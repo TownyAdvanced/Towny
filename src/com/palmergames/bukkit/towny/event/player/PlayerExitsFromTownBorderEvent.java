@@ -1,20 +1,18 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.player;
 
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-/**
- * @deprecated since 0.98.4.9 use PlayerExitsFromTownBorderEvent instead.
- */
-public class PlayerLeaveTownEvent extends Event {
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+
+public class PlayerExitsFromTownBorderEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 
-	private final Town lefttown;
+	private final Town leftTown;
 	private final PlayerMoveEvent pme;
 	private final WorldCoord from;
 	private final Player player;
@@ -29,9 +27,9 @@ public class PlayerLeaveTownEvent extends Event {
 		return handlers;
 	}
 
-	public PlayerLeaveTownEvent(Player player, WorldCoord to, WorldCoord from, Town lefttown, PlayerMoveEvent pme) {
+	public PlayerExitsFromTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town leftTown, PlayerMoveEvent pme) {
 		super(!Bukkit.getServer().isPrimaryThread());
-		this.lefttown = lefttown;
+		this.leftTown = leftTown;
 		this.player = player;
 		this.from = from;
 		this.pme = pme;
@@ -46,16 +44,8 @@ public class PlayerLeaveTownEvent extends Event {
 		return pme;
 	}
 
-	/**
-	 * @deprecated since 0.98.4.5 use {@link #getLeftTown()} instead
-	 */
-	@Deprecated
-	public Town getLefttown() {
-	    return getLeftTown();
-	}
-	
 	public Town getLeftTown() {
-		return lefttown;
+		return leftTown;
 	}
 
 	public WorldCoord getFrom() {

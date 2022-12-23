@@ -277,6 +277,9 @@ public class TownyFormatter {
 		// Created Date
 		if (town.getRegistered() != 0) 
 			screen.addComponentOf("registered", colourKeyValue(translator.of("status_founded"), registeredFormat.format(town.getRegistered())));
+		
+		// Founded by:
+		screen.addComponentOf("founder", colourKeyValue(translator.of("status_founded_by"), town.getFounder()));
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
 		if (!town.hasUnlimitedClaims())

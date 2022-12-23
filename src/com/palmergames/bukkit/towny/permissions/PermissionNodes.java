@@ -124,6 +124,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_RECLAIM("towny.command.town.reclaim"),
 		TOWNY_COMMAND_TOWN_WITHDRAW("towny.command.town.withdraw"),
 		TOWNY_COMMAND_TOWN_DEPOSIT("towny.command.town.deposit"),
+			TOWNY_COMMAND_TOWN_DEPOSIT_OTHERTOWN("towny.command.town.deposit.othertown"),
 		TOWNY_COMMAND_TOWN_PLOTS("towny.command.town.plots"),
 		TOWNY_COMMAND_TOWN_PURGE("towny.command.town.purge"),
 		TOWNY_COMMAND_TOWN_MERGE("towny.command.town.merge"),
@@ -413,6 +414,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_REVERTBLOCKEXPL("towny.command.townyworld.toggle.revertblockexpl"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_PLOTCLEARDELETE("towny.command.townyworld.toggle.plotcleardelete"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMBLOCKDELETE("towny.command.townyworld.toggle.unclaimblockdelete"),
+		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMENTITYDELETE("towny.command.townyworld.toggle.unclaimentitydelete"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WILDERNESSUSE("towny.command.townyworld.toggle.wildernessuse"),
 	
 	TOWNY_COMMAND_TOWNYWORLD_REGEN("towny.command.townyworld.regen"),
@@ -431,7 +433,9 @@ public enum PermissionNodes {
 	TOWNY_SPAWN_TOWN("towny.town.spawn.town"),
 	TOWNY_SPAWN_OUTPOST("towny.town.spawn.outpost"),
 	TOWNY_SPAWN_NATION("towny.town.spawn.nation"),
+	TOWNY_SPAWN_NATION_BYPASS_PUBLIC("towny.town.spawn.nation.bypass_public"),
 	TOWNY_SPAWN_ALLY("towny.town.spawn.ally"),
+	TOWNY_SPAWN_ALLY_BYPASS_PUBLIC("towny.town.spawn.ally.bypass_public"),
 	TOWNY_SPAWN_PUBLIC("towny.town.spawn.public"),
 	
 	TOWNY_NATION_SPAWN_ALL("towny.nation.spawn.*"),

@@ -131,10 +131,14 @@ public class WorldCoord extends Coord {
 	 */
 	@Nullable
 	public TownyWorld getTownyWorld() {
-		return TownyUniverse.getInstance().getWorld(getWorldName()); 
+		return TownyAPI.getInstance().getTownyWorld(world);
 	}
 
+	/**
+	 * @deprecated as of 0.98.4.9, please use {@link #getTownyWorld()} instead.
+	 */
 	@Nullable
+	@Deprecated
 	public TownyWorld getTownyWorldOrNull() {
 		return TownyAPI.getInstance().getTownyWorld(world);
 	}

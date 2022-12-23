@@ -110,13 +110,13 @@ public class TownyRegenAPI {
 	/**
 	 * Gets a list of WorldCoords which are having snapshots taken, for one TownyWorld.
 	 * 
-	 * @param world - TownyWorld to gather a list of WorldCoords in.
-	 * @return list - List<WorldCoord> matched to above world.
+	 * @param world TownyWorld to gather a list of WorldCoords in.
+	 * @return list List<WorldCoord> matched to above world.
 	 */
-	private static List<WorldCoord> getWorldCoords(TownyWorld world) {
+	private static List<WorldCoord> getWorldCoords(@NotNull TownyWorld world) {
 		List<WorldCoord> list = new ArrayList<>();
 		for (WorldCoord wc : worldCoords)
-			if (wc.getTownyWorldOrNull().equals(world))
+			if (world.equals(wc.getTownyWorld()))
 				list.add(wc);
 
 		return list;
@@ -189,7 +189,7 @@ public class TownyRegenAPI {
 	 */
 	private static void removeRegenQueueListOfWorld(@NotNull TownyWorld world) {
 		regenWorldCoordList = getRegenQueueList().stream()
-			.filter(wc -> !world.equals(wc.getTownyWorldOrNull()))
+			.filter(wc -> !world.equals(wc.getTownyWorld()))
 			.collect(Collectors.toList());
 		TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
@@ -228,7 +228,7 @@ public class TownyRegenAPI {
 				continue;
 			
 			// This worldCoord isn't actively regenerating, start the regeneration.
-			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));
+			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorld()));
 			if (plotData != null) {
 				// Load the chunks.
 				plotData.getWorldCoord().loadChunks();
@@ -601,7 +601,7 @@ public class TownyRegenAPI {
 	 * @param worldCoord - WorldCoord for the Town Block
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
-		TownyWorld world = worldCoord.getTownyWorldOrNull();
+		TownyWorld world = worldCoord.getTownyWorld();
 		if (world == null)
 			return;
 		
@@ -642,7 +642,7 @@ public class TownyRegenAPI {
 
 		for (int z = 0; z < plotSize; z++)
 			for (int x = 0; x < plotSize; x++)
-				for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
+				for (int y = height; y > world.getMinHeight(); y--) { //Check from bottom up else minecraft won't remove doors
 					Block block = world.getBlockAt(worldX + x, y, worldZ + z);
 					if (collection.contains(block.getType()))
 						toRemove.add(block);

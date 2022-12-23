@@ -1149,14 +1149,13 @@ public class TownySettings {
 		return StringMgmt.containsIgnoreCase(getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS), name);
 	}
 
+	/**
+	 * @deprecated since 0.98.4.12, Towny no longers uses an Essentials instance.
+	 * @return false
+	 */
+	@Deprecated
 	public static boolean isUsingEssentials() {
-
-		return getBoolean(ConfigNodes.PLUGIN_USING_ESSENTIALS);
-	}
-
-	public static void setUsingEssentials(boolean newSetting) {
-
-		setProperty(ConfigNodes.PLUGIN_USING_ESSENTIALS.getRoot(), newSetting);
+		return false;
 	}
 
 	public static double getNewTownPrice() {
@@ -2646,6 +2645,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}
 	
+	public static boolean getOutsidersUnclaimingTownBlocks() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_UNCLAIM_TOWNBLOCK);
+	}
+	
 	public static boolean isForcePvpNotAffectingHomeblocks() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP);
 	}
@@ -2721,6 +2724,16 @@ public class TownySettings {
 	public static int getPeacefulCoolDownTime() {
 
 		return getInt(ConfigNodes.GTOWN_SETTINGS_NEUTRAL_COOLDOWN_TIMER);
+	}
+	
+	public static int getTownDeleteCoolDownTime() {
+
+		return getInt(ConfigNodes.GTOWN_SETTINGS_TOWN_DELETE_COOLDOWN_TIMER);
+	}
+	
+	public static int getTownUnclaimCoolDownTime() {
+
+		return getInt(ConfigNodes.GTOWN_SETTINGS_TOWN_UNCLAIM_COOLDOWN_TIMER);
 	}
 	
 	public static String getTownAccountPrefix() {
@@ -3164,7 +3177,11 @@ public class TownySettings {
 	public static List<String> getOutlawBlacklistedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS);
 	}
-	
+
+	public static List<String> getWarBlacklistedCommands() {
+		return getStrArr(ConfigNodes.GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS);
+	}
+
 	public static boolean getVisualizedSpawnPointsEnabled() {
 		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
 	}
@@ -3374,6 +3391,18 @@ public class TownySettings {
 	
 	public static boolean areProtectedEntitiesProtectedAgainstMobs() {
 		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_MOB_BYPASS);
+	}
+	
+	public static String getBossBarNotificationColor() {
+		return getString(ConfigNodes.NOTIFICATION_BOSSBARS_COLOR);
+	}
+	
+	public static String getBossBarNotificationOverlay() {
+		return getString(ConfigNodes.NOTIFICATION_BOSSBARS_OVERLAY);
+	}
+	
+	public static float getBossBarNotificationProgress() {
+		return (float) getDouble(ConfigNodes.NOTIFICATION_BOSSBARS_PROGRESS);
 	}
 }
 

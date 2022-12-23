@@ -12,6 +12,8 @@ import com.palmergames.bukkit.towny.event.PlayerEnterTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerLeaveTownEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
 import com.palmergames.bukkit.towny.object.CommandList;
@@ -78,6 +80,8 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.metadata.MetadataValue;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,6 +93,7 @@ import java.util.Map;
  * @author Shade/ElgarL
  * 
  */
+@SuppressWarnings("deprecation")
 public class TownyPlayerListener implements Listener {
 
 	private final Towny plugin;
@@ -96,6 +101,7 @@ public class TownyPlayerListener implements Listener {
 	private CommandList blockedTownCommands;
 	private CommandList blockedTouristCommands;
 	private CommandList blockedOutlawCommands;
+	private CommandList blockedWarCommands;
 	private CommandList ownPlotLimitedCommands;
 
 	public TownyPlayerListener(Towny plugin) {
@@ -155,7 +161,9 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
 		if (resident != null) {
-			resident.setLastOnline(System.currentTimeMillis());
+			// Don't set last online if the player was vanished.
+			if (!event.getPlayer().getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean))
+				resident.setLastOnline(System.currentTimeMillis());
 			resident.clearModes();
 			resident.save();
 
@@ -705,8 +713,8 @@ public class TownyPlayerListener implements Listener {
 		
 		if (WorldCoord.cellChanged(from, to)) {
 
-			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld().getName());				
-			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld().getName());
+			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());				
+			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld());
 			if (fromWorld == null || toWorld == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("not_registered"));
 				cache.setLastLocation(to);
@@ -831,7 +839,7 @@ public class TownyPlayerListener implements Listener {
 			
 			// Caught players are tested for pvp at the location of the catch.
 			if (caught.getType().equals(EntityType.PLAYER)) {
-				TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getCaught().getWorld().getName());
+				TownyWorld world = TownyAPI.getInstance().getTownyWorld(event.getCaught().getWorld());
 				if (world == null)
 					return;
 
@@ -873,18 +881,25 @@ public class TownyPlayerListener implements Listener {
 		if (to.isWilderness() && from.isWilderness()) 
 			// Both are wilderness, no event will fire.
 			return;
-		if (to.isWilderness())
+		if (to.isWilderness()) {
 			// Gone from a Town into the wilderness.
+			BukkitTools.fireEvent(new PlayerExitsFromTownBorderEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+			// Old event which will be removed later on.
 			BukkitTools.fireEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
-		else if (from.isWilderness())
+		} else if (from.isWilderness()) {
 			// Gone from wilderness into Town.
+			BukkitTools.fireEvent(new PlayerEntersIntoTownBorderEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			// Old event which will be removed later on.
 			BukkitTools.fireEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
 		// Both to and from have towns.
-		else if (to.getTownOrNull().equals(from.getTownOrNull()))
+		} else if (to.getTownOrNull().equals(from.getTownOrNull())) {
 			// The towns are the same, no event will fire.
 			return;
-		else {
+		} else {
 			// Player has left one Town and immediately entered a different one.
+			BukkitTools.fireEvent(new PlayerEntersIntoTownBorderEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
+			BukkitTools.fireEvent(new PlayerExitsFromTownBorderEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
+			// Old events which will be removed later on.
 			BukkitTools.fireEvent(new PlayerEnterTownEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
 			BukkitTools.fireEvent(new PlayerLeaveTownEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
 		}
@@ -895,7 +910,7 @@ public class TownyPlayerListener implements Listener {
 	 * - Handles outlaws entering a town they are outlawed in.
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onOutlawEnterTown(PlayerEnterTownEvent event) {
+	public void onOutlawEnterTown(PlayerEntersIntoTownBorderEvent event) {
 
 		Resident outlaw = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
@@ -980,7 +995,7 @@ public class TownyPlayerListener implements Listener {
 	 * @param event - PlayerEnterTownEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerEnterTown(PlayerEnterTownEvent event) {
+	public void onPlayerEnterTown(PlayerEntersIntoTownBorderEvent event) {
 		
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		Town town = event.getEnteredTown();
@@ -994,15 +1009,14 @@ public class TownyPlayerListener implements Listener {
 			placeholders.put("{town_motd}", town.getBoard());
 			placeholders.put("{town_residents}", town.getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
-			if (town.hasNation()) {
-				Nation nation = town.getNationOrNull();
-				placeholders.put("{nationname}", String.format(TownySettings.getNotificationTitlesNationNameFormat(), nation.getName()));
-				placeholders.put("{nation_residents}", nation.getNumResidents());
-				placeholders.put("{nation_residents_online}", TownyAPI.getInstance().getOnlinePlayers(nation).size());
-				placeholders.put("{nation_motd}", nation.getBoard());
-				if (town.isCapital()) 
-					placeholders.put("{nationcapital}", getCapitalSlug(town.getName(), nation.getName()));
-			}
+
+			Nation nation = town.getNationOrNull();
+			placeholders.put("{nationname}", nation == null ? "" : String.format(TownySettings.getNotificationTitlesNationNameFormat(), nation.getName()));
+			placeholders.put("{nation_residents}", nation == null ? "" : nation.getNumResidents());
+			placeholders.put("{nation_residents_online}", nation == null ? "" : TownyAPI.getInstance().getOnlinePlayers(nation).size());
+			placeholders.put("{nation_motd}", nation == null ? "" : nation.getBoard());
+			placeholders.put("{nationcapital}", !town.isCapital() ? "" : getCapitalSlug(town.getName(), nation.getName()));
+
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
@@ -1028,7 +1042,7 @@ public class TownyPlayerListener implements Listener {
 	 * @param event - PlayerLeaveTownEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerLeaveTown(PlayerLeaveTownEvent event) {
+	public void onPlayerLeaveTown(PlayerExitsFromTownBorderEvent event) {
 		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer().getUniqueId());
 		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld()).getFormattedUnclaimedZoneName();
 
@@ -1100,12 +1114,26 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
+		// Potentially blocks players with a war from using the command.
+		if (blockWarPlayerCommand(event.getPlayer(), resident, command)) {
+			event.setCancelled(true);
+			return;
+		}
+		
 		// Location-dependent blocked commands
 		final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getPlayer());
 		if (blockOutlawedPlayerCommand(event.getPlayer(), resident, townBlock, command) || blockCommandInsideTown(event.getPlayer(), resident, townBlock, command))
 			event.setCancelled(true);
 	}
 
+	public boolean blockWarPlayerCommand(Player player, Resident resident, String command) {
+		if (resident.hasTown() && resident.getTownOrNull().hasActiveWar() && blockedWarCommands.containsCommand(command)) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_command_war_blocked"));
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Blocks outlawed players using blacklisted commands.
 	 * @return Whether the command has been blocked.   
@@ -1150,6 +1178,10 @@ public class TownyPlayerListener implements Listener {
 		
 		final Town town = townBlock == null ? null : townBlock.getTownOrNull();
 
+		if (town != null && town.hasActiveWar() && blockedWarCommands.containsCommand(command)) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_command_war_blocked"));
+			return true;
+		}
 		/*
 		 * Commands are sometimes blocked from being run by outsiders on an town.
 		 */
@@ -1336,6 +1368,7 @@ public class TownyPlayerListener implements Listener {
 		this.blockedTouristCommands = new CommandList(TownySettings.getTouristBlockedCommands());
 		this.blockedTownCommands = new CommandList(TownySettings.getTownBlacklistedCommands());
 		this.blockedOutlawCommands = new CommandList(TownySettings.getOutlawBlacklistedCommands());
+		this.blockedWarCommands = new CommandList(TownySettings.getWarBlacklistedCommands());
 		this.ownPlotLimitedCommands = new CommandList(TownySettings.getPlayerOwnedPlotLimitedCommands());
 	}
 }

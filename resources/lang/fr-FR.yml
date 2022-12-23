@@ -260,9 +260,9 @@ msg_set_wild_regen: '&bRégénération de la nature de %s changé avec succès �
 msg_set_use_towny_on: '&bCe monde est maintenant géré par les règles de Towny.'
 msg_set_use_towny_off: '&cCe monde est exempté de toutes les interactions de Towny.'
 msg_error_must_be_int: '&bLe montant doit être un nombre entier.'
-msg_error_input_must_be_int: '&c%s must be an integer'
+msg_error_input_must_be_int: '&c%s doit être un nombre entier'
 msg_error_must_be_num: '&bLe montant doit être un nombre.'
-msg_error_input_must_be_num: '&c%s must be a number'
+msg_error_input_must_be_num: '&c%s doit être un nombre'
 msg_must_specify_amnt: '&bVous devez préciser le montant. Ex: %s 54'
 msg_town_set_tax: '&b%s a fixé les impôts résidentiels quotidiens à %s'
 msg_town_set_plottax: '&b%s a fixé les impôts quotidiens des parcelles à %s'
@@ -590,6 +590,7 @@ status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Ouvert)'
 status_town_board: 'Description:'
 status_founded: 'Fondée le :'
+status_founded_by: 'Founded by:'
 status_town_size: 'Taille de la ville :'
 status_town_size_bought: 'Acheté:'
 status_town_size_bonus: 'Bonus:'
@@ -1617,3 +1618,11 @@ msg_town_plots_type_line: '<dark_green>%s = <green>%s <gray>/ <aqua>%s <gray>/ <
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'Vous êtes sur le point d''accorder des autorisations complètes à une ville entière. Cela signifie que le maire de la ville pourra décider qui obtiendra l''autorisation de construire et de detruire dans votre ville, en ajoutant des habitants. Si cette ville est ouverte, alors n''importe qui peut rejoindre et obtenir un accès complet à votre ville. Êtes-vous sûr de vouloir faire confiance à tous les résidents (y compris les futurs résidents) de cette ville ?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'Vous ne pouvez pas exécuter cette commande car votre ville est en guerre.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'

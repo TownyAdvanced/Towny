@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.confirmations.event;
 
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 
@@ -9,6 +11,7 @@ public abstract class ConfirmationEvent extends Event {
 	private final CommandSender sender;
 	
 	public ConfirmationEvent(Confirmation confirmation, CommandSender sender) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.confirmation = confirmation;
 		this.sender = sender;
 	}

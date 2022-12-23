@@ -1,0 +1,34 @@
+name: Publish to Glare Repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy_to_glare_repo:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['17']
+    name: mvn deploy @ glare repo
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
+      - name: set up eclipse temurin
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          java-package: jdk
+          cache: 'maven'
+      - name: maven-settings-action
+        uses: s4u/maven-settings-action@v2.8.0
+        with:
+          githubServer: false
+          servers: |
+            [{
+              "id": "nexus",
+              "username": "${{ secrets.GLAREREPO_USERNAME }}",
+              "password": "${{ secrets.GLAREREPO_PASSWORD }}"
+            }]
+
+      - run: mvn deploy

@@ -20,7 +20,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
@@ -124,7 +123,7 @@ public class TownyEntityListener implements Listener {
 			 * aren't projectiles based on whether the location has PVP enabled.
 			 */
 			if (defender instanceof Player && EntityTypeUtil.isPVPExplosive(attacker.getType()))
-				cancelExplosiveDamage = CombatUtil.preventPvP(TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
+				cancelExplosiveDamage = CombatUtil.preventPvP(TownyAPI.getInstance().getTownyWorld(defender.getWorld()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
 			
 			/*
 			 * Cancel explosion damage accordingly.
@@ -230,7 +229,7 @@ public class TownyEntityListener implements Listener {
 		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
 			return;
 
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
 		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
 			event.setCancelled(true);
@@ -278,7 +277,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		
 		Location loc = potion.getLocation();		
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld());
 		float radius = event.getAreaEffectCloud().getRadius();
 		List<Block> blocks = new ArrayList<>();
 		
@@ -358,8 +357,9 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 		
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
 		// ignore non-Towny worlds.
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
 
 		if (event.getEntity() != null) {
@@ -377,7 +377,6 @@ public class TownyEntityListener implements Listener {
 				return;
 
 			Location loc = event.getLocation();
-			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
 			
 			// remove from world if set to remove mobs globally
 			if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
@@ -469,7 +468,6 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event - onEntityChangeBlockEvent
 	 */
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 		if (plugin.isError()) {
@@ -477,7 +475,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld());
 
 		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
@@ -507,8 +505,10 @@ public class TownyEntityListener implements Listener {
 			case BOAT, CHEST_BOAT -> {
 				if (!event.getBlock().getType().equals(Material.LILY_PAD))
 					return;
-				Boat boat = (Boat) event.getEntity();
-				if (boat.getPassenger() != null && boat.getPassenger() instanceof Player player)
+				
+				final List<Entity> passengers = event.getEntity().getPassengers();
+				
+				if (!passengers.isEmpty() && passengers.get(0) instanceof Player player)
 					// Test if the player can break here.
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
 				else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
@@ -555,10 +555,10 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
+		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
-
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
+		
 		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), null, event.getEntity(), event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
@@ -646,12 +646,11 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
-			return;
 		
 		Entity hanging = event.getEntity();
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(hanging.getWorld().getName());
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(hanging.getWorld());
+		if (townyWorld == null || !townyWorld.isUsingTowny())
+			return;
 
 		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
 		if (event.getCause().equals(RemoveCause.PHYSICS) && ItemLists.HANGING_ENTITIES.contains(hanging.getType().name())) {

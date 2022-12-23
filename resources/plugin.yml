@@ -112,6 +112,14 @@ permissions:
         children:
             towny.town.spawn.outpost: true
 
+    towny.town.spawn.nation.bypass_public:
+        description: User is permitted to use /town spawn when they are a member of the same nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.
+        default: false
+
+    towny.town.spawn.ally.bypass_public:
+        description: User is permitted to use /town spawn when they are a member of an allied nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.
+        default: false
+
     towny.town.spawn.outpost:
         description: User is permitted to use /town outpost & /town outpost list
         default: false
@@ -486,6 +494,10 @@ permissions:
             towny.command.town.unclaim: true
             towny.command.town.unclaim.all: true
 
+    towny.command.town.deposit.othertown:
+        description: User can deposit money into another town bank using /t deposit amount townname.
+        default: false
+
       # Plot command permissions
     towny.command.plot.*:
         description: User can access all town related commands.
@@ -788,6 +800,7 @@ permissions:
             towny.command.townyworld.toggle.revertblockexpl: true
             towny.command.townyworld.toggle.townmobs: true
             towny.command.townyworld.toggle.unclaimblockdelete: true
+            towny.command.townyworld.toggle.unclaimentitydelete: true
             towny.command.townyworld.toggle.usingtowny: true
             towny.command.townyworld.toggle.warallowed: true
             towny.command.townyworld.toggle.wildernessmobs: true

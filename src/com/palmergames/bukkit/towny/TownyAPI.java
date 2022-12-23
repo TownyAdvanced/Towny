@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -459,7 +460,7 @@ public class TownyAPI {
 	 * @return true if PVP is enabled or this isn't a world with Towny enabled.
 	 */
 	public boolean isPVP(Location location) {
-		return !isTownyWorld(location.getWorld()) || !CombatUtil.preventPvP(getTownyWorld(location.getWorld().getName()), getTownBlock(location));
+		return !isTownyWorld(location.getWorld()) || !CombatUtil.preventPvP(getTownyWorld(location.getWorld()), getTownBlock(location));
 	}
 
 	/**
@@ -744,7 +745,7 @@ public class TownyAPI {
      */
     public TownBlockStatus hasNationZone(WorldCoord worldCoord) {
     	
-		final TownBlock nearestTownblock = TownyAPI.getInstance().getTownyWorld(worldCoord.getWorldName()).getClosestTownblockWithNationFromCoord(worldCoord);
+		final TownBlock nearestTownblock = Optional.ofNullable(worldCoord.getTownyWorld()).map(world -> world.getClosestTownblockWithNationFromCoord(worldCoord)).orElse(null);
 		
 		if (nearestTownblock == null)
 			return TownBlockStatus.UNCLAIMED_ZONE;

@@ -245,7 +245,8 @@ public class SpawnUtil {
 				Nation targetNation = town.getNationOrNull();
 
 				if (playerNation == targetNation) {
-					if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+					if (!town.isPublic() && 
+						(TownySettings.isAllySpawningRequiringPublicStatus() && !resident.hasPermissionNode(PermissionNodes.TOWNY_SPAWN_NATION_BYPASS_PUBLIC.getNode())))
 						throw new TownyException(Translatable.of("msg_err_ally_isnt_public", town));
 					else
 						townSpawnLevel = TownSpawnLevel.PART_OF_NATION;
@@ -253,7 +254,8 @@ public class SpawnUtil {
 					// Prevent enemies from using spawn travel.
 					throw new TownyException(Translatable.of("msg_err_public_spawn_enemy"));
 				} else if (targetNation.hasAlly(playerNation)) {
-					if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+					if (!town.isPublic() && 
+						(TownySettings.isAllySpawningRequiringPublicStatus() && !resident.hasPermissionNode(PermissionNodes.TOWNY_SPAWN_ALLY_BYPASS_PUBLIC.getNode())))
 						throw new TownyException(Translatable.of("msg_err_ally_isnt_public", town));
 					else
 						townSpawnLevel = TownSpawnLevel.NATION_ALLY;
@@ -660,6 +662,6 @@ public class SpawnUtil {
 	}
 	
 	private static boolean hasPerm(Player player, PermissionNodes node) {
-		return TownyUniverse.getInstance().getPermissionSource().has(player, node.getNode());
+		return TownyUniverse.getInstance().getPermissionSource().testPermission(player, node.getNode());
 	}
 }

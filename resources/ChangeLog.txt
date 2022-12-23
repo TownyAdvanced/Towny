@@ -8094,3 +8094,141 @@ v0.92.0.11:
   - Bump adventure-text-serializer-plain from 4.11.0 to 4.12.0.
 0.98.4.5:
   - Fix some of the economy-related placeholders not formatting themselves for the economy.
+  - Delete unused es-419, courtesy of GNosii with PR #6351.
+  - Fix typo in PlayerLeaveTownEvent, courtesy of Senkoco, GNosii & LlmDL with PR #6349.
+  - Set to main scoreboard when toggling hud off, courtesy of Warriorrrr with PR #6345.
+  - Make it possible to use /t deposit [amount] {townname}.
+    - Doing so will allow a player to deposit money into any town bank.
+    - This feature will require an admin to give the node to their players in the townyperms.yml, it is disabled by default.
+    - Closes #6346.
+  - New Command: /t deposit {amount} {townname}
+  - New Permission Node: towny.command.town.deposit.othertown
+    - Not a child node of towny.command.town.deposit.
+    - Must be given manually for servers that want to enable players to deposit into towns they are not a part of.
+0.98.4.6:
+  - Add the ability to toggle a world's delete-entities-on-unclaim feature.
+    - Closes #6297.
+  - New Command: /tw toggle unclaimentitydelete {on|off}
+    - Toggles a world's unclaiming-deletes-entities feature off and on.
+  - New Permission Node: towny.command.townyworld.toggle.unclaimentitydelete
+    - Child node of towny.command.townyworld.toggle.*.
+    - No changes required to your townyperms.yml.
+  - Allow the TownyMap system to properly parse Unicode characters U10000 and greater.
+    - Anyone using unicode characters for the TownBlockType map symbols should already be using the \u#### format in the config.
+    - The value you use should be the HTML-code variable of the Unicode you want to use.
+    - You can now begin using \u10000 and larger.
+  - Bump adventure-platform-bukkit from 4.1.2 to 4.2.0.
+  - Add support MC 1.19.3.
+0.98.4.7:
+  - Add /res toggle adminbypass.
+    - Bypasses the permissions tests that make ops/players with towny.admin able to act as admins.
+    - Useful for staff that want to play like normal players.
+    - Closes #3939.
+  - New Command: /res toggle adminbypass - Used to make admins play as non-admins.
+  - Tidy TownyPermissionSource.
+  - Add ability to disallow commands being run by players that have an active war.
+    - Closes #3953.
+  - New Config Option: global_town_settings.war_blacklisted_commands
+    - Default: somecommandhere,othercommandhere
+    - Commands that cannot be run by players who have an active war.
+  - Add javadocs & annotations for bed explode event, courtesy of Warriorrrr with PR #6359.
+  - Remove old powdered snow workaround, courtesy of Warriorrrr with PR #6360.
+  - Fix possible /tw set wildname NPE, courtesy of Warriorrrr with PR #6361.
+  - Better feedback message when an override lang file is not able to pass a yaml test. 
+  - Fix /plot clear not going all the way to the bottom of 1.19 worlds.
+0.98.4.8:
+  - Replace deprecated getPassenger, courtesy of Warriorrrr with PR #6370.
+  - Bump annotations from 23.0.0 to 23.1.0.
+  - Fix possible IllegalStateException thrown from ConfirmationSendEvent when /t unclaim all is run.
+  - Show correct invalid name when a nation is improperly named.
+  - Expose unformatted time in BankTransaction, courtesy of Warriorrrr with PR #6372.
+0.98.4.9:
+  - API: New (replacement) events: 
+    - PlayerEntersIntoTownBorderEvent - Thrown when a player crosses into a town.
+    - PlayerExitsFromTownBorderEvent - Thrown when a player crosses out of a town.
+    - These events replace the now-deprecated PlayerEnterTownEvent and PlayerLeaveTownEvent which had names which were too ambiguous.
+  - Lookup towny worlds via uuid, courtesy of Warriorrrr with PR #6375.
+  - Deprecate redundant WorldCoord#getTownyWorldOrNull method, courtesy of Warriorrrr with PR #6376.
+0.98.4.10:
+  - Fix /tw toggle for console helpmenu display wrong args order.
+  - Temporarily use name for world lookups again, courtesy of Warriorrrr with PR #6378.
+    - Patchs issue present in 0.98.4.9.
+0.98.4.11:
+  - Support for y less than 0 for revert-on-unclaim.
+0.98.4.12:
+  - Improve vanished-wont-affect-resident-last-online support, from using only Essentials, to supporting all plugins that use the "vanished" metadata on the player.
+    - Also prevents setting last-online when a player logs out.
+    - Plugins which work: SuperVanish, Essentials.
+    - Plugins which still do not work: VanishNoPacket.
+  - Remove internal usage of Essentials.
+    - Removed Config Node: using_essentials.
+    - Deprecated: 
+      - TownySettings.isUsingEssentials,
+      - Towny.isUsingEssentials(),
+      - Towny.getEssentials().
+0.98.4.13:
+  - Deprecate old TownComparators class.
+  - Add DRAGON_EGG to revert-on-unclaim block ignore.
+  - Automatic Config Edit:
+    - Add DRAGON_EGG to revert-on-unclaim block ignore.
+    - Will automatically update each world as well.
+    - Supercedes #6386.
+  - Make bossbar chunk notifications configurable, courtesy of Warriorrrr with PR #6384.
+    - Closes #6363.
+  - New Config Options:
+    - notification.bossbars.color
+      - Default: "white"
+      - The color to use for bossbar notifications.
+      -Valid colors are blue, green, pink, purple, red, white, or yellow.
+    - notification.bossbars.overlay
+      - Default: "progress"
+      - The overlay to use for bossbar notifications.
+      - Valid options are progress, notched_6, notched_10, notched_12, notched_20
+    - notification.bossbars.progress
+      - Default: "0"
+      - The progress to use for the bossbar, between 0 and 1."
+  - Load chunk async for protection regen task, courtesy of Warriorrrr with PR #6385.
+    - Requires you to be using Paper to take advantage.
+    - Closes #6337.
+0.98.4.14:
+  - New Permission Nodes:
+    - towny.town.spawn.nation.bypass_public:
+      - description: User is permitted to use /town spawn when:
+        - they are a member of the same nation and, 
+        - the town isn't public and,
+        - is_nation_ally_spawning_requiring_public_status is true.
+      - default: false, and not a child node of towny.town.spawn.*
+    - towny.town.spawn.ally.bypass_public:
+      - description: User is permitted to use /town spawn when:
+        - they are a member of an allied nation and,
+        - the town isn't public and,
+        - is_nation_ally_spawning_requiring_public_status is true.
+      - default: false, and not a child node of towny.town.spawn.*
+    - Give either of these nodes to allow a king or otherwise special nation member to still travel
+      to an allied town when other nation members/allies are stopped, because the town is not public,
+      and the config requires public status.
+    - Closes #6367.
+  - New Config Option: global_town_settings.outsiders_prevent_unclaim_townblock
+    - Default: false
+    - If set to true, Towny will prevent a townblock from being unclaimed while an outsider is within the townblock's boundaries.
+    - When active this feature can cause a bit of lag when the /t unclaim command is used, depending on how many players are online.
+0.98.4.15:
+  - New Config Options:
+    - global_town_settings.town_delete_cooldown_time
+      - default: "0"
+      - Number of seconds that must pass before a player that has deleted their town can create a new one.
+    - global_town_settings.town_unclaim_cooldown_time
+      - default: "0"
+      - Number of seconds that must pass before a town that has unclaimed a townblock can claim it again.
+    - Closes #6311.
+  - Add Founder to town.
+    - Stores only the name of the original mayor, which means name changes aren't factored in, but that's too much work.
+    - If founderName is null it will pull the existing mayor's name.
+    - Founder is displayed in the town status screen next to Founded: 'Date'.
+    - Closes #6306.
+  - Fix tab completion for /t rank remove {player} not using the player's ranks.
+  - Improve tab completion for /n rank.
+0.98.4.16:
+  - API: add StatusScreen#getComponentKeys
+    - When a plugin wants to know the keys the back the StatusScreen#getComponents collection.
+  - Fix nation-less towns rendering town-entered title messages poorly.
