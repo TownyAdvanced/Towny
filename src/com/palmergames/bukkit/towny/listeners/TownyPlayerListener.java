@@ -1009,15 +1009,14 @@ public class TownyPlayerListener implements Listener {
 			placeholders.put("{town_motd}", town.getBoard());
 			placeholders.put("{town_residents}", town.getNumResidents());
 			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
-			if (town.hasNation()) {
-				Nation nation = town.getNationOrNull();
-				placeholders.put("{nationname}", String.format(TownySettings.getNotificationTitlesNationNameFormat(), nation.getName()));
-				placeholders.put("{nation_residents}", nation.getNumResidents());
-				placeholders.put("{nation_residents_online}", TownyAPI.getInstance().getOnlinePlayers(nation).size());
-				placeholders.put("{nation_motd}", nation.getBoard());
-				if (town.isCapital()) 
-					placeholders.put("{nationcapital}", getCapitalSlug(town.getName(), nation.getName()));
-			}
+
+			Nation nation = town.getNationOrNull();
+			placeholders.put("{nationname}", nation == null ? "" : String.format(TownySettings.getNotificationTitlesNationNameFormat(), nation.getName()));
+			placeholders.put("{nation_residents}", nation == null ? "" : nation.getNumResidents());
+			placeholders.put("{nation_residents_online}", nation == null ? "" : TownyAPI.getInstance().getOnlinePlayers(nation).size());
+			placeholders.put("{nation_motd}", nation == null ? "" : nation.getBoard());
+			placeholders.put("{nationcapital}", !town.isCapital() ? "" : getCapitalSlug(town.getName(), nation.getName()));
+
 			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
