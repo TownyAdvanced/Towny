@@ -590,6 +590,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Açık)'
 status_town_board: 'Pano:'
 status_founded: 'Kuruluş:'
+status_founded_by: 'Founded by:'
 status_town_size: 'Şehir büyüklüğü:'
 status_town_size_bought: 'Satın alındı:'
 status_town_size_bonus: 'Bonus:'
@@ -1621,3 +1622,7 @@ confirmation_msg_trusttown_consequences: 'You are about to give full plot permis
 msg_command_war_blocked: 'You cannot run that command because your town is at war.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
 msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
