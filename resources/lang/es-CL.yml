@@ -260,9 +260,9 @@ msg_set_wild_regen: '&bSe cambió la regeneración del Exterior en %s a ''%s'''
 msg_set_use_towny_on: '&bEste mundo sigue ahora las reglas de Towny.'
 msg_set_use_towny_off: '&cEste mundo está exento de toda interacción con Towny.'
 msg_error_must_be_int: '&bLa cantidad debe ser un número entero.'
-msg_error_input_must_be_int: '&c%s must be an integer'
+msg_error_input_must_be_int: '&c%s debe ser un número entero'
 msg_error_must_be_num: '&bLa cantidad debe ser un número.'
-msg_error_input_must_be_num: '&c%s must be a number'
+msg_error_input_must_be_num: '&c%s debe ser un número'
 msg_must_specify_amnt: '&bDebes especificar la cantidad. Ejemplo: %s 54'
 msg_town_set_tax: '&b%s ha establecido los impuestos diarios para los residentes en %s'
 msg_town_set_plottax: '&b%s ha establecido los impuestos diarios para los terrenos en %s'
@@ -590,7 +590,7 @@ status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Abierta)'
 status_town_board: 'Tablero:'
 status_founded: 'Fundado:'
-status_founded_by: 'Founded by:'
+status_founded_by: 'Fundador:'
 status_town_size: 'Tamaño:'
 status_town_size_bought: 'Comprado:'
 status_town_size_bonus: 'Bonus:'
@@ -1580,7 +1580,7 @@ msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.
 msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
 msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Tus carceleros te libraron para hacer espacio.'
 msg_x_has_been_released_as_jail_slots_ran_out: '%s fue liberado para hacer espacio para otro prisionero.'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Fuiste liberado porque tus carceleros ya no pueden mantenerte encarcelado.'
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
@@ -1599,13 +1599,13 @@ confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure 
 #Part of the /town plots output.
 msg_town_plots_title: ' Town Plots'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>TamañoCiudad: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Comprados: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[BonusNación: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
