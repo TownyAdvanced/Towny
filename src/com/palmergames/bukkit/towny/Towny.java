@@ -507,6 +507,19 @@ public class Towny extends JavaPlugin {
 		} else {
 			getLogger().info("msg_compat_eco_disabled");
 		}
+
+		// Specific-plugin hooks
+		if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null && TownySettings.isContextsEnabled())
+			new LuckPermsContexts(this);
+
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
+			new TownyPlaceholderExpansion(this).register();
+
+		if (Bukkit.getPluginManager().isPluginEnabled("TheNewChat"))
+			TNCRegister.initialize();
+
+		if (Bukkit.getPluginManager().isPluginEnabled("Citizens2"))
+			setCitizens2(true);
 		
 		// Plugins that don't throw warnings, but inform their compatibility anyway.
 		final ArrayList<String> discovered = new ArrayList<>();
@@ -522,19 +535,6 @@ public class Towny extends JavaPlugin {
 				}
 			});
 		}
-		
-		// Specific-plugin hooks
-		if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null && TownySettings.isContextsEnabled())
-			new LuckPermsContexts(this);
-		
-		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
-			new TownyPlaceholderExpansion(this).register();
-		
-		if (Bukkit.getPluginManager().isPluginEnabled("TheNewChat"))
-			TNCRegister.initialize();
-		
-		if (Bukkit.getPluginManager().isPluginEnabled("Citizens2"))
-			setCitizens2(true);
 
 		if (!discovered.isEmpty()) {
 			plugin.getLogger().info(Translation.of("msg_compat_discovered", StringMgmt.wrap(String.join(", ", discovered), 52, System.lineSeparator() + "        ")));
