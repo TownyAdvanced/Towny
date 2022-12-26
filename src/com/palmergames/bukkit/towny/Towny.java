@@ -483,7 +483,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void checkSupport() {
-		final Map<String, PluginSupportUtil.Support> results = PluginSupportUtil.test();
+		final List<PluginSupportUtil.TestResult> results = PluginSupportUtil.test();
 
 		// Permission providers
 		final String providers = returnPermissionsProviders();
@@ -513,11 +513,12 @@ public class Towny extends JavaPlugin {
 		
 		// Compatibility report
 		if (!results.isEmpty()) {
-			results.forEach((tested, support) -> {
+			results.forEach((result) -> {
+				final PluginSupportUtil.Support support = result.getSupportLevel();
 				if (!support.type.warn) {
-					discovered.add(tested);
+					discovered.add(result.getFullName());
 				} else {
-					getLogger().warning(String.format("[%s] %s: %s", support.type, tested, StringMgmt.wrap(support.description, 52, System.lineSeparator() + "        ")));
+					getLogger().warning(String.format("[%s] %s: %s", support.type, result.getName(), StringMgmt.wrap(support.description, 52, System.lineSeparator() + "        ")));
 				}
 			});
 		}
@@ -536,7 +537,7 @@ public class Towny extends JavaPlugin {
 			setCitizens2(true);
 
 		if (!discovered.isEmpty()) {
-			plugin.getLogger().info(Translation.of("msg_compat_discovered", discovered.size(), StringMgmt.wrap(String.join(", ", discovered), 52, System.lineSeparator() + "        ")));
+			plugin.getLogger().info(Translation.of("msg_compat_discovered", StringMgmt.wrap(String.join(", ", discovered), 52, System.lineSeparator() + "        ")));
 		}
 	}
 

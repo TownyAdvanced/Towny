@@ -2,14 +2,12 @@ package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 
 /**
  * Allows testing support for known unsupported classes
@@ -21,36 +19,54 @@ public class PluginSupportUtil {
 	private static final Map<String, Support> TESTS = getSupportData();
 
 	/**
-	 * Run tests defined in {@link #getSupportData()}
-	 * @return map with classes detected and their support data
+	 * Run tests defined in {@link #getSupportData()}.
+	 * @return list with {@link TestResult} objects
 	 */
-	public static Map<String, Support> test() {
-		final HashMap<String, Support> map = new HashMap<>();
+	public static List<TestResult> test() {
+		final ArrayList<TestResult> results = new ArrayList<>();
 		
 		TESTS.forEach((test, support) -> {
 			if (test.startsWith("platform:")) {
 				if (Bukkit.getName().contains(cleanTest(test))) {
-					map.put(cleanTest(test), support);
+					results.add(new TestResult(
+							Bukkit.getName(), 
+							Bukkit.getVersion(), 
+							support
+						)
+					);
 				}
 			} else if (test.startsWith("plugin:")) {
 				final Plugin plugin = Bukkit.getPluginManager().getPlugin(cleanTest(test));
 				if (plugin != null) {
-					map.put(cleanTest(test) + " " + plugin.getDescription().getVersion(), support);
+					results.add(new TestResult(
+						plugin.getName(), 
+						plugin.getDescription().getVersion(), 
+						support
+					));
 				}
 			} else if (test.startsWith("economy:")){
 				if (TownyEconomyHandler.getVersion().contains(cleanTest(test))) {
-					map.put(cleanTest(test), support);
+					results.add(new TestResult(
+						TownyEconomyHandler.getVersion(),
+						"",
+						support
+					));
 				}
 			} else {
 				// Always try to avoid these tests!
 				try {
 					Class.forName(test);
-					map.put(test, support);
+					results.add(
+						new TestResult(
+							cleanTest(test), 
+							"", 
+							support
+						));
 				} catch (final ClassNotFoundException ignored) {}
 			}
 		});
 		
-		return Collections.unmodifiableMap(map);
+		return Collections.unmodifiableList(results);
 	}
 
 	/**
@@ -62,11 +78,10 @@ public class PluginSupportUtil {
 		
 		/* 
 		 * Note: There's no current way of checking specific plugin versions.
-		 * To add an class to this list, copy and paste its qualified name:
-		 * map.put("com.palmergames.bukkit.towny.Towny", new Support(SupportType.EXTENSION, "Optional description."));
-		 * 
-		 * If the plugin loads before Towny does, and it's available on Bukkit's PluginManager you can use this syntax:
-		 * map.put("plugin:Towny", new Support(SupportType.EXTENSION)
+		 * Plugin testing: map.put("plugin:Towny", new Support(SupportType.UNSUPPORTED));
+		 * Economy provider testing: map.put("economy:EconomyName", new Support(SupportType.UNSUPPORTED));
+		 * Platform testing: map.put("platform:PlatformName", new Support(SupportType.UNSUPPORTED));
+		 * Class testing (try to avoid this!): map.put("com.palmergames.bukkit.towny.Towny", new Support(SupportType.UNSUPPORTED));
 		 */
 		
 		map.put("plugin:MDCQuestioner", new Support(SupportType.UNNECESSARY, " Questioner present on server, Towny no longer requires Questioner for invites/confirmations. You may safely remove Questioner.jar from your plugins folder."));
@@ -119,8 +134,8 @@ public class PluginSupportUtil {
 	}
 	
 	/**
-	 * Defines the level of support for an certain class, including the support level, and an
-	 * optional explanation of why it's tested for
+	 * Defines the level of support for a specific element, including the support level, and an
+	 * optional explanation of why it's tested for.
 	 * @author GNosii
 	 */
 	public static class Support {
@@ -151,7 +166,45 @@ public class PluginSupportUtil {
 	}
 
 	/**
-	 * Defines the level of support Towny provides for an specific class, this being
+	 * Represents a reported element, that passed a test implemented at {@link PluginSupportUtil#getSupportData()}.
+	 * This can be a platform or a plugin.
+	 * @author GNosii
+	 */
+	@ApiStatus.Internal
+	public static class TestResult {
+		private String name;
+		private String version;
+		private Support supportLevel;
+		
+		public TestResult(String name, String version, Support support) {
+			this.name = name;
+			this.version = version;
+			this.supportLevel = support;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public String getVersion() {
+			return version;
+		}
+
+		public Support getSupportLevel() {
+			return supportLevel;
+		}
+		
+		/**
+		 * Get the full name of the plugin
+		 * @return name of the plugin and the version.
+		 */
+		public String getFullName() {
+			return getName() + " " + getVersion();
+		}
+	}
+	
+	/**
+	 * Defines the level of support Towny provides for a specific element, this being
 	 * libraries, plugins or server implementations.
 	 * @author GNosii
 	 */
