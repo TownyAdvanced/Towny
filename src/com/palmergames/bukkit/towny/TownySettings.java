@@ -3404,5 +3404,13 @@ public class TownySettings {
 	public static float getBossBarNotificationProgress() {
 		return (float) getDouble(ConfigNodes.NOTIFICATION_BOSSBARS_PROGRESS);
 	}
+	
+	public static int getNewTownMinDistanceFromTownPlots() {
+		return getInt(ConfigNodes.TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_PLOT);
+	}
+	
+	public static int getNewTownMinDistanceFromTownHomeblocks() {
+		return getInt(ConfigNodes.TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
+	}
 }
 

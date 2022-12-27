@@ -2746,19 +2746,30 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 			
 			if (world.hasTowns() &&
-				TownySettings.getMinDistanceFromTownPlotblocks() > 0 &&
-				world.getMinDistanceFromOtherTownsPlots(key) < TownySettings.getMinDistanceFromTownPlotblocks())
-				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+				(TownySettings.getMinDistanceFromTownPlotblocks() > 0 || TownySettings.getNewTownMinDistanceFromTownPlots() > 0)) {
+				
+				int minDistance = TownySettings.getNewTownMinDistanceFromTownPlots();
+				if (minDistance <= 0)
+					minDistance = TownySettings.getMinDistanceFromTownPlotblocks();
+				
+				if (world.getMinDistanceFromOtherTownsPlots(key) < minDistance)
+					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+			}
 
 			
 			if (world.hasTowns() && 
 				TownySettings.getMinDistanceFromTownHomeblocks() > 0 ||
 				TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
-				TownySettings.getMinDistanceBetweenHomeblocks() > 0) {
+				TownySettings.getMinDistanceBetweenHomeblocks() > 0 ||
+				TownySettings.getNewTownMinDistanceFromTownHomeblocks() > 0) {
 				
 				final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(key);
-				if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||
-					distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
+				
+				int minDistance = TownySettings.getNewTownMinDistanceFromTownHomeblocks();
+				if (minDistance <= 0)
+					minDistance = TownySettings.getMinDistanceFromTownHomeblocks();
+				
+				if (distanceToNextNearestHomeblock < minDistance || distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
 					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
 				if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
