@@ -590,7 +590,7 @@ status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Ouvert)'
 status_town_board: 'Description:'
 status_founded: 'Fondée le :'
-status_founded_by: 'Founded by:'
+status_founded_by: 'Fondateur:'
 status_town_size: 'Taille de la ville :'
 status_town_size_bought: 'Acheté:'
 status_town_size_bonus: 'Bonus:'
@@ -1621,7 +1621,7 @@ confirmation_msg_trusttown_consequences: 'Vous êtes sur le point d''accorder de
 #Message shown when a player uses a command that is blocked because their location has an active war.
 msg_command_war_blocked: 'Vous ne pouvez pas exécuter cette commande car votre ville est en guerre.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
-msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+msg_cant_unclaim_outsider_in_town: 'Il y a un étranger dans ce bloc de ville, tu ne peux pas dérevendicer ce bloc de ville !'
 #Message shown when a player is making a town too soon after deleting one.
 msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
 #Message shown when a player is claiming land too soon after unclaiming it.

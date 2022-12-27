@@ -1527,7 +1527,7 @@ msg_perm_hud_item_use: 'Item: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_type: 'Type: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'PVP: '
+msg_perm_hud_pvp: 'PVP：'
 #Seen in /plot perm hud:
 msg_perm_hud_explosions: 'Explosions: '
 #Seen in /plot perm hud:
@@ -1537,15 +1537,15 @@ msg_perm_hud_mobspawns: 'Mob Spawns: '
 #Seen in /plot perm hud:
 msg_perm_hud_key: 'Key'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: '朋友'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: '城鎮'
 #Seen in /plot perm hud:
-msg_perm_hud_ally: 'ally'
+msg_perm_hud_ally: '盟友'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: '居民'
 #Seen in /plot perm hud:
-msg_perm_hud_nation: 'nation'
+msg_perm_hud_nation: '國家'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'outsider'
 #Seen in /plot perm hud:
