@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
+import org.bukkit.Warning;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -10,6 +11,7 @@ import org.bukkit.event.HandlerList;
  * @deprecated As of 0.97.3.0, please use {@link com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreClaimEvent} or {@link com.palmergames.bukkit.towny.event.plot.changeowner.PlotClaimEvent}
  */
 @Deprecated
+@Warning(reason = "Use the PlotPreClaimEvent or the PlotClaimEvent.")
 public class PlotChangeOwnerEvent extends Event {
     public static final HandlerList handlers = new HandlerList();
     private final Resident oldowner;
