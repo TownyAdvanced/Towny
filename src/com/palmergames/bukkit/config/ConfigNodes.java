@@ -238,6 +238,18 @@ public enum ConfigNodes {
 			"",
 			"# Maximum distance between homeblocks.",
 			"# This will force players to build close together."),
+	TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_PLOT(
+			"town.new_town_min_distance_from_town_plot",
+			"-1",
+			"",
+			"# The minimum distance that a new town must be from nearby town's plots.",
+			"# When set to -1, this will use the value of the min_plot_distance_from_town_plot option."),
+	TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
+			"town.new_town_min_distance_from_town_homeblock",
+			"-1",
+			"",
+			"# The minimum distance that a new town must be from nearby town's homeblocks.",
+			"# When set to -1, this will use the value of the min_distance_from_town_homeblock setting."),
 	TOWN_TOWN_BLOCK_RATIO(
 			"town.town_block_ratio",
 			"8",
