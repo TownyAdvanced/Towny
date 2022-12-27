@@ -8232,3 +8232,6 @@ v0.92.0.11:
   - API: add StatusScreen#getComponentKeys
     - When a plugin wants to know the keys the back the StatusScreen#getComponents collection.
   - Fix nation-less towns rendering town-entered title messages poorly.
+  - API: Update Economy-related events.
+    - Old events that are deprecated are no longer called.
+    - New events use the same methods, with better javadocs, and exist in the economy package. 
