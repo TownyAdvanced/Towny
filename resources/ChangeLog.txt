@@ -8237,3 +8237,6 @@ v0.92.0.11:
     - New events use the same methods, with better javadocs, and exist in the economy package. 
 0.98.4.17:
   - Use bukkit warning annotation for our deprecated events, courtesy of Warriorrrr with PR #6396.
+  - Ignore end portal respawns, courtesy of Warriorrrr with PR #6399.
+  - Add min distance options for new towns, courtesy of Warriorrrr with PR #6398.
+    - Closes #4829.
