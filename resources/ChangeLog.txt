@@ -8235,3 +8235,5 @@ v0.92.0.11:
   - API: Update Economy-related events.
     - Old events that are deprecated are no longer called.
     - New events use the same methods, with better javadocs, and exist in the economy package. 
+0.98.4.17:
+  - Use bukkit warning annotation for our deprecated events, courtesy of Warriorrrr with PR #6396.
