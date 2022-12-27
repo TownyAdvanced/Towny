@@ -82,7 +82,9 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.MetadataValue;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -181,7 +183,7 @@ public class TownyPlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		if (plugin.isError()) {
+		if (plugin.isError() || isEndPortalRespawn(event)) {
 			return;
 		}
 		
@@ -224,6 +226,35 @@ public class TownyPlayerListener implements Listener {
 				return;
 			
 			res.addRespawnProtection(protectionTime);
+		}
+	}
+	
+	@SuppressWarnings({"unchecked", "JavaReflectionMemberAccess"})
+	private boolean isEndPortalRespawn(PlayerRespawnEvent event) {
+		try {
+			// https://jd.papermc.io/paper/1.19/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
+			Collection<Object> respawnFlags = (Collection<Object>) PlayerRespawnEvent.class.getDeclaredMethod("getRespawnFlags").invoke(event);
+			
+			Method name = null;
+			for (Object flag : respawnFlags) {
+				if (name == null)
+					name = flag.getClass().getMethod("name");
+				
+				if ("END_PORTAL".equals(name.invoke(flag)))
+					return true;
+			}
+			
+			return false;
+		} catch (ReflectiveOperationException e) {
+			// Spigot
+			final Player player = event.getPlayer();
+			
+			if (player.getWorld().getEnvironment() != Environment.THE_END)
+				return false;
+			
+			// Can cause a sync chunk load
+			// Check if legs or head is inside an end portal block
+			return player.getLocation().getBlock().getType() == Material.END_PORTAL || player.getEyeLocation().getBlock().getType() == Material.END_PORTAL;
 		}
 	}
 	
