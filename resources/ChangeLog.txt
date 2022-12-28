@@ -8241,5 +8241,6 @@ v0.92.0.11:
   - Add min distance options for new towns, courtesy of Warriorrrr with PR #6398.
     - Closes #4829.
   - Automatic Config Edit:
-    - Add CYRING_OBSIDIAN to revert-on-unclaim block ignore.
+    - Add CRYING_OBSIDIAN to revert-on-unclaim block ignore.
     - Will automatically update each world as well.
+0.98.4.18:
