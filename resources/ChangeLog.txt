@@ -8244,3 +8244,4 @@ v0.92.0.11:
     - Add CRYING_OBSIDIAN to revert-on-unclaim block ignore.
     - Will automatically update each world as well.
 0.98.4.18:
+  - Handle null mayors in Town#getFounder().

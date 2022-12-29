@@ -206,7 +206,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public String getFounder() {
-		return founderName != null ? founderName : getMayor().getName();
+		return founderName != null ? founderName : getMayor() != null ? getMayor().getName() : "None";
 	}
 
 	public void setFounder(String founderName) {
