@@ -8245,3 +8245,7 @@ v0.92.0.11:
     - Will automatically update each world as well.
 0.98.4.18:
   - Handle null mayors in Town#getFounder().
+  - New Permission Node: towny.nation.{nationname}
+    - Players in a nation will be given this node, for use with other plugins.
+    - ex: A player in the nation of Canada will receive towny.nation.canada.
+  - Small refactor in TownyPerms.
