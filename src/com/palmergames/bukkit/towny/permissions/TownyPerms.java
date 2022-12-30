@@ -290,6 +290,8 @@ public class TownyPerms {
 				for (String rank: resident.getNationRanks()) {
 					permList.addAll(getNationRankPermissions(rank));
 				}
+			} else {
+				permList.add("towny.nationless");
 			}
 		} else {
 			permList.add("towny.townless");

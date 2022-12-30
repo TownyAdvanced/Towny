@@ -8249,3 +8249,5 @@ v0.92.0.11:
     - Players in a nation will be given this node, for use with other plugins.
     - ex: A player in the nation of Canada will receive towny.nation.canada.
   - Small refactor in TownyPerms.
+  - New Permission Node: towny.nationless
+    - Given out to all players who have no nation.
