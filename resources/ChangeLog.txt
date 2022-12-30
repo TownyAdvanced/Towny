@@ -8251,3 +8251,5 @@ v0.92.0.11:
   - Small refactor in TownyPerms.
   - New Permission Node: towny.nationless
     - Given out to all players who have no nation.
+0.98.4.19:
+  - Handle 2nd case where the towny.nationless node should be given.

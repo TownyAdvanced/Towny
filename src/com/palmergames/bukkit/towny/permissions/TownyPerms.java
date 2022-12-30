@@ -295,6 +295,7 @@ public class TownyPerms {
 			}
 		} else {
 			permList.add("towny.townless");
+			permList.add("towny.nationless");
 		}
 		
 		List<String> playerPermArray = sort(new ArrayList<String>(permList));
