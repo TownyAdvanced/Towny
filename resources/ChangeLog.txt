@@ -8258,3 +8258,4 @@ v0.92.0.11:
     - Used by admins to set a founder for a town.
     - Requires towny.command.townyadmin.set.founder.
     - Closes #6407.
+  - Refactor /ta set code.

@@ -87,6 +87,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -2003,217 +2004,222 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
-		if (split[0].equalsIgnoreCase("mayor")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_MAYOR.getNode());
-			
-			if (split.length < 3) {
-				HelpMenu.TA_SET_MAYOR.send(sender);
-			} else
-				try {
-					Town town = getTownOrThrow(split[1]);
-					@Nullable Resident oldMayor = town.getMayor();
-					boolean deleteOldMayor = oldMayor != null && oldMayor.isNPC();
-					
-					// New mayor is either an NPC resident or a resident by name from split[2].
-					Resident newMayor = split[2].equalsIgnoreCase("npc") 
-							? ResidentUtil.createAndGetNPCResident()
-							: getResidentOrThrow(split[2]);
-
-					// Add the new Mayor to the town if need be.
-					if (!town.hasResident(newMayor))
-						TownCommand.townAddResident(town, newMayor);
-
-					// Set the new mayor.
-					town.setMayor(newMayor);
-					
-					// Reset caches and permissions.
-					if (!deleteOldMayor && oldMayor.isOnline()) {
-						Towny.getPlugin().deleteCache(oldMayor);
-						TownyPerms.assignPermissions(oldMayor, oldMayor.getPlayer());
-					}
-					if (newMayor.isOnline() && !newMayor.isNPC())
-						Towny.getPlugin().deleteCache(newMayor);
-
-					// If the previous mayor was an NPC make sure they're removed from the database.
-					if (deleteOldMayor)
-						townyUniverse.getDataSource().removeResident(oldMayor);
-
-					// NPC mayors set their towns to not pay any upkeep.
-					town.setHasUpkeep(!newMayor.isNPC());
-
-					town.save();
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor));
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(sender, e.getMessage());
-				}
-
-		} else if (split[0].equalsIgnoreCase("capital")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_CAPITAL.getNode());
-
-			if (split.length < 2) {
-				HelpMenu.TA_SET_CAPITAL.send(sender);
+		switch (split[0].toLowerCase(Locale.ROOT)) {
+		case "capital":
+			adminSetCapital(sender, split);
+			break;
+		case "founder":
+			adminSetFounder(sender, split);
+			break;
+		case "mayor":
+			adminSetMayor(sender, split);
+			break;
+		case "nationzoneoverride":
+			adminSetNationZoneOverride(sender, split);
+			break;
+		case "plot":
+			adminSetPlot(sender, split);
+			break;
+		case "surname":
+			adminSetSurname(sender, split);
+			break;
+		case "title":
+			adminSetTitle(sender, split);
+			break;
+		default:
+			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, split[0]).execute(sender, "townyadmin", split);
 			} else {
-				final Town newCapital = townyUniverse.getTown(split[1]);
-				
-				if (newCapital == null) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", split[1]));
-					return;
-				}
-				
-				try {
-					Nation nation = newCapital.getNation();
-					NationCommand.nationSet(sender, split, true, nation);
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(sender, e.getMessage());
-				}
-
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", "administrative"));
 			}
+		}
+	}
 
-		} else if (split[0].equalsIgnoreCase("founder")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_FOUNDER.getNode());
-			
-			if (split.length < 3) {
-				HelpMenu.TA_SET_FOUNDER.send(sender);
-				return;
-			}
-			Town town = getTownOrThrow(split[1]);
-			String founderName = split[2];
-			town.setFounder(founderName);
-			town.save();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_founder_set", town, founderName));
+	private void adminSetCapital(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_CAPITAL.getNode());
+
+		if (split.length < 2) {
+			HelpMenu.TA_SET_CAPITAL.send(sender);
 			return;
+		}
+		final Town newCapital = getTownOrThrow(split[1]);
+		try {
+			Nation nation = newCapital.getNation();
+			NationCommand.nationSet(sender, split, true, nation);
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(sender, e.getMessage());
+		}
+	}
 
-		} else if (split[0].equalsIgnoreCase("title")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_TITLE.getNode());
-			
-			Resident resident = null;
-			// Give the resident a title
-			if (split.length < 2)
-				TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set title bilbo Jester");
-			else
-				resident = getResidentOrThrow(split[1]);
+	private void adminSetFounder(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_FOUNDER.getNode());
 
-			split = StringMgmt.remArgs(split, 2);
-			if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
-				return;
-			}
+		if (split.length < 3) {
+			HelpMenu.TA_SET_FOUNDER.send(sender);
+			return;
+		}
+		Town town = getTownOrThrow(split[1]);
+		String founderName = split[2];
+		town.setFounder(founderName);
+		town.save();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_founder_set", town, founderName));
+	}
 
-			String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-			resident.setTitle(title + " ");
-			resident.save();
+	private void adminSetMayor(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_MAYOR.getNode());
 
-			if (resident.hasTitle()) {
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-				TownyMessaging.sendMsg(resident, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-			} else {
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-				TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-			}
+		if (split.length < 3) {
+			HelpMenu.TA_SET_MAYOR.send(sender);
+			return;
+		}
+		Town town = getTownOrThrow(split[1]);
+		@Nullable Resident oldMayor = town.getMayor();
+		boolean deleteOldMayor = oldMayor != null && oldMayor.isNPC();
+		
+		// New mayor is either an NPC resident or a resident by name from split[2].
+		Resident newMayor = split[2].equalsIgnoreCase("npc") 
+				? ResidentUtil.createAndGetNPCResident()
+				: getResidentOrThrow(split[2]);
 
-		} else if (split[0].equalsIgnoreCase("surname")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME.getNode());
-			
-			Resident resident = null;
-			// Give the resident a surname
-			if (split.length < 2)
-				TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set surname bilbo Jester");
-			else
-				resident = getResidentOrThrow(split[1]);
+		// Add the new Mayor to the town if need be.
+		if (!town.hasResident(newMayor))
+			TownCommand.townAddResident(town, newMayor);
 
-			split = StringMgmt.remArgs(split, 2);
-			if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
-				return;
-			}
+		// Set the new mayor.
+		town.setMayor(newMayor);
+		
+		// Reset caches and permissions.
+		if (!deleteOldMayor && oldMayor.isOnline()) {
+			Towny.getPlugin().deleteCache(oldMayor);
+			TownyPerms.assignPermissions(oldMayor, oldMayor.getPlayer());
+		}
+		if (newMayor.isOnline() && !newMayor.isNPC())
+			Towny.getPlugin().deleteCache(newMayor);
 
-			String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
-			resident.setSurname(surname + " ");
-			resident.save();
+		// If the previous mayor was an NPC make sure they're removed from the database.
+		if (deleteOldMayor)
+			TownyUniverse.getInstance().getDataSource().removeResident(oldMayor);
 
-			if (resident.hasSurname()) {
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-				TownyMessaging.sendMsg(resident, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-			} else {
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-				TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-			}
-		} else if (split[0].equalsIgnoreCase("nationzoneoverride")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_NATIONZONE.getNode());
-			
-			if (split.length < 2) {
-				HelpMenu.TA_SET_NATIONZONE.send(sender);
-				return;
-			}
-			
-			Town town = townyUniverse.getTown(split[1]);
-			if (town == null)
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[1]));
+		// NPC mayors set their towns to not pay any upkeep.
+		town.setHasUpkeep(!newMayor.isNPC());
 
-			int size = MathUtil.getPositiveIntOrThrow(split[2]);
-			
-			town.setNationZoneOverride(size);
-			town.save();
-			if (size == 0)
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_nationzone_override_removed", town.getName()));
-			else 
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_nationzone_override_set_to", town.getName(), size));
-			
-		} else if (split[0].equalsIgnoreCase("plot")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_PLOT.getNode());
-			
-			if (split.length < 2) {
-				HelpMenu.TA_SET_PLOT.send(sender);
-				return;
-			}
-			
-			final Player player = catchConsole(sender);
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
-			if (tb != null) {
-				Town newTown = townyUniverse.getTown(split[1]);
-				
-				if (newTown != null) {
-					tb.setResident(null);
-					tb.setTown(newTown);
-					tb.setType(TownBlockType.RESIDENTIAL);
-					tb.setName("");
-					tb.save();
-					TownyMessaging.sendMsg(player, Translatable.of("changed_plot_town", newTown.getName()));
-				}
-				else {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", split[1]));
-				}
-			} else {
-				Town town = townyUniverse.getTown(split[1]);
-				
-				if (town == null) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", split[1]));
-					return;
-				}
-				
-				TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
-				Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-				List<WorldCoord> selection;
-				if (split.length == 2)
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0], true);
-				else  {
-					String[] newSplit = StringMgmt.remFirstArg(split);
-					newSplit = StringMgmt.remFirstArg(newSplit);
-					selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), newSplit, true);
-				}
-				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
-				TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-				
-				new TownClaim(plugin, player, town, selection, false, true, false).start();
+		town.save();
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor));
+	}
 
-			}
-		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_SET, split[0]).execute(sender, "townyadmin", split);
+	private void adminSetNationZoneOverride(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_NATIONZONE.getNode());
+		
+		if (split.length < 2) {
+			HelpMenu.TA_SET_NATIONZONE.send(sender);
+			return;
+		}
+		Town town = getTownOrThrow(split[1]);
+		int size = MathUtil.getPositiveIntOrThrow(split[2]);
+		town.setNationZoneOverride(size);
+		town.save();
+		if (size == 0)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_nationzone_override_removed", town.getName()));
+		else 
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_nationzone_override_set_to", town.getName(), size));
+	}
+
+	private void adminSetPlot(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_PLOT.getNode());
+		
+		if (split.length < 2) {
+			HelpMenu.TA_SET_PLOT.send(sender);
+			return;
+		}
+		
+		final Player player = catchConsole(sender);
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
+		if (tb != null) {
+			Town newTown = getTownOrThrow(split[1]);
+			tb.setResident(null);
+			tb.setTown(newTown);
+			tb.setType(TownBlockType.RESIDENTIAL);
+			tb.setName("");
+			tb.save();
+			TownyMessaging.sendMsg(player, Translatable.of("changed_plot_town", newTown.getName()));
 		} else {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", "administrative"));
+			Town town = getTownOrThrow(split[1]);
+			TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
+			Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+			List<WorldCoord> selection;
+			if (split.length == 2)
+				selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0], true);
+			else  {
+				String[] newSplit = StringMgmt.remFirstArg(split);
+				newSplit = StringMgmt.remFirstArg(newSplit);
+				selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), newSplit, true);
+			}
+			TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
+			selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
+			TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
+			
+			new TownClaim(plugin, player, town, selection, false, true, false).start();
+
+		}
+	}
+
+	private void adminSetSurname(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME.getNode());
+		
+		Resident resident = null;
+		// Give the resident a surname
+		if (split.length < 2) {
+			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set surname bilbo Jester");
+			return;
+		} else
+			resident = getResidentOrThrow(split[1]);
+
+		split = StringMgmt.remArgs(split, 2);
+		if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
+			return;
+		}
+
+		String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+		resident.setSurname(surname + " ");
+		resident.save();
+
+		if (resident.hasSurname()) {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
+		} else {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
+		}
+	}
+
+	private void adminSetTitle(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_TITLE.getNode());
+		
+		Resident resident = null;
+		// Give the resident a title
+		if (split.length < 2) {
+			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set title bilbo Jester");
+			return;
+		} else
+			resident = getResidentOrThrow(split[1]);
+
+		split = StringMgmt.remArgs(split, 2);
+		if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
+			return;
+		}
+
+		String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+		resident.setTitle(title + " ");
+		resident.save();
+
+		if (resident.hasTitle()) {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
+		} else {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
 		}
 	}
 
