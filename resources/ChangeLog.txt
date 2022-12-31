@@ -8254,3 +8254,7 @@ v0.92.0.11:
 0.98.4.19:
   - Handle 2nd case where the towny.nationless node should be given.
   - Move PermissionEventEnums into GroupManagerSource.
+  - New Command: /ta set founder [townname] [foundername]
+    - Used by admins to set a founder for a town.
+    - Requires towny.command.townyadmin.set.founder.
+    - Closes #6407.

@@ -225,6 +225,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"mayor",
 		"capital",
 		"title",
+		"founder",
 		"surname",
 		"nationzoneoverride",
 		"plot"
@@ -289,6 +290,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 									return Collections.emptyList();
 							}
 						case "capital":
+						case "founder":
 						case "nationzoneoverride":
 						case "plot":
 							if (args.length == 3)
@@ -2068,6 +2070,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 
 			}
+
+		} else if (split[0].equalsIgnoreCase("founder")) {
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_FOUNDER.getNode());
+			
+			if (split.length < 3) {
+				HelpMenu.TA_SET_FOUNDER.send(sender);
+				return;
+			}
+			Town town = getTownOrThrow(split[1]);
+			String founderName = split[2];
+			town.setFounder(founderName);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_founder_set", town, founderName));
+			return;
+
 		} else if (split[0].equalsIgnoreCase("title")) {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_TITLE.getNode());
 			

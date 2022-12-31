@@ -252,6 +252,14 @@ public enum HelpMenu {
 		}
 	},
 
+	TA_SET_FOUNDER {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set founder")
+				.add("founder [town] [foundername]", "");
+		}
+	},
+
 	TA_SET_PLOT {
 		@Override
 		protected MenuBuilder load() {
