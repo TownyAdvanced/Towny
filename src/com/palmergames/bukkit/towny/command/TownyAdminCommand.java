@@ -2081,6 +2081,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			Town town = getTownOrThrow(split[1]);
 			String founderName = split[2];
 			town.setFounder(founderName);
+			town.save();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_founder_set", town, founderName));
 			return;
 
