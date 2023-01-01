@@ -8259,3 +8259,4 @@ v0.92.0.11:
     - Requires towny.command.townyadmin.set.founder.
     - Closes #6407.
   - Refactor /ta set code.
+  - Add PluginIntegrations class.
