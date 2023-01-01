@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.CommandList;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -704,7 +705,7 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		// Let's ignore Citizens NPCs
-		if (BukkitTools.checkCitizens(event.getPlayer()))
+		if (PluginIntegrations.getInstance().checkCitizens(event.getPlayer()))
 			return;
 		
 		if (plugin.isError()) {
@@ -766,7 +767,7 @@ public class TownyPlayerListener implements Listener {
 		// Let's ignore Citizens NPCs. This must come before the safemode check, as Citizens stores their NPCs
 		// at the world spawn until a player loads a chunk, to which the NPC is then teleported. Towny would
 		// prevent them teleporting, leaving them at spawn even after Safe Mode is cleaned up.
-		if (BukkitTools.checkCitizens(event.getPlayer()))
+		if (PluginIntegrations.getInstance().checkCitizens(event.getPlayer()))
 			return;
 		
 		if (plugin.isError()) {

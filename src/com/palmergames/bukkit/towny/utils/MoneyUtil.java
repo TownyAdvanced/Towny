@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.object.Translatable;
+
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -207,9 +210,20 @@ public class MoneyUtil {
 	}
 	
 	/**
+	 * For a short time Towny stored debt accounts in the server's economy plugin.
+	 * This practice had to end, being replaced with the debtBalance which is stored
+	 * in the Town object.
+	 */
+	public static void checkLegacyDebtAccounts() {
+		File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");
+		if (!f.exists())
+			Bukkit.getScheduler().runTaskLaterAsynchronously(Towny.getPlugin(), () -> convertLegacyDebtAccounts(), 600l);
+	}
+	
+	/**
 	 * Will attempt to set a town's debtBalance if their old DebtAccount is above 0 and exists.
 	 */
-	public static void convertLegacyDebtAccounts() {
+	private static void convertLegacyDebtAccounts() {
 		for (Town town : TownyUniverse.getInstance().getTowns()) {
 			final String name = "[DEBT]-" + town.getName();
 			if (TownyEconomyHandler.hasAccount(name)) {

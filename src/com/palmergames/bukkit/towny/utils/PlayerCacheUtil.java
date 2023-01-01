@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.player.PlayerCacheGetTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -283,7 +284,7 @@ public class PlayerCacheUtil {
 		
 		if (resident == null) {
 			// Check if entity is a Citizens NPC
-			if (BukkitTools.checkCitizens(player))
+			if (PluginIntegrations.getInstance().checkCitizens(player))
 				return TownBlockStatus.NOT_REGISTERED;
  
 			// Retry getting a resident with the ability to get a fake player resident.

@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
@@ -69,7 +70,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					Location livingEntityLoc = entity.getLocation();
 
 					// Check if entity is a Citizens NPC
-					if (BukkitTools.checkCitizens(entity))
+					if (PluginIntegrations.getInstance().checkCitizens(entity))
 						continue;
 
 					// Handles entities Globally.

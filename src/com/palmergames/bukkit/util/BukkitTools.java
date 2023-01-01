@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 
-import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -65,7 +65,7 @@ public class BukkitTools {
 		
 		for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
 			String iterPlayerName = iterPlayer.getName();
-			if (checkCitizens(iterPlayer)) {
+			if (PluginIntegrations.getInstance().checkCitizens(iterPlayer)) {
 				continue;
 			}
 			if (name.equalsIgnoreCase(iterPlayerName)) {
@@ -270,19 +270,13 @@ public class BukkitTools {
 	 * Catches the NoClassDefFoundError thrown when Citizens is present 
 	 * but failed to start up correctly.
 	 * 
+	 * @deprecated since 0.98.4.19 use {@link PluginIntegrations#checkCitizens(Entity)} instead.
 	 * @param entity Entity to check.
 	 * @return true if the entity is an NPC.
 	 */
+	@Deprecated
 	public static boolean checkCitizens(Entity entity) {
-		if (plugin.isCitizens2()) {
-			try {
-				return CitizensAPI.getNPCRegistry().isNPC(entity);
-			} catch (NoClassDefFoundError e) {
-				plugin.setCitizens2(false);
-			}
-			
-		}
-		return false;
+		return PluginIntegrations.getInstance().checkCitizens(entity);
 	}
 	
 	@SuppressWarnings("deprecation")
