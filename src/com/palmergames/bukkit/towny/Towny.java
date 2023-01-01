@@ -980,4 +980,5 @@ public class Towny extends JavaPlugin {
 		}
 
 	}
+
 }

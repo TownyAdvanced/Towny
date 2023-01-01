@@ -39,6 +39,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -387,7 +388,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		// Other TownyAdvanced plugins to report versions
 		String townyPlugins = "";
 		List<String> pluginList = PluginIntegrations.getInstance().getTownyPluginsForUniverseCommand();
-		townyPlugins = StringMgmt.join(pluginList, " ");
+		townyPlugins = String.join(" ", pluginList);
 		if (pluginList.size() > 0)
 			output.add(Colors.Gold + "[" + townyPlugins + Colors.Gold + "]");
 
