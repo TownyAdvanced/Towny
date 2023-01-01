@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
+import io.papermc.lib.PaperLib;
 import net.citizensnpcs.api.CitizensAPI;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
@@ -127,6 +128,10 @@ public class PluginIntegrations {
 			enableLuckPermsContexts(towny);
 			formatForStartup(addons, "LuckPerms");
 		}
+
+		if (!PaperLib.isPaper())
+			warnings.add("Towny performs better when it teleports players and loads chunks, when your server uses Paper."
+						+ " Consider switching to Paper: https://papermc.io");
 
 		// Add our chat handler to TheNewChat via the API.
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
