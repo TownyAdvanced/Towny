@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.event.deathprice.NationPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.PlayerPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.TownPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -62,7 +63,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (!TownySettings.isDamageCancellingSpawnWarmup() 
 				|| !event.getEntityType().equals(EntityType.PLAYER) 
 				|| !TownyTimerHandler.isTeleportWarmupRunning() 
-				|| BukkitTools.checkCitizens(event.getEntity()))
+				|| PluginIntegrations.getInstance().checkCitizens(event.getEntity()))
 			return;
 
 		Resident resident = TownyUniverse.getInstance().getResident(event.getEntity().getUniqueId());

@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -367,7 +368,7 @@ public class TownyEntityListener implements Listener {
 			LivingEntity livingEntity = event.getEntity();
 
 			// ignore Citizens NPCs
-			if (BukkitTools.checkCitizens(livingEntity))
+			if (PluginIntegrations.getInstance().checkCitizens(livingEntity))
 				return;
 			
 			if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
