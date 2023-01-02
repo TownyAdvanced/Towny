@@ -1166,51 +1166,50 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminResidentCommand(CommandSender sender, String[] split) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_RESIDENT.send(sender);
 			return;
 		}
+		Resident resident = getResidentOrThrow(split[0]);
 
-		try	{
-			Resident resident = getResidentOrThrow(split[0]);
+		if (split.length == 1) {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resident, sender)));
+			return;
+		}
+		
+		switch (split[1].toLowerCase(Locale.ROOT)) {
+		case "rename":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME.getNode());
+			if (split.length != 3)
+				throw new TownyException("Eg: /townyadmin resident [resident] rename [newname]");
 
-			if (split.length == 1) {
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resident, sender)));
+			if (NameValidation.isBlacklistName(split[2]))
+				throw new TownyException(Translatable.of("msg_invalid_name"));
+
+			TownyUniverse.getInstance().getDataSource().renamePlayer(resident, split[2]);
+			break;
+		case "friend":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND.getNode());
+			if (split.length == 2) {
+				HelpMenu.TA_RESIDENT_FRIEND.send(sender);
 				return;
 			}
 
-			if(split[1].equalsIgnoreCase("rename"))	{
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME.getNode());
-				if (!NameValidation.isBlacklistName(split[2])) {
-					townyUniverse.getDataSource().renamePlayer(resident, split[2]);
-				} else
-					throw new TownyException(Translatable.of("msg_invalid_name"));
-				
-			} else if(split[1].equalsIgnoreCase("friend"))	{
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND.getNode());
-				if (split.length == 2) {
-					HelpMenu.TA_RESIDENT_FRIEND.send(sender);
-					return;
-				}
+			ResidentCommand.residentFriend(catchConsole(sender), StringMgmt.remArgs(split, 2), true, resident);
+			break;
+		case "unjail":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL.getNode());
+			if (!resident.isJailed())
+				throw new TownyException(Translatable.of("msg_err_player_is_not_jailed"));
 
-				ResidentCommand.residentFriend(catchConsole(sender), StringMgmt.remArgs(split, 2), true, resident);
-
-			} else if(split[1].equalsIgnoreCase("unjail")) {
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL.getNode());
-				if (resident.isJailed())
-					JailUtil.unJailResident(resident, UnJailReason.ADMIN);
-				else 
-					throw new TownyException(Translatable.of("msg_err_player_is_not_jailed"));
-			} else if (split[1].equalsIgnoreCase("delete")) {
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE.getNode());
-				residentDelete(sender, split[0]);
-			}
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			JailUtil.unJailResident(resident, UnJailReason.ADMIN);
+			break;
+		case "delete":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE.getNode());
+			residentDelete(sender, resident);
+			break;
+		default:
+			throw new TownyException(Translatable.of("msg_err_invalid_property", split[1]));
 		}
 	}
 	
@@ -2323,28 +2322,21 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Delete a resident and it's data file (if not online) Available Only to
-	 * players with the 'towny.admin' permission node.
+	 * Delete a resident and their data file afer a successful confirmation.
 	 * 
-	 * @param sender - Sender who ran the command.
-	 * @param name - Name of the resident to delete.
+	 * @param sender Sender who ran the command.
+	 * @param resident Resident to delete.
 	 */
-	public void residentDelete(CommandSender sender, String name) {
+	public void residentDelete(CommandSender sender, Resident resident) {
 
-		Resident resident = TownyUniverse.getInstance().getResident(name);
-		if (resident != null) {
-			Player player = null;
-			if (resident.isOnline())
-				player = resident.getPlayer();
-
+		Confirmation.runOnAccept(()-> {
+			Player player = resident.isOnline() ? resident.getPlayer() : null;
 			TownyUniverse.getInstance().getDataSource().removeResident(resident);
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_del_resident", resident.getName()));
-			
+
 			if (player != null)
 				Bukkit.getScheduler().runTask(plugin, new OnPlayerLogin(plugin, player));
-		} else {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", name));
-		}
+		}).sendTo(sender);
 	}
 
 	public void parseToggleCommand(CommandSender sender, String[] split) throws TownyException {
