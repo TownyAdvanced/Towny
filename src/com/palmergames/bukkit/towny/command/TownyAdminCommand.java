@@ -23,9 +23,7 @@ import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
-import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
@@ -1313,7 +1311,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_BANKHISTORY.getNode());
 			int pages = 10;
 			if (split.length > 2)
-				pages = MathUtil.getIntOrThrow(split[2]);
+				pages = MathUtil.getPositiveIntOrThrow(split[2]);
 
 			town.generateBankHistoryBook(catchConsole(sender), pages);
 			break;
@@ -1588,339 +1586,150 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_NATION.send(sender);
 			return;
 		}
-		try {
-			
-			if (split[0].equalsIgnoreCase("new")) {
-				if (split.length != 3)
-					throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta nation new [name] [capital]");
+		// Special case where we check for a new nation being made before we use split[0] to set the Nation.
+		if (split[0].equalsIgnoreCase("new")) {
+			parseAdminNewNationCommand(sender, split);
+			return;
+		}
 
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_NEW.getNode());
+		Nation nation = getNationOrThrow(split[0]);
+		if (split.length == 1) {
+			//This is run async because it will ping the economy plugin for the town bank value.
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, sender)));
+			return;
+		}
+
+		switch (split[1].toLowerCase(Locale.ROOT)) {
+		case "add":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ADD.getNode());
+			if (split.length != 3)
+				throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta nation [nationname] add [townname]");
+			townyAdminNationAddTown(sender, nation, StringMgmt.remArgs(split, 2));
+			break;
+		case "transfer":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_TRANSFER.getNode());
+			if (split.length != 3)
+				throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta nation [nationname] transfer [townname]");
+			townyAdminNationTransfterTown(sender, nation, StringMgmt.remArgs(split, 2));
+			break;
+		case "kick":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_KICK.getNode());
+			NationCommand.nationKick(sender, nation, TownyAPI.getInstance().getTowns(StringMgmt.remArgs(split, 2)));
+			break;
+		case "delete":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode());
+			Confirmation.runOnAccept(() -> {
+				if (sender instanceof Player)
+					TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
 				
-				final Town capitalTown = townyUniverse.getTown(split[2]);
-				
-				if (capitalTown == null)
-					throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
+				TownyUniverse.getInstance().getDataSource().removeNation(nation);
+				TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
+			}).sendTo(sender);
+			break;
+		case "recheck":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RECHECK.getNode());
+			nation.removeOutOfRangeTowns();
+			TownyMessaging.sendMsg(sender, Translatable.of("nation_rechecked_by_admin", nation.getName()));
+			break;
+		case "rename":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME.getNode());
+			String name = String.join("_", StringMgmt.remArgs(split, 2));
+			BukkitTools.ifCancelledThenThrow(new NationPreRenameEvent(nation, name));
+			if (NameValidation.isBlacklistName(name) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(name)))
+				throw new TownyException(Translatable.of("msg_invalid_name"));
+			townyUniverse.getDataSource().renameNation(nation, name);
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
+			break;
+		case "merge":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_MERGE.getNode());
+			NationCommand.mergeNation(sender, StringMgmt.remArgs(split, 2), nation, true);
+			break;
+		case "forcemerge":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_FORCEMERGE.getNode());
+			Nation remainingNation = getNationOrThrow(split[2]);
+			if (remainingNation.equals(nation))
+				throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
+			Confirmation.runOnAccept(() -> {
+				townyUniverse.getDataSource().mergeNation(nation, remainingNation);
+				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
+			}).sendTo(sender);
+			break;
+		case "set":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SET.getNode());
+			NationCommand.nationSet(sender, StringMgmt.remArgs(split, 2), true, nation);
+			break;
+		case "toggle":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_TOGGLE.getNode());
+			NationCommand.nationToggle(sender, StringMgmt.remArgs(split, 2), true, nation);
+			break;
+		case "bankhistory":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_BANKHISTORY.getNode());
+			int pages = 10;
+			if (split.length > 2)
+				pages = MathUtil.getPositiveIntOrThrow(split[2]);
 
-				NationCommand.newNation(sender, split[1], capitalTown, true);
-				return;
-			}
-			
-			Nation nation = townyUniverse.getNation(split[0]);
-			
-			if (nation == null) {
-				throw new TownyException(Translatable.of("msg_err_no_nation_with_that_name", split[0]));
-			}
-			
-			if (split.length == 1) {
-				TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, sender));
-				return;
-			}
+			nation.generateBankHistoryBook(catchConsole(sender), pages);
+			break;
+		case "deposit":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DEPOSIT.getNode());
+			if (!TownyEconomyHandler.isActive())
+				throw new TownyException(Translatable.of("msg_err_no_economy"));
+			// Handle incorrect number of arguments
+			if (split.length != 3)
+				throw new TownyException(Translatable.of("msg_err_invalid_input", "deposit [amount]"));
 
-			if (split[1].equalsIgnoreCase("add")) {
+			int deposit = MathUtil.getPositiveIntOrThrow(split[2]);
+			nation.getAccount().deposit(deposit, "Admin Deposit");
+			// Send notifications
+			Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(sender), deposit,  Translatable.of("nation_sing"));
+			TownyMessaging.sendMsg(sender, depositMessage);
+			TownyMessaging.sendPrefixedNationMessage(nation, depositMessage);
+			break;
+		case "withdraw":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_WITHDRAW.getNode());
+			if (!TownyEconomyHandler.isActive())
+				throw new TownyException(Translatable.of("msg_err_no_economy"));
+			// Handle incorrect number of arguments
+			if (split.length != 3)
+				throw new TownyException(Translatable.of("msg_err_invalid_input", "withdraw [amount]"));
 
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ADD.getNode());
-				if (split.length != 3)
-					throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta nation [nationname] add [townname]");
-				
-				townyAdminNationAddTown(sender, nation, StringMgmt.remArgs(split, 2));
-
-			} else if (split[1].equalsIgnoreCase("transfer")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_TRANSFER.getNode());
-				if (split.length != 3)
-					throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta nation [nationname] transfer [townname]");
-
-				townyAdminNationTransfterTown(sender, nation, StringMgmt.remArgs(split, 2));
-
-			} else if (split[1].equalsIgnoreCase("kick")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_KICK.getNode());
-				NationCommand.nationKick(sender, nation, TownyAPI.getInstance().getTowns(StringMgmt.remArgs(split, 2)));
-
-			} else if (split[1].equalsIgnoreCase("delete")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode());
-				Confirmation.runOnAccept(() -> {
-					if (sender instanceof Player)
-						TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
-					
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);
-					TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
-				}).sendTo(sender);
-
-			} else if(split[1].equalsIgnoreCase("recheck")) {
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RECHECK.getNode());
-				nation.removeOutOfRangeTowns();
-				TownyMessaging.sendMsg(sender, Translatable.of("nation_rechecked_by_admin", nation.getName()));
-
-			} else if (split[1].equalsIgnoreCase("rename")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME.getNode());
-				String name = String.join("_", StringMgmt.remArgs(split, 2));
-
-				BukkitTools.ifCancelledThenThrow(new NationPreRenameEvent(nation, name));
-
-				if (!NameValidation.isBlacklistName(name) && (TownySettings.areNumbersAllowedInNationNames() || !NameValidation.containsNumbers(name))) {
-					townyUniverse.getDataSource().renameNation(nation, name);
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
-				} else
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
-
-			} else if (split[1].equalsIgnoreCase("merge")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_MERGE.getNode());
-				NationCommand.mergeNation(sender, StringMgmt.remArgs(split, 2), nation, true);
-			} else if (split[1].equalsIgnoreCase("forcemerge")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_FORCEMERGE.getNode());
-				Nation remainingNation = townyUniverse.getNation(split[2]);
-				
-				if (remainingNation == null || remainingNation.equals(nation))
-					throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
-				Confirmation.runOnAccept(() -> {
-					townyUniverse.getDataSource().mergeNation(nation, remainingNation);
-					TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
-				}).sendTo(sender);
-
-			} else if (split[1].equalsIgnoreCase("set")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SET.getNode());
-				NationCommand.nationSet(sender, StringMgmt.remArgs(split, 2), true, nation);
-
-			} else if (split[1].equalsIgnoreCase("toggle")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_TOGGLE.getNode());
-				NationCommand.nationToggle(sender, StringMgmt.remArgs(split, 2), true, nation);
-			} else if (split[1].equalsIgnoreCase("bankhistory")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_BANKHISTORY.getNode());
-				int pages = 10;
-				if (split.length > 2)
-					try {
-						pages = Integer.parseInt(split[2]);
-					} catch (NumberFormatException e) {
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-						return;
-					}
-
-				nation.generateBankHistoryBook(catchConsole(sender), pages);
-			} else if (split[1].equalsIgnoreCase("deposit")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DEPOSIT.getNode());
-				if (!TownyEconomyHandler.isActive())
-					throw new TownyException(Translatable.of("msg_err_no_economy"));
-				
-				int amount;
-				
-				// Handle incorrect number of arguments
-				if (split.length != 3)
-					throw new TownyException(Translatable.of("msg_err_invalid_input", "deposit [amount]"));
-				
-				try {
-					amount = Integer.parseInt(split[2]);
-				} catch (NumberFormatException ex) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-					return;
-				}
-
-				nation.getAccount().deposit(amount, "Admin Deposit");
-				
-				// Send notifications
-				Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(sender), amount,  Translatable.of("nation_sing"));
-				TownyMessaging.sendMsg(sender, depositMessage);
-				TownyMessaging.sendPrefixedNationMessage(nation, depositMessage);
-			}
-			else if (split[1].equalsIgnoreCase("withdraw")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_WITHDRAW.getNode());
-				if (!TownyEconomyHandler.isActive())
-					throw new TownyException(Translatable.of("msg_err_no_economy"));
-				
-				int amount;
-				
-				// Handle incorrect number of arguments
-				if (split.length != 3)
-					throw new TownyException(Translatable.of("msg_err_invalid_input", "withdraw [amount]"));
-				
-				try {
-					amount = Integer.parseInt(split[2]);
-				} catch (NumberFormatException ex) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_must_be_int"));
-					return;
-				}
-
-				nation.getAccount().withdraw(amount, "Admin Withdraw");
-				
-				// Send notifications
-				Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(sender), amount,  Translatable.of("nation_sing"));
-				TownyMessaging.sendMsg(sender, withdrawMessage);
-				TownyMessaging.sendPrefixedNationMessage(nation, withdrawMessage);
-			}
-			else if (split[1].equalsIgnoreCase("rank")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RANK.getNode());
-				if (split.length < 5) {
-					HelpMenu.TA_NATION_RANK.send(sender);
-					return;
-				}
-				Resident target;
-				String rank;
-
-				try {
-					target = getResidentOrThrow(split[3]);
-				} catch (TownyException exception) {
-					TownyMessaging.sendMessage(sender, exception.getMessage());
-					return;
-				}
-				
-				if (!target.hasTown() || !target.getTownOrNull().hasNation() || !target.getTownOrNull().getNationOrNull().getUUID().equals(nation.getUUID()))
-					throw new TownyException(Translatable.of("msg_err_that_resident_doesnt_belong_to_that_nation"));
-				
-				rank = TownyPerms.matchNationRank(split[4]);
-				if (rank == null) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_unknown_rank_available_ranks", split[4], StringMgmt.join(TownyPerms.getNationRanks(), ", ")));
-					return;
-				}
-
-				switch(split[2].toLowerCase()) {
-					case "add":
-						if (!target.hasNationRank(rank)) {
-							BukkitTools.fireEvent(new NationRankAddEvent(nation, rank, target));
-							target.addNationRank(rank);
-							if (target.isOnline()) {
-								TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Nation", rank));
-								plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-							}
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
-							target.save();
-							return;
-						} else {
-							// Already has the rank.
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_resident_already_has_rank", target.getName(), "Nation"));
-							return;
-						}
-					case "remove":
-						if (target.hasNationRank(rank)) {
-							BukkitTools.fireEvent(new NationRankRemoveEvent(nation, rank, target));
-							target.removeNationRank(rank);
-							if (target.isOnline()) {
-								TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Nation", rank));
-								plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-							}
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
-							target.save();
-							return;
-						} else {
-							// Doesn't have the rank.
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
-							return;
-						}
-					default:
-						HelpMenu.TA_NATION_RANK.send(sender);
-						return;
-				}
-			} else if (split[1].equalsIgnoreCase("ally")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ALLY.getNode());
-				if (split.length < 4) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/ta nation [nation] ally [add/remove] [nation]"));
-					return;
-				}
-				
-				Nation ally = townyUniverse.getNation(split[3]);
-				if (ally == null || ally.equals(nation)) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", split[3]));
-					return;
-				}
-
-				if (split[2].equalsIgnoreCase("add")) {
-					if (!nation.hasAlly(ally)) {
-						if (nation.hasEnemy(ally))
-							nation.removeEnemy(ally);
-						
-						if (ally.hasEnemy(nation))
-							ally.removeEnemy(nation);
-						
-						nation.addAlly(ally);
-						nation.save();
-
-						ally.addAlly(nation);
-						ally.save();
-
-						plugin.resetCache();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_added_ally", ally.getName()));
-						TownyMessaging.sendPrefixedNationMessage(ally, Translatable.of("msg_added_ally", nation.getName()));
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
-					} else
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_already_allied_with_2", nation.getName(), ally.getName()));
-				} else if (split[2].equalsIgnoreCase("remove")) {
-					if (nation.hasAlly(ally)) {
-						nation.removeAlly(ally);
-						nation.save();
-
-						ally.removeAlly(nation);
-						ally.save();
-
-						plugin.resetCache();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", ally.getName()));
-						TownyMessaging.sendPrefixedNationMessage(ally, Translatable.of("msg_removed_ally", nation.getName()));
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
-					} else
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_not_allied_with_2", nation.getName(), ally.getName()));
-				} else
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/ta nation [nation] ally [add/remove] [nation]"));
-			} else if (split[1].equalsIgnoreCase("enemy")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY.getNode());
-				if (split.length < 4) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
-					return;
-				}
-				
-				Nation enemy = townyUniverse.getNation(split[3]);
-				if (enemy == null || enemy.equals(nation)) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", split[3]));
-					return;
-				}
-
-				if (split[2].equalsIgnoreCase("add")) {
-					if (!nation.hasEnemy(enemy)) {
-						if (nation.hasAlly(enemy)) {
-							nation.removeAlly(enemy);
-							enemy.removeAlly(nation);
-							plugin.resetCache();
-						}
-
-						nation.addEnemy(enemy);
-						nation.save();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_nations", getSenderFormatted(sender), enemy.getName()));
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
-					} else
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_already_enemies_with_2", nation.getName(), enemy.getName()));
-				} else if (split[2].equalsIgnoreCase("remove")) {
-					if (nation.hasEnemy(enemy)) {
-						nation.removeEnemy(enemy);
-						nation.save();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_to_neutral", getSenderFormatted(sender), enemy.getName()));
-						TownyMessaging.sendPrefixedNationMessage(enemy, Translatable.of("msg_removed_enemy", nation.getName()));
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
-					} else
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_not_enemies_with_2", nation.getName(), enemy.getName()));
-				} else
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
-			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_NATION, split[1])) {
+			int withdraw = MathUtil.getPositiveIntOrThrow(split[2]);
+			nation.getAccount().withdraw(withdraw, "Admin Withdraw");
+			// Send notifications
+			Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(sender), withdraw,  Translatable.of("nation_sing"));
+			TownyMessaging.sendMsg(sender, withdrawMessage);
+			TownyMessaging.sendPrefixedNationMessage(nation, withdrawMessage);
+			break;
+		case "rank":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RANK.getNode());
+			parseAdminNationRankCommand(sender, StringMgmt.remArgs(split, 2), nation);
+			break;
+		case "ally":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ALLY.getNode());
+			parseAdminNationAllyCommand(sender, StringMgmt.remArgs(split, 2), nation);
+			break;
+		case "enemy":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY.getNode());
+			parseAdminNationEnemyCommand(sender, StringMgmt.remArgs(split, 2), nation);
+			break;
+		default:
+			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_NATION, split[1])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_NATION, split[1]).execute(sender, split, nation);
+				return;
 			}
-
-		} catch (NotRegisteredException | AlreadyRegisteredException | InvalidNameException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage());
+			HelpMenu.TA_NATION.send(sender);
 		}
 	}
 
-	private String getSenderFormatted(CommandSender sender) {
-		return sender instanceof Player player ? player.getName() : "Console";
+	private void parseAdminNewNationCommand(CommandSender sender, String[] split) throws TownyException {
+		if (split.length != 3)
+			throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta nation new [name] [capital]");
+
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_NEW.getNode());
+		
+		final Town capitalTown = getTownOrThrow(split[2]);
+		NationCommand.newNation(sender, split[1], capitalTown, true);
 	}
 
 	/**
@@ -1932,37 +1741,24 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * @param sender CommandSender
 	 * @param nation Nation which will have a town added.
 	 * @param townName Name of Town to add to Nation.
+	 * @throws TownyException when something has gone wrong.
 	 */
-	private void townyAdminNationAddTown(CommandSender sender, Nation nation, String[] townName) {
+	private void townyAdminNationAddTown(CommandSender sender, Nation nation, String[] townName) throws TownyException {
 
-		Town town = TownyUniverse.getInstance().getTown(townName[0]);
-		
-		if (town == null) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", townName[0]));
-			return;
-		}
-
+		Town town = getTownOrThrow(townName[0]);
 		if (town.hasNation()) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_already_nation"));
 			TownyMessaging.sendMessage(sender, "Suggestion: /townyadmin town " + town + "leavenation, or /ta nation " + nation + " transfer " + town);
-		} else {
-			try {
-				town.setNation(nation);
-			} catch (AlreadyRegisteredException ignored) {}
-			town.save();
-			TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_join_nation", town.getName()));
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_join_nation", town.getName()));
-		} 
-	}
-	
-	private void townyAdminNationTransfterTown(CommandSender sender, Nation nation, String[] townName) {
-		Town town = TownyUniverse.getInstance().getTown(townName[0]);
-		
-		if (town == null) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", townName[0]));
 			return;
 		}
-		
+		town.setNation(nation);
+		town.save();
+		TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_join_nation", town.getName()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_join_nation", town.getName()));
+	}
+	
+	private void townyAdminNationTransfterTown(CommandSender sender, Nation nation, String[] townName) throws TownyException {
+		Town town = getTownOrThrow(townName[0]);
 		if (town.hasNation()) {
 			nation = town.getNationOrNull();
 			town.removeNation();
@@ -1970,12 +1766,141 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
 		}
-		try {
-			town.setNation(nation);
-		} catch (AlreadyRegisteredException ignored) {}
+		town.setNation(nation);
 		town.save();
 		TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_join_nation", town.getName()));
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_join_nation", town.getName()));
+	}
+
+	private void parseAdminNationRankCommand(CommandSender sender, String[] split, Nation nation) throws TownyException {
+		if (split.length < 3) {
+			HelpMenu.TA_NATION_RANK.send(sender);
+			return;
+		}
+		Resident target = getResidentOrThrow(split[1]);
+		if (!target.hasTown() || !target.getTownOrNull().hasNation() || !target.getTownOrNull().getNationOrNull().getUUID().equals(nation.getUUID()))
+			throw new TownyException(Translatable.of("msg_err_that_resident_doesnt_belong_to_that_nation"));
+
+		String rank = TownyPerms.matchNationRank(split[2]);
+		if (rank == null)
+			throw new TownyException(Translatable.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getNationRanks(), ", ")));
+
+		switch(split[0].toLowerCase(Locale.ROOT)) {
+			case "add":
+				if (target.hasNationRank(rank))
+					// Already has the rank.
+					throw new TownyException(Translatable.of("msg_resident_already_has_rank", target.getName(), "Nation"));
+				BukkitTools.fireEvent(new NationRankAddEvent(nation, rank, target));
+				target.addNationRank(rank);
+				if (target.isOnline()) {
+					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", "Nation", rank));
+					plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
+				}
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
+				target.save();
+				return;
+			case "remove":
+				if (!target.hasNationRank(rank))
+					// Doesn't have the rank.
+					throw new TownyException(Translatable.of("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
+				BukkitTools.fireEvent(new NationRankRemoveEvent(nation, rank, target));
+				target.removeNationRank(rank);
+				if (target.isOnline()) {
+					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", "Nation", rank));
+					plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
+				}
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+				target.save();
+				return;
+			default:
+				HelpMenu.TA_NATION_RANK.send(sender);
+				return;
+		}
+	}
+
+	private void parseAdminNationAllyCommand(CommandSender sender, String[] split, Nation nation) throws TownyException {
+		if (split.length < 2)
+			throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta nation [nation] ally [add/remove] [nation]"));
+
+		Nation ally = getNationOrThrow(split[1]);
+		if (ally.equals(nation))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", split[1]));
+
+		if (split[0].equalsIgnoreCase("add")) {
+			if (!nation.hasAlly(ally)) {
+				if (nation.hasEnemy(ally))
+					nation.removeEnemy(ally);
+				
+				if (ally.hasEnemy(nation))
+					ally.removeEnemy(nation);
+				
+				nation.addAlly(ally);
+				nation.save();
+
+				ally.addAlly(nation);
+				ally.save();
+
+				plugin.resetCache();
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_added_ally", ally.getName()));
+				TownyMessaging.sendPrefixedNationMessage(ally, Translatable.of("msg_added_ally", nation.getName()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
+			} else
+				throw new TownyException(Translatable.of("msg_err_nation_already_allied_with_2", nation.getName(), ally.getName()));
+		} else if (split[0].equalsIgnoreCase("remove")) {
+			if (nation.hasAlly(ally)) {
+				nation.removeAlly(ally);
+				nation.save();
+
+				ally.removeAlly(nation);
+				ally.save();
+
+				plugin.resetCache();
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", ally.getName()));
+				TownyMessaging.sendPrefixedNationMessage(ally, Translatable.of("msg_removed_ally", nation.getName()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
+			} else
+				throw new TownyException(Translatable.of("msg_err_nation_not_allied_with_2", nation.getName(), ally.getName()));
+		} else
+			throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta nation [nation] ally [add/remove] [nation]"));
+	}
+
+	private void parseAdminNationEnemyCommand(CommandSender sender, String[] split, Nation nation) throws TownyException {
+		if (split.length < 2)
+			throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
+
+		Nation enemy = getNationOrThrow(split[1]);
+		if (enemy.equals(nation))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", split[3]));
+
+		if (split[0].equalsIgnoreCase("add")) {
+			if (!nation.hasEnemy(enemy)) {
+				if (nation.hasAlly(enemy)) {
+					nation.removeAlly(enemy);
+					enemy.removeAlly(nation);
+					plugin.resetCache();
+				}
+
+				nation.addEnemy(enemy);
+				nation.save();
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_nations", getSenderFormatted(sender), enemy.getName()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
+			} else
+				throw new TownyException(Translatable.of("msg_err_nation_already_enemies_with_2", nation.getName(), enemy.getName()));
+		} else if (split[0].equalsIgnoreCase("remove")) {
+			if (nation.hasEnemy(enemy)) {
+				nation.removeEnemy(enemy);
+				nation.save();
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_enemy_to_neutral", getSenderFormatted(sender), enemy.getName()));
+				TownyMessaging.sendPrefixedNationMessage(enemy, Translatable.of("msg_removed_enemy", nation.getName()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_ta_allies_enemies_updated", nation.getName()));
+			} else
+				throw new TownyException(Translatable.of("msg_err_nation_not_enemies_with_2", nation.getName(), enemy.getName()));
+		} else
+			throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta nation [nation] enemy [add/remove] [nation]"));
+	}
+
+	private String getSenderFormatted(CommandSender sender) {
+		return sender instanceof Player player ? player.getName() : "Console";
 	}
 
 	private void adminSet(CommandSender sender, String[] split) throws TownyException {
