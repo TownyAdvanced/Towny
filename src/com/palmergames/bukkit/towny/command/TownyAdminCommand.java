@@ -579,37 +579,36 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		switch (split[0].toLowerCase(Locale.ROOT)) {
-			case "set" -> adminSet(sender, StringMgmt.remFirstArg(split));
-			case "resident" -> parseAdminResidentCommand(sender, StringMgmt.remFirstArg(split));
-			case "town" -> parseAdminTownCommand(sender, StringMgmt.remFirstArg(split));
-			case "nation" -> parseAdminNationCommand(sender, StringMgmt.remFirstArg(split));
-			case "toggle" -> parseToggleCommand(sender, StringMgmt.remFirstArg(split));
-			case "plot" -> parseAdminPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-			case "givebonus", "giveplots" -> giveBonus(sender, StringMgmt.remFirstArg(split));
-			case "reload" -> parseAdminReload(sender, StringMgmt.remFirstArg(split));
-			case "reset" -> parseAdminReset(sender);
-			case "backup" -> parseAdminBackup(sender);
-			case "database" -> parseAdminDatabaseCommand(sender, StringMgmt.remFirstArg(split));
-			case "mysqldump" -> parseAdminMySQLDump(sender);
-			case "newday" -> parseAdminNewDay(sender);
-			case "newhour" -> parseAdminNewHour(sender);
-			case "purge" -> purge(sender, StringMgmt.remFirstArg(split));
-			case "unclaim" -> parseAdminUnclaimCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-			case "checkperm" -> parseAdminCheckPermCommand(sender, StringMgmt.remFirstArg(split));
-			case "checkoutposts" -> parseAdminCheckOutpostsCommand(sender, null);
-			case "townyperms" -> parseAdminTownyPermsCommand(sender, StringMgmt.remFirstArg(split));
-			case "tpplot" -> parseAdminTpPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-			case "depositall" -> parseAdminDepositAllCommand(sender, StringMgmt.remFirstArg(split));
-			case "resetbanks" -> parseAdminResetBanksCommand(sender, StringMgmt.remFirstArg(split));
-			case "install" -> parseAdminInstall(sender);
-			default -> {
-				if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
-					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(sender, "townyadmin", split);
-					return;
-				}
-				HelpMenu.TA_HELP.send(sender);
+		case "set" -> adminSet(sender, StringMgmt.remFirstArg(split));
+		case "resident" -> parseAdminResidentCommand(sender, StringMgmt.remFirstArg(split));
+		case "town" -> parseAdminTownCommand(sender, StringMgmt.remFirstArg(split));
+		case "nation" -> parseAdminNationCommand(sender, StringMgmt.remFirstArg(split));
+		case "toggle" -> parseToggleCommand(sender, StringMgmt.remFirstArg(split));
+		case "plot" -> parseAdminPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+		case "givebonus", "giveplots" -> giveBonus(sender, StringMgmt.remFirstArg(split));
+		case "reload" -> parseAdminReload(sender, StringMgmt.remFirstArg(split));
+		case "reset" -> parseAdminReset(sender);
+		case "backup" -> parseAdminBackup(sender);
+		case "database" -> parseAdminDatabaseCommand(sender, StringMgmt.remFirstArg(split));
+		case "mysqldump" -> parseAdminMySQLDump(sender);
+		case "newday" -> parseAdminNewDay(sender);
+		case "newhour" -> parseAdminNewHour(sender);
+		case "purge" -> purge(sender, StringMgmt.remFirstArg(split));
+		case "unclaim" -> parseAdminUnclaimCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+		case "checkperm" -> parseAdminCheckPermCommand(sender, StringMgmt.remFirstArg(split));
+		case "checkoutposts" -> parseAdminCheckOutpostsCommand(sender, null);
+		case "townyperms" -> parseAdminTownyPermsCommand(sender, StringMgmt.remFirstArg(split));
+		case "tpplot" -> parseAdminTpPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+		case "depositall" -> parseAdminDepositAllCommand(sender, StringMgmt.remFirstArg(split));
+		case "resetbanks" -> parseAdminResetBanksCommand(sender, StringMgmt.remFirstArg(split));
+		case "install" -> parseAdminInstall(sender);
+		default -> {
+			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(sender, "townyadmin", split);
+				return;
 			}
-		};
+			HelpMenu.TA_HELP.send(sender);
+		}};
 	}
 
 	private boolean parseBoolean(Object object) {

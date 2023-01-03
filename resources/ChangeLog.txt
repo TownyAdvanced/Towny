@@ -8262,3 +8262,4 @@ v0.92.0.11:
   - Add PluginIntegrations class.
 0.98.4.20:
   - Bump paperlib from 1.0.7 to 1.0.8.
+  - Refactor lots of TownyAdminCommand code.
