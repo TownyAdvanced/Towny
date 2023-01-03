@@ -579,36 +579,37 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		switch (split[0].toLowerCase(Locale.ROOT)) {
-		case "set" -> adminSet(sender, StringMgmt.remFirstArg(split));
-		case "resident" -> parseAdminResidentCommand(sender, StringMgmt.remFirstArg(split));
-		case "town" -> parseAdminTownCommand(sender, StringMgmt.remFirstArg(split));
-		case "nation" -> parseAdminNationCommand(sender, StringMgmt.remFirstArg(split));
-		case "toggle" -> parseToggleCommand(sender, StringMgmt.remFirstArg(split));
-		case "plot" -> parseAdminPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-		case "givebonus", "giveplots" -> giveBonus(sender, StringMgmt.remFirstArg(split));
-		case "reload" -> parseAdminReload(sender, StringMgmt.remFirstArg(split));
-		case "reset" -> parseAdminReset(sender);
-		case "backup" -> parseAdminBackup(sender);
-		case "database" -> parseAdminDatabaseCommand(sender, StringMgmt.remFirstArg(split));
-		case "mysqldump" -> parseAdminMySQLDump(sender);
-		case "newday" -> parseAdminNewDay(sender);
-		case "newhour" -> parseAdminNewHour(sender);
-		case "purge" -> purge(sender, StringMgmt.remFirstArg(split));
-		case "unclaim" -> parseAdminUnclaimCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-		case "checkperm" -> parseAdminCheckPermCommand(sender, StringMgmt.remFirstArg(split));
-		case "checkoutposts" -> parseAdminCheckOutpostsCommand(sender, null);
-		case "townyperms" -> parseAdminTownyPermsCommand(sender, StringMgmt.remFirstArg(split));
-		case "tpplot" -> parseAdminTpPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-		case "depositall" -> parseAdminDepositAllCommand(sender, StringMgmt.remFirstArg(split));
-		case "resetbanks" -> parseAdminResetBanksCommand(sender, StringMgmt.remFirstArg(split));
-		case "install" -> parseAdminInstall(sender);
-		default -> {
-			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(sender, "townyadmin", split);
-				return;
+			case "set" -> adminSet(sender, StringMgmt.remFirstArg(split));
+			case "resident" -> parseAdminResidentCommand(sender, StringMgmt.remFirstArg(split));
+			case "town" -> parseAdminTownCommand(sender, StringMgmt.remFirstArg(split));
+			case "nation" -> parseAdminNationCommand(sender, StringMgmt.remFirstArg(split));
+			case "toggle" -> parseToggleCommand(sender, StringMgmt.remFirstArg(split));
+			case "plot" -> parseAdminPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+			case "givebonus", "giveplots" -> giveBonus(sender, StringMgmt.remFirstArg(split));
+			case "reload" -> parseAdminReload(sender, StringMgmt.remFirstArg(split));
+			case "reset" -> parseAdminReset(sender);
+			case "backup" -> parseAdminBackup(sender);
+			case "database" -> parseAdminDatabaseCommand(sender, StringMgmt.remFirstArg(split));
+			case "mysqldump" -> parseAdminMySQLDump(sender);
+			case "newday" -> parseAdminNewDay(sender);
+			case "newhour" -> parseAdminNewHour(sender);
+			case "purge" -> purge(sender, StringMgmt.remFirstArg(split));
+			case "unclaim" -> parseAdminUnclaimCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+			case "checkperm" -> parseAdminCheckPermCommand(sender, StringMgmt.remFirstArg(split));
+			case "checkoutposts" -> parseAdminCheckOutpostsCommand(sender, null);
+			case "townyperms" -> parseAdminTownyPermsCommand(sender, StringMgmt.remFirstArg(split));
+			case "tpplot" -> parseAdminTpPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+			case "depositall" -> parseAdminDepositAllCommand(sender, StringMgmt.remFirstArg(split));
+			case "resetbanks" -> parseAdminResetBanksCommand(sender, StringMgmt.remFirstArg(split));
+			case "install" -> parseAdminInstall(sender);
+			default -> {
+				if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(sender, "townyadmin", split);
+					return;
+				}
+				HelpMenu.TA_HELP.send(sender);
 			}
-			HelpMenu.TA_HELP.send(sender);
-		}};
+		};
 	}
 
 	private boolean parseBoolean(Object object) {
@@ -799,8 +800,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_RELOAD, split[0]).execute(sender, split);
 			else
 				HelpMenu.TA_RELOAD.send(sender);
-		}
-		};
+		}};
 	}
 
 	private void parseAdminReset(CommandSender sender) throws NoPermissionException {
@@ -2143,7 +2143,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	public void parseToggleCommand(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE.getNode());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		Optional<Boolean> choice = Optional.empty();
 		if (split.length == 2) {
@@ -2158,78 +2157,71 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (split[0].equalsIgnoreCase("wildernessuse")) {
-			// Toggles build/destroy/switch/itemuse on or off in all worlds. True is the default, for installation setup to alter the defaulted false.
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_WILDERNESSUSE.getNode());
-			toggleWildernessUsage(choice.orElse(true));
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_wilderness_use_x_in_all_worlds", choice.orElse(true)));
-		} else if (split[0].equalsIgnoreCase("regenerations")) {
-
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_REGENERATIONS.getNode());
-			toggleRegenerations(choice.orElse(false));
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_regenerations_use_x_in_all_worlds", choice.orElse(false)));
-		} else if (split[0].equalsIgnoreCase("devmode")) {
-
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE.getNode());
-			try {
-				TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
+		switch(split[0].toLowerCase(Locale.ROOT)) {
+			case "wildernessuse" -> adminToggleWildernessUse(sender, choice);
+			case "regenerations" -> adminToggleRegenerations(sender, choice);
+			case "devmode" -> adminToggleDevMode(sender, choice);
+			case "debug" -> adminToggleDebug(sender, choice);
+			case "townwithdraw" -> adminToggleTownWithDraw(sender, choice);
+			case "nationwithdraw" -> adminToggleNationWithdraw(sender, choice);
+			case "npc" -> parseAdminToggleNPC(sender, split);
+			default -> {
+				if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOGGLE, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOGGLE, split[0]).execute(sender, "townyadmin", split);
+					return;
+				}
+				HelpMenu.TA_TOGGLE.send(sender);
 			}
-		} else if (split[0].equalsIgnoreCase("debug")) {
+		};
+	}
 
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG.getNode());
-			try {
-				TownySettings.setDebug(choice.orElse(!TownySettings.getDebug()));
-				TownyLogger.getInstance().refreshDebugLogger();
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
-			}
-		} else if (split[0].equalsIgnoreCase("townwithdraw")) {
+	private void adminToggleWildernessUse(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
+		// Toggles build/destroy/switch/itemuse on or off in all worlds. True is the default, for installation setup to alter the defaulted false.
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_WILDERNESSUSE.getNode());
+		toggleWildernessUsage(choice.orElse(true));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_wilderness_use_x_in_all_worlds", choice.orElse(true)));
+	}
 
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_TOWNWITHDRAW.getNode());
-			try {
-				TownySettings.SetTownBankAllowWithdrawls(choice.orElse(!TownySettings.getTownBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_townwithdraw", (TownySettings.getTownBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
-			}
-		} else if (split[0].equalsIgnoreCase("nationwithdraw")) {
+	private void adminToggleRegenerations(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_REGENERATIONS.getNode());
+		toggleRegenerations(choice.orElse(false));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_regenerations_use_x_in_all_worlds", choice.orElse(false)));
+	}
 
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NATIONWITHDRAW.getNode());
-			try {
-				TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.getNationBankAllowWithdrawls()));
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_nationwithdraw", (TownySettings.getNationBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
-			}
-			
-		} else if (split[0].equalsIgnoreCase("npc")) {
+	private void adminToggleDevMode(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE.getNode());
+		TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+	}
 
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NPC.getNode());
-			if (split.length != 2)
-				throw new TownyException(Translatable.of("msg_err_invalid_input", "Eg: toggle npc [resident]"));
-			
-			Resident resident = townyUniverse.getResident(split[1]);
-			
-			if (resident == null) {
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[1]));
-			}
+	private void adminToggleDebug(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG.getNode());
+		TownySettings.setDebug(choice.orElse(!TownySettings.getDebug()));
+		TownyLogger.getInstance().refreshDebugLogger();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+	}
 
-			resident.setNPC(!resident.isNPC());
+	private void adminToggleTownWithDraw(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_TOWNWITHDRAW.getNode());
+		TownySettings.SetTownBankAllowWithdrawls(choice.orElse(!TownySettings.getTownBankAllowWithdrawls()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_townwithdraw", (TownySettings.getTownBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+	}
 
-			resident.save();
+	private void adminToggleNationWithdraw(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NATIONWITHDRAW.getNode());
+		TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.getNationBankAllowWithdrawls()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_nationwithdraw", (TownySettings.getNationBankAllowWithdrawls() ? Colors.Green + Translatable.of("enabled") : Colors.Red + Translatable.of("disabled"))));
+	}
 
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_npc_flag", resident.isNPC(), resident.getName()));
-		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOGGLE, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOGGLE, split[0]).execute(sender, "townyadmin", split);
-		} else {
-			// parameter error message
-			// peaceful/war/townmobs/worldmobs
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_choice"));
-		}
+	private void parseAdminToggleNPC(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NPC.getNode());
+		if (split.length != 2)
+			throw new TownyException(Translatable.of("msg_err_invalid_input", "Eg: toggle npc [resident]"));
+		
+		Resident resident = getResidentOrThrow(split[1]);
+		resident.setNPC(!resident.isNPC());
+		resident.save();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_npc_flag", resident.isNPC(), resident.getName()));
 	}
 
 	private void toggleRegenerations(boolean choice) {
