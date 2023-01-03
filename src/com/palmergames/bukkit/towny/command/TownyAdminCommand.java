@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
+import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
@@ -257,7 +258,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 
 		try {
-			return parseTownyAdminCommand(sender, args);
+			parseTownyAdminCommand(sender, args);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 		}
@@ -570,215 +571,46 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		return Collections.emptyList();
 	}
 
-	public boolean parseTownyAdminCommand(CommandSender sender, String[] split) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+	public void parseTownyAdminCommand(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SCREEN.getNode());
-		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help"))
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			HelpMenu.TA_HELP.send(sender);
-		else {
-
-			if (split[0].equalsIgnoreCase("set")) {
-
-				adminSet(sender, StringMgmt.remFirstArg(split));
-				return true;
-			} else if (split[0].equalsIgnoreCase("resident")){
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT.getNode());
-				parseAdminResidentCommand(sender, StringMgmt.remFirstArg(split));
-				return true;
-
-			} else if (split[0].equalsIgnoreCase("town")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode());
-				parseAdminTownCommand(sender, StringMgmt.remFirstArg(split));
-				return true;
-
-			} else if (split[0].equalsIgnoreCase("nation")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION.getNode());
-				parseAdminNationCommand(sender, StringMgmt.remFirstArg(split));
-				return true;
-
-			} else if (split[0].equalsIgnoreCase("toggle")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE.getNode());
-				parseToggleCommand(sender, StringMgmt.remFirstArg(split));
-				return true;
-
-			} else if (split[0].equalsIgnoreCase("plot")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT.getNode());
-				parseAdminPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-				return true;
-
-			}
-
-			if (split[0].equalsIgnoreCase("givebonus") || split[0].equalsIgnoreCase("giveplots")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_GIVEBONUS.getNode());
-				giveBonus(sender, StringMgmt.remFirstArg(split));
-
-			} else if (split[0].equalsIgnoreCase("reload")) {
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RELOAD.getNode());
-				if (split.length == 2) {
-					switch (split[1]) {
-						case "db":
-						case "database":
-							reloadDatabase(sender);
-							break;
-						case "config":
-							reloadConfig(sender, false);
-							break;
-						case "perms":
-						case "townyperms":
-						case "permissions":
-							reloadPerms(sender);
-							break;
-						case "language":
-						case "lang":
-							reloadLangs(sender);
-							break;
-						case "all":
-							// reloadDatabase() already reloads lang & config.
-							reloadPerms(sender);
-							reloadDatabase(sender);
-							break;
-						default:
-							if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_RELOAD, split[1]))
-								TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_RELOAD, split[1]).execute(sender, split);
-							else
-								HelpMenu.TA_RELOAD.send(sender);
-					}
-				} else {
-					HelpMenu.TA_RELOAD.send(sender);
-					return false;
-				}
-			} else if (split[0].equalsIgnoreCase("reset")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESET.getNode());
-				Confirmation.runOnAccept(()-> reloadConfig(sender, true))
-					.setTitle(Translatable.of("this_will_reset_your_config"))
-					.sendTo(sender);
-
-			} else if (split[0].equalsIgnoreCase("backup")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_BACKUP.getNode());
-				CompletableFuture.runAsync(new BackupTask())
-					.thenRun(()-> TownyMessaging.sendMsg(sender, Translatable.of("mag_backup_success")));
-				
-			} else if (split[0].equalsIgnoreCase("database")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_DATABASE.getNode());
-				parseAdminDatabaseCommand(sender, StringMgmt.remFirstArg(split));
-				return true;				
-				
-			} else if (split[0].equalsIgnoreCase("mysqldump")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_MYSQLDUMP.getNode());
-				if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
-					TownyDataSource dataSource = new TownyFlatFileSource(plugin, townyUniverse);
-					dataSource.saveAll();
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_mysql_dump_success"));
-					return true;
-				} else 
-					throw new TownyException(Translatable.of("msg_err_mysql_not_being_used"));
-
-			} else if (split[0].equalsIgnoreCase("newday")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NEWDAY.getNode());
-				if (NewDayScheduler.isNewDayScheduled())
-					throw new TownyException(Translatable.of("msg_newday_already_scheduled_soon"));
-
-				// Turn the daily timer scheduler on if it wasn't running already.
-				if (!NewDayScheduler.isNewDaySchedulerRunning())
-					TownyTimerHandler.toggleDailyTimer(true);
-				// Start a newday.
-				NewDayScheduler.newDay();
-
-			} else if (split[0].equalsIgnoreCase("newhour")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NEWHOUR.getNode());
-				TownyTimerHandler.newHour();
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_newhour_success"));
-
-			} else if (split[0].equalsIgnoreCase("purge")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode());
-				purge(sender, StringMgmt.remFirstArg(split));
-			} else if (split[0].equalsIgnoreCase("unclaim")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_UNCLAIM.getNode());
-				parseAdminUnclaimCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-				/*
-				 * else if (split[0].equalsIgnoreCase("seed") &&
-				 * TownySettings.getDebug()) seedTowny(); else if
-				 * (split[0].equalsIgnoreCase("warseed") &&
-				 * TownySettings.getDebug()) warSeed(player);
-				 */
-				
-			} else if (split[0].equalsIgnoreCase("checkperm")) {
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_CHECKPERM.getNode());
-				parseAdminCheckPermCommand(sender, StringMgmt.remFirstArg(split));
-			} else if (split[0].equalsIgnoreCase("checkoutposts")) {
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_CHECKOUTPOSTS.getNode());
-				parseAdminCheckOutpostsCommand(sender, null);
-			} else if (split[0].equalsIgnoreCase("townyperms")) {
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWNYPERMS.getNode());
-				parseAdminTownyPermsCommand(sender, StringMgmt.remFirstArg(split));
-				
-			} else if (split[0].equalsIgnoreCase("tpplot")) {
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TPPLOT.getNode());
-				parseAdminTpPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
-
-			} else if (split[0].equalsIgnoreCase("depositall")) {
-				if (!TownyEconomyHandler.isActive())
-					throw new TownyException(Translatable.of("msg_err_no_economy"));
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_DEPOSITALL.getNode());
-				parseAdminDepositAllCommand(sender, StringMgmt.remFirstArg(split));
-			} else if (split[0].equalsIgnoreCase("resetbanks")) {
-				if (!TownyEconomyHandler.isActive())
-					throw new TownyException(Translatable.of("msg_err_no_economy"));
-				
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESETBANKS.getNode());
-				parseAdminResetBanksCommand(sender, StringMgmt.remFirstArg(split));
-			} else if (split[0].equalsIgnoreCase("install")) {
-
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_INSTALL.getNode());
-				Towny.getAdventure().sender(sender).sendMessage(Component.text(Translatable.of("msg_setup_full_guide_link").forLocale(sender)).clickEvent(ClickEvent.openUrl("https://github.com/TownyAdvanced/Towny/wiki/Installation")));
-				
-				new SetupConversation(sender).runOnResponse(response -> {
-					ConversationContext context = (ConversationContext) response;
-					
-					toggleWildernessUsage(parseBoolean(context.getSessionData(0)));
-					toggleRevertUnclaim(parseBoolean(context.getSessionData(1)));
-					TownySettings.setProperty(ConfigNodes.TOWN_TOWN_BLOCK_RATIO.getRoot(), Integer.parseInt((String) context.getSessionData(2)));
-					
-					if (TownyEconomyHandler.isActive()) {
-						TownySettings.setProperty(ConfigNodes.ECO_PRICE_NEW_TOWN.getRoot(), Integer.parseInt((String) context.getSessionData(3)));
-						TownySettings.setProperty(ConfigNodes.ECO_PRICE_NEW_NATION.getRoot(), Integer.parseInt((String) context.getSessionData(4)));
-						TownySettings.setProperty(ConfigNodes.ECO_PRICE_CLAIM_TOWNBLOCK.getRoot(), Integer.parseInt((String) context.getSessionData(5)));
-					}
-					
-					TownySettings.saveConfig();
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_setup_success"));
-				});
-			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(sender, "townyadmin", split);
-			}  else {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-				return false;
-			}
+			return;
 		}
 
-		return true;
+		switch (split[0].toLowerCase(Locale.ROOT)) {
+		case "set" -> adminSet(sender, StringMgmt.remFirstArg(split));
+		case "resident" -> parseAdminResidentCommand(sender, StringMgmt.remFirstArg(split));
+		case "town" -> parseAdminTownCommand(sender, StringMgmt.remFirstArg(split));
+		case "nation" -> parseAdminNationCommand(sender, StringMgmt.remFirstArg(split));
+		case "toggle" -> parseToggleCommand(sender, StringMgmt.remFirstArg(split));
+		case "plot" -> parseAdminPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+		case "givebonus", "giveplots" -> giveBonus(sender, StringMgmt.remFirstArg(split));
+		case "reload" -> parseAdminReload(sender, StringMgmt.remFirstArg(split));
+		case "reset" -> parseAdminReset(sender);
+		case "backup" -> parseAdminBackup(sender);
+		case "database" -> parseAdminDatabaseCommand(sender, StringMgmt.remFirstArg(split));
+		case "mysqldump" -> parseAdminMySQLDump(sender);
+		case "newday" -> parseAdminNewDay(sender);
+		case "newhour" -> parseAdminNewHour(sender);
+		case "purge" -> purge(sender, StringMgmt.remFirstArg(split));
+		case "unclaim" -> parseAdminUnclaimCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+		case "checkperm" -> parseAdminCheckPermCommand(sender, StringMgmt.remFirstArg(split));
+		case "checkoutposts" -> parseAdminCheckOutpostsCommand(sender, null);
+		case "townyperms" -> parseAdminTownyPermsCommand(sender, StringMgmt.remFirstArg(split));
+		case "tpplot" -> parseAdminTpPlotCommand(catchConsole(sender), StringMgmt.remFirstArg(split));
+		case "depositall" -> parseAdminDepositAllCommand(sender, StringMgmt.remFirstArg(split));
+		case "resetbanks" -> parseAdminResetBanksCommand(sender, StringMgmt.remFirstArg(split));
+		case "install" -> parseAdminInstall(sender);
+		default -> {
+			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN, split[0]).execute(sender, "townyadmin", split);
+				return;
+			}
+			HelpMenu.TA_HELP.send(sender);
+		}};
 	}
-	
+
 	private boolean parseBoolean(Object object) {
 		if (!(object instanceof String string))
 			return false;
@@ -789,34 +621,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		};
 	}
 
-	private void parseAdminTownyPermsCommand(CommandSender sender, String[] args) {
-
+	private void parseAdminTownyPermsCommand(CommandSender sender, String[] args) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWNYPERMS.getNode());
 		if (args.length == 0 || args[0].equalsIgnoreCase("?") || !adminTownyPermsCompletes.contains(args[0])) {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
 			return;
 		}
-		
-		try {
-			switch (args[0]) {
-				case "listgroups":
-					// Send an alphabetized list of ranks.
-					TownyMessaging.sendMessage(sender, ChatTools.formatTitle("Groups"));
-					TownyMessaging.sendMessage(sender, ChatTools.list(TownyPerms.getGroupList().stream().sorted().collect(Collectors.toList())));
-					break;
-				case "group":
-					// Alter a groups permission nodes.
-					parseAdminTownypermsGroupCommand(sender, StringMgmt.remFirstArg(args));
-					break;
-				case "townrank":
-				case "nationrank":
-					// Create and remove town and nation ranks.
-					parseAdminTownypermsRankCommand(sender, args);
-					break;
-				default:
-				}
-		} catch (TownyException e) {
-			// This will send back any errors to the sender.
-			TownyMessaging.sendErrorMsg(sender, e.getMessage());
+		switch (args[0]) {
+		case "listgroups":
+			// Send an alphabetized list of ranks.
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("Groups"));
+			TownyMessaging.sendMessage(sender, ChatTools.list(TownyPerms.getGroupList().stream().sorted().collect(Collectors.toList())));
+			break;
+		case "group":
+			// Alter a groups permission nodes.
+			parseAdminTownypermsGroupCommand(sender, StringMgmt.remFirstArg(args));
+			break;
+		case "townrank":
+		case "nationrank":
+			// Create and remove town and nation ranks.
+			parseAdminTownypermsRankCommand(sender, args);
+			break;
+		default:
 		}
 	}
 
@@ -952,8 +778,46 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		reloadPerms(sender);
 	}
 
-	private void parseAdminDatabaseCommand(CommandSender sender, String[] split) {
-	
+	private void parseAdminReload(CommandSender sender, String[] split) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RELOAD.getNode());
+		if (split.length != 1) {
+			HelpMenu.TA_RELOAD.send(sender);
+			return;
+		}
+		switch (split[0].toLowerCase(Locale.ROOT)) {
+		case "db", "database" -> reloadDatabase(sender);
+		case "config" -> reloadConfig(sender, false);
+		case "perms", "townyperms", "permissions" -> reloadPerms(sender);
+		case "language",  "lang" -> reloadLangs(sender);
+		case "all" -> {
+			// reloadDatabase() already reloads lang & config.
+			reloadPerms(sender);
+			reloadDatabase(sender);
+		}
+		default -> {
+			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_RELOAD, split[0]))
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_RELOAD, split[0]).execute(sender, split);
+			else
+				HelpMenu.TA_RELOAD.send(sender);
+		}
+		};
+	}
+
+	private void parseAdminReset(CommandSender sender) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESET.getNode());
+		Confirmation.runOnAccept(()-> reloadConfig(sender, true))
+			.setTitle(Translatable.of("this_will_reset_your_config"))
+			.sendTo(sender);
+	}
+
+	private void parseAdminBackup(CommandSender sender) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_BACKUP.getNode());
+		CompletableFuture.runAsync(new BackupTask())
+			.thenRun(()-> TownyMessaging.sendMsg(sender, Translatable.of("mag_backup_success")));
+	}
+
+	private void parseAdminDatabaseCommand(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_DATABASE.getNode());
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_DATABASE.send(sender);
 			return;
@@ -993,7 +857,37 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		
 	}
 
+	private void parseAdminMySQLDump(CommandSender sender) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_MYSQLDUMP.getNode());
+		if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
+			TownyDataSource dataSource = new TownyFlatFileSource(plugin, TownyUniverse.getInstance());
+			dataSource.saveAll();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_mysql_dump_success"));
+			return;
+		}
+		throw new TownyException(Translatable.of("msg_err_mysql_not_being_used"));
+	}
+
+	private void parseAdminNewDay(CommandSender sender) throws NoPermissionException, TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NEWDAY.getNode());
+		if (NewDayScheduler.isNewDayScheduled())
+			throw new TownyException(Translatable.of("msg_newday_already_scheduled_soon"));
+
+		// Turn the daily timer scheduler on if it wasn't running already.
+		if (!NewDayScheduler.isNewDaySchedulerRunning())
+			TownyTimerHandler.toggleDailyTimer(true);
+		// Start a newday.
+		NewDayScheduler.newDay();
+	}
+
+	private void parseAdminNewHour(CommandSender sender) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NEWHOUR.getNode());
+		TownyTimerHandler.newHour();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_newhour_success"));
+	}
+
 	private void parseAdminPlotCommand(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length < 1 || split[0].equalsIgnoreCase("?")) {
@@ -1040,7 +934,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminCheckPermCommand(CommandSender sender, String[] split) throws TownyException {
-		
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_CHECKPERM.getNode());
 		if (split.length !=2 ) {
 			throw new TownyException(Translatable.of("msg_err_invalid_input", "Eg: /ta checkperm {name} {node}"));
 		}
@@ -1055,7 +949,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_perm_false"));
 	}
 
-	private void parseAdminCheckOutpostsCommand(CommandSender sender, @Nullable Town specificTown) {
+	private void parseAdminCheckOutpostsCommand(CommandSender sender, @Nullable Town specificTown) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_CHECKOUTPOSTS.getNode());
 		List<Town> towns = new ArrayList<>();
 		if (specificTown == null) 
 			towns.addAll(TownyAPI.getInstance().getTowns());
@@ -1078,7 +973,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminTpPlotCommand(Player player, String[] split) throws TownyException {
-
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TPPLOT.getNode());
 		if (split.length != 3) {
 			throw new TownyException(Translatable.of("msg_err_invalid_input", "Eg: /ta tpplot world x z"));
 		}
@@ -1104,6 +999,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void giveBonus(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_GIVEBONUS.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		Town town;
 		Resident target = null;
@@ -1141,29 +1037,24 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	public void parseAdminUnclaimCommand(Player player, String[] split) {
-
+	public void parseAdminUnclaimCommand(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_UNCLAIM.getNode());
 		if (split.length == 1 && split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_UNCLAIM.send(player);
-		} else {
-			try {
-				List<WorldCoord> selection;
-				selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
-				selection = AreaSelectionUtil.filterOutWildernessBlocks(selection);
+			return;
+		} 
+		List<WorldCoord> selection;
+		selection = AreaSelectionUtil.selectWorldCoordArea(null, new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player)), split);
+		selection = AreaSelectionUtil.filterOutWildernessBlocks(selection);
 
-				if (selection.isEmpty())
-					throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+		if (selection.isEmpty())
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
-				new TownClaim(plugin, player, null, selection, false, false, true).start();
-
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
-				return;
-			}
-		}
+		new TownClaim(plugin, player, null, selection, false, false, true).start();
 	}
 
 	public void parseAdminResidentCommand(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT.getNode());
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_RESIDENT.send(sender);
 			return;
@@ -1212,6 +1103,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	public void parseAdminTownCommand(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -1580,6 +1472,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminNationCommand(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -2203,7 +2096,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException when an error message needs to be returned.
 	 */
 	public void purge(CommandSender sender, String[] split) throws TownyException {
-
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode());
 		if (split.length == 0) {
 			// command was '/townyadmin purge'
 			HelpMenu.TA_PURGE.send(sender);
@@ -2246,6 +2139,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseToggleCommand(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		Optional<Boolean> choice = Optional.empty();
@@ -2542,6 +2436,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	private void parseAdminDepositAllCommand(CommandSender sender, String[] split) throws TownyException {
+		if (!TownyEconomyHandler.isActive())
+			throw new TownyException(Translatable.of("msg_err_no_economy"));
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_DEPOSITALL.getNode());
 		if (split.length != 1) {
 			HelpMenu.TA_DEPOSITALL.send(sender);
 			return;
@@ -2558,6 +2455,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminResetBanksCommand(CommandSender sender, String[] args) throws TownyException {
+		if (!TownyEconomyHandler.isActive())
+			throw new TownyException(Translatable.of("msg_err_no_economy"));
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESETBANKS.getNode());
 		final double amount = args.length == 1 ? MathUtil.getIntOrThrow(args[0]) : 0.0;
  		Confirmation.runOnAccept(() -> {
  			for (Town town : TownyUniverse.getInstance().getTowns())
@@ -2568,5 +2468,27 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
  		})
  		.setTitle(Translatable.of("confirmation_are_you_sure_you_want_to_reset_all_banks", TownyEconomyHandler.getFormattedBalance(amount)))
  		.sendTo(sender);
+	}
+
+	private void parseAdminInstall(CommandSender sender) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_INSTALL.getNode());
+		Towny.getAdventure().sender(sender).sendMessage(Component.text(Translatable.of("msg_setup_full_guide_link").forLocale(sender)).clickEvent(ClickEvent.openUrl("https://github.com/TownyAdvanced/Towny/wiki/Installation")));
+		
+		new SetupConversation(sender).runOnResponse(response -> {
+			ConversationContext context = (ConversationContext) response;
+			
+			toggleWildernessUsage(parseBoolean(context.getSessionData(0)));
+			toggleRevertUnclaim(parseBoolean(context.getSessionData(1)));
+			TownySettings.setProperty(ConfigNodes.TOWN_TOWN_BLOCK_RATIO.getRoot(), Integer.parseInt((String) context.getSessionData(2)));
+			
+			if (TownyEconomyHandler.isActive()) {
+				TownySettings.setProperty(ConfigNodes.ECO_PRICE_NEW_TOWN.getRoot(), Integer.parseInt((String) context.getSessionData(3)));
+				TownySettings.setProperty(ConfigNodes.ECO_PRICE_NEW_NATION.getRoot(), Integer.parseInt((String) context.getSessionData(4)));
+				TownySettings.setProperty(ConfigNodes.ECO_PRICE_CLAIM_TOWNBLOCK.getRoot(), Integer.parseInt((String) context.getSessionData(5)));
+			}
+			
+			TownySettings.saveConfig();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_setup_success"));
+		});
 	}
 }
