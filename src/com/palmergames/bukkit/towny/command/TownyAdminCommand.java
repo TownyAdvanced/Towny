@@ -1067,41 +1067,62 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		switch (split[1].toLowerCase(Locale.ROOT)) {
-		case "rename":
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME.getNode());
-			if (split.length != 3)
-				throw new TownyException("Eg: /townyadmin resident [resident] rename [newname]");
-
-			if (NameValidation.isBlacklistName(split[2]))
-				throw new TownyException(Translatable.of("msg_invalid_name"));
-
-			TownyUniverse.getInstance().getDataSource().renamePlayer(resident, split[2]);
-			break;
-		case "friend":
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND.getNode());
-			if (split.length == 2) {
-				HelpMenu.TA_RESIDENT_FRIEND.send(sender);
-				return;
-			}
-
-			ResidentCommand.residentFriend(catchConsole(sender), StringMgmt.remArgs(split, 2), true, resident);
-			break;
-		case "unjail":
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL.getNode());
-			if (!resident.isJailed())
-				throw new TownyException(Translatable.of("msg_err_player_is_not_jailed"));
-
-			JailUtil.unJailResident(resident, UnJailReason.ADMIN);
-			break;
-		case "delete":
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE.getNode());
-			residentDelete(sender, resident);
-			break;
-		default:
-			throw new TownyException(Translatable.of("msg_err_invalid_property", split[1]));
-		}
+		case "rename" -> residentRename(sender, split, resident);
+		case "friend" -> residentFriend(sender, split, resident);
+		case "unjail" -> residentUnjail(sender, resident);
+		case "delete" -> residentDelete(sender, resident);
+		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[1]));
+		};
 	}
-	
+
+	private void residentRename(CommandSender sender, String[] split, Resident resident) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME.getNode());
+		if (split.length != 3)
+			throw new TownyException("Eg: /townyadmin resident [resident] rename [newname]");
+
+		if (NameValidation.isBlacklistName(split[2]))
+			throw new TownyException(Translatable.of("msg_invalid_name"));
+
+		TownyUniverse.getInstance().getDataSource().renamePlayer(resident, split[2]);
+	}
+
+	private void residentFriend(CommandSender sender, String[] split, Resident resident) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND.getNode());
+		if (split.length == 2) {
+			HelpMenu.TA_RESIDENT_FRIEND.send(sender);
+			return;
+		}
+
+		ResidentCommand.residentFriend(catchConsole(sender), StringMgmt.remArgs(split, 2), true, resident);
+	}
+
+	private void residentUnjail(CommandSender sender, Resident resident) throws NoPermissionException, TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL.getNode());
+		if (!resident.isJailed())
+			throw new TownyException(Translatable.of("msg_err_player_is_not_jailed"));
+
+		JailUtil.unJailResident(resident, UnJailReason.ADMIN);
+	}
+
+	/**
+	 * Delete a resident and their data file afer a successful confirmation.
+	 * 
+	 * @param sender Sender who ran the command.
+	 * @param resident Resident to delete.
+	 * @throws NoPermissionException 
+	 */
+	public void residentDelete(CommandSender sender, Resident resident) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE.getNode());
+		Confirmation.runOnAccept(()-> {
+			Player player = resident.isOnline() ? resident.getPlayer() : null;
+			TownyUniverse.getInstance().getDataSource().removeResident(resident);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_del_resident", resident.getName()));
+
+			if (player != null)
+				Bukkit.getScheduler().runTask(plugin, new OnPlayerLogin(plugin, player));
+		}).sendTo(sender);
+	}
+
 	public void parseAdminTownCommand(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -2120,24 +2141,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	/**
-	 * Delete a resident and their data file afer a successful confirmation.
-	 * 
-	 * @param sender Sender who ran the command.
-	 * @param resident Resident to delete.
-	 */
-	public void residentDelete(CommandSender sender, Resident resident) {
-
-		Confirmation.runOnAccept(()-> {
-			Player player = resident.isOnline() ? resident.getPlayer() : null;
-			TownyUniverse.getInstance().getDataSource().removeResident(resident);
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_del_resident", resident.getName()));
-
-			if (player != null)
-				Bukkit.getScheduler().runTask(plugin, new OnPlayerLogin(plugin, player));
-		}).sendTo(sender);
-	}
-
 	public void parseToggleCommand(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
@@ -2256,20 +2259,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void handleTownMetaCommand(CommandSender sender, Town town, String[] split) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_META.getNode());
-
 		if (split.length == 2) {
-			if (town.hasMeta()) {
-				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("Custom Meta Data"));
-				for (CustomDataField<?> field : town.getMetadata()) {
-					TownyMessaging.sendMessage(sender, field.getKey() + " = " + field.getValue());
-				}
-			} else {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_this_town_doesnt_have_any_associated_metadata"));
-			}
-
+			displayTownMeta(sender, town);
 			return;
 		}
 
@@ -2277,162 +2269,164 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_TOWN_META.send(sender);
 			return;
 		}
-		
+
 		final String mdKey = split[3];
-		
-		if (split[2].equalsIgnoreCase("set")) {
-			String val = split.length == 5 ? split[4] : null;
-			
-			if (town.hasMeta() && town.hasMeta(mdKey)) {
-				CustomDataField<?> cdf = town.getMetadata(mdKey);
+		switch (split[2].toLowerCase(Locale.ROOT)) {
+		case "set" -> handleTownMetaSet(sender, town, split, mdKey);
+		case "add" -> handleTownMetaAdd(sender, town, mdKey);
+		case "remove" -> handleTownMetaRemove(sender, town, mdKey);
+		default -> HelpMenu.TA_TOWN_META.send(sender);
+		};
+	}
 
-				// Check if the given value is valid for this field.
-				try {
-					if (val == null)
-						throw new InvalidMetadataTypeException(cdf);
+	private static void displayTownMeta(CommandSender sender, Town town) throws TownyException {
+		if (!town.hasMeta())
+			throw new TownyException(Translatable.of("msg_err_this_town_doesnt_have_any_associated_metadata"));
 
-					cdf.isValidType(val);
-				} catch (InvalidMetadataTypeException e) {
-					TownyMessaging.sendErrorMsg(sender, e.getMessage());
-					return;
-				}
-
-				// Change state
-				cdf.setValueFromString(val);
-
-				// Let user know that it was successful.
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_key_x_was_successfully_updated_to_x", mdKey, cdf.getValue()));
-
-				// Save changes.
-				town.save();
-			}
-			else {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_key_x_is_not_part_of_this_town", mdKey));
-			}
-		} else if (split[2].equalsIgnoreCase("add")) {
-
-			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)){
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_the_metadata_for_key_is_not_registered", mdKey));
-				return;
-			}
-			
-			CustomDataField<?> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
-
-			if (town.hasMeta() && town.hasMeta(md.getKey())) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_key_x_already_exists", mdKey));
-				return;
-			}
-
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_custom_data_was_successfully_added_to_town"));
-			
-			town.addMetaData(md.clone(), true);
-			
-		} else if (split[2].equalsIgnoreCase("remove")) {
-
-			if (town.hasMeta() && town.hasMeta(mdKey)) {
-				town.removeMetaData(mdKey, true);
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_data_successfully_deleted"));
-			} else 
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_key_cannot_be_deleted"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle("Custom Meta Data"));
+		for (CustomDataField<?> field : town.getMetadata()) {
+			TownyMessaging.sendMessage(sender, field.getKey() + " = " + field.getValue());
 		}
 	}
-	
-	public static boolean handlePlotMetaCommand(Player player, String[] split) throws TownyException {
+
+	private static void handleTownMetaSet(CommandSender sender, Town town, String[] split, final String mdKey) throws TownyException {
+		String val = split.length == 5 ? split[4] : null;
+
+		if (!town.hasMeta() || !town.hasMeta(mdKey))
+			throw new TownyException(Translatable.of("msg_err_key_x_is_not_part_of_this_town", mdKey));
+
+		CustomDataField<?> cdf = town.getMetadata(mdKey);
+
+		// Check if the given value is valid for this field.
+		try {
+			if (val == null)
+				throw new InvalidMetadataTypeException(cdf);
+
+			cdf.isValidType(val);
+		} catch (InvalidMetadataTypeException e) {
+			throw new TownyException(e.getMessage());
+		}
+
+		// Change state
+		cdf.setValueFromString(val);
+
+		// Let user know that it was successful.
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_key_x_was_successfully_updated_to_x", mdKey, cdf.getValue()));
+
+		// Save changes.
+		town.save();
+	}
+
+	private static void handleTownMetaAdd(CommandSender sender, Town town, final String mdKey) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey))
+			throw new TownyException(Translatable.of("msg_err_the_metadata_for_key_is_not_registered", mdKey));
+		
+		CustomDataField<?> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+
+		if (town.hasMeta() && town.hasMeta(md.getKey()))
+			throw new TownyException(Translatable.of("msg_err_key_x_already_exists", mdKey));
+
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_custom_data_was_successfully_added_to_town"));
+		
+		town.addMetaData(md.clone(), true);
+	}
+
+	private static void handleTownMetaRemove(CommandSender sender, Town town, final String mdKey) throws TownyException {
+		if (!town.hasMeta() || !town.hasMeta(mdKey))
+			throw new TownyException(Translatable.of("msg_err_key_cannot_be_deleted"));
+		town.removeMetaData(mdKey, true);
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_data_successfully_deleted"));
+	}
+
+	public static void handlePlotMetaCommand(Player player, String[] split) throws TownyException {
 		
 		String world = player.getWorld().getName();
 		TownBlock townBlock = null;
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		
 		try {
 			townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage());
-			return false;
+			throw new TownyException(e.getMessage());
 		}
 
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_META.getNode());
-		
-		if (split.length == 1) {
-			if (townBlock.hasMeta()) {
-				TownyMessaging.sendMessage(player, ChatTools.formatTitle("Custom Meta Data"));
-				for (CustomDataField<?> field : townBlock.getMetadata()) {
-					TownyMessaging.sendMessage(player, field.getKey() + " = " + field.getValue());
-				}
-			} else {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_this_plot_doesnt_have_any_associated_metadata"));
-			}
 
-			return true;
+		if (split.length == 1) {
+			displayPlotMeta(player, townBlock);
+			return;
 		}
 
 		if (split.length < 3) {
 			HelpMenu.TA_PLOT_META.send(player);
-			return false;
+			return;
 		}
 
 		final String mdKey = split[2];
-		
-		if (split[1].equalsIgnoreCase("set")) {
-			String val = split.length == 4 ? split[3] : null;
-			
-			if (townBlock.hasMeta() && townBlock.hasMeta(mdKey)) {
-				CustomDataField<?> cdf = townBlock.getMetadata(mdKey);
+		switch(split[1].toLowerCase(Locale.ROOT)) {
+		case "set" -> handlePlotMetaSet(player, split, townBlock, mdKey);
+		case "add" -> handlePlotMetaAdd(player, townBlock, mdKey);
+		case "remove" -> handlePlotMetaRemove(player, townBlock, mdKey);
+		default -> HelpMenu.TA_PLOT.send(player);
+		};
+	}
 
-				// Change state
-				try {
-					if (val == null)
-						throw new InvalidMetadataTypeException(cdf); 
-							
-					cdf.isValidType(val);
-				} catch (InvalidMetadataTypeException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage());
-					return false;
-				}
+	private static void displayPlotMeta(Player player, TownBlock townBlock) throws TownyException {
+		if (!townBlock.hasMeta())
+			throw new TownyException(Translatable.of("msg_err_this_plot_doesnt_have_any_associated_metadata"));
 
-				cdf.setValueFromString(val);
-
-				// Let user know that it was successful.
-				TownyMessaging.sendMsg(player, Translatable.of("msg_key_x_was_successfully_updated_to_x", mdKey, cdf.getValue()));
-
-				// Save changes.
-				townBlock.save();
-				return true;
-			}
-			else {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_key_x_is_not_part_of_this_plot", mdKey));
-				return false;
-			}
-		} else if (split[1].equalsIgnoreCase("add")) {
-
-			if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey)) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_the_metadata_for_key_is_not_registered", mdKey));
-				return false;
-			}
-
-			CustomDataField<?> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
-			if (townBlock.hasMeta() && townBlock.hasMeta(md.getKey())) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_key_x_already_exists", mdKey));
-				return false;
-			}
-
-			TownyMessaging.sendMsg(player, Translatable.of("msg_custom_data_was_successfully_added_to_townblock"));
-
-			townBlock.addMetaData(md.clone());
-			
-		} else if (split[1].equalsIgnoreCase("remove")) {
-
-			if (townBlock.hasMeta() && townBlock.hasMeta(mdKey)) {
-				CustomDataField<?> cdf = townBlock.getMetadata(mdKey);
-				townBlock.removeMetaData(cdf);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_data_successfully_deleted"));
-				return true;
-			}
-
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_key_cannot_be_deleted"));
-			return false;
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle("Custom Meta Data"));
+		for (CustomDataField<?> field : townBlock.getMetadata()) {
+			TownyMessaging.sendMessage(player, field.getKey() + " = " + field.getValue());
 		}
-		
-		return true;
+	}
+
+	private static void handlePlotMetaSet(Player player, String[] split, TownBlock townBlock, final String mdKey) throws TownyException {
+		String val = split.length == 4 ? split[3] : null;
+		if (!townBlock.hasMeta() || !townBlock.hasMeta(mdKey))
+			throw new TownyException(Translatable.of("msg_err_key_x_is_not_part_of_this_plot", mdKey));
+
+		CustomDataField<?> cdf = townBlock.getMetadata(mdKey);
+
+		// Change state
+		try {
+			if (val == null)
+				throw new InvalidMetadataTypeException(cdf); 
+					
+			cdf.isValidType(val);
+		} catch (InvalidMetadataTypeException e) {
+			throw new TownyException(e.getMessage());
+		}
+
+		cdf.setValueFromString(val);
+
+		// Let user know that it was successful.
+		TownyMessaging.sendMsg(player, Translatable.of("msg_key_x_was_successfully_updated_to_x", mdKey, cdf.getValue()));
+
+		// Save changes.
+		townBlock.save();
+	}
+
+	private static void handlePlotMetaAdd(Player player, TownBlock townBlock, final String mdKey) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+		if (!townyUniverse.getRegisteredMetadataMap().containsKey(mdKey))
+			throw new TownyException(Translatable.of("msg_err_the_metadata_for_key_is_not_registered", mdKey));
+
+		CustomDataField<?> md = townyUniverse.getRegisteredMetadataMap().get(mdKey);
+		if (townBlock.hasMeta() && townBlock.hasMeta(md.getKey()))
+			throw new TownyException(Translatable.of("msg_err_key_x_already_exists", mdKey));
+
+		TownyMessaging.sendMsg(player, Translatable.of("msg_custom_data_was_successfully_added_to_townblock"));
+
+		townBlock.addMetaData(md.clone());
+	}
+
+	private static void handlePlotMetaRemove(Player player, TownBlock townBlock, final String mdKey)
+			throws TownyException {
+		if (!townBlock.hasMeta() || !townBlock.hasMeta(mdKey))
+			throw new TownyException(Translatable.of("msg_err_key_cannot_be_deleted"));
+		CustomDataField<?> cdf = townBlock.getMetadata(mdKey);
+		townBlock.removeMetaData(cdf);
+		TownyMessaging.sendMsg(player, Translatable.of("msg_data_successfully_deleted"));
 	}
 	
 	private void parseAdminDepositAllCommand(CommandSender sender, String[] split) throws TownyException {
