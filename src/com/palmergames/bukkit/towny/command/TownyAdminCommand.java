@@ -718,65 +718,53 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
 			return;
 		}
-		
-		if ((!args[1].equalsIgnoreCase("addrank") && !args[1].equalsIgnoreCase("removerank")) || 
-			args.length != 3)
-			throw new TownyException(Translatable.of("msg_err_expected_command_format", "/ta townyperms townrank|nationrank add|remove [rank]"));
-		
-		boolean town = args[0].equalsIgnoreCase("townrank");		
-		boolean add = args[1].equalsIgnoreCase("addrank");
-		String rank = args[2];
-		boolean changed = false;
-		switch (args[1].toLowerCase()) {
-		case "addrank":
-			// Changing town ranks.
-			if (town) {
-				if (TownyPerms.getTownRanks().contains(rank))
-					throw new TownyException(Translatable.of("msg_err_there_is_already_a_town_or_nationrank_called_x", args[0], rank));
-				
-				TownyPerms.getTownyPermsFile().createSection("towns.ranks." + rank);
-				changed = true;
-				
-			// Changing nation ranks.
-			} else {
-				if (TownyPerms.getNationRanks().contains(rank))
-					throw new TownyException(Translatable.of("msg_err_there_is_already_a_town_or_nationrank_called_x", args[0], rank));
-				
-				TownyPerms.getTownyPermsFile().createSection("nations.ranks." + rank);
-				changed = true;
-			}
-			break;
-		case "removerank":
-			// Changing town ranks.
-			if (town) {
-				if (!TownyPerms.getTownRanks().contains(rank))
-					throw new TownyException(Translatable.of("msg_err_there_is_no_town_or_nationrank_called_x", args[0], rank));
-				
-				TownyPerms.getTownyPermsFile().set("towns.ranks." + rank, null);				
-				changed = true;
-				
-			// Changing nation ranks.
-			} else {
-				if (!TownyPerms.getNationRanks().contains(rank))
-					throw new TownyException(Translatable.of("msg_err_there_is_no_town_or_nationrank_called_x", args[0], rank));
-				
-				TownyPerms.getTownyPermsFile().set("nations.ranks." + rank, null);
-				changed = true;
-			}
-			break;
-		default:
-		}
-		
-		if (!changed)
-			return;
-		
+
+		if ((!args[0].equalsIgnoreCase("townrank") && !args[0].equalsIgnoreCase("nationrank"))
+			|| (!args[1].equalsIgnoreCase("addrank") && !args[1].equalsIgnoreCase("removerank"))
+			|| args.length != 3)
+			throw new TownyException(Translatable.of("msg_err_expected_command_format", "/ta townyperms townrank|nationrank addrank|removerank [rank]"));
+
+		if (args[1].equalsIgnoreCase("addrank"))
+			parseAdminTownypermsAddRank(sender, args[0], args[2]);
+		else
+			parseAdminTownypermsRemoveRank(sender, args[0], args[2]);
+
 		TownyPerms.getTownyPermsFile().save();
-		if (add)
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_successfully_add_rank_to_the_town_or_nation_rank", rank, args[0]));
-		else 
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_successfully_removed_rank_from_the_town_or_nation_rank", rank, args[0]));
-		
 		reloadPerms(sender);
+	}
+
+	private void parseAdminTownypermsAddRank(CommandSender sender, String rankType, String rank) throws TownyException {
+		// rankType will equal "townrank" or "nationrank"
+		// Adding to town ranks.
+		if (rankType.equalsIgnoreCase("townrank")) {
+			if (TownyPerms.getTownRanks().contains(rank))
+				throw new TownyException(Translatable.of("msg_err_there_is_already_a_town_or_nationrank_called_x", rankType, rank));
+			TownyPerms.getTownyPermsFile().createSection("towns.ranks." + rank);
+			
+		// Adding to nation ranks.
+		} else {
+			if (TownyPerms.getNationRanks().contains(rank))
+				throw new TownyException(Translatable.of("msg_err_there_is_already_a_town_or_nationrank_called_x", rankType, rank));
+			TownyPerms.getTownyPermsFile().createSection("nations.ranks." + rank);
+		}
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_successfully_add_rank_to_the_town_or_nation_rank", rank, rankType));
+	}
+
+	private void parseAdminTownypermsRemoveRank(CommandSender sender, String rankType, String rank) throws TownyException {
+		// rankType will equal "townrank" or "nationrank"
+		// Removing from town ranks.
+		if (rankType.equalsIgnoreCase("townrank")) {
+			if (!TownyPerms.getTownRanks().contains(rank))
+				throw new TownyException(Translatable.of("msg_err_there_is_no_town_or_nationrank_called_x", rankType, rank));
+			TownyPerms.getTownyPermsFile().set("towns.ranks." + rank, null);
+			
+		// Removing from nation ranks.
+		} else {
+			if (!TownyPerms.getNationRanks().contains(rank))
+				throw new TownyException(Translatable.of("msg_err_there_is_no_town_or_nationrank_called_x", rankType, rank));
+			TownyPerms.getTownyPermsFile().set("nations.ranks." + rank, null);
+		}
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_successfully_removed_rank_from_the_town_or_nation_rank", rank, rankType));
 	}
 
 	private void parseAdminReload(CommandSender sender, String[] split) throws NoPermissionException {
