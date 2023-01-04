@@ -1385,266 +1385,264 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			HelpMenu.TOWN_TOGGLE_HELP.send(sender);
-		} else {
-			
-			boolean permChanged = false; // Used to determine if we have to save the town's townblocks later on.
-			if (!admin) {
-				Resident resident = getResidentOrThrow(sender.getName());
-				town = resident.getTown();
-				checkPermOrThrow((Player) sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase()));
-			}
-
-			Optional<Boolean> choice = Optional.empty();
-			if (split.length == 2) {
-				choice = BaseCommand.parseToggleChoice(split[1]);
-			}
-
-			if (split[0].equalsIgnoreCase("public")) {
-
-				// Fire cancellable event directly before setting the toggle.
-				TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin, choice.orElse(!town.isPublic()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// Set the toggle setting.
-				town.setPublic(preEvent.getFutureState());
-				
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_public", town.isPublic() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_public", town.isPublic() ? Translatable.of("enabled") : Translatable.of("disabled")));
-
-			} else if (split[0].equalsIgnoreCase("pvp")) {
-				
-				String uuid = town.getUUID().toString();
-				// If we aren't dealing with an admin using /t toggle pvp:
-				if (!admin) {
-					// Make sure we are allowed to set these permissions.
-					toggleTest(town, StringMgmt.join(split, " "));
-				
-					// Test to see if the pvp cooldown timer is active for the town.
-					if (TownySettings.getPVPCoolDownTime() > 0 &&
-						CooldownTimerTask.hasCooldown(uuid, CooldownType.PVP) &&
-						!permSource.isTownyAdmin(sender))
-						throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining",
-								CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.PVP)));
-
-					// Test to see if an outsider being inside of the Town would prevent toggling PVP.
-					if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!town.isPVP())) {
-						for (Player target : Bukkit.getOnlinePlayers()) {
-							if (!town.hasResident(target) && town.equals(TownyAPI.getInstance().getTown(target.getLocation())))
-								throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_town"));
-						}
-					}
-				}
-
-				// Fire cancellable event directly before setting the toggle.
-				TownTogglePVPEvent preEvent = new TownTogglePVPEvent(sender, town, admin, choice.orElse(!town.isPVP()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// Set the toggle setting.
-				town.setPVP(preEvent.getFutureState());
-				permChanged = true;
-
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				
-				// Add a cooldown to PVP toggling.
-				if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
-					CooldownTimerTask.addCooldownTimer(uuid, CooldownType.PVP);
-				
-			} else if (split[0].equalsIgnoreCase("explosion")) {
-
-				// Make sure we are allowed to set these permissions.
-				if (!admin)
-					toggleTest(town, StringMgmt.join(split, " "));
-				
-				// Fire cancellable event directly before setting the toggle.
-				TownToggleExplosionEvent preEvent = new TownToggleExplosionEvent(sender, town, admin, choice.orElse(!town.isExplosion()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// Set the toggle setting.
-				town.setExplosion(preEvent.getFutureState());
-				permChanged = true;
-
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_expl", town.getName(), town.isExplosion() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_expl", town.getName(), town.isExplosion() ? Translatable.of("enabled") : Translatable.of("disabled")));
-
-			} else if (split[0].equalsIgnoreCase("fire")) {
-
-				// Make sure we are allowed to set these permissions.
-				if (!admin)
-					toggleTest(town, StringMgmt.join(split, " "));
-				
-				// Fire cancellable event directly before setting the toggle.
-				TownToggleFireEvent preEvent = new TownToggleFireEvent(sender, town, admin, choice.orElse(!town.isFire()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// Set the toggle setting.
-				town.setFire(preEvent.getFutureState());
-				permChanged = true;
-				
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_fire", town.getName(), town.isFire() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_fire", town.getName(), town.isFire() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				
-			} else if (split[0].equalsIgnoreCase("mobs")) {
-
-				// Make sure we are allowed to set these permissions.
-				if (!admin)
-					toggleTest(town, StringMgmt.join(split, " "));
-
-				// Fire cancellable event directly before setting the toggle.
-				TownToggleMobsEvent preEvent = new TownToggleMobsEvent(sender, town, admin, choice.orElse(!town.hasMobs()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// Set the toggle setting.
-				town.setHasMobs(preEvent.getFutureState());
-				permChanged = true;
-				
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				
-			} else if (split[0].equalsIgnoreCase("taxpercent")) {
-
-				// Fire cancellable event directly before setting the toggle.
-				TownToggleTaxPercentEvent preEvent = new TownToggleTaxPercentEvent(sender, town, admin, choice.orElse(!town.isTaxPercentage()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// Set the toggle setting.
-				town.setTaxPercentage(preEvent.getFutureState());
-				
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				
-			} else if (split[0].equalsIgnoreCase("open")) {
-
-				if(town.isBankrupt())
-					throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_toggle_open"));
-
-				// Fire cancellable event directly before setting the toggle.
-				TownToggleOpenEvent preEvent = new TownToggleOpenEvent(sender, town, admin, choice.orElse(!town.isOpen()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// Set the toggle setting.
-				town.setOpen(preEvent.getFutureState());
-				
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_open", town.isOpen() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_open", town.isOpen() ? Translatable.of("enabled") : Translatable.of("disabled")));
-
-				// Send a warning when toggling on (a reminder about plot permissions).
-				if (town.isOpen())
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_toggle_open_on_warning"));
-				
-			} else if (split[0].equalsIgnoreCase("neutral") || split[0].equalsIgnoreCase("peaceful")) {
-
-				String uuid = town.getUUID().toString();
-				if (TownySettings.getPeacefulCoolDownTime() > 0 && 
-					!admin && !permSource.isTownyAdmin(sender) &&
-					CooldownTimerTask.hasCooldown(uuid, CooldownType.NEUTRALITY))
-					throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining",
-							CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.NEUTRALITY)));
-
-				boolean peacefulState = choice.orElse(!town.isNeutral());
-				double cost = TownySettings.getTownNeutralityCost();
-				
-				if (TownySettings.nationCapitalsCantBeNeutral() && town.isCapital())
-					throw new TownyException(Translatable.of("msg_err_capital_cannot_be_peaceful"));
-				
-				if (town.isNeutral() && peacefulState) throw new TownyException(Translatable.of("msg_town_already_peaceful"));
-				else if (!town.isNeutral() && !peacefulState) throw new TownyException(Translatable.of("msg_town_already_not_peaceful"));
-
-				if (peacefulState && TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(cost))
-					throw new TownyException(Translatable.of("msg_town_cant_peaceful"));
-				
-				// Fire cancellable event directly before setting the toggle.
-				TownToggleNeutralEvent preEvent = new TownToggleNeutralEvent(sender, town, admin, choice.orElse(!town.isNeutral()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-
-				// If they setting neutral status on send a message confirming they paid something, if they did.
-				if (peacefulState && TownyEconomyHandler.isActive() && cost > 0) {
-					town.getAccount().withdraw(cost, "Peaceful Nation Cost");
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
-				}
-				
-				// Set the toggle setting.
-				town.setNeutral(preEvent.getFutureState());
-
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
-
-				// Add a cooldown to Peacful toggling.
-				if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
-					CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
-
-			} else if (split[0].equalsIgnoreCase("nationzone")) {
-
-				// Towns don't always have nationzones.
-				if (town.getNationZoneSize() < 1)
-					throw new TownyException(Translatable.of("msg_err_your_town_has_no_nationzone_to_toggle"));
-				
-				// Fire cancellable event directly before setting the toggle.
-				TownToggleNationZoneEvent preEvent = new TownToggleNationZoneEvent(sender, town, admin, choice.orElse(!town.isNationZoneEnabled()));
-				if (BukkitTools.isEventCancelled(preEvent))
-					throw new TownyException(preEvent.getCancelMessage());
-				
-				// Set the toggle setting.
-				town.setNationZoneEnabled(preEvent.getFutureState());
-				
-				// Send message feedback.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_nationzone", town.isNationZoneEnabled() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_nationzone", town.isNationZoneEnabled() ? Translatable.of("enabled") : Translatable.of("disabled")));
-				
-			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_TOGGLE, split[0])) {
-				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_TOGGLE, split[0]).execute(sender, "town", split);
-			} else {
-            	/*
-            	 * Fire of an event if we don't recognize the command being used.
-            	 * The event is cancelled by default, leaving our standard error message 
-            	 * to be shown to the player, unless the user of the event does 
-            	 * a) uncancel the event, or b) alters the cancellation message.
-            	 */
-				TownToggleUnknownEvent event = new TownToggleUnknownEvent(sender, town, admin, split);
-				if (BukkitTools.isEventCancelled(event))
-					throw new TownyException(event.getCancelMessage());
-			}
-
-			//Propagate perms to all unchanged, town owned, townblocks
-			if (permChanged)
-				for (TownBlock townBlock : town.getTownBlocks()) {
-					if (!townBlock.hasResident() && !townBlock.isChanged()) {
-						townBlock.setType(townBlock.getType());
-						townBlock.save();
-					}
-				}
-
-			//Change settings event
-			BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(town));
-
-			// Save the Town.
-			town.save();
+			return;
 		}
+		if (!admin) {
+			Resident resident = getResidentOrThrow(sender.getName());
+			town = resident.getTown();
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase()));
+		}
+
+		Optional<Boolean> choice = Optional.empty();
+		if (split.length == 2)
+			choice = BaseCommand.parseToggleChoice(split[1]);
+
+		switch(split[0].toLowerCase(Locale.ROOT)) {
+		case "public" -> townTogglePublic(sender, admin, town, choice);
+		case "pvp" -> townTogglePVP(sender, split, admin, town, permSource, choice);
+		case "explosion" -> townToggleExplosion(sender, split, admin, town, choice);
+		case "fire" -> townToggleFire(sender, split, admin, town, choice);
+		case "mobs" -> townToggleMobs(sender, split, admin, town, choice);
+		case "taxpercent" -> townToggleTaxPercent(sender, admin, town, choice);
+		case "open" -> townToggleOpen(sender, admin, town, choice);
+		case "neutral", "peaceful" -> townToggleNeutral(sender, admin, town, permSource, choice);
+		case "nationzone" -> townToggleNationZone(sender, admin, town, choice);
+		default -> {
+			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_TOGGLE, split[0])) {
+				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_TOGGLE, split[0]).execute(sender, "town", split);
+				return;
+			}
+			/*
+			 * Fire off an event if we don't recognize the command being used. The event is
+			 * cancelled by default, leaving our standard error message to be shown to the
+			 * player, unless the user of the event does a) uncancel the event, or b) alters
+			 * the cancellation message.
+			 */
+			BukkitTools.ifCancelledThenThrow(new TownToggleUnknownEvent(sender, town, admin, split));
+		}
+		}
+
+		// Propagate perms to all unchanged, town owned, townblocks because it is a
+		// townblock-affecting toggle.
+		switch(split[0].toLowerCase(Locale.ROOT)) {
+		case "pvp", "explosion", "fire", "mobs" -> {
+			for (TownBlock townBlock : town.getTownBlocks()) {
+				if (!townBlock.hasResident() && !townBlock.isChanged()) {
+					townBlock.setType(townBlock.getType());
+					townBlock.save();
+				}
+			}
+		}}
+
+		//Change settings event
+		BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(town));
+
+		// Save the Town.
+		town.save();
+	}
+
+	private static void townTogglePublic(CommandSender sender, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		// Fire cancellable event directly before setting the toggle.
+		TownTogglePublicEvent preEvent = new TownTogglePublicEvent(sender, town, admin, choice.orElse(!town.isPublic()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setPublic(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_public", town.isPublic() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_public", town.isPublic() ? Translatable.of("enabled") : Translatable.of("disabled")));
+	}
+
+	private static void townTogglePVP(CommandSender sender, String[] split, boolean admin, Town town, TownyPermissionSource permSource, Optional<Boolean> choice) throws TownyException {
+		String uuid = town.getUUID().toString();
+		// If we aren't dealing with an admin using /t toggle pvp:
+		if (!admin) {
+			// Make sure we are allowed to set these permissions.
+			toggleTest(town, StringMgmt.join(split, " "));
+
+			// Test to see if the pvp cooldown timer is active for the town.
+			if (TownySettings.getPVPCoolDownTime() > 0 &&
+				CooldownTimerTask.hasCooldown(uuid, CooldownType.PVP) &&
+				!permSource.isTownyAdmin(sender))
+				throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining",
+						CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.PVP)));
+
+			// Test to see if an outsider being inside of the Town would prevent toggling PVP.
+			if (TownySettings.getOutsidersPreventPVPToggle() && choice.orElse(!town.isPVP())) {
+				for (Player target : Bukkit.getOnlinePlayers()) {
+					if (!town.hasResident(target) && town.equals(TownyAPI.getInstance().getTown(target.getLocation())))
+						throw new TownyException(Translatable.of("msg_cant_toggle_pvp_outsider_in_town"));
+				}
+			}
+		}
+
+		// Fire cancellable event directly before setting the toggle.
+		TownTogglePVPEvent preEvent = new TownTogglePVPEvent(sender, town, admin, choice.orElse(!town.isPVP()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setPVP(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_pvp", town.getName(), town.isPVP() ? Translatable.of("enabled") : Translatable.of("disabled")));
+
+		// Add a cooldown to PVP toggling.
+		if (TownySettings.getPVPCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
+			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.PVP);
+	}
+
+	private static void townToggleExplosion(CommandSender sender, String[] split, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		// Make sure we are allowed to set these permissions.
+		if (!admin)
+			toggleTest(town, StringMgmt.join(split, " "));
+
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleExplosionEvent preEvent = new TownToggleExplosionEvent(sender, town, admin, choice.orElse(!town.isExplosion()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setExplosion(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_expl", town.getName(), town.isExplosion() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_expl", town.getName(), town.isExplosion() ? Translatable.of("enabled") : Translatable.of("disabled")));
+	}
+
+	private static void townToggleFire(CommandSender sender, String[] split, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		// Make sure we are allowed to set these permissions.
+		if (!admin)
+			toggleTest(town, StringMgmt.join(split, " "));
+
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleFireEvent preEvent = new TownToggleFireEvent(sender, town, admin, choice.orElse(!town.isFire()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setFire(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_fire", town.getName(), town.isFire() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_fire", town.getName(), town.isFire() ? Translatable.of("enabled") : Translatable.of("disabled")));
+	}
+
+	private static void townToggleMobs(CommandSender sender, String[] split, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		// Make sure we are allowed to set these permissions.
+		if (!admin)
+			toggleTest(town, StringMgmt.join(split, " "));
+
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleMobsEvent preEvent = new TownToggleMobsEvent(sender, town, admin, choice.orElse(!town.hasMobs()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setHasMobs(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translatable.of("enabled") : Translatable.of("disabled")));
+	}
+
+	private static void townToggleTaxPercent(CommandSender sender, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleTaxPercentEvent preEvent = new TownToggleTaxPercentEvent(sender, town, admin, choice.orElse(!town.isTaxPercentage()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setTaxPercentage(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_taxpercent", town.isTaxPercentage() ? Translatable.of("enabled") : Translatable.of("disabled")));
+	}
+
+	private static void townToggleOpen(CommandSender sender, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		if(town.isBankrupt())
+			throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_toggle_open"));
+
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleOpenEvent preEvent = new TownToggleOpenEvent(sender, town, admin, choice.orElse(!town.isOpen()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setOpen(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_open", town.isOpen() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_open", town.isOpen() ? Translatable.of("enabled") : Translatable.of("disabled")));
+
+		// Send a warning when toggling on (a reminder about plot permissions).
+		if (town.isOpen())
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_toggle_open_on_warning"));
+	}
+
+	private static void townToggleNeutral(CommandSender sender, boolean admin, Town town, TownyPermissionSource permSource, Optional<Boolean> choice) throws TownyException {
+		String uuid = town.getUUID().toString();
+		if (TownySettings.getPeacefulCoolDownTime() > 0 && 
+			!admin && !permSource.isTownyAdmin(sender) &&
+			CooldownTimerTask.hasCooldown(uuid, CooldownType.NEUTRALITY))
+			throw new TownyException(Translatable.of("msg_err_cannot_toggle_neutral_x_seconds_remaining",
+					CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.NEUTRALITY)));
+
+		boolean peacefulState = choice.orElse(!town.isNeutral());
+		double cost = TownySettings.getTownNeutralityCost();
+
+		if (TownySettings.nationCapitalsCantBeNeutral() && town.isCapital())
+			throw new TownyException(Translatable.of("msg_err_capital_cannot_be_peaceful"));
+
+		if (town.isNeutral() && peacefulState) throw new TownyException(Translatable.of("msg_town_already_peaceful"));
+		else if (!town.isNeutral() && !peacefulState) throw new TownyException(Translatable.of("msg_town_already_not_peaceful"));
+
+		if (peacefulState && TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(cost))
+			throw new TownyException(Translatable.of("msg_town_cant_peaceful"));
+
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleNeutralEvent preEvent = new TownToggleNeutralEvent(sender, town, admin, choice.orElse(!town.isNeutral()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// If they setting neutral status on send a message confirming they paid something, if they did.
+		if (peacefulState && TownyEconomyHandler.isActive() && cost > 0) {
+			town.getAccount().withdraw(cost, "Peaceful Nation Cost");
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
+		}
+
+		// Set the toggle setting.
+		town.setNeutral(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_peaceful", town.isNeutral() ? Translatable.of("enabled") : Translatable.of("disabled")));
+
+		// Add a cooldown to Peacful toggling.
+		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
+			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
+	}
+
+	private static void townToggleNationZone(CommandSender sender, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		// Towns don't always have nationzones.
+		if (town.getNationZoneSize() < 1)
+			throw new TownyException(Translatable.of("msg_err_your_town_has_no_nationzone_to_toggle"));
+
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleNationZoneEvent preEvent = new TownToggleNationZoneEvent(sender, town, admin, choice.orElse(!town.isNationZoneEnabled()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setNationZoneEnabled(preEvent.getFutureState());
+
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_nationzone", town.isNationZoneEnabled() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_nationzone", town.isNationZoneEnabled() ? Translatable.of("enabled") : Translatable.of("disabled")));
 	}
 	
 	private static void parseUnJailCommand(CommandSender sender, Town town, String[] split, boolean admin) throws TownyException {
