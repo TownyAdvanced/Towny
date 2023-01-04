@@ -412,8 +412,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 						if (res != null)
 							return townSetTabComplete(sender, res.getTown(), args);
-					} catch (TownyException e) {
-					}
+					} catch (TownyException ignore) {}
 					return Collections.emptyList();
 				case "invite":
 					switch (args.length) {
@@ -2772,56 +2771,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		.sendTo(player);
 	}
 
-	private static void testDistancesOrThrow(TownyWorld world, Coord key) throws TownyException {
-		if (TownySettings.getMinDistanceFromTownPlotblocks() > 0 || TownySettings.getNewTownMinDistanceFromTownPlots() > 0) {
-			int minDistance = TownySettings.getNewTownMinDistanceFromTownPlots();
-			if (minDistance <= 0)
-				minDistance = TownySettings.getMinDistanceFromTownPlotblocks();
-			
-			if (world.getMinDistanceFromOtherTownsPlots(key) < minDistance)
-				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
-		}
-
-		if (TownySettings.getMinDistanceFromTownHomeblocks() > 0 ||
-			TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
-			TownySettings.getMinDistanceBetweenHomeblocks() > 0 ||
-			TownySettings.getNewTownMinDistanceFromTownHomeblocks() > 0) {
-			
-			final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(key);
-			
-			int minDistance = TownySettings.getNewTownMinDistanceFromTownHomeblocks();
-			if (minDistance <= 0)
-				minDistance = TownySettings.getMinDistanceFromTownHomeblocks();
-			
-			if (distanceToNextNearestHomeblock < minDistance || distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
-				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
-
-			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
-				TownyUniverse.getInstance().getTowns().size() > 0 &&
-				distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
-				throw new TownyException(Translatable.of("msg_too_far"));
-		}
-	}
-
-	private static String filterNameOrThrow(String name) throws TownyException {
-		if (TownySettings.getTownAutomaticCapitalisationEnabled())
-			name = StringMgmt.capitalizeStrings(name);
-		
-		// Check the name is valid and doesn't already exist.
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			filteredName = null;
-		}
-
-		if (filteredName == null || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
-			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
-		
-		name = filteredName;
-		return name;
-	}
-
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
 
 		TownyUniverse.getInstance().newTown(name);
@@ -2896,6 +2845,56 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.fireEvent(new NewTownEvent(town));
 
 		return town;
+	}
+
+	private static void testDistancesOrThrow(TownyWorld world, Coord key) throws TownyException {
+		if (TownySettings.getMinDistanceFromTownPlotblocks() > 0 || TownySettings.getNewTownMinDistanceFromTownPlots() > 0) {
+			int minDistance = TownySettings.getNewTownMinDistanceFromTownPlots();
+			if (minDistance <= 0)
+				minDistance = TownySettings.getMinDistanceFromTownPlotblocks();
+			
+			if (world.getMinDistanceFromOtherTownsPlots(key) < minDistance)
+				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+		}
+
+		if (TownySettings.getMinDistanceFromTownHomeblocks() > 0 ||
+			TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
+			TownySettings.getMinDistanceBetweenHomeblocks() > 0 ||
+			TownySettings.getNewTownMinDistanceFromTownHomeblocks() > 0) {
+			
+			final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(key);
+			
+			int minDistance = TownySettings.getNewTownMinDistanceFromTownHomeblocks();
+			if (minDistance <= 0)
+				minDistance = TownySettings.getMinDistanceFromTownHomeblocks();
+			
+			if (distanceToNextNearestHomeblock < minDistance || distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
+				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+
+			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
+				TownyUniverse.getInstance().getTowns().size() > 0 &&
+				distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
+				throw new TownyException(Translatable.of("msg_too_far"));
+		}
+	}
+
+	private static String filterNameOrThrow(String name) throws TownyException {
+		if (TownySettings.getTownAutomaticCapitalisationEnabled())
+			name = StringMgmt.capitalizeStrings(name);
+		
+		// Check the name is valid and doesn't already exist.
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			filteredName = null;
+		}
+
+		if (filteredName == null || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+		
+		name = filteredName;
+		return name;
 	}
 
 	public static void townRename(CommandSender sender, Town town, String newName) {
