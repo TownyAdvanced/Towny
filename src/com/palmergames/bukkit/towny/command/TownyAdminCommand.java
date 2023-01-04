@@ -608,7 +608,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			HelpMenu.TA_HELP.send(sender);
-		}};
+		}}
 	}
 
 	private boolean parseBoolean(Object object) {
@@ -787,7 +787,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_RELOAD, split[0]).execute(sender, split);
 			else
 				HelpMenu.TA_RELOAD.send(sender);
-		}};
+		}}
 	}
 
 	private void parseAdminReset(CommandSender sender) throws NoPermissionException {
@@ -1059,7 +1059,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "unjail" -> residentUnjail(sender, resident);
 		case "delete" -> residentDelete(sender, resident);
 		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[1]));
-		};
+		}
 	}
 
 	private void residentRename(CommandSender sender, String[] split, Resident resident) throws TownyException {
@@ -2159,7 +2159,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				HelpMenu.TA_TOGGLE.send(sender);
 			}
-		};
+		}
 	}
 
 	private void adminToggleWildernessUse(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
@@ -2255,7 +2255,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "add" -> handleTownMetaAdd(sender, town, mdKey);
 		case "remove" -> handleTownMetaRemove(sender, town, mdKey);
 		default -> HelpMenu.TA_TOWN_META.send(sender);
-		};
+		}
 	}
 
 	private static void displayTownMeta(CommandSender sender, Town town) throws TownyException {
@@ -2346,7 +2346,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "add" -> handlePlotMetaAdd(player, townBlock, mdKey);
 		case "remove" -> handlePlotMetaRemove(player, townBlock, mdKey);
 		default -> HelpMenu.TA_PLOT.send(player);
-		};
+		}
 	}
 
 	private static void displayPlotMeta(Player player, TownBlock townBlock) throws TownyException {
