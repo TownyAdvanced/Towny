@@ -8263,3 +8263,5 @@ v0.92.0.11:
 0.98.4.20:
   - Bump paperlib from 1.0.7 to 1.0.8.
   - Refactor lots of TownyAdminCommand code.
+0.98.4.21:
+  - Warn about townblocks folder loading worlds Bukkit cannot find, instead of causing safe mode.

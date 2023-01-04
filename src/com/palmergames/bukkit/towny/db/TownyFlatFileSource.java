@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Location;
@@ -144,6 +145,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
+				if (BukkitTools.getWorld(worldName) == null) {
+					TownyMessaging.sendErrorMsg("Your towny\\data\\townblocks\\ folder contains a folder named '"
+							+ worldName + "' which doesn't appear to exist on your Bukkit server!");
+					TownyMessaging.sendErrorMsg("Towny is going to skip loading the townblocks found in this folder.");
+					continue;
+				}
+
 				TownyWorld world = universe.getWorld(worldName);
 				if (world == null) {
 					newWorld(worldName);
