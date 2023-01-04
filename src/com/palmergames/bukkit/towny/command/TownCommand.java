@@ -1694,10 +1694,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		double initialJailFee = TownyEconomyHandler.isActive() && TownySettings.initialJailFee() > 0 ? TownySettings.initialJailFee() : 0;
 
 		try {
-			Resident jailedResident = TownyUniverse.getInstance().getResident(split[0]);
+			Resident jailedResident = getResidentOrThrow(split[0]);
 
 			// You can only jail your members of your own town.
-			if (jailedResident == null || !town.hasResident(jailedResident))
+			if (!town.hasResident(jailedResident))
 				throw new TownyException(Translatable.of("msg_resident_not_your_town"));
 
 			// Make sure they aren't already jailed.
@@ -1737,54 +1737,27 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_resident_cannot_be_jailed_because_they_are_enemied_there"));
 			}
 
-			// offset is used to determine what argument in split is used for bail, jail # and cell #. 
-			int offset = TownySettings.isAllowingBail() && TownyEconomyHandler.isActive() ? 1 : 0;
-
 			// Begin getting hours, bail, jail and cell numbers from the inputted arguments.
 			if (split.length > 1) {
+				// offset is used to determine what argument in split is used for bail, jail # and cell #. 
+				int offset = TownySettings.isAllowingBail() && TownyEconomyHandler.isActive() ? 1 : 0;
+
 				/*
 				 * Make sure that the arguments being passed in are actually numbers we can use.
 				 */
-				try {
-					Integer.parseInt(split[1]); // Hours
-					if (offset == 1 && split.length > 2)
-						Double.parseDouble(split[2]); // Bail
-					if (split.length > 2 + offset)
-						Integer.parseInt(split[2 + offset]); // Jail
-					if (split.length > 3 + offset)
-						Integer.parseInt(split[3 + offset]); // Cell
-				} catch (NumberFormatException e) {
-					if (offset == 1)
-						HelpMenu.TOWN_JAILWITHBAIL.send(sender);
-					else 
-						HelpMenu.TOWN_JAIL.send(sender);
+				if (!checkArgumentsPassedForJail(sender, split, offset))
 					return;
-				}
 
-				// Set the hours.
-				hours = Integer.valueOf(split[1]);
-				if (hours < 2)
-					hours = 2;
-				if (hours > TownySettings.getJailedMaxHours()) {
-					hours = TownySettings.getJailedMaxHours();
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedMaxHours()));
-				}
+				// Set the hours, which are mandatory.
+				hours = setJailHours(sender, split);
 
 				// Set the bail if bailing is enabled and if the argument is given.
-				if (offset > 0 && split.length >= 3) {
-					bail = Double.valueOf(split[2]);
-					if (bail < 1)
-						bail = 1;
-					if (bail > TownySettings.getBailMaxAmount()) {
-						bail = TownySettings.getBailMaxAmount();
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_bail_x", TownySettings.getBailMaxAmount()));
-					}
-				}
+				if (offset == 1 && split.length >= 3)
+					bail = setBail(sender, split);
 
 				// Set the jail number if the argument is given.
 				if (split.length >= 3 + offset) {
-					jailNum = Integer.valueOf(split[2 + offset]);
-					jail = town.getJail(jailNum);
+					jail = town.getJail(Integer.valueOf(split[2 + offset]));
 					if (jail == null) 
 						throw new TownyException(Translatable.of("msg_err_the_town_does_not_have_that_many_jails"));
 				}
@@ -1798,13 +1771,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
-			if (TownySettings.getMaxJailedPlayerCount() >= 1 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount()) {
+			if (TownySettings.getMaxJailedPlayerCount() > 0 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount()) {
 				if (TownySettings.getMaxJailedNewJailBehavior() == 0)
 					// simple mode, rejects new jailed people outright
 					throw new TownyException(Translatable.of("msg_town_has_no_jailslots"));
-				else
-					//Pass to JailUtil method
-					JailUtil.maxJailedUnjail(town);
+				//Pass to JailUtil method
+				JailUtil.maxJailedUnjail(town);
 			}
 
 			// Jail the resident.
@@ -1824,6 +1796,43 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			e.printStackTrace();
 			return;
 		}
+	}
+
+	private static boolean checkArgumentsPassedForJail(CommandSender sender, String[] split, int offset) {
+		try {
+			Integer.parseInt(split[1]); // Hours
+			if (offset == 1 && split.length > 2)
+				Double.parseDouble(split[2]); // Bail
+			if (split.length > 2 + offset)
+				Integer.parseInt(split[2 + offset]); // Jail
+			if (split.length > 3 + offset)
+				Integer.parseInt(split[3 + offset]); // Cell
+		} catch (NumberFormatException e) {
+			if (offset == 1)
+				HelpMenu.TOWN_JAILWITHBAIL.send(sender);
+			else 
+				HelpMenu.TOWN_JAIL.send(sender);
+			return false;
+		}
+		return true;
+	}
+
+	private static int setJailHours(CommandSender sender, String[] split) {
+		int hours = Math.min(2, Integer.valueOf(split[1]));
+		if (hours > TownySettings.getJailedMaxHours()) {
+			hours = TownySettings.getJailedMaxHours();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_hours_x", TownySettings.getJailedMaxHours()));
+		}
+		return hours;
+	}
+
+	private static double setBail(CommandSender sender, String[] split) {
+		double bail = Math.min(1, Double.valueOf(split[2]));
+		if (bail > TownySettings.getBailMaxAmount()) {
+			bail = TownySettings.getBailMaxAmount();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_err_higher_than_max_allowed_bail_x", TownySettings.getBailMaxAmount()));
+		}
+		return bail;
 	}
 
 	private static void parseJailListCommand(CommandSender sender, Town town, String[] args) {
