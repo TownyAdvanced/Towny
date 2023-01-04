@@ -2699,127 +2699,118 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @param name - name of town
 	 * @param resident - The resident in charge of the town.
 	 * @param noCharge - charging for creation - /ta town new NAME MAYOR has no charge.
+	 * @throws TownyException when a new town isn't allowed.
 	 */
-	public static void newTown(Player player, String name, Resident resident, boolean noCharge) {
+	public static void newTown(Player player, String name, Resident resident, boolean noCharge) throws TownyException {
+		if (TownySettings.hasTownLimit() && TownyUniverse.getInstance().getTowns().size() >= TownySettings.getTownLimit())
+			throw new TownyException(Translatable.of("msg_err_universe_limit"));
 
-		try {
-			if (TownySettings.hasTownLimit() && TownyUniverse.getInstance().getTowns().size() >= TownySettings.getTownLimit())
-				throw new TownyException(Translatable.of("msg_err_universe_limit"));
+		// Check if the player has a cooldown since deleting their town.
+		if (!resident.isAdmin() && CooldownTimerTask.hasCooldown(player.getName(), CooldownType.TOWN_DELETE))
+			throw new TownyException(Translatable.of("msg_err_cannot_create_new_town_x_seconds_remaining",
+					CooldownTimerTask.getCooldownRemaining(player.getName(), CooldownType.TOWN_DELETE)));
 
-			// Check if the player has a cooldown since deleting their town.
-			if (!resident.isAdmin() && CooldownTimerTask.hasCooldown(player.getName(), CooldownType.TOWN_DELETE))
-				throw new TownyException(Translatable.of("msg_err_cannot_create_new_town_x_seconds_remaining",
-						CooldownTimerTask.getCooldownRemaining(player.getName(), CooldownType.TOWN_DELETE)));
-			
-			if (TownySettings.getTownAutomaticCapitalisationEnabled())
-				name = StringMgmt.capitalizeStrings(name);
-			
-			// Check the name is valid and doesn't already exist.
-			String filteredName;
-			try {
-				filteredName = NameValidation.checkAndFilterName(name);
-			} catch (InvalidNameException e) {
-				filteredName = null;
-			}
+		name = filterNameOrThrow(name);
 
-			if (filteredName == null || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
-				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
-			
-			name = filteredName;
-			
-			if (resident.hasTown())
-				throw new TownyException(Translatable.of("msg_err_already_res", resident.getName()));
+		if (resident.hasTown())
+			throw new TownyException(Translatable.of("msg_err_already_res", resident.getName()));
 
-			final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
+		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
-			if (world == null || !world.isUsingTowny())
-				throw new TownyException(Translatable.of("msg_set_use_towny_off"));
-			
-			if (!world.isClaimable())
-				throw new TownyException(Translatable.of("msg_not_claimable"));
+		if (world == null || !world.isUsingTowny())
+			throw new TownyException(Translatable.of("msg_set_use_towny_off"));
 
-			Coord key = Coord.parseCoord(player);
+		if (!world.isClaimable())
+			throw new TownyException(Translatable.of("msg_not_claimable"));
 
-			if (!TownyAPI.getInstance().isWilderness(player.getLocation()))
-				throw new TownyException(Translatable.of("msg_already_claimed_1", key));
-			
-			if (world.hasTowns() &&
-				(TownySettings.getMinDistanceFromTownPlotblocks() > 0 || TownySettings.getNewTownMinDistanceFromTownPlots() > 0)) {
-				
-				int minDistance = TownySettings.getNewTownMinDistanceFromTownPlots();
-				if (minDistance <= 0)
-					minDistance = TownySettings.getMinDistanceFromTownPlotblocks();
-				
-				if (world.getMinDistanceFromOtherTownsPlots(key) < minDistance)
-					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
-			}
+		Location spawnLocation = player.getLocation();
+		Coord key = Coord.parseCoord(player);
 
-			
-			if (world.hasTowns() && 
-				TownySettings.getMinDistanceFromTownHomeblocks() > 0 ||
-				TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
-				TownySettings.getMinDistanceBetweenHomeblocks() > 0 ||
-				TownySettings.getNewTownMinDistanceFromTownHomeblocks() > 0) {
-				
-				final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(key);
-				
-				int minDistance = TownySettings.getNewTownMinDistanceFromTownHomeblocks();
-				if (minDistance <= 0)
-					minDistance = TownySettings.getMinDistanceFromTownHomeblocks();
-				
-				if (distanceToNextNearestHomeblock < minDistance || distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
-					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+		if (!TownyAPI.getInstance().isWilderness(spawnLocation))
+			throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
-				if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
-					TownyUniverse.getInstance().getTowns().size() > 0 &&
-					distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
-					throw new TownyException(Translatable.of("msg_too_far"));
-			}
-			
-			Location spawnLocation = player.getLocation();
+		if (world.hasTowns())
+			testDistancesOrThrow(world, key);
 
-			// If the town isn't free to make, send a confirmation.
-			if (!noCharge && TownyEconomyHandler.isActive()) { 
-				// Test if the resident can afford the town.
-				if (!resident.getAccount().canPayFromHoldings(TownySettings.getNewTownPrice()))
-					throw new TownyException(Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
-				
-				final String finalName = name;
-				Confirmation.runOnAccept(() -> {
-					// Make the resident pay here.
-					if (!resident.getAccount().withdraw(TownySettings.getNewTownPrice(), "New Town Cost")) {
-						// Send economy message
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
-						return;
-					}
-					
-					try {
-						// Make town.
-						newTown(world, finalName, resident, key, spawnLocation, player);
-						TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-						e.printStackTrace();
-					}
-				})
-				.setCancellableEvent(new PreNewTownEvent(player, name, spawnLocation))
-				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
-				.sendTo(player);
-
-			// Or, if the town doesn't cost money to create, just make the Town.
-			} else {
-				if (callPreNewTownEvent(player, name, spawnLocation))
-					return;
-
-				newTown(world, name, resident, key, spawnLocation, player);
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
-			}
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
-			// TODO: delete town data that might have been done
-		} catch (Exception e) {
-			e.printStackTrace();
+		// If the town doesn't cost money to create, just make the Town.
+		if (noCharge || !TownyEconomyHandler.isActive()) {
+			BukkitTools.ifCancelledThenThrow(new PreNewTownEvent(player, name, spawnLocation));
+			newTown(world, name, resident, key, spawnLocation, player);
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
+			return;
 		}
+
+		// Test if the resident can afford the town.
+		if (!resident.getAccount().canPayFromHoldings(TownySettings.getNewTownPrice()))
+			throw new TownyException(Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+
+		// Send a confirmation before taking their money and throwing the PreNewTownEvent.
+		final String finalName = name;
+		Confirmation.runOnAccept(() -> {
+			try {
+				// Make town.
+				newTown(world, finalName, resident, key, spawnLocation, player);
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				e.printStackTrace();
+			}
+		})
+		.setCancellableEvent(new PreNewTownEvent(player, name, spawnLocation))
+		.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
+		.setCost(new ConfirmationTransaction(TownySettings::getNewTownPrice, resident.getAccount(), "New Town Cost",
+			Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice())))
+		.sendTo(player);
+	}
+
+	private static void testDistancesOrThrow(TownyWorld world, Coord key) throws TownyException {
+		if (TownySettings.getMinDistanceFromTownPlotblocks() > 0 || TownySettings.getNewTownMinDistanceFromTownPlots() > 0) {
+			int minDistance = TownySettings.getNewTownMinDistanceFromTownPlots();
+			if (minDistance <= 0)
+				minDistance = TownySettings.getMinDistanceFromTownPlotblocks();
+			
+			if (world.getMinDistanceFromOtherTownsPlots(key) < minDistance)
+				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+		}
+
+		if (TownySettings.getMinDistanceFromTownHomeblocks() > 0 ||
+			TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
+			TownySettings.getMinDistanceBetweenHomeblocks() > 0 ||
+			TownySettings.getNewTownMinDistanceFromTownHomeblocks() > 0) {
+			
+			final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTowns(key);
+			
+			int minDistance = TownySettings.getNewTownMinDistanceFromTownHomeblocks();
+			if (minDistance <= 0)
+				minDistance = TownySettings.getMinDistanceFromTownHomeblocks();
+			
+			if (distanceToNextNearestHomeblock < minDistance || distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
+				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+
+			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
+				TownyUniverse.getInstance().getTowns().size() > 0 &&
+				distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
+				throw new TownyException(Translatable.of("msg_too_far"));
+		}
+	}
+
+	private static String filterNameOrThrow(String name) throws TownyException {
+		if (TownySettings.getTownAutomaticCapitalisationEnabled())
+			name = StringMgmt.capitalizeStrings(name);
+		
+		// Check the name is valid and doesn't already exist.
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			filteredName = null;
+		}
+
+		if (filteredName == null || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+		
+		name = filteredName;
+		return name;
 	}
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
@@ -2896,17 +2887,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.fireEvent(new NewTownEvent(town));
 
 		return town;
-	}
-	
-	private static boolean callPreNewTownEvent(Player player, String townName, Location spawnLocation) {
-		PreNewTownEvent preEvent = new PreNewTownEvent(player, townName, spawnLocation);
-
-		if (BukkitTools.isEventCancelled(preEvent)) {
-			TownyMessaging.sendErrorMsg(player, preEvent.getCancelMessage());
-			return true;
-		}
-		
-		return false;
 	}
 
 	public static void townRename(CommandSender sender, Town town, String newName) {
