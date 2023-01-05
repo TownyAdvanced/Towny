@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.gui.PermissionGUI;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import io.papermc.lib.PaperLib;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.bukkit.ChatColor;
@@ -35,7 +36,7 @@ public class TownyInventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
-		if (!(event.getInventory().getHolder() instanceof TownyInventory townyInventory) || event.getCurrentItem() == null)
+		if (!(PaperLib.getHolder(event.getInventory(), false).getHolder() instanceof TownyInventory townyInventory) || event.getCurrentItem() == null)
 			return;
 
 		event.setCancelled(true);
@@ -43,7 +44,7 @@ public class TownyInventoryListener implements Listener {
 		Player player = (Player) event.getWhoClicked();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
-		if (resident == null || (event.getClickedInventory() != null && !(event.getClickedInventory().getHolder() instanceof TownyInventory)))
+		if (resident == null || (event.getClickedInventory() != null && !(PaperLib.getHolder(event.getClickedInventory(), false).getHolder() instanceof TownyInventory)))
 			return;
 
 		if (event.getInventory().getHolder() instanceof EditGUI editGUI) {
