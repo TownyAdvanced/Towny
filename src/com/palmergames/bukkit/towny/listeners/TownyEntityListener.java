@@ -61,6 +61,7 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -830,9 +831,9 @@ public class TownyEntityListener implements Listener {
 			}
 		}
 	}
-
+	
 	/**
-	 * Allows us to treat the hitting of Target blocks and ChorusFlower blocks by arrows as cancellable events.
+	 * Allows us to treat the hitting of Target and ChorusFlower blocks by arrows as cancellable events.
 	 * 
 	 * @param event ProjectileHitEvent
 	 */
