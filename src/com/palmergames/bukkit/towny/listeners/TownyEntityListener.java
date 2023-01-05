@@ -839,7 +839,7 @@ public class TownyEntityListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onProjectileHitEventBlock(ProjectileHitEvent event) {
 		/*
-		 * Bypass any occasion where there is no block being hit or this is not a player shooting.
+		 * Bypass any occasion where there is no block being hit or this is not a chorus flower or target block being hit.
 		 */
 		Block hitBlock = event.getHitBlock();
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) 
