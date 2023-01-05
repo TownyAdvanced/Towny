@@ -8267,3 +8267,4 @@ v0.92.0.11:
   - Warn about townblocks folder loading worlds Bukkit cannot find, instead of causing safe mode.
   - Refactor onCreatureSpawnEvent.
   - Use the new PaperLib#getHolder methods, courtesy of Warriorrrr with PR #6413.
+  - Refactor TownyEntityListener hangingbreak and projectilehit event handlers.
