@@ -8265,3 +8265,4 @@ v0.92.0.11:
   - Refactor lots of TownyAdminCommand code.
 0.98.4.21:
   - Warn about townblocks folder loading worlds Bukkit cannot find, instead of causing safe mode.
+  - Refactor onCreatureSpawnEvent.
