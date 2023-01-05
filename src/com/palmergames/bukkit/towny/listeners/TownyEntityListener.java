@@ -358,8 +358,8 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		// ignore null Entity or non-Towny worlds.
-		if (event.getEntity() == null || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+		// ignore non-Towny worlds.
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
 		// ignore Citizens NPCs and named-mobs (if configured.) 
@@ -402,8 +402,11 @@ public class TownyEntityListener implements Listener {
 	}
 
 	private boolean disallowedTownMob(LivingEntity livingEntity) {
-		return !TownyAPI.getInstance().isWilderness(livingEntity.getLocation()) &&
-			(!TownyAPI.getInstance().areMobsEnabled(livingEntity.getLocation()) && MobRemovalTimerTask.isRemovingTownEntity(livingEntity) || disallowedTownVillagerBaby(livingEntity));
+		return !TownyAPI.getInstance().isWilderness(livingEntity.getLocation()) && (disallowedByTown(livingEntity) || disallowedTownVillagerBaby(livingEntity));
+	}
+
+	private boolean disallowedByTown(LivingEntity livingEntity) {
+		return !TownyAPI.getInstance().areMobsEnabled(livingEntity.getLocation()) && MobRemovalTimerTask.isRemovingTownEntity(livingEntity);
 	}
 
 	private boolean disallowedTownVillagerBaby(LivingEntity livingEntity) {
