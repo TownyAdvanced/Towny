@@ -357,56 +357,73 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
 		// ignore non-Towny worlds.
 		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
 
-		if (event.getEntity() != null) {
-			
-			LivingEntity livingEntity = event.getEntity();
+		if (event.getEntity() == null)
+			return;
 
-			// ignore Citizens NPCs
-			if (PluginIntegrations.getInstance().checkCitizens(livingEntity))
-				return;
-			
-			if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
-				return;
+		LivingEntity livingEntity = event.getEntity();
 
-			if(BukkitTools.isEventCancelled(new MobSpawnRemovalEvent(event.getEntity())))
-				return;
+		// ignore Citizens NPCs
+		if (PluginIntegrations.getInstance().checkCitizens(livingEntity))
+			return;
 
-			Location loc = event.getLocation();
-			
-			// remove from world if set to remove mobs globally
-			if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
+		if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
+			return;
+
+		Location loc = event.getLocation();
+
+		if (disallowedWorldMob(townyWorld.hasWorldMobs(), livingEntity)) {
+			// Remove from world if set to remove mobs globally.
+			if (weAreAllowedToRemoveThis(livingEntity))
 				event.setCancelled(true);
-			}
-			// handle villager baby removal in wilderness
-			if (livingEntity instanceof Villager villager && !villager.isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
+		} else if (disallowedWildernessMob(townyWorld.hasWildernessMobs(), livingEntity, loc)) {
+			// Handle mob removal specific to the wilderness.
+			if (weAreAllowedToRemoveThis(livingEntity))
 				event.setCancelled(true);
-			}
-			// Handle mob removal in wilderness
-			if (TownyAPI.getInstance().isWilderness(loc)) {
-				// Check if entity should be removed.
-				if (!townyWorld.hasWildernessMobs() && MobRemovalTimerTask.isRemovingWildernessEntity(livingEntity)) {
-					event.setCancelled(true);
-				}
-				return;
-			}
-			
-			// handle mob removal in towns
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
-			if (!townyWorld.isForceTownMobs() && !townBlock.getPermissions().mobs && MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
+		} else if (TownyAPI.getInstance().isWilderness(loc)) {
+			// All further tests require a town.
+			return;
+		} else if (disallowedTownMob(livingEntity, loc)) {
+			// Handle mob removal specific to towns.
+			if (weAreAllowedToRemoveThis(livingEntity))
 				event.setCancelled(true);
-			}
-			
-			// handle villager baby removal in towns
-			if (livingEntity instanceof Villager villager && !villager.isAdult() && TownySettings.isRemovingVillagerBabiesTown()) {
-				event.setCancelled(true);
-			}
 		}
+	}
+
+	private boolean disallowedWorldMob(boolean worldAllowsMobs, LivingEntity livingEntity) {
+		return !worldAllowsMobs && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity) || disallowedWorldVillagerBaby(livingEntity);
+	}
+
+	private boolean disallowedWorldVillagerBaby(LivingEntity livingEntity) {
+		return TownySettings.isRemovingVillagerBabiesWorld() && livingEntity instanceof Villager villager && !villager.isAdult();
+	}
+
+	private boolean disallowedWildernessMob(boolean wildernessAllowsMobs, LivingEntity livingEntity, Location loc) {
+		return TownyAPI.getInstance().isWilderness(loc) && !wildernessAllowsMobs && MobRemovalTimerTask.isRemovingWildernessEntity(livingEntity);
+	}
+
+	private boolean disallowedTownMob(LivingEntity livingEntity, Location loc) {
+		return !TownyAPI.getInstance().areMobsEnabled(loc) && MobRemovalTimerTask.isRemovingTownEntity(livingEntity) || disallowedTownVillagerBaby(livingEntity);
+	}
+
+	private boolean disallowedTownVillagerBaby(LivingEntity livingEntity) {
+		return TownySettings.isRemovingVillagerBabiesTown() && livingEntity instanceof Villager villager && !villager.isAdult();
+	}
+
+	/**
+	 * Towny would normally remove this entity, but we use a
+	 * {@link MobSpawnRemovalEvent} to allow other plugins to override us.
+	 * 
+	 * @param livingEntity LivingEntity which spawned.
+	 * @return true if Towny is allowed to remove this entity.
+	 */
+	private boolean weAreAllowedToRemoveThis(LivingEntity livingEntity) {
+		return !BukkitTools.isEventCancelled(new MobSpawnRemovalEvent(livingEntity));
 	}
 
 	/**
