@@ -837,7 +837,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event ProjectileHitEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onProjectileHitEventBlock(ProjectileHitEvent event) {
+	public void onProjectileHitBlockEvent(ProjectileHitEvent event) {
 		/*
 		 * Bypass any occasion where there is no block being hit or this is not a chorus flower or target block being hit.
 		 */
@@ -854,14 +854,18 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Prevent players based on their PlayerCache/towny's cancellable event.
-		if (hitBlock.getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET, hitBlock.getLocation())
-			&& !TownyActionEventExecutor.canSwitch(player, hitBlock.getLocation(), hitBlock.getType())) {
+		if (disallowedTargetSwitch(hitBlock, player) || disallowedChorusFlowerBreak(hitBlock, player)) {
 			cancelProjectileHitEvent(event, hitBlock);
 		}
+	}
 
-		if (hitBlock.getType() == Material.CHORUS_FLOWER && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType())) {
-			cancelProjectileHitEvent(event, hitBlock);
-		}
+	private boolean disallowedTargetSwitch(Block hitBlock, Player player) {
+		return hitBlock.getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET, hitBlock.getLocation())
+			&& !TownyActionEventExecutor.canSwitch(player, hitBlock.getLocation(), hitBlock.getType());
+	}
+
+	private boolean disallowedChorusFlowerBreak(Block hitBlock, Player player) {
+		return hitBlock.getType() == Material.CHORUS_FLOWER && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType());
 	}
 
 	private void cancelProjectileHitEvent(ProjectileHitEvent event, Block block) {
