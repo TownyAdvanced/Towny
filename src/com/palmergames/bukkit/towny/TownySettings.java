@@ -223,16 +223,16 @@ public class TownySettings {
 		return configTownLevel.get(numResidents);
 	}
 
-	public static NationLevel getNationLevel(int numResidents) {
-		return configNationLevel.get(numResidents);
-	}
-
 	public static TownLevel getTownLevel(Town town) {
 		return getTownLevel(town.getLevel());
 	}
 
 	public static TownLevel getTownLevel(Town town, int residents) {
 		return getTownLevel(town.getLevel(residents));
+	}
+
+	public static NationLevel getNationLevel(int numResidents) {
+		return configNationLevel.get(numResidents);
 	}
 
 	public static NationLevel getNationLevel(Nation nation) {
@@ -1897,53 +1897,26 @@ public class TownySettings {
 	}
 
 	private static double getTownUpkeepCostRaw(Town town) {
-		if (town != null && !town.hasUpkeep())
+		if (town == null || !town.hasUpkeep())
 			return 0.0;
-		
-		double multiplier = 1.0;
 
-		if (town != null) {
-			if (isUpkeepByPlot()) {
-				multiplier = town.getTownBlocks().size();
-			} else {
-				multiplier = getTownLevel(town).upkeepModifier();
-			}
+		// When we are doing per-plot-upkeep we use the town size instead of the upkeep modified in the Town Level.
+		double townMultiplier = isUpkeepByPlot() ? town.getTownBlocks().size() : getTownLevel(town).upkeepModifier();
+		// If the town has a nation we will be altering thing with the nation's TownUpkeepModifier, or 1.0 if no nation.
+		double nationMultiplier = town.hasNation() ? getNationLevel(town.getNationOrNull()).nationTownUpkeepModifier() : 1.0;
+		// There's the chance that even with per-plot-upkeep, the townLevel upkeep modifier is still used, or 1.0 if not. 
+		double townLevelPlotModifier = isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep() ? getTownLevel(town).upkeepModifier() : 1.0;
+		// Amount is calculated using the above multipliers.
+		double amount = ((getTownUpkeep() * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
+
+		// When per-plot-upkeep is in use, there can be min/max amounts.
+		if (isUpkeepByPlot()) {
+			if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
+				amount = Math.max(amount, TownySettings.getPlotBasedUpkeepMinimumAmount());
+			if (TownySettings.getPlotBasedUpkeepMaximumAmount() > 0.0) 
+				amount = Math.min(amount, TownySettings.getPlotBasedUpkeepMaximumAmount());
 		}
-		
-		if (town != null && town.hasNation()) {
-			Nation nation = town.getNationOrNull();
-			double nationMultiplier = 1.0;
-			if (nation != null) {
-				nationMultiplier = getNationLevel(nation).nationTownUpkeepModifier();
-			}
-			if (isUpkeepByPlot()) {
-				double amount;
-				if (isTownLevelModifiersAffectingPlotBasedUpkeep())
-					amount = (((getTownUpkeep() * multiplier) * getTownLevel(town).upkeepModifier()) * nationMultiplier);
-				else
-					amount = (getTownUpkeep() * multiplier) * nationMultiplier;
-				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
-					amount = Math.max(amount, TownySettings.getPlotBasedUpkeepMinimumAmount());
-				if (TownySettings.getPlotBasedUpkeepMaximumAmount() > 0.0) 
-					amount = Math.min(amount, TownySettings.getPlotBasedUpkeepMaximumAmount());
-				return amount;
-			}
-			return (getTownUpkeep() * multiplier) * nationMultiplier;
-		} else {
-			if (isUpkeepByPlot()) {
-				double amount;
-				if (isTownLevelModifiersAffectingPlotBasedUpkeep() && town != null)
-					amount = (getTownUpkeep() * multiplier) * getTownLevel(town).upkeepModifier();
-				else
-					amount = getTownUpkeep() * multiplier;
-				if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
-					amount = Math.max(amount, TownySettings.getPlotBasedUpkeepMinimumAmount());
-				if (TownySettings.getPlotBasedUpkeepMaximumAmount() > 0.0) 
-					amount = Math.min(amount, TownySettings.getPlotBasedUpkeepMaximumAmount());
-				return amount;
-			}
-			return getTownUpkeep() * multiplier;
-		}
+		return amount;
 	}
 
 	public static double getTownUpkeep() {
