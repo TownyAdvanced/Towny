@@ -8271,3 +8271,4 @@ v0.92.0.11:
   - Simplify TownySettings#getTownUpkeepCostRaw.
 0.98.5.0:
   - Bump version for release.
+0.98.5.1:
