@@ -1970,6 +1970,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 			
 			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, false, true, false));
+
 		}
 	}
 
