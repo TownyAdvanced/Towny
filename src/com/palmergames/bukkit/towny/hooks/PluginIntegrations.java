@@ -204,8 +204,9 @@ public class PluginIntegrations {
 				}
 				
 				output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion());
+				return output;
 			}
-			return output;
+
 		}
 		// No Vault found, fall back to Bukkit's native permission source.
 		TownyUniverse.getInstance().setPermissionSource(new BukkitPermSource(towny));
