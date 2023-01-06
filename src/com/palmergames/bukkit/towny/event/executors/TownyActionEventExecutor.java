@@ -255,6 +255,17 @@ public class TownyActionEventExecutor {
 	}
 
 	/**
+	 * Can the player use this block as a switch?
+	 * 
+	 * @param player - Player involved in the event.
+	 * @param block  - Block being switched.
+	 * @return true if allowed.
+	 */
+	public static boolean canSwitch(Player player, Block block) {
+		return canSwitch(player, block.getLocation(), block.getType());
+	}
+
+	/**
 	 * Can the player use items of this material at this location?
 	 * 
 	 * @param player     - Player involved in the event.

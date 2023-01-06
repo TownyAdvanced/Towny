@@ -322,125 +322,122 @@ public class TownyPlayerListener implements Listener {
 
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
-		
+
 		Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
+		Location loc = event.hasBlock() ? clickedBlock.getLocation() : player.getLocation();
+		Material item = event.hasItem() ? event.getItem().getType() : null;
 
 		/*
-		 * Item Use or and Item's that call destroy tests.
+		 * Test Towny item_use protection. (Using an item which is configured to be special to plots.)
+		 */
+		if (event.hasItem() && TownySettings.isItemUseMaterial(item, loc))
+			event.setCancelled(!TownyActionEventExecutor.canItemuse(player, loc, item));
+
+		// The rest of the tests require a blocked to have been clicked.
+		if (!event.hasBlock())
+			return;
+
+		/*
+		 * Item's that call destroy/build tests that require a block to have been clicked.
 		 */
 		if (event.hasItem()) {
-			
-			Material item =  event.getItem().getType();
-			
-			Location loc = null;
-			if (clickedBlock != null)
-				loc = clickedBlock.getLocation();
-			else 
-				loc = player.getLocation();
-			/*
-			 * Test item_use. 
-			 */
-			if (TownySettings.isItemUseMaterial(item, loc))
-				event.setCancelled(!TownyActionEventExecutor.canItemuse(player, loc, item));
+			// Test for item-block combos that alter the block, using destroy or build tests.
+			if (preventItemBlockComboUsage(player, clickedBlock, item, loc))
+				event.setCancelled(true);
 
-			/*
-			 * Test other Items using non-ItemUse test.
-			 * 
-			 * This means less configuration for the end user,
-			 * for what should be considered build or destroy 
-			 * tests, based on their world-altering properties
-			 * 
-			 */
-			if (clickedBlock != null) {
-				Material clickedMat = clickedBlock.getType();
-				/*
-				 * Test stripping logs, scraping copper blocks, dye-able signs,
-				 * glass bottles, flint&steel on TNT and shears on beehomes
-				 * 
-				 * Treat interaction as a Destroy test.
-				 */
-				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
-					(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
-					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
-
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
-				}
-
-				/*
-				 * Test bonemeal usage. Treat interaction as a Build test.
-				 */
-				if (item == Material.BONE_MEAL) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
-				
-				/*
-				 * Test putting candles on cakes. Treat interaction as a Build test.
-				 */
-				if (ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
-				
-				/*
-				 * Test wax usage. Treat interaction as a Build test.
-				 */
-				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
-
-				/*
-				 * Test if we're about to spawn either entity. Uses build test.
-				 */
-				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item));
-
-				/*
-				 * Test if we're putting a book into a BookContainer.
-				 */
-				if (ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat))
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
-
-				/*
-				 * Catches hoes taking dirt from Rooted Dirt blocks.
-				 */
-				if (clickedMat.name().equals("ROOTED_DIRT") && item.name().toLowerCase().contains("_hoe"))
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock));
-
-			}
+			// Test if we're about to spawn either entity. Uses build test.
+			if ((item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) &&
+				!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item))
+				event.setCancelled(true);
 		}
-		
+
 		/*
-		 * No Item used.
+		 * Test Towny switch use protection. (Clicking a block which has been configured to be a "switch".)
 		 */
-		if (clickedBlock != null) {
-			Material clickedMat = clickedBlock.getType(); 
-			/*
-			 * Test switch use.
-			 */
-			if (TownySettings.isSwitchMaterial(clickedMat, clickedBlock.getLocation())) {
-				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canSwitch(player, clickedBlock.getLocation(), clickedMat));
-				return;
-			}
-			/*
-			 * Test potted plants, redstone interactables, candles and other blocks which 
-			 * cause an interaction that could be considered destructive, or 
-			 * something which wouldn't be given out like a normal 
-			 * door/inventory permission. 
-			 * 
-			 * Test interaction as a Destroy test. (These used to be switches pre-0.96.3.1)
-			 */
-			if (ItemLists.POTTED_PLANTS.contains(clickedMat) ||
-				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
-				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
-				ItemLists.CANDLES.contains(clickedMat) ||
-				clickedMat.name().equals("CHISELED_BOOKSHELF") ||
-				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
-				clickedMat == Material.COMMAND_BLOCK){
-				
-				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
-				return;
-			}
+		if (TownySettings.isSwitchMaterial(clickedBlock)) {
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			event.setCancelled(!TownyActionEventExecutor.canSwitch(player, clickedBlock));
+			return;
 		}
+
+		/*
+		 * Test non-switch_use clickable blocks that get treated as destroy tests.
+		 */
+		event.setCancelled(preventDestructiveBlockUse(player, clickedBlock));
+	}
+
+	/**
+	 * Test for item-block combos that alter the block.
+	 * 
+	 * This means less configuration for the end user, for what should be considered
+	 * build or destroy tests, based on their world-altering properties
+	 * 
+	 * @param player       Player doing the action.
+	 * @param clickedBlock Block which is clicked.
+	 * @param item         Material being held by the player.
+	 * @param loc          Location of the block being clicked.
+	 * @return true if Towny would stop this item/block combination.
+	 */
+	private boolean preventItemBlockComboUsage(Player player, Block clickedBlock, Material item, Location loc) {
+		Material clickedMat = clickedBlock.getType();
+		/*
+		 * Test stripping logs, scraping copper blocks, dye-able signs,
+		 * glass bottles, flint&steel on TNT, hoes on rooted dirt, and shears on beehomes
+		 * 
+		 * Treat interaction as a Destroy test.
+		 */
+		if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
+			(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
+			(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
+			(item.name().toLowerCase().contains("_hoe") && clickedMat.name().equals("ROOTED_DIRT")) ||
+			((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
+			return !TownyActionEventExecutor.canDestroy(player, clickedBlock);
+		}
+
+		/*
+		 * Test bonemeal usage, putting candles on cakes, wax usage, if we're putting a
+		 * book into a BookContainer.
+		 * 
+		 * Treat interaction as a Build test.
+		 */
+		if (item == Material.BONE_MEAL ||
+			(ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE) || 
+			(item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))||
+			(ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat))) {
+			return !TownyActionEventExecutor.canBuild(player, loc, item);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Test for block clicks that result in a destructive change to the block.
+	 * 
+	 * Includes potted plants, redstone interactables, candles and other blocks
+	 * which cause an interaction that could be considered destructive, or something
+	 * which wouldn't be given out like a normal door/inventory permission.
+	 * 
+	 * Test interaction as a Destroy test. (These used to be switches pre-0.96.3.1)
+	 * 
+	 * @param player       Player doing the action.
+	 * @param clickedBlock Block which is clicked.
+	 * @return true if Towny would stop this block being clicked.
+	 */
+	private boolean preventDestructiveBlockUse(Player player, Block clickedBlock) {
+		Material clickedMat = clickedBlock.getType(); 
+		if (ItemLists.POTTED_PLANTS.contains(clickedMat) ||
+			ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
+			ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
+			ItemLists.CANDLES.contains(clickedMat) ||
+			clickedMat.name().equals("CHISELED_BOOKSHELF") ||
+			clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
+			clickedMat == Material.COMMAND_BLOCK) {
+
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			return !TownyActionEventExecutor.canDestroy(player, clickedBlock);
+		}
+		return false;
 	}
 
 	/**

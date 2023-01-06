@@ -32,6 +32,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -1510,6 +1511,10 @@ public class TownySettings {
 	@Deprecated
 	public static boolean isSwitchMaterial(String mat) {
 		return switchUseMaterials.contains(Material.matchMaterial(mat));
+	}
+	
+	public static boolean isSwitchMaterial(Block block) {
+		return isSwitchMaterial(block.getType(), block.getLocation());
 	}
 	
 	public static boolean isSwitchMaterial(Material material, Location location) {
