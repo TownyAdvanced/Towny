@@ -8269,3 +8269,5 @@ v0.92.0.11:
   - Use the new PaperLib#getHolder methods, courtesy of Warriorrrr with PR #6413.
   - Refactor TownyEntityListener hangingbreak and projectilehit event handlers.
   - Simplify TownySettings#getTownUpkeepCostRaw.
+0.98.5.0:
+  - Bump version for release.
