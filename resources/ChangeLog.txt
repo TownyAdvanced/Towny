@@ -8283,3 +8283,6 @@ v0.92.0.11:
     - Setting this false should mean your town cannot be involved in a war supplied by another plugin.
   - New Command: /ta town TOWNNAME toggle allowedtowar [on|off]
     - Toggles a town's allowedtowar setting on/off.
+  - Update TownClaim task.
+    - Changes it from using Thread to Runnable, add clearer comments, make code more readable.
+    - Fix refunds for /t unclaim all, probably fixes a unclaim refund exploit.
