@@ -406,14 +406,9 @@ public class AreaSelectionUtil {
 	}
 	
 	public static boolean filterHomeBlock(Town town, List<WorldCoord> selection) {
-		WorldCoord homeCoord;
-		
-		try {
-			homeCoord = town.getHomeBlock().getWorldCoord();
-		} catch (TownyException ignore) {
+		if (!town.hasHomeBlock())
 			return false;
-		}
-		
+		WorldCoord homeCoord = town.getHomeBlockOrNull().getWorldCoord();
 		return selection.removeIf(worldCoord -> worldCoord.equals(homeCoord));
 	}
 
