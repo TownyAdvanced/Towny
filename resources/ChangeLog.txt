@@ -8273,3 +8273,13 @@ v0.92.0.11:
   - Bump version for release.
 0.98.5.1:
   - Make StatusScreen colouring methods public in TownyFormatter.
+  - Add allowedToWar Town setting.
+    - Defaults to true, but set in the config.
+    - Makes it possible for war plugins to know they should not allow certain towns to take part in wars, and for admins/other plugins to opt towns out of wars.
+  - New Config Option: town.default_allowed_to_war
+    - Default: true
+    - Default status of new towns, (are they allowed to have a war/battle?)
+    - This setting is not used internally by Towny. It is available for war/battle plugins to use.
+    - Setting this false should mean your town cannot be involved in a war supplied by another plugin.
+  - New Command: /ta town TOWNNAME toggle allowedtowar [on|off]
+    - Toggles a town's allowedtowar setting on/off.
