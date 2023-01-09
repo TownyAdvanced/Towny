@@ -617,27 +617,27 @@ public class TownyFormatter {
 	 * Utility methods used in the Status Screens.
 	 */
 	
-	private static String colourKeyValue(String key, String value) {
+	public static String colourKeyValue(String key, String value) {
 		return String.format(keyValueFormat, Translation.of("status_format_key_value_key"), key, Translation.of("status_format_key_value_value"), value); 
 	}
 	
-	private static String colourKey(String key) {
+	public static String colourKey(String key) {
 		return String.format(keyFormat, Translation.of("status_format_key_value_key"), key); 
 	}
 	
-	private static String colourKeyImportant(String key) {
+	public static String colourKeyImportant(String key) {
 		return String.format(keyFormat, Translation.of("status_format_key_important"), key);
 	}
 	
-	private static String colourBracketElement(String key, String value) {
+	public static String colourBracketElement(String key, String value) {
 		return String.format(bracketFormat, Translation.of("status_format_bracket_element"), key, value);
 	}
 	
-	private static String colourHoverKey(String key) {
+	public static String colourHoverKey(String key) {
 		return String.format(hoverFormat, Translation.of("status_format_hover_bracket_colour"), Translation.of("status_format_hover_key"), key, Translation.of("status_format_hover_bracket_colour"));
 	}
 	
-	private static String formatPopulationBrackets(int size) {
+	public static String formatPopulationBrackets(int size) {
 		return String.format(" %s[%s]", Translation.of("status_format_list_2"), size);
 	}
 	
