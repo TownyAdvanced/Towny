@@ -1628,3 +1628,7 @@ msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new tow
 msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
 msg_founder_set: 'The town of %s has had the founder set to %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
