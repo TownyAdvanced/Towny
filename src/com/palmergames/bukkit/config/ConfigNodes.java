@@ -101,6 +101,13 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Default neutral status of the town (are new towns neutral by default?)"),
+	TOWN_DEF_ALLOWED_TO_WAR(
+			"town.default_allowed_to_war",
+			"true",
+			"",
+			"# Default status of new towns, (are they allowed to have a war/battle?)",
+			"# This setting is not used internally by Towny. It is available for war/battle plugins to use.",
+			"# Setting this false should mean your town cannot be involved in a war supplied by another plugin."),
 	TOWN_DEF_BOARD("town.default_board", 
 			"/town set board [msg]",
 			"",

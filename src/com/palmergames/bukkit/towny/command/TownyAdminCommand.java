@@ -156,7 +156,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"forcemerge"
 	);
 	private static final List<String> adminTownToggleTabCompletes = Stream.concat(TownCommand.townToggleTabCompletes.stream(),
-			Arrays.asList("forcepvp", "forcedisablepvp", "unlimitedclaims", "upkeep").stream()).collect(Collectors.toList()); 
+			Arrays.asList("forcepvp", "forcedisablepvp", "unlimitedclaims", "upkeep", "allowedtowar").stream()).collect(Collectors.toList()); 
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
 		"add",
@@ -1370,6 +1370,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town.setHasUpkeep(choice.orElse(!town.hasUpkeep()));
 			town.save();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_upkeep_setting_set_to", town.getName(), town.hasUpkeep()));
+		} else if (split[0].equalsIgnoreCase("allowedtowar")) {
+			
+			town.setAllowedToWar(choice.orElse(!town.isAllowedToWar()));
+			town.save();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_allowedtowar_setting_set_to", town.getName(), town.isAllowedToWar()));
 		} else
 			TownCommand.townToggle(sender, split, true, town);
 	}

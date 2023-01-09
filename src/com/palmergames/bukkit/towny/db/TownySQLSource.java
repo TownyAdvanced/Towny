@@ -983,6 +983,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setConquered(rs.getBoolean("conquered"));
 			town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
 			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
+			town.setAllowedToWar(rs.getBoolean("allowedToWar"));
 			town.setJoinedNationAt(rs.getLong("joinedNationAt"));
 			town.setMovedHomeBlockAt(rs.getLong("movedHomeBlockAt"));
 
@@ -2187,6 +2188,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("conqueredDays", town.getConqueredDays());
 			twn_hm.put("admindisabledpvp", town.isAdminDisabledPVP());
 			twn_hm.put("adminenabledpvp", town.isAdminEnabledPVP());
+			twn_hm.put("allowedToWar", town.isAllowedToWar());
 			twn_hm.put("joinedNationAt", town.getJoinedNationAt());
 			twn_hm.put("mapColorHexCode", town.getMapColorHexCode());
 			twn_hm.put("movedHomeBlockAt", town.getMovedHomeBlockAt());

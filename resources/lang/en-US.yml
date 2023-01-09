@@ -1855,3 +1855,6 @@ msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townb
 
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
 msg_founder_set: 'The town of %s has had the founder set to %s.'
+
+# Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
