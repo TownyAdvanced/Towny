@@ -763,6 +763,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("allowedToWar");
+				if (line != null)
+					try {
+						town.setAllowedToWar(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("open");
 				if (line != null)
 					try {
@@ -1990,6 +1997,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// PVP
 		list.add("adminDisabledPvP=" + town.isAdminDisabledPVP());
 		list.add("adminEnabledPvP=" + town.isAdminEnabledPVP());
+		// Allowed to War
+		list.add("allowedToWar=" + town.isAllowedToWar());
 		// Public
 		list.add("public=" + town.isPublic());
 		// Conquered towns setting + date

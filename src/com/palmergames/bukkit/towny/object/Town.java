@@ -86,6 +86,7 @@ public class Town extends Government implements TownBlockOwner {
 	private TownyWorld world;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
+	private boolean allowedToWar = TownySettings.getTownDefaultAllowedToWar();
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private int nationZoneOverride = 0;
@@ -456,6 +457,14 @@ public class Town extends Government implements TownBlockOwner {
 
 		// Admin has enabled PvP for this town.
 		return this.adminEnabledPVP;
+	}
+
+	public boolean isAllowedToWar() {
+		return allowedToWar;
+	}
+
+	public void setAllowedToWar(boolean allowedToWar) {
+		this.allowedToWar = allowedToWar;
 	}
 
 	/**

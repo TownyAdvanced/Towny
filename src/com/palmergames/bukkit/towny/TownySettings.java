@@ -1396,6 +1396,10 @@ public class TownySettings {
 		return getDouble(ConfigNodes.TOWN_DEF_TAXES_MINIMUMTAX);
 	}
 	
+	public static boolean getTownDefaultAllowedToWar() {
+		return getBoolean(ConfigNodes.TOWN_DEF_ALLOWED_TO_WAR);
+	}
+	
 	public static boolean hasTownLimit() {
 
 		return getTownLimit() != 0;
