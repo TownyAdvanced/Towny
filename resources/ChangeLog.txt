@@ -8289,3 +8289,5 @@ v0.92.0.11:
 0.98.5.2:
   - Fix paintings and item frames being unbreakable, courtesy of Stealth2800 with PR #6427.
     - Closes #6425.
+0.98.6.0:
+  - Bump version number for release.
