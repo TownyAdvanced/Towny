@@ -741,7 +741,7 @@ public class TownyEntityListener implements Listener {
 
 	private boolean allowedToBreak(Player player, Entity hanging) {
 		// Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-		return !TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), EntityTypeUtil.parseEntityToMaterial(hanging.getType(), Material.GRASS_BLOCK));
+		return TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), EntityTypeUtil.parseEntityToMaterial(hanging.getType(), Material.GRASS_BLOCK));
 	}
 
 	private boolean weAreRevertingThisRemoversExplosionsInWild(Location loc, Object remover) {
