@@ -48,6 +48,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Towny's class for internal API Methods
@@ -239,9 +242,15 @@ public class TownyUniverse {
      * Run during onDisable() to finish cleanup and backup.
      */
     public void finishTasks() {
-    	if (backupFuture != null) {
+    	if (backupFuture != null && !backupFuture.isDone()) {
 			// Join into main thread for proper termination.
-			backupFuture.join();
+			try {
+				backupFuture.get(30, TimeUnit.SECONDS);
+			} catch (TimeoutException e) {
+				towny.getLogger().warning("Timed out waiting for backup task to finish.");
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			} catch (ExecutionException ignored) {}
 		}
 	}
 
