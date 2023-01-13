@@ -77,21 +77,22 @@ public class TownyLegacyFlatFileConverter {
 	}
 
 	private boolean updateObjectType(TownyDBFileType type) {
-		logger.info("Updating legacy " + type.getFolderName() + " files...");
-		int convertedFiles = 0;
-		int alreadyConvertedFiles = 0;
+		String folderName = type.getFolderName();
+		logger.info("Updating legacy " + folderName + " files...");
+		int numConvertedFiles = 0;
+		int numAlreadyConvertedFiles = 0;
 		File[] files = getFiles(type);
-		
+
 		List<File> toDelete = new ArrayList<>();
 		for (File file : files) {
 			String fileName = file.getName().replace(".txt", "");
 			if (alreadyUUIDFile(fileName)) {
-				alreadyConvertedFiles++;
+				numAlreadyConvertedFiles++;
 				continue;
 			}
 			UUID uuid = getUUID(file);
 			if (uuid == null) {
-				logger.warning("No UUID could be found in the " + type.getFolderName() + "\\" 
+				logger.warning("No UUID could be found in the " + folderName + "\\" 
 				+ file.getName() + " file! This file will not be converted!");
 				toDelete.add(file);
 				continue;
@@ -114,18 +115,18 @@ public class TownyLegacyFlatFileConverter {
 				break;
 			}
 			renameLegacyFile(file, type, uuid.toString());
-			convertedFiles++;
+			numConvertedFiles++;
 		}
-		int deletedFiles = toDelete.size();
+		int numDeletedFiles = toDelete.size();
 		for (File file : new ArrayList<>(toDelete))
 			source.deleteFileByTypeAndName(type, file.getName().replace(".txt", ""));
 
-		if (alreadyConvertedFiles > 0)
-			plugin.getLogger().info("Towny found " + alreadyConvertedFiles + " files that were already converted in the " + type.getFolderName() + " folder.");
-		if (convertedFiles > 0)
-			plugin.getLogger().info("Towny converted " + convertedFiles + " files from legacy to UUID format in the " + type.getFolderName() + " folder.");
-		if (deletedFiles > 0)
-			plugin.getLogger().info("Towny could not convert " + deletedFiles + " files from legacy to UUID format in the " + type.getFolderName() + "folder.");
+		if (numAlreadyConvertedFiles > 0)
+			plugin.getLogger().info("Towny found " + numAlreadyConvertedFiles + " files that were already converted in the " + folderName + " folder.");
+		if (numConvertedFiles > 0)
+			plugin.getLogger().info("Towny converted " + numConvertedFiles + " files from legacy to UUID format in the " + folderName + " folder.");
+		if (numDeletedFiles > 0)
+			plugin.getLogger().info("Towny could not convert " + numDeletedFiles + " files from legacy to UUID format in the " + folderName + "folder.");
 		return true;
 	}
 
@@ -239,7 +240,7 @@ public class TownyLegacyFlatFileConverter {
 		boolean delete = false;
 		String fileName = file.getName().replace(type.fileExtension, "");
 		if (fileName == null) {
-			plugin.getLogger().warning("While converting a file Towny was passed a null fileName!" + " Guily file: " + file.getAbsolutePath());
+			plugin.getLogger().warning("While converting a file, Towny was passed a null fileName! Guilty file: " + file.getAbsolutePath());
 			return;
 		}
 		if (newFile.exists()) {
