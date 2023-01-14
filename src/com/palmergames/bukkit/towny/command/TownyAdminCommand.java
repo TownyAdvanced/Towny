@@ -875,49 +875,52 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private void parseAdminPlotCommand(Player player, String[] split) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT.getNode());
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length < 1 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_PLOT.send(player);
 			return;
 		}
 
-		if (split[0].equalsIgnoreCase("meta")) {
-			handlePlotMetaCommand(player, split);
-			return;
+		switch (split[0].toLowerCase(Locale.ROOT)) {
+		case "meta" -> handlePlotMetaCommand(player, split);
+		case "claim" -> parseAdminPlotClaim(player, split);
+		case "claimedat" -> parseAdminPlotClaimedAt(player);
+		case "trust" -> parseAdminPlotTrust(player, StringMgmt.remFirstArg(split));
+		default -> HelpMenu.TA_PLOT.send(player);
 		}
+	}
+
+	private void parseAdminPlotClaim(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIM.getNode());
+
+		if (split.length == 1)
+			throw new TownyException(Translatable.of("msg_error_ta_plot_claim"));
+
+		Optional<Resident> resOpt = TownyUniverse.getInstance().getResidentOpt(split[1]);
 		
-		if (split[0].equalsIgnoreCase("claim")) {
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIM.getNode());
+		if (!resOpt.isPresent())
+			throw new TownyException(Translatable.of("msg_error_no_player_with_that_name", split[1]));
 
-			if (split.length == 1) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_ta_plot_claim"));
-				return;
-			}			
-			Optional<Resident> resOpt = townyUniverse.getResidentOpt(split[1]);
-			
-			if (!resOpt.isPresent()) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_no_player_with_that_name", split[1]));
-				return;
-			}
+		String world = player.getWorld().getName();
+		List<WorldCoord> selection = new ArrayList<>();
+		selection.add(new WorldCoord(world, Coord.parseCoord(player)));
+		new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false).start();
+	}
 
-			String world = player.getWorld().getName();
-			List<WorldCoord> selection = new ArrayList<>();
-			selection.add(new WorldCoord(world, Coord.parseCoord(player)));
-			new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false).start();
-		} else if (split[0].equalsIgnoreCase("claimedat")) {
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIMEDAT.getNode());
-			
-			WorldCoord wc = WorldCoord.parseWorldCoord(player);
-			if (!wc.hasTownBlock() || wc.getTownBlock().getClaimedAt() == 0)
-				throw new NotRegisteredException();
-			
-			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_perm_claimed_at").append(" " + TownyFormatter.fullDateFormat.format(wc.getTownBlock().getClaimedAt())));
-		} else if (split[0].equalsIgnoreCase("trust")) {
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_TRUST.getNode());
-			
-			PlotCommand.parsePlotTrustCommand(player, StringMgmt.remFirstArg(split));
-		}
+	private void parseAdminPlotClaimedAt(Player player) throws NoPermissionException, NotRegisteredException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIMEDAT.getNode());
+
+		WorldCoord wc = WorldCoord.parseWorldCoord(player);
+		if (!wc.hasTownBlock() || wc.getTownBlock().getClaimedAt() == 0)
+			throw new NotRegisteredException();
+
+		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_perm_claimed_at").append(" " + TownyFormatter.fullDateFormat.format(wc.getTownBlock().getClaimedAt())));
+	}
+
+	private void parseAdminPlotTrust(Player player, String[] split) throws NoPermissionException, TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_TRUST.getNode());
+
+		PlotCommand.parsePlotTrustCommand(player, split);
 	}
 
 	private void parseAdminCheckPermCommand(CommandSender sender, String[] split) throws TownyException {
