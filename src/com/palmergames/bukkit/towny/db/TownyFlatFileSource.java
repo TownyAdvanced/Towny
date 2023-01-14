@@ -21,7 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import java.io.File;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -330,68 +329,68 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	/*
-	 * Return Loadable Objects as HashMaps for TownyDataBaseHandler to load. 
+	 * Return Loadable Objects as Maps for TownyDataBaseHandler to load. 
 	 */
 
 	@Override
-	public HashMap<String, String> getJailMap(UUID uuid) {
+	public Map<String, String> getJailMap(UUID uuid) {
 		File jailFile = new File(getFileOfTypeWithUUID(TownyDBFileType.JAIL, uuid));
 		if (jailFile.exists() && jailFile.isFile())
-			return FileMgmt.loadFileIntoHashMap(jailFile);
+			return FileMgmt.loadFileIntoMap(jailFile);
 		TownyMessaging.sendErrorMsg("Cannot find a jail file with the UUID " + uuid.toString() + "!");
 		return null;
 	}
 
 	@Override
-	public HashMap<String, String> getPlotGroupMap(UUID uuid) {
+	public Map<String, String> getPlotGroupMap(UUID uuid) {
 		File groupFile = new File(getFileOfTypeWithUUID(TownyDBFileType.PLOTGROUP, uuid));
 		if (groupFile.exists() && groupFile.isFile())
-			return FileMgmt.loadFileIntoHashMap(groupFile);
+			return FileMgmt.loadFileIntoMap(groupFile);
 		TownyMessaging.sendErrorMsg("Cannot find a plotgroup file with the UUID " + uuid.toString() + "!");
 		return null;
 	}
 
 	@Override
-	public HashMap<String, String> getResidentMap(UUID uuid) {
+	public Map<String, String> getResidentMap(UUID uuid) {
 		File residentFile = new File(getFileOfTypeWithUUID(TownyDBFileType.RESIDENT, uuid));
 		if (residentFile.exists() && residentFile.isFile())
-			return FileMgmt.loadFileIntoHashMap(residentFile);
+			return FileMgmt.loadFileIntoMap(residentFile);
 		TownyMessaging.sendErrorMsg("Cannot find a resident file with the UUID " + uuid.toString() + "!");
 		return null;
 	}
 
 	@Override
-	public HashMap<String, String> getTownMap(UUID uuid) {
+	public Map<String, String> getTownMap(UUID uuid) {
 		File townFile = new File(getFileOfTypeWithUUID(TownyDBFileType.TOWN, uuid));
 		if (townFile.exists() && townFile.isFile())
-			return FileMgmt.loadFileIntoHashMap(townFile);
+			return FileMgmt.loadFileIntoMap(townFile);
 		TownyMessaging.sendErrorMsg("Cannot find a town file with the UUID " + uuid.toString() + "!");
 		return null;
 	}
 
 	@Override
-	public HashMap<String, String> getNationMap(UUID uuid) {
+	public Map<String, String> getNationMap(UUID uuid) {
 		File nationFile = new File(getFileOfTypeWithUUID(TownyDBFileType.NATION, uuid));
 		if (nationFile.exists() && nationFile.isFile())
-			return FileMgmt.loadFileIntoHashMap(nationFile);
+			return FileMgmt.loadFileIntoMap(nationFile);
 		TownyMessaging.sendErrorMsg("Cannot find a nation file with the UUID " + uuid.toString() + "!");
 		return null;
 	}
 
 	@Override
-	public HashMap<String, String> getWorldMap(UUID uuid) {
+	public Map<String, String> getWorldMap(UUID uuid) {
 		File worldFile = new File(getFileOfTypeWithUUID(TownyDBFileType.WORLD, uuid));
 		if (worldFile.exists() && worldFile.isFile())
-			return FileMgmt.loadFileIntoHashMap(worldFile);
+			return FileMgmt.loadFileIntoMap(worldFile);
 		TownyMessaging.sendErrorMsg("Cannot find a world file with the UUID " + uuid.toString() + "!");
 		return null;
 	}
 
 	@Override
-	public HashMap<String, String> getTownBlockMap(TownBlock townBlock) {
+	public Map<String, String> getTownBlockMap(TownBlock townBlock) {
 		File fileTownBlock = new File(getTownBlockFilename(townBlock));
 		if (fileTownBlock.exists() && fileTownBlock.isFile())
-			return FileMgmt.loadFileIntoHashMap(fileTownBlock);	
+			return FileMgmt.loadFileIntoMap(fileTownBlock);	
 		TownyMessaging.sendErrorMsg("Cannot find a townBlock file for " + townBlock.toString() + "!");
 		return null;
 	}
@@ -401,7 +400,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 */
 
 	@Override
-	public boolean saveJail(Jail jail, HashMap<String, Object> data) {
+	public boolean saveJail(Jail jail, Map<String, Object> data) {
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(data, getFileOfTypeWithUUID(TownyDBFileType.JAIL, jail.getUUID())));
 			return true;
@@ -412,7 +411,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean savePlotGroup(PlotGroup group, HashMap<String, Object> data) {
+	public boolean savePlotGroup(PlotGroup group, Map<String, Object> data) {
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(data, getFileOfTypeWithUUID(TownyDBFileType.PLOTGROUP, group.getUUID())));
 			return true;
@@ -423,7 +422,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveResident(Resident resident, HashMap<String, Object> data) {
+	public boolean saveResident(Resident resident, Map<String, Object> data) {
 		/*
 		 * Make sure we only save in async
 		 */
@@ -437,7 +436,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveHibernatedResident(UUID uuid, HashMap<String, Object> data) {
+	public boolean saveHibernatedResident(UUID uuid, Map<String, Object> data) {
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(data, getFileOfTypeWithUUID(TownyDBFileType.HIBERNATED_RESIDENT, uuid)));
 			return true;
@@ -448,7 +447,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveTown(Town town, HashMap<String, Object> data) {
+	public boolean saveTown(Town town, Map<String, Object> data) {
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(data, getFileOfTypeWithUUID(TownyDBFileType.TOWN, town.getUUID())));
 			return true;
@@ -459,7 +458,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveNation(Nation nation, HashMap<String, Object> data) {
+	public boolean saveNation(Nation nation, Map<String, Object> data) {
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(data, getFileOfTypeWithUUID(TownyDBFileType.NATION, nation.getUUID())));
 			return true;
@@ -470,7 +469,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveWorld(TownyWorld world, HashMap<String, Object> data) {
+	public boolean saveWorld(TownyWorld world, Map<String, Object> data) {
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(data, getFileOfTypeWithUUID(TownyDBFileType.WORLD, world.getUUID())));
 			return true;
@@ -481,7 +480,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public boolean saveTownBlock(TownBlock townBlock, HashMap<String, Object> data) {
+	public boolean saveTownBlock(TownBlock townBlock, Map<String, Object> data) {
 		try {
 			this.queryQueue.add(new FlatFileSaveTask(data, getTownBlockFilename(townBlock)));
 			return true;
@@ -578,7 +577,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (!hibernatedFile.exists())
 				return Optional.empty();
 
-			Map<String, String> keys = FileMgmt.loadFileIntoHashMap(hibernatedFile);
+			Map<String, String> keys = FileMgmt.loadFileIntoMap(hibernatedFile);
 			String registered = keys.get("registered");
 			if (registered == null || registered.isEmpty())
 				return Optional.empty();

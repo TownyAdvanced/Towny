@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -168,7 +169,7 @@ public final class FileMgmt {
 	 * @param targetLocation - Target location on Filesystem
 	 * @return true on success, false on IOException
 	 */
-	public static boolean mapToFile(HashMap<String, Object> source, String targetLocation) {
+	public static boolean mapToFile(Map<String, Object> source, String targetLocation) {
 		try {
 			writeLock.lock();
 			File file = new File(targetLocation);
@@ -436,13 +437,13 @@ public final class FileMgmt {
 	 * Function which reads from a resident, town, nation, townyobject file, returning a hashmap. 
 	 *
 	 * @param file - File from which the HashMap will be made.
-	 * @return HashMap - Used for loading keys and values from object files. 
+	 * @return Map - Used for loading keys and values from object files. 
 	 */
-	public static HashMap<String, String> loadFileIntoHashMap(File file) {
+	public static Map<String, String> loadFileIntoMap(File file) {
 		
 		try {
 			readLock.lock();
-			HashMap<String, String> keys = new HashMap<>();
+			Map<String, String> keys = new HashMap<>();
 			try (FileInputStream fis = new FileInputStream(file);
 				 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
 				Properties properties = new Properties();

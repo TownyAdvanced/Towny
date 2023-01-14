@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
+import com.palmergames.bukkit.towny.db.TownyLegacyFlatFileConverter;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -141,7 +142,15 @@ public class TownyUniverse {
      * @param saveDbType - save setting from the config.
      */
 	void loadAndSaveDatabase(String loadDbType, String saveDbType) {
-    	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
+		if (TownySettings.isServerUsingLegacySQLDB()) {
+			// Convert Old SQL DB's to Flatfile.
+			TownyLegacyFlatFileConverter.convertLegacySQLDBToFlatfile();
+			// Start this method over again.
+			loadAndSaveDatabase(loadDbType, saveDbType);
+		}
+
+		towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
+
 		try {
 			// Try loading the database.
 			loadDatabase(loadDbType);

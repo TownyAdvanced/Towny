@@ -30,9 +30,9 @@ public class ObjectSaveUtil {
 	 * HashMap methods used to save objects in the TownyFlatFileSource and TownySQLSource
 	 */
 
-	public static HashMap<String, Object> getJailMap(Jail jail) throws Exception {
+	public static Map<String, Object> getJailMap(Jail jail) throws Exception {
 		try {
-			HashMap<String, Object> jail_hm = new HashMap<>();
+			Map<String, Object> jail_hm = new HashMap<>();
 			jail_hm.put("uuid", jail.getUUID());
 			jail_hm.put("townBlock", getTownBlockForSaving(jail.getTownBlock()));
 			
@@ -51,9 +51,9 @@ public class ObjectSaveUtil {
 		}
 	}
 
-	public static HashMap<String, Object> getPlotGroupMap(PlotGroup group) throws Exception {
+	public static Map<String, Object> getPlotGroupMap(PlotGroup group) throws Exception {
 		try {
-			HashMap<String, Object> pltgrp_hm = new HashMap<>();
+			Map<String, Object> pltgrp_hm = new HashMap<>();
 			pltgrp_hm.put("groupID", group.getUUID());
 			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
@@ -68,9 +68,9 @@ public class ObjectSaveUtil {
 		}
 	}
 
-	public static HashMap<String, Object> getResidentMap(Resident resident) throws Exception {
+	public static Map<String, Object> getResidentMap(Resident resident) throws Exception {
 		try {
-			HashMap<String, Object> res_hm = new HashMap<>();
+			Map<String, Object> res_hm = new HashMap<>();
 			res_hm.put("name", resident.getName());
 			res_hm.put("uuid", resident.hasUUID() ? resident.getUUID().toString() : "");
 			res_hm.put("lastOnline", resident.getLastOnline());
@@ -97,9 +97,9 @@ public class ObjectSaveUtil {
 		}
 	}
 
-	public static HashMap<String, Object> getHibernatedResidentMap(UUID uuid, long registered) throws Exception {
+	public static Map<String, Object> getHibernatedResidentMap(UUID uuid, long registered) throws Exception {
 		try {
-			HashMap<String, Object> res_hm = new HashMap<>();
+			Map<String, Object> res_hm = new HashMap<>();
 			res_hm.put("uuid", uuid);
 			res_hm.put("registered", registered);
 			return res_hm;
@@ -110,9 +110,9 @@ public class ObjectSaveUtil {
 		}
 	}
 
-	public static HashMap<String, Object> getTownBlockMap(TownBlock townBlock) throws Exception {
+	public static Map<String, Object> getTownBlockMap(TownBlock townBlock) throws Exception {
 		try {
-			HashMap<String, Object> tb_hm = new HashMap<>();
+			Map<String, Object> tb_hm = new HashMap<>();
 			tb_hm.put("world", townBlock.getWorld().getUUID());
 			tb_hm.put("x", townBlock.getX());
 			tb_hm.put("z", townBlock.getZ());
@@ -144,9 +144,9 @@ public class ObjectSaveUtil {
 		}
 	}
 
-	public static HashMap<String, Object> getTownMap(Town town) throws Exception {
+	public static Map<String, Object> getTownMap(Town town) throws Exception {
 		try {
-			HashMap<String, Object> twn_hm = new HashMap<>();
+			Map<String, Object> twn_hm = new HashMap<>();
 			twn_hm.put("name", town.getName());
 			twn_hm.put("uuid", town.hasValidUUID() ? town.getUUID() : UUID.randomUUID()); //TODO: Do we really want this?
 			twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
@@ -211,9 +211,9 @@ public class ObjectSaveUtil {
 		}
 	}
 
-	public static HashMap<String, Object> getNationMap(Nation nation) throws Exception {
+	public static Map<String, Object> getNationMap(Nation nation) throws Exception {
 		try {
-			HashMap<String, Object> nat_hm = new HashMap<>();
+			Map<String, Object> nat_hm = new HashMap<>();
 			nat_hm.put("name", nation.getName());
 			nat_hm.put("uuid", nation.hasValidUUID() ? nation.getUUID() : UUID.randomUUID()); //TODO: Do we really want this?
 			nat_hm.put("capital", nation.hasCapital() ? nation.getCapital().getUUID() : "");
@@ -240,9 +240,9 @@ public class ObjectSaveUtil {
 		}
 	}
 
-	public static HashMap<String, Object> getWorldMap(TownyWorld world) throws Exception {
+	public static Map<String, Object> getWorldMap(TownyWorld world) throws Exception {
 		try {
-			HashMap<String, Object> world_hm = new HashMap<>();
+			Map<String, Object> world_hm = new HashMap<>();
 			world_hm.put("uuid", world.getUUID());
 			world_hm.put("name", world.getName());
 			world_hm.put("usingTowny", world.isUsingTowny());

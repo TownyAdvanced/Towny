@@ -390,4 +390,10 @@ public class TownyLegacyFlatFileConverter {
 			return false;
 		}
 	}
+
+	public static void convertLegacySQLDBToFlatfile() {
+		
+		
+		
+	}
 }

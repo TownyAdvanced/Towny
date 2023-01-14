@@ -68,8 +68,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
@@ -250,7 +250,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	/*
-	 * Object loading methods which pull HashMaps from FlatFile/SQLSources 
+	 * Object loading methods which pull Maps from FlatFile/SQLSources 
 	 */
 
 	public boolean loadJailData(UUID uuid) {
@@ -259,7 +259,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendErrorMsg("Cannot find a jail with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
 		}
-		HashMap<String, String> jailAsMap = getJailMap(uuid);
+		Map<String, String> jailAsMap = getJailMap(uuid);
 		if (jailAsMap == null)
 			return false;
 		return loader.loadJail(jail, jailAsMap);
@@ -271,7 +271,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendErrorMsg("Cannot find a plotgroup with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
 		}
-		HashMap<String, String> groupAsMap = getPlotGroupMap(uuid);
+		Map<String, String> groupAsMap = getPlotGroupMap(uuid);
 		if (groupAsMap == null)
 			return false;
 		return loader.loadPlotGroup(plotGroup, groupAsMap);
@@ -283,7 +283,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendErrorMsg("Cannot find a resident with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
 		}
-		HashMap<String, String> residentAsMap = getResidentMap(uuid);
+		Map<String, String> residentAsMap = getResidentMap(uuid);
 		if (residentAsMap == null)
 			return false;
 		return loader.loadResident(resident, residentAsMap);
@@ -295,7 +295,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendErrorMsg("Cannot find a town with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
 		}
-		HashMap<String, String> townAsMap = getTownMap(uuid);
+		Map<String, String> townAsMap = getTownMap(uuid);
 		if (townAsMap == null)
 			return false;
 		return loader.loadTown(town, townAsMap);
@@ -307,7 +307,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendErrorMsg("Cannot find a nation with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
 		}
-		HashMap<String, String> nationAsMap = getNationMap(uuid);
+		Map<String, String> nationAsMap = getNationMap(uuid);
 		if (nationAsMap == null)
 			return false;
 		return loader.loadNation(nation, nationAsMap);
@@ -319,21 +319,21 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyMessaging.sendErrorMsg("Cannot find a world with the UUID " + uuid.toString() + " in the TownyUniverse.");
 			return false;
 		}
-		HashMap<String, String> worldAsMap = getWorldMap(uuid);
+		Map<String, String> worldAsMap = getWorldMap(uuid);
 		if (worldAsMap == null)
 			return false;
 		return loader.loadWorld(world, worldAsMap);
 	}
 
 	public boolean loadTownBlock(TownBlock townBlock) {
-		HashMap<String, String> townBlockAsMap = getTownBlockMap(townBlock);
+		Map<String, String> townBlockAsMap = getTownBlockMap(townBlock);
 		if (townBlockAsMap == null)
 			return false;
 		return loader.loadTownBlock(townBlock, townBlockAsMap);
 	}
 
 	/*
-	 * Save Object Methods that call Flatfile/SQLSources after gathering the objects as HashMaps.
+	 * Save Object Methods that call Flatfile/SQLSources after gathering the objects as Maps.
 	 */
 
 	public boolean saveJail(Jail jail) {

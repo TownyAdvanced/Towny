@@ -23,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -46,7 +46,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * PlotBlockData, Snapshot and Regen queues.
  * 
  * The database source classes are responsible for providing keys,
- * loading and saving objects using HashMaps, deleting objects.  
+ * loading and saving objects using Maps, deleting objects.  
  * 
  * Creating new database sources is achieved by creating a new class
  * which extends TownyDatabaseHandler, and implementing the required
@@ -58,12 +58,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * - Load all the keys for each world, nation, town, and resident, jail,
  *   plotgroup, townblock into TownyUniverse.
  * - Parse over each key loaded into TownyUniverse, loading each object
- *   by requesting HashMaps made up of each object's data from the 
+ *   by requesting Maps made up of each object's data from the 
  *   DatabaseSource classes.
  *   
  * --- : Saving process : ---
  * 
- * - Save objects by dumping their data into HashMaps which are then
+ * - Save objects by dumping their data into Maps which are then
  *   processed by the DatabaseSource classes.
  */
 
@@ -311,59 +311,59 @@ public abstract class TownyDataSource {
 
 	/**
 	 * @param uuid UUID to use.
-	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 * @return Map&lt;String, String&gt; populated with the keys and their
 	 *         values for a jail with the given UUID, which will be used to load the
 	 *         jail with data.
 	 */
-	abstract public HashMap<String, String> getJailMap(UUID uuid);
+	abstract public Map<String, String> getJailMap(UUID uuid);
 
 	/**
 	 * @param uuid UUID to use.
-	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 * @return Map&lt;String, String&gt; populated with the keys and their
 	 *         values for a plot group with the given UUID, which will be used to
 	 *         load the plot group with data.
 	 */
-	abstract public HashMap<String, String> getPlotGroupMap(UUID uuid);
+	abstract public Map<String, String> getPlotGroupMap(UUID uuid);
 
 	/**
 	 * @param uuid UUID to use.
-	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 * @return Map&lt;String, String&gt; populated with the keys and their
 	 *         values for a resident with the given UUID, which will be used to load
 	 *         the resident with data.
 	 */
-	abstract public HashMap<String, String> getResidentMap(UUID uuid);
+	abstract public Map<String, String> getResidentMap(UUID uuid);
 
 	/**
 	 * @param uuid UUID to use.
-	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 * @return Map&lt;String, String&gt; populated with the keys and their
 	 *         values for a town with the given UUID, which will be used to load the
 	 *         town with data.
 	 */
-	abstract public HashMap<String, String> getTownMap(UUID uuid);
+	abstract public Map<String, String> getTownMap(UUID uuid);
 
 	/**
 	 * @param uuid UUID to use.
-	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 * @return Map&lt;String, String&gt; populated with the keys and their
 	 *         values for a nation with the given UUID, which will be used to load
 	 *         the nation with data.
 	 */
-	abstract public HashMap<String, String> getNationMap(UUID uuid);
+	abstract public Map<String, String> getNationMap(UUID uuid);
 
 	/**
 	 * @param uuid UUID to use.
-	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 * @return Map&lt;String, String&gt; populated with the keys and their
 	 *         values for a world with the given UUID, which will be used to load
 	 *         the world with data.
 	 */
-	abstract public HashMap<String, String> getWorldMap(UUID uuid);
+	abstract public Map<String, String> getWorldMap(UUID uuid);
 
 	/**
 	 * @param townBlock TownBlock to use.
-	 * @return HashMap&lt;String, String&gt; populated with the keys and their
+	 * @return Map&lt;String, String&gt; populated with the keys and their
 	 *         values for the given TownBlock, which will be used to load the
 	 *         townblock with data.
 	 */
-	abstract public HashMap<String, String> getTownBlockMap(TownBlock townBlock);
+	abstract public Map<String, String> getTownBlockMap(TownBlock townBlock);
 
 	/*
 	 * Legacy database entries that still store a list of keys in a file.
@@ -381,68 +381,68 @@ public abstract class TownyDataSource {
 
 	/**
 	 * @param jail Jail to save.
-	 * @param data HashMap&lt;String, Object&gt; which contains the keys and values
+	 * @param data Map&lt;String, Object&gt; which contains the keys and values
 	 *             representing a Jail's data.
 	 * @return true when the Jail is saved to the database successfully.
 	 */
-	abstract public boolean saveJail(Jail jail, HashMap<String, Object> data);
+	abstract public boolean saveJail(Jail jail, Map<String, Object> data);
 
 	/**
 	 * @param group PlotGroup to save.
-	 * @param data  HashMap&lt;String, Object&gt; which contains the keys and values
+	 * @param data  Map&lt;String, Object&gt; which contains the keys and values
 	 *              representing a PlotGroup's data.
 	 * @return true when the PlotGroup is saved to the database successfully.
 	 */
-	abstract public boolean savePlotGroup(PlotGroup group, HashMap<String, Object> data);
+	abstract public boolean savePlotGroup(PlotGroup group, Map<String, Object> data);
 
 	/**
 	 * @param resident Resident to save.
-	 * @param data     HashMap&lt;String, Object&gt; which contains the keys and
+	 * @param data     Map&lt;String, Object&gt; which contains the keys and
 	 *                 values representing a Resident's data.
 	 * @return true when the Resident is saved to the database successfully.
 	 */
-	abstract public boolean saveResident(Resident resident, HashMap<String, Object> data);
+	abstract public boolean saveResident(Resident resident, Map<String, Object> data);
 
 	/**
 	 * @param uuid UUID to save.
-	 * @param data HashMap&lt;String, Object&gt; which contains the keys and values
+	 * @param data Map&lt;String, Object&gt; which contains the keys and values
 	 *             representing a HibernatedResident's data.
 	 * @return true when the HibernatedResident is saved to the database
 	 *         successfully.
 	 */
-	abstract public boolean saveHibernatedResident(UUID uuid, HashMap<String, Object> data);
+	abstract public boolean saveHibernatedResident(UUID uuid, Map<String, Object> data);
 
 	/**
 	 * @param town Town to save.
-	 * @param data HashMap&lt;String, Object&gt; which contains the keys and values
+	 * @param data Map&lt;String, Object&gt; which contains the keys and values
 	 *             representing a Town's data.
 	 * @return true when the Town is saved to the database successfully.
 	 */
-	abstract public boolean saveTown(Town town, HashMap<String, Object> data);
+	abstract public boolean saveTown(Town town, Map<String, Object> data);
 
 	/**
 	 * @param nation Nation to save.
-	 * @param data   HashMap&lt;String, Object&gt; which contains the keys and
+	 * @param data   Map&lt;String, Object&gt; which contains the keys and
 	 *               values representing a Nation's data.
 	 * @return true when the Nation is saved to the database successfully.
 	 */
-	abstract public boolean saveNation(Nation nation, HashMap<String, Object> data);
+	abstract public boolean saveNation(Nation nation, Map<String, Object> data);
 
 	/**
 	 * @param world TownyWorld to save.
-	 * @param data  HashMap&lt;String, Object&gt; which contains the keys and values
+	 * @param data  Map&lt;String, Object&gt; which contains the keys and values
 	 *              representing a TownyWorld's data.
 	 * @return true when the TownyWorld is saved to the database successfully.
 	 */
-	abstract public boolean saveWorld(TownyWorld world, HashMap<String, Object> data);
+	abstract public boolean saveWorld(TownyWorld world, Map<String, Object> data);
 
 	/**
 	 * @param townBlock TownBlock to save.
-	 * @param data      HashMap&lt;String, Object&gt; which contains the keys and
+	 * @param data      Map&lt;String, Object&gt; which contains the keys and
 	 *                  values representing a TownBlock's data.
 	 * @return true when the TownBlock is saved to the database successfully.
 	 */
-	abstract public boolean saveTownBlock(TownBlock townBlock, HashMap<String, Object> data);
+	abstract public boolean saveTownBlock(TownBlock townBlock, Map<String, Object> data);
 
 	/*
 	 * Individual objects saving methods. Methods are found in TownyDataBaseHandler.

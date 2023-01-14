@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.db;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -48,7 +47,7 @@ public class ObjectLoadUtil {
 		this.universe = universe;
 	}
 
-	public boolean loadJail(Jail jail, HashMap<String, String> keys) {
+	public boolean loadJail(Jail jail, Map<String, String> keys) {
 		String line = "";
 		line = keys.get("townblock");
 		if (line != null) {
@@ -83,7 +82,7 @@ public class ObjectLoadUtil {
 		return true;
 	}
 	
-	public boolean loadPlotGroup(PlotGroup group, HashMap<String, String> keys) {
+	public boolean loadPlotGroup(PlotGroup group, Map<String, String> keys) {
 		String line = "";
 		try {
 			line = keys.get("town");
@@ -112,7 +111,7 @@ public class ObjectLoadUtil {
 		}
 	}
 
-	public boolean loadResident(Resident resident, HashMap<String, String> keys) {
+	public boolean loadResident(Resident resident, Map<String, String> keys) {
 		try {
 			String line = "";
 			// Name
@@ -197,7 +196,7 @@ public class ObjectLoadUtil {
 		}
 	}
 	
-	public boolean loadTown(Town town, HashMap<String, String> keys) {
+	public boolean loadTown(Town town, Map<String, String> keys) {
 		String line = "";
 		try {
 			line = keys.get("mayor");
@@ -335,7 +334,7 @@ public class ObjectLoadUtil {
 		return true;
 	}
 
-	public boolean loadNation(Nation nation, HashMap<String, String> keys) {
+	public boolean loadNation(Nation nation, Map<String, String> keys) {
 		String line = "";
 		try {
 			nation.setName(keys.getOrDefault("name", generateMissingName()));
@@ -412,7 +411,7 @@ public class ObjectLoadUtil {
 		return true;
 	}
 	
-	public boolean loadWorld(TownyWorld world, HashMap<String, String> keys) {
+	public boolean loadWorld(TownyWorld world, Map<String, String> keys) {
 		String line = "";
 		try {
 			world.setName(keys.getOrDefault("name", generateMissingName()));
@@ -464,7 +463,7 @@ public class ObjectLoadUtil {
 		return true;
 	}
 	
-	public boolean loadTownBlock(TownBlock townBlock, HashMap<String, String> keys) {
+	public boolean loadTownBlock(TownBlock townBlock, Map<String, String> keys) {
 		String line = "";
 		boolean save = false;
 		try {
@@ -569,19 +568,19 @@ public class ObjectLoadUtil {
 	 * Private methods used to read a key and set a default value from the config if it isn't present.
 	 */
 
-	private boolean getOrDefault(HashMap<String, String> keys, String key, boolean bool) {
+	private boolean getOrDefault(Map<String, String> keys, String key, boolean bool) {
 		return Boolean.parseBoolean(keys.getOrDefault(key, String.valueOf(bool)));
 	}
 	
-	private long getOrDefault(HashMap<String, String> keys, String key, long num) {
+	private long getOrDefault(Map<String, String> keys, String key, long num) {
 		return Long.parseLong(keys.getOrDefault(key, String.valueOf(num)));
 	}
 
-	private double getOrDefault(HashMap<String, String> keys, String key, double num) {
+	private double getOrDefault(Map<String, String> keys, String key, double num) {
 		return Double.parseDouble(keys.getOrDefault(key, String.valueOf(num)));
 	}
 
-	private int getOrDefault(HashMap<String, String> keys, String key, int num) {
+	private int getOrDefault(Map<String, String> keys, String key, int num) {
 		return Integer.parseInt(keys.getOrDefault(key, String.valueOf(num)));
 	}
 

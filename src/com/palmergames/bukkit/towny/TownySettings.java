@@ -989,6 +989,11 @@ public class TownySettings {
 
 		return DatabaseConfig.getString(DatabaseConfig.DATABASE_SAVE);
 	}
+	
+	public static boolean isServerUsingLegacySQLDB() {
+		return getLoadDatabase().toLowerCase(Locale.ROOT).equals("mysql")
+				&& getSaveDatabase().toLowerCase(Locale.ROOT).equals("mysql") && getDatabaseVersion().equals("1");
+	}
 
 	// SQL
 	public static String getSQLHostName() {

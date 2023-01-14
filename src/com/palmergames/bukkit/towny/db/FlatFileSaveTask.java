@@ -3,19 +3,19 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.util.FileMgmt;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class FlatFileSaveTask implements Runnable {
 
-	private final HashMap<String, Object> map;
+	private final Map<String, Object> map;
 	private final String path;
 	
 	/**
-	 * Constructor to save a HashMap to a file.
-	 * @param map HashMap to save.
+	 * Constructor to save a Map to a file.
+	 * @param map Map to save.
 	 * @param path String path on filesystem.
 	 */
-	public FlatFileSaveTask(HashMap<String, Object> map, String path) {
+	public FlatFileSaveTask(Map<String, Object> map, String path) {
 		this.map = map;
 		this.path = path;	
 	}

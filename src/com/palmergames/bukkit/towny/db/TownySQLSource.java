@@ -232,7 +232,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * @param keys    - Table keys.
 	 * @return true if the update was successful.
 	 */
-	private boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
+	private boolean UpdateDB(String tb_name, Map<String, Object> args, List<String> keys) {
 
 		/*
 		 * Make sure we only execute queries in async
@@ -244,7 +244,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
-	private boolean QueueUpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
+	private boolean QueueUpdateDB(String tb_name, Map<String, Object> args, List<String> keys) {
 
 		/*
 		 * Attempt to get a database connection.
@@ -399,7 +399,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * @param args    - Arguments
 	 * @return true if the delete was a success.
 	 */
-	private boolean DeleteDB(String tb_name, HashMap<String, Object> args) {
+	private boolean DeleteDB(String tb_name, Map<String, Object> args) {
 
 		// Make sure we only execute queries in async
 
@@ -409,7 +409,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
-	private boolean QueueDeleteDB(String tb_name, HashMap<String, Object> args) {
+	private boolean QueueDeleteDB(String tb_name, Map<String, Object> args) {
 
 		if (!getContext())
 			return false;
@@ -540,8 +540,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		};
 	}
 
-	private HashMap<String, String> loadResultSetIntoHashMap(ResultSet rs) throws SQLException {
-		HashMap<String, String> keys = new HashMap<>();
+	private Map<String, String> loadResultSetIntoMap(ResultSet rs) throws SQLException {
+		Map<String, String> keys = new HashMap<>();
 		ResultSetMetaData md = rs.getMetaData();
 		int columns = md.getColumnCount();
 		for (int i = 1; i <= columns; ++i)
@@ -705,16 +705,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	/*
-	 * Methods that return objects as HashMaps for loading.
+	 * Methods that return objects as Maps for loading.
 	 */
 
 	@Override
-	public HashMap<String, String> getJailMap(UUID uuid) {
+	public Map<String, String> getJailMap(UUID uuid) {
 		if (!getContext())
 			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS WHERE uuid='" + uuid + "'")) {
-			return loadResultSetIntoHashMap(rs);
+			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find jail with UUID " + uuid.toString() + " in the database!");
 			return null;
@@ -722,12 +722,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public HashMap<String, String> getPlotGroupMap(UUID uuid) {
+	public Map<String, String> getPlotGroupMap(UUID uuid) {
 		if (!getContext())
 			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS WHERE groupID='" + uuid + "'")) {
-			return loadResultSetIntoHashMap(rs);
+			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find plotgroup with UUID " + uuid.toString() + " in the database!");
 			return null;
@@ -735,12 +735,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public HashMap<String, String> getResidentMap(UUID uuid) {
+	public Map<String, String> getResidentMap(UUID uuid) {
 		if (!getContext())
 			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "RESIDENTS WHERE uuid='" + uuid + "'")) {
-			return loadResultSetIntoHashMap(rs);
+			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find resident with UUID " + uuid.toString() + " in the database!");
 			return null;
@@ -748,12 +748,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public HashMap<String, String> getTownMap(UUID uuid) {
+	public Map<String, String> getTownMap(UUID uuid) {
 		if (!getContext())
 			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "TOWNS WHERE uuid='" + uuid + "'")) {
-			return loadResultSetIntoHashMap(rs);
+			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find town with UUID " + uuid.toString() + " in the database!");
 			return null;
@@ -761,12 +761,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public HashMap<String, String> getNationMap(UUID uuid) {
+	public Map<String, String> getNationMap(UUID uuid) {
 		if (!getContext())
 			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "NATIONS WHERE uuid='" + uuid + "'")) {
-			return loadResultSetIntoHashMap(rs);
+			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find nation with UUID " + uuid.toString() + " in the database!");
 			return null;
@@ -774,12 +774,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public HashMap<String, String> getWorldMap(UUID uuid) {
+	public Map<String, String> getWorldMap(UUID uuid) {
 		if (!getContext())
 			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "WORLDS WHERE uuid='" + uuid + "'")) {
-			return loadResultSetIntoHashMap(rs);
+			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Unable to find world with UUID " + uuid.toString() + " in the database!");
 			return null;
@@ -787,12 +787,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public HashMap<String, String> getTownBlockMap(TownBlock townBlock) {
+	public Map<String, String> getTownBlockMap(TownBlock townBlock) {
 		if (!getContext())
 			return null;
 		try (Statement s = cntx.createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
-			return loadResultSetIntoHashMap(rs);
+			return loadResultSetIntoMap(rs);
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: "
 					+ (townBlock != null ? townBlock : "NULL") + " in the sql database");
@@ -805,7 +805,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 */
 
 	@Override
-	public synchronized boolean saveJail(Jail jail, HashMap<String, Object> data) {
+	public synchronized boolean saveJail(Jail jail, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving jail " + jail.getUUID());
 		try {
 			UpdateDB("JAILS", data, Collections.singletonList("uuid"));
@@ -818,7 +818,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean savePlotGroup(PlotGroup group, HashMap<String, Object> data) {
+	public synchronized boolean savePlotGroup(PlotGroup group, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving group " + group.getName());
 		try {
 			UpdateDB("PLOTGROUPS", data, Collections.singletonList("uuid"));
@@ -831,7 +831,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveResident(Resident resident, HashMap<String, Object> data) {
+	public synchronized boolean saveResident(Resident resident, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving Resident " + resident.getName());
 		try {
 			UpdateDB("RESIDENTS", data, Collections.singletonList("uuid"));
@@ -843,7 +843,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 	
 	@Override
-	public synchronized boolean saveHibernatedResident(UUID uuid, HashMap<String, Object> data) {
+	public synchronized boolean saveHibernatedResident(UUID uuid, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving Hibernated Resident " + uuid);
 		try {
 			UpdateDB("HIBERNATEDRESIDENTS", data, Collections.singletonList("uuid"));
@@ -855,7 +855,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveTown(Town town, HashMap<String, Object> data) {
+	public synchronized boolean saveTown(Town town, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving town " + town.getName());
 		try {
 			UpdateDB("TOWNS", data, Collections.singletonList("uuid"));
@@ -868,7 +868,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveNation(Nation nation, HashMap<String, Object> data) {
+	public synchronized boolean saveNation(Nation nation, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving nation " + nation.getName());
 		try {
 			UpdateDB("NATIONS", data, Collections.singletonList("uuid"));
@@ -881,7 +881,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveWorld(TownyWorld world, HashMap<String, Object> data) {
+	public synchronized boolean saveWorld(TownyWorld world, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving world " + world.getName());
 		try {
 			UpdateDB("WORLDS", data, Collections.singletonList("uuid"));
@@ -894,7 +894,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	@Override
-	public synchronized boolean saveTownBlock(TownBlock townBlock, HashMap<String, Object> data) {
+	public synchronized boolean saveTownBlock(TownBlock townBlock, Map<String, Object> data) {
 		TownyMessaging.sendDebugMsg("Saving town block " + townBlock.getWorld().getName() + ":" + townBlock.getX() + "x"
 				+ townBlock.getZ());
 		try {
@@ -916,7 +916,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 	
 	private void deleteRowOfColumnAndName(TownyDBTableType type, String name) {
-		HashMap<String, Object> hm = new HashMap<>();
+		Map<String, Object> hm = new HashMap<>();
 		hm.put(type.primaryKey, name);
 		DeleteDB(type.tableName, hm);
 	}
@@ -958,7 +958,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public void deleteTownBlock(TownBlock townBlock) {
-		HashMap<String, Object> twn_hm = new HashMap<>();
+		Map<String, Object> twn_hm = new HashMap<>();
 		twn_hm.put("world", townBlock.getWorld().getUUID());
 		twn_hm.put("x", townBlock.getX());
 		twn_hm.put("z", townBlock.getZ());
