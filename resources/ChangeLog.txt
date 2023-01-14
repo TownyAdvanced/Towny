@@ -8293,3 +8293,4 @@ v0.92.0.11:
   - Bump version number for release.
 0.98.6.1:
   - Add a 30 second timeout for backup future, courtesy of Warriorrrr with PR #6428.
+  - Fix missing spaces in the /{object} set perm command feedback.
