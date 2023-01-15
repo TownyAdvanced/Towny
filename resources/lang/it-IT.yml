@@ -590,7 +590,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Aperta)'
 status_town_board: 'Bacheca:'
 status_founded: 'Fondata:'
-status_founded_by: 'Founded by:'
+status_founded_by: 'Fondato da:'
 status_town_size: 'Dimensione Città:'
 status_town_size_bought: 'Acquistati:'
 status_town_size_bonus: 'Bonus:'
@@ -1579,7 +1579,7 @@ msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s è sta
 msg_you_have_been_jailed_your_bail_is_x: 'Sei stato incarcerato, la tua cauzione è %s.'
 msg_err_higher_than_max_allowed_bail_x: 'La tua cauzione impostata era più alta del massimo che è %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Le ore impostate sono state più alte del massimo che è %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Non abbastanza soldi in banca per uscire di prigione %s, la commissione è %s.'
 msg_you_were_released_as_town_ran_out_of_slots: 'I tuoi carcerieri ti hanno permesso di fare spazio.'
 msg_x_has_been_released_as_jail_slots_ran_out: '%s è stato rilasciato per fare spazio per un altro prigioniero.'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Sei stato rilasciato perché i tuoi carcerieri non possono più permettersi di mantenerti imprigionato.'
@@ -1607,11 +1607,11 @@ msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Città di proprietà: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Tipo: <green>Giocatore-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Totale'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Ricavi Giornalieri'
 #Part of the /town plots output.
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
@@ -1619,11 +1619,11 @@ msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'Stai per dare il permesso di trust completo a un''intera città. Ciò significa che il sindaco della città sarà in grado di decidere chi ottiene il permesso di costruire e rompere nella vostra città, aggiungendo i residenti. Se questa città è aperta, chiunque può unirsi e ottenere pieno accesso alla tua città. Sei sicuro di voler fidarti di tutti i residenti (inclusi i futuri residenti), di questa città?'
 #Message shown when a player uses a command that is blocked because their location has an active war.
-msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+msg_command_war_blocked: 'Non puoi eseguire questo comando perché la tua città è in guerra.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
-msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+msg_cant_unclaim_outsider_in_town: 'C''è un estraneo in questo townblock, non puoi unclaimare questo blocco!'
 #Message shown when a player is making a town too soon after deleting one.
-msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Non puoi creare una nuova città, %s secondi rimanenti.'
 #Message shown when a player is claiming land too soon after unclaiming it.
 msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
