@@ -67,7 +67,7 @@ nation_help_3: 'Stato della nazione specificata'
 nation_help_4: 'Elenca tutte le nazioni'
 nation_help_5: 'Lascia la tua nazione'
 nation_help_6: 'Crea una nuova nazione'
-nation_help_7: 'Elenca i comandi del Re nazione'
+nation_help_7: 'Elenca i comandi del leader della nazione'
 nation_help_8: 'Crea una nuova nazione'
 nation_help_9: 'Elenca tutti i residenti online nella nazione'
 king_help_1: 'Guida del Re della nazione'
@@ -1625,10 +1625,10 @@ msg_cant_unclaim_outsider_in_town: 'C''è un estraneo in questo townblock, non p
 #Message shown when a player is making a town too soon after deleting one.
 msg_err_cannot_create_new_town_x_seconds_remaining: 'Non puoi creare una nuova città, %s secondi rimanenti.'
 #Message shown when a player is claiming land too soon after unclaiming it.
-msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Non puoi posizionarti su questo blocco: %s, %s secondi rimanenti.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: 'The town of %s has had the founder set to %s.'
+msg_founder_set: 'La città di %s ha avuto il fondatore impostato su %s.'
 #Message shown when toggling town allowed to war admin setting
-msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+msg_town_allowedtowar_setting_set_to: 'La città %s ha avuto l''impostazione, consentita per la guerra, impostata a %s.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
-confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+confirmation_did_you_want_to_unclaim_all: 'Sei sicuro di voler annullare la rivendicazione di tutta la tua terra? (Il tuo blocco di casa non sarà non reclamato.)'
