@@ -1876,6 +1876,10 @@ public class TownySettings {
 		return TimeTools.getMillis(getString(ConfigNodes.JAIL_NEW_PLAYER_IMMUNITY));
 	}
 
+	public static boolean doesUnjailingTeleportPlayer() {
+		return getBoolean(ConfigNodes.JAIL_UNJAIL_TELEPORT);
+	}
+
 	public static boolean isDevMode() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DEV_MODE_ENABLE);

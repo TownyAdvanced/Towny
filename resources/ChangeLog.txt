@@ -8296,3 +8296,9 @@ v0.92.0.11:
   - Fix missing spaces in the /{object} set perm command feedback.
   - Fix missing feedback when /ta plot is used with an incorrect subcommand.
   - Fix /t unjail tabcompleter not including non-residents which are jailed in the town.
+  - New Config Option: jail.unjailed_players_get_teleported
+    - Default: true
+    - Most types of unjailing result in a player being teleported when they are freed.
+    - Setting this to false will prevent that teleporting, resulting in the player not being teleported when they are freed.
+  - API: Added UnjailedResidentTeleportEvent.
+    - Lets other plugins move unjailed residents to a location of their choice.
