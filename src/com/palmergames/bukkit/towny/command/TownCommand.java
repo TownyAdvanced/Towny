@@ -351,7 +351,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							Town town = res.getTownOrNull();
 							List<String> jailedResidents = new ArrayList<>();
 							TownyUniverse.getInstance().getJailedResidentMap().stream()
-									.filter(jailee -> town.hasResident(jailee))
+									.filter(jailee -> jailee.hasJailTown(town.getName()))
 									.forEach(jailee -> jailedResidents.add(jailee.getName()));
 							return NameUtil.filterByStart(jailedResidents, args[1]);
 						}
