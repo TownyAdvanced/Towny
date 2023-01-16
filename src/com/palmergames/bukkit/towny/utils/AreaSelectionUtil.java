@@ -18,11 +18,16 @@ import com.palmergames.util.StringMgmt;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AreaSelectionUtil {
 	
-	private final static int MAX_RECT_RADIUS = 15; // A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying.
-	private final static int MAX_CIRC_RADIUS = 18; // A maximum radius of 18 will garner 1009 townblocks. Capped to prevent servers from dying.
+	/**  A maximum radius of 15 will garner 961 townblocks. Capped to prevent servers from dying. */
+	private final static int MAX_RECT_RADIUS = 15;
+	/** A maximum radius of 18 will garner 1009 townblocks. Capped to prevent servers from dying. */
+	private final static int MAX_CIRC_RADIUS = 18;
+	/** The largest we ever want to select at once. */
+	private final static int MAX_SIZE = 1009;
 
 	/**
 	 * Method to select a List&lt;WorldCoord&gt; of coordinates. 
@@ -55,34 +60,20 @@ public class AreaSelectionUtil {
 
 		if (args.length == 0) {
 			/*
-			 * Either /{command} {claim|unclaim} or /town claim {outpost}
+			 * Either /{command} {claim|unclaim}
 			 */
 			out.add(pos);
 
 		} else {
-			
+
 			/*
-			 * First, determine what is available to be claimed, if this selection is for claiming land.
-			 * Besides claiming land this method is used to unclaim land, as well as to set plots forsale/notforsale. 
-			 * When this is not a claim we're supplying the largest amount possible to be selected.
-			 * When it is a claim, we're starting from 0 and using what the town or resident is able to claim.
-			 */
-			int available = claim ? 0 : 1009;
-			if (claim) {
-				if (owner instanceof Town town) {
-					available = town.hasUnlimitedClaims() ? 1009 : town.availableTownBlocks();
-				} else if (owner instanceof Resident resident) {
-					available = TownySettings.getMaxResidentPlots(resident) - resident.getTownBlocks().size();
-				}
-			}
-			/*
-			 * Second, handle different subcommands for /{command} {claim|unclaim} {rect|circle|auto|#} {#}
+			 * Handle different subcommands for /{command} {claim|unclaim} {rect|circle|auto|#} {#}
 			 */
 			if (args.length > 1) { // Has to be /{command} {claim|unclaim} {rect|circle} {auto|#}
 				if (args[0].equalsIgnoreCase("rect")) {
-					out = selectWorldCoordAreaRect(available, pos, StringMgmt.remFirstArg(args), claim);
+					out = selectWorldCoordAreaRect(pos, StringMgmt.remFirstArg(args), claim);
 				} else if (args[0].equalsIgnoreCase("circle")) {
-					out = selectWorldCoordAreaCircle(available, pos, StringMgmt.remFirstArg(args), claim);
+					out = selectWorldCoordAreaCircle(pos, StringMgmt.remFirstArg(args), claim);
 				} else if (args.length == 3 && args[1].startsWith("x") && args[2].startsWith("z")) {
 					// "/plot claim world x# z#" was run by clicking on the towny map.
 					out.add(new WorldCoord(args[0], Integer.parseInt(args[1].replace("x","")), Integer.parseInt(args[2].replace("z",""))));
@@ -90,12 +81,12 @@ public class AreaSelectionUtil {
 					throw new TownyException(Translatable.of("msg_err_invalid_property", StringMgmt.join(args, " ")));
 				}
 			} else if (args[0].equalsIgnoreCase("auto")) { // Is /{command} {claim|unclaim} {auto}
-				out = selectWorldCoordAreaRect(available, pos, args, claim);
+				out = selectWorldCoordAreaRect(pos, args, claim);
 			} else { // Is /{command} {claim|unclaim} #
 				try {
 					Integer.parseInt(args[0]);
 					// Treat as rect to serve for backwards capability.
-					out = selectWorldCoordAreaRect(available, pos, args, claim);
+					out = selectWorldCoordAreaRect(pos, args, claim);
 				} catch (NumberFormatException e) {
 					throw new TownyException(Translatable.of("msg_err_invalid_property", args[0]));
 				}
@@ -108,18 +99,18 @@ public class AreaSelectionUtil {
 	/**
 	 * Selects a square shaped area of WorldCoords. Works in a spiral out fashion.
 	 * 
-	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
 	 * @param pos - WorldCoord where the selection is centered at.
 	 * @param args - subcommand arguments like auto or a number.
 	 * @param claim - This selection will result in claiming for a resident or town.
 	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
 	 * @throws TownyException - Thrown when invalid radii are given.
 	 */
-	private static List<WorldCoord> selectWorldCoordAreaRect(int available, WorldCoord pos, String[] args, boolean claim) throws TownyException {
+	private static List<WorldCoord> selectWorldCoordAreaRect(WorldCoord pos, String[] args, boolean claim) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
 			int r = MAX_RECT_RADIUS;  // The greatest possible radius of a selection.
+			int selectionSize = MAX_SIZE;
 
 			/*
 			 *  Area selections are capped at a 15 radius which should be a 31x31 (or a square with a side of 496 blocks in length.)  
@@ -156,13 +147,13 @@ public class AreaSelectionUtil {
 				 */
 				int needed = pos.getTownBlock().hasTown() ? 0 : 1;
 				int claimRadius = 1;
-				while (claimRadius <= r && needed < available) {
+				while (claimRadius <= r && needed < selectionSize) {
 				    needed += (claimRadius * 8);
 				    claimRadius++;
 				}
 				// Claim Radius will always overshoot by 1
 				r = claimRadius - 1;
-				available = needed + 1;
+				selectionSize = needed + 1;
 			}
 
 			/*
@@ -170,7 +161,7 @@ public class AreaSelectionUtil {
 			 */
 			int halfSideLength = ((r * 2) + 1) / 2;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			for (int i = 0; i <= available; i++) {
+			for (int i = 0; i <= selectionSize; i++) {
 				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
 					out.add(pos.add(x,z));
 				}
@@ -198,18 +189,18 @@ public class AreaSelectionUtil {
 	/**
 	 * Selects a circle shaped area of WorldCoords. Works in a spiral out fashion.
 	 * 
-	 * @param available - How many TownBlocks the TownBlockOwner has available to claim.
 	 * @param pos - WorldCoord where the selection is centered at.
 	 * @param args - subcommand arguments like auto or a number.
 	 * @param claim - This selection will result in claiming for a resident or town.
 	 * @return List&lt;WorldCoord&gt; of {@link com.palmergames.bukkit.towny.object.WorldCoord}.
 	 * @throws TownyException - Thrown when invalid radii are given.
 	 */
-	private static List<WorldCoord> selectWorldCoordAreaCircle(int available, WorldCoord pos, String[] args, boolean claim) throws TownyException {
+	private static List<WorldCoord> selectWorldCoordAreaCircle(WorldCoord pos, String[] args, boolean claim) throws TownyException {
 
 		List<WorldCoord> out = new ArrayList<>();
 		if (args.length > 0) {
 			int r = MAX_CIRC_RADIUS; // The greatest possible radius of a selection.
+			int selectionSize = MAX_SIZE;
 
 			/*
 			 *  Area selections are capped at a 18 radius (1009 maximum.)
@@ -222,9 +213,9 @@ public class AreaSelectionUtil {
 				 * Select everything possible in a circle shape.
 				 */
 				
-				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
-					while (available - Math.ceil(Math.PI * r * r) >= 0)
-						r += 1;
+				// Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+				while (selectionSize - Math.ceil(Math.PI * r * r) >= 0)
+					r += 1;
 				
 				if (TownySettings.getMaxClaimRadiusValue() > 0) 
 					r = Math.min(r, TownySettings.getMaxClaimRadiusValue());
@@ -246,8 +237,8 @@ public class AreaSelectionUtil {
 					throw new TownyException(Translatable.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 				
 				int radius = 0;
-				if (available > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
-					while (available - Math.ceil(Math.PI * radius * radius) >= 0)
+				if (selectionSize > 0) // Since: 0 - ceil(Pi * 0^2) >= 0 is a true statement.
+					while (selectionSize - Math.ceil(Math.PI * radius * radius) >= 0)
 						radius += 1;
 				
 				radius--;// We lower the radius by one so that we get only perfect circle claims.
@@ -261,9 +252,9 @@ public class AreaSelectionUtil {
 			 */
 			int halfSideLength = ((r * 2) + 1) / 2;
 			int x = 0, z = 0, dx = 0, dz = -1;
-			for (int i = 0; i <= available; i++) {
+			for (int i = 0; i <= selectionSize; i++) {
 				if ((-halfSideLength <= x) && (x <= halfSideLength) && (-halfSideLength <= z) && (z <= halfSideLength)) {
-					if (MathUtil.distanceSquared(x, z) <= MathUtil.sqr(r) && (out.size() <= available)) {
+					if (MathUtil.distanceSquared(x, z) <= MathUtil.sqr(r) && (out.size() <= selectionSize)) {
 						out.add(pos.add(x,z));
 					}
 				}
@@ -338,15 +329,7 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterOutTownOwnedBlocks(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				if (!worldCoord.getTownBlock().hasTown())
-					out.add(worldCoord);
-			} catch (NotRegisteredException e) {
-				out.add(worldCoord);
-			}
-		return out;
+		return selection.stream().filter(WorldCoord::isWilderness).collect(Collectors.toList());
 	}
 	
 	/**
@@ -357,14 +340,7 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterOutWildernessBlocks(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				if (worldCoord.getTownBlock().hasTown())
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
-			}
-		return out;
+		return selection.stream().filter(WorldCoord::hasTownBlock).collect(Collectors.toList());
 	}
 
 	/**
@@ -376,14 +352,9 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterOwnedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				if (worldCoord.getTownBlock().isOwner(owner))
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
-			}
-		return out;
+		return filterOutWildernessBlocks(selection).stream()
+				.filter(wc -> wc.getTownBlockOrNull().isOwner(owner))
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -395,14 +366,9 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterUnownedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				if (!worldCoord.getTownBlock().isOwner(owner))
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
-			}
-		return out;
+		return filterOutWildernessBlocks(selection).stream()
+				.filter(wc -> !wc.getTownBlockOrNull().isOwner(owner))
+				.collect(Collectors.toList());
 	}
 	
 	public static boolean filterHomeBlock(Town town, List<WorldCoord> selection) {
@@ -420,19 +386,13 @@ public class AreaSelectionUtil {
 	 * @author Suneet Tipirneni (Siris)
 	 */
 	public static List<WorldCoord> filterPlotsByGroup(PlotGroup group, List<WorldCoord> selection) {
-		List<WorldCoord> out =  new ArrayList<>();
 		
-		for (WorldCoord worldCoord : selection) {
-			
-			try {
-				TownBlock townBlock = worldCoord.getTownBlock();
-				if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().equals(group)) {
-					out.add(worldCoord);
-				}
-			} catch (NotRegisteredException ignored) {}
-		}
-		
-		return out;
+		return filterOutWildernessBlocks(selection).stream()
+				.map(WorldCoord::getTownBlockOrNull)
+				.filter(TownBlock::hasPlotObjectGroup)
+				.filter(tb -> group.hasTownBlock(tb))
+				.map(TownBlock::getWorldCoord)
+				.collect(Collectors.toList());
 	}
 	
 	public static HashSet<PlotGroup> getPlotGroupsFromSelection(List<WorldCoord> selection) {
