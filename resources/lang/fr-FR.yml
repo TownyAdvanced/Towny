@@ -1623,12 +1623,12 @@ msg_command_war_blocked: 'Vous ne pouvez pas exécuter cette commande car votre 
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
 msg_cant_unclaim_outsider_in_town: 'Il y a un étranger dans ce bloc de ville, tu ne peux pas dérevendicer ce bloc de ville !'
 #Message shown when a player is making a town too soon after deleting one.
-msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Vous ne pouvez pas créer une nouvelle ville, vous devez attendre %s secondes.'
 #Message shown when a player is claiming land too soon after unclaiming it.
-msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Vous ne pouvez pas annexer ce bloc de ville : %s, il vous reste %s à attendre.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: 'The town of %s has had the founder set to %s.'
+msg_founder_set: 'Le fondateur de %s est maintenant %s.'
 #Message shown when toggling town allowed to war admin setting
-msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+msg_town_allowedtowar_setting_set_to: 'La ville de %s a été paramétrée sur %s pour l''autorisation de faire la guerre. '
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
-confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+confirmation_did_you_want_to_unclaim_all: 'Êtes-vous sûr de vouloir désannexer toute votre terre ? (Votre Centre Ville ne sera pas désannexé.)'
