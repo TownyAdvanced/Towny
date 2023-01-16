@@ -1861,3 +1861,6 @@ msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war 
 
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
 confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
