@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
@@ -162,16 +160,13 @@ public class SpawnUtil {
 	 * @param jailed Resident which is being moved from jail.
 	 */
 	public static void jailAwayTeleport(Resident jailed) {
-		Location loc = jailed.getPlayer().getWorld().getSpawnLocation();
-		try {
-			loc = getIdealLocation(jailed).get();
-		} catch (InterruptedException | ExecutionException ignored) {}
+		getIdealLocation(jailed).thenAccept(loc -> {
+			UnjailedResidentTeleportEvent event = new UnjailedResidentTeleportEvent(jailed, loc); 
+			if (BukkitTools.isEventCancelled(event))
+				return;
 
-		UnjailedResidentTeleportEvent event = new UnjailedResidentTeleportEvent(jailed, loc); 
-		if (BukkitTools.isEventCancelled(event))
-			return;
-
-		initiatePluginTeleport(jailed, event.getLocation(), false);
+			initiatePluginTeleport(jailed, event.getLocation(), false);
+		});
 	}
 	
 	/**
@@ -668,6 +663,7 @@ public class SpawnUtil {
 			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L);
 	}
 	
+	@SuppressWarnings("unused")
 	private static void initiatePluginTeleport(Resident resident, CompletableFuture<Location> loc, boolean ignoreWarmup) {
 		loc.thenAccept(location -> initiatePluginTeleport(resident, location, ignoreWarmup));
 	}
