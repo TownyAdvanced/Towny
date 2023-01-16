@@ -2707,6 +2707,12 @@ public enum ConfigNodes {
 			"1h",
 			"",
 			"# How long do new players have to be on the server before they can be jailed?"),
+	JAIL_UNJAIL_TELEPORT(
+			"jail.unjailed_players_get_teleported",
+			"true",
+			"",
+			"# Most types of unjailing result in a player being teleported when they are freed.",
+			"# Setting this to false will prevent that teleporting, resulting in the player not being teleported when they are freed."),
 	
 	BANK(
 			"bank",
