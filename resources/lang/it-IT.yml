@@ -1632,3 +1632,5 @@ msg_founder_set: 'La città di %s ha avuto il fondatore impostato su %s.'
 msg_town_allowedtowar_setting_set_to: 'La città %s ha avuto l''impostazione, consentita per la guerra, impostata a %s.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
 confirmation_did_you_want_to_unclaim_all: 'Sei sicuro di voler annullare la rivendicazione di tutta la tua terra? (Il tuo blocco di casa non sarà non reclamato.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
