@@ -3660,7 +3660,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
 				// Select a single WorldCoord using the AreaSelectionUtil.
-				selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), new String[0], true);
+				selection = new ArrayList<>();
+				selection.add(new WorldCoord(world.getName(), key));
 				outpost = true;
 			} else
 				throw new TownyException(Translatable.of("msg_outpost_disable"));
@@ -3678,9 +3679,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (selection.size() > 1) 
 				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode());
 
-			// TODO: deny using selection claiming from unclaimed land.
-//				if (selection.size() > 1 && TownyAPI.getInstance().isWilderness(player.getLocation()))
-//					throw new TownyException();
+			// Filter out any TownBlocks which aren't Wilderness. 
+			selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 		}
 
 		// Not enough available claims.
