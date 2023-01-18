@@ -8309,3 +8309,5 @@ v0.92.0.11:
     - Setting this to false will prevent that teleporting, resulting in the player not being teleported when they are freed.
   - API: Added UnjailedResidentTeleportEvent.
     - Lets other plugins move unjailed residents to a location of their choice, or cancel the teleport altogether.
+0.98.6.2:
+  - API: Add new TranslationLoader constructor which only requires a Plugin instance.
