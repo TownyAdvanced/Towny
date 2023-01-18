@@ -92,7 +92,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
 					removedTowns.add(town.getName());
-					universe.getDataSource().removeTown(town);
+					universe.getSaveDataSource().removeTown(town);
 				}
 			}
 			if (!deletedTowns.isEmpty())
@@ -219,7 +219,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						// OR Bankruptcy enabled but towns aren't allowed to use debt to pay nation tax. 
 							
 							if (TownySettings.doesNationTaxDeleteConqueredTownsWhichCannotPay() && town.isConquered()) {
-								universe.getDataSource().removeTown(town);
+								universe.getSaveDataSource().removeTown(town);
 								localTownsDestroyed.add(town.getName());
 								continue;
 							}
@@ -476,7 +476,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						if (!TownySettings.isTownBankruptcyEnabled()) {
 						// Bankruptcy is disabled, remove the town for not paying upkeep.
 							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
-							universe.getDataSource().removeTown(town);
+							universe.getSaveDataSource().removeTown(town);
 							removedTowns.add(town.getName());
 							continue;
 						}
@@ -493,7 +493,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							// Alternatively, if configured, towns will not be allowed to exceed
 							// their debt and be deleted from the server for non-payment finally.
 								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
-								universe.getDataSource().removeTown(town);
+								universe.getSaveDataSource().removeTown(town);
 								removedTowns.add(town.getName());
 								continue;
 							}
@@ -607,7 +607,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));						
 					} else {
 						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
-						universe.getDataSource().removeNation(nation);
+						universe.getSaveDataSource().removeNation(nation);
 						removedNations.add(nation.getName());
 					}
 				} else if (upkeep < 0) {

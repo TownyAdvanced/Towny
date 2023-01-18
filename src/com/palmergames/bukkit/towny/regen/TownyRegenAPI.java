@@ -191,7 +191,7 @@ public class TownyRegenAPI {
 		regenWorldCoordList = getRegenQueueList().stream()
 			.filter(wc -> !world.equals(wc.getTownyWorld()))
 			.collect(Collectors.toList());
-		TownyUniverse.getInstance().getDataSource().saveRegenList();
+		TownyUniverse.getInstance().getSaveDataSource().saveRegenList();
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class TownyRegenAPI {
 		if (!regenWorldCoordList.contains(wc))
 			return;
 		regenWorldCoordList.remove(wc);
-		TownyUniverse.getInstance().getDataSource().saveRegenList();
+		TownyUniverse.getInstance().getSaveDataSource().saveRegenList();
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class TownyRegenAPI {
 			return;
 		regenWorldCoordList.add(wc);
 		if (save)
-			TownyUniverse.getInstance().getDataSource().saveRegenList();
+			TownyUniverse.getInstance().getSaveDataSource().saveRegenList();
 	}
 
 	public static  void getWorldCoordFromQueueForRegeneration() {
@@ -321,8 +321,8 @@ public class TownyRegenAPI {
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDataSource().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
-			townyUniverse.getDataSource().savePlotData(plotChunk);
+		if (townyUniverse.getLoadDataSource().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
+			townyUniverse.getSaveDataSource().savePlotData(plotChunk);
 		}
 	}
 
@@ -332,7 +332,7 @@ public class TownyRegenAPI {
 	 * @param plotChunk - Chunk to delete snapshot (PlotBlockData)
 	 */
 	private static void deletePlotChunkSnapshot(PlotBlockData plotChunk) {
-		TownyUniverse.getInstance().getDataSource().deletePlotData(plotChunk);
+		TownyUniverse.getInstance().getSaveDataSource().deletePlotData(plotChunk);
 	}
 
 	/**
@@ -342,7 +342,7 @@ public class TownyRegenAPI {
 	 * @return loads the PlotData for the given townBlock or returns null.   
 	 */
 	public static PlotBlockData getPlotChunkSnapshot(TownBlock townBlock) {
-		return TownyUniverse.getInstance().getDataSource().loadPlotData(townBlock);
+		return TownyUniverse.getInstance().getLoadDataSource().loadPlotData(townBlock);
 	}
 
 	/**
@@ -426,7 +426,7 @@ public class TownyRegenAPI {
 //				}
 //			}
 //			
-//			TownyUniverse.getDataSource().getResident(player.getName()).addUndo(snapshot);
+//			TownyUniverse.getLoadDataSource().getResident(player.getName()).addUndo(snapshot);
 //
 //			Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
 //

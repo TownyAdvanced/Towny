@@ -15,7 +15,7 @@ public class NPCCleanupTask implements Runnable {
 	public void run() {
 		for (Resident resident : new ArrayList<>(TownyUniverse.getInstance().getResidents())) {
 			if (resident.isNPC() && !resident.hasTown())
-				TownyUniverse.getInstance().getDataSource().removeResident(resident);
+				TownyUniverse.getInstance().getSaveDataSource().removeResident(resident);
 		}
 	}
 }

@@ -103,7 +103,7 @@ public class Jail implements Savable {
 	
 	@Override
 	public void save() {
-		TownyUniverse.getInstance().getDataSource().saveJail(this);
+		TownyUniverse.getInstance().getSaveDataSource().saveJail(this);
 	}
 
 	public boolean hasCells() {

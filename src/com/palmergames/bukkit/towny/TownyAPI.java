@@ -660,14 +660,34 @@ public class TownyAPI {
     }
     
     /**
-     * Gets Towny's saving Database
+     * Gets Towny's loading Database
      *
+	 * @deprecated use TownyAPI#getLoadDataSource() and TownyAPI#getSaveDataSource() instead
      * @return the {@link TownyDataSource}
      */
+	@Deprecated
     public TownyDataSource getDataSource() {
-        return townyUniverse.getDataSource();
+        return townyUniverse.getLoadDataSource();
     }
-    
+
+	/**
+	 * Gets Towny's loading Database
+	 *
+	 * @return the {@link TownyDataSource}
+	 */
+	public TownyDataSource getLoadDataSource() {
+		return townyUniverse.getLoadDataSource();
+	}
+	
+	/**
+	 * Gets Towny's saving Database
+	 *
+	 * @return the {@link TownyDataSource}
+	 */
+	public TownyDataSource getSaveDataSource() {
+		return townyUniverse.getSaveDataSource();
+	}
+	
     /**
      * Check which {@link Resident}s are online in a {@link ResidentList}
      *

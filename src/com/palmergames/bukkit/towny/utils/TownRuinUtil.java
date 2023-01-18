@@ -117,7 +117,7 @@ public class TownRuinUtil {
 		// Unregister the now empty plotgroups.
 		if (town.getPlotGroups() != null)
 			for (PlotGroup group : new ArrayList<>(town.getPlotGroups()))
-				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+				TownyUniverse.getInstance().getSaveDataSource().removePlotGroup(group);
 		
 		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
 		if (TownySettings.getMaxResidentsPerTown() > 0)
@@ -201,7 +201,7 @@ public class TownRuinUtil {
 		if (oldMayor != null && oldMayor.isNPC()) {
 			// Delete the resident if the old mayor was an NPC.
 			oldMayor.removeTown();
-			TownyUniverse.getInstance().getDataSource().removeResident(oldMayor);
+			TownyUniverse.getInstance().getSaveDataSource().removeResident(oldMayor);
 			// set upkeep again
 			town.setHasUpkeep(true);
 		}
@@ -230,7 +230,7 @@ public class TownRuinUtil {
 					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings
 					.getTownRuinsMaxDurationHours()) {
 				//Ruin found & recently ruined end time reached. Delete town now.
-				townyUniverse.getDataSource().removeTown(town, false);
+				townyUniverse.getSaveDataSource().removeTown(town, false);
 			}
 		}
     }

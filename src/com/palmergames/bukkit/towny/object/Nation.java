@@ -608,7 +608,7 @@ public class Nation extends Government {
 	
 	@Override
 	public void save() {
-		TownyUniverse.getInstance().getDataSource().saveNation(this);
+		TownyUniverse.getInstance().getSaveDataSource().saveNation(this);
 	}
 	
 	@Override

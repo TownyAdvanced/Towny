@@ -81,7 +81,7 @@ public class OnPlayerLogin implements Runnable {
 				 * Make a brand new Resident.
 				 */
 				try {
-					universe.getDataSource().newResident(player.getName(), player.getUniqueId());
+					universe.getSaveDataSource().newResident(player.getName(), player.getUniqueId());
 					TownySettings.incrementUUIDCount();
 					
 					resident = universe.getResident(player.getUniqueId());
@@ -92,7 +92,7 @@ public class OnPlayerLogin implements Runnable {
 					resident.setRegistered(System.currentTimeMillis());
 
 					final Resident finalResident = resident;
-					universe.getDataSource().getHibernatedResidentRegistered(player.getUniqueId()).thenAccept(registered -> {
+					universe.getLoadDataSource().getHibernatedResidentRegistered(player.getUniqueId()).thenAccept(registered -> {
 						if (registered.isPresent()) {
 							finalResident.setRegistered(registered.get());
 							finalResident.save();
@@ -126,7 +126,7 @@ public class OnPlayerLogin implements Runnable {
 			// Name change test.
 			if (!resident.getName().equals(player.getName())) {
 				try {
-					universe.getDataSource().renamePlayer(resident, player.getName());
+					universe.getSaveDataSource().renamePlayer(resident, player.getName());
 				} catch (AlreadyRegisteredException e) {
 					e.printStackTrace();
 				} catch (NotRegisteredException e) {

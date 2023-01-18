@@ -203,7 +203,7 @@ public class TownClaim implements Runnable {
 			TownyRegenAPI.removeFromRegenQueueList(worldCoord);
 		}
 		// Check if a plot snapshot exists for this townblock already (inactive, unqueued regeneration.)
-		if (!TownyUniverse.getInstance().getDataSource().hasPlotData(townBlock)) {
+		if (!TownyUniverse.getInstance().getLoadDataSource().hasPlotData(townBlock)) {
 			// Queue to have a snapshot made if there is not already an earlier snapshot.
 			TownyRegenAPI.addWorldCoord(worldCoord);
 			townBlock.setLocked(true);
@@ -251,7 +251,7 @@ public class TownClaim implements Runnable {
 	 */
 	private void unclaimTownBlock(TownBlock townBlock) {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
-				() -> TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock), 1);
+				() -> TownyUniverse.getInstance().getSaveDataSource().removeTownBlock(townBlock), 1);
 	}
 
 	private void refundForUnclaim(double unclaimRefund, int numUnclaimed) {

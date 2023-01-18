@@ -2925,7 +2925,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Rename the town.
 		try {
-			townyUniverse.getDataSource().renameTown(town, newName);
+			townyUniverse.getSaveDataSource().renameTown(town, newName);
 			town = townyUniverse.getTown(newName);
 			// This should never happen
 			if (town == null)
@@ -3018,7 +3018,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted2", TownySettings.getTownRuinsMinDurationHours()));
 			}
 			Confirmation.runOnAccept(() -> {
-				townyUniverse.getDataSource().removeTown(town);
+				townyUniverse.getSaveDataSource().removeTown(town);
 				if (TownySettings.getTownUnclaimCoolDownTime() > 0)
 					CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TOWN_DELETE);
 			}).sendTo(player);
@@ -3030,7 +3030,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Confirmation.runOnAccept(() -> {
 			TownyMessaging.sendMsg(player, Translatable.of("town_deleted_by_admin", town.getName()));
-			townyUniverse.getDataSource().removeTown(town);
+			townyUniverse.getSaveDataSource().removeTown(town);
 		}).sendTo(player);
 	}
 
@@ -3258,7 +3258,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 			TownyMessaging.sendPrefixedNationMessage(town.getNation(), Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", town.getNation()));
-			TownyUniverse.getInstance().getDataSource().removeNation(town.getNation());
+			TownyUniverse.getInstance().getSaveDataSource().removeNation(town.getNation());
 
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
 				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
@@ -3939,7 +3939,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			String succumbingTownName = succumbingTown.getName();
 
 			// Start merge
-			TownyUniverse.getInstance().getDataSource().mergeTown(remainingTown, succumbingTown);
+			TownyUniverse.getInstance().getSaveDataSource().mergeTown(remainingTown, succumbingTown);
 			TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", succumbingTown, remainingTown));
 
 			TownMergeEvent townMergeEvent = new TownMergeEvent(remainingTown, succumbingTownName, succumbingTownUUID);

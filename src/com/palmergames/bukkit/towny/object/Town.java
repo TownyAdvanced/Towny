@@ -251,7 +251,7 @@ public class Town extends Government implements TownBlockOwner {
 		try {
 			oldNation.removeTown(this);
 		} catch (EmptyNationException e) {
-			TownyUniverse.getInstance().getDataSource().removeNation(oldNation);
+			TownyUniverse.getInstance().getSaveDataSource().removeNation(oldNation);
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
 		}
 		
@@ -1460,7 +1460,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public void save() {
-		TownyUniverse.getInstance().getDataSource().saveTown(this);
+		TownyUniverse.getInstance().getSaveDataSource().saveTown(this);
 	}
 
 	public void saveTownBlocks() {

@@ -10,7 +10,7 @@ public class BackupTask implements Runnable {
 	@Override
 	public void run() {
 
-		TownyDataSource dataSource = TownyUniverse.getInstance().getDataSource();
+		TownyDataSource dataSource = TownyUniverse.getInstance().getLoadDataSource();
 		Towny.getPlugin().getLogger().info("Making backup...");
 		try {
 			dataSource.backup();

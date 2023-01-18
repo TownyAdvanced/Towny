@@ -811,12 +811,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (split[0].equalsIgnoreCase("save")) {
-			if (TownyUniverse.getInstance().getDataSource().saveAll())
+			if (TownyUniverse.getInstance().getSaveDataSource().saveAll())
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_save_success"));
 	
 		} else if (split[0].equalsIgnoreCase("load")) {
 			TownyUniverse.getInstance().clearAllObjects();			
-			if (TownyUniverse.getInstance().getDataSource().loadAll()) {
+			if (TownyUniverse.getInstance().getLoadDataSource().loadAll()) {
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_load_success"));
 				BukkitTools.fireEvent(new TownyLoadedDatabaseEvent());
 			}
@@ -1073,7 +1073,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (NameValidation.isBlacklistName(split[2]))
 			throw new TownyException(Translatable.of("msg_invalid_name"));
 
-		TownyUniverse.getInstance().getDataSource().renamePlayer(resident, split[2]);
+		TownyUniverse.getInstance().getSaveDataSource().renamePlayer(resident, split[2]);
 	}
 
 	private void residentFriend(CommandSender sender, String[] split, Resident resident) throws TownyException {
@@ -1105,7 +1105,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE.getNode());
 		Confirmation.runOnAccept(()-> {
 			Player player = resident.isOnline() ? resident.getPlayer() : null;
-			TownyUniverse.getInstance().getDataSource().removeResident(resident);
+			TownyUniverse.getInstance().getSaveDataSource().removeResident(resident);
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_del_resident", resident.getName()));
 
 			if (player != null)
@@ -1161,7 +1161,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode());
 			Confirmation.runOnAccept(() -> {
 				TownyMessaging.sendMsg(sender, Translatable.of("town_deleted_by_admin", town.getName()));
-				TownyUniverse.getInstance().getDataSource().removeTown(town);
+				TownyUniverse.getInstance().getSaveDataSource().removeTown(town);
 			}).sendTo(sender);
 			break;
 		case "rename":
@@ -1175,7 +1175,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (NameValidation.isBlacklistName(name) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(name)))
 				throw new TownyException(Translatable.of("msg_invalid_name"));
 
-			townyUniverse.getDataSource().renameTown(town, name);
+			townyUniverse.getSaveDataSource().renameTown(town, name);
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_name", getSenderFormatted(sender), town.getName()));
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_name", getSenderFormatted(sender), town.getName()));
 			break;
@@ -1302,7 +1302,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (remainingTown.equals(town))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
 			Confirmation.runOnAccept(() -> {
-				townyUniverse.getDataSource().mergeTown(town, remainingTown);
+				townyUniverse.getSaveDataSource().mergeTown(town, remainingTown);
 				TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", town, remainingTown));
 			}).sendTo(sender);
 			break;
@@ -1531,7 +1531,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (sender instanceof Player)
 					TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
 				
-				TownyUniverse.getInstance().getDataSource().removeNation(nation);
+				TownyUniverse.getInstance().getSaveDataSource().removeNation(nation);
 				TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
 			}).sendTo(sender);
 			break;
@@ -1546,7 +1546,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			BukkitTools.ifCancelledThenThrow(new NationPreRenameEvent(nation, name));
 			if (NameValidation.isBlacklistName(name) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(name)))
 				throw new TownyException(Translatable.of("msg_invalid_name"));
-			townyUniverse.getDataSource().renameNation(nation, name);
+			townyUniverse.getSaveDataSource().renameNation(nation, name);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
 			break;
@@ -1560,7 +1560,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (remainingNation.equals(nation))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
 			Confirmation.runOnAccept(() -> {
-				townyUniverse.getDataSource().mergeNation(nation, remainingNation);
+				townyUniverse.getSaveDataSource().mergeNation(nation, remainingNation);
 				TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
 			}).sendTo(sender);
 			break;
@@ -1912,7 +1912,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		// If the previous mayor was an NPC make sure they're removed from the database.
 		if (deleteOldMayor)
-			TownyUniverse.getInstance().getDataSource().removeResident(oldMayor);
+			TownyUniverse.getInstance().getSaveDataSource().removeResident(oldMayor);
 
 		// NPC mayors set their towns to not pay any upkeep.
 		town.setHasUpkeep(!newMayor.isNPC());
@@ -2064,7 +2064,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	public void reloadConfig(CommandSender sender, boolean reset) {
 
 		if (reset) {
-			TownyUniverse.getInstance().getDataSource().deleteFile(plugin.getConfigPath());
+			TownyUniverse.getInstance().getSaveDataSource().deleteFile(plugin.getConfigPath());
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_reset_config"));
 		}
 		
@@ -2088,7 +2088,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	 *
 	 */
 	public void reloadDatabase(CommandSender sender) {
-		TownyUniverse.getInstance().getDataSource().finishTasks();
+		TownyUniverse.getInstance().getLoadDataSource().finishTasks();
+		TownyUniverse.getInstance().getSaveDataSource().finishTasks();
 		try {
 			plugin.loadFoundation(true);
 		} catch (TownyInitException tie) {

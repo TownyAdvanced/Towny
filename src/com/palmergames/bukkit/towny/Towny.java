@@ -172,9 +172,10 @@ public class Towny extends JavaPlugin {
 			// Update config with new version.
 			TownySettings.setLastRunVersion(getVersion());
 			// Save database.
-			townyUniverse.getDataSource().saveAll();
+			townyUniverse.getSaveDataSource().saveAll();
 			// cleanup() updates SQL schema for any changes.
-			townyUniverse.getDataSource().cleanup();
+			townyUniverse.getSaveDataSource().cleanup();
+			townyUniverse.getLoadDataSource().cleanup();
 		}
 		
 		// It is probably a good idea to always handle permissions
@@ -416,8 +417,8 @@ public class Towny extends JavaPlugin {
 
 		Bukkit.getLogger().info("==============================================================");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDataSource() != null && !isError()) {
-			townyUniverse.getDataSource().saveQueues();
+		if (townyUniverse.getSaveDataSource() != null && !isError()) {
+			townyUniverse.getSaveDataSource().saveQueues();
 		}
 
 		// Turn off timers.		
@@ -430,7 +431,8 @@ public class Towny extends JavaPlugin {
 		try {
 			// Shut down our saving task.
 			plugin.getLogger().info("Finishing File IO Tasks...");
-			townyUniverse.getDataSource().finishTasks();
+			townyUniverse.getSaveDataSource().finishTasks();
+			townyUniverse.getLoadDataSource().finishTasks();
 			townyUniverse.finishTasks();
 		} catch (NullPointerException ignored) {
 			// The saving task will not have started if this disable was fired by onEnable failing.			

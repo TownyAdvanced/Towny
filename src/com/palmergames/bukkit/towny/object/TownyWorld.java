@@ -998,6 +998,6 @@ public class TownyWorld extends TownyObject {
 
 	@Override
 	public void save() {
-		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+		TownyUniverse.getInstance().getSaveDataSource().saveWorld(this);
 	}
 }

@@ -1432,7 +1432,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (oldGroup.getTownBlocks().isEmpty()) {
 							String oldName = oldGroup.getName();
 							town.removePlotGroup(oldGroup);
-							TownyUniverse.getInstance().getDataSource().removePlotGroup(oldGroup);
+							TownyUniverse.getInstance().getSaveDataSource().removePlotGroup(oldGroup);
 							TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_deleted", oldName));
 						} else 
 							oldGroup.save();
@@ -1462,7 +1462,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				PlotGroup group = townBlock.getPlotObjectGroup();
 				String name = group.getName();
 				town.removePlotGroup(group);
-				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+				TownyUniverse.getInstance().getSaveDataSource().removePlotGroup(group);
 				TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_deleted", name));
 			}).sendTo(player);
 			
@@ -1487,7 +1487,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			if (group.getTownBlocks().isEmpty()) {
 				town.removePlotGroup(group);
-				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+				TownyUniverse.getInstance().getSaveDataSource().removePlotGroup(group);
 				TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_empty_deleted", name));
 			}
 
@@ -1507,7 +1507,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			String newName= split[1];			
 			String oldName = townBlock.getPlotObjectGroup().getName();
 			// Change name;
-			TownyUniverse.getInstance().getDataSource().renameGroup(townBlock.getPlotObjectGroup(), newName);
+			TownyUniverse.getInstance().getSaveDataSource().renameGroup(townBlock.getPlotObjectGroup(), newName);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_renamed_from_x_to_y", oldName, newName));
 
 		} else if (split[0].equalsIgnoreCase("forsale") || split[0].equalsIgnoreCase("fs")) {

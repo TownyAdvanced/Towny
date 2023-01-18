@@ -62,7 +62,7 @@ public class ResidentPurge extends Thread {
 				}
 				count++;
 				message(Translatable.of("msg_deleting_resident", resident.getName()));
-				townyUniverse.getDataSource().removeResident(resident);
+				townyUniverse.getSaveDataSource().removeResident(resident);
 			}
 		}
 

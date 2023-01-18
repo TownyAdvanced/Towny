@@ -162,7 +162,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 
 	@Override
 	public void save() {
-		TownyUniverse.getInstance().getDataSource().savePlotGroup(this);
+		TownyUniverse.getInstance().getSaveDataSource().savePlotGroup(this);
 	}
 
 	public void setTrustedResidents(Set<Resident> trustedResidents) {

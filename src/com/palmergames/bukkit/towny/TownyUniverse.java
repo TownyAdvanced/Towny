@@ -90,7 +90,8 @@ public class TownyUniverse {
     
     private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
     private final String rootFolder;
-    private TownyDataSource dataSource;
+    private TownyDataSource loadDataSource;
+	private TownyDataSource saveDataSource;
     private TownyPermissionSource permissionSource;
 
     private TownyUniverse() {
@@ -140,54 +141,72 @@ public class TownyUniverse {
      * @param saveDbType - save setting from the config.
      */
 	void loadAndSaveDatabase(String loadDbType, String saveDbType) {
+		closeDataSources();
     	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
+		initDatabase(loadDbType, saveDbType);
 		try {
 			// Try loading the database.
-			loadDatabase(loadDbType);
+			loadDatabase();
 		} catch (TownyInitException e) {
 			throw new TownyInitException(e.getMessage(), e.getError());
 		}
         
         try {
             // Try saving the database.
-        	saveDatabase(saveDbType);
+        	saveDatabase();
 		} catch (TownyInitException e) {
 			throw new TownyInitException(e.getMessage(), e.getError());
 		}        	
     }
-    
+
+	/**
+	 * Why do I seperate this method from saveDatabase and loadDatabase and load the database first?
+	 * because the loadDatabase() method calls save when loading...
+	 */
+	private void initDatabase(String loadDbType, String saveDbType) {
+		/*
+		 * Select the datasource.
+		 */
+		switch (loadDbType.toLowerCase()) {
+			case "ff", "flatfile" -> {
+				this.loadDataSource = new TownyFlatFileSource(towny, this);
+				break;
+			}
+			case "mysql" -> {
+				this.loadDataSource = new TownySQLSource(towny, this);
+				break;
+			}
+			default -> {
+				throw new TownyInitException("Database: Database.yml unsupported load format: " + loadDbType, TownyInitException.TownyError.DATABASE_CONFIG);
+			}
+		}
+		// Set the new class for saving.
+		switch (saveDbType.toLowerCase()) {
+			case "ff", "flatfile" -> {
+				this.saveDataSource = new TownyFlatFileSource(towny, this);
+				break;
+			}
+			case "mysql" -> {
+				this.saveDataSource = new TownySQLSource(towny, this);
+				break;
+			}
+			default -> {
+				throw new TownyInitException("Database.yml contains unsupported save format: " + saveDbType, TownyInitException.TownyError.DATABASE);
+			}
+		}
+	}
+	
     /**
      * Loads the database into memory.
-     *  
-     * @param loadDbType - load setting from the config.
+     *
      * @return true when the database will load.
      */
-    private boolean loadDatabase(String loadDbType) {
-        
+    private boolean loadDatabase() {
         long startTime = System.currentTimeMillis();
-
-        /*
-         * Select the datasource.
-         */
-        switch (loadDbType.toLowerCase()) {
-            case "ff":
-            case "flatfile": {
-                this.dataSource = new TownyFlatFileSource(towny, this);
-                break;
-            }
-            case "mysql": {
-                this.dataSource = new TownySQLSource(towny, this);
-                break;
-            }
-            default: {
-            	throw new TownyInitException("Database: Database.yml unsupported load format: " + loadDbType, TownyInitException.TownyError.DATABASE_CONFIG);
-            }
-        }
-        
         /*
          * Load the actual database.
          */
-        if (!dataSource.loadAll())
+        if (!loadDataSource.loadAll())
         	throw new TownyInitException("Database: Failed to load database.", TownyInitException.TownyError.DATABASE);
 
         long time = System.currentTimeMillis() - startTime;
@@ -203,34 +222,17 @@ public class TownyUniverse {
     
     /**
      * Saves the database into memory.
-     * 
-     * @param saveDbType - save setting from the config.
+     *
      * @return true when the database will save.
      */
-    private boolean saveDatabase(String saveDbType) {
+    private boolean saveDatabase() {
         try {
-            // Set the new class for saving.
-            switch (saveDbType.toLowerCase()) {
-                case "ff":
-                case "flatfile": {
-                    this.dataSource = new TownyFlatFileSource(towny, this);
-                    break;
-                }
-                case "mysql": {
-                    this.dataSource = new TownySQLSource(towny, this);
-                    break;
-                }
-                default: {
-                	throw new TownyInitException("Database.yml contains unsupported save format: " + saveDbType, TownyInitException.TownyError.DATABASE);
-                }
-            }
-
-            if (TownySettings.getLoadDatabase().equalsIgnoreCase(saveDbType)) {
+            if (TownySettings.getLoadDatabase().equalsIgnoreCase(TownySettings.getSaveDatabase())) {
                 // Update all Worlds data files
-                dataSource.saveAllWorlds();                
+                saveDataSource.saveAllWorlds();                
             } else {
                 //Formats are different so save ALL data.
-                dataSource.saveAll();
+                saveDataSource.saveAll();
             }
             return true;
         } catch (UnsupportedOperationException e) {
@@ -239,7 +241,7 @@ public class TownyUniverse {
     }
 
     /**
-     * Run during onDisable() to finish cleanup and backup.
+     * Run during onDisable() to finish cleanup, backup and close data sources.
      */
     public void finishTasks() {
     	if (backupFuture != null && !backupFuture.isDone()) {
@@ -252,16 +254,40 @@ public class TownyUniverse {
 				Thread.currentThread().interrupt();
 			} catch (ExecutionException ignored) {}
 		}
+		closeDataSources();
 	}
 
+	private void closeDataSources() {
+		if (getSaveDataSource() instanceof TownySQLSource sqlSource) {
+			sqlSource.getHikariDataSource().close();
+		}
+		if (getLoadDataSource() instanceof TownySQLSource sqlSource) {
+			sqlSource.getHikariDataSource().close();
+		}
+	}
+	
     /*
      * DataSource, PermissionSource and RootFolder.
      */
-
-    public TownyDataSource getDataSource() {
-        return dataSource;
+	/**
+	 * Gets Towny's loading Database
+	 *
+	 * @deprecated use TownyUniverse#getLoadDataSource() and TownyUniverse#getSaveDataSource() instead
+	 * @return the {@link TownyDataSource}
+	 */
+	@Deprecated
+	public TownyDataSource getDataSource() {
+		return loadDataSource;
+	}
+	
+    public TownyDataSource getLoadDataSource() {
+        return loadDataSource;
     }
     
+	public TownyDataSource getSaveDataSource() {
+		return saveDataSource;
+	}
+	
     public TownyPermissionSource getPermissionSource() {
         return permissionSource;
     }
