@@ -678,10 +678,7 @@ public class TownyPerms {
 	}
 	
 	private static void buildGroupPermsMap() {
-		for (String key : perms.getKeys(true)) {
-			List<String> nodes = (List<String>) perms.getList(key); 
-			groupPermsMap.put(key, nodes);
-		}
+		perms.getKeys(true).stream().forEach(key -> groupPermsMap.put(key, perms.getStringList(key)));
 	}
 
 	private static void buildComments() {
