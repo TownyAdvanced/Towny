@@ -1611,7 +1611,7 @@ msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
 msg_town_plots_type_header: '<dark_green>Tür: <green>Oyuncu-Sahipli <gray>/ <aqua>Satışta <gray>/ <yellow>Toplam'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Günlük Gelir'
 #Part of the /town plots output.
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
