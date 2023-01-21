@@ -36,15 +36,13 @@ public class RepeatingTimerTask extends TownyTimerTask {
 			makeNextPlotSnapshot();
 		}
 
-		// Perform the next plot_management entity_delete
+		// Try to perform the next plot_management entity_delete
 		if (TownyRegenAPI.hasDeleteTownBlockEntityQueue())
-			TownyRegenAPI.doDeleteTownBlockEntities(TownyRegenAPI.getDeleteTownBlockEntityQueue());
+			tryDeleteTownBlockEntityQueue();
 
-		// Perform the next plot_management block_delete
-		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) {
-			Bukkit.getScheduler().runTaskAsynchronously(plugin,
-				() -> TownyRegenAPI.doDeleteTownBlockIds(TownyRegenAPI.getDeleteTownBlockIdQueue()));
-		}
+		// Try to perform the next plot_management block_delete
+		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) 
+			tryDeleteTownBlockIDQueue();
 	}
 
 	private void revertAnotherBlockToWilderness() {
@@ -78,4 +76,28 @@ public class RepeatingTimerTask extends TownyTimerTask {
 			TownyMessaging.sendDebugMsg("Plot snapshots completed.");
 	}
 
+	private void tryDeleteTownBlockEntityQueue() {
+		if (TownyRegenAPI.getActiveDeleteTownBlockEntityQueueSize() > 10)
+			return;
+		// Remove WC from larger queue.
+		WorldCoord wc = TownyRegenAPI.getDeleteTownBlockEntityQueue();
+		// Add it to active queue.
+		TownyRegenAPI.addActiveDeleteTownBlockEntityQueue(wc);
+
+		// Remove a WC from the active queue and remove the entities from it.
+		TownyRegenAPI.doDeleteTownBlockEntities(TownyRegenAPI.getDeleteTownBlockEntityQueue());
+	}
+
+	private void tryDeleteTownBlockIDQueue() {
+		if (TownyRegenAPI.getActiveDeleteTownBlockIdQueueSize() > 10)
+			return;
+		// Remove WC from larger queue.
+		WorldCoord wc = TownyRegenAPI.getDeleteTownBlockIdQueue();
+		// Add it to active queue.
+		TownyRegenAPI.addActiveDeleteTownBlockIdQueue(wc);
+
+		// Remove a WC from the active queue and remove the blocks from it.
+		Bukkit.getScheduler().runTaskAsynchronously(plugin,
+				() -> TownyRegenAPI.doDeleteTownBlockIds(TownyRegenAPI.getActiveDeleteTownBlockIdQueue()));
+	}
 }

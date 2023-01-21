@@ -47,9 +47,11 @@ public class TownyRegenAPI {
 
 	// List of all old plots still to be processed for Entity removal
 	private static final List<WorldCoord> deleteTownBlockEntityQueue = new ArrayList<>();
+	private static final List<WorldCoord> activeDeleteTownBlockEntityQueue = new ArrayList<>();
 
 	// List of all old plots still to be processed for Block removal
 	private static final List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<>();
+	private static final List<WorldCoord> activeDeleteTownBlockIdQueue = new ArrayList<>();
 
 	// A list of worldCoords which are needing snapshots
 	private static final List<WorldCoord> worldCoords = new ArrayList<>();
@@ -373,143 +375,134 @@ public class TownyRegenAPI {
 		return "[" + wc.getWorldName() + "|" + wc.getX() + "|" + wc.getZ() + "]";
 	}
 
-//	/**
-//	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-//	 * 
-//	 * @param player
-//	 */
-//	public static void regenChunk(Player player) {
-//		
-//		try {
-//			Coord coord = Coord.parseCoord(player);
-//			World world = player.getWorld();
-//			Chunk chunk = world.getChunkAt(player.getLocation());
-//			int maxHeight = world.getMaxHeight();
-//			
-//			ChunkSnapshot snapshot = chunk.getChunkSnapshot(true,true,false);
-//			
-//			Object[][][] snapshot = new Object[16][maxHeight][16];
-//			
-//			for (int x = 0; x < 16; x++) {
-//				for (int z = 0; z < 16; z++) {
-//					for (int y = 0; y < maxHeight; y++) {
-//						
-//						//Current block to save
-//						BlockState state = chunk.getBlock(x, y, z).getState();
-//						
-//						if (state instanceof org.bukkit.block.Sign) {
-//							
-//							BlockSign sign = new BlockSign(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((org.bukkit.block.Sign) state).getLines());
-//							sign.setLocation(state.getLocation());
-//							snapshot[x][y][z] = sign;
-//							
-//						} else if (state instanceof CreatureSpawner) {
-//							
-//							BlockMobSpawner spawner = new BlockMobSpawner(((CreatureSpawner) state).getSpawnedType());
-//							spawner.setLocation(state.getLocation());
-//							spawner.setDelay(((CreatureSpawner) state).getDelay());
-//							snapshot[x][y][z] = spawner;
-//							
-//						} else if ((state instanceof InventoryHolder) && !(state instanceof Player)) {
-//							
-//							BlockInventoryHolder holder = new BlockInventoryHolder(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((InventoryHolder) state).getInventory().getContents());
-//							holder.setLocation(state.getLocation());
-//							snapshot[x][y][z] = holder;
-//							
-//						} else {
-//						
-//							snapshot[x][y][z] = new BlockObject(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), state.getLocation());
-//									
-//						}
-//						
-//					}
-//				}
-//			}
-//			
-//			TownyUniverse.getDataSource().getResident(player.getName()).addUndo(snapshot);
-//
-//			Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
-//
-//		} catch (NotRegisteredException e) {
-//			// Failed to get resident
-//		}
-//	}
-//	
-//	/**
-//	 * Restore the relevant chunk using the snapshot data stored in the resident
-//	 * object.
-//	 * 
-//	 * @param snapshot
-//	 * @param resident
-//	 */
-//	public static void regenUndo(Object[][][] snapshot, Resident resident) {
-//
-//		BlockObject key = ((BlockObject) snapshot[0][0][0]);
-//		World world = key.getLocation().getWorld();
-//		Chunk chunk = key.getLocation().getChunk();
-//		
-//		int maxHeight = world.getMaxHeight();
-//		
-//		for (int x = 0; x < 16; x++) {
-//			for (int z = 0; z < 16; z++) {
-//				for (int y = 0; y < maxHeight; y++) {
-//					
-//					// Snapshot data we need to update the world.
-//					Object state = snapshot[x][y][z];
-//					
-//					// The block we will be updating
-//					Block block = chunk.getBlock(x, y, z);
-//					
-//					if (state instanceof BlockSign) {
-//
-//						BlockSign signData = (BlockSign)state;
-//						BukkitTools.setTypeIdAndData(block, signData.getTypeId(), signData.getData(), false);
-//						
-//						Sign sign = (Sign) block.getState();
-//						int i = 0;
-//						for (String line : signData.getLines())
-//							sign.setLine(i++, line);
-//						
-//						sign.update(true);
-//						
-//					} else if (state instanceof BlockMobSpawner) {
-//						
-//						BlockMobSpawner spawnerData = (BlockMobSpawner) state;
-//						
-//						BukkitTools.setTypeIdAndData(block, spawnerData.getTypeId(), spawnerData.getData(), false);
-//						((CreatureSpawner) block.getState()).setSpawnedType(spawnerData.getSpawnedType());
-//						((CreatureSpawner) block.getState()).setDelay(spawnerData.getDelay());
-//						
-//					} else if ((state instanceof BlockInventoryHolder) && !(state instanceof Player)) {
-//						
-//						BlockInventoryHolder containerData = (BlockInventoryHolder) state;
-//						BukkitTools.setTypeIdAndData(block, containerData.getTypeId(), containerData.getData(), false);
-//						
-//						// Container to receive the inventory
-//						InventoryHolder container = (InventoryHolder) block.getState();
-//						
-//						// Contents we are respawning.						
-//						if (containerData.getItems().length > 0)
-//							container.getInventory().setContents(containerData.getItems());
-//						
-//					} else {
-//						
-//						BlockObject blockData = (BlockObject) state;	
-//						BukkitTools.setTypeIdAndData(block, blockData.getTypeId(), blockData.getData(), false);
-//					}
-//					
-//					
-//					
-//
-//				}
-//			}
-//
-//		}
-//
-//		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), Translation.of("msg_undo_complete"));
-//
-//	}
+/* Old Resident-stored chunk regeneration.
 
+	public static void regenChunk(Player player) {
+		
+		try {
+			Coord coord = Coord.parseCoord(player);
+			World world = player.getWorld();
+			Chunk chunk = world.getChunkAt(player.getLocation());
+			int maxHeight = world.getMaxHeight();
+			
+			ChunkSnapshot snapshot = chunk.getChunkSnapshot(true,true,false);
+			
+			Object[][][] snapshot = new Object[16][maxHeight][16];
+			
+			for (int x = 0; x < 16; x++) {
+				for (int z = 0; z < 16; z++) {
+					for (int y = 0; y < maxHeight; y++) {
+						
+						//Current block to save
+						BlockState state = chunk.getBlock(x, y, z).getState();
+						
+						if (state instanceof org.bukkit.block.Sign) {
+							
+							BlockSign sign = new BlockSign(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((org.bukkit.block.Sign) state).getLines());
+							sign.setLocation(state.getLocation());
+							snapshot[x][y][z] = sign;
+							
+						} else if (state instanceof CreatureSpawner) {
+							
+							BlockMobSpawner spawner = new BlockMobSpawner(((CreatureSpawner) state).getSpawnedType());
+							spawner.setLocation(state.getLocation());
+							spawner.setDelay(((CreatureSpawner) state).getDelay());
+							snapshot[x][y][z] = spawner;
+							
+						} else if ((state instanceof InventoryHolder) && !(state instanceof Player)) {
+							
+							BlockInventoryHolder holder = new BlockInventoryHolder(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((InventoryHolder) state).getInventory().getContents());
+							holder.setLocation(state.getLocation());
+							snapshot[x][y][z] = holder;
+							
+						} else {
+						
+							snapshot[x][y][z] = new BlockObject(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), state.getLocation());
+									
+						}
+						
+					}
+				}
+			}
+			
+			TownyUniverse.getDataSource().getResident(player.getName()).addUndo(snapshot);
+
+			Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
+
+		} catch (NotRegisteredException e) {
+			// Failed to get resident
+		}
+	}
+
+	public static void regenUndo(Object[][][] snapshot, Resident resident) {
+
+		BlockObject key = ((BlockObject) snapshot[0][0][0]);
+		World world = key.getLocation().getWorld();
+		Chunk chunk = key.getLocation().getChunk();
+		
+		int maxHeight = world.getMaxHeight();
+		
+		for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16; z++) {
+				for (int y = 0; y < maxHeight; y++) {
+					
+					// Snapshot data we need to update the world.
+					Object state = snapshot[x][y][z];
+					
+					// The block we will be updating
+					Block block = chunk.getBlock(x, y, z);
+					
+					if (state instanceof BlockSign) {
+
+						BlockSign signData = (BlockSign)state;
+						BukkitTools.setTypeIdAndData(block, signData.getTypeId(), signData.getData(), false);
+						
+						Sign sign = (Sign) block.getState();
+						int i = 0;
+						for (String line : signData.getLines())
+							sign.setLine(i++, line);
+						
+						sign.update(true);
+						
+					} else if (state instanceof BlockMobSpawner) {
+						
+						BlockMobSpawner spawnerData = (BlockMobSpawner) state;
+						
+						BukkitTools.setTypeIdAndData(block, spawnerData.getTypeId(), spawnerData.getData(), false);
+						((CreatureSpawner) block.getState()).setSpawnedType(spawnerData.getSpawnedType());
+						((CreatureSpawner) block.getState()).setDelay(spawnerData.getDelay());
+						
+					} else if ((state instanceof BlockInventoryHolder) && !(state instanceof Player)) {
+						
+						BlockInventoryHolder containerData = (BlockInventoryHolder) state;
+						BukkitTools.setTypeIdAndData(block, containerData.getTypeId(), containerData.getData(), false);
+						
+						// Container to receive the inventory
+						InventoryHolder container = (InventoryHolder) block.getState();
+						
+						// Contents we are respawning.						
+						if (containerData.getItems().length > 0)
+							container.getInventory().setContents(containerData.getItems());
+						
+					} else {
+						
+						BlockObject blockData = (BlockObject) state;	
+						BukkitTools.setTypeIdAndData(block, blockData.getTypeId(), blockData.getData(), false);
+					}
+					
+					
+					
+
+				}
+			}
+
+		}
+
+		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), Translation.of("msg_undo_complete"));
+
+	}
+
+*/
 	/*
 	 * TownBlock Entity Deleting Queue.
 	 */
@@ -540,7 +533,25 @@ public class TownyRegenAPI {
 		
 		return null;
 	}
+
+	public static int getActiveDeleteTownBlockEntityQueueSize() {
+
+		return activeDeleteTownBlockEntityQueue.size();
+	}
 	
+	public static void addActiveDeleteTownBlockEntityQueue(WorldCoord plot) {
+		if (!activeDeleteTownBlockEntityQueue.contains(plot))
+			activeDeleteTownBlockEntityQueue.add(plot);
+	}
+	
+	@Nullable
+	public static WorldCoord getActiveDeleteTownBlockEntityQueue() {
+
+		if (!activeDeleteTownBlockEntityQueue.isEmpty())
+			return activeDeleteTownBlockEntityQueue.remove(0);
+		
+		return null;
+	}
 
 	/**
 	 * Deletes all of a specified entity type from a TownBlock
@@ -595,6 +606,26 @@ public class TownyRegenAPI {
 		return null;
 	}
 
+	public static int getActiveDeleteTownBlockIdQueueSize() {
+
+		return activeDeleteTownBlockIdQueue.size();
+	}
+	
+	public static void addActiveDeleteTownBlockIdQueue(WorldCoord plot) {
+
+		if (!activeDeleteTownBlockIdQueue.contains(plot))
+			activeDeleteTownBlockIdQueue.add(plot);
+	}
+
+	@Nullable
+	public static WorldCoord getActiveDeleteTownBlockIdQueue() {
+
+		if (!activeDeleteTownBlockIdQueue.isEmpty())
+			return activeDeleteTownBlockIdQueue.remove(0);
+		
+		return null;
+	}
+	
 	/**
 	 * Deletes all of a specified block type from a TownBlock
 	 * 
@@ -632,6 +663,7 @@ public class TownyRegenAPI {
 	public static void deleteMaterialsFromWorldCoord(WorldCoord coord, Collection<Material> collection) {
 		int plotSize = TownySettings.getTownBlockSize();
 
+		coord.loadChunks();
 		World world = coord.getBukkitWorld();
 		if (world == null)
 			return;
@@ -655,6 +687,8 @@ public class TownyRegenAPI {
 			toRemove.forEach(block -> block.setType(Material.AIR));
 		else 
 			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> toRemove.forEach(block -> block.setType(Material.AIR)));
+		
+		coord.unloadChunks();
 	}
 
 	/*
