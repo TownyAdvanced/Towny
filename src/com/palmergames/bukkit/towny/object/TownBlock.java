@@ -443,7 +443,7 @@ public class TownBlock extends TownyObject {
 
 	public WorldCoord getWorldCoord() {
 
-		return new WorldCoord(world.getName(), x, z);
+		return new WorldCoord(world.getName(), world.getUUID(), x, z);
 	}
 
 	/**

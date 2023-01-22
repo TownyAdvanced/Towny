@@ -752,8 +752,8 @@ public class TownyPlayerListener implements Listener {
 				cache.setLastLocation(to);
 				return;
 			}
-			WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), Coord.parseCoord(from));
-			WorldCoord toCoord = new WorldCoord(toWorld.getName(), Coord.parseCoord(to));
+			WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), fromWorld.getUUID(), Coord.parseCoord(from));
+			WorldCoord toCoord = new WorldCoord(toWorld.getName(), fromWorld.getUUID(), Coord.parseCoord(to));
 			
 			onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
 		}
