@@ -663,7 +663,6 @@ public class TownyRegenAPI {
 	public static void deleteMaterialsFromWorldCoord(WorldCoord coord, Collection<Material> collection) {
 		int plotSize = TownySettings.getTownBlockSize();
 
-		coord.loadChunks();
 		World world = coord.getBukkitWorld();
 		if (world == null)
 			return;
@@ -687,8 +686,6 @@ public class TownyRegenAPI {
 			toRemove.forEach(block -> block.setType(Material.AIR));
 		else 
 			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> toRemove.forEach(block -> block.setType(Material.AIR)));
-		
-		coord.unloadChunks();
 	}
 
 	/*
