@@ -8311,3 +8311,5 @@ v0.92.0.11:
     - Lets other plugins move unjailed residents to a location of their choice, or cancel the teleport altogether.
 0.98.6.2:
   - API: Add new TranslationLoader constructor which only requires a Plugin instance.
+  - Add tab complete for /ta nation recheck, courtesy of Warriorrrr with PR #6449.
+  - Add confirmation to /n set capital, courtesy of Warriorrrr with PR #6450.
