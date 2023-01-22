@@ -218,7 +218,7 @@ public class Nation extends Government {
 		}
 
 		// Save the capital city. A town that becomes a capital might have its
-		// peacecful/neutral status overridden and require saving.
+		// peaceful/neutral status overridden and require saving.
 		this.capital.save();
 	}
 
