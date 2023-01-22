@@ -11,10 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
-import com.palmergames.bukkit.towny.event.PlotClearEvent;
-import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
-import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
-import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.*;
 import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustAddEvent;
@@ -594,7 +591,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
-
+							BukkitTools.ifCancelledThenThrow(new TownBlockSettingsPreChangeEvent(townBlock));
 							setTownBlockPermissions(player, townBlock.getTownBlockOwner(), townBlock, StringMgmt.remFirstArg(split));
 
 							return true;
@@ -1607,7 +1604,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Mayor/Assistant of the town.
 				
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-				
+				BukkitTools.ifCancelledThenThrow(new TownBlockSettingsPreChangeEvent(townBlock));
 				Runnable permHandler = () -> {
 
 					// setTownBlockPermissions returns a towny permission change object

@@ -11,17 +11,9 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
-import com.palmergames.bukkit.towny.event.NewTownEvent;
-import com.palmergames.bukkit.towny.event.PreNewTownEvent;
-import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
-import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
-import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
-import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
-import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
-import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
+import com.palmergames.bukkit.towny.event.*;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
-import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
@@ -2089,6 +2081,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_PERM.getNode());
 			// Make sure we are allowed to set these permissions.
 			toggleTest(town, StringMgmt.join(split, " "));
+			BukkitTools.ifCancelledThenThrow(new TownBlockSettingsPreChangeEvent(town));
 			setTownBlockOwnerPermissions(sender, town, StringMgmt.remFirstArg(split));
 
 		} else if (split[0].equalsIgnoreCase("primaryjail")) {
