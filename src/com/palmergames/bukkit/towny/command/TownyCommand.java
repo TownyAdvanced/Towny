@@ -173,12 +173,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_no_economy"));
 
 					if (split.length > 1) {
-						town = TownyUniverse.getInstance().getTown(split[1]);
-
-						if (town == null) {
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", split[1]));
-							return;
-						}
+						town = getTownOrThrow(split[1]);
 					} else if (player != null) {
 						Resident resident = TownyAPI.getInstance().getResident(player);
 						

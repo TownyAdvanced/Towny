@@ -1970,9 +1970,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationSetCapital(sender, nation, split, admin);
 			break;
 		case "spawn":
-			catchConsole(sender);
+			final Player player = catchConsole(sender);
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_SPAWN.getNode());
-			parseNationSetSpawnCommand((Player) sender, nation, admin);
+			parseNationSetSpawnCommand(player, nation, admin);
 			break;
 		case "taxes":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXES.getNode());
@@ -2235,16 +2235,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), TownyEconomyHandler.getFormattedBalance(nation.getMaxPercentTaxAmount())));
 	}
 
-	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) {
+	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
 		if (split.length < 2) {
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set capital {town name}");
 			return;
 		}
-		
-		Town newCapital = TownyUniverse.getInstance().getTown(split[1]);
-		
-		if (newCapital == null) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", split[1]));
+
+		final Town newCapital = getTownOrThrow(split[1]);
+		changeNationOwnership(sender, nation, newCapital, admin);
+	}
+	
+	private static void changeNationOwnership(CommandSender sender, Nation nation, Town newCapital, boolean admin) {
+		final Town existingCapital = nation.getCapital();
+		if (existingCapital != null && existingCapital.getUUID().equals(newCapital.getUUID())) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_warn_town_already_capital", newCapital.getName()));
 			return;
 		}
 
@@ -2265,10 +2269,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Resident newKing = newCapital.getMayor();
 
 			NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
-			if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin) {
-				TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
-				return;
-			}
 
 			// Do proximity tests.
 			if (TownySettings.getNationRequiresProximity() > 0 ) {
@@ -2278,34 +2278,45 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!removedTowns.isEmpty()) {
 					final Nation finalNation = nation;
 					Confirmation.runOnAccept(() -> {
-							finalNation.setCapital(newCapital);
-							finalNation.removeOutOfRangeTowns();
-							plugin.resetCache();
-							TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
-							if (admin)
-								TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
-						})
-						.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
+						if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin) {
+							TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
+							return;
+						}
+						
+						finalNation.setCapital(newCapital);
+						finalNation.removeOutOfRangeTowns();
+						plugin.resetCache();
+						TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
+						
+						if (admin)
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
+						
+						nation.save();
+					}).setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
 						.sendTo(sender);
-
-					// No towns will be removed, skip the Confirmation.
-				} else {
-					nation.setCapital(newCapital);
-					plugin.resetCache();
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-					if (admin)
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-					nation.save();
+					
+					return;
 				}
-				// Proximity doesn't factor in.
-			} else {
+			}
+			
+			// Proximity doesn't factor in or no towns would be considered out of range after changing the capital.
+			// Send a confirmation
+			Confirmation.runOnAccept(() -> {
+				if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin) {
+					TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
+					return;
+				}
+				
 				nation.setCapital(newCapital);
 				plugin.resetCache();
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+
 				if (admin)
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+
 				nation.save();
-			}
+			}).setTitle(Translatable.of("msg_warn_are_you_sure_you_want_to_transfer_nation_ownership", newCapital.getMayor().getName()))
+					.sendTo(sender);
 		};
 
 		if (capitalNotEnoughResidents || capitalTooManyResidents)
@@ -2321,33 +2332,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set leader Dumbo");
 		else
 			try {
-				Resident newKing = getResidentOrThrow(split[1]);
-				Resident oldKing = nation.getKing();
-				Town newCapital = newKing.getTown();
-
-				if (TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation() && !admin) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
-					return;
-				}
+				final Resident newKing = getResidentOrThrow(split[1]);
+				if (!nation.hasResident(newKing))
+					throw new TownyException(Translatable.of("msg_err_king_not_in_nation"));
 				
-				if (TownySettings.getMaxResidentsPerTown() > 0 && nation.getCapital().getNumResidents() > TownySettings.getMaxResidentsPerTown() && !admin) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
-					return;
-				}
+				if (!newKing.isMayor())
+					throw new TownyException(Translatable.of("msg_err_new_king_notmayor"));
 				
-				NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
-				if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin) {
-					TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
-					return;
-				}
-
-				nation.setKing(newKing);
-				plugin.deleteCache(oldKing);
-				plugin.deleteCache(newKing);
-				TownyPerms.assignPermissions(oldKing, null); // remove permissions from old King.
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newKing.getName(), nation.getName()));
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newKing.getName(), nation.getName()));
+				changeNationOwnership(sender, nation, getResidentOrThrow(split[1]).getTown(), admin);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 			}
@@ -2598,16 +2590,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (args.length == 3) {
 				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode());
 				
-				Town town = TownyUniverse.getInstance().getTown(args[2]);
-				if (town != null) {
-					if (!nation.hasTown(town))
-						throw new TownyException(Translatable.of("msg_err_not_same_nation", town.getName()));
+				Town town = getTownOrThrow(args[2]);
+				if (!nation.hasTown(town))
+					throw new TownyException(Translatable.of("msg_err_not_same_nation", town.getName()));
 
-					MoneyUtil.townDeposit(player, resident, town, nation, amount);
-
-				} else {
-					throw new NotRegisteredException();
-				}
+				MoneyUtil.townDeposit(player, resident, town, nation, amount);
 			}
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));

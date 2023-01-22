@@ -580,41 +580,36 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		} else {
 			
-			parseTownCommandForConsole(sender, args);
+			try {
+				parseTownCommandForConsole(sender, args);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			}
 		}
 		return true;
 	}
 
-	private void parseTownCommandForConsole(final CommandSender sender, String[] split) {
+	private void parseTownCommandForConsole(final CommandSender sender, String[] split) throws TownyException {
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-
 			HelpMenu.TOWN_HELP_CONSOLE.send(sender);
-		
-		} else if (split[0].equalsIgnoreCase("list")) {
+			return;
+		}
 
-			try {
-				listTowns(sender, split);
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-			}
+		switch(split[0].toLowerCase(Locale.ROOT)) {
+		case "list" -> listTowns(sender, split);
+		case "reslist" -> townResList(sender, split); 
+		default -> {
+			// Test if this is an addon command
+			if (tryTownAddonCommand(sender, split))
+				return;
+			// Test if this is a town status screen lookup.
+			if (tryTownStatusScreen(sender, split))
+				return;
 			
-		} else if (split[0].equalsIgnoreCase("reslist")) {
-
-			try {
-				townResList(sender, split);
-			} catch (TownyException e) {
-				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-			}
-		} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(sender, "town", split);
-		} else {
-			Town town = TownyUniverse.getInstance().getTown(split[0]);
-			
-			if (town != null)
-				townStatusScreen(sender, town);
-			else
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", split[0]));
+			// Alert the player that the subcommand doesn't exist.
+			throw new TownyException(Translatable.of("msg_err_invalid_sub"));
+		}
 		}
 	}
 
@@ -838,21 +833,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private boolean tryTownStatusScreen(Player player, String[] split) throws NoPermissionException {
+	private boolean tryTownStatusScreen(CommandSender sender, String[] split) throws NoPermissionException {
 		Town town = TownyUniverse.getInstance().getTown(split[0]);
 		if (town != null) {
-			if (!town.hasResident(player.getName()))
+			if (sender instanceof Player player && !town.hasResident(player.getName()))
 				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OTHERTOWN.getNode());
 
-			townStatusScreen(player, town);
+			townStatusScreen(sender, town);
 			return true;
 		}
 		return false;
 	}
 
-	private boolean tryTownAddonCommand(Player player, String[] split) {
+	private boolean tryTownAddonCommand(CommandSender sender, String[] split) {
 		if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN, split[0])) {
-			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(player, "town", split);
+			TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN, split[0]).execute(sender, "town", split);
 			return true;
 		}
 		return false;
@@ -3300,12 +3295,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				exceptionMsg = "msg_err_already_res";
 			}
 			
-			resident = TownyUniverse.getInstance().getResident(residentName);
-			town = TownyUniverse.getInstance().getTown(townName);
-			
-			if (resident == null || town == null) {
-				throw new TownyException(Translatable.of("msg_err_not_registered_1", resident == null ? residentName : townName));
-			}
+			resident = getResidentOrThrow(residentName);
+			town = getTownOrThrow(townName);
 
 			// Check if resident is currently in a town.
 			if (resident.hasTown())
@@ -3847,10 +3838,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!admin && sender instanceof Player player && !getResidentOrThrow(player.getUniqueId()).isMayor())
 			throw new TownyException(Translatable.of("msg_town_merge_err_mayor_only"));
 
-		Town succumbingTown = TownyUniverse.getInstance().getTown(args[0]);
+		Town succumbingTown = getTownOrThrow(args[0]);
 
 		// A lot of checks.
-		if (succumbingTown == null || succumbingTown.getName().equals(remainingTown.getName()))
+		if (succumbingTown.getName().equals(remainingTown.getName()))
 			throw new TownyException(Translatable.of("msg_err_invalid_name", args[0]));
 
 		if (TownySettings.getMaxDistanceForTownMerge() > 0 && homeBlockDistance(remainingTown, succumbingTown) > TownySettings.getMaxDistanceForTownMerge())
@@ -4091,7 +4082,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Town town = null;
 		if (args.length > 1) // not just /town plotgrouplist
-			town = TownyUniverse.getInstance().getTown(args[1]);
+			town = getTownOrThrow(args[1]);
 
 		if (town == null && player != null) // Probably a number and not a town name.
 			town = getTownFromPlayerOrThrow(player);
