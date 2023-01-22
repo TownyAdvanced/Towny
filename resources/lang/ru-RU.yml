@@ -1625,12 +1625,14 @@ msg_cant_unclaim_outsider_in_town: 'В этом городском кварта�
 #Message shown when a player is making a town too soon after deleting one.
 msg_err_cannot_create_new_town_x_seconds_remaining: 'Вы не можете создать новый город, требуется подождать %s секунд.'
 #Message shown when a player is claiming land too soon after unclaiming it.
-msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Вы не можете захватить этот квартал, требуется подождать %s, %s секунд.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: 'The town of %s has had the founder set to %s.'
+msg_founder_set: 'В городе %s был основатель, который установил %s.'
 #Message shown when toggling town allowed to war admin setting
-msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+msg_town_allowedtowar_setting_set_to: 'Город %s установил свою настройку allowed-to-war в значение %s.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
-confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+confirmation_did_you_want_to_unclaim_all: 'Вы уверены, что хотите освободить всю землю? (Ваш домашний переулок не будет освобожден.)'
 #Message shown after a player unclaims all their land.
-msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_you_have_unclaimed_everything_but_your_homeblock: "Вы освободили все земли, кроме переулка в котором стоит ваш дом. Чтобы освободить переулок, в котором стоит дом, вы должны установить новый дом, используя «/t set homeblock»."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
