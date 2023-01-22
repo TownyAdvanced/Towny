@@ -174,7 +174,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"ally",
 		"merge",
 		"transfer",
-		"forcemerge"
+		"forcemerge",
+		"recheck"
 	);
 
 	private static final List<String> adminToggleTabCompletes = Arrays.asList(
