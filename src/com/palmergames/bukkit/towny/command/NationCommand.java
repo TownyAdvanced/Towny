@@ -2235,19 +2235,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), TownyEconomyHandler.getFormattedBalance(nation.getMaxPercentTaxAmount())));
 	}
 
-	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) {
+	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
 		if (split.length < 2) {
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set capital {town name}");
 			return;
 		}
-		
-		final Town newCapital = TownyUniverse.getInstance().getTown(split[1]);
-		
-		if (newCapital == null) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", split[1]));
-			return;
-		}
 
+		final Town newCapital = getTownOrThrow(split[1]);
 		changeNationOwnership(sender, nation, newCapital, admin);
 	}
 	
@@ -2596,16 +2590,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (args.length == 3) {
 				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode());
 				
-				Town town = TownyUniverse.getInstance().getTown(args[2]);
-				if (town != null) {
-					if (!nation.hasTown(town))
-						throw new TownyException(Translatable.of("msg_err_not_same_nation", town.getName()));
+				Town town = getTownOrThrow(args[2]);
+				if (!nation.hasTown(town))
+					throw new TownyException(Translatable.of("msg_err_not_same_nation", town.getName()));
 
-					MoneyUtil.townDeposit(player, resident, town, nation, amount);
-
-				} else {
-					throw new NotRegisteredException();
-				}
+				MoneyUtil.townDeposit(player, resident, town, nation, amount);
 			}
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
