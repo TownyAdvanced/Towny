@@ -253,7 +253,7 @@ public class Nation extends Government {
 	@Override
 	public Location getSpawn() throws TownyException {
 		if (spawn == null)
-			throw new TownyException(Translation.of("msg_err_nation_has_not_set_a_spawn_location"));
+			throw new TownyException(Translatable.of("msg_err_nation_has_not_set_a_spawn_location"));
 
 		return spawn;
 	}
@@ -438,9 +438,9 @@ public class Nation extends Government {
 	public void setKing(Resident king) throws TownyException {
 
 		if (!hasResident(king))
-			throw new TownyException(Translation.of("msg_err_king_not_in_nation"));
+			throw new TownyException(Translatable.of("msg_err_king_not_in_nation"));
 		if (!king.isMayor())
-			throw new TownyException(Translation.of("msg_err_new_king_notmayor"));
+			throw new TownyException(Translatable.of("msg_err_new_king_notmayor"));
 		setCapital(king.getTown());
 		this.save();
 	}

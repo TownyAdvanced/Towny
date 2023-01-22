@@ -54,7 +54,6 @@ import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
@@ -2341,10 +2340,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				final Resident newKing = getResidentOrThrow(split[1]);
 				if (!nation.hasResident(newKing))
-					throw new TownyException(Translation.of("msg_err_king_not_in_nation"));
+					throw new TownyException(Translatable.of("msg_err_king_not_in_nation"));
 				
 				if (!newKing.isMayor())
-					throw new TownyException(Translation.of("msg_err_new_king_notmayor"));
+					throw new TownyException(Translatable.of("msg_err_new_king_notmayor"));
 				
 				changeNationOwnership(sender, nation, getResidentOrThrow(split[1]).getTown(), admin);
 			} catch (TownyException e) {
