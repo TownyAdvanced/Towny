@@ -37,12 +37,14 @@ public class RepeatingTimerTask extends TownyTimerTask {
 		}
 
 		// Try to perform the next plot_management entity_delete
-		if (TownyRegenAPI.hasDeleteTownBlockEntityQueue())
+		if (TownyRegenAPI.hasDeleteTownBlockEntityQueue()) {
 			tryDeleteTownBlockEntityQueue();
+		}
 
 		// Try to perform the next plot_management block_delete
-		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) 
+		if (TownyRegenAPI.hasDeleteTownBlockIdQueue()) {
 			tryDeleteTownBlockIDQueue();
+		}
 	}
 
 	private void revertAnotherBlockToWilderness() {
@@ -77,27 +79,24 @@ public class RepeatingTimerTask extends TownyTimerTask {
 	}
 
 	private void tryDeleteTownBlockEntityQueue() {
-		if (TownyRegenAPI.getActiveDeleteTownBlockEntityQueueSize() > 10)
+		if (TownyRegenAPI.getActiveDeleteTownBlockEntityQueueSize() >= 10)
 			return;
 		// Remove WC from larger queue.
 		WorldCoord wc = TownyRegenAPI.getDeleteTownBlockEntityQueue();
-		// Add it to active queue.
-		TownyRegenAPI.addActiveDeleteTownBlockEntityQueue(wc);
-
+		if (wc == null)
+			return;
 		// Remove a WC from the active queue and remove the entities from it.
-		TownyRegenAPI.doDeleteTownBlockEntities(TownyRegenAPI.getDeleteTownBlockEntityQueue());
+		TownyRegenAPI.doDeleteTownBlockEntities(wc);
 	}
 
 	private void tryDeleteTownBlockIDQueue() {
-		if (TownyRegenAPI.getActiveDeleteTownBlockIdQueueSize() > 10)
+		if (TownyRegenAPI.getActiveDeleteTownBlockIdQueueSize() >= 10)
 			return;
-		// Remove WC from larger queue.
+		// Get WC from larger queue.
 		WorldCoord wc = TownyRegenAPI.getDeleteTownBlockIdQueue();
-		// Add it to active queue.
-		TownyRegenAPI.addActiveDeleteTownBlockIdQueue(wc);
-
-		// Remove a WC from the active queue and remove the blocks from it.
-		Bukkit.getScheduler().runTaskAsynchronously(plugin,
-				() -> TownyRegenAPI.doDeleteTownBlockIds(TownyRegenAPI.getActiveDeleteTownBlockIdQueue()));
+		if (wc == null)
+			return;
+		// Tell it to regen.
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyRegenAPI.doDeleteTownBlockIds(wc));
 	}
 }

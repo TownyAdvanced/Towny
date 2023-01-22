@@ -519,7 +519,12 @@ public class TownyRegenAPI {
 
 		return deleteTownBlockEntityQueue.contains(plot);
 	}
-	
+
+	public static int getDeleteTownBlockEntityQueueSize() {
+
+		return deleteTownBlockEntityQueue.size();
+	}
+
 	public static void addDeleteTownBlockEntityQueue(WorldCoord plot) {
 		if (!deleteTownBlockEntityQueue.contains(plot))
 			deleteTownBlockEntityQueue.add(plot);
@@ -528,10 +533,18 @@ public class TownyRegenAPI {
 	@Nullable
 	public static WorldCoord getDeleteTownBlockEntityQueue() {
 
-		if (!deleteTownBlockEntityQueue.isEmpty())
-			return deleteTownBlockEntityQueue.remove(0);
+		if (!deleteTownBlockEntityQueue.isEmpty()) {
+			for (WorldCoord wc : deleteTownBlockEntityQueue)
+				if (!isActiveDeleteTownBlockEntityQueue(wc))
+					return wc;
+		}
 		
 		return null;
+	}
+
+	public static boolean isActiveDeleteTownBlockEntityQueue(WorldCoord plot) {
+
+		return activeDeleteTownBlockEntityQueue.contains(plot);
 	}
 
 	public static int getActiveDeleteTownBlockEntityQueueSize() {
@@ -563,6 +576,7 @@ public class TownyRegenAPI {
 		if (world == null || !world.isUsingTowny() || !world.isDeletingEntitiesOnUnclaim())
 			return;
 		
+		addActiveDeleteTownBlockEntityQueue(worldCoord);
 		List<Entity> toRemove = new ArrayList<>();
 		Collection<Entity> entities = worldCoord.getBukkitWorld().getNearbyEntities(worldCoord.getBoundingBox());
 		for (Entity entity : entities) {
@@ -572,6 +586,9 @@ public class TownyRegenAPI {
 		
 		for (Entity entity : toRemove)
 			entity.remove();
+		
+		deleteTownBlockEntityQueue.remove(worldCoord);
+		activeDeleteTownBlockEntityQueue.remove(worldCoord);
 	}
 	
 	/*
@@ -591,6 +608,11 @@ public class TownyRegenAPI {
 		return deleteTownBlockIdQueue.contains(plot);
 	}
 
+	public static int getDeleteTownBlockIdQueueSize() {
+
+		return deleteTownBlockIdQueue.size();
+	}
+
 	public static void addDeleteTownBlockIdQueue(WorldCoord plot) {
 
 		if (!deleteTownBlockIdQueue.contains(plot))
@@ -600,10 +622,18 @@ public class TownyRegenAPI {
 	@Nullable
 	public static WorldCoord getDeleteTownBlockIdQueue() {
 
-		if (!deleteTownBlockIdQueue.isEmpty())
-			return deleteTownBlockIdQueue.remove(0);
-		
+		if (!deleteTownBlockIdQueue.isEmpty()) {
+			for (WorldCoord wc : deleteTownBlockIdQueue)
+				if (!isActiveDeleteTownBlockIdQueue(wc))
+					return wc;
+		}
+
 		return null;
+	}
+
+	public static boolean isActiveDeleteTownBlockIdQueue(WorldCoord plot) {
+
+		return activeDeleteTownBlockIdQueue.contains(plot);
 	}
 
 	public static int getActiveDeleteTownBlockIdQueueSize() {
@@ -617,15 +647,6 @@ public class TownyRegenAPI {
 			activeDeleteTownBlockIdQueue.add(plot);
 	}
 
-	@Nullable
-	public static WorldCoord getActiveDeleteTownBlockIdQueue() {
-
-		if (!activeDeleteTownBlockIdQueue.isEmpty())
-			return activeDeleteTownBlockIdQueue.remove(0);
-		
-		return null;
-	}
-	
 	/**
 	 * Deletes all of a specified block type from a TownBlock
 	 * 
@@ -633,9 +654,9 @@ public class TownyRegenAPI {
 	 */
 	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
 		TownyWorld world = worldCoord.getTownyWorld();
-		if (world == null)
+		if (world == null || isActiveDeleteTownBlockIdQueue(worldCoord))
 			return;
-		
+		addActiveDeleteTownBlockIdQueue(worldCoord);
 		deleteMaterialsFromWorldCoord(worldCoord, world.getPlotManagementDeleteIds());
 	}
 
@@ -679,13 +700,22 @@ public class TownyRegenAPI {
 						toRemove.add(block);
 				}
 		
-		if (toRemove.isEmpty())
+		if (toRemove.isEmpty()) {
+			deleteTownBlockIdQueue.remove(coord);
+			activeDeleteTownBlockIdQueue.remove(coord);
 			return;
+		}
 		
 		if (Bukkit.isPrimaryThread())
-			toRemove.forEach(block -> block.setType(Material.AIR));
+			deleteBlocks(coord, toRemove);
 		else 
-			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> toRemove.forEach(block -> block.setType(Material.AIR)));
+			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> deleteBlocks(coord, toRemove));
+	}
+	
+	private static void deleteBlocks(WorldCoord coord, List<Block> toRemove) {
+		toRemove.forEach(block -> block.setType(Material.AIR));
+		deleteTownBlockIdQueue.remove(coord);
+		activeDeleteTownBlockIdQueue.remove(coord);
 	}
 
 	/*
