@@ -654,6 +654,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true both nation and ally spawn travel will also require the target town to have their status set to public."),
+	GTOWN_SETTINGS_IS_TRUSTED_RESIDENTS_COUNT_AS_RESIDENTS(
+			"global_town_settings.do_trusted_residents_count_as_residents",
+			"false",
+			"",
+			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident."),
 	GTOWN_SETTINGS_SPAWN_TIMER(
 			"global_town_settings.teleport_warmup_time",
 			"0",

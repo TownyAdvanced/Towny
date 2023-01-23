@@ -242,7 +242,11 @@ public class SpawnUtil {
 			townSpawnLevel = TownSpawnLevel.TOWN_RESIDENT;
 		} else {
 			// Arguments were used.
-			if (!resident.hasTown()) {
+			if (TownySettings.trustedResidentsGetToSpawnToTown() && 
+					(town.hasTrustedResident(resident) || 
+							(resident.hasTown() && town.hasTrustedTown(resident.getTownOrNull())))) {
+				townSpawnLevel = TownSpawnLevel.TOWN_RESIDENT;
+			} else if (!resident.hasTown()) {
 				townSpawnLevel = TownSpawnLevel.UNAFFILIATED;
 			} else if (resident.getTownOrNull() == town) {
 				townSpawnLevel = outpost ? TownSpawnLevel.TOWN_RESIDENT_OUTPOST : TownSpawnLevel.TOWN_RESIDENT;
