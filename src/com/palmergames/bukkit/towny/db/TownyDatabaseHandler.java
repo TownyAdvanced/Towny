@@ -41,6 +41,8 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.WorldCoordEntityRemover;
+import com.palmergames.bukkit.towny.regen.WorldCoordMaterialRemover;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -496,10 +498,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deleteTownBlock(townBlock);
 
 		if (townBlock.getWorld().isDeletingEntitiesOnUnclaim())
-			TownyRegenAPI.addDeleteTownBlockEntityQueue(townBlock.getWorldCoord());
+			WorldCoordEntityRemover.addToQueue(townBlock.getWorldCoord());
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
-			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
+			WorldCoordMaterialRemover.addToQueue(townBlock.getWorldCoord());
 
 		// Move the plot to be restored
 		if (townBlock.getWorld().isUsingPlotManagementRevert())
