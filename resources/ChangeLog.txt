@@ -8317,3 +8317,4 @@ v0.92.0.11:
   - New Config Option: global_town_settings.do_trusted_residents_count_as_residents
     - Default: false
     - When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.
+    - Allows allows the residents of entire an town when that town is trusted by the town.

@@ -658,7 +658,8 @@ public enum ConfigNodes {
 			"global_town_settings.do_trusted_residents_count_as_residents",
 			"false",
 			"",
-			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident."),
+			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.",
+			"# Allows allows the residents of entire an town when that town is trusted by the town."),
 	GTOWN_SETTINGS_SPAWN_TIMER(
 			"global_town_settings.teleport_warmup_time",
 			"0",
