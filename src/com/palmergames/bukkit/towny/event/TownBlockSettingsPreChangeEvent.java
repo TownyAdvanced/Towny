@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class TownBlockSettingsPreChangeEvent extends CancellableTownyEvent {
 
@@ -25,15 +27,15 @@ public class TownBlockSettingsPreChangeEvent extends CancellableTownyEvent {
 		this.tb = tb;
 	}
 
-	public Resident getResident() {
+	public @Nullable Resident getResident() {
 		return r;
 	}
 
-	public Town getTown() {
+	public @Nullable Town getTown() {
 		return t;
 	}
 
-	public TownBlock getTownBlock() {
+	public @Nullable TownBlock getTownBlock() {
 		return tb;
 	}
 
@@ -48,7 +50,7 @@ public class TownBlockSettingsPreChangeEvent extends CancellableTownyEvent {
 	}
 
 	@Override
-	public HandlerList getHandlers() {
+	public @NotNull HandlerList getHandlers() {
 		return handlers;
 	}
 
