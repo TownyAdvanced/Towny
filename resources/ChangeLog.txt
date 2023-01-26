@@ -8318,3 +8318,5 @@ v0.92.0.11:
     - Default: false
     - When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.
     - Allows allows the residents of entire an town when that town is trusted by the town.
+0.98.6.3:
+  - Fix money.csv not logging server-account deposit/withdraws.
