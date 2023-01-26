@@ -1632,3 +1632,7 @@ msg_founder_set: 'Le fondateur de %s est maintenant %s.'
 msg_town_allowedtowar_setting_set_to: 'La ville de %s a été paramétrée sur %s pour l''autorisation de faire la guerre. '
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
 confirmation_did_you_want_to_unclaim_all: 'Êtes-vous sûr de vouloir désannexer toute votre terre ? (Votre Centre Ville ne sera pas désannexé.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
