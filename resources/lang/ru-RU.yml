@@ -260,9 +260,9 @@ msg_set_wild_regen: '&bУспешно изменено восстановлен�
 msg_set_use_towny_on: '&bТеперь в этом мире Towny включен.'
 msg_set_use_towny_off: '&cВ этом мире Towny отключен.'
 msg_error_must_be_int: '&bКол-во должно быть целым.'
-msg_error_input_must_be_int: '&c%s Число должно быть целым'
+msg_error_input_must_be_int: '&c%s должно быть целым числом'
 msg_error_must_be_num: '&bДолжно быть число.'
-msg_error_input_must_be_num: '&c%s Число должно быть целым'
+msg_error_input_must_be_num: '&c%s должно быть числом'
 msg_must_specify_amnt: '&bНадо указать количество. Например: %s 54'
 msg_town_set_tax: '&b%s установил налоги в размере %s'
 msg_town_set_plottax: '&b%s установил налоги на территорию в размере %s'
@@ -1597,7 +1597,7 @@ msg_err_cannot_join_nation_over_town_limit: '&cВы не можете присо
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Вы уверены, что хотите сбросить все настройки этого мира к тем, что указаны в конфигурации?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Участки города'
+msg_town_plots_title: ' Городские участки'
 #Part of the /town plots output.
 msg_town_plots_town_size: '<dark_green>Размер города: <green>%s/%s'
 #Part of the /town plots output.
@@ -1634,5 +1634,5 @@ msg_town_allowedtowar_setting_set_to: 'Город %s установил свою
 confirmation_did_you_want_to_unclaim_all: 'Вы уверены, что хотите освободить всю землю? (Ваш домашний переулок не будет освобожден.)'
 #Message shown after a player unclaims all their land.
 msg_you_have_unclaimed_everything_but_your_homeblock: "Вы освободили все земли, кроме переулка в котором стоит ваш дом. Чтобы освободить переулок, в котором стоит дом, вы должны установить новый дом, используя «/t set homeblock»."
-msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
-msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Вы уверены, что хотите сделать %s владельцем нации? Это действие необратимо!"
+msg_warn_town_already_capital: "<red>Город %s уже является столицей нации."
