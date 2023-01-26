@@ -2916,6 +2916,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS);
 	}
 	
+	public static boolean trustedResidentsGetToSpawnToTown() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_TRUSTED_RESIDENTS_COUNT_AS_RESIDENTS);
+	}
+	
 	public static String getNotificationTitlesTownTitle() {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_TITLE);
 	}
