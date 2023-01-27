@@ -48,11 +48,7 @@ import com.palmergames.bukkit.towny.event.town.toggle.TownTogglePublicEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleTaxPercentEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustTownAddEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustTownRemoveEvent;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
-import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.*;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
@@ -3486,7 +3482,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if ((townBlockOwner instanceof Town && !townBlock.hasResident()) || 
 						(townBlockOwner instanceof Resident && townBlock.hasResident())) {
-
+						try {
+							BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, "reset"));
+						} catch (CancelledEventException e) {
+							sender.sendMessage(e.getCancelMessage());
+							return;
+						}
 						// Reset permissions
 						townBlock.setType(townBlock.getType());
 						townBlock.save();

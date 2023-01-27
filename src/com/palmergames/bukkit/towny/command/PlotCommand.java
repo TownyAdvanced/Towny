@@ -11,7 +11,11 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
-import com.palmergames.bukkit.towny.event.*;
+import com.palmergames.bukkit.towny.event.PlotClearEvent;
+import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
+import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
+import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustAddEvent;
@@ -866,6 +870,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @param townBlock Targeted town block
 	 * @param split Permission arguments
 	 * @return a TownyPermissionChange object
+	 * @throws CancelledEventException If the {@link TownBlockPermissionChangeEvent} is cancelled
 	 */
 	public static TownyPermissionChange setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) throws CancelledEventException {
 		TownyPermissionChange permChange = null;
@@ -1606,39 +1611,51 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Mayor/Assistant of the town.
 				
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
+
 				Runnable permHandler = () -> {
+					TownyPermissionChange permChange;
+					// setTownBlockPermissions returns a towny permission change object
 					try {
-						// setTownBlockPermissions returns a towny permission change object
-						TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockOwner, townBlock, StringMgmt.remArgs(split, 2));
-						// If the perm change object is not null
-						if (permChange != null) {
-							plotGroup.getPermissions().change(permChange);
-							plotGroup.getTownBlocks().stream()
-								.forEach(tb -> {
-									try {
-										String permissions = plotGroup.getPermissions().toString();
-										BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permissions));
-										tb.setPermissions(permissions);
-										tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
-											
-										tb.save();
-										// Change settings event
-										BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
-									} catch (CancelledEventException ignore) { }
-								});
-	
-							plugin.resetCache();
-							
-							TownyPermission perm = plotGroup.getPermissions();
-							TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
-							TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-							TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-																Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-																Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-																Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
-						}
+						permChange = PlotCommand.setTownBlockPermissions(player, townBlockOwner, townBlock, StringMgmt.remArgs(split, 2));
 					} catch (CancelledEventException e) {
+						TownyMessaging.sendErrorMsg(resident, e.getMessage());
+						return;
+					}
 						
+					// If the perm change object is not null
+					if (permChange != null) {
+						plotGroup.getPermissions().change(permChange);
+
+						
+						for (TownBlock t : plotGroup.getTownBlocks()) {
+							try {
+								BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(t, permChange));
+							} catch (CancelledEventException e) {
+								TownyMessaging.sendErrorMsg(resident, e.getCancelMessage());
+								return;
+							}
+						}
+							
+						plotGroup.getTownBlocks().stream()
+							.forEach(tb -> {
+								String permissions = plotGroup.getPermissions().toString();
+								tb.setPermissions(permissions);
+								tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
+									
+								tb.save();
+								// Change settings event
+								BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
+							});
+
+						plugin.resetCache();
+						
+						TownyPermission perm = plotGroup.getPermissions();
+						TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
+						TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+						TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+															Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+															Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+															Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 					}
 				};
 
