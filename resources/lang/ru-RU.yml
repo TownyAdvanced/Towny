@@ -1601,7 +1601,7 @@ msg_town_plots_title: ' Городские участки'
 #Part of the /town plots output.
 msg_town_plots_town_size: '<dark_green>Размер города: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>Куплено: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Куплено: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
 #Part of the /town plots output.
