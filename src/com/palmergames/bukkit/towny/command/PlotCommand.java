@@ -11,11 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
-import com.palmergames.bukkit.towny.event.PlotClearEvent;
-import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
-import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
-import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
-import com.palmergames.bukkit.towny.event.TownBlockSettingsPreChangeEvent;
+import com.palmergames.bukkit.towny.event.*;
 import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustAddEvent;
@@ -25,6 +21,7 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -595,7 +592,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
-							BukkitTools.ifCancelledThenThrow(new TownBlockSettingsPreChangeEvent(townBlock));
 							setTownBlockPermissions(player, townBlock.getTownBlockOwner(), townBlock, StringMgmt.remFirstArg(split));
 
 							return true;
@@ -871,7 +867,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @param split Permission arguments
 	 * @return a TownyPermissionChange object
 	 */
-	public static TownyPermissionChange setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) {
+	public static TownyPermissionChange setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) throws CancelledEventException {
 		TownyPermissionChange permChange = null;
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -900,7 +896,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					// reset this townBlock permissions (by town/resident)
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, false, townBlock);
-
+					BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, "reset"));					
 					perm.change(permChange);
 					townBlock.save();
 
@@ -994,8 +990,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			}
 
-			if (permChange != null)
+			if (permChange != null){
+				BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
 				perm.change(permChange);
+			}
 
 			townBlock.setChanged(true);
 			townBlock.save();
@@ -1608,33 +1606,39 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Mayor/Assistant of the town.
 				
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-				BukkitTools.ifCancelledThenThrow(new TownBlockSettingsPreChangeEvent(townBlock));
 				Runnable permHandler = () -> {
-
-					// setTownBlockPermissions returns a towny permission change object
-					TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockOwner, townBlock, StringMgmt.remArgs(split, 2));
-					// If the perm change object is not null
-					if (permChange != null) {
-						plotGroup.getPermissions().change(permChange);
+					try {
+						// setTownBlockPermissions returns a towny permission change object
+						TownyPermissionChange permChange = PlotCommand.setTownBlockPermissions(player, townBlockOwner, townBlock, StringMgmt.remArgs(split, 2));
+						// If the perm change object is not null
+						if (permChange != null) {
+							plotGroup.getPermissions().change(permChange);
+							plotGroup.getTownBlocks().stream()
+								.forEach(tb -> {
+									try {
+										String permissions = plotGroup.getPermissions().toString();
+										BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permissions));
+										tb.setPermissions(permissions);
+										tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
+											
+										tb.save();
+										// Change settings event
+										BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
+									} catch (CancelledEventException ignore) { }
+								});
+	
+							plugin.resetCache();
+							
+							TownyPermission perm = plotGroup.getPermissions();
+							TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
+							TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+							TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+																Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+																Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+																Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+						}
+					} catch (CancelledEventException e) {
 						
-						plotGroup.getTownBlocks().stream()
-							.forEach(tb -> {
-								tb.setPermissions(plotGroup.getPermissions().toString());
-								tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
-								tb.save();
-								// Change settings event
-								BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
-							});
-
-						plugin.resetCache();
-						
-						TownyPermission perm = plotGroup.getPermissions();
-						TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
-						TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-						TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 					}
 				};
 
