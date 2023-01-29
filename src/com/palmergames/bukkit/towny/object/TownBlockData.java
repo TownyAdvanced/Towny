@@ -14,6 +14,7 @@ public class TownBlockData {
 	private double tax = 0.0;
 	private EnumSet<Material> itemUseIds = EnumSet.noneOf(Material.class); // List of item names that will trigger an item use test.
 	private EnumSet<Material> switchIds = EnumSet.noneOf(Material.class); // List of item names that will trigger a switch test.
+	private EnumSet<Material> containersIds = EnumSet.noneOf(Material.class); // List of block names that will trigger a container test.
 	private EnumSet<Material> allowedBlocks = EnumSet.noneOf(Material.class); // List of item names that will always be allowed.
 	
 	public String getMapKey() {
@@ -50,6 +51,13 @@ public class TownBlockData {
 			return switchIds;
 	}
 
+	public Set<Material> getContainersIds() {
+		if (containersIds.isEmpty())
+			return TownySettings.getContainerMaterials();
+		else
+			return containersIds;
+	}
+
 	public Set<Material> getAllowedBlocks() {
 		return allowedBlocks;
 	}
@@ -60,6 +68,10 @@ public class TownBlockData {
 	
 	public void setSwitchIds(EnumSet<Material> switchIds) {
 		this.switchIds = EnumSet.copyOf(switchIds);
+	}
+
+	public void setContainersIds(EnumSet<Material> containersIds) {
+		this.containersIds = EnumSet.copyOf(containersIds);
 	}
 	
 	public void setAllowedBlocks(EnumSet<Material> allowedBlocks) {

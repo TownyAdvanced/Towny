@@ -15,6 +15,7 @@ public class PlayerCache {
 	private final HashMap<Material, Boolean> destroyMatPermission = new HashMap<>();
 	private final HashMap<Material, Boolean> switchMatPermission = new HashMap<>();
 	private final HashMap<Material, Boolean> itemUseMatPermission = new HashMap<>();
+	private final HashMap<Material, Boolean> containersMatPermission = new HashMap<>();
 
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
@@ -102,6 +103,8 @@ public class PlayerCache {
 
 		case ITEM_USE: // ITEM_USE
 			return getItemUsePermission(material);
+		case CONTAINERS:
+			return getContainersPermission(material);
 
 		default:
 			throw new NullPointerException();
@@ -129,7 +132,11 @@ public class PlayerCache {
 		updateMaps(itemUseMatPermission, material, value);
 		
 	}
-	
+
+	public void setContainersPermission(Material material, Boolean value) {
+		updateMaps(containersMatPermission, material, value);		
+	}
+
 	public boolean getBuildPermission(Material material) throws NullPointerException {
 
 		return getBlockPermission(buildMatPermission, material);
@@ -150,7 +157,11 @@ public class PlayerCache {
 		return getBlockPermission(itemUseMatPermission, material);
 		
 	}
-	
+
+	public Boolean getContainersPermission(Material material) throws NullPointerException {
+		return getBlockPermission(containersMatPermission, material);
+	}
+
 	private void updateMaps(HashMap<Material, Boolean> blockMap, Material material, Boolean value) {
 		
 		if (!blockMap.containsKey(material)) {
@@ -186,6 +197,7 @@ public class PlayerCache {
 		destroyMatPermission.clear();
 		switchMatPermission.clear();
 		itemUseMatPermission.clear();
+		containersMatPermission.clear();
 	}
 
 	public enum TownBlockStatus {

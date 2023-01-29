@@ -1528,7 +1528,7 @@ public enum ConfigNodes {
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT",
+			"JUKEBOX,COMPOSTER,BELL,LEVER,PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT",
 			"",
 			"# Blocks that are protected via town/plot flags.",
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",
@@ -1539,6 +1539,14 @@ public enum ConfigNodes {
 			"#       to protect HORSES, DONKEYS, MULES, PIGS, STRIDERS (This is not recommended, unless you want players to not be able to",
 			"#       re-mount their animals in towns they cannot switch in.)",
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
+	PROT_CONTAINERS_MAT(
+			"protection.containers_ids",
+			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,SMOKER,BARREL,BREWING_STAND",
+			"",
+			"# Blocks that can't be opened within towns via town/plot flags.",
+			"# These are blocks in the world that will be protected by a town/resident/plot's containers setting.",
+			"# Containers are blocks, that are in the world, which open an inventory when right-clicked.",
+			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html"),
 	PROT_FIRE_SPREAD_BYPASS(
 			"protection.fire_spread_bypass_materials",
 			"NETHERRACK,SOUL_SAND,SOUL_SOIL",
@@ -1839,22 +1847,26 @@ public enum ConfigNodes {
 			"#",
 			"# build - place blocks and other items",
 			"# destroy - break blocks and other items",
-			"# itemuse - use items such as furnaces (as defined in item_use_ids)",
-			"# switch - trigger or activate switches (as defined in switch_ids)"),
+			"# itemuse - use items such as chorus fruits (as defined in item_use_ids)",
+			"# switch - trigger or activate switches (as defined in switch_ids)",
+			"# containers - access containers such as chests (as defined in containers_id"),
 	FLAGS_RES_FR_BUILD("default_perm_flags.resident.friend.build", "true"),
 	FLAGS_RES_FR_DESTROY("default_perm_flags.resident.friend.destroy", "true"),
 	FLAGS_RES_FR_ITEM_USE("default_perm_flags.resident.friend.item_use", "true"),
 	FLAGS_RES_FR_SWITCH("default_perm_flags.resident.friend.switch", "true"),
+	FLAGS_RES_FR_CONTAINERS("default_perm_flags.resident.friend.containers", "true"),
 	FLAGS_RES_TOWN_BUILD("default_perm_flags.resident.town.build", "false"),
 	FLAGS_RES_TOWN_DESTROY("default_perm_flags.resident.town.destroy", "false"),
 	FLAGS_RES_TOWN_ITEM_USE("default_perm_flags.resident.town.item_use","false"),
 	FLAGS_RES_TOWN_SWITCH("default_perm_flags.resident.town.switch", "false"),
+	FLAGS_RES_TOWN_CONTAINERS("default_perm_flags.resident.town.containers", "false"),
 	FLAGS_RES_ALLY_BUILD("default_perm_flags.resident.ally.build", "false"),
 	FLAGS_RES_ALLY_DESTROY("default_perm_flags.resident.ally.destroy", "false"),
 	FLAGS_RES_ALLY_ITEM_USE(
 			"default_perm_flags.resident.ally.item_use",
 			"false"),
 	FLAGS_RES_ALLY_SWITCH("default_perm_flags.resident.ally.switch", "false"),
+	FLAGS_RES_ALLY_CONTAINERS("default_perm_flags.resident.ally.containers", "false"),
 	FLAGS_RES_OUTSIDER_BUILD(
 			"default_perm_flags.resident.outsider.build",
 			"false"),
@@ -1866,6 +1878,9 @@ public enum ConfigNodes {
 			"false"),
 	FLAGS_RES_OUTSIDER_SWITCH(
 			"default_perm_flags.resident.outsider.switch",
+			"false"),
+	FLAGS_RES_OUTSIDER_CONTAINERS(
+			"default_perm_flags.resident.outsider.containers",
 			"false"),
 	FLAGS_DEFAULT_TOWN(
 			"default_perm_flags.town",
@@ -1879,7 +1894,8 @@ public enum ConfigNodes {
 			"# build - place blocks and other items",
 			"# destroy - break blocks and other items",
 			"# itemuse - use items such as flint and steel or buckets (as defined in item_use_ids)",
-			"# switch - trigger or activate switches (as defined in switch_ids)"),
+			"# switch - trigger or activate switches (as defined in switch_ids)",
+			"# containers - access containers such as chests (as defined in containers_id"),
 	FLAGS_TOWN_DEF_PVP("default_perm_flags.town.default.pvp", "true"),
 	FLAGS_TOWN_DEF_FIRE("default_perm_flags.town.default.fire", "false"),
 	FLAGS_TOWN_DEF_EXPLOSION(
@@ -1891,14 +1907,17 @@ public enum ConfigNodes {
 	FLAGS_TOWN_RES_DESTROY("default_perm_flags.town.resident.destroy", "true"),
 	FLAGS_TOWN_RES_ITEM_USE("default_perm_flags.town.resident.item_use", "true"),
 	FLAGS_TOWN_RES_SWITCH("default_perm_flags.town.resident.switch", "true"),
+	FLAGS_TOWN_RES_CONTAINERS("default_perm_flags.town.resident.containers", "true"),
 	FLAGS_TOWN_NATION_BUILD("default_perm_flags.town.nation.build", "false"),
 	FLAGS_TOWN_NATION_DESTROY("default_perm_flags.town.nation.destroy", "false"),
 	FLAGS_TOWN_NATION_ITEM_USE("default_perm_flags.town.nation.item_use", "false"),
 	FLAGS_TOWN_NATION_SWITCH("default_perm_flags.town.nation.switch", "false"),
+	FLAGS_TOWN_NATION_CONTAINERS("default_perm_flags.town.nation.containers", "false"),
 	FLAGS_TOWN_ALLY_BUILD("default_perm_flags.town.ally.build", "false"),
 	FLAGS_TOWN_ALLY_DESTROY("default_perm_flags.town.ally.destroy", "false"),
 	FLAGS_TOWN_ALLY_ITEM_USE("default_perm_flags.town.ally.item_use", "false"),
 	FLAGS_TOWN_ALLY_SWITCH("default_perm_flags.town.ally.switch", "false"),
+	FLAGS_TOWN_ALLY_CONTAINERS("default_perm_flags.town.ally.containers", "false"),
 	FLAGS_TOWN_OUTSIDER_BUILD("default_perm_flags.town.outsider.build", "false"),
 	FLAGS_TOWN_OUTSIDER_DESTROY(
 			"default_perm_flags.town.outsider.destroy",
@@ -1908,6 +1927,9 @@ public enum ConfigNodes {
 			"false"),
 	FLAGS_TOWN_OUTSIDER_SWITCH(
 			"default_perm_flags.town.outsider.switch",
+			"false"),
+	FLAGS_TOWN_OUTSIDER_CONTAINERS(
+			"default_perm_flags.town.outsider.containers",
 			"false"),
 	INVITE_SYSTEM(
 			"invite_system",

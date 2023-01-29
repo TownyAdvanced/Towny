@@ -8,7 +8,8 @@ public class TownyPermission {
 		BUILD (0, "Build"),
 		DESTROY (1, "Destroy"),
 		SWITCH (2, "Switch"),
-		ITEM_USE (3, "ItemUse");
+		ITEM_USE (3, "ItemUse"),
+		CONTAINERS (4, "Containers" );
 
 		// This is a static copy of the values to avoid Enum.values() which copies all the values to a new array
 		// Since this is MUTABLE, we don't have a public call to it, restricting it to this class
@@ -140,6 +141,9 @@ public class TownyPermission {
 			case "residentitemuse":
 				perms[PermLevel.RESIDENT.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
 				break;
+			case "residentcontainers":
+				perms[PermLevel.RESIDENT.getIndex()][ActionType.CONTAINERS.getIndex()] = b;
+				break;
 			case "outsiderbuild":
 				perms[PermLevel.OUTSIDER.getIndex()][ActionType.BUILD.getIndex()] = b;
 				break;
@@ -151,6 +155,9 @@ public class TownyPermission {
 				break;
 			case "outsideritemuse":
 				perms[PermLevel.OUTSIDER.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
+				break;
+			case "outsidercontainers":
+				perms[PermLevel.OUTSIDER.getIndex()][ActionType.CONTAINERS.getIndex()] = b;
 				break;
 			case "nationbuild":
 				perms[PermLevel.NATION.getIndex()][ActionType.BUILD.getIndex()] = b;
@@ -164,6 +171,9 @@ public class TownyPermission {
 			case "nationitemuse":
 				perms[PermLevel.NATION.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
 				break;
+			case "nationcontainers":
+				perms[PermLevel.NATION.getIndex()][ActionType.CONTAINERS.getIndex()] = b;
+				break;
 			case "allybuild":
 				perms[PermLevel.ALLY.getIndex()][ActionType.BUILD.getIndex()] = b;
 				break;
@@ -175,6 +185,9 @@ public class TownyPermission {
 				break;
 			case "allyitemuse":
 				perms[PermLevel.ALLY.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
+				break;
+			case "allycontainers":
+				perms[PermLevel.ALLY.getIndex()][ActionType.CONTAINERS.getIndex()] = b;
 				break;
 			case "pvp":
 				pvp = b;

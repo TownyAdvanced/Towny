@@ -64,6 +64,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -80,6 +81,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.MetadataValue;
 
@@ -441,6 +443,25 @@ public class TownyPlayerListener implements Listener {
 				return;
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onInventoryOpen(InventoryOpenEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld())) return;
+
+		Player player = (Player) event.getPlayer();
+		if (!(event.getInventory().getHolder() instanceof BlockInventoryHolder)) return;
+
+		Block block = ((BlockInventoryHolder) event.getInventory().getHolder()).getBlock();
+
+		if (!TownySettings.isContainerMaterial(block.getType(), block.getLocation())) return;
+
+		event.setCancelled(!TownyActionEventExecutor.canUseContainer(player, block));
 	}
 
 	/**

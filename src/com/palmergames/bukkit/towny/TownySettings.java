@@ -72,6 +72,7 @@ public class TownySettings {
 	
 	private static final EnumSet<Material> itemUseMaterials = EnumSet.noneOf(Material.class);
 	private static final EnumSet<Material> switchUseMaterials = EnumSet.noneOf(Material.class);
+	private static final EnumSet<Material> containerUseMaterials = EnumSet.noneOf(Material.class);
 	private static final List<Class<?>> protectedMobs = new ArrayList<>();
 	
 	private static final Map<NamespacedKey, Consumer<CommentedConfiguration>> CONFIG_RELOAD_LISTENERS = new HashMap<>();
@@ -337,6 +338,7 @@ public class TownySettings {
 
 		switchUseMaterials.clear();
 		itemUseMaterials.clear();
+		containerUseMaterials.clear();
 		
 		/*
 		 * Load switches from config value.
@@ -367,6 +369,22 @@ public class TownySettings {
 				Material material = Material.matchMaterial(matName);
 				if (material != null)
 					itemUseMaterials.add(material);
+			}
+		}
+
+		/*
+		 * Load items from config value.
+		 * Scan over them and replace any grouping with the contents of the group.
+		 * Add single item or grouping to ItemUseMaterials.
+		 */
+		List<String> containers = getStrArr(ConfigNodes.PROT_CONTAINERS_MAT);
+		for (String matName : containers) {
+			if (ItemLists.GROUPS.contains(matName)) {
+				containerUseMaterials.addAll(ItemLists.getGrouping(matName));
+			} else {
+				Material material = Material.matchMaterial(matName);
+				if (material != null)
+					containerUseMaterials.add(material);
 			}
 		}
 	}
@@ -1515,7 +1533,11 @@ public class TownySettings {
 
 		return itemUseMaterials;
 	}
-	
+
+	public static Set<Material> getContainerMaterials() {
+		return containerUseMaterials;
+	}
+
 	/**
 	 * For compatibility with custom plot types, this has been deprecated. Please use {@link #isSwitchMaterial(Material, Location)} instead.
 	 * @param mat The name of the material.
@@ -1554,6 +1576,15 @@ public class TownySettings {
 			return townBlock.getData().getItemUseIds().contains(material);
 		else
 			return itemUseMaterials.contains(material);
+	}
+
+	public static boolean isContainerMaterial(Material material, Location location) {
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+		
+		if (townBlock != null)
+			return townBlock.getData().getContainersIds().contains(material);
+		else
+			return containerUseMaterials.contains(material);
 	}
 	
 	public static List<String> getFireSpreadBypassMaterials() {
@@ -2363,6 +2394,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_RES_FR_ITEM_USE);
 	}
 
+	public static boolean getPermFlag_Resident_Friend_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_RES_FR_CONTAINERS);
+	}
+
 	public static boolean getPermFlag_Resident_Friend_Switch() {
 
 		return getBoolean(ConfigNodes.FLAGS_RES_FR_SWITCH);
@@ -2381,6 +2416,10 @@ public class TownySettings {
 	public static boolean getPermFlag_Resident_Town_ItemUse() {
 
 		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_ITEM_USE);
+	}
+
+	public static boolean getPermFlag_Resident_Town_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_RES_TOWN_CONTAINERS);
 	}
 
 	public static boolean getPermFlag_Resident_Town_Switch() {
@@ -2402,6 +2441,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_RES_ALLY_ITEM_USE);
 	}
 
+	public static boolean getPermFlag_Resident_Ally_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_RES_ALLY_CONTAINERS);
+	}
+
 	public static boolean getPermFlag_Resident_Ally_Switch() {
 
 		return getBoolean(ConfigNodes.FLAGS_RES_ALLY_SWITCH);
@@ -2420,6 +2463,10 @@ public class TownySettings {
 	public static boolean getPermFlag_Resident_Outsider_ItemUse() {
 
 		return getBoolean(ConfigNodes.FLAGS_RES_OUTSIDER_ITEM_USE);
+	}
+
+	public static boolean getPermFlag_Resident_Outsider_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_RES_OUTSIDER_CONTAINERS);
 	}
 
 	public static boolean getPermFlag_Resident_Outsider_Switch() {
@@ -2462,6 +2509,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_TOWN_RES_ITEM_USE);
 	}
 
+	public static boolean getPermFlag_Town_Resident_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_TOWN_RES_CONTAINERS);
+	}
+
 	public static boolean getPermFlag_Town_Resident_Switch() {
 
 		return getBoolean(ConfigNodes.FLAGS_TOWN_RES_SWITCH);
@@ -2480,6 +2531,10 @@ public class TownySettings {
 	public static boolean getPermFlag_Town_Nation_ItemUse() {
 
 		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_ITEM_USE);
+	}
+
+	public static boolean getPermFlag_Town_Nation_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_TOWN_NATION_CONTAINERS);
 	}
 
 	public static boolean getPermFlag_Town_Nation_Switch() {
@@ -2502,6 +2557,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_TOWN_ALLY_ITEM_USE);
 	}
 
+	public static boolean getPermFlag_Town_Ally_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_TOWN_ALLY_CONTAINERS);
+	}
+
 	public static boolean getPermFlag_Town_Ally_Switch() {
 
 		return getBoolean(ConfigNodes.FLAGS_TOWN_ALLY_SWITCH);
@@ -2522,6 +2581,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.FLAGS_TOWN_OUTSIDER_ITEM_USE);
 	}
 
+	public static boolean getPermFlag_Town_Outsider_Containers() {
+		return getBoolean(ConfigNodes.FLAGS_TOWN_OUTSIDER_CONTAINERS);
+	}
+
 	public static boolean getPermFlag_Town_Outsider_Switch() {
 
 		return getBoolean(ConfigNodes.FLAGS_TOWN_OUTSIDER_SWITCH);
@@ -2535,6 +2598,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Resident_Friend_Destroy();
 				case SWITCH -> getPermFlag_Resident_Friend_Switch();
 				case ITEM_USE -> getPermFlag_Resident_Friend_ItemUse();
+				case CONTAINERS -> getPermFlag_Resident_Friend_Containers();
 			};
 		else if (owner instanceof Town)
 			return switch (type) {
@@ -2542,6 +2606,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Town_Resident_Destroy();
 				case SWITCH -> getPermFlag_Town_Resident_Switch();
 				case ITEM_USE -> getPermFlag_Town_Resident_ItemUse();
+				case CONTAINERS -> getPermFlag_Town_Resident_Containers();
 			};
 		else
 			throw new UnsupportedOperationException();
@@ -2555,6 +2620,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Resident_Town_Destroy();
 				case SWITCH -> getPermFlag_Resident_Town_Switch();
 				case ITEM_USE -> getPermFlag_Resident_Town_ItemUse();
+				case CONTAINERS -> getPermFlag_Resident_Town_Containers();
 			};
 		else if (owner instanceof Town)
 			return switch (type) {
@@ -2562,6 +2628,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Town_Nation_Destroy();
 				case SWITCH -> getPermFlag_Town_Nation_Switch();
 				case ITEM_USE -> getPermFlag_Town_Nation_ItemUse();
+				case CONTAINERS -> getPermFlag_Town_Nation_Containers();
 			};
 		else
 			throw new UnsupportedOperationException();
@@ -2575,6 +2642,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Resident_Ally_Destroy();
 				case SWITCH -> getPermFlag_Resident_Ally_Switch();
 				case ITEM_USE -> getPermFlag_Resident_Ally_ItemUse();
+				case CONTAINERS -> getPermFlag_Resident_Ally_Containers();
 			};
 		else if (owner instanceof Town)
 			return switch (type) {
@@ -2582,6 +2650,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Town_Ally_Destroy();
 				case SWITCH -> getPermFlag_Town_Ally_Switch();
 				case ITEM_USE -> getPermFlag_Town_Ally_ItemUse();
+				case CONTAINERS -> getPermFlag_Town_Ally_Containers();
 			};
 		else
 			throw new UnsupportedOperationException();
@@ -2595,6 +2664,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Resident_Outsider_Destroy();
 				case SWITCH -> getPermFlag_Resident_Outsider_Switch();
 				case ITEM_USE -> getPermFlag_Resident_Outsider_ItemUse();
+				case CONTAINERS -> getPermFlag_Resident_Outsider_Containers();
 			};
 		else if (owner instanceof Town)
 			return switch (type) {
@@ -2602,6 +2672,7 @@ public class TownySettings {
 				case DESTROY -> getPermFlag_Town_Outsider_Destroy();
 				case SWITCH -> getPermFlag_Town_Outsider_Switch();
 				case ITEM_USE -> getPermFlag_Town_Outsider_ItemUse();
+				case CONTAINERS -> getPermFlag_Town_Outsider_Containers();
 			};
 		else
 			throw new UnsupportedOperationException();

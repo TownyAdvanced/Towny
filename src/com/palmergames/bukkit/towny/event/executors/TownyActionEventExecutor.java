@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.palmergames.bukkit.towny.event.damage.TownBlockExplosionTestEvent;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,14 +20,17 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.actions.TownyActionEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBuildEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyBurnEvent;
+import com.palmergames.bukkit.towny.event.actions.TownyContainerEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.event.actions.TownyItemuseEvent;
 import com.palmergames.bukkit.towny.event.actions.TownySwitchEvent;
+import com.palmergames.bukkit.towny.event.damage.TownBlockExplosionTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyExplosionDamagesEntityEvent;
 import com.palmergames.bukkit.towny.object.PlayerCache;
-import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
@@ -265,6 +266,18 @@ public class TownyActionEventExecutor {
 	public static boolean canItemuse(Player player, Location loc, Material mat) {
 		TownyItemuseEvent event = new TownyItemuseEvent(player, loc, mat, TownyAPI.getInstance().getTownBlock(loc), false);
 		return isAllowedAction(player, loc, mat, ActionType.ITEM_USE, event);
+	}
+
+	/**
+	 * Can the player use items of this material at this location?
+	 * 
+	 * @param player     - Player involved in the event.
+	 * @param block   - Block involved in the event.
+	 * @return true if allowed.
+	 */
+	public static boolean canUseContainer(Player player, Block block) {
+		TownyContainerEvent event = new TownyContainerEvent(player, block.getType(), block, TownyAPI.getInstance().getTownBlock(block.getLocation()), false);
+		return isAllowedAction(player, block.getLocation(), block.getType(), ActionType.CONTAINERS, event);
 	}
 	
 	/**

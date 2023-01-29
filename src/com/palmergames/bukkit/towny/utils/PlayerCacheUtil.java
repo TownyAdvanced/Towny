@@ -128,6 +128,8 @@ public class PlayerCacheUtil {
 		case ITEM_USE: // ITEM_USE
 			cacheItemUse(player, worldCoord, material, getPermission(player, status, worldCoord, material, action));
 			return;
+		case CONTAINERS:
+			cacheContainers(player, worldCoord, material, getPermission(player, status, worldCoord, material, action));
 		default:
 			//for future expansion of permissions
 		}
@@ -218,6 +220,22 @@ public class PlayerCacheUtil {
 		cache.setItemUsePermission(material, itemUseRight);
 
 		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Item Use: " + itemUseRight);
+	}
+
+	/**
+	 * Update the player cache for Containers rights at this WorldCoord.
+	 * 
+	 * @param player - Player
+	 * @param worldCoord - WorldCoord
+	 * @param material - Material
+	 * @param containersRight - Boolean
+	 */
+	private static void cacheContainers(Player player, WorldCoord worldCoord, Material material, Boolean containersRight) {
+		PlayerCache cache = plugin.getCache(player);
+		cache.updateCoord(worldCoord);
+		cache.setContainersPermission(material, containersRight);
+
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Containers rights: " + containersRight);
 	}
 
 	/**
