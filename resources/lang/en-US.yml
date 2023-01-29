@@ -1735,6 +1735,7 @@ msg_perm_hud_destroy: 'Destroy: '
 msg_perm_hud_switch: 'Switch: '
 #Seen in /plot perm hud:
 msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_containers: 'Containers: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_type: 'Type: '
 #Seen in /plot perm hud:

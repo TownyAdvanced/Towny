@@ -33,7 +33,7 @@ public class PermHUD {
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
 		Translator translator = Translator.locale(p);
-		String plotName, build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn, title;
+		String plotName, build, destroy, switching, item, containers, type, pvp, explosions, firespread, mobspawn, title;
 		Scoreboard board = p.getScoreboard();
 		// Due to tick delay (probably not confirmed), a HUD can actually be removed from the player.
 		// Causing board to return null, and since we don't create a new board, a NullPointerException occurs.
@@ -60,6 +60,7 @@ public class PermHUD {
 			destroy = (tp.getResidentPerm(ActionType.DESTROY) ? v : "-") + (tp.getNationPerm(ActionType.DESTROY) ? u : "-") + (tp.getAllyPerm(ActionType.DESTROY) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.DESTROY) ? "o" : "-");
 			switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getNationPerm(ActionType.SWITCH) ? u : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");
 			item = (tp.getResidentPerm(ActionType.ITEM_USE) ? v : "-") + (tp.getNationPerm(ActionType.ITEM_USE) ? u : "-") + (tp.getAllyPerm(ActionType.ITEM_USE) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.ITEM_USE) ? "o" : "-");
+			containers = (tp.getResidentPerm(ActionType.CONTAINERS) ? v : "-") + (tp.getNationPerm(ActionType.CONTAINERS) ? u : "-") + (tp.getAllyPerm(ActionType.CONTAINERS) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.CONTAINERS) ? "o" : "-");
 			type = (townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName());
 			pvp = (!CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock)) ? translator.of("status_on") : translator.of("status_off");
 			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? translator.of("status_on") : translator.of("status_off");
@@ -83,6 +84,7 @@ public class PermHUD {
 		board.getTeam("destroy").setSuffix(destroy);
 		board.getTeam("switching").setSuffix(switching);
 		board.getTeam("item").setSuffix(item);
+		board.getTeam("containers").setSuffix(containers);
 		board.getTeam("plotType").setSuffix(type);
 		board.getTeam("pvp").setSuffix(pvp);
 		board.getTeam("explosions").setSuffix(explosions);
@@ -99,6 +101,7 @@ public class PermHUD {
 			board.getTeam("destroy").setSuffix(" ");
 			board.getTeam("switching").setSuffix(" ");
 			board.getTeam("item").setSuffix(" ");
+			board.getTeam("containers").setSuffix(" ");
 			board.getTeam("plotType").setSuffix(" ");
 			board.getTeam("pvp").setSuffix(" ");
 			board.getTeam("explosions").setSuffix(" ");
@@ -129,6 +132,7 @@ public class PermHUD {
 		String destroy_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_destroy") + ChatColor.GRAY;
 		String switching_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_switch") + ChatColor.GRAY;
 		String item_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_item_use") + ChatColor.GRAY;
+		String containers_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_containers") + ChatColor.GRAY;
 		String keyPlotType_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_plot_type");
 		String pvp_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ";
 		String explosions_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ";
@@ -151,6 +155,7 @@ public class PermHUD {
 		Team destroy = board.registerNewTeam("destroy");
 		Team switching = board.registerNewTeam("switching");
 		Team item = board.registerNewTeam("item");
+		Team containers = board.registerNewTeam("containers");
 		Team keyPlotType = board.registerNewTeam("plotType");
 		Team pvp = board.registerNewTeam("pvp");
 		Team explosions = board.registerNewTeam("explosions");
@@ -168,6 +173,7 @@ public class PermHUD {
 		destroy.addEntry(destroy_entry);
 		switching.addEntry(switching_entry);
 		item.addEntry(item_entry);
+		containers.addEntry(containers_entry);
 		keyPlotType.addEntry(keyPlotType_entry);
 		pvp.addEntry(pvp_entry);
 		explosions.addEntry(explosions_entry);
@@ -179,14 +185,15 @@ public class PermHUD {
 		keyAlly.addEntry(keyAlly_entry);
 
 		//set scores for positioning
-		obj.getScore(permsTitle_entry).setScore(15);
-		obj.getScore(plotName_entry).setScore(14);
-		obj.getScore(build_entry).setScore(13);
-		obj.getScore(destroy_entry).setScore(12);
-		obj.getScore(switching_entry).setScore(11);
-		obj.getScore(item_entry).setScore(10);
-		obj.getScore(pvp_entry).setScore(8);
+		obj.getScore(permsTitle_entry).setScore(16);
+		obj.getScore(plotName_entry).setScore(15);
+		obj.getScore(build_entry).setScore(14);
+		obj.getScore(destroy_entry).setScore(13);
+		obj.getScore(switching_entry).setScore(12);
+		obj.getScore(item_entry).setScore(11);
+		obj.getScore(containers_entry).setScore(10);
 		obj.getScore(keyPlotType_entry).setScore(9);
+		obj.getScore(pvp_entry).setScore(8);
 		obj.getScore(explosions_entry).setScore(7);
 		obj.getScore(firespread_entry).setScore(6);
 		obj.getScore(mobspawn_entry).setScore(5);
