@@ -96,6 +96,12 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 							continue;
 					}
 
+					// Check if this is an EliteMob before we do any skipping-removal-of-named-mobs.
+					if (PluginIntegrations.getInstance().checkHostileEliteMobs(entity)) {
+						entitiesToRemove.add(entity);
+						continue;
+					}
+
 					if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
 						continue;
 

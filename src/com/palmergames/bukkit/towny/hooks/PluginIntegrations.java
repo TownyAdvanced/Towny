@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +43,7 @@ public class PluginIntegrations {
 	private TownyPlaceholderExpansion papiExpansion = null;
 	private LuckPermsContexts luckPermsContexts;
 	private boolean citizens2 = false;
+	private NamespacedKey eliteKey;
 
 	public static PluginIntegrations getInstance() {
 		if (instance == null)
@@ -135,6 +138,11 @@ public class PluginIntegrations {
 
 		// Test for Citizens2 so we can avoid removing their NPC's.
 		setCitizens2(Bukkit.getServer().getPluginManager().isPluginEnabled("Citizens"));
+
+		// Test for EliteMobs.
+		Plugin eliteMobs = Bukkit.getServer().getPluginManager().getPlugin("EliteMobs");
+		if (eliteMobs != null)
+			eliteKey = new NamespacedKey(eliteMobs, "EliteEntity");
 
 		if (!addons.isEmpty())
 			towny.getLogger().info("  Add-ons: " + StringMgmt.wrap(String.join(", ", addons), 52, NEWLINE_STRING));
@@ -329,6 +337,20 @@ public class PluginIntegrations {
 
 	public void setCitizens2(boolean b) {
 		citizens2 = b;
+	}
+
+	/*
+	 * EliteMobs integration methods.
+	 */
+
+	public boolean checkHostileEliteMobs(Entity entity) {
+		if (isEliteMobsPresent())
+			return entity != null && entity.getPersistentDataContainer().has(eliteKey, PersistentDataType.STRING);
+		return false;
+	}
+
+	private boolean isEliteMobsPresent() {
+		return eliteKey != null;
 	}
 }
 

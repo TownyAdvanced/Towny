@@ -385,7 +385,12 @@ public class TownyEntityListener implements Listener {
 
 	private boolean entityIsExempt(LivingEntity livingEntity) {
 		return PluginIntegrations.getInstance().checkCitizens(livingEntity)
-			|| TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null;
+			|| entityIsExemptByName(livingEntity);
+	}
+
+	private boolean entityIsExemptByName(LivingEntity livingEntity) {
+		return TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null 
+				&& !PluginIntegrations.getInstance().checkHostileEliteMobs(livingEntity);
 	}
 
 	private boolean disallowedWorldMob(boolean worldAllowsMobs, LivingEntity livingEntity) {
