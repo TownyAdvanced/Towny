@@ -8320,3 +8320,4 @@ v0.92.0.11:
     - Allows allows the residents of entire an town when that town is trusted by the town.
 0.98.6.3:
   - Fix money.csv not logging server-account deposit/withdraws.
+  - Add support for EliteMobs mob removal.
