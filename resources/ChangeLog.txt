@@ -8321,3 +8321,5 @@ v0.92.0.11:
 0.98.6.3:
   - Fix money.csv not logging server-account deposit/withdraws.
   - Add support for EliteMobs mob removal.
+  - Add (for now unused) resourceProductionModifier stat to the config Town_Level.
+    - Your configs will automatically have this added with the default 1.0 setting. 

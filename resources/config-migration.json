@@ -383,5 +383,15 @@
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       }
     ]
+  },
+  {
+    "version": "0.98.6.3",
+    "changes": [
+      {
+        "type": "TOWN_LEVEL_ADD",
+        "key": "resourceProductionModifier",
+        "value": "1.0"
+      }
+    ]
   }
 ]
