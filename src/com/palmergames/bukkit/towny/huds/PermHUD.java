@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -53,7 +52,6 @@ public class PermHUD {
 		try {
 			TownBlock townBlock = worldCoord.getTownBlock();
 			TownBlockOwner owner = townBlock.hasResident() ? townBlock.getResidentOrNull() : townBlock.getTown();
-			Town town = townBlock.getTown();
 			TownyWorld world = townBlock.getWorld();
 			TownyPermission tp = townBlock.getPermissions();
 			String v = (owner instanceof Resident) ? "f" : "r";
@@ -65,8 +63,8 @@ public class PermHUD {
 			type = (townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName());
 			pvp = (!CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock)) ? translator.of("status_on") : translator.of("status_off");
 			explosions = (world.isForceExpl() || townBlock.getPermissions().explosion) ? translator.of("status_on") : translator.of("status_off");
-			firespread = (town.isFire() || world.isForceFire() || townBlock.getPermissions().fire) ? translator.of("status_on") : translator.of("status_off");
-			mobspawn = (town.hasMobs() || world.isForceTownMobs() || townBlock.getPermissions().mobs) ? translator.of("status_on") : translator.of("status_off");
+			firespread = (world.isForceFire() || townBlock.getPermissions().fire) ? translator.of("status_on") : translator.of("status_off");
+			mobspawn = (world.isForceTownMobs() || townBlock.getPermissions().mobs) ? translator.of("status_on") : translator.of("status_off");
 			if (townBlock.hasResident()) {
 				title = ChatColor.GOLD + townBlock.getResidentOrNull().getName() + " (" + townBlock.getTown().getName() + ")";
 			} else {

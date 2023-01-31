@@ -8323,3 +8323,5 @@ v0.92.0.11:
   - Add support for EliteMobs mob removal.
   - Add (for now unused) resourceProductionModifier stat to the config Town_Level.
     - Your configs will automatically have this added with the default 1.0 setting. 
+0.98.6.4:
+  - Fix plot hud and plot perm commands showing town settings for mobs/fire that were not relevant.
