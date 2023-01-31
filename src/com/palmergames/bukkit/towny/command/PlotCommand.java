@@ -596,6 +596,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
+							
 							setTownBlockPermissions(player, townBlock.getTownBlockOwner(), townBlock, StringMgmt.remFirstArg(split));
 
 							return true;
@@ -1626,7 +1627,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (permChange != null) {
 						plotGroup.getPermissions().change(permChange);
 
-						
 						for (TownBlock t : plotGroup.getTownBlocks()) {
 							try {
 								BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(t, permChange));
@@ -1638,10 +1638,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 						plotGroup.getTownBlocks().stream()
 							.forEach(tb -> {
-								String permissions = plotGroup.getPermissions().toString();
-								tb.setPermissions(permissions);
+								tb.setPermissions(plotGroup.getPermissions().toString());
 								tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
-									
 								tb.save();
 								// Change settings event
 								BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
