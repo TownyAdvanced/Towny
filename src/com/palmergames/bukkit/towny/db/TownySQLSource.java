@@ -32,6 +32,7 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
@@ -608,7 +609,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					UUID uuid = null;
 					try {
 						uuid = UUID.fromString(rs.getString("uuid"));
-					} catch (IllegalArgumentException | NullPointerException ignored) {}
+					} catch (IllegalArgumentException | NullPointerException | SQLException ignored) {}
+					
+					if (uuid == null) {
+						final World world = Bukkit.getServer().getWorld(rs.getString("name"));
+						if (world != null)
+							uuid = world.getUID();
+					}
 					
 					if (uuid != null) {
 						universe.registerTownyWorld(new TownyWorld(rs.getString("name"), uuid));

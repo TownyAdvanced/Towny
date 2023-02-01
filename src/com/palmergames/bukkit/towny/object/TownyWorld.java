@@ -92,12 +92,13 @@ public class TownyWorld extends TownyObject {
 		return uuid;
 	}
 	
+	@ApiStatus.Internal
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
 
 	public World getBukkitWorld() {
-		return Bukkit.getWorld(uuid);
+		return this.uuid != null ? Bukkit.getWorld(this.uuid) : Bukkit.getWorld(getName());
 	}
 	
 	public HashMap<String, Town> getTowns() {

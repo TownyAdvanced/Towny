@@ -94,6 +94,8 @@ public class TownyWorldListener implements Listener {
 			if (townyWorld != null && townyWorld.getUUID() == null) {
 				townyWorld.setUUID(world.getUID());
 				townyWorld.save();
+				
+				TownyUniverse.getInstance().getWorldIDMap().putIfAbsent(world.getUID(), townyWorld);
 			}
 		}
 	}
