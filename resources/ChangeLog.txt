@@ -8320,3 +8320,8 @@ v0.92.0.11:
     - Allows allows the residents of entire an town when that town is trusted by the town.
 0.98.6.3:
   - Fix money.csv not logging server-account deposit/withdraws.
+  - Add support for EliteMobs mob removal.
+  - Add (for now unused) resourceProductionModifier stat to the config Town_Level.
+    - Your configs will automatically have this added with the default 1.0 setting. 
+0.98.6.4:
+  - Fix plot hud and plot perm commands showing town settings for mobs/fire that were not relevant.
