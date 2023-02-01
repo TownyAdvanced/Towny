@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import java.io.BufferedReader;
@@ -35,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -340,10 +342,31 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadWorldList() {
 		
-		if (plugin != null) {
-			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_server_world_list"));
-			for (World world : plugin.getServer().getWorlds()) {
-				universe.newWorld(world);
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_server_world_list"));
+		for (World world : Bukkit.getServer().getWorlds())
+			universe.newWorld(world);
+
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_world_list"));
+		
+		for (File worldFile : receiveObjectFiles("worlds", ".txt")) {
+			final String name = worldFile.getName().replace(".txt", "");
+			
+			// World is already loaded by the newWorld above
+			if (universe.getWorld(name) != null)
+				continue;
+			
+			// Attempt to get the uuid from the world file
+			UUID uuid = null;
+			try {
+				uuid = UUID.fromString(FileMgmt.loadFileIntoHashMap(worldFile).getOrDefault("uuid", ""));
+			} catch (IllegalArgumentException ignored) {}
+
+			if (uuid != null) {
+				universe.registerTownyWorld(new TownyWorld(name, uuid));
+			} else {
+				try {
+					newWorld(name);
+				} catch (AlreadyRegisteredException ignored) {}
 			}
 		}
 		

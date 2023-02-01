@@ -606,16 +606,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try (Statement s = cntx.createStatement()) {
 				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
 				while (rs.next()) {
+					final String name = rs.getString("name");
+					
+					// World is loaded in bukkit and got registered by the newWorld above.
+					if (universe.getWorld(name) != null)
+						continue;
+					
 					UUID uuid = null;
 					try {
 						uuid = UUID.fromString(rs.getString("uuid"));
 					} catch (IllegalArgumentException | NullPointerException | SQLException ignored) {}
-					
-					if (uuid == null) {
-						final World world = Bukkit.getServer().getWorld(rs.getString("name"));
-						if (world != null)
-							uuid = world.getUID();
-					}
 					
 					if (uuid != null) {
 						universe.registerTownyWorld(new TownyWorld(rs.getString("name"), uuid));
