@@ -57,7 +57,7 @@ public class TownyInventory implements InventoryHolder {
 					resident.setGUIPageNum(--currentPage);
 					new TownyInventory(resident, resident.getGUIPage(), inventoryView.getTitle());
 					playClickSound(player);
-				} else if (resident.getGUIPageNum() == 0) {
+				} else if (resident.getGUIPageNum() == 0 && resident.getGUISelectionType() != null) {
 					// No page to go back from: go back to the SelectionGUI for the SelectionType
 					// that the resident is currently browsing, let them choose a different plot type.
 					playClickSound(player);
