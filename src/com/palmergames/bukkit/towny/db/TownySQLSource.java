@@ -595,10 +595,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Loading World List");
 
 		// Check for any new worlds registered with bukkit.
-		if (plugin != null) {
-			for (World world : plugin.getServer().getWorlds())
-				universe.newWorld(world);
-		}
+		for (World world : Bukkit.getServer().getWorlds())
+			universe.newWorld(world);
 
 		if (!getContext())
 			return false;
