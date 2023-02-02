@@ -8325,3 +8325,4 @@ v0.92.0.11:
     - Your configs will automatically have this added with the default 1.0 setting. 
 0.98.6.4:
   - Fix plot hud and plot perm commands showing town settings for mobs/fire that were not relevant.
+  - Fix NPE when clicking back button in a non-selection gui, courtesy of Warriorrrr with PR #6464.
