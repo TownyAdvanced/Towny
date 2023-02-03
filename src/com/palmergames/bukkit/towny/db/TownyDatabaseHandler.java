@@ -70,6 +70,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
@@ -233,10 +234,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void newWorld(String name) throws AlreadyRegisteredException {
 		
-		if (universe.getWorldMap().containsKey(name.toLowerCase()))
+		if (universe.getWorldMap().containsKey(name.toLowerCase(Locale.ROOT)))
 			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
 
-		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
+		universe.getWorldMap().put(name.toLowerCase(Locale.ROOT), new TownyWorld(name));
 	}
 
 	/*
