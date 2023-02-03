@@ -8326,3 +8326,6 @@ v0.92.0.11:
 0.98.6.4:
   - Fix plot hud and plot perm commands showing town settings for mobs/fire that were not relevant.
   - Fix NPE when clicking back button in a non-selection gui, courtesy of Warriorrrr with PR #6464.
+  - Add loading of worlds via their UUID loading, courtesy of Warriorrrr with PR #6377.
+  - New Locales:
+    - Pirate English, Upsidedown English, LOLCAT. Currently goign through initial translation on crowdin.
