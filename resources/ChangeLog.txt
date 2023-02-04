@@ -8329,3 +8329,5 @@ v0.92.0.11:
   - Add loading of worlds via their UUID loading, courtesy of Warriorrrr with PR #6377.
   - New Locales:
     - Pirate English, Upsidedown English, LOLCAT. Currently goign through initial translation on crowdin.
+0.98.6.5:
+  - Put limits on how many unclaimed townblocks can have their material/entity deletions run at once.
