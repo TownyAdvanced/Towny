@@ -806,13 +806,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					target.addNationRank(rank);
 					if (target.isOnline()) {
-						TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_been_given_rank", "Nation", rank));
+						TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_been_given_rank", Translatable.of("nation_sing"), rank));
 						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-					TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", "Nation", rank, target.getName()));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", Translatable.of("nation_sing"), rank, target.getName()));
 				} else {
 					// Must already have this rank
-					TownyMessaging.sendMsg(player, Translatable.of("msg_resident_already_has_rank", target.getName(), "Nation"));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_resident_already_has_rank", target.getName(), Translatable.of("nation_sing")));
 					return;
 				}
 
@@ -823,13 +823,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 					target.removeNationRank(rank);
 					if (target.isOnline()) {
-						TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_had_rank_taken", "Nation", rank));
+						TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_had_rank_taken", Translatable.of("nation_sing"), rank));
 						plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 					}
-					TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", "Nation", rank, target.getName()));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", Translatable.of("nation_sing"), rank, target.getName()));
 				} else {
 					// Doesn't have this rank
-					TownyMessaging.sendMsg(player, Translatable.of("msg_resident_doesnt_have_rank", target.getName(), "Nation"));
+					TownyMessaging.sendMsg(player, Translatable.of("msg_resident_doesnt_have_rank", target.getName(), Translatable.of("nation_sing")));
 					return;
 				}
 
