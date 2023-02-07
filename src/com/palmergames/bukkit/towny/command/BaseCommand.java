@@ -61,7 +61,8 @@ public class BaseCommand implements TabCompleter{
 		"build",
 		"destroy",
 		"switch",
-		"itemuse"
+		"itemuse",
+		"containers"
 	);
 
 	public static final List<String> setOnOffCompletes = Collections.unmodifiableList(Arrays.asList(
@@ -74,6 +75,7 @@ public class BaseCommand implements TabCompleter{
 		"destroy",
 		"switch",
 		"itemuse",
+		"containers",
 		"on",
 		"off"
 	);
