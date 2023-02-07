@@ -207,7 +207,7 @@ public class BaseCommand implements TabCompleter{
 			return NameUtil.filterByStart(NameUtil.getNames(res.getTownOrNull().getResidents()), str);
 		}
 
-		return Collections.emptyList();
+		return new ArrayList<>();
 	}
 
 	/**
