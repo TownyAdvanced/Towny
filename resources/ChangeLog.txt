@@ -8332,3 +8332,4 @@ v0.92.0.11:
 0.98.6.5:
   - Put limits on how many unclaimed townblocks can have their material/entity deletions run at once.
   - Replace some hardcoded town and nation strings with translatables, courtesy of Warriorrrr with PR #6473.
+  - Fix exception when tab completing /t jail with no town, courtesy of Warriorrrr with PR #6476.
