@@ -23,8 +23,8 @@ public class EditGUI extends PermissionGUI {
 	 * Saves updated permissions 
 	 */
 	public void saveChanges() {
-		SetPermissionType[] newTypes = new SetPermissionType[4];
-		for (int i = 0; i < 4; i++) {
+		SetPermissionType[] newTypes = new SetPermissionType[5];
+		for (int i = 0; i < 5; i++) {
 			switch (getInventory().getItem(PermissionGUIUtil.getWoolSlots()[i]).getType()) {
 				case LIME_WOOL -> newTypes[i] = SetPermissionType.SET;
 				case RED_WOOL -> newTypes[i] = SetPermissionType.NEGATED;

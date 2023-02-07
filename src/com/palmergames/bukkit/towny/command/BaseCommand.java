@@ -44,6 +44,7 @@ public class BaseCommand implements TabCompleter{
 		"destroy",
 		"switch",
 		"itemuse",
+		"containers",
 		"reset"
 	);
 

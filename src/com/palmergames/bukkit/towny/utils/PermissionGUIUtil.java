@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class PermissionGUIUtil {
-	private static final SetPermissionType[] defaultTypes = new SetPermissionType[]{SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET};
-	private static final int[] woolSlots = new int[]{21, 23, 30, 32};
+	private static final SetPermissionType[] defaultTypes = new SetPermissionType[]{SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET};
+	private static final int[] woolSlots = new int[]{21, 23, 30, 32, 39};
 	
 	public enum SetPermissionType {
 		UNSET(Colors.Gray, Material.GRAY_WOOL),
@@ -85,6 +85,7 @@ public class PermissionGUIUtil {
 			List<String> lore = new ArrayList<>();
 			lore.add(entry.getValue().getPermissionTypes()[ActionType.BUILD.getIndex()].getColor() + "Build" + Colors.Gray + "  | " + entry.getValue().getPermissionTypes()[ActionType.DESTROY.getIndex()].getColor() + "Destroy");
 			lore.add(entry.getValue().getPermissionTypes()[ActionType.SWITCH.getIndex()].getColor() + "Switch" + Colors.Gray + " | " + entry.getValue().getPermissionTypes()[ActionType.ITEM_USE.getIndex()].getColor() + "Item");
+			lore.add(entry.getValue().getPermissionTypes()[ActionType.CONTAINERS.getIndex()].getColor() + "Containers");
 
 			if (canEdit) {
 				if (entry.getValue().getLastChangedAt() > 0 && !entry.getValue().getLastChangedBy().equals(""))
