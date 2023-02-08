@@ -450,7 +450,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			output.add(translator.of("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : getMoney(town.getTaxes())), getMoney(town.getPlotTax())));
 			output.add(translator.of("towny_prices_taxes_shop", getMoney(town.getCommercialPlotTax()), getMoney(town.getEmbassyPlotTax())));
-			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost())));
+			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost(town))));
 			
 			output.add(translator.of("towny_prices_plots"));
 			List<TownBlockType> townBlockTypes = new ArrayList<>(TownBlockTypeHandler.getTypes().values());
@@ -469,7 +469,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			if (nation != null) {
 				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
-				output.add(translator.of("towny_prices_nation_tax", (nation.isTaxPercentage() ? nation.getTaxes() + "%" : getMoney(nation.getTaxes())), getMoney(TownySettings.getNationNeutralityCost())));
+				output.add(translator.of("towny_prices_nation_tax", (nation.isTaxPercentage() ? nation.getTaxes() + "%" : getMoney(nation.getTaxes())), getMoney(TownySettings.getNationNeutralityCost(nation))));
 			}
 		}
 		return output;

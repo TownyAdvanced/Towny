@@ -1587,7 +1587,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					CooldownTimerTask.getCooldownRemaining(uuid, CooldownType.NEUTRALITY)));
 
 		boolean peacefulState = choice.orElse(!town.isNeutral());
-		double cost = TownySettings.getTownNeutralityCost();
+		double cost = TownySettings.getTownNeutralityCost(town);
 
 		if (TownySettings.nationCapitalsCantBeNeutral() && town.isCapital())
 			throw new TownyException(Translatable.of("msg_err_capital_cannot_be_peaceful"));

@@ -56,11 +56,35 @@ public class TownySettings {
 
 	// Town Level
 	@Desugar
-	public record TownLevel(String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double upkeepModifier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier, double resourceProductionModifier, Map<String, Integer> townBlockTypeLimits) {}
+	public record TownLevel(
+			String namePrefix,
+			String namePostfix,
+			String mayorPrefix,
+			String mayorPostfix,
+			int townBlockLimit,
+			double upkeepModifier,
+			double peacefulCostMultiplier,
+			int townOutpostLimit,
+			int townBlockBuyBonusLimit,
+			double debtCapModifier,
+			double resourceProductionModifier,
+			Map<String, Integer> townBlockTypeLimits) {}
 
 	// Nation Level
 	@Desugar
-	public record NationLevel(String namePrefix, String namePostfix, String capitalPrefix, String capitalPostfix, String kingPrefix, String kingPostfix, int townBlockLimitBonus, double upkeepModifier, double nationTownUpkeepModifier, int nationZonesSize, int nationBonusOutpostLimit) {}
+	public record NationLevel(
+			String namePrefix,
+			String namePostfix,
+			String capitalPrefix,
+			String capitalPostfix,
+			String kingPrefix,
+			String kingPostfix,
+			int townBlockLimitBonus,
+			double upkeepModifier,
+			double nationTownUpkeepModifier,
+			double peacefulCostMultiplier,
+			int nationZonesSize,
+			int nationBonusOutpostLimit) {}
 
 	private static CommentedConfiguration config;
 	private static CommentedConfiguration newConfig;
@@ -76,7 +100,20 @@ public class TownySettings {
 	
 	private static final Map<NamespacedKey, Consumer<CommentedConfiguration>> CONFIG_RELOAD_LISTENERS = new HashMap<>();
 	
-	public static void newTownLevel(int numResidents, String namePrefix, String namePostfix, String mayorPrefix, String mayorPostfix, int townBlockLimit, double townUpkeepMultiplier, int townOutpostLimit, int townBlockBuyBonusLimit, double debtCapModifier, double resourceProductionModifier, Map<String, Integer> townBlockTypeLimits) {
+	public static void newTownLevel(
+			int numResidents,
+			String namePrefix,
+			String namePostfix,
+			String mayorPrefix,
+			String mayorPostfix,
+			int townBlockLimit,
+			double townUpkeepMultiplier,
+			double peacefulCostMultiplier,
+			int townOutpostLimit,
+			int townBlockBuyBonusLimit,
+			double debtCapModifier,
+			double resourceProductionModifier,
+			Map<String, Integer> townBlockTypeLimits) {
 
 		configTownLevel.put(numResidents, new TownLevel(
 			namePrefix,
@@ -85,6 +122,7 @@ public class TownySettings {
 			mayorPostfix,
 			townBlockLimit,
 			townUpkeepMultiplier,
+			peacefulCostMultiplier,
 			townOutpostLimit,
 			townBlockBuyBonusLimit,
 			debtCapModifier,
@@ -93,7 +131,20 @@ public class TownySettings {
 		));
 	}
 
-	public static void newNationLevel(int numResidents, String namePrefix, String namePostfix, String capitalPrefix, String capitalPostfix, String kingPrefix, String kingPostfix, int townBlockLimitBonus, double nationUpkeepMultiplier, double nationTownUpkeepMultiplier, int nationZonesSize, int nationBonusOutpostLimit) {
+	public static void newNationLevel(
+			int numResidents,
+			String namePrefix,
+			String namePostfix,
+			String capitalPrefix,
+			String capitalPostfix,
+			String kingPrefix,
+			String kingPostfix,
+			int townBlockLimitBonus,
+			double nationUpkeepMultiplier,
+			double nationTownUpkeepMultiplier,
+			double peacefulCostMultiplier,
+			int nationZonesSize,
+			int nationBonusOutpostLimit) {
 
 		configNationLevel.put(numResidents, new NationLevel(
 			namePrefix,
@@ -105,6 +156,7 @@ public class TownySettings {
 			townBlockLimitBonus,
 			nationUpkeepMultiplier,
 			nationTownUpkeepMultiplier,
+			peacefulCostMultiplier,
 			nationZonesSize,
 			nationBonusOutpostLimit
 		));
@@ -126,7 +178,7 @@ public class TownySettings {
 
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level town_level here which may get replaced when the config's town_levels are loaded below.
-		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 0, 0, 1.0, 1.0, new HashMap<>());
+		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 1.0, 0, 0, 1.0, 1.0, new HashMap<>());
 		
 		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
 		for (Map<?, ?> genericLevel : levels) {
@@ -157,6 +209,7 @@ public class TownySettings {
 					String.valueOf(level.get("mayorPostfix")),
 					Integer.parseInt(level.get("townBlockLimit").toString()),
 					Double.parseDouble(level.get("upkeepModifier").toString()),
+					Double.parseDouble(level.get("peacefulCostMultiplier").toString()),
 					Integer.parseInt(level.get("townOutpostLimit").toString()),
 					Integer.parseInt(level.get("townBlockBuyBonusLimit").toString()),
 					Double.parseDouble(level.get("debtCapModifier").toString()),
@@ -186,7 +239,7 @@ public class TownySettings {
 		
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level nation_level here which may get replaced when the config's nation_levels are loaded below.
-		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1, 0);
+		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1.0, 1, 0);
 
 		List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
 		for (Map<?, ?> level : levels) {
@@ -209,6 +262,7 @@ public class TownySettings {
 						Integer.parseInt(level.get("townBlockLimitBonus").toString()),
 						Double.parseDouble(level.get("upkeepModifier").toString()),
 						Double.parseDouble(level.get("nationTownUpkeepModifier").toString()),
+						Double.parseDouble(level.get("peacefulCostMultiplier").toString()),
 						Integer.parseInt(level.get("nationZonesSize").toString()),
 						Integer.parseInt(level.get("nationBonusOutpostLimit").toString())
 						);
@@ -546,6 +600,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 1);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 0);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -560,6 +615,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 16);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 0);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -574,6 +630,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 32);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 1);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -588,6 +645,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 96);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 1);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -602,6 +660,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 160);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 2);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -616,6 +675,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 224);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 2);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -630,6 +690,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 320);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 3);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -644,6 +705,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 384);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 3);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -658,6 +720,7 @@ public class TownySettings {
 			level.put("mayorPostfix", "");
 			level.put("townBlockLimit", 448);
 			level.put("upkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("townOutpostLimit", 4);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
@@ -685,6 +748,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 10);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
@@ -699,6 +763,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 20);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 1);
 			levels.add(new HashMap<>(level));
@@ -713,6 +778,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 40);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 2);
 			levels.add(new HashMap<>(level));
@@ -727,6 +793,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 60);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 3);
 			levels.add(new HashMap<>(level));
@@ -741,6 +808,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 100);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 4);
 			levels.add(new HashMap<>(level));
@@ -755,6 +823,7 @@ public class TownySettings {
 			level.put("townBlockLimitBonus", 140);
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
+			level.put("peacefulCostMultiplier", 1.0);
 			level.put("nationZonesSize", 3);
 			level.put("nationBonusOutpostLimit", 5);
 			levels.add(new HashMap<>(level));
@@ -1476,11 +1545,19 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_SPAWN_PAID_TO_TOWN);
 	}
 
+	public static double getNationNeutralityCost(Nation nation) {
+		return getNationLevel(nation, nation.getNumResidents()).peacefulCostMultiplier() * getNationNeutralityCost();
+	}
+
 	public static double getNationNeutralityCost() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY);
 	}
-	
+
+	public static double getTownNeutralityCost(Town town) {
+		return getTownLevel(town, town.getNumResidents()).peacefulCostMultiplier() * getTownNeutralityCost();
+	}
+
 	public static double getTownNeutralityCost() {
 		
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_NEUTRALITY);

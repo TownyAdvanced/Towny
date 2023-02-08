@@ -2442,7 +2442,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static void nationTogglePeaceful(CommandSender sender, Nation nation, Optional<Boolean> choice, boolean admin) throws TownyException {
 		boolean peacefulState = choice.orElse(!nation.isNeutral());
-		double cost = TownySettings.getNationNeutralityCost();
+		double cost = TownySettings.getNationNeutralityCost(nation);
 
 		if (nation.isNeutral() && peacefulState)
 			throw new TownyException(Translatable.of("msg_nation_already_peaceful"));

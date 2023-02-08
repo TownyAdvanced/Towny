@@ -393,5 +393,20 @@
         "value": "1.0"
       }
     ]
+  },
+  {
+    "version": "0.98.6.5",
+    "changes": [
+      {
+        "type": "TOWN_LEVEL_ADD",
+        "key": "peacefulCostMultiplier",
+        "value": "1.0"
+      },
+      {
+        "type": "NATION_LEVEL_ADD",
+        "key": "peacefulCostMultiplier",
+        "value": "1.0"
+      }
+    ]
   }
 ]

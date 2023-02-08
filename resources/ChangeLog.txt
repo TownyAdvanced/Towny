@@ -8334,3 +8334,8 @@ v0.92.0.11:
   - Replace some hardcoded town and nation strings with translatables, courtesy of Warriorrrr with PR #6473.
   - Fix exception when tab completing /t jail with no town, courtesy of Warriorrrr with PR #6476.
   - Clean up some old PermissionNodes that don't exist.
+  - Add peacefulCostMultiplier to the config Town_Level and Nation_Level.
+    - Your configs will automatically have this added with the default 1.0 setting.
+    - You can change it from 1.0 to alter what towns and nations pay to stay neutral/peaceful each TownyDay.
+    - With the default of 1.0, no town or nation will be paying any more than they already were.
+    - Closes #5411. 
