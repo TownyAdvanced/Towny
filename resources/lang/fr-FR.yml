@@ -665,7 +665,6 @@ build: 'Construire'
 destroy: 'Détruire'
 switch: 'Ouvrir/Fermer'
 item_use: 'Utilisation Item'
-containers: 'utiliser des contenants'
 owner_status: 'Propriétaire'
 towny_map_header: 'Carte Towny '
 towny_map_unclaimed: 'Libre'
@@ -1523,7 +1522,6 @@ msg_perm_hud_build: 'Construire: '
 msg_perm_hud_destroy: 'Détuire:'
 #Seen in /plot perm hud:
 msg_perm_hud_switch: 'Ouvrir/Fermer: '
-msg_perm_hud_containers: 'Contenants: '
 #Seen in /plot perm hud:
 msg_perm_hud_item_use: 'Objet:'
 #Seen in /plot perm hud:
