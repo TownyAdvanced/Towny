@@ -155,7 +155,6 @@ public class SQL_Schema {
     	List<String> columns = new ArrayList<>();
 		columns.add("`mayor` mediumtext");
 		columns.add("`nation` mediumtext");
-		columns.add("`assistants` text DEFAULT NULL");
 		columns.add("`townBoard` mediumtext DEFAULT NULL");
 		columns.add("`tag` mediumtext DEFAULT NULL");
 		columns.add("`founder` mediumtext DEFAULT NULL");
@@ -588,6 +587,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
     	cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "disableplayertrample"));
+    	cleanups.add(ColumnUpdate.of("TOWNS", "assistants"));
 
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
