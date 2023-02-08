@@ -515,7 +515,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "king":
 		case "leader":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_KING.getNode());
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LEADER.getNode());
 			nationKing(player, StringMgmt.remFirstArg(split));
 			break;
 		case "add":

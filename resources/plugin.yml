@@ -752,8 +752,6 @@ permissions:
             towny.command.towny.tree: true
             towny.command.towny.universe: true
             towny.command.towny.version: true
-            towny.command.towny.war: true
-            towny.command.towny.war.hud: true
 
     # Towny top command permissions
     towny.command.towny.top:
