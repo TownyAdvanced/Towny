@@ -1929,9 +1929,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			} catch (NotRegisteredException ignored) {
 			}
 
-		// Assistants
-		list.add("assistants=" + StringMgmt.join(town.getRank("assistant"), ","));
-
 		list.add(newLine);
 		// Town Board
 		list.add("townBoard=" + town.getBoard());
