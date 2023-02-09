@@ -795,6 +795,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 
@@ -815,6 +816,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 			
@@ -825,6 +827,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 
@@ -835,6 +838,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", getDefaultWildsblocks());
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 
@@ -845,6 +849,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 
@@ -855,6 +860,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 
@@ -865,6 +871,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", getDefaultFarmblocks());
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 
@@ -875,6 +882,7 @@ public class TownySettings {
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
+			type.put("containerIds", "");
 			types.add(new LinkedHashMap<>(type));
 			type.clear();
 			newConfig.set(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(), types);

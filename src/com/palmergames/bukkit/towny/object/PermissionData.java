@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 
 import java.util.Arrays;
@@ -20,9 +21,10 @@ public class PermissionData {
 		String[] data = string.split(",");
 
 		long lastChanged = Long.parseLong(data[1]);
-		SetPermissionType[] types = new SetPermissionType[4];
+		SetPermissionType[] types = new SetPermissionType[ActionType.values().length];
+		Arrays.fill(types, SetPermissionType.UNSET);
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < data.length-2; i++) {
 			types[i] = SetPermissionType.valueOf(data[i+2]);
 		}
 		
