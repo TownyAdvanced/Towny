@@ -3705,7 +3705,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Prevent straight line claims
 		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
 		if (minAdjacentBlocks > 0) {
-			int numAdjacent = numAdjacentBlocks(town, selection);
+			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, selection);
+
 			if (town.getTownBlocks().size() > minAdjacentBlocks && numAdjacent < minAdjacentBlocks)
 				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
 		}
