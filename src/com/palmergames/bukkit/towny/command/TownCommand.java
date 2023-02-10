@@ -3970,7 +3970,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return false;
 	}
 
-	public static int numAdjacentBlocks(TownBlockOwner owner, List<WorldCoord> worldCoords) {
+	public static int numAdjacentTownOwnedTownBlocks(TownBlockOwner owner, List<WorldCoord> worldCoords) {
+
 		int count = 0;
 		for (WorldCoord worldCoord : worldCoords) {
 			for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords(true)) {
