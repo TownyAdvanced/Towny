@@ -1636,4 +1636,3 @@ confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all 
 msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
 msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
-msg_min_adjacent_blocks: '&4You are required to have at least %s adjacent town blocks. There is only %s.'
