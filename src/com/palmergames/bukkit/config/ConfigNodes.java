@@ -281,6 +281,13 @@ public enum ConfigNodes {
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * height-of-the-world) in size, with height-of-the-world",
 			"# being from the bottom to the top of the build-able world."),
+	TOWN_MIN_ADJACENT_BLOCKS(
+			"town.min_adjacent_blocks",
+			"-1",
+			"",
+			"# The minimum adjacent town blocks required to expand.",
+			"# This can prevent long lines and snake-like patterns.",
+			"# Set to -1 to disable. Set to 3 to force wider expansions of towns."),
 	
 	NATION("nation", "", "", "",
 			"############################################################",

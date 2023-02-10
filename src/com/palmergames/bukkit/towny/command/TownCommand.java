@@ -3701,6 +3701,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		selection = AreaSelectionUtil.filterInvalidProximityTownBlocks(selection, town);
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+
+		// Prevent straight line claims
+		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		if (minAdjacentBlocks > 0) {
+			int numAdjacent = numAdjacentBlocks(town, selection);
+			if (town.getTownBlocks().size() > minAdjacentBlocks && numAdjacent < minAdjacentBlocks)
+				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
+		}
 		
 		TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 		
@@ -3960,6 +3968,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return true;
 		}
 		return false;
+	}
+
+	public static int numAdjacentBlocks(TownBlockOwner owner, List<WorldCoord> worldCoords) {
+		int count = 0;
+		for (WorldCoord worldCoord : worldCoords) {
+			for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords(true)) {
+				if (wc.isWilderness())
+					continue;
+				if (wc.getTownBlockOrNull().isOwner(owner)) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	public static List<Resident> getValidatedResidentsForInviteRevoke(Object sender, String[] names, Town town) {

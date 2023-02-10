@@ -3485,5 +3485,9 @@ public class TownySettings {
 	public static int getNewTownMinDistanceFromTownHomeblocks() {
 		return getInt(ConfigNodes.TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
 	}
+	
+	public static int getMinAdjacentBlocks() {
+		return getInt(ConfigNodes.TOWN_MIN_ADJACENT_BLOCKS);
+	}
 }
 
