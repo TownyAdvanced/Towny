@@ -336,6 +336,10 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
+		// Prevent liquid spilling in areas that are being reverted to a pre-claim snapshot. 
+		if (TownyRegenAPI.hasActiveRegeneration(WorldCoord.parseWorldCoord(event.getBlock())))
+			event.setCancelled(true);
+
 		if (!TownySettings.getPreventFluidGriefingEnabled() || event.getBlock().getType() == Material.DRAGON_EGG)
 			return;
 		
