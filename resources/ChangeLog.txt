@@ -8340,3 +8340,4 @@ v0.92.0.11:
     - With the default of 1.0, no town or nation will be paying any more than they already were.
     - Closes #5411. 
   - Prevent liquid spilling in actively regenerating plots which were unclaimed.
+  - Fix /ta forcemerge having swapped town names in message, courtesy of Warriorrrr with PR #6484.
