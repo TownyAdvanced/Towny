@@ -1299,12 +1299,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_FORCEMERGE.getNode());
 			if (split.length < 3)
 				throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME forcemerge OTHERTOWN"));
-			Town remainingTown = getTownOrThrow(split[2]);
-			if (remainingTown.equals(town))
+			Town succumbingTown = getTownOrThrow(split[2]);
+			if (succumbingTown.equals(town))
 				throw new TownyException(Translatable.of("msg_err_invalid_name", split[2]));
 			Confirmation.runOnAccept(() -> {
-				townyUniverse.getDataSource().mergeTown(town, remainingTown);
-				TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", town, remainingTown));
+				townyUniverse.getDataSource().mergeTown(town, succumbingTown);
+				TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", succumbingTown, town));
 			}).sendTo(sender);
 			break;
 		default:
