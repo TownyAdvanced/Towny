@@ -3487,6 +3487,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if ((townBlockOwner instanceof Town && !townBlock.hasResident()) || 
 						(townBlockOwner instanceof Resident && townBlock.hasResident())) {
+
 						try {
 							BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, "reset"));
 						} catch (CancelledEventException e) {
