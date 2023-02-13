@@ -789,8 +789,11 @@ public class TownyFormatter {
 			if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
 				screen.addComponentOf("upkeepPenalty", translator.of("status_splitter") + colourKey(translator.of("status_bank_town_penalty_upkeep")) + " " + colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
 			
-			if (town.isNeutral() && TownySettings.getTownNeutralityCost() > 0)
-				screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getTownNeutralityCost()))));
+			if (town.isNeutral()) {
+				double neutralCost = TownySettings.getTownNeutralityCost(town);
+				if (neutralCost > 0)
+					screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(neutralCost))));
+			}
 
 			screen.addComponentOf("towntax", translator.of("status_splitter") + colourKey(translator.of("status_bank_town3")) + " " + colourKeyImportant(town.isTaxPercentage() ? town.getTaxes() + "%" : formatMoney(town.getTaxes())));
 		}
@@ -809,8 +812,11 @@ public class TownyFormatter {
 		if (TownySettings.isTaxingDaily()) {
 			if (TownySettings.getNationUpkeepCost(nation) > 0)
 				screen.addComponentOf("nationupkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation)))));
-			if (nation.isNeutral() && TownySettings.getNationNeutralityCost() > 0)
-				screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(TownySettings.getNationNeutralityCost()))));
+			if (nation.isNeutral()) {
+				double neutralCost = TownySettings.getNationNeutralityCost(nation);				
+				if (neutralCost > 0)
+					screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(neutralCost))));
+			}
 
 			screen.addComponentOf("nationtax", translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(nation.isTaxPercentage() ? nation.getTaxes() + "%" : formatMoney(nation.getTaxes())));
 		}

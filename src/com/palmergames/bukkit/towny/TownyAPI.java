@@ -520,7 +520,7 @@ public class TownyAPI {
      */
     @Nullable
     public TownyWorld getTownyWorld(World world) {
-    	return getTownyWorld(world.getName());
+    	return getTownyWorld(world.getUID());
     }
     
     /**

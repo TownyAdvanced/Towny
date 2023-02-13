@@ -8325,3 +8325,19 @@ v0.92.0.11:
     - Your configs will automatically have this added with the default 1.0 setting. 
 0.98.6.4:
   - Fix plot hud and plot perm commands showing town settings for mobs/fire that were not relevant.
+  - Fix NPE when clicking back button in a non-selection gui, courtesy of Warriorrrr with PR #6464.
+  - Add loading of worlds via their UUID loading, courtesy of Warriorrrr with PR #6377.
+  - New Locales:
+    - Pirate English, Upsidedown English, LOLCAT. Currently goign through initial translation on crowdin.
+0.98.6.5:
+  - Put limits on how many unclaimed townblocks can have their material/entity deletions run at once.
+  - Replace some hardcoded town and nation strings with translatables, courtesy of Warriorrrr with PR #6473.
+  - Fix exception when tab completing /t jail with no town, courtesy of Warriorrrr with PR #6476.
+  - Clean up some old PermissionNodes that don't exist.
+  - Add peacefulCostMultiplier to the config Town_Level and Nation_Level.
+    - Your configs will automatically have this added with the default 1.0 setting.
+    - You can change it from 1.0 to alter what towns and nations pay to stay neutral/peaceful each TownyDay.
+    - With the default of 1.0, no town or nation will be paying any more than they already were.
+    - Closes #5411. 
+  - Prevent liquid spilling in actively regenerating plots which were unclaimed.
+  - Fix /ta forcemerge having swapped town names in message, courtesy of Warriorrrr with PR #6484.

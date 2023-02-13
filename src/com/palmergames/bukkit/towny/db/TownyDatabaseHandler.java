@@ -41,6 +41,8 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.WorldCoordEntityRemover;
+import com.palmergames.bukkit.towny.regen.WorldCoordMaterialRemover;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -70,6 +72,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
@@ -233,10 +236,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void newWorld(String name) throws AlreadyRegisteredException {
 		
-		if (universe.getWorldMap().containsKey(name.toLowerCase()))
+		if (universe.getWorldMap().containsKey(name.toLowerCase(Locale.ROOT)))
 			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
 
-		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
+		universe.getWorldMap().put(name.toLowerCase(Locale.ROOT), new TownyWorld(name));
 	}
 
 	/*
@@ -496,10 +499,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deleteTownBlock(townBlock);
 
 		if (townBlock.getWorld().isDeletingEntitiesOnUnclaim())
-			TownyRegenAPI.addDeleteTownBlockEntityQueue(townBlock.getWorldCoord());
+			WorldCoordEntityRemover.addToQueue(townBlock.getWorldCoord());
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
-			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
+			WorldCoordMaterialRemover.addToQueue(townBlock.getWorldCoord());
 
 		// Move the plot to be restored
 		if (townBlock.getWorld().isUsingPlotManagementRevert())

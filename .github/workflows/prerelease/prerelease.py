@@ -84,18 +84,20 @@ def addSponsorTable():
 
 def addFooter():
     tableopen = "<table align=center>"
-    tableheader = "<th colspan=3> Important Links </th>"
+    tableheader = "<th colspan=4> Important Links </th>"
     table1 = "<tr align=center>"
-    table2 = "<td><a title=\"How Towny Works\" href=https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works>How Towny Works</a></td>"
-    table3 = "<td><a title=\"Install Guide\" href=https://github.com/TownyAdvanced/Towny/wiki/Installation>Towny Install Guide</a></td>"
-    table4 = "<td><a title=\"Updating Towny\" href=https://github.com/TownyAdvanced/Towny/wiki/Updating-Towny>Towny Update Guide</a></td></tr>"
-    table5 = "<tr align=center>"
-    table6 = "<td><a title=\"Towny Changelog\" href=\"https://raw.githubusercontent.com/TownyAdvanced/Towny/master/resources/ChangeLog.txt\" target=\"_blank\" rel=\"noopener\">Complete Changelog</a> </td>"
-    table7 = "<td><a title=\"Default Config Files\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Config-Files\">Default Config Files</a></td>"
-    table8 = "<td><a title=\"Commands/Permissions/Placeholders\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Reference\">Commands/Permissions<br>Placeholders</a></td></tr>"
+    table2 = "<td><a title=\"Frequently Asked Questions\" href=https://github.com/TownyAdvanced/Towny/wiki/Frequently-Asked-Questions>Frequently Asked<br>Questions</a></td>"
+    table3 = "<td><a title=\"How Towny Works\" href=https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works>How Towny Works</a></td>"
+    table4 = "<td><a title=\"Install Guide\" href=https://github.com/TownyAdvanced/Towny/wiki/Installation>Towny Install Guide</a></td>"
+    table5 = "<td><a title=\"Updating Towny\" href=https://github.com/TownyAdvanced/Towny/wiki/Updating-Towny>Towny Update Guide</a></td></tr>"
+    table6 = "<tr align=center>"
+    table7 = "<td><a title=\"Other Towny Plugins\" href=\"https://townyadvanced.github.io\" target=\"_blank\" rel=\"noopener\">Other Towny Plugins</a> </td>"
+    table8 = "<td><a title=\"Towny Changelog\" href=\"https://raw.githubusercontent.com/TownyAdvanced/Towny/master/resources/ChangeLog.txt\" target=\"_blank\" rel=\"noopener\">Complete Changelog</a> </td>"
+    table9 = "<td><a title=\"Default Config Files\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Config-Files\">Default Config Files</a></td>"
+    table10 = "<td><a title=\"Commands/Permissions/Placeholders\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Reference\">Commands/Permissions<br>Placeholders</a></td></tr>"
     tableclose = "</table>"
     footer = "### ⏬ Download available as a .jar file in the Assets section below:"
-    releasefooter = [tableopen, tableheader, table1, table2, table3, table4, table5, table6, table7, table8, tableclose, "", footer]
+    releasefooter = [tableopen, tableheader, table1, table2, table3, table4, table5, table6, table7, table8, table9, table10, tableclose, "", footer]
     for line in releasefooter:
         releaseBody.append(line)
 
