@@ -596,7 +596,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							
 							// Test we are allowed to work on this plot
 							plotTestOwner(resident, townBlock);
-							
+
 							setTownBlockPermissions(player, townBlock.getTownBlockOwner(), townBlock, StringMgmt.remFirstArg(split));
 
 							return true;
@@ -996,7 +996,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			}
 
-			if (permChange != null){
+			if (permChange != null)	{
 				BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
 				perm.change(permChange);
 			}
@@ -1612,7 +1612,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// Mayor/Assistant of the town.
 				
 				PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-
+				
 				Runnable permHandler = () -> {
 					TownyPermissionChange permChange;
 					// setTownBlockPermissions returns a towny permission change object
@@ -1622,11 +1622,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendErrorMsg(resident, e.getMessage());
 						return;
 					}
-						
 					// If the perm change object is not null
 					if (permChange != null) {
 						plotGroup.getPermissions().change(permChange);
-
+						
 						for (TownBlock t : plotGroup.getTownBlocks()) {
 							try {
 								BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(t, permChange));
@@ -1635,7 +1634,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return;
 							}
 						}
-							
 						plotGroup.getTownBlocks().stream()
 							.forEach(tb -> {
 								tb.setPermissions(plotGroup.getPermissions().toString());
