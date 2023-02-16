@@ -1546,7 +1546,8 @@ public class TownySettings {
 	}
 
 	public static double getNationNeutralityCost(Nation nation) {
-		return getNationLevel(nation, nation.getNumResidents()).peacefulCostMultiplier() * getNationNeutralityCost();
+		double cost = getNationLevel(nation, nation.getNumResidents()).peacefulCostMultiplier() * getNationNeutralityCost();
+		return isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
 	}
 
 	public static double getNationNeutralityCost() {
@@ -1554,13 +1555,22 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY);
 	}
 
+	public static boolean isNationNeutralityCostMultipliedByNationTownAmount() {
+		return getBoolean(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY_CHARGES_PER_TOWN);
+	}
+
 	public static double getTownNeutralityCost(Town town) {
-		return getTownLevel(town, town.getNumResidents()).peacefulCostMultiplier() * getTownNeutralityCost();
+		double cost = getTownLevel(town, town.getNumResidents()).peacefulCostMultiplier() * getTownNeutralityCost();
+		return isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
 	}
 
 	public static double getTownNeutralityCost() {
 		
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_NEUTRALITY);
+	}
+
+	public static boolean isTownNeutralityCostMultipliedByTownClaimsSize() {
+		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_NEUTRALITY_CHARGES_PER_PLOT);
 	}
 
 	public static boolean isAllowingOutposts() {

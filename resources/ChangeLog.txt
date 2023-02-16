@@ -8345,3 +8345,12 @@ v0.92.0.11:
     - Closes #6100.
 0.98.6.6:
   - Replace world with weakref in WorldCoord, courtesy of Warriorrrr with PR #6451.
+  - New Config Option: economy.price_town_neutrality_charges_per_plot
+    - Default: false
+    - When it is true, the peaceful cost is multiplied by the town's number of claimed townblocks.
+    - Note that the base peacful cost is calculated by the price_town_neutrality X town_level peacefulCostMultiplier.
+    - Closes #6486.
+  - New Config Option: economy.price_nation_neutrality_charges_per_town
+    - Default: false
+    - When it is true, the peaceful cost is multiplied by the nation's number of towns.
+    - Note that the base peacful cost is calculated by the price_nation_neutrality X nation_level peacefulCostMultiplier.
