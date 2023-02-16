@@ -27,7 +27,7 @@ import org.bukkit.scoreboard.Team;
 public class PermHUD {
 
 	public static void updatePerms (Player p) {
-		WorldCoord worldCoord = new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p));
+		WorldCoord worldCoord = new WorldCoord(p.getWorld(), Coord.parseCoord(p));
 		updatePerms(p, worldCoord);
 	}
 

@@ -23,10 +23,10 @@ public class PlotBlockData {
 	 * version 3: Required when blocks were no longer available as type:data ints.
 	 * version 1 & 2: Older than time itself.
 	 */
-	private int defaultVersion = 5;
+	private final int defaultVersion = 5;
 
-	private String worldName;
-	private TownBlock townBlock;
+	private final String worldName;
+	private final TownBlock townBlock;
 	private int x, z, size, height, minHeight, version;
 
 	private List<String> blockList = new ArrayList<>(); // Stores the original plot blocks
@@ -249,7 +249,7 @@ public class PlotBlockData {
 	}
 
 	public WorldCoord getWorldCoord() {
-		return new WorldCoord(getWorldName(), getX(), getZ());
+		return townBlock.getWorldCoord();
 	}
 
 }
