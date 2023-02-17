@@ -8354,3 +8354,4 @@ v0.92.0.11:
     - Default: false
     - When it is true, the peaceful cost is multiplied by the nation's number of towns.
     - Note that the base peacful cost is calculated by the price_nation_neutrality X nation_level peacefulCostMultiplier.
+  - Correct the feedback message shown when /ta town TOWNNAME settownlevel unset is used.

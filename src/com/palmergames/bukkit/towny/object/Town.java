@@ -1737,14 +1737,14 @@ public class Town extends Government implements TownBlockOwner {
 			return 0;
 
 		int key = 0;
-		for (int level : TownySettings.getConfigTownLevel().keySet()) {
+		for (int populationLevel : TownySettings.getConfigTownLevel().keySet()) {
 			key++;
 			// Some towns might have their townlevel overridden.
 			if (getManualTownLevel() > -1 && key == getMaxLevel() - getManualTownLevel())
-				return level;
+				return populationLevel;
 			// No overridden townlevel, use population instead.
-			if (getManualTownLevel() == -1 && populationSize >= level)
-				return level;
+			if (getManualTownLevel() == -1 && populationSize >= populationLevel)
+				return populationLevel;
 		}
 		return 0;
 	}
@@ -1777,6 +1777,9 @@ public class Town extends Government implements TownBlockOwner {
 	public int getLevelID() {
 		if(this.isRuined())
 			return 0;
+
+		if (getManualTownLevel() > -1)
+			return getManualTownLevel();
 
 		int townLevelId = -1;
 		for (Integer level : TownySettings.getConfigTownLevel().keySet()) {
