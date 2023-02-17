@@ -448,8 +448,10 @@ public final class FileMgmt {
 				// Data version goes first.
 				fout.write("VER".getBytes(StandardCharsets.UTF_8));
 				fout.write(data.getVersion());
-				// Write the plot height (who knows Mojang might change it a second time.
+				// Write the plot height (who knows Mojang might change it a fourth time.)
 				fout.writeInt(data.getHeight());
+				// Write the plot min height (who knows Mojang might change it a second time.)
+				fout.writeInt(data.getMinHeight());
 				// Write the actual blocks with their BlockData included.
 				for (String block : new ArrayList<>(data.getBlockList()))
 					fout.writeUTF(block);

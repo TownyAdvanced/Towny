@@ -14,7 +14,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
@@ -176,7 +175,24 @@ public class BaseCommand implements TabCompleter{
 		
 		return Collections.emptyList();
 	}
-	
+
+	/**
+	 * Returns the names a player's nation's residents that start with a string
+	 *
+	 * @param player the player to get the nation's residents of
+	 * @param str the string to check if the nation's residents start with
+	 * @return the resident names that match str
+	 */
+	public static List<String> getNationResidentNamesOfPlayerStartingWith(Player player, String str){
+		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		
+		if (res != null && res.hasNation()) {
+			return NameUtil.filterByStart(NameUtil.getNames(res.getNationOrNull().getResidents()), str);
+		}
+
+		return Collections.emptyList();
+	}
+
 	/**
 	 * Returns the names a player's town's residents that start with a string
 	 *
@@ -191,7 +207,7 @@ public class BaseCommand implements TabCompleter{
 			return NameUtil.filterByStart(NameUtil.getNames(res.getTownOrNull().getResidents()), str);
 		}
 
-		return Collections.emptyList();
+		return new ArrayList<>();
 	}
 
 	/**
@@ -235,8 +251,9 @@ public class BaseCommand implements TabCompleter{
 		if (!(sender instanceof Player player))
 			return getResidentsWithoutTownStartingWith(arg);
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
-			.filter(res -> player.canSee(res.getPlayer()))
-			.map(res -> res.getName())
+			.map(Resident::getPlayer)
+			.filter(p -> p != null && player.canSee(p))
+			.map(Player::getName)
 			.collect(Collectors.toCollection(ArrayList::new));
 		return !residents.isEmpty()
 			? NameUtil.filterByStart(residents, arg)
@@ -348,9 +365,11 @@ public class BaseCommand implements TabCompleter{
 			throw new TownyException(Translatable.of("msg_err_console_only"));
 	}
 	
-	public static void catchConsole(CommandSender sender) throws TownyException {
-		if (sender instanceof ConsoleCommandSender)
+	public static Player catchConsole(CommandSender sender) throws TownyException {
+		if (!(sender instanceof Player player))
 			throw new TownyException(Translatable.of("msg_err_player_only"));
+		
+		return player;
 	}
 	
 	public static void checkPermOrThrow(Permissible permissible, String node) throws NoPermissionException {

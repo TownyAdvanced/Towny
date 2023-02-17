@@ -10,6 +10,8 @@ I am helped out by the TownyAdvanced team: Articdive, FlagCourier, Warrior and a
 Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness created Towny for the now-defunct server platform called hMod. Shadeness ported Towny to Bukkit and left the project shortly afterwards, returning later to add EnemyWar or as it became known: [FlagWar](https://github.com/TownyAdvanced/FlagWar). Towny is now over 10 years old! 
 
 **Go check out some of the [features](https://github.com/TownyAdvanced/Towny/wiki#features) Towny has and see why it's still popular for yourself.**
+
+**If you're interested in add-on plugins for Towny, [check out the TownyAdvanced website/portal](https://townyadvanced.github.io) where you can view and download all of the  plugins that the team maintains, or check out the [SponsorPlugins](https://github.com/LlmDl/SponsorPlugins#readme) you get access to when you give back!**
 </p>
 
 [![CodeFactor](https://www.codefactor.io/repository/github/townyadvanced/towny/badge)](https://www.codefactor.io/repository/github/townyadvanced/towny)
@@ -21,7 +23,7 @@ ___
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.19.* </td><td rowspan=4> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.98.4.0>0.98.4.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.19.* </td><td rowspan=4> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.98.6.0>0.98.6.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
 <tr align=center><td> MC 1.18.* </td>
 <tr align=center><td> MC 1.17.* </td>
 <tr align=center><td> MC 1.16.* </td>
@@ -44,7 +46,7 @@ ___
 ### Staying up to date
 <p><img align=right src="https://user-images.githubusercontent.com/879756/65964779-3a067200-e423-11e9-9928-938b976af2c2.gif" height="155">
     
-Now that all Release builds and Development builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Custom > Releases".
+Now that all Release builds and Pre-release builds are being made available here on github's [Releases](https://github.com/TownyAdvanced/Towny/releases) tab I am recommending that server admins "watch" Towny on github. Just click the watch button in the upper right and select "Custom > Releases".
     
 Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/towny-advanced.72694/watch) on Spigot you will be notified on that website when a new Release version is out.
 </p>
@@ -52,17 +54,18 @@ Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/to
 ___
 
 ### Connect/Support
-The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a development build it is expected that you have read the [changelog](https://git.io/fjbS3) for any important changes since the previous Release build.
+The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a pre-release version it is expected that you have read the [changelog](https://git.io/fjbS3) for any important changes since the previous Release build.
 
 Some important pages to look over:
-- [Installing Towny](https://github.com/TownyAdvanced/Towny/wiki/Installation)
-- [How Towny Works](https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works)
+- **[Installing Towny](https://github.com/TownyAdvanced/Towny/wiki/Installation)** - Why make installation hard on yourself?
+- **[Frequently Asked Questions](https://github.com/TownyAdvanced/Towny/wiki/Frequently-Asked-Questions)** - Actually read this!
+- **[How Towny Works](https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works)** - The bulk of the Towny documentation, read it eventually.
 
 Here on GitHub's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/discussions/new?category=Q-A)
 
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Percentage of issues still open")
 
-If you still need help, join us on the [Discord server]( https://discord.gg/gnpVs5m ), where you can find cutting edge updates and discussion on the development of the plugin.
+If you still need help, join us on the [Discord server]( https://discord.gg/gnpVs5m ), where you'll find Channels for support, add-on plugins, [SponsorPlugins](https://github.com/LlmDl/SponsorPlugins#readme), plugin-development and just regular old discussion of the plugin.
 
 If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
 

@@ -260,7 +260,9 @@ msg_set_wild_regen: '&bRégénération de la nature de %s changé avec succès �
 msg_set_use_towny_on: '&bCe monde est maintenant géré par les règles de Towny.'
 msg_set_use_towny_off: '&cCe monde est exempté de toutes les interactions de Towny.'
 msg_error_must_be_int: '&bLe montant doit être un nombre entier.'
+msg_error_input_must_be_int: '&c%s doit être un nombre entier'
 msg_error_must_be_num: '&bLe montant doit être un nombre.'
+msg_error_input_must_be_num: '&c%s doit être un nombre'
 msg_must_specify_amnt: '&bVous devez préciser le montant. Ex: %s 54'
 msg_town_set_tax: '&b%s a fixé les impôts résidentiels quotidiens à %s'
 msg_town_set_plottax: '&b%s a fixé les impôts quotidiens des parcelles à %s'
@@ -588,6 +590,7 @@ status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Ouvert)'
 status_town_board: 'Description:'
 status_founded: 'Fondée le :'
+status_founded_by: 'Fondateur:'
 status_town_size: 'Taille de la ville :'
 status_town_size_bought: 'Acheté:'
 status_town_size_bonus: 'Bonus:'
@@ -1615,3 +1618,21 @@ msg_town_plots_type_line: '<dark_green>%s = <green>%s <gray>/ <aqua>%s <gray>/ <
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'Vous êtes sur le point d''accorder des autorisations complètes à une ville entière. Cela signifie que le maire de la ville pourra décider qui obtiendra l''autorisation de construire et de detruire dans votre ville, en ajoutant des habitants. Si cette ville est ouverte, alors n''importe qui peut rejoindre et obtenir un accès complet à votre ville. Êtes-vous sûr de vouloir faire confiance à tous les résidents (y compris les futurs résidents) de cette ville ?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'Vous ne pouvez pas exécuter cette commande car votre ville est en guerre.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'Il y a un étranger dans ce bloc de ville, tu ne peux pas dérevendicer ce bloc de ville !'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Vous ne pouvez pas créer une nouvelle ville, vous devez attendre %s secondes.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Vous ne pouvez pas annexer ce bloc de ville : %s, il vous reste %s à attendre.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'Le fondateur de %s est maintenant %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'La ville de %s a été paramétrée sur %s pour l''autorisation de faire la guerre. '
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Êtes-vous sûr de vouloir désannexer toute votre terre ? (Votre Centre Ville ne sera pas désannexé.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "Vous avez tout désannexer à part le homeblock. Pour désannexer le homeblock vous devez d'abord placer un nouveau homeblock avec '/t set homeblock'."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Êtes-vous sûr de vouloir nommer %s dirigeant de la nation ? Cette action est irréversible !"
+msg_warn_town_already_capital: "<red>La ville de %s est déjà la capitale de la nation."

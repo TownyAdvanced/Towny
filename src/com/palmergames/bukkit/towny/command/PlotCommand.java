@@ -44,7 +44,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPermissionSource;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.WorldCoordMaterialRemover;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -761,7 +761,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (materialsToDelete.isEmpty())
 							return true;
 						
-						TownyRegenAPI.deleteMaterialsFromWorldCoord(townBlock.getWorldCoord(), materialsToDelete);
+						WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), materialsToDelete);
 						TownyMessaging.sendMsg(player, Translatable.of("msg_clear_plot_material", StringMgmt.join(materialsToDelete, ", ")));
 
 						// Raise an event for the claim
@@ -2123,11 +2123,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		WorldCoord coord = WorldCoord.parseWorldCoord(player);
 
 		try {
-			coord = new WorldCoord(player.getWorld().getName(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+			coord = new WorldCoord(player.getWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {}
 
 		if (TownyAPI.getInstance().isWilderness(coord))
-			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownyWorldOrNull(), player));
+			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownyWorld(), player));
 		else
 			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), player));
 	}

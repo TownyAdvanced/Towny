@@ -252,6 +252,14 @@ public enum HelpMenu {
 		}
 	},
 
+	TA_SET_FOUNDER {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin set founder")
+				.add("founder [town] [foundername]", "");
+		}
+	},
+
 	TA_SET_PLOT {
 		@Override
 		protected MenuBuilder load() {
@@ -389,7 +397,7 @@ public enum HelpMenu {
 	TOWNYWORLD_TOGGLE_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("townyworld toggle {worldname}")
+			return new MenuBuilder("townyworld {worldname} toggle")
 				.add("claimable", "")
 				.add("usingtowny", "")
 				.add("warallowed", "")

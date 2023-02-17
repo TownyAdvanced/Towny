@@ -92,12 +92,13 @@ public class TownyWorld extends TownyObject {
 		return uuid;
 	}
 	
+	@ApiStatus.Internal
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
 
 	public World getBukkitWorld() {
-		return Bukkit.getWorld(uuid);
+		return this.uuid != null ? Bukkit.getWorld(this.uuid) : Bukkit.getWorld(getName());
 	}
 	
 	public HashMap<String, Town> getTowns() {
@@ -129,12 +130,12 @@ public class TownyWorld extends TownyObject {
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
 		if (!hasTownBlock(coord))
 			throw new NotRegisteredException();
-		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), coord));
+		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), this.getUUID(), coord));
 	}
 
 	public boolean hasTownBlock(Coord key) {
 
-		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), key));
+		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), this.getUUID(), key));
 	}
 
 	public TownBlock getTownBlock(int x, int z) throws NotRegisteredException {

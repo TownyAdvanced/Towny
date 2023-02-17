@@ -268,6 +268,8 @@ public class JailUtil {
 	private static void teleportAwayFromJail(Resident resident) {
 		// Don't teleport a player who isn't online.
 		if (!resident.isOnline()) return;
+		// Don't teleport a player if the config is set to not allow it.
+		if (!TownySettings.doesUnjailingTeleportPlayer()) return;
 		SpawnUtil.jailAwayTeleport(resident);
 	}
 	

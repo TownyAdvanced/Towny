@@ -260,7 +260,9 @@ msg_set_wild_regen: '&b%s nin vahşi yenilenmesi şu şekilde başarıyla deği�
 msg_set_use_towny_on: '&bBu dünya artık kasaba kurallarını takip ediyor.'
 msg_set_use_towny_off: '&cBu dünya tüm şehir etkileşimlerinden muaftır.'
 msg_error_must_be_int: '&bMiktar tam sayı olmalıdır.'
+msg_error_input_must_be_int: '&c%s bir tam sayı olmalı'
 msg_error_must_be_num: '&bMiktar bir sayı olmalıdır.'
+msg_error_input_must_be_num: '&c%s bir sayı olmalı'
 msg_must_specify_amnt: '&bMiktarı belirtmelidir. Örneğin %s 54'
 msg_town_set_tax: '&b%s, günlük ikamet vergisini %s olarak ayarladı'
 msg_town_set_plottax: '&b%s, parsellerin günlük vergisini %s olarak belirledi'
@@ -588,6 +590,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Açık)'
 status_town_board: 'Pano:'
 status_founded: 'Kuruluş:'
+status_founded_by: 'Founded by:'
 status_town_size: 'Şehir büyüklüğü:'
 status_town_size_bought: 'Satın alındı:'
 status_town_size_bonus: 'Bonus:'
@@ -732,7 +735,7 @@ msg_error_ta_plot_claim: 'Eksik oyuncu adı, örneğin:/ta plot claim OyuncuAdı
 msg_error_no_player_with_that_name: 'İsimli oyuncu bulunamadı %s'
 msg_admin_has_given_you_a_plot: 'Bir yönetici sizin için bir arsa talep etti: %s'
 msg_town_forcepvp_setting_set_to: '%s kasabasının pvp ayarı %s'
-msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
+msg_town_forcedisabledpvp_setting_set_to: '%s şehri, adhmindisabledpvp ayarlarını %s olarak zorladı'
 msg_nation_changed_open: '&cUlusun statüsü artık açk %s.'
 msg_err_already_in_a_nation: 'Kasabanız zaten bir ulusun içinde.'
 msg_err_nation_not_open: '&c%s ülkesinin kapıları herkese açık değil. Kralıdan veya bir asistandan kasabanızı davet etmesini isteyin.'
@@ -859,7 +862,7 @@ msg_err_you_aren't currently jailed: 'Şu anda hapiste değilsin.'
 #Added in 0.74
 msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Bu konumda bu portalın diğer tarafını yaratmanıza izin verilmiyor.'
 #Added in 0.75
-msg_already_ally: 'Ulusun zaten müttefik %s.'
+msg_already_ally: 'Ulusun zaten %s ile müttefik.'
 #Added in 0.76
 msg_you: 'Sen'
 #Added in 0.77
@@ -1571,22 +1574,22 @@ msg_spawn_cost_free: 'Ücretsiz'
 msg_plot_already_of_type: 'Bu arsa çoktan %s tipinde.'
 msg_town_board_reset: '&bKasaba tahtası temizlendi.'
 msg_town_has_no_jailslots: 'Kasaba hapishanesi dolu.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s, %s hapishanesine %s. hücreye %s saatliğine ve %s ila %s kefaletiyle gönderildi.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s, %s tarafından %s saat boyunca %s hücre numarasına %s için gönderildi.'
 msg_you_have_been_jailed_your_bail_is_x: 'Hapse düştün, kefaret bedelin %s.'
-msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
-msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
-msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
-msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Belirlenmiş kefaletin maksimum değerden fazla. (%s)'
+msg_err_higher_than_max_allowed_hours_x: 'Belirlenmiş saatin maksimum değerden fazla. (%s)'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Şehir kasasında %s oyuncusunu hapsetmek için yeterli değil, ücret %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Gardiyanların alan kazanmak için seni serbest bıraktı.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s, başka bir tutsağa yer açması için serbest bırakıldı.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Gardiyanların seni tutuklu bırakmaya mali gücü yetmediği için serbest bırakıldın.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s, Şehir kasasındaki kaynak eksikliğinden ötürü serbest bırakıldı.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: 'Şehir kasasından %s çekildi, %s tutsağının bakım masrafı için ödenecek.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: 'Şehir kasasından %s çekildi, %s tutsağının hapsedilmesi için ödenecek.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Tüm kasaba ve ulus bankalarını %s''e eşitlemek istediğinizden emin misiniz?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cUlusun maksimum izin verilen ulus başına vatandaş sayısına ulaştı, %s ve %s eklenilemiyor.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
 msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
@@ -1598,20 +1601,38 @@ msg_town_plots_title: ' Kasaba Arazileri'
 #Part of the /town plots output.
 msg_town_plots_town_size: '<dark_green>Kasaba Büyüklüğü: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Alış: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[UlusBonusu: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Tür: <green>Oyuncu-Sahipli <gray>/ <aqua>Satışta <gray>/ <yellow>Toplam'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Günlük Gelir'
 #Part of the /town plots output.
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'The town of %s has had the founder set to %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."

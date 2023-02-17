@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -38,7 +39,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -173,12 +173,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						throw new TownyException(Translatable.of("msg_err_no_economy"));
 
 					if (split.length > 1) {
-						town = TownyUniverse.getInstance().getTown(split[1]);
-
-						if (town == null) {
-							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", split[1]));
-							return;
-						}
+						town = getTownOrThrow(split[1]);
 					} else if (player != null) {
 						Resident resident = TownyAPI.getInstance().getResident(player);
 						
@@ -384,70 +379,14 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyUniverse.getTownyWorlds().size() + Colors.Gray + " | " + Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
 		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
-		
 
 		// Other TownyAdvanced plugins to report versions
-		int plugins = 0;
-		String townyPlugins = Colors.Gold + "[";
-		
-		// LlmDl Sponsor exclusive
-		Plugin tCamps = Bukkit.getServer().getPluginManager().getPlugin("TownyCamps");
-		if (tCamps != null) {
-			townyPlugins += Colors.Yellow + "TownyCamps " + Colors.Green + tCamps.getDescription().getVersion() + " ";
-			plugins++;
-		}
-		
-		Plugin townyChat = Bukkit.getServer().getPluginManager().getPlugin("TownyChat");
-		if (townyChat != null){
-			townyPlugins += Colors.Yellow + "TownyChat " + Colors.Green + townyChat.getDescription().getVersion() + " ";
-			plugins++;
-		}
-		
-		Plugin tCult = Bukkit.getServer().getPluginManager().getPlugin("TownyCultures");
-		if (tCult != null) {
-			townyPlugins += Colors.Yellow + "TownyCultures " + Colors.Green + tCult.getDescription().getVersion() + " ";
-			plugins++;
-		}
-		
-		Plugin tFlight = Bukkit.getServer().getPluginManager().getPlugin("TownyFlight");
-		if (tFlight != null) {
-			townyPlugins += Colors.Yellow + "TownyFlight " + Colors.Green + tFlight.getDescription().getVersion() + " ";
-			plugins++;
-		}
+		String townyPlugins = "";
+		List<String> pluginList = PluginIntegrations.getInstance().getTownyPluginsForUniverseCommand();
+		townyPlugins = String.join(" ", pluginList);
+		if (pluginList.size() > 0)
+			output.add(Colors.Gold + "[" + townyPlugins + Colors.Gold + "]");
 
-		// LlmDl Sponsor exclusive
-		Plugin tHist = Bukkit.getServer().getPluginManager().getPlugin("TownyHistories");
-		if (tHist != null) {
-			townyPlugins += Colors.Yellow + "TownyHistories " + Colors.Green + tHist.getDescription().getVersion() + " ";
-			plugins++;
-		}
-		
-		Plugin flagWar = Bukkit.getServer().getPluginManager().getPlugin("FlagWar");
-		if (flagWar != null) {
-			townyPlugins += Colors.Yellow + "FlagWar " + Colors.Green + flagWar.getDescription().getVersion() + " ";
-			plugins++;
-		}
-		
-		Plugin siegeWar = Bukkit.getServer().getPluginManager().getPlugin("SiegeWar");
-		if (siegeWar != null) {
-			townyPlugins += Colors.Yellow + "SiegeWar " + Colors.Green + siegeWar.getDescription().getVersion() + " ";
-			plugins++;
-		}
-
-		Plugin eventWar = Bukkit.getServer().getPluginManager().getPlugin("EventWar");
-		if (eventWar != null) {
-			townyPlugins += Colors.Yellow + "EventWar " + Colors.Green + eventWar.getDescription().getVersion() + " ";
-			plugins++;
-		}
-
-		Plugin townyRTP = Bukkit.getServer().getPluginManager().getPlugin("TownyRTP");
-		if (townyRTP != null) {
-			townyPlugins += Colors.Yellow + "TownyRTP " + Colors.Green + townyRTP.getDescription().getVersion() + " ";
-			plugins++;
-		}
-
-		if (plugins > 0)
-			output.add(townyPlugins + Colors.Gold + "]");
 		return output;
 	}
 
@@ -511,7 +450,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			output.add(translator.of("towny_prices_taxes_plot", (town.isTaxPercentage()? town.getTaxes() + "%" : getMoney(town.getTaxes())), getMoney(town.getPlotTax())));
 			output.add(translator.of("towny_prices_taxes_shop", getMoney(town.getCommercialPlotTax()), getMoney(town.getEmbassyPlotTax())));
-			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost())));
+			output.add(translator.of("towny_prices_town_neutral_tax", getMoney(TownySettings.getTownNeutralityCost(town))));
 			
 			output.add(translator.of("towny_prices_plots"));
 			List<TownBlockType> townBlockTypes = new ArrayList<>(TownBlockTypeHandler.getTypes().values());
@@ -530,7 +469,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 			if (nation != null) {
 				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
-				output.add(translator.of("towny_prices_nation_tax", (nation.isTaxPercentage() ? nation.getTaxes() + "%" : getMoney(nation.getTaxes())), getMoney(TownySettings.getNationNeutralityCost())));
+				output.add(translator.of("towny_prices_nation_tax", (nation.isTaxPercentage() ? nation.getTaxes() + "%" : getMoney(nation.getTaxes())), getMoney(TownySettings.getNationNeutralityCost(nation))));
 			}
 		}
 		return output;

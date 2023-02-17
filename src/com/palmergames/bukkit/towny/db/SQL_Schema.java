@@ -64,6 +64,7 @@ public class SQL_Schema {
 		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
 		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
+		columns.add("`uuid` varchar(36) NOT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
@@ -154,9 +155,9 @@ public class SQL_Schema {
     	List<String> columns = new ArrayList<>();
 		columns.add("`mayor` mediumtext");
 		columns.add("`nation` mediumtext");
-		columns.add("`assistants` text DEFAULT NULL");
 		columns.add("`townBoard` mediumtext DEFAULT NULL");
 		columns.add("`tag` mediumtext DEFAULT NULL");
+		columns.add("`founder` mediumtext DEFAULT NULL");
 		columns.add("`protectionStatus` mediumtext DEFAULT NULL");
 		columns.add("`bonus` int(11) DEFAULT 0");
 		columns.add("`purchased` int(11)  DEFAULT 0");
@@ -174,6 +175,7 @@ public class SQL_Schema {
 		columns.add("`public` bool NOT NULL DEFAULT '0'");
 		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
+		columns.add("`allowedToWar` bool NOT NULL DEFAULT '1'");
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
 		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
@@ -585,6 +587,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
     	cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "disableplayertrample"));
+    	cleanups.add(ColumnUpdate.of("TOWNS", "assistants"));
 
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());

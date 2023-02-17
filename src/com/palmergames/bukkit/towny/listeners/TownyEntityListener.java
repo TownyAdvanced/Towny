@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -20,7 +21,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Boat;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
@@ -116,7 +116,7 @@ public class TownyEntityListener implements Listener {
 			 */
 			if (EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defender)
 				&& TownySettings.areProtectedEntitiesProtectedAgainstMobs()
-				&& !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause()))
+				&& entityProtectedFromExplosiveDamageHere(defender, event.getCause()))
 				cancelExplosiveDamage = true;
 			
 			/*
@@ -124,7 +124,7 @@ public class TownyEntityListener implements Listener {
 			 * aren't projectiles based on whether the location has PVP enabled.
 			 */
 			if (defender instanceof Player && EntityTypeUtil.isPVPExplosive(attacker.getType()))
-				cancelExplosiveDamage = CombatUtil.preventPvP(TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
+				cancelExplosiveDamage = CombatUtil.preventPvP(TownyAPI.getInstance().getTownyWorld(defender.getWorld()), TownyAPI.getInstance().getTownBlock(defender.getLocation()));
 			
 			/*
 			 * Cancel explosion damage accordingly.
@@ -203,7 +203,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && !TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), event.getCause())) {
+		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && entityProtectedFromExplosiveDamageHere(event.getEntity(), event.getCause())) {
 			event.setDamage(0);
 			event.setCancelled(true);
 		}
@@ -230,7 +230,7 @@ public class TownyEntityListener implements Listener {
 		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
 			return;
 
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
 		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
 			event.setCancelled(true);
@@ -278,7 +278,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		
 		Location loc = potion.getLocation();		
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld());
 		float radius = event.getAreaEffectCloud().getRadius();
 		List<Block> blocks = new ArrayList<>();
 		
@@ -357,56 +357,77 @@ public class TownyEntityListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		// ignore non-Towny worlds.
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if (event.getEntity() != null) {
-			
-			LivingEntity livingEntity = event.getEntity();
+		// ignore Citizens NPCs and named-mobs (if configured.) 
+		LivingEntity livingEntity = event.getEntity();
+		if (entityIsExempt(livingEntity))
+			return;
 
-			// ignore Citizens NPCs
-			if (BukkitTools.checkCitizens(livingEntity))
-				return;
-			
-			if (TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null)
-				return;
-
-			if(BukkitTools.isEventCancelled(new MobSpawnRemovalEvent(event.getEntity())))
-				return;
-
-			Location loc = event.getLocation();
-			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
-			
-			// remove from world if set to remove mobs globally
-			if (!townyWorld.hasWorldMobs() && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity)) {
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
+		if (disallowedWorldMob(townyWorld.hasWorldMobs(), livingEntity)) {
+			// Handle mob removal world-wide. 
+			if (weAreAllowedToRemoveThis(livingEntity))
 				event.setCancelled(true);
-			}
-			// handle villager baby removal in wilderness
-			if (livingEntity instanceof Villager villager && !villager.isAdult() && (TownySettings.isRemovingVillagerBabiesWorld())) {
+		} else if (disallowedWildernessMob(townyWorld.hasWildernessMobs(), livingEntity)) {
+			// Handle mob removal specific to the wilderness.
+			if (weAreAllowedToRemoveThis(livingEntity))
 				event.setCancelled(true);
-			}
-			// Handle mob removal in wilderness
-			if (TownyAPI.getInstance().isWilderness(loc)) {
-				// Check if entity should be removed.
-				if (!townyWorld.hasWildernessMobs() && MobRemovalTimerTask.isRemovingWildernessEntity(livingEntity)) {
-					event.setCancelled(true);
-				}
-				return;
-			}
-			
-			// handle mob removal in towns
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
-			if (!townyWorld.isForceTownMobs() && !townBlock.getPermissions().mobs && MobRemovalTimerTask.isRemovingTownEntity(livingEntity)) {
+		} else if (disallowedTownMob(livingEntity)) {
+			// Handle mob removal specific to towns.
+			if (weAreAllowedToRemoveThis(livingEntity))
 				event.setCancelled(true);
-			}
-			
-			// handle villager baby removal in towns
-			if (livingEntity instanceof Villager villager && !villager.isAdult() && TownySettings.isRemovingVillagerBabiesTown()) {
-				event.setCancelled(true);
-			}
 		}
+	}
+
+	private boolean entityIsExempt(LivingEntity livingEntity) {
+		return PluginIntegrations.getInstance().checkCitizens(livingEntity)
+			|| entityIsExemptByName(livingEntity);
+	}
+
+	private boolean entityIsExemptByName(LivingEntity livingEntity) {
+		return TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null 
+				&& !PluginIntegrations.getInstance().checkHostileEliteMobs(livingEntity);
+	}
+
+	private boolean disallowedWorldMob(boolean worldAllowsMobs, LivingEntity livingEntity) {
+		return (!worldAllowsMobs && MobRemovalTimerTask.isRemovingWorldEntity(livingEntity))
+				|| disallowedWorldVillagerBaby(livingEntity);
+	}
+
+	private boolean disallowedWorldVillagerBaby(LivingEntity livingEntity) {
+		return TownySettings.isRemovingVillagerBabiesWorld() && livingEntity instanceof Villager villager && !villager.isAdult();
+	}
+
+	private boolean disallowedWildernessMob(boolean wildernessAllowsMobs, LivingEntity livingEntity) {
+		return TownyAPI.getInstance().isWilderness(livingEntity.getLocation()) && !wildernessAllowsMobs && MobRemovalTimerTask.isRemovingWildernessEntity(livingEntity);
+	}
+
+	private boolean disallowedTownMob(LivingEntity livingEntity) {
+		return !TownyAPI.getInstance().isWilderness(livingEntity.getLocation()) && (disallowedByTown(livingEntity) || disallowedTownVillagerBaby(livingEntity));
+	}
+
+	private boolean disallowedByTown(LivingEntity livingEntity) {
+		return !TownyAPI.getInstance().areMobsEnabled(livingEntity.getLocation()) && MobRemovalTimerTask.isRemovingTownEntity(livingEntity);
+	}
+
+	private boolean disallowedTownVillagerBaby(LivingEntity livingEntity) {
+		return TownySettings.isRemovingVillagerBabiesTown() && livingEntity instanceof Villager villager && !villager.isAdult();
+	}
+
+	/**
+	 * Towny would normally remove this entity, but we use a
+	 * {@link MobSpawnRemovalEvent} to allow other plugins to override us. The event
+	 * starts out in a cancelled state.
+	 * 
+	 * @param livingEntity LivingEntity which spawned.
+	 * @return true if Towny is allowed to remove this entity.
+	 */
+	private boolean weAreAllowedToRemoveThis(LivingEntity livingEntity) {
+		return !BukkitTools.isEventCancelled(new MobSpawnRemovalEvent(livingEntity));
 	}
 
 	/**
@@ -469,7 +490,6 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 * @param event - onEntityChangeBlockEvent
 	 */
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
 		if (plugin.isError()) {
@@ -477,7 +497,7 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld().getName());
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld());
 
 		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
@@ -507,8 +527,10 @@ public class TownyEntityListener implements Listener {
 			case BOAT, CHEST_BOAT -> {
 				if (!event.getBlock().getType().equals(Material.LILY_PAD))
 					return;
-				Boat boat = (Boat) event.getEntity();
-				if (boat.getPassenger() != null && boat.getPassenger() instanceof Player player)
+				
+				final List<Entity> passengers = event.getEntity().getPassengers();
+				
+				if (!passengers.isEmpty() && passengers.get(0) instanceof Player player)
 					// Test if the player can break here.
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
 				else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
@@ -555,10 +577,10 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
+		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
-
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld().getName());
+		
 		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), null, event.getEntity(), event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
@@ -649,84 +671,99 @@ public class TownyEntityListener implements Listener {
 
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
-		
-		Entity hanging = event.getEntity();
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(hanging.getWorld().getName());
 
-		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
-		if (event.getCause().equals(RemoveCause.PHYSICS) && ItemLists.HANGING_ENTITIES.contains(hanging.getType().name())) {
-			Location loc = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection());
-			if (TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(loc))) {
+		Entity hanging = event.getEntity();
+		RemoveCause removeCause = event.getCause();
+
+		// Protect hanging entities from Physics-caused removals, including keeping them
+		// in place while we regenerate their exploded-attached-block.
+		if (removeCause.equals(RemoveCause.PHYSICS)) {
+			if (attachedToRegeneratingBlock(hanging) || itemFrameBrokenByBoatExploit(hanging))
 				event.setCancelled(true);
-				return;
-			}
+			return;
 		}
-		
-		// TODO: Keep an eye on https://hub.spigotmc.org/jira/browse/SPIGOT-3999 to be completed.
-		// This workaround prevent boats from destroying item_frames.
-		if (event.getCause().equals(RemoveCause.PHYSICS) && ItemLists.ITEM_FRAMES.contains(hanging.getType().name())) {
+
+		// It's an Entity that has broken this Hanging.
+		if (event instanceof HangingBreakByEntityEvent evt) {
+			// Test entity-caused Explosions, Players and Mobs.
+			if (preventHangingBrokenByEntity(hanging, removeCause, evt.getRemover()))
+				event.setCancelled(true);
+			return;
+		}
+
+		// Probably a case of a block explosion/created explosion with no Entity.
+		if (removeCause.equals(RemoveCause.EXPLOSION)) {
+			if (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.BLOCK_EXPLOSION) || weAreRevertingBlockExplosionsInWild(hanging.getLocation()))
+				event.setCancelled(true);
+			return;
+		}
+	}
+
+	private boolean attachedToRegeneratingBlock(Entity hanging) {
+		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
+		return ItemLists.HANGING_ENTITIES.contains(hanging.getType().name()) && 
+			TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection())));
+	}
+
+	private boolean itemFrameBrokenByBoatExploit(Entity hanging) {
+		// This workaround prevent boats from destroying item_frames, detailed in https://hub.spigotmc.org/jira/browse/SPIGOT-3999.
+		if (ItemLists.ITEM_FRAMES.contains(hanging.getType().name())) {
 			Block block = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection()).getBlock();
 			if (block.isLiquid() || block.isEmpty())
-				return;
+				return false;
 			
 			for (Entity entity : hanging.getNearbyEntities(0.5, 0.5, 0.5)) {
 				if (entity instanceof Vehicle) {
-					event.setCancelled(true);
-					return;
+					return true;
 				}
 			}
 		}
+		return false;
+	}
 
-		/*
-		 * It's a player or an entity (probably an explosion)
-		 */
-		if (event instanceof HangingBreakByEntityEvent evt) {
-			Object remover = evt.getRemover();
-			
-			/*
-			 * Check if this has a shooter.
-			 */
-			if (remover instanceof Projectile projectile)
-				remover = projectile.getShooter();
-
-			if (remover instanceof Player player) {
-				Material mat = EntityTypeUtil.parseEntityToMaterial(event.getEntity().getType(), Material.GRASS_BLOCK);
-
-				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), mat));
-			} else if (remover instanceof Entity) {
-				/*
-				 * Probably a skeleton, cancel the break if it is in a town.
-				 */
-				if (!TownyAPI.getInstance().isWilderness(hanging.getLocation()))
-					event.setCancelled(true);
-			}
-		
-			if (event.getCause() == RemoveCause.EXPLOSION) {
-				// Explosions are blocked in this plot
-				if (!TownyActionEventExecutor.canExplosionDamageEntities(hanging.getLocation(), event.getEntity(), DamageCause.ENTITY_EXPLOSION)) {
-					event.setCancelled(true);
-				// Explosions are enabled, must check if in the wilderness and if we have explrevert in that world
-				} else {
-					TownBlock tb = TownyAPI.getInstance().getTownBlock(hanging.getLocation());
-					// We're in the wilderness because the townblock is null and we have a remover.
-					if (tb == null && remover != null)
-					    if (townyWorld.isExpl() && townyWorld.isUsingPlotManagementWildEntityRevert() && townyWorld.isProtectingExplosionEntity((Entity)remover))
-							event.setCancelled(true);
-				}
-			}
-
-		/*
-		 * Probably a case of a block explosion/created explosion with no Entity.
-		 */
-		} else {
-
-			if (event.getCause() == RemoveCause.EXPLOSION) {
-				if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.BLOCK_EXPLOSION))
-					event.setCancelled(true);
-			}
+	private boolean preventHangingBrokenByEntity(Entity hanging, RemoveCause removeCause, Object remover) {
+		// Handle instances of Explosions caused by entities.
+		if (removeCause.equals(RemoveCause.EXPLOSION)
+				&& (entityProtectedFromExplosiveDamageHere(hanging, DamageCause.ENTITY_EXPLOSION) || weAreRevertingThisRemoversExplosionsInWild(hanging.getLocation(), remover))) {
+			return true;
 		}
 
+		// Parse a potential projectile from its shooter entity.
+		if (remover instanceof Projectile projectile)
+			remover = projectile.getShooter();
+
+		if (remover instanceof Player player) {
+			if (!allowedToBreak(player, hanging))
+				// Player doesn't have permission to break this hanging entity.
+				return true;
+		} else if (remover instanceof Entity) {
+			if (!TownyAPI.getInstance().isWilderness(hanging.getLocation()))
+				// An entity (probably a skeleton,) breaking a hanging entity in a town.
+				return true;
+		}
+		return false;
+	}
+
+	private boolean allowedToBreak(Player player, Entity hanging) {
+		// Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+		return TownyActionEventExecutor.canDestroy(player, hanging.getLocation(), EntityTypeUtil.parseEntityToMaterial(hanging.getType(), Material.GRASS_BLOCK));
+	}
+
+	private boolean weAreRevertingThisRemoversExplosionsInWild(Location loc, Object remover) {
+		// Already tested if Explosions are enabled here, must check if in the
+		// wilderness and if we have explrevert in that world and we are reverting this
+		// type of entity's explosions.
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(loc.getWorld());
+		return remover != null && TownyAPI.getInstance().isWilderness(loc) 
+				&& townyWorld.isUsingPlotManagementWildEntityRevert() && townyWorld.isProtectingExplosionEntity((Entity)remover);
+	}
+
+	private boolean weAreRevertingBlockExplosionsInWild(Location loc) {
+		// Already tested if Explosions are enabled here, must check if in the
+		// wilderness and if we have blockexplrevert enabled in the world.
+		// Because of the nature of block explosions in Bukkit's API it is impossible or
+		// not worth finding the explosion's source-block, we assume it is being reverted.
+		return TownyAPI.getInstance().isWilderness(loc) && TownyAPI.getInstance().getTownyWorld(loc.getWorld()).isUsingPlotManagementWildBlockRevert();
 	}
 
 	/**
@@ -766,7 +803,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		if (!TownyActionEventExecutor.canExplosionDamageEntities(event.getEntity().getLocation(), event.getEntity(), DamageCause.LIGHTNING))
+		if (entityProtectedFromExplosiveDamageHere(event.getEntity(), DamageCause.LIGHTNING))
 			event.setCancelled(true);
 	}
 	
@@ -801,71 +838,73 @@ public class TownyEntityListener implements Listener {
 	}
 	
 	/**
-	 * Allows us to treat the hitting of Target blocks by arrows as cancellable events.
+	 * Allows us to treat the hitting of Target and ChorusFlower blocks by arrows as cancellable events.
 	 * 
 	 * @param event ProjectileHitEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onProjectileHitEventTarget(ProjectileHitEvent event) {
+	public void onProjectileHitBlockEvent(ProjectileHitEvent event) {
 		/*
-		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
+		 * Bypass any occasion where there is no block being hit or this is not a chorus flower or target block being hit.
 		 */
-		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+		Block hitBlock = event.getHitBlock();
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) 
+			|| hitBlock == null || (hitBlock.getType() != Material.TARGET && hitBlock.getType() != Material.CHORUS_FLOWER))
 			return;
 
-		if (event.getHitBlock().getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET, event.getHitBlock().getLocation())) {
-			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.TARGET)) {
-				
-				if (event instanceof Cancellable) { //TODO: When support is dropped for pre-1.17 MC versions the else can be removed.
-					event.setCancelled(true);
-				} else {
-					/*
-					 * Since we are unable to cancel a ProjectileHitEvent before MC 1.17 we must
-					 * set the block to air then set it back to its original form. 
-					 */
-					BlockData data = event.getHitBlock().getBlockData();
-					event.getHitBlock().setType(Material.AIR);
-					BukkitTools.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Allows us to protect chorus flowers being broken by bows.
-	 * 
-	 * @param event ProjectileHitEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onProjectileHitEventChorusFlower(ProjectileHitEvent event) {
-		/*
-		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
-		 */
-		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+		// Prevent non-player actions outright if it is in a town.
+		if (!(event.getEntity().getShooter() instanceof Player player)) {
+			if (!TownyAPI.getInstance().isWilderness(hitBlock))
+				cancelProjectileHitEvent(event, hitBlock);
 			return;
+		}
 
-		if (event.getHitBlock().getType() == Material.CHORUS_FLOWER) {
-			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canDestroy((Player) event.getEntity().getShooter(), event.getHitBlock().getLocation(), Material.CHORUS_FLOWER)) {
-				
-				if (event instanceof Cancellable) { //TODO: When support is dropped for pre-1.17 MC versions the else can be removed.
-					event.setCancelled(true);
-				} else {
-					/*
-					 * Since we are unable to cancel a ProjectileHitEvent before MC 1.17 we must
-					 * set the block to air then set it back to its original form. 
-					 */
-					BlockData data = event.getHitBlock().getBlockData();
-					event.getHitBlock().setType(Material.AIR);
-					BukkitTools.getScheduler().runTask(plugin, () -> event.getHitBlock().setBlockData(data));
-				}
-			}
+		// Prevent players based on their PlayerCache/towny's cancellable event.
+		if (disallowedTargetSwitch(hitBlock, player) || disallowedChorusFlowerBreak(hitBlock, player)) {
+			cancelProjectileHitEvent(event, hitBlock);
 		}
 	}
+
+	private boolean disallowedTargetSwitch(Block hitBlock, Player player) {
+		return hitBlock.getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET, hitBlock.getLocation())
+			&& !TownyActionEventExecutor.canSwitch(player, hitBlock.getLocation(), hitBlock.getType());
+	}
+
+	private boolean disallowedChorusFlowerBreak(Block hitBlock, Player player) {
+		return hitBlock.getType() == Material.CHORUS_FLOWER && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType());
+	}
+
+	private void cancelProjectileHitEvent(ProjectileHitEvent event, Block block) {
+		if (event instanceof Cancellable) {
+			event.setCancelled(true);
+			return;
+		}
+		/*
+		 * Since we are unable to cancel a ProjectileHitEvent before MC 1.17 we must
+		 * set the block to air then set it back to its original form. 
+		 * TODO: When support is dropped for pre-1.17 MC versions this method can be removed.
+		 */
+		BlockData data = block.getBlockData();
+		block.setType(Material.AIR);
+		BukkitTools.getScheduler().runTask(plugin, () -> block.setBlockData(data));
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onDoorBreak(EntityBreakDoorEvent event) {
 		if (TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation()))
 			event.setCancelled(true);
 	}
+	
+	/**
+	 * Are entities protected from Explosions here.
+	 * 
+	 * @param entity Entity which is being damaged.
+	 * @param cause  DamageCause that is hurting said entity.
+	 * @return True if Towny would protect the entity from explosions, using the
+	 *         plot permissions and a cancellable event.
+	 */
+	private boolean entityProtectedFromExplosiveDamageHere(Entity entity, DamageCause cause) {
+		return !TownyActionEventExecutor.canExplosionDamageEntities(entity.getLocation(), entity, cause);
+	}
+
 }

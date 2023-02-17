@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
@@ -160,7 +160,13 @@ public class SpawnUtil {
 	 * @param jailed Resident which is being moved from jail.
 	 */
 	public static void jailAwayTeleport(Resident jailed) {
-		initiatePluginTeleport(jailed, getIdealLocation(jailed), false);
+		getIdealLocation(jailed).thenAccept(loc -> {
+			UnjailedResidentTeleportEvent event = new UnjailedResidentTeleportEvent(jailed, loc); 
+			if (BukkitTools.isEventCancelled(event))
+				return;
+
+			initiatePluginTeleport(jailed, event.getLocation(), false);
+		});
 	}
 	
 	/**
@@ -236,7 +242,11 @@ public class SpawnUtil {
 			townSpawnLevel = TownSpawnLevel.TOWN_RESIDENT;
 		} else {
 			// Arguments were used.
-			if (!resident.hasTown()) {
+			if (TownySettings.trustedResidentsGetToSpawnToTown() && 
+					(town.hasTrustedResident(resident) || 
+							(resident.hasTown() && town.hasTrustedTown(resident.getTownOrNull())))) {
+				townSpawnLevel = TownSpawnLevel.TOWN_RESIDENT;
+			} else if (!resident.hasTown()) {
 				townSpawnLevel = TownSpawnLevel.UNAFFILIATED;
 			} else if (resident.getTownOrNull() == town) {
 				townSpawnLevel = outpost ? TownSpawnLevel.TOWN_RESIDENT_OUTPOST : TownSpawnLevel.TOWN_RESIDENT;
@@ -245,7 +255,8 @@ public class SpawnUtil {
 				Nation targetNation = town.getNationOrNull();
 
 				if (playerNation == targetNation) {
-					if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+					if (!town.isPublic() && 
+						(TownySettings.isAllySpawningRequiringPublicStatus() && !resident.hasPermissionNode(PermissionNodes.TOWNY_SPAWN_NATION_BYPASS_PUBLIC.getNode())))
 						throw new TownyException(Translatable.of("msg_err_ally_isnt_public", town));
 					else
 						townSpawnLevel = TownSpawnLevel.PART_OF_NATION;
@@ -253,7 +264,8 @@ public class SpawnUtil {
 					// Prevent enemies from using spawn travel.
 					throw new TownyException(Translatable.of("msg_err_public_spawn_enemy"));
 				} else if (targetNation.hasAlly(playerNation)) {
-					if (!town.isPublic() && TownySettings.isAllySpawningRequiringPublicStatus())
+					if (!town.isPublic() && 
+						(TownySettings.isAllySpawningRequiringPublicStatus() && !resident.hasPermissionNode(PermissionNodes.TOWNY_SPAWN_ALLY_BYPASS_PUBLIC.getNode())))
 						throw new TownyException(Translatable.of("msg_err_ally_isnt_public", town));
 					else
 						townSpawnLevel = TownSpawnLevel.NATION_ALLY;
@@ -655,11 +667,12 @@ public class SpawnUtil {
 			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L);
 	}
 	
+	@SuppressWarnings("unused")
 	private static void initiatePluginTeleport(Resident resident, CompletableFuture<Location> loc, boolean ignoreWarmup) {
 		loc.thenAccept(location -> initiatePluginTeleport(resident, location, ignoreWarmup));
 	}
 	
 	private static boolean hasPerm(Player player, PermissionNodes node) {
-		return TownyUniverse.getInstance().getPermissionSource().has(player, node.getNode());
+		return TownyUniverse.getInstance().getPermissionSource().testPermission(player, node.getNode());
 	}
 }

@@ -41,7 +41,11 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
+import com.palmergames.bukkit.towny.regen.WorldCoordEntityRemover;
+import com.palmergames.bukkit.towny.regen.WorldCoordMaterialRemover;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -68,6 +72,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
@@ -231,10 +236,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public void newWorld(String name) throws AlreadyRegisteredException {
 		
-		if (universe.getWorldMap().containsKey(name.toLowerCase()))
+		if (universe.getWorldMap().containsKey(name.toLowerCase(Locale.ROOT)))
 			throw new AlreadyRegisteredException("The world " + name + " is already in use.");
 
-		universe.getWorldMap().put(name.toLowerCase(), new TownyWorld(name));
+		universe.getWorldMap().put(name.toLowerCase(Locale.ROOT), new TownyWorld(name));
 	}
 
 	/*
@@ -487,14 +492,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (townBlock.isJail() && townBlock.getJail() != null)
 			removeJail(townBlock.getJail());
 
+		if (TownySettings.getTownUnclaimCoolDownTime() > 0)
+			CooldownTimerTask.addCooldownTimer(townBlock.getWorldCoord().toString(), CooldownType.TOWNBLOCK_UNCLAIM);
+
 		universe.removeTownBlock(townBlock);
 		deleteTownBlock(townBlock);
 
 		if (townBlock.getWorld().isDeletingEntitiesOnUnclaim())
-			TownyRegenAPI.addDeleteTownBlockEntityQueue(townBlock.getWorldCoord());
+			WorldCoordEntityRemover.addToQueue(townBlock.getWorldCoord());
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
-			TownyRegenAPI.addDeleteTownBlockIdQueue(townBlock.getWorldCoord());
+			WorldCoordMaterialRemover.addToQueue(townBlock.getWorldCoord());
 
 		// Move the plot to be restored
 		if (townBlock.getWorld().isUsingPlotManagementRevert())
@@ -1116,56 +1124,37 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
             byte[] key = new byte[3];
             fin.read(key, 0, 3);
             String test = new String(key);
-            
-            if (elements.fromString(test) == elements.VER) {// Read the file version
-                version = fin.read();
-                plotBlockData.setVersion(version);
-                
-                // next entry is the plot height
-                plotBlockData.setHeight(fin.readInt());
-            } else {
-                /*
-                 * no version field so set height
-                 * and push rest to queue
-                 */
-                plotBlockData.setVersion(version);
-                // First entry is the plot height
-                fin.reset();
-                plotBlockData.setHeight(fin.readInt());
-                blockArr.add(fin.readUTF());
-                blockArr.add(fin.readUTF());
-            }
-            
-            /*
-             * Load plot block data based upon the stored version number.
-             */
-            switch (version) {
-                
-                default:
-                case 4:
-                case 3:
-                case 1:
-                    
-                    // load remainder of file
-                    while ((value = fin.readUTF()) != null) {
-                        blockArr.add(value);
-                    }
-                    
-                    break;
-                
-                case 2: {
-                    
-                    // load remainder of file
-                    int temp = 0;
-                    while ((temp = fin.readInt()) >= 0) {
-                        blockArr.add(temp + "");
-                    }
-                    
-                    break;
-                }
-            }
-            
-            
+
+			if (elements.fromString(test) != elements.VER)
+				// This is too old to be used by modern Towny.
+				// Return null so that we do not regenerate this plot, or, we queue up a new
+				// plotsnapshot to be made.
+				return null;
+
+			version = fin.read();
+			if (version < 4)
+				// This is too old to be used by modern Towny.
+				// Return null so that we do not regenerate this plot, or, we queue up a new
+				// plotsnapshot to be made.
+				return null;
+
+			// set the version
+			plotBlockData.setVersion(version);
+
+			// next entry is the plot height
+			plotBlockData.setHeight(fin.readInt());
+
+			// Snapshots taken before 0.98.4.11 did not account for Mojang's lowered World
+			// Height, and there will be no blocks stored below y=0.
+			// Versions 5 and newer store the world's min-height as an int here.
+			plotBlockData.setMinHeight(version == 4 ? 0 : fin.readInt());
+
+			/*
+			 * Load plot block data off of the remaining file.
+			 */
+			while ((value = fin.readUTF()) != null)
+				blockArr.add(value);
+
         } catch (EOFException ignored) {
         } catch (IOException e) {
             e.printStackTrace();

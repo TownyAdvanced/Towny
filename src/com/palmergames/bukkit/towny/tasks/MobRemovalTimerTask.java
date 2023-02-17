@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
@@ -52,11 +53,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 		for (World world : Bukkit.getWorlds()) {
 			// Filter worlds not using towny.
-			if (!TownyAPI.getInstance().isTownyWorld(world))
-				continue;
-
-			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world.getName());
-			if (townyWorld == null)
+			TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
+			if (townyWorld == null || !townyWorld.isUsingTowny())
 				continue;
 
 			// Filter worlds that will always pass all checks in a world, regardless of possible conditions.
@@ -72,7 +70,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					Location livingEntityLoc = entity.getLocation();
 
 					// Check if entity is a Citizens NPC
-					if (BukkitTools.checkCitizens(entity))
+					if (PluginIntegrations.getInstance().checkCitizens(entity))
 						continue;
 
 					// Handles entities Globally.
@@ -96,6 +94,12 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 						// Check that Towny is removing this type of entity inside towns.
 						if (!isRemovingTownEntity(entity))
 							continue;
+					}
+
+					// Check if this is an EliteMob before we do any skipping-removal-of-named-mobs.
+					if (PluginIntegrations.getInstance().checkHostileEliteMobs(entity)) {
+						entitiesToRemove.add(entity);
+						continue;
 					}
 
 					if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)

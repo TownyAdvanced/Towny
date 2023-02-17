@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.player.PlayerCacheGetTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -283,7 +284,7 @@ public class PlayerCacheUtil {
 		
 		if (resident == null) {
 			// Check if entity is a Citizens NPC
-			if (BukkitTools.checkCitizens(player))
+			if (PluginIntegrations.getInstance().checkCitizens(player))
 				return TownBlockStatus.NOT_REGISTERED;
  
 			// Retry getting a resident with the ability to get a fake player resident.
@@ -406,7 +407,7 @@ public class PlayerCacheUtil {
 			/*
 			 * Handle the Wilderness.
 			 */
-			boolean hasWildOverride = townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorldOrNull(), player, material, action);
+			boolean hasWildOverride = townyUniverse.getPermissionSource().hasWildOverride(pos.getTownyWorld(), player, material, action);
 
 			if (status == TownBlockStatus.UNCLAIMED_ZONE) {
 				if (hasWildOverride)
@@ -434,14 +435,14 @@ public class PlayerCacheUtil {
 				}
 
 				// We know that the nearest Town will have a nation because the TownBlockStatus.
-				Nation nearestNation = TownyAPI.getInstance().getTownNationOrNull(pos.getTownyWorldOrNull().getClosestTownWithNationFromCoord(pos.getCoord(), null));
+				Nation nearestNation = TownyAPI.getInstance().getTownNationOrNull(pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), null));
 
 				// If the player has a Nation and is a member of this NationZone's nation.
 				if (res.hasNation() && res.getNationOrNull().getUUID().equals(nearestNation.getUUID()))
 					return true;
 
 				// The player is not a nation member of this NationZone.
-				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorldOrNull().getFormattedUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
+				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getFormattedUnclaimedZoneName(), nearestNation.getName()).forLocale(player));
 				return false;
 			}
 		}

@@ -361,5 +361,52 @@
         "value": "global_nation_settings.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time"
       }
     ]
+  },
+  {
+    "version": "0.98.4.13",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": ",DRAGON_EGG",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
+  },
+  {
+    "version": "0.98.4.17",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": ",CRYING_OBSIDIAN",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
+  },
+  {
+    "version": "0.98.6.3",
+    "changes": [
+      {
+        "type": "TOWN_LEVEL_ADD",
+        "key": "resourceProductionModifier",
+        "value": "1.0"
+      }
+    ]
+  },
+  {
+    "version": "0.98.6.5",
+    "changes": [
+      {
+        "type": "TOWN_LEVEL_ADD",
+        "key": "peacefulCostMultiplier",
+        "value": "1.0"
+      },
+      {
+        "type": "NATION_LEVEL_ADD",
+        "key": "peacefulCostMultiplier",
+        "value": "1.0"
+      }
+    ]
   }
 ]

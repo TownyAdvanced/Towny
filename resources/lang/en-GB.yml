@@ -101,12 +101,12 @@ world_plu: 'Worlds'
 world_sing: 'World'
 world_help_1: 'Current world''s status'
 world_help_2: '[world]'
-world_help_3: 'Target worlds''s status'
+world_help_3: 'Target worlds'' status'
 world_help_4: 'List all worlds'
 world_help_5: 'Regenerate this chunk'
 townyadmin_help_1: 'Unclaim this town block'
 townyadmin_help_2: 'Attempt to unclaim around you.'
-admin_panel_2: 'reload Towny'
+admin_panel_2: 'Reload Towny'
 admin_panel_3: 'Run the new day code'
 msg_block_claim: 'Claim this town block'
 msg_plot_nfs: 'Take down a plot for sale'
@@ -126,7 +126,7 @@ msg_payed_plot_cost: '&bPayed %s for %s plots in %s'
 msg_payed_resident_tax: '&bPayed resident tax of '
 msg_bankrupt_town: ' couldn''t afford to remain a town.'
 msg_bankrupt_nation: ' couldn''t afford to remain a nation.'
-msg_nation_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
+msg_nation_not_peaceful: '&bNation couldn''t afford its peaceful state.'
 msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation.'
 msg_peaceful_disabled: '&bNation peace is disabled globally.'
 msg_you_paid: '&bYou paid %s to set peaceful status.'
@@ -169,9 +169,9 @@ msg_town_online: 'Online in Town'
 msg_nation_online: 'Online in Nation'
 msg_allied_nations: '&b%s allied with the nations %s.'
 msg_enemy_nations: '&b%s developed a hatred for the nations %s.'
-msg_enemy_to_neutral: '&b%s has changed it''s status to peaceful towards %s.'
+msg_enemy_to_neutral: '&b%s has changed its status to peaceful towards %s.'
 msg_added_ally: '&b%s allied with your nation.'
-msg_removed_ally: '&b%s canceled the alliance with your nation.'
+msg_removed_ally: '&b%s cancelled the alliance with your nation.'
 msg_added_enemy: '&b%s has developed a hatred towards your nation.'
 msg_removed_enemy: '&b%s has become peaceful towards your nation.'
 msg_unable_ally_enemy: '&cUnable to ally %s as they have us as enemies.'
@@ -179,8 +179,8 @@ msg_deny_ally: '&b%s denied your request for an alliance.'
 msg_accept_ally: '&bThe nation %s accepted your request for an alliance.'
 msg_ally_req_sent: '&bThe request for an alliance has been sent to the nation %s.'
 msg_ally_request: '&bThe %s would like to form an alliance.'
-msg_unable_ally_offline: "&cUnable to request an alliance because the mayor of the target nation is offline."
-msg_unable_ally_npc: "&cUnable to request an alliance because the mayor of the target nation is an NPC."
+msg_unable_ally_offline: "&cUnable to request an alliance because the king of the target nation is offline."
+msg_unable_ally_npc: "&cUnable to request an alliance because the king of the target nation is an NPC."
 msg_claimed: '&2Successfully claimed'
 msg_unclaimed: '&2Successfully unclaimed'
 msg_not_claimable: '&cThis world is not claimable.'
@@ -260,7 +260,9 @@ msg_set_wild_regen: '&bSuccessfully changed %s''s wild regen to ''%s'''
 msg_set_use_towny_on: '&bThis world now follows towny rules.'
 msg_set_use_towny_off: '&cThis world is exempt of all towny interactions.'
 msg_error_must_be_int: '&bAmount must be an integer.'
+msg_error_input_must_be_int: '&c%s must be an integer'
 msg_error_must_be_num: '&bAmount must be a number.'
+msg_error_input_must_be_num: '&c%s must be a number'
 msg_must_specify_amnt: '&bMust specify amount. Eg: %s 54'
 msg_town_set_tax: '&b%s has set the daily resident tax at %s'
 msg_town_set_plottax: '&b%s has set the daily tax of plots at %s'
@@ -588,6 +590,7 @@ status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Open)'
 status_town_board: 'Board:'
 status_founded: 'Founded:'
+status_founded_by: 'Founded by:'
 status_town_size: 'Town Size:'
 status_town_size_bought: 'Bought:'
 status_town_size_bonus: 'Bonus:'
@@ -1615,3 +1618,21 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'The town of %s has had the founder set to %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."

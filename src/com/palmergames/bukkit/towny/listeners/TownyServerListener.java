@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 
 public class TownyServerListener implements Listener {
 
@@ -25,6 +26,6 @@ public class TownyServerListener implements Listener {
 	@EventHandler
 	public void onPluginDisable(PluginDisableEvent event) {
 		if (event.getPlugin().getName().equals("Citizens"))
-			plugin.setCitizens2(false);
+			PluginIntegrations.getInstance().setCitizens2(false);
 	}
 }

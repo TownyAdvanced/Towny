@@ -260,7 +260,9 @@ msg_set_wild_regen: '&b荒野における %s の再生を %s にしました'
 msg_set_use_towny_on: '&このワールドはTownyのルールに従います'
 msg_set_use_towny_off: '&cこのワールドは全てのTownyの相互作用から免除されます'
 msg_error_must_be_int: '&b整数を使用してください'
+msg_error_input_must_be_int: '&c%s は整数で入力してください'
 msg_error_must_be_num: '&b数量は数で指定してください'
+msg_error_input_must_be_num: '&c%s は整数で入力してください'
 msg_must_specify_amnt: '&b金額を指定してください。例： %s 54'
 msg_town_set_tax: '&b%s は一日あたりの住民税を %s に設定しました'
 msg_town_set_plottax: '&b%s は一日あたりのプロットにかかる税金を %s に設定しました'
@@ -277,8 +279,8 @@ msg_new_day_tax: '&b新しい日がやってきました！税金と家賃を集
 msg_new_day: '&b新しい日がやってきました！'
 msg_new_king: '&b%s は現在 %s の国のリーダーです！'
 msg_err_new_king_notmayor: '&c新しい国家のリーダーは市長ではありません。'
-msg_err_king_not_in_nation: '&cNew nation leader doesn''t belong to this nation.'
-msg_err_fight_like_king: '&cPeace is not an option! Fight like a Leader!'
+msg_err_king_not_in_nation: '&cこの国のリーダーはこの国に属していません。'
+msg_err_fight_like_king: '&c平和は選択肢にない！王のように戦ってください！'
 msg_no_access_nation_bank: '&c国の銀行へのアクセス権がありません'
 msg_err_no_money: '&c銀行に十分なお金がありません'
 msg_new_mayor: '&b%s は新しい市長です！'
@@ -588,6 +590,7 @@ status_title_pvp: '&4(PvP)'
 status_title_open: '&b(オープン)'
 status_town_board: 'Board:'
 status_founded: '設立:'
+status_founded_by: 'Founded by:'
 status_town_size: '町の大きさ:'
 status_town_size_bought: '購入したもの:'
 status_town_size_bonus: 'ボーナス:'
@@ -674,7 +677,7 @@ towny_map_enemy: '敵'
 enabled: '有効'
 disabled: '無効'
 forced: 'Forced'
-adjustable: 'Adjustable'
+adjustable: '調整可能'
 #Added in 0.48:
 msg_no_funds_new_town2: '&cお金が足りません。新しく町を作るには%s必要です。'
 msg_no_funds_new_nation2: '&cこの町には、新しく国を作るためのお金がありません。国を作るたの費用は%sです。'
@@ -1615,3 +1618,21 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'The town of %s has had the founder set to %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."

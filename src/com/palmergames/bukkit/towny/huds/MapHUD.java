@@ -76,7 +76,7 @@ public class MapHUD {
 		Objective objective = board.getObjective("MAP_HUD_OBJ");
 		objective.setDisplayName(ChatColor.GOLD + "Towny Map " + ChatColor.WHITE + "(" + wc.getX() + ", " + wc.getZ() + ")");
 
-		TownyWorld world = wc.getTownyWorldOrNull();
+		TownyWorld world = wc.getTownyWorld();
 		if (world == null || !world.isUsingTowny()) {
 			HUDManager.toggleOff(player);
 			return;

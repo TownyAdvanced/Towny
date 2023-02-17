@@ -67,7 +67,7 @@ nation_help_3: 'Stato della nazione specificata'
 nation_help_4: 'Elenca tutte le nazioni'
 nation_help_5: 'Lascia la tua nazione'
 nation_help_6: 'Crea una nuova nazione'
-nation_help_7: 'Elenca i comandi del Re nazione'
+nation_help_7: 'Elenca i comandi del leader della nazione'
 nation_help_8: 'Crea una nuova nazione'
 nation_help_9: 'Elenca tutti i residenti online nella nazione'
 king_help_1: 'Guida del Re della nazione'
@@ -260,7 +260,9 @@ msg_set_wild_regen: '&bLa rigenerazione della natura di %s è stata cambiata con
 msg_set_use_towny_on: '&bQuesto mondo ora segue le regole del Towny.'
 msg_set_use_towny_off: '&cQuesto mondo è esentato da tutte le interazioni del Towny.'
 msg_error_must_be_int: '&bL''importo deve essere un numero intero.'
+msg_error_input_must_be_int: '&c%s deve essere un intero'
 msg_error_must_be_num: '&bL''importo deve essere un numero.'
+msg_error_input_must_be_num: '&c%s deve essere un numero'
 msg_must_specify_amnt: '&bDevi specificare un importo. Es: %s 54'
 msg_town_set_tax: '&b%s ha impostato le tasse giornaliere dei residenti a %s'
 msg_town_set_plottax: '&b%s ha impostato le tasse giornaliere dei lotti a %s'
@@ -588,6 +590,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Aperta)'
 status_town_board: 'Bacheca:'
 status_founded: 'Fondata:'
+status_founded_by: 'Fondato da:'
 status_town_size: 'Dimensione Città:'
 status_town_size_bought: 'Acquistati:'
 status_town_size_bonus: 'Bonus:'
@@ -732,7 +735,7 @@ msg_error_ta_plot_claim: 'Nome del giocatore mancante, es.: /ta plot claim NomeG
 msg_error_no_player_with_that_name: 'Nessun giocatore trovato col nome %s'
 msg_admin_has_given_you_a_plot: 'Un amministratore ha rivendicato un plotto per te a: %s'
 msg_town_forcepvp_setting_set_to: 'La città %s ha avuto la loro impostazione di pvp forzata a %s'
-msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
+msg_town_forcedisabledpvp_setting_set_to: 'La città %s ha avuto l''impostazione admindisabledpvp forzata a %s'
 msg_nation_changed_open: '&cLo stato pubblico della Nazione è ora %s.'
 msg_err_already_in_a_nation: 'La tua città è già in una nazione.'
 msg_err_nation_not_open: '&cLa nazione %s non ha le porte aperte a tutti. Chiedi al re o ad un assistente per unirti.'
@@ -1570,48 +1573,66 @@ msg_spawn_cost_free: 'Gratuito'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Questo plot è già di tipo %s.'
 msg_town_board_reset: '&bRipristino bordo della città.'
-msg_town_has_no_jailslots: 'The town jail is full.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_town_has_no_jailslots: 'La prigione della città è piena.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s è stato inviato a %s nel numero di cella %s per %s ore con una cauzione di %s da %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s è stato inviato a %s nel numero di cella %s per %s ore da %s.'
-msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
-msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
-msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
-msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
-msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'Sei stato incarcerato, la tua cauzione è %s.'
+msg_err_higher_than_max_allowed_bail_x: 'La tua cauzione impostata era più alta del massimo che è %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Le ore impostate sono state più alte del massimo che è %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Non abbastanza soldi in banca per uscire di prigione %s, la commissione è %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'I tuoi carcerieri ti hanno permesso di fare spazio.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s è stato rilasciato per fare spazio per un altro prigioniero.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Sei stato rilasciato perché i tuoi carcerieri non possono più permettersi di mantenerti imprigionato.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s è stato rilasciato a causa della mancanza di fondi nella banca della città.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s ritirato dalla banca della Città per pagare il mantenimento per il prigioniero %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s ritirato dalla banca della città per pagare la prigione di %s.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
-confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Sei sicuro di voler ripristinare tutte le banche della città e della nazione a %s?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cLa tua nazione ha raggiunto il numero massimo di residenti consentiti-per-nazione, %s e non può aggiungere %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+msg_err_cannot_join_nation_over_resident_limit: '&cNon puoi unirti a questa nazione perché supererebbe il limite di %s per nazione.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+msg_err_cannot_join_nation_over_town_limit: '&cNon puoi unirti a questa nazione, ha raggiunto il numero massimo di città permesse: %s.'
 #Message shown confirming /tw set usedefaults
-confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Sei sicuro di voler ripristinare tutte le impostazioni di questo mondo a quelle che sono impostate nella configurazione?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Town Plots'
+msg_town_plots_title: ' Terreni Della Città'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Dimensione città: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Acquistato: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Città di proprietà: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Tipo: <green>Giocatore-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Totale'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Ricavi Giornalieri'
 #Part of the /town plots output.
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
-confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+confirmation_msg_trusttown_consequences: 'Stai per dare il permesso di trust completo a un''intera città. Ciò significa che il sindaco della città sarà in grado di decidere chi ottiene il permesso di costruire e rompere nella vostra città, aggiungendo i residenti. Se questa città è aperta, chiunque può unirsi e ottenere pieno accesso alla tua città. Sei sicuro di voler fidarti di tutti i residenti (inclusi i futuri residenti), di questa città?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'Non puoi eseguire questo comando perché la tua città è in guerra.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'C''è un estraneo in questo townblock, non puoi unclaimare questo blocco!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Non puoi creare una nuova città, %s secondi rimanenti.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Non puoi posizionarti su questo blocco: %s, %s secondi rimanenti.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'La città di %s ha avuto il fondatore impostato su %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'La città %s ha avuto l''impostazione, consentita per la guerra, impostata a %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Sei sicuro di voler annullare la rivendicazione di tutta la tua terra? (Il tuo blocco di casa non sarà non reclamato.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."

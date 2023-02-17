@@ -64,7 +64,7 @@ public class CombatUtil {
 	 */
 	public static boolean preventDamageCall(Entity attacker, Entity defender, DamageCause cause) {
 
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(defender.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(defender.getWorld());
 
 		// World using Towny
 		if (world == null || !world.isUsingTowny())
@@ -686,7 +686,7 @@ public class CombatUtil {
 		TownBlock dispenserTB = WorldCoord.parseWorldCoord(dispenser).getTownBlockOrNull();
 		TownBlock defenderTB = WorldCoord.parseWorldCoord(entity).getTownBlockOrNull();
 		
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(dispenser.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(dispenser.getWorld());
 		if (world == null || !world.isUsingTowny())
 			return false;
 		

@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.event.deathprice.NationPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.PlayerPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.TownPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -24,7 +25,6 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -35,6 +35,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Shade &amp; ElgarL
@@ -62,7 +63,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (!TownySettings.isDamageCancellingSpawnWarmup() 
 				|| !event.getEntityType().equals(EntityType.PLAYER) 
 				|| !TownyTimerHandler.isTeleportWarmupRunning() 
-				|| BukkitTools.checkCitizens(event.getEntity()))
+				|| PluginIntegrations.getInstance().checkCitizens(event.getEntity()))
 			return;
 
 		Resident resident = TownyUniverse.getInstance().getResident(event.getEntity().getUniqueId());
@@ -75,316 +76,210 @@ public class TownyEntityMonitorListener implements Listener {
 	
 	/**
 	 * This handles PlayerDeathEvents on MONITOR in order to handle Towny features such as:
+	 * - Throwing the PlayerKilledPlayerEvent,
 	 * - DeathPayments,
 	 * - Jailing Players,
-	 * @param event The event.
+	 * @param event PlayerDeathEvent.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
 		Player defenderPlayer = event.getEntity();
 		Resident defenderResident = TownyUniverse.getInstance().getResident(defenderPlayer.getUniqueId());
-		
-		if (defenderResident == null) {
-			// Usually an NPC or a Bot of some kind.
+		if (defenderResident == null) // Usually an NPC or a Bot of some kind.
 			return;
-		}
-		
-		// Killed by another entity?			
-		if (defenderPlayer.getLastDamageCause() instanceof EntityDamageByEntityEvent) {
 
-			EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) defenderPlayer.getLastDamageCause();
+		if (defenderPlayer.getLastDamageCause() instanceof EntityDamageByEntityEvent damageEvent)
+			// Player has died from an entity that might be a player.
+			resolvePlayerKilledByEntity(event, defenderPlayer, defenderResident, damageEvent);
+		else if (!TownySettings.isDeathPricePVPOnly())
+			// Player has died from non-entity, environmental cause, which is being punished with death costs.
+			deathPayment(defenderPlayer, defenderResident, null);
+	}
 
-			Entity attackerEntity = damageEvent.getDamager();
-			Player attackerPlayer = null;
-			Resident attackerResident = null;
+	private void resolvePlayerKilledByEntity(PlayerDeathEvent event, Player defenderPlayer, Resident defenderResident, EntityDamageByEntityEvent damageEvent) {
 
-			if (attackerEntity instanceof Projectile) { // Killed by projectile, try to narrow the true source of the kill.
-				Projectile projectile = (Projectile) attackerEntity;
-				if (projectile.getShooter() instanceof Player) { // Player shot a projectile.
-					attackerPlayer = (Player) projectile.getShooter();
-					attackerResident = townyUniverse.getResident(attackerPlayer.getUniqueId());
-				} else { // Something else shot a projectile.
-					try {
-						attackerEntity = (Entity) projectile.getShooter(); // Mob shot a projectile.
-					} catch (Exception e) { // This would be a dispenser kill, should count as environmental death.
-					}
-				}
+		Entity attackerEntity = damageEvent.getDamager();
+		Player attackerPlayer = null;
+		Resident attackerResident = null;
 
-			} else if (attackerEntity instanceof Player) {
-				// This was a player kill
-				attackerPlayer = (Player) attackerEntity;
-				attackerResident = townyUniverse.getResident(attackerPlayer.getUniqueId());
-				if (attackerResident == null)
-					// Probably an NPC.
-					return;
-			}
+		if (attackerEntity instanceof Projectile projectile && projectile.getShooter() instanceof Player shooter)
+			// Player shot a projectile.
+			attackerPlayer = shooter;
+		else if (attackerEntity instanceof Player player)
+			// Player killed another player directly.
+			attackerPlayer = player;
 
+		if (attackerPlayer != null && attackerPlayer == defenderPlayer)
 			// This was a suicide, don't award money or jail.
-			if (attackerPlayer != null && attackerPlayer == defenderPlayer)
-				return;
-			
-			/*
-			 * Player has died by a player: 
-			 * 
-			 * - Fire PlayerKilledPlayerEvent.
-			 * 
-			 * - charge death payment,
-			 * - check for jailing attacking residents,
-			 */
-			if (attackerPlayer != null && attackerResident != null) {
-				BukkitTools.fireEvent(new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation(), event));
+			return;
 
-				deathPayment(attackerPlayer, defenderPlayer, attackerResident, defenderResident);			
-				isJailingAttackers(attackerPlayer, defenderPlayer, attackerResident, defenderResident);
-				
-			/*
-			 * Player has died from an entity but not a player & death price is not PVP only.
-			 */
-			} else if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
-				deathPayment(defenderPlayer, defenderResident);
-			}
+		if (attackerPlayer != null)
+			attackerResident = TownyAPI.getInstance().getResident(attackerPlayer);
 
 		/*
-		 * Player has died from non-entity cause, ie: Environmental.
+		 * Player has died by a player that can be resolved to a Resident. (Not an NPC.)
 		 */
-		} else {
-			if (!TownySettings.isDeathPricePVPOnly() && TownySettings.isChargingDeath()) {
-				deathPayment(defenderPlayer, defenderResident);
-			}
+		if (attackerPlayer != null && attackerResident != null) {
+			BukkitTools.fireEvent(new PlayerKilledPlayerEvent(attackerPlayer, defenderPlayer, attackerResident, defenderResident, defenderPlayer.getLocation(), event));
+			deathPayment(defenderPlayer, defenderResident, attackerResident);
+			isJailingAttackers(defenderPlayer, attackerResident, defenderResident);
+
+		/*
+		 * Player has died from an entity but not a player & death price is not PVP only.
+		 */
+		} else if (!TownySettings.isDeathPricePVPOnly()) {
+			deathPayment(defenderPlayer, defenderResident, null);
 		}
 	}
-	
-	public void deathPayment(Player defenderPlayer, Resident defenderResident) {
 
-		if (!TownyEconomyHandler.isActive())
-			return;
+	private void deathPayment(Player defenderPlayer, Resident defenderResident, @Nullable Resident attackerResident) {
 		
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(defenderPlayer);
-		if (townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL)))
+		if (!TownyEconomyHandler.isActive()                        // Economy Off.
+			|| !TownySettings.isChargingDeath()                    // No Death Costs.
+			|| defenderResident.isJailed()                         // Dead resident was jailed.
+			|| hasBypassNode(defenderResident)                     // Permission node bypassing death costs.
+			|| residentsAllied(defenderResident, attackerResident) // Allied players killed each other.
+			|| killedInInvalidTownBlockType(defenderPlayer)        // Player killed in Arena or Jail.
+			)
 			return;
-		
-		if (defenderResident.hasPermissionNode(PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode()))
-			return;
-		
-		if (defenderResident.isJailed())
-			return;
 
-		if (TownySettings.getDeathPrice() > 0) {
+		double total = 0.0;
 
-			double price = TownySettings.getDeathPrice();
+		if (TownySettings.getDeathPrice() > 0)
+			total = takeMoneyFromPlayer(defenderPlayer, attackerResident, defenderResident, total);
 
-			if (!TownySettings.isDeathPriceType()) {
-				price = defenderResident.getAccount().getHoldingBalance() * price;
-				if (TownySettings.isDeathPricePercentageCapped())
-					if (price > TownySettings.getDeathPricePercentageCap())
-						price = TownySettings.getDeathPricePercentageCap();
-			}
+		if (TownySettings.getDeathPriceTown() > 0 && defenderResident.hasTown())
+			total = takeMoneyFromPlayersTown(defenderPlayer, attackerResident, defenderResident, total);
 
-			if (!defenderResident.getAccount().canPayFromHoldings(price))
-				price = defenderResident.getAccount().getHoldingBalance();
-			
-			// Call event.
-			PlayerPaysDeathPriceEvent ppdpe = new PlayerPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, null);
-			if (!BukkitTools.isEventCancelled(ppdpe)) {
-				price = ppdpe.getAmount();
+		if (TownySettings.getDeathPriceNation() > 0 && defenderResident.hasNation())
+			total = takeMoneyFromPlayersNation(defenderPlayer, attackerResident, defenderResident, total);
 
+		if (attackerResident != null)
+			TownyMessaging.sendMsg(attackerResident, Translatable.of("msg_you_gained_money_for_killing", TownyEconomyHandler.getFormattedBalance(total), defenderPlayer.getName()));
+	}
+
+	private double takeMoneyFromPlayer(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+		double price = TownySettings.getDeathPrice();
+
+		if (TownySettings.isDeathPricePercentBased()) {
+			price = defenderResident.getAccount().getHoldingBalance() * price;
+			if (TownySettings.isDeathPricePercentageCapped())
+				price = Math.min(price, TownySettings.getDeathPricePercentageCap());
+		}
+
+		price = Math.min(price,  defenderResident.getAccount().getHoldingBalance());
+
+		PlayerPaysDeathPriceEvent ppdpe = new PlayerPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, defenderPlayer);
+		if (!BukkitTools.isEventCancelled(ppdpe)) {
+			price = ppdpe.getAmount();
+
+			if (attackerResident == null)
 				defenderResident.getAccount().withdraw(price, "Death Payment");
-				
-				TownyMessaging.sendMsg(defenderPlayer, Translatable.of("msg_you_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
-			}
+			else 
+				defenderResident.getAccount().payTo(price, attackerResident, "Death Payment");
+
+			total += price;
+
+			TownyMessaging.sendMsg(defenderPlayer, Translatable.of("msg_you_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
 		}
+		return total;
+	}
 
-		if (TownySettings.getDeathPriceTown() > 0 && defenderResident.hasTown()) {
+	private double takeMoneyFromPlayersTown(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+		Town town = defenderResident.getTownOrNull();
+		double price = TownySettings.getDeathPriceTown();
 
-			Town town = defenderResident.getTownOrNull();
-			double price = TownySettings.getDeathPriceTown();
+		if (TownySettings.isDeathPricePercentBased())
+			price = town.getAccount().getHoldingBalance() * price;
 
-			if (!TownySettings.isDeathPriceType())
-				price = town.getAccount().getHoldingBalance() * price;
+		price = Math.min(price,  defenderResident.getAccount().getHoldingBalance());
 
-			if (!town.getAccount().canPayFromHoldings(price))
-				price = town.getAccount().getHoldingBalance();
+		TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(town.getAccount(), price, defenderResident, defenderPlayer, town);
+		if (!BukkitTools.isEventCancelled(tpdpe)) {
+			price = tpdpe.getAmount();
 
-			// Call event.
-			TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, null, town);
-			if (!BukkitTools.isEventCancelled(tpdpe)) {
-				price = tpdpe.getAmount();
-
+			if (attackerResident == null)
 				town.getAccount().withdraw(price, "Death Payment Town");
+			else 
+				town.getAccount().payTo(price, attackerResident, "Death Payment Town");
 
-				TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_your_town_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
-			}
+			total += price;
+
+			TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_your_town_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
 		}
+		return total;
+	}
 
-		if (TownySettings.getDeathPriceNation() > 0 && defenderResident.hasNation()) {
+	private double takeMoneyFromPlayersNation(Player defenderPlayer, Resident attackerResident, Resident defenderResident, double total) {
+		Nation nation = defenderResident.getNationOrNull();
+		double price = TownySettings.getDeathPriceNation();
 
-			Nation nation = defenderResident.getNationOrNull();
-			double price = TownySettings.getDeathPriceNation();
+		if (TownySettings.isDeathPricePercentBased())
+			price = nation.getAccount().getHoldingBalance() * price;
 
-			if (!TownySettings.isDeathPriceType())
-				price = nation.getAccount().getHoldingBalance() * price;
+		price = Math.min(price,  defenderResident.getAccount().getHoldingBalance());
 
-			if (!nation.getAccount().canPayFromHoldings(price))
-				price = nation.getAccount().getHoldingBalance();
+		NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(nation.getAccount(), price, defenderResident, defenderPlayer, nation);
+		if (!BukkitTools.isEventCancelled(npdpe)) {
+			price = npdpe.getAmount();
 
-			// Call event.
-			NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, null, nation);
-			if (!BukkitTools.isEventCancelled(npdpe)) {
-				price = npdpe.getAmount();
-
+			if (attackerResident == null)
 				nation.getAccount().withdraw(price, "Death Payment Nation");
+			else 
+				nation.getAccount().payTo(price, attackerResident, "Death Payment Nation");
 
-				TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_your_nation_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
-			}
+			total += price;
+
+			TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_your_nation_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
 		}
+		return total;
 	}
 
-	public void deathPayment(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		
-		if (!TownyEconomyHandler.isActive())
-			return;
+	private boolean hasBypassNode(Resident defenderResident) {
+		return defenderResident.hasPermissionNode(PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode());
+	}
 
-		if (defenderResident.isJailed())
-			return;
-		
-		if (CombatUtil.isAlly(attackerResident.getName(), defenderResident.getName()))
-			return;
+	private boolean residentsAllied(Resident defenderResident, Resident attackerResident) {
+		return attackerResident != null && CombatUtil.isAlly(attackerResident, defenderResident);
+	}
 
+	private boolean killedInInvalidTownBlockType(Player defenderPlayer) {
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(defenderPlayer);
-		if (townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL)))
-			return;
-		
-		if (defenderResident.hasPermissionNode(PermissionNodes.TOWNY_BYPASS_DEATH_COSTS.getNode()))
-			return;
-
-		if (TownySettings.isChargingDeath() && attackerPlayer != null) {
-			
-			double total = 0.0;
-
-			if (TownySettings.getDeathPrice() > 0) {
-				double price = TownySettings.getDeathPrice();
-
-				if (!TownySettings.isDeathPriceType()) {
-					price = defenderResident.getAccount().getHoldingBalance() * price;
-					if (TownySettings.isDeathPricePercentageCapped())
-						if (price > TownySettings.getDeathPricePercentageCap())
-							price = TownySettings.getDeathPricePercentageCap();
-				}
-
-				if (!defenderResident.getAccount().canPayFromHoldings(price))
-					price = defenderResident.getAccount().getHoldingBalance();
-
-				PlayerPaysDeathPriceEvent ppdpe = new PlayerPaysDeathPriceEvent(defenderResident.getAccount(), price, defenderResident, defenderPlayer);
-				if (!BukkitTools.isEventCancelled(ppdpe)) {
-					price = ppdpe.getAmount();
-					defenderResident.getAccount().payTo(price, attackerResident, "Death Payment");
-
-					total = total + price;
-
-					TownyMessaging.sendMsg(defenderPlayer, Translatable.of("msg_you_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
-				}
-			}
-
-			if (TownySettings.getDeathPriceTown() > 0 && defenderResident.hasTown()) {
-
-				Town town = defenderResident.getTownOrNull();
-				double price = TownySettings.getDeathPriceTown();
-
-				if (!TownySettings.isDeathPriceType())
-					price = town.getAccount().getHoldingBalance() * price;
-
-				if (!town.getAccount().canPayFromHoldings(price))
-					price = town.getAccount().getHoldingBalance();
-
-				TownPaysDeathPriceEvent tpdpe = new TownPaysDeathPriceEvent(town.getAccount(), price, defenderResident, defenderPlayer, town);
-				if (!BukkitTools.isEventCancelled(tpdpe)) {
-					price = tpdpe.getAmount();
-					town.getAccount().payTo(price, attackerResident, "Death Payment Town");
-
-					total = total + price;
-
-					TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_your_town_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
-				}
-			}
-
-			if (TownySettings.getDeathPriceNation() > 0 && defenderResident.hasNation()) {
-				
-				Nation nation = defenderResident.getNationOrNull();
-				double price = TownySettings.getDeathPriceNation();
-
-				if (!TownySettings.isDeathPriceType())
-					price = nation.getAccount().getHoldingBalance() * price;
-
-				if (!nation.getAccount().canPayFromHoldings(price))
-					price = nation.getAccount().getHoldingBalance();
-
-				NationPaysDeathPriceEvent npdpe = new NationPaysDeathPriceEvent(nation.getAccount(), price, defenderResident, defenderPlayer, nation);
-				if (!BukkitTools.isEventCancelled(npdpe)) {
-					price = npdpe.getAmount();
-					nation.getAccount().payTo(price, attackerResident, "Death Payment Nation");
-					
-					total = total + price;
-
-					TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_your_nation_lost_money_dying", TownyEconomyHandler.getFormattedBalance(price)));
-				}
-			}
-
-			if (attackerResident != null)
-				TownyMessaging.sendMsg(attackerResident, Translatable.of("msg_you_gained_money_for_killing", TownyEconomyHandler.getFormattedBalance(total), defenderPlayer.getName()));
-		}
+		return townBlock != null && (townBlock.getType().equals(TownBlockType.ARENA) || townBlock.getType().equals(TownBlockType.JAIL));
 	}
-	
-	public void isJailingAttackers(Player attackerPlayer, Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
-		if (TownySettings.isJailingAttackingOutlaws()) {
-			Location loc = defenderPlayer.getLocation();
 
-			// Not a Towny World.
-			if (!TownyAPI.getInstance().isTownyWorld(loc.getWorld()))
-				return;
+	private void isJailingAttackers(Player defenderPlayer, Resident attackerResident, Resident defenderResident) {
+		if (!TownySettings.isJailingAttackingOutlaws())
+			return;
 
-			// Not in a Town.
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(loc);
-			if (townBlock == null)
-				return;
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(defenderPlayer.getLocation());
+		Town attackerTown = attackerResident.getTownOrNull();
+		if (townBlock == null                              // Player died in the Wilderness.
+			|| townBlock.getType() == TownBlockType.ARENA  // Player died in an Arena plot.
+			|| !attackerResident.hasTown()                 // Attacker has no town.
+			|| alreadyJailed(defenderResident, townBlock)  // Player was already jailed.
+			|| !hasJailingNode(attackerResident)           // Attacker doesn't have permission to jail.
+			|| !attackerTown.hasJails()                    // Town has no jails.
+			|| !attackerTown.hasOutlaw(defenderResident)   // Player isn't an outlaw.
+			|| !attackerTown.hasTownBlock(townBlock)       // Victim died in a town that isn't the attackerResident's town.
+			)
+			return;
 
-			// Not in an arena plot.
-			if (townBlock.getType() == TownBlockType.ARENA)
-				return;
+		// Send to jail.
+		JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 1, TownySettings.getJailedOutlawJailHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer());
+	}
 
-			// Not if they're already jailed.
-			if (defenderResident.isJailed()) {
-				if (!townBlock.isJail())
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_killed_attempting_to_escape_jail", defenderPlayer.getName()));
-				return;			
-			}
-			
-			// Not if the killer has no Town.
-			if (!attackerResident.hasTown()) 
-				return;
-			Town attackerTown = attackerResident.getTownOrNull();
-			
-			// Not if victim died in a town that isn't the attackerResident's town.
-			if (!TownyAPI.getInstance().getTown(loc).getUUID().equals(attackerTown.getUUID()))
-				return;
-			
-			// Not if the town has no jails.
-			if (!attackerTown.hasJails()) 
-				return;
+	private boolean hasJailingNode(Resident attackerResident) {
+		return attackerResident.hasPermissionNode(PermissionNodes.TOWNY_OUTLAW_JAILER.getNode());
+	}
 
-			// Try outlaw jailing first
-			if (attackerTown.hasOutlaw(defenderResident)) {
-				// Not if they don't have the jailer node.
-				if (!attackerResident.hasPermissionNode(PermissionNodes.TOWNY_OUTLAW_JAILER.getNode()))
-					return;
-				
-				// Send to jail. Hours are pulled from configuration.
-				JailUtil.jailResident(defenderResident, attackerTown.getPrimaryJail(), 1, TownySettings.getJailedOutlawJailHours(), JailReason.OUTLAW_DEATH, attackerResident.getPlayer());
-				return;
-			}
-		}
+	private boolean alreadyJailed(Resident defenderResident, TownBlock townBlock) {
+		boolean jailed = defenderResident.isJailed();
+		if (jailed && !townBlock.isJail()) // Send out message explaining player died during attempted escape.
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_killed_attempting_to_escape_jail", defenderResident.getName()));
+		return jailed;
 	}
 }

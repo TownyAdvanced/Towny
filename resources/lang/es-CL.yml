@@ -260,7 +260,9 @@ msg_set_wild_regen: '&bSe cambió la regeneración del Exterior en %s a ''%s'''
 msg_set_use_towny_on: '&bEste mundo sigue ahora las reglas de Towny.'
 msg_set_use_towny_off: '&cEste mundo está exento de toda interacción con Towny.'
 msg_error_must_be_int: '&bLa cantidad debe ser un número entero.'
+msg_error_input_must_be_int: '&c%s debe ser un número entero'
 msg_error_must_be_num: '&bLa cantidad debe ser un número.'
+msg_error_input_must_be_num: '&c%s debe ser un número'
 msg_must_specify_amnt: '&bDebes especificar la cantidad. Ejemplo: %s 54'
 msg_town_set_tax: '&b%s ha establecido los impuestos diarios para los residentes en %s'
 msg_town_set_plottax: '&b%s ha establecido los impuestos diarios para los terrenos en %s'
@@ -588,6 +590,7 @@ status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Abierta)'
 status_town_board: 'Tablero:'
 status_founded: 'Fundado:'
+status_founded_by: 'Fundador:'
 status_town_size: 'Tamaño:'
 status_town_size_bought: 'Comprado:'
 status_town_size_bonus: 'Bonus:'
@@ -1571,13 +1574,13 @@ msg_spawn_cost_free: 'Gratis'
 msg_plot_already_of_type: 'Este terreno ya es del tipo %s.'
 msg_town_board_reset: '&bLimpiaste el tablero de la ciudad.'
 msg_town_has_no_jailslots: 'La cárcel de la ciudad está llena.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s ha sido enviado a la celda %s de %s por %s horas con una fianza de %s por %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s ha sido enviado a la celda %3$2s de %2$2s por %s horas gracias a %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
 msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Tus carceleros te libraron para hacer espacio.'
 msg_x_has_been_released_as_jail_slots_ran_out: '%s fue liberado para hacer espacio para otro prisionero.'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Fuiste liberado porque tus carceleros ya no pueden mantenerte encarcelado.'
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
@@ -1596,13 +1599,13 @@ confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure 
 #Part of the /town plots output.
 msg_town_plots_title: ' Town Plots'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>TamañoCiudad: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Comprados: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[BonusNación: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
@@ -1615,3 +1618,21 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'The town of %s has had the founder set to %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>¿Estás seguro de que quieres transferirle la propiedad de la nación a %s? ¡Esta acción es irreversible!"
+msg_warn_town_already_capital: "<red>La ciudad de %s ya es la capital nacional."

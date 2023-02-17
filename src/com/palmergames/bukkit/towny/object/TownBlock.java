@@ -56,6 +56,13 @@ public class TownBlock extends TownyObject {
 		this.setWorld(world);
 	}
 
+	public TownBlock(WorldCoord worldCoord) {
+		super("");
+		this.x = worldCoord.getX();
+		this.z = worldCoord.getZ();
+		this.setWorld(worldCoord.getTownyWorld());
+	}
+
 	public void setTown(Town town) {
 		setTown(town, true);
 	}
@@ -436,7 +443,7 @@ public class TownBlock extends TownyObject {
 
 	public WorldCoord getWorldCoord() {
 
-		return new WorldCoord(world.getName(), x, z);
+		return new WorldCoord(world.getName(), world.getUUID(), x, z);
 	}
 
 	/**

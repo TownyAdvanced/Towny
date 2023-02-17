@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -9,8 +10,8 @@ import java.util.Map;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
@@ -41,9 +42,17 @@ public class TownyAsciiMap {
 	public static final int lineWidth = 27;
 	public static final int halfLineWidth = lineWidth / 2;
 	private static final int townBlockSize = TownySettings.getTownBlockSize();
-	public static final String forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
-	public static final String homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
-	public static final String wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
+	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
+	public static String homeSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_HOME.getDefault();
+	public static String wildernessSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS.getDefault();
+	
+	static {
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> {
+			forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
+			homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
+			wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
+		});
+	}
 	
 	public static Component[] generateHelp(Player player) {
 		final Translator translator = Translator.locale(player);
@@ -86,7 +95,7 @@ public class TownyAsciiMap {
 		if (resident.hasTown())
 			hasTown = true;
 
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld().getName());
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 		if (world == null) { 
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_configured"));
 			return;
@@ -281,10 +290,16 @@ public class TownyAsciiMap {
 	}
 
 	public static String parseSymbol(String symbol) {
-		if (symbol.startsWith("\\"))
-			return StringEscapeUtils.unescapeJava(symbol);
+		if (symbol.startsWith("\\u"))
+			return parseUnicode(symbol);
+//			return symbol.length() > 6 ? parseSupplementaryUnicode(symbol) : StringEscapeUtils.unescapeJava(symbol);
 		else 
 			return symbol.substring(0, 1);
 
+	}
+
+	private static String parseUnicode(String symbol) {
+		// remove the "\\u" before we get the resulting unicode symbol.
+		return String.valueOf(Character.toChars(Integer.parseInt(symbol.substring(2))));
 	}
 }

@@ -67,6 +67,7 @@ public class Town extends Government implements TownBlockOwner {
 	private TownBlockTypeCache plotTypeCache = new TownBlockTypeCache();
 	
 	private Resident mayor;
+	private String founderName;
 	private int bonusBlocks = 0;
 	private int purchasedBlocks = 0;
 	private double plotTax= TownySettings.getTownDefaultPlotTax();
@@ -85,6 +86,7 @@ public class Town extends Government implements TownBlockOwner {
 	private TownyWorld world;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
+	private boolean allowedToWar = TownySettings.getTownDefaultAllowedToWar();
 	private boolean isConquered = false;
 	private int conqueredDays;
 	private int nationZoneOverride = 0;
@@ -202,6 +204,14 @@ public class Town extends Government implements TownBlockOwner {
 		this.mayor = mayor;
 		
 		TownyPerms.assignPermissions(mayor, null);	
+	}
+
+	public String getFounder() {
+		return founderName != null ? founderName : getMayor() != null ? getMayor().getName() : "None";
+	}
+
+	public void setFounder(String founderName) {
+		this.founderName = founderName;
 	}
 
 	public Nation getNation() throws NotRegisteredException {
@@ -447,6 +457,14 @@ public class Town extends Government implements TownBlockOwner {
 
 		// Admin has enabled PvP for this town.
 		return this.adminEnabledPVP;
+	}
+
+	public boolean isAllowedToWar() {
+		return allowedToWar;
+	}
+
+	public void setAllowedToWar(boolean allowedToWar) {
+		this.allowedToWar = allowedToWar;
 	}
 
 	/**
@@ -1719,14 +1737,14 @@ public class Town extends Government implements TownBlockOwner {
 			return 0;
 
 		int key = 0;
-		for (int level : TownySettings.getConfigTownLevel().keySet()) {
+		for (int populationLevel : TownySettings.getConfigTownLevel().keySet()) {
 			key++;
 			// Some towns might have their townlevel overridden.
 			if (getManualTownLevel() > -1 && key == getMaxLevel() - getManualTownLevel())
-				return level;
+				return populationLevel;
 			// No overridden townlevel, use population instead.
-			if (getManualTownLevel() == -1 && populationSize >= level)
-				return level;
+			if (getManualTownLevel() == -1 && populationSize >= populationLevel)
+				return populationLevel;
 		}
 		return 0;
 	}
@@ -1759,6 +1777,9 @@ public class Town extends Government implements TownBlockOwner {
 	public int getLevelID() {
 		if(this.isRuined())
 			return 0;
+
+		if (getManualTownLevel() > -1)
+			return getManualTownLevel();
 
 		int townLevelId = -1;
 		for (Integer level : TownySettings.getConfigTownLevel().keySet()) {

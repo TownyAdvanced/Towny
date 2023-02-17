@@ -260,7 +260,9 @@ msg_set_wild_regen: '&bLyckades ändra %s återgenerering av naturen i vildmarke
 msg_set_use_towny_on: '&bDenna värld följer nu Townyregler.'
 msg_set_use_towny_off: '&cDenna värld använder inte Towny.'
 msg_error_must_be_int: '&bBeloppet måste vara ett heltal.'
+msg_error_input_must_be_int: '&c%s must be an integer'
 msg_error_must_be_num: '&bBeloppet måste vara ett nummer.'
+msg_error_input_must_be_num: '&c%s must be a number'
 msg_must_specify_amnt: '&bMåste ange belopp. T.ex. %s 54'
 msg_town_set_tax: '&b%s har satt den dagliga skatten till %s'
 msg_town_set_plottax: '&b%s har satt den dagliga skatten på mark till %s'
@@ -588,6 +590,7 @@ status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Öppen)'
 status_town_board: 'Tavla:'
 status_founded: 'Grundad:'
+status_founded_by: 'Founded by:'
 status_town_size: 'Stadens Storlek:'
 status_town_size_bought: 'Köpt:'
 status_town_size_bonus: 'Bonus:'
@@ -1615,3 +1618,21 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'The town of %s has had the founder set to %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."

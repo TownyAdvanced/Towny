@@ -67,6 +67,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"revertblockexpl",
 		"warallowed",
 		"unclaimblockdelete",
+		"unclaimentitydelete",
 		"plotcleardelete",
 		"wildernessuse"
 	);
@@ -348,6 +349,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 				globalWorld.setUsingPlotManagementDelete(choice.orElse(!globalWorld.isUsingPlotManagementDelete()));
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Unclaim Block Delete", globalWorld.getName(), formatBool(globalWorld.isUsingPlotManagementDelete())));
 
+			} else if (split[0].equalsIgnoreCase("unclaimentitydelete")) {
+
+				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMENTITYDELETE.getNode());
+				globalWorld.setDeletingEntitiesOnUnclaim(choice.orElse(!globalWorld.isDeletingEntitiesOnUnclaim()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Unclaim Entity Delete", globalWorld.getName(), formatBool(globalWorld.isDeletingEntitiesOnUnclaim())));
+
 			} else if (split[0].equalsIgnoreCase("wildernessuse")) {
 
 				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WILDERNESSUSE.getNode());
@@ -451,9 +458,10 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 				if (split.length < 2) {
 					TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildname Wildy");
-				} else
+				} else {
 					globalWorld.setUnclaimedZoneName(split[1]);
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_name", globalWorld.getName(), split[1]));
+				}
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_SET, split[0])) {
 				try {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_SET, split[0]).execute(sender, "townyworld", split);

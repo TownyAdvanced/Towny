@@ -8077,3 +8077,281 @@ v0.92.0.11:
   - Remove underscores from %townyadvanced_nation_or_town_name% placeholder.
     - Closes #6324.
   - Add warning on startup about PowerRanks.
+  - Remove townyadmin's getSender(), courtesy of Warriorrrr with PR #6321.
+  - Refactor EntityMonitorListener.
+  - Remove redundant isWilderness check, courtesy of Warriorrrr with PR #6327.
+0.98.4.4:
+  - Fix admins and ops being blocked by the blocked-commands lists.
+  - Fix admins and ops being denied the ability to teleport in towns they are outlawed in.
+  - Update plugin.yml.
+  - Fix typo in PlayerEnterTownEvent.
+  - Fix possible tab complete npe, courtesy of Warriorrrr with PR #6331.
+  - Use method handles in townyperms, courtesy of Warriorrrr with PR #6332.
+  - Make ascii map symbol options reloadable, courtesy of Warriorrrr with PR #6333.
+  - API: Add new MetaDataType: Location.
+  - Use the world's wild revert delay, courtesy of Warriorrrr with PR #6343.
+  - Bump adventure-text-minimessage from 4.11.0 to 4.12.0.
+  - Bump adventure-text-serializer-plain from 4.11.0 to 4.12.0.
+0.98.4.5:
+  - Fix some of the economy-related placeholders not formatting themselves for the economy.
+  - Delete unused es-419, courtesy of GNosii with PR #6351.
+  - Fix typo in PlayerLeaveTownEvent, courtesy of Senkoco, GNosii & LlmDL with PR #6349.
+  - Set to main scoreboard when toggling hud off, courtesy of Warriorrrr with PR #6345.
+  - Make it possible to use /t deposit [amount] {townname}.
+    - Doing so will allow a player to deposit money into any town bank.
+    - This feature will require an admin to give the node to their players in the townyperms.yml, it is disabled by default.
+    - Closes #6346.
+  - New Command: /t deposit {amount} {townname}
+  - New Permission Node: towny.command.town.deposit.othertown
+    - Not a child node of towny.command.town.deposit.
+    - Must be given manually for servers that want to enable players to deposit into towns they are not a part of.
+0.98.4.6:
+  - Add the ability to toggle a world's delete-entities-on-unclaim feature.
+    - Closes #6297.
+  - New Command: /tw toggle unclaimentitydelete {on|off}
+    - Toggles a world's unclaiming-deletes-entities feature off and on.
+  - New Permission Node: towny.command.townyworld.toggle.unclaimentitydelete
+    - Child node of towny.command.townyworld.toggle.*.
+    - No changes required to your townyperms.yml.
+  - Allow the TownyMap system to properly parse Unicode characters U10000 and greater.
+    - Anyone using unicode characters for the TownBlockType map symbols should already be using the \u#### format in the config.
+    - The value you use should be the HTML-code variable of the Unicode you want to use.
+    - You can now begin using \u10000 and larger.
+  - Bump adventure-platform-bukkit from 4.1.2 to 4.2.0.
+  - Add support MC 1.19.3.
+0.98.4.7:
+  - Add /res toggle adminbypass.
+    - Bypasses the permissions tests that make ops/players with towny.admin able to act as admins.
+    - Useful for staff that want to play like normal players.
+    - Closes #3939.
+  - New Command: /res toggle adminbypass - Used to make admins play as non-admins.
+  - Tidy TownyPermissionSource.
+  - Add ability to disallow commands being run by players that have an active war.
+    - Closes #3953.
+  - New Config Option: global_town_settings.war_blacklisted_commands
+    - Default: somecommandhere,othercommandhere
+    - Commands that cannot be run by players who have an active war.
+  - Add javadocs & annotations for bed explode event, courtesy of Warriorrrr with PR #6359.
+  - Remove old powdered snow workaround, courtesy of Warriorrrr with PR #6360.
+  - Fix possible /tw set wildname NPE, courtesy of Warriorrrr with PR #6361.
+  - Better feedback message when an override lang file is not able to pass a yaml test. 
+  - Fix /plot clear not going all the way to the bottom of 1.19 worlds.
+0.98.4.8:
+  - Replace deprecated getPassenger, courtesy of Warriorrrr with PR #6370.
+  - Bump annotations from 23.0.0 to 23.1.0.
+  - Fix possible IllegalStateException thrown from ConfirmationSendEvent when /t unclaim all is run.
+  - Show correct invalid name when a nation is improperly named.
+  - Expose unformatted time in BankTransaction, courtesy of Warriorrrr with PR #6372.
+0.98.4.9:
+  - API: New (replacement) events: 
+    - PlayerEntersIntoTownBorderEvent - Thrown when a player crosses into a town.
+    - PlayerExitsFromTownBorderEvent - Thrown when a player crosses out of a town.
+    - These events replace the now-deprecated PlayerEnterTownEvent and PlayerLeaveTownEvent which had names which were too ambiguous.
+  - Lookup towny worlds via uuid, courtesy of Warriorrrr with PR #6375.
+  - Deprecate redundant WorldCoord#getTownyWorldOrNull method, courtesy of Warriorrrr with PR #6376.
+0.98.4.10:
+  - Fix /tw toggle for console helpmenu display wrong args order.
+  - Temporarily use name for world lookups again, courtesy of Warriorrrr with PR #6378.
+    - Patchs issue present in 0.98.4.9.
+0.98.4.11:
+  - Support for y less than 0 for revert-on-unclaim.
+0.98.4.12:
+  - Improve vanished-wont-affect-resident-last-online support, from using only Essentials, to supporting all plugins that use the "vanished" metadata on the player.
+    - Also prevents setting last-online when a player logs out.
+    - Plugins which work: SuperVanish, Essentials.
+    - Plugins which still do not work: VanishNoPacket.
+  - Remove internal usage of Essentials.
+    - Removed Config Node: using_essentials.
+    - Deprecated: 
+      - TownySettings.isUsingEssentials,
+      - Towny.isUsingEssentials(),
+      - Towny.getEssentials().
+0.98.4.13:
+  - Deprecate old TownComparators class.
+  - Add DRAGON_EGG to revert-on-unclaim block ignore.
+  - Automatic Config Edit:
+    - Add DRAGON_EGG to revert-on-unclaim block ignore.
+    - Will automatically update each world as well.
+    - Supercedes #6386.
+  - Make bossbar chunk notifications configurable, courtesy of Warriorrrr with PR #6384.
+    - Closes #6363.
+  - New Config Options:
+    - notification.bossbars.color
+      - Default: "white"
+      - The color to use for bossbar notifications.
+      -Valid colors are blue, green, pink, purple, red, white, or yellow.
+    - notification.bossbars.overlay
+      - Default: "progress"
+      - The overlay to use for bossbar notifications.
+      - Valid options are progress, notched_6, notched_10, notched_12, notched_20
+    - notification.bossbars.progress
+      - Default: "0"
+      - The progress to use for the bossbar, between 0 and 1."
+  - Load chunk async for protection regen task, courtesy of Warriorrrr with PR #6385.
+    - Requires you to be using Paper to take advantage.
+    - Closes #6337.
+0.98.4.14:
+  - New Permission Nodes:
+    - towny.town.spawn.nation.bypass_public:
+      - description: User is permitted to use /town spawn when:
+        - they are a member of the same nation and, 
+        - the town isn't public and,
+        - is_nation_ally_spawning_requiring_public_status is true.
+      - default: false, and not a child node of towny.town.spawn.*
+    - towny.town.spawn.ally.bypass_public:
+      - description: User is permitted to use /town spawn when:
+        - they are a member of an allied nation and,
+        - the town isn't public and,
+        - is_nation_ally_spawning_requiring_public_status is true.
+      - default: false, and not a child node of towny.town.spawn.*
+    - Give either of these nodes to allow a king or otherwise special nation member to still travel
+      to an allied town when other nation members/allies are stopped, because the town is not public,
+      and the config requires public status.
+    - Closes #6367.
+  - New Config Option: global_town_settings.outsiders_prevent_unclaim_townblock
+    - Default: false
+    - If set to true, Towny will prevent a townblock from being unclaimed while an outsider is within the townblock's boundaries.
+    - When active this feature can cause a bit of lag when the /t unclaim command is used, depending on how many players are online.
+0.98.4.15:
+  - New Config Options:
+    - global_town_settings.town_delete_cooldown_time
+      - default: "0"
+      - Number of seconds that must pass before a player that has deleted their town can create a new one.
+    - global_town_settings.town_unclaim_cooldown_time
+      - default: "0"
+      - Number of seconds that must pass before a town that has unclaimed a townblock can claim it again.
+    - Closes #6311.
+  - Add Founder to town.
+    - Stores only the name of the original mayor, which means name changes aren't factored in, but that's too much work.
+    - If founderName is null it will pull the existing mayor's name.
+    - Founder is displayed in the town status screen next to Founded: 'Date'.
+    - Closes #6306.
+  - Fix tab completion for /t rank remove {player} not using the player's ranks.
+  - Improve tab completion for /n rank.
+0.98.4.16:
+  - API: add StatusScreen#getComponentKeys
+    - When a plugin wants to know the keys the back the StatusScreen#getComponents collection.
+  - Fix nation-less towns rendering town-entered title messages poorly.
+  - API: Update Economy-related events.
+    - Old events that are deprecated are no longer called.
+    - New events use the same methods, with better javadocs, and exist in the economy package. 
+0.98.4.17:
+  - Use bukkit warning annotation for our deprecated events, courtesy of Warriorrrr with PR #6396.
+  - Ignore end portal respawns, courtesy of Warriorrrr with PR #6399.
+  - Add min distance options for new towns, courtesy of Warriorrrr with PR #6398.
+    - Closes #4829.
+  - Automatic Config Edit:
+    - Add CRYING_OBSIDIAN to revert-on-unclaim block ignore.
+    - Will automatically update each world as well.
+0.98.4.18:
+  - Handle null mayors in Town#getFounder().
+  - New Permission Node: towny.nation.{nationname}
+    - Players in a nation will be given this node, for use with other plugins.
+    - ex: A player in the nation of Canada will receive towny.nation.canada.
+  - Small refactor in TownyPerms.
+  - New Permission Node: towny.nationless
+    - Given out to all players who have no nation.
+0.98.4.19:
+  - Handle 2nd case where the towny.nationless node should be given.
+  - Move PermissionEventEnums into GroupManagerSource.
+  - New Command: /ta set founder [townname] [foundername]
+    - Used by admins to set a founder for a town.
+    - Requires towny.command.townyadmin.set.founder.
+    - Closes #6407.
+  - Refactor /ta set code.
+  - Add PluginIntegrations class.
+0.98.4.20:
+  - Bump paperlib from 1.0.7 to 1.0.8.
+  - Refactor lots of TownyAdminCommand code.
+0.98.4.21:
+  - Warn about townblocks folder loading worlds Bukkit cannot find, instead of causing safe mode.
+  - Refactor onCreatureSpawnEvent.
+  - Use the new PaperLib#getHolder methods, courtesy of Warriorrrr with PR #6413.
+  - Refactor TownyEntityListener hangingbreak and projectilehit event handlers.
+  - Simplify TownySettings#getTownUpkeepCostRaw.
+0.98.5.0:
+  - Bump version for release.
+0.98.5.1:
+  - Make StatusScreen colouring methods public in TownyFormatter.
+  - Add allowedToWar Town setting.
+    - Defaults to true, but set in the config.
+    - Makes it possible for war plugins to know they should not allow certain towns to take part in wars, and for admins/other plugins to opt towns out of wars.
+  - New Config Option: town.default_allowed_to_war
+    - Default: true
+    - Default status of new towns, (are they allowed to have a war/battle?)
+    - This setting is not used internally by Towny. It is available for war/battle plugins to use.
+    - Setting this false should mean your town cannot be involved in a war supplied by another plugin.
+  - New Command: /ta town TOWNNAME toggle allowedtowar [on|off]
+    - Toggles a town's allowedtowar setting on/off.
+  - Update TownClaim task.
+    - Changes it from using Thread to Runnable, add clearer comments, make code more readable.
+    - Fix refunds for /t unclaim all, probably fixes a unclaim refund exploit.
+0.98.5.2:
+  - Fix paintings and item frames being unbreakable, courtesy of Stealth2800 with PR #6427.
+    - Closes #6425.
+0.98.6.0:
+  - Bump version number for release.
+0.98.6.1:
+  - Add a 30 second timeout for backup future, courtesy of Warriorrrr with PR #6428.
+  - Fix missing spaces in the /{object} set perm command feedback.
+  - Fix missing feedback when /ta plot is used with an incorrect subcommand.
+  - Fix /t unjail tabcompleter not including non-residents which are jailed in the town.
+  - Bump annotations from 23.1.0 to 24.0.0.
+  - Make area selection tool able to handle already claimed plots.
+    - It is now possible to use /t claim 4 and then /t claim 5 and the required townblocks is calculated properly.
+    - Closes #6431.
+  - Fix missing feedback message when /t unclaim all is used.
+  - Add more options for limiting/altering how unjailed players are teleported.
+    - Closes #6437.
+  - New Config Option: jail.unjailed_players_get_teleported
+    - Default: true
+    - Most types of unjailing result in a player being teleported when they are freed.
+    - Setting this to false will prevent that teleporting, resulting in the player not being teleported when they are freed.
+  - API: Added UnjailedResidentTeleportEvent.
+    - Lets other plugins move unjailed residents to a location of their choice, or cancel the teleport altogether.
+0.98.6.2:
+  - API: Add new TranslationLoader constructor which only requires a Plugin instance.
+  - Add tab complete for /ta nation recheck, courtesy of Warriorrrr with PR #6449.
+  - Add confirmation to /n set capital, courtesy of Warriorrrr with PR #6450.
+  - Replace more getTown(name) calls with getTownOrThrow(name).
+  - New Config Option: global_town_settings.do_trusted_residents_count_as_residents
+    - Default: false
+    - When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.
+    - Allows allows the residents of entire an town when that town is trusted by the town.
+0.98.6.3:
+  - Fix money.csv not logging server-account deposit/withdraws.
+  - Add support for EliteMobs mob removal.
+  - Add (for now unused) resourceProductionModifier stat to the config Town_Level.
+    - Your configs will automatically have this added with the default 1.0 setting. 
+0.98.6.4:
+  - Fix plot hud and plot perm commands showing town settings for mobs/fire that were not relevant.
+  - Fix NPE when clicking back button in a non-selection gui, courtesy of Warriorrrr with PR #6464.
+  - Add loading of worlds via their UUID loading, courtesy of Warriorrrr with PR #6377.
+  - New Locales:
+    - Pirate English, Upsidedown English, LOLCAT. Currently goign through initial translation on crowdin.
+0.98.6.5:
+  - Put limits on how many unclaimed townblocks can have their material/entity deletions run at once.
+  - Replace some hardcoded town and nation strings with translatables, courtesy of Warriorrrr with PR #6473.
+  - Fix exception when tab completing /t jail with no town, courtesy of Warriorrrr with PR #6476.
+  - Clean up some old PermissionNodes that don't exist.
+  - Add peacefulCostMultiplier to the config Town_Level and Nation_Level.
+    - Your configs will automatically have this added with the default 1.0 setting.
+    - You can change it from 1.0 to alter what towns and nations pay to stay neutral/peaceful each TownyDay.
+    - With the default of 1.0, no town or nation will be paying any more than they already were.
+    - Closes #5411. 
+  - Prevent liquid spilling in actively regenerating plots which were unclaimed.
+  - Fix /ta forcemerge having swapped town names in message, courtesy of Warriorrrr with PR #6484.
+  - New Command: Add buy subcommand to /ta town NAME.
+    - Closes #6100.
+0.98.6.6:
+  - Replace world with weakref in WorldCoord, courtesy of Warriorrrr with PR #6451.
+  - New Config Option: economy.price_town_neutrality_charges_per_plot
+    - Default: false
+    - When it is true, the peaceful cost is multiplied by the town's number of claimed townblocks.
+    - Note that the base peacful cost is calculated by the price_town_neutrality X town_level peacefulCostMultiplier.
+    - Closes #6486.
+  - New Config Option: economy.price_nation_neutrality_charges_per_town
+    - Default: false
+    - When it is true, the peaceful cost is multiplied by the nation's number of towns.
+    - Note that the base peacful cost is calculated by the price_nation_neutrality X nation_level peacefulCostMultiplier.
+  - Correct the feedback message shown when /ta town TOWNNAME settownlevel unset is used.

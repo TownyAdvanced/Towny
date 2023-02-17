@@ -112,13 +112,13 @@ public abstract class Account implements Nameable {
 	}
 	
 	protected boolean payToServer(double amount, String reason) {
-		
+		notifyObserversDeposit(EconomyAccount.SERVER_ACCOUNT, amount, reason);
 		// Put it back into the server.
 		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
 	}
 	
 	protected boolean payFromServer(double amount, String reason) {
-		
+		notifyObserversWithdraw(EconomyAccount.SERVER_ACCOUNT, amount, reason);
 		// Remove it from the server economy.
 		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
 	}

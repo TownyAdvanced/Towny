@@ -13,6 +13,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,7 +21,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -74,6 +74,40 @@ public class TranslationLoader {
 		this.langFolderPath = langFolderPath;
 		this.plugin = plugin;
 		this.clazz = clazz;
+	}
+
+	
+	/**
+	 * An object which allows a plugin to load language files into Towny's
+	 * translations hashmap. Enabling the given plugin to use Towny's built-in
+	 * messaging and translating so that messages will display in the player's own
+	 * Locale (determined by the client's locale setting.)<br>
+	 * <br>
+	 * 
+	 * This constructor requires that your Language files be saved in your plugin's
+	 * resources\lang\ folder, using valid Locale file names ie: en-US.yml,
+	 * de-DE.yml. Locales which do not appear in Minecraft will not be used.<br>
+	 * <br>
+	 * 
+	 * You may opt to provide a global.yml file in your plugin's resources folder,
+	 * which will allow an admin to globally override language strings for all
+	 * locales.<br>
+	 * <br>
+	 * 
+	 * Example: <br>
+	 * Plugin plugin = Towny.getPlugin(); <br>
+	 * TranslationLoader loader = new TranslationLoader(plugin);<br>
+	 * loader.load();<br>
+	 * TownyAPI.addTranslations(plugin, loader.getTranslations());<br>
+	 * 
+	 * @param plugin Plugin, your plugin.
+	 * @throws TownyInitException When files cannot be saved, loaded or something
+	 *                            else goes wrong.
+	 */
+	public TranslationLoader(Plugin plugin) {
+		this.langFolderPath = Paths.get(plugin.getDataFolder().getPath()).resolve("lang");
+		this.plugin = plugin;
+		this.clazz = plugin.getClass();
 	}
 
 	/**
@@ -143,7 +177,8 @@ public class TranslationLoader {
 					newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
-				plugin.getLogger().log(Level.WARNING, "Failed to load/save '" + lang + ".yml'.", e);
+				plugin.getLogger().warning("Unabled to read yaml file: '" + lang + ".yml' from within the " + plugin.getName() + ".jar.");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -225,6 +260,7 @@ public class TranslationLoader {
 								newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 						}
 					} catch (Exception e) {
+						plugin.getLogger().warning("Unabled to read yaml file: '" + file.getName() + "' in the override folder.");
 						e.printStackTrace();
 					}
 				}

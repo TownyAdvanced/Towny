@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.regen;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.actions.TownyExplodingBlocksEvent;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -12,11 +11,8 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -44,12 +40,6 @@ public class TownyRegenAPI {
 	
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
-
-	// List of all old plots still to be processed for Entity removal
-	private static final List<WorldCoord> deleteTownBlockEntityQueue = new ArrayList<>();
-
-	// List of all old plots still to be processed for Block removal
-	private static final List<WorldCoord> deleteTownBlockIdQueue = new ArrayList<>();
 
 	// A list of worldCoords which are needing snapshots
 	private static final List<WorldCoord> worldCoords = new ArrayList<>();
@@ -110,13 +100,13 @@ public class TownyRegenAPI {
 	/**
 	 * Gets a list of WorldCoords which are having snapshots taken, for one TownyWorld.
 	 * 
-	 * @param world - TownyWorld to gather a list of WorldCoords in.
-	 * @return list - List<WorldCoord> matched to above world.
+	 * @param world TownyWorld to gather a list of WorldCoords in.
+	 * @return list List<WorldCoord> matched to above world.
 	 */
-	private static List<WorldCoord> getWorldCoords(TownyWorld world) {
+	private static List<WorldCoord> getWorldCoords(@NotNull TownyWorld world) {
 		List<WorldCoord> list = new ArrayList<>();
 		for (WorldCoord wc : worldCoords)
-			if (wc.getTownyWorldOrNull().equals(world))
+			if (world.equals(wc.getTownyWorld()))
 				list.add(wc);
 
 		return list;
@@ -189,7 +179,7 @@ public class TownyRegenAPI {
 	 */
 	private static void removeRegenQueueListOfWorld(@NotNull TownyWorld world) {
 		regenWorldCoordList = getRegenQueueList().stream()
-			.filter(wc -> !world.equals(wc.getTownyWorldOrNull()))
+			.filter(wc -> !world.equals(wc.getTownyWorld()))
 			.collect(Collectors.toList());
 		TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
@@ -228,7 +218,7 @@ public class TownyRegenAPI {
 				continue;
 			
 			// This worldCoord isn't actively regenerating, start the regeneration.
-			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorldOrNull()));
+			PlotBlockData plotData = getPlotChunkSnapshot(new TownBlock(wc.getX(), wc.getZ(), wc.getTownyWorld()));
 			if (plotData != null) {
 				// Load the chunks.
 				plotData.getWorldCoord().loadChunks();
@@ -373,290 +363,6 @@ public class TownyRegenAPI {
 		return "[" + wc.getWorldName() + "|" + wc.getX() + "|" + wc.getZ() + "]";
 	}
 
-//	/**
-//	 * Regenerate the chunk the player is stood in and store the block data so it can be undone later.
-//	 * 
-//	 * @param player
-//	 */
-//	public static void regenChunk(Player player) {
-//		
-//		try {
-//			Coord coord = Coord.parseCoord(player);
-//			World world = player.getWorld();
-//			Chunk chunk = world.getChunkAt(player.getLocation());
-//			int maxHeight = world.getMaxHeight();
-//			
-//			ChunkSnapshot snapshot = chunk.getChunkSnapshot(true,true,false);
-//			
-//			Object[][][] snapshot = new Object[16][maxHeight][16];
-//			
-//			for (int x = 0; x < 16; x++) {
-//				for (int z = 0; z < 16; z++) {
-//					for (int y = 0; y < maxHeight; y++) {
-//						
-//						//Current block to save
-//						BlockState state = chunk.getBlock(x, y, z).getState();
-//						
-//						if (state instanceof org.bukkit.block.Sign) {
-//							
-//							BlockSign sign = new BlockSign(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((org.bukkit.block.Sign) state).getLines());
-//							sign.setLocation(state.getLocation());
-//							snapshot[x][y][z] = sign;
-//							
-//						} else if (state instanceof CreatureSpawner) {
-//							
-//							BlockMobSpawner spawner = new BlockMobSpawner(((CreatureSpawner) state).getSpawnedType());
-//							spawner.setLocation(state.getLocation());
-//							spawner.setDelay(((CreatureSpawner) state).getDelay());
-//							snapshot[x][y][z] = spawner;
-//							
-//						} else if ((state instanceof InventoryHolder) && !(state instanceof Player)) {
-//							
-//							BlockInventoryHolder holder = new BlockInventoryHolder(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), ((InventoryHolder) state).getInventory().getContents());
-//							holder.setLocation(state.getLocation());
-//							snapshot[x][y][z] = holder;
-//							
-//						} else {
-//						
-//							snapshot[x][y][z] = new BlockObject(BukkitTools.getTypeId(state), BukkitTools.getDataData(state), state.getLocation());
-//									
-//						}
-//						
-//					}
-//				}
-//			}
-//			
-//			TownyUniverse.getDataSource().getResident(player.getName()).addUndo(snapshot);
-//
-//			Bukkit.getWorld(player.getWorld().getName()).regenerateChunk(coord.getX(), coord.getZ());
-//
-//		} catch (NotRegisteredException e) {
-//			// Failed to get resident
-//		}
-//	}
-//	
-//	/**
-//	 * Restore the relevant chunk using the snapshot data stored in the resident
-//	 * object.
-//	 * 
-//	 * @param snapshot
-//	 * @param resident
-//	 */
-//	public static void regenUndo(Object[][][] snapshot, Resident resident) {
-//
-//		BlockObject key = ((BlockObject) snapshot[0][0][0]);
-//		World world = key.getLocation().getWorld();
-//		Chunk chunk = key.getLocation().getChunk();
-//		
-//		int maxHeight = world.getMaxHeight();
-//		
-//		for (int x = 0; x < 16; x++) {
-//			for (int z = 0; z < 16; z++) {
-//				for (int y = 0; y < maxHeight; y++) {
-//					
-//					// Snapshot data we need to update the world.
-//					Object state = snapshot[x][y][z];
-//					
-//					// The block we will be updating
-//					Block block = chunk.getBlock(x, y, z);
-//					
-//					if (state instanceof BlockSign) {
-//
-//						BlockSign signData = (BlockSign)state;
-//						BukkitTools.setTypeIdAndData(block, signData.getTypeId(), signData.getData(), false);
-//						
-//						Sign sign = (Sign) block.getState();
-//						int i = 0;
-//						for (String line : signData.getLines())
-//							sign.setLine(i++, line);
-//						
-//						sign.update(true);
-//						
-//					} else if (state instanceof BlockMobSpawner) {
-//						
-//						BlockMobSpawner spawnerData = (BlockMobSpawner) state;
-//						
-//						BukkitTools.setTypeIdAndData(block, spawnerData.getTypeId(), spawnerData.getData(), false);
-//						((CreatureSpawner) block.getState()).setSpawnedType(spawnerData.getSpawnedType());
-//						((CreatureSpawner) block.getState()).setDelay(spawnerData.getDelay());
-//						
-//					} else if ((state instanceof BlockInventoryHolder) && !(state instanceof Player)) {
-//						
-//						BlockInventoryHolder containerData = (BlockInventoryHolder) state;
-//						BukkitTools.setTypeIdAndData(block, containerData.getTypeId(), containerData.getData(), false);
-//						
-//						// Container to receive the inventory
-//						InventoryHolder container = (InventoryHolder) block.getState();
-//						
-//						// Contents we are respawning.						
-//						if (containerData.getItems().length > 0)
-//							container.getInventory().setContents(containerData.getItems());
-//						
-//					} else {
-//						
-//						BlockObject blockData = (BlockObject) state;	
-//						BukkitTools.setTypeIdAndData(block, blockData.getTypeId(), blockData.getData(), false);
-//					}
-//					
-//					
-//					
-//
-//				}
-//			}
-//
-//		}
-//
-//		TownyMessaging.sendMessage(BukkitTools.getPlayerExact(resident.getName()), Translation.of("msg_undo_complete"));
-//
-//	}
-
-	/*
-	 * TownBlock Entity Deleting Queue.
-	 */
-	
-	/**
-	 * @return true if there are any chunks being processed.
-	 */
-	public static boolean hasDeleteTownBlockEntityQueue() {
-
-		return !deleteTownBlockEntityQueue.isEmpty();
-	}
-
-	public static boolean isDeleteTownBlockEntityQueue(WorldCoord plot) {
-
-		return deleteTownBlockEntityQueue.contains(plot);
-	}
-	
-	public static void addDeleteTownBlockEntityQueue(WorldCoord plot) {
-		if (!deleteTownBlockEntityQueue.contains(plot))
-			deleteTownBlockEntityQueue.add(plot);
-	}
-	
-	@Nullable
-	public static WorldCoord getDeleteTownBlockEntityQueue() {
-
-		if (!deleteTownBlockEntityQueue.isEmpty())
-			return deleteTownBlockEntityQueue.remove(0);
-		
-		return null;
-	}
-	
-
-	/**
-	 * Deletes all of a specified entity type from a TownBlock
-	 * 
-	 * @param worldCoord - WorldCoord for the Town Block
-	 */
-	public static void doDeleteTownBlockEntities(WorldCoord worldCoord) {
-		TownyWorld world = worldCoord.getTownyWorld();
-		if (world == null || !world.isUsingTowny() || !world.isDeletingEntitiesOnUnclaim())
-			return;
-		
-		List<Entity> toRemove = new ArrayList<>();
-		Collection<Entity> entities = worldCoord.getBukkitWorld().getNearbyEntities(worldCoord.getBoundingBox());
-		for (Entity entity : entities) {
-			if (world.getUnclaimDeleteEntityTypes().contains(entity.getType()))
-				toRemove.add(entity);
-		}
-		
-		for (Entity entity : toRemove)
-			entity.remove();
-	}
-	
-	/*
-	 * TownBlock Material Deleting Queue.
-	 */
-	
-	/**
-	 * @return true if there are any chunks being processed.
-	 */
-	public static boolean hasDeleteTownBlockIdQueue() {
-
-		return !deleteTownBlockIdQueue.isEmpty();
-	}
-
-	public static boolean isDeleteTownBlockIdQueue(WorldCoord plot) {
-
-		return deleteTownBlockIdQueue.contains(plot);
-	}
-
-	public static void addDeleteTownBlockIdQueue(WorldCoord plot) {
-
-		if (!deleteTownBlockIdQueue.contains(plot))
-			deleteTownBlockIdQueue.add(plot);
-	}
-
-	@Nullable
-	public static WorldCoord getDeleteTownBlockIdQueue() {
-
-		if (!deleteTownBlockIdQueue.isEmpty())
-			return deleteTownBlockIdQueue.remove(0);
-		
-		return null;
-	}
-
-	/**
-	 * Deletes all of a specified block type from a TownBlock
-	 * 
-	 * @param worldCoord - WorldCoord for the Town Block
-	 */
-	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
-		TownyWorld world = worldCoord.getTownyWorldOrNull();
-		if (world == null)
-			return;
-		
-		deleteMaterialsFromWorldCoord(worldCoord, world.getPlotManagementDeleteIds());
-	}
-
-	/**
-	 * Deletes all of a specified block type from a TownBlock
-	 * 
-	 * @param townBlock - TownBlock to delete from
-	 * @param material - Material to delete
-	 */
-	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
-		deleteMaterialsFromWorldCoord(townBlock.getWorldCoord(), Collections.singleton(material));
-	}
-
-	@Deprecated
-	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, EnumSet<Material> materialEnumSet) {
-		deleteMaterialsFromWorldCoord(townBlock.getWorldCoord(), materialEnumSet);
-	}
-	
-	/**
-	 * Deletes all blocks which are found in the given EnumSet of Materials
-	 * 
-	 * @param coord WorldCoord to delete blocks from.
-	 * @param collection Collection of Materials from which to remove.
-	 */
-	public static void deleteMaterialsFromWorldCoord(WorldCoord coord, Collection<Material> collection) {
-		int plotSize = TownySettings.getTownBlockSize();
-
-		World world = coord.getBukkitWorld();
-		if (world == null)
-			return;
-		
-		int height = world.getMaxHeight() - 1;
-		int worldX = coord.getX() * plotSize, worldZ = coord.getZ() * plotSize;
-		List<Block> toRemove = new ArrayList<>();
-
-		for (int z = 0; z < plotSize; z++)
-			for (int x = 0; x < plotSize; x++)
-				for (int y = height; y > 0; y--) { //Check from bottom up else minecraft won't remove doors
-					Block block = world.getBlockAt(worldX + x, y, worldZ + z);
-					if (collection.contains(block.getType()))
-						toRemove.add(block);
-				}
-		
-		if (toRemove.isEmpty())
-			return;
-		
-		if (Bukkit.isPrimaryThread())
-			toRemove.forEach(block -> block.setType(Material.AIR));
-		else 
-			Bukkit.getScheduler().runTask(Towny.getPlugin(), () -> toRemove.forEach(block -> block.setType(Material.AIR)));
-	}
-
 	/*
 	 * Protection Regen follows
 	 */
@@ -682,7 +388,7 @@ public class TownyRegenAPI {
 				block = baseBlock;
 			}
 			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
-			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (TownySettings.getPlotManagementWildRegenDelay() + count) * 20));
+			task.setTaskId(Towny.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(Towny.getPlugin(), task, (world.getPlotManagementWildRevertDelay() + count) * 20));
 			addProtectionRegenTask(task);
 
 			// If this was a TownyExplodingBlocksEvent we want to get the bukkit event from it first.
@@ -800,6 +506,145 @@ public class TownyRegenAPI {
 	public static void removePlaceholder(Block block) {
 
 		protectionPlaceholders.remove(block);
+	}
+
+	/*
+	 * Deprecated TownBlock Entity Deleting Queue.
+	 */
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#hasQueue()} instead.
+	 * @return true if there are any chunks being processed.
+	 */
+	@Deprecated
+	public static boolean hasDeleteTownBlockEntityQueue() {
+		return WorldCoordEntityRemover.hasQueue();
+	}
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#isQueued(WorldCoord)} instead.
+	 * @param plot WorldCoord to check.
+	 * @return true if the WorldCoord is queued to have entities removed.
+	 */
+	@Deprecated
+	public static boolean isDeleteTownBlockEntityQueue(WorldCoord plot) {
+		return WorldCoordEntityRemover.isQueued(plot);
+	}
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#addToQueue(WorldCoord)} instead.
+	 * @param plot WorldCoord to add to the queue.
+	 */
+	@Deprecated
+	public static void addDeleteTownBlockEntityQueue(WorldCoord plot) {
+		WorldCoordEntityRemover.addToQueue(plot);
+	}
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#getWorldCoordFromQueue()} instead.
+	 * @return a WorldCoord from the queue.
+	 */
+	@Nullable
+	@Deprecated
+	public static WorldCoord getDeleteTownBlockEntityQueue() {
+		return WorldCoordEntityRemover.getWorldCoordFromQueue();
+	}
+
+	/**
+	 * Deletes all of a specified entity type from a TownBlock
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#doDeleteTownBlockEntities(WorldCoord)} instead.
+	 * @param worldCoord - WorldCoord for the Town Block
+	 */
+	@Deprecated
+	public static void doDeleteTownBlockEntities(WorldCoord worldCoord) {
+		WorldCoordEntityRemover.doDeleteTownBlockEntities(worldCoord);
+	}
+
+	/*
+	 * Deprecated TownBlock Material Deleting Queue.
+	 */
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#hasQueue()} instead.
+	 * @return true if there are any chunks being processed.
+	 */
+	@Deprecated
+	public static boolean hasDeleteTownBlockIdQueue() {
+		return WorldCoordMaterialRemover.hasQueue();
+	}
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#isQueued(WorldCoord)} instead.
+	 * @param plot WorldCoord
+	 * @return true if this WorldCoord is needing Materials removed.
+	 */
+	@Deprecated
+	public static boolean isDeleteTownBlockIdQueue(WorldCoord plot) {
+		return WorldCoordMaterialRemover.isQueued(plot);
+	}
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#addToQueue(WorldCoord)} instead.
+	 * @param plot WorldCoord to add to queue.
+	 */
+	@Deprecated
+	public static void addDeleteTownBlockIdQueue(WorldCoord plot) {
+		WorldCoordMaterialRemover.addToQueue(plot);
+	}
+
+	/**
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#getWorldCoordFromQueue()} instead.
+	 * @return a WorldCoord that is queued to have materials removed.
+	 */
+	@Nullable
+	@Deprecated
+	public static WorldCoord getDeleteTownBlockIdQueue() {
+		return WorldCoordMaterialRemover.getWorldCoordFromQueue();
+	}
+
+	/**
+	 * Deletes all of a specified block type from a TownBlock
+	 * 
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#queueUnclaimMaterialsDeletion(WorldCoord)} instead.
+	 * @param worldCoord - WorldCoord for the Town Block
+	 */
+	@Deprecated
+	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
+		WorldCoordMaterialRemover.queueUnclaimMaterialsDeletion(worldCoord);
+	}
+
+	/**
+	 * Deletes all of a specified block type from a TownBlock
+	 * 
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#queueDeleteWorldCoordMaterials(WorldCoord, Collection)} instead.
+	 * @param townBlock - TownBlock to delete from
+	 * @param material - Material to delete
+	 */
+	@Deprecated
+	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
+		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), Collections.singleton(material));
+	}
+
+	/**
+	 * @deprecated since 0.98.5.0 use {@link WorldCoordMaterialRemover#queueDeleteWorldCoordMaterials(WorldCoord, Collection)} instead.
+	 * @param townBlock TownBlock to remove from.
+	 * @param materialEnumSet Material EnumSet to remove.
+	 */
+	@Deprecated
+	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, EnumSet<Material> materialEnumSet) {
+		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), materialEnumSet);
+	}
+
+	/**
+	 * Deletes all blocks which are found in the given EnumSet of Materials
+	 * 
+	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#queueDeleteWorldCoordMaterials(WorldCoord, Collection)} instead. 
+	 * @param coord WorldCoord to delete blocks from.
+	 * @param collection Collection of Materials from which to remove.
+	 */
+	@Deprecated
+	public static void deleteMaterialsFromWorldCoord(WorldCoord coord, Collection<Material> collection) {
+		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(coord, collection);
 	}
 
 }
