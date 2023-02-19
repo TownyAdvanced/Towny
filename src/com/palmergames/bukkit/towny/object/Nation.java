@@ -456,7 +456,7 @@ public class Nation extends Government {
 	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
-			double bankCap = TownySettings.getNationBankCap();
+			double bankCap = getBankCap();
 			if (bankCap > 0 && amount + this.getAccount().getHoldingBalance() > bankCap) {
 				TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_err_deposit_capped", bankCap));
 				return;
@@ -593,7 +593,7 @@ public class Nation extends Government {
 
 	@Override
 	public double getBankCap() {
-		return TownySettings.getNationBankCap();
+		return TownySettings.getNationBankCap(this);
 	}
 
 	/**

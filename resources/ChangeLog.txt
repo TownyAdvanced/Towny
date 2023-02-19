@@ -8357,6 +8357,14 @@ v0.92.0.11:
   - Correct the feedback message shown when /ta town TOWNNAME settownlevel unset is used.
   - Fix worldcoord from location parsing, courtesy of Warriorrrr with PR #6488.
   - Fix /t claim doing economy calls on the main thread, courtesy of Warriorrrr with PR #6487.
+0.98.6.7:
   - Add peaceful section to townyperms.yml.
     - Permission nodes put into this section will be given to any player that is part of a town or nation that is peaceful.
     - Closes #6015.
+  - Add debtCapModifier to the config Town_Level and Nation_Level.
+    - Your configs will automatically have this added with the default 1.0 setting.
+    - You can change it from 1.0 to alter towns' and nations' maximum bank account levels are, based on their population.
+    - With the default of 1.0, no town or nation will have any change to their current max.
+    - Closes #5037.
+  - Fix nations that collect towntax being able to get above their nation bank cap.
+  - Fix towns and nations from collecting tax amounts that equal 0.

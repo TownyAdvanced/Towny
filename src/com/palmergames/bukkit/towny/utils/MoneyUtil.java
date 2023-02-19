@@ -160,14 +160,14 @@ public class MoneyUtil {
 		if (withdraw && ((nation && !TownySettings.getNationBankAllowWithdrawls()) || (!nation && !TownySettings.getTownBankAllowWithdrawls())))
 			throw new TownyException(Translatable.of("msg_err_withdraw_disabled"));
 		
-		if (!withdraw && (TownySettings.getTownBankCap() > 0 || TownySettings.getNationBankCap() > 0)) {
+		if (!withdraw && ((!nation && TownySettings.getTownBankCap(town) > 0) || (nation && TownySettings.getNationBankCap(town.getNationOrNull()) > 0))) {
 			double bankcap = 0;
 			double balance = 0;
-			if (!nation && TownySettings.getTownBankCap() > 0) {
-				bankcap = TownySettings.getTownBankCap();
+			if (!nation && town.getBankCap() > 0) {
+				bankcap = town.getBankCap();
 				balance = town.getAccount().getHoldingBalance();
-			} else if (nation && TownySettings.getNationBankCap() > 0) {
-				bankcap = TownySettings.getNationBankCap();
+			} else if (nation && town.getNationOrNull().getBankCap() > 0) {
+				bankcap = town.getNationOrNull().getBankCap();
 				balance = town.getNation().getAccount().getHoldingBalance();
 			}
 			if (bankcap > 0 && amount + balance > bankcap)

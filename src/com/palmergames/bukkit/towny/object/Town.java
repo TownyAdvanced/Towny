@@ -1085,7 +1085,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
-			double bankcap = TownySettings.getTownBankCap();
+			double bankcap = getBankCap();
 			if (bankcap > 0 && amount + getAccount().getHoldingBalance() > bankcap) {
 				TownyMessaging.sendPrefixedTownMessage(this, Translatable.of("msg_err_deposit_capped", bankcap));
 				return;
@@ -1355,7 +1355,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public double getBankCap() {
-		return TownySettings.getTownBankCap();
+		return TownySettings.getTownBankCap(this);
 	}
 	
 	public World getWorld() {
