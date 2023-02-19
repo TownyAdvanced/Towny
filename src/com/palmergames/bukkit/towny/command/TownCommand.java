@@ -3733,28 +3733,43 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		 * See if the Town can pay (if required.)
 		 */
 		if (TownyEconomyHandler.isActive()) {
-			double blockCost = 0;
-			try {					
-				if (outpost)
-					blockCost = TownySettings.getOutpostCost();
-				else if (selection.size() == 1)
-					blockCost = town.getTownBlockCost();
-				else
-					blockCost = town.getTownBlockCostN(selection.size());
+			final boolean isOutpost = outpost;
+			final List<WorldCoord> finalSelection = selection;
+			
+			final Runnable withdrawAndStart = () -> {
+				double blockCost;
+				try {
+					if (isOutpost)
+						blockCost = TownySettings.getOutpostCost();
+					else if (finalSelection.size() == 1)
+						blockCost = town.getTownBlockCost();
+					else
+						blockCost = town.getTownBlockCostN(finalSelection.size());
 
-				double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-				if (!town.getAccount().canPayFromHoldings(blockCost))
-					throw new TownyException(Translatable.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
-				town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", selection.size(), player.getName()));
-			} catch (NullPointerException e2) {
-				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
-			}
+					if (!town.getAccount().canPayFromHoldings(blockCost)) {
+						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
+						throw new TownyException(Translatable.of("msg_no_funds_claim2", finalSelection.size(), TownyEconomyHandler.getFormattedBalance(blockCost), TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+					}
+
+					town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", finalSelection.size(), player.getName()));
+					
+					// Start the claiming process after a successful withdraw.
+					Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, finalSelection, isOutpost, true, false));
+				} catch (NullPointerException e2) {
+					TownyMessaging.sendErrorMsg(player, "The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				}
+			};
+			
+			if (TownySettings.isEconomyAsync())
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, withdrawAndStart);
+			else 
+				Bukkit.getScheduler().runTask(plugin, withdrawAndStart);
+		} else {
+			// Economy isn't enabled, start the claiming process immediately.
+			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, outpost, true, false));
 		}
-		
-		/*
-		 * Actually start the claiming process.
-		 */
-		Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, outpost, true, false));
 	}
 
 	public static void parseTownUnclaimCommand(Player player, String[] split) throws TownyException {
