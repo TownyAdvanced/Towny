@@ -93,7 +93,7 @@ public class WorldCoord extends Coord {
 	}
 	
 	public static WorldCoord parseWorldCoord(Location loc) {
-		return new WorldCoord(loc.getWorld(), loc.getBlockX(), loc.getBlockZ());
+		return new WorldCoord(loc.getWorld(), toCell(loc.getBlockX()), toCell(loc.getBlockZ()));
 	}
 
 	public static WorldCoord parseWorldCoord(Block block) {
