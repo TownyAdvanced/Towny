@@ -1619,6 +1619,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Add a cooldown to Peacful toggling.
 		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
 			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
+
+		// Reassign permissions because neutrality can add/remove nodes.
+		if(TownyPerms.hasPeacefulNodes())
+			TownyPerms.updateTownPerms(town);
 	}
 
 	private static void townToggleNationZone(CommandSender sender, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {

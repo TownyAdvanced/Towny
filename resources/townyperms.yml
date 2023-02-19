@@ -103,3 +103,5 @@ nations:
             - towny.command.nation.deposit.other
         helper:
             - towny.command.nation.add
+
+peaceful:
