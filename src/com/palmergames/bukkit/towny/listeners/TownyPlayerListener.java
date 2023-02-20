@@ -1358,7 +1358,6 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 		
-		
 		if (event.getHand() == EquipmentSlot.OFF_HAND || !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 
