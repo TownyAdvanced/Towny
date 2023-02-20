@@ -323,6 +323,10 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
+		Action action = event.getAction();
+		if(action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR)
+			return;
+		
 		Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
 
@@ -457,6 +461,10 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+
+		Action action = event.getAction();
+		if(action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR)
 			return;
 
 		Block block = event.getClickedBlock();
@@ -1349,6 +1357,7 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
 		
 		if (event.getHand() == EquipmentSlot.OFF_HAND || !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
