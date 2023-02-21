@@ -324,12 +324,19 @@ public class WorldCoord extends Coord {
 			   !Objects.equals(from.getWorld(), to.getWorld());
 	}
 
-	public List<WorldCoord> getCardinallyAdjacentWorldCoords() {
-		List<WorldCoord> list = new ArrayList<>(4);
+	public List<WorldCoord> getCardinallyAdjacentWorldCoords(boolean... includeOrdinalFlag) {
+		boolean includeOrdinal = (includeOrdinalFlag.length >= 1) ? includeOrdinalFlag[0] : false;
+		List<WorldCoord> list =new ArrayList<>(includeOrdinal ? 8 : 4);
 		list.add(this.add(0,-1));
 		list.add(this.add(0,1));
 		list.add(this.add(1,0));
 		list.add(this.add(-1,0));
+		if (includeOrdinal) {
+			list.add(this.add(1,1));
+			list.add(this.add(1,-1));
+			list.add(this.add(-1,-1));
+			list.add(this.add(-1,1));
+		}
 		return list;
 	}
 }
