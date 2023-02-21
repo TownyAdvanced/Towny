@@ -323,6 +323,10 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
+		Action action = event.getAction();
+		if(action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR)
+			return;
+		
 		Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
 
@@ -461,12 +465,12 @@ public class TownyPlayerListener implements Listener {
 
 		Block block = event.getClickedBlock();
 		Player player = event.getPlayer();
-		if (event.hasBlock()) {
+		if (event.hasBlock() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Location blockLoc = block.getLocation();
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
-			if (block.getType() == Material.RESPAWN_ANCHOR && event.getAction() == Action.RIGHT_CLICK_BLOCK && !isRespawnAnchorWorking(block)) {
+			if (block.getType() == Material.RESPAWN_ANCHOR && !isRespawnAnchorWorking(block)) {
 				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() > 0)
 					BukkitTools.fireEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
@@ -486,7 +490,7 @@ public class TownyPlayerListener implements Listener {
 			 * Prevents setting the spawn point of the player using beds or respawn anchors, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (TownySettings.getBedUse() && event.getAction() == Action.RIGHT_CLICK_BLOCK
+			if (TownySettings.getBedUse() 
 				&& (Tag.BEDS.isTagged(block.getType()) || disallowedAnchorClick(event, block))) {
 
 				boolean isOwner = false;
