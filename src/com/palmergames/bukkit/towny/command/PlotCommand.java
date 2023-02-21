@@ -874,9 +874,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	 * @throws CancelledEventException If the {@link TownBlockPermissionChangeEvent} is cancelled
 	 */
 	public static TownyPermissionChange setTownBlockPermissions(Player player, TownBlockOwner townBlockOwner, TownBlock townBlock, String[] split) throws CancelledEventException {
-		TownyPermissionChange permChange = null;
+		TownyPermissionChange permChange;
 
-		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split.length > 3) {
 
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/... set perm"));
 			if (townBlockOwner instanceof Town)
@@ -902,7 +902,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					// reset this townBlock permissions (by town/resident)
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, false, townBlock);
-					BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, "reset"));					
+					BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));					
 					perm.change(permChange);
 					townBlock.save();
 
@@ -962,7 +962,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return null;
 					}
 				}
-			} else if (split.length == 3) {
+			} else {
 				// Reset the friend to resident so the perm settings don't fail
 				if (split[0].equalsIgnoreCase("friend"))
 					split[0] = "resident";
@@ -996,10 +996,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 			}
 
-			if (permChange != null)	{
-				BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
-				perm.change(permChange);
-			}
+			BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
+			perm.change(permChange);
 
 			townBlock.setChanged(true);
 			townBlock.save();

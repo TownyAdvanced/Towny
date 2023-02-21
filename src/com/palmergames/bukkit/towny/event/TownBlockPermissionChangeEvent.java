@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -9,26 +8,21 @@ import org.jetbrains.annotations.NotNull;
 public class TownBlockPermissionChangeEvent extends CancellableTownyEvent {
 
 	private static final HandlerList handlers = new HandlerList();
-	private static final TownyPermission test = new TownyPermission();
 	private final TownBlock townBlock;
-	private final String changes;
+	private final TownyPermissionChange change;
 	private boolean isCancelled = false;
 
-	public TownBlockPermissionChangeEvent(@NotNull TownBlock townBlock, @NotNull String changes) {
-		this.townBlock = townBlock;
-		this.changes = changes;
-	}
-
 	public TownBlockPermissionChangeEvent(@NotNull TownBlock townBlock, @NotNull TownyPermissionChange change) {
-		this(townBlock, parseChanges(change));
+		this.townBlock = townBlock;
+		this.change = change;
 	}
 
 	public TownBlock getTownBlock() {
 		return townBlock;
 	}
 
-	public String parseChanges() {
-		return changes;
+	public TownyPermissionChange getChange() {
+		return change;
 	}
 
 	@Override
@@ -48,11 +42,5 @@ public class TownBlockPermissionChangeEvent extends CancellableTownyEvent {
 
 	public static HandlerList getHandlerList() {
 		return handlers;
-	}
-	
-	private static String parseChanges(TownyPermissionChange change) {
-		test.reset();
-		test.change(change);
-		return test.toString();
 	}
 }
