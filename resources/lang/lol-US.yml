@@ -70,7 +70,7 @@ nation_help_6: 'Kitteh maek new naishun'
 nation_help_7: 'List the nation leader commands'
 nation_help_8: 'Kitteh maek new naishun'
 nation_help_9: 'List all online residents in nation'
-king_help_1: 'Nation Leader Help'
+king_help_1: 'Halp 4 royel kitteh'
 king_help_2: 'Set your alliance.'
 king_help_3: 'Set your enemies.'
 res_1: 'Statuz of kitteh'
@@ -95,7 +95,7 @@ admin_sing: 'Admin kitteh'
 town_sing: 'Tuwn'
 nation_sing: 'Naishun'
 nation_plu: 'Naishunz'
-king_sing: 'King kitteh'
+king_sing: 'Royel kitteh'
 town_plu: 'Tuwnz'
 world_plu: 'Kittehlandz'
 world_sing: 'Kittehland'
@@ -1636,3 +1636,4 @@ confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all 
 msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
 msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
+msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
