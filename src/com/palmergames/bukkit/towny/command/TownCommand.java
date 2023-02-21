@@ -3456,8 +3456,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void setTownBlockPermissions(CommandSender sender, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
-		TownyPermissionChange permChange;
-		
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split.length > 3) {
 
 			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/... set perm"));
@@ -3485,17 +3483,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (friend && split[0].equalsIgnoreCase("town"))
 			split[0] = "nation";
 
+		TownyPermissionChange permChange;
+
 		if (split.length == 1) {
 
 			if (split[0].equalsIgnoreCase("reset")) {
 
 				// reset all townBlock permissions (by town/resident)
 				for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-					permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, true, townBlock);
 
 					if ((townBlockOwner instanceof Town && !townBlock.hasResident()) || 
 						(townBlockOwner instanceof Resident && townBlock.hasResident())) {
 
+						permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, true, townBlock);
 						try {
 							BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
 						} catch (CancelledEventException e) {
@@ -3588,6 +3588,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			try {
 				boolean b = StringMgmt.parseOnOff(split[2]);
+
 				permChange = new TownyPermissionChange(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
 				perm.change(permChange);
 
@@ -3609,7 +3610,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				sender.sendMessage(e.getCancelMessage());
 				continue;
 			}
-			
+
 			if (townBlockOwner instanceof Town && !townBlock.hasResident()) {
 				townBlock.setType(townBlock.getType());
 				townBlock.save();

@@ -902,7 +902,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 					// reset this townBlock permissions (by town/resident)
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, false, townBlock);
-					BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));					
+					BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
 					perm.change(permChange);
 					townBlock.save();
 
@@ -1621,36 +1621,41 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return;
 					}
 					// If the perm change object is not null
-					if (permChange != null) {
-						plotGroup.getPermissions().change(permChange);
-						
-						for (TownBlock t : plotGroup.getTownBlocks()) {
-							try {
-								BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(t, permChange));
-							} catch (CancelledEventException e) {
-								TownyMessaging.sendErrorMsg(resident, e.getCancelMessage());
-								return;
-							}
-						}
-						plotGroup.getTownBlocks().stream()
-							.forEach(tb -> {
-								tb.setPermissions(plotGroup.getPermissions().toString());
-								tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
-								tb.save();
-								// Change settings event
-								BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
-							});
+					if (permChange == null)
+						return;
 
-						plugin.resetCache();
-						
-						TownyPermission perm = plotGroup.getPermissions();
-						TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
-						TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-						TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-															Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+					// Fire a cancellable event over each townblock to see if this should be allowed.
+					for (TownBlock tb : plotGroup.getTownBlocks()) {
+						try {
+							BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(tb, permChange));
+						} catch (CancelledEventException e) {
+							TownyMessaging.sendErrorMsg(resident, e.getCancelMessage());
+							return;
+						}
 					}
+
+					// This will be allowed, alter the permissions of PlotGroup and then all of the TownBlocks within it.
+					plotGroup.getPermissions().change(permChange);
+					plotGroup.getTownBlocks().stream()
+						.forEach(tb -> {
+							tb.setPermissions(plotGroup.getPermissions().toString());
+							tb.setChanged(!tb.getPermissions().toString().equals(town.getPermissions().toString()));
+							tb.save();
+							// Change settings event
+							BukkitTools.fireEvent(new TownBlockSettingsChangedEvent(tb));
+						});
+					plotGroup.save();
+
+					plugin.resetCache();
+
+					TownyPermission perm = plotGroup.getPermissions();
+					TownyMessaging.sendMessage(player, Translatable.of("msg_set_perms").forLocale(player));
+					TownyMessaging.sendMessage(player, (Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+					TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + (!(CombatUtil.preventPvP(townBlock.getWorld(), townBlock)) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+														Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+														Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+														Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+
 				};
 
 				// Create confirmation.
