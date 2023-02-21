@@ -8375,3 +8375,5 @@ v0.92.0.11:
     - The minimum adjacent town blocks required to expand.
     - This can prevent long lines and snake-like patterns.
     - Set to -1 to disable. Set to 3 to force wider expansions of towns.
+  - API: TownBlockPermissionChangeEvent, courtesy of Pesto with PR #6453.
+    - Adds a cancellable event that is fired when a TownBlock is about to have its permission line changed. 
