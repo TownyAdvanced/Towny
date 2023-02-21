@@ -1606,7 +1606,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// If they setting neutral status on send a message confirming they paid something, if they did.
 		if (peacefulState && TownyEconomyHandler.isActive() && cost > 0) {
-			town.getAccount().withdraw(cost, "Peaceful Nation Cost");
+			town.getAccount().withdraw(cost, "Peaceful Town Cost");
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
 		}
 
