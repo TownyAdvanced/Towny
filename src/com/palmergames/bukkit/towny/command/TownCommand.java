@@ -726,7 +726,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "buy":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_BUY.getNode());
 			catchRuinedTown(player);
-			townBuy(player, StringMgmt.remFirstArg(split));
+			townBuy(player, StringMgmt.remFirstArg(split), null, false);
 			break;
 		case "toggle":
 			// Permission test is internal.
@@ -1621,6 +1621,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Add a cooldown to Peacful toggling.
 		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !permSource.isTownyAdmin(sender))
 			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
+
+		// Reassign permissions because neutrality can add/remove nodes.
+		if(TownyPerms.hasPeacefulNodes())
+			TownyPerms.updateTownPerms(town);
 	}
 
 	private static void townToggleNationZone(CommandSender sender, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
@@ -2627,12 +2631,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		});
 	}
 
-	public void townBuy(Player player, String[] split) throws TownyException {
+	public static void townBuy(CommandSender sender, String[] split, @Nullable Town town, boolean admin) throws TownyException {
 		
 		if (!TownyEconomyHandler.isActive())
 			throw new TownyException(Translatable.of("msg_err_no_economy"));
 
-		Town town = getTownFromPlayerOrThrow(player);
+		if (town == null && sender instanceof Player player)
+			town = getTownFromPlayerOrThrow(player);
 
 		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel())
 			throw new TownyException("Config.yml has bonus blocks diabled at max_purchased_blocks: '0' ");
@@ -2640,18 +2645,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
 
 		if (split.length == 0 || !split[0].equalsIgnoreCase("bonus")) {
-			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/town buy"));
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town buy"));
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-			TownyMessaging.sendMessage(player, String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
+			TownyMessaging.sendMessage(sender, String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
-				TownyMessaging.sendMessage(player, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
+				TownyMessaging.sendMessage(sender, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 			return;
 		}
 		
 		// They have used `/t buy bonus`, check that they have specified an amount to purchase.
 		if (split.length == 2)
-			townBuyBonusTownBlocks(town, MathUtil.getIntOrThrow(split[1].trim()), player);
+			townBuyBonusTownBlocks(town, MathUtil.getIntOrThrow(split[1].trim()), sender);
 		else
 			throw new TownyException(Translatable.of("msg_must_specify_amnt", "/town buy bonus"));
 	}
@@ -2661,10 +2666,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 *
 	 * @param town - Towm object.
 	 * @param inputN - Number of townblocks being bought.
-	 * @param player - Player.
+	 * @param sender - Player.
 	 * @throws TownyException - Exception.
 	 */
-	public static void townBuyBonusTownBlocks(Town town, int inputN, Player player) throws TownyException {
+	public static void townBuyBonusTownBlocks(Town town, int inputN, CommandSender sender) throws TownyException {
 
 		if (inputN < 0)
 			throw new TownyException(Translatable.of("msg_err_negative"));
@@ -2688,13 +2693,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		Confirmation.runOnAccept(() -> {
 			town.addPurchasedBlocks(n);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
 			town.save();
 		})
 			.setCost(new ConfirmationTransaction(() -> cost, town.getAccount(), String.format("Town Buy Bonus (%d)", n),
 					Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost))))
 			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
-			.sendTo(player); 
+			.sendTo(sender); 
 	}
 
 	/**
@@ -3745,28 +3750,43 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		 * See if the Town can pay (if required.)
 		 */
 		if (TownyEconomyHandler.isActive()) {
-			double blockCost = 0;
-			try {					
-				if (outpost)
-					blockCost = TownySettings.getOutpostCost();
-				else if (selection.size() == 1)
-					blockCost = town.getTownBlockCost();
-				else
-					blockCost = town.getTownBlockCostN(selection.size());
+			final boolean isOutpost = outpost;
+			final List<WorldCoord> finalSelection = selection;
+			
+			final Runnable withdrawAndStart = () -> {
+				double blockCost;
+				try {
+					if (isOutpost)
+						blockCost = TownySettings.getOutpostCost();
+					else if (finalSelection.size() == 1)
+						blockCost = town.getTownBlockCost();
+					else
+						blockCost = town.getTownBlockCostN(finalSelection.size());
 
-				double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-				if (!town.getAccount().canPayFromHoldings(blockCost))
-					throw new TownyException(Translatable.of("msg_no_funds_claim2", selection.size(), TownyEconomyHandler.getFormattedBalance(blockCost),  TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
-				town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", selection.size(), player.getName()));
-			} catch (NullPointerException e2) {
-				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
-			}
+					if (!town.getAccount().canPayFromHoldings(blockCost)) {
+						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
+						throw new TownyException(Translatable.of("msg_no_funds_claim2", finalSelection.size(), TownyEconomyHandler.getFormattedBalance(blockCost), TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+					}
+
+					town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", finalSelection.size(), player.getName()));
+					
+					// Start the claiming process after a successful withdraw.
+					Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, finalSelection, isOutpost, true, false));
+				} catch (NullPointerException e2) {
+					TownyMessaging.sendErrorMsg(player, "The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				}
+			};
+			
+			if (TownySettings.isEconomyAsync())
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, withdrawAndStart);
+			else 
+				Bukkit.getScheduler().runTask(plugin, withdrawAndStart);
+		} else {
+			// Economy isn't enabled, start the claiming process immediately.
+			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, outpost, true, false));
 		}
-		
-		/*
-		 * Actually start the claiming process.
-		 */
-		Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, outpost, true, false));
 	}
 
 	public static void parseTownUnclaimCommand(Player player, String[] split) throws TownyException {

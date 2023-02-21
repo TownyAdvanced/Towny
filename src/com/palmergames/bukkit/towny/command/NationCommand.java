@@ -2482,6 +2482,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))
 			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.NEUTRALITY);
 
+		// Reassign permissions because neutrality can add/remove nodes.
+		if (TownyPerms.hasPeacefulNodes())
+			TownyPerms.updateNationPerms(nation);
 	}
 
 	private static void nationTogglePublic(CommandSender sender, Nation nation, Optional<Boolean> choice, boolean admin) throws TownyException {

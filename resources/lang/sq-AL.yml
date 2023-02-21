@@ -34,14 +34,14 @@ description: >
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
-unclaimed_plot_name: 'Unowned'
-unclaimed_zone_name: 'ssǝuɹǝplᴉM'
+unclaimed_plot_name: 'Nuk është prona jote'
+unclaimed_zone_name: 'Shkretëtirë'
 ############################################################
 #+------------------------------------------------------+ #
 #|help messages                                         | #
 #+------------------------------------------------------+ #
 ############################################################
-help_0: 'General Towny Help'
+help_0: 'Ndihmë për Towny'
 help_1: 'Try the following commands to learn more about towny.'
 help_2: 'Town Chat'
 help_3: 'Nation Chat'

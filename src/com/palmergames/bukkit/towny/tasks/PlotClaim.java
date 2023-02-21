@@ -98,7 +98,7 @@ public class PlotClaim extends Thread {
 								/*
 								 *  The plots are town-owned.								
 								 */
-								double bankcap = TownySettings.getTownBankCap();
+								double bankcap = worldCoord.getTownBlock().getPlotObjectGroup().getTown().getBankCap();
 								if (bankcap > 0) {
 									if (worldCoord.getTownBlock().getPlotObjectGroup().getPrice() + worldCoord.getTownBlock().getPlotObjectGroup().getTown().getAccount().getHoldingBalance() > bankcap)
 										throw new TownyException(Translatable.of("msg_err_deposit_capped", bankcap));
@@ -364,7 +364,7 @@ public class PlotClaim extends Thread {
 				if (townBlock.getPlotPrice() == -1)
 					throw new TownyException(Translatable.of("msg_err_plot_nfs"));
 				
-				double bankcap = TownySettings.getTownBankCap();
+				double bankcap = town.getBankCap();
 				if (TownyEconomyHandler.isActive() && bankcap > 0) {
 					if (townBlock.getPlotPrice() + town.getAccount().getHoldingBalance() > bankcap)
 						throw new TownyException(Translatable.of("msg_err_deposit_capped", bankcap));

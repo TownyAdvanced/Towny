@@ -408,5 +408,25 @@
         "value": "1.0"
       }
     ]
+  },
+  {
+    "version": "0.98.6.7",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "peaceful",
+        "value": "towny.peaceful"
+      },
+      {
+        "type": "TOWN_LEVEL_ADD",
+        "key": "bankCapModifier",
+        "value": "1.0"
+      },
+      {
+        "type": "NATION_LEVEL_ADD",
+        "key": "bankCapModifier",
+        "value": "1.0"
+      }
+    ]
   }
 ]

@@ -293,6 +293,10 @@ public class TownyPerms {
 			} else {
 				permList.add("towny.nationless");
 			}
+			
+			if (isPeaceful(resident.getTownOrNull()))
+				permList.addAll(getList("peaceful"));
+				
 		} else {
 			permList.add("towny.townless");
 			permList.add("towny.nationless");
@@ -527,7 +531,15 @@ public class TownyPerms {
 	private static String getNationName(Resident resident) {
 		return resident.getNationOrNull().getName().toLowerCase(Locale.ROOT);
 	}
-	
+
+	private static boolean isPeaceful(Town town) {
+		return town.isNeutral() || (town.hasNation() && town.getNationOrNull().isNeutral()); 
+	}
+
+	public static boolean hasPeacefulNodes() {
+		return !getList("peaceful").isEmpty();
+	}
+
 	/*
 	 * Permission utility functions taken from GroupManager (which I wrote anyway).
 	 */
@@ -701,7 +713,8 @@ public class TownyPerms {
 				"# You can add permission to a rank/group using the                                          #",
 				"# /ta townyperms group [name] addperm [node] command.                                       #",
 				"#                                                                                           #",
-				"# You may change the names of any of the ranks except: nomad, default, mayor, king, ranks.  #",
+				"# You may change the names of any of the ranks except: nomad, default, mayor, king, ranks,  #",
+				"# peaceful.                                                                                 #",
 				"#                                                                                           #",
 				"# If you want to, you can negate permissions nodes from nodes by doing the following:       #",
 				"# Ex:                                                                                       #",
@@ -742,6 +755,8 @@ public class TownyPerms {
 		perms.addComment("nations.default", "", "# All nation members get these permissions.");
 		
 		perms.addComment("nations.king", "", "# Kings get these permissions in addition to the default set.");
+		
+		perms.addComment("peaceful", "", "# Nodes that are given to players who are in a peaceful/neutral town or nation.");
 	}
 
 	public static CommentedConfiguration getTownyPermsFile() {

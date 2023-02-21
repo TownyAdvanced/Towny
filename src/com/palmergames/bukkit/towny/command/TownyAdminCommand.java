@@ -1307,6 +1307,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendGlobalMessage(Translatable.of("town1_has_merged_with_town2", succumbingTown, town));
 			}).sendTo(sender);
 			break;
+		case "buy":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_FORCEMERGE.getNode());
+			TownCommand.townBuy(sender, StringMgmt.remArgs(split, 2), town, true);
+			break;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOWN, split[1])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOWN, split[1]).execute(sender, split, town);
@@ -1415,7 +1419,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split[0].equalsIgnoreCase("unset")) {
 			town.setManualTownLevel(-1);
 			town.save();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_unset", town, town.getLevel()));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_unset", town, town.getLevelID()));
 			return;
 		}
 
@@ -1425,7 +1429,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			level = town.getMaxLevel() - 1;
 		town.setManualTownLevel(level);
 		town.save();
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, level));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, town.getLevelID()));
 	}
 
 	private void parseAdminTownRankCommand(CommandSender sender, Town town, String[] split) throws TownyException {

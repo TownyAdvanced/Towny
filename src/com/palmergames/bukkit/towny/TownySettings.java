@@ -68,6 +68,7 @@ public class TownySettings {
 			int townBlockBuyBonusLimit,
 			double debtCapModifier,
 			double resourceProductionModifier,
+			double bankCapModifier, 
 			Map<String, Integer> townBlockTypeLimits) {}
 
 	// Nation Level
@@ -83,6 +84,7 @@ public class TownySettings {
 			double upkeepModifier,
 			double nationTownUpkeepModifier,
 			double peacefulCostMultiplier,
+			double bankCapModifier,
 			int nationZonesSize,
 			int nationBonusOutpostLimit) {}
 
@@ -113,6 +115,7 @@ public class TownySettings {
 			int townBlockBuyBonusLimit,
 			double debtCapModifier,
 			double resourceProductionModifier,
+			double bankCapModifier,
 			Map<String, Integer> townBlockTypeLimits) {
 
 		configTownLevel.put(numResidents, new TownLevel(
@@ -127,6 +130,7 @@ public class TownySettings {
 			townBlockBuyBonusLimit,
 			debtCapModifier,
 			resourceProductionModifier,
+			bankCapModifier,
 			townBlockTypeLimits.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey().toLowerCase(Locale.ROOT), Map.Entry::getValue))
 		));
 	}
@@ -143,6 +147,7 @@ public class TownySettings {
 			double nationUpkeepMultiplier,
 			double nationTownUpkeepMultiplier,
 			double peacefulCostMultiplier,
+			double bankCapModifier,
 			int nationZonesSize,
 			int nationBonusOutpostLimit) {
 
@@ -157,6 +162,7 @@ public class TownySettings {
 			nationUpkeepMultiplier,
 			nationTownUpkeepMultiplier,
 			peacefulCostMultiplier,
+			bankCapModifier,
 			nationZonesSize,
 			nationBonusOutpostLimit
 		));
@@ -178,7 +184,7 @@ public class TownySettings {
 
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level town_level here which may get replaced when the config's town_levels are loaded below.
-		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 1.0, 0, 0, 1.0, 1.0, new HashMap<>());
+		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 1.0, 0, 0, 1.0, 1.0, 1.0, new HashMap<>());
 		
 		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
 		for (Map<?, ?> genericLevel : levels) {
@@ -214,6 +220,7 @@ public class TownySettings {
 					Integer.parseInt(level.get("townBlockBuyBonusLimit").toString()),
 					Double.parseDouble(level.get("debtCapModifier").toString()),
 					Double.parseDouble(level.get("resourceProductionModifier").toString()),
+					Double.parseDouble(level.get("bankCapModifier").toString()),
 					townBlockTypeLimits
 				);
 			} catch (NullPointerException e) {
@@ -239,7 +246,7 @@ public class TownySettings {
 		
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level nation_level here which may get replaced when the config's nation_levels are loaded below.
-		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1.0, 1, 0);
+		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1.0, 1.0, 1, 0);
 
 		List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
 		for (Map<?, ?> level : levels) {
@@ -263,6 +270,7 @@ public class TownySettings {
 						Double.parseDouble(level.get("upkeepModifier").toString()),
 						Double.parseDouble(level.get("nationTownUpkeepModifier").toString()),
 						Double.parseDouble(level.get("peacefulCostMultiplier").toString()),
+						Double.parseDouble(level.get("bankCapModifier").toString()),
 						Integer.parseInt(level.get("nationZonesSize").toString()),
 						Integer.parseInt(level.get("nationBonusOutpostLimit").toString())
 						);
@@ -604,6 +612,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 0);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -619,6 +628,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 0);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -634,6 +644,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 1);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -649,6 +660,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 1);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -664,6 +676,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 2);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -679,6 +692,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 2);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -694,6 +708,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 3);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -709,6 +724,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 3);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -724,6 +740,7 @@ public class TownySettings {
 			level.put("townOutpostLimit", 4);
 			level.put("townBlockBuyBonusLimit", 0);
 			level.put("debtCapModifier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("resourceProductionModifier", 1.0);
 			level.put("townBlockTypeLimits", new HashMap<>());
 			levels.add(new HashMap<>(level));
@@ -749,6 +766,7 @@ public class TownySettings {
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("peacefulCostMultiplier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
@@ -764,6 +782,7 @@ public class TownySettings {
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("peacefulCostMultiplier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 1);
 			levels.add(new HashMap<>(level));
@@ -779,6 +798,7 @@ public class TownySettings {
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("peacefulCostMultiplier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 2);
 			levels.add(new HashMap<>(level));
@@ -794,6 +814,7 @@ public class TownySettings {
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("peacefulCostMultiplier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 3);
 			levels.add(new HashMap<>(level));
@@ -809,6 +830,7 @@ public class TownySettings {
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("peacefulCostMultiplier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 4);
 			levels.add(new HashMap<>(level));
@@ -824,6 +846,7 @@ public class TownySettings {
 			level.put("upkeepModifier", 1.0);
 			level.put("nationTownUpkeepModifier", 1.0);
 			level.put("peacefulCostMultiplier", 1.0);
+			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 3);
 			level.put("nationBonusOutpostLimit", 5);
 			levels.add(new HashMap<>(level));
@@ -1546,7 +1569,8 @@ public class TownySettings {
 	}
 
 	public static double getNationNeutralityCost(Nation nation) {
-		return getNationLevel(nation, nation.getNumResidents()).peacefulCostMultiplier() * getNationNeutralityCost();
+		double cost = getNationLevel(nation, nation.getNumResidents()).peacefulCostMultiplier() * getNationNeutralityCost();
+		return isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
 	}
 
 	public static double getNationNeutralityCost() {
@@ -1554,13 +1578,22 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY);
 	}
 
+	public static boolean isNationNeutralityCostMultipliedByNationTownAmount() {
+		return getBoolean(ConfigNodes.ECO_PRICE_NATION_NEUTRALITY_CHARGES_PER_TOWN);
+	}
+
 	public static double getTownNeutralityCost(Town town) {
-		return getTownLevel(town, town.getNumResidents()).peacefulCostMultiplier() * getTownNeutralityCost();
+		double cost = getTownLevel(town, town.getNumResidents()).peacefulCostMultiplier() * getTownNeutralityCost();
+		return isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
 	}
 
 	public static double getTownNeutralityCost() {
 		
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_NEUTRALITY);
+	}
+
+	public static boolean isTownNeutralityCostMultipliedByTownClaimsSize() {
+		return getBoolean(ConfigNodes.ECO_PRICE_TOWN_NEUTRALITY_CHARGES_PER_PLOT);
 	}
 
 	public static boolean isAllowingOutposts() {
@@ -2815,6 +2848,10 @@ public class TownySettings {
 		return getString(ConfigNodes.ECO_NATION_PREFIX);
 	}
 
+	public static double getTownBankCap(Town town) {
+		return getTownLevel(town).bankCapModifier * getTownBankCap(); 
+	}
+
 	public static double getTownBankCap() {
 
 		return getDouble(ConfigNodes.ECO_BANK_CAP_TOWN);
@@ -2828,6 +2865,10 @@ public class TownySettings {
 	public static int getTownMinWithdraw() {
 
 		return getInt(ConfigNodes.ECO_MIN_WITHDRAW_TOWN);
+	}
+
+	public static double getNationBankCap(Nation nation) {
+		return getNationLevel(nation).bankCapModifier * getNationBankCap();
 	}
 
 	public static double getNationBankCap() {

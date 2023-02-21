@@ -2141,7 +2141,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		WorldCoord coord = WorldCoord.parseWorldCoord(player);
 
 		try {
-			coord = new WorldCoord(player.getWorld().getName(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+			coord = new WorldCoord(player.getWorld(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		} catch (NumberFormatException | ArrayIndexOutOfBoundsException ignored) {}
 
 		if (TownyAPI.getInstance().isWilderness(coord))

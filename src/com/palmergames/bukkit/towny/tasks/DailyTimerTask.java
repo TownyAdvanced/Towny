@@ -208,6 +208,15 @@ public class DailyTimerTask extends TownyTimerTask {
 					}
 					taxAmount = event.getTax();
 					
+					// Handle if the bank cannot be paid because of the cap. It might be more than
+					// the bank can accept, so we reduce it to the amount that the bank can accept,
+					// even if it becomes 0.
+					if (nation.getBankCap() != 0 && taxAmount + nation.getAccount().getHoldingBalance() > nation.getBankCap())
+						taxAmount = nation.getAccount().getBalanceCap() - nation.getAccount().getHoldingBalance();
+					
+					if (taxAmount == 0)
+						continue;
+					
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
 					// Town is able to pay the nation's tax.
 						town.getAccount().payTo(taxAmount, nation, "Nation Tax to " + nation.getName());
@@ -346,16 +355,25 @@ public class DailyTimerTask extends TownyTimerTask {
 						// they will be able to pay but it might be more than the bank can accept,
 						// so we reduce it to the amount that the bank can accept, even if it
 						// becomes 0.
-						if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+						if (town.getBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > town.getBankCap())
 							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+						
+						if (tax == 0)
+							continue;
 						
 						resident.getAccount().payTo(tax, town, "Town Tax (Percentage)");
 					} else {
 						// Check if the bank could take the money, reduce it to 0 if required so that 
 						// players do not get kicked in a situation they could be paying but cannot because
 						// of the bank cap.
-						if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+						if (town.getBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > town.getBankCap())
 							tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+						
+						
+						
+						
+						if (tax == 0)
+							continue;
 						
 						if (resident.getAccount().canPayFromHoldings(tax))
 							resident.getAccount().payTo(tax, town, "Town tax (FlatRate)");
@@ -410,8 +428,11 @@ public class DailyTimerTask extends TownyTimerTask {
 
 				// If the tax would put the town over the bank cap we reduce what will be
 				// paid by the plot owner to what will be allowed.
-				if (TownySettings.getTownBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > TownySettings.getTownBankCap())
+				if (town.getBankCap() != 0 && tax + town.getAccount().getHoldingBalance() > town.getBankCap())
 					tax = town.getAccount().getBalanceCap() - town.getAccount().getHoldingBalance();
+
+				if (tax == 0)
+					continue;
 
 				if (!resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getType()))) {
 					if (!lostPlots.contains(resident.getName()))
