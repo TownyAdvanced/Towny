@@ -301,12 +301,7 @@ public class WorldCoord extends Coord {
 
 	public List<WorldCoord> getCardinallyAdjacentWorldCoords(boolean... includeOrdinalFlag) {
 		boolean includeOrdinal = (includeOrdinalFlag.length >= 1) ? includeOrdinalFlag[0] : false;
-		List<WorldCoord> list;
-		if (includeOrdinal) {
-			list = new ArrayList<>(8);
-		} else {
-			list = new ArrayList<>(4);
-		}
+		List<WorldCoord> list =new ArrayList<>(includeOrdinal ? 8 : 4);
 		list.add(this.add(0,-1));
 		list.add(this.add(0,1));
 		list.add(this.add(1,0));
