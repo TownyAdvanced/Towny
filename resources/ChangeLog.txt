@@ -8377,3 +8377,7 @@ v0.92.0.11:
     - Set to -1 to disable. Set to 3 to force wider expansions of towns.
   - API: TownBlockPermissionChangeEvent, courtesy of Pesto with PR #6453.
     - Adds a cancellable event that is fired when a TownBlock is about to have its permission line changed. 
+  - Fix switch and item use being triggered on left-click, courtesy of Pesto with PR #6495.
+    - Closes #6494.
+  - Bump bstats-bukkit from 3.0.0 to 3.0.1.
+  - Bump maven-javadoc-plugin from 3.4.1 to 3.5.0.
