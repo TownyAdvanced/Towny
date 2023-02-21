@@ -3974,10 +3974,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static int numAdjacentTownOwnedTownBlocks(Town town, List<WorldCoord> worldCoords) {
 
 		int count = 0;
-		for (WorldCoord worldCoord : worldCoords)
+		for (WorldCoord worldCoord : worldCoords) {
 			for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords(true))
 				if (wc.hasTown(town))
 					count++;
+			break; // Only consider the first worldCoord
+		}
 		return count;
 	}
 
