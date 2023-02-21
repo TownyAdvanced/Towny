@@ -3971,20 +3971,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return false;
 	}
 
-	public static int numAdjacentTownOwnedTownBlocks(TownBlockOwner owner, List<WorldCoord> worldCoords) {
+	public static int numAdjacentTownOwnedTownBlocks(Town town, List<WorldCoord> worldCoords) {
 
 		int count = 0;
-		for (WorldCoord worldCoord : worldCoords) {
-			for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords(true)) {
-				if (wc.isWilderness())
-					continue;
-				if (wc.getTownBlockOrNull().isOwner(owner)) {
+		for (WorldCoord worldCoord : worldCoords)
+			for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords(true))
+				if (wc.hasTown(town))
 					count++;
-				}
-			}
-		}
 		return count;
 	}
+
 
 	public static List<Resident> getValidatedResidentsForInviteRevoke(Object sender, String[] names, Town town) {
 		List<Resident> toRevoke = new ArrayList<>();
