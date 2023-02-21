@@ -3487,7 +3487,7 @@ public class TownySettings {
 	}
 	
 	public static int getMinAdjacentBlocks() {
-		return getInt(ConfigNodes.TOWN_MIN_ADJACENT_BLOCKS);
+		return Math.min(3, getInt(ConfigNodes.TOWN_MIN_ADJACENT_BLOCKS));
 	}
 }
 
