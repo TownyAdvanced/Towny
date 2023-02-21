@@ -8368,3 +8368,10 @@ v0.92.0.11:
     - Closes #5037.
   - Fix nations that collect towntax being able to get above their nation bank cap.
   - Fix towns and nations from collecting tax amounts that equal 0.
+  - Option to prevent people from claiming in a straight line, courtesy of JKJameson with PR #6482. (First-Time Contributor!)
+    - Closes #6080.
+  - New Config Option: town.min_adjacent_blocks
+    - Default: -1
+    - The minimum adjacent town blocks required to expand.
+    - This can prevent long lines and snake-like patterns.
+    - Set to -1 to disable. Set to 3 to force wider expansions of towns.
