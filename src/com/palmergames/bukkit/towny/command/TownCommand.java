@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
 import com.palmergames.bukkit.towny.event.TownInvitePlayerEvent;
 import com.palmergames.bukkit.towny.event.TownPreClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
@@ -52,6 +53,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
@@ -3454,7 +3456,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void setTownBlockPermissions(CommandSender sender, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
-		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split.length > 3) {
 
 			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/... set perm"));
 			if (townBlockOwner instanceof Town)
@@ -3481,6 +3483,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (friend && split[0].equalsIgnoreCase("town"))
 			split[0] = "nation";
 
+		TownyPermissionChange permChange;
+
 		if (split.length == 1) {
 
 			if (split[0].equalsIgnoreCase("reset")) {
@@ -3491,6 +3495,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if ((townBlockOwner instanceof Town && !townBlock.hasResident()) || 
 						(townBlockOwner instanceof Resident && townBlock.hasResident())) {
 
+						permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, true, townBlock);
+						try {
+							BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
+						} catch (CancelledEventException e) {
+							sender.sendMessage(e.getCancelMessage());
+							return;
+						}
 						// Reset permissions
 						townBlock.setType(townBlock.getType());
 						townBlock.save();
@@ -3511,8 +3522,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 				try {
 					boolean b = StringMgmt.parseOnOff(split[0]);
-					
-					perm.change(TownyPermissionChange.Action.ALL_PERMS, b);
+					permChange = new TownyPermissionChange(TownyPermissionChange.Action.ALL_PERMS, b);
+					perm.change(permChange);
 				} catch (Exception e) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
 					return;
@@ -3539,22 +3550,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Check if it is a perm level first
 			try {
 				TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
-
-				perm.change(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
+				permChange = new TownyPermissionChange(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
+				perm.change(permChange);
 			}
 			catch (IllegalArgumentException permLevelException) {
 				// If it is not a perm level, then check if it is a action type
 				try {
 					TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase(Locale.ROOT));
-
-					perm.change(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
+					permChange = new TownyPermissionChange(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
+					perm.change(permChange);
 				} catch (IllegalArgumentException actionTypeException) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
 					return;
 				}
 			}
 
-		} else if (split.length == 3) {
+		} else {
 			// Reset the friend to resident so the perm settings don't fail
 			if (split[0].equalsIgnoreCase("friend"))
 				split[0] = "resident";
@@ -3578,7 +3589,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				boolean b = StringMgmt.parseOnOff(split[2]);
 
-				perm.change(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
+				permChange = new TownyPermissionChange(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
+				perm.change(permChange);
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
@@ -3591,6 +3603,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// The townBlock has custom permissions compared to what the townBlockOwner has as default.
 			if (townBlock.isChanged())
 				continue;
+
+			try {
+				BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
+			} catch (CancelledEventException e) {
+				sender.sendMessage(e.getCancelMessage());
+				continue;
+			}
 
 			if (townBlockOwner instanceof Town && !townBlock.hasResident()) {
 				townBlock.setType(townBlock.getType());
