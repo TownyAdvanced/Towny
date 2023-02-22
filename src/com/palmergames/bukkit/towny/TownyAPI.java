@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
@@ -88,23 +87,11 @@ public class TownyAPI {
     @Nullable
     public Location getNationSpawnLocation(Player player) {
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
-		
-		if (resident == null)
+		if (resident == null || !resident.hasNation())
 			return null;
-		
-        try {
-            if (resident.hasTown()) {
-            	Town t = resident.getTown();
-            	if (t.hasNation()) {
-					Nation nation = t.getNation();
-					return nation.getSpawn();
-				}
-			}
-        } catch (TownyException ignore) {
-        }
 
-		return null;
-    }
+		return resident.getNationOrNull().getSpawnOrNull();
+	}
  
     /**
      * Gets the resident's town if they have one.

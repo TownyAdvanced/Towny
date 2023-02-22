@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
@@ -1177,19 +1178,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean isAlliedWith(Town othertown) {
-		if (this.hasNation() && othertown.hasNation()) {
-			try {
-				if (this.getNation().hasAlly(othertown.getNation())) {
-					return true;
-				} else {
-					return this.getNation().equals(othertown.getNation());
-				}
-			} catch (NotRegisteredException e) {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		return CombatUtil.isAlly(this, othertown);
 	}
 
 	public int getOutpostLimit() {

@@ -1924,10 +1924,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("mayor=" + town.getMayor().getName());
 		// Nation
 		if (town.hasNation())
-			try {
-				list.add("nation=" + town.getNation().getName());
-			} catch (NotRegisteredException ignored) {
-			}
+			list.add("nation=" + town.getNationOrNull().getName());
 
 		list.add(newLine);
 		// Town Board

@@ -624,16 +624,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Nation> toSaveNation = new ArrayList<>();
 		for (Nation toCheck : new ArrayList<>(universe.getNations()))
 			if (toCheck.hasAlly(nation) || toCheck.hasEnemy(nation)) {
-				try {
-					if (toCheck.hasAlly(nation))
-						toCheck.removeAlly(nation);
-					else
-						toCheck.removeEnemy(nation);
+				if (toCheck.hasAlly(nation))
+					toCheck.removeAlly(nation);
+				else
+					toCheck.removeEnemy(nation);
 
-					toSaveNation.add(toCheck);
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
+				toSaveNation.add(toCheck);
 			}
 
 		for (Nation toCheck : toSaveNation)
@@ -770,7 +766,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			// Store the nation in case we have to update the capitol
 			if (town.hasNation()) {
-				nation = town.getNation();
+				nation = town.getNationOrNull();
 				isCapital = town.isCapital();
 			}
 
@@ -901,16 +897,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			List<Nation> toSaveNation = new ArrayList<>(universe.getNations());
 			for (Nation toCheck : toSaveNation)
 				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
-					try {
-						if (toCheck.hasAlly(oldNation)) {
-							toCheck.removeAlly(oldNation);
-							toCheck.addAlly(nation);
-						} else {
-							toCheck.removeEnemy(oldNation);
-							toCheck.addEnemy(nation);
-						}
-					} catch (NotRegisteredException e) {
-						e.printStackTrace();
+					if (toCheck.hasAlly(oldNation)) {
+						toCheck.removeAlly(oldNation);
+						toCheck.addAlly(nation);
+					} else {
+						toCheck.removeEnemy(oldNation);
+						toCheck.addEnemy(nation);
 					}
 				} else
 					toSave.remove(toCheck);
@@ -1334,12 +1326,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			mergeFrom.getAccount().payTo(mergeFrom.getAccount().getHoldingBalance(), mergeInto, Translation.of("msg_town_merge_transaction_reason"));
 
 		lock.lock();
-		boolean isSameNation = false;
-		if (mergeInto.hasNation() && mergeFrom.hasNation()) {
-			try {
-				isSameNation = mergeInto.getNation().hasTown(mergeFrom);
-			} catch (NotRegisteredException ignored) {}
-		}
+		boolean isSameNation = mergeInto.hasNation() && mergeInto.getNationOrNull().hasTown(mergeFrom);
 		String mayorName = mergeFrom.getMayor().getName();
 		List<Jail> jails = universe.getJailUUIDMap().values().stream()
 				.filter(jail -> jail.getTown().equals(mergeFrom))

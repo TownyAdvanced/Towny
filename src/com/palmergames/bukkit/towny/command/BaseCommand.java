@@ -349,6 +349,16 @@ public class BaseCommand implements TabCompleter{
 		return resident.getNationOrNull();
 	}
 
+	@NotNull
+	protected static Nation getNationFromTownOrThrow(Town town) throws NotRegisteredException {
+		Nation nation = town.getNationOrNull();
+
+		if (nation == null)
+			throw new NotRegisteredException(Translatable.of("msg_err_town_doesnt_belong_to_any_nation"));
+
+		return nation;
+	}
+
 	private static List<Resident> getOnlinePlayersWithoutTown() {
 		List<Resident> townlessResidents = new ArrayList<>();
 		for (Player player : BukkitTools.getOnlinePlayers()) {
