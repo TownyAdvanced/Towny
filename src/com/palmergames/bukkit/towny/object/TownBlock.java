@@ -106,11 +106,30 @@ public class TownBlock extends TownyObject {
 		return town != null;
 	}
 
-	public void setResident(Resident resident) {
-		setResident(resident, true);
+	/**
+	 * Removes the current resident as owner in this plot, while calling the appropriate events
+	 * @return Whether the resident (if any) was successfully removed as owner.
+	 */
+	public boolean removeResident() {
+		return setResident(null, true);
 	}
-		
-	public void setResident(Resident resident, boolean callEvent) {
+
+	/**
+	 * Changes the owner of the plot to the given resident.
+	 * @param resident The resident to give ownership to, or {@code null} to give ownership back to the town.
+	 * @return Whether the resident (if any) was successfully removed as owner.
+	 */
+	public boolean setResident(@Nullable Resident resident) {
+		return setResident(resident, true);
+	}
+
+	/**
+	 * Changes the owner of the plot to the given resident.
+	 * @param resident The resident to give ownership to, or {@code null} to give ownership back to the town.
+	 * @param callEvent Whether to call the related plot events or not, this is used by Towny to avoid calling events from database loading.   
+	 * @return Whether the resident (if any) was successfully removed as owner.
+	 */
+	public boolean setResident(@Nullable Resident resident, boolean callEvent) {
 		
 		if (callEvent) {
 			
@@ -124,7 +143,7 @@ public class TownBlock extends TownyObject {
 						if (resident != null) 
 							TownyMessaging.sendErrorMsg(resident, plotPreUnclaimEvent.getCancelMessage());
 						}
-					return;
+					return false;
 				}
 			}
 			
@@ -135,7 +154,7 @@ public class TownBlock extends TownyObject {
 					if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
 						TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
 	
-					return;
+					return false;
 				}
 			}
 		}
@@ -164,6 +183,8 @@ public class TownBlock extends TownyObject {
 		
 		this.resident = resident;
 		permissionOverrides.clear();
+		
+		return true;
 	}
 
 	public Resident getResident() throws NotRegisteredException {
