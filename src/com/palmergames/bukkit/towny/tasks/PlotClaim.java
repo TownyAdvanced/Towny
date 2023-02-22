@@ -15,8 +15,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

@@ -8383,3 +8383,6 @@ v0.92.0.11:
   - Bump maven-javadoc-plugin from 3.4.1 to 3.5.0.
 0.98.6.8:
   - Reduce number of potential NotRegisterExceptions being thrown.
+  - Fix claiming free plots causing useless bank history, courtesy of Warriorrrr with PR #6499.
+  - Remove /plot claim repossesion logic in favour of /plot evict, courtesy of Warriorrrr with PR #6500.
+  - Only remove non embassies from the left town on resident leave, courtesy of Warriorrrr with PR #6501.
