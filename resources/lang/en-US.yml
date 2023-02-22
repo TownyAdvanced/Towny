@@ -1870,4 +1870,4 @@ msg_warn_town_already_capital: "<red>The town of %s is already the nation capita
 msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
 
 # Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
-msg_plot_claim_consider_evict_instead: '<red>, Perhaps you are looking for /plot evict instead?'
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
