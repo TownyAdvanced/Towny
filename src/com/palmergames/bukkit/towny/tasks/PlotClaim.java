@@ -248,23 +248,6 @@ public class PlotClaim extends Thread {
 
 						// Update any caches for this WorldCoord
 						plugin.updateCache(worldCoord);
-					} else if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())) {
-						//Plot isn't for sale but re-possessing for town.
-
-						if (TownyEconomyHandler.isActive() && !town.getAccount().payTo(0.0, owner, "Plot - Buy Back"))
-							throw new TownyException(Translatable.of("msg_town_no_money_purchase_plot"));
-
-						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_buy_resident_plot", town.getName(), owner.getName(), 0.0));
-						townBlock.setResident(resident);
-
-						// Set the plot permissions to mirror the towns.
-						//townBlock.setType(townBlock.getType());
-
-						owner.save();
-						group.save();
-						// Update the townBlock data file so it's no longer using custom settings.
-						townBlock.save();
-						
 					} else {
 						//Should never reach here.
 						throw new AlreadyRegisteredException(Translatable.of("msg_already_claimed", owner.getName()).forLocale(player));
@@ -335,21 +318,6 @@ public class PlotClaim extends Thread {
 
 					// Update any caches for this WorldCoord
 					plugin.updateCache(worldCoord);
-					return true;
-				} else if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode())) {
-					//Plot isn't for sale but re-possessing for town.
-
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_buy_resident_plot", town.getName(), owner.getName(), 0.0));
-					townBlock.setResident(null);
-					townBlock.setPlotPrice(-1);
-
-					// Set the plot permissions to mirror the towns.
-					townBlock.setType(townBlock.getType());
-					
-					owner.save();
-					// Update the townBlock data file so it's no longer using custom settings.
-					townBlock.save();
-
 					return true;
 				} else {
 					//Should never reach here.
