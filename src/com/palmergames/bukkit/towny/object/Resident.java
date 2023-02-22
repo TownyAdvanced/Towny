@@ -302,21 +302,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
 
-		// Use an iterator to be able to keep track of element modifications.
-		Iterator<TownBlock> townBlockIterator = townBlocks.iterator();
-		
-		while (townBlockIterator.hasNext()) {
-			TownBlock townBlock = townBlockIterator.next();
+		// Remove any non-embassy plots owned by the player in the town that was just left.
+		for (TownBlock townBlock : town.getTownBlocks()) {
+			if (townBlock.getType() == TownBlockType.EMBASSY || !townBlock.hasResident(this))
+				continue;
+			
+			if (townBlock.removeResident()) {
+				this.townBlocks.remove(townBlock);
+				townBlock.setPlotPrice(town.getPlotPrice());
 
-			// Do not remove Embassy plots
-			if (townBlock.getType() != TownBlockType.EMBASSY) {
-				
-				// Make sure the element is removed from the iterator, to 
-				// prevent concurrent modification exceptions.
-				townBlockIterator.remove();
-				townBlock.setResident(null);
-				
-				townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotPrice());
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
 				townBlock.save();
