@@ -296,18 +296,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split), true);
 					
 					// Fast-fail if this is a single plot and it is already claimed.
-					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale()) {
-						final Translatable message = Translatable.of("msg_already_claimed", selection.get(0).getTownBlock().getResidentOrNull());
-
-						// Add extra message if the player has permission to evict 
-						if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode())) {
-							try {
-								plotTestOwner(resident, selection.get(0).getTownBlock());
-								message.append(Translatable.of("msg_plot_claim_consider_evict_instead"));
-							} catch (TownyException ignored) {}
+					if (selection.size() == 1 && selection.get(0).hasTownBlock()) {
+						TownBlock tb = selection.get(0).getTownBlockOrNull();
+						if (tb.hasResident() && !tb.isForSale()) {
+							final Translatable message = Translatable.of("msg_already_claimed", tb.getResidentOrNull());
+	
+							// Add extra message if the player has permission to evict 
+							if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode())) {
+								try {
+									plotTestOwner(resident, tb);
+									message.append(Translatable.of("msg_plot_claim_consider_evict_instead"));
+								} catch (TownyException ignored) {}
+							}
+							
+							throw new TownyException(message);
 						}
-						
-						throw new TownyException(message);
 					}
 					
 					// Filter to just plots that are for sale.
@@ -405,7 +408,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						if (selection.size() > 0) {
 
 							for (WorldCoord coord : selection) {
-								TownBlock block = coord.getTownBlock();
+								TownBlock block = coord.getTownBlockOrNull(); // We've already filtered out unclaimed land.
 
 								if (!block.hasPlotObjectGroup()) {
 									// Start the unclaim task
@@ -443,7 +446,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN.getNode())) {
 						for (WorldCoord worldCoord : selection) {
-							if (worldCoord.getTownBlock().hasPlotObjectGroup()) {
+							if (worldCoord.getTownBlockOrNull().hasPlotObjectGroup()) {
 								TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_belongs_to_group_plot_nfs", worldCoord));
 								return false;
 							}
@@ -460,7 +463,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						(resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
 						|| (resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
 						) {
-						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to set their town's plots not for sale.
+						selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTownOrNull(), selection); // Treat it as a mayor able to set their town's plots not for sale.
 					} else {
 						selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident making their own plots not for sale.
 					}
@@ -472,7 +475,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					for (WorldCoord worldCoord : selection) {
 						
 						// Skip over any plots that are part of a PlotGroup.
-						if (worldCoord.getTownBlock().hasPlotObjectGroup()) {
+						if (worldCoord.getTownBlockOrNull().hasPlotObjectGroup()) { // We've already filtered out wilderness coords.
 							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_belongs_to_group_plot_nfs", worldCoord));
 							continue;
 						}
@@ -509,7 +512,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								(resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode()) && town.hasResident(resident))
 								|| (resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode()) && town.hasResident(resident) && !townBlock.hasResident())
 								) {
-								selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTown(), selection); // Treat it as a mayor able to put their town's plots for sale.
+								selection = AreaSelectionUtil.filterOwnedBlocks(resident.getTownOrNull(), selection); // Treat it as a mayor able to put their town's plots for sale.
 								selection = AreaSelectionUtil.filterOutResidentBlocks(resident, selection); // Filter out any resident-owned plots.
 							} else {
 								selection = AreaSelectionUtil.filterOwnedBlocks(resident, selection); // Treat it as a resident putting their own plots up for sale.
@@ -531,7 +534,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						// Set each WorldCoord in selection for sale.
 						for (WorldCoord worldCoord : selection) {
-							TownBlock tb = worldCoord.getTownBlock();
+							TownBlock tb = worldCoord.getTownBlockOrNull(); // We've already filtered out any wilderness blocks.
 							
 							// Skip over any plots that are part of a PlotGroup.
 							if (tb.hasPlotObjectGroup()) {
@@ -548,7 +551,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						 */
 						
 						// Skip over any plots that are part of a PlotGroup.
-						if (pos.getTownBlock().hasPlotObjectGroup()) {
+						if (townBlock.hasPlotObjectGroup()) {
 							TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_plot_belongs_to_group_plot_fs2", pos));
 							return false;
 						}
@@ -581,7 +584,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						return false;
 					}
 
-					plotToggle(player, new WorldCoord(world, Coord.parseCoord(player)).getTownBlock(), StringMgmt.remFirstArg(split));
+					plotToggle(player, townBlock, StringMgmt.remFirstArg(split));
 
 				} else if (split[0].equalsIgnoreCase("set")) {
 
@@ -649,6 +652,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								plotTestOwner(resident, townBlock);
 								
 								Town town = townBlock.getTownOrNull();
+								if (!town.hasResident(resident))
+									throw new TownyException(Translatable.of("msg_not_own_area"));
 								TownyWorld townyWorld = townBlock.getWorld();
 								Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
 								
@@ -1389,7 +1394,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
 
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 		if (townBlock == null)
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
@@ -2087,7 +2092,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				try {
-					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
+					plotTestOwner(getResidentOrThrow(player), townBlock);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					return;
@@ -2121,7 +2126,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				try {
-					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
+					plotTestOwner(getResidentOrThrow(player), townBlock);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					return;

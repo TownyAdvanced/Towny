@@ -579,14 +579,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (TownyEconomyHandler.isActive())
 			town.getAccount().removeAccount();
 
-		if (townyWorld != null) {
-			try {
-				townyWorld.removeTown(town);
-			} catch (NotRegisteredException e) {
-				// Must already be removed
-			}
-			saveWorld(townyWorld);
-		}
+		if (townyWorld != null && townyWorld.hasTown(town))
+			townyWorld.removeTown(town);
 
 		try {
 			universe.unregisterTown(town);
@@ -927,7 +921,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException {
+	public void renamePlayer(Resident resident, String newName) {
 		
 		lock.lock();
 		
@@ -945,12 +939,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive() && resident.getAccountOrNull() != null)
 				resident.getAccount().setName(newName);
 			
-			// Remove the resident from the universe name storage.
-			universe.unregisterResident(resident);
-			//rename the resident
-			resident.setName(newName);
-			// Re-register the resident with the new name.
-			universe.registerResident(resident);
+			universe.changeResidentName(resident, newName);
+
 			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
 			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
 				resident.getAccount().setName(resident.getName());
@@ -967,7 +957,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			// Save the town if the player was the mayor.
 			if (resident.isMayor())
-				saveTown(resident.getTown());
+				saveTown(resident.getTownOrNull());
 			
 			// Make an oldResident with the previous name for use in searching friends/outlawlists/deleting the old resident file.
 			Resident oldResident = new Resident(oldName);
@@ -977,7 +967,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			for (Resident toCheck : toSaveResident){
 				if (toCheck.hasFriend(oldResident)) {
 					toCheck.removeFriend(oldResident);
-					toCheck.addFriend(resident);
+					if (!toCheck.hasFriend(resident))
+						try {
+							toCheck.addFriend(resident);
+						} catch (AlreadyRegisteredException ignored) {}
 				}
 			}
 			for (Resident toCheck : toSaveResident)
@@ -988,7 +981,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			for (Town toCheckTown : toSaveTown) {
 				if (toCheckTown.hasOutlaw(oldResident)) {
 					toCheckTown.removeOutlaw(oldResident);
-					toCheckTown.addOutlaw(resident);
+					if (!toCheckTown.hasOutlaw(resident))
+						try {
+							toCheckTown.addOutlaw(resident);
+						} catch (AlreadyRegisteredException ignored) {}
 				}
 			}
 			for (Town toCheckTown : toSaveTown)

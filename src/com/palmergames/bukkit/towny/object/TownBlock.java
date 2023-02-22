@@ -83,6 +83,12 @@ public class TownBlock extends TownyObject {
 		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
 	}
 
+	/**
+	 * Not used internally by Towny. It is preferred to use {@link #getTownOrNull()} instead.
+	 * 
+	 * @return Town belonging to the TownBlock or throw {@link NotRegisteredException}
+	 * @throws NotRegisteredException exception thrown when the TownBlock has no Town.
+	 */
 	public Town getTown() throws NotRegisteredException {
 
 		if (!hasTown())
@@ -187,6 +193,12 @@ public class TownBlock extends TownyObject {
 		return true;
 	}
 
+	/**
+	 * Not used internally by Towny. It is preferred to use {@link #getResidentOrNull()} instead.
+	 * 
+	 * @return Resident belonging to the TownBlock or throw {@link NotRegisteredException}
+	 * @throws NotRegisteredException exception thrown when the TownBlock has no Resident.
+	 */
 	public Resident getResident() throws NotRegisteredException {
 
 		if (!hasResident())
@@ -392,7 +404,7 @@ public class TownBlock extends TownyObject {
 			setType(type);
 
 		if (this.isJail() && resident.getPlayer() != null)
-			JailUtil.createJailPlot(this, getTown(), resident.getPlayer().getLocation());
+			JailUtil.createJailPlot(this, town, resident.getPlayer().getLocation());
 
 		this.save();
 	}

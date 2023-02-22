@@ -443,6 +443,46 @@ public class TownyUniverse {
 		}
 	}
 
+	/**
+	 * Used internally by Towny to correct resident UUIDs which were improperly
+	 * recorded. (Probably something to do with offline servers.)
+	 * 
+	 * @param resident Resident that exists in the correct name maps.
+	 * @param uuid     UUID that the Resident should have.
+	 */
+	public void changeResidentUUID(@NotNull Resident resident, @NotNull UUID uuid) {
+		Preconditions.checkNotNull(resident, "Resident cannot be null!");
+		Preconditions.checkNotNull(uuid, "UUID cannot be null!");
+		
+		Preconditions.checkState(residentNameMap.containsKey(resident.getName()), "ResidentNameMap must contain resident!");
+		Preconditions.checkState(residentUUIDMap.containsKey(uuid), "ResidentUUIDMap must contain resident!");
+
+		try {
+			unregisterResident(resident); // Unregister
+			resident.setUUID(uuid);       // Set proper UUID.
+			registerResident(resident);   // Re-register.
+		} catch (NotRegisteredException | AlreadyRegisteredException ignored) {} // Ignored because we know we will be successful.
+	}
+	
+	public void changeResidentName(@NotNull Resident resident, @NotNull String name) {
+		Preconditions.checkNotNull(resident, "Resident cannot be null!");
+		Preconditions.checkNotNull(name, "Name cannot be null!");
+		
+		Preconditions.checkState(residentNameMap.containsKey(resident.getName()), "ResidentNameMap must contain resident!");
+		try {
+			// Forcefully remove the resident from the Universe.
+			residentNameMap.remove(resident.getName().toLowerCase(Locale.ROOT));
+			residentsTrie.removeKey(resident.getName());
+			if (resident.getUUID() != null)
+				residentUUIDMap.remove(resident.getUUID());
+
+			resident.setName(name);       // Set proper name.
+			registerResident(resident);   // Re-register.
+		} catch (AlreadyRegisteredException e) {
+			e.printStackTrace();
+		}
+	}
+	
     @Unmodifiable
     public Collection<Resident> getResidents() {
 		return Collections.unmodifiableCollection(residentNameMap.values());

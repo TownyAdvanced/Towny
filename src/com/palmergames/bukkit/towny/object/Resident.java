@@ -230,6 +230,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return hasTown() && town.hasNation();
 	}
 
+	/**
+	 * Not used internally by Towny. It is preferred to use {@link #getTownOrNull()} instead.
+	 * 
+	 * @return Town belonging to the Resident or throw {@link NotRegisteredException}
+	 * @throws NotRegisteredException exception thrown when the resident has no Town.
+	 */
 	public Town getTown() throws NotRegisteredException {
 
 		if (hasTown())
@@ -287,19 +293,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return;
 
 		Town town = this.town;
-		
-		BukkitTools.fireEvent(new TownPreRemoveResidentEvent(this, town));
-		
-		try {
-			
-			town.removeResident(this);
-			
-		} catch (NotRegisteredException e1) {
-			e1.printStackTrace();
-		} catch (EmptyTownException ignore) {
-		}
 
-		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
+		BukkitTools.fireEvent(new TownPreRemoveResidentEvent(this, town));
 
 		// Remove any non-embassy plots owned by the player in the town that was just left.
 		for (TownBlock townBlock : town.getTownBlocks()) {
@@ -315,14 +310,22 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				townBlock.save();
 			}
 		}
-		
+
+		try {
+			
+			town.removeResident(this);
+			
+		} catch (EmptyTownException ignore) {}
+
+		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
+
 		try {
 			setTown(null);
 			
 		} catch (AlreadyRegisteredException ignored) {
 			// It cannot reach the point in the code at which the exception can be thrown.
 		}
-		
+
 		this.save();
 		
 		// Reset everyones cache permissions as this player losing their could affect multiple areas
@@ -880,7 +883,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public Nation getNation() throws TownyException {
-		return getTown().getNation();
+		if (!hasNation())
+			throw new TownyException(Translatable.of("msg_err_that_resident_doesnt_belong_to_that_nation"));
+		return getNationOrNull();
 	}
 	
 	@Nullable

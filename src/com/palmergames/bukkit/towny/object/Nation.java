@@ -427,7 +427,7 @@ public class Nation extends Government {
 			throw new TownyException(Translatable.of("msg_err_king_not_in_nation"));
 		if (!king.isMayor())
 			throw new TownyException(Translatable.of("msg_err_new_king_notmayor"));
-		setCapital(king.getTown());
+		setCapital(king.getTownOrNull());
 		this.save();
 	}
 

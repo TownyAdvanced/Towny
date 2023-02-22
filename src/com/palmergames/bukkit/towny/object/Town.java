@@ -215,6 +215,12 @@ public class Town extends Government implements TownBlockOwner {
 		this.founderName = founderName;
 	}
 
+	/**
+	 * Not used internally by Towny. It is preferred to use {@link #getNationOrNull()} instead.
+	 * 
+	 * @return Nation belonging to the Town or throw {@link NotRegisteredException}
+	 * @throws NotRegisteredException exception thrown when the Town has no Nation.
+	 */
 	public Nation getNation() throws NotRegisteredException {
 
 		if (hasNation())
@@ -355,15 +361,10 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void addResidentCheck(Resident resident) throws AlreadyRegisteredException {
 
-		if (hasResident(resident))
+		if (hasResident(resident)) // In this town already.
 			throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), getFormattedName()));
-		else if (resident.hasTown())
-			try {
-				if (!resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), resident.getTown().getFormattedName()));
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
+		else if (resident.hasTown()) // In a different town already.
+			throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), resident.getTownOrNull().getFormattedName()));
 	}
 
 	public boolean isMayor(Resident resident) {
@@ -737,12 +738,8 @@ public class Town extends Government implements TownBlockOwner {
 		if (this.world == world)
 			return;
 
-		if (hasWorld()) {
-			try {
-				world.removeTown(this);
-			} catch (NotRegisteredException ignored) {
-			}
-		}
+		if (hasWorld())
+			this.world.removeTown(this);
 
 		this.world = world;
 
@@ -771,19 +768,16 @@ public class Town extends Government implements TownBlockOwner {
 		return mayor != null;
 	}
 
-	public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
+	public void removeResident(Resident resident) throws EmptyTownException {
 
-		if (!hasResident(resident)) {
-			throw new NotRegisteredException();
-		} else {
+		if (!hasResident(resident))
+			return;
 
-			remove(resident);
-			resident.setJoinedTownAt(0);
+		remove(resident);
+		resident.setJoinedTownAt(0);
 
-			if (getNumResidents() == 0) {
-				throw new EmptyTownException(this);
-			}
-		}
+		if (getNumResidents() == 0)
+			throw new EmptyTownException(this);
 	}
 
 	private void remove(Resident resident) {
@@ -1146,13 +1140,8 @@ public class Town extends Government implements TownBlockOwner {
 
 		if (hasOutlaw(resident))
 			throw new AlreadyRegisteredException(Translation.of("msg_err_resident_already_an_outlaw"));
-		else if (resident.hasTown())
-			try {
-				if (resident.getTown().equals(this))
-					throw new AlreadyRegisteredException(Translation.of("msg_err_not_outlaw_in_your_town"));
-			} catch (NotRegisteredException e) {
-				e.printStackTrace();
-			}
+		else if (hasResident(resident))
+			throw new AlreadyRegisteredException(Translation.of("msg_err_not_outlaw_in_your_town"));
 	}
 	
 	public void removeOutlaw(Resident resident) {

@@ -33,7 +33,7 @@ import org.bukkit.metadata.MetadataValue;
 public class OnPlayerLogin implements Runnable {
 	
 	Towny plugin;
-	com.palmergames.bukkit.towny.TownyUniverse universe;
+	TownyUniverse universe;
 	volatile Player player;
 	
 	/**
@@ -45,100 +45,14 @@ public class OnPlayerLogin implements Runnable {
 	public OnPlayerLogin(Towny plugin, Player player) {
 		
 		this.plugin = plugin;
-		this.universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
+		this.universe = TownyUniverse.getInstance();
 		this.player = player;
 	}
 
 	@Override
 	public void run() {
 		
-		Resident resident = null;
-
-		if (!universe.hasResident(player.getUniqueId())) {
-			/*
-			 * No record of this resident's UUID.
-			 */
-			resident = universe.getResident(player.getName());
-
-			// If the universe has a resident and the resident has no UUID, log them in with their current name.
-			if (resident != null && !resident.hasUUID()) {
-				loginExistingResident(resident);
-
-			// We have a resident but the resident's UUID was not recorded properly (or the server has somehow altered the player's UUID since recording it.)
-			} else if (resident != null && !resident.getUUID().equals(player.getUniqueId())) {
-				try {
-					universe.unregisterResident(resident);   // Unregister.
-					resident.setUUID(player.getUniqueId());  // Set proper UUID.
-					universe.registerResident(resident);     // Re-register.
-					
-				} catch (NotRegisteredException | AlreadyRegisteredException ignored) {}
-				loginExistingResident(resident);
-				
-			// Else we're dealing with a new resident, because there's no resident by that UUID or resident by that Name without a UUID.
-			} else {
-
-				/*
-				 * Make a brand new Resident.
-				 */
-				try {
-					universe.getDataSource().newResident(player.getName(), player.getUniqueId());
-					TownySettings.incrementUUIDCount();
-					
-					resident = universe.getResident(player.getUniqueId());
-					
-					if (TownySettings.isShowingLocaleMessage())
-					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
-
-					resident.setRegistered(System.currentTimeMillis());
-
-					final Resident finalResident = resident;
-					universe.getDataSource().getHibernatedResidentRegistered(player.getUniqueId()).thenAccept(registered -> {
-						if (registered.isPresent()) {
-							finalResident.setRegistered(registered.get());
-							finalResident.save();
-						}
-					});
-						 
-					resident.setLastOnline(System.currentTimeMillis());
-					if (!TownySettings.getDefaultTownName().equals("")) {
-						Town town = TownyUniverse.getInstance().getTown(TownySettings.getDefaultTownName());
-						if (town != null) {
-							try {
-								resident.setTown(town);
-								town.save();
-							} catch (AlreadyRegisteredException ignore) {}
-						}
-					}
-					
-					resident.save();
-					BukkitTools.fireEvent(new NewResidentEvent(resident));
-					
-				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
-
-			}
-
-		} else {
-			/*
-			 * We do have record of this UUID being used before, log in the resident after checking for a name change.
-			 */
-			resident = universe.getResident(player.getUniqueId());
-			
-			// Name change test.
-			if (!resident.getName().equals(player.getName())) {
-				try {
-					universe.getDataSource().renamePlayer(resident, player.getName());
-				} catch (AlreadyRegisteredException e) {
-					e.printStackTrace();
-				} catch (NotRegisteredException e) {
-					e.printStackTrace();
-				}
-			}
-			/*
-			 * This resident is known so fetch the data and update it.
-			 */
-			resident = universe.getResident(player.getUniqueId());
-			loginExistingResident(resident);
-		}
+		Resident resident = tryGetOrCreateResident();
 
 		if (resident != null) {
 			TownyPerms.assignPermissions(resident, player);
@@ -180,6 +94,92 @@ public class OnPlayerLogin implements Runnable {
 			}
 		}
 	}
+
+	private Resident tryGetOrCreateResident() {
+		Resident resident = null;
+		if (!universe.hasResident(player.getUniqueId())) {
+			/*
+			 * No record of this resident's UUID.
+			 */
+			resident = universe.getResident(player.getName());
+
+			// If the universe has a resident by this name but the resident has no UUID, log
+			// them in with their current name.
+			if (resident != null && !resident.hasUUID()) {
+				loginExistingResident(resident);
+
+			// We have a resident but the resident's UUID was not recorded properly (or the
+			// server has somehow altered the player's UUID since recording it. ie: Offline mode)
+			} else if (resident != null && !resident.getUUID().equals(player.getUniqueId())) {
+				universe.changeResidentUUID(resident, player.getUniqueId());
+				loginExistingResident(resident);
+
+			// Else resident is null and we're dealing with a new resident, because there's
+			// no resident by that UUID or resident by that Name without a UUID.
+			} else {
+				resident = createANewResident(resident);
+
+			}
+			return resident;
+		}
+
+		/*
+		 * We do have record of this UUID being used before, log in the resident after checking for a name change.
+		 */
+		resident = universe.getResident(player.getUniqueId());
+
+		// Name change test.
+		if (!resident.getName().equals(player.getName())) {
+			universe.getDataSource().renamePlayer(resident, player.getName());
+			// Re-fetch the resident with the corrected name. 
+			resident = universe.getResident(player.getUniqueId());
+		}
+
+		loginExistingResident(resident);
+		return resident;
+	}
+
+	private Resident createANewResident(Resident resident) {
+		try {
+			universe.getDataSource().newResident(player.getName(), player.getUniqueId());
+		} catch (AlreadyRegisteredException | NotRegisteredException e) {
+			// This would only happen if the player's name contains symbols like \, /, ', `,
+			// which could be harmful to the database. 
+			return null;
+		}
+
+		TownySettings.incrementUUIDCount();
+		
+		resident = universe.getResident(player.getUniqueId());
+		
+		if (TownySettings.isShowingLocaleMessage())
+		    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
+
+		resident.setRegistered(System.currentTimeMillis());
+
+		final Resident finalResident = resident;
+		universe.getDataSource().getHibernatedResidentRegistered(player.getUniqueId()).thenAccept(registered -> {
+			if (registered.isPresent()) {
+				finalResident.setRegistered(registered.get());
+				finalResident.save();
+			}
+		});
+			 
+		resident.setLastOnline(System.currentTimeMillis());
+		if (!TownySettings.getDefaultTownName().equals("")) {
+			Town town = universe.getTown(TownySettings.getDefaultTownName());
+			if (town != null) {
+				try {
+					resident.setTown(town);
+					town.save();
+				} catch (AlreadyRegisteredException ignore) {}
+			}
+		}
+		
+		resident.save();
+		BukkitTools.fireEvent(new NewResidentEvent(resident));
+		return resident;
+	}
 	
 	/**
 	 * Update last online, add UUID if needed, then save the resident.
@@ -197,7 +197,7 @@ public class OnPlayerLogin implements Runnable {
 			if (!resident.hasUUID()) {
 				resident.setUUID(player.getUniqueId());
 				try {
-					TownyUniverse.getInstance().registerResidentUUID(resident);
+					universe.registerResidentUUID(resident);
 				} catch (AlreadyRegisteredException e) {
 					e.printStackTrace();
 				}
