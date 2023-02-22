@@ -296,8 +296,19 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split), true);
 					
 					// Fast-fail if this is a single plot and it is already claimed.
-					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale())
-						throw new TownyException(Translatable.of("msg_already_claimed", selection.get(0).getTownBlock().getResidentOrNull()));
+					if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale()) {
+						final Translatable message = Translatable.of("msg_already_claimed", selection.get(0).getTownBlock().getResidentOrNull());
+
+						// Add extra message if the player has permission to evict 
+						if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode())) {
+							try {
+								plotTestOwner(resident, selection.get(0).getTownBlock());
+								message.append(Translatable.of("msg_plot_claim_consider_evict_instead"));
+							} catch (TownyException ignored) {}
+						}
+						
+						throw new TownyException(message);
+					}
 					
 					// Filter to just plots that are for sale.
 					selection = AreaSelectionUtil.filterPlotsForSale(selection);
