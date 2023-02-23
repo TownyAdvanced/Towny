@@ -1637,3 +1637,5 @@ msg_you_have_unclaimed_everything_but_your_homeblock: "Вы распривати
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Вы уверены, что хотите сделать %s владельцем нации? Это действие нельзя отменить!"
 msg_warn_town_already_capital: "<red>Город %s уже является столицей."
 msg_min_adjacent_blocks: 'Для этого нужно как минимум %s прилегающих участков. У вас только %s.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
