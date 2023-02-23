@@ -1637,3 +1637,5 @@ msg_you_have_unclaimed_everything_but_your_homeblock: "Vous avez tout désannexe
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Êtes-vous sûr de vouloir nommer %s dirigeant de la nation ? Cette action est irréversible !"
 msg_warn_town_already_capital: "<red>La ville de %s est déjà la capitale de la nation."
 msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
