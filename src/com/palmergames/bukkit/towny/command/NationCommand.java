@@ -40,7 +40,6 @@ import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -649,8 +648,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 			nationName = args[0];
 			
-			resident = getResidentOrThrow(player.getUniqueId());
-			town = resident.getTown();
+			resident = getResidentOrThrow(player);
+			town = getTownFromResidentOrThrow(resident);
 			nation = getNationOrThrow(nationName);
 
 			// Check if town is currently in a nation.
@@ -752,7 +751,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		Resident target = getResidentOrThrow(split[1]);
 		Nation nation = getNationFromResidentOrThrow(resident);
 
@@ -895,20 +894,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void newNation(Player player, String[] split) throws TownyException {
-		Resident resident = getResidentOrThrow(player.getUniqueId());
-		if (TownySettings.getNumResidentsCreateNation() > 0 && resident.getTown().getNumResidents() < TownySettings.getNumResidentsCreateNation())
+		Resident resident = getResidentOrThrow(player);
+		Town town = getTownFromResidentOrThrow(resident);
+		if (TownySettings.getNumResidentsCreateNation() > 0 && town.getNumResidents() < TownySettings.getNumResidentsCreateNation())
 			throw new TownyException(Translatable.of("msg_err_not_enough_residents_new_nation"));
 
 		if (split.length == 1)
 			throw new TownyException(Translatable.of("msg_specify_nation_name"));
 
-		if (!resident.isMayor() && !resident.getTown().hasResidentWithRank(resident, "assistant"))
+		if (!resident.isMayor() && !town.hasResidentWithRank(resident, "assistant"))
 			throw new TownyException(Translatable.of("msg_peasant_right"));
 		
 		boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
 		
 		String nationName = String.join("_", StringMgmt.remFirstArg(split));
-		newNation(player, nationName, resident.getTown(), noCharge);
+		newNation(player, nationName, town, noCharge);
 	}
 	
 	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
@@ -955,7 +955,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Confirmation.runOnAccept(() -> {
 					try {
 						newNation(finalName, capitalTown);
-					} catch (AlreadyRegisteredException | NotRegisteredException e) {
+					} catch (TownyException e) {
 						TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 						return;
 					}
@@ -977,7 +977,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+	public static Nation newNation(String name, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		UUID nationUUID = UUID.randomUUID();
@@ -987,7 +987,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		// Should never happen
 		if (nation == null) {
 			TownyMessaging.sendErrorMsg(String.format("Error fetching new nation with name %s; it was not properly registered!", name));
-			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", name));
+			throw new TownyException(Translatable.of("msg_err_not_registered_1", name));
 		}
 		nation.setRegistered(System.currentTimeMillis());
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
@@ -1020,7 +1020,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_specify_nation_name"));
 
 		String name = split[0];
-		if (!admin && sender instanceof Player player && !getResidentOrThrow(player.getUniqueId()).isKing())
+		if (!admin && sender instanceof Player player && !getResidentOrThrow(player).isKing())
 			throw new TownyException(Translatable.of("msg_err_merging_for_kings_only"));
 
 		Nation nation = TownyUniverse.getInstance().getNation(name);
@@ -1057,7 +1057,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 	
 	public void nationLeave(Player player) throws TownyException {
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		Town town = getTownFromResidentOrThrow(resident); 
 		Nation nation = getNationFromResidentOrThrow(resident);
 	
@@ -1093,7 +1093,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		// Player is using "/n delete"
 		if (split.length == 0) {
 			try {
-				Resident resident = getResidentOrThrow(player.getUniqueId());
+				Resident resident = getResidentOrThrow(player);
 				Town town = getTownFromResidentOrThrow(resident);
 				Nation nation = getNationFromResidentOrThrow(resident);
 				// Check that the capital wont have too many residents after deletion. 
@@ -1165,13 +1165,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				continue;
 			}
 
-			Town town = null;
-			try {
-				town = getTownOrThrow(townname);
-			} catch (NotRegisteredException e) {
+			Town town = TownyAPI.getInstance().getTown(townname);
+			if (town == null) {
 				// The Town doesn't actually exist or was mis-spelled.
 				removeinvites.add(townname);
 				continue;
+				
 			}
 
 			if (nation.hasTown(town) || town.hasNation()) {
@@ -1424,7 +1423,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.ALLIES_STRING.send(player);
 			return;
 		}
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		Nation nation = getNationFromResidentOrThrow(resident);
 
 		switch (split[0].toLowerCase()) {
@@ -1785,7 +1784,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		Nation nation = getNationFromResidentOrThrow(resident);
 		
 		ArrayList<Nation> list = new ArrayList<>();
@@ -1906,7 +1905,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		try {
 			if (!admin && sender instanceof Player player) {
-				resident = getResidentOrThrow(player.getUniqueId());
+				resident = getResidentOrThrow(player);
 				nation = getNationFromResidentOrThrow(resident);
 			} else // treat resident as king for testing purposes.
 				resident = nation.getKing();
@@ -2023,7 +2022,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void nationSetSurname(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws NotRegisteredException {
+	private static void nationSetSurname(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {
 		// Give the resident a title
 		if (split.length < 2)
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set surname bilbo the dwarf ");
@@ -2062,7 +2061,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	}
 
-	private static void nationSetTitle(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws NotRegisteredException {
+	private static void nationSetTitle(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {
 		// Give the resident a title
 		if (split.length < 2)
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set title bilbo Jester ");
@@ -2296,7 +2295,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!newKing.isMayor())
 					throw new TownyException(Translatable.of("msg_err_new_king_notmayor"));
 				
-				changeNationOwnership(sender, nation, getResidentOrThrow(split[1]).getTown(), admin);
+				changeNationOwnership(sender, nation, newKing.getTownOrNull(), admin);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 			}
@@ -2357,7 +2356,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 
 		if (!admin) {
-			resident = getResidentOrThrow(((Player) sender).getUniqueId());
+			resident = getResidentOrThrow((Player) sender);
 			nation = getNationFromResidentOrThrow(resident);
 		} else // Treat any resident tests as though the king were doing it.
 			resident = nation.getKing();
@@ -2524,7 +2523,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		try {
-			Resident resident = getResidentOrThrow(player.getUniqueId());
+			Resident resident = getResidentOrThrow(player);
 			Nation nation = getNationFromResidentOrThrow(resident);
 
 			if (args.length < 2 || args.length > 3)

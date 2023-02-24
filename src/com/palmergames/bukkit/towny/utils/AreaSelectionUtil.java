@@ -2,9 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -182,7 +180,7 @@ public class AreaSelectionUtil {
 				 * Calculate how many townblocks will be needed to claim the desired radius,
 				 * dropping the radius if it will be required, to make a perfect a perfect square.
 				 */
-				int needed = pos.getTownBlock().hasTown() ? 0 : 1;
+				int needed = pos.hasTownBlock() ? 0 : 1;
 				int claimRadius = 1;
 				while (claimRadius <= r && needed < maxSelectionSize) {
 				    needed += (claimRadius * 8);
@@ -435,17 +433,17 @@ public class AreaSelectionUtil {
 		HashSet<PlotGroup> seenGroups = new HashSet<>();
 		
 		for (WorldCoord coord : selection) {
-			
-			PlotGroup group = null;
-			try {
-				group = coord.getTownBlock().getPlotObjectGroup();
-			} catch (NotRegisteredException ignored) {}
-			
+			if (coord.isWilderness())
+				continue;
+
+			PlotGroup group = coord.getTownBlockOrNull().getPlotObjectGroup();
+			if (group == null)
+				continue;
+
 			if (seenGroups.contains(group))
 				continue;
-			
+
 			seenGroups.add(group);
-			
 		}
 		
 		return seenGroups;
@@ -459,19 +457,20 @@ public class AreaSelectionUtil {
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				// Plot Groups do not set a townblock's individual plot price. 
-				if (worldCoord.getTownBlock().hasPlotObjectGroup() && worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
-					out.clear();             // Remove any other plots from the selection. 
-					out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
-					return out;              // Return the one plot-group-having townblock.
-				}
-
-				if (worldCoord.getTownBlock().isForSale())
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
+		for (WorldCoord worldCoord : selection) {
+			if (worldCoord.isWilderness())
+				continue;
+			TownBlock tb = worldCoord.getTownBlockOrNull();
+			// Plot Groups do not set a townblock's individual plot price. 
+			if (tb.hasPlotObjectGroup() && tb.getPlotObjectGroup().getPrice() != -1) {
+				out.clear();             // Remove any other plots from the selection. 
+				out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
+				return out;              // Return the one plot-group-having townblock.
 			}
+
+			if (tb.isForSale())
+				out.add(worldCoord);
+		}
 		return out;
 	}
 
@@ -484,11 +483,8 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
-			try {
-				if (!worldCoord.getTownBlock().isForSale())
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
-			}
+			if (!worldCoord.isWilderness() && !worldCoord.getTownBlockOrNull().isForSale())
+				out.add(worldCoord);
 		return out;
 	}
 	
@@ -503,12 +499,13 @@ public class AreaSelectionUtil {
 	public static List<WorldCoord> filterOutResidentBlocks(Resident resident, List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				if (!worldCoord.getTownBlock().hasResident() || (worldCoord.getTownBlock().hasResident() && worldCoord.getTownBlock().getResidentOrNull().equals(resident)))
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
-			}
+		for (WorldCoord worldCoord : selection) {
+			if (worldCoord.isWilderness())
+				continue;
+			TownBlock tb = worldCoord.getTownBlockOrNull();
+			if (!tb.hasResident() || tb.hasResident(resident))
+				out.add(worldCoord);
+		}
 		return out;
 	}
 
@@ -523,16 +520,13 @@ public class AreaSelectionUtil {
 
 	public static boolean isOnEdgeOfOwnership(TownBlockOwner owner, WorldCoord worldCoord) {
 
-		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-		for (int i = 0; i < 4; i++)
-			try {
-				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
-				if (!edgeTownBlock.isOwner(owner)) {
-					return true;
-				}
-			} catch (NotRegisteredException e) {
-				return true;
-			}
+		for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords()) {
+			if (wc.isWilderness())
+				continue;
+			if (!wc.getTownBlockOrNull().isOwner(owner))
+				continue;
+			return true;
+		}
 		return false;
 	}
 }

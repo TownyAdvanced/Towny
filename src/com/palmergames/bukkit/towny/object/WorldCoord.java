@@ -171,12 +171,12 @@ public class WorldCoord extends Coord {
 	/**
 	 * Shortcut for TownyUniverse.getInstance().getTownBlock(WorldCoord).
 	 * 
+	 * @deprecated as of 0.98.6.9 use {@link #getTownBlockOrNull()} instead.
 	 * @return the relevant TownBlock instance.
 	 * @throws NotRegisteredException If there is no TownBlock at this WorldCoord.
 	 */
+	@Deprecated
 	public TownBlock getTownBlock() throws NotRegisteredException {
-		if (!hasTownBlock())
-			throw new NotRegisteredException();
 		return TownyUniverse.getInstance().getTownBlock(this);
 	}
 	

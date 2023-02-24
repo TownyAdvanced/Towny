@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
-
 import java.util.Collection;
 
 /**
@@ -41,7 +39,6 @@ public interface TownBlockOwner extends Permissible, Nameable {
 	 * Removes townblock from the list of existing townblocks.
 	 * 
 	 * @param townBlock The townblock to remove.
-	 * @throws NotRegisteredException Thrown when the townblock given is not in the list.
 	 */
-	void removeTownBlock(TownBlock townBlock) throws NotRegisteredException;
+	void removeTownBlock(TownBlock townBlock);
 }

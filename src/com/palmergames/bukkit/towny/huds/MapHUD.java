@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -94,9 +95,10 @@ public class MapHUD {
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				map[y][x] = Colors.White;
 				try {
-					TownBlock townblock = world.getTownBlock(tby, tbx);
-					if (!townblock.hasTown())
+					WorldCoord currentWC = new WorldCoord(world.getBukkitWorld(), new Coord(tby, tbx));
+					if (currentWC.isWilderness())
 						throw new TownyException();
+					TownBlock townblock = currentWC.getTownBlockOrNull();
 					Town town = townblock.getTownOrNull();
 					if (x == halfLineHeight && y == halfLineWidth)
 						// This is the player's location, colour it special.
@@ -110,7 +112,7 @@ public class MapHUD {
 							map[y][x] = Colors.LightGreen;
 						} else if (resident.hasNation()) {
 							Nation resNation = resident.getNationOrNull();
-							if (resNation.hasTown(townblock.getTown()))
+							if (resNation.hasTown(town))
 								// own nation
 								map[y][x] = Colors.Green;
 							else if (town.hasNation()) {

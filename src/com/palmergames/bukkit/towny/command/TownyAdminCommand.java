@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -908,14 +907,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false).start();
 	}
 
-	private void parseAdminPlotClaimedAt(Player player) throws NoPermissionException, NotRegisteredException {
+	private void parseAdminPlotClaimedAt(Player player) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_CLAIMEDAT.getNode());
 
 		WorldCoord wc = WorldCoord.parseWorldCoord(player);
-		if (!wc.hasTownBlock() || wc.getTownBlock().getClaimedAt() == 0)
-			throw new NotRegisteredException();
+		if (!wc.hasTownBlock())
+			throw new TownyException(Translatable.of("msg_not_claimed_1"));
+		
+		long claimedAt = wc.getTownBlockOrNull().getClaimedAt(); 
+		if (claimedAt == 0)
+			throw new TownyException(Translatable.of("msg_err_townblock_has_no_claimedat_data"));
 
-		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_perm_claimed_at").append(" " + TownyFormatter.fullDateFormat.format(wc.getTownBlock().getClaimedAt())));
+		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_perm_claimed_at").append(" " + TownyFormatter.fullDateFormat.format(claimedAt)));
 	}
 
 	private void parseAdminPlotTrust(Player player, String[] split) throws NoPermissionException, TownyException {
@@ -1266,7 +1269,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			if (!town.hasNation())
 				throw new TownyException(Translatable.of("That town does not belong to a nation."));
 
-			Nation nation = town.getNation();
+			Nation nation = town.getNationOrNull();
 			town.removeNation();
 			plugin.resetCache();
 
@@ -1442,7 +1445,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (!target.hasTown()) {
 			throw new TownyException(Translatable.of("msg_err_resident_doesnt_belong_to_any_town"));
 		}
-		if (target.getTown() != town) {
+		if (!town.hasResident(target)) {
 			throw new TownyException(Translatable.of("msg_err_townadmintownrank_wrong_town"));
 		}
 
@@ -2328,15 +2331,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	public static void handlePlotMetaCommand(Player player, String[] split) throws TownyException {
 		
-		String world = player.getWorld().getName();
-		TownBlock townBlock = null;
-		try {
-			townBlock = new WorldCoord(world, Coord.parseCoord(player)).getTownBlock();
-		} catch (Exception e) {
-			throw new TownyException(e.getMessage());
-		}
-
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT_META.getNode());
+
+		WorldCoord wc = WorldCoord.parseWorldCoord(player);
+		if (wc.isWilderness())
+			throw new TownyException(Translatable.of("msg_not_claimed_1"));
+		TownBlock townBlock = wc.getTownBlockOrNull();
 
 		if (split.length == 1) {
 			displayPlotMeta(player, townBlock);

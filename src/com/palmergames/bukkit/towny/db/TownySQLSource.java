@@ -752,10 +752,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							} catch (NotRegisteredException ignored) {}
 							// Check if the older resident is a part of a town
 							if (olderRes.hasTown()) {
-								try {
-									// Resident#removeTown saves the resident, so we can't use it.
-									olderRes.getTown().removeResident(olderRes);
-								} catch (NotRegisteredException nre) {}
+								// Resident#removeTown saves the resident, so we can't use it.
+								olderRes.getTownOrNull().removeResident(olderRes);
 							}
 							deleteResident(olderRes);					
 						} else {
@@ -1020,15 +1018,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						try {
 							int x = Integer.parseInt(tokens[1]);
 							int z = Integer.parseInt(tokens[2]);
-							TownBlock homeBlock = universe
-									.getTownBlock(new WorldCoord(world.getName(), x, z));
-							town.forceSetHomeBlock(homeBlock);
+							WorldCoord wc = new WorldCoord(world.getName(), x, z);
+							if (!universe.hasTownBlock(wc)) {
+								TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
+							} else {
+								TownBlock homeBlock = wc.getTownBlockOrNull();
+								town.forceSetHomeBlock(homeBlock);
+							}
 						} catch (NumberFormatException e) {
 							TownyMessaging.sendErrorMsg(
 									"[Warning] " + town.getName() + " homeBlock tried to load invalid location.");
-						} catch (NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg(
-									"[Warning] " + town.getName() + " homeBlock tried to load invalid TownBlock.");
 						} catch (TownyException e) {
 							TownyMessaging.sendErrorMsg("[Warning] " + town.getName() + " does not have a home block.");
 						}
@@ -1089,7 +1088,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					tokens = spawn.split(search);
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
+							World world = Bukkit.getWorld(tokens[0]);
+							if (world == null)
+								continue;
 							double x = Double.parseDouble(tokens[1]);
 							double y = Double.parseDouble(tokens[2]);
 							double z = Double.parseDouble(tokens[3]);
@@ -1099,16 +1100,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 								loc.setPitch(Float.parseFloat(tokens[4]));
 								loc.setYaw(Float.parseFloat(tokens[5]));
 							}
-
-							TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
-							if (tb == null)
+							WorldCoord wc = WorldCoord.parseWorldCoord(loc);
+							if (!universe.hasTownBlock(wc))
 								continue;
+							TownBlock tb = wc.getTownBlockOrNull();
 							Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
 							universe.registerJail(jail);
 							town.addJail(jail);
 							tb.setJail(jail);
 							jail.save();
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						} catch (NumberFormatException | NullPointerException ignored) {
 						}
 				}
 			}
@@ -1768,18 +1769,22 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		try (Statement s = cntx.createStatement();
 				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
 
+			List<String> warnedWorlds = new ArrayList<>();
+			
 			while (rs.next()) {
 				String worldName = rs.getString("world");
 				int x = rs.getInt("x");
 				int z = rs.getInt("z");
-
-				try {
-					townBlock = universe.getTownBlock(new WorldCoord(worldName, x, z));
-				} catch (NotRegisteredException ex) {
-					TownyMessaging.sendErrorMsg("Loading Error: Exception while fetching townblock: " + worldName + " "
-							+ x + " " + z + " from memory!");
-					return false;
+				WorldCoord wc = new WorldCoord(worldName, x, z);
+				if (!universe.hasTownBlock(wc)) {
+					if (warnedWorlds.contains(worldName))
+						continue;
+					warnedWorlds.add(worldName);
+					TownyMessaging.sendErrorMsg("Loading Error: Exception while fetching townblock: " + worldName + " " + x + " " + z + " from memory!");
+					TownyMessaging.sendErrorMsg("Towny is going to continue trying to loading townblocks, but you wont see anymore failures for this world.");
+					continue;
 				}
+				townBlock = wc.getTownBlockOrNull();
 
 				line = rs.getString("name");
 				if (line != null)
@@ -2052,15 +2057,21 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			line = rs.getString("townBlock");
 			if (line != null) {
-				tokens = line.split("#");
-				TownBlock tb = null;
 				try {
-					tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+					tokens = line.split("#");
+					WorldCoord wc = new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim()));
+					if (!universe.hasTownBlock(wc)) {
+						TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
+						removeJail(jail);
+						deleteJail(jail);
+						return true;
+					}
+					TownBlock tb = wc.getTownBlockOrNull();
 					jail.setTownBlock(tb);
-					jail.setTown(tb.getTown());
+					jail.setTown(tb.getTownOrNull());
 					tb.setJail(jail);
-					tb.getTown().addJail(jail);
-				} catch (NumberFormatException | NotRegisteredException e) {
+					tb.getTownOrNull().addJail(jail);
+				} catch (NumberFormatException e) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
 					removeJail(jail);
 					deleteJail(jail);
@@ -2133,7 +2144,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("jailBail", resident.getJailBailCost());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
-			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
+			res_hm.put("town", resident.hasTown() ? resident.getTownOrNull().getName() : "");
 			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
 			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
 			res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
@@ -2468,7 +2479,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("z", townBlock.getZ());
 			tb_hm.put("name", townBlock.getName());
 			tb_hm.put("price", townBlock.getPlotPrice());
-			tb_hm.put("town", townBlock.getTown().getName());
+			tb_hm.put("town", townBlock.hasTown() ? townBlock.getTownOrNull().getName() : "");
 			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResidentOrNull().getName() : "");
 			tb_hm.put("typeName", townBlock.getTypeName());
 			tb_hm.put("outpost", townBlock.isOutpost());

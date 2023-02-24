@@ -127,22 +127,6 @@ public class TownyWorld extends TownyObject {
 			towns.put(town.getName(), town);
 	}
 
-	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
-		if (!hasTownBlock(coord))
-			throw new NotRegisteredException();
-		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), this.getUUID(), coord));
-	}
-
-	public boolean hasTownBlock(Coord key) {
-
-		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), this.getUUID(), key));
-	}
-
-	public TownBlock getTownBlock(int x, int z) throws NotRegisteredException {
-
-		return getTownBlock(new Coord(x, z));
-	}
-
 	public List<TownBlock> getTownBlocks(Town town) {
 
 		List<TownBlock> out = new ArrayList<>();
@@ -164,19 +148,10 @@ public class TownyWorld extends TownyObject {
 		return townBlocks;
 	}
 
-	public void removeTown(Town town) throws NotRegisteredException {
+	public void removeTown(Town town) {
 
-		if (!hasTown(town))
-			throw new NotRegisteredException();
-		else {
+		if (hasTown(town))
 			towns.remove(town.getName());
-			/*
-			 * try {
-			 * town.setWorld(null);
-			 * } catch (AlreadyRegisteredException e) {
-			 * }
-			 */
-		}
 	}
 
 	@Override
@@ -1000,5 +975,43 @@ public class TownyWorld extends TownyObject {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	}
+
+	/**
+	 * Unused by Towny.
+	 * 
+	 * @deprecated since 0.98.6.9 use {@link TownyUniverse.getInstance().getTownBlockOrNull(WorldCoord)} instead.
+	 * @param coord Coord from this TownyWorld to get a TownBlock from.
+	 * @return TownBlock or NotRegisteredException.
+	 * @throws NotRegisteredException
+	 */
+	@Deprecated
+	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
+		return TownyUniverse.getInstance().getTownBlock(new WorldCoord(this.getName(), this.getUUID(), coord));
+	}
+
+	/**
+	 * Unused by Towny.
+	 * 
+	 * @deprecated since 0.98.6.9 use {@link TownyUniverse.getInstance().getTownBlockOrNull(WorldCoord)} instead.
+	 * @param coord Coord from this TownyWorld to get a TownBlock from.
+	 * @return TownBlock or NotRegisteredException.
+	 * @throws NotRegisteredException
+	 */
+	@Deprecated
+	public TownBlock getTownBlock(int x, int z) throws NotRegisteredException {
+		return getTownBlock(new Coord(x, z));
+	}
+
+	/**
+	 * Unused by Towny.
+	 * 
+	 * @deprecated since 0.98.6.9 use {@link TownyUniverse.getInstance().hasTownBlock(WorldCoord)} instead.
+	 * @param coord Coord from this TownyWorld to get a TownBlock from.
+	 * @return true if the TownBlock exists.
+	 */
+	@Deprecated
+	public boolean hasTownBlock(Coord key) {
+		return TownyUniverse.getInstance().hasTownBlock(new WorldCoord(this.getName(), this.getUUID(), key));
 	}
 }
