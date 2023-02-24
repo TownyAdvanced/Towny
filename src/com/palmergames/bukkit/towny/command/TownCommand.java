@@ -669,7 +669,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if(!TownySettings.getTownRuinsReclaimEnabled())
 				throw new TownyException(Translatable.of("msg_err_command_disable"));
 			
-			TownRuinUtil.processRuinedTownReclaimRequest(player, plugin);
+			TownRuinUtil.processRuinedTownReclaimRequest(player);
 			break;
 		case "join":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_JOIN.getNode());

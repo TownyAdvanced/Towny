@@ -123,10 +123,8 @@ public class TownRuinUtil {
 	 * Processes a player request to reclaim a ruined town
 	 *
 	 * @param player The player reclaiming a ruined town.
-	 * @param plugin Instance of {@link Towny}
 	 */
-	public static void processRuinedTownReclaimRequest(Player player, Towny plugin) {
-		Town town;
+	public static void processRuinedTownReclaimRequest(Player player) {
 		try {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
@@ -134,7 +132,7 @@ public class TownRuinUtil {
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 
 			//Ensure town is ruined
-			town = resident.getTown();
+			Town town = resident.getTownOrNull();
 			if (!town.isRuined())
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
 

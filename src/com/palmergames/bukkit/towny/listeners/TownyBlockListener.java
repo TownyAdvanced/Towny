@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -241,23 +240,23 @@ public class TownyBlockListener implements Listener {
 		WorldCoord from = WorldCoord.parseWorldCoord(block);
 		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);
 
-		if (from.equals(to) || (allowWild && to.isWilderness()) || (to.isWilderness() && from.isWilderness()))
+		// Same WorldCoord, Both are Wilderness, or We allow moving from Town to Wild.
+		if (from.equals(to) || (to.isWilderness() && from.isWilderness()) || (allowWild && to.isWilderness()))
 			return true;
 
-		try {
-			TownBlock currentTownBlock = from.getTownBlock();
-			TownBlock destinationTownBlock = to.getTownBlock();
-
-			//Both townblocks are owned by the same resident.
-			if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() && currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
-				return true;
-
-			//Both townblocks are owned by the same town.
-			return currentTownBlock.getTown() == destinationTownBlock.getTown() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
-		} catch (NotRegisteredException e) {
-			//The 'from' townblock is wilderness.
+		if (from.isWilderness())
 			return false;
-		}
+
+		// At this point we know that "to" is not wilderness, because "from" is not.
+		TownBlock currentTownBlock = from.getTownBlockOrNull();
+		TownBlock destinationTownBlock = to.getTownBlockOrNull();
+
+		//Both townblocks are owned by the same resident.
+		if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() && currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
+			return true;
+
+		//Both townblocks are owned by the same town.
+		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
