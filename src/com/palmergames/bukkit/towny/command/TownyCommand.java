@@ -190,7 +190,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (world == null || !world.isUsingTowny())
 						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 
-					Resident resident = getResidentOrThrow(player.getUniqueId());
+					Resident resident = getResidentOrThrow(player);
 					ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.SWITCHES);
 					break;
 				}
@@ -199,7 +199,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (world == null || !world.isUsingTowny())
 						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 
-					Resident resident = getResidentOrThrow(player.getUniqueId());
+					Resident resident = getResidentOrThrow(player);
 					ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ITEMUSE);
 					break;
 				}
@@ -208,7 +208,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (world == null || !world.isUsingTowny())
 						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 
-					Resident resident = getResidentOrThrow(player.getUniqueId());
+					Resident resident = getResidentOrThrow(player);
 					ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ALLOWEDBLOCKS);
 					break;
 				}
@@ -217,7 +217,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (world == null || !world.isUsingTowny())
 						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 
-					Resident resident = getResidentOrThrow(player.getUniqueId());
+					Resident resident = getResidentOrThrow(player);
 					ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(player));
 					break;
 				}
@@ -226,7 +226,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					if (world == null || !world.isUsingTowny())
 						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 
-					Resident resident = getResidentOrThrow(player.getUniqueId());
+					Resident resident = getResidentOrThrow(player);
 					ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
 					break;
 				}
@@ -273,7 +273,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 					catchConsole(sender);
 					checkPermOrThrow(sender, PermissionNodes.TOWNY_CHAT_SPY.getNode());
 
-					Resident resident = getResidentOrThrow(player.getUniqueId());
+					Resident resident = getResidentOrThrow(player);
 					resident.toggleMode(split, true);
 					break;
 				}

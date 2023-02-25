@@ -660,7 +660,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			} else {
 				String townName = String.join("_", StringMgmt.remFirstArg(split));
 				boolean noCharge = TownySettings.getNewTownPrice() == 0.0 || !TownyEconomyHandler.isActive();
-				newTown(player, townName, getResidentOrThrow(player.getUniqueId()), noCharge);
+				newTown(player, townName, getResidentOrThrow(player), noCharge);
 			}
 			break;
 		case "reclaim":
@@ -787,7 +787,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "outlaw", "ban":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode());
 			catchRuinedTown(player);
-			parseTownOutlawCommand(player, StringMgmt.remFirstArg(split), false, getResidentOrThrow(player.getUniqueId()).getTown());
+			parseTownOutlawCommand(player, StringMgmt.remFirstArg(split), false, getResidentOrThrow(player).getTown());
 			break;
 		case "bankhistory":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_BANKHISTORY.getNode());
@@ -915,7 +915,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 
 		String received = Translatable.of("town_received_invites").forLocale(player)
 				.replace("%a", Integer.toString(resident.getTown().getReceivedInvites().size()))
@@ -1984,7 +1984,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			player = p;
 		
 		if (!admin && player != null) {
-			resident = getResidentOrThrow(player.getUniqueId());
+			resident = getResidentOrThrow(player);
 			town = resident.getTown();
 		} else // Have the resident being tested be the mayor.
 			resident = town.getMayor();
@@ -2941,7 +2941,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public void townLeave(Player player) throws TownyException {
 
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		Town town = getTownFromResidentOrThrow(resident);
 
 		if (resident.isMayor())
@@ -3044,7 +3044,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident resident;
 		Town town;
 		try {
-			resident = getResidentOrThrow(player.getUniqueId());
+			resident = getResidentOrThrow(player);
 			town = resident.getTown();
 		} catch (TownyException x) {
 			TownyMessaging.sendErrorMsg(player, x.getMessage(player));
@@ -3632,7 +3632,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		Town town = getTownFromResidentOrThrow(resident);
 
 		// Allow a bankrupt town to claim a single plot.
@@ -3802,7 +3802,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		Town town = getTownFromResidentOrThrow(resident);
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
@@ -3882,7 +3882,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (args.length <= 0) // /t merge
 			throw new TownyException(Translatable.of("msg_specify_name"));
 
-		if (!admin && sender instanceof Player player && !getResidentOrThrow(player.getUniqueId()).isMayor())
+		if (!admin && sender instanceof Player player && !getResidentOrThrow(player).isMayor())
 			throw new TownyException(Translatable.of("msg_town_merge_err_mayor_only"));
 
 		Town succumbingTown = getTownOrThrow(args[0]);

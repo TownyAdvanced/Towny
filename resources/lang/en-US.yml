@@ -1871,3 +1871,11 @@ msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blo
 
 # Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+
+msg_you_are_unknown: "You are not known to Towny."
+msg_townyobject_unknown: "%s is not known to Towny."
+msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
