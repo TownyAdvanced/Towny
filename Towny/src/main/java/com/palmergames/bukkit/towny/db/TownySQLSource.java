@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -1050,18 +1051,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				tokens = line.split(search);
 				if (tokens.length >= 4)
 					try {
-						World world = plugin.getServerWorld(tokens[0]);
-						double x = Double.parseDouble(tokens[1]);
-						double y = Double.parseDouble(tokens[2]);
-						double z = Double.parseDouble(tokens[3]);
-
-						Location loc = new Location(world, x, y, z);
-						if (tokens.length == 6) {
-							loc.setPitch(Float.parseFloat(tokens[4]));
-							loc.setYaw(Float.parseFloat(tokens[5]));
-						}
-						town.setSpawn(loc);
-					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						town.spawnPosition(Position.deserialize(tokens));
+					} catch (IllegalArgumentException e) {
+						plugin.getLogger().warning("Failed to load spawn location for town " + town.getName() + ": " + e.getMessage());
 					}
 			}
 			// Load outpost spawns
@@ -1073,18 +1065,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					tokens = spawn.split(search);
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							town.forceAddOutpostSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {}
+							town.forceAddOutpostSpawn(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
+							plugin.getLogger().warning("Failed to load an outpost spawn location for town " + town.getName() + ": " + e.getMessage());
+						}
 				}
 			}
 			// Load legacy jail spawns into new Jail objects.
@@ -1096,26 +1080,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					tokens = spawn.split(search);
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
+							Position pos = Position.deserialize(tokens);
 
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-
-							TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
+							TownBlock tb = universe.getTownBlock(pos.worldCoord());
 							if (tb == null)
 								continue;
-							Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
+							
+							Jail jail = new Jail(UUID.randomUUID(), town, tb, Collections.singleton(pos));
 							universe.registerJail(jail);
 							town.addJail(jail);
 							tb.setJail(jail);
 							jail.save();
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {}
+						} catch (IllegalArgumentException e) {
+							plugin.getLogger().warning("Failed to load a legacy jail spawn location for town " + town.getName() + ": " + e.getMessage());
+						}
 				}
 			}
 			line = rs.getString("outlaws");
@@ -1344,18 +1322,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				tokens = line.split(search);
 				if (tokens.length >= 4)
 					try {
-						World world = plugin.getServerWorld(tokens[0]);
-						double x = Double.parseDouble(tokens[1]);
-						double y = Double.parseDouble(tokens[2]);
-						double z = Double.parseDouble(tokens[3]);
-
-						Location loc = new Location(world, x, y, z);
-						if (tokens.length == 6) {
-							loc.setPitch(Float.parseFloat(tokens[4]));
-							loc.setYaw(Float.parseFloat(tokens[5]));
-						}
-						nation.setSpawn(loc);
-					} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+						nation.spawnPosition(Position.deserialize(tokens));
+					} catch (IllegalArgumentException e) {
+						plugin.getLogger().warning("Failed to load nation spawn location for nation " + nation.getName() + ": " + e.getMessage());
 					}
 			}
 
@@ -2119,20 +2088,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					tokens = spawn.split("#");
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-							
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							jail.addJailCell(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
-							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping.");
-							continue;
+							jail.addJailCell(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
+							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping: " + e.getMessage());
 						}
 				}
 				if (jail.getJailCellLocations().size() < 1) {

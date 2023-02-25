@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -843,18 +844,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-							
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							town.setSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+							town.spawnPosition(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
+							plugin.getLogger().warning("Failed to load spawn location for town " + town.getName() + ": " + e.getMessage());
 						}
 				}
 				
@@ -866,18 +858,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						tokens = spawn.split(",");
 						if (tokens.length >= 4)
 							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-								
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddOutpostSpawn(loc);
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+								town.forceAddOutpostSpawn(Position.deserialize(tokens));
+							} catch (IllegalArgumentException e) {
+								plugin.getLogger().warning("Failed to load an outpost spawn location for town " + town.getName() + ": " + e.getMessage());
 							}
 					}
 				}
@@ -890,26 +873,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						tokens = spawn.split(",");
 						if (tokens.length >= 4)
 							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-								
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-
-								TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
+								final Position position = Position.deserialize(tokens);
+								TownBlock tb = universe.getTownBlockOrNull(position.worldCoord());
 								if (tb == null)
 									continue;
-								Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
+								
+								Jail jail = new Jail(UUID.randomUUID(), town, tb, Collections.singleton(position));
 								universe.registerJail(jail);
 								town.addJail(jail);
 								tb.setJail(jail);
 								jail.save();
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+							} catch (IllegalArgumentException e) {
+								plugin.getLogger().warning("Failed to load a legacy jail spawn location for town " + town.getName() + ": " + e.getMessage());
 							}
 					}
 				}
@@ -1171,18 +1146,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-							
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							nation.setSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+							nation.spawnPosition(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
+							plugin.getLogger().warning("Failed to load nation spawn location for nation " + nation.getName() + ": " + e.getMessage());
 						}
 				}
 				
@@ -1837,22 +1803,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = spawn.split(",");
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							jail.addJailCell(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+							jail.addJailCell(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
 							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping.");
-							continue;
 						}
 				}
-				if (jail.getJailCellLocations().isEmpty()) {
+				if (jail.getJailCellCount() == 0) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
 					removeJail(jail);
 					deleteJail(jail);
@@ -2028,7 +1984,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Outpost Spawns
 		StringBuilder outpostArray = new StringBuilder("outpostspawns=");
 		if (town.hasOutpostSpawn())
-			for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
+			for (Location spawn : town.getAllOutpostSpawns()) {
 				outpostArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
 			}
 		list.add(outpostArray.toString());
@@ -2389,14 +2345,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		list.add("townblock=" + jail.getTownBlock().getWorldCoord().toString());
 		StringBuilder jailArray = new StringBuilder("spawns=");
-		for (Location spawn : new ArrayList<>(jail.getJailCellLocations())) {
-			jailArray.append(spawn.getWorld().getName()).append(",")
-					.append(spawn.getX()).append(",")
-					.append(spawn.getY()).append(",")
-					.append(spawn.getZ()).append(",")
-					.append(spawn.getPitch()).append(",")
-					.append(spawn.getYaw()).append(";");
+		for (Position spawn : jail.getJailCellPositions()) {
+			jailArray.append(String.join(",", spawn.serialize()))
+				.append(";");
 		}
+		
 		list.add(jailArray.toString());
 
 		this.queryQueue.add(new FlatFileSaveTask(list, getJailFilename(jail)));

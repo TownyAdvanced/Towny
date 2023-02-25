@@ -664,7 +664,7 @@ public class TownyMessaging {
 
 			TextComponent name = Component.text(jail.getName(), NamedTextColor.GREEN);
 			TextComponent coord = Component.text(jail.getTownBlock().getWorldCoord().toString(), NamedTextColor.BLUE);
-			TextComponent cellCount = Component.text(String.valueOf(jail.getJailCellLocations().size()), NamedTextColor.YELLOW);
+			TextComponent cellCount = Component.text(jail.getJailCellCount(), NamedTextColor.YELLOW);
 			TextComponent dash = Component.text(" - ", NamedTextColor.DARK_GRAY);
 
 			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD);

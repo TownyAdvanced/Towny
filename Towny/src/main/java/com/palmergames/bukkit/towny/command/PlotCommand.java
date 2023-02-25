@@ -778,7 +778,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				if (!jail.hasCells())
 					throw new TownyException(Translatable.of("msg_err_this_jail_has_no_cells"));
 				
-				if (jail.getCellMap().size() == 1) 
+				if (jail.getJailCellCount() == 1) 
 					throw new TownyException(Translatable.of("msg_err_you_cannot_remove_the_last_cell"));
 				
 				SpawnPointLocation cellLoc = SpawnPointLocation.parseSpawnPointLocation(player.getLocation());

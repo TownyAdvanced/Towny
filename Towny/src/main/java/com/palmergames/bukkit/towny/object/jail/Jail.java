@@ -1,12 +1,16 @@
 package com.palmergames.bukkit.towny.object.jail;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
+import com.palmergames.bukkit.towny.object.Position;
 import org.bukkit.Location;
 
 import com.palmergames.bukkit.towny.object.Savable;
@@ -16,27 +20,35 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import org.jetbrains.annotations.ApiStatus;
 
 public class Jail implements Savable {
 
 	private UUID uuid;
 	private Town town;
 	private TownBlock townBlock;
-	private Map<String, Location> jailCellMap = new ConcurrentHashMap<String, Location>();
-	private List<Location> jailCells = new ArrayList<>();
+	private final Map<SpawnPointLocation, Position> jailCellMap = new ConcurrentHashMap<>();
+	private final List<Position> jailCells = new ArrayList<>();
 	
+	@Deprecated
 	public Jail(UUID uuid, Town town, TownBlock townBlock, List<Location> jailCells) {
+		this(uuid, town, townBlock, jailCells.stream().map(Position::ofLocation).collect(Collectors.toList()));
+	}
+	
+	public Jail(UUID uuid, Town town, TownBlock townBlock, Collection<Position> jailCells) {
 		this.uuid = uuid;
 		this.town = town;
 		this.townBlock = townBlock;
-		if (jailCells != null)
-			jailCells.stream().forEach(loc -> addJailCell(loc));
+		
+		for (Position cell : jailCells)
+			addJailCell(cell);
 	}
 
 	public UUID getUUID() {
 		return uuid;
 	}
 
+	@ApiStatus.Internal
 	public void setUUID(UUID uuid) {
 		this.uuid = uuid;
 	}
@@ -58,43 +70,67 @@ public class Jail implements Savable {
 	}
 
 	public List<Location> getJailCellLocations() {
-		return Collections.unmodifiableList(jailCells);
+		return Collections.unmodifiableList(Lists.transform(this.jailCells, Position::asLocation));
+	}
+	
+	public List<Position> getJailCellPositions() {
+		return Collections.unmodifiableList(this.jailCells);
+	}
+	
+	public int getJailCellCount() {
+		return this.jailCellMap.size();
 	}
 
 	public void setJailCells(List<Location> jailCells) {
-		this.jailCells = jailCells;
+		this.jailCellMap.clear();
+		this.jailCells.clear();
+		
+		for (Location jail : jailCells)
+			addJailCell(jail);
 	}
 	
 	public void addJailCell(Location location) {
-		jailCells.add(location);
-		jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(location).toString(), location);
-		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(location, SpawnPointType.JAIL_SPAWN));
+		Position pos = Position.ofLocation(location);
+		
+		jailCells.add(pos);
+		jailCellMap.put(SpawnPointLocation.parseSpawnPointLocation(location), pos);
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(pos, SpawnPointType.JAIL_SPAWN));
+	}
+	
+	public void addJailCell(Position position) {
+		jailCells.add(position);
+		jailCellMap.put(SpawnPointLocation.parsePos(position), position);
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(position, SpawnPointType.JAIL_SPAWN));
 	}
 	
 	public void removeJailCell(Location loc) {
-		TownyUniverse.getInstance().removeSpawnPoint(loc);
-		String spawn = SpawnPointLocation.parseSpawnPointLocation(loc).toString();
-		jailCells.remove(jailCellMap.get(spawn));
-		jailCellMap.remove(spawn);
+		removeJailCell(SpawnPointLocation.parseSpawnPointLocation(loc));
+	}
+	
+	public void removeJailCell(SpawnPointLocation pos) {
+		TownyUniverse.getInstance().removeSpawnPoint(pos);
+		jailCellMap.remove(pos);
 	}
 	
 	public void removeAllCells() {
-		for (Location loc : new ArrayList<>(jailCells))
-			removeJailCell(loc);
+		for (SpawnPointLocation pos : this.jailCellMap.keySet())
+			removeJailCell(pos);
 	}
 	
 	public boolean hasJailCell(SpawnPointLocation loc) {
-		return jailCellMap.keySet().stream().anyMatch(spawn -> spawn.equals(loc.toString()));
+		return jailCellMap.containsKey(loc);
 	}
 	
 	public boolean hasJailCell(int index) {
-		if (jailCells == null || jailCells.size() < index)
-			return false;
-		return true;
+		return jailCellMap.size() - 1 >= index;
 	}
 	
+	/**
+	 * @deprecated Deprecated as of TODO insert version here, the cell map types are not guaranteed
+	 */
+	@Deprecated
 	public Map<String, Location> getCellMap() {
-		return jailCellMap;
+		return this.jailCellMap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().asLocation()));
 	}
 	
 	public String getWildName() {
@@ -107,7 +143,7 @@ public class Jail implements Savable {
 	}
 
 	public boolean hasCells() {
-		return !jailCells.isEmpty();
+		return !jailCellMap.isEmpty();
 	}
 	
 	public boolean hasName() {
