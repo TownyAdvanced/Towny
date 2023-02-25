@@ -1637,3 +1637,21 @@ msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everyt
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>¿Estás seguro de que quieres transferirle la propiedad de la nación a %s? ¡Esta acción es irreversible!"
 msg_warn_town_already_capital: "<red>La ciudad de %s ya es la capital nacional."
 msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "You are not known to Towny."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "%s is not known to Towny."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s is not a resident that is recognized."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s is not a town that is recognized."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s is not a nation that is recognized."
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
