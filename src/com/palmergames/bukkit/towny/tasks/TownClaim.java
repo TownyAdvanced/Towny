@@ -79,7 +79,9 @@ public class TownClaim implements Runnable {
 			runUnclaimAll();
 
 		if (successfulRun) {
-			town.save();
+			if (town != null)
+				town.save();
+			
 			plugin.resetCache();
 			sendFeedback();
 		}
@@ -229,7 +231,7 @@ public class TownClaim implements Runnable {
 			// the Town can pay for the new runningCost total amount. 
 			// All of this was already determined in the TownCommand class but a player
 			// might be trying something tricky before accepting the confirmation.
-			if (unclaimRefund < 0 && !town.getAccount().canPayFromHoldings(Math.abs(runningRefund))) {
+			if (unclaimRefund < 0 && town != null && !town.getAccount().canPayFromHoldings(Math.abs(runningRefund))) {
 				runningRefund = runningRefund - unclaimRefund;
 				insufficientFunds = insufficientFunds + Math.abs(unclaimRefund);
 				throw new TownyException(""); // This empty-messaged TownyException means that the player will not see a Error message every time they cannot pay.
