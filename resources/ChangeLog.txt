@@ -8386,3 +8386,7 @@ v0.92.0.11:
   - Fix claiming free plots causing useless bank history, courtesy of Warriorrrr with PR #6499.
   - Remove /plot claim repossesion logic in favour of /plot evict, courtesy of Warriorrrr with PR #6500.
   - Only remove non embassies from the left town on resident leave, courtesy of Warriorrrr with PR #6501.
+  - Fix /ta unclaim causing an NPE, courtesy of Warriorrrr with PR #6504.
+  - Minor changes to reduce NRE usage.
+  - Replace messaging used by BaseCommand's getOrThrow methods to be more relevant to players.
+  - Replace getResidentOrThrow(UUID) with getResidentOrThrow(Player) for better feedback messages.
