@@ -113,9 +113,10 @@ public class TownyAsciiMap {
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				try {
 					townyMap[y][x] = Component.empty().color(NamedTextColor.WHITE);
-					TownBlock townblock = world.getTownBlock(tby, tbx);
-					if (!townblock.hasTown())
+					WorldCoord wc = new WorldCoord(world.getBukkitWorld(), new Coord(tby, tbx));
+					if (wc.isWilderness())
 						throw new TownyException();
+					TownBlock townblock = wc.getTownBlockOrNull();
 					Town town = townblock.getTownOrNull();
 					if (x == halfLineHeight && y == halfLineWidth)
 						// This is the player's location, colour it special.

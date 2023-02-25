@@ -1389,7 +1389,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private boolean handlePlotGroupCommand(String[] split, Player player) throws TownyException {
 
-		Resident resident = getResidentOrThrow(player.getUniqueId());
+		Resident resident = getResidentOrThrow(player);
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 		if (townBlock == null)
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
@@ -2087,7 +2087,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 				
 				try {
-					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
+					plotTestOwner(getResidentOrThrow(player), townBlock);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					return;
@@ -2121,7 +2121,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				try {
-					plotTestOwner(getResidentOrThrow(player.getUniqueId()), townBlock);
+					plotTestOwner(getResidentOrThrow(player), townBlock);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					return;
