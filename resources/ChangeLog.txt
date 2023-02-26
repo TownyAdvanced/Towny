@@ -8396,3 +8396,4 @@ v0.92.0.11:
   - New Config Option: resident_settings.delete_old_residents.only_remove_town
     - Default: false
     - When true players will be removed from their town and become a nomad instead of being fully deleted.
+  - Update plugin.yml to use the proper name for MyWorlds, courtesy of bergerkiller with PR #6511. (First-Time Contributor!)
