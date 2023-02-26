@@ -9,7 +9,7 @@ description: >
     Resident-Town-Nation hierarchy combined with a grid based
     protection system, many features and an expansive API.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy,LuckPerms]
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My_Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy,LuckPerms]
 
 ############################################################
 # +------------------------------------------------------+ #
