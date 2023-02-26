@@ -2052,6 +2052,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true only residents who have no town will be deleted."),
+	RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_TOWN_ONLY(
+			"resident_settings.delete_old_residents.only_remove_town",
+			"false",
+			"",
+			"# When true players will be removed from their town and become a nomad instead of being fully deleted."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",

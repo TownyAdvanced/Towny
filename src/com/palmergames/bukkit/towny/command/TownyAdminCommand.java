@@ -2132,7 +2132,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		try {
 			int days = Integer.parseInt(split[0]);
 			Confirmation.runOnAccept(() -> 
-				new ResidentPurge(plugin, sender, TimeTools.getMillis(days + "d"), townless, town).start()
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResidentPurge(plugin, sender, TimeTools.getMillis(days + "d"), townless, town))
 			).sendTo(sender);
 		} catch (NumberFormatException e) {
 			throw new TownyException(Translatable.of("msg_error_must_be_int"));

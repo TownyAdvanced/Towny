@@ -3501,5 +3501,9 @@ public class TownySettings {
 	public static int getMinAdjacentBlocks() {
 		return Math.min(3, getInt(ConfigNodes.TOWN_MIN_ADJACENT_BLOCKS));
 	}
+	
+	public static boolean isDeletingOldResidentsRemovingTownOnly() {
+		return getBoolean(ConfigNodes.RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_TOWN_ONLY);
+	}
 }
 
