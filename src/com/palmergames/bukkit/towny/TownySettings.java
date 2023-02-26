@@ -965,7 +965,7 @@ public class TownySettings {
 	}
 
 	public static String getKingPrefix(Resident resident) {
-		return resident.isKing() ? getNationLevel(resident.getNationOrNull()).kingPostfix() : "";
+		return resident.isKing() ? getNationLevel(resident.getNationOrNull()).kingPrefix() : "";
 	}
 
 	public static String getMayorPrefix(Resident resident) {
