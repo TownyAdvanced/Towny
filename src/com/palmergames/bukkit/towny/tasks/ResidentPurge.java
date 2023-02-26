@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -17,29 +18,34 @@ import java.util.List;
  * @author ElgarL
  * 
  */
-public class ResidentPurge extends Thread {
+public class ResidentPurge implements Runnable {
 
-	final Towny plugin;
+	private final Towny plugin;
 	private final CommandSender sender;
-	final long deleteTime;
-	final boolean townless;
-	final Town town;
+	private final long deleteTime;
+	private final boolean townless;
+	private final Town town;
+	private final boolean removeTown;
 
 	/**
-	 * @param plugin reference to Towny
-	 * @param sender reference to CommandSender
-	 * @param deleteTime time at which resident is purged (long)
-	 * @param townless if resident should be 'Townless'
+	 * @param plugin Reference to Towny.
+	 * @param sender Reference to CommandSender, or {@code null} to send messages to the console.
+	 * @param deleteTime The time in milliseconds for which a resident needs to be offline for to be deleted.
+	 * @param townless Whether only residents without a town will be deleted
+	 * @param town If non-null, only residents from the given town will be purged.
+	 * @param removeTown Whether    
 	 */
-	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime, boolean townless, @Nullable Town town) {
-
-		super();
+	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime, boolean townless, @Nullable Town town, boolean removeTown) {
 		this.plugin = plugin;
 		this.deleteTime = deleteTime;
-		this.setPriority(NORM_PRIORITY);
 		this.townless = townless;
 		this.sender = sender;
 		this.town = town;
+		this.removeTown = removeTown;
+	}
+	
+	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime, boolean townless, @Nullable Town town) {
+		this(plugin, sender, deleteTime, townless, town, TownySettings.isDeletingOldResidentsRemovingTownOnly());
 	}
 
 	@Override
@@ -57,12 +63,17 @@ public class ResidentPurge extends Thread {
 		}
 		for (Resident resident : residentList) {
 			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
-				if (townless && resident.hasTown()) {
+				if (townless && resident.hasTown())
 					continue;
-				}
+				
 				count++;
+				
 				message(Translatable.of("msg_deleting_resident", resident.getName()));
-				townyUniverse.getDataSource().removeResident(resident);
+				
+				if (removeTown)
+					resident.removeTown();
+				else
+					townyUniverse.getDataSource().removeResident(resident);
 			}
 		}
 
