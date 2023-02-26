@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -20,7 +19,6 @@ import java.util.List;
  */
 public class ResidentPurge implements Runnable {
 
-	private final Towny plugin;
 	private final CommandSender sender;
 	private final long deleteTime;
 	private final boolean townless;
@@ -28,15 +26,13 @@ public class ResidentPurge implements Runnable {
 	private final boolean removeTown;
 
 	/**
-	 * @param plugin Reference to Towny.
 	 * @param sender Reference to CommandSender, or {@code null} to send messages to the console.
 	 * @param deleteTime The time in milliseconds for which a resident needs to be offline for to be deleted.
 	 * @param townless Whether only residents without a town will be deleted
 	 * @param town If non-null, only residents from the given town will be purged.
 	 * @param removeTown Whether    
 	 */
-	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime, boolean townless, @Nullable Town town, boolean removeTown) {
-		this.plugin = plugin;
+	public ResidentPurge(CommandSender sender, long deleteTime, boolean townless, @Nullable Town town, boolean removeTown) {
 		this.deleteTime = deleteTime;
 		this.townless = townless;
 		this.sender = sender;
@@ -44,8 +40,8 @@ public class ResidentPurge implements Runnable {
 		this.removeTown = removeTown;
 	}
 	
-	public ResidentPurge(Towny plugin, CommandSender sender, long deleteTime, boolean townless, @Nullable Town town) {
-		this(plugin, sender, deleteTime, townless, town, TownySettings.isDeletingOldResidentsRemovingTownOnly());
+	public ResidentPurge(CommandSender sender, long deleteTime, boolean townless, @Nullable Town town) {
+		this(sender, deleteTime, townless, town, TownySettings.isDeletingOldResidentsRemovingTownOnly());
 	}
 
 	@Override

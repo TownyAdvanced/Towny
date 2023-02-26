@@ -76,7 +76,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * If enabled, remove old residents who haven't logged in for the configured number of days.
 		 */	
 		if (TownySettings.isDeletingOldResidents()) {
-			Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResidentPurge(plugin, null, TownySettings.getDeleteTime() * 1000, TownySettings.isDeleteTownlessOnly(), null));
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, new ResidentPurge(null, TownySettings.getDeleteTime() * 1000, TownySettings.isDeleteTownlessOnly(), null));
 		}
 		
 		//Clean up unused NPC residents
