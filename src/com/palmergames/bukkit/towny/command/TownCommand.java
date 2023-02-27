@@ -3728,7 +3728,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, firstWorldCoord) == 0)
 				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
 		}
-
+		
 		TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 		
 		// When not claiming an outpost, make sure at least one of the selection is attached to a claimed plot.
