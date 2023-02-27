@@ -8403,3 +8403,5 @@ v0.92.0.11:
   - BankAccount update.
     - Old constructor deprecated, setting balanceCap deprecated.
     - Potentially fixes the ability for a town to go bankrupt when this feature is disabled.
+  - API: TownEntersBankruptcyEvent.
+    - Thrown when a town enters bankruptcy.
