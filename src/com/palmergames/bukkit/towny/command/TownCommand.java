@@ -3718,18 +3718,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
-		// Prevent straight line claims if configured, and the town has enough townblocks claimed.
-		if (!outpost) { // Don't apply this restriction to an outpost claim
-			int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
-			if (minAdjacentBlocks > 0 && town.getTownBlocks().size() > minAdjacentBlocks) {
-				// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
-				WorldCoord thisBlock = selection.get(0);
-				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, thisBlock);
-				if (numAdjacent < minAdjacentBlocks) {
-					if (!thisBlock.getTownBlock().isOutpost() || numAdjacentOutpostTownBlocks(town, thisBlock)==0)
-						throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
-				}
-			}
+		// Prevent straight line claims if configured, and the town has enough townblocks claimed, and this is not an outpost.
+		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		if (!outpost && minAdjacentBlocks > 0 && town.getTownBlocks().size() > minAdjacentBlocks) {
+			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
+			WorldCoord firstWorldCoord = selection.get(0);
+			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, firstWorldCoord);
+			// The number of adjacement TBs is not enough and there is not a nearby outpost.
+			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, firstWorldCoord) == 0)
+				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
 		}
 
 		TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
@@ -4013,9 +4010,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			.count();
 	}
 
-	public static int numAdjacentOutpostTownBlocks(Town town, WorldCoord worldCoord) {
+	public static int numAdjacentOutposts(Town town, WorldCoord worldCoord) {
 		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
-			.filter(wc -> wc.isOutpost(town))
+			.filter(wc -> wc.hasTown(town))
+			.map(wc -> wc.getTownBlockOrNull())
+			.filter(TownBlock::isOutpost)
 			.count();
 	}
 
