@@ -3718,12 +3718,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
-		// Prevent straight line claims if configured, and the town has enough townblocks claimed.
+		// Prevent straight line claims if configured, and the town has enough townblocks claimed, and this is not an outpost.
 		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
-		if (minAdjacentBlocks > 0 && town.getTownBlocks().size() > minAdjacentBlocks) {
+		if (!outpost && minAdjacentBlocks > 0 && town.getTownBlocks().size() > minAdjacentBlocks) {
 			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
-			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, selection.get(0));
-			if (numAdjacent < minAdjacentBlocks)
+			WorldCoord firstWorldCoord = selection.get(0);
+			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, firstWorldCoord);
+			// The number of adjacement TBs is not enough and there is not a nearby outpost.
+			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, firstWorldCoord) == 0)
 				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
 		}
 		
@@ -4005,6 +4007,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public static int numAdjacentTownOwnedTownBlocks(Town town, WorldCoord worldCoord) {
 		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
 			.filter(wc -> wc.hasTown(town))
+			.count();
+	}
+
+	public static int numAdjacentOutposts(Town town, WorldCoord worldCoord) {
+		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
+			.filter(wc -> wc.hasTown(town))
+			.map(wc -> wc.getTownBlockOrNull())
+			.filter(TownBlock::isOutpost)
 			.count();
 	}
 
