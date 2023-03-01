@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
+import com.palmergames.bukkit.towny.event.plot.PlayerChangePlotTypeEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustAddEvent;
@@ -688,6 +689,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								plotTypeName = "default";
 
 							TownBlockType townBlockType = TownBlockTypeHandler.getType(plotTypeName);
+							TownBlockType oldType = townBlockType;
 							
 							if (townBlockType == null)
 								throw new TownyException(Translatable.of("msg_err_not_block_type"));
@@ -732,6 +734,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 										TownyMessaging.sendErrorMsg(resident, e.getMessage(player));
 										return;
 									}
+									BukkitTools.fireEvent(new PlayerChangePlotTypeEvent(townBlockType, oldType, townBlock, player));
 									TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_type", townBlockType));
 								})
 									.setCost(new ConfirmationTransaction(() -> cost, resident.getAccount(), String.format("Plot set to %s", townBlockType),
@@ -1739,7 +1742,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 						for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
 							try {
+								TownBlockType oldType = tb.getType();
 								tb.setType(type, resident);
+								BukkitTools.fireEvent(new PlayerChangePlotTypeEvent(type, oldType, tb, player));
 							} catch (TownyException ignored) {
 								// Cannot be set to jail type as a group.
 							}
@@ -1757,8 +1762,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				// No cost or economy so no confirmation.
 				} else {
 
-					for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks())
+					for (TownBlock tb : townBlock.getPlotObjectGroup().getTownBlocks()) {
+						TownBlockType oldType = tb.getType();
 						tb.setType(type, resident);
+						BukkitTools.fireEvent(new PlayerChangePlotTypeEvent(type, oldType, tb, player));
+					}
 					TownyMessaging.sendMsg(player, Translatable.of("msg_set_group_type_to_x", plotTypeName));
 
 				}
