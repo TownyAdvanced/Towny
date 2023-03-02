@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
@@ -27,7 +28,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class TownBlockTypeHandler {
-	private static Map<String, TownBlockType> townBlockTypeMap = new ConcurrentHashMap<>();
+	private final static Map<String, TownBlockType> townBlockTypeMap = new ConcurrentHashMap<>();
 	
 	public static void initialize() {
 		Map<String, TownBlockType> newData = new ConcurrentHashMap<>();
@@ -54,15 +55,24 @@ public final class TownBlockTypeHandler {
 	 * Registers a new type. Should not be used at all outside of the TownBlockTypeRegisterEvent.
 	 * @param type - The type
 	 */
-	public static void registerType(@NotNull TownBlockType type) {
-		if (isLoadedAlready(type)) {
-			Towny.getPlugin().getLogger().warning(String.format("API: A type named '%s' with identical settings is already registered! " 
+	public static void registerType(@NotNull TownBlockType type) throws TownyException {
+		if (isLoadedAlready(type))
+			throw new TownyException(String.format("API: A type named '%s' with identical settings is already registered! " 
 					+ "Towny will not replace the already registered TownBlockType.", type.getName()));
-			return;
-		}
 
 		townBlockTypeMap.put(type.getName().toLowerCase(Locale.ROOT), type);
 		Towny.getPlugin().getLogger().info(String.format("API: A new townblock type was registered: %s", type.getName()));
+	}
+
+	/**
+	 * Checks if a TownBlockType with identical settings is already loaded.
+	 * 
+	 * @param type TownBlockType to test for.
+	 * @return true if the TownBlockType is already registered.
+	 */
+	private static boolean isLoadedAlready(@NotNull TownBlockType type) {
+		String name = type.getName().toLowerCase(Locale.ROOT);
+		return townBlockTypeMap.containsKey(name) && townBlockTypeMap.get(name).equals(type);
 	}
 
 	/**
@@ -94,17 +104,6 @@ public final class TownBlockTypeHandler {
 		} catch (NumberFormatException e) {
 			return getType(input);
 		}
-	}
-
-	/**
-	 * Checks if a TownBlockType with identical settings is already loaded.
-	 * 
-	 * @param type TownBlockType to test for.
-	 * @return true if the TownBlockType is already registered.
-	 */
-	private static boolean isLoadedAlready(@NotNull TownBlockType type) {
-		String name = type.getName().toLowerCase(Locale.ROOT);
-		return townBlockTypeMap.containsKey(name) && townBlockTypeMap.get(name).equals(type);
 	}
 
 	/**
