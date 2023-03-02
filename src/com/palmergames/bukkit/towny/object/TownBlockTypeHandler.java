@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
@@ -54,7 +53,6 @@ public final class TownBlockTypeHandler {
 	/**
 	 * Registers a new type. Should not be used at all outside of the TownBlockTypeRegisterEvent.
 	 * @param type - The type
-	 * @throws TownyException - If a type with this name is already registered.
 	 */
 	public static void registerType(@NotNull TownBlockType type) {
 		if (isLoadedAlready(type)) {
