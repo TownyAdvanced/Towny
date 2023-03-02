@@ -105,8 +105,8 @@ public final class TownBlockTypeHandler {
 	 * @return true if the TownBlockType is already registered.
 	 */
 	private static boolean isLoadedAlready(@NotNull TownBlockType type) {
-		return townBlockTypeMap.containsKey(type.getName())
-				&& townBlockTypeMap.get(type.getName().toLowerCase(Locale.ROOT)).equals(type);
+		String name = type.getName().toLowerCase(Locale.ROOT);
+		return townBlockTypeMap.containsKey(name) && townBlockTypeMap.get(name).equals(type);
 	}
 
 	/**

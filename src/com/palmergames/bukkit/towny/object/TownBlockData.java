@@ -84,6 +84,7 @@ public class TownBlockData {
 
 		if (!(other instanceof TownBlockData data))
 			return false;
+
 		if (Double.compare(data.getCost(), getCost()) != 0)
 			return false;
 
