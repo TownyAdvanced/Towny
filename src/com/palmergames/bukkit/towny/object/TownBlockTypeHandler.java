@@ -54,25 +54,14 @@ public final class TownBlockTypeHandler {
 	/**
 	 * Registers a new type. Should not be used at all outside of the TownBlockTypeRegisterEvent.
 	 * @param type - The type
+	 * @throws TownyException - If a type with this name is already registered.
 	 */
 	public static void registerType(@NotNull TownBlockType type) throws TownyException {
-		if (isLoadedAlready(type))
-			throw new TownyException(String.format("API: A type named '%s' with identical settings is already registered! " 
-					+ "Towny will not replace the already registered TownBlockType.", type.getName()));
-
-		townBlockTypeMap.put(type.getName().toLowerCase(Locale.ROOT), type);
+		if (exists(type.getName()))
+			throw new TownyException(String.format("API: A type named '%s' is already registered!", type.getName()));
+		
+		townBlockTypeMap.put(type.getName().toLowerCase(), type);
 		Towny.getPlugin().getLogger().info(String.format("API: A new townblock type was registered: %s", type.getName()));
-	}
-
-	/**
-	 * Checks if a TownBlockType with identical settings is already loaded.
-	 * 
-	 * @param type TownBlockType to test for.
-	 * @return true if the TownBlockType is already registered.
-	 */
-	private static boolean isLoadedAlready(@NotNull TownBlockType type) {
-		String name = type.getName().toLowerCase(Locale.ROOT);
-		return townBlockTypeMap.containsKey(name) && townBlockTypeMap.get(name).equals(type);
 	}
 
 	/**
@@ -89,12 +78,12 @@ public final class TownBlockTypeHandler {
 
 	/**
 	 * Gets the townblock instance for the name.
-	 * @param townBlockType The name of the town block type.
+	 * @param typeName The name of the town block type.
 	 * @return The townblocktype instance, or {@code null} if none is registered.   
 	 */
 	@Nullable
-	public static TownBlockType getType(@NotNull String townBlockType) {
-		return townBlockTypeMap.get(townBlockType.toLowerCase());
+	public static TownBlockType getType(@NotNull String typeName) {
+		return townBlockTypeMap.get(typeName.toLowerCase(Locale.ROOT));
 	}
 
 	public static TownBlockType getTypeInternal(@NotNull String input) {
@@ -149,7 +138,7 @@ public final class TownBlockTypeHandler {
 				data.setSwitchIds(switchIds);
 				data.setAllowedBlocks(allowedBlocks);
 				
-				newData.put(name.toLowerCase(), townBlockType);
+				newData.put(name.toLowerCase(Locale.ROOT), townBlockType);
 				
 			} catch (Exception e) {
 				Towny.getPlugin().getLogger().warning(String.format("Config: Error while loading townblock type '%s', skipping...", name));

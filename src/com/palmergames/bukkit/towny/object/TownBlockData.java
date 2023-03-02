@@ -76,27 +76,4 @@ public class TownBlockData {
 		else
 			return tax;
 	}
-	
-	@Override
-	public boolean equals(Object other) {
-		if (this == other)
-			return true;
-
-		if (!(other instanceof TownBlockData data))
-			return false;
-
-		if (Double.compare(data.getCost(), getCost()) != 0)
-			return false;
-
-		if (!data.getAllowedBlocks().equals(getAllowedBlocks()))
-			return false;
-
-		if (!data.getItemUseIds().equals(getItemUseIds()))
-			return false;
-
-		if (!data.getSwitchIds().equals(getSwitchIds()))
-			return false;
-
-		return true;
-	}
 }
