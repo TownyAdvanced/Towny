@@ -262,7 +262,7 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJailRespawn(PlayerRespawnEvent event) {
 
-		if (plugin.isError() || !TownySettings.isTownRespawning()) {
+		if (plugin.isError()) {
 			return;
 		}
 	

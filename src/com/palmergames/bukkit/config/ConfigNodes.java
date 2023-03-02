@@ -2628,14 +2628,12 @@ public enum ConfigNodes {
 			"jail.is_jailing_attacking_enemies",
 			"false",
 			"",
-			"# If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists.",
-			"# Requires town_respawn to be true in order to work."),
+			"# If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists."),
 	JAIL_IS_JAILING_ATTACKING_OUTLAWS(
 			"jail.is_jailing_attacking_outlaws",
 			"false",
 			"",
-			"# If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists.",
-			"# Requires town_respawn to be true in order to work."),
+			"# If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists."),
 	JAIL_OUTLAW_JAIL_HOURS(
 			"jail.outlaw_jail_hours",
 			"5",
