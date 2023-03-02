@@ -8407,3 +8407,6 @@ v0.92.0.11:
     - Thrown when a town enters bankruptcy.
 0.98.6.10:
   - Update paper repo url, courtesy of Warriorrrr with PR #6520.
+  - API: Add PlayerChangePlotTypeEvent.
+    - Thrown after a player successfully changes a TownBlock's plot type.
+  - Bump log4j-core from 2.19.0 to 2.20.0.
