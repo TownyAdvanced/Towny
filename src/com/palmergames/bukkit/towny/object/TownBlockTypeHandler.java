@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,7 +42,9 @@ public final class TownBlockTypeHandler {
 		
 		applyConfigSettings(newData);
 		
-		townBlockTypeMap = newData;
+		// Overwrite any entries of our own built-in townblocktypes.
+		for (Map.Entry<String, TownBlockType> entry : newData.entrySet())
+			townBlockTypeMap.put(entry.getKey(), entry.getValue());
 		
 		BukkitTools.fireEvent(new TownBlockTypeRegisterEvent());
 		
@@ -53,11 +56,14 @@ public final class TownBlockTypeHandler {
 	 * @param type - The type
 	 * @throws TownyException - If a type with this name is already registered.
 	 */
-	public static void registerType(@NotNull TownBlockType type) throws TownyException {
-		if (exists(type.getName()))
-			throw new TownyException(String.format("API: A type named '%s' is already registered!", type.getName()));
-		
-		townBlockTypeMap.put(type.getName().toLowerCase(), type);
+	public static void registerType(@NotNull TownBlockType type) {
+		if (isLoadedAlready(type)) {
+			Towny.getPlugin().getLogger().warning(String.format("API: A type named '%s' with identical settings is already registered! " 
+					+ "Towny will not replace the already registered TownBlockType.", type.getName()));
+			return;
+		}
+
+		townBlockTypeMap.put(type.getName().toLowerCase(Locale.ROOT), type);
 		Towny.getPlugin().getLogger().info(String.format("API: A new townblock type was registered: %s", type.getName()));
 	}
 
@@ -90,6 +96,17 @@ public final class TownBlockTypeHandler {
 		} catch (NumberFormatException e) {
 			return getType(input);
 		}
+	}
+
+	/**
+	 * Checks if a TownBlockType with identical settings is already loaded.
+	 * 
+	 * @param type TownBlockType to test for.
+	 * @return true if the TownBlockType is already registered.
+	 */
+	private static boolean isLoadedAlready(@NotNull TownBlockType type) {
+		return townBlockTypeMap.containsKey(type.getName())
+				&& townBlockTypeMap.get(type.getName().toLowerCase(Locale.ROOT)).equals(type);
 	}
 
 	/**

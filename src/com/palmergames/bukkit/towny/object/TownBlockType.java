@@ -134,6 +134,9 @@ public class TownBlockType {
 		if (!(other instanceof TownBlockType townBlockType))
 			return false;
 		
+		if (!townBlockType.getData().equals(getData()))
+			return false;
+		
 		return townBlockType.getName().equalsIgnoreCase(this.name);
 	}
 }
