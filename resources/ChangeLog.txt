@@ -8411,3 +8411,4 @@ v0.92.0.11:
     - Thrown after a player successfully changes a TownBlock's plot type.
   - Bump log4j-core from 2.19.0 to 2.20.0.
   - Remove town_spawn: true requirement for jailing altering jailed player's spawn points.
+  - Alter the TownBlockTypeHandler to be able to receive TownBlockTypes from other plugins on server startup.
