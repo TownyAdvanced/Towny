@@ -83,11 +83,14 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -107,7 +110,7 @@ public class Towny extends JavaPlugin {
 	private static BukkitAudiences adventure;
 
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
-	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
+	private final Set<TownyInitException.TownyError> errors = new HashSet<>();
 	
 	public Towny() {
 		plugin = this;
@@ -145,14 +148,6 @@ public class Towny extends JavaPlugin {
 			// Check for plugin updates if the Minecraft version is still supported.
 			if (isMinecraftVersionStillSupported())
 				TownyUpdateChecker.checkForUpdates(this);
-			// Initialize SpawnUtil only after the Translation class has figured out a language.
-			// N.B. Important that localization loaded correctly for this step.
-			SpawnUtil.initialize(this);
-			// Setup bukkit command interfaces
-			registerSpecialCommands();
-			registerCommands();
-			// Add custom metrics charts.
-			addMetricsCharts();
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
 			getLogger().log(Level.SEVERE, tie.getMessage(), tie);
@@ -162,6 +157,15 @@ public class Towny extends JavaPlugin {
 		// Important for safe mode.
 
 		adventure = BukkitAudiences.create(this);
+
+		// Initialize SpawnUtil only after the Translation class has figured out a language.
+		// N.B. Important that localization loaded correctly for this step.
+		SpawnUtil.initialize(this);
+		// Setup bukkit command interfaces
+		registerSpecialCommands();
+		registerCommands();
+		// Add custom metrics charts.
+		addMetricsCharts();
 
 		// If we aren't going to enter safe mode, do the following:
 		if (!isError()) {
@@ -550,20 +554,24 @@ public class Towny extends JavaPlugin {
 		return !errors.isEmpty();
 	}
 	
-	private boolean isError(@NotNull TownyInitException.TownyError error) {
+	@ApiStatus.Internal
+	public boolean isError(@NotNull TownyInitException.TownyError error) {
 		return errors.contains(error);
 	}
 	
+	@ApiStatus.Internal
 	public void addError(@NotNull TownyInitException.TownyError error) {
 		errors.add(error);
 	}
 	
-	private void removeError(@NotNull TownyInitException.TownyError error) {
+	@ApiStatus.Internal
+	public void removeError(@NotNull TownyInitException.TownyError error) {
 		errors.remove(error);
 	}
 
+	@ApiStatus.Internal
 	@NotNull
-	public List<TownyInitException.TownyError> getErrors() {
+	public Collection<TownyInitException.TownyError> getErrors() {
 		return errors;
 	}
 
@@ -822,7 +830,7 @@ public class Towny extends JavaPlugin {
 
 			commandMap.registerAll("towny", commands);
 		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new TownyInitException("An issue has occured while registering custom commands.", TownyInitException.TownyError.OTHER, e);
+			throw new TownyInitException("An issue has occurred while registering custom commands.", TownyInitException.TownyError.OTHER, e);
 		}
 	}
 	
