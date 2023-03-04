@@ -269,7 +269,7 @@ public class Towny extends JavaPlugin {
 		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml"), getVersion());
 		if (reload) {
 			// If Towny is in Safe Mode (for the main config) turn off Safe Mode and setup economy if it isn't already.
-			if (removeError(TownyInitException.TownyError.MAIN_CONFIG) && PluginIntegrations.getInstance().isEconomySetUp()) {
+			if (removeError(TownyInitException.TownyError.MAIN_CONFIG) && TownySettings.isUsingEconomy() && !TownyEconomyHandler.isActive()) {
 				PluginIntegrations.getInstance().setupAndPrintEconomy(TownySettings.isUsingEconomy());
 			}
 			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_config"));
