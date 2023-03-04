@@ -2077,7 +2077,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
 			Translation.loadTranslationRegistry();
 			TownBlockTypeHandler.initialize();
-		} catch (IOException e) {
+		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
 			e.printStackTrace();
 			return;
