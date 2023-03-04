@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
@@ -39,12 +40,13 @@ public class PluginIntegrations {
 	private final String[] SPONSOR_PLUGINS = { "EventWar", "SiegeConquest", "TownyCamps", "TownyHistories", "TownyRTP",
 			"TownyWayPointTravel", "TownOptionalLWC" };
 	private final String NEWLINE_STRING = System.lineSeparator() + "                           ";
-	private List<String> warnings = new ArrayList<>();
+	private final List<String> warnings = new ArrayList<>();
 
 	private TownyPlaceholderExpansion papiExpansion = null;
 	private LuckPermsContexts luckPermsContexts;
 	private boolean citizens2 = false;
 	private NamespacedKey eliteKey;
+	private boolean economySetUp = false;
 
 	public static PluginIntegrations getInstance() {
 		if (instance == null)
@@ -80,8 +82,9 @@ public class PluginIntegrations {
 	 	// Check for permission source.
 		detectAndPrintPermissions(towny);
 
-		// Check for an economy plugin.
-		setupAndPrintEconomy(TownySettings.isUsingEconomy());
+		// Check for an economy plugin if the main config loaded correctly.
+		if (!towny.isError(TownyInitException.TownyError.MAIN_CONFIG))
+			setupAndPrintEconomy(TownySettings.isUsingEconomy());
 
 		// Find supporting plugins and set them up if needed.
 		findSetupAndPrintAddons(towny);
@@ -91,11 +94,11 @@ public class PluginIntegrations {
 	}
 
 	private void detectAndPrintPermissions(Towny towny) {
-		for (String permissions : returnPermissionsProviders(towny).split("\n"))
+		for (String permissions : registerPermissionsProviders(towny).split("\n"))
 			towny.getLogger().info(permissions);
 	}
 
-	private void setupAndPrintEconomy(boolean configSetForEconomy) {
+	public void setupAndPrintEconomy(boolean configSetForEconomy) {
 		String ecowarn = "No compatible Economy plugins found."
 				+ " Install Vault.jar or Reserve.jar with any of the supported eco systems."
 				+ " If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
@@ -184,7 +187,7 @@ public class PluginIntegrations {
 			out.add(pluginName + " v" + plugin.getDescription().getVersion());
 	}
 
-	private String returnPermissionsProviders(Towny towny) {
+	public String registerPermissionsProviders(Towny towny) {
 		// TownyPerms is always present.
 		String output = "  Permissions: TownyPerms, ";
 
@@ -356,6 +359,10 @@ public class PluginIntegrations {
 
 	private boolean isEliteMobsPresent() {
 		return eliteKey != null;
+	}
+	
+	public boolean isEconomySetUp() {
+		return this.economySetUp;
 	}
 }
 

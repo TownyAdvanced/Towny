@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -2057,16 +2058,25 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void reloadLangs(CommandSender sender) {
-		Translation.loadTranslationRegistry();
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_lang"));
+		try {
+			plugin.loadLocalization(true);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_lang"));
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
+			TownyMessaging.sendErrorMsg(sender, e.getMessage());
+			plugin.getLogger().log(Level.WARNING, "Error occurred while reloading lang", e);
+			plugin.addError(TownyInitException.TownyError.LOCALIZATION);
+		}
 	}
 	
 	public void reloadPerms(CommandSender sender) {
 		try {
 			plugin.loadPermissions(true);
+			PluginIntegrations.getInstance().registerPermissionsProviders(plugin);
 		} catch (TownyInitException tie) {
-			TownyMessaging.sendErrorMsg(sender, "Error Loading townyperms.yml!");
-			TownyMessaging.sendErrorMsg(tie.getMessage());
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
+			TownyMessaging.sendErrorMsg(sender, tie.getMessage());
+			plugin.getLogger().log(Level.WARNING, "Error occurred while reloading townyperms.yml", tie);
 			// Place Towny in Safe Mode while the townyperms.yml is unreadable.
 			plugin.addError(tie.getError());
 			return;
@@ -2088,10 +2098,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		try {
-			TownySettings.loadConfig(Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("config.yml"), plugin.getVersion());
+			plugin.loadConfig(true);
 			TownySettings.loadTownLevelConfig();   // TownLevel and NationLevels are not loaded in the config,
 			TownySettings.loadNationLevelConfig(); // but later so the config-migrator can do it's work on them if needed.
-			Translation.loadTranslationRegistry();
+			plugin.loadLocalization(true);
 			TownBlockTypeHandler.initialize();
 
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_config"));

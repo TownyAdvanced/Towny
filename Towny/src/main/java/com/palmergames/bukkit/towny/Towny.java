@@ -137,10 +137,6 @@ public class Towny extends JavaPlugin {
 			// Load the foundation of Towny, containing config, locales, database.
 			loadFoundation(false);
 
-			// Check for plugins that we use or we develop, 
-			// print helpful information to startup log.
-			PluginIntegrations.getInstance().checkForPlugins(this);
-
 			// Make sure the timers are stopped for a reset, then started.
 			cycleTimers();
 			// Reset the player cache.
@@ -158,6 +154,9 @@ public class Towny extends JavaPlugin {
 
 		adventure = BukkitAudiences.create(this);
 
+		// Check for plugins that we use or we develop, 
+		// print helpful information to startup log.
+		PluginIntegrations.getInstance().checkForPlugins(this);
 		// Initialize SpawnUtil only after the Translation class has figured out a language.
 		// N.B. Important that localization loaded correctly for this step.
 		SpawnUtil.initialize(this);
@@ -266,24 +265,22 @@ public class Towny extends JavaPlugin {
 		townyUniverse.performCleanupAndBackup();
 	}
 
-	private void loadConfig(boolean reload) {
+	public void loadConfig(boolean reload) {
 		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml"), getVersion());
 		if (reload) {
-			// If Towny is in Safe Mode (for the main config) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
-				removeError(TownyInitException.TownyError.MAIN_CONFIG);
+			// If Towny is in Safe Mode (for the main config) turn off Safe Mode and setup economy if it isn't already.
+			if (removeError(TownyInitException.TownyError.MAIN_CONFIG) && PluginIntegrations.getInstance().isEconomySetUp()) {
+				PluginIntegrations.getInstance().setupAndPrintEconomy(TownySettings.isUsingEconomy());
 			}
 			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_config"));
 		}
 	}
 	
-	private void loadLocalization(boolean reload) {
+	public void loadLocalization(boolean reload) {
 		Translation.loadTranslationRegistry();
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.LOCALIZATION)) {
-				removeError(TownyInitException.TownyError.LOCALIZATION);
-			}
+			removeError(TownyInitException.TownyError.LOCALIZATION);
 			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_lang"));
 		}
 	}
@@ -295,9 +292,7 @@ public class Towny extends JavaPlugin {
 		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml"));
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.DATABASE_CONFIG)) {
-				removeError(TownyInitException.TownyError.DATABASE_CONFIG);
-			}
+			removeError(TownyInitException.TownyError.DATABASE_CONFIG);
 		}
 	}
 	
@@ -306,9 +301,7 @@ public class Towny extends JavaPlugin {
 		// This will only run if permissions is fine.
 		if (reload) {
 			// If Towny is in Safe Mode (for Permissions) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.PERMISSIONS)) {
-				removeError(TownyInitException.TownyError.PERMISSIONS);
-			}
+			removeError(TownyInitException.TownyError.PERMISSIONS);
 			// Update everyone who is online with the changes made.
 			TownyPerms.updateOnlinePerms();
 		}
@@ -565,8 +558,8 @@ public class Towny extends JavaPlugin {
 	}
 	
 	@ApiStatus.Internal
-	public void removeError(@NotNull TownyInitException.TownyError error) {
-		errors.remove(error);
+	public boolean removeError(@NotNull TownyInitException.TownyError error) {
+		return errors.remove(error);
 	}
 
 	@ApiStatus.Internal
