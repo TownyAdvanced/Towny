@@ -2703,19 +2703,19 @@ public class TownySettings {
 	}
 
 	public static String getAcceptCommand() {
-		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND.getRoot(), ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND.getDefault());
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND) : ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND.getDefault();
 	}
 
 	public static String getDenyCommand() {
-		return getString(ConfigNodes.INVITE_SYSTEM_DENY_COMMAND.getRoot(), ConfigNodes.INVITE_SYSTEM_DENY_COMMAND.getDefault());
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_DENY_COMMAND) : ConfigNodes.INVITE_SYSTEM_DENY_COMMAND.getDefault();
 	}
 
 	public static String getConfirmCommand() {
-		return getString(ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND.getRoot(), ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND.getDefault());
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND) : ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND.getDefault();
 	}
 
 	public static String getCancelCommand() {
-		return getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND.getRoot(), ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND.getDefault());
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND) : ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND.getDefault();
 	}
 
 	public static boolean getOutsidersPreventPVPToggle() {
