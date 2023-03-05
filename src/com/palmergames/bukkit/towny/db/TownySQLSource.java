@@ -63,6 +63,7 @@ import java.util.stream.Collectors;
 public final class TownySQLSource extends TownyDatabaseHandler {
 
 	private final Queue<SQL_Task> queryQueue = new ConcurrentLinkedQueue<>();
+	private boolean isPolling = false;
 	private BukkitTask task = null;
 
 	private final String dsn;
@@ -161,19 +162,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 * Start our Async queue for pushing data to the database.
 		 */
 		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+			if (this.isPolling)
+				return;
 
-			while (!TownySQLSource.this.queryQueue.isEmpty()) {
+			this.isPolling = true;
+			try {
+				while (!TownySQLSource.this.queryQueue.isEmpty()) {
 
-				final SQL_Task query = TownySQLSource.this.queryQueue.poll();
-				if (query == null)
-					break;
+					final SQL_Task query = TownySQLSource.this.queryQueue.poll();
+					if (query == null)
+						break;
 
-				if (query.update) {
-					TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
-				} else {
-					TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+					if (query.update) {
+						TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
+					} else {
+						TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+					}
+
 				}
-
+			} finally {
+				this.isPolling = false;
 			}
 
 		}, 5L, 5L);
