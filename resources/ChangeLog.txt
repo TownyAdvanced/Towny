@@ -8414,3 +8414,4 @@ v0.92.0.11:
   - Alter the TownBlockTypeHandler to be able to receive TownBlockTypes from other plugins on server startup.
 0.98.6.11:
   - Fix sql source query NPE, courtesy of Warriorrrr with PR #6527.
+  - Fix /ta set mayor causing an npe if the old mayor is null, courtesy of Warriorrrr with PR #6528.
