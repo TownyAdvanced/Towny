@@ -1906,10 +1906,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		town.setMayor(newMayor);
 		
 		// Reset caches and permissions.
-		if (!deleteOldMayor && oldMayor.isOnline()) {
+		if (!deleteOldMayor && oldMayor != null && oldMayor.isOnline()) {
 			Towny.getPlugin().deleteCache(oldMayor);
 			TownyPerms.assignPermissions(oldMayor, oldMayor.getPlayer());
 		}
+		
 		if (newMayor.isOnline() && !newMayor.isNPC())
 			Towny.getPlugin().deleteCache(newMayor);
 
