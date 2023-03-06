@@ -8418,3 +8418,6 @@ v0.92.0.11:
 0.98.6.12:
   - Fix pressure plates not respecting switch permissions, courtesy of Pesto with PR #6532.
     - Closes #6530.
+0.98.6.13:
+  - Bump annotations from 24.0.0 to 24.0.1.
+  - Bump maven-compiler-plugin from 3.10.1 to 3.11.0.
