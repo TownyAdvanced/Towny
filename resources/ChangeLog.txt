@@ -8415,3 +8415,6 @@ v0.92.0.11:
 0.98.6.11:
   - Fix sql source query NPE, courtesy of Warriorrrr with PR #6527.
   - Fix /ta set mayor causing an npe if the old mayor is null, courtesy of Warriorrrr with PR #6528.
+0.98.6.12:
+  - Fix pressure plates not respecting switch permissions, courtesy of Pesto with PR #6532.
+    - Closes #6530.
