@@ -324,7 +324,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		Action action = event.getAction();
-		if(action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR)
+		if(action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR && action != Action.PHYSICAL)
 			return;
 		
 		Player player = event.getPlayer();
