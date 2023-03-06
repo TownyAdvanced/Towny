@@ -212,10 +212,10 @@ public class TownySettings {
 				 */
 				newTownLevel(
 					levelGetAndParse(level, "town levels", numResidentsIndex, "numResidents", null, Integer::parseInt),
-					levelGet(level, "nation levels", numResidentsIndex, "namePrefix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "namePostfix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "mayorPrefix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "mayorPostfix", ""),
+					levelGet(level, "town levels", numResidentsIndex, "namePrefix", ""),
+					levelGet(level, "town levels", numResidentsIndex, "namePostfix", ""),
+					levelGet(level, "town levels", numResidentsIndex, "mayorPrefix", ""),
+					levelGet(level, "town levels", numResidentsIndex, "mayorPostfix", ""),
 					levelGetAndParse(level, "town levels", numResidentsIndex, "townBlockLimit", 0, Integer::parseInt),
 					levelGetAndParse(level, "town levels", numResidentsIndex, "upkeepModifier", 1.0, Double::parseDouble),
 					levelGetAndParse(level, "town levels", numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
