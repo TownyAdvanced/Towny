@@ -36,7 +36,6 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -202,28 +201,22 @@ public class TownySettings {
 
 			// Num residents or index used for error messages
 			final String numResidentsIndex = level.containsKey("numResidents") ? "numResidents = " + level.get("numResidents") : "index " + i;
-
+			final String description = "town levels";
 			try {
-				/*
-				 * We parse everything as if it were a string because of the config-migrator, 
-				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
-				 * Until the migrator is revamped to handle different types of primitives, or,
-				 * the nation/town levels are changed this might be the least painful alternative.
-				 */
 				newTownLevel(
-					levelGetAndParse(level, "town levels", numResidentsIndex, "numResidents", null, Integer::parseInt),
-					levelGet(level, "town levels", numResidentsIndex, "namePrefix", ""),
-					levelGet(level, "town levels", numResidentsIndex, "namePostfix", ""),
-					levelGet(level, "town levels", numResidentsIndex, "mayorPrefix", ""),
-					levelGet(level, "town levels", numResidentsIndex, "mayorPostfix", ""),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "townBlockLimit", 0, Integer::parseInt),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "upkeepModifier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "townOutpostLimit", 0, Integer::parseInt),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "townBlockBuyBonusLimit", 0, Integer::parseInt),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "debtCapModifier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "resourceProductionModifier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "town levels", numResidentsIndex, "bankCapModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "numResidents", null, Integer::parseInt),
+					levelGet(level, description, numResidentsIndex, "namePrefix", ""),
+					levelGet(level, description, numResidentsIndex, "namePostfix", ""),
+					levelGet(level, description, numResidentsIndex, "mayorPrefix", ""),
+					levelGet(level, description, numResidentsIndex, "mayorPostfix", ""),
+					levelGetAndParse(level, description, numResidentsIndex, "townBlockLimit", 0, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "upkeepModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "townOutpostLimit", 0, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "townBlockBuyBonusLimit", 0, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "debtCapModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "resourceProductionModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "bankCapModifier", 1.0, Double::parseDouble),
 					townBlockTypeLimits
 				);
 			} catch (Exception e) {
@@ -256,29 +249,23 @@ public class TownySettings {
 			
 			// Num residents or index used for error messages
 			final String numResidentsIndex = level.containsKey("numResidents") ? "numResidents = " + level.get("numResidents") : "index " + i;
-
+			final String description = "nation levels";
 			try {
-				/*
-				 * We parse everything as if it were a string because of the config-migrator, 
-				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
-				 * Until the migrator is revamped to handle different types of primitives, or,
-				 * the nation/town levels are changed this might be the least painful alternative.
-				 */
 				newNationLevel(
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "numResidents", null, Integer::parseInt), // Intentionally null to error out if left out
-					levelGet(level, "nation levels", numResidentsIndex, "namePrefix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "namePostfix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "capitalPrefix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "capitalPostfix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "kingPrefix", ""),
-					levelGet(level, "nation levels", numResidentsIndex, "kingPostfix", ""),
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "townBlockLimitBonus", 1, Integer::parseInt),
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "upkeepModifier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "nationTownUpkeepModifier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "bankCapModifier", 1.0, Double::parseDouble),
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "nationZonesSize", 1, Integer::parseInt),
-					levelGetAndParse(level, "nation levels", numResidentsIndex, "nationBonusOutpostLimit", 1, Integer::parseInt)
+					levelGetAndParse(level, description, numResidentsIndex, "numResidents", null, Integer::parseInt), // Intentionally null to error out if left out
+					levelGet(level, description, numResidentsIndex, "namePrefix", ""),
+					levelGet(level, description, numResidentsIndex, "namePostfix", ""),
+					levelGet(level, description, numResidentsIndex, "capitalPrefix", ""),
+					levelGet(level, description, numResidentsIndex, "capitalPostfix", ""),
+					levelGet(level, description, numResidentsIndex, "kingPrefix", ""),
+					levelGet(level, description, numResidentsIndex, "kingPostfix", ""),
+					levelGetAndParse(level, description, numResidentsIndex, "townBlockLimitBonus", 1, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "upkeepModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "nationTownUpkeepModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "bankCapModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "nationZonesSize", 1, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "nationBonusOutpostLimit", 1, Integer::parseInt)
 				);
 			} catch (Exception e) {
 				Towny.getPlugin().getLogger().warning("An exception occurred when a loading nation_level with " + numResidentsIndex + ", this can be caused by having an outdated nation_level section.");
