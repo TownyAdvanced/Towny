@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class BackupTask implements Runnable {
 	@Override
@@ -14,10 +15,8 @@ public class BackupTask implements Runnable {
 		Towny.getPlugin().getLogger().info("Making backup...");
 		try {
 			dataSource.backup();
-
 		} catch (IOException e) {
-			Towny.getPlugin().getLogger().warning("Error: Could not create backup.");
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "Error: Could not create backup.", e);
 			return;
 		}
 
