@@ -607,6 +607,7 @@ public enum HelpMenu {
 				.add("explosion", "")
 				.add("plotborder", "")
 				.add("constantplotborder", "")
+				.add("townborder", "")
 				.add("ignoreplots", "")
 				.add("townclaim", "")
 				.add("map", "")
