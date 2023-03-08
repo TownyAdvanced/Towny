@@ -114,7 +114,7 @@ public class BankAccount extends Account {
 	@Override
 	public boolean canPayFromHoldings(double amount) {
 		if (isBankrupt())
-			return addDebt(amount);
+			return getTownDebt() + amount > getDebtCap();
 		else
 			return super.canPayFromHoldings(amount);
 	}
