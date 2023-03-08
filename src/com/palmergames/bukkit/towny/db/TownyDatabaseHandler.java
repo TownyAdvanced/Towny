@@ -142,12 +142,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	@Override
 	public boolean backup() throws IOException {
 
-		if (!TownySettings.getSaveDatabase().equalsIgnoreCase("flatfile")) {
+		if (!TownySettings.getSaveDatabase().equalsIgnoreCase("flatfile") && !TownySettings.disableMySQLBackupWarning()) {
 			plugin.getLogger().info("***** Warning *****");
-			plugin.getLogger().info("***** Only Snapshots & Regen files in towny\\data\\ will be backed up!");
+			plugin.getLogger().info("***** Only Snapshots & Regen files in plugins/Towny/data/ will be backed up!");
 			plugin.getLogger().info("***** This does not include your residents/towns/nations.");
 			plugin.getLogger().info("***** Make sure you have scheduled a backup in MySQL too!!!");
+			plugin.getLogger().info("***** If you already have backups or accept the risk, this message can be disabled in the database config");
 		}
+		
 		String backupType = TownySettings.getFlatFileBackupType();
 		String newBackupFolder = backupFolderPath + File.separator + BACKUP_DATE_FORMAT.format(System.currentTimeMillis());
 		FileMgmt.checkOrCreateFolders(rootFolderPath, rootFolderPath + File.separator + "backup");
