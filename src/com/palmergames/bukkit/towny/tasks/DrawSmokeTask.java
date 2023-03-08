@@ -6,33 +6,36 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
 import java.time.Duration;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.bukkit.World;
 
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
-import com.palmergames.util.TimeMgmt;
 
 public class DrawSmokeTask extends TownyTimerTask {
 
-	Map<UUID, List<CellBorder>> townCellBorderMap = new HashMap<>();
-	Map<UUID, Long> townCachedTime = new HashMap<>();
-	Cache<UUID, Map<UUID, List<CellBorder>>> cellBorderCache = CacheBuilder.newBuilder()
+	LoadingCache<TownWorldPair, List<CellBorder>> cellBorderCache = CacheBuilder.newBuilder()
 			.expireAfterWrite(Duration.ofSeconds(30))
-			.build();
+			.build(new CacheLoader<TownWorldPair, List<CellBorder>>() {
+						@Override
+						public List<CellBorder> load(TownWorldPair key) throws Exception {
+							return getCellBordersForTownInWorld(key.getTown(), key.getWorld());
+						}
+					});
 
 	public DrawSmokeTask(Towny plugin) {
 		super(plugin);
@@ -58,31 +61,55 @@ public class DrawSmokeTask extends TownyTimerTask {
 				if (town == null)
 					continue;
 
-				// Check if this town's cellBorders are already cached and less than 30 seconds old.
-				List<CellBorder> cellBorders = null;
-				if (townCachedTime.containsKey(town.getUUID()) &&
-					townCachedTime.get(town.getUUID()) > System.currentTimeMillis()) {
-						cellBorders = townCellBorderMap.get(town.getUUID());
+				List<CellBorder> cellBorders;
+				try {
+					cellBorders = cellBorderCache.get(TownWorldPair.of(town, player.getWorld()));
+				} catch (ExecutionException e) {
+					continue;
 				}
 
-				// Not cached or cached List was stale.
-				if (cellBorders == null) {
-					List<WorldCoord> wcs = town.getTownBlocks().stream()
-							.map(TownBlock::getWorldCoord)
-							.filter(wc -> wc.getBukkitWorld().getName().equals(player.getWorld().getName()))
-							.filter(wc -> wc.getNormalizedDistanceFromLocation(player.getLocation()) <= 200)
-							.collect(Collectors.toList());
-					if (wcs.isEmpty())
-						continue;
-					cellBorders = BorderUtil.getOuterBorder(wcs);
-					townCachedTime.put(town.getUUID(), (System.currentTimeMillis() + (long) TimeMgmt.ONE_SECOND_IN_MILLIS * 30));
-					townCellBorderMap.put(town.getUUID(), cellBorders);
-				}
+				if (cellBorders.isEmpty())
+					continue;
+
 				Color color = DrawSmokeTaskFactory.getAffiliationColor(resident, cellBorders.get(0));
 				cellBorders.forEach(cb -> cb.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, color)));
 				continue;
 			}
-			
+		}
+	}
+
+	private List<CellBorder> getCellBordersForTownInWorld(Town town, World world) {
+		System.out.println("new cache loading");
+		List<CellBorder> cellBorders = new ArrayList<>();
+		List<WorldCoord> wcs = town.getTownBlocks().stream()
+				.map(TownBlock::getWorldCoord)
+				.filter(wc -> wc.getBukkitWorld().getName().equals(world.getName()))
+				.collect(Collectors.toList());
+		if (wcs.isEmpty())
+			return cellBorders;
+		 cellBorders = BorderUtil.getOuterBorder(wcs);
+		 return cellBorders;
+	}
+
+	private static class TownWorldPair {
+		final private Town town;
+		final private World world;
+
+		private TownWorldPair(Town town, World world) {
+			this.town = town;
+			this.world = world;
+		}
+
+		public World getWorld() {
+			return world;
+		}
+
+		public Town getTown() {
+			return town;
+		}
+		
+		private static TownWorldPair of(Town town, World world) {
+			return new TownWorldPair(town, world);
 		}
 	}
 }
