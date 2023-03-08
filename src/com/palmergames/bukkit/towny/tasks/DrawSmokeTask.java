@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -28,9 +27,7 @@ import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 
 public class DrawSmokeTask extends TownyTimerTask {
 
-	Cache<String, List<CellBorder>> cellBorderCache = CacheBuilder.newBuilder()
-			.expireAfterWrite(Duration.ofSeconds(30))
-			.build();
+	Cache<String, List<CellBorder>> cellBorderCache = CacheBuilder.newBuilder().expireAfterWrite(Duration.ofSeconds(30)).build();
 
 	public DrawSmokeTask(Towny plugin) {
 		super(plugin);
@@ -46,8 +43,8 @@ public class DrawSmokeTask extends TownyTimerTask {
 			if (resident.hasMode("constantplotborder")) {
 				WorldCoord wc = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player.getLocation()));
 				CellBorder cellBorder = BorderUtil.getPlotBorder(wc);
-				
-				cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, DrawSmokeTaskFactory.getAffiliationColor(resident, wc)));
+
+				cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, getColor(resident, wc)));
 				continue;
 			}
 
@@ -60,11 +57,15 @@ public class DrawSmokeTask extends TownyTimerTask {
 				if (cellBorders == null)
 					continue;
 
-				Color color = DrawSmokeTaskFactory.getAffiliationColor(resident, cellBorders.get(0));
+				Color color = getColor(resident, cellBorders.get(0));
 				cellBorders.forEach(cb -> cb.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, color)));
 				continue;
 			}
 		}
+	}
+
+	private Color getColor(Resident resident, WorldCoord wc) {
+		return DrawSmokeTaskFactory.getAffiliationColor(resident, wc);
 	}
 
 	@Nullable
@@ -72,12 +73,7 @@ public class DrawSmokeTask extends TownyTimerTask {
 		List<CellBorder> cellBorders = null;
 		try {
 			// Keyed to a String so that it is always a single memory address.
-			cellBorders = cellBorderCache.get(pair.toString(), new Callable<List<CellBorder>>() {
-				@Override
-				public List<CellBorder> call() {
-					return pair.getCellBordersForTownInWorld();
-				}
-			});
+			cellBorders = cellBorderCache.get(pair.toString(), pair::getCellBordersForTownInWorld);
 		} catch (ExecutionException ignored) {}
 		return cellBorders;
 	}
@@ -95,15 +91,15 @@ public class DrawSmokeTask extends TownyTimerTask {
 			return town.getName() + ":" + world.getName();
 		}
 
+		@Nullable
 		private List<CellBorder> getCellBordersForTownInWorld() {
-			List<CellBorder> cellBorders = null;
 			List<WorldCoord> wcs = town.getTownBlocks().stream()
 					.map(TownBlock::getWorldCoord)
 					.filter(wc -> wc.getBukkitWorld().getName().equals(world.getName()))
 					.collect(Collectors.toList());
 			if (wcs.isEmpty()) // Probably shouldn't ever happen.
-				return cellBorders;
-			cellBorders = BorderUtil.getOuterBorder(wcs);
+				return null;
+			List<CellBorder> cellBorders = BorderUtil.getOuterBorder(wcs);
 			return cellBorders;
 		}
 	}
