@@ -339,17 +339,4 @@ public class WorldCoord extends Coord {
 		}
 		return list;
 	}
-
-	/**
-	 * Receives a Location, and calculates the distance from the centre of the
-	 * WorldCoord (at the same Y level as the given Location,) to the given
-	 * Location.
-	 * 
-	 * @param loc Location to measure distance from.
-	 * @return distance from the location to the centre of the WorldCoord on the same Y level.
-	 */
-	public int getNormalizedDistanceFromLocation(Location loc) {
-		Location normalizedWorldCoordLoc = new Location(getBukkitWorld(), (getX() * getCellSize()) + (getCellSize()/2), loc.getY(), (getZ() * getCellSize()) + (getCellSize()/2));
-		return (int) normalizedWorldCoordLoc.distance(loc);
-	}
 }

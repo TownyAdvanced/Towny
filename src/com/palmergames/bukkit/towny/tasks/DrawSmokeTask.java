@@ -6,19 +6,19 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import org.bukkit.World;
 
+import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -28,14 +28,9 @@ import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 
 public class DrawSmokeTask extends TownyTimerTask {
 
-	LoadingCache<TownWorldPair, List<CellBorder>> cellBorderCache = CacheBuilder.newBuilder()
+	Cache<String, List<CellBorder>> cellBorderCache = CacheBuilder.newBuilder()
 			.expireAfterWrite(Duration.ofSeconds(30))
-			.build(new CacheLoader<TownWorldPair, List<CellBorder>>() {
-						@Override
-						public List<CellBorder> load(TownWorldPair key) throws Exception {
-							return getCellBordersForTownInWorld(key.getTown(), key.getWorld());
-						}
-					});
+			.build();
 
 	public DrawSmokeTask(Towny plugin) {
 		super(plugin);
@@ -61,14 +56,8 @@ public class DrawSmokeTask extends TownyTimerTask {
 				if (town == null)
 					continue;
 
-				List<CellBorder> cellBorders;
-				try {
-					cellBorders = cellBorderCache.get(TownWorldPair.of(town, player.getWorld()));
-				} catch (ExecutionException e) {
-					continue;
-				}
-
-				if (cellBorders.isEmpty())
+				List<CellBorder> cellBorders = getCellBorders(new TownWorldPair(town, player.getWorld()));
+				if (cellBorders == null)
 					continue;
 
 				Color color = DrawSmokeTaskFactory.getAffiliationColor(resident, cellBorders.get(0));
@@ -78,20 +67,22 @@ public class DrawSmokeTask extends TownyTimerTask {
 		}
 	}
 
-	private List<CellBorder> getCellBordersForTownInWorld(Town town, World world) {
-		System.out.println("new cache loading");
-		List<CellBorder> cellBorders = new ArrayList<>();
-		List<WorldCoord> wcs = town.getTownBlocks().stream()
-				.map(TownBlock::getWorldCoord)
-				.filter(wc -> wc.getBukkitWorld().getName().equals(world.getName()))
-				.collect(Collectors.toList());
-		if (wcs.isEmpty())
-			return cellBorders;
-		 cellBorders = BorderUtil.getOuterBorder(wcs);
-		 return cellBorders;
+	@Nullable
+	private List<CellBorder> getCellBorders(TownWorldPair pair) {
+		List<CellBorder> cellBorders = null;
+		try {
+			// Keyed to a String so that it is always a single memory address.
+			cellBorders = cellBorderCache.get(pair.toString(), new Callable<List<CellBorder>>() {
+				@Override
+				public List<CellBorder> call() {
+					return pair.getCellBordersForTownInWorld();
+				}
+			});
+		} catch (ExecutionException ignored) {}
+		return cellBorders;
 	}
 
-	private static class TownWorldPair {
+	private class TownWorldPair {
 		final private Town town;
 		final private World world;
 
@@ -100,16 +91,20 @@ public class DrawSmokeTask extends TownyTimerTask {
 			this.world = world;
 		}
 
-		public World getWorld() {
-			return world;
+		public String toString() {
+			return town.getName() + ":" + world.getName();
 		}
 
-		public Town getTown() {
-			return town;
-		}
-		
-		private static TownWorldPair of(Town town, World world) {
-			return new TownWorldPair(town, world);
+		private List<CellBorder> getCellBordersForTownInWorld() {
+			List<CellBorder> cellBorders = null;
+			List<WorldCoord> wcs = town.getTownBlocks().stream()
+					.map(TownBlock::getWorldCoord)
+					.filter(wc -> wc.getBukkitWorld().getName().equals(world.getName()))
+					.collect(Collectors.toList());
+			if (wcs.isEmpty()) // Probably shouldn't ever happen.
+				return cellBorders;
+			cellBorders = BorderUtil.getOuterBorder(wcs);
+			return cellBorders;
 		}
 	}
 }
