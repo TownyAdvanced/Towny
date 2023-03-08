@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -65,12 +66,14 @@ public class DrawSmokeTask extends TownyTimerTask {
 							.filter(wc -> wc.getBukkitWorld().getName().equals(player.getWorld().getName()))
 							.filter(wc -> wc.getNormalizedDistanceFromLocation(player.getLocation()) <= 200)
 							.collect(Collectors.toList());
+					if (wcs.isEmpty())
+						continue;
 					cellBorders = BorderUtil.getOuterBorder(wcs);
 					townCachedTime.put(town.getUUID(), (System.currentTimeMillis() + (long) TimeMgmt.ONE_SECOND_IN_MILLIS * 30));
 					townCellBorderMap.put(town.getUUID(), cellBorders);
 				}
-
-				cellBorders.forEach(cb -> cb.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player)));
+				Color color = DrawSmokeTaskFactory.getAffiliationColor(resident, cellBorders.get(0));
+				cellBorders.forEach(cb -> cb.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, color)));
 				continue;
 			}
 			
