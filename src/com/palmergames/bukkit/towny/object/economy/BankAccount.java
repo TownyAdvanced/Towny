@@ -112,6 +112,14 @@ public class BankAccount extends Account {
 	}
 
 	@Override
+	public boolean canPayFromHoldings(double amount) {
+		if (isBankrupt())
+			return addDebt(amount);
+		else
+			return super.canPayFromHoldings(amount);
+	}
+
+	@Override
 	public double getHoldingBalance(boolean setCache) {
 		double balance = isBankrupt() ? balance = getTownDebt() * -1 : TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 		if (setCache)

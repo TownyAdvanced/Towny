@@ -213,7 +213,7 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (nation.getBankCap() != 0 && taxAmount + nation.getAccount().getHoldingBalance() > nation.getBankCap())
 						taxAmount = nation.getBankCap() - nation.getAccount().getHoldingBalance();
 					
-					if (taxAmount == 0)
+					if (taxAmount <= 0)
 						continue;
 					
 					if (town.getAccount().canPayFromHoldings(taxAmount)) {
