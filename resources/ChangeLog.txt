@@ -8423,3 +8423,5 @@ v0.92.0.11:
   - Bump maven-compiler-plugin from 3.10.1 to 3.11.0.
   - Make town and nation level related errors easier to debug, courtesy of Warriorrrr with PR #6524.
   - Fix potential NPE in TownyBlockListener.
+  - Change format used for backup file names, courtesy of Warriorrrr with PR #6538.
+  - Relativize paths in tar.gz backups, courtesy of Warriorrrr with PR #6537.
