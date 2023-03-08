@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -27,6 +30,9 @@ public class DrawSmokeTask extends TownyTimerTask {
 
 	Map<UUID, List<CellBorder>> townCellBorderMap = new HashMap<>();
 	Map<UUID, Long> townCachedTime = new HashMap<>();
+	Cache<UUID, Map<UUID, List<CellBorder>>> cellBorderCache = CacheBuilder.newBuilder()
+			.expireAfterWrite(Duration.ofSeconds(30))
+			.build();
 
 	public DrawSmokeTask(Towny plugin) {
 		super(plugin);
