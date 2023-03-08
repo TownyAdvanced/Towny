@@ -8425,3 +8425,6 @@ v0.92.0.11:
   - Fix potential NPE in TownyBlockListener.
   - Change format used for backup file names, courtesy of Warriorrrr with PR #6538.
   - Relativize paths in tar.gz backups, courtesy of Warriorrrr with PR #6537.
+0.98.6.14:
+  - Make sure we aren't paying negative amounts to a Nation bank account during tax time.
+    - Closes #6540.
