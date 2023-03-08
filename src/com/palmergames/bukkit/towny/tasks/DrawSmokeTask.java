@@ -5,7 +5,10 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -17,8 +20,12 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
+import com.palmergames.util.TimeMgmt;
 
 public class DrawSmokeTask extends TownyTimerTask {
+
+	Map<UUID, List<CellBorder>> townCellBorderMap = new HashMap<>();
+	Map<UUID, Long> townCachedTime = new HashMap<>();
 
 	public DrawSmokeTask(Towny plugin) {
 		super(plugin);
@@ -43,12 +50,26 @@ public class DrawSmokeTask extends TownyTimerTask {
 				Town town = TownyAPI.getInstance().getTown(player.getLocation());
 				if (town == null)
 					continue;
-				List<WorldCoord> wcs = town.getTownBlocks().stream()
-						.map(TownBlock::getWorldCoord)
-						.filter(wc -> wc.getBukkitWorld().getName().equals(player.getWorld().getName()))
-						.filter(wc -> wc.getNormalizedDistanceFromLocation(player.getLocation()) <= 96)
-						.collect(Collectors.toList());
-				List<CellBorder> cellBorders = BorderUtil.getOuterBorder(wcs);
+
+				// Check if this town's cellBorders are already cached and less than 30 seconds old.
+				List<CellBorder> cellBorders = null;
+				if (townCachedTime.containsKey(town.getUUID()) &&
+					townCachedTime.get(town.getUUID()) > System.currentTimeMillis()) {
+						cellBorders = townCellBorderMap.get(town.getUUID());
+				}
+
+				// Not cached or cached List was stale.
+				if (cellBorders == null) {
+					List<WorldCoord> wcs = town.getTownBlocks().stream()
+							.map(TownBlock::getWorldCoord)
+							.filter(wc -> wc.getBukkitWorld().getName().equals(player.getWorld().getName()))
+							.filter(wc -> wc.getNormalizedDistanceFromLocation(player.getLocation()) <= 200)
+							.collect(Collectors.toList());
+					cellBorders = BorderUtil.getOuterBorder(wcs);
+					townCachedTime.put(town.getUUID(), (System.currentTimeMillis() + (long) TimeMgmt.ONE_SECOND_IN_MILLIS * 30));
+					townCellBorderMap.put(town.getUUID(), cellBorders);
+				}
+
 				cellBorders.forEach(cb -> cb.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player)));
 				continue;
 			}
