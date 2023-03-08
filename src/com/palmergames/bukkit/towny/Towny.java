@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
 import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -314,19 +315,19 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Loads the Town and Nation Levels from the config.yml
 	 *
-	 * @return true if they have the required elements.
+	 * @throws TownyInitException if a TownyException occurs while loading the levels
 	 */
-	private void loadTownAndNationLevels() {
+	private void loadTownAndNationLevels() throws TownyInitException {
 		// Load Nation & Town level data into maps.
 		try {
 			TownySettings.loadTownLevelConfig();
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to load town level config", TownyInitException.TownyError.MAIN_CONFIG);
+		} catch (TownyException e) {
+			throw new TownyInitException("Failed to load town level config", TownyInitException.TownyError.MAIN_CONFIG, e);
 		}
 		try {
 			TownySettings.loadNationLevelConfig();
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to load nation level config", TownyInitException.TownyError.MAIN_CONFIG);
+		} catch (TownyException e) {
+			throw new TownyInitException("Failed to load nation level config", TownyInitException.TownyError.MAIN_CONFIG, e);
 		}
 	}
 

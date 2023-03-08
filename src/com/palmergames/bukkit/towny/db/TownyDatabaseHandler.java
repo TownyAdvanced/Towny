@@ -84,6 +84,7 @@ import java.util.zip.ZipFile;
  * @author ElgarL
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
+	public static final SimpleDateFormat BACKUP_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	final String rootFolderPath;
 	final String dataFolderPath;
 	final String settingsFolderPath;
@@ -148,8 +149,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			plugin.getLogger().info("***** Make sure you have scheduled a backup in MySQL too!!!");
 		}
 		String backupType = TownySettings.getFlatFileBackupType();
-		long t = System.currentTimeMillis();
-		String newBackupFolder = backupFolderPath + File.separator + new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t) + " - " + t;
+		String newBackupFolder = backupFolderPath + File.separator + BACKUP_DATE_FORMAT.format(System.currentTimeMillis());
 		FileMgmt.checkOrCreateFolders(rootFolderPath, rootFolderPath + File.separator + "backup");
 		switch (backupType.toLowerCase()) {
 		case "folder": {

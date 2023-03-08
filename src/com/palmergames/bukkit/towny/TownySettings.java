@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -35,7 +36,6 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +49,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TownySettings {
@@ -170,25 +171,24 @@ public class TownySettings {
 	/**
 	 * Loads town levels. Level format ignores lines starting with #.
 	 * Each line is considered a level. Each level is loaded as such:
-	 *
+	 * <p>
 	 * numResidents:namePrefix:namePostfix:mayorPrefix:mayorPostfix:
 	 * townBlockLimit
-	 *
+	 * <p>
 	 * townBlockLimit is a required field even if using a calculated ratio.
 	 *
-	 * @throws IOException if unable to load the Town Levels
+	 * @throws TownyException if unable to load the Town Levels
 	 */
 	@SuppressWarnings("unchecked")
-	public static void loadTownLevelConfig() throws IOException {
+	public static void loadTownLevelConfig() throws TownyException {
 
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level town_level here which may get replaced when the config's town_levels are loaded below.
 		newTownLevel(0, "", " Ruins", "Spirit", "", 1, 1.0, 1.0, 0, 0, 1.0, 1.0, 1.0, new HashMap<>());
 		
 		List<Map<?, ?>> levels = config.getMapList("levels.town_level");
-		for (Map<?, ?> genericLevel : levels) {
-			
-			Map<String, Object> level = (Map<String, Object>) genericLevel;
+		for (int i = 0; i < levels.size(); i++) {
+			Map<String, Object> level = (Map<String, Object>) levels.get(i);
 
 			Map<String, Integer> townBlockTypeLimits;
 			if (level.get("townBlockTypeLimits") instanceof List<?> list)
@@ -199,33 +199,30 @@ public class TownySettings {
 			if (!townBlockTypeLimits.isEmpty())
 				areLevelTypeLimitsConfigured = true;
 
+			// Num residents or index used for error messages
+			final String numResidentsIndex = level.containsKey("numResidents") ? "numResidents = " + level.get("numResidents") : "index " + i;
+			final String description = "town levels";
 			try {
-				/*
-				 * We parse everything as if it were a string because of the config-migrator, 
-				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
-				 * Until the migrator is revamped to handle different types of primitives, or,
-				 * the nation/town levels are changed this might be the least painful alternative.
-				 */
 				newTownLevel(
-					Integer.parseInt(level.get("numResidents").toString()),
-					String.valueOf(level.get("namePrefix")),
-					String.valueOf(level.get("namePostfix")),
-					String.valueOf(level.get("mayorPrefix")),
-					String.valueOf(level.get("mayorPostfix")),
-					Integer.parseInt(level.get("townBlockLimit").toString()),
-					Double.parseDouble(level.get("upkeepModifier").toString()),
-					Double.parseDouble(level.get("peacefulCostMultiplier").toString()),
-					Integer.parseInt(level.get("townOutpostLimit").toString()),
-					Integer.parseInt(level.get("townBlockBuyBonusLimit").toString()),
-					Double.parseDouble(level.get("debtCapModifier").toString()),
-					Double.parseDouble(level.get("resourceProductionModifier").toString()),
-					Double.parseDouble(level.get("bankCapModifier").toString()),
+					levelGetAndParse(level, description, numResidentsIndex, "numResidents", null, Integer::parseInt),
+					levelGet(level, description, numResidentsIndex, "namePrefix", ""),
+					levelGet(level, description, numResidentsIndex, "namePostfix", ""),
+					levelGet(level, description, numResidentsIndex, "mayorPrefix", ""),
+					levelGet(level, description, numResidentsIndex, "mayorPostfix", ""),
+					levelGetAndParse(level, description, numResidentsIndex, "townBlockLimit", 0, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "upkeepModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "townOutpostLimit", 0, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "townBlockBuyBonusLimit", 0, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "debtCapModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "resourceProductionModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "bankCapModifier", 1.0, Double::parseDouble),
 					townBlockTypeLimits
 				);
-			} catch (NullPointerException e) {
-				Towny.getPlugin().getLogger().warning("The town_level section of you Towny config.yml is out of date.");
+			} catch (Exception e) {
+				Towny.getPlugin().getLogger().warning("An exception occurred when loading a town level at " + numResidentsIndex + ", this can be caused by having an outdated town_level section.");
 				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
-				throw new IOException("Config.yml town_levels incomplete.");
+				throw new TownyException("An error occurred when loading a town_level at " + numResidentsIndex, e);
 			}
 
 		}
@@ -234,51 +231,72 @@ public class TownySettings {
 	/**
 	 * Loads nation levels. Level format ignores lines starting with #.
 	 * Each line is considered a level. Each level is loaded as such:
-	 *
+	 * <p>
 	 * numResidents:namePrefix:namePostfix:capitalPrefix:capitalPostfix:
 	 * kingPrefix:kingPostfix
 	 *
-	 * @throws IOException if Nation Levels cannot be loaded from config
+	 * @throws TownyException if Nation Levels cannot be loaded from config
 	 */
-
-	public static void loadNationLevelConfig() throws IOException {
+	public static void loadNationLevelConfig() throws TownyException {
 		
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level nation_level here which may get replaced when the config's nation_levels are loaded below.
 		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1.0, 1.0, 1, 0);
 
 		List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
-		for (Map<?, ?> level : levels) {
-
+		for (int i = 0; i < levels.size(); i++) {
+			Map<?, ?> level = levels.get(i);
+			
+			// Num residents or index used for error messages
+			final String numResidentsIndex = level.containsKey("numResidents") ? "numResidents = " + level.get("numResidents") : "index " + i;
+			final String description = "nation levels";
 			try {
-				/*
-				 * We parse everything as if it were a string because of the config-migrator, 
-				 * which will always write any double or integer as a string (ex: debtCaptModifier: '2.0')
-				 * Until the migrator is revamped to handle different types of primitives, or,
-				 * the nation/town levels are changed this might be the least painful alternative.
-				 */
-				newNationLevel( 
-						Integer.parseInt(level.get("numResidents").toString()), 
-						String.valueOf(level.get("namePrefix")),
-						String.valueOf(level.get("namePostfix")),
-						String.valueOf(level.get("capitalPrefix")),
-						String.valueOf(level.get("capitalPostfix")),
-						String.valueOf(level.get("kingPrefix")),
-						String.valueOf(level.get("kingPostfix")),
-						Integer.parseInt(level.get("townBlockLimitBonus").toString()),
-						Double.parseDouble(level.get("upkeepModifier").toString()),
-						Double.parseDouble(level.get("nationTownUpkeepModifier").toString()),
-						Double.parseDouble(level.get("peacefulCostMultiplier").toString()),
-						Double.parseDouble(level.get("bankCapModifier").toString()),
-						Integer.parseInt(level.get("nationZonesSize").toString()),
-						Integer.parseInt(level.get("nationBonusOutpostLimit").toString())
-						);
+				newNationLevel(
+					levelGetAndParse(level, description, numResidentsIndex, "numResidents", null, Integer::parseInt), // Intentionally null to error out if left out
+					levelGet(level, description, numResidentsIndex, "namePrefix", ""),
+					levelGet(level, description, numResidentsIndex, "namePostfix", ""),
+					levelGet(level, description, numResidentsIndex, "capitalPrefix", ""),
+					levelGet(level, description, numResidentsIndex, "capitalPostfix", ""),
+					levelGet(level, description, numResidentsIndex, "kingPrefix", ""),
+					levelGet(level, description, numResidentsIndex, "kingPostfix", ""),
+					levelGetAndParse(level, description, numResidentsIndex, "townBlockLimitBonus", 1, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "upkeepModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "nationTownUpkeepModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "bankCapModifier", 1.0, Double::parseDouble),
+					levelGetAndParse(level, description, numResidentsIndex, "nationZonesSize", 1, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "nationBonusOutpostLimit", 1, Integer::parseInt)
+				);
 			} catch (Exception e) {
-				Towny.getPlugin().getLogger().warning("The nation_level section of your Towny config.yml is out of date.");
+				Towny.getPlugin().getLogger().warning("An exception occurred when a loading nation_level with " + numResidentsIndex + ", this can be caused by having an outdated nation_level section.");
 				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the nation_level section and letting Towny remake it on the next startup.");
-				throw new IOException("Config.yml nation_levels incomplete.");
+				throw new TownyException("An error occurred when loading nation_level at " + numResidentsIndex, e);
 			}
 
+		}
+	}
+
+	/**
+	 * Used for getting values from the various levels and logging helpful warning messages if a key is missing.
+	 */
+	private static String levelGet(Map<?, ?> map, String mapDescribedAs, String indexString, String key, Object defaultValue) {
+		Object value = map.get(key);
+		if (value == null) {
+			value = defaultValue;
+			Towny.getPlugin().getLogger().warning("The '" + key + "' option in the " + mapDescribedAs + " at " + indexString + " does not have a value, falling back to '" + defaultValue + "'.");
+		}
+		
+		return value.toString();
+	}
+	
+	private static <T> T levelGetAndParse(Map<?, ?> map, String mapDescribedAs, String indexString, String key, T defaultValue, Function<String, T> parse) {
+		String value = levelGet(map, mapDescribedAs, indexString, key, defaultValue);
+		
+		try {
+			return parse.apply(value);
+		} catch (NumberFormatException e) {
+			Towny.getPlugin().getLogger().severe("Could not deserialize option '" + key + "' to a number in the " + mapDescribedAs + " at " + indexString + ".");
+			throw e;
 		}
 	}
 

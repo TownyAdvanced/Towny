@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.98.6.11</version>
+    <version>0.98.6.13</version>
 
     <licenses>
         <license>
@@ -179,7 +179,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>24.0.0</version>
+            <version>24.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -234,7 +234,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.11.0</version>
                 <configuration>
                     <release>8</release>
                     <source>${java.version}</source>

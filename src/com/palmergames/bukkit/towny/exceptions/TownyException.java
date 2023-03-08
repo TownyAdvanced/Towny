@@ -18,6 +18,11 @@ public class TownyException extends Exception {
 		this.message = message;
 	}
 	
+	public TownyException(String message, Throwable cause) {
+		super(message, cause);
+		this.message = message;
+	}
+	
 	public TownyException(Translatable message) {
 		super(message.translate());
 		this.message = message;
