@@ -32,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -234,26 +236,28 @@ public final class FileMgmt {
 		return new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
 	}
 	
+	@SuppressWarnings("SimplifyStreamApiCallChains")
 	public static void tar(File destination, File... sources) throws IOException {
 		try {
 			readLock.lock();
 			try (TarArchiveOutputStream archive = new TarArchiveOutputStream(new GzipCompressorOutputStream(new FileOutputStream(destination)))) {
 				archive.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
-				for (File source : sources) {
-					Files.walk(source.toPath()).forEach((path -> {
-						File file = path.toFile();
-
-						if (!file.isDirectory()) {
-							TarArchiveEntry entry_1 = new TarArchiveEntry(file, file.toString());
-							try (FileInputStream fis = new FileInputStream(file)) {
+				for (File sourceFile : sources) {
+					Path source = sourceFile.toPath();
+					try (Stream<Path> files = Files.walk(source)) {
+						for (Path path : files.collect(Collectors.toList())) {
+							if (Files.isDirectory(path))
+								continue;
+							
+							try (InputStream fis = Files.newInputStream(path)) {
+								TarArchiveEntry entry_1 = new TarArchiveEntry(path, source.getParent().relativize(path).toString());
+								
 								archive.putArchiveEntry(entry_1);
 								IOUtils.copy(fis, archive);
 								archive.closeArchiveEntry();
-							} catch (IOException e) {
-								e.printStackTrace();
 							}
 						}
-					}));
+					}
 				}
 			}
 		} finally {
