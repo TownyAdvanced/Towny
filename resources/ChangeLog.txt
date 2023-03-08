@@ -8422,3 +8422,4 @@ v0.92.0.11:
   - Bump annotations from 24.0.0 to 24.0.1.
   - Bump maven-compiler-plugin from 3.10.1 to 3.11.0.
   - Make town and nation level related errors easier to debug, courtesy of Warriorrrr with PR #6524.
+  - Fix potential NPE in TownyBlockListener.
