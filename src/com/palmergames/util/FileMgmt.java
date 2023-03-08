@@ -1,6 +1,7 @@
 package com.palmergames.util;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.db.TownyDatabaseHandler;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -20,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -365,34 +367,44 @@ public final class FileMgmt {
 			writeLock.lock();
 
 			TreeSet<Long> deleted = new TreeSet<>();
-			if (backupsDir.isDirectory()) {
-				File[] children = backupsDir.listFiles();
-				if (children != null) {
-					for (File child : children) {
-						try {
-							String filename = child.getName();
-							if (child.isFile()) {
-								if (filename.contains("."))
-									filename = filename.split("\\.")[0];
-							}
-							String[] tokens = filename.split(" ");
-							String lastToken = tokens[tokens.length - 1];
-							long timeMade = Long.parseLong(lastToken);
-
-							if (timeMade >= 0) {
-								long age = System.currentTimeMillis() - timeMade;
-								if (age >= deleteAfter) {
-									deleteFile(child);
-									deleted.add(age);
-								}
-							}
-						} catch (Exception e) {
-							// Ignore file as it doesn't follow the backup format.
-						}
+			if (!backupsDir.isDirectory())
+				return false;
+			
+			File[] children = backupsDir.listFiles();
+			if (children == null)
+				return true;
+			
+			for (File child : children) {
+				if (child.isDirectory())
+					continue;
+				
+				String fileName = child.getName();
+							
+				long timeMade;
+							
+				try {
+					timeMade = TownyDatabaseHandler.BACKUP_DATE_FORMAT.parse(fileName).getTime();
+				} catch (ParseException pe) {
+					try {
+						// The file name does not match the new date format, attempt legacy format
+						String[] tokens = fileName.split("\\.")[0].split(" ");
+						String lastToken = tokens[tokens.length - 1];
+						timeMade = Long.parseLong(lastToken);
+					} catch (Exception e) {
+						// Ignore file as it doesn't follow the backup format.
+						Towny.getPlugin().getLogger().warning("File '" + fileName + "' in the backup folder does not match any format recognized by Towny, it will not be automatically deleted.");
+						continue;
 					}
 				}
-			} else
-				return false;
+
+				if (timeMade >= 0) {
+					long age = System.currentTimeMillis() - timeMade;
+					if (age >= deleteAfter) {
+						deleteFile(child);
+						deleted.add(age);
+					}
+				}
+			}
 
 			if (deleted.size() > 0) {
 				Towny.getPlugin().getLogger().info(String.format("Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
