@@ -3523,5 +3523,9 @@ public class TownySettings {
 	public static boolean isDeletingOldResidentsRemovingTownOnly() {
 		return getBoolean(ConfigNodes.RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_TOWN_ONLY);
 	}
+	
+	public static boolean disableMySQLBackupWarning() {
+		return DatabaseConfig.getBoolean(DatabaseConfig.DATABASE_SQL_DISABLE_BACKUP_WARNING);
+	}
 }
 

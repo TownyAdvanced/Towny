@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException
 import com.palmergames.util.FileMgmt;
 
 import java.nio.file.Path;
+import java.util.Locale;
 
 public enum DatabaseConfig {
 	DATABASE(
@@ -27,6 +28,12 @@ public enum DatabaseConfig {
 	DATABASE_USERNAME("database.sql.username", "root"),
 	DATABASE_PASSWORD("database.sql.password", ""),
 	DATABASE_FLAGS("database.sql.flags", "?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8"),
+	DATABASE_SQL_DISABLE_BACKUP_WARNING("database.sql.disable_backup_warning", 
+			"false",
+			"",
+			"# Disables the warning when a backup is made about not all Towny data being backed up when mysql is in use.",
+			"# Set this to true when you fully understand what not having flatfile backups means, if your mysql database were to become unusable and you have not configured your own backup solution."),
+
 
 	DATABASE_POOLING_HEADER(
 		"database.sql.pooling",
@@ -41,7 +48,7 @@ public enum DatabaseConfig {
 
 	private final String Root;
 	private final String Default;
-	private String[] comments;
+	private final String[] comments;
 
 	DatabaseConfig(String root, String def, String... comments) {
 
@@ -147,4 +154,7 @@ public enum DatabaseConfig {
 		}
 	}
 
+	public static boolean getBoolean(DatabaseConfig node) {
+		return Boolean.parseBoolean(databaseConfig.getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault()));
+	}
 }
