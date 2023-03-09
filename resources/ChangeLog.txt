@@ -8434,3 +8434,6 @@ v0.92.0.11:
     - Disables the warning when a backup is made about not all Towny data being backed up when mysql is in use.
     - Set this to true when you fully understand what not having flatfile backups means, if your mysql database were to become unusable and you have not configured your own backup solution.
   - Fix potential NPE in MapHud.
+  - Add /res toggle townborder.
+    - A command that turns on townborder mode.
+    - This new mode highlights the borders of the town you're stood in, using the affiliation colours.
