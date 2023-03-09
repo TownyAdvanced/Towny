@@ -147,7 +147,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			plugin.getLogger().info("***** Only Snapshots & Regen files in plugins/Towny/data/ will be backed up!");
 			plugin.getLogger().info("***** This does not include your residents/towns/nations.");
 			plugin.getLogger().info("***** Make sure you have scheduled a backup in MySQL too!!!");
-			plugin.getLogger().info("***** If you already have backups or accept the risk, this message can be disabled in the database config");
+			plugin.getLogger().info("***** If you already have backups or accept the risk, this message can be disabled in the database config.");
 		}
 		
 		String backupType = TownySettings.getFlatFileBackupType();

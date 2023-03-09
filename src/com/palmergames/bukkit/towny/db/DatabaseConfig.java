@@ -31,7 +31,9 @@ public enum DatabaseConfig {
 	DATABASE_SQL_DISABLE_BACKUP_WARNING("database.sql.disable_backup_warning", 
 			"false",
 			"",
-			"# Disables the warning when a backup is made about not all Towny data being backed up when mysql is in use."),
+			"# Disables the warning when a backup is made about not all Towny data being backed up when mysql is in use.",
+			"# Set this to true when you fully understand what not having flatfile backups means, if your mysql database were to become unusable and you have not configured your own backup solution."),
+
 
 	DATABASE_POOLING_HEADER(
 		"database.sql.pooling",
