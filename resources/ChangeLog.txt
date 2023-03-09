@@ -8428,3 +8428,8 @@ v0.92.0.11:
 0.98.6.14:
   - Make sure we aren't paying negative amounts to a Nation bank account during tax time.
     - Closes #6540.
+  - Add an option to disable the mysql backup warning, courtesy of Warriorrrr with PR #6542.
+  - New Database Config Option: database.sql.disable_backup_warning
+    - Default: false
+    - Disables the warning when a backup is made about not all Towny data being backed up when mysql is in use.
+    - Set this to true when you fully understand what not having flatfile backups means, if your mysql database were to become unusable and you have not configured your own backup solution.
