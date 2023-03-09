@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -78,6 +79,7 @@ public class MapHUD {
 		objective.setDisplayName(ChatColor.GOLD + "Towny Map " + ChatColor.WHITE + "(" + wc.getX() + ", " + wc.getZ() + ")");
 
 		TownyWorld world = wc.getTownyWorld();
+		World bukkitWorld = player.getWorld();
 		if (world == null || !world.isUsingTowny()) {
 			HUDManager.toggleOff(player);
 			return;
@@ -95,7 +97,7 @@ public class MapHUD {
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				map[y][x] = Colors.White;
 				try {
-					WorldCoord currentWC = new WorldCoord(world.getBukkitWorld(), new Coord(tby, tbx));
+					WorldCoord currentWC = new WorldCoord(bukkitWorld, new Coord(tby, tbx));
 					if (currentWC.isWilderness())
 						throw new TownyException();
 					TownBlock townblock = currentWC.getTownBlockOrNull();
