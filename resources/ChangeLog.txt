@@ -8443,3 +8443,4 @@ v0.92.0.11:
   - Modernize plot command.
   - API: Add TownyAPI#testPlotOwnerOrThrow
     - Check if a plot is owned by someone.
+  - Fix nation percentage taxes not calculating correctly.

@@ -176,7 +176,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		
 		if (nation.getTaxes() > 0) {
 
-			double taxAmount = nation.getTaxes();
+			double taxAmount;
 			List<String> localNewlyDelinquentTowns = new ArrayList<>();
 			List<String> localTownsDestroyed = new ArrayList<>();
 			List<Town> towns = new ArrayList<>(nation.getTowns());
@@ -194,7 +194,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				if (universe.hasTown(town.getName())) {
 					if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
 						continue;
-					
+					taxAmount = nation.getTaxes();
+
 					if (nation.isTaxPercentage()) {
 						taxAmount = town.getAccount().getHoldingBalance() * taxAmount / 100;
 						taxAmount = Math.min(taxAmount, nation.getMaxPercentTaxAmount());
