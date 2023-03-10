@@ -8440,3 +8440,6 @@ v0.92.0.11:
 0.98.6.15:
   - Fix upkeep warning message doing sync economy calls, courtesy of Warriorrrr with PR #6547.
   - Fix unclaim refunds doing sync economy calls, courtesy of Warriorrrr with PR #6548.
+  - Modernize plot command.
+  - API: Add TownyAPI#testPlotOwnerOrThrow
+    - Check if a plot is owned by someone.
