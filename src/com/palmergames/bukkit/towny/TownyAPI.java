@@ -4,16 +4,19 @@ import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -927,5 +930,40 @@ public class TownyAPI {
 		Resident resident = getResident(player);
 		
 		return resident == null ? null : resident.getNationOrNull();
+	}
+	
+	/**
+	 * Test the townBlock to ensure it is owned by the given Resident, or the
+	 * Resident is considered a Mayor or Town Assistant or a TownyAdmin.
+	 * 
+	 * @param resident  Resident Object to test as "owner" of the TownBlock.
+	 * @param townBlock TownBlock Object in which to test ownership.
+	 * @throws TownyException Exception thrown to trigger failures in the methods
+	 *                        using this method.
+	 */
+	public void testPlotOwnerOrThrow(@NotNull Resident resident, @NotNull TownBlock townBlock) throws TownyException {
+		final boolean isAdmin = resident.isAdmin();
+		final boolean isMayor = resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+
+		if (townBlock.hasResident()) {
+			final boolean isMayorInTheirOwnTown = isMayor && resident.hasTown() && resident.getTownOrNull() == townBlock.getTownOrNull();
+			// Resident is either an admin, or the mayor (or equivalent) of the townblock, or the townblock's actual owner.
+			if (isAdmin || isMayorInTheirOwnTown || townBlock.hasResident(resident))
+				return;
+			
+			// Not the plot owner or the towns mayor or an admin.
+			throw new TownyException(Translatable.of("msg_area_not_own"));
+		} else {
+			final boolean asMayorInUnowned = resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYORINUNOWNED.getNode());
+			final boolean isSameTown = townBlock.getTownOrNull().hasResident(resident);
+
+			if (isSameTown && !isMayor && !asMayorInUnowned)
+				throw new TownyException(Translatable.of("msg_not_mayor_ass"));
+
+			if (!isSameTown && !isAdmin)
+				throw new TownyException(Translatable.of("msg_err_not_part_town"));
+
+			// Nothing to complain about, this resident is the owner of the townblock's town or an admin.
+		}
 	}
 }
