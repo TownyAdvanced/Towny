@@ -3791,7 +3791,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.isEconomyAsync())
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, withdrawAndStart);
 			else 
-				Bukkit.getScheduler().runTask(plugin, withdrawAndStart);
+				withdrawAndStart.run();
 		} else {
 			// Economy isn't enabled, start the claiming process immediately.
 			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, outpost, true, false));

@@ -257,6 +257,11 @@ public class TownClaim implements Runnable {
 	}
 
 	private void refundForUnclaim(double unclaimRefund, int numUnclaimed) {
+		if (TownySettings.isEconomyAsync() && Bukkit.getServer().isPrimaryThread()) {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> refundForUnclaim(unclaimRefund, numUnclaimed));
+			return;
+		}
+		
 		if (unclaimRefund > 0 && town.getAccount().deposit(unclaimRefund, "Town Unclaim Refund"))
 			TownyMessaging.sendMsg(player, Translatable.of("refund_message", TownyEconomyHandler.getFormattedBalance(unclaimRefund), numUnclaimed));
 
