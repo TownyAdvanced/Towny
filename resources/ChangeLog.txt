@@ -8437,3 +8437,6 @@ v0.92.0.11:
   - Add /res toggle townborder.
     - A command that turns on townborder mode.
     - This new mode highlights the borders of the town you're stood in, using the affiliation colours.
+0.98.6.15:
+  - Fix upkeep warning message doing sync economy calls, courtesy of Warriorrrr with PR #6547.
+  - Fix unclaim refunds doing sync economy calls, courtesy of Warriorrrr with PR #6548.
