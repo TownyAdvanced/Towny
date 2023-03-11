@@ -8449,3 +8449,4 @@ v0.92.0.11:
     - Closes #6551.
   - Fix NPE with /plot fs.
   - Fix potential NPE with /towny map.
+  - Make TownyWorld#getBukkitWorld more resilient.

@@ -97,8 +97,14 @@ public class TownyWorld extends TownyObject {
 		this.uuid = uuid;
 	}
 
+	@Nullable
 	public World getBukkitWorld() {
-		return this.uuid != null ? Bukkit.getWorld(this.uuid) : Bukkit.getWorld(getName());
+		World world = this.uuid != null ? Bukkit.getWorld(this.uuid) : Bukkit.getWorld(getName());
+		
+		if (world == null)
+			world = Bukkit.getWorld(getName());
+		
+		return world;
 	}
 	
 	public HashMap<String, Town> getTowns() {
