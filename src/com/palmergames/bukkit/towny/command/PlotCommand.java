@@ -493,7 +493,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// Check that it's not: /plot forsale within rect 3
 		if (areaSelectPivot != 1) {
 			// command was 'plot fs $'
-			plotPrice = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+			plotPrice = MoneyUtil.getMoneyAboveZeroOrThrow(split[0]);
 		}
 
 		// Set each WorldCoord in selection for sale.
