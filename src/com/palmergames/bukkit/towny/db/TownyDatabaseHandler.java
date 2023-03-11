@@ -84,7 +84,7 @@ import java.util.zip.ZipFile;
  * @author ElgarL
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
-	public static final SimpleDateFormat BACKUP_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	public static final SimpleDateFormat BACKUP_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ssZ");
 	final String rootFolderPath;
 	final String dataFolderPath;
 	final String settingsFolderPath;
