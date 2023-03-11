@@ -8444,3 +8444,6 @@ v0.92.0.11:
   - API: Add TownyAPI#testPlotOwnerOrThrow
     - Check if a plot is owned by someone.
   - Fix nation percentage taxes not calculating correctly.
+0.98.6.16:
+  - Fix backups for windows regression in 0.98.6.13, courtesy of Warriorrrr with PR #6552.
+    - Closes #6551.
