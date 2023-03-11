@@ -8448,3 +8448,4 @@ v0.92.0.11:
   - Fix backups for windows regression in 0.98.6.13, courtesy of Warriorrrr with PR #6552.
     - Closes #6551.
   - Fix NPE with /plot fs.
+  - Fix potential NPE with /towny map.

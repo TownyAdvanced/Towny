@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.utils.TownyComponents;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
@@ -91,7 +92,8 @@ public class TownyAsciiMap {
 		}
 
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
-		if (world == null) { 
+		World bukkitWorld = player.getWorld();
+		if (world == null || bukkitWorld == null) { 
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_configured"));
 			return;
 		}
@@ -113,7 +115,7 @@ public class TownyAsciiMap {
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				try {
 					townyMap[y][x] = Component.empty().color(NamedTextColor.WHITE);
-					WorldCoord wc = new WorldCoord(world.getBukkitWorld(), new Coord(tby, tbx));
+					WorldCoord wc = new WorldCoord(bukkitWorld, new Coord(tby, tbx));
 					if (wc.isWilderness())
 						throw new TownyException();
 					TownBlock townblock = wc.getTownBlockOrNull();
