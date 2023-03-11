@@ -8450,3 +8450,5 @@ v0.92.0.11:
   - Fix NPE with /plot fs.
   - Fix potential NPE with /towny map.
   - Make TownyWorld#getBukkitWorld more resilient.
+0.98.6.17:
+  - Fix for using invalid plot commands in the wilderness, plot fs.

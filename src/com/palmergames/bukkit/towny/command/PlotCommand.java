@@ -284,7 +284,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
 
 		// Stops all commands except perm, claim and info being run in the wilderness.
-		if (townBlock == null && plotCommandAllowedInWilderness(split[0]))
+		if (townBlock == null && !plotCommandAllowedInWilderness(split[0]))
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
 
 		if (townBlock != null && townBlock.getTownOrNull().isRuined())
@@ -294,7 +294,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "claim" -> parsePlotClaim(player, StringMgmt.remFirstArg(split), resident, townBlock);
 		case "clear" -> parsePlotClear(resident, townBlock);
 		case "evict" -> parsePlotEvict(resident, townBlock);
-		case "fs", "forsale" -> parsePlotForSale(player, split, resident, townBlock);
+		case "fs", "forsale" -> parsePlotForSale(player, StringMgmt.remFirstArg(split), resident, townBlock);
 		case "group" -> parsePlotGroup(StringMgmt.remFirstArg(split), resident, townBlock, player);
 		case "info" -> sendPlotInfo(player, StringMgmt.remFirstArg(split));
 		case "jailcell" -> parsePlotJailCell(player, resident, townBlock, StringMgmt.remFirstArg(split));
@@ -491,7 +491,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Check that it's not: /plot forsale within rect 3
-		if (areaSelectPivot != 1) {
+		if (areaSelectPivot != 0) {
 			// command was 'plot fs $'
 			plotPrice = MoneyUtil.getMoneyAboveZeroOrThrow(split[0]);
 		}
