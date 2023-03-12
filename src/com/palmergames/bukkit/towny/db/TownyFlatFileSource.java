@@ -20,6 +20,7 @@ import com.palmergames.util.FileMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -209,7 +210,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			File worldFile = new File(getFileOfTypeWithUUID(TownyDBFileType.WORLD, world.getUID()));
 			if (!worldFile.exists())
 				try {
-					FileMgmt.mapToFile(ObjectSaveUtil.getWorldMap(townyWorld), getFileOfTypeWithUUID(TownyDBFileType.WORLD, townyWorld.getUUID()));
+					FileMgmt.mapToFile(ObjectSaveUtil.getWorldMap(townyWorld), Paths.get(getFileOfTypeWithUUID(TownyDBFileType.WORLD, townyWorld.getUUID())));
 				} catch (Exception e) {
 					logger.warn("Could not save new world file for TownyWorld: " + townyWorld.getUUID());
 					e.printStackTrace();
