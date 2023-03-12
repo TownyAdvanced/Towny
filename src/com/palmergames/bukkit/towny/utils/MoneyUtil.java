@@ -81,7 +81,7 @@ public class MoneyUtil {
 			} else {
 				// Deposit into town from a nation member.
 				resident.getAccount().payTo(amount, town, "Town Deposit from Nation member");
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, town + " " + Translatable.of("town_sing")));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, Translatable.literal(town.getName() + " ").append(Translatable.of("town_sing"))));
 			}
 			
 			BukkitTools.fireEvent(new TownTransactionEvent(town, transaction));
