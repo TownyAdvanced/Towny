@@ -136,10 +136,8 @@ public class TownRuinUtil {
 			if (!town.isRuined())
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
-			//Validate if player can pay
+			//Get cost of reclaiming.
 			double townReclaimCost = TownySettings.getEcoPriceReclaimTown();
-			if (TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
-				throw new TownyException(Translatable.of("msg_insuf_funds"));
 
 			//Validate if player can remove at this time
 			if (TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
