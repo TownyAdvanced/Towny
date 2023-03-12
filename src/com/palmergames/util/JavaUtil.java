@@ -47,12 +47,11 @@ public class JavaUtil {
 	
 	@NotNull
 	public static InputStream readResource(String resource) throws IOException {
-		try (InputStream is = JavaUtil.class.getResourceAsStream(resource)) {
-			if (is == null)
-				throw new FileNotFoundException("Could not find '" + resource + "' inside the jar as a resource.");
+		InputStream is = JavaUtil.class.getResourceAsStream(resource);
+		if (is == null)
+			throw new FileNotFoundException("Could not find '" + resource + "' inside the jar as a resource.");
 
-			return is;
-		}
+		return is;
 	}
 	
 	public static void saveResource(String resource, Path destination, CopyOption... options) throws IOException {
