@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -153,6 +155,35 @@ public class TownyVehicleListener implements Listener {
 				if (TownySettings.isSwitchMaterial(vehicle, event.getVehicle().getLocation()))
 					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getVehicle().getLocation(), vehicle));
 			}
-		}	
+		} 
+
+		/*
+		 * Dealing with a Boat being entered by a protected mob type.
+		 */
+		if (event.getVehicle() instanceof Boat boat && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), event.getEntered())) {
+
+			// Dealing with an empty boat.
+			if (boat.isEmpty()) {
+				// No driver, don't allow someone pushing a boat into a entity to steal the entity.
+				event.setCancelled(true);
+				System.out.println("Cancelled empty boat entrance.");
+				return;
+			}
+			// Dealing with a boat with one passenger.
+			Entity rider = boat.getPassengers().stream().findFirst().get();
+			System.out.println("rider = " + rider.getName());
+			// If it is driven by a player check for destroy permissions.
+			if (rider instanceof Player player) {
+				System.out.println("Cancelled player boat entrance.");
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), Material.GRASS_BLOCK));
+				System.out.println("Cancelled player boat entrance.");
+				return;
+			}
+			
+			System.out.println("Cancelled entity boat entrance.");
+			// It is another non-player in the boat, probably being pushed around by a player.
+			event.setCancelled(true);
+			return;
+		}
 	}
 }
