@@ -8455,3 +8455,6 @@ v0.92.0.11:
 0.98.6.18:
   - Add message showing what is required to be paid when someone cannot pay after a confirmation.
     - Closes #6560.
+  - Fix some Translatable.toString issues, courtesy of Warriorrrr with PR #6111.
+  - Seperate changelog reading into its own class, courtesy of Warriorrrr with PR #6558.
+  - Fix invite objects holding a reference to command senders, courtesy of Warriorrrr with PR #6559.
