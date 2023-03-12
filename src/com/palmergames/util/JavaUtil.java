@@ -1,10 +1,15 @@
 package com.palmergames.util;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JavaUtil {
 
@@ -30,18 +35,22 @@ public class JavaUtil {
 	}
 
 	public static List<String> readTextFromJar(String path) throws IOException {
-
-		BufferedReader fin = new BufferedReader(new InputStreamReader(JavaUtil.class.getResourceAsStream(path)));
-		String line;
-		List<String> out = new ArrayList<>();
-		try {
-			while ((line = fin.readLine()) != null)
-				out.add(line);
-		} catch (IOException e) {
-			throw new IOException(e.getCause());
-		} finally {
-			fin.close();
+		try (InputStream is = JavaUtil.class.getResourceAsStream(path)) {
+			if (is == null)
+				throw new FileNotFoundException("Could not find '" + path + "' inside the jar as a resource.");
+			
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+				return reader.lines().collect(Collectors.toList());
+			}
 		}
-		return out;
+	}
+	
+	public static void saveResource(String resource, Path destination, CopyOption... options) throws IOException {
+		try (InputStream is = JavaUtil.class.getResourceAsStream(resource)) {
+			if (is == null)
+				throw new FileNotFoundException("Could not find '" + resource + "' inside the jar as a resource.");
+
+			Files.copy(is, destination, options);
+		}
 	}
 }

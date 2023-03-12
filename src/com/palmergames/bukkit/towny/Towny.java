@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.listeners.TownyPlayerListener;
 import com.palmergames.bukkit.towny.listeners.TownyServerListener;
 import com.palmergames.bukkit.towny.listeners.TownyVehicleListener;
 import com.palmergames.bukkit.towny.listeners.TownyWorldListener;
+import com.palmergames.bukkit.towny.object.ChangelogResult;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
@@ -45,6 +46,7 @@ import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
+import com.palmergames.bukkit.towny.utils.ChangelogReader;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -72,6 +74,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -508,47 +511,39 @@ public class Towny extends JavaPlugin {
 	private void printChangelogToConsole() {
 
 		try {
-			List<String> changeLog = JavaUtil.readTextFromJar("/ChangeLog.txt");
-			int startingIndex = 0;
-			int linesDisplayed = 0;
+			final Path changelogPath = getDataFolder().toPath().resolve("ChangeLog.txt");
+			JavaUtil.saveResource("/ChangeLog.txt", changelogPath, StandardCopyOption.REPLACE_EXISTING);
+
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
+			ChangelogReader reader = ChangelogReader.reader(lastVersion, changelogPath, 100);
+			ChangelogResult result = reader.read();
+			
+			if (!result.successful()) {
+				plugin.getLogger().warning("Could not find starting index for the changelog.");
+				return;
+			}
+			
 			plugin.getLogger().info("------------------------------------");
 			plugin.getLogger().info("ChangeLog since v" + lastVersion + ":");
 			
-			// Go backwards through the changelog to get to the last run version.
-			for (int i = changeLog.size() - 1; i >= 0; i--) {
-				if (changeLog.get(i).startsWith(lastVersion)) {
-					// Go forwards through the changelog to find the next version after the last run version.
-					for (int j = i + 1; j < changeLog.size(); j++) {
-						if (!changeLog.get(j).trim().startsWith("-")) {
-							startingIndex = j;
-							break;
-						}
-					}
-					break;
-				}
+			for (String line : result.lines()) {
+				if (line.trim().replaceAll("\t", "").isEmpty())
+					continue;
+				
+				// We sadly don't have a logger capable of logging components, so we have to resort to sending it to the console logger for it to be coloured.
+				Bukkit.getConsoleSender().sendMessage(line.trim().startsWith("-") ? line : Colors.Yellow + line);
 			}
 			
-			if (startingIndex != 0) {
-				for (int i = startingIndex; i < changeLog.size(); i++) {
-					if (linesDisplayed > 100) {
-						plugin.getLogger().info(Colors.Yellow + "<snip>");
-						plugin.getLogger().info(Colors.Yellow + "Changelog continues for another " + (changeLog.size() - (startingIndex + 99)) + " lines.");
-						plugin.getLogger().info(Colors.Yellow + "To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + ++startingIndex);
-						break;
-					} 
-					String line = changeLog.get(i);
-					if (line.replaceAll(" ", "").replaceAll("\t", "").length() > 0) {
-						Bukkit.getLogger().info(line.trim().startsWith("-") ? line : Colors.Yellow + line);
-						++linesDisplayed;
-					}
-				}
-			} else {
-				plugin.getLogger().warning("Could not find starting index for the changelog.");	
+			if (result.limitReached()) {
+				plugin.getLogger().info("<snip>");
+				plugin.getLogger().info("Changelog continues for another " + (result.totalSize() - (result.nextVersionIndex() + 99)) + " lines.");
+				plugin.getLogger().info("To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + (result.nextVersionIndex() + 1));
+
 			}
+			
 			plugin.getLogger().info("------------------------------------");
 		} catch (IOException e) {
-			plugin.getLogger().warning("Could not read ChangeLog.txt");
+			plugin.getLogger().log(Level.WARNING, "Could not read ChangeLog.txt", e);
 		}
 	}
 
