@@ -62,7 +62,8 @@ abstract class AbstractInvite<S extends InviteSender, R extends InviteReceiver> 
 		if (this == o) return true;
 		if (!(o instanceof AbstractInvite<?, ?> that)) return false;
 
-		return Objects.equals(getDirectSender(), that.getDirectSender()) &&
+		return Objects.equals(getSenderName(), that.getSenderName()) &&
+			Objects.equals(getSenderUUID(), that.getSenderUUID()) &&
 			Objects.equals(getReceiver(), that.getReceiver()) &&
 			Objects.equals(getSender(), that.getSender());
 	}
