@@ -292,7 +292,7 @@ msg_plot_set_type: '&bТип участка теперь %s'
 msg_cache_block_error: '&cВы не были зарегистрированы в Towny. Пожалуйста, перезайдите.'
 msg_cache_block_error_wild: '&cЗапрещено %s в Диких Землях.'
 msg_cache_block_error_plot: '&cВладелец не разрешил %s %s здесь.'
-msg_cache_block_error_locked: '&cЭтот участок заблокирован!'
+msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cГражданам нельзя %s здесь.'
 msg_cache_block_error_town_allies: '&cСоюзникам нельзя %s.'
 msg_cache_block_error_town_outsider: '&cЧужакам нельзя %s.'
@@ -1655,3 +1655,5 @@ msg_err_townyobject_x_has_no_town: "%s не состоит ни в одном г
 msg_err_townyobject_x_has_no_nation: "%s не состоит ни в одной нации."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "О дате привата этого участка нет данных."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
