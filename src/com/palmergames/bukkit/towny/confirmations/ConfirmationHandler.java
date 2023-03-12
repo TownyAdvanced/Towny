@@ -145,6 +145,7 @@ public class ConfirmationHandler {
 				Account payee = transaction.getPayee();
 				if (!payee.canPayFromHoldings(cost)) {
 					TownyMessaging.sendErrorMsg(sender, transaction.getInsufficientFundsMessage());
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_you_need_x_to_pay", cost));
 					return;
 				}
 				payee.withdraw(cost, transaction.getLoggedMessage());

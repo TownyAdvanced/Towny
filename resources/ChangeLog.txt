@@ -8452,3 +8452,6 @@ v0.92.0.11:
   - Make TownyWorld#getBukkitWorld more resilient.
 0.98.6.17:
   - Fix for using invalid plot commands in the wilderness, plot fs.
+0.98.6.18:
+  - Add message showing what is required to be paid when someone cannot pay after a confirmation.
+    - Closes #6560.

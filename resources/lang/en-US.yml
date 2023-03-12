@@ -1888,3 +1888,6 @@ msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
 msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 # Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
