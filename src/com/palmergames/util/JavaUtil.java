@@ -1,10 +1,13 @@
 package com.palmergames.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,21 +38,25 @@ public class JavaUtil {
 	}
 
 	public static List<String> readTextFromJar(String path) throws IOException {
-		try (InputStream is = JavaUtil.class.getResourceAsStream(path)) {
-			if (is == null)
-				throw new FileNotFoundException("Could not find '" + path + "' inside the jar as a resource.");
-			
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+		try (InputStream is = readResource(path)) {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 				return reader.lines().collect(Collectors.toList());
 			}
 		}
 	}
 	
-	public static void saveResource(String resource, Path destination, CopyOption... options) throws IOException {
+	@NotNull
+	public static InputStream readResource(String resource) throws IOException {
 		try (InputStream is = JavaUtil.class.getResourceAsStream(resource)) {
 			if (is == null)
 				throw new FileNotFoundException("Could not find '" + resource + "' inside the jar as a resource.");
 
+			return is;
+		}
+	}
+	
+	public static void saveResource(String resource, Path destination, CopyOption... options) throws IOException {
+		try (InputStream is = readResource(resource)) {
 			Files.copy(is, destination, options);
 		}
 	}

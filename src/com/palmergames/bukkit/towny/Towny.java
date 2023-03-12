@@ -71,10 +71,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -510,12 +510,9 @@ public class Towny extends JavaPlugin {
 
 	private void printChangelogToConsole() {
 
-		try {
-			final Path changelogPath = getDataFolder().toPath().resolve("ChangeLog.txt");
-			JavaUtil.saveResource("/ChangeLog.txt", changelogPath, StandardCopyOption.REPLACE_EXISTING);
-
+		try (InputStream is = JavaUtil.readResource("/ChangeLog.txt")) {
 			String lastVersion = Version.fromString(TownySettings.getLastRunVersion()).toString(); // Parse out any trailing text after the *.*.*.* version, ie "-for-1.12.2".
-			ChangelogReader reader = ChangelogReader.reader(lastVersion, changelogPath, 100);
+			ChangelogReader reader = ChangelogReader.reader(lastVersion, is, 100);
 			ChangelogResult result = reader.read();
 			
 			if (!result.successful()) {
@@ -538,7 +535,6 @@ public class Towny extends JavaPlugin {
 				plugin.getLogger().info("<snip>");
 				plugin.getLogger().info("Changelog continues for another " + (result.totalSize() - (result.nextVersionIndex() + 99)) + " lines.");
 				plugin.getLogger().info("To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + (result.nextVersionIndex() + 1));
-
 			}
 			
 			plugin.getLogger().info("------------------------------------");

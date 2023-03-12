@@ -5,21 +5,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ChangelogReader {
 	private final String lastVersion;
-	private final Path changelogPath;
+	private final InputStream changelogStream;
 	private final int limit;
 	
-	private ChangelogReader(String lastVersion, Path changelogPath, int limit) {
+	private ChangelogReader(String lastVersion, InputStream inputStream, int limit) {
 		this.lastVersion = lastVersion;
-		this.changelogPath = changelogPath;
+		this.changelogStream = inputStream;
 		this.limit = limit;
 	}
 
@@ -34,7 +34,7 @@ public class ChangelogReader {
 		int linesRead = 0;
 		int nextVersionIndex = 0;
 		
-		try (BufferedReader reader = Files.newBufferedReader(this.changelogPath, StandardCharsets.UTF_8)) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.changelogStream, StandardCharsets.UTF_8))) {
 			String line;
 			boolean lastVersionFound = false;
 			boolean nextVersionFound = false;
@@ -51,7 +51,7 @@ public class ChangelogReader {
 					continue;
 				}
 				
-				if (nextVersionFound && out.size() < limit)
+				if (nextVersionFound && (limit < 0 || out.size() < limit))
 					out.add(line);
 			}
 			
@@ -59,14 +59,14 @@ public class ChangelogReader {
 				return new ChangelogResult(Collections.emptyList(), false, false, -1, linesRead);
 		}
 		
-		return new ChangelogResult(out, true, linesRead >= limit, nextVersionIndex, linesRead);
+		return new ChangelogResult(out, true, limit >= 0 && linesRead >= limit, nextVersionIndex, linesRead);
 	}
 	
-	public static ChangelogReader reader(@NotNull String lastVersion, @NotNull Path changelogPath) {
-		return reader(lastVersion, changelogPath, -1);
+	public static ChangelogReader reader(@NotNull String lastVersion, @NotNull InputStream changelogStream) {
+		return reader(lastVersion, changelogStream, -1);
 	}
 	
-	public static ChangelogReader reader(@NotNull String lastVersion, @NotNull Path changelogPath, int limit) {
-		return new ChangelogReader(lastVersion, changelogPath, limit);
+	public static ChangelogReader reader(@NotNull String lastVersion, @NotNull InputStream changelogStream, int limit) {
+		return new ChangelogReader(lastVersion, changelogStream, limit);
 	}
 }
