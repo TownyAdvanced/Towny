@@ -292,7 +292,7 @@ msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
 msg_cache_block_error_plot: '&c地主不允许 %s  %s .'
-msg_cache_block_error_locked: '&c这块土地已被封锁!'
+msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&c居民不能在这里 %s.'
 msg_cache_block_error_town_allies: '&c盟友不能 %s.'
 msg_cache_block_error_town_outsider: '&cO外来者不能 %s.'
@@ -1655,3 +1655,5 @@ msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
 msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."

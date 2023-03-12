@@ -292,7 +292,7 @@ msg_plot_set_type: '&bTyp pozemku byl nastaven na %s'
 msg_cache_block_error: '&cTowny má problém zaregistrovat tvůj účet. Zkus se odhlásit a znovu přihlásit.'
 msg_cache_block_error_wild: '&cNení povoleno %s ve volné přírodě.'
 msg_cache_block_error_plot: '&cVlastník zde nepovoluje hráčům typu %s činnost %s.'
-msg_cache_block_error_locked: '&cTento pozemek je uzamčen!'
+msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cObyvatelé zde nemají povoleni na %s.'
 msg_cache_block_error_town_allies: '&cSpojenci nemají povolení na %s.'
 msg_cache_block_error_town_outsider: '&cCizinci nemají povoleno %s.'
@@ -1655,3 +1655,5 @@ msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
 msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
