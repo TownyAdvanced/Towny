@@ -292,7 +292,7 @@ msg_plot_set_type: '&bTip plota postavljen na %s'
 msg_cache_block_error: '&cNiste se registrovali Towny-jem. Probajte ponovno prijavljivanje.'
 msg_cache_block_error_wild: '&cNemate dozvolu za %s u divljini.'
 msg_cache_block_error_plot: '&cVlasnik ne dopušta da %s %s ovde.'
-msg_cache_block_error_locked: '&cOvaj plot je zaključan!'
+msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cStanovnici ne smeju da %s ovde.'
 msg_cache_block_error_town_allies: '&cSaveznici ne smeju da %s.'
 msg_cache_block_error_town_outsider: '&cNestanovnici ne smeju da %s.'
@@ -1655,3 +1655,5 @@ msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
 msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
