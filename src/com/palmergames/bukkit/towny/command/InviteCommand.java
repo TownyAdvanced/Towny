@@ -287,7 +287,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Translatable object = null;
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
-			String name = invite.getDirectSender().getName();
+			String name = invite.getSenderName();
 			
 			// If it's from the sender, do it differently
 			String output = null;
