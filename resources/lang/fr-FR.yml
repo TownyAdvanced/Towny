@@ -292,7 +292,7 @@ msg_plot_set_type: '&bType de la parcelle fixé à %s'
 msg_cache_block_error: '&cVous n''avez pas été enregistré avec Towny. Essayez de vous reconnecter.'
 msg_cache_block_error_wild: '&cPas autorisé à %s dans la nature.'
 msg_cache_block_error_plot: '&cLe propriétaire ne permet pas aux %s de %s ici.'
-msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
+msg_cache_block_error_locked: "Cette parcelle est verrouillée ! Vous ne pourrez pas l'utiliser tant que Towny n'aura pas terminé de faire des sauvegardes pour la fonctionnalité de revert-on-claim."
 msg_cache_block_error_town_resident: '&cLes résidents ne sont pas autorisés à %s ici.'
 msg_cache_block_error_town_allies: '&cLes alliés ne sont pas autorisés à %s.'
 msg_cache_block_error_town_outsider: '&cLes étrangers ne sont pas autorisés à %s.'
@@ -1656,4 +1656,4 @@ msg_err_townyobject_x_has_no_nation: "%s n'appartient à aucune nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "Cette parcelle n'a aucune donnée sur le moment où elle a été réclamé."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "Vous avez besoin de %s pour payer."
