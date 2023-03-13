@@ -427,6 +427,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				townBlock.removeTrustedResident(resident);
 				townBlock.save();
 			}
+
+			if (townBlock.hasResident(resident) && townBlock.removeResident()) {
+				resident.removeTownBlock(townBlock);
+				townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotPrice());
+
+				// Set the plot permissions to mirror the towns.
+				townBlock.setType(townBlock.getType());
+				townBlock.save();
+			}
 		}
 
 		// Remove resident from residents' friendslists.
