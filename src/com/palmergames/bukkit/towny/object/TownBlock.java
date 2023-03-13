@@ -159,7 +159,7 @@ public class TownBlock extends TownyObject {
 			}
 		}
 		
-		boolean successful;
+		boolean successful = false;
 		boolean unclaim = false;
 		if (hasResident()) {
 			this.resident.removeTownBlock(this);
@@ -167,12 +167,12 @@ public class TownBlock extends TownyObject {
 			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
 		}
 		this.resident = resident;
-		try {
-			resident.addTownBlock(this);
-			successful = true;
-			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
-		} catch (AlreadyRegisteredException | NullPointerException e) {
-			successful = false;
+		if (resident != null && !resident.hasTownBlock(this)) {
+			try {
+				resident.addTownBlock(this);
+				successful = true;
+				getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
+			} catch (AlreadyRegisteredException ignored) {}
 		}
 		
 		if (successful && callEvent)
@@ -181,7 +181,6 @@ public class TownBlock extends TownyObject {
 		if (unclaim && callEvent)
 			BukkitTools.fireEvent(new PlotUnclaimEvent(this.resident, resident, this));
 		
-		this.resident = resident;
 		permissionOverrides.clear();
 		
 		return true;
