@@ -292,7 +292,7 @@ msg_plot_set_type: '&bGrundtype sat til %s'
 msg_cache_block_error: '&cDu er ikke blevet registreret af Towny. Prøv at logge ind igen.'
 msg_cache_block_error_wild: '&cDet er ikke tilladt at %s i ødemarken.'
 msg_cache_block_error_plot: '&cEjeren tillader ikke at %s til %s her.'
-msg_cache_block_error_locked: '&cDenne grund er låst!'
+msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cIndbyggere er ikke tilladte at %s her.'
 msg_cache_block_error_town_allies: '&cAllierede er ikke tilladte at %s.'
 msg_cache_block_error_town_outsider: '&cUdenforstående er ikke tilladte at %s.'
@@ -1655,3 +1655,5 @@ msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
 msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."

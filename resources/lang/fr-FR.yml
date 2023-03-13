@@ -292,7 +292,7 @@ msg_plot_set_type: '&bType de la parcelle fixé à %s'
 msg_cache_block_error: '&cVous n''avez pas été enregistré avec Towny. Essayez de vous reconnecter.'
 msg_cache_block_error_wild: '&cPas autorisé à %s dans la nature.'
 msg_cache_block_error_plot: '&cLe propriétaire ne permet pas aux %s de %s ici.'
-msg_cache_block_error_locked: '&cCette parcelle est bloquée !'
+msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cLes résidents ne sont pas autorisés à %s ici.'
 msg_cache_block_error_town_allies: '&cLes alliés ne sont pas autorisés à %s.'
 msg_cache_block_error_town_outsider: '&cLes étrangers ne sont pas autorisés à %s.'
@@ -1636,22 +1636,24 @@ confirmation_did_you_want_to_unclaim_all: 'Êtes-vous sûr de vouloir désannexe
 msg_you_have_unclaimed_everything_but_your_homeblock: "Vous avez tout désannexer à part le homeblock. Pour désannexer le homeblock vous devez d'abord placer un nouveau homeblock avec '/t set homeblock'."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Êtes-vous sûr de vouloir nommer %s dirigeant de la nation ? Cette action est irréversible !"
 msg_warn_town_already_capital: "<red>La ville de %s est déjà la capitale de la nation."
-msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+msg_min_adjacent_blocks: 'Vous devez avoir au moins %s blocs de ville adjacents. Il n''y a que %s.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
-msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+msg_plot_claim_consider_evict_instead: ', peut-être cherchez-vous plutôt /plot evict ?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "You are not known to Towny."
+msg_you_are_unknown: "Vous n'êtes pas connu de Towny."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
-msg_townyobject_unknown: "%s is not known to Towny."
+msg_townyobject_unknown: "%s n'est pas connu de Towny."
 #Shown when a resident is unknown to Towny.
-msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_resident_unknown: "%s n'est pas un résident connu."
 #Shown when a town is unknown to Towny.
-msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_town_unknown: "%s n'est pas une ville connue."
 #Shown when a nation is unknown to Towny.
-msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_nation_unknown: "%s n'est pas une nation connue."
 #Shown when a resident doesn't belong to a town.
-msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_town: "%s n'appartient à aucune ville."
 #Shown when a town doesn't belong to a nation.
-msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+msg_err_townyobject_x_has_no_nation: "%s n'appartient à aucune nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
-msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+msg_err_townblock_has_no_claimedat_data: "Cette parcelle n'a aucune donnée sur le moment où elle a été réclamé."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
