@@ -8464,3 +8464,9 @@ v0.92.0.11:
     - Closes #6562.
   - Fix NPC prefixed usernames not being blocked, courtesy of Warriorrrr with PR #6568.
     - Previously, NPC names that weren't already taken by Towny NPC residents could be used to log in.
+  - Add option to stop protected mobs from entering empty boats in Towns.
+    - Closes #6554.
+  - New Config Option: protection.mob_types_protected_from_boat_theft
+    - Default: false
+    - When set to true, the above mob_types will be protected when they are in a town, from being able to enter empty boats.
+    - This protects the mobs from being stolen using boats.
