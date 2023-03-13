@@ -2124,10 +2124,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PURGE.getNode(), Translatable.of("msg_err_admin_only"));
 
-		boolean townless = split.length == 2 && split[1].equalsIgnoreCase("townless");
-		Town town = !townless && split.length == 2 ? TownyUniverse.getInstance().getTown(split[1]) : null;
-		if (!townless && town == null)
-			throw new TownyException(Translatable.of("msg_err_not_registered_1", split[1]));
+		final boolean townless = split.length == 2 && split[1].equalsIgnoreCase("townless");
+		final Town town = !townless && split.length == 2 ? getTownOrThrow(split[1]) : null;
 
 		try {
 			int days = Integer.parseInt(split[0]);
