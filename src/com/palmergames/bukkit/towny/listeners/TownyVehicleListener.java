@@ -158,32 +158,17 @@ public class TownyVehicleListener implements Listener {
 		} 
 
 		/*
-		 * Dealing with a Boat being entered by a protected mob type.
+		 * Dealing with an empty Boat being entered by a protected mob type, inside of a Town.
 		 */
-		if (event.getVehicle() instanceof Boat boat && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), event.getEntered())) {
-
-			// Dealing with an empty boat.
-			if (boat.isEmpty()) {
-				// No driver, don't allow someone pushing a boat into a entity to steal the entity.
-				event.setCancelled(true);
-				System.out.println("Cancelled empty boat entrance.");
-				return;
-			}
-			// Dealing with a boat with one passenger.
-			Entity rider = boat.getPassengers().stream().findFirst().get();
-			System.out.println("rider = " + rider.getName());
-			// If it is driven by a player check for destroy permissions.
-			if (rider instanceof Player player) {
-				System.out.println("Cancelled player boat entrance.");
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getVehicle().getLocation(), Material.GRASS_BLOCK));
-				System.out.println("Cancelled player boat entrance.");
-				return;
-			}
-			
-			System.out.println("Cancelled entity boat entrance.");
-			// It is another non-player in the boat, probably being pushed around by a player.
+		if (TownySettings.isTownyPreventingProtectedMobsEnteringBoatsInTown() 
+			&& event.getVehicle() instanceof Boat boat && isProtectedMobEnteringEmptyBoatInTown(boat, event.getEntered())) {
 			event.setCancelled(true);
 			return;
 		}
+	}
+
+	private boolean isProtectedMobEnteringEmptyBoatInTown(Boat boat, Entity entity) {
+		return boat.isEmpty() && !TownyAPI.getInstance().isWilderness(entity.getLocation())
+				&& EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), entity);
 	}
 }
