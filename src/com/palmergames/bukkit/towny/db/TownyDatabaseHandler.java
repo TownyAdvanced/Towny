@@ -429,6 +429,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		}
 
+		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
+			townBlock.setResident(null, false);
+			resident.removeTownBlock(townBlock);
+			// Embassy plots are not put back up for sale, because the town would have no control over who buys them/griefs them.
+			if (townBlock.getType() != TownBlockType.EMBASSY)
+				townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotPrice());
+
+			// Set the plot permissions to mirror the towns.
+			townBlock.setType(townBlock.getType());
+			townBlock.save();
+		}
+
 		// Remove resident from residents' friendslists.
 		List<Resident> toSave = new ArrayList<>();
 		for (Resident toCheck : universe.getResidents()) {		
