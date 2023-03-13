@@ -8460,3 +8460,5 @@ v0.92.0.11:
   - Fix invite objects holding a reference to command senders, courtesy of Warriorrrr with PR #6559.
 0.98.6.19:
   - Fix possible ArrayIndexOutOfBoundsException in /ta purge.
+  - Fix embassy plots in other towns not having a deleted resident removed as owner.
+    - Closes #6562.
