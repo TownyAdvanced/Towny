@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event;
 
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -48,5 +49,12 @@ public class TownClaimEvent extends Event  {
 	 */
 	public Resident getResident() {
 		return resident;
+	}
+
+	/**
+	 * @return the Town which claimed this TownBlock.
+	 */
+	public Town getTown() {
+		return resident.getTownOrNull();
 	}
 }

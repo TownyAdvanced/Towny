@@ -879,6 +879,8 @@ public class Town extends Government implements TownBlockOwner {
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
 				removeOutpostSpawn(townBlock.getCoord());
+				townBlock.setOutpost(false);
+				townBlock.save();
 			}
 			if (townBlock.isJail()) {
 				removeJail(townBlock.getJail());

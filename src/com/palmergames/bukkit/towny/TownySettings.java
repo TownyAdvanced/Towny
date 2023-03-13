@@ -1472,6 +1472,14 @@ public class TownySettings {
 		return getInt(ConfigNodes.TOWN_MAX_CLAIM_RADIUS_VALUE);
 	}
 
+	public static boolean isOverClaimingAllowingStolenLand() {
+		return getBoolean(ConfigNodes.TOWN_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND);
+	}
+
+	public static boolean isOverClaimingPreventedByHomeBlockRadius() {
+		return getBoolean(ConfigNodes.TOWN_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS);
+	}
+
 	public static boolean isSellingBonusBlocks(Town town) {
 
 		return getMaxPurchasedBlocks(town) != 0;
@@ -1644,6 +1652,10 @@ public class TownySettings {
 	public static double getClaimRefundPrice() {
 		
 		return getDouble(ConfigNodes.ECO_PRICE_CLAIM_TOWNBLOCK_REFUND);
+	}
+
+	public static double getTakeoverClaimPrice() {
+		return getDouble(ConfigNodes.ECO_PRICE_TAKEOVERCLAIM_PRICE);
 	}
 
 	public static boolean getUnclaimedZoneSwitchRights() {

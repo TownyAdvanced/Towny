@@ -15,6 +15,8 @@ import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
+import com.palmergames.bukkit.towny.event.TownClaimEvent;
+import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
@@ -28,6 +30,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
@@ -275,5 +278,59 @@ public class TownyCustomListener implements Listener {
 				break;
 			}
 		}
+	}
+
+	/**
+	 * Used to warn towns when they're approaching their claim limit, when the
+	 * takeoverclaim feature is enabled
+	 * 
+	 * @param event TownClaimEvent.
+	 */
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onTownClaim(TownClaimEvent event) {
+		if (!TownySettings.isOverClaimingAllowingStolenLand())
+			return;
+		if (event.getTown().availableTownBlocks() <= TownySettings.getTownBlockRatio())
+			TownyMessaging.sendMsg(event.getResident(), Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_you_are_almost_out_of_townblocks")));
+	}
+
+	/**
+	 * Used to warn towns when they've lost a resident, so they know they're at risk
+	 * of having claims stolen in the takeoverclaim feature.
+	 * 
+	 * @param event TownRemoveResidentEvent.
+	 */
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onTownLosesResident(TownRemoveResidentEvent event) {
+		if (!TownySettings.isOverClaimingAllowingStolenLand())
+			return;
+		if (event.getTown().getTownBlocks().size() > event.getTown().getMaxTownBlocks())
+			TownyMessaging.sendPrefixedTownMessage(event.getTown(), Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
+	}
+
+	/**
+	 * Used to inform players they can /t takeoverclaim a plot when they enter towns that are overclaimed.
+	 * 
+	 * @param event ChunkNotificationEvent thrown by Towny to construct the chunk notifications.
+	 */
+	@EventHandler
+	public void onChunkNotification(ChunkNotificationEvent event) {
+		if (!TownySettings.isOverClaimingAllowingStolenLand() || event.getToCoord().isWilderness() || event.getFromCoord().isWilderness())
+			return;
+
+		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer());
+		if (resident == null || !resident.hasTown())
+			return;
+
+		Town town = resident.getTownOrNull();
+		if  (town.availableTownBlocks() < 1 || !event.getFromCoord().getTownOrNull().equals(town))
+			return;
+
+		if (!event.getToCoord().canBeStolen())
+			return;
+
+		String message = event.getMessage() + Translatable.of("chunk_notification_takeover_available").forLocale(event.getPlayer());
+		event.setMessage(message);
+
 	}
 }

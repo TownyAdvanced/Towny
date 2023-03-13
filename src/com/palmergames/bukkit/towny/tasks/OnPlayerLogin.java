@@ -19,6 +19,8 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
+
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
@@ -160,6 +162,10 @@ public class OnPlayerLogin implements Runnable {
 					} else
 						warningMessage(resident, town, nation);
 				}
+				
+				// Send a message warning of being overclaimed while the takeoverclaims feature is enabled.
+				if (TownySettings.isOverClaimingAllowingStolenLand() && town.getTownBlocks().size() > town.getMaxTownBlocks())
+					TownyMessaging.sendMsg(resident, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
 				
 				// Send a message warning of ruined status and time until deletion.
 				if (town.isRuined())

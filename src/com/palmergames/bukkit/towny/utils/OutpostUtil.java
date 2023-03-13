@@ -43,7 +43,7 @@ public class OutpostUtil {
 			throw new TownyException(Translatable.of("msg_max_outposts_own", maxOutposts));
 
 		// Outposts can have a minimum required distance from homeblocks. 
-		if (world.getMinDistanceFromOtherTowns(key) < TownySettings.getMinDistanceFromTownHomeblocks())
+		if (world.getMinDistanceFromOtherTownsHomeBlocks(key) < TownySettings.getMinDistanceFromTownHomeblocks())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
 		int maxDistance = TownySettings.getMaxDistanceForOutpostsFromTown();

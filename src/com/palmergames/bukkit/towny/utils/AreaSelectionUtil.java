@@ -340,7 +340,6 @@ public class AreaSelectionUtil {
 	 * Returns a list containing only townblocks that can be claimed.
 	 * Filters out townblocks too close to other town homeblocks as set in the config.
 	 * 
-
 	 * @param selection List&lt;WorldCoord&gt; of coordinates
 	 * @param town Town to check distance from
 	 * @return List of {@link WorldCoord}
@@ -349,14 +348,25 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
-			if (worldCoord.getTownyWorld().getMinDistanceFromOtherTowns(worldCoord, town) >= TownySettings.getMinDistanceFromTownHomeblocks()) {
+			if (!isTooCloseToHomeBlock(worldCoord, town)) {
 				out.add(worldCoord);
 			} else {
 				TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town's homeblock." );
 			}
 		return out;
 	}
-	
+
+	/**
+	 * Is the WorldCoord too close to another town's HomeBlock.
+	 * 
+	 * @param wc WorldCoord to check distance from.
+	 * @param town Town whos homeblock we don't have to account for.
+	 * @return true if the WorldCoord is too close to a homeblock.
+	 */
+	public static boolean isTooCloseToHomeBlock(WorldCoord wc, Town town) {
+		return wc.getTownyWorld().getMinDistanceFromOtherTownsHomeBlocks(wc, town) < TownySettings.getMinDistanceFromTownHomeblocks();
+	}
+
 	/**
 	 * Returns a list containing only wilderness townblocks.
 	 * 

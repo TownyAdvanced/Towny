@@ -372,6 +372,7 @@ permissions:
             towny.command.town.reslist: true
             towny.command.town.say: true
             towny.command.town.set.*: true
+            towny.command.town.takeoverclaim: true
             towny.command.town.toggle.*: true
             towny.command.town.withdraw: true
             towny.command.town.unclaim.*: true
