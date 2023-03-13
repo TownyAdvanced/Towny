@@ -430,6 +430,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		for (TownBlock townBlock : new ArrayList<>(resident.getTownBlocks())) {
+			townBlock.removeResident();
 			resident.removeTownBlock(townBlock);
 			// Embassy plots are not put back up for sale, because the town would have no control over who buys them/griefs them.
 			if (townBlock.getType() != TownBlockType.EMBASSY)
