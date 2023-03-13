@@ -3,12 +3,11 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.bukkit.NamespacedKey;
@@ -31,13 +30,10 @@ public class TownyLoginListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLogin(AsyncPlayerPreLoginEvent event) {
 
-		String logInName = event.getName();
+		final String logInName = event.getName();
 		boolean disallowed = isServerAccount(logInName) || isGovernmentAccount(logInName);
 
-		if (!disallowed && logInName.startsWith(TownySettings.getNPCPrefix())) {
-			Resident npcRes = TownyUniverse.getInstance().getResident(event.getUniqueId());
-			disallowed = npcRes != null && npcRes.isMayor();
-		}
+		disallowed |= logInName.toLowerCase(Locale.ROOT).startsWith(TownySettings.getNPCPrefix().toLowerCase(Locale.ROOT));
 
 		if (!disallowed)
 			return;
