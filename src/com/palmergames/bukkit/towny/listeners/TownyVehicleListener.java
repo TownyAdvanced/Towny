@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -153,6 +155,20 @@ public class TownyVehicleListener implements Listener {
 				if (TownySettings.isSwitchMaterial(vehicle, event.getVehicle().getLocation()))
 					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getVehicle().getLocation(), vehicle));
 			}
-		}	
+		} 
+
+		/*
+		 * Dealing with an empty Boat being entered by a protected mob type, inside of a Town.
+		 */
+		if (TownySettings.isTownyPreventingProtectedMobsEnteringBoatsInTown() 
+			&& event.getVehicle() instanceof Boat boat && isProtectedMobEnteringEmptyBoatInTown(boat, event.getEntered())) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	private boolean isProtectedMobEnteringEmptyBoatInTown(Boat boat, Entity entity) {
+		return boat.isEmpty() && !TownyAPI.getInstance().isWilderness(entity.getLocation())
+				&& EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), entity);
 	}
 }

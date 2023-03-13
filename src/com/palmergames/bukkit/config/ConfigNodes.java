@@ -1617,6 +1617,12 @@ public enum ConfigNodes {
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
 			"# Protect living entities within a town's boundaries from being killed by players or mobs."),
+	PROT_MOB_TYPES_BOAT_THEFT(
+			"protection.mob_types_protected_from_boat_theft",
+			"false",
+			"",
+			"# When set to true, the above mob_types will be protected when they are in a town, from being able to enter empty boats.",
+			"# This protects the mobs from being stolen using boats."),
 	PROT_MOB_TYPES_MOB_VS_MOB_BYPASS(
 			"protection.are_mob_types_protected_against_mobs",
 			"true",

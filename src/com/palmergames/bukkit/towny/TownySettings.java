@@ -3527,5 +3527,10 @@ public class TownySettings {
 	public static boolean disableMySQLBackupWarning() {
 		return DatabaseConfig.getBoolean(DatabaseConfig.DATABASE_SQL_DISABLE_BACKUP_WARNING);
 	}
+
+	public static boolean isTownyPreventingProtectedMobsEnteringBoatsInTown() {
+		return getBoolean(ConfigNodes.PROT_MOB_TYPES_BOAT_THEFT);
+	}
+
 }
 
