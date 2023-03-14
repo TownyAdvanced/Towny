@@ -1024,15 +1024,15 @@ msg_comptype_bankrupt: 'Bankerot status'
 msg_ruined: '&c(Ruineret)'
 msg_bankrupt: '&c(Bankerot)'
 #Added in 0.98
-msg_del_town2: '&bThe town of %s has been deleted!'
-msg_ruin_town: '&bThe town of %s fell into ruin!'
+msg_del_town2: '&bByen %s er blevet slettet!'
+msg_ruin_town: '&bByen %s faldt i ruin!'
 gui_title_select_plot_type: 'Select PlotType'
-gui_title_no_restrictions: 'No restrictions for this plottype.'
-gui_title_towny_allowedblocks: '%s AllowedBlocks List'
+gui_title_no_restrictions: 'Ingen begrænsninger for denne plottype.'
+gui_title_towny_allowedblocks: '%s Liste over tilladte blokeringer'
 gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
-gui_title_towny_itemuse: 'Towny ItemUse List'
-gui_title_towny_switch: 'Towny Switch List'
-gui_title_towny_plotclear: 'Towny Plot Clear Delete List'
+gui_title_towny_itemuse: 'Bygens brugsliste'
+gui_title_towny_switch: 'Byskifteliste'
+gui_title_towny_plotclear: 'Towny Plot Ryd sletteliste'
 #Added in 0.99 - FlatFile L10N
 #NOTICE
 #While these strings can be translated, we caution you to keep them in English.
@@ -1084,152 +1084,152 @@ flatfile_err_town_homeblock_not_exist: '[Warning] %s does not have a HomeBlock.'
 flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
 flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
 flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
-msg_ta_removed_all_titles_and_surnames_removed: 'All residents have had their titles and surnames removed.'
-msg_err_homeblock_already_set_here: 'This location is already your town''s homeblock.'
+msg_ta_removed_all_titles_and_surnames_removed: 'Alle beboere har fået fjernet deres titler og efternavne.'
+msg_err_homeblock_already_set_here: 'Denne placering er allerede din by''s homeblock.'
 #Added in 0.100
-msg_town_merge_err_mayor_only: '&cMerging can only be done by a mayor.'
-msg_town_merge_err_not_close: '&cThe town of %s is too far away from your town. Their homeblock has to be within %d townblocks of your homeblock.'
-msg_town_merge_request_sent: '&bMerge request sent to the mayor of %s.'
-msg_town_merge_request_received: '&bThe mayor of %s, %s, has requested to merge with your town. This will transfer all townblocks, residents and town bank money to %s.'
-msg_town_merge_request_denied: '&cMerge request denied.'
-msg_town_merge_other_offline: '&cThe mayor of %s, %s, is currently offline. Merge failed.'
-msg_town_merge_err_too_many_residents: '&cMerge failed: New resident amount exceeds the limit (%d)'
-msg_town_merge_err_too_many_townblocks: '&cMerge failed: New town size exceeds the limit (%d)'
-msg_town_merge_err_too_many_outposts: '&cMerge failed: New outpost amount exceeds the limit (%d)'
-msg_town_merge_err_not_enough_money: '&cMerge failed: Not enough money. (%s/%s)'
-msg_town_merge_err_too_many_purchased_townblocks: '&cMerge failed: Too many purchased townblocks (%d)'
-msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
-msg_town_merge_debt_warning: '&cWarning: %s is currently in debt, you will have to pay their debt if accepted.'
-msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s'
-msg_town_merge_failed: '&cMerge failed.'
-msg_town_merge_cancelled: '&cMerge canceled.'
-msg_town_merge_success: '&bThe town of %s, owned by %s, has successfully merged into the town of %s.'
+msg_town_merge_err_mayor_only: '&cSammenlægning kan kun udføres af en borgmester.'
+msg_town_merge_err_not_close: '&cByen %s er for langt væk fra din by. Deres hjemmeblok skal være inden for %d byblokke fra din hjemmeblok.'
+msg_town_merge_request_sent: '&bFletningsanmodning sendt til borgmesteren i %s.'
+msg_town_merge_request_received: '&b Borgmesteren i %s, %s, har anmodet om at fusionere med din by. Dette vil overføre alle byblokke, beboere og bybankpenge til %s.'
+msg_town_merge_request_denied: '&cFlet anmodning afvist.'
+msg_town_merge_other_offline: '&cBorgmesteren i %s, %s, er i øjeblikket offline. Sammenfletning mislykkedes.'
+msg_town_merge_err_too_many_residents: '&cBysammenlægning mislykkedes: Nyt beboerbeløb overskrider grænsen (%d)'
+msg_town_merge_err_too_many_townblocks: '&cBysammenlægningmislykkedes: Ny bystørrelse overskrider grænsen (%d)'
+msg_town_merge_err_too_many_outposts: '&cBysammenlægning mislykkedes: Nyt udpostbeløb overskrider grænsen (%d)'
+msg_town_merge_err_not_enough_money: '&cBysammenlægning mislykkedes: Ikke nok penge. (%s/%s)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cBysammenlægning mislykkedes: For mange købte byblokke (%d)'
+msg_town_merge_warning: '&cAdvarsel: Hvis det accepteres, vil sammenlægning med %s koste %s.'
+msg_town_merge_debt_warning: '&cAdvarsel: %s er i øjeblikket i gæld, du bliver nødt til at betale deres gæld, hvis den accepteres.'
+msg_town_merge_cost_breakdown: '&bOmkostningsopdeling: Basispris: %s, byblokpris: %s, konkursomkostning: %s'
+msg_town_merge_failed: '&cBysammenlægning mislykkedes.'
+msg_town_merge_cancelled: '&cBysammenlægning annulleret.'
+msg_town_merge_success: '&bByen %s, ejet af %s, er med succes fusioneret til byen %s.'
 #Reasons for withdrawing/depositing for the bankhistory book.
-msg_town_merge_cost_withdraw: 'Town Merge Costs'
-msg_town_merge_transaction_reason: 'Town Merge'
-towny_prices_town_merge: '&e[Merging] &2Base Cost: &a%s &8| &2Per Plot: &a%s'
+msg_town_merge_cost_withdraw: 'Bysammenlægningspris'
+msg_town_merge_transaction_reason: 'Bysammenlægning'
+towny_prices_town_merge: '&e[Sammenlægning] &2Start Pris: &a%s &8| &2Pr. grund: &a%s'
 #Added in 0.101
-msg_err_nation_not_allied_with: '&cYour nation isn''t allied with %s.'
-msg_err_nation_not_enemies_with: '&cYour nation isn''t enemies with %s.'
-msg_err_nation_already_enemies_with: '&cYour nation is already enemies with %s.'
-msg_err_ally_already_requested: '&cYou have already requested to ally with %s.'
-msg_err_nation_not_allied_with_2: '&c%s isn''t allied with %s.'
-msg_err_nation_not_enemies_with_2: '&c%s isn''t enemies with %s.'
-msg_err_nation_already_allied_with_2: '&c%s is already allied with %s.'
-msg_err_nation_already_enemies_with_2: '&c%s is already enemies with %s.'
-msg_ta_allies_enemies_updated: '&bAllies/Enemies updated for %s.'
+msg_err_nation_not_allied_with: '&cDin nation er ikke allieret med %s.'
+msg_err_nation_not_enemies_with: '&cDin nation er ikke fjender med %s.'
+msg_err_nation_already_enemies_with: '&cDin nation er allerede fjender med %s.'
+msg_err_ally_already_requested: '&cDu har allerede anmodet om at alliere dig med %s.'
+msg_err_nation_not_allied_with_2: '&c%s er ikke allieret med %s.'
+msg_err_nation_not_enemies_with_2: '&c%s er ikke fjender med %s.'
+msg_err_nation_already_allied_with_2: '&c%s er allerede allieret med %s.'
+msg_err_nation_already_enemies_with_2: '&c%s er allerede fjender med %s.'
+msg_ta_allies_enemies_updated: '&bAllies/Enemies opdateret for %s.'
 #Added in 0.102
-towny_map_detailed_information: '&2Click to see detailed plot information.'
-msg_err_nation_capital_too_many_residents: '&cThe current capital city has too many residents to be replaced by %s.'
-msg_deleting_nation_will_result_in_losing_residents: '&cWarning: Deleting your nation will mean your town is over the population limit of %d, resulting in the removal of %d residents.'
+towny_map_detailed_information: '&2Klik for at se detaljerede grundoplysninger.'
+msg_err_nation_capital_too_many_residents: '&cDen nuværende hovedstad har for mange indbyggere til at blive erstattet af %s.'
+msg_deleting_nation_will_result_in_losing_residents: '&cAdvarsel: Sletning af din nation vil betyde, at din by er over befolkningsgrænsen på %d, hvilket resulterer i fjernelse af %d indbyggere.'
 #Added in 0.103
-msg_command_blocked_inside_towns: '&cYou cannot use that command inside towns.'
-msg_command_limited: 'You can only use that command inside your own plots.'
+msg_command_blocked_inside_towns: '&cDu kan ikke bruge den kommando inde i byer.'
+msg_command_limited: 'Du kan kun bruge den kommando på din egen grund.'
 #Added in 0.104
 #Don't add a space to the end please
-msg_plot_perm_claimed_at: 'Claimed at:'
+msg_plot_perm_claimed_at: 'Gjorde krav på:'
 #Added in 0.105
-msg_wilderness_use_x_in_all_worlds: 'Wilderness use turned %s in all worlds.'
-msg_regenerations_use_x_in_all_worlds: 'Regenerations turned %s in all worlds.'
+msg_wilderness_use_x_in_all_worlds: 'Vildmarksbrug blev %s i alle verdener.'
+msg_regenerations_use_x_in_all_worlds: 'Regenerationer blev %s i alle verdener.'
 #Added in 0.106
 msg_command_outsider_blocked: 'You cannot run that command because you don''t live in %s.'
 #Added in 0.107
-msg_jailed_for_x_hours: ' for %s hours.'
-msg_err_this_jail_has_no_cells: 'This jail has no cells.'
-msg_err_no_cell_found_at_this_location: 'No jail cell found at this location.'
-msg_jail_cell_set: 'Jail cell set.'
-msg_jail_cell_removed: 'Jail cell removed.'
-msg_err_resident_is_already_jailed: '%s is already jailed'
-msg_err_the_town_does_not_have_that_many_jails: 'The town does not have that many jails.'
-msg_err_that_jail_plot_does_not_have_that_many_cells: 'That jail plot does not have that many cells.'
-msg_primary_jail_set_for_town: 'Your town''s primary jail has been set.'
-msg_x_has_been_freed_from_x: '%s has been freed from jail %s'
-msg_you_have_been_jailed: 'You have been jailed.'
-msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Run to the wilderness or wait for a jailbreak.'
-msg_err_player_is_not_jailed: 'That player is not jailed.'
-msg_you_have_paid_bail: 'You have paid bail.'
-msg_you_have_been_freed_via_jailbreak: 'There''s been a jailbreak, you are free!'
-msg_you_have_served_your_sentence_and_are_free: 'You have served your jail sentence and are free.'
-msg_x_has_served_their_sentence_and_is_free: '%s has served their jail sentence and is free.'
-msg_you've_been_jailed_for_x_hours: 'You''ve been jailed for %s hours.'
-msg_you_are_being_sent_to_jail: 'You are being sent to jail.'
-msg_err_you_cannot_remove_the_last_cell: 'You cannot remove the last jail cell in this jail, until another cell is added'
-msg_do_not_log_out_while_waiting_to_be_teleported: 'Do not log out before being teleported to jail, it would be fatal.'
-jail_plu: 'Jails'
-jail_sing: 'Jail'
-msg_resident_has_not_played_long_enough_to_be_jailed: '%s hasn''t played long enough to be jailed, wait another %s'
+msg_jailed_for_x_hours: ' i %s timer.'
+msg_err_this_jail_has_no_cells: 'Dette fængsel har ingen celler.'
+msg_err_no_cell_found_at_this_location: 'Ingen fængselscelle fundet på denne placering.'
+msg_jail_cell_set: 'Fængselscellesæt.'
+msg_jail_cell_removed: 'Fængselscelle fjernet.'
+msg_err_resident_is_already_jailed: '%s er allerede fængslet'
+msg_err_the_town_does_not_have_that_many_jails: 'Byen har ikke så mange fængsler.'
+msg_err_that_jail_plot_does_not_have_that_many_cells: 'Denne fængselsgrund har ikke så mange celler.'
+msg_primary_jail_set_for_town: 'Din bys primære fængsel er blevet indstillet.'
+msg_x_has_been_freed_from_x: '%s er blevet befriet fra fængslet %s'
+msg_you_have_been_jailed: 'Du er blevet fængslet.'
+msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Løb til ørkenen eller vent på et jailbreak.'
+msg_err_player_is_not_jailed: 'Den spiller er ikke fængslet.'
+msg_you_have_paid_bail: 'Du har betalt kaution.'
+msg_you_have_been_freed_via_jailbreak: 'Der'' har været et jailbreak, du er fri!'
+msg_you_have_served_your_sentence_and_are_free: 'Du har afsonet din fængselsdom og er fri.'
+msg_x_has_served_their_sentence_and_is_free: '%s har afsonet deres fængselsdom og er fri.'
+msg_you've_been_jailed_for_x_hours: 'Du'' er blevet fængslet i %s timer.'
+msg_you_are_being_sent_to_jail: 'Du bliver sendt i fængsel.'
+msg_err_you_cannot_remove_the_last_cell: 'Du kan ikke fjerne den sidste fængselscelle i dette fængsel, før en anden celle er tilføjet'
+msg_do_not_log_out_while_waiting_to_be_teleported: 'Log ikke ud før du bliver teleporteret til fængsel, det ville være fatalt.'
+jail_plu: 'Fængsler'
+jail_sing: 'Fængsel'
+msg_resident_has_not_played_long_enough_to_be_jailed: '%s har ikke spillet længe nok til at blive fængslet, vent %s'
 #Added in 0.108
-msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
-msg_town_already_peaceful: '&Town is already peaceful.'
-msg_town_already_not_peaceful: '&Town is already not peaceful.'
-msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town.'
-msg_town_paid_for_neutral_status: '&bYour town paid %s to retain your peaceful status.'
-msg_nation_paid_for_neutral_status: '&bYour nation paid %s to retain your peaceful status.'
-your_town_has_been_invited_to_join_nation: 'Your town has been invited to join the nation: %s'
+msg_town_not_peaceful: '&bTown havde ikke råd til sin fredelige tilstand.'
+msg_town_already_peaceful: '&Byen er allerede fredelig.'
+msg_town_already_not_peaceful: '&Byen er allerede ikke fredelig.'
+msg_town_cant_peaceful: '&bTown havde ikke råd til at blive en fredelig by.'
+msg_town_paid_for_neutral_status: '&bDin by betalte %s for at bevare din fredelige status.'
+msg_nation_paid_for_neutral_status: '&bDin nation betalte %s for at bevare din fredelige status.'
+your_town_has_been_invited_to_join_nation: 'Din by er blevet inviteret til at slutte sig til nationen: %s'
 #Added in 0.109
-msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
-msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
-msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
-msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
-msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
-msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
+msg_err_no_one_to_purge: '&bDer er ingen inaktive medlemmer at rense.'
+msg_purging_will_remove_the_following_residents: '&bBekræft venligst, at du vil rense følgende beboere: %s'
+msg_purge_complete_x_removed: '&bPurge gennemført, %s beboere fjernet.'
+msg_err_days_must_be_greater_than_0: 'Dage skal være større end nul.'
+msg_err_outlawed_players_no_teleport: '&4Du er forbudt i den by, du er i øjeblikket og kan ikke teleportere!'
+msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Du kan ikke bruge den kommando, mens du er i en by, hvor du er forbudt.'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
-msg_safe_mode_base: '[Error] Towny is locked in Safe Mode due to an error! '
-msg_safe_mode_player: 'Tell an admin to check the server''s console.'
-msg_safe_mode_admin: 'Check the server''s console for more information.'
-msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'You can only claim outposts in your homeblock''s world.'
-msg_err_not_close_enough_to_your_town_nearest_plot: 'Unable to claim outpost, you are %s townblocks from your nearest claim. Max allowed distance: %s townblocks.'
-msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'You have moved your homeblock too recently! Wait another %s.'
-msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'You cannot move your homeblock by this many townblocks, limit is %s, this space is %s townblocks away.'
-msg_err_usingtowny_disabled: 'This world is exempt of all Towny interactions. Use /townyworld toggle usingtowny first.'
+msg_safe_mode: "[Fejl] Låst i sikker tilstand!"
+msg_safe_mode_base: '[Fejl] Towny er låst i fejlsikret tilstand på grund af en fejl! '
+msg_safe_mode_player: 'Bed en administrator om at tjekke serverens konsol.'
+msg_safe_mode_admin: 'Tjek serverens konsol for mere information.'
+msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Du kan kun gøre krav på udposter i din homeblock''s verden.'
+msg_err_not_close_enough_to_your_town_nearest_plot: 'Kan ikke gøre krav på udpost, du er %s byblokke fra dit nærmeste krav. Maks. tilladt afstand: %s byblokke.'
+msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Du har flyttet din homeblock for nylig! Vent endnu en %s.'
+msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Du kan ikke flytte din boligblok med så mange byblokke, grænsen er %s, denne plads er %s byblokke væk.'
+msg_err_usingtowny_disabled: 'Denne verden er fritaget for alle Towny-interaktioner. Brug /townyworld toggle usingtowny først.'
 #Added in 0.111
-msg_plot_group_already_exists_did_you_want_to_transfer: 'This townblock is already a part of the %s plotgroup. Are you certain you want to transfer it to the %s plotgroup.'
-msg_townblock_transferred_from_x_to_x_group: 'Townblock transferred from %s to %s plot group.'
-msg_plotgroup_deleted: 'The plotgroup %s has been deleted.'
-msg_plotgroup_empty_deleted: 'The plotgroup %s had no townblocks and has been deleted.'
-plotgroup_plu: 'Plot Groups'
-msg_err_this_town_has_no_plot_groups: 'The specified town has no plot groups.'
-msg_err_this_plot_is_already_part_of_the_plot_group_x: 'This townblock is already part of the plot group: %s'
-map_hover_plot_group: 'Plot Group: '
-map_hover_plot_group_size: ' Size: '
-map_hover_plots: '%s plots'
+msg_plot_group_already_exists_did_you_want_to_transfer: 'Denne byblok er allerede en del af grundgruppe %s. Er du sikker på, at du vil overføre det til %s grundgruppen.'
+msg_townblock_transferred_from_x_to_x_group: 'Byblok overført fra %s til %s grundgruppe.'
+msg_plotgroup_deleted: 'Grundgruppen %s er blevet slettet.'
+msg_plotgroup_empty_deleted: 'Grundgruppen %s havde ingen byblokke og er blevet slettet.'
+plotgroup_plu: 'Grundgrupper'
+msg_err_this_town_has_no_plot_groups: 'Den angivne by har ingen grundgrupper.'
+msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Denne byblok er allerede en del af grundgruppen: %s'
+map_hover_plot_group: 'Grundgruppe: '
+map_hover_plot_group_size: ' Størrelse: '
+map_hover_plots: '%s grunde'
 #Added in 0.112
-msg_checking_for_updates: 'Checking for updates...'
-msg_no_new_updates: 'No new updates found.'
-msg_new_update_available: '&bNew update available: %s | Current version: %s'
-msg_download_here: 'Download it here: %s'
-msg_click_to_download: '&bClick here to download it.'
-msg_latest_version: '&2Towny version: &a%s &2| Latest version: &a%s'
-msg_up_to_date: '&aYou are up to date.'
-msg_click_purchase: 'Click to purchase'
-msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
+msg_checking_for_updates: 'Søger efter opdateringer...'
+msg_no_new_updates: 'Ingen nye opdateringer fundet.'
+msg_new_update_available: '&bNy tilgængelig opdatering: %s | Nuværende version: %s'
+msg_download_here: 'Download den her: %s'
+msg_click_to_download: '&bKlik her for at downloade det.'
+msg_latest_version: '&2Towny version: &a%s &2| Seneste version: &a%s'
+msg_up_to_date: '&aDu er opdateret.'
+msg_click_purchase: 'Klik for at købe'
+msg_you_must_join_this_town_to_claim_this_plot: 'Du skal tilslutte dig denne by: %s, for at gøre krav på denne grund. Vil du være med i byen og fortsætte med at gøre krav?'
 #Added in 0.113
 status_trustedlist: 'Trusted'
-msg_click_to_edit: '&6Click to edit.'
+msg_click_to_edit: '&6Klik for at redigere.'
 permission_gui_header: 'Towny Permission GUI'
-msg_last_edited: '&7&oLast changed at %s by %s.'
-msg_trusted_added: '&bAdded %s as trusted in this %s.' #Last %s is either town or townblock
-msg_already_trusted: '&b%s is already trusted in this %s.'
-msg_trusted_added_2: '&b%s has trusted you in a %s: %s.' #Last %s is the town name or worldcoord.
-msg_not_trusted: '&b%s is not trusted in this %s.'
-msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
-msg_trusted_removed_2: '&b%s has removed you as trusted in a %s: %s.'
-msg_overrides_removed: '&bRemoved permission overrides for %s.'
-msg_overrides_added: '&bAdded default permission overrides for %s.'
-msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
-msg_overrides_already_set: '&b%s already has overrides set for this %s.'
-msg_cache_block_err: '&cYou are not allowed to %s here.'
-msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
-plotgroup_sing: 'Plot Group'
-msg_err_ally_limit_reached: 'Your nation has reached the ally limit, unable to accept.'
+msg_last_edited: '&7&oSidst ændret ved %s af %s.'
+msg_trusted_added: '&bTilføjede %s som betroet i denne %s.' #Last %s is either town or townblock
+msg_already_trusted: '&b%s har allerede tillid til denne %s.'
+msg_trusted_added_2: '&b%s har stolet på dig i en %s: %s.' #Last %s is the town name or worldcoord.
+msg_not_trusted: '&b%s har ikke tillid til denne %s.'
+msg_trusted_removed: '&bFjernede %s som betroet i denne %s.'
+msg_trusted_removed_2: '&b%s har fjernet dig som betroet i en %s: %s.'
+msg_overrides_removed: '&bFjernede tilladelsestilsidesættelser for %s.'
+msg_overrides_added: '&bTilføjede standardtilladelsestilsidesættelser for %s.'
+msg_no_overrides_set: '&b%s har ikke sat nogen tilsidesættelser for denne %s.'
+msg_overrides_already_set: '&b%s har allerede sat tilsidesættelser for denne %s.'
+msg_cache_block_err: '&cDu har ikke tilladelse til %s her.'
+msg_err_plot_belongs_to_group: '&cGrund tilhører en gruppe, brug %s.'
+plotgroup_sing: 'Grundgruppe'
+msg_err_ally_limit_reached: 'Din nation har nået grænsen for allierede, ude af stand til at acceptere.'
 #Added in 0.114
-msg_err_group_not_found: 'Group %s not found.'
-msg_err_expected_command_format: 'Incorrect syntax, expected: %s'
-msg_err_group_already_has_node: 'The group %s already has the node %s.'
-msg_err_group_doesnt_have_node: 'The group %s does not have the node %s.'
-msg_successfully_added_node_to_group: 'Successfully added %s to %s.'
-msg_successfully_removed_node_from_group: 'Successfully removed %s from %s.'
+msg_err_group_not_found: 'Gruppe %s blev ikke fundet.'
+msg_err_expected_command_format: 'Forkert syntaks, forventet: %s'
+msg_err_group_already_has_node: 'Gruppen %s har allerede noden %s.'
+msg_err_group_doesnt_have_node: 'Gruppen %s har ikke noden %s.'
+msg_successfully_added_node_to_group: 'Føjet %s til %s.'
+msg_successfully_removed_node_from_group: 'Fjernet med succes #Tilføjet i 0.144 #Meddelelse vises, når en administrator bruger /ta town NAME til/fra ubegrænsede krav. msg_town_unlimitedclaims_setting_set_to: ''Byen %s har fået deres unlimitedclaims indstilling sat til %s'
 msg_err_there_is_already_a_town_or_nationrank_called_x: 'There is already a %s named %s.'
 msg_err_there_is_no_town_or_nationrank_called_x: 'There is no %s named %s.'
 msg_successfully_add_rank_to_the_town_or_nation_rank: 'Successfully added %s to the %s.'
@@ -1467,139 +1467,139 @@ msg_err_command_not_for_console_use: 'This command cannot be used from the conso
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+did_you_want_to_toggle_unlimited_claims: 'Du har ikke nok byblokke til at gøre krav på, ville du slå ubegrænset krav til for byen %s'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
-msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
-msg_err_console_only: 'This command can only be used by console.'
-msg_err_player_only: 'This command can only be used by a player.'
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Du kan ikke forlade din nation, din by er erobret.'
+msg_err_console_only: 'Denne kommando kan kun bruges af konsollen.'
+msg_err_player_only: 'Denne kommando kan kun bruges af en spiller.'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
-msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
+msg_border_titles_toggled: 'Titelmeddelelser, der vises ved grænseoverskridelse, er %s.'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
-this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+this_will_reset_your_config: 'Hvis du kører denne kommando, nulstilles din config.yml til standardfilen. Vil du fortsætte?'
 #Message shown when an admin is setting a new king or capital and would override the config by doing so
-msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+msg_warn_overriding_server_config: 'Ved at gøre dette tilsidesætter du de residente grænser, der er sat i serverkonfigurationen. Vil du alligevel fortsætte?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+msg_removed_x_invalid_outpost_spawns: 'Fjernede %d ugyldige outpost spawns.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
-msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+msg_your_town_is_bankrupt: 'Din by er konkurs, tilføj penge til din bank ved hjælp af /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Du kan ikke bruge denne kommando, fordi du allerede er medlem af en by. Hvis du vil fortsætte, skal du bruge ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'en by, du er fredløs i.'
 #Message shown when TownyRTP could not find any towns to teleport to.
-msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+msg_err_could_not_find_any_towns_to_rtp: 'Kunne ikke finde nogen åbne, offentlige byer med grunde til salg (som du har råd til) at rtp til.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bDu blev opkrævet %s for at teleportere til en tilfældig bygrund, der er til salg.'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+msg_you_are_about_to_be_teleported_to_a_plot: 'Du er ved at blive teleporteret til et grund, som er til salg i %s, som vil lade dig deltage. Brug ''/plot claim'' til at gøre krav på din grund, når du ankommer.'
 #Used in the town's status screen to display plots
-status_plot_string: 'Plots'
+status_plot_string: 'Grunde'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: 'Brug: %s'
 #Shown in teh bank history books when there are no pages to display
-msg_err_no_pages_to_display: 'No pages to display!'
+msg_err_no_pages_to_display: 'Ingen sider at vise!'
 #Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
-msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+msg_err_nation_unaffiliated: 'Den nation er ikke tilknyttet dig.'
 #Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
-msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+msg_err_town_unaffiliated: 'Den by er ikke tilknyttet dig.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Denne placering har allerede en fængselscelle.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Grundtilladelser'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Byg:'
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Ødelæg: '
 #Seen in /plot perm hud:
 msg_perm_hud_switch: 'Switch: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Brug: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'Type:'
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Eksplosioner: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Ildspredning: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Mob spawns: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Nøgle'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'ven'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: 'by'
 #Seen in /plot perm hud:
-msg_perm_hud_ally: 'ally'
+msg_perm_hud_ally: 'allieret'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: 'beboer'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: 'nation'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'Uvedkommende'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Plot: '
+msg_perm_hud_plot_name: 'Grund: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: 'Byen %s har fået deres byniveau sat til %s.'
 #Message shown when unsetting a manual town level.
-msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+msg_town_level_unset: 'Byen %s har fået deres manuelt indstillede byniveau deaktiveret. Nuværende byniveau er %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+msg_err_town_not_allowed_purchased_blocks: 'Byen %s er ikke i stand til at købe byblokke baseret på konfigurationsreglerne.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
+msg_purchased_blocks_unset: 'Byen %s har fået deres købte byblokke fjernet.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+msg_purchased_blocks_changed: 'Byen %s har fået %s købte byblokke, de har i øjeblikket %s købte byblokke.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Vedligeholdelse'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: 'Byen %s har haft deres vedligeholdelsesindstilling sat til %s.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'Din by har nået grænsen på %d %s grunde.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Gratis'
 #Message shown when someone tries to set a plot's type to one already set.
-msg_plot_already_of_type: 'This plot is already a %s type.'
-msg_town_board_reset: '&bTown board reset.'
-msg_town_has_no_jailslots: 'The town jail is full.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
-msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
-msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
-msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
-msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
-msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_plot_already_of_type: 'Denne grund er allerede en %s-type.'
+msg_town_board_reset: '&bTown board nulstillet.'
+msg_town_has_no_jailslots: 'Byens fængsel er fyldt.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s er blevet sendt til %s til cellenummer %s i %s timer med en kaution på %s med %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s er blevet sendt til %s til cellenummer %s i %s timer af %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'Du er blevet fængslet, din kaution er %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Din fastsatte kaution var højere end det maksimale, som er %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Dine indstillede timer var højere end det maksimale, som er %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Ikke nok i byens bank til at fængsle %s, gebyret er %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Dine fangevogtere lader dig frigøre plads.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s er blevet frigivet for at gøre plads til en anden fange.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Du er blevet løsladt, da dine fangevogtere ikke længere har råd til at holde dig fængslet.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s er blevet frigivet på grund af mangel på midler i byens bank.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s er trukket tilbage fra byens bank for at betale for vedligeholdelse for fangen %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s er trukket tilbage fra byens bank for at betale for fængsling af %s.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
-confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Er du sikker på, at du vil nulstille alle by- og nationsbanker til %s?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cDin nation har nået det maksimale antal tilladte indbyggere-per-nation, %s, og kan ikke tilføje %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+msg_err_cannot_join_nation_over_resident_limit: '&cDu kan ikke tilslutte dig denne nation, da den ville være over grænsen for beboere pr. nation på %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+msg_err_cannot_join_nation_over_town_limit: '&cDu kan ikke tilslutte dig denne nation, den har nået det maksimale antal tilladte byer-per-nation: %s.'
 #Message shown confirming /tw set usedefaults
-confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Er du sikker på, at du vil nulstille alle denne verdens indstillinger til dem, der er indstillet i konfigurationen?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Town Plots'
+msg_town_plots_title: ' Bygrunde'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Byens Størrelse: <green>%s/%s'
 #Part of the /town plots output.
 msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
 #Part of the /town plots output.
@@ -1607,53 +1607,53 @@ msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Byejet jord: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Type: <green>Spiller-Ejet <gray>/ <aqua>TilSalg <gray>/ <yellow>Total'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daglig omsætning'
 #Part of the /town plots output.
-msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+msg_town_plots_type_line: '<mørkegrøn>%s: <grøn>%s <grå>/ <aqua>%s <grå>/ <gul>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
-confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+confirmation_msg_trusttown_consequences: 'Du er ved at give fuld grundtilladelse til en hel by. Det betyder, at byens borgmester kan bestemme, hvem der får lov til at bygge og bryde i din by, ved at tilføje beboere. Hvis denne by er åben, kan alle deltage og få fuld adgang til din by. Er du sikker på, at du vil have tillid til alle beboere (inklusive fremtidige beboere) fra denne by?'
 #Message shown when a player uses a command that is blocked because their location has an active war.
-msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+msg_command_war_blocked: 'Du kan ikke køre den kommando, fordi din by er i krig.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
-msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+msg_cant_unclaim_outsider_in_town: 'Der er en outsider i denne byblok, du kan ikke annullere denne byblok!'
 #Message shown when a player is making a town too soon after deleting one.
-msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Du kan ikke oprette en ny by, %s sekunder tilbage ved nedkøling.'
 #Message shown when a player is claiming land too soon after unclaiming it.
-msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Du kan ikke gøre krav på denne byblok: %s, %s sekunder tilbage ved nedkøling.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: 'The town of %s has had the founder set to %s.'
+msg_founder_set: 'Byen %s har haft grundlæggeren sat til %s.'
 #Message shown when toggling town allowed to war admin setting
-msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+msg_town_allowedtowar_setting_set_to: 'Byen %s har haft deres tilladt-til-krig indstilling sat til %s.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
-confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+confirmation_did_you_want_to_unclaim_all: 'Er du sikker på, at du vil gøre krav på hele din jord? (Din hjemmeblok bliver ikke uopkrævet.)'
 #Message shown after a player unclaims all their land.
-msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
-msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
-msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
-msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+msg_you_have_unclaimed_everything_but_your_homeblock: "Du har ophævet alt undtagen din homeblock. For at annullere din homeblock skal du indstille en ny homeblock ved at bruge '/t set homeblock' først."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Er du sikker på, at du vil overføre nationsejerskab til %s? Denne handling er irreversibel!"
+msg_warn_town_already_capital: "<red>Byen %s er allerede landets hovedstad."
+msg_min_adjacent_blocks: 'Du skal have mindst %s tilstødende byblokke. Der er kun %s.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
-msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+msg_plot_claim_consider_evict_instead: ', leder du måske efter /plot evict i stedet?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "You are not known to Towny."
+msg_you_are_unknown: "Du er ikke kendt af Towny."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
-msg_townyobject_unknown: "%s is not known to Towny."
+msg_townyobject_unknown: "%s er ikke kendt af Towny."
 #Shown when a resident is unknown to Towny.
-msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_resident_unknown: "%s er ikke en beboer, der er genkendt."
 #Shown when a town is unknown to Towny.
-msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_town_unknown: "%s er ikke en by, der genkendes."
 #Shown when a nation is unknown to Towny.
-msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_nation_unknown: "%s er ikke en nation, der er anerkendt."
 #Shown when a resident doesn't belong to a town.
-msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_town: "%s tilhører ikke nogen by."
 #Shown when a town doesn't belong to a nation.
-msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+msg_err_townyobject_x_has_no_nation: "%s tilhører ikke nogen nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
-msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+msg_err_townblock_has_no_claimedat_data: "Denne byblok har ingen data om hvornår den blev gjort krav på."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "Du skal bruge %s for at betale."
