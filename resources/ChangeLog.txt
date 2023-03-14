@@ -8470,3 +8470,5 @@ v0.92.0.11:
     - Default: false
     - When set to true, the above mob_types will be protected when they are in a town, from being able to enter empty boats.
     - This protects the mobs from being stolen using boats.
+0.98.6.20:
+  - Update to 1.19.4, courtesy of Warriorrrr with PR #6570.
