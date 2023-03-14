@@ -322,7 +322,7 @@ public class AreaSelectionUtil {
 
 	 * @param selection - List&lt;WorldCoord&gt; of coordinates
 	 * @param town - Town to check distance from
-	 * @return List of townblocks
+	 * @return List of {@link WorldCoord}
 	 */
 	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
 
@@ -341,9 +341,9 @@ public class AreaSelectionUtil {
 	 * Filters out townblocks too close to other town homeblocks as set in the config.
 	 * 
 
-	 * @param selection - List&lt;WorldCoord&gt; of coordinates
-	 * @param town - Town to check distance from
-	 * @return List of townblocks
+	 * @param selection List&lt;WorldCoord&gt; of coordinates
+	 * @param town Town to check distance from
+	 * @return List of {@link WorldCoord}
 	 */
 	public static List<WorldCoord> filterInvalidProximityToHomeblock(List<WorldCoord> selection, Town town) {
 
@@ -360,8 +360,8 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a list containing only wilderness townblocks.
 	 * 
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord}.
 	 */
 	public static List<WorldCoord> filterOutTownOwnedBlocks(List<WorldCoord> selection) {
 
@@ -371,8 +371,8 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks.
 	 * 
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord}
 	 */
 	public static List<WorldCoord> filterOutWildernessBlocks(List<WorldCoord> selection) {
 
@@ -382,9 +382,9 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks, owned by the given owner.
 	 * 
-	 * @param owner - TownBlockOwner which owns the townblock.
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks owned by the given owner.
+	 * @param owner TownBlockOwner which owns the townblock.
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord} owned by the given owner.
 	 */
 	public static List<WorldCoord> filterOwnedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
@@ -396,9 +396,9 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks, which are not owned by the given owner.
 	 * 
-	 * @param owner - TownBlockOwner which owns the townblock.
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks not owned by the given owner.
+	 * @param owner TownBlockOwner which owns the townblock.
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord} not owned by the given owner.
 	 */
 	public static List<WorldCoord> filterUnownedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
@@ -453,7 +453,7 @@ public class AreaSelectionUtil {
 
 	/**
 	 * Gather plots that are for sale only.
-	 * @param selection - List&lt;WorldCoord&gt; from which to get plots that are for sale.
+	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are for sale.
 	 * @return List&lt;WorldCoord&gt; that are all for sale.
 	 */
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
@@ -477,7 +477,7 @@ public class AreaSelectionUtil {
 
 	/**
 	 * Gather plots that are not for sale only.
-	 * @param selection - List&lt;WorldCoord&gt; from which to get plots that are not for sale.
+	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are not for sale.
 	 * @return List&lt;WorldCoord&gt; that are all not for sale.
 	 */
 	public static List<WorldCoord> filterPlotsNotForSale(List<WorldCoord> selection) {
