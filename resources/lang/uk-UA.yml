@@ -1582,28 +1582,28 @@ msg_err_higher_than_max_allowed_hours_x: 'Ваші встановлені год
 msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Недостатньо в міському банку, щоб ув''язнити %s, плата становить %s.'
 msg_you_were_released_as_town_ran_out_of_slots: 'Ваші тюремники дозволяють вам вільно звільняти простір.'
 msg_x_has_been_released_as_jail_slots_ran_out: '%s Було звільнено, щоб звільнити місце для іншого в’язня.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
-msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Вас звільнили, оскільки ваші тюремники більше не можуть дозволити собі тримати вас у в''язниці.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s Було звільнено через брак коштів у міському банку.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s Знято з власного банку для оплати за утримання ув''язненого %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s Знято з власного банку для оплати за в''язницю %s.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
-confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Ви впевнені, що хочете скинути всі міста та нації на %s?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cВаша нація досягла максимальної кількості дозволених резиденцій %s, та не може додати %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+msg_err_cannot_join_nation_over_resident_limit: 'Ви не можете приєднатися до цієї нації, оскільки вона перевищує ліміт мешканців країни %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+msg_err_cannot_join_nation_over_town_limit: 'Ви не можете приєднатися до цієї нації, вона досягла максимальної кількості дозволених міст за нацією: %s.'
 #Message shown confirming /tw set usedefaults
-confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Ви дійсно бажаєте скинути всі налаштування світу до тих, які встановлені в конфігурації?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Town Plots'
+msg_town_plots_title: ' Міські ділянки'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Місний розмір: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Придбано: %s/%s]'
 #Part of the /town plots output.
-msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
 #Part of the /town plots output.
