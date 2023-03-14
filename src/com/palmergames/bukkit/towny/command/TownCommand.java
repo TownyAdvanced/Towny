@@ -3657,21 +3657,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		 */
 		if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
 
-			if (TownySettings.isAllowingOutposts()) {
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
-				
-				// Run various tests required by configuration/permissions through Util.
-				OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
-				
-				if (!TownyAPI.getInstance().isWilderness(plugin.getCache(player).getLastLocation()))
-					throw new TownyException(Translatable.of("msg_already_claimed_1", key));
-
-				// Select a single WorldCoord using the AreaSelectionUtil.
-				selection = new ArrayList<>();
-				selection.add(new WorldCoord(world.getName(), key));
-				outpost = true;
-			} else
+			if (!TownySettings.isAllowingOutposts())
 				throw new TownyException(Translatable.of("msg_outpost_disable"));
+
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
+			
+			// Run various tests required by configuration/permissions through Util.
+			OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
+			
+			if (!TownyAPI.getInstance().isWilderness(plugin.getCache(player).getLastLocation()))
+				throw new TownyException(Translatable.of("msg_already_claimed_1", key));
+
+			// Select a single WorldCoord using the AreaSelectionUtil.
+			selection = new ArrayList<>();
+			selection.add(new WorldCoord(world.getName(), key));
+			outpost = true;
+
 		} else {
 			
 			// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
@@ -3688,6 +3689,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Filter out any TownBlocks which aren't Wilderness. 
 			selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
+
+			if (selection.isEmpty())
+				throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 		}
 
 		// Not enough available claims.
@@ -3702,11 +3706,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		 * Filter out any unallowed claims.
 		 */
 		TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-		
-		// Filter out townblocks already owned.
-		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
-		if (selection.isEmpty())
-			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
 		// Filter out townblocks too close to another Town's homeblock.
 		selection = AreaSelectionUtil.filterInvalidProximityToHomeblock(selection, town);
