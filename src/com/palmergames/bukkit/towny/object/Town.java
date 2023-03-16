@@ -12,10 +12,12 @@ import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownRemoveAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownRemoveEnemiedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -1212,9 +1214,21 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeMetaData(@NotNull CustomDataField<?> md) {
 		this.removeMetaData(md, true);
 	}
-	
+
 	public void setConquered(boolean conquered) {
+		setConquered(conquered, true);
+	}
+	
+	public void setConquered(boolean conquered, boolean callEvent) {
 		this.isConquered = conquered;
+
+		if (!callEvent)
+			return;
+
+		if (this.isConquered)
+			BukkitTools.fireEvent(new TownConqueredEvent(this));
+		else
+			BukkitTools.fireEvent(new TownUnconquerEvent(this));
 	}
 	
 	public boolean isConquered() {

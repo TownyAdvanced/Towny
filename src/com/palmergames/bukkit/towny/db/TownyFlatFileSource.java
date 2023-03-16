@@ -777,7 +777,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("conquered");
 				if (line != null)
 					try {
-						town.setConquered(Boolean.parseBoolean(line));
+						town.setConquered(Boolean.parseBoolean(line), false);
 					} catch (Exception ignored) {
 					}
 				line = keys.get("conqueredDays");
