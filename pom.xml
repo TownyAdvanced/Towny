@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.98.6.20</version>
+    <version>0.98.6.21</version>
 
     <licenses>
         <license>
@@ -185,7 +185,17 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.2.0</version>
+            <version>4.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-plain</artifactId>
+            <version>4.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>4.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -206,19 +216,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.12.0</version>
-        </dependency>
-        <dependency>
             <groupId>solar.squares</groupId>
             <artifactId>pixel-width-core</artifactId>
             <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.12.0</version>
         </dependency>
     </dependencies>
     <pluginRepositories>

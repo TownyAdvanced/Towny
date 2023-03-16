@@ -8473,4 +8473,5 @@ v0.92.0.11:
 0.98.6.20:
   - Update to 1.19.4, courtesy of Warriorrrr with PR #6570.
 0.98.6.21:
-  - API: Add TownConqueredEvent, Thrown when a town is conquered. 
+  - API: Add TownConqueredEvent, Thrown when a town is conquered.
+  - Update Adventure dependencies.
