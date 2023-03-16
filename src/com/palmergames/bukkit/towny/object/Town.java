@@ -1220,6 +1220,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public void setConquered(boolean conquered, boolean callEvent) {
+		if (conquered = this.isConquered)
+			return;
+
 		this.isConquered = conquered;
 
 		if (!callEvent)
