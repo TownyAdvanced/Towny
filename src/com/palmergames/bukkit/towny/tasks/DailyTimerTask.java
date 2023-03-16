@@ -8,7 +8,6 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.NewDayTaxAndUpkeepPreCollectionEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
-import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -141,9 +140,6 @@ public class DailyTimerTask extends TownyTimerTask {
 	}
 
 	private void unconquer(Town town) {
-		if (BukkitTools.isEventCancelled(new TownUnconquerEvent(town)))
-			return;
-		
 		town.setConquered(false);
 		town.setConqueredDays(0);
 	}

@@ -1001,7 +1001,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setSpawnCost(rs.getFloat("spawnCost"));
 			town.setOpen(rs.getBoolean("open"));
 			town.setPublic(rs.getBoolean("public"));
-			town.setConquered(rs.getBoolean("conquered"));
+			town.setConquered(rs.getBoolean("conquered"), false);
 			town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
 			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 			town.setAllowedToWar(rs.getBoolean("allowedToWar"));
