@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Locale;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Translatable {
+public class Translatable implements ComponentLike {
 	private String key;
 	private Object[] args;
 	private boolean stripColors;
@@ -37,6 +38,7 @@ public class Translatable {
 		return new Translatable(key, args);
 	}
 	
+	@Deprecated
 	public static Translatable literal(String text) {
 		return new LiteralTranslatable(text);
 	}
@@ -49,6 +51,9 @@ public class Translatable {
 		return args;
 	}
 	
+	/**
+	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 */
 	@Nullable
 	public Locale locale() {
 		return this.locale;
@@ -106,16 +111,34 @@ public class Translatable {
 		return this;
 	}
 
+	// TODO: insert deprecation version in javadocs
+
+	/**
+	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @see #translate(Locale) 
+	 * @see #component(Locale) 
+	 */
+	@Deprecated
 	public Translatable locale(@Nullable Locale locale) {
 		this.locale = locale;
 		return this;
 	}
 
+	/**
+	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @see #translate(Locale)
+	 * @see #component(Locale)
+	 */
 	public Translatable locale(@NotNull Resident resident) {
 		this.locale = Translation.getLocale(resident);
 		return this;
 	}
 	
+	/**
+	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @see #translate(Locale)
+	 * @see #component(Locale)
+	 */
 	public Translatable locale(@NotNull CommandSender commandSender) {
 		this.locale = Translation.getLocale(commandSender);
 		return this;
@@ -187,6 +210,18 @@ public class Translatable {
 			'}';
 	}
 	
+	@Override
+	public @NotNull Component asComponent() {
+		List<Component> formattedArgs = new ArrayList<>();
+		if (this.args != null) {
+			for (Object arg : this.args)
+				formattedArgs.add(arg instanceof ComponentLike like ? like.asComponent() : TownyComponents.miniMessage(arg.toString()));
+		}
+		
+		return Component.translatable(this.key(), formattedArgs);
+	}
+
+	@Deprecated
 	private static final class LiteralTranslatable extends Translatable {
 
 		private LiteralTranslatable(String key) {

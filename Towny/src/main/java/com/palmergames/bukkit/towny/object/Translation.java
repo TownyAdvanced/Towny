@@ -6,15 +6,23 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
+import net.kyori.adventure.translation.Translator;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,8 +40,9 @@ public final class Translation {
 	private Translation() {}
 	
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
+	private static final TranslatableComponentRenderer<Locale> renderer = TranslatableComponentRenderer.usingTranslationSource(new TownyTranslator());
 	private static Locale defaultLocale = new Locale("en", "US"); // en-US here by default, in case of safe mode happening before translations are loaded.
-	private static Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
+	private static final Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
@@ -234,6 +243,11 @@ public final class Translation {
 		return BukkitTools.isOnline(resident.getName()) ? getLocale(resident.getPlayer()) : defaultLocale;
 	}
 	
+	@NotNull
+	public static Component render(@NotNull Component component, @NotNull Locale locale) {
+		return renderer.render(component, locale);
+	}
+	
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
 		if (addedTranslations != null && !addedTranslations.isEmpty()) {
 			for (String language : addedTranslations.keySet())
@@ -244,6 +258,28 @@ public final class Translation {
 					for (Map.Entry<String, String> entry : newTranslations.entrySet())
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
 				}
+		}
+	}
+	
+	private static class TownyTranslator implements Translator {
+
+		@Override
+		public @NotNull Key name() {
+			return Key.key("towny", "translations");
+		}
+
+		@Override
+		public @Nullable MessageFormat translate(@NotNull String key, @NotNull Locale locale) {
+			return null;
+		}
+
+		@Override
+		public @Nullable Component translate(@NotNull TranslatableComponent component, @NotNull Locale locale) {
+			final String translated = of(component.key(), locale, component.args());
+			if (translated.equals(component.key()))
+				return null;
+			
+			return TownyComponents.miniMessage(translated);
 		}
 	}
 }
