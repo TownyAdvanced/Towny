@@ -491,6 +491,12 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return TownyEconomyHandler.getFormattedBalance(TownySettings.getClaimRefundPrice());
 		case "outpost_claim_price": // %townyadvanced_outpost_claim_price%
 			return TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost());
+		case "townblock_next_claim_price": // %townyadvanced_townblock_next_claim_price%
+			if (resident.hasTown())
+				cost = resident.getTownOrNull().getTownBlockCost();
+			else
+				cost = TownySettings.getClaimPrice();
+			return TownyEconomyHandler.getFormattedBalance(cost);
 
 		case "has_town": // %townyadvanced_has_town%
 			return String.valueOf(resident.hasTown());
