@@ -8,7 +8,6 @@ import org.bukkit.World;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public class CellBorder extends WorldCoord {
 
 	public boolean[] border;
@@ -120,12 +119,9 @@ public class CellBorder extends WorldCoord {
 		}
 	}
 	
-	/**
-	 * @deprecated Deprecated as of 0.98.3.13, please use {@link #runBorderedOnSurface(int, int, Consumer)} instead.
-	 */
 	@Deprecated
-	public void runBorderedOnSurface(int wallHeight, int cornerHeight, LocationRunnable runnable) {
-		runBorderedOnSurface(wallHeight, cornerHeight, (Consumer<Location>) runnable::run);
+	private void runBorderedOnSurface$$bridge$$public(int wallHeight, int cornerHeight, LocationRunnable runnable) {
+		runBorderedOnSurface(wallHeight, cornerHeight, runnable::run);
 	}
 
 	@Override

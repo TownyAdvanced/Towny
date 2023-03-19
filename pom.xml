@@ -400,6 +400,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <!-- https://github.com/dmlloyd/bridger -->
+                <groupId>dev.warriorrr.bridger</groupId> <!-- Includes fix for static modifiers, still needs to be published somewhere -->
+                <artifactId>bridger</artifactId>
+                <version>1.7.Final-SNAPSHOT</version>
+                <executions>
+                    <!-- run after "compile", runs bridger on main classes -->
+                    <execution>
+                        <id>weave</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>transform</goal>
+                        </goals>
+                    </execution>
+                    <!-- run after "test-compile", runs bridger on test classes -->
+                    <!--
+                    <execution>
+                        <id>weave-tests</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>transform</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                    -->
+                </executions>
+            </plugin>
         </plugins>
         <sourceDirectory>src</sourceDirectory>
         <resources>
