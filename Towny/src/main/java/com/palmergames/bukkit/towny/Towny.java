@@ -61,6 +61,7 @@ import com.palmergames.util.JavaUtil;
 
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
 import io.papermc.lib.PaperLib;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -153,7 +154,7 @@ public class Towny extends JavaPlugin {
 		// NOTE: Runs regardless if Towny errors out!
 		// Important for safe mode.
 
-		adventure = BukkitAudiences.create(this);
+		adventure = BukkitAudiences.builder(this).componentRenderer(pointer -> pointer.getOrDefault(Identity.LOCALE, Translation.getDefaultLocale()), Translation.translationRenderer()).build();
 
 		// Check for plugins that we use or we develop, 
 		// print helpful information to startup log.

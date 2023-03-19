@@ -12,11 +12,13 @@ import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.renderer.ComponentRenderer;
 import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
 import net.kyori.adventure.translation.Translator;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -246,6 +248,11 @@ public final class Translation {
 	@NotNull
 	public static Component render(@NotNull Component component, @NotNull Locale locale) {
 		return renderer.render(component, locale);
+	}
+	
+	@ApiStatus.Internal
+	public static ComponentRenderer<Locale> translationRenderer() {
+		return renderer;
 	}
 	
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
