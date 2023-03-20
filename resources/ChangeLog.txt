@@ -8478,3 +8478,5 @@ v0.92.0.11:
   - New PAPI Placeholder: %townyadvanced_townblock_next_claim_price%
     - Displays the cost of the player's town's next claim, taking into account any townblock price increase rules. 
     - Closes #6576.
+  - Fix NRE thrown in AreaSelectionUtil.
+    - Closes #6578.

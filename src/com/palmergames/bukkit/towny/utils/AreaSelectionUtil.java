@@ -182,7 +182,7 @@ public class AreaSelectionUtil {
 				 * Calculate how many townblocks will be needed to claim the desired radius,
 				 * dropping the radius if it will be required, to make a perfect a perfect square.
 				 */
-				int needed = pos.getTownBlock().hasTown() ? 0 : 1;
+				int needed = pos.isWilderness() ? 1 : 0;
 				int claimRadius = 1;
 				while (claimRadius <= r && needed < maxSelectionSize) {
 				    needed += (claimRadius * 8);
@@ -219,7 +219,7 @@ public class AreaSelectionUtil {
 		// We remove the first pos if this is a claim and it is not wilderness.
 		if (claim && !pos.isWilderness())
 			out.remove(0);
-
+		System.out.println("debug -17");
 		return out;
 	}
 
