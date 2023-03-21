@@ -8480,3 +8480,4 @@ v0.92.0.11:
     - Closes #6576.
   - Fix NRE thrown in AreaSelectionUtil.
     - Closes #6578.
+  - Fix potential NPE in InviteHandler.
