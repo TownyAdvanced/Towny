@@ -559,12 +559,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			plotTypeName = "default";
 
 		TownBlockType townBlockType = TownBlockTypeHandler.getType(plotTypeName);
-		TownBlockType oldType = townBlockType;
+		TownBlockType oldType = townBlock.getType();
 
 		if (townBlockType == null)
 			throw new TownyException(Translatable.of("msg_err_not_block_type"));
 
-		if (townBlockType == townBlock.getType())
+		if (townBlockType == oldType)
 			throw new TownyException(Translatable.of("msg_plot_already_of_type", townBlockType.getName()));
 
 		// Test we are allowed to work on this plot
