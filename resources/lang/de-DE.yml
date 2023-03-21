@@ -1498,6 +1498,10 @@ msg_err_could_not_find_any_towns_to_rtp: 'Es konnten keine offenen, öffentliche
 msg_cost_spawn_rtp: '&bDu hast %s belastet, um dich zu einem zufälligen Stadtplan zu teleportieren, das zum Verkauf steht.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Du bist dabei, zu einem Grundstück teleportiert zu werden, der in %s vergeben ist, wodurch du beitreten kannst. Benutze ''/plot claim'', um dein Grundstück bei deiner Ankunft zu beanspruchen.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots
 status_plot_string: 'Grundstücke'
 #Displays a plot type and the amount of townblocks of that type in the town
