@@ -3807,29 +3807,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Town town = getTownFromResidentOrThrow(resident);
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
-		BukkitTools.ifCancelledThenThrow(new TownPreUnclaimCmdEvent(town, resident, world));
-
 		if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode());
-
-			if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() < 0) {
-				// Unclaiming will cost the player money because of a negative refund price. Have them confirm the cost.
-				Confirmation
-					.runOnAccept(() -> Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false))) 
-					.setTitle(Translatable.of("confirmation_unclaiming_costs",
-						TownyEconomyHandler.getFormattedBalance(Math.abs(TownySettings.getClaimRefundPrice() * town.getTownBlocks().size() - 1))))
-					.sendTo(player);
-				return;
-			}
-			// No cost to unclaim the land.
-			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false));
+			/* The Player is trying to unclaim all of their land. */
+			parseTownUnclaimAllCommand(player, town, resident, world);
 			return;
 		}
-		
-		/*
-		 * We are not unclaiming the entire town.
-		 */
-		
+
 		// Check permissions here because of the townunclaim mode.
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM.getNode());
 		
@@ -3837,19 +3820,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 3 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
 			throw new TownyException(Translatable.of("tc_err_invalid_command"));
 		
-		List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), Coord.parseCoord(plugin.getCache(player).getLastLocation())), split);
+		List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(town, WorldCoord.parseWorldCoord(player), split);
 		selection = AreaSelectionUtil.filterOwnedBlocks(town, selection);
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
 		if (selection.get(0).getTownBlock().isHomeBlock())
 			throw new TownyException(Translatable.of("msg_err_cannot_unclaim_homeblock"));
-		
+
 		if (AreaSelectionUtil.filterHomeBlock(town, selection)) {
 			// Do not stop the entire unclaim, just warn that the homeblock cannot be unclaimed
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_unclaim_homeblock"));
 		}
-		
+
+		BukkitTools.ifCancelledThenThrow(new TownPreUnclaimCmdEvent(town, resident, world, selection));
+
 		// Handle a negative unclaim refund (yes, where someone is being charged money to unclaim their land. It's a thing.)
 		if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() < 0) {
 			double cost = Math.abs(TownySettings.getClaimRefundPrice() * selection.size());
@@ -3873,7 +3858,29 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Set the area to unclaim without a unclaim refund.
 		Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, false, false, false));
 	}
-	
+
+	private static void parseTownUnclaimAllCommand(Player player, Town town, Resident resident, TownyWorld world) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_UNCLAIM_ALL.getNode());
+		List<WorldCoord> selection = new ArrayList<>();
+		selection.addAll(town.getTownBlocks().stream().map(TownBlock::getWorldCoord).collect(Collectors.toList()));
+		if (town.hasHomeBlock())
+			selection.remove(town.getHomeBlock().getWorldCoord());
+		BukkitTools.ifCancelledThenThrow(new TownPreUnclaimCmdEvent(town, resident, world, selection));
+
+		if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() < 0) {
+			int numTownBlocks = town.getTownBlocks().size() - (town.hasHomeBlock() ? 1 : 0); 
+			String formattedCost = TownyEconomyHandler.getFormattedBalance(Math.abs(TownySettings.getClaimRefundPrice() * numTownBlocks));
+			// Unclaiming will cost the player money because of a negative refund price. Have them confirm the cost.
+			Confirmation
+				.runOnAccept(() -> Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false))) 
+				.setTitle(Translatable.of("confirmation_unclaiming_costs", formattedCost))
+				.sendTo(player);
+			return;
+		}
+		// No cost to unclaim the land.
+		Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, null, false, false, false));
+	}
+
 	public static void parseTownMergeCommand(Player player, String[] args) throws TownyException {
 		parseTownMergeCommand(player, args, getTownFromPlayerOrThrow(player), false);
 	}

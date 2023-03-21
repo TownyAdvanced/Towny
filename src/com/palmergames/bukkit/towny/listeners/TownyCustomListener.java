@@ -21,7 +21,6 @@ import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -41,6 +40,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -263,15 +263,13 @@ public class TownyCustomListener implements Listener {
 		if (!TownySettings.getOutsidersUnclaimingTownBlocks() || player == null)
 			return;
 
-		TownBlock townblock = TownyAPI.getInstance().getTownBlock(player);
-		if (townblock == null)
-			return;
+		List<WorldCoord> unclaimSelection = event.getUnclaimSelection();
 
 		Town town = event.getTown();
 		for (Player target : Bukkit.getOnlinePlayers()) {
 			if (!town.hasResident(target) &&
 				!TownyAPI.getInstance().isWilderness(target.getLocation()) &&
-				townblock.equals(TownyAPI.getInstance().getTownBlock(target.getLocation()))) {
+				unclaimSelection.contains(WorldCoord.parseWorldCoord(target))) {
 				event.setCancelled(true);
 				event.setCancelMessage(Translatable.of("msg_cant_unclaim_outsider_in_town").forLocale(event.getResident()));
 				break;
