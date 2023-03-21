@@ -292,7 +292,7 @@ msg_plot_set_type: '&bТип участка теперь %s'
 msg_cache_block_error: '&cВы не были зарегистрированы в Towny. Пожалуйста, перезайдите.'
 msg_cache_block_error_wild: '&cЗапрещено %s в Диких Землях.'
 msg_cache_block_error_plot: '&cВладелец не разрешил %s %s здесь.'
-msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
+msg_cache_block_error_locked: "Этот участок заблокирован! Вы не сможете использовать его до тех пор, пока не сделайте снимок для обратного снятия владения."
 msg_cache_block_error_town_resident: '&cГражданам нельзя %s здесь.'
 msg_cache_block_error_town_allies: '&cСоюзникам нельзя %s.'
 msg_cache_block_error_town_outsider: '&cЧужакам нельзя %s.'
@@ -1498,6 +1498,10 @@ msg_err_could_not_find_any_towns_to_rtp: 'Не было найдено откр�
 msg_cost_spawn_rtp: '&bВы заплатили %s за телепорт к случайному продающемуся участку.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Вы будете телепортированы к участку, выставленному на продажу в %s, купив его используя ''/plot claim'' вы сможете присоединиться к городу.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots
 status_plot_string: 'Участки'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1656,4 +1660,4 @@ msg_err_townyobject_x_has_no_nation: "%s не состоит ни в одной 
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "О дате привата этого участка нет данных."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "Вам нужно %s для оплаты."
