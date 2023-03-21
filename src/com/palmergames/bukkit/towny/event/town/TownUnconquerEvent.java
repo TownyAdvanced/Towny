@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.town;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -13,6 +14,7 @@ public class TownUnconquerEvent extends Event implements Cancellable {
 	private final Town town;
 	
 	public TownUnconquerEvent(Town town) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 	}
 	
