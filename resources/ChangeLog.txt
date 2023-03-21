@@ -8486,3 +8486,5 @@ v0.92.0.11:
   - Fix town#setConquered(boolean, boolean).
   - API: improve TownPreUnclaimCmdEvent with the addition of a List<WorldCoord> which is going to be unclaimed.
     - TownPreUnclaimCmdEvent#getUnclaimSelection.
+0.98.6.22:
+  - Fix bed crop dupe found in Spigot or MC.

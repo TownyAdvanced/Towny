@@ -358,6 +358,13 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (clickedBlock != null) {
 				Material clickedMat = clickedBlock.getType();
+
+				/* Fixes a known duping exploit. */
+				if (Tag.BEDS.isTagged(item) && Tag.CROPS.isTagged(clickedBlock.getType()) && clickedBlock.getLightLevel() == 0) {
+					event.setCancelled(true);
+					return;
+				}
+
 				/*
 				 * Test stripping logs, scraping copper blocks, dye-able signs,
 				 * glass bottles, flint&steel on TNT and shears on beehomes
