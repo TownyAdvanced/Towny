@@ -8488,3 +8488,5 @@ v0.92.0.11:
     - TownPreUnclaimCmdEvent#getUnclaimSelection.
 0.98.6.22:
   - Fix bed crop dupe found in Spigot or MC.
+0.98.6.23:
+  - Fix 1.16.5 incompatibility, courtesy of Warriorrrr with PR #6581.
