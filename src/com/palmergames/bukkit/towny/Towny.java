@@ -47,6 +47,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.ChangelogReader;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -88,8 +89,6 @@ import java.util.logging.Level;
  * @author Shade, ElgarL, LlmDl
  */
 public class Towny extends JavaPlugin {
-	private static final Version OLDEST_MC_VER_SUPPORTED = Version.fromString("1.16");
-	private static final Version CUR_BUKKIT_VER = Version.fromString(Bukkit.getBukkitVersion());
 	private final String version = this.getDescription().getVersion();
 
 	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
@@ -949,7 +948,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	public static boolean isMinecraftVersionStillSupported() {
-		return CUR_BUKKIT_VER.compareTo(OLDEST_MC_VER_SUPPORTED) >= 0;
+		return MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.OLDEST_VERSION_SUPPORTED) >= 0;
 	}
 	
 	/**
