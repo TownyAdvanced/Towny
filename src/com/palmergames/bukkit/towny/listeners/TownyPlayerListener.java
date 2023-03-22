@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -415,6 +416,12 @@ public class TownyPlayerListener implements Listener {
 				if (clickedMat.name().equals("ROOTED_DIRT") && item.name().toLowerCase().contains("_hoe"))
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock));
 
+				/*
+				 * Prevents players using wax on signs
+				 * TODO: Add a check for whether the sign is waxed once that API is available.
+				 */
+				if (Tag.SIGNS.isTagged(clickedMat) && item == Material.HONEYCOMB && MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.MINECRAFT_1_16) >= 0)
+					event.setCancelled(!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat));
 			}
 		}
 		
@@ -451,6 +458,12 @@ public class TownyPlayerListener implements Listener {
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 				return;
 			}
+			
+			/*
+			 * Prevents players from editing signs where they shouldn't.
+			 */
+			if (Tag.SIGNS.isTagged(clickedMat) && MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.MINECRAFT_1_20) >= 0)
+				event.setCancelled(!TownyActionEventExecutor.canSwitch(player, clickedBlock.getLocation(), clickedMat));
 		}
 	}
 
