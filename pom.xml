@@ -417,19 +417,6 @@
                             <goal>transform</goal>
                         </goals>
                     </execution>
-                    <!-- run after "test-compile", runs bridger on test classes -->
-                    <!--
-                    <execution>
-                        <id>weave-tests</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>transform</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                    -->
                 </executions>
             </plugin>
         </plugins>
