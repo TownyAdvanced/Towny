@@ -226,6 +226,10 @@
             <id>apache.snapshots</id>
             <url>https://repository.apache.org/snapshots/</url>
         </pluginRepository>
+        <pluginRepository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <build>
@@ -401,10 +405,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <!-- https://github.com/dmlloyd/bridger -->
-                <groupId>dev.warriorrr.bridger</groupId> <!-- Includes fix for static modifiers, still needs to be published somewhere -->
+                <groupId>com.github.TownyAdvanced</groupId>
                 <artifactId>bridger</artifactId>
-                <version>1.7.Final-SNAPSHOT</version>
+                <version>1.7.1.Final</version>
                 <executions>
                     <!-- run after "compile", runs bridger on main classes -->
                     <execution>
