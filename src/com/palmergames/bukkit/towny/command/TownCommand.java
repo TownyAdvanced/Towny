@@ -3719,7 +3719,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Prevent straight line claims if configured, and the town has enough townblocks claimed, and this is not an outpost.
 		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
-		if (!outpost && minAdjacentBlocks > 0 && town.getTownBlocks().size() > minAdjacentBlocks) {
+		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
 			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
 			WorldCoord firstWorldCoord = selection.get(0);
 			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, firstWorldCoord);
@@ -3795,6 +3795,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Economy isn't enabled, start the claiming process immediately.
 			Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, selection, outpost, true, false));
 		}
+	}
+
+	private static boolean townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(Town town, int minAdjacentBlocks) {
+		if (minAdjacentBlocks == 3 && town.getTownBlocks().size() < 5)
+			// Special rule that makes sure a town can claim a fifth plot after claiming a 2x2 square.
+			return false;
+		return town.getTownBlocks().size() > minAdjacentBlocks;
 	}
 
 	public static void parseTownUnclaimCommand(Player player, String[] split) throws TownyException {

@@ -8493,3 +8493,4 @@ v0.92.0.11:
 0.98.6.24:
   - Protect signs from being edited, courtesy of Warriorrrr with PR #6583.
     - Waxing is treated as item_use, editing signs is treated as a destroy test.
+  - Fix abililty to claim a fifth townblock after a town has claimed a 2x2 square and min_adjacent_blocks is set to 3.
