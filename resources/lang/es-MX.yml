@@ -590,7 +590,7 @@ status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Abierta)'
 status_town_board: 'Tablero:'
 status_founded: 'Fundado:'
-status_founded_by: 'Encontrado por:'
+status_founded_by: 'Fundado por:'
 status_town_size: 'Tamaño:'
 status_town_size_bought: 'Comprado:'
 status_town_size_bonus: 'Bonificación:'
@@ -1428,7 +1428,7 @@ tc_player_channel_sound_unmuted: 'El sonido del canal ha sido reactivado'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '¡Hay un extranjero en tus tierras, no puedes cambiar el estado del combate!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&Haga clic para ver en la web.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6La ciudad %s ha accedido a una fusión con la creciente ciudad de %s.'
