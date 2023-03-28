@@ -262,7 +262,7 @@ msg_set_use_towny_off: '&cDunai ini membebaskan semua interaksi towny.'
 msg_error_must_be_int: '&bMasukan jumlah dalam bilangan bulat.'
 msg_error_input_must_be_int: '&c%s must be an integer'
 msg_error_must_be_num: '&bMasukan jumlah dalam bentuk angka.'
-msg_error_input_must_be_num: '&c%s must be a number'
+msg_error_input_must_be_num: '&c%s harus berupa angka'
 msg_must_specify_amnt: '&bMasukan angka. contoh: %s 71'
 msg_town_set_tax: '&b%s telah mengatur pajak kota menjadi %s'
 msg_town_set_plottax: '&b%s telah mengatur pajak harian lahan menjadi %s'
@@ -590,7 +590,7 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Open)'
 status_town_board: 'Papan:'
 status_founded: 'Ditemukan:'
-status_founded_by: 'Founded by:'
+status_founded_by: 'Didirikan oleh:'
 status_town_size: 'Ukuran Kota:'
 status_town_size_bought: 'Dibeli:'
 status_town_size_bonus: 'Bonus:'
@@ -1609,7 +1609,7 @@ msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[BonusNegara: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
@@ -1660,4 +1660,4 @@ msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "Anda membutuhkan %s untuk membayar."
