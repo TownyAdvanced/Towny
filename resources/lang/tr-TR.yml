@@ -590,8 +590,8 @@ status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Açık)'
 status_town_board: 'Pano:'
 status_founded: 'Kuruluş:'
-status_founded_by: 'Founded by:'
-status_town_size: 'Şehir büyüklüğü:'
+status_founded_by: 'Kurucu:'
+status_town_size: 'Kasaba büyüklüğü:'
 status_town_size_bought: 'Satın alındı:'
 status_town_size_bonus: 'Bonus:'
 status_town_size_nationbonus: 'Ulus Bonusu:'
@@ -1499,9 +1499,9 @@ msg_cost_spawn_rtp: '&bSatılık rastgele bir kasaba arsasına ışınlanmak iç
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Katılmanızı sağlayacak, %s cinsinden satılık bir arsaya ışınlanmak üzeresiniz. Geldiğinizde arsanızı talep etmek için ''/plot claim''i kullanın.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "%s kasabasında satın alabileceğiniz arsalar var, satın alabileceğiniz bir arsaya ışınlanmak ister misiniz?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Satın alabileceğiniz bir arsaya ışınlandınız. Arsayı almak için \"/plot claim\" komutunu kullanabilirsiniz."
 #Used in the town's status screen to display plots
 status_plot_string: 'Arsalar'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1595,9 +1595,9 @@ confirmation_are_you_sure_you_want_to_reset_all_banks: 'Tüm kasaba ve ulus bank
 #Message shown when a nation cannot add a town because of the max-residents-limit.
 msg_err_cannot_add_nation_over_resident_limit: '&cUlusun maksimum izin verilen ulus başına vatandaş sayısına ulaştı, %s ve %s eklenilemiyor.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+msg_err_cannot_join_nation_over_resident_limit: '&cBu ulusa katılamazsınız, çünkü bu ulus başına ikamet eden kişi sınırı olan %s''yi aşacaktır.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+msg_err_cannot_join_nation_over_town_limit: '&cBu ulusa katılamazsın, izin verilen maksimum kasaba sayısına ulaştı: %s.'
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
 #Part of the /town plots output.
@@ -1623,7 +1623,7 @@ msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
 #Message shown when a player uses a command that is blocked because their location has an active war.
-msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+msg_command_war_blocked: 'Kasaban savaştayken bu komutu kullanamazsın.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
 msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
 #Message shown when a player is making a town too soon after deleting one.
@@ -1631,15 +1631,15 @@ msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new tow
 #Message shown when a player is claiming land too soon after unclaiming it.
 msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: 'The town of %s has had the founder set to %s.'
+msg_founder_set: '%s kasabasının kurucusu %s olarak ayarlandı.'
 #Message shown when toggling town allowed to war admin setting
-msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+msg_town_allowedtowar_setting_set_to: '%s kasabasının savaş ayarı %s olarak ayarlandı.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
 confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
 #Message shown after a player unclaims all their land.
 msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
-msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
-msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Ulus liderliğini %s e devretmek istediğinizden emin misiniz? Bu işlem geri alınmaz!"
+msg_warn_town_already_capital: "<red>%s kasabası zaten başkent."
 msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
@@ -1654,10 +1654,10 @@ msg_err_town_unknown: "%s is not a town that is recognized."
 #Shown when a nation is unknown to Towny.
 msg_err_nation_unknown: "%s is not a nation that is recognized."
 #Shown when a resident doesn't belong to a town.
-msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_town: "%s herhangi bir kasabaya ait değil."
 #Shown when a town doesn't belong to a nation.
-msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+msg_err_townyobject_x_has_no_nation: "%s herhangi bir ulusa ait değil."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "%s ödemen gerekiyor."
