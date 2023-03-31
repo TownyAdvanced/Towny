@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cГород не может себе позволить �
 msg_annexed_area: '&2Заприваченная территория %s'
 msg_max_plot_own: '&cВы не можете владеть больше, чем %s участками.'
 msg_max_outposts_own: '&cВы не можете иметь больше %s аванпостов.'
-msg_wait_locked: '&2Пожалуйста, будьте терпеливы, участки станут доступны в ближайшее время.'
 msg_no_funds_new_nation: '&cУ города нет средств на основание нации.'
 msg_already_claimed: '&cЭтот участок уже принадлежит %s'
 msg_already_claimed_1: '&cЭтот участок (%s) уже кому-то принадлежит.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bТип участка теперь %s'
 msg_cache_block_error: '&cВы не были зарегистрированы в Towny. Пожалуйста, перезайдите.'
 msg_cache_block_error_wild: '&cЗапрещено %s в Диких Землях.'
 msg_cache_block_error_plot: '&cВладелец не разрешил %s %s здесь.'
-msg_cache_block_error_locked: "Этот участок заблокирован! Вы не сможете использовать его до тех пор, пока не сделайте снимок для обратного снятия владения."
 msg_cache_block_error_town_resident: '&cГражданам нельзя %s здесь.'
 msg_cache_block_error_town_allies: '&cСоюзникам нельзя %s.'
 msg_cache_block_error_town_outsider: '&cЧужакам нельзя %s.'
@@ -586,6 +584,7 @@ jailed_in_town: ' в городе: %s'
 status_friends: 'Друзья'
 rank_list_title: 'Список званий %s'
 rank_list_mayor: 'Мэр:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Откр.)'
 status_town_board: 'Доска объявлений:'
