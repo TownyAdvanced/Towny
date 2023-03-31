@@ -57,7 +57,6 @@ public class TownyRegenAPI {
 	 */
 	public static void turnOffRevertOnUnclaimForWorld(TownyWorld world) {
 		removeRegenQueueListOfWorld(world); // Remove any queued regenerations.
-		removeWorldCoords(world); // Stop any active snapshots being made.
 		removePlotChunksForWorld(world); // Stop any active reverts being done.
 	}
 	
@@ -81,6 +80,7 @@ public class TownyRegenAPI {
 	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
 	 * 
 	 * @param worldCoord - WorldCoord
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.   
 	 */
 	@Deprecated
 	public static void addWorldCoord(WorldCoord worldCoord) {
@@ -90,6 +90,7 @@ public class TownyRegenAPI {
 	 * Removes a TownBlock from having a snapshot taken.
 	 * 
 	 * @param worldCoord - WorldCoord of TownBlock to remove from snapshot list.
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.   
 	 */
 	@Deprecated
 	public static void removeWorldCoord(WorldCoord worldCoord) {
@@ -100,6 +101,7 @@ public class TownyRegenAPI {
 	 * 
 	 * @param world TownyWorld to gather a list of WorldCoords in.
 	 * @return list List<WorldCoord> matched to above world.
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
 	 */
 	@Deprecated
 	private static List<WorldCoord> getWorldCoords(@NotNull TownyWorld world) {
@@ -110,7 +112,9 @@ public class TownyRegenAPI {
 	 * Removes all worldcoords of given TownyWorld from having their snapshots taken.
 	 * 
 	 * @param world - TownyWorld to stop having snapshots made in.
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.   
 	 */
+	@Deprecated
 	private static void removeWorldCoords(TownyWorld world) {
 		for (WorldCoord wc : getWorldCoords(world))
 			removeWorldCoord(wc);
@@ -118,6 +122,7 @@ public class TownyRegenAPI {
 
 	/**
 	 * @return true if there are any TownBlocks to be processed.
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
 	 */
 	@Deprecated
 	public static boolean hasWorldCoords() {
@@ -129,6 +134,7 @@ public class TownyRegenAPI {
 	 * 
 	 * @param worldCoord - WorldCoord to check
 	 * @return true if it's in the queue.
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
 	 */
 	@Deprecated
 	public static boolean hasWorldCoord(WorldCoord worldCoord) {

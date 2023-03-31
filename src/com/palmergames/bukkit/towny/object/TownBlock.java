@@ -468,7 +468,7 @@ public class TownBlock extends TownyObject {
 	/**
 	 * Is the TownBlock locked
 	 * 
-	 * @deprecated as of TODO insert version, Towny will no longer block town blocks while taking snapshots.
+	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
 	 * @return the locked
 	 */
 	@Deprecated
@@ -478,7 +478,7 @@ public class TownBlock extends TownyObject {
 
 	/**
 	 * @param locked is the to locked to set
-	 * @deprecated as of TODO insert version, Towny will no longer block town blocks while taking snapshots.
+	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
 	 */
 	public void setLocked(boolean locked) {
 	}

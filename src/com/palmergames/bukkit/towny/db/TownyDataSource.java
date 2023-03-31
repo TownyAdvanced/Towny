@@ -87,6 +87,9 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadRegenList();
 
+	/**
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
+	 */
 	@Deprecated
 	public boolean loadSnapshotList() {
 		return true;
@@ -117,6 +120,9 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveRegenList();
 
+	/**
+	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
+	 */
 	@Deprecated
 	public boolean saveSnapshotList() {
 		return true;
