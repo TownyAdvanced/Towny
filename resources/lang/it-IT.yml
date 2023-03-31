@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cLa città non può permettersi di comprare %s %s al cost
 msg_annexed_area: '&2La zona %s è stata annessa'
 msg_max_plot_own: '&cNon puoi possedere più di %s lotti.'
 msg_max_outposts_own: '&cNon puoi possedere più di %s avamposti.'
-msg_wait_locked: '&2Sii paziente, i lotti saranno disponibili presto.'
 msg_no_funds_new_nation: '&cLa città non ha abbastanza soldi per creare una nuova nazione.'
 msg_already_claimed: '&cQuesta zona è già stata claimata da: %s'
 msg_already_claimed_1: '&cQuesta zona (%s) già appartiene a qualcuno.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bTipo di lotto impostato a %s'
 msg_cache_block_error: '&cNon sei stato registrato dal Towny. Prova a riconnetterti.'
 msg_cache_block_error_wild: '&cNon puoi %s nella natura.'
 msg_cache_block_error_plot: '&cIl proprietario non consente %s a %s qui.'
-msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cI residenti non possono %s qui.'
 msg_cache_block_error_town_allies: '&cGli alleati non possono %s.'
 msg_cache_block_error_town_outsider: '&cGli estranei non possono %s.'
@@ -586,6 +584,7 @@ jailed_in_town: ' in Città: %s'
 status_friends: 'Amici'
 rank_list_title: '%s Lista Ranghi'
 rank_list_mayor: 'Sindaco:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Aperta)'
 status_town_board: 'Bacheca:'
