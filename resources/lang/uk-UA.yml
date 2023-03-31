@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cМісто не може придбати %s %s варт
 msg_annexed_area: '&2Анексована територія %s'
 msg_max_plot_own: '&cВи не можете мати більше ніж %s територій.'
 msg_max_outposts_own: '&cВи не можете мати більше ніж %s аванпостів.'
-msg_wait_locked: '&2Будь ласка, будьте терплячими, території стануть доступними в найближчий час.'
 msg_no_funds_new_nation: '&cThe town can''t afford to start a new nation.'
 msg_already_claimed: '&cЦя територія вже належить: %s'
 msg_already_claimed_1: '&cЦя територія (%s) вже належить комусь.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bТип ділянки землі зараз %s'
 msg_cache_block_error: '&cВи не зареєстровані в Towny. Спробуйте перезайти.'
 msg_cache_block_error_wild: '&cЗаборонено гравцю %s у диких землях.'
 msg_cache_block_error_plot: '&cВласник не дозволив %s для %s тут.'
-msg_cache_block_error_locked: "Ця ділянка заблокована! Ви не зможете використовувати його, доки Towny не закінчить робити знімки для функції повернення після скасування вимоги"
 msg_cache_block_error_town_resident: '&cМешканці не мають дозволу на %s тут.'
 msg_cache_block_error_town_allies: '&cСоюзники не мають дозволу на %s.'
 msg_cache_block_error_town_outsider: '&cЧужинці не мають дозволу на %s.'
@@ -586,6 +584,7 @@ jailed_in_town: ' у місті: %s'
 status_friends: 'Друзі'
 rank_list_title: '%s Рейтинговий список'
 rank_list_mayor: 'Мер:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Відкр.)'
 status_town_board: 'Дошка оголошень:'

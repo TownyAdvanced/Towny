@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cLa ville ne peut pas se permettre d''acheter %s %s coût
 msg_annexed_area: '&2Zone annexée %s'
 msg_max_plot_own: '&cVous ne pouvez pas posséder plus de %s parcelles.'
 msg_max_outposts_own: '&cVous ne pouvez pas posséder plus de %s avant-postes.'
-msg_wait_locked: '&2Merci de patienter, les parcelles seront bientôt disponibles.'
 msg_no_funds_new_nation: '&cLa ville n’a pas les moyens de créer une nouvelle nation.'
 msg_already_claimed: '&cCette zone a déjà été annexé par: %s'
 msg_already_claimed_1: '&cCette zone (%s) appartient déjà à quelqu''un.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bType de la parcelle fixé à %s'
 msg_cache_block_error: '&cVous n''avez pas été enregistré avec Towny. Essayez de vous reconnecter.'
 msg_cache_block_error_wild: '&cPas autorisé à %s dans la nature.'
 msg_cache_block_error_plot: '&cLe propriétaire ne permet pas aux %s de %s ici.'
-msg_cache_block_error_locked: "Cette parcelle est verrouillée ! Vous ne pourrez pas l'utiliser tant que Towny n'aura pas terminé de faire des sauvegardes pour la fonctionnalité de revert-on-claim."
 msg_cache_block_error_town_resident: '&cLes résidents ne sont pas autorisés à %s ici.'
 msg_cache_block_error_town_allies: '&cLes alliés ne sont pas autorisés à %s.'
 msg_cache_block_error_town_outsider: '&cLes étrangers ne sont pas autorisés à %s.'
@@ -586,6 +584,7 @@ jailed_in_town: ' dans la ville : %s'
 status_friends: 'Amis'
 rank_list_title: 'Liste de rang %s'
 rank_list_mayor: 'Maire :'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Ouvert)'
 status_town_board: 'Description:'

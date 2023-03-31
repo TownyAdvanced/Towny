@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&c마을에 돈이 부족하여 %s개의 %s을(를) %s에 
 msg_annexed_area: '&2추가 지역: %s'
 msg_max_plot_own: '&c%s개의 토지만 소유할 수 있습니다.'
 msg_max_outposts_own: '&c%s개의 전초기지만 소유할 수 있습니다.'
-msg_wait_locked: '&2토지를 점유하는 중입니다.'
 msg_no_funds_new_nation: '&c국가를 세우기 위해 필요한 돈이 부족합니다. 마을 금고에 돈을 넣어주세요.'
 msg_already_claimed: '&c이 지역은 이미 %s님이 점유하였습니다.'
 msg_already_claimed_1: '&c이 지역(%s)은 이미 다른 주민이 점유하고 있습니다.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&b토지 유형이 %s(으)로 설정되었습니다.'
 msg_cache_block_error: '&c귀하는 타우니에 등록되지 않았습니다. 다시 접속해보세요.'
 msg_cache_block_error_wild: '&c야생에서는 %s할 수 없습니다.'
 msg_cache_block_error_plot: '&c토지의 주인이 %s이(가) 이곳에서 %s하는 것을 허락하지 않았습니다.'
-msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&c주민은 여기서 %s할 수 없습니다.'
 msg_cache_block_error_town_allies: '&c동맹국 국민은 여기서 %s할 수 없습니다.'
 msg_cache_block_error_town_outsider: '&c외부인은 여기서 %s할 수 없습니다.'
@@ -586,6 +584,7 @@ jailed_in_town: ' 소속마을: %s'
 status_friends: '친구'
 rank_list_title: '%s 등급 목록'
 rank_list_mayor: '시장:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(자유 가입)'
 status_town_board: '보드:'

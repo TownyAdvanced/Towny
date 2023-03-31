@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cMiasto nie może sobie pozwolić na zakup %s %s kosztuja
 msg_annexed_area: '&2Zaanektowano obszar %s'
 msg_max_plot_own: '&cNie możesz mieć więcej niż %s działek.'
 msg_max_outposts_own: '&cNie możesz posiadać więcej niż %s placówek.'
-msg_wait_locked: '&2Teren zostanie ci przypisany już za chwilę.'
 msg_no_funds_new_nation: '&cMiasta nie stać na utworzenie nacji.'
 msg_already_claimed: '&cTen obszar został przejęty przez: %s'
 msg_already_claimed_1: '&cObszar (%s) już do kogoś należy'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&btyp działki został zmieniony na %s'
 msg_cache_block_error: '&cNie jesteś zarejestrowany w Towny. Spróbuj wyjść i wejść.'
 msg_cache_block_error_wild: '&cNie masz uprawnienia do czynności "%s" na dzikich terenach.'
 msg_cache_block_error_plot: '&cJako właściciel działki nie masz uprawnienia "%s" na tym terenie.'
-msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cMieszkańcy nie mają tutaj uprawnienia "%s".'
 msg_cache_block_error_town_allies: '&cSojusznicy nie mają tutaj uprawnienia "%s".'
 msg_cache_block_error_town_outsider: '&cObcy nie posiadają uprawnień do "%s".'
@@ -586,6 +584,7 @@ jailed_in_town: ' w mieście: %s'
 status_friends: 'Znajomi'
 rank_list_title: '%s: Lista Rang'
 rank_list_mayor: 'Burmistrz:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Otwarte)'
 status_town_board: 'Tablica:'
