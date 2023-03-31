@@ -119,9 +119,12 @@ public class CellBorder extends WorldCoord {
 		}
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.98.3.13, please use {@link #runBorderedOnSurface(int, int, Consumer)} instead.
+	 */
 	@Deprecated
-	private void runBorderedOnSurface$$bridge$$public(int wallHeight, int cornerHeight, LocationRunnable runnable) {
-		runBorderedOnSurface(wallHeight, cornerHeight, runnable::run);
+	public void runBorderedOnSurface(int wallHeight, int cornerHeight, LocationRunnable runnable) {
+		runBorderedOnSurface(wallHeight, cornerHeight, (Consumer<Location>) runnable::run);
 	}
 
 	@Override
