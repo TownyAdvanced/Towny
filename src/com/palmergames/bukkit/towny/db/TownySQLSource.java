@@ -1869,12 +1869,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception ignored) {
 				}
 
-				result = rs.getBoolean("locked");
-				try {
-					townBlock.setLocked(result);
-				} catch (Exception ignored) {
-				}
-
 				townBlock.setClaimedAt(rs.getLong("claimedAt"));
 
 				try {
@@ -2484,7 +2478,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions",
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
-			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
 			tb_hm.put("claimedAt", townBlock.getClaimedAt());
 			if (townBlock.hasPlotObjectGroup())

@@ -7,9 +7,13 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +33,7 @@ public class PlotBlockData {
 	private final TownBlock townBlock;
 	private int x, z, size, height, minHeight, version;
 
-	private List<String> blockList = new ArrayList<>(); // Stores the original plot blocks
+	private final List<String> blockList = new ArrayList<>(); // Stores the original plot blocks
 	private int blockListRestored; // counter for the next block to test
 
 	public PlotBlockData(TownBlock townBlock) {
@@ -45,10 +49,10 @@ public class PlotBlockData {
 		this.blockListRestored = 0;
 	}
 
-	public void initialize() {
+	public void initialize(List<ChunkSnapshot> snapshots) {
 
-		List<String> blocks = getBlockArr();
-		if (blocks != null) {
+		List<String> blocks = getBlockArr(snapshots);
+		if (!blocks.isEmpty()) {
 			setBlockList(blocks); //fill array
 			resetBlockListRestored();
 		}
@@ -57,21 +61,49 @@ public class PlotBlockData {
 	/**
 	 * Fills an array with the current Block types from the plot.
 	 * 
-	 * @return
+	 * @return A list containing the block data for each blocks in this plot.
 	 */
-	private List<String> getBlockArr() {
+	private List<String> getBlockArr(List<ChunkSnapshot> snapshots) {
+		final List<String> blocks = new ArrayList<>();
 
-		List<String> list = new ArrayList<>();
-		Block block = null;
+		// If the town block size is 16 we can just use this
+		final ChunkSnapshot single = snapshots.size() == 1 && this.size == 16 ? snapshots.get(0) : null;
 
-		World world = this.townBlock.getWorldCoord().getBukkitWorld();
+		final World world = this.townBlock.getWorldCoord().getBukkitWorld();
+		if (world == null)
+			return blocks;
+		
 		for (int z = 0; z < size; z++)
 			for (int x = 0; x < size; x++)
 				for (int y = height; y > minHeight; y--) { // Top down to account for falling blocks.
-					block = world.getBlockAt((getX() * size) + x, y, (getZ() * size) + z);
-					list.add(block.getBlockData().getAsString(true));
+					if (single != null) {
+						// Our xyz will match the chunk's xyz
+						blocks.add(single.getBlockData(x, y, z).getAsString(true));
+						continue;
+					}
+					
+					blocks.add(lookupData(snapshots, x, y, z).getAsString(true));
 				}
-		return list;
+		
+		return blocks;
+	}
+	
+	private BlockData lookupData(List<ChunkSnapshot> snapshots, int x, int y, int z) {
+		final int worldX = getX() * size + x;
+		final int worldZ = getZ() * size + z;
+		
+		final int chunkX = worldX >> 4;
+		final int chunkZ = worldZ >> 4;
+		
+		for (ChunkSnapshot snapshot : snapshots) {
+			if (snapshot.getX() != chunkX || snapshot.getZ() != chunkZ)
+				continue;
+			
+			return snapshot.getBlockData(worldX & 0xF, y, worldZ & 0xF);
+		}
+		
+		// This should not happen, this would mean the supplied chunk snapshot is outside our world coord.
+		return Material.AIR.createBlockData();
 	}
 
 	/**
@@ -81,24 +113,18 @@ public class PlotBlockData {
 	 */
 	public boolean restoreNextBlock() {
 
-		Block block = null;
 		int x, y, z, reverse;
 		int worldx = getX() * size, worldz = getZ() * size;
 		int yRange = Math.abs(minHeight) + height;
-		Material blockMat, mat;
-		BlockObject storedData;
 		World world = this.townBlock.getWorldCoord().getBukkitWorld();
 
-		if (!world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
+		if (world == null || !world.isChunkLoaded(BukkitTools.calcChunk(getX()), BukkitTools.calcChunk(getZ())))
 			return true;
 
-		//Catch old snapshots which will not regenerate correctly.
-		switch (version) {
-			case 4, 5:
-				break;
-			default:
-				TownyMessaging.sendErrorMsg("Towny found a plotsnapshot which is from a version too old to use!");
-				return false;
+		// Catch old snapshots which will not regenerate correctly.
+		if (this.version < 4) {
+			TownyMessaging.sendErrorMsg("Towny found a plotsnapshot which is from a version too old to use!");
+			return false;
 		}
 
 		reverse = (blockList.size() - blockListRestored);
@@ -110,8 +136,9 @@ public class PlotBlockData {
 			x = (reverse / yRange) % size;
 			z = (reverse / yRange / size) % size;
 	
-			block = world.getBlockAt(worldx + x, y, worldz + z);
-			blockMat = block.getType();
+			final Block block = world.getBlockAt(worldx + x, y, worldz + z);
+			final Material blockMat = block.getType();
+			final BlockObject storedData;
 			try {
 				storedData = getStoredBlockData(blockList.size() - blockListRestored);
 			} catch (IllegalArgumentException e1) {
@@ -119,7 +146,7 @@ public class PlotBlockData {
 				continue;
 			}
 
-			mat = storedData.getMaterial();
+			final Material mat = storedData.getMaterial();
 
 			// Catch mat being null or currently existing block being the same.
 			if (mat == null || blockMat == mat) {
@@ -232,11 +259,11 @@ public class PlotBlockData {
 	/**
 	 * fills the BlockList
 	 * 
-	 * @param blockList - BlockList (List&lt;String&gt;)
+	 * @param blockList BlockList (List&lt;String&gt;)
 	 */
-	public void setBlockList(List<String> blockList) {
-
-		this.blockList = blockList;
+	public void setBlockList(final @NotNull List<String> blockList) {
+		this.blockList.clear();
+		this.blockList.addAll(blockList);
 	}
 
 	/**

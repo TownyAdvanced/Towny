@@ -255,9 +255,9 @@ public class WorldCoord extends Coord {
 			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
 			final Set<CompletableFuture<Chunk>> chunkFutures = new HashSet<>();
 			
-			int side = Math.round(getCellSize() / 16f);
-			for (int x = 0; x <= side; x++) {
-				for (int z = 0; z <= side; z++) {
+			int side = (int) Math.ceil(getCellSize() / 16f);
+			for (int x = 0; x < side; x++) {
+				for (int z = 0; z < side; z++) {
 					chunkFutures.add(PaperLib.getChunkAtAsync(getSubCorner(x, z)));
 				}
 			}
