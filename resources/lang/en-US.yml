@@ -14,7 +14,7 @@ description: >
 # https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
 #
 #
-# A note on text formatting (how Towny inserts words.)
+# A note on text formatting (how Towny status_title_pvpinserts words.)
 # ----------------------------------------------------
 #
 # You MUST retain spacing in the texts.
@@ -663,6 +663,7 @@ jailed_in_town: ' in Town: %s'
 status_friends: 'Friends'
 rank_list_title: '%s Rank List'
 rank_list_mayor: 'Mayor:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Open)'
 status_town_board: 'Board:'

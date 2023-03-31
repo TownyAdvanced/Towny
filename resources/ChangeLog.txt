@@ -8497,3 +8497,5 @@ v0.92.0.11:
   - Fix reversed test in CombatUtil#isEnemyTownBlock(Resident, WorldCoord).
   - Bump commons-compress from 1.22 to 1.23.0.
   - Bump placeholderapi from 2.11.2 to 2.11.3.
+0.98.6.25:
+  - Add (Capital) badge to Town subtitles, when a town is a nation capital.

@@ -835,6 +835,8 @@ public class TownyFormatter {
 	 */
 	private static List<String> getTownSubtitle(Town town, TownyWorld world, Translator translator) {
 		List<String> sub = new ArrayList<>();
+		if (town.isCapital())
+			sub.add(translator.of("status_title_capital"));
 		if (!town.isAdminDisabledPVP() && (town.isPVP() || world.isForcePVP()))
 			sub.add(translator.of("status_title_pvp"));
 		if (town.isOpen())
