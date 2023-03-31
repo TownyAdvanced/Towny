@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&c城镇没有足够的资金来购买 %s %s ,需要花费
 msg_annexed_area: '&2被吞并的区域 %s'
 msg_max_plot_own: '&c你不能拥有多于 %s 块的土地.'
 msg_max_outposts_own: '&c你不能声明多余 %s 个的前哨.'
-msg_wait_locked: '&2请耐心等待, 这块土地不久后就可以使用了.'
 msg_no_funds_new_nation: '&c城镇没有足够的资金来建国.'
 msg_already_claimed: '&c这片区域已被%s声明'
 msg_already_claimed_1: '&c这块区域 (%s)已经隶属于某人.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
 msg_cache_block_error_plot: '&c地主不允许 %s  %s .'
-msg_cache_block_error_locked: "此地皮已被锁定！在城镇恢复到无认领状态的快照之前，您无法使用它。"
 msg_cache_block_error_town_resident: '&c居民不能在这里 %s.'
 msg_cache_block_error_town_allies: '&c盟友不能 %s.'
 msg_cache_block_error_town_outsider: '&cO外来者不能 %s.'
@@ -586,6 +584,7 @@ jailed_in_town: ' 于城镇%s中'
 status_friends: '好友'
 rank_list_title: '%s的头衔列表'
 rank_list_mayor: '城主：'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(开放)'
 status_town_board: '公告栏：'
