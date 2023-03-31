@@ -99,7 +99,7 @@ public class PlotBlockData {
 			if (snapshot.getX() != chunkX || snapshot.getZ() != chunkZ)
 				continue;
 			
-			return snapshot.getBlockData(worldX % 16, y, worldZ % 16);
+			return snapshot.getBlockData(worldX & 0xF, y, worldZ & 0xF);
 		}
 		
 		// This should not happen, this would mean the supplied chunk snapshot is outside our world coord.
