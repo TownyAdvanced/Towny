@@ -574,7 +574,7 @@ public class SQL_Schema {
      */
     public static void cleanup(Connection cntx, String db_name) {
     	
-    	List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
+    	final List<ColumnUpdate> cleanups = new ArrayList<>();
     	cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
     	cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
     	cleanups.add(ColumnUpdate.of("NATIONS", "towns"));
@@ -588,6 +588,7 @@ public class SQL_Schema {
     	cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
     	cleanups.add(ColumnUpdate.of("WORLDS", "disableplayertrample"));
     	cleanups.add(ColumnUpdate.of("TOWNS", "assistants"));
+		cleanups.add(ColumnUpdate.of("TOWNSBLOCKS", "locked"));
 
     	for (ColumnUpdate update : cleanups)
     		dropColumn(cntx, db_name, update.getTable(), update.getColumn());
@@ -624,8 +625,8 @@ public class SQL_Schema {
     }
     
     private static class ColumnUpdate {
-    	private String table;
-    	private String column;
+    	private final String table;
+    	private final String column;
     	
     	private ColumnUpdate(String table, String column) {
     		this.table = SQL_Schema.tb_prefix + table;

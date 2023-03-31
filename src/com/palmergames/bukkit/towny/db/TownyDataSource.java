@@ -55,12 +55,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadSnapshotList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveSnapshotList();
+		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList();
 	}
 
 	public boolean saveAllWorlds() {
@@ -70,7 +70,7 @@ public abstract class TownyDataSource {
 
 	public boolean saveQueues() {
 
-		return saveRegenList() && saveSnapshotList();
+		return saveRegenList();
 	}
 
 	abstract public void finishTasks();
@@ -87,7 +87,10 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadRegenList();
 
-	abstract public boolean loadSnapshotList();
+	@Deprecated
+	public boolean loadSnapshotList() {
+		return true;
+	}
 
 	abstract public boolean loadTownBlocks();
 
@@ -114,7 +117,10 @@ public abstract class TownyDataSource {
 
 	abstract public boolean saveRegenList();
 
-	abstract public boolean saveSnapshotList();
+	@Deprecated
+	public boolean saveSnapshotList() {
+		return true;
+	}
 
 	abstract public boolean saveResident(Resident resident);
 

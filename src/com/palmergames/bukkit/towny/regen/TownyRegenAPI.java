@@ -11,6 +11,8 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -27,6 +29,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -40,9 +43,6 @@ public class TownyRegenAPI {
 	
 	// table containing snapshot data of active reversions.
 	private static Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
-
-	// A list of worldCoords which are needing snapshots
-	private static final List<WorldCoord> worldCoords = new ArrayList<>();
 	
 	// A holder for each protection regen task
 	private static final Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<>();
@@ -81,10 +81,8 @@ public class TownyRegenAPI {
 	 * 
 	 * @param worldCoord - WorldCoord
 	 */
+	@Deprecated
 	public static void addWorldCoord(WorldCoord worldCoord) {
-
-		if (!worldCoords.contains(worldCoord))
-			worldCoords.add(worldCoord);
 	}
 	
 	/**
@@ -92,9 +90,8 @@ public class TownyRegenAPI {
 	 * 
 	 * @param worldCoord - WorldCoord of TownBlock to remove from snapshot list.
 	 */
+	@Deprecated
 	public static void removeWorldCoord(WorldCoord worldCoord) {
-
-		worldCoords.remove(worldCoord);
 	}
 	
 	/**
@@ -103,13 +100,9 @@ public class TownyRegenAPI {
 	 * @param world TownyWorld to gather a list of WorldCoords in.
 	 * @return list List<WorldCoord> matched to above world.
 	 */
+	@Deprecated
 	private static List<WorldCoord> getWorldCoords(@NotNull TownyWorld world) {
-		List<WorldCoord> list = new ArrayList<>();
-		for (WorldCoord wc : worldCoords)
-			if (world.equals(wc.getTownyWorld()))
-				list.add(wc);
-
-		return list;
+		return new ArrayList<>();
 	}
 	
 	/**
@@ -125,9 +118,9 @@ public class TownyRegenAPI {
 	/**
 	 * @return true if there are any TownBlocks to be processed.
 	 */
+	@Deprecated
 	public static boolean hasWorldCoords() {
-
-		return worldCoords.size() != 0;
+		return false;
 	}
 
 	/**
@@ -136,21 +129,16 @@ public class TownyRegenAPI {
 	 * @param worldCoord - WorldCoord to check
 	 * @return true if it's in the queue.
 	 */
+	@Deprecated
 	public static boolean hasWorldCoord(WorldCoord worldCoord) {
-
-		return worldCoords.contains(worldCoord);
+		return false;
 	}
 
 	/**
 	 * @return First WorldCoord to be processed.
 	 */
+	@Deprecated
 	public static WorldCoord getWorldCoord() {
-
-		if (!worldCoords.isEmpty()) {
-			WorldCoord wc = worldCoords.get(0);
-			worldCoords.remove(0);
-			return wc;
-		}
 		return null;
 	}
 
@@ -189,10 +177,8 @@ public class TownyRegenAPI {
 	 * @param wc WorldCoord to add to the queue.
 	 */
 	public static void removeFromRegenQueueList(WorldCoord wc) {
-		if (!regenWorldCoordList.contains(wc))
-			return;
-		regenWorldCoordList.remove(wc);
-		TownyUniverse.getInstance().getDataSource().saveRegenList();
+		if (regenWorldCoordList.remove(wc))
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
 	/**
@@ -311,7 +297,9 @@ public class TownyRegenAPI {
 	 */
 	public static void addPlotChunkSnapshot(PlotBlockData plotChunk) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDataSource().loadPlotData(plotChunk.getWorldName(), plotChunk.getX(), plotChunk.getZ()) == null) {
+		
+		final TownBlock townBlock = plotChunk.getWorldCoord().getTownBlockOrNull();
+		if (townBlock == null || !townyUniverse.getDataSource().hasPlotData(townBlock)) {
 			townyUniverse.getDataSource().savePlotData(plotChunk);
 		}
 	}
@@ -647,4 +635,30 @@ public class TownyRegenAPI {
 		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(coord, collection);
 	}
 
+	/**
+	 * Creates a new snapshot and handles saving it
+	 * @param townBlock The townblock to take a snapshot of
+	 */
+	public static void handleNewSnapshot(final @NotNull TownBlock townBlock) {
+		createPlotSnapshot(townBlock).thenAcceptAsync(data -> {
+			if (data.getBlockList().isEmpty())
+				return;
+
+			addPlotChunkSnapshot(data);
+		});
+	}
+
+	public static CompletableFuture<PlotBlockData> createPlotSnapshot(final @NotNull TownBlock townBlock) {
+		final List<ChunkSnapshot> snapshots = new ArrayList<>();
+		final Collection<CompletableFuture<Chunk>> futures = townBlock.getWorldCoord().getChunks();
+		
+		futures.forEach(future -> future.thenAccept(chunk -> snapshots.add(chunk.getChunkSnapshot(false, false, false))));
+		
+		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[]{})).thenApplyAsync(v -> {
+			final PlotBlockData data = new PlotBlockData(townBlock);
+			data.initialize(snapshots);
+			
+			return data;
+		});
+	}
 }

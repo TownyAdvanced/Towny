@@ -193,6 +193,10 @@ public class PlayerCache {
 		ADMIN,
 		UNCLAIMED_ZONE,
 		NATION_ZONE,
+		/**
+		 * @deprecated as of TODO insert version, Towny will no longer block town blocks while taking snapshots.
+		 */
+		@Deprecated
 		LOCKED,
 		WARZONE,
 		OUTSIDER,

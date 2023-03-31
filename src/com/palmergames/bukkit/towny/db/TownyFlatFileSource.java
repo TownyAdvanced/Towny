@@ -1696,13 +1696,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setChanged(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
-					
-					line = keys.get("locked");
-					if (line != null)
-						try {
-							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
-						} catch (Exception ignored) {
-						}
 
 					line = keys.get("claimedAt");
 					if (line != null)
@@ -2319,8 +2312,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Have permissions been manually changed
 		list.add("changed=" + townBlock.isChanged());
-
-		list.add("locked=" + townBlock.isLocked());
 
 		list.add("claimedAt=" + townBlock.getClaimedAt());
 		

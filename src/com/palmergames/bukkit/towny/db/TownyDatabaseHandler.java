@@ -1234,33 +1234,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 	}
 	
-	@Override
-	public boolean loadSnapshotList() {
-		
-		TownyMessaging.sendDebugMsg("Loading Snapshot Queue");
-		
-		String line = null;
-		
-		String[] split;
-		try (BufferedReader fin = new BufferedReader(new InputStreamReader(new FileInputStream(dataFolderPath + File.separator + "snapshot_queue.txt"), StandardCharsets.UTF_8))) {
-			
-			while ((line = fin.readLine()) != null)
-				if (!line.equals("")) {
-					split = line.split(",");
-					WorldCoord worldCoord = new WorldCoord(split[0], Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-					TownyRegenAPI.addWorldCoord(worldCoord);
-				}
-			return true;
-			
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Error Loading Snapshot Queue List at " + line + ", in towny\\data\\snapshot_queue.txt");
-			e.printStackTrace();
-			return false;
-			
-		}
-		
-	}
-	
 	protected final String serializeMetadata(TownyObject obj) {
 		return DataFieldIO.serializeCDFs(obj.getMetadata());
 	}
@@ -1276,21 +1249,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		});
 
 		return true;
-	}
-
-	@Override
-	public boolean saveSnapshotList() {
-       queryQueue.add(() -> {
-       		List<String> coords = new ArrayList<>();
-       		while (TownyRegenAPI.hasWorldCoords()) {
-			   	WorldCoord worldCoord = TownyRegenAPI.getWorldCoord();
-			   	coords.add(worldCoord.getWorldName() + "," + worldCoord.getX() + "," + worldCoord.getZ());
-		    }
-       		
-       		FileMgmt.listToFile(coords, dataFolderPath + File.separator + "snapshot_queue.txt");
-	   });
-       
-       return true;
 	}
 
 	/*
