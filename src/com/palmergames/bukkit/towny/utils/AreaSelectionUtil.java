@@ -219,7 +219,7 @@ public class AreaSelectionUtil {
 		// We remove the first pos if this is a claim and it is not wilderness.
 		if (claim && !pos.isWilderness())
 			out.remove(0);
-		System.out.println("debug -17");
+
 		return out;
 	}
 
