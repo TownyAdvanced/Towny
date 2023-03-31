@@ -67,7 +67,7 @@ nation_help_3: 'Status der ausgewählten Nation'
 nation_help_4: 'Zeigt dir eine Liste mit allen Nationen'
 nation_help_5: 'Deine Nation verlassen.'
 nation_help_6: 'Gründe eine neue Nation.'
-nation_help_7: 'Nationsführer-Befehle auflisten'
+nation_help_7: 'List the nation leader commands'
 nation_help_8: 'Gründe eine neue Nation.'
 nation_help_9: 'Listet alle Bürger der Nation auf, die Online sind.'
 king_help_1: 'Nation Führer Hilfe'
@@ -292,7 +292,7 @@ msg_plot_set_type: '&bGrundstücksttyp wurde auf %s gesetzt.'
 msg_cache_block_error: '&cDu wirst von Towny nicht erkannt. Versuche dich neu einzuloggen.'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
 msg_cache_block_error_plot: '&c Der Besitzer erlaubt %s nicht auf disem Platz %s zu tun.'
-msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
+msg_cache_block_error_locked: "Dieses Grundstück ist gesperrt! Du kannst es erst dann verwenden, wenn Towny Snapshot für das rückgängig machende Feature erstellt."
 msg_cache_block_error_town_resident: '&c Bürgern ist %s hier verboten.'
 msg_cache_block_error_town_allies: '&c Verbündeten ist %s hier verboten.'
 msg_cache_block_error_town_outsider: '&c Aussenstehenden ist %s hier verboten.'
@@ -1428,7 +1428,7 @@ tc_player_channel_sound_unmuted: 'Der Kanalton wurde freigeschaltet'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Es ist ein Außenseiter in deinem Grundstück, du kannst deinen PvP-Status nicht ändern!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&7Klicke, um im Web anzuzeigen.'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6Die Stadt %s hat zugestimmt, zusammen mit der vorherrschenden Stadt %s zusammenzuführen.'
