@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cByen har ikke råd til at købe %s %s kostende %s. Tilf�
 msg_annexed_area: '&2Vedføjede området %s'
 msg_max_plot_own: '&cDu kan ikke eje mere end %s grunde.'
 msg_max_outposts_own: '&cDu kan ikke eje mere end %s forposter.'
-msg_wait_locked: '&2Hav tålmodighed, grundene vil være tilgængelige snart.'
 msg_no_funds_new_nation: '&cByen har ikke råd til at starte en ny nation.'
 msg_already_claimed: '&cDette område er der allerede blevet gjort krav på af: %s'
 msg_already_claimed_1: '&cDette område (%s) tilhører allerede nogen.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bGrundtype sat til %s'
 msg_cache_block_error: '&cDu er ikke blevet registreret af Towny. Prøv at logge ind igen.'
 msg_cache_block_error_wild: '&cDet er ikke tilladt at %s i ødemarken.'
 msg_cache_block_error_plot: '&cEjeren tillader ikke at %s til %s her.'
-msg_cache_block_error_locked: "This plot is locked! You won't be able to use it until Towny is done making snapshots for the revert-on-unclaim feature."
 msg_cache_block_error_town_resident: '&cIndbyggere er ikke tilladte at %s her.'
 msg_cache_block_error_town_allies: '&cAllierede er ikke tilladte at %s.'
 msg_cache_block_error_town_outsider: '&cUdenforstående er ikke tilladte at %s.'
@@ -586,6 +584,7 @@ jailed_in_town: ' in Town: %s'
 status_friends: 'Venner'
 rank_list_title: '%s Rank List'
 rank_list_mayor: 'Mayor:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Åben)'
 status_town_board: 'Board:'
