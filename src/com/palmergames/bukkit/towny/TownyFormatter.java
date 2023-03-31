@@ -833,7 +833,7 @@ public class TownyFormatter {
 	 * @param translator Translator used in language selection.
 	 * @return Formatted 2nd line of the Town StatusScreen.
 	 */
-	private static List<String> getTownSubtitle(Town town, TownyWorld world, Translator translator) {
+	public static List<String> getTownSubtitle(Town town, TownyWorld world, Translator translator) {
 		List<String> sub = new ArrayList<>();
 		if (town.isCapital())
 			sub.add(translator.of("status_title_capital"));
@@ -856,7 +856,7 @@ public class TownyFormatter {
 	 * @param translator Translator used in language selection.
 	 * @return Formatted 2nd line of the Nation StatusScreen.
 	 */
-	private static List<String> getNationSubtitle(Nation nation, Translator translator) {
+	public static List<String> getNationSubtitle(Nation nation, Translator translator) {
 		List<String> sub = new ArrayList<>();
 		if (nation.isOpen())
 			sub.add(translator.of("status_title_open"));
