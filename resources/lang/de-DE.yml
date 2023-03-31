@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cDie stadt kann es sich nicht leisten %s %s zu kaufen. De
 msg_annexed_area: '&2Annektierter Bereich: %s'
 msg_max_plot_own: '&cDu kannst nicht mehr als %s Grundstücke besitzen.'
 msg_max_outposts_own: '&cDu kannst nicht mehr als %s Außenposten besitzen.'
-msg_wait_locked: '&2Sei nicht so ungeduldig! Die Grundstücke sind doch schon verfügbar.'
 msg_no_funds_new_nation: '&cDie Stadt kann eine neue Nation nicht finanzieren.'
 msg_already_claimed: '&cDieser Bereich wurde bereits von %s beansprucht'
 msg_already_claimed_1: '&cDieser Bereich (%s) gehört bereits jemanden.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bGrundstücksttyp wurde auf %s gesetzt.'
 msg_cache_block_error: '&cDu wirst von Towny nicht erkannt. Versuche dich neu einzuloggen.'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
 msg_cache_block_error_plot: '&c Der Besitzer erlaubt %s nicht auf disem Platz %s zu tun.'
-msg_cache_block_error_locked: "Dieses Grundstück ist gesperrt! Du kannst es erst dann verwenden, wenn Towny Snapshot für das rückgängig machende Feature erstellt."
 msg_cache_block_error_town_resident: '&c Bürgern ist %s hier verboten.'
 msg_cache_block_error_town_allies: '&c Verbündeten ist %s hier verboten.'
 msg_cache_block_error_town_outsider: '&c Aussenstehenden ist %s hier verboten.'
@@ -586,6 +584,7 @@ jailed_in_town: ' in Stadt: %s'
 status_friends: 'Freunde'
 rank_list_title: '%s Rangliste'
 rank_list_mayor: 'Bürgermeister:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Offen)'
 status_town_board: 'Schwarzes Brett:'
