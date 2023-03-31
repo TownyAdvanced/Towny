@@ -37,7 +37,6 @@ public class TownBlock extends TownyObject {
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;
 	private double plotPrice = -1;
-	private boolean locked = false;
 	private boolean outpost = false;
 	private PlotGroup plotGroup;
 	private long claimedAt;
@@ -469,19 +468,19 @@ public class TownBlock extends TownyObject {
 	/**
 	 * Is the TownBlock locked
 	 * 
+	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
 	 * @return the locked
 	 */
+	@Deprecated
 	public boolean isLocked() {
-
-		return locked;
+		return false;
 	}
 
 	/**
 	 * @param locked is the to locked to set
+	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
 	 */
 	public void setLocked(boolean locked) {
-
-		this.locked = locked;
 	}
 
 	public void setWorld(TownyWorld world) {

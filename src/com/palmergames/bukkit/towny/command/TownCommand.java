@@ -2815,15 +2815,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				// This plot is in the regeneration queue.
 				TownyRegenAPI.removeFromActiveRegeneration(plotChunk); // just claimed so stop regeneration.
 				TownyRegenAPI.removeFromRegenQueueList(townBlock.getWorldCoord()); // Remove the WorldCoord from the regenqueue.
+				TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
 			} else {
-
-				plotChunk = new PlotBlockData(townBlock); // Not regenerating so create a new snapshot.
-				plotChunk.initialize();
-
+				TownyRegenAPI.handleNewSnapshot(townBlock);
 			}
-			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save a snapshot.
-			plotChunk = null;
 		}
+		
 		if (TownyEconomyHandler.isActive()) {
 			TownyMessaging.sendDebugMsg("Creating new Town account: " + TownySettings.getTownAccountPrefix() + name);
 			try {

@@ -19,7 +19,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 import com.palmergames.bukkit.util.BukkitTools;
 
@@ -267,14 +266,6 @@ public class PlayerCacheUtil {
 		// Has to be in a town.
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
 		Town town = worldCoord.getTownOrNull();
-		if (townBlock.isLocked()) {
-			// Push the TownBlock location to the queue for a snapshot (if it's not already in the queue).
-			if (townBlock.getWorld().isUsingPlotManagementRevert() && (TownySettings.getPlotManagementSpeed() > 0)) {
-				TownyRegenAPI.addWorldCoord(townBlock.getWorldCoord());
-				return TownBlockStatus.LOCKED;
-			}
-			townBlock.setLocked(false);
-		}
 
 		/*
 		 * Find the resident data for this player.
@@ -384,11 +375,6 @@ public class PlayerCacheUtil {
 
 		if (status == TownBlockStatus.NOT_REGISTERED) {
 			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error").forLocale(player));
-			return false;
-		}
-
-		if (status == TownBlockStatus.LOCKED) {
-			cacheBlockErrMsg(player, Translatable.of("msg_cache_block_error_locked").forLocale(player));
 			return false;
 		}
 

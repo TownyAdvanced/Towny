@@ -41,7 +41,6 @@ public class TownClaim implements Runnable {
 	private double runningRefund = 0.0;
 	private double insufficientFunds = 0.0;
 	private boolean successfulRun = false;
-	private boolean plotLocked = false;
 
 	/**
 	 * @param plugin reference to towny
@@ -151,8 +150,6 @@ public class TownClaim implements Runnable {
 			if (claim) {
 				// Something has been claimed.
 				TownyMessaging.sendMsg(player, Translatable.of("msg_annexed_area", feedbackSlug));
-				if (plotLocked) // Send plot is locked message.
-					TownyMessaging.sendMsg(player, Translatable.of("msg_wait_locked"));
 			} else if (forced) {
 				// An admin has force-fully unclaimed an area.
 				TownyMessaging.sendMsg(player, Translatable.of("msg_admin_unclaim_area", feedbackSlug));
@@ -200,16 +197,14 @@ public class TownClaim implements Runnable {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
 			if (plotChunk != null) {
 				TownyRegenAPI.removeFromActiveRegeneration(plotChunk); // just claimed so stop regeneration.
-				townBlock.setLocked(false);
 			}
 			TownyRegenAPI.removeFromRegenQueueList(worldCoord);
 		}
+		
 		// Check if a plot snapshot exists for this townblock already (inactive, unqueued regeneration.)
 		if (!TownyUniverse.getInstance().getDataSource().hasPlotData(townBlock)) {
 			// Queue to have a snapshot made if there is not already an earlier snapshot.
-			TownyRegenAPI.addWorldCoord(worldCoord);
-			townBlock.setLocked(true);
-			plotLocked = true;
+			TownyRegenAPI.handleNewSnapshot(townBlock);
 		}
 	}
 

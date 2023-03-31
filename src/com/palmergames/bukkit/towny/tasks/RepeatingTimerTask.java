@@ -3,9 +3,7 @@ package com.palmergames.bukkit.towny.tasks;
 import org.bukkit.Bukkit;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -33,11 +31,6 @@ public class RepeatingTimerTask extends TownyTimerTask {
 		  The following actions should be performed every second.
 		 */
 
-		// Take a snapshot of the next townBlock and save.
-		if (TownyRegenAPI.hasWorldCoords()) {
-			makeNextPlotSnapshot();
-		}
-
 		// Try to perform the next plot_management entity_delete
 		if (WorldCoordEntityRemover.hasQueue()) {
 			tryDeleteTownBlockEntityQueue();
@@ -59,25 +52,6 @@ public class RepeatingTimerTask extends TownyTimerTask {
 				TownyRegenAPI.finishPlotBlockData(plotBlockData);
 
 		timerCounter = 0L;
-	}
-
-	private void makeNextPlotSnapshot() {
-		WorldCoord wc = TownyRegenAPI.getWorldCoord();
-		TownBlock townBlock = wc.getTownBlockOrNull();
-		if (townBlock == null)
-			return;
-		PlotBlockData plotChunk = new PlotBlockData(townBlock);
-		plotChunk.initialize(); // Create a new snapshot.
-		if (!plotChunk.getBlockList().isEmpty() && !(plotChunk.getBlockList() == null))
-			TownyRegenAPI.addPlotChunkSnapshot(plotChunk); // Save the snapshot.
-		plotChunk = null;
-		
-		townBlock.setLocked(false);
-		townBlock.save();
-		plugin.updateCache(townBlock.getWorldCoord());
-
-		if (!TownyRegenAPI.hasWorldCoords())
-			TownyMessaging.sendDebugMsg("Plot snapshots completed.");
 	}
 
 	private void tryDeleteTownBlockEntityQueue() {
