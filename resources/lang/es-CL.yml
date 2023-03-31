@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cLa ciudad no tiene dinero para comprar %s %s con un cost
 msg_annexed_area: '&2El área %s ha sido anexada.'
 msg_max_plot_own: '&cNo puedes tener más de %s terrenos.'
 msg_max_outposts_own: '&cNo puedes tener más de %s outposts.'
-msg_wait_locked: '&2Por favor sé paciente, los terrenos estarán disponibles pronto.'
 msg_no_funds_new_nation: '&cLa ciudad no tiene suficiente dinero para fundar un país.'
 msg_already_claimed: '&cEsta área ya fue reclamada por %s'
 msg_already_claimed_1: '&cEsta área (%s) ya le pertenece a alguien.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bTipo de terreno cambiado a %s'
 msg_cache_block_error: '&cNo estás registrado en Towny, intenta reconectarte.'
 msg_cache_block_error_wild: '&cNo está permitido %s en el Exterior.'
 msg_cache_block_error_plot: '&cEl propietario no permite a %s %s aquí.'
-msg_cache_block_error_locked: "¡Esta parcela está bloqueada! No podrás usarla hasta que Towny haya terminado de hacer instantáneas para la característica \"revertir al liberar\"."
 msg_cache_block_error_town_resident: '&cLos habitantes no tienen permitido %s aquí.'
 msg_cache_block_error_town_allies: '&cLos aliados no tiene permitido %s.'
 msg_cache_block_error_town_outsider: '&cLos extranjeros no tienen permitido %s.'
@@ -586,6 +584,7 @@ jailed_in_town: ' en Ciudad: %s'
 status_friends: 'Amigos'
 rank_list_title: '%s Lista de Rangos'
 rank_list_mayor: 'Alcalde:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Abierta)'
 status_town_board: 'Tablero:'
