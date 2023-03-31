@@ -30,6 +30,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -645,6 +646,12 @@ public class TownyRegenAPI {
 				return;
 
 			addPlotChunkSnapshot(data);
+		}).exceptionally(e -> {
+			if (e.getCause() != null)
+				e = e.getCause();
+
+			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while creating a plot snapshot for " + townBlock.getWorldCoord().toString(), e);
+			return null;
 		});
 	}
 
