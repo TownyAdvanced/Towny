@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cLa ciudad no tiene dinero como para comprar %s %s con un
 msg_annexed_area: '&2Area anexada: %s'
 msg_max_plot_own: '&cNo puedes tener más de %s parcelas.'
 msg_max_outposts_own: '&cNo puedes tener más de %s outposts.'
-msg_wait_locked: '&2Por favor se paciente, la parcela estara disponible pronto.'
 msg_no_funds_new_nation: '&cLa ciudad no tiene suficiente dinero para fundar un país.'
 msg_already_claimed: '&cEste area ya fue unclaimeada por: %s'
 msg_already_claimed_1: '&cEl area (%s) ya le pertenece a alguien.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bTipo de parcela cambiado a %s'
 msg_cache_block_error: '&cNo fuiste registrado en Towny. Prueba a entrar nuevamente.'
 msg_cache_block_error_wild: '&cEn salvaje no tenes permiso para: %s'
 msg_cache_block_error_plot: '&cLos propietarios no tienen permitido %s a %s aquí'
-msg_cache_block_error_locked: "¡Esta parcela está bloqueada! No podrás usarla hasta que Towny haya terminado de hacer instantáneas para la característica revertir al liberar."
 msg_cache_block_error_town_resident: '&cLos habitantes de esta ciudad no tienen permiso para %s aquí'
 msg_cache_block_error_town_allies: '&cLos aliados de esta ciudad no tienen permiso para %s aquí'
 msg_cache_block_error_town_outsider: '&cLos que no pertenecen a esta ciudad no tienen permiso para %s aquí'
@@ -586,6 +584,7 @@ jailed_in_town: ' en la Población: %s'
 status_friends: 'Amigos'
 rank_list_title: 'Ranking por %s'
 rank_list_mayor: 'Alcalde:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Abierto)'
 status_town_board: 'Anuncios:'
