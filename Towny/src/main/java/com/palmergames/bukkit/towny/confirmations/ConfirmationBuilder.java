@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.confirmations;
 
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.command.CommandSender;
 
 import com.palmergames.bukkit.towny.TownySettings;
@@ -12,7 +15,7 @@ import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 public class ConfirmationBuilder {
 	Runnable acceptHandler;
 	Runnable cancelHandler;
-	Translatable title = Translatable.of("are_you_sure_you_want_to_continue");
+	Component title = Component.translatable("are_you_sure_you_want_to_continue");
 	String confirmCommand = TownySettings.getConfirmCommand();
 	String cancelCommand = TownySettings.getCancelCommand();
 	String pluginPrefix = "towny";
@@ -34,18 +37,27 @@ public class ConfirmationBuilder {
 
 	/**
 	 * Sets the title of the confirmation to be sent.
+	 * The input string will be converted to a component using minimessage serialization.
 	 * 
 	 * @param title The title of the confirmation.
 	 * @return A builder reference of this object.
 	 */
 	public ConfirmationBuilder setTitle(String title) {
-		this.title = Translatable.literal(title);
+		this.title = TownyComponents.miniMessage(title);
 		return this;
 	}
 	
-	public ConfirmationBuilder setTitle(Translatable title) {
-		this.title = title;
+	public ConfirmationBuilder setTitle(ComponentLike title) {
+		this.title = title.asComponent();
 		return this;
+	}
+
+	/**
+	 * TODO insert version
+	 */
+	@SuppressWarnings("unused")
+	private ConfirmationBuilder setTitle$$bridge$$public(Translatable title) {
+		return setTitle(title);
 	}
 
 	/**

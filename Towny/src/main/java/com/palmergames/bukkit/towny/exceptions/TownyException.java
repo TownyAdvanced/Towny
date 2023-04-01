@@ -36,9 +36,10 @@ public class TownyException extends Exception {
 			return (String) message;
 	}
 	
+	// TODO can probably be exposed as a component to avoid instantly translating
 	public String getMessage(CommandSender sender) {
-		if (message instanceof Translatable)
-			return ((Translatable) message).translate(Translation.getLocale(sender));
+		if (message instanceof Translatable translatable)
+			return translatable.translate(Translation.getLocale(sender));
 		else
 			return (String) message;
 	}

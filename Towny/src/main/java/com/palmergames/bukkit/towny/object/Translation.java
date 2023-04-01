@@ -12,6 +12,7 @@ import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.renderer.ComponentRenderer;
 import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
 import net.kyori.adventure.translation.Translator;
@@ -25,10 +26,12 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -282,11 +285,26 @@ public final class Translation {
 
 		@Override
 		public @Nullable Component translate(@NotNull TranslatableComponent component, @NotNull Locale locale) {
-			final String translated = of(component.key(), locale, component.args());
+			// TODO - dum
+			// will need some sort of fancy formatter for the %s in components or use messageformat
+			Object[] args = new String[component.args().size()];
+			for (int i = 0; i < component.args().size(); i++)
+				args[i] = MiniMessage.miniMessage().serialize(component.args().get(i).asComponent());
+			
+			final List<Component> children = new ArrayList<>(component.children());
+			for (int i = 0; i < children.size(); i++) {
+				if (children.get(i) instanceof TranslatableComponent child) {
+					final Component newChild = translate(child, locale);
+					if (newChild != null)
+						children.set(i, newChild);
+				}
+			}
+			
+			final String translated = of(component.key(), locale, args);
 			if (translated.equals(component.key()))
 				return null;
 			
-			return TownyComponents.miniMessage(translated);
+			return TownyComponents.miniMessage(translated).children(children);
 		}
 	}
 }

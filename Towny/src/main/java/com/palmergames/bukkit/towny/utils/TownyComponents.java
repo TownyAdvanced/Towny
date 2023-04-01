@@ -1,15 +1,19 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +29,7 @@ public class TownyComponents {
 	}
 	
 	public static String plain(@NotNull Component component) {
-		return PlainTextComponentSerializer.plainText().serialize(component);
+		return PlainTextComponentSerializer.plainText().serialize(GlobalTranslator.render(component, Translation.getDefaultLocale()));
 	}
 	
 	/**
@@ -80,5 +84,23 @@ public class TownyComponents {
 		}
 		
 		return full;
+	}
+
+	/**
+	 * Converts an array of objects to a list of components, via toString if needed and minimessage deserialization.
+	 * @param objects The objects to convert
+	 * @return The formatted list of components
+	 */
+	public static List<Component> convert(final @NotNull Object @NotNull... objects) {
+		final List<Component> components = new ArrayList<>();
+		
+		for (Object object : objects) {
+			if (object instanceof ComponentLike like)
+				components.add(like.asComponent());
+			else 
+				components.add(miniMessage(object.toString()));
+		}
+		
+		return components;
 	}
 }

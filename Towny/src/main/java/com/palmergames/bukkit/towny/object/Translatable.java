@@ -4,19 +4,20 @@ import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.Colors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Translatable implements ComponentLike {
 	private String key;
-	private Object[] args;
+	private final List<ComponentLike> args = new ArrayList<>();
 	private boolean stripColors;
 	private final List<Object> appended = new ArrayList<>(0);
 	private Locale locale;
@@ -27,7 +28,7 @@ public class Translatable implements ComponentLike {
 	
 	private Translatable(String key, Object... args) {
 		this.key = key;
-		this.args = args;
+		this.args.addAll(TownyComponents.convert(args));
 	}
 	
 	public static Translatable of(String key) {
@@ -38,6 +39,9 @@ public class Translatable implements ComponentLike {
 		return new Translatable(key, args);
 	}
 	
+	/**
+	 * @deprecated As of TODO insert version, components and translatables can be used interchangeably so this is no longer needed.
+	 */
 	@Deprecated
 	public static Translatable literal(String text) {
 		return new LiteralTranslatable(text);
@@ -48,11 +52,11 @@ public class Translatable implements ComponentLike {
 	}
 	
 	public Object[] args() {
-		return args;
+		return new Object[]{}; // todo impl
 	}
 	
 	/**
-	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
 	 */
 	@Nullable
 	public Locale locale() {
@@ -87,7 +91,8 @@ public class Translatable implements ComponentLike {
 	}
 	
 	public Translatable args(Object... args) {
-		this.args = args;
+		this.args.clear();
+		this.args.addAll(TownyComponents.convert(args));
 		return this;
 	}
 	
@@ -114,7 +119,7 @@ public class Translatable implements ComponentLike {
 	// TODO: insert deprecation version in javadocs
 
 	/**
-	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
 	 * @see #translate(Locale) 
 	 * @see #component(Locale) 
 	 */
@@ -125,7 +130,7 @@ public class Translatable implements ComponentLike {
 	}
 
 	/**
-	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
 	 * @see #translate(Locale)
 	 * @see #component(Locale)
 	 */
@@ -135,7 +140,7 @@ public class Translatable implements ComponentLike {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of x, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
 	 * @see #translate(Locale)
 	 * @see #component(Locale)
 	 */
@@ -153,7 +158,13 @@ public class Translatable implements ComponentLike {
 		translateArgs(this.locale);
 		
 		String translated;
-		if (args == null)
+		
+		// TODO - dum
+		Object[] args = new String[this.args.size()];
+		for (int i = 0; i < this.args.size(); i++)
+			args[i] = MiniMessage.miniMessage().serialize(this.args.get(i).asComponent());
+		
+		if (args.length == 0)
 			translated = locale == null ? Translation.of(key) : Translation.of(key, locale);
 		else 
 			translated = locale == null ? Translation.of(key, args) : Translation.of(key, locale, args);
@@ -169,7 +180,7 @@ public class Translatable implements ComponentLike {
 	}
 	
 	public Component component() {
-		return TownyComponents.miniMessage(translate());
+		return Translation.render(this.asComponent(), this.locale == null ? Translation.getDefaultLocale() : this.locale);
 	}
 	
 	public String forLocale(Resident resident) {
@@ -185,12 +196,9 @@ public class Translatable implements ComponentLike {
 	}
 
 	private void translateArgs(@Nullable Locale locale) {
-		if (args == null)
-			return;
-		
-		for (int i = 0; i < args.length; i++)
-			if (args[i] instanceof Translatable)
-				args[i] = ((Translatable) args[i]).locale(locale).translate();
+		for (int i = 0; i < args.size(); i++)
+			if (args.get(i) instanceof Translatable translatable)
+				args.set(i, translatable.locale(locale).component());
 	}
 	
 	@Override
@@ -203,7 +211,7 @@ public class Translatable implements ComponentLike {
 	public String debug() {
 		return "Translatable{" +
 			"key='" + key + '\'' +
-			", args=" + Arrays.toString(args) +
+			", args=[" + this.args.stream().map(comp -> MiniMessage.miniMessage().serialize(comp.asComponent())).collect(Collectors.joining(", ")) + "]" +
 			", stripColors=" + stripColors +
 			", appended=" + appended() +
 			", locale=" + locale +
@@ -212,15 +220,12 @@ public class Translatable implements ComponentLike {
 	
 	@Override
 	public @NotNull Component asComponent() {
-		List<Component> formattedArgs = new ArrayList<>();
-		if (this.args != null) {
-			for (Object arg : this.args)
-				formattedArgs.add(arg instanceof ComponentLike like ? like.asComponent() : TownyComponents.miniMessage(arg.toString()));
-		}
-		
-		return Component.translatable(this.key(), formattedArgs);
+		return Component.translatable(this.key(), this.args);
 	}
 
+	/**
+	 * @deprecated As of TODO insert version, components and translatables can be used interchangeably so this is no longer needed.
+	 */
 	@Deprecated
 	private static final class LiteralTranslatable extends Translatable {
 

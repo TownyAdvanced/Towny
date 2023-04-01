@@ -169,7 +169,7 @@ public class TownyPlayerListener implements Listener {
 			Translatable tipMsg = player.isOp() || player.hasPermission("towny.admin")
 				? Translatable.of("msg_safe_mode_admin")
 				: Translatable.of("msg_safe_mode_player");
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_safe_mode_base"), tipMsg);
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_safe_mode_base").append(" ").append(tipMsg));
 		} catch (Exception e) {
 			// Safemode is affecting Towny's ability to use Translatables.
 			String msg = player.isOp() || player.hasPermission("towny.admin") 
