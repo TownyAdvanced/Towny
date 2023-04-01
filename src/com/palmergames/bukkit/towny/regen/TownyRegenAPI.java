@@ -95,30 +95,6 @@ public class TownyRegenAPI {
 	@Deprecated
 	public static void removeWorldCoord(WorldCoord worldCoord) {
 	}
-	
-	/**
-	 * Gets a list of WorldCoords which are having snapshots taken, for one TownyWorld.
-	 * 
-	 * @param world TownyWorld to gather a list of WorldCoords in.
-	 * @return list List<WorldCoord> matched to above world.
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
-	 */
-	@Deprecated
-	private static List<WorldCoord> getWorldCoords(@NotNull TownyWorld world) {
-		return new ArrayList<>();
-	}
-	
-	/**
-	 * Removes all worldcoords of given TownyWorld from having their snapshots taken.
-	 * 
-	 * @param world - TownyWorld to stop having snapshots made in.
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.   
-	 */
-	@Deprecated
-	private static void removeWorldCoords(TownyWorld world) {
-		for (WorldCoord wc : getWorldCoords(world))
-			removeWorldCoord(wc);
-	}
 
 	/**
 	 * @return true if there are any TownBlocks to be processed.
