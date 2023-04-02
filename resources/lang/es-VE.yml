@@ -1482,15 +1482,15 @@ this_will_reset_your_config: 'Ejecutar este comando tu config.yml al predetermin
 msg_warn_overriding_server_config: 'Al hacer esto, está sobreescribiendo los límites de residentes establecidos en la configuración del servidor. ¿Desea continuar de todas formas?'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
-msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+msg_removed_x_invalid_outpost_spawns: 'Removidos %d puntos de aparición de outpost inválidos.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
 msg_your_town_is_bankrupt: 'Tu ciudad ha caído en bancarrota, añade dinero a tu banco usando /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'No puedes usar este comando, porque ya eres miembro de una ciudad. Si quieres continuar debes usar ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+msg_a_town_you_are_outlawed_in: 'una ciudad en la que eres un bandido.'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
 #Message showing payment for RTP.
