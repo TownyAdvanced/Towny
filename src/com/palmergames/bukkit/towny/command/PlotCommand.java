@@ -317,7 +317,6 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	public void parsePlotClaim(Player player, String[] args, Resident resident, TownBlock townBlock) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode());
 		List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, WorldCoord.parseWorldCoord(player), args, true);
-		final Town town = townBlock.getTownOrNull();
 
 		// Fast-fail if this is a single plot and it is already claimed.
 		if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale()) {
@@ -347,6 +346,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (selection.size() + resident.getTownBlocks().size()  > TownySettings.getMaxResidentPlots(resident))
 			throw new TownyException(Translatable.of("msg_max_plot_own", TownySettings.getMaxResidentPlots(resident)));
 
+		final Town town = townBlock != null ? townBlock.getTownOrNull() : selection.get(0).getTownOrNull();
 		/*
 		 * If a resident has no town, the Town is open, and the plot is not an Embassy,
 		 * the Town is not going to exceed the maxResidentsWithoutANation value, and the

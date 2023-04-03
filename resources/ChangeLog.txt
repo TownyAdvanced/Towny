@@ -8503,3 +8503,5 @@ v0.92.0.11:
   - Replace snapshot queue with chunk snapshots, courtesy of Warriorrrr with PR #6590.
   - Remove leftover debug stdout, courtesy of Warriorrrr with PR #6592.
   - Make TownyFormatter town and nation subtitle methods public.
+0.98.6.26:
+  - Fix potential NPE in /plot claim command.
