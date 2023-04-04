@@ -8506,3 +8506,4 @@ v0.92.0.11:
 0.98.6.26:
   - Fix potential NPE in /plot claim command.
   - Add Bridger plugin to pom.xml, courtesy of Warriorrrr with PR #6584.
+  - Make account a bit smarter, courtesy of Warriorrrr with PR #6597.
