@@ -239,7 +239,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
+			Towny.getPlugin().getLogger().warning("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
 		}
 
 		return false;
@@ -387,7 +387,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		} catch (SQLException e) {
 
-			TownyMessaging.sendErrorMsg("SQL: " + e.getMessage() + " --> " + stmt.toString());
+			Towny.getPlugin().getLogger().warning("SQL: " + e.getMessage() + " --> " + stmt.toString());
 
 		} finally {
 
@@ -401,7 +401,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					return UpdateDB(tb_name, args, null);
 
 			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("SQL closing: " + e.getMessage() + " --> " + stmt.toString());
+				Towny.getPlugin().getLogger().warning("SQL closing: " + e.getMessage() + " --> " + stmt.toString());
 			}
 
 		}
@@ -459,7 +459,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownyMessaging.sendDebugMsg("SQL: delete returned 0: " + wherecode);
 			}
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Error delete : " + e.getMessage());
+			Towny.getPlugin().getLogger().warning("SQL: Error delete : " + e.getMessage());
 		}
 		return false;
 	}
@@ -1468,8 +1468,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					world.setUUID(UUID.fromString(line));
 				} catch (IllegalArgumentException ignored) {
-					// Invalid uuid
+					UUID uuid = BukkitTools.getWorldUUID(worldName);
+					if (uuid != null)
+						world.setUUID(uuid);
 				}
+			} else {
+				UUID uuid = BukkitTools.getWorldUUID(worldName);
+				if (uuid != null)
+					world.setUUID(uuid);
 			}
 
 			result = rs.getBoolean("claimable");
