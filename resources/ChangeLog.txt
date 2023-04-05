@@ -8508,3 +8508,4 @@ v0.92.0.11:
   - Add Bridger plugin to pom.xml, courtesy of Warriorrrr with PR #6584.
   - Make account a bit smarter, courtesy of Warriorrrr with PR #6597.
   - Make SQLSource more resiliant to worlds that have not recorded a UUID correctly.
+  - Bump bstats-bukkit from 3.0.1 to 3.0.2.
