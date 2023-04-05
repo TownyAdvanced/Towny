@@ -107,7 +107,7 @@ public abstract class Account implements Nameable {
 	 * @param reason The reason for the pay. 
 	 * @return boolean indicating success.
 	 */
-	public boolean payTo(double amount, EconomyHandler collector, String reason) {
+	public synchronized boolean payTo(double amount, EconomyHandler collector, String reason) {
 		return payTo(amount, collector.getAccount(), reason);
 	}
 	
