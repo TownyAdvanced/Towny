@@ -22,12 +22,12 @@ public class EconomyAccount extends Account {
 	}
 
 	@Override
-	protected boolean addMoney(double amount) {
+	protected synchronized boolean addMoney(double amount) {
 		return TownyEconomyHandler.add(getName(), amount, world);
 	}
 
 	@Override
-	protected boolean subtractMoney(double amount) {
+	protected synchronized boolean subtractMoney(double amount) {
 		return TownyEconomyHandler.subtract(getName(), amount, world);
 	}
 

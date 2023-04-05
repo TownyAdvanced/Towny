@@ -245,7 +245,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @param amount The amount to give.
 	 * @throws TownyException On general error.
 	 */
-	public final void withdrawFromBank(Resident resident, int amount) throws TownyException {
+	public final synchronized void withdrawFromBank(Resident resident, int amount) throws TownyException {
 		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
@@ -261,7 +261,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @param amount The amount to take.
 	 * @throws TownyException On general error.
 	 */
-	public final void depositToBank(Resident resident, int amount) throws TownyException {
+	public final synchronized void depositToBank(Resident resident, int amount) throws TownyException {
 		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}

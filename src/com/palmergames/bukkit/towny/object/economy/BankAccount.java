@@ -70,7 +70,7 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	protected boolean subtractMoney(double amount) {
+	protected synchronized boolean subtractMoney(double amount) {
 		if (isBankrupt())
 			return addDebt(amount);
 
@@ -99,7 +99,7 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	protected boolean addMoney(double amount) {
+	protected synchronized boolean addMoney(double amount) {
 		// Check balance cap.
 		if (getBalanceCap() != 0 && (getHoldingBalance() + amount > getBalanceCap()))
 			return false;
@@ -112,7 +112,7 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	public boolean canPayFromHoldings(double amount) {
+	public synchronized boolean canPayFromHoldings(double amount) {
 		if (isBankrupt())
 			return getTownDebt() + amount <= getDebtCap();
 		else
@@ -120,7 +120,7 @@ public class BankAccount extends Account {
 	}
 
 	@Override
-	public double getHoldingBalance(boolean setCache) {
+	public synchronized double getHoldingBalance(boolean setCache) {
 		double balance = isBankrupt() ? balance = getTownDebt() * -1 : TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 		if (setCache)
 			this.cachedBalance.setBalance(balance);
@@ -165,7 +165,7 @@ public class BankAccount extends Account {
 	 * @return true if in debt, false otherwise.
 	 */
 	public boolean isBankrupt() {
-		return government instanceof Town town ? town.isBankrupt() : false;
+		return government instanceof Town town && town.isBankrupt();
 	}
 
 	/**
@@ -173,7 +173,7 @@ public class BankAccount extends Account {
 	 * @param amount the amount to add to the debtBalance.
 	 * @return true if the BankAccount is a town bank account, the debtCap allows it, and bankruptcy is enabled.
 	 */
-	private boolean addDebt(double amount) {
+	private synchronized boolean addDebt(double amount) {
 		if (isTownAccount() && TownySettings.isTownBankruptcyEnabled()) {
 			double newDebtBalance = getTownDebt() + amount;
 			// Subtraction not allowed as it would exceed the debt cap
@@ -190,7 +190,7 @@ public class BankAccount extends Account {
 	 * @param amount the amount to remove from the debtBalance.
 	 * @return true always.
 	 */
-	private boolean removeDebt(double amount) {
+	private synchronized boolean removeDebt(double amount) {
 		if (getTownDebt() < amount) {
 			// Calculate money to go into regular account.
 			double netMoney = amount - getTownDebt();
@@ -217,7 +217,7 @@ public class BankAccount extends Account {
 	 * 
 	 * @return The max amount of debt for this account.
 	 */
-	public double getDebtCap() {
+	public synchronized double getDebtCap() {
 		if (!isTownAccount()) // Nations should never be passed here.
 			return Double.MAX_VALUE;
 
