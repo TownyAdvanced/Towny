@@ -1500,7 +1500,7 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'Estás a punto de ser teletranspo
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
 townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "La ciudad de %s tiene parcelas que puedes comprar ¿quieres ser teletransportado a una parcela que puedes comprar ahora mismo?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Has sido teletransportado a una parcela que puedes comprar. Usa '/plot claim' si quieres reclamar la parcela."
 #Used in the town's status screen to display plots
 status_plot_string: 'Terrenos'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1580,25 +1580,25 @@ msg_town_has_no_jailslots: 'La cárcel de la ciudad está llena.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s ha sido enviado a la celda %s de %s por %s horas con una fianza de %s por %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s ha sido enviado a la celda %3$2s de %2$2s por %s horas gracias a %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'Fuiste encarcelado, tu fianza es %s.'
-msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
-msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
+msg_err_higher_than_max_allowed_bail_x: 'La fianza establecida es mayor a la máxima, que es %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Las horas fijadas son mayores que las máximas, que son %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'No hay suficiente dinero en el banco de la ciudad para encarcelar a %s, la cuota es de %s.'
 msg_you_were_released_as_town_ran_out_of_slots: 'Tus carceleros te libraron para hacer espacio.'
 msg_x_has_been_released_as_jail_slots_ran_out: '%s fue liberado para hacer espacio para otro prisionero.'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Fuiste liberado porque tus carceleros ya no pueden mantenerte encarcelado.'
-msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s ha sido liberado debido a la falta de fondos en el banco de la ciudad.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s retirados del banco de la ciudad para pagar el mantenimiento del prisionero %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s retirados del banco de la ciudad para pagar el encarcelamiento de %s.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
-confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+confirmation_are_you_sure_you_want_to_reset_all_banks: '¿Está seguro de que desea restablecer todos los bancos de ciudad y nación a %s?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cTu nación ha alcanzado el número máximo de residentes permitidos por nación, %s, y no puede agregar a %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+msg_err_cannot_join_nation_over_resident_limit: '&cNo puedes unirte a esta nación ya que superaría el límite de residentes por nación de %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+msg_err_cannot_join_nation_over_town_limit: '&cNo puedes unirte a esta nación, ha alcanzado el número máximo de ciudades permitidas por nación: %s.'
 #Message shown confirming /tw set usedefaults
-confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: '¿Estás seguro de que quieres restablecer todos los ajustes de este mundo a los que están definidos en la configuración?'
 #Part of the /town plots output.
 msg_town_plots_title: ' Parcelas de ciudad'
 #Part of the /town plots output.
@@ -1610,9 +1610,9 @@ msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[BonusNación: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Tierra en posesión de la ciudad: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>Tipo: <green>Con propietarios <gray>/ <aqua>A la venta <gray>/ <yellow>Total'
 #Part of the /town plots output.
 msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Ingresos diarios'
 #Part of the /town plots output.
@@ -1628,18 +1628,18 @@ msg_cant_unclaim_outsider_in_town: '¡Hay un extranjero en este terreno, no pued
 #Message shown when a player is making a town too soon after deleting one.
 msg_err_cannot_create_new_town_x_seconds_remaining: 'No puedes crear una nueva ciudad, quedan %s segundos en el tiempo de enfriamiento.'
 #Message shown when a player is claiming land too soon after unclaiming it.
-msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'No puedes reclamar este bloque de ciudad: %s, %s segundos restantes de enfriamiento.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: 'The town of %s has had the founder set to %s.'
+msg_founder_set: 'En la ciudad %s se ha establecido a %s como fundador.'
 #Message shown when toggling town allowed to war admin setting
-msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+msg_town_allowedtowar_setting_set_to: 'En la ciudad %s se ha establecido la opción allowed-to-war a %s.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
-confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+confirmation_did_you_want_to_unclaim_all: '¿Estás seguro de que quieres retirar toda tu tierra? (Tu bloque de hogar no será removido.)'
 #Message shown after a player unclaims all their land.
-msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_you_have_unclaimed_everything_but_your_homeblock: "Retiraste todo menos tu bloque de hogar. Para retirar tu bloque de hogar debes establecer uno nuevo usando '/t set homeblock' primero."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>¿Estás seguro de que quieres transferirle la propiedad de la nación a %s? ¡Esta acción es irreversible!"
 msg_warn_town_already_capital: "<red>La ciudad de %s ya es la capital nacional."
-msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+msg_min_adjacent_blocks: 'Debes tener al menos %s bloques de ciudad adyacentes. Solo hay %s.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', tal vez estás buscando "/plot evict" en cambio?'
 #Shown to a player when Towny does not know of them.
