@@ -8509,3 +8509,5 @@ v0.92.0.11:
   - Make account a bit smarter, courtesy of Warriorrrr with PR #6597.
   - Make SQLSource more resiliant to worlds that have not recorded a UUID correctly.
   - Bump bstats-bukkit from 3.0.1 to 3.0.2.
+0.98.6.27:
+  - Remove deprecations made in the 0.97 series of Towny releases.
