@@ -134,6 +134,8 @@ public class MapHUD {
 						map[y][x] += TownyAsciiMap.forSaleSymbol;
 					} else if (townblock.isHomeBlock())
 						map[y][x] += TownyAsciiMap.homeSymbol;
+					else if (townblock.isOutpost())
+						map[y][x] += TownyAsciiMap.outpostSymbol;
 					else
 						map[y][x] += townblock.getType().getAsciiMapKey();
 				} catch (TownyException e) {

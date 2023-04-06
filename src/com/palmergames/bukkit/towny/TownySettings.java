@@ -3381,6 +3381,10 @@ public class TownySettings {
 		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_HOME);
 	}
 	
+	public static String outpostMapSymbol() {
+		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_OUTPOST);
+	}
+	
 	public static String forSaleMapSymbol() {
 		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE);
 	}

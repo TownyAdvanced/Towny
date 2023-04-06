@@ -45,12 +45,14 @@ public class TownyAsciiMap {
 	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
 	public static String homeSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_HOME.getDefault();
+	public static String outpostSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_OUTPOST.getDefault();
 	public static String wildernessSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS.getDefault();
 	
 	static {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> {
 			forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
 			homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
+			outpostSymbol = parseSymbol(TownySettings.outpostMapSymbol());
 			wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
 		});
 	}
@@ -152,6 +154,8 @@ public class TownyAsciiMap {
 						townyMap[y][x] = townyMap[y][x].content(forSaleSymbol);
 					} else if (townblock.isHomeBlock())
 						townyMap[y][x] = townyMap[y][x].content(homeSymbol);
+					else if (townblock.isOutpost())
+						townyMap[y][x] = townyMap[y][x].content(outpostSymbol);
 					else
 						townyMap[y][x] = townyMap[y][x].content(townblock.getType().getAsciiMapKey());
 					

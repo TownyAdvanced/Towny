@@ -8513,3 +8513,9 @@ v0.92.0.11:
   - Remove deprecations made in the 0.97 series of Towny releases.
 0.99.0.0:
   - Bump version number for release.
+0.99.0.1:
+  - Add configurable symbol for the maps to showcase Outpost plots.
+    - Closes #6595.
+  - New Config Option: ascii_map_symbols.outpost
+    - Default: O
+    - The character used for the outpost symbol.
