@@ -347,17 +347,6 @@ public class TownBlock extends TownyObject {
 	}
 
 	/**
-	 * Sets the type of this townblock to the specified ID.
-	 * @param typeId The id of the type
-	 * @deprecated As of 0.97.5.4, this is deprecated for compatibility with custom types.
-	 * @see #setType(String)
-	 */
-	@Deprecated
-	public void setType(int typeId) {
-		setType(TownBlockType.lookup(typeId));
-	}
-
-	/**
 	 * @param type The TownBlockType to set this plot to.
 	 * @param resident The Resident who is trying to set the type.
 	 * @throws TownyException If this townblock has a pvp toggle cooldown.

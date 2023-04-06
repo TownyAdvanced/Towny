@@ -11,11 +11,9 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.tasks.HourlyTimerTask;
 import com.palmergames.bukkit.towny.tasks.ShortTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.ApiStatus;
 
 
 /**
@@ -211,26 +209,9 @@ public class TownyTimerHandler{
 		return drawSmokeTask != -1;
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.98.3.18, the gather resident uuid task has not existed since 0.97.2.8.
-	 */
-	@Deprecated
-	public static boolean isGatherResidentUUIDTaskRunning() {
-		return false;
-	}
-	
 	public static boolean isDrawSpawnPointsTaskRunning() {
 		
 		return drawSpawnPointsTask != -1;
-	}
-
-	/**
-	 * @deprecated Deprecated, use {@link TimeMgmt#townyTime()}
-	 */
-	@Deprecated
-	@ApiStatus.ScheduledForRemoval
-	public static Long townyTime() {
-		return TimeMgmt.townyTime();
 	}
 
 	public static Long getTimeUntilNextHourInSeconds() {

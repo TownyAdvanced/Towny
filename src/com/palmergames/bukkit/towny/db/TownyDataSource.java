@@ -1,12 +1,10 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -16,12 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -113,7 +106,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadPlotGroup(PlotGroup group);
 
-	@Deprecated
+	@Deprecated // Some time during 0.98.*.*
 	public boolean saveWorldList() {
 		return true;
 	}
@@ -319,202 +312,6 @@ public abstract class TownyDataSource {
 	}
 
 	// Database functions
-	/**
-	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getResidents()} instead.
-	 * 
-	 * Gets a list of all Towny residents.
-	 * @return list of all towny residents
-	 */
-	@Deprecated
-	public List<Resident> getResidents() {
-		return new ArrayList<>(universe.getResidents());
-	}
-	
-	/**
-	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getGroups()} instead.
-	 * @return List of PlotGroups. 
-	 */
-	abstract public List<PlotGroup> getAllPlotGroups();
-
-	/**
-	 * @deprecated since 0.97.5.18 use {@link TownyUniverse#getJails()} instead.
-	 * @return List of jails. 
-	 */
-	@Deprecated
-	abstract public List<Jail> getAllJails();
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(String[])} instead.
-	 */
-	@Deprecated
-	abstract public List<Resident> getResidents(String[] names);
-	
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidents(UUID[])} instead.
-	 */
-	@Deprecated
-	abstract public List<Resident> getResidents(UUID[] uuids);
-
-	abstract public void removeNation(Nation nation);
-
-	/**
-	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#hasTown(String)} instead.
-	 * 
-	 * Checks if a town with the name exists.
-	 * 
-	 * @param name Name of the town to check.
-	 * @return whether the town exists.
-	 */
-	@Deprecated
-	public boolean hasTown(String name) {
-		return universe.hasTown(name);
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#hasNation(String)} instead.
-	 * 
-	 * Check if a nation with the given name exists.
-	 * 
-	 * @param name Name of the nation to check.
-	 * @return whether the nation with the given name exists.
-	 */
-	@Deprecated
-	public boolean hasNation(String name) {
-		return universe.hasNation(name);
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(String[])} instead.
-	 */
-	abstract public List<Town> getTowns(String[] names);
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTowns(List)} instead.
-	 */
-	abstract public List<Town> getTowns(List<UUID> uuids);
-	
-	/**
-	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getTowns()} instead.
-	 * 
-	 * @return a list of all towns.
-	 */
-	@Deprecated
-	public List<Town> getTowns() {
-		return new ArrayList<>(universe.getTowns());
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getTown(String)} instead.
-	 * 
-	 * Gets a town from the passed-in name.
-	 * @param name Town Name
-	 * @return town associated with the name.
-	 * @throws NotRegisteredException Town does not exist.
-	 */
-	@Deprecated
-	public Town getTown(String name) throws NotRegisteredException {
-		Town town = universe.getTown(name);
-		
-		if (town == null)
-			throw new NotRegisteredException(String.format("The town with name '%s' is not registered!", name));
-		
-		return town;
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getTown(UUID)} instead.
-	 * 
-	 * Returns the associated town with the passed-in uuid.
-	 * 
-	 * @param uuid UUID of the town to fetch.
-	 *                
-	 * @return town associated with the uuid.
-	 * 
-	 * @throws NotRegisteredException Thrown if town doesn't exist.
-	 */
-	@Deprecated
-	public Town getTown(UUID uuid) throws NotRegisteredException {
-		Town town = universe.getTown(uuid);	
-		
-		if (town == null)
-			throw new NotRegisteredException(String.format("The town with uuid '%s' is not registered.", uuid));
-		
-		return town;
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getNations(String[])} instead.
-	 */
-	@Deprecated
-	abstract public List<Nation> getNations(String[] names);
-
-	/**
-	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getNations()} instead.
-	 * 
-	 * Get all nations.
-	 * 
-	 * @return all nations.
-	 */
-	@Deprecated
-	public List<Nation> getNations() {
-		return new ArrayList<>(universe.getNations());
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.3, Please use {@link TownyUniverse#getNation(String)} instead.
-	 * 
-	 * Get the nation matching the passed-in name.
-	 * 
-	 * @param name Name of the nation to get.
-	 * @return the nation that matches the name
-	 * @throws NotRegisteredException if no nation is found matching the given name.
-	 */
-	@Deprecated
-	public Nation getNation(String name) throws NotRegisteredException {
-		Nation nation = universe.getNation(name);
-
-		if (nation == null)
-			throw new NotRegisteredException(String.format("The nation '%s' is not registered.", name));
-
-		return nation;
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.3, Use {@link TownyUniverse#getNation(UUID)} instead.
-	 * 
-	 * Get the nation matching the given UUID.
-	 * 
-	 * @param uuid UUID of nation to get.
-	 * @return the nation matching the given UUID.
-	 * @throws NotRegisteredException if no nation is found matching the given UUID.
-	 */
-	@Deprecated
-	public Nation getNation(UUID uuid) throws NotRegisteredException {
-		Nation nation = universe.getNation(uuid);
-		
-		if (nation == null)
-			throw new NotRegisteredException(String.format("The nation with uuid '%s' is not registered.", uuid.toString()));
-		
-		return nation;
-	}
-
-	/**
-	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getWorld(String)} instead.
-	 *  
-	 * @param name Name of TownyWorld
-	 * @return TownyWorld matching the name or Null.
-	 */
-	@Deprecated
-	@Nullable
-	abstract public TownyWorld getWorld(String name);
-
-	/**
-	 * @deprecated as of 0.97.5.18, Use {@link TownyUniverse#getTownyWorlds()} instead.
-	 * 
-	 * @return List of TownyWorlds.
-	 */
-	@Deprecated
-	abstract public List<TownyWorld> getWorlds();
 
 	abstract public void removeResident(Resident resident);
 
@@ -522,33 +319,12 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getTownBlocks} instead.
-	 */
-	@Deprecated
-	abstract public Collection<TownBlock> getAllTownBlocks();
+	abstract public void removeNation(Nation nation);
 
 	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
 	
-	/**
-	 * @deprecated as of 0.97.5.3, use {@link TownyUniverse#newTown(String)} instead.
-	 * Create a new town from a name
-	 * 
-	 * @param name town name
-	 * @throws AlreadyRegisteredException thrown if town already exists.
-	 * @throws NotRegisteredException thrown if town has an invalid name.
-	 */
-	@Deprecated
-	public void newTown(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		try {
-			universe.newTown(name);
-		} catch (InvalidNameException e) {
-			throw new NotRegisteredException(e.getMessage());
-		}
-	}
-
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
@@ -564,18 +340,6 @@ public abstract class TownyDataSource {
 	abstract public void removeJail(Jail jail);
 	
 	abstract public void removePlotGroup(PlotGroup group);
-
-	/**
-	 * @deprecated as of 0.97.5.18 use {@link TownyAPI#getTownsWithoutNation} instead.
-	 */
-	@Deprecated
-	abstract public List<Town> getTownsWithoutNation();
-
-	/**
-	 * @deprecated as of 0.97.5.18, use {@link TownyAPI#getResidentsWithoutTown()} instead.
-	 */
-	@Deprecated
-	abstract public List<Resident> getResidentsWithoutTown();
 
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 

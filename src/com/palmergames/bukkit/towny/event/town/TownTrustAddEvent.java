@@ -5,10 +5,8 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class TownTrustAddEvent extends CancellableTownyEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
@@ -38,15 +36,6 @@ public class TownTrustAddEvent extends CancellableTownyEvent {
 		return trustedResident;
 	}
 
-	/**
-	 * @return The player that is adding the resident as trusted.
-	 * @deprecated As of 0.97.5.17, please use {@link #getSender()} instead.
-	 */
-	@Deprecated
-	public @Nullable Player getPlayer() {
-		return sender instanceof Player player ? player : null;
-	}
-	
 	@NotNull
 	public CommandSender getSender() {
 		return sender;

@@ -418,18 +418,6 @@ public class TownyPerms {
 	 * 
 	 * @param rank - Rank to check permissions for
 	 * @return a List of permissions
-	 * @deprecated since 0.97.5.5 use {@link #getTownRankPermissions(String)}
-	 */
-	@Deprecated
-	public static List<String> getTownRank(String rank) {
-		return getTownRankPermissions(rank);
-	}
-	
-	/**
-	 * Get a specific ranks permissions
-	 * 
-	 * @param rank - Rank to check permissions for
-	 * @return a List of permissions
 	 */
 	public static List<String> getTownRankPermissions(String rank) {
 
@@ -471,18 +459,6 @@ public class TownyPerms {
 	public static List<String> getNationKing() {
 
 		return getList("nations.king");
-	}
-
-	/**
-	 * Get a specific ranks permissions
-	 * 
-	 * @param rank - Rank to get permissions of
-	 * @return a List of Permissions
-	 * @deprecated since 0.97.5.5 use {@link #getNationRankPermissions(String)}
-	 */
-	@Deprecated
-	public static List<String> getNationRank(String rank) {
-		return getNationRankPermissions(rank);
 	}
 	
 	/**

@@ -86,17 +86,6 @@ public class Nation extends Government {
 		return getAllies().contains(nation) && nation.getAllies().contains(this);
 	}
 
-	/**
-	 * Check if the targetNation is an Ally.
-	 * @param targetNation Any other nation than this one.
-	 * @return Whether the targetNation is an ally.
-	 * @deprecated Unused. Marked deprecated as of 0.97.4.1+. Use {@link #isAlliedWith(Nation)}.
-	 */
-	@Deprecated
-	public boolean IsAlliedWith(Nation targetNation) {
-		return isAlliedWith(targetNation);
-	}
-
 	public void addEnemy(Nation nation) {
 
 		if (!hasEnemy(nation)) {

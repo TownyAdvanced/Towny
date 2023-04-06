@@ -22,14 +22,11 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 
-import io.papermc.lib.PaperLib;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,11 +51,9 @@ import java.util.stream.Stream;
  */
 public class TownyAPI {
     private static TownyAPI instance;
-    private final Towny towny;
     private final TownyUniverse townyUniverse;
     
     private TownyAPI() {
-        towny = Towny.getPlugin();
         townyUniverse = TownyUniverse.getInstance();
     }
     
@@ -873,51 +868,6 @@ public class TownyAPI {
 		return getNations(uuids);
 	}
 
-	/**
-     * @deprecated since 0.97.3.0 use {@link Town#hasActiveWar()} or {@link Nation#hasActiveWar()} instead.
-     * @return false.
-     */
-    @Deprecated
-    public boolean isWarTime() {
-    	return false;
-    }
-
-    /**
-     * Teleports the Player to the specified jail {@link Location}.
-     *
-     * @param player   {@link Player} to be teleported to jail.
-     * @param location {@link Location} of the jail to be teleported to.
-	 * @deprecated Since 0.97.3.0 use {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailTeleport(Resident)} or {@link com.palmergames.bukkit.towny.utils.SpawnUtil#jailAwayTeleport(Resident)} instead.
-     */
-	@Deprecated
-    public void jailTeleport(final Player player, final Location location) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(towny, () -> PaperLib.teleportAsync(player, location, PlayerTeleportEvent.TeleportCause.PLUGIN),
-			(long) TownySettings.getTeleportWarmupTime() * 20);
-	}
-
-	/**
-	 * Get a list of active {@link Resident}s.
-	 *
-	 * @return {@link List} of active {@link Resident}s.
-	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
-	 */
-	@Deprecated
-	public List<Resident> getActiveResidents() {
-		return new ArrayList<>(townyUniverse.getResidents());
-	}
-
-	/**
-	 * Check if the specified {@link Resident} is an active Resident.
-	 *
-	 * @param resident {@link Resident} to test for activity.
-	 * @return true if the player is active, false otherwise.
-	 * @deprecated This is deprecated as of 0.97.2.6, and will be removed in a future release.
-	 */
-	@Deprecated
-	public boolean isActiveResident(Resident resident) {
-		return resident.isOnline();
-	}
-	
 	@Nullable
 	public Town getTown(@NotNull Player player) {
 		Resident resident = getResident(player);
