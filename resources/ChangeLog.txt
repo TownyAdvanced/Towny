@@ -8511,3 +8511,5 @@ v0.92.0.11:
   - Bump bstats-bukkit from 3.0.1 to 3.0.2.
 0.98.6.27:
   - Remove deprecations made in the 0.97 series of Towny releases.
+0.99.0.0:
+  - Bump version number for release.
