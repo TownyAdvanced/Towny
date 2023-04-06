@@ -328,61 +328,6 @@ public class TownySettings {
 		return config;
 	}
 
-	/**
-	 * Get the town level of a specific Town.
-	 * @param town Supplied Town to evaluate.
-	 * @return The Town's Level
-	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Town#getLevel()}.
-	 */
-	@Deprecated
-	public static int calcTownLevel(Town town) {
-		return town.getLevel();
-	}
-
-	/**
-	 * Get the (theoretical) town level of a given Town, supplying the number of residents they would have.
-	 * <p>
-	 *     Note: Town levels are not hard-coded. They can be defined by the server administrator, and may be different from
-	 *     the default configuration.
-	 * </p>
-	 * @param town Supplied Town to evaluate.
-	 * @param residents Number of residents to force the calculation.
-	 * @return The supposed Town Level. 0, if the town is ruined, or the method otherwise fails through.
-	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Town#getLevel(int)}.
-	 */
-	@Deprecated
-	public static int calcTownLevel(Town town, int residents) {
-		return town.getLevel(residents);
-	}
-
-	/**
-	 * This method returns the id of the town level
-	 *
-	 * e.g.
-	 * ruins = 0
-	 * hamlet = 1
-	 * village = 2
-	 *
-	 * @param town Town to test for.
-	 * @return id
-	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Town#getLevelID()}.
-	 */
-	@Deprecated
-	public static int calcTownLevelId(Town town) {
-		return town.getLevelID();
-	}
-
-	/**
-	 * Get the level of a specific Nation.
-	 * @param nation Supplied Nation to evaluate.
-	 * @return Nation Level of the given nation.
-	 * @deprecated Marked deprecated as of 0.97.4.1+. Use {@link Nation#getLevel()}.
-	 */
-	@Deprecated
-	public static int calcNationLevel(Nation nation) {
-		return nation.getLevel();
-	}
-
 	public static void loadConfig(Path configPath, String version) {
 		if (!FileMgmt.checkOrCreateFile(configPath.toString())) {
 			throw new TownyInitException("Failed to touch '" + configPath + "'.", TownyInitException.TownyError.MAIN_CONFIG);
@@ -1614,18 +1559,7 @@ public class TownySettings {
 
 		return itemUseMaterials;
 	}
-	
-	/**
-	 * For compatibility with custom plot types, this has been deprecated. Please use {@link #isSwitchMaterial(Material, Location)} instead.
-	 * @param mat The name of the material.
-	 * @return Whether this is a switch material or not.
-	 * @deprecated as of 0.97.5.4.
-	 */
-	@Deprecated
-	public static boolean isSwitchMaterial(String mat) {
-		return switchUseMaterials.contains(Material.matchMaterial(mat));
-	}
-	
+
 	public static boolean isSwitchMaterial(Material material, Location location) {
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
 		
@@ -1635,17 +1569,6 @@ public class TownySettings {
 			return switchUseMaterials.contains(material);
 	}
 
-	/**
-	 * For compatibility with custom plot types, this has been deprecated. Please use {@link #isItemUseMaterial(Material, Location)} instead.
-	 * @param mat The name of the material.
-	 * @return Whether this is an item use material or not.
-	 * @deprecated as of 0.97.5.4.
-	 */
-	@Deprecated
-	public static boolean isItemUseMaterial(String mat) {
-		return itemUseMaterials.contains(Material.matchMaterial(mat));
-	}
-	
 	public static boolean isItemUseMaterial(Material material, Location location) {
 		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
 		
@@ -2924,16 +2847,7 @@ public class TownySettings {
 	public static double getNationRequiresProximity() {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY);
 	}
-	
-	/**
-	 * @deprecated since 0.97.5.4
-	 * @return Collections.emptyList()
-	 */
-	@Deprecated
-	public static List<String> getFarmPlotBlocks() {
-		return Collections.emptyList();
-	}
-	
+
 	public static List<String> getFarmAnimals() {
 		return getStrArr(ConfigNodes.GTOWN_FARM_ANIMALS);
 	}

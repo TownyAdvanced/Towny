@@ -48,12 +48,12 @@ public class StatusScreenEvent extends Event {
 		return screen.getCommandSender();
 	}
 
-	@Deprecated
+	@Deprecated // Sometime during 0.98.*.*
 	public boolean hasAdditionalLines() {
  		return false;
  	}
 	
-	@Deprecated 
+	@Deprecated // Sometime during 0.98.*.*
 	public List<Component> getAdditionalLines() {
 		return new ArrayList<>(0);
 	}
@@ -102,7 +102,7 @@ public class StatusScreenEvent extends Event {
 	/**
 	 * @deprecated Deprecated, please use {@link #addLines(List)} instead.
 	 */
-	@Deprecated
+	@Deprecated // Sometime during 0.98.*.*
 	public void setLines(List<String> lines) {
 		addLines(lines);
 	}

@@ -894,13 +894,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return BukkitTools.isOnline(getName());
 	}
 
-	@Deprecated
+	@Deprecated // Sometime during 0.98.*.*
 	@ApiStatus.ScheduledForRemoval
 	public int getRespawnProtectionTaskID() {
 		return -1;
 	}
 
-	@Deprecated
+	@Deprecated // Sometime during 0.98.*.*
 	@ApiStatus.ScheduledForRemoval
 	public void setRespawnProtectionTaskID(int respawnProtectionTaskID) {
 		

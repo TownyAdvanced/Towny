@@ -50,8 +50,6 @@ public class BankAccount extends Account {
 	}
 
 	/**
-	 * No longer used.
-	 * 
 	 * @deprecated since 0.98.6.9, balance caps are now dynamic.
 	 * @param balanceCap The max amount allowed in this account.
 	 */

@@ -2145,7 +2145,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendTownBoard(sender, town);
 	}
 
-	@Deprecated
+	@Deprecated // Some time during 0.98.*.*
 	public static void townSetTitle(CommandSender sender, String[] split, boolean admin, Town town, Resident resident, Player player) throws TownyException {
 		townSetTitle(sender, split, admin);
 	}
@@ -2197,7 +2197,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(sender, message);
 	}
 
-	@Deprecated
+	@Deprecated // Some time during 0.98.*.*
 	public static void townSetSurname(CommandSender sender, String[] split, boolean admin, Town town, Resident resident, Player player) throws TownyException {
 		townSetSurname(sender, split, admin);
 	}
