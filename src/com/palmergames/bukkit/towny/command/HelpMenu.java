@@ -826,6 +826,7 @@ public enum HelpMenu {
 			return new MenuBuilder("invite", "")
 				.add(TownySettings.getAcceptCommand() + " [town]", Translation.of("invite_help_1"))
 				.add(TownySettings.getDenyCommand() + " [town]", Translation.of("invite_help_2"))
+				.add(TownySettings.getDenyCommand() + " all", Translation.of("invite_help_4"))
 				.add("list", Translation.of("invite_help_3"));
 		}
 	},
