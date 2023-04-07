@@ -316,6 +316,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			if (resident.hasSurname())
 				title = resident.getSurname();
 			return title;
+		case "resident_primary_rank": // %townyadvanced_resident_primary_rank%
+			return resident.getPrimaryRankPrefix();
 		case "towny_name_prefix": // %townyadvanced_towny_name_prefix%
 			if (resident.isMayor())
 				title = TownySettings.getMayorPrefix(resident);

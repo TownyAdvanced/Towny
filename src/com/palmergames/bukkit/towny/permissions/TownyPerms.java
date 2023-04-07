@@ -27,6 +27,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -36,6 +38,8 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
 
 /**
  * @author ElgarL
@@ -49,6 +53,9 @@ public class TownyPerms {
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
 	private static final List<String> vitalGroups = Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks");
+	private static final HashMap<UUID, String> residentPrefixMap = new HashMap<>();
+	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
+	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -192,6 +199,11 @@ public class TownyPerms {
 		 * Store the attachment for future reference
 		 */
 		attachments.put(resident.getName(), attachment);
+
+		/*
+		 * Set a prefix for the resident ranks.
+		 */
+		setResidentPrimaryRankPrefix(resident);
 
 	}
 	
@@ -517,6 +529,78 @@ public class TownyPerms {
 	}
 
 	/*
+	 * Resident Primary Rank / Rank Prefix 
+	 */
+	public static String getResidentPrimaryRankPrefix(Resident resident) {
+		return residentPrefixMap.getOrDefault(resident.getUUID(), setResidentPrimaryRankPrefix(resident));
+	}
+
+	private static String setResidentPrimaryRankPrefix(Resident resident) {
+		String prefix = getPrimaryRankPrefix(resident);
+		residentPrefixMap.put(resident.getUUID(), prefix);
+		return prefix;
+	}
+
+
+	private static String getPrimaryRankPrefix(Resident resident) {
+		String prefix = getHighestPriorityRankPrefix(resident);
+		return prefix == null ? "" : prefix;
+	}
+
+	@Nullable
+	private static String getHighestPriorityRankPrefix(Resident resident) {
+		if (resident.hasNation() && !resident.getNationRanks().isEmpty()) {
+			String rank = getHighestPriorityRank(resident, resident.getNationRanks(), r -> getNationRankPermissions(r));
+			String prefix = getPrefixFromRank(getNationRankPermissions(rank));
+			if (prefix != null)
+				return prefix;
+		}
+
+		if (resident.hasTown() && !resident.getTownRanks().isEmpty()) {
+			String rank = getHighestPriorityRank(resident, resident.getTownRanks(), r -> getTownRankPermissions(r));
+			String prefix = getPrefixFromRank(getTownRankPermissions(rank));
+			if (prefix != null)
+				return prefix;
+		}
+
+		return null;
+	}
+
+	private static String getPrefixFromRank(List<String> nodes) {
+		for (String node : nodes)
+			if (node.startsWith(RANKPREFIX_PREFIX))
+				return node.substring(RANKPREFIX_PREFIX.length());
+		return null;
+	}
+
+	public static String getHighestPriorityRank(Resident resident, List<String> ranks, Function<String, List<String>> rankFunction) {
+		Map<String, Integer> rankPriorityMap = new HashMap<>(); 
+		for (String rank : ranks)
+			rankPriorityMap.put(rank, getRankPriority(rankFunction.apply(rank)));
+		return Collections.max(rankPriorityMap.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+	}
+
+	private static int getRankPriority(List<String> nodes) {
+		int topValue = 0;
+		for (String node : nodes) {
+			if (node.startsWith(RANKPRIORITY_PREFIX)) {
+				int priorityValue = getNodePriority(node);
+				if (topValue >= priorityValue)
+					continue;
+				topValue = priorityValue;
+			}
+		}
+		return topValue;
+	}
+
+	private static int getNodePriority(String node) {
+		try {
+			return Integer.valueOf(node.substring(RANKPRIORITY_PREFIX.length()));
+		} catch (NumberFormatException ignored) {
+			return 0;
+		}
+	}
+	/*
 	 * Permission utility functions taken from GroupManager (which I wrote anyway).
 	 */
 	
@@ -698,6 +782,17 @@ public class TownyPerms {
 				"#    - -towny.command.plot.set.jail                                                         #",
 				"# In this example the user is given full rights to all of the /plot command nodes,          #",
 				"# but has had their ability to set a plot to a Jail plot type disabled.                     #",
+				"#                                                                                           #",
+				"# The towns.ranks and nations.ranks sections support adding prefix and priorities, this     #",
+				"# is done using two nodes: towny.rankpriority.# and towny.rankprefix.<prefix_here>.         #",
+				"# Residents will have their ranks parsed until one rank is determined to be the highest     #",
+				"# priority, this rank will then be searched for a prefix node. This prefix can be shown     #",
+				"# using the %townyadvanced_resident_primary_rank% placeholder for PlaceholderAPI. A prefix  #",
+				"# from a Nation rank will take precendence over a prefix from a Town rank.                  #",
+				"# Ex:                                                                                       #",
+				"#    - towny.rankpriority.100                                                               #",
+				"#    - towny.rankprefix.&a<&2Sheriff&a>                                                     #",
+				"#                                                                                           #",
 				"#############################################################################################",
 				"",
 				"",

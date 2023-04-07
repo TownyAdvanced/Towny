@@ -182,6 +182,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return getJail().getJailCellLocations().get(getJailCell());
 	}
 
+	public String getPrimaryRankPrefix() {
+		return TownyPerms.getResidentPrimaryRankPrefix(this);
+	}
+
 	public void setTitle(String title) {
 		this.title = title.trim();
 	}
@@ -637,6 +641,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return false;
 	}
 
+	@Nullable
+	public String getHighestPriorityTownRank() {
+		if (getTownRanks().isEmpty())
+			return null;
+		return TownyPerms.getHighestPriorityRank(this, getTownRanks(), r->TownyPerms.getTownRankPermissions(r));
+	}
+
 	public boolean addNationRank(String rank) {
 
 		if (!hasNationRank(rank)) {
@@ -683,6 +694,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		return false;
 
+	}
+
+	@Nullable
+	public String getHighestPriorityNationRank() {
+		if (getNationRanks().isEmpty())
+			return null;
+		return TownyPerms.getHighestPriorityRank(this, getNationRanks(), r->TownyPerms.getNationRankPermissions(r));
 	}
 
 	public boolean isAlliedWith(Resident otherresident) {
