@@ -15,6 +15,8 @@ import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownMayorChangedEvent;
+import com.palmergames.bukkit.towny.event.town.TownMayorChosenBySuccessionEvent;
 import com.palmergames.bukkit.towny.event.town.TownRemoveAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownRemoveEnemiedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
@@ -192,7 +194,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (!hasResident(mayor))
 			throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
 		
-		setMayor(mayor);
+		setMayor(mayor, false);
 	}
 	
 	/**
@@ -201,12 +203,19 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param mayor - Resident to become mayor.
 	 */
 	public void setMayor(Resident mayor) {
+		setMayor(mayor, true);
+	}
+	
+	public void setMayor(Resident mayor, boolean callEvent) {
 		if (!hasResident(mayor))
 			return;
-				
+
+		if (callEvent)
+			BukkitTools.fireEvent(new TownMayorChangedEvent(this.mayor, mayor));
+
 		this.mayor = mayor;
-		
-		TownyPerms.assignPermissions(mayor, null);	
+
+		TownyPerms.assignPermissions(mayor, null);
 	}
 
 	public String getFounder() {
@@ -806,47 +815,30 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public void findNewMayor() {
 		for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
-			if (findNewMayor(rank)) {
+			if (findNewMayor(getRank(rank))) {
 				return;
 			}
 		}
 		// No one has the rank to succeed the mayor, choose a resident.
-		findNewMayorCatchAll();
+		findNewMayor(getResidents());
 	}
 
 	/**
-	 * Tries to find a new mayor from among the town's residents with the rank specified.
+	 * Tries to find a new mayor from ths list of potential residenst.
 	 * 
-	 * @param rank - the rank being checked for potential mayors
-	 * @return found - whether or not a new mayor was found
+	 * @param potentialResidents the List of Residents that could be mayor.
+	 * @return true if a new mayor is selected.
 	 */
-	private boolean findNewMayor(String rank) {
-		boolean found = false;
-		for (Resident newMayor : getRank(rank)) {
-			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
-				setMayor(newMayor);
-				found = true;
-				break;
-			}
+	private boolean findNewMayor(List<Resident> potentialResidents) {
+		for (Resident newMayor : potentialResidents) {
+			if (newMayor.equals(mayor))
+				continue;
+
+			TownMayorChosenBySuccessionEvent tmcbse = new TownMayorChosenBySuccessionEvent(mayor, newMayor, potentialResidents);
+			setMayor(tmcbse.getNewMayor());
+			return true;
 		}
-		return found;
-	}
-	
-	/**
-	 * Tries to find a new mayor from among the town's residents.
-	 * 
-	 * @return found - whether or not a new mayor was found
-	 */
-	private boolean findNewMayorCatchAll() {
-		boolean found = false;
-		for (Resident newMayor : getResidents()) {
-			if (newMayor != mayor) {
-				setMayor(newMayor);
-				found = true;
-				break;
-			}
-		}
-		return found;
+		return false;
 	}
 
 	@Override

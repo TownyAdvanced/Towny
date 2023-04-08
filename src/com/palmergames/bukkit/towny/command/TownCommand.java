@@ -2261,7 +2261,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!town.hasResident(split[1]))
 			throw new TownyException(Translatable.of("msg_err_mayor_doesnt_belong_to_town"));
 
-		TownMayorChangeEvent townMayorChangeEvent = new TownMayorChangeEvent(oldMayor, newMayor);
+		TownMayorChangeEvent townMayorChangeEvent = new TownMayorChangeEvent(sender, oldMayor, newMayor);
 		if (BukkitTools.isEventCancelled(townMayorChangeEvent) && !admin)
 			throw new TownyException(townMayorChangeEvent.getCancelMessage());
 
@@ -2798,7 +2798,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.setRegistered(System.currentTimeMillis());
 		town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
 		resident.setTown(town);
-		town.setMayor(resident);
+		town.setMayor(resident, false);
 		town.setFounder(resident.getName());
 
 		// Set the plot permissions to mirror the towns.
