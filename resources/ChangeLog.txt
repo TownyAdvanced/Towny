@@ -8540,3 +8540,5 @@ v0.92.0.11:
   - New PlaceholderAPI Placeholder: %townyadvanced_resident_primary_rank%
     - Displays a prefix associated with a player's highest-priority nation or town rank.
   - Bump adventure-text-minimessage from 4.13.0 to 4.13.1.
+0.99.0.2:
+  - Add nations that enemy your nation to the /n enemylist output.

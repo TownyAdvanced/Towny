@@ -630,10 +630,15 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void nationEnemyList(Player player, Nation nation) throws TownyException {
 		if (nation.getEnemies().isEmpty())
-			throw new TownyException(Translatable.of("msg_error_nation_has_no_enemies")); 
-
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(nation.getName() + " " + Translatable.of("status_nation_enemies").forLocale(player)));
-		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(nation.getEnemies())));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_error_nation_has_no_enemies"));
+		else {
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle(nation.getName() + " " + Translatable.of("status_nation_enemies").forLocale(player)));
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemies").forLocale(player), new ArrayList<>(nation.getEnemies())));
+		}
+		List<Nation> enemiedByList = TownyAPI.getInstance().getNations().stream().filter(n-> n.hasEnemy(nation)).collect(Collectors.toList());
+		if (!enemiedByList.isEmpty()) {
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemied_by").forLocale(player), new ArrayList<>(enemiedByList)));
+		}
 	}
 
 	private void parseNationJoin(Player player, String[] args) {
