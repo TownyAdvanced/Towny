@@ -8525,3 +8525,18 @@ v0.92.0.11:
     - Denies all of a players received town invites.
   - Newly blacklisted town and nation names: all, help. 
   - Fix /n enemy add/remove sometimes showing "none of those names were valid" despite working.
+  - Add rank priority and rank prefix to town and nation ranks.
+    - The Town and Nation ranks in the townyperms.yml can now be assigned two permission nodes:
+      - towny.rankpriority.#
+      - towny.rankprefix.<somewordshere>
+    - Ex: Assistant rank can be given:
+      - towny.rankpriority.100
+      - towny.rankprefix.&a<Assistant>&r
+    - and the Sheriff rank can be given:
+      - towny.rankpriority.500
+      - towny.rankprefix.&b<Sheriff>&r
+    - A player that has both the sheriff and assistant rank will show the assistant prefix using the below PAPI placeholder.
+    - Closes #4658.
+  - New PlaceholderAPI Placeholder: %townyadvanced_resident_primary_rank%
+    - Displays a prefix associated with a player's highest-priority nation or town rank.
+  - Bump adventure-text-minimessage from 4.13.0 to 4.13.1.
