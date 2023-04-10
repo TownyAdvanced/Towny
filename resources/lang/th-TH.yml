@@ -455,6 +455,7 @@ invite_plu: 'คำเชิญ'
 invite_sent_by: 'คำเชิญถูกส่งโดย'
 invite_help_1: 'ตอบรับคำเชิญเข้าร่วมเมือง'
 invite_help_2: 'ปฏิเสทคำเชิญเข้าร่วมเมือง'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'แสดงรายการคำเชิญทั้งหมดของคุณ'
 town_invite_help_1: 'เชิญผู้เล่นเข้าสู่ Town ของคุณ'
 town_invite_help_2: 'ยกเลิกคำเชิญที่ส่งไปยังผู้เล่น'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'แสดงรายการคำขอพันธม�
 nation_ally_help_5: 'ตอบรับคำขอเป็น Nation พันธมิตร'
 nation_ally_help_6: 'ปฏิเสทคำขอเป็น Nation พันธมิตร'
 nation_ally_help_7: 'ยกเลิกคำขอเป็นพันธมิตร'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cคุณไม่มีคำเชิญ!'
 msg_err_player_has_multiple_invites: '&cคุณมีคำเชิญหลายรายการ โปรดระบุให้ชัดเจน!'
 msg_err_player_has_too_many_invites: '%s มีคำเชิญมากเกินไป ให้ปฏิเสธบางส่วนก่อนจะเชิญอีกครั้ง.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot tha
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

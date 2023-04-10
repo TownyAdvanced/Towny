@@ -455,6 +455,7 @@ invite_plu: 'Imbitasyon'
 invite_sent_by: 'Imbitasyon na Ipinadala Ni'
 invite_help_1: 'Tanggapin ang imbitasyon na sumali sa isang bayan'
 invite_help_2: 'Tanggihan ang isang imbitasyon na sumali sa isang bayan'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'Ilista ang lahat ng iyong mga imbitasyon'
 town_invite_help_1: 'Mag-imbita ng manlalaro sa iyong bayan'
 town_invite_help_2: 'Bawiin ang isang imbitasyon, na ipinadala sa isang manlalaro'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'Inililista ang lahat ng mga kahilingan sa kaalyado na natan
 nation_ally_help_5: 'Tanggapin ang isang kahilingan sa kapanalig ng isang bansa'
 nation_ally_help_6: 'Tanggihan ang isang kahilingan sa kapanalig ng isang bansa'
 nation_ally_help_7: 'Bawiin ang kahilingan ng kaalyado'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cWala kang anumang mga imbitasyon!'
 msg_err_player_has_multiple_invites: '&cMarami kang imbitasyon, mangyaring tukuyin!'
 msg_err_player_has_too_many_invites: 'Masyadong maraming imbitasyon si %s, hilingin sa kanila na tanggihan ang ilan, bago mag-imbita muli.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bSiningil ka ng %s na mag-teleport sa isang random na bala
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Malapit ka nang i-teleport sa isang balangkas na ipinagbibili sa %s na hahayaan kang sumali. Gamitin ang ''/plot claim'' para i-claim ang iyong balangkas pagdating mo.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

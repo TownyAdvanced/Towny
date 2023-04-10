@@ -455,6 +455,7 @@ invite_plu: '招待'
 invite_sent_by: '招待を送信しました'
 invite_help_1: '町への招待を承認する。'
 invite_help_2: '町への招待を拒否する。'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: '送られてきた招待を全て表示'
 town_invite_help_1: 'プレイヤーを町に招待する'
 town_invite_help_2: 'プレイヤーに送信した招待を削除する'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'あなたが受け取ったすべての同盟リクエス�
 nation_ally_help_5: '同盟国の要請を受ける'
 nation_ally_help_6: '同盟国の要請を拒否する'
 nation_ally_help_7: '同盟国のリクエストを拒否する'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&c招待がありません。'
 msg_err_player_has_multiple_invites: '&c複数の招待がある場合は、指定してください。'
 msg_err_player_has_too_many_invites: '%sは招待が多すぎるため、しばらくしてから再度、送信してください。'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot tha
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

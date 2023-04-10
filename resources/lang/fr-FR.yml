@@ -455,6 +455,7 @@ invite_plu: 'Invitations'
 invite_sent_by: 'Invitation envoyée par'
 invite_help_1: 'Accepter une invitation à rejoindre une ville'
 invite_help_2: 'Décliner une invitation pour rejoindre une ville'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'Liste de toutes vos invitations'
 town_invite_help_1: 'Inviter un joueur dans votre ville'
 town_invite_help_2: 'Annuler une invitation qui a été envoyée à un joueur'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'Liste de toutes les demandes d''allié que vous avez reçue
 nation_ally_help_5: 'Accepter une demande d''allier d''une nation'
 nation_ally_help_6: 'Rejeter une demande d''allier d''une nation'
 nation_ally_help_7: 'Annuler une demande d''allié'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cVous n''avez aucune invitation !'
 msg_err_player_has_multiple_invites: '&cVous avez plusieurs invitations, veuillez préciser !'
 msg_err_player_has_too_many_invites: '%s a trop d''invitations, demandez-leur d''en refuser, avant d''inviter à nouveau.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bVous avez été chargé %s pour vous téléporter aléato
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Vous êtes sur le point d''être téléporté à une parcelle qui est en vente dans %s qui vous laissera rejoindre. Utilisez ''/plot claim'' pour annexer votre parcelle quand vous arrivez.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

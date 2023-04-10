@@ -455,6 +455,7 @@ invite_plu: 'Запрошення'
 invite_sent_by: 'Запрошення надіслано гравцем'
 invite_help_1: 'Прийняти запрошення до міста'
 invite_help_2: 'Відхилити запрошення до міста'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'Всі ваші запрошення'
 town_invite_help_1: 'Запросити гравця до міста'
 town_invite_help_2: 'Скасувати запрошення, яке ви надіслали гравцю'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'Всі запити союзників, які ви отр�
 nation_ally_help_5: 'Прийняти запит щодо союзу із нацією'
 nation_ally_help_6: 'Відхилити запит щодо союзу із нацією'
 nation_ally_help_7: 'Відхилити запит щодо союзу'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&сУ вас нема жодних запрошень!'
 msg_err_player_has_multiple_invites: '&cУ вас є декілька запрошень, будь ласка, укажіть конкретно!'
 msg_err_player_has_too_many_invites: '%s має занадто багато запрошень, попросіть його відмовитися від деяких, перед тим як запрошувати знову.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bВи заплатили %s за телепорт до в�
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Ось-ось вас буде телепортовано до ділянки, яка продається в %s. Використавши ''/plot claim'', ви зможете купити ділянку і приєднатися до міста.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

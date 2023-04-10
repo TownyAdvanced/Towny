@@ -455,6 +455,7 @@ invite_plu: 'Davet etme'
 invite_sent_by: 'Davet Gönderen'
 invite_help_1: 'Bir şehire katılma davetini kabul edin'
 invite_help_2: 'Bir şehire katılma davetini reddedin'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'Tüm davetlerinizi listeleyin'
 town_invite_help_1: 'Kasabanıza bir oyuncu davet edin'
 town_invite_help_2: 'Bir oyuncuya gönderilen daveti iptal et'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'Aldığınız tüm müttefik istekleri listeler'
 nation_ally_help_5: 'Bir ulusa müttefik olma talebini kabul edin'
 nation_ally_help_6: 'Bir ulusa müttefik olma isteğini reddet'
 nation_ally_help_7: 'Bir müttefik talebini iptal edin'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cHiç davetin yok!'
 msg_err_player_has_multiple_invites: '&cBirden fazla davetiniz var, lütfen belirtin!'
 msg_err_player_has_too_many_invites: '%s çok fazla daveti varsa, tekrar davet etmeden önce onlardan bazılarını reddetmelerini isteyin.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bSatılık rastgele bir kasaba arsasına ışınlanmak iç
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Katılmanızı sağlayacak, %s cinsinden satılık bir arsaya ışınlanmak üzeresiniz. Geldiğinizde arsanızı talep etmek için ''/plot claim''i kullanın.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "%s kasabasında satın alabileceğiniz arsalar var, satın alabileceğiniz bir arsaya ışınlanmak ister misiniz?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "Satın alabileceğiniz bir arsaya ışınlandınız. Arsayı almak için \"/plot claim\" komutunu kullanabilirsiniz."
 #Used in the town's status screen to display plots

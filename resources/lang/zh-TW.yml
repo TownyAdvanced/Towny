@@ -455,6 +455,7 @@ invite_plu: '邀請'
 invite_sent_by: '邀請來自：'
 invite_help_1: '接受邀請並加入城鎮'
 invite_help_2: '拒絕加入城鎮的邀請'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: '列出您的所有邀請'
 town_invite_help_1: '邀請玩家到加入到您的城鎮'
 town_invite_help_2: '撤消發送給玩家的邀請'
@@ -472,6 +473,7 @@ nation_ally_help_4: '列出您收到的所有盟國請求'
 nation_ally_help_5: '接受與盟國結盟的請求'
 nation_ally_help_6: '拒絕成為盟國的請求'
 nation_ally_help_7: '撤銷結盟請求'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&c您沒有任何邀請！'
 msg_err_player_has_multiple_invites: '&c您有多個邀請，請註明！'
 msg_err_player_has_too_many_invites: '%s有太多邀請，請他拒絕一些邀請，然後再進行邀請。'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot tha
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

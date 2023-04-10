@@ -455,6 +455,7 @@ invite_plu: 'Inviti'
 invite_sent_by: 'Invito Mandato Da'
 invite_help_1: 'Accetta un invito ad entrare in Città'
 invite_help_2: 'Rifiuta un invito ad entrare in Città'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'Elenco dei tuoi inviti'
 town_invite_help_1: 'Invita un giocatore nella tua Città.'
 town_invite_help_2: 'Annulla un invito che è stato già mandato ad un giocatore'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'Elenco delle richieste di Alleanza che hai ricevuto'
 nation_ally_help_5: 'Accetta una richiesta di Alleanza con una Nazione'
 nation_ally_help_6: 'Rifiuta una richiesta di Alleanza con una Nazione'
 nation_ally_help_7: 'Annulla una richiesta di Alleanza'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cNon hai inviti attivi!'
 msg_err_player_has_multiple_invites: '&cHai ricevuto più inviti, specificane uno!'
 msg_err_player_has_too_many_invites: '%s ha ricevuto troppi inviti, chiedigli di annullarne alcuni, prima di invitarlo di nuovo.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bTi è stato addebitato %s di teletrasportarti in un lotto
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Stai per essere teletrasportato in un lotto che è in vendita in %s che ti permetterà di entrare. Usa ''/plot claim'' per reclamare la tua trama quando arrivi.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

@@ -455,6 +455,7 @@ invite_plu: 'Приглашения'
 invite_sent_by: 'Приглашение отправлено игроком'
 invite_help_1: 'Принять приглашение присоединиться к городу'
 invite_help_2: 'Отказаться от приглашения присоединиться к городу'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'Все ваши приглашения'
 town_invite_help_1: 'Пригласить игрока в ваш город'
 town_invite_help_2: 'Отменить приглашение, которое было отправлено игроку'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'Все запросы союзников, которые в
 nation_ally_help_5: 'Принять запрос на союз с нацией'
 nation_ally_help_6: 'Отклонить запрос на союз с нацией'
 nation_ally_help_7: 'Отменить запрос на союз'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cУ вас нет никаких приглашений!'
 msg_err_player_has_multiple_invites: '&cУ вас есть несколько приглашений. Пожалуйста, укажите конкретно'
 msg_err_player_has_too_many_invites: '%s имеет слишком много приглашений. Попросите его отказаться от некоторых, прежде чем снова приглашать.'
@@ -584,7 +586,7 @@ jailed_in_town: ' в городе: %s'
 status_friends: 'Друзья'
 rank_list_title: 'Список званий %s'
 rank_list_mayor: 'Мэр:'
-status_title_capital: 'Капитал'
+status_title_capital: '&b(Столица)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Откр.)'
 status_town_board: 'Доска объявлений:'
@@ -1498,9 +1500,9 @@ msg_cost_spawn_rtp: '&bВы заплатили %s за телепорт к сл�
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Вы будете телепортированы к участку, выставленному на продажу в %s, купив его используя ''/plot claim'' вы сможете присоединиться к городу.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "В городе есть участки, которые вы можете купить, вы хотели, чтобы вас телепортировали на участок, который вы можете купить прямо сейчас?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "Вы были телепортированы на участок, который вы можете купить. Используйте «/plot», если хотите заявить права на участок."
+townyrtp.you_have_arrived: "Вы были телепортированы на участок, который вы можете купить. Используйте '/plot', если хотите заприватить участок."
 #Used in the town's status screen to display plots
 status_plot_string: 'Участки'
 #Displays a plot type and the amount of townblocks of that type in the town

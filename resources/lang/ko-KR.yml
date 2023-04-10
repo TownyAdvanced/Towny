@@ -455,6 +455,7 @@ invite_plu: '초대'
 invite_sent_by: '초대자:'
 invite_help_1: '마을 초대를 수락합니다.'
 invite_help_2: '마을 초대를 거부합니다.'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: '귀하의 초대 목록'
 town_invite_help_1: '플레이어를 귀하의 마을로 초대합니다.'
 town_invite_help_2: '플레이어에게 전송된 초대를 취소합니다.'
@@ -472,6 +473,7 @@ nation_ally_help_4: '귀하가 수신한 동맹 요청 목록'
 nation_ally_help_5: '동맹 요청을 수락합니다.'
 nation_ally_help_6: '동맹 요청을 거부합니다.'
 nation_ally_help_7: '동맹 요청을 취소합니다.'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&c어떠한 초대도 없습니다.'
 msg_err_player_has_multiple_invites: '&c초대가 여러 개 있습니다. 지정하십시오.'
 msg_err_player_has_too_many_invites: '%s에는 너무 많은 초대가 있습니다. 다시 요청하기 전에 몇몇 초대를 취소하도록 요청하세요.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot tha
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots

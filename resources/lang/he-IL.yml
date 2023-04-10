@@ -455,6 +455,7 @@ invite_plu: 'Invites'
 invite_sent_by: 'Invite Sent By'
 invite_help_1: 'Accept an invite to join a town'
 invite_help_2: 'Decline an invite to join a town'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'List all of your invites'
 town_invite_help_1: 'Invite a player to your town'
 town_invite_help_2: 'Revoke an invite, that was sent to a player'
@@ -472,6 +473,7 @@ nation_ally_help_4: 'רשימת כל בקשות הברית שקיבלת'
 nation_ally_help_5: 'Accept a request to ally a nation'
 nation_ally_help_6: 'Deny a request to ally a nation'
 nation_ally_help_7: 'Revoke an ally request'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cYou do not have any invites!'
 msg_err_player_has_multiple_invites: '&cYou have multiple invites, please specify!'
 msg_err_player_has_too_many_invites: '%s has too many invites, ask them to decline some, before inviting again.'
@@ -1498,7 +1500,7 @@ msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot tha
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase did you want to be teleported to a plot you can purhcase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots
