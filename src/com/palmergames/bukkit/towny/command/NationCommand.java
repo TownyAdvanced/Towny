@@ -1824,54 +1824,59 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		ArrayList<Nation> remove = new ArrayList<>();
 		for (Nation targetNation : enemies) {
-			if (add && !nation.getEnemies().contains(targetNation)) {
-				
-				NationPreAddEnemyEvent npaee = new NationPreAddEnemyEvent(nation, targetNation);
-				if (BukkitTools.isEventCancelled(npaee)) {
-					TownyMessaging.sendErrorMsg(player, npaee.getCancelMessage());
+			if (add) {
+				if (!nation.getEnemies().contains(targetNation)) {
+					
+					NationPreAddEnemyEvent npaee = new NationPreAddEnemyEvent(nation, targetNation);
+					if (BukkitTools.isEventCancelled(npaee)) {
+						TownyMessaging.sendErrorMsg(player, npaee.getCancelMessage());
+						remove.add(targetNation);
+						continue;
+					}
+	
+					nation.addEnemy(targetNation);
+					BukkitTools.fireEvent(new NationAddEnemyEvent(nation, targetNation));
+	
+					// Remove the targetNation from the nation ally list if present.
+					if (nation.hasAlly(targetNation)) {
+						nation.removeAlly(targetNation);
+						BukkitTools.fireEvent(new NationRemoveAllyEvent(nation, targetNation));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", targetNation));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
+					}
+					
+					// Remove the nation from the targetNation ally list if present.
+					if (targetNation.hasAlly(nation)) {
+						targetNation.removeAlly(nation);
+						BukkitTools.fireEvent(new NationRemoveAllyEvent(targetNation, nation));
+						TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation));
+						TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
+					}
+	
+					TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_enemy", nation));
+				} else {
+					// TargetNation is already an enemy.
 					remove.add(targetNation);
-					continue;
 				}
-
-				nation.addEnemy(targetNation);
-				BukkitTools.fireEvent(new NationAddEnemyEvent(nation, targetNation));
-
-				// Remove the targetNation from the nation ally list if present.
-				if (nation.hasAlly(targetNation)) {
-					nation.removeAlly(targetNation);
-					BukkitTools.fireEvent(new NationRemoveAllyEvent(nation, targetNation));
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_removed_ally", targetNation));
-					TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
-				}
-				
-				// Remove the nation from the targetNation ally list if present.
-				if (targetNation.hasAlly(nation)) {
-					targetNation.removeAlly(nation);
-					BukkitTools.fireEvent(new NationRemoveAllyEvent(targetNation, nation));
-					TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_ally", nation));
-					TownyMessaging.sendMsg(player, Translatable.of("msg_ally_removed_successfully"));
-				}
-
-				TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_added_enemy", nation));
-			} else {
-				// TargetNation is already an enemy.
-				remove.add(targetNation);
 			}
 
-			if (!add && nation.getEnemies().contains(targetNation)) {
-				NationPreRemoveEnemyEvent npree = new NationPreRemoveEnemyEvent(nation, targetNation);
-				if (BukkitTools.isEventCancelled(npree)) {
-					TownyMessaging.sendErrorMsg(player, npree.getCancelMessage());
+			if (!add) {
+				if (nation.getEnemies().contains(targetNation)) {
+	
+					NationPreRemoveEnemyEvent npree = new NationPreRemoveEnemyEvent(nation, targetNation);
+					if (BukkitTools.isEventCancelled(npree)) {
+						TownyMessaging.sendErrorMsg(player, npree.getCancelMessage());
+						remove.add(targetNation);
+						continue;
+					}
+	
+					nation.removeEnemy(targetNation);
+					BukkitTools.fireEvent(new NationRemoveEnemyEvent(nation, targetNation));
+					TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_enemy", nation));
+				} else {
+					// TargetNation is already not an enemy.
 					remove.add(targetNation);
-					continue;
 				}
-
-				nation.removeEnemy(targetNation);
-				BukkitTools.fireEvent(new NationRemoveEnemyEvent(nation, targetNation));
-				TownyMessaging.sendPrefixedNationMessage(targetNation, Translatable.of("msg_removed_enemy", nation));
-			} else {
-				// TargetNation is already not an enemy.
-				remove.add(targetNation);
 			}
 		}
 		

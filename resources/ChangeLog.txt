@@ -8524,3 +8524,4 @@ v0.92.0.11:
   - New Command: /invite deny all
     - Denies all of a players received town invites.
   - Newly blacklisted town and nation names: all, help. 
+  - Fix /n enemy add/remove sometimes showing "none of those names were valid" despite working.
