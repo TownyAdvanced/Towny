@@ -4079,6 +4079,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			else
 				amount = MathUtil.getIntOrThrow(args[0].trim());
 
+			// Stop 0 amounts being supplied.
+			if (amount == 0)
+				throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
+
 			// Attempt to do the actual bank transaction.
 			if (withdraw)
 				MoneyUtil.townWithdraw(player, resident, town, amount);

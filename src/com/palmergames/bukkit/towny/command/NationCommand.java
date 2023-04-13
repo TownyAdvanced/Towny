@@ -2545,7 +2545,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				amount = (int) Math.floor(withdraw ? nation.getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
 			else 
 				amount = MathUtil.getIntOrThrow(args[1].trim());
-			
+
+			// Stop 0 amounts being supplied.
+			if (amount == 0)
+				throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
+
 			if (args.length == 2) {
 				if (withdraw)
 					MoneyUtil.nationWithdraw(player, resident, nation, amount);
