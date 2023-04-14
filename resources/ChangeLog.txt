@@ -8543,3 +8543,8 @@ v0.92.0.11:
 0.99.0.2:
   - Add nations that enemy your nation to the /n enemylist output.
   - Prevent 0 dollar amounts being withdrawn/deposited from town and nation banks.
+  - API: Add town-changing-mayor events.
+    - Alters the TownMayorChangeEvent to include a getCommandSender.
+    - Add TownMayorChangedEvent which is not cancellable, alerts plugins of any change in mayor.
+    - Add TownMayorChosenBySuccessionEvent which allows a plugin to determine who will become mayor when Towny automatically chooses a mayor.
+    - Closes #6607.
