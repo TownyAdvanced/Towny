@@ -747,7 +747,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest homeblock.
 	 * 
-	 * @deprecated since 0.98.6.26 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord)} instead.
+	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord)} instead.
 	 * 
 	 * @param key - Coord to check from.
 	 * @return the distance to nearest towns homeblock.
@@ -770,7 +770,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from a another town's homeblock.
 	 * 
-	 * @deprecated since 0.98.6.26 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord, Town)} instead.
+	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord, Town)} instead.
 	 * 
 	 * @param key - Coord to check from.
 	 * @param homeTown Players town
