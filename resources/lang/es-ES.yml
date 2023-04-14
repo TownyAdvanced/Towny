@@ -606,6 +606,7 @@ status_nation_tax: 'Impuesto Nacional:'
 status_nation_towns: 'Poblaciones'
 status_nation_allies: 'Aliados'
 status_nation_enemies: 'Enemigos'
+status_nation_enemied_by: 'Nations that consider your nation an enemy'
 status_world_claimable: '&aAnexable'
 status_world_noclaims: '&cSin Anexos'
 status_world_forcepvp: 'Forzar PvP:'
@@ -1662,3 +1663,5 @@ msg_err_townyobject_x_has_no_nation: "%s no pertenece a ninguna nación."
 msg_err_townblock_has_no_claimedat_data: "Este bloque de ciudad no tiene datos sobre cuándo fue reclamado."
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "Necesitas %s para pagar."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."

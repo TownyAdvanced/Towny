@@ -606,6 +606,7 @@ status_nation_tax: '国税：'
 status_nation_towns: '城镇'
 status_nation_allies: '盟友'
 status_nation_enemies: '敌人'
+status_nation_enemied_by: 'Nations that consider your nation an enemy'
 status_world_claimable: '&a可宣称'
 status_world_noclaims: '&a不可宣称'
 status_world_forcepvp: '强制PVP：'
@@ -1662,3 +1663,5 @@ msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "您需要 %s 才能支付。"
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
