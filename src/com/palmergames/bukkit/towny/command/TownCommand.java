@@ -3904,7 +3904,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_you_cannot_make_this_your_homeblock"));
 
 		WorldCoord wc = WorldCoord.parseWorldCoord(player);
-		if (TownyAPI.getInstance().isWilderness(wc))
+		if (wc.isWilderness())
 			throw new TownyException(Translatable.of("msg_not_own_place"));
 
 		// Make sure the town doesn't already own this land.
