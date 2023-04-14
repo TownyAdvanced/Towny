@@ -182,6 +182,27 @@ public enum ConfigNodes {
 			"# set to 0 to disable limiting of claim radius value check.",
 			"# keep in mind that the default value of 4 is a radius, ",
 			"# and it will allow claiming 9x9 (80 plots) at once."),
+
+	TOWN_OVERCLAIMING_ROOT("town.overclaiming", "", "", ""),
+	TOWN_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(
+			"town.overclaiming.being_overclaimed_allows_other_towns_to_steal_land",
+			"false",
+			"",
+			"# A feature that allows towns which have too many townblocks claimed (overclaimed) ie: 120/100 TownBlocks, ",
+			"# to have their land stolen by other towns which are not overclaimed. Using this incentivises Towns to keep",
+			"# their residents from leaving, and will mean that mayors will be more careful about which land they choose",
+			"# to claim.",
+			"# Overclaiming does not allow a town to be split into two separate parts, requiring the Town that is stealing",
+			"# land to work from the outside inwards.",
+			"# It is highly recommended to only use this on servers where outposts are disabled, and requiring ",
+			"# a number of adjacent claims over 1 is enabled.",
+			"# Towns take land using /t takeoverclaim."),
+	TOWN_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS(
+			"town.overclaiming.overclaiming_prevented_by_homeblock_radius",
+			"true",
+			"",
+			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
+			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
 	TOWN_LIMIT(
 			"town.town_limit",
 			"3000",
@@ -2239,6 +2260,12 @@ public enum ConfigNodes {
 			"# Warning: do not set this higher than the cost to claim a townblock.",
 			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.",
 			"# Optionally, set this to a negative amount if you want towns to pay money to unclaim their land."),
+	ECO_PRICE_TAKEOVERCLAIM("economy.takeoverclaim","","",""),
+	ECO_PRICE_TAKEOVERCLAIM_PRICE(
+			"economy.takeoverclaim.price",
+			"100.0",
+			"",
+			"# The price to use /t takeoverclaim, when it has been enabled in the config at town.being_overclaimed_allows_other_towns_to_steal_land"),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",

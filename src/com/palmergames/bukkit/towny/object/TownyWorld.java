@@ -747,23 +747,51 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest homeblock.
 	 * 
+	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord)} instead.
+	 * 
 	 * @param key - Coord to check from.
 	 * @return the distance to nearest towns homeblock.
 	 */
+	@Deprecated
 	public int getMinDistanceFromOtherTowns(Coord key) {
+		return getMinDistanceFromOtherTownsHomeBlocks(key);
+	}
 
-		return getMinDistanceFromOtherTowns(key, null);
-
+	/**
+	 * Checks the distance from the closest homeblock.
+	 * 
+	 * @param key - Coord to check from.
+	 * @return the distance to nearest towns homeblock.
+	 */
+	public int getMinDistanceFromOtherTownsHomeBlocks(Coord key) {
+		return getMinDistanceFromOtherTownsHomeBlocks(key, null);
 	}
 
 	/**
 	 * Checks the distance from a another town's homeblock.
 	 * 
+	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord, Town)} instead.
+	 * 
 	 * @param key - Coord to check from.
 	 * @param homeTown Players town
 	 * @return the closest distance to another towns homeblock.
 	 */
+	@Deprecated
 	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
+		return getMinDistanceFromOtherTownsHomeBlocks(key, homeTown);
+	}
+
+	/**
+	 * Checks the distance from a another town's homeblock, or the distance to
+	 * another Town if homeTown is null.
+	 * 
+	 * @param key      Coord to check from.
+	 * @param homeTown The town belonging to a player, so that the town's own
+	 *                 homeblock is not returned, or null if this should apply to
+	 *                 any townblock, and not just homeblocks.
+	 * @return the closest distance to another towns homeblock.
+	 */
+	public int getMinDistanceFromOtherTownsHomeBlocks(Coord key, Town homeTown) {
 		double minSqr = -1;
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
