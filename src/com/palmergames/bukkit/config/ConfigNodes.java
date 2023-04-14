@@ -191,7 +191,10 @@ public enum ConfigNodes {
 			"# A feature that allows towns which have too many townblocks claimed (overclaimed) ie: 120/100 TownBlocks, ",
 			"# to have their land stolen by other towns which are not overclaimed. Using this incentivises Towns to keep",
 			"# their residents from leaving, and will mean that mayors will be more careful about which land they choose",
-			"# to claim. It is highly recommended to only use this on servers where outposts are disabled, and requiring ",
+			"# to claim.",
+			"# Overclaiming does not allow a town to be split into two separate parts, requiring the Town that is stealing",
+			"# land to work from the outside inwards.",
+			"# It is highly recommended to only use this on servers where outposts are disabled, and requiring ",
 			"# a number of adjacent claims over 1 is enabled.",
 			"# Towns take land using /t takeoverclaim."),
 	TOWN_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS(
