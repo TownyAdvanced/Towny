@@ -8548,3 +8548,42 @@ v0.92.0.11:
     - Add TownMayorChangedEvent which is not cancellable, alerts plugins of any change in mayor.
     - Add TownMayorChosenBySuccessionEvent which allows a plugin to determine who will become mayor when Towny automatically chooses a mayor.
     - Closes #6607.
+  - Add option for overclaimed towns to have their land stolen from them.
+    - When enabled a Town which has claimed too much land, ie: TownBlocks 120/100, will be vulnerable to having some of their land stolen.
+    - Stealing land is done by using /t takeoverclaim.
+      - This command must be used at the edge of a town, which is adjacent to your town.
+      - It comes with a customizable cost.
+      - It does not allow an overclaimed Town to be cut into two separate parts.
+      - Important: Towns can only have land stolen from them until they are no longer overclaimed!
+      - Important: There is an option to prevent stealing land too close to a Town's HomeBlock!
+      - Important: It is recommended to only enable this setting when outposts are disabled and min_adjacent_blocks is set to 2 or 3!
+    - TownBlocks that can be stolen will have a [TakeoverClaim Available] added to their ChunkNotification.
+    - Mayors will also see warnings:
+      - on login while being overclaimed, 
+      - when they approach their claim limit while claiming land, 
+      - and when they lose a resident that would put them at risk of being overclaimed.
+    - Closes #6564.
+  - New Config Option: town.overclaiming.being_overclaimed_allows_other_towns_to_steal_land
+    - Default: false
+    - A feature that allows towns which have too many townblocks claimed (overclaimed) ie: 120/100 TownBlocks,
+      to have their land stolen by other towns which are not overclaimed. Using this incentivises Towns to keep
+      their residents from leaving, and will mean that mayors will be more careful about which land they choose
+      to claim.
+      Overclaiming does not allow a town to be split into two separate parts, requiring the Town that is stealing
+      land to work from the outside inwards. 
+      It is highly recommended to only use this on servers where outposts are disabled, and requiring
+      a number of adjacent claims over 1 is enabled. Towns take land using /t takeoverclaim.
+  - New Config Option: town.overclaiming.overclaiming_prevented_by_homeblock_radius
+    - Default: true
+    - While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.
+    - This prevents a town from having townblocks stolen surrounding their homeblocks.
+  - New Config Option: economy.takeoverclaim.price
+    - Default: 100.0
+    - The price to use /t takeoverclaim, when it has been enabled in the config 
+      at town.being_overclaimed_allows_other_towns_to_steal_land
+  - New Command: /town takeoverclaim
+    - Used to a mayor to take over land from an overclaimed town, when allowed in the config.
+    - Towns are considered overclaimed if their townblocks are more than they are allowed, ie: TownBlocks 120/100.
+  - New Permission Node: towny.command.town.takeoverclaim
+    - Child Node of towny.command.town.*
+    - No adjustments need to be made to the townyperms.yml.
