@@ -5,7 +5,7 @@ tableheader = "<tr><th colspan=%s><h3>Towny Sponsors<br><h4>I want to give a big
 tablefooter1 = "<tr><td colspan=%s align=center>" % columns
 tablefooter2 = "<h3><a href=https://github.com/sponsors/LlmDl>If you want to support the developer, become a sponsor.</a></h3>"
 tablefooter3 = "(It's just like Patreon but instead 100% of your support goes to the developer.)"
-tablefooter4 = "<h3>Plus there are <a href=https://github.com/LlmDl/SponsorPlugins/blob/main/README.md>Sponsor Perks!</a></h3></td></tr>"
+tablefooter4 = "<h3>Plus there are <a href=https://github.com/LlmDl/SponsorPlugins/blob/main/README.md>Sponsor Plugins!</a></h3></td></tr>"
 tableclose = "</table>"
 rows = [tableopen, tableheader]
 laterRows = [tablefooter1, tablefooter2, tablefooter3, tablefooter4, tableclose]
