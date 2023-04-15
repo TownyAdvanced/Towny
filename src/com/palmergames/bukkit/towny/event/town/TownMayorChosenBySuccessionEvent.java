@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -24,7 +25,7 @@ public class TownMayorChosenBySuccessionEvent extends Event {
 
 	private final Resident oldMayor;
 	private Resident newMayor;
-	private List<Resident> potentialResidents;
+	private final List<Resident> potentialResidents = new ArrayList<>();
 
 	public TownMayorChosenBySuccessionEvent(Resident oldMayor, Resident newMayor, List<Resident> potentialResidents) {
 		super(!Bukkit.getServer().isPrimaryThread());
