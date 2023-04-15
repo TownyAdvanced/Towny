@@ -8587,3 +8587,8 @@ v0.92.0.11:
   - New Permission Node: towny.command.town.takeoverclaim
     - Child Node of towny.command.town.*
     - No adjustments need to be made to the townyperms.yml.
+0.99.0.3:
+  - Fix NPE when finding a new mayor, courtesy of Warriorrrr with PR #6616.
+    - Closes #6615.
+  - Fix missing feedback messages when towns that cannot join your nation are being invited.
+    - Closes #6614.

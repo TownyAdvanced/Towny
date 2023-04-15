@@ -1176,12 +1176,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			} catch (NotRegisteredException e) {
 				// The Town doesn't actually exist or was mis-spelled.
 				removeinvites.add(townname);
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", townname));
 				continue;
 			}
 
 			if (nation.hasTown(town) || town.hasNation()) {
 				// Town is already part of the nation.
 				removeinvites.add(townname);
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_already_in_town", townname, town.getNationOrNull().getName()));
 				continue;
 			}
 
