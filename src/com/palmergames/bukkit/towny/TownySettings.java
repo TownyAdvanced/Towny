@@ -2996,6 +2996,14 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_NATION_RENAME_COST);
 	}
 
+	public static double getTownSetMapColourCost() {
+		return getDouble(ConfigNodes.ECO_TOWN_MAPCOLOUR_COST);
+	}
+
+	public static double getNationSetMapColourCost() {
+		return getDouble(ConfigNodes.ECO_NATION_MAPCOLOUR_COST);
+	}
+
 	public static boolean isRemovingKillerBunny() {		
 		return getBoolean(ConfigNodes.PROT_MOB_REMOVE_TOWN_KILLER_BUNNY);
 	}

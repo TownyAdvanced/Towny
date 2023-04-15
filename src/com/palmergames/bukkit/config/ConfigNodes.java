@@ -2143,6 +2143,16 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# The cost of renaming a nation."),
+	ECO_TOWN_MAPCOLOUR_COST(
+			"economy.town_set_mapcolour_cost",
+			"0",
+			"",
+			"# The cost of setting a town's mapcolour."),
+	ECO_NATION_MAPCOLOUR_COST(
+			"economy.nation_set_mapcolour_cost",
+			"0",
+			"",
+			"# The cost of setting a nation's mapcolour."),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",

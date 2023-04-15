@@ -2602,11 +2602,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
 
-		if (!TownySettings.getTownColorsMap().containsKey(line.toLowerCase()))
+		if (!TownySettings.getTownColorsMap().containsKey(line.toLowerCase(Locale.ROOT)))
 			throw new TownyException(Translatable.of("msg_err_invalid_nation_map_color", TownySettings.getTownColorsMap().keySet().toString()));
 
-		town.setMapColorHexCode(TownySettings.getTownColorsMap().get(line.toLowerCase()));
-		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_map_color_changed", line.toLowerCase()));
+		Confirmation.runOnAccept(()-> {
+			town.setMapColorHexCode(TownySettings.getTownColorsMap().get(line.toLowerCase(Locale.ROOT)));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_map_color_changed", line.toLowerCase(Locale.ROOT)));
+		})
+		.setTitle(Translatable.of("msg_confirm_purchase", TownySettings.getTownSetMapColourCost()))
+		.setCost(new ConfirmationTransaction(()-> TownySettings.getTownSetMapColourCost(), town.getAccount(), "Cost of setting town map color."))
+		.sendTo(sender);
 	}
 
 	public static void townSetTaxPercent(CommandSender sender, String[] split, Town town) throws TownyException {

@@ -8592,3 +8592,10 @@ v0.92.0.11:
     - Closes #6615.
   - Fix missing feedback messages when towns that cannot join your nation are being invited.
     - Closes #6614.
+0.99.0.4:
+  - New Config Option: economy.town_set_mapcolour_cost
+    - Default: 0
+    - The cost of setting a town's mapcolour.
+  - New Config Option: economy.nation_set_mapcolour_cost
+    - Default: 0
+    - The cost of setting a nation's mapcolour.

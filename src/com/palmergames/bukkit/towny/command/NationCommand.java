@@ -1996,20 +1996,26 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 2) {
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set mapcolor brown.");
 			return;
-		} else {
-			String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+		}
 
-			if (!TownySettings.getNationColorsMap().containsKey(line.toLowerCase())) {
-				String allowedColorsListAsString = TownySettings.getNationColorsMap().keySet().toString();
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_nation_map_color", allowedColorsListAsString));
-				return;
-			}
+		String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
 
-			nation.setMapColorHexCode(TownySettings.getNationColorsMap().get(line.toLowerCase()));
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_map_color_changed", line.toLowerCase()));
+		if (!TownySettings.getNationColorsMap().containsKey(line.toLowerCase(Locale.ROOT))) {
+			String allowedColorsListAsString = TownySettings.getNationColorsMap().keySet().toString();
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_nation_map_color", allowedColorsListAsString));
+			return;
+		}
+
+		Confirmation.runOnAccept(() -> {
+			nation.setMapColorHexCode(TownySettings.getNationColorsMap().get(line.toLowerCase(Locale.ROOT)));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_map_color_changed", line.toLowerCase(Locale.ROOT)));
 			if (admin)
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_map_color_changed", line.toLowerCase()));
-		}
+			
+		})
+		.setTitle(Translatable.of("msg_confirm_purchase", TownySettings.getNationSetMapColourCost()))
+		.setCost(new ConfirmationTransaction(()-> TownySettings.getNationSetMapColourCost(), nation.getAccount(), "Cost of setting nation map color."))
+		.sendTo(sender);
 	}
 
 	private static void nationSetBoard(CommandSender sender, Nation nation, String[] split) {
