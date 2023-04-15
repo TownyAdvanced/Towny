@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import com.palmergames.util.JavaUtil;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -127,51 +128,46 @@ public class ConfigMigrator {
 
 	private void performChange(Change change) {
 		switch (change.type) {
-			case OVERWRITE:
+			case OVERWRITE -> {
 				config.set(change.path, change.value);
 				TownyMessaging.sendDebugMsg("Reseting config.yml value at " + change.path + " to " + change.value + ".");
-				break;
-			case APPEND:
+			}
+			case APPEND -> {
 				String base = config.getString(change.path);
 				config.set(change.path, base + change.value);
 				TownyMessaging.sendDebugMsg("Adding " + change.value + " to config.yml value at " + change.path + ".");
-				break;
-			case TOWN_LEVEL_ADD:
-				addTownLevelProperty(change.key, change.value);
-				break;
-			case NATION_LEVEL_ADD:
-				addNationLevelProperty(change.key, change.value);
-				break;
-			case TOWNYPERMS_ADD:
+			}
+			case TOWN_LEVEL_ADD -> addTownLevelProperty(change.key, change.value);
+			case NATION_LEVEL_ADD -> addNationLevelProperty(change.key, change.value);
+			case TOWNYPERMS_ADD -> {
 				addPermissions(change.path, change.value);
 				TownyMessaging.sendDebugMsg("Updating townyperms.yml, adding " + change.value + " to " + change.path + " group.");
-				break;
-			case REPLACE:
+			}
+			case REPLACE -> {
 				Object value = config.get(change.path);
 				if (value instanceof String string)
 					config.set(change.path, string.replaceAll(change.key, change.value));
-				break;
-			case MOVE:
+			}
+			case MOVE -> {
 				Object oldValue = config.get(change.path);
 				if (oldValue != null)
 					config.set(change.value, oldValue);
-				break;
-			case REMOVE:
+			}
+			case REMOVE -> {
 				Object path = config.get(change.path);
 				if (path != null) {
 					TownyMessaging.sendDebugMsg("Removing unneeded config entry: " + change.path);
 					config.set(change.path, null);
 				}
-				break;
-			case RUNNABLE:
+			}
+			case RUNNABLE -> {
 				Consumer<CommentedConfiguration> consumer = runnableMigrations.getByName(change.key);
 				if (consumer != null)
 					consumer.accept(config);
-				else 
+				else
 					plugin.getLogger().warning("Config Migrator: Could not find runnable migration with key " + change.key);
-				break;
-			default:
-				throw new UnsupportedOperationException("Unsupported Change type: " + change);
+			}
+			default -> throw new UnsupportedOperationException("Unsupported Change type: " + change);
 		}
 
 		// Address any changes to the world files.
@@ -193,7 +189,7 @@ public class ConfigMigrator {
 	}
 
 	private List<Migration> readMigrator() {
-		try (Reader reader = new InputStreamReader(plugin.getResource(migrationFilename))) {
+		try (Reader reader = new InputStreamReader(JavaUtil.readResource(migrationFilename))) {
 			
 			return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
 		} catch (IOException e) {
@@ -201,23 +197,31 @@ public class ConfigMigrator {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void addTownLevelProperty(String key, String value) {
 		 List<Map<?, ?>> mapList = config.getMapList("levels.town_level");
 		 TownyMessaging.sendDebugMsg("Updating town_level with " + key + " set to " + value);
 		
-		 for (Map<?, ?> map : mapList) {
-			 ((Map<String, String>)map).put(key, value);
-		 }
+		for (Map<?, ?> genericMap : mapList) {
+			Map<String, String> map = (Map<String, String>) genericMap;
+
+			if (!map.containsKey(key))
+				map.put(key, value);
+		}
 		 
 		 config.set("levels.town_level", mapList);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addNationLevelProperty(String key, String value) {
 		List<Map<?, ?>> mapList = config.getMapList("levels.nation_level");
 		TownyMessaging.sendDebugMsg("Updating nation_level with " + key + " set to " + value);
 
-		for (Map<?, ?> map : mapList) {
-			((Map<String, String>)map).put(key, value);
+		for (Map<?, ?> genericMap : mapList) {
+			Map<String, String> map = (Map<String, String>) genericMap;
+			
+			if (!map.containsKey(key))
+				map.put(key, value);
 		}
 
 		config.set("levels.nation_level", mapList);
