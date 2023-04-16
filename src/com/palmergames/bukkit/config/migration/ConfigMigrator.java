@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.Version;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collections;
@@ -21,7 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import com.palmergames.util.JavaUtil;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -189,9 +189,15 @@ public class ConfigMigrator {
 	}
 
 	private List<Migration> readMigrator() {
-		try (Reader reader = new InputStreamReader(JavaUtil.readResource(migrationFilename))) {
+		try (InputStream is = plugin.getResource(migrationFilename)) {
+			if (is == null) {
+				plugin.getLogger().warning("Could not find config migrator file '" + migrationFilename + "' in the jar.");
+				return Collections.emptyList();
+			}
 			
-			return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
+			try (Reader reader = new InputStreamReader(is)) {
+				return GSON.fromJson(reader, new TypeToken<List<Migration>>(){}.getType());
+			}
 		} catch (IOException e) {
 			return Collections.emptyList();
 		}
