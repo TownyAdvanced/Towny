@@ -1,5 +1,15 @@
 [
   {
+    "version": "0.95.1.9",
+    "changes": [
+      {
+        "type": "TOWN_LEVEL_ADD",
+        "key": "townBlockBuyBonusLimit",
+        "value": "0"
+      }
+    ]
+  },
+  {
     "version": "0.96.2.2",
     "changes": [
       {
