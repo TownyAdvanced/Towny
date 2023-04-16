@@ -8599,3 +8599,5 @@ v0.92.0.11:
   - New Config Option: economy.nation_set_mapcolour_cost
     - Default: 0
     - The cost of setting a nation's mapcolour.
+  - Add a migration for adding an old town level, courtesy of Warriorrrr with PR #6618.
+    - Servers that still use Towny 0.95.1.0 (and potentially older) can now update as easily as drag-and-drop.
