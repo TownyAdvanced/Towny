@@ -2964,6 +2964,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_TRUSTED_RESIDENTS_COUNT_AS_RESIDENTS);
 	}
 	
+	public static boolean isPromptingNewResidentsToTownSpawn() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN);
+	}
+	
 	public static String getNotificationTitlesTownTitle() {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_TOWN_TITLE);
 	}

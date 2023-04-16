@@ -688,6 +688,12 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.",
 			"# Allows allows the residents of entire an town when that town is trusted by the town."),
+	GTOWN_SETTINGS_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN(
+			"global_town_settings.are_new_residents_prompted_to_town_spawn",
+			"false",
+			"",
+			"# When a resident joins a town, should they be prompted to use spawn to the town?",
+			"# This requires them to not already be standing in the town, and also to be able to use /t spawn and whatever costs may be associated with it."),
 	GTOWN_SETTINGS_SPAWN_TIMER(
 			"global_town_settings.teleport_warmup_time",
 			"0",

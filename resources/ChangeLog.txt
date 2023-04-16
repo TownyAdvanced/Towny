@@ -8601,3 +8601,9 @@ v0.92.0.11:
     - The cost of setting a nation's mapcolour.
   - Add a migration for adding an old town level, courtesy of Warriorrrr with PR #6618.
     - Servers that still use Towny 0.95.1.0 (and potentially older) can now update as easily as drag-and-drop.
+  - Add config option that would prompt a resident who joins a town, to spawn to that town.
+    - Closes #6619.
+  - New Config Option: global_town_settings.are_new_residents_prompted_to_town_spawn
+    - Default: false
+    - When a resident joins a town, should they be prompted to use spawn to the town?
+    - This requires them to not already be standing in the town, and also to be able to use /t spawn and whatever costs may be associated with it.
