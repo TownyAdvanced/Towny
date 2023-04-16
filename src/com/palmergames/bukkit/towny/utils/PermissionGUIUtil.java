@@ -4,7 +4,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.command.PlotCommand;
 import com.palmergames.bukkit.towny.conversation.ResidentConversation;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.PermissionData;
@@ -63,7 +62,7 @@ public class PermissionGUIUtil {
 	public static void openPermissionGUI(@NotNull Resident resident, @NotNull TownBlock townBlock) {
 		boolean canEdit = true;
 		try {
-			PlotCommand.plotTestOwner(resident, townBlock);
+			TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 		} catch (TownyException e) {
 			canEdit = false;
 		}

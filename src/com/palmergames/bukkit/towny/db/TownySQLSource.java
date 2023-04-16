@@ -63,6 +63,7 @@ import java.util.stream.Collectors;
 public final class TownySQLSource extends TownyDatabaseHandler {
 
 	private final Queue<SQL_Task> queryQueue = new ConcurrentLinkedQueue<>();
+	private boolean isPolling = false;
 	private BukkitTask task = null;
 
 	private final String dsn;
@@ -161,17 +162,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 * Start our Async queue for pushing data to the database.
 		 */
 		task = BukkitTools.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+			if (this.isPolling)
+				return;
 
-			while (!TownySQLSource.this.queryQueue.isEmpty()) {
+			this.isPolling = true;
+			try {
+				while (!TownySQLSource.this.queryQueue.isEmpty()) {
 
-				SQL_Task query = TownySQLSource.this.queryQueue.poll();
+					final SQL_Task query = TownySQLSource.this.queryQueue.poll();
+					if (query == null)
+						break;
 
-				if (query.update) {
-					TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
-				} else {
-					TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+					if (query.update) {
+						TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
+					} else {
+						TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+					}
+
 				}
-
+			} finally {
+				this.isPolling = false;
 			}
 
 		}, 5L, 5L);
@@ -229,7 +239,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
+			Towny.getPlugin().getLogger().warning("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
 		}
 
 		return false;
@@ -377,7 +387,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		} catch (SQLException e) {
 
-			TownyMessaging.sendErrorMsg("SQL: " + e.getMessage() + " --> " + stmt.toString());
+			Towny.getPlugin().getLogger().warning("SQL: " + e.getMessage() + " --> " + stmt.toString());
 
 		} finally {
 
@@ -391,7 +401,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					return UpdateDB(tb_name, args, null);
 
 			} catch (SQLException e) {
-				TownyMessaging.sendErrorMsg("SQL closing: " + e.getMessage() + " --> " + stmt.toString());
+				Towny.getPlugin().getLogger().warning("SQL closing: " + e.getMessage() + " --> " + stmt.toString());
 			}
 
 		}
@@ -449,7 +459,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownyMessaging.sendDebugMsg("SQL: delete returned 0: " + wherecode);
 			}
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: Error delete : " + e.getMessage());
+			Towny.getPlugin().getLogger().warning("SQL: Error delete : " + e.getMessage());
 		}
 		return false;
 	}
@@ -991,7 +1001,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setSpawnCost(rs.getFloat("spawnCost"));
 			town.setOpen(rs.getBoolean("open"));
 			town.setPublic(rs.getBoolean("public"));
-			town.setConquered(rs.getBoolean("conquered"));
+			town.setConquered(rs.getBoolean("conquered"), false);
 			town.setAdminDisabledPVP(rs.getBoolean("admindisabledpvp"));
 			town.setAdminEnabledPVP(rs.getBoolean("adminenabledpvp"));
 			town.setAllowedToWar(rs.getBoolean("allowedToWar"));
@@ -1458,8 +1468,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					world.setUUID(UUID.fromString(line));
 				} catch (IllegalArgumentException ignored) {
-					// Invalid uuid
+					UUID uuid = BukkitTools.getWorldUUID(worldName);
+					if (uuid != null)
+						world.setUUID(uuid);
 				}
+			} else {
+				UUID uuid = BukkitTools.getWorldUUID(worldName);
+				if (uuid != null)
+					world.setUUID(uuid);
 			}
 
 			result = rs.getBoolean("claimable");
@@ -1859,12 +1875,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception ignored) {
 				}
 
-				result = rs.getBoolean("locked");
-				try {
-					townBlock.setLocked(result);
-				} catch (Exception ignored) {
-				}
-
 				townBlock.setClaimedAt(rs.getLong("claimedAt"));
 
 				try {
@@ -2179,7 +2189,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("name", town.getName());
 			twn_hm.put("outlaws", StringMgmt.join(town.getOutlaws(), "#"));
 			twn_hm.put("mayor", town.hasMayor() ? town.getMayor().getName() : "");
-			twn_hm.put("nation", town.hasNation() ? town.getNation().getName() : "");
+			twn_hm.put("nation", town.hasNation() ? town.getNationOrNull().getName() : "");
 			twn_hm.put("townBoard", town.getBoard());
 			twn_hm.put("tag", town.getTag());
 			twn_hm.put("founder", town.getFounder());
@@ -2474,7 +2484,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions",
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
-			tb_hm.put("locked", townBlock.isLocked());
 			tb_hm.put("changed", townBlock.isChanged());
 			tb_hm.put("claimedAt", townBlock.getClaimedAt());
 			if (townBlock.hasPlotObjectGroup())

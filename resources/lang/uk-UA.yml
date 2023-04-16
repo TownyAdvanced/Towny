@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cМісто не може придбати %s %s варт
 msg_annexed_area: '&2Анексована територія %s'
 msg_max_plot_own: '&cВи не можете мати більше ніж %s територій.'
 msg_max_outposts_own: '&cВи не можете мати більше ніж %s аванпостів.'
-msg_wait_locked: '&2Будь ласка, будьте терплячими, території стануть доступними в найближчий час.'
 msg_no_funds_new_nation: '&cThe town can''t afford to start a new nation.'
 msg_already_claimed: '&cЦя територія вже належить: %s'
 msg_already_claimed_1: '&cЦя територія (%s) вже належить комусь.'
@@ -260,9 +259,9 @@ msg_set_wild_regen: '&bУспішно змінено відновлення ди
 msg_set_use_towny_on: '&bТепер у цьому світі увімкнені правила towny.'
 msg_set_use_towny_off: '&cУ цьому світі towny вимкнено.'
 msg_error_must_be_int: '&bСума повинна бути цілочисельною.'
-msg_error_input_must_be_int: '&c%s must be an integer'
+msg_error_input_must_be_int: 'Має бути цілим числом'
 msg_error_must_be_num: '&bПовинно бути числом.'
-msg_error_input_must_be_num: '&c%s must be a number'
+msg_error_input_must_be_num: 'Повинно бути числом'
 msg_must_specify_amnt: '&bПотрібно вказати кількість. Наприклад: %s 54'
 msg_town_set_tax: '&b%s установив щоденні податки в розмірі %s'
 msg_town_set_plottax: '&b%s установив щоденний податок на ділянку в розмірі %s'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bТип ділянки землі зараз %s'
 msg_cache_block_error: '&cВи не зареєстровані в Towny. Спробуйте перезайти.'
 msg_cache_block_error_wild: '&cЗаборонено гравцю %s у диких землях.'
 msg_cache_block_error_plot: '&cВласник не дозволив %s для %s тут.'
-msg_cache_block_error_locked: '&cЦю ділянку заблоковано!'
 msg_cache_block_error_town_resident: '&cМешканці не мають дозволу на %s тут.'
 msg_cache_block_error_town_allies: '&cСоюзники не мають дозволу на %s.'
 msg_cache_block_error_town_outsider: '&cЧужинці не мають дозволу на %s.'
@@ -457,6 +455,7 @@ invite_plu: 'Запрошення'
 invite_sent_by: 'Запрошення надіслано гравцем'
 invite_help_1: 'Прийняти запрошення до міста'
 invite_help_2: 'Відхилити запрошення до міста'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'Всі ваші запрошення'
 town_invite_help_1: 'Запросити гравця до міста'
 town_invite_help_2: 'Скасувати запрошення, яке ви надіслали гравцю'
@@ -474,6 +473,7 @@ nation_ally_help_4: 'Всі запити союзників, які ви отр�
 nation_ally_help_5: 'Прийняти запит щодо союзу із нацією'
 nation_ally_help_6: 'Відхилити запит щодо союзу із нацією'
 nation_ally_help_7: 'Відхилити запит щодо союзу'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&сУ вас нема жодних запрошень!'
 msg_err_player_has_multiple_invites: '&cУ вас є декілька запрошень, будь ласка, укажіть конкретно!'
 msg_err_player_has_too_many_invites: '%s має занадто багато запрошень, попросіть його відмовитися від деяких, перед тим як запрошувати знову.'
@@ -586,11 +586,12 @@ jailed_in_town: ' у місті: %s'
 status_friends: 'Друзі'
 rank_list_title: '%s Рейтинговий список'
 rank_list_mayor: 'Мер:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Відкр.)'
 status_town_board: 'Дошка оголошень:'
 status_founded: 'Заснований:'
-status_founded_by: 'Founded by:'
+status_founded_by: "11 / 5 000\nЗаснований:"
 status_town_size: 'Розмір міста:'
 status_town_size_bought: 'Куплено:'
 status_town_size_bonus: 'Бонус:'
@@ -605,6 +606,7 @@ status_nation_tax: 'Національний податок:'
 status_nation_towns: 'Міста'
 status_nation_allies: 'Союзники'
 status_nation_enemies: 'Вороги'
+status_nation_enemied_by: 'Nations that consider your nation an enemy'
 status_world_claimable: '&aПривласнюваний'
 status_world_noclaims: '&cНеПривласнюваний'
 status_world_forcepvp: 'ПримусовеPVP:'
@@ -735,7 +737,7 @@ msg_error_ta_plot_claim: 'Не вказано ім''я гравця, до при
 msg_error_no_player_with_that_name: 'Не знайдено гравця з іменем %s'
 msg_admin_has_given_you_a_plot: 'Адміністратор надав вам ділянку %s'
 msg_town_forcepvp_setting_set_to: 'Місто %s було примушене встановити статус PVP як %s'
-msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
+msg_town_forcedisabledpvp_setting_set_to: 'Для міста %s налаштування admindisabledpvp примусово змінено на %s'
 msg_nation_changed_open: '&cВідкритий статус нації тепер %s.'
 msg_err_already_in_a_nation: 'Ваше місто вже в нації.'
 msg_err_nation_not_open: '&cНація %s не відкриває усім свої двері. Попросіть у лідера або помічника запрошення.'
@@ -1498,6 +1500,10 @@ msg_err_could_not_find_any_towns_to_rtp: 'Не було знайдено від�
 msg_cost_spawn_rtp: '&bВи заплатили %s за телепорт до випадкової ділянки, яка продається.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Ось-ось вас буде телепортовано до ділянки, яка продається в %s. Використавши ''/plot claim'', ви зможете купити ділянку і приєднатися до міста.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots
 status_plot_string: 'Ділянки'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1571,39 +1577,39 @@ msg_town_plot_type_limit_reached: 'Ваше місто досягнуло лім
 #Added in 0.156
 msg_spawn_cost_free: 'Безкоштовно'
 #Message shown when someone tries to set a plot's type to one already set.
-msg_plot_already_of_type: 'This plot is already a %s type.'
-msg_town_board_reset: '&bTown board reset.'
-msg_town_has_no_jailslots: 'The town jail is full.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_plot_already_of_type: 'Ця ділянка уже належить до типу %s.'
+msg_town_board_reset: 'Скидання міської дошки.'
+msg_town_has_no_jailslots: 'Міська в''язниця переповнена.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s Відправлено до %s у камеру номер %s на %s годинах із заставою %s від %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s посадив у в''язницю %s в %s у камері №%s на %s годин.'
-msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
-msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
-msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
-msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
-msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
-msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
-msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'Вас ув''язнили, ваша застава становить %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Встановлена вами застава була вищою за максимальну, яка становить %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Ваші встановлені години були вищими за максимальну, тобто %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Недостатньо в міському банку, щоб ув''язнити %s, плата становить %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Ваші тюремники дозволяють вам вільно звільняти простір.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s Було звільнено, щоб звільнити місце для іншого в’язня.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Вас звільнили, оскільки ваші тюремники більше не можуть дозволити собі тримати вас у в''язниці.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s Було звільнено через брак коштів у міському банку.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s Знято з власного банку для оплати за утримання ув''язненого %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s Знято з власного банку для оплати за в''язницю %s.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
-confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Ви впевнені, що хочете скинути всі міста та нації на %s?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
-msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+msg_err_cannot_add_nation_over_resident_limit: '&cВаша нація досягла максимальної кількості дозволених резиденцій %s, та не може додати %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
-msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+msg_err_cannot_join_nation_over_resident_limit: 'Ви не можете приєднатися до цієї нації, оскільки вона перевищує ліміт мешканців країни %s.'
 #Message shown to a town because the nation has hit their max-towns-limit.
-msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+msg_err_cannot_join_nation_over_town_limit: 'Ви не можете приєднатися до цієї нації, вона досягла максимальної кількості дозволених міст за нацією: %s.'
 #Message shown confirming /tw set usedefaults
-confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Ви дійсно бажаєте скинути всі налаштування світу до тих, які встановлені в конфігурації?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Town Plots'
+msg_town_plots_title: ' Міські ділянки'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Місний розмір: <green>%s/%s'
 #Part of the /town plots output.
-msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+msg_town_plots_town_bought: ' <aqua>[Придбано: %s/%s]'
 #Part of the /town plots output.
-msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
 #Part of the /town plots output.
@@ -1636,3 +1642,44 @@ confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all 
 msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
 msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
+msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "You are not known to Towny."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "%s is not known to Towny."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s is not a resident that is recognized."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s is not a town that is recognized."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s is not a nation that is recognized."
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."

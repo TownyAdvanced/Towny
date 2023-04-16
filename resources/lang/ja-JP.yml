@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cTownは %s %s を購入する余裕がありません。
 msg_annexed_area: '&2併合エリア %s'
 msg_max_plot_own: '%s個より多くの土地を所有することはできません。'
 msg_max_outposts_own: '&c前哨基地を%sか所以上所有することはできません。'
-msg_wait_locked: '&2この土地は間もなく利用可能になります。少々お待ちください。'
 msg_no_funds_new_nation: '&cThe town can''t afford to start a new nation.'
 msg_already_claimed: '&cこの地域は既に%sに占有されています'
 msg_already_claimed_1: '&cこのエリア (%s) は既に誰かのものになっています。'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bプロットの種類を %s に変更しました'
 msg_cache_block_error: '&cあなたはまだ町に登録されていません。再ログインしてください。'
 msg_cache_block_error_wild: '&c荒野での%sは許可されていません。'
 msg_cache_block_error_plot: '&cオーナーは %s から %s へのアクセスを許可していません。'
-msg_cache_block_error_locked: '&cこの土地はロックされています。'
 msg_cache_block_error_town_resident: '&c住民はここで%sをすることはできません。'
 msg_cache_block_error_town_allies: '&c同盟国民はここで%sをすることはできません。'
 msg_cache_block_error_town_outsider: '&c外国人はここで%sをすることはできません。'
@@ -457,6 +455,7 @@ invite_plu: '招待'
 invite_sent_by: '招待を送信しました'
 invite_help_1: '町への招待を承認する。'
 invite_help_2: '町への招待を拒否する。'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: '送られてきた招待を全て表示'
 town_invite_help_1: 'プレイヤーを町に招待する'
 town_invite_help_2: 'プレイヤーに送信した招待を削除する'
@@ -474,6 +473,7 @@ nation_ally_help_4: 'あなたが受け取ったすべての同盟リクエス�
 nation_ally_help_5: '同盟国の要請を受ける'
 nation_ally_help_6: '同盟国の要請を拒否する'
 nation_ally_help_7: '同盟国のリクエストを拒否する'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&c招待がありません。'
 msg_err_player_has_multiple_invites: '&c複数の招待がある場合は、指定してください。'
 msg_err_player_has_too_many_invites: '%sは招待が多すぎるため、しばらくしてから再度、送信してください。'
@@ -586,6 +586,7 @@ jailed_in_town: ' in Town: %s'
 status_friends: 'フレンド'
 rank_list_title: '%sのランク一覧'
 rank_list_mayor: '村長:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PvP)'
 status_title_open: '&b(オープン)'
 status_town_board: 'Board:'
@@ -605,6 +606,7 @@ status_nation_tax: '国の税金:'
 status_nation_towns: '町'
 status_nation_allies: '同盟国'
 status_nation_enemies: '敵'
+status_nation_enemied_by: 'Nations that consider your nation an enemy'
 status_world_claimable: '&aClaimable'
 status_world_noclaims: '&cNoClaims'
 status_world_forcepvp: '強制PVP:'
@@ -1498,6 +1500,10 @@ msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns 
 msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots
 status_plot_string: 'Plots'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1636,3 +1642,44 @@ confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all 
 msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
 msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
+msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "You are not known to Towny."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "%s is not known to Towny."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s is not a resident that is recognized."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s is not a town that is recognized."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s is not a nation that is recognized."
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."

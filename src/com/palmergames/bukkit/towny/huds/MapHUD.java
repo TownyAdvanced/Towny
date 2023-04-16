@@ -6,10 +6,11 @@ import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -77,13 +79,13 @@ public class MapHUD {
 		objective.setDisplayName(ChatColor.GOLD + "Towny Map " + ChatColor.WHITE + "(" + wc.getX() + ", " + wc.getZ() + ")");
 
 		TownyWorld world = wc.getTownyWorld();
+		World bukkitWorld = player.getWorld();
 		if (world == null || !world.isUsingTowny()) {
 			HUDManager.toggleOff(player);
 			return;
 		}
 		
 		Resident resident = TownyAPI.getInstance().getResident(player.getName());
-		boolean hasTown = resident.hasTown();
 
 		int halfLineWidth = lineWidth/2;
 		int halfLineHeight = lineHeight/2;
@@ -95,36 +97,34 @@ public class MapHUD {
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				map[y][x] = Colors.White;
 				try {
-					TownBlock townblock = world.getTownBlock(tby, tbx);
-					if (!townblock.hasTown())
+					WorldCoord currentWC = new WorldCoord(bukkitWorld, new Coord(tby, tbx));
+					if (currentWC.isWilderness())
 						throw new TownyException();
+					TownBlock townblock = currentWC.getTownBlockOrNull();
+					Town town = townblock.getTownOrNull();
 					if (x == halfLineHeight && y == halfLineWidth)
-						// location
+						// This is the player's location, colour it special.
 						map[y][x] = Colors.Gold;
-					else if (hasTown) {
-						if (resident.getTown() == townblock.getTown()) {
+					else if (townblock.hasResident(resident))
+						//own plot
+						map[y][x] = Colors.Yellow;
+					else if (resident.hasTown())
+						if (town.hasResident(resident)) {
 							// own town
 							map[y][x] = Colors.LightGreen;
-							try {
-								if (resident == townblock.getResident())
-									//own plot
-									map[y][x] = Colors.Yellow;
-							} catch (NotRegisteredException e) {
-							}
 						} else if (resident.hasNation()) {
-							if (resident.getTown().getNation().hasTown(townblock.getTown()))
-								// towns
+							Nation resNation = resident.getNationOrNull();
+							if (resNation.hasTown(town))
+								// own nation
 								map[y][x] = Colors.Green;
-							else if (townblock.getTown().hasNation()) {
-								Nation nation = resident.getTown().getNation();
-								if (nation.hasAlly(townblock.getTown().getNation()))
+							else if (town.hasNation()) {
+								Nation townBlockNation = town.getNationOrNull();
+								if (resNation.hasAlly(townBlockNation))
 									map[y][x] = Colors.Green;
-								else if (nation.hasEnemy(townblock.getTown().getNation()))
-									// towns
+								else if (resNation.hasEnemy(townBlockNation))
 									map[y][x] = Colors.Red;
 							}
 						}
-					}
 
 					// Registered town block
 					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {
@@ -134,6 +134,8 @@ public class MapHUD {
 						map[y][x] += TownyAsciiMap.forSaleSymbol;
 					} else if (townblock.isHomeBlock())
 						map[y][x] += TownyAsciiMap.homeSymbol;
+					else if (townblock.isOutpost())
+						map[y][x] += TownyAsciiMap.outpostSymbol;
 					else
 						map[y][x] += townblock.getType().getAsciiMapKey();
 				} catch (TownyException e) {

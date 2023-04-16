@@ -245,7 +245,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @param amount The amount to give.
 	 * @throws TownyException On general error.
 	 */
-	public final void withdrawFromBank(Resident resident, int amount) throws TownyException {
+	public final synchronized void withdrawFromBank(Resident resident, int amount) throws TownyException {
 		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
@@ -261,7 +261,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @param amount The amount to take.
 	 * @throws TownyException On general error.
 	 */
-	public final void depositToBank(Resident resident, int amount) throws TownyException {
+	public final synchronized void depositToBank(Resident resident, int amount) throws TownyException {
 		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
@@ -275,7 +275,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (account == null) {
 			String accountName = StringMgmt.trimMaxLength(getBankAccountPrefix() + getName(), 32);
 			World world = getWorld();
-			account = new BankAccount(accountName, world, getBankCap());
+			account = new BankAccount(accountName, world, this);
 			account.setAuditor(accountAuditor);
 		}
 

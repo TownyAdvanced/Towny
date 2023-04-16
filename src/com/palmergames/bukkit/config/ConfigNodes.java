@@ -182,6 +182,27 @@ public enum ConfigNodes {
 			"# set to 0 to disable limiting of claim radius value check.",
 			"# keep in mind that the default value of 4 is a radius, ",
 			"# and it will allow claiming 9x9 (80 plots) at once."),
+
+	TOWN_OVERCLAIMING_ROOT("town.overclaiming", "", "", ""),
+	TOWN_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(
+			"town.overclaiming.being_overclaimed_allows_other_towns_to_steal_land",
+			"false",
+			"",
+			"# A feature that allows towns which have too many townblocks claimed (overclaimed) ie: 120/100 TownBlocks, ",
+			"# to have their land stolen by other towns which are not overclaimed. Using this incentivises Towns to keep",
+			"# their residents from leaving, and will mean that mayors will be more careful about which land they choose",
+			"# to claim.",
+			"# Overclaiming does not allow a town to be split into two separate parts, requiring the Town that is stealing",
+			"# land to work from the outside inwards.",
+			"# It is highly recommended to only use this on servers where outposts are disabled, and requiring ",
+			"# a number of adjacent claims over 1 is enabled.",
+			"# Towns take land using /t takeoverclaim."),
+	TOWN_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS(
+			"town.overclaiming.overclaiming_prevented_by_homeblock_radius",
+			"true",
+			"",
+			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
+			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
 	TOWN_LIMIT(
 			"town.town_limit",
 			"3000",
@@ -281,6 +302,13 @@ public enum ConfigNodes {
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * height-of-the-world) in size, with height-of-the-world",
 			"# being from the bottom to the top of the build-able world."),
+	TOWN_MIN_ADJACENT_BLOCKS(
+			"town.min_adjacent_blocks",
+			"-1",
+			"",
+			"# The minimum adjacent town blocks required to expand.",
+			"# This can prevent long lines and snake-like patterns.",
+			"# Set to -1 to disable. Set to 3 to force wider expansions of towns."),
 	
 	NATION("nation", "", "", "",
 			"############################################################",
@@ -1610,6 +1638,12 @@ public enum ConfigNodes {
 			"# PigZombie, Sheep, Skeleton, Slime, Spider, Squid, WaterMob, Wolf, Zombie",
 			"",
 			"# Protect living entities within a town's boundaries from being killed by players or mobs."),
+	PROT_MOB_TYPES_BOAT_THEFT(
+			"protection.mob_types_protected_from_boat_theft",
+			"false",
+			"",
+			"# When set to true, the above mob_types will be protected when they are in a town, from being able to enter empty boats.",
+			"# This protects the mobs from being stolen using boats."),
 	PROT_MOB_TYPES_MOB_VS_MOB_BYPASS(
 			"protection.are_mob_types_protected_against_mobs",
 			"true",
@@ -2045,6 +2079,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true only residents who have no town will be deleted."),
+	RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_TOWN_ONLY(
+			"resident_settings.delete_old_residents.only_remove_town",
+			"false",
+			"",
+			"# When true players will be removed from their town and become a nomad instead of being fully deleted."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",
@@ -2104,6 +2143,16 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# The cost of renaming a nation."),
+	ECO_TOWN_MAPCOLOUR_COST(
+			"economy.town_set_mapcolour_cost",
+			"0",
+			"",
+			"# The cost of setting a town's mapcolour."),
+	ECO_NATION_MAPCOLOUR_COST(
+			"economy.nation_set_mapcolour_cost",
+			"0",
+			"",
+			"# The cost of setting a nation's mapcolour."),
 	ECO_SPAWN_TRAVEL("economy.spawn_travel", "", ""),
 	ECO_PRICE_TOWN_SPAWN_TRAVEL(
 			"economy.spawn_travel.price_town_spawn_travel",
@@ -2221,6 +2270,12 @@ public enum ConfigNodes {
 			"# Warning: do not set this higher than the cost to claim a townblock.",
 			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.",
 			"# Optionally, set this to a negative amount if you want towns to pay money to unclaim their land."),
+	ECO_PRICE_TAKEOVERCLAIM("economy.takeoverclaim","","",""),
+	ECO_PRICE_TAKEOVERCLAIM_PRICE(
+			"economy.takeoverclaim.price",
+			"100.0",
+			"",
+			"# The price to use /t takeoverclaim, when it has been enabled in the config at town.being_overclaimed_allows_other_towns_to_steal_land"),
 	ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK(
 			"economy.new_expand.price_purchased_bonus_townblock",
 			"25.0",
@@ -2616,14 +2671,12 @@ public enum ConfigNodes {
 			"jail.is_jailing_attacking_enemies",
 			"false",
 			"",
-			"# If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists.",
-			"# Requires town_respawn to be true in order to work."),
+			"# If true attacking players who die on enemy-town land will be placed into the defending town's jail if it exists."),
 	JAIL_IS_JAILING_ATTACKING_OUTLAWS(
 			"jail.is_jailing_attacking_outlaws",
 			"false",
 			"",
-			"# If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists.",
-			"# Requires town_respawn to be true in order to work."),
+			"# If true attacking players who are considered an outlaw, that are killed inside town land will be placed into the defending town's jail if it exists."),
 	JAIL_OUTLAW_JAIL_HOURS(
 			"jail.outlaw_jail_hours",
 			"5",
@@ -2817,6 +2870,10 @@ public enum ConfigNodes {
 			"H",
 			"",
 			"# The character used for the home symbol."),
+	ASCII_MAP_SYMBOLS_OUTPOST("ascii_map_symbols.outpost",
+			"O",
+			"",
+			"# The character used for the outpost symbol."),
 	ASCII_MAP_SYMBOLS_FORSALE("ascii_map_symbols.forsale",
 			"$",
 			"",

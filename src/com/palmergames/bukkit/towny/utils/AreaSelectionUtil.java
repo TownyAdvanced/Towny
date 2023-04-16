@@ -182,7 +182,7 @@ public class AreaSelectionUtil {
 				 * Calculate how many townblocks will be needed to claim the desired radius,
 				 * dropping the radius if it will be required, to make a perfect a perfect square.
 				 */
-				int needed = pos.getTownBlock().hasTown() ? 0 : 1;
+				int needed = pos.isWilderness() ? 1 : 0;
 				int claimRadius = 1;
 				while (claimRadius <= r && needed < maxSelectionSize) {
 				    needed += (claimRadius * 8);
@@ -322,7 +322,7 @@ public class AreaSelectionUtil {
 
 	 * @param selection - List&lt;WorldCoord&gt; of coordinates
 	 * @param town - Town to check distance from
-	 * @return List of townblocks
+	 * @return List of {@link WorldCoord}
 	 */
 	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
 
@@ -340,28 +340,38 @@ public class AreaSelectionUtil {
 	 * Returns a list containing only townblocks that can be claimed.
 	 * Filters out townblocks too close to other town homeblocks as set in the config.
 	 * 
-
-	 * @param selection - List&lt;WorldCoord&gt; of coordinates
-	 * @param town - Town to check distance from
-	 * @return List of townblocks
+	 * @param selection List&lt;WorldCoord&gt; of coordinates
+	 * @param town Town to check distance from
+	 * @return List of {@link WorldCoord}
 	 */
 	public static List<WorldCoord> filterInvalidProximityToHomeblock(List<WorldCoord> selection, Town town) {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
-			if (worldCoord.getTownyWorld().getMinDistanceFromOtherTowns(worldCoord, town) >= TownySettings.getMinDistanceFromTownHomeblocks()) {
+			if (!isTooCloseToHomeBlock(worldCoord, town)) {
 				out.add(worldCoord);
 			} else {
 				TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town's homeblock." );
 			}
 		return out;
 	}
-	
+
+	/**
+	 * Is the WorldCoord too close to another town's HomeBlock.
+	 * 
+	 * @param wc WorldCoord to check distance from.
+	 * @param town Town whos homeblock we don't have to account for.
+	 * @return true if the WorldCoord is too close to a homeblock.
+	 */
+	public static boolean isTooCloseToHomeBlock(WorldCoord wc, Town town) {
+		return wc.getTownyWorld().getMinDistanceFromOtherTownsHomeBlocks(wc, town) < TownySettings.getMinDistanceFromTownHomeblocks();
+	}
+
 	/**
 	 * Returns a list containing only wilderness townblocks.
 	 * 
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord}.
 	 */
 	public static List<WorldCoord> filterOutTownOwnedBlocks(List<WorldCoord> selection) {
 
@@ -371,8 +381,8 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks.
 	 * 
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord}
 	 */
 	public static List<WorldCoord> filterOutWildernessBlocks(List<WorldCoord> selection) {
 
@@ -382,9 +392,9 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks, owned by the given owner.
 	 * 
-	 * @param owner - TownBlockOwner which owns the townblock.
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks owned by the given owner.
+	 * @param owner TownBlockOwner which owns the townblock.
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord} owned by the given owner.
 	 */
 	public static List<WorldCoord> filterOwnedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
@@ -396,9 +406,9 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only claimed townblocks, which are not owned by the given owner.
 	 * 
-	 * @param owner - TownBlockOwner which owns the townblock.
-	 * @param selection - List of Coordinates (List&lt;WorldCoord&gt;)
-	 * @return List of townblocks not owned by the given owner.
+	 * @param owner TownBlockOwner which owns the townblock.
+	 * @param selection List of Coordinates (List&lt;WorldCoord&gt;)
+	 * @return List of {@link WorldCoord} not owned by the given owner.
 	 */
 	public static List<WorldCoord> filterUnownedBlocks(TownBlockOwner owner, List<WorldCoord> selection) {
 
@@ -453,7 +463,7 @@ public class AreaSelectionUtil {
 
 	/**
 	 * Gather plots that are for sale only.
-	 * @param selection - List&lt;WorldCoord&gt; from which to get plots that are for sale.
+	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are for sale.
 	 * @return List&lt;WorldCoord&gt; that are all for sale.
 	 */
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
@@ -477,7 +487,7 @@ public class AreaSelectionUtil {
 
 	/**
 	 * Gather plots that are not for sale only.
-	 * @param selection - List&lt;WorldCoord&gt; from which to get plots that are not for sale.
+	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are not for sale.
 	 * @return List&lt;WorldCoord&gt; that are all not for sale.
 	 */
 	public static List<WorldCoord> filterPlotsNotForSale(List<WorldCoord> selection) {

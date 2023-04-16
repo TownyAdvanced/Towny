@@ -37,6 +37,10 @@ public class Translatable {
 		return new Translatable(key, args);
 	}
 	
+	public static Translatable literal(String text) {
+		return new LiteralTranslatable(text);
+	}
+	
 	public String key() {
 		return key;
 	}
@@ -45,23 +49,31 @@ public class Translatable {
 		return args;
 	}
 	
+	@Nullable
+	public Locale locale() {
+		return this.locale;
+	}
+	
 	public boolean stripColors() {
 		return stripColors;
 	}
 	
 	public String appended() {
-		StringBuilder appended = new StringBuilder();
+		if (this.appended.isEmpty())
+			return "";
+
+		StringBuilder converted = new StringBuilder();
 
 		for (Object object : this.appended) {
 			if (object instanceof String string)
-				appended.append(string);
+				converted.append(string);
 			else if (object instanceof Translatable translatable)
-				appended.append(translatable.locale(this.locale).translate());
+				converted.append(translatable.locale(this.locale).translate());
 			else if (object instanceof Component component)
-				appended.append(TownyComponents.toLegacy(component));
+				converted.append(TownyComponents.toLegacy(component));
 		}
 
-		return appended.toString();
+		return converted.toString();
 	}
 	
 	public Translatable key(String key) {
@@ -173,5 +185,21 @@ public class Translatable {
 			", appended=" + appended() +
 			", locale=" + locale +
 			'}';
+	}
+	
+	private static final class LiteralTranslatable extends Translatable {
+
+		private LiteralTranslatable(String key) {
+			super(key);
+		}
+
+		private LiteralTranslatable(String key, Object... args) {
+			super(key, args);
+		}
+		
+		@Override
+		public String translate() {
+			return stripColors() ? Colors.strip(key() + appended()) : key() + appended();
+		}
 	}
 }

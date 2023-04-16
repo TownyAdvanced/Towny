@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -47,17 +46,8 @@ public class TownRuinUtil {
 	 * @return true if ruined, false if not
 	 */
 	public static boolean isPlayersTownRuined(Player player) {
-		try {
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-
-			if(resident != null && resident.hasTown() && resident.getTown().isRuined())
-				return true;
-
-		} catch (NotRegisteredException ignored) {
-			// Ignored - Maybe add to a debug logger later?
-		}
-		
-		return false;
+		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		return resident != null && resident.hasTown() && resident.getTownOrNull().isRuined();
 	}
 
 	/**
@@ -133,10 +123,8 @@ public class TownRuinUtil {
 	 * Processes a player request to reclaim a ruined town
 	 *
 	 * @param player The player reclaiming a ruined town.
-	 * @param plugin Instance of {@link Towny}
 	 */
-	public static void processRuinedTownReclaimRequest(Player player, Towny plugin) {
-		Town town;
+	public static void processRuinedTownReclaimRequest(Player player) {
 		try {
 			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
@@ -144,14 +132,12 @@ public class TownRuinUtil {
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 
 			//Ensure town is ruined
-			town = resident.getTown();
+			Town town = resident.getTownOrNull();
 			if (!town.isRuined())
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
-			//Validate if player can pay
+			//Get cost of reclaiming.
 			double townReclaimCost = TownySettings.getEcoPriceReclaimTown();
-			if (TownyEconomyHandler.isActive() && !resident.getAccount().canPayFromHoldings(townReclaimCost))
-				throw new TownyException(Translatable.of("msg_insuf_funds"));
 
 			//Validate if player can remove at this time
 			if (TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)

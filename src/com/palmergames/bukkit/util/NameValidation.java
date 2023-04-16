@@ -25,7 +25,7 @@ public class NameValidation {
 			Arrays.asList("here","leave","list","online","new","plots","add","kick","claim","unclaim","withdraw","delete",
 					"outlawlist","deposit","outlaw","outpost","ranklist","rank","reclaim","reslist","say","set","toggle","join",
 					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge","jail",
-					"plotgrouplist","trust","purge","leader", "baltop"));
+					"plotgrouplist","trust","purge","leader","baltop","all","help"));
 	}
 
 	/**

@@ -6,9 +6,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -53,33 +51,28 @@ public class Nation extends Government {
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
-	public void addAlly(Nation nation) throws AlreadyRegisteredException {
+	public void addAlly(Nation nation) {
 
-		if (hasAlly(nation))
-			throw new AlreadyRegisteredException();
-		else {
-			try {
-				removeEnemy(nation);
-			} catch (NotRegisteredException ignored) {}
+		if (!hasAlly(nation)) {
+			removeEnemy(nation);
 			getAllies().add(nation);
 		}
 	}
 
-	public boolean removeAlly(Nation nation) throws NotRegisteredException {
+	public boolean removeAlly(Nation nation) {
 
 		if (!hasAlly(nation))
-			throw new NotRegisteredException();
+			return false;
 		else
 			return getAllies().remove(nation);
 	}
 
 	public boolean removeAllAllies() {
 
-		for (Nation ally : new ArrayList<>(getAllies()))
-			try {
-				removeAlly(ally);
-				ally.removeAlly(this);
-			} catch (NotRegisteredException ignored) {}
+		for (Nation ally : new ArrayList<>(getAllies())) {
+			removeAlly(ally);
+			ally.removeAlly(this);
+		}
 		return getAllies().isEmpty();
 	}
 
@@ -93,45 +86,29 @@ public class Nation extends Government {
 		return getAllies().contains(nation) && nation.getAllies().contains(this);
 	}
 
-	/**
-	 * Check if the targetNation is an Ally.
-	 * @param targetNation Any other nation than this one.
-	 * @return Whether the targetNation is an ally.
-	 * @deprecated Unused. Marked deprecated as of 0.97.4.1+. Use {@link #isAlliedWith(Nation)}.
-	 */
-	@Deprecated
-	public boolean IsAlliedWith(Nation targetNation) {
-		return isAlliedWith(targetNation);
-	}
+	public void addEnemy(Nation nation) {
 
-	public void addEnemy(Nation nation) throws AlreadyRegisteredException {
-
-		if (hasEnemy(nation))
-			throw new AlreadyRegisteredException();
-		else {
-			try {
-				removeAlly(nation);
-			} catch (NotRegisteredException ignored) {}
+		if (!hasEnemy(nation)) {
+			removeAlly(nation);
 			getEnemies().add(nation);
 		}
 
 	}
 
-	public boolean removeEnemy(Nation nation) throws NotRegisteredException {
+	public boolean removeEnemy(Nation nation) {
 
 		if (!hasEnemy(nation))
-			throw new NotRegisteredException();
+			return false;
 		else
 			return getEnemies().remove(nation);
 	}
 
 	public boolean removeAllEnemies() {
 
-		for (Nation enemy : new ArrayList<>(getEnemies()))
-			try {
-				removeEnemy(enemy);
-				enemy.removeEnemy(this);
-			} catch (NotRegisteredException ignored) {}
+		for (Nation enemy : new ArrayList<>(getEnemies())) {
+			removeEnemy(enemy);
+			enemy.removeEnemy(this);
+		}
 		return getEnemies().isEmpty();
 	}
 
@@ -191,14 +168,12 @@ public class Nation extends Government {
 
 		if (towns.isEmpty())
 			throw new EmptyNationException(this);
-		
-		try {
-			if (capital.getNation().equals(this)) {
-				setCapital(capital);
-				return;
-			}
-		} catch (NotRegisteredException e) {
+
+		if (hasTown(capital)) {
+			setCapital(capital);
+			return;
 		}
+
 		if (!findNewCapital())
 			throw new EmptyNationException(this);
 	}
@@ -456,7 +431,7 @@ public class Nation extends Government {
 	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
-			double bankCap = TownySettings.getNationBankCap();
+			double bankCap = getBankCap();
 			if (bankCap > 0 && amount + this.getAccount().getHoldingBalance() > bankCap) {
 				TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_err_deposit_capped", bankCap));
 				return;
@@ -593,7 +568,7 @@ public class Nation extends Government {
 
 	@Override
 	public double getBankCap() {
-		return TownySettings.getNationBankCap();
+		return TownySettings.getNationBankCap(this);
 	}
 
 	/**

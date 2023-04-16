@@ -22,12 +22,13 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class TownBlockTypeHandler {
-	private static Map<String, TownBlockType> townBlockTypeMap = new ConcurrentHashMap<>();
+	private final static Map<String, TownBlockType> townBlockTypeMap = new ConcurrentHashMap<>();
 	
 	public static void initialize() {
 		Map<String, TownBlockType> newData = new ConcurrentHashMap<>();
@@ -41,7 +42,9 @@ public final class TownBlockTypeHandler {
 		
 		applyConfigSettings(newData);
 		
-		townBlockTypeMap = newData;
+		// Overwrite any entries of our own built-in townblocktypes.
+		for (Map.Entry<String, TownBlockType> entry : newData.entrySet())
+			townBlockTypeMap.put(entry.getKey(), entry.getValue());
 		
 		BukkitTools.fireEvent(new TownBlockTypeRegisterEvent());
 		
@@ -75,12 +78,12 @@ public final class TownBlockTypeHandler {
 
 	/**
 	 * Gets the townblock instance for the name.
-	 * @param townBlockType The name of the town block type.
+	 * @param typeName The name of the town block type.
 	 * @return The townblocktype instance, or {@code null} if none is registered.   
 	 */
 	@Nullable
-	public static TownBlockType getType(@NotNull String townBlockType) {
-		return townBlockTypeMap.get(townBlockType.toLowerCase());
+	public static TownBlockType getType(@NotNull String typeName) {
+		return townBlockTypeMap.get(typeName.toLowerCase(Locale.ROOT));
 	}
 
 	public static TownBlockType getTypeInternal(@NotNull String input) {
@@ -135,7 +138,7 @@ public final class TownBlockTypeHandler {
 				data.setSwitchIds(switchIds);
 				data.setAllowedBlocks(allowedBlocks);
 				
-				newData.put(name.toLowerCase(), townBlockType);
+				newData.put(name.toLowerCase(Locale.ROOT), townBlockType);
 				
 			} catch (Exception e) {
 				Towny.getPlugin().getLogger().warning(String.format("Config: Error while loading townblock type '%s', skipping...", name));

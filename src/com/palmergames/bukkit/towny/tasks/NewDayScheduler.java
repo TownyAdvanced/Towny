@@ -134,7 +134,7 @@ public class NewDayScheduler extends TownyTimerTask {
 	 * 
 	 * @return seconds until event
 	 */
-	@Deprecated
+	@Deprecated // Sometime during 0.98.*.*
 	@ApiStatus.ScheduledForRemoval
 	public static Long townyTime() {
 		return TimeMgmt.townyTime();

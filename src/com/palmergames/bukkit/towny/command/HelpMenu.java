@@ -607,6 +607,7 @@ public enum HelpMenu {
 				.add("explosion", "")
 				.add("plotborder", "")
 				.add("constantplotborder", "")
+				.add("townborder", "")
 				.add("ignoreplots", "")
 				.add("townclaim", "")
 				.add("map", "")
@@ -736,6 +737,14 @@ public enum HelpMenu {
 		}
 	},
 	
+	NATION_RANK {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation rank")
+				.add("add/remove [resident] rank", "");
+		}
+	},
+	
 	NATION_LIST {
 		@Override
 		protected MenuBuilder load() {
@@ -817,6 +826,7 @@ public enum HelpMenu {
 			return new MenuBuilder("invite", "")
 				.add(TownySettings.getAcceptCommand() + " [town]", Translation.of("invite_help_1"))
 				.add(TownySettings.getDenyCommand() + " [town]", Translation.of("invite_help_2"))
+				.add(TownySettings.getDenyCommand() + " all", Translation.of("invite_help_4"))
 				.add("list", Translation.of("invite_help_3"));
 		}
 	},

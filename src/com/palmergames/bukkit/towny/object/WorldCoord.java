@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
@@ -93,7 +94,7 @@ public class WorldCoord extends Coord {
 	}
 	
 	public static WorldCoord parseWorldCoord(Location loc) {
-		return new WorldCoord(loc.getWorld(), loc.getBlockX(), loc.getBlockZ());
+		return new WorldCoord(loc.getWorld(), toCell(loc.getBlockX()), toCell(loc.getBlockZ()));
 	}
 
 	public static WorldCoord parseWorldCoord(Block block) {
@@ -255,9 +256,9 @@ public class WorldCoord extends Coord {
 			// Dealing with a townblocksize greater than 16, we will have multiple chunks per WorldCoord.
 			final Set<CompletableFuture<Chunk>> chunkFutures = new HashSet<>();
 			
-			int side = Math.round(getCellSize() / 16f);
-			for (int x = 0; x <= side; x++) {
-				for (int z = 0; z <= side; z++) {
+			int side = (int) Math.ceil(getCellSize() / 16f);
+			for (int x = 0; x < side; x++) {
+				for (int z = 0; z < side; z++) {
 					chunkFutures.add(PaperLib.getChunkAtAsync(getSubCorner(x, z)));
 				}
 			}
@@ -324,12 +325,23 @@ public class WorldCoord extends Coord {
 			   !Objects.equals(from.getWorld(), to.getWorld());
 	}
 
-	public List<WorldCoord> getCardinallyAdjacentWorldCoords() {
-		List<WorldCoord> list = new ArrayList<>(4);
+	public List<WorldCoord> getCardinallyAdjacentWorldCoords(boolean... includeOrdinalFlag) {
+		boolean includeOrdinal = (includeOrdinalFlag.length >= 1) ? includeOrdinalFlag[0] : false;
+		List<WorldCoord> list =new ArrayList<>(includeOrdinal ? 8 : 4);
 		list.add(this.add(0,-1));
 		list.add(this.add(0,1));
 		list.add(this.add(1,0));
 		list.add(this.add(-1,0));
+		if (includeOrdinal) {
+			list.add(this.add(1,1));
+			list.add(this.add(1,-1));
+			list.add(this.add(-1,-1));
+			list.add(this.add(-1,1));
+		}
 		return list;
+	}
+
+	public boolean canBeStolen() {
+		return TownySettings.isOverClaimingAllowingStolenLand() && hasTownBlock() && getTownOrNull().isOverClaimed();
 	}
 }

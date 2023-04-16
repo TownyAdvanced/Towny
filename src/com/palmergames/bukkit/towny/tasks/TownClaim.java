@@ -7,10 +7,11 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -41,7 +42,6 @@ public class TownClaim implements Runnable {
 	private double runningRefund = 0.0;
 	private double insufficientFunds = 0.0;
 	private boolean successfulRun = false;
-	private boolean plotLocked = false;
 
 	/**
 	 * @param plugin reference to towny
@@ -79,7 +79,9 @@ public class TownClaim implements Runnable {
 			runUnclaimAll();
 
 		if (successfulRun) {
-			town.save();
+			if (town != null)
+				town.save();
+			
 			plugin.resetCache();
 			sendFeedback();
 		}
@@ -99,7 +101,7 @@ public class TownClaim implements Runnable {
 				successfulRun = true;
 			} catch (TownyException x) {
 				// Based on the selection filtering that runs before we start TownClaim, the selection size should never drop below 0.
-				TownyMessaging.sendErrorMsg(player, x.getMessage());
+				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
 				disallowedWorldCoords.add(worldCoord);
 			}
 		}
@@ -149,8 +151,6 @@ public class TownClaim implements Runnable {
 			if (claim) {
 				// Something has been claimed.
 				TownyMessaging.sendMsg(player, Translatable.of("msg_annexed_area", feedbackSlug));
-				if (plotLocked) // Send plot is locked message.
-					TownyMessaging.sendMsg(player, Translatable.of("msg_wait_locked"));
 			} else if (forced) {
 				// An admin has force-fully unclaimed an area.
 				TownyMessaging.sendMsg(player, Translatable.of("msg_admin_unclaim_area", feedbackSlug));
@@ -165,24 +165,46 @@ public class TownClaim implements Runnable {
 	}
 
 	private void townClaim(WorldCoord worldCoord) throws TownyException {
+		boolean alreadyClaimed = worldCoord.hasTownBlock();
 
-		if (TownyUniverse.getInstance().hasTownBlock(worldCoord))
-			throw new AlreadyRegisteredException(Translatable.of("msg_already_claimed", worldCoord.getTownOrNull().getName()).forLocale(player));
+		if (alreadyClaimed && !worldCoord.canBeStolen())
+			throw new TownyException(Translatable.of("msg_already_claimed", worldCoord.getTownOrNull().getName()));
 
-		TownBlock townBlock = new TownBlock(worldCoord);
+		TownBlock townBlock = !alreadyClaimed ? new TownBlock(worldCoord) : worldCoord.getTownBlockOrNull();
+	
+		// If this is an occaision where a town is stealing this land, do the
+		// prep to clean the old town from the townblock.
+		if (alreadyClaimed) {
+			Town oldTown = worldCoord.getTownOrNull();
+
+			//  Fire an event for other plugins.
+			BukkitTools.fireEvent(new TownUnclaimEvent(oldTown, worldCoord));
+
+			if (townBlock.hasResident())
+				townBlock.setResident(null, false);
+
+			oldTown.save();
+			// Many other things are going to be handled by the townBlock.setTown(town) below, including:
+			// - Removing the outpost if it exists.
+			// - Removing the oldTown's homeblock.
+			// - Removing the town's jail if it is.
+			// - Removing the oldTown's nation spawn point.
+			// - Updating the oldTown's TownBlockTypeCache.
+		}
+
 		townBlock.setTown(town);
-		townBlock.setType(townBlock.getType()); // Sets the plot permissions to mirror the towns.
-
+		townBlock.setType(!alreadyClaimed ? townBlock.getType() : TownBlockType.RESIDENTIAL); // Sets the plot permissions to mirror the towns.
 		if (outpost) {
 			townBlock.setOutpost(true);
 			town.addOutpostSpawn(outpostLocation);
 			outpost = false; // Reset so we only flag the first plot as an outpost.
 		}
 
-		// Claiming land can influence the Revert on Unclaim feature.
-		handleRevertOnUnclaimPossiblities(worldCoord, townBlock);
+		if (!alreadyClaimed)
+			// Claiming land can influence the Revert on Unclaim feature.
+			handleRevertOnUnclaimPossiblities(worldCoord, townBlock);
 
-		// Save our new TownBlock in the DB.
+		// Save the TownBlock in the DB.
 		townBlock.save();
 
 		// Raise an event for the claim
@@ -198,16 +220,14 @@ public class TownClaim implements Runnable {
 			PlotBlockData plotChunk = TownyRegenAPI.getPlotChunk(townBlock);
 			if (plotChunk != null) {
 				TownyRegenAPI.removeFromActiveRegeneration(plotChunk); // just claimed so stop regeneration.
-				townBlock.setLocked(false);
 			}
 			TownyRegenAPI.removeFromRegenQueueList(worldCoord);
 		}
+		
 		// Check if a plot snapshot exists for this townblock already (inactive, unqueued regeneration.)
 		if (!TownyUniverse.getInstance().getDataSource().hasPlotData(townBlock)) {
 			// Queue to have a snapshot made if there is not already an earlier snapshot.
-			TownyRegenAPI.addWorldCoord(worldCoord);
-			townBlock.setLocked(true);
-			plotLocked = true;
+			TownyRegenAPI.handleNewSnapshot(townBlock);
 		}
 	}
 
@@ -229,7 +249,7 @@ public class TownClaim implements Runnable {
 			// the Town can pay for the new runningCost total amount. 
 			// All of this was already determined in the TownCommand class but a player
 			// might be trying something tricky before accepting the confirmation.
-			if (unclaimRefund < 0 && !town.getAccount().canPayFromHoldings(Math.abs(runningRefund))) {
+			if (unclaimRefund < 0 && town != null && !town.getAccount().canPayFromHoldings(Math.abs(runningRefund))) {
 				runningRefund = runningRefund - unclaimRefund;
 				insufficientFunds = insufficientFunds + Math.abs(unclaimRefund);
 				throw new TownyException(""); // This empty-messaged TownyException means that the player will not see a Error message every time they cannot pay.
@@ -255,6 +275,11 @@ public class TownClaim implements Runnable {
 	}
 
 	private void refundForUnclaim(double unclaimRefund, int numUnclaimed) {
+		if (TownySettings.isEconomyAsync() && Bukkit.getServer().isPrimaryThread()) {
+			Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> refundForUnclaim(unclaimRefund, numUnclaimed));
+			return;
+		}
+		
 		if (unclaimRefund > 0 && town.getAccount().deposit(unclaimRefund, "Town Unclaim Refund"))
 			TownyMessaging.sendMsg(player, Translatable.of("refund_message", TownyEconomyHandler.getFormattedBalance(unclaimRefund), numUnclaimed));
 

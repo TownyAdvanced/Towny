@@ -37,7 +37,6 @@ public class TownBlock extends TownyObject {
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private int x, z;
 	private double plotPrice = -1;
-	private boolean locked = false;
 	private boolean outpost = false;
 	private PlotGroup plotGroup;
 	private long claimedAt;
@@ -106,11 +105,30 @@ public class TownBlock extends TownyObject {
 		return town != null;
 	}
 
-	public void setResident(Resident resident) {
-		setResident(resident, true);
+	/**
+	 * Removes the current resident as owner in this plot, while calling the appropriate events
+	 * @return Whether the resident (if any) was successfully removed as owner.
+	 */
+	public boolean removeResident() {
+		return setResident(null, true);
 	}
-		
-	public void setResident(Resident resident, boolean callEvent) {
+
+	/**
+	 * Changes the owner of the plot to the given resident.
+	 * @param resident The resident to give ownership to, or {@code null} to give ownership back to the town.
+	 * @return Whether the resident (if any) was successfully removed as owner.
+	 */
+	public boolean setResident(@Nullable Resident resident) {
+		return setResident(resident, true);
+	}
+
+	/**
+	 * Changes the owner of the plot to the given resident.
+	 * @param resident The resident to give ownership to, or {@code null} to give ownership back to the town.
+	 * @param callEvent Whether to call the related plot events or not, this is used by Towny to avoid calling events from database loading.   
+	 * @return Whether the resident (if any) was successfully removed as owner.
+	 */
+	public boolean setResident(@Nullable Resident resident, boolean callEvent) {
 		
 		if (callEvent) {
 			
@@ -124,7 +142,7 @@ public class TownBlock extends TownyObject {
 						if (resident != null) 
 							TownyMessaging.sendErrorMsg(resident, plotPreUnclaimEvent.getCancelMessage());
 						}
-					return;
+					return false;
 				}
 			}
 			
@@ -135,12 +153,12 @@ public class TownBlock extends TownyObject {
 					if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
 						TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
 	
-					return;
+					return false;
 				}
 			}
 		}
 		
-		boolean successful;
+		boolean successful = false;
 		boolean unclaim = false;
 		if (hasResident()) {
 			this.resident.removeTownBlock(this);
@@ -148,12 +166,12 @@ public class TownBlock extends TownyObject {
 			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
 		}
 		this.resident = resident;
-		try {
-			resident.addTownBlock(this);
-			successful = true;
-			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
-		} catch (AlreadyRegisteredException | NullPointerException e) {
-			successful = false;
+		if (resident != null && !resident.hasTownBlock(this)) {
+			try {
+				resident.addTownBlock(this);
+				successful = true;
+				getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
+			} catch (AlreadyRegisteredException ignored) {}
 		}
 		
 		if (successful && callEvent)
@@ -162,8 +180,9 @@ public class TownBlock extends TownyObject {
 		if (unclaim && callEvent)
 			BukkitTools.fireEvent(new PlotUnclaimEvent(this.resident, resident, this));
 		
-		this.resident = resident;
 		permissionOverrides.clear();
+		
+		return true;
 	}
 
 	public Resident getResident() throws NotRegisteredException {
@@ -328,17 +347,6 @@ public class TownBlock extends TownyObject {
 	}
 
 	/**
-	 * Sets the type of this townblock to the specified ID.
-	 * @param typeId The id of the type
-	 * @deprecated As of 0.97.5.4, this is deprecated for compatibility with custom types.
-	 * @see #setType(String)
-	 */
-	@Deprecated
-	public void setType(int typeId) {
-		setType(TownBlockType.lookup(typeId));
-	}
-
-	/**
 	 * @param type The TownBlockType to set this plot to.
 	 * @param resident The Resident who is trying to set the type.
 	 * @throws TownyException If this townblock has a pvp toggle cooldown.
@@ -449,19 +457,19 @@ public class TownBlock extends TownyObject {
 	/**
 	 * Is the TownBlock locked
 	 * 
+	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
 	 * @return the locked
 	 */
+	@Deprecated
 	public boolean isLocked() {
-
-		return locked;
+		return false;
 	}
 
 	/**
 	 * @param locked is the to locked to set
+	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
 	 */
 	public void setLocked(boolean locked) {
-
-		this.locked = locked;
 	}
 
 	public void setWorld(TownyWorld world) {
@@ -614,5 +622,12 @@ public class TownBlock extends TownyObject {
 	
 	public TownBlockData getData() {
 		return type.getData();
+	}
+	
+	public void evictOwnerFromTownBlock() {
+		this.setResident(null);
+		this.setPlotPrice(-1);
+		this.setType(getType());
+		this.save();
 	}
 }

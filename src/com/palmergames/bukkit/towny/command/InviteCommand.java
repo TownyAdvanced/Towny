@@ -165,8 +165,14 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Town town;
 		
 		if (args.length >= 1) {
-			// We cut the first argument out of it so /invite *accept* args[1]
+			// We cut the first argument out of it so /invite deny args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
+			if (args[0].equalsIgnoreCase("all")) {
+				denyAllInvites(invites);
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_player_denied_all_invites"));
+				return;
+			}
+
 			town = townyUniverse.getTown(args[0]);
 			
 			if (town == null) {
@@ -201,6 +207,14 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));			
 
 
+	}
+
+	private static void denyAllInvites(List<Invite> invites) {
+		for (Invite invite : invites) {
+			try {
+				InviteHandler.declineInvite(invite, true);
+			} catch (InvalidObjectException ignored) {}
+		}
 	}
 
 	public static void parseAccept(Player player, String[] args) {
@@ -287,7 +301,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		Translatable object = null;
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Invite invite = list.get(i);
-			String name = invite.getDirectSender().getName();
+			String name = invite.getSenderName();
 			
 			// If it's from the sender, do it differently
 			String output = null;

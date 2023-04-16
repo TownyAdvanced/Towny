@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.huds;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -90,20 +89,13 @@ public class HUDManager implements Listener{
 	public void onTownBlockSettingsChanged (TownBlockSettingsChangedEvent e) {
 
 		if (e.getTownyWorld() != null)
-			for (Player p : permUsers)
-				PermHUD.updatePerms(p);
+			permUsers.forEach(p -> PermHUD.updatePerms(p));
 		else if (e.getTown() != null)
-			for (Player p : permUsers)
-				try {
-					if (new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p)).getTownBlock().getTown() == e.getTown())
-						PermHUD.updatePerms(p);
-				} catch (Exception ex) {}
+			permUsers.stream().filter(p -> WorldCoord.parseWorldCoord(p).hasTown(e.getTown()))
+				.forEach(p -> PermHUD.updatePerms(p));
 		else if (e.getTownBlock() != null)
-			for (Player p : permUsers)
-				try {
-					if (new WorldCoord(p.getWorld().getName(), Coord.parseCoord(p)).getTownBlock() == e.getTownBlock())
-						PermHUD.updatePerms(p);
-				} catch (Exception ex) {}
+			permUsers.stream().filter(p -> e.getTownBlock().getWorldCoord().equals(WorldCoord.parseWorldCoord(p)))
+				.forEach(p -> PermHUD.updatePerms(p));
 	}
 
 	public static String check(String string) {

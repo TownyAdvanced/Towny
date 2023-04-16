@@ -777,7 +777,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("conquered");
 				if (line != null)
 					try {
-						town.setConquered(Boolean.parseBoolean(line));
+						town.setConquered(Boolean.parseBoolean(line), false);
 					} catch (Exception ignored) {
 					}
 				line = keys.get("conqueredDays");
@@ -1696,13 +1696,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setChanged(Boolean.parseBoolean(line.trim()));
 						} catch (Exception ignored) {
 						}
-					
-					line = keys.get("locked");
-					if (line != null)
-						try {
-							townBlock.setLocked(Boolean.parseBoolean(line.trim()));
-						} catch (Exception ignored) {
-						}
 
 					line = keys.get("claimedAt");
 					if (line != null)
@@ -1924,10 +1917,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("mayor=" + town.getMayor().getName());
 		// Nation
 		if (town.hasNation())
-			try {
-				list.add("nation=" + town.getNation().getName());
-			} catch (NotRegisteredException ignored) {
-			}
+			list.add("nation=" + town.getNationOrNull().getName());
 
 		list.add(newLine);
 		// Town Board
@@ -2322,8 +2312,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Have permissions been manually changed
 		list.add("changed=" + townBlock.isChanged());
-
-		list.add("locked=" + townBlock.isLocked());
 
 		list.add("claimedAt=" + townBlock.getClaimedAt());
 		

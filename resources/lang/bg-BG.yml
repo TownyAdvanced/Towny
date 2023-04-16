@@ -11,7 +11,7 @@ description: >
 #Before you edit this file, read about how Towny handles
 #language files:
 #https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny inserts words.)
+#A note on text formatting (how Towny status_title_pvpinserts words.)
 #----------------------------------------------------
 #You MUST retain spacing in the texts.
 #If a text begins or ends with a space, it must remain that
@@ -67,10 +67,10 @@ nation_help_3: 'Състоянието на избраната нация'
 nation_help_4: 'Списък с всички нации'
 nation_help_5: 'Извадете градът от вашата нация'
 nation_help_6: 'Създайте нова нация'
-nation_help_7: 'List the nation leader commands'
+nation_help_7: 'Показва командите за националния лидер'
 nation_help_8: 'Създайте нова нация'
 nation_help_9: 'Списък с всички жители на нация'
-king_help_1: 'Nation Leader Help'
+king_help_1: 'Помощ за национален лидер'
 king_help_2: 'Съюзете се.'
 king_help_3: 'Изеберете си враговете.'
 res_1: 'Вашето състояние'
@@ -78,29 +78,29 @@ res_2: '[жител]'
 res_3: 'Състоянието на избран играч'
 res_4: 'Списък с всички активни играчи'
 res_5: 'за помощ'
-res_6: 'Online match'
-res_7: 'Exact name'
-mode_1: 'Show the map between each townblock'
-mode_2: 'Attempt to claim as you walk'
-mode_3: 'Attempt to unclaim as you walk'
-mode_4: 'Default chat to town channel'
-mode_5: 'Default chat to nation channel'
-mode_6: 'Can place %s in enemy borders to make warzones.'
-plot_perms: 'Use %s instead of %s for plot permissions.'
-plot_perms_1: 'Resident plots don''t make use of outsider permissions.'
-res_list: 'Residents'
-res_sing: 'Resident'
-mayor_sing: 'Mayor'
-admin_sing: 'Admin'
-town_sing: 'Town'
-nation_sing: 'Nation'
-nation_plu: 'Nations'
-king_sing: 'Leader'
-town_plu: 'Towns'
-world_plu: 'Worlds'
-world_sing: 'World'
-world_help_1: 'Current world''s status'
-world_help_2: '[world]'
+res_6: 'Онлайн матч'
+res_7: 'Точно име'
+mode_1: 'Покажи картата между всеки градски блок'
+mode_2: 'Опит да изисквате докато ходите'
+mode_3: 'Опит за премахване на изискванията докато ходите'
+mode_4: 'Чат по подразбиране към чатът на града'
+mode_5: 'Чат по подразбиране на националния чат'
+mode_6: 'Може да постави %s във вражески гранизи за да създаде военни зони.'
+plot_perms: 'Използва %s вместо %s за права на територия.'
+plot_perms_1: 'Територия не се възползва от правата на външните.'
+res_list: 'Жители'
+res_sing: 'Жител'
+mayor_sing: 'Кмет'
+admin_sing: 'Администратор'
+town_sing: 'Град'
+nation_sing: 'Нация'
+nation_plu: 'Нации'
+king_sing: 'Лидер'
+town_plu: 'Градове'
+world_plu: 'Светове'
+world_sing: 'Свят'
+world_help_1: 'Статус на вмоменташния свят'
+world_help_2: '[свят]'
 world_help_3: 'Target worlds''s status'
 world_help_4: 'List all worlds'
 world_help_5: 'Regenerate this chunk'
@@ -195,7 +195,6 @@ msg_no_funds_to_buy: '&cTown cannot afford to buy %s %s costing %s. Add more mon
 msg_annexed_area: '&2Annexed area %s'
 msg_max_plot_own: '&cYou cannot own more than %s plots.'
 msg_max_outposts_own: '&cYou cannot own more than %s outposts.'
-msg_wait_locked: '&2Please be patient, the plots will become available soon.'
 msg_no_funds_new_nation: '&cThe town can''t afford to start a new nation.'
 msg_already_claimed: '&cThis area has already been claimed by: %s'
 msg_already_claimed_1: '&cThis area (%s) already belongs to someone.'
@@ -292,7 +291,6 @@ msg_plot_set_type: '&bPlot type set to %s'
 msg_cache_block_error: '&cYou have not been registered with Towny. Try relogging.'
 msg_cache_block_error_wild: '&cNot allowed to %s in the wild.'
 msg_cache_block_error_plot: '&cOwner doesn''t allow %s to %s here.'
-msg_cache_block_error_locked: '&cThis plot is locked!'
 msg_cache_block_error_town_resident: '&cResidents aren''t allowed to %s here.'
 msg_cache_block_error_town_allies: '&cAllies aren''t allowed to %s.'
 msg_cache_block_error_town_outsider: '&cOutsiders aren''t allowed to %s.'
@@ -457,6 +455,7 @@ invite_plu: 'Invites'
 invite_sent_by: 'Invite Sent By'
 invite_help_1: 'Accept an invite to join a town'
 invite_help_2: 'Decline an invite to join a town'
+invite_help_4: 'Decline all invites to join a town'
 invite_help_3: 'List all of your invites'
 town_invite_help_1: 'Invite a player to your town'
 town_invite_help_2: 'Revoke an invite, that was sent to a player'
@@ -474,6 +473,7 @@ nation_ally_help_4: 'Lists all of the ally-requests you''ve received'
 nation_ally_help_5: 'Accept a request to ally a nation'
 nation_ally_help_6: 'Deny a request to ally a nation'
 nation_ally_help_7: 'Revoke an ally request'
+msg_player_denied_all_invites: "All of your received invites have been denied."
 msg_err_player_no_invites: '&cYou do not have any invites!'
 msg_err_player_has_multiple_invites: '&cYou have multiple invites, please specify!'
 msg_err_player_has_too_many_invites: '%s has too many invites, ask them to decline some, before inviting again.'
@@ -586,6 +586,7 @@ jailed_in_town: ' in Town: %s'
 status_friends: 'Friends'
 rank_list_title: '%s Rank List'
 rank_list_mayor: 'Mayor:'
+status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Open)'
 status_town_board: 'Board:'
@@ -605,6 +606,7 @@ status_nation_tax: 'NationTax:'
 status_nation_towns: 'Towns'
 status_nation_allies: 'Allies'
 status_nation_enemies: 'Enemies'
+status_nation_enemied_by: 'Nations that consider your nation an enemy'
 status_world_claimable: '&aClaimable'
 status_world_noclaims: '&cNoClaims'
 status_world_forcepvp: 'ForcePVP:'
@@ -1498,6 +1500,10 @@ msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns 
 msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots
 status_plot_string: 'Plots'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1636,3 +1642,44 @@ confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all 
 msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
 msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
+msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "You are not known to Towny."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "%s is not known to Towny."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s is not a resident that is recognized."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s is not a town that is recognized."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s is not a nation that is recognized."
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."

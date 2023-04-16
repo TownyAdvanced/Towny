@@ -37,11 +37,9 @@ public class ConfirmationBuilder {
 	 * 
 	 * @param title The title of the confirmation.
 	 * @return A builder reference of this object.
-	 * @deprecated since 0.97.3.0 - Use {@link#setTitle(Translatable)} instead.
 	 */
-	@Deprecated
 	public ConfirmationBuilder setTitle(String title) {
-		this.title = Translatable.of(title);
+		this.title = Translatable.literal(title);
 		return this;
 	}
 	

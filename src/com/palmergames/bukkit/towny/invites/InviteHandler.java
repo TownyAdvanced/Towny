@@ -62,7 +62,7 @@ public class InviteHandler {
 	}
 	
 	private static long getInviteTime(Invite invite) {
-		return invitesTimes.get(invite);
+		return invitesTimes.getOrDefault(invite, 0l); 
 	}
 	
 	public static void searchForExpiredInvites() {

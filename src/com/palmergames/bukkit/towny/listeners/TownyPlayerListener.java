@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -262,7 +263,7 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJailRespawn(PlayerRespawnEvent event) {
 
-		if (plugin.isError() || !TownySettings.isTownRespawning()) {
+		if (plugin.isError()) {
 			return;
 		}
 	
@@ -323,6 +324,10 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
+		Action action = event.getAction();
+		if(action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR && action != Action.PHYSICAL)
+			return;
+		
 		Player player = event.getPlayer();
 		Block clickedBlock = event.getClickedBlock();
 
@@ -354,6 +359,13 @@ public class TownyPlayerListener implements Listener {
 			 */
 			if (clickedBlock != null) {
 				Material clickedMat = clickedBlock.getType();
+
+				/* Fixes a known duping exploit. */
+				if (Tag.BEDS.isTagged(item) && Tag.CROPS.isTagged(clickedBlock.getType()) && clickedBlock.getLightLevel() == 0) {
+					event.setCancelled(true);
+					return;
+				}
+
 				/*
 				 * Test stripping logs, scraping copper blocks, dye-able signs,
 				 * glass bottles, flint&steel on TNT and shears on beehomes
@@ -404,6 +416,12 @@ public class TownyPlayerListener implements Listener {
 				if (clickedMat.name().equals("ROOTED_DIRT") && item.name().toLowerCase().contains("_hoe"))
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock));
 
+				/*
+				 * Prevents players using wax on signs
+				 * TODO: Add a check for whether the sign is waxed once that API is available.
+				 */
+				if (Tag.SIGNS.isTagged(clickedMat) && item == Material.HONEYCOMB && MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.MINECRAFT_1_16) >= 0)
+					event.setCancelled(!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat));
 			}
 		}
 		
@@ -440,6 +458,12 @@ public class TownyPlayerListener implements Listener {
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 				return;
 			}
+			
+			/*
+			 * Prevents players from editing signs where they shouldn't.
+			 */
+			if (Tag.SIGNS.isTagged(clickedMat) && MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.MINECRAFT_1_20) >= 0)
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 		}
 	}
 
@@ -461,12 +485,12 @@ public class TownyPlayerListener implements Listener {
 
 		Block block = event.getClickedBlock();
 		Player player = event.getPlayer();
-		if (event.hasBlock()) {
+		if (event.hasBlock() && event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Location blockLoc = block.getLocation();
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
-			if (block.getType() == Material.RESPAWN_ANCHOR && event.getAction() == Action.RIGHT_CLICK_BLOCK && !isRespawnAnchorWorking(block)) {
+			if (block.getType() == Material.RESPAWN_ANCHOR && !isRespawnAnchorWorking(block)) {
 				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() > 0)
 					BukkitTools.fireEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
@@ -486,7 +510,7 @@ public class TownyPlayerListener implements Listener {
 			 * Prevents setting the spawn point of the player using beds or respawn anchors, 
 			 * except in allowed plots (personally-owned and Inns)
 			 */
-			if (TownySettings.getBedUse() && event.getAction() == Action.RIGHT_CLICK_BLOCK
+			if (TownySettings.getBedUse() 
 				&& (Tag.BEDS.isTagged(block.getType()) || disallowedAnchorClick(event, block))) {
 
 				boolean isOwner = false;

@@ -8355,3 +8355,247 @@ v0.92.0.11:
     - When it is true, the peaceful cost is multiplied by the nation's number of towns.
     - Note that the base peacful cost is calculated by the price_nation_neutrality X nation_level peacefulCostMultiplier.
   - Correct the feedback message shown when /ta town TOWNNAME settownlevel unset is used.
+  - Fix worldcoord from location parsing, courtesy of Warriorrrr with PR #6488.
+  - Fix /t claim doing economy calls on the main thread, courtesy of Warriorrrr with PR #6487.
+0.98.6.7:
+  - Add peaceful section to townyperms.yml.
+    - Permission nodes put into this section will be given to any player that is part of a town or nation that is peaceful.
+    - Closes #6015.
+  - Add debtCapModifier to the config Town_Level and Nation_Level.
+    - Your configs will automatically have this added with the default 1.0 setting.
+    - You can change it from 1.0 to alter towns' and nations' maximum bank account levels are, based on their population.
+    - With the default of 1.0, no town or nation will have any change to their current max.
+    - Closes #5037.
+  - Fix nations that collect towntax being able to get above their nation bank cap.
+  - Fix towns and nations from collecting tax amounts that equal 0.
+  - Option to prevent people from claiming in a straight line, courtesy of JKJameson with PR #6482. (First-Time Contributor!)
+    - Closes #6080.
+  - New Config Option: town.min_adjacent_blocks
+    - Default: -1
+    - The minimum adjacent town blocks required to expand.
+    - This can prevent long lines and snake-like patterns.
+    - Set to -1 to disable. Set to 3 to force wider expansions of towns.
+  - API: TownBlockPermissionChangeEvent, courtesy of Pesto with PR #6453.
+    - Adds a cancellable event that is fired when a TownBlock is about to have its permission line changed. 
+  - Fix switch and item use being triggered on left-click, courtesy of Pesto with PR #6495.
+    - Closes #6494.
+  - Bump bstats-bukkit from 3.0.0 to 3.0.1.
+  - Bump maven-javadoc-plugin from 3.4.1 to 3.5.0.
+0.98.6.8:
+  - Reduce number of potential NotRegisterExceptions being thrown.
+  - Fix claiming free plots causing useless bank history, courtesy of Warriorrrr with PR #6499.
+  - Remove /plot claim repossesion logic in favour of /plot evict, courtesy of Warriorrrr with PR #6500.
+  - Only remove non embassies from the left town on resident leave, courtesy of Warriorrrr with PR #6501.
+  - Fix /ta unclaim causing an NPE, courtesy of Warriorrrr with PR #6504.
+  - Minor changes to reduce NRE usage.
+  - Replace messaging used by BaseCommand's getOrThrow methods to be more relevant to players.
+  - Replace getResidentOrThrow(UUID) with getResidentOrThrow(Player) for better feedback messages.
+0.98.6.9:
+  - Add remove town only option to resident purge, courtesy of Warriorrrr with PR #6508.
+    - Closes #6506.
+  - New Config Option: resident_settings.delete_old_residents.only_remove_town
+    - Default: false
+    - When true players will be removed from their town and become a nomad instead of being fully deleted.
+  - Update plugin.yml to use the proper name for MyWorlds, courtesy of bergerkiller with PR #6511. (First-Time Contributor!)
+  - Fix king prefix not showing.
+  - Fix min_adjacent_blocks setting breaking outposts, courtesy of JKJameson & LlmDl with PR #6510.
+    - Closes #6505.
+  - BankAccount update.
+    - Old constructor deprecated, setting balanceCap deprecated.
+    - Potentially fixes the ability for a town to go bankrupt when this feature is disabled.
+  - API: TownEntersBankruptcyEvent.
+    - Thrown when a town enters bankruptcy.
+0.98.6.10:
+  - Update paper repo url, courtesy of Warriorrrr with PR #6520.
+  - API: Add PlayerChangePlotTypeEvent.
+    - Thrown after a player successfully changes a TownBlock's plot type.
+  - Bump log4j-core from 2.19.0 to 2.20.0.
+  - Remove town_spawn: true requirement for jailing altering jailed player's spawn points.
+  - Alter the TownBlockTypeHandler to be able to receive TownBlockTypes from other plugins on server startup.
+0.98.6.11:
+  - Fix sql source query NPE, courtesy of Warriorrrr with PR #6527.
+  - Fix /ta set mayor causing an npe if the old mayor is null, courtesy of Warriorrrr with PR #6528.
+0.98.6.12:
+  - Fix pressure plates not respecting switch permissions, courtesy of Pesto with PR #6532.
+    - Closes #6530.
+0.98.6.13:
+  - Bump annotations from 24.0.0 to 24.0.1.
+  - Bump maven-compiler-plugin from 3.10.1 to 3.11.0.
+  - Make town and nation level related errors easier to debug, courtesy of Warriorrrr with PR #6524.
+  - Fix potential NPE in TownyBlockListener.
+  - Change format used for backup file names, courtesy of Warriorrrr with PR #6538.
+  - Relativize paths in tar.gz backups, courtesy of Warriorrrr with PR #6537.
+0.98.6.14:
+  - Make sure we aren't paying negative amounts to a Nation bank account during tax time.
+    - Closes #6540.
+  - Add an option to disable the mysql backup warning, courtesy of Warriorrrr with PR #6542.
+  - New Database Config Option: database.sql.disable_backup_warning
+    - Default: false
+    - Disables the warning when a backup is made about not all Towny data being backed up when mysql is in use.
+    - Set this to true when you fully understand what not having flatfile backups means, if your mysql database were to become unusable and you have not configured your own backup solution.
+  - Fix potential NPE in MapHud.
+  - Add /res toggle townborder.
+    - A command that turns on townborder mode.
+    - This new mode highlights the borders of the town you're stood in, using the affiliation colours.
+0.98.6.15:
+  - Fix upkeep warning message doing sync economy calls, courtesy of Warriorrrr with PR #6547.
+  - Fix unclaim refunds doing sync economy calls, courtesy of Warriorrrr with PR #6548.
+  - Modernize plot command.
+  - API: Add TownyAPI#testPlotOwnerOrThrow
+    - Check if a plot is owned by someone.
+  - Fix nation percentage taxes not calculating correctly.
+0.98.6.16:
+  - Fix backups for windows regression in 0.98.6.13, courtesy of Warriorrrr with PR #6552.
+    - Closes #6551.
+  - Fix NPE with /plot fs.
+  - Fix potential NPE with /towny map.
+  - Make TownyWorld#getBukkitWorld more resilient.
+0.98.6.17:
+  - Fix for using invalid plot commands in the wilderness, plot fs.
+0.98.6.18:
+  - Add message showing what is required to be paid when someone cannot pay after a confirmation.
+    - Closes #6560.
+  - Fix some Translatable.toString issues, courtesy of Warriorrrr with PR #6111.
+  - Seperate changelog reading into its own class, courtesy of Warriorrrr with PR #6558.
+  - Fix invite objects holding a reference to command senders, courtesy of Warriorrrr with PR #6559.
+0.98.6.19:
+  - Fix possible ArrayIndexOutOfBoundsException in /ta purge.
+  - Fix embassy plots in other towns not having a deleted resident removed as owner.
+    - Closes #6562.
+  - Fix NPC prefixed usernames not being blocked, courtesy of Warriorrrr with PR #6568.
+    - Previously, NPC names that weren't already taken by Towny NPC residents could be used to log in.
+  - Add option to stop protected mobs from entering empty boats in Towns.
+    - Closes #6554.
+  - New Config Option: protection.mob_types_protected_from_boat_theft
+    - Default: false
+    - When set to true, the above mob_types will be protected when they are in a town, from being able to enter empty boats.
+    - This protects the mobs from being stolen using boats.
+0.98.6.20:
+  - Update to 1.19.4, courtesy of Warriorrrr with PR #6570.
+0.98.6.21:
+  - API: Add TownConqueredEvent, Thrown when a town is conquered.
+  - Update Adventure dependencies.
+  - New PAPI Placeholder: %townyadvanced_townblock_next_claim_price%
+    - Displays the cost of the player's town's next claim, taking into account any townblock price increase rules. 
+    - Closes #6576.
+  - Fix NRE thrown in AreaSelectionUtil.
+    - Closes #6578.
+  - Fix potential NPE in InviteHandler.
+  - Fix incorrect TownBlockType being set in the PlayerChangePlotEvent.
+  - Fix TownUnconquerEvent being able to be thrown async.
+  - Fix town#setConquered(boolean, boolean).
+  - API: improve TownPreUnclaimCmdEvent with the addition of a List<WorldCoord> which is going to be unclaimed.
+    - TownPreUnclaimCmdEvent#getUnclaimSelection.
+0.98.6.22:
+  - Fix bed crop dupe found in Spigot or MC.
+0.98.6.23:
+  - Fix 1.16.5 incompatibility, courtesy of Warriorrrr with PR #6581.
+0.98.6.24:
+  - Protect signs from being edited, courtesy of Warriorrrr with PR #6583.
+    - Waxing is treated as item_use, editing signs is treated as a destroy test.
+  - Fix abililty to claim a fifth townblock after a town has claimed a 2x2 square and min_adjacent_blocks is set to 3.
+  - Fix reversed test in CombatUtil#isEnemyTownBlock(Resident, WorldCoord).
+  - Bump commons-compress from 1.22 to 1.23.0.
+  - Bump placeholderapi from 2.11.2 to 2.11.3.
+0.98.6.25:
+  - Add (Capital) badge to Town subtitles, when a town is a nation capital.
+  - Fix WorldCoord#getChunks sometimes being wrong, courtesy of Warriorrrr with PR #6591.
+  - Replace snapshot queue with chunk snapshots, courtesy of Warriorrrr with PR #6590.
+  - Remove leftover debug stdout, courtesy of Warriorrrr with PR #6592.
+  - Make TownyFormatter town and nation subtitle methods public.
+0.98.6.26:
+  - Fix potential NPE in /plot claim command.
+  - Add Bridger plugin to pom.xml, courtesy of Warriorrrr with PR #6584.
+  - Make account a bit smarter, courtesy of Warriorrrr with PR #6597.
+  - Make SQLSource more resiliant to worlds that have not recorded a UUID correctly.
+  - Bump bstats-bukkit from 3.0.1 to 3.0.2.
+0.98.6.27:
+  - Remove deprecations made in the 0.97 series of Towny releases.
+0.99.0.0:
+  - Bump version number for release.
+0.99.0.1:
+  - Add configurable symbol for the maps to showcase Outpost plots.
+    - Closes #6595.
+  - New Config Option: ascii_map_symbols.outpost
+    - Default: O
+    - The character used for the outpost symbol.
+  - Add /invite deny all, so a player can deny all of their received invites.
+    - Closes #6606.
+  - New Command: /invite deny all
+    - Denies all of a players received town invites.
+  - Newly blacklisted town and nation names: all, help. 
+  - Fix /n enemy add/remove sometimes showing "none of those names were valid" despite working.
+  - Add rank priority and rank prefix to town and nation ranks.
+    - The Town and Nation ranks in the townyperms.yml can now be assigned two permission nodes:
+      - towny.rankpriority.#
+      - towny.rankprefix.<somewordshere>
+    - Ex: Assistant rank can be given:
+      - towny.rankpriority.100
+      - towny.rankprefix.&a<Assistant>&r
+    - and the Sheriff rank can be given:
+      - towny.rankpriority.500
+      - towny.rankprefix.&b<Sheriff>&r
+    - A player that has both the sheriff and assistant rank will show the assistant prefix using the below PAPI placeholder.
+    - Closes #4658.
+  - New PlaceholderAPI Placeholder: %townyadvanced_resident_primary_rank%
+    - Displays a prefix associated with a player's highest-priority nation or town rank.
+  - Bump adventure-text-minimessage from 4.13.0 to 4.13.1.
+0.99.0.2:
+  - Add nations that enemy your nation to the /n enemylist output.
+  - Prevent 0 dollar amounts being withdrawn/deposited from town and nation banks.
+  - API: Add town-changing-mayor events.
+    - Alters the TownMayorChangeEvent to include a getCommandSender.
+    - Add TownMayorChangedEvent which is not cancellable, alerts plugins of any change in mayor.
+    - Add TownMayorChosenBySuccessionEvent which allows a plugin to determine who will become mayor when Towny automatically chooses a mayor.
+    - Closes #6607.
+  - Add option for overclaimed towns to have their land stolen from them.
+    - When enabled a Town which has claimed too much land, ie: TownBlocks 120/100, will be vulnerable to having some of their land stolen.
+    - Stealing land is done by using /t takeoverclaim.
+      - This command must be used at the edge of a town, which is adjacent to your town.
+      - It comes with a customizable cost.
+      - It does not allow an overclaimed Town to be cut into two separate parts.
+      - Important: Towns can only have land stolen from them until they are no longer overclaimed!
+      - Important: There is an option to prevent stealing land too close to a Town's HomeBlock!
+      - Important: It is recommended to only enable this setting when outposts are disabled and min_adjacent_blocks is set to 2 or 3!
+    - TownBlocks that can be stolen will have a [TakeoverClaim Available] added to their ChunkNotification.
+    - Mayors will also see warnings:
+      - on login while being overclaimed, 
+      - when they approach their claim limit while claiming land, 
+      - and when they lose a resident that would put them at risk of being overclaimed.
+    - Closes #6564.
+  - New Config Option: town.overclaiming.being_overclaimed_allows_other_towns_to_steal_land
+    - Default: false
+    - A feature that allows towns which have too many townblocks claimed (overclaimed) ie: 120/100 TownBlocks,
+      to have their land stolen by other towns which are not overclaimed. Using this incentivises Towns to keep
+      their residents from leaving, and will mean that mayors will be more careful about which land they choose
+      to claim.
+      Overclaiming does not allow a town to be split into two separate parts, requiring the Town that is stealing
+      land to work from the outside inwards. 
+      It is highly recommended to only use this on servers where outposts are disabled, and requiring
+      a number of adjacent claims over 1 is enabled. Towns take land using /t takeoverclaim.
+  - New Config Option: town.overclaiming.overclaiming_prevented_by_homeblock_radius
+    - Default: true
+    - While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.
+    - This prevents a town from having townblocks stolen surrounding their homeblocks.
+  - New Config Option: economy.takeoverclaim.price
+    - Default: 100.0
+    - The price to use /t takeoverclaim, when it has been enabled in the config 
+      at town.being_overclaimed_allows_other_towns_to_steal_land
+  - New Command: /town takeoverclaim
+    - Used to a mayor to take over land from an overclaimed town, when allowed in the config.
+    - Towns are considered overclaimed if their townblocks are more than they are allowed, ie: TownBlocks 120/100.
+  - New Permission Node: towny.command.town.takeoverclaim
+    - Child Node of towny.command.town.*
+    - No adjustments need to be made to the townyperms.yml.
+0.99.0.3:
+  - Fix NPE when finding a new mayor, courtesy of Warriorrrr with PR #6616.
+    - Closes #6615.
+  - Fix missing feedback messages when towns that cannot join your nation are being invited.
+    - Closes #6614.
+0.99.0.4:
+  - New Config Option: economy.town_set_mapcolour_cost
+    - Default: 0
+    - The cost of setting a town's mapcolour.
+  - New Config Option: economy.nation_set_mapcolour_cost
+    - Default: 0
+    - The cost of setting a nation's mapcolour.

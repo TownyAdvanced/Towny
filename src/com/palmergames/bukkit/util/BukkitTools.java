@@ -142,6 +142,11 @@ public class BukkitTools {
 	public static World getWorld(UUID worldUID) {
 		return getServer().getWorld(worldUID);
 	}
+
+	public static UUID getWorldUUID(String name) {
+		World world = getWorld(name);
+		return world != null ? world.getUID() : null;
+	}
 	
 	public static Server getServer() {
 		synchronized(server) {

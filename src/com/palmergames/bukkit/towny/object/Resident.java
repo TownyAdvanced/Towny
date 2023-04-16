@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
@@ -45,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -182,6 +182,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return getJail().getJailCellLocations().get(getJailCell());
 	}
 
+	public String getPrimaryRankPrefix() {
+		return TownyPerms.getResidentPrimaryRankPrefix(this);
+	}
+
 	public void setTitle(String title) {
 		this.title = title.trim();
 	}
@@ -301,21 +305,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
 
-		// Use an iterator to be able to keep track of element modifications.
-		Iterator<TownBlock> townBlockIterator = townBlocks.iterator();
-		
-		while (townBlockIterator.hasNext()) {
-			TownBlock townBlock = townBlockIterator.next();
+		// Remove any non-embassy plots owned by the player in the town that was just left.
+		for (TownBlock townBlock : town.getTownBlocks()) {
+			if (townBlock.getType() == TownBlockType.EMBASSY || !townBlock.hasResident(this))
+				continue;
+			
+			if (townBlock.removeResident()) {
+				this.townBlocks.remove(townBlock);
+				townBlock.setPlotPrice(town.getPlotPrice());
 
-			// Do not remove Embassy plots
-			if (townBlock.getType() != TownBlockType.EMBASSY) {
-				
-				// Make sure the element is removed from the iterator, to 
-				// prevent concurrent modification exceptions.
-				townBlockIterator.remove();
-				townBlock.setResident(null);
-				
-				townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotPrice());
 				// Set the plot permissions to mirror the towns.
 				townBlock.setType(townBlock.getType());
 				townBlock.save();
@@ -643,6 +641,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return false;
 	}
 
+	@Nullable
+	public String getHighestPriorityTownRank() {
+		if (getTownRanks().isEmpty())
+			return null;
+		return TownyPerms.getHighestPriorityRank(this, getTownRanks(), r->TownyPerms.getTownRankPermissions(r));
+	}
+
 	public boolean addNationRank(String rank) {
 
 		if (!hasNationRank(rank)) {
@@ -691,21 +696,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	}
 
+	@Nullable
+	public String getHighestPriorityNationRank() {
+		if (getNationRanks().isEmpty())
+			return null;
+		return TownyPerms.getHighestPriorityRank(this, getNationRanks(), r->TownyPerms.getNationRankPermissions(r));
+	}
+
 	public boolean isAlliedWith(Resident otherresident) {
-		if (this.hasNation() && this.hasTown() && otherresident.hasTown() && otherresident.hasNation()) {
-			try {
-				if (this.getTown().getNation().hasAlly(otherresident.getTown().getNation())) {
-					return true;
-				} else {
-					
-					return this.getTown().getNation().equals(otherresident.getTown().getNation());
-				}
-			} catch (NotRegisteredException e) {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		return CombatUtil.isAlly(this, otherresident);
 	}
 
 	@Override
@@ -904,23 +903,22 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	
 	@Nullable
 	public Nation getNationOrNull() {
-		if (hasNation())
-			return getTownOrNull().getNationOrNull();
-		else
+		if (!hasNation())
 			return null;
+		return getTownOrNull().getNationOrNull();
 	}
 	
 	public boolean isOnline() {
 		return BukkitTools.isOnline(getName());
 	}
 
-	@Deprecated
+	@Deprecated // Sometime during 0.98.*.*
 	@ApiStatus.ScheduledForRemoval
 	public int getRespawnProtectionTaskID() {
 		return -1;
 	}
 
-	@Deprecated
+	@Deprecated // Sometime during 0.98.*.*
 	@ApiStatus.ScheduledForRemoval
 	public void setRespawnProtectionTaskID(int respawnProtectionTaskID) {
 		

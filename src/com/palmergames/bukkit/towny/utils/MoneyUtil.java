@@ -81,7 +81,7 @@ public class MoneyUtil {
 			} else {
 				// Deposit into town from a nation member.
 				resident.getAccount().payTo(amount, town, "Town Deposit from Nation member");
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, town + " " + Translatable.of("town_sing")));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_xx_deposited_xx", resident.getName(), amount, Translatable.literal(town.getName() + " ").append(Translatable.of("town_sing"))));
 			}
 			
 			BukkitTools.fireEvent(new TownTransactionEvent(town, transaction));
@@ -144,7 +144,8 @@ public class MoneyUtil {
 	 * @throws TownyException thrown if any of the tests are failed.
 	 */
 	private static void commonTests(int amount, Resident resident, Town town, Location loc, boolean nation, boolean withdraw) throws TownyException {
-		
+		Nation townNation = nation ? town.getNationOrNull() : null; 
+
 		if (!TownyEconomyHandler.isActive())
 			throw new TownyException(Translatable.of("msg_err_no_economy"));
 		
@@ -160,15 +161,15 @@ public class MoneyUtil {
 		if (withdraw && ((nation && !TownySettings.getNationBankAllowWithdrawls()) || (!nation && !TownySettings.getTownBankAllowWithdrawls())))
 			throw new TownyException(Translatable.of("msg_err_withdraw_disabled"));
 		
-		if (!withdraw && (TownySettings.getTownBankCap() > 0 || TownySettings.getNationBankCap() > 0)) {
+		if (!withdraw && ((!nation && TownySettings.getTownBankCap(town) > 0) || (nation && TownySettings.getNationBankCap(townNation) > 0))) {
 			double bankcap = 0;
 			double balance = 0;
-			if (!nation && TownySettings.getTownBankCap() > 0) {
-				bankcap = TownySettings.getTownBankCap();
+			if (!nation && town.getBankCap() > 0) {
+				bankcap = town.getBankCap();
 				balance = town.getAccount().getHoldingBalance();
-			} else if (nation && TownySettings.getNationBankCap() > 0) {
-				bankcap = TownySettings.getNationBankCap();
-				balance = town.getNation().getAccount().getHoldingBalance();
+			} else if (nation && townNation.getBankCap() > 0) {
+				bankcap = townNation.getBankCap();
+				balance = townNation.getAccount().getHoldingBalance();
 			}
 			if (bankcap > 0 && amount + balance > bankcap)
 				throw new TownyException(Translatable.of("msg_err_deposit_capped", bankcap));

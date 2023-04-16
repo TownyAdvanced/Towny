@@ -67,7 +67,7 @@ public abstract class Account implements Nameable {
 	 * @param reason The reason for adding.
 	 * @return boolean indicating success.
 	 */
-	public boolean deposit(double amount, String reason) {
+	public synchronized boolean deposit(double amount, String reason) {
 		if (addMoney(amount)) {
 			notifyObserversDeposit(this, amount, reason);
 			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
@@ -87,7 +87,7 @@ public abstract class Account implements Nameable {
 	 * @param reason The reason for subtracting.
 	 * @return boolean indicating success.
 	 */
-	public boolean withdraw(double amount, String reason) {
+	public synchronized boolean withdraw(double amount, String reason) {
 		if (subtractMoney(amount)) {
 			notifyObserversWithdraw(this, amount, reason);
 			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
@@ -107,17 +107,17 @@ public abstract class Account implements Nameable {
 	 * @param reason The reason for the pay. 
 	 * @return boolean indicating success.
 	 */
-	public boolean payTo(double amount, EconomyHandler collector, String reason) {
+	public synchronized boolean payTo(double amount, EconomyHandler collector, String reason) {
 		return payTo(amount, collector.getAccount(), reason);
 	}
 	
-	protected boolean payToServer(double amount, String reason) {
+	protected synchronized boolean payToServer(double amount, String reason) {
 		notifyObserversDeposit(EconomyAccount.SERVER_ACCOUNT, amount, reason);
 		// Put it back into the server.
 		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
 	}
 	
-	protected boolean payFromServer(double amount, String reason) {
+	protected synchronized boolean payFromServer(double amount, String reason) {
 		notifyObserversWithdraw(EconomyAccount.SERVER_ACCOUNT, amount, reason);
 		// Remove it from the server economy.
 		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
@@ -131,7 +131,7 @@ public abstract class Account implements Nameable {
 	 * @param reason The reason for the pay.
 	 * @return boolean indicating success.
 	 */
-	public boolean payTo(double amount, Account collector, String reason) {
+	public synchronized boolean payTo(double amount, Account collector, String reason) {
 		
 		if (amount > getHoldingBalance()) {
 			return false;
@@ -172,7 +172,7 @@ public abstract class Account implements Nameable {
 		}
 	}
 
-	public double getHoldingBalance() {
+	public synchronized double getHoldingBalance() {
 		return getHoldingBalance(true);
 	}
 	
@@ -182,7 +182,7 @@ public abstract class Account implements Nameable {
 	 * @param setCache when True the account will have its cachedbalance set.
 	 * @return The amount in this account.
 	 */
-	public double getHoldingBalance(boolean setCache) {
+	public synchronized double getHoldingBalance(boolean setCache) {
 		double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 		if (setCache)
 			cachedBalance.setBalance(balance);
@@ -195,7 +195,7 @@ public abstract class Account implements Nameable {
 	 * @param amount currency to check for
 	 * @return true if there is enough.
 	 */
-	public boolean canPayFromHoldings(double amount) {
+	public synchronized boolean canPayFromHoldings(double amount) {
 		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
 	}
 
@@ -308,6 +308,8 @@ public abstract class Account implements Nameable {
 		}
 
 		void updateCache() {
+			time = System.currentTimeMillis();
+			
 			if (!TownySettings.isEconomyAsync()) // Some economy plugins don't handle things async, luckily we have a config option for this such case. 
 				setBalance(getHoldingBalance());
 			else
@@ -334,7 +336,7 @@ public abstract class Account implements Nameable {
 	 * @param refreshIfStale when true, if the cache is stale it will update.
 	 * @return balance {@link Double} which is from a {@link CachedBalance#balance}.
 	 */
-	public double getCachedBalance(boolean refreshIfStale) {
+	public synchronized double getCachedBalance(boolean refreshIfStale) {
 		if (refreshIfStale && cachedBalance.isStale())
 			cachedBalance.updateCache();
 

@@ -7,7 +7,7 @@
     <groupId>com.palmergames.bukkit.towny</groupId>
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.98.6.6</version>
+    <version>0.99.0.4</version>
 
     <licenses>
         <license>
@@ -59,7 +59,7 @@
         </repository>
         <repository>
             <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.3-R0.1-SNAPSHOT</version>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -156,20 +156,20 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.19.0</version>
+            <version>2.20.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.2</version>
+            <version>2.11.3</version>
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.22</version>
+            <version>1.23.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -179,18 +179,28 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>24.0.0</version>
+            <version>24.0.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.2.0</version>
+            <version>4.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-plain</artifactId>
+            <version>4.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>4.13.1</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -206,19 +216,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.12.0</version>
-        </dependency>
-        <dependency>
             <groupId>solar.squares</groupId>
             <artifactId>pixel-width-core</artifactId>
             <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.12.0</version>
         </dependency>
     </dependencies>
     <pluginRepositories>
@@ -226,181 +226,200 @@
             <id>apache.snapshots</id>
             <url>https://repository.apache.org/snapshots/</url>
         </pluginRepository>
+        <pluginRepository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <configuration>
-                    <release>8</release>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <compilerArgs>
-                        <arg>-Xplugin:jabel</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <source>16</source>
-                    <doclint>all,-missing</doclint>
-                    <doctitle>Towny - ${project.version}</doctitle>
-                    <groups>
-                        <group>
-                            <title>Events</title>
-                            <packages>com.palmergames.bukkit.towny.event*</packages>
-                        </group>
-                        <group>
-                            <title>Objects</title>
-                            <packages>com.palmergames.bukkit.towny.object*</packages>
-                        </group>
-                        <group>
-                            <title>Tasks</title>
-                            <packages>com.palmergames.bukkit.towny.regen*:com.palmergames.bukkit.towny.tasks</packages>
-                        </group>
-                        <group>
-                            <title>Plugin</title>
-                            <packages>com.palmergames.bukkit.towny.command*:com.palmergames.bukkit.towny.listeners*:com.palmergames.bukkit.towny:com.palmergames.bukkit.config*:com.palmergames.bukkit.towny.db*</packages>
-                        </group>
-                        <group>
-                            <title>Player</title>
-                            <packages>com.palmergames.bukkit.towny.confirmations:com.palmergames.bukkit.towny.invites:com.palmergames.bukkit.towny.conversation:com.palmergames.bukkit.towny.huds</packages>
-                        </group>
-                        <group>
-                            <title>Hooks</title>
-                            <packages>com.palmergames.bukkit.towny.permissions:com.palmergames.bukkit.towny.hooks:com.palmergames.bukkit.towny.chat*</packages>
-                        </group>
-                        <group>
-                            <title>Exceptions</title>
-                            <packages>com.palmergames.bukkit.towny.exceptions*:com.palmergames.bukkit.towny.invites.exceptions</packages>
-                        </group>
-                        <group>
-                            <title>Utilities</title>
-                            <packages>com.palmergames.annotations:com.palmergames.util:com.palmergames.bukkit.util:com.palmergames.bukkit.towny.utils</packages>
-                        </group>
-                    </groups>
-                </configuration>
-            </plugin>
-            <plugin>  <!-- Create sources.jar -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
-                <configuration>
-                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                    <artifactSet>
-                        <includes>
-                            <include>net.kyori:adventure-platform-bukkit</include>
-                            <include>net.kyori:adventure-platform-api</include>
-                            <include>net.kyori:adventure-api</include>
-                            <include>net.kyori:adventure-text-serializer-craftbukkit</include>
-                            <include>net.kyori:adventure-platform-facet</include>
-                            <include>net.kyori:adventure-text-serializer-gson</include>
-                            <include>net.kyori:adventure-text-serializer-legacy</include>
-                            <include>net.kyori:adventure-key</include>
-                            <include>net.kyori:adventure-text-serializer-gson-legacy-impl</include>
-                            <include>net.kyori:adventure-text-serializer-bungeecord</include>
-                            <include>net.kyori:adventure-platform-viaversion</include>
-                            <include>net.kyori:adventure-nbt</include>
-                            <include>net.kyori:examination-api</include>
-                            <include>net.kyori:examination-string</include>
-                            <include>net.kyori:adventure-text-serializer-plain</include>
-                            <include>net.kyori:adventure-text-minimessage</include>
-                            <include>com.zaxxer:HikariCP</include>
-                            <include>io.papermc:paperlib</include>
-                            <include>org.apache.commons:commons-compress</include>
-                            <include>org.apache.commons:commons-text</include>
-                            <include>org.bstats:bstats-bukkit</include>
-                            <include>org.bstats:bstats-base</include>
-                            <include>org.json:json</include>
-                            <include>solar.squares:pixel-width-core</include>
-                        </includes>
-                    </artifactSet>
-                    <relocations>
-                        <relocation>
-                            <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>com.palmergames.paperlib</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>com.palmergames.hikaricp</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.commons.compress</pattern>
-                            <shadedPattern>com.palmergames.compress</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.apache.commons.text</pattern>
-                            <shadedPattern>com.palmergames.text</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.kyori.adventure</pattern>
-                            <shadedPattern>com.palmergames.adventure</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>net.kyori.examination</pattern>
-                            <shadedPattern>com.palmergames.examination</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>org.bstats</pattern>
-                            <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>solar.squares.pixelwidth</pattern>
-                            <shadedPattern>com.palmergames.bukkit.towny.libs.pixelwidth</shadedPattern>
-                        </relocation>
-                    </relocations>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.MF</exclude>
-                            </excludes>
-                        </filter>
-                        <filter>
-                            <artifact>net.kyori:*</artifact>
-                            <excludes>META-INF/versions/9/module-info.class</excludes>
-                        </filter>
-                    </filters>
-                    <minimizeJar>true</minimizeJar>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <release>8</release>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <compilerArgs>
+                            <arg>-Xplugin:jabel</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.5.0</version>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <source>16</source>
+                        <doclint>all,-missing</doclint>
+                        <doctitle>Towny - ${project.version}</doctitle>
+                        <groups>
+                            <group>
+                                <title>Events</title>
+                                <packages>com.palmergames.bukkit.towny.event*</packages>
+                            </group>
+                            <group>
+                                <title>Objects</title>
+                                <packages>com.palmergames.bukkit.towny.object*</packages>
+                            </group>
+                            <group>
+                                <title>Tasks</title>
+                                <packages>com.palmergames.bukkit.towny.regen*:com.palmergames.bukkit.towny.tasks</packages>
+                            </group>
+                            <group>
+                                <title>Plugin</title>
+                                <packages>com.palmergames.bukkit.towny.command*:com.palmergames.bukkit.towny.listeners*:com.palmergames.bukkit.towny:com.palmergames.bukkit.config*:com.palmergames.bukkit.towny.db*</packages>
+                            </group>
+                            <group>
+                                <title>Player</title>
+                                <packages>com.palmergames.bukkit.towny.confirmations:com.palmergames.bukkit.towny.invites:com.palmergames.bukkit.towny.conversation:com.palmergames.bukkit.towny.huds</packages>
+                            </group>
+                            <group>
+                                <title>Hooks</title>
+                                <packages>com.palmergames.bukkit.towny.permissions:com.palmergames.bukkit.towny.hooks:com.palmergames.bukkit.towny.chat*</packages>
+                            </group>
+                            <group>
+                                <title>Exceptions</title>
+                                <packages>com.palmergames.bukkit.towny.exceptions*:com.palmergames.bukkit.towny.invites.exceptions</packages>
+                            </group>
+                            <group>
+                                <title>Utilities</title>
+                                <packages>com.palmergames.annotations:com.palmergames.util:com.palmergames.bukkit.util:com.palmergames.bukkit.towny.utils</packages>
+                            </group>
+                        </groups>
+                    </configuration>
+                </plugin>
+                <plugin>  <!-- Create sources.jar -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.4.1</version>
+                    <configuration>
+                        <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                        <artifactSet>
+                            <includes>
+                                <include>net.kyori:adventure-platform-bukkit</include>
+                                <include>net.kyori:adventure-platform-api</include>
+                                <include>net.kyori:adventure-api</include>
+                                <include>net.kyori:adventure-text-serializer-craftbukkit</include>
+                                <include>net.kyori:adventure-platform-facet</include>
+                                <include>net.kyori:adventure-text-serializer-gson</include>
+                                <include>net.kyori:adventure-text-serializer-legacy</include>
+                                <include>net.kyori:adventure-key</include>
+                                <include>net.kyori:adventure-text-serializer-gson-legacy-impl</include>
+                                <include>net.kyori:adventure-text-serializer-bungeecord</include>
+                                <include>net.kyori:adventure-platform-viaversion</include>
+                                <include>net.kyori:adventure-nbt</include>
+                                <include>net.kyori:examination-api</include>
+                                <include>net.kyori:examination-string</include>
+                                <include>net.kyori:adventure-text-serializer-plain</include>
+                                <include>net.kyori:adventure-text-minimessage</include>
+                                <include>com.zaxxer:HikariCP</include>
+                                <include>io.papermc:paperlib</include>
+                                <include>org.apache.commons:commons-compress</include>
+                                <include>org.apache.commons:commons-text</include>
+                                <include>org.bstats:bstats-bukkit</include>
+                                <include>org.bstats:bstats-base</include>
+                                <include>org.json:json</include>
+                                <include>solar.squares:pixel-width-core</include>
+                            </includes>
+                        </artifactSet>
+                        <relocations>
+                            <relocation>
+                                <pattern>io.papermc.lib</pattern>
+                                <shadedPattern>com.palmergames.paperlib</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>com.zaxxer.hikari</pattern>
+                                <shadedPattern>com.palmergames.hikaricp</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>org.apache.commons.compress</pattern>
+                                <shadedPattern>com.palmergames.compress</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>org.apache.commons.text</pattern>
+                                <shadedPattern>com.palmergames.text</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>net.kyori.adventure</pattern>
+                                <shadedPattern>com.palmergames.adventure</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>net.kyori.examination</pattern>
+                                <shadedPattern>com.palmergames.examination</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>org.bstats</pattern>
+                                <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>solar.squares.pixelwidth</pattern>
+                                <shadedPattern>com.palmergames.bukkit.towny.libs.pixelwidth</shadedPattern>
+                            </relocation>
+                        </relocations>
+                        <filters>
+                            <filter>
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <exclude>META-INF/*.MF</exclude>
+                                </excludes>
+                            </filter>
+                            <filter>
+                                <artifact>net.kyori:*</artifact>
+                                <excludes>META-INF/versions/9/module-info.class</excludes>
+                            </filter>
+                        </filters>
+                        <minimizeJar>true</minimizeJar>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.TownyAdvanced</groupId>
+                    <artifactId>bridger</artifactId>
+                    <version>1.7.1.Final</version>
+                    <executions>
+                        <!-- run after "compile", runs bridger on main classes -->
+                        <execution>
+                            <id>weave</id>
+                            <phase>process-classes</phase>
+                            <goals>
+                                <goal>transform</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
         <sourceDirectory>src</sourceDirectory>
         <resources>
             <resource>
@@ -418,7 +437,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.4.1</version>
+                        <version>3.5.0</version>
                         <executions>
                             <execution>
                                 <phase>none</phase>

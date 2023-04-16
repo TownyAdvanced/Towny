@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -42,14 +41,6 @@ import java.util.List;
  * 
  */
 public class CombatUtil {
-
-	/**
-	 * @deprecated As of 0.97.5.9, please use {@link #preventDamageCall(Entity, Entity, DamageCause)}
-	 */
-	@Deprecated
-	public static boolean preventDamageCall(Towny plugin, Entity attacker, Entity defender, DamageCause cause) {
-		return preventDamageCall(attacker, defender, cause);
-	}
 
 	/**
 	 * Tests the attacker against defender to see if we need to cancel
@@ -547,19 +538,6 @@ public class CombatUtil {
 	}
 
 	/**
-	 * Can resident a attack resident b?
-	 * 
-	 * @param a - Resident A in comparison
-	 * @param b - Resident B in comparison
-	 * @return true if they can attack.
-	 * @deprecated since 0.97.3.0 use {@link CombatUtil#isEnemy(String, String)} or {@link CombatUtil#isEnemy(Town, Town)}  
-	 */
-	@Deprecated
-	public static boolean canAttackEnemy(String a, String b) {
-		return isEnemy(a, b);
-	}
-
-	/**
 	 * Test if all the listed nations are allies
 	 * 
 	 * @param possibleAllies - List of Nations (List&lt;Nation&gt;)
@@ -660,7 +638,7 @@ public class CombatUtil {
 	public static boolean isEnemyTownBlock(Player player, WorldCoord worldCoord) {
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident != null && resident.hasTown() && worldCoord.hasTownBlock())
-			return CombatUtil.isEnemy(resident.getTownOrNull(), worldCoord.getTownOrNull());
+			return CombatUtil.isEnemy(worldCoord.getTownOrNull(), resident.getTownOrNull());
 		return false;
 	}
 	

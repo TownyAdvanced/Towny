@@ -12,10 +12,14 @@ import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownMayorChangedEvent;
+import com.palmergames.bukkit.towny.event.town.TownMayorChosenBySuccessionEvent;
 import com.palmergames.bukkit.towny.event.town.TownRemoveAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownRemoveEnemiedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownUnconquerEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -25,6 +29,7 @@ import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
@@ -189,7 +194,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (!hasResident(mayor))
 			throw new TownyException(Translation.of("msg_err_mayor_doesnt_belong_to_town"));
 		
-		setMayor(mayor);
+		setMayor(mayor, false);
 	}
 	
 	/**
@@ -198,12 +203,19 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param mayor - Resident to become mayor.
 	 */
 	public void setMayor(Resident mayor) {
+		setMayor(mayor, true);
+	}
+	
+	public void setMayor(Resident mayor, boolean callEvent) {
 		if (!hasResident(mayor))
 			return;
-				
+
+		if (callEvent)
+			BukkitTools.fireEvent(new TownMayorChangedEvent(this.mayor, mayor));
+
 		this.mayor = mayor;
-		
-		TownyPerms.assignPermissions(mayor, null);	
+
+		TownyPerms.assignPermissions(mayor, null);
 	}
 
 	public String getFounder() {
@@ -803,47 +815,30 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public void findNewMayor() {
 		for (String rank : TownySettings.getOrderOfMayoralSuccession()) {
-			if (findNewMayor(rank)) {
+			if (findNewMayor(getRank(rank))) {
 				return;
 			}
 		}
 		// No one has the rank to succeed the mayor, choose a resident.
-		findNewMayorCatchAll();
+		findNewMayor(getResidents());
 	}
 
 	/**
-	 * Tries to find a new mayor from among the town's residents with the rank specified.
+	 * Tries to find a new mayor from ths list of potential residenst.
 	 * 
-	 * @param rank - the rank being checked for potential mayors
-	 * @return found - whether or not a new mayor was found
+	 * @param potentialResidents the List of Residents that could be mayor.
+	 * @return true if a new mayor is selected.
 	 */
-	private boolean findNewMayor(String rank) {
-		boolean found = false;
-		for (Resident newMayor : getRank(rank)) {
-			if ((newMayor != mayor) && (newMayor.hasTownRank(rank))) {  // The latter portion seems redundant.
-				setMayor(newMayor);
-				found = true;
-				break;
-			}
+	private boolean findNewMayor(List<Resident> potentialResidents) {
+		for (Resident newMayor : potentialResidents) {
+			if (newMayor.equals(mayor))
+				continue;
+
+			TownMayorChosenBySuccessionEvent tmcbse = new TownMayorChosenBySuccessionEvent(mayor, newMayor, potentialResidents);
+			setMayor(tmcbse.getNewMayor());
+			return true;
 		}
-		return found;
-	}
-	
-	/**
-	 * Tries to find a new mayor from among the town's residents.
-	 * 
-	 * @return found - whether or not a new mayor was found
-	 */
-	private boolean findNewMayorCatchAll() {
-		boolean found = false;
-		for (Resident newMayor : getResidents()) {
-			if (newMayor != mayor) {
-				setMayor(newMayor);
-				found = true;
-				break;
-			}
-		}
-		return found;
+		return false;
 	}
 
 	@Override
@@ -884,6 +879,8 @@ public class Town extends Government implements TownBlockOwner {
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
 				removeOutpostSpawn(townBlock.getCoord());
+				townBlock.setOutpost(false);
+				townBlock.save();
 			}
 			if (townBlock.isJail()) {
 				removeJail(townBlock.getJail());
@@ -1085,7 +1082,7 @@ public class Town extends Government implements TownBlockOwner {
 	public void collect(double amount) {
 		
 		if (TownyEconomyHandler.isActive()) {
-			double bankcap = TownySettings.getTownBankCap();
+			double bankcap = getBankCap();
 			if (bankcap > 0 && amount + getAccount().getHoldingBalance() > bankcap) {
 				TownyMessaging.sendPrefixedTownMessage(this, Translatable.of("msg_err_deposit_capped", bankcap));
 				return;
@@ -1177,19 +1174,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean isAlliedWith(Town othertown) {
-		if (this.hasNation() && othertown.hasNation()) {
-			try {
-				if (this.getNation().hasAlly(othertown.getNation())) {
-					return true;
-				} else {
-					return this.getNation().equals(othertown.getNation());
-				}
-			} catch (NotRegisteredException e) {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		return CombatUtil.isAlly(this, othertown);
 	}
 
 	public int getOutpostLimit() {
@@ -1223,9 +1208,24 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeMetaData(@NotNull CustomDataField<?> md) {
 		this.removeMetaData(md, true);
 	}
-	
+
 	public void setConquered(boolean conquered) {
+		setConquered(conquered, true);
+	}
+	
+	public void setConquered(boolean conquered, boolean callEvent) {
+		if (conquered == this.isConquered)
+			return;
+
 		this.isConquered = conquered;
+
+		if (!callEvent)
+			return;
+
+		if (this.isConquered)
+			BukkitTools.fireEvent(new TownConqueredEvent(this));
+		else
+			BukkitTools.fireEvent(new TownUnconquerEvent(this));
 	}
 	
 	public boolean isConquered() {
@@ -1355,7 +1355,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public double getBankCap() {
-		return TownySettings.getTownBankCap();
+		return TownySettings.getTownBankCap(this);
 	}
 	
 	public World getWorld() {

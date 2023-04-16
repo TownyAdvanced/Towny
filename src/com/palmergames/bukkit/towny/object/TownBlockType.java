@@ -1,9 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.util.StringMgmt;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,15 +55,6 @@ public class TownBlockType {
 		return data.getTax(town);
 	}
 
-	/**
-	 * @deprecated since 0.97.5.4.
-	 * @return 0.
-	 */
-	@Deprecated
-	public int getId() {
-		return 0;
-	}
-
 	public String getAsciiMapKey() {
 		return data.getMapKey();
 	}
@@ -104,24 +92,6 @@ public class TownBlockType {
 		legacyLookupMap.put(9, "bank");
 	}
 
-	/**
-	 * @deprecated As of 0.97.5.4, please use {@link TownBlockTypeHandler#getType(String)} instead.
-	 */
-	@Nullable
-	@Deprecated
-	public static TownBlockType lookup(int id) {
-		return TownBlockTypeHandler.getType(legacyLookupMap.getOrDefault(id, "default"));
-	}
-
-	/**
-	 * @deprecated As of 0.97.5.4, please use {@link TownBlockTypeHandler#getType(String)} instead.
-	 */
-	@Nullable
-	@Deprecated
-	public static TownBlockType lookup(@NotNull String name) {
-		return TownBlockTypeHandler.getType(name);
-	}
-	
 	public TownBlockData getData() {
 		return data;
 	}

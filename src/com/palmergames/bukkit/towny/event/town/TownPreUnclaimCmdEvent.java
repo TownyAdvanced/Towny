@@ -5,6 +5,10 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+
+import java.util.List;
+
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,19 +29,22 @@ public class TownPreUnclaimCmdEvent extends CancellableTownyEvent {
 	private final Town town;
 	private final Resident resident;
 	private final TownyWorld townyWorld;
+	private final List<WorldCoord> worldCoords;
 
 	/**
 	 * Constructs the TownPreUnclaimCmdEvent and stores data an external war plugin
 	 * may use.
 	 *
-	 * @param town     The {@link Town} about to process un-claiming (a) plot(s).
-	 * @param resident The {@link Resident} who initiated the command.
-	 * @param world    The {@link TownyWorld} in which the resident is in.
+	 * @param town      The {@link Town} about to process un-claiming (a) plot(s).
+	 * @param resident  The {@link Resident} who initiated the command.
+	 * @param world     The {@link TownyWorld} in which the resident is in.
+	 * @param selection The List of {@link WorldCoord} which will be unclaimed.
 	 */
-	public TownPreUnclaimCmdEvent(Town town, Resident resident, TownyWorld world) {
+	public TownPreUnclaimCmdEvent(Town town, Resident resident, TownyWorld world, List<WorldCoord> selection) {
 		this.town = town;
 		this.resident = resident;
 		this.townyWorld = world;
+		this.worldCoords = selection;
 		setCancelMessage(Translation.of("msg_err_town_unclaim_canceled"));
 	}
 
@@ -60,6 +67,13 @@ public class TownPreUnclaimCmdEvent extends CancellableTownyEvent {
 	 */
 	public TownyWorld getTownyWorld() {
 		return townyWorld;
+	}
+
+	/**
+	 * @return Gets the List of {@link WorldCoord} which will be unclaimed if this event is not cancelled.
+	 */
+	public List<WorldCoord> getUnclaimSelection() {
+		return worldCoords;
 	}
 
 	public static HandlerList getHandlerList() {
