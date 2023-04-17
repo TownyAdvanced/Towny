@@ -455,7 +455,7 @@ invite_plu: 'Запрошення'
 invite_sent_by: 'Запрошення надіслано гравцем'
 invite_help_1: 'Прийняти запрошення до міста'
 invite_help_2: 'Відхилити запрошення до міста'
-invite_help_4: 'Decline all invites to join a town'
+invite_help_4: 'Відхилити всі запрошення до міст'
 invite_help_3: 'Всі ваші запрошення'
 town_invite_help_1: 'Запросити гравця до міста'
 town_invite_help_2: 'Скасувати запрошення, яке ви надіслали гравцю'
@@ -473,7 +473,7 @@ nation_ally_help_4: 'Всі запити союзників, які ви отр�
 nation_ally_help_5: 'Прийняти запит щодо союзу із нацією'
 nation_ally_help_6: 'Відхилити запит щодо союзу із нацією'
 nation_ally_help_7: 'Відхилити запит щодо союзу'
-msg_player_denied_all_invites: "All of your received invites have been denied."
+msg_player_denied_all_invites: "Всі запрошення у міста відмовлені."
 msg_err_player_no_invites: '&сУ вас нема жодних запрошень!'
 msg_err_player_has_multiple_invites: '&cУ вас є декілька запрошень, будь ласка, укажіть конкретно!'
 msg_err_player_has_too_many_invites: '%s має занадто багато запрошень, попросіть його відмовитися від деяких, перед тим як запрошувати знову.'
@@ -586,7 +586,7 @@ jailed_in_town: ' у місті: %s'
 status_friends: 'Друзі'
 rank_list_title: '%s Рейтинговий список'
 rank_list_mayor: 'Мер:'
-status_title_capital: '&b(Capital)'
+status_title_capital: '&b(Столиця)'
 status_title_pvp: '&4(PVP)'
 status_title_open: '&b(Відкр.)'
 status_town_board: 'Дошка оголошень:'
@@ -606,7 +606,7 @@ status_nation_tax: 'Національний податок:'
 status_nation_towns: 'Міста'
 status_nation_allies: 'Союзники'
 status_nation_enemies: 'Вороги'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: 'Народи, які вважають вашу націю ворогом'
 status_world_claimable: '&aПривласнюваний'
 status_world_noclaims: '&cНеПривласнюваний'
 status_world_forcepvp: 'ПримусовеPVP:'
@@ -1501,9 +1501,9 @@ msg_cost_spawn_rtp: '&bВи заплатили %s за телепорт до в�
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Ось-ось вас буде телепортовано до ділянки, яка продається в %s. Використавши ''/plot claim'', ви зможете купити ділянку і приєднатися до міста.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "У місті %s є ділянки, які ви можете придбати, ви хотіли б телепортуватися на ділянку, яку ви можете придбати прямо зараз?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Вас телепортували на ділянку, яку ви можете придбати. Використовуйте '/plot claim', якщо ви бажаєте отримати ділянку."
 #Used in the town's status screen to display plots
 status_plot_string: 'Ділянки'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1611,75 +1611,75 @@ msg_town_plots_town_bought: ' <aqua>[Придбано: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Бонус: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: '<aqua>[Бонус нації: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Земля, що належить місту: <green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green> Тип: <green>Приналежність гравця <gray>/ <aqua>Продається <gray>/ <yellow>Всього'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Щоденний дохід'
 #Part of the /town plots output.
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
-confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+confirmation_msg_trusttown_consequences: 'Ви збираєтесь надати повні дозволи на забудову цілого міста. Це означає, що мер міста зможе вирішувати, хто отримає дозвіл на будівництво та руйнування у вашому місті, додаючи мешканців. Якщо це місто відкрите, то будь-хто може приєднатися і отримати повний доступ до вашого міста. Ви впевнені, що хочете довіряти всім жителям (в тому числі майбутнім) цього міста?'
 #Message shown when a player uses a command that is blocked because their location has an active war.
-msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+msg_command_war_blocked: 'Ви не можете керувати цією командою, тому що ваше місто перебуває у стані війни.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
-msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+msg_cant_unclaim_outsider_in_town: 'У цьому кварталі є чужинець, ви не можете відмовитися від цього кварталу!'
 #Message shown when a player is making a town too soon after deleting one.
-msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Ви не можете створити нове місто, залишилося %s секунд до завершення тайм-ауту.'
 #Message shown when a player is claiming land too soon after unclaiming it.
-msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Ви не можете претендувати на цей таунблок: %s, %s секунд залишилося на охолодження.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
-msg_founder_set: 'The town of %s has had the founder set to %s.'
+msg_founder_set: 'У місті %s було встановлено засновника %s.'
 #Message shown when toggling town allowed to war admin setting
-msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+msg_town_allowedtowar_setting_set_to: 'Для міста %s було встановлено режим дозволеної війни на %s.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
-confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+confirmation_did_you_want_to_unclaim_all: 'Ви впевнені, що хочете відмовитися від усієї своєї землі? (Ваш житловий квартал не залишиться непотрібний.)'
 #Message shown after a player unclaims all their land.
-msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
-msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
-msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
-msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+msg_you_have_unclaimed_everything_but_your_homeblock: "Ви вилучили все, окрім домашнього блоку. Щоб вилучити свій домашній блок, ви маєте спочатку встановити новий домашній блок за допомогою команди '/t set homeblock'."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Ви впевнені, що хочете передати національну власність %s? Ця дія є незворотною!"
+msg_warn_town_already_capital: "<red>Місто %s вже є столицею країни."
+msg_min_adjacent_blocks: 'Ви повинні мати принаймні %s сусідніх міських кварталів. Є тільки %s.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
-msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+msg_plot_claim_consider_evict_instead: ', можливо ви шукаєте / плануєте виселення замість цього?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "You are not known to Towny."
+msg_you_are_unknown: "Ви не відомі Тауні."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
-msg_townyobject_unknown: "%s is not known to Towny."
+msg_townyobject_unknown: "%s не відоме Тауні."
 #Shown when a resident is unknown to Towny.
-msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_resident_unknown: "%s не є визнаним резидентом."
 #Shown when a town is unknown to Towny.
-msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_town_unknown: "%s не є визнаним містом."
 #Shown when a nation is unknown to Towny.
-msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_nation_unknown: "%s не є визнаною нацією."
 #Shown when a resident doesn't belong to a town.
-msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_town: "%s не належить жодному місту."
 #Shown when a town doesn't belong to a nation.
-msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+msg_err_townyobject_x_has_no_nation: "%s не належить до жодної нації."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
-msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+msg_err_townblock_has_no_claimedat_data: "Немає даних про те, коли цей квартал був захоплений."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "Вам потрібні %s, щоб заплатити."
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+msg_err_amount_must_be_greater_than_zero: "Сума повинна бути більшою за нуль."
 #Message shown when taking over claims is disabled on a server.
-msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+msg_err_taking_over_claims_is_not_enabled: "На цьому сервері не ввімкнено перехоплення претензій."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "Цей ТаунБлок не може бути захоплений, місто, якому він належить, не є надмірно затребуваним."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "Ви не можете зробити цю заяву, тому що це зробить цей таунблок вашим домашнім блоком, а це не дозволено."
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "Інший плагін зупинив ваше захоплення цієї землі."
 #Confirmation shown when taking over a claim.
-confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+confirmation_you_are_about_to_take_over_a_claim: "Ви збираєтеся придбати право вимоги, що належить %s, за ціною: %s. Ви хочете продовжити?"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
-msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+msg_warning_you_are_almost_out_of_townblocks: "Попередження: Ви майже використали всі наявні міські квартали, на які можна претендувати. Якщо ви втратите жителя, ви ризикуєте тим, що інші міста зможуть вкрасти міські квартали у вашого міста."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
-msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+msg_warning_your_town_is_overclaimed: "Попередження: На ваше місто надто багато претензій. Якщо у вас занадто багато заявлених кварталів, то інші міста можуть захопити ділянки вашого міста, тому подумайте про те, щоб відмовитися від деяких земельних ділянок."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: "<red>[Позов про поглинання доступний]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "Ви не можете захопити цю ділянку, тому що це розділить місто на два сегменти. Вам доведеться зазіхати з іншого боку."
