@@ -8607,3 +8607,4 @@ v0.92.0.11:
     - Default: false
     - When a resident joins a town, should they be prompted to use spawn to the town?
     - This requires them to not already be standing in the town, and also to be able to use /t spawn and whatever costs may be associated with it.
+  - Update sql schema class to be more modern with much cleaner code, in prep for the transition to a UUID-keyed database.

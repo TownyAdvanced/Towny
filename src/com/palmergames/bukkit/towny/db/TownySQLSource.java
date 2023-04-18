@@ -490,7 +490,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name");
 		
 		private String tableName;
+		@SuppressWarnings("unused")
 		private String queryString;
+		@SuppressWarnings("unused")
 		private String primaryKey;
 
 		TownyDBTableType(String tableName, String queryString, String primaryKey) {
