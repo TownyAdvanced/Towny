@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
@@ -62,7 +63,7 @@ import java.util.stream.Collectors;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
 
-	private final Queue<SQL_Task> queryQueue = new ConcurrentLinkedQueue<>();
+	private final Queue<SQLTask> queryQueue = new ConcurrentLinkedQueue<>();
 	private boolean isPolling = false;
 	private BukkitTask task = null;
 
@@ -156,7 +157,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Initialise database Schema.
 		 */
-		SQL_Schema.initTables(cntx, db_name);
+		SQLSchema.initTables(cntx);
 
 		/*
 		 * Start our Async queue for pushing data to the database.
@@ -169,7 +170,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			try {
 				while (!TownySQLSource.this.queryQueue.isEmpty()) {
 
-					final SQL_Task query = TownySQLSource.this.queryQueue.poll();
+					final SQLTask query = TownySQLSource.this.queryQueue.poll();
 					if (query == null)
 						break;
 
@@ -194,7 +195,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		// Make sure that *all* tasks are saved before shutting down.
 		while (!queryQueue.isEmpty()) {
-			SQL_Task query = TownySQLSource.this.queryQueue.poll();
+			SQLTask query = TownySQLSource.this.queryQueue.poll();
 
 			if (query.update) {
 				TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
@@ -259,7 +260,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 * Make sure we only execute queries in async
 		 */
 
-		this.queryQueue.add(new SQL_Task(tb_name, args, keys));
+		this.queryQueue.add(new SQLTask(tb_name, args, keys));
 
 		return true;
 
@@ -424,7 +425,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		// Make sure we only execute queries in async
 
-		this.queryQueue.add(new SQL_Task(tb_name, args));
+		this.queryQueue.add(new SQLTask(tb_name, args));
 
 		return true;
 
@@ -473,11 +474,49 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		if (!getContext())
 			return false;
 
-		SQL_Schema.cleanup(cntx, db_name);
+		SQLSchema.cleanup(cntx);
 
 		return true;
 	}
 	
+	public enum TownyDBTableType {
+		JAIL("JAILS", "SELECT uuid FROM ", "uuid"),
+		PLOTGROUP("PLOTGROUPS", "SELECT groupID FROM ", "groupID"),
+		RESIDENT("RESIDENTS", "SELECT name FROM ", "name"),
+		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", "", "uuid"),
+		TOWN("TOWNS", "SELECT name FROM ", "name"),
+		NATION("NATIONS", "SELECT name FROM ", "name"),
+		WORLD("WORLDS", "SELECT name FROM ", "name"),
+		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name");
+		
+		private String tableName;
+		private String queryString;
+		private String primaryKey;
+
+		TownyDBTableType(String tableName, String queryString, String primaryKey) {
+			this.tableName = tableName;
+			this.queryString = queryString;
+			this.primaryKey = primaryKey;
+		}
+		
+		public String tableName() {
+			return tableName;
+		}
+		
+		private String getSingular() {
+			// Hibernated Residents are never loaded so this method is never called on them.
+			return tableName.substring(0, tableName.length()-1).toLowerCase(Locale.ROOT);
+		}
+		
+		public String getSaveLocation(String rowKeyName) {
+			return TownySettings.getSQLTablePrefix() + tableName + File.separator + rowKeyName;
+		}
+		
+		public String getLoadErrorMsg(UUID uuid) {
+			return "Loading Error: Could not read the " + getSingular() + " with UUID '" + uuid + "' from the " + tableName + " table.";
+		}
+	}
+
 	/*
 	 * Load keys
 	 */
