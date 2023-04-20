@@ -2600,18 +2600,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 2)
 			throw new TownyException("Eg: /town set mapcolor brown.");
 
-		String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+		String color = StringMgmt.join(StringMgmt.remFirstArg(split), " ").toLowerCase(Locale.ROOT);
 
-		if (!TownySettings.getTownColorsMap().containsKey(line.toLowerCase(Locale.ROOT)))
+		if (!TownySettings.getTownColorsMap().containsKey(color))
 			throw new TownyException(Translatable.of("msg_err_invalid_nation_map_color", TownySettings.getTownColorsMap().keySet().toString()));
 
-		Confirmation.runOnAccept(()-> {
-			town.setMapColorHexCode(TownySettings.getTownColorsMap().get(line.toLowerCase(Locale.ROOT)));
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_map_color_changed", line.toLowerCase(Locale.ROOT)));
-		})
-		.setTitle(Translatable.of("msg_confirm_purchase", TownySettings.getTownSetMapColourCost()))
-		.setCost(new ConfirmationTransaction(()-> TownySettings.getTownSetMapColourCost(), town.getAccount(), "Cost of setting town map color."))
-		.sendTo(sender);
+		if (TownySettings.getTownSetMapColourCost() > 0)
+			Confirmation
+				.runOnAccept(()-> setTownMapColor(town, color))
+				.setTitle(Translatable.of("msg_confirm_purchase", TownySettings.getTownSetMapColourCost()))
+				.setCost(new ConfirmationTransaction(()-> TownySettings.getTownSetMapColourCost(), town.getAccount(), "Cost of setting town map color."))
+				.sendTo(sender);
+		else 
+			setTownMapColor(town, color);
+	}
+
+	private static void setTownMapColor(Town town, String color) {
+		town.setMapColorHexCode(TownySettings.getTownColorsMap().get(color));
+		town.save();
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_map_color_changed", color));
 	}
 
 	public static void townSetTaxPercent(CommandSender sender, String[] split, Town town) throws TownyException {
