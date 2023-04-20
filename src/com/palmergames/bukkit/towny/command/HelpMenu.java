@@ -87,7 +87,8 @@ public enum HelpMenu {
 				.add("[town] withdraw [amount]", "")
 				.add("[town] bankhistory", "")
 				.add("[town] outlaw [add|remove] [name]", "")
-				.add("[town] leavenation", "");
+				.add("[town] leavenation", "")
+				.add("[town] conquered", "");
 		}
 	},
 
