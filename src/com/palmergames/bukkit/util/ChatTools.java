@@ -121,7 +121,7 @@ public class ChatTools {
 		int pivot = line.length() / 2;
 		String center = subtitle + Translation.of("status_title_primary_colour");
 		String out = Translation.of("status_title_primary_colour") + line.substring(0, Math.max(0, (pivot - center.length() / 2)));
-		out += center + line.substring(pivot + center.length() / 2);
+		out += center + line.substring(Math.min(line.length(), pivot + center.length() / 2));
 		return out;	
 	}
 	
