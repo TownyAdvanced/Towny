@@ -343,12 +343,15 @@ public class TownyFormatter {
 				addTownMoneyComponents(town, translator, screen);
 
 			// Mayor: MrSand
-			screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName()),
+			if (town.getMayor() != null) {
+				screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName()),
 					HoverEvent.showText(translator.component("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline()))
 						.append(Component.newline())
 						.append(translator.component("status_hover_click_for_more"))),
 					ClickEvent.runCommand("/towny:resident " + town.getMayor().getName())
-					);
+				);
+			} else
+				screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), translator.of("status_no_town")));
 
 			// Nation: Azur Empire
 			if (town.hasNation()) {
