@@ -8613,3 +8613,7 @@ v0.92.0.11:
   - New Command: /ta town toggle conquered
     - Removes the conquered status of a town.
   - Only show cost confirmation for setting map color when the cost is above 0.
+  - Fix legacy format subtitle out of bounds, courtesy of Warriorrrr with PR #6630.
+    - Closes #6629.
+  - Display mayor as none if town has no mayor, courtesy of Warriorrrr with PR #6631.
+  - Make campfire water bottle protection a bit better, courtesy of Warriorrrr with PR #6632.
