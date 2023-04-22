@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
+import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -550,9 +551,15 @@ public class TownyEntityListener implements Listener {
 
 			/* Protect campfires from SplashWaterBottles. Uses a destroy test. */
 			case SPLASH_POTION -> {
-				if (event.getBlock().getType() != Material.CAMPFIRE && ((ThrownPotion) event.getEntity()).getShooter() instanceof Player)
+				final ThrownPotion potion = (ThrownPotion) event.getEntity();
+				// Check that the affected block is a campfire and that a water bottle (no effects) was used.
+				if (event.getBlock().getType() != Material.CAMPFIRE || !potion.getEffects().isEmpty())
 					return;
-				event.setCancelled(!TownyActionEventExecutor.canDestroy((Player) ((ThrownPotion) event.getEntity()).getShooter(), event.getBlock().getLocation(), Material.CAMPFIRE));
+				
+				if (potion.getShooter() instanceof BlockProjectileSource bps)
+					event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), event.getBlock()));
+				else if (potion.getShooter() instanceof Player player)
+					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.CAMPFIRE));
 			}
 			
 			default -> {}
