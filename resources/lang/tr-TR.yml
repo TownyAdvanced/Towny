@@ -455,7 +455,7 @@ invite_plu: 'Davet etme'
 invite_sent_by: 'Davet Gönderen'
 invite_help_1: 'Bir şehire katılma davetini kabul edin'
 invite_help_2: 'Bir şehire katılma davetini reddedin'
-invite_help_4: 'Decline all invites to join a town'
+invite_help_4: 'Kasabaya katılma davetini reddedin'
 invite_help_3: 'Tüm davetlerinizi listeleyin'
 town_invite_help_1: 'Kasabanıza bir oyuncu davet edin'
 town_invite_help_2: 'Bir oyuncuya gönderilen daveti iptal et'
@@ -473,7 +473,7 @@ nation_ally_help_4: 'Aldığınız tüm müttefik istekleri listeler'
 nation_ally_help_5: 'Bir ulusa müttefik olma talebini kabul edin'
 nation_ally_help_6: 'Bir ulusa müttefik olma isteğini reddet'
 nation_ally_help_7: 'Bir müttefik talebini iptal edin'
-msg_player_denied_all_invites: "All of your received invites have been denied."
+msg_player_denied_all_invites: "Alınan tüm davetlerin reddedildi."
 msg_err_player_no_invites: '&cHiç davetin yok!'
 msg_err_player_has_multiple_invites: '&cBirden fazla davetiniz var, lütfen belirtin!'
 msg_err_player_has_too_many_invites: '%s çok fazla daveti varsa, tekrar davet etmeden önce onlardan bazılarını reddetmelerini isteyin.'
@@ -586,7 +586,7 @@ jailed_in_town: ' şu kasabada: %s'
 status_friends: 'Arkadaşlar'
 rank_list_title: '%s Rütbe Listesi'
 rank_list_mayor: 'Başkan:'
-status_title_capital: '&b(Capital)'
+status_title_capital: '&b(Başkent)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Açık)'
 status_town_board: 'Pano:'
@@ -606,7 +606,7 @@ status_nation_tax: 'Ulus Vergisi:'
 status_nation_towns: 'Kasabalar'
 status_nation_allies: 'Müttefikler'
 status_nation_enemies: 'Düşmanlar'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: 'Ulusunuzu düşman olarak gören uluslar'
 status_world_claimable: '&aAlınabilir'
 status_world_noclaims: '&cAlınamaz'
 status_world_forcepvp: 'ZorunluPVP:'
@@ -1501,7 +1501,7 @@ msg_cost_spawn_rtp: '&bSatılık rastgele bir kasaba arsasına ışınlanmak iç
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Katılmanızı sağlayacak, %s cinsinden satılık bir arsaya ışınlanmak üzeresiniz. Geldiğinizde arsanızı talep etmek için ''/plot claim''i kullanın.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "%s kasabası satın alabileceğiniz arsalar içeriyor, satın alabileceğin bir arsaya ışınlanmak ister misin?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "Satın alabileceğiniz bir arsaya ışınlandınız. Arsayı almak için \"/plot claim\" komutunu kullanabilirsiniz."
 #Used in the town's status screen to display plots
@@ -1601,7 +1601,7 @@ msg_err_cannot_join_nation_over_resident_limit: '&cBu ulusa katılamazsınız, �
 #Message shown to a town because the nation has hit their max-towns-limit.
 msg_err_cannot_join_nation_over_town_limit: '&cBu ulusa katılamazsın, izin verilen maksimum kasaba sayısına ulaştı: %s.'
 #Message shown confirming /tw set usedefaults
-confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Dünya ayarlarını, konfigürasyondaki normal ayarlara sıfırlamak istediğinize emin misiniz?'
 #Part of the /town plots output.
 msg_town_plots_title: ' Kasaba Arazileri'
 #Part of the /town plots output.
@@ -1613,7 +1613,7 @@ msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[UlusBonusu: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>Kasaba Tarafından Alınmış Alan: <green>%s'
 #Part of the /town plots output.
 msg_town_plots_type_header: '<dark_green>Tür: <green>Oyuncu-Sahipli <gray>/ <aqua>Satışta <gray>/ <yellow>Toplam'
 #Part of the /town plots output.
