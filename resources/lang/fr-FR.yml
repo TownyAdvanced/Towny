@@ -473,7 +473,7 @@ nation_ally_help_4: 'Liste de toutes les demandes d''allié que vous avez reçue
 nation_ally_help_5: 'Accepter une demande d''allier d''une nation'
 nation_ally_help_6: 'Rejeter une demande d''allier d''une nation'
 nation_ally_help_7: 'Annuler une demande d''allié'
-msg_player_denied_all_invites: "All of your received invites have been denied."
+msg_player_denied_all_invites: "Toutes vos invitations reçues ont été refusées."
 msg_err_player_no_invites: '&cVous n''avez aucune invitation !'
 msg_err_player_has_multiple_invites: '&cVous avez plusieurs invitations, veuillez préciser !'
 msg_err_player_has_too_many_invites: '%s a trop d''invitations, demandez-leur d''en refuser, avant d''inviter à nouveau.'
@@ -586,7 +586,7 @@ jailed_in_town: ' dans la ville : %s'
 status_friends: 'Amis'
 rank_list_title: 'Liste de rang %s'
 rank_list_mayor: 'Maire :'
-status_title_capital: '&b(Capital)'
+status_title_capital: '&b(Capitale)'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(Ouvert)'
 status_town_board: 'Description:'
@@ -1684,6 +1684,6 @@ chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
 #Message shown when a takeover claim would cut a town into two sections.
 msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
-msg_err_that_town_is_not_conquered: "%s is already not conquered."
+msg_err_that_town_is_not_conquered: "%s n'est pas déjà conquis."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s has had their conquered status removed."
