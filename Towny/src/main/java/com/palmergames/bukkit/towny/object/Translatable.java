@@ -52,7 +52,12 @@ public class Translatable implements ComponentLike {
 	}
 	
 	public Object[] args() {
-		return new Object[]{}; // todo impl
+		Object[] arr = new Object[args.size()];
+		
+		for (int i = 0; i < args.size(); i++)
+			arr[i] = args.get(i);
+		
+		return arr;
 	}
 	
 	/**
