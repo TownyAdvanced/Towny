@@ -155,23 +155,11 @@ public class Translatable implements ComponentLike {
 	}
 	
 	public String translate() {
-		translateArgs(this.locale);
+		final Component translated = component();
 		
-		String translated;
-		
-		// TODO - dum
-		Object[] args = new String[this.args.size()];
-		for (int i = 0; i < this.args.size(); i++)
-			args[i] = MiniMessage.miniMessage().serialize(this.args.get(i).asComponent());
-		
-		if (args.length == 0)
-			translated = locale == null ? Translation.of(key) : Translation.of(key, locale);
-		else 
-			translated = locale == null ? Translation.of(key, args) : Translation.of(key, locale, args);
-		
-		translated += appended();
-		
-		return stripColors ? Colors.strip(translated) : translated;
+		return this.stripColors
+			? TownyComponents.plain(translated)
+			: MiniMessage.miniMessage().serialize(translated);
 	}
 	
 	public Component component(@NotNull Locale locale) {
@@ -193,12 +181,6 @@ public class Translatable implements ComponentLike {
 	
 	public String defaultLocale() {
 		return translate(Translation.getDefaultLocale());
-	}
-
-	private void translateArgs(@Nullable Locale locale) {
-		for (int i = 0; i < args.size(); i++)
-			if (args.get(i) instanceof Translatable translatable)
-				args.set(i, translatable.locale(locale).component());
 	}
 	
 	@Override
