@@ -6,13 +6,15 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.flattener.ComponentFlattener;
+import net.kyori.adventure.text.flattener.FlattenerListener;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.renderer.ComponentRenderer;
 import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
 import net.kyori.adventure.translation.Translator;
@@ -26,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +36,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -44,10 +47,12 @@ public final class Translation {
 	
 	private Translation() {}
 	
+	private static final Pattern LOCALIZATION_PATTERN = Pattern.compile("%(?:(\\d+)\\$)?s");
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
 	private static final TranslatableComponentRenderer<Locale> renderer = TranslatableComponentRenderer.usingTranslationSource(new TownyTranslator());
 	private static Locale defaultLocale = new Locale("en", "US"); // en-US here by default, in case of safe mode happening before translations are loaded.
 	private static final Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
+	private static final Map<Locale, ComponentFlattener> flatteners = new HashMap<>();
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
@@ -271,6 +276,50 @@ public final class Translation {
 		}
 	}
 	
+	private static ComponentFlattener flattener(final @NotNull Locale locale) {
+		return flatteners.computeIfAbsent(locale, k -> ComponentFlattener.basic().toBuilder()
+			// Thanks to Paper for already having a flattener for translatables using the %s style
+			.complexMapper(TranslatableComponent.class, (translatable, consumer) -> {
+				final String translated = of(translatable.key(), locale);
+
+				final Matcher matcher = LOCALIZATION_PATTERN.matcher(translated);
+				final List<Component> args = translatable.args();
+				int argPosition = 0;
+				int lastIdx = 0;
+				while (matcher.find()) {
+					// append prior
+					if (lastIdx < matcher.start()) {
+						consumer.accept(Component.text(translated.substring(lastIdx, matcher.start())));
+					}
+					lastIdx = matcher.end();
+
+					final String argIdx = matcher.group(1);
+					// calculate argument position
+					if (argIdx != null) {
+						try {
+							final int idx = Integer.parseInt(argIdx) - 1;
+							if (idx < args.size()) {
+								consumer.accept(args.get(idx));
+							}
+						} catch (final NumberFormatException ex) {
+							// ignore, drop the format placeholder
+						}
+					} else {
+						final int idx = argPosition++;
+						if (idx < args.size()) {
+							consumer.accept(args.get(idx));
+						}
+					}
+				}
+
+				// append tail
+				if (lastIdx < translated.length()) {
+					consumer.accept(Component.text(translated.substring(lastIdx)));
+				}
+			})
+			.build());
+	}
+	
 	private static class TownyTranslator implements Translator {
 
 		@Override
@@ -285,26 +334,28 @@ public final class Translation {
 
 		@Override
 		public @Nullable Component translate(@NotNull TranslatableComponent component, @NotNull Locale locale) {
-			// TODO - dum
-			// will need some sort of fancy formatter for the %s in components or use messageformat
-			Object[] args = new String[component.args().size()];
-			for (int i = 0; i < component.args().size(); i++)
-				args[i] = MiniMessage.miniMessage().serialize(component.args().get(i).asComponent());
+			final TextComponent.Builder builder = Component.text();
 			
-			final List<Component> children = new ArrayList<>(component.children());
-			for (int i = 0; i < children.size(); i++) {
-				if (children.get(i) instanceof TranslatableComponent child) {
-					final Component newChild = translate(child, locale);
-					if (newChild != null)
-						children.set(i, newChild);
+			flattener(locale).flatten(component, new FlattenerListener() {
+				Style currentStyle = Style.empty();
+				
+				@Override
+				public void pushStyle(@NotNull Style style) {
+					currentStyle = style;
 				}
-			}
+
+				@Override
+				public void component(@NotNull String text) {
+					builder.append(Component.text(text, currentStyle));
+				}
+
+				@Override
+				public void popStyle(@NotNull Style style) {
+					currentStyle = Style.empty();
+				}
+			});
 			
-			final String translated = of(component.key(), locale, args);
-			if (translated.equals(component.key()))
-				return null;
-			
-			return TownyComponents.miniMessage(translated).children(children);
+			return builder.build();
 		}
 	}
 }
