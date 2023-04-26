@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.key.Key;
@@ -289,7 +290,7 @@ public final class Translation {
 				while (matcher.find()) {
 					// append prior
 					if (lastIdx < matcher.start()) {
-						consumer.accept(Component.text(translated.substring(lastIdx, matcher.start())));
+						consumer.accept(TownyComponents.miniMessage(translated.substring(lastIdx, matcher.start())).applyFallbackStyle(translatable.style()));
 					}
 					lastIdx = matcher.end();
 
@@ -314,7 +315,7 @@ public final class Translation {
 
 				// append tail
 				if (lastIdx < translated.length()) {
-					consumer.accept(Component.text(translated.substring(lastIdx)));
+					consumer.accept(TownyComponents.miniMessage(translated.substring(lastIdx)).applyFallbackStyle(translatable.style()));
 				}
 			})
 			.build());
