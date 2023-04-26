@@ -61,7 +61,7 @@ public class Translatable implements ComponentLike {
 	}
 	
 	/**
-	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * @return The set locale that this translatable will be translated in.
 	 */
 	@Nullable
 	public Locale locale() {
@@ -121,21 +121,22 @@ public class Translatable implements ComponentLike {
 		return this;
 	}
 
-	// TODO: insert deprecation version in javadocs
-
 	/**
-	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * Sets the locale that will be used if {@link #translate()} or {@link #component()} is invoked without a locale.
+	 * If this translatable is converted to a {@link Component} the locale will be lost however, so it is encouraged to chain this with one of the translation methods.
+	 * 
 	 * @see #translate(Locale) 
 	 * @see #component(Locale) 
 	 */
-	@Deprecated
 	public Translatable locale(@Nullable Locale locale) {
 		this.locale = locale;
 		return this;
 	}
 
 	/**
-	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * Sets the locale that will be used if {@link #translate()} or {@link #component()} is invoked without a locale to the locale of the given resident.
+	 * If this translatable is converted to a {@link Component} the locale will be lost however, so it is encouraged to chain this with one of the translation methods.
+	 * 
 	 * @see #translate(Locale)
 	 * @see #component(Locale)
 	 */
@@ -145,7 +146,9 @@ public class Translatable implements ComponentLike {
 	}
 	
 	/**
-	 * @deprecated Deprecated TODO insert version, the locale is no longer guaranteed to be preserved due to Translatable now implementing ComponentLike.
+	 * Sets the locale that will be used if {@link #translate()} or {@link #component()} is invoked without a locale to the locale of the given command sender.
+	 * If this translatable is converted to a {@link Component} the locale will be lost however, so it is encouraged to chain this with one of the translation methods.
+	 * 
 	 * @see #translate(Locale)
 	 * @see #component(Locale)
 	 */
