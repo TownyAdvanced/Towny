@@ -91,12 +91,12 @@ public class TownyComponents {
 	 * @param objects The objects to convert
 	 * @return The formatted list of components
 	 */
-	public static List<Component> convert(final @NotNull Object @NotNull... objects) {
-		final List<Component> components = new ArrayList<>();
+	public static List<ComponentLike> convert(final @NotNull Object @NotNull... objects) {
+		final List<ComponentLike> components = new ArrayList<>();
 		
 		for (Object object : objects) {
 			if (object instanceof ComponentLike like)
-				components.add(like.asComponent());
+				components.add(like);
 			else 
 				components.add(miniMessage(object.toString()));
 		}
