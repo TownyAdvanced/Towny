@@ -1286,6 +1286,10 @@ status_jailed: 'Emprisonné:'
 status_bad_yes: '&cOUI'
 status_good_no: '&aNON'
 status_resident_tax_title: 'Taxe de %s'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Vu qu''elles ne seront pas assez proches de votre capitale nationale, les villes suivantes seront supprimées si la fusion est faite: %s.'
 #Added in 0.123
