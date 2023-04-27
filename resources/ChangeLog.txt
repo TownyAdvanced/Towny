@@ -8617,3 +8617,6 @@ v0.92.0.11:
     - Closes #6629.
   - Display mayor as none if town has no mayor, courtesy of Warriorrrr with PR #6631.
   - Make campfire water bottle protection a bit better, courtesy of Warriorrrr with PR #6632.
+0.99.0.6:
+  - Prevent creatures from using switches more reliably.
+    - Closes #6640.

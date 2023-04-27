@@ -432,9 +432,10 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * Handles pressure plates (switch use) not triggered by players.
-	 * example: animals or a boat with a player in it.
-	 * 
+	 * Handles:
+	 *  - vehicles that would trigger a switch, allowed if a permitted player is riding.
+	 *  - switch use and pressure plates triggered by Creatures.
+	 *
 	 * @param event - EntityInteractEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -456,10 +457,9 @@ public class TownyEntityListener implements Listener {
 		 * are permitted.
 		 */
 		if (passengers != null) {
-
 			for (Entity passenger : passengers) {
 				if (!(passenger instanceof Player player))
-					return;
+					continue;
 
 				if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())) {
 					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -469,14 +469,16 @@ public class TownyEntityListener implements Listener {
 			}
 		}
 
-		// Prevent creatures triggering stone pressure plates
-		if (TownySettings.isCreatureTriggeringPressurePlateDisabled()) {
-			if (block.getType() == Material.STONE_PRESSURE_PLATE) {
-				if (entity instanceof Creature) {
-					event.setCancelled(true);
-					return;
-				}
-			}
+		// We only care about creatures at this point, players are handled in the TownyPlayerListener. 
+		if (!(entity instanceof Creature))
+			return;
+
+		// Prevent creatures triggering switch items (usually a villager using a door,)
+		// OR prevent creatures triggering stone pressure plates (if the config denies it.)
+		if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())
+			|| (TownySettings.isCreatureTriggeringPressurePlateDisabled() && block.getType() == Material.STONE_PRESSURE_PLATE)) {
+			event.setCancelled(true);
+			return;
 		}
 
 	}
