@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
 
@@ -140,13 +141,13 @@ public class ChatTools {
 
 		String out = "  ";
 		if (requirement.length() > 0)
-			out += Colors.Rose + requirement + ": ";
-		out += Colors.Blue + command;
+			out += TownySettings.helpMenuRequirementColour() + requirement + ": ";
+		out += TownySettings.helpMenuCommandColour() + command;
 		if (subCommand.length() > 0)
-			out += " " + Colors.LightBlue + subCommand;
+			out += " " + TownySettings.helpMenuSubcommandColour() + subCommand;
 		if (help.length() > 0)
-			out += " " + Colors.LightGray + " : " + help;
-		return out;
+			out += " " + TownySettings.helpMenuExplanationColour() + " : " + help;
+		return Colors.translateColorCodes(out);
 	}
 
 	/**

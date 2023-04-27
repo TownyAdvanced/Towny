@@ -8620,3 +8620,7 @@ v0.92.0.11:
 0.99.0.6:
   - Prevent creatures from using switches more reliably.
     - Closes #6640.
+  - Added the ability to change the colours used in the help menus in Towny.
+    - Closes #6633.
+  - New Config Section: helpmenu_colours
+    - Contains options for colouring the helpmenus' commands, subcommands, explanations, requirements.

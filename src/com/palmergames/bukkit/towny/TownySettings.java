@@ -3450,6 +3450,22 @@ public class TownySettings {
 		return (float) getDouble(ConfigNodes.NOTIFICATION_BOSSBARS_PROGRESS);
 	}
 	
+	public static String helpMenuCommandColour() {
+		return getString(ConfigNodes.HELPMENU_COLOURS_COMMAND);
+	}
+	
+	public static String helpMenuSubcommandColour() {
+		return getString(ConfigNodes.HELPMENU_COLOURS_SUBCOMMAND);
+	}
+	
+	public static String helpMenuExplanationColour() {
+		return getString(ConfigNodes.HELPMENU_COLOURS_EXPLANATION);
+	}
+	
+	public static String helpMenuRequirementColour() {
+		return getString(ConfigNodes.HELPMENU_COLOURS_REQUIREMENT);
+	}
+	
 	public static int getNewTownMinDistanceFromTownPlots() {
 		return getInt(ConfigNodes.TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_PLOT);
 	}
