@@ -1286,6 +1286,10 @@ status_jailed: 'Jailed:'
 status_bad_yes: '&cOO'
 status_good_no: '&aHINDI'
 status_resident_tax_title: 'Buwis ni %s'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Dahil hindi sila magiging malapit sa iyong kabisera ng bansa, ang mga sumusunod na bayan ay aalisin kung makumpleto ang pagsasanib: %s.'
 #Added in 0.123
