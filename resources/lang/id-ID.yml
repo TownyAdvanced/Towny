@@ -1286,6 +1286,10 @@ status_jailed: 'Dipenjara:'
 status_bad_yes: '&cYA'
 status_good_no: '&aTIDAK'
 status_resident_tax_title: 'Pajak Milik %s'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Karena tidak akan cukup mendekati ibu kota negara Anda, kota-kota berikut akan dihapus jika penggabungan selesai: %s.'
 #Added in 0.123
