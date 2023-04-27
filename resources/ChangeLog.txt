@@ -8621,6 +8621,5 @@ v0.92.0.11:
   - Prevent creatures from using switches more reliably.
     - Closes #6640.
   - Added the ability to change the colours used in the help menus in Towny.
+    - You may override the following language strings in the global lang file: help_menu_command, help_menu_subcommand, help_menu_explanation, help_menu_requirement.
     - Closes #6633.
-  - New Config Section: helpmenu_colours
-    - Contains options for colouring the helpmenus' commands, subcommands, explanations, requirements.

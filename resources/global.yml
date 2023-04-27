@@ -17,3 +17,7 @@
 #status_format_key_important: '&c'           # Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 #status_splitter: ' &7| '                    # Used in status screens where a splitter is used between values.
 #status_home_element: ' &7[Home: %s]'
+#help_menu_command: '<blue>'
+#help_menu_subcommand: '<aqua>'
+#help_menu_explanation: '<gray>'
+#help_menu_requirement: '<red>'

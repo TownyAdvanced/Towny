@@ -141,13 +141,13 @@ public class ChatTools {
 
 		String out = "  ";
 		if (requirement.length() > 0)
-			out += TownySettings.helpMenuRequirementColour() + requirement + ": ";
-		out += TownySettings.helpMenuCommandColour() + command;
+			out += Translation.of("help_menu_requirement") + requirement + ": ";
+		out += Translation.of("help_menu_command") + command;
 		if (subCommand.length() > 0)
-			out += " " + TownySettings.helpMenuSubcommandColour() + subCommand;
+			out += " " + Translation.of("help_menu_subcommand") + subCommand;
 		if (help.length() > 0)
-			out += " " + TownySettings.helpMenuExplanationColour() + " : " + help;
-		return Colors.translateColorCodes(out);
+			out += " " + Translation.of("help_menu_explanation") + " : " + help;
+		return out;
 	}
 
 	/**
