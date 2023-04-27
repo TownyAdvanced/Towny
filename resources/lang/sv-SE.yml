@@ -1286,6 +1286,10 @@ status_jailed: 'Fängslad:'
 status_bad_yes: '&cJA'
 status_good_no: '&aNEJ'
 status_resident_tax_title: '%s''s skatt'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Eftersom de inte kommer att vara tillräckligt nära ditt lands huvudstad, kommer följande städer att tas bort om sammanslagningen är slutförd: %s.'
 #Added in 0.123
