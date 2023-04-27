@@ -8623,3 +8623,8 @@ v0.92.0.11:
   - Added the ability to change the colours used in the help menus in Towny.
     - You may override the following language strings in the global lang file: help_menu_command, help_menu_subcommand, help_menu_explanation, help_menu_requirement.
     - Closes #6633.
+  - Add config option to have ruined towns pay any remaining money to their nation bank.
+    - Closes #6612.
+  - New Config Option: town_ruining.town_ruins.town_bank_is_sent_to_nation
+    - Default: false
+    - If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank.

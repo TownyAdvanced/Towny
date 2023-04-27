@@ -66,8 +66,12 @@ public class TownRuinUtil {
 			return;
 
 		//Remove town from nation, otherwise after we change the mayor to NPC and if the nation falls, the npc would receive nation refund.
-		if (town.hasNation())
+		if (town.hasNation()) {
+			double bankBalance = town.getAccount().getHoldingBalance();
+			if (TownySettings.areRuinedTownsBanksPaidToNation() && bankBalance > 0)
+				town.getAccount().payTo(bankBalance, town.getNationOrNull().getAccount(), String.format("Ruined Town (%s) Paid Remaining Bank To Nation", town.getName()));
 			town.removeNation();
+		}
 
 		String oldMayorName = town.hasMayor()
 				? town.getMayor().getName()

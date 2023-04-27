@@ -3319,6 +3319,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWNS_BECOME_OPEN);
 	}
 
+	public static boolean areRuinedTownsBanksPaidToNation() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION);
+	}
+
 	public static void saveConfig() {
 		config.save();
 	}

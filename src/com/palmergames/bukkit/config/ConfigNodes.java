@@ -2860,6 +2860,12 @@ public enum ConfigNodes {
 			"# If this is true, when a town becomes a ruin they also become open to join,",
 			"# meaning any townless player could join the town and reclaim it.",
 			"# You should expect this to be abused by players who will reclaim a town to prevent someone else reclaiming it."),
+	TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION(
+			"town_ruining.town_ruins.town_bank_is_sent_to_nation",
+			"false",
+			"",
+			"# If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank."),
+
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
