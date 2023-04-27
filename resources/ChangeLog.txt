@@ -8628,3 +8628,4 @@ v0.92.0.11:
   - New Config Option: town_ruining.town_ruins.town_bank_is_sent_to_nation
     - Default: false
     - If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank.
+  - Fix incorrect balances shown in the bankhistory books.
