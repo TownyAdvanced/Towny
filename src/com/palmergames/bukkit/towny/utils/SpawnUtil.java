@@ -663,10 +663,14 @@ public class SpawnUtil {
 	 *                     TeleportWarmupTime from the config.
 	 */
 	private static void initiatePluginTeleport(Resident resident, Location loc, boolean ignoreWarmup) {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
-			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			Player player = resident.getPlayer();
+			if (player == null)
+				return;
+			PaperLib.teleportAsync(player, loc, TeleportCause.PLUGIN);
+		}, ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L); 
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static void initiatePluginTeleport(Resident resident, CompletableFuture<Location> loc, boolean ignoreWarmup) {
 		loc.thenAccept(location -> initiatePluginTeleport(resident, location, ignoreWarmup));
