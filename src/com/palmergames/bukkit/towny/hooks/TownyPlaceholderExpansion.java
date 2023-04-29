@@ -318,6 +318,9 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return title;
 		case "resident_primary_rank": // %townyadvanced_resident_primary_rank%
 			return resident.getPrimaryRankPrefix();
+		case "resident_primary_rank_spaced": // %townyadvanced_resident_primary_rank_spaced%
+			rank = resident.getPrimaryRankPrefix();
+			return rank.isEmpty() ? "" : rank + " ";
 		case "towny_name_prefix": // %townyadvanced_towny_name_prefix%
 			if (resident.isMayor())
 				title = TownySettings.getMayorPrefix(resident);
