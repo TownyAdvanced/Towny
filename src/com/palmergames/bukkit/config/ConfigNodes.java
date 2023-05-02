@@ -1088,7 +1088,7 @@ public enum ConfigNodes {
 	),
 
 	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_TRUSTED_BYPASS(
-			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands.allow_trusted_residents",
+			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands_allow_trusted_residents",
 			"true",
 			"",
 			"# When set to true, trusted residents (residents that are trusted by a town directly,",
@@ -1097,7 +1097,7 @@ public enum ConfigNodes {
 	),
 
 	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_ALLIES_BYPASS(
-			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands.allow_allies",
+			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands_allow_allies",
 			"false",
 			"",
 			"# When set to true, residents which are allies of the town (which could be nation members as well as allied nations' members) will be able to use",
