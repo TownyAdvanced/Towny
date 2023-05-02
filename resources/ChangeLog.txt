@@ -8637,3 +8637,11 @@ v0.92.0.11:
     - Default: true
     - When true, a plot notification that has a plot owner's name will use the verbose name, ie: town/nation titles or prefixes set via the town/nation levels.
     - When false, only their name will appear.
+  - Add new options to allow trusted and allied residents to use commands in towns which are normally blocked by non-residents.
+    - Closes #6639.
+  - New Config Option: global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands.allow_trusted_residents
+    - Default: true
+    - When set to true, trusted residents (residents that are trusted by a town directly, as well as residents that are members of a town that is trusted,) will be able to use commands that only town residents could use.
+  - New Config Option: global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands.allow_allies
+    - Default: false
+    - When set to true, residents which are allies of the town (which could be nation members as well as allied nations' members) will be able to use commands that only town residents could use.

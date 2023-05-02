@@ -1076,7 +1076,7 @@ public enum ConfigNodes {
 			"# Players with the towny.claimed.owntown.* permission node (given to mayors/assistants usually,)",
 			"# will also not be limited by this command blacklist."
 	),
-	
+
 	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS(
 			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands",
 			"sethome,home",
@@ -1086,7 +1086,24 @@ public enum ConfigNodes {
 			"# Players with the towny.globally_welcome permission node are not going to be limited by this list.",
 			"# Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked."
 	),
-	
+
+	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_TRUSTED_BYPASS(
+			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands.allow_trusted_residents",
+			"true",
+			"",
+			"# When set to true, trusted residents (residents that are trusted by a town directly,",
+			"# as well as residents that are members of a town that is trusted,) will be able to use",
+			"# commands that only town residents could use."
+	),
+
+	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_ALLIES_BYPASS(
+			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands.allow_allies",
+			"false",
+			"",
+			"# When set to true, residents which are allies of the town (which could be nation members as well as allied nations' members) will be able to use",
+			"# commands that only town residents could use."
+	),
+
 	GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION(
 			"global_town_settings.automatic_capitalisation",
 			"false",

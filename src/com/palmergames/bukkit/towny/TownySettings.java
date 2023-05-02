@@ -3270,7 +3270,15 @@ public class TownySettings {
 	public static List<String> getTouristBlockedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS);
 	}
-	
+
+	public static boolean doTrustedResidentsBypassTownBlockedCommands() {
+		return getBoolean(ConfigNodes.GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_TRUSTED_BYPASS);
+	}
+
+	public static boolean doAlliesBypassTownBlockedCommands() {
+		return getBoolean(ConfigNodes.GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_ALLIES_BYPASS);
+	}
+
 	public static boolean isContextsEnabled() {
 		return getBoolean(ConfigNodes.PLUGIN_LUCKPERMS_CONTEXTS);
 	}
