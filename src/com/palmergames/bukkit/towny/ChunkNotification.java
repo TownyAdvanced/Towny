@@ -216,7 +216,7 @@ public class ChunkNotification {
 		|| (fromTownBlock != null && fromTownBlock.hasPlotObjectGroup() && !toTownBlock.hasPlotObjectGroup())) // Left a plot group and entered to a regular plot. 
 		{
 			if (toResident != null) {
-				String resName = (TownySettings.isNotificationOwnerShowingNationTitles() ? toResident.getFormattedTitleName() : toResident.getFormattedName());
+				String resName = (TownySettings.isNotificationOwnerShowingVerboseName() ? toResident.getFormattedName() : toResident.getName());
 				return String.format(ownerNotificationFormat, Colors.translateColorCodes(toTownBlock.getName().isEmpty() ? resName : toTownBlock.getName()));
 			} else
 				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translatable.of("UNCLAIMED_PLOT_NAME").forLocale(resident) : Colors.translateColorCodes(toTownBlock.getName()));

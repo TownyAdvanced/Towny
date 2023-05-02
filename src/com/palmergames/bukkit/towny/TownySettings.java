@@ -1240,11 +1240,11 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SHOW_TOWN_NOTIFICATIONS);
 	}
 	
-	public static boolean isNotificationOwnerShowingNationTitles() {
+	public static boolean isNotificationOwnerShowingVerboseName() {
 		
-		return getBoolean(ConfigNodes.NOTIFICATION_OWNER_SHOWS_NATION_TITLE);
+		return getBoolean(ConfigNodes.NOTIFICATION_OWNER_SHOWS_VERBOSE_NAME);
 	}
-	
+
 	public static boolean isNotificationsAppearingInActionBar() {
 		return getString(ConfigNodes.NOTIFICATION_NOTIFICATIONS_APPEAR_AS).equalsIgnoreCase("action_bar");
 	}

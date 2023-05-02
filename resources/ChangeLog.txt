@@ -8632,3 +8632,8 @@ v0.92.0.11:
   - Fix potential NPE thrown when players log off before their spawn warmup is over, when TeleportCause.PLUGIN is used.
     - Closes #6643.
   - New PAPI Placeholder: %townyadvanced_resident_primary_rank_spaced% - Displays a resident's primary rank with a space afterwards.
+  - Removed Config Option: notification.owner_shows_nation_title.
+  - New Config Option: notification.owner_shows_verbose_name 
+    - Default: true
+    - When true, a plot notification that has a plot owner's name will use the verbose name, ie: town/nation titles or prefixes set via the town/nation levels.
+    - When false, only their name will appear.
