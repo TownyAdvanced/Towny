@@ -2501,7 +2501,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (TownySettings.getHomeBlockMovementDistanceInTownBlocks() > 0) {
-			double distance = MathUtil.distance(town.getHomeBlock().getX(), townBlock.getX(), town.getHomeBlock().getZ(), townBlock.getZ());
+			double distance = MathUtil.distance(town.getHomeBlock().getCoord(), townBlock.getCoord());
 			if (distance > TownySettings.getHomeBlockMovementDistanceInTownBlocks())
 				throw new TownyException(Translatable.of("msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x", TownySettings.getHomeBlockMovementDistanceInTownBlocks(), Math.floor(distance)));
 		}

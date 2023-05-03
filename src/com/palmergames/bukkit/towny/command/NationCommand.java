@@ -681,9 +681,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
 					throw new TownyException(Translatable.of("msg_err_nation_homeblock_in_another_world"));
 				}
-				double distance;
-				distance = Math.sqrt(Math.pow(capitalCoord.getX() - (double)townCoord.getX(), 2) + Math.pow(capitalCoord.getZ() - (double)townCoord.getZ(), 2));
-				if (distance > TownySettings.getNationRequiresProximity()) {
+				if (MathUtil.distance(capitalCoord, townCoord) > TownySettings.getNationRequiresProximity()) {
 					throw new TownyException(Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 				}
 			}
