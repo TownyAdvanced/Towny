@@ -4427,10 +4427,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static int homeBlockDistance(Town town1, Town town2) {
-		try {
-			return (int) Math.sqrt((Math.abs(town1.getHomeBlock().getX() - town2.getHomeBlock().getX())^2) + (Math.abs(town1.getHomeBlock().getZ() - town2.getHomeBlock().getZ())^2));
-		} catch (TownyException e) {
+		if (!town1.hasHomeBlock() || !town2.hasHomeBlock())
 			return Integer.MAX_VALUE;
-		}
+
+		return (int) MathUtil.distance(town1.getHomeBlockOrNull().getCoord(), town2.getHomeBlockOrNull().getCoord());
 	}
 }

@@ -8645,3 +8645,4 @@ v0.92.0.11:
   - New Config Option: global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands_allow_allies
     - Default: false
     - When set to true, residents which are allies of the town (which could be nation members as well as allied nations' members) will be able to use commands that only town residents could use.
+  - Fix distance test for merging towns.
