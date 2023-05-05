@@ -62,7 +62,7 @@ mayor_help_6: '町の一区画分のエリアの領有を解除する'
 mayor_help_7: 'あなたの周りのエリアの領有を解除することを試みる'
 mayor_help_8: 'すべての町の区画の要求を解除しようとしています。'
 nation_help_1: 'あなたの国のステータス'
-nation_help_2: '[nation]'
+nation_help_2: '[国]'
 nation_help_3: '指定した国の状態を表示'
 nation_help_4: '国の一覧を表示'
 nation_help_5: '所属している国から脱退する'
@@ -286,7 +286,7 @@ msg_new_mayor: '&b%s は新しい市長です！'
 msg_new_nation: '&b%s は %s という名前の新しい国家を設立しました'
 msg_new_town: '&b%s は %s という名前の新しい町を設立しました'
 msg_plot_for_sale: '&b%s はプロット（%s）を売りに出しました！'
-msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_for_sale_amount: '&b%sはプロット(%s) を%sで売りに出した!'
 msg_plot_set_type: '&bプロットの種類を %s に変更しました'
 msg_cache_block_error: '&cあなたはまだ町に登録されていません。再ログインしてください。'
 msg_cache_block_error_wild: '&c荒野での%sは許可されていません。'
@@ -508,11 +508,11 @@ msg_ally_removed_successfully: '&bとの同盟の削除に成功しました。'
 town_deleted_by_admin: '&b%sが削除されました。'
 nation_deleted_by_admin: '&b%sが削除されました。'
 are_you_sure_you_want_to_continue: '本当に続行しますか？'
-you_have_been_invited_to_join: 'You have been invited to join '
+you_have_been_invited_to_join: '招待されています。 '
 you_have_been_requested_to_ally: '同盟国からリクエストが来ました。'
 this_message_will_expire: '20秒後に自動で削除されます。'
 player_sing: 'プレイヤー'
-nation_zone_this_area_under_protection_of: 'This part of the %s is under the protection of %s'
+nation_zone_this_area_under_protection_of: '%sのこの部分は%sの保護下にあります。'
 #Added in 0.42
 you_have_been_invited_to_join2: '%sに招待されています。'
 you_have_been_requested_to_ally2: '%sから同盟国のリクエストが来ました。'
@@ -543,9 +543,9 @@ tc_player_already_muted_in_channel: '[TownyChat] %sはすでにミュートに�
 tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2is now muted in &f%s'
 tc_player_is_not_muted_in_channel: '[TownyChat] %sはミュートではありません。'
 tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2is now unmuted in &f%s'
-tc_err_you_are_currently_muted_in_channel: 'You are currently muted in &f%s&c!'
+tc_err_you_are_currently_muted_in_channel: '&f%s&cでミュートされています!'
 tc_err_you_cannot_leave_channel: '%sから退出することはできません。'
-tc_you_already_left_channel: '[TownyChat] You already left &f%s'
+tc_you_already_left_channel: '[TownyChat] 既に%sに参加しています。'
 tc_you_left_channel: '[TownyChat] %sから退出しました。'
 tc_you_are_now_talking_in_channel: '[TownyChat] %sで会話しています。'
 tc_err_you_cannot_join_channel: '%sに参加することはできません。'
@@ -554,7 +554,7 @@ tc_you_joined_channel: '[TownyChat] %sに参加しました。'
 tc_err_you_are_already_talking_in_default_channel_help: 'あなたはデフォルトチャンネルでチャットしています。他のチャンネルに切り替えるには、コマンドを使用してください。'
 tc_err_unable_to_talk_essentials_mute: 'ミュート中のため話せません！'
 tc_err_unable_to_talk_you_are_spamming: 'スパムと判定されたため話せません！'
-msg_admin_set_plot_help_1: 'When in a town.'
+msg_admin_set_plot_help_1: '町にいるとき。'
 msg_admin_set_plot_help_2: 'When in the wilderness.'
 msg_err_not_enough_outposts_free_to_claim: 'Not enough outposts available to claim %s/%s'
 msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over your limit %s/%s'
@@ -606,14 +606,14 @@ status_nation_tax: '国の税金:'
 status_nation_towns: '町'
 status_nation_allies: '同盟国'
 status_nation_enemies: '敵'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: 'あなたの国と敵対している国'
 status_world_claimable: '&aClaimable'
 status_world_noclaims: '&cNoClaims'
 status_world_forcepvp: '強制PVP:'
 status_world_fire: '火の延焼:'
 status_world_forcefire: '強制的な火の延焼:'
 status_world_forceexplosion: '強制的な爆発:'
-status_world_worldmobs: 'World Mobs:'
+status_world_worldmobs: 'ワールドのモブ:'
 status_world_forcetownmobs: 'Force TownMobs:'
 status_world_unclaimrevert: 'Unclaim Revert:'
 status_world_explrevert: '爆発の取り消し:'
@@ -631,7 +631,7 @@ msg_minutes: ' 分'
 msg_seconds: ' 秒'
 msg_err_invalid_string_nationboard_not_set: '無効な文字列です。'
 msg_plot_evict: 'プロットを削除しました。'
-msg_no_one_to_evict: 'No one to evict from this plot.'
+msg_no_one_to_evict: 'このプロットから立ち去る人はいません。'
 #Added in 0.46
 nation_help_10: '国のスポーン地点にテレポートしています。'
 msg_nation_spawn_warmup: '&bテレポートしています...'
@@ -689,7 +689,7 @@ msg_err_not_enough_variables: '&c変数が足りません: '
 nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'
 msg_err_nation_over_town_limit: 'あなたの国の町の数が、上限に達しました。%s'
 #Added in 0.49
-msg_process_claim: 'Processing Plot Claim...'
+msg_process_claim: 'プロットの請求を処理しています...'
 msg_process_unclaim: 'Processing Plot Unclaim...'
 msg_total_townblocks: 'タウンブロックの合計: '
 #Added in 0.50
@@ -704,7 +704,7 @@ townboard_message_colour_2: '&e'
 nationboard_message_colour_1: '&6'
 nationboard_message_colour_2: '&e'
 not_registered: '登録されていません。'
-msg_error_missing_comparator: '&bMust specify what to sort by.'
+msg_error_missing_comparator: '&b並べ替えの方法を指定してください。　'
 msg_error_invalid_comparator: '&bコンパレータが無効です。'
 msg_error_multiple_comparators: '&bコンパレータが多すぎます。'
 msg_error_comparator_failed: '&bコンパレータに失敗しました。'
@@ -723,11 +723,11 @@ msg_bankrupt_town2: '&b%s couldn''t afford to remain a town.'
 msg_bankrupt_nation2: '&b%sは国家として存続する余裕がなくなりました。'
 status_embassy_town: '大使館'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
-msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_nation: '&b無効なコンパレータです。%sを試してください。'
+msg_error_invalid_comparator_town: '&bコンパレータが無効です。%sを試してください。'
 msg_err_merging_for_kings_only: '&b合併は国家のリーダーのみが行うことができます。'
 msg_err_king_of_that_nation_is_not_online: '&bThe Nation Leader of %s, %s, is not online. Merge failed.'
-nation1_has_merged_with_nation2: '&6The nation %s has agreed to merge together with the prevailing nation of %s.'
+nation1_has_merged_with_nation2: '&6%sは%sと合併することに同意しました。'
 msg_would_you_merge_your_nation_into_other_nation: '&6Would you agree to dissolve your nation %s into the nation of %s? This will transfer all towns and nation bank money over to %s.'
 no_open_towns: '町がありません。'
 #Added in 0.52:
@@ -735,7 +735,7 @@ msg_error_nation_has_no_allies: '同盟国がいません'
 msg_error_nation_has_no_enemies: '敵対している国はありません。'
 msg_error_ta_plot_claim: 'プレイヤーが見つかりません。'
 msg_error_no_player_with_that_name: '%sという名前のプレイヤーは存在しません。'
-msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s'
+msg_admin_has_given_you_a_plot: '管理者があなたのプロットを請求しました。 %s'
 msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
 msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&c国のステータスが%sになりました。'
@@ -770,14 +770,14 @@ msg_mysql_dump_success: 'MySQLのダンプが完了しました。'
 msg_err_mysql_not_being_used: 'MySQLの保存と読み込みが設定されていません。'
 msg_save_success: 'データベースが保存されました。'
 msg_load_success: 'データベースの読み込みが完了しました。'
-msg_err_cannot_afford_to_set_outpost: 'Your town does not have enough funds to set this townblock to an outpost.'
+msg_err_cannot_afford_to_set_outpost: 'この町には、この町を前哨基地にするのに十分は資金がありません。'
 msg_too_close2: 'この場所は%sに近すぎます。'
 homeblock: 'ホームブロック'
 townblock: 'タウンブロック'
 outpost: '前哨基地'
 msg_err_not_same_town: '&b%sあなたは、町に所属していません。'
 #Added in 0.59:
-msg_modes_set: 'Modes set: '
+msg_modes_set: 'モードの設定: '
 msg_err_this_plot_doesnt_have_any_associated_metadata: 'このプロットに関連するメタデータはありません。'
 msg_err_the_metadata_for_key_is_not_registered: '%sのメタデータは登録されていません。'
 msg_key_x_was_successfully_updated_to_x: 'Key %s was successfully updated to %s.'
@@ -818,7 +818,7 @@ msg_enemy_areas: '敵のエリア'
 msg_neutral_towns: '中立の町'
 #Added in 0.64
 msg_err_no_nation_with_that_name: '%sという国はありません。'
-msg_err_cannot_unclaim_homeblock: 'You cannot unclaim your homeblock, use ''/town set homeblock'' to move your homeblock.'
+msg_err_cannot_unclaim_homeblock: 'ホームブロックを解除することはできません。 /town set homeblock を使用してホームブロックを移動してください。'
 #Added in 0.65
 msg_err_rename_cancelled: '他のプラグインの影響で名前の変更がキャンセルされました。'
 #Added in 0.66
@@ -832,7 +832,7 @@ msg_plot_group_set_perm_confirmation: 'This plot is part a group of %s plot(s) b
 msg_plot_evict_group: 'You have successfully evicted the player of this grouped plot, %s.'
 msg_err_plot_belongs_to_group_plot_fs: 'Plot: %s belongs to a group, use /plot group [group name] fs [amount]'
 msg_err_plot_belongs_to_group_set: 'Plot belongs to a group, use /plot group set'
-msg_plot_group_set_for_sale: 'Group %s was put up for sale!'
+msg_plot_group_set_for_sale: 'グループ%sは売りに出されました!'
 msg_err_plot_already_belongs_to_a_group: 'This plot already belongs to a group: %s, please remove the townblock from that group before adding it to another.'
 msg_err_you_must_specify_a_group_name: 'グループ名を指定してください。'
 msg_plot_was_put_into_group_x: 'プロット&9(%s,%s)&2はグループ%sに追加されました。'
@@ -841,17 +841,17 @@ msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2was removed from group %s'
 msg_plot_renamed_from_x_to_y: '土地 %s を %s に改名しました。'
 msg_err_plot_group_specify_price: '価格を設定してください。例: /plot group fs [値段]'
 msg_player_put_group_up_for_sale: '%s put group %s up for sale for %s'
-msg_err_could_not_set_group_type: 'Could not set group type - '
+msg_err_could_not_set_group_type: 'グループの種類を設定できませんでした - '
 msg_set_group_type_to_x: 'プロットグループにタイプを%sに変更されました。'
 msg_player_successfully_bought_group_x: '%sがプロットグループ%sを購入しました。'
 status_plot_group_name_and_size: 'Townblock is part of group: %s. Group has %s Townblocks total.'
 msg_player_made_group_not_for_sale: '%s made group %s not for sale.'
 #Added in 0.69
-msg_err_cannot_set_group_to_jail: 'Plot groups cannot be set to jail types.'
+msg_err_cannot_set_group_to_jail: 'プロットグループを刑務所タイプに設定することはできません。'
 #Added in 0.70
-msg_err_plot_group_name_required: 'You must specify plot group name ie, /plot group add {name}'
-msg_confirmation_spigot_click_accept: 'Click %s or type %s'
-msg_confirmation_spigot_click_cancel: 'Click %s or type %s'
+msg_err_plot_group_name_required: 'プロットグループ名を指定してください。(/plot group add {name})'
+msg_confirmation_spigot_click_accept: '%sをクリックするか%sと入力してください。'
+msg_confirmation_spigot_click_cancel: '%sをクリックするか%sと入力してください。'
 msg_you_cannot_kick_yourself: '自分をキックすることはできません。'
 msg_you_cannot_kick_this_resident: '%sをキックすることはできません。'
 #Added in 0.71
@@ -862,13 +862,13 @@ msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'The Admin-controll
 #Added in 0.73
 msg_err_you_aren't currently jailed: 'あなたは、投獄されていません。'
 #Added in 0.74
-msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'You are not allowed to create the other side of this portal in this location.'
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'この場所でポータルを作成することはできません。'
 #Added in 0.75
 msg_already_ally: 'あなたの国は既に%sと同盟を結んでいます。'
 #Added in 0.76
 msg_you: 'あなた'
 #Added in 0.77
-msg_click_spawn: '&aClick to spawn to: &e%s'
+msg_click_spawn: '&aクリックしてスポーンする: &e%s'
 msg_spawn_cost: '&aスポーンコスト = &e%s'
 #Added in 0.78
 msg_reload_error: 'Townyの読み込み中にエラーが発生しました。'
@@ -886,7 +886,7 @@ msg_cache_block_error_plot_town_members: '町のメンバー'
 msg_err_invalid_nation_map_color: '&c地図の色が不明です。許可された色は%sです。'
 msg_nation_map_color_changed: '&b国の地図の色が%sに変更されました。'
 msg_err_unable_to_add_more_residents_without_nation: 'Your town cannot invite more than %s residents without first joining or creating a nation.'
-msg_the_following_towns_were_deleted_for_having_0_claims: 'The following towns were deleted for having 0 claims: %s'
+msg_the_following_towns_were_deleted_for_having_0_claims: '以下の町は請求が0だったため削除されました: %s'
 msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these confirmations.'
 msg_confirm_purchase: 'これを実行すると%sかかります。実行しますか?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
@@ -904,16 +904,16 @@ this_message_will_expire2: '&9%s秒後に自動で削除されます。'
 msg_hover_next_page: '次のページ'
 msg_hover_previous_page: '前のページ'
 #Added in 0.83
-msg_max_tax_amount_only_for_percent: "Max tax amounts can only be set for towns with tax percentages."
+msg_max_tax_amount_only_for_percent: "最大税額を設定できるのは、税率が設定されている町のみです。"
 msg_town_set_tax_max_percent_amount: "%sは税率を%sに設定しました。"
 #Added in 0.84
-msg_err_plot_belongs_to_group_toggle: 'Plot belongs to a group, use /plot group toggle'
+msg_err_plot_belongs_to_group_toggle: 'プロットはグループに所属しています。 /plot froup toggle を使用してください。'
 #Added in 0.85
 msg_set_perms_reset_single: '&bこのプロットの権限をリセットしました。'
 #Added in 0.86
 status_bank_bankrupt: '(BANKRUPT)'
 msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
-msg_town_bankrupt_by_upkeep: '&b%s could not afford its upkeep and has gone bankrupt.'
+msg_town_bankrupt_by_upkeep: '&b%sは維持費を支払うことができなかったので破産しました。'
 msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
 msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay the %s tax and has gone bankrupt.'
 msg_town_bankrupt_by_nation_tax_multiple: '&bThe following towns could not afford the nation tax and have gone bankrupt: '
@@ -933,14 +933,14 @@ msg_town_reached_debtcap_and_is_disbanded: '&b%s could not pay their upkeep, rea
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bThe following towns could not pay their upkeep, reached their debtcap, and have disbanded: '
 msg_unable_to_deposit_x: 'Unable to deposit %s into that town''s bank.'
 msg_unable_to_withdraw_x: 'Unable to withdraw %s from that town''s bank.'
-status_debtcap: 'Debt Cap:'
+status_debtcap: '債務上限:'
 status_world_explrevert_entity: 'Entity Explosion Revert:'
 status_world_explrevert_block: 'Block Explosion Revert:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cNation is already peaceful.'
 msg_nation_already_not_peaceful: '&cNation is already not peaceful.'
 #Added in 0.89
-status_world_friendlyfire: 'FriendlyFire:'
+status_world_friendlyfire: 'フレンドリーファイア:'
 status_world_wildernessmobs: 'Wilderness Mobs:'
 msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
 msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
@@ -975,7 +975,7 @@ msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
 #Added in 0.94
 msg_comptype_residents: '住民数'
-msg_comptype_townblocks: 'Number of Claimed Townblocks'
+msg_comptype_townblocks: '要求されたタウンブロックの数'
 msg_comptype_balance: '銀行の残高'
 msg_comptype_online: 'オンラインプレイヤー'
 msg_comptype_towns: '町数'
@@ -991,7 +991,7 @@ status_public: '&b(公開)'
 msg_days: ' 日'
 msg_comptype_public: '公開ステータス'
 towny_prices_title: '価格'
-towny_prices_town_nation: '&e[New] &2Town: &a%s &8| &2Nation: &a%s'
+towny_prices_town_nation: '&e[New] &2町: &a%s &8| &2国: &a%s'
 towny_prices_reclaim: '&e[Reclaim] &2Town: &a%s'
 towny_prices_upkeep: '&e[Upkeep] &2Town: &a%s &8| &2Nation: &a%s'
 towny_prices_overclaimed_upkeep: '&e[Overclaimed Upkeep] &2Town: &a%s'
@@ -1176,7 +1176,7 @@ msg_err_days_must_be_greater_than_0: '日数は0より大きくなければい�
 msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
 #Added in 0.110
-msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode: "[Error] セーフモードでロックされました!"
 msg_safe_mode_base: '[Error] Townyはエラーのためセーフモードでロックされています。 '
 msg_safe_mode_player: 'サーバーのコンソールを確認してください。'
 msg_safe_mode_admin: '詳細はサーバーのコンソールを確認してください。'
@@ -1278,23 +1278,23 @@ status_format_key_important: '&c' #Colour applied to an important status screen 
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Home: %s]'
 status_registered: '登録済み:'
-status_lastonline: 'Last Online:'
+status_lastonline: '最後のオンライン:'
 status_fractions: '%s/%s'
 status_rank_list: 'ランク一覧'
-status_hover_click_for_more: 'Click for more information.'
+status_hover_click_for_more: '詳細についてはクリックしてください。'
 status_jailed: 'Jailed:'
 status_bad_yes: '&cはい'
 status_good_no: '&aいいえ'
-status_resident_tax_title: '%s''s Tax'
-help_menu_command: '<blue>'
-help_menu_subcommand: '<aqua>'
-help_menu_explanation: '<gray>'
-help_menu_requirement: '<red>'
+status_resident_tax_title: '%sの税金'
+help_menu_command: '<青色>'
+help_menu_subcommand: '<水色>'
+help_menu_explanation: '<灰色>'
+help_menu_requirement: '<赤色>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
 #Added in 0.123
 msg_err_invalid_townyworld: "'%s' is not a valid towny world."
-msg_err_enter_world_name_first: 'Please enter the name of the world first.'
+msg_err_enter_world_name_first: 'はじめにワールドの名前の入力してください。'
 msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
 #Added in 0.124
 msg_err_invalid_response: 'Invalid response! Enter q to exit or back to go back to the previous question.'
@@ -1381,7 +1381,7 @@ msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to t
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
-towny_prices_upkeep_num_towns: 'number of towns.'
+towny_prices_upkeep_num_towns: '町の数'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
 towny_prices_upkeep_nation_level: 'nation level (num residents.)'
 #Added in 0.130
@@ -1430,11 +1430,11 @@ msg_baltop_book_format: '%s. %s | %s'
 msg_confirmation_timed_out: 'タイムアウトしました。'
 #Added in 0.134
 tc_player_channel_sound_muted: 'チャンネルの音声をミュートしました。'
-tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+tc_player_channel_sound_unmuted: 'チャンネルのミュートを解除しました。'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
 #Added in 0.136
-msg_view_on_web: '&7Click to view on the web.'
+msg_view_on_web: '&7クリックしてウェブ上で表示します。'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
@@ -1509,13 +1509,13 @@ townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plo
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
 #Used in the town's status screen to display plots
-status_plot_string: 'Plots'
+status_plot_string: 'プロット'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s：'
 #Usage:
-msg_usage: 'Usage: %s'
+msg_usage: '使用状況: %s'
 #Shown in teh bank history books when there are no pages to display
-msg_err_no_pages_to_display: 'No pages to display!'
+msg_err_no_pages_to_display: '表示するページがありません！'
 #Added in 0.151
 #Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
 msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
@@ -1533,36 +1533,36 @@ msg_perm_hud_destroy: 'Destroy: '
 #Seen in /plot perm hud:
 msg_perm_hud_switch: 'Switch: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'アイテム: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'タイプ: '
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: '爆発: '
 #Seen in /plot perm hud:
 msg_perm_hud_firespread: 'Firespread: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'モブのスポーン: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'キー'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'フレンド'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: '町'
 #Seen in /plot perm hud:
 msg_perm_hud_ally: 'ally'
 #Seen in /plot perm hud:
 msg_perm_hud_resident: 'resident'
 #Seen in /plot perm hud:
-msg_perm_hud_nation: 'nation'
+msg_perm_hud_nation: '国'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'outsider'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Plot: '
+msg_perm_hud_plot_name: 'プロット: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: '%sは町のレベルを%sに設定しました。'
 #Message shown when unsetting a manual town level.
 msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
@@ -1583,7 +1583,7 @@ msg_spawn_cost_free: 'Free'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'This plot is already a %s type.'
 msg_town_board_reset: '&bTown board reset.'
-msg_town_has_no_jailslots: 'The town jail is full.'
+msg_town_has_no_jailslots: '町の刑務所はいっぱいです。'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
 msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
@@ -1607,7 +1607,7 @@ msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it h
 #Message shown confirming /tw set usedefaults
 confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
 #Part of the /town plots output.
-msg_town_plots_title: ' Town Plots'
+msg_town_plots_title: ' 町のプロット'
 #Part of the /town plots output.
 msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
 #Part of the /town plots output.
@@ -1666,9 +1666,9 @@ msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "支払うには %s が必要です。"
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+msg_err_amount_must_be_greater_than_zero: "0より大きい金額にしてください。"
 #Message shown when taking over claims is disabled on a server.
 msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
