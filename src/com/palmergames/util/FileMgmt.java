@@ -145,8 +145,7 @@ public final class FileMgmt {
 					copyDirectory(new File(sourceLocation, aChildren), new File(targetLocation, aChildren));
 			} else {
 				OutputStream out = new FileOutputStream(targetLocation);
-				try {
-					InputStream in = new FileInputStream(sourceLocation);
+				try (InputStream in = new FileInputStream(sourceLocation)) {
 					// Copy the bits from in stream to out stream.
 					byte[] buf = new byte[1024];
 					int len;
@@ -316,12 +315,12 @@ public final class FileMgmt {
 				if (f.isDirectory()) {
 					recursiveZipDirectory(f, zipStream);
 				} else if (f.isFile() && f.canRead()) {
-					FileInputStream input = new FileInputStream(f);
-					ZipEntry anEntry = new ZipEntry(f.getPath());
-					zipStream.putNextEntry(anEntry);
-					while ((bytesIn = input.read(readBuffer)) != -1)
-						zipStream.write(readBuffer, 0, bytesIn);
-					input.close();
+					try (FileInputStream input = new FileInputStream(f)){
+						ZipEntry anEntry = new ZipEntry(f.getPath());
+						zipStream.putNextEntry(anEntry);
+						while ((bytesIn = input.read(readBuffer)) != -1)
+							zipStream.write(readBuffer, 0, bytesIn);
+					}
 				}
 			}
 		} finally {
