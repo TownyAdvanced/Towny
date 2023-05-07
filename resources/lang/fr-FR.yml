@@ -455,7 +455,7 @@ invite_plu: 'Invitations'
 invite_sent_by: 'Invitation envoyée par'
 invite_help_1: 'Accepter une invitation à rejoindre une ville'
 invite_help_2: 'Décliner une invitation pour rejoindre une ville'
-invite_help_4: 'Decline all invites to join a town'
+invite_help_4: 'Refuser toutes les invitations à rejoindre une ville'
 invite_help_3: 'Liste de toutes vos invitations'
 town_invite_help_1: 'Inviter un joueur dans votre ville'
 town_invite_help_2: 'Annuler une invitation qui a été envoyée à un joueur'
@@ -606,7 +606,7 @@ status_nation_tax: 'Taxe nationale:'
 status_nation_towns: 'Villes'
 status_nation_allies: 'Alliés'
 status_nation_enemies: 'Ennemis'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: 'Les nations qui considèrent votre nation comme ennemi'
 status_world_claimable: '&aAnnexable'
 status_world_noclaims: '&cNon annexable'
 status_world_forcepvp: 'PvP autorisé:'
@@ -1505,9 +1505,9 @@ msg_cost_spawn_rtp: '&bVous avez été chargé %s pour vous téléporter aléato
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Vous êtes sur le point d''être téléporté à une parcelle qui est en vente dans %s qui vous laissera rejoindre. Utilisez ''/plot claim'' pour annexer votre parcelle quand vous arrivez.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "La ville de %s a des parcelles que vous pouvez acheter, voulez-vous être téléporté à une parcelle que vous pouvez acheter maintenant ?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Vous avez été téléporté à une parcelle que vous pouvez acheter. Tapez '/plot claim' si vous voulez annexer cette parcelle."
 #Used in the town's status screen to display plots
 status_plot_string: 'Parcelles'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1643,7 +1643,7 @@ msg_town_allowedtowar_setting_set_to: 'La ville de %s a été paramétrée sur %
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
 confirmation_did_you_want_to_unclaim_all: 'Êtes-vous sûr de vouloir désannexer toute votre terre ? (Votre Centre Ville ne sera pas désannexé.)'
 #Message shown after a player unclaims all their land.
-msg_you_have_unclaimed_everything_but_your_homeblock: "Vous avez tout désannexer à part le homeblock. Pour désannexer le homeblock vous devez d'abord placer un nouveau homeblock avec '/t set homeblock'."
+msg_you_have_unclaimed_everything_but_your_homeblock: "Vous avez tout désannexé à part le homeblock. Pour désannexer le homeblock vous devez d'abord placer un nouveau homeblock avec '/t set homeblock'."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Êtes-vous sûr de vouloir nommer %s dirigeant de la nation ? Cette action est irréversible !"
 msg_warn_town_already_capital: "<red>La ville de %s est déjà la capitale de la nation."
 msg_min_adjacent_blocks: 'Vous devez avoir au moins %s blocs de ville adjacents. Il n''y a que %s.'
@@ -1668,26 +1668,26 @@ msg_err_townblock_has_no_claimedat_data: "Cette parcelle n'a aucune donnée sur 
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "Vous avez besoin de %s pour payer."
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+msg_err_amount_must_be_greater_than_zero: "Le montant doit être supérieur à zéro."
 #Message shown when taking over claims is disabled on a server.
-msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+msg_err_taking_over_claims_is_not_enabled: "La reprise des parcelles n'est pas activée sur ce serveur."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "Cette parcelle ne peut pas être reprise, la ville à laquelle il appartient n'est pas en surplus de parcelles."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "Vous ne pouvez pas faire cette annexion car cette parcelle deviendrait votre HomeBlock, ce qui n'est pas autorisé."
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "Un autre plugin vous a empêché de reprendre cette terre."
 #Confirmation shown when taking over a claim.
-confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+confirmation_you_are_about_to_take_over_a_claim: "Vous êtes sur le point de reprendre une parcelle appartenant à %s, coûtant : %s. Voulez-vous continuer ?"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
-msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+msg_warning_you_are_almost_out_of_townblocks: "Attention : Vous avez presque utilisé toutes les parcelles disponibles de votre ville. Si vous perdez un résident, vous risquez d'avoir des parcelles volées par d'autres villes."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
-msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+msg_warning_your_town_is_overclaimed: "Attention : Votre ville est en surplus de parcelle. Vous avez trop de parcelles annexées, d'autres villes pourront reprendre vos parcelles. Pensez à désannexer quelques parcelles."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[Reprise de parcelle possible]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "Vous ne pouvez pas reprendre cette parcelle, car cela diviserait la ville en deux. Vous devez reprendre d'autres parcelles."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
 msg_err_that_town_is_not_conquered: "%s n'est pas déjà conquis."
 #Message shown when a town has its conquered status removed by an admin.
-msg_conquered_status_removed: "%s has had their conquered status removed."
+msg_conquered_status_removed: "%s a perdu son status de conquis."
