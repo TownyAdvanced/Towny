@@ -59,8 +59,7 @@ public class SQLSchema {
 	 * Check that the tables are created.
 	 */
 	private static void initTable(Connection cntx, TownyDBTableType tableType) {
-		try {
-			Statement s = cntx.createStatement();
+		try (Statement s = cntx.createStatement()) {
 			s.executeUpdate(fetchTableSchema(tableType));
 			TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is ok!");
 		} catch (SQLException ee) {
@@ -114,8 +113,7 @@ public class SQLSchema {
 	private static void updateTable(Connection cntx, TownyDBTableType tableType, List<String> columns) {
 		String update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + TABLE_PREFIX + tableType.tableName() + "` ADD COLUMN ";
 		for (String column : columns) {
-			try {
-				PreparedStatement ps = cntx.prepareStatement(update + column);
+			try (PreparedStatement ps = cntx.prepareStatement(update + column)) {
 				ps.executeUpdate();
 			} catch (SQLException ee) {
 				if (ee.getErrorCode() != MYSQL_DUPLICATE_COLUMN_ERR)
@@ -347,7 +345,7 @@ public class SQLSchema {
 	private static void dropColumn(Connection cntx, String table, String column) {
 		String update;
 
-		try {
+		try (Statement s = cntx.createStatement()) {
 			DatabaseMetaData md = cntx.getMetaData();
 			ResultSet rs = md.getColumns(null, null, table, column);
 			if (!rs.next())
@@ -355,7 +353,6 @@ public class SQLSchema {
 
 			update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + table + "` DROP COLUMN `" + column + "`";
 
-			Statement s = cntx.createStatement();
 			s.executeUpdate(update);
 
 			TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
