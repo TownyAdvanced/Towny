@@ -144,20 +144,17 @@ public final class FileMgmt {
 				for (String aChildren : children)
 					copyDirectory(new File(sourceLocation, aChildren), new File(targetLocation, aChildren));
 			} else {
-				OutputStream out = new FileOutputStream(targetLocation);
-				try (InputStream in = new FileInputStream(sourceLocation)) {
+				try (OutputStream out = new FileOutputStream(targetLocation);
+					InputStream in = new FileInputStream(sourceLocation)) {
 					// Copy the bits from in stream to out stream.
 					byte[] buf = new byte[1024];
 					int len;
 					while ((len = in.read(buf)) > 0)
 						out.write(buf, 0, len);
-					in.close();
-					out.close();
 				} catch (IOException ex) {
 					// failed to access file.
 					Towny.getPlugin().getLogger().warning("Error: Could not access: " + sourceLocation);
 				}
-				out.close();
 			}
 		} finally {
 			writeLock.unlock();
@@ -315,7 +312,7 @@ public final class FileMgmt {
 				if (f.isDirectory()) {
 					recursiveZipDirectory(f, zipStream);
 				} else if (f.isFile() && f.canRead()) {
-					try (FileInputStream input = new FileInputStream(f)){
+					try (FileInputStream input = new FileInputStream(f)) {
 						ZipEntry anEntry = new ZipEntry(f.getPath());
 						zipStream.putNextEntry(anEntry);
 						while ((bytesIn = input.read(readBuffer)) != -1)
