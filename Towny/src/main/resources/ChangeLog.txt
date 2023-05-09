@@ -8647,3 +8647,6 @@ v0.92.0.11:
     - When set to true, residents which are allies of the town (which could be nation members as well as allied nations' members) will be able to use commands that only town residents could use.
   - Fix distance test for merging towns.
   - Cleanup Resources not using modern Try, courtesy of jimender2 with PR #6649. (First-Time Contributor!)
+  - Add Folia Support, courtesy of Warrior with PR #6611.
+    - An absolutely astounding achievement accomplished by Warrior, everybody clap.
+    - While the secondary plugins (TownyChat, Sponsor Plugins) do not yet support Folia, they will be updated to use Towny's bukkit & folia compatible scheduler.
