@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.utils.TownyComponents;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translation;
 
