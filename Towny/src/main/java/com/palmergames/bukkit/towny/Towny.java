@@ -117,7 +117,7 @@ public class Towny extends JavaPlugin {
 	
 	private static Towny plugin;
 	private final TaskScheduler scheduler;
-	private final boolean isFolia = isFoliaClassPresent();
+	private final boolean isFolia = JavaUtil.classExists("io.papermc.paper.threadedregions.RegionizedServer");
 
 	private static BukkitAudiences adventure;
 	

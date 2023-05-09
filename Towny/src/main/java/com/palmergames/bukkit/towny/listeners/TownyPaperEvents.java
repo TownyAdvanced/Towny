@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -17,6 +18,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockEvent;
+import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
@@ -29,36 +31,47 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 public class TownyPaperEvents implements Listener {
 	private final Towny plugin;
-	private MethodHandle getOrigin = null;
-	private MethodHandle getPrimerEntity = null;
+	private static final MethodHandle GET_ORIGIN = getOriginHandle();
+	private static final MethodHandle GET_PRIMER_ENTITY = getPrimerEntityHandle();
+	
+	private static final String SPIGOT_PRIME_EVENT = "org.bukkit.event.block.TNTPrimeEvent"; // Added somewhere during 1.19.4
+	private static final String PAPER_PRIME_EVENT = "com.destroystokyo.paper.event.block.TNTPrimeEvent";
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
 	}
 	
 	public void register() {
-		initializeReflections();
+		if (JavaUtil.classExists(SPIGOT_PRIME_EVENT))
+			registerEvent(SPIGOT_PRIME_EVENT, this::tntPrimeEvent, EventPriority.LOW, true);
+		else if (GET_PRIMER_ENTITY != null) {
+			registerEvent(PAPER_PRIME_EVENT, this::tntPrimeEvent, EventPriority.LOW, true);
+			TownyMessaging.sendDebugMsg("TNTPRimeEvent#getPrimerEntity method found, using TNTPrimeEvent listener.");
+		}
 		
-		if (this.getPrimerEntity != null)
-			registerEvent("com.destroystokyo.paper.event.block.TNTPrimeEvent", this::tntPrimeEvent, EventPriority.LOW, true);
-		
-		if (this.getOrigin != null)
+		if (GET_ORIGIN != null) {
 			registerEvent(EntityChangeBlockEvent.class, fallingBlockListener(), EventPriority.LOW, true);
+			TownyMessaging.sendDebugMsg("Entity#getOrigin found, using falling block listener.");
+		}
 	}
-	
+
 	@SuppressWarnings("JavaReflectionMemberAccess")
-	private void initializeReflections() {
+	private static MethodHandle getOriginHandle() {
 		try {
 			//https://jd.papermc.io/paper/1.19/org/bukkit/entity/Entity.html#getOrigin()
-			this.getOrigin = MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getOrigin"));
-			TownyMessaging.sendDebugMsg("Entity#getOrigin found, using falling block listener.");
-		} catch (ReflectiveOperationException ignored) {}
-		
+			return MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getOrigin"));
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
+	}
+
+	private static MethodHandle getPrimerEntityHandle() {
 		try {
 			// https://jd.papermc.io/paper/1.19/com/destroystokyo/paper/event/block/TNTPrimeEvent.html#getPrimerEntity()
-			this.getPrimerEntity = MethodHandles.publicLookup().unreflect(Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity"));
-			TownyMessaging.sendDebugMsg("TNTPRimeEvent#getPrimerEntity method found, using TNTPrimeEvent listener.");
-		} catch (ReflectiveOperationException ignored) {}
+			return MethodHandles.publicLookup().unreflect(Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity"));
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -78,12 +91,15 @@ public class TownyPaperEvents implements Listener {
 	private Consumer<Event> tntPrimeEvent() {
 		return event -> {
 			Entity primerEntity;
-			try {
-				primerEntity = (Entity) getPrimerEntity.invoke(event);
-			} catch (final Throwable e) {
-				// Should not happen, unless the getPrimerEntity method is renamed.
-				e.printStackTrace();
-				return;
+			
+			if (event.getClass().getName().equals(SPIGOT_PRIME_EVENT)) {
+				primerEntity = ((TNTPrimeEvent) event).getPrimingEntity();
+			} else {
+				try {
+					primerEntity = (Entity) GET_PRIMER_ENTITY.invoke(event);
+				} catch (final Throwable e) {
+					return;
+				}
 			}
 
 			if (primerEntity instanceof Projectile projectile) {
@@ -108,7 +124,7 @@ public class TownyPaperEvents implements Listener {
 			
 			Location origin;
 			try {
-				origin = (Location) getOrigin.invoke(event.getEntity());
+				origin = (Location) GET_ORIGIN.invoke(event.getEntity());
 			} catch (final Throwable e) {
 				e.printStackTrace();
 				return;

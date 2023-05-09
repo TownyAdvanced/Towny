@@ -59,4 +59,13 @@ public class JavaUtil {
 			Files.copy(is, destination, options);
 		}
 	}
+	
+	public static boolean classExists(@NotNull String className) {
+		try {
+			Class.forName(className);
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
 }
