@@ -1,5 +1,5 @@
 import subprocess
-changelogPath = "resources/ChangeLog.txt"
+changelogPath = "./Towny/src/main/resources/ChangeLog.txt"
 filePath = "./staging/prerelease.txt"
 pomPath = "./Towny/pom.xml"
 sponsorPath = "./staging/sponsortable.txt"
