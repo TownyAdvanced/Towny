@@ -65,4 +65,4 @@ jobs:
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
       - name: deploy to glaremaster repo
-        run: mvn -f ./Towny/pom.xml deploy
+        run: mvn deploy
