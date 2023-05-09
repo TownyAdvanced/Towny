@@ -59,6 +59,7 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
+import io.papermc.lib.PaperLib;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -932,10 +933,10 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new SimplePie("server_type", () -> {
 			if (isFolia)
 				return "Folia";
-			else if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
+			else if (PaperLib.isPaper())
 				return "Paper";
 			else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
-				if (isSpigotOrDerivative())
+				if (PaperLib.isSpigot())
 					return "Spigot";
 				else 
 					return "CraftBukkit";
@@ -964,18 +965,6 @@ public class Towny extends JavaPlugin {
 	@Deprecated
 	public static boolean is116Plus() {
 		return true;
-	}
-
-	/**
-	 * @return whether server is running spigot (and not CraftBukkit.)
-	 */
-	private static boolean isSpigotOrDerivative() {
-		try {
-			Class.forName("org.bukkit.entity.Player$Spigot");
-			return true;
-		} catch (ClassNotFoundException tr) {
-			return false;
-		}
 	}
 
 	private static boolean isFoliaClassPresent() {
