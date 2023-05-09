@@ -1,7 +1,7 @@
 import subprocess
 changelogPath = "resources/ChangeLog.txt"
 filePath = "./staging/prerelease.txt"
-pomPath = "pom.xml"
+pomPath = "./Towny/pom.xml"
 sponsorPath = "./staging/sponsortable.txt"
 currentVersion = "0.0.0.0"
 lastFullReleaseVersion = ""
