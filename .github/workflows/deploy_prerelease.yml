@@ -51,7 +51,7 @@ jobs:
           tag_name: ${{ env.CURR_VER }}
           name: ${{ env.CURR_VER }}${{ env.SUPPORTED }}
           files: |
-            ./target/towny-${{ env.CURR_VER }}.jar
+            ./Towny/target/towny-${{ env.CURR_VER }}.jar
         env:
           GITHUB_REPOSITORY: my_gh_org/my_gh_repo
       - name: prepare maven settings.xml
@@ -65,4 +65,4 @@ jobs:
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
       - name: deploy to glaremaster repo
-        run: mvn deploy
+        run: mvn mvn -f ./Towny/pom.xml deploy
