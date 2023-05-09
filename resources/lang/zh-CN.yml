@@ -1286,6 +1286,10 @@ status_jailed: '监禁于：'
 status_bad_yes: '&c是'
 status_good_no: '&a否'
 status_resident_tax_title: '%s的税'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: '下列城镇会因国家合并后离首都太远而脱离国家：%s。'
 #Added in 0.123

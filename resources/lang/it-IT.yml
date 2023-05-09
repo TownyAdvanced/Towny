@@ -1286,6 +1286,10 @@ status_jailed: 'Incarcerato:'
 status_bad_yes: '&cSI'
 status_good_no: '&aNO'
 status_resident_tax_title: 'Tassa di %s'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Poiché non saranno abbastanza vicini alla tua capitale nazionale, le seguenti città saranno rimosse se la fusione è completata: %s.'
 #Added in 0.123
