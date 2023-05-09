@@ -935,12 +935,11 @@ public class Towny extends JavaPlugin {
 				return "Folia";
 			else if (PaperLib.isPaper())
 				return "Paper";
-			else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
-				if (PaperLib.isSpigot())
-					return "Spigot";
-				else 
-					return "CraftBukkit";
-			}
+			else if (PaperLib.isSpigot())
+				return "Spigot";
+			else if (getServer().getName().equalsIgnoreCase("craftbukkit"))
+				return "CraftBukkit";
+			
 			return "Unknown";
 		}));
 
