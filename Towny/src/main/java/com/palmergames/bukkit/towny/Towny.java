@@ -930,7 +930,9 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
 		
 		metrics.addCustomChart(new SimplePie("server_type", () -> {
-			if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
+			if (isFolia)
+				return "Folia";
+			else if (Bukkit.getServer().getName().equalsIgnoreCase("paper"))
 				return "Paper";
 			else if (Bukkit.getServer().getName().equalsIgnoreCase("craftbukkit")) {
 				if (isSpigotOrDerivative())
