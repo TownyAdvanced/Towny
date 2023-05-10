@@ -219,10 +219,11 @@ public class TownyAPI {
 	 */
 	@NotNull
 	@Contract("null -> fail")
-	public Resident getResidentOrThrow(Player player) throws TownyException {
+	public Resident getResidentOrThrow(@Nullable Player player) throws TownyException {
 		Resident resident = player == null ? null : getResident(player);
 		if (resident == null)
-			throw new TownyException(Translatable.of("msg_err_resident_unknown", player.getName()));
+			throw new TownyException(Translatable.of("msg_err_resident_unknown", player != null ? player.getName() : "'null'"));
+		
 		return resident;
 	}
     

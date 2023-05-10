@@ -38,6 +38,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -49,8 +50,7 @@ import java.util.Locale;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
 
-	// protected static TownyUniverse universe;
-	private static Towny plugin;
+	private final Towny plugin;
 
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
@@ -92,7 +92,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 		if (plugin.isError()) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_safe_mode"));
 			return true;
@@ -392,7 +392,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public static void showMap(Player player) {
 
-		TownyAsciiMap.generateAndSend(plugin, player, TownySettings.asciiMapHeight());
+		TownyAsciiMap.generateAndSend(Towny.getPlugin(), player, TownySettings.asciiMapHeight());
 	}
 
 	/**

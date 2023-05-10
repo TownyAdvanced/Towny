@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.confirmations.ConfirmationHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.jetbrains.annotations.NotNull;
 
 public class ConfirmCommand extends BukkitCommand {
 	public ConfirmCommand(String name) {
@@ -15,16 +16,16 @@ public class ConfirmCommand extends BukkitCommand {
 	}
 
 	@Override
-	public boolean execute(CommandSender commandSender, String s, String[] strings) {
+	public boolean execute(@NotNull CommandSender sender, @NotNull String label, String[] args) {
 		
 		// Check if confirmation is available.
-		if (!ConfirmationHandler.hasConfirmation(commandSender)) {
-			TownyMessaging.sendMsg(commandSender, Translatable.of("no_confirmations_open"));
+		if (!ConfirmationHandler.hasConfirmation(sender)) {
+			TownyMessaging.sendMsg(sender, Translatable.of("no_confirmations_open"));
 			return true;
 		}
 		
 		// Handle the confirmation.
-		ConfirmationHandler.acceptConfirmation(commandSender);
+		ConfirmationHandler.acceptConfirmation(sender);
 		return true;
 	}
 }

@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -42,6 +43,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -610,7 +612,7 @@ public class TownyMessaging {
 				.append(dash);
 
 			TextComponent outpostName = Component.text(name, NamedTextColor.GREEN);
-			TextComponent worldName = Component.text(outpost.getWorld().getName(), NamedTextColor.BLUE);
+			TextComponent worldName = Component.text(Optional.ofNullable(outpost.getWorld()).map(World::getName).orElse("null"), NamedTextColor.BLUE);
 			TextComponent coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")", NamedTextColor.BLUE);
 
 			if (!name.equalsIgnoreCase("")) {
@@ -637,11 +639,17 @@ public class TownyMessaging {
 		audience.sendMessage(pageFooter);
 	}
 	
-	public static void sendJailList(Player player, Town town, int page, int total) {
-		Translator translator = Translator.locale(player);
-		int jailCount = town.getJails().size();
+	@SuppressWarnings("unused")
+	private static void sendJailList$$bridge$$public(Player player, Town town, int page, int total) {
+		sendJailList(player, town, page, total);
+	}
+	
+	public static void sendJailList(CommandSender sender, Town town, int page, int total) {
+		Translator translator = Translator.locale(sender);
+		List<Jail> jails = town.getJails() == null ? new ArrayList<>() : new ArrayList<>(town.getJails());
+		
+		int jailCount = jails.size();
 		int iMax = Math.min(page * 10, jailCount);
-		List<Jail> jails = new ArrayList<>(town.getJails());
 		
 		TextComponent[] jailsFormatted;
 		
@@ -672,14 +680,15 @@ public class TownyMessaging {
 				line = line.append(dash).append(name);
 			line = line.append(dash).append(coord).append(dash).append(cellCount);
 				
-			if (town.getPrimaryJail().getUUID().equals(jail.getUUID()))
+			Jail primaryJail = town.getPrimaryJail();
+			if (primaryJail != null && primaryJail.getUUID().equals(jail.getUUID()))
 				line = line.append(dash).append(Component.text("(Primary Jail)", NamedTextColor.RED));
 
 			jailsFormatted[i % 10] = line;
 		}
-		Audience audience = Towny.getAdventure().player(player);
-		sendMessage(player, ChatTools.formatTitle(Translatable.of("jail_plu").forLocale(player)));
-		sendMessage(player, headerMsg);
+		Audience audience = Towny.getAdventure().sender(sender);
+		sendMessage(sender, ChatTools.formatTitle(Translatable.of("jail_plu").forLocale(sender)));
+		sendMessage(sender, headerMsg);
 		for (TextComponent textComponent : jailsFormatted) {
 			audience.sendMessage(textComponent);
 		}
