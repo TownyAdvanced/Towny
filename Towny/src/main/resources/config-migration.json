@@ -438,5 +438,16 @@
         "value": "1.0"
       }
     ]
+  },
+  {
+    "version": "0.99.0.7",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.revert_on_unclaim.block_ignore",
+        "value": ",MOVING_PISTON",
+        "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
+      }
+    ]
   }
 ]
