@@ -8654,3 +8654,4 @@ v0.92.0.11:
   - Add moving piston to block ignore list, courtesy of Warrior with PR #6656.
   - Automatic Config update:
     - MOVING_PISTON will be to the new_world_settings.plot_management.revert_on_unclaim.block_ignore config entry, and the corresponding world file setting.
+  - Take care of a missed bukkit scheduler use, courtesy of Warrior with PR #6657.
