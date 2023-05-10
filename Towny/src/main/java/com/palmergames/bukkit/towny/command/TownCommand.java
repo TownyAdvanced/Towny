@@ -127,7 +127,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -1149,13 +1148,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								TownyMessaging.sendMsg(target, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
 							
 							final Resident outlawRes = target;
-							new BukkitRunnable() {
-								@Override
-								public void run() {
-									if (TownyAPI.getInstance().getTown(loc) != null && TownyAPI.getInstance().getTown(loc) == town) 
-										SpawnUtil.outlawTeleport(town, outlawRes);
-								}
-							}.runTaskLater(plugin, TownySettings.getOutlawTeleportWarmup() * 20);
+							plugin.getScheduler().runLater(() -> {
+								if (TownyAPI.getInstance().getTown(loc) == town)
+									SpawnUtil.outlawTeleport(town, outlawRes);									
+							}, TownySettings.getOutlawTeleportWarmup() * 20L);
 						}
 					}
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
