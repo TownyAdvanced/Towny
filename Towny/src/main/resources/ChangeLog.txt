@@ -8650,3 +8650,7 @@ v0.92.0.11:
   - Add Folia Support, courtesy of Warrior with PR #6611.
     - An absolutely astounding achievement accomplished by Warrior, everybody clap.
     - While the secondary plugins (TownyChat, Sponsor Plugins) do not yet support Folia, they will be updated to use Towny's bukkit & folia compatible scheduler.
+0.99.0.7:
+  - Add moving piston to block ignore list, courtesy of Warrior with PR #6656.
+  - Automatic Config update:
+    - MOVING_PISTON will be to the new_world_settings.plot_management.revert_on_unclaim.block_ignore config entry, and the corresponding world file setting.
