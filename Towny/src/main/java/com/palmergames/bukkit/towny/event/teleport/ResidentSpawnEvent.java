@@ -17,11 +17,13 @@ public class ResidentSpawnEvent extends SpawnEvent {
 	private final Town fromTown;
 	private final Town toTown;
 	
-	public ResidentSpawnEvent(Player player, Location from, Location to) {
+	public ResidentSpawnEvent(Player player, Location from, Location to, boolean cancelled, String cancelMessage) {
 		super(player, from, to);
 		
 		fromTown = WorldCoord.parseWorldCoord(from).getTownOrNull();
 		toTown = WorldCoord.parseWorldCoord(to).getTownOrNull();
+		setCancelled(cancelled);
+		setCancelMessage(cancelMessage);
 	}
 
 	/**
