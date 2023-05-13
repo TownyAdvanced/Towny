@@ -1075,7 +1075,7 @@ public class TownyPlayerListener implements Listener {
 				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
 				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 			}
-			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
+			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle, TownySettings.getNotificationTitlesDurationTicks());
 		}
 	}
 	
@@ -1119,7 +1119,7 @@ public class TownyPlayerListener implements Listener {
 			if (subtitle.contains("{townname}")) {
 				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
 			}
-			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle);
+			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle, TownySettings.getNotificationTitlesDurationTicks());
 		}
 
 		if (resident.isJailed())

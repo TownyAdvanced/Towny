@@ -8655,3 +8655,9 @@ v0.92.0.11:
   - Automatic Config update:
     - MOVING_PISTON will be to the new_world_settings.plot_management.revert_on_unclaim.block_ignore config entry, and the corresponding world file setting.
   - Take care of a missed bukkit scheduler use, courtesy of Warrior with PR #6657.
+  - Add config option to set the duration of the Title and Subtitle messages shown when entering/leaving towns.
+    - Closes #6662.
+  - New Config Option: notification.titles.duration",
+    - Default: 70
+    - The duration (in ticks) that the Title and Subtitle messages will appear for.
+    - The default duration for minecraft is 70 ticks, which equates to 3.5 seconds.

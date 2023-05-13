@@ -2992,6 +2992,10 @@ public class TownySettings {
 		return getString(ConfigNodes.NOTIFICATION_TITLES_NATIONCAPITAL_FORMAT);
 	}
 	
+	public static int getNotificationTitlesDurationTicks() {
+		return getInt(ConfigNodes.NOTIFICATION_TITLES_DURATION);
+	}
+
 	public static double getTownRenameCost() {
 		return getDouble(ConfigNodes.ECO_TOWN_RENAME_COST);
 	}

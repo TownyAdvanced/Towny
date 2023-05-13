@@ -1845,6 +1845,12 @@ public enum ConfigNodes {
 			"",
 			"# The format used to format the {nationcapital} option. The name of the capital city and nation will replace the %s and %s.",
 			"# Alternatively, you can use %t for townname and %n for nationname and show either one or both."),
+	NOTIFICATION_TITLES_DURATION(
+			"notification.titles.duration",
+			"70",
+			"",
+			"# The duration (in ticks) that the Title and Subtitle messages will appear for.",
+			"# The default duration for minecraft is 70 ticks, which equates to 3.5 seconds."),
 	NOTIFICATION_OWNER_SHOWS_VERBOSE_NAME("notification.owner_shows_verbose_name", 
 			"true",
 			"",

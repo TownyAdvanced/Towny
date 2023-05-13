@@ -317,45 +317,81 @@ public class TownyMessaging {
 	 */
 	
 	/**
-	 * Send a Title and Subtitle to a resident
+	 * Send a Title and Subtitle to a resident for a specified number of ticks.
 	 *
-	 * @param resident resident to receive title &amp; subtitle message
-	 * @param title title message to send
-	 * @param subtitle subtitle message to send
+	 * @param resident Resident to receive title &amp; subtitle message.
+	 * @param title    Title message to send.
+	 * @param subtitle Subtitle message to send.
+	 * @param duration Number of ticks to display the message.
 	 */
-	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) {
+	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle, int duration) {
 		Player player = resident.getPlayer();
 		if (player == null)
 			return;
-		sendTitle(player, title, subtitle);
+		sendTitle(player, title, subtitle, duration);
 	}
-	
+
 	/**
-	 * Send a Title and Subtitle to a town
+	 * Send a Title and Subtitle to a resident with default duration (70 ticks.)
 	 *
-	 * @param town town to receive title &amp; subtitle messages
-	 * @param title title message to send
-	 * @param subtitle subtitle message to send
+	 * @param resident Resident to receive title &amp; subtitle message.
+	 * @param title    Title message to send.
+	 * @param subtitle Subtitle message to send.
+	 */
+	public static void sendTitleMessageToResident(Resident resident, String title, String subtitle) {
+		sendTitleMessageToResident(resident, title, subtitle, 70);
+	}
+
+	/**
+	 * Send a Title and Subtitle to a town for a specified number of ticks.
+	 *
+	 * @param town     Town to receive title &amp; subtitle messages.
+	 * @param title    Title message to send.
+	 * @param subtitle Subtitle message to send.
+	 * @param duration Number of ticks to display the message.
+	 */
+	public static void sendTitleMessageToTown(Town town, String title, String subtitle, int duration) {
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
+			sendTitle(player, title, subtitle, duration);
+	}
+
+	/**
+	 * Send a Title and Subtitle to a town with default duration (70 ticks.)
+	 *
+	 * @param town     Town to receive title &amp; subtitle messages.
+	 * @param title    Title message to send.
+	 * @param subtitle Subtitle message to send.
 	 */
 	public static void sendTitleMessageToTown(Town town, String title, String subtitle) {
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			sendTitle(player, title, subtitle);
+		sendTitleMessageToTown(town, title, subtitle, 70);
 	}
 
 	/**
-	 * Send a Title and Subtitle to a nation
+	 * Send a Title and Subtitle to a nation for a specified number of ticks.
 	 *
-	 * @param nation   - Nation object
-	 * @param title    - Title
-	 * @param subtitle - Subtitle
+	 * @param nation   Nation to receive title &amp; subtitle messages.
+	 * @param title    Title message to send.
+	 * @param subtitle Subtitle message to send.
+	 * @param duration Number of ticks to display the message.
+	 */
+	public static void sendTitleMessageToNation(Nation nation, String title, String subtitle, int duration) {
+		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
+			sendTitle(player, title, subtitle, duration);
+	}
+
+	/**
+	 * Send a Title and Subtitle to a nation with default duration (70 ticks.)
+	 *
+	 * @param nation   Nation to receive title &amp; subtitle messages.
+	 * @param title    Title message to send.
+	 * @param subtitle Subtitle message to send.
 	 */
 	public static void sendTitleMessageToNation(Nation nation, String title, String subtitle) {
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			sendTitle(player, title, subtitle);
+		sendTitleMessageToNation(nation, title, subtitle, 70);
 	}
 
 	/**
-	 * Send the player a Title message
+	 * Send the player a Title message for a specified number of ticks.
 	 * <p>
 	 * As of MC 1.18 a null title will mean the message is never sent, so we are
 	 * changing empty Strings to " ".
@@ -363,9 +399,21 @@ public class TownyMessaging {
 	 * @param player   Player being send the Title message.
 	 * @param title    String title message.
 	 * @param subtitle String subtitle message.
+	 * @param duration How long the title is shown for in ticks. 
+	 */
+	public static void sendTitle(Player player, String title, String subtitle, int duration) {
+		player.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, 10, duration, 10);
+	}
+
+	/**
+	 * Send the player a Title message with default duration (70 ticks.)
+	 * 
+	 * @param player   Player being send the Title message.
+	 * @param title    String title message.
+	 * @param subtitle String subtitle message.
 	 */
 	public static void sendTitle(Player player, String title, String subtitle) {
-		player.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, 10, 70, 10);
+		sendTitle(player, title, subtitle, 70);
 	}
 
 	/*
