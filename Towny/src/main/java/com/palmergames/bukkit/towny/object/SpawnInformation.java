@@ -19,9 +19,9 @@ public class SpawnInformation {
 		this.eventCancelled = false;
 		this.eventCancellationMessage = null;
 		this.travelCost = 0;
-		townSpawnLevel = null;
-		nationSpawnLevel = null;
-		cooldown = 0;
+		this.townSpawnLevel = null;
+		this.nationSpawnLevel = null;
+		this.cooldown = 0;
 	}
 	
 }
