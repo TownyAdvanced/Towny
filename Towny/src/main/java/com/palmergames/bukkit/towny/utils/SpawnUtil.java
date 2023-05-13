@@ -65,7 +65,7 @@ public class SpawnUtil {
 	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
 
 		// Get resident while testing they aren't on a cooldown or jailed.
-		final Resident resident = getResident(player);;
+		Resident resident = getResident(player);;
 
 		// Set up town and nation variables.
 		final Town town = switch (spawnType) {
