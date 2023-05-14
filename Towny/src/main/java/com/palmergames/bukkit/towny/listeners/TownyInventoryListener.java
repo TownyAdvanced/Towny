@@ -52,32 +52,31 @@ public class TownyInventoryListener implements Listener {
 		if (event.getInventory().getHolder() instanceof EditGUI editGUI) {
 			
 			ItemMeta meta = event.getCurrentItem().getItemMeta();
-			switch (event.getCurrentItem().getType()) {
-				case LIME_WOOL:
-					if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
-						editGUI.saveChanges();
-					} else {
-						meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-						event.getCurrentItem().setType(Material.RED_WOOL);
-					}
-					break;
-				case RED_WOOL:
-					if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
-						editGUI.exitScreen();
-					} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
-						editGUI.deleteResident();
-					} else {
-						meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-						event.getCurrentItem().setType(Material.GRAY_WOOL);
-					}
-					break;
-				case GRAY_WOOL:
-					meta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-					event.getCurrentItem().setType(Material.LIME_WOOL);
-					break;
-				default:
-					return;
-			}
+			if (meta == null)
+				return;
+			
+			Material type = event.getCurrentItem().getType();
+			if (type == Material.LIME_WOOL) {
+				if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
+					editGUI.saveChanges();
+				} else {
+					meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
+					event.getCurrentItem().setType(Material.RED_WOOL);
+				}
+			} else if (type == Material.RED_WOOL) {
+				if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
+					editGUI.exitScreen();
+				} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
+					editGUI.deleteResident();
+				} else {
+					meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
+					event.getCurrentItem().setType(Material.GRAY_WOOL);
+				}
+			} else if (type == Material.GRAY_WOOL) {
+				meta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
+				event.getCurrentItem().setType(Material.LIME_WOOL);
+			} else 
+				return;
 			
 			event.getCurrentItem().setItemMeta(meta);			
 			editGUI.playClickSound(player);
