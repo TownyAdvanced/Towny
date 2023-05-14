@@ -31,11 +31,9 @@ public class ItemLists {
 	
 	private ItemLists(@NotNull Set<String> taggedMaterials) {
 		for (String mat : taggedMaterials) {
-			try {
-				Material matched = Material.matchMaterial(mat);
-				if (matched != null)
-					this.taggedMaterials.add(matched);
-			} catch (IllegalArgumentException ignored) {}
+			Material matched = Material.matchMaterial(mat);
+			if (matched != null)
+				this.taggedMaterials.add(matched);
 		}
 	}
 	
@@ -52,11 +50,12 @@ public class ItemLists {
 	 * @return Whether the item list contains the specified material.
 	 */
 	public boolean contains(@NotNull String matName) {
-		try {
-			Material matched = Material.matchMaterial(matName);
-			if (matched != null)
-				return taggedMaterials.contains(matched);
-		} catch (IllegalArgumentException ignored) {}
+		if (matName.isEmpty())
+			return false;
+		
+		Material matched = Material.matchMaterial(matName);
+		if (matched != null)
+			return taggedMaterials.contains(matched);
 		
 		return false;
 	}
@@ -366,11 +365,12 @@ public class ItemLists {
 				exceptions = new HashSet<>();
 
 			for (String name : names) {
-				try {
-					Material match = Material.matchMaterial(name);
-					if (match != null)
-						exceptions.add(match);
-				} catch (IllegalArgumentException ignored) {}
+				if (name.isEmpty())
+					continue;
+				
+				Material match = Material.matchMaterial(name);
+				if (match != null)
+					exceptions.add(match);
 			}
 
 			return this;

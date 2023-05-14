@@ -425,12 +425,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "/townyworld set wildignore OAK_SAPLING GOLD_ORE IRON_ORE"));
 				else
 					try {
-						List<String> mats = new ArrayList<>();
-						for (String s : StringMgmt.remFirstArg(split)) {
-							String matName = BukkitTools.matchMaterialName(s);
-							if (matName != null)
-								mats.add(matName);
-						}
+						List<String> mats = Arrays.asList(StringMgmt.remFirstArg(split));
 						globalWorld.setUnclaimedZoneIgnore(mats);
 
 						plugin.resetCache();
