@@ -409,11 +409,9 @@ public class TownySettings {
 		Set<EntityType> entities = new HashSet<>();
 		
 		for (String entityName : entityList) {
-			try {
-				EntityType type = Registry.ENTITY_TYPE.match(entityName);
-				if (type != null)
-					entities.add(type);
-			} catch (IllegalArgumentException ignored) {}
+			EntityType type = Registry.ENTITY_TYPE.match(entityName);
+			if (type != null)
+				entities.add(type);
 		}
 
 		return entities;
