@@ -12,6 +12,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class JavaUtil {
@@ -67,5 +68,9 @@ public class JavaUtil {
 		} catch (ClassNotFoundException e) {
 			return false;
 		}
+	}
+	
+	public static <T> T make(Supplier<T> supplier) {
+		return supplier.get();
 	}
 }

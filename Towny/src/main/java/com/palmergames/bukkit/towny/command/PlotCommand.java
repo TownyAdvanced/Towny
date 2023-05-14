@@ -404,7 +404,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		BukkitTools.ifCancelledThenThrow(new PlotPreClearEvent(townBlock));
 
-		Set<Material> materialsToDelete = townBlock.getWorld().getPlotManagementMayorDelete();
+		Collection<Material> materialsToDelete = townBlock.getWorld().getPlotManagementMayorDelete();
 		if (materialsToDelete.isEmpty())
 			return;
 
