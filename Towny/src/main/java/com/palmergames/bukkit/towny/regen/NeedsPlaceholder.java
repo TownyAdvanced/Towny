@@ -1,23 +1,40 @@
 package com.palmergames.bukkit.towny.regen;
 
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Material;
 
-import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 public class NeedsPlaceholder {
 
-	private static EnumSet<Material> needsPlaceholder = EnumSet.of(
-			Material.SAND, Material.GRAVEL,
-			Material.REDSTONE_WIRE, Material.COMPARATOR,
-			Material.OAK_SAPLING, Material.SPRUCE_SAPLING,
-			Material.BIRCH_SAPLING, Material.SPRUCE_SAPLING,
-			Material.JUNGLE_SAPLING, Material.ACACIA_SAPLING,
-			Material.DARK_OAK_SAPLING, Material.BROWN_MUSHROOM,
-			Material.RED_MUSHROOM, Material.WHEAT, Material.REDSTONE_TORCH,
-			Material.REDSTONE_WALL_TORCH, Material.SNOW, Material.OAK_WALL_SIGN,
-			Material.SPRUCE_WALL_SIGN, Material.DARK_OAK_WALL_SIGN,
-			Material.BIRCH_WALL_SIGN, Material.ACACIA_WALL_SIGN,
-			Material.JUNGLE_WALL_SIGN);
+	private static final Set<Material> needsPlaceholder = JavaUtil.make(() -> {
+		Set<Material> materials = new HashSet<>();
+		materials.add(Material.SAND);
+		materials.add(Material.GRAVEL);
+		materials.add(Material.REDSTONE_WIRE);
+		materials.add(Material.COMPARATOR);
+		materials.add(Material.OAK_SAPLING);
+		materials.add(Material.SPRUCE_SAPLING);
+		materials.add(Material.BIRCH_SAPLING);
+		materials.add(Material.JUNGLE_SAPLING);
+		materials.add(Material.ACACIA_SAPLING);
+		materials.add(Material.DARK_OAK_SAPLING);
+		materials.add(Material.BROWN_MUSHROOM);
+		materials.add(Material.RED_MUSHROOM);
+		materials.add(Material.WHEAT);
+		materials.add(Material.REDSTONE_TORCH);
+		materials.add(Material.REDSTONE_WALL_TORCH);
+		materials.add(Material.SNOW);
+		materials.add(Material.OAK_WALL_SIGN);
+		materials.add(Material.SPRUCE_WALL_SIGN);
+		materials.add(Material.DARK_OAK_WALL_SIGN);
+		materials.add(Material.BIRCH_WALL_SIGN);
+		materials.add(Material.ACACIA_WALL_SIGN);
+		materials.add(Material.JUNGLE_WALL_SIGN);
+		
+		return materials;
+	});
 
 	public static boolean contains(Material material) {
 

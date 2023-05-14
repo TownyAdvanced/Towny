@@ -3,7 +3,7 @@ package com.palmergames.bukkit.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.EnumSet;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -11,10 +11,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 /**
  * Item lists as Strings. Useful for groups that are missing from the Spigot Tags.
@@ -24,20 +27,20 @@ import org.jetbrains.annotations.Nullable;
  * @author LlmDl
  */
 public class ItemLists {
-	public final EnumSet<Material> taggedMaterials;
+	public final Set<Material> taggedMaterials = new HashSet<>();
 	
 	private ItemLists(@NotNull Set<String> taggedMaterials) {
-		this.taggedMaterials = EnumSet.noneOf(Material.class);
-
 		for (String mat : taggedMaterials) {
 			try {
-				this.taggedMaterials.add(Material.valueOf(mat.toUpperCase(Locale.ROOT)));
+				Material matched = Material.matchMaterial(mat);
+				if (matched != null)
+					this.taggedMaterials.add(matched);
 			} catch (IllegalArgumentException ignored) {}
 		}
 	}
 	
-	private ItemLists(EnumSet<Material> taggedMaterials) {
-		this.taggedMaterials = taggedMaterials;
+	private ItemLists(Collection<Material> taggedMaterials) {
+		this.taggedMaterials.addAll(taggedMaterials);
 	}
 	
 	private static ItemLists of(@NotNull String... taggedMaterials) {
@@ -50,10 +53,12 @@ public class ItemLists {
 	 */
 	public boolean contains(@NotNull String matName) {
 		try {
-			return taggedMaterials.contains(Material.valueOf(matName.toUpperCase(Locale.ROOT)));
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
+			Material matched = Material.matchMaterial(matName);
+			if (matched != null)
+				return taggedMaterials.contains(matched);
+		} catch (IllegalArgumentException ignored) {}
+		
+		return false;
 	}
 
 	/**
@@ -266,14 +271,15 @@ public class ItemLists {
 	 * @return - Set&lt;Material&gt; grouping of materials, or an empty set if the grouping was not found.
 	 */
 	@NotNull
+	@Unmodifiable
 	public static Set<Material> getGrouping(String groupName) {
 		if (!GROUPS.contains(groupName))
-			return EnumSet.noneOf(Material.class);
+			return ImmutableSet.of();
 
 		try {
 			return ((ItemLists) ItemLists.class.getField(groupName).get(null)).taggedMaterials;
 		} catch (Exception e) {
-			return EnumSet.noneOf(Material.class);
+			return ImmutableSet.of();
 		}
 	}
 	
@@ -301,13 +307,13 @@ public class ItemLists {
 	private static class PredicateListBuilder {
 		private final Set<Predicate<String>> allMatchPredicates = new HashSet<>();
 		private final Set<Predicate<String>> anyMatchPredicates = new HashSet<>();
-		private @Nullable EnumSet<Material> exceptions;
+		private @Nullable Set<Material> exceptions;
 
 		public ItemLists build() {
 			PredicateList predicateList = new PredicateList(allMatchPredicates, anyMatchPredicates);
-			EnumSet<Material> matches = EnumSet.noneOf(Material.class);
+			Set<Material> matches = new HashSet<>();
 
-			for (Material material : Material.values())
+			for (Material material : Registry.MATERIAL)
 				if (predicateList.contains(material))
 					matches.add(material);
 			
@@ -357,11 +363,13 @@ public class ItemLists {
 
 		public PredicateListBuilder add(@NotNull String... names) {
 			if (exceptions == null)
-				exceptions = EnumSet.noneOf(Material.class);
+				exceptions = new HashSet<>();
 
 			for (String name : names) {
 				try {
-					exceptions.add(Material.valueOf(name.toUpperCase(Locale.ROOT)));
+					Material match = Material.matchMaterial(name);
+					if (match != null)
+						exceptions.add(match);
 				} catch (IllegalArgumentException ignored) {}
 			}
 
