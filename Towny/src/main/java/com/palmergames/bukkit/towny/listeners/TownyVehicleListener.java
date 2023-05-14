@@ -1,8 +1,10 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import com.palmergames.bukkit.util.EntityLists;
 import org.bukkit.Material;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,25 +63,13 @@ public class TownyVehicleListener implements Listener {
 		 * Note: Player-lit-TNT and Fireballs are considered Players by the API in this instance.
 		 */
 		if (event.getAttacker() instanceof Player player) {
+			final EntityType vehicleType = event.getVehicle().getType();
 			
 			/*
 			 * Substitute a Material for the Entity so we can run a destroy test against it.
-			 * Any entity not in the switch statement will leave vehicle null and no test will occur.
+			 * Any entity not in the vehicle entity list will leave vehicle null and no test will occur.
 			 */
-			Material vehicle = switch (event.getVehicle().getType()) {
-				case MINECART:
-				case MINECART_FURNACE:
-				case MINECART_HOPPER:
-				case MINECART_CHEST:
-				case MINECART_MOB_SPAWNER:
-				case MINECART_COMMAND:
-				case MINECART_TNT:
-				case BOAT:
-				case CHEST_BOAT:
-					yield EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
-				default:
-					yield null;
-			};
+			Material vehicle = EntityLists.VEHICLES.contains(vehicleType) ? EntityTypeUtil.parseEntityToMaterial(vehicleType) : null;
 
 			if (vehicle != null) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
@@ -130,25 +120,18 @@ public class TownyVehicleListener implements Listener {
 			return;
 
 		if (event.getEntered() instanceof Player player) {
+			EntityType vehicleType = event.getVehicle().getType();
 
 			/*
 			 * Substitute a Material for the Entity so we can run a switch test against it.
-			 * Any entity not in the switch statement will leave vehicle null and no test will occur.
+			 * Any entity not in the entity lists will leave vehicle null and no test will occur.
 			 */
-			Material vehicle = switch (event.getVehicle().getType()) {
-				case MINECART:
-				case BOAT:
-				case CHEST_BOAT:
-					yield EntityTypeUtil.parseEntityToMaterial(event.getVehicle().getType());
-				case HORSE:
-				case STRIDER:
-				case PIG:
-				case DONKEY:
-				case MULE:
-					yield Material.SADDLE;
-				default:
-					yield null;
-			};
+			Material vehicle = null;
+			
+			if (EntityLists.VEHICLES.contains(vehicleType))
+				vehicle = EntityTypeUtil.parseEntityToMaterial(vehicleType);
+			else if (EntityLists.MOUNTABLE.contains(vehicleType))
+				vehicle = Material.SADDLE;
 
 			if (vehicle != null) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.

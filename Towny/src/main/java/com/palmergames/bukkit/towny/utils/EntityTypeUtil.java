@@ -2,10 +2,14 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +44,37 @@ public class EntityTypeUtil {
 			EntityType.MINECART_TNT,
 			EntityType.PRIMED_TNT,
 			EntityType.ENDER_CRYSTAL);
+	
+	// TODO account for older versions not having certain constants
+	/**
+	 * A mapping of various entity types to their corresponding material
+	 */
+	private static final Map<EntityType, Material> ENTITY_TYPE_MATERIAL_MAP = JavaUtil.make(() -> {
+		Map<EntityType, Material> map = new HashMap<>();
+		map.put(EntityType.AXOLOTL, Material.AXOLOTL_BUCKET);
+		map.put(EntityType.COD, Material.COD);
+		map.put(EntityType.SALMON, Material.SALMON);
+		map.put(EntityType.PUFFERFISH, Material.PUFFERFISH);
+		map.put(EntityType.TROPICAL_FISH, Material.TROPICAL_FISH);
+		map.put(EntityType.TADPOLE, Material.TADPOLE_BUCKET);
+		map.put(EntityType.ITEM_FRAME, Material.ITEM_FRAME);
+		map.put(EntityType.GLOW_ITEM_FRAME, Material.GLOW_ITEM_FRAME);
+		map.put(EntityType.PAINTING, Material.PAINTING);
+		map.put(EntityType.ARMOR_STAND, Material.ARMOR_STAND);
+		map.put(EntityType.LEASH_HITCH, Material.LEAD);
+		map.put(EntityType.ENDER_CRYSTAL, Material.END_CRYSTAL);
+		map.put(EntityType.MINECART, Material.MINECART);
+		map.put(EntityType.MINECART_MOB_SPAWNER, Material.MINECART);
+		map.put(EntityType.MINECART_CHEST, Material.CHEST_MINECART);
+		map.put(EntityType.MINECART_FURNACE, Material.FURNACE_MINECART);
+		map.put(EntityType.MINECART_COMMAND, Material.COMMAND_BLOCK_MINECART);
+		map.put(EntityType.MINECART_HOPPER, Material.HOPPER_MINECART);
+		map.put(EntityType.MINECART_TNT, Material.TNT_MINECART);
+		map.put(EntityType.BOAT, Material.OAK_BOAT);
+		map.put(EntityType.CHEST_BOAT, Material.OAK_CHEST_BOAT);
+
+		return map;
+	});
 	
 	public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
 
@@ -81,29 +116,12 @@ public class EntityTypeUtil {
 	 */
 	@Nullable
 	public static Material parseEntityToMaterial(EntityType entityType) {
-		return switch (entityType) {
-			case AXOLOTL -> Material.AXOLOTL_BUCKET;
-			case COD -> Material.COD;
-			case SALMON -> Material.SALMON;
-			case PUFFERFISH -> Material.PUFFERFISH;
-			case TROPICAL_FISH -> Material.TROPICAL_FISH;
-			case TADPOLE -> Material.TADPOLE_BUCKET;
-			case ITEM_FRAME -> Material.ITEM_FRAME;
-			case GLOW_ITEM_FRAME -> Material.GLOW_ITEM_FRAME;
-			case PAINTING -> Material.PAINTING;
-			case ARMOR_STAND -> Material.ARMOR_STAND;
-			case LEASH_HITCH -> Material.LEAD;
-			case ENDER_CRYSTAL -> Material.END_CRYSTAL;
-			case MINECART, MINECART_MOB_SPAWNER -> Material.MINECART;
-			case MINECART_CHEST -> Material.CHEST_MINECART;
-			case MINECART_FURNACE -> Material.FURNACE_MINECART;
-			case MINECART_COMMAND -> Material.COMMAND_BLOCK_MINECART;
-			case MINECART_HOPPER -> Material.HOPPER_MINECART;
-			case MINECART_TNT -> Material.TNT_MINECART;
-			case BOAT -> Material.OAK_BOAT;
-			case CHEST_BOAT -> Material.OAK_CHEST_BOAT;
-			default -> null;
-		};
+		Material lookup = ENTITY_TYPE_MATERIAL_MAP.get(entityType);
+		if (lookup != null)
+			return lookup;
+		
+		// Attempt to lookup a material with the same name, if it doesn't exist it's null.
+		return Registry.MATERIAL.get(entityType.getKey());
 	}
 
 	/**
