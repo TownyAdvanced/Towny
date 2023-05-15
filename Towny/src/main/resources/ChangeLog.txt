@@ -8661,3 +8661,5 @@ v0.92.0.11:
     - Default: 70
     - The duration (in ticks) that the Title and Subtitle messages will appear for.
     - The default duration for minecraft is 70 ticks, which equates to 3.5 seconds.
+  - Bump adventure-text-serializer-plain from 4.13.0 to 4.13.1.
+  - Add Folia to bstats server type chart, courtesy of Warrior with PR #6654.
