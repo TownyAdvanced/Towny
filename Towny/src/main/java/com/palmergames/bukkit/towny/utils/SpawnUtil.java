@@ -64,8 +64,7 @@ public class SpawnUtil {
 	 */
 	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
 
-		// Get resident while testing they aren't on a cooldown or jailed.
-		Resident resident = getResident(player);
+		Resident resident = TownyAPI.getInstance().getResidentOrThrow(player);
 
 		// Set up town and nation variables.
 		final Town town = switch (spawnType) {
@@ -108,6 +107,9 @@ public class SpawnUtil {
 
 		SpawnInformation spawnInformation = new SpawnInformation();
 		try {
+			// Check if the resident is denied spawning because of cooldowns or being jailed.
+			testResidentAbility(resident);
+
 			// Set up either the townSpawnLevel or nationSpawnLevel variable. (One of these will be null.)
 			// This determines whether a spawn is considered town, nation, public, allied, admin via TownSpawnLevel and NationSpawnLevel objects.
 			// Accounts for costs, permission, config settings and messages.
@@ -189,18 +191,11 @@ public class SpawnUtil {
 	}
 	
 	/**
-	 * Get a resident or throw an exception.
+	 * Checks that a resident is allowed to spawn.
 	 * 
-	 * @param player Player to get a resident from.
-	 * @return resident Resident which will be teleporting.
-	 * @throws TownyException thrown when the resident is null, on cooldown or
-	 *                        jailed.
+	 * @throws TownyException thrown when the resident is on cooldown or jailed.
 	 */
-	private static Resident getResident(Player player) throws TownyException {
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		if (resident == null)
-			throw new TownyException(Translatable.of("msg_err_not_registered_1", player.getName()));
-			
+	private static void testResidentAbility(Resident resident) throws TownyException {
 		// Test if the resident is in a teleport cooldown.
 		if (CooldownTimerTask.hasCooldown(resident.getName(), "teleport"))
 			throw new TownyException(Translatable.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), "teleport")));
@@ -208,8 +203,6 @@ public class SpawnUtil {
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
 			throw new TownyException(Translatable.of("msg_cannot_spawn_while_jailed"));
-
-		return resident;
 	}
 
 	/**
