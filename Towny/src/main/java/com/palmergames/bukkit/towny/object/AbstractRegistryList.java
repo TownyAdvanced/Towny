@@ -19,7 +19,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 	private final Registry<T> registry;
 	protected final Set<T> tagged = new HashSet<>();
 	
-	public AbstractRegistryList(Registry<T> registry, Collection<T> collection) {
+	public AbstractRegistryList(@NotNull Registry<T> registry, @NotNull Collection<T> collection) {
 		this.registry = registry;
 		this.tagged.addAll(collection);
 	}
@@ -33,22 +33,17 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 	}
 	
 	public boolean contains(@NotNull NamespacedKey key) {
-		T element = registry.get(key);
-		if (element == null)
-			return false;
+		final T element = registry.get(key);
 		
-		return this.contains(element);
+		return element != null && this.contains(element);
 	}
 	
 	public boolean contains(@NotNull String element) {
 		if (element.isEmpty())
 			return false;
 		
-		T matched = registry.match(element);
-		if (matched != null)
-			return this.contains(matched);
-		
-		return false;
+		final T matched = registry.match(element);
+		return matched != null && this.contains(matched);
 	}
 	
 	@SuppressWarnings("unused")
@@ -63,6 +58,11 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		private final Set<Predicate<NamespacedKey>> anyMatchPredicates = new HashSet<>();
 		private @Nullable Set<T> exceptions;
 		
+		/**
+		 * @param registry The bukkit registry, used for matching strings into {@link T}.
+		 * @param clazz The class that belongs to {@link T}, used for tag lookups in {@link #withTag(String, NamespacedKey)}.
+		 * @param function The mapping function to convert a {@code Collection<T>} to your implementing class, this can just be {@code MyClass::new}.
+		 */
 		public Builder(Registry<T> registry, Class<T> clazz, Function<Collection<T>, F> function) {
 			this.registry = registry;
 			this.clazz = clazz;
@@ -136,6 +136,10 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 			return this;
 		}
 
+		/**
+		 * Manually adds the given names to the resulting list, assuming that they can be matched and are available on the current running version.
+		 * @param names An array of names to add.
+		 */
 		public Builder<T, F> add(@NotNull String... names) {
 			if (exceptions == null)
 				exceptions = new HashSet<>();
