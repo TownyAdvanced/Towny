@@ -26,7 +26,7 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists SWITCH_PROTECTED = newBuilder().add("minecart_chest", "minecart_furnace", "minecart_hopper", "chest_boat").build();
 	
-	public static final EntityLists RIGHT_CLICK_PROTECTED = newBuilder().add("tropical_fish", "salmon", "cod", "item_frame", "glow_item_frame", "painting", "leash_hitch", "command_block_minecart", "tnt_minecart", "spawner_minecart", "tadpole", "axolotl").build();
+	public static final EntityLists RIGHT_CLICK_PROTECTED = newBuilder().add("tropical_fish", "salmon", "cod", "item_frame", "glow_item_frame", "painting", "leash_hitch", "leash_knot", "command_block_minecart", "tnt_minecart", "spawner_minecart", "tadpole", "axolotl").build();
 	
 	public static final EntityLists ITEM_FRAMES = newBuilder().add("item_frame", "glow_item_frame").build();
 	

@@ -61,10 +61,10 @@ public class EntityTypeUtil {
 		map.put(EntityType.GLOW_ITEM_FRAME, Material.GLOW_ITEM_FRAME);
 		map.put(EntityType.PAINTING, Material.PAINTING);
 		map.put(EntityType.ARMOR_STAND, Material.ARMOR_STAND);
-		map.put(EntityType.LEASH_HITCH, Material.LEAD);
+		map.put(EntityType.LEASH_HITCH, Material.LEAD); // TODO this is renamed to LEASH_KNOT
 		map.put(EntityType.ENDER_CRYSTAL, Material.END_CRYSTAL);
 		map.put(EntityType.MINECART, Material.MINECART);
-		map.put(EntityType.MINECART_MOB_SPAWNER, Material.MINECART);
+		map.put(EntityType.MINECART_MOB_SPAWNER, Material.MINECART); // TODO whole bunch of renames
 		map.put(EntityType.MINECART_CHEST, Material.CHEST_MINECART);
 		map.put(EntityType.MINECART_FURNACE, Material.FURNACE_MINECART);
 		map.put(EntityType.MINECART_COMMAND, Material.COMMAND_BLOCK_MINECART);

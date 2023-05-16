@@ -449,9 +449,24 @@
         "worldAction": "UPDATE_WORLD_BLOCK_IGNORE"
       },
       {
-        "type": "APPEND",
+        "type": "REPLACE",
         "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
+        "key": "LARGE_FIREBALL",
         "value": "FIREBALL",
+        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
+      },
+      {
+        "type": "REPLACE",
+        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
+        "key": "PRIMED_TNT",
+        "value": "TNT",
+        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
+      },
+      {
+        "type": "REPLACE",
+        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
+        "key": "MINECART_TNT",
+        "value": "TNT_MINECART",
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
       }
     ]
