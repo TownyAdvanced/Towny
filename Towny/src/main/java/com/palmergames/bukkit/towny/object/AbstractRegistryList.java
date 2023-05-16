@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
@@ -42,7 +43,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		if (element.isEmpty())
 			return false;
 		
-		final T matched = registry.match(element);
+		final T matched = BukkitTools.matchRegistry(this.registry, element);
 		return matched != null && this.contains(matched);
 	}
 	
@@ -148,7 +149,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 				if (name.isEmpty())
 					continue;
 
-				T match = registry.match(name);
+				T match = BukkitTools.matchRegistry(this.registry, name);
 				if (match != null)
 					exceptions.add(match);
 			}
