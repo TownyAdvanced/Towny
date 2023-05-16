@@ -184,7 +184,7 @@ public class TownyActionEventExecutor {
 	}
 	
 	private static boolean isNotFireSpreadBypassMat(Block block) {
-		if (ItemLists.CAMPFIRES.contains(block.getType()))
+		if (isNotCampfire(block))
 			block = block.getRelative(BlockFace.DOWN);
 		
 		return !TownySettings.isFireSpreadBypassMaterial(block.getType().name());
