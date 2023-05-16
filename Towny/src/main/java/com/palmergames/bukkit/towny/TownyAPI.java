@@ -28,6 +28,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -209,6 +210,22 @@ public class TownyAPI {
     	return getResident(player.getUniqueId());
     }
 
+	/**
+	 * Gets the resident from the given Player or throws a TownyException if that isn't possible.
+	 * 
+	 * @param player Player to get the resident from.
+	 * @return resident or null if it doesn't exist.
+	 * @throws TownyException when the player does not have a Resident.
+	 */
+	@NotNull
+	@Contract("null -> fail")
+	public Resident getResidentOrThrow(Player player) throws TownyException {
+		Resident resident = player == null ? null : getResident(player);
+		if (resident == null)
+			throw new TownyException(Translatable.of("msg_err_resident_unknown", player.getName()));
+		return resident;
+	}
+    
 	/**
 	 * Get a List of Resident from an array of names.
 	 * 

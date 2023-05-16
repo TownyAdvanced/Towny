@@ -27,7 +27,7 @@ public class NationSpawnEvent extends SpawnEvent {
 	 * @param from The location the player is teleporting from.
 	 * @param to The location the player is going to.
 	 */
-	public NationSpawnEvent(Player player, Location from, Location to) {
+	public NationSpawnEvent(Player player, Location from, Location to, boolean cancelled, String cancelMessage) {
 		super(player, from, to);
 		
 		TownBlock fromTownBlock = WorldCoord.parseWorldCoord(from).getTownBlockOrNull();
@@ -37,6 +37,9 @@ public class NationSpawnEvent extends SpawnEvent {
 			fromNation = fromTownBlock.getTownOrNull().getNationOrNull();
 		if (toTownBlock != null)
 			toNation = toTownBlock.getTownOrNull().getNationOrNull();
+		
+		setCancelled(cancelled);
+		setCancelMessage(cancelMessage);
 	}
 
 	/**

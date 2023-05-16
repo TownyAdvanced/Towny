@@ -296,12 +296,7 @@ public class BaseCommand implements TabCompleter{
 	@NotNull
 	@Contract("null -> fail")
 	protected static Resident getResidentOrThrow(@Nullable Player player) throws TownyException {
-		Resident resident = player == null ? null : TownyAPI.getInstance().getResident(player);
-		
-		if (resident == null)
-			throw new TownyException(Translatable.of("msg_err_resident_unknown", player.getName()));
-		
-		return resident;
+		return TownyAPI.getInstance().getResidentOrThrow(player);
 	}
 
 	@NotNull

@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
 import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
+import com.palmergames.bukkit.towny.object.SpawnInformation;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
@@ -63,8 +64,7 @@ public class SpawnUtil {
 	 */
 	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
 
-		// Get resident while testing they aren't on a cooldown or jailed.
-		Resident resident = getResident(player);
+		Resident resident = TownyAPI.getInstance().getResidentOrThrow(player);
 
 		// Set up town and nation variables.
 		final Town town = switch (spawnType) {
@@ -74,57 +74,69 @@ public class SpawnUtil {
 		};
 
 		final Nation nation = spawnType == SpawnType.NATION ? (Nation) townyObject : null;
-		
-		// Is this an admin spawning?
-		boolean isTownyAdmin = isTownyAdmin(player);
 
-		// Set up either the townSpawnLevel or nationSpawnLevel variable.
-		// This determines whether a spawn is considered town, nation, public, allied, admin via TownSpawnLevel and NationSpawnLevel objects.
-		// Accounts for costs, permission, config settings and messages.
-		final TownSpawnLevel townSpawnLevel = switch (spawnType) {
-			case RESIDENT -> isTownyAdmin ? TownSpawnLevel.ADMIN : TownSpawnLevel.TOWN_RESIDENT;
-			case TOWN -> isTownyAdmin ? TownSpawnLevel.ADMIN : getTownSpawnLevel(player, resident, town, outpost, split.length == 0);
-			default -> null;
-		};
-		
-		final NationSpawnLevel nationSpawnLevel = spawnType == SpawnType.NATION ? isTownyAdmin ? NationSpawnLevel.ADMIN : getNationSpawnLevel(player, resident, nation, split.length == 0) : null;
-
-		int cooldown = player.hasPermission(PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()) ? 0 : townSpawnLevel != null ? townSpawnLevel.getCooldown() : nationSpawnLevel.getCooldown();
-		
-		// Prevent spawn travel while in the config's disallowed zones.
-		// Throws a TownyException if the player is disallowed.
-		if (!isTownyAdmin)
-			testDisallowedZones(player, resident, spawnType, TownySettings.getDisallowedTownSpawnZones());
-
-		// Get cost required to spawn.
-		final double travelCost = getTravelCost(player, town, nation, townSpawnLevel, nationSpawnLevel, spawnType);
-
-		// Don't allow if they cannot pay.
-		if (travelCost > 0 && !resident.getAccount().canPayFromHoldings(travelCost))
-			throw new TownyException(notAffordMSG);
+		//Get spawn information object. This allows us to pass data into the lambda below
+		final SpawnInformation spawnInfo = getSpawnInformation(player, split.length == 0,
+			notAffordMSG, outpost, spawnType, resident, town, nation);
 
 		getSpawnLoc(player, town, nation, spawnType, outpost, split).thenAccept(spawnLoc -> {
 			// Fire a cancellable event right before a player would actually pay.
 			// Throws a TownyException if the event is cancelled.
 			try {
-				sendSpawnEvent(player, spawnType, spawnLoc);
+				sendSpawnEvent(player, spawnType, spawnLoc, spawnInfo);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 				return;
 			}
 
 			// There is a cost to spawn, prompt with confirmation unless ignoreWarn is true.
-			if (travelCost > 0) {
+			if (spawnInfo.travelCost > 0) {
 				// Get paymentMsg for the money.csv and the Account being paid.
-				final String paymentMsg = getPaymentMsg(townSpawnLevel, nationSpawnLevel, spawnType);
+				final String paymentMsg = getPaymentMsg(spawnInfo.townSpawnLevel, spawnInfo.nationSpawnLevel, spawnType);
 				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : EconomyAccount.SERVER_ACCOUNT;
-				initiateCostedSpawn(player, resident, spawnLoc, travelCost, payee, paymentMsg, ignoreWarn, cooldown);
+				initiateCostedSpawn(player, resident, spawnLoc, spawnInfo.travelCost, payee, paymentMsg, ignoreWarn, spawnInfo.cooldown);
 				// No Cost so skip confirmation system.
 			} else
-				initiateSpawn(player, spawnLoc, cooldown);
+				initiateSpawn(player, spawnLoc, spawnInfo.cooldown);
 		});
 	}
 
+	private static SpawnInformation getSpawnInformation(Player player, boolean noCmdArgs, String notAffordMSG, boolean outpost, SpawnType spawnType, Resident resident, Town town, Nation nation) {
+		// Is this an admin spawning?
+		final boolean isTownyAdmin = isTownyAdmin(player);
+
+		SpawnInformation spawnInformation = new SpawnInformation();
+		try {
+			// Check if the resident is denied spawning because of cooldowns or being jailed.
+			testResidentAbility(resident);
+
+			// Set up either the townSpawnLevel or nationSpawnLevel variable. (One of these will be null.)
+			// This determines whether a spawn is considered town, nation, public, allied, admin via TownSpawnLevel and NationSpawnLevel objects.
+			// Accounts for costs, permission, config settings and messages.
+			spawnInformation.townSpawnLevel = getTownSpawnLevel(player, noCmdArgs, spawnType, resident, town, outpost, isTownyAdmin);
+			spawnInformation.nationSpawnLevel = getNationSpawnLevel(player, noCmdArgs, spawnType, resident, nation, isTownyAdmin);
+
+			// Get any applicable cooldown.
+			spawnInformation.cooldown = getCooldown(player, spawnInformation);
+
+			// Prevent spawn travel while in the config's disallowed zones.
+			// Throws a TownyException if the player is disallowed.
+			if (!isTownyAdmin)
+				testDisallowedZones(player, resident, spawnType, TownySettings.getDisallowedTownSpawnZones());
+
+			// Get cost required to spawn.
+			spawnInformation.travelCost= getTravelCost(player, town, nation, spawnInformation.townSpawnLevel, spawnInformation.nationSpawnLevel, spawnType);
+			
+			// Don't allow if they cannot pay.
+			if (spawnInformation.travelCost > 0 && !resident.getAccount().canPayFromHoldings(spawnInformation.travelCost))
+				throw new TownyException(notAffordMSG);
+
+		} catch (TownyException te) {
+			spawnInformation.eventCancelled = true;
+			spawnInformation.eventCancellationMessage = te.getMessage();
+		}
+		return spawnInformation;
+	}
 
 	/**
 	 * Handles moving outlaws from outside of towns they are outlawed in.
@@ -179,18 +191,11 @@ public class SpawnUtil {
 	}
 	
 	/**
-	 * Get a resident or throw an exception.
+	 * Checks that a resident is allowed to spawn.
 	 * 
-	 * @param player Player to get a resident from.
-	 * @return resident Resident which will be teleporting.
-	 * @throws TownyException thrown when the resident is null, on cooldown or
-	 *                        jailed.
+	 * @throws TownyException thrown when the resident is on cooldown or jailed.
 	 */
-	private static Resident getResident(Player player) throws TownyException {
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		if (resident == null)
-			throw new TownyException(Translatable.of("msg_err_not_registered_1", player.getName()));
-			
+	private static void testResidentAbility(Resident resident) throws TownyException {
 		// Test if the resident is in a teleport cooldown.
 		if (CooldownTimerTask.hasCooldown(resident.getName(), "teleport"))
 			throw new TownyException(Translatable.of("msg_err_cannot_spawn_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), "teleport")));
@@ -198,8 +203,6 @@ public class SpawnUtil {
 		// Disallow jailed players from teleporting.
 		if (resident.isJailed())
 			throw new TownyException(Translatable.of("msg_cannot_spawn_while_jailed"));
-
-		return resident;
 	}
 
 	/**
@@ -223,6 +226,31 @@ public class SpawnUtil {
 				|| hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCHARGE);
 	}
 	
+	/**
+	 * Get the TownSpawnLevel for this Spawn action, differentiating between /res
+	 * spawn and /t spawn, returns null if this is a /n spawn.
+	 * 
+	 * @param player       Player doing the spawning.
+	 * @param noCmdArgs    Whether the command had any subarguments passed on.
+	 * @param spawnType    SpawnType involved, only cares about RESIDENT or TOWN.
+	 * @param resident     Resident that is spawning.
+	 * @param town         Town that the resident is spawning to.
+	 * @param outpost      True if the player is spawning to an outpost.
+	 * @param isTownyAdmin True if the player is treated as an admin.
+	 * @return TownSpawnLevel The TownSpawnLevel object that will be used to
+	 *         determine costs, cooldowns and permissions, or null if this is a /n
+	 *         spawn-initiated spawn.
+	 * @throws TownyException thrown when a spawn is not going to be allowed based
+	 *                        on the TownSpawnLevel settings
+	 */
+	private static TownSpawnLevel getTownSpawnLevel(Player player, boolean noCmdArgs, SpawnType spawnType, Resident resident, Town town, boolean outpost, boolean isTownyAdmin) throws TownyException {
+		return switch (spawnType) {
+			case RESIDENT -> isTownyAdmin ? TownSpawnLevel.ADMIN : TownSpawnLevel.TOWN_RESIDENT;
+			case TOWN -> isTownyAdmin ? TownSpawnLevel.ADMIN : getTownSpawnLevel(player, resident, town, outpost, noCmdArgs);
+			default -> null;
+		};
+	}
+
 	/**
 	 * Get the TownSpawnLevel for this Spawn action.
 	 * 
@@ -292,6 +320,25 @@ public class SpawnUtil {
 	}
 
 	/**
+	 * Get the NationSpawnLevel for this spawn action, or null if this was /res
+	 * spawn or /t spawn.
+	 * 
+	 * @param player       Player doing the spawning.
+	 * @param noCmdArgs    Whether the command had any subarguments passed on.
+	 * @param spawnType    SpawnType involved, only cares about RESIDENT or TOWN.
+	 * @param resident     Resident that is spawning.
+	 * @param nation       Nation that is being spawned to.
+	 * @param isTownyAdmin True if the player is treated as an admin.
+	 * @return NationSpawnLevel or null if this was an instance of /res spawn or /t
+	 *         spawn.
+	 * @throws TownyException thrown when a spawn is not going to be allowed based
+	 *                        on the TownSpawnLevel settings
+	 */
+	private static NationSpawnLevel getNationSpawnLevel(Player player, boolean noCmdArgs, SpawnType spawnType, Resident resident, Nation nation, boolean isTownyAdmin) throws TownyException {
+		return spawnType == SpawnType.NATION ? isTownyAdmin ? NationSpawnLevel.ADMIN : getNationSpawnLevel(player, resident, nation, noCmdArgs) : null;
+	}
+
+	/**
 	 * Get the NationSpawnLevel for this Spawn action.
 	 * 
 	 * @param player   Player doing the spawning.
@@ -342,6 +389,18 @@ public class SpawnUtil {
 		nationSpawnLevel.checkIfAllowed(player, nation);
 
 		return nationSpawnLevel;
+	}
+
+	/**
+	 * Get the cooldown time on a player using a spawn command.
+	 * 
+	 * @param player           Player doing the spawning action.
+	 * @param spawnInformation SpawnInformation containing the useful TownSpawnLevel
+	 *                         or NationSpawnLevel.
+	 * @return number of seconds a player must wait until they can spawn again.
+	 */
+	private static int getCooldown(Player player, SpawnInformation spawnInformation) {
+		return player.hasPermission(PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()) ? 0 : spawnInformation.townSpawnLevel != null ? spawnInformation.townSpawnLevel.getCooldown() : spawnInformation.nationSpawnLevel.getCooldown();
 	}
 	
 	/**
@@ -553,8 +612,8 @@ public class SpawnUtil {
 	 * @param spawnLoc  Location being spawned to.
 	 * @throws TownyException when the event is cancelled.
 	 */
-	private static void sendSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc) throws TownyException {
-		BukkitTools.ifCancelledThenThrow(getSpawnEvent(player, spawnType, spawnLoc));
+	private static void sendSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc, SpawnInformation spawnInformation) throws TownyException {
+		BukkitTools.ifCancelledThenThrow(getSpawnEvent(player, spawnType, spawnLoc, spawnInformation));
 	}
 	
 	/**
@@ -565,11 +624,11 @@ public class SpawnUtil {
 	 * @param spawnLoc  Location that the player will spawn at.
 	 * @return SpawnEvent to be called.
 	 */
-	private static SpawnEvent getSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc) {
+	private static SpawnEvent getSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc, SpawnInformation spawnInfo) {
 		return switch(spawnType) {
-		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc);
-		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc);
-		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc);
+		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
 		};
 	}
 
