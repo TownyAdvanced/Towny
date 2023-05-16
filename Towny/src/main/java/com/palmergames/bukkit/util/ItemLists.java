@@ -57,7 +57,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Plants.
 	 */
-	public static final ItemLists PLANTS = newBuilder().withTag("blocks", minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINE_PLANT","WEEPING_VINE_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF", "TORCHFLOWER").build();
+	public static final ItemLists PLANTS = newBuilder().withTag("blocks", minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF", "TORCHFLOWER").build();
 
 	/**
 	 * List of Ores and Valuable Raw Materials.
@@ -199,7 +199,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of placeable books
 	 */
-	public static final ItemLists PLACEABLE_BOOKS = newBuilder().add("BOOK", "ENCHANTED_BOOK", "WRITEABLE_BOOK", "WRITTEN_BOOK").build();
+	public static final ItemLists PLACEABLE_BOOKS = newBuilder().add("BOOK", "ENCHANTED_BOOK", "WRITABLE_BOOK", "WRITTEN_BOOK").build();
 	
 	/**
 	 * List of harvestable berries
