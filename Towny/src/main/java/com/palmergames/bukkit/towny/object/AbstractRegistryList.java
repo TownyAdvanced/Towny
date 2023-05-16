@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
@@ -152,6 +153,8 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 				T match = BukkitTools.matchRegistry(this.registry, name);
 				if (match != null)
 					exceptions.add(match);
+				else
+					TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
 			}
 
 			return this;
