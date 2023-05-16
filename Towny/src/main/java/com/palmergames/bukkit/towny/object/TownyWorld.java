@@ -444,8 +444,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementDeleteIds(List<String> plotManagementDeleteIds) {
-		this.plotManagementDeleteIds.clear();
-		this.plotManagementDeleteIds.addAll(TownySettings.toMaterialSet(plotManagementDeleteIds));
+		this.plotManagementDeleteIds = new HashSet<>(TownySettings.toMaterialSet(plotManagementDeleteIds));
 	}
 
 	public Collection<Material> getPlotManagementMayorDelete() {
@@ -462,8 +461,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementMayorDelete(List<String> plotManagementMayorDelete) {
-		this.plotManagementMayorDelete.clear();
-		this.plotManagementMayorDelete.addAll(TownySettings.toMaterialSet(plotManagementMayorDelete));
+		this.plotManagementMayorDelete = new HashSet<>(TownySettings.toMaterialSet(plotManagementMayorDelete));
 	}
 
 	public Collection<Material> getPlotManagementIgnoreIds() {
@@ -479,8 +477,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
-		this.plotManagementIgnoreIds.clear();
-		this.plotManagementIgnoreIds.addAll(TownySettings.toMaterialSet(plotManagementIgnoreIds));
+		this.plotManagementIgnoreIds = new HashSet<>(TownySettings.toMaterialSet(plotManagementIgnoreIds));
 	}
 
 	/**
@@ -601,8 +598,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
-		blockExplosionProtection = new HashSet<>();
-		blockExplosionProtection.addAll(TownySettings.toMaterialSet(mats));
+		blockExplosionProtection = new HashSet<>(TownySettings.toMaterialSet(mats));
 	}
 
 	public Collection<Material> getPlotManagementWildRevertBlocks() {
