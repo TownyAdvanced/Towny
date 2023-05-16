@@ -409,7 +409,7 @@ public class TownySettings {
 		Set<EntityType> entities = new HashSet<>();
 		
 		for (String entityName : entityList) {
-			EntityType type = Registry.ENTITY_TYPE.match(entityName);
+			EntityType type = BukkitTools.matchRegistry(Registry.ENTITY_TYPE, entityName);
 			if (type != null)
 				entities.add(type);
 		}
