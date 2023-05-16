@@ -8663,3 +8663,6 @@ v0.92.0.11:
     - The default duration for minecraft is 70 ticks, which equates to 3.5 seconds.
   - Bump adventure-text-serializer-plain from 4.13.0 to 4.13.1.
   - Add Folia to bstats server type chart, courtesy of Warrior with PR #6654.
+0.99.0.8:
+  - Allow Spawn Events to be Un-Cancelled, courtesy of Goosius1 with PR #6663.
+  - Support spigot's tnt prime event, courtesy of Warrior with PR #6653.

@@ -966,15 +966,6 @@ public class Towny extends JavaPlugin {
 		return true;
 	}
 
-	private static boolean isFoliaClassPresent() {
-		try {
-			Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
-		}
-	}
-	
 	@ApiStatus.Internal
 	public boolean isFolia() {
 		return this.isFolia;
