@@ -90,11 +90,30 @@ public class Version implements Comparable<Version> {
 		return components;
 	}
 	
+	/**
+	 * @return Whether the last component is not equal to 0
+	 */
 	public boolean isPreRelease() {
 		try {
 			return Integer.parseInt(this.components[components.length-1]) != 0;
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+	
+	public boolean isNewerThanOrEquals(@NotNull Version other) {
+		return this.compareTo(other) >= 0;
+	}
+	
+	public boolean isNewerThan(@NotNull Version other) {
+		return this.compareTo(other) > 0;
+	}
+	
+	public boolean isOlderThanOrEquals(@NotNull Version other) {
+		return this.compareTo(other) <= 0;
+	}
+	
+	public boolean isOlderThan(@NotNull Version other) {
+		return this.compareTo(other) < 0;
 	}
 }
