@@ -8666,3 +8666,9 @@ v0.92.0.11:
 0.99.0.8:
   - Allow Spawn Events to be Un-Cancelled, courtesy of Goosius1 with PR #6663.
   - Support spigot's tnt prime event, courtesy of Warrior with PR #6653.
+  - Add some more readable convenience methods to Version, courtesy of Warrior with PR #6670.
+  - Remove first arg for nation transaction method, courtesy of Warrior with PR #6669.
+  - New Permission Node: towny.command.invite.add.multiple
+    - Child node of towny.command.town.invite.add, given by default with no change required to your townyperms.yml file.
+    - When set to false, mayors/assistants will not be able to send out more than one town invite at a time, preventing spamming townless players. 
+  - Add new perm node for inviting multiple residents, courtesy of Warrior with PR #6668.
