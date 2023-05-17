@@ -3432,6 +3432,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					removeInvites.add(resName);
 			}
 		}
+		
+		if (newResList.size() + removeInvites.size() > 1)
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ADD_MULTIPLE.getNode());
+		
 		names = newResList.toArray(new String[0]);
 		String[] namesToRemove = removeInvites.toArray(new String[0]);
 		if (namesToRemove.length != 0) {
