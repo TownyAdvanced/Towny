@@ -1871,8 +1871,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		split = split.toLowerCase();
 
-		if (split.contains("mobs") && town.getHomeblockWorld().isForceTownMobs())
-			throw new TownyException(Translatable.of("msg_world_mobs"));
+		if (split.contains("mobs")) {
+			if (town.getHomeblockWorld().isForceTownMobs())
+				throw new TownyException(Translatable.of("msg_world_mobs"));
+			if (town.isAdminEnabledMobs())
+				throw new TownyException(Translatable.of("msg_town_mobs"));
+		}
 
 		if (split.contains("fire") && town.getHomeblockWorld().isForceFire())
 			throw new TownyException(Translatable.of("msg_world_fire"));

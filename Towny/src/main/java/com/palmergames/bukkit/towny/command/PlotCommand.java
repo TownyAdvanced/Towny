@@ -1139,6 +1139,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (split.contains("mobs")) {
 			if (townBlock.getWorld().isForceTownMobs())
 				throw new TownyException(Translatable.of("msg_world_mobs"));
+			if (townBlock.getTownOrNull().isAdminEnabledMobs())
+				throw new TownyException(Translatable.of("msg_town_mobs"));
 		}
 
 		if (split.contains("fire")) {

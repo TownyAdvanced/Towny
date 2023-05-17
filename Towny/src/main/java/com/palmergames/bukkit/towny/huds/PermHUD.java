@@ -67,7 +67,7 @@ public class PermHUD {
 		pvp = !CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock) ? translator.of("status_on") : translator.of("status_off");
 		explosions = (world.isForceExpl() || tp.explosion) ? translator.of("status_on") : translator.of("status_off");
 		firespread = (world.isForceFire() || tp.fire) ? translator.of("status_on") : translator.of("status_off");
-		mobspawn = (world.isForceTownMobs() || tp.mobs) ? translator.of("status_on") : translator.of("status_off");
+		mobspawn = (world.isForceTownMobs() || tp.mobs || townBlock.getTownOrNull().isAdminEnabledMobs()) ? translator.of("status_on") : translator.of("status_off");
 
 		// Displays the name of the owner, and if the owner is a resident the town name as well.
 		title = ChatColor.GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 

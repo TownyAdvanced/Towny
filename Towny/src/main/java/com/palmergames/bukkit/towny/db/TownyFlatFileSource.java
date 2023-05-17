@@ -755,6 +755,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("adminEnabledMobs");
+				if (line != null)
+					try {
+						town.setAdminEnabledMobs(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("allowedToWar");
 				if (line != null)
 					try {
@@ -1961,6 +1968,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// PVP
 		list.add("adminDisabledPvP=" + town.isAdminDisabledPVP());
 		list.add("adminEnabledPvP=" + town.isAdminEnabledPVP());
+		// Mobs override
+		list.add("adminEnabledMobs=" + town.isAdminEnabledMobs());
 		// Allowed to War
 		list.add("allowedToWar=" + town.isAllowedToWar());
 		// Public
