@@ -484,7 +484,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "withdraw":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_WITHDRAW.getNode());
-			TownyEconomyHandler.economyExecutor().execute(() -> nationTransaction(player, split, true));
+			TownyEconomyHandler.economyExecutor().execute(() -> nationTransaction(player, StringMgmt.remFirstArg(split), true));
 			break;
 		case "leave":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LEAVE.getNode());
@@ -497,7 +497,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "deposit":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode());
-			TownyEconomyHandler.economyExecutor().execute(() -> nationTransaction(player, split, false));
+			TownyEconomyHandler.economyExecutor().execute(() -> nationTransaction(player, StringMgmt.remFirstArg(split), false));
 			break;
 		case "rank":
 			/* Permission test is internal*/
@@ -2536,20 +2536,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = getResidentOrThrow(player);
 			Nation nation = getNationFromResidentOrThrow(resident);
 
-			if (args.length < 2 || args.length > 3)
+			if (args.length < 1 || args.length > 2)
 				throw new TownyException(Translatable.of("msg_must_specify_amnt", "/nation" + (withdraw ? " withdraw" : " deposit")));
 
 			int amount;
-			if ("all".equalsIgnoreCase(args[1].trim()))
+			if ("all".equalsIgnoreCase(args[0].trim()))
 				amount = (int) Math.floor(withdraw ? nation.getAccount().getHoldingBalance() : resident.getAccount().getHoldingBalance());
 			else 
-				amount = MathUtil.getIntOrThrow(args[1].trim());
+				amount = MathUtil.getIntOrThrow(args[0].trim());
 
 			// Stop 0 amounts being supplied.
 			if (amount == 0)
 				throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
 
-			if (args.length == 2) {
+			if (args.length == 1) {
 				if (withdraw)
 					MoneyUtil.nationWithdraw(player, resident, nation, amount);
 				else 
@@ -2560,15 +2560,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (withdraw)
 				throw new TownyException(Translatable.of("msg_must_specify_amnt", "/nation withdraw"));
 
-			if (args.length == 3) {
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode());
-				
-				Town town = getTownOrThrow(args[2]);
-				if (!nation.hasTown(town))
-					throw new TownyException(Translatable.of("msg_err_not_same_nation", town.getName()));
+			// Check depositing into another town
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT_OTHER.getNode());
 
-				MoneyUtil.townDeposit(player, resident, town, nation, amount);
-			}
+			Town town = getTownOrThrow(args[1]);
+			if (!nation.hasTown(town))
+				throw new TownyException(Translatable.of("msg_err_not_same_nation", town.getName()));
+
+			MoneyUtil.townDeposit(player, resident, town, nation, amount);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
