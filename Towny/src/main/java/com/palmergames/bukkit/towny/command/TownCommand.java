@@ -3851,6 +3851,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_unclaim_homeblock"));
 		}
 
+		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
+		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+			WorldCoord firstWorldCoord = selection.get(0);
+			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
+				if (wc.isWilderness() || !wc.hasTown(town))
+					continue;
+				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
+				// The number of adjacement TBs is not enough and there is not a nearby outpost.
+				if (numAdjacent - 1 < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
+					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
+			}
+		}
+
 		BukkitTools.ifCancelledThenThrow(new TownPreUnclaimCmdEvent(town, resident, world, selection));
 
 		// Handle a negative unclaim refund (yes, where someone is being charged money to unclaim their land. It's a thing.)

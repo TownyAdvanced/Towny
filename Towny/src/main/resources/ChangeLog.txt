@@ -8677,3 +8677,6 @@ v0.92.0.11:
     - Used to force mobs on in a town.
     - Closes #6659.
   - New Command: /ta town TOWNNAME toggle forcemobs.
+  - Add adjacent claims feature support to the /t unclaim command.
+    - Players will no longer be able to unclaim land if any of their adjacent townblocks will not have the required number of adjacent claims.
+    - Closes #6644. 
