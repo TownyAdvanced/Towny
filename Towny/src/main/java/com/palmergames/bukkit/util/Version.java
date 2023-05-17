@@ -101,18 +101,30 @@ public class Version implements Comparable<Version> {
 		}
 	}
 	
+	/**
+	 * @since 0.99.0.8
+	 */
 	public boolean isNewerThanOrEquals(@NotNull Version other) {
 		return this.compareTo(other) >= 0;
 	}
 	
+	/**
+	 * @since 0.99.0.8
+	 */
 	public boolean isNewerThan(@NotNull Version other) {
 		return this.compareTo(other) > 0;
 	}
 	
+	/**
+	 * @since 0.99.0.8
+	 */
 	public boolean isOlderThanOrEquals(@NotNull Version other) {
 		return this.compareTo(other) <= 0;
 	}
 	
+	/**
+	 * @since 0.99.0.8
+	 */
 	public boolean isOlderThan(@NotNull Version other) {
 		return this.compareTo(other) < 0;
 	}
