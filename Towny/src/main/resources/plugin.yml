@@ -436,6 +436,11 @@ permissions:
         children:
             towny.command.town.invite.add: true
 
+    towny.command.town.invite.add:
+        default: false
+        children:
+            towny.command.invite.add.multiple: true
+
     towny.command.town.invite.sent:
         description: User can see sent invites from their town.
         default: true

@@ -461,6 +461,7 @@ public enum PermissionNodes {
 	// Towns invite residents.
 	TOWNY_COMMAND_TOWN_INVITE_SEE_HOME("towny.command.town.invite"),
 	TOWNY_COMMAND_TOWN_INVITE_ADD("towny.command.town.invite.add"),
+	TOWNY_COMMAND_TOWN_INVITE_ADD_MULTIPLE("towny.command.town.invite.add.multiple"),
 	TOWNY_COMMAND_TOWN_INVITE_LIST_SENT("towny.command.town.invite.sent"),
 	TOWNY_COMMAND_TOWN_INVITE_LIST_RECEIVED("towny.command.town.invite.received"),
 	TOWNY_COMMAND_TOWN_INVITE_ACCEPT("towny.command.town.invite.accept"),
