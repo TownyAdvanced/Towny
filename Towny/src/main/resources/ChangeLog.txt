@@ -8672,3 +8672,8 @@ v0.92.0.11:
     - Child node of towny.command.town.invite.add, given by default with no change required to your townyperms.yml file.
     - When set to false, mayors/assistants will not be able to send out more than one town invite at a time, preventing spamming townless players. 
   - Add new perm node for inviting multiple residents, courtesy of Warrior with PR #6668.
+0.99.0.9:
+  - Add admin setting for towns: forcemobs
+    - Used to force mobs on in a town.
+    - Closes #6659.
+  - New Command: /ta town TOWNNAME toggle forcemobs.
