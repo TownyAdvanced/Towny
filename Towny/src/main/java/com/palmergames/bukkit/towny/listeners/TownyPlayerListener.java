@@ -460,7 +460,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Prevents players from editing signs where they shouldn't.
 			 */
-			if (Tag.SIGNS.isTagged(clickedMat) && MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.MINECRAFT_1_20) >= 0)
+			if (Tag.SIGNS.isTagged(clickedMat) && MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20))
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 		}
 	}
