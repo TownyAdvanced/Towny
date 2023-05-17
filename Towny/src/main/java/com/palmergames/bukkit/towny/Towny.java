@@ -955,7 +955,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	public static boolean isMinecraftVersionStillSupported() {
-		return MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.OLDEST_VERSION_SUPPORTED) >= 0;
+		return MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.OLDEST_VERSION_SUPPORTED);
 	}
 	
 	/**

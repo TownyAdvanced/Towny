@@ -34,7 +34,7 @@ public class UpdateCheckerTask implements Runnable {
 					// TODO: Replace this when support for MC 1.16.* is dropped.
 					@SuppressWarnings("deprecation")
 					Version latestVersion = Version.fromString(new JsonParser().parse(reader).getAsJsonArray().get(0).getAsJsonObject().get("tag_name").getAsString());
-					boolean upToDate = Version.fromString(towny.getVersion()).compareTo(latestVersion) >= 0;
+					boolean upToDate = Version.fromString(towny.getVersion()).isNewerThanOrEquals(latestVersion);
 					
 					if (!upToDate) {
 						TownyUpdateChecker.setUpdate(true);

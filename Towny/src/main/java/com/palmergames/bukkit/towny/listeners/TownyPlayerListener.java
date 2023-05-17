@@ -418,7 +418,7 @@ public class TownyPlayerListener implements Listener {
 				 * Prevents players using wax on signs
 				 * TODO: Add a check for whether the sign is waxed once that API is available.
 				 */
-				if (Tag.SIGNS.isTagged(clickedMat) && item == Material.HONEYCOMB && MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.MINECRAFT_1_16) >= 0)
+				if (Tag.SIGNS.isTagged(clickedMat) && item == Material.HONEYCOMB && MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20))
 					event.setCancelled(!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat));
 			}
 		}
@@ -460,7 +460,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Prevents players from editing signs where they shouldn't.
 			 */
-			if (Tag.SIGNS.isTagged(clickedMat) && MinecraftVersion.CURRENT_VERSION.compareTo(MinecraftVersion.MINECRAFT_1_20) >= 0)
+			if (Tag.SIGNS.isTagged(clickedMat) && MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20))
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 		}
 	}
