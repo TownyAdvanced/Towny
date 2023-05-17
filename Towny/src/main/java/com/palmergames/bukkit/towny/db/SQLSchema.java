@@ -192,6 +192,7 @@ public class SQLSchema {
 		columns.add("`embassyPlotTax` float NOT NULL");
 		columns.add("`open` bool NOT NULL DEFAULT '0'");
 		columns.add("`public` bool NOT NULL DEFAULT '0'");
+		columns.add("`adminEnabledMobs` bool NOT NULL DEFAULT '0'");
 		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`allowedToWar` bool NOT NULL DEFAULT '1'");

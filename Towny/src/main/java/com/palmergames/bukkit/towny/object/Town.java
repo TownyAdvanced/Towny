@@ -89,6 +89,7 @@ public class Town extends Government implements TownBlockOwner {
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private TownBlock homeBlock;
 	private TownyWorld world;
+	private boolean adminEnabledMobs = false;
 	private boolean adminDisabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP disabled.
 	private boolean adminEnabledPVP = false; // This is a special setting to make a town ignore All PVP settings and keep PVP enabled. Overrides the admin disabled too.
 	private boolean allowedToWar = TownySettings.getTownDefaultAllowedToWar();
@@ -429,6 +430,14 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean hasMobs() {
 
 		return this.permissions.mobs;
+	}
+
+	public void setAdminEnabledMobs(boolean isMobsForced) {
+		this.adminEnabledMobs = isMobsForced;
+	}
+
+	public boolean isAdminEnabledMobs() {
+		return this.adminEnabledMobs;
 	}
 
 	public void setPVP(boolean isPVP) {

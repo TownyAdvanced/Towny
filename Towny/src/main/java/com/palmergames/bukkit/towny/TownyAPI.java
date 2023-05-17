@@ -477,7 +477,7 @@ public class TownyAPI {
 		TownyWorld townyWorld = getTownyWorld(location.getWorld());
 		return !townyWorld.isUsingTowny() || isWilderness(location)
 			? townyWorld.hasWildernessMobs()
-			: townyWorld.isForceTownMobs() || getTownBlock(location).getPermissions().mobs;
+			: townyWorld.isForceTownMobs() || getTownBlock(location).getPermissions().mobs || getTown(location).isAdminEnabledMobs();
 	}
 	
     /**

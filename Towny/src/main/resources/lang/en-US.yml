@@ -266,6 +266,8 @@ msg_world_mobs: '&cThis world has Monster spawns forced on.'
 msg_world_expl: '&cThis world has Explosions forced on.'
 msg_world_fire: '&cThis world has Fire spread forced on.'
 
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
+
 msg_plot_pvp: '&cPVP can not be toggled in an Arena Plot.'
 msg_plot_regen_wrong_size: '&cRegen can only be performed when the default plot size (16) is used.'
 
@@ -822,6 +824,7 @@ msg_error_nation_has_no_enemies: 'Nation has no enemies to list.'
 msg_error_ta_plot_claim: 'Missing playername, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'No player found with name %s'
 msg_admin_has_given_you_a_plot: 'An admin has claimed a plot for you at: %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: 'The town %s has had their pvp setting forced to %s'
 msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cThe Nation''s open status is now %s.'
