@@ -65,4 +65,4 @@ jobs:
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
       - name: deploy to glaremaster repo
-        run: mvn deploy
+        run: mvn deploy -Dmaven.javadoc.skip=false

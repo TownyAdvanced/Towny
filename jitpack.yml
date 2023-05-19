@@ -8,3 +8,5 @@ before_install:
     # Use a modern Maven binary
     - sdk install maven 3.8.3
     - sdk use maven 3.8.3
+install:
+    - mvn install -DskipTests -Dmaven.javadoc.skip=false
