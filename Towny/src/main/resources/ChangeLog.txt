@@ -8680,3 +8680,5 @@ v0.92.0.11:
   - Add adjacent claims feature support to the /t unclaim command.
     - Players will no longer be able to unclaim land if any of their adjacent townblocks will not have the required number of adjacent claims.
     - Closes #6644. 
+  - Fix hex gradients with minimessage not working, courtesy of Warrior with PR #6674.
+    - Closes #6291.
