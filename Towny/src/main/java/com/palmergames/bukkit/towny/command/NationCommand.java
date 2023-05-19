@@ -83,6 +83,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
+
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +100,9 @@ import java.util.stream.Collectors;
 public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
-	private static final List<String> nationTabCompletes = Arrays.asList(
+	
+	@VisibleForTesting
+	public static final List<String> nationTabCompletes = Arrays.asList(
 		"list",
 		"online",
 		"leave",

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -25,7 +26,8 @@ public class NameValidation {
 			Arrays.asList("here","leave","list","online","new","plots","add","kick","claim","unclaim","withdraw","delete",
 					"outlawlist","deposit","outlaw","outpost","ranklist","rank","reclaim","reslist","say","set","toggle","join",
 					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge","jail",
-					"plotgrouplist","trust","purge","leader","baltop","all","help"));
+					"plotgrouplist","trust","purge","leader","baltop","all","help", "spawn", "takeoverclaim", "ban", "unjail",
+					"trusttown"));
 	}
 
 	/**
@@ -190,5 +192,9 @@ public class NameValidation {
 	
 	public static boolean containsNumbers(String input) {
 		return numberPattern.matcher(input).find();
+	}
+	
+	public static boolean isBannedName(String name) {
+		return bannedNames.contains(name.toLowerCase(Locale.ROOT));
 	}
 }
