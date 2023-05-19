@@ -113,7 +113,7 @@ public class NameValidation {
 			return true;
 		
 		// A list of all banned names (notably all sub commands like 'spawn' used in '/town spawn')
-		if (bannedNames.contains(name.toLowerCase()))
+		if (isBannedName(name))
 			return true;
 
 		// Config's name blacklist.
