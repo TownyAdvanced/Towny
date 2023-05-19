@@ -31,4 +31,4 @@ jobs:
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
 
-      - run: mvn deploy -Dmaven.javadoc.skip=false
+      - run: mvn deploy
