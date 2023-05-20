@@ -8688,3 +8688,5 @@ v0.92.0.11:
   - Add some more tests, courtesy of Warrior with PR #6676.
   - Skip javadoc generation by default, courtesy of Warrior with PR #6675.
   - Fix trie insertion order weirdness, courtesy of Warrior with PR #6677.
+0.99.0.10:
+  - Add protection to turtle eggs, players are required to pass a destroy test in order to break them via jumping.

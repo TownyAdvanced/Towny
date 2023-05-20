@@ -448,6 +448,7 @@ public class TownyPlayerListener implements Listener {
 				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
 				ItemLists.CANDLES.contains(clickedMat) ||
+				clickedMat.name().equals("TURTLE_EGG") ||
 				clickedMat.name().equals("CHISELED_BOOKSHELF") ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK){
