@@ -263,7 +263,15 @@
                     <version>3.5.0</version>
                     <executions>
                         <execution>
-                            <phase>compile</phase>
+                            <id>install</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>deploy</id>
+                            <phase>deploy</phase>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
@@ -445,36 +453,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>no-apidoc</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.5.0</version>
-                        <executions>
-                            <execution>
-                                <phase>none</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!--
-        <profile>
-             Enforces JDK 9+ to generate safe bytecode when targeting Java 8.
-             See: https://stackoverflow.com/questions/64868952/how-should-javac-11-link-methods-overridden-in-later-versions-with-a-java-8-targ
-            <id>enforce-java-8-bytecode</id>
-            <activation>
-                Activate automatically for JDK 9+. No manual call needed.
-                <jdk>[9,)</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.release>8</maven.compiler.release>
-            </properties>
-        </profile> -->
         <profile>
             <id>intellij-idea-only</id>
             <activation>
