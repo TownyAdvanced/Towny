@@ -129,6 +129,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.io.InvalidObjectException;
 import java.text.DecimalFormat;
@@ -150,7 +151,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static Towny plugin;
 
-	private static final List<String> townTabCompletes = Arrays.asList(
+	@VisibleForTesting
+	public static final List<String> townTabCompletes = Arrays.asList(
 		"here",
 		"leave",
 		"list",

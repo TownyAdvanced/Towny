@@ -40,7 +40,7 @@ public class TimeTools {
 		if (dhms.contains("s")) {
 			seconds = Integer.parseInt(dhms.split("s")[0].replaceAll(" ", ""));
 		}
-		return (days * 86400) + (hours * 3600) + (minutes * 60) + (long)seconds;
+		return (days * 86400L) + (hours * 3600L) + (minutes * 60L) + (long)seconds;
 	}
 
 	public static long getMillis(String dhms) {
