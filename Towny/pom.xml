@@ -32,7 +32,6 @@
     <properties>
         <java.version>17</java.version>
         <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <scm>
