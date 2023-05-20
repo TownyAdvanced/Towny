@@ -8682,3 +8682,9 @@ v0.92.0.11:
     - Closes #6644. 
   - Fix hex gradients with minimessage not working, courtesy of Warrior with PR #6674.
     - Closes #6291.
+  - Setup jabel for the provider modules, courtesy of Warrior with PR #6682.
+  - Delete redundant submodule gitignores, courtesy of Warrior with PR #6679.
+  - Set source encoding utf-8 for all modules, courtesy of Warrior with PR #6678.
+  - Add some more tests, courtesy of Warrior with PR #6676.
+  - Skip javadoc generation by default, courtesy of Warrior with PR #6675.
+  - Fix trie insertion order weirdness, courtesy of Warrior with PR #6677.
