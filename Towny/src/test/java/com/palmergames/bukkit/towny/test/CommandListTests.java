@@ -27,6 +27,16 @@ public class CommandListTests {
 	}
 	
 	@Test
+	void testSubSubCommands() {
+		CommandList list = new CommandList(Arrays.asList("/command subcommand1 subcommand2"));
+		
+		assertTrue(list.containsCommand("command subcommand1 subcommand2"));
+		
+		assertFalse(list.containsCommand("command subcommand1 anothercommand"));
+		assertFalse(list.containsCommand("command subcommand2"));
+	}
+	
+	@Test
 	void testNamespacedCommands() {
 		CommandList list = new CommandList(Arrays.asList("/towny"));
 		
