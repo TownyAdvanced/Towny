@@ -1,75 +1,70 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Set;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CommandList {
-	private static final Pattern NORMALIZER_PATTERN = Pattern.compile("[/ ]{1,2}");
+	private static final Pattern REMOVE_LEADING_SPACE = Pattern.compile("^[/ ]{1,2}");
+	private static final Pattern MATCH_NAMESPACE = Pattern.compile("^(.+:)");
 	
-	private final Set<String> commands = new HashSet<>();
-	// Commands that were registered with no namespace.
-	private final Set<String> commandsNoNamespace = new HashSet<>();
-	
-	public CommandList(Collection<String> commands) {
-		for (String command : commands) {
-			command = command.toLowerCase(Locale.ROOT);
-			
-			addCommand(command);
-			
-			if (command.contains(":")) {
-				// If the given command to block has a namespace we should treat the key as a command to block as well.
-				// i.e. /towny:town -> block /town too.
-				String key = command.split(":")[1];
-				
-				addCommand(key);
-			} else {
-				// No namespace was defined, add the command to the commandsNoNamespace set.
-				// This is used to block commands no matter the namespace.
-				commandsNoNamespace.add(normalizeCommand(command));
-			}
+	public static class CommandNode {
+		final Map<String, CommandNode> children = new HashMap<>();
+		final String command;
+		boolean endOfWord = false;
+		
+		public CommandNode(String command) {
+			this.command = command;
 		}
 	}
 	
-	private void addCommand(String command) {
-		if (command.startsWith("/"))
-			command = command.substring(1);
-
-		commands.add(command);
-		commands.add("/" + command);
-
-		// Block commands containing spaces.
-		// '/ town' is in fact a valid command.
-		if (command.startsWith(" ")) {
-			commands.add(command.substring(1));
-			commands.add("/" + command.substring(1));
-		} else {
-			commands.add(" " + command);
-			commands.add("/ " + command);
+	final CommandNode root = new CommandNode("");
+	
+	public CommandList(Collection<String> commands) {
+		for (String command : commands) {
+			addCommand(command);
 		}
+	}
+	
+	public void addCommand(@NotNull String command) {
+		Preconditions.checkNotNull(command, "command");
+
+		CommandNode current = root;
+
+		for (String part : normalizeCommand(command.toLowerCase(Locale.ROOT)).split(" ")) {
+			current = current.children.computeIfAbsent(part, k -> new CommandNode(part));
+		}
+		
+		current.endOfWord = true;
 	}
 	
 	private String normalizeCommand(String command) {
 		// Replace slash and/or space from the start of a command
-		command = NORMALIZER_PATTERN.matcher(command).replaceAll("");
+		command = REMOVE_LEADING_SPACE.matcher(command).replaceAll("");
 		
 		// Strip namespace
-		if (command.contains(":"))
-			return command.split(":")[1];
-		
-		return command;
+		return MATCH_NAMESPACE.matcher(command).replaceAll("");
 	}
 	
 	public boolean containsCommand(@NotNull String command) {
-		command = command.toLowerCase(Locale.ROOT);
+		Preconditions.checkNotNull(command, "command");
+		final String normalized = normalizeCommand(command.toLowerCase(Locale.ROOT));
 		
-		if (command.contains(":") && commandsNoNamespace.contains(normalizeCommand(command)))
-			return true;
+		CommandNode current = root;
+		for (String part : normalized.split(" ")) {
+			current = current.children.get(part);
+			if (current == null)
+				break;
+			
+			if (current.endOfWord)
+				return true;
+		}
 		
-		return commands.contains(command);
+		return false;
 	}
 }
