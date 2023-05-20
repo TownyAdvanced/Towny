@@ -3,7 +3,6 @@ package com.palmergames.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,8 @@ public class Trie {
 	 * TrieNode implementation that handles any character and keeps track of its own children and character
 	 */
 	public static class TrieNode {
-		List<TrieNode> children = new ArrayList<>();
-		char character;
+		final Map<Character, TrieNode> children = new HashMap<>();
+		final char character;
 		boolean endOfWord = false;
 
 		TrieNode(char character) {
@@ -46,30 +45,14 @@ public class Trie {
 	 */
 	public void addKey(String key) {
 		// Current trieNode to crawl through
-		TrieNode trieNode = root;
+		TrieNode current = root;
 
 		// Loop through each character of key
-		for (int i = 0; i < key.length(); i++) {
-			char index = key.charAt(i);
-
-			TrieNode lastNode = trieNode;
-			trieNode = null;
-			for (TrieNode node : lastNode.children) {
-				if (node.character == index) {
-					trieNode = node;
-					break;
-				}
-			}
-
-			if (trieNode == null) {
-				trieNode = new TrieNode(index);
-				lastNode.children.add(trieNode); // Put this node as one of lastNode's children
-
-				if (i == key.length() - 1) { // Check if this is the last character of the key, indicating a word ending
-					trieNode.endOfWord = true;
-				}
-			}
+		for (char c : key.toCharArray()) {
+			current = current.children.computeIfAbsent(c, k -> new TrieNode(c));
 		}
+
+		current.endOfWord = true;
 	}
 
 	/**
@@ -90,14 +73,8 @@ public class Trie {
 		for (int i = 0; i < key.length(); i++) {
 			char currChar = key.charAt(i);
 			// Search for the node matching the character
-			TrieNode charNode = null;
-			for (TrieNode loopNode : lastNode.children) {
-				if (loopNode.character == currChar) {
-					charNode = loopNode;
-					// There should only be one so we can fast-exit.
-					break;
-				}
-			}
+			TrieNode charNode = lastNode.children.get(currChar);
+
 			if (charNode != null) {
 				found.add(charNode);
 				lastNode = charNode;
@@ -122,13 +99,7 @@ public class Trie {
 			char lastChar = lastCharNode.character;
 			while (!found.isEmpty()) {
 				lastCharNode = found.poll();
-				Iterator<TrieNode> nodeIterator = lastCharNode.children.iterator();
-				while (nodeIterator.hasNext()) {
-					if (nodeIterator.next().character == lastChar) {
-						nodeIterator.remove();
-						break;
-					}
-				}
+				lastCharNode.children.remove(lastChar);
 
 				if (lastCharNode.endOfWord || !lastCharNode.children.isEmpty())
 					break;
@@ -161,7 +132,7 @@ public class Trie {
 
 			for (Map.Entry<TrieNode, String> entry : nodes.entrySet()) { // Loop through the old nodes
 
-				for (TrieNode node : entry.getKey().children) {
+				for (TrieNode node : entry.getKey().children.values()) {
 
 					if (Character.toLowerCase(node.character) == index) {
 						String realKey = entry.getValue()+node.character;
@@ -192,7 +163,7 @@ public class Trie {
 	private static List<String> getChildrenStrings(TrieNode find, List<String> found) {
 		
 		List<String> childrenStrings = new ArrayList<>(); // Create re-usable list to prevent object allocation
-		for (TrieNode trieNode : find.children) { // Loop through each child
+		for (TrieNode trieNode : find.children.values()) { // Loop through each child
 
 			if (found.size() + 1 > MAX_RETURNS) {
 				return found;
