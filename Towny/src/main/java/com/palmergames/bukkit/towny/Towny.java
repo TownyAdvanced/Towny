@@ -94,32 +94,19 @@ import java.util.logging.Level;
  * @author Shade, ElgarL, LlmDl
  */
 public class Towny extends JavaPlugin {
+	private static Towny plugin;
 	private final String version = this.getDescription().getVersion();
-
-	private final TownyPlayerListener playerListener = new TownyPlayerListener(this);
-	private final TownyVehicleListener vehicleListener = new TownyVehicleListener(this);
-	private final TownyBlockListener blockListener = new TownyBlockListener(this);
-	private final TownyCustomListener customListener = new TownyCustomListener(this);
-	private final TownyEntityListener entityListener = new TownyEntityListener(this);
-	private final TownyServerListener serverListener = new TownyServerListener(this);
-	private final TownyEntityMonitorListener entityMonitorListener = new TownyEntityMonitorListener(this);
-	private final TownyWorldListener worldListener = new TownyWorldListener(this);
-	private final TownyInventoryListener inventoryListener = new TownyInventoryListener(this);
-	private final TownyLoginListener loginListener = new TownyLoginListener();
-	private final HUDManager HUDManager = new HUDManager(this);
-	private final TownyPaperEvents paperEvents = new TownyPaperEvents(this);
 
 	private TownyUniverse townyUniverse;
 
-	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
-
-	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
-	
-	private static Towny plugin;
-	private final TaskScheduler scheduler;
 	private final boolean isFolia = JavaUtil.classExists("io.papermc.paper.threadedregions.RegionizedServer");
+	private final TaskScheduler scheduler;
 
 	private static BukkitAudiences adventure;
+
+	private final HUDManager HUDManager = new HUDManager(this);
+	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
+	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
 	
 	public Towny() {
 		plugin = this;
@@ -176,7 +163,7 @@ public class Towny extends JavaPlugin {
 		adventure = BukkitAudiences.create(this);
 
 		// If we aren't going to enter safe mode, do the following:
-		if (!isError() &&TownySettings.isTownyUpdating(getVersion())) {
+		if (!isError() && TownySettings.isTownyUpdating(getVersion())) {
 
 			printChangelogToConsole();
 			// Update config with new version.
@@ -496,21 +483,21 @@ public class Towny extends JavaPlugin {
 			pluginManager.registerEvents(HUDManager, this);
 
 			// Manage player deaths and death payments
-			pluginManager.registerEvents(entityMonitorListener, this);
-			pluginManager.registerEvents(vehicleListener, this);
-			pluginManager.registerEvents(serverListener, this);
-			pluginManager.registerEvents(customListener, this);
-			pluginManager.registerEvents(worldListener, this);
-			pluginManager.registerEvents(loginListener, this);
+			pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
+			pluginManager.registerEvents(new TownyVehicleListener(this), this);
+			pluginManager.registerEvents(new TownyServerListener(this), this);
+			pluginManager.registerEvents(new TownyCustomListener(this), this);
+			pluginManager.registerEvents(new TownyWorldListener(this), this);
+			pluginManager.registerEvents(new TownyLoginListener(), this);
 		}
 
 		// Always register these events.
-		pluginManager.registerEvents(playerListener, this);
-		pluginManager.registerEvents(blockListener, this);
-		pluginManager.registerEvents(entityListener, this);
-		pluginManager.registerEvents(inventoryListener, this);
+		pluginManager.registerEvents(new TownyPlayerListener(this), this);
+		pluginManager.registerEvents(new TownyBlockListener(this), this);
+		pluginManager.registerEvents(new TownyEntityListener(this), this);
+		pluginManager.registerEvents(new TownyInventoryListener(this), this);
 
-		paperEvents.register();
+		new TownyPaperEvents(this).register();
 	}
 
 	private void printChangelogToConsole() {
@@ -639,9 +626,9 @@ public class Towny extends JavaPlugin {
 	}
 
 	public void deleteCache(Resident resident) {
-		if (!resident.isOnline())
-			return;
-		deleteCache(resident.getPlayer());
+		final Player player = resident.getPlayer();
+		if (player != null)
+			deleteCache(player);
 	}
 
 	public void deleteCache(Player player) {
@@ -829,49 +816,6 @@ public class Towny extends JavaPlugin {
 			throw new IllegalStateException("Attempted to use getPlugin() while the plugin is null, are you shading Towny? If you do not understand this message, join the Towny discord using https://discord.com/invite/gnpVs5m and ask for support.");
 
 		return plugin;
-	}
-
-	/**
-	 * @return the playerListener
-	 */
-	public TownyPlayerListener getPlayerListener() {
-	
-		return playerListener;
-	}
-
-	
-	/**
-	 * @return the vehicleListener
-	 */
-	public TownyVehicleListener getVehicleListener() {
-	
-		return vehicleListener;
-	}
-
-	
-	/**
-	 * @return the entityListener
-	 */
-	public TownyEntityListener getEntityListener() {
-	
-		return entityListener;
-	}
-	
-	/**
-	 * @return the entityMonitorListener
-	 */
-	public TownyEntityMonitorListener getEntityMonitorListener() {
-	
-		return entityMonitorListener;
-	}
-
-	
-	/**
-	 * @return the worldListener
-	 */
-	public TownyWorldListener getWorldListener() {
-	
-		return worldListener;
 	}
 	
 	/**
