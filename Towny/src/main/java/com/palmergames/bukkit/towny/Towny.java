@@ -104,7 +104,6 @@ public class Towny extends JavaPlugin {
 
 	private static BukkitAudiences adventure;
 
-	private final HUDManager HUDManager = new HUDManager(this);
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
 	
@@ -476,7 +475,7 @@ public class Towny extends JavaPlugin {
 
 		if (!isError()) {			
 			// Huds
-			pluginManager.registerEvents(HUDManager, this);
+			pluginManager.registerEvents(new HUDManager(this), this);
 
 			// Manage player deaths and death payments
 			pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
@@ -812,14 +811,6 @@ public class Towny extends JavaPlugin {
 			throw new IllegalStateException("Attempted to use getPlugin() while the plugin is null, are you shading Towny? If you do not understand this message, join the Towny discord using https://discord.com/invite/gnpVs5m and ask for support.");
 
 		return plugin;
-	}
-	
-	/**
-	 * @return the HUDManager
-	 */
-	public HUDManager getHUDManager() {
-		
-		return HUDManager;
 	}
 
 	public static BukkitAudiences getAdventure() {
