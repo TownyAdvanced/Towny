@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,17 +34,21 @@ public class CommandList {
 	
 	public void addCommand(@NotNull String command) {
 		Preconditions.checkNotNull(command, "command");
+		final String normalized = normalizeCommand(command.toLowerCase(Locale.ROOT));
+		if (normalized.isEmpty())
+			return;
 
 		CommandNode current = root;
 
-		for (String part : normalizeCommand(command.toLowerCase(Locale.ROOT)).split(" ")) {
+		for (String part : normalized.split(" ")) {
 			current = current.children.computeIfAbsent(part, k -> new CommandNode(part));
 		}
 		
 		current.endOfWord = true;
 	}
 	
-	private String normalizeCommand(String command) {
+	@VisibleForTesting
+	public static String normalizeCommand(String command) {
 		// Replace slash and/or space from the start of a command
 		command = REMOVE_LEADING_SPACE.matcher(command).replaceAll("");
 		

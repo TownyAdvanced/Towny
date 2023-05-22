@@ -3,7 +3,9 @@ package com.palmergames.bukkit.towny.test;
 import com.palmergames.bukkit.towny.object.CommandList;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,5 +72,22 @@ public class CommandListTests {
 		assertTrue(list.containsCommand("/warp spawn"));
 		list.addCommand("/warp spawn");
 		assertTrue(list.containsCommand("/warp spawn"));
+	}
+	
+	@Test
+	void testNullStringThrowsException() {
+		List<String> list = new ArrayList<>();
+		list.add(null);
+		
+		assertThrowsExactly(IllegalArgumentException.class, () -> new CommandList(list));
+	}
+	
+	@Test
+	void testCommandNormalization() {
+		assertEquals("", CommandList.normalizeCommand("/towny:"));
+		assertEquals("command", CommandList.normalizeCommand("/ towny:command"));
+		assertEquals("command", CommandList.normalizeCommand(" towny:command"));
+		
+		assertEquals("command", CommandList.normalizeCommand("/ command"));
 	}
 }
