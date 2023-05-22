@@ -191,7 +191,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public void finishTasks() {
 		// Cancel the repeating task as its not needed anymore.
-		task.cancel();
+		if (task != null)
+			task.cancel();
 
 		// Make sure that *all* tasks are saved before shutting down.
 		while (!queryQueue.isEmpty()) {
@@ -204,7 +205,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 		}
 		// Close the database sources on shutdown to get GC
-		hikariDataSource.close();
+		if (hikariDataSource != null)
+			hikariDataSource.close();
 	}
 
 	/**

@@ -129,7 +129,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void finishTasks() {
 		
 		// Cancel the repeating task as its not needed anymore.
-		task.cancel();
+		if (task != null)
+			task.cancel();
 		
 		// Make sure that *all* tasks are saved before shutting down.
 		while (!queryQueue.isEmpty()) {
