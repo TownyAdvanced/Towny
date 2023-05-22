@@ -953,7 +953,19 @@ public class Towny extends JavaPlugin {
 		
 		metrics.addCustomChart(new SimplePie("resident_uuids_stored", TownySettings::getUUIDPercent));
 	}
-	
+
+	/**
+	 * Check if the version of Towny is newer than or equal to the supplied version.
+	 * Used by other plugins to determine if Towny is of the required version level.
+	 *
+	 * @param version String version ie: "0.99.1.0"
+	 * @return true if Towny's version is sufficient.
+	 * @since 0.99.0.10.
+	 */
+	public static boolean isTownyVersionSupported(String version) {
+		return Version.fromString(Towny.getPlugin().getVersion()).isNewerThanOrEquals(Version.fromString(version)); 
+	}
+
 	public static boolean isMinecraftVersionStillSupported() {
 		return MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.OLDEST_VERSION_SUPPORTED);
 	}

@@ -8690,3 +8690,5 @@ v0.92.0.11:
   - Fix trie insertion order weirdness, courtesy of Warrior with PR #6677.
 0.99.0.10:
   - Add protection to turtle eggs, players are required to pass a destroy test in order to break them via jumping.
+  - API: Add Towny#isTownyVersionSupported(String)
+    - Returns true if Towny is of equal or newer version, used by other plugins to determine if the Towny version is good.
