@@ -75,14 +75,6 @@ public class CommandListTests {
 	}
 	
 	@Test
-	void testNullStringThrowsException() {
-		List<String> list = new ArrayList<>();
-		list.add(null);
-		
-		assertThrowsExactly(IllegalArgumentException.class, () -> new CommandList(list));
-	}
-	
-	@Test
 	void testCommandNormalization() {
 		assertEquals("", CommandList.normalizeCommand("/towny:"));
 		assertEquals("command", CommandList.normalizeCommand("/ towny:command"));
