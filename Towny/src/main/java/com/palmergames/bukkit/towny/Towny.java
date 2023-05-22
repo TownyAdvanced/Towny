@@ -421,16 +421,12 @@ public class Towny extends JavaPlugin {
 		TownyRegenAPI.cancelProtectionRegenTasks();
 
 		playerCache.clear();
-		
-		try {
-			// Shut down our saving task.
-			plugin.getLogger().info("Finishing File IO Tasks...");
-			townyUniverse.getDataSource().finishTasks();
-			plugin.getLogger().info("Finishing Universe Tasks...");
-			townyUniverse.finishTasks();
-		} catch (NullPointerException ignored) {
-			// The saving task will not have started if this disable was fired by onEnable failing.			
-		}
+
+		// Shut down our saving task.
+		plugin.getLogger().info("Finishing File IO Tasks...");
+		townyUniverse.getDataSource().finishTasks();
+		plugin.getLogger().info("Finishing Universe Tasks...");
+		townyUniverse.finishTasks();
 
 		if (adventure != null) {
 			adventure.close();
