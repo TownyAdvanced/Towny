@@ -16,12 +16,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 public class TownyLoginListener implements Listener {
 	
-	@MonotonicNonNull
-	private Set<String> disallowedNames = null;
+	private Set<String> disallowedNames = populateDisallowedNames();
 	
 	public TownyLoginListener() {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:login-listener"), config -> disallowedNames = populateDisallowedNames());
