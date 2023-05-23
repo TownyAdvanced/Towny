@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -9,7 +9,6 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
@@ -28,24 +27,33 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		for (Player player : server.getOnlinePlayers()) {
-			if (player.getHealth() <= 0)
-				continue;
-			
-			// Is wilderness
-			if (TownyAPI.getInstance().isWilderness(player.getLocation()))
-				continue;
-			
-			TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-
-			if (resident != null 
-				&& resident.hasTown()
-				&& !resident.getTownOrNull().hasActiveWar()
-				&& CombatUtil.isAlly(townBlock.getTownOrNull(), TownyAPI.getInstance().getResidentTownOrNull(resident))
-				&& !townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
-				incHealth(player);
+		if (plugin.isFolia()) {
+			for (Player player : server.getOnlinePlayers())
+				plugin.getScheduler().run(player, () -> checkPlayer(player));
+		} else {
+			plugin.getScheduler().run(() -> {
+				for (Player player : server.getOnlinePlayers())
+					checkPlayer(player);
+			});
 		}
+	}
+	
+	public void checkPlayer(final Player player) {
+		if (player.getHealth() <= 0)
+			return;
+
+		final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
+		// Is wilderness
+		if (townBlock == null)
+			return;
+
+		Town playerTown = TownyAPI.getInstance().getTown(player);
+
+		if (playerTown != null
+			&& !playerTown.hasActiveWar()
+			&& CombatUtil.isAlly(townBlock.getTownOrNull(), playerTown)
+			&& !townBlock.getType().equals(TownBlockType.ARENA)) // only regen if not in an arena
+			incHealth(player);
 	}
 
 	public void incHealth(Player player) {
