@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
 import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 
+import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,6 +41,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.jetbrains.annotations.Nullable;
 
 public class SpawnUtil {
 
@@ -97,7 +99,7 @@ public class SpawnUtil {
 				initiateCostedSpawn(player, resident, spawnLoc, spawnInfo.travelCost, payee, paymentMsg, ignoreWarn, spawnInfo.cooldown);
 				// No Cost so skip confirmation system.
 			} else
-				initiateSpawn(player, spawnLoc, spawnInfo.cooldown);
+				initiateSpawn(player, spawnLoc, spawnInfo.cooldown, 0, null);
 		});
 	}
 
@@ -637,12 +639,18 @@ public class SpawnUtil {
 	 * 
 	 * @param player   Player being spawned.
 	 * @param spawnLoc Location being spawned to.
+	 * @param cooldown The teleport cooldown in seconds to give to the player once teleported.
+	 * @param cost The cost that this player has paid to teleport, used for refunds if the player aborts the teleport.
+	 * @param refundAccount The account that the player paid the cost to, used for refunds if the player aborts the teleport.   
 	 */
-	private static void initiateSpawn(Player player, Location spawnLoc, int cooldown) {
+	private static void initiateSpawn(Player player, Location spawnLoc, int cooldown, double cost, @Nullable Account refundAccount) {
 		if (TownyTimerHandler.isTeleportWarmupRunning() && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP)) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-			TownyAPI.getInstance().requestTeleport(player, spawnLoc, cooldown);
+
+			Resident resident = TownyAPI.getInstance().getResident(player);
+			if (resident != null)
+				TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown, refundAccount, cost);
 		} else {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)
@@ -690,9 +698,7 @@ public class SpawnUtil {
 	private static void payAndThenSpawn(Player player, Resident resident, Location spawnLoc, double travelCost, Account payee, String paymentMsg, int cooldown) {
 		if (resident.getAccount().payTo(travelCost, payee, paymentMsg)) {
 			TownyMessaging.sendMsg(player, Translatable.of("msg_cost_spawn", TownyEconomyHandler.getFormattedBalance(travelCost)));
-			resident.setTeleportCost(travelCost);
-			resident.setTeleportAccount(payee);
-			initiateSpawn(player, spawnLoc, cooldown);
+			initiateSpawn(player, spawnLoc, cooldown, travelCost, payee);
 		}
 	}
 
