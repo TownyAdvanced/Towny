@@ -8692,3 +8692,12 @@ v0.92.0.11:
   - Add protection to turtle eggs, players are required to pass a destroy test in order to break them via jumping.
   - API: Add Towny#isTownyVersionSupported(String)
     - Returns true if Towny is of equal or newer version, used by other plugins to determine if the Towny version is good.
+  - Refactor the main class a bit, courtesy of Warrior with PR #6684.
+  - Use a proper key for the cooldowns map #6694.
+  - Remove teleport related fields from Resident #6695.
+  - Fix previously async timers tasks being sync #6696.
+  - Fix login npe regression #6688.
+  - Bump junit-jupiter from 5.9.2 to 5.9.3.
+  - Bump junit-jupiter-api from 5.9.2 to 5.9.3.
+  - Bump maven-source-plugin from 3.2.1 to 3.3.0.
+  - Bump maven-surefire-plugin from 2.22.2 to 3.1.0.
