@@ -76,7 +76,7 @@ public class TownyTimerHandler{
 
 	public static void toggleHourlyTimer(boolean on) {
 		if (on && !isHourlyTimerRunning()) {
-			hourlyTask = plugin.getScheduler().runRepeating(new HourlyTimerTask(plugin), getTimeUntilNextHourInSeconds(), TimeTools.convertToTicks(TownySettings.getHourInterval()));
+			hourlyTask = plugin.getScheduler().runAsyncRepeating(new HourlyTimerTask(plugin), getTimeUntilNextHourInSeconds(), TimeTools.convertToTicks(TownySettings.getHourInterval()));
 		} else if (!on && isHourlyTimerRunning()) {
 			hourlyTask.cancel();
 			hourlyTask = null;
@@ -87,7 +87,7 @@ public class TownyTimerHandler{
 		if (on && !isShortTimerRunning()) {
 			//This small delay is a safeguard against race conditions
 			long delayTicks = TimeTools.convertToTicks(60);
-			shortTask = plugin.getScheduler().runRepeating(new ShortTimerTask(plugin), delayTicks, TimeTools.convertToTicks(TownySettings.getShortInterval()));
+			shortTask = plugin.getScheduler().runAsyncRepeating(new ShortTimerTask(plugin), delayTicks, TimeTools.convertToTicks(TownySettings.getShortInterval()));
 		} else if (!on && isShortTimerRunning()) {
 			shortTask.cancel();
 			shortTask = null;
@@ -117,7 +117,7 @@ public class TownyTimerHandler{
 	public static void toggleCooldownTimer(boolean on) {
 		
 		if (on && !isCooldownTimerRunning()) {
-			cooldownTimerTask = plugin.getScheduler().runRepeating(new CooldownTimerTask(plugin), 1, 20);
+			cooldownTimerTask = plugin.getScheduler().runAsyncRepeating(new CooldownTimerTask(plugin), 1, 20);
 		} else if (!on && isCooldownTimerRunning()) {
 			cooldownTimerTask.cancel();
 			cooldownTimerTask = null;
@@ -126,7 +126,7 @@ public class TownyTimerHandler{
 	
 	public static void toggleDrawSmokeTask(boolean on) {
 		if (on && !isDrawSmokeTaskRunning()) {
-			drawSmokeTask = plugin.getScheduler().runRepeating(new DrawSmokeTask(plugin), 1, 40);
+			drawSmokeTask = plugin.getScheduler().runAsyncRepeating(new DrawSmokeTask(plugin), 1, 40);
 		} else if (!on && isDrawSmokeTaskRunning()) {
 			drawSmokeTask.cancel();
 			drawSmokeTask = null;
@@ -136,7 +136,7 @@ public class TownyTimerHandler{
 	public static void toggleDrawSpointsTask(boolean on) {
 		if (on && !isDrawSpawnPointsTaskRunning()) {
 			// This is given a delay because it was causing ConcurrentModificationExceptions on startup on one server.
-			drawSpawnPointsTask = plugin.getScheduler().runRepeating(new DrawSpawnPointsTask(plugin), 40, 52);
+			drawSpawnPointsTask = plugin.getScheduler().runAsyncRepeating(new DrawSpawnPointsTask(plugin), 40, 52);
 		} else if (!on && isDrawSpawnPointsTaskRunning()) {
 			drawSpawnPointsTask.cancel();
 			drawSpawnPointsTask = null;
