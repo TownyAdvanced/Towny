@@ -68,7 +68,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	}
 
 	/**
-	 * @apiNote This does not refund any other teleport requests that might be active for the resident, use
+	 * This does not refund any other teleport requests that might be active for the resident, use
 	 * {@link #abortTeleportRequest(Resident)} first if you want them to be refunded.
 	 */
 	public static void requestTeleport(@NotNull Resident resident, @NotNull Location destination, int cooldown, @Nullable Account teleportAccount, double teleportCost) {
