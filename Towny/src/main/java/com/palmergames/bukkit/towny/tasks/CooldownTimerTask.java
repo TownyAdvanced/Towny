@@ -1,15 +1,16 @@
 package com.palmergames.bukkit.towny.tasks;
 
-import java.util.AbstractMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 
 public class CooldownTimerTask extends TownyTimerTask {
 	
-	private static ConcurrentHashMap<AbstractMap.SimpleEntry<String, String>, Long> cooldowns;
-
+	private static final Map<String, Long> COOLDOWNS = new ConcurrentHashMap<>();
 
 	public enum CooldownType{
 		PVP(TownySettings.getPVPCoolDownTime()),
@@ -33,23 +34,14 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 
 	public CooldownTimerTask(Towny plugin) {
-
 		super(plugin);
-		cooldowns = new ConcurrentHashMap<>();
 	}
 
 	@Override
 	public void run() {
 		long currentTime = System.currentTimeMillis();
 
-		while (!cooldowns.isEmpty()) {
-			for (AbstractMap.SimpleEntry<String, String> map : cooldowns.keySet()) {
-				long time = cooldowns.get(map);
-				if (time < currentTime)
-					cooldowns.remove(map);
-			}
-			break;
-		}
+		COOLDOWNS.entrySet().removeIf(entry -> entry.getValue() <= currentTime);
 	}
 	
 	public static void addCooldownTimer(String object, CooldownType type) {
@@ -57,7 +49,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 
 	public static void addCooldownTimer(String object, String cooldownTypeName, int coolDownSeconds) {
-		cooldowns.put(mapOf(object, cooldownTypeName.toLowerCase(Locale.ROOT)), getCooldownEndTime(coolDownSeconds));
+		COOLDOWNS.put(key(object, cooldownTypeName), getCooldownEndTime(coolDownSeconds));
 	}
 
 	public static boolean hasCooldown(String object, CooldownType type) {
@@ -65,7 +57,11 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 
 	public static boolean hasCooldown(String object, String cooldownTypeName) {
-		return cooldowns.containsKey(mapOf(object, cooldownTypeName.toLowerCase(Locale.ROOT)));
+		final Long endTime = COOLDOWNS.get(key(object, cooldownTypeName));
+		if (endTime == null)
+			return false;
+		
+		return endTime > System.currentTimeMillis();
 	}
 
 	public static int getCooldownRemaining(String object, CooldownType type) {
@@ -73,22 +69,23 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 
 	public static int getCooldownRemaining(String object, String cooldownTypeName) {
-		AbstractMap.SimpleEntry<String, String> map = mapOf(object, cooldownTypeName.toLowerCase(Locale.ROOT));
-		if (cooldowns.containsKey(map))
-			return getSecondsRemaining(map);
-		return 0;
+		return getSecondsRemaining(key(object, cooldownTypeName));
 	}
 
-	private static AbstractMap.SimpleEntry<String, String> mapOf(String object, String cooldownTypeName) {
-		return new AbstractMap.SimpleEntry<String, String>(object, cooldownTypeName);
+	private static String key(String object, String cooldownTypeName) {
+		return object + ":" + cooldownTypeName.toLowerCase(Locale.ROOT);
 	}
 
-	private static Long getCooldownEndTime(int coolDownSeconds) {
-		return System.currentTimeMillis() + (coolDownSeconds * 1000);
+	private static long getCooldownEndTime(int coolDownSeconds) {
+		return System.currentTimeMillis() + (coolDownSeconds * 1000L);
 	}
 
-	private static int getSecondsRemaining(AbstractMap.SimpleEntry<String, String> map) {
-		return (int) ((cooldowns.get(map) - System.currentTimeMillis()) / 1000);
+	private static int getSecondsRemaining(String key) {
+		final Long endTime = COOLDOWNS.get(key);
+		if (endTime == null)
+			return 0;
+		
+		return (int) TimeUnit.MILLISECONDS.toSeconds(endTime - System.currentTimeMillis());
 	}
 
 }
