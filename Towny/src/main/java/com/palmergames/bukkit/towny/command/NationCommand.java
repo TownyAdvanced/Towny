@@ -1224,16 +1224,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	 */
 	public static void nationAdd(Player player, Nation nation, List<Town> invited) throws TownyException {
 
-		ArrayList<Town> remove = new ArrayList<>();
+		List<String> invitedNames = new ArrayList<>(invited.size());
 		for (Town town : invited) {
 			if (town.hasNation()) {
-				remove.add(town);
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_already_nation"));
 				continue;
 			}	
 
 			if (!testTownHasEnoughResidents(town)) {
-				remove.add(town);
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
 				continue;
 			}
@@ -1241,17 +1239,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (TownySettings.getNationRequiresProximity() > 0) {
 				if (!nation.getCapital().hasHomeBlock() || !town.hasHomeBlock()) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_homeblock_has_not_been_set"));
+					continue;
 				}
 				WorldCoord capitalCoord = nation.getCapital().getHomeBlockOrNull().getWorldCoord();
 				WorldCoord townCoord = town.getHomeBlockOrNull().getWorldCoord();
 				if (!capitalCoord.getWorldName().equalsIgnoreCase(townCoord.getWorldName())) {
-					remove.add(town);
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_homeblock_in_another_world"));
 					continue;
 				}
 
 				if (MathUtil.distance(capitalCoord, townCoord) > TownySettings.getNationRequiresProximity()) {
-					remove.add(town);
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 					continue;
 				}
@@ -1261,20 +1258,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			BukkitTools.ifCancelledThenThrow(new NationPreAddTownEvent(nation, town));
 
 			nationInviteTown(player, nation, town);
+			invitedNames.add(town.getName());
 		}
 
-		for (Town town : remove) {
-			invited.remove(town);
-		}
-
-		if (invited.size() > 0) {
-			StringBuilder sb = new StringBuilder();
-
-			for (Town town : invited) {
-				sb.append(town.getName()).append(", ");
-			}
-			
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_invited_join_nation", player.getName(), sb.substring(0, sb.length() - 2)));
+		if (invitedNames.size() > 0) {
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_invited_join_nation", player.getName(), String.join(", ", invitedNames)));
 		} else {
 			// This is executed when the arraylist returns empty (no valid town was entered).
 			throw new TownyException(Translatable.of("msg_invalid_name"));
