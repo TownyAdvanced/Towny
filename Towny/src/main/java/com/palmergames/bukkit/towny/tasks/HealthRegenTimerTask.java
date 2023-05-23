@@ -31,10 +31,8 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			for (Player player : server.getOnlinePlayers())
 				plugin.getScheduler().run(player, () -> checkPlayer(player));
 		} else {
-			plugin.getScheduler().run(() -> {
-				for (Player player : server.getOnlinePlayers())
-					checkPlayer(player);
-			});
+			for (Player player : server.getOnlinePlayers())
+				checkPlayer(player);
 		}
 	}
 	
