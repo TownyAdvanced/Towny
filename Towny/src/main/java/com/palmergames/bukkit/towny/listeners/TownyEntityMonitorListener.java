@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -55,24 +54,19 @@ public class TownyEntityMonitorListener implements Listener {
 
 	/**
 	 * Handles players who have taken damage having their spawn cancelled.
-	 * 
-	 * @param event EntityDamageEvent.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerTakesDamage(EntityDamageEvent event) {
-		if (!TownySettings.isDamageCancellingSpawnWarmup() 
-				|| !event.getEntityType().equals(EntityType.PLAYER) 
+		if (!(event.getEntity() instanceof Player player)
+				|| !TownySettings.isDamageCancellingSpawnWarmup() 
 				|| !TownyTimerHandler.isTeleportWarmupRunning() 
-				|| PluginIntegrations.getInstance().checkCitizens(event.getEntity()))
+				|| PluginIntegrations.getInstance().checkCitizens(player))
 			return;
 
-		Resident resident = TownyUniverse.getInstance().getResident(event.getEntity().getUniqueId());
+		Resident resident = TownyAPI.getInstance().getResident(player);
 
-		if (resident != null && resident.getTeleportRequestTime() > 0) {
-			TeleportWarmupTimerTask.abortTeleportRequest(resident);
-			TownyMessaging.sendErrorMsg(event.getEntity(), Translatable.of("msg_err_teleport_cancelled_damage"));
-		}
-	}
+		if (TeleportWarmupTimerTask.abortTeleportRequest(resident))
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled_damage"));}
 	
 	/**
 	 * This handles PlayerDeathEvents on MONITOR in order to handle Towny features such as:

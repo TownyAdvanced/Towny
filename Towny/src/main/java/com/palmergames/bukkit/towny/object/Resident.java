@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
+import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -62,11 +63,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private boolean isNPC = false;
 	private String title = "";
 	private String surname = "";
-	private long teleportRequestTime = -1;
-	private Location teleportDestination;
-	private int teleportCooldown;
-	private double teleportCost = 0.0;
-	private Account teleportAccount;
 	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
@@ -399,64 +395,95 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return out;
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.0.10, clearing teleport requests is no longer needed.
+	 * Use {@link com.palmergames.bukkit.towny.TownyAPI#abortTeleportRequest(Resident)} to abort an active teleport request.
+	 */
+	@Deprecated
 	public void clearTeleportRequest() {
-		teleportCost = 0;
-		teleportRequestTime = -1;
-		teleportAccount = null;
-		teleportCooldown = 0;
+
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
+	 */
+	@Deprecated
 	public void setTeleportRequestTime() {
 
-		teleportRequestTime = System.currentTimeMillis();
 	}
 
+	@ApiStatus.Obsolete
 	public long getTeleportRequestTime() {
-
-		return teleportRequestTime;
+		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
+		
+		return request == null ? -1 : request.requestTime();
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
+	 */
+	@Deprecated
 	public void setTeleportDestination(Location spawnLoc) {
 
-		teleportDestination = spawnLoc;
 	}
 
+	@ApiStatus.Obsolete
 	public Location getTeleportDestination() {
+		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
 
-		return teleportDestination;
+		return request == null ? null : request.destinationLocation();
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
+	 */
+	@Deprecated
 	public void setTeleportCooldown(int cooldown) {
 
-		teleportCooldown = cooldown;
 	}
 
+	@ApiStatus.Obsolete
 	public int getTeleportCooldown() {
+		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
 
-		return teleportCooldown;
+		return request == null ? -1 : request.cooldown();
 	}
 
+	/**
+	 * @return Whether this resident has an active teleport warmup that they're waiting for.
+	 */
 	public boolean hasRequestedTeleport() {
-
-		return teleportRequestTime != -1;
+		return TeleportWarmupTimerTask.hasTeleportRequest(this);
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
+	 */
+	@Deprecated
 	public void setTeleportCost(double cost) {
 
-		teleportCost = cost;
 	}
 
+	@ApiStatus.Obsolete
 	public double getTeleportCost() {
+		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
 
-		return teleportCost;
+		return request == null ? 0 : request.teleportCost();
 	}
 	
+	/**
+	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
+	 */
+	@Deprecated
 	public void setTeleportAccount(Account payee) {
-		teleportAccount = payee;
+
 	}
 	
+	@ApiStatus.Obsolete
 	public Account getTeleportAccount() {
-		return teleportAccount;
+		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
+
+		return request == null ? null : request.teleportAccount();
 	}
 
 	//TODO: Restore /tw regen and /tw regen undo functionality.
