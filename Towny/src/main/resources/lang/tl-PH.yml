@@ -230,6 +230,7 @@ msg_world_pvp: '&cItong mundo ay PvP lamang.'
 msg_world_mobs: '&cItong mundo ay merong pagpilit na pag-spawn nang mga Halimaw.'
 msg_world_expl: '&cItong mundo ay merong pilitan na pag-sabog na naka buhay.'
 msg_world_fire: '&cItong mundo ay merong pag-kalat nang apoy na naka pilit na buhay.'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
 msg_plot_pvp: '&cAng Pvp ay hindi mabuksan sa isang Arena na may lote nang lupa.'
 msg_plot_regen_wrong_size: '&cRegen can only be performed when the default plot size (16) is used.'
 msg_reloaded: '&2Towny''s setting ay kakargahang muli.'
@@ -736,6 +737,7 @@ msg_error_nation_has_no_enemies: 'Ang bansa ay walang mga kaaway na ilista.'
 msg_error_ta_plot_claim: 'Nawawalang playername, hal: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'Walang nakitang manlalaro na may pangalang %s'
 msg_admin_has_given_you_a_plot: 'Isang admin ang nag-claim ng plot para sa iyo sa: %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: 'Ang bayan na %s ay pinilit ang kanilang pvp setting na %s'
 msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cAng bukas na katayuan ng Nation ay %s na ngayon.'
@@ -1691,3 +1693,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plo
 msg_err_that_town_is_not_conquered: "%s is already not conquered."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s has had their conquered status removed."
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
