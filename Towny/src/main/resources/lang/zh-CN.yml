@@ -230,6 +230,7 @@ msg_world_pvp: '&c这个世界强制开启PVP.'
 msg_world_mobs: '&c这个世界强制开启怪物生成.'
 msg_world_expl: '&c这个世界强制开启爆炸.'
 msg_world_fire: '&c这个世界强制开启火势蔓延.'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
 msg_plot_pvp: '&c不能在一个竞技场中开启或关闭PVP.'
 msg_plot_regen_wrong_size: '&c回溯只支持默认的区块大小(16).'
 msg_reloaded: '&2城镇设置已重载.'
@@ -736,6 +737,7 @@ msg_error_nation_has_no_enemies: '没有可以成为敌国的国家.'
 msg_error_ta_plot_claim: '缺少玩家名, 示例: /ta plot claim 玩家名'
 msg_error_no_player_with_that_name: '找不到 %s 这名玩家'
 msg_admin_has_given_you_a_plot: '管理员为你声明了一块土地: %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: '城镇 %s 的强制PVP设置为 %s'
 msg_town_forcedisabledpvp_setting_set_to: '城镇 %s 的强制管理员禁用PVP设置为 %s'
 msg_nation_changed_open: '&c国家的公开状态为 %s.'
@@ -1691,3 +1693,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plo
 msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
