@@ -68,7 +68,7 @@ public class TownyWorldListener implements Listener {
 		}
 
 		// This is a world we've never seen before, make a new TownyWorld.
-		TownyUniverse.getInstance().newWorld(world);
+		TownyUniverse.getInstance().newWorld(world, true);
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world.getUID());
 		
 		if (townyWorld == null) {
