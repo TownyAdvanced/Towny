@@ -230,6 +230,7 @@ msg_world_pvp: '&cDetta är en PVP värld.'
 msg_world_mobs: '&cMonster är påtvingat i denna värld.'
 msg_world_expl: '&cExplosioner är påtvingat i denna värld.'
 msg_world_fire: '&cEldspridning är påtvingat i denna värld.'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
 msg_plot_pvp: '&cPVP kan inte ändras i en Arena.'
 msg_plot_regen_wrong_size: '&cÅterhämtning fungerar endast på mark som är av standardstorleken (16).'
 msg_reloaded: '&2Townys inställningar laddades om.'
@@ -736,6 +737,7 @@ msg_error_nation_has_no_enemies: 'Nationen har inga fiender att lista.'
 msg_error_ta_plot_claim: 'Saknar spelarnamn, ex: /ta plot claim PlayerNameHere'
 msg_error_no_player_with_that_name: 'Ingen spelare med namnet %s hittades'
 msg_admin_has_given_you_a_plot: 'En administratör har claimat en plot för dig på: %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: 'Staden %s har fått sin pvp-inställning tvingad till %s'
 msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
 msg_nation_changed_open: '&cNationens öppen-status är nu %s.'
@@ -1691,3 +1693,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plo
 msg_err_that_town_is_not_conquered: "%s is already not conquered."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s has had their conquered status removed."
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
