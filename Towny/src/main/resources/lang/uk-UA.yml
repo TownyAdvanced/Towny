@@ -230,6 +230,7 @@ msg_world_pvp: '&cУ цьому світі завжди ввімкнено PvP.'
 msg_world_mobs: '&cУ цьому світі монстри з''являтимуться завжди.'
 msg_world_expl: '&cУ цьому світі дозволені вибухи.'
 msg_world_fire: '&cУ цьому світі дозволений вогонь.'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
 msg_plot_pvp: '&cНе можна перемикати PvP на арені.'
 msg_plot_regen_wrong_size: '&cRegen can only be performed when the default plot size (16) is used.'
 msg_reloaded: '&2Налаштування плагіна перезавантажені.'
@@ -736,6 +737,7 @@ msg_error_nation_has_no_enemies: 'Нація не має ворогів.'
 msg_error_ta_plot_claim: 'Не вказано ім''я гравця, до прикладу: /ta plot claim Ім''яГравцяТут'
 msg_error_no_player_with_that_name: 'Не знайдено гравця з іменем %s'
 msg_admin_has_given_you_a_plot: 'Адміністратор надав вам ділянку %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: 'Місто %s було примушене встановити статус PVP як %s'
 msg_town_forcedisabledpvp_setting_set_to: 'Для міста %s налаштування admindisabledpvp примусово змінено на %s'
 msg_nation_changed_open: '&cВідкритий статус нації тепер %s.'
@@ -1691,3 +1693,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "Ви не можете зах
 msg_err_that_town_is_not_conquered: "%s is already not conquered."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s has had their conquered status removed."
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
