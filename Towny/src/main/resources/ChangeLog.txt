@@ -8703,3 +8703,4 @@ v0.92.0.11:
   - Bump maven-surefire-plugin from 2.22.2 to 3.1.0.
 0.99.0.11:
   - Fix edge case scenario where the nation-requires-proximity feature could be bypassed.
+  - Fix another NPE caused by listener registration change, courtesy of Warrior with PR #6698.
