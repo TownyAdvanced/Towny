@@ -110,6 +110,7 @@ public class TownyPlayerListener implements Listener {
 
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
+		loadBlockedCommandLists();
 		TownySettings.addReloadListener(NamespacedKey.fromString("blocked-commands", plugin), config -> loadBlockedCommandLists());
 	}
 
