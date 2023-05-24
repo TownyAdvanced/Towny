@@ -230,6 +230,7 @@ msg_world_pvp: '&cЭтот мир только с PVP.'
 msg_world_mobs: '&cВ этом мире монстры появляются всегда.'
 msg_world_expl: '&cВ этом мире всегда разрешены взрывы.'
 msg_world_fire: '&cВ этом мире разрешен огонь.'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
 msg_plot_pvp: '&cНельзя переключать PVP на арене.'
 msg_plot_regen_wrong_size: '&cРегенерация может быть выполнена только тогда, когда размер участка по умолчанию (16).'
 msg_reloaded: '&2Настройки плагина были перезагружены.'
@@ -736,6 +737,7 @@ msg_error_nation_has_no_enemies: 'Нация не имеет врагов, чт�
 msg_error_ta_plot_claim: 'Отсутствует имя игрока. Пример: /ta plot claim <игрок>'
 msg_error_no_player_with_that_name: 'Игрок с именем %s не найден'''
 msg_admin_has_given_you_a_plot: 'Администратор заприватил для вас участок по адресу: %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: 'PVP в городе %s принудительно установлено на %s'
 msg_town_forcedisabledpvp_setting_set_to: 'Настройка admindisabledpvp в городе %s теперь %s'
 msg_nation_changed_open: '&cОткрытый статус Нации сейчас: %s.'
@@ -1691,3 +1693,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "Вы не можете зан
 msg_err_that_town_is_not_conquered: "%s уже не захвачен."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s теперь не захвачен."
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
