@@ -230,6 +230,7 @@ msg_world_pvp: '&c이 월드에서는 PVP 설정을 변경할 수 없습니다.'
 msg_world_mobs: '&c이 월드의 몹스폰은 강제적입니다.'
 msg_world_expl: '&c이 월드의 폭발은 강제적입니다.'
 msg_world_fire: '&c이 월드의 불번짐은 강제적입니다.'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
 msg_plot_pvp: '&c아레나로 설정된 토지는 PVP 권한을 변경할 수 없습니다.'
 msg_plot_regen_wrong_size: '&c재생성 기능은 기본 토지 크기 (16) 에서만 사용할 수 있습니다'
 msg_reloaded: '&2타우니 설정을 다시 불러왔습니다.'
@@ -736,6 +737,7 @@ msg_error_nation_has_no_enemies: '국가가 나열할 적국이 없습니다.'
 msg_error_ta_plot_claim: '플레이어 이름 없음, 예시: /ta plot claim 플레이어이름'
 msg_error_no_player_with_that_name: '%s(이)라는 이름을 가진 플레이어가 없습니다.'
 msg_admin_has_given_you_a_plot: '관리자가 당신의 이름으로 토지를 점유했습니다: %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: '마을 %s의 PVP 설정이 %s로 강제되었습니다.'
 msg_town_forcedisabledpvp_setting_set_to: '마을 %s의 Pvp 설정이 %s로 강제되었습니다.'
 msg_nation_changed_open: '&c이국가의 공공 설정이 %s로 변경되었습니다.'
@@ -1691,3 +1693,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plo
 msg_err_that_town_is_not_conquered: "%s is already not conquered."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s has had their conquered status removed."
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
