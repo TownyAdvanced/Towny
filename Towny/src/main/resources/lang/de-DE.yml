@@ -230,6 +230,7 @@ msg_world_pvp: '&cIn dieser Welt ist PvP überall aktiv. (config=force_pvp_on)'
 msg_world_mobs: '&cIn dieser Welt spawnen überall Monster. (config=force_town_monster_on)'
 msg_world_expl: '&cIn dieser Welt sind Explosionen überall aktiviert. (config=force_explosions_on)'
 msg_world_fire: '&cIn dieser Welt kann sich Feuer überall ausbreiten. (config=force_fire_on).'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
 msg_plot_pvp: '&cPvP kann in einem Arenabereich nicht umgeschaltet werden.'
 msg_plot_regen_wrong_size: '&cGrundstücke können nur neu generiert werden, wenn die standard Größe (16) verwendet wird.'
 msg_reloaded: '&2Die Einstellungen von Towny wurden neu geladen.'
@@ -736,6 +737,7 @@ msg_error_nation_has_no_enemies: 'Die Nation hat keine Feinde.'
 msg_error_ta_plot_claim: 'Der Spielername fehlt. Bsp: /ta plot claim PlayerNameHier'
 msg_error_no_player_with_that_name: 'Es konnte kein Spiel Spieler mit dem Namen %s gefunden werden.'
 msg_admin_has_given_you_a_plot: 'Ein Admin hat für dich einen Plot bei %s beansprucht.'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
 msg_town_forcepvp_setting_set_to: 'Die PvP-Einstellung der Stadt %s wurde geändert zu %s'
 msg_town_forcedisabledpvp_setting_set_to: 'Die Stadt %s hat ihre admindisabledpv Einstellung zu %s gezwungen'
 msg_nation_changed_open: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'
@@ -1691,3 +1693,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plo
 msg_err_that_town_is_not_conquered: "%s is already not conquered."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s has had their conquered status removed."
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
