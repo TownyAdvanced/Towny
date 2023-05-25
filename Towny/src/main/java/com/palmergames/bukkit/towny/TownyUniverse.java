@@ -749,26 +749,15 @@ public class TownyUniverse {
 	// =========== World Methods ===========
 
 	/**
-	 * Called during loading of the database only, to prevent saving over existing world data.
-	 * @param world World being loaded as a TownyWorld.
+	 * Causes a new TownyWorld object to be made in the Universe, from a Bukkit World.
 	 */
 	public void newWorld(@NotNull World world) {
-		newWorld(world, false);
-	}
-
-	/**
-	 * Causes a new TownyWorld object to be made in the Universe, from a Bukkit World.
-	 * 
-	 * @param newlyDetected Used to cause Towny to save the TownyWorld to the database.
-	 */
-	public void newWorld(@NotNull World world, boolean newlyDetected) {
 		Preconditions.checkNotNull(world, "World cannot be null!");
 		if (getWorldIDMap().containsKey(world.getUID()))
 			return;
 		TownyWorld townyWorld = new TownyWorld(world.getName(), world.getUID());
 		registerTownyWorld(townyWorld);
-		if (newlyDetected)
-			townyWorld.save();
+		townyWorld.save();
 	}
 
 	public void registerTownyWorld(@NotNull TownyWorld world) {

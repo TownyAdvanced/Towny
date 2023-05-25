@@ -649,7 +649,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		// Check for any new worlds registered with bukkit.
 		for (World world : Bukkit.getServer().getWorlds())
-			universe.newWorld(world);
+			universe.registerTownyWorld(new TownyWorld(world.getName(), world.getUID()));
 
 		if (!getContext())
 			return false;
