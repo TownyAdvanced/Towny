@@ -607,7 +607,7 @@ status_nation_tax: '国税：'
 status_nation_towns: '城镇'
 status_nation_allies: '盟友'
 status_nation_enemies: '敌人'
-status_nation_enemied_by: '将你的国家视为敌人的国家'
+status_nation_enemied_by: 'Nations that consider your nation an enemy'
 status_world_claimable: '&a可宣称'
 status_world_noclaims: '&a不可宣称'
 status_world_forcepvp: '强制PVP：'
@@ -742,7 +742,7 @@ msg_town_forcepvp_setting_set_to: '城镇 %s 的强制PVP设置为 %s'
 msg_town_forcedisabledpvp_setting_set_to: '城镇 %s 的强制管理员禁用PVP设置为 %s'
 msg_nation_changed_open: '&c国家的公开状态为 %s.'
 msg_err_already_in_a_nation: '你的城镇已经加入了一个国家.'
-msg_err_nation_not_open: '&c国家 %s 并不对外人开放，请向国家领导者或助手请求加入。'
+msg_err_nation_not_open: '&c国家 %s 不是对所有人开放的，请向国家领导者或助手请求以加入。'
 msg_err_nation_homeblock_in_another_world: '&c你的城镇之家与国都不在同一个世界.'
 status_bank_town_penalty_upkeep: '过度圈地费用：'
 #Added in 0.53:
@@ -891,7 +891,7 @@ msg_err_unable_to_add_more_residents_without_nation: '你的城镇在第一次�
 msg_the_following_towns_were_deleted_for_having_0_claims: '以下城镇因没有声明任何土地而被删除: %s'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: '这些城镇将因过于远离新首都而脱离你的国家：%s。你确定要继续吗？'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '因为离新的首都不够近，所以城镇 %s 将从您的国家中移除。您确定要继续吗?'
 msg_ta_deposit_all_success: '成功卷轴%s到所有国家和城镇的银行内.'
 bonus_townblocks: '奖励城镇区块'
 #Added in 0.80
@@ -1196,7 +1196,7 @@ plotgroup_plu: '地皮组'
 msg_err_this_town_has_no_plot_groups: '指定城镇没有地皮组。'
 msg_err_this_plot_is_already_part_of_the_plot_group_x: '这个城镇区块已经是地皮组%s的一部分了。'
 map_hover_plot_group: '地皮组： '
-map_hover_plot_group_size: '大小：'
+map_hover_plot_group_size: ' 大小： '
 map_hover_plots: '%s块地皮'
 #Added in 0.112
 msg_checking_for_updates: '检查更新中......'
@@ -1207,14 +1207,14 @@ msg_click_to_download: '&b点此下载。'
 msg_latest_version: '&2Towny版本：&a%s &2| 最新版本：&a%s'
 msg_up_to_date: '&a当前已是最新版本。'
 msg_click_purchase: '点击购买'
-msg_you_must_join_this_town_to_claim_this_plot: '你必须加入城镇%s来购买此土地。你想要加入并继续吗？'
+msg_you_must_join_this_town_to_claim_this_plot: '要购买此土地，你必须加入城镇%s。你想要加入并继续吗？'
 #Added in 0.113
 status_trustedlist: '已信任'
 msg_click_to_edit: '&b点击编辑。'
 permission_gui_header: 'Towny权限面板'
 msg_last_edited: '&7&o上一次更改于%s，由%s更改。'
-msg_trusted_added: '&b已信任%s于此%s中。' #Last %s is either town or townblock
-msg_already_trusted: '&b%s已被信任于此%s中。'
+msg_trusted_added: '&b已在%s中信任%s。' #Last %s is either town or townblock
+msg_already_trusted: '&b%s已被信任于此%s。'
 msg_trusted_added_2: '&b%s将你列入了%s%s的信任列表中。' #Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s未受此%s的信任。'
 msg_trusted_removed: '&b%s不再受此%s的信任。'
@@ -1226,7 +1226,7 @@ msg_overrides_already_set: '&b%s已在%s上有覆盖设置。'
 msg_cache_block_err: '&c你没有权限在这里%s。'
 msg_err_plot_belongs_to_group: '&c这片土地属于一个土地组，请使用%s。'
 plotgroup_sing: '土地组'
-msg_err_ally_limit_reached: '无法接受邀请，你的盟友太多了。'
+msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
 #Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
 msg_err_expected_command_format: '语法错误，预期传入%s'
@@ -1293,7 +1293,7 @@ help_menu_subcommand: '<aqua>'
 help_menu_explanation: '<gray>'
 help_menu_requirement: '<red>'
 #Added in 0.122
-msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: '下列城镇会因国家合并后离首都太远而脱离国家：%s。'
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: '城镇 %s 会因国家合并后离首都太远而脱离国家。'
 #Added in 0.123
 msg_err_invalid_townyworld: "\"%s\"不是一个有效的世界。"
 msg_err_enter_world_name_first: '请先输入世界名。'
@@ -1314,7 +1314,7 @@ msg_err_player_cannot_be_harmed: '%s处于重生保护中，无法伤害。'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: '你失去了你的重生保护。'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
-msg_err_cannot_pickup_respawn_protection: '你在受到重生保护时不能拾取物品。'
+msg_err_cannot_pickup_respawn_protection: '你在受到重生保护时不能拾起物品。'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: '首都：'
@@ -1396,7 +1396,7 @@ msg_jailed_war: '作为战俘监禁。'
 #Jail handbook messages
 msg_jailed_handbook_1: '看起来你因为%s而被监禁了。'
 #Jail handbook messages
-msg_jailed_handbook_2: '那真是糟糕。可是你又能做什么呢？这里有一些被监禁时有用的小贴士。'
+msg_jailed_handbook_2: '啊，那真是糟糕。可是你又能做些什么呢？这里有一些被监禁时的小贴士。'
 #Jail handbook messages
 msg_jailed_handbook_3: '你已经被监禁%s小时了，服刑后你将得到自由。'
 #Jail handbook messages
@@ -1412,7 +1412,7 @@ msg_jailed_handbook_5: '如果你坚持逃离到了城镇外的野地，你将�
 #Jail handbook messages
 msg_jailed_handbook_6: '但是在到达野地之前不要死亡，否则你将被送回监狱。'
 #Jail handbook messages
-msg_jailed_teleport: '还好，末影珍珠和紫颂果可以在监狱里使用来帮助你越狱，如果你手上恰好有几个的话。'
+msg_jailed_teleport: '还好，如果你手中有一些末影珍珠和紫颂果，你可以在监狱里使用它们来帮助你越狱。'
 #Jail handbook messages
 msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
@@ -1436,7 +1436,7 @@ tc_player_channel_sound_unmuted: '频道已解除静音'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '有外来者在你的领地上，你不能切换PVP状态！'
 #Added in 0.136
-msg_view_on_web: '点击转向网页查看。'
+msg_view_on_web: '&7点击以转向网页查看。'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6城镇%s同意与主城镇%s合并。'
@@ -1444,7 +1444,7 @@ town1_has_merged_with_town2: '&6城镇%s同意与主城镇%s合并。'
 status_neutrality_cost: '中立成本：'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: '如果您已经为这些城镇区块支付了任何实际生活费用，请了解：您正在玩的服务器违反了MinecraftEULA和城镇许可证。'
+msg_ptw_warning_1: '如果您已经为这些城镇区块支付了任何实际生活费用，请了解：您正在玩的服务器违反了 Minecraft EULA 和 Towny 许可协议。'
 #Line 2 of the givebonus warning.
 msg_ptw_warning_2: '城镇团队从未打算用真钱购买城镇区块。'
 #Line 3 of the givebonus warning.
