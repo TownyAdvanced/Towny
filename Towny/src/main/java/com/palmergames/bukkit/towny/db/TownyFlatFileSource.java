@@ -343,7 +343,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_server_world_list"));
 		for (World world : Bukkit.getServer().getWorlds())
-			universe.newWorld(world);
+			universe.registerTownyWorld(new TownyWorld(world.getName(), world.getUID()));
 
 		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_world_list"));
 		

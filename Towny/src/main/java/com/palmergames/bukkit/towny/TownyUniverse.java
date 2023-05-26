@@ -748,6 +748,9 @@ public class TownyUniverse {
 	
 	// =========== World Methods ===========
 
+	/**
+	 * Causes a new TownyWorld object to be made in the Universe, from a Bukkit World.
+	 */
 	public void newWorld(@NotNull World world) {
 		Preconditions.checkNotNull(world, "World cannot be null!");
 		if (getWorldIDMap().containsKey(world.getUID()))
