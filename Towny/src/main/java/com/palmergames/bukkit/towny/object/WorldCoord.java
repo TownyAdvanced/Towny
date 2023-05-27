@@ -307,9 +307,9 @@ public class WorldCoord extends Coord {
 	 */
 	@Nullable
 	public Town getTownOrNull() {
-		if (hasTownBlock())
-			return getTownBlockOrNull().getTownOrNull();
-		return null;
+		final TownBlock townBlock = getTownBlockOrNull();
+
+		return townBlock != null ? townBlock.getTownOrNull() : null;
 	}
 	
 	/**
