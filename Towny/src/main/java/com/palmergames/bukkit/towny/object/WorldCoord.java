@@ -98,7 +98,7 @@ public class WorldCoord extends Coord {
 	}
 
 	public static WorldCoord parseWorldCoord(Block block) {
-		return parseWorldCoord(block.getLocation());
+		return new WorldCoord(block.getWorld(), toCell(block.getX()), toCell(block.getZ()));
 	}
 
 	public WorldCoord add(int xOffset, int zOffset) {

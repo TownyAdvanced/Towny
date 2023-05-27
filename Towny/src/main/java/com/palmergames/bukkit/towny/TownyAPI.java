@@ -427,7 +427,7 @@ public class TownyAPI {
      * @return true if the {@link Block} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(Block block) {
-        return isWilderness(block.getLocation());
+        return isWilderness(WorldCoord.parseWorldCoord(block));
     }
     
     /**
@@ -447,12 +447,9 @@ public class TownyAPI {
      * @return true if the {@link WorldCoord} is in the wilderness, false otherwise.
      */
     public boolean isWilderness(WorldCoord worldCoord) {
-        
-		if (worldCoord.hasTownBlock() && worldCoord.getTownBlockOrNull().hasTown())
-			return false;
+		final TownBlock townBlock = worldCoord.getTownBlockOrNull();
 
-		// Must be wilderness
-		return true;
+		return townBlock == null || !townBlock.hasTown();
     }    
     
 	/**
