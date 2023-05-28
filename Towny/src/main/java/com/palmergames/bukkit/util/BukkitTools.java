@@ -29,6 +29,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -48,6 +50,15 @@ public class BukkitTools {
 
 	private static Towny plugin = null;
 	private static Server server = null;
+	private static final MethodHandle GET_KEY;
+	
+	static {
+		try {
+			GET_KEY = MethodHandles.publicLookup().unreflect(Material.class.getMethod("getKey"));
+		} catch (Throwable e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
@@ -363,5 +374,13 @@ public class BukkitTools {
 		
 		NamespacedKey key = NamespacedKey.fromString(filtered);
 		return key != null ? registry.get(key) : null;
+	}
+	
+	public static NamespacedKey getMaterialKey(@NotNull Material material) {
+		try {
+			return (NamespacedKey) GET_KEY.invoke(material);
+		} catch (Throwable e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

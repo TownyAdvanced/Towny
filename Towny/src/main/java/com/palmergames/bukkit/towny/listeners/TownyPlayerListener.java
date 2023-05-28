@@ -413,7 +413,7 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Catches hoes taking dirt from Rooted Dirt blocks.
 				 */
-				if (clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item))
+				if (BukkitTools.getMaterialKey(clickedMat).equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item))
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock));
 
 				/*
@@ -450,8 +450,8 @@ public class TownyPlayerListener implements Listener {
 				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
 				ItemLists.CANDLES.contains(clickedMat) ||
-				clickedMat.getKey().equals(NamespacedKey.minecraft("turtle_egg")) ||
-				clickedMat.getKey().equals(NamespacedKey.minecraft("chiseled_bookshelf")) ||
+				BukkitTools.getMaterialKey(clickedMat).equals(NamespacedKey.minecraft("turtle_egg")) ||
+				BukkitTools.getMaterialKey(clickedMat).equals(NamespacedKey.minecraft("chiseled_bookshelf")) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK){
 				
@@ -1285,7 +1285,12 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		if (event.hasItem()
-				&& event.getPlayer().getInventory().getItemInMainHand().getType().getKey().getKey().equalsIgnoreCase(TownySettings.getTool()) 
+				&& BukkitTools.getMaterialKey(event.getPlayer()
+			.getInventory()
+			.getItemInMainHand()
+			.getType())
+			.getKey()
+			.equalsIgnoreCase(TownySettings.getTool()) 
 				&& plugin.hasPlayerMode(event.getPlayer(), "infotool")
 				&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())
 				&& event.getClickedBlock() != null) {

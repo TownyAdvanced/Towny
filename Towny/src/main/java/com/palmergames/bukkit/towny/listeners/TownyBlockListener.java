@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.BlockUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Material;
@@ -395,7 +396,7 @@ public class TownyBlockListener implements Listener {
 	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onSculkSpread(BlockSpreadEvent event) {
-		String sourceName = event.getSource().getType().getKey().getKey();
+		String sourceName = BukkitTools.getMaterialKey(event.getBlock().getType()).getKey();
 		if (!sourceName.startsWith("sculk"))
 			return;
 
