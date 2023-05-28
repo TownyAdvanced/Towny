@@ -1301,7 +1301,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 				town.setNation(nation);
 				town.save();
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_join_nation", town.getName()));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_join_nation", StringMgmt.remUnderscore(town.getName())));
 			}
 
 		}
