@@ -13,6 +13,7 @@ import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -166,7 +167,7 @@ public final class TownBlockTypeHandler {
 
 	@Nullable
 	private static Material matchMaterial(String materialName, String listName, String typeName) {
-		Material material = Material.matchMaterial(materialName);
+		Material material = BukkitTools.matchRegistry(Registry.MATERIAL, materialName);
 		if (material == null)
 			TownyMessaging.sendDebugMsg(String.format("Could not find a material named '%s' while loading the " + listName + " list for the %s type.", materialName, typeName));
 		

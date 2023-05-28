@@ -350,8 +350,8 @@ public class BukkitTools {
 	 */
 	@Nullable
 	public static String matchMaterialName(String name) {
-		Material mat = Material.matchMaterial(name.trim().toUpperCase(Locale.ROOT));
-		return mat == null ? null : mat.name(); 
+		Material mat = matchRegistry(Registry.MATERIAL, name);
+		return mat == null ? null : mat.getKey().getKey().toUpperCase(Locale.ROOT); 
 	}
 
 	/**

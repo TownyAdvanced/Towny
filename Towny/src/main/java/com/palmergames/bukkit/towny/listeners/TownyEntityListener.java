@@ -21,6 +21,7 @@ import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Creature;
@@ -61,7 +62,6 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 
 import java.util.ArrayList;
@@ -159,7 +159,7 @@ public class TownyEntityListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onAxolotlTarget(EntityTargetLivingEntityEvent event) {
 		if (event.getEntity() instanceof Mob attacker &&
-			attacker.getType().name().equals("AXOLOTL") &&
+			attacker.getType().getKey().equals(NamespacedKey.minecraft("axolotl")) &&
 			event.getTarget() instanceof Mob defender &&
 			CombatUtil.preventDamageCall(attacker, defender, DamageCause.ENTITY_ATTACK)) {
 			attacker.setMemory(MemoryKey.HAS_HUNTING_COOLDOWN, true);
@@ -226,7 +226,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		if (!event.getEntity().getCustomEffects().stream().anyMatch(effect -> effect.getType().equals(PotionEffectType.HARM)))
+		if (event.getEntity().getCustomEffects().stream().noneMatch(effect -> effect.getType().getKey().equals(NamespacedKey.minecraft("instant_damage"))))
 			return;
 
 		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))

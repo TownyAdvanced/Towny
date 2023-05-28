@@ -395,8 +395,8 @@ public class TownyBlockListener implements Listener {
 	 */
 	@EventHandler(ignoreCancelled = true)
 	public void onSculkSpread(BlockSpreadEvent event) {
-		String sourceName = event.getSource().getType().name();
-		if (!sourceName.startsWith("SCULK"))
+		String sourceName = event.getSource().getType().getKey().getKey();
+		if (!sourceName.startsWith("sculk"))
 			return;
 
 		if (plugin.isError()) {

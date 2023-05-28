@@ -228,6 +228,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists CAULDRON_FILLABLE = newBuilder().add("WATER_BUCKET", "LAVA_BUCKET", "POWDER_SNOW_BUCKET").build();
 
 	/**
+	 * List of hoes
+	 */
+	public static final ItemLists HOES = newBuilder().withTag("items", minecraft("hoes")).endsWith("_hoe").build();
+
+	/**
 	 * Config-useable material groups.
 	 */
 	public static final Set<String> GROUPS = Arrays.stream(ItemLists.class.getFields()).filter(field -> Modifier.isStatic(field.getModifiers())).map(Field::getName).filter(name -> !name.equals("GROUPS")).collect(Collectors.toSet());

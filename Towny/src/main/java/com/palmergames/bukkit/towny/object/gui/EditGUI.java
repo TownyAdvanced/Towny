@@ -7,7 +7,12 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public class EditGUI extends PermissionGUI {
 	private final Resident editor;
@@ -24,12 +29,19 @@ public class EditGUI extends PermissionGUI {
 	 */
 	public void saveChanges() {
 		SetPermissionType[] newTypes = new SetPermissionType[4];
+		Arrays.fill(newTypes, SetPermissionType.UNSET);
+		
 		for (int i = 0; i < 4; i++) {
-			switch (getInventory().getItem(PermissionGUIUtil.getWoolSlots()[i]).getType()) {
-				case LIME_WOOL -> newTypes[i] = SetPermissionType.SET;
-				case RED_WOOL -> newTypes[i] = SetPermissionType.NEGATED;
-				default -> newTypes[i] = SetPermissionType.UNSET;
-			}
+			final Material type = Optional.ofNullable(getInventory().getItem(PermissionGUIUtil.getWoolSlots()[i])).map(ItemStack::getType).orElse(null);
+			if (type == null)
+				continue;
+			
+			if (type == Material.LIME_WOOL)
+				newTypes[i] = SetPermissionType.SET;
+			else if (type == Material.RED_WOOL)
+				newTypes[i] = SetPermissionType.NEGATED;
+			else if (type == Material.GRAY_WOOL)
+				newTypes[i] = SetPermissionType.UNSET;
 		}
 
 		if (getTownBlock().hasPlotObjectGroup())

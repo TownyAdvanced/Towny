@@ -72,19 +72,19 @@ public class TownBlockData {
 	}
 
 	// These bridge methods were added during 0.99.0.*
-	@SuppressWarnings("unused")
-	private void setItemUseIds$$bridge$$public(EnumSet<Material> itemUseIds) {
-		setItemUseIds(itemUseIds);
+	@SuppressWarnings({"unused", "unchecked"})
+	private void setItemUseIds$$bridge$$public(EnumSet<?> itemUseIds) {
+		setItemUseIds((Collection<Material>) itemUseIds);
 	}
 
-	@SuppressWarnings("unused")
-	private void setSwitchIds$$bridge$$public(EnumSet<Material> switchIds) {
-		setSwitchIds(switchIds);
+	@SuppressWarnings({"unused", "unchecked"})
+	private void setSwitchIds$$bridge$$public(EnumSet<?> switchIds) {
+		setSwitchIds((Collection<Material>) switchIds);
 	}
 
-	@SuppressWarnings("unused")
-	private void setAllowedBlocks$$bridge$$public(EnumSet<Material> allowedBlocks) {
-		setAllowedBlocks(allowedBlocks);
+	@SuppressWarnings({"unused", "unchecked"})
+	private void setAllowedBlocks$$bridge$$public(EnumSet<?> allowedBlocks) {
+		setAllowedBlocks((Collection<Material>) allowedBlocks);
 	}
 
 	public void setTax(double tax) {
