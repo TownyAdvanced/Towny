@@ -382,7 +382,7 @@ public class TownySettings {
 			if (ItemLists.GROUPS.contains(matName)) {
 				switchUseMaterials.addAll(ItemLists.getGrouping(matName));
 			} else {
-				Material material = Material.matchMaterial(matName);
+				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, matName);
 				if (material != null)
 					switchUseMaterials.add(material);
 			}
@@ -398,7 +398,7 @@ public class TownySettings {
 			if (ItemLists.GROUPS.contains(matName)) {
 				itemUseMaterials.addAll(ItemLists.getGrouping(matName));
 			} else {
-				Material material = Material.matchMaterial(matName);
+				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, matName);
 				if (material != null)
 					itemUseMaterials.add(material);
 			}
@@ -427,7 +427,7 @@ public class TownySettings {
 			if (ItemLists.GROUPS.contains(materialName.toUpperCase(Locale.ROOT))) {
 				materials.addAll(ItemLists.getGrouping(materialName.toUpperCase(Locale.ROOT)));
 			} else {
-				Material material = Material.matchMaterial(materialName.toUpperCase(Locale.ROOT));
+				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, materialName);
 				if (material != null)
 					materials.add(material);
 			}

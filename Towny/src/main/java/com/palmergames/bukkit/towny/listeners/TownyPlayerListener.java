@@ -430,7 +430,7 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Catches hoes taking dirt from Rooted Dirt blocks.
 				 */
-				if (clickedMat.name().equals("ROOTED_DIRT") && item.name().toLowerCase().contains("_hoe"))
+				if (clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item))
 					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock));
 
 				/*
@@ -474,8 +474,8 @@ public class TownyPlayerListener implements Listener {
 				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
 				ItemLists.CANDLES.contains(clickedMat) ||
-				clickedMat.name().equals("TURTLE_EGG") ||
-				clickedMat.name().equals("CHISELED_BOOKSHELF") ||
+				clickedMat.getKey().equals(NamespacedKey.minecraft("turtle_egg")) ||
+				clickedMat.getKey().equals(NamespacedKey.minecraft("chiseled_bookshelf")) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK){
 				
@@ -1308,7 +1308,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		if (event.hasItem()
-				&& event.getPlayer().getInventory().getItemInMainHand().getType().name().equalsIgnoreCase(TownySettings.getTool()) 
+				&& event.getPlayer().getInventory().getItemInMainHand().getType().getKey().getKey().equalsIgnoreCase(TownySettings.getTool()) 
 				&& plugin.hasPlayerMode(event.getPlayer(), "infotool")
 				&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())
 				&& event.getClickedBlock() != null) {
@@ -1327,7 +1327,7 @@ public class TownyPlayerListener implements Listener {
 						org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
 						TownyMessaging.sendMessage(player, Arrays.asList(
 								ChatTools.formatTitle("Door Info"),
-								ChatTools.formatCommand("", "Door Type", "", block.getType().name()),
+								ChatTools.formatCommand("", "Door Type", "", block.getType().getKey().toString()),
 								ChatTools.formatCommand("", "hinged on ", "", String.valueOf(door.getHinge())),
 								ChatTools.formatCommand("", "isOpen", "", String.valueOf(door.isOpen())),
 								ChatTools.formatCommand("", "getFacing", "", door.getFacing().name())
@@ -1335,7 +1335,7 @@ public class TownyPlayerListener implements Listener {
 					} else {
 						TownyMessaging.sendMessage(player, Arrays.asList(
 								ChatTools.formatTitle("Block Info"),
-								ChatTools.formatCommand("", "Material", "", block.getType().name()),								      
+								ChatTools.formatCommand("", "Material", "", block.getType().getKey().toString()),								      
 								ChatTools.formatCommand("", "MaterialData", "", block.getBlockData().getAsString())
 								));
 					}
@@ -1358,7 +1358,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		if (event.getRightClicked() != null
-				&& event.getPlayer().getInventory().getItemInMainHand().getType().name().equalsIgnoreCase(TownySettings.getTool())
+				&& event.getPlayer().getInventory().getItemInMainHand().getType().getKey().getKey().equalsIgnoreCase(TownySettings.getTool())
 				&& plugin.hasPlayerMode(event.getPlayer(), "infotool")
 				&& TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(event.getPlayer())) {
 
@@ -1367,7 +1367,7 @@ public class TownyPlayerListener implements Listener {
 				TownyMessaging.sendMessage(event.getPlayer(), Arrays.asList(
 						ChatTools.formatTitle("Entity Info"),
 						ChatTools.formatCommand("", "Entity Class", "", entity.getType().getEntityClass().getSimpleName()),
-						ChatTools.formatCommand("", "Entity Type", "", entity.getType().name() + " (" + entity.getType().getKey() + ")")
+						ChatTools.formatCommand("", "Entity Type", "", entity.getType().getKey().toString())
 						));
 
 				event.setCancelled(true);

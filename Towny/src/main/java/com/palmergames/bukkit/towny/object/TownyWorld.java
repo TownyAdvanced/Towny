@@ -558,7 +558,7 @@ public class TownyWorld extends TownyObject {
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
 		entityExplosionProtection = new HashSet<>();
 		
-		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entitytype enum names.
+		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entity's key.
 		if (entities.size() > 0 && !StringMgmt.isAllUpperCase(entities))
 			convertLegacyEntityNames(entities);
 		
@@ -570,7 +570,7 @@ public class TownyWorld extends TownyObject {
 			String entity = entities.get(i);
 			for (EntityType type : Registry.ENTITY_TYPE) {
 				if (type.getEntityClass() != null && type.getEntityClass().getSimpleName().equalsIgnoreCase(entity)) {
-					entities.set(i, type.name());
+					entities.set(i, type.getKey().toString());
 					break;
 				}					
 			}

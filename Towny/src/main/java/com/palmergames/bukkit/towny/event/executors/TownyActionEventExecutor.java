@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.event.executors;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import com.palmergames.bukkit.towny.event.damage.TownBlockExplosionTestEvent;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -187,7 +188,7 @@ public class TownyActionEventExecutor {
 		if (isNotCampfire(block))
 			block = block.getRelative(BlockFace.DOWN);
 		
-		return !TownySettings.isFireSpreadBypassMaterial(block.getType().name());
+		return !TownySettings.isFireSpreadBypassMaterial(block.getType().getKey().getKey().toUpperCase(Locale.ROOT)); // TODO proper key
 	}
 	
 	/**
