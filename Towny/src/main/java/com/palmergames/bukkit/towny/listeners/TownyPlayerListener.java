@@ -1163,7 +1163,7 @@ public class TownyPlayerListener implements Listener {
 		if (resident == null || resident.isAdmin())
 			return;
 		
-		final String command = event.getMessage().split(" ")[0];
+		final String command = event.getMessage();
 		
 		if (blockJailedPlayerCommand(event.getPlayer(), resident, command)) {
 			event.setCancelled(true);
