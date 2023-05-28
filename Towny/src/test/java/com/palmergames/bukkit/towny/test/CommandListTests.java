@@ -3,10 +3,7 @@ package com.palmergames.bukkit.towny.test;
 import com.palmergames.bukkit.towny.object.CommandList;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")

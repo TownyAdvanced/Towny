@@ -8705,3 +8705,8 @@ v0.92.0.11:
   - Fix edge case scenario where the nation-requires-proximity feature could be bypassed.
   - Fix another NPE caused by listener registration change, courtesy of Warrior with PR #6698.
   - Fix world settings being wiped on load, which affected some servers using MySQL.
+0.99.0.12:
+  - Marginally faster town or null, courtesy of Warrior with PR #6701.
+  - Allow subcommands to be blocked using the blocked-commands config sections, courtesy of Warrior with PR #6680.
+    - Closes #6642.
+    - Blocking a root command i.e. /town will block any town subcommands, blocking a subcommand will not block the root command or any other sub commands.

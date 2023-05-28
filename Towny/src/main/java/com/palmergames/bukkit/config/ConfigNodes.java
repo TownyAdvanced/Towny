@@ -1049,7 +1049,10 @@ public enum ConfigNodes {
 			"",
 			"# Allows blocking commands inside towns and limiting them to plots owned by the players only.",
 			"# Useful for limiting sethome/home commands to plots owned by the players themselves and not someone else.",
-			"# Admins and players with the towny.admin.town_commands.blacklist_bypass permission node will not be hindered."
+			"# Admins and players with the towny.admin.town_commands.blacklist_bypass permission node will not be hindered.",
+			"# Blocked commands lists can be for root commands: ie: /town, which will block all subcommands. A subcommand",
+			"# can be specified without blocking the root command: ie: /town spawn which would not block /town.",
+			"# When configuring the command lists below, do not include the / symbol."
 	),
 	GTOWN_SETTINGS_ENABLE_COMMAND_BLACKLISTING(
 			"global_town_settings.town_command_blacklisting.enabled",
