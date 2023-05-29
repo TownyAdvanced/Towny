@@ -8711,3 +8711,5 @@ v0.92.0.11:
     - Closes #6642.
     - Blocking a root command i.e. /town will block any town subcommands, blocking a subcommand will not block the root command or any other sub commands.
   - Fix errant underscores in the message displayed when a town joins a nation.
+  - PAPI: Fallback to Plot Group name when Plot has no name, courtesy of GabrielTK with PR #6704. (First-Time Contributor!)
+    - Closes #6703.
