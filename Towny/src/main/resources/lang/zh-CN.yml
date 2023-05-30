@@ -1179,7 +1179,7 @@ msg_err_outlawed_players_no_teleport: '&4你被你所在的城镇列为被放逐
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4你不能在把你列为被放逐者的城镇里使用此命令。'
 #Added in 0.110
 msg_safe_mode: "[Error] 已锁定安全模式！"
-msg_safe_mode_base: '[错误] Towny因产生了一个错误而被锁定于安全模式下！'
+msg_safe_mode_base: '[Error] Towny因产生了一个错误而被锁定于安全模式下！'
 msg_safe_mode_player: '告诉管理员去检查服务器后台。'
 msg_safe_mode_admin: '查看服务器后台以获取详细信息。'
 msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: '你只能在中心区块所在的世界里声明前哨。'
