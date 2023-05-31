@@ -49,6 +49,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class TownyFormatter {
 	public static final SimpleDateFormat lastOnlineFormat = new SimpleDateFormat("MMMMM dd '@' HH:mm");
@@ -160,7 +161,7 @@ public class TownyFormatter {
 					.append(Component.newline())
 					.append(TownyComponents.miniMessage(getResidentJoinedTownDate(resident, translator)))
 					.append(Component.newline())
-					.append(TownyComponents.miniMessage(colourKeyValue(translator.of("rank_list_mayor"), town.getMayor().getFormattedName())))
+					.append(TownyComponents.miniMessage(colourKeyValue(translator.of("rank_list_mayor"), Optional.ofNullable(town.getMayor()).map(Resident::getFormattedName).orElse("null"))))
 					.append(Component.newline())
 					.append(TownyComponents.miniMessage(colourKeyValue(translator.of("res_list"), StringMgmt.join(residents, ", "))))
 					.append(Component.newline())
