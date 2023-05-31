@@ -94,7 +94,7 @@ Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/to
 ___
 
 ### Connect/Support
-The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a pre-release version it is expected that you have read the [changelog](https://git.io/fjbS3) for any important changes since the previous Release build.
+The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a pre-release version it is expected that you have read the [changelog](https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt) for any important changes since the previous Release build.
 
 Some important pages to look over:
 - **[Installing Towny](https://github.com/TownyAdvanced/Towny/wiki/Installation)** - Why make installation hard on yourself?
