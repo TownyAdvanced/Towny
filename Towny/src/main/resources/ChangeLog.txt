@@ -8715,3 +8715,5 @@ v0.92.0.11:
     - Closes #6703.
 0.99.1.0:
   - Bump version for release.
+0.99.1.1:
+  - Fix the seventh null mayor npe, courtesy of Warrior with PR #6710.
