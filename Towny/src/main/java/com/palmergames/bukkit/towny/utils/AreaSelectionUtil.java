@@ -269,6 +269,9 @@ public class AreaSelectionUtil {
 					throw new TownyException(Translatable.of("msg_err_invalid_radius"));
 				}
 				
+				if (r < 0)
+					throw new TownyException(Translatable.of("msg_err_invalid_radius"));
+				
 				if (TownySettings.getMaxClaimRadiusValue() > 0 && r > TownySettings.getMaxClaimRadiusValue())
 					throw new TownyException(Translatable.of("msg_err_invalid_radius_number", TownySettings.getMaxClaimRadiusValue()));
 				
