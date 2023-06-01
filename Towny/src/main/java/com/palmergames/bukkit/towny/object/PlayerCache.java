@@ -6,26 +6,26 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerCache {
 
-	private final HashMap<Material, Boolean> buildMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> destroyMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> switchMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> itemUseMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> buildMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> destroyMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> switchMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> itemUseMatPermission = new HashMap<>();
 
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
 	private Location lastLocation;
 
-	//TODO: cache last entity attacked
-
 	public PlayerCache(TownyWorld world, Player player) {
 
 		this(new WorldCoord(world.getName(), Coord.parseCoord(player)));
-		setLastLocation(player.getLocation());
+		this.lastLocation = player.getLocation();
 	}
 
 	public PlayerCache(@NotNull WorldCoord worldCoord) {
@@ -151,26 +151,11 @@ public class PlayerCache {
 		
 	}
 	
-	private void updateMaps(HashMap<Material, Boolean> blockMap, Material material, Boolean value) {
-		
-		if (!blockMap.containsKey(material)) {
-			/*
-			 * We have no permissions cached for this block.
-			 */			
-			blockMap.put(material, value);
-		} else {
-			/*
-			 * We have cached permissions for this block type so just push updated data.
-			 */
-			blockMap.get(material);
-		}
+	private void updateMaps(Map<Material, Boolean> blockMap, Material material, Boolean value) {
+		blockMap.putIfAbsent(material, value);
 	}
 	
-	private boolean getBlockPermission(HashMap<Material, Boolean> blockMap, Material material) throws NullPointerException {
-		
-		if (!blockMap.containsKey(material))
-			throw new NullPointerException();
-		
+	private boolean getBlockPermission(Map<Material, Boolean> blockMap, Material material) throws NullPointerException {
 		return blockMap.get(material);
 		
 	}

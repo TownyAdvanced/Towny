@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -68,7 +69,7 @@ public class PlayerCacheUtil {
 
 		try {
 			// Test required for portalCreateEvent in WorldListener, player hasn't changed worlds yet.
-			if (location.getWorld().equals(player.getWorld())) 
+			if (player.getWorld().equals(location.getWorld())) 
 				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
 			else 
 				worldCoord = new WorldCoord(location.getWorld().getName(), Coord.parseCoord(location));
@@ -95,7 +96,7 @@ public class PlayerCacheUtil {
 			
 			TownyMessaging.sendDebugMsg("New Cache Created and updated!");
 
-			TownyMessaging.sendDebugMsg("New Cache permissions for " + material + ":" + action.toString() + ":" + status.name() + " = " + cache.getCachePermission(material, action));
+			TownyMessaging.sendDebugMsg("New Cache permissions for " + material + ":" + action + ":" + status.name() + " = " + cache.getCachePermission(material, action));
 			return cache.getCachePermission(material, action);
 		}
 	}
@@ -111,24 +112,19 @@ public class PlayerCacheUtil {
 	 * @param action - ActionType
 	 */
 	private static void triggerCacheCreate(Player player, Location location, WorldCoord worldCoord, TownBlockStatus status, Material material, ActionType action) {
+		final boolean permission = getPermission(player, status, worldCoord, material, action);
+
+		PlayerCache cache = plugin.getCache(player);
+		cache.updateCoord(worldCoord);
 
 		switch (action) {
-
-		case BUILD: // BUILD
-			cacheBuild(player, worldCoord, material, getPermission(player, status, worldCoord, material, action));
-			return;
-		case DESTROY: // DESTROY
-			cacheDestroy(player, worldCoord, material, getPermission(player, status, worldCoord, material, action));
-			return;
-		case SWITCH: // SWITCH
-			cacheSwitch(player, worldCoord, material, getPermission(player, status, worldCoord, material, action));
-			return;
-		case ITEM_USE: // ITEM_USE
-			cacheItemUse(player, worldCoord, material, getPermission(player, status, worldCoord, material, action));
-			return;
-		default:
-			//for future expansion of permissions
+			case BUILD -> cache.setBuildPermission(material, permission);
+			case DESTROY -> cache.setDestroyPermission(material, permission);
+			case SWITCH -> cache.setSwitchPermission(material, permission);
+			case ITEM_USE -> cache.setItemUsePermission(material, permission);
 		}
+
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord + ") Cached " + action.getCommonName() + ": " + permission);
 	}
 	
 	/**
@@ -146,76 +142,8 @@ public class PlayerCacheUtil {
 		cache.updateCoord(worldCoord);
 		cache.setStatus(townBlockStatus);
 
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Status: " + townBlockStatus);
+		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord + ") Cached Status: " + townBlockStatus);
 		return townBlockStatus;
-	}
-
-	/**
-	 * Update the player cache for Build rights at this WorldCoord.
-	 * 
-	 * @param player - Player
-	 * @param worldCoord - WorldCoord
-	 * @param material - Material
-	 * @param buildRight - Boolean
-	 */
-	private static void cacheBuild(Player player, WorldCoord worldCoord, Material material, Boolean buildRight) {
-
-		PlayerCache cache = plugin.getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setBuildPermission(material, buildRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Build: " + buildRight);
-	}
-
-	/**
-	 * Update the player cache for Destroy rights at this WorldCoord.
-	 * 
-	 * @param player - Player
-	 * @param worldCoord - WorldCoord
-	 * @param material - Material
-	 * @param destroyRight - Boolean
-	 */
-	private static void cacheDestroy(Player player, WorldCoord worldCoord, Material material, Boolean destroyRight) {
-
-		PlayerCache cache = plugin.getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setDestroyPermission(material, destroyRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Destroy: " + destroyRight);
-	}
-
-	/**
-	 * Update the player cache for Switch rights at this WorldCoord.
-	 * 
-	 * @param player - Player
-	 * @param worldCoord - WorldCoord
-	 * @param material - Material
-	 * @param switchRight - Boolean
-	 */
-	private static void cacheSwitch(Player player, WorldCoord worldCoord, Material material, Boolean switchRight) {
-
-		PlayerCache cache = plugin.getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setSwitchPermission(material, switchRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Switch: " + switchRight);
-	}
-
-	/**
-	 * Update the player cache for Item_use rights at this WorldCoord.
-	 * 
-	 * @param player - Player
-	 * @param worldCoord - WorldCoord
-	 * @param material - Material
-	 * @param itemUseRight - Boolean
-	 */
-	private static void cacheItemUse(Player player, WorldCoord worldCoord, Material material, Boolean itemUseRight) {
-
-		PlayerCache cache = plugin.getCache(player);
-		cache.updateCoord(worldCoord);
-		cache.setItemUsePermission(material, itemUseRight);
-
-		TownyMessaging.sendDebugMsg(player.getName() + " (" + worldCoord.toString() + ") Cached Item Use: " + itemUseRight);
 	}
 
 	/**
@@ -254,18 +182,17 @@ public class PlayerCacheUtil {
 	 */
 	public static TownBlockStatus getTownBlockStatus(Player player, WorldCoord worldCoord) {
 
-		if (!TownyAPI.getInstance().isTownyWorld(worldCoord.getBukkitWorld()))
+		final TownyWorld townyWorld = worldCoord.getTownyWorld();
+		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return TownBlockStatus.OFF_WORLD;
 
-		// Has to be wilderness.
-		if (!worldCoord.hasTownBlock())
+		final TownBlock townBlock = worldCoord.getTownBlockOrNull();
+		final Town town = townBlock != null ? townBlock.getTownOrNull() : null;
+
+		if (townBlock == null || town == null)
 			// When nation zones are enabled we do extra tests to determine if this is near to a nation.
 			// If NationZones are not enabled we return normal wilderness.
 			return TownySettings.getNationZonesEnabled() ? TownyAPI.getInstance().hasNationZone(worldCoord) : TownBlockStatus.UNCLAIMED_ZONE;  
-
-		// Has to be in a town.
-		TownBlock townBlock = worldCoord.getTownBlockOrNull();
-		Town town = worldCoord.getTownOrNull();
 
 		/*
 		 * Find the resident data for this player.
@@ -297,8 +224,8 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.PLOT_TRUSTED;
 		
 		// Resident Plot rights
-		if (townBlock.hasResident()) {
-			Resident owner = townBlock.getResidentOrNull();
+		final Resident owner = townBlock.getResidentOrNull();
+		if (owner != null) {
 			if (resident == owner)
 				return TownBlockStatus.PLOT_OWNER;
 			else if (owner.hasFriend(resident))
