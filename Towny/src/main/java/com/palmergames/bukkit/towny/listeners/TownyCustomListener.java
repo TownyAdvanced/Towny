@@ -52,6 +52,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 
 /**
  * Author: Chris H (Zren / Shade)
@@ -100,9 +101,8 @@ public class TownyCustomListener implements Listener {
 				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
 				msg = chunkNotifier.getNotificationString(resident);
 			} catch (NullPointerException e) {
-				plugin.getLogger().info("ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful:");
-				plugin.getLogger().info("  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ());
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful: " + System.lineSeparator() +
+					"  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ(), e);
 			}
 			if (msg == null)
 				return;

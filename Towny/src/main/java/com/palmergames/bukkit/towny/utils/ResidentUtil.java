@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -222,7 +223,7 @@ public class ResidentUtil {
 			npc.setNPC(true);
 			npc.save();
 		} catch (TownyException e) {
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "exception occurred while creating new npc resident", e);
 		}
 		
 		return npc;

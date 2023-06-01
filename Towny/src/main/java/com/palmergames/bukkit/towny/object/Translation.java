@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.IllegalFormatException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -116,8 +117,7 @@ public final class Translation {
 		try {
 			return String.format(translated, args);
 		} catch (IllegalFormatException e) {
-			Towny.getPlugin().getLogger().warning("An exception occurred when formatting translation '" + translated + "' for {key=" + key + ",args=" + Arrays.toString(args) + "}, see the below error for more details");
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred when formatting translation '" + translated + "' for {key=" + key + ",args=" + Arrays.toString(args) + "}, see the below error for more details", e);
 			return translated;
 		}
 	}
@@ -154,8 +154,7 @@ public final class Translation {
 		try {
 			return String.format(of(key, locale), args);
 		} catch (IllegalFormatException e) {
-			Towny.getPlugin().getLogger().warning("An exception occurred when formatting translation '" + translated + "' for {key=" + key + ",locale=" + locale.toString() + ",args=" + Arrays.toString(args) + "}, see the below error for more details");
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred when formatting translation '" + translated + "' for {key=" + key + ",locale=" + locale + ",args=" + Arrays.toString(args) + "}, see the below error for more details", e);
 			return translated;
 		}
 	}

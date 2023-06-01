@@ -204,7 +204,7 @@ public class OnPlayerLogin implements Runnable {
 				try {
 					TownyUniverse.getInstance().registerResidentUUID(resident);
 				} catch (AlreadyRegisteredException e) {
-					e.printStackTrace();
+					plugin.getLogger().log(Level.WARNING, "uuid for resident " + resident.getName() + " was already registered! (" + player.getUniqueId() + ")", e);
 				}
 				TownySettings.incrementUUIDCount();
 			}

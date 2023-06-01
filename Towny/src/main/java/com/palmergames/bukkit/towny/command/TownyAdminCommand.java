@@ -87,6 +87,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -2094,7 +2095,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownBlockTypeHandler.initialize();
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while reloading the config", e);
 			return;
 		}
 		

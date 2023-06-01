@@ -141,6 +141,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -1013,7 +1014,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						InviteHandler.acceptInvite(toAccept);
 						return;
 					} catch (TownyException | InvalidObjectException e) {
-						e.printStackTrace();
+						plugin.getLogger().log(Level.WARNING, "unknown exception occurred while accepting invite", e);
 					}
 				}
 			}
@@ -1053,9 +1054,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					try {
 						InviteHandler.declineInvite(toDecline, false);
 						TownyMessaging.sendMsg(player, Translatable.of("successful_deny"));
-						return;
 					} catch (InvalidObjectException e) {
-						e.printStackTrace(); // Shouldn't happen, however like i said a fallback
+						plugin.getLogger().log(Level.WARNING, "unknown exception occurred while declining invite", e); // Shouldn't happen, however like i said a fallback
 					}
 				}
 			} else {
@@ -1794,8 +1794,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 
 		} catch (NullPointerException e) {
-			e.printStackTrace();
-			return;
+			plugin.getLogger().log(Level.WARNING, "while parsing jail command", e);
 		}
 	}
 
@@ -2780,7 +2779,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "An exception occurred while creating a new town", e);
 			}
 		})
 		.setCancellableEvent(new PreNewTownEvent(player, name, spawnLocation))
@@ -3179,7 +3178,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendMsg(sender, Translatable.of("town_revoke_invite_successful"));
 							break;
 						} catch (InvalidObjectException e) {
-							e.printStackTrace();
+							plugin.getLogger().log(Level.WARNING, "An exception occurred while revoking invites for town " + town.getName(), e);
 						}
 					}
 				}

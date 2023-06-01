@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -181,7 +182,7 @@ public final class FileMgmt {
 
 				return true;
 			} catch (IOException e) {
-				e.printStackTrace();
+				Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while writing to " + targetLocation, e);
 				return false;
 			}
 		} finally {
@@ -280,10 +281,8 @@ public final class FileMgmt {
                     zos.write(buffer, 0, len);
                 }
             }			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while zipping up file " + file.getName(), e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -436,7 +435,7 @@ public final class FileMgmt {
 					keys.put(key, String.valueOf(value));
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while reading file " + file.getName(), e);
 			}
 			return keys;
 		} finally {
@@ -469,7 +468,7 @@ public final class FileMgmt {
 					fout.writeUTF(block);
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while saving plot data to " + file.getName(), e1);
 		} finally {
 			writeLock.unlock();
 		}

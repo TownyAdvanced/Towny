@@ -68,13 +68,9 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		Block block = state.getBlock();
 		
 		// Replace physical block.
-		try {
-			BlockData blockData = state.getBlockData().clone();			
-			block.setType(state.getType(), false);
-			block.setBlockData(blockData);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		BlockData blockData = state.getBlockData().clone();			
+		block.setType(state.getType(), false);
+		block.setBlockData(blockData);
 		
 		// If the state is a creature spawner, then replace properly.
 		if (state instanceof CreatureSpawner) {

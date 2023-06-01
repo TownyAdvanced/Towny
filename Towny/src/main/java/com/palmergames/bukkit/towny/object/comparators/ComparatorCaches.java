@@ -5,7 +5,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.google.common.cache.CacheBuilder;
@@ -31,21 +33,22 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.jetbrains.annotations.NotNull;
 
 public class ComparatorCaches {
 	
-	private static LoadingCache<ComparatorType, List<TextComponent>> townCompCache = CacheBuilder.newBuilder()
+	private static final LoadingCache<ComparatorType, List<TextComponent>> townCompCache = CacheBuilder.newBuilder()
 			.expireAfterWrite(10, TimeUnit.MINUTES)
-			.build(new CacheLoader<ComparatorType, List<TextComponent>>() {
-				public List<TextComponent> load(ComparatorType compType) throws Exception {
+			.build(new CacheLoader<>() {
+				public @NotNull List<TextComponent> load(@NotNull ComparatorType compType) {
 					return gatherTownLines(compType);
 				}
 			});
 	
-	private static LoadingCache<ComparatorType, List<TextComponent>> nationCompCache = CacheBuilder.newBuilder()
+	private static final LoadingCache<ComparatorType, List<TextComponent>> nationCompCache = CacheBuilder.newBuilder()
 			.expireAfterWrite(10, TimeUnit.MINUTES)
-			.build(new CacheLoader<ComparatorType, List<TextComponent>>() {
-				public List<TextComponent> load(ComparatorType compType) throws Exception {
+			.build(new CacheLoader<>() {
+				public @NotNull List<TextComponent> load(@NotNull ComparatorType compType) {
 					return gatherNationLines(compType);
 				}
 			}); 
@@ -54,7 +57,7 @@ public class ComparatorCaches {
 		try {
 			return townCompCache.get(compType);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "exception occurred while updating town comparator cache", e);
 			return new ArrayList<>();
 		}
 	}
@@ -63,7 +66,7 @@ public class ComparatorCaches {
 		try {
 			return nationCompCache.get(compType);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "exception occurred while updating nation comparator cache", e);
 			return new ArrayList<>();
 		}
 	}

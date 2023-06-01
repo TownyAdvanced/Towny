@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.logging.Level;
 
 /**
  * @author ElgarL
@@ -61,14 +62,14 @@ public class TownyPerms {
 		TownyPerms.plugin = plugin;
 	}
 	
-	private static final MethodHandle permissions;
+	private static final MethodHandle PERMISSIONS;
 
 	// Setup reflection (Thanks to Codename_B for the reflection source)
 	static {
 		try {
 			Field permissionsField = PermissionAttachment.class.getDeclaredField("permissions");
 			permissionsField.setAccessible(true);
-			permissions = MethodHandles.lookup().unreflectGetter(permissionsField);
+			PERMISSIONS = MethodHandles.lookup().unreflectGetter(permissionsField);
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException(e);
 		}
@@ -137,6 +138,7 @@ public class TownyPerms {
 	 * @param resident - Resident to check if player is valid
 	 * @param player - Player to register permission
 	 */
+	@SuppressWarnings("unchecked")
 	public static void assignPermissions(Resident resident, Player player) {
 
 		if (resident == null) {
@@ -173,7 +175,7 @@ public class TownyPerms {
 		 */
 
 		try {
-			final Map<String, Boolean> orig = (Map<String, Boolean>) permissions.invoke(attachment);
+			final Map<String, Boolean> orig = (Map<String, Boolean>) PERMISSIONS.invoke(attachment);
 			/*
 			 * Clear the map (faster than removing the attachment and
 			 * recalculating)
@@ -192,7 +194,7 @@ public class TownyPerms {
 			*/
 			player.recalculatePermissions();
 		} catch (final Throwable e) {
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "exception occurred while assigning permissions to player " + player.getName(), e);
 		}
 		
 		/*

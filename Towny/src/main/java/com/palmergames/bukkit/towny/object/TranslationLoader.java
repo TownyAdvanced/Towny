@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -177,8 +178,7 @@ public class TranslationLoader {
 					newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
-				plugin.getLogger().warning("Unabled to read yaml file: '" + lang + ".yml' from within the " + plugin.getName() + ".jar.");
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "Unabled to read yaml file: '" + lang + ".yml' from within the " + plugin.getName() + ".jar.", e);
 			}
 		}
 	}
@@ -197,7 +197,7 @@ public class TranslationLoader {
 					.forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
 			}
 		} catch (URISyntaxException | IOException e) {
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while getting language file names from the plugin jar", e);
 		}
 		return lang;
 	}
@@ -229,8 +229,7 @@ public class TranslationLoader {
 					FileMgmt.writeString(langPath, string);
 			}
 		} catch (IOException e) {
-			plugin.getLogger().warning("Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + "' during a reference language file update.");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + "' during a reference language file update.", e);
 		}
 	}
 
@@ -260,8 +259,7 @@ public class TranslationLoader {
 								newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 						}
 					} catch (Exception e) {
-						plugin.getLogger().warning("Unabled to read yaml file: '" + file.getName() + "' in the override folder.");
-						e.printStackTrace();
+						plugin.getLogger().log(Level.WARNING, "Unabled to read yaml file: '" + file.getName() + "' in the override folder.", e);
 					}
 				}
 			}
@@ -363,7 +361,7 @@ public class TranslationLoader {
 		try (InputStream is = Files.newInputStream(globalYMLPath)) {
 			globalOverrides = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
 		} catch (Exception e) {
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while reading the global.yml file", e);
 		}
 		return globalOverrides;
 	}

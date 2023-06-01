@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class MetadataLoader {
 	
@@ -69,8 +70,7 @@ public class MetadataLoader {
 			fields = DataFieldIO.deserializeMeta(serializedMetadata);
 		} catch (IOException e) {
 			// Unsure if logger is loaded at this point
-			Towny.getPlugin().getLogger().warning("Error loading metadata for towny object " + object.getClass().getName() + object.getName() + "!");
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "Error loading metadata for towny object " + object.getClass().getName() + object.getName() + "!", e);
 		}
 		
 		if (!fields.isEmpty()) {
