@@ -11,10 +11,8 @@ import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author - Articdive
@@ -23,8 +21,7 @@ public class InviteHandler {
 	@SuppressWarnings("unused")
 	private static Towny plugin;
 	
-	private static final Set<Invite> activeInvites = new HashSet<>();
-	private static final Map<Invite, Long> invitesTimes = new HashMap<>();
+	private static final Map<Invite, Long> ACTIVE_INVITES = new ConcurrentHashMap<>();
 
 	public static void initialize(Towny plugin) {
 
@@ -32,7 +29,7 @@ public class InviteHandler {
 	}
 
 	public static void acceptInvite(Invite invite) throws InvalidObjectException, TownyException {
-		if (activeInvites.contains(invite)) {
+		if (ACTIVE_INVITES.containsKey(invite)) {
 			invite.accept();
 			removeInvite(invite);
 			return;
@@ -42,7 +39,7 @@ public class InviteHandler {
 	}
 
 	public static void declineInvite(Invite invite, boolean fromSender) throws InvalidObjectException {
-		if (activeInvites.contains(invite)) {
+		if (ACTIVE_INVITES.containsKey(invite)) {
 			invite.decline(fromSender);
 			removeInvite(invite);
 			return;
@@ -52,17 +49,15 @@ public class InviteHandler {
 	}
 	
 	public static void addInvite(Invite invite) {
-		activeInvites.add(invite);
-		invitesTimes.put(invite, System.currentTimeMillis());
+		ACTIVE_INVITES.put(invite, System.currentTimeMillis());
 	}
 	
 	public static void removeInvite(Invite invite) {
-		activeInvites.remove(invite);
-		invitesTimes.remove(invite);
+		ACTIVE_INVITES.remove(invite);
 	}
 	
 	private static long getInviteTime(Invite invite) {
-		return invitesTimes.getOrDefault(invite, 0l); 
+		return ACTIVE_INVITES.getOrDefault(invite, 0L); 
 	}
 	
 	public static void searchForExpiredInvites() {
@@ -84,11 +79,11 @@ public class InviteHandler {
 	}
 	
 	public static Collection<Invite> getActiveInvites() {
-		return Collections.unmodifiableSet(activeInvites);
+		return Collections.unmodifiableSet(ACTIVE_INVITES.keySet());
 	}
 	
 	public static boolean inviteIsActive(Invite invite) {
-		for (Invite activeInvite : activeInvites) {
+		for (Invite activeInvite : ACTIVE_INVITES.keySet()) {
 			if (activeInvite.getReceiver().equals(invite.getReceiver()) && activeInvite.getSender().equals(invite.getSender()))
 				return true;
 		}
@@ -96,7 +91,7 @@ public class InviteHandler {
 	}
 	
 	public static boolean inviteIsActive(InviteSender sender, InviteReceiver receiver) {
-		for (Invite activeInvite : activeInvites) {
+		for (Invite activeInvite : ACTIVE_INVITES.keySet()) {
 			if (activeInvite.getReceiver().equals(receiver) && activeInvite.getSender().equals(sender))
 				return true;
 		}
