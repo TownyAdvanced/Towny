@@ -142,7 +142,7 @@ public final class TownBlockTypeHandler {
 				newData.put(name.toLowerCase(Locale.ROOT), townBlockType);
 				
 			} catch (Exception e) {
-				Towny.getPlugin().getLogger().log(Level.WARNING, "Config: Error while loading townblock type '%s', skipping...".formatted(name), e);
+				Towny.getPlugin().getLogger().log(Level.WARNING, String.format("Config: Error while loading townblock type '%s', skipping...", name), e);
 			}
 		}
 	}

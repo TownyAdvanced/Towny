@@ -43,7 +43,7 @@ public abstract class Account implements Nameable {
 		try {
 			this.cachedBalance = new CachedBalance(getHoldingBalance(false));
 		} catch (Exception e) {
-			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.".formatted(name), e);
+			Towny.getPlugin().getLogger().log(Level.WARNING, String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name), e);
 			
 			this.cachedBalance = new CachedBalance(0);
 		}
