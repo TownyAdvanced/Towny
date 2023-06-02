@@ -76,8 +76,9 @@ public class PlayerCacheUtil {
 			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
 
-			TownyMessaging.sendDebugMsg("Cache permissions for " + action.toString() + " : " + cache.getCachePermission(material, action));
-			return cache.getCachePermission(material, action); // Throws NullPointerException if the cache is empty
+			boolean result = cache.getCachePermission(material, action); // Throws NullPointerException if the cache is empty
+			TownyMessaging.sendDebugMsg("Cache permissions for " + player.getName() + " using " + material + ":" + action + " = " + result);
+			return result;
 
 		} catch (NullPointerException e) {
 			// New or old cache permission was null, update it
@@ -93,11 +94,10 @@ public class PlayerCacheUtil {
 
 			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
-			
-			TownyMessaging.sendDebugMsg("New Cache Created and updated!");
 
-			TownyMessaging.sendDebugMsg("New Cache permissions for " + material + ":" + action + ":" + status.name() + " = " + cache.getCachePermission(material, action));
-			return cache.getCachePermission(material, action);
+			boolean result = cache.getCachePermission(material, action);
+			TownyMessaging.sendDebugMsg("New Cache created for " + player.getName() + " using " + material + ":" + action + ":" + status.name() + " = " + result);
+			return result;
 		}
 	}
 
