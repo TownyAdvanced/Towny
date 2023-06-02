@@ -87,68 +87,47 @@ public class PlayerCache {
 	 */
 	public boolean getCachePermission(Material material, ActionType action) throws NullPointerException {
 
-		switch (action) {
-
-		case BUILD: // BUILD
-			return getBuildPermission(material);
-
-		case DESTROY: // DESTROY
-			return getDestroyPermission(material);
-
-		case SWITCH: // SWITCH
-			return getSwitchPermission(material);
-
-		case ITEM_USE: // ITEM_USE
-			return getItemUsePermission(material);
-
-		default:
-			throw new NullPointerException();
-
-		}
+		return switch (action) {
+		case BUILD -> getBlockPermission(buildMatPermission, material);
+		case DESTROY -> getBlockPermission(destroyMatPermission, material);
+		case SWITCH -> getBlockPermission(switchMatPermission, material);
+		case ITEM_USE -> getBlockPermission(itemUseMatPermission, material);
+		};
 
 	}
 
 	public void setBuildPermission(Material material, Boolean value) {
-
 		updateMaps(buildMatPermission, material, value);
-
 	}
-	public void setDestroyPermission(Material material, Boolean value) {
 
+	public void setDestroyPermission(Material material, Boolean value) {
 		updateMaps(destroyMatPermission, material, value);
 	}
+
 	public void setSwitchPermission(Material material, Boolean value) {
-
 		updateMaps(switchMatPermission, material, value);
-
 	}
+
 	public void setItemUsePermission(Material material, Boolean value) {
-
 		updateMaps(itemUseMatPermission, material, value);
-		
 	}
-	
+
 	public boolean getBuildPermission(Material material) throws NullPointerException {
-
 		return getBlockPermission(buildMatPermission, material);
-
 	}
+
 	public boolean getDestroyPermission(Material material) throws NullPointerException {
-
 		return getBlockPermission(destroyMatPermission, material);
-		
 	}
+
 	public boolean getSwitchPermission(Material material) throws NullPointerException {
-
 		return getBlockPermission(switchMatPermission, material);
-		
 	}
-	public Boolean getItemUsePermission(Material material) throws NullPointerException {
 
+	public boolean getItemUsePermission(Material material) throws NullPointerException {
 		return getBlockPermission(itemUseMatPermission, material);
-		
 	}
-	
+
 	private void updateMaps(Map<Material, Boolean> blockMap, Material material, Boolean value) {
 		blockMap.putIfAbsent(material, value);
 	}
