@@ -109,6 +109,8 @@ public class PluginIntegrations {
 
 		if (TownyEconomyHandler.isActive())
 			Towny.getPlugin().getLogger().info("  Economy: " + TownyEconomyHandler.getVersion());
+		else if (configSetForEconomy && (isPluginPresent("Vault") || isPluginPresent("Reserve")))
+			ecowarn = "No compatible Economy plugins found. If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
 
 		if (!ecowarn.isEmpty() && configSetForEconomy)
 			warnings.add(ecowarn);
