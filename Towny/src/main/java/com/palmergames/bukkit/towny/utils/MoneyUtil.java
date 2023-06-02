@@ -217,7 +217,7 @@ public class MoneyUtil {
 	public static void checkLegacyDebtAccounts() {
 		File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");
 		if (!f.exists())
-			Towny.getPlugin().getScheduler().runAsyncLater(MoneyUtil::convertLegacyDebtAccounts, 600L);
+			Towny.getPlugin().getScheduler().runAsyncLater(() -> TownyEconomyHandler.economyExecutor().execute(MoneyUtil::convertLegacyDebtAccounts), 600L);
 	}
 	
 	/**
@@ -227,10 +227,9 @@ public class MoneyUtil {
 		for (Town town : TownyUniverse.getInstance().getTowns()) {
 			final String name = "[DEBT]-" + town.getName();
 			if (TownyEconomyHandler.hasAccount(name)) {
-				TownyEconomyHandler.economyExecutor().execute(() -> {
-					town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
-					TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
-				});
+				town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
+				town.save();
+				TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
 			}
 		}
 		Towny.getPlugin().saveResource("debtAccountsConverted.txt", false);
