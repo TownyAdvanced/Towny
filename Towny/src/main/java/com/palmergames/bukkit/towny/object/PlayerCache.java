@@ -6,26 +6,24 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerCache {
 
-	private final HashMap<Material, Boolean> buildMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> destroyMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> switchMatPermission = new HashMap<>();
-	private final HashMap<Material, Boolean> itemUseMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> buildMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> destroyMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> switchMatPermission = new HashMap<>();
+	private final Map<Material, Boolean> itemUseMatPermission = new HashMap<>();
 
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
 	private Location lastLocation;
 
-	//TODO: cache last entity attacked
-
 	public PlayerCache(TownyWorld world, Player player) {
 
 		this(new WorldCoord(world.getName(), Coord.parseCoord(player)));
-		setLastLocation(player.getLocation());
+		this.lastLocation = player.getLocation();
 	}
 
 	public PlayerCache(@NotNull WorldCoord worldCoord) {
@@ -89,88 +87,52 @@ public class PlayerCache {
 	 */
 	public boolean getCachePermission(Material material, ActionType action) throws NullPointerException {
 
-		switch (action) {
-
-		case BUILD: // BUILD
-			return getBuildPermission(material);
-
-		case DESTROY: // DESTROY
-			return getDestroyPermission(material);
-
-		case SWITCH: // SWITCH
-			return getSwitchPermission(material);
-
-		case ITEM_USE: // ITEM_USE
-			return getItemUsePermission(material);
-
-		default:
-			throw new NullPointerException();
-
-		}
+		return switch (action) {
+		case BUILD -> getBlockPermission(buildMatPermission, material);
+		case DESTROY -> getBlockPermission(destroyMatPermission, material);
+		case SWITCH -> getBlockPermission(switchMatPermission, material);
+		case ITEM_USE -> getBlockPermission(itemUseMatPermission, material);
+		};
 
 	}
 
 	public void setBuildPermission(Material material, Boolean value) {
-
 		updateMaps(buildMatPermission, material, value);
-
 	}
-	public void setDestroyPermission(Material material, Boolean value) {
 
+	public void setDestroyPermission(Material material, Boolean value) {
 		updateMaps(destroyMatPermission, material, value);
 	}
+
 	public void setSwitchPermission(Material material, Boolean value) {
-
 		updateMaps(switchMatPermission, material, value);
-
 	}
+
 	public void setItemUsePermission(Material material, Boolean value) {
-
 		updateMaps(itemUseMatPermission, material, value);
-		
 	}
-	
+
 	public boolean getBuildPermission(Material material) throws NullPointerException {
-
 		return getBlockPermission(buildMatPermission, material);
-
 	}
+
 	public boolean getDestroyPermission(Material material) throws NullPointerException {
-
 		return getBlockPermission(destroyMatPermission, material);
-		
 	}
+
 	public boolean getSwitchPermission(Material material) throws NullPointerException {
-
 		return getBlockPermission(switchMatPermission, material);
-		
 	}
-	public Boolean getItemUsePermission(Material material) throws NullPointerException {
 
+	public boolean getItemUsePermission(Material material) throws NullPointerException {
 		return getBlockPermission(itemUseMatPermission, material);
-		
+	}
+
+	private void updateMaps(Map<Material, Boolean> blockMap, Material material, Boolean value) {
+		blockMap.putIfAbsent(material, value);
 	}
 	
-	private void updateMaps(HashMap<Material, Boolean> blockMap, Material material, Boolean value) {
-		
-		if (!blockMap.containsKey(material)) {
-			/*
-			 * We have no permissions cached for this block.
-			 */			
-			blockMap.put(material, value);
-		} else {
-			/*
-			 * We have cached permissions for this block type so just push updated data.
-			 */
-			blockMap.get(material);
-		}
-	}
-	
-	private boolean getBlockPermission(HashMap<Material, Boolean> blockMap, Material material) throws NullPointerException {
-		
-		if (!blockMap.containsKey(material))
-			throw new NullPointerException();
-		
+	private boolean getBlockPermission(Map<Material, Boolean> blockMap, Material material) throws NullPointerException {
 		return blockMap.get(material);
 		
 	}
