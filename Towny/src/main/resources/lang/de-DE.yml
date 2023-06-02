@@ -230,7 +230,7 @@ msg_world_pvp: '&cIn dieser Welt ist PvP überall aktiv. (config=force_pvp_on)'
 msg_world_mobs: '&cIn dieser Welt spawnen überall Monster. (config=force_town_monster_on)'
 msg_world_expl: '&cIn dieser Welt sind Explosionen überall aktiviert. (config=force_explosions_on)'
 msg_world_fire: '&cIn dieser Welt kann sich Feuer überall ausbreiten. (config=force_fire_on).'
-msg_town_mobs: '&cThis town has Monster spawns forced on.'
+msg_town_mobs: '&cDiese Stadt hat das Spawning von Monstern erzwungen.'
 msg_plot_pvp: '&cPvP kann in einem Arenabereich nicht umgeschaltet werden.'
 msg_plot_regen_wrong_size: '&cGrundstücke können nur neu generiert werden, wenn die standard Größe (16) verwendet wird.'
 msg_reloaded: '&2Die Einstellungen von Towny wurden neu geladen.'
@@ -456,7 +456,7 @@ invite_plu: 'Einladungen'
 invite_sent_by: 'Einladung gesendet von'
 invite_help_1: 'Die Beitrittsanfrage einer Stadt annehmen '
 invite_help_2: 'Die Beitrittsanfrage einer Stadt ablehnen'
-invite_help_4: 'Decline all invites to join a town'
+invite_help_4: 'Alle Einladungen ablehnen, einer Stadt beizutreten'
 invite_help_3: 'Liste all deiner Einladungen'
 town_invite_help_1: 'Einen Spieler in deine Stadt einladen'
 town_invite_help_2: 'Wiederrufe eine Einladung, die an einen Spieler gesendet wurde'
@@ -474,7 +474,7 @@ nation_ally_help_4: 'Liste aller Allianzanfragen, die du erhalten hast'
 nation_ally_help_5: 'Allianzanfrage einer Nation annehmen'
 nation_ally_help_6: 'Allianzanfrage einer Nation ablehnen'
 nation_ally_help_7: 'Wiederruft eine Bündnisanfrage'
-msg_player_denied_all_invites: "All of your received invites have been denied."
+msg_player_denied_all_invites: "Alle deine empfangenen Einladungen wurden abgelehnt."
 msg_err_player_no_invites: '&cDu hast keine Einladungen!'
 msg_err_player_has_multiple_invites: '&cDu hast mehrere Einladungen, gib eine an.'
 msg_err_player_has_too_many_invites: '%s hat zu viele Einladungen, er muss erst einige ablehnen, bevor er eingeladen werden kann.'
@@ -607,7 +607,7 @@ status_nation_tax: 'Nationssteuern:'
 status_nation_towns: 'Städte'
 status_nation_allies: 'Verbündete'
 status_nation_enemies: 'Feinde'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: 'Nationen, die deine Nation als Feind betrachten'
 status_world_claimable: '&aBeanspruchbar'
 status_world_noclaims: '&cNicht beanspruchbar'
 status_world_forcepvp: 'Erzwinge Pvp:'
@@ -737,7 +737,7 @@ msg_error_nation_has_no_enemies: 'Die Nation hat keine Feinde.'
 msg_error_ta_plot_claim: 'Der Spielername fehlt. Bsp: /ta plot claim PlayerNameHier'
 msg_error_no_player_with_that_name: 'Es konnte kein Spiel Spieler mit dem Namen %s gefunden werden.'
 msg_admin_has_given_you_a_plot: 'Ein Admin hat für dich einen Plot bei %s beansprucht.'
-msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
+msg_town_forcemobs_setting_set_to: 'Die Stadt %s wurde gezwungen, ihre Mobs zu %s zu setzen'
 msg_town_forcepvp_setting_set_to: 'Die PvP-Einstellung der Stadt %s wurde geändert zu %s'
 msg_town_forcedisabledpvp_setting_set_to: 'Die Stadt %s hat ihre admindisabledpv Einstellung zu %s gezwungen'
 msg_nation_changed_open: '&cDer Öffentlichkeitsstatus der Nation ist jetzt %s.'
@@ -1507,9 +1507,9 @@ msg_cost_spawn_rtp: '&bDu hast %s belastet, um dich zu einem zufälligen Stadtpl
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Du bist dabei, zu einem Grundstück teleportiert zu werden, der in %s vergeben ist, wodurch du beitreten kannst. Benutze ''/plot claim'', um dein Grundstück bei deiner Ankunft zu beanspruchen.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "Die Stadt %s hat Grundstücke, die du kaufen kannst. Möchtest du zu einem Grundstück teleportiert werden, den du jetzt kaufen kannst?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Du wurdest zu einem Grundstück teleportiert, den du kaufen kannst. Benutze '/plot claim', wenn du das Grundstück beanspruchen möchtest."
 #Used in the town's status screen to display plots
 status_plot_string: 'Grundstücke'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1525,76 +1525,76 @@ msg_err_nation_unaffiliated: 'Diese Nation ist nicht mit Ihnen verbunden.'
 msg_err_town_unaffiliated: 'Diese Stadt ist nicht mit Ihnen verbunden.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
-msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+msg_err_this_location_already_has_a_jailcell: 'Dieser Standort hat bereits eine Gefängniszelle.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Plot Perms'
+msg_perm_hud_title: 'Zeichne Perms'
 #Seen in /plot perm hud:
-msg_perm_hud_build: 'Build: '
+msg_perm_hud_build: 'Bauen: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Destroy: '
+msg_perm_hud_destroy: 'Zerstören: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Switch: '
+msg_perm_hud_switch: 'Wechseln: '
 #Seen in /plot perm hud:
-msg_perm_hud_item_use: 'Item: '
+msg_perm_hud_item_use: 'Artikel: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_type: 'Type: '
+msg_perm_hud_plot_type: 'Typ: '
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
-msg_perm_hud_explosions: 'Explosions: '
+msg_perm_hud_explosions: 'Explosionen: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Firespread: '
+msg_perm_hud_firespread: 'Feuerausbreitung: '
 #Seen in /plot perm hud:
-msg_perm_hud_mobspawns: 'Mob Spawns: '
+msg_perm_hud_mobspawns: 'Kreaturen Spawns: '
 #Seen in /plot perm hud:
-msg_perm_hud_key: 'Key'
+msg_perm_hud_key: 'Schlüssel'
 #Seen in /plot perm hud:
-msg_perm_hud_friend: 'friend'
+msg_perm_hud_friend: 'freund'
 #Seen in /plot perm hud:
-msg_perm_hud_town: 'town'
+msg_perm_hud_town: 'stadt'
 #Seen in /plot perm hud:
-msg_perm_hud_ally: 'ally'
+msg_perm_hud_ally: 'verbündete'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'resident'
+msg_perm_hud_resident: 'bürger'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: 'nation'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'außenseiter'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Plot: '
+msg_perm_hud_plot_name: 'Grundstück: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: 'In der Stadt %s wurde das Stadtlevel auf %s gesetzt.'
 #Message shown when unsetting a manual town level.
-msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+msg_town_level_unset: 'Die Stadt %s hat ihr manuell eingestelltes Stadtlevel nicht erreicht. Aktuelles Stadtlevel beträgt %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
-msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+msg_err_town_not_allowed_purchased_blocks: 'Die Stadt %s kann keine Stadtblöcke auf Basis der Konfigurationsregeln kaufen.'
 #Message shown when unsetting all purchased townblocks from a town.
-msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
+msg_purchased_blocks_unset: 'Die Stadt %s wurde ihre gekauften Stadtblöcke entfernt.'
 #Message shown when /ta town name giveboughtblocks # is used.
-msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+msg_purchased_blocks_changed: 'Die Stadt %s hat %s gekaufte Stadtblöcke erhalten. Sie haben derzeit %s Stadtblöcke gekauft.'
 #Added in 0.154
-msg_comptype_upkeep: 'Upkeep'
+msg_comptype_upkeep: 'Unterhaltskosten'
 #Added in 0.155
 #Message shown when toggling town upkeep admin setting
-msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+msg_town_upkeep_setting_set_to: 'Die Stadt %s hat ihre Versorgungs-Einstellung auf %s gesetzt.'
 #Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
-msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+msg_town_plot_type_limit_reached: 'Deine Stadt hat das Limit von %d %s Grundstücken erreicht.'
 #Added in 0.156
-msg_spawn_cost_free: 'Free'
+msg_spawn_cost_free: 'Gratis'
 #Message shown when someone tries to set a plot's type to one already set.
-msg_plot_already_of_type: 'This plot is already a %s type.'
-msg_town_board_reset: '&bTown board reset.'
-msg_town_has_no_jailslots: 'The town jail is full.'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_plot_already_of_type: 'Dieses Grundstück ist bereits ein %s Typ.'
+msg_town_board_reset: '&bStadt Board zurücksetzen.'
+msg_town_has_no_jailslots: 'Das Stadtgefängnis ist voll.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s wurde für %s Stunden mit einer Kaution von %s von %s an %s an die Zellennummer %s gesendet.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s wurde für %s Stunden von %s an %s an die Zellennummer %s gesendet.'
-msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
-msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
-msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
-msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
-msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
-msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
+msg_you_have_been_jailed_your_bail_is_x: 'Du wurdest eingesperrt, deine Kaution ist %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Deine festgelegte Kaution war höher als das Maximum, das %s ist.'
+msg_err_higher_than_max_allowed_hours_x: 'Deine eingestellten Stunden waren höher als das Maximum, das %s ist.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Nicht genug in der Stadtbank, um %szu inhaftieren, Gebühr ist %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Ihre Gefängnisse lassen Ihnen freien Platz schaffen.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s wurde freigelassen, um Platz für einen anderen Häftling zu schaffen.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Sie wurden freigelassen, da sich Ihre Gefängnisse nicht mehr leisten können, Sie in Haft zu halten.'
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
 msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
 msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
@@ -1690,10 +1690,10 @@ chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
 #Message shown when a takeover claim would cut a town into two sections.
 msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
-msg_err_that_town_is_not_conquered: "%s is already not conquered."
+msg_err_that_town_is_not_conquered: "%s ist bereits nicht erobert."
 #Message shown when a town has its conquered status removed by an admin.
-msg_conquered_status_removed: "%s has had their conquered status removed."
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
-msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+msg_conquered_status_removed: "%s wurde der eroberte Status entfernt."
+msg_setup_command_folia: "Das /ta Installations-Kommando funktioniert derzeit nicht auf Folia, da die Konversations-API nicht funktioniert, lesen Sie stattdessen die Installationsanleitung unten."
+msg_perm_gui_folia: "Dieser Button funktioniert derzeit nicht bei Folia, da die Konversations-API nicht funktioniert, verwenden Sie stattdessen den Befehl /plot perm add <name>."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
-msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "Sie können den Anspruch auf diesen Stadtblock nicht aufheben, da der Stadtblock bei %s,%s nicht genügend angrenzende Ansprüche hätte (%s sind erforderlich)"
