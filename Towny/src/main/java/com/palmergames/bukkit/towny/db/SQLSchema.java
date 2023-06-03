@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
@@ -330,27 +331,27 @@ public class SQLSchema {
 	/**
 	 * Call after loading to remove any old database elements we no longer need.
 	 *
-	 * @param cntx    Connection.
+	 * @param connection A connection to the database.
 	 */
-	public static void cleanup(Connection cntx) {
+	public static void cleanup(Connection connection) {
 
-		List<ColumnUpdate> cleanups = new ArrayList<ColumnUpdate>();
-		cleanups.add(ColumnUpdate.of("TOWNS", "residents"));
-		cleanups.add(ColumnUpdate.of("NATIONS", "assistants"));
-		cleanups.add(ColumnUpdate.of("NATIONS", "towns"));
-		cleanups.add(ColumnUpdate.of("WORLDS", "towns"));
-		cleanups.add(ColumnUpdate.of("WORLDS", "plotManagementRevertSpeed"));
-		cleanups.add(ColumnUpdate.of("PLOTGROUPS", "claimedAt"));
-		cleanups.add(ColumnUpdate.of("RESIDENTS", "isJailed"));
-		cleanups.add(ColumnUpdate.of("RESIDENTS", "JailSpawn"));
-		cleanups.add(ColumnUpdate.of("RESIDENTS", "JailDays"));
-		cleanups.add(ColumnUpdate.of("RESIDENTS", "JailTown"));
-		cleanups.add(ColumnUpdate.of("TOWNS", "jailSpawns"));
-		cleanups.add(ColumnUpdate.of("WORLDS", "disableplayertrample"));
-		cleanups.add(ColumnUpdate.of("TOWNS", "assistants"));
+		List<ColumnUpdate> cleanups = new ArrayList<>();
+		cleanups.add(ColumnUpdate.update("TOWNS", "residents"));
+		cleanups.add(ColumnUpdate.update("NATIONS", "assistants"));
+		cleanups.add(ColumnUpdate.update("NATIONS", "towns"));
+		cleanups.add(ColumnUpdate.update("WORLDS", "towns"));
+		cleanups.add(ColumnUpdate.update("WORLDS", "plotManagementRevertSpeed"));
+		cleanups.add(ColumnUpdate.update("PLOTGROUPS", "claimedAt"));
+		cleanups.add(ColumnUpdate.update("RESIDENTS", "isJailed"));
+		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailSpawn"));
+		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailDays"));
+		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailTown"));
+		cleanups.add(ColumnUpdate.update("TOWNS", "jailSpawns"));
+		cleanups.add(ColumnUpdate.update("WORLDS", "disableplayertrample"));
+		cleanups.add(ColumnUpdate.update("TOWNS", "assistants"));
 
 		for (ColumnUpdate update : cleanups)
-			dropColumn(cntx, update.getTable(), update.getColumn());
+			dropColumn(connection, update.table(), update.column());
 	}
 
 	/**
@@ -381,25 +382,10 @@ public class SQLSchema {
 		}
 	}
 
-	private static class ColumnUpdate {
-		private String table;
-		private String column;
-
-		private ColumnUpdate(String table, String column) {
-			this.table = SQLSchema.TABLE_PREFIX + table;
-			this.column = column;
-		}
-
-		private String getTable() {
-			return this.table;
-		}
-
-		private String getColumn() {
-			return this.column;
-		}
-
-		private static ColumnUpdate of(String table, String column) {
-			return new ColumnUpdate(table, column);
+	@Desugar
+	private record ColumnUpdate(String table, String column) {
+		private static ColumnUpdate update(String table, String column) {
+			return new ColumnUpdate(SQLSchema.TABLE_PREFIX + table, column);
 		}
 	}
 }

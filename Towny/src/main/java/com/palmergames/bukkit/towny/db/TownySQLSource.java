@@ -6,6 +6,7 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -37,6 +38,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.sql.Connection;
@@ -66,17 +68,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	private final Queue<SQLTask> queryQueue = new ConcurrentLinkedQueue<>();
 	private boolean isPolling = false;
-	private ScheduledTask task = null;
+	private final ScheduledTask task;
 
-	private final String dsn;
-	private final String db_name;
-	private final String username;
-	private final String password;
 	private final String tb_prefix;
 
-	private Connection cntx = null;
-
-	private final HikariConfig config;
 	private final HikariDataSource hikariDataSource;
 
 	public TownySQLSource(Towny plugin, TownyUniverse universe) {
@@ -91,20 +86,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		/*
 		 * Setup SQL connection
 		 */
-		db_name = TownySettings.getSQLDBName();
 		tb_prefix = TownySettings.getSQLTablePrefix().toUpperCase();
 		
-		this.dsn = ("jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + db_name + TownySettings.getSQLFlags());
-		this.config = new HikariConfig();
+		String dsn = "jdbc:mysql://" + TownySettings.getSQLHostName() + ":" + TownySettings.getSQLPort() + "/" + TownySettings.getSQLDBName() + TownySettings.getSQLFlags();
+		HikariConfig config = new HikariConfig();
 		
 		config.setPoolName("Towny MySQL");
-		config.setJdbcUrl(this.dsn);
+		config.setJdbcUrl(dsn);
 
-		username = TownySettings.getSQLUsername();
-		password = TownySettings.getSQLPassword();
-
-		config.setUsername(username);
-		config.setPassword(password);
+		config.setUsername(TownySettings.getSQLUsername());
+		config.setPassword(TownySettings.getSQLPassword());
 
 		config.addDataSourceProperty("cachePrepStmts", "true");
 		config.addDataSourceProperty("prepStmtCacheSize", "250");
@@ -141,24 +132,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			plugin.getLogger().severe("Driver error: " + e);
 		}
 
-		/*
-		 * Attempt to get a connection to the database
-		 */
-		if (getContext()) {
+		try (Connection connection = getConnection()) {
+			TownyMessaging.sendDebugMsg("Connected to the database");
 
-			TownyMessaging.sendDebugMsg("Connected to Database");
-
-		} else {
-
-			TownyMessaging.sendErrorMsg("Failed when connecting to Database");
-			return;
-
+			// Initialize database schema.
+			SQLSchema.initTables(connection);
+		} catch (SQLException e) {
+			logger.error("Failed to connect to the database", e);
 		}
-
-		/*
-		 * Initialise database Schema.
-		 */
-		SQLSchema.initTables(cntx);
 
 		/*
 		 * Start our Async queue for pushing data to the database.
@@ -214,39 +195,27 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * open a connection to the SQL server.
 	 *
 	 * @return true if we successfully connected to the db.
+	 * @deprecated as of 0.99.1.2, use {@link #getConnection()} to obtain a connection instead.
 	 */
+	@Deprecated
+	@SuppressWarnings("RedundantScheduledForRemovalAnnotation") // The forRemoval = true attribute did not exist in java 8
+	@ApiStatus.ScheduledForRemoval
 	public boolean getContext() {
+		return isReady();
+	}
 
-		try {
-			if (cntx == null || cntx.isClosed() || !cntx.isValid(1)) {
+	/**
+	 * @return Whether the datasource is initialized and running.
+	 */
+	public boolean isReady() {
+		return hikariDataSource != null && hikariDataSource.isRunning();
+	}
 
-				if (cntx != null && !cntx.isClosed()) {
-
-					try {
-
-						cntx.close();
-
-					} catch (SQLException e) {
-						/*
-						 * We're disposing of an old stale connection just be nice to the GC as well as
-						 * mysql, so ignore the error as there's nothing we can do if it fails
-						 */
-					}
-					cntx = null;
-				}
-
-				cntx = hikariDataSource.getConnection();
-
-				return cntx != null && !cntx.isClosed();
-			}
-
-			return true;
-
-		} catch (SQLException e) {
-			Towny.getPlugin().getLogger().warning("Error could not Connect to db " + this.dsn + ": " + e.getMessage());
-		}
-
-		return false;
+	/**
+	 * @return A connection from the pool
+	 */
+	public Connection getConnection() throws SQLException {
+		return this.hikariDataSource.getConnection();
 	}
 	
 	@SuppressWarnings("unused")
@@ -279,20 +248,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return queueUpdateDB(tb_name, args, keys);
 	}
 
+	@ApiStatus.Internal
 	public boolean queueUpdateDB(String tb_name, Map<String, ?> args, List<String> keys) {
-
-		/*
-		 * Attempt to get a database connection.
-		 */
-		if (!getContext())
-			return false;
 
 		StringBuilder code;
 		PreparedStatement stmt = null;
 		List<Object> parameters = new ArrayList<>();
 		int rs = 0;
 
-		try {
+		try (Connection connection = getConnection()) {
 
 			if (keys == null) {
 
@@ -375,7 +339,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			// Populate the prepared statement parameters.
 
-			stmt = cntx.prepareStatement(code.toString());
+			stmt = connection.prepareStatement(code.toString());
 
 			for (int count = 0; count < parameters.size(); count++) {
 
@@ -434,6 +398,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * @param args    - Arguments
 	 * @return true if the delete was a success.
 	 */
+	@ApiStatus.Internal
 	public boolean DeleteDB(String tb_name, HashMap<String, Object> args) {
 
 		// Make sure we only execute queries in async
@@ -449,10 +414,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return queueDeleteDB(tb_name, args);
 	}
 
+	@ApiStatus.Internal
 	public boolean queueDeleteDB(String tb_name, Map<String, ?> args) {
 
-		if (!getContext())
-			return false;
 		try {
 			StringBuilder wherecode = new StringBuilder(
 					"DELETE FROM " + tb_prefix + (tb_name.toUpperCase()) + " WHERE ");
@@ -471,7 +435,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				wherecode.append(i.hasNext() ? " AND " : "");
 			}
 			int rs;
-			try (Statement statement = cntx.createStatement()) {
+			try (Connection connection = getConnection();
+				 Statement statement = connection.createStatement()) {
 				rs = statement.executeUpdate(wherecode.toString());
 			}
 			if (rs == 0) {
@@ -486,13 +451,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean cleanup() {
 
-		/*
-		 * Attempt to get a database connection.
-		 */
-		if (!getContext())
-			return false;
-
-		SQLSchema.cleanup(cntx);
+		try (Connection connection = getConnection()) {
+			SQLSchema.cleanup(connection);
+		} catch (SQLException e) {
+			logger.warn("An exception occurred when cleaning up SQL schema.", e);
+		}
 
 		return true;
 	}
@@ -508,7 +471,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name"),
 		COOLDOWN("COOLDOWNS", "SELECT * FROM ", "key");
 		
-		private String tableName;
+		private final String tableName;
 		@SuppressWarnings("unused")
 		private String queryString;
 		@SuppressWarnings("unused")
@@ -544,34 +507,29 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	
 	@Override
 	public boolean loadTownBlockList() {
-
 		TownyMessaging.sendDebugMsg("Loading TownBlock List");
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs;
-				int total = 0;
-				rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS");
-				while (rs.next()) {
 
-					String worldName = rs.getString("world");
-					TownyWorld world = universe.getWorld(worldName);
-					if (world == null)
-						throw new Exception("World " + worldName + " not registered!");
-					
-					int x = Integer.parseInt(rs.getString("x"));
-					int z = Integer.parseInt(rs.getString("z"));
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT world,x,z FROM " + tb_prefix + "TOWNBLOCKS")) {
+				
+			int total = 0;
+			while (rs.next()) {
+				String worldName = rs.getString("world");
+				TownyWorld world = universe.getWorld(worldName);
+				if (world == null)
+					throw new Exception("World " + worldName + " not registered!");
 
-					TownBlock townBlock = new TownBlock(x, z, world);
-					universe.addTownBlock(townBlock);
-					total++;
+				int x = Integer.parseInt(rs.getString("x"));
+				int z = Integer.parseInt(rs.getString("z"));
 
-				}
-				TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
-
+				TownBlock townBlock = new TownBlock(x, z, world);
+				universe.addTownBlock(townBlock);
+				total++;
 			}
-			
+
+			TownyMessaging.sendDebugMsg("Loaded " + total + " townblocks.");
+
 			return true;
 		} catch (SQLException s) {
 			plugin.getLogger().warning("SQL: town block list error: " + s.getMessage());
@@ -584,20 +542,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadResidentList() {
-
 		TownyMessaging.sendDebugMsg("Loading Resident List");
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS");
 
-				while (rs.next()) {
-					try {
-						newResident(rs.getString("name"));
-					} catch (AlreadyRegisteredException ignored) {
-					}
-				}
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS")) {
+			
+			while (rs.next()) {
+				try {
+					newResident(rs.getString("name"));
+				} catch (AlreadyRegisteredException ignored) {}
 			}
 			return true;
 		} catch (Exception e) {
@@ -608,20 +562,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadTownList() {
-
 		TownyMessaging.sendDebugMsg("Loading Town List");
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS");
 
-				while (rs.next()) {
-					try {
-						universe.newTownInternal(rs.getString("name"));
-					} catch (AlreadyRegisteredException ignored) {
-					}
-				}
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS")) {
+
+			while (rs.next()) {
+				try {
+					universe.newTownInternal(rs.getString("name"));
+				} catch (AlreadyRegisteredException ignored) {}
 			}
 			return true;
 		} catch (SQLException e) {
@@ -634,19 +584,16 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadNationList() {
-
 		TownyMessaging.sendDebugMsg("Loading Nation List");
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS");
-				while (rs.next()) {
-					try {
-						newNation(rs.getString("name"));
-					} catch (AlreadyRegisteredException ignored) {
-					}
-				}
+
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS")) {
+			
+			while (rs.next()) {
+				try {
+					newNation(rs.getString("name"));
+				} catch (AlreadyRegisteredException ignored) {}
 			}
 			return true;
 		} catch (SQLException e) {
@@ -659,37 +606,34 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadWorldList() {
-
 		TownyMessaging.sendDebugMsg("Loading World List");
 
 		// Check for any new worlds registered with bukkit.
 		for (World world : Bukkit.getServer().getWorlds())
 			universe.registerTownyWorld(new TownyWorld(world.getName(), world.getUID()));
 
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS");
-				while (rs.next()) {
-					final String name = rs.getString("name");
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS")) {
+			
+			while (rs.next()) {
+				final String name = rs.getString("name");
 					
-					// World is loaded in bukkit and got registered by the newWorld above.
-					if (universe.getWorld(name) != null)
-						continue;
+				// World is loaded in bukkit and got registered by the newWorld above.
+				if (universe.getWorld(name) != null)
+					continue;
 					
-					UUID uuid = null;
+				UUID uuid = null;
+				try {
+					uuid = UUID.fromString(rs.getString("uuid"));
+				} catch (IllegalArgumentException | NullPointerException | SQLException ignored) {}
+					
+				if (uuid != null) {
+					universe.registerTownyWorld(new TownyWorld(rs.getString("name"), uuid));
+				} else {
 					try {
-						uuid = UUID.fromString(rs.getString("uuid"));
-					} catch (IllegalArgumentException | NullPointerException | SQLException ignored) {}
-					
-					if (uuid != null) {
-						universe.registerTownyWorld(new TownyWorld(rs.getString("name"), uuid));
-					} else {
-						try {
-							newWorld(rs.getString("name"));
-						} catch (AlreadyRegisteredException ignored) {}
-					}
+						newWorld(rs.getString("name"));
+					} catch (AlreadyRegisteredException ignored) {}
 				}
 			}
 		} catch (SQLException e) {
@@ -703,42 +647,44 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	
 	public boolean loadPlotGroupList() {
 		TownyMessaging.sendDebugMsg("Loading PlotGroup List");
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS");
 
-				while (rs.next()) {
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT groupID FROM " + tb_prefix + "PLOTGROUPS")) {
+
+			while (rs.next()) {
+				try {
 					universe.newPlotGroupInternal(UUID.fromString(rs.getString("groupID")));
+				} catch (IllegalArgumentException e) {
+					logger.warn("ID for plot group is not a valid uuid, skipped loading plot group {}", rs.getString("groupID"));
 				}
 			}
 			
 			return true;
 
-		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: group list unknown error", e);
+		} catch (SQLException e) {
+			logger.error("An exception occurred while loading plot group list", e);
 		}
+		
 		return false;
 	}
 	
 	public boolean loadJailList() {
 		TownyMessaging.sendDebugMsg("Loading Jail List");
-		if (!getContext())
-			return false;
-		try {
-			try (Statement s = cntx.createStatement()) {
-				ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS");
-				while (rs.next()) {
-					universe.newJailInternal(rs.getString("uuid"));
-				}
+
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "JAILS")) {
+				
+			while (rs.next()) {
+				universe.newJailInternal(rs.getString("uuid"));
 			}
+
 			return true;
-		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("SQL: jail list sql error : " + e.getMessage());
 		} catch (Exception e) {
-			plugin.getLogger().log(Level.WARNING, "SQL: jail list unknown error", e);
+			logger.error("An exception occurred while loading jail list", e);
 		}
+		
 		return false;
 	}
 
@@ -748,15 +694,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadResidents() {
-
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
 		TownySettings.setUUIDCount(0);
 
-		if (!getContext())
-			return false;
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS")) {
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS")) {
 
 			while (rs.next()) {
 				String residentName;
@@ -820,7 +764,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 								try {
 									// Resident#removeTown saves the resident, so we can't use it.
 									olderRes.getTown().removeResident(olderRes);
-								} catch (NotRegisteredException nre) {}
+								} catch (NotRegisteredException ignored) {}
 							}
 							deleteResident(olderRes);					
 						} else {
@@ -973,11 +917,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadTowns() {
 		TownyMessaging.sendDebugMsg("Loading Towns");
-		if (!getContext())
-			return false;
 
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS ")) {
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS ")) {
 			while (rs.next()) {
 				if (!loadTown(rs)) {
 					plugin.getLogger().warning("Loading Error: Could not read town data properly.");
@@ -1146,8 +1089,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 								loc.setYaw(Float.parseFloat(tokens[5]));
 							}
 							town.forceAddOutpostSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-						}
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {}
 				}
 			}
 			// Load legacy jail spawns into new Jail objects.
@@ -1178,8 +1120,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							town.addJail(jail);
 							tb.setJail(jail);
 							jail.save();
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
-						}
+						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {}
 				}
 			}
 			line = rs.getString("outlaws");
@@ -1299,11 +1240,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadNations() {
-		if (!getContext())
-			return false;
-
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS")) {
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS")) {
+			
 			while (rs.next()) {
 				if (!loadNation(rs)) {
 					plugin.getLogger().warning("Loading Error: Could not properly read nation data.");
@@ -1477,11 +1417,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadWorlds() {
-		if (!getContext())
-			return false;
-
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS")) {
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS")) {
 
 			while (rs.next()) {
 				if (!loadWorld(rs)) {
@@ -1498,10 +1436,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadWorld(TownyWorld world) {
-		if (!getContext())
-			return false;
-
-		try (PreparedStatement ps = cntx.prepareStatement("SELECT * FROM " + tb_prefix + "WORLDS WHERE name=?")) {
+		try (Connection connection = getConnection();
+			 PreparedStatement ps = connection.prepareStatement("SELECT * FROM " + tb_prefix + "WORLDS WHERE name=?")) {
 			ps.setString(1, world.getName());
 
 			try (ResultSet rs = ps.executeQuery()) {
@@ -1856,13 +1792,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		boolean result;
 		TownyMessaging.sendDebugMsg("Loading Town Blocks.");
 
-		// Load town blocks
-		if (!getContext())
-			return false;
-
 		TownBlock townBlock = null;
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNBLOCKS")) {
 
 			while (rs.next()) {
 				String worldName = rs.getString("world");
@@ -1997,7 +1930,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				
 				line = rs.getString("customPermissionData");
 				if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
-					Map<String, String> map = new Gson().fromJson(line, Map.class);
+					Map<String, String> map = new Gson().fromJson(line, new TypeToken<Map<String, String>>(){}.getType());
 
 					for (Map.Entry<String, String> entry : map.entrySet()) {
 						Resident resident;
@@ -2030,10 +1963,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadPlotGroups() {
 		TownyMessaging.sendDebugMsg("Loading plot groups.");
-		if (!getContext())
-			return false;
-		try (Statement s = cntx.createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS ")) {
+		
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "PLOTGROUPS ")) {
 			while (rs.next()) {
 				if (!loadPlotGroup(rs)) {
 					plugin.getLogger().warning("Loading Error: Could not read plotgroup data properly.");
@@ -2132,11 +2065,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadJails() {
 		TownyMessaging.sendDebugMsg("Loading Jails");
-		if (!getContext())
-			return false;
 
-		try (Statement s = cntx.createStatement();
-				ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "JAILS ")) {
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "JAILS ")) {
 			while (rs.next()) {
 				if (!loadJail(rs)) {
 					plugin.getLogger().warning("Loading Error: Could not read jail data properly.");
@@ -2720,11 +2652,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid) {
 		return CompletableFuture.supplyAsync(() -> {
-			if (!getContext())
-				return Optional.empty();
-			
-			try (Statement statement = cntx.createStatement()) {
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tb_prefix + "HIBERNATEDRESIDENTS WHERE uuid = '" + uuid + "' LIMIT 1");
+			try (Connection connection = getConnection();
+				 Statement statement = connection.createStatement();
+				 ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tb_prefix + "HIBERNATEDRESIDENTS WHERE uuid = '" + uuid + "' LIMIT 1")) {
 				
 				final String registered;
 				if (resultSet.next() && (registered = resultSet.getString("registered")) != null && !registered.isEmpty()) {
