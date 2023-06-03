@@ -150,18 +150,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			this.isPolling = true;
 			try {
-				while (!TownySQLSource.this.queryQueue.isEmpty()) {
-
-					final SQLTask query = TownySQLSource.this.queryQueue.poll();
-					if (query == null)
-						break;
-
+				SQLTask query;
+				while ((query = this.queryQueue.poll()) != null) {
 					if (query.update) {
 						TownySQLSource.this.queueUpdateDB(query.tb_name, query.args, query.keys);
 					} else {
 						TownySQLSource.this.queueDeleteDB(query.tb_name, query.args);
 					}
-
 				}
 			} finally {
 				this.isPolling = false;
