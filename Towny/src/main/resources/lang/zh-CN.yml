@@ -1213,7 +1213,7 @@ status_trustedlist: '已信任'
 msg_click_to_edit: '&b点击编辑。'
 permission_gui_header: 'Towny权限面板'
 msg_last_edited: '&7&o上一次更改于%s，由%s更改。'
-msg_trusted_added: '&b已在此%s中信任%s。' #Last %s is either town or townblock
+msg_trusted_added: '&b已在此%2$s中信任%1$s。' #Last %s is either town or townblock
 msg_already_trusted: '&b%s已被信任于此%s。'
 msg_trusted_added_2: '&b%s将你列入了%s%s的信任列表中。' #Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s未受此%s的信任。'
@@ -1587,7 +1587,7 @@ msg_plot_already_of_type: '此地皮已经是%s类型。'
 msg_town_board_reset: '&b城镇面板已被重置。'
 msg_town_has_no_jailslots: '城镇监狱已经满员。'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s被%s送进%s的%s号牢房%s小时，保释额为%s。'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s被%s送进%s的%s号牢房%s小时。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%1$s被%5$s送进%2$s的%3$s号牢房%4$s小时。'
 msg_you_have_been_jailed_your_bail_is_x: '你已被监禁，你的保释金是%s。'
 msg_err_higher_than_max_allowed_bail_x: '您设定的保释金高于上限，上限为 %s。'
 msg_err_higher_than_max_allowed_hours_x: '您设定的小时数高于上限，上限为 %s。'
