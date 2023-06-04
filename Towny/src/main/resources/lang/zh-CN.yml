@@ -990,7 +990,7 @@ msg_no_funds_claim_plot_group: '&c你没有足够的资金来圈这%s块总价�
 status_town_title_peaceful: '&b(Peacful)'
 #Added in 0.95
 status_public: '&b(公开)'
-msg_days: '天'
+msg_days: ' 天'
 msg_comptype_public: '公开状态'
 towny_prices_title: '价格'
 towny_prices_town_nation: '&e[建立新的] &2城镇：&a%s &8| &2国家：&a%s'
