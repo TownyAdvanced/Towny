@@ -73,7 +73,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 	}
 
 	private static String key(String object, String cooldownTypeName) {
-		return object + ":" + cooldownTypeName.toLowerCase(Locale.ROOT);
+		return object + ":" + cooldownTypeName.toLowerCase(Locale.ROOT).substring(0, 200); // Limit key to 200 chars for SQL saving purposes
 	}
 
 	private static long getCooldownEndTime(int coolDownSeconds) {
@@ -88,4 +88,7 @@ public class CooldownTimerTask extends TownyTimerTask {
 		return (int) TimeUnit.MILLISECONDS.toSeconds(endTime - System.currentTimeMillis());
 	}
 
+	public static Map<String, Long> getCooldowns() {
+		return COOLDOWNS;
+	}
 }

@@ -1,6 +1,10 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -23,6 +27,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -34,8 +39,12 @@ import org.bukkit.World;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -2462,5 +2471,44 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				return Optional.empty();
 			}
 		});
+	}
+
+	@SuppressWarnings("ReadWriteStringCanBeUsed")
+	@Override
+	public boolean loadCooldowns() {
+		final String data;
+		try {
+			data = new String(Files.readAllBytes(Paths.get(dataFolderPath).resolve("cooldowns.json")), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			logger.warn("An exception occurred when reading cooldowns.json");
+			return true;
+		}
+		
+		try {
+			CooldownTimerTask.getCooldowns().putAll(new Gson().fromJson(data, new TypeToken<Map<String, Long>>(){}.getType()));
+		} catch (JsonSyntaxException e) {
+			logger.warn("Could not load saved cooldowns due to a json syntax exception", e);
+		}
+		
+		return true;
+	}
+
+	@SuppressWarnings("ReadWriteStringCanBeUsed")
+	@Override
+	public boolean saveCooldowns() {
+		final JsonObject object = new JsonObject();
+		
+		for (Map.Entry<String, Long> cooldown : CooldownTimerTask.getCooldowns().entrySet())
+			object.addProperty(cooldown.getKey(), cooldown.getValue());
+		
+		this.queryQueue.add(() -> {
+			try {
+				Files.write(Paths.get(dataFolderPath).resolve("cooldowns.json"), new GsonBuilder().setPrettyPrinting().create().toJson(object).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+			} catch (IOException e) {
+				logger.warn("An exception occurred when writing cooldowns.json", e);
+			}
+		});
+		
+		return true;
 	}
 }

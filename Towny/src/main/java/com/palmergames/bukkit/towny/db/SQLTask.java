@@ -1,15 +1,18 @@
 package com.palmergames.bukkit.towny.db;
 
-import java.util.HashMap;
-import java.util.List;
+import org.jetbrains.annotations.ApiStatus;
 
+import java.util.List;
+import java.util.Map;
+
+@ApiStatus.Internal
 public class SQLTask {
 
 	// Update flags this for an insert/update or delete.
 	public final boolean update;
 
 	public final String tb_name;
-	public final HashMap<String, Object> args;
+	public final Map<String, ?> args;
 	public final List<String> keys;
 
 	/**
@@ -18,7 +21,7 @@ public class SQLTask {
 	 * @param tb_name - Table name.
 	 * @param args - Arguments.
 	 */
-	public SQLTask(String tb_name, HashMap<String, Object> args) {
+	public SQLTask(String tb_name, Map<String, ?> args) {
 
 		this(false, tb_name, args, null);
 
@@ -31,13 +34,13 @@ public class SQLTask {
 	 * @param args - Arguments.
 	 * @param keys - Keys to add to table.
 	 */
-	public SQLTask(String tb_name, HashMap<String, Object> args, List<String> keys) {
+	public SQLTask(String tb_name, Map<String, ?> args, List<String> keys) {
 
 		this(true, tb_name, args, keys);
 
 	}
 
-	private SQLTask(boolean update, String tb_name, HashMap<String, Object> args, List<String> keys) {
+	private SQLTask(boolean update, String tb_name, Map<String, ?> args, List<String> keys) {
 
 		this.update = update;
 		this.tb_name = tb_name;

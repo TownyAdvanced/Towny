@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
+import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -175,9 +176,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						break;
 
 					if (query.update) {
-						TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
+						TownySQLSource.this.queueUpdateDB(query.tb_name, query.args, query.keys);
 					} else {
-						TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+						TownySQLSource.this.queueDeleteDB(query.tb_name, query.args);
 					}
 
 				}
@@ -199,9 +200,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			SQLTask query = TownySQLSource.this.queryQueue.poll();
 
 			if (query.update) {
-				TownySQLSource.this.QueueUpdateDB(query.tb_name, query.args, query.keys);
+				TownySQLSource.this.queueUpdateDB(query.tb_name, query.args, query.keys);
 			} else {
-				TownySQLSource.this.QueueDeleteDB(query.tb_name, query.args);
+				TownySQLSource.this.queueDeleteDB(query.tb_name, query.args);
 			}
 		}
 		// Close the database sources on shutdown to get GC
@@ -247,6 +248,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		return false;
 	}
+	
+	private boolean UpdateDB$$bridge$$public(String tb_name, HashMap<String, Object> args, List<String> keys) {
+		return updateDB(tb_name, args, keys);
+	}
 
 	/**
 	 * Build the SQL string and execute to INSERT/UPDATE
@@ -256,7 +261,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * @param keys    - Table keys.
 	 * @return true if the update was successful.
 	 */
-	public boolean UpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
+	public boolean updateDB(String tb_name, Map<String, ?> args, List<String> keys) {
 
 		/*
 		 * Make sure we only execute queries in async
@@ -268,7 +273,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
-	public boolean QueueUpdateDB(String tb_name, HashMap<String, Object> args, List<String> keys) {
+	private boolean QueueUpdateDB$$bridge$$public(String tb_name, HashMap<String, Object> args, List<String> keys) {
+		return queueUpdateDB(tb_name, args, keys);
+	}
+
+	public boolean queueUpdateDB(String tb_name, Map<String, ?> args, List<String> keys) {
 
 		/*
 		 * Attempt to get a database connection.
@@ -401,7 +410,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				if (rs == 0) // if entry doesn't exist then try to insert
-					return UpdateDB(tb_name, args, null);
+					return updateDB(tb_name, args, null);
 
 			} catch (SQLException e) {
 				Towny.getPlugin().getLogger().warning("SQL closing: " + e.getMessage() + " --> " + stmt.toString());
@@ -433,17 +442,21 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
-	public boolean QueueDeleteDB(String tb_name, HashMap<String, Object> args) {
+	private boolean queueDeleteDB$$bridge$$public(String tb_name, HashMap<String, Object> args) {
+		return queueDeleteDB(tb_name, args);
+	}
+
+	public boolean queueDeleteDB(String tb_name, Map<String, ?> args) {
 
 		if (!getContext())
 			return false;
 		try {
 			StringBuilder wherecode = new StringBuilder(
 					"DELETE FROM " + tb_prefix + (tb_name.toUpperCase()) + " WHERE ");
-			Set<Map.Entry<String, Object>> set = args.entrySet();
-			Iterator<Map.Entry<String, Object>> i = set.iterator();
+
+			Iterator<? extends Map.Entry<String, ?>> i = args.entrySet().iterator();
 			while (i.hasNext()) {
-				Map.Entry<String, Object> me = i.next();
+				Map.Entry<String, ?> me = i.next();
 				wherecode.append("`").append(me.getKey()).append("` = ");
 				if (me.getValue() instanceof String)
 					wherecode.append("'").append(((String) me.getValue()).replace("'", "''")).append("'");
@@ -489,7 +502,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TOWN("TOWNS", "SELECT name FROM ", "name"),
 		NATION("NATIONS", "SELECT name FROM ", "name"),
 		WORLD("WORLDS", "SELECT name FROM ", "name"),
-		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name");
+		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name"),
+		COOLDOWN("COOLDOWNS", "SELECT * FROM ", "key");
 		
 		private String tableName;
 		@SuppressWarnings("unused")
@@ -2013,6 +2027,37 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 
+	@Override
+	public boolean loadCooldowns() {
+		if (!getContext())
+			return false;
+		
+		try (PreparedStatement statement = cntx.prepareStatement("SELECT * FROM " + tb_prefix + TownyDBTableType.COOLDOWN.tableName()); 
+		     ResultSet resultSet = statement.executeQuery()) {
+			
+			while (resultSet.next())
+				CooldownTimerTask.getCooldowns().put(resultSet.getString("key"), resultSet.getLong("expiry"));
+		} catch (SQLException e) {
+			logger.warn("An exception occurred when loading cooldowns", e);
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public boolean saveCooldowns() {
+		for (Map.Entry<String, Long> entry : CooldownTimerTask.getCooldowns().entrySet()) {
+			final Map<String, Object> data = new HashMap<>();
+			data.put("key", entry.getKey());
+			data.put("expiry", entry.getValue());
+
+			queueUpdateDB(TownyDBTableType.COOLDOWN.tableName(), data, Collections.singletonList("key"));
+		}
+		
+		return true;
+	}
+
 	private boolean loadPlotGroup(ResultSet rs) {
 		String line = null;
 		String uuid = null;
@@ -2198,7 +2243,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				res_hm.put("metadata", "");
 
-			UpdateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
+			updateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
 			return true;
 
 		} catch (Exception e) {
@@ -2215,7 +2260,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("uuid", uuid);
 			res_hm.put("registered", registered);
 
-			UpdateDB("HIBERNATEDRESIDENTS", res_hm, Collections.singletonList("uuid"));
+			updateDB("HIBERNATEDRESIDENTS", res_hm, Collections.singletonList("uuid"));
 			return true;
 
 		} catch (Exception e) {
@@ -2314,7 +2359,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			twn_hm.put("enemies", StringMgmt.join(town.getEnemiesUUIDs(), "#"));
 			
-			UpdateDB("TOWNS", twn_hm, Collections.singletonList("name"));
+			updateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
 
 		} catch (Exception e) {
@@ -2334,7 +2379,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			pltgrp_hm.put("groupPrice", group.getPrice());
 			pltgrp_hm.put("town", group.getTown().toString());
 
-			UpdateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("groupID"));
+			updateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("groupID"));
 
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
@@ -2381,7 +2426,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				nat_hm.put("metadata", "");
 
-			UpdateDB("NATIONS", nat_hm, Collections.singletonList("name"));
+			updateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
@@ -2501,7 +2546,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				nat_hm.put("metadata", "");
 
-			UpdateDB("WORLDS", nat_hm, Collections.singletonList("name"));
+			updateDB("WORLDS", nat_hm, Collections.singletonList("name"));
 
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save world unknown error (" + world.getName() + ")");
@@ -2549,7 +2594,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			tb_hm.put("customPermissionData", new Gson().toJson(stringMap));
 
-			UpdateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
+			updateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
 
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
@@ -2578,7 +2623,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			jail_hm.put("spawns", jailCellArray);
 			
-			UpdateDB("JAILS", jail_hm, Collections.singletonList("uuid"));
+			updateDB("JAILS", jail_hm, Collections.singletonList("uuid"));
 			return true;
 		} catch (Exception e) {
 			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");

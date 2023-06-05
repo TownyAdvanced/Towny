@@ -48,12 +48,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadCooldowns();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList();
+		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveCooldowns();
 	}
 
 	public boolean saveAllWorlds() {
@@ -246,6 +246,8 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
+	abstract public boolean loadCooldowns();
+
 	/*
 	 * Save all of category
 	 */
@@ -310,6 +312,8 @@ public abstract class TownyDataSource {
 		}
 		return true;
 	}
+	
+	abstract public boolean saveCooldowns();
 
 	// Database functions
 
