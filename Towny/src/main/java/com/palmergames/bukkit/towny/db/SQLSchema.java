@@ -78,7 +78,7 @@ public class SQLSchema {
 			case TOWNBLOCK -> fetchCreateTownBlocksStatement();
 			case JAIL -> fetchCreateUUIDStatement(tableType);
 			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
-			case COOLDOWN -> "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`key` varchar(200) not null, primary key (`key`))";
+			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
 			default -> fetchCreateNamedStatement(tableType);
 		};
 	}
@@ -109,6 +109,10 @@ public class SQLSchema {
 	 */
 	private static String fetchCreateTownBlocksStatement() {
 		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + "TOWNBLOCKS (`world` VARCHAR(36) NOT NULL,`x` mediumint NOT NULL,`z` mediumint NOT NULL,PRIMARY KEY (`world`,`x`,`z`))";
+	}
+	
+	private static String fetchCreateCooldownsStatement(TownyDBTableType tableType) {
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`key` varchar(200) not null, primary key (`key`))";
 	}
 
 	/*
