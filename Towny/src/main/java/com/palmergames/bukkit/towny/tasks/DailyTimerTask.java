@@ -169,7 +169,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	 */
 	protected void collectNationTaxes(Nation nation) {
 
-		List<String> localNewlyDelinquentTowns = new ArrayList<>();
+		List<String> newlyDelinquentTowns = new ArrayList<>();
 		List<String> localTownsDestroyed = new ArrayList<>();
 		List<Town> towns = new ArrayList<>(nation.getTowns());
 		ListIterator<Town> townItr = towns.listIterator();
@@ -187,21 +187,23 @@ public class DailyTimerTask extends TownyTimerTask {
 
 			switch (processNationTownTax(town, nation)) {
 			case "destroyed" -> localTownsDestroyed.add(town.getName());
-			case "delinquent" -> localNewlyDelinquentTowns.add(town.getName());
+			case "delinquent" -> newlyDelinquentTowns.add(town.getName());
 			}
 		}
 
-		if (localNewlyDelinquentTowns != null && !localNewlyDelinquentTowns.isEmpty()) {
+		// Some towns were unable to pay the nation tax, send a message.
+		if (newlyDelinquentTowns != null && !newlyDelinquentTowns.isEmpty()) {
 			boolean bankruptcyenabled = TownySettings.isTownBankruptcyEnabled() && TownySettings.doBankruptTownsPayNationTax();
 			String msg1 = bankruptcyenabled ? "msg_town_bankrupt_by_nation_tax" : "msg_couldnt_pay_tax";
 			String msg2 = bankruptcyenabled ? "msg_town_bankrupt_by_nation_tax_multiple" : "msg_couldnt_pay_nation_tax_multiple";
 
-			if (localNewlyDelinquentTowns.size() == 1)
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msg1, localNewlyDelinquentTowns.get(0), Translatable.of("nation_sing")));
+			if (newlyDelinquentTowns.size() == 1)
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msg1, newlyDelinquentTowns.get(0), Translatable.of("nation_sing")));
 			else
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msg2).append(StringMgmt.join(localNewlyDelinquentTowns, ", ")));
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msg2).append(StringMgmt.join(newlyDelinquentTowns, ", ")));
 		}
 
+		// Some towns were destroyed because they were conquered and could not pay and that sort of punishment has been configured, send a message.
 		if (localTownsDestroyed != null && !localTownsDestroyed.isEmpty())
 			if (localTownsDestroyed.size() == 1)
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_destroyed_by_nation_tax", localTownsDestroyed.get(0)));
@@ -374,7 +376,12 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_tax_exempt"));
 			return true;
-		} 
+		}
+
+		if (tax < 0) {
+			payTownTaxToResidents(town);
+			return true;
+		}
 
 		if (town.isTaxPercentage()) {
 			tax = resident.getAccount().getHoldingBalance() * tax / 100;
@@ -394,11 +401,6 @@ public class DailyTimerTask extends TownyTimerTask {
 				return true;
 			
 			resident.getAccount().payTo(tax, town, "Town Tax (Percentage)");
-			return true;
-		}
-
-		if (tax < 0) {
-			payTownTaxToResidents(town);
 			return true;
 		}
 
