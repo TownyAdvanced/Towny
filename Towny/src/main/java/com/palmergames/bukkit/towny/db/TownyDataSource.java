@@ -14,6 +14,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
@@ -321,9 +323,9 @@ public abstract class TownyDataSource {
 
 	abstract public void removeNation(Nation nation);
 
-	abstract public void newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
+	abstract public @NotNull Resident newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
-	abstract public void newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
+	abstract public @NotNull Resident newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
 	
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
