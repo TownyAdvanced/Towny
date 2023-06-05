@@ -1585,7 +1585,7 @@ msg_spawn_cost_free: 'Free'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'This plot is already a %s type.'
 msg_town_board_reset: '&bTown board reset.'
-msg_town_has_no_jailslots: 'The town jail is full.'
+msg_town_has_no_jailslots: '城鎮監獄已經滿員。'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s已發送%s至號碼%s花了%s小時，由%s發送。'
 msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
@@ -1611,21 +1611,21 @@ confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure 
 #Part of the /town plots output.
 msg_town_plots_title: ' Town Plots'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>城鎮大小：<green>%s/%s'
 #Part of the /town plots output.
 msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
 #Part of the /town plots output.
 msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[國家加成：%s]'
 #Part of the /town plots output.
-msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+msg_town_plots_town_owned_land: '<dark_green>城鎮所擁有土地：<green>%s'
 #Part of the /town plots output.
-msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+msg_town_plots_type_header: '<dark_green>類型：<green>玩家擁有 <gray>/ <aqua>出售 <gray>/ <yellow>總計'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>每日收入'
 #Part of the /town plots output.
-msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+msg_town_plots_type_line: '<dark_green>%s：<green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
@@ -1662,9 +1662,9 @@ msg_err_town_unknown: "%s is not a town that is recognized."
 #Shown when a nation is unknown to Towny.
 msg_err_nation_unknown: "%s is not a nation that is recognized."
 #Shown when a resident doesn't belong to a town.
-msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_town: "%s 不屬於任何一個城鎮。"
 #Shown when a town doesn't belong to a nation.
-msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+msg_err_townyobject_x_has_no_nation: "%s 不屬於任何一個國家。"
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
 #Shown when someone cannot afford something, to tell them what it costs.
