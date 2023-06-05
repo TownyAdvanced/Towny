@@ -412,6 +412,7 @@ public class Towny extends JavaPlugin {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getDataSource() != null && !isError()) {
 			townyUniverse.getDataSource().saveQueues();
+			townyUniverse.getDataSource().saveCooldowns();
 		}
 
 		// Turn off timers.		
