@@ -1662,9 +1662,9 @@ msg_err_town_unknown: "%s is not a town that is recognized."
 #Shown when a nation is unknown to Towny.
 msg_err_nation_unknown: "%s is not a nation that is recognized."
 #Shown when a resident doesn't belong to a town.
-msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_town: "%s 不属于任何一个城镇."
 #Shown when a town doesn't belong to a nation.
-msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+msg_err_townyobject_x_has_no_nation: "%s 不属于任何一个国家."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
 #Shown when someone cannot afford something, to tell them what it costs.
