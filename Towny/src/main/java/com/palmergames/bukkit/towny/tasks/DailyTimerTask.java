@@ -185,10 +185,12 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (!universe.hasTown(town.getName()))
 				continue;
 
-			switch (processNationTownTax(town, nation)) {
-			case "destroyed" -> localTownsDestroyed.add(town.getName());
-			case "delinquent" -> newlyDelinquentTowns.add(town.getName());
-			}
+			String result = processTownPaysNationTax(town, nation);
+			if (!result.isEmpty())
+				switch (result) {
+				case "destroyed" -> localTownsDestroyed.add(town.getName());
+				case "delinquent" -> newlyDelinquentTowns.add(town.getName());
+				}
 		}
 
 		// Some towns were unable to pay the nation tax, send a message.
@@ -213,9 +215,9 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	}
 
-	private String processNationTownTax(Town town, Nation nation) {
+	private String processTownPaysNationTax(Town town, Nation nation) {
 		if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
-			return "exempt";
+			return "";
 
 		double taxAmount = nation.getTaxes();
 
@@ -227,14 +229,14 @@ public class DailyTimerTask extends TownyTimerTask {
 		PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
 		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendPrefixedTownMessage(town, event.getCancelMessage());
-			return "exempt";
+			return "";
 		}
 		taxAmount = event.getTax();
 
 		// Town is going to be paid if the nation can afford it.
 		if (!nation.isTaxPercentage() && taxAmount < 0) {
 			payNationTaxToTown(taxAmount, town, nation);
-			return "paid";
+			return "";
 		}
 
 		// Handle if the bank cannot be paid because of the cap. It might be more than
@@ -244,13 +246,13 @@ public class DailyTimerTask extends TownyTimerTask {
 			taxAmount = nation.getBankCap() - nation.getAccount().getHoldingBalance();
 
 		if (taxAmount == 0)
-			return "exempt";
+			return "";
 
 		// Town is able to pay the nation's tax.
 		if (town.getAccount().canPayFromHoldings(taxAmount)) {
 			town.getAccount().payTo(taxAmount, nation, "Nation Tax to " + nation.getName());
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
-			return "paid";
+			return "";
 		} 
 
 		// Town is unable to pay the nation's tax.
@@ -298,7 +300,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			town.save();
 			return "delinquent";
 		}
-		return null;
+		return "";
 	}
 
 	private void payNationTaxToTown(double taxAmount, Town town, Nation nation) {
