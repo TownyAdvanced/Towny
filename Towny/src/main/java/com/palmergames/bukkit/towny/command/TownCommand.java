@@ -4060,14 +4060,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			cost = baseCost + townblockCost + bankruptcyCost + purchasedBlockCost;
 
 			if (!remainingTown.getAccount().canPayFromHoldings(cost))
-				throw new TownyException(Translatable.of("msg_town_merge_err_not_enough_money", TownyEconomyHandler.getFormattedBalance(remainingTown.getAccount().getHoldingBalance()), TownyEconomyHandler.getFormattedBalance(cost)));
+				throw new TownyException(Translatable.of("msg_town_merge_err_not_enough_money", prettyMoney(remainingTown.getAccount().getHoldingBalance()), prettyMoney(cost)));
 		}
 		
 		if (cost > 0) {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_warning", succumbingTown.getName(), TownyEconomyHandler.getFormattedBalance(cost)));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_warning", succumbingTown.getName(), prettyMoney(cost)));
 			if (bankruptcyCost > 0)
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_debt_warning", succumbingTown.getName()));
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_cost_breakdown", TownyEconomyHandler.getFormattedBalance(baseCost), TownyEconomyHandler.getFormattedBalance(townblockCost), TownyEconomyHandler.getFormattedBalance(bankruptcyCost)));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_cost_breakdown", prettyMoney(baseCost), prettyMoney(townblockCost), prettyMoney(bankruptcyCost), prettyMoney(purchasedBlockCost)));
 			final Town finalSuccumbingTown = succumbingTown;
 			final Town finalRemainingTown = remainingTown;
 			final double finalCost = cost;
@@ -4079,6 +4079,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}).sendTo(sender);
 		} else
 			sendTownMergeRequest(sender, remainingTown, succumbingTown, cost);
+	}
+
+	private static String prettyMoney(double cost) {
+		return TownyEconomyHandler.getFormattedBalance(cost);
 	}
 
 	private static void sendTownMergeRequest(CommandSender sender, Town remainingTown, Town succumbingTown, double cost) {
