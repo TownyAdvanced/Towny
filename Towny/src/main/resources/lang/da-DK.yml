@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cBysammenlægning mislykkedes: Ikke nok p
 msg_town_merge_err_too_many_purchased_townblocks: '&cBysammenlægning mislykkedes: For mange købte byblokke (%d)'
 msg_town_merge_warning: '&cAdvarsel: Hvis det accepteres, vil sammenlægning med %s koste %s.'
 msg_town_merge_debt_warning: '&cAdvarsel: %s er i øjeblikket i gæld, du bliver nødt til at betale deres gæld, hvis den accepteres.'
-msg_town_merge_cost_breakdown: '&bOmkostningsopdeling: Basispris: %s, byblokpris: %s, konkursomkostning: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cBysammenlægning mislykkedes.'
 msg_town_merge_cancelled: '&cBysammenlægning annulleret.'
 msg_town_merge_success: '&bByen %s, ejet af %s, er med succes fusioneret til byen %s.'
