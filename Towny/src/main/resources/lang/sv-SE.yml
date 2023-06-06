@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cSammanslagning misslyckades: Inte tillr�
 msg_town_merge_err_too_many_purchased_townblocks: '&cSammanslagning misslyckades: För många köpta stadsblock (%d)'
 msg_town_merge_warning: '&cVarning: Om accepterat, kommer sammanslagning med %s att kosta %s.'
 msg_town_merge_debt_warning: '&cVarning: %s är för närvarande i skuld, du måste betala deras skuld om den accepteras.'
-msg_town_merge_cost_breakdown: '&bKostnadsfördelning: Baskostnad: %s, Stadsblock-kostad: %s, Konkurskostnad: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cSammanfogning misslyckades.'
 msg_town_merge_cancelled: '&cSammanslagningen avbruten.'
 msg_town_merge_success: '&bStaden %s, som ägs av %s, har framgångsrikt slagits samman till staden %s.'
