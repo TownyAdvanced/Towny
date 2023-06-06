@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cUnion fallida: No hay suficiente dinero.
 msg_town_merge_err_too_many_purchased_townblocks: '&cUnion fallida: Muchos bloques comprados (%d)'
 msg_town_merge_warning: '&cAdvertencia: Si se acepta, la union con %s costara %s.'
 msg_town_merge_debt_warning: '&cAdvertencia: %s esta en deuda, tendras que pagar su deuda si aceptas.'
-msg_town_merge_cost_breakdown: '&bDesglose del costo: Costo base: %s, Costo de bloques: %s, Costo de bancarota: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cUnion fallida.'
 msg_town_merge_cancelled: '&cUnion cancelada.'
 msg_town_merge_success: '&bLa ciudad de %s, gobernada por %s, se unio exitosamente con %s.'
