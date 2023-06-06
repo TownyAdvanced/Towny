@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cSpajanje nije uspelo: Nema dovoljno novc
 msg_town_merge_err_too_many_purchased_townblocks: '&cSpajanje nije uspelo: Previše kupljnih gradskih blokova (%d)'
 msg_town_merge_warning: '&cUpozorenje: Ako bude prihvaćeno, spajanje sa %s će koštati %s.'
 msg_town_merge_debt_warning: '&cUpozorenje: %s trenutno duguje, moraćete da platite njihov dug u slučaju prihvatanja.'
-msg_town_merge_cost_breakdown: '&bRazlaganje cene: Osnovna cena: %s, Cena blokova grada: %s, Cena bankrotstva: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cSpajanje neuspešno.'
 msg_town_merge_cancelled: '&cSpajanje otkazano.'
 msg_town_merge_success: '&bGrad %s, vlasništvo od %s, uspešno spojen sa gradom %s.'
