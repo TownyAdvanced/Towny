@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cFalha ao mesclar: Dinheiro insuficiente.
 msg_town_merge_err_too_many_purchased_townblocks: '&cMerge failed: Too many purchased townblocks (%d)'
 msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
 msg_town_merge_debt_warning: '&cAviso: %s está em dívida, você terá que pagar a dívida se aceito.'
-msg_town_merge_cost_breakdown: '&bDetalhamento de custo: Custo base: %s, custo de bloco: %s, custo de falecimento: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cFalha ao mesclar.'
 msg_town_merge_cancelled: '&cMesclagem cancelada.'
 msg_town_merge_success: '&bA cidade de %s, de propriedade de %s, mesclou-se com sucesso na cidade de %s.'
