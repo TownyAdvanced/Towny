@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cFusione fallita: denaro non sufficiente.
 msg_town_merge_err_too_many_purchased_townblocks: '&cFusione non riuscita: troppi blocchi urbani acquistati (%d)'
 msg_town_merge_warning: '&cAttenzione: se accettata, la fusione con %s costerà %s.'
 msg_town_merge_debt_warning: '&cAttenzione: %s è attualmente in debito, dovrai pagare il loro debito se accettato.'
-msg_town_merge_cost_breakdown: '&bRipartizione dei costi: Costo di base: %s, Costo di Townblock: %s, Costo fallimento: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cFusione non riuscita.'
 msg_town_merge_cancelled: '&cFusione annullata.'
 msg_town_merge_success: '&bLa città di %s, di proprietà di %s, si è unita con successo nella città di %s.'
@@ -1676,17 +1676,17 @@ msg_err_taking_over_claims_is_not_enabled: "Prendere controllo sui claims non è
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
 msg_err_this_townblock_cannot_be_taken_over: "Prendere controllo su questo blocco non è possibile, la città non supera il numero massimo di blocchi reclamati."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "Non puoi reclamare questo blocco perché questa azione renderebbe questo blocco il tuo homeblock. Cosa che non è permessa."
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "Un altro plugin ti impedisce di prendere controllo di questa terra."
 #Confirmation shown when taking over a claim.
-confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+confirmation_you_are_about_to_take_over_a_claim: "Stai per prendere controllo su un claim di %s per %s. Vuoi continuare?"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
-msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+msg_warning_you_are_almost_out_of_townblocks: "Attenzione: hai quasi usato tutti i blocchi utilizzabili per reclamare terra. Se perdessi un residente la tua città sarà a rischio di avere blocchi rubati da altre città."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
 msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[TakeoverClaim Aviable]"
 #Message shown when a takeover claim would cut a town into two sections.
 msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
