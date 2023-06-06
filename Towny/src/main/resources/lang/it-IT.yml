@@ -474,7 +474,7 @@ nation_ally_help_4: 'Elenco delle richieste di Alleanza che hai ricevuto'
 nation_ally_help_5: 'Accetta una richiesta di Alleanza con una Nazione'
 nation_ally_help_6: 'Rifiuta una richiesta di Alleanza con una Nazione'
 nation_ally_help_7: 'Annulla una richiesta di Alleanza'
-msg_player_denied_all_invites: "All of your received invites have been denied."
+msg_player_denied_all_invites: "Tutti gli inviti ricevuti sono stati rifiutati."
 msg_err_player_no_invites: '&cNon hai inviti attivi!'
 msg_err_player_has_multiple_invites: '&cHai ricevuto più inviti, specificane uno!'
 msg_err_player_has_too_many_invites: '%s ha ricevuto troppi inviti, chiedigli di annullarne alcuni, prima di invitarlo di nuovo.'
@@ -587,7 +587,7 @@ jailed_in_town: ' in Città: %s'
 status_friends: 'Amici'
 rank_list_title: '%s Lista Ranghi'
 rank_list_mayor: 'Sindaco:'
-status_title_capital: '&b(Capital)'
+status_title_capital: '&b(Capitale)'
 status_title_pvp: ' &4(PVP)'
 status_title_open: ' &b(Aperta)'
 status_town_board: 'Bacheca:'
@@ -607,7 +607,7 @@ status_nation_tax: 'Tassa della Nazione:'
 status_nation_towns: 'Città'
 status_nation_allies: 'Alleati'
 status_nation_enemies: 'Nemici'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: 'Nazioni che considerano nemica la tua nazione'
 status_world_claimable: '&aRivendicabile'
 status_world_noclaims: '&cSenzaRivendicazioni'
 status_world_forcepvp: 'Forza il PVP:'
@@ -737,7 +737,7 @@ msg_error_nation_has_no_enemies: 'La nazione non ha nemici da elencare.'
 msg_error_ta_plot_claim: 'Nome del giocatore mancante, es.: /ta plot claim NomeGiocatoreQui'
 msg_error_no_player_with_that_name: 'Nessun giocatore trovato col nome %s'
 msg_admin_has_given_you_a_plot: 'Un amministratore ha rivendicato un plotto per te a: %s'
-msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
+msg_town_forcemobs_setting_set_to: 'La città %s ha forzato le impostazioni dei mob a %s'
 msg_town_forcepvp_setting_set_to: 'La città %s ha avuto la loro impostazione di pvp forzata a %s'
 msg_town_forcedisabledpvp_setting_set_to: 'La città %s ha avuto l''impostazione admindisabledpvp forzata a %s'
 msg_nation_changed_open: '&cLo stato pubblico della Nazione è ora %s.'
@@ -1507,9 +1507,9 @@ msg_cost_spawn_rtp: '&bTi è stato addebitato %s di teletrasportarti in un lotto
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'Stai per essere teletrasportato in un lotto che è in vendita in %s che ti permetterà di entrare. Usa ''/plot claim'' per reclamare la tua trama quando arrivi.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "La città di %s ha un lotto che puoi comprare, volevi essere teletrasportato in un lotto che puoi comprare?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Sei stato teletrasportato in un lotto che puoi compare. Usa '/plot claim' se vuoi reclamare il lotto."
 #Used in the town's status screen to display plots
 status_plot_string: 'Lotti'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1645,36 +1645,36 @@ msg_town_allowedtowar_setting_set_to: 'La città %s ha avuto l''impostazione, co
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
 confirmation_did_you_want_to_unclaim_all: 'Sei sicuro di voler annullare la rivendicazione di tutta la tua terra? (Il tuo blocco di casa non sarà non reclamato.)'
 #Message shown after a player unclaims all their land.
-msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
-msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
-msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
-msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+msg_you_have_unclaimed_everything_but_your_homeblock: "Hai abbandonato tutto tranne il tuo homeblock, per abbandonare il tuo homeblock dovrai impostarne uno nuovo usando '/t set homeblock'."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Sei sicuro di trasferire la proprietà della nazione a %s? Questa azione è Irreversibile!"
+msg_warn_town_already_capital: "<red>La città di %s è già la capitale della nazione."
+msg_min_adjacent_blocks: 'Devi avere almeno %s blocchi vicini. C''è ne sono solo %s.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
-msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+msg_plot_claim_consider_evict_instead: ', magiari stai cercando /plot evict?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "You are not known to Towny."
+msg_you_are_unknown: "Sei Sconosciuto a Towny."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
-msg_townyobject_unknown: "%s is not known to Towny."
+msg_townyobject_unknown: "%s è sconosciuto a Towny."
 #Shown when a resident is unknown to Towny.
-msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_resident_unknown: "%s non è un residente riconosciuto."
 #Shown when a town is unknown to Towny.
-msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_town_unknown: "%s non è una città riconosciuta."
 #Shown when a nation is unknown to Towny.
-msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_nation_unknown: "%s non è una nazione riconosciuta."
 #Shown when a resident doesn't belong to a town.
-msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+msg_err_townyobject_x_has_no_town: "%s non è residente in nessuna città."
 #Shown when a town doesn't belong to a nation.
-msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+msg_err_townyobject_x_has_no_nation: "%s non appartiene a nessuna nazione."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
-msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+msg_err_townblock_has_no_claimedat_data: "Questo blocco non ha dati su quanto è stato reclamato."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "Devi fare pagare %s."
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+msg_err_amount_must_be_greater_than_zero: "La quantità deve essere maggiore di zero."
 #Message shown when taking over claims is disabled on a server.
-msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+msg_err_taking_over_claims_is_not_enabled: "Prendere controllo sui claims non è attivo in questo server."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "Prendere controllo su questo blocco non è possibile, la città non supera il numero massimo di blocchi reclamati."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
 msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
 #Message shown when taking over a claim is stopped by another plugin.
