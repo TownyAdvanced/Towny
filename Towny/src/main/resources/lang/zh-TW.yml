@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&c合併失敗：餘額不足。（%s/%s�
 msg_town_merge_err_too_many_purchased_townblocks: '&c合併失敗：過多已購買的城區（%d）'
 msg_town_merge_warning: '&c警告：如果接受，與%s合併將花費%s。'
 msg_town_merge_debt_warning: '&c警告：%s目前有債務在身，您若接受，您將必須連同債務一起付清。'
-msg_town_merge_cost_breakdown: '&b費用明細：底價：%s，城區價格：%s，破產價格：%s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&c合併失敗。'
 msg_town_merge_cancelled: '&c合併已取消。'
 msg_town_merge_success: '&b%s鎮（原本屬於%s）已成功合併到%s鎮。'
