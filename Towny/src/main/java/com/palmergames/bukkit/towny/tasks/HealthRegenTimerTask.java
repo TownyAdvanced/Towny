@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.object.Town;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -15,6 +18,9 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
+	static {
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:health-regen-task"), () -> TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen()));
+	}
 
 	private final Server server;
 
