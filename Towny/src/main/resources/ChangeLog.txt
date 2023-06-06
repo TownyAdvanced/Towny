@@ -8725,3 +8725,8 @@ v0.92.0.11:
   - Minor improvements to player cache, courtesy of Warrior with PR #6717.
 0.99.1.2:
   - Add towny.command.resident.friend to the nomad group for newly made Townyperms.yml files.
+  - Add persistent cooldowns, courtesy of Warrior with PR #6723.
+    - Closes #2949.
+  - Replace last use of non-get player exact, courtesy of Warrior with PR #6725.
+  - Add default Geyser username compatability, courtesy of Warrior with PR #6724.
+  - Fix merge costs related to purchaseable bonus blocks.

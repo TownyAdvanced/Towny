@@ -56,7 +56,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -249,6 +248,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return false;
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean UpdateDB$$bridge$$public(String tb_name, HashMap<String, Object> args, List<String> keys) {
 		return updateDB(tb_name, args, keys);
 	}
@@ -273,6 +273,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
+	@SuppressWarnings("unused")
 	private boolean QueueUpdateDB$$bridge$$public(String tb_name, HashMap<String, Object> args, List<String> keys) {
 		return queueUpdateDB(tb_name, args, keys);
 	}
@@ -442,6 +443,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	}
 
+	@SuppressWarnings("unused")
 	private boolean queueDeleteDB$$bridge$$public(String tb_name, HashMap<String, Object> args) {
 		return queueDeleteDB(tb_name, args);
 	}
