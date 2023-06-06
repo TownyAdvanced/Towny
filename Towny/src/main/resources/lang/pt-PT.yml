@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cA fusão falhou: dinheiro insuficiente. 
 msg_town_merge_err_too_many_purchased_townblocks: '&cFalha ao fundir: muitos blocos urbanos comprados (%d)'
 msg_town_merge_warning: '&cAviso: se aceito, a fusão com %s custará %s.'
 msg_town_merge_debt_warning: '&cAviso: %s está em dívida, você terá que pagar a dívida se for aceito.'
-msg_town_merge_cost_breakdown: '&bDetalhamento dos custos: Custo básico: %s, custo do Townblock: %s, custo de falência: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cA fusão falhou.'
 msg_town_merge_cancelled: '&cFusão cancelada.'
 msg_town_merge_success: '&bA cidade de %s, de propriedade de %s, foi fundida com sucesso na cidade de %s.'
