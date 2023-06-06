@@ -1,15 +1,17 @@
 package com.palmergames.bukkit.towny.command;
 
+import cloud.commandframework.ArgumentDescription;
+import cloud.commandframework.Command;
+import cloud.commandframework.paper.PaperCommandManager;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
+import com.palmergames.bukkit.towny.command.cloud.argument.TownArgument;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.huds.HUDManager;
@@ -28,349 +30,227 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
-public class TownyCommand extends BaseCommand implements CommandExecutor {
+public class TownyCommand extends BaseCommand {
 
-	// protected static TownyUniverse universe;
-	private static Towny plugin;
+	public static void register(PaperCommandManager<CommandSender> manager, Towny plugin) {
+		final Command.Builder<CommandSender> root = manager.commandBuilder("towny", ArgumentDescription.of("Base Towny command, see /towny ?"));
 
-	private static final List<String> townyTabCompletes = Arrays.asList(
-		"map",
-		"prices",
-		"time",
-		"top",
-		"spy",
-		"universe",
-		"version",
-		"v",
-		"tree",
-		"switches",
-		"itemuse",
-		"allowedblocks",
-		"wildsblocks",
-		"plotclearblocks"
-	);
-	
-	private static final List<String> townyTopTabCompletes = Arrays.asList(
-		"residents",
-		"land",
-		"balance"
-	);
-	
-	private static final List<String> townyTopTownNationCompletes = Arrays.asList(
-		"all",
-		"town",
-		"nation"
-	);
-	
-	private static final List<String> townyTopLandTabCompletes = Arrays.asList(
-		"all",
-		"resident",
-		"town"
-	);
+		final Command.Builder<CommandSender> map = root.literal("map")
+			.permission(PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode())
+			.senderType(Player.class);
 
-	public TownyCommand(Towny instance) {
-		plugin = instance;
-	}
+		manager.command(map.handler(context -> showMap((Player) context.getSender())))
+			.command(map.literal("big")
+				.handler(context -> TownyAsciiMap.generateAndSend(plugin, (Player) context.getSender(), 18)))
+			.command(map.literal("hud")
+				.handler(context -> HUDManager.toggleMapHud((Player) context.getSender())));
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if (plugin.isError()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_safe_mode"));
-			return true;
-		}
+		manager.command(root.literal("prices")
+			.argument(TownArgument.optional("town", ArgumentDescription.of("The town to get prices for")))
+			.handler(context -> {
+				if (!TownyEconomyHandler.isActive())
+					sneaky(new TownyException(Translatable.of("msg_err_no_economy")));
 
-		parseTownyCommand(sender, args);
-		return true;
-	}
+				Town town = context.getOrSupplyDefault("town", () -> {
+					if (context.getSender() instanceof Player player)
+						return TownyAPI.getInstance().getTown(player);
+					else
+						return null;
+				});
 
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+				for (String line : getTownyPrices(town, Translator.locale(context.getSender())))
+					TownyMessaging.sendMessage(context.getSender(), line);
+			}));
 
-		switch (args[0].toLowerCase()) {
-			case "top":
-				switch (args.length) {
-					case 2:
-						return NameUtil.filterByStart(townyTopTabCompletes, args[1]);
-					case 3:
-						switch (args[1].toLowerCase()) {
-							case "residents":
-							case "balance":
-								return NameUtil.filterByStart(townyTopTownNationCompletes, args[2]);
-							case "land":
-								return NameUtil.filterByStart(townyTopLandTabCompletes, args[2]);
-							default:
-								return Collections.emptyList();
-						}
-					default:
-						return Collections.emptyList();
-				}
-			case "map":
-				if (args.length == 2)
-					return NameUtil.filterByStart(Arrays.asList("big", "hud"), args[1]);
-				break;
-			default:
-				if (args.length == 1)
-					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNY, townyTabCompletes), args[0]);
-				else if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, args[0]))
-					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, args[0]).getTabCompletion(sender, args), args[args.length-1]);
-		}
+		manager.command(root.literal("switches")
+			.senderType(Player.class)
+			.handler(context -> {
+				final TownyWorld world = TownyAPI.getInstance().getTownyWorld(((Player) context.getSender()).getWorld());
+				if (world == null || !world.isUsingTowny())
+					sneaky(new TownyException(Translatable.of("msg_err_usingtowny_disabled")));
 
-		return Collections.emptyList();
-	}
+				Resident resident = getResidentOrThrow((Player) context.getSender());
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.SWITCHES);
+			}));
 
-	private void parseTownyCommand(CommandSender sender, String[] split) {
-		if (split.length == 0) {
-			HelpMenu.GENERAL_HELP.send(sender);
-			return;
-		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
-			HelpMenu.HELP.send(sender);
-			return;
-		}
+		manager.command(root.literal("itemuse")
+			.senderType(Player.class)
+			.handler(context -> {
+				final TownyWorld world = TownyAPI.getInstance().getTownyWorld(((Player) context.getSender()).getWorld());
+				if (world == null || !world.isUsingTowny())
+					sneaky(new TownyException(Translatable.of("msg_err_usingtowny_disabled")));
+
+				Resident resident = getResidentOrThrow((Player) context.getSender());
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ITEMUSE);
+			}));
+
+		manager.command(root.literal("allowedblocks")
+			.senderType(Player.class)
+			.handler(context -> {
+				final TownyWorld world = TownyAPI.getInstance().getTownyWorld(((Player) context.getSender()).getWorld());
+				if (world == null || !world.isUsingTowny())
+					sneaky(new TownyException(Translatable.of("msg_err_usingtowny_disabled")));
+
+				Resident resident = getResidentOrThrow((Player) context.getSender());
+				ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ALLOWEDBLOCKS);
+			}));
+
+		manager.command(root.literal("wildsblocks")
+			.senderType(Player.class)
+			.handler(context -> {
+				final TownyWorld world = TownyAPI.getInstance().getTownyWorld(((Player) context.getSender()).getWorld());
+				if (world == null || !world.isUsingTowny())
+					sneaky(new TownyException(Translatable.of("msg_err_usingtowny_disabled")));
+
+				Resident resident = getResidentOrThrow((Player) context.getSender());
+				ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(context.getSender()));
+			}));
+
+		manager.command(root.literal("plotclearblocks")
+			.senderType(Player.class)
+			.handler(context -> {
+				final TownyWorld world = TownyAPI.getInstance().getTownyWorld(((Player) context.getSender()).getWorld());
+				if (world == null || !world.isUsingTowny())
+					sneaky(new TownyException(Translatable.of("msg_err_usingtowny_disabled")));
+
+				Resident resident = getResidentOrThrow((Player) context.getSender());
+				ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(context.getSender()));
+			}));
 		
-		Player player = null;
-		TownyWorld world = null;
-		if (sender instanceof Player) {
-			player = (Player) sender;
-			world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
-		}
+		manager.command(root.literal("tree")
+			.senderType(ConsoleCommandSender.class)
+			.permission(PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode())
+			.handler(context -> {
+				for (String line : TownyUniverse.getInstance().getTreeString(0))
+					TownyMessaging.sendMessage(context.getSender(), line);
+			}));
 
-		try {
-			switch(split[0].toLowerCase(Locale.ROOT)) {
-				case "map": {
-					catchConsole(sender);
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_MAP.getNode());
-					if (split.length > 1 && split[1].equalsIgnoreCase("big"))
-						TownyAsciiMap.generateAndSend(plugin, player, 18);
-					else if (split.length > 1 && split[1].equalsIgnoreCase("hud"))
-						HUDManager.toggleMapHud(player);
-					else
-						showMap(player);
-					break;
-				}
-				case "prices": {
-					Town town = null;
-					if (!TownyEconomyHandler.isActive())
-						throw new TownyException(Translatable.of("msg_err_no_economy"));
+		manager.command(root.literal("time")
+			.permission(PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode())
+			.handler(context -> TownyMessaging.sendMsg(context.getSender(), Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true))))));
 
-					if (split.length > 1) {
-						town = getTownOrThrow(split[1]);
-					} else if (player != null) {
-						Resident resident = TownyAPI.getInstance().getResident(player);
-						
-						if (resident != null)
-							town = resident.getTownOrNull();
-					}
-
-					for (String line : getTownyPrices(town, Translator.locale(sender)))
-						TownyMessaging.sendMessage(sender, line);
-					break;
-				}
-				case "switches": {
-					catchConsole(sender);
-					if (world == null || !world.isUsingTowny())
-						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
-
-					Resident resident = getResidentOrThrow(player);
-					ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.SWITCHES);
-					break;
-				}
-				case "itemuse": {
-					catchConsole(sender);
-					if (world == null || !world.isUsingTowny())
-						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
-
-					Resident resident = getResidentOrThrow(player);
-					ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ITEMUSE);
-					break;
-				}
-				case "allowedblocks": {
-					catchConsole(sender);
-					if (world == null || !world.isUsingTowny())
-						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
-
-					Resident resident = getResidentOrThrow(player);
-					ResidentUtil.openSelectionGUI(resident, SelectionGUI.SelectionType.ALLOWEDBLOCKS);
-					break;
-				}
-				case "wildsblocks": {
-					catchConsole(sender);
-					if (world == null || !world.isUsingTowny())
-						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
-
-					Resident resident = getResidentOrThrow(player);
-					ResidentUtil.openGUIInventory(resident, world.getUnclaimedZoneIgnoreMaterials(), Translatable.of("gui_title_towny_wildsblocks").forLocale(player));
-					break;
-				}
-				case "plotclearblocks": {
-					catchConsole(sender);
-					if (world == null || !world.isUsingTowny())
-						throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
-
-					Resident resident = getResidentOrThrow(player);
-					ResidentUtil.openGUIInventory(resident, world.getPlotManagementMayorDelete(), Translatable.of("gui_title_towny_plotclear").forLocale(player));
-					break;
-				}
-				case "top": {
-					parseTopCommand(sender, StringMgmt.remFirstArg(split));
-					break;
-				}
-				case "tree": {
-					catchPlayer(sender);
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TREE.getNode());
-
-					for (String line : TownyUniverse.getInstance().getTreeString(0))
-						TownyMessaging.sendMessage(sender, line);
-					break;
-				}
-				case "time": {
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TIME.getNode());
-
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_time_until_a_new_day").append(TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true))));
-					break;
-				}
-				case "universe": {
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode());
-
-					for (String line : getUniverseStats(Translator.locale(sender)))
-						TownyMessaging.sendMessage(sender, line);
-					break;
-				}
-				case "version":
-				case "v": {
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode());
-
-					if (TownyUpdateChecker.shouldShowNotification()) {
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
-					} else {
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_towny_version", plugin.getVersion()));
-
-						if (TownyUpdateChecker.hasCheckedSuccessfully())
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));
-					}
-					break;
-				}
-				case "spy": {
-					catchConsole(sender);
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_CHAT_SPY.getNode());
-
-					Resident resident = getResidentOrThrow(player);
-					resident.toggleMode(split, true);
-					break;
-				}
-				default: {
-					if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNY, split[0]))
-						TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNY, split[0]).execute(sender, "towny", split);
-					else
-						TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-				}
-			}
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-		}
-
-	}
-
-	private void parseTopCommand(CommandSender sender, String[] args) throws TownyException {
-		List<String> townyTop = new ArrayList<>();
-		TownyUniverse universe = TownyUniverse.getInstance();
-
-		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
-			townyTop.add(ChatTools.formatTitle("/towny top"));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
-			for (String line : townyTop)
-				TownyMessaging.sendMessage(sender, line);
-			return;
-		} 
-
-		if (args[0].equalsIgnoreCase("residents")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_RESIDENTS.getNode());
-			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentList> list = new ArrayList<>(universe.getTowns());
-				list.addAll(universe.getNations());
-				townyTop.add(ChatTools.formatTitle("Most Residents"));
-				townyTop.addAll(getMostResidents(list));
-			} else if (args[1].equalsIgnoreCase("town")) {
-				townyTop.add(ChatTools.formatTitle("Most Residents in a Town"));
-				townyTop.addAll(getMostResidents(new ArrayList<>(universe.getTowns())));
-			} else if (args[1].equalsIgnoreCase("nation")) {
-				townyTop.add(ChatTools.formatTitle("Most Residents in a Nation"));
-				townyTop.addAll(getMostResidents(new ArrayList<>(universe.getNations())));
-			} else
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-		} else if (args[0].equalsIgnoreCase("land")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_LAND.getNode());
-			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<TownBlockOwner> list = new ArrayList<>(universe.getResidents());
-				list.addAll(universe.getTowns());
-				townyTop.add(ChatTools.formatTitle("Most Land Owned"));
-				townyTop.addAll(getMostLand(list));
-			} else if (args[1].equalsIgnoreCase("resident")) {
-				townyTop.add(ChatTools.formatTitle("Most Land Owned by Resident"));
-				townyTop.addAll(getMostLand(new ArrayList<>(universe.getResidents())));
-			} else if (args[1].equalsIgnoreCase("town")) {
-				townyTop.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				townyTop.addAll(getMostLand(new ArrayList<>(universe.getTowns())));
-			} else
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-		} else if (args[0].equalsIgnoreCase("balance")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_BALANCE.getNode());
-			plugin.getScheduler().runAsync(() -> {
-				if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-					List<Government> list = new ArrayList<>();
-					list.addAll(universe.getTowns());
-					list.addAll(universe.getNations());
-					townyTop.add(ChatTools.formatTitle("Top Bank Balances"));
-					townyTop.addAll(getTopBankBalance(list));
-				} else if (args[1].equalsIgnoreCase("town")) {
-					List<Government> list = new ArrayList<>(universe.getTowns());
-					townyTop.add(ChatTools.formatTitle("Top Bank Balances by Town"));
-					townyTop.addAll(getTopBankBalance(list));
-				} else if (args[1].equalsIgnoreCase("nation")) {
-					List<Government> list = new ArrayList<>(universe.getNations());
-					townyTop.add(ChatTools.formatTitle("Top Bank Balances by Nation"));
-					townyTop.addAll(getTopBankBalance(list));
+		manager.command(root.literal("version", "v")
+			.permission(PermissionNodes.TOWNY_COMMAND_TOWNY_VERSION.getNode())
+			.handler(context -> {
+				if (TownyUpdateChecker.shouldShowNotification()) {
+					TownyMessaging.sendMsg(context.getSender(), Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
 				} else {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
-				}
-				for (String line : townyTop)
-					TownyMessaging.sendMessage(sender, line);
-			});
-			return;
-		}
-		else
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
+					TownyMessaging.sendMsg(context.getSender(), Translatable.of("msg_towny_version", plugin.getVersion()));
 
-		for (String line : townyTop)
-			TownyMessaging.sendMessage(sender, line);
+					if (TownyUpdateChecker.hasCheckedSuccessfully())
+						TownyMessaging.sendMsg(context.getSender(), Translatable.of("msg_up_to_date"));
+				}
+			}));
+
+		manager.command(root.literal("spy")
+			.senderType(Player.class)
+			.permission(PermissionNodes.TOWNY_CHAT_SPY.getNode())
+			.handler(context -> {
+				getResidentOrThrow((Player) context.getSender()).toggleMode(new String[]{"spy"}, true);
+			}));
+
+		manager.command(root.literal("universe")
+			.permission(PermissionNodes.TOWNY_COMMAND_TOWNY_UNIVERSE.getNode())
+			.handler(context -> {
+				for (String line : getUniverseStats(Translator.locale(context.getSender())))
+					TownyMessaging.sendMessage(context.getSender(), line);
+			}));
+		
+		final Command.Builder<CommandSender> top = root.literal("top");
+		
+		manager.command(top.handler(context -> {
+			TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("/towny top"));
+			TownyMessaging.sendMessage(context.getSender(), ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
+			TownyMessaging.sendMessage(context.getSender(), ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
+			TownyMessaging.sendMessage(context.getSender(), ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
+		})).command(top.literal("residents").permission(PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_RESIDENTS.getNode()))
+			.command(top.literal("residents").literal("all")
+				.handler(context -> {
+					List<ResidentList> list = new ArrayList<>(TownyUniverse.getInstance().getTowns());
+					list.addAll(TownyUniverse.getInstance().getNations());
+					
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Most Residents"));
+					for (String message : getMostResidents(list))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				}))
+			.command(top.literal("residents").literal("town")
+				.handler(context -> {
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Most Residents in a Town"));
+					for (String message : getMostResidents(new ArrayList<>(TownyUniverse.getInstance().getTowns())))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				}))
+			.command(top.literal("residents").literal("nations")
+				.handler(context -> {
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Most Residents in a Nation"));
+					for (String message : getMostResidents(new ArrayList<>(TownyUniverse.getInstance().getNations())))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				}))
+			.command(top.literal("land").permission(PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_LAND.getNode()))
+			.command(top.literal("land").literal("all")
+				.handler(context -> {
+					List<TownBlockOwner> list = new ArrayList<>(TownyUniverse.getInstance().getResidents());
+					list.addAll(TownyUniverse.getInstance().getTowns());
+					
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Most Land Owned"));
+					for (String message : getMostLand(list))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				}))
+			.command(top.literal("land").literal("resident")
+				.handler(context -> {
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Most Land Owned By Resident"));
+					for (String message : getMostLand(new ArrayList<>(TownyUniverse.getInstance().getResidents())))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				}))
+			.command(top.literal("land").literal("town")
+				.handler(context -> {
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Most Land Owned By Town"));
+					for (String message : getMostLand(new ArrayList<>(TownyUniverse.getInstance().getTowns())))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				}))
+			.command(top.literal("balance").permission(PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_BALANCE.getNode()))
+			.command(top.literal("balance").literal("all")
+				.handler(context -> plugin.getScheduler().runAsync(() -> {
+					List<Government> list = new ArrayList<>(TownyUniverse.getInstance().getTowns());
+					list.addAll(TownyUniverse.getInstance().getNations());
+
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Top Bank Balances"));
+					for (String message : getTopBankBalance(list))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				})))
+			.command(top.literal("balance").literal("town")
+				.handler(context -> plugin.getScheduler().runAsync(() -> {
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Top Bank Balances by Town"));
+					for (String message : getTopBankBalance(new ArrayList<>(TownyUniverse.getInstance().getTowns())))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				})))
+			.command(top.literal("balance").literal("nation")
+				.handler(context -> plugin.getScheduler().runAsync(() -> {
+					TownyMessaging.sendMessage(context.getSender(), ChatTools.formatTitle("Top Bank Balances by Nation"));
+					for (String message : getTopBankBalance(new ArrayList<>(TownyUniverse.getInstance().getNations())))
+						TownyMessaging.sendMessage(context.getSender(), message);
+				})));
 	}
 
-	public List<String> getUniverseStats(Translator translator) {
+	public static List<String> getUniverseStats(Translator translator) {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<String> output = new ArrayList<>();
 		
 		output.add(""); // Intentionally left blank
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
+		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + Towny.getPlugin().getVersion() + Colors.Gold + "]");
 		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "Chris H (Shade), ElgarL, LlmDl");
 		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
 		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
@@ -397,7 +277,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public static void showMap(Player player) {
 
-		TownyAsciiMap.generateAndSend(plugin, player, 7);
+		TownyAsciiMap.generateAndSend(Towny.getPlugin(), player, 7);
 	}
 
 	/**
@@ -406,7 +286,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	 * @param translator - The Translator to use.
 	 * @return - Prices screen for a town.
 	 */
-	public List<String> getTownyPrices(Town town, Translator translator) {
+	public static List<String> getTownyPrices(Town town, Translator translator) {
 
 		List<String> output = new ArrayList<>();
 		Nation nation = null;
@@ -474,11 +354,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 	
-	private String getMoney(double cost) {
+	private static String getMoney(double cost) {
 		return TownyEconomyHandler.getFormattedBalance(cost);
 	}
 	
-	public List<String> getTopBankBalance(final List<Government> governments) {
+	private static List<String> getTopBankBalance(final List<Government> governments) {
 		final int maxListing = TownySettings.getTownyTopSize();
 		final List<String> output = new ArrayList<>();
 
@@ -497,7 +377,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getMostResidents(List<ResidentList> list) {
+	private static List<String> getMostResidents(List<ResidentList> list) {
 		final int maxListing = TownySettings.getTownyTopSize();
 
 		List<String> output = new ArrayList<>();
@@ -516,7 +396,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		return output;
 	}
 
-	public List<String> getMostLand(List<TownBlockOwner> list) {
+	private static List<String> getMostLand(List<TownBlockOwner> list) {
 		final int maxListing = TownySettings.getTownyTopSize();
 
 		List<String> output = new ArrayList<>();

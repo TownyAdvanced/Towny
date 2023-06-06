@@ -295,8 +295,13 @@ public class BaseCommand implements TabCompleter{
 	
 	@NotNull
 	@Contract("null -> fail")
-	protected static Resident getResidentOrThrow(@Nullable Player player) throws TownyException {
-		return TownyAPI.getInstance().getResidentOrThrow(player);
+	protected static Resident getResidentOrThrow(@Nullable Player player) {
+		try {
+			return TownyAPI.getInstance().getResidentOrThrow(player);
+		} catch (TownyException e) {
+			sneaky(e);
+			return null; // Not reachable
+		}
 	}
 
 	@NotNull
@@ -382,5 +387,10 @@ public class BaseCommand implements TabCompleter{
 	
 	public static void checkPermOrThrowWithMessage(Permissible permissible, String node, Translatable errormsg) throws NoPermissionException {
 		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node, errormsg);
+	}
+	
+	@SuppressWarnings("unchecked")
+	static <T extends Throwable> void sneaky(@NotNull Throwable throwable) throws T {
+		throw (T) throwable;
 	}
 }

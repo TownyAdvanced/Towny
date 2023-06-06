@@ -1,21 +1,17 @@
  package com.palmergames.bukkit.towny;
 
+import cloud.commandframework.bukkit.CloudBukkitCapabilities;
+import cloud.commandframework.execution.CommandExecutionCoordinator;
+import cloud.commandframework.execution.FilteringCommandSuggestionProcessor;
+import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
+import cloud.commandframework.paper.PaperCommandManager;
 import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
-import com.palmergames.bukkit.towny.command.InviteCommand;
-import com.palmergames.bukkit.towny.command.NationCommand;
-import com.palmergames.bukkit.towny.command.PlotCommand;
-import com.palmergames.bukkit.towny.command.ResidentCommand;
-import com.palmergames.bukkit.towny.command.TownCommand;
-import com.palmergames.bukkit.towny.command.TownyAdminCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
-import com.palmergames.bukkit.towny.command.TownyWorldCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.AcceptCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.CancelCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.ConfirmCommand;
-import com.palmergames.bukkit.towny.command.commandobjects.DenyCommand;
+import com.palmergames.bukkit.towny.command.cloud.SafeModePreProcessor;
+import com.palmergames.bukkit.towny.command.cloud.TownyCloudExceptionHandlers;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -65,10 +61,7 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -78,7 +71,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -103,6 +95,7 @@ public class Towny extends JavaPlugin {
 	private final TaskScheduler scheduler;
 
 	private static BukkitAudiences adventure;
+	private PaperCommandManager<CommandSender> commandManager;
 
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
@@ -147,7 +140,6 @@ public class Towny extends JavaPlugin {
 			// N.B. Important that localization loaded correctly for this step.
 			SpawnUtil.initialize(this);
 			// Setup bukkit command interfaces
-			registerSpecialCommands();
 			registerCommands();
 			// Add custom metrics charts.
 			addMetricsCharts();
@@ -817,41 +809,36 @@ public class Towny extends JavaPlugin {
 	public static BukkitAudiences getAdventure() {
 		return adventure;
 	}
-
-	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
-	private void registerSpecialCommands() {
-		List<Command> commands = new ArrayList<>(4);
-		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
-		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
-		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
-		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
-		try {
-			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-
-			bukkitCommandMap.setAccessible(true);
-			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-
-			commandMap.registerAll("towny", commands);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new TownyInitException("An issue has occured while registering custom commands.", TownyInitException.TownyError.OTHER, e);
-		}
-	}
 	
 	private void registerCommands() {
-		getCommand("townyadmin").setExecutor(new TownyAdminCommand(this));
-		getCommand("townyworld").setExecutor(new TownyWorldCommand(this));
-		getCommand("resident").setExecutor(new ResidentCommand(this));
-		getCommand("towny").setExecutor(new TownyCommand(this));
+		try {
+			this.commandManager = PaperCommandManager.createNative(this, CommandExecutionCoordinator.simpleCoordinator());
+		} catch (Exception e) {
+			getLogger().log(Level.WARNING, "An exception occurred when registering commands", e);
+			return;
+		}
+		
+		this.commandManager.commandSuggestionProcessor(new FilteringCommandSuggestionProcessor<>(
+			FilteringCommandSuggestionProcessor.Filter.<CommandSender>contains(true).andTrimBeforeLastSpace()
+		));
+		
+		if (this.commandManager.hasCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION))
+			this.commandManager.registerAsynchronousCompletions();
+		
+		if (this.commandManager.hasCapability(CloudBukkitCapabilities.NATIVE_BRIGADIER))
+			this.commandManager.registerBrigadier();
+		
+		commandManager.registerCommandPreProcessor(new SafeModePreProcessor(this));
 
-		CommandExecutor townCommandExecutor = new TownCommand(this);
-		getCommand("town").setExecutor(townCommandExecutor);
-		
-		// This is needed because the vanilla "/t" tab completer needs to be overridden.
-		getCommand("t").setTabCompleter((TabCompleter)townCommandExecutor);
-		
-		getCommand("nation").setExecutor(new NationCommand(this));
-		getCommand("plot").setExecutor(new PlotCommand(this));
-		getCommand("invite").setExecutor(new InviteCommand(this));
+		new MinecraftExceptionHandler<CommandSender>()
+			.withInvalidSyntaxHandler()
+			.withHandler(MinecraftExceptionHandler.ExceptionType.INVALID_SENDER, TownyCloudExceptionHandlers.INVALID_SENDER_HANDLER)
+			.withHandler(MinecraftExceptionHandler.ExceptionType.NO_PERMISSION, TownyCloudExceptionHandlers.NO_PERMISSION_HANDLER)
+			.withArgumentParsingHandler()
+			.withHandler(MinecraftExceptionHandler.ExceptionType.COMMAND_EXECUTION, TownyCloudExceptionHandlers.EXECUTION_EXCEPTION_HANDLER)
+			.apply(commandManager, sender -> adventure.sender(sender));
+
+		TownyCommand.register(commandManager, this);
 	}
 
 	private void addMetricsCharts() {

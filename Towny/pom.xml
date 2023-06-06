@@ -32,6 +32,7 @@
     <properties>
         <java.version>17</java.version>
         <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
+        <cloud.version>1.8.3</cloud.version>
     </properties>
 
     <scm>
@@ -229,6 +230,21 @@
             <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-bukkit</artifactId>
+            <version>${cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-paper</artifactId>
+            <version>${cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-minecraft-extras</artifactId>
+            <version>${cloud.version}</version>
+        </dependency>
     </dependencies>
     <pluginRepositories>
         <pluginRepository>
@@ -364,6 +380,14 @@
                                 <include>solar.squares:pixel-width-core</include>
                                 <include>com.palmergames.bukkit.towny:towny-base-providers</include>
                                 <include>com.palmergames.bukkit.towny:towny-folia-provider</include>
+                                <include>cloud.commandframework:cloud-core</include>
+                                <include>cloud.commandframework:cloud-services</include>
+                                <include>cloud.commandframework:cloud-brigadier</include>
+                                <include>cloud.commandframework:cloud-tasks</include>
+                                <include>cloud.commandframework:cloud-bukkit</include>
+                                <include>cloud.commandframework:cloud-paper</include>
+                                <include>cloud.commandframework:cloud-minecraft-extras</include>
+                                <include>io.leangen.geantyref:geantyref</include>
                             </includes>
                         </artifactSet>
                         <relocations>
@@ -398,6 +422,14 @@
                             <relocation>
                                 <pattern>solar.squares.pixelwidth</pattern>
                                 <shadedPattern>com.palmergames.bukkit.towny.libs.pixelwidth</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>cloud.commandframework</pattern>
+                                <shadedPattern>com.palmergames.bukkit.towny.libs.cloud</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>io.leangen.geantyref</pattern>
+                                <shadedPattern>com.palmergames.bukkit.towny.libs.typetoken</shadedPattern>
                             </relocation>
                         </relocations>
                         <filters>
@@ -470,6 +502,13 @@
                             <compilerArgs>
                                 <arg>--enable-preview</arg>
                             </compilerArgs>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>cloud.commandframework</groupId>
+                                    <artifactId>cloud-annotations</artifactId>
+                                    <version>${cloud.version}</version>
+                                </path>
+                            </annotationProcessorPaths>
                         </configuration>
                     </plugin>
                 </plugins>
