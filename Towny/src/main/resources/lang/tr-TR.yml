@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cBirleştirme başarısız oldu: Yeterli 
 msg_town_merge_err_too_many_purchased_townblocks: '&cBirleştirme başarısız oldu: Çok fazla satın alınmış kasaba bloğu (%d)'
 msg_town_merge_warning: '&cUyarı: Kabul edilirse, %s ile birleştirmenin maliyeti %s Altın olacaktır.'
 msg_town_merge_debt_warning: '&cUyarı:%s şu anda borçlu, kabul edilirse borcunu ödemeniz gerekecek.'
-msg_town_merge_cost_breakdown: '&bMaliyet dökümü: Temel maliyet: %s Altın, Townblock maliyeti: %s Altın, İflas maliyeti: %s Altın'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cBirleştirme başarısız oldu.'
 msg_town_merge_cancelled: '&cBirleştirme iptal edildi.'
 msg_town_merge_success: '&b%s tarafından sahip olunan %s kasabası, %s kasabasına başarıyla birleştirildi.'
