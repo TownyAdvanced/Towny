@@ -8723,3 +8723,5 @@ v0.92.0.11:
   - Use a concurrent hashmap for invite handler invites, courtesy of Warrior with PR #6719.
   - Remove 'install vault' recommendation if it's present, courtesy of Warrior with PR #6715.
   - Minor improvements to player cache, courtesy of Warrior with PR #6717.
+0.99.1.2:
+  - Add towny.command.resident.friend to the nomad group for newly made Townyperms.yml files.

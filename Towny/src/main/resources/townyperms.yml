@@ -13,6 +13,7 @@ nomad:
     - towny.command.town.list.*
     - towny.command.town.ranklist
     - towny.command.town.reslist
+    - towny.command.resident.friend
     - towny.command.plot.group.*
     - towny.command.plot.perm
     - towny.command.plot.perm.hud
