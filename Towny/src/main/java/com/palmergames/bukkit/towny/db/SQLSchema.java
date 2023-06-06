@@ -53,6 +53,9 @@ public class SQLSchema {
 
 		initTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT);
 		updateTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, getHibernatedResidentsColumns());
+		
+		initTable(cntx, TownyDBTableType.COOLDOWN);
+		updateTable(cntx, TownyDBTableType.COOLDOWN, getCooldownColumns());
 	}
 
 	/*
@@ -72,10 +75,11 @@ public class SQLSchema {
 	 */
 	private static String fetchTableSchema(TownyDBTableType tableType) {
 		return switch(tableType) {
-		case TOWNBLOCK -> fetchCreateTownBlocksStatement();
-		case JAIL -> fetchCreateUUIDStatement(tableType);
-		case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
-		default -> fetchCreateNamedStatement(tableType);
+			case TOWNBLOCK -> fetchCreateTownBlocksStatement();
+			case JAIL -> fetchCreateUUIDStatement(tableType);
+			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
+			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
+			default -> fetchCreateNamedStatement(tableType);
 		};
 	}
 
@@ -105,6 +109,10 @@ public class SQLSchema {
 	 */
 	private static String fetchCreateTownBlocksStatement() {
 		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + "TOWNBLOCKS (`world` VARCHAR(36) NOT NULL,`x` mediumint NOT NULL,`z` mediumint NOT NULL,PRIMARY KEY (`world`,`x`,`z`))";
+	}
+	
+	private static String fetchCreateCooldownsStatement(TownyDBTableType tableType) {
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`key` varchar(200) not null, primary key (`key`))";
 	}
 
 	/*
@@ -307,6 +315,13 @@ public class SQLSchema {
 		columns.add("`claimedAt` BIGINT NOT NULL");
 		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
 		columns.add("`customPermissionData` mediumtext DEFAULT NULL");
+		return columns;
+	}
+	
+	private static List<String> getCooldownColumns() {
+		List<String> columns = new ArrayList<>();
+		columns.add("`key` varchar(200) NOT NULL");
+		columns.add("`expiry` BIGINT NOT NULL");
 		return columns;
 	}
 
