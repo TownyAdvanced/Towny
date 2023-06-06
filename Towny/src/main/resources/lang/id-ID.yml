@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cGagal menggabungkan: Uang tidak cukup. (
 msg_town_merge_err_too_many_purchased_townblocks: '&cPenggabungan gagal: Terlalu banyak townblock yang dibeli (%d)'
 msg_town_merge_warning: '&cPeringatan: Jika diterima, penggabungan dengan %s akan memerlukan biaya sebesar %s.'
 msg_town_merge_debt_warning: '&cPeringatan: %s saat ini sedang dalam utang, Anda akan harus membayar utang mereka jika diterima.'
-msg_town_merge_cost_breakdown: '&bRincian biaya: Biaya dasar: %s, Biaya townblock: %s, Biaya kepailitan: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cPenggabungan gagal.'
 msg_town_merge_cancelled: '&cPenggabungan dibatalkan.'
 msg_town_merge_success: '&bKota %s, milik %s, telah berhasil bergabung ke kota %s.'
