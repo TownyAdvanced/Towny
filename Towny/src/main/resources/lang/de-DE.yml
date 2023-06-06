@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cZusammenführung fehlgeschlagen: Nicht g
 msg_town_merge_err_too_many_purchased_townblocks: '&cZusammenführung fehlgeschlagen: Zu viele gekaufte Stadtblöcke (%d)'
 msg_town_merge_warning: '&cWarnung: Falls angenommen, wird die Zusammenführung mit %s %s kosten.'
 msg_town_merge_debt_warning: '&cWarnung: %s ist derzeit verschuldet, du musst seine Schulden bezahlen, wenn sie akzeptiert werden.'
-msg_town_merge_cost_breakdown: '&bKostenzusammenbruch: Basiskosten: %s, Stadtblockkosten: %s, Insolvenzkosten: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cZusammenführung fehlgeschlagen.'
 msg_town_merge_cancelled: '&cZusammenführung abgebrochen.'
 msg_town_merge_success: '&bDie Stadt %s, im Besitz von %s, hat sich erfolgreich in die Stadt %s eingegliedert.'
