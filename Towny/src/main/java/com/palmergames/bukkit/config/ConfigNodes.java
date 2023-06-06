@@ -1471,7 +1471,7 @@ public enum ConfigNodes {
 			"[\\\\\\/]"),
 	FILTERS_REGEX_NAME_CHECK_REGEX(
 			"filters_colour_chat.regex.name_check_regex",
-			"^[\\p{L}a-zA-Z0-9._\\[\\]-]*$"),
+			"^[\\p{L}\\*a-zA-Z0-9._\\[\\]-]*$"),
 	FILTERS_REGEX_STRING_CHECK_REGEX(
 			"filters_colour_chat.regex.string_check_regex",
 			"^[a-zA-Z0-9 \\s._\\[\\]\\#\\?\\!\\@\\$\\%\\^\\&\\*\\-\\,\\*\\(\\)\\{\\}]*$"),

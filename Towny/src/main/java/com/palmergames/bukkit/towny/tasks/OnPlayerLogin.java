@@ -84,10 +84,8 @@ public class OnPlayerLogin implements Runnable {
 				 * Make a brand new Resident.
 				 */
 				try {
-					universe.getDataSource().newResident(player.getName(), player.getUniqueId());
+					resident = universe.getDataSource().newResident(player.getName(), player.getUniqueId());
 					TownySettings.incrementUUIDCount();
-					
-					resident = universe.getResident(player.getUniqueId());
 					
 					if (TownySettings.isShowingLocaleMessage())
 					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
@@ -116,7 +114,9 @@ public class OnPlayerLogin implements Runnable {
 					resident.save();
 					BukkitTools.fireEvent(new NewResidentEvent(resident));
 					
-				} catch (AlreadyRegisteredException | NotRegisteredException ignored) {}
+				} catch (NotRegisteredException e) {
+					plugin.getLogger().log(Level.WARNING, "Could not register resident '" + player.getName() + "' (" + player.getUniqueId() + ") due to an error, Towny features might be limited for this player until it is resolved", e);
+				} catch (AlreadyRegisteredException ignored) {}
 
 			}
 
