@@ -189,7 +189,7 @@ public class TownyEconomyHandler {
 	 */
 	public static boolean subtract(String accountName, double amount, World world) {
 
-		Player player = Bukkit.getServer().getPlayer(accountName);
+		Player player = Bukkit.getServer().getPlayerExact(accountName);
 		Transaction transaction = new Transaction(TransactionType.SUBTRACT, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
 		
@@ -215,7 +215,7 @@ public class TownyEconomyHandler {
 	 */
 	public static boolean add(String accountName, double amount, World world) {
 
-		Player player = Bukkit.getServer().getPlayer(accountName);
+		Player player = Bukkit.getServer().getPlayerExact(accountName);
 		Transaction transaction = new Transaction(TransactionType.ADD, player, amount);
 		TownyTransactionEvent event = new TownyTransactionEvent(transaction);
 
