@@ -27,6 +27,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	
 	private double totalTownUpkeep = 0.0;
 	private double totalNationUpkeep = 0.0;
+	private double taxCollected = 0.0;
 	private final List<String> bankruptedTowns = new ArrayList<>();
 	private final List<String> removedTowns = new ArrayList<>();
 	private final List<String> removedNations = new ArrayList<>();
@@ -152,6 +153,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		Nation nation;
 
 		while (nationItr.hasNext()) {
+			taxCollected = 0.0;
 			nation = nationItr.next();
 			/*
 			 * Only collect tax for this nation if it really still exists.
@@ -185,6 +187,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (!universe.hasTown(town.getName()))
 				continue;
 
+			if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
+				continue;
+
 			String result = processTownPaysNationTax(town, nation);
 			if (!result.isEmpty())
 				switch (result) {
@@ -211,14 +216,15 @@ public class DailyTimerTask extends TownyTimerTask {
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_destroyed_by_nation_tax", localTownsDestroyed.get(0)));
 			else
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_destroyed_by_nation_tax_multiple").append(StringMgmt.join(localTownsDestroyed, ", ")));
-		
+
+		if (taxCollected > 0.0) {
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_collected_from_towns", prettyMoney(taxCollected)));
+			taxCollected = 0.0;
+		}
 
 	}
 
 	private String processTownPaysNationTax(Town town, Nation nation) {
-		if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
-			return "";
-
 		double taxAmount = nation.getTaxes();
 
 		if (nation.isTaxPercentage()) {
@@ -250,8 +256,9 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Town is able to pay the nation's tax.
 		if (town.getAccount().canPayFromHoldings(taxAmount)) {
-			town.getAccount().payTo(taxAmount, nation, "Nation Tax to " + nation.getName());
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+			town.getAccount().payTo(taxAmount, nation, String.format("Nation Tax to %s paid by %s.", nation.getName(), town.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax", prettyMoney(taxAmount)));
+			taxCollected += taxAmount;
 			return "";
 		} 
 
@@ -266,7 +273,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			}
 
 			town.removeNation();
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_the_nation_tax_of", prettyMoney(taxAmount)));
 			return "delinquent";
 		}
 
@@ -282,7 +289,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			// Alternatively, when configured, a nation will kick a town that  
 			// can no longer pay the full nation tax with their allowed debt. 
 				town.removeNation();
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_the_nation_tax_of", TownyEconomyHandler.getFormattedBalance(nation.getTaxes())));
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_the_nation_tax_of", prettyMoney(nation.getTaxes())));
 				return "delinquent";
 			}
 
@@ -290,9 +297,10 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 
 		// Pay the nation tax with at least some amount of debt.
-		town.getAccount().withdraw(taxAmount, "Nation Tax to " + nation.getName()); // .withdraw() is used because other economy methods do not allow a town to go into debt.
-		nation.getAccount().deposit(taxAmount, "Nation Tax from " + town.getName());
-		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax_with_debt", TownyEconomyHandler.getFormattedBalance(taxAmount)));
+		town.getAccount().withdraw(taxAmount, String.format("Nation Tax paid to %s.", nation.getName())); // .withdraw() is used because other economy methods do not allow a town to go into debt.
+		nation.getAccount().deposit(taxAmount, String.format("Nation Tax paid by %.", town.getName()));
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax_with_debt", prettyMoney(taxAmount)));
+		taxCollected += taxAmount;
 
 		// Check if the town was newly bankrupted and punish them for it.
 		if (!townWasBankrupt) {
@@ -316,14 +324,20 @@ public class DailyTimerTask extends TownyTimerTask {
 		Town town;
 
 		while (townItr.hasNext()) {
+			taxCollected = 0.0;
 			town = townItr.next();
 			/*
 			 * Only collect resident tax for this town if it really still
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (universe.hasTown(town.getName()) && !town.isRuined())
-				collectTownTaxes(town);
+			if (!universe.hasTown(town.getName()))
+				continue;
+
+			if (town.isRuined())
+				continue;
+
+			collectTownTaxes(town);
 		}
 	}
 
@@ -335,9 +349,17 @@ public class DailyTimerTask extends TownyTimerTask {
 	protected void collectTownTaxes(Town town) {
 		// Resident Tax
 		collectTownResidentTax(town);
+		if (taxCollected > 0.0) {
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_residents", prettyMoney(taxCollected)));
+			taxCollected = 0.0;
+		}
 
 		// Plot Tax
 		collecTownPlotTax(town);
+		if (taxCollected > 0.0) {
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_plots", prettyMoney(taxCollected)));
+			taxCollected = 0.0;
+		}
 	}
 
 	private void collectTownResidentTax(Town town) {
@@ -362,6 +384,11 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (!universe.hasResident(resident.getName()))
 				continue;
 
+			if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_tax_exempt"));
+				continue;
+			}
+
 			if (!collectTownTaxFromResident(tax, resident, town))
 				removedResidents.add(resident.getName());
 		}
@@ -375,11 +402,6 @@ public class DailyTimerTask extends TownyTimerTask {
 	}
 
 	private boolean collectTownTaxFromResident(double tax, Resident resident, Town town) {
-		if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_tax_exempt"));
-			return true;
-		}
-
 		if (tax < 0) {
 			payTownTaxToResidents(town);
 			return true;
@@ -402,7 +424,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (tax == 0)
 				return true;
 			
-			resident.getAccount().payTo(tax, town, "Town Tax (Percentage)");
+			resident.getAccount().payTo(tax, town, String.format("Town Tax (Percentage) paid by %s.", resident.getName()));
+			taxCollected += tax;
 			return true;
 		}
 
@@ -416,7 +439,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			return true;
 
 		if (resident.getAccount().canPayFromHoldings(tax)) {
-			resident.getAccount().payTo(tax, town, "Town tax (FlatRate)");
+			resident.getAccount().payTo(tax, town, String.format("Town tax (FlatRate) paid by %s.", resident.getName()));
+			taxCollected += tax;
 			return true;
 		}
 		// remove this resident from the town, they cannot pay the town tax.
@@ -485,7 +509,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	private boolean collectPlotTaxFromResident(double tax, Resident resident, Town town, TownBlock townBlock) {
 		if (resident.getAccount().canPayFromHoldings(tax)) {
-			resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s)", townBlock.getTypeName()));
+			resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s) paid by %s", townBlock.getTypeName(), resident.getName()));
+			taxCollected += tax;
 			return true;
 		}
 
@@ -539,12 +564,12 @@ public class DailyTimerTask extends TownyTimerTask {
 					if (town.getAccount().canPayFromHoldings(upkeep)) {
 					// Town is able to pay the upkeep.
 						town.getAccount().withdraw(upkeep, "Town Upkeep");
-						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_payed_upkeep", prettyMoney(upkeep)));
 					} else {
 					// Town is unable to pay the upkeep.
 						if (!TownySettings.isTownBankruptcyEnabled()) {
 						// Bankruptcy is disabled, remove the town for not paying upkeep.
-							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+							TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", prettyMoney(upkeep)));
 							universe.getDataSource().removeTown(town);
 							removedTowns.add(town.getName());
 							continue;
@@ -561,7 +586,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							if (TownySettings.isUpkeepDeletingTownsThatReachDebtCap()) {
 							// Alternatively, if configured, towns will not be allowed to exceed
 							// their debt and be deleted from the server for non-payment finally.
-								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", prettyMoney(upkeep)));
 								universe.getDataSource().removeTown(town);
 								removedTowns.add(town.getName());
 								continue;
@@ -571,7 +596,7 @@ public class DailyTimerTask extends TownyTimerTask {
 						
 						// Finally pay the upkeep or the modified upkeep up to the debtcap. 
 						town.getAccount().withdraw(upkeep, "Town Upkeep");
-						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_payed_upkeep_with_debt", TownyEconomyHandler.getFormattedBalance(upkeep)));
+						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_payed_upkeep_with_debt", prettyMoney(upkeep)));
 						
 						// Check if the town was newly bankrupted and punish them for it.
 						if(!townWasBankrupt) {
@@ -622,7 +647,7 @@ public class DailyTimerTask extends TownyTimerTask {
 								town.save();
 								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));
 							} else {
-								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", TownyEconomyHandler.getFormattedBalance(neutralityCost)));
+								TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", prettyMoney(neutralityCost)));
 							}
 						
 					}
@@ -676,9 +701,9 @@ public class DailyTimerTask extends TownyTimerTask {
 					
 					if (nation.getAccount().canPayFromHoldings(upkeep)) {
 						nation.getAccount().withdraw(upkeep, "Nation Upkeep");
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_payed_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));						
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_payed_upkeep", prettyMoney(upkeep)));
 					} else {
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", TownyEconomyHandler.getFormattedBalance(upkeep)));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", prettyMoney(upkeep)));
 						universe.getDataSource().removeNation(nation);
 						removedNations.add(nation.getName());
 					}
@@ -695,7 +720,7 @@ public class DailyTimerTask extends TownyTimerTask {
 							nation.save();
 							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_not_peaceful"));
 						} else {
-							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", TownyEconomyHandler.getFormattedBalance(neutralityCost)));
+							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", prettyMoney(neutralityCost)));
 						}
 					}
 				}
@@ -707,5 +732,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			else
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_bankrupt_nation_multiple").append(StringMgmt.join(removedNations, ", ")));
 		}
+	}
+
+	private String prettyMoney(double money) {
+		return TownyEconomyHandler.getFormattedBalance(money);
 	}
 }
