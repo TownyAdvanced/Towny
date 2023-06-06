@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
@@ -602,39 +603,14 @@ public class Town extends Government implements TownBlockOwner {
 		return event.getPrice();
 	}
 	
-	public double getBonusBlockCostN(int inputN) throws TownyException {
-		
-		if (inputN < 0)
+	public double getBonusBlockCostN(int n) throws TownyException {
+
+		if (n < 0)
 			throw new TownyException(Translation.of("msg_err_negative"));
 
-		int current = getPurchasedBlocks();
-		int n;
-		if (current + inputN > TownySettings.getMaxPurchasedBlocks(this)) {
-			n = TownySettings.getMaxPurchasedBlocks(this) - current;
-		} else {
-			n = inputN;
-		}
+		double cost = MoneyUtil.returnPurchasedBlocksCost(getPurchasedBlocks(), n, this);
 
-		if (n == 0)
-			return n;
-		
-		double nextprice = getBonusBlockCost();
-		int i = 1;
-		double cost = nextprice;
-		boolean hasmaxprice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
-		double maxprice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		while (i < n){
-			nextprice = Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue() , getPurchasedBlocks()+(double)i) * TownySettings.getPurchasedBonusBlocksCost());			
-			
-			if (hasmaxprice && nextprice > maxprice) {
-				cost += maxprice * (inputN - i);
-				break;
-			}
-
-			cost += nextprice;
-			i++;
-		}
-		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, Math.round(cost), inputN);
+		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, cost, n);
 		BukkitTools.fireEvent(event);
 		return event.getPrice();
 	}
