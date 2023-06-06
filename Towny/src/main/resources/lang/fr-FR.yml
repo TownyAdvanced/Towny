@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cÉchec de la fusion: pas assez d''argent
 msg_town_merge_err_too_many_purchased_townblocks: '&cÉchec de la fusion: trop de blocs de ville achetés (%d)'
 msg_town_merge_warning: '&cAttention: si elle est acceptée, la fusion avec %s coûtera %s.'
 msg_town_merge_debt_warning: '&cAttention: %s est actuellement endetté, vous devrez payer sa dette si accepté.'
-msg_town_merge_cost_breakdown: '&bRépartition des coûts: Coût de base: %s, Coût Blocs de ville: %s, Coût de banqueroute: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cLa fusion a échoué.'
 msg_town_merge_cancelled: '&cLa fusion est annulée'
 msg_town_merge_success: '&bLa ville de %s, appartenant à %s, a fusionné avec succès dans la ville de %s.'
