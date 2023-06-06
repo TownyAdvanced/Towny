@@ -92,7 +92,7 @@ def addFooter():
     table5 = "<td><a title=\"Updating Towny\" href=https://github.com/TownyAdvanced/Towny/wiki/Updating-Towny>Towny Update Guide</a></td></tr>"
     table6 = "<tr align=center>"
     table7 = "<td><a title=\"Other Towny Plugins\" href=\"https://townyadvanced.github.io\" target=\"_blank\" rel=\"noopener\">Other Towny Plugins</a> </td>"
-    table8 = "<td><a title=\"Towny Changelog\" href=\"https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt" target=\"_blank\" rel=\"noopener\">Complete Changelog</a> </td>"
+    table8 = "<td><a title=\"Towny Changelog\" href=\"https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt\" target=\"_blank\" rel=\"noopener\">Complete Changelog</a> </td>"
     table9 = "<td><a title=\"Default Config Files\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Config-Files\">Default Config Files</a></td>"
     table10 = "<td><a title=\"Commands/Permissions/Placeholders\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Reference\">Commands/Permissions<br>Placeholders</a></td></tr>"
     tableclose = "</table>"
