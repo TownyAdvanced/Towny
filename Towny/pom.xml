@@ -502,13 +502,6 @@
                             <compilerArgs>
                                 <arg>--enable-preview</arg>
                             </compilerArgs>
-                            <annotationProcessorPaths>
-                                <path>
-                                    <groupId>cloud.commandframework</groupId>
-                                    <artifactId>cloud-annotations</artifactId>
-                                    <version>${cloud.version}</version>
-                                </path>
-                            </annotationProcessorPaths>
                         </configuration>
                     </plugin>
                 </plugins>
