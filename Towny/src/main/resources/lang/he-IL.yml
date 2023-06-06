@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cהאיחוד נכשל: אין מספיק
 msg_town_merge_err_too_many_purchased_townblocks: '&cהאיחוד נכשל: קנייה מרובה מדי של חלקות (%d)'
 msg_town_merge_warning: '&cאזהרה: אם יאושר, האיחוד עם %s יעלה %s.'
 msg_town_merge_debt_warning: '&cאזהרה: %s נמצאת כרגע בחוב, אתה תצטרך לשלם את החוב אם תאשר.'
-msg_town_merge_cost_breakdown: '&bחשבון עלויות: מחיר בסיסי: %s, מחיר חלקות: %s, מחיר פשיטת רגל: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cהאיחוד בוטל.'
 msg_town_merge_cancelled: '&cהאיחוד בוטל.'
 msg_town_merge_success: '&bהעיר %s, השייכת ל - %s, אוחדה בהצלחה לעיר %s.'
