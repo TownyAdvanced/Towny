@@ -63,13 +63,14 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			if (townyWorld.isForceTownMobs() && townyWorld.hasWorldMobs())
 				continue;
 
-			final List<LivingEntity> entities = world.getLivingEntities();
-			if (entities.isEmpty())
+			if (world.getLivingEntities().isEmpty())
 				continue;
-			
+
+			// Build a list of mobs to be removed
+			List<LivingEntity> entitiesToRemove = new ArrayList<>();
+			List<LivingEntity> entities = world.getLivingEntities();
+
 			CompletableFuture.runAsync(() -> {
-				// Build a list of mobs to be removed
-				List<LivingEntity> entitiesToRemove = new ArrayList<>();
 
 				for (LivingEntity entity : entities) {
 					Location livingEntityLoc = entity.getLocation();
@@ -143,6 +144,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					});
 				}
 			}).whenComplete((v, t) -> {
+				entitiesToRemove.clear();
+				entities.clear();
 				if (t != null)
 					plugin.getLogger().log(Level.WARNING, "An error occurred while removing mobs in " + world.getName() + ":", t);
 			});
