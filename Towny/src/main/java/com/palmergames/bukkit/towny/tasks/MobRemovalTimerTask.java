@@ -63,13 +63,13 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			if (townyWorld.isForceTownMobs() && townyWorld.hasWorldMobs())
 				continue;
 
-			if (world.getLivingEntities().isEmpty())
+			final List<LivingEntity> entities = world.getLivingEntities();
+			if (entities.isEmpty())
 				continue;
 
 			// Build a list of mobs to be removed
 			List<LivingEntity> entitiesToRemove = new ArrayList<>();
-			List<LivingEntity> entities = world.getLivingEntities();
-
+			
 			CompletableFuture.runAsync(() -> {
 
 				for (LivingEntity entity : entities) {
