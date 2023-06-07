@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cFusione fallita: denaro non sufficiente.
 msg_town_merge_err_too_many_purchased_townblocks: '&cFusione non riuscita: troppi blocchi urbani acquistati (%d)'
 msg_town_merge_warning: '&cAttenzione: se accettata, la fusione con %s costerà %s.'
 msg_town_merge_debt_warning: '&cAttenzione: %s è attualmente in debito, dovrai pagare il loro debito se accettato.'
-msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
+msg_town_merge_cost_breakdown: '&bSeparazione dei costi: costi base:%s, costi townblock: %s, costo bancarotta: %s, costo blocco bonus: %s'
 msg_town_merge_failed: '&cFusione non riuscita.'
 msg_town_merge_cancelled: '&cFusione annullata.'
 msg_town_merge_success: '&bLa città di %s, di proprietà di %s, si è unita con successo nella città di %s.'
@@ -1684,16 +1684,16 @@ confirmation_you_are_about_to_take_over_a_claim: "Stai per prendere controllo su
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
 msg_warning_you_are_almost_out_of_townblocks: "Attenzione: hai quasi usato tutti i blocchi utilizzabili per reclamare terra. Se perdessi un residente la tua città sarà a rischio di avere blocchi rubati da altre città."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
-msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+msg_warning_your_town_is_overclaimed: "Attenzione: la tua città ha superato il numero massimo di blocchi reclamati. Mentre hai troppi blocchi reclamati sarà possibile per altre città di prendere controllo su questi, considera abbandonare un po' di terra."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
 chunk_notification_takeover_available: " <red>[TakeoverClaim Aviable]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "Non puoi prendere controllo su questo lotto perché fare ciò separerebbe la città in due segmenti. Dovrai farlo da un'altra direzione."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
-msg_err_that_town_is_not_conquered: "%s is already not conquered."
+msg_err_that_town_is_not_conquered: "%s è già non conquistata."
 #Message shown when a town has its conquered status removed by an admin.
-msg_conquered_status_removed: "%s has had their conquered status removed."
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_conquered_status_removed: "Lo stato di conquistato è stato rimosso a %s."
+msg_setup_command_folia: "Il comando /ta install attualmente non funziona con Folia per via del non funzionamento dell'API di conversione, fare riferimento alla guida d'installazione qua sotto."
 msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
