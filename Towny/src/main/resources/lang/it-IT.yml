@@ -814,7 +814,7 @@ msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Non puoi attivare/disattivare PV
 msg_err_cannot_spawn_x_seconds_remaining: 'Non puoi spawnare per altri %s secondi.'
 #Added in 0.63
 msg_plot_set_to_nfs: 'Il lotto non è più in vendita.'
-msg_err_x_spawn_disallowed_from_x: '&c%s spawn non è consentito da %s.'
+msg_err_x_spawn_disallowed_from_x: '&c%s lo spawn non è consentito da %s.'
 msg_the_wilderness: 'terre selvagge'
 msg_enemy_areas: 'Aree nemiche'
 msg_neutral_towns: 'Città neutrali'
@@ -889,7 +889,7 @@ msg_err_invalid_nation_map_color: '&cColore mappa sconosciuto. I colori consenti
 msg_nation_map_color_changed: '&bIl colore della mappa della nazione è stato cambiato in %s.'
 msg_err_unable_to_add_more_residents_without_nation: 'La tua città non può invitare più di %s residenti senza entrare o creare una nazione.'
 msg_the_following_towns_were_deleted_for_having_0_claims: 'Le seguenti città sono state eliminate per avere 0 claims: %s'
-msg_spawn_warn: 'La Spawning costa %s. Continuare? Suggerimento: aggiungi -ignore per saltare queste conferme.'
+msg_spawn_warn: 'Lo spawn costa %s. Continuare? Suggerimento: aggiungi -ignore per saltare queste conferme.'
 msg_confirm_purchase: 'Fare questo costerà %s. Continuare?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Poiché non saranno abbastanza vicini alla nuova capitale, le seguenti città saranno rimosse dalla tua nazione: %s. Volete continuare?'
 msg_ta_deposit_all_success: 'Hai depositato con successo %s presso le banche di tutte le nazioni e le città.'
@@ -1694,6 +1694,6 @@ msg_err_that_town_is_not_conquered: "%s è già non conquistata."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "Lo stato di conquistato è stato rimosso a %s."
 msg_setup_command_folia: "Il comando /ta install attualmente non funziona con Folia per via del non funzionamento dell'API di conversione, fare riferimento alla guida d'installazione qua sotto."
-msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+msg_perm_gui_folia: "Questo bottone attualmente non funziona per via del non funzionamento dell'API di conversione, invece usa /plot perm add <name>."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
-msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "Non puoi abbandonare questo blocco perché il blocco a %s,%s Non avrebbe abbastanza blocchi adiacenti (%s sono richiesti.)"
