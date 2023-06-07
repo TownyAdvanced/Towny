@@ -133,13 +133,15 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					return;
 				
 				if (plugin.isFolia()) {
-					for (LivingEntity entity : entitiesToRemove)
+					for (LivingEntity entity : entitiesToRemove) {
 						plugin.getScheduler().run(entity, entity::remove);
+					}
 				} else {
 					// Remove all mobs in one go if we're on Bukkit
 					plugin.getScheduler().run(() -> {
-						for (LivingEntity entity : entitiesToRemove)
+						for (LivingEntity entity : entitiesToRemove) {
 							entity.remove();
+						}
 					});
 				}
 			}).whenComplete((v, t) -> {
