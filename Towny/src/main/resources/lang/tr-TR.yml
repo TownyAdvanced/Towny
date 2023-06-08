@@ -230,7 +230,7 @@ msg_world_pvp: '&cBu dünya sadece PvP dir.'
 msg_world_mobs: '&cBu dünyada Canavar doğma zorunluluğu var.'
 msg_world_expl: '&cBu dünyada zorla Patlamalar var. Bu dünyada zorla Patlamalar var.'
 msg_world_fire: '&cBu dünyada ateş yayıldı.'
-msg_town_mobs: '&cThis town has Monster spawns forced on.'
+msg_town_mobs: '&cBu kasabada canavarlar zorunlu olarak ortaya çıkıyor.'
 msg_plot_pvp: '&cPVP Arena Arsa da değiştirilemez.'
 msg_plot_regen_wrong_size: '&cRegen yalnızca varsayılan çizim boyutu (16) kullanıldığında gerçekleştirilebilir.'
 msg_reloaded: '&2Towny nin ayarları yeniden yüklendi.'
@@ -737,7 +737,7 @@ msg_error_nation_has_no_enemies: 'Ulusun listelenecek düşmanı yok.'
 msg_error_ta_plot_claim: 'Eksik oyuncu adı, örneğin:/ta plot claim OyuncuAdı Burada hak talebinde bulun'
 msg_error_no_player_with_that_name: 'İsimli oyuncu bulunamadı %s'
 msg_admin_has_given_you_a_plot: 'Bir yönetici sizin için bir arsa talep etti: %s'
-msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
+msg_town_forcemobs_setting_set_to: '%s kasabasının mob ayarları %s olarak zorunlu kılındı'
 msg_town_forcepvp_setting_set_to: '%s kasabasının pvp ayarı %s'
 msg_town_forcedisabledpvp_setting_set_to: '%s şehri, adhmindisabledpvp ayarlarını %s olarak zorladı'
 msg_nation_changed_open: '&cUlusun statüsü artık açk %s.'
@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cBirleştirme başarısız oldu: Yeterli 
 msg_town_merge_err_too_many_purchased_townblocks: '&cBirleştirme başarısız oldu: Çok fazla satın alınmış kasaba bloğu (%d)'
 msg_town_merge_warning: '&cUyarı: Kabul edilirse, %s ile birleştirmenin maliyeti %s Altın olacaktır.'
 msg_town_merge_debt_warning: '&cUyarı:%s şu anda borçlu, kabul edilirse borcunu ödemeniz gerekecek.'
-msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
+msg_town_merge_cost_breakdown: '&bMaliyet dökümü: Temel maliyet: %s, Kasaba arazi maliyeti: %s, İflas maliyeti: %s, Bonus arazi maliyeti: %s'
 msg_town_merge_failed: '&cBirleştirme başarısız oldu.'
 msg_town_merge_cancelled: '&cBirleştirme iptal edildi.'
 msg_town_merge_success: '&b%s tarafından sahip olunan %s kasabası, %s kasabasına başarıyla birleştirildi.'
@@ -1288,10 +1288,10 @@ status_jailed: 'Hapis_Durumu:'
 status_bad_yes: '&cEVET'
 status_good_no: '&aHAYIR'
 status_resident_tax_title: '%s Vergisi'
-help_menu_command: '<blue>'
-help_menu_subcommand: '<aqua>'
-help_menu_explanation: '<gray>'
-help_menu_requirement: '<red>'
+help_menu_command: '<mavi>'
+help_menu_subcommand: '<su>'
+help_menu_explanation: '<gri>'
+help_menu_requirement: '<kırmızı>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: "Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.\n"
 #Added in 0.123
@@ -1629,11 +1629,11 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
-confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+confirmation_msg_trusttown_consequences: 'Bütün bir kasabaya tam arsa izinleri vermek üzeresiniz. Bu, kasabanın belediye başkanının, sakinleri ekleyerek kasabanızda kimin inşaat ve yıkma izni alacağına karar verebileceği anlamına gelir. Bu kasaba açıksa, o zaman herkes katılabilir ve kasabanıza tam erişim sağlayabilir. Bu kasabanın tüm sakinlerine (gelecekteki sakinler dahil) güvenmek istediğinizden emin misiniz?'
 #Message shown when a player uses a command that is blocked because their location has an active war.
 msg_command_war_blocked: 'Kasaban savaştayken bu komutu kullanamazsın.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
-msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+msg_cant_unclaim_outsider_in_town: 'Bu mahallede bir yabancı var, bu mahalleyi sahiplenemezsiniz!'
 #Message shown when a player is making a town too soon after deleting one.
 msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
 #Message shown when a player is claiming land too soon after unclaiming it.
