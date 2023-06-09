@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
 import com.palmergames.bukkit.towny.object.Translatable;
@@ -12,6 +13,7 @@ import com.palmergames.bukkit.towny.object.economy.Account;
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +29,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TeleportWarmupTimerTask extends TownyTimerTask {
 
 	private static final Map<Resident, TeleportRequest> TELEPORT_QUEUE = new ConcurrentHashMap<>();
+	
+	static {
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:warmup-task"), () -> TownyTimerHandler.toggleTeleportWarmup(TownySettings.getTeleportWarmupTime() > 0));
+	}
 
 	public TeleportWarmupTimerTask(Towny plugin) {
 		super(plugin);

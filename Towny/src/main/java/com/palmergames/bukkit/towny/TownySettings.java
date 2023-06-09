@@ -3433,12 +3433,21 @@ public class TownySettings {
 		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS);
 	}
 
-	public static void addReloadListener(NamespacedKey key, Consumer<CommentedConfiguration> consumer) {
-		if (!CONFIG_RELOAD_LISTENERS.containsKey(key))
-			CONFIG_RELOAD_LISTENERS.put(key, consumer);
+	public static void addReloadListener(NamespacedKey key, @NotNull Consumer<CommentedConfiguration> consumer) {
+		if (key == null)
+			throw new IllegalArgumentException("Key cannot be null");
+		
+		CONFIG_RELOAD_LISTENERS.putIfAbsent(key, consumer);
 	}
 	
-	public static void removeReloadListener(NamespacedKey key) {
+	public static void addReloadListener(NamespacedKey key, @NotNull Runnable runnable) {
+		if (key == null)
+			throw new IllegalArgumentException("Key cannot be null");
+
+		CONFIG_RELOAD_LISTENERS.putIfAbsent(key, config -> runnable.run());
+	}
+	
+	public static void removeReloadListener(@NotNull NamespacedKey key) {
 		CONFIG_RELOAD_LISTENERS.remove(key);
 	}
 	
