@@ -230,7 +230,7 @@ msg_world_pvp: '&cEn este mundo el combate está habilitado globalmente.'
 msg_world_mobs: '&cEn este mundo la aparición de mobs está habilitada globalmente.'
 msg_world_expl: '&cEn este mundo las explosiones están habilitadas globalmente.'
 msg_world_fire: '&cEn este mundo los incendios están habilitados globalmente.'
-msg_town_mobs: '&cThis town has Monster spawns forced on.'
+msg_town_mobs: '&cEsta ciudad tiene apariciones de monstruos forzadas.'
 msg_plot_pvp: '&cLas parcelas de arena tienen el combate habilitado de forma obligatoria.'
 msg_plot_regen_wrong_size: '&cLa regeneración solo puede hacerse en plots de 16x16.'
 msg_reloaded: '&2La configuración de Towny fue recargada.'
@@ -456,7 +456,7 @@ invite_plu: 'Invitaciones'
 invite_sent_by: 'Invitación enviada por'
 invite_help_1: 'Aceptar una invitación para unirse a una ciudad'
 invite_help_2: 'Rechazar una invitación para unirse a una ciudad'
-invite_help_4: 'Decline all invites to join a town'
+invite_help_4: 'Rechazar todas las invitaciones para unirse a una ciudad'
 invite_help_3: 'Ver todas tus invitaciones'
 town_invite_help_1: 'Invitar a un jugador a tu ciudad.'
 town_invite_help_2: 'Anular una invitación enviada a un jugador'
@@ -474,7 +474,7 @@ nation_ally_help_4: 'Ver todas las solicitudes de alianza entrantes.'
 nation_ally_help_5: 'Aceptar una solicitud de alianza.'
 nation_ally_help_6: 'Rechazar una solicitud de alianza.'
 nation_ally_help_7: 'Anular una solicitud de alianza.'
-msg_player_denied_all_invites: "All of your received invites have been denied."
+msg_player_denied_all_invites: "Todas las invitaciones recibidas han sido rechazadas."
 msg_err_player_no_invites: '&c¡No tienes ninguna invitación/solicitud pendiente!'
 msg_err_player_has_multiple_invites: '&c¡Tienes varias invitaciones! Se más específico.'
 msg_err_player_has_too_many_invites: '¡%s tiene demasiadas invitaciones! Pidele que responda algunas y intentalo denuevo.'
@@ -607,7 +607,7 @@ status_nation_tax: 'ImpuestoNación:'
 status_nation_towns: 'Ciudades'
 status_nation_allies: 'Aliados'
 status_nation_enemies: 'Enemigos'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: 'Naciones que consideran a tu nación como un enemigo'
 status_world_claimable: '&aReclamable'
 status_world_noclaims: '&cNoReclamar'
 status_world_forcepvp: 'ForzarPVP:'
@@ -737,7 +737,7 @@ msg_error_nation_has_no_enemies: 'La nación no tiene ningún enemigo al que mos
 msg_error_ta_plot_claim: 'Falta el nombre del jugador, ejemplo: /ta plot claim NombreDelUsuarioAqui'
 msg_error_no_player_with_that_name: 'No se encontró a ningún jugador llamado %s'
 msg_admin_has_given_you_a_plot: 'Un administrador reclamó un terreno a tu nombre en: %s'
-msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
+msg_town_forcemobs_setting_set_to: 'La ciudad %s tiene su configuracion de pvp forzada a %s'
 msg_town_forcepvp_setting_set_to: 'La ciudad de %s ha sido forzada a cambiar la configuración del combate a %s'
 msg_town_forcedisabledpvp_setting_set_to: 'La ciudad %s tiene su configuración "admindisabledpvp" forzada a %s'
 msg_nation_changed_open: '&cLa membresía sin invitación en la nación ahora está %s.'
@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cFusión fallida: Fondos insuficientes (%
 msg_town_merge_err_too_many_purchased_townblocks: '&cFusión fallida: Muchos reclamos comprados (%d)'
 msg_town_merge_warning: '&cAdvertencia: Aceptar la fusión con %s costará %s.'
 msg_town_merge_debt_warning: '&cAdvertencia: %s está en deuda, al fusionarse TÚ deberás pagarla.'
-msg_town_merge_cost_breakdown: '&bAquí puedes ver algunos costos aproximados: Costo base: %s, Costo por reclamo: %s, Costo de bancarrota: %s'
+msg_town_merge_cost_breakdown: '&bDesglose del costo: Costo base: %s, Costo de bloques: %s, Costo de bancarota: %s'
 msg_town_merge_failed: '&cFusión fallida.'
 msg_town_merge_cancelled: '&cFusión cancelada.'
 msg_town_merge_success: '&bLa ciudad de %s, originalmente liderada por %s, se ha fusionado con la ciudad de %s.'
@@ -1501,15 +1501,15 @@ msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
 msg_a_town_you_are_outlawed_in: 'una ciudad en la que eres un bandido.'
 #Message shown when TownyRTP could not find any towns to teleport to.
-msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+msg_err_could_not_find_any_towns_to_rtp: 'No se pudo encontrar ningún pueblo abierto, público con parcelas a la venta (que usted puede permitirse,) a rtp a.'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+msg_cost_spawn_rtp: '&bHas sido cobrado %s para teletransportarte a una parcela de ciudad aleatoria que está a la venta.'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "La ciudad de %s tiene parcelas que puedes comprar, ¿quieres ser teletransportado a una parcela que puedes comprar ahora?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Has sido teletransportado a una parcela que puedes comprar. Usa '/plot claim' si deseas reclamar la parcela."
 #Used in the town's status screen to display plots
 status_plot_string: 'Parcelas'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1697,3 +1697,9 @@ msg_setup_command_folia: "The /ta install command currently does not work on Fol
 msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."

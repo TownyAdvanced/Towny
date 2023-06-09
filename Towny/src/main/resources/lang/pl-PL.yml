@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cScalenie nieudane: Brak wystarczającej 
 msg_town_merge_err_too_many_purchased_townblocks: '&cScalenie nieudane: Zbyt wiele zakupionych bloków miejskich (%d)'
 msg_town_merge_warning: '&cUwaga: Jeśli prośba zostanie rozpatrzona pomyślnie, scalenie się z %s będzie kosztować %s.'
 msg_town_merge_debt_warning: '&cOstrzeżenie: Miasto %s jest zadłużone, będziesz zatem musiał spłacić jego dług, jeśli się zgodzisz na scalenie.'
-msg_town_merge_cost_breakdown: '&bRozkład kosztów: Koszt Bazowy: %s, Koszt za Chunk: %s, Koszt Upadłości: %s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&cScalanie nie powiodło się.'
 msg_town_merge_cancelled: '&cScalenie anulowane.'
 msg_town_merge_success: '&bMiasto pod władaniem %s, należące do %s, z pomyślnie scaliło się z miastem %s.'
@@ -1697,3 +1697,9 @@ msg_setup_command_folia: "The /ta install command currently does not work on Fol
 msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."

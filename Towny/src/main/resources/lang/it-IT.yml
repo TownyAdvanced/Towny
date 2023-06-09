@@ -814,7 +814,7 @@ msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Non puoi attivare/disattivare PV
 msg_err_cannot_spawn_x_seconds_remaining: 'Non puoi spawnare per altri %s secondi.'
 #Added in 0.63
 msg_plot_set_to_nfs: 'Il lotto non è più in vendita.'
-msg_err_x_spawn_disallowed_from_x: '&c%s spawn non è consentito da %s.'
+msg_err_x_spawn_disallowed_from_x: '&c%s lo spawn non è consentito da %s.'
 msg_the_wilderness: 'terre selvagge'
 msg_enemy_areas: 'Aree nemiche'
 msg_neutral_towns: 'Città neutrali'
@@ -889,7 +889,7 @@ msg_err_invalid_nation_map_color: '&cColore mappa sconosciuto. I colori consenti
 msg_nation_map_color_changed: '&bIl colore della mappa della nazione è stato cambiato in %s.'
 msg_err_unable_to_add_more_residents_without_nation: 'La tua città non può invitare più di %s residenti senza entrare o creare una nazione.'
 msg_the_following_towns_were_deleted_for_having_0_claims: 'Le seguenti città sono state eliminate per avere 0 claims: %s'
-msg_spawn_warn: 'La Spawning costa %s. Continuare? Suggerimento: aggiungi -ignore per saltare queste conferme.'
+msg_spawn_warn: 'Lo spawn costa %s. Continuare? Suggerimento: aggiungi -ignore per saltare queste conferme.'
 msg_confirm_purchase: 'Fare questo costerà %s. Continuare?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Poiché non saranno abbastanza vicini alla nuova capitale, le seguenti città saranno rimosse dalla tua nazione: %s. Volete continuare?'
 msg_ta_deposit_all_success: 'Hai depositato con successo %s presso le banche di tutte le nazioni e le città.'
@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&cFusione fallita: denaro non sufficiente.
 msg_town_merge_err_too_many_purchased_townblocks: '&cFusione non riuscita: troppi blocchi urbani acquistati (%d)'
 msg_town_merge_warning: '&cAttenzione: se accettata, la fusione con %s costerà %s.'
 msg_town_merge_debt_warning: '&cAttenzione: %s è attualmente in debito, dovrai pagare il loro debito se accettato.'
-msg_town_merge_cost_breakdown: '&bRipartizione dei costi: Costo di base: %s, Costo di Townblock: %s, Costo fallimento: %s'
+msg_town_merge_cost_breakdown: '&bSeparazione dei costi: costi base:%s, costi townblock: %s, costo bancarotta: %s, costo blocco bonus: %s'
 msg_town_merge_failed: '&cFusione non riuscita.'
 msg_town_merge_cancelled: '&cFusione annullata.'
 msg_town_merge_success: '&bLa città di %s, di proprietà di %s, si è unita con successo nella città di %s.'
@@ -1676,24 +1676,30 @@ msg_err_taking_over_claims_is_not_enabled: "Prendere controllo sui claims non è
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
 msg_err_this_townblock_cannot_be_taken_over: "Prendere controllo su questo blocco non è possibile, la città non supera il numero massimo di blocchi reclamati."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "Non puoi reclamare questo blocco perché questa azione renderebbe questo blocco il tuo homeblock. Cosa che non è permessa."
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "Un altro plugin ti impedisce di prendere controllo di questa terra."
 #Confirmation shown when taking over a claim.
-confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+confirmation_you_are_about_to_take_over_a_claim: "Stai per prendere controllo su un claim di %s per %s. Vuoi continuare?"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
-msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+msg_warning_you_are_almost_out_of_townblocks: "Attenzione: hai quasi usato tutti i blocchi utilizzabili per reclamare terra. Se perdessi un residente la tua città sarà a rischio di avere blocchi rubati da altre città."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
-msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+msg_warning_your_town_is_overclaimed: "Attenzione: la tua città ha superato il numero massimo di blocchi reclamati. Mentre hai troppi blocchi reclamati sarà possibile per altre città di prendere controllo su questi, considera abbandonare un po' di terra."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[TakeoverClaim Aviable]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "Non puoi prendere controllo su questo lotto perché fare ciò separerebbe la città in due segmenti. Dovrai farlo da un'altra direzione."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
-msg_err_that_town_is_not_conquered: "%s is already not conquered."
+msg_err_that_town_is_not_conquered: "%s è già non conquistata."
 #Message shown when a town has its conquered status removed by an admin.
-msg_conquered_status_removed: "%s has had their conquered status removed."
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
-msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+msg_conquered_status_removed: "Lo stato di conquistato è stato rimosso a %s."
+msg_setup_command_folia: "Il comando /ta install attualmente non funziona con Folia per via del non funzionamento dell'API di conversione, fare riferimento alla guida d'installazione qua sotto."
+msg_perm_gui_folia: "Questo bottone attualmente non funziona per via del non funzionamento dell'API di conversione, invece usa /plot perm add <name>."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
-msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "Non puoi abbandonare questo blocco perché il blocco a %s,%s Non avrebbe abbastanza blocchi adiacenti (%s sono richiesti.)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."

@@ -294,7 +294,7 @@ msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
 msg_cache_block_error_plot: '&c地主不允许 %s  %s .'
 msg_cache_block_error_town_resident: '&c居民不能在这里 %s.'
 msg_cache_block_error_town_allies: '&c盟友不能 %s.'
-msg_cache_block_error_town_outsider: '&cO外来者不能 %s.'
+msg_cache_block_error_town_outsider: '&c外来者不能%s。'
 msg_err_cant_afford_tp_town: '&c你没有钱传送到 %s.'
 msg_err_not_public: '&c那个城镇不对外开放.'
 msg_err_not_open: '&c城镇 %s 不对每个人都开放它的大门. 如果你想要加入这个城镇,请询问城主及其助手.'
@@ -1104,7 +1104,7 @@ msg_town_merge_err_not_enough_money: '&c合并失败：金额不足。(%s/%s)'
 msg_town_merge_err_too_many_purchased_townblocks: '&c合并失败：城镇区块太多(%d)'
 msg_town_merge_warning: '&c警告：如果接受与城镇%s合并将花费%s。'
 msg_town_merge_debt_warning: '&c警告：城镇%s目前正负债，在接受后债务也将会继承。'
-msg_town_merge_cost_breakdown: '&b费用明细：基础：%s，城镇区块：%s，破产价格：%s'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
 msg_town_merge_failed: '&c合并失败。'
 msg_town_merge_cancelled: '&c合并已取消。'
 msg_town_merge_success: '&b城镇%s（由%s拥有）已成功地与城镇%s合并。'
@@ -1697,3 +1697,9 @@ msg_setup_command_folia: "The /ta install command currently does not work on Fol
 msg_perm_gui_folia: "交互API没有工作，使得这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
