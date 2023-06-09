@@ -421,6 +421,12 @@ public class TownyPlayerListener implements Listener {
 				 */
 				if (Tag.SIGNS.isTagged(clickedMat) && item == Material.HONEYCOMB && MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20))
 					event.setCancelled(!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat));
+				
+				/*
+				 * Prevents players from using brushes on brush-able blocks (suspicious sand, suspicious gravel)
+				 */
+				if (ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH && !TownyActionEventExecutor.canDestroy(player, clickedBlock))
+					event.setCancelled(true);
 			}
 		}
 		
