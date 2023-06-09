@@ -752,12 +752,11 @@ public class TownyPlayerListener implements Listener {
 		Resident resident = townyUniverse.getResident(player.getUniqueId());
 		
 		if (resident != null
-				&& TownyTimerHandler.isTeleportWarmupRunning()	 
 				&& TownySettings.getTeleportWarmupTime() > 0
 				&& TownySettings.isMovementCancellingSpawnWarmup()
 				&& resident.hasRequestedTeleport()
-				&& !townyUniverse.getPermissionSource().isTownyAdmin(player)) {
-			TeleportWarmupTimerTask.abortTeleportRequest(resident);
+				&& !townyUniverse.getPermissionSource().isTownyAdmin(player)
+				&& TeleportWarmupTimerTask.abortTeleportRequest(resident)) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
 		}
 
