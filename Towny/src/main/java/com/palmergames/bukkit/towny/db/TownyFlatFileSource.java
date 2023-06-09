@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -2476,11 +2477,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@SuppressWarnings("ReadWriteStringCanBeUsed")
 	@Override
 	public boolean loadCooldowns() {
+		final Path cooldownsFile = Paths.get(dataFolderPath).resolve("cooldowns.json");
+		if (!Files.exists(cooldownsFile))
+			return true;
+
 		final String data;
 		try {
-			data = new String(Files.readAllBytes(Paths.get(dataFolderPath).resolve("cooldowns.json")), StandardCharsets.UTF_8);
+			data = new String(Files.readAllBytes(cooldownsFile), StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			logger.warn("An exception occurred when reading cooldowns.json");
+			logger.warn("An exception occurred when reading cooldowns.json", e);
 			return true;
 		}
 		
