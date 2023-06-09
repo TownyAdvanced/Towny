@@ -1978,10 +1978,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadCooldowns() {
-		if (!getContext())
-			return false;
-		
-		try (PreparedStatement statement = cntx.prepareStatement("SELECT * FROM " + tb_prefix + TownyDBTableType.COOLDOWN.tableName()); 
+		try (Connection connection = getConnection();
+		     PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tb_prefix + TownyDBTableType.COOLDOWN.tableName()); 
 		     ResultSet resultSet = statement.executeQuery()) {
 			
 			while (resultSet.next())
