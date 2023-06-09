@@ -1636,7 +1636,7 @@ public enum ConfigNodes {
 			"protection.world_mob_removal_entities",
 			"Monster,Flying,Slime,Shulker,SkeletonHorse,ZombieHorse",
 			"",
-			"# Globally remove living entities in all worlds that have worldmmobs turned off"),
+			"# Globally remove living entities in all worlds that have worldmobs turned off"),
 
 	PROT_MOB_REMOVE_VILLAGER_BABIES_WORLD(
 			"protection.world_prevent_villager_breeding",
