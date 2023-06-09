@@ -1635,65 +1635,65 @@ msg_command_war_blocked: 'Kasaban savaştayken bu komutu kullanamazsın.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
 msg_cant_unclaim_outsider_in_town: 'Bu mahallede bir yabancı var, bu mahalleyi sahiplenemezsiniz!'
 #Message shown when a player is making a town too soon after deleting one.
-msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Yeni bir kasaba oluşturamazsınız, bekleme süresinde %s saniye kaldı.'
 #Message shown when a player is claiming land too soon after unclaiming it.
-msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Bu şehir bloğunu talep edemezsiniz: %s, bekleme süresinde kalan %s saniye.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
 msg_founder_set: '%s kasabasının kurucusu %s olarak ayarlandı.'
 #Message shown when toggling town allowed to war admin setting
 msg_town_allowedtowar_setting_set_to: '%s kasabasının savaş ayarı %s olarak ayarlandı.'
 #Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
-confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+confirmation_did_you_want_to_unclaim_all: 'Arazinizin tümünü geri almak istediğinizden emin misiniz? (Homeblock''unuz talep edilmeyecektir.)'
 #Message shown after a player unclaims all their land.
-msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_you_have_unclaimed_everything_but_your_homeblock: "Ev bloğunuz dışında her şeyi sahiplenmediniz. Ana arazi'nizi iptal etmek için önce '/t set homeblock' seçeneğini kullanarak yeni bir Ana arazi ayarlamanız gerekir."
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Ulus liderliğini %s e devretmek istediğinizden emin misiniz? Bu işlem geri alınmaz!"
 msg_warn_town_already_capital: "<red>%s kasabası zaten başkent."
-msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+msg_min_adjacent_blocks: 'En az %s bitişik şehir bloğuna sahip olmanız gerekmektedir. Sadece %s var.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
-msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+msg_plot_claim_consider_evict_instead: ', belki de bunun yerine /plot evict instead?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "You are not known to Towny."
+msg_you_are_unknown: "Towny seni tanımıyor."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
-msg_townyobject_unknown: "%s is not known to Towny."
+msg_townyobject_unknown: "%s, Towny tarafından bilinmiyor."
 #Shown when a resident is unknown to Towny.
-msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_resident_unknown: "%s tanınan bir yerleşik değil."
 #Shown when a town is unknown to Towny.
-msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_town_unknown: "%s tanınan bir kasaba değil."
 #Shown when a nation is unknown to Towny.
-msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_nation_unknown: "%s tanınan bir ulus değil."
 #Shown when a resident doesn't belong to a town.
 msg_err_townyobject_x_has_no_town: "%s herhangi bir kasabaya ait değil."
 #Shown when a town doesn't belong to a nation.
 msg_err_townyobject_x_has_no_nation: "%s herhangi bir ulusa ait değil."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
-msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+msg_err_townblock_has_no_claimedat_data: "Bu kasaba bloğunun ne zaman talep edildiğine dair hiçbir veri yok."
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "%s ödemen gerekiyor."
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+msg_err_amount_must_be_greater_than_zero: "Tutar sıfırdan büyük olmalıdır."
 #Message shown when taking over claims is disabled on a server.
-msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+msg_err_taking_over_claims_is_not_enabled: "Taleplerin devralınması bu sunucuda etkin değil."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "Bu Kasaba Bloğu devralınamaz, ait olduğu kasaba üzerinde hak iddia edilemez."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "Bu iddiada bulunamazsınız çünkü bu, bu Kasaba Bloğu'nu ev bloğunuz yapar ki buna izin verilmez."
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "Başka bir eklenti, bu toprakları ele geçirmenizi durdurdu."
 #Confirmation shown when taking over a claim.
-confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+confirmation_you_are_about_to_take_over_a_claim: "%s'ye ait bir talebi şu maliyet karşılığında devralmak üzeresiniz: %s. Devam etmek istedin mi?"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
-msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+msg_warning_you_are_almost_out_of_townblocks: "Uyarı: Hak talebinde bulunmak için mevcut şehir bloklarınızı neredeyse tükettiniz. Bir sakini kaybederseniz, şehrinizin diğer kasabalar tarafından çalınan şehir bloklarına sahip olma riskiyle karşı karşıya kalacaksınız."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
-msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+msg_warning_your_town_is_overclaimed: "Uyarı: Kasabanız fazla talep edildi. Sahip olduğunuz çok fazla kasaba bloğunuz olsa da, diğer kasabaların şehrinizdeki arazileri ele geçirmesi mümkün olacak, bazı arazileri geri almayı düşünün."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[Devralma Talebi Mevcut]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "Bu arsayı ele geçiremezsin, çünkü bunu yapmak kasabayı iki bölüme ayırır. Farklı bir yönden fazla talepte bulunmanız gerekecek."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
-msg_err_that_town_is_not_conquered: "%s is already not conquered."
+msg_err_that_town_is_not_conquered: "%s zaten fethedilmedi."
 #Message shown when a town has its conquered status removed by an admin.
-msg_conquered_status_removed: "%s has had their conquered status removed."
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
-msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+msg_conquered_status_removed: "%s fethedilme durumunu kaldırdı."
+msg_setup_command_folia: "/ta install komutu şu anda konuşma API'sinin çalışmaması nedeniyle Folia'da çalışmıyor, bunun yerine aşağıdaki kurulum kılavuzuna bakın."
+msg_perm_gui_folia: "Bu düğme şu anda konuşma API'sinin çalışmaması nedeniyle Folia'da çalışmıyor, bunun yerine /plot perm add <name> komutunu kullanın."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
-msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "%s,%s adresindeki kasaba bloğu yeterli sayıda bitişik hak talebine sahip olmayacağından (%s gereklidir.)"
