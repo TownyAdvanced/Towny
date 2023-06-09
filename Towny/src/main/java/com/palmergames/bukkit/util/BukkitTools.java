@@ -8,9 +8,12 @@ import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -347,7 +350,18 @@ public class BukkitTools {
 	 */
 	@Nullable
 	public static String matchMaterialName(String name) {
-		Material mat = Material.matchMaterial(name.trim().toUpperCase(Locale.ROOT));
+		Material mat = matchRegistry(Registry.MATERIAL, name);
 		return mat == null ? null : mat.name(); 
+	}
+
+	/**
+	 * Our own copy of {@link Registry#match(String)}, since this method did not exist on the currently lowest supported version, 1.16.
+	 */
+	@Nullable
+	public static <T extends Keyed> T matchRegistry(Registry<T> registry, String input) {
+		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_").replaceAll("\\W", "");
+
+		final NamespacedKey key = NamespacedKey.fromString(filtered);
+		return key != null ? registry.get(key) : null;
 	}
 }
