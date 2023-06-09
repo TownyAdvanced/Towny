@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
@@ -2287,8 +2288,7 @@ public class TownySettings {
 	}
 
 	public static boolean isTownyUpdating(String currentVersion) {
-		// Assume
-		return !isTownyUpToDate(currentVersion);
+		return Version.fromString(getLastRunVersion(currentVersion)).isOlderThan(Version.fromString(currentVersion));
 	}
 
 	public static boolean isTownyUpToDate(String currentVersion) {
