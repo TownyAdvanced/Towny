@@ -8730,3 +8730,14 @@ v0.92.0.11:
   - Replace last use of non-get player exact, courtesy of Warrior with PR #6725.
   - Add default Geyser username compatability, courtesy of Warrior with PR #6724.
   - Fix merge costs related to purchaseable bonus blocks.
+  - Refactor upkeep & taxation code, improving the messages shown to the players about how much tax is collected as well as what appears in the bank history books.
+  - Skip is warmup task running for movement, courtesy of Warrior with PR #6729.
+  - Add reload listeners to some timer tasks, courtesy of Warrior with PR #6730.
+  - Fix cooldown loading exception message on first startup, courtesy of Warrior with PR #6736.
+  - Port ItemList changes from enum branch, courtesy of Warrior with PR #6737.
+  - Allow villagers to open doors, courtesy of Warrior with PR #6738.
+  - Cleanup the mob removal task, courtesy of Warrior with PR #6740.
+  - 1.20.* Support, courtesy of Warrior with PR #6739.
+    - Protect Suspicious Sand and Gravel being brushed, using destroy tests.
+    - Update readme.md with version info.
+  
