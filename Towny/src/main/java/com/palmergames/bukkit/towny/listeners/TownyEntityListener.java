@@ -473,7 +473,11 @@ public class TownyEntityListener implements Listener {
 		if (!(entity instanceof Creature))
 			return;
 
-		// Prevent creatures triggering switch items (usually a villager using a door,)
+		// Allow villagers to open doors
+		if (entity instanceof Villager && ItemLists.WOOD_DOORS.contains(block.getType()))
+			return;
+
+		// Prevent creatures triggering switch items,
 		// OR prevent creatures triggering stone pressure plates (if the config denies it.)
 		if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())
 			|| (TownySettings.isCreatureTriggeringPressurePlateDisabled() && block.getType() == Material.STONE_PRESSURE_PLATE)) {
