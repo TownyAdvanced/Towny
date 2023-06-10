@@ -7,5 +7,4 @@ public class ObjectCouldNotBeLoadedException extends TownyException {
 	public ObjectCouldNotBeLoadedException(String message) {
 		super(message);
 	}
-
 }
