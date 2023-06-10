@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
 import org.bukkit.Location;
 
 import com.google.gson.Gson;
@@ -30,7 +33,7 @@ public class ObjectSaveUtil {
 	 * HashMap methods used to save objects in the TownyFlatFileSource and TownySQLSource
 	 */
 
-	public static Map<String, Object> getJailMap(Jail jail) throws Exception {
+	public static Map<String, Object> getJailMap(Jail jail) throws ObjectSaveException {
 		try {
 			Map<String, Object> jail_hm = new HashMap<>();
 			jail_hm.put("uuid", jail.getUUID());
@@ -45,13 +48,11 @@ public class ObjectSaveUtil {
 			
 			return jail_hm;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: Jail HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for jail " + jail.getName() + " (" + jail.getUUID() + ").");
 		}
 	}
 
-	public static Map<String, Object> getPlotGroupMap(PlotGroup group) throws Exception {
+	public static Map<String, Object> getPlotGroupMap(PlotGroup group) throws ObjectSaveException {
 		try {
 			Map<String, Object> pltgrp_hm = new HashMap<>();
 			pltgrp_hm.put("groupID", group.getUUID());
@@ -62,13 +63,11 @@ public class ObjectSaveUtil {
 			return pltgrp_hm;
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: PlotGroup HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for plot group " + group.getName() + " (" + group.getUUID() + ").");
 		}
 	}
 
-	public static Map<String, Object> getResidentMap(Resident resident) throws Exception {
+	public static Map<String, Object> getResidentMap(Resident resident) throws ObjectSaveException {
 		try {
 			Map<String, Object> res_hm = new HashMap<>();
 			res_hm.put("name", resident.getName());
@@ -91,26 +90,22 @@ public class ObjectSaveUtil {
 			res_hm.put("metadata", resident.hasMeta() ? serializeMetadata(resident) : "");
 			return res_hm;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: Resident HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for resident " + resident.getName() + " (" + resident.getUUID() + ").");
 		}
 	}
 
-	public static Map<String, Object> getHibernatedResidentMap(UUID uuid, long registered) throws Exception {
+	public static Map<String, Object> getHibernatedResidentMap(UUID uuid, long registered) throws ObjectSaveException {
 		try {
 			Map<String, Object> res_hm = new HashMap<>();
 			res_hm.put("uuid", uuid);
 			res_hm.put("registered", registered);
 			return res_hm;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: HibernatedResident HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for hibernated resident " + uuid + ".");
 		}
 	}
 
-	public static Map<String, Object> getTownBlockMap(TownBlock townBlock) throws Exception {
+	public static Map<String, Object> getTownBlockMap(TownBlock townBlock) throws ObjectSaveException {
 		try {
 			Map<String, Object> tb_hm = new HashMap<>();
 			tb_hm.put("world", townBlock.getWorld().getUUID());
@@ -137,13 +132,11 @@ public class ObjectSaveUtil {
 
 			return tb_hm;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: TownBlock HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for townblock " + townBlock.getName() + " (" + townBlock.getUUID() + ").");
 		}
 	}
 
-	public static Map<String, Object> getTownMap(Town town) throws Exception {
+	public static Map<String, Object> getTownMap(Town town) throws ObjectSaveException {
 		try {
 			Map<String, Object> twn_hm = new HashMap<>();
 			twn_hm.put("name", town.getName());
@@ -205,13 +198,11 @@ public class ObjectSaveUtil {
 			twn_hm.put("enemies", StringMgmt.join(town.getEnemiesUUIDs(), "#"));
 			return twn_hm;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: Town HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for town " + town.getName() + " (" + town.getUUID() + ").");
 		}
 	}
 
-	public static Map<String, Object> getNationMap(Nation nation) throws Exception {
+	public static Map<String, Object> getNationMap(Nation nation) throws ObjectSaveException {
 		try {
 			Map<String, Object> nat_hm = new HashMap<>();
 			nat_hm.put("name", nation.getName());
@@ -234,13 +225,11 @@ public class ObjectSaveUtil {
 			nat_hm.put("metadata", nation.hasMeta() ? serializeMetadata(nation) : "");
 			return nat_hm;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: Nation HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for nation " + nation.getName() + " (" + nation.getUUID() + ")" + ".");
 		}
 	}
 
-	public static Map<String, Object> getWorldMap(TownyWorld world) throws Exception {
+	public static Map<String, Object> getWorldMap(TownyWorld world) throws ObjectSaveException {
 		try {
 			Map<String, Object> world_hm = new HashMap<>();
 			world_hm.put("uuid", world.getUUID());
@@ -322,13 +311,11 @@ public class ObjectSaveUtil {
 			return world_hm;
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Saving: World HashMap could not be made.");
-			e.printStackTrace();
-			throw new Exception(e);
+			throw new ObjectSaveException("An exception occurred when constructing data for world " + world.getName() + " (" + world.getUUID() + ").");
 		}
 	}
 
-	private final static String serializeMetadata(TownyObject obj) {
+	private static String serializeMetadata(TownyObject obj) {
 		return DataFieldIO.serializeCDFs(obj.getMetadata());
 	}
 
@@ -337,7 +324,7 @@ public class ObjectSaveUtil {
 	}
 
 	private static String parseLocationForSaving(Location loc) {
-		return loc.getWorld().getUID().toString() + "#" 
+		return loc.getWorld().getUID() + "#" 
 				+ loc.getX() + "#"
 				+ loc.getY() + "#"
 				+ loc.getZ() + "#"

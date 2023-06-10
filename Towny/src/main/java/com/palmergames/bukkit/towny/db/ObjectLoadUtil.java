@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -106,14 +107,15 @@ public class ObjectLoadUtil {
 			source.savePlotGroup(group);
 			return true;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", group.getUUID(), line));
+			plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_exception_reading_group_file_at_line", group.getUUID(), line), e);
 			return false;
 		}
 	}
 
 	public boolean loadResident(Resident resident, Map<String, String> keys) {
+		String line = "";
+
 		try {
-			String line = "";
 			// Name
 			resident.setName(keys.getOrDefault("name", generateMissingName()));
 			// Registered Date
@@ -191,7 +193,7 @@ public class ObjectLoadUtil {
 			source.saveResident(resident);
 			return true;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(e.getMessage());
+			plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_resident_at_line", resident.getName(), line, resident.getUUID()), e);
 			return false;
 		}
 	}
@@ -328,8 +330,7 @@ public class ObjectLoadUtil {
 			source.saveTown(town);
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getUUID().toString()));
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getUUID().toString()), e);
 			return false;
 		}
 		return true;
@@ -405,8 +406,7 @@ public class ObjectLoadUtil {
 			source.saveNation(nation);
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getUUID().toString()));
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getUUID().toString()), e);
 			return false;
 		}
 		return true;
@@ -458,7 +458,7 @@ public class ObjectLoadUtil {
 			universe.registerTownyWorld(world);
 			source.saveWorld(world);
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_world_file_at_line", world.getName(), line, world.getUUID().toString()));
+			plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_exception_reading_world_file_at_line", world.getName(), line, world.getUUID().toString()), e);
 			return false;
 		}
 		return true;
@@ -556,7 +556,7 @@ public class ObjectLoadUtil {
 			if (save)
 				source.saveTownBlock(townBlock);
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_townblock_file_at_line", townBlock.toString(), line));
+			plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_exception_reading_townblock_file_at_line", townBlock.toString(), line), e);
 			return false;
 		}
 		return true;

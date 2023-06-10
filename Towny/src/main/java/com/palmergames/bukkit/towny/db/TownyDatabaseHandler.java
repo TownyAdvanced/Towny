@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -347,57 +348,73 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public boolean saveJail(Jail jail) {
 		try {
 			return saveJail(jail, ObjectSaveUtil.getJailMap(jail));
-		} catch (Exception ignore) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	public boolean savePlotGroup(PlotGroup group) {
 		try {
 			return savePlotGroup(group, ObjectSaveUtil.getPlotGroupMap(group));
-		} catch (Exception ignored) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	public boolean saveResident(Resident resident) {
 		try {
 			return saveResident(resident, ObjectSaveUtil.getResidentMap(resident));
-		} catch (Exception ignored) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	public boolean saveHibernatedResident(UUID uuid, long registered) {
 		try {
 			return saveHibernatedResident(uuid, ObjectSaveUtil.getHibernatedResidentMap(uuid, registered));
-		} catch (Exception ignored) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	public boolean saveTown(Town town) {
 		try {
 			return saveTown(town, ObjectSaveUtil.getTownMap(town));
-		} catch (Exception ignored) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	public boolean saveNation(Nation nation) {
 		try {
 			return saveNation(nation, ObjectSaveUtil.getNationMap(nation));
-		} catch (Exception ignored) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	public boolean saveWorld(TownyWorld world) {
 		try {
 			return saveWorld(world, ObjectSaveUtil.getWorldMap(world));
-		} catch (Exception ignored) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	public boolean saveTownBlock(TownBlock townBlock) {
 		try {
 			return saveTownBlock(townBlock, ObjectSaveUtil.getTownBlockMap(townBlock));
-		} catch (Exception ignored) {}
-		return false;
+		} catch (ObjectSaveException e) {
+			logger.warn(e.getMessage(), e);
+			return false;
+		}
 	}
 
 	/*
