@@ -2,8 +2,8 @@ package com.palmergames.bukkit.towny.db;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 @ApiStatus.Internal
 public class SQLTask {
