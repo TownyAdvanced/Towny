@@ -415,19 +415,16 @@ public class TownyUniverse {
 	public void registerResidentUUID(@NotNull Resident resident) {
 		Preconditions.checkNotNull(resident, "Resident cannot be null!");
 		
-		if (resident.getUUID() != null) {
-			if (residentUUIDMap.containsKey(resident.getUUID()))
-				return;
-			residentUUIDMap.put(resident.getUUID(), resident);
-		}
+		if (resident.getUUID() != null)
+			residentUUIDMap.putIfAbsent(resident.getUUID(), resident);
 	}
 
 	/**
 	 * Register a resident into the internal structures.
 	 * This will allow the resident to be fetched by name and UUID, as well as autocomplete the resident name.
-	 * 
+	 * <br>
 	 * If a resident's name or UUID change, the resident must be re-registered into the maps. 
-	 * 
+	 * <br>
 	 * This does not modify the resident internally, nor saves the resident in the database.
 	 * 
 	 * @param resident Resident to register.

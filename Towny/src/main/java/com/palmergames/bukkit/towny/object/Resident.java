@@ -54,10 +54,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
-	private Map<UUID, Resident> friends = new LinkedHashMap<>();
+	private final Map<UUID, Resident> friends = new LinkedHashMap<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private UUID uuid = null;
 	private Town town = null;
@@ -359,22 +358,22 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public List<UUID> getFriendsUUIDs() {
-		return Collections.unmodifiableList(friends.keySet().stream().collect(Collectors.toList()));
+		//noinspection Java9CollectionFactory
+		return Collections.unmodifiableList(new ArrayList<>(friends.keySet()));
 	}
 
 	public void setFriends(List<Resident> newFriends) {
-
+		this.friends.clear();
 		loadFriends(newFriends);
 	}
 
 	public List<Resident> getFriends() {
+		//noinspection Java9CollectionFactory
 		return Collections.unmodifiableList(new ArrayList<>(friends.values()));
 	}
 
 	public void removeFriend(Resident resident) {
-
-		if (hasFriend(resident))
-			friends.remove(resident.getUUID());
+		friends.remove(resident.getUUID());
 	}
 
 	public boolean hasFriend(Resident resident) {
@@ -391,7 +390,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void removeAllFriends() {
-		// Wipe the array.
+		// Wipe the map.
 		friends.clear();
 	}
 
