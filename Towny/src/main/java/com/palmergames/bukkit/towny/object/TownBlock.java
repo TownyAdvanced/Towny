@@ -28,9 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 public class TownBlock extends TownyObject {
 
+	private UUID uuid;
 	private TownyWorld world;
 	private Town town = null;
 	private Resident resident = null;
@@ -53,6 +55,14 @@ public class TownBlock extends TownyObject {
 		this.x = x;
 		this.z = z;
 		this.setWorld(world);
+	}
+
+	public UUID getUUID() {
+		return uuid;
+	}
+
+	public void setUUID(UUID uuid) {
+		this.uuid = uuid;
 	}
 
 	public TownBlock(WorldCoord worldCoord) {

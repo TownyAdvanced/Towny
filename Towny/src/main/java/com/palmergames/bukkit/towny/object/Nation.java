@@ -19,6 +19,7 @@ import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -34,8 +38,8 @@ public class Nation extends Government {
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	private final List<Town> towns = new ArrayList<>();
-	private List<Nation> allies = new ArrayList<>();
-	private List<Nation> enemies = new ArrayList<>();
+	private Map<UUID, Nation> allies = new LinkedHashMap<>();
+	private Map<UUID, Nation> enemies = new LinkedHashMap<>();
 	private Town capital;
 	private final List<Invite> sentAllyInvites = new ArrayList<>();
 	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
@@ -49,6 +53,22 @@ public class Nation extends Government {
 		setTaxes(TownySettings.getNationDefaultTax());
 		setBoard(TownySettings.getNationDefaultBoard());
 		setOpen(TownySettings.getNationDefaultOpen());
+	}
+
+	public Nation(String name, UUID uuid) {
+		super(name);
+		this.uuid = uuid;
+	}
+
+	/**
+	 * Only to be used in Loading process.
+	 * <p>
+	 * @param uuid UUID to set on the Nation.
+	 */
+	@Internal
+	public Nation(@NotNull UUID uuid) {
+		super(null);
+		this.uuid = uuid;
 	}
 
 	public void addAlly(Nation nation) {
@@ -254,24 +274,40 @@ public class Nation extends Government {
 		return this.getResidents().stream().filter(assistant -> assistant.hasNationRank("assistant")).collect(Collectors.toList());
 	}
 
+	public void loadEnemies(List<Nation> nations) {
+		for (Nation nation : nations)
+			enemies.put(nation.getUUID(), nation);
+	}
+
+	public List<UUID> getEnemiesUUIDs() {
+		return Collections.unmodifiableList(enemies.keySet().stream().collect(Collectors.toList()));
+	}
+
 	public void setEnemies(List<Nation> enemies) {
 
-		this.enemies = enemies;
+		loadEnemies(enemies);
 	}
 
 	public List<Nation> getEnemies() {
+		return Collections.unmodifiableList(enemies.values().stream().collect(Collectors.toList()));
+	}
 
-		return enemies;
+	public void loadAllies(List<Nation> nations) {
+		for (Nation nation : nations)
+			allies.put(nation.getUUID(), nation);
+	}
+
+	public List<UUID> getAlliesUUIDs() {
+		return Collections.unmodifiableList(allies.keySet().stream().collect(Collectors.toList()));
 	}
 
 	public void setAllies(List<Nation> allies) {
 
-		this.allies = allies;
+		loadAllies(allies);
 	}
 
 	public List<Nation> getAllies() {
-
-		return allies;
+		return Collections.unmodifiableList(allies.values().stream().collect(Collectors.toList()));
 	}
 
 	public List<Nation> getMutualAllies() {
@@ -578,7 +614,7 @@ public class Nation extends Government {
 	 * @return true if it is allied, false otherwise.
 	 */
 	public boolean isAlliedWith(Nation nation) {
-		return allies.contains(nation);
+		return allies.containsKey(nation.getUUID());
 	}
 	
 	@Override

@@ -76,25 +76,9 @@ public class SQLSchema {
 	private static String fetchTableSchema(TownyDBTableType tableType) {
 		return switch(tableType) {
 			case TOWNBLOCK -> fetchCreateTownBlocksStatement();
-			case JAIL -> fetchCreateUUIDStatement(tableType);
-			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
-			default -> fetchCreateNamedStatement(tableType);
+			default -> fetchCreateUUIDStatement(tableType);
 		};
-	}
-
-	/*
-	 * Generic create table statement for the Name keyed TownyDBTableTypes
-	 */
-	private static String fetchCreateNamedStatement(TownyDBTableType tableType) {
-		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL,PRIMARY KEY (`name`))";
-	}
-
-	/*
-	 * Create table statement for the PlotGroups that originally got keyed with groupID
-	 */
-	private static String fetchCreatePlotGroupStatement(TownyDBTableType tableType) {
-		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`groupID` VARCHAR(36) NOT NULL,PRIMARY KEY (`groupID`))";
 	}
 
 	/*
@@ -152,6 +136,7 @@ public class SQLSchema {
 
 	private static List<String> getResidentColumns(){
 		List<String> columns = new ArrayList<>();
+		columns.add("`name` VARCHAR(32) NOT NULL");
 		columns.add("`town` mediumtext");
 		columns.add("`town-ranks` mediumtext");
 		columns.add("`nation-ranks` mediumtext");
@@ -180,6 +165,7 @@ public class SQLSchema {
 
 	private static List<String> getTownColumns() {
 	List<String> columns = new ArrayList<>();
+		columns.add("`name` VARCHAR(32) NOT NULL");
 		columns.add("`mayor` mediumtext");
 		columns.add("`nation` mediumtext");
 		columns.add("`townBoard` mediumtext DEFAULT NULL");
@@ -236,6 +222,7 @@ public class SQLSchema {
 
 	private static List<String> getNationColumns(){
 		List<String> columns = new ArrayList<>();
+		columns.add("`name` VARCHAR(32) NOT NULL");
 		columns.add("`capital` mediumtext NOT NULL");
 		columns.add("`tag` mediumtext NOT NULL");
 		columns.add("`allies` mediumtext NOT NULL");
@@ -259,6 +246,7 @@ public class SQLSchema {
 	private static List<String> getWorldColumns() {
 		List<String> columns = new ArrayList<>();
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
+		columns.add("`name` VARCHAR(32) NOT NULL");
 		columns.add("`claimable` bool NOT NULL DEFAULT '0'");
 		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");

@@ -93,7 +93,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -959,7 +958,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Confirmation.runOnAccept(() -> {
 					try {
 						newNation(finalName, capitalTown);
-					} catch (AlreadyRegisteredException | NotRegisteredException e) {
+					} catch (AlreadyRegisteredException | NotRegisteredException | InvalidNameException e) {
 						TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 						return;
 					}
@@ -981,12 +980,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException, InvalidNameException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
-		UUID nationUUID = UUID.randomUUID();
-		townyUniverse.getDataSource().newNation(name, nationUUID);
-		Nation nation = townyUniverse.getNation(nationUUID);
+		townyUniverse.newNation(name);
+		Nation nation = townyUniverse.getNation(name);
 		
 		// Should never happen
 		if (nation == null) {

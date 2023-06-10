@@ -215,7 +215,7 @@ public class ResidentUtil {
 		try {
 			String name = nextNpcName();
 			final UUID npcUUID = UUID.randomUUID();
-			TownyUniverse.getInstance().getDataSource().newResident(name, npcUUID);
+			TownyUniverse.getInstance().newResident(npcUUID, name);
 			npc = TownyUniverse.getInstance().getResident(npcUUID);
 			npc.setRegistered(System.currentTimeMillis());
 			npc.setLastOnline(0);
