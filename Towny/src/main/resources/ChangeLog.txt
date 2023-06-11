@@ -8740,4 +8740,6 @@ v0.92.0.11:
   - 1.20.* Support, courtesy of Warrior with PR #6739.
     - Protect Suspicious Sand and Gravel being brushed, using destroy tests.
     - Update readme.md with version info.
-  
+0.99.1.3:
+  - Fix regression dating to 0.99.1.1: some of the town and nation lists being in reverse order.
+    - Closes #6746.

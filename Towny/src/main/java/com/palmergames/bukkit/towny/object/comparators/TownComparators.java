@@ -12,7 +12,7 @@ public class TownComparators {
 
 		// Both are ruined, fallback to population comparison.
 		if (t1.isRuined() && t2.isRuined()) {
-			return Integer.compare(t2.getResidents().size(), t1.getResidents().size());
+			return t2.getResidents().size() - t1.getResidents().size();
 		}
 
 		// Less than.
@@ -27,7 +27,7 @@ public class TownComparators {
 
 		// Both are bankrupt, fallback to population comparison.
 		if (t1.isBankrupt() && t2.isBankrupt()) {
-			return Integer.compare(t2.getResidents().size(), t1.getResidents().size());
+			return t2.getResidents().size() - t1.getResidents().size();
 		}
 
 		// Less than.
