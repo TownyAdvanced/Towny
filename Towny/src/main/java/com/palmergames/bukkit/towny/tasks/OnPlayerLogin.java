@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.event.resident.NewResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -84,11 +85,11 @@ public class OnPlayerLogin implements Runnable {
 				 * Make a brand new Resident.
 				 */
 				try {
-					resident = universe.getDataSource().newResident(player.getName(), player.getUniqueId());
-					TownySettings.incrementUUIDCount();
-					
+					universe.newResident(player.getUniqueId(), player.getName());
+					resident = universe.getResident(player.getUniqueId());
+
 					if (TownySettings.isShowingLocaleMessage())
-					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
+						TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
 
 					resident.setRegistered(System.currentTimeMillis());
 
@@ -114,9 +115,11 @@ public class OnPlayerLogin implements Runnable {
 					resident.save();
 					BukkitTools.fireEvent(new NewResidentEvent(resident));
 					
-				} catch (NotRegisteredException e) {
+				} catch (AlreadyRegisteredException ignored) {
+				} catch (InvalidNameException e) {
 					plugin.getLogger().log(Level.WARNING, "Could not register resident '" + player.getName() + "' (" + player.getUniqueId() + ") due to an error, Towny features might be limited for this player until it is resolved", e);
-				} catch (AlreadyRegisteredException ignored) {}
+					TownyMessaging.sendErrorMsg(player, e.getMessage() + " You have not been registered correctly with Towny!");
+				}
 
 			}
 
@@ -201,12 +204,7 @@ public class OnPlayerLogin implements Runnable {
 
 			if (!resident.hasUUID()) {
 				resident.setUUID(player.getUniqueId());
-				try {
-					TownyUniverse.getInstance().registerResidentUUID(resident);
-				} catch (AlreadyRegisteredException e) {
-					e.printStackTrace();
-				}
-				TownySettings.incrementUUIDCount();
+				TownyUniverse.getInstance().registerResidentUUID(resident);
 			}
 			resident.save();
 		}, 5);

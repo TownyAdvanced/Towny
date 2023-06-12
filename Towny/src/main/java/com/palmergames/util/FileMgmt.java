@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -154,6 +155,27 @@ public final class FileMgmt {
 				} catch (IOException ex) {
 					// failed to access file.
 					Towny.getPlugin().getLogger().warning("Error: Could not access: " + sourceLocation);
+				}
+			}
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
+	/**
+	 * Write a map to a file, terminating each line with a system specific new line.
+	 * 
+	 * @param source Map to write
+	 * @param targetLocation Target location on the filesystem
+	 * @throws IOException if an IO exception occurs while writing to the file   
+	 */
+	public static void mapToFile(Map<String, Object> source, Path targetLocation) throws IOException {
+		try {
+			writeLock.lock();
+			try (BufferedWriter writer = Files.newBufferedWriter(targetLocation)) {
+				for (Map.Entry<String, Object> entry : source.entrySet()) {
+					writer.write(entry.getKey() + "=" + entry.getValue());
+					writer.newLine();
 				}
 			}
 		} finally {
@@ -422,7 +444,7 @@ public final class FileMgmt {
 	 * @param file - File from which the HashMap will be made.
 	 * @return HashMap - Used for loading keys and values from object files. 
 	 */
-	public static HashMap<String, String> loadFileIntoHashMap(File file) {
+	public static HashMap<String, String> loadFileIntoMap(File file) {
 		
 		try {
 			readLock.lock();

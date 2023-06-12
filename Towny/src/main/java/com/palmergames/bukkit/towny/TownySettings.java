@@ -90,7 +90,6 @@ public class TownySettings {
 
 	private static CommentedConfiguration config;
 	private static CommentedConfiguration newConfig;
-	private static int uuidCount;
 	private static boolean areLevelTypeLimitsConfigured;
 
 	private static final SortedMap<Integer, TownLevel> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
@@ -1026,6 +1025,11 @@ public class TownySettings {
 	public static String getSaveDatabase() {
 
 		return DatabaseConfig.getString(DatabaseConfig.DATABASE_SAVE);
+	}
+
+	public static boolean isServerUsingLegacySQLDB() {
+		return getLoadDatabase().toLowerCase(Locale.ROOT).equals("mysql")
+				&& getSaveDatabase().toLowerCase(Locale.ROOT).equals("mysql") && getDatabaseVersion().equals("1");
 	}
 
 	// SQL
@@ -3121,37 +3125,6 @@ public class TownySettings {
 		return townColorsMap;
 	}
 
-	public static String getUUIDPercent() {
-		double fraction = (double) uuidCount / TownyUniverse.getInstance().getNumResidents();
-		
-		if (fraction == 1.00)
-			return "100%";
-		if (fraction > 0.89)
-			return "90%+";
-		if (fraction > 0.79)
-			return "80%+";
-		if (fraction > 0.69)
-			return "70%+";
-		if (fraction > 0.59)
-			return "60%+";	
-		if (fraction > 0.49)
-			return "50%+";
-		
-		return "<50%";
-	}
-
-	public static int getUUIDCount() {
-		return uuidCount;
-	}
-	
-	public static void setUUIDCount(int hasUUID) {
-		uuidCount = hasUUID;
-	}
-
-	public static void incrementUUIDCount() {
-		uuidCount++;
-	}
-	
 	public static boolean isTownBankruptcyEnabled() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
 	}
