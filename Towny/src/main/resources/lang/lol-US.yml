@@ -50,9 +50,9 @@ town_help_2: '[mayor]'
 town_help_3: 'Selected town''s status'
 town_help_4: 'Shortcut to the town''s status of your location.'
 town_help_5: 'Muv kitteh 2 tuwn spawn'
-town_help_6: 'New tuwn but u is head kitteh'
+town_help_6: 'New tuwn but u is head kitteh.'
 town_help_7: 'New town with target mayor.'
-town_help_8: 'Wach all commandz 4 head kittehz'
+town_help_8: 'Wach all commandz 4 head kittehz.'
 town_help_9: 'New kitteh dai iz heer!!!'
 town_help_10: 'Wach all onlain kittehz in tuwn'
 mayor_help_3: 'Claim area not attached to town'
@@ -1635,7 +1635,7 @@ msg_command_war_blocked: 'You cannot run that command because your town is at wa
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
 msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
 #Message shown when a player is making a town too soon after deleting one.
-msg_err_cannot_create_new_town_x_seconds_remaining: 'Kitteh shud w8 %s sekundz b4 makin new tuwn'
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Kitteh shud w8 %s sekundz b4 makin new tuwn.'
 #Message shown when a player is claiming land too soon after unclaiming it.
 msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
 #Messages shown when an admin uses /ta set founder {townname} {foundername}
