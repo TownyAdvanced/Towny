@@ -253,6 +253,7 @@ public class SQLSchema {
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`conqueredTax` float NOT NULL");
 		return columns;
 	}
 

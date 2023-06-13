@@ -1224,6 +1224,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					MetadataLoader.getInstance().deserializeMetadata(nation, line.trim());
 
+				line = keys.get("conqueredTax");
+				if (line != null && !line.isEmpty())
+					nation.setConqueredTax(Double.parseDouble(line));
+
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()));
 				e.printStackTrace();
@@ -2127,6 +2131,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Metadata
 		list.add("metadata=" + serializeMetadata(nation));
 		
+		list.add("conqueredTax=" + nation.getConqueredTax());
 		/*
 		 *  Make sure we only save in async
 		 */

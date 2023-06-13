@@ -823,6 +823,7 @@ public class TownyFormatter {
 			}
 
 			screen.addComponentOf("nationtax", translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(nation.isTaxPercentage() ? nation.getTaxes() + "%" : formatMoney(nation.getTaxes())));
+			screen.addComponentOf("nationConqueredTax", translator.of("status_splitter") + colourKey(translator.of("status_nation_conquered_tax")) + " " + colourKeyImportant(formatMoney(nation.getConqueredTax())));
 		}
 	}
 

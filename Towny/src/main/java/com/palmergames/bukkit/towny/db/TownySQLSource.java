@@ -1458,6 +1458,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (SQLException ignored) {
 			}
 
+			try {
+				line = rs.getString("conqueredTax");
+				if (line != null && !line.isEmpty()) {
+					nation.setConqueredTax(Double.parseDouble(line));
+				}
+			} catch (SQLException ignored) {
+			}
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
@@ -2427,6 +2435,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				nat_hm.put("metadata", serializeMetadata(nation));
 			else
 				nat_hm.put("metadata", "");
+
+			nat_hm.put("conqueredTax", nation.getConqueredTax());
 
 			updateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 

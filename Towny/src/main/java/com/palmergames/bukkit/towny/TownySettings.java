@@ -1772,6 +1772,14 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT_AMOUNT);
 	}
 
+	public static double getMaxNationConqueredTaxAmount() {
+		return getDouble(ConfigNodes.NATION_DEF_TAXES_MAX_CONQUEREDTAX);
+	}
+
+	public static double getDefaultNationConqueredTaxAmount() {
+		return getDouble(ConfigNodes.NATION_DEF_TAXES_CONQUEREDTAX);
+	}
+
 	public static double getMaxNationTaxPercent() {
 
 		return getDouble(ConfigNodes.ECO_DAILY_TAXES_MAX_NATION_TAX_PERCENT);

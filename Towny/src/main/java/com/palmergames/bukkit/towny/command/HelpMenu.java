@@ -768,6 +768,7 @@ public enum HelpMenu {
 				.add("king " + Translation.of("res_2"), "")
 				.add("capital [town]", "")
 				.add("taxes [$]", "")
+				.add("conqueredtax [$]", "")
 				.add("name [name]", "")
 				.add("title/surname [resident] [text]", "")
 				.add("tag [upto 4 letters] or clear", "")
