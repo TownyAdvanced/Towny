@@ -162,15 +162,18 @@ public class Towny extends JavaPlugin {
 		adventure = BukkitAudiences.create(this);
 
 		// If we aren't going to enter safe mode, do the following:
-		if (!isError() && TownySettings.isTownyUpdating(getVersion())) {
+		if (!isError()) {
+			if (TownySettings.isTownyUpdating(getVersion())) {
+				printChangelogToConsole();
 
-			printChangelogToConsole();
-			// Update config with new version.
-			TownySettings.setLastRunVersion(getVersion());
-			// Save database.
-			townyUniverse.getDataSource().saveAll();
-			// cleanup() updates SQL schema for any changes.
-			townyUniverse.getDataSource().cleanup();
+				// Save database.
+				townyUniverse.getDataSource().saveAll();
+				// cleanup() updates SQL schema for any changes.
+				townyUniverse.getDataSource().cleanup();
+			}
+
+			if (!TownySettings.getLastRunVersion().equals(getVersion()))
+				TownySettings.setLastRunVersion(getVersion());
 		}
 		
 		// It is probably a good idea to always handle permissions
