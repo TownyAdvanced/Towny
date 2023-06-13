@@ -8743,3 +8743,29 @@ v0.92.0.11:
 0.99.1.3:
   - Fix regression dating to 0.99.1.1: some of the town and nation lists being in reverse order.
     - Closes #6746.
+  - Bump maven-surefire-plugin from 3.1.0 to 3.1.2.
+  - Bump adventure-text-serializer-plain from 4.13.1 to 4.14.0.
+  - Bump adventure-text-minimessage from 4.13.1 to 4.14.0.
+  - Fix possible reclaimTown NPE, courtesy of Warrior with PR #6753.
+  - Fix changelog warning message when downgrading, courtesy of Warrior with PR #6741.
+    - Changelog will only be printed out when the version is newer.
+  - Replace all printStackTraces with the logger, courtesy of Warrior with PR #6718.
+  - Added Nation Conquered Tax.
+    - A feature that lets nations set a conquered tax which is paid by the conquered towns, in addition to the normal nation tax.
+    - Conquered Tax is set using /n set conqueredtax {amount}
+    - ConqueredTax appears on the nation status screen.
+    - Closes #6397.
+  - API: Added TownPaysNationConqueredTaxEvent
+    - Thrown before Towny charges a conquered town the nation conquered tax.
+    - A cancellable event that lets a plugin alter the amount if they choose.
+  - New Permission Node: towny.command.nation.set.conqueredtax
+    - Child node of towny.command.nation.set.*
+    - No change required to the townyperms.yml
+  - New Command: /nation set conqueredtax {amount}
+    - Sets a nation's conquered tax, which is paid by the conquered towns.
+  - New Config Option: nation.default_taxes.default_nation_conquered_tax
+    - Default: 0
+    - The default amount of money that nations will charge their conquered towns.
+  - New Config Option: nation.default_taxes.max_nation_conquered_tax
+    - Default: 100
+    - The maximum amount of money that can be charge by a nation on their conquered towns.
