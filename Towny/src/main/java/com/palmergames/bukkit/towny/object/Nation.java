@@ -40,7 +40,7 @@ public class Nation extends Government {
 	private final List<Invite> sentAllyInvites = new ArrayList<>();
 	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
-
+	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
 
 	public Nation(String name) {
 		super(name);
@@ -633,5 +633,13 @@ public class Nation extends Government {
 	@Override
 	public @NotNull Iterable<? extends Audience> audiences() {
 		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());
+	}
+
+	public double getConqueredTax() {
+		return conqueredTax;
+	}
+
+	public void setConqueredTax(double conqueredTax) {
+		this.conqueredTax = Math.min(conqueredTax, TownySettings.getMaxNationConqueredTaxAmount());
 	}
 }

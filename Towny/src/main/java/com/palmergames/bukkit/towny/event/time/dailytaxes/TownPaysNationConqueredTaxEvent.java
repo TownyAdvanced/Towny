@@ -1,0 +1,56 @@
+package com.palmergames.bukkit.towny.event.time.dailytaxes;
+
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translation;
+import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+
+public class TownPaysNationConqueredTaxEvent extends CancellableTownyEvent {
+	private static final HandlerList HANDLER_LIST = new HandlerList();
+
+	private final Town town;
+	private final Nation nation;
+	private double tax;
+
+	/**
+	 * Cancellable event that precedes a town paying the nation's conquered tax.
+	 * 
+	 * @param town   Town about to pay tax.
+	 * @param nation Nation about to have tax paid to it.
+	 * @param tax    the amount the town will pay.
+	 */
+	public TownPaysNationConqueredTaxEvent(Town town, Nation nation, double tax) {
+		this.town = town;
+		this.nation = nation;
+		this.tax = tax;
+		setCancelMessage(Translation.of("msg_your_town_was_exempt_from_the_nation_conquered_tax"));
+	}
+
+	public Town getTown() {
+		return town;
+	}
+
+	public Nation getNation() {
+		return nation;
+	}
+
+	public double getConqueredTax() {
+		return tax;
+	}
+
+	public void setConqueredTax(double tax) {
+		this.tax = tax;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
+
+	@NotNull
+	@Override
+	public HandlerList getHandlers() {
+		return HANDLER_LIST;
+	}
+}

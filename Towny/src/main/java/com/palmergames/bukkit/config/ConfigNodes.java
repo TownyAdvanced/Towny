@@ -352,7 +352,16 @@ public enum ConfigNodes {
 			"",
 			"# A required minimum tax amount for the default_tax, will not change any nations which already have a tax set.",
 			"# Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero."),
-	
+	NATION_DEF_TAXES_CONQUEREDTAX(
+			"nation.default_taxes.default_nation_conquered_tax",
+			"0",
+			"",
+			"# The default amount of money that nations will charge their conquered towns."),
+	NATION_DEF_TAXES_MAX_CONQUEREDTAX(
+			"nation.default_taxes.max_nation_conquered_tax",
+			"100",
+			"",
+			"# The maximum amount of money that can be charge by a nation on their conquered towns."),
 	NWS(
 			"new_world_settings",
 			"",

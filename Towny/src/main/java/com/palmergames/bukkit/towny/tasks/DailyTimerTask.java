@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.NewDayTaxAndUpkeepPreCollectionEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
+import com.palmergames.bukkit.towny.event.time.dailytaxes.TownPaysNationConqueredTaxEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -28,6 +29,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private double totalTownUpkeep = 0.0;
 	private double totalNationUpkeep = 0.0;
 	private double taxCollected = 0.0;
+	private double conqueredTaxCollected = 0.0;
 	private final List<String> bankruptedTowns = new ArrayList<>();
 	private final List<String> removedTowns = new ArrayList<>();
 	private final List<String> removedNations = new ArrayList<>();
@@ -223,14 +225,27 @@ public class DailyTimerTask extends TownyTimerTask {
 			taxCollected = 0.0;
 		}
 
+		if (conqueredTaxCollected > 0.0) {
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_collected_from_conquered_towns", prettyMoney(conqueredTaxCollected)));
+			conqueredTaxCollected = 0.0;
+		}
 	}
 
 	private String processTownPaysNationTax(Town town, Nation nation) {
 		double taxAmount = nation.getTaxes();
+		double localConqueredTax = 0.0;
 
 		if (nation.isTaxPercentage()) {
 			taxAmount = town.getAccount().getHoldingBalance() * taxAmount / 100;
 			taxAmount = Math.min(taxAmount, nation.getMaxPercentTaxAmount());
+		}
+
+		if (town.isConquered()) {
+			TownPaysNationConqueredTaxEvent event = new TownPaysNationConqueredTaxEvent(town, nation, nation.getConqueredTax());
+			if (!BukkitTools.isEventCancelled(event) && event.getConqueredTax() > 0) {
+				localConqueredTax = event.getConqueredTax();
+				taxAmount += localConqueredTax;
+			}
 		}
 
 		PreTownPaysNationTaxEvent event = new PreTownPaysNationTaxEvent(town, nation, taxAmount);
@@ -260,6 +275,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			town.getAccount().payTo(taxAmount, nation, String.format("Nation Tax to %s paid by %s.", nation.getName(), town.getName()));
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax", prettyMoney(taxAmount)));
 			taxCollected += taxAmount;
+			if (localConqueredTax > 0)
+				conqueredTaxCollected += localConqueredTax;
 			return "";
 		} 
 
@@ -302,6 +319,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		nation.getAccount().deposit(taxAmount, String.format("Nation Tax paid by %.", town.getName()));
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax_with_debt", prettyMoney(taxAmount)));
 		taxCollected += taxAmount;
+		if (localConqueredTax > 0)
+			conqueredTaxCollected += localConqueredTax;
 
 		// Check if the town was newly bankrupted and punish them for it.
 		if (!townWasBankrupt) {

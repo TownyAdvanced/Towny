@@ -146,6 +146,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"surname",
 		"tag",
 		"mapcolor",
+		"conqueredtax",
 		"taxpercentcap"
 	);
 	
@@ -1938,6 +1939,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TAXPERCENTCAP.getNode());
 			nationSetTaxPercentCap(sender, split, nation);
 			break;
+		case "conqueredtax":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_CONQUEREDTAX.getNode());
+			nationSetConqueredTax(sender, split, nation);
+			break;
 		case "spawncost":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_SPAWNCOST.getNode());
 			nationSetSpawnCost(sender, nation, split, admin);
@@ -2196,6 +2201,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setMaxPercentTaxAmount(MathUtil.getPositiveIntOrThrow(split[1]));
 
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), TownyEconomyHandler.getFormattedBalance(nation.getMaxPercentTaxAmount())));
+	}
+
+	public static void nationSetConqueredTax(CommandSender sender, String[] split, Nation nation) throws TownyException {
+		if (split.length < 2) 
+			throw new TownyException("Eg. /nation set conqueredtax 10000");
+
+		double input = MathUtil.getPositiveIntOrThrow(split[1]);
+		double max = TownySettings.getMaxNationConqueredTaxAmount();
+		if (input > max)
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_cannot_set_nation_conquere_tax_amount_higher_than", TownyEconomyHandler.getFormattedBalance(max)));
+
+		nation.setConqueredTax(Math.min(input, max));
+
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_conquered_tax__amount_set", sender.getName(), TownyEconomyHandler.getFormattedBalance(nation.getConqueredTax())));
 	}
 
 	private static void nationSetCapital(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
