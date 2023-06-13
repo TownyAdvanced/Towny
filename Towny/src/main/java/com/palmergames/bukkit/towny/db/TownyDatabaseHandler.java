@@ -77,6 +77,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
@@ -332,7 +333,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		try {
 			universe.unregisterResident(resident);
 		} catch (NotRegisteredException e) {
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while unregistering resident " + resident.getName(), e);
 		}
 
 		// Clear accounts
@@ -529,9 +530,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		try {
 			universe.unregisterNation(nation);
-		} catch (NotRegisteredException e) {
-			// Just print out the exception. Very unlikely to happen.
-			e.printStackTrace();
+		} catch (NotRegisteredException ignored) {
+			// Just ignore the exception. Very unlikely to happen.
 		}
 
 		for (Town town : toSave) {
@@ -947,7 +947,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				InputStream stream = zipFile.getInputStream(zipFile.entries().nextElement());
 				return loadDataStream(plotBlockData, stream);
 			} catch (IOException e) {
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "An exception occurred while loading plot block data from file " + fileName, e);
 				return null;
 			}
 			
@@ -959,7 +959,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
         	try {
     			return loadDataStream(plotBlockData, new FileInputStream(getLegacyPlotFilename(townBlock)));
     		} catch (FileNotFoundException e) {
-    			e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "Could not find file for legacy plot block data file for townblock " + townBlock, e);
     			return null;
     		}
         }
@@ -1019,7 +1019,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
         } catch (EOFException ignored) {
         } catch (IOException e) {
-            e.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, "An exception occurred while loading plot block data stream", e);
         }
         
         plotBlockData.setBlockList(blockArr);
@@ -1082,8 +1082,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return true;
 			
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("Error Loading Regen List at " + line + ", in towny\\data\\regen.txt");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "Error Loading Regen List at " + line + ", in towny\\data\\regen.txt", e);
 			return false;
 			
 		}
@@ -1244,8 +1243,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String replacementName = "replacementname" + r.nextInt(99) + 1;
 		try {
 			replacementName = getNextName(town);
-		} catch (TownyException e) {
-			e.printStackTrace();
+		} catch (TownyException ignored) {
+			// fallback to replacement name
 		}
 		return replacementName;
 	}

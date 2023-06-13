@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class InviteCommand extends BaseCommand implements CommandExecutor {
@@ -201,7 +202,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			try {
 				InviteHandler.declineInvite(toDecline, false);
 			} catch (InvalidObjectException e) {
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "unknown exception occurred while denying invite", e);
 			}
 		} else
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));			
@@ -265,14 +266,12 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			try {
 				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)) {
 					TownyMessaging.sendMsg(player, Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
-					return;
 				} else if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation()) {
 					TownyMessaging.sendMsg(player, Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
-					return;
 				} else
 					InviteHandler.acceptInvite(toAccept);
 			} catch (TownyException | InvalidObjectException e) {
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "unknown exception occurred while accepting invite", e);
 			}
 		} else
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));

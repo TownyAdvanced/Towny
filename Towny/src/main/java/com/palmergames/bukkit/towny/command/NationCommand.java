@@ -94,6 +94,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 
@@ -1341,7 +1342,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendMsg(sender, Translatable.of("nation_revoke_invite_successful"));
 							break;
 						} catch (InvalidObjectException e) {
-							e.printStackTrace();
+							plugin.getLogger().log(Level.WARNING, "unknown exception occurred while revoking invite", e);
 						}
 					}
 				}
@@ -1586,9 +1587,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				InviteHandler.acceptInvite(toAccept);
-				return;
 			} catch (InvalidObjectException e) {
-				e.printStackTrace(); // Shouldn't happen, however like i said a fallback
+				plugin.getLogger().log(Level.WARNING, "unknown exception occurred while accepting invite", e); // Shouldn't happen, however like i said a fallback
 			}
 		}
 
@@ -1635,7 +1635,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				InviteHandler.declineInvite(toDecline, false);
 				TownyMessaging.sendMsg(player, Translatable.of("successful_deny_request"));
 			} catch (InvalidObjectException e) {
-				e.printStackTrace(); // Shouldn't happen, however like i said a fallback
+				plugin.getLogger().log(Level.WARNING, "unknown exception occurred while declining invite", e); // Shouldn't happen, however like i said a fallback
 			}
 		}
 	}
@@ -1650,7 +1650,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendMsg(sender, Translatable.of("nation_revoke_ally_successful"));
 							break;
 						} catch (InvalidObjectException e) {
-							e.printStackTrace();
+							plugin.getLogger().log(Level.WARNING, "An exception occurred while revoking invites for nation " + invitedNation.getName(), e);
 						}
 					}
 				}

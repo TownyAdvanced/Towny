@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public final class TownBlockTypeHandler {
 	private final static Map<String, TownBlockType> townBlockTypeMap = new ConcurrentHashMap<>();
@@ -141,8 +142,7 @@ public final class TownBlockTypeHandler {
 				newData.put(name.toLowerCase(Locale.ROOT), townBlockType);
 				
 			} catch (Exception e) {
-				Towny.getPlugin().getLogger().warning(String.format("Config: Error while loading townblock type '%s', skipping...", name));
-				e.printStackTrace();
+				Towny.getPlugin().getLogger().log(Level.WARNING, String.format("Config: Error while loading townblock type '%s', skipping...", name), e);
 			}
 		}
 	}

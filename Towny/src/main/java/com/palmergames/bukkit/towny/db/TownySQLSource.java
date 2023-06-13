@@ -59,6 +59,7 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
@@ -573,9 +574,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			return true;
 		} catch (SQLException s) {
-			s.printStackTrace();
+			plugin.getLogger().warning("SQL: town block list error: " + s.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(e.getMessage());
+			plugin.getLogger().log(Level.WARNING, "SQL: townblock list unknown error", e);
 		}
 		return false;
 
@@ -600,7 +601,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: resident list unknown error", e);
 		}
 		return false;
 	}
@@ -626,8 +627,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: town list sql error : " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: town list unknown error: ");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: town list unknown error", e);
 		}
 		return false;
 	}
@@ -652,8 +652,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: nation list sql error : " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: nation list unknown error : ");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: nation list unknown error", e);
 		}
 		return false;
 	}
@@ -696,8 +695,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: world list sql error : " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: world list unknown error : ");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: world list unknown error", e);
 		}
 
 		return true;
@@ -719,7 +717,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: group list unknown error", e);
 		}
 		return false;
 	}
@@ -739,8 +737,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: jail list sql error : " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: jail list unknown error : ");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: jail list unknown error", e);
 		}
 		return false;
 	}
@@ -766,8 +763,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					residentName = rs.getString("name");
 				} catch (SQLException ex) {
-					plugin.getLogger().severe("Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..");
-					ex.printStackTrace();
+					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a resident name from SQL Database. Skipping loading resident..", ex);
 					continue;
 				}
 				
@@ -839,29 +835,32 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get uuid column on the residents table", e);
 			}
 
 			try {
 				resident.setLastOnline(rs.getLong("lastOnline"));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get lastOnline column on the residents table", e);
 			}
+			
 			try {
 				resident.setRegistered(rs.getLong("registered"));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get registered column on the residents table", e);
 			}
+			
 			try {
 				resident.setJoinedTownAt(rs.getLong("joinedTownAt"));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get joinedTownAt column on the residents table", e);
 			}
+			
 			try {
 				resident.setNPC(rs.getBoolean("isNPC"));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get isNPC column on the residents table", e);
 			}
 			
 			if (rs.getString("jailUUID") != null && !rs.getString("jailUUID").isEmpty()) {
@@ -870,24 +869,27 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					resident.setJail(universe.getJail(uuid));
 				}
 			}
+			
 			if (resident.isJailed()) {
 				try {
 					if (rs.getString("jailCell") != null && !rs.getString("jailCell").isEmpty())
 						resident.setJailCell(rs.getInt("jailCell"));
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (SQLException e) {
+					plugin.getLogger().log(Level.WARNING, "Could not get jailCell column on the residents table", e);
 				}
+				
 				try {
 					if (rs.getString("jailHours") != null && !rs.getString("jailHours").isEmpty())
 						resident.setJailHours(rs.getInt("jailHours"));
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (SQLException e) {
+					plugin.getLogger().log(Level.WARNING, "Could not get jailHours column on the residents table", e);
 				}
+				
 				try {
 					if (rs.getString("jailBail") != null && !rs.getString("jailBail").isEmpty())
 						resident.setJailBailCost(rs.getDouble("jailBail"));
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (SQLException e) {
+					plugin.getLogger().log(Level.WARNING, "Could not get jailBail column on the residents table", e);
 				}
 			}
 
@@ -903,13 +905,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						} catch (AlreadyRegisteredException ignored) {}
 					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get friends column on the residents table", e);
 			}
+			
 			try {
 				resident.setPermissions(rs.getString("protectionStatus").replaceAll("#", ","));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get protectionStatus column on the residents table", e);
 			}
 
 			try {
@@ -932,13 +935,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 					try {
 						resident.setTitle(rs.getString("title"));
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (SQLException e) {
+						plugin.getLogger().log(Level.WARNING, "Could not get title column on the residents table", e);
 					}
 					try {
 						resident.setSurname(rs.getString("surname"));
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (SQLException e) {
+						plugin.getLogger().log(Level.WARNING, "Could not get surname column on the residents table", e);
 					}
 
 					try {
@@ -947,8 +950,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							search = (line.contains("#")) ? "#" : ",";
 							resident.setTownRanks(Arrays.asList((line.split(search))));
 						}
-					} catch (Exception e) {
-					}
+					} catch (Exception ignored) {}
 
 					try {
 						line = rs.getString("nation-ranks");
@@ -956,16 +958,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							search = (line.contains("#")) ? "#" : ",";
 							resident.setNationRanks(Arrays.asList((line.split(search))));
 						}
-					} catch (Exception e) {
-					}
+					} catch (Exception ignored) {}
 				}
 			}
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load resident unknown error");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Load resident unknown error", e);
 		}
 		return false;
 	}
@@ -1291,8 +1291,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " unknown Error - ");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Load Town " + name + " unknown Error - ", e);
 		}
 
 		return false;
@@ -1462,8 +1461,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
 		} catch (TownyException ex) {
-			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " unknown Error - ");
-			ex.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Load Nation " + name + " unknown Error - ", ex);
 		}
 
 		return false;
@@ -1999,9 +1997,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 
 		} catch (SQLException ex) {
-			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading TownBlock: "
-					+ (townBlock != null ? townBlock : "NULL") + " at line: " + line + " in the sql database");
-			ex.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading TownBlock: "
+					+ (townBlock != null ? townBlock : "NULL") + " at line: " + line + " in the sql database", ex);
 			return false;
 		}
 
@@ -2097,9 +2094,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception ignored) {}
 			}
 		} catch (SQLException e) {
-			TownyMessaging.sendErrorMsg("Loading Error: Exception while reading plot group: " + uuid
-			+ " at line: " + line + " in the sql database");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading plot group: " + uuid
+			+ " at line: " + line + " in the sql database", e);
 			return false;
 		}
 		return true;
@@ -2205,8 +2201,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " sql Error - " + e.getMessage());
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Load Jail " + uuid + " unknown Error - ");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Load Jail " + uuid + " unknown Error - ", e);
 		}
 
 		return false;
@@ -2365,8 +2360,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return true;
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Town unknown error");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Save Town unknown error", e);
 		}
 		return false;
 	}
@@ -2384,8 +2378,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			updateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("groupID"));
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Plot groups unknown error");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Save Plot groups unknown error", e);
 		}
 		return false;
 	}
@@ -2431,8 +2424,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			updateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save Nation unknown error");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Save Nation unknown error", e);
 		}
 		return false;
 	}
@@ -2551,8 +2543,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			updateDB("WORLDS", nat_hm, Collections.singletonList("name"));
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save world unknown error (" + world.getName() + ")");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Save world unknown error (" + world.getName() + ")", e);
 			return false;
 		}
 		return true;
@@ -2599,8 +2590,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			updateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
 
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save TownBlock unknown error");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Save TownBlock unknown error", e);
 		}
 		return true;
 	}
@@ -2628,8 +2618,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			updateDB("JAILS", jail_hm, Collections.singletonList("uuid"));
 			return true;
 		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg("SQL: Save jail unknown error");
-			e.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "SQL: Save jail unknown error", e);
 		}
 		return true;
 		

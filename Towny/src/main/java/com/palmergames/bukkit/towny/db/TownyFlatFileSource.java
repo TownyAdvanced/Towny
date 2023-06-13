@@ -55,6 +55,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
@@ -191,7 +192,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 			return true;
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while loading the flatfile townblock list", e1);
 			return false;
 		}
 	}
@@ -231,7 +232,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				newResident(name);
 			} catch (NotRegisteredException e) {
 				// Thrown if the resident name does not pass the filters.
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "Resident " + name + " has an invalid name", e);
 				return false;
 			} catch (AlreadyRegisteredException ignored) {
 				// Should not be possible in flatfile.
@@ -286,7 +287,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				universe.newTownInternal(newName);
 			} catch (AlreadyRegisteredException | InvalidNameException e1) {
 				// We really hope this doesn't fail again.
-				e1.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "exception occurred while registering town '" + newName + "' internally", e1);
 				return false;
 			}
 			File newFile = new File(town.getParent(), newName + ".txt");
@@ -338,7 +339,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				newNation(newName);
 			} catch (AlreadyRegisteredException | NotRegisteredException e1) {
 				// we really hope this doesn't fail a second time.
-				e1.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "exception occurred while registering nation '" + newName + "' internally", e1);
 				return false;
 			}
 			File newFile = new File(nation.getParent(), newName + ".txt");
@@ -566,8 +567,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_resident_at_line", resident.getName(), line, resident.getName()));
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_resident_at_line", resident.getName(), line, resident.getName()), e);
 				return false;
 			} finally {
 				if (save) saveResident(resident);
@@ -1043,8 +1043,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				}
 				
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()));
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()), e);
 				return false;
 			} finally {
 				saveTown(town);
@@ -1225,8 +1224,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					MetadataLoader.getInstance().deserializeMetadata(nation, line.trim());
 
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()));
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()), e);
 				return false;
 			} finally {
 				saveNation(nation);

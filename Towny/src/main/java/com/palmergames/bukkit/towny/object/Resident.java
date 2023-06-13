@@ -291,13 +291,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		BukkitTools.fireEvent(new TownPreRemoveResidentEvent(this, town));
 		
 		try {
-			
 			town.removeResident(this);
-			
-		} catch (NotRegisteredException e1) {
-			e1.printStackTrace();
-		} catch (EmptyTownException ignore) {
-		}
+		} catch (NotRegisteredException | EmptyTownException ignored) {}
 
 		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
 

@@ -13,6 +13,7 @@ import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Used to facilitate transactions regarding money, 
@@ -42,8 +43,7 @@ public abstract class Account implements Nameable {
 		try {
 			this.cachedBalance = new CachedBalance(getHoldingBalance(false));
 		} catch (Exception e) {
-			Towny.getPlugin().getLogger().warning(String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name));
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name), e);
 			
 			this.cachedBalance = new CachedBalance(0);
 		}

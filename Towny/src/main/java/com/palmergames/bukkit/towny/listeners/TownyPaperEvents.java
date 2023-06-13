@@ -27,6 +27,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 @ApiStatus.Internal
 public class TownyPaperEvents implements Listener {
@@ -126,7 +127,7 @@ public class TownyPaperEvents implements Listener {
 			try {
 				origin = (Location) GET_ORIGIN.invoke(event.getEntity());
 			} catch (final Throwable e) {
-				e.printStackTrace();
+				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking Entity#getOrigin reflectively", e);
 				return;
 			}
 			

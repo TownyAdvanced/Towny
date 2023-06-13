@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.util;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 
@@ -7,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -153,7 +155,7 @@ public class NameValidation {
 				namePattern = Pattern.compile(TownySettings.getNameCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
 			return namePattern.matcher(name).find();
 		} catch (PatternSyntaxException e) {
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "Failed to compile the name check regex pattern because it contains errors (" + TownySettings.getNameCheckRegex() + ")", e);
 			return false;
 		}
 		
@@ -176,7 +178,7 @@ public class NameValidation {
 				stringPattern = Pattern.compile(TownySettings.getStringCheckRegex(), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
 			return stringPattern.matcher(message).find();
 		} catch (PatternSyntaxException e) {
-			e.printStackTrace();
+			Towny.getPlugin().getLogger().log(Level.WARNING, "Failed to compile the string check regex pattern because it contains errors (" + TownySettings.getStringCheckRegex() + ")", e);
 			return false;
 		}
 	}
