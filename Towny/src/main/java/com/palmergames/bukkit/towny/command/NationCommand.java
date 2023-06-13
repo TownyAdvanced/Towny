@@ -2207,8 +2207,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 2) 
 			throw new TownyException("Eg. /nation set conqueredtax 10000");
 
-		double tax = Math.min(MathUtil.getPositiveIntOrThrow(split[1]), TownySettings.getMaxNationConqueredTaxAmount());
-		nation.setConqueredTax(tax);
+		double input = MathUtil.getPositiveIntOrThrow(split[1]);
+		double max = TownySettings.getMaxNationConqueredTaxAmount();
+		if (input > max)
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_cannot_set_nation_conquere_tax_amount_higher_than", TownyEconomyHandler.getFormattedBalance(max)));
+
+		nation.setConqueredTax(Math.min(input, max));
 
 		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_conquered_tax__amount_set", sender.getName(), TownyEconomyHandler.getFormattedBalance(nation.getConqueredTax())));
 	}

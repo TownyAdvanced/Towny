@@ -1963,3 +1963,5 @@ msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
 
 msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
+
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
