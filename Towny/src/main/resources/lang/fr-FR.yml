@@ -1693,8 +1693,8 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "Vous ne pouvez pas reprendre 
 msg_err_that_town_is_not_conquered: "%s n'est pas déjà conquis."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s a perdu son status de conquis."
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
-msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+msg_setup_command_folia: "La commande /ta install ne marche actuellement pas sur Folia à cause du dysfonctionnement de l'API de conversation, référez-vous au guide ci-dessous à la place."
+msg_perm_gui_folia: "Ce bouton ne marche actuellement pas sur Folia a cause du dysfonctionnement de l'API de conversation, utilisez la commande /plot perm add <nom> à la place."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
