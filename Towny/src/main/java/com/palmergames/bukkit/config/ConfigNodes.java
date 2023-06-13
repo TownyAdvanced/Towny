@@ -354,7 +354,7 @@ public enum ConfigNodes {
 			"# Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero."),
 	NATION_DEF_TAXES_CONQUEREDTAX(
 			"nation.default_taxes.default_nation_conquered_tax",
-			"50",
+			"0",
 			"",
 			"# The default amount of money that nations will charge their conquered towns."),
 	NATION_DEF_TAXES_MAX_CONQUEREDTAX(
