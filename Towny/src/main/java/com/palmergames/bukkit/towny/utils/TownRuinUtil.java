@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -12,6 +13,7 @@ import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 
@@ -23,6 +25,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +48,9 @@ public class TownRuinUtil {
 	 * @param player the player
 	 * @return true if ruined, false if not
 	 */
-	public static boolean isPlayersTownRuined(Player player) {
-		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		return resident != null && resident.hasTown() && resident.getTownOrNull().isRuined();
+	public static boolean isPlayersTownRuined(@NotNull Player player) {
+		final Town town = TownyAPI.getInstance().getTown(player);
+		return town != null && town.isRuined();
 	}
 
 	/**
@@ -66,10 +69,11 @@ public class TownRuinUtil {
 			return;
 
 		//Remove town from nation, otherwise after we change the mayor to NPC and if the nation falls, the npc would receive nation refund.
-		if (town.hasNation()) {
+		final Nation nation = town.getNationOrNull();
+		if (nation != null) {
 			double bankBalance = town.getAccount().getHoldingBalance();
 			if (TownySettings.areRuinedTownsBanksPaidToNation() && bankBalance > 0)
-				town.getAccount().payTo(bankBalance, town.getNationOrNull().getAccount(), String.format("Ruined Town (%s) Paid Remaining Bank To Nation", town.getName()));
+				town.getAccount().payTo(bankBalance, nation.getAccount(), String.format("Ruined Town (%s) Paid Remaining Bank To Nation", town.getName()));
 			town.removeNation();
 		}
 
@@ -130,13 +134,13 @@ public class TownRuinUtil {
 	 */
 	public static void processRuinedTownReclaimRequest(Player player) {
 		try {
-			Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			final Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+			final Town town = resident != null ? resident.getTownOrNull() : null;
 
-			if (resident == null || !resident.hasTown())
+			if (town == null)
 				throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
 
 			//Ensure town is ruined
-			Town town = resident.getTownOrNull();
 			if (!town.isRuined())
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
 
@@ -160,12 +164,12 @@ public class TownRuinUtil {
 		}
 	}
 
-	public static void reclaimTown(Resident resident, Town town) {
+	public static void reclaimTown(@NotNull Resident resident, @NotNull Town town) {
 		town.setRuined(false);
 		town.setRuinedTime(0);
 
 		// The admin unruin command would result in the NPC mayor being deleted without this check.
-		if (!town.getMayor().equals(resident))
+		if (!resident.equals(town.getMayor()))
 			setMayor(town, resident); //Set player as mayor (and remove npc)
 
 		// Set permission line to the config's default settings.
