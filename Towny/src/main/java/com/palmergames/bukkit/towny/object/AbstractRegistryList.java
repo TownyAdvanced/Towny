@@ -122,9 +122,10 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		}
 
 		/**
-		 * Tags can be found <a href="https://github.com/misode/mcmeta/tree/data/data/minecraft/tags">here</a>.
-		 * @param registry The registry to look in, i.e. 'blocks' or 'items'
-		 * @param key The key of the tag
+		 * Matches all elements in a specific vanilla tag to be added to the resulting list.
+		 * <br>Tags can be found <a href="https://github.com/misode/mcmeta/tree/data/data/minecraft/tags">here</a>.
+		 * @param registry The registry to look in, i.e. 'blocks' or 'items'. See {@link Tag} for registry name constants.
+		 * @param key The key of the tag.
 		 */
 		public Builder<T, F> withTag(@NotNull String registry, @NotNull NamespacedKey key) {
 			final Tag<T> tag = Bukkit.getServer().getTag(registry, key, this.clazz);
@@ -133,6 +134,23 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 				anyMatchPredicates.add(s -> {
 					final T exact = this.registry.get(s);
 					return exact != null && tag.isTagged(exact);
+				});
+
+			return this;
+		}
+
+		/**
+		 * Identical to {@link #withTag(String, NamespacedKey)}, but reverse.
+		 * @param registry The registry to look in, i.e. 'blocks' or 'items'. See {@link Tag} for registry name constants.
+		 * @param key The key of the tag.
+		 */
+		public Builder<T, F> excludeTag(@NotNull String registry, @NotNull NamespacedKey key) {
+			final Tag<T> tag = Bukkit.getServer().getTag(registry, key, this.clazz);
+
+			if (tag != null)
+				allMatchPredicates.add(s -> {
+					final T exact = this.registry.get(s);
+					return exact == null || !tag.isTagged(exact);
 				});
 
 			return this;

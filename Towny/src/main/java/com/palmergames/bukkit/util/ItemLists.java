@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableSet;
 import com.palmergames.bukkit.towny.object.AbstractRegistryList;
 import org.bukkit.Material;
 import org.bukkit.Registry;
+import org.bukkit.Tag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -37,7 +38,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Axe items.
 	 */
-	public static final ItemLists AXES = newBuilder().withTag("items", minecraft("axes")).endsWith("_AXE").build();
+	public static final ItemLists AXES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("axes")).endsWith("_AXE").build();
 
 	/**
 	 * List of Dye items.
@@ -52,12 +53,12 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Potted Plants.
 	 */
-	public static final ItemLists POTTED_PLANTS = newBuilder().withTag("blocks", minecraft("potted_plants")).startsWith("POTTED_").build();
+	public static final ItemLists POTTED_PLANTS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("potted_plants")).startsWith("POTTED_").build();
 
 	/**
 	 * List of Plants.
 	 */
-	public static final ItemLists PLANTS = newBuilder().withTag("blocks", minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF", "TORCHFLOWER").build();
+	public static final ItemLists PLANTS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF", "TORCHFLOWER").build();
 
 	/**
 	 * List of Ores and Valuable Raw Materials.
@@ -67,22 +68,22 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Saplings.
 	 */
-	public static final ItemLists SAPLINGS = newBuilder().withTag("blocks", minecraft("saplings")).endsWith("_SAPLING").add("MANGROVE_PROPAGULE","CRIMSON_FUNGUS","WARPED_FUNGUS").build();
+	public static final ItemLists SAPLINGS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("saplings")).endsWith("_SAPLING").add("MANGROVE_PROPAGULE","CRIMSON_FUNGUS","WARPED_FUNGUS").build();
 
 	/**
 	 * List of Trees and Leaves.
 	 */
-	public static final ItemLists TREES = newBuilder().withTag("blocks", minecraft("logs")).withTag("blocks", minecraft("leaves")).endsWith("_WOOD").endsWith("_HYPHAE").notStartsWith("STRIPPED_").endsWith("_LEAVES").endsWith("_LOG").add("CRIMSON_STEM", "WARPED_STEM").add("BAMBOO_BLOCK").build();
+	public static final ItemLists TREES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("logs")).withTag(Tag.REGISTRY_BLOCKS, minecraft("leaves")).endsWith("_WOOD").endsWith("_HYPHAE").notStartsWith("STRIPPED_").endsWith("_LEAVES").endsWith("_LOG").add("CRIMSON_STEM", "WARPED_STEM").add("BAMBOO_BLOCK").build();
 
 	/**
 	 * List of Beds.
 	 */
-	public static final ItemLists BEDS = newBuilder().withTag("blocks", minecraft("beds")).endsWith("_BED").build();
+	public static final ItemLists BEDS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("beds")).endsWith("_BED").build();
 
 	/**
 	 * List of Signs.
 	 */
-	public static final ItemLists SIGNS = newBuilder().withTag("blocks", minecraft("signs")).endsWith("_SIGN").build();
+	public static final ItemLists SIGNS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("signs")).endsWith("_SIGN").build();
 
 	/**
 	 * List of Torches
@@ -97,7 +98,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Boats.
 	 */
-	public static final ItemLists BOATS = newBuilder().withTag("items", minecraft("boats")).endsWith("_BOAT").endsWith("_RAFT").build();
+	public static final ItemLists BOATS = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("boats")).endsWith("_BOAT").endsWith("_RAFT").build();
 	
 	/**
 	 * List of Minecarts.
@@ -107,50 +108,51 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Wooden Doors.
 	 */
-	public static final ItemLists WOOD_DOORS = newBuilder().withTag("blocks", minecraft("wooden_doors")).endsWith("_DOOR").not("IRON_DOOR").build();
+	public static final ItemLists WOOD_DOORS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("wooden_doors")).endsWith("_DOOR").not("IRON_DOOR").build();
 
 	/**
 	 * List of Doors.
 	 */
-	public static final ItemLists DOORS = newBuilder().withTag("blocks", minecraft("doors")).endsWith("_DOOR").build();
+	public static final ItemLists DOORS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("doors")).endsWith("_DOOR").build();
 	
 	/**
 	 * List of Fence Gates.
 	 */
-	public static final ItemLists FENCE_GATES = newBuilder().withTag("blocks", minecraft("fence_gates")).endsWith("_FENCE_GATE").build();
+	public static final ItemLists FENCE_GATES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("fence_gates")).endsWith("_FENCE_GATE").build();
 
 	/**
 	 * List of Trap Doors.
 	 */
-	public static final ItemLists TRAPDOORS = newBuilder().withTag("blocks", minecraft("trapdoors")).endsWith("_TRAPDOOR").build();
+	public static final ItemLists TRAPDOORS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("trapdoors")).endsWith("_TRAPDOOR").build();
 
 	/**
 	 * List of Shulker Boxes.
 	 */
-	public static final ItemLists SHULKER_BOXES = newBuilder().withTag("blocks", minecraft("shulker_boxes")).endsWith("SHULKER_BOX").build();
+	public static final ItemLists SHULKER_BOXES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("shulker_boxes")).endsWith("SHULKER_BOX").build();
 
 	/**
 	 * List of Pressure Plates.
 	 */
-	public static final ItemLists PRESSURE_PLATES = newBuilder().withTag("blocks", minecraft("pressure_plates")).endsWith("_PRESSURE_PLATE").build();
+	public static final ItemLists PRESSURE_PLATES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("pressure_plates")).endsWith("_PRESSURE_PLATE").build();
 
 	/**
 	 * List of Non-Wooden Pressure Plates.
 	 */
-	public static final ItemLists NON_WOODEN_PRESSURE_PLATES = newBuilder().endsWith("WEIGHTED_PRESSURE_PLATE").endsWith("STONE_PRESSURE_PLATE").build();
+	public static final ItemLists NON_WOODEN_PRESSURE_PLATES = newBuilder()
+		.withTag(Tag.REGISTRY_BLOCKS, minecraft("pressure_plates")).excludeTag(Tag.REGISTRY_BLOCKS, minecraft("wooden_pressure_plates")).build();
 
 	/**
 	 * List of Buttons.
 	 */
-	public static final ItemLists BUTTONS = newBuilder().withTag("blocks", minecraft("buttons")).endsWith("_BUTTON").build();
+	public static final ItemLists BUTTONS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("buttons")).endsWith("_BUTTON").build();
 
 	/**
 	 * List of materials that will activate redstone when triggered by a projectile.
 	 */
 	public static final ItemLists PROJECTILE_TRIGGERED_REDSTONE = newBuilder()
-		.withTag("blocks", minecraft("wooden_buttons"))
+		.withTag(Tag.REGISTRY_BLOCKS, minecraft("wooden_buttons"))
 		.endsWith("_BUTTON").not("STONE_BUTTON")
-		.withTag("blocks", minecraft("wooden_pressure_plates"))
+		.withTag(Tag.REGISTRY_BLOCKS, minecraft("wooden_pressure_plates"))
 		.endsWith("_PRESSURE_PLATE").not("STONE_PRESSURE_PLATE").build();
 	
 	/**
@@ -177,8 +179,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	 * List of Candles
 	 */
 	public static final ItemLists CANDLES = newBuilder()
-		.withTag("blocks", minecraft("candles"))
-		.withTag("blocks", minecraft("candle_cakes"))
+		.withTag(Tag.REGISTRY_BLOCKS, minecraft("candles"))
+		.withTag(Tag.REGISTRY_BLOCKS, minecraft("candle_cakes"))
 		.endsWith("CANDLE").endsWith("_CANDLE_CAKE").build();
 
 	/**
@@ -194,7 +196,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Campfires
 	 */
-	public static final ItemLists CAMPFIRES = newBuilder().withTag("blocks", minecraft("campfires")).add("CAMPFIRE","SOUL_CAMPFIRE").build();
+	public static final ItemLists CAMPFIRES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("campfires")).add("CAMPFIRE","SOUL_CAMPFIRE").build();
 	
 	/**
 	 * List of blocks that can hold books
@@ -219,13 +221,13 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/*
 	 * List of unstripped wood logs.
 	 */
-	public static final ItemLists UNSTRIPPED_WOOD = newBuilder().withTag("blocks", minecraft("logs")).endsWith("_LOG").notStartsWith("STRIPPED_").add("CRIMSON_STEM", "WARPED_STEM").add("BAMBOO_BLOCK").build();
+	public static final ItemLists UNSTRIPPED_WOOD = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("logs")).endsWith("_LOG").notStartsWith("STRIPPED_").add("CRIMSON_STEM", "WARPED_STEM").add("BAMBOO_BLOCK").build();
 	
 	/*
 	 * List of cauldrons.
 	 */
-	public static final ItemLists CAULDRONS = newBuilder().withTag("blocks", minecraft("cauldrons")).endsWith("CAULDRON").build();
-	public static final ItemLists FILLED_CAULDRONS = newBuilder().withTag("blocks", minecraft("cauldrons")).endsWith("CAULDRON").not("CAULDRON").build();
+	public static final ItemLists CAULDRONS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("cauldrons")).endsWith("CAULDRON").build();
+	public static final ItemLists FILLED_CAULDRONS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("cauldrons")).endsWith("CAULDRON").not("CAULDRON").build();
 	
 	/*
 	 * List of buckets that a cauldron can be filled with.
@@ -235,7 +237,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of hoes
 	 */
-	public static final ItemLists HOES = newBuilder().withTag("items", minecraft("hoes")).endsWith("_hoe").build();
+	public static final ItemLists HOES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("hoes")).endsWith("_hoe").build();
 
 	public static final ItemLists BRUSHABLE_BLOCKS = newBuilder().add("SUSPICIOUS_SAND", "SUSPICIOUS_GRAVEL").build();
 
