@@ -604,6 +604,7 @@ status_town_nation: 'Nacija:'
 status_town_reslist_overlength: 'i više...'
 status_nation_king: 'Vodja:'
 status_nation_tax: 'Nacionalni Porez:'
+status_nation_conquered_tax: 'ConqueredTax:'
 status_nation_towns: 'Gradovi'
 status_nation_allies: 'Saveznici'
 status_nation_enemies: 'Neprijatelji'
@@ -1703,3 +1704,8 @@ msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its to
 msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
 #Message shown when a town collects taxes from its plottaxes.
 msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
+#Message shown when a nation collects taxes from its towns that are conquered.
+msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra tax from its conquered towns."
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
+msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
