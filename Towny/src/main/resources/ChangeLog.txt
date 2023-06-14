@@ -8777,3 +8777,14 @@ v0.92.0.11:
     - Closes #6752.
   - New PAPI Placeholder: %townyadvanced_town_map_color_minimessage_hex% - Shows the town colour formatted for MiniMessage, (TownyChat-friendly.)
   - New PAPI Placeholder: %townyadvanced_nation_map_color_minimessage_hex% - Shows the nation colour formatted for MiniMessage, (TownyChat-friendly.)
+  - Add new excludeTag method, courtesy of Warrior with PR #6756.
+  - Use paper's isWaxed API for signs, courtesy of Warrior with PR #6744.
+  - Add Town leaderboard PAPI Placeholders.
+    - Closes #5073.
+  - New Placeholders:
+    - %townyadvanced_top_town_balance_n% - (Replace n with a number) Displays the nth Town by money in the town bank.
+    - %townyadvanced_top_town_residents_n% - (Replace n with a number) Displays the nth Town by number of residents.
+    - %townyadvanced_top_town_land_n% - (Replace n with a number) Displays the nth Town by number of townblocks claimed.
+  - New Config Option: filters_colour_chat.papi_leaderboard_formatting.format"
+    - Default: "%s - %s",
+    - How the %townyadvanced_top_....% placeholders will appear, first %s being the town name, with the second being the balance, resident count or town size.
