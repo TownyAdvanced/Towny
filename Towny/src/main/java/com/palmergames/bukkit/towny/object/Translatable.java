@@ -52,7 +52,12 @@ public class Translatable implements ComponentLike {
 	 */
 	@Deprecated
 	public static Translatable literal(String text) {
-		return new LiteralTranslatable(text);
+		return new Translatable(text) {
+			@Override
+			public String translate() {
+				return stripColors() ? Colors.strip(key() + appended()) : key() + appended();
+			}
+		};
 	}
 	
 	public String key() {
@@ -219,25 +224,5 @@ public class Translatable implements ComponentLike {
 	@Override
 	public @NotNull Component asComponent() {
 		return Component.translatable(this.key(), this.args);
-	}
-
-	/**
-	 * @deprecated As of TODO insert version, components and translatables can be used interchangeably so this is no longer needed.
-	 */
-	@Deprecated
-	private static final class LiteralTranslatable extends Translatable {
-
-		private LiteralTranslatable(String key) {
-			super(key);
-		}
-
-		private LiteralTranslatable(String key, Object... args) {
-			super(key, args);
-		}
-		
-		@Override
-		public String translate() {
-			return stripColors() ? Colors.strip(key() + appended()) : key() + appended();
-		}
 	}
 }
