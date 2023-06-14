@@ -542,6 +542,20 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				if (!hex.isEmpty())
 					hex = "#"+hex;
 			}
+			return hex;
+		case "town_map_color_minimessage_hex": // %townyadvanced_town_map_color_minimessage_hex%
+			if (resident.hasTown()){
+				hex = resident.getTownOrNull().getMapColorHexCode();
+				if (!hex.isEmpty())
+					hex = "<#"+hex+">";
+			}
+			return hex;				
+		case "nation_map_color_minimessage_hex": // %townyadvanced_nation_map_color_minimessage_hex%
+			if (resident.hasNation()){
+				hex = resident.getNationOrNull().getMapColorHexCode();
+				if (!hex.isEmpty())
+					hex = "<#"+hex+">";
+			}
 			return hex;	
 		case "town_ranks": // %townyadvanced_town_ranks%
 			if (resident.isMayor())

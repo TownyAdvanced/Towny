@@ -8775,3 +8775,5 @@ v0.92.0.11:
     - Wooden pressure plates are inherently un-protectable due to being set off by dropped items.
     - Wooden pressure plates are good for contraptions you would want mobs to use, or for doors which you want players to be able to use.
     - Closes #6752.
+  - New PAPI Placeholder: %townyadvanced_town_map_color_minimessage_hex% - Shows the town colour formatted for MiniMessage, (TownyChat-friendly.)
+  - New PAPI Placeholder: %townyadvanced_nation_map_color_minimessage_hex% - Shows the nation colour formatted for MiniMessage, (TownyChat-friendly.)
