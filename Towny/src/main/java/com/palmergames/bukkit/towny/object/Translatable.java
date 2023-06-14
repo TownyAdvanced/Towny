@@ -32,10 +32,18 @@ public class Translatable implements ComponentLike {
 	}
 	
 	public static Translatable of(String key) {
-		return new Translatable(key);
+		return translatable(key);
 	}
 	
 	public static Translatable of(String key, Object... args) {
+		return translatable(key, args);
+	}
+	
+	public static Translatable translatable(String key) {
+		return new Translatable(key);
+	}
+	
+	public static Translatable translatable(String key, Object... args) {
 		return new Translatable(key, args);
 	}
 	
