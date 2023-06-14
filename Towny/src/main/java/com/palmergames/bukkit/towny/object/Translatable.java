@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +20,7 @@ public class Translatable implements ComponentLike {
 	private String key;
 	private final List<ComponentLike> args = new ArrayList<>();
 	private boolean stripColors;
-	private final List<Object> appended = new ArrayList<>(0);
+	private final List<ComponentLike> appended = new ArrayList<>();
 	private Locale locale;
 	
 	private Translatable(String key) {
@@ -91,14 +92,8 @@ public class Translatable implements ComponentLike {
 
 		StringBuilder converted = new StringBuilder();
 
-		for (Object object : this.appended) {
-			if (object instanceof String string)
-				converted.append(string);
-			else if (object instanceof Translatable translatable)
-				converted.append(translatable.locale(this.locale).translate());
-			else if (object instanceof Component component)
-				converted.append(TownyComponents.toLegacy(component));
-		}
+		for (ComponentLike object : this.appended)
+			converted.append(MiniMessage.miniMessage().serialize(GlobalTranslator.render(object.asComponent(), this.locale == null ? Translation.getDefaultLocale() : this.locale)));
 
 		return converted.toString();
 	}
@@ -120,7 +115,7 @@ public class Translatable implements ComponentLike {
 	}
 	
 	public Translatable append(String append) {
-		appended.add(append);
+		appended.add(Component.text(append));
 		return this;
 	}
 	
@@ -223,6 +218,10 @@ public class Translatable implements ComponentLike {
 	
 	@Override
 	public @NotNull Component asComponent() {
-		return Component.translatable(this.key(), this.args);
+		return Component.translatable()
+			.key(this.key)
+			.args(this.args)
+			.append(this.appended)
+			.build();
 	}
 }
