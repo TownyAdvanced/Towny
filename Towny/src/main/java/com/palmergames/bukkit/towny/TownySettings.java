@@ -3058,7 +3058,11 @@ public class TownySettings {
 	public static String getPAPIFormattingKing() {
 		return getString(ConfigNodes.FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING);
 	}
-	
+
+	public static String getPAPILeaderboardFormat() {
+		return getString(ConfigNodes.FILTERS_PAPI_LEADERBOARD_FORMATTING);
+	}
+
 	public static String getPAPIRelationNone() {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_NONE);
 	}

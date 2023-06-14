@@ -1534,6 +1534,13 @@ public enum ConfigNodes {
 			"filters_colour_chat.papi_chat_formatting.ranks.mayor","&b"),
 	FILTERS_PAPI_CHAT_FORMATTING_RANKS_KING(
 			"filters_colour_chat.papi_chat_formatting.ranks.king","&6"),
+	FILTERS_PAPI_LEADERBOARD_FORMATTING_ROOT(
+			"filters_colour_chat.papi_leaderboard_formatting","",""),
+	FILTERS_PAPI_LEADERBOARD_FORMATTING(
+			"filters_colour_chat.papi_leaderboard_formatting.format",
+			"%s - %s",
+			"",
+			"# How the %townyadvanced_top_....% placeholders will appear, first %s being the town name, with the second being the balance, resident count or town size."),
 	FILTERS_PAPI_REL_FORMATTING(
 			"filters_colour_chat.papi_relational_formatting",
 			"",
