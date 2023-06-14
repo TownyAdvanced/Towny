@@ -44,6 +44,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,10 +52,11 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.RespawnAnchor;
-import org.bukkit.block.data.type.Sign;
-import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -84,6 +86,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.MetadataValue;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
@@ -107,6 +111,19 @@ public class TownyPlayerListener implements Listener {
 	private CommandList blockedOutlawCommands;
 	private CommandList blockedWarCommands;
 	private CommandList ownPlotLimitedCommands;
+	
+	private static final MethodHandle IS_WAXED;
+	
+	static {
+		MethodHandle temp = null;
+		try {
+			// https://jd.papermc.io/paper/1.20/org/bukkit/block/Sign.html#isWaxed()
+			//noinspection JavaReflectionMemberAccess
+			temp = MethodHandles.publicLookup().unreflect(Sign.class.getMethod("isWaxed"));
+		} catch (Throwable ignored) {}
+		
+		IS_WAXED = temp;
+	}
 
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
@@ -417,10 +434,11 @@ public class TownyPlayerListener implements Listener {
 
 				/*
 				 * Prevents players using wax on signs
-				 * TODO: Add a check for whether the sign is waxed once that API is available.
 				 */
-				if (Tag.SIGNS.isTagged(clickedMat) && item == Material.HONEYCOMB && MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20))
-					event.setCancelled(!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat));
+				if (item == Material.HONEYCOMB && Tag.SIGNS.isTagged(clickedMat) && !isSignWaxed(clickedBlock) && !TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
+					event.setCancelled(true);
+					return;
+				}
 				
 				/*
 				 * Prevents players from using brushes on brush-able blocks (suspicious sand, suspicious gravel)
@@ -468,7 +486,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Prevents players from editing signs where they shouldn't.
 			 */
-			if (Tag.SIGNS.isTagged(clickedMat) && MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20))
+			if (Tag.SIGNS.isTagged(clickedMat) && !isSignWaxed(clickedBlock))
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 		}
 	}
@@ -1334,21 +1352,14 @@ public class TownyPlayerListener implements Listener {
 				&& event.getClickedBlock() != null) {
 					Player player = event.getPlayer();
 					Block block = event.getClickedBlock();
+					final BlockState state = PaperLib.getBlockState(block, false).getState();
+					final BlockData data = state.getBlockData();
 					
-					if (Tag.SIGNS.isTagged(block.getType())) {
-						BlockFace facing = null;
-						if (block.getBlockData() instanceof Sign) {
-							org.bukkit.block.data.type.Sign sign = (org.bukkit.block.data.type.Sign) block.getBlockData();
-							facing = sign.getRotation();
-						}
-						if (block.getBlockData() instanceof WallSign)  { 
-							org.bukkit.block.data.type.WallSign sign = (org.bukkit.block.data.type.WallSign) block.getBlockData();
-							facing = sign.getFacing();	
-						}
+					if (Tag.SIGNS.isTagged(block.getType()) && data instanceof Rotatable rotatable) {
 						TownyMessaging.sendMessage(player, Arrays.asList(
 								ChatTools.formatTitle("Sign Info"),
 								ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),
-								ChatTools.formatCommand("", "Facing", "", facing.toString())
+								ChatTools.formatCommand("", "Facing", "", rotatable.getRotation().toString())
 								));
 					} else if (Tag.DOORS.isTagged(block.getType())) {
 						org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
@@ -1433,5 +1444,17 @@ public class TownyPlayerListener implements Listener {
 		this.blockedOutlawCommands = new CommandList(TownySettings.getOutlawBlacklistedCommands());
 		this.blockedWarCommands = new CommandList(TownySettings.getWarBlacklistedCommands());
 		this.ownPlotLimitedCommands = new CommandList(TownySettings.getPlayerOwnedPlotLimitedCommands());
+	}
+	
+	private boolean isSignWaxed(Block block) {
+		if (IS_WAXED == null || MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
+			return false;
+		
+		try {
+			return (boolean) IS_WAXED.invoke(sign);
+		} catch (Throwable throwable) {
+			// Shouldn't be happening but treat as not waxed just in case
+			return false;
+		}
 	}
 }
