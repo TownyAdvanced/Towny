@@ -8769,3 +8769,9 @@ v0.92.0.11:
   - New Config Option: nation.default_taxes.max_nation_conquered_tax
     - Default: 100
     - The maximum amount of money that can be charge by a nation on their conquered towns.
+0.99.1.4:
+  - Default Config Change:
+    - The switch_ids list will now come with the new NON_WOODEN_PRESSURE_PLATES as default, replacing PRESSURE_PLATES.
+    - Wooden pressure plates are inherently un-protectable due to being set off by dropped items.
+    - Wooden pressure plates are good for contraptions you would want mobs to use, or for doors which you want players to be able to use.
+    - Closes #6752.

@@ -135,6 +135,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists PRESSURE_PLATES = newBuilder().withTag("blocks", minecraft("pressure_plates")).endsWith("_PRESSURE_PLATE").build();
 
 	/**
+	 * List of Non-Wooden Pressure Plates.
+	 */
+	public static final ItemLists NON_WOODEN_PRESSURE_PLATES = newBuilder().endsWith("WEIGHTED_PRESSURE_PLATE").endsWith("STONE_PRESSURE_PLATE").build();
+
+	/**
 	 * List of Buttons.
 	 */
 	public static final ItemLists BUTTONS = newBuilder().withTag("blocks", minecraft("buttons")).endsWith("_BUTTON").build();
