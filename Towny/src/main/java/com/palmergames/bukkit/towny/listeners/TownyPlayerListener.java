@@ -1447,11 +1447,8 @@ public class TownyPlayerListener implements Listener {
 	}
 	
 	private boolean isSignWaxed(Block block) {
-		if (MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
+		if (IS_WAXED == null || MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
 			return false;
-		
-		if (IS_WAXED == null)
-			return false; // Always treat as not waxed on spigot
 		
 		try {
 			return (boolean) IS_WAXED.invoke(sign);
