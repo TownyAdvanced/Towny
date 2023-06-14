@@ -1699,13 +1699,13 @@ msg_perm_gui_folia: "交互API没有工作，使得这个按钮当前在Folia上
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
-msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+msg_tax_collected_from_towns: "<aqua>你的国家从自己的各个城镇中征收了%s的税。"
 #Message shown when a town collects taxes from its residents.
-msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+msg_tax_collected_from_residents: "<aqua>你的城镇从自己的各个居民那里征收了%s的税。"
 #Message shown when a town collects taxes from its plottaxes.
-msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
+msg_tax_collected_from_plots: "<aqua>你的城镇从各个土地税中收取了%s的税。"
 #Message shown when a nation collects taxes from its towns that are conquered.
-msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra tax from its conquered towns."
-msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
+msg_tax_collected_from_conquered_towns: "<aqua>你的国家从被征服的各个城镇中征收了%s的税。"
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被免除了国家所征收的税。"
 msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
