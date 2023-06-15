@@ -802,6 +802,12 @@ public enum ConfigNodes {
 			"",
 			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.",
 			"# Allowed options: unclaimed,enemy,neutral,outlaw"),
+	GTOWN_SETTINGS_ENEMIES_ALLOWED_TO_SPAWN_TO_PEACEFUL_TOWNS(
+			"global_town_settings.allow_enemies_spawn_to_peaceful_towns",
+			"false",
+			"",
+			"# When true, players will be allowed to spawn to peaceful/neutral towns in which they are considered enemies.",
+			"# Setting this to true will make town spawn points unsafe for private towns which are part of nations with enemies."),
 	GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE(
 			"global_town_settings.respawn_anchor_higher_precendence",
 			"true",

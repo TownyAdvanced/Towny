@@ -291,8 +291,12 @@ public class SpawnUtil {
 					else
 						townSpawnLevel = TownSpawnLevel.PART_OF_NATION;
 				} else if (targetNation.hasEnemy(playerNation)) {
-					// Prevent enemies from using spawn travel.
-					throw new TownyException(Translatable.of("msg_err_public_spawn_enemy"));
+					if (town.isNeutral() && TownySettings.areEnemiesAllowedToSpawnToPeacefulTowns())
+						// Let enemies spawn to peaceful towns.
+						townSpawnLevel = TownSpawnLevel.TOWN_RESIDENT;
+					else 
+						// Prevent enemies from using spawn travel.
+						throw new TownyException(Translatable.of("msg_err_public_spawn_enemy"));
 				} else if (targetNation.hasAlly(playerNation)) {
 					if (!town.isPublic() && 
 						(TownySettings.isAllySpawningRequiringPublicStatus() && !resident.hasPermissionNode(PermissionNodes.TOWNY_SPAWN_ALLY_BYPASS_PUBLIC.getNode())))
