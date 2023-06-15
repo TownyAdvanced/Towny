@@ -1731,7 +1731,11 @@ public class TownySettings {
 	public static List<String> getDisallowedTownSpawnZones() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
 	}
-	
+
+	public static boolean areEnemiesAllowedToSpawnToPeacefulTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ENEMIES_ALLOWED_TO_SPAWN_TO_PEACEFUL_TOWNS);
+	}
+
 	public static boolean isSpawnWarnConfirmationUsed() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SPAWN_WARNINGS);
 	}
