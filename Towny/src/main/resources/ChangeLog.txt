@@ -8790,3 +8790,9 @@ v0.92.0.11:
     - How the %townyadvanced_top_....% placeholders will appear, first %s being the town name, with the second being the balance, resident count or town size.
 0.99.1.5:
   - Fix ancient typo in the plugin.yml's towny.command.town.* childpermissions nodes.
+  - Add option to allow enemies to spawn to neutral/peaceful towns.
+    - Closes #6401.
+  - New Config Option: global_town_settings.allow_enemies_spawn_to_peaceful_towns
+    - Default: false
+    - When true, players will be allowed to spawn to peaceful/neutral towns in which they are considered enemies.
+    - Setting this to true will make town spawn points unsafe for private towns which are part of nations with enemies.
