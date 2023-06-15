@@ -2256,6 +2256,10 @@ public class TownySettings {
 		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE));
 	}
 
+	public static EnumSet<Material> getRevertOnUnclaimWhitelistMaterials() {
+		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_WHITELIST));
+	}
+
 	public static boolean isTownRespawning() {
 
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN);

@@ -609,7 +609,7 @@ public class TownyEntityListener implements Listener {
 				if (!TownyAPI.getInstance().isWilderness(block))
 					continue;
 				// Check the white/blacklist
-				if (!townyWorld.isBlockAllowedToRevert(block.getType()))
+				if (!townyWorld.isExplodedBlockAllowedToRevert(block.getType()))
 					continue;
 				// Don't start a revert on a block that is going to be reverted.
 				if (TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(block.getLocation())))

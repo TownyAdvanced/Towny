@@ -1474,7 +1474,19 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						world.setPlotManagementIgnoreIds(mats);
 					} catch (Exception ignored) {
 					}
-				
+
+				line = keys.get("revertOnUnclaimWhitelistMaterials");
+				if (line != null)
+					try {
+						List<String> mats = new ArrayList<>();
+						for (String s : line.split("#"))
+							if (!s.isEmpty())
+								mats.add(s);
+						
+						world.setRevertOnUnclaimWhitelistMaterials(mats);
+					} catch (Exception ignored) {
+					}
+
 				line = keys.get("usingPlotManagementWildRegen");
 				if (line != null)
 					try {
@@ -2239,6 +2251,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Plot Management Ignore Ids
 		if (world.getPlotManagementIgnoreIds() != null)
 			list.add("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));
+		// Revert on Unclaim whitelisted Materials.
+		if (world.getRevertOnUnclaimWhitelistMaterials() != null)
+			list.add("revertOnUnclaimWhitelistMaterials=" + StringMgmt.join(world.getRevertOnUnclaimWhitelistMaterials(), "#"));
 
 		// PlotManagement Wild Regen
 		list.add("");

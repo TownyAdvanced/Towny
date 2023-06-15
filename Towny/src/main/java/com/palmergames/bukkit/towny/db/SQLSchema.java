@@ -287,6 +287,7 @@ public class SQLSchema {
 		columns.add("`plotManagementMayorDelete` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementIgnoreIds` mediumtext NOT NULL");
+		columns.add("`revertOnUnclaimWhitelistMaterials` mediumtext NOT NULL");
 		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenBlockWhitelist` mediumtext NOT NULL");
