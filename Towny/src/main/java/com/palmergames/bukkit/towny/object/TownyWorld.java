@@ -501,7 +501,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setRevertOnUnclaimWhitelistMaterials(List<String> revertOnUnclaimWhitelistMaterials) {
-		this.revertOnUnclaimWhitelistMaterials = new HashSet<>(TownySettings.toMaterialSet(revertOnUnclaimWhitelistMaterials));
+		this.revertOnUnclaimWhitelistMaterials = new HashSet<>(TownySettings.toMaterialEnumSet(revertOnUnclaimWhitelistMaterials));
 	}
 
 	public boolean isRevertOnUnclaimWhitelistMaterial(Material mat) {
