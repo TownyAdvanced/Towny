@@ -24,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
@@ -44,7 +46,7 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private EnumSet<Material> plotManagementIgnoreIds = null;
-	private EnumSet<Material> revertOnUnclaimWhitelistMaterials = null;
+	private Set<Material> revertOnUnclaimWhitelistMaterials = null;
 
 	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
@@ -491,7 +493,7 @@ public class TownyWorld extends TownyObject {
 		this.plotManagementIgnoreIds = TownySettings.toMaterialEnumSet(plotManagementIgnoreIds);
 	}
 
-	public EnumSet<Material> getRevertOnUnclaimWhitelistMaterials() {
+	public Collection<Material> getRevertOnUnclaimWhitelistMaterials() {
 		if (revertOnUnclaimWhitelistMaterials == null)
 			return TownySettings.getRevertOnUnclaimWhitelistMaterials();
 		else 
@@ -499,7 +501,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setRevertOnUnclaimWhitelistMaterials(List<String> revertOnUnclaimWhitelistMaterials) {
-		this.revertOnUnclaimWhitelistMaterials = TownySettings.toMaterialEnumSet(revertOnUnclaimWhitelistMaterials);
+		this.revertOnUnclaimWhitelistMaterials = new HashSet<>(TownySettings.toMaterialSet(revertOnUnclaimWhitelistMaterials));
 	}
 
 	public boolean isRevertOnUnclaimWhitelistMaterial(Material mat) {
