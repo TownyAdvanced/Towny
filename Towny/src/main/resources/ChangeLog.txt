@@ -8788,3 +8788,5 @@ v0.92.0.11:
   - New Config Option: filters_colour_chat.papi_leaderboard_formatting.format"
     - Default: "%s - %s",
     - How the %townyadvanced_top_....% placeholders will appear, first %s being the town name, with the second being the balance, resident count or town size.
+0.99.1.5:
+  - Fix ancient typo in the plugin.yml's towny.command.town.* childpermissions nodes.
