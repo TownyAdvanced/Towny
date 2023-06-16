@@ -764,6 +764,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Resident target = getResidentOrThrow(split[1]);
 		Nation nation = getNationFromResidentOrThrow(resident);
 
+		if (!nation.hasResident(target))
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", target.getName()));
+
 		/*
 		 * Match casing to an existing rank, returns null if Nation rank doesn't exist.
 		 */
