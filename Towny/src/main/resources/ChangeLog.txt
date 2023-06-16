@@ -8798,3 +8798,5 @@ v0.92.0.11:
     - Setting this to true will make town spawn points unsafe for private towns which are part of nations with enemies.
   - Fix nation ranking issue.
     - Closes #6762.
+0.99.2.0:
+  - Bump version for release.
