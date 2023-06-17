@@ -8800,3 +8800,6 @@ v0.92.0.11:
     - Closes #6762.
 0.99.2.0:
   - Bump version for release.
+0.99.2.1:
+  - Make MobRemovalEvent unable to be triggered sync.
+    - Closes #6766.
