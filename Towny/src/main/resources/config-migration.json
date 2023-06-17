@@ -275,10 +275,11 @@
         "key": "TNTPrimed",
         "value": "PRIMED_TNT",
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },{
+      },
+      {
         "type": "REPLACE",
         "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "ExplosiveMinecartl",
+        "key": "ExplosiveMinecart",
         "value": "MINECART_TNT",
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
       },
@@ -491,7 +492,7 @@
     ]
   },
   {
-    "version": "0.99.0.12",
+    "version": "0.99.2.2",
     "changes": [
       {
         "type": "REPLACE",

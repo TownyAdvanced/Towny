@@ -71,7 +71,7 @@ public class TownBlockData {
 		this.allowedBlocks.addAll(allowedBlocks);
 	}
 
-	// These bridge methods were added during 0.99.0.*
+	// These bridge methods were added during 0.99.2.*
 	@SuppressWarnings({"unused", "unchecked"})
 	private void setItemUseIds$$bridge$$public(EnumSet<?> itemUseIds) {
 		setItemUseIds((Collection<Material>) itemUseIds);

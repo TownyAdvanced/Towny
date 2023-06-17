@@ -139,7 +139,7 @@ public class ResidentUtil {
 		createTownyGUI(resident, items, name);
 	}
 	
-	// Bridge method added during 0.99.0.*
+	// Bridge method added during 0.99.2.*
 	@SuppressWarnings("unused")
 	private static void openGUIInventory$$bridge$$public(Resident resident, Set<Material> set, String name) {
 		openGUIInventory(resident, set, name);
