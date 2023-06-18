@@ -214,6 +214,11 @@
         </dependency>
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
+            <artifactId>towny-paper-provider</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>towny-base-providers</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -364,6 +369,7 @@
                                 <include>solar.squares:pixel-width-core</include>
                                 <include>com.palmergames.bukkit.towny:towny-base-providers</include>
                                 <include>com.palmergames.bukkit.towny:towny-folia-provider</include>
+                                <include>com.palmergames.bukkit.towny:towny-paper-provider</include>
                             </includes>
                         </artifactSet>
                         <relocations>
