@@ -30,6 +30,7 @@
         <module>Towny</module>
         <module>providers/BaseProviders</module>
         <module>providers/FoliaProvider</module>
+        <module>providers/PaperProvider</module>
     </modules>
 
     <properties>

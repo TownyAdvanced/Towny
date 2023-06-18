@@ -47,6 +47,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.scheduling.TaskScheduler;
 import com.palmergames.bukkit.towny.scheduling.impl.BukkitTaskScheduler;
+import com.palmergames.bukkit.towny.scheduling.impl.PaperTaskScheduler;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.ChangelogReader;
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
@@ -109,7 +110,7 @@ public class Towny extends JavaPlugin {
 	
 	public Towny() {
 		plugin = this;
-		this.scheduler = isFolia() ? new FoliaTaskScheduler(this) : new BukkitTaskScheduler(this);
+		this.scheduler = isFolia() ? new FoliaTaskScheduler(this) : expandedSchedulingAvailable() ? new PaperTaskScheduler(this) : new BukkitTaskScheduler(this);
 	}
 
 	@Override
@@ -916,6 +917,10 @@ public class Towny extends JavaPlugin {
 	@ApiStatus.Internal
 	public boolean isFolia() {
 		return this.isFolia;
+	}
+	
+	private boolean expandedSchedulingAvailable() {
+		return JavaUtil.classExists("io.papermc.paper.threadedregions.scheduler.ScheduledTask");
 	}
 
 	@NotNull
