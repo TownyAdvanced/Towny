@@ -346,9 +346,7 @@ public class PluginIntegrations {
 	 */
 
 	public boolean checkHostileEliteMobs(Entity entity) {
-		if (isEliteMobsPresent())
-			return entity != null && entity.getPersistentDataContainer().has(eliteKey, PersistentDataType.STRING);
-		return false;
+		return isEliteMobsPresent() && entity != null && entity.getPersistentDataContainer().has(eliteKey, PersistentDataType.STRING);
 	}
 
 	private boolean isEliteMobsPresent() {
