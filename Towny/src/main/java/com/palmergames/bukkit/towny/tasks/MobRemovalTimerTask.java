@@ -76,7 +76,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 					continue;
 				}
 
-				plugin.getScheduler().run(entity, () -> {
+				final Runnable runnable = () -> {
 					final Location livingEntityLoc = entity.getLocation();
 					final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
 						
@@ -112,7 +112,12 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 						return;
 
 					removeEntity(entity);
-				});
+				};
+				
+				if (plugin.isFolia())
+					plugin.getScheduler().run(entity, runnable);
+				else
+					runnable.run();
 			}
 		}
 	}
@@ -121,7 +126,10 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		if (MobRemovalEvent.getHandlerList().getRegisteredListeners().length > 0 && BukkitTools.isEventCancelled(new MobRemovalEvent(entity)))
 			return;
 
-		plugin.getScheduler().run(entity, entity::remove);
+		if (!plugin.getScheduler().isEntityThread(entity))
+			plugin.getScheduler().run(entity, entity::remove);
+		else
+			entity.remove();
 	}
 	
 	private void populateFields() {
