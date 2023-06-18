@@ -8803,3 +8803,6 @@ v0.92.0.11:
 0.99.2.1:
   - Make MobRemovalEvent unable to be triggered sync.
     - Closes #6766.
+0.99.2.2:
+  - Make the mob removal task a bit more thread safe on folia, courtesy of Warrior with PR #6769.
+    - Closes #6767.
