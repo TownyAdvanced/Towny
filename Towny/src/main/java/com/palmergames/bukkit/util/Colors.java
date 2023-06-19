@@ -166,7 +166,7 @@ public class Colors {
 		legacyLookupMap.put("k", "<obfuscated>");
 		legacyLookupMap.put("l", "<bold>");
 		legacyLookupMap.put("m", "<strikethrough>");
-		legacyLookupMap.put("n", "<underline>");
+		legacyLookupMap.put("n", "<underlined>");
 		legacyLookupMap.put("o", "<italic>");
 		legacyLookupMap.put("r", "<reset>");
 	}
