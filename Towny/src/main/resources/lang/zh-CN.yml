@@ -287,7 +287,7 @@ msg_new_mayor: '&b%s 成为了新一届的城主!'
 msg_new_nation: '&b%s 建立了一个名为 %s 的国家'
 msg_new_town: '&b%s 建立了一个名为 %s 的城镇'
 msg_plot_for_sale: '&b%s 将 (%s) 区块挂出出售!'
-msg_plot_for_sale_amount: '&b%s 出售土地 (%s) 售价：%s！'
+msg_plot_for_sale_amount: '&b%s将的土地%s以%s的价格出售！'
 msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
@@ -1695,7 +1695,7 @@ msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
 msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
-msg_perm_gui_folia: "交互API没有工作，使得这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
+msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
