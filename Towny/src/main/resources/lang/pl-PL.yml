@@ -1510,7 +1510,7 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'Za chwilę zostaniesz przetelepor
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
 townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "Miasto %s ma działki, które możesz kupić, czy przeteleportować się do działki, którą możesz teraz kupić?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+townyrtp.you_have_arrived: "Zostałeś przeteleportowany do działki, którą możesz kupić. Użyj komendy \"/plot claim\" jeżeli chcesz zająć działkę."
 #Used in the town's status screen to display plots
 status_plot_string: 'Działki'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1562,7 +1562,7 @@ msg_perm_hud_nation: 'naród'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'outsider'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Plot: '
+msg_perm_hud_plot_name: 'Działka:'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
@@ -1608,17 +1608,17 @@ msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation a
 #Message shown to a town because the nation has hit their max-towns-limit.
 msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
 #Message shown confirming /tw set usedefaults
-confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Czy na pewno chcesz, aby zresetowano wszystkie ustawienia tego świata do tych, które zostały ustawione w plikach konfiguracji?'
 #Part of the /town plots output.
 msg_town_plots_title: ' Town Plots'
 #Part of the /town plots output.
-msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+msg_town_plots_town_size: '<dark_green>Wielkość Miasta: <green>%s/%s'
 #Part of the /town plots output.
 msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
 #Part of the /town plots output.
-msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+msg_town_plots_town_bonus: '<aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+msg_town_plots_town_nationbonus: '<aqua>[BonusPaństwa: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
