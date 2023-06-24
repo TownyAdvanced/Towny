@@ -1671,7 +1671,7 @@ msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it 
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "您需要 %s 才能支付。"
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+msg_err_amount_must_be_greater_than_zero: "数量必须大于0。"
 #Message shown when taking over claims is disabled on a server.
 msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
