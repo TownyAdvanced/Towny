@@ -414,9 +414,13 @@ public class Towny extends JavaPlugin {
 
 		Bukkit.getLogger().info("==============================================================");
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		if (townyUniverse.getDataSource() != null && !isError()) {
+		if (townyUniverse.getDataSource() != null && !isError(TownyInitException.TownyError.DATABASE)) {
 			townyUniverse.getDataSource().saveQueues();
 			townyUniverse.getDataSource().saveCooldowns();
+
+			// Shut down our saving task.
+			plugin.getLogger().info("Finishing File IO Tasks...");
+			townyUniverse.getDataSource().finishTasks();
 		}
 
 		// Turn off timers.		
@@ -426,9 +430,6 @@ public class Towny extends JavaPlugin {
 
 		playerCache.clear();
 
-		// Shut down our saving task.
-		plugin.getLogger().info("Finishing File IO Tasks...");
-		townyUniverse.getDataSource().finishTasks();
 		plugin.getLogger().info("Finishing Universe Tasks...");
 		townyUniverse.finishTasks();
 
