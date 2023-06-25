@@ -8808,4 +8808,5 @@ v0.92.0.11:
     - Closes #6767.
   - Make use of Folia's scheduling API in Paper, courtesy of Warrior with PR #6770.
 0.99.2.3:
-   - Fix legacy conversion for underlined text, courtesy of Warrior with PR #6772.
+  - Fix legacy conversion for underlined text, courtesy of Warrior with PR #6772.
+  - Fix hanging signs not being edit protected, courtesy of Warrior with PR #6781.
