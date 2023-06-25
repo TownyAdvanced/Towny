@@ -389,7 +389,7 @@ public class TownyPlayerListener implements Listener {
 				 * Treat interaction as a Destroy test.
 				 */
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
-					(ItemLists.DYES.contains(item) && Tag.SIGNS.isTagged(clickedMat)) ||
+					(ItemLists.DYES.contains(item) && ItemLists.SIGNS.contains(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
@@ -435,7 +435,7 @@ public class TownyPlayerListener implements Listener {
 				/*
 				 * Prevents players using wax on signs
 				 */
-				if (item == Material.HONEYCOMB && Tag.SIGNS.isTagged(clickedMat) && !isSignWaxed(clickedBlock) && !TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
+				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock) && !TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
 					event.setCancelled(true);
 					return;
 				}
@@ -486,7 +486,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Prevents players from editing signs where they shouldn't.
 			 */
-			if (Tag.SIGNS.isTagged(clickedMat) && !isSignWaxed(clickedBlock))
+			if (ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock))
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 		}
 	}
@@ -1355,7 +1355,7 @@ public class TownyPlayerListener implements Listener {
 					final BlockState state = PaperLib.getBlockState(block, false).getState();
 					final BlockData data = state.getBlockData();
 					
-					if (Tag.SIGNS.isTagged(block.getType()) && data instanceof Rotatable rotatable) {
+					if (ItemLists.SIGNS.contains(block.getType()) && data instanceof Rotatable rotatable) {
 						TownyMessaging.sendMessage(player, Arrays.asList(
 								ChatTools.formatTitle("Sign Info"),
 								ChatTools.formatCommand("", "Sign Type", "", block.getType().name()),

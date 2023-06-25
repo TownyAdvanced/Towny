@@ -83,7 +83,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Signs.
 	 */
-	public static final ItemLists SIGNS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("signs")).endsWith("_SIGN").build();
+	public static final ItemLists SIGNS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("signs")).withTag(Tag.REGISTRY_BLOCKS, minecraft("all_signs")).endsWith("_SIGN").build();
 
 	/**
 	 * List of Torches
