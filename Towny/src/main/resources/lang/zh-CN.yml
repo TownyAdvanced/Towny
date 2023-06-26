@@ -41,7 +41,7 @@ unclaimed_zone_name: '荒郊野外'
 #|help messages                                         | #
 #+------------------------------------------------------+ #
 ############################################################
-help_0: '城镇插件帮助'
+help_0: 'Towny插件帮助'
 help_1: '尝试下面的命令来学习怎么使用Towny插件。'
 help_2: '城镇聊天'
 help_3: '国家聊天'
@@ -51,7 +51,7 @@ town_help_3: '调整你的城镇的状态'
 town_help_4: '你所在地的小镇状态的捷径.'
 town_help_5: '传送去城镇出生点'
 town_help_6: '新建一个城镇，城主是你。'
-town_help_7: '新建一个城镇，并且制定一个玩家作为城主。'
+town_help_7: '新建一个城镇，并且选定一个玩家作为城主。'
 town_help_8: '列出城主可以使用的命令'
 town_help_9: '就在今天!'
 town_help_10: '查看城镇内在线的玩家'
@@ -159,7 +159,7 @@ msg_nation_town_left: '&b城镇 %s 离开了你的国家.'
 msg_nation_kicked: '&b%s 把 %s 从这个国家踢出.'
 msg_raised_ass: '&b%s 把 %s 提升为 %s 助手.'
 msg_lowered_to_res_by: '&b你被 %s 降职了.'
-msg_lowered_to_res: '&b%s 炒了 %s 的鱿鱼.'
+msg_lowered_to_res: '&b%2$s被%1$s炒了鱿鱼，使得%2$s成为了普通居民。'
 msg_invalid_name: '&b无效名称.'
 msg_invited_join_town: '&b%s 邀请 %s 加入城镇.'
 msg_invited_join_nation: '&b%s 邀请 %s 加入国家.'
@@ -287,14 +287,14 @@ msg_new_mayor: '&b%s 成为了新一届的城主!'
 msg_new_nation: '&b%s 建立了一个名为 %s 的国家'
 msg_new_town: '&b%s 建立了一个名为 %s 的城镇'
 msg_plot_for_sale: '&b%s 将 (%s) 区块挂出出售!'
-msg_plot_for_sale_amount: '&b%s 出售土地 (%s) 售价：%s！'
+msg_plot_for_sale_amount: '&b%s将位于%s的土地以%s的价格出售！'
 msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
 msg_cache_block_error_plot: '&c地主不允许 %s  %s .'
 msg_cache_block_error_town_resident: '&c居民不能在这里 %s.'
 msg_cache_block_error_town_allies: '&c盟友不能 %s.'
-msg_cache_block_error_town_outsider: '&c外来者不能%s。'
+msg_cache_block_error_town_outsider: '&c外来者不能 %s.'
 msg_err_cant_afford_tp_town: '&c你没有钱传送到 %s.'
 msg_err_not_public: '&c那个城镇不对外开放.'
 msg_err_not_open: '&c城镇 %s 不对每个人都开放它的大门. 如果你想要加入这个城镇,请询问城主及其助手.'
@@ -344,7 +344,7 @@ msg_err_invalid_choice: '&c无效的选择'
 msg_err_invalid_sub: '&c无效的子命令.'
 msg_err_command_disable: '&c你没有足够的权限使用这个指令.'
 msg_err_universe_limit: '&c这个世界不能再有更多的城镇了.'
-msg_err_too_many_npc: '&cNPC太多了.'
+msg_err_too_many_npc: '&c已注册的NPC太多了.'
 msg_err_negative_money: '&c你不能拥有负数的钱.'
 msg_err_not_percentage: '&c税率必须小于100.'
 msg_err_no_economy: '&c无经济插件支持.'
@@ -917,15 +917,15 @@ msg_set_perms_reset_single: '&b成功地重置了这片土地的权限设置。'
 status_bank_bankrupt: '（破产）'
 msg_warning_bankrupt: '&4*** 警告，由于%s的资金不足，其将在下一天破产！ ***'
 msg_town_bankrupt_by_upkeep: '&b城镇%s因为不能维持日常开支而破产了。'
-msg_town_bankrupt_by_upkeep_multiple: '&b以下城镇因无力维持开支而破产：'
+msg_town_bankrupt_by_upkeep_multiple: '&b以下城镇因无力维持开支而破产： '
 msg_town_bankrupt_by_nation_tax: '&b城镇%s因无力付清%s税而破产了。'
-msg_town_bankrupt_by_nation_tax_multiple: '&b以下城镇因无力上缴国税而破产：'
+msg_town_bankrupt_by_nation_tax_multiple: '&b以下城镇因无力上缴国税而破产： '
 msg_town_debts_cleared: '城镇%s付清了所有债务，不再处于破产状态。'
 msg_err_bankrupt_town_cannot_claim: '已破产的城镇不能圈地。'
 msg_err_bankrupt_town_cannot_build: '已破产的城镇不能进行建筑。'
 msg_err_bankrupt_town_cannot_toggle_open: '已破产的城镇不能开放。'
 msg_err_bankrupt_town_cannot_invite: '已破产的城镇不能邀请玩家加入。'
-msg_payed_nation_tax: '&bPayed nation tax of %s'
+msg_payed_nation_tax: '&b你的城镇上缴了%s的国税。'
 msg_your_town_couldnt_pay_the_nation_tax_of: '&b你的城镇因无力给国家上缴%s税而被踢出国家。'
 msg_your_town_payed_upkeep: '你的城镇支付了%s的日常开支。'
 msg_your_nation_payed_upkeep: '你的国家支付了%s的日常开支。'
@@ -933,7 +933,7 @@ msg_your_town_couldnt_pay_upkeep: '你的城镇无力维护%s的日常开支而�
 msg_your_nation_couldnt_pay_upkeep: '你的国家无力维护%s的日常开支而被解散了。'
 #Added in 0.87
 msg_town_reached_debtcap_and_is_disbanded: '&b城镇%s因无力维护开支并达到了负债上限而解散。'
-msg_town_reached_debtcap_and_is_disbanded_multiple: '&b以下城镇因无力维护开支并达到了负债上限而解散：'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&b以下城镇因无力维护开支并达到了负债上限而解散： '
 msg_unable_to_deposit_x: '无法将%s存入城镇银行。'
 msg_unable_to_withdraw_x: '无法从城镇银行中取出%s。'
 status_debtcap: '负债上限：'
@@ -988,7 +988,7 @@ msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
 npc_created: '创建于：'
 msg_no_funds_claim_plot: '&c你没有足够的资金来圈这块价格为%s的地。'
 msg_no_funds_claim_plot_group: '&c你没有足够的资金来圈这%s块总价为%s的地。'
-status_town_title_peaceful: '&b(Peacful)'
+status_town_title_peaceful: '&b（和平）'
 #Added in 0.95
 status_public: '&b(公开)'
 msg_days: ' 天'
@@ -1165,8 +1165,8 @@ jail_sing: '监狱'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s游玩的时间太短，无法被监禁，请再等待%s'
 #Added in 0.108
 msg_town_not_peaceful: '&b城镇的和平已被打破。'
-msg_town_already_peaceful: '&Town is already peaceful.'
-msg_town_already_not_peaceful: '&Town is already not peaceful.'
+msg_town_already_peaceful: '&b城镇已处于和平状态。'
+msg_town_already_not_peaceful: '&b城镇已不再和平。'
 msg_town_cant_peaceful: '&b城镇无法维持和平。'
 msg_town_paid_for_neutral_status: '&b你的城镇支付了%s以保持中立。'
 msg_nation_paid_for_neutral_status: '&b你的国家支付了%s以保持中立。'
@@ -1451,10 +1451,10 @@ msg_ptw_warning_2: 'Towny团队从未打算用真钱购买城镇区块。'
 #Line 3 of the givebonus warning.
 msg_ptw_warning_3: '如果您确实支付了真正的钱，您应该考虑在一个尊重Towny团队愿望的Towny服务器上玩游戏。'
 #Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: '您已被邀请加入 %s&9 (Nation: %s&9)'
+you_have_been_invited_to_join3: '您已被邀请加入 %s&9 (国家: %s&9)'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
-msg_err_your_town_cannot_afford_unclaim: '你的城镇没有钱来取消这块土地。需要%s的资金。'
+msg_err_your_town_cannot_afford_unclaim: '你的城镇没有钱来取消这块土地。这需要%s的资金。'
 #Message shown when a town pays to unclaim their land because the refund is a negative amount.
 msg_your_town_paid_x_to_unclaim: '你的城镇已支付 %s 来取消对土地的所有权。'
 #Confirmation message shown when a player will unclaim land that costs money.
@@ -1500,11 +1500,11 @@ msg_your_town_is_bankrupt: '你的城镇破产了，使用 /town deposit {amount
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: '您不能使用这个命令，因为您已经是一个城镇的成员。 如果您想要继续，您必须先使用命令“/t leave”。'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: '你在这个城镇被认为是法外狂徒。'
+msg_a_town_you_are_outlawed_in: '你在这个城镇是放逐者。'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: '找不到任何拥有可出售地块的开放、公开城镇来随机传送。'
 #Message showing payment for RTP.
-msg_cost_spawn_rtp: '&b你被收取了传送到随机的销售城镇地皮的费用 %s。'
+msg_cost_spawn_rtp: '&bYou 被收取了传送到随机的销售城镇地皮的费用 %s。'
 #Message shown to a player when they use the town rtp command.
 msg_you_are_about_to_be_teleported_to_a_plot: '您即将被传送到一块在 %s 中被禁止销售的地皮，这将让您加入。 当您到达时，使用“/plot claim”来声称您的地皮。'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
@@ -1671,7 +1671,7 @@ msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it 
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "您需要 %s 才能支付。"
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+msg_err_amount_must_be_greater_than_zero: "数量必须大于0。"
 #Message shown when taking over claims is disabled on a server.
 msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
@@ -1695,7 +1695,7 @@ msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
 msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
-msg_perm_gui_folia: "交互API没有工作，使得这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
+msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
