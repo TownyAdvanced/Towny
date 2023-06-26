@@ -35,9 +35,9 @@ import java.util.logging.Level;
  */
 public class OnPlayerLogin implements Runnable {
 	
-	Towny plugin;
-	com.palmergames.bukkit.towny.TownyUniverse universe;
-	volatile Player player;
+	private final Towny plugin;
+	private final TownyUniverse universe = TownyUniverse.getInstance();
+	private final Player player;
 	
 	/**
 	 * Constructor
@@ -48,7 +48,6 @@ public class OnPlayerLogin implements Runnable {
 	public OnPlayerLogin(Towny plugin, Player player) {
 		
 		this.plugin = plugin;
-		this.universe = com.palmergames.bukkit.towny.TownyUniverse.getInstance();
 		this.player = player;
 	}
 
