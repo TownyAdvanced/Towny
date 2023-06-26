@@ -24,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
@@ -44,6 +46,7 @@ public class TownyWorld extends TownyObject {
 	
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
 	private EnumSet<Material> plotManagementIgnoreIds = null;
+	private Set<Material> revertOnUnclaimWhitelistMaterials = null;
 
 	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
@@ -368,6 +371,7 @@ public class TownyWorld extends TownyObject {
 		setUsingPlotManagementRevert(TownySettings.isUsingPlotManagementRevert());
 		// revert ignore
 		plotManagementIgnoreIds = null;
+		revertOnUnclaimWhitelistMaterials = null;
 		// wilderness entity explosion revert
 		setUsingPlotManagementWildEntityRevert(TownySettings.isUsingPlotManagementWildEntityRegen());
 		entityExplosionProtection = null;
@@ -464,6 +468,14 @@ public class TownyWorld extends TownyObject {
 		this.plotManagementMayorDelete = TownySettings.toMaterialEnumSet(plotManagementMayorDelete);
 	}
 
+	public boolean isUnclaimedBlockAllowedToRevert(Material mat) {
+		if (!getRevertOnUnclaimWhitelistMaterials().isEmpty()) {
+			return isRevertOnUnclaimWhitelistMaterial(mat);
+		}
+
+		return !isPlotManagementIgnoreIds(mat);
+	}
+	
 	public EnumSet<Material> getPlotManagementIgnoreIds() {
 		
 		if (plotManagementIgnoreIds == null)
@@ -479,6 +491,21 @@ public class TownyWorld extends TownyObject {
 	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
 
 		this.plotManagementIgnoreIds = TownySettings.toMaterialEnumSet(plotManagementIgnoreIds);
+	}
+
+	public Collection<Material> getRevertOnUnclaimWhitelistMaterials() {
+		if (revertOnUnclaimWhitelistMaterials == null)
+			return TownySettings.getRevertOnUnclaimWhitelistMaterials();
+		else 
+			return revertOnUnclaimWhitelistMaterials;
+	}
+
+	public void setRevertOnUnclaimWhitelistMaterials(List<String> revertOnUnclaimWhitelistMaterials) {
+		this.revertOnUnclaimWhitelistMaterials = new HashSet<>(TownySettings.toMaterialEnumSet(revertOnUnclaimWhitelistMaterials));
+	}
+
+	public boolean isRevertOnUnclaimWhitelistMaterial(Material mat) {
+		return getRevertOnUnclaimWhitelistMaterials().contains(mat);
 	}
 
 	/**
@@ -595,11 +622,21 @@ public class TownyWorld extends TownyObject {
 		return plotManagementWildRevertBlockWhitelist.isEmpty() || plotManagementWildRevertBlockWhitelist.contains(mat);
 	}
 
-	public boolean isBlockAllowedToRevert(Material mat) {
+	public boolean isExplodedBlockAllowedToRevert(Material mat) {
 		if (getPlotManagementWildRevertBlockWhitelist().isEmpty())
 			return !isPlotManagementIgnoreIds(mat);
 		else
 			return isPlotManagementWildRevertWhitelistedBlock(mat);
+	}
+
+	/**
+	 * @deprecated in lieu of {@link#isExplodedBlockAllowedToRevert} in 0.99.1.5.
+	 * @param mat Material that is being checked
+	 * @return true if the block should be reverted after blocking up.
+	 */
+	@Deprecated
+	public boolean isBlockAllowedToRevert(Material mat) {
+		return isExplodedBlockAllowedToRevert(mat);
 	}
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {

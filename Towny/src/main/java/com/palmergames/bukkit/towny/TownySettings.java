@@ -39,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -421,7 +422,7 @@ public class TownySettings {
 		
 		return materials;
 	}
-	
+
 	public static void sendError(String msg) {
 		Towny.getPlugin().getLogger().warning(() -> String.format("Error could not read %s",msg));
 	}
@@ -2258,6 +2259,10 @@ public class TownySettings {
 	public static EnumSet<Material> getPlotManagementIgnoreIds() {
 
 		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE));
+	}
+
+	public static Collection<Material> getRevertOnUnclaimWhitelistMaterials() {
+		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_WHITELIST));
 	}
 
 	public static boolean isTownRespawning() {

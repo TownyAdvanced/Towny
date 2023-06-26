@@ -1749,6 +1749,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception ignored) {
 			}
 
+			line = rs.getString("revertOnUnclaimWhitelistMaterials");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					for (String split : line.split("#"))
+						if (!split.isEmpty())
+							try {
+								materials.add(split.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setRevertOnUnclaimWhitelistMaterials(materials);
+				} catch (Exception ignored) {
+				}
+
 			line = rs.getString("plotManagementWildRegenEntities");
 			if (line != null)
 				try {
@@ -2514,6 +2528,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// Plot Management Ignore Ids
 			if (world.getPlotManagementIgnoreIds() != null)
 				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), "#"));
+
+			// Revert on Unclaim whitelisted materials
+			if (world.getRevertOnUnclaimWhitelistMaterials() != null)
+				nat_hm.put("revertOnUnclaimWhitelistMaterials", StringMgmt.join(world.getRevertOnUnclaimWhitelistMaterials(), "#"));
 
 			// Using PlotManagement Wild Regen
 			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildEntityRevert());

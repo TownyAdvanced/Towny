@@ -153,8 +153,8 @@ public class PlotBlockData {
 				continue;
 			}
 
-			// Catch this being a ignored material that isn't allowed to be reverted, setting it to air.
-			if (this.townBlock.getWorld().isPlotManagementIgnoreIds(mat)) {
+			// Catch this being a ignored material or a whitelisted material that isn't allowed to be reverted, setting it to air.
+			if (!this.townBlock.getWorld().isUnclaimedBlockAllowedToRevert(mat)) {
 				block.setType(Material.AIR);
 				return true;
 			}
