@@ -8823,3 +8823,5 @@ v0.92.0.11:
 0.99.2.5:
   - Fix %townyadvanced_top... placeholders only displaying the first place town.
     - Closes #6786.
+  - Add legacy conversion unit tests, courtesy of Warrior with PR #6784.
+  - Remove useless volatile keyword in OnPlayerLogin, courtesy of Warrior with PR #6785.
