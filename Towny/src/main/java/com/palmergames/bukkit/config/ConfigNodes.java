@@ -571,7 +571,9 @@ public enum ConfigNodes {
 			"",
 			"# The list of blocks that are allowed to regenerate, if this list is empty then all blocks will regenerate.",
 			"# This list is useful for when you want only 'natural' blocks to regenerate like stone, grass, trees, etc.,",
-			"# useful when you allow players to build/destroy in the wilderness."),
+			"# useful when you allow players to build/destroy in the wilderness.",
+			"# Like other options in the new_world_settings section, this is only applied as a default setting for new worlds.",
+			"# Configure the list found in the towny\\data\\worlds\\WORLDNAME.txt files."),
 
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion",
