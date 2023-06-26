@@ -652,7 +652,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		int underscore = identifier.lastIndexOf("_");
 		int num;
 		try {
-			num = Math.min(0, Integer.valueOf(identifier.substring(underscore + 1)) - 1);
+			num = Math.max(0, Integer.valueOf(identifier.substring(underscore + 1)) - 1);
 		} catch (Exception e) {
 			return "";
 		}
