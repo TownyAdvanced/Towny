@@ -361,7 +361,7 @@ msg_admin_only_create_town: '&c只有管理员能够创建城镇!'
 msg_err_not_enough_residents_new_nation: '&c你的城镇居民数不足以建国.'
 msg_err_not_enough_residents_join_nation: '&b城镇 %s 没有足够的居民数所以无法加入国家.'
 msg_not_enough_residents_no_longer_capital: '&b国家旧都居民数不足所以不再是首都.新的首都将在 %s.'
-msg_town_not_enough_residents_left_nation: '&b城镇 %s 没有足够的居民数来成为国家的一员,并被赶出了国家.'
+msg_town_not_enough_residents_left_nation: '&b因为城镇 %s 不再有有足够的居民来成为国家的一员，所以它被赶出了国家。'
 msg_nation_disbanded_town_not_enough_residents: '&b城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
 msg_not_enough_residents_refunded: '&b你的国家由于居民数不足而灭亡了,因此你获得了 $%s .'
 msg_not_enough_residents_capital: '&b城镇 %s 没有足够的居民来作为首都.'
@@ -430,7 +430,7 @@ msg_err_invalid_radius_number: '&c无效半径. 最大半径为 %s .'
 #Added in 0.34
 msg_err_max_residents_per_town_reached: '&c已达到最大居民数量上限:(%s) .'
 #Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '&c玩家 %s在服务器内没有足够的资质来加入城镇, 请等待.'
+msg_err_resident_doesnt_meet_invite_cooldown: '&c玩家%s在服务器上的时间还不够长，因此无法被邀请到城镇里，请稍等。'
 msg_cant_toggle_pvp_outsider_in_town: '有一位外来者在你的城镇,你不能改变你的PVP状态!'
 msg_err_unclaim_not_outpost: '无法放弃声明, 这块土地不是前哨!'
 outpost_plu: '城镇前哨'
@@ -604,11 +604,11 @@ status_town_nation: '国家：'
 status_town_reslist_overlength: '和更多...'
 status_nation_king: '领导者：'
 status_nation_tax: '国税：'
-status_nation_conquered_tax: 'ConqueredTax:'
+status_nation_conquered_tax: '征服税：'
 status_nation_towns: '城镇'
 status_nation_allies: '盟友'
 status_nation_enemies: '敌人'
-status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_nation_enemied_by: '和你国敌对的国家'
 status_world_claimable: '&a可宣称'
 status_world_noclaims: '&a不可宣称'
 status_world_forcepvp: '强制PVP：'
@@ -685,8 +685,8 @@ adjustable: '可调整'
 #Added in 0.48:
 msg_no_funds_new_town2: '&c%s 你不能在这里建立一个新城镇, 这需要花费 %s.'
 msg_no_funds_new_nation2: '&c这个城镇的国库不足够强大到足以建立一个新的国家, 建国需要花费 %s.'
-msg_no_funds_claim2: '&c城镇不能声明这块 %s 成本需要 %s. 添加 %s 到城镇银行使用 /t deposit %s'
-msg_err_cant_afford_blocks2: '&c城镇不能声明这块 %s 成本需要 %s. 添加 %s 到城镇银行使用 /t deposit %s'
+msg_no_funds_claim2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块，因此你需要使用/t deposit %4$s来向你的城镇银行中存款%3$s，才能继续声明这些城镇区块。'
+msg_err_cant_afford_blocks2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块，因此你需要使用/t deposit %4$s来向你的城镇银行中存款%3$s，才能继续声明这些城镇区块。'
 msg_err_not_enough_variables: '&c变量不足: '
 nation_rechecked_by_admin: '&b成功重新检测国家 %s 的城镇距离.'
 msg_err_nation_over_town_limit: '&c你的国家内的城镇已满，上限为: %s.'
@@ -984,7 +984,7 @@ msg_comptype_online: '在线玩家'
 msg_comptype_towns: '城镇数量'
 msg_comptype_name: '按字母顺序'
 msg_comptype_open: '开放状态'
-msg_status_npc: '&c%s is not an real player, and is limited to Towny only.'
+msg_status_npc: '&c%s不是一个真正的玩家，它是Towny独有的。'
 npc_created: '创建于：'
 msg_no_funds_claim_plot: '&c你没有足够的资金来圈这块价格为%s的地。'
 msg_no_funds_claim_plot_group: '&c你没有足够的资金来圈这%s块总价为%s的地。'
@@ -1653,9 +1653,9 @@ msg_min_adjacent_blocks: '您必须至少有 %s 个邻接的城镇区块。这�
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "You are not known to Towny."
+msg_you_are_unknown: "你并不被Towny所知。"
 #Generic Resident/Town/Nation/Thing is not known to Towny.
-msg_townyobject_unknown: "%s is not known to Towny."
+msg_townyobject_unknown: "%s并不被Towny所知。"
 #Shown when a resident is unknown to Towny.
 msg_err_resident_unknown: "%s is not a resident that is recognized."
 #Shown when a town is unknown to Towny.
@@ -1667,7 +1667,7 @@ msg_err_townyobject_x_has_no_town: "%s 不属于任何一个城镇."
 #Shown when a town doesn't belong to a nation.
 msg_err_townyobject_x_has_no_nation: "%s 不属于任何一个国家."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
-msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+msg_err_townblock_has_no_claimedat_data: "没有关于这个城镇区块声称时间的数据。"
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "您需要 %s 才能支付。"
 #Shown when someone tries to deposit/withdraw 0 amounts.
