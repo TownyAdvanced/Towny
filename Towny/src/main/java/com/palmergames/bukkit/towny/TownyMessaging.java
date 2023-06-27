@@ -931,7 +931,7 @@ public class TownyMessaging {
 	public static void sendMsgToOnlineAdmins(Translatable message) {
 		sendMsg(message);
 		for (Player player : Bukkit.getOnlinePlayers())
-			if (player.isOp() || player.hasPermission("towny.admin"))
+			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
 				sendMsg(player, message);
 	}
 	

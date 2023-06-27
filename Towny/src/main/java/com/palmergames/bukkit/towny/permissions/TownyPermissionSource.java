@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.permissions;
 
+import net.kyori.adventure.util.TriState;
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author ElgarL
@@ -173,8 +175,8 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player is not in adminbypass mode, and they are
 	 *         considered a admin Permissible.
 	 */
-	public boolean isTownyAdmin(Player player) {
-		return !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && isTownyAdmin((Permissible) player);
+	private boolean isTownyAdmin$$bridge$$public(Player player) {
+		return isTownyAdmin(player);
 	}
 
 	/**
@@ -183,8 +185,14 @@ public abstract class TownyPermissionSource {
 	 * @param permissible Permissible object, a player or a console.
 	 * @return true if the permissible is null or op or has the towny.admin node.
 	 */
-	public boolean isTownyAdmin(Permissible permissible) {
-		return permissible == null || permissible.isOp() || strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
+	public boolean isTownyAdmin(@NotNull Permissible permissible) {
+		final TriState has = strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
+
+		// Explicitly set to false or using the admin bypass mode
+		if (has == TriState.FALSE || (permissible instanceof Player player && Towny.getPlugin().hasPlayerMode(player, "adminbypass")))
+			return false;
+
+		return has == TriState.TRUE || permissible.isOp();
 	}
 
 	/**
@@ -227,8 +235,8 @@ public abstract class TownyPermissionSource {
 	 * @param perm   String representing the node to test for.
 	 * @return true if the player has the permission node or is otherwise allowed.
 	 */
-	public boolean testPermission(Player player, String perm) {
-		return testPermission((Permissible) player, perm);
+	private boolean testPermission$$bridge$$public(Player player, String perm) {
+		return testPermission(player, perm);
 	}
 
 	/**
@@ -239,12 +247,13 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has the permission node or is considered an admin.
 	 */
 	public boolean testPermission(Permissible permissible, String perm) {
-		if (permissible instanceof Player player)
-			// This shunts the test through #isTownyAdmin(Player) which will test if the
-			// Player has the adminbypass mode enabled.
-			return isTownyAdmin(player) || strictHas(permissible, perm);
+		final TriState has = strictHas(permissible, perm);
 
-		return isTownyAdmin(permissible) || strictHas(permissible, perm);
+		// Explicitly set to false
+		if (has == TriState.FALSE)
+			return false;
+
+		return has == TriState.TRUE || isTownyAdmin(permissible);
 	}
 	
 	/**
@@ -263,11 +272,11 @@ public abstract class TownyPermissionSource {
 	 * @param player Player to check
 	 * @param node Permission node to check for
 	 * @return true if the player has this permission node or is Op.
-	 * @deprecated since 0.98.4.6 use {@link #testPermission(Player, String)} instead.
+	 * @deprecated since 0.98.4.6 use {@link #testPermission(Permissible, String)} instead.
 	 */
 	@Deprecated
 	public boolean has(Player player, String node) {
-		return isTownyAdmin(player) || strictHas(player, node);
+		return testPermission(player, node);
 	}
 
 	/**
@@ -279,27 +288,27 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has this permission node or a parent wildcard
 	 *         node.
 	 */
-	private boolean strictHas(Permissible permissible, String node) {
+	private TriState strictHas(Permissible permissible, String node) {
 
 		/*
 		 * Node has been set or negated so return the actual value
 		 */
 		if (permissible.isPermissionSet(node))
-			return permissible.hasPermission(node);
+			return TriState.byBoolean(permissible.hasPermission(node));
 
 		/*
 		 * Check for a parent with a wildcard
+		 * This is likely redundant for most permission plugins since they can implement isPermissionSet("foo.bar") to return true if foo.* is set
 		 */
 		final String[] parts = node.split("\\.");
 		final StringBuilder builder = new StringBuilder(node.length());
 		for (String part : parts) {
 			builder.append('*');
-			if (permissible.hasPermission("-" + builder.toString())) {
-				return false;
-			}
-			if (permissible.hasPermission(builder.toString())) {
-				return true;
-			}
+			
+			final String newNode = builder.toString();
+			if (permissible.isPermissionSet(newNode))
+				return TriState.byBoolean(permissible.hasPermission(newNode));
+			
 			builder.deleteCharAt(builder.length() - 1);
 			builder.append(part).append('.');
 		}
@@ -307,7 +316,6 @@ public abstract class TownyPermissionSource {
 		/*
 		 * No parent found so we don't have this node.
 		 */
-		return false;
-
+		return TriState.NOT_SET;
 	}
 }
