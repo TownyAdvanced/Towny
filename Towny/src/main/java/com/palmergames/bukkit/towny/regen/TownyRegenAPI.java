@@ -606,7 +606,7 @@ public class TownyRegenAPI {
 	}
 
 	@Deprecated
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	private static void deleteMaterialsFromTownBlock$$bridge$$public(TownBlock townBlock, EnumSet<?> materialEnumSet) {
 		deleteMaterialsFromTownBlock(townBlock, (Collection<Material>) materialEnumSet);
 	}

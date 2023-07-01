@@ -8825,3 +8825,7 @@ v0.92.0.11:
     - Closes #6786.
   - Add legacy conversion unit tests, courtesy of Warrior with PR #6784.
   - Remove useless volatile keyword in OnPlayerLogin, courtesy of Warrior with PR #6785.
+0.99.2.6:
+  - Improve config levels section parsing failure logging, courtesy of Warrior with PR #6792.
+  - Refactor sql source to remove use of connection field, courtesy of Warrior with PR #6721.
+  - Bukkit enum eradication futureproofing, courtesy of Warrior with PR #6665.
