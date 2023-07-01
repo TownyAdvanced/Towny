@@ -2275,7 +2275,7 @@ public class TownySettings {
 	}
 
 	public static Collection<Material> getRevertOnUnclaimWhitelistMaterials() {
-		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_WHITELIST));
+		return toMaterialSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_WHITELIST));
 	}
 
 	public static boolean isTownRespawning() {
