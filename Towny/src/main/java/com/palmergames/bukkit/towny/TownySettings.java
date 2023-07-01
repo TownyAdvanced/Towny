@@ -224,7 +224,11 @@ public class TownySettings {
 			} catch (Exception e) {
 				Towny.getPlugin().getLogger().warning("An exception occurred when loading a town level at " + numResidentsIndex + ", this can be caused by having an outdated town_level section.");
 				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the town_level section and letting Towny remake it on the next startup.");
-				throw new TownyException("An error occurred when loading a town_level at " + numResidentsIndex, e);
+
+				if (e instanceof TownyException)
+					throw e;
+				else
+					throw new TownyException("An error occurred when loading a town level at " + numResidentsIndex, e);
 			}
 
 		}
@@ -270,9 +274,13 @@ public class TownySettings {
 					levelGetAndParse(level, description, numResidentsIndex, "nationBonusOutpostLimit", 1, Integer::parseInt)
 				);
 			} catch (Exception e) {
-				Towny.getPlugin().getLogger().warning("An exception occurred when a loading nation_level with " + numResidentsIndex + ", this can be caused by having an outdated nation_level section.");
+				Towny.getPlugin().getLogger().warning("An exception occurred when a loading nation level with " + numResidentsIndex + ", this can be caused by having an outdated nation_level section.");
 				Towny.getPlugin().getLogger().warning("This can be fixed automatically by deleting the nation_level section and letting Towny remake it on the next startup.");
-				throw new TownyException("An error occurred when loading nation_level at " + numResidentsIndex, e);
+
+				if (e instanceof TownyException)
+					throw e;
+				else
+					throw new TownyException("An error occurred when loading a nation level at " + numResidentsIndex, e);
 			}
 
 		}
@@ -291,14 +299,13 @@ public class TownySettings {
 		return value.toString();
 	}
 	
-	private static <T> T levelGetAndParse(Map<?, ?> map, String mapDescribedAs, String indexString, String key, T defaultValue, Function<String, T> parse) {
+	private static <T> T levelGetAndParse(Map<?, ?> map, String mapDescribedAs, String indexString, String key, T defaultValue, Function<String, T> parse) throws TownyException {
 		String value = levelGet(map, mapDescribedAs, indexString, key, defaultValue);
 		
 		try {
 			return parse.apply(value);
-		} catch (NumberFormatException e) {
-			Towny.getPlugin().getLogger().severe("Could not deserialize option '" + key + "' to a number in the " + mapDescribedAs + " at " + indexString + ".");
-			throw e;
+		} catch (Exception e) {
+			throw new TownyException("Could not deserialize option '" + key + "' in the " + mapDescribedAs + " at " + indexString + ".", e);
 		}
 	}
 
