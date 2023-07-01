@@ -5,16 +5,18 @@ import com.palmergames.bukkit.towny.TownySettings;
 
 import org.bukkit.Material;
 
+ import java.util.Collection;
  import java.util.EnumSet;
+ import java.util.HashSet;
  import java.util.Set;
 
 public class TownBlockData {
 	private String mapKey = "+";
 	private double cost = 0.0;
 	private double tax = 0.0;
-	private EnumSet<Material> itemUseIds = EnumSet.noneOf(Material.class); // List of item names that will trigger an item use test.
-	private EnumSet<Material> switchIds = EnumSet.noneOf(Material.class); // List of item names that will trigger a switch test.
-	private EnumSet<Material> allowedBlocks = EnumSet.noneOf(Material.class); // List of item names that will always be allowed.
+	private final Set<Material> itemUseIds = new HashSet<>(); // List of item names that will trigger an item use test.
+	private final Set<Material> switchIds = new HashSet<>(); // List of item names that will trigger a switch test.
+	private final Set<Material> allowedBlocks = new HashSet<>(); // List of item names that will always be allowed.
 	
 	public String getMapKey() {
 		return mapKey;
@@ -54,16 +56,35 @@ public class TownBlockData {
 		return allowedBlocks;
 	}
 	
-	public void setItemUseIds(EnumSet<Material> itemUseIds) {
-		this.itemUseIds = EnumSet.copyOf(itemUseIds);
+	public void setItemUseIds(Collection<Material> itemUseIds) {
+		this.itemUseIds.clear();
+		this.itemUseIds.addAll(itemUseIds);
 	}
 	
-	public void setSwitchIds(EnumSet<Material> switchIds) {
-		this.switchIds = EnumSet.copyOf(switchIds);
+	public void setSwitchIds(Collection<Material> switchIds) {
+		this.switchIds.clear();
+		this.switchIds.addAll(switchIds);
 	}
 	
-	public void setAllowedBlocks(EnumSet<Material> allowedBlocks) {
-		this.allowedBlocks = EnumSet.copyOf(allowedBlocks);
+	public void setAllowedBlocks(Collection<Material> allowedBlocks) {
+		this.allowedBlocks.clear();
+		this.allowedBlocks.addAll(allowedBlocks);
+	}
+
+	// These bridge methods were added during 0.99.2.*
+	@SuppressWarnings({"unused", "unchecked"})
+	private void setItemUseIds$$bridge$$public(EnumSet<?> itemUseIds) {
+		setItemUseIds((Collection<Material>) itemUseIds);
+	}
+
+	@SuppressWarnings({"unused", "unchecked"})
+	private void setSwitchIds$$bridge$$public(EnumSet<?> switchIds) {
+		setSwitchIds((Collection<Material>) switchIds);
+	}
+
+	@SuppressWarnings({"unused", "unchecked"})
+	private void setAllowedBlocks$$bridge$$public(EnumSet<?> allowedBlocks) {
+		setAllowedBlocks((Collection<Material>) allowedBlocks);
 	}
 
 	public void setTax(double tax) {

@@ -1,11 +1,16 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.util.EntityLists;
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -14,32 +19,43 @@ import org.jetbrains.annotations.Nullable;
 import com.palmergames.bukkit.towny.TownyMessaging;
 
 public class EntityTypeUtil {
-	private static final List<EntityType> ExplosiveEntityTypes = Arrays.asList(
-			EntityType.CREEPER,
-			EntityType.DRAGON_FIREBALL, 
-			EntityType.FIREBALL, 
-			EntityType.SMALL_FIREBALL,
-			EntityType.FIREWORK,
-			EntityType.MINECART_TNT,
-			EntityType.PRIMED_TNT,
-			EntityType.WITHER,
-			EntityType.WITHER_SKULL,
-			EntityType.ENDER_CRYSTAL);
 	
-	private static final List<EntityType> ExplosivePVMEntityTypes = Arrays.asList(
-			EntityType.CREEPER,
-			EntityType.DRAGON_FIREBALL,
-			EntityType.FIREBALL,
-			EntityType.SMALL_FIREBALL,
-			EntityType.WITHER,
-			EntityType.WITHER_SKULL,
-			EntityType.ENDER_CRYSTAL);
+	/**
+	 * Used for debugging whether all entity types were mapped, should always equal the map size on the latest version.
+	 */
+	private static int attempted = 0;
 
-	private static final List<EntityType> ExplosivePVPEntityTypes = Arrays.asList(
-			EntityType.FIREWORK,
-			EntityType.MINECART_TNT,
-			EntityType.PRIMED_TNT,
-			EntityType.ENDER_CRYSTAL);
+	/**
+	 * A mapping of various entity types to their corresponding material
+	 */
+	private static final Map<EntityType, Material> ENTITY_TYPE_MATERIAL_MAP = JavaUtil.make(() -> {
+		Map<EntityType, Material> map = new HashMap<>();
+		register(map, "axolotl", "axolotl_bucket");
+		register(map, "cod", "cod");
+		register(map, "salmon", "salmon");
+		register(map, "pufferfish", "pufferfish");
+		register(map, "tropical_fish", "tropical_fish");
+		register(map, "tadpole", "tadpole_bucket");
+		register(map, "item_frame", "item_frame");
+		register(map, "glow_item_frame", "glow_item_frame");
+		register(map, "painting", "painting");
+		register(map, "armor_stand", "armor_stand");
+		register(map, "leash_knot", "lead");
+		register(map, "end_crystal", "end_crystal");
+		register(map, "minecart", "minecart");
+		register(map, "spawner_minecart", "minecart");
+		register(map, "chest_minecart", "chest_minecart");
+		register(map, "furnace_minecart", "furnace_minecart");
+		register(map, "command_block_minecart", "command_block_minecart");
+		register(map, "hopper_minecart", "hopper_minecart");
+		register(map, "tnt_minecart", "tnt_minecart");
+		register(map, "boat", "oak_boat");
+		register(map, "chest_boat", "oak_chest_boat");
+		
+		TownyMessaging.sendDebugMsg("[EntityTypeUtil] Attempted: " + attempted + " | Registered: " + map.size());
+
+		return map;
+	});
 	
 	public static boolean isInstanceOfAny(List<Class<?>> classes, Object obj) {
 
@@ -81,29 +97,12 @@ public class EntityTypeUtil {
 	 */
 	@Nullable
 	public static Material parseEntityToMaterial(EntityType entityType) {
-		return switch (entityType) {
-			case AXOLOTL -> Material.AXOLOTL_BUCKET;
-			case COD -> Material.COD;
-			case SALMON -> Material.SALMON;
-			case PUFFERFISH -> Material.PUFFERFISH;
-			case TROPICAL_FISH -> Material.TROPICAL_FISH;
-			case TADPOLE -> Material.TADPOLE_BUCKET;
-			case ITEM_FRAME -> Material.ITEM_FRAME;
-			case GLOW_ITEM_FRAME -> Material.GLOW_ITEM_FRAME;
-			case PAINTING -> Material.PAINTING;
-			case ARMOR_STAND -> Material.ARMOR_STAND;
-			case LEASH_HITCH -> Material.LEAD;
-			case ENDER_CRYSTAL -> Material.END_CRYSTAL;
-			case MINECART, MINECART_MOB_SPAWNER -> Material.MINECART;
-			case MINECART_CHEST -> Material.CHEST_MINECART;
-			case MINECART_FURNACE -> Material.FURNACE_MINECART;
-			case MINECART_COMMAND -> Material.COMMAND_BLOCK_MINECART;
-			case MINECART_HOPPER -> Material.HOPPER_MINECART;
-			case MINECART_TNT -> Material.TNT_MINECART;
-			case BOAT -> Material.OAK_BOAT;
-			case CHEST_BOAT -> Material.OAK_CHEST_BOAT;
-			default -> null;
-		};
+		Material lookup = ENTITY_TYPE_MATERIAL_MAP.get(entityType);
+		if (lookup != null)
+			return lookup;
+		
+		// Attempt to lookup a material with the same name, if it doesn't exist it's null.
+		return Registry.MATERIAL.get(entityType.getKey());
 	}
 
 	/**
@@ -126,7 +125,7 @@ public class EntityTypeUtil {
 	 */
 	public static boolean isExplosive(EntityType entityType) {
 
-		return ExplosiveEntityTypes.contains(entityType);	
+		return EntityLists.EXPLOSIVE.contains(entityType);
 	}
 	
 	/**
@@ -137,7 +136,7 @@ public class EntityTypeUtil {
 	 */
 	public static boolean isPVPExplosive(EntityType entityType) {
 
-		return ExplosivePVPEntityTypes.contains(entityType);	
+		return EntityLists.PVP_EXPLOSIVE.contains(entityType);
 	}
 	
 	/**
@@ -148,6 +147,19 @@ public class EntityTypeUtil {
 	 */
 	public static boolean isPVMExplosive(EntityType entityType) {
 
-		return ExplosivePVMEntityTypes.contains(entityType);	
+		return EntityLists.PVE_EXPLOSIVE.contains(entityType);
+	}
+	
+	private static void register(Map<EntityType, Material> map, String name, String mat) {
+		attempted++;
+		EntityType type = Registry.ENTITY_TYPE.get(NamespacedKey.minecraft(name));
+		Material material = Registry.MATERIAL.get(NamespacedKey.minecraft(mat));
+
+		if (type == null || material == null) {
+			TownyMessaging.sendDebugMsg("[EntityTypeUtil] Could not map " + name + " to " + mat);
+			return;
+		}
+
+		map.put(type, material);
 	}
 }

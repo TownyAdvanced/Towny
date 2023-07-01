@@ -20,8 +20,10 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import com.palmergames.bukkit.util.EntityLists;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -195,30 +197,13 @@ public class CombatUtil {
 				 * Protect specific entity interactions (faked with Materials).
 				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
 				 */
-				Material material = switch (defendingEntity.getType()) {
-					/*
-					 * Below are the entities we specifically want to protect with this test.
-					 * Any other entity will mean that block is still null and will not be
-					 * tested with a destroy test.
-					 */
-					case ITEM_FRAME:
-					case GLOW_ITEM_FRAME:
-					case PAINTING:
-					case ARMOR_STAND:
-					case ENDER_CRYSTAL:
-					case MINECART:
-					case MINECART_CHEST:
-					case MINECART_FURNACE:
-					case MINECART_COMMAND:
-					case MINECART_HOPPER:
-						yield EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
-					default:
-						yield null;
-				};
+				if (EntityLists.DESTROY_PROTECTED.contains(defendingEntity)) {
+					Material material = EntityTypeUtil.parseEntityToMaterial(defendingEntity.getType());
 
-				if (material != null) {
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), material);
+					if (material != null) {
+						//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), material);
+					}
 				}
 			}
 
@@ -291,7 +276,7 @@ public class CombatUtil {
 					}
 				}
 				
-				if (attackingEntity.getType().name().equals("AXOLOTL") && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
+				if (attackingEntity.getType().getKey().equals(NamespacedKey.minecraft("axolotl")) && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
 					return true;
 				}
 			}

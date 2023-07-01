@@ -75,7 +75,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -404,7 +403,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		BukkitTools.ifCancelledThenThrow(new PlotPreClearEvent(townBlock));
 
-		Set<Material> materialsToDelete = townBlock.getWorld().getPlotManagementMayorDelete();
+		Collection<Material> materialsToDelete = townBlock.getWorld().getPlotManagementMayorDelete();
 		if (materialsToDelete.isEmpty())
 			return;
 

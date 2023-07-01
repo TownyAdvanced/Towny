@@ -13,13 +13,13 @@ import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -37,15 +37,14 @@ public final class TownBlockTypeHandler {
 		for (Field field : TownBlockType.class.getFields()) {
 			try {
 				TownBlockType type = (TownBlockType) field.get(null);
-				newData.put(type.getName().toLowerCase(), type);
+				newData.put(type.getName().toLowerCase(Locale.ROOT), type);
 			} catch (Exception ignored) {}
 		}
 		
 		applyConfigSettings(newData);
 		
 		// Overwrite any entries of our own built-in townblocktypes.
-		for (Map.Entry<String, TownBlockType> entry : newData.entrySet())
-			townBlockTypeMap.put(entry.getKey(), entry.getValue());
+		townBlockTypeMap.putAll(newData);
 		
 		BukkitTools.fireEvent(new TownBlockTypeRegisterEvent());
 		
@@ -119,9 +118,9 @@ public final class TownBlockTypeHandler {
 				double tax = parseDouble(type.getOrDefault("tax", 0.0).toString());
 				String mapKey = String.valueOf(type.getOrDefault("mapKey", "+"));
 
-				EnumSet<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.getOrDefault("itemUseIds", "")), name);
-				EnumSet<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.getOrDefault("switchIds", "")), name);
-				EnumSet<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.getOrDefault("allowedBlocks", "")), name);
+				Set<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.getOrDefault("itemUseIds", "")), name);
+				Set<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.getOrDefault("switchIds", "")), name);
+				Set<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.getOrDefault("allowedBlocks", "")), name);
 				
 				TownBlockType townBlockType = newData.get(name.toLowerCase());
 				TownBlockData data;
@@ -147,9 +146,9 @@ public final class TownBlockTypeHandler {
 		}
 	}
 	
-	private static EnumSet<Material> loadMaterialList(String listName, String materialList, String typeName) {
+	private static Set<Material> loadMaterialList(String listName, String materialList, String typeName) {
 		if (!materialList.isEmpty()) {
-			EnumSet<Material> set = EnumSet.noneOf(Material.class);
+			Set<Material> set = new HashSet<>();
 			for (String materialName : materialList.split(",")) {
 				if (ItemLists.GROUPS.contains(materialName)) {
 					set.addAll(ItemLists.getGrouping(materialName));
@@ -163,12 +162,12 @@ public final class TownBlockTypeHandler {
 			
 			return set;
 		} else
-			return EnumSet.noneOf(Material.class);
+			return new HashSet<>();
 	}
 
 	@Nullable
 	private static Material matchMaterial(String materialName, String listName, String typeName) {
-		Material material = Material.matchMaterial(materialName);
+		Material material = BukkitTools.matchRegistry(Registry.MATERIAL, materialName);
 		if (material == null)
 			TownyMessaging.sendDebugMsg(String.format("Could not find a material named '%s' while loading the " + listName + " list for the %s type.", materialName, typeName));
 		

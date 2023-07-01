@@ -598,11 +598,17 @@ public class TownyRegenAPI {
 	/**
 	 * @deprecated since 0.98.5.0 use {@link WorldCoordMaterialRemover#queueDeleteWorldCoordMaterials(WorldCoord, Collection)} instead.
 	 * @param townBlock TownBlock to remove from.
-	 * @param materialEnumSet Material EnumSet to remove.
+	 * @param materials Material collection to remove.
 	 */
 	@Deprecated
-	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, EnumSet<Material> materialEnumSet) {
-		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), materialEnumSet);
+	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, Collection<Material> materials) {
+		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), materials);
+	}
+
+	@Deprecated
+	@SuppressWarnings("unchecked")
+	private static void deleteMaterialsFromTownBlock$$bridge$$public(TownBlock townBlock, EnumSet<?> materialEnumSet) {
+		deleteMaterialsFromTownBlock(townBlock, (Collection<Material>) materialEnumSet);
 	}
 
 	/**

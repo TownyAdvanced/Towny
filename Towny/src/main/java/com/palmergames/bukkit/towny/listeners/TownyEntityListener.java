@@ -16,10 +16,12 @@ import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Creature;
@@ -60,7 +62,6 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.BlockProjectileSource;
 
 import java.util.ArrayList;
@@ -158,7 +159,7 @@ public class TownyEntityListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onAxolotlTarget(EntityTargetLivingEntityEvent event) {
 		if (event.getEntity() instanceof Mob attacker &&
-			attacker.getType().name().equals("AXOLOTL") &&
+			attacker.getType().getKey().equals(NamespacedKey.minecraft("axolotl")) &&
 			event.getTarget() instanceof Mob defender &&
 			CombatUtil.preventDamageCall(attacker, defender, DamageCause.ENTITY_ATTACK)) {
 			attacker.setMemory(MemoryKey.HAS_HUNTING_COOLDOWN, true);
@@ -225,7 +226,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		if (!event.getEntity().getCustomEffects().stream().anyMatch(effect -> effect.getType().equals(PotionEffectType.HARM)))
+		if (event.getEntity().getCustomEffects().stream().noneMatch(effect -> effect.getType().getKey().equals(NamespacedKey.minecraft("instant_damage"))))
 			return;
 
 		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
@@ -524,51 +525,39 @@ public class TownyEntityListener implements Listener {
 			}
 		}
 
-		switch (event.getEntity().getType()) {
-			case ENDERMAN -> {
-				if (townyWorld.isEndermanProtect())
-					event.setCancelled(true);
-			}
-
+		final EntityType type = event.getEntityType();
+		
+		if (type == EntityType.ENDERMAN) {
+			if (townyWorld.isEndermanProtect())
+				event.setCancelled(true);
+		} else if (EntityLists.BOATS.contains(type)) {
 			/* Protect lily pads. */
-			case BOAT, CHEST_BOAT -> {
-				if (!event.getBlock().getType().equals(Material.LILY_PAD))
-					return;
-				
-				final List<Entity> passengers = event.getEntity().getPassengers();
-				
-				if (!passengers.isEmpty() && passengers.get(0) instanceof Player player)
-					// Test if the player can break here.
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
-				else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
-					// Protect townland from non-player-ridden boats. (Maybe someone is pushing a boat?)
-					event.setCancelled(true);
-			}
+			if (!event.getBlock().getType().equals(Material.LILY_PAD))
+				return;
 
-			case RAVAGER -> {
-				if (townyWorld.isDisableCreatureTrample())
-					event.setCancelled(true);
-			}
+			final List<Entity> passengers = event.getEntity().getPassengers();
 
-			case WITHER -> {
-				List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(Collections.singletonList(event.getBlock()), event.getBlock().getType(), event.getEntity(), event);
-				event.setCancelled(allowed.isEmpty());
-			}
+			if (!passengers.isEmpty() && passengers.get(0) instanceof Player player)
+				// Test if the player can break here.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
+			else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
+				// Protect townland from non-player-ridden boats. (Maybe someone is pushing a boat?)
+				event.setCancelled(true);
+		} else if (type == EntityType.RAVAGER) {
+			if (townyWorld.isDisableCreatureTrample())
+				event.setCancelled(true);
+		} else if (type == EntityType.WITHER) {
+			List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(Collections.singletonList(event.getBlock()), event.getBlock().getType(), event.getEntity(), event);
+			event.setCancelled(allowed.isEmpty());
+		} else if (event.getEntity() instanceof ThrownPotion potion) {
+			// Check that the affected block is a campfire and that a water bottle (no effects) was used.
+			if (event.getBlock().getType() != Material.CAMPFIRE || !potion.getEffects().isEmpty())
+				return;
 
-			/* Protect campfires from SplashWaterBottles. Uses a destroy test. */
-			case SPLASH_POTION -> {
-				final ThrownPotion potion = (ThrownPotion) event.getEntity();
-				// Check that the affected block is a campfire and that a water bottle (no effects) was used.
-				if (event.getBlock().getType() != Material.CAMPFIRE || !potion.getEffects().isEmpty())
-					return;
-				
-				if (potion.getShooter() instanceof BlockProjectileSource bps)
-					event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), event.getBlock()));
-				else if (potion.getShooter() instanceof Player player)
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.CAMPFIRE));
-			}
-			
-			default -> {}
+			if (potion.getShooter() instanceof BlockProjectileSource bps)
+				event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), event.getBlock()));
+			else if (potion.getShooter() instanceof Player player)
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.CAMPFIRE));
 		}
 	}
 
@@ -714,13 +703,13 @@ public class TownyEntityListener implements Listener {
 
 	private boolean attachedToRegeneratingBlock(Entity hanging) {
 		// Prevent an item_frame or painting from breaking if it is attached to something which will be regenerated.
-		return ItemLists.HANGING_ENTITIES.contains(hanging.getType().name()) && 
+		return EntityLists.HANGING.contains(hanging) && 
 			TownyRegenAPI.hasProtectionRegenTask(new BlockLocation(hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection())));
 	}
 
 	private boolean itemFrameBrokenByBoatExploit(Entity hanging) {
 		// This workaround prevent boats from destroying item_frames, detailed in https://hub.spigotmc.org/jira/browse/SPIGOT-3999.
-		if (ItemLists.ITEM_FRAMES.contains(hanging.getType().name())) {
+		if (EntityLists.ITEM_FRAMES.contains(hanging)) {
 			Block block = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection()).getBlock();
 			if (block.isLiquid() || block.isEmpty())
 				return false;

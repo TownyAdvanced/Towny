@@ -96,7 +96,7 @@ public class PlayerCacheUtil {
 			cache.updateCoord(worldCoord);
 
 			boolean result = cache.getCachePermission(material, action);
-			TownyMessaging.sendDebugMsg("New Cache created for " + player.getName() + " using " + material + ":" + action + ":" + status.name() + " = " + result);
+			TownyMessaging.sendDebugMsg("New Cache created for " + player.getName() + " using " + material.getKey() + ":" + action + ":" + status.name() + " = " + result);
 			return result;
 		}
 	}

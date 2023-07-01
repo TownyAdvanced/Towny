@@ -351,7 +351,7 @@ public class BukkitTools {
 	@Nullable
 	public static String matchMaterialName(String name) {
 		Material mat = matchRegistry(Registry.MATERIAL, name);
-		return mat == null ? null : mat.name(); 
+		return mat == null ? null : mat.getKey().getKey().toUpperCase(Locale.ROOT); 
 	}
 
 	/**

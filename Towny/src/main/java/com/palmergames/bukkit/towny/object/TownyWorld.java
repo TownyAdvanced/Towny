@@ -13,6 +13,7 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -22,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,27 +36,27 @@ public class TownyWorld extends TownyObject {
 	private HashMap<String, Town> towns = new HashMap<>();
 
 	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
-	private EnumSet<EntityType> unclaimDeleteEntityTypes = null;
+	private Set<EntityType> unclaimDeleteEntityTypes = null;
 	
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
-	private EnumSet<Material> plotManagementDeleteIds = null;
+	private Set<Material> plotManagementDeleteIds = null;
 	
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
-	private EnumSet<Material> plotManagementMayorDelete = null;
+	private Set<Material> plotManagementMayorDelete = null;
 	
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
-	private EnumSet<Material> plotManagementIgnoreIds = null;
+	private Set<Material> plotManagementIgnoreIds = null;
 	private Set<Material> revertOnUnclaimWhitelistMaterials = null;
 
 	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
-	private EnumSet<EntityType> entityExplosionProtection = null;
-	private EnumSet<Material> plotManagementWildRevertBlockWhitelist = null;
+	private Set<EntityType> entityExplosionProtection = null;
+	private Set<Material> plotManagementWildRevertBlockWhitelist = null;
 	
 	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
-	private EnumSet<Material> blockExplosionProtection = null;
+	private Set<Material> blockExplosionProtection = null;
 	
-	private EnumSet<Material> unclaimedZoneIgnoreBlockMaterials = null;
+	private Set<Material> unclaimedZoneIgnoreBlockMaterials = null;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 
@@ -401,7 +401,7 @@ public class TownyWorld extends TownyObject {
 		return isDeletingEntitiesOnUnclaim;
 	}
 
-	public EnumSet<EntityType> getUnclaimDeleteEntityTypes() {
+	public Collection<EntityType> getUnclaimDeleteEntityTypes() {
 		if (unclaimDeleteEntityTypes == null)
 			setUnclaimDeleteEntityTypes(TownySettings.getUnclaimDeleteEntityTypes());
 
@@ -409,7 +409,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setUnclaimDeleteEntityTypes(List<String> entityTypes) {
-		this.unclaimDeleteEntityTypes = TownySettings.toEntityTypeEnumSet(entityTypes);
+		this.unclaimDeleteEntityTypes = TownySettings.toEntityTypeSet(entityTypes);
 	}
 
 	public void setUsingPlotManagementMayorDelete(boolean using) {
@@ -432,7 +432,7 @@ public class TownyWorld extends TownyObject {
 		return isUsingPlotManagementRevert;
 	}
 
-	public EnumSet<Material> getPlotManagementDeleteIds() {
+	public Collection<Material> getPlotManagementDeleteIds() {
 
 		if (plotManagementDeleteIds == null)
 			return TownySettings.getPlotManagementDeleteIds();
@@ -446,11 +446,10 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementDeleteIds(List<String> plotManagementDeleteIds) {
-
-		this.plotManagementDeleteIds = TownySettings.toMaterialEnumSet(plotManagementDeleteIds);
+		this.plotManagementDeleteIds = new HashSet<>(TownySettings.toMaterialSet(plotManagementDeleteIds));
 	}
 
-	public EnumSet<Material> getPlotManagementMayorDelete() {
+	public Collection<Material> getPlotManagementMayorDelete() {
 
 		if (plotManagementMayorDelete == null)
 			return TownySettings.getPlotManagementMayorDelete();
@@ -464,8 +463,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementMayorDelete(List<String> plotManagementMayorDelete) {
-
-		this.plotManagementMayorDelete = TownySettings.toMaterialEnumSet(plotManagementMayorDelete);
+		this.plotManagementMayorDelete = new HashSet<>(TownySettings.toMaterialSet(plotManagementMayorDelete));
 	}
 
 	public boolean isUnclaimedBlockAllowedToRevert(Material mat) {
@@ -476,7 +474,7 @@ public class TownyWorld extends TownyObject {
 		return !isPlotManagementIgnoreIds(mat);
 	}
 	
-	public EnumSet<Material> getPlotManagementIgnoreIds() {
+	public Collection<Material> getPlotManagementIgnoreIds() {
 		
 		if (plotManagementIgnoreIds == null)
 			return TownySettings.getPlotManagementIgnoreIds();
@@ -489,8 +487,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
-
-		this.plotManagementIgnoreIds = TownySettings.toMaterialEnumSet(plotManagementIgnoreIds);
+		this.plotManagementIgnoreIds = new HashSet<>(TownySettings.toMaterialSet(plotManagementIgnoreIds));
 	}
 
 	public Collection<Material> getRevertOnUnclaimWhitelistMaterials() {
@@ -501,7 +498,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setRevertOnUnclaimWhitelistMaterials(List<String> revertOnUnclaimWhitelistMaterials) {
-		this.revertOnUnclaimWhitelistMaterials = new HashSet<>(TownySettings.toMaterialEnumSet(revertOnUnclaimWhitelistMaterials));
+		this.revertOnUnclaimWhitelistMaterials = new HashSet<>(TownySettings.toMaterialSet(revertOnUnclaimWhitelistMaterials));
 	}
 
 	public boolean isRevertOnUnclaimWhitelistMaterial(Material mat) {
@@ -559,28 +556,28 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
-		entityExplosionProtection = EnumSet.noneOf(EntityType.class);
+		entityExplosionProtection = new HashSet<>();
 		
-		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entitytype enum names.
+		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entity's key.
 		if (entities.size() > 0 && !StringMgmt.isAllUpperCase(entities))
 			convertLegacyEntityNames(entities);
 		
-		entityExplosionProtection.addAll(TownySettings.toEntityTypeEnumSet(entities));
+		entityExplosionProtection.addAll(TownySettings.toEntityTypeSet(entities));
 	}
 	
 	private void convertLegacyEntityNames(List<String> entities) {
 		for (int i = 0; i < entities.size(); i++) {
 			String entity = entities.get(i);
-			for (EntityType type : EntityType.values()) {
+			for (EntityType type : Registry.ENTITY_TYPE) {
 				if (type.getEntityClass() != null && type.getEntityClass().getSimpleName().equalsIgnoreCase(entity)) {
-					entities.set(i, type.name());
+					entities.set(i, type.getKey().toString());
 					break;
 				}					
 			}
 		}
 	}
 
-	public EnumSet<EntityType> getPlotManagementWildRevertEntities() {
+	public Collection<EntityType> getPlotManagementWildRevertEntities() {
 
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
@@ -598,15 +595,11 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertBlockWhitelist(List<String> mats) {
-
-		plotManagementWildRevertBlockWhitelist = EnumSet.noneOf(Material.class);
-
-		for (Material mat : TownySettings.toMaterialEnumSet(mats))
-			plotManagementWildRevertBlockWhitelist.add(mat);
-
+		plotManagementWildRevertBlockWhitelist = new HashSet<>();
+		plotManagementWildRevertBlockWhitelist.addAll(TownySettings.toMaterialSet(mats));
 	}
 
-	public EnumSet<Material> getPlotManagementWildRevertBlockWhitelist() {
+	public Collection<Material> getPlotManagementWildRevertBlockWhitelist() {
 
 		if (plotManagementWildRevertBlockWhitelist == null)
 			setPlotManagementWildRevertBlockWhitelist(TownySettings.getWildExplosionRevertBlockWhitelist());
@@ -640,15 +633,10 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
-
-		blockExplosionProtection = EnumSet.noneOf(Material.class);
-
-		for (Material mat : TownySettings.toMaterialEnumSet(mats))
-			blockExplosionProtection.add(mat);
-
+		blockExplosionProtection = new HashSet<>(TownySettings.toMaterialSet(mats));
 	}
 
-	public EnumSet<Material> getPlotManagementWildRevertBlocks() {
+	public Collection<Material> getPlotManagementWildRevertBlocks() {
 
 		if (blockExplosionProtection == null)
 			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
@@ -667,12 +655,12 @@ public class TownyWorld extends TownyObject {
 
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 		if (unclaimedZoneIgnoreIds == null)
-			this.unclaimedZoneIgnoreBlockMaterials = TownySettings.getUnclaimedZoneIgnoreMaterials();
+			this.unclaimedZoneIgnoreBlockMaterials = new HashSet<>(TownySettings.getUnclaimedZoneIgnoreMaterials());
 		else
-			this.unclaimedZoneIgnoreBlockMaterials = TownySettings.toMaterialEnumSet(unclaimedZoneIgnoreIds);
+			this.unclaimedZoneIgnoreBlockMaterials = new HashSet<>(TownySettings.toMaterialSet(unclaimedZoneIgnoreIds));
 	}
 	
-	public EnumSet<Material> getUnclaimedZoneIgnoreMaterials() {
+	public Collection<Material> getUnclaimedZoneIgnoreMaterials() {
 
 		if (unclaimedZoneIgnoreBlockMaterials == null)
 			return TownySettings.getUnclaimedZoneIgnoreMaterials();

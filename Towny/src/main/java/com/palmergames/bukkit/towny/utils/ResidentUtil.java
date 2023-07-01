@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -130,12 +131,18 @@ public class ResidentUtil {
 		createTownyGUI(resident, items, name);
 	}
 	
-	public static void openGUIInventory(Resident resident, Set<Material> set, String name) {
+	public static void openGUIInventory(Resident resident, Collection<Material> set, String name) {
 		ArrayList<ItemStack> items = new ArrayList<>();
 		for (Material material : set)
 			items.add(new ItemStack(material));
 		
 		createTownyGUI(resident, items, name);
+	}
+	
+	// Bridge method added during 0.99.2.*
+	@SuppressWarnings("unused")
+	private static void openGUIInventory$$bridge$$public(Resident resident, Set<Material> set, String name) {
+		openGUIInventory(resident, set, name);
 	}
 	
 	public static void openSelectionGUI(Resident resident, SelectionGUI.SelectionType selectionType) {

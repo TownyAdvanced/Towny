@@ -33,6 +33,7 @@ import com.palmergames.util.TimeTools;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -41,8 +42,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -98,8 +99,8 @@ public class TownySettings {
 	private static final SortedMap<Integer, TownLevel> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, NationLevel> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	
-	private static final EnumSet<Material> itemUseMaterials = EnumSet.noneOf(Material.class);
-	private static final EnumSet<Material> switchUseMaterials = EnumSet.noneOf(Material.class);
+	private static final Set<Material> itemUseMaterials = new HashSet<>();
+	private static final Set<Material> switchUseMaterials = new HashSet<>();
 	private static final List<Class<?>> protectedMobs = new ArrayList<>();
 	
 	private static final Map<NamespacedKey, Consumer<CommentedConfiguration>> CONFIG_RELOAD_LISTENERS = new HashMap<>();
@@ -381,7 +382,7 @@ public class TownySettings {
 			if (ItemLists.GROUPS.contains(matName)) {
 				switchUseMaterials.addAll(ItemLists.getGrouping(matName));
 			} else {
-				Material material = Material.matchMaterial(matName);
+				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, matName);
 				if (material != null)
 					switchUseMaterials.add(material);
 			}
@@ -397,31 +398,36 @@ public class TownySettings {
 			if (ItemLists.GROUPS.contains(matName)) {
 				itemUseMaterials.addAll(ItemLists.getGrouping(matName));
 			} else {
-				Material material = Material.matchMaterial(matName);
+				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, matName);
 				if (material != null)
 					itemUseMaterials.add(material);
 			}
 		}
 	}
 
-	public static EnumSet<EntityType> toEntityTypeEnumSet(List<String> entityList) {
-		EnumSet<EntityType> entities = EnumSet.noneOf(EntityType.class);
+	public static Set<EntityType> toEntityTypeSet(List<String> entityList) {
+		Set<EntityType> entities = new HashSet<>();
+		
 		for (String entityName : entityList) {
-			try {
-				entities.add(EntityType.valueOf(entityName.toUpperCase(Locale.ROOT)));
-			} catch (IllegalArgumentException ignored) {}
+			EntityType type = BukkitTools.matchRegistry(Registry.ENTITY_TYPE, entityName);
+			if (type != null)
+				entities.add(type);
 		}
 
 		return entities;
 	}
 
-	public static EnumSet<Material> toMaterialEnumSet(List<String> materialList) {
-		EnumSet<Material> materials = EnumSet.noneOf(Material.class);
+	public static Collection<Material> toMaterialSet(List<String> materialList) {
+		Set<Material> materials = new HashSet<>();
+		
 		for (String materialName : materialList) {
+			if (materialName.isEmpty())
+				continue;
+			
 			if (ItemLists.GROUPS.contains(materialName.toUpperCase(Locale.ROOT))) {
 				materials.addAll(ItemLists.getGrouping(materialName.toUpperCase(Locale.ROOT)));
 			} else {
-				Material material = Material.matchMaterial(materialName.toUpperCase(Locale.ROOT));
+				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, materialName);
 				if (material != null)
 					materials.add(material);
 			}
@@ -505,11 +511,11 @@ public class TownySettings {
 
 		String[] strArray = getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault()).split(",");
 		List<String> list = new ArrayList<>();
-		if (strArray.length > 0) {
-			for (String aStrArray : strArray)
-				if (aStrArray != null)
-					list.add(aStrArray.trim());
-		}
+		
+		for (String string : strArray)
+			if (string != null && !string.isEmpty())
+				list.add(string.trim());
+		
 		return list;
 	}
 
@@ -1605,9 +1611,9 @@ public class TownySettings {
 		return getFireSpreadBypassMaterials().contains(mat);
 	}
 	
-	public static EnumSet<Material> getUnclaimedZoneIgnoreMaterials() {
+	public static Collection<Material> getUnclaimedZoneIgnoreMaterials() {
 
-		return toMaterialEnumSet(getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE));
+		return toMaterialSet(getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE));
 	}
 	
 	public static List<Class<?>> getProtectedEntityTypes() {
@@ -2223,9 +2229,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE_ENABLE);
 	}
 
-	public static EnumSet<Material> getPlotManagementDeleteIds() {
+	public static Collection<Material> getPlotManagementDeleteIds() {
 
-		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE));
+		return toMaterialSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_DELETE));
 	}
 
 	public static boolean isUsingPlotManagementMayorDelete() {
@@ -2233,9 +2239,9 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE_ENABLE);
 	}
 
-	public static EnumSet<Material> getPlotManagementMayorDelete() {
+	public static Collection<Material> getPlotManagementMayorDelete() {
 
-		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE));
+		return toMaterialSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_MAYOR_DELETE));
 	}
 
 	public static boolean isUsingPlotManagementRevert() {
@@ -2263,13 +2269,13 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_ENABLE);
 	}
 
-	public static EnumSet<Material> getPlotManagementIgnoreIds() {
+	public static Collection<Material> getPlotManagementIgnoreIds() {
 
-		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE));
+		return toMaterialSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_IGNORE));
 	}
 
 	public static Collection<Material> getRevertOnUnclaimWhitelistMaterials() {
-		return toMaterialEnumSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_WHITELIST));
+		return toMaterialSet(getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_REVERT_WHITELIST));
 	}
 
 	public static boolean isTownRespawning() {

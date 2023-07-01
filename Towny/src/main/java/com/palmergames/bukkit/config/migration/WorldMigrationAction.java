@@ -1,12 +1,13 @@
 package com.palmergames.bukkit.config.migration;
 
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.util.StringMgmt;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -14,53 +15,61 @@ public enum WorldMigrationAction {
 	UPDATE_WORLD_BLOCK_IGNORE(((townyWorld, change) -> {
 		if (change.type == MigrationType.REPLACE)
 			townyWorld.setPlotManagementIgnoreIds(replaceAll(townyWorld.getPlotManagementIgnoreIds().stream()
-					.map(mat -> mat.name())
+					.map(WorldMigrationAction::matName)
 					.collect(Collectors.toList()), change.key, change.value));
 		else
-			townyWorld.setPlotManagementIgnoreIds(splitMats(StringMgmt.join(townyWorld.getPlotManagementIgnoreIds(), ",") + change.value));
+			townyWorld.setPlotManagementIgnoreIds(splitMats(townyWorld.getPlotManagementIgnoreIds().stream().map(type -> type.getKey().toString()).collect(Collectors.joining(",")) + change.value));
 	})),
 	UPDATE_WORLD_DELETE_MAYOR(((townyWorld, change) -> {
 		if (change.type == MigrationType.REPLACE)
 			townyWorld.setPlotManagementMayorDelete(replaceAll(townyWorld.getPlotManagementMayorDelete().stream()
-					.map(mat -> mat.name())
+					.map(WorldMigrationAction::matName)
 					.collect(Collectors.toList()), change.key, change.value));
 		else
-			townyWorld.setPlotManagementMayorDelete(splitMats(StringMgmt.join(townyWorld.getPlotManagementMayorDelete(), ",") + change.value));
+			townyWorld.setPlotManagementMayorDelete(splitMats(townyWorld.getPlotManagementMayorDelete().stream().map(type -> type.getKey().toString()).collect(Collectors.joining(",")) + change.value));
 	})),
 	UPDATE_WORLD_UNCLAIM_DELETE(((townyWorld, change) -> {
 		if (change.type == MigrationType.REPLACE)
 			townyWorld.setPlotManagementDeleteIds(replaceAll(townyWorld.getPlotManagementDeleteIds().stream()
-					.map(mat -> mat.name())
+					.map(WorldMigrationAction::matName)
 					.collect(Collectors.toList()), change.key, change.value));
 		else
-			townyWorld.setPlotManagementDeleteIds(splitMats(StringMgmt.join(townyWorld.getPlotManagementDeleteIds(), ",") + change.value));
+			townyWorld.setPlotManagementDeleteIds(splitMats(townyWorld.getPlotManagementDeleteIds().stream().map(type -> type.getKey().toString()).collect(Collectors.joining(",")) + change.value));
 	})),
 	UPDATE_WILDERNESS_IGNORE_MATS(((townyWorld, change) -> {
 		if (change.type == MigrationType.REPLACE)
 			townyWorld.setUnclaimedZoneIgnore(replaceAll(townyWorld.getUnclaimedZoneIgnoreMaterials().stream()
-					.map(mat -> mat.name())
+					.map(WorldMigrationAction::matName)
 					.collect(Collectors.toList()), change.key, change.value));
 		else
-			townyWorld.setUnclaimedZoneIgnore(splitMats(StringMgmt.join(townyWorld.getUnclaimedZoneIgnoreMaterials(), ",") + change.value));
+			townyWorld.setUnclaimedZoneIgnore(splitMats(townyWorld.getUnclaimedZoneIgnoreMaterials().stream().map(type -> type.getKey().toString()).collect(Collectors.joining(",")) + change.value));
 	})),
 	UPDATE_WORLD_EXPLOSION_REVERT_BLOCKS(((townyWorld, change) -> {
 		if (change.type == MigrationType.REPLACE)
 			townyWorld.setPlotManagementWildRevertMaterials(replaceAll(townyWorld.getPlotManagementWildRevertBlocks().stream()
-					.map(mat -> mat.name())
+					.map(WorldMigrationAction::matName)
 					.collect(Collectors.toList()), change.key, change.value));
 		else
-			townyWorld.setPlotManagementWildRevertMaterials(splitMats(StringMgmt.join(townyWorld.getPlotManagementWildRevertBlocks(), ",") + change.value));
+			townyWorld.setPlotManagementWildRevertMaterials(splitMats(townyWorld.getPlotManagementWildRevertBlocks().stream().map(type -> type.getKey().toString()).collect(Collectors.joining(",")) + change.value));
 	})),
 	UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES(((townyWorld, change) -> {
 		if (change.type == MigrationType.REPLACE)
 			townyWorld.setPlotManagementWildRevertEntities(replaceAll(townyWorld.getPlotManagementWildRevertEntities().stream()
-					.map(type -> type.name())
+					.map(WorldMigrationAction::entityName)
 					.collect(Collectors.toList()), change.key, change.value));
 		else
-			townyWorld.setPlotManagementWildRevertEntities(splitMats(StringMgmt.join(townyWorld.getPlotManagementWildRevertEntities(), ",") + change.value));
-	}));
+			townyWorld.setPlotManagementWildRevertEntities(splitMats(townyWorld.getPlotManagementWildRevertEntities().stream().map(type -> type.getKey().toString()).collect(Collectors.joining(",")) + change.value));
+	})),
+	UPDATE_WORLD_UNCLAIM_REVERT_ENTITIES((((townyWorld, change) -> {
+		if (change.type == MigrationType.REPLACE)
+			townyWorld.setUnclaimDeleteEntityTypes(replaceAll(townyWorld.getUnclaimDeleteEntityTypes().stream()
+				.map(WorldMigrationAction::entityName)
+				.collect(Collectors.toList()), change.key, change.value));
+		else
+			townyWorld.setUnclaimDeleteEntityTypes(splitMats(townyWorld.getUnclaimDeleteEntityTypes().stream().map(type -> type.getKey().toString()).collect(Collectors.joining(",")) + change.value));
+	})));
 	
-	BiConsumer<TownyWorld, Change> action;
+	final BiConsumer<TownyWorld, Change> action;
 	
 	WorldMigrationAction(BiConsumer<TownyWorld, Change> action) {
 		this.action = action;
@@ -76,7 +85,21 @@ public enum WorldMigrationAction {
 	
 	private static List<String> replaceAll(List<String> list, String oldValue, String newValue) {
 		List<String> toReplace = new ArrayList<>(list);
-		Collections.replaceAll(toReplace, oldValue, newValue);
+		
+		ListIterator<String> iterator = toReplace.listIterator();
+		while (iterator.hasNext()) {
+			if (iterator.next().equalsIgnoreCase(oldValue))
+				iterator.set(newValue);
+		}
+
 		return toReplace;
+	}
+	
+	private static String matName(Material material) {
+		return material.getKey().getKey(); // Material.DIRT -> minecraft:dirt -> dirt
+	}
+	
+	private static String entityName(EntityType entity) {
+		return entity.getKey().getKey();
 	}
 }
