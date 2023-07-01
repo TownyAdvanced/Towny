@@ -158,3 +158,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 
     - For older branches using the Ant build system, the main command to use would be: `ant clean jar`. This command will _exit_ the Towny directory, creating a lib folder alongside it. A Towny.jar file will be generated and placed within there.
     - _Note: As Ant is being deprecated, older branches may eventually not be able to be built against without modification of the `build.xml` file. We leave no guarantee that the file repo providing the dependencies will stay up._
+
+___
+
+<a href=https://dedimc.promo/towny>![Spigot_Banner_Towny](https://github.com/TownyAdvanced/Towny/assets/879756/559c8340-82e5-41fc-a10c-af0dcf47f38f)</a>
