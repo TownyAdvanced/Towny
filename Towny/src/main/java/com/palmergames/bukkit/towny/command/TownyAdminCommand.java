@@ -2125,7 +2125,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			plugin.loadFoundation(true);
 		} catch (TownyInitException tie) {
 			TownyMessaging.sendErrorMsg(sender, tie.getMessage());
-			tie.printStackTrace();
+			plugin.getLogger().log(Level.WARNING, "An exception occurred when reloading the database", tie);
 			plugin.addError(tie.getError());
 			return;
 		}
