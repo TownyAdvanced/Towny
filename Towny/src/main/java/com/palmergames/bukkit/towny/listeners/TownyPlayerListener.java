@@ -174,10 +174,11 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerQuit(PlayerQuitEvent event) {
+		plugin.deleteCache(event.getPlayer());
+		TownyPerms.removeAttachment(event.getPlayer().getName());
 
-		if (plugin.isError()) {
+		if (plugin.isError())
 			return;
-		}
 		
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
@@ -196,8 +197,6 @@ public class TownyPlayerListener implements Listener {
 				event.getPlayer().setHealth(0);
 		}
 
-		plugin.deleteCache(event.getPlayer());
-		TownyPerms.removeAttachment(event.getPlayer().getName());
 		ChunkNotificationUtil.cancelPlayerTasks(event.getPlayer());
 	}
 	
