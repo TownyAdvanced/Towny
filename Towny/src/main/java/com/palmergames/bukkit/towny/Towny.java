@@ -478,18 +478,17 @@ public class Towny extends JavaPlugin {
 
 		final PluginManager pluginManager = getServer().getPluginManager();
 
-		if (!isError()) {			
-			// Huds
-			pluginManager.registerEvents(new HUDManager(this), this);
+		// Huds
+		pluginManager.registerEvents(new HUDManager(this), this);
 
-			// Manage player deaths and death payments
-			pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
-			pluginManager.registerEvents(new TownyVehicleListener(this), this);
-			pluginManager.registerEvents(new TownyServerListener(this), this);
-			pluginManager.registerEvents(new TownyCustomListener(this), this);
-			pluginManager.registerEvents(new TownyWorldListener(this), this);
-			pluginManager.registerEvents(new TownyLoginListener(), this);
-		}
+		// Manage player deaths and death payments
+		pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
+		pluginManager.registerEvents(new TownyVehicleListener(this), this);
+		pluginManager.registerEvents(new TownyServerListener(this), this);
+		pluginManager.registerEvents(new TownyCustomListener(this), this);
+		pluginManager.registerEvents(new TownyWorldListener(this), this);
+		pluginManager.registerEvents(new TownyLoginListener(), this);
+		
 
 		// Always register these events.
 		pluginManager.registerEvents(new TownyPlayerListener(this), this);
