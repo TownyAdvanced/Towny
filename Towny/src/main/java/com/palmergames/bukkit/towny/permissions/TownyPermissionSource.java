@@ -175,6 +175,7 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player is not in adminbypass mode, and they are
 	 *         considered a admin Permissible.
 	 */
+	@SuppressWarnings("unused")
 	private boolean isTownyAdmin$$bridge$$public(Player player) {
 		return isTownyAdmin(player);
 	}
@@ -235,6 +236,7 @@ public abstract class TownyPermissionSource {
 	 * @param perm   String representing the node to test for.
 	 * @return true if the player has the permission node or is otherwise allowed.
 	 */
+	@SuppressWarnings("unused")
 	private boolean testPermission$$bridge$$public(Player player, String perm) {
 		return testPermission(player, perm);
 	}
