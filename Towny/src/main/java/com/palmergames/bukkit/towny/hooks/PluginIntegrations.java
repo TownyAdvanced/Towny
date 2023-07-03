@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -189,7 +190,7 @@ public class PluginIntegrations {
 
 		// Test for GroupManager being present.
 		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
-		if (test != null) {
+		if (test != null && JavaUtil.classExists("org.anjocaido.groupmanager.GroupManager")) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(towny, test));
 			return output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
 		}
