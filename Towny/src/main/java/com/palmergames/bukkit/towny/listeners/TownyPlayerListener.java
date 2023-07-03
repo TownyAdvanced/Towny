@@ -89,7 +89,6 @@ import org.bukkit.metadata.MetadataValue;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -114,6 +113,7 @@ public class TownyPlayerListener implements Listener {
 	private CommandList ownPlotLimitedCommands;
 	
 	private static final MethodHandle IS_WAXED;
+	private static final MethodHandle GET_RESPAWN_FLAGS;
 	
 	static {
 		MethodHandle temp = null;
@@ -124,6 +124,15 @@ public class TownyPlayerListener implements Listener {
 		} catch (Throwable ignored) {}
 		
 		IS_WAXED = temp;
+		
+		temp = null;
+		try {
+			// https://jd.papermc.io/paper/1.20/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
+			//noinspection JavaReflectionMemberAccess
+			temp = MethodHandles.publicLookup().unreflect(PlayerRespawnEvent.class.getMethod("getRespawnFlags"));
+		} catch (Throwable ignored) {}
+		
+		GET_RESPAWN_FLAGS = temp;
 	}
 
 	public TownyPlayerListener(Towny plugin) {
@@ -248,23 +257,18 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
-	@SuppressWarnings({"unchecked", "JavaReflectionMemberAccess"})
+	@SuppressWarnings({"unchecked"})
 	private boolean isEndPortalRespawn(PlayerRespawnEvent event) {
 		try {
-			// https://jd.papermc.io/paper/1.19/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
-			Collection<Object> respawnFlags = (Collection<Object>) PlayerRespawnEvent.class.getDeclaredMethod("getRespawnFlags").invoke(event);
+			final Collection<Enum<?>> respawnFlags = (Collection<Enum<?>>) GET_RESPAWN_FLAGS.invoke(event);
 			
-			Method name = null;
-			for (Object flag : respawnFlags) {
-				if (name == null)
-					name = flag.getClass().getMethod("name");
-				
-				if ("END_PORTAL".equals(name.invoke(flag)))
+			for (final Enum<?> flag : respawnFlags) {
+				if ("END_PORTAL".equals(flag.name()))
 					return true;
 			}
 			
 			return false;
-		} catch (ReflectiveOperationException e) {
+		} catch (Throwable e) {
 			// Spigot
 			final Player player = event.getPlayer();
 			
