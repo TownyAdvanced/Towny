@@ -782,7 +782,8 @@ public class TownyFormatter {
 		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), town.getAccount().getHoldingFormattedBalance()));
 		if (town.isBankrupt()) {
 			if (town.getAccount().getDebtCap() == 0)
-				town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+				town.getAccount().setDebtCap(MoneyUtil.getTownDebtCap(town, TownySettings.getTownUpkeepCost(town)));
+
 			screen.addComponentOf("bankrupt", translator.of("status_bank_bankrupt") + " " + colourKeyValue(translator.of("status_debtcap"), "-" + formatMoney(town.getAccount().getDebtCap())));
 		}
 		

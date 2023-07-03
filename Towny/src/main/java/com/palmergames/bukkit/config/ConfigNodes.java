@@ -2635,6 +2635,17 @@ public enum ConfigNodes {
 			"# When true the debt_cap.override price will be multiplied by the debtCapModifier in the town_level",
 			"# section of the config. (Ex: debtCapModifier of 3.0 and debt_cap.override of 1000.0 would set ",
 			"# a debtcap of 3.0 x 1000 = 3000."),
+	ECO_BANKRUPTCY_DEBT_CAP_USES_FIXED_DAYS(
+			"economy.bankruptcy.debt_cap.debt_cap_uses_fixed_days",
+			"false",
+			"",
+			"# When true a town will only be allowed to be bankrupt for a specific number of days, before they will be deleted,",
+			"# requires delete_towns_that_reach_debt_cap to be true."),
+	ECO_BANKRUPTCY_DEBT_CAP_ALLOWED_DAYS(
+			"economy.bankruptcy.debt_cap.allowed_days",
+			"7",
+			"",
+			"# When debt_cap_uses_fixed_days is set to true, how many days will a town be allowed to be bankrupt?"),
 	ECO_BANKRUPTCY_UPKEEP(
 			"economy.bankruptcy.upkeep",
 			"",

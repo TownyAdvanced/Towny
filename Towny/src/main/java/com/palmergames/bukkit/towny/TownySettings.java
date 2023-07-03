@@ -3219,7 +3219,15 @@ public class TownySettings {
 	public static boolean isDebtCapDeterminedByTownLevel() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DEBT_CAP_USES_TOWN_LEVELS);
 	}
-	
+
+	public static boolean isDebtCapAFixedNumberOfDays() {
+		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DEBT_CAP_USES_FIXED_DAYS);
+	}
+
+	public static int getDebtCapFixedDays() {
+		return getInt(ConfigNodes.ECO_BANKRUPTCY_DEBT_CAP_ALLOWED_DAYS);
+	}
+
 	public static boolean isUpkeepDeletingTownsThatReachDebtCap() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_UPKEEP_DELETE_TOWNS_THAT_REACH_DEBT_CAP);
 	}
