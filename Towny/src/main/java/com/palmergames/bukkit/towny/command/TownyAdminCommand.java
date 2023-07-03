@@ -937,7 +937,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Player couldn't be found");
 		}
 		String node = split[1];
-		if (player.hasPermission(node))
+		if (TownyUniverse.getInstance().getPermissionSource().testPermission(player, node))
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_perm_true"));
 		else
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_perm_false"));
