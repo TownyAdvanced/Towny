@@ -203,6 +203,18 @@ public enum ConfigNodes {
 			"",
 			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
 			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
+	TOWN_OVERCLAIMING_TOWN_AGE_REQUIREMENT(
+			"town.overclaiming.town_age_requirement",
+			"7d",
+			"",
+			"# When in use, requires that a town be of a minimum age in order to overclaim another town. This prevents new towns being made just to overclaim someone.",
+			"# Default is for 7 days."),
+	TOWN_OVERCLAIMING_COMMAND_COOLDOWN(
+			"town.overclaiming.command_cooldown",
+			"0m",
+			"",
+			"# When in use, requires an amount of time to pass before the /t takeoverclaim command can be used again."),
+
 	TOWN_LIMIT(
 			"town.town_limit",
 			"3000",

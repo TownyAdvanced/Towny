@@ -17,6 +17,8 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.TimeMgmt;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -182,6 +184,12 @@ public class TownClaim implements Runnable {
 		// If this is an occaision where a town is stealing this land, do the
 		// prep to clean the old town from the townblock.
 		if (alreadyClaimed) {
+			if (TownySettings.getOverclaimingCommandCooldownInSeconds() > 0 &&
+				CooldownTimerTask.hasCooldown(town.getUUID().toString(), "overclaimingcooldown")) {
+				long req = CooldownTimerTask.getCooldownRemaining(town.getUUID().toString(), "overclaimingcooldown") * 1000;
+				throw new TownyException(Translatable.of("msg_err_your_cannot_overclaim_for_another", TimeMgmt.getFormattedTimeValue(req)));
+			}
+
 			Town oldTown = worldCoord.getTownOrNull();
 
 			//  Fire an event for other plugins.
@@ -197,6 +205,9 @@ public class TownClaim implements Runnable {
 			// - Removing the town's jail if it is.
 			// - Removing the oldTown's nation spawn point.
 			// - Updating the oldTown's TownBlockTypeCache.
+			
+			if (TownySettings.getOverclaimingCommandCooldownInSeconds() > 0)
+				CooldownTimerTask.addCooldownTimer(town.getUUID().toString(), "overclaimingcooldown", TownySettings.getOverclaimingCommandCooldownInSeconds());
 		}
 
 		townBlock.setTown(town);

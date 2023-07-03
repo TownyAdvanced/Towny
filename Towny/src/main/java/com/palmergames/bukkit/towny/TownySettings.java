@@ -529,6 +529,16 @@ public class TownySettings {
 		}
 	}
 
+	public static long getMillis(ConfigNodes node) {
+
+		try {
+			return TimeTools.getMillis(getString(node));
+		} catch (NumberFormatException e) {
+			sendError(node.getRoot().toLowerCase(Locale.ROOT) + " from config.yml");
+			return 1;
+		}
+	}
+
 	public static void addComment(String root, String... comments) {
 
 		newConfig.addComment(root.toLowerCase(Locale.ROOT), comments);
@@ -1493,6 +1503,14 @@ public class TownySettings {
 
 	public static boolean isOverClaimingPreventedByHomeBlockRadius() {
 		return getBoolean(ConfigNodes.TOWN_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS);
+	}
+
+	public static long getOverclaimingTownAgeRequirement() {
+		return getMillis(ConfigNodes.TOWN_OVERCLAIMING_TOWN_AGE_REQUIREMENT);
+	}
+
+	public static int getOverclaimingCommandCooldownInSeconds() {
+		return (int) getSeconds(ConfigNodes.TOWN_OVERCLAIMING_COMMAND_COOLDOWN);
 	}
 
 	public static boolean isSellingBonusBlocks(Town town) {
