@@ -8830,3 +8830,27 @@ v0.92.0.11:
   - Refactor sql source to remove use of connection field, courtesy of Warrior with PR #6721.
   - Bukkit enum eradication futureproofing, courtesy of Warrior with PR #6665.
   - Update some incorrect entity keys, courtesy of Warrior with PR #6794.
+0.99.2.7:
+  - Use method handle for respawn flags, courtesy of Warrior with PR #6799.
+  - Make explicitly false nodes bypass towny admin check, courtesy of Warrior with PR #6789.
+    - Allows admins to have both towny.admin permissions while still negating some specific permissions.
+  - Add new options to the overclaiming feature:
+    - A configurable cooldown between using /t takeoverclaim.
+    - A configurable age requirement to prevent new towns using /t takeoverclaim.
+    - Closes #6734.
+  - New Config Option: town.overclaiming.town_age_requirement
+    - Default: 7d - When in use, requires that a town be of a minimum age in order to overclaim another town. This prevents new towns being made just to overclaim someone.
+    - Default is for 7 days.
+  - New Config Option: town.overclaiming.command_cooldown 
+    - Default: 0m 
+    - When in use, requires an amount of time to pass before the /t takeoverclaim command can be used again.
+  - Add alternate debt cap calculation system for Bankruptcy.
+    - Instead of using the townblock and town costs, it takes the cost of a town's upkeep times a number of days.
+    - This way it can be assured that a town will always become deleted/reach the debt cap after X number of days.
+    - Closes #6775.
+  -  New Config Option: economy.bankruptcy.debt_cap.debt_cap_uses_fixed_days
+    - Default: false
+    - When true a town will only be allowed to be bankrupt for a specific number of days, before they will be deleted, requires delete_towns_that_reach_debt_cap to be true.
+  - New Config Option: economy.bankruptcy.debt_cap.allowed_days
+    - Default: 7
+    - When debt_cap_uses_fixed_days is set to true, how many days will a town be allowed to be bankrupt?
