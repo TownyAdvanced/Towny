@@ -30,6 +30,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 public class MoneyUtil {
 
+	public static double getTownDebtCap(Town town, double upkeep) {
+		return TownySettings.isDebtCapAFixedNumberOfDays() ? upkeep * TownySettings.getDebtCapFixedDays() : getEstimatedValueOfTown(town);
+	}
+	
 	/**
 	 * Get estimated value of town
 	 * Useful when calculating the allowed debt cap for a town
