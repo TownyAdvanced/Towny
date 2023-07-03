@@ -3923,6 +3923,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Town town = getTownFromPlayerOrThrow(player);
 
+		long ageRequirement = TownySettings.getOverclaimingTownAgeRequirement();
+		if (ageRequirement > 0l) {
+			long ageNeeded = System.currentTimeMillis() - ageRequirement;
+			if (ageNeeded < town.getRegistered())
+				throw new TownyException(Translatable.of("msg_err_your_town_is_not_old_enough_to_overclaim", TimeMgmt.getFormattedTimeValue(town.getRegistered() - ageNeeded)));
+		}
+
 		// Make sure this wouldn't end up becoming a homeblock.
 		if (town.getTownBlocks().size() == 0)
 			throw new TownyException(Translatable.of("msg_err_you_cannot_make_this_your_homeblock"));

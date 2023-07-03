@@ -1,4 +1,4 @@
- package com.palmergames.bukkit.towny;
+package com.palmergames.bukkit.towny;
 
 import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.config.CommentedConfiguration;
