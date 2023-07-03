@@ -8854,3 +8854,4 @@ v0.92.0.11:
   - New Config Option: economy.bankruptcy.debt_cap.allowed_days
     - Default: 7
     - When debt_cap_uses_fixed_days is set to true, how many days will a town be allowed to be bankrupt?
+  - API: Add Resident#getResidentsEmbassyTowns, which returns a list of towns that a resident has embassy plots in.

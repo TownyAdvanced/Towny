@@ -910,6 +910,22 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
 	}
 
+	/**
+	 * Gets a list of Towns which the given resident owns embassy plots in.
+	 * @return List of Towns in which the resident owns embassies.
+	 */
+	public List<Town> getResidentsEmbassyTowns() {
+		List<Town> townEmbassies = new ArrayList<>();
+
+		for(TownBlock tB : getTownBlocks()) {
+			Town town = tB.getTownOrNull();
+			if (town == null || townEmbassies.contains(town) || town.hasResident(this))
+				continue;
+			townEmbassies.add(town);
+		}
+		return townEmbassies;
+	}
+
 	public long getJoinedTownAt() {
 		return joinedTownAt;
 	}

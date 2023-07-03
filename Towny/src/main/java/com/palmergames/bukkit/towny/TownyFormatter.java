@@ -220,7 +220,7 @@ public class TownyFormatter {
 		}
 		
 		// Embassies in: Camelot, London, Tokyo.
-		List<Town> townEmbassies = getResidentsEmbassyTowns(resident);
+		List<Town> townEmbassies = resident.getResidentsEmbassyTowns();
 		if (townEmbassies.size() > 0)
 			screen.addComponentOf("embassiesInTowns", getFormattedTownyObjects(translator.of("status_embassy_town"), new ArrayList<>(townEmbassies)));
 			
@@ -695,24 +695,6 @@ public class TownyFormatter {
 		if (resident.isJailed() && resident.hasJailTime())
 			jailLine += colourKey(translator.of("msg_jailed_for_x_hours", resident.getJailHours()));
 		return jailLine;
-	}
-	
-	/**
-	 * Gets a list of Towns which the given resident owns embassy plots in.
-	 * @param resident the given Resident
-	 * @return List of Towns in which the resident owns embassies.
-	 */
-	private static List<Town> getResidentsEmbassyTowns(Resident resident) {
-		List<Town> townEmbassies = new ArrayList<>();
-		String actualTown = resident.hasTown() ? TownyAPI.getInstance().getResidentTownOrNull(resident).getName() : "";
-		
-		for(TownBlock tB : resident.getTownBlocks()) {
-			Town town = tB.getTownOrNull();
-			if (town == null) continue;
-			if (!actualTown.equals(town.getName()) && !townEmbassies.contains(town))
-				townEmbassies.add(town);
-		}
-		return townEmbassies;
 	}
 	
 	/**
