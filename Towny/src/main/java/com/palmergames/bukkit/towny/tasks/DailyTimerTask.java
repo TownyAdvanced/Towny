@@ -647,7 +647,11 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Bankruptcy is enabled.
 		boolean townWasBankrupt = town.isBankrupt();
-		town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+		if (TownySettings.isDebtCapAFixedNumberOfDays()) {
+			town.getAccount().setDebtCap(upkeep * TownySettings.getDebtCapFixedDays());
+		} else {
+			town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+		}
 	
 		if (town.getAccount().getHoldingBalance() - upkeep < town.getAccount().getDebtCap() * -1) {
 			// The town will exceed their debt cap to pay the upkeep.

@@ -781,8 +781,13 @@ public class TownyFormatter {
 		screen.addComponentOf("moneynewline", Component.newline());
 		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), town.getAccount().getHoldingFormattedBalance()));
 		if (town.isBankrupt()) {
-			if (town.getAccount().getDebtCap() == 0)
-				town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+			if (town.getAccount().getDebtCap() == 0) {
+				if (TownySettings.isDebtCapAFixedNumberOfDays()) {
+					town.getAccount().setDebtCap(TownySettings.getTownUpkeepCost(town) * TownySettings.getDebtCapFixedDays());
+				} else {
+					town.getAccount().setDebtCap(MoneyUtil.getEstimatedValueOfTown(town));
+				}
+			}
 			screen.addComponentOf("bankrupt", translator.of("status_bank_bankrupt") + " " + colourKeyValue(translator.of("status_debtcap"), "-" + formatMoney(town.getAccount().getDebtCap())));
 		}
 		
