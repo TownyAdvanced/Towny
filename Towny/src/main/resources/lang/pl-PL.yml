@@ -1709,3 +1709,5 @@ msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
 msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
+msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."

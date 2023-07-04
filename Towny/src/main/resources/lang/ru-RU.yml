@@ -1105,7 +1105,7 @@ msg_town_merge_err_not_enough_money: '&cСлияние провалилось: �
 msg_town_merge_err_too_many_purchased_townblocks: '&cСлияние провалилось: Слишком много заприваченных участков (%d)'
 msg_town_merge_warning: '&cПредупреждение: в случае принятия, слияние с %s будет стоить %s.'
 msg_town_merge_debt_warning: '&cПредупреждение: в данный момент %s имеет долги, в случае принятия вам придётся заплатить их долги.'
-msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
+msg_town_merge_cost_breakdown: '&bРазбор затрат: базовая стоимость — %s, стоимость участков — %s, цена банкротства — %s, стоимость BonusBlock — %s'
 msg_town_merge_failed: '&cСлияние не получилось.'
 msg_town_merge_cancelled: '&cСлияние отменено.'
 msg_town_merge_success: '&bГород %s, принадлежащий %s, успешно объединился с городом %s.'
@@ -1694,18 +1694,20 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "Вы не можете зан
 msg_err_that_town_is_not_conquered: "%s уже не захвачен."
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s теперь не захвачен."
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
-msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+msg_setup_command_folia: "Эта функция временно не работает с Folia из-за нерабочего API, обратитесь к руководству по установке внизу."
+msg_perm_gui_folia: "Эта функция временно не работает с Folia из-за нерабочего API, используйте команду /plot perm add <name>"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
-msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "Вы не можете расприватить этот участок, поскольку участку на %s,%s не будет хватать прилегающих участков (нужно минимум %s.)"
 #Message shown when a nation collects taxes from its towns.
-msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+msg_tax_collected_from_towns: "<aqua>Ваша нация собрала %s налогов с городов."
 #Message shown when a town collects taxes from its residents.
-msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+msg_tax_collected_from_residents: "<aqua>Ваш город собрал %s налогов с жителей."
 #Message shown when a town collects taxes from its plottaxes.
-msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
+msg_tax_collected_from_plots: "<aqua>Ваш город собрал %s налогов с участков."
 #Message shown when a nation collects taxes from its towns that are conquered.
-msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra tax from its conquered towns."
-msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
-msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
-msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
+msg_tax_collected_from_conquered_towns: "<aqua>Ваша нация собрала %s дополнительных налогов с завоеванных городов."
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Ваш город освобожден от налога завоеванного."
+msg_nation_set_conquered_tax__amount_set: "%s установил налог завоеванного в %s."
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "Налог завоеванного не может быть выше %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
+msg_err_your_cannot_overclaim_for_another: "Вы не можете перепривачивать еще %s."
