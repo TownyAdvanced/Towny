@@ -1709,3 +1709,5 @@ msg_tax_collected_from_conquered_towns: "<aqua>Ваша нация собрал�
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Ваш город освобожден от налога завоеванного."
 msg_nation_set_conquered_tax__amount_set: "%s установил налог завоеванного в %s."
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "Налог завоеванного не может быть выше %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
+msg_err_your_cannot_overclaim_for_another: "Вы не можете перепривачивать еще %s."
