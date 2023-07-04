@@ -9,6 +9,7 @@ import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -35,8 +37,13 @@ public class TownyPaperEvents implements Listener {
 	private static final MethodHandle GET_ORIGIN = getOriginHandle();
 	private static final MethodHandle GET_PRIMER_ENTITY = getPrimerEntityHandle();
 	
+	public static final MethodHandle SIGN_OPEN_GET_CAUSE = getSignOpenCauseHandle(); // Public for use in the player listener
+	private static final MethodHandle SIGN_OPEN_GET_SIGN = getSignOpenGetSignHandle();
+	
 	private static final String SPIGOT_PRIME_EVENT = "org.bukkit.event.block.TNTPrimeEvent"; // Added somewhere during 1.19.4
 	private static final String PAPER_PRIME_EVENT = "com.destroystokyo.paper.event.block.TNTPrimeEvent";
+	
+	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -54,24 +61,10 @@ public class TownyPaperEvents implements Listener {
 			registerEvent(EntityChangeBlockEvent.class, fallingBlockListener(), EventPriority.LOW, true);
 			TownyMessaging.sendDebugMsg("Entity#getOrigin found, using falling block listener.");
 		}
-	}
-
-	@SuppressWarnings("JavaReflectionMemberAccess")
-	private static MethodHandle getOriginHandle() {
-		try {
-			//https://jd.papermc.io/paper/1.19/org/bukkit/entity/Entity.html#getOrigin()
-			return MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getOrigin"));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
-	}
-
-	private static MethodHandle getPrimerEntityHandle() {
-		try {
-			// https://jd.papermc.io/paper/1.19/com/destroystokyo/paper/event/block/TNTPrimeEvent.html#getPrimerEntity()
-			return MethodHandles.publicLookup().unreflect(Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity"));
-		} catch (ReflectiveOperationException e) {
-			return null;
+		
+		if (SIGN_OPEN_GET_CAUSE != null) {
+			registerEvent(SIGN_OPEN_EVENT, this::openSignListener, EventPriority.LOW, true);
+			TownyMessaging.sendDebugMsg("PlayerOpenSignEvent#getCause found, using PlayerOpenSignEvent listener.");
 		}
 	}
 	
@@ -91,11 +84,11 @@ public class TownyPaperEvents implements Listener {
 	// https://papermc.io/javadocs/paper/1.19/com/destroystokyo/paper/event/block/TNTPrimeEvent.html
 	private Consumer<Event> tntPrimeEvent() {
 		return event -> {
-			Entity primerEntity;
+			Entity primerEntity = null;
 			
 			if (event.getClass().getName().equals(SPIGOT_PRIME_EVENT)) {
 				primerEntity = ((TNTPrimeEvent) event).getPrimingEntity();
-			} else {
+			} else if (GET_PRIMER_ENTITY != null) {
 				try {
 					primerEntity = (Entity) GET_PRIMER_ENTITY.invoke(event);
 				} catch (final Throwable e) {
@@ -120,7 +113,7 @@ public class TownyPaperEvents implements Listener {
 	
 	private Consumer<EntityChangeBlockEvent> fallingBlockListener() {
 		return event -> {
-			if (event.getEntityType() != EntityType.FALLING_BLOCK || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			if (GET_ORIGIN == null || event.getEntityType() != EntityType.FALLING_BLOCK || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 				return;
 			
 			Location origin;
@@ -141,5 +134,65 @@ public class TownyPaperEvents implements Listener {
 			if (!BorderUtil.allowedMove(origin.getBlock(), event.getBlock()))
 				event.setCancelled(true);
 		};
+	}
+	
+	private Consumer<Event> openSignListener() {
+		return event -> {
+			if (SIGN_OPEN_GET_CAUSE == null || SIGN_OPEN_GET_SIGN == null)
+				return;
+			
+			final Enum<?> cause;
+			final Sign sign;
+			try {
+				cause = (Enum<?>) SIGN_OPEN_GET_CAUSE.invoke(event);
+				sign = (Sign) SIGN_OPEN_GET_SIGN.invoke(event);
+			} catch (final Throwable e) {
+				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking " + SIGN_OPEN_EVENT + "#getCause/#getSign reflectively", e);
+				return;
+			}
+			
+			if (!cause.name().equals("INTERACT") || !sign.isPlaced())
+				return;
+			
+			if (!TownyActionEventExecutor.canDestroy(((PlayerEvent) event).getPlayer(), sign.getBlock()))
+				((Cancellable) event).setCancelled(true);
+		};
+	}
+
+	@SuppressWarnings("JavaReflectionMemberAccess")
+	private static MethodHandle getOriginHandle() {
+		try {
+			//https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getOrigin()
+			return MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getOrigin"));
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
+	}
+
+	private static MethodHandle getPrimerEntityHandle() {
+		try {
+			// https://jd.papermc.io/paper/1.20/com/destroystokyo/paper/event/block/TNTPrimeEvent.html#getPrimerEntity()
+			return MethodHandles.publicLookup().unreflect(Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity"));
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
+	}
+
+	private static MethodHandle getSignOpenCauseHandle() {
+		try {
+			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
+			return MethodHandles.publicLookup().unreflect(Class.forName(SIGN_OPEN_EVENT).getMethod("getCause"));
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
+	}
+
+	private static MethodHandle getSignOpenGetSignHandle() {
+		try {
+			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
+			return MethodHandles.publicLookup().unreflect(Class.forName(SIGN_OPEN_EVENT).getMethod("getSign"));
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
 	}
 }

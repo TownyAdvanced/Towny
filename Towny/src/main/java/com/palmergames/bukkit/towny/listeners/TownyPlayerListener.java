@@ -490,8 +490,9 @@ public class TownyPlayerListener implements Listener {
 			
 			/*
 			 * Prevents players from editing signs where they shouldn't.
+			 * This check is only used when our listener for paper's sign open event is not in use, since that event fires when the sign is actually opened instead of interact.
 			 */
-			if (ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock))
+			if (TownyPaperEvents.SIGN_OPEN_GET_CAUSE == null && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock))
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
 		}
 	}
