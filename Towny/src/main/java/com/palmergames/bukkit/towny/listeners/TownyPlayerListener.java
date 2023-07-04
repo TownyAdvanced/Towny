@@ -112,20 +112,10 @@ public class TownyPlayerListener implements Listener {
 	private CommandList blockedWarCommands;
 	private CommandList ownPlotLimitedCommands;
 	
-	private static final MethodHandle IS_WAXED;
 	private static final MethodHandle GET_RESPAWN_FLAGS;
 	
 	static {
 		MethodHandle temp = null;
-		try {
-			// https://jd.papermc.io/paper/1.20/org/bukkit/block/Sign.html#isWaxed()
-			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(Sign.class.getMethod("isWaxed"));
-		} catch (Throwable ignored) {}
-		
-		IS_WAXED = temp;
-		
-		temp = null;
 		try {
 			// https://jd.papermc.io/paper/1.20/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
 			//noinspection JavaReflectionMemberAccess
@@ -1414,13 +1404,13 @@ public class TownyPlayerListener implements Listener {
 	}
 	
 	private boolean isSignWaxed(Block block) {
-		if (IS_WAXED == null || MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
+		if (MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
 			return false;
 		
 		try {
-			return (boolean) IS_WAXED.invoke(sign);
-		} catch (Throwable throwable) {
-			// Shouldn't be happening but treat as not waxed just in case
+			return sign.isWaxed();
+		} catch (NoSuchMethodError e) {
+			// Method does not exist in this version
 			return false;
 		}
 	}
