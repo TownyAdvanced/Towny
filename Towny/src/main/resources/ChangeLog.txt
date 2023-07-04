@@ -8856,3 +8856,5 @@ v0.92.0.11:
     - When debt_cap_uses_fixed_days is set to true, how many days will a town be allowed to be bankrupt?
   - API: Add Resident#getResidentsEmbassyTowns, which returns a list of towns that a resident has embassy plots in.
   - Make Towny startup when Groupmanager has failed to start.
+  - Use paper's open sign event for detecting sign edits, courtesy of Warrior with PR #6803.
+  - Remove reflection for isWaxed method, courtesy of Warrior with PR #6798.
