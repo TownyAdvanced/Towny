@@ -914,7 +914,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	 * Gets a list of Towns which the given resident owns embassy plots in.
 	 * @return List of Towns in which the resident owns embassies.
 	 */
-	public List<Town> getResidentsEmbassyTowns() {
+	public List<Town> getEmbassyTowns() {
 		List<Town> townEmbassies = new ArrayList<>();
 
 		for(TownBlock tB : getTownBlocks()) {
