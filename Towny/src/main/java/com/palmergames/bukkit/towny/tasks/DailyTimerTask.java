@@ -404,7 +404,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (!universe.hasResident(resident.getName()))
 				continue;
 
-			if (TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt") || resident.isNPC() || resident.isMayor()) {
+			if (TownyPerms.getResidentPerms(resident).get("towny.tax_exempt") == Boolean.TRUE || resident.isNPC() || resident.isMayor()) {
 				TownyMessaging.sendMsg(resident, Translatable.of("msg_tax_exempt"));
 				continue;
 			}
