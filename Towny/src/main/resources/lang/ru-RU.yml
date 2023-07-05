@@ -534,17 +534,17 @@ tc_channel_list_out: 'Из'
 tc_err_you_dont_have_perm_mute_list: 'У вас нет разрешения на просмотр списка в муте.'
 tc_err_you_dont_have_unmute_perm: 'У вас нет разрешений на размут'
 tc_err_no_channel_called_channel: 'Нет канала, который бы назывался &f%s'
-tc_err_no_muted_players_in_channel_players: 'Нет приглушённых игроков в &f%s'
-tc_players_muted_in_channel: '[TownyChat] &f%n &2игроков приглушено в &f%s&2: &f%s'
+tc_err_no_muted_players_in_channel_players: 'Нет заглушённых игроков в &f%s'
+tc_players_muted_in_channel: '[TownyChat] &f%n &2игроков заглушено в &f%s&2: &f%s'
 tc_err_no_online_players_with_name: 'Нет онлайн-игроков с именем &f%s'
 tc_err_you_dont_have_mute_perms: 'У вас нет разрешений на мут.'
 tc_err_you_cant_mute_admin: 'Вы не можете заткнуть администратора Towny.'
 tc_err_you_cant_mute_chat_mod: 'Вы не можете заткнуть модератора чата.'
-tc_player_already_muted_in_channel: '[TownyChat] Игрок уже заткнут в &f%s'
-tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2заткнут на &f%s'
-tc_player_is_not_muted_in_channel: '[TownyChat] Игрок может писать в &f%s'
-tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2может писать в &f%s'
-tc_err_you_are_currently_muted_in_channel: 'В настоящее время вы приглушены в &f%s&c!'
+tc_player_already_muted_in_channel: '[TownyChat] Игрок уже заглушен в &f%s'
+tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2заглушен в &f%s'
+tc_player_is_not_muted_in_channel: '[TownyChat] Игрок может писа́ть в &f%s'
+tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2снова может писа́ть в &f%s'
+tc_err_you_are_currently_muted_in_channel: 'В данный момент вы заглушены в &f%s&c!'
 tc_err_you_cannot_leave_channel: 'Вы не можете покинуть &f%s'
 tc_you_already_left_channel: '[TownyChat] Вы уже покинули &f%s'
 tc_you_left_channel: '[TownyChat] Вы покинули &f%s'
@@ -553,7 +553,7 @@ tc_err_you_cannot_join_channel: 'Вы не можете присоединить
 tc_you_are_already_in_channel: '[TownyChat] Вы уже присоединились к &f%s'
 tc_you_joined_channel: '[TownyChat] Вы присоединились &f%s'
 tc_err_you_are_already_talking_in_default_channel_help: 'Вы уже пишите в канале по умолчанию. Чтобы переключиться на другой канал, используйте команду этого канала.'
-tc_err_unable_to_talk_essentials_mute: 'Не получается написать...Вас заткнули!'
+tc_err_unable_to_talk_essentials_mute: 'Вы не можете писа́ть... вас заглушили!'
 tc_err_unable_to_talk_you_are_spamming: 'Не получается написать...Вы спамите!'
 msg_admin_set_plot_help_1: 'Когда в городе.'
 msg_admin_set_plot_help_2: 'Когда в диких землях.'
@@ -897,7 +897,7 @@ msg_ta_deposit_all_success: 'Успешно переведено %s на сче�
 bonus_townblocks: 'бонусные участки'
 #Added in 0.80
 nomad_sing: 'Путник'
-msg_new_town_advice: 'Поздравляем с созданием своего города! Ваш город будет платить налог за ежедневное обслуживание, которое в настоящее время оценивается в %s. Вы можете внести деньги в банк вашего города, используя ''/t deposit #''. Без денег на содержание ваш город будет удален. Вы можете увидеть свои расходы в любое время, используя /towny prices. Следующий ежедневный налог будет списан через %s.'
+msg_new_town_advice: 'Поздравляем с созданием своего города! Ваш город будет платить налог в %s за ежедневное обслуживание. Вы можете внести деньги в казну вашего города, используя ''/t deposit количество''. Без денег на содержание ваш город будет удален. Вы можете увидеть свои расходы в любое время, используя ''/towny prices''. Следующий ежедневный налог будет собран через %s.'
 #Added in 0.81
 msg_err_teleport_cancelled_damage: 'Из-за урона телепортация отменена.'
 #Added in 0.82
@@ -1696,6 +1696,7 @@ msg_err_that_town_is_not_conquered: "%s уже не захвачен."
 msg_conquered_status_removed: "%s теперь не захвачен."
 msg_setup_command_folia: "Эта функция временно не работает с Folia из-за нерабочего API, обратитесь к руководству по установке внизу."
 msg_perm_gui_folia: "Эта функция временно не работает с Folia из-за нерабочего API, используйте команду /plot perm add <name>"
+msg_folia_scoreboard: "Изменение таблиц временно не работает с Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "Вы не можете расприватить этот участок, поскольку участку на %s,%s не будет хватать прилегающих участков (нужно минимум %s.)"
 #Message shown when a nation collects taxes from its towns.
@@ -1709,5 +1710,5 @@ msg_tax_collected_from_conquered_towns: "<aqua>Ваша нация собрал�
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Ваш город освобожден от налога завоеванного."
 msg_nation_set_conquered_tax__amount_set: "%s установил налог завоеванного в %s."
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "Налог завоеванного не может быть выше %s."
-msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
-msg_err_your_cannot_overclaim_for_another: "Вы не можете перепривачивать еще %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "Ваш город недостаточно стар для перепривата, попробуйте снова через %s."
+msg_err_your_cannot_overclaim_for_another: "Вы не можете переприватить еще %s."
