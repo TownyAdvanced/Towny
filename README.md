@@ -140,7 +140,7 @@ ___
 ### Importing Towny for API use
 [![](https://jitpack.io/v/TownyAdvanced/Towny.svg)](https://jitpack.io/#TownyAdvanced/Towny)
 
-Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a Maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
+Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a Maven pom.xml,](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide) or read [the API guide](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI) to learn about the vast API Towny has to offer.
 
 ___
 
