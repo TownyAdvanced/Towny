@@ -1,8 +1,10 @@
 package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,6 +28,11 @@ public class HUDManager implements Listener{
 
 	//**TOGGLES**//
 	public static void togglePermHUD (Player p) {
+		if (Towny.getPlugin().isFolia()) {
+			TownyMessaging.sendErrorMsg(p, Translatable.of("msg_folia_scoreboard"));
+			return;
+		}
+		
 		if (!permUsers.contains(p)) {
 			toggleAllOff(p);
 			permUsers.add(p);
@@ -35,6 +42,11 @@ public class HUDManager implements Listener{
 	}
 	
 	public static void toggleMapHud(Player player) {
+		if (Towny.getPlugin().isFolia()) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_folia_scoreboard"));
+			return;
+		}
+		
 		if (!mapUsers.contains(player)) {
 			toggleAllOff(player);
 			mapUsers.add(player);
@@ -51,6 +63,9 @@ public class HUDManager implements Listener{
 	}
 	
 	public static void toggleOff(final Player player) {
+		if (Towny.getPlugin().isFolia())
+			return;
+		
 		Optional.ofNullable(Bukkit.getScoreboardManager()).ifPresent(manager -> player.setScoreboard(manager.getMainScoreboard()));
 	}
 
