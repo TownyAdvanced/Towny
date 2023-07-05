@@ -1034,7 +1034,7 @@ public class TownyFormatter {
 		List<String> out = new ArrayList<>();
 		
 		Town town;
-		boolean taxExempt = TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt");
+		boolean taxExempt = TownyPerms.getResidentPerms(resident).get("towny.tax_exempt") == Boolean.TRUE;
 		double plotTax = 0.0;
 		double townTax = 0.0;
 
