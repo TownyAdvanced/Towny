@@ -530,5 +530,16 @@
         "worldAction": "UPDATE_WORLD_UNCLAIM_REVERT_ENTITIES"
       }
     ]
+  },
+  {
+    "version": "0.99.3.1",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
+        "value": ",CREEPER",
+        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
+      }
+    ]
   }
 ]

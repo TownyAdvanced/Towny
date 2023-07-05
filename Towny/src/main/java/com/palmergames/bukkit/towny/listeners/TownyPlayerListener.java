@@ -236,6 +236,11 @@ public class TownyPlayerListener implements Listener {
 		
 		event.setRespawnLocation(respawn);
 		
+		System.out.println("Towny has set a respawn location: " + respawn.toString());
+		Town town = TownyAPI.getInstance().getTown(respawn);
+		if (town != null)
+			System.out.println("Town at that location: " + town.getName());
+
 		// Handle Spawn protection
 		long protectionTime = TownySettings.getSpawnProtectionDuration();
 		if (protectionTime > 0L) {
