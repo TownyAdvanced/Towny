@@ -8858,3 +8858,6 @@ v0.92.0.11:
   - Make Towny startup when Groupmanager has failed to start.
   - Use paper's open sign event for detecting sign edits, courtesy of Warrior with PR #6803.
   - Remove reflection for isWaxed method, courtesy of Warrior with PR #6798.
+0.99.2.8:
+  - Fix scoreboards on Folia by disabling them, courtesy of Warrior with PR #6805.
+  - Fix negating tax_exempt not working, courtesy of Warrior with PR #6804.
