@@ -497,7 +497,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				continue;
 
 			// Prevents Mayors/Assistants/VIPs paying taxes in their own town.
-			if (town.hasResident(resident) && TownyPerms.getResidentPerms(resident).containsKey("towny.tax_exempt"))
+			if (town.hasResident(resident) && TownyPerms.getResidentPerms(resident).get("towny.tax_exempt") == Boolean.TRUE)
 				continue;
 
 			// The PlotTax might be negative, in order to pay the resident for owning a special plot type.
