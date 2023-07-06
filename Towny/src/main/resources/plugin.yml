@@ -1,0 +1,815 @@
+name: Towny
+main: com.palmergames.bukkit.towny.Towny
+version: ${project.version}
+api-version: ${project.bukkitAPIVersion}
+folia-supported: true
+author: 'LlmDl, Warrior, and many contributors. Past lead devs: Shade, ElgarL.'
+website: 'https://townyadvanced.github.io/'
+prefix: Towny
+description: >
+    Resident-Town-Nation hierarchy combined with a grid based
+    protection system, many features and an expansive API.
+
+softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My_Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy,LuckPerms]
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Towny commands                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+commands:
+    towny:
+        aliases: []
+        description: Base Towny command, see /towny ?
+    nation:
+        aliases: [n, nat]
+        description: Towny's Nation command, see /nation ?
+    plot:
+        aliases: []
+        description: Towny's Plot command, see /plot ?
+    resident:
+        aliases: [res, p, player]
+        description: Towny's Resident command, see /res ?
+    town:
+        aliases: [t]
+        description: Towny's Town command, see /town ?
+    townyadmin:
+        aliases: [ta]
+        description: Towny's TownyAdmin command, see /ta ?
+    townyworld:
+        aliases: [tw]
+        description: Towny's TownyWorld command, see /tw ?
+    invite:
+        aliases: [invites]
+        description: Towny's Invite command, see /invite ?
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     Permissions                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+permissions:
+    towny.admin:
+        description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
+        default: false
+        children:
+            towny.command.townyadmin.*: true
+            towny.command.townyworld.*: true
+            towny.command.towny.*: true
+            towny.command.town.*: true
+            towny.command.town.claim.town.multiple: true
+            towny.command.nation.*: true
+            towny.command.plot.*: true
+            towny.town.resident: true
+            towny.town.spawn.*: true
+            towny.wild.*: true
+            towny.claimed.*: true
+            towny.globally_welcome: true
+            towny.admin.nation_zone: true
+            towny.admin.outlaw.teleport_bypass: true
+            towny.admin.spawn: true
+            towny.admin.town_commands.blacklist_bypass: true
+            towny.admin.updatealerts: true
+
+    towny.outlaw.jailer:
+        description: Node given in townyperms.yml to mayors, assistants and sheriffs by default. Required to jail outlaws that are killed in a town.
+        default: false
+
+    towny.admin.outlaw.teleport_bypass:
+        description: Admin perm allowing player to bypass being teleported out of towns they are outlawed in.
+        default: false
+
+    towny.townless:
+        description: Given to players which do not have a town.
+        default: false
+
+    towny.town.resident:
+        description: User is permitted to join towns.
+        default: false
+
+    towny.admin.spawn:
+        description: Grants admin spawn priviledges, without cooldowns/warmups/spawncosts.
+        default: false
+        children:
+            towny.command.townyadmin.town.spawn.freecharge: true
+            towny.admin.spawn.nowarmup: true
+            towny.admin.spawn.nocooldown: true
+            towny.admin.spawn.nocharge: true
+
+    towny.town.spawn.*:
+        description: Grants all Spawn travel nodes
+        default: false
+        children:
+            towny.town.spawn.town: true
+            towny.town.spawn.nation: true
+            towny.town.spawn.ally: true
+            towny.town.spawn.public: true
+
+    towny.town.spawn.town:
+        description: User is permitted to use /town spawn.
+        default: false
+        children:
+            towny.town.spawn.outpost: true
+
+    towny.town.spawn.nation.bypass_public:
+        description: User is permitted to use /town spawn when they are a member of the same nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.
+        default: false
+
+    towny.town.spawn.ally.bypass_public:
+        description: User is permitted to use /town spawn when they are a member of an allied nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.
+        default: false
+
+    towny.town.spawn.outpost:
+        description: User is permitted to use /town outpost & /town outpost list
+        default: false
+        children:
+            towny.command.town.outpost.list: true
+
+    towny.nation.spawn.*:
+        description: Grants all Nation Spawn travel nodes
+        default: false
+        children:
+            towny.nation.spawn.nation: true
+            towny.nation.spawn.ally: true
+            towny.nation.spawn.public: true
+
+    towny.wild.*:
+        description: User can build/destroy/switch/item_use in the wild.
+        default: false
+        children:
+            # You can grant these child nodes and replace the * with a block Id
+            # to directly set or negate specific block permissions
+            towny.wild.build.*: true
+            towny.wild.switch.*: true
+            towny.wild.destroy.*: true
+            towny.wild.item_use.*: true
+
+    towny.claimed.*:
+        description: User can build/destroy/switch/item_use in all towns.
+        default: false
+        children:
+            # You can grant these child nodes and replace the * with a block Id
+            # to directly set or negate specific block permissions
+            towny.claimed.townowned.build.*: true
+            towny.claimed.townowned.item_use.*: true
+            towny.claimed.townowned.destroy.*: true
+            towny.claimed.townowned.switch.*: true
+            towny.claimed.owntown.build.*: true
+            towny.claimed.owntown.item_use.*: true
+            towny.claimed.owntown.destroy.*: true
+            towny.claimed.owntown.switch.*: true
+            towny.claimed.alltown.switch.*: true
+            towny.claimed.alltown.build.*: true
+            towny.claimed.alltown.item_use.*: true
+            towny.claimed.alltown.destroy.*: true
+
+    #
+    # New command permissions (replaces many of the older permissions)
+    #
+
+    # Res/Town/Nation lookup commands.
+
+    towny.command.resident.otherresident:
+        description: User can look up other residents.
+        default: true
+    towny.command.town.othertown:
+        description: User can look up other towns.
+        default: true
+    towny.command.nation.othernation:
+        description: User can look up other nations.
+        default: true
+
+    # Nation command permissions
+    towny.command.nation.*:
+        description: User can access all nation commands.
+        default: false
+        children:
+            towny.command.nation.ally.*: true
+            towny.command.nation.baltop: true
+            towny.command.nation.bankhistory: true
+            towny.command.nation.delete: true
+            towny.command.nation.deposit: true
+            towny.command.nation.enemy: true
+            towny.command.nation.invite.*: true
+            towny.command.nation.kick: true
+            towny.command.nation.king: true
+            towny.command.nation.leave: true
+            towny.command.nation.list.*: true
+            towny.command.nation.new: true
+            towny.command.nation.online: true
+            towny.command.nation.othernation: true
+            towny.command.nation.withdraw: true
+            towny.command.nation.rank.*: true
+            towny.command.nation.say: true
+            towny.command.nation.set.*: true
+            towny.command.nation.spawn: true
+            towny.command.nation.toggle.*: true
+            towny.command.nation.townlist: true
+            towny.command.nation.allylist: true
+            towny.command.nation.enemylist: true
+            towny.command.nation.join: true
+            towny.command.nation.ranklist: true
+
+    # Default: true Nation permissions
+    towny.command.nation.default:
+        description: These are given by default because all of the available subcommands are behind other permission tests.
+        default: true
+        children:
+            towny.command.nation.ally: true
+            towny.command.nation.invite: true
+            towny.command.nation.rank: true
+            towny.command.nation.set: true
+            towny.command.nation.toggle: true
+
+    towny.command.nation.list:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children:
+            towny.command.nation.list.residents: true
+            towny.command.nation.list.towns: true
+            towny.command.nation.list.open: true
+            towny.command.nation.list.public: true
+            towny.command.nation.list.balance: true
+            towny.command.nation.list.name: true
+            towny.command.nation.list.founded: true
+            towny.command.nation.list.townblocks: true
+            towny.command.nation.list.online: true
+            towny.command.nation.list.upkeep: true
+
+    towny.command.nation.list.*:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children:
+            towny.command.nation.list: true
+
+    towny.command.nation.deposit.other:
+        description: User can deposit money into the town bank of a nation member.
+        default: false
+
+    towny.command.nation.ally.*:
+        description: User can access the nation ally related commands.
+        default: false
+        children:
+            towny.command.nation.ally.manage.*: true
+            towny.command.nation.ally.sent: true
+            towny.command.nation.ally.received: true
+            towny.command.nation.ally: true
+
+    towny.command.nation.ally.manage.*:
+        description: User can manage invites by accept/deny/add/-add
+        default: false
+        children:
+            towny.command.nation.ally.add: true
+            towny.command.nation.ally.accept: true
+            towny.command.nation.ally.deny: true
+            towny.command.nation.ally.remove: true
+
+    towny.command.nation.ally.sent:
+        description: User can see sent ally invites from their nation.
+        default: true
+
+    towny.command.nation.ally.received:
+        description: User can see received ally invites for their nation.
+        default: true
+
+    towny.command.nation.ally:
+        description: User can see ally help page.
+        default: true
+
+    towny.command.nation.invite.*:
+        description: User can access the nation invite related commands.
+        default: false
+        children:
+            towny.command.nation.invite.manage.* : true
+            towny.command.nation.invite.sent: true
+            towny.command.nation.invite.received: true
+            towny.command.nation.invite: true
+
+    towny.command.nation.invite.manage.*:
+        description: User can manage invites by accept/deny/add/-add
+        default: false
+        children:
+            towny.command.nation.add: true
+            towny.command.nation.invite.add: true
+            towny.command.nation.invite.accept: true
+            towny.command.nation.invite.deny: true
+
+    towny.command.nation.add:
+        description: User can add towns to nations.
+        default: false
+        children:
+            towny.command.nation.invite.add: true
+
+    towny.command.nation.invite.sent:
+        description: User can see sent invites from their nation.
+        default: true
+
+    towny.command.nation.invite.received:
+        description: User can see received invites for their nation.
+        default: true
+
+    towny.command.nation.invite:
+        description: User can see invite help page.
+        default: true
+
+
+    towny.command.nation.set.*:
+        description: User can access any of the nation set commands.
+        default: false
+        children:
+            towny.command.nation.set.board: true
+            towny.command.nation.set.capital: true
+            towny.command.nation.set.king: true
+            towny.command.nation.set.name: true
+            towny.command.nation.set.spawn: true
+            towny.command.nation.set.spawncost: true
+            towny.command.nation.set.surname: true
+            towny.command.nation.set.tag: true
+            towny.command.nation.set.taxes: true
+            towny.command.nation.set.title: true
+            towny.command.nation.set.mapcolor: true
+            towny.command.nation.set.taxpercentcap: true
+            towny.command.nation.set.conqueredtax: true
+
+    towny.command.nation.toggle.*:
+        description: User can toggle any available nation setting.
+        default: false
+        children:
+            towny.command.nation.toggle.neutral: true
+            towny.command.nation.toggle.public: true
+            towny.command.nation.toggle.open: true
+            towny.command.nation.toggle.taxpercent: true
+
+    # Town command permissions
+    towny.command.town.*:
+        description: User can access all town related commands.
+        default: false
+        children:
+            towny.command.town.bankhistory: true
+            towny.command.town.buy: true
+            towny.command.town.claim.*: true
+            towny.command.town.delete: true
+            towny.command.town.deposit: true
+            towny.command.town.here: true
+            towny.command.town.invite.*: true
+            towny.command.town.jail: true
+            towny.command.town.jail.list: true
+            towny.command.town.join: true
+            towny.command.town.kick: true
+            towny.command.town.leave: true
+            towny.command.town.list.*: true
+            towny.command.town.mayor: true
+            towny.command.town.new: true
+            towny.command.town.online: true
+            towny.command.town.othertown: true
+            towny.command.town.outlaw: true
+            towny.command.town.plots: true
+            towny.command.town.plotgrouplist: true
+            towny.command.town.purge: true
+            towny.command.town.rank.*: true
+            towny.command.town.ranklist: true
+            towny.command.town.reclaim: true
+            towny.command.town.reslist: true
+            towny.command.town.say: true
+            towny.command.town.set.*: true
+            towny.command.town.takeoverclaim: true
+            towny.command.town.toggle.*: true
+            towny.command.town.withdraw: true
+            towny.command.town.unclaim.*: true
+            towny.command.town.merge: true
+            towny.command.town.unjail: true
+            towny.command.town.trust: true
+            towny.command.town.trusttown: true
+
+    towny.command.town.list:
+        description: Users are able to use the default method of sorting the town list.
+        default: false
+        children:
+            towny.command.town.list.residents: true
+
+    towny.command.town.list.*:
+        description: Users are able to use all the various methods of sorting the nation list.
+        default: false
+        children:
+            towny.command.town.list.residents: true
+            towny.command.town.list.open: true
+            towny.command.town.list.public: true
+            towny.command.town.list.balance: true
+            towny.command.town.list.name: true
+            towny.command.town.list.townblocks: true
+            towny.command.town.list.online: true
+            towny.command.town.list.founded: true
+            towny.command.town.list.ruined: true
+            towny.command.town.list.bankrupt: true
+            towny.command.town.list.upkeep: true
+
+    towny.command.town.claim.*:
+        description: User can access all town claim related commands.
+        default: false
+        children:
+            towny.command.town.claim.town: true
+            towny.command.town.claim.outpost: true
+            towny.command.town.claim.town.multiple: false
+
+    towny.command.town.invite.*:
+        description: User can access all town invites related commands.
+        default: false
+        children:
+            towny.command.town.invite.manage.*: true
+            towny.command.town.invite.sent: true
+            towny.command.town.invite.received: true
+            towny.command.town.invite: true
+
+    towny.command.town.invite.manage.*:
+        description: User can manage invites by accept/deny/add/-add
+        default: false
+        children:
+            towny.command.town.add: true
+            towny.command.town.invite.add: true
+            towny.command.town.invite.accept: true
+            towny.command.town.invite.deny: true
+
+    towny.command.town.add:
+        description: User can add residents to towns.
+        default: false
+        children:
+            towny.command.town.invite.add: true
+
+    towny.command.town.invite.add:
+        default: false
+        children:
+            towny.command.invite.add.multiple: true
+
+    towny.command.town.invite.sent:
+        description: User can see sent invites from their town.
+        default: true
+
+    towny.command.town.invite.received:
+        description: User can see received invites for their town.
+        default: true
+
+    towny.command.town.invite:
+        description: User can see invite help page.
+        default: true
+
+    towny.command.town.set.*:
+        description: User can access all town set commands.
+        default: false
+        children:
+            towny.command.town.set.board: true
+            towny.command.town.set.homeblock: true
+            towny.command.town.set.jail: true
+            towny.command.town.set.mapcolor: true
+            towny.command.town.set.mayor: true
+            towny.command.town.set.name: true
+            towny.command.town.set.outpost: true
+            towny.command.town.set.perm: true
+            towny.command.town.set.plotprice: true
+            towny.command.town.set.shopprice: true
+            towny.command.town.set.embassyprice: true
+            towny.command.town.set.spawn: true
+            towny.command.town.set.spawncost: true
+            towny.command.town.set.tag: true
+            towny.command.town.set.taxes: true
+            towny.command.town.set.plottax: true
+            towny.command.town.set.primaryjail: true
+            towny.command.town.set.shoptax: true
+            towny.command.town.set.embassytax: true
+            towny.command.town.set.taxpercentcap: true
+            towny.command.town.set.title: true
+            towny.command.town.set.surname: true
+
+    towny.command.town.toggle.*:
+        description: User can toggle all town settings.
+        default: false
+        children:
+            towny.command.town.toggle.explosion: true
+            towny.command.town.toggle.fire: true
+            towny.command.town.toggle.mobs: true
+            towny.command.town.toggle.nationzone: true
+            towny.command.town.toggle.neutral: true
+            towny.command.town.toggle.open: true
+            towny.command.town.toggle.public: true
+            towny.command.town.toggle.pvp: true
+            towny.command.town.toggle.taxpercent: true
+
+    towny.command.town.unclaim.*:
+        description: User can access all town unclaim related commands.
+        default: false
+        children:
+            towny.command.town.unclaim: true
+            towny.command.town.unclaim.all: true
+
+    towny.command.town.deposit.othertown:
+        description: User can deposit money into another town bank using /t deposit amount townname.
+        default: false
+
+      # Plot command permissions
+    towny.command.plot.*:
+        description: User can access all town related commands.
+        default: false
+        children:
+            towny.command.plot.asmayor: true
+            towny.command.plot.asmayorinunowned: true
+            towny.command.plot.claim: true
+            towny.command.plot.clear: true
+            towny.command.plot.evict: true
+            towny.command.plot.forsale: true
+            towny.command.plot.jailcell: true
+            towny.command.plot.notforsale: true
+            towny.command.plot.perm.*: true
+            towny.command.plot.toggle.*: true
+            towny.command.plot.set.*: true
+            towny.command.plot.unclaim: true
+            towny.command.plot.group.*: true
+            towny.command.plot.trust: true
+
+    towny.command.plot.toggle.*:
+        description: User can toggle plot settings.
+        default: false
+        children:
+            towny.command.plot.toggle.explosion: true
+            towny.command.plot.toggle.fire: true
+            towny.command.plot.toggle.mobs: true
+            towny.command.plot.toggle.pvp: true
+
+    towny.command.plot.set.*:
+        description: User can access the plot set command.
+        default: false
+        children:
+            towny.command.plot.set.name: true
+            towny.command.plot.set.perm: true
+            towny.command.plot.set.reset: true
+            towny.command.plot.set.arena: true
+            towny.command.plot.set.bank: true
+            towny.command.plot.set.embassy: true
+            towny.command.plot.set.farm: true
+            towny.command.plot.set.inn: true
+            towny.command.plot.set.jail: true
+            towny.command.plot.set.shop: true
+            towny.command.plot.set.spleef: true
+            towny.command.plot.set.wilds: true
+
+    towny.command.plot.perm:
+        description: User can access all plot perm commands (legacy townyperms.yml support.)
+        default: false
+        children:
+            towny.command.plot.perm.*: true
+        
+    towny.command.plot.perm.*:
+        description: User can access all plot perm commands.
+        default: false
+        children:
+            towny.command.plot.perm.hud: true
+            towny.command.plot.perm.gui: true
+            towny.command.plot.perm.add: true
+            towny.command.plot.perm.remove: true
+
+    towny.command.plot.group.*:
+        description: User can access the plot group command.
+        default: false
+        children:
+            towny.command.plot.group.add: true
+            towny.command.plot.group.delete: true
+            towny.command.plot.group.remove: true
+            towny.command.plot.group.rename: true
+            towny.command.plot.group.set: true
+            towny.command.plot.group.toggle: true
+            towny.command.plot.group.forsale: true
+            towny.command.plot.group.notforsale: true
+            towny.command.plot.group.perm: true
+            towny.command.plot.group.trust: true
+
+    # Resident command permissions
+    towny.command.resident.*:
+        description: User can access to all resident commands.
+        default: false
+        children:
+            towny.command.resident.friend: true
+            towny.command.resident.jail: true
+            towny.command.resident.list: true
+            towny.command.resident.set.*: true
+            towny.command.resident.otherresident: true
+            towny.command.resident.tax: true
+            towny.command.resident.toggle.*: true
+
+    towny.command.resident.set.*:
+        description: User can access the plot set command.
+        default: false
+        children:
+            towny.command.resident.set.mode: true
+            towny.command.resident.set.perm: true
+
+    towny.command.resident.toggle.*:
+        description: User can toggle their default settings.
+        default: false
+        children:
+            towny.command.resident.toggle.explosion: true
+            towny.command.resident.toggle.fire: true
+            towny.command.resident.toggle.map: true
+            towny.command.resident.toggle.mobs: true
+            towny.command.resident.toggle.plotborder: true
+            towny.command.resident.toggle.pvp: true
+            towny.command.resident.toggle.townclaim: true
+            towny.command.resident.toggle.constantplotborder: true
+            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.bordertitles: true
+
+    # TownyAdmin command permissions
+    towny.command.townyadmin.*:
+        description: User can access the admin commands.
+        default: false
+        children:
+            towny.command.townyadmin: true
+            towny.command.townyadmin.backup: true
+            towny.command.townyadmin.checkperm: true
+            towny.command.townyadmin.checkoutposts: true
+            towny.command.townyadmin.givebonus: true
+            towny.command.townyadmin.nation.*: true
+            towny.command.townyadmin.newday: true
+            towny.command.townyadmin.newhour: true
+            towny.command.townyadmin.purge: true
+            towny.command.townyadmin.reload: true
+            towny.command.townyadmin.mysqldump: true
+            towny.command.townyadmin.database: true
+            towny.command.townyadmin.reset: true
+            towny.command.townyadmin.set.*: true
+            towny.command.townyadmin.toggle.*: true
+            towny.command.townyadmin.town.*: true
+            towny.command.townyadmin.townyperms: true
+            towny.command.townyadmin.unclaim: true
+            towny.command.townyadmin.plot.*: true
+            towny.command.townyadmin.tpplot: true
+            towny.command.townyadmin.resident.*: true
+            towny.command.townyadmin.depositall: true
+            towny.command.townyadmin.resetbanks: true
+            towny.command.townyadmin.install: true
+
+    towny.command.townyadmin.resident.*:
+        description: User can access admin resident commands
+        default: false
+        children:
+            towny.command.townyadmin.resident.rename: true
+            towny.command.townyadmin.resident.delete: true
+            towny.command.townyadmin.resident.friend: true
+            towny.command.townyadmin.resident.unjail: true
+
+    towny.command.townyadmin.town.spawn.*:
+        description: User can access town spawns
+        default: false
+        children:
+            towny.command.townyadmin.town.spawn: true
+            towny.command.townyadmin.town.spawn.freecharge: true
+
+    towny.command.townyadmin.set.*:
+        description: User can access the admin set commands.
+        default: false
+        children:
+            towny.command.townyadmin.set.capital: true
+            towny.command.townyadmin.set.founder: true
+            towny.command.townyadmin.set.mayor: true
+            towny.command.townyadmin.set.nationzoneoverride: true
+            towny.command.townyadmin.set.plot: true
+            towny.command.townyadmin.set.surname: true
+            towny.command.townyadmin.set.title: true
+
+    towny.command.townyadmin.town.*:
+        description: User can access the admin town commands.
+        default: false
+        children:
+            towny.command.townyadmin.town.add: true
+            towny.command.townyadmin.town.bankhistory: true
+            towny.command.townyadmin.town.checkoutposts: true
+            towny.command.townyadmin.town.delete: true
+            towny.command.townyadmin.town.deposit: true
+            towny.command.townyadmin.town.forcemerge: true
+            towny.command.townyadmin.town.giveboughtblocks: true
+            towny.command.townyadmin.town.invite: true
+            towny.command.townyadmin.town.kick: true
+            towny.command.townyadmin.town.merge: true
+            towny.command.townyadmin.town.meta: true
+            towny.command.townyadmin.town.new: true
+            towny.command.townyadmin.town.outpost: true
+            towny.command.townyadmin.town.outlaw: true
+            towny.command.townyadmin.town.rank: true
+            towny.command.townyadmin.town.rename: true
+            towny.command.townyadmin.town.set: true
+            towny.command.townyadmin.town.settownlevel: true
+            towny.command.townyadmin.town.spawn.*: true
+            towny.command.townyadmin.town.toggle: true
+            towny.command.townyadmin.town.trust: true
+            towny.command.townyadmin.town.trusttown: true
+            towny.command.townyadmin.town.unruin: true
+            towny.command.townyadmin.town.withdraw: true
+
+    towny.command.townyadmin.nation.*:
+        description: User can access the admin nation commands.
+        default: false
+        children:
+            towny.command.townyadmin.nation.add: true
+            towny.command.townyadmin.nation.ally: true
+            towny.command.townyadmin.nation.bankhistory: true
+            towny.command.townyadmin.nation.delete: true
+            towny.command.townyadmin.nation.deposit: true
+            towny.command.townyadmin.nation.enemy: true
+            towny.command.townyadmin.nation.forcemerge: true
+            towny.command.townyadmin.nation.kick: true
+            towny.command.townyadmin.nation.merge: true
+            towny.command.townyadmin.nation.new: true
+            towny.command.townyadmin.nation.rank: true
+            towny.command.townyadmin.nation.recheck: true
+            towny.command.townyadmin.nation.rename: true
+            towny.command.townyadmin.nation.set: true
+            towny.command.townyadmin.nation.toggle: true
+            towny.command.townyadmin.nation.transfer: true
+            towny.command.townyadmin.nation.withdraw: true
+
+    towny.command.townyadmin.plot.*:
+        description: User can access the admin plot commands.
+        default: false
+        children:
+            towny.command.townyadmin.plot.claim: true
+            towny.command.townyadmin.plot.meta: true
+            towny.command.townyadmin.plot.claimedat: true
+            towny.command.townyadmin.plot.trust: true
+
+    towny.command.townyadmin.toggle.*:
+        description: User can access the admin toggle commands.
+        default: false
+        children:
+            towny.command.townyadmin.toggle.devmode: true
+            towny.command.townyadmin.toggle.debug: true
+            towny.command.townyadmin.toggle.nationwithdraw: true
+            towny.command.townyadmin.toggle.npc: true
+            towny.command.townyadmin.toggle.regenerations: true
+            towny.command.townyadmin.toggle.townwithdraw: true
+            towny.command.townyadmin.toggle.wildernessuse: true
+
+    # Towny command permissions
+    towny.command.towny.*:
+        description: User can access the admin toggle commands.
+        default: false
+        children:
+            towny.command.towny.map: true
+            towny.command.towny.prices: true
+            towny.command.towny.spy: true
+            towny.command.towny.time: true
+            towny.command.towny.top: true
+            towny.command.towny.tree: true
+            towny.command.towny.universe: true
+            towny.command.towny.version: true
+
+    # Towny top command permissions
+    towny.command.towny.top:
+        description: User has access to full top command.
+        default: false
+        children:
+            towny.command.towny.top.*: true
+
+    # Towny top.* command permissions
+    towny.command.towny.top.*:
+        description: User has access to full top command.
+        default: false
+        children:
+            towny.command.towny.top.residents: true
+            towny.command.towny.top.land: true
+            towny.command.towny.top.balance: true
+
+    # TownyWorld command permissions
+    towny.command.townyworld.*:
+        description: User can access the admin toggle commands.
+        default: false
+        children:
+            towny.command.townyworld.list: true
+            towny.command.townyworld.regen: true
+            towny.command.townyworld.set: true
+            towny.command.townyworld.toggle.*: true
+            towny.command.townyworld.undo: true
+
+    towny.command.townyworld.toggle.*:
+        description: TownyWorld toggle commands.
+        default: false
+        children:
+            towny.command.townyworld.toggle.claimable: true
+            towny.command.townyworld.toggle.explosion: true
+            towny.command.townyworld.toggle.fire: true
+            towny.command.townyworld.toggle.forceexplosion: true
+            towny.command.townyworld.toggle.forcefire: true
+            towny.command.townyworld.toggle.forcepvp: true
+            towny.command.townyworld.toggle.friendlyfire: true
+            towny.command.townyworld.toggle.plotcleardelete: true
+            towny.command.townyworld.toggle.pvp: true
+            towny.command.townyworld.toggle.revertunclaim: true
+            towny.command.townyworld.toggle.revertexpl: true
+            towny.command.townyworld.toggle.revertentityexpl: true
+            towny.command.townyworld.toggle.revertblockexpl: true
+            towny.command.townyworld.toggle.townmobs: true
+            towny.command.townyworld.toggle.unclaimblockdelete: true
+            towny.command.townyworld.toggle.unclaimentitydelete: true
+            towny.command.townyworld.toggle.usingtowny: true
+            towny.command.townyworld.toggle.warallowed: true
+            towny.command.townyworld.toggle.wildernessmobs: true
+            towny.command.townyworld.toggle.wildernessuse: true
+            towny.command.townyworld.toggle.worldmobs: true

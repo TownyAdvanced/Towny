@@ -1,0 +1,1713 @@
+---
+name: Towny
+language: english
+author: ElgarL
+website: 'http://townyadvanced.github.io/'
+description: >
+  Language file for all game messages for this Locale.
+#A note on editing this file.
+#----------------------------
+#Do not alter this file if it is in the reference folder.
+#Before you edit this file, read about how Towny handles
+#language files:
+#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
+#A note on text formatting (how Towny status_title_pvpinserts words.)
+#----------------------------------------------------
+#You MUST retain spacing in the texts.
+#If a text begins or ends with a space, it must remain that
+#way.
+#%s = data to be supplied by the plugin.
+#If you find that a line has multiple %s variables which would
+#be in a different order in your language, you can change them
+#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
+#will always use the 4th variable, no matter where it is
+#placed on the line.
+#A note on text colouring and formatting.
+#----------------------------------------
+#Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
+#Purple = &5, Gold = &6, LightGray = &7, Gray = &8
+#DarkPurple = &9, LightGreen = &a, LightBlue = &b
+#Rose = &c, LightPurple = &d, Yellow = &e, White = &f
+#This language file also supports using MiniMessage for colours
+#and formatting. Learn about MiniMessage formatting here:
+#https://docs.adventure.kyori.net/minimessage/format.html
+default_towny_prefix: '&6[Towny] &b'
+default_town_prefix: '&6[%s] &b'
+default_nation_prefix: '&6[%s] &6'
+unclaimed_plot_name: 'Unowned'
+unclaimed_zone_name: 'Wilderness'
+############################################################
+#+------------------------------------------------------+ #
+#|help messages                                         | #
+#+------------------------------------------------------+ #
+############################################################
+help_0: 'General Towny Help'
+help_1: 'Try the following commands to learn more about towny.'
+help_2: 'Town Chat'
+help_3: 'Nation Chat'
+town_help_1: 'สถานะ town ของคุณ'
+town_help_2: '[mayor]'
+town_help_3: 'สถานะเมืองที่เลือก'
+town_help_4: 'ทางลัดเข้า townสถานะของตำแหน่งของคุณ'
+town_help_5: 'วาปเข้า town spawn'
+town_help_6: 'town ใหม่ที่มีคุณเป็น Mayor'
+town_help_7: 'town ใหม่กับเป้าหมายของ Mayor'
+town_help_8: 'รายการคำสั่งของเจ้าเมือง'
+town_help_9: 'วันที่'
+town_help_10: 'รายชื่อผู้อยู่อาศัยที่กำลังออนไลน์ใน town'
+mayor_help_3: 'Claim พื้นที่ไม่ติดเมือง'
+mayor_help_4: 'Claim รอบตัวคุณในรัศมี X'
+mayor_help_5: 'Claim ในรัศมีสูงสุด'
+mayor_help_6: 'Unclaim Townblocks นี้'
+mayor_help_7: 'พยายามที่จะ Unclaim รอบตัวคุณ'
+mayor_help_8: 'พยายามที่จะ Unclaim Townblocks ทั้งหมด'
+nation_help_1: 'status nation ของคุณ'
+nation_help_2: '[nation]'
+nation_help_3: 'status เป้าหมายของ nation'
+nation_help_4: 'รายชื่อแต่ละ nation'
+nation_help_5: 'ออกจาก nation ของคุณ'
+nation_help_6: 'สร้าง nation ใหม่'
+nation_help_7: 'List the nation leader commands'
+nation_help_8: 'สร้าง nation ใหม่'
+nation_help_9: 'รายชื่อผู้อยู่อาศัยที่ออนไลน์ใน nation ของคุณ'
+king_help_1: 'Nation Leader Help'
+king_help_2: 'Set your alliance.'
+king_help_3: 'Set your enemies.'
+res_1: 'สถานะของคุณ'
+res_2: '[พลเมือง]'
+res_3: 'สถานะของผู้เล่นคนนั้น'
+res_4: 'รายชื่อผู้เล่นที่ออนไลน์อยู่ขณะนี้'
+res_5: 'การขอความช่วยเหลือ'
+res_6: 'Online match'
+res_7: 'ชื่อจริง'
+mode_1: 'แสดงแผนที่ระหว่าง Towny แต่ละที่'
+mode_2: 'พยายามที่จะ claim เมื่อคุณเดิน'
+mode_3: 'พยายามที่จะ unclaim เมื่อคุณเดิน'
+mode_4: 'เริ่มต้นแชทกับช่อง Town'
+mode_5: 'เริ่มต้นแชทกับช่อง Nation'
+mode_6: 'สามารถวาง %s ในพรมแดนของศัตรูเพื่อสร้างเขตสงคราม'
+plot_perms: 'ใช้ %s แทนที่ %s สำหรับการอนุญาติ plot'
+plot_perms_1: 'plot ปล่าวไม่ใช้การอนุญาตจากบุคคลภายนอก.'
+res_list: 'Residents'
+res_sing: 'Resident'
+mayor_sing: 'Mayor'
+admin_sing: 'Admin'
+town_sing: 'Town'
+nation_sing: 'Nation'
+nation_plu: 'Nations'
+king_sing: 'Leader'
+town_plu: 'Towns'
+world_plu: 'Worlds'
+world_sing: 'World'
+world_help_1: 'สถานะของ World ปัจจุบัน'
+world_help_2: '[world]'
+world_help_3: 'สถานะของ World เป้าหมาย'
+world_help_4: 'รายชื่อ World ทั้งหมด'
+world_help_5: 'กำลังสร้าง chunk'
+townyadmin_help_1: 'ยกเลิกการ Claim TownBlock'
+townyadmin_help_2: 'พยายามที่จะยกเลิกการ Claim รอบตัวคุณ'
+admin_panel_2: 'reload Towny'
+admin_panel_3: 'Run the new day code'
+msg_block_claim: 'อ้างสิทธิ์ใน Town Block นี้'
+msg_plot_nfs: 'รื้อ plot เพื่อขาย'
+msg_nfs_abr: '&efs และ nfs เป็นคำย่อของ forsale และ notforsale'''
+msg_plot_fs: 'นำพื้นที่นี้ไปประมูล'
+############################################################
+#+------------------------------------------------------+ #
+#|   Messages                                           | #
+#+------------------------------------------------------+ #
+############################################################
+msg_buy: '&bซื้อ %d %s สำหรับ %s'
+msg_buy_resident_plot: '&b%s ซื้อพล็อตของ %s สำหรับ %s!'
+msg_couldnt_pay_taxes: '&b%s ไม่สามารถจ่ายภาษีได้และถูกไล่ออกจาก %s'
+msg_couldnt_pay_plot_taxes: '&b%s ไม่สามารถจ่ายภาษีได้และเสียความเป็นเจ้าของ plot'
+msg_payed_town_tax: '&bจ่ายภาษีเมืองของ'
+msg_payed_plot_cost: '&bจ่าย %s สำหรับ %s แปลงใน %s'
+msg_payed_resident_tax: '&bชำระภาษีที่อยู่อาศัยของ'
+msg_bankrupt_town: ' ไม่สามารถที่จะรักษาความคงอยู่ของ town ได้'
+msg_bankrupt_nation: ' ไม่สามารถที่จะรักษาความคงอยู่ของ nation ได้.'
+msg_nation_not_peaceful: '&bประเทศไม่สามรถเป็นประเทศที่สงบสุขได้'
+msg_nation_cant_peaceful: '&bประเทศไม่สามารถจะเป็นประเทศที่สงบสุขได้'
+msg_peaceful_disabled: '&bpeaceful ของประเทศถูกปิดการใช้งานทั่วโลก'
+msg_you_paid: '&bคุณได้ชำระเงิน %s เพื่อเปิดสถานะความปลอดภัย'
+msg_nation_set_peace: '&bเปลี่ยนสถานะของ nation สำเร็จแล้ว'
+msg_nation_allow_peaceful: '&bขณะนี้ nation ได้อยู่ในสถานะปลอดภัย: %s'
+msg_mobremoval_world: '&bไม่สามารถใช้ไข่ในการเสกม็อบภายโลก world นี้ได้: %s'
+msg_mobremoval_town: '&bสามารถใช้ไข่ในการเสกม็อบใน town ได้: %s'
+msg_nation_peaceful: '&bnation ของคุณตอนนี้'
+msg_tax_exempt: '&bstaff ของ town ได้รับการยกเว้นภาษี.'
+msg_del_nation: '&bnation %s ถูกยุบ'
+msg_del_resident: '&b%s ข้อมูล towny ของเขาสูญหาย'
+msg_join_nation: '&btown ของ %s ได้เข้าร่วมกับ nation'
+msg_join_town: '&b%s ได้เข้าร่วม town'
+msg_friend_add: '&b%s เพิ่มคุณเป็นเพื่อน'
+msg_friend_remove: '&b%s ลบคุณจากการเป็นเพื่อน'
+msg_left_town: '&b%s ออกจาก town'
+msg_you_left: '&bคุณได้ออกจากเมือง %s.'
+msg_not_mayor: '&bคุณไม่ใช่ Mayor'
+msg_not_king: '&bYou are not the nation leader.'
+msg_not_mayor_ass: '&bคุณไม่ได้เป็น Mayor หรือ assistant'
+msg_not_king_ass: '&bYou are not the nation leader or an assistant.'
+msg_own_nation_disallow: '&bคุณไม่สามารถทำแบบนี้ใน nation ของคุณได้.'
+msg_no_perms_claim: '&bคุณไม่ได้รับอนุญาตให้ขยาย town ของคุณ.'
+msg_outpost_disable: '&bOutpost ไม่สามารถใช้ได้'
+msg_kicked_by: '&bคุณถูกเตะออกจาก town โดย %s.'
+msg_kicked: '&b%s เตะ %s ออกจาก town.'
+msg_nation_kicked_by: '&btown ของคุณถูกเตะออกจาก nation โดย %s.'
+msg_town_left_nation: '&btown ของคุณออกจากประเทศ %s.'
+msg_nation_town_left: '&btown ของ %s ออกจาก nation ของคุณ'
+msg_nation_kicked: '&b%s เตะ %s ออกจาก nation.'
+msg_raised_ass: '&b%s แต่งตั้ง %s ให้เป็น %s ผู้ช่วย.'
+msg_lowered_to_res_by: '&bคุณถูกลดตำแหน่งให้เป็น Resident โดย %s.'
+msg_lowered_to_res: '&b%s ได้ลดตำแหน่ง %s ให้เป็น Resident'
+msg_invalid_name: '&bไม่มีชื่อที่ถูกต้อง.'
+msg_invited_join_town: '&b%s ได้เชิญ %s เข้า town.'
+msg_invited_join_nation: '&b%s ได้เชิญ %s เข้า nation.'
+msg_deny_invite: '&b%s ปฏิเสธจดหมายเชิญของคุณ.'
+msg_invited: '&bคุณได้จดหมายเชิญเข้าร่วมสู่ %s.'
+msg_town_online: 'Town ที่ออนไลน์'
+msg_nation_online: 'Nation ที่ออนไลน์'
+msg_allied_nations: '&b%s เป็นพันธมิตรกับ Nation %s.'
+msg_enemy_nations: '&b%s เป็นศัตรูต่อ Nations %s.'
+msg_enemy_to_neutral: '&b%s ได้เปลี่ยนสถานะเป็นสงบต่อ %s.'
+msg_added_ally: '&b%s เป็นพันธมิตรกับ Nation ของคุณ.'
+msg_removed_ally: '&b%s ยกเลิกการเป็นพันธมิตรกับ Nation ของคุณ.'
+msg_added_enemy: '&b%s มีความเกลียดชังต่อ Nation ของคุณ.'
+msg_removed_enemy: '&b%s ไม่ได้เป็นศัตรูกับ Nation ของคุณแล้ว '
+msg_unable_ally_enemy: '&cไม่สามารถเป็นพันธมิตร กับ %s ได้ เนื่องจากเป็นศัตรูต่อกัน.'
+msg_deny_ally: '&b%s ปฏิเสธคำขอเป็นพันธมิตรของคุณ.'
+msg_accept_ally: '&bNation %s ยอมรับคำขอเป็นพันธมิตรของคุณ.'
+msg_ally_req_sent: '&bคำขอเป็นพันธมิตรถูกส่งไปยังประเทศ %s แล้ว.'
+msg_ally_request: '&bNation %s ต้องการเป็นพันธมิตร.'
+msg_unable_ally_offline: "&cไม่สามารถส่งคำขอเป็นพันธมิตรได้เนื่องจาก Mayor ของเป้าหมายได้ออฟไลน์อยู่."
+msg_unable_ally_npc: "&cไม่สามารถขอเป็นพันธมิตรได้เนื่องจาก Mayor ของ Nation นี้เป็น NPC."
+msg_claimed: '&2Claimed plot เรียบร้อยแล้ว'
+msg_unclaimed: '&2Unclaimed plot เรียบร้อยแล้ว'
+msg_not_claimable: '&cworld ไม่สามารถ Claim ได้'
+msg_abandoned_area: '&bพื้นที่ที่ถูกทิ้งร้าง %s'
+msg_admin_unclaim_area: '&cพื้นที่นี้ไม่มีใคร Claim  %s'
+msg_abandoned_area_1: '&bพื้นที่ Town ของคุณถูกทิ้งร้าง'
+msg_no_money_purchase_plot: '&cคุณไม่มีเงินพอที่จะซื้อ Plot นี้.'
+msg_town_no_money_purchase_plot: '&cTown ไม่มีเงินมากพอที่จะซื้อ plot คืน.'
+msg_no_funds_new_town: '&c%s can''t afford to settle a new town here.'
+msg_no_funds_claim: '&cTown ไม่สามารถรับ %s Townblock ที่คิดต้นทุน %s เพิ่มเงินเข้า Town Bank.'
+msg_no_funds_to_buy: '&cTown ไม่สามารถซื้อ %s %s โดยคิดต้นทุน %s เพิ่มเงินเข้า Town Bank.'
+msg_annexed_area: '&2พื้นที่เสริม %s'
+msg_max_plot_own: '&cคุณไม่สามารถเป็นเจ้าของมากกว่า %s Plot.'
+msg_max_outposts_own: '&cคุณไม่สามารถเป็นเจ้าของมากกว่า %s Outpost'
+msg_no_funds_new_nation: '&cThe town can''t afford to start a new nation.'
+msg_already_claimed: '&cพื้นที่นี้ถูก Claim แล้ว โดย: %s'
+msg_already_claimed_1: '&cพื้นที่นี้ (%s) เป็นของใครบางคนอยู่แล้ว.'
+msg_already_claimed_2: '&cพื้นที่นี้ถูก Claim แล้ว.'
+msg_too_close: '&cบริเวณนี้ใกล้กับ Town อื่นมากเกินไป.'
+msg_too_far: '&cบริเวณนี้อยู่ไกลจาก Town อื่นมากเกินไป.'
+msg_not_claimed: '&bพื้นที่นี้ (%s) ยังไม่ได้ถูก Claim'
+msg_not_claimed_1: '&bพื้นที่นี้ไม่ได้รับการ Claim.'
+msg_not_own_area: '&cคุณไม่ได้เป็นเจ้าของพื้นที่ที่เลือกอยู่.'
+msg_not_own_place: '&bพื้นที่นี้ ไม่มีใครเป็นเจ้าของ.'
+msg_area_not_own: '&cพื้นที่นี้ไม่ใช่ของคุณ'
+msg_area_not_recog: '&cพื้นที่นี้ไม่ได้รับการยอมรับจากTowny.'
+msg_specify_name: '&bระบุชื่อ Town.'
+msg_specify_nation_name: '&bระบุชื่อ Nation'
+msg_peasant_right: '&bPeasant ไม่มีสิทธิ์บังคับ Leaders ให้ขึ้นครองบัลลังก์.'
+msg_cost_spawn: '&bคุณถูกเรียกเก็บเงิน %s เพื่อวาปไปยังจุดวาปของเมือง'
+msg_cost_spawn_refund: '&bคุณได้รับเงินคืนสำหรับการใช้วาปใน Town'
+msg_town_spawn_warmup: '&bกำลังวา...'
+msg_town_rename_disabled: '&bTown Renaming Disabled'
+msg_town_set_name: '&b%s เปลี่ยนชื่อ Town เป็น %s.'
+msg_nation_set_name: '&b%s เปลี่ยนชื่อ Nation เป็น %s.'
+msg_changed_pvp: '&c%s PVP คือ %s'
+msg_changed_public: '&cStatus สาธารณะของ Town คือ %s.'
+msg_changed_expl: '&cการระเบิดใน %s คือ %s.'
+msg_changed_fire: '&cไฟลุกลามใน %s คือ %s.'
+msg_changed_mobs: '&cมอนสเตอร์เกิดใน %s คือ %s.'
+msg_the_plot_group: 'the Plot Group'
+msg_changed_taxpercent: '&cภาษีตามเปอร์เซ็นต์ตอนนี้คือ %s'
+msg_changed_open: '&cการเข้าร่วมแบบไม่เชิญตอนนี้คือ %s'
+msg_toggle_open_on_warning: 'คำเตือน: ควรปิด Townperms หากเมืองเปิดอยู่ พิมพ์ /town set perm off ตามด้วย /town set perm reset'
+msg_changed_world_setting: '&c%s สำหรับ %s คือ: %s.'
+msg_world_pvp: '&cWorld นี้เป็น PvP เท่านั้น.'
+msg_world_mobs: '&cWorld นี้บังคับให้มอนสเตอร์เกิด.'
+msg_world_expl: '&cWorld นี้สามารถใช้ระเบิดได้'
+msg_world_fire: '&cWorld นี้สามารถติดไฟได้'
+msg_town_mobs: '&cThis town has Monster spawns forced on.'
+msg_plot_pvp: '&cPVP ไม่สามารถสลับใน Arena Plot.'
+msg_plot_regen_wrong_size: '&cRegen can only be performed when the default plot size (16) is used.'
+msg_reloaded: '&2Towny ได้ Reload การตั้งค่า เรียบร้อยแล้ว.'
+msg_undo_complete: '&2Undo สำเร็จ.'
+msg_give_total: '&bให้ %s โบนัส. (สูงสุด: %s)'
+mag_backup_success: '&2Backup สำเร็จ.'
+msg_xx_withdrew_xx: '&2[Withdrew] &b%s ถอน %s ออกจาก Bank %s.'
+msg_xx_deposited_xx: '&2[Deposited] &b%s ฝาก %s เข้าสู่ Bank %s'
+msg_insuf_funds: '&cคุณไม่ได้มีมากขนาดนั้น.'
+msg_err_withdraw_disabled: '[Withdraw]การถอนเงินจากธนาคารนี้ถูกปิดใช้งาน!'
+msg_err_deposit_capped: '[Err Deposited]ไม่สามารถฝากเงินได้ ขั้นต่ำ %s'
+msg_set_town_home: '&bเปลี่ยน HomeBlock ของ Town เป็น %s เรียบร้อยแล้ว.'
+msg_set_town_spawn: '&bเปลี่ยน Spawn ของ Town เรียบร้อยแล้ว.'
+msg_set_outpost_spawn: '&bเปลี่ยนจุด Spawn ของ Outpost เรียบร้อยแล้ว.'
+msg_set_title: '&b%s ได้รับตำแหน่ง ''%s''.'
+msg_set_surname: '&b%s ได้รับนามสกุลเป็น ''%s'''
+msg_clear_title_surname: '&bลบ %s สำหรับ ''%s'' แล้ว'
+msg_clear_plot_material: '&bThe plot was cleared of the following block types: %s.'
+msg_set_perms: '&bเปลี่ยนการอนุญาตเป็น:'
+msg_set_claim: '&bเปลี่ยนความสามารถ Claimability ของ %s เป็น %s เรียบร้อยแล้ว.'
+msg_set_perms_reset: '&bReset การอนุญาตบน %s Plot ทั้งหมด เรียบร้อยแล้ว.'
+msg_usedefault: '&bWorld (%s) กำลังใช้การตั้งค่าเป็น Default'
+msg_set_wild_perms: '&bเปลี่ยนการอนุญาตเสริมของ %s สำเร็จแล้ว %s'
+msg_set_wild_ignore: '&bSuccessfully changed %s''s wild ignore blocks to %s'
+msg_set_wild_name: '&bเปลี่ยนชื่อป่าจาก %s''s เป็น %s เรียบร้อยแล้ว'
+msg_set_wild_regen: '&bเปลี่ยนค่า Regen ป่า ของ %s เป็น ''%s'' เรียบร้อยแล้ว'
+msg_set_use_towny_on: '&bWorld นี้เป็นไปตามกฎของ Towny.'
+msg_set_use_towny_off: '&cWorld นี้ได้รับการยกเว้นจาก Towny ทั้งหมด.'
+msg_error_must_be_int: '&bจำนวนเงินต้องเป็นจำนวนเต็ม'
+msg_error_input_must_be_int: '&c%s must be an integer'
+msg_error_must_be_num: '&bจำนวนเงินต้องเป็นตัวเลข'
+msg_error_input_must_be_num: '&c%s must be a number'
+msg_must_specify_amnt: '&bต้องระบุจำนวนเงิน เช่น %s 54'
+msg_town_set_tax: '&b%s ได้กำหนดภาษี Resident รายวันไว้ที่ %s'
+msg_town_set_plottax: '&b%s ได้กำหนดภาษีรายวันของ Plot ที่ %s'
+msg_town_set_plotprice: '&b%s ได้กำหนดราคา Plot ที่ %s'
+msg_town_set_alttax: '&b%s ได้กำหนดภาษีรายวันของ %s Plot ที่ %s'
+msg_town_set_altprice: '&b%s ได้กำหนดราคาของ %s Plot ที่ %s'
+msg_town_set_nation_tax: '&b%s ได้กำหนดภาษีของ Nation ไว้ที่ %s'
+msg_set_nation_tag: '&b%s ได้ตั้งค่า Tag Nation เป็น [%s]'
+msg_set_town_tag: '&b%s ได้ตั้งค่า Tag Town เป็น [%s]'
+msg_reset_nation_tag: '&b%s ได้ล้าง Tag Nation แล้ว'
+msg_reset_town_tag: '&b%s เคลียร์ Tag Town แล้ว.'
+msg_mayor_abandon: '&bคุณจะละทิ้งคนของคุณหรือไม่ เลือก Mayor คนอื่น ''/town set mayor'' ถ้าคุณมั่นใจแล้ว.'
+msg_new_day_tax: '&bวันใหม่มาถึงแล้ว! เก็บภาษีและค่าเช่าแล้ว'
+msg_new_day: '&bวันใหม่มาถึงแล้ว!'
+msg_new_king: '&b%s is now the nation leader of %s!'
+msg_err_new_king_notmayor: '&cNew nation leader is not a mayor.'
+msg_err_king_not_in_nation: '&cNew nation leader doesn''t belong to this nation.'
+msg_err_fight_like_king: '&cPeace is not an option! Fight like a Leader!'
+msg_no_access_nation_bank: '&cคุณไม่สามารถเข้า Nation Bank ได้.'
+msg_err_no_money: '&cเงินใน Bank ไม่พอ.'
+msg_new_mayor: '&b%s เป็น Mayor แล้ว!'
+msg_new_nation: '&b%s สร้าง Nation ใหม่ชื่อ %s'
+msg_new_town: '&b%s สร้าง Town ใหม่ชื่อ %s'
+msg_plot_for_sale: '&b%s ลง Plot (%s) ขึ้นเพื่อขาย!'
+msg_plot_for_sale_amount: '&b%s put the plot (%s) up for sale for %s!'
+msg_plot_set_type: '&bตั้งค่าประเภท Plot เป็น %s'
+msg_cache_block_error: '&cคุณยังไม่ได้ลงทะเบียนกับ Towny. ลองใหม่.'
+msg_cache_block_error_wild: '&cไม่อนุญาตให้ %s อยู่ในป่า. '
+msg_cache_block_error_plot: '&cOwner ไม่อนุญาตให้ %s มายัง %s ที่นี่'
+msg_cache_block_error_town_resident: '&cResident ไม่ได้รับอนุญาตให้ %s ที่นี่'
+msg_cache_block_error_town_allies: '&cAllies ไม่ได้รับอนุญาตให้ %s.'
+msg_cache_block_error_town_outsider: '&cไม่อนุญาตให้ Outsiders เข้า %s.'
+msg_err_cant_afford_tp_town: '&cไม่สามารถวาปไปที่ %s ได้'
+msg_err_not_public: '&cTown นั้นไม่ได้เปิดเป็นสาธารณะ'
+msg_err_not_open: '&cเมือง %s ไม่ได้เปิดให้ทุกคน ขอให้ Mayor หรือ Assistant เข้าร่วม'
+msg_err_town_spawn_forbidden: '&cห้ามเดินทางไป Spawn ใน Town.'
+msg_err_town_spawn_nation_forbidden: '&cการวาปใน Town ถูกห้ามไม่ให้เดินทางไปยัง Town อื่นใน Nation ของคุณ'
+msg_err_town_spawn_ally_forbidden: '&cการวาปใน Town ถูกห้ามไม่ให้เดินทางไปยัง Town ที่เป็นพันธมิตรกับ Nation ของคุณ'
+msg_err_public_spawn_forbidden: '&cไม่อนุญาตให้วาปในที่สาธารณะไปยัง Town อื่น'
+msg_err_public_spawn_enemy: '&cห้ามวาปในที่ Town ของ ศัตรู'
+msg_err_town_spawn_disallowed_from: '&cไม่อนุญาตให้วาปในเมืองจาก %s'
+msg_err_outpost_spawn: '&cไม่มี spawn ใน Outpost ของ Town นี้'
+msg_err_cant_afford_tp: '&bไม่สามารถวาป ไปยังจุด Spawn ใน Town ของคุณได้.'
+msg_err_plot_nfs: '&cPlot นี้ไม่ขาย.'
+msg_err_not_part_town: '&cพื้นที่ที่เลือก ไม่ได้เป็นส่วนหนึ่งของ Town ของคุณ.'
+msg_err_not_attached_edge: '&cพื้นที่ที่เลือกไม่ติดขอบ.'
+msg_err_empty_area_selection: '&cพื้นที่ที่เลือกไม่มี Plot ที่ถูกต้อง.'
+msg_err_not_enough_blocks: '&cมี Townblock ไม่เพียงพอที่จะ Claim ที่เลือกนี้.'
+msg_err_cant_afford_blocks: '&cTown ไม่สามารถ Claim %s Townblock ที่คิดต้นทุน %s'
+msg_err_not_in_town_claim: 'คุณต้องอยู่ใน Town เพื่อ Claim Plot.'
+msg_err_must_belong_town: 'คุณต้องอยู่ใน Town.'
+msg_err_dont_belong_town: '&cคุณไม่ได้อยู่ใน Town.'
+msg_err_dont_belong_nation: '&bคุณไม่ได้เป็นของ Nation.'
+msg_err_not_same_nation: '&b%s ไม่ได้เป็นของ Nation ของคุณ.'
+msg_err_rect_auto: '&cเฉพาะ Town และ Residents เท่านั้นที่สามารถใช้อัตโนมัติได้.'
+msg_err_invalid_radius: '&cรัศมีไม่ถูกต้อง ใช้จำนวนเต็มหรืออัตโนมัติ.'
+msg_err_not_configured: '&cWorld นี้ไม่ได้ถูก Config โดย Towny.'
+msg_err_updating_item_perms: '&cเกิดข้อผิดพลาดในการ Update แคชการอนุญาต Use Item.'
+msg_err_updating_switch_perms: 'เกิดข้อผิดพลาดในการ Update แคชการอนุญาต Switch.'
+msg_err_updating_destroy_perms: 'เกิดข้อผิดพลาดในการ Update แคชการอนุญาต Destroy.'
+msg_err_updating_build_perms: 'เกิดข้อผิดพลาดในการ Update แคชการอนุญาต Build.'
+msg_err_admin_only: '&cมีเพียงผู้ดูแลระบบเท่านั้นที่สามารถใช้คำสั่งนี้ได้.'
+msg_err_admin_only_delete: '&cมีเพียงผู้ดูแลระบบเท่านั้นที่สามารถลบข้อมูล'
+msg_err_admin_only_delete_town: '&cมีเพียงผู้ดูแลระบบเท่านั้นที่สามารถลบข้อมูล Town อื่นได้'
+msg_err_admin_only_delete_nation: '&cมีเพียงผู้ดูแลระบบเท่านั้นที่สามารถลบข้อมูล Nation อื่นได้.'
+msg_err_online_or_npc: '&c%s กำลังออนไลน์หรือเป็น NPC'
+msg_err_not_registered: '&cคุณยังไม่ได้ลงทะเบียน'
+msg_err_not_registered_1: '&c%s ไม่ได้ลงทะเบียน'
+msg_err_invalid_name: '&c%s เป็นชื่อที่ไม่ถูกต้อง'
+msg_err_already_res: '&c%s อยู่ใน Town แล้ว'
+msg_err_already_in_town: '&c%s เป็นส่วนหนึ่งของ %s แล้ว.'
+msg_err_already_nation: '&cTown เป็น Nation แล้ว'
+msg_err_invalid_property: '&cคุณสมบัติ ''%s'' ไม่ถูกต้อง.'
+msg_err_not_supported: '&cยังไม่รองรับ.'
+msg_err_invalid_input: '&cนำเข้าไม่ถูกต้อง ใช้ %s'
+msg_err_negative: '&cไม่สามารถนำเข้า เป็นค่าลบได้.'
+msg_err_input_too_long: '&cนำเข้ายาวเกินไป'
+msg_err_invalid_choice: '&cตัวเลือกไม่ถูกต้อง'
+msg_err_invalid_sub: '&cคำสั่งย่อยไม่ถูกต้อง'
+msg_err_command_disable: '&cคุณไม่ได้รับอนุญาตให้ใช้คำสั่งนี้'
+msg_err_universe_limit: '&cUniverse ไม่สามารถยึดเมืองได้อีกต่อไป.'
+msg_err_too_many_npc: '&cมี Npc มากเกินไป'
+msg_err_negative_money: '&cคุณไม่สามารถมีเงินติดลบได้'
+msg_err_not_percentage: '&cเปอร์เซ็นต์ต้องต่ำกว่า 100'
+msg_err_no_economy: '&cยังไม่ได้เปิดระบบ Economy'
+msg_err_not_block_type: '&cนั่นไม่ใช่ประเภท Plot ที่ถูกต้อง!'
+msg_not_allowed_join: '&c%s ไม่ได้รับอนุญาตให้เข้าร่วม Town'
+msg_offline_no_join: '&c%s Offline อยู่แต่ใช้การอนุญาต จึงไม่สามารถเข้าร่วม Town ได้.'
+msg_err_cannot_perform_action: '&cไม่สามารถดำเนินการนี้ได้ใน %s.'
+msg_npc_flag: '&bNPC ตั้งค่าสถานะเป็น %s สำหรับ %s แล้ว'
+msg_warning_delete: '&4*** คำเตือน %s จะถูกลบออกในวันถัดไปเนื่องจากขาดเงินบำรุงรักษา Town/Nation ***'
+#these messages are only used if town/nation creation is set to admins only
+msg_admin_only_create_nation: '&cมีเพียงผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้สร้าง Nation.'
+msg_admin_only_create_town: '&cมีเพียงผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้สร้าง Town.'
+#Required residents to be part of a nation
+msg_err_not_enough_residents_new_nation: '&cเมืองของคุณมีประชากรไม่เพียงพอที่จะสร้าง Nation'
+msg_err_not_enough_residents_join_nation: '&bTown %s มี Residents ไม่เพียงพอที่จะเข้าร่วม Nation.'
+msg_not_enough_residents_no_longer_capital: '&bเมืองหลวงเก่าของ Nation ไม่มี Resident เพียงพอที่จะเป็นเมืองหลวงของ Nation อีกต่อไป เมืองหลวงใหม่ของ Nation คือ %s'
+msg_town_not_enough_residents_left_nation: '&bTown %s ไม่มี Residents เพียงพอที่จะเป็นสมาชิกของ Nation อีกต่อไป และจะถูกลบออกจาก Nation.'
+msg_nation_disbanded_town_not_enough_residents: '&bTown %s ไม่มี Resident เพียงพอที่จะบริหาร Nation อีกต่อไปและได้บังคับให้ Nation ต้องยุบ'
+msg_not_enough_residents_refunded: '&bคุณได้รับเงินคืน $%s สำหรับ Nation ของคุณที่ถูกยกเลิกเนื่องจากมี Resident ไม่เพียงพอ.'
+msg_not_enough_residents_capital: '&bTown %s มี Resident ไม่เพียงพอที่จะเป็นเมืองหลวงของ Nation.'
+list_page: '&bหน้า %s จาก %s'
+list_err_not_enough_pages: '&cมีเพียง %s หน้าที่ใช้ได้'
+#Added in 0.30
+#Added in 0.31
+msg_err_tax_minimum_not_met: 'คุณไม่สามารถกำหนดภาษี Town ของคุณให้ต่ำกว่า %s'
+msg_unknown_rank_available_ranks: 'ไม่ทราบ Rank %s Rank ที่อนุญาตคือ %s'
+msg_no_permission_to_give_rank: 'คุณไม่ได้รับอนุญาตให้จัด Rank นี้.'
+msg_you_have_been_given_rank: 'คุณได้รับ Rank %s ของ %s.'
+msg_you_have_given_rank: 'คุณได้ให้ %s Rank ของ %s แก่ %s.'
+msg_resident_not_your_town: 'Residents นั้นไม่ใช่สมาชิกของ Town!'
+msg_resident_already_has_rank: '%s เป็น Rank %s นี้อยู่แล้ว.'
+msg_you_have_had_rank_taken: 'คุณถูกลด Rank จาก Rank %s ของ %s.'
+msg_you_have_taken_rank_from: 'คุณได้ลบ Rank %s ของ %s ออกจาก %s.'
+msg_resident_doesnt_have_rank: '%s ไม่มี Rank %s นี้.'
+msg_town_has_no_jails: 'Town ยังไม่มีการตั้ง คุก.'
+msg_no_permission_to_jail_your_residents: 'คุณไม่ได้รับอนุญาตให้ติดคุก Residents ของคุณเอง.'
+msg_resident_not_part_of_any_town: 'ผู้เล่นคนนั้นไม่ได้เป็นส่วนหนึ่งของ Town ใด.'
+msg_player_not_jailed_in_your_town: 'ผู้เล่นคนนั้นไม่ได้ติดคุกใน Town ของคุณ.'
+msg_cannot_spawn_while_jailed: 'ไม่สามารถ Spawn ได้ขณะติดคุก.'
+msg_cannot_abandon_town_while_jailed: 'ไม่อนุญาตให้ละทิ้ง Town ของคุณเมื่อคุณถูกติดคุก.'
+msg_player_escaped_jail_by_leaving_town: '%s ได้หลบหนีออกจากคุก โดยกลายเป็น Nomad.'
+msg_set_jail_spawn: 'ตั้ง Spawn ของ Plot Jail เรียบร้อยแล้ว.'
+msg_killed_attempting_to_escape_jail: '&4%s ถูกฆ่าตายเพราะพยายามจะหนีคุก.'
+msg_err_jailed_players_no_teleport: '&4ผู้เล่นที่ถูกขังคุก ไม่สามารถวาปได้!'
+msg_player_escaped_jail_into_wilderness: '&4%s หนีออกจากคุกโดยวิ่งเข้าไปใน %s'
+msg_err_invalid_string_board_not_set: 'String ไม่ถูกต้อง ไม่ได้ตั้งค่า Town Board.'
+msg_plot_name_removed: 'ชื่อ Plot ถูกลบออก.'
+msg_plot_name_set_to: 'ตั้งชื่อ Plot เป็น [%s].'
+msg_plot_price_too_expensive: 'ราคา Plot แพงเกินไป.'
+msg_you_robbed_player: 'คุณปล้น %s จาก %s.'
+msg_player_robbed_you: '%s ปล้นคุณ %s.'
+msg_you_lost_money: 'คุณสูญเสีย %s สำหรับการตาย.'
+msg_player_couldnt_pay_player_town_bank_paying_instead: 'กระเป๋าเงินของ %s ไม่สามารถตอบสนอง %s ได้ %s นำมาจาก Town Bank.'
+msg_err_could_not_take_deathfunds: 'รับเงิน จากการตายไม่ได้.'
+msg_you_lost_money_dying: 'คุณแพ้ %s.'
+msg_your_town_lost_money_dying: 'Town ของคุณแพ้ %s.'
+msg_your_nation_lost_money_dying: 'Nation ของคุณแพ้ %s.'
+msg_err_couldnt_take_deathfunds: 'รับเงิน จากการตายไม่ได้.'
+msg_err_couldnt_take_town_deathfunds: 'รับเงิน จากการตายของ Town ไม่ได้.'
+msg_err_couldnt_take_nation_deathfunds: 'รับเงิน จากการตายของ Nation ไม่ได้.'
+msg_you_gained_money_for_killing: 'คุณได้รับ %s จากการฆ่า %s.'
+msg_err_ender_pearls_disabled: '&4Ender Pearls ถูกปิดการใช้งาน!'
+msg_err_no_sleep_in_enemy_inn: '&4คุณไม่สามารถนอนหลับในพื้นที่ของศัตรูได้'
+msg_err_cant_use_bed: '&4คุณไม่สามารถใช้เตียงได้ เนื่องจากคุณไม่ได้เป็นเจ้าของที่ดินนี้'
+msg_town_plots_revenue_disclaimer: '&aรายได้ที่แสดงเป็นค่าโดยประมาณ และเจ้าของที่ดินสามารถกำหนดได้ว่าจะให้จ่ายหรือไม่.'
+msg_town_set_perm_syntax_error: 'คำสั่งนี้ใช้คำไม่ถูกต้อง. ''/town set perm ?'' เพื่อดูคำสั่ง.'
+msg_plot_set_perm_syntax_error: 'คำสั่งนี้ใช้คำไม่ถูกต้อง. ''/plot set perm ?'' เพื่อดูคำสั่ง.'
+#Added in 0.32
+msg_err_townadmintownrank_wrong_town: 'Resident ไม่ได้อยู่ Town นั้น.'
+msg_err_resident_already_an_outlaw: 'Player คนนี้เป็น Outlaw ในเมืองของคุณ.'
+msg_err_not_outlaw_in_your_town: 'คุณไม่สามารถตั้งสมาชิกใน Town เป็น Outlaw ได้.'
+msg_you_have_been_declared_outlaw: 'คุณถูกการประกาศให้เป็นพวก Outlaw ใน %s. อย่าถูกจับตายใน Town.'
+msg_you_have_declared_an_outlaw: '%s ถูกประกาศว่าเป็น Outlaw ใน %s.'
+msg_you_have_been_undeclared_outlaw: 'คุณไม่ใช่พวก Outlaw ใน %s อีกต่อไป.'
+msg_you_have_undeclared_an_outlaw: '%s ไม่ได้เป็นพวก Outlaw ใน %s อีกต่อไป.'
+msg_err_player_not_an_outlaw: 'Player คนนั้นไม่ได้ถูกระบุว่าเป็น Outlaw.'
+msg_err_outlaw_in_open_town: 'คุณไม่สามารถเข้าร่วม Town ที่ประกาศให้คุณเป็น Outlaw.'
+msg_you_are_an_outlaw_in_this_town: '&4ระวังตัวด้วย %s ประกาศให้คุณเป็น Outlaw, ถ้าตายที่นี่อาจหมายถึง ail.'
+msg_err_town_not_close_enough_to_nation: 'Homeblock %s ต้องอยู่ไกลจาก Capital Homeblock(Chunk ที่เป็นเมืองหลวง) ของคุณเพื่อเข้าร่วม Nation.'
+msg_nation_town_moved_their_homeblock_too_far: 'HomeBlock ของ %s ถูกย้ายออกห่างจาก HomeBlock ของเมืองหลวงของ Nation คุณมากเกินไป และถูกนำออกจาก Nation ของคุณแล้ว'
+#Added in 0.33
+msg_err_invalid_radius_number: '&cจำนวนรัศมีไม่ถูกต้อง ใช้ %s หรือน้อยกว่า'
+#Added in 0.34
+msg_err_max_residents_per_town_reached: '&cถึงจำนวน Resident สูงสุด (%s) แล้ว'
+#Added in 0.35
+msg_err_resident_doesnt_meet_invite_cooldown: '&cผู้เล่น %s ไม่ได้อยู่บนเซิร์ฟเวอร์นานพอที่จะได้รับเชิญให้เข้า Town โปรดรอสักครู่'
+msg_cant_toggle_pvp_outsider_in_town: 'มี Outsider อยู่ใน Town ของคุณ คุณไม่สามารถเปลี่ยนสถานะ pvp ของคุณได้!'
+msg_err_unclaim_not_outpost: 'ไม่สามารถยกเลิกการอ้างสิทธิ์ Plot นี้ไม่ใช่ด่านหน้า!'
+outpost_plu: 'Outposts'
+#Added in 0.36
+msg_err_not_enough_residents: 'มี Resident ใน Town นี้ไม่เพียงพอที่จะทำอย่างนั้น'
+#Added in 0.37
+msg_err_friendly_fire_disable: 'ไฟที่เป็นมิตรถูกปิดการใช้งาน!'
+#Added in 0.38
+msg_claim_error: '&cPlugin อื่น หยุดการ Claim ของ (%s)/(%s) Town Block ไม่สามารถดำเนินการให้เสร็จสิ้น.'
+#Added in 0.39
+msg_err_town_spawn_forbidden_war: '&cTown spawn  ทำได้เฉพาะในช่วง War เท่านั้น'
+msg_err_town_spawn_forbidden_peace: '&cห้ามTown spawn  ระหว่าง War.'
+msg_err_town_spawn_nation_forbidden_war: '&cTown spawn  สามารถเดินทางไปยัง Town อื่นๆ ใน Nation ของคุณได้ในช่วง War เท่านั้น.'
+msg_err_town_spawn_nation_forbidden_peace: '&cTown spawn  จะไม่อนุญาตให้เดินทางไปยัง Town อื่นใน Nation ของคุณในช่วง War.'
+msg_err_town_spawn_ally_forbidden_war: '&cTown spawn  จะอนุญาตให้วาปไปยัง Town ที่เป็นพันธมิตรกับ Nation ของคุณในช่วง War เท่านั้น.'
+msg_err_town_spawn_ally_forbidden_false: '&cTown spawn การเดินทางไปยัง Town ที่เป็นพันธมิตรกับ Nation ของคุณถูกห้ามในระหว่าง War'
+msg_err_public_spawn_forbidden_war: '&cอนุญาตให้ Town spawn ในที่ สาธารณะไปยัง Town อื่นได้ในช่วง War เท่านั้น.'
+msg_err_public_spawn_forbidden_peace: '&cวาปในที่สาธารณะ ห้ามเดินทางไปยัง Town อื่นในระหว่าง War'
+#Added in 0.40
+mayor_help_9: 'พยายามที่จะ Unclaim Outpost'
+#Added in 0.41 (Invite-Update)
+invite_plu: 'คำเชิญ'
+invite_sent_by: 'คำเชิญถูกส่งโดย'
+invite_help_1: 'ตอบรับคำเชิญเข้าร่วมเมือง'
+invite_help_2: 'ปฏิเสทคำเชิญเข้าร่วมเมือง'
+invite_help_4: 'Decline all invites to join a town'
+invite_help_3: 'แสดงรายการคำเชิญทั้งหมดของคุณ'
+town_invite_help_1: 'เชิญผู้เล่นเข้าสู่ Town ของคุณ'
+town_invite_help_2: 'ยกเลิกคำเชิญที่ส่งไปยังผู้เล่น'
+town_invite_help_3: 'แสดงรายการคำเชิญที่ส่งทั้งหมดของคุณ'
+town_invite_help_4: 'แสดงรายการคำเชิญทั้งหมดที่คุณได้รับ'
+town_invite_help_5: 'ยอมรับคำขอเข้าร่วม Nation'
+town_invite_help_6: 'ปฎิเสธขอร่วม Nation'
+nation_invite_help_1: 'เชิญ Town เข้าสู่ Nation ของคุณ'
+nation_invite_help_2: 'ปฏิเสทคำเชิญ, ที่ส่งไปยัง Town'
+nation_invite_help_3: 'รายชื่อคำเชิญทั้งหมดที่ส่งไปยัง Town'
+nation_ally_help_1: 'ลองเพิ่มพันธมิตรให้ Nation ของคุณ'
+nation_ally_help_2: 'ลองยกเลิกพันธมิตรของ Nation คุณ'
+nation_ally_help_3: 'แสดงรายการคำขอพันธมิตรทั้งหมดที่คุณส่งไป'
+nation_ally_help_4: 'แสดงรายการคำขอพันธมิตรทั้งหมดที่คุณได้รับ'
+nation_ally_help_5: 'ตอบรับคำขอเป็น Nation พันธมิตร'
+nation_ally_help_6: 'ปฏิเสทคำขอเป็น Nation พันธมิตร'
+nation_ally_help_7: 'ยกเลิกคำขอเป็นพันธมิตร'
+msg_player_denied_all_invites: "All of your received invites have been denied."
+msg_err_player_no_invites: '&cคุณไม่มีคำเชิญ!'
+msg_err_player_has_multiple_invites: '&cคุณมีคำเชิญหลายรายการ โปรดระบุให้ชัดเจน!'
+msg_err_player_has_too_many_invites: '%s มีคำเชิญมากเกินไป ให้ปฏิเสธบางส่วนก่อนจะเชิญอีกครั้ง.'
+msg_err_player_already_invited: '&bคุณได้เชิญ %s เข้าร่วม Town ของคุณแล้ว!'
+msg_err_town_no_invites: '&bTown ไม่มีคำเชิญใดๆ!'
+msg_err_town_specify_invite: '&cโปรดระบุคำเชิญ!'
+msg_err_town_has_too_many_invites: '&bTown %s มีคำเชิญมากเกินไป ให้ปฏิเสธบางส่วนก่อนจะเชิญอีกครั้ง.'
+msg_err_town_sent_too_many_invites: '&bส่งคำเชิญมากเกินไป โปรดยกเลิกบางส่วนก่อนลองอีกครั้ง!'
+msg_err_town_already_invited: '&bคุณได้เชิญ %s เข้าร่วม Nation ของคุณแล้ว!'
+msg_err_nation_specify_invite: '&cโปรดระบุคำเชิญ!'
+msg_err_nation_no_requests: '&bNation ไม่มีคำขอเป็นพันธมิตร!'
+msg_err_nation_sent_too_many_invites: '&bNation มีคำเชิญมากเกินไป ให้ปฏิเสธบางส่วนก่อนจะเชิญอีกครั้ง!'
+msg_err_nation_sent_too_many_requests: '&bNation ส่งคำขอมากเกินไป โปรดยกเลิกบางส่วนก่อนลองอีกครั้ง!'
+msg_err_nation_has_too_many_requests: '&bNation %s มีคำขอมากเกินไป ขอให้พวกเขาปฏิเสธบางคำขอ ก่อนที่คุณจะขออีกครั้ง.'
+player_received_invites: '&bคุณได้รับ %a/%m คำเชิญ.'
+town_revoke_invite: '&bTown %s, ยกเลิกคำขอให้เข้าร่วมของคุณ.'
+town_revoke_invite_successful: '&bคุณได้ยกเลิกคำเชิญเข้าร่วม Town ของคุณสำเร็จแล้ว.'
+town_received_invites: '&bTown ได้รับ %a/%m คำเชิญ.'
+town_sent_invites: '&bTown ได้ส่ง %a/%m คำเชิญ.'
+nation_revoke_invite: '&bNation %s, ยกเลิกคำเชิญเข้าร่วมของคุณ.'
+nation_revoke_invite_successful: '&bคุณได้ยกเลิกคำเชิญเข้าร่วม Nation ของคุณสำเร็จแล้ว.'
+nation_revoke_ally: '&bNation %s, ยกเลิกคำขอเป็นพันธมิตรของพวกเขา.'
+nation_revoke_ally_successful: '&bคุณได้ยกเลิกคำขอเป็นพันธมิตรสำเร็จแล้ว.'
+nation_received_requests: '&bNation ได้รับ %a/%m คำขอเป็นพันธมิตร.'
+nation_sent_invites: '&bNation ได้ส่ง %a/%m คำเชิญ.'
+nation_sent_ally_requests: '&bNation ได้ส่ง %a/%m คำขอเป็นพันธมิตร.'
+no_confirmations_open: '&cคุณไม่มีอะไรจะยืนยัน!'
+successful_cancel: '&cAction cancelled!'
+successful_deny: '&bคำเชิญถูกปฏิเสธเรียบร้อยแล้ว.'
+successful_deny_request: '&bคำขอพันธมิตรถูกปฏิเสธเรียบร้อยแล้ว.'
+msg_ally_removed_successfully: '&bพันธมิตรถูกลบเรียบร้อยแล้ว.'
+town_deleted_by_admin: '&bลบ Town %s เรียบร้อยแล้ว'
+nation_deleted_by_admin: '&bลบ Nation %s เรียบร้อยแล้ว'
+are_you_sure_you_want_to_continue: 'คุณแน่ใจหรือว่าต้องการดำเนินการต่อ?'
+you_have_been_invited_to_join: 'คุณได้รับเชิญให้เข้าร่วม '
+you_have_been_requested_to_ally: 'คุณได้รับคำขอเป็นพันธมิตร '
+this_message_will_expire: 'การดำเนินการนี้จะหมดอายุโดยอัตโนมัติใน 20 วินาที'
+player_sing: 'Player'
+nation_zone_this_area_under_protection_of: 'ส่วนนี้ของ %s อยู่ภายใต้การคุ้มครองของ %s'
+#Added in 0.42
+you_have_been_invited_to_join2: 'คุณได้รับเชิญให้เข้าร่วม %s'
+you_have_been_requested_to_ally2: 'คุณได้รับการร้องขอให้เป็นพันธมิตร %s'
+#Added in 0.43
+town_help_11: 'สร้างเมืองใหม่ ใช้ ''_'' เพื่อเว้นวรรค.'
+changed_plot_town: '&bคุณได้เปลี่ยนแปลง %s!'
+not_standing_in_plot: 'คุณไม่ได้ยืนอยู่ใน Plot ที่ถูกต้อง!'
+msg_err_homeblock_has_not_been_set: 'ยังไม่ได้ตั้งค่า Home Block ใช้ ''/town set homeblock'' ก่อน.'
+msg_err_spawn_not_within_homeblock: 'Spawn ไม่ได้อยู่ใน Home Block ใช้ ''/town set homeblock'' ก่อน.'
+#Added in 0.44
+#TownyChat language strings
+tc_err_invalid_command: 'ข้อผิดพลาด: คำสั่งไม่ถูกต้อง!'
+tc_settings_reloaded: '[TownyChat] Reloaded การตั้งค่าแล้ว!'
+tc_err_unrecognized_command_format: 'ข้อผิดพลาด: เป็นรูปแบบคำสั่งที่ไม่รู้จัก!'
+tc_channel_list_status: '(Status)'
+tc_channel_list_in: 'In'
+tc_channel_list_out: 'Out'
+tc_err_you_dont_have_perm_mute_list: 'คุณไม่มีสิทธิ์ดู Mute List'
+tc_err_you_dont_have_unmute_perm: 'คุณไม่มีสิทธิ์เปิดเสียง'
+tc_err_no_channel_called_channel: 'ไม่มีช่องชื่อ &f%s'
+tc_err_no_muted_players_in_channel_players: 'ไม่มีผู้เล่นที่ปิดเสียงใน &f%s'
+tc_players_muted_in_channel: '[TownyChat] &f%n &2ผู้เล่นถูกปิดเสียงใน &f%s&2: &f%s'
+tc_err_no_online_players_with_name: 'ไม่มีผู้เล่น Online ที่มีชื่อ &f%s'
+tc_err_you_dont_have_mute_perms: 'คุณไม่มีสิทธิ์ปิดเสียง'
+tc_err_you_cant_mute_admin: 'คุณไม่สามารถปิดเสียงผู้ดูแล Towny ได้.'
+tc_err_you_cant_mute_chat_mod: 'คุณไม่สามารถปิดเสียงผู้ดูแลแชทได้.'
+tc_player_already_muted_in_channel: '[TownyChat] ผู้เล่นถูกปิดเสียงแล้วใน &f%s'
+tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2ถูกปิดเสียงใน &f%s'
+tc_player_is_not_muted_in_channel: '[TownyChat] ผู้เล่นไม่ถูกปิดเสียงใน &f%s'
+tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2เปิดเสียงใน &f%s . แล้ว'
+tc_err_you_are_currently_muted_in_channel: 'คุณกำลังปิดเสียงใน &f%s&c!'
+tc_err_you_cannot_leave_channel: 'คุณไม่สามารถออกจาก &f%s'
+tc_you_already_left_channel: '[TownyChat] คุณกำลังจะออกจาก &f%s'
+tc_you_left_channel: '[TownyChat] คุณได้ออกจาก &f%s'
+tc_you_are_now_talking_in_channel: '[TownyChat] คุณกำลังพูดคุยใน &f%s'
+tc_err_you_cannot_join_channel: 'คุณไม่สามารถเข้าร่วม &f%s'
+tc_you_are_already_in_channel: '[TownyChat] คุณอยู่ใน &f%s . แล้ว'
+tc_you_joined_channel: '[TownyChat] คุณได้เข้าร่วม &f%s'
+tc_err_you_are_already_talking_in_default_channel_help: 'คุณกำลังพูดในช่องเริ่มต้นอยู่แล้ว หากต้องการเปลี่ยนไปใช้ช่องอื่น ให้ใช้คำสั่งของ channel''s นั้น.'
+tc_err_unable_to_talk_essentials_mute: 'ไม่สามารถพูดได้...คุณกำลังปิดเสียง!'
+tc_err_unable_to_talk_you_are_spamming: 'ไม่สามารถพูดคุยได้...คุณกำลังส่งสแปม!'
+msg_admin_set_plot_help_1: 'เมื่ออยู่ใน Town.'
+msg_admin_set_plot_help_2: 'เมื่ออยู่ใน Wilderness.'
+msg_err_not_enough_outposts_free_to_claim: 'มี Outpost ไม่เพียงพอที่จะ Claim %s/%s'
+msg_err_over_outposts_limit: 'คุณไม่สามารถวาปไปยัง Outpost ของคุณได้ คุณเกินขีดจำกัด %s/%s'
+#Status Screen elements (/res, /town, /nation, /tw, /plot perm)
+#These are translated because we may (or may not) be handling longer words in a smart way.
+#If you are a translator feel free to skip over this section, as it may or may not appear very nice
+#in game. It would be best to see what the changes look like in game before you PR it to github.
+outlaws: '&2Outlaws: &f' #Used on /t outlawlist
+online: '&a(Online)'
+registered_last_online: '&2ลงทะเบียนแล้ว: &a%s &8| &2ออนไลน์ล่าสุด: &a%s' #Used in mayor hover text in /town status screen.
+status_perm: '&2การอนุญาต: ' #Used on /plot perm, /res
+status_on: '&cเปิด'
+status_off: '&aปิด'
+status_on_good: '&aเปิด'
+status_off_bad: '&cปิด'
+status_forced: '&cบังคับ'
+status_adjustable: '&aปรับได้'
+status_pvp: '&2PVP: '
+explosions: '  &2ระเบิด: '
+firespread: '  &2ไฟกระจาย: '
+mobspawns: '  &2จุดเกิดม็อบ: '
+owner_of_x_plots: '&2เป็นเจ้าของ &a%s plots'
+status_bank: '&2ธนาคาร: &a%s'
+status_town: '&2เมือง: &a'
+status_no_town: 'None'
+status_town_ranks: '&2ลำดับTown: &a'
+status_nation_ranks: '&2ลำดับ Nation: &a'
+jailed_in_town: '&2Jailed: &aYes &2in Town: &a%s'
+status_friends: 'Friends'
+rank_list_title: ' &3รายการ Rank '
+rank_list_mayor: '&2เจ้าเมือง: &a%s'
+status_title_capital: '&b(Capital)'
+status_title_pvp: '&4(PVP)'
+status_title_open: '&b(Open)'
+status_town_board: '&2กระดาน: &a%s'
+status_founded: '&2ก่อตั้ง: &7%s'
+status_founded_by: 'Founded by:'
+status_town_size: 'ขนาดเมือง:'
+status_town_size_bought: 'ซื้อแล้ว'
+status_town_size_bonus: 'โบนัส:'
+status_town_size_nationbonus: 'คุกนี้ไม่มีเซลล์'
+status_town_outposts: '&2Outposts: &a%s / %s'
+status_bank_town2: ' &7| &2ค่าบำรุงรักษารายวัน: &4%s'
+status_bank_town3: ' &7| &2ภาษี: &4%s'
+status_town_nation: '&2Nation: &a%s'
+status_town_reslist_overlength: 'และอื่นๆ...'
+status_nation_king: 'Leader:'
+status_nation_tax: '  &2ภาษีของNation: &4%s'
+status_nation_conquered_tax: 'ConqueredTax:'
+status_nation_towns: '&2Towns &a[%s]&2: &f'
+status_nation_allies: '&2Allies &a[%s]&2: &f'
+status_nation_enemies: '&2Enemies &a[%s]&2: &f'
+status_nation_enemied_by: 'Nations that consider your nation an enemy'
+status_world_claimable: ' &aClaimable'
+status_world_noclaims: ' &cNoClaims'
+status_world_forcepvp: '&2ForcePVP: '
+status_world_fire: '&2Fire: '
+status_world_forcefire: '&2Force Fire: '
+status_world_forceexplosion: '&2Force Explosion: '
+status_world_worldmobs: '&2World Mobs: '
+status_world_forcetownmobs: '&2Force TownMobs: '
+status_world_unclaimrevert: '&2Unclaim กลับ: '
+status_world_explrevert: '&2การระเบิดย้อนกลับ: '
+status_world_ignoredblocks: '&2บล็อกที่ถูกละเว้น:'
+status_res_taxexempt: '&2Staff ได้รับการยกเว้นไม่ต้องเสียภาษี Town.'
+status_res_tax: '&2ภาษี Town : &a'
+status_res_plottax: '&2ภาษี Plot ทั้งหมด: &a'
+status_res_totaltax: '&2รวมภาษีที่ต้องชำระ: &a'
+#Added in 0.45
+msg_err_unable_to_use_bank_outside_nation_capital: 'คุณไม่สามารถใช้ประโยชน์จาก Nation Bank ของคุณนอกเมืองหลวงได้.'
+msg_err_unable_to_use_bank_outside_your_town: 'คุณไม่สามารถใช้ประโยชน์จาก Town Bank ของคุณนอก Town ของคุณ.'
+msg_time_until_a_new_day: 'เวลาจนถึงวันใหม่: '
+msg_hours: ' ชั่วโมง'
+msg_minutes: ' นาที'
+msg_seconds: ' วินาที'
+msg_err_invalid_string_nationboard_not_set: 'String ไม่ถูกต้อง ไม่ได้ตั้งค่า Nation Board.'
+msg_plot_evict: 'ขับไล่ Plot เรีนยร้อย.'
+msg_no_one_to_evict: 'ไม่มีใครขับไล่ออกจาก Plot นี้.'
+#Added in 0.46
+nation_help_10: 'วาปไปยัง Spawn ของ Nation.'
+msg_nation_spawn_warmup: '&bกำลังรอการวาป...'
+msg_set_nation_spawn: '&bเปลี่ยนการ Spawn ของ Nation เรียบร้อยแล้ว.'
+msg_err_cant_afford_tp_nation: '&cไม่สามารถวาปไปที่ %s ได้.'
+msg_err_nationspawn_has_not_been_set: '&cNation ไม่ได้ตั้ง Spawn.'
+msg_err_spawn_not_within_nationtowns: '&cSpawn ของ Nation ต้องอยู่ใน Town ที่เป็นส่วนหนึ่งของ Nation.'
+msg_err_spawn_not_within_capital: '&cSpawn ของ Nation ต้องอยู่ในเมืองหลวง.'
+msg_err_nation_spawn_war: '&cNation Spawn ไม่เป็นมิตรในช่วงสงคราม.'
+msg_err_nation_not_public: '&cNation นั้นไม่เป็นสาธารณะ.'
+msg_nation_toggle_public: '&aสลับการตั้งค่า Nation เป็นสาธารณะ เรียบร้อยแล้ว.'
+status_yes: '&aYES'
+status_no: '&cNO'
+msg_err_unable_to_use_bank_outside_bank_plot: 'คุณไม่สามารถใช้คำสั่งนั้นนอกธนาคารหรือบ้าน'
+msg_err_nation_spawn_forbidden: '&cห้ามวาปในประเทศ'
+msg_err_nation_spawn_forbidden_war: '&cNation spawn travel อนุญาตเฉพาะในช่วงสงครามเท่านั้น'
+msg_err_nation_spawn_forbidden_peace: '&cNation spawn travel ต้องห้ามในระหว่างสงคราม.'
+msg_err_nation_spawn_ally_forbidden: '&cNation วาปไปยัง Nation พันธมิตรเป็นสิ่งต้องห้าม.'
+msg_err_nation_spawn_nation_forbidden_war: '&cNation spawn สามารถเดินทางไปยัง Nation พันธมิตรอื่น ๆ ได้ในช่วง War เท่านั้น'
+msg_err_nation_spawn_nation_forbidden_peace: '&cNation วาปไปยัง Nation พันธมิตรอื่น ๆ ถูกห้ามในระหว่าง War.'
+msg_err_public_nation_spawn_forbidden: '&cไม่อนุญาตให้วาปในที่สาธารณะไปยังประเทศอื่น'
+msg_err_public_nation_spawn_forbidden_war: '&cการวาป ในที่สาธารณะสามารถวาปไปยัง Nation อื่นได้ในช่วง War เท่านั้น.'
+msg_err_public_nation_spawn_forbidden_peace: '&cการวาป ในที่สาธารณะ ห้ามเดินทางไปยัง Nationอื่นในระหว่าง War.'
+msg_spawn_cost_set_to: '&b%s ได้กำหนดราคาของการใช้ /%s spawn เป็น %s'
+msg_err_cannot_set_spawn_cost_more_than: '&cคุณไม่สามารถกำหนดราคา Spawn ให้สูงกว่า %s'
+msg_err_ally_isnt_public: '&cพันธมิตรของคุณ %s ไม่ได้เปิดใช้งานการวาปแบบสาธารณะ การวาปถูกปฏิเสธ.'
+msg_nation_changed_public: '&cสถานะ Nation ของตอนนี้คือ %s.'
+#Added in 0.47:
+status_plot_type: '&2ประเภท Plot: &a'
+msg_no_self_jailing: 'คุณไม่สามารถ ติดคุกของตัวเองได้.'
+online2: ' &a(Online)'
+build: 'สร้าง'
+destroy: 'ทำลาย'
+switch: 'สวิตช์'
+item_use: 'ใช้ Item'
+owner_status: 'เจ้าของ'
+towny_map_header: 'แผนที่ Towny '
+towny_map_unclaimed: 'Unclaimed'
+towny_map_claimed: 'Claimed'
+towny_map_forsale: 'สำหรับขาย'
+towny_map_yourtown: 'Town ของคุณ'
+towny_map_yourplot: 'Plot ของคุณ'
+towny_map_ally: 'พันธมิตร'
+towny_map_enemy: 'ศัตรู'
+enabled: 'เปิดใช้งาน'
+disabled: 'ปิดใช้งาน'
+forced: 'บังคับ'
+adjustable: 'ปรับได้'
+#Added in 0.48:
+msg_no_funds_new_town2: '&c%s can''t afford to settle a new town here, which costs %s.'
+msg_no_funds_new_nation2: '&cTown นี้ไม่สามารถเริ่มต้น Nation ใหม่ได้ ซึ่งมีค่าใช้จ่าย %s.'
+msg_no_funds_claim2: '&cTown ไม่สามารถรับ %s Town Block ที่คิดต้นทุน %s เพิ่ม %s ไปยังธนาคารเมืองโดยใช้ /t เงินฝาก %s'
+msg_err_cant_afford_blocks2: '&cTown ไม่สามารถรับ %s Town Block ที่คิดต้นทุน %s เพิ่ม %s ไปยัง Town Bank โดยใช้ /t เงินฝาก %s'
+msg_err_not_enough_variables: '&cตัวแปรไม่เพียงพอ: '
+nation_rechecked_by_admin: '&bNation %s ระยะทางใน Town ตรวจสอบได้สำเร็จอีกครั้ง.'
+msg_err_nation_over_town_limit: '&cNation ของคุณมีจำนวน Town ต่อ Nation ถึงจำนวนสูงสุดที่อนุญาตแล้ว: %s.'
+#Added in 0.49
+msg_process_claim: 'กำลังดำเนินการ Claim ใน Plot ...'
+msg_process_unclaim: 'กำลังยกเลิกการ Claim Plot...'
+msg_total_townblocks: 'TownBlocks ทั้งหมด: '
+#Added in 0.50
+friend_list: 'รายชื่อเพื่อน'
+#The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
+#nationranks lists on the /nation screen; and probably more lists of residents.
+res_format_list_1: '&2' #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
+res_format_list_2: '&a' #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
+res_format_list_3: '&f' #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
+townboard_message_colour_1: '&6'
+townboard_message_colour_2: '&e'
+nationboard_message_colour_1: '&6'
+nationboard_message_colour_2: '&e'
+not_registered: 'ยังไม่ได้ลงทะเบียน.'
+msg_error_missing_comparator: '&bต้องระบุสิ่งที่จะจัดเรียงตาม.'
+msg_error_invalid_comparator: '&bตัวเปรียบเทียบไม่ถูกต้อง.'
+msg_error_multiple_comparators: '&bเครื่องเปรียบเทียบมากเกินไป ระบุอย่างใดอย่างหนึ่งเท่านั้น'
+msg_error_comparator_failed: '&bตัวเปรียบเทียบล้มเหลว ลองอันอื่น'
+number_of_residents: '(Number of Residents)'
+number_of_towns: '(Number of Towns)'
+town_name: 'ชื่อ Town'
+nation_name: 'ชื่อ Nation'
+refund_message: '&aRefunded %s for unclaiming %s townblocks.'
+msg_bankrupt_town_multiple: '&bTown ต่อไปนี้ไม่สามารถจ่ายค่าบำรุงรักษาและจะถูกยุบ: '
+msg_bankrupt_nation_multiple: '&bNation ต่อไปนี้ไม่สามารถจ่ายค่าบำรุงรักษาและจะถูกยุบ: '
+msg_couldnt_pay_tax: '&b%s ไม่สามารถจ่ายภาษีได้และถูกไล่ออกจาก %s'
+msg_couldnt_pay_nation_tax_multiple: '&bTown ต่อไปนี้ไม่สามารถจ่ายภาษี ของNation และออกจาก Nation: '
+msg_couldnt_pay_town_tax_multiple: '&bResident ต่อไปนี้ไม่สามารถจ่ายภาษีเมืองและถูกเนรเทศ: '
+msg_couldnt_pay_plot_taxes_multiple: '&bResident ต่อไปนี้ไม่สามารถจ่ายภาษีที่ดินใน Plot บางส่วนหรือทั้งหมดได้:'
+msg_bankrupt_town2: '&b%s ไม่สามารถที่จะอยู่ใน Town ต่อไปได้.'
+msg_bankrupt_nation2: '&b%s ไม่สามารถที่จะเป็น Nation ได้'
+status_embassy_town: '&2สถานทูตใน'
+#Added in 0.51:
+msg_error_invalid_comparator_nation: '&bInvalid comparator. Try %s.'
+msg_error_invalid_comparator_town: '&bInvalid comparator. Try %s.'
+msg_err_merging_for_kings_only: '&bMerging can only be done by a Nation Leader.'
+msg_err_king_of_that_nation_is_not_online: '&bThe Nation Leader of %s, %s, is not online. Merge failed.'
+nation1_has_merged_with_nation2: '&6Nation %s ได้ตกลงที่จะ Merge ด้วยกันกับ Nation ที่มีอยู่ของ %s'
+msg_would_you_merge_your_nation_into_other_nation: '&6คุณตกลงที่จะยุบ Nation ของคุณ %s ให้เป็น Nation ของ %s หรือไม่? การดำเนินการนี้จะโอนเงินทุก Town และ Nation Bank ไปที่ %s.'
+no_open_towns: 'ไม่มี Town เปิดในรายการ.'
+#Added in 0.52:
+msg_error_nation_has_no_allies: 'ไม่มีพันธมิตร [Ally] ในรายการ'
+msg_error_nation_has_no_enemies: 'ไม่มีศัตรู [Enemies] ในรายการ'
+msg_error_ta_plot_claim: 'ไม่มีชื่อผู้เล่น เช่น /ta plot claim PlayerNameHere'
+msg_error_no_player_with_that_name: 'ไม่พบผู้เล่นที่มีชื่อ %s'
+msg_admin_has_given_you_a_plot: 'ผู้ดูแลได้ Claim Plot ให้คุณที่: %s'
+msg_town_forcemobs_setting_set_to: 'The town %s has had their mobs setting forced to %s'
+msg_town_forcepvp_setting_set_to: 'Town %s ถูกบังคับให้ตั้ง pvp เป็น %s'
+msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
+msg_nation_changed_open: '&cสถานะของ Nation ตอนนี้คือ %s .'
+msg_err_already_in_a_nation: 'Town ของคุณมีอยู่แล้วใน Nation'
+msg_err_nation_not_open: '&cThe nation %s does not have it''s doors open to everyone. Ask the nation leader or an assistant to join.'
+msg_err_nation_homeblock_in_another_world: '&cHomeBlock Town ของคุณไม่ได้อยู่ใน World เดียวกับบล็อกหลักของ Nation Capital'
+status_bank_town_penalty_upkeep: '&7| &2ค่าบำรุงรักษา การ Claim : &4%s'
+#Added in 0.53:
+msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'คุณไม่สามารถ Spawn ที่ %s ได้ คุณถูกทำเครื่องหมายว่าเป็น Outlaw ที่นั่น.'
+#Added in 0.55:
+msg_you_cannot_use_that_command_while_jailed: '&4คุณไม่สามารถใช้คำสั่งนั้นในขณะที่ถูกจำคุก.'
+#Added in 0.56:
+msg_cache_block_error_town_nation: '&cสมาชิก Nation ไม่ได้รับอนุญาตให้ %s.'
+#Added in 0.57:
+msg_err_already_res2: '&c%s อยู่ในเมืองแล้ว.'
+msg_err_cannot_afford_plot_set_type_cost: '&cคุณไม่สามารถตั้งค่า Plot เป็นประเภท %s โดยคิดต้นทุน %s'
+msg_plot_set_cost: '&bคุณถูกเรียกเก็บเงิน %s สำหรับการตั้งค่า Plot เป็นประเภท: %s'
+msg_err_townspawn_has_not_been_set: '&cไม่ได้ตั้งค่า Spawn ใน Town.'
+msg_err_player_too_far_from_town_spawn: '&c%s อยู่ห่างจากเมืองของคุณเกินกว่าจะรับคำเชิญให้เข้าเมืองได้ ระยะทางสูงสุด: %s บล็อค.'
+#Added in 0.58:
+msg_resident_bail_amount: 'ค่าประกัน Resident : '
+msg_mayor_bail_amount: 'ค่าประกัน Mayor: '
+msg_king_bail_amount: 'Nation Leader Bail costs: '
+msg_has_paid_bail: 'ได้ประกันตัวแล้วฟรี.'
+msg_err_unable_to_pay_bail: 'ประกันตัวไม่ได้.'
+msg_err_bail_not_enabled: 'ไม่ได้เปิดใช้งานการประกันตัว.'
+msg_you_have_been_freed_from_jail: 'คุณได้รับอิสรภาพจากคุก.'
+msg_player_has_been_freed_from_jail_number: '%s พ้นโทษแล้ว %s.'
+msg_player_has_been_sent_to_jail_number: '%s ถูกส่งไปยังคุกหมายเลข %s.'
+msg_player_is_not_online: '%s ไม่ Online.'
+msg_mysql_dump_success: 'MySQL database dump complete.'
+msg_err_mysql_not_being_used: 'Your config is not set to save & load mysql.'
+msg_save_success: 'Database saved.'
+msg_load_success: 'Database loaded.'
+msg_err_cannot_afford_to_set_outpost: 'Town ของคุณไม่มีเงินทุนเพียงพอที่จะตั้ง Town นี้เป็นด่านหน้า.'
+msg_too_close2: 'บริเวณนี้ใกล้กับ %s ของ Town อื่นมากเกินไป.'
+homeblock: 'homeblock'
+townblock: 'townblock'
+outpost: 'ด่านหน้า'
+msg_err_not_same_town: '&b%s ไม่ได้อยู่ใน Town ของคุณ.'
+#Added in 0.59:
+msg_modes_set: 'Modes set: '
+msg_err_this_plot_doesnt_have_any_associated_metadata: 'Plot นี้ไม่มีข้อมูล Meta ที่เกี่ยวข้อง.'
+msg_err_the_metadata_for_key_is_not_registered: 'ข้อมูล Meta สำหรับ ''%s'' ไม่ได้ลงทะเบียน!'
+msg_key_x_was_successfully_updated_to_x: 'อัปเดต Key %s เป็น %s เรียบร้อยแล้ว.'
+msg_err_key_x_is_not_part_of_this_plot: 'Key %s ไม่ได้เป็นส่วนหนึ่งของ Plot นี้ ถ้าเป็นไปได้ โปรดเพิ่มเข้าไป.'
+msg_err_key_x_already_exists: 'มี Key %s อยู่แล้ว!'
+msg_custom_data_was_successfully_added_to_townblock: 'เพิ่มข้อมูล Custom ลงใน Townblock สำเร็จแล้ว!'
+msg_data_successfully_deleted: 'ลบข้อมูลเรียบร้อยแล้ว!'
+msg_err_key_cannot_be_deleted: 'ไม่สามารถลบ Key ได้เนื่องจากไม่มีอยู่!'
+msg_err_this_town_doesnt_have_any_associated_metadata: 'This town doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_town: 'Key %s ไม่ได้เป็นส่วนหนึ่งของ Town นี้ '
+msg_custom_data_was_successfully_added_to_town: 'เพิ่มข้อมูล Custom ในเมืองเรียบร้อยแล้ว!'
+msg_error_too_many_pages: 'หน้าเยอะเกินไป.'
+msg_err_location_is_not_within_a_town: 'ที่ตั้งไม่ได้อยู่ใน Town '
+msg_err_location_is_not_within_a_jail_plot: 'Location ไม่ได้อยู่ใน Plot Jail'
+msg_err_town_has_no_jail_spawns_set: 'Town ไม่ได้ตั้งจุดเกิดภายในคุกไว้'
+msg_err_town_has_no_outpost_spawns_set: 'Town ไม่ได้ตั้งจุดเกิดตรง Plot Outpost.'
+msg_err_location_is_not_within_an_outpost_plot: 'Location ไม่ได้อยู่ใน Plot ของ Outpost'
+msg_err_town_has_not_set_a_spawn_location: 'Town ไม่ได้ตั้งจุดเกิดไว้'
+msg_err_town_has_no_claim_over_this_town_block: 'Town ไม่สามารถ Claim เหนือ Block นี้ได้'
+msg_err_town_doesnt_belong_to_any_nation: 'Town ไม่ได้เป็นของ Nation อื่นๆ'
+msg_err_mayor_doesnt_belong_to_town: 'Mayor ไม่ได้อยู่ใน town.'
+msg_err_tag_too_long: 'Tag ยาวเกินไป.'
+msg_err_nation_has_not_set_a_spawn_location: 'Nation ไม่ได้ตั้งจุดเกิดไว้'
+msg_err_resident_doesnt_belong_to_any_town: 'ไม่มี Resident อยู่ใน Town อื่นๆ'
+msg_err_could_not_set_default_modes_for: 'ไม่สามารถตั้งเป็น default modes สำหรับ '
+#Added in 0.60
+msg_set_war_allowed_on: 'War ถูกเปิด'
+msg_set_war_allowed_off: 'War ถูกปิด'
+#Added in 0.61
+#Added in 0.62
+msg_err_cannot_toggle_pvp_x_seconds_remaining: 'คุณไม่สามารถสลับเป็น PVP ได้ เหลืออีก %s วินาที'
+msg_err_cannot_spawn_x_seconds_remaining: 'คุณไม่สามารถเกิดได้อีก %s วินาที'
+#Added in 0.63
+msg_plot_set_to_nfs: 'Plot นี้ไม่ได้ขายแล้ว'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn ถูกปิดโดย %s.'
+msg_the_wilderness: 'ที่รกร้างว่างเปล่า'
+msg_enemy_areas: 'พื้นที่ศัตรู'
+msg_neutral_towns: 'towns ที่เป็นกลาง'
+#Added in 0.64
+msg_err_no_nation_with_that_name: 'ไม่พบ Nation ที่ชื่อ %s'
+msg_err_cannot_unclaim_homeblock: 'คุณไม่สามารถยกเลิกการ Claim homeblock ของคุณ,คุณสามารถพิมพ์ /town set homeblock เพื่อย้าย homeblock ของคุณ'
+#Added in 0.65
+msg_err_rename_cancelled: 'การเปลี่ยนชื่อถูกยกเลิกโดยปลั๊กอินอื่น'
+#Added in 0.66
+#Added in 0.67
+msg_conquered: '&4(Occupied)'
+#Added in 0.68
+msg_plot_group_claim_confirmation: 'Plot นี้เป็นส่วนหนึ่งของกลุ่มของ %s Plot โดยการยืนยันการ Claim ของคุณ คุณจะซื้อทั้งหมด.'
+msg_plot_group_unclaim_confirmation: 'Plot นี้เป็นส่วนหนึ่งของกลุ่มของ %s Plot โดยยืนยันว่าคุณจะยกเลิกการ Claim ทั้งหมด.'
+msg_plot_group_toggle_confirmation: 'Plot นี้เป็นส่วนหนึ่งในกลุ่มของ %s Plot โดยยืนยันว่าคุณจะสลับคุณสมบัติทั้งหมด'
+msg_plot_group_set_perm_confirmation: 'Plot นี้เป็นส่วนหนึ่งของกลุ่มของ %s Plot โดยยืนยันว่าคุณจะกำหนดเส้นการอนุญาตทั้งหมด.'
+msg_plot_evict_group: 'คุณได้ขับไล่ผู้เล่นขอ Plot นี้สำเร็จแล้ว %s'
+msg_err_plot_belongs_to_group_plot_fs: 'Plot: %s หากจะจัดเป็น Group ให้พิมพ์ /plot group [group name] fs [amount]'
+msg_err_plot_belongs_to_group_set: 'Plot เป็นของกลุ่ม ใช้ /plot group set'
+msg_plot_group_set_for_sale: 'กลุ่ม %s ถูกวางขาย!'
+msg_err_plot_already_belongs_to_a_group: 'Plot นี้อยู่ในกลุ่มแล้ว: %s โปรดลบ Town Block ออกจากกลุ่มนั้นก่อนที่จะเพิ่มไปยังอีกกลุ่มหนึ่ง.'
+msg_err_you_must_specify_a_group_name: 'คุณต้องระบุชื่อ Group ของ Plot'
+msg_plot_was_put_into_group_x: 'Plot &9(%s,%s) &2ถูกจัดกลุ่ม %s'
+msg_err_plot_not_associated_with_a_group: 'Plot นี้ไม่เกี่ยวข้องกับกลุ่ม.'
+msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2ถูกนำออกจากกลุ่ม %s'
+msg_plot_renamed_from_x_to_y: 'Plot %s ถูกเปลี่ยนชื่อเป็น %s.'
+msg_err_plot_group_specify_price: 'โปรดระบุราคา เช่น /plot group fs [price]'
+msg_player_put_group_up_for_sale: '%s กลุ่มที่วาง %s ขึ้นสำหรับการขาย %s'
+msg_err_could_not_set_group_type: 'ไม่สามารถกำหนดประเภท Group ได้ - '
+msg_set_group_type_to_x: 'เปลี่ยนประเภทของกลุ่ม Plot เป็น %s'
+msg_player_successfully_bought_group_x: '%s ซื้อกลุ่ม Plot สำเร็จแล้ว %s'
+status_plot_group_name_and_size: '&2Town block เป็นส่วนหนึ่งของกลุ่ม: %s กลุ่มมีทั้งหมด %s Town block'
+msg_player_made_group_not_for_sale: '%s สร้างกลุ่ม %s ไม่ขาย'
+#Added in 0.69
+msg_err_cannot_set_group_to_jail: 'ไม่สามารถตั้งค่ากลุ่ม Plot เป็นประเภท Jail ได้.'
+#Added in 0.70
+msg_err_plot_group_name_required: 'คุณต้องระบุชื่อกลุ่ม Plot เช่น, /plot group add {name}'
+msg_confirmation_spigot_click_accept: 'คลิก %s หรือพิมพ์ %s'
+msg_confirmation_spigot_click_cancel: 'คลิก %s หรือพิมพ์ %s'
+msg_you_cannot_kick_yourself: 'คุณไม่สามารถ Kick ตัวเองได้.'
+msg_you_cannot_kick_this_resident: 'คุณไม่สามารถ kick %s ได้, พวกเขาคือ Mayor หรือ Assistant.'
+#Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: 'Plot: %s อยู่ในกลุ่ม, ใช้ /plot group fs [amount]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Plot: %s อยู่ในกลุ่ม, ใช้ /plot group nfs'
+#Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'การตั้งค่า %s ที่ควบคุมโดย Admin จะป้องกันไม่ให้คุณสลับ pvp เป็น %s.'
+#Added in 0.73
+msg_err_you_aren't currently jailed: 'คุณยังไม่เคยถูก Jail.'
+#Added in 0.74
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'คุณไม่ได้รับอนุญาตให้สร้างอีกด้านหนึ่งของ Portal นี้ในตำแหน่งนี้.'
+#Added in 0.75
+msg_already_ally: 'Nation ของคุณเป็นพันธมิตรกับ %s แล้ว.'
+#Added in 0.76
+msg_you: 'คุณ'
+#Added in 0.77
+msg_click_spawn: '&aClick to spawn to: &e%s'
+msg_spawn_cost: '&aSpawn Cost = &e%s'
+#Added in 0.78
+msg_reload_error: 'เกิดข้อผิดพลาดในการโหลด Towny.'
+msg_reloaded_config: '&2โหลดการกำหนดค่าอีกครั้งสำเร็จ.'
+msg_reloaded_perms: '&2โหลดสิทธิ์สำเร็จแล้ว.'
+msg_reloaded_db: '&2โหลด Database สำเร็จแล้ว'
+msg_reloaded_lang: '&2โหลด Language file สำเร็จแล้ว'
+msg_reset_config: '&2รีเซ็ตการกำหนดค่าแล้ว'
+msg_err_teleport_cancelled: 'คุณเคลื่อนที่ ยกเลิกการเทเลพอร์ตของคุณ.'
+#Added in 0.79
+msg_cache_block_error_plot_friends: 'เพื่อน'
+msg_cache_block_error_plot_allies: 'พันธมิตร'
+msg_cache_block_error_plot_outsiders: 'คนนอก'
+msg_cache_block_error_plot_town_members: 'สมาชิกใน town'
+msg_err_invalid_nation_map_color: '&cไม่พบสีแผนที่นี้. สีที่อนุญาตคือ %s.'
+msg_nation_map_color_changed: '&bเปลี่ยนสีแผนที่ Nation เป็น %s.'
+msg_err_unable_to_add_more_residents_without_nation: 'เมืองของคุณไม่สามารถเชิญผู้อยู่อาศัยได้เกิน %s โดยไม่ได้เข้าร่วมหรือสร้าง Nation ก่อน.'
+msg_the_following_towns_were_deleted_for_having_0_claims: 'เมืองต่อไปนี้ถูกลบเนื่องจากมีการอ้างสิทธิ์ 0 ครั้ง: %s'
+msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these confirmations.'
+msg_confirm_purchase: 'การทำเช่นนี้จะมีค่าใช้จ่าย %s ดำเนินการต่อ?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Town ต่อไปนี้จะถูกลบออกจาก Nation ของคุณ: %s คุณต้องการที่จะดำเนินการต่อ?'
+msg_ta_deposit_all_success: 'ฝาก %s สำเร็จไปยัง Bank ของทุก Nation และทุก Town.'
+bonus_townblocks: 'โบนัส townblocks'
+#Added in 0.80
+nomad_sing: 'Nomad'
+msg_new_town_advice: 'ขอแสดงความยินดีที่สร้าง Town ของคุณ! Town ของคุณจะจ่ายค่าบำรุงรักษารายวัน ซึ่งปัจจุบันมีมูลค่า %s คุณสามารถฝากเงินใน Bank ของ Town โดยใช้ ''/t deposit #'' หากไม่มีเงินจ่ายค่าบำรุงรักษา Town ของคุณจะถูกลบ คุณสามารถดูค่าใช้จ่ายของคุณได้ตลอดเวลาโดยใช้ /towny price ค่าบำรุงรักษารายวันถัดไปใน %s.'
+#Added in 0.81
+msg_err_teleport_cancelled_damage: 'ความเสียหายได้ยกเลิกการเคลื่อนย้ายของคุณ.'
+#Added in 0.82
+invitation_prefix: "&8[&7Invitation&8] &9"
+confirmation_prefix: "&8[&7Confirmation&8] &9"
+this_message_will_expire2: '&9This will auto-expire in %s seconds'
+msg_hover_next_page: 'หน้าต่อไป'
+msg_hover_previous_page: 'หน้าก่อนหน้า'
+#Added in 0.83
+msg_max_tax_amount_only_for_percent: "จำนวนภาษีสูงสุดสามารถกำหนดได้เฉพาะ Town ที่มีเปอร์เซ็นต์ภาษีเท่านั้น"
+msg_town_set_tax_max_percent_amount: "%s ได้กำหนดจำนวนเปอร์เซ็นต์ภาษีสูงสุดเป็น %s"
+#Added in 0.84
+msg_err_plot_belongs_to_group_toggle: 'พล็อตเป็นของกลุ่ม ใช้ /plot กลุ่ม toggle'
+#Added in 0.85
+msg_set_perms_reset_single: '&bรีเซ็ตการอนุญาตบน Plot นี้สำเร็จ'
+#Added in 0.86
+status_bank_bankrupt: '&2ธนาคาร: &a%s &c(ล้มละลาย)'
+msg_warning_bankrupt: '&4*** คำเตือน %s จะล้มละลายในวันถัดไปเนื่องจากขาดเงินทุน ***'
+msg_town_bankrupt_by_upkeep: '&b%s ไม่สามารถจ่ายค่าบำรุงรักษาและจะล้มละลายได้'
+msg_town_bankrupt_by_upkeep_multiple: '&bTown ต่อไปนี้ไม่สามารถจ่ายค่าบำรุงรักษาและจะล้มละลายได้: '
+msg_town_bankrupt_by_nation_tax: '&b%s ไม่สามารถชำระภาษี %s และล้มละลายได้'
+msg_town_bankrupt_by_nation_tax_multiple: '&bTown ต่อไปนี้ไม่สามารถจ่ายภาษีของ Nation และล้มละลายได้: '
+msg_town_debts_cleared: '%s ได้ชำระหนี้สินทั้งหมดแล้ว และจะไม่ล้มละลายอีกต่อไป'
+msg_err_bankrupt_town_cannot_claim: 'ไม่อนุญาตให้ Claim ใน Plot เพื่อ Town ที่ล้มละลาย'
+msg_err_bankrupt_town_cannot_build: 'ไม่อนุญาตให้สร้างใน Town ที่ล้มละลาย'
+msg_err_bankrupt_town_cannot_toggle_open: 'ไม่อนุญาตให้เปิดใน Town ที่ล้มละลาย'
+msg_err_bankrupt_town_cannot_invite: 'ไม่อนุญาตให้เชิญผู้เล่นเข้าสู่ Town ที่ล้มละลาย'
+msg_payed_nation_tax: '&bTown ของคุณจ่ายภาษีประเทศเป็น %s'
+msg_your_town_couldnt_pay_the_nation_tax_of: '&bTown ของคุณไม่สามารถจ่ายภาษีของ Nation นั้นได้ %s และจะ ถูกไล่ออกจาก Nation'
+msg_your_town_payed_upkeep: '&bTown ของคุณจ่ายค่าบำรุงรักษารายวันเป็น %s'
+msg_your_nation_payed_upkeep: '&bNation ของคุณจ่ายค่าบำรุงรักษารายวันเป็น %s'
+msg_your_town_couldnt_pay_upkeep: '&bTown ของคุณไม่สามารถจ่ายค่าบำรุงรักษารายวัน %s และจะถูกยุบได้'
+msg_your_nation_couldnt_pay_upkeep: '&bNation ของคุณไม่สามารถจ่ายค่าบำรุงรักษารายวันของ %s และได้ยุบไปแล้ว'
+#Added in 0.87
+msg_town_reached_debtcap_and_is_disbanded: '&b%s ไม่สามารถจ่ายค่ารักษาพยาบาลได้ ใช้หนี้จนครบแล้ว และได้ยุบไปแล้ว'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&bTown ต่อไปนี้ไม่สามารถจ่ายค่ารักษาพยาบาล ใช้หนี้จนหมด และยุบไป: '
+msg_unable_to_deposit_x: 'ไม่สามารถฝาก %s เข้าธนาคารของ Town นั้นได้'
+msg_unable_to_withdraw_x: 'ไม่สามารถถอน %s ออกจากธนาคารของ Town นั้นได้'
+status_debtcap: '&2ยอดหนี้: &a%s'
+status_world_explrevert_entity: '&2Entity Explosion ย้อนกลับ:'
+status_world_explrevert_block: '&2บล็อกการระเบิดย้อนกลับ: '
+#Added in 0.88
+msg_nation_already_peaceful: '&cNation นี้สงบสุขแล้ว.'
+msg_nation_already_not_peaceful: '&cNation นี้ไม่สงบสุขแล้ว.'
+#Added in 0.89
+status_world_friendlyfire: '&2FriendlyFire: '
+status_world_wildernessmobs: '&2Wilderness Mobs: '
+msg_outlaw_kick_cooldown: '&cคุณถูกมองว่าเป็นคนนอกกฎหมายใน %s คุณเหลือ %s ให้ออกจาก Town มิฉะนั้น คุณจะถูกเทเลพอร์ตกลับไปยัง Spawn ของคุณ.'
+msg_outlaw_kicked: '&4ไม่ต้อนรับคุณใน %s คุณถูกเคลื่อนย้ายออกไป.'
+msg_outlaw_town_notify: '&cอาชญากร %s ได้เข้าสู่อาณาเขตของ Town ของคุณแล้ว.'
+msg_your_town_payed_upkeep_with_debt: '&cTown ของคุณจ่ายค่าบำรุงรักษารายวัน %s ด้วยหนี้'
+msg_payed_nation_tax_with_debt: '&cTown ของคุณจ่ายภาษีของประเทศเป็น %s ด้วยหนี้'
+#Added in 0.90
+status_plot_clear_deletion: '&2PlotClearBlockลบ: '
+msg_err_plot_clear_disabled_in_this_world: 'คำสั่ง /plot clear ถูกปิดใช้งานใน World นี้'
+#Added in 0.91
+msg_universe_attribution: 'ผู้เขียน: '
+msg_universe_contributors: ' และผู้มีส่วนร่วมเช่นคุณ '
+msg_universe_heart: '<3'
+townblock_plu: 'TownBlocks'
+#Added in 0.92
+#Town Ruins
+admin_panel_4: 'เรียกใช้รหัสชั่วโมง'
+msg_newhour_success: 'คำสั่ง newhour ดำเนินการสำเร็จแล้ว'
+town_help_12: 'ReClaim Town ของคุณจากรัฐที่ถูกทำลาย'
+msg_warning_town_ruined_if_deleted: "คำเตือน!!!: หากคุณลบ Town ของคุณ Town ของคุณจะอยู่ในสภาพที่ทรุดโทรมเป็นเวลา %d ชั่วโมง หลังจากเวลานี้ จะลบทั้งหมดเกิดขึ้น"
+msg_warning_town_ruined_if_deleted2: "ชาวเมืองสามารถเรียกคืน Town ได้โดยใช้ ''/t reclaim'' หลังจาก %d ชั่วโมง"
+msg_err_cannot_reclaim_town_unless_ruined: '&cคุณไม่สามารถ Reclaim Town ของคุณได้เพราะมันไม่ได้ถูกทำลาย'
+msg_err_cannot_reclaim_town_yet: '&cคุณไม่สามารถ Reclaim Town ของคุณได้อีก %d ชั่วโมง'
+msg_town_reclaimed: '&b%s ได้ยึดเมืองของ %s กลับคืนมา'
+msg_err_cannot_use_command_because_town_ruined: "&cคุณไม่สามารถใช้คำสั่งนี้ได้เนื่องจาก Town ของคุณถูกทำลาย หากต้องการกลับมาใช้คำสั่งตามปกติ ให้ Reclaim Town โดยใช้ ''/town reclaim\" หรือออกจากเมืองโดยใช้ ''/town leave''"
+msg_warning_your_town_is_ruined_for_x_more_hours: '&cTown ของคุณจะอยู่ในสภาพที่พังยับเยินอีก %d ชั่วโมง พิมพ์ ''/town reclaim'' เพื่อช่วยเมืองและคุณจะกลายเป็น Mayor'
+msg_time_remaining_before_full_removal: '&cเวลาที่เหลือก่อนลบทั้งหมด: %d ชั่วโมง'
+msg_time_until_reclaim_available: '&cเวลาจนกว่าจะเรียกคืนได้: %d ชั่วโมง'
+msg_reclaim_available: '&aReclaim ใช้ได้'
+#Added in 0.93
+msg_changed_peaceful: '&cความเป็นกลางของเมือง/ความปลอดภัยตอนนี้คือ %s'
+msg_err_town_unclaim_canceled: '&cยกเลิกการ Claim แล้ว คุณไม่สามารถยกเลิกการ Claim พื้นที่นี้ได้ในขณะนี้'
+#Added in 0.94
+msg_comptype_residents: 'จำนวนผู้อยู่อาศัย'
+msg_comptype_townblocks: 'จำนวนสิทธิ์ของ Townblocks'
+msg_comptype_balance: 'ยอดคงเหลือใน Bank'
+msg_comptype_online: 'ผู้เล่นออนไลน์'
+msg_comptype_towns: 'จำนวนของ Towns'
+msg_comptype_name: 'เรียงตามตัวอักษร'
+msg_comptype_open: 'เปิดสถานะ'
+msg_status_npc: '&c%s ไม่ใช่ผู้เล่นจริง และจำกัดเฉพาะ Towny เท่านั้น.'
+npc_created: '&2Created: &a%s'
+msg_no_funds_claim_plot: '&cคุณไม่สามารถ Claim Plot ราคา %s.'
+msg_no_funds_claim_plot_group: '&cคุณไม่สามารถ Claim ใน %s plots ในราคา %s.'
+status_town_title_peaceful: '&b(สงบสุข)'
+#Added in 0.95
+status_public: '&b(สาธารณะ)'
+msg_days: ' วัน'
+msg_comptype_public: 'สถานะ สาธารณะ'
+towny_prices_title: 'ราคา'
+towny_prices_town_nation: '&e[ใหม่] &2ทาวน์: &a%s &8| &2ประเทศ: &a%s'
+towny_prices_reclaim: '&e[เรียกคืน] &2ทาวน์: &a%s'
+towny_prices_upkeep: '&e[ค่าบำรุงรักษา] &2ทาวน์: &a%s &8| &2ประเทศ: &a%s'
+towny_prices_overclaimed_upkeep: '&e[ค่าบำรุงรักษาเกินจริง] &2ทาวน์: &a%s'
+towny_prices_claiming_townblock: '&e[เคลม] &2ทาวน์บล็อค: &a%s'
+towny_prices_claiming_townblock_increase: ' &8| &2เพิ่มขึ้นต่อทาวน์บล็อค:  &a+%s'
+towny_prices_claiming_outposts: '&e[เคลม] &2เอาท์โพสต์: &a%s'
+towny_prices_upkeep_based_on: '&7ค่าบำรุงรักษา Town ขึ้นอยู่กับ &athe %s'
+towny_prices_upkeep_num_plots: 'จำนวนของ Plots.'
+towny_prices_upkeep_town_level: 'town level (num residents.)'
+towny_prices_overclaimed_based_on: '&8ค่าบำรุงรักษาที่ใช้มากเกินไปขึ้นอยู่กับ &a %s %s'
+towny_prices_overclaimed_num_plots: 'จำนวน Plot ที่ได้ OverClaim *'
+towny_prices_overclaimed_flat_cost: 'ต้นทุนคงที่ของ'
+towny_prices_townname: '&cทาวน์: &b%s'
+towny_prices_price_plot: '&c    [ราคา] &2พล็อต: &a%s &8| &2เอาท์โพสต์: &a%s'
+towny_prices_price_shop: '&c            &2ร้านค้า: &a%s &8| &2สถานทูต: &a%s'
+towny_prices_taxes_plot: '&c    [ภาษี]    &2ผู้อยู่อาศัย: &a%s &8| &2พล็อต: &a%s'
+towny_prices_taxes_shop: '&c            &2ร้านค้า: &a%s &8| &2สถานทูต: &a%s'
+towny_prices_town_neutral_tax: '&c            &2Peace: &a%s'
+towny_prices_plots: '&c    [Setting Plots]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
+towny_prices_nationname: '&cประเทศ: &6%s'
+towny_prices_nation_tax: '&c    [ภาษี] &2ทาวน์: &a%s &8| &2สันติภาพ: &a%s'
+#Added in 0.96
+msg_town_destroyed_by_nation_tax: '&bTown ที่ถูกยึดครอง %s ไม่สามารถจ่ายภาษีของ Nation และ ล่มสลาย.'
+msg_town_destroyed_by_nation_tax_multiple: '&bTown ที่ถูกยึดครองต่อไปนี้ไม่สามารถจ่ายภาษีของ Nation และ ล่มสลาย: '
+msg_your_town_was_exempt_from_the_nation_tax: '&bTown ของคุณได้รับการยกเว้นภาษี Nation .'
+#Added in 0.97
+status_perm_line_format: '&a%s = &7' #The Build = ---- Destroy = ---- seen in the status screen.
+msg_comptype_ruined: 'Ruined Status'
+msg_comptype_bankrupt: 'Bankrupt Status'
+msg_ruined: '&c(Ruined)'
+msg_bankrupt: '&c(Bankrupt)'
+#Added in 0.98
+msg_del_town2: '&bเมือง %s ถูกลบไปแล้ว!'
+msg_ruin_town: '&bเมือง %s พังทลายลง!'
+gui_title_select_plot_type: 'Select PlotType'
+gui_title_no_restrictions: 'No restrictions for this plottype.'
+gui_title_towny_allowedblocks: '%s AllowedBlocks List'
+gui_title_towny_wildsblocks: 'รายการ Towny WildsBlocks'
+gui_title_towny_itemuse: 'รายการ Towny ItemUse'
+gui_title_towny_switch: 'รายการ Towny Switch'
+gui_title_towny_plotclear: 'ลบรายการ Towny Plot '
+#Added in 0.99 - FlatFile L10N
+#NOTICE
+#While these strings can be translated, we caution you to keep them in English.
+flatfile_dbg_cannot_set_capital_try_next: 'Nation %s could not set capital to %s, selecting a new capital...'
+flatfile_dbg_deleting_duplicate: 'Deleting: %s which is a duplicate of %s'
+flatfile_dbg_folders_found: 'Folders found %s'
+flatfile_dbg_group_file_missing_town_delete: 'Group file missing Town, deleting %s'
+flatfile_dbg_loading_group_list: 'Loading Group list...'
+flatfile_dbg_loading_nation: 'Loading Nation: %s'
+flatfile_dbg_loading_nation_list: 'Loading Nation list...'
+flatfile_dbg_loading_resident: 'Loading Resident: %s'
+flatfile_dbg_loading_resident_list: 'Loading Resident list...'
+flatfile_dbg_loading_server_world_list: 'Loading Server World List...'
+flatfile_dbg_loading_town: 'Loading Town: %s'
+flatfile_dbg_loading_town_list: 'Loading Town list...'
+flatfile_dbg_loading_townblock_list: 'Loading TownBlock list...'
+flatfile_dbg_loading_world: 'Loading World: %s'
+flatfile_dbg_loading_world_list: 'Loading World List...'
+flatfile_dbg_mismatched_townblock_size: '%s townblocks were found with a town_block_size that does not match your config, they were not loaded into memory.'
+flatfile_dbg_missing_file_delete_group_entry: 'Missing file: %s deleting entry in group.txt'
+flatfile_dbg_missing_file_delete_groups_entry: 'Missing file: %s deleting entry in groups.txt'
+flatfile_dbg_removing_nation_not_found: 'Removing %s because they are not found in the nations.txt'
+flatfile_dbg_removing_resident_not_found: 'Removing %s because they are not found in the residents.txt'
+flatfile_dbg_removing_town_not_found: 'Removing %s because they are not found in the towns.txt.'
+flatfile_dbg_town_fetch_outlaw: 'Town Fetching Outlaw: %s'
+flatfile_dbg_undefined_capital_select_new: 'Nation %s did not have a capital defined, selecting a new capital...'
+flatfile_dbg_world_loaded_townblocks: 'World: %s loaded %s TownBlocks.'
+flatfile_err_cannot_create_defaults: 'Could not create flatfile default files and folders.'
+flatfile_err_could_not_add_to_town: 'Could not add to town!'
+flatfile_err_exception_reading_file: 'Loading Error: Exception while reading file %s'
+flatfile_err_exception_reading_group_file_at_line: 'Loading Error: Exception while reading Group file %s at line: %s'
+flatfile_err_exception_reading_townblock_file_at_line: 'Loading Error: Exception while reading TownBlock file %s at line: %s.'
+flatfile_err_exception_reading_world_file_at_line: 'Loading Error: Exception while reading world file %s at line: %s, in towny/data/worlds/%s.txt'
+flatfile_err_file_error_reading_world_file_at_line: 'Loading Error: File error while reading %s at line: %s, in towny/data/worlds/%s.txt'
+flatfile_err_homeblock_load_invalid_location: '[Warning] %s - HomeBlock tried to load invalid Location.'
+flatfile_err_homeblock_load_invalid_townblock: '[Warning] %s - HomeBlock tried to load invalid TownBlock.'
+flatfile_err_homeblock_load_invalid_world: '[Warning] %s - HomeBlock tried to load invalid World.'
+flatfile_err_invalid_townblock_resident: 'Invalid resident for TownBlock %s. Skipped setting resident for TownBlock...'
+flatfile_err_loading_group_list_at_line: 'Error loading Group List at %s, in towny/data/groups.txt'
+flatfile_err_loading_world_list_at_line: 'Error loading World list at %s, in towny/data/worlds.txt'
+flatfile_err_nation_could_not_load_capital_disband: 'The nation %s could not load a capital city and is being disbanded.'
+flatfile_err_reading_nation_file_at_line: 'Loading Error: Exception while reading nation file %s at line %s, in towny/data/nations/%s.txt'
+flatfile_err_reading_outlaw_of_town_duplicate: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s is duplicated! Skipping adding duplicate...'
+flatfile_err_reading_outlaw_of_town_not_exist: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s does not exist! Removing from list...'
+flatfile_err_reading_resident_at_line: 'Loading Error: Exception while reading resident file %s at line: %s, in towny/data/residents/%s.txt'
+flatfile_err_reading_town_file_at_line: 'Loading Error: Exception while reading town file %s at line: %s, in towny/data/towns/%s.txt'
+flatfile_err_resident_tried_load_invalid_town: 'Loading Error: %s tried to load the town %s which is invalid. Removing town from the resident.'
+flatfile_err_town_homeblock_not_exist: '[Warning] %s does not have a HomeBlock.'
+flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
+flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
+flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
+msg_ta_removed_all_titles_and_surnames_removed: 'ผู้อยู่อาศัยทุกคนถูกลบ ชื่อและนามสกุล.'
+msg_err_homeblock_already_set_here: 'ตำแหน่งนี้เป็นบ้านหลักใน Town ของคุณอยู่แล้ว.'
+#Added in 0.100
+msg_town_merge_err_mayor_only: '&cการ Merge ทำได้โดย Mayor เท่านั้น.'
+msg_town_merge_err_not_close: '&cTown %s อยู่ห่างจาก Town ของคุณมากเกินไป. Homeblock ของพวกเขาจะต้องอยู่ภายใน %d Townblocks ของ Homeblock คุณ.'
+msg_town_merge_request_sent: '&bส่งคำขอ Merge ไปยัง Mayor ของ %s.'
+msg_town_merge_request_received: '&bMayor ของ %s, %s, , ได้ขอ Merge เข้ากับ Town ของคุณ. การดำเนินการนี้จะโอน Townblocks, ผู้อยู่อาศัย และ เงินใน Town Bank ไปยัง %s.'
+msg_town_merge_request_denied: '&cคำขอ Merge ถูกปฏิเสธ.'
+msg_town_merge_other_offline: '&cMayor ของ %s, %s, ออฟไลน์อยู่ การ Merge ล้มเหลว.'
+msg_town_merge_err_too_many_residents: '&cการ Merge ล้มเหลว: จำนวนผู้อยู่อาศัยใหม่เกินขีดจำกัด (%d)'
+msg_town_merge_err_too_many_townblocks: '&cการ Merge ล้มเหลว: ขนาด Town ใหม่เกินขีดจำกัด (%d)'
+msg_town_merge_err_too_many_outposts: '&cการ Merge ล้มเหลว: จำนวน outpost ใหม่เกินขีดจำกัด (%d)'
+msg_town_merge_err_not_enough_money: '&cการ Merge ล้มเหลว: มีเงินไม่เพียงพอ. (%s/%s)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cการ Merge ล้มเหลว: Townblocks ที่ซื้อมีมากเกินไป (%d)'
+msg_town_merge_warning: '&cคำเตือน: หากยอมรับการ Merge กับ %s จะมีค่าใช้จ่าย %s.'
+msg_town_merge_debt_warning: '&cคำเตือน: %s เป็นหนี้อยู่, คุณจะต้องจ่ายหนี้ทั้งหมด ถ้าคุณรับข้อตกลงนี้.'
+msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
+msg_town_merge_failed: '&cการ Merge ล้มเหลว.'
+msg_town_merge_cancelled: '&cการ Merge canceled.'
+msg_town_merge_success: '&bTown ของ %s, ซึ่งเป็นเจ้าของโดย %s ได้รวมเข้ากับเมือง %s เรียบร้อยแล้ว.'
+#Reasons for withdrawing/depositing for the bankhistory book.
+msg_town_merge_cost_withdraw: 'ค่าใช้จ่ายในการรวมเมือง'
+msg_town_merge_transaction_reason: 'การรวมเมือง'
+towny_prices_town_merge: '&e[Merging] &2ค่าใช้จ่ายพื้นฐาน: &a%s &8| &2ต่อ Plot: &a%s'
+#Added in 0.101
+msg_err_nation_not_allied_with: '&cNation ของคุณไม่ได้เป็นพันธมิตรกับ %s.'
+msg_err_nation_not_enemies_with: '&cNation ของคุณไม่ใช่ศัตรูกับ %s.'
+msg_err_nation_already_enemies_with: '&cNation ของคุณเป็นศัตรูกับ %s.'
+msg_err_ally_already_requested: '&cคุณได้ขอเป็นพันธมิตรกับ %s แล้ว.'
+msg_err_nation_not_allied_with_2: '&c%s ไม่ได้เป็นพันธมิตรกับ %s.'
+msg_err_nation_not_enemies_with_2: '&c%s ไม่ใช่ศัตรูกับ %s.'
+msg_err_nation_already_allied_with_2: '&c%s เป็นพันธมิตรกับ %s แล้ว.'
+msg_err_nation_already_enemies_with_2: '&c%s เป็นศัตรูกับ %s แล้ว.'
+msg_ta_allies_enemies_updated: '&bพันธมิตร/ศัตรู อัปเดตสำหรับ %s.'
+#Added in 0.102
+towny_map_detailed_information: '&2คลิกเพื่อดูรายละเอียดข้อมูลของ Plot.'
+msg_err_nation_capital_too_many_residents: '&cเมืองหลวงปัจจุบันมีผู้อยู่อาศัยมากเกินไปที่จะแทนที่ด้วย %s.'
+msg_deleting_nation_will_result_in_losing_residents: '&cคำเตือน:การลบประเทศของคุณจะทำให้เมืองของคุณมีประชากรเกินขีดจำกัด %d คน, ส่งผลให้มีการนำผู้อยู่อาศัยออก %d คน.'
+#Added in 0.103
+msg_command_blocked_inside_towns: '&cคุณไม่สามารถใช้คำสั่งนี้ในเมืองได้'
+msg_command_limited: 'คุณสามารถใช้คำสั่งนี้ใน Plot ของคุณเองเท่านั้น'
+#Added in 0.104
+#Don't add a space to the end please
+msg_plot_perm_claimed_at: '&2Claimed at: &a%s'
+#Added in 0.105
+msg_wilderness_use_x_in_all_worlds: 'การใช้ถิ่นทุรกันดาร %s เกิดขึ้นในทุก world.'
+msg_regenerations_use_x_in_all_worlds: 'การ Regenerations %s เกิดขึ้นในทุก World'
+#Added in 0.106
+msg_command_outsider_blocked: 'คุณไม่สามารถเรียกใช้คำสั่งนั้นได้เพราะคุณไม่ได้อาศัยอยู่ใน %s.'
+#Added in 0.107
+msg_jailed_for_x_hours: ' เป็นเวลา %s ชั่วโมง'
+msg_err_this_jail_has_no_cells: 'This jail has no cells.'
+msg_err_no_cell_found_at_this_location: 'ไม่พบห้องขังในสถานที่นี้'
+msg_jail_cell_set: 'ชุดห้องขัง.'
+msg_jail_cell_removed: 'Jail cell removed.'
+msg_err_resident_is_already_jailed: '%s ถูกใช้งานแล้ว'
+msg_err_the_town_does_not_have_that_many_jails: 'เมืองนี้มีคุกไม่มากนัก'
+msg_err_that_jail_plot_does_not_have_that_many_cells: 'That jail plot does not have that many cells.'
+msg_primary_jail_set_for_town: 'คุกหลักในเมืองของคุณถูกตั้งไว้แล้ว'
+msg_x_has_been_freed_from_x: '%s พ้นโทษแล้ว %s'
+msg_you_have_been_jailed: 'คุณถูกจำคุก'
+msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'วิ่งไปที่ถิ่นทุรกันดารหรือรอการแหกคุก'
+msg_err_player_is_not_jailed: 'ผู้เล่นคนนั้นไม่ติดคุก'
+msg_you_have_paid_bail: 'คุณได้จ่ายเงินประกันตัวแล้ว'
+msg_you_have_been_freed_via_jailbreak: 'มีการแหกคุก คุณเป็นอิสระแล้ว'
+msg_you_have_served_your_sentence_and_are_free: 'คุณได้รับโทษจำคุกและเป็นอิสระ'
+msg_x_has_served_their_sentence_and_is_free: '%s ได้รับโทษจำคุกและเป็นอิสระ'
+msg_you've_been_jailed_for_x_hours: 'คุณถูกจำคุกเป็นเวลา %s ชั่วโมง'
+msg_you_are_being_sent_to_jail: 'You are being sent to jail.'
+msg_err_you_cannot_remove_the_last_cell: 'You cannot remove the last jail cell in this jail, until another cell is added'
+msg_do_not_log_out_while_waiting_to_be_teleported: 'Do not log out before being teleported to jail, it would be fatal.'
+jail_plu: 'คุก'
+jail_sing: 'คุก'
+msg_resident_has_not_played_long_enough_to_be_jailed: '%s hasn''t played long enough to be jailed, wait another %s'
+#Added in 0.108
+msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
+msg_town_already_peaceful: '&bTown is already peaceful.'
+msg_town_already_not_peaceful: '&bTown is already not peaceful.'
+msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town.'
+msg_town_paid_for_neutral_status: '&bYour town paid %s to retain your peaceful status.'
+msg_nation_paid_for_neutral_status: '&bYour nation paid %s to retain your peaceful status.'
+your_town_has_been_invited_to_join_nation: 'Your town has been invited to join the nation: %s'
+#Added in 0.109
+msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
+msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
+msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
+msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
+msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
+msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
+#Added in 0.110
+msg_safe_mode: "[Error] Locked in safe mode!"
+msg_safe_mode_base: '[Error] Towny is locked in Safe Mode due to an error! '
+msg_safe_mode_player: 'Tell an admin to check the server''s console.'
+msg_safe_mode_admin: 'Check the server''s console for more information.'
+msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'You can only claim outposts in your homeblock''s world.'
+msg_err_not_close_enough_to_your_town_nearest_plot: 'Unable to claim outpost, you are %s townblocks from your nearest claim. Max allowed distance: %s townblocks.'
+msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'You have moved your homeblock too recently! Wait another %s.'
+msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'You cannot move your homeblock by this many townblocks, limit is %s, this space is %s townblocks away.'
+msg_err_usingtowny_disabled: 'This world is exempt of all Towny interactions. Use /townyworld toggle usingtowny first.'
+#Added in 0.111
+msg_plot_group_already_exists_did_you_want_to_transfer: 'This townblock is already a part of the %s plotgroup. Are you certain you want to transfer it to the %s plotgroup.'
+msg_townblock_transferred_from_x_to_x_group: 'Townblock transferred from %s to %s plot group.'
+msg_plotgroup_deleted: 'The plotgroup %s has been deleted.'
+msg_plotgroup_empty_deleted: 'The plotgroup %s had no townblocks and has been deleted.'
+plotgroup_plu: 'Plot Groups'
+msg_err_this_town_has_no_plot_groups: 'The specified town has no plot groups.'
+msg_err_this_plot_is_already_part_of_the_plot_group_x: 'This townblock is already part of the plot group: %s'
+map_hover_plot_group: 'Plot Group: '
+map_hover_plot_group_size: ' ขนาด: '
+map_hover_plots: '%s plots'
+#Added in 0.112
+msg_checking_for_updates: 'ตรวจหาการอัปเดต…'
+msg_no_new_updates: 'ไม่พบการอัปเดตใหม่'
+msg_new_update_available: '&bNew update available: %s | Current version: %s'
+msg_download_here: 'Download it here: %s'
+msg_click_to_download: '&bClick here to download it.'
+msg_latest_version: '&2Towny version: &a%s &2| Latest version: &a%s'
+msg_up_to_date: '&aYou are up to date.'
+msg_click_purchase: 'Click to purchase'
+msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
+#Added in 0.113
+status_trustedlist: 'Trusted'
+msg_click_to_edit: '&6Click to edit.'
+permission_gui_header: 'Towny Permission GUI'
+msg_last_edited: '&7&oLast changed at %s by %s.'
+msg_trusted_added: '&bAdded %s as trusted in this %s.' #Last %s is either town or townblock
+msg_already_trusted: '&b%s is already trusted in this %s.'
+msg_trusted_added_2: '&b%s has trusted you in a %s: %s.' #Last %s is the town name or worldcoord.
+msg_not_trusted: '&b%s is not trusted in this %s.'
+msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
+msg_trusted_removed_2: '&b%s has removed you as trusted in a %s: %s.'
+msg_overrides_removed: '&bRemoved permission overrides for %s.'
+msg_overrides_added: '&bAdded default permission overrides for %s.'
+msg_no_overrides_set: '&b%s does not have any overrides set for this %s.'
+msg_overrides_already_set: '&b%s already has overrides set for this %s.'
+msg_cache_block_err: '&cYou are not allowed to %s here.'
+msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
+plotgroup_sing: 'Plot Group'
+msg_err_ally_limit_reached: 'Your nation has reached the ally limit, unable to accept.'
+#Added in 0.114
+msg_err_group_not_found: 'Group %s not found.'
+msg_err_expected_command_format: 'Incorrect syntax, expected: %s'
+msg_err_group_already_has_node: 'The group %s already has the node %s.'
+msg_err_group_doesnt_have_node: 'The group %s does not have the node %s.'
+msg_successfully_added_node_to_group: 'Successfully added %s to %s.'
+msg_successfully_removed_node_from_group: 'Successfully removed %s from %s.'
+msg_err_there_is_already_a_town_or_nationrank_called_x: 'There is already a %s named %s.'
+msg_err_there_is_no_town_or_nationrank_called_x: 'There is no %s named %s.'
+msg_successfully_add_rank_to_the_town_or_nation_rank: 'Successfully added %s to the %s.'
+msg_successfully_removed_rank_from_the_town_or_nation_rank: 'Successfully removed %s from the %s.'
+msg_err_group_has_no_nodes: 'The group %s has no permission nodes assigned.'
+msg_title_group_permissions: '%s Permissions'
+help_ta_perms_listgroups: 'List groups.'
+help_ta_perms_group: 'Show permission nodes in group'
+help_ta_perms_groupaddpermnode: 'Add a node to a group.'
+help_ta_perms_groupremovepermnode: 'Remove a node from a group.'
+help_ta_perms_townrankadd: 'Adds a townrank to the townyperms file.'
+help_ta_perms_townrankremove: 'Removes a townrank from the townyperms file.'
+help_ta_perms_nationrankadd: 'Adds a nationrank to the townyperms file.'
+help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
+msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'
+#Added in 0.115
+msg_comptype_founded: 'Founded Date'
+msg_err_must_be_greater_than_or_equal_to: 'Amount must be greater than or equal to %s'
+err_invalid_yaml: 'Loading error: Failed to load file %s (does it pass a yaml parser?).'
+#Added in 0.116
+msg_town_map_color_changed: '&bThe town map color was changed to %s.'
+#Added in 0.117
+msg_err_this_townblock_doesnt_match_the_groups_type: 'This townblock cannot be added to the group because it is not of type: %s'
+#Added in 0.118
+status_title_nopvp: '&a(No PVP)'
+#Added in 0.119
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'You cannot jail your resident because they are in a location where they are outlawed.'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'You cannot jail your resident because they are in a location where they are considered an enemy.'
+#Added in 0.120
+msg_resident_prompt: 'Enter the name of the player in chat, or q to exit. This will automatically time out in 30 seconds.'
+msg_prompt_cancel: 'Prompt cancelled or timed out.'
+#Added in 0.121
+status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
+status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
+status_format_list_1: '&2' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
+status_format_list_2: '&a' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
+status_format_list_3: '&f' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
+status_format_key_value_key: '&2' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
+status_format_key_value_value: '&a' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
+status_format_bracket_element: '&b' #Colour applied to a status element within a bracket, ex: [Bonus: #].
+status_format_hover_key: '&a' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
+status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
+status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
+status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
+status_home_element: ' &7[Home: %s]'
+status_registered: 'Registered:'
+status_lastonline: 'Last Online:'
+status_fractions: '%s/%s'
+status_rank_list: 'Rank List'
+status_hover_click_for_more: 'Click for more information.'
+status_jailed: 'Jailed:'
+status_bad_yes: '&cYES'
+status_good_no: '&aNO'
+status_resident_tax_title: '%s''s Tax'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
+#Added in 0.122
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
+#Added in 0.123
+msg_err_invalid_townyworld: "'%s' is not a valid towny world."
+msg_err_enter_world_name_first: 'Please enter the name of the world first.'
+msg_wilderness_use_set_to: '&bWilderness use has been set to %s in %s.'
+#Added in 0.124
+msg_err_invalid_response: 'Invalid response! Enter q to exit or back to go back to the previous question.'
+msg_setup_full_guide_link: '&bFor a link to the full install guide, click here.'
+msg_setup_wildernessuse: 'Would you like to enable wilderness use? This will allow players to break/build in the wilderness.'
+msg_setup_revertunclaim: 'Would you like to use revert on unclaim? This will make townblocks slowly regenerate when they are unclaimed.'
+msg_setup_town_block_ratio: 'What would you like to set your town block ratio at? The default is 8 townblocks per resident. Higher amounts will allow towns to claim more for each resident they have. Setting this to 0 will make it use values from the town_levels.'
+msg_setup_town_cost: 'How much should the cost to create a new town be? The default is 250.'
+msg_setup_nation_cost: 'How much should the cost to create a new nation be? The default is 1000.'
+msg_setup_townblock_cost: 'How much should it cost to claim a townblock? The default is 25. A townblock is the same size as a chunk (default settings)'
+msg_setup_success: 'Successfully changed config values to your new values.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s spawned recently and cannot be harmed.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_respawn_protection: 'You have lost your respawn protection.'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'You cannot pick up items while under respawn protection.'
+#Added in 0.126
+#Used in the nation screen:
+status_capital: 'Capital:'
+#Used in the resident screen's town hover, to denote when a player joined a town.
+status_joined_town: 'Joined town:'
+#Used in the town screen's nation hover, to denote when a town joined a nation.
+status_joined_nation: 'Joined nation:'
+#Shown in status screen elements where a value is not known.
+status_unknown: 'unknown'
+#Feedback given for the /ta set nationzoneoverride [townname] [size] command.
+msg_nationzone_override_set_to: '%s has had their nationzone override set to %s.'
+#Feedback given for the /ta set nationzoneoverride [townname] 0 command.
+msg_nationzone_override_removed: '%s has had their nationzone override removed.'
+#Added in 0.127
+#Used in status screen:
+status_nation_zone_size: 'Nation Zone Size:'
+#Shown when a player adds people to their friends list.
+msg_res_friend_added_to_list: 'Added %s to your friend list.'
+#Shown when a player removes people from their friends list.
+msg_res_friend_removed_from_list: 'Removed %s from your friend list.'
+#Generic resident freed from jail message.
+msg_resident_unjailed: '%s has been unjailed.'
+#Shown when an admin uses /ta toggle devmode.
+msg_admin_toggle_devmode: 'Dev Mode: %s'
+#Shown when an admin uses /ta toggle debug.
+msg_admin_toggle_debugmode: 'Debug Mode: %s'
+#Shown when an admin uses /ta toggle townwithdraw
+msg_admin_toggle_townwithdraw: 'Town Withdrawls: %s'
+#Shown when an admin uses /ta toggle nationwithdraw
+msg_admin_toggle_nationwithdraw: 'Nation Withdrawls: %s'
+#Shown when claiming a town block for the town.
+msg_process_town_claim: 'Processing Town Claim...'
+#Shown when unclaiming a town block for the town.
+msg_process_town_unclaim: 'Processing Town Unclaim...'
+#Shown when there is nothing to unclaim.
+msg_err_nothing_to_unclaim: 'Nothing to unclaim!'
+#Given as feedback when /ta checkperm is used.
+msg_perm_true: 'Permission True.'
+#Given as feedback when /ta checkperm is used.
+msg_err_perm_false: 'Permission False.'
+#Shown at the bottom of the /towny map
+#First variable is townname or None, 2nd variable is plot owner's name or None.
+status_towny_map_town_line: '&2Town: &a%s &7| &2Owner: &a%s'
+#Shown on /towny version
+msg_towny_version: '&2Towny Version: &a%s'
+#Shown to admins and ops when a player has been blocked from logging into the server.
+msg_admin_blocked_login: '&2A player using the IP address &c%s &2tried to log in using an account name %s which could damage your server''s economy, but was prevented by Towny. Consider banning this IP address!'
+#Shown during resident purge
+msg_scanning_for_old_residents: 'Scanning for old residents...'
+#Shown during resident purge
+msg_deleting_resident: 'Deleting resident: %s.'
+#Shown during resident purge
+msg_purge_complete: 'Resident purge complete: %s deleted.'
+#Message to the Town, shown when a town is given bonus blocks.
+msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
+#Message shown when a town cannot purchase any more bonus blocks.
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'Your town has no NationZone to toggle!'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7Nation upkeep is based on &athe %s'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'number of towns.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'nation level (num residents.)'
+#Added in 0.130
+#Jail causes
+msg_jailed_mayor: 'Jailed by mayor.'
+#Jail causes
+msg_jailed_outlaw: 'Killed as an outlaw.'
+#Jail causes
+msg_jailed_war: 'Prisoner of War.'
+#Jail handbook messages
+msg_jailed_handbook_1: 'Looks like you''ve been jailed, for the reason %s'
+#Jail handbook messages
+msg_jailed_handbook_2: 'That''s too bad huh. Well what can you do about it? Here''s some helpful tips for you while you serve your sentence.'
+#Jail handbook messages
+msg_jailed_handbook_3: 'You have been jailed for %s hours. By serving your sentence you will become free.'
+#Jail handbook messages
+msg_jailed_handbook_4_can: 'You can escape from jail by leaving your town using ''/town leave''.'
+#Jail handbook messages
+msg_jailed_handbook_4_cant: 'While you''re jailed you won''t be able to leave your town to escape jail.'
+#Jail handbook messages
+msg_jailed_handbook_bail_1: 'You can be freed from jail by paying your bail using ''/res jail paybail''.'
+#Jail handbook messages
+msg_jailed_handbook_bail_2: 'Bail will cost %s.'
+#Jail handbook messages
+msg_jailed_handbook_5: 'If you must persist and make efforts to escape, if you make it to the wilderness you will also earn your freedom.'
+#Jail handbook messages
+msg_jailed_handbook_6: 'But don''t die before you reach the wilderness or you''ll end up right back in jail.'
+#Jail handbook messages
+msg_jailed_teleport: 'Luckily, enderpearls and chorus fruit are allowed to be used to help you escape, now you''ve just got to get a hold of some.'
+#Jail handbook messages
+msg_jailed_war_prisoner: 'As a prisoner of war you will be freed if your countrymen can reduce the jail plot''s HP to 0, or if the town you are jailed in is removed from the war.'
+#Jail handbook title
+msg_jailed_title: 'So you''ve been jailed :('
+#Jail handbook author
+msg_jailed_author: 'Towny Jailco.'
+#Added in 0.130
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'Town has no allies to list.'
+#Message shown when there are no enemies to list in /town enemylist.
+msg_error_town_has_no_enemies: 'Town has no enemies to list.'
+#Added in 0.132
+#Message shown in the lines of the baltop books
+msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'Confirmation Timed Out.'
+#Added in 0.134
+tc_player_channel_sound_muted: 'The channel sound has been muted'
+tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
+#Added in 0.135
+msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+#Added in 0.136
+msg_view_on_web: '&7Click to view on the web.'
+#Added in 0.137
+#Shown globally when a town merges with another town.
+town1_has_merged_with_town2: '&6The town %s has agreed to merge together with the prevailing town of %s.'
+#Shown in the town and nation status screens to inform about neutrality costs.
+status_neutrality_cost: 'Neutrality Cost:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'If you have paid any real-life money for these townblocks please understand: the server you play on is in violation of the Minecraft EULA and the Towny license.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'The Towny team never intended for townblocks to be purchaseable with real money.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'If you did pay real money you should consider playing on a Towny server that respects the wishes of the Towny Team.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'You have been invited to join %s&9 (Nation: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Your town cannot afford the money to unclaim this land. %s required.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
+#Added in 0.140
+#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
+msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
+#Added in 1.141
+msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+#Added in 0.142
+#Message shown when a player is toggling neutrality too fast.
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality, %s seconds remaining.'
+#Added in 0.143
+#Message shown when a console sender uses a command meant for in game.
+msg_err_command_not_for_console_use: 'This command cannot be used from the console.'
+#Added in 0.144
+#Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
+msg_town_unlimitedclaims_setting_set_to: 'The town %s has had their unlimitedclaims setting set to %s'
+#Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
+did_you_want_to_toggle_unlimited_claims: 'You do not have enough townblocks to claim, did you want to turn on unlimited claiming for the town of %s'
+#Added in 0.145
+#Message shown when a conquered town tries to leave their nation.
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'You cannot leave your nation, your town is conquered.'
+msg_err_console_only: 'This command can only be used by console.'
+msg_err_player_only: 'This command can only be used by a player.'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'Title messages shown when crossing borders is %s.'
+#Added in 0.147
+#Message shown confirming that an admin wants to reset their Towny config
+this_will_reset_your_config: 'Running this command resets your config.yml to the default file. Do you want to continue?'
+#Message shown when an admin is setting a new king or capital and would override the config by doing so
+msg_warn_overriding_server_config: 'By doing this you are overriding the resident limits set in the server configuration. Do you want to continue anyway?'
+#Added in 0.148
+#Message shown when invalid outpost spawns are removed using the /ta commands.
+msg_removed_x_invalid_outpost_spawns: 'Removed %d invalid outpost spawns.'
+#Added in 0.149
+#Message shown when a player logs in and their town is bankrupt.
+msg_your_town_is_bankrupt: 'Your town is bankrupt, add money to your bank using /town deposit {amount}.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'You are unable to use this command, because you are already a member of a town. If you want to continue you will have to use ''/t leave''.'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'a town you are an outlaw in.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'Could not find any open, public towns with plots for sale (which you can afford,) to rtp to.'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&bYou were charged %s to teleport to a random town plot that is for sale.'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "The town of %s has plots which you can purchase, did you want to be teleported to a plot you can purchase right now?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "You have been teleported to a plot you can purchase. Use '/plot claim' if you would like to claim the plot."
+#Used in the town's status screen to display plots
+status_plot_string: 'Plots'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'
+#Usage:
+msg_usage: 'Usage: %s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: 'No pages to display!'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: 'That nation is not affiliated with you.'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: 'That town is not affiliated with you.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'This location already has a jail cell.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Plot Perms'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Build: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Destroy: '
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Switch: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Item: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Type: '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'PVP: '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Explosions: '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'Firespread: '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Mob Spawns: '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Key'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'friend'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'town'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'ally'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'resident'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'nation'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'outsider'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_name: 'Plot: '
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'The town %s is unable to purchase townblocks based on the config rules.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: 'The town %s has had their purchased townblocks removed.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: 'The town %s has been given %s bought townblocks, they currently have %s bought townblocks.'
+#Added in 0.154
+msg_comptype_upkeep: 'Upkeep'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'The town %s has had their upkeep setting set to %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Your town has reached the limit of %d %s plots.'
+#Added in 0.156
+msg_spawn_cost_free: 'Free'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'This plot is already a %s type.'
+msg_town_board_reset: '&bTown board reset.'
+msg_town_has_no_jailslots: 'The town jail is full.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s has been sent to %s into cell number %s for %s hours by %s.'
+msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'Your jailers let you free to make space.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s has been released to make space for another prisoner.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released as your jailers can no longer afford to keep you imprisoned.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&cYou cannot join this nation as it would be over the residents-per-nation limit of %s.'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&cYou cannot join this nation, it has reached the maximum number of allowed towns-per-nation: %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Are you sure you want to reset all of this world''s settings to the ones which are set in the config?'
+#Part of the /town plots output.
+msg_town_plots_title: ' Town Plots'
+#Part of the /town plots output.
+msg_town_plots_town_size: '<dark_green>Town Size: <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>[Bought: %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_nationbonus: ' <aqua>[NationBonus: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
+#Part of the /town plots output.
+msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
+#Part of the /town plots output.
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+#Part of the /town plots output.
+msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+#Part of the /town plots output.
+msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'You are about to give full plot permissions to an entire town. This means that the mayor of the town will be able to decide who gets permission to build and break in your town, by adding residents. If this town is open, then anyone can join and gain full access to your town. Are you sure you wish to trust all residents (including future residents,) from this town?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'You cannot run that command because your town is at war.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'You cannot claim this townblock: %s, %s seconds remaining on cooldown.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'The town of %s has had the founder set to %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'The town %s has had their allowed-to-war setting set to %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Are you sure you want to unclaim all of your land? (Your homeblock will not be unclaimed.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everything but your homeblock. To unclaim your homeblock you must set a new homeblock using '/t set homeblock' first."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
+msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
+msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "You are not known to Towny."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "%s is not known to Towny."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s is not a resident that is recognized."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s is not a town that is recognized."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s is not a nation that is recognized."
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "You need %s to pay."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+#Message shown when an admin tries to toggle conquered off of a town that is not conquered.
+msg_err_that_town_is_not_conquered: "%s is already not conquered."
+#Message shown when a town has its conquered status removed by an admin.
+msg_conquered_status_removed: "%s has had their conquered status removed."
+msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
+#Message shown when a nation collects taxes from its towns that are conquered.
+msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra tax from its conquered towns."
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
+msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
+msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."

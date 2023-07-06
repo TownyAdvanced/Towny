@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 env:
   CURR_VER: 0.0.0.0
-  SUPPORTED: " for MC 1.16.* & 1.17.* & 1.18.* & 1.19.*"
+  SUPPORTED: " for MC 1.16.* & 1.17.* & 1.18.* & 1.19.* & 1.20.*"
 jobs:
   deploy_prerelease:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
           tag_name: ${{ env.CURR_VER }}
           name: ${{ env.CURR_VER }}${{ env.SUPPORTED }}
           files: |
-            ./target/towny-${{ env.CURR_VER }}.jar
+            ./Towny/target/towny-${{ env.CURR_VER }}.jar
         env:
           GITHUB_REPOSITORY: my_gh_org/my_gh_repo
       - name: prepare maven settings.xml

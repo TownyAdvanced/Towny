@@ -1,7 +1,7 @@
 import subprocess
-changelogPath = "resources/ChangeLog.txt"
+changelogPath = "./Towny/src/main/resources/ChangeLog.txt"
 filePath = "./staging/prerelease.txt"
-pomPath = "pom.xml"
+pomPath = "./Towny/pom.xml"
 sponsorPath = "./staging/sponsortable.txt"
 currentVersion = "0.0.0.0"
 lastFullReleaseVersion = ""
@@ -92,12 +92,13 @@ def addFooter():
     table5 = "<td><a title=\"Updating Towny\" href=https://github.com/TownyAdvanced/Towny/wiki/Updating-Towny>Towny Update Guide</a></td></tr>"
     table6 = "<tr align=center>"
     table7 = "<td><a title=\"Other Towny Plugins\" href=\"https://townyadvanced.github.io\" target=\"_blank\" rel=\"noopener\">Other Towny Plugins</a> </td>"
-    table8 = "<td><a title=\"Towny Changelog\" href=\"https://raw.githubusercontent.com/TownyAdvanced/Towny/master/resources/ChangeLog.txt\" target=\"_blank\" rel=\"noopener\">Complete Changelog</a> </td>"
+    table8 = "<td><a title=\"Towny Changelog\" href=\"https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt\" target=\"_blank\" rel=\"noopener\">Complete Changelog</a> </td>"
     table9 = "<td><a title=\"Default Config Files\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Config-Files\">Default Config Files</a></td>"
     table10 = "<td><a title=\"Commands/Permissions/Placeholders\" href=\"https://github.com/TownyAdvanced/Towny/wiki/Reference\">Commands/Permissions<br>Placeholders</a></td></tr>"
     tableclose = "</table>"
+    banner = "<a href=https://dedimc.promo/towny>![Spigot_Banner_Towny](https://github.com/TownyAdvanced/Towny/assets/879756/559c8340-82e5-41fc-a10c-af0dcf47f38f)</a>"
     footer = "### ⏬ Download available as a .jar file in the Assets section below:"
-    releasefooter = [tableopen, tableheader, table1, table2, table3, table4, table5, table6, table7, table8, table9, table10, tableclose, "", footer]
+    releasefooter = [tableopen, tableheader, table1, table2, table3, table4, table5, table6, table7, table8, table9, table10, tableclose, "", banner, "", footer]
     for line in releasefooter:
         releaseBody.append(line)
 

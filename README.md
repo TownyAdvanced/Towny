@@ -58,12 +58,13 @@ Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.16.* & 1.17.* & 1.18.* & 1.19.*.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.16.* & 1.17.* & 1.18.* & 1.19.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.16.* & 1.17.* & 1.18.* & 1.19.* & 1.20.*.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.16.* & 1.17.* & 1.18.* & 1.19.* & 1.20.*.
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.19.* </td><td rowspan=4> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.99.0.0>0.99.0.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.20.* </td><td rowspan=5> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.99.5.0>0.99.5.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.19.* </td>
 <tr align=center><td> MC 1.18.* </td>
 <tr align=center><td> MC 1.17.* </td>
 <tr align=center><td> MC 1.16.* </td>
@@ -94,7 +95,7 @@ Alternatively, if you [watch the resource](https://www.spigotmc.org/resources/to
 ___
 
 ### Connect/Support
-The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a pre-release version it is expected that you have read the [changelog](https://git.io/fjbS3) for any important changes since the previous Release build.
+The documentation found on the [Towny Wiki](https://github.com/TownyAdvanced/Towny/wiki) is updated every time a Release version of Towny is put out. If you are using a pre-release version it is expected that you have read the [changelog](https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt) for any important changes since the previous Release build.
 
 Some important pages to look over:
 - **[Installing Towny](https://github.com/TownyAdvanced/Towny/wiki/Installation)** - Why make installation hard on yourself?
@@ -139,7 +140,7 @@ ___
 ### Importing Towny for API use
 [![](https://jitpack.io/v/TownyAdvanced/Towny.svg)](https://jitpack.io/#TownyAdvanced/Towny)
 
-Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a Maven pom.xml.](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide)
+Developers who wish to use the Towny API in their plugins may read [the following instructions on adding Towny via a Maven pom.xml,](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI#getting-started-with-towny-and-your-ide) or read [the API guide](https://github.com/TownyAdvanced/Towny/wiki/TownyAPI) to learn about the vast API Towny has to offer.
 
 ___
 
@@ -157,3 +158,7 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 
     - For older branches using the Ant build system, the main command to use would be: `ant clean jar`. This command will _exit_ the Towny directory, creating a lib folder alongside it. A Towny.jar file will be generated and placed within there.
     - _Note: As Ant is being deprecated, older branches may eventually not be able to be built against without modification of the `build.xml` file. We leave no guarantee that the file repo providing the dependencies will stay up._
+
+___
+
+<a href=https://dedimc.promo/towny>![Spigot_Banner_Towny](https://github.com/TownyAdvanced/Towny/assets/879756/559c8340-82e5-41fc-a10c-af0dcf47f38f)</a>
