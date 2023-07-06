@@ -44,7 +44,7 @@ public class DrawSmokeTask extends TownyTimerTask {
 				WorldCoord wc = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(player.getLocation()));
 				CellBorder cellBorder = BorderUtil.getPlotBorder(wc);
 
-				cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, getColor(resident, wc)));
+				plugin.getScheduler().run(cellBorder.getLowerMostCornerLocation(), () -> cellBorder.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, getColor(resident, wc))));
 				continue;
 			}
 
@@ -58,8 +58,7 @@ public class DrawSmokeTask extends TownyTimerTask {
 					continue;
 
 				Color color = getColor(resident, cellBorders.get(0));
-				cellBorders.forEach(cb -> cb.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, color)));
-				continue;
+				cellBorders.forEach(cb -> plugin.getScheduler().run(cb.getLowerMostCornerLocation(), () -> cb.runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, color))));
 			}
 		}
 	}
