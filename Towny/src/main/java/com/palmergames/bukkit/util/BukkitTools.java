@@ -359,7 +359,7 @@ public class BukkitTools {
 	 */
 	@Nullable
 	public static <T extends Keyed> T matchRegistry(Registry<T> registry, String input) {
-		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_").replaceAll("\\W", "");
+		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_:]", "");
 
 		final NamespacedKey key = NamespacedKey.fromString(filtered);
 		return key != null ? registry.get(key) : null;
