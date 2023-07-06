@@ -218,8 +218,12 @@ public class StringMgmt {
 		if (string.isEmpty())
 			return false;
 
+		char underscore = '_';
 		for (int i = 0; i < string.length(); i++) {
-			if (!Character.isUpperCase(string.charAt(i)))
+			char character = string.charAt(i);
+			if (character == underscore)
+				continue;
+			if (!Character.isUpperCase(character))
 				return false;
 		}
 		return true;
