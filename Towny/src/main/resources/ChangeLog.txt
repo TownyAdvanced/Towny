@@ -8866,3 +8866,5 @@ v0.92.0.11:
 0.99.3.1:
   - Draw cellborders sync, courtesy of Warrior with PR #6809.
   - Refactor the draw smoke task a bit, courtesy of Warrior with PR #6810.
+  - Fix isUpperCased failing on underscores.
+  - Fix matchRegistry filtering out ':', courtesy of Warrior with PR #6812.
