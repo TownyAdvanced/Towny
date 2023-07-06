@@ -53,7 +53,7 @@ public class DrawSmokeTask extends TownyTimerTask {
 				if (town == null)
 					continue;
 
-				List<CellBorder> cellBorders = getCellBorders(new TownWorldPair(town, player.getWorld()));
+				List<CellBorder> cellBorders = getCellBorders(town, player.getWorld());
 				if (cellBorders == null)
 					continue;
 
@@ -68,38 +68,24 @@ public class DrawSmokeTask extends TownyTimerTask {
 	}
 
 	@Nullable
-	private List<CellBorder> getCellBorders(TownWorldPair pair) {
-		List<CellBorder> cellBorders = null;
+	private List<CellBorder> getCellBorders(final Town town, final World world) {
 		try {
-			// Keyed to a String so that it is always a single memory address.
-			cellBorders = cellBorderCache.get(pair.toString(), pair::getCellBordersForTownInWorld);
-		} catch (ExecutionException ignored) {}
-		return cellBorders;
+			return cellBorderCache.get(town.getName() + ":" + world.getName(), () -> getCellBordersForTownInWorld(town, world));
+		} catch (ExecutionException ignored) {
+			return null;
+		}
 	}
 
-	private class TownWorldPair {
-		final private Town town;
-		final private World world;
-
-		private TownWorldPair(Town town, World world) {
-			this.town = town;
-			this.world = world;
-		}
-
-		public String toString() {
-			return town.getName() + ":" + world.getName();
-		}
-
-		@Nullable
-		private List<CellBorder> getCellBordersForTownInWorld() {
-			List<WorldCoord> wcs = town.getTownBlocks().stream()
-					.map(TownBlock::getWorldCoord)
-					.filter(wc -> wc.getBukkitWorld().getName().equals(world.getName()))
-					.collect(Collectors.toList());
-			if (wcs.isEmpty()) // Probably shouldn't ever happen.
-				return null;
-			List<CellBorder> cellBorders = BorderUtil.getOuterBorder(wcs);
-			return cellBorders;
-		}
+	@Nullable
+	private static List<CellBorder> getCellBordersForTownInWorld(final Town town, final World world) {
+		List<WorldCoord> wcs = town.getTownBlocks().stream()
+				.map(TownBlock::getWorldCoord)
+				.filter(wc -> world.equals(wc.getBukkitWorld()))
+				.collect(Collectors.toList());
+		
+		if (wcs.isEmpty()) // Probably shouldn't ever happen.
+			return null;
+		
+		return BorderUtil.getOuterBorder(wcs);
 	}
 }
