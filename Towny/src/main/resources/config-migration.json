@@ -541,16 +541,5 @@
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
       }
     ]
-  },
-  {
-    "version": "0.99.4.0",
-    "changes": [
-      {
-        "type": "APPEND",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "value": ",PRIMED_TNT,WITHER,MINECART_TNT,ENDER_CRYSTAL",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      }
-    ]
   }
 ]

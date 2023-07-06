@@ -2463,8 +2463,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			// Wilderness Explosion Protection entities
 			if (world.getPlotManagementWildRevertEntities() != null)
-				nat_hm.put("PlotManagementWildRegenEntities",
-						StringMgmt.join(world.getPlotManagementWildRevertEntities(), "#"));
+				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntitiesForSaving(), "#"));
 
 			// Wilderness Explosion Protection Block Whitelist
 			if (world.getPlotManagementWildRevertBlockWhitelist() != null)

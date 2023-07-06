@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
@@ -585,6 +586,11 @@ public class TownyWorld extends TownyObject {
 		return entityExplosionProtection;
 	}
 
+	public List<String> getPlotManagementWildRevertEntitiesForSaving() {
+		// getKey().getKey() strips out any minecraft: from minecraft:creeper.
+		return entityExplosionProtection.stream().map(type -> type.getKey().getKey()).collect(Collectors.toList());
+	}
+	
 	public boolean isProtectingExplosionEntity(Entity entity) {
 
 		if (entityExplosionProtection == null)
