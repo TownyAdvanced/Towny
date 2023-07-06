@@ -8872,4 +8872,5 @@ v0.92.0.11:
   - Bump version for release.
 0.99.5.0:
   - Fix saving of entity lists so that Entities whose names dont match EntityType Registry keys are not wiped out on save/load.
+  - Fix a typo that was causing an exception, courtesy of Warrior with PR #6819.
   - Bump version for release.
