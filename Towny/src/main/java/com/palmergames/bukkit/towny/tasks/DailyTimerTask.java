@@ -316,7 +316,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		// Pay the nation tax with at least some amount of debt.
 		town.getAccount().withdraw(taxAmount, String.format("Nation Tax paid to %s.", nation.getName())); // .withdraw() is used because other economy methods do not allow a town to go into debt.
-		nation.getAccount().deposit(taxAmount, String.format("Nation Tax paid by %.", town.getName()));
+		nation.getAccount().deposit(taxAmount, String.format("Nation Tax paid by %s.", town.getName()));
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_payed_nation_tax_with_debt", prettyMoney(taxAmount)));
 		taxCollected += taxAmount;
 		if (localConqueredTax > 0)
