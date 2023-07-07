@@ -110,6 +110,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MathUtil;
+import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
 import com.palmergames.util.TimeTools;
@@ -1351,7 +1352,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				plugin.getScheduler().runAsync(() -> TownyMessaging.sendTownList(sender, ComparatorCaches.getTownListCache(finalType), finalType, pageNumber, totalNumber));
 			} else { 
 				// Make a randomly sorted output.
-				List<TextComponent> output = new ArrayList<>();
+				List<Pair<UUID, Component>> output = new ArrayList<>();
 				List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 				Collections.shuffle(towns);
 				
@@ -1368,7 +1369,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
 					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
-					output.add(townName);
+					output.add(Pair.pair(town.getUUID(), townName));
 				}
 				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
 			}

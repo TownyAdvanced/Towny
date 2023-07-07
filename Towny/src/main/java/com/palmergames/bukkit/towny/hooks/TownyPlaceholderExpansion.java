@@ -7,7 +7,9 @@ import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 
+import com.palmergames.util.Pair;
 import com.palmergames.util.TimeMgmt;
+import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -22,12 +24,13 @@ import com.palmergames.util.StringMgmt;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
-import net.kyori.adventure.text.TextComponent;
 import net.md_5.bungee.api.ChatColor;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * This class will be registered through the register-method in the plugins
@@ -652,7 +655,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		int underscore = identifier.lastIndexOf("_");
 		int num;
 		try {
-			num = Math.max(0, Integer.valueOf(identifier.substring(underscore + 1)) - 1);
+			num = Math.max(0, Integer.parseInt(identifier.substring(underscore + 1)) - 1);
 		} catch (Exception e) {
 			return "";
 		}
@@ -676,6 +679,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		return String.format(TownySettings.getPAPILeaderboardFormat(), StringMgmt.remUnderscore(town.getName()), value);
 	}
 
+	@Nullable
 	private Town getTownForLeaderBoardPlaceholder(String identifier, int num) {
 		ComparatorType type = switch (identifier) {
 		case "town_balance" -> ComparatorType.BALANCE;     // %townyadvanced_top_town_balance_n%
@@ -687,23 +691,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return null;
 		}
 
-		List<TextComponent> cache = ComparatorCaches.getTownListCache(type);
-		if (cache.isEmpty()) {
-			return null;
-		}
-
-		TextComponent townname;
-		try {
-			townname = cache.get(num);
-		} catch (IndexOutOfBoundsException e) {
-			return null;
-		}
-
-		if (townname == null || townname.content().isEmpty()) {
-			return null;
-		}
-
-		return TownyAPI.getInstance().getTown(townname.content());
+		final List<Pair<UUID, Component>> cache = ComparatorCaches.getTownListCache(type);
+		return cache.size() <= num ? null : TownyAPI.getInstance().getTown(cache.get(num).key());
 	}
 
 	@Override
