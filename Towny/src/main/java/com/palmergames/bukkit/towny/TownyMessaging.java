@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 
 import org.apache.logging.log4j.LogManager;
@@ -41,6 +42,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Towny message handling class
@@ -503,27 +505,27 @@ public class TownyMessaging {
 	 * PAGINATED LIST METHODS
 	 */
 	
-	public static void sendTownList(CommandSender sender, List<TextComponent> towns, ComparatorType compType, int page, int total) {
+	public static void sendTownList(CommandSender sender, List<Pair<UUID, Component>> towns, ComparatorType compType, int page, int total) {
 		Translator translator = Translator.locale(sender);
 		int iMax = Math.min(page * 10, towns.size());
 
-		TextComponent[] townsformatted;
+		Component[] townsformatted;
 		
 		if ((page * 10) > towns.size()) {
-			townsformatted = new TextComponent[towns.size() % 10];
+			townsformatted = new Component[towns.size() % 10];
 		} else {
-			townsformatted = new TextComponent[10];
+			townsformatted = new Component[10];
 		}
 		
 		// Populate the page with TextComponents.
 		for (int i = (page - 1) * 10; i < iMax; i++) {
-			townsformatted[i % 10] = towns.get(i);
+			townsformatted[i % 10] = towns.get(i).value();
 		}
 		
 		Audience audience = Towny.getAdventure().sender(sender);
 		sendMessage(sender, ChatTools.formatTitle(translator.of("town_plu")));
 		sendMessage(sender, Colors.Blue + translator.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + translator.of(compType.getName())));
-		for (TextComponent textComponent : townsformatted)
+		for (Component textComponent : townsformatted)
 			audience.sendMessage(textComponent);
 		
 		// Page navigation
@@ -554,26 +556,26 @@ public class TownyMessaging {
 		return backButton.append(pageText).append(forwardButton);
 	}
 
-	public static void sendNationList(CommandSender sender, List<TextComponent> nations, ComparatorType compType, int page, int total) {
+	public static void sendNationList(CommandSender sender, List<Pair<UUID, Component>> nations, ComparatorType compType, int page, int total) {
 		Translator translator = Translator.locale(sender);
 		int iMax = Math.min(page * 10, nations.size());
 
-		TextComponent[] nationsformatted;
+		Component[] nationsformatted;
 		if ((page * 10) > nations.size()) {
-			nationsformatted = new TextComponent[nations.size() % 10];
+			nationsformatted = new Component[nations.size() % 10];
 		} else {
-			nationsformatted = new TextComponent[10];
+			nationsformatted = new Component[10];
 		}
 		
 		// Populate the page with TextComponents.
 		for (int i = (page - 1) * 10; i < iMax; i++) {
-			nationsformatted[i % 10] = nations.get(i);
+			nationsformatted[i % 10] = nations.get(i).value();
 		}
 
 		sendMessage(sender, ChatTools.formatTitle(translator.of("nation_plu")));
 		sendMessage(sender, Colors.Blue + translator.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + translator.of(compType.getName()));
 		Audience audience = Towny.getAdventure().sender(sender);
-		for (TextComponent textComponent : nationsformatted) {
+		for (Component textComponent : nationsformatted) {
 			audience.sendMessage(textComponent);
 		}
 
