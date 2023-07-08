@@ -8874,3 +8874,7 @@ v0.92.0.11:
   - Fix saving of entity lists so that Entities whose names dont match EntityType Registry keys are not wiped out on save/load.
   - Fix a typo that was causing an exception, courtesy of Warrior with PR #6819.
   - Bump version for release.
+0.99.5.1:
+  - Handle top placeholders better, courtesy of Warrior with PR #6821.
+    - Fixes top placeholders failing on towns with spaces in their name.
+    - Closes #6814.
