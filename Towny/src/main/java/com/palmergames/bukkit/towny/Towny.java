@@ -921,7 +921,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private boolean expandedSchedulingAvailable() {
-		return JavaUtil.classExists("io.papermc.paper.threadedregions.scheduler.ScheduledTask");
+		return JavaUtil.classExists("io.papermc.paper.threadedregions.scheduler.FoliaAsyncScheduler");
 	}
 
 	@NotNull
