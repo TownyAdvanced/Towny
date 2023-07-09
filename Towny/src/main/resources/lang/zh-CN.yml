@@ -178,7 +178,7 @@ msg_unable_ally_enemy: '&c无法将 %s 视为盟国,因为他们已经将你视�
 msg_deny_ally: '&b%s 拒绝了你的加盟.'
 msg_accept_ally: '&b国家 %s 接受了你的邀请,成为盟国.'
 msg_ally_req_sent: '&b邀请已发送给 %s.'
-msg_ally_request: '&b %s 想要与你国构成结盟.'
+msg_ally_request: '&b%s想要与你国结盟。'
 msg_unable_ally_offline: "&c无法邀请该国家因为国王不在线."
 msg_unable_ally_npc: "&c无法邀请该国家因为国王是NPC."
 msg_claimed: '&2成功声明'
