@@ -3558,6 +3558,10 @@ public class TownySettings {
 	public static boolean isTownyPreventingProtectedMobsEnteringBoatsInTown() {
 		return getBoolean(ConfigNodes.PROT_MOB_TYPES_BOAT_THEFT);
 	}
+	
+	public static boolean coreProtectSupport() {
+		return getBoolean(ConfigNodes.PLUGIN_COREPROTECT_SUPPORT);
+	}
 
 }
 

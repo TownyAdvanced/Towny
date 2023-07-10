@@ -1,11 +1,14 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import io.papermc.lib.PaperLib;
+import net.coreprotect.CoreProtect;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -71,6 +74,9 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		BlockData blockData = state.getBlockData().clone();			
 		block.setType(state.getType(), false);
 		block.setBlockData(blockData);
+		
+		if (TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect"))
+			CoreProtect.getInstance().getAPI().logPlacement("#towny", state.getLocation(), state.getType(), blockData);
 		
 		// If the state is a creature spawner, then replace properly.
 		if (state instanceof CreatureSpawner) {
