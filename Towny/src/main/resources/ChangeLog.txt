@@ -8879,3 +8879,6 @@ v0.92.0.11:
     - Fixes top placeholders failing on towns with spaces in their name.
     - Closes #6814.
   - User internal class for expanded scheduling check, courtesy of Warrior with PR #6822.
+  - Fix exception being thrown for empty key in wilderness entity regen lists, courtesy of Warrior with PR #6826.
+  - Make towny handle longer world names on sql.
+    - Closes #6796.
