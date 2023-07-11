@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -43,10 +43,10 @@ public class TownyRegenAPI {
 	private static List<WorldCoord> regenWorldCoordList = new ArrayList<>();
 	
 	// table containing snapshot data of active reversions.
-	private static final Map<String, PlotBlockData> plotChunks = new HashMap<>();
+	private static final Map<String, PlotBlockData> plotChunks = new ConcurrentHashMap<>();
 	
 	// A holder for each protection regen task
-	private static final Map<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new HashMap<>();
+	private static final Map<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new ConcurrentHashMap<>();
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static final Set<Block> protectionPlaceholders = new HashSet<>();
