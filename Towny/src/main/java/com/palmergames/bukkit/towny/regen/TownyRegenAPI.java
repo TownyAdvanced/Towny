@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -42,10 +43,10 @@ public class TownyRegenAPI {
 	private static List<WorldCoord> regenWorldCoordList = new ArrayList<>();
 	
 	// table containing snapshot data of active reversions.
-	private static Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
+	private static final Map<String, PlotBlockData> plotChunks = new HashMap<>();
 	
 	// A holder for each protection regen task
-	private static final Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<>();
+	private static final Map<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new HashMap<>();
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static final Set<Block> protectionPlaceholders = new HashSet<>();
@@ -66,7 +67,7 @@ public class TownyRegenAPI {
 	public static void finishPlotBlockData(PlotBlockData plotChunk) {
 		TownyMessaging.sendDebugMsg("Revert on unclaim complete for " + plotChunk.getWorldName() + " " + plotChunk.getX() +"," + plotChunk.getZ());
 		removeFromRegenQueueList(plotChunk.getWorldCoord()); // Remove the WorldCoord from the queue.
-		removeFromActiveRegeneration(plotChunk); // Remove from the active HashTable.
+		removeFromActiveRegeneration(plotChunk); // Remove from the active map.
 		deletePlotChunkSnapshot(plotChunk); // Remove from the database.
 		plotChunk.getWorldCoord().unloadChunks(); // Remove the PluginChunkTickets keeping the plotChunk loaded.
 	}
@@ -205,7 +206,7 @@ public class TownyRegenAPI {
 	/**
 	 * @return the plotChunks which are being processed
 	 */
-	public static Hashtable<String, PlotBlockData> getPlotChunks() {
+	public static Map<String, PlotBlockData> getPlotChunks() {
 
 		return plotChunks;
 	}
@@ -235,20 +236,13 @@ public class TownyRegenAPI {
 	 * @param world - TownyWorld to have regeneration stop in.
 	 */
 	private static void removePlotChunksForWorld(TownyWorld world) {
-		Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
-		// Rebuild the list of plotChunks, skipping the ones belonging to the given world.
-		for (String key : getPlotChunks().keySet())
-			if (!getPlotChunks().get(key).getWorldName().equals(world.getName()))
-				plotChunks.put(key, getPlotChunks().get(key));
-
-		// Set the new plotchunks.
-		TownyRegenAPI.plotChunks = plotChunks;
+		plotChunks.values().removeIf(data -> data.getWorldName().equals(world.getName()));
 	}
 
 	/**
-	 * Removes a Plot Chunk from the regeneration Hashtable
+	 * Removes a Plot Chunk from the regeneration map
 	 * 
-	 * @param plotChunk - Chunk to remove (PlotBlockData)
+	 * @param plotChunk Chunk to remove (PlotBlockData)
 	 */
 	public static void removeFromActiveRegeneration(PlotBlockData plotChunk) {
 
@@ -256,16 +250,12 @@ public class TownyRegenAPI {
 	}
 	
 	/**
-	 * Adds a Plot Chunk to the regeneration Hashtable
+	 * Adds a Plot Chunk to the regeneration map
 	 * 
-	 * @param plotChunk - Chunk to add (PlotBlockData)
+	 * @param plotChunk Chunk to add (PlotBlockData)
 	 */
 	public static void addToActiveRegeneration(PlotBlockData plotChunk) {
-
-		if (!plotChunks.containsKey(getPlotKey(plotChunk))) {
-			//plotChunk.initialize();
-			plotChunks.put(getPlotKey(plotChunk), plotChunk);
-		}
+		plotChunks.putIfAbsent(getPlotKey(plotChunk), plotChunk);
 	}
 
 	/*
@@ -306,17 +296,14 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Gets a Plot Chunk from the regeneration Hashtable
+	 * Gets a Plot Chunk from the regeneration map
 	 * 
-	 * @param townBlock - TownBlock to get
+	 * @param townBlock TownBlock to get
 	 * @return PlotChunks or null   
 	 */
+	@Nullable
 	public static PlotBlockData getPlotChunk(TownBlock townBlock) {
-
-		if (plotChunks.containsKey(getPlotKey(townBlock))) {
-			return plotChunks.get(getPlotKey(townBlock));
-		}
-		return null;
+		return plotChunks.get(getPlotKey(townBlock));
 	}
 
 	private static String getPlotKey(PlotBlockData plotChunk) {
@@ -353,9 +340,8 @@ public class TownyRegenAPI {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
 			if (block.getType() == Material.PISTON_HEAD) {
-				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
-				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
-				block = baseBlock;
+				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData();
+				block = block.getRelative(blockData.getFacing().getOppositeFace());
 			}
 			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
 			task.setTask(Towny.getPlugin().getScheduler().runLater(block.getLocation(), task, (world.getPlotManagementWildRevertDelay() + count) * 20));
@@ -395,11 +381,7 @@ public class TownyRegenAPI {
 	 * @return the stored task, or null if there is none.
 	 */
 	public static ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
-
-		if (protectionRegenTasks.containsKey(blockLocation))
-			return protectionRegenTasks.get(blockLocation);
-
-		return null;
+		return protectionRegenTasks.get(blockLocation);
 	}
 
 	/**
