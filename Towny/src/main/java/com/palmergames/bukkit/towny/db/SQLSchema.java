@@ -80,6 +80,7 @@ public class SQLSchema {
 			case JAIL -> fetchCreateUUIDStatement(tableType);
 			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
+			case WORLD -> fetchCreateWorldStatemnt(tableType);
 			default -> fetchCreateNamedStatement(tableType);
 		};
 	}
@@ -114,6 +115,13 @@ public class SQLSchema {
 	
 	private static String fetchCreateCooldownsStatement(TownyDBTableType tableType) {
 		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`key` varchar(200) not null, primary key (`key`))";
+	}
+
+	/*
+	 * Create table statement for the TownyWorld, with a larger varchar.
+	 */
+	private static String fetchCreateWorldStatemnt(TownyDBTableType tableType) {
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(64) NOT NULL,PRIMARY KEY (`name`))";
 	}
 
 	/*
