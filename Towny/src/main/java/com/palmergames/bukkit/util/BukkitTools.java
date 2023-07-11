@@ -358,8 +358,10 @@ public class BukkitTools {
 	 * Our own copy of {@link Registry#match(String)}, since this method did not exist on the currently lowest supported version, 1.16.
 	 */
 	@Nullable
-	public static <T extends Keyed> T matchRegistry(Registry<T> registry, String input) {
+	public static <T extends Keyed> T matchRegistry(@NotNull Registry<T> registry, @NotNull String input) {
 		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_:]", "");
+		if (filtered.isEmpty())
+			return null;
 
 		final NamespacedKey key = NamespacedKey.fromString(filtered);
 		return key != null ? registry.get(key) : null;
