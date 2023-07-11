@@ -178,7 +178,7 @@ msg_unable_ally_enemy: '&c无法将 %s 视为盟国,因为他们已经将你视�
 msg_deny_ally: '&b%s 拒绝了你的加盟.'
 msg_accept_ally: '&b国家 %s 接受了你的邀请,成为盟国.'
 msg_ally_req_sent: '&b邀请已发送给 %s.'
-msg_ally_request: '&b %s 想要与你国构成结盟.'
+msg_ally_request: '&b%s想要与你国结盟。'
 msg_unable_ally_offline: "&c无法邀请该国家因为国王不在线."
 msg_unable_ally_npc: "&c无法邀请该国家因为国王是NPC."
 msg_claimed: '&2成功声明'
@@ -291,9 +291,9 @@ msg_plot_for_sale_amount: '&b%s将位于（%s）的土地以%s的价格出售！
 msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
-msg_cache_block_error_plot: '&c地主不允许 %s  %s .'
-msg_cache_block_error_town_resident: '&c居民不能在这里 %s.'
-msg_cache_block_error_town_allies: '&c盟友不能 %s.'
+msg_cache_block_error_plot: '&c地主不允许%s在这里%s。'
+msg_cache_block_error_town_resident: '&c居民不能在这里%s。'
+msg_cache_block_error_town_allies: '&c盟友不能%s。'
 msg_cache_block_error_town_outsider: '&c外来者不能 %s.'
 msg_err_cant_afford_tp_town: '&c你没有钱传送到 %s.'
 msg_err_not_public: '&c那个城镇不对外开放.'
@@ -501,7 +501,7 @@ nation_revoke_ally_successful: '&b您已经成功撤销了结盟请求.'
 nation_received_requests: '&b国家已经收到了 %a/%m 结盟请求.'
 nation_sent_invites: '&b国家已发出 %a/%m 邀请.'
 nation_sent_ally_requests: '&b国家已经派出 %a/%m 结盟请求.'
-no_confirmations_open: '&c你没什么可确认的!'
+no_confirmations_open: '&c你现在没有什么需要确认！'
 successful_cancel: '&c操作已取消！'
 successful_deny: '&b邀请已被拒绝.'
 successful_deny_request: '&b已拒绝结盟请求.'
@@ -573,7 +573,7 @@ status_on_good: '&a开'
 status_off_bad: '&4关'
 status_forced: '&c强制'
 status_adjustable: '&a可调整'
-status_pvp: 'PVP：'
+status_pvp: 'PvP：'
 explosions: '爆炸：'
 firespread: '火焰蔓延：'
 mobspawns: '生物生成：'
@@ -608,7 +608,7 @@ status_nation_conquered_tax: '征服税：'
 status_nation_towns: '城镇'
 status_nation_allies: '盟友'
 status_nation_enemies: '敌人'
-status_nation_enemied_by: '和你国敌对的国家'
+status_nation_enemied_by: '和你所在国敌对的国家'
 status_world_claimable: '&a可宣称'
 status_world_noclaims: '&a不可宣称'
 status_world_forcepvp: '强制PVP：'
@@ -725,8 +725,8 @@ msg_bankrupt_town2: '&b%s 城镇因资金不足而倒闭.'
 msg_bankrupt_nation2: '&b%s 因国库已空而灭亡.'
 status_embassy_town: '驻有大使馆于'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&b无效的比较器。你或许可以试试%s。'
-msg_error_invalid_comparator_town: '&b无效的比较器。你或许可以试试%s。'
+msg_error_invalid_comparator_nation: '&b你不能比较这个！你可以尝试这些：%s。'
+msg_error_invalid_comparator_town: '&b你不能比较这个！你可以尝试这些：%s。'
 msg_err_merging_for_kings_only: '&b只有国家领导者能合并。'
 msg_err_king_of_that_nation_is_not_online: '&b合并失败： %s 和 %s 的国家领导者不在线。'
 nation1_has_merged_with_nation2: '&6国家 %s t同意与 %s 合并.'
@@ -751,7 +751,7 @@ msg_error_cannot_town_spawn_youre_an_outlaw_in_town: '你无法传送到 %s, 你
 #Added in 0.55:
 msg_you_cannot_use_that_command_while_jailed: '&4你不能在监禁时使用这个指令.'
 #Added in 0.56:
-msg_cache_block_error_town_nation: '&c国家成员不能 %s.'
+msg_cache_block_error_town_nation: '&c国家成员不能%s。'
 #Added in 0.57:
 msg_err_already_res2: '&c%s 已经属于一个城镇了.'
 msg_err_cannot_afford_plot_set_type_cost: '&c你支付不起将土地设置为 %s 类型的价格： %s'
@@ -847,7 +847,7 @@ msg_player_put_group_up_for_sale: '%s 将土地组 %s 以 %s 的价格出售'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
-status_plot_group_name_and_size: '这个城镇区块是城镇%s的一部分，其共有%s个城镇区块。'
+status_plot_group_name_and_size: '这个城镇区块是地皮组%s的一部分，这个地皮组共包含%s个城镇区块。'
 msg_player_made_group_not_for_sale: '%s 停止出售 %s .'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: '土地组无法设置为监狱.'
@@ -889,7 +889,7 @@ msg_cache_block_error_plot_town_members: '城镇居民'
 msg_err_invalid_nation_map_color: '&c未知的地图颜色. 可用颜色有%s.'
 msg_nation_map_color_changed: '&b国家地图颜色已更改为%s.'
 msg_err_unable_to_add_more_residents_without_nation: '你的城镇在第一次加入其他国家或建国前无法邀请多于%s位居民n.'
-msg_the_following_towns_were_deleted_for_having_0_claims: '以下城镇因没有声明任何土地而被删除: %s'
+msg_the_following_towns_were_deleted_for_having_0_claims: '城镇%s已被删除，因为这些城镇没有声明任何土地。'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: '因为离新的首都不够近，所以城镇 %s 将从您的国家中移除。您确定要继续吗?'
@@ -1397,7 +1397,7 @@ msg_jailed_war: '作为战俘监禁。'
 #Jail handbook messages
 msg_jailed_handbook_1: '看起来你因为%s而被监禁了。'
 #Jail handbook messages
-msg_jailed_handbook_2: '啊，那真是糟糕。可是你又能做些什么呢？这里有一些被监禁时的小贴士。'
+msg_jailed_handbook_2: '啊……太糟糕了，实在太糟糕了。但是你又不能干些什么……不过，这里有一些被监禁时的小贴士。'
 #Jail handbook messages
 msg_jailed_handbook_3: '你已经被监禁%s小时了，服刑后你将得到自由。'
 #Jail handbook messages
@@ -1417,7 +1417,7 @@ msg_jailed_teleport: '还好，如果你手中有一些末影珍珠和紫颂果�
 #Jail handbook messages
 msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
-msg_jailed_title: '所以你就这样被监禁了 :('
+msg_jailed_title: '所以……你就这样被监禁了:('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco。'
 #Added in 0.130
@@ -1696,6 +1696,7 @@ msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
 msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
 msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
+msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.

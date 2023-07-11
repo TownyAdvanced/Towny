@@ -1696,6 +1696,7 @@ msg_err_that_town_is_not_conquered: "%s zaten fethedilmedi."
 msg_conquered_status_removed: "%s fethedilme durumunu kaldırdı."
 msg_setup_command_folia: "/ta install komutu şu anda konuşma API'sinin çalışmaması nedeniyle Folia'da çalışmıyor, bunun yerine aşağıdaki kurulum kılavuzuna bakın."
 msg_perm_gui_folia: "Bu düğme şu anda konuşma API'sinin çalışmaması nedeniyle Folia'da çalışmıyor, bunun yerine /plot perm add <name> komutunu kullanın."
+msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "%s,%s adresindeki kasaba bloğu yeterli sayıda bitişik hak talebine sahip olmayacağından (%s gereklidir.)"
 #Message shown when a nation collects taxes from its towns.

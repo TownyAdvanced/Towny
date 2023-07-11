@@ -1696,6 +1696,7 @@ msg_err_that_town_is_not_conquered: "%s è già non conquistata."
 msg_conquered_status_removed: "Lo stato di conquistato è stato rimosso a %s."
 msg_setup_command_folia: "Il comando /ta install attualmente non funziona con Folia per via del non funzionamento dell'API di conversione, fare riferimento alla guida d'installazione qua sotto."
 msg_perm_gui_folia: "Questo bottone attualmente non funziona per via del non funzionamento dell'API di conversione, invece usa /plot perm add <name>."
+msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "Non puoi abbandonare questo blocco perché il blocco a %s,%s Non avrebbe abbastanza blocchi adiacenti (%s sono richiesti.)"
 #Message shown when a nation collects taxes from its towns.

@@ -230,7 +230,7 @@ msg_world_pvp: '&cTen świat ma permanentnie włączone PvP.'
 msg_world_mobs: '&cTen świat ma włączone moby.'
 msg_world_expl: '&cTen świat ma permanentnie włączone eksplozje.'
 msg_world_fire: '&cTen świat ma włączony ogień.'
-msg_town_mobs: '&cThis town has Monster spawns forced on.'
+msg_town_mobs: '&cTen świat ma włączone moby.'
 msg_plot_pvp: '&cPVP nie może być zmienione na arenie.'
 msg_plot_regen_wrong_size: '&cRegenerację można wykonać tylko, gdy szerokości działki wynoszą 16 bloków.'
 msg_reloaded: '&2Ustawienia Twony zostały przeładowane.'
@@ -1696,6 +1696,7 @@ msg_err_that_town_is_not_conquered: "%s is already not conquered."
 msg_conquered_status_removed: "%s has had their conquered status removed."
 msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
 msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
+msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
