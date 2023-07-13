@@ -366,7 +366,7 @@ public class TownyEntityListener implements Listener {
 
 		// ignore Citizens NPCs and named-mobs (if configured.) 
 		LivingEntity livingEntity = event.getEntity();
-		if (entityIsExempt(livingEntity))
+		if (entityIsExempt(livingEntity, event.getSpawnReason()))
 			return;
 
 		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
@@ -385,9 +385,10 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
-	private boolean entityIsExempt(LivingEntity livingEntity) {
+	private boolean entityIsExempt(LivingEntity livingEntity, CreatureSpawnEvent.SpawnReason spawnReason) {
 		return PluginIntegrations.getInstance().checkCitizens(livingEntity)
-			|| entityIsExemptByName(livingEntity);
+			|| entityIsExemptByName(livingEntity)
+			|| MobRemovalTimerTask.isSpawnReasonIgnored(livingEntity, spawnReason);
 	}
 
 	private boolean entityIsExemptByName(LivingEntity livingEntity) {
