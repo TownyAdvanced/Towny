@@ -217,9 +217,9 @@ public class ChunkNotification {
 		{
 			if (toResident != null) {
 				String resName = (TownySettings.isNotificationOwnerShowingVerboseName() ? toResident.getFormattedName() : toResident.getName());
-				return String.format(ownerNotificationFormat, Colors.translateColorCodes(toTownBlock.getName().isEmpty() ? resName : toTownBlock.getName()));
+				return String.format(ownerNotificationFormat, Colors.translateColorCodes(toTownBlock.getName().isEmpty() ? resName : StringMgmt.remUnderscore(toTownBlock.getName())));
 			} else
-				return  String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translatable.of("UNCLAIMED_PLOT_NAME").forLocale(resident) : Colors.translateColorCodes(toTownBlock.getName()));
+				return String.format(noOwnerNotificationFormat, (toTownBlock.getName().isEmpty()) ? Translatable.of("UNCLAIMED_PLOT_NAME").forLocale(resident) : Colors.translateColorCodes(StringMgmt.remUnderscore(toTownBlock.getName())));
 
 		}
 		return null;
@@ -307,7 +307,7 @@ public class ChunkNotification {
 	
 	public String getGroupNotification() {
 		if (toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
-			return String.format(groupNotificationFormat, toTownBlock.getPlotObjectGroup().getName());
+			return String.format(groupNotificationFormat, StringMgmt.remUnderscore(toTownBlock.getPlotObjectGroup().getName()));
 		return null;
 	}
 
