@@ -3091,7 +3091,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					BukkitTools.ifCancelledThenThrow(new TownPreAddResidentEvent(town, newMember));
 
 				// only add players with the right permissions.
-				if (BukkitTools.matchPlayer(newMember.getName()).isEmpty()) { // Not online
+				if (!newMember.isOnline()) { // Not online
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_offline_no_join", newMember.getName()));
 					invited.remove(newMember);
 				} else if (!newMember.hasPermissionNode(PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
