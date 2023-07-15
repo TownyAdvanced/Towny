@@ -1,6 +1,5 @@
  package com.palmergames.bukkit.towny;
 
-import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
@@ -566,29 +565,11 @@ public class Towny extends JavaPlugin {
 	}
 
 	/**
-	 * @deprecated since 0.98.4.12, Towny no longer checks for essentials usage internally.
-	 * @return false
-	 */
-	@Deprecated
-	public boolean isEssentials() {
-		return false;
-	}
-
-	/**
 	 * @deprecated since 0.98.4.19.
 	 */
 	@Deprecated
 	public boolean isCitizens2() {
 		return false;
-	}
-
-	/**
-	 * @deprecated since 0.98.4.12, Towny no longer uses an internal Essentials instance.
-	 * @return a Essentials plugin instance or null
-	 */
-	@Deprecated
-	public Essentials getEssentials() {
-		return (Essentials) getServer().getPluginManager().getPlugin("Essentials");
 	}
 
 	/**

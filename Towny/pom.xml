@@ -58,10 +58,6 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>ess-repo</id>
-            <url>https://repo.essentialsx.net/releases/</url>
-        </repository>
-        <repository>
             <id>citizens-repo</id>
             <url>https://repo.citizensnpcs.co/</url>
         </repository>
@@ -125,12 +121,6 @@
                     <artifactId>bukkit</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>2.18.2</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.ElgarL</groupId>

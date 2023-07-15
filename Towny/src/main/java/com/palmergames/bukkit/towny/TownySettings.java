@@ -1211,15 +1211,6 @@ public class TownySettings {
 		return StringMgmt.containsIgnoreCase(getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS), name);
 	}
 
-	/**
-	 * @deprecated since 0.98.4.12, Towny no longers uses an Essentials instance.
-	 * @return false
-	 */
-	@Deprecated
-	public static boolean isUsingEssentials() {
-		return false;
-	}
-
 	public static double getNewTownPrice() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NEW_TOWN);
