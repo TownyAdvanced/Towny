@@ -29,6 +29,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -47,11 +49,10 @@ import java.util.stream.Collectors;
 public class BukkitTools {
 
 	private static Towny plugin = null;
-	private static Server server = null;
+	private static final MethodHandle GET_OFFLINE_PLAYER_CACHED;
 	
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
-		BukkitTools.server = plugin.getServer();
 	}
 	
 	/**
@@ -94,10 +95,9 @@ public class BukkitTools {
 	 * @return UUID of player or null if the player is not in the cache.
 	 */
 	public static UUID getUUIDSafely(String name) {
-		if (hasPlayedBefore(name))
-			return getOfflinePlayer(name).getUniqueId();
-		else
-			return null;
+		final OfflinePlayer cached = getOfflinePlayerIfCached(name);
+		
+		return cached != null ? cached.getUniqueId() : null;
 	}
 	
 	@Nullable
@@ -112,7 +112,7 @@ public class BukkitTools {
 	
 	@Nullable
 	public static Player getPlayer(UUID playerUUID) {
-		return server.getPlayer(playerUUID);
+		return getServer().getPlayer(playerUUID);
 	}
 	
 	public static Collection<? extends Player> getVisibleOnlinePlayers(CommandSender sender) {
@@ -152,9 +152,7 @@ public class BukkitTools {
 	}
 	
 	public static Server getServer() {
-		synchronized(server) {
-			return server;
-		}
+		return Bukkit.getServer();
 	}
 	
 	public static PluginManager getPluginManager() {
@@ -271,6 +269,18 @@ public class BukkitTools {
 		return Bukkit.getOfflinePlayer(name);
 	}
 	
+	@Nullable
+	public static OfflinePlayer getOfflinePlayerIfCached(@NotNull String name) {
+		if (GET_OFFLINE_PLAYER_CACHED == null)
+			return null;
+		
+		try {
+			return (OfflinePlayer) GET_OFFLINE_PLAYER_CACHED.invokeExact(getServer(), name);
+		} catch (Throwable thr) {
+			return null;
+		}
+	}
+	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
 
 		return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
@@ -365,5 +375,15 @@ public class BukkitTools {
 
 		final NamespacedKey key = NamespacedKey.fromString(filtered);
 		return key != null ? registry.get(key) : null;
+	}
+	
+	static {
+		MethodHandle temp = null;
+		try {
+			//noinspection JavaReflectionMemberAccess
+			temp = MethodHandles.publicLookup().unreflect(Server.class.getMethod("getOfflinePlayerIfCached", String.class));
+		} catch (ReflectiveOperationException ignored) {}
+		
+		GET_OFFLINE_PLAYER_CACHED = temp;
 	}
 }
