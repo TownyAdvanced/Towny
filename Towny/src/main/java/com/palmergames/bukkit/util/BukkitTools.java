@@ -381,7 +381,7 @@ public class BukkitTools {
 		MethodHandle temp = null;
 		try {
 			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(Server.class.getMethod("getOfflinePlayerIfCached"));
+			temp = MethodHandles.publicLookup().unreflect(Server.class.getMethod("getOfflinePlayerIfCached", String.class));
 		} catch (ReflectiveOperationException ignored) {}
 		
 		GET_OFFLINE_PLAYER_CACHED = temp;
