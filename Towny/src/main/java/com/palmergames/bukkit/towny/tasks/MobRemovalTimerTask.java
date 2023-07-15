@@ -1,7 +1,9 @@
 package com.palmergames.bukkit.towny.tasks;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
@@ -18,17 +20,27 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 public class MobRemovalTimerTask extends TownyTimerTask {
 
 	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfWildernessMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
+	private static final Set<String> ignoredSpawnReasons = new HashSet<>();
 	private boolean isRemovingKillerBunny;
+	
+	private static final MethodHandle GET_SPAWN_REASON;
 
 	public MobRemovalTimerTask(Towny plugin) {
 		super(plugin);
@@ -47,6 +59,26 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 	public static boolean isRemovingTownEntity(LivingEntity livingEntity) {
 		return EntityTypeUtil.isInstanceOfAny(classesOfTownMobsToRemove, livingEntity);
+	}
+	
+	public static boolean isSpawnReasonIgnored(@NotNull Entity entity) {
+		return isSpawnReasonIgnored(entity, null);
+	}
+
+	public static boolean isSpawnReasonIgnored(@NotNull Entity entity, @Nullable CreatureSpawnEvent.SpawnReason spawnReason) {
+		if (spawnReason != null && ignoredSpawnReasons.contains(spawnReason.name()))
+			return true;
+
+		if (GET_SPAWN_REASON == null || ignoredSpawnReasons.isEmpty())
+			return false;
+
+		try {
+			final Enum<?> reason = (Enum<?>) GET_SPAWN_REASON.invoke(entity);
+
+			return ignoredSpawnReasons.contains(reason.name());
+		} catch (Throwable throwable) {
+			return false;
+		}
 	}
 
 	@Override
@@ -110,6 +142,10 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 
 					if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
 						return;
+					
+					// Don't remove if the entity's spawn reason is considered ignored by the config
+					if (isSpawnReasonIgnored(entity))
+						return;
 
 					removeEntity(entity);
 				};
@@ -137,5 +173,21 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		classesOfWildernessMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWildernessMobRemovalEntities(),"WildernessMob: ");
 		classesOfTownMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
 		isRemovingKillerBunny = TownySettings.isRemovingKillerBunny();
+		
+		ignoredSpawnReasons.clear();
+		for (final String cause : TownySettings.getStrArr(ConfigNodes.PROT_MOB_REMOVE_IGNORED_SPAWN_CAUSES))
+			ignoredSpawnReasons.add(cause.toUpperCase(Locale.ROOT));
+	}
+	
+	static {
+		MethodHandle temp = null;
+		try {
+			// https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getEntitySpawnReason()
+			//noinspection JavaReflectionMemberAccess
+			temp = MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getEntitySpawnReason"));
+			TownyMessaging.sendDebugMsg("Using Entity.html#getEntitySpawnReason");
+		} catch (ReflectiveOperationException ignored) {}
+		
+		GET_SPAWN_REASON = temp;
 	}
 }
