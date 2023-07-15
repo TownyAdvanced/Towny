@@ -260,6 +260,10 @@ public class PluginIntegrations {
 	private boolean isPluginPresent(String pluginName) {
 		return Bukkit.getServer().getPluginManager().getPlugin(pluginName) != null;
 	}
+	
+	public boolean isPluginEnabled(@NotNull String pluginName) {
+		return Bukkit.getServer().getPluginManager().isPluginEnabled(pluginName);
+	}
 
 	/*
 	 * Disable 3rd Party integrations.
