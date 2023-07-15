@@ -565,15 +565,6 @@ public class Towny extends JavaPlugin {
 	}
 
 	/**
-	 * @deprecated since 0.98.4.12, Towny no longer checks for essentials usage internally.
-	 * @return false
-	 */
-	@Deprecated
-	public boolean isEssentials() {
-		return false;
-	}
-
-	/**
 	 * @deprecated since 0.98.4.19.
 	 */
 	@Deprecated
