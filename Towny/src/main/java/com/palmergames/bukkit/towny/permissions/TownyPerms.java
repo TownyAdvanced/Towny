@@ -175,7 +175,7 @@ public class TownyPerms {
 		 */
 
 		try {
-			final Map<String, Boolean> orig = (Map<String, Boolean>) PERMISSIONS.invoke(attachment);
+			final Map<String, Boolean> orig = (Map<String, Boolean>) PERMISSIONS.invokeExact(attachment);
 			/*
 			 * Clear the map (faster than removing the attachment and
 			 * recalculating)

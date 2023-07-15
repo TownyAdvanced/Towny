@@ -118,7 +118,7 @@ public class TownyPaperEvents implements Listener {
 			
 			Location origin;
 			try {
-				origin = (Location) GET_ORIGIN.invoke(event.getEntity());
+				origin = (Location) GET_ORIGIN.invokeExact(event.getEntity());
 			} catch (final Throwable e) {
 				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking Entity#getOrigin reflectively", e);
 				return;
