@@ -31,7 +31,6 @@ import java.util.Set;
 
 public class TownBlock extends TownyObject {
 
-	private TownyWorld world;
 	private Town town = null;
 	private Resident resident = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
@@ -51,13 +50,11 @@ public class TownBlock extends TownyObject {
 	public TownBlock(int x, int z, TownyWorld world) {
 		super("");
 		this.worldCoord = new WorldCoord(world.getName(), world.getUUID(), x, z);
-		this.world = world;
 	}
 
 	public TownBlock(WorldCoord worldCoord) {
 		super("");
 		this.worldCoord = worldCoord;
-		this.world = worldCoord.getTownyWorld();
 	}
 
 	public void setTown(Town town) {
@@ -83,7 +80,7 @@ public class TownBlock extends TownyObject {
 	public Town getTown() throws NotRegisteredException {
 
 		if (!hasTown())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), getX(), getZ()));
+			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", getWorld().getName(), getX(), getZ()));
 		return town;
 	}
 	
@@ -186,7 +183,7 @@ public class TownBlock extends TownyObject {
 	public Resident getResident() throws NotRegisteredException {
 
 		if (!hasResident())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), getX(), getZ()));
+			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", getWorld().getName(), getX(), getZ()));
 		return resident;
 	}
 
@@ -421,6 +418,9 @@ public class TownBlock extends TownyObject {
 		super.setName(newName.replace("_", " ")); 
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
+	 */
 	@Deprecated
 	public void setX(int x) {
 
@@ -431,6 +431,9 @@ public class TownBlock extends TownyObject {
 		return this.worldCoord.getX();
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
+	 */
 	@Deprecated
 	public void setZ(int z) {
 
@@ -469,14 +472,17 @@ public class TownBlock extends TownyObject {
 	public void setLocked(boolean locked) {
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
+	 */
+	@Deprecated
 	public void setWorld(TownyWorld world) {
 
-		this.world = world;
 	}
 
 	public TownyWorld getWorld() {
 
-		return world;
+		return this.worldCoord.getTownyWorld();
 	}
 
 	@Override
@@ -489,14 +495,13 @@ public class TownBlock extends TownyObject {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(world, getX(), getZ());
+		return Objects.hash(getWorld(), getX(), getZ());
 	}
 
 	public void clear() {
 
 		setTown(null);
 		setResident(null);
-		setWorld(null);
 	}
 
 	@Override
