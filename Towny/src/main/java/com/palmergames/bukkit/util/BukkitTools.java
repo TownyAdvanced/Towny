@@ -369,7 +369,7 @@ public class BukkitTools {
 	 */
 	@Nullable
 	public static <T extends Keyed> T matchRegistry(@NotNull Registry<T> registry, @NotNull String input) {
-		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_:]", "");
+		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
 		if (filtered.isEmpty())
 			return null;
 
