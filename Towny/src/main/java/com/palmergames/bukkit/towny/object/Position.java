@@ -142,7 +142,7 @@ public class Position {
 		return data;
 	}
 	
-	public static Position deserialize(@NotNull final String[] data) throws NumberFormatException {
+	public static Position deserialize(@NotNull final String[] data) throws IllegalArgumentException {
 		Validate.notNull(data, "data cannot be null");
 		
 		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(data[0]);
@@ -150,15 +150,15 @@ public class Position {
 		if (world == null)
 			throw new IllegalArgumentException("World '" + data[0] + "' is not recognized by towny.");
 		
-		double x = Double.parseDouble(data[1]);
-		double y = Double.parseDouble(data[2]);
-		double z = Double.parseDouble(data[3]);
+		double x = NumberConversions.toDouble(data[1]);
+		double y = NumberConversions.toDouble(data[2]);
+		double z = NumberConversions.toDouble(data[3]);
 		float pitch = 0F;
 		float yaw = 0F;
 		
 		if (data.length == 6) {
-			pitch = Float.parseFloat(data[4]);
-			yaw = Float.parseFloat(data[5]);
+			pitch = NumberConversions.toFloat(data[4]);
+			yaw = NumberConversions.toFloat(data[5]);
 		}
 		
 		return new Position(world, x, y, z, pitch, yaw);
