@@ -13,17 +13,17 @@ public class Position {
 	private final double x;
 	private final double y;
 	private final double z;
-	private final float yaw;
 	private final float pitch;
+	private final float yaw;
 	
 	@ApiStatus.Internal
-	protected Position(TownyWorld world, double x, double y, double z, float yaw, float pitch) {
+	protected Position(TownyWorld world, double x, double y, double z, float pitch, float yaw) {
 		this.world = world;
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.yaw = yaw;
 		this.pitch = pitch;
+		this.yaw = yaw;
 	}
 	
 	public TownyWorld world() {
@@ -42,12 +42,12 @@ public class Position {
 		return this.z;
 	}
 	
-	public float yaw() {
-		return this.yaw;
-	}
-	
 	public float pitch() {
 		return this.pitch;
+	}
+	
+	public float yaw() {
+		return this.yaw;
 	}
 	
 	public int blockX() {
@@ -70,14 +70,14 @@ public class Position {
 		return positionOf(world, x, y, z, 0F, 0F);
 	}
 	
-	public static Position positionOf(@NotNull TownyWorld world, double x, double y, double z, float yaw, float pitch) {
+	public static Position positionOf(@NotNull TownyWorld world, double x, double y, double z, float pitch, float yaw) {
 		Validate.notNull(world, "world cannot be null");
-		return new Position(world, x, y, z, yaw, pitch);
+		return new Position(world, x, y, z, pitch, yaw);
 	}
 	
 	@NotNull
 	public Location asLocation() {
-		return new Location(world.getBukkitWorld(), this.x, this.y, this.z, this.yaw, this.pitch);
+		return new Location(world.getBukkitWorld(), this.x, this.y, this.z, this.pitch, this.yaw);
 	}
 	
 	@NotNull
@@ -96,7 +96,7 @@ public class Position {
 		if (world == null)
 			throw new IllegalArgumentException("Could not find towny world for world " + bukkitWorld.getName() + ".");
 		
-		return new Position(world, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+		return new Position(world, location.getX(), location.getY(), location.getZ(), location.getPitch(), location.getYaw());
 	}
 
 	@Override
@@ -107,8 +107,8 @@ public class Position {
 		if (Double.compare(position.x, x) != 0) return false;
 		if (Double.compare(position.y, y) != 0) return false;
 		if (Double.compare(position.z, z) != 0) return false;
-		if (Float.compare(position.yaw, yaw) != 0) return false;
 		if (Float.compare(position.pitch, pitch) != 0) return false;
+		if (Float.compare(position.yaw, yaw) != 0) return false;
 		return world.getName().equals(position.world.getName());
 	}
 
@@ -123,8 +123,8 @@ public class Position {
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(z);
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
-		result = 31 * result + (yaw != 0.0f ? Float.floatToIntBits(yaw) : 0);
 		result = 31 * result + (pitch != 0.0f ? Float.floatToIntBits(pitch) : 0);
+		result = 31 * result + (yaw != 0.0f ? Float.floatToIntBits(yaw) : 0);
 		return result;
 	}
 
@@ -136,8 +136,8 @@ public class Position {
 		data[1] = String.valueOf(this.x);
 		data[2] = String.valueOf(this.y);
 		data[3] = String.valueOf(this.z);
-		data[4] = String.valueOf(this.yaw);
-		data[5] = String.valueOf(this.pitch);
+		data[4] = String.valueOf(this.pitch);
+		data[5] = String.valueOf(this.yaw);
 		
 		return data;
 	}
@@ -153,14 +153,14 @@ public class Position {
 		double x = Double.parseDouble(data[1]);
 		double y = Double.parseDouble(data[2]);
 		double z = Double.parseDouble(data[3]);
-		float yaw = 0F;
 		float pitch = 0F;
+		float yaw = 0F;
 		
 		if (data.length == 6) {
-			yaw = Float.parseFloat(data[4]);
-			pitch = Float.parseFloat(data[5]);
+			pitch = Float.parseFloat(data[4]);
+			yaw = Float.parseFloat(data[5]);
 		}
 		
-		return new Position(world, x, y, z, yaw, pitch);
+		return new Position(world, x, y, z, pitch, yaw);
 	}
 }

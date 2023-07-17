@@ -9,7 +9,7 @@ import org.bukkit.Location;
 public class SpawnPointLocation extends Position {
 	
 	public SpawnPointLocation(Location loc) {
-		super(TownyAPI.getInstance().getTownyWorld(loc.getWorld()), loc.getX(), loc.getY(), loc.getZ(), 0F, 0F);
+		super(TownyAPI.getInstance().getTownyWorld(loc.getWorld()), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 0F, 0F);
 	}
 
 	private SpawnPointLocation(Position position) {
@@ -53,6 +53,6 @@ public class SpawnPointLocation extends Position {
 		if (this == other) return true;
 		if (!(other instanceof SpawnPointLocation loc)) return false;
 		
-		return world().getName().equalsIgnoreCase(loc.world().getName()) && blockX() == loc.blockX() && blockY() == loc.blockY() && blockZ() == loc.blockZ();
+		return world().equals(loc.world()) && blockX() == loc.blockX() && blockY() == loc.blockY() && blockZ() == loc.blockZ();
 	}
 }
