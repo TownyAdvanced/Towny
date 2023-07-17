@@ -92,12 +92,13 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		}
 
 		public Builder<T, F> endsWith(@NotNull String endingWith) {
-			anyMatchPredicates.add((s) -> s.getKey().getKey().toLowerCase(Locale.ROOT).endsWith(endingWith.toLowerCase(Locale.ROOT)));
+			final String endingWithLower = endingWith.toLowerCase(Locale.ROOT);
+			anyMatchPredicates.add((s) -> s.getKey().getKey().endsWith(endingWithLower));
 			return this;
 		}
 
 		public Builder<T, F> not(@NotNull String name) {
-			allMatchPredicates.add((s) -> !s.getKey().getKey().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT)));
+			allMatchPredicates.add((s) -> !s.getKey().getKey().equalsIgnoreCase(name));
 			return this;
 		}
 
@@ -107,17 +108,20 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		}
 
 		public Builder<T, F> notEndsWith(@NotNull String notEndingWith) {
-			allMatchPredicates.add((s) -> !s.getKey().getKey().toLowerCase(Locale.ROOT).endsWith(notEndingWith.toLowerCase(Locale.ROOT)));
+			final String notEndingLower = notEndingWith.toLowerCase(Locale.ROOT);
+			allMatchPredicates.add((s) -> !s.getKey().getKey().endsWith(notEndingLower));
 			return this;
 		}
 
 		public Builder<T, F> contains(@NotNull String containing) {
-			allMatchPredicates.add((s) -> s.getKey().getKey().toLowerCase(Locale.ROOT).contains(containing.toLowerCase(Locale.ROOT)));
+			final String containingLower = containing.toLowerCase(Locale.ROOT);
+			allMatchPredicates.add((s) -> s.getKey().getKey().contains(containingLower));
 			return this;
 		}
 
 		public Builder<T, F> notContains(@NotNull String notContaining) {
-			allMatchPredicates.add((s) -> !s.getKey().getKey().toLowerCase(Locale.ROOT).contains(notContaining.toLowerCase(Locale.ROOT)));
+			final String notContainingLower = notContaining.toLowerCase(Locale.ROOT);
+			allMatchPredicates.add((s) -> !s.getKey().getKey().contains(notContainingLower));
 			return this;
 		}
 
