@@ -55,9 +55,9 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		private final Function<Collection<T>, F> convertFunction;
 
 		// Predicates where all should match, this is used for functions that exclude certain elements. (notStartsWith, contains, etc.)
-		private final Set<Predicate<NamespacedKey>> allMatchPredicates = new HashSet<>();
+		private final Set<Predicate<T>> allMatchPredicates = new HashSet<>();
 		// Predicates where only 1 has to match, this is used for functions that include new elements. (endsWith, startsWith)
-		private final Set<Predicate<NamespacedKey>> anyMatchPredicates = new HashSet<>();
+		private final Set<Predicate<T>> anyMatchPredicates = new HashSet<>();
 		private @Nullable Set<T> exceptions;
 
 		/**
@@ -75,8 +75,8 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 			final Set<T> matches = new HashSet<>();
 
 			if (!allMatchPredicates.isEmpty() || !anyMatchPredicates.isEmpty()) {
-				for (T element : registry)
-					if (allMatchPredicates.stream().allMatch(predicate -> predicate.test(element.getKey())) && anyMatchPredicates.stream().anyMatch(predicate -> predicate.test(element.getKey())))
+				for (final T element : registry)
+					if (allMatchPredicates.stream().allMatch(predicate -> predicate.test(element)) && (anyMatchPredicates.isEmpty() || anyMatchPredicates.stream().anyMatch(predicate -> predicate.test(element))))
 						matches.add(element);
 			}
 
@@ -87,37 +87,37 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		}
 
 		public Builder<T, F> startsWith(String startingWith) {
-			anyMatchPredicates.add((s) -> s.getKey().regionMatches(true, 0, startingWith, 0, startingWith.length()));
+			anyMatchPredicates.add((s) -> s.getKey().getKey().regionMatches(true, 0, startingWith, 0, startingWith.length()));
 			return this;
 		}
 
 		public Builder<T, F> endsWith(@NotNull String endingWith) {
-			anyMatchPredicates.add((s) -> s.getKey().toLowerCase(Locale.ROOT).endsWith(endingWith.toLowerCase(Locale.ROOT)));
+			anyMatchPredicates.add((s) -> s.getKey().getKey().toLowerCase(Locale.ROOT).endsWith(endingWith.toLowerCase(Locale.ROOT)));
 			return this;
 		}
 
 		public Builder<T, F> not(@NotNull String name) {
-			allMatchPredicates.add((s) -> !s.getKey().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT)));
+			allMatchPredicates.add((s) -> !s.getKey().getKey().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT)));
 			return this;
 		}
 
 		public Builder<T, F> notStartsWith(@NotNull String notStartingWith) {
-			allMatchPredicates.add((s) -> !s.getKey().regionMatches(true, 0, notStartingWith, 0, notStartingWith.length()));
+			allMatchPredicates.add((s) -> !s.getKey().getKey().regionMatches(true, 0, notStartingWith, 0, notStartingWith.length()));
 			return this;
 		}
 
 		public Builder<T, F> notEndsWith(@NotNull String notEndingWith) {
-			allMatchPredicates.add((s) -> !s.getKey().toLowerCase(Locale.ROOT).endsWith(notEndingWith.toLowerCase(Locale.ROOT)));
+			allMatchPredicates.add((s) -> !s.getKey().getKey().toLowerCase(Locale.ROOT).endsWith(notEndingWith.toLowerCase(Locale.ROOT)));
 			return this;
 		}
 
 		public Builder<T, F> contains(@NotNull String containing) {
-			allMatchPredicates.add((s) -> s.getKey().toLowerCase(Locale.ROOT).contains(containing.toLowerCase(Locale.ROOT)));
+			allMatchPredicates.add((s) -> s.getKey().getKey().toLowerCase(Locale.ROOT).contains(containing.toLowerCase(Locale.ROOT)));
 			return this;
 		}
 
 		public Builder<T, F> notContains(@NotNull String notContaining) {
-			allMatchPredicates.add((s) -> !s.getKey().toLowerCase(Locale.ROOT).contains(notContaining.toLowerCase(Locale.ROOT)));
+			allMatchPredicates.add((s) -> !s.getKey().getKey().toLowerCase(Locale.ROOT).contains(notContaining.toLowerCase(Locale.ROOT)));
 			return this;
 		}
 
@@ -131,10 +131,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 			final Tag<T> tag = Bukkit.getServer().getTag(registry, key, this.clazz);
 
 			if (tag != null)
-				anyMatchPredicates.add(s -> {
-					final T exact = this.registry.get(s);
-					return exact != null && tag.isTagged(exact);
-				});
+				anyMatchPredicates.add(tag::isTagged);
 
 			return this;
 		}
@@ -148,10 +145,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 			final Tag<T> tag = Bukkit.getServer().getTag(registry, key, this.clazz);
 
 			if (tag != null)
-				allMatchPredicates.add(s -> {
-					final T exact = this.registry.get(s);
-					return exact == null || !tag.isTagged(exact);
-				});
+				allMatchPredicates.add(s -> !tag.isTagged(s));
 
 			return this;
 		}
@@ -165,9 +159,6 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 				exceptions = new HashSet<>();
 
 			for (String name : names) {
-				if (name.isEmpty())
-					continue;
-
 				final T match = BukkitTools.matchRegistry(this.registry, name);
 				if (match != null)
 					exceptions.add(match);
@@ -175,6 +166,11 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 					TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
 			}
 
+			return this;
+		}
+
+		public Builder<T, F> filter(@NotNull Predicate<T> predicate) {
+			allMatchPredicates.add(predicate);
 			return this;
 		}
 	}
