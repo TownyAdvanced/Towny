@@ -528,7 +528,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public boolean hasMode(String mode) {
-		return this.modes.contains(mode.toLowerCase());
+		return this.modes.contains(mode.toLowerCase(Locale.ROOT));
 	}
 	
 	public void toggleMode(String[] newModes, boolean notify) {

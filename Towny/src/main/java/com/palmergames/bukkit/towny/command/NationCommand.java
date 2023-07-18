@@ -203,7 +203,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return Collections.emptyList();
 			Nation nation = res.getNationOrNull();
 
-			switch (args[0].toLowerCase()) {
+			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "toggle":
 					if (args.length == 2)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_TOGGLE, nationToggleTabCompletes), args[1]);
@@ -249,7 +249,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
 					} else if (args.length > 2){
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "add":
 								if (args[args.length - 1].startsWith("-")) {
 									return NameUtil.filterByStart(nation.getSentAllyInvites()
@@ -290,7 +290,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					case 3:
 						return getNationResidentNamesOfPlayerStartingWith(player, args[2]);
 					case 4:
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "add":
 								return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
 							case "remove": {
@@ -311,7 +311,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
 					} else if (args.length >= 3){
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "add":
 								return getTownyStartingWith(args[2], "n");
 							case "remove":
@@ -360,7 +360,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, args[1]))
 				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 			
-			switch (args[1].toLowerCase()) {
+			switch (args[1].toLowerCase(Locale.ROOT)) {
 				case "king":
 				case "leader":
 				case "title":
@@ -458,7 +458,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "list":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode());
 			listNations(player, split);
@@ -777,7 +777,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * Only allow the player to assign ranks if they have the grant perm for it.
 		 */
-		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase()), Translatable.of("msg_no_permission_to_give_rank"));
+		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase(Locale.ROOT)), Translatable.of("msg_no_permission_to_give_rank"));
 
 		if (split[0].equalsIgnoreCase("add")) {
 			if (target.hasNationRank(rank)) // Must already have this rank
@@ -865,7 +865,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!console)
 						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode(split[i]));
 					
-					if (!nationListTabCompletes.contains(split[i].toLowerCase()))
+					if (!nationListTabCompletes.contains(split[i].toLowerCase(Locale.ROOT)))
 						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation", nationListTabCompletes.stream().filter(comp -> sender.hasPermission(PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode(comp))).collect(Collectors.joining(", "))));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
@@ -1426,7 +1426,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Resident resident = getResidentOrThrow(player);
 		Nation nation = getNationFromResidentOrThrow(resident);
 
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "add":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ADD.getNode());
 			nationAllyAdd(player, resident, nation, StringMgmt.remFirstArg(split));
@@ -1919,7 +1919,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "leader":
 		case "king":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_KING.getNode());
@@ -2394,7 +2394,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 2)
 			choice = BaseCommand.parseToggleChoice(split[1]);
 
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "peaceful":
 		case "neutral":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL.getNode());

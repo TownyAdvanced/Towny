@@ -97,7 +97,7 @@ public final class Translation {
 			if (data == null) {
 				// Even the en_US is missing this string, we're probably dealing with a typo.
 				// Log the error and return the un-translated key.
-				TownySettings.sendError(key.toLowerCase() + " from en_US");
+				TownySettings.sendError(key.toLowerCase(Locale.ROOT) + " from en_US");
 				return key;
 			}
 		}

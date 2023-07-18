@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.palmergames.bukkit.towny.object.AddonCommand;
@@ -50,18 +51,18 @@ public class TownyCommandAddonAPI {
     }
 
     public static boolean addSubCommand(@NotNull AddonCommand command) {
-		if (addedCommands.computeIfAbsent(command.getCommandType(), k -> new HashMap<>()).containsKey(command.getName().toLowerCase()))
+		if (addedCommands.computeIfAbsent(command.getCommandType(), k -> new HashMap<>()).containsKey(command.getName().toLowerCase(Locale.ROOT)))
 			return false;
 		
-        addedCommands.get(command.getCommandType()).put(command.getName().toLowerCase(), command);
+        addedCommands.get(command.getCommandType()).put(command.getName().toLowerCase(Locale.ROOT), command);
 		return true;
     }
 
     public static boolean removeSubCommand(@NotNull CommandType commandType, @NotNull String name) {
-		if (!addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).containsKey(name.toLowerCase()))
+		if (!addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).containsKey(name.toLowerCase(Locale.ROOT)))
 			return false;
 		
-		addedCommands.get(commandType).remove(name.toLowerCase());
+		addedCommands.get(commandType).remove(name.toLowerCase(Locale.ROOT));
 		return true;
     }
 
@@ -70,7 +71,7 @@ public class TownyCommandAddonAPI {
     }
 
     public static boolean hasCommand(@NotNull CommandType commandType, @NotNull String name) {
-        return addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).containsKey(name.toLowerCase());
+        return addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).containsKey(name.toLowerCase(Locale.ROOT));
     }
 
     /**
@@ -80,7 +81,7 @@ public class TownyCommandAddonAPI {
      */
     @Nullable
     public static AddonCommand getAddonCommand(@NotNull CommandType commandType, @NotNull String name) {
-        return addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).get(name.toLowerCase());
+        return addedCommands.computeIfAbsent(commandType, k -> new HashMap<>()).get(name.toLowerCase(Locale.ROOT));
     }
 
     public static List<String> getTabCompletes(@NotNull CommandType commandType, @NotNull List<String> addFrom) {

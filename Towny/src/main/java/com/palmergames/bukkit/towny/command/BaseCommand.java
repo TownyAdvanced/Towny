@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -161,9 +162,9 @@ public class BaseCommand implements TabCompleter{
 			case 1:
 				return NameUtil.filterByStart(setPermTabCompletes, args[0]);
 			case 2:
-				if (setTypeCompletes.contains(args[0].toLowerCase()))
+				if (setTypeCompletes.contains(args[0].toLowerCase(Locale.ROOT)))
 					return NameUtil.filterByStart(setOnOffCompletes, args[1]);
-				if (setLevelCompletes.contains(args[0].toLowerCase()))
+				if (setLevelCompletes.contains(args[0].toLowerCase(Locale.ROOT)))
 					return NameUtil.filterByStart(toggleTypeOnOffCompletes, args[1]);
 				break;
 			case 3:

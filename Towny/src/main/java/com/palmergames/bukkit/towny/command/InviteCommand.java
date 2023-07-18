@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			case 1:
 				return NameUtil.filterByStart(inviteTabCompletes, args[0]);
 			case 2:
-				switch (args[0].toLowerCase()) {
+				switch (args[0].toLowerCase(Locale.ROOT)) {
 					case "accept":
 					case "deny": {
 						if (sender instanceof Player) {

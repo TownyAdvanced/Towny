@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -315,7 +316,7 @@ public class TownBlock extends TownyObject {
 		
 		BukkitTools.fireEvent(new PlotChangeTypeEvent(this.type, type, this));
 
-		switch (type.getName().toLowerCase()) {
+		switch (type.getName().toLowerCase(Locale.ROOT)) {
 			case "default":
 			case "shop":
 			case "embassy":

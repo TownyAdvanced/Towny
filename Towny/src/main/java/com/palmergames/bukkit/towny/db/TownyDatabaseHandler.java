@@ -155,7 +155,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String backupType = TownySettings.getFlatFileBackupType();
 		String newBackupFolder = backupFolderPath + File.separator + BACKUP_DATE_FORMAT.format(System.currentTimeMillis());
 		FileMgmt.checkOrCreateFolders(rootFolderPath, rootFolderPath + File.separator + "backup");
-		switch (backupType.toLowerCase()) {
+		switch (backupType.toLowerCase(Locale.ROOT)) {
 		case "folder": {
 			FileMgmt.checkOrCreateFolder(newBackupFolder);
 			FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));

@@ -295,7 +295,7 @@ public class BukkitTools {
 	}
 	
 	public static List<String> getWorldNames(boolean lowercased) {
-		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
+		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase(Locale.ROOT)).collect(Collectors.toList()) : getWorldNames();
 	}
 	
 	/**
