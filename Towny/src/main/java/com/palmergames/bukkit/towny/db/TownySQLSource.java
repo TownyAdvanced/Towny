@@ -1835,10 +1835,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					}
 				}
 
-				line = rs.getString("type");
-				if (line != null)
-					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
-
 				line = rs.getString("resident");
 				if (line != null && !line.isEmpty()) {
 					Resident res = universe.getResident(line.trim());
@@ -1851,6 +1847,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						));
 					}
 				}
+
+				line = rs.getString("type");
+				if (line != null)
+					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 
 				line = rs.getString("price");
 				if (line != null)
