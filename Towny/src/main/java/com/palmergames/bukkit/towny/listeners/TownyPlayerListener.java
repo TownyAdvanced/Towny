@@ -62,6 +62,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -357,8 +358,8 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Test item_use. 
 			 */
-			if (TownySettings.isItemUseMaterial(item, loc))
-				event.setCancelled(!TownyActionEventExecutor.canItemuse(player, loc, item));
+			if (TownySettings.isItemUseMaterial(item, loc) && !TownyActionEventExecutor.canItemuse(player, loc, item))
+				event.setUseItemInHand(Result.DENY);
 
 			/*
 			 * Test other Items using non-ItemUse test.
@@ -388,58 +389,67 @@ public class TownyPlayerListener implements Listener {
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
 
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, loc, clickedMat));
+					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat))
+						event.setUseItemInHand(Result.DENY);
 				}
 
 				/*
 				 * Test bonemeal usage. Treat interaction as a Build test.
 				 */
-				if (item == Material.BONE_MEAL) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+				if (item == Material.BONE_MEAL && !TownyActionEventExecutor.canBuild(player, loc, item))
+					event.setUseItemInHand(Result.DENY);
 				
 				/*
 				 * Test putting candles on cakes. Treat interaction as a Build test.
 				 */
-				if (ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+				if (ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE &&
+						!TownyActionEventExecutor.canBuild(player, loc, item))
+					event.setUseItemInHand(Result.DENY);
 				
 				/*
 				 * Test wax usage. Treat interaction as a Build test.
 				 */
-				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat) &&
+						!TownyActionEventExecutor.canBuild(player, loc, item))
+					event.setUseItemInHand(Result.DENY);
 
 				/*
 				 * Test if we're about to spawn either entity. Uses build test.
 				 */
-				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) 
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item));
+				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL &&
+						!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item))
+					event.setUseItemInHand(Result.DENY);
 
 				/*
 				 * Test if we're putting a book into a BookContainer.
 				 */
-				if (ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat))
-					event.setCancelled(!TownyActionEventExecutor.canBuild(player, loc, item));
+				if (ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat) &&
+						!TownyActionEventExecutor.canBuild(player, loc, item))
+					event.setUseItemInHand(Result.DENY);
 
 				/*
 				 * Catches hoes taking dirt from Rooted Dirt blocks.
 				 */
-				if (clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item))
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock));
+				if (clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) &&
+						!TownyActionEventExecutor.canDestroy(player, loc, clickedMat))
+					event.setUseItemInHand(Result.DENY);
+
 
 				/*
 				 * Prevents players using wax on signs
 				 */
-				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock) && !TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
-					event.setCancelled(true);
+				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock) &&
+						!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
+					event.setUseItemInHand(Result.DENY);
 					return;
 				}
 				
 				/*
 				 * Prevents players from using brushes on brush-able blocks (suspicious sand, suspicious gravel)
 				 */
-				if (ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH && !TownyActionEventExecutor.canDestroy(player, clickedBlock))
-					event.setCancelled(true);
+				if (ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH &&
+						!TownyActionEventExecutor.canDestroy(player, clickedBlock))
+					event.setUseItemInHand(Result.DENY);
 			}
 		}
 		
@@ -451,9 +461,9 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Test switch use.
 			 */
-			if (TownySettings.isSwitchMaterial(clickedMat, clickedBlock.getLocation())) {
+			if (TownySettings.isSwitchMaterial(clickedMat, clickedBlock.getLocation()) && !TownyActionEventExecutor.canSwitch(player, clickedBlock.getLocation(), clickedMat)) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canSwitch(player, clickedBlock.getLocation(), clickedMat));
+				event.setUseInteractedBlock(Result.DENY);
 				return;
 			}
 			/*
@@ -474,7 +484,8 @@ public class TownyPlayerListener implements Listener {
 				clickedMat == Material.COMMAND_BLOCK){
 				
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
+				if (!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat))
+					event.setUseInteractedBlock(Result.DENY);
 				return;
 			}
 			
@@ -482,8 +493,9 @@ public class TownyPlayerListener implements Listener {
 			 * Prevents players from editing signs where they shouldn't.
 			 * This check is only used when our listener for paper's sign open event is not in use, since that event fires when the sign is actually opened instead of interact.
 			 */
-			if (TownyPaperEvents.SIGN_OPEN_GET_CAUSE == null && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock))
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat));
+			if (TownyPaperEvents.SIGN_OPEN_GET_CAUSE == null && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock) &&
+					!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat))
+				event.setUseInteractedBlock(Result.DENY);
 		}
 	}
 
