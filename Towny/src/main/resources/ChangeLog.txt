@@ -8903,3 +8903,6 @@ v0.92.0.11:
   - Add getOfflinePlayerIfCached to BukkitTools, courtesy of Warrior with PR #6847.
   - Use invokeExact where possible, courtesy of Warrior with PR #6849.
   - Remove essentials maven dependency, courtesy of Warrior with PR #6842.
+0.99.5.3:
+  - Fix personal permission line loading in TownBlocks.
+    - Closes #6856.
