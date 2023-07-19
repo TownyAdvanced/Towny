@@ -8906,3 +8906,12 @@ v0.92.0.11:
 0.99.5.3:
   - Fix personal permission line loading in TownBlocks.
     - Closes #6856.
+  - Fix Towny uncancelling PlayerInteractEvents.
+    - Closes #6861.
+  - Remove unneeded filtering from matchRegistry, courtesy of Warrior with PR #6851.
+  - Cache a townblock's worldcoord/pos, courtesy of Warrior with PR #6853.
+  - Allow negating nodes with {townname} and {nationname}, courtesy of Warrior with PR #6850.
+    - Allows nodes with {townname} and {nationname} to be prefixed with a -.
+  - Use material key for cache debug message, courtesy of Warrior with PR #6852.
+  - Implement a filter method for registry lists, courtesy of Warrior with PR #6859.
+  - Take care of all the places we weren't using Locale.ROOT with toLowerCase().
