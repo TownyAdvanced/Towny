@@ -594,7 +594,7 @@ public class TownyPerms {
 		registeredPermissions.clear();
 
 		for (Permission perm : BukkitTools.getPluginManager().getPermissions()) {
-			registeredPermissions.put(perm.getName().toLowerCase(), perm);
+			registeredPermissions.put(perm.getName().toLowerCase(Locale.ROOT), perm);
 		}
 
 	}
@@ -711,7 +711,7 @@ public class TownyPerms {
 	 */
 	public static Map<String, Boolean> getChildren(String node) {
 
-		Permission perm = registeredPermissions.get(node.toLowerCase());
+		Permission perm = registeredPermissions.get(node.toLowerCase(Locale.ROOT));
 		if (perm == null)
 			return null;
 

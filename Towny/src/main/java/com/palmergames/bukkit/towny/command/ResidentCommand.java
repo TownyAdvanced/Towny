@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -161,7 +162,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
 		if (sender instanceof Player) {
-			switch (args[0].toLowerCase()) {
+			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "tax":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "r");
@@ -173,10 +174,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				case "toggle":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentToggleTabCompletes), args[1]);
-					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase())) {
+					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase(Locale.ROOT))) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
 					} else if (args.length >= 3) {
-						String prevArg = args[args.length - 2].toLowerCase();
+						String prevArg = args[args.length - 2].toLowerCase(Locale.ROOT);
 						if (residentToggleModes.contains(prevArg)) {
 							return NameUtil.filterByStart(residentToggleModesUnionToggles, args[args.length - 1]);
 						} else if (BaseCommand.setOnOffCompletes.contains(prevArg)) {
@@ -191,7 +192,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, args[1]))
 							return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "mode":
 								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
 							case "perm":
@@ -403,7 +404,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyPermission perm = resident.getPermissions();
 		
 		Optional<Boolean> choice = Optional.empty();
-		if (newSplit.length == 2 && residentToggleChoices.contains(newSplit[0].toLowerCase())) {
+		if (newSplit.length == 2 && residentToggleChoices.contains(newSplit[0].toLowerCase(Locale.ROOT))) {
 			choice = BaseCommand.parseToggleChoice(newSplit[1]);
 		}
 

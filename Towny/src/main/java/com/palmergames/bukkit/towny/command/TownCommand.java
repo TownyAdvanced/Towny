@@ -292,7 +292,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if (sender instanceof Player player) {
 			
-			switch (args[0].toLowerCase()) {
+			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "online":
 				case "reslist":
 				case "outlawlist":
@@ -329,7 +329,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						case 3:
 							return getTownResidentNamesOfPlayerStartingWith(player, args[2]);
 						case 4:
-							switch (args[1].toLowerCase()) {
+							switch (args[1].toLowerCase(Locale.ROOT)) {
 								case "add":
 									return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
 								case "remove": {
@@ -372,7 +372,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						case 2:
 							return NameUtil.filterByStart(townAddRemoveTabCompletes, args[1]);
 						case 3:
-							switch (args[1].toLowerCase()) {
+							switch (args[1].toLowerCase(Locale.ROOT)) {
 								case "add":
 									return getTownyStartingWith(args[2], "r");
 								case "remove": {
@@ -450,7 +450,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 								}
 							}
 						case 3:
-							switch (args[1].toLowerCase()) {
+							switch (args[1].toLowerCase(Locale.ROOT)) {
 								case "accept":
 								case "deny": {
 									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
@@ -546,7 +546,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_SET, args[1]))
 				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 			
-			switch (args[1].toLowerCase()) {
+			switch (args[1].toLowerCase(Locale.ROOT)) {
 				case "mayor":
 					return NameUtil.filterByStart(NameUtil.getNames(town.getResidents()), args[2]);
 				case "perm":
@@ -1317,7 +1317,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!console)
 						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode(split[i]));
 					
-					if (!townListTabCompletes.contains(split[i].toLowerCase()))
+					if (!townListTabCompletes.contains(split[i].toLowerCase(Locale.ROOT)))
 						throw new TownyException(Translatable.of("msg_error_invalid_comparator_town", townListTabCompletes.stream().filter(comp -> sender.hasPermission(PermissionNodes.TOWNY_COMMAND_TOWN_LIST.getNode(comp))).collect(Collectors.joining(", "))));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
@@ -1388,7 +1388,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!admin) {
 			Resident resident = getResidentOrThrow(sender.getName());
 			town = resident.getTown();
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase()));
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_TOGGLE.getNode(split[0].toLowerCase(Locale.ROOT)));
 		}
 
 		Optional<Boolean> choice = Optional.empty();
@@ -1871,7 +1871,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Make sure we are allowed to set these permissions.
 
-		split = split.toLowerCase();
+		split = split.toLowerCase(Locale.ROOT);
 
 		if (split.contains("mobs")) {
 			if (town.getHomeblockWorld().isForceTownMobs())
@@ -1927,7 +1927,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		 * Only allow the player to assign ranks if they have the grant perm
 		 * for it.
 		 */
-		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(rank.toLowerCase()), Translatable.of("msg_no_permission_to_give_rank"));
+		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(rank.toLowerCase(Locale.ROOT)), Translatable.of("msg_no_permission_to_give_rank"));
 
 		if (split[0].equalsIgnoreCase("add")) {
 

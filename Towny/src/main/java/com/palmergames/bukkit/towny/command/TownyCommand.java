@@ -105,13 +105,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		switch (args[0].toLowerCase()) {
+		switch (args[0].toLowerCase(Locale.ROOT)) {
 			case "top":
 				switch (args.length) {
 					case 2:
 						return NameUtil.filterByStart(townyTopTabCompletes, args[1]);
 					case 3:
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "residents":
 							case "balance":
 								return NameUtil.filterByStart(townyTopTownNationCompletes, args[2]);

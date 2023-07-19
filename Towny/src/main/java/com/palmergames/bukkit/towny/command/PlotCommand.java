@@ -190,7 +190,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		if (sender instanceof Player) {
-			switch (args[0].toLowerCase()) {
+			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "set":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, getPlotSetCompletions()), args[1]);
@@ -230,7 +230,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length < 2)
 						break;
 					
-					switch (args[1].toLowerCase()) {
+					switch (args[1].toLowerCase(Locale.ROOT)) {
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
@@ -550,7 +550,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void tryPlotSetType(Player player, Resident resident, TownBlock townBlock, String[] split) throws TownyException {
-		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase()));
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase(Locale.ROOT)));
 		String plotTypeName = split[0];
 
 		// Handle type being reset
@@ -1133,7 +1133,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		// Make sure we are allowed to set these permissions.
 
-		split = split.toLowerCase();
+		split = split.toLowerCase(Locale.ROOT);
 
 		if (split.contains("mobs")) {
 			if (townBlock.getWorld().isForceTownMobs())

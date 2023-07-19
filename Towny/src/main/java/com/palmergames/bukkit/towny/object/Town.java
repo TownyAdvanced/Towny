@@ -1006,7 +1006,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getPlotTypePrice(TownBlockType type) {
-		double plotPrice = switch (type.getName().toLowerCase()) {
+		double plotPrice = switch (type.getName().toLowerCase(Locale.ROOT)) {
 			case "shop" -> getCommercialPlotPrice();
 			case "embassy" -> getEmbassyPlotPrice();
 			default -> getPlotPrice();

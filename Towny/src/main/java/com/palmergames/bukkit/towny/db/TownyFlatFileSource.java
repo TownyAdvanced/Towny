@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -426,7 +427,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * @return files - Files from inside the residents\towns\nations folder.
 	 */
 	private File[] receiveObjectFiles(String folder, String extension) {
-		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase().endsWith(extension));
+		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase(Locale.ROOT).endsWith(extension));
 	}
 	
 	/*

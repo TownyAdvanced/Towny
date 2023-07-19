@@ -122,7 +122,7 @@ public enum DatabaseConfig {
 		newDatabaseConfig.load();
 
 		for (DatabaseConfig root : DatabaseConfig.values()) {
-			String key = root.getRoot().toLowerCase();
+			String key = root.getRoot().toLowerCase(Locale.ROOT);
 			if (root.getComments().length > 0)
 				newDatabaseConfig.addComment(key, root.getComments());
 			Object value = databaseConfig.get(key) != null
@@ -141,15 +141,15 @@ public enum DatabaseConfig {
 	
 	public static String getString(DatabaseConfig node) {
 
-		return databaseConfig.getString(node.getRoot().toLowerCase(), node.getDefault());
+		return databaseConfig.getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault());
 	}
 	
 	public static int getInt(DatabaseConfig node) {
 
 		try {
-			return Integer.parseInt(databaseConfig.getString(node.getRoot().toLowerCase(), node.getDefault()).trim());
+			return Integer.parseInt(databaseConfig.getString(node.getRoot().toLowerCase(Locale.ROOT), node.getDefault()).trim());
 		} catch (NumberFormatException e) {
-			Towny.getPlugin().getLogger().severe(node.getRoot().toLowerCase() + " from database.yml");
+			Towny.getPlugin().getLogger().severe(node.getRoot().toLowerCase(Locale.ROOT) + " from database.yml");
 			return 0;
 		}
 	}

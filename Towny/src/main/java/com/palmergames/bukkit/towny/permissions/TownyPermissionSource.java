@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import net.kyori.adventure.util.TriState;
+
+import java.util.Locale;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -76,7 +79,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasWildOverride(TownyWorld world, Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,
@@ -116,7 +119,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasOwnTownOverride(Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_OWNTOWN_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_CLAIMED_OWNTOWN_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,
@@ -137,7 +140,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasTownOwnedOverride(Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_TOWNOWNED_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_CLAIMED_TOWNOWNED_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,
@@ -158,7 +161,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasAllTownOverride(Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALLTOWN_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALLTOWN_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,

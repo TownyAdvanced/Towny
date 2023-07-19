@@ -269,7 +269,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		
-		switch (args[0].toLowerCase()) {
+		switch (args[0].toLowerCase(Locale.ROOT)) {
 			case "reload":
 				if (args.length > 1)
 					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_RELOAD, adminReloadTabCompletes), args[1]);
@@ -279,7 +279,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				break;
 			case "set":
 				if (args.length > 1) {
-					switch (args[1].toLowerCase()) {
+					switch (args[1].toLowerCase(Locale.ROOT)) {
 						case "mayor":
 							switch (args.length) {
 								case 3:
@@ -311,7 +311,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2) {
 					return NameUtil.filterByStart(adminPlotTabCompletes, args[1]);
 				} else if (args.length > 2) {
-					switch (args[1].toLowerCase()) {
+					switch (args[1].toLowerCase(Locale.ROOT)) {
 						case "claim":
 							return getTownyStartingWith(args[2], "r");
 						case "meta":
@@ -385,7 +385,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2) {
 					return filterByStartOrGetTownyStartingWith(Collections.singletonList("new"), args[1], "+t");
 				} else if (args.length > 2 && !args[1].equalsIgnoreCase("new")) {
-					switch (args[2].toLowerCase()) {
+					switch (args[2].toLowerCase(Locale.ROOT)) {
 						case "add":
 							if (args.length == 4)
 								return null;
@@ -399,7 +399,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								case 5:
 									return getResidentsOfTownStartingWith(args[1], args[4]);
 								case 6:
-									switch (args[3].toLowerCase()) {
+									switch (args[3].toLowerCase(Locale.ROOT)) {
 										case "add":
 											return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[5]);
 										case "remove": {
@@ -430,7 +430,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							case 4:
 								return NameUtil.filterByStart(TownCommand.townAddRemoveTabCompletes, args[3]);
 							case 5:
-								switch (args[3].toLowerCase()) {
+								switch (args[3].toLowerCase(Locale.ROOT)) {
 									case "add":
 										return getTownyStartingWith(args[4], "r");
 									case "remove": {
@@ -483,7 +483,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2) {
 					return filterByStartOrGetTownyStartingWith(Collections.singletonList("new"), args[1], "+n");
 				} else if (args.length > 2 && !args[1].equalsIgnoreCase("new")) {
-					switch (args[2].toLowerCase()) {
+					switch (args[2].toLowerCase(Locale.ROOT)) {
 						case "add":
 							if (args.length == 4)
 								return getTownyStartingWith(args[3], "t");
@@ -538,7 +538,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2)
 					return NameUtil.filterByStart(adminTownyPermsCompletes, args[1]);
 				if (args.length > 2) {
-					switch (args[1].toLowerCase()) {
+					switch (args[1].toLowerCase(Locale.ROOT)) {
 						case "group":
 							if (args.length == 3)
 								return NameUtil.filterByStart(TownyPerms.getGroupList(), args[2]);
@@ -615,7 +615,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (!(object instanceof String string))
 			return false;
 
-		return switch (string.toLowerCase()) {
+		return switch (string.toLowerCase(Locale.ROOT)) {
 			case "y", "yes", "true" -> true;
 			default -> false;
 		};
@@ -653,7 +653,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
 			return;
 		}
-		if (!TownyPerms.getGroupList().contains(args[0].toLowerCase()))
+		if (!TownyPerms.getGroupList().contains(args[0].toLowerCase(Locale.ROOT)))
 			throw new TownyException(Translatable.of("msg_err_group_not_found", args[0]));
 
 		String group = args[0];
@@ -672,7 +672,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		boolean add = args[1].equalsIgnoreCase("addperm");
 		String node = args[2];
 		boolean changed = false;
-		switch (args[1].toLowerCase()) {
+		switch (args[1].toLowerCase(Locale.ROOT)) {
 		case "addperm":
 			if (groupNodes.contains(node))
 				throw new TownyException(Translatable.of("msg_err_group_already_has_node", group, node));

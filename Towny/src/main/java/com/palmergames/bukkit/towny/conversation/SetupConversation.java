@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Predicate;
 
 public class SetupConversation extends TownyConversation {
@@ -81,7 +82,7 @@ public class SetupConversation extends TownyConversation {
 	}
 	
 	private List<Question> buildQuestions() {
-		Predicate<String> trueOrFalse = (str) -> switch (str.toLowerCase()) {
+		Predicate<String> trueOrFalse = (str) -> switch (str.toLowerCase(Locale.ROOT)) {
 			case "y", "yes", "true", "n", "no", "false" -> true;
 			default -> false;
 		};

@@ -169,7 +169,7 @@ public class TownyUniverse {
         /*
          * Select the datasource.
          */
-        switch (loadDbType.toLowerCase()) {
+        switch (loadDbType.toLowerCase(Locale.ROOT)) {
             case "ff":
             case "flatfile": {
                 this.dataSource = new TownyFlatFileSource(towny, this);
@@ -210,7 +210,7 @@ public class TownyUniverse {
     private boolean saveDatabase(String saveDbType) {
         try {
             // Set the new class for saving.
-            switch (saveDbType.toLowerCase()) {
+            switch (saveDbType.toLowerCase(Locale.ROOT)) {
                 case "ff":
                 case "flatfile": {
                     this.dataSource = new TownyFlatFileSource(towny, this);
@@ -298,7 +298,7 @@ public class TownyUniverse {
 
 		String filteredName;
 		try {
-			filteredName = NameValidation.checkAndFilterPlayerName(residentName).toLowerCase();
+			filteredName = NameValidation.checkAndFilterPlayerName(residentName).toLowerCase(Locale.ROOT);
 		} catch (InvalidNameException ignored) {
 			return false;
 		}
@@ -335,7 +335,7 @@ public class TownyUniverse {
 
 		String filteredName = residentName;
 		try {
-			filteredName = NameValidation.checkAndFilterPlayerName(residentName).toLowerCase();
+			filteredName = NameValidation.checkAndFilterPlayerName(residentName).toLowerCase(Locale.ROOT);
 		} catch (InvalidNameException ignored) {
 		}
 		
@@ -412,7 +412,7 @@ public class TownyUniverse {
 	public void registerResident(@NotNull Resident resident) throws AlreadyRegisteredException {
 		Preconditions.checkNotNull(resident, "Resident cannot be null!");
 
-		if (residentNameMap.putIfAbsent(resident.getName().toLowerCase(), resident) != null) {
+		if (residentNameMap.putIfAbsent(resident.getName().toLowerCase(Locale.ROOT), resident) != null) {
 			throw new AlreadyRegisteredException(String.format("The resident with name '%s' is already registered!", resident.getName()));
 		}
 
@@ -430,7 +430,7 @@ public class TownyUniverse {
 	public void unregisterResident(@NotNull Resident resident) throws NotRegisteredException {
 		Preconditions.checkNotNull(resident, "Resident cannot be null!");
 
-		if (residentNameMap.remove(resident.getName().toLowerCase()) == null) {
+		if (residentNameMap.remove(resident.getName().toLowerCase(Locale.ROOT)) == null) {
 			throw new NotRegisteredException(String.format("The resident with the name '%s' is not registered!", resident.getName()));
 		}
 
@@ -474,7 +474,7 @@ public class TownyUniverse {
 		
     	String formattedName;
 		try {
-			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase();
+			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase(Locale.ROOT);
 		} catch (InvalidNameException e) {
 			return false;
 		}
@@ -498,7 +498,7 @@ public class TownyUniverse {
     	
 		String formattedName;
 		try {
-			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase();
+			formattedName = NameValidation.checkAndFilterName(townName).toLowerCase(Locale.ROOT);
 		} catch (InvalidNameException e) {
 			return null;
 		}
@@ -570,7 +570,7 @@ public class TownyUniverse {
 	public void registerTown(@NotNull Town town) throws AlreadyRegisteredException {
 		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
-		if (townNameMap.putIfAbsent(town.getName().toLowerCase(), town) != null) {
+		if (townNameMap.putIfAbsent(town.getName().toLowerCase(Locale.ROOT), town) != null) {
 			throw new AlreadyRegisteredException(String.format("The town with name '%s' is already registered!", town.getName()));
 		}
 		
@@ -589,7 +589,7 @@ public class TownyUniverse {
 	public void unregisterTown(@NotNull Town town) throws NotRegisteredException {
 		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
-		if (townNameMap.remove(town.getName().toLowerCase()) == null) {
+		if (townNameMap.remove(town.getName().toLowerCase(Locale.ROOT)) == null) {
 			throw new NotRegisteredException(String.format("The town with the name '%s' is not registered!", town.getName()));
 		}
 		
@@ -619,7 +619,7 @@ public class TownyUniverse {
 
 		String filteredName;
 		try {
-			filteredName = NameValidation.checkAndFilterName(nationName).toLowerCase();
+			filteredName = NameValidation.checkAndFilterName(nationName).toLowerCase(Locale.ROOT);
 		} catch (InvalidNameException ignored) {
 			return false;
 		}
@@ -655,7 +655,7 @@ public class TownyUniverse {
 
 		String filteredName;
 		try {
-			filteredName = NameValidation.checkAndFilterName(nationName).toLowerCase();
+			filteredName = NameValidation.checkAndFilterName(nationName).toLowerCase(Locale.ROOT);
 		} catch (InvalidNameException ignored) {
 			return null;
 		}
@@ -710,7 +710,7 @@ public class TownyUniverse {
 	public void registerNation(@NotNull Nation nation) throws AlreadyRegisteredException {
 		Preconditions.checkNotNull(nation, "Nation cannot be null!");
 
-		if (nationNameMap.putIfAbsent(nation.getName().toLowerCase(), nation) != null) {
+		if (nationNameMap.putIfAbsent(nation.getName().toLowerCase(Locale.ROOT), nation) != null) {
 			throw new AlreadyRegisteredException(String.format("The nation with name '%s' is already registered!", nation.getName()));
 		}
 
@@ -729,7 +729,7 @@ public class TownyUniverse {
 	public void unregisterNation(@NotNull Nation nation) throws NotRegisteredException {
 		Preconditions.checkNotNull(nation, "Nation cannot be null!");
 
-		if (nationNameMap.remove(nation.getName().toLowerCase()) == null) {
+		if (nationNameMap.remove(nation.getName().toLowerCase(Locale.ROOT)) == null) {
 			throw new NotRegisteredException(String.format("The nation with the name '%s' is not registered!", nation.getName()));
 		}
 

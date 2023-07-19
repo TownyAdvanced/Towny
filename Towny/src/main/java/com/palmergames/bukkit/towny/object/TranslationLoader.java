@@ -275,7 +275,7 @@ public class TranslationLoader {
 	 */
 	private static String getTranslationValue(Map.Entry<String, Object> entry) {
 		// Messages blocked from being overriden.
-		if (entry.getKey().toLowerCase().startsWith("msg_ptw_warning")) {
+		if (entry.getKey().toLowerCase(Locale.ROOT).startsWith("msg_ptw_warning")) {
 			// Get the defaultLocale's translation of the PTW warnings.
 			String msg = String.valueOf(entry.getValue());
 			Towny.getPlugin().getLogger().warning("Attempted to override an protected string. Skipped " + entry.getKey());

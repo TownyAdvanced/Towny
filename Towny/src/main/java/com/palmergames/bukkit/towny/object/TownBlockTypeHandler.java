@@ -60,7 +60,7 @@ public final class TownBlockTypeHandler {
 		if (exists(type.getName()))
 			throw new TownyException(String.format("API: A type named '%s' is already registered!", type.getName()));
 		
-		townBlockTypeMap.put(type.getName().toLowerCase(), type);
+		townBlockTypeMap.put(type.getName().toLowerCase(Locale.ROOT), type);
 		Towny.getPlugin().getLogger().info(String.format("API: A new townblock type was registered: %s", type.getName()));
 	}
 
@@ -122,7 +122,7 @@ public final class TownBlockTypeHandler {
 				Set<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.getOrDefault("switchIds", "")), name);
 				Set<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.getOrDefault("allowedBlocks", "")), name);
 				
-				TownBlockType townBlockType = newData.get(name.toLowerCase());
+				TownBlockType townBlockType = newData.get(name.toLowerCase(Locale.ROOT));
 				TownBlockData data;
 				
 				if (townBlockType == null) {

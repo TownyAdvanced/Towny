@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class TownyPermission {
 	public enum ActionType {
@@ -32,7 +33,7 @@ public class TownyPermission {
 		
 		@Override
 		public String toString() {
-			return super.toString().toLowerCase();
+			return super.toString().toLowerCase(Locale.ROOT);
 		}
 	}
 
@@ -59,7 +60,7 @@ public class TownyPermission {
 
 		@Override
 		public String toString() {
-			return super.toString().toLowerCase();
+			return super.toString().toLowerCase(Locale.ROOT);
 		}
 	}
 	
@@ -124,7 +125,7 @@ public class TownyPermission {
 	// TODO Restructure how perms are saved
 	public void set(String s, boolean b) {
 		
-		switch (s.toLowerCase()) {
+		switch (s.toLowerCase(Locale.ROOT)) {
 			case "denyall":
 				reset();
 				break;
@@ -206,7 +207,7 @@ public class TownyPermission {
 		StringBuilder output = new StringBuilder();
 		
 		for (PermLevel permLevel : PermLevel.values) {
-			String permLevelName = permLevel.name().toLowerCase();
+			String permLevelName = permLevel.name().toLowerCase(Locale.ROOT);
 			
 			for (ActionType actionType : ActionType.values) {
 				if (perms[permLevel.getIndex()][actionType.getIndex()]) {
