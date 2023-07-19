@@ -1,13 +1,19 @@
 package com.palmergames.bukkit.util;
 
+import com.google.common.collect.ImmutableSet;
 import com.palmergames.bukkit.towny.object.AbstractRegistryList;
 import org.bukkit.Registry;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class EntityLists extends AbstractRegistryList<EntityType> {
 
@@ -46,6 +52,24 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	public static final EntityLists PVP_EXPLOSIVE = newBuilder().add("firework_rocket", "tnt_minecart", "tnt", "end_crystal").build();
 	
 	public static final EntityLists ANIMALS = newBuilder().filter(type -> type.getEntityClass() != null && Animals.class.isAssignableFrom(type.getEntityClass())).build();
+	
+	private static final Map<String, EntityLists> GROUPS = new HashMap<>();
+
+	@NotNull
+	@Unmodifiable
+	public static Set<EntityType> getGrouping(@NotNull String groupName) {
+		final EntityLists grouping = GROUPS.get(groupName.toLowerCase(Locale.ROOT));
+
+		return grouping != null ? ImmutableSet.copyOf(grouping.tagged) : ImmutableSet.of();
+	}
+
+	public static boolean hasGroup(@NotNull String groupName) {
+		return GROUPS.containsKey(groupName.toLowerCase(Locale.ROOT));
+	}
+
+	public static void addGroup(@NotNull String groupName, @NotNull EntityLists group) {
+		GROUPS.put(groupName.toLowerCase(Locale.ROOT), group);
+	}
 	
 	public static Builder<EntityType, EntityLists> newBuilder() {
 		return new Builder<>(Registry.ENTITY_TYPE, EntityType.class, EntityLists::new).filter(type -> type != EntityType.UNKNOWN);

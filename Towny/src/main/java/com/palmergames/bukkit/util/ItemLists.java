@@ -1,10 +1,10 @@
 package com.palmergames.bukkit.util;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -304,25 +304,37 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * Config-useable material groups.
 	 */
-	public static final Set<String> GROUPS = Arrays.stream(ItemLists.class.getFields()).filter(field -> Modifier.isStatic(field.getModifiers())).map(Field::getName).filter(name -> !name.equals("GROUPS")).collect(Collectors.toSet());
+	private static final Map<String, ItemLists> GROUPS = Arrays.stream(ItemLists.class.getFields())
+		.filter(field -> Modifier.isStatic(field.getModifiers()))
+		.filter(field -> field.getType().equals(ItemLists.class))
+		.collect(Collectors.toMap(field -> field.getName().toLowerCase(Locale.ROOT), field -> {
+			try {
+				return (ItemLists) field.get(null);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}));
 	
 	/**
 	 * Returns a pre-configured list from the GROUPS.
 	 * 
-	 * @param groupName - String value of one of the {@link ItemLists#GROUPS}
-	 * @return - Set&lt;Material&gt; grouping of materials, or an empty set if the grouping was not found.
+	 * @param groupName String value of one of the {@link ItemLists#GROUPS}
+	 * @return Set&lt;Material&gt; grouping of materials, or an empty set if the grouping was not found.
 	 */
 	@NotNull
 	@Unmodifiable
-	public static Set<Material> getGrouping(String groupName) {
-		if (!GROUPS.contains(groupName))
-			return ImmutableSet.of();
+	public static Set<Material> getGrouping(@NotNull String groupName) {
+		final ItemLists grouping = GROUPS.get(groupName.toLowerCase(Locale.ROOT));
 
-		try {
-			return ImmutableSet.copyOf(((ItemLists) ItemLists.class.getField(groupName).get(null)).tagged);
-		} catch (Exception e) {
-			return ImmutableSet.of();
-		}
+		return grouping != null ? ImmutableSet.copyOf(grouping.tagged) : ImmutableSet.of();
+	}
+
+	public static boolean hasGroup(@NotNull String groupName) {
+		return GROUPS.containsKey(groupName.toLowerCase(Locale.ROOT));
+	}
+	
+	public static void addGroup(@NotNull String groupName, @NotNull ItemLists group) {
+		GROUPS.put(groupName.toLowerCase(Locale.ROOT), group);
 	}
 	
 	public static Builder<Material, ItemLists> newBuilder() {
