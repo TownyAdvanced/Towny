@@ -379,14 +379,18 @@ public class TownyPlayerListener implements Listener {
 
 				/*
 				 * Test stripping logs, scraping copper blocks, dye-able signs,
-				 * glass bottles, flint&steel on TNT and shears on beehomes
+				 * glass bottles, flint&steel on TNT and shears on beehomes,
+				 * catches hoes taking dirt from Rooted Dirt blocks,
+				 * prevents players from using brushes on brush-able blocks (suspicious sand, suspicious gravel)
 				 * 
 				 * Treat interaction as a Destroy test.
 				 */
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
 					(ItemLists.DYES.contains(item) && ItemLists.SIGNS.contains(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN))) { 
+					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN)) ||
+					clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) ||
+					ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH) { 
 
 					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat))
 						event.setCancelled(true);
@@ -399,18 +403,20 @@ public class TownyPlayerListener implements Listener {
 					event.setCancelled(true);
 				
 				/*
-				 * Test putting candles on cakes. Treat interaction as a Build test.
+				 * Test putting candles on cakes.
+				 * Test wax usage.
+				 * Test putting plants in pots.
+				 * Test if we're putting a book into a BookContainer.
+				 * Treat interaction as a Build test.
 				 */
-				if (ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE &&
-						!TownyActionEventExecutor.canBuild(player, loc, item))
-					event.setCancelled(true);
-				
-				/*
-				 * Test wax usage. Treat interaction as a Build test.
-				 */
-				if (item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat) &&
-						!TownyActionEventExecutor.canBuild(player, loc, item))
-					event.setCancelled(true);
+				if ((ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE) ||  
+					ItemLists.PLANTS.contains(item) && clickedMat == Material.FLOWER_POT ||
+					item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat) ||
+					ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat)) {
+
+					if (!TownyActionEventExecutor.canBuild(player, loc, item))
+						event.setCancelled(true);
+				}
 
 				/*
 				 * Test if we're about to spawn either entity. Uses build test.
@@ -420,21 +426,6 @@ public class TownyPlayerListener implements Listener {
 					event.setCancelled(true);
 
 				/*
-				 * Test if we're putting a book into a BookContainer.
-				 */
-				if (ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat) &&
-						!TownyActionEventExecutor.canBuild(player, loc, item))
-					event.setCancelled(true);
-
-				/*
-				 * Catches hoes taking dirt from Rooted Dirt blocks.
-				 */
-				if (clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) &&
-						!TownyActionEventExecutor.canDestroy(player, loc, clickedMat))
-					event.setCancelled(true);
-
-
-				/*
 				 * Prevents players using wax on signs
 				 */
 				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock) &&
@@ -442,13 +433,6 @@ public class TownyPlayerListener implements Listener {
 					event.setCancelled(true);
 					return;
 				}
-				
-				/*
-				 * Prevents players from using brushes on brush-able blocks (suspicious sand, suspicious gravel)
-				 */
-				if (ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH &&
-						!TownyActionEventExecutor.canDestroy(player, clickedBlock))
-					event.setCancelled(true);
 			}
 		}
 		
