@@ -357,8 +357,10 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Test item_use. 
 			 */
-			if (TownySettings.isItemUseMaterial(item, loc) && !TownyActionEventExecutor.canItemuse(player, loc, item))
+			if (TownySettings.isItemUseMaterial(item, loc) && !TownyActionEventExecutor.canItemuse(player, loc, item)) {
 				event.setCancelled(true);
+				return;
+			}
 
 			/*
 			 * Test other Items using non-ItemUse test.
@@ -394,43 +396,44 @@ public class TownyPlayerListener implements Listener {
 
 					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat))
 						event.setCancelled(true);
+					return;
 				}
 
-				/*
-				 * Test bonemeal usage. Treat interaction as a Build test.
-				 */
-				if (item == Material.BONE_MEAL && !TownyActionEventExecutor.canBuild(player, loc, item))
-					event.setCancelled(true);
-				
 				/*
 				 * Test putting candles on cakes.
 				 * Test wax usage.
 				 * Test putting plants in pots.
 				 * Test if we're putting a book into a BookContainer.
+				 * Test bonemeal usage.
+				 * 
 				 * Treat interaction as a Build test.
 				 */
 				if ((ItemLists.CANDLES.contains(item) && clickedMat == Material.CAKE) ||  
 					ItemLists.PLANTS.contains(item) && clickedMat == Material.FLOWER_POT ||
 					item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat) ||
-					ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat)) {
+					ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat) ||
+					item == Material.BONE_MEAL && !TownyActionEventExecutor.canBuild(player, loc, item)) {
 
 					if (!TownyActionEventExecutor.canBuild(player, loc, item))
 						event.setCancelled(true);
+					return;
 				}
 
 				/*
 				 * Test if we're about to spawn either entity. Uses build test.
 				 */
-				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL &&
-						!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item))
-					event.setCancelled(true);
+				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) {
+					if (!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item))
+						event.setCancelled(true);
+					return;
+				}
 
 				/*
 				 * Prevents players using wax on signs
 				 */
-				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock) &&
-						!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
-					event.setCancelled(true);
+				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock)) {
+					if (!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat))
+						event.setCancelled(true);
 					return;
 				}
 			}
