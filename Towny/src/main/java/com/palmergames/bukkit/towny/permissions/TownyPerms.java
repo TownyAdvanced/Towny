@@ -283,8 +283,9 @@ public class TownyPerms {
 		Set<String> permList = new HashSet<>(getDefault());
 		
 		//Check for town membership
-		if (resident.hasTown()) {
-			permList.addAll(getTownDefault(getTownName(resident)));
+		final Town town = resident.getTownOrNull();
+		if (town != null) {
+			permList.addAll(getTownDefault(town.getName().toLowerCase(Locale.ROOT)));
 			
 			// Is Mayor?
 			if (resident.isMayor()) permList.addAll(getTownMayor());
@@ -295,8 +296,9 @@ public class TownyPerms {
 			}
 			
 			//Check for nation membership
-			if (resident.hasNation()) {
-				permList.addAll(getNationDefault(getNationName(resident)));
+			final Nation nation = town.getNationOrNull();
+			if (nation != null) {
+				permList.addAll(getNationDefault(nation.getName().toLowerCase(Locale.ROOT)));
 				// Is King?
 				if (resident.isKing()) permList.addAll(getNationKing());
 							
@@ -316,25 +318,18 @@ public class TownyPerms {
 			permList.add("towny.nationless");
 		}
 		
-		List<String> playerPermArray = sort(new ArrayList<String>(permList));
+		List<String> playerPermArray = sort(permList);
 		LinkedHashMap<String, Boolean> newPerms = new LinkedHashMap<String, Boolean>();
 
-		Boolean value = false;
-		for (String permission : playerPermArray) {			
-			if (permission.contains("{townname}")) {
-				if (resident.hasTown()) {
-					String placeholderPerm = permission.replace("{townname}", getTownName(resident));
-					newPerms.put(placeholderPerm, true);
-				}
-			} else if (permission.contains("{nationname}")) {
-				if (resident.hasNation()) {
-					String placeholderPerm = permission.replace("{nationname}", getNationName(resident));
-					newPerms.put(placeholderPerm, true);
-				}
-			} else {
-				value = (!permission.startsWith("-"));
-				newPerms.put((value ? permission : permission.substring(1)), value);
-			}
+		for (String permission : playerPermArray) {
+			if (permission.contains("{townname}") && resident.getTownOrNull() != null)
+				permission = permission.replace("{townname}", resident.getTownOrNull().getName().toLowerCase(Locale.ROOT));
+			
+			if (permission.contains("{nationname}") && resident.getNationOrNull() != null)
+				permission = permission.replace("{nationname}", resident.getNationOrNull().getName().toLowerCase(Locale.ROOT));
+			
+			final boolean value = !permission.startsWith("-");
+			newPerms.put(value ? permission : permission.substring(1), value);
 		}
 		return newPerms;
 		
@@ -507,14 +502,6 @@ public class TownyPerms {
 		return null;
 	}
 
-	private static String getTownName(Resident resident) {
-		return resident.getTownOrNull().getName().toLowerCase(Locale.ROOT);
-	}
-
-	private static String getNationName(Resident resident) {
-		return resident.getNationOrNull().getName().toLowerCase(Locale.ROOT);
-	}
-
 	private static boolean isPeaceful(Town town) {
 		return town.isNeutral() || (town.hasNation() && town.getNationOrNull().isNeutral()); 
 	}
@@ -590,7 +577,7 @@ public class TownyPerms {
 
 	private static int getNodePriority(String node) {
 		try {
-			return Integer.valueOf(node.substring(RANKPRIORITY_PREFIX.length()));
+			return Integer.parseInt(node.substring(RANKPRIORITY_PREFIX.length()));
 		} catch (NumberFormatException ignored) {
 			return 0;
 		}
@@ -618,7 +605,7 @@ public class TownyPerms {
 	 * @param permList - List of permissions
 	 * @return List sorted for priority
 	 */
-	private static List<String> sort(List<String> permList) {
+	private static List<String> sort(Iterable<String> permList) {
 		
 		List<String> result = new ArrayList<String>();
 
@@ -745,7 +732,7 @@ public class TownyPerms {
 	}
 	
 	private static void buildGroupPermsMap() {
-		perms.getKeys(true).stream().forEach(key -> groupPermsMap.put(key, perms.getStringList(key)));
+		perms.getKeys(true).forEach(key -> groupPermsMap.put(key, perms.getStringList(key)));
 	}
 
 	private static void buildComments() {
