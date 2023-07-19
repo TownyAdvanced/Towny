@@ -502,7 +502,7 @@ public class TownySettings {
 		 * Scan over them and replace any grouping with the contents of the group.
 		 * Add single item or grouping to ItemUseMaterials.
 		 */
-		itemUseMaterials.addAll(toMaterialSet(getStrArr(ConfigNodes.PROT_ITEM_USE_MAT));
+		itemUseMaterials.addAll(toMaterialSet(getStrArr(ConfigNodes.PROT_ITEM_USE_MAT)));
 	}
 
 	public static Set<EntityType> toEntityTypeSet(final List<String> entityList) {
@@ -1098,8 +1098,6 @@ public class TownySettings {
 		
 		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ENTITY_LISTS).entrySet())
 			EntityLists.addGroup(entry.getKey(), (EntityLists) constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, entry.getValue().split(","), EntityType::getEntityClass));
-		
-		System.out.println(EntityLists.getGrouping("test"));
 	}
 	
 	private static <T extends Keyed, F extends AbstractRegistryList<T>> AbstractRegistryList<T> constructRegistryList(final AbstractRegistryList.Builder<T, F> builder, final String registryName, final String[] elements, final Function<T, Class<?>> classExtractor) throws TownyInitException {
