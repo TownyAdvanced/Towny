@@ -77,7 +77,7 @@ public class PlayerCacheUtil {
 			cache.updateCoord(worldCoord);
 
 			boolean result = cache.getCachePermission(material, action); // Throws NullPointerException if the cache is empty
-			TownyMessaging.sendDebugMsg("Cache permissions for " + player.getName() + " using " + material + ":" + action + " = " + result);
+			TownyMessaging.sendDebugMsg("Cache permissions for " + player.getName() + " using " + material.getKey() + ":" + action + " = " + result);
 			return result;
 
 		} catch (NullPointerException e) {
