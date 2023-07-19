@@ -8915,3 +8915,5 @@ v0.92.0.11:
   - Use material key for cache debug message, courtesy of Warrior with PR #6852.
   - Implement a filter method for registry lists, courtesy of Warrior with PR #6859.
   - Take care of all the places we weren't using Locale.ROOT with toLowerCase().
+0.99.5.4:
+  - Fix PlayerInteractEvent throwing NoSuchFieldError on 1.19.4 servers using a 1.20 datapack.
