@@ -8917,3 +8917,6 @@ v0.92.0.11:
   - Take care of all the places we weren't using Locale.ROOT with toLowerCase().
 0.99.5.4:
   - Fix PlayerInteractEvent throwing NoSuchFieldError on 1.19.4 servers using a 1.20 datapack.
+  - Fix registry lists' add method not working as expected, courtesy of Warrior with PR #6869.
+    - Closes #6866.
+  - Fix teleport refund being done synchronously, courtesy of Warrior with PR #6870.
