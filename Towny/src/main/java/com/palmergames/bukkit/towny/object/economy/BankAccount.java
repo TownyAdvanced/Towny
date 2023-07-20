@@ -133,11 +133,6 @@ public class BankAccount extends Account {
 		return TownyEconomyHandler.getFormattedBalance(getHoldingBalance());
 	}
 
-	@Override
-	public void removeAccount() {
-		TownyEconomyHandler.removeAccount(getName());
-	}
-
 	/**
 	 * return true if this BankAcount is one belonging to a Town.
 	 */
