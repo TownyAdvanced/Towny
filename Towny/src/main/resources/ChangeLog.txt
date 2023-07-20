@@ -8920,3 +8920,8 @@ v0.92.0.11:
   - Fix registry lists' add method not working as expected, courtesy of Warrior with PR #6869.
     - Closes #6866.
   - Fix teleport refund being done synchronously, courtesy of Warrior with PR #6870.
+0.99.5.5:
+  - Fix EconomyAccount removals not paying their value into the ClosedEconomy Server Account.
+    - Closes #6874.
+  - Remove redundant 1.20 check, courtesy of Warrior with PR #6873.
+  - Add testing for registry lists, courtesy of Warrior with PR #6871.
