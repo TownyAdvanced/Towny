@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
@@ -44,6 +45,11 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 
 		final T matched = BukkitTools.matchRegistry(this.registry, element);
 		return matched != null && this.contains(matched);
+	}
+	
+	@VisibleForTesting
+	public Collection<T> tagged() {
+		return this.tagged;
 	}
 
 	@SuppressWarnings("unused")
