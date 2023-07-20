@@ -58,7 +58,6 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		private final Set<Predicate<T>> allMatchPredicates = new HashSet<>();
 		// Predicates where only 1 has to match, this is used for functions that include new elements. (endsWith, startsWith)
 		private final Set<Predicate<T>> anyMatchPredicates = new HashSet<>();
-		private @Nullable Set<T> exceptions;
 
 		/**
 		 * @param registry The bukkit registry, used for matching strings into {@link T}.
@@ -79,9 +78,6 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 					if (allMatchPredicates.stream().allMatch(predicate -> predicate.test(element)) && (anyMatchPredicates.isEmpty() || anyMatchPredicates.stream().anyMatch(predicate -> predicate.test(element))))
 						matches.add(element);
 			}
-
-			if (exceptions != null)
-				matches.addAll(exceptions);
 
 			return convertFunction.apply(matches);
 		}
@@ -159,13 +155,10 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		 * @param names An array of names to add.
 		 */
 		public Builder<T, F> add(@NotNull String... names) {
-			if (exceptions == null)
-				exceptions = new HashSet<>();
-
 			for (String name : names) {
 				final T match = BukkitTools.matchRegistry(this.registry, name);
 				if (match != null)
-					exceptions.add(match);
+					anyMatchPredicates.add(t -> t.equals(match));
 				else
 					TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
 			}
