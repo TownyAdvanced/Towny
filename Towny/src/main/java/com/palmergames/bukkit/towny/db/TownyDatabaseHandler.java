@@ -621,12 +621,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
 				try {
-					townBalance = town.getAccount().getHoldingBalance();					
-					if (TownySettings.isEcoClosedEconomyEnabled()){
-						town.getAccount().deposit(townBalance, "Town Rename");
-					} 
+					townBalance = town.getAccount().getHoldingBalance();
 					town.getAccount().removeAccount();
-					
 				} catch (Exception ignored) {
 					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + ", could not be received from the economy plugin and will not be able to be converted.");
 				}
@@ -730,11 +726,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive())
 				try {
 					nationBalance = nation.getAccount().getHoldingBalance();
-					if (TownySettings.isEcoClosedEconomyEnabled()){
-						nation.getAccount().withdraw(nationBalance, "Nation Rename");
-					}
 					nation.getAccount().removeAccount();
-					
 				} catch (Exception ignored) {
 					TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
 				}
@@ -809,7 +801,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Get balance in case this a server using ico5.  
 			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
 				balance = resident.getAccount().getHoldingBalance();
-				resident.getAccount().removeAccount();				
+				resident.getAccount().removeAccount();
 			}
 			// Change account name over.
 			if (TownyEconomyHandler.isActive() && resident.getAccountOrNull() != null)
@@ -824,7 +816,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
 			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
 				resident.getAccount().setName(resident.getName());
-				resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");				
+				resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
 			}
 			
 			// Save resident with new name.
