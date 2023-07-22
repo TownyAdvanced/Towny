@@ -161,4 +161,4 @@ For building, open your terminal / command prompt and navigate to the Towny Dire
 
 ___
 
-<a href=https://dedimc.promo/towny>![Spigot_Banner_Towny](https://github.com/TownyAdvanced/Towny/assets/879756/559c8340-82e5-41fc-a10c-af0dcf47f38f)</a>
+<a href=https://dedimc.promo/towny><img src=https://github-production-user-asset-6210df.s3.amazonaws.com/879756/250277564-559c8340-82e5-41fc-a10c-af0dcf47f38f.png></a>
