@@ -1657,11 +1657,11 @@ msg_you_are_unknown: "你并不被Towny所知。"
 #Generic Resident/Town/Nation/Thing is not known to Towny.
 msg_townyobject_unknown: "%s并不被Towny所知。"
 #Shown when a resident is unknown to Towny.
-msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_resident_unknown: "%s不是可以被识别的居民。"
 #Shown when a town is unknown to Towny.
-msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_town_unknown: "%s不是可以被识别的城镇。"
 #Shown when a nation is unknown to Towny.
-msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_nation_unknown: "%s不是可以被识别的国家。"
 #Shown when a resident doesn't belong to a town.
 msg_err_townyobject_x_has_no_town: "%s 不属于任何一个城镇."
 #Shown when a town doesn't belong to a nation.
@@ -1696,7 +1696,7 @@ msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
 msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
 msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
-msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia."
+msg_folia_scoreboard: "目前不支持在Folia的服务端上更改计分板。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
@@ -1708,7 +1708,7 @@ msg_tax_collected_from_plots: "<aqua>你的城镇从各个土地税中收取了%
 #Message shown when a nation collects taxes from its towns that are conquered.
 msg_tax_collected_from_conquered_towns: "<aqua>你的国家从被征服的各个城镇中征收了%s的税。"
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被免除了国家所征收的税。"
-msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
-msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
+msg_nation_set_conquered_tax__amount_set: "%s把征服的税额设置为%s。"
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "你不能将征服税额设置到%s以上。"
 msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
 msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
