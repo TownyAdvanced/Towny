@@ -24,7 +24,7 @@ jobs:
       - name: compile towny with maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B clean package -P no-apidoc
+        run: mvn -B clean package -P no-apidoc -DskipTests=false
       - name: setup PHP
         uses: shivammathur/setup-php@v2
         with:

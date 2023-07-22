@@ -23,4 +23,4 @@ jobs:
             - name: Compile with Maven
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: mvn -B compile test
+              run: mvn -B compile test -DskipTests=false

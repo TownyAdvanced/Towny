@@ -32,6 +32,7 @@
     <properties>
         <java.version>17</java.version>
         <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
+        <skipTests>true</skipTests>
     </properties>
 
     <scm>
@@ -472,6 +473,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.1.2</version>
+                    <configuration>
+                        <skipTests>${skipTests}</skipTests>
+                    </configuration>
                 </plugin>
             </plugins>
         <resources>
@@ -483,6 +487,19 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>test</id>
+            <activation>
+                <property>
+                    <name>maven.test.skip</name>
+                    <value>false</value>
+                </property>
+            </activation>
+            <properties>
+                <skipTests>false</skipTests>
+            </properties>
+        </profile>
+
         <profile>
             <id>intellij-idea-only</id>
             <activation>
