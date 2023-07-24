@@ -20,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -320,6 +321,10 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		return mapColorHexCode;
 	}
 
+	public Color getColor() {
+		return Color.decode(getMapColorHexCode());
+	}
+	
 	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
 	}
