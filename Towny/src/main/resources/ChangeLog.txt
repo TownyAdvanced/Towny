@@ -8925,3 +8925,5 @@ v0.92.0.11:
     - Closes #6874.
   - Remove redundant 1.20 check, courtesy of Warrior with PR #6873.
   - Add testing for registry lists, courtesy of Warrior with PR #6871.
+  - Skip tests by default, courtesy of Warrior with PR #6878.
+  - Refactor the regen API to use hashmaps, courtesy of Warrior with PR #6827.
