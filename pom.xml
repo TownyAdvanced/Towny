@@ -31,10 +31,12 @@
         <module>providers/BaseProviders</module>
         <module>providers/FoliaProvider</module>
         <module>providers/PaperProvider</module>
+        <module>tests</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     </properties>
 
     <dependencyManagement>

@@ -155,6 +155,9 @@ public class Towny extends JavaPlugin {
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
 			getLogger().log(Level.SEVERE, tie.getMessage(), tie);
+		} catch (IllegalStateException exception) {
+			//bStats relocation issues in test scope
+			getLogger().log(Level.SEVERE, exception.getMessage());
 		}
 		
 		// NOTE: Runs regardless if Towny errors out!

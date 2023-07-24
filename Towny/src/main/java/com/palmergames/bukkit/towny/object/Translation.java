@@ -88,7 +88,7 @@ public final class Translation {
 			return key;
 		}
 		
-		String data = translations.get(defaultLocale.toString()).get(key.toLowerCase(Locale.ROOT));
+		String data = translations.getOrDefault(defaultLocale.toString(), Collections.emptyMap()).get(key.toLowerCase(Locale.ROOT));
 
 		if (data == null) {
 			// The default locale in the config is missing the language string, they are probably using a non-en_US locale.
@@ -130,7 +130,7 @@ public final class Translation {
 	 * @return The localized string.
 	 */
 	public static String of(String key, Locale locale) {
-		String data = translations.get(validateLocale(locale.toString())).get(key.toLowerCase(Locale.ROOT));
+		String data = translations.getOrDefault(validateLocale(locale.toString()), Collections.emptyMap()).get(key.toLowerCase(Locale.ROOT));
 
 		if (data == null) {
 			// The locale is missing the language string or the locale is invalid, try to use the default locale.

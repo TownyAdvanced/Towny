@@ -196,7 +196,7 @@ public class TranslationLoader {
 				stream.filter(p -> TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(p.toString().replace("-", "_"))))
 					.forEach(p -> lang.add(FileNameUtils.getBaseName(p.toString())));
 			}
-		} catch (URISyntaxException | IOException e) {
+		} catch (URISyntaxException | IOException | IllegalArgumentException e) {
 			plugin.getLogger().log(Level.WARNING, "An exception occurred while getting language file names from the plugin jar", e);
 		}
 		return lang;
