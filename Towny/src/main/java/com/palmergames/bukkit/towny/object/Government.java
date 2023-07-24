@@ -19,6 +19,7 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -321,8 +322,18 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		return mapColorHexCode;
 	}
 
-	public Color getColor() {
-		return Color.decode("#" + getMapColorHexCode());
+	/**
+	 * Gets the map color of a nation.
+	 *
+	 * @return The {@link Color} this object is in.
+	 */
+	@Nullable
+	public Color getMapColor() {
+		try {
+			return Color.decode("#" + getMapColorHexCode());
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 	
 	public void setMapColorHexCode(String mapColorHexCode) {
