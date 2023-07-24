@@ -132,6 +132,7 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
+		SpawnUtil.initialize(this);
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
@@ -157,9 +158,6 @@ public class Towny extends JavaPlugin {
 		// Check for plugins that we use or we develop, 
 		// print helpful information to startup log.
 		PluginIntegrations.getInstance().checkForPlugins(this);
-		// Initialize SpawnUtil only after the Translation class has figured out a language.
-		// N.B. Important that localization loaded correctly for this step.
-		SpawnUtil.initialize(this);
 		// Setup bukkit command interfaces
 		registerSpecialCommands();
 		registerCommands();
