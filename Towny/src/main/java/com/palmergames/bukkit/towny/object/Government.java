@@ -323,7 +323,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	/**
-	 * Gets the map color of a nation.
+	 * Gets the map color of a government if it has one.
 	 *
 	 * @return The {@link Color} this object is in.
 	 */
