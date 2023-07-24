@@ -477,13 +477,13 @@ public class CombatUtil {
 
 		if (isSameTown(a, b))
 			return true;
-		if (a.hasNation() && b.hasNation() && a.getNationOrNull().equals(b.getNationOrNull()))
+		if (a.hasNation() && b.hasNation() && a.getNationOrNull().hasTown(b))
 			return true;
 		return false;
 	}
 
 	/**
-	 * Is town b in a nation with town a?
+	 * Is town b the same town as town a?
 	 * 
 	 * @param a - Town A in comparison
 	 * @param b - Town B in comparison
@@ -491,7 +491,10 @@ public class CombatUtil {
 	 */
 	public static boolean isSameTown(Town a, Town b) {
 
-		return a == b;
+		if (a == null || b == null)
+			return false;
+
+		return a.getUUID().equals(b.getUUID());
 	}
 
 	/**

@@ -8927,3 +8927,4 @@ v0.92.0.11:
   - Add testing for registry lists, courtesy of Warrior with PR #6871.
   - Skip tests by default, courtesy of Warrior with PR #6878.
   - Refactor the regen API to use hashmaps, courtesy of Warrior with PR #6827.
+  - Make a couple CombatUtil methods more reliable.
