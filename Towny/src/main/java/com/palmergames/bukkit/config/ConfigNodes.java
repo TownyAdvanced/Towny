@@ -850,8 +850,8 @@ public enum ConfigNodes {
 			"global_town_settings.show_town_notifications",
 			"true",
 			"",
-			"# Enables the [~Home] message.",
-			"# If false it will make it harder for enemies to find the home block during a war"),
+			"# Enables the [~Home] TownName - PlotOwner - PlotName message line..",
+			"# If false players will not be shown any notifications when they move in and out of towns, between plots."),
 	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN(
 			"global_town_settings.allow_outlaws_to_enter_town",
 			"true",
