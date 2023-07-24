@@ -322,7 +322,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	}
 
 	public Color getColor() {
-		return Color.decode(getMapColorHexCode());
+		return Color.decode("#" + getMapColorHexCode());
 	}
 	
 	public void setMapColorHexCode(String mapColorHexCode) {
