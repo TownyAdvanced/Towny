@@ -37,7 +37,10 @@ import org.bukkit.Registry;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -360,6 +363,15 @@ public class TownySettings {
 		
 		// Always run reload consumers after everything else is reloaded.
 		CONFIG_RELOAD_LISTENERS.values().forEach(consumer -> consumer.accept(config));
+	}
+	
+	@VisibleForTesting
+	public static void loadDefaultConfig() {
+		try {
+			loadConfig(Files.createTempFile("towny-temp-config", ".yml"), "0.0.0.0");
+		} catch (IOException e) {
+			throw new RuntimeException("Could not create temporary file", e);
+		}
 	}
 	
 	private static void loadProtectedMobsList() {

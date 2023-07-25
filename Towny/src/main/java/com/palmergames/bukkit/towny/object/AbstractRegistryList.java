@@ -163,8 +163,10 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 				final T match = BukkitTools.matchRegistry(this.registry, name);
 				if (match != null)
 					anyMatchPredicates.add(t -> t.equals(match));
-				else
+				else {
 					TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
+					anyMatchPredicates.add(t -> false);
+				}
 			}
 
 			return this;
