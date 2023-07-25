@@ -8930,4 +8930,6 @@ v0.92.0.11:
   - Make a couple CombatUtil methods more reliable.
 0.99.5.6:
   - Add getMapColor to Government, courtesy of ewof #6881. (First-Time Contributor!)
-  - Fix an issue with Material.BRUSH appearing on <1.20 servers.
+  - Fix returning early in the PlayerInteractEvent listeners, courtesy of Warrior with PR #6886.
+  - Fix Item Registry matching incorrectly, courtesy of Warrior with PR #6885.
+    - Closes #6868.
