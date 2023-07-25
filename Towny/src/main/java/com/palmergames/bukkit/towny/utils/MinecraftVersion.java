@@ -11,9 +11,4 @@ public class MinecraftVersion {
 	
 	public static final Version CURRENT_VERSION = Version.fromString(Bukkit.getBukkitVersion());
 	public static final Version OLDEST_VERSION_SUPPORTED = MINECRAFT_1_16;
-	
-
-	public static boolean is120Plus() {
-		return CURRENT_VERSION.isNewerThanOrEquals(MINECRAFT_1_20);
-	}
 }
