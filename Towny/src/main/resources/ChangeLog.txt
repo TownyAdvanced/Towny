@@ -8928,3 +8928,5 @@ v0.92.0.11:
   - Skip tests by default, courtesy of Warrior with PR #6878.
   - Refactor the regen API to use hashmaps, courtesy of Warrior with PR #6827.
   - Make a couple CombatUtil methods more reliable.
+0.99.5.6:
+  - Add getMapColor to Government, courtesy of ewof #6881. (First-Time Contributor!)
