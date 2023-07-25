@@ -394,9 +394,10 @@ public class TownyPlayerListener implements Listener {
 					clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) ||
 					MinecraftVersion.is120Plus() && ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH) { 
 
-					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat))
+					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat)) {
 						event.setCancelled(true);
-					return;
+						return;
+					}
 				}
 
 				/*
@@ -414,27 +415,30 @@ public class TownyPlayerListener implements Listener {
 					ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat) ||
 					item == Material.BONE_MEAL && !TownyActionEventExecutor.canBuild(player, loc, item)) {
 
-					if (!TownyActionEventExecutor.canBuild(player, loc, item))
+					if (!TownyActionEventExecutor.canBuild(player, loc, item)) {
 						event.setCancelled(true);
-					return;
+						return;
+					}
 				}
 
 				/*
 				 * Test if we're about to spawn either entity. Uses build test.
 				 */
 				if (item == Material.ARMOR_STAND || item == Material.END_CRYSTAL) {
-					if (!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item))
+					if (!TownyActionEventExecutor.canBuild(player, clickedBlock.getRelative(event.getBlockFace()).getLocation(), item)) {
 						event.setCancelled(true);
-					return;
+						return;
+					}
 				}
 
 				/*
 				 * Prevents players using wax on signs
 				 */
 				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock)) {
-					if (!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat))
+					if (!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
 						event.setCancelled(true);
-					return;
+						return;
+					}
 				}
 			}
 		}
@@ -470,9 +474,10 @@ public class TownyPlayerListener implements Listener {
 				clickedMat == Material.COMMAND_BLOCK){
 				
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				if (!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat))
+				if (!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat)) {
 					event.setCancelled(true);
-				return;
+					return;
+				}
 			}
 			
 			/*
