@@ -392,7 +392,7 @@ public class TownyPlayerListener implements Listener {
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN)) ||
 					clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) ||
-					ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH) { 
+					MinecraftVersion.is120Plus() && ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH) { 
 
 					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat))
 						event.setCancelled(true);
