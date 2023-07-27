@@ -8942,3 +8942,5 @@ v0.92.0.11:
   - Bump org.junit.jupiter:junit-jupiter from 5.9.3 to 5.10.0.
 0.99.5.8:
   - Cancel scheduled tasks on shutdown, courtesy of Warrior with PR #6890.
+  - Make it possible to recover from safemode without restarting, courtesy of Warrior with PR #6526.
+    - If you have managed to put your server into safemode, and you can manage to fix what's caused it, you can now use /ta reload all to have towny re-attempt loading.
