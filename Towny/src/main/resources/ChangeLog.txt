@@ -8935,3 +8935,4 @@ v0.92.0.11:
     - Closes #6868.
 0.99.5.7:
   - Fix ConcurrentModificationError in saving the regen list.
+  - Fix chunk notification tasks still running when Towny has disabled itself. 

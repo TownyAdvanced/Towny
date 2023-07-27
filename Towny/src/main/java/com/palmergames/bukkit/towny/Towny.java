@@ -49,6 +49,7 @@ import com.palmergames.bukkit.towny.scheduling.impl.BukkitTaskScheduler;
 import com.palmergames.bukkit.towny.scheduling.impl.PaperTaskScheduler;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.ChangelogReader;
+import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -427,6 +428,7 @@ public class Towny extends JavaPlugin {
 		toggleTimersOff();
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
+		ChunkNotificationUtil.cancelChunkNotificationTasks();
 
 		playerCache.clear();
 
