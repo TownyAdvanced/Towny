@@ -2702,20 +2702,20 @@ public class TownySettings {
 		};
 	}
 
-	public static String getAcceptCommand(){
-		return getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND);
+	public static String getAcceptCommand() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND) : ConfigNodes.INVITE_SYSTEM_ACCEPT_COMMAND.getDefault();
 	}
 
-	public static String getDenyCommand(){
-		return getString(ConfigNodes.INVITE_SYSTEM_DENY_COMMAND);
+	public static String getDenyCommand() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_DENY_COMMAND) : ConfigNodes.INVITE_SYSTEM_DENY_COMMAND.getDefault();
 	}
 
-	public static String getConfirmCommand(){
-		return getString(ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND);
+	public static String getConfirmCommand() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND) : ConfigNodes.INVITE_SYSTEM_CONFIRM_COMMAND.getDefault();
 	}
 
-	public static String getCancelCommand(){
-		return getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND);
+	public static String getCancelCommand() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND) : ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND.getDefault();
 	}
 
 	public static boolean getOutsidersPreventPVPToggle() {
