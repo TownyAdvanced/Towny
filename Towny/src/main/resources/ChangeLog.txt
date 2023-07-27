@@ -8936,3 +8936,7 @@ v0.92.0.11:
 0.99.5.7:
   - Fix ConcurrentModificationError in saving the regen list.
   - Fix chunk notification tasks still running when Towny has disabled itself. 
+  - Use concurrent collection for regen queue, courtesy of Warrior with PR #6889.
+  - Cancel chunk notification tasks on logout, courtesy of Warrior with PR #6888.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.9.3 to 5.10.0.
+  - Bump org.junit.jupiter:junit-jupiter from 5.9.3 to 5.10.0.
