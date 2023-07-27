@@ -1,10 +1,9 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
@@ -23,11 +22,12 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class ChunkNotificationUtil {
 
-	private final static Map<Player, ScheduledTask> playerActionTasks = new HashMap<>();
-	private final static Map<Player, BossBar> playerBossBarMap = new HashMap<>();
+	private final static Map<UUID, ScheduledTask> playerActionTasks = new HashMap<>();
+	private final static Map<UUID, BossBar> playerBossBarMap = new HashMap<>();
 
 	public static void showChunkNotification(Player player, Resident resident, WorldCoord to, WorldCoord from) {
 		String msg = null;
@@ -51,8 +51,7 @@ public class ChunkNotificationUtil {
 	}
 
 	public static void cancelChunkNotificationTasks() {
-		List<ScheduledTask> tasks = new ArrayList<>(playerActionTasks.values());
-		tasks.forEach(task -> task.cancel());
+		playerActionTasks.values().forEach(ScheduledTask::cancel);
 	}
 
 	private static void sendChunkNoticiation(Player player, String msg) {
@@ -69,7 +68,7 @@ public class ChunkNotificationUtil {
 		if (seconds > 3) {
 			// Towny is showing the actionbar message longer than vanilla MC allows, using a scheduled task.
 			// Cancel any older tasks running to prevent them from leaking over.
-			if (playerActionTasks.get(player) != null)
+			if (playerActionTasks.get(player.getUniqueId()) != null)
 				removePlayerActionTasks(player);
 	
 			AtomicInteger remainingSeconds = new AtomicInteger(seconds);
@@ -77,11 +76,11 @@ public class ChunkNotificationUtil {
 				TownyMessaging.sendActionBarMessageToPlayer(player, msgComponent);
 				remainingSeconds.getAndDecrement();
 				
-				if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player)) 
+				if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player.getUniqueId())) 
 					removePlayerActionTasks(player);
 			}, 0, 20L);
 			
-			playerActionTasks.put(player, task);
+			playerActionTasks.put(player.getUniqueId(), task);
 		} else {
 			// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
 			TownyMessaging.sendActionBarMessageToPlayer(player, msgComponent);
@@ -90,7 +89,7 @@ public class ChunkNotificationUtil {
 
 	private static void sendBossBarChunkNotification(Player player, Component message) {
 		int ticks = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION) * 20;
-		if (playerBossBarMap.containsKey(player)) {
+		if (playerBossBarMap.containsKey(player.getUniqueId())) {
 			removePlayerActionTasks(player);
 			removePlayerBossBar(player);
 		}
@@ -103,23 +102,28 @@ public class ChunkNotificationUtil {
 		TownyMessaging.sendBossBarMessageToPlayer(player, bossBar);
 
 		final ScheduledTask task = Towny.getPlugin().getScheduler().runAsyncLater(() -> {
-			playerActionTasks.remove(player);
+			playerActionTasks.remove(player.getUniqueId());
 			removePlayerBossBar(player);
 		}, ticks);
 
-		playerBossBarMap.put(player, bossBar);
-		playerActionTasks.put(player, task);
+		playerBossBarMap.put(player.getUniqueId(), bossBar);
+		playerActionTasks.put(player.getUniqueId(), task);
 	}
 
 	private static void removePlayerActionTasks(Player player) {
-		final ScheduledTask task = playerActionTasks.remove(player);
+		final ScheduledTask task = playerActionTasks.remove(player.getUniqueId());
 		if (task != null)
 			task.cancel();
 	}
 
 	private static void removePlayerBossBar(Player player) {
-		final BossBar bar = playerBossBarMap.remove(player);
+		final BossBar bar = playerBossBarMap.remove(player.getUniqueId());
 		if (bar != null)
 			Towny.getAdventure().player(player).hideBossBar(bar);
+	}
+	
+	public static void cancelPlayerTasks(@NotNull Player player) {
+		removePlayerActionTasks(player);
+		removePlayerBossBar(player);
 	}
 }
