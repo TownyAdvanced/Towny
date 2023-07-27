@@ -8940,3 +8940,5 @@ v0.92.0.11:
   - Cancel chunk notification tasks on logout, courtesy of Warrior with PR #6888.
   - Bump org.junit.jupiter:junit-jupiter-api from 5.9.3 to 5.10.0.
   - Bump org.junit.jupiter:junit-jupiter from 5.9.3 to 5.10.0.
+0.99.5.8:
+  - Cancel scheduled tasks on shutdown, courtesy of Warrior with PR #6890.
