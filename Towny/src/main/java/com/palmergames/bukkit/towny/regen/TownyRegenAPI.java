@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
 public class TownyRegenAPI {
 
 	// A list of worldCoords which are to be regenerated.
-	private static List<WorldCoord> regenWorldCoordList = new ArrayList<>();
+	private static final Set<WorldCoord> regenWorldCoordList = ConcurrentHashMap.newKeySet();
 	
 	// table containing snapshot data of active reversions.
 	private static final Map<String, PlotBlockData> plotChunks = new ConcurrentHashMap<>();
@@ -132,7 +131,7 @@ public class TownyRegenAPI {
 	/**
 	 * @return the list of WorldCoords which are waiting to be regenerated.
 	 */
-	public static List<WorldCoord> getRegenQueueList() {
+	public static Collection<WorldCoord> getRegenQueueList() {
 		return regenWorldCoordList;
 	}
 
@@ -149,10 +148,8 @@ public class TownyRegenAPI {
 	 * @param world TownyWorld to remove from the queue.
 	 */
 	private static void removeRegenQueueListOfWorld(@NotNull TownyWorld world) {
-		regenWorldCoordList = getRegenQueueList().stream()
-			.filter(wc -> !world.equals(wc.getTownyWorld()))
-			.collect(Collectors.toList());
-		TownyUniverse.getInstance().getDataSource().saveRegenList();
+		if (regenWorldCoordList.removeIf(wc -> world.equals(wc.getTownyWorld())))
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
 	/**
@@ -170,15 +167,12 @@ public class TownyRegenAPI {
 	 * @param save true to save the regenlist.
 	 */
 	public static void addToRegenQueueList(WorldCoord wc, boolean save) {
-		if (regenWorldCoordList.contains(wc))
-			return;
-		regenWorldCoordList.add(wc);
-		if (save)
+		if (regenWorldCoordList.add(wc) && save)
 			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
-	public static  void getWorldCoordFromQueueForRegeneration() {
-		for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
+	public static void getWorldCoordFromQueueForRegeneration() {
+		for (WorldCoord wc : TownyRegenAPI.getRegenQueueList()) {
 			// We have enough plot chunks regenerating, break out of the loop.
 			if (getPlotChunks().size() >= 20)
 				break;
@@ -211,9 +205,10 @@ public class TownyRegenAPI {
 		return plotChunks;
 	}
 
-	public static List<PlotBlockData> getActivePlotBlockDatas() {
-		return new ArrayList<>(plotChunks.values());
+	public static Collection<PlotBlockData> getActivePlotBlockDatas() {
+		return plotChunks.values();
 	}
+
 	/**
 	 * @return true if there are any chunks being processed.
 	 */
