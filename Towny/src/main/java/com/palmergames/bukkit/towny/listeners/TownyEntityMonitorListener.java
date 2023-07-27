@@ -77,7 +77,7 @@ public class TownyEntityMonitorListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
 		Player defenderPlayer = event.getEntity();

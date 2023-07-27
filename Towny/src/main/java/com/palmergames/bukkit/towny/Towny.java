@@ -83,11 +83,14 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -107,7 +110,7 @@ public class Towny extends JavaPlugin {
 	private static BukkitAudiences adventure;
 
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
-	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
+	private final Set<TownyInitException.TownyError> errors = new HashSet<>();
 	
 	public Towny() {
 		plugin = this;
@@ -129,14 +132,11 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
+		SpawnUtil.initialize(this);
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
 			loadFoundation(false);
-
-			// Check for plugins that we use or we develop, 
-			// print helpful information to startup log.
-			PluginIntegrations.getInstance().checkForPlugins(this);
 
 			// Make sure the timers are stopped for a reset, then started.
 			cycleTimers();
@@ -145,14 +145,6 @@ public class Towny extends JavaPlugin {
 			// Check for plugin updates if the Minecraft version is still supported.
 			if (isMinecraftVersionStillSupported())
 				TownyUpdateChecker.checkForUpdates(this);
-			// Initialize SpawnUtil only after the Translation class has figured out a language.
-			// N.B. Important that localization loaded correctly for this step.
-			SpawnUtil.initialize(this);
-			// Setup bukkit command interfaces
-			registerSpecialCommands();
-			registerCommands();
-			// Add custom metrics charts.
-			addMetricsCharts();
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
 			getLogger().log(Level.SEVERE, tie.getMessage(), tie);
@@ -162,6 +154,15 @@ public class Towny extends JavaPlugin {
 		// Important for safe mode.
 
 		adventure = BukkitAudiences.create(this);
+
+		// Check for plugins that we use or we develop, 
+		// print helpful information to startup log.
+		PluginIntegrations.getInstance().checkForPlugins(this);
+		// Setup bukkit command interfaces
+		registerSpecialCommands();
+		registerCommands();
+		// Add custom metrics charts.
+		addMetricsCharts();
 
 		// If we aren't going to enter safe mode, do the following:
 		if (!isError()) {
@@ -262,24 +263,22 @@ public class Towny extends JavaPlugin {
 		townyUniverse.performCleanupAndBackup();
 	}
 
-	private void loadConfig(boolean reload) {
+	public void loadConfig(boolean reload) {
 		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml"), getVersion());
 		if (reload) {
-			// If Towny is in Safe Mode (for the main config) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
-				removeError(TownyInitException.TownyError.MAIN_CONFIG);
+			// If Towny is in Safe Mode (for the main config) turn off Safe Mode and setup economy if it isn't already.
+			if (removeError(TownyInitException.TownyError.MAIN_CONFIG) && TownySettings.isUsingEconomy() && !TownyEconomyHandler.isActive()) {
+				PluginIntegrations.getInstance().setupAndPrintEconomy(TownySettings.isUsingEconomy());
 			}
 			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_config"));
 		}
 	}
 	
-	private void loadLocalization(boolean reload) {
+	public void loadLocalization(boolean reload) {
 		Translation.loadTranslationRegistry();
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.LOCALIZATION)) {
-				removeError(TownyInitException.TownyError.LOCALIZATION);
-			}
+			removeError(TownyInitException.TownyError.LOCALIZATION);
 			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_lang"));
 		}
 	}
@@ -291,9 +290,7 @@ public class Towny extends JavaPlugin {
 		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml"));
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.DATABASE_CONFIG)) {
-				removeError(TownyInitException.TownyError.DATABASE_CONFIG);
-			}
+			removeError(TownyInitException.TownyError.DATABASE_CONFIG);
 		}
 	}
 	
@@ -302,9 +299,7 @@ public class Towny extends JavaPlugin {
 		// This will only run if permissions is fine.
 		if (reload) {
 			// If Towny is in Safe Mode (for Permissions) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.PERMISSIONS)) {
-				removeError(TownyInitException.TownyError.PERMISSIONS);
-			}
+			removeError(TownyInitException.TownyError.PERMISSIONS);
 			// Update everyone who is online with the changes made.
 			TownyPerms.updateOnlinePerms();
 		}
@@ -484,18 +479,17 @@ public class Towny extends JavaPlugin {
 
 		final PluginManager pluginManager = getServer().getPluginManager();
 
-		if (!isError()) {			
-			// Huds
-			pluginManager.registerEvents(new HUDManager(this), this);
+		// Huds
+		pluginManager.registerEvents(new HUDManager(this), this);
 
-			// Manage player deaths and death payments
-			pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
-			pluginManager.registerEvents(new TownyVehicleListener(this), this);
-			pluginManager.registerEvents(new TownyServerListener(this), this);
-			pluginManager.registerEvents(new TownyCustomListener(this), this);
-			pluginManager.registerEvents(new TownyWorldListener(this), this);
-			pluginManager.registerEvents(new TownyLoginListener(), this);
-		}
+		// Manage player deaths and death payments
+		pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
+		pluginManager.registerEvents(new TownyVehicleListener(this), this);
+		pluginManager.registerEvents(new TownyServerListener(this), this);
+		pluginManager.registerEvents(new TownyCustomListener(this), this);
+		pluginManager.registerEvents(new TownyWorldListener(this), this);
+		pluginManager.registerEvents(new TownyLoginListener(), this);
+		
 
 		// Always register these events.
 		pluginManager.registerEvents(new TownyPlayerListener(this), this);
@@ -553,20 +547,24 @@ public class Towny extends JavaPlugin {
 		return !errors.isEmpty();
 	}
 	
-	private boolean isError(@NotNull TownyInitException.TownyError error) {
+	@ApiStatus.Internal
+	public boolean isError(@NotNull TownyInitException.TownyError error) {
 		return errors.contains(error);
 	}
 	
+	@ApiStatus.Internal
 	public void addError(@NotNull TownyInitException.TownyError error) {
 		errors.add(error);
 	}
 	
-	private void removeError(@NotNull TownyInitException.TownyError error) {
-		errors.remove(error);
+	@ApiStatus.Internal
+	public boolean removeError(@NotNull TownyInitException.TownyError error) {
+		return errors.remove(error);
 	}
 
+	@ApiStatus.Internal
 	@NotNull
-	public List<TownyInitException.TownyError> getErrors() {
+	public Collection<TownyInitException.TownyError> getErrors() {
 		return errors;
 	}
 
@@ -825,7 +823,7 @@ public class Towny extends JavaPlugin {
 
 			commandMap.registerAll("towny", commands);
 		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new TownyInitException("An issue has occured while registering custom commands.", TownyInitException.TownyError.OTHER, e);
+			throw new TownyInitException("An issue has occurred while registering custom commands.", TownyInitException.TownyError.OTHER, e);
 		}
 	}
 	
