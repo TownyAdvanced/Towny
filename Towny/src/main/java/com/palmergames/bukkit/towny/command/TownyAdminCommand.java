@@ -2104,8 +2104,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownBlockTypeHandler.initialize();
 
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_reloaded_config"));
-			plugin.removeError(TownyInitException.TownyError.MAIN_CONFIG);
-			plugin.removeError(TownyInitException.TownyError.LOCALIZATION);
 		} catch (TownyException | TownyInitException e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_reload_error"));
 			plugin.getLogger().log(Level.WARNING, "An exception occurred while reloading the config", e);
