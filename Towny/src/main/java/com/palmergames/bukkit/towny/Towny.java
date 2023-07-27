@@ -444,6 +444,9 @@ public class Towny extends JavaPlugin {
 
 		this.townyUniverse = null;
 
+		if (this.scheduler instanceof FoliaTaskScheduler foliaScheduler)
+			foliaScheduler.cancelTasks();
+
 		plugin.getLogger().info("Version: " + version + " - Plugin Disabled");
 		Bukkit.getLogger().info("=============================================================");
 	}
