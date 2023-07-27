@@ -114,4 +114,12 @@ public class FoliaTaskScheduler implements TaskScheduler {
 	public @NotNull ScheduledTask runAsyncRepeating(@NotNull Runnable runnable, long delay, long period) {
 		return new FoliaScheduledTask(this.asyncScheduler.runAtFixedRate(this.plugin, task -> runnable.run(), delay * 50L, period * 50L, TimeUnit.MILLISECONDS));
 	}
+
+	/**
+	 * Cancels all active tasks that have been scheduled by {@code this.plugin}
+	 */
+	public void cancelTasks() {
+		this.asyncScheduler.cancelTasks(this.plugin);
+		this.globalRegionScheduler.cancelTasks(this.plugin);
+	}
 }
