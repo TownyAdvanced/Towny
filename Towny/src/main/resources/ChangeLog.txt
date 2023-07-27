@@ -8933,3 +8933,5 @@ v0.92.0.11:
   - Fix returning early in the PlayerInteractEvent listeners, courtesy of Warrior with PR #6886.
   - Fix Item Registry matching incorrectly, courtesy of Warrior with PR #6885.
     - Closes #6868.
+0.99.5.7:
+  - Fix ConcurrentModificationError in saving the regen list.

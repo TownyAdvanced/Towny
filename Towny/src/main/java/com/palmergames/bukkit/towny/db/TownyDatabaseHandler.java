@@ -1089,7 +1089,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public boolean saveRegenList() {
         queryQueue.add(() -> {
         	File file = new File(dataFolderPath + File.separator + "regen.txt");
-			Collection<String> lines = TownyRegenAPI.getRegenQueueList().stream()
+			Collection<String> lines = new ArrayList<>(TownyRegenAPI.getRegenQueueList()).stream()
 				.map(wc -> wc.getWorldName() + "," + wc.getX() + "," + wc.getZ())
 				.collect(Collectors.toList());
 			FileMgmt.listToFile(lines, file.getPath());
