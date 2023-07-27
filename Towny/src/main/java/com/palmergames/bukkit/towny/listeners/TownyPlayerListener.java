@@ -34,6 +34,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
@@ -197,6 +198,7 @@ public class TownyPlayerListener implements Listener {
 
 		plugin.deleteCache(event.getPlayer());
 		TownyPerms.removeAttachment(event.getPlayer().getName());
+		ChunkNotificationUtil.cancelPlayerTasks(event.getPlayer());
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
