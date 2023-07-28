@@ -88,13 +88,13 @@ mode_5: '默认进入国家聊天频道'
 mode_6: '可以在敌国边界用 %s 来制造战区.'
 plot_perms: '用 %s 而不是 %s 来设置权限.'
 plot_perms_1: '默认外来者没有居民的土地权限.'
-res_list: '居民列表'
+res_list: '居民'
 res_sing: '居民'
 mayor_sing: '城主'
 admin_sing: '管理员'
 town_sing: '城镇'
 nation_sing: '国家'
-nation_plu: '国家列表'
+nation_plu: '国家'
 king_sing: '领导者'
 town_plu: '城镇'
 world_plu: '世界列表'
@@ -248,7 +248,7 @@ msg_set_outpost_spawn: '&b成功改变前哨传送点.'
 msg_set_title: '&b%s 获得了 %s &b的头衔.'
 msg_set_surname: '&b%s 获得了 %s&b的后缀.'
 msg_clear_title_surname: '&b %2$s 的 %1$s 被清除了.'
-msg_clear_plot_material: '&b这块地皮已经被清除了以下块类型： %s'
+msg_clear_plot_material: '&b这块地皮已经被清除了%s的区块类型'
 msg_set_perms: '&b成功将权限设置为:'
 msg_set_claim: '&b成功改变 %s 的可声明状态为 %s'
 msg_set_perms_reset: '&b成功重置 %s 的所有土地的权限.'
@@ -743,7 +743,7 @@ msg_town_forcepvp_setting_set_to: '城镇 %s 的强制PVP设置为 %s'
 msg_town_forcedisabledpvp_setting_set_to: '城镇 %s 的强制管理员禁用PVP设置为 %s'
 msg_nation_changed_open: '&c国家的公开状态为 %s.'
 msg_err_already_in_a_nation: '你的城镇已经加入了一个国家.'
-msg_err_nation_not_open: '&c国家 %s 不是对所有人开放的，请向国家领导者或助手请求以加入。'
+msg_err_nation_not_open: '&c国家%s不是对所有人开放的，请询问这个国家的领导者或助手以加入。'
 msg_err_nation_homeblock_in_another_world: '&c你的城镇之家与国都不在同一个世界.'
 status_bank_town_penalty_upkeep: '过度圈地费用：'
 #Added in 0.53:
@@ -1694,7 +1694,7 @@ msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plo
 msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_setup_command_folia: "由于对话API不工作，“/ta install”命令当前在Folia上不起作用，因此请参阅下面的安装指南。"
 msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
 msg_folia_scoreboard: "目前不支持在Folia的服务端上更改计分板。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
