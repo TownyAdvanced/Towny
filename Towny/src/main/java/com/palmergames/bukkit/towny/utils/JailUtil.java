@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import com.palmergames.bukkit.towny.object.Position;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -255,8 +256,8 @@ public class JailUtil {
 
 	public static void createJailPlot(TownBlock townBlock, Town town, Location location) throws TownyException {
 		UUID uuid = UUID.randomUUID();
-		List<Location> jailSpawns = new ArrayList<Location>(1);
-		jailSpawns.add(location);
+		List<Position> jailSpawns = new ArrayList<>(1);
+		jailSpawns.add(Position.ofLocation(location));
 		Jail jail = new Jail(uuid, town, townBlock, jailSpawns);
 		TownyUniverse.getInstance().registerJail(jail);
 		jail.save();
