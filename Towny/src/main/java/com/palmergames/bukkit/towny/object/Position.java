@@ -77,7 +77,7 @@ public class Position {
 	
 	@NotNull
 	public Location asLocation() {
-		return new Location(world.getBukkitWorld(), this.x, this.y, this.z, this.pitch, this.yaw);
+		return new Location(world.getBukkitWorld(), this.x, this.y, this.z, this.yaw, this.pitch);
 	}
 	
 	@NotNull
