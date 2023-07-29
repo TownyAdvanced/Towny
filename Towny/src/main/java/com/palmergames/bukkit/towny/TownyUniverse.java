@@ -1070,7 +1070,7 @@ public class TownyUniverse {
      */
     public void newJailInternal(String uuid) {
     	// Remaining fields are set later on in the loading process.
-    	Jail jail = new Jail(UUID.fromString(uuid), null, null, (Collection<Position>) null);
+    	Jail jail = new Jail(UUID.fromString(uuid), null, null, new ArrayList<Position>());
     	registerJail(jail);
     }
 
