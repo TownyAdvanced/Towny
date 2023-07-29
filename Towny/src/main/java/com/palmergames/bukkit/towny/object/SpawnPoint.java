@@ -48,8 +48,11 @@ public class SpawnPoint {
 	}
 
 	public void drawParticle() {
-		Location origin = centreLocation(position.asLocation());
 		final World world = position.world().getBukkitWorld();
+		if (world == null)
+			return;
+		
+		Location origin = centreLocation(position.asLocation());
 		int i = 0;
 
 		for (RingCoord ringPosition : RING_PATTERN) {
