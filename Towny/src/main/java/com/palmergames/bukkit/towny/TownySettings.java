@@ -458,7 +458,7 @@ public class TownySettings {
 
 		config.save();
 
-		loadCustomGroups();
+		loadCustomRegistryLists();
 		loadSwitchAndItemUseMaterialsLists();
 		loadProtectedMobsList();
 		ChunkNotification.loadFormatStrings();
@@ -1092,15 +1092,16 @@ public class TownySettings {
 			newConfig.set(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(), config.get(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()));
 	}
 	
-	private static void loadCustomGroups() {
+	private static void loadCustomRegistryLists() {
 		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ITEM_LISTS).entrySet())
-			ItemLists.addGroup(entry.getKey(), (ItemLists) constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, entry.getValue().split(","), Material::getData));
+			ItemLists.addGroup(entry.getKey(), (ItemLists) constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList(entry.getValue().split(",")), mat -> mat.data));
 		
 		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ENTITY_LISTS).entrySet())
-			EntityLists.addGroup(entry.getKey(), (EntityLists) constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, entry.getValue().split(","), EntityType::getEntityClass));
+			EntityLists.addGroup(entry.getKey(), (EntityLists) constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList(entry.getValue().split(",")), EntityType::getEntityClass));
 	}
 	
-	private static <T extends Keyed, F extends AbstractRegistryList<T>> AbstractRegistryList<T> constructRegistryList(final AbstractRegistryList.Builder<T, F> builder, final String registryName, final String[] elements, final Function<T, Class<?>> classExtractor) throws TownyInitException {
+	@VisibleForTesting
+	public static <T extends Keyed, F extends AbstractRegistryList<T>> AbstractRegistryList<T> constructRegistryList(final AbstractRegistryList.Builder<T, F> builder, final String registryName, final Iterable<String> elements, final Function<T, Class<?>> classExtractor) throws TownyInitException {
 		for (final String e : elements) {
 			final String element = e.trim();
 			
@@ -1125,23 +1126,48 @@ public class TownySettings {
 			else if (element.startsWith("!~"))
 				builder.notContains(element.substring(2));
 			else if (element.startsWith("c:")) {
-				final Class<?> desired;
-				try {
-					desired = Class.forName(element.substring(2));
-				} catch (ClassNotFoundException ex) {
-					throw new TownyInitException("Could not find class named " + element.substring(2), TownyInitException.TownyError.MAIN_CONFIG);
-				}
+				final String className = element.substring(2);
+				boolean classFound = false;
 				
-				builder.filter(t -> {
-					Class<?> clazz = classExtractor.apply(t);
-					return clazz != null && desired.isAssignableFrom(clazz);
-				});
+				// Check certain packages so that fully qualified names aren't required, i.e. 'Animals' will work.
+				for (String packageName : REGISTRY_LIST_PACKAGES)
+					classFound |= checkClass(builder, classExtractor, packageName + "." + className);
+				
+				// Check exact class, since this could be a fully qualified name already.
+				classFound |= checkClass(builder, classExtractor, className);
+				
+				// The user's class name might be wrong/wrongly cased, let them know about it.
+				if (!classFound)
+					throw new TownyInitException("Could not find class named " + className, TownyInitException.TownyError.MAIN_CONFIG);
 			} else 
 				TownyMessaging.sendErrorMsg("Invalid format for element " + element);
 		}
 		
 		return builder.build();
 	}
+	
+	private static <T extends Keyed, F extends AbstractRegistryList<T>> boolean checkClass(AbstractRegistryList.Builder<T, F> builder, Function<T, Class<?>> classExtractor, String className) {
+		final Class<?> desired;
+		try {
+			desired = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+		
+		builder.filter(t -> {
+			final Class<?> clazz = classExtractor.apply(t);
+			return clazz != null && desired.isAssignableFrom(clazz);
+		});
+		
+		return true;
+	}
+	
+	private static final List<String> REGISTRY_LIST_PACKAGES = List.of(
+		"org.bukkit.entity",
+		"org.bukkit.entity.minecart",
+		"org.bukkit.block.data",
+		"org.bukkit.block.data.type"
+	);
 	
 	public static String getDefaultFarmblocks() {
 		Set<String> farmMaterials = new HashSet<>();
