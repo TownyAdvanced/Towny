@@ -30,7 +30,6 @@ public class Jail implements Savable {
 	private final Map<SpawnPointLocation, Position> jailCellMap = new ConcurrentHashMap<>();
 	private final List<Position> jailCells = new ArrayList<>();
 	
-	@Deprecated
 	public Jail(UUID uuid, Town town, TownBlock townBlock, List<Location> jailCells) {
 		this(uuid, town, townBlock, jailCells.stream().map(Position::ofLocation).collect(Collectors.toList()));
 	}

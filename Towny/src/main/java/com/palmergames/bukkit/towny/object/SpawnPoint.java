@@ -15,7 +15,6 @@ public class SpawnPoint {
 	
 	private static final ArrayList<RingCoord> RING_PATTERN = createRing();
 	
-	@Deprecated
 	public SpawnPoint(Location loc, SpawnPointType type) {
 		this(Position.ofLocation(loc), type);
 	}
