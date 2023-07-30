@@ -2,14 +2,10 @@ package com.palmergames.bukkit.towny.object;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.Tag;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.bukkit.Material.*;
 import static org.junit.jupiter.api.Assertions.*;
