@@ -807,7 +807,7 @@ msg_err_nation_has_not_set_a_spawn_location: '国家没有设置传送点.'
 msg_err_resident_doesnt_belong_to_any_town: '该居民不属于任何城镇'
 msg_err_could_not_set_default_modes_for: '无法设置默认模式： '
 #Added in 0.60
-msg_set_war_allowed_on: '这个和平的世界内不能发动战争.'
+msg_set_war_allowed_on: '这个世界内将可以发动战争。'
 msg_set_war_allowed_off: '这个世界不受战争的侵扰.'
 #Added in 0.61
 #Added in 0.62
@@ -1673,13 +1673,13 @@ msg_err_you_need_x_to_pay: "您需要 %s 才能支付。"
 #Shown when someone tries to deposit/withdraw 0 amounts.
 msg_err_amount_must_be_greater_than_zero: "数量必须大于0。"
 #Message shown when taking over claims is disabled on a server.
-msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+msg_err_taking_over_claims_is_not_enabled: "这个服务器没有开启过度声明。"
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "这个城镇区块不能被接管，它所属的城镇没有过度声明。"
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "你不能声明这里，这会使得这个城镇区块成为Homeblock，但这是不允许的。"
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "另外的插件阻止了你接管这块土地。"
 #Confirmation shown when taking over a claim.
 confirmation_you_are_about_to_take_over_a_claim: "您将要接管属于 %s 的区块，费用为： %s。您想要继续吗？"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
@@ -1687,9 +1687,9 @@ msg_warning_you_are_almost_out_of_townblocks: "警告: 您已经快要用完您�
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
 msg_warning_your_town_is_overclaimed: "警告: 您的城镇区块数量超出上限。当你有太多的城镇区块时，其他城镇可以接管你的城镇的地块，考虑删除一些领地。"
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[过度圈地可用]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "你不能接管这个区块，因为这会把城镇分成两部分。你必须从其他的的方向进行过度声明。"
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
 msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
@@ -1698,7 +1698,7 @@ msg_setup_command_folia: "由于对话API不工作，“/ta install”命令当�
 msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
 msg_folia_scoreboard: "目前不支持在Folia的服务端上更改计分板。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
-msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "您不能取消声明这个城镇区块，因为它位于 %s，%s 的镇块没有足够的相邻的区块（必须有%s。）"
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>你的国家从自己的各个城镇中征收了%s的税。"
 #Message shown when a town collects taxes from its residents.
@@ -1710,5 +1710,5 @@ msg_tax_collected_from_conquered_towns: "<aqua>你的国家从被征服的各个
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被免除了国家所征收的税。"
 msg_nation_set_conquered_tax__amount_set: "%s把征服的税额设置为%s。"
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "你不能将征服税额设置到%s以上。"
-msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "你的城镇存在时间太短，不足以进行过度声明。你必须再等%s。"
 msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
