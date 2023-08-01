@@ -83,7 +83,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	@Override
 	public final void newSentInvite(Invite invite)  throws TooManyInvitesException {
-		if (sentInvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
+		if (sentInvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) {
 			sentInvites.add(invite);
 		} else {
 			throw new TooManyInvitesException(Translation.of("msg_err_town_sent_too_many_invites"));
