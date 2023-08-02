@@ -66,3 +66,11 @@ jobs:
             }]
       - name: deploy to glaremaster repo
         run: mvn deploy
+      - name: deploy javadoc to github pages
+        uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          javadoc-branch: master
+          java-version: 17
+          target-folder: javadocs/prerelease
+          project: maven
