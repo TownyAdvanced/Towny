@@ -837,6 +837,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
+	@NotNull
 	public Location getSpawn() throws TownyException {
 		if (hasHomeBlock() && spawn != null) {
 			return spawn.asLocation();
