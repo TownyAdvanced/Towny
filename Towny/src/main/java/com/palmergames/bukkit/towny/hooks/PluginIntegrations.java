@@ -3,7 +3,10 @@ package com.palmergames.bukkit.towny.hooks;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import org.bukkit.Bukkit;
@@ -40,7 +43,7 @@ public class PluginIntegrations {
 	private final String[] SPONSOR_PLUGINS = { "EventWar", "SiegeConquest", "TownyCamps", "TownyHistories", "TownyRTP",
 			"TownyWayPointTravel", "TownOptionalLWC" };
 	private final String NEWLINE_STRING = System.lineSeparator() + "                           ";
-	private final List<String> warnings = new ArrayList<>();
+	private final Map<String, Level> warnings = new LinkedHashMap<>();
 
 	private TownyPlaceholderExpansion papiExpansion = null;
 	private LuckPermsContexts luckPermsContexts;
@@ -116,7 +119,7 @@ public class PluginIntegrations {
 			ecowarn = "No compatible Economy plugins found. If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
 
 		if (!ecowarn.isEmpty() && configSetForEconomy)
-			warnings.add(ecowarn);
+			warnings.put(ecowarn, Level.INFO);
 	}
 
 	private void findSetupAndPrintAddons(Towny towny) {
@@ -156,16 +159,16 @@ public class PluginIntegrations {
 	private void printPluginWarnings() {
 		//Legacy check to see if questioner.jar is still present.
 		if (isPluginPresent("Questioner"))
-			warnings.add("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations."
-					+ " You may safely remove Questioner.jar from your plugins folder.");
+			warnings.put("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations."
+					+ " You may safely remove Questioner.jar from your plugins folder.", Level.WARNING);
 		//Add warning about PowerRanks.
 		if (isPluginPresent("PowerRanks"))
-			warnings.add("PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
-					+ " You can expect issues with Towny permissions (and other permission providers,) while PowerRanks is installed.");
+			warnings.put("PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
+					+ " You can expect issues with Towny permissions (and other permission providers,) while PowerRanks is installed.", Level.WARNING);
 
 		if (!warnings.isEmpty()) {
-			for (String warning : warnings)
-				Towny.getPlugin().getLogger().warning(StringMgmt.wrap("  Warning: " + warning, 55, NEWLINE_STRING));
+			for (Map.Entry<String, Level> warning : warnings.entrySet())
+				Towny.getPlugin().getLogger().log(warning.getValue(), StringMgmt.wrap("  Warning: " + warning.getKey(), 55, NEWLINE_STRING));
 
 			warnings.clear();
 		}
