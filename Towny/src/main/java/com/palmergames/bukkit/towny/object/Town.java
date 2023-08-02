@@ -939,11 +939,11 @@ public class Town extends Government implements TownBlockOwner {
 	 * Saves the TownBlock if it is not already an Outpost.
 	 * Saves the Town when finished.
 	 * 
-	 * @param position position to set an outpost's spawn point
+	 * @param position Position to set an outpost's spawn point
 	 */
 	public void addOutpostSpawn(Position position) {
 		TownBlock townBlock = position.worldCoord().getTownBlockOrNull();
-		if (townBlock == null || !townBlock.hasTown() || !townBlock.getTownOrNull().equals(this))
+		if (townBlock == null || !this.equals(townBlock.getTownOrNull()))
 			return;
 		
 		// Remove any potential previous outpost spawn at this location (when run via /t set outpost.)
