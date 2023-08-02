@@ -125,7 +125,7 @@ public class Jail implements Savable {
 	}
 	
 	/**
-	 * @deprecated Deprecated as of TODO insert version here, the cell map types are not guaranteed
+	 * @deprecated Deprecated as of 0.99.5.9, the cell map types are an implementation detail and not guaranteed.
 	 */
 	@Deprecated
 	public Map<String, Location> getCellMap() {

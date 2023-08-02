@@ -17,7 +17,7 @@ public class SpawnPointLocation extends Position {
 	}
 
 	/**
-	 * @deprecated Deprecated as of TODO insert version, please use {@link #world()} instead.
+	 * @deprecated Deprecated as of 0.99.5.9, please use {@link #world()} instead.
 	 */
 	@Deprecated
 	public String getWorld() {
