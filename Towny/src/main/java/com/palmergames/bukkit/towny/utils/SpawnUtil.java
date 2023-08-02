@@ -82,6 +82,11 @@ public class SpawnUtil {
 			notAffordMSG, outpost, spawnType, resident, town, nation);
 
 		getSpawnLoc(player, town, nation, spawnType, outpost, split).thenAccept(spawnLoc -> {
+			if (!spawnLoc.isWorldLoaded()) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_world_not_loaded"));
+				return;
+			}
+			
 			// Fire a cancellable event right before a player would actually pay.
 			// Throws a TownyException if the event is cancelled.
 			try {
