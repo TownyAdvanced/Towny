@@ -88,13 +88,13 @@ mode_5: '默认进入国家聊天频道'
 mode_6: '可以在敌国边界用 %s 来制造战区.'
 plot_perms: '用 %s 而不是 %s 来设置权限.'
 plot_perms_1: '默认外来者没有居民的土地权限.'
-res_list: '居民列表'
+res_list: '居民'
 res_sing: '居民'
 mayor_sing: '城主'
 admin_sing: '管理员'
 town_sing: '城镇'
 nation_sing: '国家'
-nation_plu: '国家列表'
+nation_plu: '国家'
 king_sing: '领导者'
 town_plu: '城镇'
 world_plu: '世界列表'
@@ -248,7 +248,7 @@ msg_set_outpost_spawn: '&b成功改变前哨传送点.'
 msg_set_title: '&b%s 获得了 %s &b的头衔.'
 msg_set_surname: '&b%s 获得了 %s&b的后缀.'
 msg_clear_title_surname: '&b %2$s 的 %1$s 被清除了.'
-msg_clear_plot_material: '&b这块地皮已经被清除了以下块类型： %s'
+msg_clear_plot_material: '&b这块地皮已经被清除了%s的区块类型'
 msg_set_perms: '&b成功将权限设置为:'
 msg_set_claim: '&b成功改变 %s 的可声明状态为 %s'
 msg_set_perms_reset: '&b成功重置 %s 的所有土地的权限.'
@@ -280,7 +280,7 @@ msg_new_day: '&b美好的一天又开始了!'
 msg_new_king: '&b%s现在是%s的国家领导者！'
 msg_err_new_king_notmayor: '&c新的国家领导者不是市长。'
 msg_err_king_not_in_nation: '&c新的国家领导者不属于这个国家。'
-msg_err_fight_like_king: '&c和平？不，和平不是一个选择！像个真正的领导者一样战斗！！'
+msg_err_fight_like_king: '&c和平？不，和平不是选择！像个真正的领导者一样战斗！！'
 msg_no_access_nation_bank: '&c你没有使用国家银行的权限.'
 msg_err_no_money: '&c银行里没有足够的钱.'
 msg_new_mayor: '&b%s 成为了新一届的城主!'
@@ -291,7 +291,7 @@ msg_plot_for_sale_amount: '&b%s将位于（%s）的土地以%s的价格出售！
 msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
 msg_cache_block_error_wild: '&c你不能在荒野中 %s .'
-msg_cache_block_error_plot: '&c地主不允许%s在这里%s。'
+msg_cache_block_error_plot: '&c地主不允许%s%s。'
 msg_cache_block_error_town_resident: '&c居民不能在这里%s。'
 msg_cache_block_error_town_allies: '&c盟友不能%s。'
 msg_cache_block_error_town_outsider: '&c外来者不能 %s.'
@@ -430,7 +430,7 @@ msg_err_invalid_radius_number: '&c无效半径. 最大半径为 %s .'
 #Added in 0.34
 msg_err_max_residents_per_town_reached: '&c已达到最大居民数量上限:(%s) .'
 #Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '&c玩家%s在服务器上的时间还不够长，因此无法被邀请到城镇里，请稍等。'
+msg_err_resident_doesnt_meet_invite_cooldown: '&c玩家%s在服务器上的时间还不够长，因此无法被邀请，请稍等。'
 msg_cant_toggle_pvp_outsider_in_town: '有一位外来者在你的城镇,你不能改变你的PVP状态!'
 msg_err_unclaim_not_outpost: '无法放弃声明, 这块土地不是前哨!'
 outpost_plu: '城镇前哨'
@@ -553,7 +553,7 @@ tc_err_you_cannot_join_channel: '你不能加入 &f%s'
 tc_you_are_already_in_channel: '[城镇聊天] 你已经在 &f%s'
 tc_you_joined_channel: '[城镇聊天] 你加入了 &f%s'
 tc_err_you_are_already_talking_in_default_channel_help: '你已经在默认频道聊天 使用该频道的命令切换到另一个频道.'
-tc_err_unable_to_talk_essentials_mute: '你不能聊天了...你现在是禁言状态!'
+tc_err_unable_to_talk_essentials_mute: '你不能说话...因为你被禁言了！'
 tc_err_unable_to_talk_you_are_spamming: '住口...你刷屏了!'
 msg_admin_set_plot_help_1: '在城镇内.'
 msg_admin_set_plot_help_2: '在荒郊野外.'
@@ -608,7 +608,7 @@ status_nation_conquered_tax: '征服税：'
 status_nation_towns: '城镇'
 status_nation_allies: '盟友'
 status_nation_enemies: '敌人'
-status_nation_enemied_by: '和你所在国敌对的国家'
+status_nation_enemied_by: '和此国敌对的国家'
 status_world_claimable: '&a可宣称'
 status_world_noclaims: '&a不可宣称'
 status_world_forcepvp: '强制PVP：'
@@ -636,7 +636,7 @@ msg_plot_evict: '已依法收回土地.'
 msg_no_one_to_evict: '没有人放弃这片土地.'
 #Added in 0.46
 nation_help_10: '传送到国家传送点.'
-msg_nation_spawn_warmup: '&b等待传送中...'
+msg_nation_spawn_warmup: '&b等待传送...'
 msg_set_nation_spawn: '&b已重新设置国家传送点.'
 msg_err_cant_afford_tp_nation: '&c无法传送到 %s.'
 msg_err_nationspawn_has_not_been_set: '&c国家传送点尚未设置.'
@@ -743,7 +743,7 @@ msg_town_forcepvp_setting_set_to: '城镇 %s 的强制PVP设置为 %s'
 msg_town_forcedisabledpvp_setting_set_to: '城镇 %s 的强制管理员禁用PVP设置为 %s'
 msg_nation_changed_open: '&c国家的公开状态为 %s.'
 msg_err_already_in_a_nation: '你的城镇已经加入了一个国家.'
-msg_err_nation_not_open: '&c国家 %s 不是对所有人开放的，请向国家领导者或助手请求以加入。'
+msg_err_nation_not_open: '&c国家%s不是对所有人开放的，请询问这个国家的领导者或助手以加入。'
 msg_err_nation_homeblock_in_another_world: '&c你的城镇之家与国都不在同一个世界.'
 status_bank_town_penalty_upkeep: '过度圈地费用：'
 #Added in 0.53:
@@ -807,7 +807,7 @@ msg_err_nation_has_not_set_a_spawn_location: '国家没有设置传送点.'
 msg_err_resident_doesnt_belong_to_any_town: '该居民不属于任何城镇'
 msg_err_could_not_set_default_modes_for: '无法设置默认模式： '
 #Added in 0.60
-msg_set_war_allowed_on: '这个和平的世界内不能发动战争.'
+msg_set_war_allowed_on: '这个世界内将可以发动战争。'
 msg_set_war_allowed_off: '这个世界不受战争的侵扰.'
 #Added in 0.61
 #Added in 0.62
@@ -988,7 +988,7 @@ msg_status_npc: '&c%s不是一个真正的玩家，它是Towny独有的。'
 npc_created: '创建于：'
 msg_no_funds_claim_plot: '&c你没有足够的资金来圈这块价格为%s的地。'
 msg_no_funds_claim_plot_group: '&c你没有足够的资金来圈这%s块总价为%s的地。'
-status_town_title_peaceful: '&b（和平）'
+status_town_title_peaceful: '&b(和平)'
 #Added in 0.95
 status_public: '&b(公开)'
 msg_days: ' 天'
@@ -1413,7 +1413,7 @@ msg_jailed_handbook_5: '如果你坚持逃离到了城镇外的野地，你将�
 #Jail handbook messages
 msg_jailed_handbook_6: '但是在到达野地之前不要死亡，否则你将被送回监狱。'
 #Jail handbook messages
-msg_jailed_teleport: '还好，如果你手中有一些末影珍珠和紫颂果，你可以在监狱里使用它们来帮助你越狱。'
+msg_jailed_teleport: '但幸运的是……如果你手中有一些末影珍珠和紫颂果，你可以在监狱里使用它们来帮助你越狱。'
 #Jail handbook messages
 msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
@@ -1673,13 +1673,13 @@ msg_err_you_need_x_to_pay: "您需要 %s 才能支付。"
 #Shown when someone tries to deposit/withdraw 0 amounts.
 msg_err_amount_must_be_greater_than_zero: "数量必须大于0。"
 #Message shown when taking over claims is disabled on a server.
-msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+msg_err_taking_over_claims_is_not_enabled: "这个服务器没有开启过度声明。"
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "这个城镇区块不能被接管，它所属的城镇没有过度声明。"
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "你不能声明这里，这会使得这个城镇区块成为Homeblock，但这是不允许的。"
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "另外的插件阻止了你接管这块土地。"
 #Confirmation shown when taking over a claim.
 confirmation_you_are_about_to_take_over_a_claim: "您将要接管属于 %s 的区块，费用为： %s。您想要继续吗？"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
@@ -1687,18 +1687,18 @@ msg_warning_you_are_almost_out_of_townblocks: "警告: 您已经快要用完您�
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
 msg_warning_your_town_is_overclaimed: "警告: 您的城镇区块数量超出上限。当你有太多的城镇区块时，其他城镇可以接管你的城镇的地块，考虑删除一些领地。"
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[过度圈地可用]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "你不能接管这个区块，因为这会把城镇分成两部分。你必须从其他的的方向进行过度声明。"
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
 msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
 msg_conquered_status_removed: "%s 的被征服状态已被取消。"
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_setup_command_folia: "由于对话API不工作，“/ta install”命令当前在Folia上不起作用，因此请参阅下面的安装指南。"
 msg_perm_gui_folia: "由于交互API没有工作，使这个按钮当前在Folia上不工作。请使用 /plot perm add <name> 指令来代替它。"
 msg_folia_scoreboard: "目前不支持在Folia的服务端上更改计分板。"
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
-msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "您不能取消声明这个城镇区块，因为它位于 %s，%s 的镇块没有足够的相邻的区块（必须有%s。）"
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>你的国家从自己的各个城镇中征收了%s的税。"
 #Message shown when a town collects taxes from its residents.
@@ -1710,5 +1710,5 @@ msg_tax_collected_from_conquered_towns: "<aqua>你的国家从被征服的各个
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被免除了国家所征收的税。"
 msg_nation_set_conquered_tax__amount_set: "%s把征服的税额设置为%s。"
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "你不能将征服税额设置到%s以上。"
-msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "你的城镇存在时间太短，不足以进行过度声明。你必须再等%s。"
 msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
