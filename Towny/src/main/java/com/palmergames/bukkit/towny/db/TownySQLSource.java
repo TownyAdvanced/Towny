@@ -37,7 +37,6 @@ import com.palmergames.util.StringMgmt;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -2223,19 +2222,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							? town.getHomeBlock().getWorld().getName() + "#" + town.getHomeBlock().getX() + "#"
 									+ town.getHomeBlock().getZ()
 							: "");
-			twn_hm.put("spawn",
-					town.hasSpawn()
-							? town.getSpawn().getWorld().getName() + "#" + town.getSpawn().getX() + "#"
-									+ town.getSpawn().getY() + "#" + town.getSpawn().getZ() + "#"
-									+ town.getSpawn().getPitch() + "#" + town.getSpawn().getYaw()
-							: "");
+			
+			final Position spawnPos = town.spawnPosition();
+			twn_hm.put("spawn", spawnPos != null ? String.join("#", spawnPos.serialize()) : "");
 			// Outpost Spawns
 			StringBuilder outpostArray = new StringBuilder();
 			if (town.hasOutpostSpawn())
-				for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
-					outpostArray.append(spawn.getWorld().getName()).append("#").append(spawn.getX()).append("#")
-							.append(spawn.getY()).append("#").append(spawn.getZ()).append("#").append(spawn.getPitch())
-							.append("#").append(spawn.getYaw()).append(";");
+				for (Position spawn : town.getOutpostSpawns()) {
+					outpostArray.append(String.join("#", spawn.serialize())).append(";");
 				}
 			twn_hm.put("outpostSpawns", outpostArray.toString());
 			if (town.hasValidUUID()) {
@@ -2306,12 +2300,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("maxPercentTaxAmount", nation.getMaxPercentTaxAmount());
 			nat_hm.put("spawnCost", nation.getSpawnCost());
 			nat_hm.put("neutral", nation.isNeutral());
-			nat_hm.put("nationSpawn",
-					nation.hasSpawn()
-							? nation.getSpawn().getWorld().getName() + "#" + nation.getSpawn().getX() + "#"
-									+ nation.getSpawn().getY() + "#" + nation.getSpawn().getZ() + "#"
-									+ nation.getSpawn().getPitch() + "#" + nation.getSpawn().getYaw()
-							: "");
+			
+			final Position spawnPos = nation.spawnPosition();
+			nat_hm.put("nationSpawn", spawnPos != null ? String.join("#", spawnPos.serialize()) : "");
 			if (nation.hasValidUUID()) {
 				nat_hm.put("uuid", nation.getUUID());
 			} else {
@@ -2518,10 +2509,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			StringBuilder jailCellArray = new StringBuilder();
 			if (jail.hasCells())
-				for (Location cell : new ArrayList<>(jail.getJailCellLocations())) {
-					jailCellArray.append(cell.getWorld().getName()).append("#").append(cell.getX()).append("#")
-							.append(cell.getY()).append("#").append(cell.getZ()).append("#").append(cell.getPitch())
-							.append("#").append(cell.getYaw()).append(";");
+				for (Position cell : jail.getJailCellPositions()) {
+					jailCellArray.append(String.join("#", cell.serialize())).append(";");
 				}
 			
 			jail_hm.put("spawns", jailCellArray);

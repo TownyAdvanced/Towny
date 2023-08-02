@@ -35,7 +35,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import java.io.BufferedReader;
 import java.io.File;
@@ -1974,17 +1973,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 
 		// Spawn
-		if (town.hasSpawn())
-			try {
-				list.add("spawn=" + town.getSpawn().getWorld().getName() + "," + town.getSpawn().getX() + "," + town.getSpawn().getY() + "," + town.getSpawn().getZ() + "," + town.getSpawn().getPitch() + "," + town.getSpawn().getYaw());
-			} catch (TownyException ignored) {
-			}
+		final Position spawnPos = town.spawnPosition();
+		if (spawnPos != null)
+			list.add("spawn=" + String.join(",", spawnPos.serialize()));
 
 		// Outpost Spawns
 		StringBuilder outpostArray = new StringBuilder("outpostspawns=");
 		if (town.hasOutpostSpawn())
-			for (Location spawn : town.getAllOutpostSpawns()) {
-				outpostArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
+			for (Position spawn : town.getOutpostSpawns()) {
+				outpostArray.append(String.join(",", spawn.serialize())).append(";");
 			}
 		list.add(outpostArray.toString());
 
@@ -2084,10 +2081,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         list.add("registered=" + nation.getRegistered());
         
         // Spawn
-		if (nation.hasSpawn()) {
-			try {
-				list.add("nationSpawn=" + nation.getSpawn().getWorld().getName() + "," + nation.getSpawn().getX() + "," + nation.getSpawn().getY() + "," + nation.getSpawn().getZ() + "," + nation.getSpawn().getPitch() + "," + nation.getSpawn().getYaw());
-			} catch (TownyException ignored) { }
+		final Position spawnPos = nation.spawnPosition();
+		if (spawnPos != null) {
+			list.add("nationSpawn=" + String.join(",", spawnPos.serialize()));
 		}
 
 		list.add("isPublic=" + nation.isPublic());

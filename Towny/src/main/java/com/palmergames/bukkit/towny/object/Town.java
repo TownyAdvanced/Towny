@@ -1009,6 +1009,13 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(Lists.transform(this.outpostSpawns, Position::asLocation));
 	}
 
+	/**
+	 * @return Similar to {@link #getAllOutpostSpawns()}, but with positions.
+	 */
+	public Collection<Position> getOutpostSpawns() {
+		return Collections.unmodifiableList(this.outpostSpawns);
+	}
+
 	public void removeOutpostSpawn(Coord coord) {
 		getAllOutpostSpawns().stream()
 			.filter(spawn -> Coord.parseCoord(spawn).equals(coord))
@@ -1019,7 +1026,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void removeOutpostSpawn(Location loc) {
-		outpostSpawns.remove(loc);
+		outpostSpawns.remove(Position.ofLocation(loc));
 	}
 
 	public void setPlotPrice(double plotPrice) {
