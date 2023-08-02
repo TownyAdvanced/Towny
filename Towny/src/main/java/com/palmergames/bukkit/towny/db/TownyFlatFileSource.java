@@ -1769,6 +1769,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					line = keys.get("customPermissionData");
 					if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
+						@SuppressWarnings("unchecked")
 						Map<String, String> map = new Gson().fromJson(line, Map.class);
 						
 						for (Map.Entry<String, String> entry : map.entrySet()) {
