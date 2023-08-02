@@ -160,8 +160,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (BukkitTools.getWorld(worldName) == null) {
 					TownyMessaging.sendErrorMsg("Your towny\\data\\townblocks\\ folder contains a folder named '"
 							+ worldName + "' which doesn't appear to exist on your Bukkit server!");
-					TownyMessaging.sendErrorMsg("Towny is going to skip loading the townblocks found in this folder.");
-					continue;
+					TownyMessaging.sendErrorMsg("Towny will load the townblocks regardless, but if this world no longer exists please delete the folder.");
 				}
 
 				TownyWorld world = universe.getWorld(worldName);
