@@ -1,6 +1,7 @@
 name: Publish Javadoc on Full Release
 
 on:
+  workflow_dispatch:
   release:
     types: [released]
     branches: [master]
