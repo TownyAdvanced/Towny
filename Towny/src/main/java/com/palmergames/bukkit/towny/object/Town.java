@@ -826,14 +826,8 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
-	public void setSpawn(Location spawn) {
-		if (this.spawn != null)
-			TownyUniverse.getInstance().removeSpawnPoint(spawn);
-		
-		this.spawn = spawn == null ? null : Position.ofLocation(spawn);
-		
-		if (this.spawn != null)
-			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(this.spawn, SpawnPointType.TOWN_SPAWN));
+	public void setSpawn(@Nullable Location spawn) {
+		spawnPosition(spawn == null ? null : Position.ofLocation(spawn));
 	}
 
 	@Override
@@ -862,11 +856,12 @@ public class Town extends Government implements TownBlockOwner {
 		return this.spawn;
 	}
 	
-	public void spawnPosition(Position spawn) {
+	public void spawnPosition(@Nullable Position spawn) {
 		if (this.spawn != null)
 			TownyUniverse.getInstance().removeSpawnPoint(SpawnPointLocation.parsePos(this.spawn));
 		
 		this.spawn = spawn;
+		
 		if (spawn != null)
 			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.TOWN_SPAWN));
 	}
