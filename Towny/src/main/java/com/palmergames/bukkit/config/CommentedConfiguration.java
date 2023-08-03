@@ -26,7 +26,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 	private final HashMap<String, String> comments = new HashMap<>();
 	private final Path path;
 	private final Logger logger;
-	private final String newLine = System.getProperty("line.separator");
+	private final String newLine = System.lineSeparator();
 	private int depth;
 	
 	public CommentedConfiguration(Path path, Logger logger) {

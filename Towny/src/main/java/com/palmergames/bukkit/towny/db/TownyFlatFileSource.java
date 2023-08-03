@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
-	private final String newLine = System.getProperty("line.separator");
+	private final String newLine = System.lineSeparator();
 	
 	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
