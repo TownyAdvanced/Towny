@@ -63,7 +63,7 @@ public class Position {
 	}
 	
 	public WorldCoord worldCoord() {
-		return WorldCoord.parseWorldCoord(world.getName(), blockX(), blockZ());
+		return new WorldCoord(world.getName(), world.getUUID(), Coord.toCell(blockX()), Coord.toCell(blockZ()));
 	}
 	
 	public static Position positionOf(@NotNull TownyWorld world, double x, double y, double z) {
