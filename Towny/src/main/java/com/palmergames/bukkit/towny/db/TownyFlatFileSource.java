@@ -2231,7 +2231,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# Valid EntityTypes are listed here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
 		list.add("isDeletingEntitiesOnUnclaim=" + world.isDeletingEntitiesOnUnclaim());
 		if (world.getUnclaimDeleteEntityTypes() != null)
-			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(world.getUnclaimDeleteEntityTypes(), ","));
+			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(world.getUnclaimDeleteEntityTypes().stream().map(type -> BukkitTools.keyAsString(type.getKey())).collect(Collectors.toList()), ","));
 
 		// PlotManagement
 		list.add("");

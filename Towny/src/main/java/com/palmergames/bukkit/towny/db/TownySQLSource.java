@@ -2433,7 +2433,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// Deleting EntityTypes from Townblocks on Unclaim.
 			nat_hm.put("isDeletingEntitiesOnUnclaim", world.isDeletingEntitiesOnUnclaim());
 			if (world.getUnclaimDeleteEntityTypes() != null)
-				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(world.getUnclaimDeleteEntityTypes(), "#"));
+				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(world.getUnclaimDeleteEntityTypes().stream().map(type -> BukkitTools.keyAsString(type.getKey())).collect(Collectors.toList()), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
