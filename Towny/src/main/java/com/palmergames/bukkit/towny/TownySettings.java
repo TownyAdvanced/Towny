@@ -417,11 +417,35 @@ public class TownySettings {
 		}
 	}
 
-	public static Set<EntityType> toEntityTypeSet(List<String> entityList) {
-		Set<EntityType> entities = new HashSet<>();
+	public static Set<EntityType> toEntityTypeSet(final List<String> entityList) {
+		final Set<EntityType> entities = new HashSet<>();
 		
-		for (String entityName : entityList) {
-			EntityType type = BukkitTools.matchRegistry(Registry.ENTITY_TYPE, entityName);
+		for (final String entityName : entityList) {
+			final EntityType type = BukkitTools.matchRegistry(Registry.ENTITY_TYPE, switch (entityName.toLowerCase(Locale.ROOT)) {
+				// This is needed because some of the entity type fields don't/didn't match the actual key.
+				//<editor-fold desc="Lots of switch cases">
+				case "primed_tnt" -> "tnt";
+				case "minecart_tnt" -> "tnt_minecart";
+				case "ender_crystal" -> "end_crystal";
+				case "fishing_hook" -> "fishing_bobber";
+				case "minecart_chest" -> "chest_minecart";
+				case "minecart_hopper" -> "hopper_minecart";
+				case "minecart_furnace" -> "furnace_minecart";
+				case "minecart_command" -> "command_block_minecart";
+				case "thrown_exp_bottle" -> "experience_bottle";
+				case "ender_signal" -> "eye_of_ender";
+				case "mushroom_cow" -> "mooshroom";
+				case "splash_potion" -> "potion";
+				case "leash_hitch" -> "leash_knot";
+				case "lightning" -> "lightning_bolt";
+				case "dropped_item" -> "item";
+				case "minecart_mob_spawner" -> "spawner_minecart";
+				case "snowman" -> "snow_golem";
+				case "firework" -> "firework_rocket";
+				//</editor-fold>
+				default -> entityName;
+			});
+			
 			if (type != null)
 				entities.add(type);
 		}

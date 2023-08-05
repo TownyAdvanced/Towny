@@ -2267,8 +2267,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# The list of entities whose explosions would be reverted.");
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertEntities() != null)
-			// getKey().getKey() strips out any minecraft: from minecraft:creeper.
-			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities().stream().map(type -> type.getKey().getKey()).collect(Collectors.toList()), ","));
+			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities().stream().map(type -> BukkitTools.keyAsString(type.getKey())).collect(Collectors.toList()), ","));
 
 		list.add("# If enabled any damage caused by block explosions will repair itself.");
 		// Using PlotManagement Wild Block Regen

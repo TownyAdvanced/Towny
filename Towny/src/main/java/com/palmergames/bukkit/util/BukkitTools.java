@@ -376,6 +376,14 @@ public class BukkitTools {
 		final NamespacedKey key = NamespacedKey.fromString(filtered);
 		return key != null ? registry.get(key) : null;
 	}
+
+	/**
+	 * Converts a namespaced key into a string. The namespace is included for non minecraft namespaced keys.
+	 * @return The string representation of the key.
+	 */
+	public static String keyAsString(@NotNull NamespacedKey key) {
+		return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
+	}
 	
 	static {
 		MethodHandle temp = null;

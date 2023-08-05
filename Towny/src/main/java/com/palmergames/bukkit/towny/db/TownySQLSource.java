@@ -2463,8 +2463,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			// Wilderness Explosion Protection entities
 			if (world.getPlotManagementWildRevertEntities() != null)
-				// getKey().getKey() strips out any minecraft: from minecraft:creeper.
-				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities().stream().map(type -> type.getKey().getKey()).collect(Collectors.toList()), "#"));
+				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities().stream().map(type -> BukkitTools.keyAsString(type.getKey())).collect(Collectors.toList()), "#"));
 
 			// Wilderness Explosion Protection Block Whitelist
 			if (world.getPlotManagementWildRevertBlockWhitelist() != null)

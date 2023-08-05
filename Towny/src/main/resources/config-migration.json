@@ -232,71 +232,17 @@
     ]
   },
   {
-    "version": "0.98.0.3",
+    "version": "0.98.0.1",
     "changes": [
       {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "Creeper",
-        "value": "CREEPER",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "EnderCrystal",
-        "value": "ENDER_CRYSTAL",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "EnderDragon",
-        "value": "ENDER_DRAGON",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "Fireball",
-        "value": "FIREBALL",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "SmallFireball",
-        "value": "SMALL_FIREBALL",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "TNTPrimed",
-        "value": "PRIMED_TNT",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "ExplosiveMinecart",
-        "value": "MINECART_TNT",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "Wither",
-        "value": "WITHER",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
-      {
-        "type": "REPLACE",
-        "path": "new_world_settings.plot_management.wild_revert_on_mob_explosion.entities",
-        "key": "WitherSkull",
-        "value": "WITHER_SKULL",
-        "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
-      },
+        "type": "RUNNABLE",
+        "key": "convert_entity_class_names"
+      }
+    ]
+  },
+  {
+    "version": "0.98.0.3",
+    "changes": [
       {
         "type": "TOWNYPERMS_ADD",
         "path": "towns.ranks.sheriff",
