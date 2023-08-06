@@ -1711,4 +1711,4 @@ msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被�
 msg_nation_set_conquered_tax__amount_set: "%s把征服的税额设置为%s。"
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "你不能将征服税额设置到%s以上。"
 msg_err_your_town_is_not_old_enough_to_overclaim: "你的城镇存在时间太短，不足以进行过度声明。你必须再等%s。"
-msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
+msg_err_your_cannot_overclaim_for_another: "你不可以在%s的时间内再次进行超额声明。"
