@@ -97,7 +97,7 @@ nation_sing: '国家'
 nation_plu: '国家'
 king_sing: '领导者'
 town_plu: '城镇'
-world_plu: '世界列表'
+world_plu: '世界'
 world_sing: '世界'
 world_help_1: '当前世界状态'
 world_help_2: '[世界]'
@@ -941,7 +941,7 @@ status_world_explrevert_entity: '生物爆炸回溯：'
 status_world_explrevert_block: '方块爆炸回溯：'
 #Added in 0.88
 msg_nation_already_peaceful: '&c国家已处于和平状态。'
-msg_nation_already_not_peaceful: '&c国家已经处于非和平状态。'
+msg_nation_already_not_peaceful: '&c国家已不再和平了。'
 #Added in 0.89
 status_world_friendlyfire: '友伤：'
 status_world_wildernessmobs: '荒地生成生物：'
@@ -963,7 +963,7 @@ townblock_plu: '城镇区块'
 admin_panel_4: '运行下一小时的代码'
 msg_newhour_success: '下一小时命令执行成功'
 town_help_12: '重新声明你的城镇来从倒闭之中挽回它。'
-msg_warning_town_ruined_if_deleted: "警告！！！如果你删除你的城镇，它将进入倒闭的状态，持续%d小时。 之后，其将被完全删除。在倒闭的状态下，所有保护都将失效，城镇也将能被其他人破坏。"
+msg_warning_town_ruined_if_deleted: "警告！！！如果你删除你的城镇，它将进入持续%d小时的倒闭状态。 之后，它将被完全删除。在倒闭的状态下，所有保护都将失效，城镇也将能被其他人破坏。"
 msg_warning_town_ruined_if_deleted2: "%d小时后城镇中的任何居民都可以使用/t reclaim来重新声明此城镇。"
 msg_err_cannot_reclaim_town_unless_ruined: '&c你不能重新声明你的城镇，因为其并未倒闭。'
 msg_err_cannot_reclaim_town_yet: '&c%d小时后才可以重新声明你的城镇。'
@@ -1397,7 +1397,7 @@ msg_jailed_war: '作为战俘监禁。'
 #Jail handbook messages
 msg_jailed_handbook_1: '看起来你因为%s而被监禁了。'
 #Jail handbook messages
-msg_jailed_handbook_2: '啊……太糟糕了，实在太糟糕了。但是你又不能干些什么……不过，这里有一些被监禁时的小贴士。'
+msg_jailed_handbook_2: '啊……太糟糕了，实在太糟糕了。但是你又不能干些什么……不过，这里有一些被监禁时的小贴士，它们或许可以帮你。'
 #Jail handbook messages
 msg_jailed_handbook_3: '你已经被监禁%s小时了，服刑后你将得到自由。'
 #Jail handbook messages
