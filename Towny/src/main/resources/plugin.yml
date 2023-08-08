@@ -813,3 +813,7 @@ permissions:
             towny.command.townyworld.toggle.wildernessmobs: true
             towny.command.townyworld.toggle.wildernessuse: true
             towny.command.townyworld.toggle.worldmobs: true
+
+    towny.notify.entryexit:
+        description: User gets notified when they enter and exit town plots.
+        default: true
