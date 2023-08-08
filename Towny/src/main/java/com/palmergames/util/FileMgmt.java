@@ -176,7 +176,7 @@ public final class FileMgmt {
 				BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
 
 				for (String aSource : source) {
-					bufferedWriter.write(aSource + System.getProperty("line.separator"));
+					bufferedWriter.write(aSource + System.lineSeparator());
 				}
 
 				return true;
