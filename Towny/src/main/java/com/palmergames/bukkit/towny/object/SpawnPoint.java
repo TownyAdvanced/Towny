@@ -5,9 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 
 import com.palmergames.bukkit.towny.Towny;
+import org.bukkit.World;
 
 public class SpawnPoint {
-	private final Location location;
+	private final Position position;
 	private final WorldCoord wc;
 	private final SpawnPointType type;
 	private final SpawnPointLocation spawnLocation;
@@ -15,10 +16,14 @@ public class SpawnPoint {
 	private static final ArrayList<RingCoord> RING_PATTERN = createRing();
 	
 	public SpawnPoint(Location loc, SpawnPointType type) {
-		this.location = loc;
+		this(Position.ofLocation(loc), type);
+	}
+	
+	public SpawnPoint(Position pos, SpawnPointType type) {
+		this.position = pos;
 		this.type = type;
-		this.wc = WorldCoord.parseWorldCoord(loc);
-		this.spawnLocation = new SpawnPointLocation(loc);
+		this.wc = pos.worldCoord();
+		this.spawnLocation = SpawnPointLocation.parsePos(pos);
 	}
 
 	public WorldCoord getWorldCoord() {
@@ -30,7 +35,11 @@ public class SpawnPoint {
 	}
 
 	public Location getBukkitLocation() {
-		return location;
+		return this.position.asLocation();
+	}
+	
+	public Position getPosition() {
+		return this.position;
 	}
 	
 	public SpawnPointLocation getSpawnPointLocation() {
@@ -38,7 +47,11 @@ public class SpawnPoint {
 	}
 
 	public void drawParticle() {
-		Location origin = centreLocation(location);
+		final World world = position.world().getBukkitWorld();
+		if (world == null)
+			return;
+		
+		Location origin = centreLocation(position.asLocation());
 		int i = 0;
 
 		for (RingCoord ringPosition : RING_PATTERN) {
@@ -46,7 +59,7 @@ public class SpawnPoint {
 			Towny.getPlugin().getScheduler().runAsyncLater(() -> {
 				try {
 					// This can potentially throw an exception if we're running this async and a player disconnects while it's sending particles.
-					location.getWorld().spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
+					world.spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
 				} catch (Exception ignored) {}
 			}, i * 4L);
 			i++;

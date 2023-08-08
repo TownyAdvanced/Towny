@@ -184,7 +184,7 @@ public class Nation extends Government {
 		this.capital = capital;
 		
 		if (this.spawn != null && TownySettings.isNationSpawnOnlyAllowedInCapital() && !capital.isInsideTown(this.spawn))
-			this.spawn = capital.getSpawnOrNull();
+			this.spawn = capital.spawnPosition();
 
 		try {
 			TownyPerms.assignPermissions(capital.getMayor(), null);
@@ -226,27 +226,34 @@ public class Nation extends Government {
 	}
 
 	@Override
+	@NotNull
 	public Location getSpawn() throws TownyException {
 		if (spawn == null)
 			throw new TownyException(Translatable.of("msg_err_nation_has_not_set_a_spawn_location"));
 
-		return spawn;
+		return this.spawn.asLocation();
 	}
 	
 	@Override
 	@Nullable
-	public Location getSpawnOrNull() {
+	public Position spawnPosition() {
 		return spawn;
 	}
-	
 
 	@Override
-	public void setSpawn(Location spawn) {
+	public void setSpawn(@Nullable Location spawn) {
+		spawnPosition(spawn == null ? null : Position.ofLocation(spawn));
+	}
+
+	@Override
+	public void spawnPosition(@Nullable Position spawn) {
+		if (this.spawn != null)
+			TownyUniverse.getInstance().removeSpawnPoint(SpawnPointLocation.parsePos(this.spawn));
+
+		this.spawn = spawn;
+
 		if (spawn != null)
 			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.NATION_SPAWN));
-		else if (this.spawn != null)
-			TownyUniverse.getInstance().removeSpawnPoint(this.spawn);
-		this.spawn = spawn;
 	}
 
 	public List<Resident> getAssistants() {

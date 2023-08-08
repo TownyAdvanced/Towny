@@ -12,8 +12,10 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnPoint;
+import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -31,6 +33,7 @@ import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -82,7 +85,7 @@ public class TownyUniverse {
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private CompletableFuture<Void> backupFuture;
     
-	private final Map<Block, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
+	private final Map<SpawnPointLocation, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
     private final List<Resident> jailedResidents = new ArrayList<>();
     private final Map<UUID, Jail> jailUUIDMap = new ConcurrentHashMap<>();
     private final Map<String, String> replacementNamesMap = new ConcurrentHashMap<>();
@@ -1002,25 +1005,30 @@ public class TownyUniverse {
 	 * SpawnPoint Stuff
 	 */
 
-	public Map<Block, SpawnPoint> getSpawnPoints() {
+	@ApiStatus.Internal
+	public Map<SpawnPointLocation, SpawnPoint> getSpawnPoints() {
 		return spawnPoints;
 	}
 	
+	@Nullable
 	public SpawnPoint getSpawnPoint(Location loc) {
-		return spawnPoints.get(loc.getBlock());
+		return spawnPoints.get(SpawnPointLocation.parseSpawnPointLocation(loc));
 	}
 	
 	public boolean hasSpawnPoint(Location loc) {
-		return spawnPoints.containsKey(loc.getBlock()); 
+		return spawnPoints.containsKey(SpawnPointLocation.parseSpawnPointLocation(loc)); 
 	}
 	
 	public void addSpawnPoint(SpawnPoint spawn) {
-		spawnPoints.put(spawn.getBukkitLocation().getBlock(), spawn);
+		spawnPoints.put(spawn.getSpawnPointLocation(), spawn);
 	}
 
 	public void removeSpawnPoint(Location loc) {
-		if (hasSpawnPoint(loc))
-			spawnPoints.remove(loc.getBlock());
+		removeSpawnPoint(SpawnPointLocation.parseSpawnPointLocation(loc));
+	}
+	
+	public void removeSpawnPoint(SpawnPointLocation point) {
+		spawnPoints.remove(point);
 	}
 	
     /*
@@ -1062,7 +1070,7 @@ public class TownyUniverse {
      */
     public void newJailInternal(String uuid) {
     	// Remaining fields are set later on in the loading process.
-    	Jail jail = new Jail(UUID.fromString(uuid), null, null, null);
+    	Jail jail = new Jail(UUID.fromString(uuid), null, null, new ArrayList<Position>());
     	registerJail(jail);
     }
 

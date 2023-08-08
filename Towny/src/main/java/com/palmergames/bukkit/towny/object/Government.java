@@ -16,7 +16,6 @@ import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.audience.ForwardingAudience;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -34,11 +33,11 @@ import java.util.UUID;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, Identifiable, SpawnLocation, ForwardingAudience {
+public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, Identifiable, SpawnLocation, SpawnPosition, ForwardingAudience {
 	
 	protected UUID uuid;
 	protected BankAccount account;
-	protected Location spawn;
+	protected Position spawn;
 	protected String tag = "";
 	protected String board = null;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
