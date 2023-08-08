@@ -3683,7 +3683,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Run various tests required by configuration/permissions through Util.
 			OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
 			
-			if (!TownyAPI.getInstance().isWilderness(key))
+			if (key.hasTownBlock())
 				throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
 			// Select a single WorldCoord using the AreaSelectionUtil.

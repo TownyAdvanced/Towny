@@ -135,7 +135,6 @@ public class PlayerCache {
 
 	private void reset(WorldCoord wc) {
 
-		System.out.println("Cache reset");
 		lastWorldCoord = wc;
 		townBlockStatus = null;
 		blockErrMsg = null;
@@ -204,11 +203,17 @@ public class PlayerCache {
 		return blockErrMsg != null;
 	}
 
+	/**
+	 * Deprecated as of 0.99.5.9, location caching is no longer used.
+	 */
 	@Deprecated
 	public void setLastLocation(Location lastLocation) {
 
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.5.9, location caching is no longer used.
+	 */
 	@Deprecated
 	public Location getLastLocation() throws NullPointerException {
 		final Player player = Bukkit.getServer().getPlayer(this.playerUUID);
