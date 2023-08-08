@@ -8953,3 +8953,6 @@ v0.92.0.11:
   - Make the ecowarn line log on the INFO level #6895.
   - Bump net.coreprotect:coreprotect from 21.3 to 22.0.
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.17.0 to 3.19.0.
+  - Add Position object, courtesy of Warrior with PR #6536.
+    - The position object aims to resolve issues with world manager plugins that load after Towny loads, causing spawns to be wiped.
+    - By representing these spawns with an object that's not associated with a loaded bukkit world, but instead our own internal TownyWorld, we can successfully load them every time, regardless of plugin load order.
