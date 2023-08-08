@@ -815,5 +815,5 @@ permissions:
             towny.command.townyworld.toggle.worldmobs: true
 
     towny.receives-plot-notifications:
-        description: User gets notified when they enter and exit town plots.
+        description: User is able to be shown the notifications that appear when crossing plot boundaries and entering/exiting towns.
         default: true
