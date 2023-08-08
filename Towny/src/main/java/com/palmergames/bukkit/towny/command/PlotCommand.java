@@ -625,7 +625,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		Town town = townBlock.getTownOrNull();
 		TownyWorld townyWorld = townBlock.getWorld();
-		Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+		Coord key = Coord.parseCoord(player.getLocation());
 		
 		if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true)) {
 			// Test if they can pay.

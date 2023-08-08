@@ -65,14 +65,9 @@ public class PlayerCacheUtil {
 	 */
 	public static boolean getCachePermission(Player player, Location location, Material material, ActionType action) {
 
-		WorldCoord worldCoord;
+		final WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
 
 		try {
-			// Test required for portalCreateEvent in WorldListener, player hasn't changed worlds yet.
-			if (player.getWorld().equals(location.getWorld())) 
-				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
-			else 
-				worldCoord = new WorldCoord(location.getWorld().getName(), Coord.parseCoord(location));
 			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
 
@@ -82,13 +77,6 @@ public class PlayerCacheUtil {
 
 		} catch (NullPointerException e) {
 			// New or old cache permission was null, update it
-
-			// Test required for portalCreateEvent in WorldListener, player hasn't changed worlds yet.
-			if (location.getWorld().equals(player.getWorld())) 
-				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
-			else 
-				worldCoord = new WorldCoord(location.getWorld().getName(), Coord.parseCoord(location));
-
 			TownBlockStatus status = cacheStatus(player, worldCoord, fetchTownBlockStatus(player, worldCoord));
 			triggerCacheCreate(player, location, worldCoord, status, material, action);
 
