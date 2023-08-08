@@ -3,7 +3,8 @@ main: com.palmergames.bukkit.towny.Towny
 version: ${project.version}
 api-version: ${project.bukkitAPIVersion}
 folia-supported: true
-author: 'LlmDl, Warrior, and many contributors. Past lead devs: Shade, ElgarL.'
+authors: [LlmDl, Warrior]
+contributors: [Articdive, creatorfromhell, ElgarL, FlagCourier, Goosius1, Shade, silverwolfg11]
 website: 'https://townyadvanced.github.io/'
 prefix: Towny
 description: >
