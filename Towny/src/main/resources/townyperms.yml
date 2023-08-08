@@ -27,6 +27,7 @@ nomad:
     - towny.town.spawn.public
     - towny.chat.general
     - towny.command.towny.war.hud
+    - towny.notify
 
 towns:
     default:

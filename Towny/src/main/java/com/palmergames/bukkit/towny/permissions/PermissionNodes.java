@@ -27,6 +27,7 @@ public enum PermissionNodes {
 
 	TOWNY_TOWN_RESIDENT("towny.town.resident"),
 	TOWNY_OUTLAW_JAILER("towny.outlaw.jailer"),
+	TOWNY_NOTIFY("towny.notify"),
 	
 	/*
 	 * Nation command permissions
