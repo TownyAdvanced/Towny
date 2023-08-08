@@ -8946,3 +8946,10 @@ v0.92.0.11:
     - If you have managed to put your server into safemode, and you can manage to fix what's caused it, you can now use /ta reload all to have towny re-attempt loading.
   - Remove an outdated comment, courtesy of Warrior with PR #6892.
 0.99.5.9:
+  - Fix edge case scenario where NPCs can be treated like Players in Combat.
+  - Add towny.receives-plot-notifications permission, courtesy of invpt with PR #6908. (First-Time Contributor!)
+  - Improve move event listener/player cache a bit, courtesy of Warrior with PR #6910.
+  - Use constant for line separator string, courtesy of Warrior with PR #6896.
+  - Make the ecowarn line log on the INFO level #6895.
+  - Bump net.coreprotect:coreprotect from 21.3 to 22.0.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.17.0 to 3.19.0.
