@@ -42,7 +42,7 @@ public class PlayerChangePlotEvent extends Event {
 		this.from = from;
 		this.to = to;
 		this.moveEvent = moveEvent;
-		this.showPlotNotifications = TownySettings.getShowTownNotifications() && player.hasPermission(PermissionNodes.TOWNY_NOTIFY_ENTRYEXIT.getNode());
+		this.showPlotNotifications = TownySettings.getShowTownNotifications() && player.hasPermission(PermissionNodes.TOWNY_RECEIVES_PLOT_NOTIFICATIONS.getNode());
 	}
 
 	public WorldCoord getFrom() {
