@@ -1712,3 +1712,5 @@ msg_nation_set_conquered_tax__amount_set: "%s установил налог за
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "Налог завоеванного не может быть выше %s."
 msg_err_your_town_is_not_old_enough_to_overclaim: "Ваш город недостаточно стар для перепривата, попробуйте снова через %s."
 msg_err_your_cannot_overclaim_for_another: "Вы не можете переприватить еще %s."
+#Generic error message for when a world isn't loaded
+msg_err_world_not_loaded: "<red>World is not loaded."
