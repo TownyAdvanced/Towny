@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -122,16 +123,16 @@ public class CombatUtil {
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
-		 * We have an attacking player
+		 * We have an attacking player, which is not an NPC.
 		 */
-		if (attackingPlayer != null) {
+		if (attackingPlayer != null && isNotNPC(attackingPlayer)) {
 
 			boolean cancelled = false;
 			
 			/*
-			 * Defender is a player.
+			 * Defender is a player, which is not an NPC..
 			 */
-			if (defendingPlayer != null) {
+			if (defendingPlayer != null && isNotNPC(defendingPlayer)) {
 				
 				/*
 				 * Both townblocks are not Arena plots.
@@ -662,5 +663,9 @@ public class CombatUtil {
 			preventDamage = preventPvP(world, dispenserTB) || preventPvP(world, defenderTB);
 
 		return BukkitTools.isEventCancelled(new TownyDispenserDamageEntityEvent(entity.getLocation(), entity, cause, defenderTB, preventDamage, dispenser));
+	}
+
+	private static boolean isNotNPC(Entity entity) {
+		return !PluginIntegrations.getInstance().checkCitizens(entity);
 	}
 }
