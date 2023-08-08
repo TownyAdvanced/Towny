@@ -602,10 +602,10 @@ public class Towny extends JavaPlugin {
 
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 		if (world == null) {
-			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
-			return null;	
+			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for unregistered world (" + player.getWorld().getName() + ").");
+			return null;
 		}
-		PlayerCache cache = new PlayerCache(world, player);
+		PlayerCache cache = new PlayerCache(player);
 		playerCache.put(player.getUniqueId(), cache);
 		return cache;
 
@@ -635,17 +635,7 @@ public class Towny extends JavaPlugin {
 	 * @return the current (or new) cache for this player.
 	 */
 	public PlayerCache getCache(Player player) {
-
-		PlayerCache cache = playerCache.get(player.getUniqueId());
-		
-		if (cache == null) {
-			cache = newCache(player);
-			
-			if (cache != null)
-				cache.setLastTownBlock(WorldCoord.parseWorldCoord(player));
-		}
-
-		return cache;
+		return playerCache.computeIfAbsent(player.getUniqueId(), k -> newCache(player));
 	}
 
 	/**

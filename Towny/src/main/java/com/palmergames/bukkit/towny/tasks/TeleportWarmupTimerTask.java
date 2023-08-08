@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,7 +88,8 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	 * @param resident The resident to abort the request for.
 	 * @return Whether the resident had an active teleport request.
 	 */
-	public static boolean abortTeleportRequest(Resident resident) {
+	@Contract("null -> false")
+	public static boolean abortTeleportRequest(@Nullable Resident resident) {
 		if (resident == null)
 			return false;
 

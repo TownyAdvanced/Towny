@@ -113,6 +113,9 @@ public class TownyPlayerListener implements Listener {
 	private CommandList blockedWarCommands;
 	private CommandList ownPlotLimitedCommands;
 	
+	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
+	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+	
 	private static final MethodHandle GET_RESPAWN_FLAGS;
 	
 	static {
@@ -130,6 +133,11 @@ public class TownyPlayerListener implements Listener {
 		this.plugin = plugin;
 		loadBlockedCommandLists();
 		TownySettings.addReloadListener(NamespacedKey.fromString("blocked-commands", plugin), config -> loadBlockedCommandLists());
+		
+		TownySettings.addReloadListener(NamespacedKey.fromString("teleport-warmups", plugin), () -> {
+			this.teleportWarmupTime = TownySettings.getTeleportWarmupTime();
+			this.isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+		});
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -722,52 +730,37 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
+		Player player = event.getPlayer();
+		Location to = event.getTo();
+		Location from = event.getFrom();
+
 		/*
-		 * Abort if we havn't really moved
+		 * Abort if we haven't really moved
 		 */
-		if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ() && event.getFrom().getBlockY() == event.getTo().getBlockY()) {
+		if (from.getBlockX() == to.getBlockX() && from.getBlockZ() == to.getBlockZ() && from.getBlockY() == to.getBlockY()) {
 			return;
 		}
 
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		Player player = event.getPlayer();
-		Location to = event.getTo();
-		Location from;
-		PlayerCache cache = plugin.getCache(player);
-		Resident resident = townyUniverse.getResident(player.getUniqueId());
-		
-		if (resident != null
-				&& TownySettings.getTeleportWarmupTime() > 0
-				&& TownySettings.isMovementCancellingSpawnWarmup()
-				&& resident.hasRequestedTeleport()
-				&& !townyUniverse.getPermissionSource().isTownyAdmin(player)
-				&& TeleportWarmupTimerTask.abortTeleportRequest(resident)) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
+		if (this.teleportWarmupTime > 0 && this.isMovementCancellingWarmup) {
+			final Resident resident = TownyAPI.getInstance().getResident(player);
+			
+			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident))
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
 		}
 
-		try {
-			from = cache.getLastLocation();
-		} catch (NullPointerException e) {
-			from = event.getFrom();
-		}
-		
 		if (WorldCoord.cellChanged(from, to)) {
 
 			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());				
 			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld());
 			if (fromWorld == null || toWorld == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("not_registered"));
-				cache.setLastLocation(to);
 				return;
 			}
-			WorldCoord fromCoord = new WorldCoord(fromWorld.getName(), fromWorld.getUUID(), Coord.parseCoord(from));
-			WorldCoord toCoord = new WorldCoord(toWorld.getName(), fromWorld.getUUID(), Coord.parseCoord(to));
+			WorldCoord fromCoord = WorldCoord.parseWorldCoord(from);
+			WorldCoord toCoord = WorldCoord.parseWorldCoord(to);
 			
-			onPlayerMoveChunk(player, fromCoord, toCoord, from, to, event);
+			onPlayerMoveChunk(player, fromCoord, toCoord, event);
 		}
-
-		// Update the cached players current location
-		cache.setLastLocation(to);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -900,10 +893,11 @@ public class TownyPlayerListener implements Listener {
 	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent
 	*/
-	public void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Location fromLoc, Location toLoc, PlayerMoveEvent moveEvent) {
+	private void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, PlayerMoveEvent moveEvent) {
 
-		plugin.getCache(player).setLastLocation(toLoc);
-		plugin.getCache(player).updateCoord(to);
+		final PlayerCache cache = plugin.getCacheOrNull(player.getUniqueId());
+		if (cache != null)
+			cache.resetAndUpdate(to);
 
 		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to, moveEvent);
 		BukkitTools.fireEvent(event);

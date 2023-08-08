@@ -104,7 +104,7 @@ public class TownyAsciiMap {
 			return;
 		}
 		
-		Coord pos = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+		WorldCoord pos = WorldCoord.parseWorldCoord(player.getLocation());
 		final Translator translator = Translator.locale(player);
 
 		// Generate Map 
@@ -278,7 +278,7 @@ public class TownyAsciiMap {
 		for (Component component : map)
 			Towny.getAdventure().player(player).sendMessage(component);
 
-		TownBlock townblock = TownyAPI.getInstance().getTownBlock(plugin.getCache(player).getLastLocation());
+		TownBlock townblock = TownyAPI.getInstance().getTownBlock(pos);
 		TownyMessaging.sendMsg(player, translator.of("status_towny_map_town_line", 
 				(townblock != null && townblock.hasTown() ? townblock.getTownOrNull() : translator.of("status_no_town")), 
 				(townblock != null && townblock.hasResident() ? townblock.getResidentOrNull() : translator.of("status_no_town"))));

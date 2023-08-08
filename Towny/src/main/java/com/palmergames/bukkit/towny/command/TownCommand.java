@@ -3654,7 +3654,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Town town = getTownFromResidentOrThrow(resident);
 
 		// Allow a bankrupt town to claim a single plot.
-		if (town.isBankrupt() && town.getTownBlocks().size() != 0)
+		if (town.isBankrupt() && !town.getTownBlocks().isEmpty())
 			throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_claim"));
 
 		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
@@ -3668,7 +3668,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		List<WorldCoord> selection;
 		boolean outpost = false;
 		boolean isAdmin = resident.isAdmin();
-		Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
+		WorldCoord key = WorldCoord.parseWorldCoord(player);
 
 		/*
 		 * Make initial selection of WorldCoord(s)
@@ -3683,12 +3683,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Run various tests required by configuration/permissions through Util.
 			OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
 			
-			if (!TownyAPI.getInstance().isWilderness(plugin.getCache(player).getLastLocation()))
+			if (!TownyAPI.getInstance().isWilderness(key))
 				throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
 			// Select a single WorldCoord using the AreaSelectionUtil.
 			selection = new ArrayList<>();
-			selection.add(new WorldCoord(world.getName(), key));
+			selection.add(key);
 			outpost = true;
 
 		} else {

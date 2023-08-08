@@ -432,12 +432,12 @@ public class SpawnUtil {
 						else if (town != null && town.hasSpawn())
 							return town.getSpawnOrNull();
 						else
-							return plugin.getCache(player).getLastLocation().getWorld().getSpawnLocation();
+							return player.getWorld().getSpawnLocation();
 					});
 				} else if (town != null && town.hasSpawn())
 					yield CompletableFuture.completedFuture(town.getSpawnOrNull());
 				else
-					yield CompletableFuture.completedFuture(plugin.getCache(player).getLastLocation().getWorld().getSpawnLocation());
+					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
 					yield CompletableFuture.completedFuture(getOutpostSpawnLocation(town, split));
