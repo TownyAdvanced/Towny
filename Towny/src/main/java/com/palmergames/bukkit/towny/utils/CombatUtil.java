@@ -123,14 +123,14 @@ public class CombatUtil {
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
-		 * We have an attacking player, which is not an NPC..
+		 * We have an attacking player, which is not an NPC.
 		 */
 		if (attackingPlayer != null && isNotNPC(attackingPlayer)) {
 
 			boolean cancelled = false;
 			
 			/*
-			 * Defender is a player.
+			 * Defender is a player, which is not an NPC..
 			 */
 			if (defendingPlayer != null && isNotNPC(defendingPlayer)) {
 				
