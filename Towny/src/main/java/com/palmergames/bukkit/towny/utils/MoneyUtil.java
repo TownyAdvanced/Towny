@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import com.palmergames.bukkit.towny.object.Translatable;
 
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import org.bukkit.Location;
@@ -252,35 +253,43 @@ public class MoneyUtil {
 		return amount;
 	}
 
-	public static double returnPurchasedBlocksCost(int start, int end, Town town) {
-		int n;
-		if (start + end > TownySettings.getMaxPurchasedBlocks(town)) {
-			n = TownySettings.getMaxPurchasedBlocks(town) - start;
-		} else {
-			n = end;
-		}
+	public static CompletableFuture<Double> returnPurchasedBlocksCost(int start, int end, Town town) {
 
-		if (n == 0)
-			return n;
-
-		Function<Integer, Long> priceFunction = (num) -> Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue(), (double)num) * TownySettings.getPurchasedBonusBlocksCost());
-		boolean hasMaxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
-		double maxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		double nextPrice = priceFunction.apply(start);
-		double cost = !hasMaxPrice ? nextPrice : Math.min(maxPrice, nextPrice);
-
-		int i = 1;
-		while (i < n){
-			nextPrice = priceFunction.apply(start + i);
-
-			if (hasMaxPrice && nextPrice > maxPrice) {
-				cost += maxPrice * (end - i);
-				break;
+		return CompletableFuture.supplyAsync(()->{
+			int n;
+			if (start + end > TownySettings.getMaxPurchasedBlocks(town)) {
+				n = TownySettings.getMaxPurchasedBlocks(town) - start;
+			} else {
+				n = end;
 			}
 
-			cost += nextPrice;
-			i++;
-		}
-		return Math.round(cost);
+			if (n == 0)
+				return Double.valueOf(n);
+
+			double purchasedBonusBlocksIncreaseValue = TownySettings.getPurchasedBonusBlocksIncreaseValue();
+			double purchasedBonusBlocksCost = TownySettings.getPurchasedBonusBlocksCost();
+			
+			Function<Integer, Long> priceFunction = (num) -> {
+				return Math.round(Math.pow(purchasedBonusBlocksIncreaseValue, (double)num) * purchasedBonusBlocksCost);
+			};
+			boolean hasMaxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
+			double maxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice();
+			double nextPrice = priceFunction.apply(start);
+			double cost = !hasMaxPrice ? nextPrice : Math.min(maxPrice, nextPrice);
+
+			int i = 1;
+			while (i < n){
+				nextPrice = priceFunction.apply(start + i);
+
+				if (hasMaxPrice && nextPrice > maxPrice) {
+					cost += maxPrice * (end - i);
+					break;
+				}
+
+				cost += nextPrice;
+				i++;
+			}
+			return Double.valueOf(Math.round(cost));
+		});
 	}
 }

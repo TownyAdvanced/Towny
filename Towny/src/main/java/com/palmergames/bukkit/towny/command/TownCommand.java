@@ -2703,20 +2703,28 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (n == 0)
 			throw new TownyException(Translatable.of("msg_err_you_cannot_purchase_any_more_bonus_blocks"));
 
-		double cost = town.getBonusBlockCostN(n);
-		// Test if the town can pay and throw economy exception if not.
-		if (!town.getAccount().canPayFromHoldings(cost))
-			throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
-		
-		Confirmation.runOnAccept(() -> {
-			town.addPurchasedBlocks(n);
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
-			town.save();
-		})
-			.setCost(new ConfirmationTransaction(() -> cost, town.getAccount(), String.format("Town Buy Bonus (%d)", n),
-					Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost))))
-			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
-			.sendTo(sender); 
+		Towny.getPlugin().getScheduler().runAsync(() -> {
+			try {
+				double cost = town.getBonusBlockCostN(n);
+				// Test if the town can pay and throw economy exception if not.
+				if (!town.getAccount().canPayFromHoldings(cost))
+					throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+				
+				Confirmation.runOnAccept(() -> {
+					town.addPurchasedBlocks(n);
+					TownyMessaging.sendMsg(sender, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+					town.save();
+				})
+					.setCost(new ConfirmationTransaction(() -> cost, town.getAccount(), String.format("Town Buy Bonus (%d)", n),
+							Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost))))
+					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+					.sendTo(sender);
+
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			}
+		});
+ 
 	}
 
 	/**
@@ -4043,6 +4051,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC())
 			throw new TownyException(Translatable.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
 
+		Towny.getPlugin().getScheduler().run(() -> {
+			try {
+				continueTownMergeCommand(sender, remainingTown, admin, succumbingTown);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			}
+		});
+	}
+
+	private static void continueTownMergeCommand(CommandSender sender, Town remainingTown, boolean admin, Town succumbingTown) throws TownyException {
 		double baseCost = TownySettings.getBaseCostForTownMerge();
 		double townblockCost = 0;
 		double bankruptcyCost = 0;
@@ -4060,7 +4078,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// otherwise towns will farm small towns that buy up bonus blocks at a cheap rate, then merge.
 			if (succumbingTown.getPurchasedBlocks() > 0 && TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0) {
 				int purchasedBlocks = succumbingTown.getPurchasedBlocks();
-				double priceAlreadyPaid = MoneyUtil.returnPurchasedBlocksCost(0, purchasedBlocks, succumbingTown);
+				double priceAlreadyPaid = MoneyUtil.returnPurchasedBlocksCost(0, purchasedBlocks, succumbingTown).join();
 				purchasedBlockCost = remainingTown.getBonusBlockCostN(purchasedBlocks) - priceAlreadyPaid;
 			}
 

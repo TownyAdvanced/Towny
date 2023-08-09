@@ -602,12 +602,17 @@ public class Town extends Government implements TownBlockOwner {
 		return event.getPrice();
 	}
 	
+	/**
+	 * Do not call on the main thread, this will result in a blocking task.
+	 * 
+	 * @param int n the number of BonusBlocks to calculate a cost for. 
+	 */
 	public double getBonusBlockCostN(int n) throws TownyException {
 
 		if (n < 0)
 			throw new TownyException(Translation.of("msg_err_negative"));
 
-		double cost = MoneyUtil.returnPurchasedBlocksCost(getPurchasedBlocks(), n, this);
+		double cost = MoneyUtil.returnPurchasedBlocksCost(getPurchasedBlocks(), n, this).join();
 
 		BonusBlockPurchaseCostCalculationEvent event = new BonusBlockPurchaseCostCalculationEvent(this, cost, n);
 		BukkitTools.fireEvent(event);
