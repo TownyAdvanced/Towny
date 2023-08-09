@@ -26,6 +26,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,8 +35,10 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -383,6 +386,16 @@ public class BukkitTools {
 	 */
 	public static String keyAsString(@NotNull NamespacedKey key) {
 		return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
+	}
+	
+	@ApiStatus.Internal
+	public static Collection<String> convertKeyedToString(@NotNull Collection<? extends Keyed> keys) {
+		final Set<String> set = new HashSet<>();
+		
+		for (Keyed keyed : keys)
+			set.add(keyAsString(keyed.getKey()));
+		
+		return set;
 	}
 	
 	static {

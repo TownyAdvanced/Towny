@@ -2231,7 +2231,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# Valid EntityTypes are listed here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
 		list.add("isDeletingEntitiesOnUnclaim=" + world.isDeletingEntitiesOnUnclaim());
 		if (world.getUnclaimDeleteEntityTypes() != null)
-			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(world.getUnclaimDeleteEntityTypes().stream().map(type -> BukkitTools.keyAsString(type.getKey())).collect(Collectors.toList()), ","));
+			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(BukkitTools.convertKeyedToString(world.getUnclaimDeleteEntityTypes()), ","));
 
 		// PlotManagement
 		list.add("");
@@ -2267,7 +2267,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# The list of entities whose explosions would be reverted.");
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertEntities() != null)
-			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities().stream().map(type -> BukkitTools.keyAsString(type.getKey())).collect(Collectors.toList()), ","));
+			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(BukkitTools.convertKeyedToString(world.getPlotManagementWildRevertEntities()), ","));
 
 		list.add("# If enabled any damage caused by block explosions will repair itself.");
 		// Using PlotManagement Wild Block Regen
