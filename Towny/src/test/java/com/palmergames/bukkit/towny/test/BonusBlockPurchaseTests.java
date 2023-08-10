@@ -70,4 +70,21 @@ public class BonusBlockPurchaseTests {
 		double expected = Math.round(25 * Math.pow(1.2, 12 - 1) + (100 - 12 + 1) * 200);
 		assertEquals(expected, cost);
 	}
+	
+	@Test
+	void testBuyJustEnough() {
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1.20D);
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), 200);
+
+		double cost = MoneyUtil.returnPurchasedBlocksCost(0, 11, town);
+		// 11 is not enough to reach our max price
+		double expected = Math.round(25 * Math.pow(1.2, 11));
+		
+		assertEquals(expected, cost);
+		
+		// but 12 is
+		expected = Math.round(25 * Math.pow(1.2, 11) + 200);
+		cost = MoneyUtil.returnPurchasedBlocksCost(0, 12, town);
+		assertEquals(expected, cost);
+	}
 }
