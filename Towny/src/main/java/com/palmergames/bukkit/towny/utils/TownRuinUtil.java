@@ -165,6 +165,13 @@ public class TownRuinUtil {
 	}
 
 	public static void reclaimTown(@NotNull Resident resident, @NotNull Town town) {
+		// Re-test that the town is still ruined, because Confirmations can be accepted out-of-order.
+		if (!town.isRuined()) {
+			if (resident.isOnline())
+				TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
+			return;
+		}
+
 		town.setRuined(false);
 		town.setRuinedTime(0);
 
@@ -186,7 +193,6 @@ public class TownRuinUtil {
 		BukkitTools.fireEvent(new TownReclaimedEvent(town, resident));
 
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_reclaimed", resident.getName(), town.getName()));
-		
 	}
 
 	private static void setMayor(Town town, Resident newMayor) {

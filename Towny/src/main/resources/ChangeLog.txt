@@ -8959,3 +8959,5 @@ v0.92.0.11:
 0.99.5.10:
   - Fix exception after creating a new PlayerCache, courtesy of Warrior with PR #6911.
   - Add contributors to plugin.yml, courtesy of Warrior with PR #6915.
+0.99.5.11:
+  - Fix a town being able to be reclaimed a second time if the first Confirmation hadn't timed out.
