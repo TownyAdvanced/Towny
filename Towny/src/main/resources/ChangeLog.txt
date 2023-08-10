@@ -8963,3 +8963,6 @@ v0.92.0.11:
   - Fix a town being able to be reclaimed a second time if the first Confirmation hadn't timed out.
   - Add placing items onto Campfires cause a Build test.
     - Closes #6894.
+  - Fix all the weirdness around world entity key loading, courtesy of Warrior with PR #6901.
+  - Speed up calculating bonus block costs, courtesy of Warrior with PR #6919.
+  - Add spigot fallback to sign open event, courtesy of Warrior with PR #6920.
