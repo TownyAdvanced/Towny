@@ -252,35 +252,46 @@ public class MoneyUtil {
 		return amount;
 	}
 
-	public static double returnPurchasedBlocksCost(int start, int end, Town town) {
+	public static double returnPurchasedBlocksCost(int alreadyPurchased, int toPurchase, Town town) {
 		int n;
-		if (start + end > TownySettings.getMaxPurchasedBlocks(town)) {
-			n = TownySettings.getMaxPurchasedBlocks(town) - start;
+		if (alreadyPurchased + toPurchase > TownySettings.getMaxPurchasedBlocks(town)) {
+			n = TownySettings.getMaxPurchasedBlocks(town) - alreadyPurchased;
 		} else {
-			n = end;
+			n = toPurchase;
 		}
 
 		if (n == 0)
 			return n;
 
-		Function<Integer, Long> priceFunction = (num) -> Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue(), (double)num) * TownySettings.getPurchasedBonusBlocksCost());
+		final double increaseValue = TownySettings.getPurchasedBonusBlocksIncreaseValue();
+		final double baseCost = TownySettings.getPurchasedBonusBlocksCost();
 		boolean hasMaxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
 		double maxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		double nextPrice = priceFunction.apply(start);
-		double cost = !hasMaxPrice ? nextPrice : Math.min(maxPrice, nextPrice);
 
-		int i = 1;
-		while (i < n){
-			nextPrice = priceFunction.apply(start + i);
+		if (increaseValue == 1) {
+			// No exponential increase, short circuit to a simpler calculation
+			final double perBlockCost = hasMaxPrice ? Math.min(baseCost, maxPrice) : baseCost;
 
-			if (hasMaxPrice && nextPrice > maxPrice) {
-				cost += maxPrice * (end - i);
-				break;
-			}
-
-			cost += nextPrice;
-			i++;
+			return Math.round(perBlockCost * n);
 		}
+
+		// Adjust the base cost to the amount of already purchased blocks
+		final double blockCost = baseCost * Math.pow(increaseValue, alreadyPurchased);
+
+		if (hasMaxPrice) {
+			// Check if we're going to reach the max price
+			final int increases = (int) Math.ceil((Math.log(maxPrice) - Math.log(blockCost)) / Math.log(increaseValue));
+			
+			if (increases < n) {
+				// The amount of increments needed to reach the max price is less than the amount we're buying
+				// Calculate the price of the exponential increase until we reach the max price, then add up the remainder
+				final double cost = (blockCost * (1 - Math.pow(increaseValue, increases)) / (1 - increaseValue)) + (n - increases) * maxPrice;
+				return Math.round(cost);
+			}
+		}
+		
+		// sum = a * (1 - r^n) / (1 - r) where r != 1
+		final double cost = blockCost * (1 - Math.pow(increaseValue, n)) / (1 - increaseValue);
 		return Math.round(cost);
 	}
 }
