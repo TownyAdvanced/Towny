@@ -369,8 +369,11 @@ public class TownySettings {
 	public static void loadDefaultConfig() {
 		try {
 			loadConfig(Files.createTempFile("towny-temp-config", ".yml"), "0.0.0.0");
+			loadTownLevelConfig();
 		} catch (IOException e) {
 			throw new RuntimeException("Could not create temporary file", e);
+		} catch (TownyException e) {
+			throw new RuntimeException("Could not load town level config", e);
 		}
 	}
 	

@@ -263,24 +263,31 @@ public class MoneyUtil {
 		if (n == 0)
 			return n;
 
-		Function<Integer, Long> priceFunction = (num) -> Math.round(Math.pow(TownySettings.getPurchasedBonusBlocksIncreaseValue(), (double)num) * TownySettings.getPurchasedBonusBlocksCost());
+		final double increaseValue = TownySettings.getPurchasedBonusBlocksIncreaseValue();
+		final double blockCost = TownySettings.getPurchasedBonusBlocksCost();
 		boolean hasMaxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
 		double maxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice();
-		double nextPrice = priceFunction.apply(start);
-		double cost = !hasMaxPrice ? nextPrice : Math.min(maxPrice, nextPrice);
 
-		int i = 1;
-		while (i < n){
-			nextPrice = priceFunction.apply(start + i);
+		if (increaseValue == 1) {
+			// No exponential increase, short circuit to a simpler calculation
+			final double perBlockCost = hasMaxPrice ? Math.min(blockCost, maxPrice) : blockCost;
 
-			if (hasMaxPrice && nextPrice > maxPrice) {
-				cost += maxPrice * (end - i);
-				break;
-			}
-
-			cost += nextPrice;
-			i++;
+			return Math.round(perBlockCost * n);
 		}
+
+		if (hasMaxPrice) {
+			// Check if we're going to reach the max price
+			final int increases = (int) Math.ceil((Math.log(maxPrice) - Math.log(blockCost)) / Math.log(increaseValue));
+			
+			if (increases < n) {
+				// The amount of increments needed to reach the max price is less than the amount we're buying
+				// Calculate the price of the exponential increase until we reach the max price, then add up the remainder
+				final double cost = blockCost * Math.pow(increaseValue, increases) + (n - increases) * maxPrice;
+				return Math.round(cost);
+			}
+		}
+		
+		final double cost = blockCost * Math.pow(increaseValue, n);
 		return Math.round(cost);
 	}
 }
