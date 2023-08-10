@@ -264,7 +264,7 @@ public class MoneyUtil {
 			}
 
 			if (n == 0)
-				return Double.valueOf(n);
+				return 0.0D;
 
 			double purchasedBonusBlocksIncreaseValue = TownySettings.getPurchasedBonusBlocksIncreaseValue();
 			double purchasedBonusBlocksCost = TownySettings.getPurchasedBonusBlocksCost();
