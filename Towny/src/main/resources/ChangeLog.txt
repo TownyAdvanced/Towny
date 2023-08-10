@@ -8961,3 +8961,5 @@ v0.92.0.11:
   - Add contributors to plugin.yml, courtesy of Warrior with PR #6915.
 0.99.5.11:
   - Fix a town being able to be reclaimed a second time if the first Confirmation hadn't timed out.
+  - Add placing items onto Campfires cause a Build test.
+    - Closes #6894.

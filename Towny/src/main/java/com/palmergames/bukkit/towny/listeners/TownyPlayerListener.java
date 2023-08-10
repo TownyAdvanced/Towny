@@ -413,6 +413,7 @@ public class TownyPlayerListener implements Listener {
 				 * Test wax usage.
 				 * Test putting plants in pots.
 				 * Test if we're putting a book into a BookContainer.
+				 * Test if something is being put onto a Campfire.
 				 * Test bonemeal usage.
 				 * 
 				 * Treat interaction as a Build test.
@@ -421,6 +422,7 @@ public class TownyPlayerListener implements Listener {
 					ItemLists.PLANTS.contains(item) && clickedMat == Material.FLOWER_POT ||
 					item == Material.HONEYCOMB && ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat) ||
 					ItemLists.PLACEABLE_BOOKS.contains(item) && ItemLists.BOOK_CONTAINERS.contains(clickedMat) ||
+					ItemLists.CAMPFIRES.contains(clickedMat) && item != Material.FLINT_AND_STEEL ||
 					item == Material.BONE_MEAL && !TownyActionEventExecutor.canBuild(player, loc, item)) {
 
 					if (!TownyActionEventExecutor.canBuild(player, loc, item)) {
