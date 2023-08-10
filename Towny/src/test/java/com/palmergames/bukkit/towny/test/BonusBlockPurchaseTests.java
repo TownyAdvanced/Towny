@@ -62,12 +62,12 @@ public class BonusBlockPurchaseTests {
 
 		double cost = MoneyUtil.returnPurchasedBlocksCost(0, 100, town);
 		
-		/* After purchasing 12 townblocks we go above the 200 limit:
+		/* After purchasing 13 townblocks we go above the 200 limit:
 		 * 25 * Math.pow(1.2, 11) = ~186
 		 * 25 * Math.pow(1.2, 12) = ~223
-		 * So to stay under the max price of 200, we need to use 11 instead of 12.
+		 * So to stay under the max price of 200, we need to use 12 instead of 13.
 		 */
-		double expected = calculateExpected(25, 1.2, 11) + (100 - 12) * 200;
+		double expected = calculateExpected(25, 1.2, 12) + (100 - 12) * 200;
 		assertEquals(expected, cost);
 	}
 	
@@ -77,14 +77,14 @@ public class BonusBlockPurchaseTests {
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), 200);
 
 		double cost = MoneyUtil.returnPurchasedBlocksCost(0, 11, town);
-		// 11 is not enough to reach our max price
+		// 12 is not enough to reach our max price
 		double expected = calculateExpected(25, 1.2, 11);
 		
 		assertEquals(expected, cost);
 		
-		// but 12 is
-		expected = calculateExpected(25, 1.2, 11) + 200;
-		cost = MoneyUtil.returnPurchasedBlocksCost(0, 12, town);
+		// but 13 is
+		expected = calculateExpected(25, 1.2, 12) + 200;
+		cost = MoneyUtil.returnPurchasedBlocksCost(0, 13, town);
 		assertEquals(expected, cost);
 	}
 	
