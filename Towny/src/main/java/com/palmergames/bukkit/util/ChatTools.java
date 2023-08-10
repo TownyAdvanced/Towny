@@ -23,11 +23,11 @@ public class ChatTools {
 	private static final float UNDERSCORE_WIDTH = FontUtil.measureWidth('_');
 	
 	// Padding used for the main title formatting
-	private static final String WIDGET = ".oOo.";
+	private static final String WIDGET = Translation.of("widget");
 	private static final float WIDGET_WIDTH = FontUtil.measureWidth(WIDGET);
 	
 	// Padding used for subtitle formatting
-	private static final String SUBWIDGET = " .]|[. ";
+	private static final String SUBWIDGET = Translation.of("subwidget");
 	private static final float SUBWIDGET_WIDTH = FontUtil.measureWidth(SUBWIDGET);
 	
 	public static String listArr(String[] args, String prefix) {
@@ -69,7 +69,7 @@ public class ChatTools {
 	}
 	
 	public static String formatTitle(String title) {
-		title = ".[ " + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + " ].";
+		title = Translation.of("titleLeft") + Translation.of("status_title_secondary_colour") + title + Translation.of("status_title_primary_colour") + Translation.of("titleRight");
 		
 		if (!FontUtil.isValidMinecraftFont(title))
 			return legacyFormatTitle(title);
@@ -89,7 +89,7 @@ public class ChatTools {
 
 
 	private static String legacyFormatTitle(String title) {
-		String line = ".oOo.__________________________________________________.oOo.";
+		String line = Translation.of("line");
 		if (title.length() > line.length())
 			title = title.substring(0, line.length());
 		int pivot = line.length() / 2;

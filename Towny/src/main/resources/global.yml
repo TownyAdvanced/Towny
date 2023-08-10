@@ -21,3 +21,8 @@
 #help_menu_subcommand: '<aqua>'
 #help_menu_explanation: '<gray>'
 #help_menu_requirement: '<red>'
+line: ".oOo.__________________________________________________.oOo."
+widget: ".oOo."
+subwidget: " .]|[. "
+titleLeft: ".[ "
+titleRight: " ]."
