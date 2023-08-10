@@ -2382,7 +2382,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// Deleting EntityTypes from Townblocks on Unclaim.
 			nat_hm.put("isDeletingEntitiesOnUnclaim", world.isDeletingEntitiesOnUnclaim());
 			if (world.getUnclaimDeleteEntityTypes() != null)
-				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(world.getUnclaimDeleteEntityTypes(), "#"));
+				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(BukkitTools.convertKeyedToString(world.getUnclaimDeleteEntityTypes()), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
@@ -2412,8 +2412,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			// Wilderness Explosion Protection entities
 			if (world.getPlotManagementWildRevertEntities() != null)
-				// getKey().getKey() strips out any minecraft: from minecraft:creeper.
-				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(world.getPlotManagementWildRevertEntities().stream().map(type -> type.getKey().getKey()).collect(Collectors.toList()), "#"));
+				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(BukkitTools.convertKeyedToString(world.getPlotManagementWildRevertEntities()), "#"));
 
 			// Wilderness Explosion Protection Block Whitelist
 			if (world.getPlotManagementWildRevertBlockWhitelist() != null)

@@ -13,7 +13,6 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -557,24 +556,7 @@ public class TownyWorld extends TownyObject {
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
 		entityExplosionProtection = new HashSet<>();
-		
-		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entity's key.
-		if (entities.size() > 0 && !StringMgmt.isAllUpperCase(entities))
-			convertLegacyEntityNames(entities);
-		
 		entityExplosionProtection.addAll(TownySettings.toEntityTypeSet(entities));
-	}
-	
-	private void convertLegacyEntityNames(List<String> entities) {
-		for (int i = 0; i < entities.size(); i++) {
-			String entity = entities.get(i);
-			for (EntityType type : Registry.ENTITY_TYPE) {
-				if (type.getEntityClass() != null && type.getEntityClass().getSimpleName().equalsIgnoreCase(entity)) {
-					entities.set(i, type.getKey().toString());
-					break;
-				}					
-			}
-		}
 	}
 
 	public Collection<EntityType> getPlotManagementWildRevertEntities() {
