@@ -282,12 +282,13 @@ public class MoneyUtil {
 			if (increases < n) {
 				// The amount of increments needed to reach the max price is less than the amount we're buying
 				// Calculate the price of the exponential increase until we reach the max price, then add up the remainder
-				final double cost = blockCost * Math.pow(increaseValue, increases) + (n - increases) * maxPrice;
+				final double cost = (blockCost * (1 - Math.pow(increaseValue, increases)) / (1 - increaseValue)) + (n - increases - 1) * maxPrice;
 				return Math.round(cost);
 			}
 		}
 		
-		final double cost = blockCost * Math.pow(increaseValue, n);
+		// sum = a * (1 - r^n) / (1 - r) where r != 1
+		final double cost = blockCost * (1 - Math.pow(increaseValue, n)) / (1 - increaseValue);
 		return Math.round(cost);
 	}
 }
