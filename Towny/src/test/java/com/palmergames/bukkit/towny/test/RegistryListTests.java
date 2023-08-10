@@ -12,7 +12,7 @@ public class RegistryListTests {
 	
 	@BeforeAll
 	static void mock() {
-		MockBukkit.mock();
+		MockBukkit.getOrCreateMock();
 		TownySettings.loadDefaultConfig();
 	}
 	
