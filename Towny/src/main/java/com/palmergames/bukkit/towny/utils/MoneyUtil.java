@@ -252,28 +252,31 @@ public class MoneyUtil {
 		return amount;
 	}
 
-	public static double returnPurchasedBlocksCost(int start, int end, Town town) {
+	public static double returnPurchasedBlocksCost(int alreadyPurchased, int toPurchase, Town town) {
 		int n;
-		if (start + end > TownySettings.getMaxPurchasedBlocks(town)) {
-			n = TownySettings.getMaxPurchasedBlocks(town) - start;
+		if (alreadyPurchased + toPurchase > TownySettings.getMaxPurchasedBlocks(town)) {
+			n = TownySettings.getMaxPurchasedBlocks(town) - alreadyPurchased;
 		} else {
-			n = end;
+			n = toPurchase;
 		}
 
 		if (n == 0)
 			return n;
 
 		final double increaseValue = TownySettings.getPurchasedBonusBlocksIncreaseValue();
-		final double blockCost = TownySettings.getPurchasedBonusBlocksCost();
+		final double baseCost = TownySettings.getPurchasedBonusBlocksCost();
 		boolean hasMaxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
 		double maxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice();
 
 		if (increaseValue == 1) {
 			// No exponential increase, short circuit to a simpler calculation
-			final double perBlockCost = hasMaxPrice ? Math.min(blockCost, maxPrice) : blockCost;
+			final double perBlockCost = hasMaxPrice ? Math.min(baseCost, maxPrice) : baseCost;
 
 			return Math.round(perBlockCost * n);
 		}
+
+		// Adjust the base cost to the amount of already purchased blocks
+		final double blockCost = baseCost * Math.pow(increaseValue, alreadyPurchased);
 
 		if (hasMaxPrice) {
 			// Check if we're going to reach the max price

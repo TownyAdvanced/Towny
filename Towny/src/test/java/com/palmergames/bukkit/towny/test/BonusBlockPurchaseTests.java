@@ -87,6 +87,22 @@ public class BonusBlockPurchaseTests {
 		cost = MoneyUtil.returnPurchasedBlocksCost(0, 13, town);
 		assertEquals(expected, cost);
 	}
+
+	@Test
+	void testNotStartingFromZero() {
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1.20D);
+
+		double firstCost = MoneyUtil.returnPurchasedBlocksCost(0, 1, town);
+		assertEquals(25, firstCost); // Ensure that first cost is 25
+		
+		// The town has one bonus block and is claiming another
+		double cost = MoneyUtil.returnPurchasedBlocksCost(1, 1, town);
+		assertEquals(25 * 1.2, cost);
+		
+		// The town has two bonus blocks and claims yet another
+		double finalCost = MoneyUtil.returnPurchasedBlocksCost(2, 1, town);
+		assertEquals(25 * Math.pow(1.2, 2), finalCost);
+	}
 	
 	private double calculateExpected(int baseCost, double increase, int n) {
 		return Math.round(baseCost * (1 - Math.pow(increase, n)) / (1 - increase));
