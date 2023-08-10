@@ -61,7 +61,13 @@ public class BonusBlockPurchaseTests {
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), 200);
 
 		double cost = MoneyUtil.returnPurchasedBlocksCost(0, 100, town);
-		double expected = Math.round(25 * Math.pow(1.2, 12) + (100 - 12) * 200);
-		assertEquals(expected, cost); 
+		
+		/* After purchasing 12 townblocks we go above the 200 limit:
+		 * 25 * Math.pow(1.2, 11) = ~186
+		 * 25 * Math.pow(1.2, 12) = ~223
+		 * So to stay under the max price of 200, we need to use 11 instead of 12, since if we did 12 we'd be above it.
+		 */
+		double expected = Math.round(25 * Math.pow(1.2, 12 - 1) + (100 - 12 + 1) * 200);
+		assertEquals(expected, cost);
 	}
 }
