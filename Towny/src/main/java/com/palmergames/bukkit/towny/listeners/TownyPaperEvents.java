@@ -44,6 +44,7 @@ public class TownyPaperEvents implements Listener {
 	private static final String PAPER_PRIME_EVENT = "com.destroystokyo.paper.event.block.TNTPrimeEvent";
 	
 	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";
+	private static final String SPIGOT_SIGN_OPEN_EVENT = "org.bukkit.event.player.PlayerSignOpenEvent";
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -63,7 +64,7 @@ public class TownyPaperEvents implements Listener {
 		}
 		
 		if (SIGN_OPEN_GET_CAUSE != null) {
-			registerEvent(SIGN_OPEN_EVENT, this::openSignListener, EventPriority.LOW, true);
+			registerEvent(JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT, this::openSignListener, EventPriority.LOW, true);
 			TownyMessaging.sendDebugMsg("PlayerOpenSignEvent#getCause found, using PlayerOpenSignEvent listener.");
 		}
 	}
@@ -179,18 +180,20 @@ public class TownyPaperEvents implements Listener {
 	}
 
 	private static MethodHandle getSignOpenCauseHandle() {
+		final String eventClass = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
 		try {
 			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
-			return MethodHandles.publicLookup().unreflect(Class.forName(SIGN_OPEN_EVENT).getMethod("getCause"));
+			return MethodHandles.publicLookup().unreflect(Class.forName(eventClass).getMethod("getCause"));
 		} catch (ReflectiveOperationException e) {
 			return null;
 		}
 	}
 
 	private static MethodHandle getSignOpenGetSignHandle() {
+		final String eventClass = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
 		try {
 			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
-			return MethodHandles.publicLookup().unreflect(Class.forName(SIGN_OPEN_EVENT).getMethod("getSign"));
+			return MethodHandles.publicLookup().unreflect(Class.forName(eventClass).getMethod("getSign"));
 		} catch (ReflectiveOperationException e) {
 			return null;
 		}
