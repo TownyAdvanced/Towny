@@ -42,7 +42,7 @@ unclaimed_zone_name: 'Dzikie tereny'
 #+------------------------------------------------------+ #
 ############################################################
 help_0: 'Ogólna Pomoc Towny'
-help_1: '&bWypróbuj te komendy, aby lepiej poznać Towny.'
+help_1: 'Wypróbuj te polecenia, aby dowiedzieć się więcej o Towny.'
 help_2: 'Chat Miasta'
 help_3: 'Chat Nacji'
 town_help_1: 'Informacje o twoim mieście'
@@ -52,13 +52,13 @@ town_help_4: 'Informacje o mieście, na którego terenie stoisz'
 town_help_5: 'Teleportacja do twojego miasta.'
 town_help_6: 'Nowe miasto na czele z tobą.'
 town_help_7: 'Nowe miasto z wybranym przywódcą.'
-town_help_8: 'Lista komend przywódcy.'
+town_help_8: 'Lista poleceń dla burmistrzów.'
 town_help_9: 'Nadszedł ten dzień!'
 town_help_10: 'Lista rezydentów online w twoim mieście'
 mayor_help_3: 'Teren leżący poza murami miasta'
 mayor_help_4: 'Pozyskaj dookoła w promieniu X'
 mayor_help_5: 'Przejmuje wszystko w maksymalnym promieniu'
-mayor_help_6: 'Porzuć blok miejski'
+mayor_help_6: 'Porzuć ten Blok Miasta'
 mayor_help_7: 'Próba porzucenia chunków dookoła ciebie.'
 mayor_help_8: 'Porzucanie wszelkich przejętych chunków'
 nation_help_1: 'Informacje o twojej nacji'
@@ -87,7 +87,7 @@ mode_4: 'Domyślne pisanie na kanale miasta'
 mode_5: 'Domyślne pisanie na kanale nacji'
 mode_6: 'Może postawić %s we wrogim terytorium, aby oznaczyć strefy wojenne.'
 plot_perms: 'Użyj %s zamiast %s do ustawiania uprawnień działki.'
-plot_perms_1: 'Dziaki rezydenckie nie biorą pod uwagę generalnych, miejskich uprawnień dla obcych.'
+plot_perms_1: 'Działki mieszkańców nie korzystają z uprawnień Obcych.'
 res_list: 'Rezydenci'
 res_sing: 'Rezydent'
 mayor_sing: 'Burmistrz'
@@ -104,7 +104,7 @@ world_help_2: '[świat]'
 world_help_3: 'Informacje o danym świecie'
 world_help_4: 'Lista wszystkich światów'
 world_help_5: 'Regeneruj ten chunk'
-townyadmin_help_1: 'Porzuć ten blok miejski.'
+townyadmin_help_1: 'Porzuć ten Blok Miasta'
 townyadmin_help_2: 'Porzucenie chunków w okolicy.'
 admin_panel_2: 'przeładowanie Towny'
 admin_panel_3: 'Wykonaj kod nowego dnia'
@@ -160,7 +160,7 @@ msg_nation_kicked: '&b%s wyrzucił miasto %s z nacji.'
 msg_raised_ass: '&b%s awansował %s na asystenta %s.'
 msg_lowered_to_res_by: '&bZostałeś zdegradowany do zwykłego rezydenta przez %s.'
 msg_lowered_to_res: '&b%s zdegradował %s do rangi rezydenta.'
-msg_invalid_name: '&bNie rozpoznano tej nazwy.'
+msg_invalid_name: '&bŻadna z tych nazw nie jest poprawna.'
 msg_invited_join_town: '&b%s zaprosił do swojego miasta człowieka o imieniu %s.'
 msg_invited_join_nation: '&b%s zaprosił %s do wstąpienia donacji.'
 msg_deny_invite: '&b%s odrzucił zaproszenie.'
@@ -181,8 +181,8 @@ msg_ally_req_sent: '&bPropozycja sojuszu została wysłana do nacji %s.'
 msg_ally_request: '&bNacja %s wysłała propozycję utworzenia sojuszu.'
 msg_unable_ally_offline: "&cWysłanie propozycji sojuszu jest niemożliwe - król nacji jest nieaktywny."
 msg_unable_ally_npc: "&cWysłanie prośby o sojusz jest niemożliwe - burmistrz nacji jest NPC."
-msg_claimed: '&2Pomyślnie pozyskano blok miejski'
-msg_unclaimed: '&2Pomyślnie porzucono blok miejski'
+msg_claimed: '&2Pozyskano pomyślnie'
+msg_unclaimed: '&2Porzucono pomyślnie'
 msg_not_claimable: '&cW tym świecie nie można zajmować chunków.'
 msg_abandoned_area: '&bPorzucono teren %s'
 msg_admin_unclaim_area: '&cObszar niemożliwy do przejęcia %s'
@@ -190,7 +190,7 @@ msg_abandoned_area_1: '&bTwoje miasto opuściło ten obszar'
 msg_no_money_purchase_plot: '&cNie stać cię na zakup tej działki.'
 msg_town_no_money_purchase_plot: '&cMiasto nie ma wystarczającej ilości pieniędzy, aby zakupić ten teren.'
 msg_no_funds_new_town: '&c%s nie stać na założenie miasta.'
-msg_no_funds_claim: '&cMiasto nie może pozwolić sobie na zakup chunków w ilości: %s, kosztujących  %s. Zasil konto bankowe miasta pieniędzmi.'
+msg_no_funds_claim: '&cMiasto nie stać na kupno %s Bloków Miasta kosztujących %s. Przelej więcej pieniędzy do banku miasta.'
 msg_no_funds_to_buy: '&cMiasto nie może sobie pozwolić na zakup %s %s kosztujacego %s. Przelej wiecej pieniędzy do banku.'
 msg_annexed_area: '&2Zaanektowano obszar %s'
 msg_max_plot_own: '&cNie możesz mieć więcej niż %s działek.'
@@ -224,7 +224,7 @@ msg_changed_mobs: '&cSpawnowanie się potworów w %s zostało %s.'
 msg_the_plot_group: 'Grupa Działek'
 msg_changed_taxpercent: '&cPodatki procentowe zostały %s.'
 msg_changed_open: '&cDołączanie bez zaproszeń zostało %s.'
-msg_toggle_open_on_warning: 'Ostrzeżenie: Uprawnienia miasta powinny być wyłączone, jeśli miasto jest otwarte. Użyj komendy "/town set perm off", a następnie "/town set perm reset".'
+msg_toggle_open_on_warning: 'Ostrzeżenie: Rekomendowane jest, by uprawnienia w mieście były wyłączone, jeśli miasto jest otwarte. Użyj polecenia "/town set perm off", następnie "/town set perm reset".'
 msg_changed_world_setting: '&c%s dla %s jest: %s'
 msg_world_pvp: '&cTen świat ma permanentnie włączone PvP.'
 msg_world_mobs: '&cTen świat ma włączone moby.'
@@ -242,7 +242,7 @@ msg_xx_deposited_xx: '&b%s zdeponował kwotę %s do banku "%s".'
 msg_insuf_funds: '&cNie masz tylu pieniedzy.'
 msg_err_withdraw_disabled: 'Wypłacanie pieniędzy z banku jest wyłączone!'
 msg_err_deposit_capped: 'Nie można zdeponować pieniędzy. Ten bank ma limit wynoszący %s.'
-msg_set_town_home: '&bPomyślnie zmieniono koordynaty Bloku Macierzystego na %s'
+msg_set_town_home: '&bPomyślnie zmieniono Blok Macierzysty na %s'
 msg_set_town_spawn: '&bPomyslnie zmieniono spawn miasta.'
 msg_set_outpost_spawn: '&bPomyślnie zmieniono punkt spawnu placówki.'
 msg_set_title: '&b%s otrzymał tytuł ''%s&b''.'
@@ -274,7 +274,7 @@ msg_set_nation_tag: '&b%s ustawił tag nacji na [%s]'
 msg_set_town_tag: '&b%s ustawił tag miasta na [%s]'
 msg_reset_nation_tag: '&b%s wyczyścił tag nacji.'
 msg_reset_town_tag: '&b%s wyczyścił tag miasta.'
-msg_mayor_abandon: '&bChcesz porzucić swoich poddanych? Wybierz nowego przywódcę wpisując komendę "/town set mayor".'
+msg_mayor_abandon: '&bChcesz porzucić swoich ludzi? Wybierz nowego burmistrza poleceniem "/town set mayor" jeśli jesteś tego pewien.'
 msg_new_day_tax: '&bNastał nowy dzień! Podatki zostały zebrane'
 msg_new_day: '&bNastał nowy dzień!'
 msg_new_king: '&b%s jest od teraz liderem nacji %s!'
@@ -294,7 +294,7 @@ msg_cache_block_error_wild: '&cNie masz uprawnienia do czynności "%s" na dzikic
 msg_cache_block_error_plot: '&cJako właściciel działki nie masz uprawnienia "%s" na tym terenie.'
 msg_cache_block_error_town_resident: '&cMieszkańcy nie mają tutaj uprawnienia "%s".'
 msg_cache_block_error_town_allies: '&cSojusznicy nie mają tutaj uprawnienia "%s".'
-msg_cache_block_error_town_outsider: '&cObcy nie posiadają uprawnień do "%s".'
+msg_cache_block_error_town_outsider: '&cObcy nie mają uprawnień "%s".'
 msg_err_cant_afford_tp_town: '&cNie stać cię na teleportację do %s.'
 msg_err_not_public: '&cTo miasto nie jest publiczne.'
 msg_err_not_open: '&cMiasto %s nie ma otwartych drzwi dla każdego, zgłoś się do burmistrza lub asystenta.'
@@ -324,13 +324,13 @@ msg_err_updating_item_perms: '&cBłąd podczas aktualizacji pamięci podręcznej
 msg_err_updating_switch_perms: '&cBłąd podczas aktualizacji pamięci podręcznej uprawnienia "switch".'
 msg_err_updating_destroy_perms: '&cBłąd podczas aktualizacji pamięci podręcznej uprawnienia "destroy".'
 msg_err_updating_build_perms: '&cBłąd podczas aktualizacji pamięci podręcznej uprawnienia "build".'
-msg_err_admin_only: '&cTylko administrator może użyć tej komendy.'
+msg_err_admin_only: '&cTylko admin może użyć tego polecenia.'
 msg_err_admin_only_delete: '&cTylko administrator może usunąć dane mieszkańca.'
 msg_err_admin_only_delete_town: '&cTylko administrator może usunąc miasto.'
 msg_err_admin_only_delete_nation: '&cTylko administrator może usunąć nację.'
 msg_err_online_or_npc: '&c%s jest online albo jest NPC.'
 msg_err_not_registered: '&cNie jesteś zarejestrowany.'
-msg_err_not_registered_1: 'Nie rozpoznano "&c%s". Popraw komendę'
+msg_err_not_registered_1: '&c%s nie jest rozpoznawane'
 msg_err_invalid_name: '&c"%s" jest niepoprawną nazwą.'
 msg_err_already_res: '&c%s należy już do miasta.'
 msg_err_already_in_town: '&c%s jest już cześcią %s.'
@@ -341,8 +341,8 @@ msg_err_invalid_input: '&cNieprawidlowe wejscie. Uzyj %s'
 msg_err_negative: '&cWartość nie może być ujemna.'
 msg_err_input_too_long: '&cZbyt długie!'
 msg_err_invalid_choice: '&cNieprawidłowy wybór'
-msg_err_invalid_sub: '&cNieprawidłowe rozwinięcie komendy.'
-msg_err_command_disable: '&cKomenda jest niedostępna - brak wymaganych uprawnień.'
+msg_err_invalid_sub: '&cNieprawidłowe polecenie podrzędne.'
+msg_err_command_disable: '&cNie masz wymaganych uprawnień, aby użyć tego polecenia.'
 msg_err_universe_limit: '&cWszechświat jest zbyt przeciążony ilością miast!'
 msg_err_too_many_npc: '&cZbyt wiele zarejestrowanych NPC.'
 msg_err_negative_money: '&cNie możesz mieć ujemnego stanu konta.'
@@ -410,8 +410,8 @@ msg_err_ender_pearls_disabled: '&4Perły są wyłączone!'
 msg_err_no_sleep_in_enemy_inn: '&4Nie możesz spać w karczmie wroga!'
 msg_err_cant_use_bed: '&4Nie jesteś właścicielem tej ziemi, ani nie jest to karczma.'
 msg_town_plots_revenue_disclaimer: '&aPokazany przychód jest szacowany. To, czy właściciel działki może zapłacić, jest głównym czynnikiem.'
-msg_town_set_perm_syntax_error: 'Nieprawidłowa kombinacja słów dla tej komendy. Spójrz na ''/town set perm ? '' Aby poznać prawidłową składnię.'
-msg_plot_set_perm_syntax_error: 'Nieprawidłowa kombinacja słów dla tej komendy. Spójrz na "/plot set perm ?" Aby poznać prawidłową składnię.'
+msg_town_set_perm_syntax_error: 'Nieprawidłowa kombinacja słów dla tego polecenia. Użyj "/town set perm ?", aby poznać prawidłową składnię polecenia.'
+msg_plot_set_perm_syntax_error: 'Nieprawidłowa kombinacja słów dla tego polecenia. Użyj "/plot set perm ?", aby poznać prawidłową składnię polecenia.'
 #Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'Ten rezydent nie należy do tego miasta.'
 msg_err_resident_already_an_outlaw: 'Ten gracz został już wygnany z twojego miasta.'
@@ -423,15 +423,15 @@ msg_you_have_undeclared_an_outlaw: '%s nie jest już wygnańcem w %s.'
 msg_err_player_not_an_outlaw: 'Ten gracz nie był uznany jako wygnaniec.'
 msg_err_outlaw_in_open_town: 'Nie możesz dołączyć do otwartego miasta, które cię wygnało.'
 msg_you_are_an_outlaw_in_this_town: '&4Bądź ostrożny - miasto %s wygnało cię, smierć tutaj może oznaczać więzienie.'
-msg_err_town_not_close_enough_to_nation: 'Chunk centralny miasta %s nie jest wystarczająco blisko terenu centralnego nacji.'
-msg_nation_town_moved_their_homeblock_too_far: 'Chunk centralny miasta %s został przesunięty zbyt daleko stolicy nacji, więc zostało usuniętye z twojej nacji.'
+msg_err_town_not_close_enough_to_nation: 'Blok Macierzysty miasta %s jest za daleko od Bloku Macierzystego stolicy twojej nacji, więc to miasto nie może dołączyć do twojej nacji.'
+msg_nation_town_moved_their_homeblock_too_far: 'Chunk Macierzysty miasta %s został przesunięty zbyt daleko od stolicy twojej nacji, więc zostało usunięte z nacji.'
 #Added in 0.33
 msg_err_invalid_radius_number: '&cNieprawidłowa wartość promienia. Użyj %s lub mniejszej.'
 #Added in 0.34
 msg_err_max_residents_per_town_reached: '&cMaksymalna liczba rezydentów (%s) została osiągnięta.'
 #Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&cGracz %s nie był akywny od dłuższego czasu. Nie możesz go zaprosić.'
-msg_cant_toggle_pvp_outsider_in_town: 'Na terenie twojego miasta jest obcy, nie możesz zmienić swojego statusu pvp!'
+msg_cant_toggle_pvp_outsider_in_town: 'Na terenie twojego miasta jest obcy, nie możesz zmienić statusu PVP!'
 msg_err_unclaim_not_outpost: 'Ten teren nie jest placówką!'
 outpost_plu: 'Placówki'
 #Added in 0.36
@@ -439,7 +439,7 @@ msg_err_not_enough_residents: 'Niewystarczająca ilość rezydentów.'
 #Added in 0.37
 msg_err_friendly_fire_disable: 'Ogień bratobójczy jest wyłączony!'
 #Added in 0.38
-msg_claim_error: '&cInny plugin wstrzymał roszczenie (%s)/(%s) chunków miejskich, nie udało się dokończyć tej operacji.'
+msg_claim_error: '&cInny plugin uniemożliwił pozyskanie (%s)/(%s) Bloków Miasta, nie udało się dokończyć tej operacji.'
 #Added in 0.39
 msg_err_town_spawn_forbidden_war: '&cSpawn miasta jest włączony tylko podczas wojny.'
 msg_err_town_spawn_forbidden_peace: '&cSpawn miasta jest wyłączony podczas wojny.'
@@ -521,13 +521,13 @@ you_have_been_requested_to_ally2: 'Dostałeś propozycję sojuszu z %s'
 town_help_11: 'Utwórz nowe misto.'
 changed_plot_town: '&bZ powodzeniem zmieniłeś działkę w mieście na %s!'
 not_standing_in_plot: 'Nie stoisz w srodku waznego terenu!'
-msg_err_homeblock_has_not_been_set: 'Blok centralny nie jest ustawiony. Użyj najpierw komendy /town set homeblock.'
-msg_err_spawn_not_within_homeblock: 'Spawn nie jest na bloku centralnym, użyj najpierw "/town set homeblock".'
+msg_err_homeblock_has_not_been_set: 'Blok Macierzysty nie został ustawiony, najpierw wpisz polecenie "/town set homeblock".'
+msg_err_spawn_not_within_homeblock: 'Spawn nie jest na obszarze Bloku Macierzystego, wpisz najpierw "/town set homeblock".'
 #Added in 0.44
 #TownyChat language strings
-tc_err_invalid_command: 'Błędna komenda!'
+tc_err_invalid_command: 'Błędne polecenie!'
 tc_settings_reloaded: '[TownyChat] ustawienia przeładowane!'
-tc_err_unrecognized_command_format: 'Error: nierozpoznany format komend!'
+tc_err_unrecognized_command_format: 'Error: nierozpoznany format polecenia!'
 tc_channel_list_status: '(Status)'
 tc_channel_list_in: 'Aktualnie'
 tc_channel_list_out: 'Poza'
@@ -604,7 +604,7 @@ status_town_nation: 'Nacja:'
 status_town_reslist_overlength: 'i wiecej...'
 status_nation_king: 'Lider:'
 status_nation_tax: 'PodatekNacji:'
-status_nation_conquered_tax: 'ConqueredTax:'
+status_nation_conquered_tax: 'Trybut:'
 status_nation_towns: 'Miasta'
 status_nation_allies: 'Sojusznicy'
 status_nation_enemies: 'Wrogowie'
@@ -625,8 +625,8 @@ status_res_tax: 'Podatek Miejski:'
 status_res_plottax: 'Suma Podatków Od Działki:'
 status_res_totaltax: 'Suma Podatków do zapłaty:'
 #Added in 0.45
-msg_err_unable_to_use_bank_outside_nation_capital: 'Nie możesz operować środkami nacji, kiedy nie jesteś w stolicy.'
-msg_err_unable_to_use_bank_outside_your_town: 'Nie możesz operować środkami miasta, kiedy w nim nie jesteś.'
+msg_err_unable_to_use_bank_outside_nation_capital: 'Nie możesz operować środkami nacji, kiedy nie przebywasz w stolicy.'
+msg_err_unable_to_use_bank_outside_your_town: 'Nie możesz operować środkami miasta, kiedy w nim nie przebywasz.'
 msg_time_until_a_new_day: 'Czas do nowego dnia: '
 msg_hours: ' godz'
 msg_minutes: ' minut'
@@ -647,7 +647,7 @@ msg_err_nation_not_public: '&cNacja nie jest publiczna.'
 msg_nation_toggle_public: '&aZ sukcesem zmieniono status nacji na publiczny.'
 status_yes: '&aTak'
 status_no: '&cNie'
-msg_err_unable_to_use_bank_outside_bank_plot: 'Nie możesz użyć tej komendy w tym miejscu. Idź do banku, lub na swoją działkę.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'Nie możesz użyć tego polecenia poza bankiem i Blokiem Macierzystym.'
 msg_err_nation_spawn_forbidden: '&cSpawn nacji jest wyłączony.'
 msg_err_nation_spawn_forbidden_war: '&cTeleportacja na spawn nacji jest dozwolona tylko podczas wojny.'
 msg_err_nation_spawn_forbidden_peace: '&cSpawn nacji jest wyłączony podczas wojny.'
@@ -685,7 +685,7 @@ adjustable: 'Regulowane'
 #Added in 0.48:
 msg_no_funds_new_town2: '&cZ aktualnym stanem konta, %s nie jest(eś) w stanie dokonać opłaty za założenie nowego miasta. Kosztuje to %s.'
 msg_no_funds_new_nation2: '&cMiasto nie stać na założenie nowej nacji. Kosztuje to %s.'
-msg_no_funds_claim2: '&cMiasto nie może sobie pozwolić na zakup chunków w ilości: %s, kosztujących %s. Zasil konto bankowe miasta kwotą %s za pomocą /t deposit %s'
+msg_no_funds_claim2: '&cMiasto nie stać na %s Bloków Miasta kosztujących %s. Przelej %s do banku miejskiego poleceniem "/t deposit %s"'
 msg_err_cant_afford_blocks2: '&cMiasto nie może pozwolić sobie na zakup chunków w ilości: %s, kosztujących %s. Zasil konto bankowe miasta kwotą %s za pomocą /t deposit %s'
 msg_err_not_enough_variables: '&cBrak wystarczającej ilości zmniennych: '
 nation_rechecked_by_admin: '&bOdległości pomiędzy miastami członkowskimi nacji %s zostały ponownie sprawdzone.'
@@ -693,7 +693,7 @@ msg_err_nation_over_town_limit: '&cTwoja nacja osiągnęła maksymalną ilość 
 #Added in 0.49
 msg_process_claim: 'Pozyskiwanie Bloku Miejskiego...'
 msg_process_unclaim: 'Porzucenie terenu...'
-msg_total_townblocks: 'Wszystkich Bloków Miejskich: '
+msg_total_townblocks: 'Wszystkich Bloków Miasta: '
 #Added in 0.50
 friend_list: 'Lista Znajomych'
 #The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
@@ -714,12 +714,12 @@ number_of_residents: '(Liczba rezydentów)'
 number_of_towns: '(Liczba miast)'
 town_name: 'Nazwa Miasta'
 nation_name: 'Nazwa nacji'
-refund_message: '&aZwrócono %s za zrzeczenie się bloków miejskich w ilości %s.'
+refund_message: '&aZwrócono %s za porzucenie %s Bloków Miasta.'
 msg_bankrupt_town_multiple: '&bNastępujące miasta nie mogły sobie pozwolić na utrzymanie i zostały rozwiązane: '
 msg_bankrupt_nation_multiple: '&bNastępujące nacje nie mogły sobie pozwolić na utrzymanie i zostały rozwiązane: '
 msg_couldnt_pay_tax: '&b%s nie płacił podatków i został wyrzucony z %s.'
 msg_couldnt_pay_nation_tax_multiple: '&bNastępujace miasta nie były w stanie opłacić podatku od nacji i ją opuściły: '
-msg_couldnt_pay_town_tax_multiple: '&bNastępujacy mieszkańcy nie mogli sobie pozwolić na podatek miejski i zostali wyrzuceni poza miasto: '
+msg_couldnt_pay_town_tax_multiple: '&bNastępujacych mieszkańców nie było stać na podatek miejski i zostali eksmitowani: '
 msg_couldnt_pay_plot_taxes_multiple: '&bNastępujących mieszkańców nie nie było stać na podatek od nieruchomości od niektorych lub od wszystkich swoich działek: '
 msg_bankrupt_town2: '&bNastępujące miasta nie były w stanie zapłacić podatków, aby przetrwać: %s.'
 msg_bankrupt_nation2: '&bNacji %s nie stać na zapłacenie podatków.'
@@ -744,7 +744,7 @@ msg_town_forcedisabledpvp_setting_set_to: 'Miasto %s wymusiło ustawienie admind
 msg_nation_changed_open: '&cNacja %s zmienila status na otwarty.'
 msg_err_already_in_a_nation: 'Twoje miasto należy już do nacji.'
 msg_err_nation_not_open: '&cNacja %s nie otwiera swoich drzwi każdemu. Poproś lidera nacji, lub jego asystenta, aby dołączyć.'
-msg_err_nation_homeblock_in_another_world: '&cBlok centralny twojego miasta nie znajduje się w tym samym świecie, co blok centralny stolicy nacji.'
+msg_err_nation_homeblock_in_another_world: '&cBlok Macierzysty twojego miasta nie jest na tym samym świecie, co Blok Macierzysty stolicy nacji.'
 status_bank_town_penalty_upkeep: 'Utrzymanie nadmiarowych chunków:'
 #Added in 0.53:
 msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Nie możesz teleportować się do miasta %s, jesteś stamtąd wygnany.'
@@ -775,8 +775,8 @@ msg_save_success: 'Dane zapisane.'
 msg_load_success: 'Dane wczytane.'
 msg_err_cannot_afford_to_set_outpost: 'Twoje miasto nie ma wystarczajacych środków, aby ustawić ten chunk na wartę.'
 msg_too_close2: 'Te miejsce jest zbyt blisko miasta %s.'
-homeblock: 'blok centralny'
-townblock: 'blok miejski'
+homeblock: 'blok macierzysty'
+townblock: 'blok miasta'
 outpost: 'placówka'
 msg_err_not_same_town: '&b%s nie należy do zadnego miasta.'
 #Added in 0.59:
@@ -821,7 +821,7 @@ msg_enemy_areas: 'Strefy wrogów'
 msg_neutral_towns: 'Neutralne miasta'
 #Added in 0.64
 msg_err_no_nation_with_that_name: 'Nie znaleziono nacji %s.'
-msg_err_cannot_unclaim_homeblock: 'Nie możesz porzucić powierzchni, gdzie znajduje się blok centralny. Użyj "/town set homeblock", aby zmienić jego położenie.'
+msg_err_cannot_unclaim_homeblock: 'Nie możesz porzucić Bloku Macierzystego, użyj "/town set homeblock", aby przenieść Blok Macierzysty.'
 #Added in 0.65
 msg_err_rename_cancelled: 'Zmiana nazwy została przerwana przez inny plugin. Skontaktuj się z administratorem.'
 #Added in 0.66
@@ -894,10 +894,10 @@ msg_spawn_warn: 'Spawn kosztuje %s. Kontynuować? [INFO] Dodaj frazę "-ignore",
 msg_confirm_purchase: 'Koszt tej akcji wynosi %s. Kontynuować?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Następujące miasta zostaną usunięte z twojej nacji, ponieważ nie będą wystarczająco blisko nowej stolicy: %s. Czy chcesz kontynuować?'
 msg_ta_deposit_all_success: 'Pomyślnie wpłacono kwotę %s do banków wszystkich nacji i miast.'
-bonus_townblocks: 'bonusowe bloki miejskie'
+bonus_townblocks: 'bonusowe bloki miasta'
 #Added in 0.80
 nomad_sing: 'Przejezdny'
-msg_new_town_advice: 'Gratulujemy utworzenia miasta! Twoja osada będzie musiała płacić codzienny podatek, wynosząc aktualnie %s. Zdeponuj środki do banku miejskiego, używając komendy "/t deposit <kwota>", inaczej twoje miasto przestanie istnieć. Dokładny cennik znajdziesz pod komendą "/towny prices". Następna opłata zostanie pobrana już za %s.'
+msg_new_town_advice: 'Gratulujemy utworzenia własnego miasta! Twoje miasto będzie płacić codzienny podatek wynoszący aktualnie %s. Możesz przelać środki do banku miejskiego używając polecenia "/t deposit <kwota>". Nieposiadając pieniędzy na opłaty twoje miasto zostanie usunięte. Twoje koszty sprawdź poleceniem "/towny prices". Następna opłata zostanie pobrana za %s.'
 #Added in 0.81
 msg_err_teleport_cancelled_damage: 'Odniesienie obrażeń anulowało teleportację.'
 #Added in 0.82
@@ -921,7 +921,7 @@ msg_town_bankrupt_by_upkeep_multiple: '&bNastepujących miast nie było stać na
 msg_town_bankrupt_by_nation_tax: '&bMiasto %s nie było stać na zapłacenie Podatku %s i zbankrutowało.'
 msg_town_bankrupt_by_nation_tax_multiple: '&bNastępujących miast nie bylo stać na zaplacenie podatku nacji i zbankrutowały: '
 msg_town_debts_cleared: 'Miasto %s spłaciło cały swój dług i uwolniło się od bankructwa!'
-msg_err_bankrupt_town_cannot_claim: 'Nie możesz pozyskiwać Bloków Miejskich dla bankrutującego miasta.'
+msg_err_bankrupt_town_cannot_claim: 'Nie można pozyskać działek dla bankrutującego miasta.'
 msg_err_bankrupt_town_cannot_build: 'Nie możesz budować w bankrutuajcym mieście.'
 msg_err_bankrupt_town_cannot_toggle_open: 'Nie możesz otwierać bankrutującego miasta.'
 msg_err_bankrupt_town_cannot_invite: 'Nie możesz zapraszać graczy do bankrutującego miasta.'
@@ -961,24 +961,24 @@ townblock_plu: 'Chunki'
 #Added in 0.92
 #Town Ruins
 admin_panel_4: 'Wykonaj kod nowej godziny'
-msg_newhour_success: 'komenda "new hour" została wykonana pomyślnie'
+msg_newhour_success: 'Polecenie "newhour" zostało wykonane pomyślnie'
 town_help_12: 'Odzyskaj swoje miasto ze stanu zrujnowania.'
 msg_warning_town_ruined_if_deleted: "OSTRZEŻENIE!!!: Jeśli usuniesz miasto, wejdzie ono w stan ruiny na %d godzin. Po upływie tego czasu nastąpi pełne usunięcie. W fazie ruiny wszystkie czynności są dozwolone, więc twoje miasto może być rabowane."
 msg_warning_town_ruined_if_deleted2: "Miasto może zostać przejęte przez każdego jego mieszkańca poprzez użycie \"/t reclaim\" za %d godzin."
 msg_err_cannot_reclaim_town_unless_ruined: '&cNie możesz odzyskać miasta, ponieważ nie jest w stanie ruiny.'
 msg_err_cannot_reclaim_town_yet: '&cNie możesz odzyskać miasta przez kolejne %d godzin.'
 msg_town_reclaimed: '&b%s odzyskał miasto %s.'
-msg_err_cannot_use_command_because_town_ruined: "&cNie możesz użyć tej komendy, ponieważ Twoje miasto jest zrujnowane. Aby wznowić normalne użycie poleceń, odzyskaj miasto używając ''/city reclaim'' lub zostaw miasto używając ''/city leave''."
+msg_err_cannot_use_command_because_town_ruined: "&cNie możesz użyć tego polecenia, ponieważ twoje miasto jest zrujnowane. Aby wznowić normalne użycie poleceń, odzyskaj miasto używając ''/town reclaim'' lub opuść miasto używając ''/town leave''."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cTwoje miasto będzie w ruinie przez kolejne %d godzin. Użyj "/town reclaim", aby uratować miasto i stać się przywódcą.'
 msg_time_remaining_before_full_removal: 'Pozostały czas przed całkowitym usunięciem: %d godzin.'
 msg_time_until_reclaim_available: 'Ponowne przechwycenie tego terenu będzie możliwe za %d godzin.'
 msg_reclaim_available: 'Odzysk jest możliwy.'
 #Added in 0.93
 msg_changed_peaceful: '&cNeutralność miasta jest teraz %s.'
-msg_err_town_unclaim_canceled: '&cPorzucenie anulowane. Nie możesz w tej chwili zwrócić tego Bloku Miejskiego.'
+msg_err_town_unclaim_canceled: '&cPorzucenie anulowane. Nie możesz w tej chwili porzucić tego Bloku Miasta.'
 #Added in 0.94
 msg_comptype_residents: 'Liczba rezydentów'
-msg_comptype_townblocks: 'Liczba Zajętych Bloków Miejskich'
+msg_comptype_townblocks: 'Liczba Zajętych Bloków Miasta'
 msg_comptype_balance: 'Saldo bankowe'
 msg_comptype_online: 'Graczy Online'
 msg_comptype_towns: 'Liczba miast'
@@ -998,7 +998,7 @@ towny_prices_town_nation: '&e[Utworzenie] &2Miasto: &a%s &8| &2Nacja: &a%s'
 towny_prices_reclaim: '&e[Odzyskanie] &2Miasto: &a%s'
 towny_prices_upkeep: '&e[Utrzymanie] &2Miasto: &a%s &8| &2Nacja: &a%s'
 towny_prices_overclaimed_upkeep: '&e[Przewyższające Koszty Utrzymania] &2Miasto: &a%s'
-towny_prices_claiming_townblock: '&e[Pozyskanie] &2Blok Miejski: &a%s'
+towny_prices_claiming_townblock: '&e[Claiming] &2Blok Miasta: &a%s'
 towny_prices_claiming_townblock_increase: ' &8| &2Wzrost co każdy blok: &a+%s'
 towny_prices_claiming_outposts: '&e[Pozyskanie] &2Placówki: &a%s'
 towny_prices_upkeep_based_on: '&7Utrzymanie miasta zależne jest od czynnika &a%s'
@@ -1090,10 +1090,10 @@ flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file c
 flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
 flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
 msg_ta_removed_all_titles_and_surnames_removed: 'Wszyscy mieszkańcy zostali pozbawieni swoich tytułów i nazwisk.'
-msg_err_homeblock_already_set_here: 'Twój blok centralny już się tutaj znajduje.'
+msg_err_homeblock_already_set_here: 'Ta działka już jest Blokiem Macierzystym twojego miasta.'
 #Added in 0.100
 msg_town_merge_err_mayor_only: '&bScalenia może dokonać tylko przywódca.'
-msg_town_merge_err_not_close: '&cMiasto pod władaniem %s jest zbyt oddalone. Ich Blok Centralny musi się znajdować w obrębie %d chunków od centrum twojego miasta.'
+msg_town_merge_err_not_close: '&cMiasto %s jest zbyt oddalone od twojego miasta. Ich Blok Macierzysty musi być oddalony o maksymalnie %d Bloków Miasta od Bloku Macierzystego twojego miasta.'
 msg_town_merge_request_sent: '&bPropozycja scalenia została wysłana przywódcy miasta %s.'
 msg_town_merge_request_received: '&bPrzywódca %s, %s poprosił o scalenie się z twoim miastem. Wraz z dokonaniem zjednoczenia, pieniądze, rezydenci, oraz wszystkie przejęte tereny zostaną przydzielone do %s.'
 msg_town_merge_request_denied: '&cŻądanie scalenia miast zostało odrzucone.'
@@ -1102,10 +1102,10 @@ msg_town_merge_err_too_many_residents: '&cScalenie nieudane: Ilość rezydentów
 msg_town_merge_err_too_many_townblocks: '&cScalenie nieudane: Nowy rozmiar miasta przekracza limit (%d)'
 msg_town_merge_err_too_many_outposts: '&cScalenie nieudane: Ilość placówek przekraczałaby limit (%d)'
 msg_town_merge_err_not_enough_money: '&cScalenie nieudane: Brak wystarczającej ilości pieniędzy. (%s/%s)'
-msg_town_merge_err_too_many_purchased_townblocks: '&cScalenie nieudane: Zbyt wiele zakupionych bloków miejskich (%d)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cScalenie nieudane: Zbyt wiele zakupionych Bloków Miasta (%d)'
 msg_town_merge_warning: '&cUwaga: Jeśli prośba zostanie rozpatrzona pomyślnie, scalenie się z %s będzie kosztować %s.'
 msg_town_merge_debt_warning: '&cOstrzeżenie: Miasto %s jest zadłużone, będziesz zatem musiał spłacić jego dług, jeśli się zgodzisz na scalenie.'
-msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
+msg_town_merge_cost_breakdown: '&bAnaliza kosztów: Koszt bazowy: %s, koszt Bloku Miasta: %s, koszt Bankructwa: %s, koszt Bonusowych Bloków Miasta: %s'
 msg_town_merge_failed: '&cScalanie nie powiodło się.'
 msg_town_merge_cancelled: '&cScalenie anulowane.'
 msg_town_merge_success: '&bMiasto pod władaniem %s, należące do %s, z pomyślnie scaliło się z miastem %s.'
@@ -1128,8 +1128,8 @@ towny_map_detailed_information: '&2Kliknij, aby zobaczyć szczegółowe informac
 msg_err_nation_capital_too_many_residents: '&cBieżąca stolica ma zbyt wielu mieszkańców, aby mogła być zastąpiona na %s.'
 msg_deleting_nation_will_result_in_losing_residents: '&cUwaga: Rozwiązanie nacji będzie się wiązało z obniżeniem maksymalnej liczby mieszkańców w twoim mieście do %d, przez co %d mieszkańców będzie musiało je opuścić.'
 #Added in 0.103
-msg_command_blocked_inside_towns: '&cNie możesz używać tej komendy wewnątrz miast.'
-msg_command_limited: 'Możesz użyć tej komendy tylko na terenie swojej działki.'
+msg_command_blocked_inside_towns: '&cNie możesz używać tego polecenia wewnątrz miast.'
+msg_command_limited: 'Użyć tego polecenia możesz jedynie będąc na należących do ciebie działkach.'
 #Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: 'Przejęte:'
@@ -1137,7 +1137,7 @@ msg_plot_perm_claimed_at: 'Przejęte:'
 msg_wilderness_use_x_in_all_worlds: 'Dzikie tereny posiadają status %s we wszystkich światach.'
 msg_regenerations_use_x_in_all_worlds: 'Regeneracja na wszystkich światach jest teraz %s.'
 #Added in 0.106
-msg_command_outsider_blocked: 'Nie moższ wykonać tej komendy, ponieważ nie mieszkasz w %s.'
+msg_command_outsider_blocked: 'Nie moższ uruchomić tego polecenia, bo nie mieszkasz w %s.'
 #Added in 0.107
 msg_jailed_for_x_hours: ' na %s godzin.'
 msg_err_this_jail_has_no_cells: 'W tym więzieniu nie ma cel.'
@@ -1183,16 +1183,16 @@ msg_safe_mode: "[Error] Zablokowano w trybie awaryjnym!"
 msg_safe_mode_base: '[Error] Towny jest zablokowany w trybie Safe Mode z powodu błędu! '
 msg_safe_mode_player: 'Zgłoś administratorowi, aby sprawdził konsolę serwera.'
 msg_safe_mode_admin: 'Sprawdź konsolę serwera, aby uzyskać więcej informacji.'
-msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Możesz przejąć tylko placówki w świecie, w którym znajduje się twój chunk centralny.'
+msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Możesz stawiać placówki jedynie w świecie, w którym znajduje się twój Blok Macierzysty.'
 msg_err_not_close_enough_to_your_town_nearest_plot: 'W tym miejscu nie można postawić placówki. Jesteś oddalony o %s chunków od najbliżej posiadanych terenów. Maksymalny dystans oddalenia to %s chunków.'
-msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Przesunąłeś swój blok centralny niedawno! Musisz poczekać %s.'
-msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Nie możesz przesunąć bloku centralnego na taką odległość, limit wynosi %s chunków. Cofnij się o %s bloki/bloków.'
+msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Przesunąłeś swój Blok Macierzysty niedawno! Poczekaj %s.'
+msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Nie możesz przesunąć Bloku Macierzystego na tak dużą odległość, limit wynosi %s Bloków Miasta. Przekroczyłeś go o %s Bloki Miasta.'
 msg_err_usingtowny_disabled: 'Ten świat ma wyłączone wszelkie interakcje w miastach. Użyj najpierw "/townyworld toggle usingtowny".'
 #Added in 0.111
 msg_plot_group_already_exists_did_you_want_to_transfer: 'Ten Blok jest już częścią grupy działek %s. Czy na pewno chcesz przenieść go do grupy %s?'
 msg_townblock_transferred_from_x_to_x_group: 'Blok należący do grupy %s został przeniesiony do grupy działek %s.'
 msg_plotgroup_deleted: 'Grupa działek %s została usunięta.'
-msg_plotgroup_empty_deleted: 'Grupa %s nie zawierała żadnych Bloków Miejskich i została usunięta.'
+msg_plotgroup_empty_deleted: 'Grupa działek %s nie składała się z żadnych Bloków Miasta i została usunięta.'
 plotgroup_plu: 'Grupy Działek'
 msg_err_this_town_has_no_plot_groups: 'To miasto nie ma zgrupowanych działek.'
 msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Ta działka jest już częścią grupy %s'
@@ -1257,7 +1257,7 @@ err_invalid_yaml: 'Błąd ładowania: Nie udało się załadować pliku %s (spra
 #Added in 0.116
 msg_town_map_color_changed: '&bKolor mapy miasta został zmieniony na %s.'
 #Added in 0.117
-msg_err_this_townblock_doesnt_match_the_groups_type: 'Ten blok miejski nie może zostać dodany do grupy, ponieważ nie jest typu %s'
+msg_err_this_townblock_doesnt_match_the_groups_type: 'Ten Blok Miasta nie może zostać dodany do grupy, ponieważ nie jest typu %s'
 #Added in 0.118
 status_title_nopvp: '&a(Brak PVP)'
 #Added in 0.119
@@ -1476,7 +1476,7 @@ msg_err_command_not_for_console_use: 'Tego polecenia nie może zostać wykonane
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: 'Miasto %s ma ustawione zniesienie limitu przejętych ziem na %s'
 #Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
-did_you_want_to_toggle_unlimited_claims: 'Nie masz wystarczającej liczby chunków możliwych do przejęcia. Czy chcesz wyłączyć ten limit dla miasta %s?'
+did_you_want_to_toggle_unlimited_claims: 'Nie masz wystarczającej ilości Bloków Miasta do pozyskania. Czy chciałeś włączyć pozyskiwanie bez ograniczeń dla miasta %s?'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Nie możesz opuścić swojej nacji, twoje miasto jest podbite.'
@@ -1510,13 +1510,13 @@ msg_you_are_about_to_be_teleported_to_a_plot: 'Za chwilę zostaniesz przetelepor
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
 townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "Miasto %s ma działki, które możesz kupić, czy przeteleportować się do działki, którą możesz teraz kupić?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
-townyrtp.you_have_arrived: "Zostałeś przeteleportowany do działki, którą możesz kupić. Użyj komendy \"/plot claim\" jeżeli chcesz zająć działkę."
+townyrtp.you_have_arrived: "Zostałeś przeteleportowany na działkę, którą możesz kupić. Użyj polecenia \"/plot claim\" jeżeli chcesz kupić tę działkę."
 #Used in the town's status screen to display plots
 status_plot_string: 'Działki'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
 #Usage:
-msg_usage: 'Składnia komendy: %s'
+msg_usage: 'Składnia polecenia: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'Brak wpisów w historii!'
 #Added in 0.151
@@ -1528,7 +1528,7 @@ msg_err_town_unaffiliated: 'To miasto nie jest z tobą w żaden sposób powiąza
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'Ta lokalizacja ma już komórkę więzienia.'
 #Title line of the /plot perm hud.
-msg_perm_hud_title: 'Uprawnienia działki'
+msg_perm_hud_title: 'Uprawnienia Działki'
 #Seen in /plot perm hud:
 msg_perm_hud_build: 'Buduj: '
 #Seen in /plot perm hud:
@@ -1540,7 +1540,7 @@ msg_perm_hud_item_use: 'Przedmiot: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_type: 'Rodzaj: '
 #Seen in /plot perm hud:
-msg_perm_hud_pvp: 'Walka: '
+msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
 msg_perm_hud_explosions: 'Wybuchy: '
 #Seen in /plot perm hud:
@@ -1560,12 +1560,12 @@ msg_perm_hud_resident: 'mieszkaniec'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: 'naród'
 #Seen in /plot perm hud:
-msg_perm_hud_outsider: 'outsider'
+msg_perm_hud_outsider: 'obcy'
 #Seen in /plot perm hud:
-msg_perm_hud_plot_name: 'Działka:'
+msg_perm_hud_plot_name: 'Działka: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
-msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
+msg_town_level_overridden_with: 'Poziom miasta %s został ustawiony na %s.'
 #Message shown when unsetting a manual town level.
 msg_town_level_unset: 'The town %s has had their manually-set townlevel unset. Current townlevel is %s.'
 #Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
@@ -1600,7 +1600,7 @@ msg_x_has_been_released_ran_out_of_upkeep_funds: 'Uwolniono %s z powodu braku ś
 msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: 'Wypłacono %s z banku miasta, żeby opłacić koszty utrzymania więźnia %s.'
 msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: 'Wypłacono %s z banku miasta, żeby opłacić koszty aresztowania więźnia %s.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
-confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Jesteś pewien, że chcesz zresetować banki wszystkich miast i nacji do kwoty %s?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
 msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.
@@ -1624,7 +1624,7 @@ msg_town_plots_town_owned_land: '<dark_green>Town Owned Land: <green>%s'
 #Part of the /town plots output.
 msg_town_plots_type_header: '<dark_green>Type: <green>Player-Owned <gray>/ <aqua>ForSale <gray>/ <yellow>Total'
 #Part of the /town plots output.
-msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Daily Revenue'
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Dzienny przychód'
 #Part of the /town plots output.
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
@@ -1634,7 +1634,7 @@ confirmation_msg_trusttown_consequences: 'You are about to give full plot permis
 #Message shown when a player uses a command that is blocked because their location has an active war.
 msg_command_war_blocked: 'You cannot run that command because your town is at war.'
 #Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
-msg_cant_unclaim_outsider_in_town: 'There is an outsider in this townblock, you can''t unclaim this townblock!'
+msg_cant_unclaim_outsider_in_town: 'Obcy stoi na tej działce, nie możesz porzucić tego Bloku Miasta!'
 #Message shown when a player is making a town too soon after deleting one.
 msg_err_cannot_create_new_town_x_seconds_remaining: 'You cannot create a new town, %s seconds remaining on cooldown.'
 #Message shown when a player is claiming land too soon after unclaiming it.
@@ -1653,15 +1653,15 @@ msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blo
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "You are not known to Towny."
+msg_you_are_unknown: "Nie rozpoznawany przez Towny."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
-msg_townyobject_unknown: "%s is not known to Towny."
+msg_townyobject_unknown: "%s nie jest rozpoznawany przez Towny."
 #Shown when a resident is unknown to Towny.
-msg_err_resident_unknown: "%s is not a resident that is recognized."
+msg_err_resident_unknown: "Mieszkaniec %s nie jest rozpoznawany."
 #Shown when a town is unknown to Towny.
-msg_err_town_unknown: "%s is not a town that is recognized."
+msg_err_town_unknown: "Miasto %s nie jest rozpoznawane przez Towny."
 #Shown when a nation is unknown to Towny.
-msg_err_nation_unknown: "%s is not a nation that is recognized."
+msg_err_nation_unknown: "Nacja %s nie jest rozpoznawana przez Towny."
 #Shown when a resident doesn't belong to a town.
 msg_err_townyobject_x_has_no_town: "%s does not belong to any town."
 #Shown when a town doesn't belong to a nation.
@@ -1669,32 +1669,32 @@ msg_err_townyobject_x_has_no_nation: "%s does not belong to any nation."
 #Shown to admins when they use /plot claimedat on a plot which has no registration date.
 msg_err_townblock_has_no_claimedat_data: "This townblock has no data on when it was claimed."
 #Shown when someone cannot afford something, to tell them what it costs.
-msg_err_you_need_x_to_pay: "You need %s to pay."
+msg_err_you_need_x_to_pay: "Potrzebujesz %s, aby móc zapłacić."
 #Shown when someone tries to deposit/withdraw 0 amounts.
 msg_err_amount_must_be_greater_than_zero: "Amount must be greater than zero."
 #Message shown when taking over claims is disabled on a server.
-msg_err_taking_over_claims_is_not_enabled: "Taking over claims is not enabled on this server."
+msg_err_taking_over_claims_is_not_enabled: "Podbieranie Bloków Miasta nie jest włączone na tym serwerze."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "Ten Blok Miasta nie może zostać podebrany, miasto do którego należy nie przekroczyło swojego limitu ziemi."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
-msg_err_you_cannot_make_this_your_homeblock: "You cannot make this claim because it would make this TownBlock your homeblock, which is not allowed."
+msg_err_you_cannot_make_this_your_homeblock: "Nie możesz podebrać tej działki, bo ten Blok Miasta stałby się twoim Blokiem Macierzystym, co jest niedozwolone."
 #Message shown when taking over a claim is stopped by another plugin.
-msg_err_another_plugin_cancelled_takeover: "Another plugin has stopped your takeover of this land."
+msg_err_another_plugin_cancelled_takeover: "Inny plugin nie pozwolił ci podebrać tej ziemi."
 #Confirmation shown when taking over a claim.
-confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a claim belonging to %s for the cost: %s. Did you want to continue?"
+confirmation_you_are_about_to_take_over_a_claim: "Podbierzesz działkę należącą do miasta %s za kwotę %s. Czy chcesz kontynuować?"
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
-msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
+msg_warning_you_are_almost_out_of_townblocks: "Ostrzeżenie: Wykorzystałeś niemalże wszystkie wolne Bloki Miasta. Jeśli stracisz mieszkańca, będziesz narażony na podebranie przez inne miasta twoich Bloków Miasta."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
-msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+msg_warning_your_town_is_overclaimed: "Ostrzeżenie: Twoje miasto przekroczyło limit ziemi. Gdy posiadasz zbyt wiele Bloków Miasta, inne miasta będą mogły podebrać działki z Twojego miasta, rozważ porzucenie jakiejś ziemi."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[Możliwe Podebranie]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "Nie możesz podebrać tej działki, bo miasto zostałoby rozdzielone na dwie niepołączone części. Będziesz musiał podebrać inną działkę."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
-msg_err_that_town_is_not_conquered: "%s is already not conquered."
+msg_err_that_town_is_not_conquered: "Miasto %s już jest niepodbite."
 #Message shown when a town has its conquered status removed by an admin.
-msg_conquered_status_removed: "%s has had their conquered status removed."
-msg_setup_command_folia: "The /ta install command currently does not work on Folia due to the conversation API not working, refer to the install guide below instead."
+msg_conquered_status_removed: "Usunięto status podbicia miastu %s."
+msg_setup_command_folia: "Polecenie /ta install aktualnie nie działa na Folia przez niedziałające conversaion API. Zamiast niego, zapoznaj się z przewodnikiem instalacji poniżej."
 msg_perm_gui_folia: "This button currently does not work on Folia due to the conversation API not working, use the /plot perm add <name> command instead."
 msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
