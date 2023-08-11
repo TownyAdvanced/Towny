@@ -702,7 +702,7 @@ status_res_taxexempt: 'Staff are exempt from paying town taxes.'
 status_res_tax: 'Town Tax:'
 status_res_plottax: 'Total Plot Taxes:'
 status_res_totaltax: 'Total Tax to pay:'
-status_townblock_plottax: 'Plot Tax:'
+status_townblock_plottax: 'Plot Tax: '
 status_townblock_untaxed: 'Untaxed'
 
 # Added in 0.45
