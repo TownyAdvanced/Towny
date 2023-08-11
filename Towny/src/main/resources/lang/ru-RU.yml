@@ -624,6 +624,8 @@ status_res_taxexempt: 'Персонал освобождается от упла
 status_res_tax: 'Налог города:'
 status_res_plottax: 'Всего земельных налогов:'
 status_res_totaltax: 'Всего налогов для оплаты:'
+status_townblock_plottax: 'Plot Tax: '
+status_townblock_untaxed: 'Untaxed'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Вы не можете пользоваться своим национальным банком вне столицы нации.'
 msg_err_unable_to_use_bank_outside_your_town: 'Вы не можете пользоваться своим городским банком за пределами своего города.'
@@ -1714,3 +1716,5 @@ msg_err_your_town_is_not_old_enough_to_overclaim: "Ваш город недос�
 msg_err_your_cannot_overclaim_for_another: "Вы не можете переприватить еще %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
