@@ -624,6 +624,8 @@ status_res_taxexempt: 'Das Personal ist von den Stadtsteuern befreit.'
 status_res_tax: 'Stadtsteuer:'
 status_res_plottax: 'Gesamte Plot-Steuern:'
 status_res_totaltax: 'Gesamte Steuern:'
+status_townblock_plottax: 'Plot Tax: '
+status_townblock_untaxed: 'Untaxed'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Du kannst die Nationalbank nicht nutzen, solange du außerhalb der Hauptstadt bist.'
 msg_err_unable_to_use_bank_outside_your_town: 'Du kannst die Stadtbank nicht außerhalb deiner Stadt nutzen.'
@@ -1714,3 +1716,5 @@ msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough t
 msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
