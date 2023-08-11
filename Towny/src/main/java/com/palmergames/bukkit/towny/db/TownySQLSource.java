@@ -1826,6 +1826,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						townBlock.setPlotPrice(Float.parseFloat(line.trim()));
 					} catch (Exception ignored) {
 					}
+
+				boolean taxed = rs.getBoolean("taxed");
+				try {
+					townBlock.setTaxed(taxed);
+				} catch (Exception ignored) {
+				}
 				
 				line = rs.getString("typeName");
 				if (line != null) 
@@ -2462,6 +2468,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("z", townBlock.getZ());
 			tb_hm.put("name", townBlock.getName());
 			tb_hm.put("price", townBlock.getPlotPrice());
+			tb_hm.put("taxed", townBlock.isTaxed());
 			tb_hm.put("town", townBlock.getTown().getName());
 			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResidentOrNull().getName() : "");
 			tb_hm.put("typeName", townBlock.getTypeName());

@@ -313,6 +313,7 @@ public class SQLSchema {
 		List<String> columns = new ArrayList<>();
 		columns.add("`name` mediumtext");
 		columns.add("`price` float DEFAULT '-1'");
+		columns.add("`taxed` bool NOT NULL DEFAULT '1'");
 		columns.add("`town` mediumtext");
 		columns.add("`resident` mediumtext");
 		columns.add("`type` TINYINT NOT  NULL DEFAULT '0'");

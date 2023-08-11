@@ -702,6 +702,8 @@ status_res_taxexempt: 'Staff are exempt from paying town taxes.'
 status_res_tax: 'Town Tax:'
 status_res_plottax: 'Total Plot Taxes:'
 status_res_totaltax: 'Total Tax to pay:'
+status_townblock_plottax: 'Plot Tax:'
+status_townblock_untaxed: 'Untaxed'
 
 # Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'You cannot make use of your nation bank outside of the nation capital.'
@@ -1973,3 +1975,6 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 
 # Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
+
+# Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'

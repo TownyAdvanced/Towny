@@ -1671,6 +1671,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
 						} catch (Exception ignored) {
 						}
+
+					line = keys.get("taxed");
+					if (line != null)
+						try {
+							townBlock.setTaxed(Boolean.parseBoolean(line));
+						} catch (Exception ignored) {
+						}
 					
 					line = keys.get("outpost");
 					if (line != null)
@@ -2275,6 +2282,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// price
 		list.add("price=" + townBlock.getPlotPrice());
+
+		// taxed
+		list.add("taxed=" + townBlock.isTaxed());
 
 		// town
 		try {

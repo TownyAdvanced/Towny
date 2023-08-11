@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
+import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleTaxedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
@@ -138,6 +139,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> plotToggleTabCompletes = Arrays.asList(
+		"taxed",
 		"fire",
 		"pvp",
 		"explosion",
@@ -1028,18 +1030,24 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "explosion":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_EXPLOSION.getNode());
 			tryToggleTownBlockExplosion(player, townBlock, split, choice);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled")));
 			break;
 		case "fire":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_FIRE.getNode());
 			tryToggleTownBlockFire(player, townBlock, split, choice);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled")));
 			break;
 		case "mobs":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_MOBS.getNode());
 			tryToggleTownBlockMobs(player, townBlock, split, choice);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled")));
 			break;
+		case "taxed":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+			tryToggleTownBlockTaxed(player, townBlock, split, choice);
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_plot_taxed", townBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled")));
+			townBlock.save();
+			return;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_TOGGLE, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).execute(player, "plot", split);
@@ -1120,6 +1128,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 	}
 
+	private void tryToggleTownBlockTaxed(Player player, TownBlock townBlock, String[] split, Optional<Boolean> choice) throws TownyException {
+		// Fire cancellable event directly before setting the toggle.
+		BukkitTools.ifCancelledThenThrow(new PlotToggleTaxedEvent(townBlock, player, choice.orElse(!townBlock.isTaxed())));
+
+		townBlock.setTaxed(choice.orElse(!townBlock.isTaxed()));
+	}
+	
 	/**
 	 * Check the world and town settings to see if we are allowed to alter these
 	 * settings

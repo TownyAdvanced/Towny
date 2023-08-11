@@ -37,6 +37,7 @@ public class TownBlock extends TownyObject {
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private final WorldCoord worldCoord;
 	private double plotPrice = -1;
+	private boolean taxed = true;
 	private boolean outpost = false;
 	private PlotGroup plotGroup;
 	private long claimedAt;
@@ -64,8 +65,10 @@ public class TownBlock extends TownyObject {
 
 	public void setTown(Town town, boolean updateClaimedAt) {
 
-		if (hasTown())
+		if (hasTown()) {
 			this.town.removeTownBlock(this);
+			this.setTaxed(true);
+		}
 		this.town = town;
 		try {
 			TownyUniverse.getInstance().addTownBlock(this);
@@ -232,6 +235,18 @@ public class TownBlock extends TownyObject {
 	public boolean isForSale() {
 
 		return getPlotPrice() != -1.0;
+	}
+
+	public boolean isTaxed() {
+		return taxed;
+	}
+
+	public void setTaxed(boolean value) {
+		this.taxed = value;
+	}
+
+	public double getPlotTax() {
+		return getType().getTax(town);
 	}
 
 	public void setPermissions(String line) {
