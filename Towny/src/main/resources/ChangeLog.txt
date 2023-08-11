@@ -8966,3 +8966,14 @@ v0.92.0.11:
   - Fix all the weirdness around world entity key loading, courtesy of Warrior with PR #6901.
   - Speed up calculating bonus block costs, courtesy of Warrior with PR #6919.
   - Add spigot fallback to sign open event, courtesy of Warrior with PR #6920.
+0.99.5.12:
+  - Add ability for mayors to exempt their townblocks from charging plot taxes.
+    - Mayors can toggle a plot's status using /plot toggle taxed.
+    - When false, the owner of that plot will pay no plot tax.
+    - A Plot Tax: [Amount|Untaxed] blurb will now appear in the townblock status screens.
+    - Closes #3675.
+  - New Command: /plot toggle taxed
+    - Uses the towny.command.plot.asmayor permission node.
+    - Allows a mayor to decide whether a plot will require the plotowner to pay the plot taxes.
+  - API: PlotToggleTaxedEvent
+    - Cancellable event that stops a mayor toggling taxation off/on on a townblock.
