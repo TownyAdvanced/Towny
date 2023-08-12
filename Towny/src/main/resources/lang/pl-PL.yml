@@ -1534,9 +1534,9 @@ msg_perm_hud_title: 'Uprawnienia Działki'
 #Seen in /plot perm hud:
 msg_perm_hud_build: 'Buduj: '
 #Seen in /plot perm hud:
-msg_perm_hud_destroy: 'Niszczenie: '
+msg_perm_hud_destroy: 'Niszcz: '
 #Seen in /plot perm hud:
-msg_perm_hud_switch: 'Przełączanie: '
+msg_perm_hud_switch: 'Przełączaj: '
 #Seen in /plot perm hud:
 msg_perm_hud_item_use: 'Przedmiot: '
 #Seen in /plot perm hud:
@@ -1546,7 +1546,7 @@ msg_perm_hud_pvp: 'PVP: '
 #Seen in /plot perm hud:
 msg_perm_hud_explosions: 'Wybuchy: '
 #Seen in /plot perm hud:
-msg_perm_hud_firespread: 'Rozprzestrzenianie się ognia: '
+msg_perm_hud_firespread: 'Rozprzestrzenianie ognia: '
 #Seen in /plot perm hud:
 msg_perm_hud_mobspawns: 'Spawn Mobów: '
 #Seen in /plot perm hud:
@@ -1594,7 +1594,7 @@ msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s zosta�
 msg_you_have_been_jailed_your_bail_is_x: 'Aresztowano cię twoja kaucja wynosi %s.'
 msg_err_higher_than_max_allowed_bail_x: 'Twoja kaucja wynosi więcej niż maksimum, czyli %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Liczba godzin przez ciebie zaproponowana jest większa od maksymalnej wynoszącej %s.'
-msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Za mało środków w banku miasta, aby aresztować %s, opłata wynosi %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Za mało środków w banku miasta, aby uwięzić %s, opłata wynosi %s.'
 msg_you_were_released_as_town_ran_out_of_slots: 'Strażnicy uwolnili cię, żeby zwolnić miejsce.'
 msg_x_has_been_released_as_jail_slots_ran_out: 'Zwolniono %s aby zwolnić miejsce na innego więźnia.'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Zostałeś uwolniony, ponieważ twoi strażników nie stać na trzymanie cię w więzieniu.'
@@ -1655,7 +1655,7 @@ msg_min_adjacent_blocks: 'Nowy Blok Miasta musi przylegać do przynajniej %s ist
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', czy nie chodzi ci o /plot evict?'
 #Shown to a player when Towny does not know of them.
-msg_you_are_unknown: "Nie rozpoznawany przez Towny."
+msg_you_are_unknown: "Nie jesteś rozpoznawany przez Towny."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
 msg_townyobject_unknown: "%s nie jest rozpoznawany przez Towny."
 #Shown when a resident is unknown to Towny.
