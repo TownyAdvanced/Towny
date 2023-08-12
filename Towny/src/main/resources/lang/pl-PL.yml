@@ -1618,9 +1618,9 @@ msg_town_plots_town_size: '<dark_green>Wielkość Miasta: <green>%s/%s'
 #Part of the /town plots output.
 msg_town_plots_town_bought: ' <aqua>[Kupiono: %s/%s]'
 #Part of the /town plots output.
-msg_town_plots_town_bonus: '<aqua>[Bonus: %s]'
+msg_town_plots_town_bonus: ' <aqua>[Bonus: %s]'
 #Part of the /town plots output.
-msg_town_plots_town_nationbonus: '<aqua>[BonusPaństwa: %s]'
+msg_town_plots_town_nationbonus: ' <aqua>[BonusPaństwa: %s]'
 #Part of the /town plots output.
 msg_town_plots_town_owned_land: '<dark_green>Ziemia Miasta: <green>%s'
 #Part of the /town plots output.
