@@ -2964,13 +2964,20 @@ public enum ConfigNodes {
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
-			"# |                  ASCII MAP SYMBOLS                   | #",
+			"# |               ASCII MAP SYMBOLS & SIZES              | #",
 			"# |                                                      | #",
 			"# | Used in the ascii maps for symbols not determined by | #",
 			"# | townblocktype. See Town Block Types section for more | #",
 			"# | options. When using Unicode use the \\u#### format,   | #",
 			"# | and use the HTML-code version of the unicode         | #",
 			"# | character.                                           | #",
+			"# |                                                      | #",
+			"# | When setting sizes you cannot set a height of less   | #",
+			"# | than seven or greater than 18. Your width must be    | #",
+			"# | between seven and 27, and should always be an odd    | #",
+			"# | number. These sizes will be used when displaying the | #",
+			"# | output of the /towny map command, and not used when  | #",
+			"# | the player uses the /towny map big command.          | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -2989,8 +2996,17 @@ public enum ConfigNodes {
 	ASCII_MAP_SYMBOLS_WILDERNESS("ascii_map_symbols.wilderness",
 			"-",
 			"",
-			"# The character used for plots which are unclaimed.");
-
+			"# The character used for plots which are unclaimed."),
+	ASCII_MAP_HEIGHT("ascii_map_symbols.map_height",
+			"7",
+			"",
+			"# The height of the map shown in /towny map and /res toggle map.",
+			"# Minimum 7, maximum 18."),
+	ASCII_MAP_WIDTH("ascii_map_symbols.map_width",
+			"27",
+			"",
+			"# The width of the map shown in /towny map and /res toggle map.",
+			"# Minimum 7, maximum 27, only odd numbers are accepted.");
 	
 	private final String Root;
 	private final String Default;

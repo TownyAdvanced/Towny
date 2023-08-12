@@ -8977,3 +8977,13 @@ v0.92.0.11:
     - Allows a mayor to decide whether a plot will require the plotowner to pay the plot taxes.
   - API: PlotToggleTaxedEvent
     - Cancellable event that stops a mayor toggling taxation off/on on a townblock.
+  - Add ability to customize the dimensions of the ASCII map seen in /towny map and the /res toggle map commands.
+    - Closes #6117.
+  - New Config Option: ascii_map_symbols.map_height
+    - Default: 7
+    - The height of the map shown in /towny map and /res toggle map.
+    - Minimum 7, maximum 18.
+  - New Config Option: ascii_map_symbols.map_width
+    - Default: 27
+    - The width of the map shown in /towny map and /res toggle map.
+    - Minimum 7, maximum 27, only odd numbers are accepted.

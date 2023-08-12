@@ -3523,6 +3523,14 @@ public class TownySettings {
 		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS);
 	}
 
+	public static int asciiMapHeight() {
+		return getInt(ConfigNodes.ASCII_MAP_HEIGHT);
+	}
+
+	public static int asciiMapWidth() {
+		return getInt(ConfigNodes.ASCII_MAP_WIDTH);
+	}
+
 	public static void addReloadListener(NamespacedKey key, @NotNull Consumer<CommentedConfiguration> consumer) {
 		if (key == null)
 			throw new IllegalArgumentException("Key cannot be null");
