@@ -685,7 +685,7 @@ disabled: '禁用'
 forced: '强制'
 adjustable: '可调整'
 #Added in 0.48:
-msg_no_funds_new_town2: '&c%s 你不能在这里建立一个新城镇, 这需要花费 %s.'
+msg_no_funds_new_town2: '&c%s不能在这里建立一个新城镇，因为这需要花费%s。'
 msg_no_funds_new_nation2: '&c这个城镇的国库不足够强大到足以建立一个新的国家, 建国需要花费 %s.'
 msg_no_funds_claim2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块，因此你需要使用/t deposit %4$s来向你的城镇银行中存款%3$s，才能继续声明这些城镇区块。'
 msg_err_cant_afford_blocks2: '&c城镇需要花费%2$s来声明这%1$s个城镇区块，因此你需要使用/t deposit %4$s来向你的城镇银行中存款%3$s，才能继续声明这些城镇区块。'
@@ -1715,6 +1715,6 @@ msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "你不能将征服�
 msg_err_your_town_is_not_old_enough_to_overclaim: "你的城镇存在时间太短，不足以进行过度声明。你必须再等%s。"
 msg_err_your_cannot_overclaim_for_another: "你不可以在%s的时间内再次进行超额声明。"
 #Generic error message for when a world isn't loaded
-msg_err_world_not_loaded: "<red>World is not loaded."
+msg_err_world_not_loaded: "<red>世界未加载。"
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
