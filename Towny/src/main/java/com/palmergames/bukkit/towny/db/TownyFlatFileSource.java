@@ -2036,15 +2036,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean savePlotGroup(PlotGroup group) {
 		
 		List<String> list = new ArrayList<>();
-		
-		// Group Name
-		list.add("groupName=" + group.getName());
-		
-		// Group Price
-		list.add("groupPrice=" + group.getPrice());
-		
-		// Town
-		list.add("town=" + group.getTown().toString());
+
+		try {
+			list.add("groupID=" + group.getUUID().toString());
+			list.add("groupName=" + group.getName());
+			list.add("groupPrice=" + group.getPrice());
+			list.add("town=" + group.getTown().getName());
+		} catch (Exception e) {
+			logger.warn("An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
+		}
 		
 		// Save file
 		this.queryQueue.add(new FlatFileSaveTask(list, getPlotGroupFilename(group)));
