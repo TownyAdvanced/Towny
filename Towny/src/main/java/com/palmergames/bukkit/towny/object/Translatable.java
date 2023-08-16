@@ -4,20 +4,23 @@ import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.Colors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.translation.GlobalTranslator;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Translatable {
+public class Translatable implements ComponentLike {
 	private String key;
-	private Object[] args;
+	private final List<ComponentLike> args = new ArrayList<>();
 	private boolean stripColors;
-	private final List<Object> appended = new ArrayList<>(0);
+	private final List<ComponentLike> appended = new ArrayList<>();
 	private Locale locale;
 	
 	private Translatable(String key) {
@@ -26,19 +29,36 @@ public class Translatable {
 	
 	private Translatable(String key, Object... args) {
 		this.key = key;
-		this.args = args;
+		this.args.addAll(TownyComponents.convert(args));
 	}
 	
 	public static Translatable of(String key) {
-		return new Translatable(key);
+		return translatable(key);
 	}
 	
 	public static Translatable of(String key, Object... args) {
+		return translatable(key, args);
+	}
+	
+	public static Translatable translatable(String key) {
+		return new Translatable(key);
+	}
+	
+	public static Translatable translatable(String key, Object... args) {
 		return new Translatable(key, args);
 	}
 	
+	/**
+	 * @deprecated As of TODO insert version, components and translatables can be used interchangeably so this is no longer needed.
+	 */
+	@Deprecated
 	public static Translatable literal(String text) {
-		return new LiteralTranslatable(text);
+		return new Translatable(text) {
+			@Override
+			public String translate() {
+				return stripColors() ? Colors.strip(key() + appended()) : key() + appended();
+			}
+		};
 	}
 	
 	public String key() {
@@ -46,9 +66,17 @@ public class Translatable {
 	}
 	
 	public Object[] args() {
-		return args;
+		Object[] arr = new Object[args.size()];
+		
+		for (int i = 0; i < args.size(); i++)
+			arr[i] = args.get(i);
+		
+		return arr;
 	}
 	
+	/**
+	 * @return The set locale that this translatable will be translated in.
+	 */
 	@Nullable
 	public Locale locale() {
 		return this.locale;
@@ -64,14 +92,8 @@ public class Translatable {
 
 		StringBuilder converted = new StringBuilder();
 
-		for (Object object : this.appended) {
-			if (object instanceof String string)
-				converted.append(string);
-			else if (object instanceof Translatable translatable)
-				converted.append(translatable.locale(this.locale).translate());
-			else if (object instanceof Component component)
-				converted.append(TownyComponents.toLegacy(component));
-		}
+		for (ComponentLike object : this.appended)
+			converted.append(MiniMessage.miniMessage().serialize(GlobalTranslator.render(object.asComponent(), this.locale == null ? Translation.getDefaultLocale() : this.locale)));
 
 		return converted.toString();
 	}
@@ -82,7 +104,8 @@ public class Translatable {
 	}
 	
 	public Translatable args(Object... args) {
-		this.args = args;
+		this.args.clear();
+		this.args.addAll(TownyComponents.convert(args));
 		return this;
 	}
 	
@@ -92,7 +115,7 @@ public class Translatable {
 	}
 	
 	public Translatable append(String append) {
-		appended.add(append);
+		appended.add(Component.text(append));
 		return this;
 	}
 	
@@ -106,16 +129,37 @@ public class Translatable {
 		return this;
 	}
 
+	/**
+	 * Sets the locale that will be used if {@link #translate()} or {@link #component()} is invoked without a locale.
+	 * If this translatable is converted to a {@link Component} the locale will be lost however, so it is encouraged to chain this with one of the translation methods.
+	 * 
+	 * @see #translate(Locale) 
+	 * @see #component(Locale) 
+	 */
 	public Translatable locale(@Nullable Locale locale) {
 		this.locale = locale;
 		return this;
 	}
 
+	/**
+	 * Sets the locale that will be used if {@link #translate()} or {@link #component()} is invoked without a locale to the locale of the given resident.
+	 * If this translatable is converted to a {@link Component} the locale will be lost however, so it is encouraged to chain this with one of the translation methods.
+	 * 
+	 * @see #translate(Locale)
+	 * @see #component(Locale)
+	 */
 	public Translatable locale(@NotNull Resident resident) {
 		this.locale = Translation.getLocale(resident);
 		return this;
 	}
 	
+	/**
+	 * Sets the locale that will be used if {@link #translate()} or {@link #component()} is invoked without a locale to the locale of the given command sender.
+	 * If this translatable is converted to a {@link Component} the locale will be lost however, so it is encouraged to chain this with one of the translation methods.
+	 * 
+	 * @see #translate(Locale)
+	 * @see #component(Locale)
+	 */
 	public Translatable locale(@NotNull CommandSender commandSender) {
 		this.locale = Translation.getLocale(commandSender);
 		return this;
@@ -127,17 +171,11 @@ public class Translatable {
 	}
 	
 	public String translate() {
-		translateArgs(this.locale);
+		final Component translated = component();
 		
-		String translated;
-		if (args == null)
-			translated = locale == null ? Translation.of(key) : Translation.of(key, locale);
-		else 
-			translated = locale == null ? Translation.of(key, args) : Translation.of(key, locale, args);
-		
-		translated += appended();
-		
-		return stripColors ? Colors.strip(translated) : translated;
+		return this.stripColors
+			? TownyComponents.plain(translated)
+			: MiniMessage.miniMessage().serialize(translated);
 	}
 	
 	public Component component(@NotNull Locale locale) {
@@ -146,7 +184,7 @@ public class Translatable {
 	}
 	
 	public Component component() {
-		return TownyComponents.miniMessage(translate());
+		return Translation.render(this.asComponent(), this.locale == null ? Translation.getDefaultLocale() : this.locale);
 	}
 	
 	public String forLocale(Resident resident) {
@@ -160,15 +198,6 @@ public class Translatable {
 	public String defaultLocale() {
 		return translate(Translation.getDefaultLocale());
 	}
-
-	private void translateArgs(@Nullable Locale locale) {
-		if (args == null)
-			return;
-		
-		for (int i = 0; i < args.length; i++)
-			if (args[i] instanceof Translatable)
-				args[i] = ((Translatable) args[i]).locale(locale).translate();
-	}
 	
 	@Override
 	public String toString() {
@@ -180,26 +209,19 @@ public class Translatable {
 	public String debug() {
 		return "Translatable{" +
 			"key='" + key + '\'' +
-			", args=" + Arrays.toString(args) +
+			", args=[" + this.args.stream().map(comp -> MiniMessage.miniMessage().serialize(comp.asComponent())).collect(Collectors.joining(", ")) + "]" +
 			", stripColors=" + stripColors +
 			", appended=" + appended() +
 			", locale=" + locale +
 			'}';
 	}
 	
-	private static final class LiteralTranslatable extends Translatable {
-
-		private LiteralTranslatable(String key) {
-			super(key);
-		}
-
-		private LiteralTranslatable(String key, Object... args) {
-			super(key, args);
-		}
-		
-		@Override
-		public String translate() {
-			return stripColors() ? Colors.strip(key() + appended()) : key() + appended();
-		}
+	@Override
+	public @NotNull Component asComponent() {
+		return Component.translatable()
+			.key(this.key)
+			.args(this.args)
+			.append(this.appended)
+			.build();
 	}
 }

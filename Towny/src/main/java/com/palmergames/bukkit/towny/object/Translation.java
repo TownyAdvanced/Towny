@@ -6,22 +6,39 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.flattener.ComponentFlattener;
+import net.kyori.adventure.text.flattener.FlattenerListener;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.renderer.ComponentRenderer;
+import net.kyori.adventure.text.renderer.TranslatableComponentRenderer;
+import net.kyori.adventure.translation.Translator;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -31,9 +48,12 @@ public final class Translation {
 	
 	private Translation() {}
 	
+	private static final Pattern LOCALIZATION_PATTERN = Pattern.compile("%(?:(\\d+)\\$)?s");
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
+	private static final TranslatableComponentRenderer<Locale> renderer = TranslatableComponentRenderer.usingTranslationSource(new TownyTranslator());
 	private static Locale defaultLocale = new Locale("en", "US"); // en-US here by default, in case of safe mode happening before translations are loaded.
-	private static Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
+	private static final Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
+	private static final Map<Locale, ComponentFlattener> flatteners = new HashMap<>();
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
@@ -234,6 +254,16 @@ public final class Translation {
 		return BukkitTools.isOnline(resident.getName()) ? getLocale(resident.getPlayer()) : defaultLocale;
 	}
 	
+	@NotNull
+	public static Component render(@NotNull Component component, @NotNull Locale locale) {
+		return renderer.render(component, locale);
+	}
+	
+	@ApiStatus.Internal
+	public static ComponentRenderer<Locale> translationRenderer() {
+		return renderer;
+	}
+	
 	public static void addTranslations(Map<String, Map<String, String>> addedTranslations) {
 		if (addedTranslations != null && !addedTranslations.isEmpty()) {
 			for (String language : addedTranslations.keySet())
@@ -244,6 +274,89 @@ public final class Translation {
 					for (Map.Entry<String, String> entry : newTranslations.entrySet())
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
 				}
+		}
+	}
+	
+	private static ComponentFlattener flattener(final @NotNull Locale locale) {
+		return flatteners.computeIfAbsent(locale, k -> ComponentFlattener.basic().toBuilder()
+			// Thanks to Paper for already having a flattener for translatables using the %s style
+			.complexMapper(TranslatableComponent.class, (translatable, consumer) -> {
+				final String translated = of(translatable.key(), locale);
+
+				final Matcher matcher = LOCALIZATION_PATTERN.matcher(translated);
+				final List<Component> args = translatable.args();
+				int argPosition = 0;
+				int lastIdx = 0;
+				while (matcher.find()) {
+					// append prior
+					if (lastIdx < matcher.start()) {
+						consumer.accept(TownyComponents.miniMessage(translated.substring(lastIdx, matcher.start())).applyFallbackStyle(translatable.style()));
+					}
+					lastIdx = matcher.end();
+
+					final String argIdx = matcher.group(1);
+					// calculate argument position
+					if (argIdx != null) {
+						try {
+							final int idx = Integer.parseInt(argIdx) - 1;
+							if (idx < args.size()) {
+								consumer.accept(args.get(idx));
+							}
+						} catch (final NumberFormatException ex) {
+							// ignore, drop the format placeholder
+						}
+					} else {
+						final int idx = argPosition++;
+						if (idx < args.size()) {
+							consumer.accept(args.get(idx));
+						}
+					}
+				}
+
+				// append tail
+				if (lastIdx < translated.length()) {
+					consumer.accept(TownyComponents.miniMessage(translated.substring(lastIdx)).applyFallbackStyle(translatable.style()));
+				}
+			})
+			.build());
+	}
+	
+	private static class TownyTranslator implements Translator {
+
+		@Override
+		public @NotNull Key name() {
+			return Key.key("towny", "translations");
+		}
+
+		@Override
+		public @Nullable MessageFormat translate(@NotNull String key, @NotNull Locale locale) {
+			return null;
+		}
+
+		@Override
+		public @Nullable Component translate(@NotNull TranslatableComponent component, @NotNull Locale locale) {
+			final TextComponent.Builder builder = Component.text();
+			
+			flattener(locale).flatten(component, new FlattenerListener() {
+				Style currentStyle = Style.empty();
+				
+				@Override
+				public void pushStyle(@NotNull Style style) {
+					currentStyle = style;
+				}
+
+				@Override
+				public void component(@NotNull String text) {
+					builder.append(Component.text(text, currentStyle));
+				}
+
+				@Override
+				public void popStyle(@NotNull Style style) {
+					currentStyle = Style.empty();
+				}
+			});
+			
+			return builder.build();
 		}
 	}
 }

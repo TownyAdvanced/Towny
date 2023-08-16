@@ -21,6 +21,7 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 
+import net.kyori.adventure.text.ComponentLike;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
@@ -39,10 +40,13 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.generator.WorldInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 
 /**
  * Towny message handling class
@@ -51,6 +55,7 @@ import java.util.UUID;
  *
  */
 
+@SuppressWarnings("unused")
 public class TownyMessaging {
 	private static final Logger LOGGER = LogManager.getLogger("Towny");
 	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
@@ -76,9 +81,9 @@ public class TownyMessaging {
 	/**
 	 * Sends an Error message (red) to the Player or console and to the named Dev if
 	 * DevMode is enabled.
-	 * 
+	 * <p>
 	 * Uses default_towny_prefix.
-	 * 
+	 * <p>
 	 * If msg is empty nothing will be sent.
 	 *
 	 * @param sender the Object sending the message
@@ -88,24 +93,7 @@ public class TownyMessaging {
 		if (sender == null || msg.isEmpty())
 			return;
 
-		if (sender instanceof CommandSender toSend) {
-			sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(sender instanceof ConsoleCommandSender).append(Colors.Red + msg).forLocale(toSend));
-		} else if (sender instanceof TownyObject townySender) {
-			if (townySender instanceof Resident resident) {
-				// Resident
-				sendMessage(resident, Translation.of("default_towny_prefix") + Colors.Red + msg);
-			} else if (townySender instanceof Town town) {
-				// Town
-				sendPrefixedTownMessage(town, Colors.Red + msg);
-			} else if (townySender instanceof Nation nation) {
-				// Nation
-				sendPrefixedNationMessage(nation, Colors.Red + msg);
-			}
-		} else {
-			sendErrorMsg(String.format("Unsupported TownyMessaging#sendErrorMsg sender class type: %s", sender.getClass().getName()));
-		}
-		
-		sendDevMsg(msg);
+		sendErrorMsg(sender, TownyComponents.miniMessage(msg));
 	}
 
 	/**
@@ -120,8 +108,6 @@ public class TownyMessaging {
 	}
 
 	/**
-	 * Towny's main endpoint for Towny-Prefixed messages.
-	 * 
 	 * Sends a message (green) to the Player or console
 	 * and to the named Dev if DevMode is enabled.
 	 * Uses default_towny_prefix
@@ -133,28 +119,24 @@ public class TownyMessaging {
 		if (sender == null || msg.isEmpty())
 			return;
 		
-		if (sender instanceof Player p) {
-			sendMessage(p, Translatable.of("default_towny_prefix").forLocale(p) + Colors.LightGreen + msg);
-		} else if (sender instanceof ConsoleCommandSender) {
-			sendMessage(sender, Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + Colors.strip(msg));
-		} else {
-			sendMessage(sender, Translatable.of("default_towny_prefix").forLocale(sender) + Colors.LightGreen + msg);
-		}
-		
-		sendDevMsg(msg);
+		sendMsg(sender, TownyComponents.miniMessage(msg));
+	}
+	
+	public static void sendDevMsg(final String msg) {
+		sendDevMsg(TownyComponents.miniMessage(msg));
 	}
 	
 	/**
 	 * Sends a message (red) to the named Dev (if DevMode is enabled)
 	 * Uses default_towny_prefix
 	 *
-	 * @param msg the message to be sent
+	 * @param message the message to be sent
 	 */
-	public static void sendDevMsg(String msg) {
+	public static void sendDevMsg(final ComponentLike message) {
 		if (TownySettings.isDevMode()) {
 			Player townyDev = BukkitTools.getPlayerExact(TownySettings.getDevName());
 			if (townyDev != null)
-				sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.Red + msg);
+				sendMessage(townyDev, Component.translatable("default_towny_prefix").append(Component.text(" DevMode: ")).append(message.asComponent().color(NamedTextColor.DARK_RED)));
 		}
 	}
 
@@ -187,20 +169,14 @@ public class TownyMessaging {
 	 * Send a message. This is the main end point for all String based messages
 	 * before being sent to the eventual reader.
 	 *
-	 * @param sender the Object sending the message
+	 * @param receiver the object receiving the message
 	 * @param line   the String to send
 	 */
-	public static void sendMessage(Object sender, String line) {
+	public static void sendMessage(Object receiver, String line) {
 		if (line.isEmpty())
 			return;
 		
-		if (sender instanceof Player player) {
-			Towny.getAdventure().player(player).sendMessage(TownyComponents.miniMessage(line));
-		} else if (sender instanceof CommandSender commandSender) {
-			commandSender.sendMessage(Colors.strip(line));
-		} else if (sender instanceof Resident resident) {
-			resident.sendMessage(TownyComponents.miniMessage(line));
-		}
+		sendMessage(receiver, TownyComponents.miniMessage(line));
 	}
 
 	/**
@@ -481,7 +457,7 @@ public class TownyMessaging {
 	 */
 	public static void sendConfirmationMessage(CommandSender sender, Confirmation confirmation) {
 		final Translator translator = Translator.locale(sender);
-		Component firstLineComponent = translator.component("confirmation_prefix").append(confirmation.getTitle().locale(sender).component());
+		Component firstLineComponent = translator.component("confirmation_prefix").append(confirmation.title());
 		Component lastLineComponent = translator.component("this_message_will_expire2", confirmation.getDuration());
 
 		// Create confirm button based on given params.
@@ -534,12 +510,14 @@ public class TownyMessaging {
 	}
 
 	public static Component getPageNavigationFooter(String prefix, int page, String arg, int total, Translator translator) {
+		final String command = "/" + prefix + " " + (arg.isEmpty() ? "" : arg + " ");
+		
 		Component backButton = Component.text("<<<", NamedTextColor.GOLD)
-			.clickEvent(ClickEvent.runCommand("/" + prefix + " " + (arg.isEmpty() ? "" : arg + " ") + (page - 1)))
+			.clickEvent(ClickEvent.runCommand(command + (page - 1)))
 			.hoverEvent(HoverEvent.showText(translator.component("msg_hover_previous_page")));
 		
 		Component forwardButton = Component.text(">>>", NamedTextColor.GOLD)
-			.clickEvent(ClickEvent.runCommand("/" + prefix + " " +  (arg.isEmpty() ? "" : arg + " ") + (page + 1)))
+			.clickEvent(ClickEvent.runCommand(command + (page + 1)))
 			.hoverEvent(HoverEvent.showText(translator.component("msg_hover_next_page")));
 		
 		Component pageText = Component.text("   ").append(translator.component("list_page", page, total)).append(Component.text("   "));
@@ -601,8 +579,10 @@ public class TownyMessaging {
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Location outpost = outposts.get(i);
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
+			
 			if (tb == null)
 				continue;
+			
 			String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
 			TextComponent dash = Component.text(" - ", NamedTextColor.DARK_GRAY);		
 			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD)
@@ -610,7 +590,7 @@ public class TownyMessaging {
 				.append(dash);
 
 			TextComponent outpostName = Component.text(name, NamedTextColor.GREEN);
-			TextComponent worldName = Component.text(outpost.getWorld().getName(), NamedTextColor.BLUE);
+			TextComponent worldName = Component.text(Optional.ofNullable(outpost.getWorld()).map(WorldInfo::getName).orElse("null"), NamedTextColor.BLUE);
 			TextComponent coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")", NamedTextColor.BLUE);
 
 			if (!name.equalsIgnoreCase("")) {
@@ -622,7 +602,7 @@ public class TownyMessaging {
 			if (TownyEconomyHandler.isActive())
 				spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-			line = line.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name).append("\n").append(spawnCost).locale(player).component()));
+			line = line.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name).append("\n").append(spawnCost)));
 			outpostsFormatted[i % 10] = line;
 		}
 		
@@ -638,10 +618,11 @@ public class TownyMessaging {
 	}
 	
 	public static void sendJailList(Player player, Town town, int page, int total) {
-		Translator translator = Translator.locale(player);
-		int jailCount = town.getJails().size();
+		final Translator translator = Translator.locale(player);
+		final List<Jail> jails = town.getJails() == null ? new ArrayList<>() : new ArrayList<>(town.getJails());
+		
+		int jailCount = jails.size();
 		int iMax = Math.min(page * 10, jailCount);
-		List<Jail> jails = new ArrayList<>(town.getJails());
 		
 		TextComponent[] jailsFormatted;
 		
@@ -671,8 +652,9 @@ public class TownyMessaging {
 			if (jail.hasName())
 				line = line.append(dash).append(name);
 			line = line.append(dash).append(coord).append(dash).append(cellCount);
-				
-			if (town.getPrimaryJail().getUUID().equals(jail.getUUID()))
+
+			final Jail primaryJail = town.getPrimaryJail();
+			if (primaryJail != null && primaryJail.getUUID().equals(jail.getUUID()))
 				line = line.append(dash).append(Component.text("(Primary Jail)", NamedTextColor.RED));
 
 			jailsFormatted[i % 10] = line;
@@ -734,20 +716,31 @@ public class TownyMessaging {
 		audience.sendMessage(pageFooter);
 	}
 	
-	/*
-	 * TRANSLATABLES FOLLOW
-	 */
-	
 	/**
-	 * Sends a message in green, prefixed by the default_towny_prefix to the sender,
-	 * translated to the end-user's locale.
-	 *  
-	 * @param sender CommandSender who will see the message. 
-	 * @param translatables Translatable object(s) which will be translated, joined with a space.
-	 * @see #sendMsg(CommandSender, Translatable)
+	 * Send a message. This is the main end point for all component based messages
+	 * before being sent to the eventual reader.
+	 *
+	 * @param receiver the object receiving the message
+	 * @param message the message to send
 	 */
-	public static void sendMsg(CommandSender sender, Translatable... translatables) {
-		sendMsg(sender, Translation.translateTranslatables(sender, translatables));
+	@SuppressWarnings("IfCanBeSwitch") // Newer language feature that jabel doesn't support
+	public static void sendMessage(final @NotNull Object receiver, final @NotNull ComponentLike message) {
+		final Component component = message.asComponent();
+
+		if (receiver instanceof ConsoleCommandSender) {
+			LOGGER.info(TownyComponents.plain(component));
+			return;
+		}
+		
+		final Audience audience;
+		if (receiver instanceof CommandSender sender)
+			audience = Towny.getAdventure().sender(sender);
+		else if (receiver instanceof Audience aud)
+			audience = aud;
+		else
+			return;
+
+		audience.sendMessage(component);
 	}
 
 	/**
@@ -755,45 +748,13 @@ public class TownyMessaging {
 	 * translated to the end-user's locale.
 	 *
 	 * @param sender CommandSender who will see the message. 
-	 * @param translatable Translatable object which will be translated.
+	 * @param message Translatable object which will be translated.
 	 */
-	public static void sendMsg(CommandSender sender, Translatable translatable) {
-		sendMsg(sender, translatable.locale(sender).translate());
-	}
-
-	/**
-	 * Sends a message translated to the end-user's locale, with no prefix.
-	 *  
-	 * @param sender CommandSender who will see the message. 
-	 * @param translatables Translatable... object(s) which will be translated.
-	 * @see #sendMessage(CommandSender, Translatable)    
-	 */
-	public static void sendMessage(CommandSender sender, Translatable... translatables) {
-		sendMessage(sender, Translation.translateTranslatables(sender, translatables));
-	}
-
-	/**
-	 * Sends a message translated to the end-user's locale, with no prefix.
-	 *
-	 * @param sender CommandSender who will see the message. 
-	 * @param translatable Translatable object which will be translated.
-	 */
-	public static void sendMessage(CommandSender sender, Translatable translatable) {
-		sendMessage(sender, translatable.locale(sender).translate());
-	}
-	
-	/**
-	 * Sends an Error message (red) to the sender
-	 * and to the named Dev if DevMode is enabled.
-	 * Uses default_towny_prefix.
-	 * Translates to the end-user's locale.
-	 * 
-	 * @param sender CommandSender who will receive the error message.
-	 * @param translatables Translatable... object(s) to be translated using the locale of the end-user.
-	 * @see #sendErrorMsg(CommandSender, Translatable)    
-	 */
-	public static void sendErrorMsg(CommandSender sender, Translatable... translatables) {
-		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
+	public static void sendMsg(final @NotNull CommandSender sender, final @NotNull ComponentLike message) {
+		final Component component = message.asComponent();
+		
+		sendMessage(sender, Component.translatable("default_towny_prefix").append(component.color(NamedTextColor.GREEN)));
+		sendDevMsg(component);
 	}
 
 	/**
@@ -803,23 +764,46 @@ public class TownyMessaging {
 	 * Translates to the end-user's locale.
 	 *
 	 * @param sender CommandSender who will receive the error message.
-	 * @param translatable Translatable object to be translated using the locale of the end-user.
+	 * @param message message to be sent to the end-user.
 	 */
-	public static void sendErrorMsg(CommandSender sender, Translatable translatable) {
-		sendErrorMsg(sender, translatable.locale(sender).translate());
+	@SuppressWarnings("IfCanBeSwitch")
+	public static void sendErrorMsg(final @NotNull Object sender, final @NotNull ComponentLike message) {
+		final Component component = message.asComponent();
+		
+		if (sender instanceof CommandSender toSend) {
+			sendMessage(toSend, Component.translatable("default_towny_prefix").append(component.color(NamedTextColor.DARK_RED)));
+		} else if (sender instanceof TownyObject townySender) {
+			if (townySender instanceof Resident resident) {
+				// Resident
+				sendMessage(resident, Component.translatable("default_towny_prefix").append(component.color(NamedTextColor.DARK_RED)));
+			} else if (townySender instanceof Town town) {
+				// Town
+				sendPrefixedTownMessage(town, component.color(NamedTextColor.DARK_RED));
+			} else if (townySender instanceof Nation nation) {
+				// Nation
+				sendPrefixedNationMessage(nation, component.color(NamedTextColor.DARK_RED));
+			}
+		} else {
+			sendErrorMsg(String.format("Unsupported TownyMessaging#sendErrorMsg sender class type: %s", sender.getClass().getName()));
+		}
+
+		sendDevMsg(component);
 	}
 	
 	/**
-	 * Send a message to All online players and the log.
+	 * Sends a message to all online players and the log.
 	 * Uses default_towny_prefix. Message is translated for the end-user.
 	 *
-	 * @param translatable Translatable object to be messaged to the player using their locale.
+	 * @param message message to be sent to all players using their locale.
 	 */
-	public static void sendGlobalMessage(Translatable translatable) {
+	public static void sendGlobalMessage(ComponentLike message) {
+		final Component component = message.asComponent();
+		
 		for (Player player : Bukkit.getOnlinePlayers())
 			if (player != null && TownyAPI.getInstance().isTownyWorld(player.getWorld()))
-				sendMsg(player, translatable);
-		LOGGER.info("[Global Message] " + translatable.stripColors(true).translate());
+				sendMsg(player, component);
+		
+		LOGGER.info("[Global Message] " + TownyComponents.plain(component));
 	}
 
 	/**
@@ -829,11 +813,13 @@ public class TownyMessaging {
 	 * @param nation Nation to pass the message to, prefix message with.
 	 * @param message Translatable object to be messaged to the player using their locale.
 	 */
-	public static void sendPrefixedNationMessage(Nation nation, Translatable message) {
-		LOGGER.info(Colors.strip("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
+	public static void sendPrefixedNationMessage(Nation nation, ComponentLike message) {
+		final Component component = message.asComponent();
+		
+		LOGGER.info("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + TownyComponents.plain(component));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
-			sendMessage(player, Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())).append(message));
+			sendMessage(player, Translatable.of("default_nation_prefix", StringMgmt.remUnderscore(nation.getName())).append(component));
 	}
 	
 	/**
@@ -843,11 +829,15 @@ public class TownyMessaging {
 	 * @param town Town to pass the message to, and prefix message with.
 	 * @param message Translatable object to be messaged to the player using their locale.
 	 */
-	public static void sendPrefixedTownMessage(Town town, Translatable message) {
-		LOGGER.info(Colors.strip("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + message.translate()));
+	public static void sendPrefixedTownMessage(Town town, ComponentLike message) {
+		final Component component = message.asComponent();
+		final String plain = TownyComponents.plain(component);
 		
-		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
-			sendMessage(player, Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())).append(message));
+		if (plain.isEmpty())
+			return;
+		
+		LOGGER.info("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + plain);
+		town.sendMessage(Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())).append(component));
 	}
 
 	/**
@@ -857,7 +847,7 @@ public class TownyMessaging {
 	 * @param resident The resident.
 	 * @param message The translatable message to be sent to the resident and/or their town.
 	 */
-	public static void sendPrefixedTownMessage(Resident resident, Translatable message) {
+	public static void sendPrefixedTownMessage(@NotNull Resident resident, @NotNull ComponentLike message) {
 		Town town = resident.getTownOrNull();
 		
 		if (town == null)
@@ -873,8 +863,10 @@ public class TownyMessaging {
 	 * @param nation Nation which will receive the message.
 	 * @param message Translatable message to be shown to the town.
 	 */
-	public static void sendNationMessagePrefixed(Nation nation, Translatable message) {
-		LOGGER.info(Colors.strip("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + message.translate()));
+	public static void sendNationMessagePrefixed(Nation nation, ComponentLike message) {
+		final Component component = message.asComponent();
+		
+		LOGGER.info("[Nation Msg] " + StringMgmt.remUnderscore(nation.getName()) + ": " + TownyComponents.plain(component));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(nation))
 			sendMsg(player, message);
@@ -885,10 +877,12 @@ public class TownyMessaging {
 	 * preceded by the default_towny_prefix
 	 * 
 	 * @param town Town which will receive the message.
-	 * @param message Translatable message to be shown to the town.
+	 * @param message Message to be shown to the town.
 	 */
-	public static void sendTownMessagePrefixed(Town town, Translatable message) {
-		LOGGER.info(Colors.strip("[Town Msg] " + StringMgmt.remUnderscore(town.getName())) + ": " + message.translate());
+	public static void sendTownMessagePrefixed(Town town, ComponentLike message) {
+		final Component component = message.asComponent();
+		
+		LOGGER.info("[Town Msg] " + StringMgmt.remUnderscore(town.getName()) + ": " + TownyComponents.plain(component));
 		
 		for (Player player : TownyAPI.getInstance().getOnlinePlayers(town))
 			sendMsg(player, message);
@@ -901,9 +895,10 @@ public class TownyMessaging {
 	 * @param resident Resident to receive the message.
 	 * @param message Translatable message for the resident.
 	 */
-	public static void sendMsg(Resident resident, Translatable message) {
-		if (resident.isOnline())
-			sendMsg(resident.getPlayer(), message);
+	public static void sendMsg(Resident resident, ComponentLike message) {
+		final Player player = resident.getPlayer();
+		if (player != null)
+			sendMsg(player, message);
 	}
 	
 	/**
@@ -912,8 +907,10 @@ public class TownyMessaging {
 	 * 
 	 * @param message Translatable message to show the console.
 	 */
-	public static void sendMsg(Translatable message) {
-		LOGGER.info(message.stripColors(true).translate());
+	public static void sendMsg(ComponentLike message) {
+		final String plain = TownyComponents.plain(message.asComponent());
+		if (!plain.isEmpty())
+			LOGGER.info(plain);
 	}
 	
 	/**
@@ -922,15 +919,17 @@ public class TownyMessaging {
 	 * 
 	 * @param message Translatable error message to show the console.
 	 */
-	public static void sendErrorMsg(Translatable message) {
-		LOGGER.warn("Error: " + message.stripColors(true).translate());
+	public static void sendErrorMsg(ComponentLike message) {
+		final String plain = TownyComponents.plain(message.asComponent());
+		if (!plain.isEmpty())
+			LOGGER.warn("Error: " + plain);
 	}
 
 	/**
 	 * Send a message to All online ops or players with towny.admin, and the log.
 	 * @param message Translatable message to send.
 	 */
-	public static void sendMsgToOnlineAdmins(Translatable message) {
+	public static void sendMsgToOnlineAdmins(ComponentLike message) {
 		sendMsg(message);
 		for (Player player : Bukkit.getOnlinePlayers())
 			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player))
@@ -981,5 +980,73 @@ public class TownyMessaging {
 	
 	public static void sendBossBarMessageToPlayer(Player player, BossBar bossBar) {
 		Towny.getAdventure().player(player).showBossBar(bossBar);
+	}
+
+	/*
+	 * Bridge methods
+	 */
+
+	private static void sendMsg$$bridge$$public(CommandSender sender, Translatable... translatables) {
+		sendMsg(sender, Translation.translateTranslatables(sender, translatables));
+	}
+
+	private static void sendMsg$$bridge$$public(CommandSender sender, Translatable translatable) {
+		sendMsg(sender, translatable);
+	}
+
+	private static void sendMessage$$bridge$$public(CommandSender sender, Translatable... translatables) {
+		sendMessage(sender, Translation.translateTranslatables(sender, translatables));
+	}
+
+	private static void sendMessage$$bridge$$public(CommandSender sender, Translatable translatable) {
+		sendMessage(sender, translatable);
+	}
+
+	private static void sendErrorMsg$$bridge$$public(CommandSender sender, Translatable... translatables) {
+		sendErrorMsg(sender, Translation.translateTranslatables(sender, translatables));
+	}
+
+	private static void sendErrorMsg$$bridge$$public(CommandSender sender, Translatable message) {
+		sendErrorMsg(sender, message);
+	}
+
+	private static void sendGlobalMessage$$bridge$$public(Translatable message) {
+		sendGlobalMessage(message);
+	}
+
+	private static void sendPrefixedNationMessage$$bridge$$public(Nation nation, Translatable message) {
+		sendPrefixedNationMessage(nation, message);
+	}
+
+	private static void sendPrefixedTownMessage$$bridge$$public(Town town, Translatable message) {
+		sendPrefixedTownMessage(town, message);
+	}
+
+	private static void sendPrefixedTownMessage$$bridge$$public(Resident resident, Translatable message) {
+		sendPrefixedTownMessage(resident, message);
+	}
+
+	private static void sendNationMessagePrefixed$$bridge$$public(Nation nation, Translatable message) {
+		sendNationMessagePrefixed(nation, message);
+	}
+
+	private static void sendTownMessagePrefixed$$bridge$$public(Town town, Translatable message) {
+		sendTownMessagePrefixed(town, message);
+	}
+
+	private static void sendMsg$$bridge$$public(Resident resident, Translatable message) {
+		sendMsg(resident, message);
+	}
+
+	private static void sendMsg$$bridge$$public(Translatable message) {
+		sendMsg(message);
+	}
+
+	private static void sendErrorMsg$$bridge$$public(Translatable message) {
+		sendErrorMsg(message);
+	}
+	
+	private static void sendMsgToOnlineAdmins$$bridge$$public(Translatable message) {
+		sendMsgToOnlineAdmins(message);
 	}
 }

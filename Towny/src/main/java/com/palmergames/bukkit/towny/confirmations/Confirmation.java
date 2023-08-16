@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.confirmations;
 
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
 
 /**
  * An object which stores information about confirmations. While this 
@@ -14,13 +16,13 @@ public class Confirmation {
 	
 	private final Runnable acceptHandler;
 	private final Runnable cancelHandler;
-	private final Translatable title;
+	private final Component title;
 	private final int duration;
 	private final ConfirmationTransaction transaction;
 	private final String confirmCommand;
 	private final String cancelCommand;
 	private final boolean isAsync;
-	private String pluginPrefix;
+	private final String pluginPrefix;
 	private final CancellableTownyEvent event;
 
 	/**
@@ -91,9 +93,21 @@ public class Confirmation {
 	 * Gets the title of the confirmation message.
 	 * 
 	 * @return The title of the confirmation message.
+	 * @deprecated Deprecated as of todo insert version, Confirmation titles can now be any component
+	 * @see #title() 
 	 */
+	@Deprecated
 	public Translatable getTitle() {
-		return title;
+		return Translatable.literal(TownyComponents.plain(this.title));
+	}
+
+	/**
+	 * Gets the title of the confirmation message.
+	 *
+	 * @return The title of the confirmation message.
+	 */
+	public Component title() {
+		return this.title;
 	}
 	
 	/**
