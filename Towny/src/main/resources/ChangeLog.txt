@@ -8987,3 +8987,4 @@ v0.92.0.11:
     - Default: 27
     - The width of the map shown in /towny map and /res toggle map.
     - Minimum 7, maximum 27, only odd numbers are accepted.
+  - Replace lang3 validate with guava, courtesy of Warrior with PR #6931.
