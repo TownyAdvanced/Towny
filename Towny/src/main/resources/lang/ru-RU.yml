@@ -1703,10 +1703,16 @@ msg_folia_scoreboard: "Изменение таблиц временно не р�
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "Вы не можете расприватить этот участок, поскольку участку на %s,%s не будет хватать прилегающих участков (нужно минимум %s.)"
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>Ваша нация собрала %s налогов с городов."
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
 #Message shown when a town collects taxes from its residents.
 msg_tax_collected_from_residents: "<aqua>Ваш город собрал %s налогов с жителей."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>Your town paid %s in tax to its residents."
 #Message shown when a town collects taxes from its plottaxes.
 msg_tax_collected_from_plots: "<aqua>Ваш город собрал %s налогов с участков."
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>Your town paid %s in tax to the land owners via plot taxes."
 #Message shown when a nation collects taxes from its towns that are conquered.
 msg_tax_collected_from_conquered_towns: "<aqua>Ваша нация собрала %s дополнительных налогов с завоеванных городов."
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Ваш город освобожден от налога завоеванного."
