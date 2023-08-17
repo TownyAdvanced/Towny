@@ -157,7 +157,8 @@ public enum ConfigNodes {
 			"0.0",
 			"",
 			"# A required minimum tax amount for the default_tax, will not change any towns which already have a tax set.",
-			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero."),
+			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero.",
+			"# This setting has no effect when negative taxes are allowed."),
 	TOWN_MAX_PURCHASED_BLOCKS(
 			"town.max_purchased_blocks",
 			"0",
@@ -363,7 +364,8 @@ public enum ConfigNodes {
 			"0.0",
 			"",
 			"# A required minimum tax amount for the default_tax, will not change any nations which already have a tax set.",
-			"# Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero."),
+			"# Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero.",
+			"# This setting has no effect when negative taxes are allowed."),
 	NATION_DEF_TAXES_CONQUEREDTAX(
 			"nation.default_taxes.default_nation_conquered_tax",
 			"0",

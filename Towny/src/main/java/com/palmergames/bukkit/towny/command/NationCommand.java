@@ -2188,7 +2188,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_negative_money"));
 		if (nation.isTaxPercentage() && (amount > 100 || amount < 0.0))
 			throw new TownyException(Translatable.of("msg_err_not_percentage"));
-		if (TownySettings.getNationDefaultTaxMinimumTax() > amount)
+		if (!TownySettings.isNegativeNationTaxAllowed() && TownySettings.getNationDefaultTaxMinimumTax() > amount)
 			throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getNationDefaultTaxMinimumTax()));
 		nation.setTaxes(amount);
 		if (admin) 

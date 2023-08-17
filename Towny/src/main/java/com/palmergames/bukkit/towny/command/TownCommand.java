@@ -2299,7 +2299,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_negative_money"));
 		if (town.isTaxPercentage() && (amount > 100 || amount < 0.0))
 			throw new TownyException(Translatable.of("msg_err_not_percentage"));
-		if (TownySettings.getTownDefaultTaxMinimumTax() > amount)
+		if (!TownySettings.isNegativeTownTaxAllowed() && TownySettings.getTownDefaultTaxMinimumTax() > amount)
 			throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getTownDefaultTaxMinimumTax()));
 		town.setTaxes(amount);
 		if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_tax", sender.getName(), town.getTaxes()));
