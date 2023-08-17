@@ -232,8 +232,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_collected_from_towns", prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		} else if (taxCollected < 0.0) {
-			// TODO: A negative Lang String.
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_collected_from_towns", prettyMoney(taxCollected)));
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_paid_to_towns", prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 
@@ -391,8 +390,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_residents", prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		} else if (taxCollected < 0.0) {
-			// TODO: Make a new negative amount lang string.
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_residents", prettyMoney(taxCollected)));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_paid_to_residents", prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 
@@ -404,8 +402,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_plots", prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		} else if (taxCollected < 0.0) {
-			// TODO: Make a new negative amount lang string.
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_plots", prettyMoney(taxCollected)));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_paid_to_residents_for_plots", prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 	}
