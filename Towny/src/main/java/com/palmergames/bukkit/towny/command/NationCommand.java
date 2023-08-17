@@ -2183,21 +2183,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void nationSetTaxes(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
 		if (split.length < 2)
 			throw new TownyException("Eg: /nation set taxes 70");
-		try {
-			Double amount = Double.parseDouble(split[1]);
-			if (amount < 0 && !TownySettings.isNegativeNationTaxAllowed())
-				throw new TownyException(Translatable.of("msg_err_negative_money"));
-			if (nation.isTaxPercentage() && (amount > 100 || amount < 0.0))
-				throw new TownyException(Translatable.of("msg_err_not_percentage"));
-			if (TownySettings.getNationDefaultTaxMinimumTax() > amount)
-				throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getNationDefaultTaxMinimumTax()));
-			nation.setTaxes(amount);
-			if (admin) 
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
-		} catch (NumberFormatException e) {
-			throw new TownyException(Translatable.of("msg_error_must_be_num"));
-		}
+		Double amount = MathUtil.getDoubleOrThrow(split[1]);
+		if (amount < 0 && !TownySettings.isNegativeNationTaxAllowed())
+			throw new TownyException(Translatable.of("msg_err_negative_money"));
+		if (nation.isTaxPercentage() && (amount > 100 || amount < 0.0))
+			throw new TownyException(Translatable.of("msg_err_not_percentage"));
+		if (TownySettings.getNationDefaultTaxMinimumTax() > amount)
+			throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getNationDefaultTaxMinimumTax()));
+		nation.setTaxes(amount);
+		if (admin) 
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_set_nation_tax", sender.getName(), nation.getTaxes()));
 	}
 
 	public static void nationSetTaxPercentCap(CommandSender sender, String[] split, Nation nation) throws TownyException {
