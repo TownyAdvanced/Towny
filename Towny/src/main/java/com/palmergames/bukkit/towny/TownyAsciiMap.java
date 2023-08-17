@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -152,11 +151,13 @@ public class TownyAsciiMap {
 							}
 						}
 
+					// If this is not where the player is currently locationed,
+					// set the colour of the townblocktype if it has one.
+					if (!(x == halfLineHeight && y == halfLineWidth) && townblock.getData().hasColour())
+						townyMap[y][x] = townyMap[y][x].color(townblock.getData().getColour());
+
 					// Registered town block
 					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {
-						// override the colour if it's a shop plot for sale
-						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
-							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.BLUE);
 						townyMap[y][x] = townyMap[y][x].content(forSaleSymbol);
 					} else if (townblock.isHomeBlock())
 						townyMap[y][x] = townyMap[y][x].content(homeSymbol);
