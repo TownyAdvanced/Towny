@@ -2084,6 +2084,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS);
 	}
 
+	public static boolean isNegativeTownTaxAllowed() {
+		return getBoolean(ConfigNodes.ECO_UPKEEP_NEGATIVETOWNTAX);
+	}
+
+	public static boolean isNegativeNationTaxAllowed() {
+		return getBoolean(ConfigNodes.ECO_UPKEEP_NEGATIVENATIONTAX);
+	}
+
 	public static double getTownPenaltyUpkeepCost(Town town) {
 		TownUpkeepPenalityCalculationEvent event = new TownUpkeepPenalityCalculationEvent(town, getTownPenaltyUpkeepCostRaw(town));
 		BukkitTools.fireEvent(event);

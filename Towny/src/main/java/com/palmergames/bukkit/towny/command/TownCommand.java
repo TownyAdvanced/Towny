@@ -2296,9 +2296,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /town set taxes 7");
 		try {
 			Double amount = Double.parseDouble(split[1]);
-			if (amount < 0)
+			if (amount < 0 && !TownySettings.isNegativeTownTaxAllowed())
 				throw new TownyException(Translatable.of("msg_err_negative_money"));
-			if (town.isTaxPercentage() && amount > 100)
+			if (town.isTaxPercentage() && (amount > 100 || amount < 0.0))
 				throw new TownyException(Translatable.of("msg_err_not_percentage"));
 			if (TownySettings.getTownDefaultTaxMinimumTax() > amount)
 				throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getTownDefaultTaxMinimumTax()));

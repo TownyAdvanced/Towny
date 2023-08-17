@@ -2607,6 +2607,18 @@ public enum ConfigNodes {
 			"# If enabled, if a plot tax is set to a negative amount",
 			"# it will result in the resident that owns it being paid",
 			"# by the town bank (if the town can afford it.)"),
+	ECO_UPKEEP_NEGATIVETOWNTAX(
+			"economy.daily_taxes.allow_negative_town_tax",
+			"false",
+			"",
+			"# If enabled, and a town tax is set to a negative amount and is a fixed amount (not percentage,)",
+			"# it will result in every resident being paid by the town bank (if the town can afford it.)"),
+	ECO_UPKEEP_NEGATIVENATIONTAX(
+			"economy.daily_taxes.allow_negative_nation_tax",
+			"false",
+			"",
+			"# If enabled, and a nation tax is set to a negative amount and is a fixed amount (not percentage,)",
+			"# it will result in every town in the nation being paid by the nation bank (if the nation can afford it.)"),
 	
 	ECO_BANKRUPTCY("economy.bankruptcy", "", "", 
 			"# The Bankruptcy system in Towny will make it so that when a town cannot pay their upkeep costs,",
