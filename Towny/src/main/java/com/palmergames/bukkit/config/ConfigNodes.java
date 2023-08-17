@@ -2593,27 +2593,27 @@ public enum ConfigNodes {
 			"",
 			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
 			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
-	ECO_UPKEEP_PLOTPAYMENTS(
+	ECO_TAXES_ALLOW_PLOT_PAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
 			"",
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
-	ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS(
+	ECO_TAXES_ALLOW_PLAYER_OWNED_PLOT_PAYMENTS(
 			"economy.daily_taxes.allow_negative_plot_tax",
 			"false",
 			"",
 			"# If enabled, if a plot tax is set to a negative amount",
 			"# it will result in the resident that owns it being paid",
 			"# by the town bank (if the town can afford it.)"),
-	ECO_UPKEEP_NEGATIVETOWNTAX(
+	ECO_TAXES_ALLOW_NEGATIVE_TOWN_TAX(
 			"economy.daily_taxes.allow_negative_town_tax",
 			"false",
 			"",
 			"# If enabled, and a town tax is set to a negative amount and is a fixed amount (not percentage,)",
 			"# it will result in every resident being paid by the town bank (if the town can afford it.)"),
-	ECO_UPKEEP_NEGATIVENATIONTAX(
+	ECO_TAXES_ALLOW_NEGATIVE_NATION_TAX(
 			"economy.daily_taxes.allow_negative_nation_tax",
 			"false",
 			"",

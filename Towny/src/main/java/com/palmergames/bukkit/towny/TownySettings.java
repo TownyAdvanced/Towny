@@ -2077,19 +2077,19 @@ public class TownySettings {
 
 	public static boolean isUpkeepPayingPlots() {
 
-		return getBoolean(ConfigNodes.ECO_UPKEEP_PLOTPAYMENTS);
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_PLOT_PAYMENTS);
 	}
 	
 	public static boolean isNegativePlotTaxAllowed() {
-		return getBoolean(ConfigNodes.ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS);
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_PLAYER_OWNED_PLOT_PAYMENTS);
 	}
 
 	public static boolean isNegativeTownTaxAllowed() {
-		return getBoolean(ConfigNodes.ECO_UPKEEP_NEGATIVETOWNTAX);
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_NEGATIVE_TOWN_TAX);
 	}
 
 	public static boolean isNegativeNationTaxAllowed() {
-		return getBoolean(ConfigNodes.ECO_UPKEEP_NEGATIVENATIONTAX);
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_NEGATIVE_NATION_TAX);
 	}
 
 	public static double getTownPenaltyUpkeepCost(Town town) {
