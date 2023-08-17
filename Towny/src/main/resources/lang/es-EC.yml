@@ -1703,10 +1703,16 @@ msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
 #Message shown when a town collects taxes from its residents.
 msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>Your town paid %s in tax to its residents."
 #Message shown when a town collects taxes from its plottaxes.
 msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>Your town paid %s in tax to the land owners via plot taxes."
 #Message shown when a nation collects taxes from its towns that are conquered.
 msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra tax from its conquered towns."
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
