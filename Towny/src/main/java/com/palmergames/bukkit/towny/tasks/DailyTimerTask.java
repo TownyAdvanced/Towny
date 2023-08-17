@@ -228,11 +228,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			else
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_destroyed_by_nation_tax_multiple").append(StringMgmt.join(localTownsDestroyed, ", ")));
 
-		if (taxCollected > 0.0) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_collected_from_towns", prettyMoney(taxCollected)));
-			taxCollected = 0.0;
-		} else if (taxCollected < 0.0) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_paid_to_towns", prettyMoney(taxCollected)));
+		if (taxCollected != 0.0) {
+			String msgSlug = taxCollected > 0.0 ? "msg_tax_collected_from_towns" : "msg_tax_paid_to_towns";
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msgSlug, prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 
@@ -386,11 +384,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Taxes paid by or paid to the Residents of the town.
 		 */
 		collectTownResidentTax(town);
-		if (taxCollected > 0.0) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_residents", prettyMoney(taxCollected)));
-			taxCollected = 0.0;
-		} else if (taxCollected < 0.0) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_paid_to_residents", prettyMoney(taxCollected)));
+		if (taxCollected != 0.0) {
+			String msgSlug = taxCollected > 0.0 ? "msg_tax_collected_from_residents" : "msg_tax_paid_to_residents";
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of(msgSlug, prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 
@@ -398,11 +394,9 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Taxes paid by or paid to the Residents that own Town land personally.
 		 */
 		collecTownPlotTax(town);
-		if (taxCollected > 0.0) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_plots", prettyMoney(taxCollected)));
-			taxCollected = 0.0;
-		} else if (taxCollected < 0.0) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_paid_to_residents_for_plots", prettyMoney(taxCollected)));
+		if (taxCollected != 0.0) {
+			String msgSlug = taxCollected > 0.0 ? "msg_tax_collected_from_plots" : "msg_tax_paid_to_residents_for_plots";
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of(msgSlug, prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 	}
