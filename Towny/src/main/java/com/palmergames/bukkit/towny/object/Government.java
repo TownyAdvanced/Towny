@@ -43,8 +43,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
 	private final transient List<Invite> sentInvites = new ArrayList<>();
 	private boolean isPublic = false;
-	private boolean isForSale = false;
-	private double forSalePrice = 0;
 	private boolean isOpen = false;
 	protected boolean isNeutral = false;
 	private long registered;
@@ -132,42 +130,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 */
 	public final boolean isPublic() { 
 		return isPublic; 
-	}
-
-	/**
-	 * Sets the town for sale.
-	 * 
-	 * @param isForSale whether the town is for sale.
-	 */
-	public final void setForSale(boolean isForSale) {
-		this.isForSale = isForSale;
-	}
-
-	/**
-	 * Whether the town is for sale.
-	 * 
-	 * @return true for on sale, false otherwise.
-	 */
-	public final boolean isForSale() {
-		return isForSale;
-	}
-
-	/**
-	 * Sets town sale price.
-	 * 
-	 * @param forSalePrice double representing sale price.
-	 */
-	public final void setForSalePrice(double forSalePrice) {
-		this.forSalePrice = forSalePrice;
-	}
-
-	/**
-	 * Get town sale price.
-	 * 
-	 * @return double representing sale price.
-	 */
-	public final double getForSalePrice() {
-		return forSalePrice;
 	}
 
 	/**

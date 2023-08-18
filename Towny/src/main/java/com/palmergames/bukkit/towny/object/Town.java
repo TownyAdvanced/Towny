@@ -89,6 +89,8 @@ public class Town extends Government implements TownBlockOwner {
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean hasUnlimitedClaims = false;
+	private boolean isForSale = false;
+	private double forSalePrice = 0;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private TownBlock homeBlock;
 	private TownyWorld world;
@@ -1027,6 +1029,42 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void removeOutpostSpawn(Location loc) {
 		outpostSpawns.remove(Position.ofLocation(loc));
+	}
+
+	/**
+	 * Sets the town for sale.
+	 *
+	 * @param isForSale whether the town is for sale.
+	 */
+	public final void setForSale(boolean isForSale) {
+		this.isForSale = isForSale;
+	}
+
+	/**
+	 * Whether the town is for sale.
+	 *
+	 * @return true for on sale, false otherwise.
+	 */
+	public final boolean isForSale() {
+		return isForSale;
+	}
+
+	/**
+	 * Sets town sale price.
+	 *
+	 * @param forSalePrice double representing sale price.
+	 */
+	public final void setForSalePrice(double forSalePrice) {
+		this.forSalePrice = forSalePrice;
+	}
+
+	/**
+	 * Get town sale price.
+	 *
+	 * @return double representing sale price.
+	 */
+	public final double getForSalePrice() {
+		return forSalePrice;
 	}
 
 	public void setPlotPrice(double plotPrice) {
