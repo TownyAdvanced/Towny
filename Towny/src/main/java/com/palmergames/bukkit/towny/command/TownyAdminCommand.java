@@ -90,6 +90,9 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.palmergames.bukkit.towny.permissions.PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_FORSALE;
+import static com.palmergames.bukkit.towny.permissions.PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NOTFORSALE;
+
 /**
  * Send a list of all general townyadmin help commands to player Command:
  * /townyadmin
@@ -151,7 +154,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"settownlevel",
 		"giveboughtblocks",
 		"merge",
-		"forcemerge"
+		"forcemerge",
+		"forsale",
+		"fs",
+		"notforsale",
+		"nfs"
 	);
 	private static final List<String> adminTownToggleTabCompletes = Stream.concat(TownCommand.townToggleTabCompletes.stream(),
 			Arrays.asList("forcemobs", "forcepvp", "forcedisablepvp", "unlimitedclaims", "upkeep", "allowedtowar", "conquered").stream()).collect(Collectors.toList()); 
@@ -1312,6 +1319,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "buy":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_FORCEMERGE.getNode());
 			TownCommand.townBuy(sender, StringMgmt.remArgs(split, 2), town, true);
+			break;
+		case "forsale":
+		case "fs":
+			checkPermOrThrow(sender, TOWNY_COMMAND_TOWNYADMIN_TOWN_FORSALE.getNode());
+			parseAdminTownForSaleCommand(sender, town, StringMgmt.remArgs(split, 2));
+			break;
+		case "notforsale":
+		case "nfs":
+			checkPermOrThrow(sender, TOWNY_COMMAND_TOWNYADMIN_TOWN_NOTFORSALE.getNode());
+			parseAdminTownNotForSaleCommand(sender, town);
 			break;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOWN, split[1])) {
@@ -2492,5 +2509,21 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownySettings.saveConfig();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_setup_success"));
 		});
+	}
+
+	private void parseAdminTownForSaleCommand(CommandSender sender, Town town, String[] arg) throws TownyException {
+		if (arg.length == 0)
+			throw new TownyException(Translatable.of("msg_error_must_be_num"));
+
+		double forSalePrice = Double.parseDouble(arg[0]);
+		TownCommand.setTownForSale(town, forSalePrice, true);
+
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_forsale", town.getName(), TownyEconomyHandler.getFormattedBalance(forSalePrice)));
+	}
+
+	private void parseAdminTownNotForSaleCommand(CommandSender sender, Town town) {
+		TownCommand.setTownNotForSale(town, true);
+
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_notforsale", town.getName()));
 	}
 }

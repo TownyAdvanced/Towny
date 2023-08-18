@@ -1005,6 +1005,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setAllowedToWar(rs.getBoolean("allowedToWar"));
 			town.setJoinedNationAt(rs.getLong("joinedNationAt"));
 			town.setMovedHomeBlockAt(rs.getLong("movedHomeBlockAt"));
+			town.setForSale(rs.getBoolean("forSale"));
+			town.setForSalePrice(rs.getDouble("forSalePrice"));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
@@ -2218,6 +2220,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("joinedNationAt", town.getJoinedNationAt());
 			twn_hm.put("mapColorHexCode", town.getMapColorHexCode());
 			twn_hm.put("movedHomeBlockAt", town.getMovedHomeBlockAt());
+			twn_hm.put("forSale", town.isForSale());
+			twn_hm.put("forSalePrice", town.getForSalePrice());
 			if (town.hasMeta())
 				twn_hm.put("metadata", serializeMetadata(town));
 			else

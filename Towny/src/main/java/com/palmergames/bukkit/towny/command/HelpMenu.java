@@ -432,6 +432,8 @@ public enum HelpMenu {
 				.add("outlaw add/remove [name]", "")
 				.add("say", "[message]")
 				.add("spawn", Translation.of("town_help_5"))
+				.add("forsale [$]", "")
+				.add("notforsale [$]", "")
 				.add(Translation.of("res_sing"), "deposit [$]", "")
 				.add(Translation.of("res_sing"), "rank add/remove [resident] [rank]", "")
 				.add(Translation.of("mayor_sing"), "mayor ?", Translation.of("town_help_8"))
@@ -558,7 +560,6 @@ public enum HelpMenu {
 				.add("[days]", "");
 		}
 	},
-	
 
 	TOWN_INVITE {
 		@Override
