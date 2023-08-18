@@ -334,7 +334,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @return The tax number.
 	 */
 	public double getTaxes() {
-		setTaxes(taxes); //make sure the tax level is right.
 		return taxes;
 	}
 

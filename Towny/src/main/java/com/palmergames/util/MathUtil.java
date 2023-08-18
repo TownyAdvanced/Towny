@@ -57,6 +57,16 @@ public class MathUtil {
 	public static double distance(Coord coord1, Coord coord2) {
 		return distance(coord1.getX(), coord2.getX(), coord1.getZ(), coord2.getZ());
 	}
+
+	public static double getDoubleOrThrow(String input) throws TownyException {
+		double d;
+		try {
+			d = Double.parseDouble(input);
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_must_be_num"));
+		}
+		return d;
+	}
 	
 	public static int getIntOrThrow(String input) throws TownyException {
 		int i;
