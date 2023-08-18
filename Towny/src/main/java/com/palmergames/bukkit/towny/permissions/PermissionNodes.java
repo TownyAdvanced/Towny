@@ -109,7 +109,6 @@ public enum PermissionNodes {
 		    TOWNY_COMMAND_TOWN_LIST_RUINED("towny.command.town.list.ruined"),
 		    TOWNY_COMMAND_TOWN_LIST_BANKRUPT("towny.command.town.list.bankrupt"),
 			TOWNY_COMMAND_TOWN_LIST_UPKEEP("towny.command.town.list.upkeep"),
-			TOWNY_COMMAND_TOWN_LIST_FORSALE("towny.command.town.list.forsale"),
 		TOWNY_COMMAND_TOWN_OUTPOST_LIST("towny.command.town.outpost.list"),
 		TOWNY_COMMAND_TOWN_NEW("towny.command.town.new"),
 		TOWNY_COMMAND_TOWN_LEAVE("towny.command.town.leave"),
