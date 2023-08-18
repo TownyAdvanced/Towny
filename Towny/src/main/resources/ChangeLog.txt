@@ -8988,3 +8988,12 @@ v0.92.0.11:
     - The width of the map shown in /towny map and /res toggle map.
     - Minimum 7, maximum 27, only odd numbers are accepted.
   - Replace lang3 validate with guava, courtesy of Warrior with PR #6931.
+0.99.5.13:
+  - Add ability for towns and nations to have a negative fixed-rate tax amount.
+    - Closes #6705.
+  - New Config Option: economy.daily_taxes.allow_negative_town_tax
+    - Default: false
+    - If enabled, and a town tax is set to a negative amount and is a fixed amount (not percentage,) it will result in every resident being paid by the town bank (if the town can afford it.)
+  - New Config Option: economy.daily_taxes.allow_negative_nation_tax
+    - Default: false
+    - If enabled, and a nation tax is set to a negative amount and is a fixed amount (not percentage,) it will result in every town in the nation being paid by the nation bank (if the nation can afford it.)

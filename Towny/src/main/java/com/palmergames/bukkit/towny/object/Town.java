@@ -183,7 +183,7 @@ public class Town extends Government implements TownBlockOwner {
 		this.taxes = Math.min(taxes, isTaxPercentage ? TownySettings.getMaxTownTaxPercent() : TownySettings.getMaxTownTax());
 		
 		// Fix invalid taxes
-		if (this.taxes < 0)
+		if (this.taxes < 0 && !TownySettings.isNegativeTownTaxAllowed())
 			this.taxes = TownySettings.getTownDefaultTax();
 	}
 
