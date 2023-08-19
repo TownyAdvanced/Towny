@@ -4557,6 +4557,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Confirmation
 			.runOnAccept(() -> {
+				Resident currentMayor = town.getMayor();
+				
 				try {
 					if (resident.hasTown())
 						resident.removeTown();
@@ -4565,7 +4567,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				} catch (AlreadyRegisteredException e) {
 					town.setMayor(resident);
 				}
+				
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", resident.getName()));
+				
+				currentMayor.getAccount().deposit(town.getForSalePrice(), "Payment for town sale");
+				
 				town.setForSale(false);
 				town.save();
 			})
