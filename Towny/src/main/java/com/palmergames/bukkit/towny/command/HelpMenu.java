@@ -434,6 +434,7 @@ public enum HelpMenu {
 				.add("spawn", Translation.of("town_help_5"))
 				.add("forsale [$]", "")
 				.add("notforsale [$]", "")
+				.add("buytown (town)", "")
 				.add(Translation.of("res_sing"), "deposit [$]", "")
 				.add(Translation.of("res_sing"), "rank add/remove [resident] [rank]", "")
 				.add(Translation.of("mayor_sing"), "mayor ?", Translation.of("town_help_8"))
