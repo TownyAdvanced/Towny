@@ -560,7 +560,8 @@ public enum HelpMenu {
 				.add("[days]", "");
 		}
 	},
-
+	
+	
 	TOWN_INVITE {
 		@Override
 		protected MenuBuilder load() {
