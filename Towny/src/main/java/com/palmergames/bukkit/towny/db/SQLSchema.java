@@ -240,8 +240,9 @@ public class SQLSchema {
 		columns.add("`enemies` mediumtext NOT NULL");
 		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
 		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
-		columns.add("'forSale' bool NOT NULL DEFAULT '0'");
-		columns.add("'forSalePrice' float NOT NULL");
+		columns.add("`forSale` bool NOT NULL DEFAULT '0'");
+		columns.add("`forSalePrice` float NOT NULL");
+		
 		return columns;
 	}
 
