@@ -531,6 +531,22 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						default:
 							return Collections.emptyList();
 					}
+
+				case "buytown":
+					if (args.length == 2) {
+						List<String> townsList = getTownyStartingWith(args[1], "t");
+						List<String> notForSale = new ArrayList<>();
+
+						for (Town town : TownyUniverse.getInstance().getTowns()) {
+							if (!town.isForSale()) {
+								notForSale.add(town.getName());
+							}
+						}
+
+						townsList.removeAll(notForSale);
+						return townsList;
+					}
+					
 				default:
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
@@ -4480,30 +4496,32 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return (int) MathUtil.distance(town1.getHomeBlockOrNull().getCoord(), town2.getHomeBlockOrNull().getCoord());
 	}
 
-	private void parseTownForSaleCommand(Player player, String[] args) throws TownyException {
+	private void parseTownForSaleCommand(CommandSender sender, String[] args) throws TownyException {
 		if (args.length == 0)
 			throw new TownyException(Translatable.of("msg_error_must_be_num"));
 
-		double forSalePrice = Double.parseDouble(args[0]);
-
+		double forSalePrice = MathUtil.getDoubleOrThrow(args[0]);
+		Player player = (Player) sender;
 		Town town = getTownFromPlayerOrThrow(player);
 
 		Confirmation
 			.runOnAccept(() -> {
 				setTownForSale(town, forSalePrice, false);
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), TownyEconomyHandler.getFormattedBalance(forSalePrice)));
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), prettyMoney(forSalePrice)));
 			})
-			.setTitle(Translatable.of("msg_town_sell_confirmation", TownyEconomyHandler.getFormattedBalance(forSalePrice)))
+			.setTitle(Translatable.of("msg_town_sell_confirmation", prettyMoney(forSalePrice)))
 			.sendTo(player);
 	}
 
-	private void parseTownNotForSaleCommand(Player player) throws TownyException {
+	private void parseTownNotForSaleCommand(CommandSender sender) throws TownyException {
+		Player player = (Player) sender;
 		Town town = getTownFromPlayerOrThrow(player);
 
-		if (town.isForSale()) {
-			setTownNotForSale(town, false);
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
-		}
+		if (!town.isForSale())
+			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
+		
+		setTownNotForSale(town, false);
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
 	}
 
 	public static void setTownForSale(Town town, double price, boolean admin) {
@@ -4521,26 +4539,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void parseTownBuyTownCommand(Player player, String[] args) throws TownyException {
-		catchConsole(player);
+	private void parseTownBuyTownCommand(CommandSender sender, String[] args) throws TownyException {
+		catchConsole(sender);
 
 		if (args.length == 0) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
-			return;
+			throw new TownyException(Translatable.of("msg_specify_name"));
 		}
 
-		Town town = TownyUniverse.getInstance().getTown(args[0]);
-		if (town == null) {
-			throw new TownyException(Translatable.of("msg_err_town_unknown", args[0]));
-		}
+		Town town = getTownOrThrow(args[0]);
 
 		if (!town.isForSale()) {
 			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
 		}
-
+		
+		Player player = (Player) sender;
 		Resident resident = getResidentOrThrow(player);
-		if (town.getMayor() == resident) {
-			throw new TownyException(Translatable.of("msg_town_buytown_already_mayor", town.getName()));
+		if (resident.isMayor()) {
+			throw new TownyException(Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
 		}
 
 		Confirmation
@@ -4555,8 +4570,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", resident.getName()));
 				town.setForSale(false);
+				town.save();
 			})
-			.setTitle(Translatable.of("msg_town_buytown_confirmation", town.getName(), TownyEconomyHandler.getFormattedBalance(town.getForSalePrice())))
+			.setTitle(Translatable.of("msg_town_buytown_confirmation", town.getName(), prettyMoney(town.getForSalePrice())))
 			.setCost(new ConfirmationTransaction(town::getForSalePrice, resident.getAccount(), "Town purchase cost."))
 			.sendTo(player);
 	}
