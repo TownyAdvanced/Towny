@@ -4496,12 +4496,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return (int) MathUtil.distance(town1.getHomeBlockOrNull().getCoord(), town2.getHomeBlockOrNull().getCoord());
 	}
 
-	private void parseTownForSaleCommand(CommandSender sender, String[] args) throws TownyException {
+	private void parseTownForSaleCommand(Player player, String[] args) throws TownyException {
 		if (args.length == 0)
 			throw new TownyException(Translatable.of("msg_error_must_be_num"));
 
 		double forSalePrice = MathUtil.getDoubleOrThrow(args[0]);
-		Player player = (Player) sender;
 		Town town = getTownFromPlayerOrThrow(player);
 
 		Confirmation
@@ -4513,8 +4512,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			.sendTo(player);
 	}
 
-	private void parseTownNotForSaleCommand(CommandSender sender) throws TownyException {
-		Player player = (Player) sender;
+	private void parseTownNotForSaleCommand(Player player) throws TownyException {
 		Town town = getTownFromPlayerOrThrow(player);
 
 		if (!town.isForSale())
@@ -4539,8 +4537,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void parseTownBuyTownCommand(CommandSender sender, String[] args) throws TownyException {
-		catchConsole(sender);
+	private void parseTownBuyTownCommand(Player player, String[] args) throws TownyException {
+		catchConsole(player);
 
 		if (args.length == 0) {
 			throw new TownyException(Translatable.of("msg_specify_name"));
@@ -4552,7 +4550,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
 		}
 		
-		Player player = (Player) sender;
 		Resident resident = getResidentOrThrow(player);
 		if (resident.isMayor()) {
 			throw new TownyException(Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
