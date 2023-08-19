@@ -8997,3 +8997,4 @@ v0.92.0.11:
   - New Config Option: economy.daily_taxes.allow_negative_nation_tax
     - Default: false
     - If enabled, and a nation tax is set to a negative amount and is a fixed amount (not percentage,) it will result in every town in the nation being paid by the nation bank (if the nation can afford it.)
+  - Add warning about MyCommand taking over /t in the startup.
