@@ -624,7 +624,7 @@ status_res_taxexempt: 'El personal municipal está exento de los impuestos.'
 status_res_tax: 'Impuesto de la Ciudad:'
 status_res_plottax: 'Impuesto total de los terrenos:'
 status_res_totaltax: 'Impuesto total:'
-status_townblock_plottax: 'Plot Tax: '
+status_townblock_plottax: 'Cargar impuesto: '
 status_townblock_untaxed: 'Untaxed'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'No puedes interactuar con el banco de la nación fuera de la capital.'
