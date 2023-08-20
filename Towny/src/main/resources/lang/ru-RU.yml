@@ -624,8 +624,8 @@ status_res_taxexempt: 'Персонал освобождается от упла
 status_res_tax: 'Налог города:'
 status_res_plottax: 'Всего земельных налогов:'
 status_res_totaltax: 'Всего налогов для оплаты:'
-status_townblock_plottax: 'Plot Tax: '
-status_townblock_untaxed: 'Untaxed'
+status_townblock_plottax: 'Налог на участок: '
+status_townblock_untaxed: 'Не облагается налогом'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Вы не можете пользоваться своим национальным банком вне столицы нации.'
 msg_err_unable_to_use_bank_outside_your_town: 'Вы не можете пользоваться своим городским банком за пределами своего города.'
@@ -1704,15 +1704,15 @@ msg_err_cannot_unclaim_not_enough_adjacent_claims: "Вы не можете ра�
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>Ваша нация собрала %s налогов с городов."
 #Message shown when a nation pays taxes to its towns.
-msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
+msg_tax_paid_to_towns: "<aqua>Ваша нация заплатила %s налогов своим городам."
 #Message shown when a town collects taxes from its residents.
 msg_tax_collected_from_residents: "<aqua>Ваш город собрал %s налогов с жителей."
 #Message shown when a town pays taxes to its residents.
-msg_tax_paid_to_residents: "<aqua>Your town paid %s in tax to its residents."
+msg_tax_paid_to_residents: "<aqua>Ваш город заплатил %s налогов своим жителям."
 #Message shown when a town collects taxes from its plottaxes.
 msg_tax_collected_from_plots: "<aqua>Ваш город собрал %s налогов с участков."
 #Message shown when a town pays taxes to its plottaxes.
-msg_tax_paid_to_residents_for_plots: "<aqua>Your town paid %s in tax to the land owners via plot taxes."
+msg_tax_paid_to_residents_for_plots: "<aqua>Ваш город заплатил %s налогов землевладельцам."
 #Message shown when a nation collects taxes from its towns that are conquered.
 msg_tax_collected_from_conquered_towns: "<aqua>Ваша нация собрала %s дополнительных налогов с завоеванных городов."
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Ваш город освобожден от налога завоеванного."
@@ -1721,6 +1721,6 @@ msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "Налог заво�
 msg_err_your_town_is_not_old_enough_to_overclaim: "Ваш город недостаточно стар для перепривата, попробуйте снова через %s."
 msg_err_your_cannot_overclaim_for_another: "Вы не можете переприватить еще %s."
 #Generic error message for when a world isn't loaded
-msg_err_world_not_loaded: "<red>World is not loaded."
+msg_err_world_not_loaded: "<red>Мир не загружен."
 #Message shown when a mayor toggles a plots taxed status.
-msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
+msg_changed_plot_taxed: '&cЭтому участку присвоен статус налогооблажения %s.'
