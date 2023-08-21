@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.TownyAPI;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.NumberConversions;
@@ -71,7 +71,7 @@ public class Position {
 	}
 	
 	public static Position positionOf(@NotNull TownyWorld world, double x, double y, double z, float pitch, float yaw) {
-		Validate.notNull(world, "world cannot be null");
+		Preconditions.checkNotNull(world, "world cannot be null");
 		return new Position(world, x, y, z, pitch, yaw);
 	}
 	
@@ -86,7 +86,7 @@ public class Position {
 	}
 	
 	public static Position ofLocation(@NotNull Location location) {
-		Validate.notNull(location, "location cannot be null");
+		Preconditions.checkNotNull(location, "location cannot be null");
 		
 		final World bukkitWorld = location.getWorld();
 		if (bukkitWorld == null)
@@ -143,7 +143,7 @@ public class Position {
 	}
 	
 	public static Position deserialize(@NotNull final String[] data) throws IllegalArgumentException {
-		Validate.notNull(data, "data cannot be null");
+		Preconditions.checkNotNull(data, "data cannot be null");
 		
 		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(data[0]);
 		

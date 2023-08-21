@@ -892,6 +892,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "+");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -902,6 +903,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "C");
+			type.put("colour", "<blue>");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -912,6 +914,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "A");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -922,6 +925,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "E");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -932,6 +936,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "W");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", getDefaultWildsblocks());
@@ -942,6 +947,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "I");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -952,6 +958,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "J");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -962,6 +969,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "F");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", getDefaultFarmblocks());
@@ -972,6 +980,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "B");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -2077,11 +2086,19 @@ public class TownySettings {
 
 	public static boolean isUpkeepPayingPlots() {
 
-		return getBoolean(ConfigNodes.ECO_UPKEEP_PLOTPAYMENTS);
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_PLOT_PAYMENTS);
 	}
 	
 	public static boolean isNegativePlotTaxAllowed() {
-		return getBoolean(ConfigNodes.ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS);
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_PLAYER_OWNED_PLOT_PAYMENTS);
+	}
+
+	public static boolean isNegativeTownTaxAllowed() {
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_NEGATIVE_TOWN_TAX);
+	}
+
+	public static boolean isNegativeNationTaxAllowed() {
+		return getBoolean(ConfigNodes.ECO_TAXES_ALLOW_NEGATIVE_NATION_TAX);
 	}
 
 	public static double getTownPenaltyUpkeepCost(Town town) {
@@ -3521,6 +3538,14 @@ public class TownySettings {
 
 	public static String wildernessMapSymbol() {
 		return getString(ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS);
+	}
+
+	public static int asciiMapHeight() {
+		return getInt(ConfigNodes.ASCII_MAP_HEIGHT);
+	}
+
+	public static int asciiMapWidth() {
+		return getInt(ConfigNodes.ASCII_MAP_WIDTH);
 	}
 
 	public static void addReloadListener(NamespacedKey key, @NotNull Consumer<CommentedConfiguration> consumer) {

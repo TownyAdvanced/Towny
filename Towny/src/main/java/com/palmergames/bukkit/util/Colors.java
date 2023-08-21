@@ -176,4 +176,26 @@ public class Colors {
 		LEGACY_LOOKUP.put("o", ITALIC);
 		LEGACY_LOOKUP.put("r", RESET);
 	}
+
+	public static String getLegacyFromNamedTextColor(NamedTextColor colour) {
+		return switch ("<" +colour.toString() + ">") {
+		case BLACK ->"§0";
+		case DARK_BLUE -> "§1";
+		case DARK_GREEN -> "§2";
+		case DARK_AQUA -> "§3";
+		case DARK_RED -> "§4";
+		case DARK_PURPLE -> "§5";
+		case GOLD -> "§6";
+		case GRAY -> "§7";
+		case DARK_GRAY -> "§8";
+		case BLUE -> "§9";
+		case GREEN -> "§a";
+		case AQUA -> "§b";
+		case RED -> "§c";
+		case LIGHT_PURPLE -> "§d";
+		case YELLOW -> "§e";
+		case WHITE -> "§f";
+		default -> null;
+	};
+	}
 }

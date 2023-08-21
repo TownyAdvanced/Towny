@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.99.5.11</version>
+    <version>0.99.5.13</version>
 
     <licenses>
         <license>
@@ -126,7 +126,7 @@
         <dependency>
             <groupId>com.github.ElgarL</groupId>
             <artifactId>groupmanager</artifactId>
-            <version>2.9</version>
+            <version>3.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -256,7 +256,7 @@
         <dependency>
             <groupId>com.github.seeseemelk</groupId>
             <artifactId>MockBukkit-v1.20</artifactId>
-            <version>3.19.0</version>
+            <version>3.19.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

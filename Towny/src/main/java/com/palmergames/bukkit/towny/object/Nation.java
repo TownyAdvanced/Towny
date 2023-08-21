@@ -338,7 +338,7 @@ public class Nation extends Government {
 		this.taxes = Math.min(taxes, isTaxPercentage ? TownySettings.getMaxNationTaxPercent() : TownySettings.getMaxNationTax());
 		
 		// Fix invalid taxes
-		if (this.taxes < 0)
+		if (this.taxes < 0 && !TownySettings.isNegativeNationTaxAllowed())
 			this.taxes = TownySettings.getNationDefaultTax();
 	}
 

@@ -161,10 +161,16 @@ public class PluginIntegrations {
 		if (isPluginPresent("Questioner"))
 			warnings.put("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations."
 					+ " You may safely remove Questioner.jar from your plugins folder.", Level.WARNING);
+
 		//Add warning about PowerRanks.
 		if (isPluginPresent("PowerRanks"))
 			warnings.put("PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
 					+ " You can expect issues with Towny permissions (and other permission providers,) while PowerRanks is installed.", Level.WARNING);
+
+		//Add warning about MyCommand which will have a /t alias for /time in it by default.
+		if (isPluginPresent("MyCommand"))
+			warnings.put("By default MyCommand has an alias for /time that uses /t stored in the mycommand/commands/examples.yml file."
+					+ " If you have not removed it you can expect the /t command to not work properly for Towny!", Level.WARNING);
 
 		if (!warnings.isEmpty()) {
 			for (Map.Entry<String, Level> warning : warnings.entrySet())

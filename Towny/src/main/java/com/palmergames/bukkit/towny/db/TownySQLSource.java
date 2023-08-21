@@ -1005,6 +1005,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setAllowedToWar(rs.getBoolean("allowedToWar"));
 			town.setJoinedNationAt(rs.getLong("joinedNationAt"));
 			town.setMovedHomeBlockAt(rs.getLong("movedHomeBlockAt"));
+			
+			line = rs.getString("forSale");
+			if (line != null)
+				town.setForSale(Boolean.getBoolean(line));
+			
+			line = rs.getString("forSalePrice");
+			if (line != null)
+				town.setForSalePrice(Double.parseDouble(line));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
@@ -1826,6 +1834,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						townBlock.setPlotPrice(Float.parseFloat(line.trim()));
 					} catch (Exception ignored) {
 					}
+
+				boolean taxed = rs.getBoolean("taxed");
+				try {
+					townBlock.setTaxed(taxed);
+				} catch (Exception ignored) {
+				}
 				
 				line = rs.getString("typeName");
 				if (line != null) 
@@ -2212,6 +2226,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("joinedNationAt", town.getJoinedNationAt());
 			twn_hm.put("mapColorHexCode", town.getMapColorHexCode());
 			twn_hm.put("movedHomeBlockAt", town.getMovedHomeBlockAt());
+			twn_hm.put("forSale", town.isForSale());
+			twn_hm.put("forSalePrice", town.getForSalePrice());
 			if (town.hasMeta())
 				twn_hm.put("metadata", serializeMetadata(town));
 			else
@@ -2462,6 +2478,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("z", townBlock.getZ());
 			tb_hm.put("name", townBlock.getName());
 			tb_hm.put("price", townBlock.getPlotPrice());
+			tb_hm.put("taxed", townBlock.isTaxed());
 			tb_hm.put("town", townBlock.getTown().getName());
 			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResidentOrNull().getName() : "");
 			tb_hm.put("typeName", townBlock.getTypeName());

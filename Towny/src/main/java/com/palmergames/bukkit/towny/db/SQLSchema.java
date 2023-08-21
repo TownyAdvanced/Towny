@@ -81,6 +81,7 @@ public class SQLSchema {
 			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
 			case WORLD -> fetchCreateWorldStatemnt(tableType);
+			case HIBERNATED_RESIDENT -> fetchCreateUUIDStatement(tableType);
 			default -> fetchCreateNamedStatement(tableType);
 		};
 	}
@@ -240,6 +241,9 @@ public class SQLSchema {
 		columns.add("`enemies` mediumtext NOT NULL");
 		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
 		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
+		columns.add("`forSale` bool NOT NULL DEFAULT '0'");
+		columns.add("`forSalePrice` float NOT NULL");
+		
 		return columns;
 	}
 
@@ -313,6 +317,7 @@ public class SQLSchema {
 		List<String> columns = new ArrayList<>();
 		columns.add("`name` mediumtext");
 		columns.add("`price` float DEFAULT '-1'");
+		columns.add("`taxed` bool NOT NULL DEFAULT '1'");
 		columns.add("`town` mediumtext");
 		columns.add("`resident` mediumtext");
 		columns.add("`type` TINYINT NOT  NULL DEFAULT '0'");

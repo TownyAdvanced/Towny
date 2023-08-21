@@ -157,7 +157,8 @@ public enum ConfigNodes {
 			"0.0",
 			"",
 			"# A required minimum tax amount for the default_tax, will not change any towns which already have a tax set.",
-			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero."),
+			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero.",
+			"# This setting has no effect when negative taxes are allowed."),
 	TOWN_MAX_PURCHASED_BLOCKS(
 			"town.max_purchased_blocks",
 			"0",
@@ -363,7 +364,8 @@ public enum ConfigNodes {
 			"0.0",
 			"",
 			"# A required minimum tax amount for the default_tax, will not change any nations which already have a tax set.",
-			"# Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero."),
+			"# Do not forget to set the default_tax to more than 0 or new nations will still begin with a tax of zero.",
+			"# This setting has no effect when negative taxes are allowed."),
 	NATION_DEF_TAXES_CONQUEREDTAX(
 			"nation.default_taxes.default_nation_conquered_tax",
 			"0",
@@ -2593,20 +2595,32 @@ public enum ConfigNodes {
 			"",
 			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
 			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
-	ECO_UPKEEP_PLOTPAYMENTS(
+	ECO_TAXES_ALLOW_PLOT_PAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
 			"",
 			"# If enabled and you set a negative upkeep for the town",
 			"# any funds the town gains via upkeep at a new day",
 			"# will be shared out between the plot owners."),
-	ECO_UPKEEP_PLAYEROWNEDPLOTPAYMENTS(
+	ECO_TAXES_ALLOW_PLAYER_OWNED_PLOT_PAYMENTS(
 			"economy.daily_taxes.allow_negative_plot_tax",
 			"false",
 			"",
 			"# If enabled, if a plot tax is set to a negative amount",
 			"# it will result in the resident that owns it being paid",
 			"# by the town bank (if the town can afford it.)"),
+	ECO_TAXES_ALLOW_NEGATIVE_TOWN_TAX(
+			"economy.daily_taxes.allow_negative_town_tax",
+			"false",
+			"",
+			"# If enabled, and a town tax is set to a negative amount and is a fixed amount (not percentage,)",
+			"# it will result in every resident being paid by the town bank (if the town can afford it.)"),
+	ECO_TAXES_ALLOW_NEGATIVE_NATION_TAX(
+			"economy.daily_taxes.allow_negative_nation_tax",
+			"false",
+			"",
+			"# If enabled, and a nation tax is set to a negative amount and is a fixed amount (not percentage,)",
+			"# it will result in every town in the nation being paid by the nation bank (if the nation can afford it.)"),
 	
 	ECO_BANKRUPTCY("economy.bankruptcy", "", "", 
 			"# The Bankruptcy system in Towny will make it so that when a town cannot pay their upkeep costs,",
@@ -2744,6 +2758,9 @@ public enum ConfigNodes {
 			"# |    commands. When using Unicode use the \\u####       | #",
 			"# |    format, and use the HTML-code version of the      | #",
 			"# |    unicode character.                                | #",
+			"# | colour: The colour code which will be used to colour | #",
+			"# |    the townblocktype when viewed on the ascii maps.  | #",
+			"# |    Leave this blank to not set any colour.           | #",
 			"# | itemUseIds: If empty, will use values defined in     | #",
 			"# |    protection.item_use_ids. If not empty this defines| #",
 			"# |    what items are considered item_use.               | #",
@@ -2964,13 +2981,20 @@ public enum ConfigNodes {
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
-			"# |                  ASCII MAP SYMBOLS                   | #",
+			"# |               ASCII MAP SYMBOLS & SIZES              | #",
 			"# |                                                      | #",
 			"# | Used in the ascii maps for symbols not determined by | #",
 			"# | townblocktype. See Town Block Types section for more | #",
 			"# | options. When using Unicode use the \\u#### format,   | #",
 			"# | and use the HTML-code version of the unicode         | #",
 			"# | character.                                           | #",
+			"# |                                                      | #",
+			"# | When setting sizes you cannot set a height of less   | #",
+			"# | than seven or greater than 18. Your width must be    | #",
+			"# | between seven and 27, and should always be an odd    | #",
+			"# | number. These sizes will be used when displaying the | #",
+			"# | output of the /towny map command, and not used when  | #",
+			"# | the player uses the /towny map big command.          | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -2989,8 +3013,17 @@ public enum ConfigNodes {
 	ASCII_MAP_SYMBOLS_WILDERNESS("ascii_map_symbols.wilderness",
 			"-",
 			"",
-			"# The character used for plots which are unclaimed.");
-
+			"# The character used for plots which are unclaimed."),
+	ASCII_MAP_HEIGHT("ascii_map_symbols.map_height",
+			"7",
+			"",
+			"# The height of the map shown in /towny map and /res toggle map.",
+			"# Minimum 7, maximum 18."),
+	ASCII_MAP_WIDTH("ascii_map_symbols.map_width",
+			"27",
+			"",
+			"# The width of the map shown in /towny map and /res toggle map.",
+			"# Minimum 7, maximum 27, only odd numbers are accepted.");
 	
 	private final String Root;
 	private final String Default;

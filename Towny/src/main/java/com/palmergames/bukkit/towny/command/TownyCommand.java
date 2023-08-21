@@ -397,7 +397,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public static void showMap(Player player) {
 
-		TownyAsciiMap.generateAndSend(plugin, player, 7);
+		TownyAsciiMap.generateAndSend(plugin, player, TownySettings.asciiMapHeight());
 	}
 
 	/**

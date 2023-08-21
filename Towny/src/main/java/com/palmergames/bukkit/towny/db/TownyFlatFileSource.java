@@ -791,6 +791,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setPublic(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+				line = keys.get("forSale");
+				if (line != null)
+					try {
+						town.setForSale(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				line = keys.get("forSalePrice");
+				if (line != null)
+					try {
+						town.setForSalePrice(Double.parseDouble(line));
+					} catch (Exception ignored) {
+					}
 				line = keys.get("conquered");
 				if (line != null)
 					try {
@@ -1671,6 +1683,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
 						} catch (Exception ignored) {
 						}
+
+					line = keys.get("taxed");
+					if (line != null)
+						try {
+							townBlock.setTaxed(Boolean.parseBoolean(line));
+						} catch (Exception ignored) {
+						}
 					
 					line = keys.get("outpost");
 					if (line != null)
@@ -1965,6 +1984,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         list.add("registered=" + town.getRegistered());
 		list.add("joinedNationAt=" + town.getJoinedNationAt());
 		list.add("movedHomeBlockAt=" + town.getMovedHomeBlockAt());
+		// ForSale
+		list.add("forSale=" + town.isForSale());
+		// Town sale price
+		list.add("forSalePrice=" + town.getForSalePrice());
         
         // Home Block
 		if (town.hasHomeBlock())
@@ -2275,6 +2298,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// price
 		list.add("price=" + townBlock.getPlotPrice());
+
+		// taxed
+		list.add("taxed=" + townBlock.isTaxed());
 
 		// town
 		try {

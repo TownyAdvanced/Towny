@@ -27,7 +27,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -39,8 +38,11 @@ import static net.kyori.adventure.text.Component.*;
 
 public class TownyAsciiMap {
 
-	public static final int lineWidth = 27;
-	public static final int halfLineWidth = lineWidth / 2;
+	private static final int MAP_WIDTH_UPPER_BOUNDS = 27;
+	private static final int MAP_HEIGHT_UPPER_BOUNDS = 18;
+	private static final int MAP_LOWER_BOUNDS = 7;
+	public static int lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
+	public static int halfLineWidth = lineWidth / 2;
 	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
 	public static String homeSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_HOME.getDefault();
@@ -53,6 +55,8 @@ public class TownyAsciiMap {
 			homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
 			outpostSymbol = parseSymbol(TownySettings.outpostMapSymbol());
 			wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
+			lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
+			halfLineWidth = lineWidth / 2;
 		});
 	}
 	
@@ -76,6 +80,7 @@ public class TownyAsciiMap {
 
 		return new Component[] {
 			text("  -----  ", BLACK),
+			text("  -----  ", BLACK),
 			text("  -", BLACK).append(text(dir == Compass.Point.NW ? "\\" : "-", dir == Compass.Point.NW ? GOLD : BLACK)).append(text("N", dir == Compass.Point.N ? GOLD : WHITE)).append(text(dir == Compass.Point.NE ? "/" : "-", dir == Compass.Point.NE ? GOLD : BLACK)).append(text("-  ", BLACK)),
 			text("  -", BLACK).append(text( "W", dir == Compass.Point.W ? GOLD : WHITE)).append(text("+", GRAY)).append(text("E", dir == Compass.Point.E ? GOLD : WHITE)).append(text("-  ", BLACK)),
 			text("  -", BLACK).append(text(dir == Compass.Point.SW ? "/" : "-", dir == Compass.Point.SW ? GOLD : BLACK)).append(text("S", dir == Compass.Point.S ? GOLD : WHITE)).append(text(dir == Compass.Point.SE ? "\\" : "-", dir == Compass.Point.SE ? GOLD : BLACK)).append(text("-  ", BLACK))
@@ -83,6 +88,7 @@ public class TownyAsciiMap {
 	}
 
 	public static void generateAndSend(Towny plugin, Player player, int lineHeight) {
+		lineHeight = sanitizeLineHeight(lineHeight);
 
 		// Collect Sample Data
 		Resident resident = TownyAPI.getInstance().getResident(player);
@@ -145,11 +151,13 @@ public class TownyAsciiMap {
 							}
 						}
 
+					// If this is not where the player is currently locationed,
+					// set the colour of the townblocktype if it has one.
+					if (!(x == halfLineHeight && y == halfLineWidth) && townblock.getData().hasColour())
+						townyMap[y][x] = townyMap[y][x].color(townblock.getData().getColour());
+
 					// Registered town block
 					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {
-						// override the colour if it's a shop plot for sale
-						if (townblock.getType().equals(TownBlockType.COMMERCIAL))
-							townyMap[y][x] = townyMap[y][x].color(NamedTextColor.BLUE);
 						townyMap[y][x] = townyMap[y][x].content(forSaleSymbol);
 					} else if (townblock.isHomeBlock())
 						townyMap[y][x] = townyMap[y][x].content(homeSymbol);
@@ -284,6 +292,33 @@ public class TownyAsciiMap {
 				(townblock != null && townblock.hasResident() ? townblock.getResidentOrNull() : translator.of("status_no_town"))));
 	}
 	
+	/**
+	 * Returns a map height of at least 7 and at most 18.
+	 * 
+	 * @param asciiMapHeight Height of the map set in the config.
+	 * @return A corrected number within the bounds we require.
+	 */
+	private static int sanitizeLineHeight(int asciiMapHeight) {
+		asciiMapHeight = Math.max(MAP_LOWER_BOUNDS, asciiMapHeight);
+		asciiMapHeight = Math.min(MAP_HEIGHT_UPPER_BOUNDS, asciiMapHeight);
+		return asciiMapHeight;
+	}
+
+	/**
+	 * Returns a map width of at least 7 and at most 27, with any even number
+	 * increased by one, so that the map will be symmetrical.
+	 * 
+	 * @param asciiMapWidth Width of the map set in the config.
+	 * @return A corrected number within the bounds we require.
+	 */
+	private static int sanitizeLineWidth(int asciiMapWidth) {
+		asciiMapWidth = Math.max(MAP_LOWER_BOUNDS, asciiMapWidth);
+		asciiMapWidth = Math.min(MAP_WIDTH_UPPER_BOUNDS, asciiMapWidth);
+		if (asciiMapWidth % 2 == 0)
+			asciiMapWidth++;
+		return asciiMapWidth;
+	}
+
 	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
 		return TownyUniverse.getInstance().getWildernessMapDataMap();
 	}
