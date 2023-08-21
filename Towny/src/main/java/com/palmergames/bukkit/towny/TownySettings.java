@@ -892,6 +892,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "+");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -902,6 +903,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "C");
+			type.put("colour", "<blue>");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -912,6 +914,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "A");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -922,6 +925,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "E");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -932,6 +936,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "W");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", getDefaultWildsblocks());
@@ -942,6 +947,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "I");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -952,6 +958,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "J");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");
@@ -962,6 +969,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "F");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", getDefaultFarmblocks());
@@ -972,6 +980,7 @@ public class TownySettings {
 			type.put("cost", 0.0);
 			type.put("tax", 0.0);
 			type.put("mapKey", "B");
+			type.put("colour", "");
 			type.put("itemUseIds", "");
 			type.put("switchIds", "");
 			type.put("allowedBlocks", "");

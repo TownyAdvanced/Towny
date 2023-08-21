@@ -9,8 +9,11 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.TownBlockTypeRegisterEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.StringMgmt;
+
+import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -118,6 +121,9 @@ public final class TownBlockTypeHandler {
 				double tax = parseDouble(type.getOrDefault("tax", 0.0).toString());
 				String mapKey = String.valueOf(type.getOrDefault("mapKey", "+"));
 
+				String colourName = String.valueOf(type.getOrDefault("colour", ""));
+				NamedTextColor colour = colourName.isEmpty() ? null : Colors.toNamedTextColor(colourName);
+
 				Set<Material> itemUseIds = loadMaterialList("itemUseIds", String.valueOf(type.getOrDefault("itemUseIds", "")), name);
 				Set<Material> switchIds = loadMaterialList("switchIds", String.valueOf(type.getOrDefault("switchIds", "")), name);
 				Set<Material> allowedBlocks = loadMaterialList("allowedBlocks", String.valueOf(type.getOrDefault("allowedBlocks", "")), name);
@@ -134,6 +140,7 @@ public final class TownBlockTypeHandler {
 				data.setCost(cost);
 				data.setTax(tax);
 				data.setMapKey(mapKey);
+				data.setColour(colour);
 				data.setItemUseIds(itemUseIds);
 				data.setSwitchIds(switchIds);
 				data.setAllowedBlocks(allowedBlocks);
