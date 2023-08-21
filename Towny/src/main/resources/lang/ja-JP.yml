@@ -230,7 +230,7 @@ msg_world_pvp: '&cこのワールドはPvPのみです'
 msg_world_mobs: '&cこのワールドはモンスターのスポーンが強制されます'
 msg_world_expl: '&cこのワールドは爆発が強制されます'
 msg_world_fire: '&cこのワールドは火の広がりが強制されます'
-msg_town_mobs: '&cThis town has Monster spawns forced on.'
+msg_town_mobs: '&cこのワールドはモンスターのスポーンが強制されます'
 msg_plot_pvp: '&cアリーナプロットではPvPの設定を切り替えることはできません'
 msg_plot_regen_wrong_size: '&cRegen can only be performed when the default plot size (16) is used.'
 msg_reloaded: '&2Townyの設定がリロードされました'
@@ -556,9 +556,9 @@ tc_err_you_are_already_talking_in_default_channel_help: 'あなたはデフォ�
 tc_err_unable_to_talk_essentials_mute: 'ミュート中のため話せません！'
 tc_err_unable_to_talk_you_are_spamming: 'スパムと判定されたため話せません！'
 msg_admin_set_plot_help_1: '町にいるとき。'
-msg_admin_set_plot_help_2: 'When in the wilderness.'
-msg_err_not_enough_outposts_free_to_claim: 'Not enough outposts available to claim %s/%s'
-msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over your limit %s/%s'
+msg_admin_set_plot_help_2: '荒野にいる場合。'
+msg_err_not_enough_outposts_free_to_claim: '十分な前哨基地が利用可能でないため、%s/%s をclaimすることはできません。'
+msg_err_over_outposts_limit: '前哨基地にテレポートすることはできません。上限 %s/%s に達しています。'
 #Status Screen elements (/res, /town, /nation, /tw, /plot perm)
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
@@ -571,8 +571,8 @@ status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'
 status_off_bad: '&4OFF'
-status_forced: '&cForced'
-status_adjustable: '&aAdjustable'
+status_forced: '&c強制されました。'
+status_adjustable: '&a調整可能です。'
 status_pvp: 'PvP:'
 explosions: '爆発:'
 firespread: 'Firespread:'
@@ -620,10 +620,12 @@ status_world_forcetownmobs: 'Force TownMobs:'
 status_world_unclaimrevert: 'Unclaim Revert:'
 status_world_explrevert: '爆発の取り消し:'
 status_world_ignoredblocks: '無視されたブロック:'
-status_res_taxexempt: 'Staff are exempt from paying town taxes.'
+status_res_taxexempt: 'スタッフは町の税金を支払う義務がありません。'
 status_res_tax: '町の税金:'
 status_res_plottax: 'Total Plot Taxes:'
 status_res_totaltax: '支払う税金の合計:'
+status_townblock_plottax: 'Plot Tax: '
+status_townblock_untaxed: '非課税'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '首都以外で国の銀行を使用することはできません。'
 msg_err_unable_to_use_bank_outside_your_town: '町の外で町の銀行を使用することはできません。'
@@ -659,7 +661,7 @@ msg_err_public_nation_spawn_forbidden_war: '&cパブリックな他の国への�
 msg_err_public_nation_spawn_forbidden_peace: '&cパブリックな他の国へのスポーンは戦争中は禁止されています。'
 msg_spawn_cost_set_to: '&b%sが''/%s spawn''を使用する価格を%sに設定しました。'
 msg_err_cannot_set_spawn_cost_more_than: '&cスポーンの費用を%sより高く設定することはできません。'
-msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'
+msg_err_ally_isnt_public: '&cあなたの同盟者 %s は公開スポーンを有効にしていません。テレポートは拒否されました。'
 msg_nation_changed_public: '&c国のステータスが%sになりました。'
 #Added in 0.47:
 status_plot_type: '土地のタイプ:'
@@ -686,7 +688,7 @@ adjustable: '調整可能'
 msg_no_funds_new_town2: '&cお金が足りません。新しく町を作るには%s必要です。'
 msg_no_funds_new_nation2: '&cこの町には、新しく国を作るためのお金がありません。国を作るたの費用は%sです。'
 msg_no_funds_claim2: '&cこの町には、タウンブロックを購入するお金がありません。/t deposit %sを使用して町の銀行に%s追加してください。'
-msg_err_cant_afford_blocks2: '&cTown cannot afford to claim %s town blocks costing %s. Add %s to the town bank using /t deposit %s'
+msg_err_cant_afford_blocks2: '&cこの町は %s のタウンブロックを購入する余裕がありません。町銀行に /t deposit %s を使って %s を追加してください。'
 msg_err_not_enough_variables: '&c変数が足りません: '
 nation_rechecked_by_admin: '&bNation %s town distances have been successfully rechecked.'
 msg_err_nation_over_town_limit: 'あなたの国の町の数が、上限に達しました。%s'
@@ -1701,10 +1703,16 @@ msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
 #Message shown when a town collects taxes from its residents.
 msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>Your town paid %s in tax to its residents."
 #Message shown when a town collects taxes from its plottaxes.
 msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>Your town paid %s in tax to the land owners via plot taxes."
 #Message shown when a nation collects taxes from its towns that are conquered.
 msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra tax from its conquered towns."
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
@@ -1714,3 +1722,5 @@ msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough t
 msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
