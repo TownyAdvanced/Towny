@@ -1987,3 +1987,11 @@ msg_err_world_not_loaded: "<red>World is not loaded."
 
 # Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
+
+status_forsale: "&a(For Sale: %s)"
+msg_town_forsale: "%s has been set for sale at %s."
+msg_town_notforsale: "%s is no longer for sale."
+msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you sure you want to continue?"
+msg_town_buytown_already_mayor: "You are already mayor of %s."
+msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
+msg_town_buytown_not_forsale: "Specified town is not for sale."

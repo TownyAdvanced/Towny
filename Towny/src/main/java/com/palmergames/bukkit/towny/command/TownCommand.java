@@ -195,7 +195,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"trusttown",
 		"allylist",
 		"enemylist",
-		"baltop"
+		"baltop",
+		"forsale",
+		"fs",
+		"notforsale",
+		"nfs",
+		"buytown"
 		);
 	private static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
@@ -526,6 +531,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						default:
 							return Collections.emptyList();
 					}
+
+				case "buytown":
+					if (args.length == 2) {
+						List<String> townsList = getTownyStartingWith(args[1], "t");
+						townsList.removeIf(n -> !TownyAPI.getInstance().getTown(n).isForSale());
+						return townsList;
+					}
+					
 				default:
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN, townTabCompletes), args[0], "t");
@@ -838,6 +851,21 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town = split.length > 1 ? getTownOrThrow(split[1]) : getTownFromPlayerOrThrow(player);
 			parseTownBaltop(player, town);
 			break;
+		case "forsale":
+		case "fs":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_FORSALE.getNode());
+			parseTownForSaleCommand(player, StringMgmt.remFirstArg(split));
+			break;
+		case "notforsale":
+		case "nfs":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_NOTFORSALE.getNode());
+			parseTownNotForSaleCommand(player);
+			break;
+		case "buytown":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_BUYTOWN.getNode());
+			parseTownBuyTownCommand(player, StringMgmt.remFirstArg(split));
+			break;
+				
 		default:
 			// Test if this is an addon command
 			if (tryTownAddonCommand(player, split))
@@ -4458,5 +4486,105 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return Integer.MAX_VALUE;
 
 		return (int) MathUtil.distance(town1.getHomeBlockOrNull().getCoord(), town2.getHomeBlockOrNull().getCoord());
+	}
+
+	private void parseTownForSaleCommand(Player player, String[] args) throws TownyException {
+		if (args.length == 0)
+			throw new TownyException(Translatable.of("msg_error_must_be_num"));
+
+		double forSalePrice = MathUtil.getDoubleOrThrow(args[0]);
+		Town town = getTownFromPlayerOrThrow(player);
+
+		Confirmation
+			.runOnAccept(() -> {
+				setTownForSale(town, forSalePrice, false);
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), prettyMoney(forSalePrice)));
+			})
+			.setTitle(Translatable.of("msg_town_sell_confirmation", prettyMoney(forSalePrice)))
+			.sendTo(player);
+	}
+
+	private void parseTownNotForSaleCommand(Player player) throws TownyException {
+		Town town = getTownFromPlayerOrThrow(player);
+
+		if (!town.isForSale())
+			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
+		
+		setTownNotForSale(town, false);
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
+	}
+
+	public static void setTownForSale(Town town, double price, boolean admin) {
+		if (town != null) {
+			town.setForSale(true);
+			town.setForSalePrice(price);
+			town.save();
+		}
+	}
+
+	public static void setTownNotForSale(Town town, boolean admin) {
+		if (town != null) {
+			town.setForSale(false);
+			town.save();
+		}
+	}
+
+	private void parseTownBuyTownCommand(CommandSender sender, String[] args) throws TownyException {
+		catchConsole(sender);
+		Player player = (Player) sender;
+
+		if (args.length == 0) {
+			throw new TownyException(Translatable.of("msg_specify_name"));
+		}
+
+		Town town = getTownOrThrow(args[0]);
+
+		if (!town.isForSale()) {
+			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
+		}
+		
+		Resident resident = getResidentOrThrow(player);
+		if (resident.isMayor()) {
+			throw new TownyException(Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
+		}
+
+		Confirmation
+			.runOnAccept(() -> {
+				if (!town.isForSale()) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_buytown_not_forsale"));
+					return;
+				}
+
+				Resident currentMayor = town.getMayor();
+				if (currentMayor == resident) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
+					return;
+				}
+				
+				if (!resident.getAccount().withdraw(town.getForSalePrice(), "Town purchase cost.")) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_you_need_x_to_pay", town.getForSalePrice()));
+					return;
+				}
+				
+				try {
+					if (resident.hasTown())
+						resident.removeTown();
+					
+					townAddResident(town, resident);
+					town.setMayor(resident);
+				} catch (AlreadyRegisteredException e) {
+					town.setMayor(resident);
+				}
+
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", resident.getName()));
+
+				if (currentMayor != null)
+					currentMayor.getAccount().deposit(town.getForSalePrice(), "Payment for town sale");
+
+				town.setForSale(false);
+				town.save();
+			})
+		.setTitle(Translatable.of("msg_town_buytown_confirmation", town.getName(), prettyMoney(town.getForSalePrice())))
+		.sendTo(player);
 	}
 }

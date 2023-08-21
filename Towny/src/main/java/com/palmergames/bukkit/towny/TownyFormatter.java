@@ -837,6 +837,8 @@ public class TownyFormatter {
 			sub.add(translator.of("status_town_title_peaceful"));
 		if (town.isConquered())
 			sub.add(translator.of("msg_conquered"));
+		if (town.isForSale())
+			sub.add(translator.of("status_forsale", formatMoney(town.getForSalePrice())));
 		return sub;
 	}
 
