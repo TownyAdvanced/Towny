@@ -535,15 +535,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "buytown":
 					if (args.length == 2) {
 						List<String> townsList = getTownyStartingWith(args[1], "t");
-						List<String> notForSale = new ArrayList<>();
-
-						for (Town town : TownyUniverse.getInstance().getTowns()) {
-							if (!town.isForSale()) {
-								notForSale.add(town.getName());
-							}
-						}
-
-						townsList.removeAll(notForSale);
+						townsList.removeIf(n -> !TownyAPI.getInstance().getTown(n).isForSale());
 						return townsList;
 					}
 					
