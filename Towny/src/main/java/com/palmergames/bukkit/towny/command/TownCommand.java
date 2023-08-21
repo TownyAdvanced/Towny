@@ -4558,32 +4558,41 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Confirmation
 			.runOnAccept(() -> {
-				Resident currentMayor = town.getMayor();
-				
-				if (currentMayor == resident) {
-					resident.getAccount().deposit(town.getForSalePrice(), "Payment for failed town sale");
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
-				} else {
-					try {
-						if (resident.hasTown())
-							resident.removeTown();
-						townAddResident(town, resident);
-						town.setMayor(resident);
-					} catch (AlreadyRegisteredException e) {
-						town.setMayor(resident);
-					}
-
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", resident.getName()));
-
-					if (currentMayor != null)
-						currentMayor.getAccount().deposit(town.getForSalePrice(), "Payment for town sale");
-
-					town.setForSale(false);
-					town.save();
+				if (!town.isForSale()) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_buytown_not_forsale"));
+					return;
 				}
+
+				Resident currentMayor = town.getMayor();
+				if (currentMayor == resident) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
+					return;
+				}
+				
+				if (!resident.getAccount().withdraw(town.getForSalePrice(), "Town purchase cost.")) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_you_need_x_to_pay", town.getForSalePrice()));
+					return;
+				}
+				
+				try {
+					if (resident.hasTown())
+						resident.removeTown();
+					
+					townAddResident(town, resident);
+					town.setMayor(resident);
+				} catch (AlreadyRegisteredException e) {
+					town.setMayor(resident);
+				}
+
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", resident.getName()));
+
+				if (currentMayor != null)
+					currentMayor.getAccount().deposit(town.getForSalePrice(), "Payment for town sale");
+
+				town.setForSale(false);
+				town.save();
 			})
 		.setTitle(Translatable.of("msg_town_buytown_confirmation", town.getName(), prettyMoney(town.getForSalePrice())))
-		.setCost(new ConfirmationTransaction(town::getForSalePrice, resident.getAccount(), "Town purchase cost."))
 		.sendTo(player);
 	}
 }
