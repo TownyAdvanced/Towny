@@ -81,6 +81,7 @@ public class SQLSchema {
 			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
 			case WORLD -> fetchCreateWorldStatemnt(tableType);
+			case HIBERNATED_RESIDENT -> fetchCreateUUIDStatement(tableType);
 			default -> fetchCreateNamedStatement(tableType);
 		};
 	}
