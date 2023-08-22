@@ -624,8 +624,8 @@ status_res_taxexempt: 'El personal municipal está exento de los impuestos.'
 status_res_tax: 'Impuesto de la Ciudad:'
 status_res_plottax: 'Impuesto total de los terrenos:'
 status_res_totaltax: 'Impuesto total:'
-status_townblock_plottax: 'Plot Tax: '
-status_townblock_untaxed: 'Untaxed'
+status_townblock_plottax: 'Cargar impuesto: '
+status_townblock_untaxed: 'Sin impuestos'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'No puedes interactuar con el banco de la nación fuera de la capital.'
 msg_err_unable_to_use_bank_outside_your_town: 'No puedes interactuar con el banco de tu ciudad fuera de esta.'
@@ -1508,7 +1508,7 @@ msg_err_could_not_find_any_towns_to_rtp: 'No se pudo encontrar ningún pueblo ab
 #Message showing payment for RTP.
 msg_cost_spawn_rtp: '&bHas sido cobrado %s para teletransportarte a una parcela de ciudad aleatoria que está a la venta.'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: 'You are about to be teleported to a plot which is forsale in %s which will let you join. Use ''/plot claim'' to claim your plot when you arrive.'
+msg_you_are_about_to_be_teleported_to_a_plot: 'Estás a punto de ser teletransportado a una parcela que está prohibida en %s que te permitirá unirte. Usa ''/plot claim'' para reclamar tu parcela cuando llegas.'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
 townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "La ciudad de %s tiene parcelas que puedes comprar, ¿quieres ser teletransportado a una parcela que puedes comprar ahora?"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
@@ -1724,3 +1724,10 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 msg_err_world_not_loaded: "<red>World is not loaded."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
+status_forsale: "&a(For Sale: %s)"
+msg_town_forsale: "%s has been set for sale at %s."
+msg_town_notforsale: "%s is no longer for sale."
+msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you sure you want to continue?"
+msg_town_buytown_already_mayor: "You are already mayor of %s."
+msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
+msg_town_buytown_not_forsale: "Specified town is not for sale."
