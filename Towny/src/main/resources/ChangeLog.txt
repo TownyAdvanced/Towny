@@ -8998,3 +8998,36 @@ v0.92.0.11:
     - Default: false
     - If enabled, and a nation tax is set to a negative amount and is a fixed amount (not percentage,) it will result in every town in the nation being paid by the nation bank (if the nation can afford it.)
   - Add warning about MyCommand taking over /t in the startup.
+  - Bump com.github.ElgarL:groupmanager from 2.9 to 3.2.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.19.0 to 3.19.1.
+  - Fix Hibernated Residents table being keyed improperly.
+    - Closes #6936.
+  - Add ability for mayors to put their Towns up for sale, and for other players to buy them, courtesy of Fruitloopins with PR #6934. (First-Time Contributor!)
+    - Closes #6478.
+  - New Command: /t forsale/fs [$]
+    - Puts town up for sale at the specified amount
+    - Requires towny.command.town.forsale
+  - New Command: /t notforsale/nfs
+    - Cancels town sale
+    - Requires towny.command.town.notforsale
+  - New Command: /t buytown [town]
+    - Buy a town that is for sale
+    - Requires towny.command.town.buytown
+  - New Command: /ta town [town] forsale/fs [$]
+    - Admin command to force town sale at specified price
+    - Requires towny.command.townyadmin.town.forsale
+  - New Command: /ta town [town] notforsale/nfs
+    - Admin command to force cancel town sale
+    - Requires towny.command.townyadmin.town.notforsale
+  - New permission nodes: (All of which are child nodes of towny.command.town.*, no townyperms.yml changes are required for standard installations.)
+    - towny.command.town.forsale
+    - towny.command.town.notforsale
+    - towny.command.town.buytown
+  - New permission nodes: (All of which are child nodes of towny.command.townyadmin.town.*, no townyperms.yml changes are required for standard installations.)
+    - towny.command.townyadmin.town.forsale
+    - towny.command.townyadmin.town.notforsale
+  - Add the ability to set colours for TownBlockTypes.
+    - The TownBlockTypes section by default will come with a new "colour:" option.
+    - Only the Shop plot currently being configured with a colour (as is the previous behaviour.)
+    - Existing configs will have to add the colour: line to each TownBlock Type if they want to take advantage.
+    - Closes #6115.
