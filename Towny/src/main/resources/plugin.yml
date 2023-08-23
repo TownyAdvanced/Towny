@@ -605,6 +605,7 @@ permissions:
         children:
             towny.command.resident.set.mode: true
             towny.command.resident.set.perm: true
+            towny.command.resident.set.about: true
 
     towny.command.resident.toggle.*:
         description: User can toggle their default settings.
@@ -678,6 +679,7 @@ permissions:
             towny.command.townyadmin.set.plot: true
             towny.command.townyadmin.set.surname: true
             towny.command.townyadmin.set.title: true
+            towny.command.townyadmin.set.about: true
 
     towny.command.townyadmin.town.*:
         description: User can access the admin town commands.

@@ -480,6 +480,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					universe.registerResidentUUID(resident);
 				}
 				
+				line = keys.get("about");
+				if (line != null)
+					resident.setAbout(line);
+				
 				line = keys.get("registered");
 				if (line != null)
 					resident.setRegistered(Long.parseLong(line));
@@ -1875,6 +1879,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("title=" + resident.getTitle());
 		// surname
 		list.add("surname=" + resident.getSurname());
+		// about
+		list.add("about=" + resident.getAbout());
 
 		if (resident.hasTown()) {
 			try {

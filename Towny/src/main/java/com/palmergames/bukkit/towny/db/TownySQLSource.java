@@ -834,6 +834,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			String line;
 			try {
+				line = rs.getString("about");
+				if (line != null)
+					resident.setAbout(line);
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get about column on the residents table", e);
+			}
+			
+			try {
 				line = rs.getString("friends");
 				if (line != null) {
 					search = (line.contains("#")) ? "#" : ",";
@@ -2147,6 +2155,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("jailBail", resident.getJailBailCost());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
+			res_hm.put("about", resident.getAbout());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
 			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
 			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
