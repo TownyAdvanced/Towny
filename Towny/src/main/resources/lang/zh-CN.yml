@@ -80,6 +80,7 @@ res_4: '列出所有活跃玩家'
 res_5: '来查看帮助'
 res_6: '邀请一个玩家加入你的城镇/踢出你的城镇内的一名玩家'
 res_7: '申请添加一个离线玩家为好友'
+res_8: 'Just a humble farmer'
 mode_1: '显示城镇区块地图'
 mode_2: '在你移动到每个区块时自动声明土地'
 mode_3: '在你移动到每个区块时自动放弃声明土地'
@@ -1282,6 +1283,7 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[中心区块：%s]'
+status_about: "About:"
 status_registered: '注册于：'
 status_lastonline: '最后在线时间：'
 status_fractions: '%s/%s'
@@ -1731,3 +1733,7 @@ msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you
 msg_town_buytown_already_mayor: "You are already mayor of %s."
 msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
 msg_town_buytown_not_forsale: "Specified town is not for sale."
+msg_resident_about_reset: "&bResident about reset."
+msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
+msg_set_about: "%s's about was set to %s."
+msg_clear_about: "%s's about was cleared."
