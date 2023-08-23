@@ -225,6 +225,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> adminSetCompletes = Arrays.asList(
+		"about",
 		"mayor",
 		"capital",
 		"title",
@@ -232,6 +233,12 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"surname",
 		"nationzoneoverride",
 		"plot"
+	);
+	
+	private static final List<String> adminAboutTabCompletes = Arrays.asList(
+		"reset",
+		"none",
+		"clear"
 	);
 	
 	private static final List<String> adminTownyPermsCompletes = Arrays.asList(
@@ -298,10 +305,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "plot":
 							if (args.length == 3)
 								return getTownyStartingWith(args[2], "t");
+						case "about":
 						case "title":
 						case "surname":
 							if (args.length == 3)
 								return getTownyStartingWith(args[2], "r");
+							if (args.length == 4 && args[1].equalsIgnoreCase("about"))
+								return NameUtil.filterByStart(adminAboutTabCompletes, args[args.length - 1]);
 						default:
 							if (args.length == 2)
 								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_SET, adminSetCompletes), args[1]);
@@ -1870,6 +1880,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "plot":
 			adminSetPlot(sender, split);
 			break;
+		case "about":
+			adminSetAbout(sender, split);
+			break;
 		case "surname":
 			adminSetSurname(sender, split);
 			break;
@@ -2000,6 +2013,39 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, false, true, false));
 
+		}
+	}
+
+	private void adminSetAbout(CommandSender sender, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_ABOUT.getNode());
+
+		Resident resident = null;
+		if (split.length < 2) {
+			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set about bilbo Just a humble farmer");
+		} else {
+			resident = getResidentOrThrow(split[1]);
+
+			split = StringMgmt.remArgs(split, 2);
+			String about = StringMgmt.join(split);
+
+			if ("reset".equalsIgnoreCase(about))
+				about = "/resident set about [msg]";
+
+			else if ("none".equalsIgnoreCase(about) || "clear".equalsIgnoreCase(about)) {
+				about = "";
+			}
+			
+			if (about.length() > 159)
+				about = about.substring(0, 159);
+
+			resident.setAbout(about);
+			resident.save();
+
+			if (about.isEmpty()) {
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_about", resident.getName()));
+			} else {
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_about", resident.getName(), about));
+			}
 		}
 	}
 

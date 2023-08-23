@@ -144,6 +144,9 @@ public class TownyFormatter {
 		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
 		// Registered: Sept 3 2009 | Last Online: March 7 2009
+		if (resident.getAbout() != null && !resident.getAbout().isEmpty())
+			screen.addComponentOf("about", colourKeyValue(translator.of("status_about"), resident.getAbout()));
+		
 		screen.addComponentOf("registered", getResidentRegisteredLine(resident, translator));
 		if (!resident.isNPC())
 			screen.addComponentOf("lastonline", getResidentLastOnline(resident, translator));

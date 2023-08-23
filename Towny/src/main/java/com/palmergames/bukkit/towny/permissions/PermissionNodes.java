@@ -248,6 +248,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_RESIDENT_SET("towny.command.resident.set.*"),
 		TOWNY_COMMAND_RESIDENT_SET_PERM("towny.command.resident.set.perm"),
 		TOWNY_COMMAND_RESIDENT_SET_MODE("towny.command.resident.set.mode"),
+		TOWNY_COMMAND_RESIDENT_SET_ABOUT("towny.command.resident.set.about"),
 	
 	TOWNY_COMMAND_RESIDENT_TOGGLE("towny.command.resident.toggle.*"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PVP("towny.command.resident.toggle.pvp"),
@@ -275,6 +276,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_SET_FOUNDER("towny.command.townyadmin.set.founder"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_TITLE("towny.command.townyadmin.set.title"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME("towny.command.townyadmin.set.surname"),
+		TOWNY_COMMAND_TOWNYADMIN_SET_ABOUT("towny.command.townyadmin.set.about"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_NATIONZONE("towny.command.townyadmin.set.nationzoneoverride"),
 		
     TOWNY_COMMAND_TOWNYADMIN_PLOT("towny.command.townyadmin.plot.*"),

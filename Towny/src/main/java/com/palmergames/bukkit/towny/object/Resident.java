@@ -63,6 +63,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private boolean isNPC = false;
 	private String title = "";
 	private String surname = "";
+	private String about = "/resident set about [msg]";
 	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
@@ -208,6 +209,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean hasSurname() {
 
 		return !surname.isEmpty();
+	}
+	
+	public void setAbout(String about) {
+		this.about = about;
+	}
+	
+	public String getAbout() {
+		return about;
 	}
 
 	public boolean isKing() {

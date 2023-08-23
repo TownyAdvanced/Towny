@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -107,8 +108,15 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> residentSetTabCompletes = Arrays.asList(
+		"about",
 		"perm",
 		"mode"
+	);
+	
+	private static final List<String> residentAboutTabCompletes = Arrays.asList(
+		"reset",
+		"none",
+		"clear"
 	);
 	
 	private static final List<String> residentToggleChoices = Arrays.asList(
@@ -197,6 +205,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
 							case "perm":
 								return permTabComplete(StringMgmt.remArgs(args, 2));
+							case "about":
+								return NameUtil.filterByStart(residentAboutTabCompletes, args[args.length - 1]);
 							default:
 								return Collections.emptyList();
 						}
@@ -513,6 +523,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0) {
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident set", "about ...", "'/resident set about' " + Translatable.of("res_5").forLocale(player)));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident set", "perm ...", "'/resident set perm' " + Translatable.of("res_5").forLocale(player)));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/resident set", "mode ...", "'/resident set mode' " + Translatable.of("res_5").forLocale(player)));
 		} else {
@@ -534,6 +545,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE.getNode());
 				setMode(player, StringMgmt.remFirstArg(split));
+
+			} else if (split[0].equalsIgnoreCase("about")) {
+
+				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_ABOUT.getNode());
+				setAbout(player, String.join(" ", StringMgmt.remFirstArg(split)), resident);
 
 			} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_SET, split[0]).execute(player, "resident", split);
@@ -577,6 +593,36 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		plugin.setPlayerMode(player, split, true);
 
+	}
+	
+	private void setAbout(Player player, String about, Resident resident) throws TownyException {
+		if (about.isEmpty())
+			throw new TownyException("Eg: /res set about " + Translatable.of("res_8").forLocale(player));
+
+		if ("reset".equalsIgnoreCase(about)) {
+			about = "/resident set about [msg]";
+
+			TownyMessaging.sendMsg(player, Translatable.of("msg_resident_about_reset"));
+		} else if ("none".equalsIgnoreCase(about) || "clear".equalsIgnoreCase(about)) {
+			about = "";
+		} else {
+			if (!NameValidation.isValidString(about)) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_string_about_not_set"));
+				return;
+			}
+			
+			if (about.length() > 159)
+				about = about.substring(0, 159);
+		}
+		
+		resident.setAbout(about);
+		resident.save();
+
+		if (about.isEmpty()) {
+			TownyMessaging.sendMsg(player, Translatable.of("msg_clear_about", resident.getName()));
+		} else {
+			TownyMessaging.sendMsg(player, Translatable.of("msg_set_about", resident.getName(), about));
+		}
 	}
 
 	public static void residentFriend(Player player, String[] split, boolean admin, Resident resident) {
