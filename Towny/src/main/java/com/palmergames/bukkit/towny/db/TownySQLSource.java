@@ -785,12 +785,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 			
 			try {
-				resident.setAbout(rs.getString("about"));
-			} catch (SQLException e) {
-				plugin.getLogger().log(Level.WARNING, "Could not get about column on the residents table");
-			}
-			
-			try {
 				resident.setRegistered(rs.getLong("registered"));
 			} catch (SQLException e) {
 				plugin.getLogger().log(Level.WARNING, "Could not get registered column on the residents table", e);
@@ -839,6 +833,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 
 			String line;
+			try {
+				line = rs.getString("about");
+				if (line != null)
+					resident.setAbout(line);
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get about column on the residents table", e);
+			}
+			
 			try {
 				line = rs.getString("friends");
 				if (line != null) {
