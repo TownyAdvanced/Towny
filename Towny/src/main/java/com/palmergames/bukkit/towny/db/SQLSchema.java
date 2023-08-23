@@ -179,7 +179,7 @@ public class SQLSchema {
 		columns.add("`friends` mediumtext");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) NOT NULL");
-		columns.add("`residentAbout` mediumtext DEFAULT NULL");
+		columns.add("`about` mediumtext DEFAULT NULL");
 		return columns;
 	}
 

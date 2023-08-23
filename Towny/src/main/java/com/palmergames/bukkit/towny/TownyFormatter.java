@@ -141,12 +141,13 @@ public class TownyFormatter {
 		// ___[ King Harlus ]___
 		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
 
-		// First used if last online is this year, 2nd used if last online is early than this year.
-		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
-		// Registered: Sept 3 2009 | Last Online: March 7 2009
+		// About: Just a humble farmer
 		if (resident.getAbout() != null && !resident.getAbout().isEmpty())
 			screen.addComponentOf("about", colourKeyValue(translator.of("status_about"), resident.getAbout()));
 		
+		// First used if last online is this year, 2nd used if last online is early than this year.
+		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
+		// Registered: Sept 3 2009 | Last Online: March 7 2009
 		screen.addComponentOf("registered", getResidentRegisteredLine(resident, translator));
 		if (!resident.isNPC())
 			screen.addComponentOf("lastonline", getResidentLastOnline(resident, translator));
