@@ -2038,7 +2038,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> list = new ArrayList<>();
 
 		try {
-			list.add("groupID=" + group.getUUID().toString());
 			list.add("groupName=" + group.getName());
 			list.add("groupPrice=" + group.getPrice());
 			list.add("town=" + group.getTown().getName());
