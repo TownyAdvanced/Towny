@@ -9033,3 +9033,5 @@ v0.92.0.11:
     - Closes #6115.
 0.99.5.14:
   - API: Add TownyAPI#getTownName(Player).
+  - Add "about" section to resident status screen, courtesy of Fruitloopins with PR	#6944.
+  - Catch exceptions during plot group saving, courtesy of Warrior with PR #6927.
