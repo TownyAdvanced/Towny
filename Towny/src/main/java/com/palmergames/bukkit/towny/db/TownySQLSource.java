@@ -2297,7 +2297,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			pltgrp_hm.put("groupID", group.getUUID().toString());
 			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
-			pltgrp_hm.put("town", group.getTown().toString());
+			pltgrp_hm.put("town", group.getTown().getName());
 
 			updateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("groupID"));
 
