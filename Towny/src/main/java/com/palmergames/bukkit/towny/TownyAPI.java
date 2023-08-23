@@ -559,6 +559,18 @@ public class TownyAPI {
     	return townBlock.getResidentOrNull();
     }
     
+	/**
+	 * Returns the name of the Player's town, if they have one, or an empty String.
+	 * 
+	 * @since 0.99.5.14.
+	 * @param player Player
+	 * @return Town name or "" if the player has no Town.
+	 */
+	public String getTownName(Player player) {
+		Town town = getTown(player);
+		return town != null ? town.getName() : "";
+	}
+
     /**
      * Get the name of a {@link Town} at a specific {@link Location}.
      *

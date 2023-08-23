@@ -9031,3 +9031,5 @@ v0.92.0.11:
     - Only the Shop plot currently being configured with a colour (as is the previous behaviour.)
     - Existing configs will have to add the colour: line to each TownBlock Type if they want to take advantage.
     - Closes #6115.
+0.99.5.14:
+  - API: Add TownyAPI#getTownName(Player).
