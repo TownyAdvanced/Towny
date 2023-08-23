@@ -80,6 +80,7 @@ res_4: 'Išvardyti visus prisijungusius žaidėjus'
 res_5: 'norėdami sužinoti tolimesnes komandas'
 res_6: 'Būtinas prisijungusio žaidėjo vardas'
 res_7: 'Būtinas tikslus vardas'
+res_8: 'Just a humble farmer'
 mode_1: 'Atnaujinti žemėlapį kiekvienąkart perėjus į kitą miesto sklypą'
 mode_2: 'Mėginti užimti teritoriją, per kurią einate'
 mode_3: 'Mėginti atsisakyti teritorijos, per kurią einate'
@@ -1282,6 +1283,7 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Home: %s]'
+status_about: "About:"
 status_registered: 'Registered:'
 status_lastonline: 'Last Online:'
 status_fractions: '%s/%s'
@@ -1731,3 +1733,7 @@ msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you
 msg_town_buytown_already_mayor: "You are already mayor of %s."
 msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
 msg_town_buytown_not_forsale: "Specified town is not for sale."
+msg_resident_about_reset: "&bResident about reset."
+msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
+msg_set_about: "%s's about was set to %s."
+msg_clear_about: "%s's about was cleared."
