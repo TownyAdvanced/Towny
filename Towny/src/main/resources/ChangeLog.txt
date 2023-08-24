@@ -9035,3 +9035,8 @@ v0.92.0.11:
   - API: Add TownyAPI#getTownName(Player).
   - Add "about" section to resident status screen, courtesy of Fruitloopins with PR	#6944.
   - Catch exceptions during plot group saving, courtesy of Warrior with PR #6927.
+0.99.5.15:
+  - Add a new plotgroup mode for residents to toggle.
+    - Allows a resident to set /res toggle plotgroup, which will auto-group walked-into plots, as long as the resident has a plotgroupname set in memory.
+    - The plotgroupname is automatically set when a resident successfully runs /plot group add NAME.
+    - Closes #6404.
