@@ -653,8 +653,8 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident friend")
-				.add("add" + Translation.of("res_2"), "")
-				.add("remove" + Translation.of("res_2"), "")
+				.add("add " + Translation.of("res_2"), "")
+				.add("remove " + Translation.of("res_2"), "")
 				.add("list", "")
 				.add("clear", "");
 		}

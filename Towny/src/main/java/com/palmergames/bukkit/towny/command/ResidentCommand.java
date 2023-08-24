@@ -145,7 +145,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			try {
-				parseResidentCommandForConsole(player, args);
+				parseResidentCommand(player, args);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage());
 			}
@@ -592,7 +592,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void residentFriendAdd(Player player, Resident resident, List<Resident> friending) {
-		List<Resident> toFriend = friending.stream().filter(r -> !resident.hasFriend(r)).collect(Collectors.toList());
+		List<Resident> toFriend = friending.stream()
+				.filter(friend -> !resident.hasFriend(friend) && !friend.isNPC() && !friend.getName().equalsIgnoreCase(resident.getName()))
+				.collect(Collectors.toList());
 
 		if (toFriend.isEmpty()) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
