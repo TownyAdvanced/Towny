@@ -516,9 +516,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(","));
 					for (Resident friend : friends) {
-						try {
-							resident.addFriend(friend);
-						} catch (AlreadyRegisteredException ignored) {}
+						resident.addFriend(friend);
 					}
 				}
 				
