@@ -9041,3 +9041,4 @@ v0.92.0.11:
     - The plotgroupname is automatically set when a resident successfully runs /plot group add NAME.
     - Closes #6404.
   - Fix being unable to run Resident-based TownyAddonCommands from the console.
+  - Fix bank history books showing the incorrect balances, a side effect of a now un-needed patch to an older issue. 

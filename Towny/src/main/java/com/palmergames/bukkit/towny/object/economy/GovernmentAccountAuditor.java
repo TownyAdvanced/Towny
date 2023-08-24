@@ -15,12 +15,12 @@ public class GovernmentAccountAuditor implements AccountAuditor {
 	
 	@Override
 	public void withdrew(Account account, double amount, String reason) {
-		transactions.add(new BankTransaction(TransactionType.WITHDRAW, System.currentTimeMillis(), account, amount, account.getHoldingBalance() - amount, reason));
+		transactions.add(new BankTransaction(TransactionType.WITHDRAW, System.currentTimeMillis(), account, amount, account.getHoldingBalance(), reason));
 	}
 
 	@Override
 	public void deposited(Account account, double amount, String reason) {
-		transactions.add(new BankTransaction(TransactionType.DEPOSIT, System.currentTimeMillis(), account, amount, account.getHoldingBalance() + amount, reason));
+		transactions.add(new BankTransaction(TransactionType.DEPOSIT, System.currentTimeMillis(), account, amount, account.getHoldingBalance(), reason));
 	}
 
 	@Override
