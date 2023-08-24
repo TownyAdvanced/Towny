@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.Colors;
-
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.TransactionType;
 
@@ -15,12 +15,14 @@ public class GovernmentAccountAuditor implements AccountAuditor {
 	
 	@Override
 	public void withdrew(Account account, double amount, String reason) {
-		transactions.add(new BankTransaction(TransactionType.WITHDRAW, System.currentTimeMillis(), account, amount, account.getHoldingBalance(), reason));
+		Towny.getPlugin().getScheduler().runLater(() -> 
+			transactions.add(new BankTransaction(TransactionType.WITHDRAW, System.currentTimeMillis(), account, amount, account.getHoldingBalance(), reason)), 1L);
 	}
 
 	@Override
 	public void deposited(Account account, double amount, String reason) {
-		transactions.add(new BankTransaction(TransactionType.DEPOSIT, System.currentTimeMillis(), account, amount, account.getHoldingBalance(), reason));
+		Towny.getPlugin().getScheduler().runLater(() -> 
+			transactions.add(new BankTransaction(TransactionType.DEPOSIT, System.currentTimeMillis(), account, amount, account.getHoldingBalance(), reason)), 1L);
 	}
 
 	@Override
