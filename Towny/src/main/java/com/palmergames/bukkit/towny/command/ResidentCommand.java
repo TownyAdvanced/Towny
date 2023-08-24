@@ -81,6 +81,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"ignoreplots",
 		"bordertitles",
 		"townclaim",
+		"plotgroup",
 		"map",
 		"spy",
 		"reset",
@@ -572,6 +573,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Mode", "map", "", Translatable.of("mode_1").forLocale(player)));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Mode", "townclaim", "", Translatable.of("mode_2").forLocale(player)));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Mode", "townunclaim", "", Translatable.of("mode_3").forLocale(player)));
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Mode", "plotrgoup", "", "runs /plot group add with your last-used plot group name."));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Mode", "tc", "", Translatable.of("mode_4").forLocale(player)));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Mode", "nc", "", Translatable.of("mode_5").forLocale(player)));
 			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Mode", "ignoreplots", "", ""));

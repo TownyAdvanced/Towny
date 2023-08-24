@@ -83,6 +83,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private SelectionType guiSelectionType;
 	private ScheduledTask respawnProtectionTask = null;
 	private boolean respawnPickupWarningShown = false; // Prevents chat spam when a player attempts to pick up an item while under respawn protection.
+	private String plotGroupName = null;
 
 	public Resident(String name) {
 		super(name);
@@ -1013,5 +1014,17 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean isSeeingBorderTitles() {
 		BooleanDataField borderMeta = new BooleanDataField("bordertitles");
 		return !MetaDataUtil.hasMeta(this, borderMeta) || MetaDataUtil.getBoolean(this, borderMeta);
+	}
+
+	public boolean hasPlotGroupName() {
+		return plotGroupName != null;
+	}
+
+	public String getPlotGroupName() {
+		return plotGroupName;
+	}
+
+	public void setPlotGroupName(String plotGroupName) {
+		this.plotGroupName = plotGroupName;
 	}
 }
