@@ -449,13 +449,13 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town list")
-				.add("{page #}", "")
-				.add("{page #} by residents", "")
-				.add("{page #} by open", "")
-				.add("{page #} by balance", "")
-				.add("{page #} by name", "")
-				.add("{page #} by townblocks", "")
-				.add("{page #} by online", "");
+				.add("{page #}", Translatable.of("town_list_help_0"))
+				.add("{page #} by residents", Translatable.of("town_list_help_1"))
+				.add("{page #} by open", Translatable.of("town_list_help_2"))
+				.add("{page #} by balance", Translatable.of("town_list_help_3"))
+				.add("{page #} by name", Translatable.of("town_list_help_4"))
+				.add("{page #} by townblocks", Translatable.of("town_list_help_5"))
+				.add("{page #} by online", Translatable.of("town_list_help_6"));
 		}
 	},
 	

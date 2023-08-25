@@ -103,6 +103,14 @@ town_help_25: "Used to modify your town's outlaws."
 town_help_26: "List all towns, see /t list ? for help."
 town_help_27: "Leave the town you're a member of."
 
+town_list_help_0: "View the specified page."
+town_list_help_1: "List towns by resident-count, with the specified page."
+town_list_help_2: "List towns which are open, with the specified page."
+town_list_help_3: "List towns using bank balance, with the specified page."
+town_list_help_4: "List towns in alphabetical order, with the specified page."
+town_list_help_5: "List towns by claimed land, with the specified page."
+town_list_help_6: "List towns by number online, with the specified page."
+
 mayor_help_3: 'Claim area not attached to town'
 mayor_help_4: 'Claim around you to a radius of X'
 mayor_help_5: 'Claim to the maximum radius'
