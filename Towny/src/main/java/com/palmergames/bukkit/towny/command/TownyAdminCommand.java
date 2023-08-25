@@ -840,8 +840,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private void parseAdminDatabaseRemoveCommand(CommandSender sender, String[] split) {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/townyadmin database remove"));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand(Translatable.of("admin_sing").forLocale(sender), "/townyadmin database remove", "titles", "Removes all titles and surnames from every resident."));
+			HelpMenu.TA_DATABASE.send(sender);
 			return;
 		}
 		
