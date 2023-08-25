@@ -77,6 +77,10 @@ towny_help_4: "Display time until a new day"
 towny_help_5: "Displays stats"
 towny_help_6: "Displays the version of Towny"
 
+towny_top_help_0: "List top residents based on subcommand."
+towny_top_help_1: "List top land-owners based on subcommand."
+towny_top_help_2: "List wealthiest based on subcommand."
+
 town_help_1: 'Your town''s status'
 town_help_2: '[mayor]'
 town_help_3: 'Selected town''s status'
@@ -367,7 +371,7 @@ townyadmin_nationrank_help_1: "Removes a nation rank from the resident."
 
 townyadmin_database_help_0: "Force saves the database."
 townyadmin_database_help_1: "Force loads the database."
-townyadmin_database_help_2: "See /ta database remove ? for help."
+townyadmin_database_help_2: "Removes all titles and surnames from every resident."
 
 ta_plot_help_0: "Claim a plot for a player."
 ta_plot_help_1: "View the metadata stored in the plot you are stood in."
