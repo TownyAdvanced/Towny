@@ -48,21 +48,22 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin")
-				.add("set [] .. []", "")
-				.add("unclaim [radius]", "")
-				.add("plot", "")
-				.add("givebonus [town/player] [num]", "")
-				.add("toggle peaceful/war/debug/devmode", "")
-				.add("resident/town/nation", "")
-				.add("tpplot {world} {x} {z}", "")
-				.add("checkperm {name} {node}", "")
+				.add("set [] .. []", Translatable.of("admin_panel_1"))
+				.add("unclaim [radius]", Translatable.of("admin_panel_4"))
+				.add("plot", Translatable.of("admin_panel_5"))
+				.add("givebonus [town/player] [num]", Translatable.of("admin_panel_6"))
+				.add("toggle debug/devmode", Translatable.of("admin_panel_7"))
+				.add("resident/town/nation", Translatable.of("admin_panel_8"))
+				.add("tpplot {world} {x} {z}", Translatable.of("admin_panel_9"))
+				.add("checkperm {name} {node}", Translatable.of("admin_panel_10"))
 				.add("reload", Translatable.of("admin_panel_2"))
-				.add("reset", "")
-				.add("backup", "")
-				.add("mysqldump", "")
-				.add("database [save/load]", "")
+				.add("reset", Translatable.of("admin_panel_11"))
+				.add("backup", Translatable.of("admin_panel_12"))
+				.add("mysqldump", Translatable.of("admin_panel_13"))
+				.add("database [save/load]", Translatable.of("admin_panel_14"))
 				.add("newday", Translatable.of("admin_panel_3"))
-				.add("purge [number of days]", "");
+				.add("newhour", Translatable.of("admin_panel_15"))
+				.add("purge [number of days]", Translatable.of("admin_panel_16"));
 		}
 	},
 	
@@ -70,25 +71,25 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin town")
-				.add("new [name] [mayor]", "")
-				.add("[town]", "")
-				.add("[town] add/kick [] .. []", "")
-				.add("[town] rename [newname]", "")
-				.add("[town] delete", "")
-				.add("[town] spawn", "")
-				.add("[town] outpost #", "")
-				.add("[town] rank", "")
-				.add("[town] set", "")
-				.add("[town] toggle", "")
-				.add("[town] meta", "")
-				.add("[town] merge [townname]", "")
-				.add("[town] forcemerge [townname]", "")
-				.add("[town] deposit [amount]", "")
-				.add("[town] withdraw [amount]", "")
-				.add("[town] bankhistory", "")
-				.add("[town] outlaw [add|remove] [name]", "")
-				.add("[town] leavenation", "")
-				.add("[town] conquered", "");
+				.add("new [name] [mayor]", Translatable.of("townyadmin_town_help_0"))
+				.add("[town]", Translatable.of("townyadmin_town_help_1"))
+				.add("[town] add/kick [] .. []", Translatable.of("townyadmin_town_help_2"))
+				.add("[town] rename [newname]", Translatable.of("townyadmin_town_help_3"))
+				.add("[town] delete", Translatable.of("townyadmin_town_help_4"))
+				.add("[town] spawn", Translatable.of("townyadmin_town_help_5"))
+				.add("[town] outpost #", Translatable.of("townyadmin_town_help_6"))
+				.add("[town] rank", Translatable.of("townyadmin_town_help_7"))
+				.add("[town] set", Translatable.of("townyadmin_town_help_8"))
+				.add("[town] toggle", Translatable.of("townyadmin_town_help_9"))
+				.add("[town] meta", Translatable.of("townyadmin_town_help_10"))
+				.add("[town] merge [townname]", Translatable.of("townyadmin_town_help_11"))
+				.add("[town] forcemerge [townname]", Translatable.of("townyadmin_town_help_12"))
+				.add("[town] deposit [amount]", Translatable.of("townyadmin_town_help_13"))
+				.add("[town] withdraw [amount]", Translatable.of("townyadmin_town_help_14"))
+				.add("[town] bankhistory", Translatable.of("townyadmin_town_help_15"))
+				.add("[town] outlaw [add|remove] [name]", Translatable.of("townyadmin_town_help_16"))
+				.add("[town] leavenation", Translatable.of("townyadmin_town_help_17"))
+				.add("[town] conquered", Translatable.of("townyadmin_town_help_18"));
 		}
 	},
 
@@ -96,14 +97,14 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("ta town {townname} toggle")
-				.add("pvp", "")
-				.add("forcepvp", "")
-				.add("public", "")
-				.add("explosion", "")
-				.add("fire", "")
-				.add("mobs", "")
-				.add("taxpercent", "")
-				.add("open", "");
+				.add("pvp", Translatable.of("townyadmin_town_toggle_help_0"))
+				.add("forcepvp", Translatable.of("townyadmin_town_toggle_help_1"))
+				.add("public", Translatable.of("townyadmin_town_toggle_help_2"))
+				.add("explosion", Translatable.of("townyadmin_town_toggle_help_3"))
+				.add("fire", Translatable.of("townyadmin_town_toggle_help_4"))
+				.add("mobs", Translatable.of("townyadmin_town_toggle_help_5"))
+				.add("taxpercent", Translatable.of("townyadmin_town_toggle_help_6"))
+				.add("open", Translatable.of("townyadmin_town_toggle_help_7"));
 		}
 	},
 
@@ -636,12 +637,12 @@ public enum HelpMenu {
 			return new MenuBuilder("resident set mode")
 				.add("", "/resident set mode", "clear", "")
 				.add("", "/resident set mode", "[mode]...[mode]", "")
-				.add("MODE", "map", "", Translation.of("mode_1"))
-				.add("MODE", "townclaim", "", Translation.of("mode_2"))
-				.add("MODE", "townunclaim", "", Translation.of("mode_3"))
+				.add("MODE", "map", "", Translatable.of("mode_1"))
+				.add("MODE", "townclaim", "", Translatable.of("mode_2"))
+				.add("MODE", "townunclaim", "", Translatable.of("mode_3"))
 				.add("Mode", "plotgroup", "", "runs /plot group add with your last-used plot group name.")
-				.add("Mode", "tc", "", Translation.of("mode_4"))
-				.add("Mode", "nc", "", Translation.of("mode_5"))
+				.add("Mode", "tc", "", Translatable.of("mode_4"))
+				.add("Mode", "nc", "", Translatable.of("mode_5"))
 				.add("Mode", "ignoreplots", "", "")
 				.add("Mode", "constantplotborder", "", "")
 				.add("Mode", "plotborder", "", "")
@@ -653,8 +654,8 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident friend")
-				.add("add " + Translation.of("res_2"), "")
-				.add("remove " + Translation.of("res_2"), "")
+				.add("add ", Translatable.of("res_2"))
+				.add("remove ", Translatable.of("res_2"))
 				.add("list", "")
 				.add("clear", "");
 		}

@@ -148,8 +148,51 @@ world_help_5: 'Regenerate this chunk'
 townyadmin_help_1: 'Unclaim this town block'
 townyadmin_help_2: 'Attempt to unclaim around you.'
 
+admin_panel_1: "See /ta set ? for help"
 admin_panel_2: 'reload Towny'
 admin_panel_3: 'Run the new day code'
+admin_panel_4: "Unclaim an space surrounding you"
+admin_panel_5: "See /ta plot ? for help"
+admin_panel_6: "Give a positive or negative amount of townblocks to a player or town"
+admin_panel_7: "Toggles on helpful logging systems"
+admin_panel_8: "Commands for controlling these objects"
+admin_panel_9: "Teleport to the specified plot"
+admin_panel_10: "Check if the player has a permission node"
+admin_panel_11: "Reset your config"
+admin_panel_12: "Make a backup of your Towny data"
+admin_panel_13: "Dump your mysql db to flatfile"
+admin_panel_14: "Force save or load your database"
+admin_panel_15: "Run the newhour code"
+admin_panel_16: "Purge old residents"
+
+townyadmin_town_help_0: "Create a town with the given name and mayor."
+townyadmin_town_help_1: "Show the town status screen."
+townyadmin_town_help_2: "Add or remove residents from a town."
+townyadmin_town_help_3: "Rename a town."
+townyadmin_town_help_4: "Delete a town."
+townyadmin_town_help_5: "Spawn at a town."
+townyadmin_town_help_6: "Spawn at a town's outpost."
+townyadmin_town_help_7: "Use a town's rank command."
+townyadmin_town_help_8: "Use a town's set command."
+townyadmin_town_help_9: "Use a town's toggle command."
+townyadmin_town_help_10: "Alter a town's metadata."
+townyadmin_town_help_11: "Merge the 2nd town into the first town."
+townyadmin_town_help_12: "Merge the 2nd town into the first town, ignoring any rules."
+townyadmin_town_help_13: "Put money into the town bank."
+townyadmin_town_help_14: "Take money from the town bank."
+townyadmin_town_help_15: "Open the town's bankhistory book."
+townyadmin_town_help_16: "Alter a town's outlaws."
+townyadmin_town_help_17: "Make the town leave their nation."
+townyadmin_town_help_18: "Remove a town's conquered status."
+
+townyadmin_town_toggle_help_0: "Toggle the Town's PVP."
+townyadmin_town_toggle_help_1: "Toggle the Town's ForcePVP, preventing mayors from turning off pvp."
+townyadmin_town_toggle_help_2: "Toggle the Town's Public status, allowing non-residents to teleport there."
+townyadmin_town_toggle_help_3: "Toggle the Town's Explosion setting."
+townyadmin_town_toggle_help_4: "Toggle the Town's Fire setting."
+townyadmin_town_toggle_help_5: "Toggle the Town's Mob setting."
+townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
+townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
 
 msg_block_claim: 'Claim this town block'
 msg_plot_nfs: 'Take down a plot for sale'
