@@ -45,6 +45,19 @@ help_0: 'Panduan umum towny'
 help_1: 'Ikuti beberapa perintah untuk mengetahui lebih lanjut tentang towny.'
 help_2: 'Chat Antar Kota'
 help_3: 'Chat Antar Negara'
+help_4: 'Resident command help.'
+help_5: 'Town command help.'
+help_6: 'Nation command help.'
+help_7: 'Plot command help.'
+help_8: 'Towny command help.'
+help_9: 'Townyadmin command help.'
+towny_help_0: "General help for Towny"
+towny_help_1: "Displays a map of the nearby townblocks"
+towny_help_2: "Display the prices used with Economy"
+towny_help_3: "Display highscores"
+towny_help_4: "Display time until a new day"
+towny_help_5: "Displays stats"
+towny_help_6: "Displays the version of Towny"
 town_help_1: 'Status kota mu'
 town_help_2: '[walikota]'
 town_help_3: 'Status kota yang dipilih'
