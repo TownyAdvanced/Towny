@@ -52,7 +52,7 @@ public enum HelpMenu {
 				.add("unclaim [radius]", Translatable.of("admin_panel_4"))
 				.add("plot", Translatable.of("admin_panel_5"))
 				.add("givebonus [town/player] [num]", Translatable.of("admin_panel_6"))
-				.add("toggle debug/devmode", Translatable.of("admin_panel_7"))
+				.add("toggle", Translatable.of("admin_panel_7"))
 				.add("resident/town/nation", Translatable.of("admin_panel_8"))
 				.add("tpplot {world} {x} {z}", Translatable.of("admin_panel_9"))
 				.add("checkperm {name} {node}", Translatable.of("admin_panel_10"))
@@ -113,23 +113,22 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin nation")
-				.add("new [name] [capital]", "")
-				.add("[nation]", "")
-				.add("[nation] add [] .. []", "")
-				.add("[nation] kick [] .. []", "")
-				.add("[nation] rename [newname]", "")
-				.add("[nation] delete", "")
-				.add("[nation] recheck", "")
-				.add("[nation] merge [nationname]", "")
-				.add("[nation] forcemerge [nationname]", "")
-				.add("[nation] toggle", "")
-				.add("[nation] set", "")
-				.add("[nation] deposit [amount]", "")
-				.add("[nation] withdraw [amount]", "")
-				.add("[nation] bankhistory", "")
-				.add("[oldnation] merge [newnation]", "")
-				.add("[nation] transfer [townname]", "")
-				.add("rank [add/remove] [resident] [rank]", "");
+				.add("new [name] [capital]", Translatable.of("townyadmin_nation_help_0"))
+				.add("[nation]", Translatable.of("townyadmin_nation_help_1"))
+				.add("[nation] add [] .. []", Translatable.of("townyadmin_nation_help_2"))
+				.add("[nation] kick [] .. []", Translatable.of("townyadmin_nation_help_3"))
+				.add("[nation] rename [newname]", Translatable.of("townyadmin_nation_help_4"))
+				.add("[nation] delete", Translatable.of("townyadmin_nation_help_5"))
+				.add("[nation] recheck", Translatable.of("townyadmin_nation_help_6"))
+				.add("[nation] merge [nationname]", Translatable.of("townyadmin_nation_help_7"))
+				.add("[nation] forcemerge [nationname]", Translatable.of("townyadmin_nation_help_8"))
+				.add("[nation] toggle", Translatable.of("townyadmin_nation_help_9"))
+				.add("[nation] set", Translatable.of("townyadmin_nation_help_10"))
+				.add("[nation] deposit [amount]", Translatable.of("townyadmin_nation_help_11"))
+				.add("[nation] withdraw [amount]", Translatable.of("townyadmin_nation_help_12"))
+				.add("[nation] bankhistory", Translatable.of("townyadmin_nation_help_13"))
+				.add("[nation] transfer [townname]", Translatable.of("townyadmin_nation_help_14"))
+				.add("rank [add/remove] [resident] [rank]", Translatable.of("townyadmin_nation_help_15"));
 		}
 	},
 	
@@ -137,8 +136,8 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("ta nation [nation] rank")
-				.add("add [resident] [rank]", "")
-				.add("remove [resident] [rank]", "");
+				.add("add [resident] [rank]", Translatable.of("townyadmin_nationrank_help_0"))
+				.add("remove [resident] [rank]", Translatable.of("townyadmin_nationrank_help_1"));
 		}
 	},
 
@@ -155,9 +154,9 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin database")
-				.add("save", "")
-				.add("load", "")
-				.add("remove ?", "");
+				.add("save", Translatable.of("townyadmin_database_help_0"))
+				.add("load", Translatable.of("townyadmin_database_help_1"))
+				.add("remove", Translatable.of("townyadmin_database_help_2"));
 		}
 	},
 	
@@ -200,7 +199,6 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin toggle")
 				.add("wildernessuse", "")
 				.add("regenerations", "")
-				.add("peaceful", "")
 				.add("devmode", "")
 				.add("debug", "")
 				.add("townwithdraw/nationwithdraw", "")
