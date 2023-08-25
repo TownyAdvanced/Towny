@@ -463,19 +463,19 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town set")
-				.add("board [message ... ]", "")
-				.add("mayor " + Translation.of("town_help_2"), "")
-				.add("homeblock", "")
-				.add("spawn/outpost/jail", "")
-				.add("perm ...", "'/town set perm' " + Translation.of("res_5"))
-				.add("taxes [$]", "")
-				.add("[plottax/shoptax/embassytax] [$]", "")
-				.add("[plotprice/shopprice/embassyprice] [$]", "")
-				.add("spawncost [$]", "")
-				.add("name [name]", "")
-				.add("tag [upto 4 letters] or clear", "")
-				.add("title/surname [resident] [text]", "")
-				.add("taxpercentcap [amount]", "");
+				.add("board [message ... ]", Translatable.of("town_set_help_0"))
+				.add("mayor " + Translation.of("town_help_2"), Translatable.of("ta_set_help_0"))
+				.add("homeblock", Translatable.of("town_set_help_1"))
+				.add("spawn/outpost", Translatable.of("town_set_help_2"))
+				.add("perm ...", Translatable.of("town_set_help_3"))
+				.add("taxes [$]", Translatable.of("town_set_help_4"))
+				.add("[plottax/shoptax/embassytax] [$]", Translatable.of("town_set_help_5"))
+				.add("[plotprice/shopprice/embassyprice] [$]", Translatable.of("town_set_help_6"))
+				.add("spawncost [$]", Translatable.of("town_set_help_7"))
+				.add("name [name]", Translatable.of("town_set_help_8"))
+				.add("tag [upto 4 letters] or clear", Translatable.of("town_set_help_9"))
+				.add("title/surname [resident] [text]", Translatable.of("town_set_help_10"))
+				.add("taxpercentcap [amount]", Translatable.of("town_set_help_11"));
 		}
 	},
 	
