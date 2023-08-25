@@ -19,14 +19,14 @@ public enum HelpMenu {
 			return new MenuBuilder()
 				.addTitle(Translation.of("help_0"))
 				.add(Translatable.of("help_1"))
-				.add("/resident", "?", "")
-				.add("/town", "?", "")
-				.add("/nation", "?", "")
-				.add("/plot", "?", "")
-				.add("/towny", "?", "")
+				.add("/resident", "?", Translatable.of("help_4"))
+				.add("/town", "?", Translatable.of("help_5"))
+				.add("/nation", "?", Translatable.of("help_6"))
+				.add("/plot", "?", Translatable.of("help_7"))
+				.add("/towny", "?", Translatable.of("help_8"))
 				.add("/tc", "[msg]", Translatable.of("help_2"))
 				.add("/nc", "[msg]", Translatable.of("help_3"))
-				.add(Translation.of("admin_sing"), "/townyadmin", "?", "");
+				.add(Translation.of("admin_sing"), "/townyadmin", "?", Translatable.of("help_9"));
 		}
 	},
 
@@ -34,13 +34,13 @@ public enum HelpMenu {
 	HELP {
 		@Override
 		public MenuBuilder load() {
-			return new MenuBuilder("towny", "General help for Towny")
-				.add("map", "Displays a map of the nearby townblocks")
-				.add("prices", "Display the prices used with Economy")
-				.add("top", "Display highscores")
-				.add("time", "Display time until a new day")
-				.add("universe", "Displays stats")
-				.add("v", "Displays the version of Towny");
+			return new MenuBuilder("towny", Translatable.of("towny_help_0"))
+				.add("map", Translatable.of("towny_help_1"))
+				.add("prices", Translatable.of("towny_help_2"))
+				.add("top", Translatable.of("towny_help_3"))
+				.add("time", Translatable.of("towny_help_4"))
+				.add("universe", Translatable.of("towny_help_5"))
+				.add("v", Translatable.of("towny_help_6"));
 		}
 	},
 	
@@ -145,7 +145,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin unclaim", Translation.of("admin_sing"),
-				Translation.of("townyadmin_help_1"))
+				Translatable.of("townyadmin_help_1"))
 				.add("[radius]", Translatable.of("townyadmin_help_2"));
 		}
 	},
@@ -635,7 +635,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			String resReq = Translation.of("res_sing");
-			return new MenuBuilder("plot", resReq + "/" + Translation.of("mayor_sing"), "")
+			return new MenuBuilder("plot", resReq + "/" + Translation.of("mayor_sing"))
 				.add(resReq, "/plot claim", "", Translatable.of("msg_block_claim"))
 				.add(resReq, "/plot claim", "[rect/circle] [radius]", "")
 				.add(resReq, "/plot perm", "[hud]", "")
@@ -997,11 +997,18 @@ public enum HelpMenu {
 			add("", desc);
 		}
 
+		@SuppressWarnings("unused")
 		MenuBuilder(String cmd, String requirement, String desc) {
 			this(cmd);
 			this.requirement = requirement;
 			if (!desc.isEmpty())
 				add("", desc);
+		}
+
+		MenuBuilder(String cmd, String requirement, Translatable desc) {
+			this(cmd);
+			this.requirement = requirement;
+			add("", desc);
 		}
 
 		MenuBuilder() {
