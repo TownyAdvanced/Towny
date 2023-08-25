@@ -45,6 +45,19 @@ help_0: 'Основная помощь по Towny'
 help_1: 'Введите следующие команды чтобы узнать больше про Towny.'
 help_2: 'Чат города'
 help_3: 'Чат нации'
+help_4: 'Resident command help.'
+help_5: 'Town command help.'
+help_6: 'Nation command help.'
+help_7: 'Plot command help.'
+help_8: 'Towny command help.'
+help_9: 'Townyadmin command help.'
+towny_help_0: "General help for Towny"
+towny_help_1: "Displays a map of the nearby townblocks"
+towny_help_2: "Display the prices used with Economy"
+towny_help_3: "Display highscores"
+towny_help_4: "Display time until a new day"
+towny_help_5: "Displays stats"
+towny_help_6: "Displays the version of Towny"
 town_help_1: 'Статус вашего города'
 town_help_2: '[Мэр]'
 town_help_3: 'Посмотреть статус города'
