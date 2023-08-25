@@ -246,6 +246,10 @@ res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
 
 res_jail_help_0: "Pays the bail cost to get out of jail."
 
+res_set_help_0: "Set your resident's About/Bio"
+res_set_help_1: "Set your resident's default plot permissions."
+res_set_help_2: "Set your resident's modes."
+
 mode_1: 'Show the map between each townblock'
 mode_2: 'Attempt to claim as you walk'
 mode_3: 'Attempt to unclaim as you walk'
