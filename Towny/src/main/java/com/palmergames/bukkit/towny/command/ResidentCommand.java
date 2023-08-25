@@ -257,6 +257,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0) {
 			Resident res = getResidentOrThrow(player);
 			plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(res, player)));
+			return;
 		}
 
 		switch(split[0].toLowerCase(Locale.ROOT)) {
