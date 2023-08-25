@@ -9035,3 +9035,14 @@ v0.92.0.11:
   - API: Add TownyAPI#getTownName(Player).
   - Add "about" section to resident status screen, courtesy of Fruitloopins with PR	#6944.
   - Catch exceptions during plot group saving, courtesy of Warrior with PR #6927.
+0.99.5.15:
+  - Add a new plotgroup mode for residents to toggle.
+    - Allows a resident to set /res toggle plotgroup, which will auto-group walked-into plots, as long as the resident has a plotgroupname set in memory.
+    - The plotgroupname is automatically set when a resident successfully runs /plot group add NAME.
+    - Closes #6404.
+  - Fix being unable to run Resident-based TownyAddonCommands from the console.
+  - Fix bank history books showing the incorrect balances, a side effect of a now un-needed patch to an older issue. 
+  - Upgrade HelpMenus to accept Translatables for multilanguage help menus.
+  - Refactor Resident Command, add HelpMenus for everything that was not yet using them.
+  - Only warn the log when the world isn't loaded 20 ticks after Towny first tries to load it.
+  - Add translatable descriptions to all of the HelpMenus.

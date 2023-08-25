@@ -157,9 +157,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
 				if (BukkitTools.getWorld(worldName) == null) {
-					TownyMessaging.sendErrorMsg("Your towny\\data\\townblocks\\ folder contains a folder named '"
-							+ worldName + "' which doesn't appear to exist on your Bukkit server!");
-					TownyMessaging.sendErrorMsg("Towny will load the townblocks regardless, but if this world no longer exists please delete the folder.");
+					Towny.getPlugin().getScheduler().runAsyncLater(() -> {
+						// Check if the World is still null in Bukkit and warn the admin.
+						if (BukkitTools.getWorld(worldName) == null) {
+							Towny.getPlugin().getLogger().warning("Your towny\\data\\townblocks\\ folder contains a folder named '"
+									+ worldName + "' which doesn't appear to exist on your Bukkit server!");
+							Towny.getPlugin().getLogger().warning("Towny will load the townblocks regardless, but if this world no longer exists please delete the folder.");
+						}
+					}, 20L);
 				}
 
 				TownyWorld world = universe.getWorld(worldName);
@@ -516,9 +521,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(","));
 					for (Resident friend : friends) {
-						try {
-							resident.addFriend(friend);
-						} catch (AlreadyRegisteredException ignored) {}
+						resident.addFriend(friend);
 					}
 				}
 				

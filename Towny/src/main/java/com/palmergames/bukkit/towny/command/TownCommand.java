@@ -1102,13 +1102,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			// Help output.
-			if (!admin) {
-				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town outlaw"));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town outlaw", "add/remove [name]", ""));
-			} else {
-				TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/ta town [town] outlaw"));
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/ta town [town] outlaw", "add/remove [name]", ""));
-			}
+			if (!admin)
+				HelpMenu.TOWN_OUTLAW_HELP.send(sender);
+			else
+				HelpMenu.TA_TOWN_OUTLAW.send(sender);
 
 		} else {
 
