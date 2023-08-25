@@ -87,6 +87,22 @@ town_help_7: 'New town with target mayor.'
 town_help_8: 'List commands for mayors.'
 town_help_9: 'Today''s the day!'
 town_help_10: 'List all online residents in town'
+town_help_11: "List all towns, see /t list ? for help."
+town_help_12: "Leave the town you're a member of."
+town_help_13: "See a list of residents in the town."
+town_help_14: "See a list of ranks in the town."
+town_help_15: "See a list of outlaws in the town."
+town_help_16: "See a list of plotgroups in the town."
+town_help_17: "See a list of plot types in the town."
+town_help_18: "Say a message to the town members."
+town_help_19: "Set your town for sale, able to be bought by other players."
+town_help_20: "Set your town not for sale."
+town_help_21: "Buy the given town, as long as it is for sale."
+town_help_22: "Deposit money into your town's bank."
+town_help_23: "Used to modify your resident's town ranks."
+town_help_24: "Used to delete your town."
+town_help_25: "Used to modify your town's outlaws."
+
 
 mayor_help_3: 'Claim area not attached to town'
 mayor_help_4: 'Claim around you to a radius of X'
@@ -145,6 +161,25 @@ world_help_2: '[world]'
 world_help_3: 'Target worlds''s status'
 world_help_4: 'List all worlds'
 world_help_5: 'Regenerate this chunk'
+world_help_6: 'See /tw toggle ? for help'
+world_help_7: 'See /tw set ? for help'
+
+world_set_help_0: "Set the world's wilderness name."
+
+world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
+world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
+world_toggle_help_2: "Toggle on/off if wars can happen in this world."
+world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
+world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
+world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
+world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
+world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
+world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
+world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
+world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
+world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+
+
 townyadmin_help_1: 'Unclaim this town block'
 townyadmin_help_2: 'Attempt to unclaim around you.'
 
@@ -217,6 +252,48 @@ townyadmin_nationrank_help_1: "Removes a nation rank from the resident."
 townyadmin_database_help_0: "Force saves the database."
 townyadmin_database_help_1: "Force loads the database."
 townyadmin_database_help_2: "See /ta database remove ? for help."
+
+ta_plot_help_0: "Claim a plot for a player."
+ta_plot_help_1: "View the metadata stored in the plot you are stood in."
+ta_plot_help_2: "Set plot metadata key and value."
+ta_plot_help_3: "Add or remove a metadata by key."
+
+ta_resident_help_0: "Rename a resident."
+ta_resident_help_1: "Add or remove a friend."
+ta_resident_help_2: "List or clear the friend list."
+ta_resident_help_3: "Delete a resident from the database."
+
+ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
+ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
+ta_toggle_help_2: "Turn on/off devmode, shows extra logging messages to the player specified in the config."
+ta_toggle_help_3: "Turn on/off debug mode, showing extra messages in the log."
+ta_toggle_help_4: "Turn on/off the ability for towns or nations to remove money from their banks."
+ta_toggle_help_5: "Make a player an NPC or not."
+
+ta_set_help_0: "Set a towns mayor to the given player."
+ta_set_help_1: "Set a town with a new NPC mayor, they pay no upkeep."
+ta_set_help_2: "Set the capital of a nation."
+ta_set_help_3: "Set a nation's nationzone size."
+ta_set_help_4: "Set a resident's title."
+ta_set_help_5: "Set a resident's surname."
+ta_set_help_6: "Set a plot to a different town."
+ta_set_help_7: "Set a town's founder name."
+ta_set_help_8: "Use size 0 to remove nationzone override."
+
+ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
+
+ta_townmeta_help_1: "View the metadata stored in the town you are stood in."
+ta_townmeta_help_2: "Set town metadata key and value."
+ta_townmeta_help_3: "Add or remove a metadata by key."
+
+ta_reload_help_0: "Reloads database."
+ta_reload_help_1: "Reloads config."
+ta_reload_help_2: "Reloads language files."
+ta_reload_help_3: "Reloads Towny permissions."
+ta_reload_help_4: "Reloads all components of Towny."
+
+ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
+
 
 msg_block_claim: 'Claim this town block'
 msg_plot_nfs: 'Take down a plot for sale'

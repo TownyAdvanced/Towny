@@ -164,10 +164,10 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin plot")
-				.add("claim [player]", "")
-				.add("meta", "")
-				.add("meta set [key] [value]", "")
-				.add("meta [add|remove] [key]", "");
+				.add("claim [player]", Translatable.of("ta_plot_help_0"))
+				.add("meta", Translatable.of("ta_plot_help_1"))
+				.add("meta set [key] [value]", Translatable.of("ta_plot_help_2"))
+				.add("meta [add|remove] [key]", Translatable.of("ta_plot_help_3"));
 		}
 	},
 	
@@ -175,11 +175,11 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin resident")
-				.add("[resident]", "")
-				.add("[resident] rename [newname]", "")
-				.add("[resident] friend... [add|remove] [resident]", "")
-				.add("[resident] friend... [list|clear]", "")
-				.add("[resident] delete", "Delete this resident's Towny data.");
+				.add("[resident]", Translatable.of("res_3"))
+				.add("[resident] rename [newname]", Translatable.of("ta_resident_help_0"))
+				.add("[resident] friend... [add|remove] [resident]", Translatable.of("ta_resident_help_1"))
+				.add("[resident] friend... [list|clear]", Translatable.of("ta_resident_help_2"))
+				.add("[resident] delete", Translatable.of("ta_resident_help_3"));
 		}
 	},
 
@@ -187,9 +187,8 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin resident [resident] friend")
-				.add("[add|remove] [resident]", "")
-				.add("list", "")
-				.add("clear", "");
+				.add("[add|remove] [resident]", Translatable.of("ta_resident_help_1"))
+				.add("list|clear", Translatable.of("ta_resident_help_2"));
 		}
 	},
 	
@@ -197,12 +196,12 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin toggle")
-				.add("wildernessuse", "")
-				.add("regenerations", "")
-				.add("devmode", "")
-				.add("debug", "")
-				.add("townwithdraw/nationwithdraw", "")
-				.add("[resident]", "");
+				.add("wildernessuse", Translatable.of("ta_toggle_help_0"))
+				.add("regenerations", Translatable.of("ta_toggle_help_1"))
+				.add("devmode", Translatable.of("ta_toggle_help_2"))
+				.add("debug", Translatable.of("ta_toggle_help_3"))
+				.add("townwithdraw/nationwithdraw", Translatable.of("ta_toggle_help_4"))
+				.add("npc [resident]", Translatable.of("ta_toggle_help_5"));
 		}
 	},
 	
@@ -225,13 +224,14 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set")
-				.add("mayor [town] " + Translatable.of("town_help_2"), "")
-				.add("mayor [town] npc", "")
-				.add("capital [town] [nation]", "")
-				.add("nationzoneoverride [town name] [size]", "")
-				.add("title [resident] [title]", "")
-				.add("surname [resident] [surname]", "")
-				.add("plot [town]", "");
+				.add("mayor [town] " + Translatable.of("town_help_2"), Translatable.of("ta_set_help_0"))
+				.add("mayor [town] npc", Translatable.of("ta_set_help_1"))
+				.add("capital [town] [nation]", Translatable.of("ta_set_help_2"))
+				.add("nationzoneoverride [town name] [size]", Translatable.of("ta_set_help_3"))
+				.add("title [resident] [title]", Translatable.of("ta_set_help_4"))
+				.add("surname [resident] [surname]", Translatable.of("ta_set_help_5"))
+				.add("plot [town]", Translatable.of("ta_set_help_6"))
+				.add("founder [town] foundername", Translatable.of("ta_set_help_7"));
 		}
 	},
 	
@@ -239,8 +239,8 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set mayor")
-				.add("[town] " + Translatable.of("town_help_2"), "")
-				.add("[town] npc", "");
+				.add("[town] " + Translatable.of("town_help_2"), Translatable.of("ta_set_help_0"))
+				.add("[town] npc", Translatable.of("ta_set_help_1"));
 		}
 	},
 
@@ -248,7 +248,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set capital")
-				.add("capital [town] [nation]", "");
+				.add("[town] [nation]", Translatable.of("ta_set_help_2"));
 		}
 	},
 
@@ -256,7 +256,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set founder")
-				.add("founder [town] [foundername]", "");
+				.add("[town] [foundername]", Translatable.of("ta_set_help_7"));
 		}
 	},
 
@@ -274,8 +274,8 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set nationzoneoverride")
-				.add("[town name] [size]", "")
-				.add("[town name] 0", "Removes the NationZone override.");
+				.add("[town name] [size]", Translatable.of("ta_set_help_3"))
+				.add("[town name] 0", Translatable.of("ta_set_help_8"));
 		}
 	},
 	
@@ -283,10 +283,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin purge")
-				.add("[number of days] {townless|townname}", "")
-				.add("", "Removes offline residents not seen for this duration.")
-				.add("", "Optional {townless} flag limits purge to only people that have no town.")
-				.add("", "Optional {townname} flag limits purge to only people in the given town.");
+				.add("[number of days] {townless|townname}", Translatable.of("ta_purge_help_0"));
 		}
 	},
 	
@@ -294,10 +291,9 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin town [townname] meta")
-				.add("", "View the metadata stored in a town.")
-				.add("set [key] [value]", "Set the key to the value.")
-				.add("add [key]", "Add a key of a registered data field.")
-				.add("remove [key]", "Remove a key from the town.");
+				.add("", Translatable.of("ta_townmeta_help_1"))
+				.add("set [key] [value]", Translatable.of("ta_townmeta_help_2"))
+				.add("add|remove [key]", Translatable.of("ta_townmeta_help_3"));
 		}
 	},
 
@@ -305,10 +301,9 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin plot meta")
-				.add("", "View the metadata stored in the plot you are stood in.")
-				.add("set [key] [value]", "Set the key to the value.")
-				.add("add [key]", "Add a key of a registered data field.")
-				.add("remove [key]", "Remove a key from the plot.");
+				.add("", Translatable.of("ta_plot_help_1"))
+				.add("set [key] [value]", Translatable.of("ta_plot_help_2"))
+				.add("add|remove [key]", Translatable.of("ta_plot_help_3"));
 		}
 	},
 	
@@ -316,11 +311,11 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin reload")
-				.add("database", "Reloads database")
-				.add("config", "Reloads config")
-				.add("lang", "Reloads language file.")
-				.add("perms", "Reloads Towny permissions.")
-				.add("all", "Reloads all components of towny.");
+				.add("database", Translatable.of("ta_reload_help_0"))
+				.add("config", Translatable.of("ta_reload_help_1"))
+				.add("lang", Translatable.of("ta_reload_help_2"))
+				.add("perms", Translatable.of("ta_reload_help_3"))
+				.add("all", Translatable.of("ta_reload_help_4"));
 		}
 	},
 	
@@ -328,7 +323,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin depositall")
-				.add("[amount]", "Deposit the given amount into all town and nation banks.");
+				.add("[amount]", Translatable.of("ta_depositall_help_0"));
 		}
 	},
 	
@@ -338,9 +333,8 @@ public enum HelpMenu {
 			return builder
 				.add(Translation.of("world_help_2"), Translatable.of("world_help_3"))
 				.add("list", Translatable.of("world_help_4"))
-				.add("toggle", "")
-				.add(Translation.of("admin_sing"), "set [] .. []", "")
-				.add(Translation.of("admin_sing"), "regen", Translatable.of("world_help_5"));
+				.add("toggle", Translatable.of("world_help_6"))
+				.add(Translation.of("admin_sing"), "set [] .. []", Translatable.of("world_help_7"));
 		}
 
 		@Override
@@ -359,7 +353,7 @@ public enum HelpMenu {
 	TOWNYWORLD_SET {
 		@Override
 		protected MenuBuilder load(MenuBuilder builder) {
-			return builder.add("wildname [name]", "");
+			return builder.add("wildname [name]", Translatable.of("world_set_help_0"));
 		}
 
 		@Override
@@ -379,18 +373,18 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyworld toggle")
-				.add("claimable", "")
-				.add("usingtowny", "")
-				.add("warallowed", "")
-				.add("pvp/forcepvp", "")
-				.add("friendlyfire", "")
-				.add("explosion/forceexplosion", "")
-				.add("fire/forcefire", "")
-				.add("townmobs/wildernessmobs/worldmobs", "")
-				.add("revertunclaim", "")
-				.add("revertentityexpl/revertblockexpl", "")
-				.add("plotcleardelete", "")
-				.add("unclaimblockdelete", "");
+				.add("claimable", Translatable.of("world_toggle_help_0"))
+				.add("usingtowny", Translatable.of("world_toggle_help_1"))
+				.add("warallowed", Translatable.of("world_toggle_help_2"))
+				.add("pvp/forcepvp", Translatable.of("world_toggle_help_3"))
+				.add("friendlyfire", Translatable.of("world_toggle_help_4"))
+				.add("explosion/forceexplosion", Translatable.of("world_toggle_help_5"))
+				.add("fire/forcefire", Translatable.of("world_toggle_help_6"))
+				.add("townmobs/wildernessmobs/worldmobs", Translatable.of("world_toggle_help_7"))
+				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
+				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
+				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
 		}
 	},
 
@@ -398,18 +392,18 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyworld {worldname} toggle")
-				.add("claimable", "")
-				.add("usingtowny", "")
-				.add("warallowed", "")
-				.add("pvp/forcepvp", "")
-				.add("friendlyfire", "")
-				.add("explosion/forceexplosion", "")
-				.add("fire/forcefire", "")
-				.add("townmobs/wildernessmobs/worldmobs", "")
-				.add("revertunclaim", "")
-				.add("revertentityexpl/revertblockexpl", "")
-				.add("plotcleardelete", "")
-				.add("unclaimblockdelete", "");
+				.add("claimable", Translatable.of("world_toggle_help_0"))
+				.add("usingtowny", Translatable.of("world_toggle_help_1"))
+				.add("warallowed", Translatable.of("world_toggle_help_2"))
+				.add("pvp/forcepvp", Translatable.of("world_toggle_help_3"))
+				.add("friendlyfire", Translatable.of("world_toggle_help_4"))
+				.add("explosion/forceexplosion", Translatable.of("world_toggle_help_5"))
+				.add("fire/forcefire", Translatable.of("world_toggle_help_6"))
+				.add("townmobs/wildernessmobs/worldmobs", Translatable.of("world_toggle_help_7"))
+				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
+				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
+				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
 		}
 	},
 	
@@ -420,24 +414,24 @@ public enum HelpMenu {
 				.add("[town]", Translatable.of("town_help_3"))
 				.add("new [name]", Translatable.of("town_help_11"))
 				.add("here", Translatable.of("town_help_4"))
-				.add("list", "")
+				.add("list", Translatable.of("town_help_11"))
 				.add("online", Translatable.of("town_help_10"))
-				.add("leave", "")
-				.add("reslist (town)", "")
-				.add("ranklist (town)", "")
-				.add("outlawlist (town)", "")
-				.add("plotgrouplist (town) (page)", "")
-				.add("plots (town)", "")
-				.add("outlaw add/remove [name]", "")
-				.add("say", "[message]")
+				.add("leave", Translatable.of("town_help_12"))
+				.add("reslist (town)", Translatable.of("town_help_13"))
+				.add("ranklist (town)", Translatable.of("town_help_14"))
+				.add("outlawlist (town)", Translatable.of("town_help_15"))
+				.add("plotgrouplist (town) (page)", Translatable.of("town_help_16"))
+				.add("plots (town)", Translatable.of("town_help_17"))
+				.add("outlaw add/remove [name]", Translatable.of("town_help_25"))
+				.add("say", "[message]", Translatable.of("town_help_18"))
 				.add("spawn", Translatable.of("town_help_5"))
-				.add("forsale [$]", "")
-				.add("notforsale [$]", "")
-				.add("buytown (town)", "")
-				.add(Translation.of("res_sing"), "deposit [$]", "")
-				.add(Translation.of("res_sing"), "rank add/remove [resident] [rank]", "")
+				.add("forsale [$]", Translatable.of("town_help_19"))
+				.add("notforsale [$]", Translatable.of("town_help_20"))
+				.add("buytown (town)", Translatable.of("town_help_21"))
+				.add(Translation.of("res_sing"), "deposit [$]", Translatable.of("town_help_22"))
+				.add(Translation.of("res_sing"), "rank add/remove [resident] [rank]", Translatable.of("town_help_23"))
 				.add(Translation.of("mayor_sing"), "mayor ?", Translatable.of("town_help_8"))
-				.add(Translation.of("admin_sing"), "delete [town]", "");
+				.add(Translation.of("admin_sing"), "delete [town]", Translatable.of("town_help_24"));
 		}
 	},
 	
@@ -446,7 +440,7 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("town", Translatable.of("town_help_1"))
 				.add("[town]", Translatable.of("town_help_3"))
-				.add("list", "");
+				.add("list", Translatable.of("town_help_11"));
 		}
 	},
 	
