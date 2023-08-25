@@ -294,12 +294,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse universe = TownyUniverse.getInstance();
 
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
-			townyTop.add(ChatTools.formatTitle("/towny top"));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
-			for (String line : townyTop)
-				TownyMessaging.sendMessage(sender, line);
+			HelpMenu.TOWNY_TOP_HELP.send(sender);
 			return;
 		} 
 

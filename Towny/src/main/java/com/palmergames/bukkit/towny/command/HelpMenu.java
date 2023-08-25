@@ -43,7 +43,17 @@ public enum HelpMenu {
 				.add("v", Translatable.of("towny_help_6"));
 		}
 	},
-	
+
+	TOWNY_TOP_HELP {
+		@Override
+		public MenuBuilder load() {
+			return new MenuBuilder("towny top")
+				.add("residents", "[all/town/nation]", Translatable.of("towny_top_help_0"))
+				.add("land", " [all/resident/town]", Translatable.of("towny_top_help_1"))
+				.add("balance", " [all/town/nation]", Translatable.of("towny_top_help_2"));
+		}
+	},
+
 	TA_HELP {
 		@Override
 		protected MenuBuilder load() {
@@ -90,6 +100,14 @@ public enum HelpMenu {
 				.add("[town] outlaw [add|remove] [name]", Translatable.of("townyadmin_town_help_16"))
 				.add("[town] leavenation", Translatable.of("townyadmin_town_help_17"))
 				.add("[town] conquered", Translatable.of("townyadmin_town_help_18"));
+		}
+	},
+
+	TA_TOWN_OUTLAW {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("ta town [town] outlaw")
+				.add("[add|remove] [name]", Translatable.of("townyadmin_town_help_16"));
 		}
 	},
 
@@ -156,7 +174,7 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin database")
 				.add("save", Translatable.of("townyadmin_database_help_0"))
 				.add("load", Translatable.of("townyadmin_database_help_1"))
-				.add("remove", Translatable.of("townyadmin_database_help_2"));
+				.add("remove titles", Translatable.of("townyadmin_database_help_2"));
 		}
 	},
 	
@@ -442,6 +460,14 @@ public enum HelpMenu {
 			return new MenuBuilder("town", Translatable.of("town_help_1"))
 				.add("[town]", Translatable.of("town_help_3"))
 				.add("list", Translatable.of("town_help_26"));
+		}
+	},
+	
+	TOWN_OUTLAW_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town outlaw")
+				.add("add/remove [name]", Translatable.of("town_help_25"));
 		}
 	},
 	
