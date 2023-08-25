@@ -619,7 +619,47 @@ public enum HelpMenu {
 				.add("spy", "");
 		}
 	},
-			
+
+	RESIDENT_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("resident set")
+				.add("about ...", "'/resident set about' " + Translation.of("res_5"))
+				.add("perm ...", "'/resident set perm' " + Translation.of("res_5"))
+				.add("mode ...", "'/resident set mode' " + Translation.of("res_5"));
+		}
+	},
+
+	RESIDENT_SET_MODE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("resident set mode")
+				.add("", "/resident set mode", "clear", "")
+				.add("", "/resident set mode", "[mode]...[mode]", "")
+				.add("MODE", "map", "", Translation.of("mode_1"))
+				.add("MODE", "townclaim", "", Translation.of("mode_2"))
+				.add("MODE", "townunclaim", "", Translation.of("mode_3"))
+				.add("Mode", "plotgroup", "", "runs /plot group add with your last-used plot group name.")
+				.add("Mode", "tc", "", Translation.of("mode_4"))
+				.add("Mode", "nc", "", Translation.of("mode_5"))
+				.add("Mode", "ignoreplots", "", "")
+				.add("Mode", "constantplotborder", "", "")
+				.add("Mode", "plotborder", "", "")
+				.add("Eg", "/resident set mode", "map townclaim town nation general", "");
+		}
+	},
+
+	RESIDENT_FRIEND {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("resident friend")
+				.add("add " + Translation.of("res_2"), "")
+				.add("remove " + Translation.of("res_2"), "")
+				.add("list", "")
+				.add("clear", "");
+		}
+	},
+
 	RESIDENT_JAIL_HELP {
 		@Override
 		protected MenuBuilder load() {
