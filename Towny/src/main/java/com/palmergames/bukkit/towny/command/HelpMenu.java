@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -17,14 +18,14 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder()
 				.addTitle(Translation.of("help_0"))
-				.add(Translation.of("help_1"))
-				.add(ChatTools.formatCommand("/resident", "?", "") + ", "
-					+ ChatTools.formatCommand("/town", "?", "") + ", "
-					+ ChatTools.formatCommand("/nation", "?", "") + ", "
-					+ ChatTools.formatCommand("/plot", "?", "") + ", "
-					+ ChatTools.formatCommand("/towny", "?", ""))
-				.add(ChatTools.formatCommand("/tc", "[msg]", Translation.of("help_2")) + ", "
-					+ ChatTools.formatCommand("/nc", "[msg]", Translation.of("help_3")).trim())
+				.add(Translatable.of("help_1"))
+				.add("/resident", "?", "")
+				.add("/town", "?", "")
+				.add("/nation", "?", "")
+				.add("/plot", "?", "")
+				.add("/towny", "?", "")
+				.add("/tc", "[msg]", Translatable.of("help_2"))
+				.add("/nc", "[msg]", Translatable.of("help_3"))
 				.add(Translation.of("admin_sing"), "/townyadmin", "?", "");
 		}
 	},
@@ -39,8 +40,7 @@ public enum HelpMenu {
 				.add("top", "Display highscores")
 				.add("time", "Display time until a new day")
 				.add("universe", "Displays stats")
-				.add("v", "Displays the version of Towny")
-				.add("war", "'/towny war' for more info");
+				.add("v", "Displays the version of Towny");
 		}
 	},
 	
@@ -56,12 +56,12 @@ public enum HelpMenu {
 				.add("resident/town/nation", "")
 				.add("tpplot {world} {x} {z}", "")
 				.add("checkperm {name} {node}", "")
-				.add("reload", Translation.of("admin_panel_2"))
+				.add("reload", Translatable.of("admin_panel_2"))
 				.add("reset", "")
 				.add("backup", "")
 				.add("mysqldump", "")
 				.add("database [save/load]", "")
-				.add("newday", Translation.of("admin_panel_3"))
+				.add("newday", Translatable.of("admin_panel_3"))
 				.add("purge [number of days]", "");
 		}
 	},
@@ -146,7 +146,7 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin unclaim", Translation.of("admin_sing"),
 				Translation.of("townyadmin_help_1"))
-				.add("[radius]", Translation.of("townyadmin_help_2"));
+				.add("[radius]", Translatable.of("townyadmin_help_2"));
 		}
 	},
 	
@@ -211,14 +211,14 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("ta townyperms")
-				.add("listgroups", Translation.of("help_ta_perms_listgroups"))
-				.add("group [group]", Translation.of("help_ta_perms_group"))
-				.add("group [group] addperm [node]", Translation.of("help_ta_perms_groupaddpermnode"))
-				.add("group [group] removeperm [node]", Translation.of("help_ta_perms_groupremovepermnode"))
-				.add("townrank addrank [rank]", Translation.of("help_ta_perms_townrankadd"))
-				.add("townrank removerank [rank]", Translation.of("help_ta_perms_townrankremove"))
-				.add("nationrank addrank [rank]", Translation.of("help_ta_perms_nationrankadd"))
-				.add("nationrank removerank [rank]", Translation.of("help_ta_perms_nationrankremove"));
+				.add("listgroups", Translatable.of("help_ta_perms_listgroups"))
+				.add("group [group]", Translatable.of("help_ta_perms_group"))
+				.add("group [group] addperm [node]", Translatable.of("help_ta_perms_groupaddpermnode"))
+				.add("group [group] removeperm [node]", Translatable.of("help_ta_perms_groupremovepermnode"))
+				.add("townrank addrank [rank]", Translatable.of("help_ta_perms_townrankadd"))
+				.add("townrank removerank [rank]", Translatable.of("help_ta_perms_townrankremove"))
+				.add("nationrank addrank [rank]", Translatable.of("help_ta_perms_nationrankadd"))
+				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"));
 		}
 	},
 	
@@ -226,7 +226,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set")
-				.add("mayor [town] " + Translation.of("town_help_2"), "")
+				.add("mayor [town] " + Translatable.of("town_help_2"), "")
 				.add("mayor [town] npc", "")
 				.add("capital [town] [nation]", "")
 				.add("nationzoneoverride [town name] [size]", "")
@@ -240,7 +240,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set mayor")
-				.add("[town] " + Translation.of("town_help_2"), "")
+				.add("[town] " + Translatable.of("town_help_2"), "")
 				.add("[town] npc", "");
 		}
 	},
@@ -265,9 +265,9 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin set plot")
-				.add("[town]",  Translation.of("msg_admin_set_plot_help_1"))
-				.add("[town name] {rect|circle} {radius}", Translation.of("msg_admin_set_plot_help_2"))
-				.add("[town name] {rect|circle} auto", Translation.of("msg_admin_set_plot_help_2"));
+				.add("[town]",  Translatable.of("msg_admin_set_plot_help_1"))
+				.add("[town name] {rect|circle} {radius}", Translatable.of("msg_admin_set_plot_help_2"))
+				.add("[town name] {rect|circle} auto", Translatable.of("msg_admin_set_plot_help_2"));
 		}
 	},
 	
@@ -337,23 +337,23 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load(MenuBuilder builder) {
 			return builder
-				.add(Translation.of("world_help_2"), Translation.of("world_help_3"))
-				.add("list", Translation.of("world_help_4"))
+				.add(Translation.of("world_help_2"), Translatable.of("world_help_3"))
+				.add("list", Translatable.of("world_help_4"))
 				.add("toggle", "")
 				.add(Translation.of("admin_sing"), "set [] .. []", "")
-				.add(Translation.of("admin_sing"), "regen", Translation.of("world_help_5"));
+				.add(Translation.of("admin_sing"), "regen", Translatable.of("world_help_5"));
 		}
 
 		@Override
 		protected MenuBuilder load() {
-			return load(new MenuBuilder("townyworld", Translation.of("world_help_1")));
+			return load(new MenuBuilder("townyworld", Translatable.of("world_help_1")));
 		}
 	},
 
 	TOWNYWORLD_HELP_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return TOWNYWORLD_HELP.load(new MenuBuilder("townyworld {world}", Translation.of("world_help_1")));
+			return TOWNYWORLD_HELP.load(new MenuBuilder("townyworld {world}", Translatable.of("world_help_1")));
 		}
 	},
 
@@ -417,12 +417,12 @@ public enum HelpMenu {
 	TOWN_HELP {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("town", Translation.of("town_help_1"))
-				.add("[town]", Translation.of("town_help_3"))
-				.add("new [name]", Translation.of("town_help_11"))
-				.add("here", Translation.of("town_help_4"))
+			return new MenuBuilder("town", Translatable.of("town_help_1"))
+				.add("[town]", Translatable.of("town_help_3"))
+				.add("new [name]", Translatable.of("town_help_11"))
+				.add("here", Translatable.of("town_help_4"))
 				.add("list", "")
-				.add("online", Translation.of("town_help_10"))
+				.add("online", Translatable.of("town_help_10"))
 				.add("leave", "")
 				.add("reslist (town)", "")
 				.add("ranklist (town)", "")
@@ -431,13 +431,13 @@ public enum HelpMenu {
 				.add("plots (town)", "")
 				.add("outlaw add/remove [name]", "")
 				.add("say", "[message]")
-				.add("spawn", Translation.of("town_help_5"))
+				.add("spawn", Translatable.of("town_help_5"))
 				.add("forsale [$]", "")
 				.add("notforsale [$]", "")
 				.add("buytown (town)", "")
 				.add(Translation.of("res_sing"), "deposit [$]", "")
 				.add(Translation.of("res_sing"), "rank add/remove [resident] [rank]", "")
-				.add(Translation.of("mayor_sing"), "mayor ?", Translation.of("town_help_8"))
+				.add(Translation.of("mayor_sing"), "mayor ?", Translatable.of("town_help_8"))
 				.add(Translation.of("admin_sing"), "delete [town]", "");
 		}
 	},
@@ -445,8 +445,8 @@ public enum HelpMenu {
 	TOWN_HELP_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("town", Translation.of("town_help_1"))
-				.add("[town]", Translation.of("town_help_3"))
+			return new MenuBuilder("town", Translatable.of("town_help_1"))
+				.add("[town]", Translatable.of("town_help_3"))
 				.add("list", "");
 		}
 	},
@@ -503,11 +503,11 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town claim")
-				.add("", Translation.of("msg_block_claim"))
-				.add("outpost", Translation.of("mayor_help_3"))
-				.add("[auto]", Translation.of("mayor_help_5"))
-				.add("[circle/rect] [radius]", Translation.of("mayor_help_4"))
-				.add("[circle/rect] auto", Translation.of("mayor_help_5"));
+				.add("", Translatable.of("msg_block_claim"))
+				.add("outpost", Translatable.of("mayor_help_3"))
+				.add("[auto]", Translatable.of("mayor_help_5"))
+				.add("[circle/rect] [radius]", Translatable.of("mayor_help_4"))
+				.add("[circle/rect] auto", Translatable.of("mayor_help_5"));
 		}
 	},
 	
@@ -515,9 +515,9 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town unclaim")
-				.add("", Translation.of("mayor_help_6"))
-				.add("[circle/rect] [radius]", Translation.of("mayor_help_7"))
-				.add("all", Translation.of("mayor_help_8"));
+				.add("", Translatable.of("mayor_help_6"))
+				.add("[circle/rect] [radius]", Translatable.of("mayor_help_7"))
+				.add("all", Translatable.of("mayor_help_8"));
 		}
 	},
 	
@@ -567,27 +567,27 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("town invite")
-				.add("[player]", Translation.of("town_invite_help_1"))
-				.add("-[player]", Translation.of("town_invite_help_2"))
-				.add("sent", Translation.of("town_invite_help_3"))
-				.add("received", Translation.of("town_invite_help_4"))
-				.add("accept [nation]", Translation.of("town_invite_help_5"))
-				.add("deny [nation]", Translation.of("town_invite_help_6"));
+				.add("[player]", Translatable.of("town_invite_help_1"))
+				.add("-[player]", Translatable.of("town_invite_help_2"))
+				.add("sent", Translatable.of("town_invite_help_3"))
+				.add("received", Translatable.of("town_invite_help_4"))
+				.add("accept [nation]", Translatable.of("town_invite_help_5"))
+				.add("deny [nation]", Translatable.of("town_invite_help_6"));
 		}
 	},
 
 	RESIDENT_HELP {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("resident", Translation.of("res_1"))
-				.add(Translation.of("res_2"), Translation.of("res_3"))
-				.add("list", Translation.of("res_4"))
+			return new MenuBuilder("resident", Translatable.of("res_1"))
+				.add(Translation.of("res_2"), Translatable.of("res_3"))
+				.add("list", Translatable.of("res_4"))
 				.add("tax", "")
 				.add("jail", "")
 				.add("toggle", "[mode]...[mode]")
 				.add("set [] .. []", "'/resident set' " + Translation.of("res_5"))
-				.add("friend [add/remove] " + Translation.of("res_2"), Translation.of("res_6"))
-				.add("friend [add+/remove+] " + Translation.of("res_2") + " ", Translation.of("res_7"))
+				.add("friend [add/remove] " + Translation.of("res_2"), Translatable.of("res_6"))
+				.add("friend [add+/remove+] " + Translation.of("res_2") + " ", Translatable.of("res_7"))
 				.add("spawn", "");
 		}
 	},
@@ -595,9 +595,9 @@ public enum HelpMenu {
 	RESIDENT_HELP_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("resident", Translation.of("res_1"))
-				.add(Translation.of("res_2"), Translation.of("res_3"))
-				.add("list", Translation.of("res_4"));
+			return new MenuBuilder("resident", Translatable.of("res_1"))
+				.add(Translation.of("res_2"), Translatable.of("res_3"))
+				.add("list", Translatable.of("res_4"));
 		}
 	},
 	
@@ -636,19 +636,19 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			String resReq = Translation.of("res_sing");
 			return new MenuBuilder("plot", resReq + "/" + Translation.of("mayor_sing"), "")
-				.add(resReq, "/plot claim", "", Translation.of("msg_block_claim"))
+				.add(resReq, "/plot claim", "", Translatable.of("msg_block_claim"))
 				.add(resReq, "/plot claim", "[rect/circle] [radius]", "")
 				.add(resReq, "/plot perm", "[hud]", "")
-				.addCmd("/plot notforsale", "", Translation.of("msg_plot_nfs"))
+				.addCmd("/plot notforsale", "", Translatable.of("msg_plot_nfs"))
 				.addCmd("/plot notforsale", "[rect/circle] [radius]", "")
-				.addCmd("/plot forsale [$]", "", Translation.of("msg_plot_fs"))
+				.addCmd("/plot forsale [$]", "", Translatable.of("msg_plot_fs"))
 				.addCmd("/plot forsale [$]", "within [rect/circle] [radius]", "")
 				.addCmd("/plot evict", "", "")
 				.addCmd("/plot clear", "", "")
-				.addCmd("/plot set ...", "", Translation.of("msg_plot_fs"))
+				.addCmd("/plot set ...", "", Translatable.of("msg_plot_fs"))
 				.add(resReq, "/plot toggle", "[pvp/fire/explosion/mobs]", "")
 				.add(resReq, "/plot group", "?", "")
-				.add(Translation.of("msg_nfs_abr"));
+				.add(Translatable.of("msg_nfs_abr"));
 		}
 	},
 	
@@ -696,7 +696,7 @@ public enum HelpMenu {
 				.add("Eg", "/plot set perm", "ally off", "")
 				.add("Eg", "/plot set perm", "friend build on", "")
 				.add(Translation.of("plot_perms", "'friend'", "'resident'"))
-				.add(Translation.of("plot_perms_1"));
+				.add(Translatable.of("plot_perms_1"));
 		}
 	},
 
@@ -714,19 +714,19 @@ public enum HelpMenu {
 	NATION_HELP {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("nation", Translation.of("nation_help_1"))
-				.add(Translation.of("nation_help_2"), Translation.of("nation_help_3"))
-				.add("list", Translation.of("nation_help_4"))
+			return new MenuBuilder("nation", Translatable.of("nation_help_1"))
+				.add(Translation.of("nation_help_2"), Translatable.of("nation_help_3"))
+				.add("list", Translatable.of("nation_help_4"))
 				.add("townlist (nation)", "")
 				.add("allylist (nation)", "")
 				.add("enemylist (nation)", "")
-				.add("online", Translation.of("nation_help_9"))
-				.add("spawn", Translation.of("nation_help_10"))
+				.add("online", Translatable.of("nation_help_9"))
+				.add("spawn", Translatable.of("nation_help_10"))
 				.add("join (nation)", "Used to join open nations.")
 				.add(Translation.of("res_sing"), "deposit [$]", "")
-				.add(Translation.of("mayor_sing"), "leave", Translation.of("nation_help_5"))
-				.add(Translation.of("king_sing"), "king ?", Translation.of("nation_help_7"))
-				.add(Translation.of("admin_sing"), "new " + Translation.of("nation_help_2") + " [capital]", Translation.of("nation_help_8"))
+				.add(Translation.of("mayor_sing"), "leave", Translatable.of("nation_help_5"))
+				.add(Translation.of("king_sing"), "king ?", Translatable.of("nation_help_7"))
+				.add(Translation.of("admin_sing"), "new " + Translation.of("nation_help_2") + " [capital]", Translatable.of("nation_help_8"))
 				.add(Translation.of("admin_sing"), "delete " + Translation.of("nation_help_2"), "")
 				.add(Translation.of("admin_sing"), "say", "[message]");
 		}
@@ -735,9 +735,9 @@ public enum HelpMenu {
 	NATION_HELP_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("nation", Translation.of("nation_help_1"))
-				.add(Translation.of("nation_help_2"), Translation.of("nation_help_3"))
-				.add("list", Translation.of("nation_help_4"));
+			return new MenuBuilder("nation", Translatable.of("nation_help_1"))
+				.add(Translation.of("nation_help_2"), Translatable.of("nation_help_3"))
+				.add("list", Translatable.of("nation_help_4"));
 		}
 	},
 	
@@ -793,8 +793,8 @@ public enum HelpMenu {
 				.add("rank [add/remove] " + Translation.of("res_2"), "[Rank]")
 				.add("set [] .. []", "")
 				.add("toggle [] .. []", "")
-				.add("ally [] .. [] " + Translation.of("nation_help_2"), Translation.of("king_help_2"))
-				.add("enemy [add/remove] " + Translation.of("nation_help_2"), Translation.of("king_help_3"))
+				.add("ally [] .. [] " + Translation.of("nation_help_2"), Translatable.of("king_help_2"))
+				.add("enemy [add/remove] " + Translation.of("nation_help_2"), Translatable.of("king_help_3"))
 				.add("delete", "")
 				.add("merge {nation}", "")
 				.add("say", "[message]");
@@ -805,13 +805,13 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("nation ally")
-				.add("add [nation]", Translation.of("nation_ally_help_1"))
-				.add("add -[nation]", Translation.of("nation_ally_help_7"))
-				.add("remove [nation]", Translation.of("nation_ally_help_2"))
-				.add("sent", Translation.of("nation_ally_help_3"))
-				.add("received", Translation.of("nation_ally_help_4"))
-				.add("accept [nation]", Translation.of("nation_ally_help_5"))
-				.add("deny [nation]", Translation.of("nation_ally_help_6"));
+				.add("add [nation]", Translatable.of("nation_ally_help_1"))
+				.add("add -[nation]", Translatable.of("nation_ally_help_7"))
+				.add("remove [nation]", Translatable.of("nation_ally_help_2"))
+				.add("sent", Translatable.of("nation_ally_help_3"))
+				.add("received", Translatable.of("nation_ally_help_4"))
+				.add("accept [nation]", Translatable.of("nation_ally_help_5"))
+				.add("deny [nation]", Translatable.of("nation_ally_help_6"));
 		}
 	},
 
@@ -819,9 +819,9 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("nation invite")
-				.add("[town]", Translation.of("nation_invite_help_1"))
-				.add("-[town]", Translation.of("nation_invite_help_2"))
-				.add("sent", Translation.of("nation_invite_help_3"));
+				.add("[town]", Translatable.of("nation_invite_help_1"))
+				.add("-[town]", Translatable.of("nation_invite_help_2"))
+				.add("sent", Translatable.of("nation_invite_help_3"));
 		}
 	},
 
@@ -829,10 +829,10 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("invite", "")
-				.add(TownySettings.getAcceptCommand() + " [town]", Translation.of("invite_help_1"))
-				.add(TownySettings.getDenyCommand() + " [town]", Translation.of("invite_help_2"))
-				.add(TownySettings.getDenyCommand() + " all", Translation.of("invite_help_4"))
-				.add("list", Translation.of("invite_help_3"));
+				.add(TownySettings.getAcceptCommand() + " [town]", Translatable.of("invite_help_1"))
+				.add(TownySettings.getDenyCommand() + " [town]", Translatable.of("invite_help_2"))
+				.add(TownySettings.getDenyCommand() + " all", Translatable.of("invite_help_4"))
+				.add("list", Translatable.of("invite_help_3"));
 		}
 	},
 	
@@ -933,7 +933,7 @@ public enum HelpMenu {
 	};
 
 
-	HelpMenu(String... lines) {
+	HelpMenu(MenuLine... lines) {
 		Collections.addAll(this.lines, lines);
 	}
 
@@ -942,7 +942,7 @@ public enum HelpMenu {
 		lines.addAll(load().lines);
 	}
 
-	private final List<String> lines = new ArrayList<>();
+	private final List<MenuLine> lines = new ArrayList<>();
 
 	protected MenuBuilder load(MenuBuilder builder) {
 		return load();
@@ -956,24 +956,30 @@ public enum HelpMenu {
 		}
 	}
 	
-	public List<String> getLines() {
+	public List<MenuLine> getLines() {
 		return Collections.unmodifiableList(lines);
 	}
 
 	public void send(CommandSender sender) {
-		TownyMessaging.sendMessage(sender, lines);
+		for (MenuLine line : lines) {
+			String message = line.getLine();
+			String separator = Translation.of("help_menu_explanation") + (!message.isEmpty() ? " : " : "");
+			if (line.getDesc() != null)
+				message += separator + line.getDesc().forLocale(sender);
+			TownyMessaging.sendMessage(sender, message);
+		}
 	}
 
 	// Class to ease making menus
 	private static class MenuBuilder {
-		final List<String> lines = new ArrayList<>();
+		final List<MenuLine> lines = new ArrayList<>();
 		private String command;
 		String requirement = "";
 
 		MenuBuilder(String cmd, boolean cmdTitle) {
 			this.command = cmd;
 			if (cmdTitle)
-				this.lines.add(ChatTools.formatTitle("/" + command));
+				this.lines.add(MenuLine.of(ChatTools.formatTitle("/" + command), null));
 		}
 
 		MenuBuilder(String cmd) {
@@ -984,6 +990,11 @@ public enum HelpMenu {
 			this(cmd);
 			if (!desc.isEmpty())
 				add("", desc);
+		}
+
+		MenuBuilder(String cmd, Translatable desc) {
+			this(cmd);
+			add("", desc);
 		}
 
 		MenuBuilder(String cmd, String requirement, String desc) {
@@ -1001,28 +1012,73 @@ public enum HelpMenu {
 			return add(this.requirement, subCmd, desc);
 		}
 
+		MenuBuilder add(String subCmd, Translatable desc) {
+			return add(this.requirement, subCmd, desc);
+		}
+
 		MenuBuilder add(String requirement, String subCmd, String desc) {
-			this.lines.add(ChatTools.formatCommand(requirement, "/" + command, subCmd, desc));
+			this.lines.add(MenuLine.of(ChatTools.formatCommand(requirement, "/" + command, subCmd, desc), null));
+			return this;
+		}
+
+		MenuBuilder add(String requirement, String subCmd, Translatable desc) {
+			this.lines.add(MenuLine.of(ChatTools.formatCommand(requirement, "/" + command, subCmd, ""), desc));
 			return this;
 		}
 
 		MenuBuilder add(String requirement, String command, String subCmd, String desc) {
-			this.lines.add(ChatTools.formatCommand(requirement, command, subCmd, desc));
+			this.lines.add(MenuLine.of(ChatTools.formatCommand(requirement, command, subCmd, desc), null));
+			return this;
+		}
+
+		MenuBuilder add(String requirement, String command, String subCmd, Translatable desc) {
+			this.lines.add(MenuLine.of(ChatTools.formatCommand(requirement, command, subCmd, ""), desc));
 			return this;
 		}
 
 		MenuBuilder add(String line) {
-			this.lines.add(line);
+			this.lines.add(MenuLine.of(line, null));
+			return this;
+		}
+
+		public MenuBuilder add(Translatable desc) {
+			this.lines.add(MenuLine.of("", desc));
 			return this;
 		}
 
 		MenuBuilder addTitle(String title) {
-			this.lines.add(ChatTools.formatTitle(title));
+			this.lines.add(MenuLine.of(ChatTools.formatTitle(title), null));
 			return this;
 		}
 
 		MenuBuilder addCmd(String cmd, String subCmd, String desc) {
 			return add(requirement, cmd, subCmd, desc);
+		}
+		
+		MenuBuilder addCmd(String cmd, String subCmd, Translatable desc) {
+			return add(requirement, cmd, subCmd, desc);
+		}
+	}
+
+	private static class MenuLine {
+		private String line = "";
+		private Translatable description = null;
+
+		MenuLine(String line, Translatable desc) {
+			this.line = line;
+			this.description = desc;
+		}
+
+		public static MenuLine of(String line, Translatable desc) {
+			return new MenuLine(line, desc);
+		}
+		
+		public String getLine() {
+			return line;
+		}
+		
+		public Translatable getDesc() {
+			return description;
 		}
 	}
 }
