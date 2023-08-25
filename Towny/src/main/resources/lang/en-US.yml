@@ -1168,7 +1168,6 @@ townblock_plu: 'TownBlocks'
 
 #Added in 0.92
 #Town Ruins
-admin_panel_4: 'Run the new hour code'
 msg_newhour_success: 'newhour command executed successfully'
 town_help_12: 'Reclaim your town from a ruined state.'
 msg_warning_town_ruined_if_deleted: "WARNING!!!: If you delete your town it will enter a ruined state for %d hours. After this time full deletion will occur. In the ruined state, all perms are enabled and the town can be griefed."
