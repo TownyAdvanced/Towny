@@ -623,9 +623,9 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident set")
-				.add("about ...", "'/resident set about' " + Translation.of("res_5"))
-				.add("perm ...", "'/resident set perm' " + Translation.of("res_5"))
-				.add("mode ...", "'/resident set mode' " + Translation.of("res_5"));
+				.add("about ...", Translatable.of("res_set_help_0"))
+				.add("perm ...", Translatable.of("res_set_help_1"))
+				.add("mode ...",  Translatable.of("res_set_help_2"));
 		}
 	},
 
@@ -634,7 +634,7 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident set mode")
 				.add("", "/resident set mode", "clear", Translatable.of("res_toggle_help_10"))
-				.add("", "/resident set mode", "[mode]...[mode]", "")
+				.add("/resident set mode [mode]...[mode]")
 				.add("tc", "", Translatable.of("mode_4"))
 				.add("nc", "", Translatable.of("mode_5"))
 				.add("plotborder", Translatable.of("res_toggle_help_4"))
@@ -650,7 +650,7 @@ public enum HelpMenu {
 				.add("spy", Translatable.of("res_toggle_help_11"))
 				.add("infotool", Translatable.of("res_toggle_help_15"))
 				.add("adminbypass", Translatable.of("res_toggle_help_16"))
-				.add("Eg", "/resident set mode", "map townclaim town nation general", "");
+				.add("Eg: /resident set mode map townclaim town nation general");
 		}
 	},
 
@@ -679,7 +679,7 @@ public enum HelpMenu {
 		@Override
 		protected MenuBuilder load() {
 			String resReq = Translation.of("res_sing");
-			return new MenuBuilder("plot", resReq + "/" + Translation.of("mayor_sing"))
+			return new MenuBuilder("plot")
 				.add(resReq, "/plot claim", "", Translatable.of("msg_block_claim"))
 				.add(resReq, "/plot claim", "[rect/circle] [radius]", Translatable.of("msg_block_claim_radius"))
 				.add(resReq, "/plot perm", "[hud]", Translatable.of("plot_help_0"))
@@ -732,14 +732,14 @@ public enum HelpMenu {
 				.add("outpost", Translatable.of("plot_set_help_1"))
 				.add("reset", Translatable.of("plot_set_help_2"))
 				.add("[name]", Translatable.of("plot_set_help_3"))
-				.add("Level", "[resident/ally/outsider]", "", "")
-				.add("Type", "[build/destroy/switch/itemuse]", "", "")
+				.add("Valid Levels: [resident/ally/outsider]")
+				.add("Valid Types: [build/destroy/switch/itemuse]")
 				.add("perm [on/off]", Translatable.of("plot_set_help_4"))
 				.add("perm [level/type] [on/off]", Translatable.of("plot_set_help_5"))
 				.add("perm [level] [type] [on/off]", Translatable.of("plot_set_help_6"))
 				.add("perm reset", Translatable.of("plot_set_help_7"))
-				.add("Eg", "/plot set perm", "ally off", "")
-				.add("Eg", "/plot set perm", "friend build on", "")
+				.add("Eg: /plot set perm ally off")
+				.add("Eg: /plot set perm friend build on")
 				.add(Translation.of("plot_perms", "'friend'", "'resident'"))
 				.add(Translatable.of("plot_perms_1"));
 		}
@@ -774,10 +774,7 @@ public enum HelpMenu {
 				.add("say", "[message]", Translatable.of("king_help_9"))
 				.add(Translation.of("res_sing"), "deposit [$]", Translatable.of("nation_help_15"))
 				.add(Translation.of("mayor_sing"), "leave", Translatable.of("nation_help_5"))
-				.add(Translation.of("king_sing"), "king ?", Translatable.of("nation_help_7"))
-				.add(Translation.of("admin_sing"), "new " + Translation.of("nation_help_2") + " [capital]", Translatable.of("nation_help_8"))
-				.add(Translation.of("admin_sing"), "delete " + Translation.of("nation_help_2"), "")
-				.add(Translation.of("admin_sing"), "say", "[message]");
+				.add(Translation.of("king_sing"), "king ?", Translatable.of("nation_help_7"));
 		}
 	},
 	
@@ -877,7 +874,7 @@ public enum HelpMenu {
 	INVITE_HELP {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("invite", "")
+			return new MenuBuilder("invite")
 				.add(TownySettings.getAcceptCommand() + " [town]", Translatable.of("invite_help_1"))
 				.add(TownySettings.getDenyCommand() + " [town]", Translatable.of("invite_help_2"))
 				.add(TownySettings.getDenyCommand() + " all", Translatable.of("invite_help_4"))
@@ -1012,9 +1009,10 @@ public enum HelpMenu {
 	public void send(CommandSender sender) {
 		for (MenuLine line : lines) {
 			String message = line.getLine();
-			String separator = Translation.of("help_menu_explanation") + (!message.isEmpty() ? " : " : "");
-			if (line.getDesc() != null)
+			if (line.getDesc() != null) {
+				String separator = Translation.of("help_menu_explanation") + (!message.isEmpty() ? " : " : "");
 				message += separator + line.getDesc().forLocale(sender);
+			}
 			TownyMessaging.sendMessage(sender, message);
 		}
 	}
@@ -1035,12 +1033,6 @@ public enum HelpMenu {
 			this(cmd, true);
 		}
 
-		MenuBuilder(String cmd, String desc) {
-			this(cmd);
-			if (!desc.isEmpty())
-				add("", desc);
-		}
-
 		MenuBuilder(String cmd, Translatable desc) {
 			this(cmd);
 			add("", desc);
@@ -1056,26 +1048,12 @@ public enum HelpMenu {
 			this.command = "";
 		}
 
-		MenuBuilder add(String subCmd, String desc) {
-			return add(this.requirement, subCmd, desc);
-		}
-
 		MenuBuilder add(String subCmd, Translatable desc) {
 			return add(this.requirement, subCmd, desc);
 		}
 
-		MenuBuilder add(String requirement, String subCmd, String desc) {
-			this.lines.add(MenuLine.of(ChatTools.formatCommand(requirement, "/" + command, subCmd, desc), null));
-			return this;
-		}
-
 		MenuBuilder add(String requirement, String subCmd, Translatable desc) {
 			this.lines.add(MenuLine.of(ChatTools.formatCommand(requirement, "/" + command, subCmd, ""), desc));
-			return this;
-		}
-
-		MenuBuilder add(String requirement, String command, String subCmd, String desc) {
-			this.lines.add(MenuLine.of(ChatTools.formatCommand(requirement, command, subCmd, desc), null));
 			return this;
 		}
 
