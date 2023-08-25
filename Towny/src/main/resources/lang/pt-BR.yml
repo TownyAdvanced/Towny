@@ -45,6 +45,19 @@ help_0: 'Ajuda Geral do Towny'
 help_1: 'Experimente os seguintes comandos para aprender mais sobre o Towny.'
 help_2: 'Chat da Cidade'
 help_3: 'Chat da Nação'
+help_4: 'Resident command help.'
+help_5: 'Town command help.'
+help_6: 'Nation command help.'
+help_7: 'Plot command help.'
+help_8: 'Towny command help.'
+help_9: 'Townyadmin command help.'
+towny_help_0: "General help for Towny"
+towny_help_1: "Displays a map of the nearby townblocks"
+towny_help_2: "Display the prices used with Economy"
+towny_help_3: "Display highscores"
+towny_help_4: "Display time until a new day"
+towny_help_5: "Displays stats"
+towny_help_6: "Displays the version of Towny"
 town_help_1: 'Estado da sua cidade'
 town_help_2: '[prefeito]'
 town_help_3: 'Estado da cidade selecionada'
