@@ -87,8 +87,6 @@ town_help_7: 'New town with target mayor.'
 town_help_8: 'List commands for mayors.'
 town_help_9: 'Today''s the day!'
 town_help_10: 'List all online residents in town'
-town_help_11: "List all towns, see /t list ? for help."
-town_help_12: "Leave the town you're a member of."
 town_help_13: "See a list of residents in the town."
 town_help_14: "See a list of ranks in the town."
 town_help_15: "See a list of outlaws in the town."
@@ -102,7 +100,8 @@ town_help_22: "Deposit money into your town's bank."
 town_help_23: "Used to modify your resident's town ranks."
 town_help_24: "Used to delete your town."
 town_help_25: "Used to modify your town's outlaws."
-
+town_help_26: "List all towns, see /t list ? for help."
+town_help_27: "Leave the town you're a member of."
 
 mayor_help_3: 'Claim area not attached to town'
 mayor_help_4: 'Claim around you to a radius of X'

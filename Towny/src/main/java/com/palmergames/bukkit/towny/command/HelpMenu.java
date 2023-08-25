@@ -414,9 +414,10 @@ public enum HelpMenu {
 				.add("[town]", Translatable.of("town_help_3"))
 				.add("new [name]", Translatable.of("town_help_11"))
 				.add("here", Translatable.of("town_help_4"))
-				.add("list", Translatable.of("town_help_11"))
+				.add("list", Translatable.of("town_help_26"))
 				.add("online", Translatable.of("town_help_10"))
-				.add("leave", Translatable.of("town_help_12"))
+				.add("leave", Translatable.of("town_help_27"))
+				.add("reclaim", Translatable.of("town_help_12"))
 				.add("reslist (town)", Translatable.of("town_help_13"))
 				.add("ranklist (town)", Translatable.of("town_help_14"))
 				.add("outlawlist (town)", Translatable.of("town_help_15"))
@@ -440,7 +441,7 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("town", Translatable.of("town_help_1"))
 				.add("[town]", Translatable.of("town_help_3"))
-				.add("list", Translatable.of("town_help_11"));
+				.add("list", Translatable.of("town_help_26"));
 		}
 	},
 	
