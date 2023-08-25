@@ -124,6 +124,18 @@ town_set_help_9: "Set your town's tag."
 town_set_help_10: "Set the title or surname of your resident."
 town_set_help_11: "Set the max amount of money a percentage tax can take from a resident."
 
+town_jail_help_0: "List the town's jails."
+town_jail_help_1: "Jail a resident in the primary jail."
+town_jail_help_2: "Jail a resident in the primary jail, for the specified hours."
+town_jail_help_3: "Jail a resident in the primary jail, for the specified hours, in the specified jail."
+town_jail_help_4: "Jail a resident in the primary jail, for the specified hours, in the specified jail and cell."
+town_jail_help_5: "Jail a resident in the primary jail, for the specified hours, with the given bail amount."
+town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
+town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
+town_jail_help_8: "Unjails the resident."
+
+town_purge_help: "Purges residents that have not logged in for the given amount of days."
+
 mayor_help_3: 'Claim area not attached to town'
 mayor_help_4: 'Claim around you to a radius of X'
 mayor_help_5: 'Claim to the maximum radius'
@@ -140,6 +152,23 @@ nation_help_6: 'Create a new nation'
 nation_help_7: 'List the nation leader commands'
 nation_help_8: 'Create a new nation'
 nation_help_9: 'List all online residents in nation'
+nation_help_11: "Lists the towns in the nation."
+nation_help_12: "Lists the allied nations of the nation."
+nation_help_13: "Lists the enemied nations of the nation."
+nation_help_14: "Used to join open nations."
+nation_help_15: "Deposits money into the nation bank."
+nation_help_16: "Used to delete your nation."
+nation_help_17: "Used to add or remove ranks from residents."
+nation_help_18: "See /n rank ? for help."
+
+nation_list_help_0: "View the specified page."
+nation_list_help_1: "List nations by resident-count, with the specified page."
+nation_list_help_2: "List nations by town-count, with the specified page."
+nation_list_help_3: "List nations which are open, with the specified page."
+nation_list_help_4: "List nations using bank balance, with the specified page."
+nation_list_help_5: "List nations in alphabetical order, with the specified page."
+nation_list_help_6: "List nations by claimed land, with the specified page."
+nation_list_help_7: "List nations by number online, with the specified page."
 
 king_help_1: 'Nation Leader Help'
 king_help_2: 'Set your alliance.'
@@ -153,6 +182,31 @@ res_5: 'for help'
 res_6: 'Online match'
 res_7: 'Exact name'
 res_8: 'Just a humble farmer'
+res_9: "How much tax you will pay per day."
+res_10: "See /res jail ? for help."
+res_11: "See /res toggle ? for help."
+res_12: "See /res set ? for help."
+res_13: "Spawn to your town or bed."
+
+res_toggle_help_0: "Toggle your plots' pvp status."
+res_toggle_help_1: "Toggle your plots' fire status."
+res_toggle_help_2: "Toggle your plots' mobs status."
+res_toggle_help_3: "Toggle your plots' explosion status."
+res_toggle_help_4: "Toggle the ability to see plot borders."
+res_toggle_help_5: "Toggle the ability to see constant plot borders."
+res_toggle_help_6: "Toggle the ability to see town borders."
+res_toggle_help_7: "Toggle the ability to see plot notifications."
+res_toggle_help_8: "Toggle the ability to claim where you walk."
+res_toggle_help_9: "Toggle the ability to see the map when you change plots."
+res_toggle_help_10: "Remove all modes."
+res_toggle_help_11: "Spy on chat channels."
+res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
+res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
+res_toggle_help_14: "Toggle the ability to unclaim where you walk."
+res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
+res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
+
+res_jail_help_0: "Pays the bail cost to get out of jail."
 
 mode_1: 'Show the map between each townblock'
 mode_2: 'Attempt to claim as you walk'
@@ -314,11 +368,50 @@ ta_reload_help_4: "Reloads all components of Towny."
 
 ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
 
+plot_help_0: "Turns on the plot info HUD."
+plot_help_1: "Removes the owner of the plot."
+plot_help_2: "Deletes a list of blocks from the plot."
+plot_help_3: "See /plot set ? for help."
+plot_help_4: "See /plot toggle ? for help."
+plot_help_5: "See /plot group ? for help."
+
+plot_group_help_0: "Ex: /plot group new ExpensivePlots"
+plot_group_help_1: "Removes a plot from the specified group."
+plot_group_help_2: "Deletes a plotgroup completely."
+plot_group_help_3: "Renames the group you are standing in."
+plot_group_help_4: "Ex: /plot group set perm resident on."
+plot_group_help_5: "Ex: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Ex: /plot group forsale 50"
+plot_group_help_7: "Ex: /plot group notforsale"
+plot_group_help_8: "Adds or removes a resident as trusted."
+
+plot_toggle_help_0: "Toggles pvp in the plot."
+plot_toggle_help_1: "Toggles explosions in the plot."
+plot_toggle_help_2: "Toggles fire in the plot."
+plot_toggle_help_3: "Toggles mobs in the plot."
+
+plot_group_toggle_help_0: "Toggles pvp in the plot group."
+plot_group_toggle_help_1: "Toggles explosions in the plot group."
+plot_group_toggle_help_2: "Toggles fire in the plot group."
+plot_group_toggle_help_3: "Toggles mobs in the plot group."
+
+plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
+plot_set_help_1: "Sets a plot to an Outpost."
+plot_set_help_2: "Removes a plot type."
+plot_set_help_3: "Names a plot."
+plot_set_help_4: "Toggle all permissions."
+plot_set_help_5: "Sets the permissions of a level or type to on or off."
+plot_set_help_6: "Sets the permission of a level and type to on or off.
+plot_set_help_7: "Sets the permissions to the resident or town that owns the plots.
+
 
 msg_block_claim: 'Claim this town block'
+msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
 msg_plot_nfs: 'Take down a plot for sale'
+msg_plot_nfs_radius: 'Take down a radius of plots for sale'
 msg_nfs_abr: '&e''fs'' and ''nfs'' are accepted abbreviations for ''forsale'' and ''notforsale''.'
 msg_plot_fs: 'Put this area up for auction.'
+msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 
 ############################################################
 # +------------------------------------------------------+ #

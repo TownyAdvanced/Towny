@@ -75,6 +75,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"ignoreplots",
 		"bordertitles",
 		"townclaim",
+		"townunclaim",
 		"plotgroup",
 		"map",
 		"spy",
