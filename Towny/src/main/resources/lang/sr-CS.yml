@@ -45,6 +45,19 @@ help_0: 'Opšta Towny Pomoć'
 help_1: 'Probajte sa sledećim komandama kako biste naučili više o towny-u.'
 help_2: 'Gradsko Ćaskanje'
 help_3: 'Nacionalno Ćaskanje'
+help_4: 'Resident command help.'
+help_5: 'Town command help.'
+help_6: 'Nation command help.'
+help_7: 'Plot command help.'
+help_8: 'Towny command help.'
+help_9: 'Townyadmin command help.'
+towny_help_0: "General help for Towny"
+towny_help_1: "Displays a map of the nearby townblocks"
+towny_help_2: "Display the prices used with Economy"
+towny_help_3: "Display highscores"
+towny_help_4: "Display time until a new day"
+towny_help_5: "Displays stats"
+towny_help_6: "Displays the version of Towny"
 town_help_1: 'Status Vašeg grada'
 town_help_2: '[gradonačelnik]'
 town_help_3: 'Status odabranog grada'
