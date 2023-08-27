@@ -57,10 +57,10 @@ towny_help_2: "Pokazuje koszty w Ekonomii"
 towny_help_3: "Wyświetla listę z rekordami"
 towny_help_4: "Wyświetla czas do nowego dnia"
 towny_help_5: "Wyświetla statystyki"
-towny_help_6: "Wyświetl wersję Towny"
-towny_top_help_0: "Lista topowych mieszkańców sortowana według wybranego czynnika."
-towny_top_help_1: "Lista topowych właścicieli ziem sortowana według wybranego czynnika."
-towny_top_help_2: "List wealthiest based on subcommand."
+towny_help_6: "Wyświetla wersję Towny"
+towny_top_help_0: "Lista najliczebniejszych w podanym zakresie."
+towny_top_help_1: "Lista geograficznie największych w podanym zakresie."
+towny_top_help_2: "Lista najbogatszych w podanym zakresie."
 town_help_1: 'Status twojego miasta'
 town_help_2: '[burmistrz]'
 town_help_3: 'Status wskazanego miasta'
@@ -71,7 +71,7 @@ town_help_7: 'Nowe miasto z wybranym Burmistrzem.'
 town_help_8: 'Lista poleceń dla Burmistrzów.'
 town_help_9: 'Nadszedł ten dzień!'
 town_help_10: 'Lista aktywnych mieszkańców w mieście'
-town_help_13: "Zobacz listę wszystkich mieszkańców twojego miasta."
+town_help_13: "Zobacz listę wszystkich mieszkańców miasta."
 town_help_14: "Zobacz listę rang w mieście."
 town_help_15: "Zobacz listę wygnańców miasta."
 town_help_16: "Zobacz listę grup działek w mieście."
@@ -80,8 +80,8 @@ town_help_18: "Przekazuje wiadomość mieszkańcom miasta."
 town_help_19: "Wystaw swoje miasto na sprzedaż, umożliwiając innym graczom jego zakup."
 town_help_20: "Ustaw swoje miasto jako nie na sprzedaż."
 town_help_21: "Kupuje podane miasto, o ile jest na sprzedaż."
-town_help_22: "Deposit money into your town's bank."
-town_help_23: "Used to modify your resident's town ranks."
+town_help_22: "Przelewa pieniądze do banku Twojego miasta."
+town_help_23: "Służy do edytowania rang miasta twoich mieszkańców."
 town_help_24: "Usuwa twoje miasto."
 town_help_25: "Służy do edytowania listy wygnańców twojego miasta."
 town_help_26: "Lista wszystkich miast, zobacz \"/t list ?\", aby dowiedzieć się więcej."
@@ -116,11 +116,11 @@ town_set_help_11: "Ustawia maksymalną ilość pieniędzy, jaką podatek procent
 town_jail_help_0: "Lista więzień w mieście."
 town_jail_help_1: "Zamyka gracza w głównym więzieniu."
 town_jail_help_2: "Zamyka gracza w głównym więzieniu, na podaną ilość godzin."
-town_jail_help_3: "Jail a resident in the primary jail, for the specified hours, in the specified jail."
-town_jail_help_4: "Jail a resident in the primary jail, for the specified hours, in the specified jail and cell."
+town_jail_help_3: "Zamyka gracza w głównym więzieniu, na podaną ilość godzin. Możliwe jest wybranie więzienia, do którego gracz ma trafić."
+town_jail_help_4: "Zamyka gracza w głównym więzieniu, w podanej celi, na podaną ilość godzin. Możliwe jest wybranie więzienia, do którego gracz ma trafić."
 town_jail_help_5: "Zamyka gracza w głównym więzieniu, na podaną ilość godzin, z kaucją w wysokości przez ciebie podaną."
-town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
-town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
+town_jail_help_6: "Zamyka gracza w głównym więzieniu, na podaną ilość godzin, z kaucją w wysokości przez ciebie podaną. Możliwe jest wybranie więzienia, do którego gracz ma trafić."
+town_jail_help_7: "Zamyka gracza w głównym więzieniu, w podanej celi, na podaną ilość godzin, z kaucją w wysokości przez ciebie podaną. Możliwe jest wybranie więzienia, do którego gracz ma trafić."
 town_jail_help_8: "Wypuszcza gracza z więzienia."
 town_purge_help: "Usuwa z miasta mieszkańców nie aktywnych od podanej liczby dni."
 town_trust_help_0: "Dodaje mieszkańca do grona zaufanych w mieście."
@@ -174,12 +174,12 @@ nation_set_help_10: "Ustawia kolor nacji na mapie używany przez pluginy do map.
 nation_toggle_help_0: "Przełącza stan pokojowy nacji."
 nation_toggle_help_1: "Przełącza status publiczny, pozwalając graczom spoza nacji użyć /n spawn."
 nation_toggle_help_2: "Przełącza status otwarty, pozwalając miastom dołączyć bez zaproszenia."
-nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
+nation_toggle_help_3: "Przełącza obowiązywanie podatku procentowego. Miasta będą płaciły procent od posiadanych pieniędzy, zamiast stałej stawki."
 king_help_1: 'Pomoc Lidera Nacji'
 king_help_2: 'Wyznacz swoich sojuszników.'
 king_help_3: 'Wyznacz swoich wrogów.'
-king_help_4: "Withdraw money from your nation bank."
-king_help_5: "Add or remove towns from your nation."
+king_help_4: "Wypłaca pieniądze z banku twojej nacji."
+king_help_5: "Dodaje lub usuwa miasta z twojej nacji."
 king_help_6: "Użyj \"/n set ?\", by uzyskać pomoc."
 king_help_7: "Użyj \"/n toggle ?\", by uzyskać pomoc."
 king_help_8: "Łączy jedną nację z drugą."
@@ -202,10 +202,10 @@ res_toggle_help_1: "Przełącza Podpalanie na twoich działkach."
 res_toggle_help_2: "Przełącza moby na twoich działkach."
 res_toggle_help_3: "Przełącza eksplozje na twoich działkach."
 res_toggle_help_4: "Przełącza zdolność widzenia granic działek."
-res_toggle_help_5: "Toggle the ability to see constant plot borders."
+res_toggle_help_5: "Przełącza zdolność ciągłego widzenia granic działek."
 res_toggle_help_6: "Przełącza zdolność widzenia granic miasta."
-res_toggle_help_7: "Toggle the ability to see plot notifications."
-res_toggle_help_8: "Toggle the ability to claim where you walk."
+res_toggle_help_7: "Przełącza zdolność widzenia powiadomień o działce, na którą wkraczasz."
+res_toggle_help_8: "Przełącza zdolność pozyskiwania terenów, po których chodzisz."
 res_toggle_help_9: "Przełącza zdolność widzenia mapy podczas wchodzenia na działki."
 res_toggle_help_10: "Wyłącza wszystkie tryby."
 res_toggle_help_11: "Szpiegowanie na kanałach czatu."
@@ -216,7 +216,7 @@ res_toggle_help_15: "Przełącza zdolność używania infotool'a, pomagającego 
 res_toggle_help_16: "Przełącza zdolność deaktywowania przywilejów administratora."
 res_jail_help_0: "Wpłata kaucji umożliwiającej na wyjście z więzienia."
 res_set_help_0: "Ustawia twoje Bio mieszkańca"
-res_set_help_1: "Set your resident's default plot permissions."
+res_set_help_1: "Przywraca domyślne uprawnienia mieszkańca na działce."
 res_set_help_2: "Ustawia twoje tryby mieszkańca."
 mode_1: 'Pokaż mapę co każdy Blok Miasta'
 mode_2: 'Pozyskiwanie terenu na którym chodzisz'
@@ -244,19 +244,19 @@ world_help_4: 'Lista wszystkich światów'
 world_help_5: 'Regeneruj ten chunk'
 world_help_6: 'Użyj "/tw toggle ?", by uzyskać pomoc'
 world_help_7: 'Użyj "/tw set ?", by uzyskać pomoc'
-world_set_help_0: "Ustawia nazwę dziczy dla tego miasta."
-world_toggle_help_0: "Przełączenie zdolnośći miast do pozyskiwania ziemi w tym świecie."
+world_set_help_0: "Ustawia nazwę Dziczy dla świata."
+world_toggle_help_0: "Przełączenie zdolnośći miast do pozyskiwania ziemi na tym świecie."
 world_toggle_help_1: "Przełącza używanie Towny na tym świecie."
-world_toggle_help_2: "Przełączenie możliwości odbywanie się wojen w tym świecie."
-world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
+world_toggle_help_2: "Przełączenie możliwości odbywanie się wojny na tym świecie."
+world_toggle_help_3: "Włącza/Wyłącza PVP lub jego narzucenie na tym świecie."
 world_toggle_help_4: "Przełączenie Friendly Fire, jeśli Friendly Fire jest włączone na tym świecie."
-world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
+world_toggle_help_5: "Włącza/Wyłącza eksplozje lub ich narzucenie na tym świecie."
 world_toggle_help_6: "Przełączenie możliwości Podpalania na tym świecie lub jej narzucenie."
-world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
-world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
-world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
-world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
-world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_7: "Włącza/Wyłącza różne ustawienia odpowiedzialne za spawn mobów na tym świecie."
+world_toggle_help_8: "Włącza/Wyłącza przywracanie do stanu naturalnego po porzuceniu na tym świecie."
+world_toggle_help_9: "Włącza/Wyłącza naprawianie zniszczeń po eksplozji na tym świecie."
+world_toggle_help_10: "Włącza/Wyłącza usuwanie bloków po wyczyszczeniu działki na tym świecie."
+world_toggle_help_11: "Włącza/Wyłącza usuwanie bloków po porzuceniu działki na tym świecie."
 townyadmin_help_1: 'Porzuca ten Blok Miasta'
 townyadmin_help_2: 'Próba porzucenia ziemii w twoim otoczeniu.'
 admin_panel_1: "Użyj \"/ta set ?\", by uzyskać pomoc"
@@ -266,8 +266,8 @@ admin_panel_4: "Porzuca tereny wokół ciebie"
 admin_panel_5: "Użyj \"/ta plot ?\", by uzyskać pomoc"
 admin_panel_6: "Przyznaje graczowi lub miastu dodatnią lub ujemną liczbę Bloków Miasta"
 admin_panel_7: "Użyj \"/ta toggle ?\", by uzyskać pomoc"
-admin_panel_8: "Commands for controlling these objects"
-admin_panel_9: "Teleport to the specified plot"
+admin_panel_8: "Polecenia umożliwiające kontrolę tych podmiotów"
+admin_panel_9: "Teleportacja na podaną działkę"
 admin_panel_10: "Sprawdza, czy gracza posiada node'a permisji"
 admin_panel_11: "Resetuje config"
 admin_panel_12: "Tworzy kopię zapasowych danych Towny"
@@ -288,7 +288,7 @@ townyadmin_town_help_9: "Używa polecenia toggle w imieniu podanego miasta."
 townyadmin_town_help_10: "Zmienia metadane miasta."
 townyadmin_town_help_11: "Scala drugie miasto w pierwsze."
 townyadmin_town_help_12: "Scala drugie miasto w pierwsze, ignorując jakiekolwiek reguły."
-townyadmin_town_help_13: "Put money into the town bank."
+townyadmin_town_help_13: "Dodaje pieniądze do banku miasta."
 townyadmin_town_help_14: "Wypłaca pieniądze z banku miasta."
 townyadmin_town_help_15: "Otwiera książkę z historią banku miasta."
 townyadmin_town_help_16: "Modyfikuje listę wygnańców miasta."
@@ -300,7 +300,7 @@ townyadmin_town_toggle_help_2: "Przełącza status publiczny miasta, pozwalając
 townyadmin_town_toggle_help_3: "Przełącza eksplozje w mieście."
 townyadmin_town_toggle_help_4: "Przełącza ustawienie Podpalanie w mieście."
 townyadmin_town_toggle_help_5: "Przełącza moby w mieście."
-townyadmin_town_toggle_help_6: "Przełącza podatek procentowy w mieście."
+townyadmin_town_toggle_help_6: "Przełącza obowiązywanie podatku procentowego w mieście."
 townyadmin_town_toggle_help_7: "Przełącza status otwartego miasta, pozwalając graczom spoza miasta na dołączanie bez zaproszenia."
 townyadmin_nation_help_0: "Tworzy nację o podanej nazwie i z podaną stolicą."
 townyadmin_nation_help_1: "Pokazuje status nacji."
@@ -335,11 +335,11 @@ ta_toggle_help_0: "Włącza/Wyłącza zdolność naruszania Dziczy we wszystkich
 ta_toggle_help_1: "Włącza/Wyłącza regenerację terenu we wszystkich światach."
 ta_toggle_help_2: "Włącza/Wyłącza devmode, pokazuje dodatkowe informacje graczowi podanemu w config'u."
 ta_toggle_help_3: "Włącza/Wyłącza devmode, pokazuje dodatkowe informacje w logach."
-ta_toggle_help_4: "Turn on/off the ability for towns or nations to remove money from their banks."
-ta_toggle_help_5: "Make a player an NPC or not."
-ta_set_help_0: "Set a towns mayor to the given player."
-ta_set_help_1: "Set a town with a new NPC mayor, they pay no upkeep."
-ta_set_help_2: "Set the capital of a nation."
+ta_toggle_help_4: "Włącza/Wyłącza zdolność miast i nacji do wypłacania pieniędzy ze swoich banków."
+ta_toggle_help_5: "Ustawia gracza jako NPC lub czyści oznaczenie NPC graczowi."
+ta_set_help_0: "Ustanawia podanego gracza Burmistrzem podanego miasta."
+ta_set_help_1: "Tworzy miasto z nowym NPC'em jako Burmistrzem. Takie miasto nie płaci czynszu."
+ta_set_help_2: "Ustawia stolicę nacji."
 ta_set_help_3: "Ustawia rozmiar Strefy Nacji."
 ta_set_help_4: "Ustawia tytuł mieszkańca."
 ta_set_help_5: "Ustawia nazwisko mieszkańca."
@@ -516,7 +516,7 @@ msg_changed_expl: '&cEksplozje w %s są teraz %s.'
 msg_changed_fire: '&cPodpalanie w %s jest teraz %s.'
 msg_changed_mobs: '&cSpawnowanie się potworów w %s jest teraz %s.'
 msg_the_plot_group: 'Grupa Działek'
-msg_changed_taxpercent: '&cPodatki procentowe są teraz %s.'
+msg_changed_taxpercent: '&cObowiązywanie podatków procentowych jest teraz %s.'
 msg_changed_open: '&cDołączanie bez zaproszeń jest teraz %s.'
 msg_toggle_open_on_warning: 'Ostrzeżenie: Rekomendowane jest, by uprawnienia w mieście były wyłączone, jeśli miasto jest otwarte. Użyj polecenia "/town set perm off", następnie "/town set perm reset".'
 msg_changed_world_setting: '&c%s dla %s jest: %s'
@@ -640,7 +640,7 @@ msg_err_command_disable: '&cNie masz wymaganych uprawnień, aby użyć tego pole
 msg_err_universe_limit: '&cŚwiat nie może mieć więcej miast.'
 msg_err_too_many_npc: '&cZbyt wiele zarejestrowanych NPC.'
 msg_err_negative_money: '&cNie możesz mieć ujemnego stanu konta.'
-msg_err_not_percentage: '&cWartość procentowa musi być mniejsza od 100.'
+msg_err_not_percentage: '&cProcent musi być mniej niż 100.'
 msg_err_no_economy: '&cEkonomia nie została włączona.'
 msg_err_not_block_type: '&cNiewłaściwy rodzaj działki!'
 msg_not_allowed_join: '&c%s nie jest uprawniony do dołączenia się do miasta.'
@@ -912,7 +912,7 @@ status_world_forceexplosion: 'Narzucone Eksplozje:'
 status_world_worldmobs: 'Potwory Na Świecie:'
 status_world_forcetownmobs: 'Narzucone Potwory w Miastach:'
 status_world_unclaimrevert: 'Cofanie Po Porzuceniu:'
-status_world_explrevert: 'Naprawianie po Eksplozji:'
+status_world_explrevert: 'Naprawianie Zniszczeń Po Eksplozji:'
 status_world_ignoredblocks: 'Ignorowane Bloki:'
 status_res_taxexempt: 'Rządzący są zwolnieni z płacenia podatków na miasto.'
 status_res_tax: 'Podatek Miejski:'
@@ -1234,7 +1234,7 @@ msg_unable_to_deposit_x: 'Nie możesz umieścić %s w banku miasta.'
 msg_unable_to_withdraw_x: 'Nie możesz wypłacić %s z banku miasta.'
 status_debtcap: 'Limit Zadłużenia:'
 status_world_explrevert_entity: 'Cofanie Wybuchów Mobów:'
-status_world_explrevert_block: 'Naprawianie Eksplozji Bloków:'
+status_world_explrevert_block: 'Naprawianie Zniszczeń po Eksplozji Bloków:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cNacja już jest pokojowa.'
 msg_nation_already_not_peaceful: '&cNacja już jest niepokojowa.'
