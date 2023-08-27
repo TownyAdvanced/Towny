@@ -90,6 +90,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (TownySettings.isNewDayDeleting0PlotTowns()) {
 			List<String> deletedTowns = new ArrayList<>();
 			for (Town town : universe.getTowns()) {
+				if (!universe.hasTown(town.getName()))
+					continue;
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
 					removedTowns.add(town.getName());
@@ -104,6 +106,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Reduce the number of days conquered towns are conquered for.
 		 */
 		for (Town town : universe.getTowns()) {
+			if (!universe.hasTown(town.getName()))
+				continue;
 			if (town.isConquered()) {
 				if (town.getConqueredDays() == 1)
 					plugin.getScheduler().run(() -> unconquer(town));
