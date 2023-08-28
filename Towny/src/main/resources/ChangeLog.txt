@@ -9051,3 +9051,6 @@ v0.92.0.11:
   - New Config Node: resident_settings.default_about
     - Default: /res set about [msg]
     - The default resident about text, shown in the resident's status screen.
+  - Fix removing Town from residents not being able to delete 1 man towns.
+  - Add protection for milkable animals, using a destroy test.
+  - Automatic Config Edit: Farm Plots allowedBlock lists will have COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG added to them.  
