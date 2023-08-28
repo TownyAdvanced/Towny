@@ -1883,7 +1883,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// surname
 		list.add("surname=" + resident.getSurname());
 		// about
-		list.add("about=" + resident.getAbout());
+		if (!TownySettings.getDefaultResidentAbout().equals(resident.getAbout()))
+			list.add("about=" + resident.getAbout());
 
 		if (resident.hasTown()) {
 			try {

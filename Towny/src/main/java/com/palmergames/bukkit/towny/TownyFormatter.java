@@ -142,7 +142,7 @@ public class TownyFormatter {
 		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
 
 		// About: Just a humble farmer
-		if (resident.getAbout() != null && !resident.getAbout().isEmpty())
+		if (!resident.getAbout().isEmpty())
 			screen.addComponentOf("about", colourKeyValue(translator.of("status_about"), resident.getAbout()));
 		
 		// First used if last online is this year, 2nd used if last online is early than this year.
