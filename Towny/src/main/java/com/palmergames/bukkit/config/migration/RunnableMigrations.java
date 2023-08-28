@@ -23,6 +23,7 @@ public class RunnableMigrations {
 		BY_NAME.put("migrate_notifications", MIGRATE_NOTIFICATIONS);
 		BY_NAME.put("add_townblocktype_limits", ADD_TOWNBLOCKTYPE_LIMITS);
 		BY_NAME.put("convert_entity_class_names", CONVERT_ENTITY_CLASS_NAMES);
+		BY_NAME.put("add_milkable_animals_to_farm_plot", ADD_MILKABLE_ANIMALS);
 	}
 	
 	@Nullable
@@ -71,5 +72,15 @@ public class RunnableMigrations {
 		}
 		
 		config.set("new_world_settings.plot_management.wild_revert_on_mob_explosion.entities", String.join(",", entities));
+	};
+	
+	@SuppressWarnings("unchecked")
+	private final Consumer<CommentedConfiguration> ADD_MILKABLE_ANIMALS = config -> {
+		for (Map<?, ?> plotType : config.getMapList("townblocktypes.types")) {
+			if (plotType.get("name").equals("farm")) {
+				String allowedBlocks = (String) plotType.get("allowedBlocks");
+				((Map<String, Object>) plotType).replace("allowedBlocks", "COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG," + allowedBlocks);
+			}
+		}
 	};
 }
