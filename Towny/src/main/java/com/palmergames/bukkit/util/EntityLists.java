@@ -23,6 +23,8 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists MOUNTABLE = newBuilder().add("horse", "strider", "pig", "donkey", "mule", "trader_llama", "camel").build();
 	
+	public static final EntityLists MILKABLE = newBuilder().add("cow", "mooshroom", "goat").build();
+	
 	public static final EntityLists DYEABLE = newBuilder().add("sheep", "wolf", "cat").build();
 	
 	public static final EntityLists SWITCH_PROTECTED = newBuilder().add("chest_minecart", "furnace_minecart", "hopper_minecart", "chest_boat").build();

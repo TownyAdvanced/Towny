@@ -662,6 +662,8 @@ public class TownyPlayerListener implements Listener {
 				actionType = ActionType.SWITCH;
 			} else if (EntityLists.DYEABLE.contains(entityType) && ItemLists.DYES.contains(item))
 				mat = item;
+			else if (item != null && item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType))
+				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 			else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType))
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 
