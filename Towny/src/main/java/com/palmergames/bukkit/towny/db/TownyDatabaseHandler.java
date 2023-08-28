@@ -256,7 +256,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Remove resident from towns' outlaw & trusted lists.
 		for (Town town : universe.getTowns()) {
-			if (!universe.isRegistered(town))
+			if (!town.exists())
 				continue;
 
 			boolean save = false;
@@ -528,7 +528,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		for (Town town : toSave) {
-			if (!universe.isRegistered(town))
+			if (!town.exists())
 				continue;
 
 			for (Resident res : town.getResidents()) {

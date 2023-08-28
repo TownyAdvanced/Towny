@@ -1029,4 +1029,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public void setPlotGroupName(String plotGroupName) {
 		this.plotGroupName = plotGroupName;
 	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasResident(getName());
+	}
 }

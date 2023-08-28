@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.object;
 
 import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -253,5 +255,12 @@ public abstract class TownyObject implements Nameable, Savable {
 
 		return false;
 	}
-	
+
+	/**
+	 * An internal method used to determine if an object exists in the TownyUniverse's maps.
+	 *  
+	 * @return true if this TownyObject exists.
+	 */
+	@ApiStatus.Internal
+	public abstract boolean exists();
 }

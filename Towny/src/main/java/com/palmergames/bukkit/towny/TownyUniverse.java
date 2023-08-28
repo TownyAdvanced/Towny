@@ -466,14 +466,7 @@ public class TownyUniverse {
     }
 
 	// =========== Town Methods ===========
-
-
-	@ApiStatus.Internal
-	public boolean isRegistered(Town town) {
-		Preconditions.checkNotNull(town, "Town cannot be null!");
-		return townNameMap.containsKey(town.getName());
-	}
-
+	
 	public boolean hasTown(@NotNull String townName) {
 		Preconditions.checkNotNull(townName, "Town Name cannot be null!");
 		
@@ -800,7 +793,16 @@ public class TownyUniverse {
 	public List<TownyWorld> getTownyWorlds() {
 		return new ArrayList<>(worlds.values());
 	}
-    
+
+	public boolean hasTownyWorld(String worldName) {
+		Preconditions.checkNotNull(worldName, "World Name cannot be null!");
+
+		// Fast-fail if empty
+		if (worldName.isEmpty())
+			return false;
+
+		return worlds.containsKey(worldName);
+	}
     /*
      * Towny Tree command output.
      */
