@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -63,7 +64,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private boolean isNPC = false;
 	private String title = "";
 	private String surname = "";
-	private String about = "/resident set about [msg]";
+	private String about = TownySettings.getDefaultResidentAbout();
 	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
@@ -212,10 +213,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return !surname.isEmpty();
 	}
 	
-	public void setAbout(String about) {
+	public void setAbout(@NotNull String about) {
+		Preconditions.checkNotNull(about, "about");
 		this.about = about;
 	}
 	
+	@NotNull
 	public String getAbout() {
 		return about;
 	}

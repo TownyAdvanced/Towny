@@ -524,7 +524,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /res set about " + Translatable.of("res_8").forLocale(player));
 
 		if ("reset".equalsIgnoreCase(about)) {
-			about = "/resident set about [msg]";
+			about = TownySettings.getDefaultResidentAbout();
 
 			TownyMessaging.sendMsg(player, Translatable.of("msg_resident_about_reset"));
 		} else if ("none".equalsIgnoreCase(about) || "clear".equalsIgnoreCase(about)) {

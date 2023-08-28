@@ -3618,5 +3618,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PLUGIN_COREPROTECT_SUPPORT);
 	}
 
+	public static String getDefaultResidentAbout() {
+		return getString(ConfigNodes.RES_SETTING_DEFAULT_ABOUT);
+	}
 }
 
