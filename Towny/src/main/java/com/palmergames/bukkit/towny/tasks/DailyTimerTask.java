@@ -90,7 +90,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (TownySettings.isNewDayDeleting0PlotTowns()) {
 			List<String> deletedTowns = new ArrayList<>();
 			for (Town town : universe.getTowns()) {
-				if (!universe.hasTown(town.getName()))
+				if (!universe.isRegistered(town))
 					continue;
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
@@ -106,7 +106,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Reduce the number of days conquered towns are conquered for.
 		 */
 		for (Town town : universe.getTowns()) {
-			if (!universe.hasTown(town.getName()))
+			if (!universe.isRegistered(town))
 				continue;
 			if (town.isConquered()) {
 				if (town.getConqueredDays() == 1)
@@ -199,7 +199,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect nation tax from this town if it really still exists. We are
 			 * running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()))
+			if (!universe.isRegistered(town))
 				continue;
 
 			if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
@@ -368,7 +368,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()))
+			if (!universe.isRegistered(town))
 				continue;
 
 			if (town.isRuined())
@@ -602,7 +602,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only charge/pay upkeep for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()) || !town.hasUpkeep() || town.isRuined())
+			if (!universe.isRegistered(town) || !town.hasUpkeep() || town.isRuined())
 				continue;
 
 			processTownUpkeep(town);

@@ -319,9 +319,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		try {
 			town.removeResident(this);
-		} catch (NotRegisteredException ignored) {} catch (EmptyTownException e) {
+		} catch (EmptyTownException e) {
 			TownyUniverse.getInstance().getDataSource().removeTown(town, false);
-		}
+		} catch (NotRegisteredException ignored) {}
+
 		try {
 			setTown(null);
 			

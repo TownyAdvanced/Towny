@@ -466,7 +466,14 @@ public class TownyUniverse {
     }
 
 	// =========== Town Methods ===========
-	
+
+
+	@ApiStatus.Internal
+	public boolean isRegistered(Town town) {
+		Preconditions.checkNotNull(town, "Town cannot be null!");
+		return townNameMap.containsKey(town.getName());
+	}
+
 	public boolean hasTown(@NotNull String townName) {
 		Preconditions.checkNotNull(townName, "Town Name cannot be null!");
 		
