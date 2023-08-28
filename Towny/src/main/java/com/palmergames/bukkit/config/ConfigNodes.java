@@ -2196,7 +2196,7 @@ public enum ConfigNodes {
 			"resident_settings.default_about",
 			"/res set about [msg]",
 			"",
-			"# Default resident about"),
+			"# The default resident about text, shown in the resident's status screen."),
 	ECO(
 			"economy",
 			"",
