@@ -9046,3 +9046,8 @@ v0.92.0.11:
   - Refactor Resident Command, add HelpMenus for everything that was not yet using them.
   - Only warn the log when the world isn't loaded 20 ticks after Towny first tries to load it.
   - Add translatable descriptions to all of the HelpMenus.
+0.99.5.16:
+  - Make the default resident about configurable, courtesy of Warrior with PR #6954.
+  - New Config Node: resident_settings.default_about
+    - Default: /res set about [msg]
+    - The default resident about text, shown in the resident's status screen.
