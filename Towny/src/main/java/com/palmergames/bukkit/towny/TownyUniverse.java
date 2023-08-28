@@ -793,7 +793,16 @@ public class TownyUniverse {
 	public List<TownyWorld> getTownyWorlds() {
 		return new ArrayList<>(worlds.values());
 	}
-    
+
+	public boolean hasTownyWorld(String worldName) {
+		Preconditions.checkNotNull(worldName, "World Name cannot be null!");
+
+		// Fast-fail if empty
+		if (worldName.isEmpty())
+			return false;
+
+		return worlds.containsKey(worldName);
+	}
     /*
      * Towny Tree command output.
      */

@@ -1879,4 +1879,10 @@ public class Town extends Government implements TownBlockOwner {
 	public @NotNull Iterable<? extends Audience> audiences() {
 		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());
 	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasTown(getName());
+	}
 }

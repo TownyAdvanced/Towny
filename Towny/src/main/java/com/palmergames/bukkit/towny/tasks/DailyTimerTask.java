@@ -90,6 +90,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (TownySettings.isNewDayDeleting0PlotTowns()) {
 			List<String> deletedTowns = new ArrayList<>();
 			for (Town town : universe.getTowns()) {
+				if (!town.exists())
+					continue;
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
 					removedTowns.add(town.getName());
@@ -104,6 +106,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Reduce the number of days conquered towns are conquered for.
 		 */
 		for (Town town : universe.getTowns()) {
+			if (!town.exists())
+				continue;
 			if (town.isConquered()) {
 				if (town.getConqueredDays() == 1)
 					plugin.getScheduler().run(() -> unconquer(town));
@@ -162,7 +166,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect tax for this nation if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (universe.hasNation(nation.getName()))
+			if (nation.exists())
 				collectNationTaxes(nation);
 		}
 	}
@@ -195,7 +199,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect nation tax from this town if it really still exists. We are
 			 * running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()))
+			if (!town.exists())
 				continue;
 
 			if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
@@ -364,7 +368,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()))
+			if (!town.exists())
 				continue;
 
 			if (town.isRuined())
@@ -424,7 +428,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * still exists. We are running in an Async thread so MUST
 			 * verify all objects.
 			 */
-			if (!universe.hasResident(resident.getName()))
+			if (!resident.exists())
 				continue;
 
 			if (TownyPerms.getResidentPerms(resident).get("towny.tax_exempt") == Boolean.TRUE || resident.isNPC() || resident.isMayor()) {
@@ -519,7 +523,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect plot tax from this resident if it really still exist and are not
 			 * an NPC. We are running in an Async thread so MUST verify all objects.
 			 */
-			if (resident == null || !universe.hasResident(resident.getName()) || resident.isNPC())
+			if (resident == null || !resident.exists() || resident.isNPC())
 				continue;
 
 			// Prevents Mayors/Assistants/VIPs paying taxes in their own town.
@@ -598,7 +602,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only charge/pay upkeep for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()) || !town.hasUpkeep() || town.isRuined())
+			if (!town.exists() || !town.hasUpkeep() || town.isRuined())
 				continue;
 
 			processTownUpkeep(town);
@@ -749,7 +753,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * and its capital town also pays upkeep costs.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasNation(nation.getUUID()) || !nation.getCapital().hasUpkeep())
+			if (!nation.exists() || !nation.getCapital().hasUpkeep())
 				continue;
 
 			processNationUpkeep(nation);

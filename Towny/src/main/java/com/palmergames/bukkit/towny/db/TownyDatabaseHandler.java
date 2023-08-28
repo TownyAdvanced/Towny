@@ -256,6 +256,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Remove resident from towns' outlaw & trusted lists.
 		for (Town town : universe.getTowns()) {
+			if (!town.exists())
+				continue;
+
 			boolean save = false;
 			
 			if (town.hasOutlaw(resident)) {
@@ -311,18 +314,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (Resident toCheck : toSave)
 			saveResident(toCheck);
 		
-		if (resident.hasTown()) {
-			Town town = resident.getTownOrNull();
-
-			if (town != null) {
-				// Delete the town if there are no more residents
-				if (town.getNumResidents() <= 1) {
-					universe.getDataSource().removeTown(town);
-				}
-
-				resident.removeTown();
-			}
-		}
+		if (resident.hasTown() && resident.getTownOrNull() != null)
+			resident.removeTown();
 
 		if (resident.hasUUID() && !resident.isNPC())
 			saveHibernatedResident(resident.getUUID(), resident.getRegistered());
@@ -535,6 +528,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		for (Town town : toSave) {
+			if (!town.exists())
+				continue;
 
 			for (Resident res : town.getResidents()) {
 				res.updatePermsForNationRemoval();

@@ -302,14 +302,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		Town town = this.town;
 		
 		BukkitTools.fireEvent(new TownPreRemoveResidentEvent(this, town));
-		
-		try {
-			town.removeResident(this);
-		} catch (NotRegisteredException | EmptyTownException ignored) {}
 
-		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
-
-		// Remove any non-embassy plots owned by the player in the town that was just left.
+		// Remove any non-embassy plots owned by the player in the town that the resident will leave.
 		for (TownBlock townBlock : town.getTownBlocks()) {
 			if (townBlock.getType() == TownBlockType.EMBASSY || !townBlock.hasResident(this))
 				continue;
@@ -324,6 +318,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			}
 		}
 		
+		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
+
+		try {
+			town.removeResident(this);
+		} catch (EmptyTownException e) {
+			TownyUniverse.getInstance().getDataSource().removeTown(town, false);
+		} catch (NotRegisteredException ignored) {}
+
 		try {
 			setTown(null);
 			
@@ -1029,5 +1031,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public void setPlotGroupName(String plotGroupName) {
 		this.plotGroupName = plotGroupName;
+	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasResident(getName());
 	}
 }

@@ -19,6 +19,7 @@ import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -648,5 +649,11 @@ public class Nation extends Government {
 
 	public void setConqueredTax(double conqueredTax) {
 		this.conqueredTax = Math.min(conqueredTax, TownySettings.getMaxNationConqueredTaxAmount());
+	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasNation(getName());
 	}
 }
