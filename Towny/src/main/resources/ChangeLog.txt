@@ -9054,3 +9054,4 @@ v0.92.0.11:
   - Fix removing Town from residents not being able to delete 1 man towns.
   - Add protection for milkable animals, using a destroy test.
   - Automatic Config Edit: Farm Plots allowedBlock lists will have COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG added to them.  
+  - Fix the NewHourEvent being started with the incorrect delay.

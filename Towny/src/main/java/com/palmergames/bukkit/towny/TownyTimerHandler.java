@@ -76,7 +76,7 @@ public class TownyTimerHandler{
 
 	public static void toggleHourlyTimer(boolean on) {
 		if (on && !isHourlyTimerRunning()) {
-			hourlyTask = plugin.getScheduler().runAsyncRepeating(new HourlyTimerTask(plugin), getTimeUntilNextHourInSeconds(), TimeTools.convertToTicks(TownySettings.getHourInterval()));
+			hourlyTask = plugin.getScheduler().runAsyncRepeating(new HourlyTimerTask(plugin), TimeTools.convertToTicks(getTimeUntilNextHourInSeconds()), TimeTools.convertToTicks(TownySettings.getHourInterval()));
 		} else if (!on && isHourlyTimerRunning()) {
 			hourlyTask.cancel();
 			hourlyTask = null;
