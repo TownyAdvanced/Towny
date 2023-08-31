@@ -9055,3 +9055,9 @@ v0.92.0.11:
   - Add protection for milkable animals, using a destroy test.
   - Automatic Config Edit: Farm Plots allowedBlock lists will have COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG added to them.  
   - Fix the NewHourEvent being started with the incorrect delay.
+0.99.5.17:
+  - Add permission node that bypasses deny_bed_use config setting.
+    - Closes #6956.
+  - New Permission Node: towny.bypass_bed_restriction
+    - description: Makes the player not subject to bed-use restrictions.
+    - default: false

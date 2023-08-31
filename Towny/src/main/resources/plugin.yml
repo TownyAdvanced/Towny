@@ -166,6 +166,14 @@ permissions:
             towny.claimed.alltown.item_use.*: true
             towny.claimed.alltown.destroy.*: true
 
+    towny.bypass_death_costs:
+        description: Makes the player not subject to death costs charged by Towny.
+        default: false
+
+    towny.bypass_bed_restriction:
+        description: Makes the player not subject to bed-use restrictions.
+        default: false
+
     #
     # New command permissions (replaces many of the older permissions)
     #

@@ -544,6 +544,7 @@ public class TownyPlayerListener implements Listener {
 			 * except in allowed plots (personally-owned and Inns)
 			 */
 			if (TownySettings.getBedUse() 
+				&& !TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_BYPASS_BED_RESTRICTION.getNode())
 				&& (Tag.BEDS.isTagged(block.getType()) || disallowedAnchorClick(event, block))) {
 
 				boolean isOwner = false;

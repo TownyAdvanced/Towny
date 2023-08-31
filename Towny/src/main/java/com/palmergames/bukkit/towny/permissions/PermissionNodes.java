@@ -16,6 +16,7 @@ public enum PermissionNodes {
 	TOWNY_ADMIN_UPDATEALERTS("towny.admin.updatealerts"),
 	TOWNY_CHAT_SPY("towny.chat.spy"),
 	TOWNY_BYPASS_DEATH_COSTS("towny.bypass_death_costs"),
+	TOWNY_BYPASS_BED_RESTRICTION("towny.bypass_bed_restriction"),
 	TOWNY_SPAWN_ADMIN("towny.admin.spawn"),
 	TOWNY_SPAWN_ADMIN_NOWARMUP("towny.admin.spawn.nowarmup"),
 	TOWNY_SPAWN_ADMIN_NOCOOLDOWN("towny.admin.spawn.nocooldown"),
