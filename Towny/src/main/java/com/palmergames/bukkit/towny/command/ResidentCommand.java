@@ -35,6 +35,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -137,7 +139,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 		
 		if (sender instanceof Player player) {
 			if (plugin.isError()) {
@@ -225,7 +227,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				default:
 					if (args.length == 1)
 						return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT, residentTabCompletes), args[0], "r");
-					else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
+					else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT, args[0]))
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT, args[0]).getTabCompletion(sender, args), args[args.length-1]);
 			}
 		} else if (args.length == 1){
@@ -355,9 +357,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Toggle modes for this player.
 	 * 
-	 * @param player
-	 * @param newSplit
-	 * @throws TownyException
+	 * @param player The player
+	 * @param newSplit The array of arguments
+	 * @throws TownyException when the player does not have permission or some other blocking factor.
 	 */
 	private void residentToggle(Player player, String[] newSplit) throws TownyException {
 		Resident resident = getResidentOrThrow(player);
@@ -391,10 +393,11 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else if (newSplit[0].equalsIgnoreCase("pvp")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PVP.getNode());
 			
+			Town town = resident.getTownOrNull();
 			// Test to see if the pvp cooldown timer is active for the town this resident belongs to.
-			if (TownySettings.getPVPCoolDownTime() > 0 && resident.hasTown() && !resident.isAdmin()) {
-				if (CooldownTimerTask.hasCooldown(resident.getTownOrNull().getUUID().toString(), CooldownType.PVP))
-					throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getTownOrNull().getUUID().toString(), CooldownType.PVP))); 
+			if (TownySettings.getPVPCoolDownTime() > 0 && town != null && !resident.isAdmin()) {
+				if (CooldownTimerTask.hasCooldown(town.getUUID().toString(), CooldownType.PVP))
+					throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(town.getUUID().toString(), CooldownType.PVP))); 
 				if (CooldownTimerTask.hasCooldown(resident.getName(), CooldownType.PVP))
 					throw new TownyException(Translatable.of("msg_err_cannot_toggle_pvp_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(resident.getName(), CooldownType.PVP)));
 
@@ -433,8 +436,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	/**
 	 * Show the player the new Permission settings after the toggle.
 	 * 
-	 * @param player
-	 * @param perm
+	 * @param player The player to show the permissions to
+	 * @param perm The perms to show
 	 */
 	private void notifyPerms(Player player, TownyPermission perm) {
 
@@ -614,7 +617,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void residentFriendRemove(Player player, Resident resident, List<Resident> unFriending) {
-		List<Resident> toUnfriend = unFriending.stream().filter(r-> resident.hasFriend(r)).collect(Collectors.toList());
+		List<Resident> toUnfriend = unFriending.stream().filter(resident::hasFriend).collect(Collectors.toList());
 
 		if (toUnfriend.isEmpty()) {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));

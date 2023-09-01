@@ -155,32 +155,28 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String backupType = TownySettings.getFlatFileBackupType();
 		String newBackupFolder = backupFolderPath + File.separator + BACKUP_DATE_FORMAT.format(System.currentTimeMillis());
 		FileMgmt.checkOrCreateFolders(rootFolderPath, rootFolderPath + File.separator + "backup");
-		switch (backupType.toLowerCase(Locale.ROOT)) {
-		case "folder": {
-			FileMgmt.checkOrCreateFolder(newBackupFolder);
-			FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
-			FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
-			FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
-			return true;
-		}
-		case "zip": {
-			FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"), new File(dataFolderPath),
-					new File(logFolderPath), new File(settingsFolderPath));
-			return true;
-		}
-		case "tar.gz":
-		case "tar": {
-			FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
-				new File(dataFolderPath),
-				new File(logFolderPath),
-				new File(settingsFolderPath));
-			return true;
-		}
-		default:
-		case "none": {
-			return false;
-		}
-		}
+        return switch (backupType.toLowerCase(Locale.ROOT)) {
+            case "folder" -> {
+                FileMgmt.checkOrCreateFolder(newBackupFolder);
+                FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
+                FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
+                FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
+                yield true;
+            }
+            case "zip" -> {
+                FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"), new File(dataFolderPath),
+                        new File(logFolderPath), new File(settingsFolderPath));
+                yield true;
+            }
+            case "tar.gz", "tar" -> {
+                FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
+                        new File(dataFolderPath),
+                        new File(logFolderPath),
+                        new File(settingsFolderPath));
+                yield true;
+            }
+            default -> false;
+        };
 	}
 
 	/*

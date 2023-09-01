@@ -244,13 +244,12 @@ public class TownyBlockListener implements Listener {
 		if (from.equals(to) || (to.isWilderness() && from.isWilderness()) || (allowWild && to.isWilderness()))
 			return true;
 
-		// If only one of 'from' and 'to' is wilderness and allowWild is false, this isn't allowed.
-		if (from.isWilderness() || to.isWilderness())
-			return false;
-
-		// Neither 'from' or 'to' are wilderness.
 		TownBlock currentTownBlock = from.getTownBlockOrNull();
 		TownBlock destinationTownBlock = to.getTownBlockOrNull();
+
+		// If only one of 'from' and 'to' is wilderness and allowWild is false, this isn't allowed.
+		if (currentTownBlock == null || destinationTownBlock == null)
+			return false;
 
 		//Both townblocks are owned by the same resident.
 		if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() && currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())

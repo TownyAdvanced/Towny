@@ -227,12 +227,11 @@ public class TownyCustomListener implements Listener {
 		if (!TownySettings.isOverClaimingAllowingStolenLand() || event.getToCoord().isWilderness() || event.getFromCoord().isWilderness())
 			return;
 
-		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer());
-		if (resident == null || !resident.hasTown())
+		Town town = TownyAPI.getInstance().getTown(event.getPlayer());
+		if (town == null)
 			return;
 
-		Town town = resident.getTownOrNull();
-		if  (town.availableTownBlocks() < 1 || !event.getFromCoord().getTownOrNull().equals(town))
+		if (town.availableTownBlocks() < 1 || !town.equals(event.getFromCoord().getTownOrNull()))
 			return;
 
 		if (!event.getToCoord().canBeStolen())
@@ -243,16 +242,18 @@ public class TownyCustomListener implements Listener {
 
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void onResidentJoinTown(TownAddResidentEvent event) {
 		if (!TownySettings.isPromptingNewResidentsToTownSpawn() || !TownySettings.getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN))
 			return;
 
 		Town town = event.getTown();
 		Player player = event.getResident().getPlayer();
+		Town residentTown = event.getResident().getTownOrNull();
 
-		if (player == null || TownyAPI.getInstance().getTown(player).equals(town))
+		if (player == null || residentTown == null || residentTown.equals(town))
 			return;
+		
 		String notAffordMsg = Translatable.of("msg_err_cant_afford_tp").forLocale(player);
 
 		try {
