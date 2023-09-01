@@ -32,7 +32,7 @@ import java.util.UUID;
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
 
-	private HashMap<String, Town> towns = new HashMap<>();
+	private final HashMap<String, Town> towns = new HashMap<>();
 
 	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
 	private Set<EntityType> unclaimDeleteEntityTypes = null;
@@ -605,7 +605,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @deprecated in lieu of {@link#isExplodedBlockAllowedToRevert} in 0.99.1.5.
+	 * @deprecated in lieu of {@link #isExplodedBlockAllowedToRevert(Material)} in 0.99.1.5.
 	 * @param mat Material that is being checked
 	 * @return true if the block should be reverted after blocking up.
 	 */
@@ -819,8 +819,7 @@ public class TownyWorld extends TownyObject {
 				final double distSqr = MathUtil.distanceSquared((double) townCoord.getX() - keyX, (double) townCoord.getZ() - keyZ);
 				if (minSqr == -1 || distSqr < minSqr)
 					minSqr = distSqr;
-			} catch (TownyException e) {
-			}
+			} catch (TownyException ignored) {}
 		}
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}

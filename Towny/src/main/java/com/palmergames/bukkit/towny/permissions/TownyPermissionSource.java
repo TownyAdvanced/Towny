@@ -60,8 +60,7 @@ public abstract class TownyPermissionSource {
 				try {
 					int i = Integer.parseInt(split[split.length - 1]);
 					biggest = Math.max(biggest, i);
-				} catch (NumberFormatException e) {
-				}
+				} catch (NumberFormatException ignored) {}
 			}
 		}
 		return biggest;

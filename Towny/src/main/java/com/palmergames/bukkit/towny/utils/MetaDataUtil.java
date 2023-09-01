@@ -140,7 +140,7 @@ public class MetaDataUtil {
 		CustomDataField<?> cdf = townyObject.getMetadata(ldf.getKey());
 		if (cdf instanceof LongDataField)
 			return ((LongDataField) cdf).getValue();
-		return 0l;
+		return 0L;
 	}
 	
 	/**

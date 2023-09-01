@@ -468,7 +468,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								try {
 									// Resident#removeTown saves the resident, so we can't use it.
 									olderRes.getTown().removeResident(olderRes);
-								} catch (NotRegisteredException nre) {}
+								} catch (NotRegisteredException ignored) {}
 							}
 							deleteResident(olderRes);					
 						} else {
@@ -559,13 +559,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							line = keys.get("town-ranks");
 							if (line != null)
 								resident.setTownRanks(Arrays.asList((line.split(","))));
-						} catch (Exception e) {}
+						} catch (Exception ignored) {}
 
 						try {
 							line = keys.get("nation-ranks");
 							if (line != null)
 								resident.setNationRanks(Arrays.asList((line.split(","))));
-						} catch (Exception e) {}
+						} catch (Exception ignored) {}
 
 						line = keys.get("joinedTownAt");
 						if (line != null) {
