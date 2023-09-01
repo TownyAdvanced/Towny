@@ -9061,3 +9061,4 @@ v0.92.0.11:
   - New Permission Node: towny.bypass_bed_restriction
     - description: Makes the player not subject to bed-use restrictions.
     - default: false
+  - Run sync confirmations on the player's region, courtesy of Warrior with PR #6960.
