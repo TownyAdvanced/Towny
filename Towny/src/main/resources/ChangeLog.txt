@@ -9062,3 +9062,6 @@ v0.92.0.11:
     - description: Makes the player not subject to bed-use restrictions.
     - default: false
   - Run sync confirmations on the player's region, courtesy of Warrior with PR #6960.
+  - Fix a lot of IDE warnings, courtesy of Warrior with PR #6658.
+  - Add gitattributes file, courtesy of Warrior with PR #6962.
+  - Add missing deprecation annotations, courtesy of Warrior with PR #6963.
