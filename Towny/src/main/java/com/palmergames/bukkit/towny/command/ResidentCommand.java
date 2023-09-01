@@ -356,6 +356,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	/**
 	 * Toggle modes for this player.
+	 * 
+	 * @param player The player
+	 * @param newSplit The array of arguments
+	 * @throws TownyException when the player does not have permission or some other blocking factor.
 	 */
 	private void residentToggle(Player player, String[] newSplit) throws TownyException {
 		Resident resident = getResidentOrThrow(player);
@@ -431,6 +435,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	/**
 	 * Show the player the new Permission settings after the toggle.
+	 * 
+	 * @param player The player to show the permissions to
+	 * @param perm The perms to show
 	 */
 	private void notifyPerms(Player player, TownyPermission perm) {
 
