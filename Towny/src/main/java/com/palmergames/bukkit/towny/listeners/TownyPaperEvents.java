@@ -4,12 +4,17 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -24,6 +29,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -34,17 +40,23 @@ import java.util.logging.Level;
 @ApiStatus.Internal
 public class TownyPaperEvents implements Listener {
 	private final Towny plugin;
-	private static final MethodHandle GET_ORIGIN = getOriginHandle();
-	private static final MethodHandle GET_PRIMER_ENTITY = getPrimerEntityHandle();
-	
-	public static final MethodHandle SIGN_OPEN_GET_CAUSE = getSignOpenCauseHandle(); // Public for use in the player listener
-	private static final MethodHandle SIGN_OPEN_GET_SIGN = getSignOpenGetSignHandle();
 	
 	private static final String SPIGOT_PRIME_EVENT = "org.bukkit.event.block.TNTPrimeEvent"; // Added somewhere during 1.19.4
 	private static final String PAPER_PRIME_EVENT = "com.destroystokyo.paper.event.block.TNTPrimeEvent";
 	
 	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";
 	private static final String SPIGOT_SIGN_OPEN_EVENT = "org.bukkit.event.player.PlayerSignOpenEvent";
+	private static final String USED_SIGN_OPEN_EVENT = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
+
+	private static final String DRAGON_FIREBALL_HIT_EVENT = "com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent";
+
+	public static final MethodHandle SIGN_OPEN_GET_CAUSE = getMethodHandle(USED_SIGN_OPEN_EVENT, "getCause");
+	private static final MethodHandle SIGN_OPEN_GET_SIGN = getMethodHandle(USED_SIGN_OPEN_EVENT, "getSign");
+
+	private static final MethodHandle GET_ORIGIN = getMethodHandle(Entity.class, "getOrigin");
+	private static final MethodHandle GET_PRIMER_ENTITY = getMethodHandle(PAPER_PRIME_EVENT, "getPrimerEntity");
+
+	public static final MethodHandle DRAGON_FIREBALL_GET_EFFECT_CLOUD = getMethodHandle(DRAGON_FIREBALL_HIT_EVENT, "getAreaEffectCloud");
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -66,6 +78,11 @@ public class TownyPaperEvents implements Listener {
 		if (SIGN_OPEN_GET_CAUSE != null) {
 			registerEvent(JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT, this::openSignListener, EventPriority.LOW, true);
 			TownyMessaging.sendDebugMsg("PlayerOpenSignEvent#getCause found, using PlayerOpenSignEvent listener.");
+		}
+		
+		if (DRAGON_FIREBALL_GET_EFFECT_CLOUD != null) {
+			registerEvent(DRAGON_FIREBALL_HIT_EVENT, this::dragonFireballHitEventListener, EventPriority.LOW, true);
+			TownyMessaging.sendDebugMsg("Using " + DRAGON_FIREBALL_GET_EFFECT_CLOUD + " listener.");
 		}
 	}
 	
@@ -148,7 +165,7 @@ public class TownyPaperEvents implements Listener {
 				cause = (Enum<?>) SIGN_OPEN_GET_CAUSE.invoke(event);
 				sign = (Sign) SIGN_OPEN_GET_SIGN.invoke(event);
 			} catch (final Throwable e) {
-				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking " + SIGN_OPEN_EVENT + "#getCause/#getSign reflectively", e);
+				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking " + USED_SIGN_OPEN_EVENT + "#getCause/#getSign reflectively", e);
 				return;
 			}
 			
@@ -160,40 +177,36 @@ public class TownyPaperEvents implements Listener {
 		};
 	}
 
-	@SuppressWarnings("JavaReflectionMemberAccess")
-	private static MethodHandle getOriginHandle() {
+	private Consumer<Event> dragonFireballHitEventListener() {
+		return event -> {
+			if (DRAGON_FIREBALL_GET_EFFECT_CLOUD == null)
+				return;
+
+			final AreaEffectCloud effectCloud;
+
+			try {
+				effectCloud = (AreaEffectCloud) DRAGON_FIREBALL_GET_EFFECT_CLOUD.invoke(event);
+			} catch (final Throwable thr) {
+				plugin.getLogger().log(Level.WARNING, "An exception occurred when invoking " + DRAGON_FIREBALL_HIT_EVENT + "#getAreaEffectCloud reflectively.", thr);
+				return;
+			}
+
+			if (TownyEntityListener.discardAreaEffectCloud(effectCloud))
+				((Cancellable) event).setCancelled(true);
+		};
+	}
+
+	private static @Nullable MethodHandle getMethodHandle(String className, String methodName) {
 		try {
-			//https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getOrigin()
-			return MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getOrigin"));
-		} catch (ReflectiveOperationException e) {
+			return getMethodHandle(Class.forName(className), methodName);
+		} catch (ClassNotFoundException e) {
 			return null;
 		}
 	}
 
-	private static MethodHandle getPrimerEntityHandle() {
+	private static @Nullable MethodHandle getMethodHandle(Class<?> clazz, String methodName) {
 		try {
-			// https://jd.papermc.io/paper/1.20/com/destroystokyo/paper/event/block/TNTPrimeEvent.html#getPrimerEntity()
-			return MethodHandles.publicLookup().unreflect(Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity"));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
-	}
-
-	private static MethodHandle getSignOpenCauseHandle() {
-		final String eventClass = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
-		try {
-			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
-			return MethodHandles.publicLookup().unreflect(Class.forName(eventClass).getMethod("getCause"));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
-	}
-
-	private static MethodHandle getSignOpenGetSignHandle() {
-		final String eventClass = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
-		try {
-			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
-			return MethodHandles.publicLookup().unreflect(Class.forName(eventClass).getMethod("getSign"));
+			return MethodHandles.publicLookup().unreflect(clazz.getMethod(methodName));
 		} catch (ReflectiveOperationException e) {
 			return null;
 		}

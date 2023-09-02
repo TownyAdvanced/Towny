@@ -12,6 +12,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -72,5 +73,10 @@ public class JavaUtil {
 	
 	public static <T> T make(Supplier<T> supplier) {
 		return supplier.get();
+	}
+	
+	public static <T> T make(T initial, Consumer<T> initializer) {
+		initializer.accept(initial);
+		return initial;
 	}
 }

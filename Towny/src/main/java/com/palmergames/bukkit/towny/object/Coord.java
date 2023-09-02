@@ -80,7 +80,7 @@ public class Coord {
 	 * @param value x/z integer
 	 * @return cell position
 	 */
-	protected static int toCell(int value) {
+	public static int toCell(int value) {
 		// Floor divides means that for negative values will round to the next negative value
 		// and positive value to the previous positive value.
 		return Math.floorDiv(value, getCellSize());
