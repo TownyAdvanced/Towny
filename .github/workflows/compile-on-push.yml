@@ -24,5 +24,4 @@ jobs:
             - name: Upload Artifact
               uses: actions/checkout@v3
               with:
-                  name: Towny
                   path: Towny/target/towny-*.jar

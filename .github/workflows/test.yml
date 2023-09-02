@@ -20,5 +20,4 @@ jobs:
                   java-package: jdk
                   cache: 'maven'
             - name: Run Tests
-              continue-on-error: true
               run: mvn test -P test
