@@ -24,7 +24,7 @@ ij_java_names_count_to_use_import_on_demand = 999999
 ## Markdownlint (https://github.com/DavidAnson/markdownlint#rules--aliases)
 [*.{yml,yaml,md}]
 insert_final_newline = false
-trim_trailing_whitespace = true
+trim_trailing_whitespace = false
 indent_style = space
 indent_size = 4
 
