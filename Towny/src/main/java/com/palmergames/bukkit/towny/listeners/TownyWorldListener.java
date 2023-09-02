@@ -11,6 +11,7 @@ import java.util.List;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -107,6 +108,13 @@ public class TownyWorldListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		/*
+		 * Paper provides a method to get the entity who caused a lightning strike, if the return is non-null then we don't need to add it to the list,
+		 * since we can get the player directly in the CombatUtil.
+		 */
+		if (event.getCause().equals(LightningStrikeEvent.Cause.TRIDENT) && CombatUtil.getLightningCausingEntity(event.getLightning()) != null)
+			return;
 
 		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getWorld());
 		if (townyWorld == null || !townyWorld.isUsingTowny())

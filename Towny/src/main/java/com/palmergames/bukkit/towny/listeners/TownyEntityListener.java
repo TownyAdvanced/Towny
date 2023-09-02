@@ -28,6 +28,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Monster;
@@ -63,6 +64,7 @@ import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -635,10 +637,10 @@ public class TownyEntityListener implements Listener {
 		LivingEntity attacker = null;
 		if (combuster instanceof Projectile projectile) {
 			
-			Object source = projectile.getShooter();
+			final ProjectileSource source = projectile.getShooter();
 			
-			if (source instanceof BlockProjectileSource) {
-				if (CombatUtil.preventDispenserDamage(((BlockProjectileSource) source).getBlock(), defender, DamageCause.PROJECTILE)) {
+			if (source instanceof BlockProjectileSource blockSource) {
+				if (CombatUtil.preventDispenserDamage(blockSource.getBlock(), defender, DamageCause.PROJECTILE)) {
 					combuster.remove();
 					event.setCancelled(true);
 					return;
@@ -657,8 +659,11 @@ public class TownyEntityListener implements Listener {
 					event.setCancelled(true);
 				}
 			}
+		} else if (combuster instanceof LightningStrike lightning) {
+			// Protect entities from being lit on fire by player caused lightning
+			if (CombatUtil.getLightningCausingEntity(lightning) instanceof Player player && CombatUtil.preventDamageCall(player, defender, DamageCause.LIGHTNING))
+				event.setCancelled(true);
 		}
-
 	}
 
 	/**
