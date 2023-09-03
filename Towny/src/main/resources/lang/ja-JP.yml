@@ -2,7 +2,7 @@
 name: Towny
 language: english
 author: ElgarL
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'このプロットは、グループ�
 msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2was removed from group %s'
 msg_plot_renamed_from_x_to_y: '土地 %s を %s に改名しました。'
 msg_err_plot_group_specify_price: '価格を設定してください。例: /plot group fs [値段]'
-msg_player_put_group_up_for_sale: '%s put group %s up for sale for %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'グループの種類を設定できませんでした - '
 msg_set_group_type_to_x: 'プロットグループにタイプを%sに変更されました。'
 msg_player_successfully_bought_group_x: '%sがプロットグループ%sを購入しました。'
