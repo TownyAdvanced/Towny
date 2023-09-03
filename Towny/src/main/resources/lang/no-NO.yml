@@ -2,7 +2,7 @@
 name: Towny
 language: norwegian
 author: Nectuz, Walbern
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'Denne tomten er ikke assosiert med en
 msg_plot_was_removed_from_group_x: 'Tomt &9(%s,%s) &2ble fjernet fra gruppe %s'
 msg_plot_renamed_from_x_to_y: 'Tomt %s heter nå %s.'
 msg_err_plot_group_specify_price: 'Vennligst angi pris, f eks: /plot group fs [price]'
-msg_player_put_group_up_for_sale: '%s la gruppe %s ut for salg for %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Klarte ikke angi gruppetype - '
 msg_set_group_type_to_x: 'Endret tomtgruppens type til %s'
 msg_player_successfully_bought_group_x: '%s suksessfullt kjøpt tomtgruppe %s'
