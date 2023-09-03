@@ -43,6 +43,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
+import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
 import io.papermc.lib.PaperLib;
@@ -88,7 +89,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.MetadataValue;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -115,18 +115,8 @@ public class TownyPlayerListener implements Listener {
 	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
 	
-	private static final MethodHandle GET_RESPAWN_FLAGS;
-	
-	static {
-		MethodHandle temp = null;
-		try {
-			// https://jd.papermc.io/paper/1.20/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
-			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(PlayerRespawnEvent.class.getMethod("getRespawnFlags"));
-		} catch (Throwable ignored) {}
-		
-		GET_RESPAWN_FLAGS = temp;
-	}
+	// https://jd.papermc.io/paper/1.20/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
+	private static final MethodHandle GET_RESPAWN_FLAGS = JavaUtil.getMethodHandle(PlayerRespawnEvent.class, "getRespawnFlags");
 
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;

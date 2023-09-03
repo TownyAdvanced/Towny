@@ -1,14 +1,18 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
@@ -19,11 +23,13 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
@@ -65,10 +71,14 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -228,22 +238,13 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 		
-		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
-			return;
-		
-		if (event.getEntity().getCustomEffects().stream().noneMatch(effect -> effect.getType().getKey().equals(NamespacedKey.minecraft("instant_damage"))))
+		if (TownyPaperEvents.DRAGON_FIREBALL_GET_EFFECT_CLOUD != null || !(event.getEntity().getSource() instanceof DragonFireball))
 			return;
 
-		if (!(event.getEntity().getSource() instanceof Player) || !(event.getEntity().getSource() instanceof DragonFireball))
-			return;
-
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
-		if (CombatUtil.preventPvP(townyWorld, townBlock)) {
+		if (discardAreaEffectCloud(event.getEntity())) {
 			event.setCancelled(true);
 			event.getEntity().remove();
 		}
-
 	}
 	
 	/**
@@ -263,48 +264,12 @@ public class TownyEntityListener implements Listener {
 			return;
 		
 		ThrownPotion potion = event.getEntity();
-		boolean detrimental = false;
 
-		/*
-		 * List of potion effects blocked from PvP.
-		 */
-		List<String> detrimentalPotions = TownySettings.getPotionTypes();
-
-		for (PotionEffect effect : potion.getEffects()) {
-
-			/*
-			 * Check to see if any of the potion effects are protected.
-			 */
-			if (detrimentalPotions.contains(effect.getType().getName())) {
-				detrimental = true;
-				break;
-			}
-		}
-
-		if (!detrimental)
+		if (!hasDetrimentalEffects(potion.getEffects()))
 			return;
 		
-		Location loc = potion.getLocation();		
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(potion.getWorld());
-		float radius = event.getAreaEffectCloud().getRadius();
-		List<Block> blocks = new ArrayList<>();
-		
-		for(double x = loc.getX() - radius; x < loc.getX() + radius; x++ ) {
-			for(double z = loc.getZ() - radius; z < loc.getZ() + radius; z++ ) {
-				Location loc2 = new Location(potion.getWorld(), x, loc.getY(), z);
-			    Block b = loc2.getBlock();
-			    if (b.getType().equals(Material.AIR)) blocks.add(b);
-			}		   
-		}
-
-		for (Block block : blocks) {
-						
-			if (!TownyAPI.getInstance().isWilderness(block.getLocation()) 
-					&& CombatUtil.preventPvP(townyWorld, TownyAPI.getInstance().getTownBlock(block.getLocation()))) {
-				event.setCancelled(true);
-				break;
-			}			
-		}	
+		if (discardAreaEffectCloud(event.getAreaEffectCloud()))
+			event.setCancelled(true);
 	}	
 	
 	/**
@@ -915,4 +880,69 @@ public class TownyEntityListener implements Listener {
 		return !TownyActionEventExecutor.canExplosionDamageEntities(entity.getLocation(), entity, cause);
 	}
 
+	private static final BiMap<String, String> POTION_LEGACY_NAMES = JavaUtil.make(HashBiMap.create(), map -> {
+		map.put("slow", "slowness");
+		map.put("fast_digging", "haste");
+		map.put("slow_digging", "mining_fatigue");
+		map.put("increase_damage", "strength");
+		map.put("heal", "instant_health");
+		map.put("harm", "instant_damage");
+		map.put("jump", "jump_boost");
+		map.put("confusion", "nausea");
+		map.put("damage_resistance", "resistance");
+	});
+
+	@SuppressWarnings("SimplifyStreamApiCallChains")
+	private boolean hasDetrimentalEffects(Collection<PotionEffect> effects) {
+		if (effects.isEmpty())
+			return false;
+		
+		/*
+		 * List of potion effects blocked from PvP.
+		 */
+		final List<String> detrimentalPotions = TownySettings.getPotionTypes().stream().map(type -> type.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+
+		for (final PotionEffect effect : effects) {
+			// This should use getKey when 1.18 becomes the minimum supported version.
+			final String name = effect.getType().getName().toLowerCase(Locale.ROOT);
+
+			/*
+			 * Check to see if any of the potion effects are protected.
+			 */
+			if (detrimentalPotions.contains(name))
+				return true;
+			
+			// Account for PotionEffect#getType possibly returning the new name post enum removal.
+			final String legacyName = POTION_LEGACY_NAMES.inverse().get(name);
+			if (legacyName != null && detrimentalPotions.contains(legacyName))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	@ApiStatus.Internal
+	public static boolean discardAreaEffectCloud(@NotNull AreaEffectCloud effectCloud) {
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(effectCloud.getWorld());
+		final Location loc = effectCloud.getLocation();
+		final int radius = (int) Math.ceil(effectCloud.getRadius());
+		WorldCoord lastChecked = null;
+		
+		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++ ) {
+			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++ ) {
+				if (lastChecked != null && lastChecked.getX() == Coord.toCell(x) && lastChecked.getZ() == Coord.toCell(z))
+					continue;
+				
+				final WorldCoord current = WorldCoord.parseWorldCoord(effectCloud.getWorld().getName(), x, z);
+				final TownBlock townBlock = current.getTownBlockOrNull();
+				
+				if (townyWorld != null && CombatUtil.preventPvP(townyWorld, townBlock))
+					return true;
+				
+				lastChecked = current;
+			}
+		}
+		
+		return false;
+	}
 }
