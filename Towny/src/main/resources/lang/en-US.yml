@@ -42,7 +42,7 @@ description: >
 # and formatting. Learn about MiniMessage formatting here:
 # https://docs.adventure.kyori.net/minimessage/format.html
 #
-#
+# 
 
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
@@ -198,8 +198,8 @@ nation_set_help_5: "Set the title or surname of one of your residents."
 nation_set_help_6: "Set the nation tag."
 nation_set_help_7: "Set the nation board message."
 nation_set_help_8: "Set the nation spawn point."
-nation_set_help_9: "Set the cost to use /n spawn."
-nation_set_help_10: "Set the mapcolor used in Mapping plugins."
+nation_set_help_9: "Set the cost to use /n spawn." 
+nation_set_help_10: "Set the mapcolor used in Mapping plugins." 
 
 nation_toggle_help_0: "Toggles peaceful status of the nation."
 nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
