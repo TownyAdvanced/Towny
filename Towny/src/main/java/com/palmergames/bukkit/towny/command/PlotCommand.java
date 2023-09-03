@@ -1311,18 +1311,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_FORSALE.getNode());
 
 		// This means the player wants to fs the plot group they are in.
-		if (split.length < 2)
+		if (split.length < 2 && TownyEconomyHandler.isActive())
 			throw new TownyException(Translatable.of("msg_err_plot_group_specify_price"));
 
 		PlotGroup group = catchMissingPlotGroup(townBlock);
 
-		double price = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+		double price = TownyEconomyHandler.isActive() || split.length >= 2 ? MoneyUtil.getMoneyAboveZeroOrThrow(split[1]) : 0;
 		group.setPrice(Math.min(price, TownySettings.getMaxPlotPrice()));
 		
 		// Save
 		group.save();
 
-		Translatable message = Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice()));
+		Translatable message = TownyEconomyHandler.isActive()
+			? Translatable.of("msg_player_put_group_up_for_sale_amount", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice()))
+			: Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName());
+		
 		TownyMessaging.sendPrefixedTownMessage(town, message);
 		
 		if (!resident.hasTown() || resident.getTownOrNull() != town)
