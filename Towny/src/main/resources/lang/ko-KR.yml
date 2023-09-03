@@ -2,7 +2,7 @@
 name: Towny
 language: 한국어
 author: Daybreak 새벽
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: '해당 토지는 그룹과 연결되�
 msg_plot_was_removed_from_group_x: '토지 &9(%s,%s) 이(가) &2그룹 %s에서 제거 되었습니다.'
 msg_plot_renamed_from_x_to_y: '땅 %s을/를 %s(으)로 계명했습니다.'
 msg_err_plot_group_specify_price: '가격을 정해주십시오, 예: /plot group fs [price]'
-msg_player_put_group_up_for_sale: '%s의 그룹 %s에서 %s를 판매 중입니다.'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: '그룹 유형을 설정할 수 없습니다. - '
 msg_set_group_type_to_x: '토지의 그룹 유형이 %s으로 변경 되었습니다.'
 msg_player_successfully_bought_group_x: '%s을(를) 토지 그룹 %s으로 구입 했습니다.'
