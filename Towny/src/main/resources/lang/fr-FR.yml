@@ -2,7 +2,7 @@
 name: Towny
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'Cette parcelle n''est pas associée �
 msg_plot_was_removed_from_group_x: 'La parcelle &9(%s,%s) &2a été enlevé du groupe %s'
 msg_plot_renamed_from_x_to_y: 'Parcelle %s a été renommé %s.'
 msg_err_plot_group_specify_price: 'Veuillez spécifier le prix, ex: /plot group fs [prix]'
-msg_player_put_group_up_for_sale: '%s a mit pe groupe %s à vendre pour %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Impossible de mettre le type de groupe - '
 msg_set_group_type_to_x: 'Changé le type de groupe de parcelle en %s'
 msg_player_successfully_bought_group_x: '%s a acheté avec succès le groupe de parcelles %s'
