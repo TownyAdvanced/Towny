@@ -4,17 +4,13 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
-import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
-import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.AreaEffectCloud;
-import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -29,10 +25,8 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -50,13 +44,13 @@ public class TownyPaperEvents implements Listener {
 
 	private static final String DRAGON_FIREBALL_HIT_EVENT = "com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent";
 
-	public static final MethodHandle SIGN_OPEN_GET_CAUSE = getMethodHandle(USED_SIGN_OPEN_EVENT, "getCause");
-	private static final MethodHandle SIGN_OPEN_GET_SIGN = getMethodHandle(USED_SIGN_OPEN_EVENT, "getSign");
+	public static final MethodHandle SIGN_OPEN_GET_CAUSE = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getCause");
+	private static final MethodHandle SIGN_OPEN_GET_SIGN = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getSign");
 
-	private static final MethodHandle GET_ORIGIN = getMethodHandle(Entity.class, "getOrigin");
-	private static final MethodHandle GET_PRIMER_ENTITY = getMethodHandle(PAPER_PRIME_EVENT, "getPrimerEntity");
+	private static final MethodHandle GET_ORIGIN = JavaUtil.getMethodHandle(Entity.class, "getOrigin");
+	private static final MethodHandle GET_PRIMER_ENTITY = JavaUtil.getMethodHandle(PAPER_PRIME_EVENT, "getPrimerEntity");
 
-	public static final MethodHandle DRAGON_FIREBALL_GET_EFFECT_CLOUD = getMethodHandle(DRAGON_FIREBALL_HIT_EVENT, "getAreaEffectCloud");
+	public static final MethodHandle DRAGON_FIREBALL_GET_EFFECT_CLOUD = JavaUtil.getMethodHandle(DRAGON_FIREBALL_HIT_EVENT, "getAreaEffectCloud");
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -194,21 +188,5 @@ public class TownyPaperEvents implements Listener {
 			if (TownyEntityListener.discardAreaEffectCloud(effectCloud))
 				((Cancellable) event).setCancelled(true);
 		};
-	}
-
-	private static @Nullable MethodHandle getMethodHandle(String className, String methodName) {
-		try {
-			return getMethodHandle(Class.forName(className), methodName);
-		} catch (ClassNotFoundException e) {
-			return null;
-		}
-	}
-
-	private static @Nullable MethodHandle getMethodHandle(Class<?> clazz, String methodName) {
-		try {
-			return MethodHandles.publicLookup().unreflect(clazz.getMethod(methodName));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
 	}
 }

@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.tasks;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.MobRemovalEvent;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
@@ -12,6 +11,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +39,8 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	private static final Set<String> ignoredSpawnReasons = new HashSet<>();
 	private boolean isRemovingKillerBunny;
 	
-	private static final MethodHandle GET_SPAWN_REASON;
+	// https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getEntitySpawnReason()
+	private static final MethodHandle GET_SPAWN_REASON = JavaUtil.getMethodHandle(Entity.class, "getEntitySpawnReason");
 
 	public MobRemovalTimerTask(Towny plugin) {
 		super(plugin);
@@ -177,17 +177,5 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		ignoredSpawnReasons.clear();
 		for (final String cause : TownySettings.getStrArr(ConfigNodes.PROT_MOB_REMOVE_IGNORED_SPAWN_CAUSES))
 			ignoredSpawnReasons.add(cause.toUpperCase(Locale.ROOT));
-	}
-	
-	static {
-		MethodHandle temp = null;
-		try {
-			// https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getEntitySpawnReason()
-			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getEntitySpawnReason"));
-			TownyMessaging.sendDebugMsg("Using Entity.html#getEntitySpawnReason");
-		} catch (ReflectiveOperationException ignored) {}
-		
-		GET_SPAWN_REASON = temp;
 	}
 }
