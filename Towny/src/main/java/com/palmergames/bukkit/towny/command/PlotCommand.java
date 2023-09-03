@@ -1316,7 +1316,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		PlotGroup group = catchMissingPlotGroup(townBlock);
 
-		double price = TownyEconomyHandler.isActive() || split.length >= 2 ? MoneyUtil.getMoneyAboveZeroOrThrow(split[1]) : 0;
+		double price = split.length >= 2 ? MoneyUtil.getMoneyAboveZeroOrThrow(split[1]) : 0;
 		group.setPrice(Math.min(price, TownySettings.getMaxPlotPrice()));
 		
 		// Save
