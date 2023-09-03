@@ -2,7 +2,7 @@
 name: Towny
 language: swedish
 author: ElgarL
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'Denna plot är inte associerad med en
 msg_plot_was_removed_from_group_x: 'Plotten &9(%s,%s) &2togs bort från gruppen %s'
 msg_plot_renamed_from_x_to_y: 'Plotten %s har bytt namn till %s.'
 msg_err_plot_group_specify_price: 'Vänligen ange priset, ex: /plot group fs [price]'
-msg_player_put_group_up_for_sale: '%s lade ut gruppen %s till salu för %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Kunde inte ange grupptyp - '
 msg_set_group_type_to_x: 'Ändrade plott-gruppens typ till %s'
 msg_player_successfully_bought_group_x: '%s köpte framgångsrikt plott-gruppen %s'

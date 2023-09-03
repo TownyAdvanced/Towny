@@ -2,7 +2,7 @@
 name: Towny
 language: Chinese
 author: ElgarL
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -524,7 +524,7 @@ msg_world_pvp: '&c这个世界强制开启PVP.'
 msg_world_mobs: '&c这个世界强制开启怪物生成.'
 msg_world_expl: '&c这个世界强制开启爆炸.'
 msg_world_fire: '&c这个世界强制开启火势蔓延.'
-msg_town_mobs: '&c这个世界强制开启怪物生成.'
+msg_town_mobs: '&c这个世界强制怪物生成.'
 msg_plot_pvp: '&c不能在一个竞技场中开启或关闭PVP.'
 msg_plot_regen_wrong_size: '&c回溯只支持默认的区块大小(16).'
 msg_reloaded: '&2城镇设置已重载.'
@@ -1010,7 +1010,7 @@ number_of_residents: '(居民数)'
 number_of_towns: '(城镇数)'
 town_name: '城镇名'
 nation_name: '国家名'
-refund_message: '&a放弃声明 %2$s 城镇区块，获得退款：%1$s 。'
+refund_message: '&a放弃声明 %2$s 城镇区块，获得 %1$s 的退款。'
 msg_bankrupt_town_multiple: '&b以下城镇因支付不起每日维护费用而倒闭: '
 msg_bankrupt_nation_multiple: '&b以下国家因支付不起每日维护费用而破灭: '
 msg_couldnt_pay_tax: '&b%s 因支付不起税收而被踢出了 %s.'
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: '这片土地不属于任何一个土�
 msg_plot_was_removed_from_group_x: '土地 &9(%s,%s) &2被移出了 %s 土地组'
 msg_plot_renamed_from_x_to_y: '土地 %s 已重命名为 %s.'
 msg_err_plot_group_specify_price: '请设置价格, 指令示例: /plot group fs [价格]'
-msg_player_put_group_up_for_sale: '%s 将土地组 %s 以 %s 的价格出售'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'

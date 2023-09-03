@@ -2,7 +2,7 @@
 name: Towny
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'Этот участок не связ
 msg_plot_was_removed_from_group_x: 'Участок &9(%s,%s) &2удален из группы %s'
 msg_plot_renamed_from_x_to_y: 'Участок %s переименован в %s.'
 msg_err_plot_group_specify_price: 'Пожалуйста, укажите цену. Например /plot group fs [цена]'
-msg_player_put_group_up_for_sale: '%s переместил группу %s на продажу для %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Не удалось установить тип группы - '
 msg_set_group_type_to_x: 'Изменен тип группы участков на %s'
 msg_player_successfully_bought_group_x: '%s успешно приобрел группу участков %s'

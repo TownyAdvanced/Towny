@@ -2,7 +2,7 @@
 name: Towny
 language: english
 author: ElgarL
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -45,22 +45,22 @@ help_0: 'Pagrindinės Towny Komandos'
 help_1: 'Išbandykite šias komandas, kad sužinotumėte daugiau apie towny.'
 help_2: 'Miesto susirašinėjimo kanalas'
 help_3: 'Valstybinis susirašinėjimo kanalas'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
-towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
-towny_help_4: "Display time until a new day"
-towny_help_5: "Displays stats"
-towny_help_6: "Displays the version of Towny"
-towny_top_help_0: "List top residents based on subcommand."
-towny_top_help_1: "List top land-owners based on subcommand."
-towny_top_help_2: "List wealthiest based on subcommand."
+help_4: 'Gyventojo pagalbinės komandos.'
+help_5: 'Miesto pagalbinės komandos.'
+help_6: 'Valstybės pagalbinės komandos.'
+help_7: 'Sklypų pagalbinės komandos.'
+help_8: 'Towny pagalbinės komandos.'
+help_9: 'Towny administratoriaus pagalbinės komandos.'
+towny_help_0: "Pagrindinės Towny pagalbinės komandos"
+towny_help_1: "Parodyti artimiausių miesto sklypų žemėlapį"
+towny_help_2: "Parodyti kainas, kurios reikalauja Ekonomikos įskiepio"
+towny_help_3: "Parodyti rekordus"
+towny_help_4: "Parodyti, kiek liko laiko iki naujos dienos"
+towny_help_5: "Parodyti statistiką"
+towny_help_6: "Parodyti Towny versiją"
+towny_top_help_0: "Išrikiuoti geriausius gyventojus pagal nurodytą kriterijų."
+towny_top_help_1: "Išrikiuoti geriausius žemvaldžius pagal nurodytą kriterijų."
+towny_top_help_2: "Išrikiuoti turtingiausius pagal nurodytą kriterijų."
 town_help_1: 'Jūsų miesto informacija'
 town_help_2: '[meras]'
 town_help_3: 'Pasirinkto miesto informacija'
@@ -71,64 +71,64 @@ town_help_7: 'Naujojasis miestas su nurodytu žaidėju mero pareigose.'
 town_help_8: 'Išvardyti mero komandas.'
 town_help_9: 'Nauja diena!'
 town_help_10: 'Išvardyti visus prisijungusius miesto gyventojus'
-town_help_13: "See a list of residents in the town."
-town_help_14: "See a list of ranks in the town."
-town_help_15: "See a list of outlaws in the town."
-town_help_16: "See a list of plotgroups in the town."
-town_help_17: "See a list of plot types in the town."
-town_help_18: "Say a message to the town members."
-town_help_19: "Set your town for sale, able to be bought by other players."
-town_help_20: "Set your town not for sale."
-town_help_21: "Buy the given town, as long as it is for sale."
-town_help_22: "Deposit money into your town's bank."
-town_help_23: "Used to modify your resident's town ranks."
-town_help_24: "Used to delete your town."
-town_help_25: "Used to modify your town's outlaws."
-town_help_26: "List all towns, see /t list ? for help."
-town_help_27: "Leave the town you're a member of."
-town_help_28: "Withdraw money from your town's bank."
-town_help_29: "Use /t claim ? for help."
-town_help_30: "Used to unclaim land from your town."
-town_help_31: "Add or remove residents."
-town_help_32: "Use /t set ? for help."
-town_help_33: "Use /t buy ? for help."
-town_help_34: "Use /t toggle ? for help."
-town_help_35: "Use /t rank ? for help."
-town_list_help_0: "View the specified page."
-town_list_help_1: "List towns by resident-count, with the specified page."
-town_list_help_2: "List towns which are open, with the specified page."
-town_list_help_3: "List towns using bank balance, with the specified page."
-town_list_help_4: "List towns in alphabetical order, with the specified page."
-town_list_help_5: "List towns by claimed land, with the specified page."
-town_list_help_6: "List towns by number online, with the specified page."
-town_set_help_0: "Set your town's board."
-town_set_help_1: "Set your town's homeblock to where you're standing."
-town_set_help_2: "Sets the spawn point in your homeblock or an outpost spawnpoint when stood in an outpost."
-town_set_help_3: "See /town set perm ? for help."
-town_set_help_4: "Set your town's tax amount."
-town_set_help_5: "Set the special amounts for per-plot taxes."
-town_set_help_6: "Set the default prices for buying plots."
-town_set_help_7: "Set the cost to use /t spawn."
-town_set_help_8: "Set your town's name."
-town_set_help_9: "Set your town's tag."
-town_set_help_10: "Set the title or surname of your resident."
-town_set_help_11: "Set the max amount of money a percentage tax can take from a resident."
-town_jail_help_0: "List the town's jails."
-town_jail_help_1: "Jail a resident in the primary jail."
-town_jail_help_2: "Jail a resident in the primary jail, for the specified hours."
-town_jail_help_3: "Jail a resident in the primary jail, for the specified hours, in the specified jail."
-town_jail_help_4: "Jail a resident in the primary jail, for the specified hours, in the specified jail and cell."
-town_jail_help_5: "Jail a resident in the primary jail, for the specified hours, with the given bail amount."
-town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
-town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
-town_jail_help_8: "Unjails the resident."
-town_purge_help: "Purges residents that have not logged in for the given amount of days."
-town_trust_help_0: "Adds a resident as Trusted in the town."
-town_trust_help_1: "Removes a resident as Trusted in the town."
-town_trust_help_2: "Lists the Trusted residents of a town."
-town_towntrust_help_0: "Adds a town as Trusted in the town."
-town_towntrust_help_1: "Removes a town as Trusted in the town."
-town_towntrust_help_2: "Lists the Trusted towns of a town."
+town_help_13: "Pamatyti miesto gyventojų sąrašą."
+town_help_14: "Pamatyti miesto rangų sąrašą."
+town_help_15: "Pamatyti miesto nepageidaujamų asmenų sąrašą."
+town_help_16: "Pamatyti miesto sklypų grupių sąrašą."
+town_help_17: "Pamatyti miesto sklypų tipų sąrašą."
+town_help_18: "Išsiųsti žinutę miesto gyventojams."
+town_help_19: "Pastatyti miestą pardavimui, kurį galėtų nupirkti kiti žaidėjai."
+town_help_20: "Išimti miestą iš pardavimo."
+town_help_21: "Nusipirkti miestą, jei jis yra parduodamas."
+town_help_22: "Įnešti pinigų į miesto banką."
+town_help_23: "Naudojama modifikuoti miesto gyventojų rangus."
+town_help_24: "Naudojama panaikinti miestą."
+town_help_25: "Naudojama modifikuoti miesto nepageidaujamų asmenų sąrašą."
+town_help_26: "Išvardyti visus miestus, parašykite /t list ? norėdami sužinoti tolimesnes komandas."
+town_help_27: "Palikti miestą, kurio nariu šiuo metu esate."
+town_help_28: "Išsiimti pinigų iš savo miesto banko."
+town_help_29: "Naudoti /t claim ? tolimesnėms komandoms."
+town_help_30: "Naudojama atsisakyti miesto teritorijų."
+town_help_31: "Pridėti arba pašalinti gyventojus."
+town_help_32: "Naudokite /t set ? tolimesnėms komandoms."
+town_help_33: "Naudokite /t buy ? tolimesnėms komandoms."
+town_help_34: "Naudokite /t toggle ? tolimesnėms komandoms."
+town_help_35: "Naudokite /t rank ? tolimesnėms komandoms."
+town_list_help_0: "Peržiūrėti nurodytą puslapį."
+town_list_help_1: "Išrikiuoti miestus pagal gyventojų skaičių nurodytame puslapyje."
+town_list_help_2: "Išvardyti atvirus miestus nurodytame puslapyje."
+town_list_help_3: "Išrikiuoti miestus pagal banko balansą nurodytame puslapyje."
+town_list_help_4: "Išrikiuoti miestus abėcėlės tvarka nurodytame puslapyje."
+town_list_help_5: "Išrikiuoti miestus pagal plotą nurodytame puslapyje."
+town_list_help_6: "Išrikiuoti miestus pagal prisijungusių gyventojų skaičių nurodytame puslapyje."
+town_set_help_0: "Nustatyti savo miesto lentą."
+town_set_help_1: "Nustatyti savo miesto pagrindinį sklypą, kuriame stovima."
+town_set_help_2: "Nustatyti atsiradimo vietą savo miesto pagrindiniame sklype arba tolimosios teritorijos atsiradimo vietą, kai stovima toje tolimojoje teritorijoje."
+town_set_help_3: "Naudokite /town set perm ? tolimesnėns komandoms."
+town_set_help_4: "Nustatyti savo miesto mokesčio dydį."
+town_set_help_5: "Nustatyti specialius dydžius mokesčiams už sklypus."
+town_set_help_6: "Nustatyti numatytąsias kainas sklypų įsigijimui."
+town_set_help_7: "Nustatyti /t spawn kainą."
+town_set_help_8: "Nustatyti savo miesto pavadinimą."
+town_set_help_9: "Nustatyti savo miesto žymą."
+town_set_help_10: "Nustatyti gyventojo titulą arba pavardę."
+town_set_help_11: "Nustatyti maksimalią pinigų sumą, kurią miestas gali paimti iš žaidėjo už procentinius mokesčius."
+town_jail_help_0: "Išvardyti miesto kalėjimus."
+town_jail_help_1: "Įkalinti gyventoją pagrindiniame kalėjime."
+town_jail_help_2: "Įkalinti gyventoją pagrindiniame kalėjime nurodytam laikui, išreikštu valandomis."
+town_jail_help_3: "Įkalinti gyventoją nurodytame kalėjime nurodytam laikui, išreikštu valandomis."
+town_jail_help_4: "Įkalinti gyventoją nurodytame kalėjime bei nurodytoje kameroje nurodytam laikui, išreikštu valandomis."
+town_jail_help_5: "Įkalinti gyventoją pagrindiniame kalėjime nurodytam laikui, išreikštu valandomis, nurodžius užstato dydį."
+town_jail_help_6: "Įkalinti gyventoją nurodytame kalėjime nurodytam laikui, išreikštu valandomis, nurodžius užstato dydį."
+town_jail_help_7: "Įkalinti gyventoją nurodytame kalėjime bei nurodytoje kameroje nurodytam laikui, išreikštu valandomis, nurodžius užstato dydį."
+town_jail_help_8: "Paleisti gyventoją į laisvę."
+town_purge_help: "Pašalinti gyventojus, kurie nebuvo prisijungę nurodytą laiką, išreikštą dienomis."
+town_trust_help_0: "Pridėti žaidėją į miesto patikimų žmonių sąrašą."
+town_trust_help_1: "Pašalinti žaidėją iš miesto patikimų žmonių sąrašo."
+town_trust_help_2: "Išvardyti miesto patikimus žmones."
+town_towntrust_help_0: "Pridėti miestą į miesto patikimų miestų sąrašą."
+town_towntrust_help_1: "Pašalinti miestą iš miesto patikimų miestų sąrašo."
+town_towntrust_help_2: "Išvardyti miesto patikimus miestus."
 mayor_help_3: 'Užimti teritoriją, kuri nebūtinai liečiasi su pagrindine miesto teritorija'
 mayor_help_4: 'Užimti teritoriją aplink save X spinduliu'
 mayor_help_5: 'Užimti teritoriją didžiausiu spinduliu'
@@ -144,46 +144,46 @@ nation_help_6: 'Sukurti naują valstybę'
 nation_help_7: 'Išvardyti valstybės vadovo komandas'
 nation_help_8: 'Sukurti naują valstybę'
 nation_help_9: 'Išvardyti visus prisijungusius valstybės gyventojus'
-nation_help_11: "Lists the towns in the nation."
-nation_help_12: "Lists the allied nations of the nation."
-nation_help_13: "Lists the enemied nations of the nation."
-nation_help_14: "Used to join open nations."
-nation_help_15: "Deposits money into the nation bank."
-nation_help_16: "Used to delete your nation."
-nation_help_17: "Used to add or remove ranks from residents."
-nation_help_18: "See /n rank ? for help."
-nation_list_help_0: "View the specified page."
-nation_list_help_1: "List nations by resident-count, with the specified page."
-nation_list_help_2: "List nations by town-count, with the specified page."
-nation_list_help_3: "List nations which are open, with the specified page."
-nation_list_help_4: "List nations using bank balance, with the specified page."
-nation_list_help_5: "List nations in alphabetical order, with the specified page."
-nation_list_help_6: "List nations by claimed land, with the specified page."
-nation_list_help_7: "List nations by number online, with the specified page."
-nation_set_help_0: "Change the leader of the nation."
-nation_set_help_1: "Change the capital city of the nation."
-nation_set_help_2: "Set the amount of tax that towns will pay."
-nation_set_help_3: "Set the amount of tax that conquered towns will pay."
-nation_set_help_4: "Set the name of the nation."
-nation_set_help_5: "Set the title or surname of one of your residents."
-nation_set_help_6: "Set the nation tag."
-nation_set_help_7: "Set the nation board message."
-nation_set_help_8: "Set the nation spawn point."
-nation_set_help_9: "Set the cost to use /n spawn."
-nation_set_help_10: "Set the mapcolor used in Mapping plugins."
-nation_toggle_help_0: "Toggles peaceful status of the nation."
-nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
-nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
-nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
+nation_help_11: "Išvardyti visus valstybės miestus."
+nation_help_12: "Išvardyti visus valstybės sąjungininkus."
+nation_help_13: "Išvardyti visus valstybės priešus."
+nation_help_14: "Naudojama prisijungti prie atvirų valstybių."
+nation_help_15: "Įnešti pinigų į valstybės banką."
+nation_help_16: "Naudojama panaikinti savo valstybę."
+nation_help_17: "Naudojama suteikti arba pašalinti gyventojų rangus."
+nation_help_18: "Naudokite /n rank ? tolimesnėms komandoms."
+nation_list_help_0: "Pamatyti nurodytą puslapį."
+nation_list_help_1: "Išrikiuoti valstybes pagal gyventojų skaičių nurodytame puslapyje."
+nation_list_help_2: "Išrikiuoti valstybes pagal miestų skaičių nurodytame puslapyje."
+nation_list_help_3: "Išvardyti atviras valstybes nurodytame puslapyje."
+nation_list_help_4: "Išrikiuoti valstybes pagal banko balansą nurodytame puslapyje."
+nation_list_help_5: "Išrikiuoti valstybes abėcėlės tvarka nurodytame puslapyje."
+nation_list_help_6: "Išrikiuoti valstybes pagal plotą nurodytame puslapyje."
+nation_list_help_7: "Išrikiuoti valstybes pagal prisijungusių žaidėjų skaičių nurodytame puslapyje."
+nation_set_help_0: "Pakeisti valstybės vadovą."
+nation_set_help_1: "Pakeisti valstybės sostinę."
+nation_set_help_2: "Nustatyti miestų mokestį valstybei."
+nation_set_help_3: "Nustatyti užkariautų miestų mokestį valstybei."
+nation_set_help_4: "Nustatyti valstybės pavadinimą."
+nation_set_help_5: "Nustatyti vieno iš gyventojų titulą arba pavardę."
+nation_set_help_6: "Nustatyti valstybės žymą."
+nation_set_help_7: "Nustatyti valstybės lentos žinutę."
+nation_set_help_8: "Nustatyti valstybės atsiradimo vietą."
+nation_set_help_9: "Nustatyti /n spawn kainą."
+nation_set_help_10: "Nustatyti žemėlapio spalvą, naudojamą kartografavimo įskiepių."
+nation_toggle_help_0: "Paskelbti valstybės neutralitetą."
+nation_toggle_help_1: "Paskelbti valstybę vieša, leidžiant nepiliečiams naudotis Jūsų valstybės /n spawn."
+nation_toggle_help_2: "Paskelbti valstybę atvira, leidžiant miestams prisijungti prie jos be kvietimo."
+nation_toggle_help_3: "Įtvirtinti procentinius mokesčius, todėl miestai mokėtų tam tikrą dalį pinigų nuo savo banko vietoj fiksuoto dydžio."
 king_help_1: 'Valstybės Vadovo Komandos'
 king_help_2: 'Tvarkyti aljansų sąrašą.'
 king_help_3: 'Tvarkyti priešiškų valstybių sąrašą.'
-king_help_4: "Withdraw money from your nation bank."
-king_help_5: "Add or remove towns from your nation."
-king_help_6: "Use /n set ? for help."
-king_help_7: "Use /n toggle ? for help."
-king_help_8: "Used to absorb another nation into your nation."
-king_help_9: "Used to message everyone in your nation."
+king_help_4: "Išsiimti pinigų iš savo valstybės banko."
+king_help_5: "Pridėti ar pašalinti miestus iš savo valstybės."
+king_help_6: "Naudokite /n set ? tolimesnėms komandoms."
+king_help_7: "Naudokite /n toggle ? tolimesnėms komandoms."
+king_help_8: "Naudojama prijungti kitą valstybę prie Jūsiškės."
+king_help_9: "Naudojama išsiųsti žinutę visiems valstybės piliečiams."
 res_1: 'Jūsų informacija'
 res_2: '[gyventojas]'
 res_3: 'Nurodyto žaidėjo informacija'
@@ -191,14 +191,14 @@ res_4: 'Išvardyti visus prisijungusius žaidėjus'
 res_5: 'norėdami sužinoti tolimesnes komandas'
 res_6: 'Būtinas prisijungusio žaidėjo vardas'
 res_7: 'Būtinas tikslus vardas'
-res_8: 'Just a humble farmer'
-res_9: "How much tax you will pay per day."
-res_10: "See /res jail ? for help."
-res_11: "See /res toggle ? for help."
-res_12: "See /res set ? for help."
-res_13: "Spawn to your town or bed."
-res_toggle_help_0: "Toggle your plots' pvp status."
-res_toggle_help_1: "Toggle your plots' fire status."
+res_8: 'Tik paprastas ūkininkas'
+res_9: "Tiek mokėsite mokesčių per dieną."
+res_10: "Naudokite /res jail ? tolimesnėms komandoms."
+res_11: "Naudokite /res toggle ? tolimesnėms komandoms."
+res_12: "Naudokite /res set ? tolimesnėms komandoms."
+res_13: "Teleportuotis į savo miestą ar lovą."
+res_toggle_help_0: "Pakeisti sklypų PVP statusą."
+res_toggle_help_1: "Pakeisti sklypų ugnies plitimo statusą."
 res_toggle_help_2: "Toggle your plots' mobs status."
 res_toggle_help_3: "Toggle your plots' explosion status."
 res_toggle_help_4: "Toggle the ability to see plot borders."
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'This plot is not associated with a gr
 msg_plot_was_removed_from_group_x: 'Plot &9(%s,%s) &2was removed from group %s'
 msg_plot_renamed_from_x_to_y: 'Plot %s has been renamed to %s.'
 msg_err_plot_group_specify_price: 'Please specify the price, ex: /plot group fs [price]'
-msg_player_put_group_up_for_sale: '%s put group %s up for sale for %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Could not set group type - '
 msg_set_group_type_to_x: 'Changed plot group''s type to %s'
 msg_player_successfully_bought_group_x: '%s successfully bought plot group %s'

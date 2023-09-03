@@ -2,7 +2,7 @@
 name: Towny
 language: spanish
 author: Seruhio, Alvarote1998, Beelzebu, ElMoha943, Ngzhiwei
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'Esta parcela no esta asociada a un gr
 msg_plot_was_removed_from_group_x: 'La parcela &9(%s,%s) &2fue eliminada del grupo %s'
 msg_plot_renamed_from_x_to_y: 'La parcela %s fue renombrada a %s.'
 msg_err_plot_group_specify_price: 'Por favor especifique el precio, ej: /plot group fs [precio]'
-msg_player_put_group_up_for_sale: '%s puso al grupo %s a la venta por %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'No se puedo cambiar el tipo del grupo - '
 msg_set_group_type_to_x: 'Se ha cambiado el tipo del grupo de parcelas a %s'
 msg_player_successfully_bought_group_x: '%s exitosamente compro el grupo de parcelas %s'

@@ -2,7 +2,7 @@
 name: Towny
 language: es-cl
 author: GNosii
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'Este terreno no está asociado con un
 msg_plot_was_removed_from_group_x: 'El terreno &9(%s,%s) &2fue quitado del grupo %s'
 msg_plot_renamed_from_x_to_y: 'El terreno %s ha sido renombrado a %s.'
 msg_err_plot_group_specify_price: 'Por favor especifica el precio, ejemplo: /plot group fs [Precio]'
-msg_player_put_group_up_for_sale: '%s ha puesto el grupo %s a la venta por %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'No se pudo establecer el tipo del grupo - '
 msg_set_group_type_to_x: 'Se ha cambiado el tipo del grupo a %s'
 msg_player_successfully_bought_group_x: '%s compró el grupo de terrenos %s'

@@ -2,7 +2,7 @@
 name: Towny
 language: english
 author: ElgarL
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: 'חלקה זאת אינה שייכת �
 msg_plot_was_removed_from_group_x: 'חלקה &9(%s,%s) &2הוסרה מהקבוצה%s'
 msg_plot_renamed_from_x_to_y: 'שם החלקה %s שונה ל - %s.'
 msg_err_plot_group_specify_price: 'בבקשה ציין את המחיר באמצעות הפקודה, "/plot group fs [price]" בשביל למכור את כל הקבוצה'
-msg_player_put_group_up_for_sale: '%sהעמיד את הקבוצה %s למכירה עבור %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'לא ניתן להגדיר את סוג הקבוצה כ - '
 msg_set_group_type_to_x: 'סוג קבוצת החלקות שונה לסוג %s'
 msg_player_successfully_bought_group_x: '%s קנה את קבוצת החלקות %s בהצלחה'

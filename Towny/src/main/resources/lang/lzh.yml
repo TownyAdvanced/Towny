@@ -2,7 +2,7 @@
 name: Towny
 language: zh-TW
 author: ElgarL
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -1139,7 +1139,8 @@ msg_err_plot_not_associated_with_a_group: '這個地段不屬於任何一個地�
 msg_plot_was_removed_from_group_x: '地段&9（%s，%s）&2被移出了%s地段群組'
 msg_plot_renamed_from_x_to_y: '地段%s已重命名為%s。'
 msg_err_plot_group_specify_price: '請設定價格，指令範例：/plot group fs [價格]'
-msg_player_put_group_up_for_sale: '%s將地段群組%s以%s的價格出售'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: '無法設定地段群組類型 - '
 msg_set_group_type_to_x: '已將地段群組類型更改為%s'
 msg_player_successfully_bought_group_x: '%s成功購買了地段群組%s'
