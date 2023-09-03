@@ -117,6 +117,7 @@ public class TownyPlayerListener implements Listener {
 	
 	// https://jd.papermc.io/paper/1.20/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
 	private static final MethodHandle GET_RESPAWN_FLAGS = JavaUtil.getMethodHandle(PlayerRespawnEvent.class, "getRespawnFlags");
+	private static final MethodHandle SIGN_IS_WAXED = JavaUtil.getMethodHandle(Sign.class, "isWaxed");
 
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
@@ -1396,12 +1397,12 @@ public class TownyPlayerListener implements Listener {
 	}
 	
 	private boolean isSignWaxed(Block block) {
-		if (MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
+		if (SIGN_IS_WAXED == null || MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
 			return false;
 		
 		try {
-			return sign.isWaxed();
-		} catch (NoSuchMethodError e) {
+			return (boolean) SIGN_IS_WAXED.invokeExact(sign);
+		} catch (Throwable throwable) {
 			// Method does not exist in this version
 			return false;
 		}
