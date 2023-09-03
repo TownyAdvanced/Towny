@@ -9065,3 +9065,8 @@ v0.92.0.11:
   - Fix a lot of IDE warnings, courtesy of Warrior with PR #6658.
   - Add gitattributes file, courtesy of Warrior with PR #6962.
   - Add missing deprecation annotations, courtesy of Warrior with PR #6963.
+  - Fix exception when putting a group for sale with eco off, courtesy of Warrior with PR #6970.
+    - Closes #6969.
+  - Improve trident lightning protection, courtesy of Warrior with PR #6964.
+  - Replace http urls with https, courtesy of Warrior with PR #6965.
+  - Area effect cloud protection improvements, courtesy of Warrior with PR #6967.
