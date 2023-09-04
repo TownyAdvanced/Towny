@@ -200,11 +200,11 @@ res_13: "Teleportuotis į savo miestą ar lovą."
 res_toggle_help_0: "Pakeisti sklypų PVP statusą."
 res_toggle_help_1: "Pakeisti sklypų ugnies plitimo statusą."
 res_toggle_help_2: "Pakeisti savo sklypo mobų statusą."
-res_toggle_help_3: "Toggle your plots' explosion status."
-res_toggle_help_4: "Toggle the ability to see plot borders."
-res_toggle_help_5: "Toggle the ability to see constant plot borders."
-res_toggle_help_6: "Toggle the ability to see town borders."
-res_toggle_help_7: "Toggle the ability to see plot notifications."
+res_toggle_help_3: "Įjungti arba išjungti savo sklypų sprogimų statusą."
+res_toggle_help_4: "Įjungti arba išjungti gebėjimą stebėti sklypų ribas."
+res_toggle_help_5: "Įjungti arba išjungti gebėjimą stebėti pastovias sklypų ribas."
+res_toggle_help_6: "Įjungti arba išjungti gebėjimą stebėti miestų ribas."
+res_toggle_help_7: "Įjungti arba išjungti gebėjimą stebėti sklypų pranešimus."
 res_toggle_help_8: "Toggle the ability to claim where you walk."
 res_toggle_help_9: "Toggle the ability to see the map when you change plots."
 res_toggle_help_10: "Remove all modes."
@@ -242,21 +242,21 @@ world_help_2: '[pasaulis]'
 world_help_3: 'Nurodyto pasaulio informacija'
 world_help_4: 'Išvardyti visus pasaulius'
 world_help_5: 'Atstatyti šį sklypą'
-world_help_6: 'See /tw toggle ? for help'
-world_help_7: 'See /tw set ? for help'
-world_set_help_0: "Set the world's wilderness name."
-world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
-world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
-world_toggle_help_2: "Toggle on/off if wars can happen in this world."
-world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
-world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
-world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
-world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
-world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
-world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
-world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
-world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
-world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_help_6: 'Naudokite /tw toggle ? tolimesnėms komandoms'
+world_help_7: 'Naudokite /tw set ? tolimesnėms komandoms'
+world_set_help_0: "Pakeiskite pasaulio tyrlaukių pavadinimą."
+world_toggle_help_0: "Įjunkite arba išjunkite jeigu miestai gali užimti žemę šiame pasaulyje."
+world_toggle_help_1: "Įjunkite arba išjunkite jeigu Towny yra įjungta šiame pasaulyje."
+world_toggle_help_2: "Įjunkite arba išjunkite jeigu karai gali įvykti šiame pasaulyje."
+world_toggle_help_3: "Įjunkite arba išjunkite jeigu pvp arba priverstinis pvp yra įjungtas šiame pasaulyje."
+world_toggle_help_4: "Įjunkite arba išjunkite jeigu draugiška ugnis yra įjungta šiame pasaulyje."
+world_toggle_help_5: "Įjunkite arba išjunkite jeigu sprogimai yra įjungti arba priverstinai įjungti šiame pasaulyje."
+world_toggle_help_6: "Įjunkite arba išjunkite jeigu liepsnos yra įjungtos arba priverstinai įjungtos šiame pasaulyje."
+world_toggle_help_7: "Įjunkite arba išjunkite įvairių mobų dauginimosi nustatymus šiame pasaulyje."
+world_toggle_help_8: "Įjunkite arba išjunkite pakeitimų atšaukimą priverstinai atsisakius žemių funkciją šiame pasaulyje."
+world_toggle_help_9: "Įjunkite arba išjunkite sprogimų padarinių atšaukimo funkcijas šiame pasaulyje."
+world_toggle_help_10: "Įjunkite arba išjunkite komandą šiame pasaulyje, leidžiančią sklypams visiškai ištrinti blockus."
+world_toggle_help_11: "Įjunkite arba išjunkite funkciją šiame pasaulyje, automatiškai ištrinančią padėtus blockus atsisakius sklypo."
 townyadmin_help_1: 'Atsisakyti miesto sklypo'
 townyadmin_help_2: 'Mėginti atsisakyti teritorijos aplink Jus.'
 admin_panel_1: "See /ta set ? for help"
