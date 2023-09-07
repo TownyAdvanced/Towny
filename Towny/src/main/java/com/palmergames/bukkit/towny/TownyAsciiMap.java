@@ -21,8 +21,6 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -43,7 +41,6 @@ public class TownyAsciiMap {
 	private static final int MAP_LOWER_BOUNDS = 7;
 	public static int lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
 	public static int halfLineWidth = lineWidth / 2;
-	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
 	public static String homeSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_HOME.getDefault();
 	public static String outpostSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_OUTPOST.getDefault();

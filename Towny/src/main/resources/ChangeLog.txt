@@ -9072,4 +9072,8 @@ v0.92.0.11:
   - Area effect cloud protection improvements, courtesy of Warrior with PR #6967.
 0.99.5.18:
   - Add protection for parrots being fed cookies. Now requires passing a destroy test.
-    - Closes 6981.
+    - Closes #6981.
+  - Remove exception based control flow from map hud, courtesy of Warrior with PR #6972.
+  - Remove iConomy soft dependency, courtesy of Warrior with PR #6980.
+  - Bump net.coreprotect:coreprotect from 22.0 to 22.1.
+  - Bump mockbukkit to 3.21.0.
