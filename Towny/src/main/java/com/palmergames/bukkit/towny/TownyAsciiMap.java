@@ -120,12 +120,12 @@ public class TownyAsciiMap {
 		for (int tby = pos.getX() + (lineWidth - halfLineWidth - 1); tby >= pos.getX() - halfLineWidth; tby--) {
 			x = 0;
 			for (int tbx = pos.getZ() - halfLineHeight; tbx <= pos.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
-				try {
-					townyMap[y][x] = Component.empty().color(NamedTextColor.WHITE);
-					WorldCoord wc = new WorldCoord(bukkitWorld, new Coord(tby, tbx));
-					if (wc.isWilderness())
-						throw new TownyException();
-					TownBlock townblock = wc.getTownBlockOrNull();
+				townyMap[y][x] = Component.empty().color(NamedTextColor.WHITE);
+
+				WorldCoord wc = new WorldCoord(bukkitWorld, tby, tbx);
+				TownBlock townblock = wc.getTownBlockOrNull();
+
+				if (townblock != null) {
 					Town town = townblock.getTownOrNull();
 					if (x == halfLineHeight && y == halfLineWidth)
 						// This is the player's location, colour it special.
@@ -219,7 +219,7 @@ public class TownyAsciiMap {
 						: ClickEvent.runCommand("/towny:plot claim " + world.getName() + " x" + tby + " z" + tbx);
 					
 					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(clickEvent);
-				} catch (TownyException e) {
+				} else {
 					// Unregistered town block (Wilderness)
 
 					if (x == halfLineHeight && y == halfLineWidth)
@@ -227,7 +227,6 @@ public class TownyAsciiMap {
 					else
 						townyMap[y][x] = townyMap[y][x].color(NamedTextColor.DARK_GRAY);
 
-					WorldCoord wc = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tbx* townBlockSize);
 					String symbol;
 					TextComponent hoverText;
 					String clickCommand;
