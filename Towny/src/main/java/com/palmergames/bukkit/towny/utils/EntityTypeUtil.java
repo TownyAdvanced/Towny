@@ -36,6 +36,7 @@ public class EntityTypeUtil {
 		register(map, "pufferfish", "pufferfish");
 		register(map, "tropical_fish", "tropical_fish");
 		register(map, "tadpole", "tadpole_bucket");
+		register(map, "parrot", "parrot_spawn_egg");
 		register(map, "item_frame", "item_frame");
 		register(map, "glow_item_frame", "glow_item_frame");
 		register(map, "painting", "painting");

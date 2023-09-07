@@ -9070,3 +9070,6 @@ v0.92.0.11:
   - Improve trident lightning protection, courtesy of Warrior with PR #6964.
   - Replace http urls with https, courtesy of Warrior with PR #6965.
   - Area effect cloud protection improvements, courtesy of Warrior with PR #6967.
+0.99.5.18:
+  - Add protection for parrots being fed cookies. Now requires passing a destroy test.
+    - Closes 6981.

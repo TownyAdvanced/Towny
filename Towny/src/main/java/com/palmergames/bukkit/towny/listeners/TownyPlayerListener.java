@@ -656,6 +656,8 @@ public class TownyPlayerListener implements Listener {
 				mat = item;
 			else if (item != null && item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType))
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+			else if (item != null && item == Material.COOKIE && EntityType.PARROT.equals(entityType))
+				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 			else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType))
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 
