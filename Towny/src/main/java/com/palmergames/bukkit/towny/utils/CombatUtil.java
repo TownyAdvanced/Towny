@@ -202,7 +202,14 @@ public class CombatUtil {
 					if (EntityTypeUtil.isProtectedEntity(defendingEntity))
 						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT);
 				}
-				
+
+				/*
+				 * Special wolf scenario to prevent players sniping tamed animals outside of town, while in non-pvp areas.
+				 */
+				if (defenderTB == null && defendingEntity instanceof Wolf wolf && wolf.isTamed() && !isOwner(wolf, attackingPlayer)) {
+					return preventPvP(world, attackerTB) || preventPvP(world, defenderTB);
+				}
+
 				/*
 				 * Protect specific entity interactions (faked with Materials).
 				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
@@ -235,7 +242,6 @@ public class CombatUtil {
 				 * Prevent pvp and remove Wolf targeting.
 				 */
 				if (attackingEntity instanceof Wolf wolf && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
-					wolf.setTarget(null);
 					wolf.setAngry(false);
 					return true;
 				}
@@ -280,8 +286,6 @@ public class CombatUtil {
 						Player owner = BukkitTools.getPlayerExact(wolf.getOwner().getName());
 						return !PlayerCacheUtil.getCachePermission(owner, defendingEntity.getLocation(), Material.AIR, ActionType.DESTROY);
 					} else {
-						wolf.setTarget(null);
-						wolf.setAngry(false);
 						return true;
 					}
 				}

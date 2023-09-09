@@ -43,6 +43,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.Wolf;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -78,6 +79,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -838,6 +840,31 @@ public class TownyEntityListener implements Listener {
 		}
 	}
 
+	@EventHandler(ignoreCancelled = true)
+	public void onWolfTargetPlayer(EntityTargetLivingEntityEvent event) {
+		try {
+			if (!(event.getEntity() instanceof Wolf wolf))
+				return;
+			
+			System.out.println("Target is null: " + String.valueOf(event.getTarget() == null));
+			if (event.getTarget() == null) {
+				return;
+			}
+			
+			if (!(event.getTarget() instanceof Player player))
+				return;
+
+			if (TownyAPI.getInstance().isPVP(player.getLocation()))
+				return;
+
+			System.out.println("Targetting cancelled.");
+			throw new Exception();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Towny.getPlugin().getLogger().log(Level.INFO, "error", e);
+		}
+	}
+	
 	private boolean disallowedTargetSwitch(Block hitBlock, Player player) {
 		return hitBlock.getType() == Material.TARGET && TownySettings.isSwitchMaterial(Material.TARGET, hitBlock.getLocation())
 			&& !TownyActionEventExecutor.canSwitch(player, hitBlock.getLocation(), hitBlock.getType());
