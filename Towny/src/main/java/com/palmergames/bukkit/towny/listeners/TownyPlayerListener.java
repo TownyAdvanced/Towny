@@ -1213,19 +1213,24 @@ public class TownyPlayerListener implements Listener {
 			return true;
 		}
 		/*
-		 * Commands are sometimes blocked from being run by outsiders on an town.
+		 * Commands are sometimes blocked from being run by outsiders on an town. 
 		 */
-		if (town != null && blockedTownCommands.containsCommand(command) && blockedTouristCommands.containsCommand(command)) {
+		if (blockedTownCommands.containsCommand(command) && blockedTouristCommands.containsCommand(command)) {
+			// Allow these commands to be run in the wilderness.
+			if (town == null)
+				return false;
+
 			// Allow own town & let globally welcomed players run commands, also potentially allow trusted and allied residents.
-			if (town.hasResident(resident) || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode())
+			if (town.hasResident(resident) 
+				|| resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_TOURIST_COMMAND_LIMITATION_BYPASS.getNode())
 				|| TownySettings.doTrustedResidentsBypassTownBlockedCommands() && town.hasTrustedResident(resident)
 				|| (resident.hasTown() && TownySettings.doAlliesBypassTownBlockedCommands() && CombatUtil.isAlly(town, resident.getTownOrNull())))
 				return false;
-			
+
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_command_outsider_blocked", town.getName()));
 			return true;
 		}
-		
+
 		/*
 		 * Commands are sometimes blocked from being run inside any town.
 		 */
