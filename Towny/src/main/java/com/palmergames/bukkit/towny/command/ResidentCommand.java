@@ -421,6 +421,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 		} else if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_TOGGLE, newSplit[0])) {
 			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).execute(player, "resident", newSplit);
+			return;
 		} else {
 
 			resident.toggleMode(newSplit, true);

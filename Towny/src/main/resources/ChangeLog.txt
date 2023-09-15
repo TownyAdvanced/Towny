@@ -9078,3 +9078,4 @@ v0.92.0.11:
   - Bump net.coreprotect:coreprotect from 22.0 to 22.1.
   - Bump mockbukkit to 3.21.0.
   - Fix tourist-blacklisted commands not being usable in the wilderness.
+  - Fix seeing an errant permission string when running a /res toggle addon command.
