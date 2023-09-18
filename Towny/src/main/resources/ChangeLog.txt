@@ -9079,3 +9079,5 @@ v0.92.0.11:
   - Bump mockbukkit to 3.21.0.
   - Fix tourist-blacklisted commands not being usable in the wilderness.
   - Fix seeing an errant permission string when running a /res toggle addon command.
+0.99.5.19:
+  - Update PowerRanks warning to mention their version that fixes the incompatibility.
