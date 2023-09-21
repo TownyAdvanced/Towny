@@ -2331,3 +2331,6 @@ msg_resident_about_reset: "&bResident about reset."
 msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
 msg_set_about: "%s's about was set to %s."
 msg_clear_about: "%s's about was cleared."
+
+# Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
