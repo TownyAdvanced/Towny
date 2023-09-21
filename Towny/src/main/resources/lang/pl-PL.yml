@@ -2030,3 +2030,5 @@ msg_resident_about_reset: "&bResetowanie bio mieszkańca."
 msg_err_invalid_string_about_not_set: "Niepoprawna treść, bio nie zostało ustawione."
 msg_set_about: "Bio mieszkańca %s zostało ustawione na %s."
 msg_clear_about: "Bio %s zostało usunięte."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
