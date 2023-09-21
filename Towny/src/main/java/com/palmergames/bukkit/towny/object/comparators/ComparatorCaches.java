@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -75,7 +76,7 @@ public class ComparatorCaches {
 	@SuppressWarnings("unchecked")
 	private static List<Pair<UUID, Component>> gatherTownLines(ComparatorType compType) {
 		List<Pair<UUID, Component>> output = new ArrayList<>();
-		List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
+		List<Town> towns = TownyUniverse.getInstance().getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
 		towns.sort((Comparator<? super Town>) compType.getComparator());
 		
 		for (Town town : towns) {

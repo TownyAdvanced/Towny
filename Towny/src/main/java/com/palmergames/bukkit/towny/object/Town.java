@@ -111,6 +111,7 @@ public class Town extends Government implements TownBlockOwner {
 	private long movedHomeBlockAt;
 	private Jail primaryJail;
 	private int manualTownLevel = -1;
+	private boolean visibleOnTopLists = true;
 
 	public Town(String name) {
 		super(name);
@@ -1889,5 +1890,13 @@ public class Town extends Government implements TownBlockOwner {
 	@Override
 	public boolean exists() {
 		return TownyUniverse.getInstance().hasTown(getName());
+	}
+
+	public boolean isVisibleOnTopLists() {
+		return visibleOnTopLists;
+	}
+
+	public void setVisibleOnTopLists(boolean visibleOnTopLists) {
+		this.visibleOnTopLists = visibleOnTopLists;
 	}
 }

@@ -158,7 +158,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"nfs"
 	);
 	private static final List<String> adminTownToggleTabCompletes = Stream.concat(TownCommand.townToggleTabCompletes.stream(),
-			Arrays.asList("forcemobs", "forcepvp", "forcedisablepvp", "unlimitedclaims", "upkeep", "allowedtowar", "conquered").stream()).collect(Collectors.toList()); 
+			Arrays.asList("forcemobs", "forcepvp", "forcedisablepvp", "unlimitedclaims", "upkeep", "allowedtowar", "conquered", "visibleontoplists").stream()).collect(Collectors.toList()); 
 
 	private static final List<String> adminNationTabCompletes = Arrays.asList(
 		"add",
@@ -1423,6 +1423,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town.setConqueredDays(0);
 			town.save();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_conquered_status_removed", town.getName()));
+		} else if (split[0].equalsIgnoreCase("visibleontoplists")) {
+
+			town.setVisibleOnTopLists(choice.orElse(!town.isVisibleOnTopLists()));
+			town.save();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_visibleontoplist_setting_set_to", town.getName(), town.isVisibleOnTopLists()));
 		} else
 			TownCommand.townToggle(sender, split, true, town);
 	}

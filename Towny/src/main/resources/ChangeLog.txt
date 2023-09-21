@@ -9085,3 +9085,7 @@ v0.92.0.11:
     - Thrown when a Resident, Town or Nation is returning a getFormattedName() value.
     - This is used to alter the prefix or postfix that flanks a TownyObject name, usually a title, surname, townlevel/nationlevel prefix/postfix.
     - Closes #6995.
+  - Add the ability to hide towns from the /towny top and /t list by commands (as well as the PAPIPlaceholders.)
+    - Closes #6996.
+  - New Command: /ta town TOWNNAME toggle visibleontoplists [on|off]
+    - Used by an admin to toggle a town's visiblity on the /towny top, /t list by commands (as well as the PAPIPlaceholders.)
