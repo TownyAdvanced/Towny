@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -547,7 +548,9 @@ public class Nation extends Government {
 
 	@Override
 	public String getFormattedName() {
-		return TownySettings.getNationPrefix(this) + this.getName().replace("_", " ") + TownySettings.getNationPostfix(this);
+		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, TownySettings.getNationPrefix(this), TownySettings.getNationPostfix(this));
+		BukkitTools.fireEvent(event);
+		return event.getPrefix() + getName().replace("_", " ") + event.getPostfix();
 	}
 	
 	@Override

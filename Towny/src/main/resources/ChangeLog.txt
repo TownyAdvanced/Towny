@@ -9081,3 +9081,7 @@ v0.92.0.11:
   - Fix seeing an errant permission string when running a /res toggle addon command.
 0.99.5.19:
   - Update PowerRanks warning to mention their version that fixes the incompatibility.
+  - API: Added TownyObjectFormattedNameEvent
+    - Thrown when a Resident, Town or Nation is returning a getFormattedName() value.
+    - This is used to alter the prefix or postfix that flanks a TownyObject name, usually a title, surname, townlevel/nationlevel prefix/postfix.
+    - Closes #6995.
