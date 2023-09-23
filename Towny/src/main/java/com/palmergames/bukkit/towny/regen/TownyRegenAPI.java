@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
@@ -296,6 +297,11 @@ public class TownyRegenAPI {
 				((EntityExplodeEvent) event).setYield(0);
 			else if (event instanceof BlockExplodeEvent)
 				((BlockExplodeEvent) event).setYield(0);
+
+			// Set extra-special blocks to air so we're not duping items.
+			if (ItemLists.EXPLODABLE_ATTACHABLES.contains(block.getType().name())) {
+				block.setType(Material.AIR);
+			}
 
 			return true;
 		}
