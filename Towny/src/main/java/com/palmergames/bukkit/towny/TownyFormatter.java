@@ -114,7 +114,8 @@ public class TownyFormatter {
 		if (townBlock.getTrustedResidents().size() > 0)
 			screen.addComponentOf("trusted", getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
 
-		screen.addComponentOf("plottax", colourKeyValue(translator.of("status_townblock_plottax"), townBlock.isTaxed() ? formatMoney(townBlock.getPlotTax()) : translator.of("status_townblock_untaxed")));
+		if (TownyEconomyHandler.isActive())
+			screen.addComponentOf("plottax", colourKeyValue(translator.of("status_townblock_plottax"), townBlock.isTaxed() ? formatMoney(townBlock.getPlotTax()) : translator.of("status_townblock_untaxed")));
 
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(townBlock);
