@@ -246,4 +246,18 @@ public final class Translation {
 				}
 		}
 	}
+
+	/**
+	 * @since 0.99.5.20
+	 * @param key The key to check for
+	 * @param locale The language
+	 * @return Whether the language has a translation for the given key
+	 */
+	public static boolean hasTranslation(final @NotNull String key, final @NotNull Locale locale) {
+		final Map<String, String> language = translations.get(locale.toString());
+		if (language == null)
+			return false;
+		
+		return language.get(key) != null;
+	}
 }
