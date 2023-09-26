@@ -9095,3 +9095,4 @@ v0.92.0.11:
 0.99.5.20:
   - Fix /plot info throwing NPE when using_economy is false.
     - Closes #7000.
+  - Add hasTranslation method, courtesy of Warrior with PR #7001.
