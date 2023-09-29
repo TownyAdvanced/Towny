@@ -803,14 +803,10 @@ public class Towny extends JavaPlugin {
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
 		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+
 		try {
-			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-
-			bukkitCommandMap.setAccessible(true);
-			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-
-			commandMap.registerAll("towny", commands);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
+			BukkitTools.getCommandMap().registerAll("towny", commands);
+		} catch (ReflectiveOperationException e) {
 			throw new TownyInitException("An issue has occurred while registering custom commands.", TownyInitException.TownyError.OTHER, e);
 		}
 	}
