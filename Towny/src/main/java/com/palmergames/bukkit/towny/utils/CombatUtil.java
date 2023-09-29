@@ -147,12 +147,18 @@ public class CombatUtil {
 				 * Both townblocks are not Arena plots.
 				 */
 				if (!isArenaPlot(attackerTB, defenderTB)) {
+
 					/*
-					 * Check if we are preventing friendly fire between allies
-					 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
-					 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
+					 * Player does not have the towny.admin permission.
 					 */
-					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB) || preventJailedPVP(defendingPlayer, attackingPlayer);
+					if (!player.hasPermission("towny.admin")) {
+						/*
+						 * Check if we are preventing friendly fire between allies
+						 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
+						 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
+						 */
+						cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB) || preventJailedPVP(defendingPlayer, attackingPlayer);
+					}
 				}
 
 				/*
