@@ -1,20 +1,31 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -174,5 +185,85 @@ public class BorderUtil {
 		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() 
 			&& !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 		
+	}
+
+	private static final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+	@ApiStatus.Internal
+	public static @NotNull FloodfillResult getFloodFillableCoords(final @NotNull Town town, final @NotNull WorldCoord origin) {
+		final TownyWorld originWorld = origin.getTownyWorld();
+		if (originWorld == null || origin.hasTownBlock())
+			return FloodfillResult.fail("a");
+
+		// Filter out any coords not in the same world
+		final Set<WorldCoord> coords = new HashSet<>(town.getTownBlockMap().keySet());
+		coords.removeIf(coord -> !originWorld.equals(coord.getTownyWorld()));
+		if (coords.isEmpty())
+			return FloodfillResult.fail("No coords in the same world");
+
+		int minX = origin.getX();
+		int maxX = origin.getX();
+		int minZ = origin.getZ();
+		int maxZ = origin.getZ();
+
+		// Establish a min and max X & Z to avoid possibly looking very far
+		for (final WorldCoord coord : coords) {
+			minX = Math.min(minX, coord.getX());
+			maxX = Math.max(maxX, coord.getX());
+			minZ = Math.min(minZ, coord.getZ());
+			maxZ = Math.max(maxZ, coord.getZ());
+		}
+
+		final Set<WorldCoord> valid = new HashSet<>();
+		final Set<WorldCoord> visited = new HashSet<>();
+
+		final Queue<WorldCoord> queue = new LinkedList<>();
+		queue.offer(origin);
+		visited.add(origin);
+
+		while (!queue.isEmpty()) {
+			final WorldCoord current = queue.poll();
+
+			valid.add(current);
+
+			for (final int[] direction : DIRECTIONS) {
+				final int xOffset = direction[0];
+				final int zOffset = direction[1];
+
+				final WorldCoord candidate = current.add(xOffset, zOffset);
+
+				if (!coords.contains(candidate) && (candidate.getX() >= maxX || candidate.getX() <= minX || candidate.getZ() >= maxZ || candidate.getZ() <= minZ)) {
+					return FloodfillResult.oob();
+				}
+
+				if (!candidate.hasTownBlock() && !visited.contains(candidate) && !coords.contains(candidate)) {
+					queue.offer(candidate);
+					visited.add(candidate);
+				}
+			}
+		}
+
+		return FloodfillResult.success(valid);
+	}
+
+	@Desugar
+	public record FloodfillResult(@NotNull Type type, @NotNull String feedback, @NotNull Collection<WorldCoord> coords) {
+		public enum Type {
+			SUCCESS,
+			FAIL,
+			OUT_OF_BOUNDS
+		}
+
+		static FloodfillResult fail(final @NotNull String feedback) {
+			return new FloodfillResult(Type.FAIL, feedback, Collections.emptySet());
+		}
+
+		static FloodfillResult oob() {
+			return new FloodfillResult(Type.OUT_OF_BOUNDS, "", Collections.emptySet());
+		}
+
+		static FloodfillResult success(final Collection<WorldCoord> coords) {
+			return new FloodfillResult(Type.SUCCESS, "", coords);
+		}
 	}
 }

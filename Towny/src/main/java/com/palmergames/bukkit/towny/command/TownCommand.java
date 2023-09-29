@@ -93,6 +93,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.MapUtil;
@@ -268,7 +269,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"outpost",
 		"auto",
 		"circle",
-		"rect"
+		"rect",
+		"fill"
 	);
 	
 	public static final List<String> townUnclaimTabCompletes = Arrays.asList(
@@ -3712,6 +3714,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			selection.add(key);
 			outpost = true;
 
+		} else if (split.length == 1 && "fill".equalsIgnoreCase(split[0])) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_FILL.getNode());
+			
+			final BorderUtil.FloodfillResult result = BorderUtil.getFloodFillableCoords(town, key);
+			switch (result.type()) {
+				case FAIL -> {
+					TownyMessaging.sendErrorMsg(player, result.feedback());
+					return;
+				}
+				case OUT_OF_BOUNDS -> TownyMessaging.sendErrorMsg(player, "out of bounds");
+			}
+			
+			selection = new ArrayList<>(result.coords());
 		} else {
 			
 			// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
@@ -3728,10 +3743,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Filter out any TownBlocks which aren't Wilderness. 
 			selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
-
-			if (selection.isEmpty())
-				throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 		}
+
+		if (selection.isEmpty())
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
 		// Not enough available claims.
 		if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
