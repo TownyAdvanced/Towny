@@ -304,6 +304,16 @@ public enum HelpMenu {
 				.add("[number of days] {townless|townname}", Translatable.of("ta_purge_help_0"));
 		}
 	},
+
+	TA_NATION_META {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin nation [nationname] meta")
+				.add("", Translatable.of("ta_nationmeta_help_1"))
+				.add("set [key] [value]", Translatable.of("ta_nationmeta_help_2"))
+				.add("add|remove [key]", Translatable.of("ta_nationmeta_help_3"));
+		}
+	},
 	
 	TA_TOWN_META {
 		@Override
@@ -312,6 +322,16 @@ public enum HelpMenu {
 				.add("", Translatable.of("ta_townmeta_help_1"))
 				.add("set [key] [value]", Translatable.of("ta_townmeta_help_2"))
 				.add("add|remove [key]", Translatable.of("ta_townmeta_help_3"));
+		}
+	},
+
+	TA_RESIDENT_META {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin resident [residentname] meta")
+				.add("", Translatable.of("ta_residentmeta_help_1"))
+				.add("set [key] [value]", Translatable.of("ta_residentmeta_help_2"))
+				.add("add|remove [key]", Translatable.of("ta_residentmeta_help_3"));
 		}
 	},
 

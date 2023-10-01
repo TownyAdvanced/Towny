@@ -9096,3 +9096,10 @@ v0.92.0.11:
   - Fix /plot info throwing NPE when using_economy is false.
     - Closes #7000.
   - Add hasTranslation method, courtesy of Warrior with PR #7001.
+0.99.5.21:
+  - Add new townyadmin commands for controlling resident and nation metadata when it is Globally registered metadata.
+    - /ta nation NAME meta set [key] [value]
+    - /ta nation NAME meta add|remove [key]
+    - /ta resident NAME meta set [key] [value]
+    - /ta resident NAME meta set add|remove [key]
+    - Closes #7015.
