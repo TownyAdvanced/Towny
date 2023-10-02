@@ -9110,3 +9110,5 @@ v0.92.0.11:
   - Bump me.clip:placeholderapi from 2.11.3 to 2.11.4.
   - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.0 to 3.5.1.
   - Bump net.coreprotect:coreprotect from 22.1 to 22.2.
+0.99.6.0:
+  - Bump version number for release.
