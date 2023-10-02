@@ -347,9 +347,15 @@ ta_set_help_6: "Set a plot to a different town."
 ta_set_help_7: "Set a town's founder name."
 ta_set_help_8: "Use size 0 to remove nationzone override."
 ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
-ta_townmeta_help_1: "View the metadata stored in the town you are stood in."
+ta_townmeta_help_1: "View the metadata stored on the town you specify."
 ta_townmeta_help_2: "Set town metadata key and value."
-ta_townmeta_help_3: "Add or remove a metadata by key."
+ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_2: "Set resident metadata key and value."
+ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
+ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
 ta_reload_help_0: "Reloads database."
 ta_reload_help_1: "Reloads config."
 ta_reload_help_2: "Reloads language files."
@@ -1088,6 +1094,12 @@ msg_err_key_cannot_be_deleted: 'Kunci tidak dapat dihapus dikarenakan tidak ada!
 msg_err_this_town_doesnt_have_any_associated_metadata: 'Kota ini tidak memiliki metadata yang terkait.'
 msg_err_key_x_is_not_part_of_this_town: 'Kunci %s bukan bagian dari kota ini, jika memungkinkan harap ditambahkan.'
 msg_custom_data_was_successfully_added_to_town: 'Data kustom telah berhasil ditambahakan ke kota!'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'Terlalu banyak halaman.'
 msg_err_location_is_not_within_a_town: 'Lokasi tidak berada didalam kota.'
 msg_err_location_is_not_within_a_jail_plot: 'Lokasi tidak berada didalam lahan penjara.'
