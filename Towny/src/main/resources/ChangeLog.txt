@@ -9103,3 +9103,10 @@ v0.92.0.11:
     - /ta resident NAME meta set [key] [value]
     - /ta resident NAME meta set add|remove [key]
     - Closes #7015.
+  - Bump adventure platform bukkit to 4.3.1, courtesy of Warrior with PR #7010.
+    - Adds 1.20.2 support.
+  - Fix unclaim all message missing color/prefix, courtesy of Warrior with PR #7014.
+  - Add utility for getting the bukkit command map, courtesy of Warrior with PR #7011.
+  - Bump me.clip:placeholderapi from 2.11.3 to 2.11.4.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.0 to 3.5.1.
+  - Bump net.coreprotect:coreprotect from 22.1 to 22.2.
