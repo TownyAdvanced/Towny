@@ -151,7 +151,7 @@ public class CombatUtil {
 					/*
 					 * Player does not have the towny.admin permission.
 					 */
-					if (!attackingPlayer.hasPermission("towny.admin")) {
+					if (!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(attackingPlayer)) {
 						/*
 						 * Check if we are preventing friendly fire between allies
 						 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
