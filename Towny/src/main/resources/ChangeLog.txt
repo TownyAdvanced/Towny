@@ -9112,3 +9112,5 @@ v0.92.0.11:
   - Bump net.coreprotect:coreprotect from 22.1 to 22.2.
 0.99.6.0:
   - Bump version number for release.
+0.99.6.1:
+  - Reset a player's cache when they change gamemodes.

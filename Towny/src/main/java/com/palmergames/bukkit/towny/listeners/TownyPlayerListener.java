@@ -76,6 +76,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -1392,7 +1393,14 @@ public class TownyPlayerListener implements Listener {
 			}
 		}
 	}
-	
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerChangeGameMode(PlayerGameModeChangeEvent event) {
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+		Towny.getPlugin().deleteCache(event.getPlayer());
+	}
+
 	private void loadBlockedCommandLists() {
 		this.blockedJailCommands = new CommandList(TownySettings.getJailBlacklistedCommands());
 		this.blockedTouristCommands = new CommandList(TownySettings.getTouristBlockedCommands());
