@@ -47,6 +47,8 @@ import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
 import io.papermc.lib.PaperLib;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -1130,7 +1132,9 @@ public class TownyPlayerListener implements Listener {
 	public void onPlayerUsesCommand(PlayerCommandPreprocessEvent event) {
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
-		
+
+		checkForOpDeOpCommand(event);
+
 		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 
 		// More than likely another plugin using a fake player to run a command or,
@@ -1155,6 +1159,31 @@ public class TownyPlayerListener implements Listener {
 		final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(event.getPlayer());
 		if (blockOutlawedPlayerCommand(event.getPlayer(), resident, townBlock, command) || blockCommandInsideTown(event.getPlayer(), resident, townBlock, command))
 			event.setCancelled(true);
+	}
+
+	private void checkForOpDeOpCommand(PlayerCommandPreprocessEvent event) {
+		String[] args = CommandList.normalizeCommand(event.getMessage()).split(" ");
+		String command = args[0];
+		// Fail early if we aren't looking at /op|deop [playername]
+		if ((!command.equalsIgnoreCase("op") && !command.equalsIgnoreCase("deop")) || args.length != 2)
+			return;
+
+		// Get the target.
+		Player target = Bukkit.getPlayer(args[1]);
+		if (target == null || !target.isOnline())
+			return;
+
+		// Make sure they have the permission to run the command.
+		if (!event.getPlayer().hasPermission("minecraft.command." + command))
+			return;
+
+		// Make sure they're not running the command which will have no effect.
+		if (target.isOp() == "op".equalsIgnoreCase(command))
+			return;
+
+		// Delete the online player's cache because they have been op'd or deop'd.
+		Towny plugin = Towny.getPlugin();
+		plugin.getScheduler().runLater(target, () -> plugin.deleteCache(target), 1L);
 	}
 
 	public boolean blockWarPlayerCommand(Player player, Resident resident, String command) {
@@ -1394,7 +1423,7 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerChangeGameMode(PlayerGameModeChangeEvent event) {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;

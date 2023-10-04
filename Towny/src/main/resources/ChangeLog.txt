@@ -9114,3 +9114,4 @@ v0.92.0.11:
   - Bump version number for release.
 0.99.6.1:
   - Reset a player's cache when they change gamemodes.
+  - Reset a player's cache when they are op'd or deop'd.
