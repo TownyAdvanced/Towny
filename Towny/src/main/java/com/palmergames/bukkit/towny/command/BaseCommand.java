@@ -252,7 +252,7 @@ public class BaseCommand implements TabCompleter{
 			return getResidentsWithoutTownStartingWith(arg);
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
 			.map(Resident::getPlayer)
-			.filter(p -> p != null && player.canSee(p))
+			.filter(p -> p != null && BukkitTools.playerCanSeePlayer(player, p))
 			.map(Player::getName)
 			.collect(Collectors.toCollection(ArrayList::new));
 		return !residents.isEmpty()
