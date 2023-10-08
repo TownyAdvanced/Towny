@@ -19,6 +19,7 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
     private final Player player;
     private boolean isHomeblock = false;
     private boolean isOutpost = false;
+	private boolean isOverClaim = false;
 
 	/**
 	 * This event runs when a town is made and when a town attempts to claim land.
@@ -38,15 +39,25 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
 	 * @param player Player who is doing the claiming.
 	 * @param isOutpost True if the TownBlock will become an outpost.
 	 * @param isHomeblock True if the TownBlock will become a homeblock.
+	 * @param isOverClaim True if the claim has resulted from takeoverclaim.
 	 */
-    public TownPreClaimEvent(Town town, TownBlock townBlock, Player player, boolean isOutpost, boolean isHomeblock) {
+    public TownPreClaimEvent(Town town, TownBlock townBlock, Player player, boolean isOutpost, boolean isHomeblock, boolean isOverClaim) {
         this.town = town;
         this.townBlock = townBlock;
         this.player = player;
         this.isOutpost = isOutpost;
         this.isHomeblock = isHomeblock;
+		this.isOverClaim = isOverClaim;
         setCancelMessage(Translation.of("msg_claim_error"));
     }
+
+	/**
+	 * Whether the claim has resulted from takeoverclaim.
+	 * @return true if the claim resulted from /t takeoverclaim.
+	 */
+	public boolean isOverClaim() {
+		return isOverClaim;
+	}
 
     /**
      * Whether the townblock being claimed will be an outpost.
