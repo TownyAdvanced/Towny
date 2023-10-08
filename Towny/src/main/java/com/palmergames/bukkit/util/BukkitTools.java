@@ -132,18 +132,18 @@ public class BukkitTools {
 	 * @return true if the seeing Player can see the seen Player.
 	 */
 	public static boolean playerCanSeePlayer(Player seeing, Player seen) {
-		// Vanish plugins on servers using MC 1.19.3 and newer should be able to
-		// correctly set the results of player#canSee(Player).
-		if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_19_3))
-			return seeing.canSee(seen);
-
-		// Servers using MC older than 1.19.3 will use a metadata test, which 4+ vanish plugins use.
-		for (MetadataValue meta : seen.getMetadata("vanished")) {
-			if (meta.asBoolean())
-				return false;
+		// PremiumVanish cannot hide a player unless the MC is 1.19.3+ and ProtocolLib
+		// is of a specific version.
+		if (Bukkit.getPluginManager().isPluginEnabled("PremiumVanish") &&
+			MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_19_3)) {
+			for (MetadataValue meta : seen.getMetadata("vanished")) {
+				if (meta.asBoolean())
+					return false;
+			}
+			return true;
 		}
-
-		return true;
+		// Vanish plugins should be able to correctly set the results of player#canSee(Player).
+		return seeing.canSee(seen);
 	}
 
 	public static Collection<? extends Player> getVisibleOnlinePlayers(CommandSender sender) {
