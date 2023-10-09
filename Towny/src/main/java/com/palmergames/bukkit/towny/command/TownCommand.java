@@ -4558,10 +4558,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				
-				if (!resident.getAccount().withdraw(town.getForSalePrice(), "Town purchase cost.")) {
+				if (resident.getAccount().getHoldingBalance() < town.getForSalePrice()) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_you_need_x_to_pay", town.getForSalePrice()));
 					return;
 				}
+				
+				resident.getAccount().withdraw(town.getForSalePrice(), "Town purchase cost.");
 				
 				try {
 					if (resident.hasTown())
