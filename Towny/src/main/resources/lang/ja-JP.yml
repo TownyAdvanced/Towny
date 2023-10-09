@@ -178,12 +178,12 @@ nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead
 king_help_1: '国家リーダーヘルプ'
 king_help_2: '同盟を設定'
 king_help_3: '敵を設定'
-king_help_4: "Withdraw money from your nation bank."
-king_help_5: "Add or remove towns from your nation."
+king_help_4: "国の銀行からお金を引き出します。"
+king_help_5: "町をあなたの国に追加または削除します。"
 king_help_6: "Use /n set ? for help."
 king_help_7: "Use /n toggle ? for help."
-king_help_8: "Used to absorb another nation into your nation."
-king_help_9: "Used to message everyone in your nation."
+king_help_8: "他の国をあなたの国に併合します。"
+king_help_9: "国に居る全員にメッセージを送ります。"
 res_1: 'ステータス'
 res_2: '[住民]'
 res_3: 'ターゲットプレイヤーの状態'
