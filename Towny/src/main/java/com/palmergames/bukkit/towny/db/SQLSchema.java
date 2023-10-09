@@ -179,6 +179,7 @@ public class SQLSchema {
 		columns.add("`friends` mediumtext");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) NOT NULL");
+		columns.add("`about` mediumtext DEFAULT NULL");
 		return columns;
 	}
 
@@ -243,6 +244,7 @@ public class SQLSchema {
 		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
 		columns.add("`forSale` bool NOT NULL DEFAULT '0'");
 		columns.add("`forSalePrice` float NOT NULL");
+		columns.add("`visibleOnTopLists` bool NOT NULL DEFAULT '1'");
 		
 		return columns;
 	}

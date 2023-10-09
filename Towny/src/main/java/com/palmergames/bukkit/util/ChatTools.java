@@ -145,7 +145,7 @@ public class ChatTools {
 		if (subCommand.length() > 0)
 			out += " " + Translation.of("help_menu_subcommand") + subCommand;
 		if (help.length() > 0)
-			out += " " + Translation.of("help_menu_explanation") + " : " + help;
+			out += Translation.of("help_menu_explanation") + " : " + help;
 		return out;
 	}
 

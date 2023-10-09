@@ -1216,15 +1216,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	public void parsePlotGroupAdd(String[] split, TownBlock townBlock, Player player, Town town) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_ADD.getNode());
 
-		if (split.length == 1) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_must_specify_a_group_name"));
-			return;
-		}
+		Resident resident = getResidentOrThrow(player);
 
-		if (split.length != 2)
+		if (split.length != 2 && !resident.hasPlotGroupName())
 			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
 
-		String plotGroupName = NameValidation.filterName(split[1]);
+		String plotGroupName = split.length == 2 ? NameValidation.filterName(split[1]) : 
+				resident.hasPlotGroupName() ? resident.getPlotGroupName() : null;
 		plotGroupName = NameValidation.filterCommas(plotGroupName);
 
 		if (town.hasPlotGroupName(plotGroupName)) {
@@ -1251,6 +1249,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else 
 					oldGroup.save();
 				createOrAddOnToPlotGroup(townBlock, town, name);
+				resident.setPlotGroupName(name);
 				TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_transferred_from_x_to_x_group", oldGroup.getName(), townBlock.getPlotObjectGroup().getName()));
 			})
 			.setTitle(Translatable.of("msg_plot_group_already_exists_did_you_want_to_transfer", townBlock.getPlotObjectGroup().getName(), split[1]))
@@ -1258,6 +1257,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Create a brand new plot group.
 			createOrAddOnToPlotGroup(townBlock, town, plotGroupName);
+			resident.setPlotGroupName(plotGroupName);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), townBlock.getPlotObjectGroup().getName()));
 		}
 	}
@@ -1311,18 +1311,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_FORSALE.getNode());
 
 		// This means the player wants to fs the plot group they are in.
-		if (split.length < 2)
+		if (split.length < 2 && TownyEconomyHandler.isActive())
 			throw new TownyException(Translatable.of("msg_err_plot_group_specify_price"));
 
 		PlotGroup group = catchMissingPlotGroup(townBlock);
 
-		double price = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+		double price = split.length >= 2 ? MoneyUtil.getMoneyAboveZeroOrThrow(split[1]) : 0;
 		group.setPrice(Math.min(price, TownySettings.getMaxPlotPrice()));
 		
 		// Save
 		group.save();
 
-		Translatable message = Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice()));
+		Translatable message = TownyEconomyHandler.isActive()
+			? Translatable.of("msg_player_put_group_up_for_sale_amount", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice()))
+			: Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName());
+		
 		TownyMessaging.sendPrefixedTownMessage(town, message);
 		
 		if (!resident.hasTown() || resident.getTownOrNull() != town)

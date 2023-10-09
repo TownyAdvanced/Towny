@@ -3,11 +3,8 @@ package com.palmergames.bukkit.towny.huds;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyAsciiMap;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.asciimap.WildernessMapEvent;
-import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -19,7 +16,6 @@ import com.palmergames.bukkit.towny.object.map.TownyMapData;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
-import net.kyori.adventure.text.TextComponent;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -32,7 +28,6 @@ import org.bukkit.scoreboard.Scoreboard;
 
 public class MapHUD {
 	private static int lineWidth = 19, lineHeight = 10;
-	private static final int townBlockSize = TownySettings.getTownBlockSize();
 	
 	public static void toggleOn(Player player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -95,16 +90,15 @@ public class MapHUD {
 			x = 0;
 			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
 				map[y][x] = Colors.White;
-				try {
-					WorldCoord currentWC = new WorldCoord(bukkitWorld, new Coord(tby, tbx));
-					if (currentWC.isWilderness())
-						throw new TownyException();
-					TownBlock townblock = currentWC.getTownBlockOrNull();
-					Town town = townblock.getTownOrNull();
+				final WorldCoord worldCoord = new WorldCoord(bukkitWorld, tby, tbx);
+				final TownBlock townBlock = worldCoord.getTownBlockOrNull();
+				
+				if (townBlock != null) {
+					Town town = townBlock.getTownOrNull();
 					if (x == halfLineHeight && y == halfLineWidth)
 						// This is the player's location, colour it special.
 						map[y][x] = Colors.Gold;
-					else if (townblock.hasResident(resident))
+					else if (townBlock.hasResident(resident))
 						//own plot
 						map[y][x] = Colors.Yellow;
 					else if (resident.hasTown())
@@ -127,19 +121,19 @@ public class MapHUD {
 
 					// If this is not where the player is currently locationed,
 					// set the colour of the townblocktype if it has one.
-					if (!(x == halfLineHeight && y == halfLineWidth) && townblock.getData().hasColour())
-						map[y][x] = map[y][x] = Colors.getLegacyFromNamedTextColor(townblock.getData().getColour());
+					if (!(x == halfLineHeight && y == halfLineWidth) && townBlock.getData().hasColour())
+						map[y][x] = map[y][x] = Colors.getLegacyFromNamedTextColor(townBlock.getData().getColour());
 
 					// Registered town block
-					if (townblock.getPlotPrice() != -1 || townblock.hasPlotObjectGroup() && townblock.getPlotObjectGroup().getPrice() != -1) {
+					if (townBlock.getPlotPrice() != -1 || townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPrice() != -1) {
 						map[y][x] += TownyAsciiMap.forSaleSymbol;
-					} else if (townblock.isHomeBlock())
+					} else if (townBlock.isHomeBlock())
 						map[y][x] += TownyAsciiMap.homeSymbol;
-					else if (townblock.isOutpost())
+					else if (townBlock.isOutpost())
 						map[y][x] += TownyAsciiMap.outpostSymbol;
 					else
-						map[y][x] += townblock.getType().getAsciiMapKey();
-				} catch (TownyException e) {
+						map[y][x] += townBlock.getType().getAsciiMapKey();
+				} else {
 					// Unregistered town block
 					
 					if (x == halfLineHeight && y == halfLineWidth)
@@ -147,29 +141,22 @@ public class MapHUD {
 					else
 						map[y][x] = Colors.Gray;
 
-					WorldCoord worldcoord = WorldCoord.parseWorldCoord(world.getName(), tby * townBlockSize , tbx* townBlockSize);
 					String symbol;
-					TextComponent hoverText; 
-					String clickCommand;
 					// Cached TownyMapData is present and not old.
-					if (getWildernessMapDataMap().containsKey(worldcoord) && !getWildernessMapDataMap().get(worldcoord).isOld()) {
-						TownyMapData mapData = getWildernessMapDataMap().get(worldcoord);
+					final TownyMapData data = getWildernessMapDataMap().get(worldCoord);
+					
+					if (data != null && !data.isOld()) {
+						TownyMapData mapData = getWildernessMapDataMap().get(worldCoord);
 						symbol = mapData.getSymbol();
-						hoverText = mapData.getHoverText();
-						clickCommand = mapData.getClickCommand();
 					// Cached TownyMapData is either not present or was considered old.
 					} else {
-						getWildernessMapDataMap().remove(worldcoord);
-						WildernessMapEvent wildMapEvent = new WildernessMapEvent(worldcoord);
+						WildernessMapEvent wildMapEvent = new WildernessMapEvent(worldCoord);
 						BukkitTools.fireEvent(wildMapEvent);
 						symbol = wildMapEvent.getMapSymbol();
-						hoverText = wildMapEvent.getHoverText();
-						clickCommand = wildMapEvent.getClickCommand();
-						getWildernessMapDataMap().put(worldcoord, new TownyMapData(worldcoord, symbol, hoverText, clickCommand));
+						getWildernessMapDataMap().put(worldCoord, new TownyMapData(worldCoord, symbol, wildMapEvent.getHoverText(), wildMapEvent.getClickCommand()));
 						
 						Towny.getPlugin().getScheduler().runAsyncLater(() -> {
-							if (getWildernessMapDataMap().containsKey(worldcoord) && getWildernessMapDataMap().get(worldcoord).isOld())
-								getWildernessMapDataMap().remove(worldcoord);
+							getWildernessMapDataMap().computeIfPresent(worldCoord, (key, cachedData) -> cachedData.isOld() ? null : cachedData);
 						}, 20 * 35);
 					}
 

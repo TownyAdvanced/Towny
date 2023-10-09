@@ -234,8 +234,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(nationOrIgnore, args[1]);
 					}
 					if (args.length == 3) {
-						List<String> ignore = Collections.singletonList("-ignore");
-						return ignore;
+						return Collections.singletonList("-ignore");
 					}
 				case "add":
 					return getTownyStartingWith(args[args.length - 1], "t");
@@ -460,7 +459,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "list":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode());
 			listNations(player, split);
 			break;
 		case "townlist":
@@ -1025,7 +1023,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public static void mergeNation(CommandSender sender, String[] split, @NotNull Nation remainingNation, boolean admin) throws TownyException {
 
-		if (split.length <= 0) // /n merge
+		if (split.length == 0) // /n merge
 			throw new TownyException(Translatable.of("msg_specify_nation_name"));
 
 		String name = split[0];
@@ -1419,7 +1417,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void nationAlly(Player player, String[] split) throws TownyException {
-		if (split.length <= 0) {
+		if (split.length == 0) {
 			HelpMenu.ALLIES_STRING.send(player);
 			return;
 		}
@@ -1674,7 +1672,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// threw an exception or a non-admin player tried to ally an NPC-led nation, continue;
 					TownyMessaging.sendErrorMsg(resident, e.getMessage());
 					remove.add(targetNation);
-					continue;
 				}
 	
 			} else { // So we are removing an ally
@@ -1684,7 +1681,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// One of the Allies was not removed because the NationRemoveAllyEvent was cancelled, continue;
 					TownyMessaging.sendErrorMsg(resident, e.getMessage());
 					remove.add(targetNation);
-					continue;
 				}
 			}
 		}
@@ -2114,7 +2110,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationSetTag(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
-		String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
+		String name = sender instanceof Player ? sender.getName() : "Console"; 
 		
 		if (split.length < 2)
 			throw new TownyException("Eg: /nation set tag PLT");
@@ -2173,7 +2169,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
 
 			nation.setSpawnCost(amount);
-			String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
+			String name = sender instanceof Player ? sender.getName() : "Console"; 
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));
 			if (admin)
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));

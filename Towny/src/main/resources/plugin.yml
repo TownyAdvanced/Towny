@@ -11,7 +11,7 @@ description: >
     Resident-Town-Nation hierarchy combined with a grid based
     protection system, many features and an expansive API.
 
-softdepend: [Citizens,Vault,Reserve,TheNewChat,PlaceholderAPI,GroupManager,iConomy,LuckPerms,CoreProtect]
+softdepend: [Citizens,Vault,Reserve,TheNewChat,PlaceholderAPI,GroupManager,LuckPerms,CoreProtect]
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -165,6 +165,14 @@ permissions:
             towny.claimed.alltown.build.*: true
             towny.claimed.alltown.item_use.*: true
             towny.claimed.alltown.destroy.*: true
+
+    towny.bypass_death_costs:
+        description: Makes the player not subject to death costs charged by Towny.
+        default: false
+
+    towny.bypass_bed_restriction:
+        description: Makes the player not subject to bed-use restrictions.
+        default: false
 
     #
     # New command permissions (replaces many of the older permissions)
@@ -605,6 +613,7 @@ permissions:
         children:
             towny.command.resident.set.mode: true
             towny.command.resident.set.perm: true
+            towny.command.resident.set.about: true
 
     towny.command.resident.toggle.*:
         description: User can toggle their default settings.
@@ -678,6 +687,7 @@ permissions:
             towny.command.townyadmin.set.plot: true
             towny.command.townyadmin.set.surname: true
             towny.command.townyadmin.set.title: true
+            towny.command.townyadmin.set.about: true
 
     towny.command.townyadmin.town.*:
         description: User can access the admin town commands.

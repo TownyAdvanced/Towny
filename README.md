@@ -63,7 +63,7 @@ ___
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.20.* </td><td rowspan=5> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.99.5.0>0.99.5.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.20.* </td><td rowspan=5> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.99.6.0>0.99.6.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
 <tr align=center><td> MC 1.19.* </td>
 <tr align=center><td> MC 1.18.* </td>
 <tr align=center><td> MC 1.17.* </td>
@@ -104,7 +104,7 @@ Some important pages to look over:
 
 Here on GitHub's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) you can file [bug reports](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=bug_report.md&title=), [feature requests](https://github.com/TownyAdvanced/Towny/issues/new?assignees=&labels=&template=feature_request.md&title=Suggestion%3A+), or just ask [general questions.](https://github.com/TownyAdvanced/Towny/discussions/new?category=Q-A)
 
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/TownyAdvanced/Towny.svg)](http://isitmaintained.com/project/TownyAdvanced/Towny "Percentage of issues still open")
+[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/TownyAdvanced/Towny.svg)](https://isitmaintained.com/project/TownyAdvanced/Towny "Average time to resolve an issue") [![Percentage of issues still open](https://isitmaintained.com/badge/open/TownyAdvanced/Towny.svg)](https://isitmaintained.com/project/TownyAdvanced/Towny "Percentage of issues still open")
 
 If you still need help, join us on the [Discord server]( https://discord.gg/gnpVs5m ), where you'll find Channels for support, add-on plugins, [SponsorPlugins](https://github.com/LlmDl/SponsorPlugins#readme), plugin-development and just regular old discussion of the plugin.
 
@@ -130,7 +130,7 @@ If you'd like to help translating Towny into the available languages or add enti
 ___
 
 ### Licensing
-Towny is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0) License ](http://creativecommons.org/licenses/by-nc-nd/3.0/)
+Towny is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0) License ](https://creativecommons.org/licenses/by-nc-nd/3.0/)
 
 We don't object to you making your own forks and builds but we do object to people being selfish, which is why we specify No Derivative Works.
 If you want to modify the code to add some nice feature the least you can do is ask and submit a pull request to allow everyone to benefit from it.
@@ -145,7 +145,7 @@ Developers who wish to use the Towny API in their plugins may read [the followin
 ___
 
 ### Building Towny
-If you would like to build from a specific branch yourself, you can do so with either [Apache Ant](https://ant.apache.org/) or [Apache Maven](http://maven.apache.org/), depending on the age of the branch.
+If you would like to build from a specific branch yourself, you can do so with either [Apache Ant](https://ant.apache.org/) or [Apache Maven](https://maven.apache.org/), depending on the age of the branch.
 
 For building, open your terminal / command prompt and navigate to the Towny Directory (either extracted, or cloned).
 

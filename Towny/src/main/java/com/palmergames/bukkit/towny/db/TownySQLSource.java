@@ -834,14 +834,20 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			String line;
 			try {
+				line = rs.getString("about");
+				if (line != null)
+					resident.setAbout(line);
+			} catch (SQLException e) {
+				plugin.getLogger().log(Level.WARNING, "Could not get about column on the residents table", e);
+			}
+			
+			try {
 				line = rs.getString("friends");
 				if (line != null) {
 					search = (line.contains("#")) ? "#" : ",";
 					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(search));
 					for (Resident friend : friends) {
-						try {
-							resident.addFriend(friend);
-						} catch (AlreadyRegisteredException ignored) {}
+						resident.addFriend(friend);
 					}
 				}
 			} catch (SQLException e) {
@@ -989,6 +995,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
 			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
 			town.setHasUnlimitedClaims(rs.getBoolean("hasUnlimitedClaims"));
+			town.setVisibleOnTopLists(rs.getBoolean("visibleOnTopLists"));
 			town.setPlotPrice(rs.getFloat("plotPrice"));
 			town.setPlotTax(rs.getFloat("plotTax"));
 			town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
@@ -1208,6 +1215,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
 			}
 			
+			line = rs.getString("visibleOnTopLists");
+			if (line != null && !line.isEmpty())
+				town.setVisibleOnTopLists(rs.getBoolean("visibleOnTopLists"));
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
@@ -2147,6 +2158,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			res_hm.put("jailBail", resident.getJailBailCost());
 			res_hm.put("title", resident.getTitle());
 			res_hm.put("surname", resident.getSurname());
+			
+			if (!TownySettings.getDefaultResidentAbout().equals(resident.getAbout()))
+				res_hm.put("about", resident.getAbout());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
 			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanks(), "#") : "");
 			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
@@ -2213,6 +2227,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("taxes", town.getTaxes());
 			twn_hm.put("hasUpkeep", town.hasUpkeep());
 			twn_hm.put("hasUnlimitedClaims", town.hasUnlimitedClaims());
+			twn_hm.put("visibleOnTopLists", town.isVisibleOnTopLists());
 			twn_hm.put("taxpercent", town.isTaxPercentage());
 			twn_hm.put("maxPercentTaxAmount", town.getMaxPercentTaxAmount());
 			twn_hm.put("open", town.isOpen());
@@ -2288,7 +2303,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			pltgrp_hm.put("groupID", group.getUUID().toString());
 			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
-			pltgrp_hm.put("town", group.getTown().toString());
+			pltgrp_hm.put("town", group.getTown().getName());
 
 			updateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("groupID"));
 

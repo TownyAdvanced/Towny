@@ -157,9 +157,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
 				if (BukkitTools.getWorld(worldName) == null) {
-					TownyMessaging.sendErrorMsg("Your towny\\data\\townblocks\\ folder contains a folder named '"
-							+ worldName + "' which doesn't appear to exist on your Bukkit server!");
-					TownyMessaging.sendErrorMsg("Towny will load the townblocks regardless, but if this world no longer exists please delete the folder.");
+					Towny.getPlugin().getScheduler().runAsyncLater(() -> {
+						// Check if the World is still null in Bukkit and warn the admin.
+						if (BukkitTools.getWorld(worldName) == null) {
+							Towny.getPlugin().getLogger().warning("Your towny\\data\\townblocks\\ folder contains a folder named '"
+									+ worldName + "' which doesn't appear to exist on your Bukkit server!");
+							Towny.getPlugin().getLogger().warning("Towny will load the townblocks regardless, but if this world no longer exists please delete the folder.");
+						}
+					}, 20L);
 				}
 
 				TownyWorld world = universe.getWorld(worldName);
@@ -463,7 +468,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								try {
 									// Resident#removeTown saves the resident, so we can't use it.
 									olderRes.getTown().removeResident(olderRes);
-								} catch (NotRegisteredException nre) {}
+								} catch (NotRegisteredException ignored) {}
 							}
 							deleteResident(olderRes);					
 						} else {
@@ -479,6 +484,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
+				
+				line = keys.get("about");
+				if (line != null)
+					resident.setAbout(line);
 				
 				line = keys.get("registered");
 				if (line != null)
@@ -512,9 +521,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(","));
 					for (Resident friend : friends) {
-						try {
-							resident.addFriend(friend);
-						} catch (AlreadyRegisteredException ignored) {}
+						resident.addFriend(friend);
 					}
 				}
 				
@@ -552,13 +559,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							line = keys.get("town-ranks");
 							if (line != null)
 								resident.setTownRanks(Arrays.asList((line.split(","))));
-						} catch (Exception e) {}
+						} catch (Exception ignored) {}
 
 						try {
 							line = keys.get("nation-ranks");
 							if (line != null)
 								resident.setNationRanks(Arrays.asList((line.split(","))));
-						} catch (Exception e) {}
+						} catch (Exception ignored) {}
 
 						line = keys.get("joinedTownAt");
 						if (line != null) {
@@ -682,6 +689,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("visibleOnTopLists");
+				if (line != null)
+					try {
+						town.setVisibleOnTopLists(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
 				line = keys.get("taxpercent");
 				if (line != null)
 					try {
@@ -1875,6 +1889,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("title=" + resident.getTitle());
 		// surname
 		list.add("surname=" + resident.getSurname());
+		// about
+		if (!TownySettings.getDefaultResidentAbout().equals(resident.getAbout()))
+			list.add("about=" + resident.getAbout());
 
 		if (resident.hasTown()) {
 			try {
@@ -1962,6 +1979,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("hasUpkeep=" + town.hasUpkeep());
 		// UnlimitedClaims
 		list.add("hasUnlimitedClaims=" + town.hasUnlimitedClaims());
+		// VisibleOnTopLists
+		list.add("visibleOnTopLists=" + town.isVisibleOnTopLists());
 		// Open
 		list.add("open=" + town.isOpen());
 		// PVP
@@ -2052,15 +2071,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean savePlotGroup(PlotGroup group) {
 		
 		List<String> list = new ArrayList<>();
-		
-		// Group Name
-		list.add("groupName=" + group.getName());
-		
-		// Group Price
-		list.add("groupPrice=" + group.getPrice());
-		
-		// Town
-		list.add("town=" + group.getTown().toString());
+
+		try {
+			list.add("groupName=" + group.getName());
+			list.add("groupPrice=" + group.getPrice());
+			list.add("town=" + group.getTown().getName());
+		} catch (Exception e) {
+			logger.warn("An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
+		}
 		
 		// Save file
 		this.queryQueue.add(new FlatFileSaveTask(list, getPlotGroupFilename(group)));

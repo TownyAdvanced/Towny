@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.JavaUtil;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -20,8 +21,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Field;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +36,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -62,18 +62,7 @@ public class TownyPerms {
 		TownyPerms.plugin = plugin;
 	}
 	
-	private static final MethodHandle PERMISSIONS;
-
-	// Setup reflection (Thanks to Codename_B for the reflection source)
-	static {
-		try {
-			Field permissionsField = PermissionAttachment.class.getDeclaredField("permissions");
-			permissionsField.setAccessible(true);
-			PERMISSIONS = MethodHandles.lookup().unreflectGetter(permissionsField);
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	private static final MethodHandle PERMISSIONS = Objects.requireNonNull(JavaUtil.getFieldHandle(PermissionAttachment.class, "permissions"), "Could not find expected PermissionAttachment.permissions field");
 
 	/**
 	 * Load the townyperms.yml file.

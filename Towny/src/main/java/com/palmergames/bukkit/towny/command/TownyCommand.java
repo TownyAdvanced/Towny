@@ -38,6 +38,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -46,11 +47,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
 
-	// protected static TownyUniverse universe;
-	private static Towny plugin;
+	private final Towny plugin;
 
 	private static final List<String> townyTabCompletes = Arrays.asList(
 		"map",
@@ -92,7 +93,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
 		if (plugin.isError()) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_safe_mode"));
 			return true;
@@ -294,25 +295,20 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		TownyUniverse universe = TownyUniverse.getInstance();
 
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
-			townyTop.add(ChatTools.formatTitle("/towny top"));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "residents [all/town/nation]", ""));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "land [all/resident/town]", ""));
-			townyTop.add(ChatTools.formatCommand("", "/towny top", "balance [all/town/nation]", ""));
-			for (String line : townyTop)
-				TownyMessaging.sendMessage(sender, line);
+			HelpMenu.TOWNY_TOP_HELP.send(sender);
 			return;
 		} 
 
 		if (args[0].equalsIgnoreCase("residents")) {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_RESIDENTS.getNode());
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentList> list = new ArrayList<>(universe.getTowns());
+				List<ResidentList> list = universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
 				list.addAll(universe.getNations());
 				townyTop.add(ChatTools.formatTitle("Most Residents"));
 				townyTop.addAll(getMostResidents(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				townyTop.add(ChatTools.formatTitle("Most Residents in a Town"));
-				townyTop.addAll(getMostResidents(new ArrayList<>(universe.getTowns())));
+				townyTop.addAll(getMostResidents(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList())));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				townyTop.add(ChatTools.formatTitle("Most Residents in a Nation"));
 				townyTop.addAll(getMostResidents(new ArrayList<>(universe.getNations())));
@@ -322,7 +318,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_LAND.getNode());
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<TownBlockOwner> list = new ArrayList<>(universe.getResidents());
-				list.addAll(universe.getTowns());
+				list.addAll(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList()));
 				townyTop.add(ChatTools.formatTitle("Most Land Owned"));
 				townyTop.addAll(getMostLand(list));
 			} else if (args[1].equalsIgnoreCase("resident")) {
@@ -330,7 +326,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				townyTop.addAll(getMostLand(new ArrayList<>(universe.getResidents())));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				townyTop.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				townyTop.addAll(getMostLand(new ArrayList<>(universe.getTowns())));
+				townyTop.addAll(getMostLand(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList())));
 			} else
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
 		} else if (args[0].equalsIgnoreCase("balance")) {
@@ -338,12 +334,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			plugin.getScheduler().runAsync(() -> {
 				if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 					List<Government> list = new ArrayList<>();
-					list.addAll(universe.getTowns());
+					list.addAll(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList()));
 					list.addAll(universe.getNations());
 					townyTop.add(ChatTools.formatTitle("Top Bank Balances"));
 					townyTop.addAll(getTopBankBalance(list));
 				} else if (args[1].equalsIgnoreCase("town")) {
-					List<Government> list = new ArrayList<>(universe.getTowns());
+					List<Government> list = universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
 					townyTop.add(ChatTools.formatTitle("Top Bank Balances by Town"));
 					townyTop.addAll(getTopBankBalance(list));
 				} else if (args[1].equalsIgnoreCase("nation")) {
@@ -397,7 +393,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	public static void showMap(Player player) {
 
-		TownyAsciiMap.generateAndSend(plugin, player, TownySettings.asciiMapHeight());
+		TownyAsciiMap.generateAndSend(Towny.getPlugin(), player, TownySettings.asciiMapHeight());
 	}
 
 	/**

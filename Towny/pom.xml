@@ -13,12 +13,12 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.99.5.13</version>
+    <version>0.99.6.1</version>
 
     <licenses>
         <license>
             <name>CC BY-NC-ND 3.0</name>
-            <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
+            <url>https://creativecommons.org/licenses/by-nc-nd/3.0/</url>
             <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported</comments>
             <distribution>repo</distribution>
         </license>
@@ -84,7 +84,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -145,14 +145,14 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.3</version>
+            <version>2.11.4</version>
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.23.0</version>
+            <version>1.24.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -167,7 +167,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.0</version>
+            <version>4.3.1</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
@@ -250,13 +250,13 @@
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>coreprotect</artifactId>
-            <version>22.0</version>
+            <version>22.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.seeseemelk</groupId>
             <artifactId>MockBukkit-v1.20</artifactId>
-            <version>3.19.1</version>
+            <version>3.22.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -290,7 +290,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.0</version>
                     <executions>
                         <execution>
                             <id>install</id>
@@ -363,7 +363,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.5.1</version>
                     <configuration>
                         <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                         <artifactSet>

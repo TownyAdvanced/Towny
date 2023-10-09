@@ -58,6 +58,7 @@ public class PreTownPaysNationTaxEvent extends CancellableTownyEvent {
 	 * @param cancellationMessage String that will display if this Event is cancelled.
 	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}
 	 */
+	@Deprecated
 	public void setCancellationMessage(String cancellationMessage) {
 		setCancelMessage(cancellationMessage);
 	}

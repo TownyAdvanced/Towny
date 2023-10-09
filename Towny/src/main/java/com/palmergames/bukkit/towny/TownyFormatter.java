@@ -114,7 +114,8 @@ public class TownyFormatter {
 		if (townBlock.getTrustedResidents().size() > 0)
 			screen.addComponentOf("trusted", getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
 
-		screen.addComponentOf("plottax", colourKeyValue(translator.of("status_townblock_plottax"), townBlock.isTaxed() ? formatMoney(townBlock.getPlotTax()) : translator.of("status_townblock_untaxed")));
+		if (TownyEconomyHandler.isActive())
+			screen.addComponentOf("plottax", colourKeyValue(translator.of("status_townblock_plottax"), townBlock.isTaxed() ? formatMoney(townBlock.getPlotTax()) : translator.of("status_townblock_untaxed")));
 
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(townBlock);
@@ -141,6 +142,10 @@ public class TownyFormatter {
 		// ___[ King Harlus ]___
 		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
 
+		// About: Just a humble farmer
+		if (!resident.getAbout().isEmpty())
+			screen.addComponentOf("about", colourKeyValue(translator.of("status_about"), resident.getAbout()));
+		
 		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
 		// Registered: Sept 3 2009 | Last Online: March 7 2009

@@ -23,6 +23,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,9 +40,8 @@ import java.util.Optional;
 
 public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
-	private static Towny plugin;
-
-	private static TownyWorld globalWorld;
+	private final Towny plugin;
+	private static TownyWorld globalWorld; // TODO: Make this not static, should be passed through the methods instead.
 	
 	private static final List<String> townyWorldTabCompletes = Arrays.asList(
 		"list",
@@ -72,7 +72,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"wildernessuse"
 	);
 	
-	private static List<String> townySetTabCompletes = Arrays.asList(
+	private static final List<String> townySetTabCompletes = Arrays.asList(
 		"usedefault",
 		"wildperm",
 		"wildignore",
@@ -81,12 +81,11 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	public TownyWorldCommand(Towny instance) {
-
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		
 		if (plugin.isError() && sender instanceof Player) {
 			TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");

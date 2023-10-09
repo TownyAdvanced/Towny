@@ -2,7 +2,7 @@
 name: Towny
 language: Chinese
 author: ElgarL
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -45,6 +45,22 @@ help_0: 'Towny插件帮助'
 help_1: '尝试下面的命令来学习怎么使用Towny插件。'
 help_2: '城镇聊天'
 help_3: '国家聊天'
+help_4: '关于居民命令的帮助。'
+help_5: '关于城镇命令的帮助。'
+help_6: '关于国家命令的帮助。'
+help_7: '关于地皮命令的帮助。'
+help_8: '关于Towny各个命令的帮助。'
+help_9: '关于管理员命令的帮助。'
+towny_help_0: "Towny的基本帮助"
+towny_help_1: "Displays a map of the nearby townblocks"
+towny_help_2: "Display the prices used with Economy"
+towny_help_3: "Display highscores"
+towny_help_4: "Display time until a new day"
+towny_help_5: "Displays stats"
+towny_help_6: "Displays the version of Towny"
+towny_top_help_0: "List top residents based on subcommand."
+towny_top_help_1: "List top land-owners based on subcommand."
+towny_top_help_2: "List wealthiest based on subcommand."
 town_help_1: '你的城镇的状态'
 town_help_2: '[城主]'
 town_help_3: '调整你的城镇的状态'
@@ -55,6 +71,64 @@ town_help_7: '新建一个城镇，并且选定一个玩家作为城主。'
 town_help_8: '列出城主可以使用的命令'
 town_help_9: '就在今天！'
 town_help_10: '查看城镇内在线的玩家'
+town_help_13: "See a list of residents in the town."
+town_help_14: "See a list of ranks in the town."
+town_help_15: "See a list of outlaws in the town."
+town_help_16: "See a list of plotgroups in the town."
+town_help_17: "See a list of plot types in the town."
+town_help_18: "Say a message to the town members."
+town_help_19: "Set your town for sale, able to be bought by other players."
+town_help_20: "Set your town not for sale."
+town_help_21: "购买给定的城镇（只要它是出售的）。"
+town_help_22: "向您的城镇银行存钱。"
+town_help_23: "用来修改您城镇居民的头衔。"
+town_help_24: "用来删除您的城镇。"
+town_help_25: "用来修改您城镇所放逐的玩家。"
+town_help_26: "列出所有的城镇，查看/t list ?以获得帮助。"
+town_help_27: "离开你所属的城镇。"
+town_help_28: "从您的城镇银行取钱。"
+town_help_29: "使用指令/t claim ?以获得帮助。"
+town_help_30: "用来取消声明你城镇的土地。"
+town_help_31: "添加或者移除居民。"
+town_help_32: "使用指令/t set ?以获得帮助。"
+town_help_33: "使用指令/t buy ?以获得帮助。"
+town_help_34: "使用指令/t toggle ?以获得帮助。"
+town_help_35: "使用指令/t rank ?以获得帮助。"
+town_list_help_0: "查看指定的页面。"
+town_list_help_1: "在指定的页面，按照居民的数量列出城镇。"
+town_list_help_2: "在指定的页面，列出开放的城镇。"
+town_list_help_3: "在指定的页面，按照银行存款数列出城镇。"
+town_list_help_4: "在指定的页面，按照字母顺序列出城镇。"
+town_list_help_5: "在指定的页面，按照已声明的土地数量列出城镇。"
+town_list_help_6: "在指定的页面，按照在线玩家数量列出城镇。"
+town_set_help_0: "设置你城镇的公告。"
+town_set_help_1: "将城镇的Home区块设置到你所站立的地方。"
+town_set_help_2: "在Home区块中设置传送点，或者你站在前哨里，设置前哨的传送点。"
+town_set_help_3: "查看/town set perm ?以获得帮助。"
+town_set_help_4: "设置你城镇的税额。"
+town_set_help_5: "Set the special amounts for per-plot taxes."
+town_set_help_6: "Set the default prices for buying plots."
+town_set_help_7: "设置使用/t spawn的费用。"
+town_set_help_8: "设置你城镇的名称。"
+town_set_help_9: "设置你城镇的简称。"
+town_set_help_10: "设置一个居民的头衔或后缀。"
+town_set_help_11: "Set the max amount of money a percentage tax can take from a resident."
+town_jail_help_0: "列出城镇的监狱。"
+town_jail_help_1: "将一个居民关在初级监狱。"
+town_jail_help_2: "将一个居民以指定的时间关在初级监狱。"
+town_jail_help_3: "将一个居民以指定的时间关在指定的初级监狱。"
+town_jail_help_4: "Jail a resident in the primary jail, for the specified hours, in the specified jail and cell."
+town_jail_help_5: "Jail a resident in the primary jail, for the specified hours, with the given bail amount."
+town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
+town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
+town_jail_help_8: "释放这个居民。"
+town_purge_help: "Purges residents that have not logged in for the given amount of days."
+town_trust_help_0: "在这个城镇中，增加一个受信任的玩家。"
+town_trust_help_1: "在这个城镇中，移除一个受信任的玩家。"
+town_trust_help_2: "列出一个城镇中受信任的玩家。"
+town_towntrust_help_0: "在这个城镇中，增加一个受信任的城镇。"
+town_towntrust_help_1: "在这个城镇中，移除一个受信任的城镇。"
+town_towntrust_help_2: "列出一个城镇所信任的城镇。"
 mayor_help_3: '你所选择的区域不附属于城镇'
 mayor_help_4: '声明你附近半径为X的区块'
 mayor_help_5: '声明最大半径内的所有区块'
@@ -70,9 +144,46 @@ nation_help_6: '建国'
 nation_help_7: '列出国家领导者指令'
 nation_help_8: '建国'
 nation_help_9: '列出在线的国民'
+nation_help_11: "列出国家中的城镇。"
+nation_help_12: "列出国家的盟国。"
+nation_help_13: "列出国家的敌国。"
+nation_help_14: "用来加入开放的国家。"
+nation_help_15: "向国家银行中存钱。"
+nation_help_16: "用来删除您的国家。"
+nation_help_17: "用来给一个居民添加或移除头衔。"
+nation_help_18: "查看/n rank ?以获得帮助。"
+nation_list_help_0: "查看指定的页面。"
+nation_list_help_1: "在指定的页面，按照居民的数量列出国家。"
+nation_list_help_2: "在指定的页面，按照城镇数量列出国家。"
+nation_list_help_3: "在指定的页面，列出开放的国家。"
+nation_list_help_4: "在指定的页面，按照银行存款数列出国家。"
+nation_list_help_5: "在指定的页面，按照字母顺序列出国家。"
+nation_list_help_6: "在指定的页面，按照已声明的土地数量列出国家。"
+nation_list_help_7: "在指定的页面，按照在线玩家数量列出国家。"
+nation_set_help_0: "改变国家的领导人。"
+nation_set_help_1: "改变国家的首都。"
+nation_set_help_2: "Set the amount of tax that towns will pay."
+nation_set_help_3: "Set the amount of tax that conquered towns will pay."
+nation_set_help_4: "设置国家名称。"
+nation_set_help_5: "Set the title or surname of one of your residents."
+nation_set_help_6: "Set the nation tag."
+nation_set_help_7: "Set the nation board message."
+nation_set_help_8: "Set the nation spawn point."
+nation_set_help_9: "Set the cost to use /n spawn."
+nation_set_help_10: "Set the mapcolor used in Mapping plugins."
+nation_toggle_help_0: "Toggles peaceful status of the nation."
+nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
+nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
+nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
 king_help_1: '国家领导者帮助'
 king_help_2: '设置你的盟国.'
 king_help_3: '设置你的敌国.'
+king_help_4: "Withdraw money from your nation bank."
+king_help_5: "Add or remove towns from your nation."
+king_help_6: "使用指令/n set ?以获得帮助。"
+king_help_7: "使用指令/n toggle ?以获得帮助。"
+king_help_8: "Used to absorb another nation into your nation."
+king_help_9: "Used to message everyone in your nation."
 res_1: '你的信息'
 res_2: '[玩家名]'
 res_3: '目标玩家信息'
@@ -80,6 +191,33 @@ res_4: '列出所有活跃玩家'
 res_5: '来查看帮助'
 res_6: '邀请一个玩家加入你的城镇/踢出你的城镇内的一名玩家'
 res_7: '申请添加一个离线玩家为好友'
+res_8: 'Just a humble farmer'
+res_9: "How much tax you will pay per day."
+res_10: "查看/res jail ?以获得帮助。"
+res_11: "查看/res toggle ?以获得帮助。"
+res_12: "查看/res set ?以获得帮助。"
+res_13: "Spawn to your town or bed."
+res_toggle_help_0: "Toggle your plots' pvp status."
+res_toggle_help_1: "Toggle your plots' fire status."
+res_toggle_help_2: "Toggle your plots' mobs status."
+res_toggle_help_3: "Toggle your plots' explosion status."
+res_toggle_help_4: "Toggle the ability to see plot borders."
+res_toggle_help_5: "Toggle the ability to see constant plot borders."
+res_toggle_help_6: "Toggle the ability to see town borders."
+res_toggle_help_7: "Toggle the ability to see plot notifications."
+res_toggle_help_8: "Toggle the ability to claim where you walk."
+res_toggle_help_9: "Toggle the ability to see the map when you change plots."
+res_toggle_help_10: "Remove all modes."
+res_toggle_help_11: "Spy on chat channels."
+res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
+res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
+res_toggle_help_14: "Toggle the ability to unclaim where you walk."
+res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
+res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
+res_jail_help_0: "Pays the bail cost to get out of jail."
+res_set_help_0: "Set your resident's About/Bio"
+res_set_help_1: "Set your resident's default plot permissions."
+res_set_help_2: "Set your resident's modes."
 mode_1: '显示城镇区块地图'
 mode_2: '在你移动到每个区块时自动声明土地'
 mode_3: '在你移动到每个区块时自动放弃声明土地'
@@ -104,14 +242,176 @@ world_help_2: '[世界]'
 world_help_3: '目标世界状态'
 world_help_4: '列出所有世界'
 world_help_5: '重新生成这个区块'
+world_help_6: '查看/tw toggle ?以获得帮助。'
+world_help_7: '查看/tw set ?以获得帮助。'
+world_set_help_0: "Set the world's wilderness name."
+world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
+world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
+world_toggle_help_2: "Toggle on/off if wars can happen in this world."
+world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
+world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
+world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
+world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
+world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
+world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
+world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
+world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
+world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
 townyadmin_help_1: '放弃声明这个城镇区块'
 townyadmin_help_2: '放弃声明你附近的城镇区块.'
+admin_panel_1: "查看/ta set ?以获得帮助。"
 admin_panel_2: '重载城镇'
 admin_panel_3: '执行新一天指令'
+admin_panel_4: "Unclaim an space surrounding you"
+admin_panel_5: "查看/ta plot ?以获得帮助。"
+admin_panel_6: "Give a positive or negative amount of townblocks to a player or town"
+admin_panel_7: "查看/ta toggle ?以获得帮助。"
+admin_panel_8: "Commands for controlling these objects"
+admin_panel_9: "Teleport to the specified plot"
+admin_panel_10: "Check if the player has a permission node"
+admin_panel_11: "Reset your config"
+admin_panel_12: "Make a backup of your Towny data"
+admin_panel_13: "Dump your mysql db to flatfile"
+admin_panel_14: "Force save or load your database"
+admin_panel_15: "Run the newhour code"
+admin_panel_16: "Purge old residents"
+townyadmin_town_help_0: "Create a town with the given name and mayor."
+townyadmin_town_help_1: "Show the town status screen."
+townyadmin_town_help_2: "Add or remove residents from a town."
+townyadmin_town_help_3: "Rename a town."
+townyadmin_town_help_4: "Delete a town."
+townyadmin_town_help_5: "Spawn at a town."
+townyadmin_town_help_6: "Spawn at a town's outpost."
+townyadmin_town_help_7: "Use a town's rank command."
+townyadmin_town_help_8: "Use a town's set command."
+townyadmin_town_help_9: "Use a town's toggle command."
+townyadmin_town_help_10: "Alter a town's metadata."
+townyadmin_town_help_11: "Merge the 2nd town into the first town."
+townyadmin_town_help_12: "Merge the 2nd town into the first town, ignoring any rules."
+townyadmin_town_help_13: "Put money into the town bank."
+townyadmin_town_help_14: "Take money from the town bank."
+townyadmin_town_help_15: "Open the town's bankhistory book."
+townyadmin_town_help_16: "Alter a town's outlaws."
+townyadmin_town_help_17: "Make the town leave their nation."
+townyadmin_town_help_18: "Remove a town's conquered status."
+townyadmin_town_toggle_help_0: "Toggle the Town's PVP."
+townyadmin_town_toggle_help_1: "Toggle the Town's ForcePVP, preventing mayors from turning off pvp."
+townyadmin_town_toggle_help_2: "Toggle the Town's Public status, allowing non-residents to teleport there."
+townyadmin_town_toggle_help_3: "Toggle the Town's Explosion setting."
+townyadmin_town_toggle_help_4: "Toggle the Town's Fire setting."
+townyadmin_town_toggle_help_5: "Toggle the Town's Mob setting."
+townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
+townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
+townyadmin_nation_help_0: "Create a nation with the given name and capital city."
+townyadmin_nation_help_1: "Show the nation status screen."
+townyadmin_nation_help_2: "Add towns from the nation."
+townyadmin_nation_help_3: "Remove towns from the nation."
+townyadmin_nation_help_4: "Rename a nation."
+townyadmin_nation_help_5: "Delete a town."
+townyadmin_nation_help_6: "Recheck the nation's towns to make sure they're close enough to the capital."
+townyadmin_nation_help_7: "Merge the 2nd nation into the first nation."
+townyadmin_nation_help_8: "Merge the 2nd nation into the first nation, ignoring any rules."
+townyadmin_nation_help_9: "Use a nation's toggle command."
+townyadmin_nation_help_10: "Use a nation's set command."
+townyadmin_nation_help_11: "Put money into the nation bank."
+townyadmin_nation_help_12: "Take money from the nation bank."
+townyadmin_nation_help_13: "Open the nation's bankhistory book."
+townyadmin_nation_help_14: "Place the town into the nation."
+townyadmin_nation_help_15: "Use the nation's rank command."
+townyadmin_nationrank_help_0: "Adds a nation rank to the resident."
+townyadmin_nationrank_help_1: "Removes a nation rank from the resident."
+townyadmin_database_help_0: "Force saves the database."
+townyadmin_database_help_1: "Force loads the database."
+townyadmin_database_help_2: "Removes all titles and surnames from every resident."
+ta_plot_help_0: "Claim a plot for a player."
+ta_plot_help_1: "View the metadata stored in the plot you are stood in."
+ta_plot_help_2: "Set plot metadata key and value."
+ta_plot_help_3: "Add or remove a metadata by key."
+ta_resident_help_0: "Rename a resident."
+ta_resident_help_1: "Add or remove a friend."
+ta_resident_help_2: "List or clear the friend list."
+ta_resident_help_3: "Delete a resident from the database."
+ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
+ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
+ta_toggle_help_2: "Turn on/off devmode, shows extra logging messages to the player specified in the config."
+ta_toggle_help_3: "Turn on/off debug mode, showing extra messages in the log."
+ta_toggle_help_4: "Turn on/off the ability for towns or nations to remove money from their banks."
+ta_toggle_help_5: "Make a player an NPC or not."
+ta_set_help_0: "Set a towns mayor to the given player."
+ta_set_help_1: "Set a town with a new NPC mayor, they pay no upkeep."
+ta_set_help_2: "Set the capital of a nation."
+ta_set_help_3: "Set a nation's nationzone size."
+ta_set_help_4: "Set a resident's title."
+ta_set_help_5: "Set a resident's surname."
+ta_set_help_6: "Set a plot to a different town."
+ta_set_help_7: "Set a town's founder name."
+ta_set_help_8: "Use size 0 to remove nationzone override."
+ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
+ta_townmeta_help_1: "View the metadata stored on the town you specify."
+ta_townmeta_help_2: "Set town metadata key and value."
+ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_2: "Set resident metadata key and value."
+ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
+ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
+ta_reload_help_0: "Reloads database."
+ta_reload_help_1: "Reloads config."
+ta_reload_help_2: "Reloads language files."
+ta_reload_help_3: "Reloads Towny permissions."
+ta_reload_help_4: "Reloads all components of Towny."
+ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
+plot_help_0: "Turns on the plot info HUD."
+plot_help_1: "Removes the owner of the plot."
+plot_help_2: "Deletes a list of blocks from the plot."
+plot_help_3: "查看/plot set ?以获得帮助。"
+plot_help_4: "查看/plot toggle ?以获得帮助。"
+plot_help_5: "查看/plot group ?以获得帮助。"
+plot_help_6: "Removes permission overrides for a player."
+plot_help_7: "Adds default permission overrides for a player."
+plot_help_8: "Opens the permission editor gui."
+plot_help_9: "Adds a resident as Trusted in the plot."
+plot_help_10: "Removes a resident as Trusted in the plot."
+plot_group_help_0: "Ex: /plot group new ExpensivePlots"
+plot_group_help_1: "Removes a plot from the specified group."
+plot_group_help_2: "Deletes a plotgroup completely."
+plot_group_help_3: "Renames the group you are standing in."
+plot_group_help_4: "Ex: /plot group set perm resident on."
+plot_group_help_5: "Ex: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Ex: /plot group forsale 50"
+plot_group_help_7: "Ex: /plot group notforsale"
+plot_group_help_8: "Adds or removes a resident as trusted."
+plot_group_help_9: "Adds a resident as Trusted in the plotgroup."
+plot_group_help_10: "Removes a resident as Trusted in the plotgroup."
+plot_group_help_11: "Opens the plot perm GUI."
+plot_group_help_12: "Adds a player to the plot perm GUI."
+plot_group_help_13: "Removes a player to the plot perm GUI."
+plot_toggle_help_0: "Toggles pvp in the plot."
+plot_toggle_help_1: "Toggles explosions in the plot."
+plot_toggle_help_2: "Toggles fire in the plot."
+plot_toggle_help_3: "Toggles mobs in the plot."
+plot_group_toggle_help_0: "Toggles pvp in the plot group."
+plot_group_toggle_help_1: "Toggles explosions in the plot group."
+plot_group_toggle_help_2: "Toggles fire in the plot group."
+plot_group_toggle_help_3: "Toggles mobs in the plot group."
+plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
+plot_set_help_1: "Sets a plot to an Outpost."
+plot_set_help_2: "Removes a plot type."
+plot_set_help_3: "Names a plot."
+plot_set_help_4: "Toggle all permissions."
+plot_set_help_5: "Sets the permissions of a level or type to on or off."
+plot_set_help_6: "Sets the permission of a level and type to on or off."
+plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
+plot_jailcell_help_0: "Adds a JailCell where you stand."
+plot_jailcell_help_1: "Removes a JailCell where you stand."
 msg_block_claim: '声明这个城镇区块'
+msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
 msg_plot_nfs: '关闭这块土地的出售状态'
+msg_plot_nfs_radius: 'Take down a radius of plots for sale'
 msg_nfs_abr: '&efs 和 nfs 分别是 forsale(出售) 和 notforsale(不供出售)的缩写.'
 msg_plot_fs: '出售这块土地.'
+msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -230,7 +530,7 @@ msg_world_pvp: '&c这个世界强制开启PVP.'
 msg_world_mobs: '&c这个世界强制开启怪物生成.'
 msg_world_expl: '&c这个世界强制开启爆炸.'
 msg_world_fire: '&c这个世界强制开启火势蔓延.'
-msg_town_mobs: '&c这个世界强制开启怪物生成.'
+msg_town_mobs: '&c这个世界强制怪物生成.'
 msg_plot_pvp: '&c不能在一个竞技场中开启或关闭PVP.'
 msg_plot_regen_wrong_size: '&c回溯只支持默认的区块大小(16).'
 msg_reloaded: '&2城镇设置已重载.'
@@ -716,7 +1016,7 @@ number_of_residents: '(居民数)'
 number_of_towns: '(城镇数)'
 town_name: '城镇名'
 nation_name: '国家名'
-refund_message: '&a放弃声明 %2$s 城镇区块，获得退款：%1$s 。'
+refund_message: '&a放弃声明 %2$s 城镇区块，获得 %1$s 的退款。'
 msg_bankrupt_town_multiple: '&b以下城镇因支付不起每日维护费用而倒闭: '
 msg_bankrupt_nation_multiple: '&b以下国家因支付不起每日维护费用而破灭: '
 msg_couldnt_pay_tax: '&b%s 因支付不起税收而被踢出了 %s.'
@@ -794,6 +1094,12 @@ msg_err_key_cannot_be_deleted: '无法删除不存在的Key!'
 msg_err_this_town_doesnt_have_any_associated_metadata: '这个城镇没有相关的元数据.'
 msg_err_key_x_is_not_part_of_this_town: 'Key %s 不是这个城镇的一部分.'
 msg_custom_data_was_successfully_added_to_town: '成功添加自定义数据到城镇内!'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: '页数过多.'
 msg_err_location_is_not_within_a_town: '该地点不在城镇内.'
 msg_err_location_is_not_within_a_jail_plot: '该地点不在监狱内.'
@@ -845,7 +1151,8 @@ msg_err_plot_not_associated_with_a_group: '这片土地不属于任何一个土�
 msg_plot_was_removed_from_group_x: '土地 &9(%s,%s) &2被移出了 %s 土地组'
 msg_plot_renamed_from_x_to_y: '土地 %s 已重命名为 %s.'
 msg_err_plot_group_specify_price: '请设置价格, 指令示例: /plot group fs [价格]'
-msg_player_put_group_up_for_sale: '%s 将土地组 %s 以 %s 的价格出售'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
@@ -962,7 +1269,6 @@ msg_universe_heart: '<3'
 townblock_plu: '城镇区块'
 #Added in 0.92
 #Town Ruins
-admin_panel_4: '运行下一小时的代码'
 msg_newhour_success: '下一小时命令执行成功'
 town_help_12: '重新声明你的城镇来从倒闭之中挽回它。'
 msg_warning_town_ruined_if_deleted: "警告！！！如果你删除你的城镇，它将进入持续%d小时的倒闭状态。 之后，它将被完全删除。在倒闭的状态下，所有保护都将失效，城镇也将能被其他人破坏。"
@@ -1282,6 +1588,7 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[中心区块：%s]'
+status_about: "About:"
 status_registered: '注册于：'
 status_lastonline: '最后在线时间：'
 status_fractions: '%s/%s'
@@ -1724,3 +2031,16 @@ msg_err_your_cannot_overclaim_for_another: "你不可以在%s的时间内再次�
 msg_err_world_not_loaded: "<red>世界未加载。"
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
+status_forsale: "&a(For Sale: %s)"
+msg_town_forsale: "%s has been set for sale at %s."
+msg_town_notforsale: "%s is no longer for sale."
+msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you sure you want to continue?"
+msg_town_buytown_already_mayor: "You are already mayor of %s."
+msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
+msg_town_buytown_not_forsale: "Specified town is not for sale."
+msg_resident_about_reset: "&bResident about reset."
+msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
+msg_set_about: "%s's about was set to %s."
+msg_clear_about: "%s's about was cleared."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'

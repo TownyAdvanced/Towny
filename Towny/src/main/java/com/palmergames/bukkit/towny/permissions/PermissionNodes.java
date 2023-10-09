@@ -16,6 +16,7 @@ public enum PermissionNodes {
 	TOWNY_ADMIN_UPDATEALERTS("towny.admin.updatealerts"),
 	TOWNY_CHAT_SPY("towny.chat.spy"),
 	TOWNY_BYPASS_DEATH_COSTS("towny.bypass_death_costs"),
+	TOWNY_BYPASS_BED_RESTRICTION("towny.bypass_bed_restriction"),
 	TOWNY_SPAWN_ADMIN("towny.admin.spawn"),
 	TOWNY_SPAWN_ADMIN_NOWARMUP("towny.admin.spawn.nowarmup"),
 	TOWNY_SPAWN_ADMIN_NOCOOLDOWN("towny.admin.spawn.nocooldown"),
@@ -248,6 +249,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_RESIDENT_SET("towny.command.resident.set.*"),
 		TOWNY_COMMAND_RESIDENT_SET_PERM("towny.command.resident.set.perm"),
 		TOWNY_COMMAND_RESIDENT_SET_MODE("towny.command.resident.set.mode"),
+		TOWNY_COMMAND_RESIDENT_SET_ABOUT("towny.command.resident.set.about"),
 	
 	TOWNY_COMMAND_RESIDENT_TOGGLE("towny.command.resident.toggle.*"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PVP("towny.command.resident.toggle.pvp"),
@@ -275,6 +277,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_SET_FOUNDER("towny.command.townyadmin.set.founder"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_TITLE("towny.command.townyadmin.set.title"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME("towny.command.townyadmin.set.surname"),
+		TOWNY_COMMAND_TOWNYADMIN_SET_ABOUT("towny.command.townyadmin.set.about"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_NATIONZONE("towny.command.townyadmin.set.nationzoneoverride"),
 		
     TOWNY_COMMAND_TOWNYADMIN_PLOT("towny.command.townyadmin.plot.*"),
@@ -286,6 +289,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND("towny.command.townyadmin.resident.friend"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_META("towny.command.townyadmin.resident.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL("towny.command.townyadmin.resident.unjail"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE("towny.command.townyadmin.resident.delete"),
 		
@@ -326,6 +330,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_NATION_DEPOSIT("towny.command.townyadmin.nation.deposit"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_FORCEMERGE("towny.command.townyadmin.nation.forcemerge"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_KICK("towny.command.townyadmin.nation.kick"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_META("towny.command.townyadmin.nation.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RANK("towny.command.townyadmin.nation.rank"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RECHECK("towny.command.townyadmin.nation.recheck"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME("towny.command.townyadmin.nation.rename"),

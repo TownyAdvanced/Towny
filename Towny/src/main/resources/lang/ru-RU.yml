@@ -2,7 +2,7 @@
 name: Towny
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
-website: 'http://townyadvanced.github.io/'
+website: 'https://города.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -45,6 +45,22 @@ help_0: 'Основная помощь по Towny'
 help_1: 'Введите следующие команды чтобы узнать больше про Towny.'
 help_2: 'Чат города'
 help_3: 'Чат нации'
+help_4: 'Помощь по командам жителей.'
+help_5: 'Помощь по командам городов.'
+help_6: 'Помощь по командам наций.'
+help_7: 'Помощь по командам участков.'
+help_8: 'Помощь по командам Towny.'
+help_9: 'Помощь по командам Towny для админов.'
+towny_help_0: "Общая помощь по Towny"
+towny_help_1: "Показывает карту близлежащих участков"
+towny_help_2: "Display the prices used with Economy"
+towny_help_3: "Показывает топ"
+towny_help_4: "Показывает время до начала нового дня"
+towny_help_5: "Показывает статистику"
+towny_help_6: "Показывает версию Towny"
+towny_top_help_0: "Показывает топ городов по жителям по критериям."
+towny_top_help_1: "Показывает топ землевладельцев по критериям."
+towny_top_help_2: "Показывает топ самых богатых по критериям."
 town_help_1: 'Статус вашего города'
 town_help_2: '[Мэр]'
 town_help_3: 'Посмотреть статус города'
@@ -55,6 +71,64 @@ town_help_7: 'Новый город с назначенным мэром.'
 town_help_8: 'Список команд для мэров.'
 town_help_9: 'Новый день!'
 town_help_10: 'Список горожан онлайн'
+town_help_13: "See a list of residents in the town."
+town_help_14: "See a list of ranks in the town."
+town_help_15: "See a list of outlaws in the town."
+town_help_16: "See a list of plotgroups in the town."
+town_help_17: "See a list of plot types in the town."
+town_help_18: "Отправляет сообщение жителям города."
+town_help_19: "Выставляет ваш город на продажу, его могут купить другие игроки."
+town_help_20: "Убирает ваш город с продажи."
+town_help_21: "Покупает выбранный город, если он выставлен на продажу."
+town_help_22: "Вносит деньги в казну вашего города."
+town_help_23: "Used to modify your resident's town ranks."
+town_help_24: "Используется для удаления вашего города."
+town_help_25: "Used to modify your town's outlaws."
+town_help_26: "List all towns, see /t list ? for help."
+town_help_27: "Leave the town you're a member of."
+town_help_28: "Withdraw money from your town's bank."
+town_help_29: "Используйте /t claim ? для большей информации."
+town_help_30: "Используется, чтобы расприватить землю."
+town_help_31: "Пригласить или выгнать жителей."
+town_help_32: "Используйте /t set ? для большей информации."
+town_help_33: "Используйте /t buy ? для большей информации."
+town_help_34: "Используйте /t toggle ? для большей информации."
+town_help_35: "Используйте /t rank ? для большей информации."
+town_list_help_0: "View the specified page."
+town_list_help_1: "List towns by resident-count, with the specified page."
+town_list_help_2: "List towns which are open, with the specified page."
+town_list_help_3: "List towns using bank balance, with the specified page."
+town_list_help_4: "List towns in alphabetical order, with the specified page."
+town_list_help_5: "List towns by claimed land, with the specified page."
+town_list_help_6: "List towns by number online, with the specified page."
+town_set_help_0: "Настройка доски объявлений города."
+town_set_help_1: "Set your town's homeblock to where you're standing."
+town_set_help_2: "Sets the spawn point in your homeblock or an outpost spawnpoint when stood in an outpost."
+town_set_help_3: "See /town set perm ? for help."
+town_set_help_4: "Устанавливает количество налогов в вашем городе."
+town_set_help_5: "Set the special amounts for per-plot taxes."
+town_set_help_6: "Set the default prices for buying plots."
+town_set_help_7: "Устанавливает стоимость использования /t spawn."
+town_set_help_8: "Изменяет имя вашего города."
+town_set_help_9: "Set your town's tag."
+town_set_help_10: "Задаёт имя или фамилию жителю."
+town_set_help_11: "Устанавливает максимальную сумму денег, которую может составлять процентный налог."
+town_jail_help_0: "Показывает список тюрем города."
+town_jail_help_1: "Отправляет жителя в основную тюрьму."
+town_jail_help_2: "Отправляет жителя в основную тюрьму на указанное количество часов."
+town_jail_help_3: "Отправляет жителя в указанный тюремный участок на указанное количество часов."
+town_jail_help_4: "Отправляет жителя в указанный тюремный участок и камеру на указанное количество часов."
+town_jail_help_5: "Отправляет жителя в основную тюрьму на указанное количество часов под указанный залог."
+town_jail_help_6: "Отправляет жителя в указанный тюремный участок на указанное количество часов под указанный залог."
+town_jail_help_7: "Отправляет жителя в указанный тюремный участок и камеру на указанное количество часов под указанный залог."
+town_jail_help_8: "Освобождает жителя из тюрьмы."
+town_purge_help: "Выгоняет жителей, которые не заходили указанное количество дней."
+town_trust_help_0: "Adds a resident as Trusted in the town."
+town_trust_help_1: "Removes a resident as Trusted in the town."
+town_trust_help_2: "Lists the Trusted residents of a town."
+town_towntrust_help_0: "Adds a town as Trusted in the town."
+town_towntrust_help_1: "Removes a town as Trusted in the town."
+town_towntrust_help_2: "Lists the Trusted towns of a town."
 mayor_help_3: 'Участок не прилегает к городу'
 mayor_help_4: 'Заприватить местность в радиусе X вокруг вас'
 mayor_help_5: 'Заприватить максимальный радиус'
@@ -70,9 +144,46 @@ nation_help_6: 'Создать нацию'
 nation_help_7: 'Отображает команды для лидеров наций'
 nation_help_8: 'Создать нацию'
 nation_help_9: 'Список всех онлайн жителей нации'
+nation_help_11: "Показывает список городов в вашей нации."
+nation_help_12: "Показывает союзников вашей нации."
+nation_help_13: "Показывает врагов вашей нации."
+nation_help_14: "Используется для присоединения к открытым нациям."
+nation_help_15: "Вносит деньги в казну вашей нации."
+nation_help_16: "Удаляет вашу нацию."
+nation_help_17: "Добавляет или убирает звание у жителей."
+nation_help_18: "Используйте /n rank ? для большей информации."
+nation_list_help_0: "Просмотреть указанную страницу."
+nation_list_help_1: "List nations by resident-count, with the specified page."
+nation_list_help_2: "List nations by town-count, with the specified page."
+nation_list_help_3: "List nations which are open, with the specified page."
+nation_list_help_4: "List nations using bank balance, with the specified page."
+nation_list_help_5: "List nations in alphabetical order, with the specified page."
+nation_list_help_6: "List nations by claimed land, with the specified page."
+nation_list_help_7: "List nations by number online, with the specified page."
+nation_set_help_0: "Change the leader of the nation."
+nation_set_help_1: "Change the capital city of the nation."
+nation_set_help_2: "Set the amount of tax that towns will pay."
+nation_set_help_3: "Set the amount of tax that conquered towns will pay."
+nation_set_help_4: "Set the name of the nation."
+nation_set_help_5: "Set the title or surname of one of your residents."
+nation_set_help_6: "Set the nation tag."
+nation_set_help_7: "Настройка доски объявлений нации."
+nation_set_help_8: "Set the nation spawn point."
+nation_set_help_9: "Set the cost to use /n spawn."
+nation_set_help_10: "Set the mapcolor used in Mapping plugins."
+nation_toggle_help_0: "Toggles peaceful status of the nation."
+nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
+nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
+nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
 king_help_1: 'Помощь для лидеров наций'
 king_help_2: 'Установить альянс.'
 king_help_3: 'Установить врагов.'
+king_help_4: "Withdraw money from your nation bank."
+king_help_5: "Add or remove towns from your nation."
+king_help_6: "Use /n set ? for help."
+king_help_7: "Use /n toggle ? for help."
+king_help_8: "Used to absorb another nation into your nation."
+king_help_9: "Used to message everyone in your nation."
 res_1: 'Ваш статус'
 res_2: '[Горожанин]'
 res_3: 'Статус указанного игрока'
@@ -80,6 +191,33 @@ res_4: 'Список всех активных игроков'
 res_5: 'для помощи'
 res_6: 'Совпадения в сети'
 res_7: 'Точное имя'
+res_8: 'Just a humble farmer'
+res_9: "How much tax you will pay per day."
+res_10: "See /res jail ? for help."
+res_11: "See /res toggle ? for help."
+res_12: "See /res set ? for help."
+res_13: "Spawn to your town or bed."
+res_toggle_help_0: "Toggle your plots' pvp status."
+res_toggle_help_1: "Toggle your plots' fire status."
+res_toggle_help_2: "Toggle your plots' mobs status."
+res_toggle_help_3: "Toggle your plots' explosion status."
+res_toggle_help_4: "Toggle the ability to see plot borders."
+res_toggle_help_5: "Toggle the ability to see constant plot borders."
+res_toggle_help_6: "Toggle the ability to see town borders."
+res_toggle_help_7: "Toggle the ability to see plot notifications."
+res_toggle_help_8: "Toggle the ability to claim where you walk."
+res_toggle_help_9: "Toggle the ability to see the map when you change plots."
+res_toggle_help_10: "Remove all modes."
+res_toggle_help_11: "Spy on chat channels."
+res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
+res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
+res_toggle_help_14: "Toggle the ability to unclaim where you walk."
+res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
+res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
+res_jail_help_0: "Pays the bail cost to get out of jail."
+res_set_help_0: "Set your resident's About/Bio"
+res_set_help_1: "Set your resident's default plot permissions."
+res_set_help_2: "Set your resident's modes."
 mode_1: 'Показать карту между каждым участком города'
 mode_2: 'Приватить участки на ходу'
 mode_3: 'Распривачивать участки на ходу'
@@ -104,14 +242,176 @@ world_help_2: '[Мир]'
 world_help_3: 'Статус указанного мира'
 world_help_4: 'Список миров'
 world_help_5: 'Регенерировать этот чанк'
+world_help_6: 'See /tw toggle ? for help'
+world_help_7: 'See /tw set ? for help'
+world_set_help_0: "Set the world's wilderness name."
+world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
+world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
+world_toggle_help_2: "Toggle on/off if wars can happen in this world."
+world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
+world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
+world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
+world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
+world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
+world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
+world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
+world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
+world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
 townyadmin_help_1: 'Расприватить участок города'
 townyadmin_help_2: 'Попытаться расприватить участок вокруг вас.'
+admin_panel_1: "See /ta set ? for help"
 admin_panel_2: 'Перезагрузить плагин'
 admin_panel_3: 'Начать новый день'
+admin_panel_4: "Unclaim an space surrounding you"
+admin_panel_5: "See /ta plot ? for help"
+admin_panel_6: "Give a positive or negative amount of townblocks to a player or town"
+admin_panel_7: "See /ta toggle ? for help"
+admin_panel_8: "Commands for controlling these objects"
+admin_panel_9: "Teleport to the specified plot"
+admin_panel_10: "Check if the player has a permission node"
+admin_panel_11: "Reset your config"
+admin_panel_12: "Make a backup of your Towny data"
+admin_panel_13: "Dump your mysql db to flatfile"
+admin_panel_14: "Force save or load your database"
+admin_panel_15: "Run the newhour code"
+admin_panel_16: "Purge old residents"
+townyadmin_town_help_0: "Create a town with the given name and mayor."
+townyadmin_town_help_1: "Show the town status screen."
+townyadmin_town_help_2: "Add or remove residents from a town."
+townyadmin_town_help_3: "Rename a town."
+townyadmin_town_help_4: "Delete a town."
+townyadmin_town_help_5: "Spawn at a town."
+townyadmin_town_help_6: "Spawn at a town's outpost."
+townyadmin_town_help_7: "Use a town's rank command."
+townyadmin_town_help_8: "Use a town's set command."
+townyadmin_town_help_9: "Use a town's toggle command."
+townyadmin_town_help_10: "Alter a town's metadata."
+townyadmin_town_help_11: "Merge the 2nd town into the first town."
+townyadmin_town_help_12: "Merge the 2nd town into the first town, ignoring any rules."
+townyadmin_town_help_13: "Put money into the town bank."
+townyadmin_town_help_14: "Take money from the town bank."
+townyadmin_town_help_15: "Open the town's bankhistory book."
+townyadmin_town_help_16: "Alter a town's outlaws."
+townyadmin_town_help_17: "Make the town leave their nation."
+townyadmin_town_help_18: "Remove a town's conquered status."
+townyadmin_town_toggle_help_0: "Toggle the Town's PVP."
+townyadmin_town_toggle_help_1: "Toggle the Town's ForcePVP, preventing mayors from turning off pvp."
+townyadmin_town_toggle_help_2: "Toggle the Town's Public status, allowing non-residents to teleport there."
+townyadmin_town_toggle_help_3: "Toggle the Town's Explosion setting."
+townyadmin_town_toggle_help_4: "Toggle the Town's Fire setting."
+townyadmin_town_toggle_help_5: "Toggle the Town's Mob setting."
+townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
+townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
+townyadmin_nation_help_0: "Create a nation with the given name and capital city."
+townyadmin_nation_help_1: "Show the nation status screen."
+townyadmin_nation_help_2: "Add towns from the nation."
+townyadmin_nation_help_3: "Remove towns from the nation."
+townyadmin_nation_help_4: "Rename a nation."
+townyadmin_nation_help_5: "Delete a town."
+townyadmin_nation_help_6: "Recheck the nation's towns to make sure they're close enough to the capital."
+townyadmin_nation_help_7: "Merge the 2nd nation into the first nation."
+townyadmin_nation_help_8: "Merge the 2nd nation into the first nation, ignoring any rules."
+townyadmin_nation_help_9: "Use a nation's toggle command."
+townyadmin_nation_help_10: "Use a nation's set command."
+townyadmin_nation_help_11: "Put money into the nation bank."
+townyadmin_nation_help_12: "Take money from the nation bank."
+townyadmin_nation_help_13: "Open the nation's bankhistory book."
+townyadmin_nation_help_14: "Place the town into the nation."
+townyadmin_nation_help_15: "Use the nation's rank command."
+townyadmin_nationrank_help_0: "Adds a nation rank to the resident."
+townyadmin_nationrank_help_1: "Removes a nation rank from the resident."
+townyadmin_database_help_0: "Force saves the database."
+townyadmin_database_help_1: "Force loads the database."
+townyadmin_database_help_2: "Removes all titles and surnames from every resident."
+ta_plot_help_0: "Claim a plot for a player."
+ta_plot_help_1: "View the metadata stored in the plot you are stood in."
+ta_plot_help_2: "Set plot metadata key and value."
+ta_plot_help_3: "Add or remove a metadata by key."
+ta_resident_help_0: "Rename a resident."
+ta_resident_help_1: "Add or remove a friend."
+ta_resident_help_2: "List or clear the friend list."
+ta_resident_help_3: "Delete a resident from the database."
+ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
+ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
+ta_toggle_help_2: "Turn on/off devmode, shows extra logging messages to the player specified in the config."
+ta_toggle_help_3: "Turn on/off debug mode, showing extra messages in the log."
+ta_toggle_help_4: "Turn on/off the ability for towns or nations to remove money from their banks."
+ta_toggle_help_5: "Make a player an NPC or not."
+ta_set_help_0: "Set a towns mayor to the given player."
+ta_set_help_1: "Set a town with a new NPC mayor, they pay no upkeep."
+ta_set_help_2: "Set the capital of a nation."
+ta_set_help_3: "Set a nation's nationzone size."
+ta_set_help_4: "Set a resident's title."
+ta_set_help_5: "Set a resident's surname."
+ta_set_help_6: "Set a plot to a different town."
+ta_set_help_7: "Set a town's founder name."
+ta_set_help_8: "Use size 0 to remove nationzone override."
+ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
+ta_townmeta_help_1: "View the metadata stored on the town you specify."
+ta_townmeta_help_2: "Set town metadata key and value."
+ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_2: "Set resident metadata key and value."
+ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
+ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
+ta_reload_help_0: "Reloads database."
+ta_reload_help_1: "Reloads config."
+ta_reload_help_2: "Reloads language files."
+ta_reload_help_3: "Reloads Towny permissions."
+ta_reload_help_4: "Reloads all components of Towny."
+ta_depositall_help_0: "Вносит указанное количество на счета всех городов и наций."
+plot_help_0: "Turns on the plot info HUD."
+plot_help_1: "Removes the owner of the plot."
+plot_help_2: "Deletes a list of blocks from the plot."
+plot_help_3: "See /plot set ? for help."
+plot_help_4: "See /plot toggle ? for help."
+plot_help_5: "See /plot group ? for help."
+plot_help_6: "Removes permission overrides for a player."
+plot_help_7: "Adds default permission overrides for a player."
+plot_help_8: "Opens the permission editor gui."
+plot_help_9: "Adds a resident as Trusted in the plot."
+plot_help_10: "Removes a resident as Trusted in the plot."
+plot_group_help_0: "Ex: /plot group new ExpensivePlots"
+plot_group_help_1: "Removes a plot from the specified group."
+plot_group_help_2: "Deletes a plotgroup completely."
+plot_group_help_3: "Renames the group you are standing in."
+plot_group_help_4: "Ex: /plot group set perm resident on."
+plot_group_help_5: "Ex: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Ex: /plot group forsale 50"
+plot_group_help_7: "Ex: /plot group notforsale"
+plot_group_help_8: "Делает жителя доверенным или не доверенным."
+plot_group_help_9: "Делает жителя доверенным в группе участков."
+plot_group_help_10: "Делает жителя не доверенным в группе участков."
+plot_group_help_11: "Opens the plot perm GUI."
+plot_group_help_12: "Adds a player to the plot perm GUI."
+plot_group_help_13: "Removes a player to the plot perm GUI."
+plot_toggle_help_0: "Toggles pvp in the plot."
+plot_toggle_help_1: "Toggles explosions in the plot."
+plot_toggle_help_2: "Toggles fire in the plot."
+plot_toggle_help_3: "Toggles mobs in the plot."
+plot_group_toggle_help_0: "Toggles pvp in the plot group."
+plot_group_toggle_help_1: "Toggles explosions in the plot group."
+plot_group_toggle_help_2: "Toggles fire in the plot group."
+plot_group_toggle_help_3: "Toggles mobs in the plot group."
+plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
+plot_set_help_1: "Sets a plot to an Outpost."
+plot_set_help_2: "Removes a plot type."
+plot_set_help_3: "Names a plot."
+plot_set_help_4: "Toggle all permissions."
+plot_set_help_5: "Sets the permissions of a level or type to on or off."
+plot_set_help_6: "Sets the permission of a level and type to on or off."
+plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
+plot_jailcell_help_0: "Adds a JailCell where you stand."
+plot_jailcell_help_1: "Removes a JailCell where you stand."
 msg_block_claim: 'Заприватить этот участок'
+msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
 msg_plot_nfs: 'Снять участок с продажи'
+msg_plot_nfs_radius: 'Take down a radius of plots for sale'
 msg_nfs_abr: '&e''fs'' и ''nfs'' являются аббревиатурами для ''forsale'' и ''notforsale''.'
 msg_plot_fs: 'Выставить участок на аукцион.'
+msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -241,7 +541,7 @@ msg_xx_withdrew_xx: '&b%s снял %s со счета %s.'
 msg_xx_deposited_xx: '&b%s положил %s на счет %s.'
 msg_insuf_funds: '&cСтолько нет.'
 msg_err_withdraw_disabled: 'Снятие со счета города запрещено!'
-msg_err_deposit_capped: 'Не удалось положить деньги на счет города. Достигнут лимит в %s.'
+msg_err_deposit_capped: 'Не удалось положить деньги в казну города. Достигнут лимит в %s.'
 msg_set_town_home: '&bСпавнблок города успешно изменён на %s'
 msg_set_town_spawn: '&bУспешно изменена точка спавна города.'
 msg_set_outpost_spawn: '&bУспешно изменен спавн аванпоста''.'
@@ -390,7 +690,7 @@ msg_set_jail_spawn: 'Успешно установлена точка тюрьм
 msg_killed_attempting_to_escape_jail: '&4%s был убит при попытке бегства из тюрьмы.'
 msg_err_jailed_players_no_teleport: '&4Вы не можете телепортироваться находясь в заточении!'
 msg_player_escaped_jail_into_wilderness: '&4%s сбежал из тюрьмы путем побега в %s'
-msg_err_invalid_string_board_not_set: 'Недопустимая строка, пограничное сообщение не установлено.'
+msg_err_invalid_string_board_not_set: 'Ошибка, доска объявлений города не установлена.'
 msg_plot_name_removed: 'Название участка удалено.'
 msg_plot_name_set_to: 'Название участка установлено [%s].'
 msg_plot_price_too_expensive: 'Недопустимая цена участка.'
@@ -633,7 +933,7 @@ msg_time_until_a_new_day: 'Время до нового дня: '
 msg_hours: ' часов'
 msg_minutes: ' минут'
 msg_seconds: ' секунд'
-msg_err_invalid_string_nationboard_not_set: 'Неверная строка, граница Нации не установлена.'
+msg_err_invalid_string_nationboard_not_set: 'Неверная строка, доска объявлений нации не установлена.'
 msg_plot_evict: 'Участок успешно выселен.'
 msg_no_one_to_evict: 'Некого выселять с этого участка.'
 #Added in 0.46
@@ -794,6 +1094,12 @@ msg_err_key_cannot_be_deleted: 'Ключ не может быть удален, 
 msg_err_this_town_doesnt_have_any_associated_metadata: 'В этом городе нет никаких связанных метаданных.'
 msg_err_key_x_is_not_part_of_this_town: 'Ключ %s не является частью этого города. Если возможно, пожалуйста, добавьте его.'
 msg_custom_data_was_successfully_added_to_town: 'Пользовательские данные были успешно добавлены в город!'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'Слишком много страниц.'
 msg_err_location_is_not_within_a_town: 'Местоположение вне пределов города.'
 msg_err_location_is_not_within_a_jail_plot: 'Местоположение находится вне пределов чанка Тюрьмы.'
@@ -845,7 +1151,8 @@ msg_err_plot_not_associated_with_a_group: 'Этот участок не связ
 msg_plot_was_removed_from_group_x: 'Участок &9(%s,%s) &2удален из группы %s'
 msg_plot_renamed_from_x_to_y: 'Участок %s переименован в %s.'
 msg_err_plot_group_specify_price: 'Пожалуйста, укажите цену. Например /plot group fs [цена]'
-msg_player_put_group_up_for_sale: '%s переместил группу %s на продажу для %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Не удалось установить тип группы - '
 msg_set_group_type_to_x: 'Изменен тип группы участков на %s'
 msg_player_successfully_bought_group_x: '%s успешно приобрел группу участков %s'
@@ -962,7 +1269,6 @@ msg_universe_heart: '<3'
 townblock_plu: 'Участки'
 #Added in 0.92
 #Town Ruins
-admin_panel_4: 'Начать новый день'
 msg_newhour_success: '&aКоманда выполнена'
 town_help_12: 'Верните свой город из разрушенного состояния.'
 msg_warning_town_ruined_if_deleted: "ПРЕДУПРЕЖДЕНИЕ! Если вы удалите свой город, он войдет в состояние разрушенного на %d часов. После этого времени ваш город будет удалён. В разрушенном состоянии у всех есть права и город может быть разворован."
@@ -1216,12 +1522,12 @@ status_trustedlist: 'Доверенный'
 msg_click_to_edit: '&6Нажмите, чтобы изменить.'
 permission_gui_header: 'Интерфейс прав Towny'
 msg_last_edited: '&7&oВ последний раз изменено %s %s.'
-msg_trusted_added: '&b%s добавлен как доверенный в этом %s.' #Last %s is either town or townblock
+msg_trusted_added: '&b%s теперь доверенный в этом %s.' #Last %s is either town or townblock
 msg_already_trusted: '&b%s уже доверенный(ая) в этом %s.'
 msg_trusted_added_2: '&b%s добавил вас на пост доверенного в %s: %s.' #Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s не является доверенным в этом %s.'
 msg_trusted_removed: '&b%s больше не доверенный в этом %s.'
-msg_trusted_removed_2: '&b%s снял вас с поста доверенного в %s:%s.'
+msg_trusted_removed_2: '&b%s сделал вас не доверенным в %s:%s.'
 msg_overrides_removed: '&bУбрана коррекция прав для %s.'
 msg_overrides_added: '&bДобавлена коррекция прав для %s.'
 msg_no_overrides_set: '&b%s не имеет никаких переопределений для этого %s.'
@@ -1282,6 +1588,7 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Дом: %s]'
+status_about: "About:"
 status_registered: 'Зарегистрирован c:'
 status_lastonline: 'Последний раз в сети:'
 status_fractions: '%s/%s'
@@ -1587,7 +1894,7 @@ msg_town_plot_type_limit_reached: 'Ваш город достиг лимита �
 msg_spawn_cost_free: 'Бесплатно'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Этот участок уже %s вида.'
-msg_town_board_reset: '&bДоска объявлений очищена.'
+msg_town_board_reset: '&bДоска объявлений города очищена.'
 msg_town_has_no_jailslots: 'Городская тюрьма переполнена.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s был заключен в %s в камеру №%s на %s часов с залогом в %s игроком %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
@@ -1724,3 +2031,16 @@ msg_err_your_cannot_overclaim_for_another: "Вы не можете перепр�
 msg_err_world_not_loaded: "<red>Мир не загружен."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cЭтому участку присвоен статус налогооблажения %s.'
+status_forsale: "&a(For Sale: %s)"
+msg_town_forsale: "%s has been set for sale at %s."
+msg_town_notforsale: "%s is no longer for sale."
+msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you sure you want to continue?"
+msg_town_buytown_already_mayor: "You are already mayor of %s."
+msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
+msg_town_buytown_not_forsale: "Specified town is not for sale."
+msg_resident_about_reset: "&bResident about reset."
+msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
+msg_set_about: "%s's about was set to %s."
+msg_clear_about: "%s's about was cleared."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'

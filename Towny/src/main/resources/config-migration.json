@@ -487,5 +487,24 @@
         "worldAction": "UPDATE_WORLD_EXPLOSION_REVERT_ENTITIES"
       }
     ]
+  },
+  {
+    "version": "0.99.5.14",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.resident.set.about"
+      }
+    ]
+  },
+  {
+    "version": "0.99.5.16",
+    "changes": [
+      {
+        "type": "RUNNABLE",
+        "key": "add_milkable_animals_to_farm_plot"
+      }
+    ]
   }
 ]

@@ -226,7 +226,7 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.hasTown(town.getName()) && town.isRuined()
+			if (town.exists() && town.isRuined()
 					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings
 					.getTownRuinsMaxDurationHours()) {
 				//Ruin found & recently ruined end time reached. Delete town now.

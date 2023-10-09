@@ -5,33 +5,33 @@
 root = true
 
 # Global Rules (Applies to all files)
+[*]
+charset = utf-8
 ## The project uses Windows-style line-endings.
-[*.java]
 end_of_line = crlf
+
+[*.java]
 insert_final_newline = false
 trim_trailing_whitespace = false
-charset = utf-8
 indent_size = 4
 indent_style = tab
+ij_java_class_count_to_use_import_on_demand = 999999
+ij_java_names_count_to_use_import_on_demand = 999999
 
 # Tab-sensitive files, use spaces from here on out
 
 ## YAML 1.2 Spec (https://yaml.org/spec/1.2/spec.html)
 ## Markdownlint (https://github.com/DavidAnson/markdownlint#rules--aliases)
 [*.{yml,yaml,md}]
-end_of_line = crlf
 insert_final_newline = false
-trim_trailing_whitespace = true
-charset = utf-8
+trim_trailing_whitespace = false
 indent_style = space
 indent_size = 4
 
 ## See Maven Code Style and Code Conventions
 ## https://maven.apache.org/developers/conventions/code.html
 [*.xml]
-end_of_line = crlf
 insert_final_newline = false
 trim_trailing_whitespace = true
-charset = utf-8
 indent_style = space
 indent_size = 4

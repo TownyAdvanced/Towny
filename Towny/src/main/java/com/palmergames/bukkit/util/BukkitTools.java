@@ -16,6 +16,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -386,6 +389,21 @@ public class BukkitTools {
 	 */
 	public static String keyAsString(@NotNull NamespacedKey key) {
 		return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
+	}
+
+	public static @NotNull CommandMap getCommandMap() throws ReflectiveOperationException {
+		try {
+			// https://jd.papermc.io/paper/1.20/org/bukkit/Server.html#getCommandMap()
+			final Method commandMapGetter = getServer().getClass().getMethod("getCommandMap");
+
+			return (CommandMap) commandMapGetter.invoke(getServer());
+		} catch (ReflectiveOperationException e) {
+			// Fallback to attempting to get the field directly when not on paper
+			final Field bukkitCommandMap = getServer().getClass().getDeclaredField("commandMap");
+
+			bukkitCommandMap.setAccessible(true);
+			return (CommandMap) bukkitCommandMap.get(getServer());
+		}
 	}
 	
 	@ApiStatus.Internal

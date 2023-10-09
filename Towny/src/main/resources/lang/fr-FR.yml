@@ -2,7 +2,7 @@
 name: Towny
 language: french
 author: Noiknez,TheCalypso,Cidalex,Mitsu,ARNPIK,Dzious,PainOchoco
-website: 'http://townyadvanced.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -45,6 +45,22 @@ help_0: 'Aides générales de Towny'
 help_1: 'Essayez les commandes suivantes pour en savoir plus sur Towny.'
 help_2: 'Tchat de Ville'
 help_3: 'Tchat de Nation'
+help_4: 'Aide pour les commandes de résident.'
+help_5: 'Aide pour les commandes de ville.'
+help_6: 'Aide pour les commandes de nation.'
+help_7: 'Aide pour les commandes de parcelle.'
+help_8: 'Aide pour les commandes Towny.'
+help_9: 'Aide pour les commandes d''administrateur Towny.'
+towny_help_0: "Aide générale pour Towny"
+towny_help_1: "Affiche une carte des parcelles alentours"
+towny_help_2: "Affiche les prix utilisés avec Economy"
+towny_help_3: "Affiche les meilleurs scores"
+towny_help_4: "Affiche le temps jusqu'au prochain jour"
+towny_help_5: "Affiche les statistiques"
+towny_help_6: "Affiche la version de Towny"
+towny_top_help_0: "Liste les meilleurs résidents en fonction de la sous-commande."
+towny_top_help_1: "Liste les plus grands terrains en fonction de la sous-commande."
+towny_top_help_2: "Affiche les résidents les plus riches en fonction de la sous-commande."
 town_help_1: 'Statut de votre ville'
 town_help_2: '[Maire]'
 town_help_3: 'Statut de la ville cible'
@@ -55,6 +71,64 @@ town_help_7: 'Nouvelle ville avec le maire spécifié.'
 town_help_8: 'Liste des commandes pour maires.'
 town_help_9: 'Aujourd''hui est un grand jour !'
 town_help_10: 'Liste tout les résidents en ligne de la ville'
+town_help_13: "Voir la liste des résidents dans la ville."
+town_help_14: "Voir la liste des rangs dans la ville."
+town_help_15: "Voir la liste des hors-la-loi dans la ville."
+town_help_16: "Voir la liste des groupes de plots dans la ville."
+town_help_17: "Voir la liste des types de plot dans la ville."
+town_help_18: "Envoie un message aux résidents de la ville."
+town_help_19: "Mettre votre ville en vente, elle peut être achetée par d'autres joueurs."
+town_help_20: "Enlevez votre ville de la vente."
+town_help_21: "Achetez la ville donnée, tant qu'elle est à vendre."
+town_help_22: "Déposez de l'argent dans la banque de votre ville."
+town_help_23: "Utilisé pour modifier les rangs de ville de vos résidents."
+town_help_24: "Utilisé pour supprimé votre ville."
+town_help_25: "Utilisé pour modifier les hors-la-loi de votre ville."
+town_help_26: "Liste toutes les villes, voir /t list ? pour de l'aide."
+town_help_27: "Quittez la ville dont vous faites partie."
+town_help_28: "Retirez de l'argent de la banque de votre ville."
+town_help_29: "Utilisez /t claim ? pour de l'aide."
+town_help_30: "Utilisé pour désannexer des parcelles de votre ville."
+town_help_31: "Ajouter ou enlever des résidents."
+town_help_32: "Utiliser /t set ? pour de l'aide."
+town_help_33: "Utiliser /t buy ? pour de l'aide."
+town_help_34: "Utiliser /t toggle ? pour de l'aide."
+town_help_35: "Utilisez /t rank ? pour de l'aide."
+town_list_help_0: "Voir la page spécifiée."
+town_list_help_1: "Liste les villes par nombre de résidents, avec la page spécifiée."
+town_list_help_2: "Liste les villes ouvertes, avec la page spécifiée."
+town_list_help_3: "Liste les villes en fonction de leur argent dans la banque, avec la page spécifiée."
+town_list_help_4: "Liste les villes dans l'ordre alphabétique, avec la page spécifiée."
+town_list_help_5: "Liste les villes par nombre de parcelles, avec la page spécifiée."
+town_list_help_6: "Liste les villes par nombre de résidents en ligne, avec la page spécifiée."
+town_set_help_0: "Changer votre affiche de ville."
+town_set_help_1: "Mettre le homeblock de votre ville ici."
+town_set_help_2: "Mets le point de spawn dans votre homeblock ou votre point de spawn d'avant-poste quand vous êtes dans un avant-poste."
+town_set_help_3: "Voir /town set perm ? pour obtenir de l'aide."
+town_set_help_4: "Définissez le montant d'impôt de votre ville."
+town_set_help_5: "Set the special amounts for per-plot taxes."
+town_set_help_6: "Set the default prices for buying plots."
+town_set_help_7: "Set the cost to use /t spawn."
+town_set_help_8: "Set your town's name."
+town_set_help_9: "Set your town's tag."
+town_set_help_10: "Set the title or surname of your resident."
+town_set_help_11: "Set the max amount of money a percentage tax can take from a resident."
+town_jail_help_0: "List the town's jails."
+town_jail_help_1: "Jail a resident in the primary jail."
+town_jail_help_2: "Jail a resident in the primary jail, for the specified hours."
+town_jail_help_3: "Jail a resident in the primary jail, for the specified hours, in the specified jail."
+town_jail_help_4: "Jail a resident in the primary jail, for the specified hours, in the specified jail and cell."
+town_jail_help_5: "Jail a resident in the primary jail, for the specified hours, with the given bail amount."
+town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
+town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
+town_jail_help_8: "Unjails the resident."
+town_purge_help: "Purges residents that have not logged in for the given amount of days."
+town_trust_help_0: "Adds a resident as Trusted in the town."
+town_trust_help_1: "Removes a resident as Trusted in the town."
+town_trust_help_2: "Lists the Trusted residents of a town."
+town_towntrust_help_0: "Adds a town as Trusted in the town."
+town_towntrust_help_1: "Removes a town as Trusted in the town."
+town_towntrust_help_2: "Lists the Trusted towns of a town."
 mayor_help_3: 'Parcelle non attachée à la ville'
 mayor_help_4: 'Annexe autour de vous dans un rayon de X'
 mayor_help_5: 'Annexe au rayon maximal'
@@ -70,9 +144,46 @@ nation_help_6: 'Créer une nouvelle nation'
 nation_help_7: 'Lister les commandes de dirigeant de nation'
 nation_help_8: 'Créer une nouvelle nation'
 nation_help_9: 'Liste tout les résidents en ligne de la nation'
+nation_help_11: "Lists the towns in the nation."
+nation_help_12: "Lists the allied nations of the nation."
+nation_help_13: "Lists the enemied nations of the nation."
+nation_help_14: "Used to join open nations."
+nation_help_15: "Deposits money into the nation bank."
+nation_help_16: "Used to delete your nation."
+nation_help_17: "Used to add or remove ranks from residents."
+nation_help_18: "See /n rank ? for help."
+nation_list_help_0: "View the specified page."
+nation_list_help_1: "List nations by resident-count, with the specified page."
+nation_list_help_2: "List nations by town-count, with the specified page."
+nation_list_help_3: "List nations which are open, with the specified page."
+nation_list_help_4: "List nations using bank balance, with the specified page."
+nation_list_help_5: "List nations in alphabetical order, with the specified page."
+nation_list_help_6: "List nations by claimed land, with the specified page."
+nation_list_help_7: "List nations by number online, with the specified page."
+nation_set_help_0: "Change the leader of the nation."
+nation_set_help_1: "Change the capital city of the nation."
+nation_set_help_2: "Set the amount of tax that towns will pay."
+nation_set_help_3: "Set the amount of tax that conquered towns will pay."
+nation_set_help_4: "Set the name of the nation."
+nation_set_help_5: "Set the title or surname of one of your residents."
+nation_set_help_6: "Set the nation tag."
+nation_set_help_7: "Set the nation board message."
+nation_set_help_8: "Set the nation spawn point."
+nation_set_help_9: "Set the cost to use /n spawn."
+nation_set_help_10: "Set the mapcolor used in Mapping plugins."
+nation_toggle_help_0: "Toggles peaceful status of the nation."
+nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
+nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
+nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
 king_help_1: 'Aides du Dirigeant de Nation'
 king_help_2: 'Gérer vos alliances.'
 king_help_3: 'Gérer vos ennemis.'
+king_help_4: "Withdraw money from your nation bank."
+king_help_5: "Add or remove towns from your nation."
+king_help_6: "Use /n set ? for help."
+king_help_7: "Use /n toggle ? for help."
+king_help_8: "Used to absorb another nation into your nation."
+king_help_9: "Used to message everyone in your nation."
 res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
@@ -80,6 +191,33 @@ res_4: 'Liste tout les joueurs actifs'
 res_5: 'Pour de l''aide'
 res_6: 'Correspondance en ligne'
 res_7: 'Nom exact'
+res_8: 'Just a humble farmer'
+res_9: "How much tax you will pay per day."
+res_10: "See /res jail ? for help."
+res_11: "See /res toggle ? for help."
+res_12: "See /res set ? for help."
+res_13: "Spawn to your town or bed."
+res_toggle_help_0: "Toggle your plots' pvp status."
+res_toggle_help_1: "Toggle your plots' fire status."
+res_toggle_help_2: "Toggle your plots' mobs status."
+res_toggle_help_3: "Toggle your plots' explosion status."
+res_toggle_help_4: "Toggle the ability to see plot borders."
+res_toggle_help_5: "Toggle the ability to see constant plot borders."
+res_toggle_help_6: "Toggle the ability to see town borders."
+res_toggle_help_7: "Toggle the ability to see plot notifications."
+res_toggle_help_8: "Toggle the ability to claim where you walk."
+res_toggle_help_9: "Toggle the ability to see the map when you change plots."
+res_toggle_help_10: "Remove all modes."
+res_toggle_help_11: "Spy on chat channels."
+res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
+res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
+res_toggle_help_14: "Toggle the ability to unclaim where you walk."
+res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
+res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
+res_jail_help_0: "Pays the bail cost to get out of jail."
+res_set_help_0: "Set your resident's About/Bio"
+res_set_help_1: "Set your resident's default plot permissions."
+res_set_help_2: "Set your resident's modes."
 mode_1: 'Afficher la carte entre chaque parcelles de ville'
 mode_2: 'Essaye d''annexer lorsque vous marchez'
 mode_3: 'Essaye de déxannexer lorsque vous marchez'
@@ -104,14 +242,176 @@ world_help_2: '[World]'
 world_help_3: 'Statut du monde cible'
 world_help_4: 'Liste tout les mondes'
 world_help_5: 'Régénérez cette parcelle'
+world_help_6: 'See /tw toggle ? for help'
+world_help_7: 'See /tw set ? for help'
+world_set_help_0: "Set the world's wilderness name."
+world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
+world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
+world_toggle_help_2: "Toggle on/off if wars can happen in this world."
+world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
+world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
+world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
+world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
+world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
+world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
+world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
+world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
+world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
 townyadmin_help_1: 'Désannexe cette parcelle de ville'
 townyadmin_help_2: 'Tente de désannexer autour de vous.'
+admin_panel_1: "See /ta set ? for help"
 admin_panel_2: 'Rafraîchit Towny'
 admin_panel_3: 'Exécute le code du nouveau jour'
+admin_panel_4: "Unclaim an space surrounding you"
+admin_panel_5: "See /ta plot ? for help"
+admin_panel_6: "Give a positive or negative amount of townblocks to a player or town"
+admin_panel_7: "See /ta toggle ? for help"
+admin_panel_8: "Commands for controlling these objects"
+admin_panel_9: "Teleport to the specified plot"
+admin_panel_10: "Check if the player has a permission node"
+admin_panel_11: "Reset your config"
+admin_panel_12: "Make a backup of your Towny data"
+admin_panel_13: "Dump your mysql db to flatfile"
+admin_panel_14: "Force save or load your database"
+admin_panel_15: "Run the newhour code"
+admin_panel_16: "Purge old residents"
+townyadmin_town_help_0: "Create a town with the given name and mayor."
+townyadmin_town_help_1: "Show the town status screen."
+townyadmin_town_help_2: "Add or remove residents from a town."
+townyadmin_town_help_3: "Rename a town."
+townyadmin_town_help_4: "Delete a town."
+townyadmin_town_help_5: "Spawn at a town."
+townyadmin_town_help_6: "Spawn at a town's outpost."
+townyadmin_town_help_7: "Use a town's rank command."
+townyadmin_town_help_8: "Use a town's set command."
+townyadmin_town_help_9: "Use a town's toggle command."
+townyadmin_town_help_10: "Alter a town's metadata."
+townyadmin_town_help_11: "Merge the 2nd town into the first town."
+townyadmin_town_help_12: "Merge the 2nd town into the first town, ignoring any rules."
+townyadmin_town_help_13: "Put money into the town bank."
+townyadmin_town_help_14: "Take money from the town bank."
+townyadmin_town_help_15: "Open the town's bankhistory book."
+townyadmin_town_help_16: "Alter a town's outlaws."
+townyadmin_town_help_17: "Make the town leave their nation."
+townyadmin_town_help_18: "Remove a town's conquered status."
+townyadmin_town_toggle_help_0: "Toggle the Town's PVP."
+townyadmin_town_toggle_help_1: "Toggle the Town's ForcePVP, preventing mayors from turning off pvp."
+townyadmin_town_toggle_help_2: "Toggle the Town's Public status, allowing non-residents to teleport there."
+townyadmin_town_toggle_help_3: "Toggle the Town's Explosion setting."
+townyadmin_town_toggle_help_4: "Toggle the Town's Fire setting."
+townyadmin_town_toggle_help_5: "Toggle the Town's Mob setting."
+townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
+townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
+townyadmin_nation_help_0: "Create a nation with the given name and capital city."
+townyadmin_nation_help_1: "Show the nation status screen."
+townyadmin_nation_help_2: "Add towns from the nation."
+townyadmin_nation_help_3: "Remove towns from the nation."
+townyadmin_nation_help_4: "Rename a nation."
+townyadmin_nation_help_5: "Delete a town."
+townyadmin_nation_help_6: "Recheck the nation's towns to make sure they're close enough to the capital."
+townyadmin_nation_help_7: "Merge the 2nd nation into the first nation."
+townyadmin_nation_help_8: "Merge the 2nd nation into the first nation, ignoring any rules."
+townyadmin_nation_help_9: "Use a nation's toggle command."
+townyadmin_nation_help_10: "Use a nation's set command."
+townyadmin_nation_help_11: "Put money into the nation bank."
+townyadmin_nation_help_12: "Take money from the nation bank."
+townyadmin_nation_help_13: "Open the nation's bankhistory book."
+townyadmin_nation_help_14: "Place the town into the nation."
+townyadmin_nation_help_15: "Use the nation's rank command."
+townyadmin_nationrank_help_0: "Adds a nation rank to the resident."
+townyadmin_nationrank_help_1: "Removes a nation rank from the resident."
+townyadmin_database_help_0: "Force saves the database."
+townyadmin_database_help_1: "Force loads the database."
+townyadmin_database_help_2: "Removes all titles and surnames from every resident."
+ta_plot_help_0: "Claim a plot for a player."
+ta_plot_help_1: "View the metadata stored in the plot you are stood in."
+ta_plot_help_2: "Set plot metadata key and value."
+ta_plot_help_3: "Add or remove a metadata by key."
+ta_resident_help_0: "Rename a resident."
+ta_resident_help_1: "Add or remove a friend."
+ta_resident_help_2: "List or clear the friend list."
+ta_resident_help_3: "Delete a resident from the database."
+ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
+ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
+ta_toggle_help_2: "Turn on/off devmode, shows extra logging messages to the player specified in the config."
+ta_toggle_help_3: "Turn on/off debug mode, showing extra messages in the log."
+ta_toggle_help_4: "Turn on/off the ability for towns or nations to remove money from their banks."
+ta_toggle_help_5: "Make a player an NPC or not."
+ta_set_help_0: "Set a towns mayor to the given player."
+ta_set_help_1: "Set a town with a new NPC mayor, they pay no upkeep."
+ta_set_help_2: "Set the capital of a nation."
+ta_set_help_3: "Set a nation's nationzone size."
+ta_set_help_4: "Set a resident's title."
+ta_set_help_5: "Set a resident's surname."
+ta_set_help_6: "Set a plot to a different town."
+ta_set_help_7: "Set a town's founder name."
+ta_set_help_8: "Use size 0 to remove nationzone override."
+ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
+ta_townmeta_help_1: "View the metadata stored on the town you specify."
+ta_townmeta_help_2: "Set town metadata key and value."
+ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_2: "Set resident metadata key and value."
+ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
+ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
+ta_reload_help_0: "Reloads database."
+ta_reload_help_1: "Reloads config."
+ta_reload_help_2: "Reloads language files."
+ta_reload_help_3: "Reloads Towny permissions."
+ta_reload_help_4: "Reloads all components of Towny."
+ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
+plot_help_0: "Turns on the plot info HUD."
+plot_help_1: "Removes the owner of the plot."
+plot_help_2: "Deletes a list of blocks from the plot."
+plot_help_3: "See /plot set ? for help."
+plot_help_4: "See /plot toggle ? for help."
+plot_help_5: "See /plot group ? for help."
+plot_help_6: "Removes permission overrides for a player."
+plot_help_7: "Adds default permission overrides for a player."
+plot_help_8: "Opens the permission editor gui."
+plot_help_9: "Adds a resident as Trusted in the plot."
+plot_help_10: "Removes a resident as Trusted in the plot."
+plot_group_help_0: "Ex: /plot group new ExpensivePlots"
+plot_group_help_1: "Removes a plot from the specified group."
+plot_group_help_2: "Deletes a plotgroup completely."
+plot_group_help_3: "Renames the group you are standing in."
+plot_group_help_4: "Ex: /plot group set perm resident on."
+plot_group_help_5: "Ex: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Ex: /plot group forsale 50"
+plot_group_help_7: "Ex: /plot group notforsale"
+plot_group_help_8: "Adds or removes a resident as trusted."
+plot_group_help_9: "Adds a resident as Trusted in the plotgroup."
+plot_group_help_10: "Removes a resident as Trusted in the plotgroup."
+plot_group_help_11: "Opens the plot perm GUI."
+plot_group_help_12: "Adds a player to the plot perm GUI."
+plot_group_help_13: "Removes a player to the plot perm GUI."
+plot_toggle_help_0: "Toggles pvp in the plot."
+plot_toggle_help_1: "Toggles explosions in the plot."
+plot_toggle_help_2: "Toggles fire in the plot."
+plot_toggle_help_3: "Toggles mobs in the plot."
+plot_group_toggle_help_0: "Toggles pvp in the plot group."
+plot_group_toggle_help_1: "Toggles explosions in the plot group."
+plot_group_toggle_help_2: "Toggles fire in the plot group."
+plot_group_toggle_help_3: "Toggles mobs in the plot group."
+plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
+plot_set_help_1: "Sets a plot to an Outpost."
+plot_set_help_2: "Removes a plot type."
+plot_set_help_3: "Names a plot."
+plot_set_help_4: "Toggle all permissions."
+plot_set_help_5: "Sets the permissions of a level or type to on or off."
+plot_set_help_6: "Sets the permission of a level and type to on or off."
+plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
+plot_jailcell_help_0: "Adds a JailCell where you stand."
+plot_jailcell_help_1: "Removes a JailCell where you stand."
 msg_block_claim: 'Annexe cette parcelle de ville'
+msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
 msg_plot_nfs: 'Enlève une parcelle en vente'
+msg_plot_nfs_radius: 'Take down a radius of plots for sale'
 msg_nfs_abr: '&e''fs'' et ''nfs'' sont des abréviations autorisées pour ''forsale'' et ''notforsale''.'
 msg_plot_fs: 'Mets cette zone aux enchères.'
+msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -794,6 +1094,12 @@ msg_err_key_cannot_be_deleted: 'La clé ne peut pas être supprimée car elle n'
 msg_err_this_town_doesnt_have_any_associated_metadata: 'Cette ville n''a pas de métadonnées associées.'
 msg_err_key_x_is_not_part_of_this_town: 'La clé %s ne fait pas parti de cette ville, si possible veuillez l''ajouter.'
 msg_custom_data_was_successfully_added_to_town: 'Les données customisées ont bien été ajoutées à la ville!'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'Trop de pages.'
 msg_err_location_is_not_within_a_town: 'Cet emplacement n''est pas dans une ville.'
 msg_err_location_is_not_within_a_jail_plot: 'Cet emplacement n''est pas dans une prison.'
@@ -845,7 +1151,8 @@ msg_err_plot_not_associated_with_a_group: 'Cette parcelle n''est pas associée �
 msg_plot_was_removed_from_group_x: 'La parcelle &9(%s,%s) &2a été enlevé du groupe %s'
 msg_plot_renamed_from_x_to_y: 'Parcelle %s a été renommé %s.'
 msg_err_plot_group_specify_price: 'Veuillez spécifier le prix, ex: /plot group fs [prix]'
-msg_player_put_group_up_for_sale: '%s a mit pe groupe %s à vendre pour %s'
+msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
+msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Impossible de mettre le type de groupe - '
 msg_set_group_type_to_x: 'Changé le type de groupe de parcelle en %s'
 msg_player_successfully_bought_group_x: '%s a acheté avec succès le groupe de parcelles %s'
@@ -962,7 +1269,6 @@ msg_universe_heart: '<3'
 townblock_plu: 'Blocs de ville'
 #Added in 0.92
 #Town Ruins
-admin_panel_4: 'Exécutez le code à la prochaine heure'
 msg_newhour_success: 'La commande de nouvelle heure a été exécutée avec succés'
 town_help_12: 'Récupérez votre ville d''un état en ruine.'
 msg_warning_town_ruined_if_deleted: "ATTENTION !!!: Si vous supprimez votre ville, elle entrera dans un état de ruine pour %d heures. Passé ce délai, la suppression complète aura lieu. Dans l'état en ruine, toutes les permissions sont activées et la ville peut être abîmée."
@@ -1282,6 +1588,7 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Accueil: %s]'
+status_about: "About:"
 status_registered: 'Enregistré le:'
 status_lastonline: 'Dernier en ligne:'
 status_fractions: '%s/%s'
@@ -1724,3 +2031,16 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 msg_err_world_not_loaded: "<red>World is not loaded."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
+status_forsale: "&a(For Sale: %s)"
+msg_town_forsale: "%s has been set for sale at %s."
+msg_town_notforsale: "%s is no longer for sale."
+msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you sure you want to continue?"
+msg_town_buytown_already_mayor: "You are already mayor of %s."
+msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
+msg_town_buytown_not_forsale: "Specified town is not for sale."
+msg_resident_about_reset: "&bResident about reset."
+msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
+msg_set_about: "%s's about was set to %s."
+msg_clear_about: "%s's about was cleared."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'

@@ -155,32 +155,28 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String backupType = TownySettings.getFlatFileBackupType();
 		String newBackupFolder = backupFolderPath + File.separator + BACKUP_DATE_FORMAT.format(System.currentTimeMillis());
 		FileMgmt.checkOrCreateFolders(rootFolderPath, rootFolderPath + File.separator + "backup");
-		switch (backupType.toLowerCase(Locale.ROOT)) {
-		case "folder": {
-			FileMgmt.checkOrCreateFolder(newBackupFolder);
-			FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
-			FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
-			FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
-			return true;
-		}
-		case "zip": {
-			FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"), new File(dataFolderPath),
-					new File(logFolderPath), new File(settingsFolderPath));
-			return true;
-		}
-		case "tar.gz":
-		case "tar": {
-			FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
-				new File(dataFolderPath),
-				new File(logFolderPath),
-				new File(settingsFolderPath));
-			return true;
-		}
-		default:
-		case "none": {
-			return false;
-		}
-		}
+        return switch (backupType.toLowerCase(Locale.ROOT)) {
+            case "folder" -> {
+                FileMgmt.checkOrCreateFolder(newBackupFolder);
+                FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
+                FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
+                FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
+                yield true;
+            }
+            case "zip" -> {
+                FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"), new File(dataFolderPath),
+                        new File(logFolderPath), new File(settingsFolderPath));
+                yield true;
+            }
+            case "tar.gz", "tar" -> {
+                FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
+                        new File(dataFolderPath),
+                        new File(logFolderPath),
+                        new File(settingsFolderPath));
+                yield true;
+            }
+            default -> false;
+        };
 	}
 
 	/*
@@ -256,6 +252,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Remove resident from towns' outlaw & trusted lists.
 		for (Town town : universe.getTowns()) {
+			if (!town.exists())
+				continue;
+
 			boolean save = false;
 			
 			if (town.hasOutlaw(resident)) {
@@ -311,18 +310,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (Resident toCheck : toSave)
 			saveResident(toCheck);
 		
-		if (resident.hasTown()) {
-			Town town = resident.getTownOrNull();
-
-			if (town != null) {
-				// Delete the town if there are no more residents
-				if (town.getNumResidents() <= 1) {
-					universe.getDataSource().removeTown(town);
-				}
-
-				resident.removeTown();
-			}
-		}
+		if (resident.hasTown() && resident.getTownOrNull() != null)
+			resident.removeTown();
 
 		if (resident.hasUUID() && !resident.isNPC())
 			saveHibernatedResident(resident.getUUID(), resident.getRegistered());
@@ -535,6 +524,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		for (Town town : toSave) {
+			if (!town.exists())
+				continue;
 
 			for (Resident res : town.getResidents()) {
 				res.updatePermsForNationRemoval();

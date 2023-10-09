@@ -2192,6 +2192,11 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system."),
+	RES_SETTING_DEFAULT_ABOUT(
+			"resident_settings.default_about",
+			"/res set about [msg]",
+			"",
+			"# The default resident about text, shown in the resident's status screen."),
 	ECO(
 			"economy",
 			"",
