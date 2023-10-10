@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
@@ -22,6 +23,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Criteria;
@@ -121,12 +123,35 @@ public class BukkitTools {
 		return getServer().getPlayer(playerUUID);
 	}
 	
+	/**
+	 * Test whether an Player can see another Player. Staff on servers tend to enjoy
+	 * their privacy while vanished.
+	 * 
+	 * @param seeing Player who is doing the seeing.
+	 * @param seen   Player who is potentially vanished from the seeing Player.
+	 * @return true if the seeing Player can see the seen Player.
+	 */
+	public static boolean playerCanSeePlayer(Player seeing, Player seen) {
+		// PremiumVanish cannot hide a player unless the MC is 1.19.3+ and ProtocolLib
+		// is of a specific version.
+		if (Bukkit.getPluginManager().isPluginEnabled("PremiumVanish") &&
+			MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_19_3)) {
+			for (MetadataValue meta : seen.getMetadata("vanished")) {
+				if (meta.asBoolean())
+					return false;
+			}
+			return true;
+		}
+		// Vanish plugins should be able to correctly set the results of player#canSee(Player).
+		return seeing.canSee(seen);
+	}
+
 	public static Collection<? extends Player> getVisibleOnlinePlayers(CommandSender sender) {
 		if (!(sender instanceof Player player))
 			return Bukkit.getOnlinePlayers();
 		
 		return Bukkit.getOnlinePlayers().stream()
-			.filter(player::canSee)
+			.filter(p -> playerCanSeePlayer(player, p))
 			.collect(Collectors.toCollection(ArrayList::new));
 	}
 	

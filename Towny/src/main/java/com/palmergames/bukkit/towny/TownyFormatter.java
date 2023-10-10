@@ -941,7 +941,7 @@ public class TownyFormatter {
 	 */
 	private static boolean playerIsOnlineAndVisible(String name, CommandSender sender) {
 		if (sender instanceof Player player)
-			return BukkitTools.isOnline(name) && player.canSee(BukkitTools.getPlayerExact(name));
+			return BukkitTools.isOnline(name) && BukkitTools.playerCanSeePlayer(player, BukkitTools.getPlayerExact(name));
 		else if (sender instanceof ConsoleCommandSender)
 			return BukkitTools.isOnline(name);
 		else
