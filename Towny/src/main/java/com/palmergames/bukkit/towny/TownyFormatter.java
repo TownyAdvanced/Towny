@@ -318,7 +318,7 @@ public class TownyFormatter {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
 				outpostLine = colourKeyValue(translator.of("status_town_outposts"), translator.of("status_fractions", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 				if (town.hasNation()) {
-					int nationBonus = TownySettings.getNationLevel(town.getNationOrNull()).nationBonusOutpostLimit();
+					int nationBonus = town.getNationOrNull().getNationLevel().nationBonusOutpostLimit();
 					if (nationBonus > 0)					
 						outpostLine += colourBracketElement(translator.of("status_town_size_nationbonus"), String.valueOf(nationBonus));
 				}

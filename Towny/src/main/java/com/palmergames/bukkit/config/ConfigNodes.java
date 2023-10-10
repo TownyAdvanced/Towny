@@ -1277,6 +1277,11 @@ public enum ConfigNodes {
 			"30",
 			"",
 			"# Number of seconds that must pass before a player who is not a member or ally can use /n spawn."),
+	GNATION_SETTINGS_NATION_LEVEL_IS_DETERMINED_BY_TOWNS_COUNT(
+			"global_nation_settings.nation_level_is_determined_by_town_count_instead_of_resident_count",
+			"false",
+			"",
+			"# When set to true, the nation's NationLevel is determined by the number of towns in the nations, instead of the number of residents."),
 	GNATION_SETTINGS_MAX_TOWNS_PER_NATION(
 			"global_nation_settings.max_towns_per_nation",
 			"0",

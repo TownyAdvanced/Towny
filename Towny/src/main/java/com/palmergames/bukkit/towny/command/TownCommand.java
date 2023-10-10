@@ -4055,10 +4055,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount))
 			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_purchased_townblocks", TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount)));
 
-		if (TownySettings.isAllowingOutposts() &&
-			TownySettings.isOutpostsLimitedByLevels() && 
-			(remainingTown.getMaxOutpostSpawn() + succumbingTown.getMaxOutpostSpawn()) > TownySettings.getMaxOutposts(remainingTown, newResidentsAmount))
-			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_outposts", TownySettings.getMaxOutposts(remainingTown, newResidentsAmount)));
+		if (TownySettings.isAllowingOutposts() && TownySettings.isOutpostsLimitedByLevels()) {
+			// When determining the future-max outposts we have to determine how many towns the potential nation might have,
+			// nations can add bonus outposts to towns and the nation_level can be determined using the amount of towns a nation has.
+			int nationTownsAmount = !remainingTown.hasNation() ? 0 : remainingTown.getNationOrNull().getTowns().size();
+			if (remainingTown.getNationOrNull().hasTown(succumbingTown))
+				nationTownsAmount--;
+
+			int maxOutposts = TownySettings.getMaxOutposts(remainingTown, newResidentsAmount, nationTownsAmount);
+			int combinedOutposts = TownySettings.getMaxOutposts(remainingTown) + TownySettings.getMaxOutposts(succumbingTown);
+			if (combinedOutposts > maxOutposts)
+				throw new TownyException(Translatable.of("msg_town_merge_err_too_many_outposts", maxOutposts));
+		}
 
 		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC())
 			throw new TownyException(Translatable.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
