@@ -642,11 +642,8 @@ public class Nation extends Government {
 	 * @return Nation Level (int) for current population.
 	 */
 	public int getLevel() {
-		// If nationLevel by resident count 
-		if (!TownySettings.isNationLevelDeterminedByTownCount())
-			return TownySettings.getNationLevelFromGivenInt(this.getResidents().size());
-		else
-			return TownySettings.getNationLevelFromGivenInt(this.getTowns().size());
+		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? this.getNumTowns() : this.getNumResidents();
+		return TownySettings.getNationLevelFromGivenInt(modifier);
 	}
 
 	/**
