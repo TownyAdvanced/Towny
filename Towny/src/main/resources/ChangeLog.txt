@@ -9117,3 +9117,5 @@ v0.92.0.11:
   - Reset a player's cache when they are op'd or deop'd.
   - Fix unneeded permission test in /n list command.
   - Allow Towny admins to bypass PvP damage prevention, courtesy of ImperialSam12 with PR #7013. (First-Time Contributor!)
+  - API: Add boolean for if claim is from takeoverclaim to TownPreClaimEvent, courtesy of Fruitloopins with PR #7023.
+  - Fix support for Vanished players on servers using PremiumVanish and MC versions older than 1.19.3.
