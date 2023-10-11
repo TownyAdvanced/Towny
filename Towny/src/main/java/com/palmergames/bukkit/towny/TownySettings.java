@@ -330,9 +330,23 @@ public class TownySettings {
 	}
 
 	public static NationLevel getNationLevel(Nation nation) {
-		return getNationLevel(nation.getLevel());
+		return getNationLevel(nation.getLevelNumber());
 	}
 
+	/**
+	 * @deprecated since 0.99.6.2 use {@link Nation#getNationLevelWithModifier(int)}
+	 *             or {@link #getNationLevelWithModifier(int) instead.
+	 * @param nation    Nation to test with, unused.
+	 * @param residents an int representing what modifies a nationlevel.
+	 *                  {@link #isNationLevelDeterminedByTownCount()} decides
+	 *                  whether it is residents or towns.
+	 * @return the NationLevel given the number of residents/towns.
+	 */
+	@Deprecated
+	public static NationLevel getNationLevel(Nation nation, int residents) {
+		return getNationLevelWithModifier(residents);
+	}
+	
 	public static NationLevel getNationLevelWithModifier(int modifier) {
 		return getNationLevel(getNationLevelFromGivenInt(modifier));
 	}

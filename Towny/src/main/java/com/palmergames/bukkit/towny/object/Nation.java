@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySettings.NationLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
+import com.palmergames.bukkit.towny.event.nation.NationCalculateNationLevelNumberEvent;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -627,6 +628,10 @@ public class Nation extends Government {
 	 * administrator, and may be different from the default configuration.
 	 * </p>
 	 * 
+	 * @param modifier an int representing either the amount of residents or towns
+	 *                 that determines a nation's NationLevel.
+	 *                 {@link TownySettings#isNationLevelDeterminedByTownCount()}
+	 *                 will tell you which is used.
 	 * @return NationLevel of the nation knowing the modifier.
 	 */
 	public NationLevel getNationLevelWithModifier(int modifier) {
@@ -634,41 +639,23 @@ public class Nation extends Government {
 	}
 
 	/**
-	 * Get the Nation's current Nation Level.
+	 * Get the Nation's current Nation Level number, ie: 1 to
+	 * {@link TownySettings#getNationLevelMax()}. This is used as a key to determine
+	 * which NationLevel a Nation receives, and ultimately which attributes that
+	 * Nation will receive.
 	 * <p>
-	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.	 
+	 * Note that Nation Levels are not hard-coded. They can be defined by the server
+	 * administrator, and may be different from the default configuration.
 	 * </p>
-	 * @return Nation Level (int) for current population.
+	 * 
+	 * @return Nation Level (int) for current population or amount of towns.
 	 */
-	public int getLevel() {
-		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? this.getNumTowns() : this.getNumResidents();
-		return TownySettings.getNationLevelFromGivenInt(modifier);
-	}
-
-	/**
-	 * Get the maximum level a Nation may achieve.
-	 * @return Size of TownySettings' configNationLevel SortedMap.
-	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelMax()} instead.
-	 */
-	@Deprecated
-	public int getMaxLevel() {
-		return TownySettings.getConfigNationLevel().size();
-	}
-
-	/**
-	 * Get the Nation's Level for a supposed population size.
-	 * <p>
-	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.	 
-	 * </p>
-	 * @param populationSize Number of residents in the Nation, theoretical or real.
-	 * @return Nation Level (int) for the supplied populationSize.
-	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelFromGivenInt(int)} instead.
-	 */
-	@Deprecated
-	public int getLevel(int populationSize) {
-		return TownySettings.getNationLevelFromGivenInt(populationSize);
+	public int getLevelNumber() {
+		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? getNumTowns() : getNumResidents();
+		int nationLevelNumber = TownySettings.getNationLevelFromGivenInt(modifier);
+		NationCalculateNationLevelNumberEvent ncnle = new NationCalculateNationLevelNumberEvent(this, nationLevelNumber);
+		BukkitTools.fireEvent(ncnle);
+		return ncnle.getNationLevelNumber();
 	}
 
 	@Override
@@ -689,4 +676,44 @@ public class Nation extends Government {
 	public boolean exists() {
 		return TownyUniverse.getInstance().hasNation(getName());
 	}
+
+	/**
+	 * @deprecated since 0.99.6.2, use {@link #getLevelNumber()} instead.
+	 * Get the Nation's current Nation Level.
+	 * <p>
+	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.	 
+	 * </p>
+	 * @return Nation Level (int) for current population or amount of towns.
+	 */
+	@Deprecated
+	public int getLevel() {
+		return getLevelNumber();
+	}
+
+	/**
+	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelMax()} instead.
+	 * Get the maximum level a Nation may achieve.
+	 * @return Size of TownySettings' configNationLevel SortedMap.
+	 */
+	@Deprecated
+	public int getMaxLevel() {
+		return TownySettings.getConfigNationLevel().size();
+	}
+
+	/**
+	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelFromGivenInt(int)} instead.
+	 * Get the Nation's Level for a supposed population size.
+	 * <p>
+	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.	 
+	 * </p>
+	 * @param populationSize Number of residents in the Nation, theoretical or real.
+	 * @return Nation Level (int) for the supplied populationSize.
+	 */
+	@Deprecated
+	public int getLevel(int populationSize) {
+		return TownySettings.getNationLevelFromGivenInt(populationSize);
+	}
+
 }
