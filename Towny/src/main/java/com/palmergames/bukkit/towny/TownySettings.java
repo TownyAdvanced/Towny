@@ -360,6 +360,7 @@ public class TownySettings {
 	 * @param threshold Number of residents or towns in the Nation, theoretical or real.
 	 * @return Nation Level (int) for the supplied threshold.
 	 */
+	@ApiStatus.Internal
 	public static int getNationLevelFromGivenInt(int threshold) {
 		for (Integer level : configNationLevel.keySet())
 			if (threshold >= level)

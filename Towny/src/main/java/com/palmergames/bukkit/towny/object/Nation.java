@@ -620,25 +620,6 @@ public class Nation extends Government {
 	}
 
 	/**
-	 * Get the Nation's NationLevel assuming a supplied modifier. This is used to
-	 * determine theoretical or future nationLevels given a change in the resident
-	 * amount or town amount.
-	 * <p>
-	 * Note that Nation Levels are not hard-coded. They can be defined by the server
-	 * administrator, and may be different from the default configuration.
-	 * </p>
-	 * 
-	 * @param modifier an int representing either the amount of residents or towns
-	 *                 that determines a nation's NationLevel.
-	 *                 {@link TownySettings#isNationLevelDeterminedByTownCount()}
-	 *                 will tell you which is used.
-	 * @return NationLevel of the nation knowing the modifier.
-	 */
-	public NationLevel getNationLevelWithModifier(int modifier) {
-		return TownySettings.getNationLevelWithModifier(modifier);
-	}
-
-	/**
 	 * Get the Nation's current Nation Level number, ie: 1 to
 	 * {@link TownySettings#getNationLevelMax()}. This is used as a key to determine
 	 * which NationLevel a Nation receives, and ultimately which attributes that
