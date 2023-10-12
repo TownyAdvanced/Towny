@@ -9140,3 +9140,5 @@ v0.92.0.11:
     - When set to true, the nation's NationLevel is determined by the number of towns in the nations, instead of the number of residents.
   - API: Added NationCalculateNationLevelNumberEvent, an event thrown when Towny decides what NationLevel number a Nation will have, which ultimately decides which NationLevel the Nation receives.
     - Useful for plugins that want to artifically increase or decrease a Nation's NationLevel.
+  - Handle tamed wolves who are in pvp-enabled areas, being able to be shot from pvp-disabled areas.
+    - Closes #6983.
