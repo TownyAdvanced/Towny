@@ -436,9 +436,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (town != null) {
 								if (args.length == 4) {
 									return NameUtil.filterByStart(adminTownSetTabCompletes, args[3]);
-                                } else {
-									return TownCommand.townSetTabComplete(sender, town, StringMgmt.remArgs(args, 2));
-								}
+                                }
                             }
 							break;
 						}
@@ -519,8 +517,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							if (nation != null) {
 								if (args.length == 4) {
 									return NameUtil.filterByStart(adminTownSetTabCompletes, args[3]);
-								} else {
-									return NationCommand.nationSetTabComplete(sender, nation, StringMgmt.remArgs(args, 2));
 								}
 							}
 							else {
@@ -1225,12 +1221,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "set":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SET.getNode());
-			if (split.length == 2) {
-				// Empty Case: /townyadmin town [town] set
-				TownCommand.townSet(sender, StringMgmt.remArgs(split, 2), true, town);
-			} else {
-				parseAdminTownSet(sender, town, StringMgmt.remArgs(split, 2));
-			}
+			parseAdminTownSet(sender, town, StringMgmt.remArgs(split, 2));
 			break;
 		case "meta":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_META.getNode());
@@ -1388,35 +1379,42 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminTownSet(CommandSender sender, Town town, String[] split) throws TownyException {
-		if (split[0].equalsIgnoreCase("foundingdate")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SETFOUNDINGDATE.getNode());
-			
-			// Handle incorrect number of arguments
-			if (split.length == 1) {
-				throw new TownyException(Translatable.of("msg_err_invalid_input", "Use /townyadmin town [townname] set foundingdate [unix_timestamp]"));
-			}
-			
-			long timestamp;
-			try {
-				// They will input a UNIX timestamp in seconds (e.g. https://www.unixtimestamp.com/)
-				// We use a UNIX timestamp in milliseconds, hence * 1000.
-				timestamp = Long.parseLong(split[1]) * 1000;
-			} catch (NumberFormatException ife) {
-				throw new TownyException(Translatable.of("msg_error_must_be_int"));
-			}
-			if (timestamp <= 0) {
-				throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
-			}
-			if (timestamp > System.currentTimeMillis()) {
-				throw new TownyException(Translatable.of("msg_err_time_cannot_be_in_the_future"));
-			}
-			town.setRegistered(timestamp);
-			town.save();
-
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_registered_set", town, TownyFormatter.registeredFormat.format(town.getRegistered())));
+		if (split.length == 0 || split[0].equals("?")) {
+			// Empty Case: /townyadmin town [town] set
+			HelpMenu.TA_TOWN_SET.send(sender);
+        } else if (split[0].equalsIgnoreCase("foundingdate")) {
+			parseAdminTownSetFoundingDate(sender, town, split);
 		} else {
 			TownCommand.townSet(sender, split, true, town);
         }
+	}
+
+	private static void parseAdminTownSetFoundingDate(CommandSender sender, Town town, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_SETFOUNDINGDATE.getNode());
+
+		// Handle incorrect number of arguments
+		if (split.length == 1) {
+			throw new TownyException(Translatable.of("msg_err_invalid_input", "Use /townyadmin town [townname] set foundingdate [unix_timestamp]"));
+		}
+
+		long timestamp;
+		try {
+			// They will input a UNIX timestamp in seconds (e.g. https://www.unixtimestamp.com/)
+			// We use a UNIX timestamp in milliseconds, hence * 1000.
+			timestamp = Long.parseLong(split[1]) * 1000;
+		} catch (NumberFormatException ife) {
+			throw new TownyException(Translatable.of("msg_error_must_be_int"));
+		}
+		if (timestamp <= 0) {
+			throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
+		}
+		if (timestamp > System.currentTimeMillis()) {
+			throw new TownyException(Translatable.of("msg_err_time_cannot_be_in_the_future"));
+		}
+		town.setRegistered(timestamp);
+		town.save();
+
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_registered_set", town, TownyFormatter.registeredFormat.format(town.getRegistered())));
 	}
 
 	private void parseAdminTownToggle(CommandSender sender, Town town, String[] split) throws TownyException {
@@ -1661,12 +1659,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "set":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SET.getNode());
-			if (split.length == 2) {
-				// Empty Case: /townyadmin nation [nation] set
-				NationCommand.nationSet(sender, StringMgmt.remArgs(split, 2), true, nation);
-			} else {
-				parseAdminNationSet(sender, nation, StringMgmt.remArgs(split, 2));
-			}
+			parseAdminNationSet(sender, nation, StringMgmt.remArgs(split, 2));
 			break;
 		case "toggle":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_TOGGLE.getNode());
@@ -1780,37 +1773,43 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendNationMessagePrefixed(nation, Translatable.of("msg_join_nation", town.getName()));
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_join_nation", town.getName()));
 	}
-
 	private void parseAdminNationSet(CommandSender sender, Nation nation, String[] split) throws TownyException {
-		if (split[0].equalsIgnoreCase("foundingdate")) {
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SETFOUNDINGDATE.getNode());
-
-			// Handle incorrect number of arguments
-			if (split.length == 1) {
-				throw new TownyException(Translatable.of("msg_err_invalid_input", "Use /townyadmin nation [nationname] set foundingdate [unix_timestamp]"));
-			}
-			
-			long timestamp;
-			try {
-				// They will input a UNIX timestamp in seconds (e.g. https://www.unixtimestamp.com/)
-				// We use a UNIX timestamp in milliseconds, hence * 1000.
-				timestamp = Long.parseLong(split[1]) * 1000;
-			} catch (NumberFormatException ife) {
-				throw new TownyException(Translatable.of("msg_error_must_be_int"));
-			}
-			if (timestamp <= 0) {
-				throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
-			}
-			if (timestamp > System.currentTimeMillis()) {
-				throw new TownyException(Translatable.of("msg_err_time_cannot_be_in_the_future"));
-			}
-			nation.setRegistered(timestamp);
-			nation.save();
-
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_registered_set", nation, TownyFormatter.registeredFormat.format(nation.getRegistered())));
+		if (split.length == 0 || split[0].equals("?")) {
+			// Empty Case: /townyadmin town [town] set
+			HelpMenu.TA_NATION_SET.send(sender);
+		} else if (split[0].equalsIgnoreCase("foundingdate")) {
+			parseAdminNationSetFoundingDate(sender, nation, split);
 		} else {
 			NationCommand.nationSet(sender, split, true, nation);
 		}
+	}
+
+	private static void parseAdminNationSetFoundingDate(CommandSender sender, Nation nation, String[] split) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SETFOUNDINGDATE.getNode());
+
+		// Handle incorrect number of arguments
+		if (split.length == 1) {
+			throw new TownyException(Translatable.of("msg_err_invalid_input", "Use /townyadmin nation [nationname] set foundingdate [unix_timestamp]"));
+		}
+
+		long timestamp;
+		try {
+			// They will input a UNIX timestamp in seconds (e.g. https://www.unixtimestamp.com/)
+			// We use a UNIX timestamp in milliseconds, hence * 1000.
+			timestamp = Long.parseLong(split[1]) * 1000;
+		} catch (NumberFormatException ife) {
+			throw new TownyException(Translatable.of("msg_error_must_be_int"));
+		}
+		if (timestamp <= 0) {
+			throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
+		}
+		if (timestamp > System.currentTimeMillis()) {
+			throw new TownyException(Translatable.of("msg_err_time_cannot_be_in_the_future"));
+		}
+		nation.setRegistered(timestamp);
+		nation.save();
+
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_registered_set", nation, TownyFormatter.registeredFormat.format(nation.getRegistered())));
 	}
 
 	private void parseAdminNationRankCommand(CommandSender sender, String[] split, Nation nation) throws TownyException {

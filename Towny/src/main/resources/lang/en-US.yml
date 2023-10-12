@@ -2333,6 +2333,8 @@ msg_set_about: "%s's about was set to %s."
 msg_clear_about: "%s's about was cleared."
 
 # Message shown when an admin overrides a town founding date via townyadmin.
+townyadmin_town_set_help_0: "Sets the founding date of a town."
+townyadmin_nation_set_help_0: "Sets the founding date of a nation."
 msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
 msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
 msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
