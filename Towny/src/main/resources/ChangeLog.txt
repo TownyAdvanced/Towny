@@ -9142,3 +9142,7 @@ v0.92.0.11:
     - Useful for plugins that want to artifically increase or decrease a Nation's NationLevel.
   - Handle tamed wolves who are in pvp-enabled areas, being able to be shot from pvp-disabled areas.
     - Closes #6983.
+  - New Command: /plot set outpost spawn
+    - Sets the spawn point inside of an existing outpost plot to where the player is standing.
+    - An alias of the older command /t set outpost.
+    - Closes #6998.

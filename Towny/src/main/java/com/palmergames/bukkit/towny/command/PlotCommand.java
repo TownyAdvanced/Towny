@@ -197,6 +197,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2) {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, getPlotSetCompletions()), args[1]);
 					}
+					if (args.length == 3 && args[1].equalsIgnoreCase("outpost")) {
+						return Arrays.asList("spawn");
+					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
 					} else if (args.length > 2 && TownyCommandAddonAPI.hasCommand(CommandType.PLOT_SET, args[1]))
@@ -538,7 +541,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "outpost":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
 			TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock); // Test we are allowed to work on this plot
-			parsePlotSetOutpost(player, resident, townBlock);
+			boolean spawn = split.length == 2 && split[1].equalsIgnoreCase("spawn");
+			parsePlotSetOutpost(player, resident, townBlock, spawn);
 			break;
 		default:
 			if (tryPlotSetAddonCommand(player, split))
@@ -621,14 +625,26 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		return false;
 	}
 
-	public void parsePlotSetOutpost(Player player, Resident resident, TownBlock townBlock) throws TownyException {
+	public void parsePlotSetOutpost(Player player, Resident resident, TownBlock townBlock, boolean spawn) throws TownyException {
 		if (!TownySettings.isAllowingOutposts()) 
 			throw new TownyException(Translatable.of("msg_outpost_disable"));
 
 		Town town = townBlock.getTownOrNull();
+
+		if (spawn) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_OUTPOST.getNode());
+
+			if (!townBlock.isOutpost())
+				throw new TownyException(Translatable.of("msg_err_location_is_not_within_an_outpost_plot"));
+
+			town.addOutpostSpawn(player.getLocation());
+			TownyMessaging.sendMsg(player, Translatable.of("msg_set_outpost_spawn"));
+			return;
+		}
+
 		TownyWorld townyWorld = townBlock.getWorld();
 		Coord key = Coord.parseCoord(player.getLocation());
-		
+
 		if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true)) {
 			// Test if they can pay.
 			if (TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(TownySettings.getOutpostCost())) 
