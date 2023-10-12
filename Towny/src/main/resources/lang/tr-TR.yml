@@ -1598,10 +1598,10 @@ status_jailed: 'Hapis_Durumu:'
 status_bad_yes: '&cEVET'
 status_good_no: '&aHAYIR'
 status_resident_tax_title: '%s Vergisi'
-help_menu_command: '<mavi>'
-help_menu_subcommand: '<su>'
-help_menu_explanation: '<gri>'
-help_menu_requirement: '<kırmızı>'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: "Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.\n"
 #Added in 0.123
