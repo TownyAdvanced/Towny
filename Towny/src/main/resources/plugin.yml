@@ -712,6 +712,7 @@ permissions:
             towny.command.townyadmin.town.rank: true
             towny.command.townyadmin.town.rename: true
             towny.command.townyadmin.town.set: true
+            towny.command.townyadmin.town.set.*: true
             towny.command.townyadmin.town.settownlevel: true
             towny.command.townyadmin.town.spawn.*: true
             towny.command.townyadmin.town.toggle: true
@@ -719,6 +720,12 @@ permissions:
             towny.command.townyadmin.town.trusttown: true
             towny.command.townyadmin.town.unruin: true
             towny.command.townyadmin.town.withdraw: true
+
+    towny.command.townyadmin.town.set.*:
+        description: User can access the admin town set commands.
+        default: false
+        children:
+            towny.command.townyadmin.town.set.foundingdate: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
@@ -738,9 +745,16 @@ permissions:
             towny.command.townyadmin.nation.recheck: true
             towny.command.townyadmin.nation.rename: true
             towny.command.townyadmin.nation.set: true
+            towny.command.townyadmin.nation.set.*: true
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.transfer: true
             towny.command.townyadmin.nation.withdraw: true
+
+    towny.command.townyadmin.nation.set.*:
+        description: User can access the admin nation set commands.
+        default: false
+        children:
+            towny.command.townyadmin.nation.set.foundingdate: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commands.

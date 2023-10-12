@@ -9119,3 +9119,19 @@ v0.92.0.11:
   - Allow Towny admins to bypass PvP damage prevention, courtesy of ImperialSam12 with PR #7013. (First-Time Contributor!)
   - API: Add boolean for if claim is from takeoverclaim to TownPreClaimEvent, courtesy of Fruitloopins with PR #7023.
   - Fix support for Vanished players on servers using PremiumVanish and MC versions older than 1.19.3.
+0.99.6.2:
+  - Add ability for admins to edit town/nation founding dates, courtesy of Articdive with PR #6904.
+    - Using New Commands: /ta town [townname] set foundingdate [unix timestamp] & /ta nation [nationname] set foundingdate [unix timestamp]
+    - Closes #6471.
+  - New Command: /ta town [townname] set foundingdate [unix timestamp]
+    - Sets a town's founding date to the given time, use https://www.unixtimestamp.com/ to get a suitable timestamp number.
+    - Requires towny.command.townyadmin.town.set.foundingdate.
+  - New Command: /ta nation [nationname] set foundingdate [unix timestamp]
+    - Sets a nation's founding date to the given time, use https://www.unixtimestamp.com/ to get a suitable timestamp number.
+    - Requires towny.command.townyadmin.nation.set.foundingdate.
+  - New Permission Node: towny.command.townyadmin.town.set.foundingdate
+    - A child node of towny.command.townyadmin.town.set.*, which is in turn a child node of towny.command.townyadmin.town.*.
+    - No changes to townyperms.yml required, admins will inherit this from towny.admin.
+  - New Permission Node: towny.command.townyadmin.nation.set.foundingdate
+    - A child node of towny.command.townyadmin.nation.set.*, which is in turn a child node of towny.command.townyadmin.nation.*.
+    - No changes to townyperms.yml required, admins will inherit this from towny.admin.
