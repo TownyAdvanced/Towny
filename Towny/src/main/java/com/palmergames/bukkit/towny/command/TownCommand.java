@@ -203,7 +203,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"nfs",
 		"buytown"
 		);
-	private static final List<String> townSetTabCompletes = Arrays.asList(
+	@VisibleForTesting
+	public static final List<String> townSetTabCompletes = Arrays.asList(
 		"board",
 		"mayor",
 		"homeblock",

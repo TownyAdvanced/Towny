@@ -133,7 +133,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"baltop"
 	);
 
-	private static final List<String> nationSetTabCompletes = Arrays.asList(
+	@VisibleForTesting
+	public static final List<String> nationSetTabCompletes = Arrays.asList(
 		"king",
 		"leader",
 		"capital",
