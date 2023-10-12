@@ -521,7 +521,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							Nation nation = TownyUniverse.getInstance().getNation(args[1]);
 							if (nation != null) {
 								if (args.length == 4) {
-									return NameUtil.filterByStart(adminTownSetTabCompletes, args[3]);
+									return NameUtil.filterByStart(adminNationSetTabCompletes, args[3]);
 								}
 							}
 							else {
