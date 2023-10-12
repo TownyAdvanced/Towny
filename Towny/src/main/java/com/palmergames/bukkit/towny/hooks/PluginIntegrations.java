@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
@@ -49,6 +50,7 @@ public class PluginIntegrations {
 	private LuckPermsContexts luckPermsContexts;
 	private boolean citizens2 = false;
 	private NamespacedKey eliteKey;
+	private Version POWERRANKS_FIXED_VERSION = Version.fromString("1.10.8");
 
 	public static PluginIntegrations getInstance() {
 		if (instance == null)
@@ -162,10 +164,13 @@ public class PluginIntegrations {
 			warnings.put("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations."
 					+ " You may safely remove Questioner.jar from your plugins folder.", Level.WARNING);
 
-		//Add warning about PowerRanks.
-		if (isPluginPresent("PowerRanks"))
-			warnings.put("PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
-					+ " You can expect issues with Towny permissions (and other permission providers,) while PowerRanks is installed.", Level.WARNING);
+		//Add warning about outdated PowerRanks.
+		if (isPluginPresent("PowerRanks")) {
+			Version version = Version.fromString(Bukkit.getPluginManager().getPlugin("PowerRanks").getDescription().getVersion());
+			if (version.isOlderThan(POWERRANKS_FIXED_VERSION))
+				warnings.put("Your outdated PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
+					+ " Update your PowerRanks to version 1.10.8 or newer!", Level.WARNING);
+		}
 
 		//Add warning about MyCommand which will have a /t alias for /time in it by default.
 		if (isPluginPresent("MyCommand"))

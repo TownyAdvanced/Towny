@@ -289,6 +289,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND("towny.command.townyadmin.resident.friend"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_META("towny.command.townyadmin.resident.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL("towny.command.townyadmin.resident.unjail"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE("towny.command.townyadmin.resident.delete"),
 		
@@ -330,6 +331,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_NATION_DEPOSIT("towny.command.townyadmin.nation.deposit"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_FORCEMERGE("towny.command.townyadmin.nation.forcemerge"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_KICK("towny.command.townyadmin.nation.kick"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_META("towny.command.townyadmin.nation.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RANK("towny.command.townyadmin.nation.rank"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RECHECK("towny.command.townyadmin.nation.recheck"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME("towny.command.townyadmin.nation.rename"),

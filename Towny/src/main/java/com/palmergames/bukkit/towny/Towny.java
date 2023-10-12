@@ -68,7 +68,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -79,7 +78,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -803,14 +801,10 @@ public class Towny extends JavaPlugin {
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
 		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+
 		try {
-			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-
-			bukkitCommandMap.setAccessible(true);
-			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-
-			commandMap.registerAll("towny", commands);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
+			BukkitTools.getCommandMap().registerAll("towny", commands);
+		} catch (ReflectiveOperationException e) {
 			throw new TownyInitException("An issue has occurred while registering custom commands.", TownyInitException.TownyError.OTHER, e);
 		}
 	}

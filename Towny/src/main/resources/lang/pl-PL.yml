@@ -347,9 +347,15 @@ ta_set_help_6: "Przypisuje działkę innemu miastu."
 ta_set_help_7: "Ustaw nazwę założyciela miasta."
 ta_set_help_8: "Użyj 0 dla rozmiaru, aby usunąć nadpisane Strefy Nacji."
 ta_purge_help_0: "Usuwa mieszkańców, którzy nie logowali się ponad podaną liczbę dni, opcjonalnie z parametrem \"townless\" wyłącza graczy należących do miast, a z nazwą miasta w parametrze, usuwa jedynie dane nieaktywnych mieszkańców konkretnego miasta."
-ta_townmeta_help_1: "Przeglądaj metadane miasta, na terenie którego stoisz."
+ta_townmeta_help_1: "View the metadata stored on the town you specify."
 ta_townmeta_help_2: "Ustaw klucz i wartość metadanych miasta."
-ta_townmeta_help_3: "Dodaj lub usuń metadane na podstawie klucza."
+ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_2: "Set resident metadata key and value."
+ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
+ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
 ta_reload_help_0: "Przeładowuje bazę danych."
 ta_reload_help_1: "Przeładowuje config."
 ta_reload_help_2: "Przeładowuje pliki językowe."
@@ -1088,6 +1094,12 @@ msg_err_key_cannot_be_deleted: 'Klucz nie może być usunięty, ponieważ nie is
 msg_err_this_town_doesnt_have_any_associated_metadata: 'To miasto nie ma żadnych metadanych.'
 msg_err_key_x_is_not_part_of_this_town: 'Klucz %s nie jest częścią tego miasta, jeśli jest to możliwe proszę dodać go.'
 msg_custom_data_was_successfully_added_to_town: 'Niestandardowe dane zostały dodane do miasta!'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'Za dużo stron.'
 msg_err_location_is_not_within_a_town: 'To miejsce nie znajduje się w mieście.'
 msg_err_location_is_not_within_a_jail_plot: 'To miejsce nie jest na działce rodzaju Jail.'
@@ -1139,8 +1151,8 @@ msg_err_plot_not_associated_with_a_group: 'Ta działka nie należy do żadnej gr
 msg_plot_was_removed_from_group_x: 'Działka &9(%s,%s) &2została usunięta z grupy %s'
 msg_plot_renamed_from_x_to_y: 'Nazwa działki zmieniła się z %s na %s.'
 msg_err_plot_group_specify_price: 'Podaj cenę działki, np.: /plot group forsale [kwota]'
-msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
-msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
+msg_player_put_group_up_for_sale_amount: '%s wystawił grupę działek %s na sprzedaż za %s!'
+msg_player_put_group_up_for_sale: '%s wystawił grupę działek %s na sprzedaż!'
 msg_err_could_not_set_group_type: 'Nie można ustawić rodzaju grupy - '
 msg_set_group_type_to_x: 'Zmieniono rodzaj grupy działki na %s'
 msg_player_successfully_bought_group_x: '%s kupił grupę działek %s'
@@ -2030,3 +2042,5 @@ msg_resident_about_reset: "&bResetowanie bio mieszkańca."
 msg_err_invalid_string_about_not_set: "Niepoprawna treść, bio nie zostało ustawione."
 msg_set_about: "Bio mieszkańca %s zostało ustawione na %s."
 msg_clear_about: "Bio %s zostało usunięte."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'

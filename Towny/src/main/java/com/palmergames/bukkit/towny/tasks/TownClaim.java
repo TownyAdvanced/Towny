@@ -148,7 +148,7 @@ public class TownClaim implements Runnable {
 			}
 			townUnclaimAll(town);
 			successfulRun = true;
-			TownyMessaging.sendMessage(player, Translatable.of("msg_you_have_unclaimed_everything_but_your_homeblock"));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_unclaimed_everything_but_your_homeblock"));
 		})
 		.setTitle(Translatable.of("confirmation_did_you_want_to_unclaim_all"))
 		.sendTo(player);

@@ -9079,3 +9079,43 @@ v0.92.0.11:
   - Bump mockbukkit to 3.21.0.
   - Fix tourist-blacklisted commands not being usable in the wilderness.
   - Fix seeing an errant permission string when running a /res toggle addon command.
+0.99.5.19:
+  - Update PowerRanks warning to mention their version that fixes the incompatibility.
+  - API: Added TownyObjectFormattedNameEvent
+    - Thrown when a Resident, Town or Nation is returning a getFormattedName() value.
+    - This is used to alter the prefix or postfix that flanks a TownyObject name, usually a title, surname, townlevel/nationlevel prefix/postfix.
+    - Closes #6995.
+  - Add the ability to hide towns from the /towny top and /t list by commands (as well as the PAPIPlaceholders.)
+    - Closes #6996.
+  - New Command: /ta town TOWNNAME toggle visibleontoplists [on|off]
+    - Used by an admin to toggle a town's visiblity on the /towny top, /t list by commands (as well as the PAPIPlaceholders.)
+  - Bump org.apache.commons:commons-compress from 1.23.0 to 1.24.0.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.5.0 to 3.6.0.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.21.0 to 3.22.0.
+0.99.5.20:
+  - Fix /plot info throwing NPE when using_economy is false.
+    - Closes #7000.
+  - Add hasTranslation method, courtesy of Warrior with PR #7001.
+0.99.5.21:
+  - Add new townyadmin commands for controlling resident and nation metadata when it is Globally registered metadata.
+    - /ta nation NAME meta set [key] [value]
+    - /ta nation NAME meta add|remove [key]
+    - /ta resident NAME meta set [key] [value]
+    - /ta resident NAME meta set add|remove [key]
+    - Closes #7015.
+  - Bump adventure platform bukkit to 4.3.1, courtesy of Warrior with PR #7010.
+    - Adds 1.20.2 support.
+  - Fix unclaim all message missing color/prefix, courtesy of Warrior with PR #7014.
+  - Add utility for getting the bukkit command map, courtesy of Warrior with PR #7011.
+  - Bump me.clip:placeholderapi from 2.11.3 to 2.11.4.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.0 to 3.5.1.
+  - Bump net.coreprotect:coreprotect from 22.1 to 22.2.
+0.99.6.0:
+  - Bump version number for release.
+0.99.6.1:
+  - Reset a player's cache when they change gamemodes.
+  - Reset a player's cache when they are op'd or deop'd.
+  - Fix unneeded permission test in /n list command.
+  - Allow Towny admins to bypass PvP damage prevention, courtesy of ImperialSam12 with PR #7013. (First-Time Contributor!)
+  - API: Add boolean for if claim is from takeoverclaim to TownPreClaimEvent, courtesy of Fruitloopins with PR #7023.
+  - Fix support for Vanished players on servers using PremiumVanish and MC versions older than 1.19.3.

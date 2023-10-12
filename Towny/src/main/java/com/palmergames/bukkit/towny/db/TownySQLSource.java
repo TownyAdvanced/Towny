@@ -995,6 +995,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setMaxPercentTaxAmount(rs.getFloat("maxPercentTaxAmount"));
 			town.setHasUpkeep(rs.getBoolean("hasUpkeep"));
 			town.setHasUnlimitedClaims(rs.getBoolean("hasUnlimitedClaims"));
+			town.setVisibleOnTopLists(rs.getBoolean("visibleOnTopLists"));
 			town.setPlotPrice(rs.getFloat("plotPrice"));
 			town.setPlotTax(rs.getFloat("plotTax"));
 			town.setEmbassyPlotPrice(rs.getFloat("embassyPlotPrice"));
@@ -1214,6 +1215,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
 			}
 			
+			line = rs.getString("visibleOnTopLists");
+			if (line != null && !line.isEmpty())
+				town.setVisibleOnTopLists(rs.getBoolean("visibleOnTopLists"));
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
@@ -2222,6 +2227,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("taxes", town.getTaxes());
 			twn_hm.put("hasUpkeep", town.hasUpkeep());
 			twn_hm.put("hasUnlimitedClaims", town.hasUnlimitedClaims());
+			twn_hm.put("visibleOnTopLists", town.isVisibleOnTopLists());
 			twn_hm.put("taxpercent", town.isTaxPercentage());
 			twn_hm.put("maxPercentTaxAmount", town.getMaxPercentTaxAmount());
 			twn_hm.put("open", town.isOpen());

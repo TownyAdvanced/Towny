@@ -2822,7 +2822,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
-		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true);
+		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true, false);
 		preClaimEvent.setCancelMessage(Translation.of("msg_claim_error", 1, 1));
 		
 		if (BukkitTools.isEventCancelled(preClaimEvent)) {
@@ -3782,7 +3782,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		boolean isHomeblock = town.getTownBlocks().size() == 0;
 		for (WorldCoord coord : selection) {
 			//Use the user's current world
-			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock);
+			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock, false);
 			if(BukkitTools.isEventCancelled(preClaimEvent)) {
 				blockedClaims++;
 				cancelMessage = preClaimEvent.getCancelMessage();
@@ -3994,7 +3994,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.isOverClaimingPreventedByHomeBlockRadius() && AreaSelectionUtil.isTooCloseToHomeBlock(wc, town))
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
-		if(BukkitTools.isEventCancelled(new TownPreClaimEvent(town, wc.getTownBlockOrNull(), player, false, false)))
+		if(BukkitTools.isEventCancelled(new TownPreClaimEvent(town, wc.getTownBlockOrNull(), player, false, false, true)))
 			throw new TownyException(Translatable.of("msg_err_another_plugin_cancelled_takeover"));
 
 		double cost = TownySettings.getTakeoverClaimPrice();

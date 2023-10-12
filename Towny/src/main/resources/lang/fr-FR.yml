@@ -45,22 +45,22 @@ help_0: 'Aides générales de Towny'
 help_1: 'Essayez les commandes suivantes pour en savoir plus sur Towny.'
 help_2: 'Tchat de Ville'
 help_3: 'Tchat de Nation'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
-towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
-towny_help_4: "Display time until a new day"
-towny_help_5: "Displays stats"
-towny_help_6: "Displays the version of Towny"
-towny_top_help_0: "List top residents based on subcommand."
-towny_top_help_1: "List top land-owners based on subcommand."
-towny_top_help_2: "List wealthiest based on subcommand."
+help_4: 'Aide pour les commandes de résident.'
+help_5: 'Aide pour les commandes de ville.'
+help_6: 'Aide pour les commandes de nation.'
+help_7: 'Aide pour les commandes de parcelle.'
+help_8: 'Aide pour les commandes Towny.'
+help_9: 'Aide pour les commandes d''administrateur Towny.'
+towny_help_0: "Aide générale pour Towny"
+towny_help_1: "Affiche une carte des parcelles alentours"
+towny_help_2: "Affiche les prix utilisés avec Economy"
+towny_help_3: "Affiche les meilleurs scores"
+towny_help_4: "Affiche le temps jusqu'au prochain jour"
+towny_help_5: "Affiche les statistiques"
+towny_help_6: "Affiche la version de Towny"
+towny_top_help_0: "Liste les meilleurs résidents en fonction de la sous-commande."
+towny_top_help_1: "Liste les plus grands terrains en fonction de la sous-commande."
+towny_top_help_2: "Affiche les résidents les plus riches en fonction de la sous-commande."
 town_help_1: 'Statut de votre ville'
 town_help_2: '[Maire]'
 town_help_3: 'Statut de la ville cible'
@@ -71,41 +71,41 @@ town_help_7: 'Nouvelle ville avec le maire spécifié.'
 town_help_8: 'Liste des commandes pour maires.'
 town_help_9: 'Aujourd''hui est un grand jour !'
 town_help_10: 'Liste tout les résidents en ligne de la ville'
-town_help_13: "See a list of residents in the town."
-town_help_14: "See a list of ranks in the town."
-town_help_15: "See a list of outlaws in the town."
-town_help_16: "See a list of plotgroups in the town."
-town_help_17: "See a list of plot types in the town."
-town_help_18: "Say a message to the town members."
-town_help_19: "Set your town for sale, able to be bought by other players."
-town_help_20: "Set your town not for sale."
-town_help_21: "Buy the given town, as long as it is for sale."
-town_help_22: "Deposit money into your town's bank."
-town_help_23: "Used to modify your resident's town ranks."
-town_help_24: "Used to delete your town."
-town_help_25: "Used to modify your town's outlaws."
-town_help_26: "List all towns, see /t list ? for help."
-town_help_27: "Leave the town you're a member of."
-town_help_28: "Withdraw money from your town's bank."
-town_help_29: "Use /t claim ? for help."
-town_help_30: "Used to unclaim land from your town."
-town_help_31: "Add or remove residents."
-town_help_32: "Use /t set ? for help."
-town_help_33: "Use /t buy ? for help."
-town_help_34: "Use /t toggle ? for help."
-town_help_35: "Use /t rank ? for help."
-town_list_help_0: "View the specified page."
-town_list_help_1: "List towns by resident-count, with the specified page."
-town_list_help_2: "List towns which are open, with the specified page."
-town_list_help_3: "List towns using bank balance, with the specified page."
-town_list_help_4: "List towns in alphabetical order, with the specified page."
-town_list_help_5: "List towns by claimed land, with the specified page."
-town_list_help_6: "List towns by number online, with the specified page."
-town_set_help_0: "Set your town's board."
-town_set_help_1: "Set your town's homeblock to where you're standing."
-town_set_help_2: "Sets the spawn point in your homeblock or an outpost spawnpoint when stood in an outpost."
-town_set_help_3: "See /town set perm ? for help."
-town_set_help_4: "Set your town's tax amount."
+town_help_13: "Voir la liste des résidents dans la ville."
+town_help_14: "Voir la liste des rangs dans la ville."
+town_help_15: "Voir la liste des hors-la-loi dans la ville."
+town_help_16: "Voir la liste des groupes de plots dans la ville."
+town_help_17: "Voir la liste des types de plot dans la ville."
+town_help_18: "Envoie un message aux résidents de la ville."
+town_help_19: "Mettre votre ville en vente, elle peut être achetée par d'autres joueurs."
+town_help_20: "Enlevez votre ville de la vente."
+town_help_21: "Achetez la ville donnée, tant qu'elle est à vendre."
+town_help_22: "Déposez de l'argent dans la banque de votre ville."
+town_help_23: "Utilisé pour modifier les rangs de ville de vos résidents."
+town_help_24: "Utilisé pour supprimé votre ville."
+town_help_25: "Utilisé pour modifier les hors-la-loi de votre ville."
+town_help_26: "Liste toutes les villes, voir /t list ? pour de l'aide."
+town_help_27: "Quittez la ville dont vous faites partie."
+town_help_28: "Retirez de l'argent de la banque de votre ville."
+town_help_29: "Utilisez /t claim ? pour de l'aide."
+town_help_30: "Utilisé pour désannexer des parcelles de votre ville."
+town_help_31: "Ajouter ou enlever des résidents."
+town_help_32: "Utiliser /t set ? pour de l'aide."
+town_help_33: "Utiliser /t buy ? pour de l'aide."
+town_help_34: "Utiliser /t toggle ? pour de l'aide."
+town_help_35: "Utilisez /t rank ? pour de l'aide."
+town_list_help_0: "Voir la page spécifiée."
+town_list_help_1: "Liste les villes par nombre de résidents, avec la page spécifiée."
+town_list_help_2: "Liste les villes ouvertes, avec la page spécifiée."
+town_list_help_3: "Liste les villes en fonction de leur argent dans la banque, avec la page spécifiée."
+town_list_help_4: "Liste les villes dans l'ordre alphabétique, avec la page spécifiée."
+town_list_help_5: "Liste les villes par nombre de parcelles, avec la page spécifiée."
+town_list_help_6: "Liste les villes par nombre de résidents en ligne, avec la page spécifiée."
+town_set_help_0: "Changer votre affiche de ville."
+town_set_help_1: "Mettre le homeblock de votre ville ici."
+town_set_help_2: "Mets le point de spawn dans votre homeblock ou votre point de spawn d'avant-poste quand vous êtes dans un avant-poste."
+town_set_help_3: "Voir /town set perm ? pour obtenir de l'aide."
+town_set_help_4: "Définissez le montant d'impôt de votre ville."
 town_set_help_5: "Set the special amounts for per-plot taxes."
 town_set_help_6: "Set the default prices for buying plots."
 town_set_help_7: "Set the cost to use /t spawn."
@@ -166,7 +166,7 @@ nation_set_help_2: "Set the amount of tax that towns will pay."
 nation_set_help_3: "Set the amount of tax that conquered towns will pay."
 nation_set_help_4: "Set the name of the nation."
 nation_set_help_5: "Set the title or surname of one of your residents."
-nation_set_help_6: "Set the nation tag."
+nation_set_help_6: "Définissez le tag de la nation."
 nation_set_help_7: "Set the nation board message."
 nation_set_help_8: "Set the nation spawn point."
 nation_set_help_9: "Set the cost to use /n spawn."
@@ -347,9 +347,15 @@ ta_set_help_6: "Set a plot to a different town."
 ta_set_help_7: "Set a town's founder name."
 ta_set_help_8: "Use size 0 to remove nationzone override."
 ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
-ta_townmeta_help_1: "View the metadata stored in the town you are stood in."
+ta_townmeta_help_1: "View the metadata stored on the town you specify."
 ta_townmeta_help_2: "Set town metadata key and value."
-ta_townmeta_help_3: "Add or remove a metadata by key."
+ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_2: "Set resident metadata key and value."
+ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
+ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
 ta_reload_help_0: "Reloads database."
 ta_reload_help_1: "Reloads config."
 ta_reload_help_2: "Reloads language files."
@@ -1088,6 +1094,12 @@ msg_err_key_cannot_be_deleted: 'La clé ne peut pas être supprimée car elle n'
 msg_err_this_town_doesnt_have_any_associated_metadata: 'Cette ville n''a pas de métadonnées associées.'
 msg_err_key_x_is_not_part_of_this_town: 'La clé %s ne fait pas parti de cette ville, si possible veuillez l''ajouter.'
 msg_custom_data_was_successfully_added_to_town: 'Les données customisées ont bien été ajoutées à la ville!'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'Trop de pages.'
 msg_err_location_is_not_within_a_town: 'Cet emplacement n''est pas dans une ville.'
 msg_err_location_is_not_within_a_jail_plot: 'Cet emplacement n''est pas dans une prison.'
@@ -2030,3 +2042,5 @@ msg_resident_about_reset: "&bResident about reset."
 msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
 msg_set_about: "%s's about was set to %s."
 msg_clear_about: "%s's about was cleared."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'

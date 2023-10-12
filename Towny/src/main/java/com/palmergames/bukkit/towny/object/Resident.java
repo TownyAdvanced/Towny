@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentToggleModeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -808,7 +809,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		String postfix = Colors.translateColorCodes(hasSurname() ? " " + getSurname() : 
 			(isKing() && !TownySettings.getKingPostfix(this).isEmpty()) ? TownySettings.getKingPostfix(this) : 
 				(isMayor() && !TownySettings.getMayorPostfix(this).isEmpty()) ? TownySettings.getMayorPostfix(this) : "");
-		return prefix + getName() + postfix;
+
+		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
+		BukkitTools.fireEvent(event);
+
+		return event.getPrefix() + getName() + event.getPostfix();
 	}
 
 	/**

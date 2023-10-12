@@ -42,15 +42,15 @@ unclaimed_zone_name: '荒野'
 #+------------------------------------------------------+ #
 ############################################################
 help_0: 'Townyヘルプ'
-help_1: '町についてもっと知るには、次のコマンドを試してみてください。'
-help_2: '都市チャットチャンネル'
-help_3: '国家チャットチャンネル'
+help_1: 'Townyについてもっと知るには、次のコマンドを試してみてください。'
+help_2: 'タウンチャット'
+help_3: '国家チャット'
 help_4: '住人コマンドのヘルプ'
 help_5: '町のコマンドのヘルプ'
 help_6: '国家コマンドのヘルプ'
-help_7: 'プロットコマンドのヘルプ'
-help_8: 'Townyコマンドヘルプ'
-help_9: 'Towny管理者コマンドヘルプ'
+help_7: '区画コマンドのヘルプ'
+help_8: 'Townyコマンドのヘルプ'
+help_9: 'Towny管理者コマンドのヘルプ'
 towny_help_0: "一般的なTownyのヘルプ"
 towny_help_1: "近くの町の地図を表示します。"
 towny_help_2: "エコノミーで使用されている価格を表示します。"
@@ -173,17 +173,17 @@ nation_set_help_9: "/n spawn を使用するコストを設定します。"
 nation_set_help_10: "マッピングプラグインで使用されるマップカラーを設定します。"
 nation_toggle_help_0: "国家の平和な状態を切り替えます。"
 nation_toggle_help_1: "公開状態を切り替え、居住者でない人が /n spawnを使用できるようにします。"
-nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
-nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
+nation_toggle_help_2: "オープンステータスを切り替え、招待なしで参加できるようにする。"
+nation_toggle_help_3: "税率を切り替えて、町が固定税率ではなく割合で支払うようにします。"
 king_help_1: '国家リーダーヘルプ'
 king_help_2: '同盟を設定'
 king_help_3: '敵を設定'
-king_help_4: "Withdraw money from your nation bank."
-king_help_5: "Add or remove towns from your nation."
-king_help_6: "Use /n set ? for help."
-king_help_7: "Use /n toggle ? for help."
-king_help_8: "Used to absorb another nation into your nation."
-king_help_9: "Used to message everyone in your nation."
+king_help_4: "町の銀行からお金を引き出します。"
+king_help_5: "国から町を追加または削除します。"
+king_help_6: "/n set ? を使用してヘルプを参照します。"
+king_help_7: "/n toggle ? を使用してヘルプを参照します。"
+king_help_8: "他の国を自分の国に吸収するために使用されます。"
+king_help_9: "自国の全員にメッセージを送るのに使う。"
 res_1: 'ステータス'
 res_2: '[住民]'
 res_3: 'ターゲットプレイヤーの状態'
@@ -191,17 +191,17 @@ res_4: 'すべてのオンラインプレイヤーの一覧を表示します'
 res_5: 'ヘルプ'
 res_6: 'オンラインの一致'
 res_7: '正確な名前'
-res_8: 'Just a humble farmer'
-res_9: "How much tax you will pay per day."
-res_10: "See /res jail ? for help."
-res_11: "See /res toggle ? for help."
-res_12: "See /res set ? for help."
-res_13: "Spawn to your town or bed."
-res_toggle_help_0: "Toggle your plots' pvp status."
-res_toggle_help_1: "Toggle your plots' fire status."
-res_toggle_help_2: "Toggle your plots' mobs status."
-res_toggle_help_3: "Toggle your plots' explosion status."
-res_toggle_help_4: "Toggle the ability to see plot borders."
+res_8: '謙虚な農民'
+res_9: "1日あたりの納税額はいくらにしますか"
+res_10: "/res jail ? を使用してヘルプを参照します。"
+res_11: "/res toggle ? を使用してヘルプを参照します。"
+res_12: "/res set ? を使用してヘルプを参照します。"
+res_13: "あなたの町やベッドにスポーンします。"
+res_toggle_help_0: "区画のPvPステータスを切り替える。"
+res_toggle_help_1: "区画の火災状態を切り替える。"
+res_toggle_help_2: "区画のモブのステータスを切り替える。"
+res_toggle_help_3: "区画の爆発ステータスを切り替える。"
+res_toggle_help_4: "区画の境界線を表示するかどうかを切り替えます。"
 res_toggle_help_5: "Toggle the ability to see constant plot borders."
 res_toggle_help_6: "Toggle the ability to see town borders."
 res_toggle_help_7: "Toggle the ability to see plot notifications."
@@ -347,9 +347,15 @@ ta_set_help_6: "Set a plot to a different town."
 ta_set_help_7: "Set a town's founder name."
 ta_set_help_8: "Use size 0 to remove nationzone override."
 ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
-ta_townmeta_help_1: "View the metadata stored in the town you are stood in."
+ta_townmeta_help_1: "View the metadata stored on the town you specify."
 ta_townmeta_help_2: "Set town metadata key and value."
-ta_townmeta_help_3: "Add or remove a metadata by key."
+ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_2: "Set resident metadata key and value."
+ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
+ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
 ta_reload_help_0: "Reloads database."
 ta_reload_help_1: "Reloads config."
 ta_reload_help_2: "Reloads language files."
@@ -1088,6 +1094,12 @@ msg_err_key_cannot_be_deleted: 'キーが存在しません。'
 msg_err_this_town_doesnt_have_any_associated_metadata: 'この町に関連するメタデータはありません。'
 msg_err_key_x_is_not_part_of_this_town: 'Key %s is not part of this town, if possible please add it.'
 msg_custom_data_was_successfully_added_to_town: '町にカスタムデータが追加されました。'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'ページが多すぎます。'
 msg_err_location_is_not_within_a_town: 'その場所は町の中にありません。'
 msg_err_location_is_not_within_a_jail_plot: 'この場所は牢屋の中ではありません。'
@@ -2030,3 +2042,5 @@ msg_resident_about_reset: "&bResident about reset."
 msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
 msg_set_about: "%s's about was set to %s."
 msg_clear_about: "%s's about was cleared."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'

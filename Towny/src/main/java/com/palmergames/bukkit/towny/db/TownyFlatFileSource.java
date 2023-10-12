@@ -689,6 +689,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("visibleOnTopLists");
+				if (line != null)
+					try {
+						town.setVisibleOnTopLists(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
 				line = keys.get("taxpercent");
 				if (line != null)
 					try {
@@ -1972,6 +1979,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("hasUpkeep=" + town.hasUpkeep());
 		// UnlimitedClaims
 		list.add("hasUnlimitedClaims=" + town.hasUnlimitedClaims());
+		// VisibleOnTopLists
+		list.add("visibleOnTopLists=" + town.isVisibleOnTopLists());
 		// Open
 		list.add("open=" + town.isOpen());
 		// PVP

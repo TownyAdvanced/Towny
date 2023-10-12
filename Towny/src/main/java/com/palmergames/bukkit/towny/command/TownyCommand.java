@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
 
@@ -301,13 +302,13 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("residents")) {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_RESIDENTS.getNode());
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
-				List<ResidentList> list = new ArrayList<>(universe.getTowns());
+				List<ResidentList> list = universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
 				list.addAll(universe.getNations());
 				townyTop.add(ChatTools.formatTitle("Most Residents"));
 				townyTop.addAll(getMostResidents(list));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				townyTop.add(ChatTools.formatTitle("Most Residents in a Town"));
-				townyTop.addAll(getMostResidents(new ArrayList<>(universe.getTowns())));
+				townyTop.addAll(getMostResidents(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList())));
 			} else if (args[1].equalsIgnoreCase("nation")) {
 				townyTop.add(ChatTools.formatTitle("Most Residents in a Nation"));
 				townyTop.addAll(getMostResidents(new ArrayList<>(universe.getNations())));
@@ -317,7 +318,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNY_TOP_LAND.getNode());
 			if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 				List<TownBlockOwner> list = new ArrayList<>(universe.getResidents());
-				list.addAll(universe.getTowns());
+				list.addAll(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList()));
 				townyTop.add(ChatTools.formatTitle("Most Land Owned"));
 				townyTop.addAll(getMostLand(list));
 			} else if (args[1].equalsIgnoreCase("resident")) {
@@ -325,7 +326,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				townyTop.addAll(getMostLand(new ArrayList<>(universe.getResidents())));
 			} else if (args[1].equalsIgnoreCase("town")) {
 				townyTop.add(ChatTools.formatTitle("Most Land Owned by Town"));
-				townyTop.addAll(getMostLand(new ArrayList<>(universe.getTowns())));
+				townyTop.addAll(getMostLand(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList())));
 			} else
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_sub"));
 		} else if (args[0].equalsIgnoreCase("balance")) {
@@ -333,12 +334,12 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			plugin.getScheduler().runAsync(() -> {
 				if (args.length == 1 || args[1].equalsIgnoreCase("all")) {
 					List<Government> list = new ArrayList<>();
-					list.addAll(universe.getTowns());
+					list.addAll(universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList()));
 					list.addAll(universe.getNations());
 					townyTop.add(ChatTools.formatTitle("Top Bank Balances"));
 					townyTop.addAll(getTopBankBalance(list));
 				} else if (args[1].equalsIgnoreCase("town")) {
-					List<Government> list = new ArrayList<>(universe.getTowns());
+					List<Government> list = universe.getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
 					townyTop.add(ChatTools.formatTitle("Top Bank Balances by Town"));
 					townyTop.addAll(getTopBankBalance(list));
 				} else if (args[1].equalsIgnoreCase("nation")) {

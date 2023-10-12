@@ -460,7 +460,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "list":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode());
 			listNations(player, split);
 			break;
 		case "townlist":
