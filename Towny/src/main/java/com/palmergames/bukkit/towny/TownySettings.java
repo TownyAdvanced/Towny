@@ -334,8 +334,7 @@ public class TownySettings {
 	}
 
 	/**
-	 * @deprecated since 0.99.6.2 use {@link Nation#getNationLevelWithModifier(int)}
-	 *             or {@link #getNationLevelWithModifier(int) instead.
+	 * @deprecated since 0.99.6.2 use {@link #getNationLevelWithModifier(int)} instead.
 	 * @param nation    Nation to test with, unused.
 	 * @param residents an int representing what modifies a nationlevel.
 	 *                  {@link #isNationLevelDeterminedByTownCount()} decides
