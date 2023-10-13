@@ -1598,10 +1598,10 @@ status_jailed: 'Hapis_Durumu:'
 status_bad_yes: '&cEVET'
 status_good_no: '&aHAYIR'
 status_resident_tax_title: '%s Vergisi'
-help_menu_command: '<mavi>'
-help_menu_subcommand: '<su>'
-help_menu_explanation: '<gri>'
-help_menu_requirement: '<kırmızı>'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: "Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.\n"
 #Added in 0.123
@@ -2044,3 +2044,9 @@ msg_set_about: "%s's about was set to %s."
 msg_clear_about: "%s's about was cleared."
 #Message shown when toggling town visibleontoplists setting
 msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
+#Message shown when an admin overrides a town founding date via townyadmin.
+townyadmin_town_set_help_0: "Sets the founding date of a town."
+townyadmin_nation_set_help_0: "Sets the founding date of a nation."
+msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
+msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
+msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
