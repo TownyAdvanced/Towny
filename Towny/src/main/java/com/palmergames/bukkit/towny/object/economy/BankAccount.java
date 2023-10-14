@@ -215,7 +215,7 @@ public class BankAccount extends Account {
 			return Double.MAX_VALUE;
 
 		if (TownySettings.isDebtCapDeterminedByTownLevel()) { // town_level debtCapModifier * debt_cap.override.
-			return TownySettings.getTownLevel(getTown()).debtCapModifier() * TownySettings.getDebtCapOverride();
+			return getTown().getTownLevel().debtCapModifier() * TownySettings.getDebtCapOverride();
 		}
 		
 		if (TownySettings.getDebtCapOverride() != 0.0)

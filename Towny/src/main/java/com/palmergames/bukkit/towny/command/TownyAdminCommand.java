@@ -1523,17 +1523,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split[0].equalsIgnoreCase("unset")) {
 			town.setManualTownLevel(-1);
 			town.save();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_unset", town, town.getLevelID()));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_unset", town, town.getLevelNumber()));
 			return;
 		}
 
 		// Handle applying a manual override.
 		int level = MathUtil.getPositiveIntOrThrow(split[0]);
-		if (level > town.getMaxLevel() - 1)
-			level = town.getMaxLevel() - 1;
+		if (level > TownySettings.getTownLevelMax() - 1)
+			level = TownySettings.getTownLevelMax() - 1;
 		town.setManualTownLevel(level);
 		town.save();
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, town.getLevelID()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, town.getLevelNumber()));
 	}
 
 	private void parseAdminTownRankCommand(CommandSender sender, Town town, String[] split) throws TownyException {
