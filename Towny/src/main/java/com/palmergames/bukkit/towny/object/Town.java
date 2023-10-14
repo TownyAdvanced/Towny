@@ -1785,6 +1785,15 @@ public class Town extends Government implements TownBlockOwner {
 	 * <p>
 	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
 	 *     and may be different from the default configuration.
+	 *     If you need a Town's level, use {@link Town#getTownLevel()}.
+	 *     Due to Town Levels being configurable by administrators, caution is advised when relying on this method.
+	 *     See <a href="https://github.com/TownyAdvanced/TownyResources">TownyResources</a>
+	 *     or <a href="https://github.com/TownyAdvanced/SiegeWar">SiegeWar</a> for example usages.
+	 *     <br />
+	 *     e.g.
+	 *     ruins = 0
+	 * 	   hamlet = 1
+	 * 	   village = 2
 	 * </p>
 	 * @return Current TownLevel number.
 	 */
@@ -1841,31 +1850,12 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	/**
-	 * @deprecated since 0.99.6.3 use {@link #getTownLevelNumber()} instead.
+	 * @deprecated since 0.99.6.3 use {@link #getLevelNumber()} instead.
 	 * Returns the Town Level ID.
-	 * <p>
-	 *     Note, this is not the Town Level, but an associated classifier.
-	 *     If you need a Town's level, use {@link Town#getLevel()} or {@link Town#getLevel(int)}.
-	 *     Due to Town Levels being configurable by administrators, caution is advised when relying on this method.
-	 *     See <a href="https://github.com/TownyAdvanced/TownyResources">TownyResources</a>
-	 *     or <a href="https://github.com/TownyAdvanced/SiegeWar">SiegeWar</a> for example usages.
-	 *     <br />
-	 *     e.g.
-	 *     ruins = 0
-	 * 	   hamlet = 1
-	 * 	   village = 2
-	 * </p> 
-	 *
 	 * @return id
 	 */
 	@Deprecated
 	public int getLevelID() {
-		if(this.isRuined())
-			return 0;
-
-		if (getManualTownLevel() > -1)
-			return getManualTownLevel();
-
 		return getLevelNumber();
 	}
 
