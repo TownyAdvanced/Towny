@@ -28,15 +28,13 @@ public class BonusBlockPurchaseTests {
 	
 	@BeforeEach
 	void reset() {
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK.getRoot(), 25.0D);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), -1);
 	}
 	
 	@Test
 	void testBuy1000() {
-		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK.getRoot(), 25.0D);
-		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1.0D);
-		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), -1);
 		double cost = MoneyUtil.returnPurchasedBlocksCost(0, 1000, town);
 		double expected = 1000 * 25;
 		assertEquals(expected, cost);
@@ -51,7 +49,6 @@ public class BonusBlockPurchaseTests {
 	
 	@Test
 	void testBuy100Exponential() {
-		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK.getRoot(), 25.0D);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1.20D);
 		
 		double cost = MoneyUtil.returnPurchasedBlocksCost(0, 100, town);
@@ -61,7 +58,6 @@ public class BonusBlockPurchaseTests {
 	
 	@Test
 	void testBuy100ExponentialWithMaxPrice() {
-		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK.getRoot(), 25.0D);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1.20D);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), 200);
 
@@ -90,7 +86,6 @@ public class BonusBlockPurchaseTests {
 	
 	@Test
 	void testBuyJustEnough() {
-		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK.getRoot(), 25.0D);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1.20D);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), 200);
 
