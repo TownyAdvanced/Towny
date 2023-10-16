@@ -277,6 +277,11 @@ public class MoneyUtil {
 		final double blockCost = baseCost * Math.pow(increaseValue, alreadyPurchased);
 
 		if (hasMaxPrice) {
+			// We've already hit the max price.
+			if (blockCost >= maxPrice) {
+				return Math.round(maxPrice * n);
+			}
+			
 			// Check if we're going to reach the max price
 			final int increases = (int) Math.ceil((Math.log(maxPrice) - Math.log(blockCost)) / Math.log(increaseValue));
 			
