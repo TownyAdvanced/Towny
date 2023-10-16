@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 
 import java.util.ArrayList;
@@ -192,14 +193,17 @@ public class BorderUtil {
 	@ApiStatus.Internal
 	public static @NotNull FloodfillResult getFloodFillableCoords(final @NotNull Town town, final @NotNull WorldCoord origin) {
 		final TownyWorld originWorld = origin.getTownyWorld();
-		if (originWorld == null || origin.hasTownBlock())
-			return FloodfillResult.fail("a");
+		if (originWorld == null)
+			return FloodfillResult.fail(null);
+
+		if (origin.hasTownBlock())
+			return FloodfillResult.fail(Translatable.of("msg_err_floodfill_not_in_wild"));
 
 		// Filter out any coords not in the same world
 		final Set<WorldCoord> coords = new HashSet<>(town.getTownBlockMap().keySet());
 		coords.removeIf(coord -> !originWorld.equals(coord.getTownyWorld()));
 		if (coords.isEmpty())
-			return FloodfillResult.fail("No coords in the same world");
+			return FloodfillResult.fail(null);
 
 		int minX = origin.getX();
 		int maxX = origin.getX();
@@ -247,23 +251,23 @@ public class BorderUtil {
 	}
 
 	@Desugar
-	public record FloodfillResult(@NotNull Type type, @NotNull String feedback, @NotNull Collection<WorldCoord> coords) {
+	public record FloodfillResult(@NotNull Type type, @Nullable Translatable feedback, @NotNull Collection<WorldCoord> coords) {
 		public enum Type {
 			SUCCESS,
 			FAIL,
 			OUT_OF_BOUNDS
 		}
 
-		static FloodfillResult fail(final @NotNull String feedback) {
+		static FloodfillResult fail(final @Nullable Translatable feedback) {
 			return new FloodfillResult(Type.FAIL, feedback, Collections.emptySet());
 		}
 
 		static FloodfillResult oob() {
-			return new FloodfillResult(Type.OUT_OF_BOUNDS, "", Collections.emptySet());
+			return new FloodfillResult(Type.OUT_OF_BOUNDS, Translatable.of("msg_err_floodfill_out_of_bounds"), Collections.emptySet());
 		}
 
 		static FloodfillResult success(final Collection<WorldCoord> coords) {
-			return new FloodfillResult(Type.SUCCESS, "", coords);
+			return new FloodfillResult(Type.SUCCESS, null, coords);
 		}
 	}
 }

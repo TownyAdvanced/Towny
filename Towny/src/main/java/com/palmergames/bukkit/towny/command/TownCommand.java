@@ -3718,13 +3718,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_FILL.getNode());
 			
 			final BorderUtil.FloodfillResult result = BorderUtil.getFloodFillableCoords(town, key);
-			switch (result.type()) {
-				case FAIL -> {
-					TownyMessaging.sendErrorMsg(player, result.feedback());
-					return;
-				}
-				case OUT_OF_BOUNDS -> TownyMessaging.sendErrorMsg(player, "out of bounds");
-			}
+			if (result.feedback() != null)
+				TownyMessaging.sendErrorMsg(player, result.feedback());
 			
 			selection = new ArrayList<>(result.coords());
 		} else {
@@ -3740,10 +3735,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			if (selection.size() > 1) 
 				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode());
-
-			// Filter out any TownBlocks which aren't Wilderness. 
-			selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 		}
+
+		// Filter out any TownBlocks which aren't Wilderness. 
+		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
