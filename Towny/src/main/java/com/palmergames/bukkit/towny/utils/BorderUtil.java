@@ -240,7 +240,14 @@ public class BorderUtil {
 					return FloodfillResult.oob();
 				}
 
-				if (!candidate.hasTownBlock() && !visited.contains(candidate) && !coords.contains(candidate)) {
+				final TownBlock townBlock = candidate.getTownBlockOrNull();
+
+				// Fail if we're touching another town
+				if (townBlock != null && townBlock.hasTown() && !town.equals(townBlock.getTownOrNull())) {
+					return FloodfillResult.fail(Translatable.of("msg_err_floodfill_cannot_contain_towns"));
+				}
+
+				if (townBlock == null && !visited.contains(candidate) && !coords.contains(candidate)) {
 					queue.offer(candidate);
 					visited.add(candidate);
 				}
