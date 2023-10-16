@@ -296,10 +296,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public void removeTown() {
-		removeTown(false);
-	}
-	
-	public void removeTown(boolean townDeleted) {
 		
 		if (!hasTown())
 			return;
@@ -328,7 +324,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		try {
 			town.removeResident(this);
 		} catch (EmptyTownException e) {
-			if (!townDeleted)
+			if (town.exists())
 				TownyUniverse.getInstance().getDataSource().removeTown(town, false);
 		} catch (NotRegisteredException ignored) {}
 
