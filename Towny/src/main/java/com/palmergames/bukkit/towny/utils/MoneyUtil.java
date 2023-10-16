@@ -263,8 +263,8 @@ public class MoneyUtil {
 
 		final double increaseValue = TownySettings.getPurchasedBonusBlocksIncreaseValue();
 		final double baseCost = TownySettings.getPurchasedBonusBlocksCost();
-		boolean hasMaxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice() != -1;
-		double maxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice();
+		final double maxPrice = TownySettings.getPurchasedBonusBlocksMaxPrice();
+		final boolean hasMaxPrice = maxPrice >= 0;
 
 		if (increaseValue == 1) {
 			// No exponential increase, short circuit to a simpler calculation
