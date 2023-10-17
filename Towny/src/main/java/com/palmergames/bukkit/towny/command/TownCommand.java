@@ -3718,8 +3718,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_FILL.getNode());
 			
 			final BorderUtil.FloodfillResult result = BorderUtil.getFloodFillableCoords(town, key);
-			if (result.feedback() != null)
-				TownyMessaging.sendErrorMsg(player, result.feedback());
+			if (result.type() != BorderUtil.FloodfillResult.Type.SUCCESS)
+				throw result.feedback() != null ? new TownyException(result.feedback()) : new TownyException();
+			else if (result.feedback() != null)
+				TownyMessaging.sendMsg(player, result.feedback());
 			
 			selection = new ArrayList<>(result.coords());
 		} else {

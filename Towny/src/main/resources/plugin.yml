@@ -424,6 +424,7 @@ permissions:
             towny.command.town.claim.town: true
             towny.command.town.claim.outpost: true
             towny.command.town.claim.town.multiple: false
+            towny.command.town.claim.fill: true
 
     towny.command.town.invite.*:
         description: User can access all town invites related commands.
