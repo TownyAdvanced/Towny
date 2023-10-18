@@ -827,7 +827,7 @@ public class TownyEntityListener implements Listener {
 		 */
 		Block hitBlock = event.getHitBlock();
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) 
-			|| hitBlock == null || !ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType()))
+			|| hitBlock == null || (hitBlock.getType() != Material.TARGET && !ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType())))
 			return;
 
 		// Prevent non-player actions outright if it is in a town.
