@@ -9146,3 +9146,10 @@ v0.92.0.11:
     - Sets the spawn point inside of an existing outpost plot to where the player is standing.
     - An alias of the older command /t set outpost.
     - Closes #6998.
+0.99.6.3:
+  - Fix the purchased block calculation not taking into account a town which has already hit the max price.
+  - Make all negative purchased blocks prices count as disabled, courtesy of Warrior with PR #7034.
+  - Fix towns being deleted causing a second (pointless) town deletion when the last resident is removed.
+  - Refactor TownLevel calculation to include a new API event and reflow.
+  - API: Added TownCalculateTownLevelNumberEvent, an event thrown when Towny decides what TownLevel number a Town will have, which ultimately decides which TownLevel the Town receives.
+    - Useful for plugins that want to artifically increase or decrease a Town's TownLevel.
