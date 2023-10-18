@@ -179,7 +179,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 			return this;
 		}
 		
-		public Builder<T, F> conditionally(@NotNull BooleanSupplier supplier, Consumer<Builder<T, F>> consumer) {
+		public Builder<T, F> conditionally(@NotNull BooleanSupplier supplier, @NotNull Consumer<Builder<T, F>> consumer) {
 			if (supplier.getAsBoolean())
 				consumer.accept(this);
 			
