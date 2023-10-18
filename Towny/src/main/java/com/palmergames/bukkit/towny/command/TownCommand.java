@@ -3941,7 +3941,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
 
 		// Not connected to the town stealing the land.
-		if (!isEdgeBlock(town, wc))
+		if (!isEdgeBlock(town, wc, new ArrayList<>()))
 			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
 
 		// Prevent straight line claims if configured, and the town has enough townblocks claimed, and this is not an outpost.
@@ -4147,20 +4147,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static boolean isEdgeBlock(TownBlockOwner owner, List<WorldCoord> worldCoords) {
 
-		// TODO: Better algorithm that doesn't duplicates checks.
+		List<WorldCoord> visited = new ArrayList<>();
 		for (WorldCoord worldCoord : worldCoords)
-			if (isEdgeBlock(owner, worldCoord))
+			if (isEdgeBlock(owner, worldCoord, visited))
 				return true;
 		return false;
 	}
 
-	public static boolean isEdgeBlock(TownBlockOwner owner, WorldCoord worldCoord) {
+	public static boolean isEdgeBlock(TownBlockOwner owner, WorldCoord worldCoord, List<WorldCoord> visited) {
 
 		for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords()) {
-			if (wc.isWilderness())
+			if (visited.contains(wc))
 				continue;
-			if (!wc.getTownBlockOrNull().isOwner(owner))
+			if (wc.isWilderness()) {
+				visited.add(wc);
 				continue;
+			}
+			if (!wc.getTownBlockOrNull().isOwner(owner)) {
+				visited.add(wc);
+				continue;
+			}
 			return true;
 		}
 		return false;
