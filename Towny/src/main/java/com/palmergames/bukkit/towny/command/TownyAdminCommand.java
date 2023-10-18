@@ -1087,7 +1087,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		Resident resident = getResidentOrThrow(split[0]);
 
 		if (split.length == 1) {
-			plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resident, sender)));
+			TownyEconomyHandler.economyExecutor().execute(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resident, sender)));
 			return;
 		}
 		
@@ -1167,7 +1167,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		Town town = getTownOrThrow(split[0]);
 		if (split.length == 1) {
 			//This is run async because it will ping the economy plugin for the town bank value.
-			plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
+			TownyEconomyHandler.economyExecutor().execute(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
 			return;
 		}
 
@@ -1613,7 +1613,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		Nation nation = getNationOrThrow(split[0]);
 		if (split.length == 1) {
 			//This is run async because it will ping the economy plugin for the town bank value.
-			plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, sender)));
+			TownyEconomyHandler.economyExecutor().execute(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, sender)));
 			return;
 		}
 

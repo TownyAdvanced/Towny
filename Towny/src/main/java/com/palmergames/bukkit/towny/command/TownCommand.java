@@ -4283,7 +4283,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * This is run async because it will ping the economy plugin for the town bank value.
 		 */
-		plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
+		TownyEconomyHandler.economyExecutor().execute(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
 	}
 
 	private void townResList(CommandSender sender, String[] args) throws TownyException {
