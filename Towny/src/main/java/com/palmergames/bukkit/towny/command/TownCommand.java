@@ -4003,7 +4003,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		parseTownMergeCommand(player, args, getTownFromPlayerOrThrow(player), false);
 	}
 
-	public static void parseTownMergeCommand(CommandSender sender, String[] args, @NotNull Town remainingTown, boolean admin) throws TownyException {
+	public static void parseTownMergeCommand(CommandSender sender, String[] args, @NotNull final Town remainingTown, boolean admin) throws TownyException {
 
 		if (args.length <= 0) // /t merge
 			throw new TownyException(Translatable.of("msg_specify_name"));
@@ -4011,11 +4011,38 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!admin && sender instanceof Player player && !getResidentOrThrow(player).isMayor())
 			throw new TownyException(Translatable.of("msg_town_merge_err_mayor_only"));
 
-		Town succumbingTown = getTownOrThrow(args[0]);
+		final Town succumbingTown = getTownOrThrow(args[0]);
 
+		vetTownsForMergeAndThrow(remainingTown, succumbingTown);
+
+		// An array that keeps Merge costs separate, so the individual prices can be used later on in messaging.
+		final double[] mergeCost = getMergeCosts(remainingTown, succumbingTown, admin);
+		final double cost = Arrays.stream(mergeCost).sum();
+
+		if (cost > 0) {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_warning", succumbingTown.getName(), prettyMoney(cost)));
+			if (mergeCost[2] > 0) // If the succumbing town was bankrupt.
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_debt_warning", succumbingTown.getName()));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_cost_breakdown", 
+					prettyMoney(mergeCost[0]), // Base Cost
+					prettyMoney(mergeCost[1]), // TownBlock Cost
+					prettyMoney(mergeCost[2]), // Bankruptcy Cost
+					prettyMoney(mergeCost[3]))); // Purchased BonusBlock Cost
+
+			Confirmation.runOnAccept(() -> {
+				sendTownMergeRequest(sender, remainingTown, succumbingTown, cost);
+			}).runOnCancel(() -> {
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_cancelled"));
+				return;
+			}).sendTo(sender);
+		} else
+			sendTownMergeRequest(sender, remainingTown, succumbingTown, cost);
+	}
+
+	private static void vetTownsForMergeAndThrow(Town remainingTown, Town succumbingTown) throws TownyException {
 		// A lot of checks.
 		if (succumbingTown.getName().equals(remainingTown.getName()))
-			throw new TownyException(Translatable.of("msg_err_invalid_name", args[0]));
+			throw new TownyException(Translatable.of("msg_err_invalid_name", succumbingTown.getName()));
 
 		if (TownySettings.getMaxDistanceForTownMerge() > 0 && homeBlockDistance(remainingTown, succumbingTown) > TownySettings.getMaxDistanceForTownMerge())
 			throw new TownyException(Translatable.of("msg_town_merge_err_not_close", succumbingTown.getName(), TownySettings.getMaxDistanceForTownMerge()));
@@ -4048,50 +4075,39 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC())
 			throw new TownyException(Translatable.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
+	}
 
-		double baseCost = TownySettings.getBaseCostForTownMerge();
-		double townblockCost = 0;
-		double bankruptcyCost = 0;
-		double purchasedBlockCost = 0;
-		double cost = 0;
-		if (!admin && TownyEconomyHandler.isActive()) {
-			// There is a configurable price that is applied as a percent, that the remaining town will pay.
-			townblockCost = remainingTown.getTownBlockCostN(succumbingTown.getNumTownBlocks()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
+	private static double[] getMergeCosts(Town remainingTown, Town succumbingTown, boolean admin) throws TownyException {
+		// An array that keeps Merge costs separate, so the individual prices can be used later on in messaging.
+		double[] mergeCost = new double[] {TownySettings.getBaseCostForTownMerge(), // mergeCost[0] Base cost of merging.
+											0,  // mergeCost[1] TownblockCost
+											0,  // mergeCost[2] BankruptcyCost,
+											0}; // mergeCost[3] Purchased BonusBlock costs.
 
-			// Remaining town has to wipe out the succumbing town's debt if any is present.
-			if (succumbingTown.isBankrupt())
-				bankruptcyCost = Math.abs(succumbingTown.getAccount().getHoldingBalance());
+		if (admin || !TownyEconomyHandler.isActive())
+			return mergeCost;
 
-			// When purchased bonus townblocks have a price increase we have to make sure the new town is able to pay the difference
-			// otherwise towns will farm small towns that buy up bonus blocks at a cheap rate, then merge.
-			if (succumbingTown.getPurchasedBlocks() > 0 && TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0) {
-				int purchasedBlocks = succumbingTown.getPurchasedBlocks();
-				double priceAlreadyPaid = MoneyUtil.returnPurchasedBlocksCost(0, purchasedBlocks, succumbingTown);
-				purchasedBlockCost = remainingTown.getBonusBlockCostN(purchasedBlocks) - priceAlreadyPaid;
-			}
+		// There is a configurable price that is applied as a percent, that the remaining town will pay.
+		mergeCost[1] =  remainingTown.getTownBlockCostN(succumbingTown.getNumTownBlocks()) * (TownySettings.getPercentageCostPerPlot() * 0.01);
 
-			cost = baseCost + townblockCost + bankruptcyCost + purchasedBlockCost;
+		// Remaining town has to wipe out the succumbing town's debt if any is present.
+		if (succumbingTown.isBankrupt())
+			mergeCost[2] = Math.abs(succumbingTown.getAccount().getHoldingBalance());
 
-			if (!remainingTown.getAccount().canPayFromHoldings(cost))
-				throw new TownyException(Translatable.of("msg_town_merge_err_not_enough_money", prettyMoney(remainingTown.getAccount().getHoldingBalance()), prettyMoney(cost)));
+		// When purchased bonus townblocks have a price increase we have to make sure the new town is able to pay the difference
+		// otherwise towns will farm small towns that buy up bonus blocks at a cheap rate, then merge.
+		if (succumbingTown.getPurchasedBlocks() > 0 && TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0) {
+			int purchasedBlocks = succumbingTown.getPurchasedBlocks();
+			double priceAlreadyPaid = MoneyUtil.returnPurchasedBlocksCost(0, purchasedBlocks, succumbingTown);
+			mergeCost[3] = remainingTown.getBonusBlockCostN(purchasedBlocks) - priceAlreadyPaid;
 		}
-		
-		if (cost > 0) {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_warning", succumbingTown.getName(), prettyMoney(cost)));
-			if (bankruptcyCost > 0)
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_debt_warning", succumbingTown.getName()));
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_cost_breakdown", prettyMoney(baseCost), prettyMoney(townblockCost), prettyMoney(bankruptcyCost), prettyMoney(purchasedBlockCost)));
-			final Town finalSuccumbingTown = succumbingTown;
-			final Town finalRemainingTown = remainingTown;
-			final double finalCost = cost;
-			Confirmation.runOnAccept(() -> {
-				sendTownMergeRequest(sender, finalRemainingTown, finalSuccumbingTown, finalCost);
-			}).runOnCancel(() -> {
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_cancelled"));
-				return;
-			}).sendTo(sender);
-		} else
-			sendTownMergeRequest(sender, remainingTown, succumbingTown, cost);
+
+		double cost = Arrays.stream(mergeCost).sum();
+
+		if (!remainingTown.getAccount().canPayFromHoldings(cost))
+			throw new TownyException(Translatable.of("msg_town_merge_err_not_enough_money", prettyMoney(remainingTown.getAccount().getHoldingBalance()), prettyMoney(cost)));
+
+		return mergeCost;
 	}
 
 	private static String prettyMoney(double cost) {
@@ -4103,6 +4119,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(succumbingTown.getMayor(), Translatable.of("msg_town_merge_request_received", remainingTown.getName(), sender.getName(), remainingTown.getName()));
 
 		Confirmation.runOnAccept(() -> {
+			try {
+				vetTownsForMergeAndThrow(remainingTown, succumbingTown);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+				return;
+			}
+
 			TownPreMergeEvent townPreMergeEvent = new TownPreMergeEvent(remainingTown, succumbingTown);
 			if (BukkitTools.isEventCancelled(townPreMergeEvent)) {
 				TownyMessaging.sendErrorMsg(succumbingTown.getMayor().getPlayer(), townPreMergeEvent.getCancelMessage());
