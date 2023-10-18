@@ -347,7 +347,7 @@ public class TownySettings {
 	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
 	 *     and may be different from the default configuration.
 	 * </p>
-	 * @param populationSize Number of residents used to calculate the level.
+	 * @param threshold Number of residents used to calculate the level.
 	 * @param town the Town from which to get a TownLevel.
 	 * @return The calculated Town Level. 0, if the town is ruined, or the method otherwise fails through.
 	 */
