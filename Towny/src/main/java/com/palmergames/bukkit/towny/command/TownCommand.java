@@ -765,7 +765,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		.sendTo(player);
 	}
 
-	private void parseInviteCommand(Player player, String[] newSplit) throws TownyException {
+	private void parseInviteCommand(Player player, String[] args) throws TownyException {
 		catchRuinedTown(player);
 		Resident resident = getResidentOrThrow(player);
 
@@ -776,141 +776,108 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				.replace("%a", Integer.toString(resident.getTown().getSentInvites().size()))
 				.replace("%m", Integer.toString(InviteHandler.getSentInvitesMaxAmount(resident.getTown())));
 
-		if (newSplit.length == 0) { // (/town invite)
+		if (args.length == 0 || args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?") ) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_SEE_HOME.getNode());
-
 			HelpMenu.TOWN_INVITE.send(player);
 			TownyMessaging.sendMessage(player, sent);
 			TownyMessaging.sendMessage(player, received);
 			return;
 		}
-		if (newSplit.length >= 1) { // /town invite [something]
-			if (newSplit[0].equalsIgnoreCase("help") || newSplit[0].equalsIgnoreCase("?")) {
-				HelpMenu.TOWN_INVITE.send(player);
-				return;
-			}
-			if (newSplit[0].equalsIgnoreCase("sent")) { //  /invite(remfirstarg) sent args[1]
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_LIST_SENT.getNode());
+		switch (args[0].toLowerCase(Locale.ROOT)) {
+		case "sent" -> parseTownInviteSentCommand(player, StringMgmt.remFirstArg(args), resident, sent);
+		case "received" -> parseTownInviteReceivedCommand(player, StringMgmt.remFirstArg(args), resident, received);
+		case "accept" -> parseTownInviteAcceptCommand(player, StringMgmt.remFirstArg(args), resident);
+		case "deny" -> parseTownInviteDenyCommand(player, StringMgmt.remFirstArg(args), resident);
+		case "add" -> parseTownInviteAddCommand(player, StringMgmt.remFirstArg(args));
+		default -> throw new TownyException(Translatable.of("msg_err_invalid_sub"));
+		}
+	}
 
-				List<Invite> sentinvites = resident.getTown().getSentInvites();
-				int page = 1;
-				if (newSplit.length >= 2) {
-					try {
-						page = Integer.parseInt(newSplit[1]);
-					} catch (NumberFormatException ignored) {
-					}
-				}
-				InviteCommand.sendInviteList(player, sentinvites, page, true);
-				TownyMessaging.sendMessage(player, sent);
-				return;
-			}
-			if (newSplit[0].equalsIgnoreCase("received")) { // /town invite received
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_LIST_RECEIVED.getNode());
+	private void parseTownInviteSentCommand(Player player, String[] args, Resident resident, String sent) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_LIST_SENT.getNode());
 
-				List<Invite> receivedinvites = resident.getTown().getReceivedInvites();
-				int page = 1;
-				if (newSplit.length >= 2) {
-					try {
-						page = Integer.parseInt(newSplit[1]);
-					} catch (NumberFormatException ignored) {
-					}
-				}
-				InviteCommand.sendInviteList(player, receivedinvites, page, false);
-				TownyMessaging.sendMessage(player, received);
-				return;
-			}
-			if (newSplit[0].equalsIgnoreCase("accept")) {
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ACCEPT.getNode());
+		List<Invite> sentinvites = resident.getTown().getSentInvites();
+		int page = args.length > 0 ? MathUtil.getPositiveIntOrThrow(args[0]) : 1;
+		InviteCommand.sendInviteList(player, sentinvites, page, true);
+		TownyMessaging.sendMessage(player, sent);
+	}
 
-				// /town (gone)
-				// invite (gone)
-				// args[0] = accept = length = 1
-				// args[1] = [Nation] = length = 2
-				Town town = resident.getTown();
-				Nation nation;
-				List<Invite> invites = town.getReceivedInvites();
+	private void parseTownInviteReceivedCommand(Player player, String[] args, Resident resident, String received) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_LIST_RECEIVED.getNode());
 
-				if (invites.size() == 0) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_no_invites"));
-					return;
-				}
-				if (newSplit.length >= 2) { // /invite deny args[1]
-					nation = TownyUniverse.getInstance().getNation(newSplit[1]);
-					
-					if (nation == null) {
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
-						return;
-					}
-				} else {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_specify_invite"));
-					InviteCommand.sendInviteList(player, invites, 1, false);
-					return;
-				}
+		List<Invite> receivedinvites = resident.getTown().getReceivedInvites();
+		int page = args.length > 0 ? MathUtil.getPositiveIntOrThrow(args[0]) : 1;
+		InviteCommand.sendInviteList(player, receivedinvites, page, false);
+		TownyMessaging.sendMessage(player, received);
+	}
 
-				Invite toAccept = null;
-				for (Invite invite : InviteHandler.getActiveInvites()) {
-					if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
-						toAccept = invite;
-						break;
-					}
-				}
-				if (toAccept != null) {
-					try {
-						InviteHandler.acceptInvite(toAccept);
-						return;
-					} catch (TownyException | InvalidObjectException e) {
-						plugin.getLogger().log(Level.WARNING, "unknown exception occurred while accepting invite", e);
-					}
-				}
-			}
-			if (newSplit[0].equalsIgnoreCase("deny")) { // /town invite deny
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_DENY.getNode());
+	private void parseTownInviteAcceptCommand(Player player, String[] args, Resident resident) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ACCEPT.getNode());
+		Town town = resident.getTown();
+		List<Invite> invites = town.getReceivedInvites();
 
-				Town town = resident.getTown();
-				Nation nation;
-				List<Invite> invites = town.getReceivedInvites();
+		if (invites.size() == 0)
+			throw new TownyException(Translatable.of("msg_err_town_no_invites"));
 
-				if (invites.size() == 0) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_no_invites"));
-					return;
-				}
-				if (newSplit.length >= 2) { // /invite deny args[1]
-					nation = TownyUniverse.getInstance().getNation(newSplit[1]);
-					
-					if (nation == null) {
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
-						return;
-					}
-				} else {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_specify_invite"));
-					InviteCommand.sendInviteList(player, invites, 1, false);
-					return;
-				}
-				
-				Invite toDecline = null;
-				
-				for (Invite invite : InviteHandler.getActiveInvites()) {
-					if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
-						toDecline = invite;
-						break;
-					}
-				}
-				if (toDecline != null) {
-					try {
-						InviteHandler.declineInvite(toDecline, false);
-						TownyMessaging.sendMsg(player, Translatable.of("successful_deny"));
-					} catch (InvalidObjectException e) {
-						plugin.getLogger().log(Level.WARNING, "unknown exception occurred while declining invite", e); // Shouldn't happen, however like i said a fallback
-					}
-				}
-			} else {
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ADD.getNode());
+		if (args.length == 0) { // /invite accept
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_specify_invite"));
+			InviteCommand.sendInviteList(player, invites, 1, false);
+			return;
+		}
 
-				townAdd(player, null, newSplit);
-				// It's none of those 4 subcommands, so it's a playername, I just expect it to be ok.
-				// If it is invalid it is handled in townAdd() so, I'm good
+		Nation nation = getNationOrThrow(args[0]);
+		Invite toAccept = null;
+		for (Invite invite : InviteHandler.getActiveInvites()) {
+			if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
+				toAccept = invite;
+				break;
 			}
 		}
+		if (toAccept != null) {
+			try {
+				InviteHandler.acceptInvite(toAccept);
+				return;
+			} catch (TownyException | InvalidObjectException e) {
+				plugin.getLogger().log(Level.WARNING, "unknown exception occurred while accepting invite", e);
+			}
+		}
+	}
+
+	private void parseTownInviteDenyCommand(Player player, String[] args, Resident resident) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_DENY.getNode());
+		Town town = resident.getTown();
+		List<Invite> invites = town.getReceivedInvites();
+
+		if (invites.size() == 0)
+			throw new TownyException(Translatable.of("msg_err_town_no_invites"));
+
+		if (args.length == 0) {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_specify_invite"));
+			InviteCommand.sendInviteList(player, invites, 1, false);
+			return;
+		}
+
+		Nation nation = getNationOrThrow(args[0]);
+		Invite toDecline = null;
+		for (Invite invite : InviteHandler.getActiveInvites()) {
+			if (invite.getSender().equals(nation) && invite.getReceiver().equals(town)) {
+				toDecline = invite;
+				break;
+			}
+		}
+		if (toDecline != null) {
+			try {
+				InviteHandler.declineInvite(toDecline, false);
+				TownyMessaging.sendMsg(player, Translatable.of("successful_deny"));
+			} catch (InvalidObjectException e) {
+				plugin.getLogger().log(Level.WARNING, "unknown exception occurred while declining invite", e); // Shouldn't happen, however like i said a fallback
+			}
+		}
+	}
+
+	private void parseTownInviteAddCommand(Player player, String[] newSplit) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ADD.getNode());
+		townAdd(player, null, newSplit);
 	}
 
 	public static void parseTownOutlawCommand(CommandSender sender, String[] split, boolean admin, Town town) throws TownyException {
