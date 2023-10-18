@@ -9153,3 +9153,5 @@ v0.92.0.11:
   - Refactor TownLevel calculation to include a new API event and reflow.
   - API: Added TownCalculateTownLevelNumberEvent, an event thrown when Towny decides what TownLevel number a Town will have, which ultimately decides which TownLevel the Town receives.
     - Useful for plugins that want to artifically increase or decrease a Town's TownLevel.
+  - Fix NoClassDefFoundError that appears on 1.16.5 servers when /t outpost list is used.
+    - Closes #7037.
