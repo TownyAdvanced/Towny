@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
+import com.palmergames.bukkit.towny.exceptions.ResidentNPCException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -383,5 +384,10 @@ public class BaseCommand implements TabCompleter{
 	
 	public static void checkPermOrThrowWithMessage(Permissible permissible, String node, Translatable errormsg) throws NoPermissionException {
 		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node, errormsg);
+	}
+	
+	public static void catchNPCResident(Resident resident) throws ResidentNPCException {
+		if (resident.isNPC())
+			throw new ResidentNPCException();
 	}
 }

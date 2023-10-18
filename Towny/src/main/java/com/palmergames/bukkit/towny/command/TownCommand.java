@@ -3947,7 +3947,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Town town = getTownFromPlayerOrThrow(player);
 
 		long ageRequirement = TownySettings.getOverclaimingTownAgeRequirement();
-		if (ageRequirement > 0l) {
+		if (ageRequirement > 0L) {
 			long ageNeeded = System.currentTimeMillis() - ageRequirement;
 			if (ageNeeded < town.getRegistered())
 				throw new TownyException(Translatable.of("msg_err_your_town_is_not_old_enough_to_overclaim", TimeMgmt.getFormattedTimeValue(town.getRegistered() - ageNeeded)));
@@ -4358,66 +4358,70 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	
 	public static void parseTownTrustCommand(CommandSender sender, String[] args, @Nullable Town town) throws TownyException {
 		
-		if (args.length < 1
-			|| args.length < 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))
-			|| args.length == 1 && !args[0].equalsIgnoreCase("list")) {
+		if (args.length < 1) {
 			HelpMenu.TOWN_TRUST_HELP.send(sender);
 			return;
 		}
-		
+
 		if (town == null && sender instanceof Player player)
 			town = getTownFromPlayerOrThrow(player);
 
 		if (args[0].equalsIgnoreCase("list")) {
-			List<String> output = town.getTrustedResidents().isEmpty()
-					? Collections.singletonList(Translatable.of("status_no_town").forLocale(sender)) // String which is "None".
-					: town.getTrustedResidents().stream().map(res -> res.getName()).collect(Collectors.toList());
-			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(sender), output));
+			parseTownTrustListCommand(sender, town);
+			return;
+		}
+
+		if (args.length < 2) {
+			HelpMenu.TOWN_TRUST_HELP.send(sender);
 			return;
 		}
 
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_TRUST.getNode());
+		Resident resident = getResidentOrThrow(args[1]);
+		catchNPCResident(resident);
 
-		Resident resident = TownyAPI.getInstance().getResident(args[1]);
-		if (resident == null || resident.isNPC()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", args[1]));
-			return;
+		switch (args[0].toLowerCase(Locale.ROOT)) {
+		case "add" -> parseTownTrustAddCommand(sender, town, resident);
+		case "remove" -> parseTownTrustRemoveCommand(sender, town, resident);
+		default -> HelpMenu.TOWN_TRUST_HELP.send(sender);
 		}
-		
-		if (args[0].equalsIgnoreCase("add")) {
-			if (town.hasTrustedResident(resident)) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", resident.getName(), Translatable.of("town_sing")));
-				return;
-			}
+	}
 
-			BukkitTools.ifCancelledThenThrow(new TownTrustAddEvent(sender, resident, town));
+	private static void parseTownTrustListCommand(CommandSender sender, Town town) {
+		List<String> output = town.getTrustedResidents().isEmpty()
+				? Collections.singletonList(Translatable.of("status_no_town").forLocale(sender)) // String which is "None".
+				: town.getTrustedResidents().stream().map(Resident::getName).collect(Collectors.toList());
+		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedStrings(Translatable.of("status_trustedlist").forLocale(sender), output));
+	}
 
-			town.addTrustedResident(resident);
-			plugin.deleteCache(resident);
-			
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("town_sing")));
-			if (BukkitTools.isOnline(resident.getName()))
-				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_added_2", sender instanceof Player player ? player.getName() : "Console", Translatable.of("town_sing"), town.getName()));
-		} else if (args[0].equalsIgnoreCase("remove")) {
-			if (!town.hasTrustedResident(resident)) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", resident.getName(), Translatable.of("town_sing")));
-				return;
-			}
+	private static void parseTownTrustAddCommand(CommandSender sender, Town town, Resident resident) throws TownyException {
+		if (town.hasTrustedResident(resident))
+			throw new TownyException(Translatable.of("msg_already_trusted", resident.getName(), Translatable.of("town_sing")));
 
-			BukkitTools.ifCancelledThenThrow(new TownTrustRemoveEvent(sender, resident, town));
+		BukkitTools.ifCancelledThenThrow(new TownTrustAddEvent(sender, resident, town));
 
-			town.removeTrustedResident(resident);
-			plugin.deleteCache(resident);
-			
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
-			if (BukkitTools.isOnline(resident.getName()))
-				TownyMessaging.sendMsg(resident.getPlayer(), Translatable.of("msg_trusted_removed_2", sender instanceof Player player ? player.getName() : "Console", Translatable.of("town_sing"), town.getName()));
-		} else {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", args[0]));
-			return;
-		}
-		
+		town.addTrustedResident(resident);
 		town.save();
+		plugin.deleteCache(resident);
+
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", resident.getName(), Translatable.of("town_sing")));
+		if (resident.isOnline())
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_trusted_added_2", sender instanceof Player player ? player.getName() : "Console", Translatable.of("town_sing"), town.getName()));
+	}
+
+	private static void parseTownTrustRemoveCommand(CommandSender sender, Town town, Resident resident) throws TownyException {
+		if (!town.hasTrustedResident(resident))
+			throw new TownyException(Translatable.of("msg_not_trusted", resident.getName(), Translatable.of("town_sing")));
+
+		BukkitTools.ifCancelledThenThrow(new TownTrustRemoveEvent(sender, resident, town));
+
+		town.removeTrustedResident(resident);
+		town.save();
+		plugin.deleteCache(resident);
+
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", resident.getName(), Translatable.of("town_sing")));
+		if (resident.isOnline())
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_trusted_removed_2", sender instanceof Player player ? player.getName() : "Console", Translatable.of("town_sing"), town.getName()));
 	}
 
 	public static void parseTownTrustTownCommand(CommandSender sender, String[] args, @Nullable Town town) throws TownyException {
