@@ -881,135 +881,109 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void parseTownOutlawCommand(CommandSender sender, String[] split, boolean admin, Town town) throws TownyException {
-		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-
 		if (split.length == 0) {
 			// Help output.
 			if (!admin)
 				HelpMenu.TOWN_OUTLAW_HELP.send(sender);
 			else
 				HelpMenu.TA_TOWN_OUTLAW.send(sender);
-
-		} else {
-
-			Resident resident;
-			Resident target;
-			Town targetTown = null;
-
-			/*
-			 * Does the command have enough arguments?
-			 */
-			if (split.length < 2)
-				throw new TownyException(Translatable.of("msg_usage", "/town outlaw add/remove [name]"));
-
-			if (!admin) {
-				resident = getResidentOrThrow(sender.getName());
-				checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode());
-				catchRuinedTown((Player) sender);
-			} else
-				resident = town.getMayor();	// if this is an Admin-initiated command, dupe the action as if it were done by the mayor.
-			
-			target = townyUniverse.getResident(split[1]);
-			
-			if (target == null) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_name", split[1]));
-				return;
-			}
-
-			if (split[0].equalsIgnoreCase("add")) {
-				try {
-					// Get the target resident's town if they have a town.
-					if (target.hasTown())
-						targetTown = TownyAPI.getInstance().getResidentTownOrNull(target);
-					
-					// Don't allow a resident to outlaw their own mayor.
-					if (resident.getTown().getMayor().equals(target))
-						return;
-
-					// Call cancellable event.
-					BukkitTools.ifCancelledThenThrow(new TownOutlawAddEvent(sender, target, town));
-
-					// Kick outlaws from town if they are residents.
-					if (targetTown != null && targetTown.getUUID().equals(town.getUUID())) {
-						target.removeTown();
-						Object outlawer = (admin ? Translatable.of("admin_sing") : sender.getName());
-						TownyMessaging.sendMsg(target, Translatable.of("msg_kicked_by", outlawer));
-						TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_kicked", outlawer, target.getName()));
-					}
-					
-					// Add the outlaw and save the town.
-					town.addOutlaw(target);
-					town.save();
-					
-					// Send feedback messages.
-					if (target.getPlayer() != null && target.getPlayer().isOnline()) {
-						TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_declared_outlaw", town.getName()));
-						Location loc = target.getPlayer().getLocation();
-						
-						// If the newly-outlawed player is within the town's borders and is meant to be teleported away, 
-						// send them using the outlaw teleport warmup time, potentially giving them the chance to escape
-						// the borders.
-						if (TownySettings.areNewOutlawsTeleportedAway() 
-							&& TownyAPI.getInstance().getTownBlock(loc) != null
-							&& TownyAPI.getInstance().getTown(loc) == town) {
-							
-							OutlawTeleportEvent event = new OutlawTeleportEvent(target, town, loc);
-							if (BukkitTools.isEventCancelled(event))
-								return;
-							
-							if (TownySettings.getOutlawTeleportWarmup() > 0)
-								TownyMessaging.sendMsg(target, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
-							
-							final Resident outlawRes = target;
-							plugin.getScheduler().runLater(() -> {
-								if (TownyAPI.getInstance().getTown(loc) == town)
-									SpawnUtil.outlawTeleport(town, outlawRes);									
-							}, TownySettings.getOutlawTeleportWarmup() * 20L);
-						}
-					}
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
-					if (admin)
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
-				} catch (AlreadyRegisteredException e) {
-					// Must already be an outlaw
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_err_resident_already_an_outlaw"));
-					return;
-				}
-
-			} else if (split[0].equalsIgnoreCase("remove")) {
-				if (town.hasOutlaw(target)) {
-
-					// Call cancellable event.
-					BukkitTools.ifCancelledThenThrow(new TownOutlawRemoveEvent(sender, target, town));
-
-					town.removeOutlaw(target);
-					town.save();
-
-					// Send feedback messages.
-					if (target.getPlayer() != null && target.getPlayer().isOnline())
-						TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_undeclared_outlaw", town.getName()));
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
-					if (admin)
-						TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
-				} else {
-					// Must already not be an outlaw
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_err_player_not_an_outlaw"));
-					return;
-				}
-
-			} else {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", split[0]));
-				return;
-			}
-
-			/*
-			 * If we got here we have made a change Save the altered resident
-			 * data.
-			 */
-			town.save();
-
+			return;
 		}
 
+		/*
+		 * Does the command have enough arguments?
+		 */
+		if (split.length < 2)
+			throw new TownyException(Translatable.of("msg_usage", "/town outlaw add/remove [name]"));
+
+		Resident resident;
+		if (!admin) {
+			resident = getResidentOrThrow(sender.getName());
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode());
+			catchRuinedTown((Player) sender);
+		} else
+			resident = town.getMayor();	// if this is an Admin-initiated command, dupe the action as if it were done by the mayor.
+
+		Resident target = getResidentOrThrow(split[1]);
+
+		switch (split[0].toLowerCase(Locale.ROOT)) {
+		case "add" -> parseTownOutlawAddCommand(sender, admin, town, resident, target);
+		case "remove" -> parseTownOutlawRemoveCommand(sender, admin, town, target);
+		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[0]));
+		}
+	}
+
+	private static void parseTownOutlawAddCommand(CommandSender sender, boolean admin, Town town, Resident resident, Resident target) throws TownyException {
+		// Don't allow a resident to outlaw their own mayor.
+		if (resident.getTown().getMayor().equals(target))
+			return;
+
+		if (town.hasOutlaw(target))
+			throw new TownyException(Translatable.of("msg_err_resident_already_an_outlaw"));
+
+		// Call cancellable event.
+		BukkitTools.ifCancelledThenThrow(new TownOutlawAddEvent(sender, target, town));
+
+		// Kick outlaws from town if they are residents.
+		if (town.hasResident(target)) {
+			target.removeTown();
+			Object outlawer = (admin ? Translatable.of("admin_sing") : sender.getName());
+			TownyMessaging.sendMsg(target, Translatable.of("msg_kicked_by", outlawer));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_kicked", outlawer, target.getName()));
+		}
+
+		// Add the outlaw and save the town.
+		try {
+			town.addOutlaw(target);	
+		} catch (AlreadyRegisteredException ignored) {}
+		town.save();
+
+		// Send feedback messages.
+		if (target.isOnline()) {
+			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_declared_outlaw", town.getName()));
+			Location loc = target.getPlayer().getLocation();
+
+			// If the newly-outlawed player is within the town's borders and is meant to be teleported away, 
+			// send them using the outlaw teleport warmup time, potentially giving them the chance to escape
+			// the borders.
+			if (TownySettings.areNewOutlawsTeleportedAway() 
+				&& !TownyAPI.getInstance().isWilderness(loc)
+				&& TownyAPI.getInstance().getTown(loc) == town) {
+				
+				OutlawTeleportEvent event = new OutlawTeleportEvent(target, town, loc);
+				if (BukkitTools.isEventCancelled(event))
+					return;
+				
+				if (TownySettings.getOutlawTeleportWarmup() > 0)
+					TownyMessaging.sendMsg(target, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
+				
+				plugin.getScheduler().runLater(() -> {
+					if (TownyAPI.getInstance().getTown(loc) == town)
+						SpawnUtil.outlawTeleport(town, target);
+				}, TownySettings.getOutlawTeleportWarmup() * 20L);
+			}
+		}
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
+	}
+
+	private static void parseTownOutlawRemoveCommand(CommandSender sender, boolean admin, Town town, Resident target) throws TownyException {
+		if (!town.hasOutlaw(target))
+			throw new TownyException(Translatable.of("msg_err_player_not_an_outlaw"));
+
+		// Call cancellable event.
+		BukkitTools.ifCancelledThenThrow(new TownOutlawRemoveEvent(sender, target, town));
+
+		town.removeOutlaw(target);
+		town.save();
+
+		// Send feedback messages.
+		if (target.isOnline())
+			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_undeclared_outlaw", town.getName()));
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
 	}
 
 	private void parseTownWithdrawCommand(final Player player, String[] split) throws NoPermissionException {
