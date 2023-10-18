@@ -240,6 +240,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists HOES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("hoes")).endsWith("_hoe").build();
 
 	public static final ItemLists BRUSHABLE_BLOCKS = newBuilder().add("SUSPICIOUS_SAND", "SUSPICIOUS_GRAVEL").build();
+	
+	public static final ItemLists PROJECTILE_BREAKABLE_BLOCKS = newBuilder().add("CHORUS_FLOWER", "POINTED_DRIPSTONE", "DECORATED_POT").build();
 
 	/**
 	 * Config-useable material groups.
