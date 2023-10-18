@@ -209,7 +209,7 @@ public class StringMgmt {
 		else if (s.equalsIgnoreCase("off"))
 			return false;
 		else
-			throw new Exception(Translation.of("msg_err_invalid_input", " on/off."));
+			throw new Exception(Translation.of("msg_err_invalid_input", "on/off."));
 	}
 	
 	public static boolean isAllUpperCase(@NotNull String string) {

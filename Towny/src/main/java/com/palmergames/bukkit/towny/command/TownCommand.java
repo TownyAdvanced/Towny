@@ -3455,145 +3455,89 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void setTownBlockPermissions(CommandSender sender, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
 		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split.length > 3) {
-
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/... set perm"));
-			if (townBlockOwner instanceof Town)
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
-			if (townBlockOwner instanceof Resident)
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "reset", ""));
-			if (townBlockOwner instanceof Town)
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
-			if (townBlockOwner instanceof Resident)
-				TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
-
+			displaySetPlotPermissionsHelp(sender, townBlockOwner);
 			return;
 		}
 
-		// reset the friend to resident so the perm settings don't fail
-		if (friend && split[0].equalsIgnoreCase("friend"))
+		// /t set perm reset has been run.
+		if (split[0].equalsIgnoreCase("reset")) {
+			resetTownBlockOwnersTownBlocks(sender, townBlockOwner);
+			return;
+		}
+
+		// Permissions commands for residents use Friend instead of Resident and Town
+		// instead of Nation, we must set these values to their "true" value for
+		// permissions to be set correctly.
+		if (split[0].equalsIgnoreCase("friend"))
 			split[0] = "resident";
-		// reset the town to nation so the perm settings don't fail
-		if (friend && split[0].equalsIgnoreCase("town"))
+		else if (split[0].equalsIgnoreCase("town"))
 			split[0] = "nation";
+		if (split[0].equalsIgnoreCase("itemuse"))
+			split[0] = "item_use";
+		if (split.length > 1 && split[1].equalsIgnoreCase("itemuse"))
+			split[1] = "item_use";
 
-		TownyPermissionChange permChange;
-
-		if (split.length == 1) {
-
-			if (split[0].equalsIgnoreCase("reset")) {
-
-				// reset all townBlock permissions (by town/resident)
-				for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
-
-					if ((townBlockOwner instanceof Town && !townBlock.hasResident()) || 
-						(townBlockOwner instanceof Resident && townBlock.hasResident())) {
-
-						permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, true, townBlock);
-						try {
-							BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
-						} catch (CancelledEventException e) {
-							sender.sendMessage(e.getCancelMessage());
-							return;
-						}
-						// Reset permissions
-						townBlock.setType(townBlock.getType());
-						townBlock.save();
-					}
-				}
-				if (townBlockOwner instanceof Town)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "Town owned"));
-				else
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "your"));
-
-				// Reset all caches as this can affect everyone.
-				plugin.resetCache();
+		// A more complex command has been run for setting permissions.
+		TownyPermissionChange permChange = null;
+		switch (split.length) {
+		case 1: { // Set all perms to On or Off ie: /town set perm off'
+			try {
+				boolean b = StringMgmt.parseOnOff(split[0]);
+				permChange = new TownyPermissionChange(TownyPermissionChange.Action.ALL_PERMS, b);
+				perm.change(permChange);
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "on/off."));
 				return;
-
-			} else {
-				// Set all perms to On or Off
-				// '/town set perm off'
-
-				try {
-					boolean b = StringMgmt.parseOnOff(split[0]);
-					permChange = new TownyPermissionChange(TownyPermissionChange.Action.ALL_PERMS, b);
-					perm.change(permChange);
-				} catch (Exception e) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
-					return;
-				}
 			}
-
-		} else if (split.length == 2) {
+		}
+		case 2: { // Either /t set perm PERMLEVEL on|off or /t set perm ACTIONTYPE on|off
 			boolean b;
-
 			try {
 				b = StringMgmt.parseOnOff(split[1]);
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "on/off."));
 				return;
 			}
-
-			if (split[0].equalsIgnoreCase("friend"))
-				split[0] = "resident";
-			else if (split[0].equalsIgnoreCase("town"))
-				split[0] = "nation";
-			else if (split[0].equalsIgnoreCase("itemuse"))
-				split[0] = "item_use";
 
 			// Check if it is a perm level first
 			try {
 				TownyPermission.PermLevel permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
 				permChange = new TownyPermissionChange(TownyPermissionChange.Action.PERM_LEVEL, b, permLevel);
 				perm.change(permChange);
-			}
-			catch (IllegalArgumentException permLevelException) {
+			} catch (IllegalArgumentException permLevelException) {
 				// If it is not a perm level, then check if it is a action type
 				try {
 					TownyPermission.ActionType actionType = TownyPermission.ActionType.valueOf(split[0].toUpperCase(Locale.ROOT));
 					permChange = new TownyPermissionChange(TownyPermissionChange.Action.ACTION_TYPE, b, actionType);
 					perm.change(permChange);
 				} catch (IllegalArgumentException actionTypeException) {
+					// It isn't either perm level or action type, it's a syntax error.
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
 					return;
 				}
 			}
-
-		} else {
-			// Reset the friend to resident so the perm settings don't fail
-			if (split[0].equalsIgnoreCase("friend"))
-				split[0] = "resident";
-			// reset the town to nation so the perm settings don't fail
-			else if (split[0].equalsIgnoreCase("town"))
-				split[0] = "nation";
-			if (split[1].equalsIgnoreCase("itemuse"))
-				split[1] = "item_use";
-
+		}
+		case 3: { // /t set perm PERMLEVEL ACTIONTYPE on|off
 			TownyPermission.PermLevel permLevel;
 			TownyPermission.ActionType actionType;
 
 			try {
 				permLevel = TownyPermission.PermLevel.valueOf(split[0].toUpperCase(Locale.ROOT));
 				actionType = TownyPermission.ActionType.valueOf(split[1].toUpperCase(Locale.ROOT));
-			} catch (IllegalArgumentException ignore) {
+			} catch (IllegalArgumentException exception) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
 				return;
 			}
-			
+
 			try {
 				boolean b = StringMgmt.parseOnOff(split[2]);
-
 				permChange = new TownyPermissionChange(TownyPermissionChange.Action.SINGLE_PERM, b, permLevel, actionType);
 				perm.change(permChange);
-
 			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_set_perm_syntax_error"));
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "on/off."));
 				return;
 			}
+		}
 		}
 
 		// Propagate perms to all unchanged townblocks
@@ -3605,7 +3549,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			try {
 				BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
 			} catch (CancelledEventException e) {
-				sender.sendMessage(e.getCancelMessage());
+				TownyMessaging.sendErrorMsg(sender, e.getCancelMessage());
 				continue;
 			}
 
@@ -3621,14 +3565,61 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Translator translator = Translator.locale(sender);
 		TownyMessaging.sendMsg(sender, translator.of("msg_set_perms"));
 		TownyMessaging.sendMessage(sender, (Colors.Green + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
-		TownyMessaging.sendMessage(sender, Colors.Green + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + " " +
-										   Colors.Green + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + " " +
-										   Colors.Green + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) + " " +
-										   Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")));
+		String on = translator.of("status_on");
+		String off = translator.of("status_off");
+		TownyMessaging.sendMessage(sender, Colors.Green + translator.of("status_pvp") + " " + (perm.pvp ? on : off) + " " +
+										   Colors.Green + translator.of("explosions") + " " + (perm.explosion ? on : off) + " " +
+										   Colors.Green + translator.of("firespread") + " " + (perm.fire ? on : off) + " " +
+										   Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? on : off));
 
 		// Reset all caches as this can affect everyone.
 		plugin.resetCache();
 
+	}
+
+	private static void displaySetPlotPermissionsHelp(CommandSender sender, TownBlockOwner townBlockOwner) {
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/... set perm"));
+		if (townBlockOwner instanceof Town)
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
+		if (townBlockOwner instanceof Resident)
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "[on/off]", "Toggle all permissions"));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "[level/type] [on/off]", ""));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "[level] [type] [on/off]", ""));
+		TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "set perm", "reset", ""));
+		if (townBlockOwner instanceof Town)
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/town set perm", "ally off", ""));
+		if (townBlockOwner instanceof Resident)
+			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("Eg", "/resident set perm", "friend build on", ""));
+	}
+
+	private static void resetTownBlockOwnersTownBlocks(CommandSender sender, TownBlockOwner townBlockOwner) {
+		// reset all townBlock permissions (by town/resident)
+		for (TownBlock townBlock : townBlockOwner.getTownBlocks()) {
+
+			if ((townBlockOwner instanceof Town && !townBlock.hasResident()) || 
+				(townBlockOwner instanceof Resident && townBlock.hasResident())) {
+
+				TownyPermissionChange permChange = new TownyPermissionChange(TownyPermissionChange.Action.RESET, true, townBlock);
+				try {
+					BukkitTools.ifCancelledThenThrow(new TownBlockPermissionChangeEvent(townBlock, permChange));
+				} catch (CancelledEventException e) {
+					TownyMessaging.sendErrorMsg(sender, e.getCancelMessage());
+					return;
+				}
+				// Reset permissions
+				townBlock.setType(townBlock.getType());
+				townBlock.save();
+			}
+		}
+		if (townBlockOwner instanceof Town)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "Town owned"));
+		else
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_perms_reset", "your"));
+
+		// Reset all caches as this can affect everyone.
+		plugin.resetCache();
 	}
 
 	public static void parseTownClaimCommand(Player player, String[] split) throws TownyException {
