@@ -2050,3 +2050,5 @@ townyadmin_nation_set_help_0: "Sets the founding date of a nation."
 msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
 msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
 msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
+#The format used for the /t say and /n say commands.
+town_say_format: "%s says: %s"
