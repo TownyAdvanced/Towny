@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.plot;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyWorld;
@@ -7,18 +7,15 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.TownyUniverse;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Warning;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
- * This event is no longer called.
- * @deprecated since 0.99.6.4 use {@link com.palmergames.bukkit.towny.event.plot.PlayerChangePlotEvent} instead.
+ * Author: Chris H (Zren / Shade)
+ * Date: 4/15/12
  */
-@Deprecated
-@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.plot package.")
 public class PlayerChangePlotEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();

@@ -1,18 +1,11 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.plot;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermissionChange;
-
-import org.bukkit.Warning;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * This event is no longer called.
- * @deprecated since 0.99.6.4 use {@link com.palmergames.bukkit.towny.event.plot.TownBlockPermissionChangeEvent} instead.
- */
-@Deprecated
-@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.plot package.")
 public class TownBlockPermissionChangeEvent extends CancellableTownyEvent {
 
 	private static final HandlerList handlers = new HandlerList();
