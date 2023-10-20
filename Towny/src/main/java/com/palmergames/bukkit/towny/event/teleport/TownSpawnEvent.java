@@ -1,18 +1,17 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.teleport;
 
+import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Location;
-import org.bukkit.Warning;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * This event is no longer called.
- * @deprecated since 0.99.6.4 use {@link com.palmergames.bukkit.towny.event.teleport.TownSpawnEvent} instead.
+ * An event called when town spawns occur.
+ * 
+ * @author Suneet Tipirneni (Siris)
  */
-@Deprecated
-@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.town package.")
 public class TownSpawnEvent extends SpawnEvent {
 	
 	private final Town fromTown;
