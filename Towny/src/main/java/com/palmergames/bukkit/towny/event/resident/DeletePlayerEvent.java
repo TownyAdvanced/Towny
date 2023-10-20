@@ -1,18 +1,11 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.resident;
 
+import com.palmergames.bukkit.towny.event.TownyObjDeleteEvent;
 import com.palmergames.bukkit.towny.object.Resident;
-
-import org.bukkit.Warning;
 import org.bukkit.event.HandlerList;
 
 import java.util.UUID;
 
-/**
- * This event is no longer called.
- * @deprecated since 0.99.6.4 use {@link com.palmergames.bukkit.towny.event.resident.DeletePlayerEvent} instead.
- */
-@Deprecated
-@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.resident package.")
 public class DeletePlayerEvent extends TownyObjDeleteEvent {
     private static final HandlerList handlers = new HandlerList();
 
