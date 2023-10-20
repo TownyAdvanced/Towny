@@ -9155,3 +9155,5 @@ v0.92.0.11:
     - Useful for plugins that want to artifically increase or decrease a Town's TownLevel.
   - Fix NoClassDefFoundError that appears on 1.16.5 servers when /t outpost list is used.
     - Closes #7037.
+0.99.6.4:
+  - Make it clearer when a message is sent via the /t say and /n say commands.

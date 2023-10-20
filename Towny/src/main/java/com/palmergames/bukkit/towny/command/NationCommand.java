@@ -69,7 +69,6 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -556,7 +555,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "say":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode());
-			nationSay(getNationFromPlayerOrThrow(player), StringMgmt.remFirstArg(split));
+			nationSay(player, StringMgmt.remFirstArg(split));
 			break;
 		case "bankhistory":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_BANKHISTORY.getNode());
@@ -599,11 +598,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return false;
 }
 
-	private void nationSay(Nation nation, String[] split) throws TownyException {
+	private void nationSay(Player player, String[] split) throws TownyException {
 		if (split.length == 0)
 			throw new TownyException("ex: /n say [message here]");
-		TownyMessaging.sendPrefixedNationMessage(nation, TownyComponents.stripClickTags(StringMgmt.join(split)));
-
+		getNationFromPlayerOrThrow(player).playerBroadCastMessageToNation(player, StringMgmt.join(split));
 	}
 
 	private void nationBankHistory(Player player, String[] split) throws TownyException {
