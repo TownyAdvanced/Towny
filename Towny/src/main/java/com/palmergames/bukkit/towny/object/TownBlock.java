@@ -4,7 +4,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.event.PlotChangeTypeEvent;
+import com.palmergames.bukkit.towny.event.plot.PlotChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotClaimEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreClaimEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreUnclaimEvent;
