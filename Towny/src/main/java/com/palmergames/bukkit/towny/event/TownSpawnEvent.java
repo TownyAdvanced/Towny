@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * @deprecated since 0.99.6.4 use {@link com.palmergames.bukkit.towny.event.teleport.TownSpawnEvent} instead.
  */
 @Deprecated
-@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.town package.")
+@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.teleport package.")
 public class TownSpawnEvent extends SpawnEvent {
 	
 	private final Town fromTown;

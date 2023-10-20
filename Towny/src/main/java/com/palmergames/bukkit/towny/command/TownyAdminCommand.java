@@ -16,7 +16,7 @@ import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.conversation.SetupConversation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
-import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.town.TownRemoveResidentRankEvent;

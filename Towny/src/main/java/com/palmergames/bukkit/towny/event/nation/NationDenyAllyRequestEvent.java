@@ -1,17 +1,10 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.nation;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
-
-import org.bukkit.Warning;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * This event is no longer called.
- * @deprecated since 0.99.6.4 use {@link com.palmergames.bukkit.towny.event.nation.NationDenyAllyRequestEvent} instead.
- */
-@Deprecated
-@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.nation package.")
 public class NationDenyAllyRequestEvent extends CancellableTownyEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 

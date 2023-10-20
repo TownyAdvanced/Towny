@@ -1,39 +1,38 @@
-package com.palmergames.bukkit.towny.event;
+package com.palmergames.bukkit.towny.event.nation;
 
+import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
-
-import org.bukkit.Warning;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * This event is no longer called.
- * @deprecated since 0.99.6.4 use {@link com.palmergames.bukkit.towny.event.nation.PreDeleteNationEvent} instead.
- */
-@Deprecated
-@Warning(reason = "Event is no longer called. Event has been moved to the com.palmergames.bukkit.towny.event.nation package.")
-public class PreDeleteNationEvent extends CancellableTownyEvent {
+public class NationPreAddTownEvent extends CancellableTownyEvent {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 
+	private final String townName;
+	private final Town town;
 	private final String nationName;
 	private final Nation nation;
-	
-	public PreDeleteNationEvent(Nation nation) {
+
+	public NationPreAddTownEvent(Nation nation, Town town) {
+		this.townName = town.getName();
+		this.town = town;
 		this.nation = nation;
 		this.nationName = nation.getName();
 	}
 
-	/**
-	 *
-	 * @return the deleted nation name.
-	 */
+	public String getTownName() {
+		return townName;
+	}
+
 	public String getNationName() {
 		return nationName;
 	}
 
-	/**
-	 * @return the deleted nation object.
-	 */
+	public Town getTown() {
+		return town;
+	}
+
 	public Nation getNation() {
 		return nation;
 	}
