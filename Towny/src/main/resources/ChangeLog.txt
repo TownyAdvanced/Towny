@@ -9157,3 +9157,5 @@ v0.92.0.11:
     - Closes #7037.
 0.99.6.4:
   - Make it clearer when a message is sent via the /t say and /n say commands.
+  - Fix un-changed townblocks with custom plot types not having their permissions altered by the /t set perm command.
+    - Closes #7043.
