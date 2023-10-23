@@ -9159,3 +9159,12 @@ v0.92.0.11:
   - Make it clearer when a message is sent via the /t say and /n say commands.
   - Fix un-changed townblocks with custom plot types not having their permissions altered by the /t set perm command.
     - Closes #7043.
+  - Add projectile breaking protection for dripstone & pots, courtesy of Warrior with PR #7040.
+  - Make status screen sending respect the async eco setting, courtesy of Warrior with PR #7038.
+  - Add new switches from 23w41a and 23w42a, courtesy of Warrior with PR #7042.
+  - Add floodfill claim command, courtesy of Warrior with PR #7012.
+  - New Command: /t claim fill
+    - Fills a surrounded section with claims for a town.
+  - New Permission Node: towny.command.town.claim.fill
+    - Child node of towny.command.town.claim.*
+    - No changes to townyperms.yml required.
