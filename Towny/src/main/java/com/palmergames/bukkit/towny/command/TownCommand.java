@@ -93,6 +93,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.tasks.TownClaim;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.towny.utils.MapUtil;
@@ -103,7 +104,6 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -268,7 +268,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"outpost",
 		"auto",
 		"circle",
-		"rect"
+		"rect",
+		"fill"
 	);
 	
 	public static final List<String> townUnclaimTabCompletes = Arrays.asList(
@@ -803,7 +804,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "say":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_SAY.getNode());
 			catchRuinedTown(player);
-			TownyMessaging.sendPrefixedTownMessage(getTownFromPlayerOrThrow(player), TownyComponents.stripClickTags(StringMgmt.join(StringMgmt.remFirstArg(split))));
+			getTownFromPlayerOrThrow(player).playerBroadCastMessageToTown(player, StringMgmt.join(StringMgmt.remFirstArg(split)));
 			break;
 		case "outlaw", "ban":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode());
@@ -3712,6 +3713,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			selection.add(key);
 			outpost = true;
 
+		} else if (split.length == 1 && "fill".equalsIgnoreCase(split[0])) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_FILL.getNode());
+			
+			final BorderUtil.FloodfillResult result = BorderUtil.getFloodFillableCoords(town, key);
+			if (result.type() != BorderUtil.FloodfillResult.Type.SUCCESS)
+				throw result.feedback() != null ? new TownyException(result.feedback()) : new TownyException();
+			else if (result.feedback() != null)
+				TownyMessaging.sendMsg(player, result.feedback());
+			
+			selection = new ArrayList<>(result.coords());
 		} else {
 			
 			// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
@@ -3725,13 +3736,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			
 			if (selection.size() > 1) 
 				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode());
-
-			// Filter out any TownBlocks which aren't Wilderness. 
-			selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
-
-			if (selection.isEmpty())
-				throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 		}
+
+		// Filter out any TownBlocks which aren't Wilderness. 
+		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
+
+		if (selection.isEmpty())
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
 		// Not enough available claims.
 		if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
@@ -4283,7 +4294,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * This is run async because it will ping the economy plugin for the town bank value.
 		 */
-		plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
+		TownyEconomyHandler.economyExecutor().execute(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
 	}
 
 	private void townResList(CommandSender sender, String[] args) throws TownyException {

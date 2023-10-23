@@ -28,6 +28,7 @@ public class BonusBlockPurchaseTests {
 	
 	@BeforeEach
 	void reset() {
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK.getRoot(), 25.0D);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1);
 		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), -1);
 	}
@@ -68,6 +69,18 @@ public class BonusBlockPurchaseTests {
 		 * So to stay under the max price of 200, we need to use 12 instead of 13.
 		 */
 		double expected = calculateExpected(25, 1.2, 12) + (100 - 12) * 200;
+		assertEquals(expected, cost);
+	}
+	
+	@Test
+	void testBuy26After59ExponentialWithMaxPrice() {
+		// The Synchro test.
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK.getRoot(), 3000.0D);
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCK_INCREASE.getRoot(), 1.1D);
+		TownySettings.getConfig().set(ConfigNodes.ECO_PRICE_PURCHASED_BONUS_TOWNBLOCKS_MAXIMUM.getRoot(), 250000.0D);
+
+		double cost = MoneyUtil.returnPurchasedBlocksCost(59, 26, town);
+		double expected = 6500000;
 		assertEquals(expected, cost);
 	}
 	

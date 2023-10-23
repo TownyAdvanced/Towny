@@ -452,8 +452,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return getMoney(TownySettings.getUpkeepPenalty());
 		case "daily_town_upkeep_reduction_from_town_level": // %townyadvanced_daily_town_upkeep_reduction_from_town_level%
 			cost = resident.hasTown() 
-				? TownySettings.getTownLevel(resident.getTownOrNull()).upkeepModifier()
-				: TownySettings.getTownLevel(1).upkeepModifier();
+				? resident.getTownOrNull().getTownLevel().upkeepModifier()
+				: 1.0;
 			return cost == 1.0 ? "0" : String.valueOf(dFormat.format((1.0 - cost) * 100));
 		case "daily_town_upkeep_reduction_from_nation_level": // %townyadvanced_daily_town_upkeep_reduction_from_nation_level%
 			cost = resident.hasNation() 
