@@ -318,11 +318,52 @@ public class TownySettings {
 	}
 
 	public static TownLevel getTownLevel(Town town) {
-		return getTownLevel(town.getLevel());
+		return getTownLevel(town.getLevelNumber());
 	}
 
+	/**
+	 * @deprecated since 0.99.6.3 use {@link #getTownLevelWithModifier(int, Town)}
+	 *             instead.
+	 * @param town      Town to test with.
+	 * @param residents an int representing what modifies a townlevel, typically the
+	 *                  number of residents in the town.
+	 * @return the TownLevel given the number of residents.
+	 */
+	@Deprecated
 	public static TownLevel getTownLevel(Town town, int residents) {
-		return getTownLevel(town.getLevel(residents));
+		return getTownLevelWithModifier(residents, town);
+	}
+
+	public static TownLevel getTownLevelWithModifier(int modifier, Town town) {
+		return getTownLevel(getTownLevelFromGivenInt(modifier, town));
+	}
+
+	/**
+	 * Get the town level for a given population size.
+	 * <p>
+	 *     Great for debugging, or just to see what the town level is for a given amount of residents. 
+	 *     But for most cases you'll want to use {@link Town#getLevel()}, which uses the town's current population.
+	 *     <br />
+	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.
+	 * </p>
+	 * @param threshold Number of residents used to calculate the level.
+	 * @param town the Town from which to get a TownLevel.
+	 * @return The calculated Town Level. 0, if the town is ruined, or the method otherwise fails through.
+	 */
+	@ApiStatus.Internal
+	public static int getTownLevelFromGivenInt(int threshold, Town town) {
+		if (town.isRuined())
+			return 0;
+
+		for (int level : configTownLevel.keySet())
+			if (threshold >= level)
+				return level;
+		return 0;
+	}
+
+	public static int getTownLevelMax() {
+		return configTownLevel.size();
 	}
 
 	public static NationLevel getNationLevel(int levelNumber) {
@@ -368,7 +409,7 @@ public class TownySettings {
 	}
 
 	public static int getNationLevelMax() {
-		return TownySettings.getConfigNationLevel().size();
+		return configNationLevel.size();
 	}
 
 	public static boolean isNationLevelDeterminedByTownCount() {
@@ -1043,7 +1084,7 @@ public class TownySettings {
 	}
 
 	public static String getMayorPrefix(Resident resident) {
-		return resident.isMayor() ? getTownLevel(resident.getTownOrNull()).mayorPrefix() : "";
+		return resident.isMayor() ? resident.getTownOrNull().getTownLevel().mayorPrefix() : "";
 	}
 
 	public static String getCapitalPostfix(Town town) {
@@ -1057,7 +1098,7 @@ public class TownySettings {
 	public static String getTownPostfix(Town town) {
 
 		try {
-			return Colors.translateColorCodes(getTownLevel(town).namePostfix());
+			return Colors.translateColorCodes(town.getTownLevel().namePostfix());
 		} catch (Exception e) {
 			sendError("getTownPostfix.");
 			return "";
@@ -1087,7 +1128,7 @@ public class TownySettings {
 	public static String getTownPrefix(Town town) {
 
 		try {
-			return Colors.translateColorCodes(getTownLevel(town).namePrefix());
+			return Colors.translateColorCodes(town.getTownLevel().namePrefix());
 		} catch (Exception e) {
 			sendError("getTownPrefix.");
 			return "";
@@ -1107,7 +1148,7 @@ public class TownySettings {
 	}
 
 	public static String getMayorPostfix(Resident resident) {
-		return resident.isMayor() ? getTownLevel(resident.getTownOrNull()).mayorPostfix() : "";
+		return resident.isMayor() ? resident.getTownOrNull().getTownLevel().mayorPostfix() : "";
 	}
 
 	public static String getNPCPrefix() {
@@ -1193,7 +1234,7 @@ public class TownySettings {
 		int n = town.getBonusBlocks() + town.getPurchasedBlocks();
 
 		if (ratio == 0)
-			n += getTownLevel(town).townBlockLimit();
+			n += town.getTownLevel().townBlockLimit();
 		else
 			n += town.getNumResidents() * ratio;
 
@@ -1211,7 +1252,7 @@ public class TownySettings {
 		int amount = town.getBonusBlocks() + town.getPurchasedBlocks();
 
 		if (ratio == 0)
-			amount += getTownLevel(town, residents).townBlockLimit();
+			amount += getTownLevelWithModifier(residents, town).townBlockLimit();
 		else
 			amount += residents * ratio;
 
@@ -1225,7 +1266,7 @@ public class TownySettings {
 
 	public static int getMaxOutposts(Town town, int residentsAmount, int townsAmount) {
 		
-		int townOutposts = getTownLevel(town, residentsAmount).townOutpostLimit();
+		int townOutposts = getTownLevelWithModifier(residentsAmount, town).townOutpostLimit();
 		int nationOutposts = 0;
 		if (town.hasNation()) {
 			int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? townsAmount : residentsAmount;
@@ -1236,7 +1277,7 @@ public class TownySettings {
 	
 	public static int getMaxOutposts(Town town) {
 		
-		int townOutposts = getTownLevel(town).townOutpostLimit();
+		int townOutposts = town.getTownLevel().townOutpostLimit();
 		int nationOutposts = 0;
 		if (town.hasNation()) {
 			Nation nation = town.getNationOrNull();
@@ -1249,7 +1290,7 @@ public class TownySettings {
 	
 	public static int getMaxBonusBlocks(Town town, int residents) {
 		
-		return getTownLevel(town, residents).townBlockBuyBonusLimit();
+		return getTownLevelWithModifier(residents, town).townBlockBuyBonusLimit();
 	}
 	
 	public static int getMaxBonusBlocks(Town town) {
@@ -1638,7 +1679,7 @@ public class TownySettings {
 	}
 
 	public static double getTownNeutralityCost(Town town) {
-		double cost = getTownLevel(town, town.getNumResidents()).peacefulCostMultiplier() * getTownNeutralityCost();
+		double cost = town.getTownLevel().peacefulCostMultiplier() * getTownNeutralityCost();
 		return isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
 	}
 
@@ -2079,11 +2120,11 @@ public class TownySettings {
 			return 0.0;
 
 		// When we are doing per-plot-upkeep we use the town size instead of the upkeep modified in the Town Level.
-		double townMultiplier = isUpkeepByPlot() ? town.getTownBlocks().size() : getTownLevel(town).upkeepModifier();
+		double townMultiplier = isUpkeepByPlot() ? town.getTownBlocks().size() : town.getTownLevel().upkeepModifier();
 		// If the town has a nation we will be altering thing with the nation's TownUpkeepModifier, or 1.0 if no nation.
 		double nationMultiplier = town.hasNation() ? town.getNationOrNull().getNationLevel().nationTownUpkeepModifier() : 1.0;
 		// There's the chance that even with per-plot-upkeep, the townLevel upkeep modifier is still used, or 1.0 if not. 
-		double townLevelPlotModifier = isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep() ? getTownLevel(town).upkeepModifier() : 1.0;
+		double townLevelPlotModifier = isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep() ? town.getTownLevel().upkeepModifier() : 1.0;
 		// Amount is calculated using the above multipliers.
 		double amount = ((getTownUpkeep() * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
 
@@ -2909,7 +2950,7 @@ public class TownySettings {
 	}
 
 	public static double getTownBankCap(Town town) {
-		return getTownLevel(town).bankCapModifier * getTownBankCap(); 
+		return town.getTownLevel().bankCapModifier * getTownBankCap(); 
 	}
 
 	public static double getTownBankCap() {

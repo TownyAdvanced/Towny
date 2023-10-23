@@ -506,5 +506,15 @@
         "key": "add_milkable_animals_to_farm_plot"
       }
     ]
+  },
+  {
+    "version": "0.99.6.4",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.switch_ids",
+        "value": ",DECORATED_POT,CRAFTER"
+      }
+    ]
   }
 ]

@@ -104,7 +104,6 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -805,7 +804,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "say":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_SAY.getNode());
 			catchRuinedTown(player);
-			TownyMessaging.sendPrefixedTownMessage(getTownFromPlayerOrThrow(player), TownyComponents.stripClickTags(StringMgmt.join(StringMgmt.remFirstArg(split))));
+			getTownFromPlayerOrThrow(player).playerBroadCastMessageToTown(player, StringMgmt.join(StringMgmt.remFirstArg(split)));
 			break;
 		case "outlaw", "ban":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_OUTLAW.getNode());
@@ -4295,7 +4294,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * This is run async because it will ping the economy plugin for the town bank value.
 		 */
-		plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
+		TownyEconomyHandler.economyExecutor().execute(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(town, sender)));
 	}
 
 	private void townResList(CommandSender sender, String[] args) throws TownyException {

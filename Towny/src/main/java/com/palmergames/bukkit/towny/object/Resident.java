@@ -324,7 +324,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		try {
 			town.removeResident(this);
 		} catch (EmptyTownException e) {
-			TownyUniverse.getInstance().getDataSource().removeTown(town, false);
+			if (town.exists())
+				TownyUniverse.getInstance().getDataSource().removeTown(town, false);
 		} catch (NotRegisteredException ignored) {}
 
 		try {

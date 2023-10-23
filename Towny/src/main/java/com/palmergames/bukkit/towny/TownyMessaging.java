@@ -26,7 +26,6 @@ import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -612,7 +611,7 @@ public class TownyMessaging {
 				.append(dash);
 
 			TextComponent outpostName = Component.text(name, NamedTextColor.GREEN);
-			TextComponent worldName = Component.text(Optional.ofNullable(outpost.getWorld()).map(World::getName).orElse("null"), NamedTextColor.BLUE);
+			TextComponent worldName = Component.text(Optional.ofNullable(outpost.getWorld()).map(w -> w.getName()).orElse("null"), NamedTextColor.BLUE);
 			TextComponent coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")", NamedTextColor.BLUE);
 
 			if (!name.equalsIgnoreCase("")) {

@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
@@ -32,15 +33,19 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.LlamaSpit;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ShulkerBullet;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Trident;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
@@ -822,7 +827,7 @@ public class TownyEntityListener implements Listener {
 		 */
 		Block hitBlock = event.getHitBlock();
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) 
-			|| hitBlock == null || (hitBlock.getType() != Material.TARGET && hitBlock.getType() != Material.CHORUS_FLOWER))
+			|| hitBlock == null || (hitBlock.getType() != Material.TARGET && !ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType())))
 			return;
 
 		// Prevent non-player actions outright if it is in a town.
@@ -833,7 +838,7 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Prevent players based on their PlayerCache/towny's cancellable event.
-		if (disallowedTargetSwitch(hitBlock, player) || disallowedChorusFlowerBreak(hitBlock, player)) {
+		if (disallowedTargetSwitch(hitBlock, player) || disallowedProjectileBlockBreak(hitBlock, event.getEntity(), player)) {
 			cancelProjectileHitEvent(event, hitBlock);
 		}
 	}
@@ -843,8 +848,16 @@ public class TownyEntityListener implements Listener {
 			&& !TownyActionEventExecutor.canSwitch(player, hitBlock.getLocation(), hitBlock.getType());
 	}
 
-	private boolean disallowedChorusFlowerBreak(Block hitBlock, Player player) {
-		return hitBlock.getType() == Material.CHORUS_FLOWER && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType());
+	private boolean disallowedProjectileBlockBreak(Block hitBlock, Projectile projectile, Player player) {
+		// Pointed dripstone can only be broken by tridents
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_17) && hitBlock.getType() == Material.POINTED_DRIPSTONE && !(projectile instanceof Trident))
+			return false;
+
+		// Decorated pots can't be broken by these 3 projectiles
+		if (hitBlock.getType().getKey().equals(NamespacedKey.minecraft("decorated_pot")) && (projectile instanceof ShulkerBullet || projectile instanceof EnderPearl || projectile instanceof LlamaSpit))
+			return false;
+
+		return ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType()) && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType());
 	}
 
 	private void cancelProjectileHitEvent(ProjectileHitEvent event, Block block) {
