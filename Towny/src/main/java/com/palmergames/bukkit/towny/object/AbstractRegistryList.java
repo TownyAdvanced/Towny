@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -174,6 +176,13 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 
 		public Builder<T, F> filter(@NotNull Predicate<T> predicate) {
 			allMatchPredicates.add(predicate);
+			return this;
+		}
+		
+		public Builder<T, F> conditionally(@NotNull BooleanSupplier supplier, @NotNull Consumer<Builder<T, F>> consumer) {
+			if (supplier.getAsBoolean())
+				consumer.accept(this);
+			
 			return this;
 		}
 	}
