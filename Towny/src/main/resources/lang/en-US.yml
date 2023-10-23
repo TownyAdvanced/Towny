@@ -2359,3 +2359,7 @@ msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
 
 # The format used for the /t say and /n say commands.
 town_say_format: "%s says: %s"
+
+msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
+msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
+msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
