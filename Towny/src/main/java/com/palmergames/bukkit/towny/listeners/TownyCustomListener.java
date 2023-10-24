@@ -15,12 +15,14 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
@@ -30,6 +32,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
@@ -261,5 +264,21 @@ public class TownyCustomListener implements Listener {
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onTownBlockPermissionChange(TownBlockPermissionChangeEvent event) {
+		WorldCoord wc = event.getTownBlock().getWorldCoord();
+		for (Player player : Bukkit.getOnlinePlayers())
+			Towny.getPlugin().getScheduler().runAsync(() -> attemptPlayerCacheReset(player, wc));
+	}
+
+	private void attemptPlayerCacheReset(Player player, WorldCoord worldCoord) {
+		if (!worldCoord.getWorldName().equalsIgnoreCase(player.getWorld().getName()))
+			return;
+		PlayerCache cache = Towny.getPlugin().getCache(player);
+		if (cache == null || PlayerCacheUtil.isOwnerCache(cache) || !cache.getLastTownBlock().equals(worldCoord))
+			return;
+		Towny.getPlugin().resetCache(player);
 	}
 }

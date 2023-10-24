@@ -9168,3 +9168,5 @@ v0.92.0.11:
   - New Permission Node: towny.command.town.claim.fill
     - Child node of towny.command.town.claim.*
     - No changes to townyperms.yml required.
+0.99.6.5:
+  - Add a listener which will reset the player cache when they are inside of a plot or town which has had their plot permissions change.

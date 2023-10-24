@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -25,6 +26,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Groups all the cache status and permissions in one place.
@@ -481,5 +483,19 @@ public class PlayerCacheUtil {
 			return townBlock.getData().getAllowedBlocks().contains(material);
 
 		return true;
+	}
+
+	/**
+	 * Does the given cache have a TownBlockStatus which is admin, plot_owner or
+	 * town_owner. These TownBlockStatus values will always allow for all
+	 * interactions.
+	 * 
+	 * @param cache PlayerCache to check for, do not pass a null cache.
+	 * @return true if the cache's TownBlockStatus is a admin, plot or town owner.
+	 */
+	public static boolean isOwnerCache(@NotNull PlayerCache cache) {
+		Preconditions.checkNotNull(cache, "Cache cannot be null.");
+		TownBlockStatus status = cache.getStatus();
+		return status.equals(TownBlockStatus.ADMIN) || status.equals(TownBlockStatus.PLOT_OWNER) || status.equals(TownBlockStatus.TOWN_OWNER);
 	}
 }
