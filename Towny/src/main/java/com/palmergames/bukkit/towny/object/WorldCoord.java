@@ -166,15 +166,6 @@ public class WorldCoord extends Coord {
 	public TownyWorld getTownyWorld() {
 		return TownyAPI.getInstance().getTownyWorld(this.worldName);
 	}
-
-	/**
-	 * @deprecated as of 0.98.4.9, please use {@link #getTownyWorld()} instead.
-	 */
-	@Nullable
-	@Deprecated
-	public TownyWorld getTownyWorldOrNull() {
-		return TownyAPI.getInstance().getTownyWorld(this.worldName);
-	}
 	
 	/**
 	 * Shortcut for TownyUniverse.getInstance().getTownBlock(WorldCoord).

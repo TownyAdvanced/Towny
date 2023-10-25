@@ -2176,11 +2176,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendTownBoard(sender, town);
 	}
 
-	@Deprecated // Some time during 0.98.*.*
-	public static void townSetTitle(CommandSender sender, String[] split, boolean admin, Town town, Resident resident, Player player) throws TownyException {
-		townSetTitle(sender, split, admin);
-	}
-
 	public static void townSetTitle(@NotNull CommandSender sender, @NotNull String[] split, boolean admin) throws TownyException {
 		// Give the resident a title
 		if (split.length < 2)
@@ -2228,11 +2223,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(sender, message);
 	}
 
-	@Deprecated // Some time during 0.98.*.*
-	public static void townSetSurname(CommandSender sender, String[] split, boolean admin, Town town, Resident resident, Player player) throws TownyException {
-		townSetSurname(sender, split, admin);
-	}
-	
 	public static void townSetSurname(CommandSender sender, String[] split, boolean admin) throws TownyException {
 		// Give the resident a surname
 		if (split.length < 2)

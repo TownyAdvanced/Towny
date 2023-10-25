@@ -44,25 +44,6 @@ public class PreTownPaysNationTaxEvent extends CancellableTownyEvent {
 		this.tax = tax;
 	}
 
-	/**
-	 * 
-	 * @return {@link #getCancelMessage()}
-	 * @deprecated since 0.98.4.0 use {@link #getCancelMessage()}
-	 */
-	@Deprecated
-	public String getCancellationMessage() {
-		return getCancelMessage();
-	}
-
-	/**
-	 * @param cancellationMessage String that will display if this Event is cancelled.
-	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}
-	 */
-	@Deprecated
-	public void setCancellationMessage(String cancellationMessage) {
-		setCancelMessage(cancellationMessage);
-	}
-
 	public static HandlerList getHandlerList() {
 		return HANDLER_LIST;
 	}

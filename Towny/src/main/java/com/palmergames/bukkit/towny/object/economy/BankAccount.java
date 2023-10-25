@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.event.economy.TownEntersBankruptcyEvent;
@@ -31,31 +30,6 @@ public class BankAccount extends Account {
 	public BankAccount(String name, World world, Government government) {
 		super(name, world);
 		this.government = government;
-	}
-
-	/**
-	 * @deprecated since 0.98.6.9, use {@link #BankAccount(String, World, Government)} instead.
-	 * 
-	 * @param name Name of the {@link EconomyAccount} that will be used, ie: town-townname.
-	 * @param world World attacked to this BankAccount.
-	 * @param balanceCap Unused as of 0.98.6.9.
-	 */
-	@Deprecated
-	public BankAccount(String name, World world, double balanceCap) {
-		super(name, world);
-		if (this.getName().startsWith(TownySettings.getTownAccountPrefix()))
-			this.government = TownyUniverse.getInstance().getTown(this.getName().replace(TownySettings.getTownAccountPrefix(), ""));
-		else
-			this.government = TownyUniverse.getInstance().getNation(this.getName().replace(TownySettings.getNationAccountPrefix(), ""));
-	}
-
-	/**
-	 * @deprecated since 0.98.6.9, balance caps are now dynamic.
-	 * @param balanceCap The max amount allowed in this account.
-	 */
-	@Deprecated
-	public void setBalanceCap(double balanceCap) {
-		return;
 	}
 
 	/**

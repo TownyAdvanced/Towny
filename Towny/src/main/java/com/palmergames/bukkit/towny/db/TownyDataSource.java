@@ -82,14 +82,6 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadRegenList();
 
-	/**
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
-	 */
-	@Deprecated
-	public boolean loadSnapshotList() {
-		return true;
-	}
-
 	abstract public boolean loadTownBlocks();
 
 	abstract public boolean loadJailList();
@@ -108,20 +100,7 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadPlotGroup(PlotGroup group);
 
-	@Deprecated // Some time during 0.98.*.*
-	public boolean saveWorldList() {
-		return true;
-	}
-
 	abstract public boolean saveRegenList();
-
-	/**
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
-	 */
-	@Deprecated
-	public boolean saveSnapshotList() {
-		return true;
-	}
 
 	abstract public boolean saveResident(Resident resident);
 

@@ -259,29 +259,6 @@ public abstract class TownyPermissionSource {
 
 		return has == TriState.TRUE || isTownyAdmin(permissible);
 	}
-	
-	/**
-	 * Unused by Towny, scheduled for removal.
-	 * @deprecated since 0.98.4.6 use {@link #testPermission(Permissible, String)} instead.
-	 * @param permissible Permissible to check.
-	 * @param node PermissionNode to check for.
-	 * @return true if the Permissble has the PermissionNodes.
-	 */
-	@Deprecated
-	public boolean testPermission(Permissible permissible, PermissionNodes node) {
-		return testPermission(permissible, node.getNode());
-	}
-
-	/**
-	 * @param player Player to check
-	 * @param node Permission node to check for
-	 * @return true if the player has this permission node or is Op.
-	 * @deprecated since 0.98.4.6 use {@link #testPermission(Permissible, String)} instead.
-	 */
-	@Deprecated
-	public boolean has(Player player, String node) {
-		return testPermission(player, node);
-	}
 
 	/**
 	 * Return true if a player has a certain, specific permission node or a parent

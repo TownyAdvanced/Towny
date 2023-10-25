@@ -329,7 +329,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			// Add extra message if the player has permission to evict 
 			if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode())) {
 				try {
-					plotTestOwner(resident, selection.get(0).getTownBlock());
+					TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 					message.append(Translatable.of("msg_plot_claim_consider_evict_instead"));
 				} catch (TownyException ignored) {}
 			}
@@ -1991,19 +1991,5 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_plot_not_associated_with_a_group"));
 		
 		return townBlock.getPlotObjectGroup();
-	}
-
-	/**
-	 * Test the townBlock to ensure we are either the plot owner, or the
-	 * mayor/assistant, or a TownyAdmin.
-	 * 
-	 * @param resident Resident Object.
-	 * @param townBlock TownBlock Object.
-	 * @throws TownyException Exception thrown to trigger failures in the methods using this method.
-	 * @deprecated since 0.98.4.5 use {@link TownyAPI#testPlotOwnerOrThrow(Resident, TownBlock)} instead.
-	 */
-	@Deprecated
-	public static void plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
-		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 	}
 }

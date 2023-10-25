@@ -56,24 +56,6 @@ public abstract class TownToggleEvent extends CancellableTownyEvent {
 	}
 
 	/**
-	 * @return {@link #getCancelMessage()}
-	 * @deprecated since 0.98.4.0 use {@link #getCancelMessage()}
-	 */
-	@Deprecated
-	public String getCancellationMsg() {
-		return getCancelMessage();
-	}
-
-	/**
-	 * @param cancellationMsg String to set the cancellation message to.
-	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}
-	 */
-	@Deprecated
-	public void setCancellationMsg(String cancellationMsg) {
-		setCancelMessage(cancellationMsg);
-	}
-
-	/**
 	 * @return true if this toggling is because of an admin or console.
 	 */
 	public boolean isAdminAction() {

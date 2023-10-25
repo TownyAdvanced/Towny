@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.event.statusscreen;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -48,16 +47,6 @@ public class StatusScreenEvent extends Event {
 		return screen.getCommandSender();
 	}
 
-	@Deprecated // Sometime during 0.98.*.*
-	public boolean hasAdditionalLines() {
- 		return false;
- 	}
-	
-	@Deprecated // Sometime during 0.98.*.*
-	public List<Component> getAdditionalLines() {
-		return new ArrayList<>(0);
-	}
-	
 	// String methods
 
 	/**
@@ -97,14 +86,6 @@ public class StatusScreenEvent extends Event {
 	 */
 	public void addLine(String key, String line) {
 		this.screen.addComponentOf(key, "\n" + line);
-	}
-	
-	/**
-	 * @deprecated Deprecated, please use {@link #addLines(List)} instead.
-	 */
-	@Deprecated // Sometime during 0.98.*.*
-	public void setLines(List<String> lines) {
-		addLines(lines);
 	}
 	
 	// Component methods

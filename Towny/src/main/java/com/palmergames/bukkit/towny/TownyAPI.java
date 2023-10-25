@@ -884,17 +884,6 @@ public class TownyAPI {
 		return BaseCommand.getResidentsWithoutTownStartingWith(str);
 	}
 
-	
-	/**
-	 * @deprecated as of 0.98.3.7, use {@link TownyAPI#getNations(UUID[])} instead.
-	 * @param uuids List of UUIDs representing possible Nations.
-	 * @return {@link TownyAPI#getNations(UUID[])}
-	 */
-	@Deprecated
-	public List<Nation> getNation(List<UUID> uuids) {
-		return getNations(uuids);
-	}
-
 	@Nullable
 	public Town getTown(@NotNull Player player) {
 		Resident resident = getResident(player);
