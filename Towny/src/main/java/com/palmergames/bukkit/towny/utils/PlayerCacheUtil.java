@@ -495,7 +495,12 @@ public class PlayerCacheUtil {
 	 */
 	public static boolean isOwnerCache(@NotNull PlayerCache cache) {
 		Preconditions.checkNotNull(cache, "Cache cannot be null.");
-		TownBlockStatus status = cache.getStatus();
+		TownBlockStatus status;
+		try {
+			status = cache.getStatus();
+		} catch (NullPointerException e) {
+			return false;
+		}
 		return status.equals(TownBlockStatus.ADMIN) || status.equals(TownBlockStatus.PLOT_OWNER) || status.equals(TownBlockStatus.TOWN_OWNER);
 	}
 }

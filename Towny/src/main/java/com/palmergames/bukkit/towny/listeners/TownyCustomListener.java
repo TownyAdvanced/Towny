@@ -277,7 +277,7 @@ public class TownyCustomListener implements Listener {
 		if (!worldCoord.getWorldName().equalsIgnoreCase(player.getWorld().getName()))
 			return;
 		PlayerCache cache = Towny.getPlugin().getCache(player);
-		if (cache == null || PlayerCacheUtil.isOwnerCache(cache) || !cache.getLastTownBlock().equals(worldCoord))
+		if (cache == null || !cache.getLastTownBlock().equals(worldCoord) || PlayerCacheUtil.isOwnerCache(cache))
 			return;
 		Towny.getPlugin().resetCache(player);
 	}
