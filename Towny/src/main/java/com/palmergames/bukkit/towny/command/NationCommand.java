@@ -53,6 +53,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -92,7 +93,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -119,6 +122,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"set",
 		"toggle",
 		"invite",
+		"taxexempt",
 		"join",
 		"merge",
 		"townlist",
@@ -175,6 +179,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"add",
 		"remove"
 	);
+
+	private static final List<String> nationTaxExemptTabCompletes = Arrays.asList(
+		"add",
+		"remove"
+	);
 	
 	private static final List<String> nationAllyTabCompletes = Arrays.asList(
 		"add",
@@ -218,6 +227,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "townlist":
 				case "allylist":
 				case "enemylist":
+				case "taxexemptlist":
 				case "ranklist":
 				case "online":
 				case "join":
@@ -241,6 +251,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "kick":
 					if (res.hasNation())
 						return NameUtil.filterByStart(NameUtil.getNames(res.getNationOrNull().getTowns()), args[args.length - 1]);
+					break;
+				case "taxexempt":
+					if(!res.hasNation()) 
+						break;
+					if(args.length == 2) {
+						return NameUtil.filterByStart(nationTaxExemptTabCompletes, args[1]);
+					} else if(args.length > 2) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
+							case "add":
+								return NameUtil.filterByStart(nation.getTowns().stream()
+									.filter(((Predicate<? super Town>) nation.getTaxExempt()::contains).negate())
+									.map(TownyObject::getName)
+									.collect(Collectors.toList()), args[1]);
+							case "remove":
+								return NameUtil.filterByStart(nation.getTaxExempt().stream()
+									.map(TownyObject::getName)
+									.collect(Collectors.toList()), args[1]);
+							default:
+								return Collections.emptyList();
+						}
+					}
 					break;
 				case "ally":
 					if (!res.hasNation())
@@ -473,6 +504,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMYLIST.getNode());
 			nationEnemyList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 			break;
+		case "taxexemptlist":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LEADER.getNode());
+			nationTaxExemptList(player, getPlayerNationOrNationFromArg(player, StringMgmt.remFirstArg(split)));
 		case "new":
 		case "create":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode());
@@ -544,7 +578,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		case "enemy":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ENEMY.getNode());
 			nationEnemy(player, StringMgmt.remFirstArg(split));
-			break;
+			break; 
+		case "taxexempt":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LEADER.getNode());
+			nationTaxExempt(player, StringMgmt.remFirstArg(split));
 		case "delete":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DELETE.getNode());
 			nationDelete(player, StringMgmt.remFirstArg(split));
@@ -643,6 +680,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+	private void nationTaxExemptList(Player player, Nation nation) {
+		if(nation.getTaxExempt().isEmpty()) {
+			TownyMessaging.sendMsg(player, "Nation has no towns that are tax-exempt");
+			return;
+		}
+
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(nation.getName() + " Tax Exempt"));
+		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects("Tax Exempt", new ArrayList<>(nation.getTaxExempt())));
+	} 
+	
 	private void parseNationJoin(Player player, String[] args) {
 		
 		try {
@@ -1895,6 +1942,62 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
 	}
 
+	public static void nationTaxExempt(Player player, String[] split) throws TownyException {
+		TownyUniverse townyUniverse = TownyUniverse.getInstance();
+
+		if (split.length < 2) {
+			TownyMessaging.sendErrorMsg(player, "Eg: /nation taxexempt [add/remove] [town_name]");
+			return;
+		}
+
+		Resident resident = getResidentOrThrow(player);
+		Nation nation = getNationFromResidentOrThrow(resident);
+
+		ArrayList<Town> list = new ArrayList<>();
+
+		// test add or remove
+		String test = split[0];
+		String[] newSplit = StringMgmt.remFirstArg(split);
+		boolean add = test.equalsIgnoreCase("add");
+
+		if ((test.equalsIgnoreCase("remove") || test.equalsIgnoreCase("add")) && newSplit.length > 0) {
+			for (String name : newSplit) {
+				Town town = townyUniverse.getTown(name);
+				
+				if(town == null) {
+					throw new TownyException(Translatable.of("msg_err_not_registered_1", name));
+				}
+				
+				if(!town.hasNation() || town.getNation() != nation) {
+					throw new TownyException("Town is not apart of your nation");
+				}
+				
+				if (add && nation.hasTaxExempt(town))
+					TownyMessaging.sendErrorMsg(player, "Town is already tax exempt");
+				else if (!add && !nation.hasTaxExempt(town))
+					TownyMessaging.sendErrorMsg(player, "Town is not tax exempt");
+				else
+					list.add(town);
+			}
+			
+			if (!list.isEmpty()) {
+				for (Town town : list) {
+					if(add) {
+						nation.addTaxExempt(town);
+						TownyMessaging.sendPrefixedNationMessage(nation, "Added " + town.getFormattedName() + " to the tax-exempt list");
+					} else {
+						nation.removeTaxExempt(town);
+						TownyMessaging.sendPrefixedNationMessage(nation, "Removed " + town.getFormattedName() + " from the tax-exempt list");
+					}
+				}
+				
+				TownyUniverse.getInstance().getDataSource().saveNations();
+			}
+		} else {
+			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "[add/remove]"));
+		}
+	}
+	
 	public static void nationSet(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {
 		if (split.length == 0) {
 			HelpMenu.NATION_SET.send(sender);

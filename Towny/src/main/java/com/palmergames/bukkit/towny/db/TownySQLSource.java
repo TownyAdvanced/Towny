@@ -1324,6 +1324,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				for (Nation enemy : enemies) 
 					nation.addEnemy(enemy);
 			}
+			
+			line = rs.getString("taxexempt");
+			if(line != null) {
+				search = (line.contains("#")) ? "#" : ",";
+				List<Town> taxExempt = TownyAPI.getInstance().getTowns(line.split(search));
+				nation.setTaxExempt(taxExempt);
+			}
 
 			nation.setSpawnCost(rs.getFloat("spawnCost"));
 			nation.setNeutral(rs.getBoolean("neutral"));
@@ -2326,6 +2333,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("tag", nation.hasTag() ? nation.getTag() : "");
 			nat_hm.put("allies", StringMgmt.join(nation.getAllies(), "#"));
 			nat_hm.put("enemies", StringMgmt.join(nation.getEnemies(), "#"));
+			nat_hm.put("taxexempt", StringMgmt.join(nation.getTaxExempt(), "#"));
 			nat_hm.put("taxes", nation.getTaxes());
             nat_hm.put("taxpercent", nation.isTaxPercentage());
 			nat_hm.put("maxPercentTaxAmount", nation.getMaxPercentTaxAmount());

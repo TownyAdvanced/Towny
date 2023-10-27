@@ -1135,6 +1135,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
+				line = keys.get("taxexempt");
+				if(line != null) {
+					List<Town> taxExempt = TownyAPI.getInstance().getTowns(line.split(","));
+					nation.setTaxExempt(taxExempt);
+				}
+				
 				line = keys.get("spawnCost");
 				if (line != null)
 					try {
@@ -2104,6 +2110,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("allies=" + StringMgmt.join(nation.getAllies(), ","));
 
 		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
+		
+		list.add("taxexempt=" + StringMgmt.join(nation.getTaxExempt(), ","));
 
         // Taxpercent
 		list.add("taxpercent=" + nation.isTaxPercentage());

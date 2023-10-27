@@ -39,9 +39,11 @@ public class Nation extends Government {
 
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
+	
 	private final List<Town> towns = new ArrayList<>();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
+	private List<Town> taxExempt = new ArrayList<>();
 	private Town capital;
 	private final List<Invite> sentAllyInvites = new ArrayList<>();
 	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
@@ -57,6 +59,18 @@ public class Nation extends Government {
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
+	public void addTaxExemptTown(Town town) {
+		if(this.towns.contains(town)) {
+			this.taxExempt.add(town);
+		}
+	}
+	
+	public void removeTaxExemptTown(Town town) {
+		if(this.towns.contains(town)) {
+			this.taxExempt.remove(town);
+		}
+	}
+	
 	public void addAlly(Nation nation) {
 
 		if (!hasAlly(nation)) {
@@ -123,6 +137,26 @@ public class Nation extends Government {
 		return getEnemies().contains(nation);
 	}
 
+	public boolean hasTaxExempt(Town town) {
+		
+		return getTaxExempt().contains(town);
+	}
+	
+	public boolean addTaxExempt(Town town) {
+		if(hasTaxExempt(town)) 
+			return false;
+		else 
+			return getTaxExempt().add(town);
+	}
+	
+	public boolean removeTaxExempt(Town town) {
+		
+		if(!hasTaxExempt(town))
+			return false;
+		else 
+			return getTaxExempt().remove(town);
+	}
+	
 	public List<Town> getTowns() {
 		return Collections.unmodifiableList(towns);
 	}
@@ -285,6 +319,16 @@ public class Nation extends Government {
 	public List<Nation> getAllies() {
 
 		return allies;
+	}
+	
+	public List<Town> getTaxExempt() {
+
+		return taxExempt;
+	}
+	
+	public void setTaxExempt(List<Town> taxExempt) {
+		
+		this.taxExempt = towns;
 	}
 
 	public List<Nation> getMutualAllies() {
