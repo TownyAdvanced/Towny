@@ -9172,3 +9172,5 @@ v0.92.0.11:
   - Add a listener which will reset the player cache when they are inside of a plot or town which has had their plot permissions change.
 0.100.0.0:
   - Bump version for release.
+0.100.0.1:
+  - Fix the town-is-deleted message being shown twice.

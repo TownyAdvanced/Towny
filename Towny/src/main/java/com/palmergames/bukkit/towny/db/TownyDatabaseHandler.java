@@ -427,7 +427,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Resident resident : toSave) {
 			resident.clearModes();
-			resident.removeTown();
+			resident.removeTown(true);
 		}
 		
 		// Look for residents inside of this town's jail(s) and free them, more than 
