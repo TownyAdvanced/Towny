@@ -9160,7 +9160,7 @@ v0.92.0.11:
   - Fix un-changed townblocks with custom plot types not having their permissions altered by the /t set perm command.
     - Closes #7043.
   - Add projectile breaking protection for dripstone & pots, courtesy of Warrior with PR #7040.
-  - Make status screen sending respect the async eco setting, courtesy of Warrior with PR #7038.
+  - Make status screen sending respect the async eco settingc #7038.
   - Add new switches from 23w41a and 23w42a, courtesy of Warrior with PR #7042.
   - Add floodfill claim command, courtesy of Warrior with PR #7012.
   - New Command: /t claim fill
@@ -9174,3 +9174,4 @@ v0.92.0.11:
   - Bump version for release.
 0.100.0.1:
   - Fix the town-is-deleted message being shown twice.
+  - Fix the draw smoke task being able to load chunks, courtesy of Warrior with PR #7053.
