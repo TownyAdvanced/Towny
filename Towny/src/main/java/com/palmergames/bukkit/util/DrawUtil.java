@@ -32,6 +32,10 @@ public class DrawUtil {
 
 		for (int z = _z1; z <= _z2; z++) {
 			for (int x = _x1; x <= _x2; x++) {
+				if (!world.isChunkLoaded(x >> 4, z >> 4)) {
+					continue;
+				}
+
 				int start = world.getHighestBlockYAt(x, z);
 				int end = (start + height) < world.getMaxHeight() ? (start + height - 1) : world.getMaxHeight();
 				for (int y = start; y <= end; y++) {
