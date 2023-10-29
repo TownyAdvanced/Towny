@@ -20,17 +20,7 @@ public abstract class ObjectGroup implements Nameable, Identifiable {
 		this.uuid = id;
 		this.name = name;
 	}
-	
-	@Deprecated // Sometime during 0.98.*.*
-	public UUID getID() {
-		return uuid;
-	}
-	
-	@Deprecated // Sometime during 0.98.*.*
-	public void setID(UUID ID) {
-		this.uuid = ID;
-	}
-	
+
 	public UUID getUUID() {
 		return uuid;
 	}

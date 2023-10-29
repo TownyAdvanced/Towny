@@ -19,7 +19,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -328,22 +327,7 @@ public class BukkitTools {
 	public static List<String> getWorldNames(boolean lowercased) {
 		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase(Locale.ROOT)).collect(Collectors.toList()) : getWorldNames();
 	}
-	
-	/**
-	 * Check if the entity is a Citizens NPC.
-	 * 
-	 * Catches the NoClassDefFoundError thrown when Citizens is present 
-	 * but failed to start up correctly.
-	 * 
-	 * @deprecated since 0.98.4.19 use {@link PluginIntegrations#checkCitizens(Entity)} instead.
-	 * @param entity Entity to check.
-	 * @return true if the entity is an NPC.
-	 */
-	@Deprecated
-	public static boolean checkCitizens(Entity entity) {
-		return PluginIntegrations.getInstance().checkCitizens(entity);
-	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
 		Objective objective;

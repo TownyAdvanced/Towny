@@ -29,22 +29,6 @@ public abstract class TownyActionEvent extends CancellableTownyEvent {
 		setCancelled(cancelled);
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.98.3.18, please use {@link #isMessageSuppressed()} instead.
-	 */
-	@Deprecated
-	public boolean isMessageSupressed() {
-		return isMessageSuppressed();
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.98.3.18, please use {@link #suppressMessage()} instead.
-	 */
-	@Deprecated
-	public void supressMessage(boolean suppressMessage) {
-		suppressMessage();
-	}
-	
 	public boolean isMessageSuppressed() {
 		return getCancelMessage() == null || getCancelMessage().isEmpty();
 	}
@@ -102,25 +86,4 @@ public abstract class TownyActionEvent extends CancellableTownyEvent {
 		return townblock != null;
 	}
 
-	/**
-	 * @return cancellation message shown to players when their build attempt is cancelled or null.
-	 * @deprecated since 0.98.4.0, use {@link #getCancelMessage()} instead.
-	 */
-	@Deprecated
-	public String getMessage() {
-		return getCancelMessage();
-	}
-
-	/**
-	 * @param message Message shown to players when their build attempts is cancelled.
-	 * @deprecated since 0.98.4.0 use {@link #setCancelMessage(String)}	instead.
-	 */
-	@Deprecated
-	public void setMessage(String message) {
-		if (message.equals(""))
-			this.supressMessage(true);
-		else
-			setCancelMessage(message);
-	}
-	
 }

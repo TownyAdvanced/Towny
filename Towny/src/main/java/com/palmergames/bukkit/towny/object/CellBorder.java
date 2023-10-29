@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.util.DrawUtil;
-import com.palmergames.bukkit.util.LocationRunnable;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -118,14 +117,6 @@ public class CellBorder extends WorldCoord {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * @deprecated Deprecated as of 0.98.3.13, please use {@link #runBorderedOnSurface(int, int, Consumer)} instead.
-	 */
-	@Deprecated
-	public void runBorderedOnSurface(int wallHeight, int cornerHeight, LocationRunnable runnable) {
-		runBorderedOnSurface(wallHeight, cornerHeight, (Consumer<Location>) runnable::run);
 	}
 
 	@Override

@@ -566,22 +566,6 @@ public class Towny extends JavaPlugin {
 		return errors;
 	}
 
-	/**
-	 * @deprecated since 0.98.4.19.
-	 */
-	@Deprecated
-	public boolean isCitizens2() {
-		return false;
-	}
-
-	/**
-	 * @deprecated since 0.98.4.19.
-	 */
-	@Deprecated
-	public boolean isPAPI() {
-		return false;
-	}
-
 	public World getServerWorld(String name) throws NotRegisteredException {
 		World world = BukkitTools.getWorld(name);
 		
@@ -872,14 +856,6 @@ public class Towny extends JavaPlugin {
 
 	public static boolean isMinecraftVersionStillSupported() {
 		return MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.OLDEST_VERSION_SUPPORTED);
-	}
-	
-	/**
-	 * @deprecated since 0.98.1.1. Towny will only support 1.16 and newer going forward.
-	 */
-	@Deprecated
-	public static boolean is116Plus() {
-		return true;
 	}
 
 	@ApiStatus.Internal

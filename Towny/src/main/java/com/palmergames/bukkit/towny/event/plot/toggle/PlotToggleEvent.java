@@ -25,23 +25,6 @@ public abstract class PlotToggleEvent extends CancellableTownyEvent {
 		setCancelMessage(Translation.of("msg_err_command_disable"));
 	}
 
-	/**
-	 * @deprecated since 0.98.4.0, use {@link #getCancelMessage()}
-	 */
-	@Deprecated 
-	public String getCancellationMsg() {
-		return getCancelMessage();
-	}
-
-	/**
-	 * @deprecated since 0.98.4.0, use {@link #setCancelMessage(String)}
-	 * @param cancellationMsg
-	 */
-	@Deprecated
-	public void setCancellationMsg(String cancellationMsg) {
-		setCancelMessage(cancellationMsg);
-	}
-
 	public TownBlock getTownBlock() {
 		return townBlock;
 	}

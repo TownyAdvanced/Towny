@@ -19,18 +19,6 @@ import java.util.function.Consumer;
  */
 public class DrawSmokeTaskFactory {
 
-    /**
-     * Send to the smoke effect to the player.
-	 * 
-	 * @param player - {@link Player} to send smoke effect
-     * @return {@link LocationRunnable}
-	 * @deprecated Deprecated as of 0.98.3.13, please use {@link #showToPlayer(Player)} instead.
-     */
-	@Deprecated
-    public static LocationRunnable sendToPlayer(final Player player) {
-        return location -> player.spawnParticle(Particle.SMOKE_NORMAL, location.add(0.5, 1.5, 0.5), 5, 0, 0, 0, 0);
-    }
-	
 	public static Consumer<Location> showToPlayer(@NotNull Player player) {
 		return showToPlayer(player, WorldCoord.parseWorldCoord(player));
 	}

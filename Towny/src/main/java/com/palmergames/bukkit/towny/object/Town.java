@@ -495,22 +495,6 @@ public class Town extends Government implements TownBlockOwner {
 		this.allowedToWar = allowedToWar;
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.98.3.5, use {@link #setExplosion(boolean)} instead.
-	 */
-	@Deprecated
-	public void setBANG(boolean isBANG) {
-		setExplosion(isBANG);
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.98.3.5, use {@link #isExplosion()} instead.
-	 */
-	@Deprecated
-	public boolean isBANG() {
-		return isExplosion();
-	}
-	
 	public void setExplosion(boolean isExplosion) {
 		this.permissions.explosion = isExplosion;
 	}

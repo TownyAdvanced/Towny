@@ -469,25 +469,6 @@ public class TownBlock extends TownyObject {
 	}
 
 	/**
-	 * Is the TownBlock locked
-	 * 
-	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
-	 * @return the locked
-	 */
-	@Deprecated
-	public boolean isLocked() {
-		return false;
-	}
-
-	/**
-	 * @param locked is the to locked to set
-	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
-	 */
-	@Deprecated
-	public void setLocked(boolean locked) {
-	}
-
-	/**
 	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
 	 */
 	@Deprecated
