@@ -38,10 +38,14 @@ public class TownyInventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
-		if (!(PaperLib.getHolder(event.getInventory(), false).getHolder() instanceof TownyInventory townyInventory) || event.getCurrentItem() == null)
+		if (!(PaperLib.getHolder(event.getInventory(), false).getHolder() instanceof TownyInventory townyInventory) || (event.getCurrentItem() == null && event.getHotbarButton() == -1))
 			return;
 
 		event.setCancelled(true);
+
+		// Someone is using their hotbar buttons to place items into the TownyInventory, an action they cannot reverse causing item loss.
+		if (event.getHotbarButton() > -1)
+			return;
 
 		Player player = (Player) event.getWhoClicked();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());

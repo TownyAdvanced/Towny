@@ -9175,3 +9175,5 @@ v0.92.0.11:
 0.100.0.1:
   - Fix the town-is-deleted message being shown twice.
   - Fix the draw smoke task being able to load chunks, courtesy of Warrior with PR #7053.
+  - Fix players being able to use hotbar buttons to place items into Towny inventory GUIs, resulting in loss of items.
+    - Closes #7054.
