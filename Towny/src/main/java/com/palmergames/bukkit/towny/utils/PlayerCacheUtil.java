@@ -217,7 +217,7 @@ public class PlayerCacheUtil {
 		if (owner != null) {
 			if (resident == owner)
 				return TownBlockStatus.PLOT_OWNER;
-			else if (owner.hasFriend(resident))
+			else if (owner.hasFriend(resident) && !CombatUtil.isEnemy(resident, owner))
 				return TownBlockStatus.PLOT_FRIEND;
 			else if (resident.hasTown() && CombatUtil.isSameTown(owner, resident))
 				return TownBlockStatus.PLOT_TOWN;
