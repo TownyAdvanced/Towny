@@ -35,7 +35,7 @@ default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
 unclaimed_plot_name: '无主之地'
-unclaimed_zone_name: '荒郊野外'
+unclaimed_zone_name: '荒郊野地'
 ############################################################
 #+------------------------------------------------------+ #
 #|help messages                                         | #
@@ -56,8 +56,8 @@ towny_help_1: "Displays a map of the nearby townblocks"
 towny_help_2: "Display the prices used with Economy"
 towny_help_3: "Display highscores"
 towny_help_4: "Display time until a new day"
-towny_help_5: "Displays stats"
-towny_help_6: "Displays the version of Towny"
+towny_help_5: "显示统计信息"
+towny_help_6: "显示Towny的版本"
 towny_top_help_0: "List top residents based on subcommand."
 towny_top_help_1: "List top land-owners based on subcommand."
 towny_top_help_2: "List wealthiest based on subcommand."
@@ -107,7 +107,7 @@ town_set_help_2: "在Home区块中设置传送点，或者你站在前哨里，�
 town_set_help_3: "查看/town set perm ?以获得帮助。"
 town_set_help_4: "设置你城镇的税额。"
 town_set_help_5: "Set the special amounts for per-plot taxes."
-town_set_help_6: "Set the default prices for buying plots."
+town_set_help_6: "设置购买地皮的默认价格。"
 town_set_help_7: "设置使用/t spawn的费用。"
 town_set_help_8: "设置你城镇的名称。"
 town_set_help_9: "设置你城镇的简称。"
@@ -476,8 +476,8 @@ msg_added_enemy: '&b%s 把你的国家视为敌国.'
 msg_removed_enemy: '&b%s 不再把你的国家视为敌国.'
 msg_unable_ally_enemy: '&c无法将 %s 视为盟国,因为他们已经将你视为敌国.'
 msg_deny_ally: '&b%s 拒绝了你的加盟.'
-msg_accept_ally: '&b国家 %s 接受了你的邀请,成为盟国.'
-msg_ally_req_sent: '&b邀请已发送给 %s.'
+msg_accept_ally: '&b国家%s接受了你的邀请，你们成为了盟国。'
+msg_ally_req_sent: '&b成为盟国的邀请已发送给%s。'
 msg_ally_request: '&b%s想要与你国结盟。'
 msg_unable_ally_offline: "&c无法邀请该国家因为国王不在线."
 msg_unable_ally_npc: "&c无法邀请该国家因为国王是NPC."
@@ -490,8 +490,8 @@ msg_abandoned_area_1: '&b你的城镇放弃了这片区域'
 msg_no_money_purchase_plot: '&c你没有足够的钱来购买这块土地.'
 msg_town_no_money_purchase_plot: '&c城镇没有足够的钱来买回这块土地.'
 msg_no_funds_new_town: '&c%s 没有足够的建城资金.'
-msg_no_funds_claim: '&c城镇没有足够的资金来声明 %s 个城镇区块,需要 %s. 捐点钱到城镇银行吧.'
-msg_no_funds_to_buy: '&c城镇没有足够的资金来购买 %s %s ,需要花费  %s. 捐点钱到城镇银行吧.'
+msg_no_funds_claim: '&c城镇现在没有足够的资金来声明%s个城镇区块，因为这需要 %s。你捐些钱到城镇银行吧。'
+msg_no_funds_to_buy: '&c城镇现在没有足够的资金来购买 %s %s，因为这需要花费  %s。你捐些钱到城镇银行吧。'
 msg_annexed_area: '&2被吞并的区域 %s'
 msg_max_plot_own: '&c你不能拥有多于 %s 块的土地.'
 msg_max_outposts_own: '&c你不能声明多余 %s 个的前哨.'
@@ -547,7 +547,7 @@ msg_set_town_spawn: '&b城镇传送点已成功更改.'
 msg_set_outpost_spawn: '&b成功改变前哨传送点.'
 msg_set_title: '&b%s 获得了 %s &b的头衔.'
 msg_set_surname: '&b%s 获得了 %s&b的后缀.'
-msg_clear_title_surname: '&b %2$s 的 %1$s 被清除了.'
+msg_clear_title_surname: '&b%2$s的%1$s被清除了.'
 msg_clear_plot_material: '&b这块地皮已经被清除了%s的区块类型'
 msg_set_perms: '&b成功将权限设置为:'
 msg_set_claim: '&b成功改变 %s 的可声明状态为 %s'
