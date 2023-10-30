@@ -2432,7 +2432,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_nation_already_not_peaceful"));
 
 		if (peacefulState && TownyEconomyHandler.isActive() && !nation.getAccount().canPayFromHoldings(cost))
-			throw new TownyException(Translatable.of("msg_nation_cant_peaceful"));
+			throw new TownyException(Translatable.of("msg_nation_cant_peaceful", TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		String uuid = nation.getUUID().toString();
 		

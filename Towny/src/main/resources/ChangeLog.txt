@@ -9181,3 +9181,4 @@ v0.92.0.11:
   - Remove everything deprecated between 0.98.0.0 and 0.99.0.0.
 0.100.0.2:
   - Fix potential ConcurrentModificationException when a town removes an outpost spawn.
+  - Show players who cannot pay the peaceful/neutral costs how much they will need to pay. 
