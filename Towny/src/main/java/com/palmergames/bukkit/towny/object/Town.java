@@ -1008,7 +1008,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void removeOutpostSpawn(Coord coord) {
-		getAllOutpostSpawns().stream()
+		new ArrayList<>(getAllOutpostSpawns()).stream()
 			.filter(spawn -> Coord.parseCoord(spawn).equals(coord))
 			.forEach(spawn -> {
 				removeOutpostSpawn(spawn);

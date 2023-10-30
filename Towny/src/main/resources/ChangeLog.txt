@@ -9179,3 +9179,5 @@ v0.92.0.11:
     - Closes #7054.
   - Fix players being able to bypass setting enemy status during cache creation.
   - Remove everything deprecated between 0.98.0.0 and 0.99.0.0.
+0.100.0.2:
+  - Fix potential ConcurrentModificationException when a town removes an outpost spawn.
