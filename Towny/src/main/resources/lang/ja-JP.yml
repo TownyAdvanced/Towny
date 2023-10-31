@@ -1598,10 +1598,11 @@ status_jailed: 'Jailed:'
 status_bad_yes: '&cはい'
 status_good_no: '&aいいえ'
 status_resident_tax_title: '%sの税金'
-help_menu_command: '<青色>'
-help_menu_subcommand: '<水色>'
-help_menu_explanation: '<灰色>'
-help_menu_requirement: '<赤色>'
+#ja-JP NOTE 色名は英字表記のままに。表示置き換えされる
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
 #Added in 0.123
