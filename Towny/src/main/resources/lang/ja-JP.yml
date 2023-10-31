@@ -178,12 +178,12 @@ nation_toggle_help_3: "税率を切り替えて、町が固定税率ではなく
 king_help_1: '国家リーダーヘルプ'
 king_help_2: '同盟を設定'
 king_help_3: '敵を設定'
-king_help_4: "町の銀行からお金を引き出します。"
+king_help_4: "国の銀行からお金を引き出します。"
 king_help_5: "国から町を追加または削除します。"
 king_help_6: "/n set ? を使用してヘルプを参照します。"
 king_help_7: "/n toggle ? を使用してヘルプを参照します。"
-king_help_8: "他の国を自分の国に吸収するために使用されます。"
-king_help_9: "自国の全員にメッセージを送るのに使う。"
+king_help_8: "他の国を自分の国に併合するために使用されます。"
+king_help_9: "自国の全員にメッセージを送る時に使います。"
 res_1: 'ステータス'
 res_2: '[住民]'
 res_3: 'ターゲットプレイヤーの状態'
@@ -890,15 +890,15 @@ rank_list_mayor: '村長:'
 status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PvP)'
 status_title_open: '&b(オープン)'
-status_town_board: 'Board:'
+status_town_board: '一言掲示板:'
 status_founded: '設立:'
-status_founded_by: 'Founded by:'
+status_founded_by: '創設者:'
 status_town_size: '町の大きさ:'
 status_town_size_bought: '購入したもの:'
 status_town_size_bonus: 'ボーナス:'
 status_town_size_nationbonus: '国のボーナス'
 status_town_outposts: '前哨基地：'
-status_bank_town2: 'Daily upkeep:'
+status_bank_town2: '日次維持費:'
 status_bank_town3: '税金:'
 status_town_nation: '国:'
 status_town_reslist_overlength: 'その他...'
@@ -911,7 +911,7 @@ status_nation_enemies: '敵'
 status_nation_enemied_by: 'あなたの国と敵対している国'
 status_world_claimable: '&aClaimable'
 status_world_noclaims: '&cNoClaims'
-status_world_forcepvp: '強制PVP:'
+status_world_forcepvp: '強制PvP:'
 status_world_fire: '火の延焼:'
 status_world_forcefire: '強制的な火の延焼:'
 status_world_forceexplosion: '強制的な爆発:'
@@ -1223,13 +1223,13 @@ msg_err_plot_belongs_to_group_toggle: 'プロットはグループに所属し�
 #Added in 0.85
 msg_set_perms_reset_single: '&bこのプロットの権限をリセットしました。'
 #Added in 0.86
-status_bank_bankrupt: '(BANKRUPT)'
-msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
+status_bank_bankrupt: '(破産)'
+msg_warning_bankrupt: '&4*** 警告, %s は、翌日には資金不足により破産します ***'
 msg_town_bankrupt_by_upkeep: '&b%sは維持費を支払うことができなかったので破産しました。'
-msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
-msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay the %s tax and has gone bankrupt.'
-msg_town_bankrupt_by_nation_tax_multiple: '&bThe following towns could not afford the nation tax and have gone bankrupt: '
-msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
+msg_town_bankrupt_by_upkeep_multiple: '&b以下の町は維持費が支払えず破産しました: '
+msg_town_bankrupt_by_nation_tax: '&b%s は %s に納税できず、破産しました。'
+msg_town_bankrupt_by_nation_tax_multiple: '&b以下の町は国に納税できず破産しました: '
+msg_town_debts_cleared: '%s は債務を解消しました。破産状態ではありません。'
 msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
 msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
 msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
@@ -2009,7 +2009,7 @@ msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia.
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
-msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+msg_tax_collected_from_towns: "<aqua>あなたの国は、所属する町から%s の税金を受け取りました。"
 #Message shown when a nation pays taxes to its towns.
 msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
 #Message shown when a town collects taxes from its residents.
