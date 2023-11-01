@@ -178,12 +178,12 @@ nation_toggle_help_3: "税率を切り替えて、町が固定税率ではなく
 king_help_1: '国家リーダーヘルプ'
 king_help_2: '同盟を設定'
 king_help_3: '敵を設定'
-king_help_4: "町の銀行からお金を引き出します。"
+king_help_4: "国の銀行からお金を引き出します。"
 king_help_5: "国から町を追加または削除します。"
 king_help_6: "/n set ? を使用してヘルプを参照します。"
 king_help_7: "/n toggle ? を使用してヘルプを参照します。"
-king_help_8: "他の国を自分の国に吸収するために使用されます。"
-king_help_9: "自国の全員にメッセージを送るのに使う。"
+king_help_8: "他の国を自分の国に併合するために使用されます。"
+king_help_9: "自国の全員にメッセージを送る時に使います。"
 res_1: 'ステータス'
 res_2: '[住民]'
 res_3: 'ターゲットプレイヤーの状態'
@@ -279,8 +279,8 @@ townyadmin_town_help_0: "Create a town with the given name and mayor."
 townyadmin_town_help_1: "Show the town status screen."
 townyadmin_town_help_2: "Add or remove residents from a town."
 townyadmin_town_help_3: "Rename a town."
-townyadmin_town_help_4: "Delete a town."
-townyadmin_town_help_5: "Spawn at a town."
+townyadmin_town_help_4: "町を削除します。"
+townyadmin_town_help_5: "町でスポーンします。"
 townyadmin_town_help_6: "Spawn at a town's outpost."
 townyadmin_town_help_7: "Use a town's rank command."
 townyadmin_town_help_8: "Use a town's set command."
@@ -427,7 +427,7 @@ msg_payed_resident_tax: '&b住民税を払いました： '
 msg_bankrupt_town: ' は町に留まるためのお金を支払えませんでした'
 msg_bankrupt_nation: ' は国に留まるためのお金を支払えませんでした'
 msg_nation_not_peaceful: '&b 国は平和状態を維持するためのお金を支払えませんでした'
-msg_nation_cant_peaceful: '&b 国は平和国家になるためのお金を支払えませんでした'
+msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
 msg_peaceful_disabled: '&b国の平和状態が全体解除されました'
 msg_you_paid: '&bあなたは平和状態を設定するために %s を支払いました。'
 msg_nation_set_peace: '&b国の状態を変更することに成功しました'
@@ -481,8 +481,8 @@ msg_ally_req_sent: '&b同盟申請は%sに送信されました。'
 msg_ally_request: '&b %s は同盟を結成しようとしています。'
 msg_unable_ally_offline: "&cターゲット国の市長がオフラインのため、同盟を要求できません。"
 msg_unable_ally_npc: "&c対象国の市長がNPCであるため、同盟申請を送信することができません。"
-msg_claimed: '確保成功'
-msg_unclaimed: '&2占有に成功しました'
+msg_claimed: '&2占有に成功しました'
+msg_unclaimed: '&2占有の解除に成功しました'
 msg_not_claimable: '&cこのワールドでは占有できません。'
 msg_abandoned_area: '&b放棄されたエリア %s'
 msg_admin_unclaim_area: '&c強制的に占有が解除されたエリア %s'
@@ -890,15 +890,15 @@ rank_list_mayor: '村長:'
 status_title_capital: '&b(Capital)'
 status_title_pvp: '&4(PvP)'
 status_title_open: '&b(オープン)'
-status_town_board: 'Board:'
+status_town_board: '一言掲示板:'
 status_founded: '設立:'
-status_founded_by: 'Founded by:'
+status_founded_by: '創設者:'
 status_town_size: '町の大きさ:'
 status_town_size_bought: '購入したもの:'
 status_town_size_bonus: 'ボーナス:'
 status_town_size_nationbonus: '国のボーナス'
 status_town_outposts: '前哨基地：'
-status_bank_town2: 'Daily upkeep:'
+status_bank_town2: '日次維持費:'
 status_bank_town3: '税金:'
 status_town_nation: '国:'
 status_town_reslist_overlength: 'その他...'
@@ -911,7 +911,7 @@ status_nation_enemies: '敵'
 status_nation_enemied_by: 'あなたの国と敵対している国'
 status_world_claimable: '&aClaimable'
 status_world_noclaims: '&cNoClaims'
-status_world_forcepvp: '強制PVP:'
+status_world_forcepvp: '強制PvP:'
 status_world_fire: '火の延焼:'
 status_world_forcefire: '強制的な火の延焼:'
 status_world_forceexplosion: '強制的な爆発:'
@@ -1223,13 +1223,13 @@ msg_err_plot_belongs_to_group_toggle: 'プロットはグループに所属し�
 #Added in 0.85
 msg_set_perms_reset_single: '&bこのプロットの権限をリセットしました。'
 #Added in 0.86
-status_bank_bankrupt: '(BANKRUPT)'
-msg_warning_bankrupt: '&4*** WARNING, %s WILL GO BANKRUPT AT NEXT NEW DAY DUE TO LACK OF FUNDS ***'
+status_bank_bankrupt: '(破産)'
+msg_warning_bankrupt: '&4*** 警告, %s は、翌日には資金不足により破産します ***'
 msg_town_bankrupt_by_upkeep: '&b%sは維持費を支払うことができなかったので破産しました。'
-msg_town_bankrupt_by_upkeep_multiple: '&bThe following towns could not afford their upkeep and have gone bankrupt: '
-msg_town_bankrupt_by_nation_tax: '&b%s couldn''t pay the %s tax and has gone bankrupt.'
-msg_town_bankrupt_by_nation_tax_multiple: '&bThe following towns could not afford the nation tax and have gone bankrupt: '
-msg_town_debts_cleared: '%s has cleared all its debts, and is no longer bankrupt.'
+msg_town_bankrupt_by_upkeep_multiple: '&b以下の町は維持費が支払えず破産しました: '
+msg_town_bankrupt_by_nation_tax: '&b%s は %s に納税できず、破産しました。'
+msg_town_bankrupt_by_nation_tax_multiple: '&b以下の町は国に納税できず破産しました: '
+msg_town_debts_cleared: '%s は債務を解消しました。破産状態ではありません。'
 msg_err_bankrupt_town_cannot_claim: 'Not allowed to claim plots for a bankrupt town.'
 msg_err_bankrupt_town_cannot_build: 'Not allowed to build in a bankrupt town.'
 msg_err_bankrupt_town_cannot_toggle_open: 'Not allowed to toggle open in a bankrupt town.'
@@ -1475,7 +1475,7 @@ msg_resident_has_not_played_long_enough_to_be_jailed: '%s hasn''t played long en
 msg_town_not_peaceful: '&bTown couldn''t afford it''s peaceful state.'
 msg_town_already_peaceful: '&bTown is already peaceful.'
 msg_town_already_not_peaceful: '&bTown is already not peaceful.'
-msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town.'
+msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town. You need to be able to pay %s per day.'
 msg_town_paid_for_neutral_status: '&bYour town paid %s to retain your peaceful status.'
 msg_nation_paid_for_neutral_status: '&bYour nation paid %s to retain your peaceful status.'
 your_town_has_been_invited_to_join_nation: 'Your town has been invited to join the nation: %s'
@@ -1598,10 +1598,10 @@ status_jailed: 'Jailed:'
 status_bad_yes: '&cはい'
 status_good_no: '&aいいえ'
 status_resident_tax_title: '%sの税金'
-help_menu_command: '<青色>'
-help_menu_subcommand: '<水色>'
-help_menu_explanation: '<灰色>'
-help_menu_requirement: '<赤色>'
+help_menu_command: '<blue>'
+help_menu_subcommand: '<aqua>'
+help_menu_explanation: '<gray>'
+help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Because they will not be close enough to your nation capital, the following towns will be removed if the merge is completed: %s.'
 #Added in 0.123
@@ -2009,7 +2009,7 @@ msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia.
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "You cannot unclaim this townblock because the townblock at %s,%s would not have enough adjacent claims (%s are required.)"
 #Message shown when a nation collects taxes from its towns.
-msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
+msg_tax_collected_from_towns: "<aqua>あなたの国は、所属する町から%s の税金を受け取りました。"
 #Message shown when a nation pays taxes to its towns.
 msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
 #Message shown when a town collects taxes from its residents.
