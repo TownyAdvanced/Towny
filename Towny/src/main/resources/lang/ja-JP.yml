@@ -481,8 +481,8 @@ msg_ally_req_sent: '&b同盟申請は%sに送信されました。'
 msg_ally_request: '&b %s は同盟を結成しようとしています。'
 msg_unable_ally_offline: "&cターゲット国の市長がオフラインのため、同盟を要求できません。"
 msg_unable_ally_npc: "&c対象国の市長がNPCであるため、同盟申請を送信することができません。"
-msg_claimed: '確保成功'
-msg_unclaimed: '&2占有に成功しました'
+msg_claimed: '&2占有に成功しました'
+msg_unclaimed: '&2占有の解除に成功しました'
 msg_not_claimable: '&cこのワールドでは占有できません。'
 msg_abandoned_area: '&b放棄されたエリア %s'
 msg_admin_unclaim_area: '&c強制的に占有が解除されたエリア %s'
