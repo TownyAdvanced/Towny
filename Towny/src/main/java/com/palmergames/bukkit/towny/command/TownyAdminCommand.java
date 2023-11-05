@@ -495,10 +495,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[3], "t");
 						default:
 							if (args.length == 3)
-								return NameUtil.filterByStart(
-									TownyCommandAddonAPI.getTabCompletes(
-										CommandType.TOWNYADMIN_TOWN, adminTownTabCompletes
-									), args[2]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_TOWN, adminTownTabCompletes), args[2]);
+							else if (args.length > 3 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_TOWN, args[2]))
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOWN, args[2]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 					}
 				} else if (args.length == 4 && args[1].equalsIgnoreCase("new")) {
 					return getTownyStartingWith(args[3], "r");
@@ -554,10 +553,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[4], "n");
 						default:
 							if (args.length == 3)
-								return NameUtil.filterByStart(
-									TownyCommandAddonAPI.getTabCompletes(
-										CommandType.TOWNYADMIN_NATION, adminNationTabCompletes
-									), args[2]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYADMIN_NATION, adminNationTabCompletes), args[2]);
+							else if (args.length > 3 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_NATION, args[2]))
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_TOWN, args[2]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 					}
 				} else if (args.length == 4 && args[1].equalsIgnoreCase("new")) {
 					return getTownyStartingWith(args[3], "t");
