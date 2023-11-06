@@ -9189,3 +9189,5 @@ v0.92.0.11:
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.22.0 to 3.44.0.
   - Fix /ta town and /ta nation tab completers not using TownyAddonCommandAPI completions when there are too many arguments.
   - Refactor some TownCommand code to be simpler, more optimized, and reduce redundant code.
+0.100.0.3:
+  - Fix TownyAddonCommandAPI's TownyAdmin Nation Tabcompleter not using the correct command type.
