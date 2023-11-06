@@ -2,7 +2,7 @@
 name: Towny
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
-website: 'https://города.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -45,7 +45,7 @@ help_0: 'Основная помощь по Towny'
 help_1: 'Введите следующие команды чтобы узнать больше про Towny.'
 help_2: 'Чат города'
 help_3: 'Чат нации'
-help_4: 'Помощь по командам жителей.'
+help_4: 'Помощь по командам наций.'
 help_5: 'Помощь по командам городов.'
 help_6: 'Помощь по командам наций.'
 help_7: 'Помощь по командам участков.'
