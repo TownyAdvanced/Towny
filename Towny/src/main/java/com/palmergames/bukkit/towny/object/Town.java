@@ -1027,6 +1027,9 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public final void setForSale(boolean isForSale) {
 		this.isForSale = isForSale;
+		
+		if (!isForSale)
+			this.forSalePrice = 0;
 	}
 
 	/**

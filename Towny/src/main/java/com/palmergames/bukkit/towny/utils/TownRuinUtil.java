@@ -121,6 +121,8 @@ public class TownRuinUtil {
 		if (TownySettings.getMaxResidentsPerTown() > 0)
 			ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 		
+		town.setForSale(false);
+		
 		town.save();
 		Towny.getPlugin().resetCache();
 		
