@@ -9191,3 +9191,4 @@ v0.92.0.11:
   - Refactor some TownCommand code to be simpler, more optimized, and reduce redundant code.
 0.100.0.3:
   - Fix TownyAddonCommandAPI's TownyAdmin Nation Tabcompleter not using the correct command type.
+  - Fix saving nations unnecessarily when a nation is renamed.

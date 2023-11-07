@@ -747,21 +747,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//search and update all ally/enemy lists
 			Nation oldNation = new Nation(oldName);
-			List<Nation> toSaveNation = new ArrayList<>(universe.getNations());
-			for (Nation toCheck : toSaveNation)
-				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
-					if (toCheck.hasAlly(oldNation)) {
-						toCheck.removeAlly(oldNation);
-						toCheck.addAlly(nation);
+			List<Nation> toSaveNations = new ArrayList<>();
+			universe.getNations().stream()
+				.filter(n -> n.hasAlly(oldNation) || n.hasEnemy(oldNation))
+				.forEach(n -> {
+					if (n.hasAlly(oldNation)) {
+						n.removeAlly(oldNation);
+						n.addAlly(nation);
 					} else {
-						toCheck.removeEnemy(oldNation);
-						toCheck.addEnemy(nation);
+						n.removeEnemy(oldNation);
+						n.addEnemy(nation);
 					}
-				} else
-					toSave.remove(toCheck);
-
-			for (Nation toCheck : toSaveNation)
-				saveNation(toCheck);
+					toSaveNations.add(n);
+				});
+			toSaveNations.forEach(Nation::save);
 
 		} finally {
 			lock.unlock();
