@@ -2366,3 +2366,8 @@ msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain o
 
 # Message shown when a resident is an NPC and is not allowed to do something.
 msg_err_resident_is_npc: "You cannot do this to an NPC resident."
+
+# Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
+
+msg_unnamed: "Unnamed"

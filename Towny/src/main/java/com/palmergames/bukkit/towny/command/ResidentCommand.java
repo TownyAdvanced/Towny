@@ -30,6 +30,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,6 +53,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"friend",
 		"list",
 		"jail",
+		"plotlist",
 		"spawn",
 		"toggle",
 		"set",
@@ -168,6 +170,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		if (sender instanceof Player) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
+				case "plotlist":
+					if (args.length == 2)
+						return getTownyStartingWith(args[1], "r");
+					if (args.length == 3)
+						return Collections.singletonList("[page #]");
+					break;
 				case "tax":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "r");
@@ -267,6 +275,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		case "?", "help" -> HelpMenu.RESIDENT_HELP.send(player); 
 		case "list" -> listResidents(player); 
 		case "tax" -> parseResidentTax(player, StringMgmt.remFirstArg(split));
+		case "plotlist" -> parseResidentPlotlist(player, StringMgmt.remFirstArg(split));
 		case "jail" -> parseResidentJail(player, StringMgmt.remFirstArg(split));
 		case "set" -> residentSet(player, StringMgmt.remFirstArg(split));
 		case "toggle" -> residentToggle(player, StringMgmt.remFirstArg(split));
@@ -306,6 +315,36 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		Resident res = split.length > 0 ? getResidentOrThrow(split[0]) : getResidentOrThrow(player);
 		TownyMessaging.sendMessage(player, TownyFormatter.getTaxStatus(res, Translator.locale(player)));
+	}
+
+	private void parseResidentPlotlist(Player player, String[] split) throws TownyException {
+
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_PLOTLIST.getNode());
+
+		int pageLoc = 0;
+		Resident res = getResidentOrThrow(player);
+		if (split.length > 0) {
+			if (TownyUniverse.getInstance().hasResident(split[0])) {
+				res = getResidentOrThrow(split[0]);
+				pageLoc = 1;
+			}
+		}
+
+		if (res.getTownBlocks().isEmpty())
+			throw new TownyException(Translatable.of("msg_err_resident_doesnt_own_any_land"));
+
+		int page = 1;
+		int total = (int) Math.ceil(((double) res.getTownBlocks().size()) / ((double) 10));
+		if (split.length > pageLoc) {
+			page = MathUtil.getPositiveIntOrThrow(split[pageLoc]);
+			if (page == 0)
+				throw new TownyException(Translatable.of("msg_error_must_be_int"));
+			// Page will continue to be one.
+		}
+		if (page > total)
+			throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+
+		TownyMessaging.sendPlotList(player, res, page, total);
 	}
 
 	private void parseResidentJail(Player player, String[] split) throws TownyException {

@@ -742,6 +742,51 @@ public class TownyMessaging {
 		audience.sendMessage(pageFooter);
 	}
 	
+	public static void sendPlotList(CommandSender sender, Resident resident, int page, int totalPages) {
+		Translator translator = Translator.locale(sender);
+		int plotCount = resident.getTownBlocks().size();
+		int iMax = Math.min(page * 10, plotCount);
+		List<TownBlock> townblocks = new ArrayList<>(resident.getTownBlocks());
+
+		TextComponent[] plotsFormatted = ((page * 10) > plotCount)
+				? new TextComponent[plotCount % 10]
+				: new TextComponent[10];
+
+		String headerMsg = ChatColor.GOLD + "# " + 
+				ChatColor.DARK_GRAY + "-    " +
+				ChatColor.GREEN + "Coord " +
+				ChatColor.DARK_GRAY + "    -    " +
+				ChatColor.AQUA + "Town" +
+				ChatColor.DARK_GRAY + "    -    " +
+				ChatColor.GREEN + "Type" +
+				ChatColor.DARK_GRAY + "    -    " +
+				ChatColor.YELLOW + "Name";
+
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			TownBlock tb = townblocks.get(i);
+			String tbName = tb.getName().isEmpty() ? translator.of("msg_unnamed") : tb.getName();
+			TextComponent coord = Component.text(tb.getWorldCoord().toString(), NamedTextColor.GREEN);
+			TextComponent town = Component.text(tb.getTownOrNull().getName(), NamedTextColor.AQUA);
+			TextComponent type = Component.text(tb.getTypeName(), NamedTextColor.GREEN);
+			TextComponent name = Component.text(tbName, NamedTextColor.YELLOW);
+			TextComponent dash = Component.text(" - ", NamedTextColor.DARK_GRAY);
+			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD);
+			line = line.append(dash).append(coord).append(dash).append(town).append(dash).append(type).append(dash).append(name);
+
+			plotsFormatted[i % 10] = line;
+		}
+
+		Audience audience = Towny.getAdventure().sender(sender);
+		sendMessage(sender, ChatTools.formatTitle(resident.getName() + " " + translator.of("townblock_plu")));
+		sendMessage(sender, headerMsg);
+		for (TextComponent textComponent : plotsFormatted)
+			audience.sendMessage(textComponent);
+
+		// Page navigation
+		Component pageFooter = getPageNavigationFooter("towny:resident plotlist" + resident.getName(), page, "", totalPages, translator);
+		audience.sendMessage(pageFooter);
+	}
+
 	/*
 	 * TRANSLATABLES FOLLOW
 	 */
