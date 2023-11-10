@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -744,6 +745,7 @@ public class TownyMessaging {
 	
 	public static void sendPlotList(CommandSender sender, Resident resident, int page, int totalPages) {
 		Translator translator = Translator.locale(sender);
+		boolean hasTPPermission = TownyUniverse.getInstance().getPermissionSource().testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TPPLOT.getNode());
 		int plotCount = resident.getTownBlocks().size();
 		int iMax = Math.min(page * 10, plotCount);
 		List<TownBlock> townblocks = new ArrayList<>(resident.getTownBlocks());
@@ -772,7 +774,10 @@ public class TownyMessaging {
 			TextComponent dash = Component.text(" - ", NamedTextColor.DARK_GRAY);
 			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD);
 			line = line.append(dash).append(coord).append(dash).append(town).append(dash).append(type).append(dash).append(name);
-
+			if (hasTPPermission) {
+				line = line.clickEvent(ClickEvent.runCommand("/towny:ta tpplot " + tb.getWorld().getName() + " " + tb.getX() + " " + tb.getZ()));
+				line = line.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", tb.getWorldCoord()).locale(sender).component() ));
+			}
 			plotsFormatted[i % 10] = line;
 		}
 
