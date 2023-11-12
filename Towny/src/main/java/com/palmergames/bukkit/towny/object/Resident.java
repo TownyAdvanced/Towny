@@ -92,6 +92,22 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		permissions.loadDefault(this);
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Resident otherResident))
+			return false;
+		return this.getUUID().equals(otherResident.getUUID());
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 17;
+		hash = hash * 27 + this.getUUID().hashCode();
+		return hash * 27 + this.getName().hashCode();
+	}
+
 	public void setLastOnline(long lastOnline) {
 
 		this.lastOnline = lastOnline;

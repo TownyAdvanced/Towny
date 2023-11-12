@@ -137,9 +137,8 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean equals(Object other) {
 		if (other == this)
 			return true;
-		if (!(other instanceof Town))
+		if (!(other instanceof Town otherTown))
 			return false;
-		Town otherTown = (Town) other;
 		return this.getUUID().equals(otherTown.getUUID());
 	}
 

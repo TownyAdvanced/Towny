@@ -61,9 +61,8 @@ public class Nation extends Government {
 	public boolean equals(Object other) {
 		if (other == this)
 			return true;
-		if (!(other instanceof Nation))
+		if (!(other instanceof Nation otherNation))
 			return false;
-		Nation otherNation = (Nation) other;
 		return this.getUUID().equals(otherNation.getUUID());
 	}
 
