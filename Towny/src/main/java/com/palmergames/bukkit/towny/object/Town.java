@@ -57,6 +57,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -144,9 +145,7 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public int hashCode() {
-		int hash = 17;
-		hash = hash * 27 + this.getUUID().hashCode();
-		return hash * 27 + this.getName().hashCode();
+		return Objects.hash(getUUID(), getName());
 	}
 
 	@Override

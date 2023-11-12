@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -68,9 +69,7 @@ public class Nation extends Government {
 
 	@Override
 	public int hashCode() {
-		int hash = 17;
-		hash = hash * 27 + this.getUUID().hashCode();
-		return hash * 27 + this.getName().hashCode();
+		return Objects.hash(getUUID(), getName());
 	}
 
 	public void addAlly(Nation nation) {

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -89,7 +90,21 @@ public class TownyWorld extends TownyObject {
 		super(name);
 		this.uuid = uuid;
 	}
-	
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof TownyWorld otherTownyWorld))
+			return false;
+		return this.getUUID().equals(otherTownyWorld.getUUID());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUUID(), getName());
+	}
+
 	public UUID getUUID() {
 		return uuid;
 	}
