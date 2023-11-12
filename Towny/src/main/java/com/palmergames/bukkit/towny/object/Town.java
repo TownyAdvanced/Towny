@@ -134,6 +134,23 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Town))
+			return false;
+		Town otherTown = (Town) other;
+		return this.getUUID().equals(otherTown.getUUID());
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 17;
+		hash = hash * 27 + this.getUUID().hashCode();
+		return hash * 27 + this.getName().hashCode();
+	}
+
+	@Override
 	public Collection<TownBlock> getTownBlocks() {
 		return Collections.unmodifiableCollection(townBlocks.values());
 	}

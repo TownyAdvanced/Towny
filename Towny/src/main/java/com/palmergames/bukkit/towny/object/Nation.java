@@ -57,6 +57,23 @@ public class Nation extends Government {
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Nation))
+			return false;
+		Nation otherNation = (Nation) other;
+		return this.getUUID().equals(otherNation.getUUID());
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 17;
+		hash = hash * 27 + this.getUUID().hashCode();
+		return hash * 27 + this.getName().hashCode();
+	}
+
 	public void addAlly(Nation nation) {
 
 		if (!hasAlly(nation)) {
