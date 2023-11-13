@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -55,6 +56,20 @@ public class Nation extends Government {
 		setTaxes(TownySettings.getNationDefaultTax());
 		setBoard(TownySettings.getNationDefaultBoard());
 		setOpen(TownySettings.getNationDefaultOpen());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Nation otherNation))
+			return false;
+		return this.getUUID().equals(otherNation.getUUID());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUUID(), getName());
 	}
 
 	public void addAlly(Nation nation) {

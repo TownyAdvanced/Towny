@@ -51,6 +51,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -90,6 +91,20 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public Resident(String name) {
 		super(name);
 		permissions.loadDefault(this);
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Resident otherResident))
+			return false;
+		return this.getUUID().equals(otherResident.getUUID());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUUID(), getName());
 	}
 
 	public void setLastOnline(long lastOnline) {
