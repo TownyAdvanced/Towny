@@ -4445,10 +4445,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!town.isForSale()) {
 			throw new TownyException(Translatable.of("msg_town_buytown_not_forsale"));
 		}
+
+		if (town.isRuined()) {
+			throw new TownyException("msg_town_buytown_ruined");
+		}
 		
 		Resident resident = getResidentOrThrow(player);
 		if (resident.isMayor()) {
-			throw new TownyException(Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
+			throw new TownyException(Translatable.of("msg_mayor_abandon"));
 		}
 
 		Confirmation
