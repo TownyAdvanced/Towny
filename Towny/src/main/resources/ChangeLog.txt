@@ -9192,3 +9192,18 @@ v0.92.0.11:
 0.100.0.3:
   - Fix TownyAddonCommandAPI's TownyAdmin Nation Tabcompleter not using the correct command type.
   - Fix saving nations unnecessarily when a nation is renamed.
+  - Add equals and hashcodes overrides to Resident, Town, Nation & TownyWorld objects.
+  - Prevent ruined towns from being bought, courtesy of Warrior with PR #7073.
+  - Add /res plotlist {name} Command.
+    - A command which shows you the plots which are personally owned by yourself, or by the resident with the given name.
+    - Location, town, plottype and plot name are all shown.
+    - When it is used by an Admin, they also gain the ability to click on the list to teleport to the plots as long as they possess the towny.command.townyadmin.tpplot permission node.
+    - Closes #7075.
+  - New Permission Node: towny.command.resident.plotlist
+    - Child nodes of towny.commmand.resident.*
+    - No changes required to be made to the townyperms.yml.
+  - New Command: /res plotlist {#} - Shows a player their own list of plots, with an optional page number.
+  - New Command: /res plotlist [name] {#} - Shows a a list of plots for the given player name, with an optional page number.
+  - Bump com.zaxxer:HikariCP from 5.0.1 to 5.1.0.
+  - Bump org.junit.jupiter:junit-jupiter from 5.10.0 to 5.10.1.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.10.0 to 5.10.1.
