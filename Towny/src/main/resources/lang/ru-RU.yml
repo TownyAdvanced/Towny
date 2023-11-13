@@ -2,7 +2,7 @@
 name: Towny
 language: русский
 author: ElgarL (Plugin developer), Communar, Egor33345 (Russian Translation)
-website: 'https://города.github.io/'
+website: 'https://townyadvanced.github.io/'
 description: >
   Language file for all game messages for this Locale.
 #A note on editing this file.
@@ -45,7 +45,7 @@ help_0: 'Основная помощь по Towny'
 help_1: 'Введите следующие команды чтобы узнать больше про Towny.'
 help_2: 'Чат города'
 help_3: 'Чат нации'
-help_4: 'Помощь по командам жителей.'
+help_4: 'Помощь по командам наций.'
 help_5: 'Помощь по командам городов.'
 help_6: 'Помощь по командам наций.'
 help_7: 'Помощь по командам участков.'
@@ -53,11 +53,11 @@ help_8: 'Помощь по командам Towny.'
 help_9: 'Помощь по командам Towny для админов.'
 towny_help_0: "Общая помощь по Towny"
 towny_help_1: "Показывает карту близлежащих участков"
-towny_help_2: "Display the prices used with Economy"
+towny_help_2: "Показать цены, используемые в экономике"
 towny_help_3: "Показывает топ"
 towny_help_4: "Показывает время до начала нового дня"
-towny_help_5: "Показывает статистику"
-towny_help_6: "Показывает версию Towny"
+towny_help_5: "Отображает статистику"
+towny_help_6: "Отображает версию Towny"
 towny_top_help_0: "Показывает топ городов по жителям по критериям."
 towny_top_help_1: "Показывает топ землевладельцев по критериям."
 towny_top_help_2: "Показывает топ самых богатых по критериям."
@@ -73,17 +73,17 @@ town_help_9: 'Новый день!'
 town_help_10: 'Список горожан онлайн'
 town_help_13: "Показывает список жителей города."
 town_help_14: "Показывает список рангов города."
-town_help_15: "See a list of outlaws in the town."
-town_help_16: "See a list of plotgroups in the town."
-town_help_17: "See a list of plot types in the town."
+town_help_15: "Посмотреть список преступников в городе."
+town_help_16: "Список групп участков в городе."
+town_help_17: "Посмотреть список типов участков в городе."
 town_help_18: "Отправляет сообщение жителям города."
 town_help_19: "Выставляет ваш город на продажу, его могут купить другие игроки."
 town_help_20: "Убирает ваш город с продажи."
 town_help_21: "Покупает выбранный город, если он выставлен на продажу."
 town_help_22: "Вносит деньги в казну вашего города."
-town_help_23: "Used to modify your resident's town ranks."
+town_help_23: ""
 town_help_24: "Используется для удаления вашего города."
-town_help_25: "Used to modify your town's outlaws."
+town_help_25: "."
 town_help_26: "Показывает список всех городов, используйте /t list ? для подробной информации."
 town_help_27: "Покинуть ваш текущий город."
 town_help_28: "Снять деньги со счёта вашего города."
@@ -2055,3 +2055,5 @@ town_say_format: "%s says: %s"
 msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
 msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
 msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
+#Message shown when a resident is an NPC and is not allowed to do something.
+msg_err_resident_is_npc: "You cannot do this to an NPC resident."
