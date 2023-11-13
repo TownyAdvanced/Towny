@@ -2038,6 +2038,7 @@ msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you
 msg_town_buytown_already_mayor: "You are already mayor of %s."
 msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
 msg_town_buytown_not_forsale: "Указанный город не продаётся."
+msg_town_buytown_ruined: "Ruined towns cannot be bought."
 msg_resident_about_reset: "&bПоле \"О себе\" жителя сброшено."
 msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
 msg_set_about: "%s's about was set to %s."
@@ -2057,3 +2058,6 @@ msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order 
 msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
 #Message shown when a resident is an NPC and is not allowed to do something.
 msg_err_resident_is_npc: "You cannot do this to an NPC resident."
+#Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
+msg_unnamed: "Unnamed"
