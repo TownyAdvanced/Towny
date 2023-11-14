@@ -739,7 +739,7 @@ public class TownyMessaging {
 		}
 		
 		// Page navigation
-		Component pageFooter = getPageNavigationFooter("towny:town plotgrouplist" + town.getName(), page, "", total, translator);
+		Component pageFooter = getPageNavigationFooter("towny:town plotgrouplist " + town.getName(), page, "", total, translator);
 		audience.sendMessage(pageFooter);
 	}
 	
@@ -788,7 +788,7 @@ public class TownyMessaging {
 			audience.sendMessage(component);
 
 		// Page navigation
-		Component pageFooter = getPageNavigationFooter("towny:resident plotlist" + resident.getName(), page, "", totalPages, translator);
+		Component pageFooter = getPageNavigationFooter("towny:resident plotlist " + resident.getName(), page, "", totalPages, translator);
 		audience.sendMessage(pageFooter);
 	}
 

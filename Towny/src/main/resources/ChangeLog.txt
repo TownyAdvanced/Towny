@@ -9210,3 +9210,6 @@ v0.92.0.11:
 0.100.0.4:
   - Fix new TownyObject equals methods using UUIDs, something to undo once the UUID db is adopted.
   - Remove two cases of == equality check for residents, courtesy of Warrior with PR #7084.
+0.100.0.5:
+  - Fix page navigation from list footers in the plotgrouplist and plotlist screens.
+    - Closes #7089.
