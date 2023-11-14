@@ -9209,3 +9209,4 @@ v0.92.0.11:
   - Bump org.junit.jupiter:junit-jupiter-api from 5.10.0 to 5.10.1.
 0.100.0.4:
   - Fix new TownyObject equals methods using UUIDs, something to undo once the UUID db is adopted.
+  - Remove two cases of == equality check for residents, courtesy of Warrior with PR #7084.
