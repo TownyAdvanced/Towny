@@ -2038,6 +2038,7 @@ msg_town_sell_confirmation: "Wystawisz swoje miasto na sprzedaż za %s. Jesteś 
 msg_town_buytown_already_mayor: "Już jesteś Burmistrzem miasta %s."
 msg_town_buytown_confirmation: "Zakup miasta %s będzie kosztować %s i usunie cię miasta, do którego aktualnie należysz. Czy na pewno chcesz kontynuować?"
 msg_town_buytown_not_forsale: "To miasto nie jest na sprzedaż."
+msg_town_buytown_ruined: "Ruined towns cannot be bought."
 msg_resident_about_reset: "&bResetowanie bio mieszkańca."
 msg_err_invalid_string_about_not_set: "Niepoprawna treść, bio nie zostało ustawione."
 msg_set_about: "Bio mieszkańca %s zostało ustawione na %s."
@@ -2057,3 +2058,6 @@ msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order 
 msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
 #Message shown when a resident is an NPC and is not allowed to do something.
 msg_err_resident_is_npc: "You cannot do this to an NPC resident."
+#Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
+msg_unnamed: "Unnamed"
