@@ -3027,7 +3027,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				continue;
 			}
 
-			if (resident == member) {
+			if (member.equals(resident)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_you_cannot_kick_yourself"));
 				kicking.remove(member);
 				continue;
@@ -4463,8 +4463,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				}
 
 				Resident currentMayor = town.getMayor();
-				if (currentMayor == resident) {
+				if (resident.equals(currentMayor)) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_town_buytown_already_mayor", resident.getTownOrNull().getName()));
+					return;
+				}
+
+				if (resident.isMayor()) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_mayor_abandon"));
 					return;
 				}
 				
