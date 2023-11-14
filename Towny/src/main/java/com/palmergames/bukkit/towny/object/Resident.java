@@ -99,7 +99,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return true;
 		if (!(other instanceof Resident otherResident))
 			return false;
-		return this.getUUID().equals(otherResident.getUUID());
+		return this.getName().equals(otherResident.getName()); // TODO: Change this to UUID when the UUID database is in use.
 	}
 
 	@Override

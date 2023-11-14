@@ -64,7 +64,7 @@ public class Nation extends Government {
 			return true;
 		if (!(other instanceof Nation otherNation))
 			return false;
-		return this.getUUID().equals(otherNation.getUUID());
+		return this.getName().equals(otherNation.getName()); // TODO: Change this to UUID when the UUID database is in use.
 	}
 
 	@Override

@@ -140,7 +140,7 @@ public class Town extends Government implements TownBlockOwner {
 			return true;
 		if (!(other instanceof Town otherTown))
 			return false;
-		return this.getUUID().equals(otherTown.getUUID());
+		return this.getName().equals(otherTown.getName()); // TODO: Change this to UUID when the UUID database is in use.
 	}
 
 	@Override
