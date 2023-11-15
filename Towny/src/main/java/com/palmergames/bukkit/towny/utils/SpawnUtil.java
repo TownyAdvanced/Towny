@@ -82,6 +82,11 @@ public class SpawnUtil {
 			notAffordMSG, outpost, spawnType, resident, town, nation);
 
 		getSpawnLoc(player, town, nation, spawnType, outpost, split).thenAccept(spawnLoc -> {
+			if (!spawnLoc.isWorldLoaded()) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_world_not_loaded"));
+				return;
+			}
+			
 			// Fire a cancellable event right before a player would actually pay.
 			// Throws a TownyException if the event is cancelled.
 			try {
@@ -432,12 +437,12 @@ public class SpawnUtil {
 						else if (town != null && town.hasSpawn())
 							return town.getSpawnOrNull();
 						else
-							return plugin.getCache(player).getLastLocation().getWorld().getSpawnLocation();
+							return player.getWorld().getSpawnLocation();
 					});
 				} else if (town != null && town.hasSpawn())
 					yield CompletableFuture.completedFuture(town.getSpawnOrNull());
 				else
-					yield CompletableFuture.completedFuture(plugin.getCache(player).getLastLocation().getWorld().getSpawnLocation());
+					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
 					yield CompletableFuture.completedFuture(getOutpostSpawnLocation(town, split));
@@ -525,18 +530,18 @@ public class SpawnUtil {
 			Town townAtPlayerLoc = TownyAPI.getInstance().getTown(player.getLocation());
 			
 			if (townAtPlayerLoc == null && disallowedZones.contains("unclaimed"))
-				throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_the_wilderness")));
+				throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.typeName(), Translatable.of("msg_the_wilderness")));
 
 			if (townAtPlayerLoc != null) {
 				if (townAtPlayerLoc.hasOutlaw(player.getName()) && disallowedZones.contains("outlaw"))
 					throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", "RTP", Translatable.of("msg_a_town_you_are_outlawed_in")));
 				if (resident.hasNation() && townAtPlayerLoc.hasNation()) {
 					if (CombatUtil.isEnemy(resident.getTownOrNull(), townAtPlayerLoc) && disallowedZones.contains("enemy"))
-						throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_enemy_areas")));
+						throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.typeName(), Translatable.of("msg_enemy_areas")));
 					Nation townLocNation = townAtPlayerLoc.getNationOrNull();
 					Nation resNation = resident.getNationOrNull();
 					if (!townLocNation.hasAlly(resNation) && !townLocNation.hasEnemy(resNation) && disallowedZones.contains("neutral"))
-						throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.getTypeName(), Translatable.of("msg_neutral_towns")));
+						throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.typeName(), Translatable.of("msg_neutral_towns")));
 				}
 			}
 		}

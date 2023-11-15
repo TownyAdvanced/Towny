@@ -16,10 +16,11 @@ import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.audience.ForwardingAudience;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,11 +33,11 @@ import java.util.UUID;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, Identifiable, SpawnLocation, ForwardingAudience {
+public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, Identifiable, SpawnLocation, SpawnPosition, ForwardingAudience {
 	
 	protected UUID uuid;
 	protected BankAccount account;
-	protected Location spawn;
+	protected Position spawn;
 	protected String tag = "";
 	protected String board = null;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
@@ -81,7 +82,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 
 	@Override
 	public final void newSentInvite(Invite invite)  throws TooManyInvitesException {
-		if (sentInvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) { // We only want 35 Invites, for towns, later we can make this number configurable
+		if (sentInvites.size() <= (InviteHandler.getSentInvitesMaxAmount(this) -1)) {
 			sentInvites.add(invite);
 		} else {
 			throw new TooManyInvitesException(Translation.of("msg_err_town_sent_too_many_invites"));
@@ -295,7 +296,6 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	 * @return The tax number.
 	 */
 	public double getTaxes() {
-		setTaxes(taxes); //make sure the tax level is right.
 		return taxes;
 	}
 
@@ -320,6 +320,20 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		return mapColorHexCode;
 	}
 
+	/**
+	 * Gets the map color of a government if it has one.
+	 *
+	 * @return The {@link Color} this object is in.
+	 */
+	@Nullable
+	public Color getMapColor() {
+		try {
+			return Color.decode("#" + getMapColorHexCode());
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+	
 	public void setMapColorHexCode(String mapColorHexCode) {
 		this.mapColorHexCode = mapColorHexCode;
 	}

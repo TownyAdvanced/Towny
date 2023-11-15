@@ -94,7 +94,11 @@ public class WorldCoord extends Coord {
 	}
 	
 	public static WorldCoord parseWorldCoord(Location loc) {
-		return new WorldCoord(loc.getWorld(), toCell(loc.getBlockX()), toCell(loc.getBlockZ()));
+		final World world = loc.getWorld();
+		if (world == null)
+			throw new IllegalArgumentException("Provided location does not have an associated world");
+		
+		return new WorldCoord(world, toCell(loc.getBlockX()), toCell(loc.getBlockZ()));
 	}
 
 	public static WorldCoord parseWorldCoord(Block block) {
@@ -147,6 +151,9 @@ public class WorldCoord extends Coord {
 		if (world == null) {
 			world = Bukkit.getServer().getWorld(this.worldName);
 			worldRef = new WeakReference<>(world);
+			
+			if (this.worldUUID == null && world != null)
+				this.worldUUID = world.getUID();
 		}
 		
 		return world;
@@ -157,15 +164,6 @@ public class WorldCoord extends Coord {
 	 */
 	@Nullable
 	public TownyWorld getTownyWorld() {
-		return TownyAPI.getInstance().getTownyWorld(this.worldName);
-	}
-
-	/**
-	 * @deprecated as of 0.98.4.9, please use {@link #getTownyWorld()} instead.
-	 */
-	@Nullable
-	@Deprecated
-	public TownyWorld getTownyWorldOrNull() {
 		return TownyAPI.getInstance().getTownyWorld(this.worldName);
 	}
 	
@@ -197,7 +195,7 @@ public class WorldCoord extends Coord {
 	}
 	
 	public boolean hasTown(Town town) {
-		return hasTownBlock() && getTownOrNull().equals(town);
+		return town != null && town.equals(getTownOrNull());
 	}
 
 	/**
@@ -271,8 +269,7 @@ public class WorldCoord extends Coord {
 
 	// Used to get a location at the corner of a WorldCoord.
 	private Location getCorner() {
-		Location loc = new Location(getBukkitWorld(), getX() * getCellSize(), 0, getZ() * getCellSize());
-		return loc;
+		return new Location(getBukkitWorld(), getX() * getCellSize(), 0, getZ() * getCellSize());
 	}
 	
 	// Used to get a location representing sub coordinates of a WorldCoord, to ease the lookup of a corresponding Chunk. 

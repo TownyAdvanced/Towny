@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.permissions;
 
 import net.kyori.adventure.util.TriState;
+
+import java.util.Locale;
+
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -57,8 +60,7 @@ public abstract class TownyPermissionSource {
 				try {
 					int i = Integer.parseInt(split[split.length - 1]);
 					biggest = Math.max(biggest, i);
-				} catch (NumberFormatException e) {
-				}
+				} catch (NumberFormatException ignored) {}
 			}
 		}
 		return biggest;
@@ -76,7 +78,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasWildOverride(TownyWorld world, Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_WILD_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,
@@ -116,7 +118,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasOwnTownOverride(Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_OWNTOWN_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_CLAIMED_OWNTOWN_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,
@@ -137,7 +139,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasTownOwnedOverride(Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_TOWNOWNED_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_CLAIMED_TOWNOWNED_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,
@@ -158,7 +160,7 @@ public abstract class TownyPermissionSource {
 	public boolean hasAllTownOverride(Player player, Material material, TownyPermission.ActionType action) {
 
 		// Figure out what permission node this would be.
-		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALLTOWN_ALL.getNode(action.toString().toLowerCase() + "." + material);
+		String blockPerm = PermissionNodes.TOWNY_CLAIMED_ALLTOWN_ALL.getNode(action.toString().toLowerCase(Locale.ROOT) + "." + material);
 
 		/*
 		 * Test if the player is an admin or actually has the specific permission node or,
@@ -256,29 +258,6 @@ public abstract class TownyPermissionSource {
 			return false;
 
 		return has == TriState.TRUE || isTownyAdmin(permissible);
-	}
-	
-	/**
-	 * Unused by Towny, scheduled for removal.
-	 * @deprecated since 0.98.4.6 use {@link #testPermission(Permissible, String)} instead.
-	 * @param permissible Permissible to check.
-	 * @param node PermissionNode to check for.
-	 * @return true if the Permissble has the PermissionNodes.
-	 */
-	@Deprecated
-	public boolean testPermission(Permissible permissible, PermissionNodes node) {
-		return testPermission(permissible, node.getNode());
-	}
-
-	/**
-	 * @param player Player to check
-	 * @param node Permission node to check for
-	 * @return true if the player has this permission node or is Op.
-	 * @deprecated since 0.98.4.6 use {@link #testPermission(Permissible, String)} instead.
-	 */
-	@Deprecated
-	public boolean has(Player player, String node) {
-		return testPermission(player, node);
 	}
 
 	/**

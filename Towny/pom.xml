@@ -13,12 +13,12 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.99.5.0</version>
+    <version>0.100.0.5</version>
 
     <licenses>
         <license>
             <name>CC BY-NC-ND 3.0</name>
-            <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
+            <url>https://creativecommons.org/licenses/by-nc-nd/3.0/</url>
             <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported</comments>
             <distribution>repo</distribution>
         </license>
@@ -32,6 +32,7 @@
     <properties>
         <java.version>17</java.version>
         <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
+        <skipTests>true</skipTests>
     </properties>
 
     <scm>
@@ -58,10 +59,6 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>ess-repo</id>
-            <url>https://repo.essentialsx.net/releases/</url>
-        </repository>
-        <repository>
             <id>citizens-repo</id>
             <url>https://repo.citizensnpcs.co/</url>
         </repository>
@@ -77,13 +74,17 @@
             <id>central</id>
             <url>https://repo1.maven.org/maven2</url>
         </repository>
+        <repository>
+            <id>playpro-repo</id>
+            <url>https://maven.playpro.com</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>1.20.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -95,7 +96,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.0.1</version>
+            <version>5.1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -123,15 +124,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>2.18.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.ElgarL</groupId>
             <artifactId>groupmanager</artifactId>
-            <version>2.9</version>
+            <version>3.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -144,25 +139,25 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.20.0</version>
+            <version>2.21.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.3</version>
+            <version>2.11.5</version>
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.23.0</version>
+            <version>1.24.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.10.0</version>
+            <version>1.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
@@ -172,7 +167,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.0</version>
+            <version>4.3.1</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
@@ -243,13 +238,25 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.9.3</version>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.3</version>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.coreprotect</groupId>
+            <artifactId>coreprotect</artifactId>
+            <version>22.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.seeseemelk</groupId>
+            <artifactId>MockBukkit-v1.20</artifactId>
+            <version>3.44.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -283,7 +290,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.0</version>
                     <executions>
                         <execution>
                             <id>install</id>
@@ -356,7 +363,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.5.1</version>
                     <configuration>
                         <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                         <artifactSet>
@@ -465,7 +472,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.1</version>
+                    <configuration>
+                        <skipTests>${skipTests}</skipTests>
+                    </configuration>
                 </plugin>
             </plugins>
         <resources>
@@ -477,6 +487,19 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>test</id>
+            <activation>
+                <property>
+                    <name>maven.test.skip</name>
+                    <value>false</value>
+                </property>
+            </activation>
+            <properties>
+                <skipTests>false</skipTests>
+            </properties>
+        </profile>
+
         <profile>
             <id>intellij-idea-only</id>
             <activation>

@@ -155,32 +155,28 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		String backupType = TownySettings.getFlatFileBackupType();
 		String newBackupFolder = backupFolderPath + File.separator + BACKUP_DATE_FORMAT.format(System.currentTimeMillis());
 		FileMgmt.checkOrCreateFolders(rootFolderPath, rootFolderPath + File.separator + "backup");
-		switch (backupType.toLowerCase()) {
-		case "folder": {
-			FileMgmt.checkOrCreateFolder(newBackupFolder);
-			FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
-			FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
-			FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
-			return true;
-		}
-		case "zip": {
-			FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"), new File(dataFolderPath),
-					new File(logFolderPath), new File(settingsFolderPath));
-			return true;
-		}
-		case "tar.gz":
-		case "tar": {
-			FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
-				new File(dataFolderPath),
-				new File(logFolderPath),
-				new File(settingsFolderPath));
-			return true;
-		}
-		default:
-		case "none": {
-			return false;
-		}
-		}
+        return switch (backupType.toLowerCase(Locale.ROOT)) {
+            case "folder" -> {
+                FileMgmt.checkOrCreateFolder(newBackupFolder);
+                FileMgmt.copyDirectory(new File(dataFolderPath), new File(newBackupFolder));
+                FileMgmt.copyDirectory(new File(logFolderPath), new File(newBackupFolder));
+                FileMgmt.copyDirectory(new File(settingsFolderPath), new File(newBackupFolder));
+                yield true;
+            }
+            case "zip" -> {
+                FileMgmt.zipDirectories(new File(newBackupFolder + ".zip"), new File(dataFolderPath),
+                        new File(logFolderPath), new File(settingsFolderPath));
+                yield true;
+            }
+            case "tar.gz", "tar" -> {
+                FileMgmt.tar(new File(newBackupFolder.concat(".tar.gz")),
+                        new File(dataFolderPath),
+                        new File(logFolderPath),
+                        new File(settingsFolderPath));
+                yield true;
+            }
+            default -> false;
+        };
 	}
 
 	/*
@@ -256,6 +252,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Remove resident from towns' outlaw & trusted lists.
 		for (Town town : universe.getTowns()) {
+			if (!town.exists())
+				continue;
+
 			boolean save = false;
 			
 			if (town.hasOutlaw(resident)) {
@@ -311,18 +310,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		for (Resident toCheck : toSave)
 			saveResident(toCheck);
 		
-		if (resident.hasTown()) {
-			Town town = resident.getTownOrNull();
-
-			if (town != null) {
-				// Delete the town if there are no more residents
-				if (town.getNumResidents() <= 1) {
-					universe.getDataSource().removeTown(town);
-				}
-
-				resident.removeTown();
-			}
-		}
+		if (resident.hasTown() && resident.getTownOrNull() != null)
+			resident.removeTown();
 
 		if (resident.hasUUID() && !resident.isNPC())
 			saveHibernatedResident(resident.getUUID(), resident.getRegistered());
@@ -438,7 +427,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		for (Resident resident : toSave) {
 			resident.clearModes();
-			resident.removeTown();
+			resident.removeTown(true);
 		}
 		
 		// Look for residents inside of this town's jail(s) and free them, more than 
@@ -535,6 +524,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		for (Town town : toSave) {
+			if (!town.exists())
+				continue;
 
 			for (Resident res : town.getResidents()) {
 				res.updatePermsForNationRemoval();
@@ -621,12 +612,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
 				try {
-					townBalance = town.getAccount().getHoldingBalance();					
-					if (TownySettings.isEcoClosedEconomyEnabled()){
-						town.getAccount().deposit(townBalance, "Town Rename");
-					} 
+					townBalance = town.getAccount().getHoldingBalance();
 					town.getAccount().removeAccount();
-					
 				} catch (Exception ignored) {
 					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + ", could not be received from the economy plugin and will not be able to be converted.");
 				}
@@ -730,11 +717,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive())
 				try {
 					nationBalance = nation.getAccount().getHoldingBalance();
-					if (TownySettings.isEcoClosedEconomyEnabled()){
-						nation.getAccount().withdraw(nationBalance, "Nation Rename");
-					}
 					nation.getAccount().removeAccount();
-					
 				} catch (Exception ignored) {
 					TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
 				}
@@ -764,21 +747,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			//search and update all ally/enemy lists
 			Nation oldNation = new Nation(oldName);
-			List<Nation> toSaveNation = new ArrayList<>(universe.getNations());
-			for (Nation toCheck : toSaveNation)
-				if (toCheck.hasAlly(oldNation) || toCheck.hasEnemy(oldNation)) {
-					if (toCheck.hasAlly(oldNation)) {
-						toCheck.removeAlly(oldNation);
-						toCheck.addAlly(nation);
+			List<Nation> toSaveNations = new ArrayList<>();
+			universe.getNations().stream()
+				.filter(n -> n.hasAlly(oldNation) || n.hasEnemy(oldNation))
+				.forEach(n -> {
+					if (n.hasAlly(oldNation)) {
+						n.removeAlly(oldNation);
+						n.addAlly(nation);
 					} else {
-						toCheck.removeEnemy(oldNation);
-						toCheck.addEnemy(nation);
+						n.removeEnemy(oldNation);
+						n.addEnemy(nation);
 					}
-				} else
-					toSave.remove(toCheck);
-
-			for (Nation toCheck : toSaveNation)
-				saveNation(toCheck);
+					toSaveNations.add(n);
+				});
+			toSaveNations.forEach(Nation::save);
 
 		} finally {
 			lock.unlock();
@@ -809,7 +791,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Get balance in case this a server using ico5.  
 			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
 				balance = resident.getAccount().getHoldingBalance();
-				resident.getAccount().removeAccount();				
+				resident.getAccount().removeAccount();
 			}
 			// Change account name over.
 			if (TownyEconomyHandler.isActive() && resident.getAccountOrNull() != null)
@@ -824,7 +806,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Set the economy account balance in ico5 (because it doesn't use UUIDs.)
 			if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getVersion().startsWith("iConomy 5")) {
 				resident.getAccount().setName(resident.getName());
-				resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");				
+				resident.getAccount().setBalance(balance, "Rename Player - Transfer to new account");
 			}
 			
 			// Save resident with new name.

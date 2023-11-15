@@ -3,8 +3,12 @@ package com.palmergames.bukkit.towny.hooks;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
@@ -24,6 +28,7 @@ import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
@@ -39,12 +44,13 @@ public class PluginIntegrations {
 	private final String[] SPONSOR_PLUGINS = { "EventWar", "SiegeConquest", "TownyCamps", "TownyHistories", "TownyRTP",
 			"TownyWayPointTravel", "TownOptionalLWC" };
 	private final String NEWLINE_STRING = System.lineSeparator() + "                           ";
-	private List<String> warnings = new ArrayList<>();
+	private final Map<String, Level> warnings = new LinkedHashMap<>();
 
 	private TownyPlaceholderExpansion papiExpansion = null;
 	private LuckPermsContexts luckPermsContexts;
 	private boolean citizens2 = false;
 	private NamespacedKey eliteKey;
+	private Version POWERRANKS_FIXED_VERSION = Version.fromString("1.10.8");
 
 	public static PluginIntegrations getInstance() {
 		if (instance == null)
@@ -80,8 +86,9 @@ public class PluginIntegrations {
 	 	// Check for permission source.
 		detectAndPrintPermissions(towny);
 
-		// Check for an economy plugin.
-		setupAndPrintEconomy(TownySettings.isUsingEconomy());
+		// Check for an economy plugin if the main config loaded correctly.
+		if (!towny.isError(TownyInitException.TownyError.MAIN_CONFIG))
+			setupAndPrintEconomy(TownySettings.isUsingEconomy());
 
 		// Find supporting plugins and set them up if needed.
 		findSetupAndPrintAddons(towny);
@@ -91,11 +98,11 @@ public class PluginIntegrations {
 	}
 
 	private void detectAndPrintPermissions(Towny towny) {
-		for (String permissions : returnPermissionsProviders(towny).split("\n"))
+		for (String permissions : registerPermissionsProviders(towny).split("\n"))
 			towny.getLogger().info(permissions);
 	}
 
-	private void setupAndPrintEconomy(boolean configSetForEconomy) {
+	public void setupAndPrintEconomy(boolean configSetForEconomy) {
 		String ecowarn = "No compatible Economy plugins found."
 				+ " Install Vault.jar or Reserve.jar with any of the supported eco systems."
 				+ " If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
@@ -114,7 +121,7 @@ public class PluginIntegrations {
 			ecowarn = "No compatible Economy plugins found. If you do not want an economy to be used, set using_economy: false in your Towny config.yml.";
 
 		if (!ecowarn.isEmpty() && configSetForEconomy)
-			warnings.add(ecowarn);
+			warnings.put(ecowarn, Level.INFO);
 	}
 
 	private void findSetupAndPrintAddons(Towny towny) {
@@ -154,16 +161,25 @@ public class PluginIntegrations {
 	private void printPluginWarnings() {
 		//Legacy check to see if questioner.jar is still present.
 		if (isPluginPresent("Questioner"))
-			warnings.add("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations."
-					+ " You may safely remove Questioner.jar from your plugins folder.");
-		//Add warning about PowerRanks.
-		if (isPluginPresent("PowerRanks"))
-			warnings.add("PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
-					+ " You can expect issues with Towny permissions (and other permission providers,) while PowerRanks is installed.");
+			warnings.put("Questioner.jar present on server, Towny no longer requires Questioner for invites/confirmations."
+					+ " You may safely remove Questioner.jar from your plugins folder.", Level.WARNING);
+
+		//Add warning about outdated PowerRanks.
+		if (isPluginPresent("PowerRanks")) {
+			Version version = Version.fromString(Bukkit.getPluginManager().getPlugin("PowerRanks").getDescription().getVersion());
+			if (version.isOlderThan(POWERRANKS_FIXED_VERSION))
+				warnings.put("Your outdated PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
+					+ " Update your PowerRanks to version 1.10.8 or newer!", Level.WARNING);
+		}
+
+		//Add warning about MyCommand which will have a /t alias for /time in it by default.
+		if (isPluginPresent("MyCommand"))
+			warnings.put("By default MyCommand has an alias for /time that uses /t stored in the mycommand/commands/examples.yml file."
+					+ " If you have not removed it you can expect the /t command to not work properly for Towny!", Level.WARNING);
 
 		if (!warnings.isEmpty()) {
-			for (String warning : warnings)
-				Towny.getPlugin().getLogger().warning(StringMgmt.wrap("  Warning: " + warning, 55, NEWLINE_STRING));
+			for (Map.Entry<String, Level> warning : warnings.entrySet())
+				Towny.getPlugin().getLogger().log(warning.getValue(), StringMgmt.wrap("  Warning: " + warning.getKey(), 55, NEWLINE_STRING));
 
 			warnings.clear();
 		}
@@ -184,7 +200,7 @@ public class PluginIntegrations {
 			out.add(pluginName + " v" + plugin.getDescription().getVersion());
 	}
 
-	private String returnPermissionsProviders(Towny towny) {
+	public String registerPermissionsProviders(Towny towny) {
 		// TownyPerms is always present.
 		String output = "  Permissions: TownyPerms, ";
 
@@ -259,6 +275,10 @@ public class PluginIntegrations {
 
 	private boolean isPluginPresent(String pluginName) {
 		return Bukkit.getServer().getPluginManager().getPlugin(pluginName) != null;
+	}
+	
+	public boolean isPluginEnabled(@NotNull String pluginName) {
+		return Bukkit.getServer().getPluginManager().isPluginEnabled(pluginName);
 	}
 
 	/*

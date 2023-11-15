@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.util.StringMgmt;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author dumptruckman
@@ -105,5 +106,10 @@ public class TownBlockType {
 			return false;
 		
 		return townBlockType.getName().equalsIgnoreCase(this.name);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.name, this.data);
 	}
 }

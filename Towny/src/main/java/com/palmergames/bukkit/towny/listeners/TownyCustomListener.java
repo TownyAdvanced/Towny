@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import com.palmergames.bukkit.config.ConfigNodes;
-import com.palmergames.bukkit.towny.ChunkNotification;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -16,12 +15,14 @@ import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
+import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
@@ -29,30 +30,21 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
-
-import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 
 /**
  * Author: Chris H (Zren / Shade)
@@ -60,8 +52,6 @@ import java.util.logging.Level;
  */
 public class TownyCustomListener implements Listener {
 	private final Towny plugin;
-	private final Map<Player, ScheduledTask> playerActionTasks = new HashMap<>();
-	private final Map<Player, BossBar> playerBossBarMap = new HashMap<>();
 
 	public TownyCustomListener(Towny instance) {
 		plugin = instance;
@@ -86,6 +76,8 @@ public class TownyCustomListener implements Listener {
 				TownCommand.parseTownClaimCommand(player, new String[] {});
 			if (resident.hasMode("townunclaim"))
 				TownCommand.parseTownUnclaimCommand(player, new String[] {});
+			if (resident.hasMode("plotgroup") && resident.hasPlotGroupName()) 
+				Towny.getPlugin().getScheduler().runLater(player, () -> Bukkit.dispatchCommand(player, "plot group add " + resident.getPlotGroupName()), 1l);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
@@ -95,94 +87,8 @@ public class TownyCustomListener implements Listener {
 			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, to));
 
 		// Check if player has entered a new town/wilderness
-		if (event.isShowingPlotNotifications()) {
-			String msg = null;
-			try {
-				ChunkNotification chunkNotifier = new ChunkNotification(from, to);
-				msg = chunkNotifier.getNotificationString(resident);
-			} catch (NullPointerException e) {
-				plugin.getLogger().log(Level.WARNING, "ChunkNotifier generated an NPE, this is harmless but if you'd like to report it the following information will be useful: " + System.lineSeparator() +
-					"  Player: " + player.getName() + "  To: " + to.getWorldName() + "," + to.getX() + "," + to.getZ() + "  From: " + from.getWorldName() + "," + from.getX() + "," + from.getZ(), e);
-			}
-			if (msg == null)
-				return;
-
-			ChunkNotificationEvent cne = new ChunkNotificationEvent(player, msg, to, from);
-			BukkitTools.fireEvent(cne);
-			msg = cne.getMessage();
-			if (cne.isCancelled() || msg == null || msg.isEmpty())
-				return;
-
-			sendChunkNoticiation(player, msg);
-		}
-	}
-	
-	private void sendChunkNoticiation(Player player, String msg) {
-		switch (TownySettings.getNotificationsAppearAs().toLowerCase(Locale.ROOT)) {
-			case "bossbar" -> sendBossBarChunkNotification(player, TownyComponents.miniMessage(msg));
-			case "chat" -> TownyMessaging.sendMessage(player, msg);
-			case "none" -> {}
-			default -> sendActionBarChunkNotification(player, TownyComponents.miniMessage(msg));
-		}
-	}
-	
-	private void sendActionBarChunkNotification(Player player, Component msgComponent) {
-		int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
-		if (seconds > 3) {
-			// Towny is showing the actionbar message longer than vanilla MC allows, using a scheduled task.
-			// Cancel any older tasks running to prevent them from leaking over.
-			if (playerActionTasks.get(player) != null)
-				removePlayerActionTasks(player);
-	
-			AtomicInteger remainingSeconds = new AtomicInteger(seconds);
-			final ScheduledTask task = plugin.getScheduler().runAsyncRepeating(() -> {
-				TownyMessaging.sendActionBarMessageToPlayer(player, msgComponent);
-				remainingSeconds.getAndDecrement();
-				
-				if (remainingSeconds.get() == 0 && playerActionTasks.containsKey(player)) 
-					removePlayerActionTasks(player);
-			}, 0, 20L);
-			
-			playerActionTasks.put(player, task);
-		} else {
-			// Vanilla action bar displays for 3 seconds, so we shouldn't bother with any scheduling.
-			TownyMessaging.sendActionBarMessageToPlayer(player, msgComponent);
-		}
-	}
-
-	private void sendBossBarChunkNotification(Player player, Component message) {
-		int ticks = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION) * 20;
-		if (playerBossBarMap.containsKey(player)) {
-			removePlayerActionTasks(player);
-			removePlayerBossBar(player);
-		}
-		
-		final BossBar.Color color = BossBar.Color.NAMES.valueOr(TownySettings.getBossBarNotificationColor().toLowerCase(Locale.ROOT), BossBar.Color.WHITE);
-		final BossBar.Overlay overlay = BossBar.Overlay.NAMES.valueOr(TownySettings.getBossBarNotificationOverlay().toLowerCase(Locale.ROOT), BossBar.Overlay.PROGRESS);
-		
-		final BossBar bossBar = BossBar.bossBar(message, TownySettings.getBossBarNotificationProgress(), color, overlay);
-
-		TownyMessaging.sendBossBarMessageToPlayer(player, bossBar);
-
-		final ScheduledTask task = plugin.getScheduler().runAsyncLater(() -> {
-			playerActionTasks.remove(player);
-			removePlayerBossBar(player);
-		}, ticks);
-
-		playerBossBarMap.put(player, bossBar);
-		playerActionTasks.put(player, task);
-	}
-	
-	private void removePlayerActionTasks(Player player) {
-		final ScheduledTask task = playerActionTasks.remove(player);
-		if (task != null)
-			task.cancel();
-	}
-	
-	private void removePlayerBossBar(Player player) {
-		final BossBar bar = playerBossBarMap.remove(player);
-		if (bar != null)
-			Towny.getAdventure().player(player).hideBossBar(bar);
+		if (event.isShowingPlotNotifications())
+			ChunkNotificationUtil.showChunkNotification(player, resident, to, from);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -324,12 +230,11 @@ public class TownyCustomListener implements Listener {
 		if (!TownySettings.isOverClaimingAllowingStolenLand() || event.getToCoord().isWilderness() || event.getFromCoord().isWilderness())
 			return;
 
-		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer());
-		if (resident == null || !resident.hasTown())
+		Town town = TownyAPI.getInstance().getTown(event.getPlayer());
+		if (town == null)
 			return;
 
-		Town town = resident.getTownOrNull();
-		if  (town.availableTownBlocks() < 1 || !event.getFromCoord().getTownOrNull().equals(town))
+		if (town.availableTownBlocks() < 1 || !town.equals(event.getFromCoord().getTownOrNull()))
 			return;
 
 		if (!event.getToCoord().canBeStolen())
@@ -340,16 +245,18 @@ public class TownyCustomListener implements Listener {
 
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void onResidentJoinTown(TownAddResidentEvent event) {
 		if (!TownySettings.isPromptingNewResidentsToTownSpawn() || !TownySettings.getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN))
 			return;
 
 		Town town = event.getTown();
 		Player player = event.getResident().getPlayer();
+		Town residentTown = event.getResident().getTownOrNull();
 
-		if (player == null || TownyAPI.getInstance().getTown(player).equals(town))
+		if (player == null || residentTown == null || residentTown.equals(town))
 			return;
+		
 		String notAffordMsg = Translatable.of("msg_err_cant_afford_tp").forLocale(player);
 
 		try {
@@ -357,5 +264,21 @@ public class TownyCustomListener implements Listener {
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onTownBlockPermissionChange(TownBlockPermissionChangeEvent event) {
+		WorldCoord wc = event.getTownBlock().getWorldCoord();
+		for (Player player : Bukkit.getOnlinePlayers())
+			Towny.getPlugin().getScheduler().runAsync(() -> attemptPlayerCacheReset(player, wc));
+	}
+
+	private void attemptPlayerCacheReset(Player player, WorldCoord worldCoord) {
+		if (!worldCoord.getWorldName().equalsIgnoreCase(player.getWorld().getName()))
+			return;
+		PlayerCache cache = Towny.getPlugin().getCache(player);
+		if (cache == null || !cache.getLastTownBlock().equals(worldCoord) || PlayerCacheUtil.isOwnerCache(cache))
+			return;
+		Towny.getPlugin().resetCache(player);
 	}
 }

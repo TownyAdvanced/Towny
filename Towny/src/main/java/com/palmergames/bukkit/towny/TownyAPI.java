@@ -219,10 +219,11 @@ public class TownyAPI {
 	 */
 	@NotNull
 	@Contract("null -> fail")
-	public Resident getResidentOrThrow(Player player) throws TownyException {
+	public Resident getResidentOrThrow(@Nullable Player player) throws TownyException {
 		Resident resident = player == null ? null : getResident(player);
 		if (resident == null)
-			throw new TownyException(Translatable.of("msg_err_resident_unknown", player.getName()));
+			throw new TownyException(Translatable.of("msg_err_resident_unknown", player != null ? player.getName() : "'null'"));
+		
 		return resident;
 	}
     
@@ -559,6 +560,18 @@ public class TownyAPI {
     	return townBlock.getResidentOrNull();
     }
     
+	/**
+	 * Returns the name of the Player's town, if they have one, or an empty String.
+	 * 
+	 * @since 0.99.5.14.
+	 * @param player Player
+	 * @return Town name or "" if the player has no Town.
+	 */
+	public String getTownName(Player player) {
+		Town town = getTown(player);
+		return town != null ? town.getName() : "";
+	}
+
     /**
      * Get the name of a {@link Town} at a specific {@link Location}.
      *
@@ -869,17 +882,6 @@ public class TownyAPI {
 	 */
 	public static List<String> getResidentsWithoutTownStartingWith(String str) {
 		return BaseCommand.getResidentsWithoutTownStartingWith(str);
-	}
-
-	
-	/**
-	 * @deprecated as of 0.98.3.7, use {@link TownyAPI#getNations(UUID[])} instead.
-	 * @param uuids List of UUIDs representing possible Nations.
-	 * @return {@link TownyAPI#getNations(UUID[])}
-	 */
-	@Deprecated
-	public List<Nation> getNation(List<UUID> uuids) {
-		return getNations(uuids);
 	}
 
 	@Nullable

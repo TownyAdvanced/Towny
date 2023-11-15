@@ -1,4 +1,4 @@
-name: Maven Compile
+name: Compile
 on:
     push:
         branches: [master]
@@ -10,10 +10,9 @@ jobs:
         strategy:
             matrix:
                 java: ['17']
-        name: Java (Temurin) ${{ matrix.java }}
         steps:
             - uses: actions/checkout@v3
-            - name: Set up Eclipse Temurin
+            - name: Set up Java
               uses: actions/setup-java@v3
               with:
                   distribution: 'temurin'
@@ -21,6 +20,9 @@ jobs:
                   java-package: jdk
                   cache: 'maven'
             - name: Compile with Maven
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: mvn -B compile test
+              run: mvn package
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Towny
+                  path: Towny/target/towny-*.jar

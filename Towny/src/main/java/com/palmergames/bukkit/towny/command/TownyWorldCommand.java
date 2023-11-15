@@ -23,6 +23,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,9 +40,8 @@ import java.util.Optional;
 
 public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
-	private static Towny plugin;
-
-	private static TownyWorld globalWorld;
+	private final Towny plugin;
+	private static TownyWorld globalWorld; // TODO: Make this not static, should be passed through the methods instead.
 	
 	private static final List<String> townyWorldTabCompletes = Arrays.asList(
 		"list",
@@ -72,7 +72,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"wildernessuse"
 	);
 	
-	private static List<String> townySetTabCompletes = Arrays.asList(
+	private static final List<String> townySetTabCompletes = Arrays.asList(
 		"usedefault",
 		"wildperm",
 		"wildignore",
@@ -81,12 +81,11 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	public TownyWorldCommand(Towny instance) {
-
 		plugin = instance;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 		
 		if (plugin.isError() && sender instanceof Player) {
 			TownyMessaging.sendErrorMsg(sender, "Locked in Safe mode!");
@@ -104,7 +103,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	
 	public List<String> tabComplete(CommandSender sender, String[] args, boolean showWorlds) {
 		
-		switch (args[0].toLowerCase()) {
+		switch (args[0].toLowerCase(Locale.ROOT)) {
 			case "toggle":
 				if (args.length == 2)
 					return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYWORLD_TOGGLE, townyWorldToggleTabCompletes), args[1]);
@@ -122,7 +121,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 					return filterByStartOrGetTownyStartingWith(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWNYWORLD, townyWorldTabCompletes), args[0], showWorlds ? "+w" : "");
 				else if (args.length > 1 && TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD, args[0]))
 					return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD, args[0]).getTabCompletion(sender, args), args[args.length-1]);
-				else if (showWorlds && BukkitTools.getWorldNames(true).contains(args[0].toLowerCase()))
+				else if (showWorlds && BukkitTools.getWorldNames(true).contains(args[0].toLowerCase(Locale.ROOT)))
 					return tabComplete(sender, StringMgmt.remFirstArg(args), false);
 		}
 		
@@ -132,7 +131,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	public void parseWorldCommand(CommandSender sender, String[] split) {
 
 		if (sender instanceof Player player) {
-			if (split.length > 0 && !townyWorldTabCompletes.contains(split[0].toLowerCase()) && TownyAPI.getInstance().getTownyWorld(split[0]) != null) {
+			if (split.length > 0 && !townyWorldTabCompletes.contains(split[0].toLowerCase(Locale.ROOT)) && TownyAPI.getInstance().getTownyWorld(split[0]) != null) {
 				globalWorld = TownyAPI.getInstance().getTownyWorld(split[0]);
 				split = StringMgmt.remFirstArg(split);
 			} else
@@ -152,7 +151,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 			if (globalWorld == null) {
 				Translatable error = Translatable.of("msg_err_invalid_townyworld", split[0]);
 				
-				if (townyWorldTabCompletes.contains(split[0].toLowerCase()))
+				if (townyWorldTabCompletes.contains(split[0].toLowerCase(Locale.ROOT)))
 					error = Translatable.of("msg_err_enter_world_name_first");
 						
 				TownyMessaging.sendErrorMsg(sender, error);

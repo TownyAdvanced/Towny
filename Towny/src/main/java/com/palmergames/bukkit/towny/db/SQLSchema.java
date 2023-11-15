@@ -80,6 +80,8 @@ public class SQLSchema {
 			case JAIL -> fetchCreateUUIDStatement(tableType);
 			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
+			case WORLD -> fetchCreateWorldStatemnt(tableType);
+			case HIBERNATED_RESIDENT -> fetchCreateUUIDStatement(tableType);
 			default -> fetchCreateNamedStatement(tableType);
 		};
 	}
@@ -114,6 +116,13 @@ public class SQLSchema {
 	
 	private static String fetchCreateCooldownsStatement(TownyDBTableType tableType) {
 		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`key` varchar(200) not null, primary key (`key`))";
+	}
+
+	/*
+	 * Create table statement for the TownyWorld, with a larger varchar.
+	 */
+	private static String fetchCreateWorldStatemnt(TownyDBTableType tableType) {
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(64) NOT NULL,PRIMARY KEY (`name`))";
 	}
 
 	/*
@@ -170,6 +179,7 @@ public class SQLSchema {
 		columns.add("`friends` mediumtext");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) NOT NULL");
+		columns.add("`about` mediumtext DEFAULT NULL");
 		return columns;
 	}
 
@@ -232,6 +242,10 @@ public class SQLSchema {
 		columns.add("`enemies` mediumtext NOT NULL");
 		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
 		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
+		columns.add("`forSale` bool NOT NULL DEFAULT '0'");
+		columns.add("`forSalePrice` float NOT NULL");
+		columns.add("`visibleOnTopLists` bool NOT NULL DEFAULT '1'");
+		
 		return columns;
 	}
 
@@ -305,6 +319,7 @@ public class SQLSchema {
 		List<String> columns = new ArrayList<>();
 		columns.add("`name` mediumtext");
 		columns.add("`price` float DEFAULT '-1'");
+		columns.add("`taxed` bool NOT NULL DEFAULT '1'");
 		columns.add("`town` mediumtext");
 		columns.add("`resident` mediumtext");
 		columns.add("`type` TINYINT NOT  NULL DEFAULT '0'");

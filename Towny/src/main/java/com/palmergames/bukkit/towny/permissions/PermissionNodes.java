@@ -16,6 +16,7 @@ public enum PermissionNodes {
 	TOWNY_ADMIN_UPDATEALERTS("towny.admin.updatealerts"),
 	TOWNY_CHAT_SPY("towny.chat.spy"),
 	TOWNY_BYPASS_DEATH_COSTS("towny.bypass_death_costs"),
+	TOWNY_BYPASS_BED_RESTRICTION("towny.bypass_bed_restriction"),
 	TOWNY_SPAWN_ADMIN("towny.admin.spawn"),
 	TOWNY_SPAWN_ADMIN_NOWARMUP("towny.admin.spawn.nowarmup"),
 	TOWNY_SPAWN_ADMIN_NOCOOLDOWN("towny.admin.spawn.nocooldown"),
@@ -27,6 +28,7 @@ public enum PermissionNodes {
 
 	TOWNY_TOWN_RESIDENT("towny.town.resident"),
 	TOWNY_OUTLAW_JAILER("towny.outlaw.jailer"),
+	TOWNY_RECEIVES_PLOT_NOTIFICATIONS("towny.receives-plot-notifications"),
 	
 	/*
 	 * Nation command permissions
@@ -128,6 +130,9 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_TRUSTTOWN("towny.command.town.trusttown"),
 		TOWNY_COMMAND_TOWN_RANK("towny.command.town.rank.*"), // Covers all assignable ranks
 		TOWNY_COMMAND_TOWN_RANKLIST("towny.command.town.ranklist"),
+		TOWNY_COMMAND_TOWN_FORSALE("towny.command.town.forsale"),
+		TOWNY_COMMAND_TOWN_NOTFORSALE("towny.command.town.notforsale"),
+		TOWNY_COMMAND_TOWN_BUYTOWN("towny.command.town.buytown"),
 		TOWNY_COMMAND_TOWN_SET("towny.command.town.set.*"),
 			TOWNY_COMMAND_TOWN_SET_BOARD("towny.command.town.set.board"),
 			TOWNY_COMMAND_TOWN_SET_MAYOR("towny.command.town.set.mayor"),
@@ -172,6 +177,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_CLAIM_TOWN("towny.command.town.claim.town"),
 				TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE("towny.command.town.claim.town.multiple"),
 			TOWNY_COMMAND_TOWN_CLAIM_OUTPOST("towny.command.town.claim.outpost"),
+			TOWNY_COMMAND_TOWN_CLAIM_FILL("towny.command.town.claim.fill"),
 		
 		TOWNY_COMMAND_TOWN_UNCLAIM("towny.command.town.unclaim"),
 		TOWNY_COMMAND_TOWN_UNCLAIM_ALL("towny.command.town.unclaim.all"),
@@ -240,10 +246,12 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_RESIDENT_OTHERRESIDENT("towny.command.resident.otherresident"),
 	TOWNY_COMMAND_RESIDENT_LIST("towny.command.resident.list"),
 	TOWNY_COMMAND_RESIDENT_TAX("towny.command.resident.tax"),
+	TOWNY_COMMAND_RESIDENT_PLOTLIST("towny.command.resident.plotlist"),
 	TOWNY_COMMAND_RESIDENT_JAIL("towny.command.resident.jail"),
 	TOWNY_COMMAND_RESIDENT_SET("towny.command.resident.set.*"),
 		TOWNY_COMMAND_RESIDENT_SET_PERM("towny.command.resident.set.perm"),
 		TOWNY_COMMAND_RESIDENT_SET_MODE("towny.command.resident.set.mode"),
+		TOWNY_COMMAND_RESIDENT_SET_ABOUT("towny.command.resident.set.about"),
 	
 	TOWNY_COMMAND_RESIDENT_TOGGLE("towny.command.resident.toggle.*"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PVP("towny.command.resident.toggle.pvp"),
@@ -271,6 +279,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_SET_FOUNDER("towny.command.townyadmin.set.founder"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_TITLE("towny.command.townyadmin.set.title"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME("towny.command.townyadmin.set.surname"),
+		TOWNY_COMMAND_TOWNYADMIN_SET_ABOUT("towny.command.townyadmin.set.about"),
 		TOWNY_COMMAND_TOWNYADMIN_SET_NATIONZONE("towny.command.townyadmin.set.nationzoneoverride"),
 		
     TOWNY_COMMAND_TOWNYADMIN_PLOT("towny.command.townyadmin.plot.*"),
@@ -282,6 +291,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWNYADMIN_RESIDENT("towny.command.townyadmin.resident.*"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_RENAME("towny.command.townyadmin.resident.rename"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_FRIEND("towny.command.townyadmin.resident.friend"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_META("towny.command.townyadmin.resident.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL("towny.command.townyadmin.resident.unjail"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE("towny.command.townyadmin.resident.delete"),
 		
@@ -294,11 +304,14 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE("towny.command.townyadmin.town.delete"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_DEPOSIT("towny.command.townyadmin.town.deposit"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_FORCEMERGE("towny.command.townyadmin.town.forcemerge"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_FORSALE("towny.command.townyadmin.town.forsale"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_NOTFORSALE("towny.command.townyadmin.town.notforsale"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_MERGE("towny.command.townyadmin.town.merge"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_RENAME("towny.command.townyadmin.town.rename"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_TOGGLE("towny.command.townyadmin.town.toggle"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SET("towny.command.townyadmin.town.set"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SETTOWNLEVEL("towny.command.townyadmin.town.settownlevel"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_SETFOUNDINGDATE("towny.command.townyadmin.town.set.foundingdate"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_GIVEBOUGHTBLOCKS("towny.command.townyadmin.town.giveboughtblocks"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN("towny.command.townyadmin.town.spawn"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_SPAWN_FREECHARGE("towny.command.townyadmin.town.spawn.freecharge"),
@@ -320,11 +333,13 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_NATION_DEPOSIT("towny.command.townyadmin.nation.deposit"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_FORCEMERGE("towny.command.townyadmin.nation.forcemerge"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_KICK("towny.command.townyadmin.nation.kick"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_META("towny.command.townyadmin.nation.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RANK("towny.command.townyadmin.nation.rank"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RECHECK("towny.command.townyadmin.nation.recheck"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME("towny.command.townyadmin.nation.rename"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_MERGE("towny.command.townyadmin.nation.merge"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_SET("towny.command.townyadmin.nation.set"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_SETFOUNDINGDATE("towny.command.townyadmin.nation.set.foundingdate"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_TOGGLE("towny.command.townyadmin.nation.toggle"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_TRANSFER("towny.command.townyadmin.nation.transfer"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_WITHDRAW("towny.command.townyadmin.nation.withdraw"),

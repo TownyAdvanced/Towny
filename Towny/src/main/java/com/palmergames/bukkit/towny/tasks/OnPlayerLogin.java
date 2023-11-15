@@ -105,7 +105,6 @@ public class OnPlayerLogin implements Runnable {
 						if (town != null) {
 							try {
 								resident.setTown(town);
-								town.save();
 							} catch (AlreadyRegisteredException ignore) {}
 						}
 					}

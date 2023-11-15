@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.command;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
+import com.palmergames.bukkit.towny.exceptions.ResidentNPCException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -161,9 +163,9 @@ public class BaseCommand implements TabCompleter{
 			case 1:
 				return NameUtil.filterByStart(setPermTabCompletes, args[0]);
 			case 2:
-				if (setTypeCompletes.contains(args[0].toLowerCase()))
+				if (setTypeCompletes.contains(args[0].toLowerCase(Locale.ROOT)))
 					return NameUtil.filterByStart(setOnOffCompletes, args[1]);
-				if (setLevelCompletes.contains(args[0].toLowerCase()))
+				if (setLevelCompletes.contains(args[0].toLowerCase(Locale.ROOT)))
 					return NameUtil.filterByStart(toggleTypeOnOffCompletes, args[1]);
 				break;
 			case 3:
@@ -251,7 +253,7 @@ public class BaseCommand implements TabCompleter{
 			return getResidentsWithoutTownStartingWith(arg);
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
 			.map(Resident::getPlayer)
-			.filter(p -> p != null && player.canSee(p))
+			.filter(p -> p != null && BukkitTools.playerCanSeePlayer(player, p))
 			.map(Player::getName)
 			.collect(Collectors.toCollection(ArrayList::new));
 		return !residents.isEmpty()
@@ -382,5 +384,10 @@ public class BaseCommand implements TabCompleter{
 	
 	public static void checkPermOrThrowWithMessage(Permissible permissible, String node, Translatable errormsg) throws NoPermissionException {
 		TownyUniverse.getInstance().getPermissionSource().testPermissionOrThrow(permissible, node, errormsg);
+	}
+	
+	public static void catchNPCResident(Resident resident) throws ResidentNPCException {
+		if (resident.isNPC())
+			throw new ResidentNPCException();
 	}
 }

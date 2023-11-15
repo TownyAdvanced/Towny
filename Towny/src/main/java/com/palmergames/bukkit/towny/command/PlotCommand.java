@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
+import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleTaxedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
@@ -138,6 +139,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> plotToggleTabCompletes = Arrays.asList(
+		"taxed",
 		"fire",
 		"pvp",
 		"explosion",
@@ -190,10 +192,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		if (sender instanceof Player) {
-			switch (args[0].toLowerCase()) {
+			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "set":
 					if (args.length == 2) {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_SET, getPlotSetCompletions()), args[1]);
+					}
+					if (args.length == 3 && args[1].equalsIgnoreCase("outpost")) {
+						return Arrays.asList("spawn");
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
@@ -230,7 +235,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length < 2)
 						break;
 					
-					switch (args[1].toLowerCase()) {
+					switch (args[1].toLowerCase(Locale.ROOT)) {
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
@@ -324,7 +329,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			// Add extra message if the player has permission to evict 
 			if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode())) {
 				try {
-					plotTestOwner(resident, selection.get(0).getTownBlock());
+					TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 					message.append(Translatable.of("msg_plot_claim_consider_evict_instead"));
 				} catch (TownyException ignored) {}
 			}
@@ -536,7 +541,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "outpost":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
 			TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock); // Test we are allowed to work on this plot
-			parsePlotSetOutpost(player, resident, townBlock);
+			boolean spawn = split.length == 2 && split[1].equalsIgnoreCase("spawn");
+			parsePlotSetOutpost(player, resident, townBlock, spawn);
 			break;
 		default:
 			if (tryPlotSetAddonCommand(player, split))
@@ -550,7 +556,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void tryPlotSetType(Player player, Resident resident, TownBlock townBlock, String[] split) throws TownyException {
-		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase()));
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET.getNode(split[0].toLowerCase(Locale.ROOT)));
 		String plotTypeName = split[0];
 
 		// Handle type being reset
@@ -619,14 +625,26 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		return false;
 	}
 
-	public void parsePlotSetOutpost(Player player, Resident resident, TownBlock townBlock) throws TownyException {
+	public void parsePlotSetOutpost(Player player, Resident resident, TownBlock townBlock, boolean spawn) throws TownyException {
 		if (!TownySettings.isAllowingOutposts()) 
 			throw new TownyException(Translatable.of("msg_outpost_disable"));
 
 		Town town = townBlock.getTownOrNull();
+
+		if (spawn) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_SET_OUTPOST.getNode());
+
+			if (!townBlock.isOutpost())
+				throw new TownyException(Translatable.of("msg_err_location_is_not_within_an_outpost_plot"));
+
+			town.addOutpostSpawn(player.getLocation());
+			TownyMessaging.sendMsg(player, Translatable.of("msg_set_outpost_spawn"));
+			return;
+		}
+
 		TownyWorld townyWorld = townBlock.getWorld();
-		Coord key = Coord.parseCoord(plugin.getCache(player).getLastLocation());
-		
+		Coord key = Coord.parseCoord(player.getLocation());
+
 		if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true)) {
 			// Test if they can pay.
 			if (TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(TownySettings.getOutpostCost())) 
@@ -778,7 +796,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				if (!jail.hasCells())
 					throw new TownyException(Translatable.of("msg_err_this_jail_has_no_cells"));
 				
-				if (jail.getCellMap().size() == 1) 
+				if (jail.getJailCellCount() == 1) 
 					throw new TownyException(Translatable.of("msg_err_you_cannot_remove_the_last_cell"));
 				
 				SpawnPointLocation cellLoc = SpawnPointLocation.parseSpawnPointLocation(player.getLocation());
@@ -1028,18 +1046,24 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "explosion":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_EXPLOSION.getNode());
 			tryToggleTownBlockExplosion(player, townBlock, split, choice);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_expl", "the Plot", townBlock.getPermissions().explosion ? Translatable.of("enabled") : Translatable.of("disabled")));
 			break;
 		case "fire":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_FIRE.getNode());
 			tryToggleTownBlockFire(player, townBlock, split, choice);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_fire", "the Plot", townBlock.getPermissions().fire ? Translatable.of("enabled") : Translatable.of("disabled")));
 			break;
 		case "mobs":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_MOBS.getNode());
 			tryToggleTownBlockMobs(player, townBlock, split, choice);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled")));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled")));
 			break;
+		case "taxed":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+			tryToggleTownBlockTaxed(player, townBlock, split, choice);
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_plot_taxed", townBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled")));
+			townBlock.save();
+			return;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_TOGGLE, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_TOGGLE, split[0]).execute(player, "plot", split);
@@ -1120,6 +1144,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 	}
 
+	private void tryToggleTownBlockTaxed(Player player, TownBlock townBlock, String[] split, Optional<Boolean> choice) throws TownyException {
+		// Fire cancellable event directly before setting the toggle.
+		BukkitTools.ifCancelledThenThrow(new PlotToggleTaxedEvent(townBlock, player, choice.orElse(!townBlock.isTaxed())));
+
+		townBlock.setTaxed(choice.orElse(!townBlock.isTaxed()));
+	}
+	
 	/**
 	 * Check the world and town settings to see if we are allowed to alter these
 	 * settings
@@ -1133,7 +1164,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		// Make sure we are allowed to set these permissions.
 
-		split = split.toLowerCase();
+		split = split.toLowerCase(Locale.ROOT);
 
 		if (split.contains("mobs")) {
 			if (townBlock.getWorld().isForceTownMobs())
@@ -1201,15 +1232,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	public void parsePlotGroupAdd(String[] split, TownBlock townBlock, Player player, Town town) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_ADD.getNode());
 
-		if (split.length == 1) {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_must_specify_a_group_name"));
-			return;
-		}
+		Resident resident = getResidentOrThrow(player);
 
-		if (split.length != 2)
+		if (split.length != 2 && !resident.hasPlotGroupName())
 			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
 
-		String plotGroupName = NameValidation.filterName(split[1]);
+		String plotGroupName = split.length == 2 ? NameValidation.filterName(split[1]) : 
+				resident.hasPlotGroupName() ? resident.getPlotGroupName() : null;
 		plotGroupName = NameValidation.filterCommas(plotGroupName);
 
 		if (town.hasPlotGroupName(plotGroupName)) {
@@ -1236,6 +1265,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				} else 
 					oldGroup.save();
 				createOrAddOnToPlotGroup(townBlock, town, name);
+				resident.setPlotGroupName(name);
 				TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_transferred_from_x_to_x_group", oldGroup.getName(), townBlock.getPlotObjectGroup().getName()));
 			})
 			.setTitle(Translatable.of("msg_plot_group_already_exists_did_you_want_to_transfer", townBlock.getPlotObjectGroup().getName(), split[1]))
@@ -1243,6 +1273,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		} else {
 			// Create a brand new plot group.
 			createOrAddOnToPlotGroup(townBlock, town, plotGroupName);
+			resident.setPlotGroupName(plotGroupName);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), townBlock.getPlotObjectGroup().getName()));
 		}
 	}
@@ -1296,18 +1327,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_FORSALE.getNode());
 
 		// This means the player wants to fs the plot group they are in.
-		if (split.length < 2)
+		if (split.length < 2 && TownyEconomyHandler.isActive())
 			throw new TownyException(Translatable.of("msg_err_plot_group_specify_price"));
 
 		PlotGroup group = catchMissingPlotGroup(townBlock);
 
-		double price = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
+		double price = split.length >= 2 ? MoneyUtil.getMoneyAboveZeroOrThrow(split[1]) : 0;
 		group.setPrice(Math.min(price, TownySettings.getMaxPlotPrice()));
 		
 		// Save
 		group.save();
 
-		Translatable message = Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice()));
+		Translatable message = TownyEconomyHandler.isActive()
+			? Translatable.of("msg_player_put_group_up_for_sale_amount", player.getName(), group.getName(), TownyEconomyHandler.getFormattedBalance(group.getPrice()))
+			: Translatable.of("msg_player_put_group_up_for_sale", player.getName(), group.getName());
+		
 		TownyMessaging.sendPrefixedTownMessage(town, message);
 		
 		if (!resident.hasTown() || resident.getTownOrNull() != town)
@@ -1957,19 +1991,5 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_plot_not_associated_with_a_group"));
 		
 		return townBlock.getPlotObjectGroup();
-	}
-
-	/**
-	 * Test the townBlock to ensure we are either the plot owner, or the
-	 * mayor/assistant, or a TownyAdmin.
-	 * 
-	 * @param resident Resident Object.
-	 * @param townBlock TownBlock Object.
-	 * @throws TownyException Exception thrown to trigger failures in the methods using this method.
-	 * @deprecated since 0.98.4.5 use {@link TownyAPI#testPlotOwnerOrThrow(Resident, TownBlock)} instead.
-	 */
-	@Deprecated
-	public static void plotTestOwner(Resident resident, TownBlock townBlock) throws TownyException {
-		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 	}
 }

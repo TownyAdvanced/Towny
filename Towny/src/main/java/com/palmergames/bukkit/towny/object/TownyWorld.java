@@ -13,7 +13,6 @@ import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -27,13 +26,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
 
-	private HashMap<String, Town> towns = new HashMap<>();
+	private final HashMap<String, Town> towns = new HashMap<>();
 
 	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
 	private Set<EntityType> unclaimDeleteEntityTypes = null;
@@ -90,7 +90,21 @@ public class TownyWorld extends TownyObject {
 		super(name);
 		this.uuid = uuid;
 	}
-	
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof TownyWorld otherTownyWorld))
+			return false;
+		return this.getName().equals(otherTownyWorld.getName()); // TODO: Change this to UUID when the UUID database is in use.
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUUID(), getName());
+	}
+
 	public UUID getUUID() {
 		return uuid;
 	}
@@ -557,24 +571,7 @@ public class TownyWorld extends TownyObject {
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
 		entityExplosionProtection = new HashSet<>();
-		
-		// If entities isn't empty and the first string isn't entirely uppercase, convert the legacy names to the entity's key.
-		if (entities.size() > 0 && !StringMgmt.isAllUpperCase(entities))
-			convertLegacyEntityNames(entities);
-		
 		entityExplosionProtection.addAll(TownySettings.toEntityTypeSet(entities));
-	}
-	
-	private void convertLegacyEntityNames(List<String> entities) {
-		for (int i = 0; i < entities.size(); i++) {
-			String entity = entities.get(i);
-			for (EntityType type : Registry.ENTITY_TYPE) {
-				if (type.getEntityClass() != null && type.getEntityClass().getSimpleName().equalsIgnoreCase(entity)) {
-					entities.set(i, type.getKey().toString());
-					break;
-				}					
-			}
-		}
 	}
 
 	public Collection<EntityType> getPlotManagementWildRevertEntities() {
@@ -623,7 +620,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	/**
-	 * @deprecated in lieu of {@link#isExplodedBlockAllowedToRevert} in 0.99.1.5.
+	 * @deprecated in lieu of {@link #isExplodedBlockAllowedToRevert(Material)} in 0.99.1.5.
 	 * @param mat Material that is being checked
 	 * @return true if the block should be reverted after blocking up.
 	 */
@@ -837,8 +834,7 @@ public class TownyWorld extends TownyObject {
 				final double distSqr = MathUtil.distanceSquared((double) townCoord.getX() - keyX, (double) townCoord.getZ() - keyZ);
 				if (minSqr == -1 || distSqr < minSqr)
 					minSqr = distSqr;
-			} catch (TownyException e) {
-			}
+			} catch (TownyException ignored) {}
 		}
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
@@ -1059,5 +1055,11 @@ public class TownyWorld extends TownyObject {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasTownyWorld(getName());
 	}
 }

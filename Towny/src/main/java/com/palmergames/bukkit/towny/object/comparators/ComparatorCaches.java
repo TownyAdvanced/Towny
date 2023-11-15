@@ -3,9 +3,11 @@ package com.palmergames.bukkit.towny.object.comparators;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -26,10 +28,10 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -37,23 +39,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class ComparatorCaches {
 	
-	private static final LoadingCache<ComparatorType, List<TextComponent>> townCompCache = CacheBuilder.newBuilder()
+	private static final LoadingCache<ComparatorType, List<Pair<UUID, Component>>> townCompCache = CacheBuilder.newBuilder()
 			.expireAfterWrite(10, TimeUnit.MINUTES)
 			.build(new CacheLoader<>() {
-				public @NotNull List<TextComponent> load(@NotNull ComparatorType compType) {
+				public @NotNull List<Pair<UUID, Component>> load(@NotNull ComparatorType compType) {
 					return gatherTownLines(compType);
 				}
 			});
 	
-	private static final LoadingCache<ComparatorType, List<TextComponent>> nationCompCache = CacheBuilder.newBuilder()
+	private static final LoadingCache<ComparatorType, List<Pair<UUID, Component>>> nationCompCache = CacheBuilder.newBuilder()
 			.expireAfterWrite(10, TimeUnit.MINUTES)
 			.build(new CacheLoader<>() {
-				public @NotNull List<TextComponent> load(@NotNull ComparatorType compType) {
+				public @NotNull List<Pair<UUID, Component>> load(@NotNull ComparatorType compType) {
 					return gatherNationLines(compType);
 				}
 			}); 
 	
-	public static List<TextComponent> getTownListCache(ComparatorType compType) {
+	public static List<Pair<UUID, Component>> getTownListCache(ComparatorType compType) {
 		try {
 			return townCompCache.get(compType);
 		} catch (ExecutionException e) {
@@ -62,7 +64,7 @@ public class ComparatorCaches {
 		}
 	}
 	
-	public static List<TextComponent> getNationListCache(ComparatorType compType) {
+	public static List<Pair<UUID, Component>> getNationListCache(ComparatorType compType) {
 		try {
 			return nationCompCache.get(compType);
 		} catch (ExecutionException e) {
@@ -72,13 +74,13 @@ public class ComparatorCaches {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static List<TextComponent> gatherTownLines(ComparatorType compType) {
-		List<TextComponent> output = new ArrayList<>();
-		List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
+	private static List<Pair<UUID, Component>> gatherTownLines(ComparatorType compType) {
+		List<Pair<UUID, Component>> output = new ArrayList<>();
+		List<Town> towns = TownyUniverse.getInstance().getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
 		towns.sort((Comparator<? super Town>) compType.getComparator());
 		
 		for (Town town : towns) {
-			TextComponent townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
+			Component townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
 					.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
 				
 			String slug = "";
@@ -120,14 +122,15 @@ public class ComparatorCaches {
 				spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
 			townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).component()));
-			output.add(townName);
+			output.add(Pair.pair(town.getUUID(), townName));
 		}
+		
 		return output;
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static List<TextComponent> gatherNationLines(ComparatorType compType) {
-		List<TextComponent> output = new ArrayList<>();
+	private static List<Pair<UUID, Component>> gatherNationLines(ComparatorType compType) {
+		List<Pair<UUID, Component>> output = new ArrayList<>();
 		List<Nation> nations = new ArrayList<>(TownyUniverse.getInstance().getNations());
 
 		//Sort nations
@@ -137,7 +140,7 @@ public class ComparatorCaches {
 		nations = nationListSortEvent.getNations();
 
 		for (Nation nation : nations) {
-			TextComponent nationName = Component.text(StringMgmt.remUnderscore(nation.getName()), NamedTextColor.AQUA)
+			Component nationName = Component.text(StringMgmt.remUnderscore(nation.getName()), NamedTextColor.AQUA)
 					.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
 
 			String slug = "";
@@ -188,7 +191,7 @@ public class ComparatorCaches {
 				spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 			
 			nationName = nationName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", nation).append("\n").append(spawnCost).component()));
-			output.add(nationName);
+			output.add(Pair.pair(nation.getUUID(), nationName));
 		}
 		return output;
 	}

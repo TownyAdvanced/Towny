@@ -32,6 +32,10 @@ public class DrawUtil {
 
 		for (int z = _z1; z <= _z2; z++) {
 			for (int x = _x1; x <= _x2; x++) {
+				if (!world.isChunkLoaded(x >> 4, z >> 4)) {
+					continue;
+				}
+
 				int start = world.getHighestBlockYAt(x, z);
 				int end = (start + height) < world.getMaxHeight() ? (start + height - 1) : world.getMaxHeight();
 				for (int y = start; y <= end; y++) {
@@ -39,13 +43,5 @@ public class DrawUtil {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * @deprecated Deprecated as of 0.98.3.13, please use {@link #runOnSurface(World, int, int, int, int, int, Consumer)} instead.
-	 */
-	@Deprecated
-	public static void runOnSurface(World world, int x1, int z1, int x2, int z2, int height, LocationRunnable runnable) {
-		runOnSurface(world, x1, z1, x2, z2, height, (Consumer<Location>) runnable::run);
 	}
 }

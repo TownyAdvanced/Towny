@@ -121,6 +121,8 @@ public class TownRuinUtil {
 		if (TownySettings.getMaxResidentsPerTown() > 0)
 			ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 		
+		town.setForSale(false);
+		
 		town.save();
 		Towny.getPlugin().resetCache();
 		
@@ -165,6 +167,13 @@ public class TownRuinUtil {
 	}
 
 	public static void reclaimTown(@NotNull Resident resident, @NotNull Town town) {
+		// Re-test that the town is still ruined, because Confirmations can be accepted out-of-order.
+		if (!town.isRuined()) {
+			if (resident.isOnline())
+				TownyMessaging.sendErrorMsg(resident.getPlayer(), Translatable.of("msg_err_cannot_reclaim_town_unless_ruined"));
+			return;
+		}
+
 		town.setRuined(false);
 		town.setRuinedTime(0);
 
@@ -186,7 +195,6 @@ public class TownRuinUtil {
 		BukkitTools.fireEvent(new TownReclaimedEvent(town, resident));
 
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_reclaimed", resident.getName(), town.getName()));
-		
 	}
 
 	private static void setMayor(Town town, Resident newMayor) {
@@ -220,7 +228,7 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (townyUniverse.hasTown(town.getName()) && town.isRuined()
+			if (town.exists() && town.isRuined()
 					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings
 					.getTownRuinsMaxDurationHours()) {
 				//Ruin found & recently ruined end time reached. Delete town now.

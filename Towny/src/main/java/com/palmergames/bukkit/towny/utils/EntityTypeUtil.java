@@ -36,6 +36,7 @@ public class EntityTypeUtil {
 		register(map, "pufferfish", "pufferfish");
 		register(map, "tropical_fish", "tropical_fish");
 		register(map, "tadpole", "tadpole_bucket");
+		register(map, "parrot", "parrot_spawn_egg");
 		register(map, "item_frame", "item_frame");
 		register(map, "glow_item_frame", "glow_item_frame");
 		register(map, "painting", "painting");
@@ -51,6 +52,9 @@ public class EntityTypeUtil {
 		register(map, "tnt_minecart", "tnt_minecart");
 		register(map, "boat", "oak_boat");
 		register(map, "chest_boat", "oak_chest_boat");
+		register(map, "cow", "cow_spawn_egg");
+		register(map, "goat", "goat_spawn_egg");
+		register(map, "mooshroom", "mooshroom_spawn_egg");
 		
 		TownyMessaging.sendDebugMsg("[EntityTypeUtil] Attempted: " + attempted + " | Registered: " + map.size());
 

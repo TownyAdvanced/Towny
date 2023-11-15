@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -34,7 +35,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,6 +51,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,7 +61,7 @@ import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
-	private final String newLine = System.getProperty("line.separator");
+	private final String newLine = System.lineSeparator();
 	
 	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
@@ -156,10 +157,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			for (File worldfolder : worldFolders) {
 				String worldName = worldfolder.getName();
 				if (BukkitTools.getWorld(worldName) == null) {
-					TownyMessaging.sendErrorMsg("Your towny\\data\\townblocks\\ folder contains a folder named '"
-							+ worldName + "' which doesn't appear to exist on your Bukkit server!");
-					TownyMessaging.sendErrorMsg("Towny is going to skip loading the townblocks found in this folder.");
-					continue;
+					Towny.getPlugin().getScheduler().runAsyncLater(() -> {
+						// Check if the World is still null in Bukkit and warn the admin.
+						if (BukkitTools.getWorld(worldName) == null) {
+							Towny.getPlugin().getLogger().warning("Your towny\\data\\townblocks\\ folder contains a folder named '"
+									+ worldName + "' which doesn't appear to exist on your Bukkit server!");
+							Towny.getPlugin().getLogger().warning("Towny will load the townblocks regardless, but if this world no longer exists please delete the folder.");
+						}
+					}, 20L);
 				}
 
 				TownyWorld world = universe.getWorld(worldName);
@@ -426,7 +431,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	 * @return files - Files from inside the residents\towns\nations folder.
 	 */
 	private File[] receiveObjectFiles(String folder, String extension) {
-		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase().endsWith(extension));
+		return new File(dataFolderPath + File.separator + folder).listFiles(file -> file.getName().toLowerCase(Locale.ROOT).endsWith(extension));
 	}
 	
 	/*
@@ -463,7 +468,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								try {
 									// Resident#removeTown saves the resident, so we can't use it.
 									olderRes.getTown().removeResident(olderRes);
-								} catch (NotRegisteredException nre) {}
+								} catch (NotRegisteredException ignored) {}
 							}
 							deleteResident(olderRes);					
 						} else {
@@ -479,6 +484,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					resident.setUUID(uuid);
 					universe.registerResidentUUID(resident);
 				}
+				
+				line = keys.get("about");
+				if (line != null)
+					resident.setAbout(line);
 				
 				line = keys.get("registered");
 				if (line != null)
@@ -512,9 +521,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(","));
 					for (Resident friend : friends) {
-						try {
-							resident.addFriend(friend);
-						} catch (AlreadyRegisteredException ignored) {}
+						resident.addFriend(friend);
 					}
 				}
 				
@@ -552,13 +559,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							line = keys.get("town-ranks");
 							if (line != null)
 								resident.setTownRanks(Arrays.asList((line.split(","))));
-						} catch (Exception e) {}
+						} catch (Exception ignored) {}
 
 						try {
 							line = keys.get("nation-ranks");
 							if (line != null)
 								resident.setNationRanks(Arrays.asList((line.split(","))));
-						} catch (Exception e) {}
+						} catch (Exception ignored) {}
 
 						line = keys.get("joinedTownAt");
 						if (line != null) {
@@ -682,6 +689,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("visibleOnTopLists");
+				if (line != null)
+					try {
+						town.setVisibleOnTopLists(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
 				line = keys.get("taxpercent");
 				if (line != null)
 					try {
@@ -791,6 +805,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setPublic(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
+				line = keys.get("forSale");
+				if (line != null)
+					try {
+						town.setForSale(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				line = keys.get("forSalePrice");
+				if (line != null)
+					try {
+						town.setForSalePrice(Double.parseDouble(line));
+					} catch (Exception ignored) {
+					}
 				line = keys.get("conquered");
 				if (line != null)
 					try {
@@ -842,18 +868,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-							
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							town.setSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+							town.spawnPosition(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
+							plugin.getLogger().warning("Failed to load spawn location for town " + town.getName() + ": " + e.getMessage());
 						}
 				}
 				
@@ -865,18 +882,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						tokens = spawn.split(",");
 						if (tokens.length >= 4)
 							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-								
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-								town.forceAddOutpostSpawn(loc);
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+								town.forceAddOutpostSpawn(Position.deserialize(tokens));
+							} catch (IllegalArgumentException e) {
+								plugin.getLogger().warning("Failed to load an outpost spawn location for town " + town.getName() + ": " + e.getMessage());
 							}
 					}
 				}
@@ -889,26 +897,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						tokens = spawn.split(",");
 						if (tokens.length >= 4)
 							try {
-								World world = plugin.getServerWorld(tokens[0]);
-								double x = Double.parseDouble(tokens[1]);
-								double y = Double.parseDouble(tokens[2]);
-								double z = Double.parseDouble(tokens[3]);
-								
-								Location loc = new Location(world, x, y, z);
-								if (tokens.length == 6) {
-									loc.setPitch(Float.parseFloat(tokens[4]));
-									loc.setYaw(Float.parseFloat(tokens[5]));
-								}
-
-								TownBlock tb = universe.getTownBlock(WorldCoord.parseWorldCoord(loc));
+								final Position position = Position.deserialize(tokens);
+								TownBlock tb = universe.getTownBlockOrNull(position.worldCoord());
 								if (tb == null)
 									continue;
-								Jail jail = new Jail(UUID.randomUUID(), town, tb, new ArrayList<>(Collections.singleton(loc)));
+								
+								Jail jail = new Jail(UUID.randomUUID(), town, tb, Collections.singleton(position));
 								universe.registerJail(jail);
 								town.addJail(jail);
 								tb.setJail(jail);
 								jail.save();
-							} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+							} catch (IllegalArgumentException e) {
+								plugin.getLogger().warning("Failed to load a legacy jail spawn location for town " + town.getName() + ": " + e.getMessage());
 							}
 					}
 				}
@@ -1170,18 +1170,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = line.split(",");
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-							
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							nation.setSpawn(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException ignored) {
+							nation.spawnPosition(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
+							plugin.getLogger().warning("Failed to load nation spawn location for nation " + nation.getName() + ": " + e.getMessage());
 						}
 				}
 				
@@ -1685,10 +1676,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (Exception ignored) {
 						}
 					
-					line = keys.get("type");
-					if (line != null)
-						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
-					
 					line = keys.get("resident");
 					if (line != null && !line.isEmpty()) {
 						Resident res = universe.getResident(line.trim());
@@ -1700,10 +1687,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						}
 					}
 					
+					line = keys.get("type");
+					if (line != null)
+						townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
+					
 					line = keys.get("price");
 					if (line != null)
 						try {
 							townBlock.setPlotPrice(Double.parseDouble(line.trim()));
+						} catch (Exception ignored) {
+						}
+
+					line = keys.get("taxed");
+					if (line != null)
+						try {
+							townBlock.setTaxed(Boolean.parseBoolean(line));
 						} catch (Exception ignored) {
 						}
 					
@@ -1768,6 +1766,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					line = keys.get("customPermissionData");
 					if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
+						@SuppressWarnings("unchecked")
 						Map<String, String> map = new Gson().fromJson(line, Map.class);
 						
 						for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -1836,22 +1835,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					tokens = spawn.split(",");
 					if (tokens.length >= 4)
 						try {
-							World world = plugin.getServerWorld(tokens[0]);
-							double x = Double.parseDouble(tokens[1]);
-							double y = Double.parseDouble(tokens[2]);
-							double z = Double.parseDouble(tokens[3]);
-							Location loc = new Location(world, x, y, z);
-							if (tokens.length == 6) {
-								loc.setPitch(Float.parseFloat(tokens[4]));
-								loc.setYaw(Float.parseFloat(tokens[5]));
-							}
-							jail.addJailCell(loc);
-						} catch (NumberFormatException | NullPointerException | NotRegisteredException e) {
+							jail.addJailCell(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
 							TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid spawn " + line + " skipping.");
-							continue;
 						}
 				}
-				if (jail.getJailCellLocations().isEmpty()) {
+				if (jail.getJailCellCount() == 0) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " loaded with zero spawns " + line + " deleting jail.");
 					removeJail(jail);
 					deleteJail(jail);
@@ -1900,6 +1889,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("title=" + resident.getTitle());
 		// surname
 		list.add("surname=" + resident.getSurname());
+		// about
+		if (!TownySettings.getDefaultResidentAbout().equals(resident.getAbout()))
+			list.add("about=" + resident.getAbout());
 
 		if (resident.hasTown()) {
 			try {
@@ -1987,6 +1979,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("hasUpkeep=" + town.hasUpkeep());
 		// UnlimitedClaims
 		list.add("hasUnlimitedClaims=" + town.hasUnlimitedClaims());
+		// VisibleOnTopLists
+		list.add("visibleOnTopLists=" + town.isVisibleOnTopLists());
 		// Open
 		list.add("open=" + town.isOpen());
 		// PVP
@@ -2009,6 +2003,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         list.add("registered=" + town.getRegistered());
 		list.add("joinedNationAt=" + town.getJoinedNationAt());
 		list.add("movedHomeBlockAt=" + town.getMovedHomeBlockAt());
+		// ForSale
+		list.add("forSale=" + town.isForSale());
+		// Town sale price
+		list.add("forSalePrice=" + town.getForSalePrice());
         
         // Home Block
 		if (town.hasHomeBlock())
@@ -2018,17 +2016,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 
 		// Spawn
-		if (town.hasSpawn())
-			try {
-				list.add("spawn=" + town.getSpawn().getWorld().getName() + "," + town.getSpawn().getX() + "," + town.getSpawn().getY() + "," + town.getSpawn().getZ() + "," + town.getSpawn().getPitch() + "," + town.getSpawn().getYaw());
-			} catch (TownyException ignored) {
-			}
+		final Position spawnPos = town.spawnPosition();
+		if (spawnPos != null)
+			list.add("spawn=" + String.join(",", spawnPos.serialize()));
 
 		// Outpost Spawns
 		StringBuilder outpostArray = new StringBuilder("outpostspawns=");
 		if (town.hasOutpostSpawn())
-			for (Location spawn : new ArrayList<>(town.getAllOutpostSpawns())) {
-				outpostArray.append(spawn.getWorld().getName()).append(",").append(spawn.getX()).append(",").append(spawn.getY()).append(",").append(spawn.getZ()).append(",").append(spawn.getPitch()).append(",").append(spawn.getYaw()).append(";");
+			for (Position spawn : town.getOutpostSpawns()) {
+				outpostArray.append(String.join(",", spawn.serialize())).append(";");
 			}
 		list.add(outpostArray.toString());
 
@@ -2075,15 +2071,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean savePlotGroup(PlotGroup group) {
 		
 		List<String> list = new ArrayList<>();
-		
-		// Group Name
-		list.add("groupName=" + group.getName());
-		
-		// Group Price
-		list.add("groupPrice=" + group.getPrice());
-		
-		// Town
-		list.add("town=" + group.getTown().toString());
+
+		try {
+			list.add("groupName=" + group.getName());
+			list.add("groupPrice=" + group.getPrice());
+			list.add("town=" + group.getTown().getName());
+		} catch (Exception e) {
+			logger.warn("An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
+		}
 		
 		// Save file
 		this.queryQueue.add(new FlatFileSaveTask(list, getPlotGroupFilename(group)));
@@ -2128,10 +2123,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
         list.add("registered=" + nation.getRegistered());
         
         // Spawn
-		if (nation.hasSpawn()) {
-			try {
-				list.add("nationSpawn=" + nation.getSpawn().getWorld().getName() + "," + nation.getSpawn().getX() + "," + nation.getSpawn().getY() + "," + nation.getSpawn().getZ() + "," + nation.getSpawn().getPitch() + "," + nation.getSpawn().getYaw());
-			} catch (TownyException ignored) { }
+		final Position spawnPos = nation.spawnPosition();
+		if (spawnPos != null) {
+			list.add("nationSpawn=" + String.join(",", spawnPos.serialize()));
 		}
 
 		list.add("isPublic=" + nation.isPublic());
@@ -2229,7 +2223,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# Valid EntityTypes are listed here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
 		list.add("isDeletingEntitiesOnUnclaim=" + world.isDeletingEntitiesOnUnclaim());
 		if (world.getUnclaimDeleteEntityTypes() != null)
-			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(world.getUnclaimDeleteEntityTypes(), ","));
+			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(BukkitTools.convertKeyedToString(world.getUnclaimDeleteEntityTypes()), ","));
 
 		// PlotManagement
 		list.add("");
@@ -2265,8 +2259,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# The list of entities whose explosions would be reverted.");
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertEntities() != null)
-			// getKey().getKey() strips out any minecraft: from minecraft:creeper.
-			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(world.getPlotManagementWildRevertEntities().stream().map(type -> type.getKey().getKey()).collect(Collectors.toList()), ","));
+			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(BukkitTools.convertKeyedToString(world.getPlotManagementWildRevertEntities()), ","));
 
 		list.add("# If enabled any damage caused by block explosions will repair itself.");
 		// Using PlotManagement Wild Block Regen
@@ -2323,6 +2316,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// price
 		list.add("price=" + townBlock.getPlotPrice());
+
+		// taxed
+		list.add("taxed=" + townBlock.isTaxed());
 
 		// town
 		try {
@@ -2388,14 +2384,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		list.add("townblock=" + jail.getTownBlock().getWorldCoord().toString());
 		StringBuilder jailArray = new StringBuilder("spawns=");
-		for (Location spawn : new ArrayList<>(jail.getJailCellLocations())) {
-			jailArray.append(spawn.getWorld().getName()).append(",")
-					.append(spawn.getX()).append(",")
-					.append(spawn.getY()).append(",")
-					.append(spawn.getZ()).append(",")
-					.append(spawn.getPitch()).append(",")
-					.append(spawn.getYaw()).append(";");
+		for (Position spawn : jail.getJailCellPositions()) {
+			jailArray.append(String.join(",", spawn.serialize()))
+				.append(";");
 		}
+		
 		list.add(jailArray.toString());
 
 		this.queryQueue.add(new FlatFileSaveTask(list, getJailFilename(jail)));

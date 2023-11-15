@@ -24,7 +24,7 @@ jobs:
       - name: compile towny with maven
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B clean package -P no-apidoc
+        run: mvn -B clean package -P no-apidoc -DskipTests=false
       - name: setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -66,3 +66,11 @@ jobs:
             }]
       - name: deploy to glaremaster repo
         run: mvn deploy
+      - name: deploy javadoc to github pages
+        uses: MathieuSoysal/Javadoc-publisher.yml@v2.4.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          javadoc-branch: javadoc
+          java-version: 17
+          target-folder: javadoc/prerelease
+          project: maven

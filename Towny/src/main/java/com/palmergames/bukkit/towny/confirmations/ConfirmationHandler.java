@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -156,7 +157,10 @@ public class ConfirmationHandler {
 		if (context.confirmation.isAsync()) {
 			plugin.getScheduler().runAsync(handler);
 		} else {
-			plugin.getScheduler().run(handler);
+			if (sender instanceof Player player)
+				plugin.getScheduler().run(player, handler);
+			else 
+				plugin.getScheduler().run(handler);
 		}
 	}
 	

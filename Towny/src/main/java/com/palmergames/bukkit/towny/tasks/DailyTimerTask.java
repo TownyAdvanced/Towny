@@ -90,6 +90,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (TownySettings.isNewDayDeleting0PlotTowns()) {
 			List<String> deletedTowns = new ArrayList<>();
 			for (Town town : universe.getTowns()) {
+				if (!town.exists())
+					continue;
 				if (town.getTownBlocks().size() == 0) {
 					deletedTowns.add(town.getName());
 					removedTowns.add(town.getName());
@@ -104,6 +106,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		 * Reduce the number of days conquered towns are conquered for.
 		 */
 		for (Town town : universe.getTowns()) {
+			if (!town.exists())
+				continue;
 			if (town.isConquered()) {
 				if (town.getConqueredDays() == 1)
 					plugin.getScheduler().run(() -> unconquer(town));
@@ -162,7 +166,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect tax for this nation if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (universe.hasNation(nation.getName()))
+			if (nation.exists())
 				collectNationTaxes(nation);
 		}
 	}
@@ -173,6 +177,14 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @param nation - Nation to collect taxes from.
 	 */
 	protected void collectNationTaxes(Nation nation) {
+
+		double tax = nation.getTaxes();
+		if (tax == 0)
+			return;
+
+		// Don't allow negative taxes if the nation uses a tax percentage or negative naiton tax is explicitly disallowed.
+		if (tax < 0 && (!TownySettings.isNegativeNationTaxAllowed() || nation.isTaxPercentage()))
+			return;
 
 		List<String> newlyDelinquentTowns = new ArrayList<>();
 		List<String> localTownsDestroyed = new ArrayList<>();
@@ -187,7 +199,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect nation tax from this town if it really still exists. We are
 			 * running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()))
+			if (!town.exists())
 				continue;
 
 			if ((town.isCapital() && !TownySettings.doCapitalsPayNationTax()) || !town.hasUpkeep() || town.isRuined())
@@ -220,8 +232,9 @@ public class DailyTimerTask extends TownyTimerTask {
 			else
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_destroyed_by_nation_tax_multiple").append(StringMgmt.join(localTownsDestroyed, ", ")));
 
-		if (taxCollected > 0.0) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_tax_collected_from_towns", prettyMoney(taxCollected)));
+		if (taxCollected != 0.0) {
+			String msgSlug = taxCollected > 0.0 ? "msg_tax_collected_from_towns" : "msg_tax_paid_to_towns";
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of(msgSlug, prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 
@@ -256,8 +269,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		taxAmount = event.getTax();
 
 		// Town is going to be paid if the nation can afford it.
-		if (!nation.isTaxPercentage() && taxAmount < 0) {
-			payNationTaxToTown(taxAmount, town, nation);
+		if (taxAmount < 0 && !town.isConquered()) {
+			payNationTaxToTown(nation, town, taxAmount);
 			return "";
 		}
 
@@ -267,7 +280,8 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (nation.getBankCap() != 0 && taxAmount + nation.getAccount().getHoldingBalance() > nation.getBankCap())
 			taxAmount = nation.getBankCap() - nation.getAccount().getHoldingBalance();
 
-		if (taxAmount == 0)
+		// This will stop towns paying $0 and stop conquered towns from getting a less-than-zero tax charge.
+		if (taxAmount <= 0)
 			return "";
 
 		// Town is able to pay the nation's tax.
@@ -331,8 +345,11 @@ public class DailyTimerTask extends TownyTimerTask {
 		return "";
 	}
 
-	private void payNationTaxToTown(double taxAmount, Town town, Nation nation) {
-		// TODO Implement feature.
+	private void payNationTaxToTown(Nation nation, Town town, double tax) {
+		if (!nation.getAccount().canPayFromHoldings(tax))
+			return;
+		nation.getAccount().payTo(tax, town.getAccount(), "Nation Tax Payment To Town");
+		taxCollected += tax;
 	}
 
 	/**
@@ -351,7 +368,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()))
+			if (!town.exists())
 				continue;
 
 			if (town.isRuined())
@@ -367,17 +384,23 @@ public class DailyTimerTask extends TownyTimerTask {
 	 * @param town - Town to collect taxes from
 	 */
 	protected void collectTownTaxes(Town town) {
-		// Resident Tax
+		/*
+		 * Taxes paid by or paid to the Residents of the town.
+		 */
 		collectTownResidentTax(town);
-		if (taxCollected > 0.0) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_residents", prettyMoney(taxCollected)));
+		if (taxCollected != 0.0) {
+			String msgSlug = taxCollected > 0.0 ? "msg_tax_collected_from_residents" : "msg_tax_paid_to_residents";
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of(msgSlug, prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 
-		// Plot Tax
+		/*
+		 * Taxes paid by or paid to the Residents that own Town land personally.
+		 */
 		collecTownPlotTax(town);
-		if (taxCollected > 0.0) {
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_tax_collected_from_plots", prettyMoney(taxCollected)));
+		if (taxCollected != 0.0) {
+			String msgSlug = taxCollected > 0.0 ? "msg_tax_collected_from_plots" : "msg_tax_paid_to_residents_for_plots";
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of(msgSlug, prettyMoney(taxCollected)));
 			taxCollected = 0.0;
 		}
 	}
@@ -385,6 +408,10 @@ public class DailyTimerTask extends TownyTimerTask {
 	private void collectTownResidentTax(Town town) {
 		double tax = town.getTaxes();
 		if (tax == 0)
+			return;
+
+		// Don't allow negative taxes if the town uses a tax percentage or negative town tax is explicitly disallowed.
+		if (tax < 0 && (!TownySettings.isNegativeTownTaxAllowed() || town.isTaxPercentage()))
 			return;
 
 		// Tax is over 0.
@@ -401,7 +428,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * still exists. We are running in an Async thread so MUST
 			 * verify all objects.
 			 */
-			if (!universe.hasResident(resident.getName()))
+			if (!resident.exists())
 				continue;
 
 			if (TownyPerms.getResidentPerms(resident).get("towny.tax_exempt") == Boolean.TRUE || resident.isNPC() || resident.isMayor()) {
@@ -423,7 +450,7 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	private boolean collectTownTaxFromResident(double tax, Resident resident, Town town) {
 		if (tax < 0) {
-			payTownTaxToResidents(town);
+			payTownTaxToResidents(town, resident, tax);
 			return true;
 		}
 
@@ -468,8 +495,11 @@ public class DailyTimerTask extends TownyTimerTask {
 		return false;
 	}
 
-	private void payTownTaxToResidents(Town town) {
-		// TODO Implement feature.
+	private void payTownTaxToResidents(Town town, Resident resident, double tax) {
+		if (!town.getAccount().canPayFromHoldings(tax))
+			return;
+		town.getAccount().payTo(tax, resident.getAccount(), "Town Tax Payment To Resident");
+		taxCollected += tax;
 	}
 
 	private void collecTownPlotTax(Town town) {
@@ -483,7 +513,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			townBlock = townBlockItr.next();
 			double tax = townBlock.getType().getTax(town);
 
-			if (!townBlock.hasResident() || tax == 0 ||
+			if (!townBlock.isTaxed() || !townBlock.hasResident() || tax == 0 ||
 				!TownySettings.isNegativePlotTaxAllowed() && tax < 1)
 				continue;
 
@@ -493,7 +523,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only collect plot tax from this resident if it really still exist and are not
 			 * an NPC. We are running in an Async thread so MUST verify all objects.
 			 */
-			if (resident == null || !universe.hasResident(resident.getName()) || resident.isNPC())
+			if (resident == null || !resident.exists() || resident.isNPC())
 				continue;
 
 			// Prevents Mayors/Assistants/VIPs paying taxes in their own town.
@@ -554,6 +584,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		if (!town.getAccount().canPayFromHoldings(tax))
 			return;
 		town.getAccount().payTo(tax, resident.getAccount(), String.format("Plot Tax Payment To Resident (%s)", typeName));
+		taxCollected += tax;
 	}
 
 	/**
@@ -571,7 +602,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * Only charge/pay upkeep for this town if it really still exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasTown(town.getName()) || !town.hasUpkeep() || town.isRuined())
+			if (!town.exists() || !town.hasUpkeep() || town.isRuined())
 				continue;
 
 			processTownUpkeep(town);
@@ -722,7 +753,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			 * and its capital town also pays upkeep costs.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (!universe.hasNation(nation.getUUID()) || !nation.getCapital().hasUpkeep())
+			if (!nation.exists() || !nation.getCapital().hasUpkeep())
 				continue;
 
 			processNationUpkeep(nation);

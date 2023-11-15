@@ -1,6 +1,5 @@
  package com.palmergames.bukkit.towny;
 
-import com.earth2me.essentials.Essentials;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.config.migration.ConfigMigrator;
@@ -50,6 +49,7 @@ import com.palmergames.bukkit.towny.scheduling.impl.BukkitTaskScheduler;
 import com.palmergames.bukkit.towny.scheduling.impl.PaperTaskScheduler;
 import com.palmergames.bukkit.towny.tasks.OnPlayerLogin;
 import com.palmergames.bukkit.towny.utils.ChangelogReader;
+import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
@@ -68,7 +68,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -79,14 +78,17 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -106,7 +108,7 @@ public class Towny extends JavaPlugin {
 	private static BukkitAudiences adventure;
 
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
-	private final List<TownyInitException.TownyError> errors = new ArrayList<>();
+	private final Set<TownyInitException.TownyError> errors = new HashSet<>();
 	
 	public Towny() {
 		plugin = this;
@@ -128,14 +130,11 @@ public class Towny extends JavaPlugin {
 		PlayerCacheUtil.initialize(this);
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
+		SpawnUtil.initialize(this);
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
 			loadFoundation(false);
-
-			// Check for plugins that we use or we develop, 
-			// print helpful information to startup log.
-			PluginIntegrations.getInstance().checkForPlugins(this);
 
 			// Make sure the timers are stopped for a reset, then started.
 			cycleTimers();
@@ -144,14 +143,6 @@ public class Towny extends JavaPlugin {
 			// Check for plugin updates if the Minecraft version is still supported.
 			if (isMinecraftVersionStillSupported())
 				TownyUpdateChecker.checkForUpdates(this);
-			// Initialize SpawnUtil only after the Translation class has figured out a language.
-			// N.B. Important that localization loaded correctly for this step.
-			SpawnUtil.initialize(this);
-			// Setup bukkit command interfaces
-			registerSpecialCommands();
-			registerCommands();
-			// Add custom metrics charts.
-			addMetricsCharts();
 		} catch (TownyInitException tie) {
 			addError(tie.getError());
 			getLogger().log(Level.SEVERE, tie.getMessage(), tie);
@@ -161,6 +152,15 @@ public class Towny extends JavaPlugin {
 		// Important for safe mode.
 
 		adventure = BukkitAudiences.create(this);
+
+		// Check for plugins that we use or we develop, 
+		// print helpful information to startup log.
+		PluginIntegrations.getInstance().checkForPlugins(this);
+		// Setup bukkit command interfaces
+		registerSpecialCommands();
+		registerCommands();
+		// Add custom metrics charts.
+		addMetricsCharts();
 
 		// If we aren't going to enter safe mode, do the following:
 		if (!isError()) {
@@ -261,24 +261,22 @@ public class Towny extends JavaPlugin {
 		townyUniverse.performCleanupAndBackup();
 	}
 
-	private void loadConfig(boolean reload) {
+	public void loadConfig(boolean reload) {
 		TownySettings.loadConfig(getDataFolder().toPath().resolve("settings").resolve("config.yml"), getVersion());
 		if (reload) {
-			// If Towny is in Safe Mode (for the main config) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.MAIN_CONFIG)) {
-				removeError(TownyInitException.TownyError.MAIN_CONFIG);
+			// If Towny is in Safe Mode (for the main config) turn off Safe Mode and setup economy if it isn't already.
+			if (removeError(TownyInitException.TownyError.MAIN_CONFIG) && TownySettings.isUsingEconomy() && !TownyEconomyHandler.isActive()) {
+				PluginIntegrations.getInstance().setupAndPrintEconomy(TownySettings.isUsingEconomy());
 			}
 			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_config"));
 		}
 	}
 	
-	private void loadLocalization(boolean reload) {
+	public void loadLocalization(boolean reload) {
 		Translation.loadTranslationRegistry();
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.LOCALIZATION)) {
-				removeError(TownyInitException.TownyError.LOCALIZATION);
-			}
+			removeError(TownyInitException.TownyError.LOCALIZATION);
 			TownyMessaging.sendMsg(Translatable.of("msg_reloaded_lang"));
 		}
 	}
@@ -290,9 +288,7 @@ public class Towny extends JavaPlugin {
 		DatabaseConfig.loadDatabaseConfig(getDataFolder().toPath().resolve("settings").resolve("database.yml"));
 		if (reload) {
 			// If Towny is in Safe Mode (because of localization) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.DATABASE_CONFIG)) {
-				removeError(TownyInitException.TownyError.DATABASE_CONFIG);
-			}
+			removeError(TownyInitException.TownyError.DATABASE_CONFIG);
 		}
 	}
 	
@@ -301,9 +297,7 @@ public class Towny extends JavaPlugin {
 		// This will only run if permissions is fine.
 		if (reload) {
 			// If Towny is in Safe Mode (for Permissions) turn off Safe Mode.
-			if (isError(TownyInitException.TownyError.PERMISSIONS)) {
-				removeError(TownyInitException.TownyError.PERMISSIONS);
-			}
+			removeError(TownyInitException.TownyError.PERMISSIONS);
 			// Update everyone who is online with the changes made.
 			TownyPerms.updateOnlinePerms();
 		}
@@ -427,6 +421,7 @@ public class Towny extends JavaPlugin {
 		toggleTimersOff();
 
 		TownyRegenAPI.cancelProtectionRegenTasks();
+		ChunkNotificationUtil.cancelChunkNotificationTasks();
 
 		playerCache.clear();
 
@@ -441,6 +436,9 @@ public class Towny extends JavaPlugin {
 		PluginIntegrations.getInstance().disable3rdPartyPluginIntegrations();
 
 		this.townyUniverse = null;
+
+		if (this.scheduler instanceof FoliaTaskScheduler foliaScheduler)
+			foliaScheduler.cancelTasks();
 
 		plugin.getLogger().info("Version: " + version + " - Plugin Disabled");
 		Bukkit.getLogger().info("=============================================================");
@@ -479,18 +477,17 @@ public class Towny extends JavaPlugin {
 
 		final PluginManager pluginManager = getServer().getPluginManager();
 
-		if (!isError()) {			
-			// Huds
-			pluginManager.registerEvents(new HUDManager(this), this);
+		// Huds
+		pluginManager.registerEvents(new HUDManager(this), this);
 
-			// Manage player deaths and death payments
-			pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
-			pluginManager.registerEvents(new TownyVehicleListener(this), this);
-			pluginManager.registerEvents(new TownyServerListener(this), this);
-			pluginManager.registerEvents(new TownyCustomListener(this), this);
-			pluginManager.registerEvents(new TownyWorldListener(this), this);
-			pluginManager.registerEvents(new TownyLoginListener(), this);
-		}
+		// Manage player deaths and death payments
+		pluginManager.registerEvents(new TownyEntityMonitorListener(this), this);
+		pluginManager.registerEvents(new TownyVehicleListener(this), this);
+		pluginManager.registerEvents(new TownyServerListener(this), this);
+		pluginManager.registerEvents(new TownyCustomListener(this), this);
+		pluginManager.registerEvents(new TownyWorldListener(this), this);
+		pluginManager.registerEvents(new TownyLoginListener(), this);
+		
 
 		// Always register these events.
 		pluginManager.registerEvents(new TownyPlayerListener(this), this);
@@ -548,55 +545,25 @@ public class Towny extends JavaPlugin {
 		return !errors.isEmpty();
 	}
 	
-	private boolean isError(@NotNull TownyInitException.TownyError error) {
+	@ApiStatus.Internal
+	public boolean isError(@NotNull TownyInitException.TownyError error) {
 		return errors.contains(error);
 	}
 	
+	@ApiStatus.Internal
 	public void addError(@NotNull TownyInitException.TownyError error) {
 		errors.add(error);
 	}
 	
-	private void removeError(@NotNull TownyInitException.TownyError error) {
-		errors.remove(error);
+	@ApiStatus.Internal
+	public boolean removeError(@NotNull TownyInitException.TownyError error) {
+		return errors.remove(error);
 	}
 
+	@ApiStatus.Internal
 	@NotNull
-	public List<TownyInitException.TownyError> getErrors() {
+	public Collection<TownyInitException.TownyError> getErrors() {
 		return errors;
-	}
-
-	/**
-	 * @deprecated since 0.98.4.12, Towny no longer checks for essentials usage internally.
-	 * @return false
-	 */
-	@Deprecated
-	public boolean isEssentials() {
-		return false;
-	}
-
-	/**
-	 * @deprecated since 0.98.4.19.
-	 */
-	@Deprecated
-	public boolean isCitizens2() {
-		return false;
-	}
-
-	/**
-	 * @deprecated since 0.98.4.12, Towny no longer uses an internal Essentials instance.
-	 * @return a Essentials plugin instance or null
-	 */
-	@Deprecated
-	public Essentials getEssentials() {
-		return (Essentials) getServer().getPluginManager().getPlugin("Essentials");
-	}
-
-	/**
-	 * @deprecated since 0.98.4.19.
-	 */
-	@Deprecated
-	public boolean isPAPI() {
-		return false;
 	}
 
 	public World getServerWorld(String name) throws NotRegisteredException {
@@ -613,17 +580,15 @@ public class Towny extends JavaPlugin {
 		return playerCache.containsKey(player.getUniqueId());
 	}
 
-	public PlayerCache newCache(Player player) {
+	private PlayerCache newCache(Player player) {
 
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 		if (world == null) {
-			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for this world (" + player.getWorld().getName() + ".");
-			return null;	
+			TownyMessaging.sendErrorMsg(player, "Could not create permission cache for unregistered world (" + player.getWorld().getName() + ").");
+			return null;
 		}
-		PlayerCache cache = new PlayerCache(world, player);
-		playerCache.put(player.getUniqueId(), cache);
-		return cache;
 
+        return new PlayerCache(player);
 	}
 
 	public void deleteCache(Resident resident) {
@@ -650,17 +615,7 @@ public class Towny extends JavaPlugin {
 	 * @return the current (or new) cache for this player.
 	 */
 	public PlayerCache getCache(Player player) {
-
-		PlayerCache cache = playerCache.get(player.getUniqueId());
-		
-		if (cache == null) {
-			cache = newCache(player);
-			
-			if (cache != null)
-				cache.setLastTownBlock(WorldCoord.parseWorldCoord(player));
-		}
-
-		return cache;
+		return playerCache.computeIfAbsent(player.getUniqueId(), k -> newCache(player));
 	}
 
 	/**
@@ -830,15 +785,11 @@ public class Towny extends JavaPlugin {
 		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
 		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
 		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+
 		try {
-			final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-
-			bukkitCommandMap.setAccessible(true);
-			CommandMap commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-
-			commandMap.registerAll("towny", commands);
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new TownyInitException("An issue has occured while registering custom commands.", TownyInitException.TownyError.OTHER, e);
+			BukkitTools.getCommandMap().registerAll("towny", commands);
+		} catch (ReflectiveOperationException e) {
+			throw new TownyInitException("An issue has occurred while registering custom commands.", TownyInitException.TownyError.OTHER, e);
 		}
 	}
 	
@@ -882,7 +833,7 @@ public class Towny extends JavaPlugin {
 
 		metrics.addCustomChart(new SimplePie("nation_zones_enabled", () -> TownySettings.getNationZonesEnabled() ? "true" : "false"));
 		
-		metrics.addCustomChart(new SimplePie("database_type", () -> TownySettings.getSaveDatabase().toLowerCase()));
+		metrics.addCustomChart(new SimplePie("database_type", () -> TownySettings.getSaveDatabase().toLowerCase(Locale.ROOT)));
 		
 		metrics.addCustomChart(new SimplePie("town_block_size", () -> String.valueOf(TownySettings.getTownBlockSize())));
 		
@@ -906,14 +857,6 @@ public class Towny extends JavaPlugin {
 	public static boolean isMinecraftVersionStillSupported() {
 		return MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.OLDEST_VERSION_SUPPORTED);
 	}
-	
-	/**
-	 * @deprecated since 0.98.1.1. Towny will only support 1.16 and newer going forward.
-	 */
-	@Deprecated
-	public static boolean is116Plus() {
-		return true;
-	}
 
 	@ApiStatus.Internal
 	public boolean isFolia() {
@@ -921,7 +864,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private boolean expandedSchedulingAvailable() {
-		return JavaUtil.classExists("io.papermc.paper.threadedregions.scheduler.ScheduledTask");
+		return JavaUtil.classExists("io.papermc.paper.threadedregions.scheduler.FoliaAsyncScheduler");
 	}
 
 	@NotNull

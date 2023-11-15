@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,7 +88,8 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	 * @param resident The resident to abort the request for.
 	 * @return Whether the resident had an active teleport request.
 	 */
-	public static boolean abortTeleportRequest(Resident resident) {
+	@Contract("null -> false")
+	public static boolean abortTeleportRequest(@Nullable Resident resident) {
 		if (resident == null)
 			return false;
 
@@ -96,7 +98,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			return false;
 
 		if (request.teleportCost() != 0 && TownyEconomyHandler.isActive() && request.teleportAccount() != null) {
-			request.teleportAccount().payTo(request.teleportCost(), resident.getAccount(), Translation.of("msg_cost_spawn_refund"));
+			TownyEconomyHandler.economyExecutor().execute(() -> request.teleportAccount().payTo(request.teleportCost(), resident.getAccount(), Translation.of("msg_cost_spawn_refund")));
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_cost_spawn_refund"));
 		}
 

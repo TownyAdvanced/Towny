@@ -2,11 +2,13 @@ package com.palmergames.bukkit.towny.regen;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockObject;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import net.coreprotect.CoreProtect;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -160,14 +162,13 @@ public class PlotBlockData {
 			}
 
 			// Actually set the block back to what we have in the snapshot.
-			try {
-				block.setType(mat, false);
-				block.setBlockData(storedData.getBlockData());
-				return true;
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg("Exception in PlotBlockData.java");
-				break;
-			}
+			block.setType(mat, false);
+			block.setBlockData(storedData.getBlockData());
+			
+			if (TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect"))
+				CoreProtect.getInstance().getAPI().logPlacement("#towny", block.getLocation(), mat, storedData.getBlockData());
+			
+			return true;
 		}
 		// reset as we are finished with the regeneration
 		resetBlockListRestored();

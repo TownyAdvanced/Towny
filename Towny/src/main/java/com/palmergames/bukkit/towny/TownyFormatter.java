@@ -113,7 +113,10 @@ public class TownyFormatter {
 		
 		if (townBlock.getTrustedResidents().size() > 0)
 			screen.addComponentOf("trusted", getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
-		
+
+		if (TownyEconomyHandler.isActive())
+			screen.addComponentOf("plottax", colourKeyValue(translator.of("status_townblock_plottax"), townBlock.isTaxed() ? formatMoney(townBlock.getPlotTax()) : translator.of("status_townblock_untaxed")));
+
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(townBlock);
 		if (!fields.isEmpty())
@@ -139,6 +142,10 @@ public class TownyFormatter {
 		// ___[ King Harlus ]___
 		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
 
+		// About: Just a humble farmer
+		if (!resident.getAbout().isEmpty())
+			screen.addComponentOf("about", colourKeyValue(translator.of("status_about"), resident.getAbout()));
+		
 		// First used if last online is this year, 2nd used if last online is early than this year.
 		// Registered: Sept 3 2009 | Last Online: March 7 @ 14:30
 		// Registered: Sept 3 2009 | Last Online: March 7 2009
@@ -311,7 +318,7 @@ public class TownyFormatter {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
 				outpostLine = colourKeyValue(translator.of("status_town_outposts"), translator.of("status_fractions", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 				if (town.hasNation()) {
-					int nationBonus = TownySettings.getNationLevel(town.getNationOrNull()).nationBonusOutpostLimit();
+					int nationBonus = town.getNationOrNull().getNationLevel().nationBonusOutpostLimit();
 					if (nationBonus > 0)					
 						outpostLine += colourBracketElement(translator.of("status_town_size_nationbonus"), String.valueOf(nationBonus));
 				}
@@ -835,6 +842,8 @@ public class TownyFormatter {
 			sub.add(translator.of("status_town_title_peaceful"));
 		if (town.isConquered())
 			sub.add(translator.of("msg_conquered"));
+		if (town.isForSale())
+			sub.add(translator.of("status_forsale", formatMoney(town.getForSalePrice())));
 		return sub;
 	}
 
@@ -932,7 +941,7 @@ public class TownyFormatter {
 	 */
 	private static boolean playerIsOnlineAndVisible(String name, CommandSender sender) {
 		if (sender instanceof Player player)
-			return BukkitTools.isOnline(name) && player.canSee(BukkitTools.getPlayerExact(name));
+			return BukkitTools.isOnline(name) && BukkitTools.playerCanSeePlayer(player, BukkitTools.getPlayerExact(name));
 		else if (sender instanceof ConsoleCommandSender)
 			return BukkitTools.isOnline(name);
 		else

@@ -3,14 +3,15 @@ main: com.palmergames.bukkit.towny.Towny
 version: ${project.version}
 api-version: ${project.bukkitAPIVersion}
 folia-supported: true
-author: 'LlmDl, Warrior, and many contributors. Past lead devs: Shade, ElgarL.'
+authors: [LlmDl, Warrior]
+contributors: [Articdive, creatorfromhell, ElgarL, FlagCourier, Goosius1, Shade, silverwolfg11]
 website: 'https://townyadvanced.github.io/'
 prefix: Towny
 description: >
     Resident-Town-Nation hierarchy combined with a grid based
     protection system, many features and an expansive API.
 
-softdepend: [MultiVerse,Multiverse-Core,XcraftGate,My_Worlds,Citizens,PersonalWorlds,WormholeXTremeWorlds,Vault,Reserve,MultiWorld,TheNewChat,PlaceholderAPI,Essentials,Hyperverse,GroupManager,iConomy,LuckPerms]
+softdepend: [Citizens,Vault,Reserve,TheNewChat,PlaceholderAPI,GroupManager,LuckPerms,CoreProtect]
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -164,6 +165,14 @@ permissions:
             towny.claimed.alltown.build.*: true
             towny.claimed.alltown.item_use.*: true
             towny.claimed.alltown.destroy.*: true
+
+    towny.bypass_death_costs:
+        description: Makes the player not subject to death costs charged by Towny.
+        default: false
+
+    towny.bypass_bed_restriction:
+        description: Makes the player not subject to bed-use restrictions.
+        default: false
 
     #
     # New command permissions (replaces many of the older permissions)
@@ -352,6 +361,9 @@ permissions:
             towny.command.town.claim.*: true
             towny.command.town.delete: true
             towny.command.town.deposit: true
+            towny.command.town.buytown: true
+            towny.command.town.forsale: true
+            towny.command.town.notforsale: true
             towny.command.town.here: true
             towny.command.town.invite.*: true
             towny.command.town.jail: true
@@ -412,6 +424,7 @@ permissions:
             towny.command.town.claim.town: true
             towny.command.town.claim.outpost: true
             towny.command.town.claim.town.multiple: false
+            towny.command.town.claim.fill: true
 
     towny.command.town.invite.*:
         description: User can access all town invites related commands.
@@ -557,7 +570,7 @@ permissions:
         default: false
         children:
             towny.command.plot.perm.*: true
-        
+
     towny.command.plot.perm.*:
         description: User can access all plot perm commands.
         default: false
@@ -590,6 +603,7 @@ permissions:
             towny.command.resident.friend: true
             towny.command.resident.jail: true
             towny.command.resident.list: true
+            towny.command.resident.plotlist: true
             towny.command.resident.set.*: true
             towny.command.resident.otherresident: true
             towny.command.resident.tax: true
@@ -601,6 +615,7 @@ permissions:
         children:
             towny.command.resident.set.mode: true
             towny.command.resident.set.perm: true
+            towny.command.resident.set.about: true
 
     towny.command.resident.toggle.*:
         description: User can toggle their default settings.
@@ -674,6 +689,7 @@ permissions:
             towny.command.townyadmin.set.plot: true
             towny.command.townyadmin.set.surname: true
             towny.command.townyadmin.set.title: true
+            towny.command.townyadmin.set.about: true
 
     towny.command.townyadmin.town.*:
         description: User can access the admin town commands.
@@ -685,17 +701,20 @@ permissions:
             towny.command.townyadmin.town.delete: true
             towny.command.townyadmin.town.deposit: true
             towny.command.townyadmin.town.forcemerge: true
+            towny.command.townyadmin.town.forsale: true
             towny.command.townyadmin.town.giveboughtblocks: true
             towny.command.townyadmin.town.invite: true
             towny.command.townyadmin.town.kick: true
             towny.command.townyadmin.town.merge: true
             towny.command.townyadmin.town.meta: true
             towny.command.townyadmin.town.new: true
+            towny.command.townyadmin.town.notforsale: true
             towny.command.townyadmin.town.outpost: true
             towny.command.townyadmin.town.outlaw: true
             towny.command.townyadmin.town.rank: true
             towny.command.townyadmin.town.rename: true
             towny.command.townyadmin.town.set: true
+            towny.command.townyadmin.town.set.*: true
             towny.command.townyadmin.town.settownlevel: true
             towny.command.townyadmin.town.spawn.*: true
             towny.command.townyadmin.town.toggle: true
@@ -703,6 +722,12 @@ permissions:
             towny.command.townyadmin.town.trusttown: true
             towny.command.townyadmin.town.unruin: true
             towny.command.townyadmin.town.withdraw: true
+
+    towny.command.townyadmin.town.set.*:
+        description: User can access the admin town set commands.
+        default: false
+        children:
+            towny.command.townyadmin.town.set.foundingdate: true
 
     towny.command.townyadmin.nation.*:
         description: User can access the admin nation commands.
@@ -722,9 +747,16 @@ permissions:
             towny.command.townyadmin.nation.recheck: true
             towny.command.townyadmin.nation.rename: true
             towny.command.townyadmin.nation.set: true
+            towny.command.townyadmin.nation.set.*: true
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.transfer: true
             towny.command.townyadmin.nation.withdraw: true
+
+    towny.command.townyadmin.nation.set.*:
+        description: User can access the admin nation set commands.
+        default: false
+        children:
+            towny.command.townyadmin.nation.set.foundingdate: true
 
     towny.command.townyadmin.plot.*:
         description: User can access the admin plot commands.
@@ -813,3 +845,7 @@ permissions:
             towny.command.townyworld.toggle.wildernessmobs: true
             towny.command.townyworld.toggle.wildernessuse: true
             towny.command.townyworld.toggle.worldmobs: true
+
+    towny.receives-plot-notifications:
+        description: User is able to be shown the notifications that appear when crossing plot boundaries and entering/exiting towns.
+        default: true

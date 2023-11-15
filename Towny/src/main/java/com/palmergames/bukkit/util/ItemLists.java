@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import static com.palmergames.bukkit.towny.utils.MinecraftVersion.*;
 import static org.bukkit.NamespacedKey.minecraft;
 
 /**
@@ -240,6 +241,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists HOES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("hoes")).endsWith("_hoe").build();
 
 	public static final ItemLists BRUSHABLE_BLOCKS = newBuilder().add("SUSPICIOUS_SAND", "SUSPICIOUS_GRAVEL").build();
+	
+	public static final ItemLists PROJECTILE_BREAKABLE_BLOCKS = newBuilder()
+		.add("CHORUS_FLOWER", "POINTED_DRIPSTONE")
+		.conditionally(() -> CURRENT_VERSION.isNewerThanOrEquals(MINECRAFT_1_20_3), builder -> builder.add("DECORATED_POT"))
+		.build();
 
 	/**
 	 * Config-useable material groups.

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -8,6 +9,7 @@ import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.event.resident.ResidentToggleModeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -49,6 +51,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,6 +66,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private boolean isNPC = false;
 	private String title = "";
 	private String surname = "";
+	private String about = TownySettings.getDefaultResidentAbout();
 	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
@@ -82,10 +86,25 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private SelectionType guiSelectionType;
 	private ScheduledTask respawnProtectionTask = null;
 	private boolean respawnPickupWarningShown = false; // Prevents chat spam when a player attempts to pick up an item while under respawn protection.
+	private String plotGroupName = null;
 
 	public Resident(String name) {
 		super(name);
 		permissions.loadDefault(this);
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Resident otherResident))
+			return false;
+		return this.getName().equals(otherResident.getName()); // TODO: Change this to UUID when the UUID database is in use.
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUUID(), getName());
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -209,6 +228,16 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 		return !surname.isEmpty();
 	}
+	
+	public void setAbout(@NotNull String about) {
+		Preconditions.checkNotNull(about, "about");
+		this.about = about;
+	}
+	
+	@NotNull
+	public String getAbout() {
+		return about;
+	}
 
 	public boolean isKing() {
 
@@ -282,21 +311,18 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public void removeTown() {
-		
+		removeTown(false);
+	}
+
+	public void removeTown(boolean townDeleted) {
 		if (!hasTown())
 			return;
 
 		Town town = this.town;
 		
 		BukkitTools.fireEvent(new TownPreRemoveResidentEvent(this, town));
-		
-		try {
-			town.removeResident(this);
-		} catch (NotRegisteredException | EmptyTownException ignored) {}
 
-		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
-
-		// Remove any non-embassy plots owned by the player in the town that was just left.
+		// Remove any non-embassy plots owned by the player in the town that the resident will leave.
 		for (TownBlock townBlock : town.getTownBlocks()) {
 			if (townBlock.getType() == TownBlockType.EMBASSY || !townBlock.hasResident(this))
 				continue;
@@ -311,6 +337,15 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			}
 		}
 		
+		BukkitTools.fireEvent(new TownRemoveResidentEvent(this, town));
+
+		try {
+			town.removeResident(this);
+		} catch (EmptyTownException e) {
+			if (!townDeleted)
+				TownyUniverse.getInstance().getDataSource().removeTown(town, false);
+		} catch (NotRegisteredException ignored) {}
+
 		try {
 			setTown(null);
 			
@@ -344,12 +379,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return friends.contains(resident);
 	}
 
-	public void addFriend(Resident resident) throws AlreadyRegisteredException {
+	public void addFriend(Resident resident){
 
 		if (hasFriend(resident) || this.equals(resident) || resident.isNPC())
-			throw new AlreadyRegisteredException();
-		else
-			friends.add(resident);
+			return;
+
+		friends.add(resident);
 	}
 
 	public void removeAllFriends() {
@@ -528,7 +563,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public boolean hasMode(String mode) {
-		return this.modes.contains(mode.toLowerCase());
+		return this.modes.contains(mode.toLowerCase(Locale.ROOT));
 	}
 	
 	public void toggleMode(String[] newModes, boolean notify) {
@@ -793,7 +828,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		String postfix = Colors.translateColorCodes(hasSurname() ? " " + getSurname() : 
 			(isKing() && !TownySettings.getKingPostfix(this).isEmpty()) ? TownySettings.getKingPostfix(this) : 
 				(isMayor() && !TownySettings.getMayorPostfix(this).isEmpty()) ? TownySettings.getMayorPostfix(this) : "");
-		return prefix + getName() + postfix;
+
+		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
+		BukkitTools.fireEvent(event);
+
+		return event.getPrefix() + getName() + event.getPostfix();
 	}
 
 	/**
@@ -949,18 +988,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return BukkitTools.isOnline(getName());
 	}
 
-	@Deprecated // Sometime during 0.98.*.*
-	@ApiStatus.ScheduledForRemoval
-	public int getRespawnProtectionTaskID() {
-		return -1;
-	}
-
-	@Deprecated // Sometime during 0.98.*.*
-	@ApiStatus.ScheduledForRemoval
-	public void setRespawnProtectionTaskID(int respawnProtectionTaskID) {
-		
-	}
-	
 	public boolean hasRespawnProtection() {
 		return this.respawnProtectionTask != null && !this.respawnProtectionTask.isCancelled();
 	}
@@ -1004,5 +1031,23 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean isSeeingBorderTitles() {
 		BooleanDataField borderMeta = new BooleanDataField("bordertitles");
 		return !MetaDataUtil.hasMeta(this, borderMeta) || MetaDataUtil.getBoolean(this, borderMeta);
+	}
+
+	public boolean hasPlotGroupName() {
+		return plotGroupName != null;
+	}
+
+	public String getPlotGroupName() {
+		return plotGroupName;
+	}
+
+	public void setPlotGroupName(String plotGroupName) {
+		this.plotGroupName = plotGroupName;
+	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasResident(getName());
 	}
 }

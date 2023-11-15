@@ -19,24 +19,26 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 public class TownBlock extends TownyObject {
 
-	private TownyWorld world;
 	private Town town = null;
 	private Resident resident = null;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
-	private int x, z;
+	private final WorldCoord worldCoord;
 	private double plotPrice = -1;
+	private boolean taxed = true;
 	private boolean outpost = false;
 	private PlotGroup plotGroup;
 	private long claimedAt;
@@ -50,16 +52,12 @@ public class TownBlock extends TownyObject {
 	
 	public TownBlock(int x, int z, TownyWorld world) {
 		super("");
-		this.x = x;
-		this.z = z;
-		this.setWorld(world);
+		this.worldCoord = new WorldCoord(world.getName(), world.getUUID(), x, z);
 	}
 
 	public TownBlock(WorldCoord worldCoord) {
 		super("");
-		this.x = worldCoord.getX();
-		this.z = worldCoord.getZ();
-		this.setWorld(worldCoord.getTownyWorld());
+		this.worldCoord = worldCoord;
 	}
 
 	public void setTown(Town town) {
@@ -68,8 +66,10 @@ public class TownBlock extends TownyObject {
 
 	public void setTown(Town town, boolean updateClaimedAt) {
 
-		if (hasTown())
+		if (hasTown()) {
 			this.town.removeTownBlock(this);
+			this.setTaxed(true);
+		}
 		this.town = town;
 		try {
 			TownyUniverse.getInstance().addTownBlock(this);
@@ -85,7 +85,7 @@ public class TownBlock extends TownyObject {
 	public Town getTown() throws NotRegisteredException {
 
 		if (!hasTown())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", world.getName(), x, z));
+			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", getWorld().getName(), getX(), getZ()));
 		return town;
 	}
 	
@@ -150,7 +150,7 @@ public class TownBlock extends TownyObject {
 			if (resident != null && !resident.equals(this.resident)) {
 				PlotPreClaimEvent plotPreClaimEvent = new PlotPreClaimEvent(this.resident, resident, this);
 				if (BukkitTools.isEventCancelled(plotPreClaimEvent)) {
-					if (!plotPreClaimEvent.getCancelMessage().isEmpty() && resident != null)
+					if (!plotPreClaimEvent.getCancelMessage().isEmpty())
 						TownyMessaging.sendErrorMsg(resident, plotPreClaimEvent.getCancelMessage());
 	
 					return false;
@@ -163,14 +163,14 @@ public class TownBlock extends TownyObject {
 		if (hasResident()) {
 			this.resident.removeTownBlock(this);
 			unclaim = true;
-			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
+			this.town.getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
 		}
 		this.resident = resident;
 		if (resident != null && !resident.hasTownBlock(this)) {
 			try {
 				resident.addTownBlock(this);
 				successful = true;
-				getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
+				this.town.getTownBlockTypeCache().addTownBlockOfTypeResidentOwned(this);
 			} catch (AlreadyRegisteredException ignored) {}
 		}
 		
@@ -188,7 +188,7 @@ public class TownBlock extends TownyObject {
 	public Resident getResident() throws NotRegisteredException {
 
 		if (!hasResident())
-			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", world.getName(), x, z));
+			throw new NotRegisteredException(String.format("The TownBlock at (%s, %d, %d) is not registered to a resident.", getWorld().getName(), getX(), getZ()));
 		return resident;
 	}
 
@@ -207,24 +207,23 @@ public class TownBlock extends TownyObject {
 		return resident != null;
 	}
 
-	public boolean isOwner(TownBlockOwner owner) {
+	public boolean isOwner(@NotNull TownBlockOwner owner) {
 
 		if (hasTown() && owner == getTownOrNull())
 			return true;
 
-		if (hasResident() && owner == getResidentOrNull())
-			return true;
-
-		return false;
+		return hasResident() && owner == getResidentOrNull();
 	}
 
 	public void setPlotPrice(double price) {
-		if (isForSale() && price == -1.0)
-			// Plot is no longer for sale.
-			getTownOrNull().getTownBlockTypeCache().removeTownBlockOfTypeForSale(this);
-		else if (!isForSale() && price > -1.0)
-			// Plot is being put up for sale.
-			getTownOrNull().getTownBlockTypeCache().addTownBlockOfTypeForSale(this);
+		if (this.town != null) {
+			if (isForSale() && price == -1.0)
+				// Plot is no longer for sale.
+				this.town.getTownBlockTypeCache().removeTownBlockOfTypeForSale(this);
+			else if (!isForSale() && price > -1.0)
+				// Plot is being put up for sale.
+				this.town.getTownBlockTypeCache().addTownBlockOfTypeForSale(this);
+		}
 
 		this.plotPrice = price;
 	}
@@ -237,6 +236,18 @@ public class TownBlock extends TownyObject {
 	public boolean isForSale() {
 
 		return getPlotPrice() != -1.0;
+	}
+
+	public boolean isTaxed() {
+		return taxed;
+	}
+
+	public void setTaxed(boolean value) {
+		this.taxed = value;
+	}
+
+	public double getPlotTax() {
+		return getType().getTax(town);
 	}
 
 	public void setPermissions(String line) {
@@ -315,19 +326,7 @@ public class TownBlock extends TownyObject {
 		
 		BukkitTools.fireEvent(new PlotChangeTypeEvent(this.type, type, this));
 
-		switch (type.getName().toLowerCase()) {
-			case "default":
-			case "shop":
-			case "embassy":
-			case "bank":
-			case "inn":
-				if (this.hasResident()) {
-					setPermissions(this.resident.getPermissions().toString());
-				} else {
-					setPermissions(this.town.getPermissions().toString());
-				}
-
-				break;
+		switch (type.getName().toLowerCase(Locale.ROOT)) {
 			case "arena":
 				setPermissions("pvp");
 				break; 
@@ -338,8 +337,17 @@ public class TownBlock extends TownyObject {
 			case "wilds":
 				setPermissions("residentBuild,residentDestroy");
 				break;
-			default:
-				break;
+			case "default":
+			case "shop":
+			case "embassy":
+			case "bank":
+			case "inn":
+			default: // Any custom TownBlockTypes will also get caught here and reset to the town/resident default.
+				if (this.hasResident()) {
+					setPermissions(this.resident.getPermissions().toString());
+				} else {
+					setPermissions(this.town.getPermissions().toString());
+				}
 		}
 		
 		// Set the changed status.
@@ -416,7 +424,7 @@ public class TownBlock extends TownyObject {
 	}
 
 	public boolean isHomeBlock() {
-		return hasTown() && getTownOrNull().isHomeBlock(this);
+		return this.town != null && this.town.isHomeBlock(this);
 	}
 	
 	@Override
@@ -424,62 +432,53 @@ public class TownBlock extends TownyObject {
 		super.setName(newName.replace("_", " ")); 
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
+	 */
+	@Deprecated
 	public void setX(int x) {
 
-		this.x = x;
 	}
 
 	public int getX() {
 
-		return x;
+		return this.worldCoord.getX();
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
+	 */
+	@Deprecated
 	public void setZ(int z) {
 
-		this.z = z;
 	}
 
 	public int getZ() {
 
-		return z;
+		return this.worldCoord.getZ();
 	}
 
 	public Coord getCoord() {
 
-		return new Coord(x, z);
+		return this.worldCoord;
 	}
 
 	public WorldCoord getWorldCoord() {
 
-		return new WorldCoord(world.getName(), world.getUUID(), x, z);
+		return this.worldCoord;
 	}
 
 	/**
-	 * Is the TownBlock locked
-	 * 
-	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
-	 * @return the locked
+	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
 	 */
 	@Deprecated
-	public boolean isLocked() {
-		return false;
-	}
-
-	/**
-	 * @param locked is the to locked to set
-	 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
-	 */
-	public void setLocked(boolean locked) {
-	}
-
 	public void setWorld(TownyWorld world) {
 
-		this.world = world;
 	}
 
 	public TownyWorld getWorld() {
 
-		return world;
+		return this.worldCoord.getTownyWorld();
 	}
 
 	@Override
@@ -487,21 +486,18 @@ public class TownBlock extends TownyObject {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		TownBlock townBlock = (TownBlock) o;
-		return x == townBlock.x &&
-			z == townBlock.z &&
-			world.equals(townBlock.world);
+		return this.worldCoord.equals(townBlock.worldCoord);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(world, x, z);
+		return Objects.hash(getWorld(), getX(), getZ());
 	}
 
 	public void clear() {
 
 		setTown(null);
 		setResident(null);
-		setWorld(null);
 	}
 
 	@Override
@@ -573,7 +569,7 @@ public class TownBlock extends TownyObject {
 	}
 
 	public void addTrustedResidents(List<Resident> residents) {
-		residents.stream().forEach(r -> addTrustedResident(r));
+		residents.forEach(this::addTrustedResident);
 	}
 
 	public Set<Resident> getTrustedResidents() {
@@ -629,5 +625,11 @@ public class TownBlock extends TownyObject {
 		this.setPlotPrice(-1);
 		this.setType(getType());
 		this.save();
+	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasTownBlock(getWorldCoord());
 	}
 }

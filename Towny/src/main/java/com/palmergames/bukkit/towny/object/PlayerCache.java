@@ -2,12 +2,14 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class PlayerCache {
 
@@ -18,17 +20,11 @@ public class PlayerCache {
 
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
-	private Location lastLocation;
+	private final UUID playerUUID;
 
-	public PlayerCache(TownyWorld world, Player player) {
-
-		this(new WorldCoord(world.getName(), Coord.parseCoord(player)));
-		this.lastLocation = player.getLocation();
-	}
-
-	public PlayerCache(@NotNull WorldCoord worldCoord) {
-
-		this.setLastTownBlock(worldCoord);
+	public PlayerCache(Player player) {
+		this.lastWorldCoord = WorldCoord.parseWorldCoord(player);
+		this.playerUUID = player.getUniqueId();
 	}
 
 	/**
@@ -155,11 +151,6 @@ public class PlayerCache {
 		ADMIN,
 		UNCLAIMED_ZONE,
 		NATION_ZONE,
-		/**
-		 * @deprecated as of 0.98.6.25, Towny will no longer block town blocks while taking snapshots.
-		 */
-		@Deprecated
-		LOCKED,
 		WARZONE,
 		OUTSIDER,
 		PLOT_OWNER,
@@ -207,16 +198,23 @@ public class PlayerCache {
 		return blockErrMsg != null;
 	}
 
+	/**
+	 * Deprecated as of 0.99.5.9, location caching is no longer used.
+	 */
+	@Deprecated
 	public void setLastLocation(Location lastLocation) {
 
-		this.lastLocation = lastLocation.clone();
 	}
 
+	/**
+	 * @deprecated Deprecated as of 0.99.5.9, location caching is no longer used.
+	 */
+	@Deprecated
 	public Location getLastLocation() throws NullPointerException {
+		final Player player = Bukkit.getServer().getPlayer(this.playerUUID);
+		if (player == null)
+			throw new NullPointerException(); // adhere to the throws contract
 
-		if (lastLocation == null)
-			throw new NullPointerException();
-		else
-			return lastLocation;
+		return player.getLocation();
 	}
 }

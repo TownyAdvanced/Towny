@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -7,7 +8,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.player.PlayerCacheGetTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
@@ -26,6 +26,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Groups all the cache status and permissions in one place.
@@ -65,30 +66,18 @@ public class PlayerCacheUtil {
 	 */
 	public static boolean getCachePermission(Player player, Location location, Material material, ActionType action) {
 
-		WorldCoord worldCoord;
+		final WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
 
 		try {
-			// Test required for portalCreateEvent in WorldListener, player hasn't changed worlds yet.
-			if (player.getWorld().equals(location.getWorld())) 
-				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
-			else 
-				worldCoord = new WorldCoord(location.getWorld().getName(), Coord.parseCoord(location));
 			PlayerCache cache = plugin.getCache(player);
 			cache.updateCoord(worldCoord);
 
 			boolean result = cache.getCachePermission(material, action); // Throws NullPointerException if the cache is empty
-			TownyMessaging.sendDebugMsg("Cache permissions for " + player.getName() + " using " + material + ":" + action + " = " + result);
+			TownyMessaging.sendDebugMsg("Cache permissions for " + player.getName() + " using " + material.getKey() + ":" + action + " = " + result);
 			return result;
 
 		} catch (NullPointerException e) {
 			// New or old cache permission was null, update it
-
-			// Test required for portalCreateEvent in WorldListener, player hasn't changed worlds yet.
-			if (location.getWorld().equals(player.getWorld())) 
-				worldCoord = new WorldCoord(player.getWorld().getName(), Coord.parseCoord(location));
-			else 
-				worldCoord = new WorldCoord(location.getWorld().getName(), Coord.parseCoord(location));
-
 			TownBlockStatus status = cacheStatus(player, worldCoord, fetchTownBlockStatus(player, worldCoord));
 			triggerCacheCreate(player, location, worldCoord, status, material, action);
 
@@ -228,7 +217,7 @@ public class PlayerCacheUtil {
 		if (owner != null) {
 			if (resident == owner)
 				return TownBlockStatus.PLOT_OWNER;
-			else if (owner.hasFriend(resident))
+			else if (owner.hasFriend(resident) && !CombatUtil.isEnemy(resident, owner))
 				return TownBlockStatus.PLOT_FRIEND;
 			else if (resident.hasTown() && CombatUtil.isSameTown(owner, resident))
 				return TownBlockStatus.PLOT_TOWN;
@@ -494,5 +483,24 @@ public class PlayerCacheUtil {
 			return townBlock.getData().getAllowedBlocks().contains(material);
 
 		return true;
+	}
+
+	/**
+	 * Does the given cache have a TownBlockStatus which is admin, plot_owner or
+	 * town_owner. These TownBlockStatus values will always allow for all
+	 * interactions.
+	 * 
+	 * @param cache PlayerCache to check for, do not pass a null cache.
+	 * @return true if the cache's TownBlockStatus is a admin, plot or town owner.
+	 */
+	public static boolean isOwnerCache(@NotNull PlayerCache cache) {
+		Preconditions.checkNotNull(cache, "Cache cannot be null.");
+		TownBlockStatus status;
+		try {
+			status = cache.getStatus();
+		} catch (NullPointerException e) {
+			return false;
+		}
+		return status.equals(TownBlockStatus.ADMIN) || status.equals(TownBlockStatus.PLOT_OWNER) || status.equals(TownBlockStatus.TOWN_OWNER);
 	}
 }

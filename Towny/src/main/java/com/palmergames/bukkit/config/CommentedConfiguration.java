@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.config;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.util.StringMgmt;
 
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -15,6 +14,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -26,18 +26,22 @@ public class CommentedConfiguration extends YamlConfiguration {
 	private final HashMap<String, String> comments = new HashMap<>();
 	private final Path path;
 	private final Logger logger;
-	private final String newLine = System.getProperty("line.separator");
+	private final String newLine = System.lineSeparator();
 	private int depth;
+	
+	public CommentedConfiguration(Path path, Logger logger) {
+		super();
+		this.path = path;
+		this.logger = logger;
+		setWidth();
+	}
 
 	/**
 	 * Create a new CommentedConfiguration using the file at the given path, using
 	 * Towny's Logger for any error messages.
 	 */
 	public CommentedConfiguration(Path path) {
-		super();
-		this.path = path;
-		logger = Towny.getPlugin().getLogger();
-		setWidth();
+		this(path, LogManager.getLogManager().getLogger("Towny"));
 	}
 
 	/**
@@ -45,10 +49,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 	 * given plugin. Plugin's own Logger will be used for any error messages.
 	 */
 	public CommentedConfiguration(Path path, Plugin plugin) {
-		super();
-		this.path = path;
-		logger = plugin.getLogger();
-		setWidth();
+		this(path, plugin.getLogger());
 	}
 
 	/**
@@ -56,10 +57,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 	 * Logger for any error messages.
 	 */
 	public CommentedConfiguration(File file) {
-		super();
-		this.path = file.toPath();
-		logger = Towny.getPlugin().getLogger();
-		setWidth();
+		this(file.toPath());
 	}
 
 	

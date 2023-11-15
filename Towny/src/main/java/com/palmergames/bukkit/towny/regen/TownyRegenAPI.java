@@ -22,15 +22,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -39,13 +37,13 @@ import java.util.stream.Collectors;
 public class TownyRegenAPI {
 
 	// A list of worldCoords which are to be regenerated.
-	private static List<WorldCoord> regenWorldCoordList = new ArrayList<>();
+	private static final Set<WorldCoord> regenWorldCoordList = ConcurrentHashMap.newKeySet();
 	
 	// table containing snapshot data of active reversions.
-	private static Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
+	private static final Map<String, PlotBlockData> plotChunks = new ConcurrentHashMap<>();
 	
 	// A holder for each protection regen task
-	private static final Hashtable<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new Hashtable<>();
+	private static final Map<BlockLocation, ProtectionRegenTask> protectionRegenTasks = new ConcurrentHashMap<>();
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static final Set<Block> protectionPlaceholders = new HashSet<>();
@@ -66,62 +64,9 @@ public class TownyRegenAPI {
 	public static void finishPlotBlockData(PlotBlockData plotChunk) {
 		TownyMessaging.sendDebugMsg("Revert on unclaim complete for " + plotChunk.getWorldName() + " " + plotChunk.getX() +"," + plotChunk.getZ());
 		removeFromRegenQueueList(plotChunk.getWorldCoord()); // Remove the WorldCoord from the queue.
-		removeFromActiveRegeneration(plotChunk); // Remove from the active HashTable.
+		removeFromActiveRegeneration(plotChunk); // Remove from the active map.
 		deletePlotChunkSnapshot(plotChunk); // Remove from the database.
 		plotChunk.getWorldCoord().unloadChunks(); // Remove the PluginChunkTickets keeping the plotChunk loaded.
-	}
-	
-	/*
-	 * Snapshots used in Revert-On-Unclaim feature
-	 */
-
-	/**
-	 * Add a TownBlocks WorldCoord for a snapshot to be taken.
-	 * 
-	 * @param worldCoord - WorldCoord
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.   
-	 */
-	@Deprecated
-	public static void addWorldCoord(WorldCoord worldCoord) {
-	}
-	
-	/**
-	 * Removes a TownBlock from having a snapshot taken.
-	 * 
-	 * @param worldCoord - WorldCoord of TownBlock to remove from snapshot list.
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.   
-	 */
-	@Deprecated
-	public static void removeWorldCoord(WorldCoord worldCoord) {
-	}
-
-	/**
-	 * @return true if there are any TownBlocks to be processed.
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
-	 */
-	@Deprecated
-	public static boolean hasWorldCoords() {
-		return false;
-	}
-
-	/**
-	 * Check if this WorldCoord is waiting for a snapshot to be taken.
-	 * 
-	 * @param worldCoord - WorldCoord to check
-	 * @return true if it's in the queue.
-	 * @deprecated Towny no longer uses a snapshot queue as of 0.98.6.25.
-	 */
-	@Deprecated
-	public static boolean hasWorldCoord(WorldCoord worldCoord) {
-		return false;
-	}
-
-	/**
-	 * @return First WorldCoord to be processed.
-	 */
-	@Deprecated
-	public static WorldCoord getWorldCoord() {
-		return null;
 	}
 
 	/*
@@ -131,7 +76,7 @@ public class TownyRegenAPI {
 	/**
 	 * @return the list of WorldCoords which are waiting to be regenerated.
 	 */
-	public static List<WorldCoord> getRegenQueueList() {
+	public static Collection<WorldCoord> getRegenQueueList() {
 		return regenWorldCoordList;
 	}
 
@@ -148,10 +93,8 @@ public class TownyRegenAPI {
 	 * @param world TownyWorld to remove from the queue.
 	 */
 	private static void removeRegenQueueListOfWorld(@NotNull TownyWorld world) {
-		regenWorldCoordList = getRegenQueueList().stream()
-			.filter(wc -> !world.equals(wc.getTownyWorld()))
-			.collect(Collectors.toList());
-		TownyUniverse.getInstance().getDataSource().saveRegenList();
+		if (regenWorldCoordList.removeIf(wc -> world.equals(wc.getTownyWorld())))
+			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
 	/**
@@ -169,15 +112,12 @@ public class TownyRegenAPI {
 	 * @param save true to save the regenlist.
 	 */
 	public static void addToRegenQueueList(WorldCoord wc, boolean save) {
-		if (regenWorldCoordList.contains(wc))
-			return;
-		regenWorldCoordList.add(wc);
-		if (save)
+		if (regenWorldCoordList.add(wc) && save)
 			TownyUniverse.getInstance().getDataSource().saveRegenList();
 	}
 
-	public static  void getWorldCoordFromQueueForRegeneration() {
-		for (WorldCoord wc : new ArrayList<>(TownyRegenAPI.getRegenQueueList())) {
+	public static void getWorldCoordFromQueueForRegeneration() {
+		for (WorldCoord wc : TownyRegenAPI.getRegenQueueList()) {
 			// We have enough plot chunks regenerating, break out of the loop.
 			if (getPlotChunks().size() >= 20)
 				break;
@@ -205,14 +145,15 @@ public class TownyRegenAPI {
 	/**
 	 * @return the plotChunks which are being processed
 	 */
-	public static Hashtable<String, PlotBlockData> getPlotChunks() {
+	public static Map<String, PlotBlockData> getPlotChunks() {
 
 		return plotChunks;
 	}
 
-	public static List<PlotBlockData> getActivePlotBlockDatas() {
-		return new ArrayList<>(plotChunks.values());
+	public static Collection<PlotBlockData> getActivePlotBlockDatas() {
+		return plotChunks.values();
 	}
+
 	/**
 	 * @return true if there are any chunks being processed.
 	 */
@@ -235,20 +176,13 @@ public class TownyRegenAPI {
 	 * @param world - TownyWorld to have regeneration stop in.
 	 */
 	private static void removePlotChunksForWorld(TownyWorld world) {
-		Hashtable<String, PlotBlockData> plotChunks = new Hashtable<>();
-		// Rebuild the list of plotChunks, skipping the ones belonging to the given world.
-		for (String key : getPlotChunks().keySet())
-			if (!getPlotChunks().get(key).getWorldName().equals(world.getName()))
-				plotChunks.put(key, getPlotChunks().get(key));
-
-		// Set the new plotchunks.
-		TownyRegenAPI.plotChunks = plotChunks;
+		plotChunks.values().removeIf(data -> data.getWorldName().equals(world.getName()));
 	}
 
 	/**
-	 * Removes a Plot Chunk from the regeneration Hashtable
+	 * Removes a Plot Chunk from the regeneration map
 	 * 
-	 * @param plotChunk - Chunk to remove (PlotBlockData)
+	 * @param plotChunk Chunk to remove (PlotBlockData)
 	 */
 	public static void removeFromActiveRegeneration(PlotBlockData plotChunk) {
 
@@ -256,16 +190,12 @@ public class TownyRegenAPI {
 	}
 	
 	/**
-	 * Adds a Plot Chunk to the regeneration Hashtable
+	 * Adds a Plot Chunk to the regeneration map
 	 * 
-	 * @param plotChunk - Chunk to add (PlotBlockData)
+	 * @param plotChunk Chunk to add (PlotBlockData)
 	 */
 	public static void addToActiveRegeneration(PlotBlockData plotChunk) {
-
-		if (!plotChunks.containsKey(getPlotKey(plotChunk))) {
-			//plotChunk.initialize();
-			plotChunks.put(getPlotKey(plotChunk), plotChunk);
-		}
+		plotChunks.putIfAbsent(getPlotKey(plotChunk), plotChunk);
 	}
 
 	/*
@@ -306,17 +236,14 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Gets a Plot Chunk from the regeneration Hashtable
+	 * Gets a Plot Chunk from the regeneration map
 	 * 
-	 * @param townBlock - TownBlock to get
+	 * @param townBlock TownBlock to get
 	 * @return PlotChunks or null   
 	 */
+	@Nullable
 	public static PlotBlockData getPlotChunk(TownBlock townBlock) {
-
-		if (plotChunks.containsKey(getPlotKey(townBlock))) {
-			return plotChunks.get(getPlotKey(townBlock));
-		}
-		return null;
+		return plotChunks.get(getPlotKey(townBlock));
 	}
 
 	private static String getPlotKey(PlotBlockData plotChunk) {
@@ -353,9 +280,8 @@ public class TownyRegenAPI {
 			// Piston extensions which are broken by explosions ahead of the base block
 			// cause baseblocks to drop as items and no base block to be regenerated.
 			if (block.getType() == Material.PISTON_HEAD) {
-				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData(); 
-				Block baseBlock = block.getRelative(blockData.getFacing().getOppositeFace());
-				block = baseBlock;
+				org.bukkit.block.data.type.PistonHead blockData = (org.bukkit.block.data.type.PistonHead) block.getBlockData();
+				block = block.getRelative(blockData.getFacing().getOppositeFace());
 			}
 			ProtectionRegenTask task = new ProtectionRegenTask(Towny.getPlugin(), block);
 			task.setTask(Towny.getPlugin().getScheduler().runLater(block.getLocation(), task, (world.getPlotManagementWildRevertDelay() + count) * 20));
@@ -395,11 +321,7 @@ public class TownyRegenAPI {
 	 * @return the stored task, or null if there is none.
 	 */
 	public static ProtectionRegenTask GetProtectionRegenTask(BlockLocation blockLocation) {
-
-		if (protectionRegenTasks.containsKey(blockLocation))
-			return protectionRegenTasks.get(blockLocation);
-
-		return null;
+		return protectionRegenTasks.get(blockLocation);
 	}
 
 	/**
@@ -476,151 +398,6 @@ public class TownyRegenAPI {
 	public static void removePlaceholder(Block block) {
 
 		protectionPlaceholders.remove(block);
-	}
-
-	/*
-	 * Deprecated TownBlock Entity Deleting Queue.
-	 */
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#hasQueue()} instead.
-	 * @return true if there are any chunks being processed.
-	 */
-	@Deprecated
-	public static boolean hasDeleteTownBlockEntityQueue() {
-		return WorldCoordEntityRemover.hasQueue();
-	}
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#isQueued(WorldCoord)} instead.
-	 * @param plot WorldCoord to check.
-	 * @return true if the WorldCoord is queued to have entities removed.
-	 */
-	@Deprecated
-	public static boolean isDeleteTownBlockEntityQueue(WorldCoord plot) {
-		return WorldCoordEntityRemover.isQueued(plot);
-	}
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#addToQueue(WorldCoord)} instead.
-	 * @param plot WorldCoord to add to the queue.
-	 */
-	@Deprecated
-	public static void addDeleteTownBlockEntityQueue(WorldCoord plot) {
-		WorldCoordEntityRemover.addToQueue(plot);
-	}
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#getWorldCoordFromQueue()} instead.
-	 * @return a WorldCoord from the queue.
-	 */
-	@Nullable
-	@Deprecated
-	public static WorldCoord getDeleteTownBlockEntityQueue() {
-		return WorldCoordEntityRemover.getWorldCoordFromQueue();
-	}
-
-	/**
-	 * Deletes all of a specified entity type from a TownBlock
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordEntityRemover#doDeleteTownBlockEntities(WorldCoord)} instead.
-	 * @param worldCoord - WorldCoord for the Town Block
-	 */
-	@Deprecated
-	public static void doDeleteTownBlockEntities(WorldCoord worldCoord) {
-		WorldCoordEntityRemover.doDeleteTownBlockEntities(worldCoord);
-	}
-
-	/*
-	 * Deprecated TownBlock Material Deleting Queue.
-	 */
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#hasQueue()} instead.
-	 * @return true if there are any chunks being processed.
-	 */
-	@Deprecated
-	public static boolean hasDeleteTownBlockIdQueue() {
-		return WorldCoordMaterialRemover.hasQueue();
-	}
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#isQueued(WorldCoord)} instead.
-	 * @param plot WorldCoord
-	 * @return true if this WorldCoord is needing Materials removed.
-	 */
-	@Deprecated
-	public static boolean isDeleteTownBlockIdQueue(WorldCoord plot) {
-		return WorldCoordMaterialRemover.isQueued(plot);
-	}
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#addToQueue(WorldCoord)} instead.
-	 * @param plot WorldCoord to add to queue.
-	 */
-	@Deprecated
-	public static void addDeleteTownBlockIdQueue(WorldCoord plot) {
-		WorldCoordMaterialRemover.addToQueue(plot);
-	}
-
-	/**
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#getWorldCoordFromQueue()} instead.
-	 * @return a WorldCoord that is queued to have materials removed.
-	 */
-	@Nullable
-	@Deprecated
-	public static WorldCoord getDeleteTownBlockIdQueue() {
-		return WorldCoordMaterialRemover.getWorldCoordFromQueue();
-	}
-
-	/**
-	 * Deletes all of a specified block type from a TownBlock
-	 * 
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#queueUnclaimMaterialsDeletion(WorldCoord)} instead.
-	 * @param worldCoord - WorldCoord for the Town Block
-	 */
-	@Deprecated
-	public static void doDeleteTownBlockIds(WorldCoord worldCoord) {
-		WorldCoordMaterialRemover.queueUnclaimMaterialsDeletion(worldCoord);
-	}
-
-	/**
-	 * Deletes all of a specified block type from a TownBlock
-	 * 
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#queueDeleteWorldCoordMaterials(WorldCoord, Collection)} instead.
-	 * @param townBlock - TownBlock to delete from
-	 * @param material - Material to delete
-	 */
-	@Deprecated
-	public static void deleteTownBlockMaterial(TownBlock townBlock, Material material) {
-		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), Collections.singleton(material));
-	}
-
-	/**
-	 * @deprecated since 0.98.5.0 use {@link WorldCoordMaterialRemover#queueDeleteWorldCoordMaterials(WorldCoord, Collection)} instead.
-	 * @param townBlock TownBlock to remove from.
-	 * @param materials Material collection to remove.
-	 */
-	@Deprecated
-	public static void deleteMaterialsFromTownBlock(TownBlock townBlock, Collection<Material> materials) {
-		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), materials);
-	}
-
-	@Deprecated
-	@SuppressWarnings({ "unchecked", "unused" })
-	private static void deleteMaterialsFromTownBlock$$bridge$$public(TownBlock townBlock, EnumSet<?> materialEnumSet) {
-		deleteMaterialsFromTownBlock(townBlock, (Collection<Material>) materialEnumSet);
-	}
-
-	/**
-	 * Deletes all blocks which are found in the given EnumSet of Materials
-	 * 
-	 * @deprecated since 0.98.6.2 use {@link WorldCoordMaterialRemover#queueDeleteWorldCoordMaterials(WorldCoord, Collection)} instead. 
-	 * @param coord WorldCoord to delete blocks from.
-	 * @param collection Collection of Materials from which to remove.
-	 */
-	@Deprecated
-	public static void deleteMaterialsFromWorldCoord(WorldCoord coord, Collection<Material> collection) {
-		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(coord, collection);
 	}
 
 	/**

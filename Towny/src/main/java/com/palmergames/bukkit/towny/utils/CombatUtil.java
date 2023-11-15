@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.event.damage.TownyFriendlyFireTestEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.damage.WildernessPVPTestEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -33,8 +34,13 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.projectiles.BlockProjectileSource;
+import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 /**
@@ -73,7 +79,7 @@ public class CombatUtil {
 		 */
 		if (attacker instanceof Projectile projectile) {
 			
-			Object source = projectile.getShooter();
+			final ProjectileSource source = projectile.getShooter();
 			
 			if (source instanceof Entity entity)
 				directSource = entity;
@@ -81,6 +87,10 @@ public class CombatUtil {
 				if (CombatUtil.preventDispenserDamage(blockProjectileSource.getBlock(), defender, cause))
 					return true;
 			}
+		} else if (attacker instanceof LightningStrike lightning) {
+			final Entity causingEntity = getLightningCausingEntity(lightning);
+			if (causingEntity != null)
+				directSource = causingEntity;
 		}
 
 		if (directSource instanceof Player player)
@@ -122,25 +132,27 @@ public class CombatUtil {
 		TownBlock defenderTB = TownyAPI.getInstance().getTownBlock(defendingEntity.getLocation());
 		TownBlock attackerTB = TownyAPI.getInstance().getTownBlock(attackingEntity.getLocation());
 		/*
-		 * We have an attacking player
+		 * We have an attacking player, which is not an NPC.
 		 */
-		if (attackingPlayer != null) {
+		if (attackingPlayer != null && isNotNPC(attackingPlayer)) {
 
-			boolean cancelled = false;
-			
 			/*
-			 * Defender is a player.
+			 * Defender is a player, which is not an NPC..
 			 */
-			if (defendingPlayer != null) {
-				
+			if (defendingPlayer != null && isNotNPC(defendingPlayer)) {
+
+				boolean cancelled = false;
+
 				/*
-				 * Both townblocks are not Arena plots.
+				 * Both townblocks are not Arena plot and Player is not considered an Admin by Towny.
+				 * Arena plots never prevent pvp, admins are never prevented from pvping.
 				 */
-				if (!isArenaPlot(attackerTB, defenderTB)) {
+				if (!isArenaPlot(attackerTB, defenderTB) && !isTownyAdmin(attackingPlayer)) {
 					/*
 					 * Check if we are preventing friendly fire between allies
-					 * Check the attackers TownBlock and it's Town for their PvP status, else the world.
-					 * Check the defenders TownBlock and it's Town for their PvP status, else the world.
+					 * Check the attackers TownBlock for its PvP status, else the world.
+					 * Check the defenders TownBlock for its PvP status, else the world.
+					 * Check whether this involves someone who is jailed and in a Jail plot. 
 					 */
 					cancelled = preventFriendlyFire(attackingPlayer, defendingPlayer, world) || preventPvP(world, attackerTB) || preventPvP(world, defenderTB) || preventJailedPVP(defendingPlayer, attackingPlayer);
 				}
@@ -192,7 +204,14 @@ public class CombatUtil {
 					if (EntityTypeUtil.isProtectedEntity(defendingEntity))
 						return !TownyActionEventExecutor.canDestroy(attackingPlayer, defendingEntity.getLocation(), Material.DIRT);
 				}
-				
+
+				/*
+				 * Special wolf scenario to prevent players sniping tamed wolves outside of town, while in non-pvp areas.
+				 */
+				if (defenderTB == null && defendingEntity instanceof Wolf wolf && wolf.isTamed() && !isOwner(wolf, attackingPlayer)) {
+					return preventPvP(world, attackerTB) || preventPvP(world, defenderTB);
+				}
+
 				/*
 				 * Protect specific entity interactions (faked with Materials).
 				 * Requires destroy permissions in either the Wilderness or in Town-Claimed land.
@@ -225,7 +244,6 @@ public class CombatUtil {
 				 * Prevent pvp and remove Wolf targeting.
 				 */
 				if (attackingEntity instanceof Wolf wolf && (preventPvP(world, attackerTB) || preventPvP(world, defenderTB))) {
-					wolf.setTarget(null);
 					wolf.setAngry(false);
 					return true;
 				}
@@ -270,7 +288,6 @@ public class CombatUtil {
 						Player owner = BukkitTools.getPlayerExact(wolf.getOwner().getName());
 						return !PlayerCacheUtil.getCachePermission(owner, defendingEntity.getLocation(), Material.AIR, ActionType.DESTROY);
 					} else {
-						wolf.setTarget(null);
 						wolf.setAngry(false);
 						return true;
 					}
@@ -477,13 +494,13 @@ public class CombatUtil {
 
 		if (isSameTown(a, b))
 			return true;
-		if (a.hasNation() && b.hasNation() && a.getNationOrNull().equals(b.getNationOrNull()))
+		if (a.hasNation() && b.hasNation() && a.getNationOrNull().hasTown(b))
 			return true;
 		return false;
 	}
 
 	/**
-	 * Is town b in a nation with town a?
+	 * Is town b the same town as town a?
 	 * 
 	 * @param a - Town A in comparison
 	 * @param b - Town B in comparison
@@ -491,7 +508,10 @@ public class CombatUtil {
 	 */
 	public static boolean isSameTown(Town a, Town b) {
 
-		return a == b;
+		if (a == null || b == null)
+			return false;
+
+		return a.getUUID().equals(b.getUUID());
 	}
 
 	/**
@@ -659,5 +679,38 @@ public class CombatUtil {
 			preventDamage = preventPvP(world, dispenserTB) || preventPvP(world, defenderTB);
 
 		return BukkitTools.isEventCancelled(new TownyDispenserDamageEntityEvent(entity.getLocation(), entity, cause, defenderTB, preventDamage, dispenser));
+	}
+
+	private static boolean isNotNPC(Entity entity) {
+		return !PluginIntegrations.getInstance().checkCitizens(entity);
+	}
+	
+	private static final @Nullable MethodHandle GET_LIGHTNING_CAUSING_ENTITY;
+	
+	static {
+		MethodHandle temp = null;
+		try {
+			// https://jd.papermc.io/paper/1.20/org/bukkit/entity/LightningStrike.html#getCausingEntity()
+			//noinspection JavaReflectionMemberAccess
+			temp = MethodHandles.publicLookup().unreflect(LightningStrike.class.getMethod("getCausingEntity"));
+		} catch (Throwable ignored) {}
+		
+		GET_LIGHTNING_CAUSING_ENTITY = temp;
+	}
+	
+	@ApiStatus.Internal
+	public static @Nullable Entity getLightningCausingEntity(@NotNull LightningStrike lightning) {
+		if (GET_LIGHTNING_CAUSING_ENTITY == null)
+			return null;
+		
+		try {
+			return (Entity) GET_LIGHTNING_CAUSING_ENTITY.invokeExact(lightning);
+		} catch (Throwable thr) {
+			return null;
+		}
+	}
+
+	private static boolean isTownyAdmin(Player attackingPlayer) {
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(attackingPlayer);
 	}
 }

@@ -1,17 +1,21 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.common.collect.Lists;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownySettings.TownLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
+import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownCalculateTownLevelNumberEvent;
 import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
@@ -31,12 +35,14 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +57,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -67,7 +74,7 @@ public class Town extends Government implements TownBlockOwner {
 	private Map<UUID, Town> enemies = new LinkedHashMap<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private final Map<UUID, Town> trustedTowns = new LinkedHashMap<>();
-	private List<Location> outpostSpawns = new ArrayList<>();
+	private final List<Position> outpostSpawns = new ArrayList<>();
 	private List<Jail> jails = null;
 	private HashMap<String, PlotGroup> plotGroups = null;
 	private TownBlockTypeCache plotTypeCache = new TownBlockTypeCache();
@@ -87,6 +94,8 @@ public class Town extends Government implements TownBlockOwner {
 	private Nation nation;
 	private boolean hasUpkeep = true;
 	private boolean hasUnlimitedClaims = false;
+	private boolean isForSale = false;
+	private double forSalePrice = 0;
 	private boolean isTaxPercentage = TownySettings.getTownDefaultTaxPercentage();
 	private TownBlock homeBlock;
 	private TownyWorld world;
@@ -106,6 +115,7 @@ public class Town extends Government implements TownBlockOwner {
 	private long movedHomeBlockAt;
 	private Jail primaryJail;
 	private int manualTownLevel = -1;
+	private boolean visibleOnTopLists = true;
 
 	public Town(String name) {
 		super(name);
@@ -122,6 +132,20 @@ public class Town extends Government implements TownBlockOwner {
 	public Town(String name, UUID uuid) {
 		this(name);
 		setUUID(uuid);
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Town otherTown))
+			return false;
+		return this.getName().equals(otherTown.getName()); // TODO: Change this to UUID when the UUID database is in use.
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUUID(), getName());
 	}
 
 	@Override
@@ -181,7 +205,7 @@ public class Town extends Government implements TownBlockOwner {
 		this.taxes = Math.min(taxes, isTaxPercentage ? TownySettings.getMaxTownTaxPercent() : TownySettings.getMaxTownTax());
 		
 		// Fix invalid taxes
-		if (this.taxes < 0)
+		if (this.taxes < 0 && !TownySettings.isNegativeTownTaxAllowed())
 			this.taxes = TownySettings.getTownDefaultTax();
 	}
 
@@ -486,22 +510,6 @@ public class Town extends Government implements TownBlockOwner {
 		this.allowedToWar = allowedToWar;
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.98.3.5, use {@link #setExplosion(boolean)} instead.
-	 */
-	@Deprecated
-	public void setBANG(boolean isBANG) {
-		setExplosion(isBANG);
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.98.3.5, use {@link #isExplosion()} instead.
-	 */
-	@Deprecated
-	public boolean isBANG() {
-		return isExplosion();
-	}
-	
 	public void setExplosion(boolean isExplosion) {
 		this.permissions.explosion = isExplosion;
 	}
@@ -649,8 +657,8 @@ public class Town extends Government implements TownBlockOwner {
 			setWorld(homeBlock.getWorld());
 
 		// Unset the spawn if it is not inside of the new homeblock.
-		if (spawn != null && !homeBlock.getWorldCoord().equals(Coord.parseCoord(spawn))) {
-			TownyUniverse.getInstance().removeSpawnPoint(spawn);
+		if (spawn != null && !homeBlock.getWorldCoord().equals(spawn.worldCoord())) {
+			TownyUniverse.getInstance().removeSpawnPoint(SpawnPointLocation.parsePos(spawn));
 			spawn = null;
 		}
 
@@ -824,16 +832,15 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	@Override
-	public void setSpawn(Location spawn) {
-		this.spawn = spawn;
-		if (spawn != null)
-			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.TOWN_SPAWN));
+	public void setSpawn(@Nullable Location spawn) {
+		spawnPosition(spawn == null ? null : Position.ofLocation(spawn));
 	}
 
 	@Override
+	@NotNull
 	public Location getSpawn() throws TownyException {
 		if (hasHomeBlock() && spawn != null) {
-			return spawn;
+			return spawn.asLocation();
 		} else {
 			this.spawn = null;
 			throw new TownyException(Translation.of("msg_err_town_has_not_set_a_spawn_location"));
@@ -843,7 +850,26 @@ public class Town extends Government implements TownBlockOwner {
 	@Nullable
 	@Override
 	public Location getSpawnOrNull() {
-		return spawn;
+		if (this.spawn != null)
+			return this.spawn.asLocation();
+		
+		return null;
+	}
+	
+	@Nullable
+	@Override
+	public Position spawnPosition() {
+		return this.spawn;
+	}
+	
+	public void spawnPosition(@Nullable Position spawn) {
+		if (this.spawn != null)
+			TownyUniverse.getInstance().removeSpawnPoint(SpawnPointLocation.parsePos(this.spawn));
+		
+		this.spawn = spawn;
+		
+		if (spawn != null)
+			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.TOWN_SPAWN));
 	}
 
 	public boolean hasHomeBlock() {
@@ -905,21 +931,25 @@ public class Town extends Government implements TownBlockOwner {
 	public TownyPermission getPermissions() {
 		return permissions;
 	}
+	
+	public void addOutpostSpawn(Location location) {
+		addOutpostSpawn(Position.ofLocation(location));
+	}
 
 	/**
 	 * Add or update an outpost spawn for a town.
 	 * Saves the TownBlock if it is not already an Outpost.
 	 * Saves the Town when finished.
 	 * 
-	 * @param spawn - Location to set an outpost's spawn point
+	 * @param position Position to set an outpost's spawn point
 	 */
-	public void addOutpostSpawn(Location spawn) {
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(spawn);
-		if (townBlock == null || !townBlock.hasTown() || !townBlock.getTownOrNull().equals(this))
+	public void addOutpostSpawn(Position position) {
+		TownBlock townBlock = position.worldCoord().getTownBlockOrNull();
+		if (townBlock == null || !this.equals(townBlock.getTownOrNull()))
 			return;
 		
 		// Remove any potential previous outpost spawn at this location (when run via /t set outpost.)
-		removeOutpostSpawn(Coord.parseCoord(spawn));
+		removeOutpostSpawn(position.worldCoord());
 
 		// Set the TownBlock to be an outpost.
 		if (!townBlock.isOutpost()) {
@@ -928,7 +958,7 @@ public class Town extends Government implements TownBlockOwner {
 		}
 
 		// Add to the towns' outpost list.
-		outpostSpawns.add(spawn);
+		outpostSpawns.add(position);
 		
 		// Add a SpawnPoint so a particle effect is displayed.
 		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.OUTPOST_SPAWN));
@@ -940,11 +970,12 @@ public class Town extends Government implements TownBlockOwner {
 	/**
 	 * Only to be called from the Loading methods.
 	 * 
-	 * @param spawn - Location to set Outpost's spawn point
+	 * @param position Location to set Outpost's spawn point
 	 */
-	public void forceAddOutpostSpawn(Location spawn) {
-		outpostSpawns.add(spawn);
-		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.OUTPOST_SPAWN));
+	@ApiStatus.Internal
+	public void forceAddOutpostSpawn(Position position) {
+		outpostSpawns.add(position);
+		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(position, SpawnPointType.OUTPOST_SPAWN));
 	}
 
 	/**
@@ -959,7 +990,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (getMaxOutpostSpawn() == 0 && TownySettings.isOutpostsLimitedByLevels())
 			throw new TownyException(Translation.of("msg_err_town_has_no_outpost_spawns_set"));
 
-		return outpostSpawns.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1)));
+		return outpostSpawns.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1))).asLocation();
 	}
 
 	public int getMaxOutpostSpawn() {
@@ -967,12 +998,12 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean hasOutpostSpawn() {
-		return (!outpostSpawns.isEmpty());
+		return !outpostSpawns.isEmpty();
 	}
 
 	// Used because (perhaps) some mysql databases do not properly save a townblock's outpost flag.
 	private boolean isAnOutpost(Coord coord) {
-		return new ArrayList<>(outpostSpawns).stream().anyMatch(spawn -> Coord.parseCoord(spawn).equals(coord));
+		return new ArrayList<>(outpostSpawns).stream().anyMatch(spawn -> spawn.worldCoord().equals(coord));
 	}
 
 	/**
@@ -981,11 +1012,18 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return List of outpostSpawns
 	 */
 	public List<Location> getAllOutpostSpawns() {
-		return new ArrayList<>(outpostSpawns);
+		return Collections.unmodifiableList(Lists.transform(this.outpostSpawns, Position::asLocation));
+	}
+
+	/**
+	 * @return Similar to {@link #getAllOutpostSpawns()}, but with positions.
+	 */
+	public Collection<Position> getOutpostSpawns() {
+		return Collections.unmodifiableList(this.outpostSpawns);
 	}
 
 	public void removeOutpostSpawn(Coord coord) {
-		getAllOutpostSpawns().stream()
+		new ArrayList<>(getAllOutpostSpawns()).stream()
 			.filter(spawn -> Coord.parseCoord(spawn).equals(coord))
 			.forEach(spawn -> {
 				removeOutpostSpawn(spawn);
@@ -994,7 +1032,46 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void removeOutpostSpawn(Location loc) {
-		outpostSpawns.remove(loc);
+		outpostSpawns.remove(Position.ofLocation(loc));
+	}
+
+	/**
+	 * Sets the town for sale.
+	 *
+	 * @param isForSale whether the town is for sale.
+	 */
+	public final void setForSale(boolean isForSale) {
+		this.isForSale = isForSale;
+		
+		if (!isForSale)
+			this.forSalePrice = 0;
+	}
+
+	/**
+	 * Whether the town is for sale.
+	 *
+	 * @return true for on sale, false otherwise.
+	 */
+	public final boolean isForSale() {
+		return isForSale;
+	}
+
+	/**
+	 * Sets town sale price.
+	 *
+	 * @param forSalePrice double representing sale price.
+	 */
+	public final void setForSalePrice(double forSalePrice) {
+		this.forSalePrice = forSalePrice;
+	}
+
+	/**
+	 * Get town sale price.
+	 *
+	 * @return double representing sale price.
+	 */
+	public final double getForSalePrice() {
+		return forSalePrice;
 	}
 
 	public void setPlotPrice(double plotPrice) {
@@ -1006,7 +1083,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public double getPlotTypePrice(TownBlockType type) {
-		double plotPrice = switch (type.getName().toLowerCase()) {
+		double plotPrice = switch (type.getName().toLowerCase(Locale.ROOT)) {
 			case "shop" -> getCommercialPlotPrice();
 			case "embassy" -> getEmbassyPlotPrice();
 			default -> getPlotPrice();
@@ -1149,7 +1226,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setOutpostSpawns(List<Location> outpostSpawns) {
-		this.outpostSpawns = outpostSpawns;
+		this.outpostSpawns.clear();
+		
+		for (Location location : outpostSpawns)
+			addOutpostSpawn(location);
 	}
 
 	public boolean isAlliedWith(Town othertown) {
@@ -1351,7 +1431,11 @@ public class Town extends Government implements TownBlockOwner {
 	public String getFormattedName() {
 		String prefix = (this.isCapital() && !TownySettings.getCapitalPrefix(this).isEmpty()) ? TownySettings.getCapitalPrefix(this) : TownySettings.getTownPrefix(this);
 		String postfix = (this.isCapital() && !TownySettings.getCapitalPostfix(this).isEmpty()) ? TownySettings.getCapitalPostfix(this) : TownySettings.getTownPostfix(this);
-		return prefix + this.getName().replace("_", " ") + postfix;
+
+		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
+		BukkitTools.fireEvent(event);
+
+		return event.getPrefix() + getName().replace("_", " ") + event.getPostfix();
 	}
 	
 	public String getPrefix() {
@@ -1673,6 +1757,15 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean isInsideTown(@NotNull Location location) {
 		return this.equals(WorldCoord.parseWorldCoord(location).getTownOrNull());
 	}
+
+	/**
+	 * Tests whether a position is inside this town's boundaries
+	 * @param position The position
+	 * @return Whether the position is inside this town.
+	 */
+	public boolean isInsideTown(@NotNull Position position) {
+		return this.equals(position.worldCoord().getTownOrNull());
+	}
 	
 	/**
 	 * Is the Town Neutral or Peaceful?
@@ -1687,7 +1780,38 @@ public class Town extends Government implements TownBlockOwner {
 		return (!TownySettings.nationCapitalsCantBeNeutral() || !isCapital()) && isNeutral;
 	}
 
+	public TownLevel getTownLevel() {
+		return TownySettings.getTownLevel(this);
+	}
 	/**
+	 * Get the Town's current TownLevel number, based on its population.
+	 * <p>
+	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.
+	 *     If you need a Town's level, use {@link Town#getTownLevel()}.
+	 *     Due to Town Levels being configurable by administrators, caution is advised when relying on this method.
+	 *     See <a href="https://github.com/TownyAdvanced/TownyResources">TownyResources</a>
+	 *     or <a href="https://github.com/TownyAdvanced/SiegeWar">SiegeWar</a> for example usages.
+	 *     <br />
+	 *     e.g.
+	 *     ruins = 0
+	 * 	   hamlet = 1
+	 * 	   village = 2
+	 * </p>
+	 * @return Current TownLevel number.
+	 */
+	public int getLevelNumber() {
+		int townLevelNumber = getManualTownLevel() > -1
+				? getManualTownLevel()
+				: TownySettings.getTownLevelFromGivenInt(getNumResidents(), this);
+
+		TownCalculateTownLevelNumberEvent tctle = new TownCalculateTownLevelNumberEvent(this, townLevelNumber);
+		BukkitTools.fireEvent(tctle);
+		return tctle.getTownLevelNumber();
+	}
+	
+	/**
+	 * @deprecated since 0.99.6.3 use {@link #getLevelNumber()} instead.
 	 * Get the Town's current level, based on its population.
 	 * <p>
 	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
@@ -1695,11 +1819,13 @@ public class Town extends Government implements TownBlockOwner {
 	 * </p>
 	 * @return Current Town Level.
 	 */
+	@Deprecated
 	public int getLevel() {
-		return getLevel(this.getNumResidents());
+		return getLevelNumber();
 	}
 
 	/**
+	 * @deprecated since 0.99.6.3 use {@link TownySettings#getTownLevelFromGivenInt(int, Town)} instead.
 	 * Get the town level for a given population size.
 	 * <p>
 	 *     Great for debugging, or just to see what the town level is for a given amount of residents. 
@@ -1711,61 +1837,29 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param populationSize Number of residents used to calculate the level.
 	 * @return The calculated Town Level. 0, if the town is ruined, or the method otherwise fails through.
 	 */
+	@Deprecated
 	public int getLevel(int populationSize) {
-		if (this.isRuined())
-			return 0;
-
-		int key = 0;
-		for (int populationLevel : TownySettings.getConfigTownLevel().keySet()) {
-			key++;
-			// Some towns might have their townlevel overridden.
-			if (getManualTownLevel() > -1 && key == getMaxLevel() - getManualTownLevel())
-				return populationLevel;
-			// No overridden townlevel, use population instead.
-			if (getManualTownLevel() == -1 && populationSize >= populationLevel)
-				return populationLevel;
-		}
-		return 0;
+		return TownySettings.getTownLevelFromGivenInt(populationSize, this);
 	}
 
 	/**
+	 * @deprecated since 0.99.6.3 use {@link TownySettings#getTownLevelMax()} instead.
 	 * Get the maximum level a Town may achieve.
 	 * @return Size of TownySettings' configTownLevel SortedMap.
 	 */
+	@Deprecated
 	public int getMaxLevel() {
 		return TownySettings.getConfigTownLevel().size();
 	}
 
 	/**
+	 * @deprecated since 0.99.6.3 use {@link #getLevelNumber()} instead.
 	 * Returns the Town Level ID.
-	 * <p>
-	 *     Note, this is not the Town Level, but an associated classifier.
-	 *     If you need a Town's level, use {@link Town#getLevel()} or {@link Town#getLevel(int)}.
-	 *     Due to Town Levels being configurable by administrators, caution is advised when relying on this method.
-	 *     See <a href="https://github.com/TownyAdvanced/TownyResources">TownyResources</a>
-	 *     or <a href="https://github.com/TownyAdvanced/SiegeWar">SiegeWar</a> for example usages.
-	 *     <br />
-	 *     e.g.
-	 *     ruins = 0
-	 * 	   hamlet = 1
-	 * 	   village = 2
-	 * </p> 
-	 *
 	 * @return id
 	 */
+	@Deprecated
 	public int getLevelID() {
-		if(this.isRuined())
-			return 0;
-
-		if (getManualTownLevel() > -1)
-			return getManualTownLevel();
-
-		int townLevelId = -1;
-		for (Integer level : TownySettings.getConfigTownLevel().keySet()) {
-			if (level <= this.getNumResidents())
-				townLevelId ++;
-		}
-		return townLevelId;
+		return getLevelNumber();
 	}
 
 	/**
@@ -1790,11 +1884,29 @@ public class Town extends Government implements TownBlockOwner {
 		if (!TownySettings.areLevelTypeLimitsConfigured())
 			return -1;
 		
-		return TownySettings.getTownLevel(this).townBlockTypeLimits().getOrDefault(type.getName().toLowerCase(Locale.ROOT), -1);
+		return getTownLevel().townBlockTypeLimits().getOrDefault(type.getName().toLowerCase(Locale.ROOT), -1);
 	}
 	
 	@Override
 	public @NotNull Iterable<? extends Audience> audiences() {
 		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());
+	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasTown(getName());
+	}
+
+	public boolean isVisibleOnTopLists() {
+		return visibleOnTopLists;
+	}
+
+	public void setVisibleOnTopLists(boolean visibleOnTopLists) {
+		this.visibleOnTopLists = visibleOnTopLists;
+	}
+
+	public void playerBroadCastMessageToTown(Player player, String message) {
+		TownyMessaging.sendPrefixedTownMessage(this, Translatable.of("town_say_format", player.getName(), TownyComponents.stripClickTags(message)));
 	}
 }

@@ -5,7 +5,10 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownySettings.NationLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
+import com.palmergames.bukkit.towny.event.nation.NationCalculateNationLevelNumberEvent;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -14,11 +17,14 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -49,6 +56,20 @@ public class Nation extends Government {
 		setTaxes(TownySettings.getNationDefaultTax());
 		setBoard(TownySettings.getNationDefaultBoard());
 		setOpen(TownySettings.getNationDefaultOpen());
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other == this)
+			return true;
+		if (!(other instanceof Nation otherNation))
+			return false;
+		return this.getName().equals(otherNation.getName()); // TODO: Change this to UUID when the UUID database is in use.
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUUID(), getName());
 	}
 
 	public void addAlly(Nation nation) {
@@ -184,7 +205,7 @@ public class Nation extends Government {
 		this.capital = capital;
 		
 		if (this.spawn != null && TownySettings.isNationSpawnOnlyAllowedInCapital() && !capital.isInsideTown(this.spawn))
-			this.spawn = capital.getSpawnOrNull();
+			this.spawn = capital.spawnPosition();
 
 		try {
 			TownyPerms.assignPermissions(capital.getMayor(), null);
@@ -226,27 +247,34 @@ public class Nation extends Government {
 	}
 
 	@Override
+	@NotNull
 	public Location getSpawn() throws TownyException {
 		if (spawn == null)
 			throw new TownyException(Translatable.of("msg_err_nation_has_not_set_a_spawn_location"));
 
-		return spawn;
+		return this.spawn.asLocation();
 	}
 	
 	@Override
 	@Nullable
-	public Location getSpawnOrNull() {
+	public Position spawnPosition() {
 		return spawn;
 	}
-	
 
 	@Override
-	public void setSpawn(Location spawn) {
+	public void setSpawn(@Nullable Location spawn) {
+		spawnPosition(spawn == null ? null : Position.ofLocation(spawn));
+	}
+
+	@Override
+	public void spawnPosition(@Nullable Position spawn) {
+		if (this.spawn != null)
+			TownyUniverse.getInstance().removeSpawnPoint(SpawnPointLocation.parsePos(this.spawn));
+
+		this.spawn = spawn;
+
 		if (spawn != null)
 			TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.NATION_SPAWN));
-		else if (this.spawn != null)
-			TownyUniverse.getInstance().removeSpawnPoint(this.spawn);
-		this.spawn = spawn;
 	}
 
 	public List<Resident> getAssistants() {
@@ -331,7 +359,7 @@ public class Nation extends Government {
 		this.taxes = Math.min(taxes, isTaxPercentage ? TownySettings.getMaxNationTaxPercent() : TownySettings.getMaxNationTax());
 		
 		// Fix invalid taxes
-		if (this.taxes < 0)
+		if (this.taxes < 0 && !TownySettings.isNegativeNationTaxAllowed())
 			this.taxes = TownySettings.getNationDefaultTax();
 	}
 
@@ -539,7 +567,9 @@ public class Nation extends Government {
 
 	@Override
 	public String getFormattedName() {
-		return TownySettings.getNationPrefix(this) + this.getName().replace("_", " ") + TownySettings.getNationPostfix(this);
+		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, TownySettings.getNationPrefix(this), TownySettings.getNationPostfix(this));
+		BukkitTools.fireEvent(event);
+		return event.getPrefix() + getName().replace("_", " ") + event.getPostfix();
 	}
 	
 	@Override
@@ -591,43 +621,39 @@ public class Nation extends Government {
 		if (!TownySettings.getNationZonesEnabled())
 			return 0;
 		
-		return TownySettings.getNationLevel(this).nationZonesSize();
+		return getNationLevel().nationZonesSize();
 	}
 
 	/**
-	 * Get the Nation's current Nation Level.
+	 * Get the Nation's current NationLevel.
 	 * <p>
 	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
 	 *     and may be different from the default configuration.	 
 	 * </p>
-	 * @return Nation Level (int) for current population.
+	 * @return NationLevel of the nation.
 	 */
-	public int getLevel() {
-		return getLevel(this.getNumResidents());
+	public NationLevel getNationLevel() {
+		return TownySettings.getNationLevel(this);
 	}
 
 	/**
-	 * Get the maximum level a Nation may achieve.
-	 * @return Size of TownySettings' configNationLevel SortedMap.
-	 */
-	public int getMaxLevel() {
-		return TownySettings.getConfigNationLevel().size();
-	}
-
-	/**
-	 * Get the Nation's Level for a supposed population size.
+	 * Get the Nation's current Nation Level number, ie: 1 to
+	 * {@link TownySettings#getNationLevelMax()}. This is used as a key to determine
+	 * which NationLevel a Nation receives, and ultimately which attributes that
+	 * Nation will receive.
 	 * <p>
-	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.	 
+	 * Note that Nation Levels are not hard-coded. They can be defined by the server
+	 * administrator, and may be different from the default configuration.
 	 * </p>
-	 * @param populationSize Number of residents in the Nation, theoretical or real.
-	 * @return Nation Level (int) for the supplied populationSize.
+	 * 
+	 * @return Nation Level (int) for current population or amount of towns.
 	 */
-	public int getLevel(int populationSize) {
-		for (Integer level : TownySettings.getConfigNationLevel().keySet())
-			if (populationSize >= level)
-				return level;
-		return 0;
+	public int getLevelNumber() {
+		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? getNumTowns() : getNumResidents();
+		int nationLevelNumber = TownySettings.getNationLevelFromGivenInt(modifier);
+		NationCalculateNationLevelNumberEvent ncnle = new NationCalculateNationLevelNumberEvent(this, nationLevelNumber);
+		BukkitTools.fireEvent(ncnle);
+		return ncnle.getNationLevelNumber();
 	}
 
 	@Override
@@ -641,5 +667,54 @@ public class Nation extends Government {
 
 	public void setConqueredTax(double conqueredTax) {
 		this.conqueredTax = Math.min(conqueredTax, TownySettings.getMaxNationConqueredTaxAmount());
+	}
+
+	@ApiStatus.Internal
+	@Override
+	public boolean exists() {
+		return TownyUniverse.getInstance().hasNation(getName());
+	}
+
+	/**
+	 * @deprecated since 0.99.6.2, use {@link #getLevelNumber()} instead.
+	 * Get the Nation's current Nation Level.
+	 * <p>
+	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.	 
+	 * </p>
+	 * @return Nation Level (int) for current population or amount of towns.
+	 */
+	@Deprecated
+	public int getLevel() {
+		return getLevelNumber();
+	}
+
+	/**
+	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelMax()} instead.
+	 * Get the maximum level a Nation may achieve.
+	 * @return Size of TownySettings' configNationLevel SortedMap.
+	 */
+	@Deprecated
+	public int getMaxLevel() {
+		return TownySettings.getConfigNationLevel().size();
+	}
+
+	/**
+	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelFromGivenInt(int)} instead.
+	 * Get the Nation's Level for a supposed population size.
+	 * <p>
+	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
+	 *     and may be different from the default configuration.	 
+	 * </p>
+	 * @param populationSize Number of residents in the Nation, theoretical or real.
+	 * @return Nation Level (int) for the supplied populationSize.
+	 */
+	@Deprecated
+	public int getLevel(int populationSize) {
+		return TownySettings.getNationLevelFromGivenInt(populationSize);
+	}
+
+	public void playerBroadCastMessageToNation(Player player, String message) {
+		TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("town_say_format", player.getName(), TownyComponents.stripClickTags(message)));
 	}
 }

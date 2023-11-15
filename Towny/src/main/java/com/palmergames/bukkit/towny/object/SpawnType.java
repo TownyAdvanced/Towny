@@ -1,19 +1,26 @@
 package com.palmergames.bukkit.towny.object;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum SpawnType {
 
-	RESIDENT(Translation.of("res_sing")),
-	TOWN(Translation.of("town_sing")),
-	NATION(Translation.of("nation_sing"));
+	RESIDENT(Translatable.of("res_sing")),
+	TOWN(Translatable.of("town_sing")),
+	NATION(Translatable.of("nation_sing"));
 
-	private String typeName;
+	private final Translatable typeName;
 	
-	SpawnType(String typeName) {
+	SpawnType(Translatable typeName) {
 		this.typeName = typeName;
 	}
 	
+	@NotNull
 	public String getTypeName() {
-		return this.typeName;
+		return this.typeName.translate();
 	}
 	
+	@NotNull
+	public Translatable typeName() {
+		return this.typeName;
+	}	
 }

@@ -211,6 +211,11 @@ public abstract class Account implements Nameable {
 	 * Attempt to delete the economy account.
 	 */
 	public void removeAccount() {
+		if (TownySettings.isEcoClosedEconomyEnabled()) {
+			double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+			if (balance > 0)
+				TownyEconomyHandler.addToServer(balance, getBukkitWorld());
+		}
 		TownyEconomyHandler.removeAccount(getName());
 	}
 

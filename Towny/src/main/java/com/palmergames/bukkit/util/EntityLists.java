@@ -2,6 +2,7 @@ package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.object.AbstractRegistryList;
 import org.bukkit.Registry;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,8 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	public static final EntityLists VEHICLES = newBuilder().startsWith("minecart").endsWith("boat").endsWith("raft").build();
 	
 	public static final EntityLists MOUNTABLE = newBuilder().add("horse", "strider", "pig", "donkey", "mule", "trader_llama", "camel").build();
+	
+	public static final EntityLists MILKABLE = newBuilder().add("cow", "mooshroom", "goat").build();
 	
 	public static final EntityLists DYEABLE = newBuilder().add("sheep", "wolf", "cat").build();
 	
@@ -42,7 +45,9 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists PVP_EXPLOSIVE = newBuilder().add("firework_rocket", "tnt_minecart", "tnt", "end_crystal").build();
 	
+	public static final EntityLists ANIMALS = newBuilder().filter(type -> type.getEntityClass() != null && Animals.class.isAssignableFrom(type.getEntityClass())).build();
+	
 	public static Builder<EntityType, EntityLists> newBuilder() {
-		return new Builder<>(Registry.ENTITY_TYPE, EntityType.class, EntityLists::new);
+		return new Builder<>(Registry.ENTITY_TYPE, EntityType.class, EntityLists::new).filter(type -> type != EntityType.UNKNOWN);
 	}
 }

@@ -3,15 +3,19 @@ package com.palmergames.bukkit.towny.object;
  import com.palmergames.bukkit.towny.TownyAsciiMap;
 import com.palmergames.bukkit.towny.TownySettings;
 
-import org.bukkit.Material;
+import net.kyori.adventure.text.format.NamedTextColor;
 
- import java.util.Collection;
+import org.bukkit.Material;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
  import java.util.EnumSet;
  import java.util.HashSet;
  import java.util.Set;
 
 public class TownBlockData {
 	private String mapKey = "+";
+	private NamedTextColor colour = null;
 	private double cost = 0.0;
 	private double tax = 0.0;
 	private final Set<Material> itemUseIds = new HashSet<>(); // List of item names that will trigger an item use test.
@@ -26,6 +30,19 @@ public class TownBlockData {
 		this.mapKey = TownyAsciiMap.parseSymbol(mapKey);
 	}
 	
+	public boolean hasColour() {
+		return colour != null;
+	}
+
+	@Nullable
+	public NamedTextColor getColour() {
+		return colour;
+	}
+
+	public void setColour(NamedTextColor colour) {
+		this.colour = colour;
+	}
+
 	public double getCost() {
 		return cost;
 	}

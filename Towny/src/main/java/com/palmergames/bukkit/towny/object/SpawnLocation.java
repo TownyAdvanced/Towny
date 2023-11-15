@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides the spawn location and access to setter for spawn locations.
@@ -13,6 +15,7 @@ public interface SpawnLocation {
 	 * 
 	 * @throws TownyException If no location is found.
 	 */
+	@NotNull
 	Location getSpawn() throws TownyException;
 
 	/**
@@ -20,12 +23,8 @@ public interface SpawnLocation {
 	 * 
 	 * @return A boolean indicating if the spawn exists.
 	 */
-	default boolean hasSpawn(){
-		try {
-			return getSpawn() != null;
-		} catch (TownyException e) {
-			return false;
-		}
+	default boolean hasSpawn() {
+		return getSpawnOrNull() != null;
 	}
 
 	/**
@@ -34,8 +33,9 @@ public interface SpawnLocation {
 	 *                 
 	 * @throws TownyException If the spawn could not be set.
 	 */
-	void setSpawn(Location spawn) throws TownyException;
+	void setSpawn(@Nullable Location spawn) throws TownyException;
 	
+	@Nullable
 	default Location getSpawnOrNull() {
 		try {
 			return getSpawn();

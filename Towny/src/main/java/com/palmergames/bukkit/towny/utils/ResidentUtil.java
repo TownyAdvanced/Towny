@@ -56,7 +56,7 @@ public class ResidentUtil {
 	 */
 	public static List<Resident> getOnlineResidentsViewable(Player viewer, ResidentList residentList) {
 		return residentList.getResidents().stream()
-			.filter(res -> viewer != null ?  res.isOnline() && viewer.canSee(res.getPlayer()) : res.isOnline())
+			.filter(res -> viewer != null ? res.isOnline() && BukkitTools.playerCanSeePlayer(viewer, res.getPlayer()) : res.isOnline())
 			.collect(Collectors.toList());
 	}
 	

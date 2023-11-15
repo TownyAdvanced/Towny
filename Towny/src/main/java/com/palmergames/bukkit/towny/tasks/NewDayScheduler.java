@@ -8,8 +8,6 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -113,19 +111,5 @@ public class NewDayScheduler extends TownyTimerTask {
 	
 	public static void logTime() {
 		Towny.getPlugin().getLogger().info("Time until a New Day: " + TimeMgmt.formatCountdownTime(TimeMgmt.townyTime()));
-	}
-	
-	/**
-	 * Calculates the time in seconds until the next new day event.
-	 * TimeZone specific, including daylight savings.
-	 * 
-	 * @deprecated Deprecated, use {@link TimeMgmt#townyTime()}
-	 * 
-	 * @return seconds until event
-	 */
-	@Deprecated // Sometime during 0.98.*.*
-	@ApiStatus.ScheduledForRemoval
-	public static Long townyTime() {
-		return TimeMgmt.townyTime();
 	}
 }

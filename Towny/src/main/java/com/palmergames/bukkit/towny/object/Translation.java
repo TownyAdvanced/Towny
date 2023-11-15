@@ -97,7 +97,7 @@ public final class Translation {
 			if (data == null) {
 				// Even the en_US is missing this string, we're probably dealing with a typo.
 				// Log the error and return the un-translated key.
-				TownySettings.sendError(key.toLowerCase() + " from en_US");
+				TownySettings.sendError(key.toLowerCase(Locale.ROOT) + " from en_US");
 				return key;
 			}
 		}
@@ -245,5 +245,19 @@ public final class Translation {
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
 				}
 		}
+	}
+
+	/**
+	 * @since 0.99.5.20
+	 * @param key The key to check for
+	 * @param locale The language
+	 * @return Whether the language has a translation for the given key
+	 */
+	public static boolean hasTranslation(final @NotNull String key, final @NotNull Locale locale) {
+		final Map<String, String> language = translations.get(locale.toString());
+		if (language == null)
+			return false;
+		
+		return language.get(key) != null;
 	}
 }

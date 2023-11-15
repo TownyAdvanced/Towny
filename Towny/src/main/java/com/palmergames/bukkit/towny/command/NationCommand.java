@@ -69,7 +69,6 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BookFactory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -133,7 +132,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"baltop"
 	);
 
-	private static final List<String> nationSetTabCompletes = Arrays.asList(
+	@VisibleForTesting
+	public static final List<String> nationSetTabCompletes = Arrays.asList(
 		"king",
 		"leader",
 		"capital",
@@ -203,7 +203,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				return Collections.emptyList();
 			Nation nation = res.getNationOrNull();
 
-			switch (args[0].toLowerCase()) {
+			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "toggle":
 					if (args.length == 2)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_TOGGLE, nationToggleTabCompletes), args[1]);
@@ -234,8 +234,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(nationOrIgnore, args[1]);
 					}
 					if (args.length == 3) {
-						List<String> ignore = Collections.singletonList("-ignore");
-						return ignore;
+						return Collections.singletonList("-ignore");
 					}
 				case "add":
 					return getTownyStartingWith(args[args.length - 1], "t");
@@ -249,7 +248,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationAllyTabCompletes, args[1]);
 					} else if (args.length > 2){
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "add":
 								if (args[args.length - 1].startsWith("-")) {
 									return NameUtil.filterByStart(nation.getSentAllyInvites()
@@ -290,7 +289,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					case 3:
 						return getNationResidentNamesOfPlayerStartingWith(player, args[2]);
 					case 4:
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "add":
 								return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
 							case "remove": {
@@ -311,7 +310,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2) {
 						return NameUtil.filterByStart(nationEnemyTabCompletes, args[1]);
 					} else if (args.length >= 3){
-						switch (args[1].toLowerCase()) {
+						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "add":
 								return getTownyStartingWith(args[2], "n");
 							case "remove":
@@ -360,7 +359,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_SET, args[1]))
 				return NameUtil.filterByStart(TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_SET, args[1]).getTabCompletion(sender, StringMgmt.remFirstArg(args)), args[args.length-1]);
 			
-			switch (args[1].toLowerCase()) {
+			switch (args[1].toLowerCase(Locale.ROOT)) {
 				case "king":
 				case "leader":
 				case "title":
@@ -458,9 +457,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "list":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode());
 			listNations(player, split);
 			break;
 		case "townlist":
@@ -557,7 +555,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "say":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_SAY.getNode());
-			nationSay(getNationFromPlayerOrThrow(player), StringMgmt.remFirstArg(split));
+			nationSay(player, StringMgmt.remFirstArg(split));
 			break;
 		case "bankhistory":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_BANKHISTORY.getNode());
@@ -600,11 +598,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		return false;
 }
 
-	private void nationSay(Nation nation, String[] split) throws TownyException {
+	private void nationSay(Player player, String[] split) throws TownyException {
 		if (split.length == 0)
 			throw new TownyException("ex: /n say [message here]");
-		TownyMessaging.sendPrefixedNationMessage(nation, TownyComponents.stripClickTags(StringMgmt.join(split)));
-
+		getNationFromPlayerOrThrow(player).playerBroadCastMessageToNation(player, StringMgmt.join(split));
 	}
 
 	private void nationBankHistory(Player player, String[] split) throws TownyException {
@@ -777,7 +774,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * Only allow the player to assign ranks if they have the grant perm for it.
 		 */
-		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase()), Translatable.of("msg_no_permission_to_give_rank"));
+		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase(Locale.ROOT)), Translatable.of("msg_no_permission_to_give_rank"));
 
 		if (split[0].equalsIgnoreCase("add")) {
 			if (target.hasNationRank(rank)) // Must already have this rank
@@ -865,7 +862,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (!console)
 						checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode(split[i]));
 					
-					if (!nationListTabCompletes.contains(split[i].toLowerCase()))
+					if (!nationListTabCompletes.contains(split[i].toLowerCase(Locale.ROOT)))
 						throw new TownyException(Translatable.of("msg_error_invalid_comparator_nation", nationListTabCompletes.stream().filter(comp -> sender.hasPermission(PermissionNodes.TOWNY_COMMAND_NATION_LIST.getNode(comp))).collect(Collectors.joining(", "))));
 
 					type = ComparatorType.valueOf(split[i].toUpperCase(Locale.ROOT));
@@ -1025,7 +1022,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	public static void mergeNation(CommandSender sender, String[] split, @NotNull Nation remainingNation, boolean admin) throws TownyException {
 
-		if (split.length <= 0) // /n merge
+		if (split.length == 0) // /n merge
 			throw new TownyException(Translatable.of("msg_specify_nation_name"));
 
 		String name = split[0];
@@ -1419,14 +1416,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void nationAlly(Player player, String[] split) throws TownyException {
-		if (split.length <= 0) {
+		if (split.length == 0) {
 			HelpMenu.ALLIES_STRING.send(player);
 			return;
 		}
 		Resident resident = getResidentOrThrow(player);
 		Nation nation = getNationFromResidentOrThrow(resident);
 
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "add":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ADD.getNode());
 			nationAllyAdd(player, resident, nation, StringMgmt.remFirstArg(split));
@@ -1674,7 +1671,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// threw an exception or a non-admin player tried to ally an NPC-led nation, continue;
 					TownyMessaging.sendErrorMsg(resident, e.getMessage());
 					remove.add(targetNation);
-					continue;
 				}
 	
 			} else { // So we are removing an ally
@@ -1684,7 +1680,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					// One of the Allies was not removed because the NationRemoveAllyEvent was cancelled, continue;
 					TownyMessaging.sendErrorMsg(resident, e.getMessage());
 					remove.add(targetNation);
-					continue;
 				}
 			}
 		}
@@ -1919,7 +1914,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "leader":
 		case "king":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_KING.getNode());
@@ -2114,7 +2109,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationSetTag(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
-		String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
+		String name = sender instanceof Player ? sender.getName() : "Console"; 
 		
 		if (split.length < 2)
 			throw new TownyException("Eg: /nation set tag PLT");
@@ -2173,7 +2168,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
 
 			nation.setSpawnCost(amount);
-			String name = (sender instanceof Player) ? ((Player)sender).getName() : "Console"; 
+			String name = sender instanceof Player ? sender.getName() : "Console"; 
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));
 			if (admin)
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_spawn_cost_set_to", name, Translatable.of("nation_sing"), split[1]));
@@ -2183,10 +2178,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void nationSetTaxes(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
 		if (split.length < 2)
 			throw new TownyException("Eg: /nation set taxes 70");
-		int amount = MathUtil.getPositiveIntOrThrow(split[1].trim());
-		if (nation.isTaxPercentage() && amount > 100)
+		Double amount = MathUtil.getDoubleOrThrow(split[1]);
+		if (amount < 0 && !TownySettings.isNegativeNationTaxAllowed())
+			throw new TownyException(Translatable.of("msg_err_negative_money"));
+		if (nation.isTaxPercentage() && (amount > 100 || amount < 0.0))
 			throw new TownyException(Translatable.of("msg_err_not_percentage"));
-		if (TownySettings.getNationDefaultTaxMinimumTax() > amount)
+		if (!TownySettings.isNegativeNationTaxAllowed() && TownySettings.getNationDefaultTaxMinimumTax() > amount)
 			throw new TownyException(Translatable.of("msg_err_tax_minimum_not_met", TownySettings.getNationDefaultTaxMinimumTax()));
 		nation.setTaxes(amount);
 		if (admin) 
@@ -2394,7 +2391,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 2)
 			choice = BaseCommand.parseToggleChoice(split[1]);
 
-		switch (split[0].toLowerCase()) {
+		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "peaceful":
 		case "neutral":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_TOGGLE_NEUTRAL.getNode());
@@ -2435,7 +2432,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_nation_already_not_peaceful"));
 
 		if (peacefulState && TownyEconomyHandler.isActive() && !nation.getAccount().canPayFromHoldings(cost))
-			throw new TownyException(Translatable.of("msg_nation_cant_peaceful"));
+			throw new TownyException(Translatable.of("msg_nation_cant_peaceful", TownyEconomyHandler.getFormattedBalance(cost)));
 		
 		String uuid = nation.getUUID().toString();
 		
@@ -2591,7 +2588,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		/*
 		 * This is run async because it will ping the economy plugin for the nation bank value.
 		 */
-		plugin.getScheduler().runAsync(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, sender)));
+		TownyEconomyHandler.economyExecutor().execute(() -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation, sender)));
 	}
 	
 	/**

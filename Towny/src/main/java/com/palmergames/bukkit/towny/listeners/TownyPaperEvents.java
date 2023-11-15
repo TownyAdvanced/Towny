@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,7 +27,6 @@ import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -34,16 +34,23 @@ import java.util.logging.Level;
 @ApiStatus.Internal
 public class TownyPaperEvents implements Listener {
 	private final Towny plugin;
-	private static final MethodHandle GET_ORIGIN = getOriginHandle();
-	private static final MethodHandle GET_PRIMER_ENTITY = getPrimerEntityHandle();
-	
-	public static final MethodHandle SIGN_OPEN_GET_CAUSE = getSignOpenCauseHandle(); // Public for use in the player listener
-	private static final MethodHandle SIGN_OPEN_GET_SIGN = getSignOpenGetSignHandle();
 	
 	private static final String SPIGOT_PRIME_EVENT = "org.bukkit.event.block.TNTPrimeEvent"; // Added somewhere during 1.19.4
 	private static final String PAPER_PRIME_EVENT = "com.destroystokyo.paper.event.block.TNTPrimeEvent";
 	
 	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";
+	private static final String SPIGOT_SIGN_OPEN_EVENT = "org.bukkit.event.player.PlayerSignOpenEvent";
+	private static final String USED_SIGN_OPEN_EVENT = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
+
+	private static final String DRAGON_FIREBALL_HIT_EVENT = "com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent";
+
+	public static final MethodHandle SIGN_OPEN_GET_CAUSE = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getCause");
+	private static final MethodHandle SIGN_OPEN_GET_SIGN = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getSign");
+
+	private static final MethodHandle GET_ORIGIN = JavaUtil.getMethodHandle(Entity.class, "getOrigin");
+	private static final MethodHandle GET_PRIMER_ENTITY = JavaUtil.getMethodHandle(PAPER_PRIME_EVENT, "getPrimerEntity");
+
+	public static final MethodHandle DRAGON_FIREBALL_GET_EFFECT_CLOUD = JavaUtil.getMethodHandle(DRAGON_FIREBALL_HIT_EVENT, "getAreaEffectCloud");
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -63,8 +70,13 @@ public class TownyPaperEvents implements Listener {
 		}
 		
 		if (SIGN_OPEN_GET_CAUSE != null) {
-			registerEvent(SIGN_OPEN_EVENT, this::openSignListener, EventPriority.LOW, true);
+			registerEvent(JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT, this::openSignListener, EventPriority.LOW, true);
 			TownyMessaging.sendDebugMsg("PlayerOpenSignEvent#getCause found, using PlayerOpenSignEvent listener.");
+		}
+		
+		if (DRAGON_FIREBALL_GET_EFFECT_CLOUD != null) {
+			registerEvent(DRAGON_FIREBALL_HIT_EVENT, this::dragonFireballHitEventListener, EventPriority.LOW, true);
+			TownyMessaging.sendDebugMsg("Using " + DRAGON_FIREBALL_GET_EFFECT_CLOUD + " listener.");
 		}
 	}
 	
@@ -118,7 +130,7 @@ public class TownyPaperEvents implements Listener {
 			
 			Location origin;
 			try {
-				origin = (Location) GET_ORIGIN.invoke(event.getEntity());
+				origin = (Location) GET_ORIGIN.invokeExact(event.getEntity());
 			} catch (final Throwable e) {
 				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking Entity#getOrigin reflectively", e);
 				return;
@@ -147,7 +159,7 @@ public class TownyPaperEvents implements Listener {
 				cause = (Enum<?>) SIGN_OPEN_GET_CAUSE.invoke(event);
 				sign = (Sign) SIGN_OPEN_GET_SIGN.invoke(event);
 			} catch (final Throwable e) {
-				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking " + SIGN_OPEN_EVENT + "#getCause/#getSign reflectively", e);
+				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking " + USED_SIGN_OPEN_EVENT + "#getCause/#getSign reflectively", e);
 				return;
 			}
 			
@@ -159,40 +171,22 @@ public class TownyPaperEvents implements Listener {
 		};
 	}
 
-	@SuppressWarnings("JavaReflectionMemberAccess")
-	private static MethodHandle getOriginHandle() {
-		try {
-			//https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getOrigin()
-			return MethodHandles.publicLookup().unreflect(Entity.class.getMethod("getOrigin"));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
-	}
+	private Consumer<Event> dragonFireballHitEventListener() {
+		return event -> {
+			if (DRAGON_FIREBALL_GET_EFFECT_CLOUD == null)
+				return;
 
-	private static MethodHandle getPrimerEntityHandle() {
-		try {
-			// https://jd.papermc.io/paper/1.20/com/destroystokyo/paper/event/block/TNTPrimeEvent.html#getPrimerEntity()
-			return MethodHandles.publicLookup().unreflect(Class.forName("com.destroystokyo.paper.event.block.TNTPrimeEvent").getMethod("getPrimerEntity"));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
-	}
+			final AreaEffectCloud effectCloud;
 
-	private static MethodHandle getSignOpenCauseHandle() {
-		try {
-			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
-			return MethodHandles.publicLookup().unreflect(Class.forName(SIGN_OPEN_EVENT).getMethod("getCause"));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
-	}
+			try {
+				effectCloud = (AreaEffectCloud) DRAGON_FIREBALL_GET_EFFECT_CLOUD.invoke(event);
+			} catch (final Throwable thr) {
+				plugin.getLogger().log(Level.WARNING, "An exception occurred when invoking " + DRAGON_FIREBALL_HIT_EVENT + "#getAreaEffectCloud reflectively.", thr);
+				return;
+			}
 
-	private static MethodHandle getSignOpenGetSignHandle() {
-		try {
-			// https://jd.papermc.io/paper/1.20/io/papermc/paper/event/player/PlayerOpenSignEvent.html
-			return MethodHandles.publicLookup().unreflect(Class.forName(SIGN_OPEN_EVENT).getMethod("getSign"));
-		} catch (ReflectiveOperationException e) {
-			return null;
-		}
+			if (TownyEntityListener.discardAreaEffectCloud(effectCloud))
+				((Cancellable) event).setCancelled(true);
+		};
 	}
 }

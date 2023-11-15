@@ -3,6 +3,9 @@ package com.palmergames.bukkit.towny.event;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.PermissionNodes;
+import com.palmergames.bukkit.towny.TownyUniverse;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -40,7 +43,7 @@ public class PlayerChangePlotEvent extends Event {
 		this.from = from;
 		this.to = to;
 		this.moveEvent = moveEvent;
-		this.showPlotNotifications = TownySettings.getShowTownNotifications();
+		this.showPlotNotifications = TownySettings.getShowTownNotifications() && TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_RECEIVES_PLOT_NOTIFICATIONS.getNode());
 	}
 
 	public WorldCoord getFrom() {

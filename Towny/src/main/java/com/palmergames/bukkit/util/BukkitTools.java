@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
@@ -16,24 +17,32 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -47,11 +56,10 @@ import java.util.stream.Collectors;
 public class BukkitTools {
 
 	private static Towny plugin = null;
-	private static Server server = null;
+	private static final MethodHandle GET_OFFLINE_PLAYER_CACHED;
 	
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
-		BukkitTools.server = plugin.getServer();
 	}
 	
 	/**
@@ -94,10 +102,9 @@ public class BukkitTools {
 	 * @return UUID of player or null if the player is not in the cache.
 	 */
 	public static UUID getUUIDSafely(String name) {
-		if (hasPlayedBefore(name))
-			return getOfflinePlayer(name).getUniqueId();
-		else
-			return null;
+		final OfflinePlayer cached = getOfflinePlayerIfCached(name);
+		
+		return cached != null ? cached.getUniqueId() : null;
 	}
 	
 	@Nullable
@@ -112,15 +119,38 @@ public class BukkitTools {
 	
 	@Nullable
 	public static Player getPlayer(UUID playerUUID) {
-		return server.getPlayer(playerUUID);
+		return getServer().getPlayer(playerUUID);
 	}
 	
+	/**
+	 * Test whether an Player can see another Player. Staff on servers tend to enjoy
+	 * their privacy while vanished.
+	 * 
+	 * @param seeing Player who is doing the seeing.
+	 * @param seen   Player who is potentially vanished from the seeing Player.
+	 * @return true if the seeing Player can see the seen Player.
+	 */
+	public static boolean playerCanSeePlayer(Player seeing, Player seen) {
+		// PremiumVanish cannot hide a player unless the MC is 1.19.3+ and ProtocolLib
+		// is of a specific version.
+		if (Bukkit.getPluginManager().isPluginEnabled("PremiumVanish") &&
+			MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_19_3)) {
+			for (MetadataValue meta : seen.getMetadata("vanished")) {
+				if (meta.asBoolean())
+					return false;
+			}
+			return true;
+		}
+		// Vanish plugins should be able to correctly set the results of player#canSee(Player).
+		return seeing.canSee(seen);
+	}
+
 	public static Collection<? extends Player> getVisibleOnlinePlayers(CommandSender sender) {
 		if (!(sender instanceof Player player))
 			return Bukkit.getOnlinePlayers();
 		
 		return Bukkit.getOnlinePlayers().stream()
-			.filter(player::canSee)
+			.filter(p -> playerCanSeePlayer(player, p))
 			.collect(Collectors.toCollection(ArrayList::new));
 	}
 	
@@ -152,9 +182,7 @@ public class BukkitTools {
 	}
 	
 	public static Server getServer() {
-		synchronized(server) {
-			return server;
-		}
+		return Bukkit.getServer();
 	}
 	
 	public static PluginManager getPluginManager() {
@@ -271,6 +299,18 @@ public class BukkitTools {
 		return Bukkit.getOfflinePlayer(name);
 	}
 	
+	@Nullable
+	public static OfflinePlayer getOfflinePlayerIfCached(@NotNull String name) {
+		if (GET_OFFLINE_PLAYER_CACHED == null)
+			return null;
+		
+		try {
+			return (OfflinePlayer) GET_OFFLINE_PLAYER_CACHED.invokeExact(getServer(), name);
+		} catch (Throwable thr) {
+			return null;
+		}
+	}
+	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
 
 		return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
@@ -285,24 +325,9 @@ public class BukkitTools {
 	}
 	
 	public static List<String> getWorldNames(boolean lowercased) {
-		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase()).collect(Collectors.toList()) : getWorldNames();
+		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase(Locale.ROOT)).collect(Collectors.toList()) : getWorldNames();
 	}
-	
-	/**
-	 * Check if the entity is a Citizens NPC.
-	 * 
-	 * Catches the NoClassDefFoundError thrown when Citizens is present 
-	 * but failed to start up correctly.
-	 * 
-	 * @deprecated since 0.98.4.19 use {@link PluginIntegrations#checkCitizens(Entity)} instead.
-	 * @param entity Entity to check.
-	 * @return true if the entity is an NPC.
-	 */
-	@Deprecated
-	public static boolean checkCitizens(Entity entity) {
-		return PluginIntegrations.getInstance().checkCitizens(entity);
-	}
-	
+
 	@SuppressWarnings("deprecation")
 	public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
 		Objective objective;
@@ -358,10 +383,55 @@ public class BukkitTools {
 	 * Our own copy of {@link Registry#match(String)}, since this method did not exist on the currently lowest supported version, 1.16.
 	 */
 	@Nullable
-	public static <T extends Keyed> T matchRegistry(Registry<T> registry, String input) {
-		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_").replaceAll("[^a-zA-Z0-9_:]", "");
+	public static <T extends Keyed> T matchRegistry(@NotNull Registry<T> registry, @NotNull String input) {
+		final String filtered = input.toLowerCase(Locale.ROOT).replaceAll("\\s+", "_");
+		if (filtered.isEmpty())
+			return null;
 
 		final NamespacedKey key = NamespacedKey.fromString(filtered);
 		return key != null ? registry.get(key) : null;
+	}
+
+	/**
+	 * Converts a namespaced key into a string. The namespace is included for non minecraft namespaced keys.
+	 * @return The string representation of the key.
+	 */
+	public static String keyAsString(@NotNull NamespacedKey key) {
+		return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
+	}
+
+	public static @NotNull CommandMap getCommandMap() throws ReflectiveOperationException {
+		try {
+			// https://jd.papermc.io/paper/1.20/org/bukkit/Server.html#getCommandMap()
+			final Method commandMapGetter = getServer().getClass().getMethod("getCommandMap");
+
+			return (CommandMap) commandMapGetter.invoke(getServer());
+		} catch (ReflectiveOperationException e) {
+			// Fallback to attempting to get the field directly when not on paper
+			final Field bukkitCommandMap = getServer().getClass().getDeclaredField("commandMap");
+
+			bukkitCommandMap.setAccessible(true);
+			return (CommandMap) bukkitCommandMap.get(getServer());
+		}
+	}
+	
+	@ApiStatus.Internal
+	public static Collection<String> convertKeyedToString(@NotNull Collection<? extends Keyed> keys) {
+		final Set<String> set = new HashSet<>();
+		
+		for (Keyed keyed : keys)
+			set.add(keyAsString(keyed.getKey()));
+		
+		return set;
+	}
+	
+	static {
+		MethodHandle temp = null;
+		try {
+			//noinspection JavaReflectionMemberAccess
+			temp = MethodHandles.publicLookup().unreflect(Server.class.getMethod("getOfflinePlayerIfCached", String.class));
+		} catch (ReflectiveOperationException ignored) {}
+		
+		GET_OFFLINE_PLAYER_CACHED = temp;
 	}
 }
