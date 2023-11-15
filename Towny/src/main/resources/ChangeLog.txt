@@ -9213,3 +9213,4 @@ v0.92.0.11:
 0.100.0.5:
   - Fix page navigation from list footers in the plotgrouplist and plotlist screens.
     - Closes #7089.
+  - Fix regression: the /t invite {playername} not working as of 0.100.0.2. 

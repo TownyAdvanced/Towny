@@ -789,7 +789,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "accept" -> parseTownInviteAcceptCommand(player, StringMgmt.remFirstArg(args), resident);
 		case "deny" -> parseTownInviteDenyCommand(player, StringMgmt.remFirstArg(args), resident);
 		case "add" -> parseTownInviteAddCommand(player, StringMgmt.remFirstArg(args));
-		default -> throw new TownyException(Translatable.of("msg_err_invalid_sub"));
+		default -> {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ADD.getNode());
+			townAdd(player, null, args);
+		}
 		}
 	}
 
