@@ -992,7 +992,11 @@ public class TownyPlayerListener implements Listener {
 		// Sometimes we keep the inventory when they are in any town.
 		keepInventory = TownySettings.getKeepInventoryInTowns() && tb != null;
 
-		if (resident.hasTown() && tb != null && !keepInventory) {
+		// All of the other tests require a town.
+		if (tb == null)
+			return keepInventory;
+
+		if (resident.hasTown() && !keepInventory) {
 			Town town = resident.getTownOrNull();
 			Town tbTown = tb.getTownOrNull();
 			// Sometimes we keep the inventory only when they are in their own town.
@@ -1004,7 +1008,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		// Sometimes we keep the inventory when they are in an Arena plot.
-		if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb != null && tb.getType() == TownBlockType.ARENA)
+		if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb.getType() == TownBlockType.ARENA)
 			keepInventory = true;
 
 		return keepInventory;
