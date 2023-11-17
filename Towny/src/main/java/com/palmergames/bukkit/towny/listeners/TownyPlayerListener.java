@@ -970,11 +970,8 @@ public class TownyPlayerListener implements Listener {
 		/* Handle Inventory Keeping with our own PlayerKeepsInventoryEvent. */
 		tryKeepInventory(event, resident, tb);
 
-		boolean inTown = tb != null;
-		TownBlockType tbType = inTown ? tb.getType() : null;
-
 		/* Handle Experience Keeping with our own PlayerKeepsExperienceEvent. */
-		tryKeepExperience(event, inTown, tbType);
+		tryKeepExperience(event, tb);
 	}
 
 	private boolean tryKeepInventory(PlayerDeathEvent event, Resident resident, TownBlock tb) {
@@ -1013,8 +1010,8 @@ public class TownyPlayerListener implements Listener {
 		return keepInventory;
 	}
 
-	private boolean tryKeepExperience(PlayerDeathEvent event, boolean inTown, TownBlockType type) {
-		boolean keepExperience = getKeepExperienceValue(inTown, type); 
+	private boolean tryKeepExperience(PlayerDeathEvent event, TownBlock tb) {
+		boolean keepExperience = getKeepExperienceValue(tb != null, tb != null ? tb.getType() : null); 
 		PlayerKeepsExperienceEvent pkee = new PlayerKeepsExperienceEvent(event, keepExperience);
 		if (!BukkitTools.isEventCancelled(pkee)) {
 			event.setKeepLevel(true);
