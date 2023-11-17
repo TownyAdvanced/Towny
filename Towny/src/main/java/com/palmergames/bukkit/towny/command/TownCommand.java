@@ -2080,32 +2080,46 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Resident oldMayor = town.getMayor();
 		Resident newMayor = getResidentOrThrow(split[1]);
-		if (!town.hasResident(split[1]))
-			throw new TownyException(Translatable.of("msg_err_mayor_doesnt_belong_to_town"));
 
-		TownMayorChangeEvent townMayorChangeEvent = new TownMayorChangeEvent(sender, oldMayor, newMayor);
-		if (BukkitTools.isEventCancelled(townMayorChangeEvent) && !admin)
-			throw new TownyException(townMayorChangeEvent.getCancelMessage());
+		Confirmation.runOnAccept(() -> {
+			try {
+				if (!admin && !resident.isMayor()) // We already know the resident is a mayor if admin if true, prevents an NPE in rare cases of resident being null.
+					throw new TownyException(Translatable.of("msg_not_mayor"));
 
-		if (town.isCapital()) {
-			NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldMayor, newMayor);
-			if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin)
-				throw new TownyException(nationKingChangeEvent.getCancelMessage());
-		}
-		
-		town.setMayor(newMayor);
-		
-		if (oldMayor != null) {
-			TownyPerms.assignPermissions(oldMayor, null);
-			plugin.deleteCache(oldMayor);
-		}
+				if (!town.hasResident(newMayor))
+					throw new TownyException(Translatable.of("msg_err_mayor_doesnt_belong_to_town"));
 
-		plugin.deleteCache(newMayor);
-		if (admin) {
-			town.setHasUpkeep(!newMayor.isNPC());
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_new_mayor", newMayor.getName()));
-		}
-		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor.getName()));
+				TownMayorChangeEvent townMayorChangeEvent = new TownMayorChangeEvent(sender, oldMayor, newMayor);
+				if (BukkitTools.isEventCancelled(townMayorChangeEvent) && !admin)
+					throw new TownyException(townMayorChangeEvent.getCancelMessage());
+
+				if (town.isCapital()) {
+					NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldMayor, newMayor);
+					if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin)
+						throw new TownyException(nationKingChangeEvent.getCancelMessage());
+				}
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+				return;
+			}
+
+			town.setMayor(newMayor);
+			plugin.deleteCache(newMayor);
+
+			if (oldMayor != null) {
+				TownyPerms.assignPermissions(oldMayor, null);
+				plugin.deleteCache(oldMayor);
+			}
+
+			if (admin) {
+				town.setHasUpkeep(!newMayor.isNPC());
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_new_mayor", newMayor.getName()));
+			}
+
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_new_mayor", newMayor.getName()));
+			town.save();
+		})
+		.sendTo(sender);
 	}
 
 	public static void townSetTaxes(CommandSender sender, String[] split, boolean admin, Town town) throws TownyException {
