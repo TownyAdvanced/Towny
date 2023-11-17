@@ -37,6 +37,20 @@ public class PlayerKeepsExperienceEvent extends Event implements Cancellable {
 		this.event = event;
 	}
 
+	/**
+	 * An event thrown after a PlayerDeathEvent at HIGHEST priority.
+	 * Thrown when Towny would opt to keep someone's experience and clear the dropped XP orbs.
+	 * 
+	 * @param event PlayerDeathEvent
+	 * @param keepExperience Default state of the event.
+	 */
+	public PlayerKeepsExperienceEvent(PlayerDeathEvent event, boolean keepExperience) {
+		super(!Bukkit.getServer().isPrimaryThread());
+		this.player = event.getEntity();
+		this.location = event.getEntity().getLocation();
+		this.event = event;
+		this.isCancelled = !keepExperience;
+	}
 	@Override
 	public boolean isCancelled() {
 		return isCancelled;
