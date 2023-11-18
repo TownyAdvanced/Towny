@@ -3364,6 +3364,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "on/off."));
 				return;
 			}
+			break;
 		}
 		case 2: { // Either /t set perm PERMLEVEL on|off or /t set perm ACTIONTYPE on|off
 			boolean b;
@@ -3391,6 +3392,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 			}
+			break;
 		}
 		case 3: { // /t set perm PERMLEVEL ACTIONTYPE on|off
 			TownyPermission.PermLevel permLevel;
@@ -3412,6 +3414,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_input", "on/off."));
 				return;
 			}
+			break;
 		}
 		}
 

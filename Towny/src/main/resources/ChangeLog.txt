@@ -9216,3 +9216,4 @@ v0.92.0.11:
   - Fix regression: the /t invite {playername} not working as of 0.100.0.2. 
   - Add Confirmation to /t set mayor command.
     - Closes #7092.
+  - Fix /t set perm commands showing error feedback messages.
