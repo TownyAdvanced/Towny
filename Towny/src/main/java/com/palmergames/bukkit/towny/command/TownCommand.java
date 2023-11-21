@@ -3952,7 +3952,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				nationTownsAmount--;
 
 			int maxOutposts = TownySettings.getMaxOutposts(remainingTown, newResidentsAmount, nationTownsAmount);
-			int combinedOutposts = TownySettings.getMaxOutposts(remainingTown) + TownySettings.getMaxOutposts(succumbingTown);
+			int combinedOutposts = remainingTown.getOutpostSpawns().size() + succumbingTown.getOutpostSpawns().size();
 			if (combinedOutposts > maxOutposts)
 				throw new TownyException(Translatable.of("msg_town_merge_err_too_many_outposts", maxOutposts));
 		}
