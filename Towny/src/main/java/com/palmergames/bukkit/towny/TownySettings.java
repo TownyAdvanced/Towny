@@ -370,13 +370,13 @@ public class TownySettings {
 	 */
 	public static int getTownLevelWhichIsManuallySet(int level) {
 		
-		Object[] keys = configTownLevel.keySet().toArray();
+		Integer[] keys = configTownLevel.keySet().toArray(new Integer[] {});
 		// keys is always ordered from biggest to lowest (despite what the javadocs say
 		// about being sorted in Ascending order, this is not the case for a SortedMap.)
 		// We have to get it from lowest to largest.
 		Arrays.sort(keys);
 		level = Math.min(level, keys.length);
-		return (Integer) keys[level];
+		return keys[level];
 	}
 
 	public static int getTownLevelMax() {
