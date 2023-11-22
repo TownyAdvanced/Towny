@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 @ApiStatus.Internal
-public class SQLTask {
+public class SQLTask implements Runnable {
+	private final TownySQLSource source;
 
 	// Update flags this for an insert/update or delete.
 	public final boolean update;
@@ -21,9 +22,9 @@ public class SQLTask {
 	 * @param tb_name - Table name.
 	 * @param args - Arguments.
 	 */
-	public SQLTask(String tb_name, Map<String, ?> args) {
+	public SQLTask(TownySQLSource source, String tb_name, Map<String, ?> args) {
 
-		this(false, tb_name, args, null);
+		this(source, false, tb_name, args, null);
 
 	}
 
@@ -34,14 +35,14 @@ public class SQLTask {
 	 * @param args - Arguments.
 	 * @param keys - Keys to add to table.
 	 */
-	public SQLTask(String tb_name, Map<String, ?> args, List<String> keys) {
+	public SQLTask(TownySQLSource source, String tb_name, Map<String, ?> args, List<String> keys) {
 
-		this(true, tb_name, args, keys);
+		this(source, true, tb_name, args, keys);
 
 	}
 
-	private SQLTask(boolean update, String tb_name, Map<String, ?> args, List<String> keys) {
-
+	private SQLTask(TownySQLSource source, boolean update, String tb_name, Map<String, ?> args, List<String> keys) {
+		this.source = source;
 		this.update = update;
 		this.tb_name = tb_name;
 		this.args = args;
@@ -49,4 +50,12 @@ public class SQLTask {
 
 	}
 
+	@Override
+	public void run() {
+		if (this.update) {
+			source.queueUpdateDB(this.tb_name, this.args, this.keys);
+		} else {
+			source.queueDeleteDB(this.tb_name, this.args);
+		}
+	}
 }

@@ -28,7 +28,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
-import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -57,18 +56,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
-
-	private final Queue<SQLTask> queryQueue = new ConcurrentLinkedQueue<>();
-	private boolean isPolling = false;
-	private final ScheduledTask task;
 
 	private final String tb_prefix;
 
@@ -140,47 +133,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		} catch (SQLException e) {
 			logger.error("Failed to connect to the database", e);
 		}
-
-		/*
-		 * Start our Async queue for pushing data to the database.
-		 */
-		task = plugin.getScheduler().runAsyncRepeating(() -> {
-			if (this.isPolling)
-				return;
-
-			this.isPolling = true;
-			try {
-				SQLTask query;
-				while ((query = this.queryQueue.poll()) != null) {
-					if (query.update) {
-						TownySQLSource.this.queueUpdateDB(query.tb_name, query.args, query.keys);
-					} else {
-						TownySQLSource.this.queueDeleteDB(query.tb_name, query.args);
-					}
-				}
-			} finally {
-				this.isPolling = false;
-			}
-
-		}, 5L, 5L);
 	}
 
 	@Override
 	public void finishTasks() {
-		// Cancel the repeating task as its not needed anymore.
-		if (task != null)
-			task.cancel();
+		super.finishTasks();
 
-		// Make sure that *all* tasks are saved before shutting down.
-		while (!queryQueue.isEmpty()) {
-			SQLTask query = TownySQLSource.this.queryQueue.poll();
-
-			if (query.update) {
-				TownySQLSource.this.queueUpdateDB(query.tb_name, query.args, query.keys);
-			} else {
-				TownySQLSource.this.queueDeleteDB(query.tb_name, query.args);
-			}
-		}
 		// Close the database sources on shutdown to get GC
 		if (hikariDataSource != null)
 			hikariDataSource.close();
@@ -232,7 +190,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		 * Make sure we only execute queries in async
 		 */
 
-		this.queryQueue.add(new SQLTask(tb_name, args, keys));
+		this.queryQueue.add(new SQLTask(this, tb_name, args, keys));
 
 		return true;
 
@@ -398,7 +356,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		// Make sure we only execute queries in async
 
-		this.queryQueue.add(new SQLTask(tb_name, args));
+		this.queryQueue.add(new SQLTask(this, tb_name, args));
 
 		return true;
 
