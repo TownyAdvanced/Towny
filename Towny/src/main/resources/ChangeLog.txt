@@ -9228,5 +9228,6 @@ v0.92.0.11:
   - Bump org.jetbrains:annotations from 24.0.1 to 24.1.0.
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.44.0 to 3.47.0.
   - Bump org.apache.commons:commons-compress from 1.24.0 to 1.25.0
+0.100.0.7:
   - Fix manually-set town levels not returning the correct TownLevel.
     - Closes #7103.
