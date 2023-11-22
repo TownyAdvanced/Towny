@@ -142,21 +142,11 @@ public class TownyUniverse {
      * @param loadDbType - load setting from the config.
      * @param saveDbType - save setting from the config.
      */
-	void loadAndSaveDatabase(String loadDbType, String saveDbType) {
+	void loadAndSaveDatabase(String loadDbType, String saveDbType) throws TownyInitException {
     	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
-		try {
-			// Try loading the database.
-			loadDatabase(loadDbType);
-		} catch (TownyInitException e) {
-			throw new TownyInitException(e.getMessage(), e.getError());
-		}
-        
-        try {
-            // Try saving the database.
-        	saveDatabase(saveDbType);
-		} catch (TownyInitException e) {
-			throw new TownyInitException(e.getMessage(), e.getError());
-		}
+		
+		loadDatabase(loadDbType);
+		saveDatabase(saveDbType);
 		
 		// Dispose of the load data source if it's no longer needed
 		if (this.loadDataSource != this.saveDataSource) {
