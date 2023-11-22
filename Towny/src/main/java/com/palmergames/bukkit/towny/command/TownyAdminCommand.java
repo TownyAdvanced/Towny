@@ -1531,7 +1531,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			level = TownySettings.getTownLevelMax() - 1;
 		town.setManualTownLevel(level);
 		town.save();
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, town.getLevelNumber()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, level));
 	}
 
 	private void parseAdminTownRankCommand(CommandSender sender, Town town, String[] split) throws TownyException {
