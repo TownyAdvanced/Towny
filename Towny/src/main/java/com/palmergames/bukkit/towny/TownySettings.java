@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -360,6 +361,22 @@ public class TownySettings {
 			if (threshold >= level)
 				return level;
 		return 0;
+	}
+
+	/**
+	 * Gets the TownLevel for manually-set towns, returning the key in the SortedMap which corresponds with the position of the key in the SortedMap's keySet.
+	 * @param level The number used to get the key from the keySet array. 
+	 * @return the number of residents which will get us the correct TownLevel in the TownLevel SortedMap.
+	 */
+	public static int getTownLevelWhichIsManuallySet(int level) {
+		
+		Object[] keys = configTownLevel.keySet().toArray();
+		// keys is always ordered from biggest to lowest (despite what the javadocs say
+		// about being sorted in Ascending order, this is not the case for a SortedMap.)
+		// We have to get it from lowest to largest.
+		Arrays.sort(keys);
+		level = Math.min(level, keys.length);
+		return (Integer) keys[level];
 	}
 
 	public static int getTownLevelMax() {

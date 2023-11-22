@@ -1802,7 +1802,7 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public int getLevelNumber() {
 		int townLevelNumber = getManualTownLevel() > -1
-				? getManualTownLevel()
+				? TownySettings.getTownLevelWhichIsManuallySet(getManualTownLevel())
 				: TownySettings.getTownLevelFromGivenInt(getNumResidents(), this);
 
 		TownCalculateTownLevelNumberEvent tctle = new TownCalculateTownLevelNumberEvent(this, townLevelNumber);
