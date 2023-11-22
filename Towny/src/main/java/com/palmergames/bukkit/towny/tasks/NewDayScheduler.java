@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.NamespacedKey;
 import java.util.Timer;
@@ -44,7 +45,7 @@ public class NewDayScheduler extends TownyTimerTask {
 			long secondsUntilNextNewDay = TimeMgmt.townyTime();
 			
 			// If the next new day is less than 2 minutes away, schedule the new day.
-			if (secondsUntilNextNewDay < TimeUnit.MINUTES.toSeconds(2)) {
+			if (plugin.getScheduler() instanceof FoliaTaskScheduler || secondsUntilNextNewDay < TimeUnit.MINUTES.toSeconds(2)) {
 				TownyMessaging.sendDebugMsg("New Day time finalized for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay) + " from now.");
 				scheduleUpComingNewDay(secondsUntilNextNewDay);
 				// Else the new day scheduler will run again at half the secondsUntilNextNewDay, to check again.
