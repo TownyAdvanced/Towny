@@ -37,6 +37,24 @@ public class PlayerKeepsInventoryEvent extends Event implements Cancellable {
 		this.event = event;
 	}
 
+	/**
+	 * An event thrown after a PlayerDeathEvent at HIGHEST priority.
+	 * Thrown when Towny would opt to keep someone's inventory and clear the drops.
+	 * 
+	 * @param event PlayerDeathEvent
+	 * @param keepInventory Default state of the event.
+	 */
+	public PlayerKeepsInventoryEvent(PlayerDeathEvent event, boolean keepInventory) {
+		super(!Bukkit.getServer().isPrimaryThread());
+		this.player = event.getEntity();
+		this.location = event.getEntity().getLocation();
+		this.event = event;
+		this.isCancelled = !keepInventory;
+	}
+
+	/**
+	 * When true, players will not keep their inventory.
+	 */
 	@Override
 	public boolean isCancelled() {
 		return isCancelled;
