@@ -9217,3 +9217,14 @@ v0.92.0.11:
   - Add Confirmation to /t set mayor command.
     - Closes #7092.
   - Fix /t set perm commands showing error feedback messages.
+0.100.0.6:
+  - Fix outposts being counted wrong in town merge vetting code.
+    - Closes #7099.
+  - Refactor KeepInventory and KeepExperience code.
+    - Unblocks https://github.com/TownyAdvanced/SiegeWar/pull/845.
+  - Immediately schedule upcoming newday on paper servers, courtesy of Warrior with PR #7101.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.2.1 to 3.2.2.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.6.0 to 3.6.2.
+  - Bump org.jetbrains:annotations from 24.0.1 to 24.1.0.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.44.0 to 3.47.0.
+  - Bump org.apache.commons:commons-compress from 1.24.0 to 1.25.0
