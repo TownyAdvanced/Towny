@@ -45,19 +45,19 @@ help_0: 'Загальна допомога з Towny'
 help_1: 'Спробуйте наступні команди, щоб дізнатися більше про Towny.'
 help_2: 'Чат міста'
 help_3: 'Чат нації'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
+help_4: 'Допомога по командах гравця.'
+help_5: 'Допомога по командах міста.'
+help_6: 'Допомога по командах нації.'
+help_7: 'Допомога по командах ділянки.'
+help_8: 'Допомога по командах Towny.'
+help_9: 'Допомога по командах Towny для адміна.'
+towny_help_0: "Загальна допомога по Towny"
+towny_help_1: "Показувати карту найближчих ділянок"
 towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
-towny_help_4: "Display time until a new day"
-towny_help_5: "Displays stats"
-towny_help_6: "Displays the version of Towny"
+towny_help_3: "Показати ТОП"
+towny_help_4: "Показати час до початку нового дня"
+towny_help_5: "Показати статистику"
+towny_help_6: "Показати версію Towny"
 towny_top_help_0: "List top residents based on subcommand."
 towny_top_help_1: "List top land-owners based on subcommand."
 towny_top_help_2: "List wealthiest based on subcommand."
@@ -71,9 +71,9 @@ town_help_7: 'Нове місто з назначеним мером.'
 town_help_8: 'Список команд для мерів.'
 town_help_9: 'Новий день!'
 town_help_10: 'Список містян онлайн'
-town_help_13: "See a list of residents in the town."
+town_help_13: "Побачити список жителів в місті."
 town_help_14: "See a list of ranks in the town."
-town_help_15: "See a list of outlaws in the town."
+town_help_15: "Побачити список ізгоїв в місті."
 town_help_16: "See a list of plotgroups in the town."
 town_help_17: "See a list of plot types in the town."
 town_help_18: "Say a message to the town members."
@@ -594,7 +594,7 @@ msg_cache_block_error_wild: '&cЗаборонено гравцю %s у дики�
 msg_cache_block_error_plot: '&cВласник не дозволив %s для %s тут.'
 msg_cache_block_error_town_resident: '&cМешканці не мають дозволу на %s тут.'
 msg_cache_block_error_town_allies: '&cСоюзники не мають дозволу на %s.'
-msg_cache_block_error_town_outsider: '&cЧужинці не мають дозволу на %s.'
+msg_cache_block_error_town_outsider: '&cЧужаки не мають дозволу на %s.'
 msg_err_cant_afford_tp_town: '&cНеможливо телепортування до %s.'
 msg_err_not_public: '&cЦе місто не є публічним.'
 msg_err_not_open: '&cМісто %s не відкриває усім свої двері. Попросіть у мера або помічника запрошення.'
