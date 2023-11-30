@@ -523,7 +523,7 @@ msg_changed_fire: '&c%s中的火勢蔓延變更為%s '
 msg_changed_mobs: '&c%s中的怪物變更為%s '
 msg_the_plot_group: '領地叢集'
 msg_changed_taxpercent: '&c占比收稅模式變更為%s '
-msg_changed_open: '&c城鎮邀請加入開放變更為%s '
+msg_changed_open: '&c城鎮加入邀請開放變更為%s '
 msg_toggle_open_on_warning: '警告：如果城鎮設為開放那麽城鎮權限最好關閉  輸入 /town set perm off 關閉， /town set perm reset 重置 '
 msg_changed_world_setting: '&c%s的%s狀態變更為：%s '
 msg_world_pvp: '&c這個世界強制開啟PVP '
@@ -790,7 +790,7 @@ msg_err_nation_sent_too_many_invites: '&b國家派出了太多的邀請，請撤
 msg_err_nation_sent_too_many_requests: '&b國家已經發出了太多的要求，請撤銷一些再嘗試！'
 msg_err_nation_has_too_many_requests: '&b國家%s有太多的邀請，需要他們拒絕一些請求，然後再進行邀請 '
 player_received_invites: '&b你已經收到%a/%m 邀請 '
-town_revoke_invite: '&b城鎮%s，撤銷了你的邀請加入 '
+town_revoke_invite: '&b城鎮%s，撤銷了你的加入邀請 '
 town_revoke_invite_successful: '&b你已成功撤銷邀請你加入的城鎮'
 town_received_invites: '&b城鎮已收到%a/%m 邀請 '
 town_sent_invites: '&b城鎮已發送%a/%m 邀請 '
@@ -1613,7 +1613,7 @@ msg_err_invalid_response: '無效的回應！輸入q退出或返回到上一個�
 msg_setup_full_guide_link: '&b完整的安裝指南請點擊此處 '
 msg_setup_wildernessuse: '你想要允許荒地開發嗎？這將允許玩家在荒地中放置或破壞方塊 '
 msg_setup_revertunclaim: '你想讓註銷回復嗎？這樣會使註銷的城區緩慢重新生成 '
-msg_setup_town_block_ratio: '你想將你的城區占比設定為何？預設每個居民8個城區 較高的數字將使城鎮能夠為其每個居民獲得更多的城區上限 將其設置為0將會以城鎮等級來作為數值參考 '
+msg_setup_town_block_ratio: '你想將你的城區占比設定為何？預設每個居民8個城區 較高的數字將使城鎮能夠為其每個居民獲得更多的城區上限 將其設定為0將會以城鎮等級來作為數值參考 '
 msg_setup_town_cost: '你想要將新建一個城鎮的價格設定為多少？預設為250 '
 msg_setup_nation_cost: '你想要將新建一個國家的價格設定為多少？預設為1000 '
 msg_setup_townblock_cost: '你想要將城鎮擴張一個城區（預設一個chunk）的價格設定為多少？預設為25 '
@@ -1760,7 +1760,7 @@ msg_ptw_warning_2: 'Towny開發團隊不曾打算使你花費真實金錢購買�
 #Line 3 of the givebonus warning.
 msg_ptw_warning_3: '如果你已經付了真實金錢給未知對象，你最好考慮遊玩真正尊重Towny開發團隊宗旨的伺服器 '
 #Message shown when a town invites a player to join, and that town has a nation.
-you_have_been_invited_to_join3: '你已被邀請加入%s&9（Nation：%s&9）'
+you_have_been_invited_to_join3: '你已被邀請加入%s&9（國家：%s&9）'
 #Added in 0.139
 #Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
 msg_err_your_town_cannot_afford_unclaim: '你的城鎮無法支付註銷土地用的押金 需要%s '
