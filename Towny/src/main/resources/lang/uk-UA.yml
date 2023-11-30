@@ -448,7 +448,7 @@ msg_not_mayor: '&bВи не мер.'
 msg_not_king: '&bВи не є лідером нації.'
 msg_not_mayor_ass: '&bВи не мер або помічник.'
 msg_not_king_ass: '&bВи не є лідером нації або помічником.'
-msg_own_nation_disallow: '&bНа превеликий жаль, ви не можете створити націю (можливо, у вас не вистачає грошей).'
+msg_own_nation_disallow: '&bВи не можете робити цього зі своєю нацією.'
 msg_no_perms_claim: '&bУ вас немає прав, щоб розширити своє місто.'
 msg_outpost_disable: '&bАванпости недоступні.'
 msg_kicked_by: '&bВи були вигнані з міста %s.'
@@ -924,8 +924,8 @@ status_res_taxexempt: 'Персонал звільнений від міськи
 status_res_tax: 'Міський податок:'
 status_res_plottax: 'Загалом податків на землю:'
 status_res_totaltax: 'Загалом податків до оплати:'
-status_townblock_plottax: 'Plot Tax: '
-status_townblock_untaxed: 'Untaxed'
+status_townblock_plottax: 'Податок на ділянку: '
+status_townblock_untaxed: 'Без податку'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Ви не можете користуватись національним банком поза столицею.'
 msg_err_unable_to_use_bank_outside_your_town: 'Ви не можете користуватись міським банком поза вашим містом.'
@@ -1588,7 +1588,7 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Дім: %s]'
-status_about: "About:"
+status_about: "Біо:"
 status_registered: 'Зареєстровано:'
 status_lastonline: 'Останній раз в мережі:'
 status_fractions: '%s/%s'
@@ -1865,7 +1865,7 @@ msg_perm_hud_town: 'місто'
 #Seen in /plot perm hud:
 msg_perm_hud_ally: 'союзник'
 #Seen in /plot perm hud:
-msg_perm_hud_resident: 'мешканець'
+msg_perm_hud_resident: 'житель'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: 'нація'
 #Seen in /plot perm hud:
@@ -2028,36 +2028,36 @@ msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the c
 msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
 msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
 #Generic error message for when a world isn't loaded
-msg_err_world_not_loaded: "<red>World is not loaded."
+msg_err_world_not_loaded: "<red>Світ не завантажений."
 #Message shown when a mayor toggles a plots taxed status.
-msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
-status_forsale: "&a(For Sale: %s)"
-msg_town_forsale: "%s has been set for sale at %s."
-msg_town_notforsale: "%s is no longer for sale."
-msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you sure you want to continue?"
-msg_town_buytown_already_mayor: "You are already mayor of %s."
-msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
-msg_town_buytown_not_forsale: "Specified town is not for sale."
-msg_town_buytown_ruined: "Ruined towns cannot be bought."
-msg_resident_about_reset: "&bResident about reset."
-msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
-msg_set_about: "%s's about was set to %s."
-msg_clear_about: "%s's about was cleared."
+msg_changed_plot_taxed: '&сЦя ділянка має податок у вигляді %s.'
+status_forsale: "&a(На продаж: %s)"
+msg_town_forsale: "Місто %s було виставлено на продаж за %s."
+msg_town_notforsale: "Місто %s більше не продається."
+msg_town_sell_confirmation: "Це виставить ваше місто на продаж за %s. Ви впевнені, що хочете продовжити?"
+msg_town_buytown_already_mayor: "Ви вже мер міста %s."
+msg_town_buytown_confirmation: "Купівля міста %s коштуватиме %s і видалить вас з міста, до якого ви зараз належите. Ви впевнені, що хочете продовжити?"
+msg_town_buytown_not_forsale: "Це місто не продається."
+msg_town_buytown_ruined: "Зруйновані міста не можуть бути куплені."
+msg_resident_about_reset: "&bСкидання біографії жителя."
+msg_err_invalid_string_about_not_set: "Неправильний вміст, біографія не встановлена."
+msg_set_about: "Біо жителя %s's було встановлено на %s."
+msg_clear_about: "Біо %s було видалено."
 #Message shown when toggling town visibleontoplists setting
-msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
+msg_town_visibleontoplist_setting_set_to: 'Місто %sдля параметра видимості у верхніх списках було встановлено значення %s.'
 #Message shown when an admin overrides a town founding date via townyadmin.
-townyadmin_town_set_help_0: "Sets the founding date of a town."
-townyadmin_nation_set_help_0: "Sets the founding date of a nation."
-msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
-msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
-msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
+townyadmin_town_set_help_0: "Встановлення дати заснування міста."
+townyadmin_nation_set_help_0: "Встановлення дати заснування нації."
+msg_town_registered_set: "Дата заснування міста: '%s' встановлено на: '%s'."
+msg_nation_registered_set: "Дата заснування нації: '%s' встановлено на: '%s'."
+msg_err_time_cannot_be_in_the_future: "Встановлений час не може бути майбутнім."
 #The format used for the /t say and /n say commands.
 town_say_format: "%s says: %s"
-msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
-msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
+msg_err_floodfill_not_in_wild: "Ви не можете використовувати функцію \"Заповнити виділеним\" в області, яка вже зайнята."
+msg_err_floodfill_out_of_bounds: "Форма заявки має бути повністю закрита для заповнення."
 msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
 #Message shown when a resident is an NPC and is not allowed to do something.
-msg_err_resident_is_npc: "You cannot do this to an NPC resident."
+msg_err_resident_is_npc: "Ви не можете зробити цього з NPC-жителем."
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
-msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
-msg_unnamed: "Unnamed"
+msg_err_resident_doesnt_own_any_land: "Жодною земельною ділянкою гравець особисто не володіє."
+msg_unnamed: "Безіменне"
