@@ -183,6 +183,12 @@ public enum ConfigNodes {
 			"# set to 0 to disable limiting of claim radius value check.",
 			"# keep in mind that the default value of 4 is a radius, ",
 			"# and it will allow claiming 9x9 (80 plots) at once."),
+	TOWN_MAX_BUYTOWN_PRICE(
+			"town.max_buytown_price",
+			"999999999",
+			"",
+			"# The Maximum price that a town can be put for sale at. This refers to the price that",
+			"# someone could pay if they ran /t buytown, to buy a town that has been put up for sale."),
 
 	TOWN_OVERCLAIMING_ROOT("town.overclaiming", "", "", ""),
 	TOWN_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(

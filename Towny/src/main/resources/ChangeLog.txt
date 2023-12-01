@@ -9231,3 +9231,8 @@ v0.92.0.11:
 0.100.0.7:
   - Fix manually-set town levels not returning the correct TownLevel.
     - Closes #7103.
+0.100.0.8:
+  - New Config Option: town.max_buytown_price
+    - Default: 999999999
+    - The Maximum price that a town can be put for sale at.
+    - This refers to the price that someone could pay if they ran /t buytown, to buy a town that has been put up for sale.

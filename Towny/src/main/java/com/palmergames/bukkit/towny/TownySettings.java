@@ -3720,5 +3720,9 @@ public class TownySettings {
 	public static String getDefaultResidentAbout() {
 		return getString(ConfigNodes.RES_SETTING_DEFAULT_ABOUT);
 	}
+
+	public static double maxBuyTownPrice() {
+		return getDouble(ConfigNodes.TOWN_MAX_BUYTOWN_PRICE);
+	}
 }
 

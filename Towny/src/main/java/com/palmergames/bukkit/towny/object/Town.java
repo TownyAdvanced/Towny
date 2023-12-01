@@ -1062,7 +1062,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param forSalePrice double representing sale price.
 	 */
 	public final void setForSalePrice(double forSalePrice) {
-		this.forSalePrice = forSalePrice;
+		this.forSalePrice = Math.min(forSalePrice, TownySettings.maxBuyTownPrice());
 	}
 
 	/**
