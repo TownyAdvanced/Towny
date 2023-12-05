@@ -350,68 +350,68 @@ ta_purge_help_0: "Pašalina gyventojus, kurie nebuvo prisijungę ilgiau kaip nur
 ta_townmeta_help_1: "Peržiūrėti metaduomenis, saugomus mieste, kuris buvo nurodytas."
 ta_townmeta_help_2: "Set town metadata key and value."
 ta_townmeta_help_3: "Add or remove a metadata by key from the town."
-ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_residentmeta_help_1: "Peržiūrėti gyventojo metaduomenis, kuris buvo nurodytas."
 ta_residentmeta_help_2: "Set resident metadata key and value."
 ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
-ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
+ta_nationmeta_help_1: "Peržiūrėti metaduomenis, saugomus valstybėje, kuri buvo nurodytas."
 ta_nationmeta_help_2: "Set nation metadata key and value."
 ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
-ta_reload_help_0: "Reloads database."
-ta_reload_help_1: "Reloads config."
-ta_reload_help_2: "Reloads language files."
-ta_reload_help_3: "Reloads Towny permissions."
-ta_reload_help_4: "Reloads all components of Towny."
-ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
-plot_help_0: "Turns on the plot info HUD."
-plot_help_1: "Removes the owner of the plot."
+ta_reload_help_0: "Perkrauna duomenyną."
+ta_reload_help_1: "Perkrauna konfigūraciją."
+ta_reload_help_2: "Perkrauna kalbų failus."
+ta_reload_help_3: "Pekrauna Towny leidimus."
+ta_reload_help_4: "Perkrauna visus Towny komponentus."
+ta_depositall_help_0: "Įnešti nurodytą sumą į visus miestų ir valstybių bankus."
+plot_help_0: "Įjungia sklypo informacijos HUD."
+plot_help_1: "Pašalina sklypo savininką."
 plot_help_2: "Deletes a list of blocks from the plot."
-plot_help_3: "See /plot set ? for help."
-plot_help_4: "See /plot toggle ? for help."
-plot_help_5: "See /plot group ? for help."
-plot_help_6: "Removes permission overrides for a player."
+plot_help_3: "Naudokite /plot set ? tolimesnėms komandoms."
+plot_help_4: "Naudokite /plot toggle ? tolimesnėms komandoms."
+plot_help_5: "Naudokite /plot group ? tolimesnėms komandoms."
+plot_help_6: "Pašalina žaidėjo leidimų nepaisymus."
 plot_help_7: "Adds default permission overrides for a player."
-plot_help_8: "Opens the permission editor gui."
-plot_help_9: "Adds a resident as Trusted in the plot."
-plot_help_10: "Removes a resident as Trusted in the plot."
-plot_group_help_0: "Ex: /plot group new ExpensivePlots"
-plot_group_help_1: "Removes a plot from the specified group."
-plot_group_help_2: "Deletes a plotgroup completely."
-plot_group_help_3: "Renames the group you are standing in."
-plot_group_help_4: "Ex: /plot group set perm resident on."
-plot_group_help_5: "Ex: /plot group toggle [pvp|fire|mobs]"
-plot_group_help_6: "Ex: /plot group forsale 50"
-plot_group_help_7: "Ex: /plot group notforsale"
-plot_group_help_8: "Adds or removes a resident as trusted."
-plot_group_help_9: "Adds a resident as Trusted in the plotgroup."
-plot_group_help_10: "Removes a resident as Trusted in the plotgroup."
-plot_group_help_11: "Opens the plot perm GUI."
-plot_group_help_12: "Adds a player to the plot perm GUI."
-plot_group_help_13: "Removes a player to the plot perm GUI."
-plot_toggle_help_0: "Toggles pvp in the plot."
-plot_toggle_help_1: "Toggles explosions in the plot."
-plot_toggle_help_2: "Toggles fire in the plot."
-plot_toggle_help_3: "Toggles mobs in the plot."
-plot_group_toggle_help_0: "Toggles pvp in the plot group."
-plot_group_toggle_help_1: "Toggles explosions in the plot group."
-plot_group_toggle_help_2: "Toggles fire in the plot group."
-plot_group_toggle_help_3: "Toggles mobs in the plot group."
-plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
-plot_set_help_1: "Sets a plot to an Outpost."
-plot_set_help_2: "Removes a plot type."
-plot_set_help_3: "Names a plot."
-plot_set_help_4: "Toggle all permissions."
-plot_set_help_5: "Sets the permissions of a level or type to on or off."
-plot_set_help_6: "Sets the permission of a level and type to on or off."
-plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
-plot_jailcell_help_0: "Adds a JailCell where you stand."
-plot_jailcell_help_1: "Removes a JailCell where you stand."
+plot_help_8: "Atveria leidimų rengyklės grafinę naudotojo sąsają."
+plot_help_9: "Prideda žaidėją į sklypo patikimų žmonių sąrašą."
+plot_help_10: "Pašalina žaidėją iš sklypo patikimų žmonių sąrašo."
+plot_group_help_0: "Pvz.: /plot group new PrabangusSklypai"
+plot_group_help_1: "Pašalina sklypą iš nurodytos grupės."
+plot_group_help_2: "Visiškai pašalina sklypų grupę."
+plot_group_help_3: "Pervardija grupę, kurioje šiuo metu stovi."
+plot_group_help_4: "Pvz.: /plot group set perm resident on."
+plot_group_help_5: "Pvz.: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Pvz.: /plot group forsale 50"
+plot_group_help_7: "Pvz.: /plot group notforsale"
+plot_group_help_8: "Prideda arba pašalina žaidėją iš patikimų žmonių sąrašo."
+plot_group_help_9: "Prideda žaidėją į sklypų grupės patikimų žmonių sąrašą."
+plot_group_help_10: "Pašalina žaidėją iš sklypų grupės patikimų žmonių sąrašo."
+plot_group_help_11: "Atveria sklypo leidimų grafinę naudotojo sąsają."
+plot_group_help_12: "Prideda žaidėją į sklypo leidimų grafinę naudotojo sąsają."
+plot_group_help_13: "Pašalina žaidėją iš sklypo leidimų grafinės naudotojo sąsajos."
+plot_toggle_help_0: "Įjungia arba išjungia PVP režimą sklype."
+plot_toggle_help_1: "Įjungia arba išjungia sprogimus sklype."
+plot_toggle_help_2: "Įjungia arba išjungia ugnies plitimą sklype."
+plot_toggle_help_3: "Įjungia arba išjungia monstrų atsiradimą sklype."
+plot_group_toggle_help_0: "Įjungia arba išjungia PVP režimą sklypų grupėje."
+plot_group_toggle_help_1: "Įjungia arba išjungia sprogimus sklypų grupėje."
+plot_group_toggle_help_2: "Įjungia arba išjungia ugnies plitimą sklypų grupėje."
+plot_group_toggle_help_3: "Įjungia arba išjungia monstrų atsiradimą sklypų grupėje."
+plot_set_help_0: "Pvz.: Inn, Wilds, Farm, Embassy, t.t."
+plot_set_help_1: "Nustato sklypą kaip tolimąją teritoriją."
+plot_set_help_2: "Pašalina sklypo tipą."
+plot_set_help_3: "Pavadina sklypą."
+plot_set_help_4: "Įjungia arba išjungia visus leidimus."
+plot_set_help_5: "Įjungia arba išjungia lygmens arba tipo leidimus."
+plot_set_help_6: "Įjungia arba išjungia lygmens ir tipo leidimą."
+plot_set_help_7: "Nustato leidimus gyventojui arba miestui, kuriam priklauso minėtieji sklypai."
+plot_jailcell_help_0: "Prideda kalėjimo kamerą ten, kur stovite."
+plot_jailcell_help_1: "Pašalina kalėjimo kamerą iš ten, kur stovite."
 msg_block_claim: 'Užimti šį sklypą'
-msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
+msg_block_claim_radius: 'Užimti sklypus spinduliu aplink save.'
 msg_plot_nfs: 'Išimti sklypą iš prekybos'
-msg_plot_nfs_radius: 'Take down a radius of plots for sale'
+msg_plot_nfs_radius: 'Išimti sklypus iš prekybos spinduliu'
 msg_nfs_abr: '&e„fs“ ir „nfs“ yra atitinkamai „parduodama“ ir „neparduodama“ santrumpos.'
 msg_plot_fs: 'Skelbti šio sklypo aukcioną.'
-msg_plot_fs_radius: 'Put up a radius of plots for sale.'
+msg_plot_fs_radius: 'Parduoti sklypus spinduliu.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -427,7 +427,7 @@ msg_payed_resident_tax: '&b Sumokėtas gyventojo mokestis '
 msg_bankrupt_town: ' neturėjo pakankamai lėšų išlikti miestu.'
 msg_bankrupt_nation: ' neturėjo pakankamai lėšų išlikti valstybe.'
 msg_nation_not_peaceful: '&bValstybė neturėjo pakankamai lėšų išlaikyti savo neutralitetui.'
-msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
+msg_nation_cant_peaceful: '&bValstybė neturėjo pakankamai lėšų, kad galėtų paskelbti neutralitetą. Jūs privalote turėti pakankamai pinigų, kad galėtumėte kasdien mokėti %.'
 msg_peaceful_disabled: '&bNeutraliteto negalima paskelbti visame pasaulyje.'
 msg_you_paid: '&bSumokėjote %s, kad paskelbtumėte neutralitetą.'
 msg_nation_set_peace: '&bSėkmingai pakeistas valstybės neutraliteto statusas.'
@@ -598,7 +598,7 @@ msg_cache_block_error_town_outsider: '&cPašaliečiams neleidžiama %s.'
 msg_err_cant_afford_tp_town: '&cNeturite pakankamai lėšų teleportuotis į %s.'
 msg_err_not_public: '&cTas miestas neviešas.'
 msg_err_not_open: '&c Miesto pavadinimu %s durys nėra atviros visiems. Paprašykite mero ar asistento, kad pakviestų Jus prie jo prisijungti.'
-msg_err_town_spawn_forbidden: '&cKelionės į miestų atsiradimo vietas draudžiamos.'
+msg_err_town_spawn_forbidden: '&cKelionė į miesto atsiradimo vietą draudžiama.'
 msg_err_town_spawn_nation_forbidden: '&cKelionės į miestų, esančių Jūsų valstybėje, atsiradimo vietas draudžiamos.'
 msg_err_town_spawn_ally_forbidden: '&cKelionės į miestų, kurie priklauso su Jumis aljansą sudariusiai valstybei, atsiradimo vietas draudžiamos.'
 msg_err_public_spawn_forbidden: '&cKelionės į viešas miestų atsiradimo vietas draudžiamos.'
@@ -723,64 +723,64 @@ msg_you_have_undeclared_an_outlaw: '%s nebėra nepageidaujamas mieste pavadinimu
 msg_err_player_not_an_outlaw: 'Tas žaidėjas nebuvo paskelbtas nepageidaujamu.'
 msg_err_outlaw_in_open_town: 'Jūs negalite prisijungti prie atviro miesto, kuris Jus yra paskelbęs nepageidaujamu.'
 msg_you_are_an_outlaw_in_this_town: '&4Būkite atsargus, %s laiko Jus nepageidaujamu, todėl žūtis šiame mieste galėtų reikšti kalėjimą.'
-msg_err_town_not_close_enough_to_nation: '%s''s homeblock isn''t near enough to your capital''s homeblock to join your nation.'
-msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too far away from your nation''s capital''s homeblock and has been removed from your nation.'
+msg_err_town_not_close_enough_to_nation: '%s pagrindinis sklypas yra nepakankamai arti Jūsų sostinės pagrindinio sklypo, kad galėtų prisijungti prie Jūsų valstybės.'
+msg_nation_town_moved_their_homeblock_too_far: '%s pagrindinis sklypas buvo perkeltas pernelyg toli nuo Jūsų valstybės sostinės pagrindinio sklypo ir buvo išmestas iš Jūsų valstybės.'
 #Added in 0.33
-msg_err_invalid_radius_number: '&cInvalid radius amount. Use an %s or less.'
+msg_err_invalid_radius_number: '&cNetinkamas spindulio ilgis. Rašykite %s arba mažiau.'
 #Added in 0.34
-msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached.'
+msg_err_max_residents_per_town_reached: '&cDidžiausias gyventojų skaičius (%s) buvo pasiektas.'
 #Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
-msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
-msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
-outpost_plu: 'Outposts'
+msg_err_resident_doesnt_meet_invite_cooldown: '&cŽaidėjas %s nebuvo pakankamai ilgai serveryje, kad būtų galima jį pakviesti į miestą, prašome palaukti.'
+msg_cant_toggle_pvp_outsider_in_town: 'Jūsų ieste yra pašalietis, todėl Jūs negalite pakeisti PVP statuso!'
+msg_err_unclaim_not_outpost: 'Negalima užimti, šis sklypas nėra tolimoji teritorija!'
+outpost_plu: 'Tolimosios teritorijos'
 #Added in 0.36
-msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'
+msg_err_not_enough_residents: 'Mieste yra nepakankamai gyventojų, kad būtų galima tą daryti.'
 #Added in 0.37
-msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
+msg_err_friendly_fire_disable: 'Draugiška ugnis išjungta!'
 #Added in 0.38
-msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
+msg_claim_error: '&cKitas įskiepis sustabdė (%s)/(%s) miesto sklypų užėmimą, nebuvo galima užbaigti operacijos.'
 #Added in 0.39
-msg_err_town_spawn_forbidden_war: '&cTown spawn travel is only allowed during war.'
-msg_err_town_spawn_forbidden_peace: '&cTown spawn travel is forbidden during war.'
-msg_err_town_spawn_nation_forbidden_war: '&cTown spawn travel to other towns in your nation is only allowed during war.'
-msg_err_town_spawn_nation_forbidden_peace: '&cTown spawn travel to other towns in your nation is forbidden during war.'
-msg_err_town_spawn_ally_forbidden_war: '&cTown spawn travel to towns allied with your nation is only allowed during war.'
-msg_err_town_spawn_ally_forbidden_false: '&cTown spawn travel to towns allied with your nation is forbidden during war.'
-msg_err_public_spawn_forbidden_war: '&cPublic spawn travel to other towns is only allowed during war.'
-msg_err_public_spawn_forbidden_peace: '&cPublic spawn travel to other towns is forbidden during war.'
+msg_err_town_spawn_forbidden_war: '&cKelionė į miesto atsiradimo vietą yra įmanoma tik karo metu.'
+msg_err_town_spawn_forbidden_peace: '&cKelionė į miesto atsiradimo vietą yra draudžiama karo metu.'
+msg_err_town_spawn_nation_forbidden_war: '&cKelionės į kitų miestų, esančių Jūsų valstybėje, atsiradimo vietas yra įmanomos tik karo metu.'
+msg_err_town_spawn_nation_forbidden_peace: '&cKelionės į miestų, esančių Jūsų valstybėje, atsiradimo vietas yra draudžiamos karo metu.'
+msg_err_town_spawn_ally_forbidden_war: '&cKelionės į kitų miestų, kurie yra Jūsų valstybės sąjungininkai, atsiradimo vietas yra įmanomos tik karo metu.'
+msg_err_town_spawn_ally_forbidden_false: '&cKelionės į kitų miestų, kurie yra Jūsų valstybės sąjungininkai, atsiradimo vietas yra draudžiamos karo metu.'
+msg_err_public_spawn_forbidden_war: '&cKelionės į viešas miestų atsiradimo vietas yra įmanomos tik karo metu.'
+msg_err_public_spawn_forbidden_peace: '&cKelionės į viešas miestų atsiradimo vietas yra draudžiamos karo metu.'
 #Added in 0.40
-mayor_help_9: 'Attempt to unclaim an outpost'
+mayor_help_9: 'Mėginti atsisakyti tolimosios teritorijos'
 #Added in 0.41 (Invite-Update)
-invite_plu: 'Invites'
-invite_sent_by: 'Invite Sent By'
-invite_help_1: 'Accept an invite to join a town'
-invite_help_2: 'Decline an invite to join a town'
-invite_help_4: 'Decline all invites to join a town'
-invite_help_3: 'List all of your invites'
-town_invite_help_1: 'Invite a player to your town'
-town_invite_help_2: 'Revoke an invite, that was sent to a player'
-town_invite_help_3: 'Lists all of your sent invites'
-town_invite_help_4: 'Lists all of the invites you''ve received'
-town_invite_help_5: 'Accept a request to join a nation'
-town_invite_help_6: 'Deny a request to join a nation'
-nation_invite_help_1: 'Invite a town to your nation'
-nation_invite_help_2: 'Revoke an invite, that was sent to a town'
-nation_invite_help_3: 'List all of the invites sent to towns'
-nation_ally_help_1: 'Try to add an ally to your nation'
-nation_ally_help_2: 'Try to remove an ally of your nation'
-nation_ally_help_3: 'Lists all of the ally-requests you''ve sent'
-nation_ally_help_4: 'Lists all of the ally-requests you''ve received'
-nation_ally_help_5: 'Accept a request to ally a nation'
-nation_ally_help_6: 'Deny a request to ally a nation'
-nation_ally_help_7: 'Revoke an ally request'
-msg_player_denied_all_invites: "All of your received invites have been denied."
-msg_err_player_no_invites: '&cYou do not have any invites!'
-msg_err_player_has_multiple_invites: '&cYou have multiple invites, please specify!'
-msg_err_player_has_too_many_invites: '%s has too many invites, ask them to decline some, before inviting again.'
-msg_err_player_already_invited: '&bYou have already invited %s to join your town!'
-msg_err_town_no_invites: '&bTown does not have any invites!'
-msg_err_town_specify_invite: '&cPlease specify the invite!'
+invite_plu: 'Pakvietimai'
+invite_sent_by: 'Pakvietimą išsiuntė'
+invite_help_1: 'Priimti prisijungimo į miestą pakvietimą'
+invite_help_2: 'Atmesti prisijungimo į miestą pakvietimą'
+invite_help_4: 'Atmesti visus prisijungimo į miestą pakvietimus'
+invite_help_3: 'Išvardyti visus savo pakvietimus'
+town_invite_help_1: 'Pakviesti žaidėją prisijungti prie Jūsų miesto'
+town_invite_help_2: 'Atšaukti žaidėjui nusiųstą pakvietimą'
+town_invite_help_3: 'Išvardija visus Jūsų išsiųstus pakvietimus'
+town_invite_help_4: 'Išvardija visus Jūsų gautus pakvietimus'
+town_invite_help_5: 'Priimti prisijungimo prie valstybės pakvietimą'
+town_invite_help_6: 'Atmesti prisijungimo prie valstybės pakvietimą'
+nation_invite_help_1: 'Pakviesti miestą prisijungti prie valstybės'
+nation_invite_help_2: 'Atšaukti miestui nusiųstą pakvietimą'
+nation_invite_help_3: 'Išvardyti visus miestams siųstus pakvietimus'
+nation_ally_help_1: 'Bandyti sudaryti aljansą su kita valstybe'
+nation_ally_help_2: 'Bandyti atšaukti aljansą su kita valstybe'
+nation_ally_help_3: 'Išvardija visus Jūsų siųstus aljanso pasiūlymus'
+nation_ally_help_4: 'Išvardija visus Jūsų gautus aljanso pasiūlymus'
+nation_ally_help_5: 'Priimti pakvietimą sudaryti aljansą'
+nation_ally_help_6: 'Atmesti pakvietimą sudaryti aljansą'
+nation_ally_help_7: 'Atšaukti pakvietimą sudaryti aljansą'
+msg_player_denied_all_invites: "Visi Jūsų gauti pakvietimai buvo atmesti."
+msg_err_player_no_invites: '&cJūs neturite jokių pakvietimų!'
+msg_err_player_has_multiple_invites: '&cJūs turite gausybę pakvietimų, prašome patikslinti!'
+msg_err_player_has_too_many_invites: '%s turi per daug pakvietimų, paprašykite jo atmesti keletą prieš Jums išsiunčiant pakvietimą iš naujo.'
+msg_err_player_already_invited: '&bJūs jau pakvietėte %s prisijungti prie savo miesto!'
+msg_err_town_no_invites: '&bMiestas neturi jokių pakvietimų!'
+msg_err_town_specify_invite: '&cPrašome nurodyti pakvietimą!'
 msg_err_town_has_too_many_invites: '&bTown %s has too many invites, ask them to decline some, before inviting again.'
 msg_err_town_sent_too_many_invites: '&bTown has sent too many invites, revoke some before trying again!'
 msg_err_town_already_invited: '&bYou have already invited %s to join your nation!'
