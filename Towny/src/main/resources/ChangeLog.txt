@@ -9236,3 +9236,4 @@ v0.92.0.11:
     - Default: 999999999
     - The Maximum price that a town can be put for sale at.
     - This refers to the price that someone could pay if they ran /t buytown, to buy a town that has been put up for sale.
+  - Add 2 utility methods to BlockLocation object.
