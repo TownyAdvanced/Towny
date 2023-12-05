@@ -560,7 +560,7 @@ msg_set_wild_regen: '&bУспішно змінено відновлення ди
 msg_set_use_towny_on: '&bТепер у цьому світі увімкнені правила towny.'
 msg_set_use_towny_off: '&cУ цьому світі towny вимкнено.'
 msg_error_must_be_int: '&bСума повинна бути цілочисельною.'
-msg_error_input_must_be_int: 'Має бути цілим числом'
+msg_error_input_must_be_int: '&c%sмає бути цілим числом'
 msg_error_must_be_num: '&bПовинно бути числом.'
 msg_error_input_must_be_num: 'Повинно бути числом'
 msg_must_specify_amnt: '&bПотрібно вказати кількість. Наприклад: %s 54'
