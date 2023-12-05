@@ -1522,7 +1522,7 @@ status_trustedlist: '已信任'
 msg_click_to_edit: '&b点击编辑。'
 permission_gui_header: 'Towny权限面板'
 msg_last_edited: '&7&o上一次更改于%s，由%s更改。'
-msg_trusted_added: '&b已在此%2$s中信任%1$s。' #Last %s is either town or townblock
+msg_trusted_added: '&b成功在此%2$s中信任%1$s。' #Last %s is either town or townblock
 msg_already_trusted: '&b%s已被信任于此%s。'
 msg_trusted_added_2: '&b%s将你列入了%s%s的信任列表中。' #Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s未受此%s的信任。'
