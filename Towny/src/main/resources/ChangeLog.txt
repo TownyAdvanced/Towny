@@ -9237,3 +9237,7 @@ v0.92.0.11:
     - The Maximum price that a town can be put for sale at.
     - This refers to the price that someone could pay if they ran /t buytown, to buy a town that has been put up for sale.
   - Add 2 utility methods to BlockLocation object.
+  - Bump org.apache.logging.log4j:log4j-core from 2.21.1 to 2.22.0.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.6.2 to 3.6.3.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.47.0 to 3.56.0.
+  - Bump net.tnemc:Reserve from 0.1.5.0 to 0.1.5.4.
