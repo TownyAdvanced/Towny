@@ -52,12 +52,12 @@ help_7: 'Sklypų pagalbinės komandos.'
 help_8: 'Towny pagalbinės komandos.'
 help_9: 'Towny administratoriaus pagalbinės komandos.'
 towny_help_0: "Pagrindinės Towny pagalbinės komandos"
-towny_help_1: "Parodyti artimiausių miesto sklypų žemėlapį"
+towny_help_1: "Parodo artimiausių miesto sklypų žemėlapį"
 towny_help_2: "Parodyti kainas, kurios reikalauja Ekonomikos įskiepio"
 towny_help_3: "Parodyti rekordus"
 towny_help_4: "Parodyti, kiek liko laiko iki naujos dienos"
-towny_help_5: "Parodyti statistiką"
-towny_help_6: "Parodyti Towny versiją"
+towny_help_5: "Parodo statistiką"
+towny_help_6: "Parodo Towny versiją"
 towny_top_help_0: "Išrikiuoti geriausius gyventojus pagal nurodytą kriterijų."
 towny_top_help_1: "Išrikiuoti geriausius žemvaldžius pagal nurodytą kriterijų."
 towny_top_help_2: "Išrikiuoti turtingiausius pagal nurodytą kriterijų."
@@ -103,7 +103,7 @@ town_list_help_5: "Išrikiuoti miestus pagal plotą nurodytame puslapyje."
 town_list_help_6: "Išrikiuoti miestus pagal prisijungusių gyventojų skaičių nurodytame puslapyje."
 town_set_help_0: "Nustatyti savo miesto lentą."
 town_set_help_1: "Nustatyti savo miesto pagrindinį sklypą, kuriame stovima."
-town_set_help_2: "Nustatyti atsiradimo vietą savo miesto pagrindiniame sklype arba tolimosios teritorijos atsiradimo vietą, kai stovima toje tolimojoje teritorijoje."
+town_set_help_2: "Nustato atsiradimo vietą savo miesto pagrindiniame sklype arba tolimosios teritorijos atsiradimo vietą, kai stovima toje tolimojoje teritorijoje."
 town_set_help_3: "Naudokite /town set perm ? tolimesnėns komandoms."
 town_set_help_4: "Nustatyti savo miesto mokesčio dydį."
 town_set_help_5: "Nustatyti specialius dydžius mokesčiams už sklypus."
@@ -121,14 +121,14 @@ town_jail_help_4: "Įkalinti gyventoją nurodytame kalėjime bei nurodytoje kame
 town_jail_help_5: "Įkalinti gyventoją pagrindiniame kalėjime nurodytam laikui, išreikštu valandomis, nurodžius užstato dydį."
 town_jail_help_6: "Įkalinti gyventoją nurodytame kalėjime nurodytam laikui, išreikštu valandomis, nurodžius užstato dydį."
 town_jail_help_7: "Įkalinti gyventoją nurodytame kalėjime bei nurodytoje kameroje nurodytam laikui, išreikštu valandomis, nurodžius užstato dydį."
-town_jail_help_8: "Paleisti gyventoją į laisvę."
-town_purge_help: "Pašalinti gyventojus, kurie nebuvo prisijungę nurodytą laiką, išreikštą dienomis."
-town_trust_help_0: "Pridėti žaidėją į miesto patikimų žmonių sąrašą."
-town_trust_help_1: "Pašalinti žaidėją iš miesto patikimų žmonių sąrašo."
-town_trust_help_2: "Išvardyti miesto patikimus žmones."
-town_towntrust_help_0: "Pridėti miestą į miesto patikimų miestų sąrašą."
-town_towntrust_help_1: "Pašalinti miestą iš miesto patikimų miestų sąrašo."
-town_towntrust_help_2: "Išvardyti miesto patikimus miestus."
+town_jail_help_8: "Paleidžia gyventoją į laisvę."
+town_purge_help: "Pašalina gyventojus, kurie nebuvo prisijungę nurodytą laiką, išreikštą dienomis."
+town_trust_help_0: "Prideda žaidėją į miesto patikimų žmonių sąrašą."
+town_trust_help_1: "Pašalina žaidėją iš miesto patikimų žmonių sąrašo."
+town_trust_help_2: "Išvardija miesto patikimus žmones."
+town_towntrust_help_0: "Prideda miestą į miesto patikimų miestų sąrašą."
+town_towntrust_help_1: "Pašalina miestą iš miesto patikimų miestų sąrašo."
+town_towntrust_help_2: "Išvardija miesto patikimus miestus."
 mayor_help_3: 'Užimti teritoriją, kuri nebūtinai liečiasi su pagrindine miesto teritorija'
 mayor_help_4: 'Užimti teritoriją aplink save X spinduliu'
 mayor_help_5: 'Užimti teritoriją didžiausiu spinduliu'
@@ -144,11 +144,11 @@ nation_help_6: 'Sukurti naują valstybę'
 nation_help_7: 'Išvardyti valstybės vadovo komandas'
 nation_help_8: 'Sukurti naują valstybę'
 nation_help_9: 'Išvardyti visus prisijungusius valstybės gyventojus'
-nation_help_11: "Išvardyti visus valstybės miestus."
-nation_help_12: "Išvardyti visus valstybės sąjungininkus."
-nation_help_13: "Išvardyti visus valstybės priešus."
+nation_help_11: "Išvardija visus valstybės miestus."
+nation_help_12: "Išvardija visus valstybės sąjungininkus."
+nation_help_13: "Išvardija visus valstybės priešus."
 nation_help_14: "Naudojama prisijungti prie atvirų valstybių."
-nation_help_15: "Įnešti pinigų į valstybės banką."
+nation_help_15: "Įneša pinigų į valstybės banką."
 nation_help_16: "Naudojama panaikinti savo valstybę."
 nation_help_17: "Naudojama suteikti arba pašalinti gyventojų rangus."
 nation_help_18: "Naudokite /n rank ? tolimesnėms komandoms."
@@ -171,10 +171,10 @@ nation_set_help_7: "Nustatyti valstybės lentos žinutę."
 nation_set_help_8: "Nustatyti valstybės atsiradimo vietą."
 nation_set_help_9: "Nustatyti /n spawn kainą."
 nation_set_help_10: "Nustatyti žemėlapio spalvą, naudojamą kartografavimo įskiepių."
-nation_toggle_help_0: "Paskelbti valstybės neutralitetą."
-nation_toggle_help_1: "Paskelbti valstybę vieša, leidžiant nepiliečiams naudotis Jūsų valstybės /n spawn."
-nation_toggle_help_2: "Paskelbti valstybę atvira, leidžiant miestams prisijungti prie jos be kvietimo."
-nation_toggle_help_3: "Įtvirtinti procentinius mokesčius, todėl miestai mokėtų tam tikrą dalį pinigų nuo savo banko vietoj fiksuoto dydžio."
+nation_toggle_help_0: "Pakeičia valstybės taikumo būseną."
+nation_toggle_help_1: "Paskelbia valstybę vieša, leidžiant nepiliečiams naudotis Jūsų valstybės /n spawn."
+nation_toggle_help_2: "Paskelbia valstybę atvira, leidžiant miestams prisijungti prie jos be pakvietimo."
+nation_toggle_help_3: "Įtvirtina procentinius mokesčius, todėl miestai mokėtų tam tikrą dalį pinigų nuo savo banko vietoj fiksuoto dydžio."
 king_help_1: 'Valstybės Vadovo Komandos'
 king_help_2: 'Tvarkyti aljansų sąrašą.'
 king_help_3: 'Tvarkyti priešiškų valstybių sąrašą.'
@@ -197,10 +197,10 @@ res_10: "Naudokite /res jail ? tolimesnėms komandoms."
 res_11: "Naudokite /res toggle ? tolimesnėms komandoms."
 res_12: "Naudokite /res set ? tolimesnėms komandoms."
 res_13: "Teleportuotis į savo miestą ar lovą."
-res_toggle_help_0: "Pakeisti sklypų PVP statusą."
-res_toggle_help_1: "Pakeisti sklypų ugnies sklidimo statusą."
-res_toggle_help_2: "Pakeisti savo sklypo priešiškų mobų atsiradimo nuostatą."
-res_toggle_help_3: "Įjungti arba išjungti savo sklypų sprogimų statusą."
+res_toggle_help_0: "Pakeisti savo sklypų PVP būseną."
+res_toggle_help_1: "Pakeisti sklypų ugnies sklidimo būseną."
+res_toggle_help_2: "Pakeisti savo sklypų monstrų atsiradimo būseną."
+res_toggle_help_3: "Pakeisti savo sklypų sprogimų būseną."
 res_toggle_help_4: "Nustatyti gebėjimą stebėti sklypų ribas."
 res_toggle_help_5: "Nustatyti funkciją, leidžiančią stebėti pastovias sklypų ribas."
 res_toggle_help_6: "Nustatyti funkciją, leidžiančią stebėti miestų ribas."
@@ -276,7 +276,7 @@ admin_panel_14: "Prieverstinai išsaugoti arba įkelti Jūsų duomenų bazę"
 admin_panel_15: "Paleisti \"naujos valandos\" kodą"
 admin_panel_16: "Pašalinti senesnius gyventojus"
 townyadmin_town_help_0: "Sukurti miestą su duotu pavadinimu ir meru."
-townyadmin_town_help_1: "Parodyti miesto statuso lentelę."
+townyadmin_town_help_1: "Parodyti miesto informacijos lentelę."
 townyadmin_town_help_2: "Pridėti arba išvaryti gyventojus iš miesto."
 townyadmin_town_help_3: "Pervadinti miestą."
 townyadmin_town_help_4: "Sunaikinti miestą."
@@ -293,17 +293,17 @@ townyadmin_town_help_14: "Išimti pinigus iš miesto banko."
 townyadmin_town_help_15: "Atidaryti miesto banko operacijų knygą."
 townyadmin_town_help_16: "Pakeisti miesto nepageidaujamųjų žmonių sąrašą."
 townyadmin_town_help_17: "Priversti miestą palikti savo valstybę."
-townyadmin_town_help_18: "Išimti miesto okupacijos statusą."
+townyadmin_town_help_18: "Išimti miesto okupacijos būseną."
 townyadmin_town_toggle_help_0: "Pakeisti Miesto PVP funkciją."
 townyadmin_town_toggle_help_1: "Pakeisti Miesto Priverstinio PVP funkciją, užkertant kelią miesto merams išjungti pvp."
-townyadmin_town_toggle_help_2: "Nustatyti miesto viešumo statusą, leidžiant ir negyvenantiems žaidėjams teleportuotis čia."
+townyadmin_town_toggle_help_2: "Pakeisti miesto viešumo būseną, leidžiant ir negyvenantiems žaidėjams teleportuotis čia."
 townyadmin_town_toggle_help_3: "Pakeisti miesto sprogimų nustatymą."
 townyadmin_town_toggle_help_4: "Pakeisti miesto gaisrų nustatymą."
 townyadmin_town_toggle_help_5: "Pakeisti nustatymą dėl priešingų mobų atsiradimo mieste."
 townyadmin_town_toggle_help_6: "Pakeisti miesto mokėsčių procento nustatymą."
 townyadmin_town_toggle_help_7: "Pakeisti miesto atvirumo nustatymą, leidžiantį žmonėms prisijungti prie miesto be pakvietimo."
 townyadmin_nation_help_0: "Sukurti valstybę su duotu pavadinimu ir sostine."
-townyadmin_nation_help_1: "Parodyti valstybės būseną."
+townyadmin_nation_help_1: "Parodyti valstybės informacijos lentelę."
 townyadmin_nation_help_2: "Pridėti miestus iš valstybės."
 townyadmin_nation_help_3: "Pašalinti miestus iš valstybės."
 townyadmin_nation_help_4: "Pervadinti valstybę."
@@ -426,12 +426,12 @@ msg_payed_plot_cost: '&bSumokėta %s už %s sklypą/-us %s'
 msg_payed_resident_tax: '&b Sumokėtas gyventojo mokestis '
 msg_bankrupt_town: ' neturėjo pakankamai lėšų išlikti miestu.'
 msg_bankrupt_nation: ' neturėjo pakankamai lėšų išlikti valstybe.'
-msg_nation_not_peaceful: '&bValstybė neturėjo pakankamai lėšų išlaikyti savo neutralitetui.'
-msg_nation_cant_peaceful: '&bValstybė neturėjo pakankamai lėšų, kad galėtų paskelbti neutralitetą. Jūs privalote turėti pakankamai pinigų, kad galėtumėte kasdien mokėti %.'
-msg_peaceful_disabled: '&bNeutraliteto negalima paskelbti visame pasaulyje.'
-msg_you_paid: '&bSumokėjote %s, kad paskelbtumėte neutralitetą.'
-msg_nation_set_peace: '&bSėkmingai pakeistas valstybės neutraliteto statusas.'
-msg_nation_allow_peaceful: '&bValstybių leidimai, kad jos galėtų išlaikyti neutralitetą, yra: %s'
+msg_nation_not_peaceful: '&bValstybė neturėjo pakankamai lėšų išlaikyti savo taikios būsenos.'
+msg_nation_cant_peaceful: '&bValstybė neturi pakankamai lėšų, kad galėtų tapti taiki. Jūs privalote turėti pakankamai pinigų, kad galėtumėte kasdien mokėti %.'
+msg_peaceful_disabled: '&bValstybės taika yra išjungta visame pasaulyje.'
+msg_you_paid: '&bSumokėjote %s, kad taptumėte taikūs.'
+msg_nation_set_peace: '&bSėkmingai pakeista valstybės taikos būsena.'
+msg_nation_allow_peaceful: '&bValstybių leidimai, kad jos galėtų išlikti taikios, yra: %s'
 msg_mobremoval_world: '&bBlokuoti monstrų atsiradimą pasaulyje: %s'
 msg_mobremoval_town: '&bLeisti blokuoti monstrų atsiradimą miestuose: %s'
 msg_nation_peaceful: '&bJūsų valstybė dabar yra'
@@ -517,7 +517,7 @@ msg_town_rename_disabled: '&bTown Renaming Disabled'
 msg_town_set_name: '&b%s pervadino miestą į %s.'
 msg_nation_set_name: '&b%s pervardino valstybę į %s.'
 msg_changed_pvp: '&c%s PVP režimas buvo %s.'
-msg_changed_public: '&cMiesto viešumo statusas dabar yra %s.'
+msg_changed_public: '&cMiesto viešumo būsena dabar yra %s.'
 msg_changed_expl: '&cDabar mieste pavadinimu %s sprogimai yra %s.'
 msg_changed_fire: '&cDabar mieste pavadinimu %s ugnies sklidimas yra %s.'
 msg_changed_mobs: '&cDabar mieste pavadinimu %s monstrų atsiradimas yra %s.'
@@ -731,7 +731,7 @@ msg_err_invalid_radius_number: '&cNetinkamas spindulio ilgis. Rašykite %s arba 
 msg_err_max_residents_per_town_reached: '&cDidžiausias gyventojų skaičius (%s) buvo pasiektas.'
 #Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&cŽaidėjas %s nebuvo pakankamai ilgai serveryje, kad būtų galima jį pakviesti į miestą, prašome palaukti.'
-msg_cant_toggle_pvp_outsider_in_town: 'Jūsų ieste yra pašalietis, todėl Jūs negalite pakeisti PVP statuso!'
+msg_cant_toggle_pvp_outsider_in_town: 'Jūsų mieste yra pašalietis, todėl Jūs negalite pakeisti PVP būsenos!'
 msg_err_unclaim_not_outpost: 'Negalima užimti, šis sklypas nėra tolimoji teritorija!'
 outpost_plu: 'Tolimosios teritorijos'
 #Added in 0.36
@@ -962,7 +962,7 @@ msg_err_public_nation_spawn_forbidden_peace: '&cKelionės į viešas valstybių 
 msg_spawn_cost_set_to: '&b%s nustatė /%s atsiradimo vietos naudojimo mokestį į %s'
 msg_err_cannot_set_spawn_cost_more_than: '&cJūs negalite nustatyti atsiradimo vietos mokesčio aukštesnio kaip %s'
 msg_err_ally_isnt_public: '&cJūsų sąjungininkas %s nėra įjungęs viešos atsiradimo vietos. Teleportacija atmesta.'
-msg_nation_changed_public: '&cValstybės viešumo statusas dabar yra %s.'
+msg_nation_changed_public: '&cValstybės viešumo būsena dabar yra %s.'
 #Added in 0.47:
 status_plot_type: 'Sklypo tipas:'
 msg_no_self_jailing: 'Jūs negalite įkalinti savęs.'
@@ -1043,7 +1043,7 @@ msg_admin_has_given_you_a_plot: 'Administratorius Jums užėmė sklypą: %s'
 msg_town_forcemobs_setting_set_to: 'Jūsų miestui %s buvo priverstinai pakeistas monstrų nustatymas į %s'
 msg_town_forcepvp_setting_set_to: 'Jūsų miestui %s buvo priverstinai pakeistas PVP nustatymas į %s'
 msg_town_forcedisabledpvp_setting_set_to: 'The town %s has had their admindisabledpvp setting forced to %s'
-msg_nation_changed_open: '&cValstybės atvirumo statusas dabar yra %s.'
+msg_nation_changed_open: '&cValstybės atvirumo būsena dabar yra %s.'
 msg_err_already_in_a_nation: 'Jūsų miestas jau yra valstybėje.'
 msg_err_nation_not_open: '&cValstybės %s durys nėra atviros visiems. Paprašykite vadovo ar asistento, kad pakviestų Jus prie jo prisijungti.'
 msg_err_nation_homeblock_in_another_world: '&cJūsų miesto pagrindinis sklypas nėra tame pačiame pasaulyje kaip valstybės sostinės pagrindinis sklypas.'
@@ -1203,7 +1203,7 @@ msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these co
 msg_confirm_purchase: 'Doing this will cost %s. Continue?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
 msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and towns'' banks.'
-bonus_townblocks: 'bonus townblocks'
+bonus_townblocks: 'papildomi miesto sklypai'
 #Added in 0.80
 nomad_sing: 'Bastūnas'
 msg_new_town_advice: 'Congratulations on creating your town! Your town will pay a daily upkeep which is currently valued at %s. You can deposit money in your town''s bank using ''/t deposit #''. Without money to pay the upkeep your town will be deleted. You can see your costs anytime using /towny prices. Next daily upkeep taken in %s.'
@@ -1266,7 +1266,7 @@ msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled 
 msg_universe_attribution: 'Autoriai: '
 msg_universe_contributors: ' And contributors like you. '
 msg_universe_heart: '<3'
-townblock_plu: 'TownBlocks'
+townblock_plu: 'Miesto sklypai'
 #Added in 0.92
 #Town Ruins
 msg_newhour_success: 'newhour command executed successfully'
@@ -1280,7 +1280,7 @@ msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command b
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined state for %d more hours. Use ''/town reclaim'' to save the town and become mayor.'
 msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
 msg_time_until_reclaim_available: 'Time until reclaim available: %d hours.'
-msg_reclaim_available: 'Reclaim available.'
+msg_reclaim_available: 'Galimas atsiėmimas.'
 #Added in 0.93
 msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim canceled. You cannot unclaim this area at this time.'
@@ -1291,16 +1291,16 @@ msg_comptype_balance: 'Banko balansas'
 msg_comptype_online: 'Prisijungę žaidėjai'
 msg_comptype_towns: 'Miestų skaičius'
 msg_comptype_name: 'Abėcėlės tvarka'
-msg_comptype_open: 'Open Status'
+msg_comptype_open: 'Atvirumo būsena'
 msg_status_npc: '&c%s is not a real player, and is limited to Towny only.'
-npc_created: 'Created:'
+npc_created: 'Sukurtas:'
 msg_no_funds_claim_plot: '&cYou cannot afford to claim the plot costing %s.'
 msg_no_funds_claim_plot_group: '&cYou cannot afford to claim the %s plots costing %s.'
-status_town_title_peaceful: '&b(Peaceful)'
+status_town_title_peaceful: '&b(Taikus)'
 #Added in 0.95
-status_public: '&b(Public)'
+status_public: '&b(Viešas)'
 msg_days: ' dienos'
-msg_comptype_public: 'Public Status'
+msg_comptype_public: 'Viešumo būsena'
 towny_prices_title: 'Kainos'
 towny_prices_town_nation: '&e[New] &2Town: &a%s &8| &2Nation: &a%s'
 towny_prices_reclaim: '&e[Reclaim] &2Town: &a%s'
@@ -1332,15 +1332,15 @@ msg_town_destroyed_by_nation_tax_multiple: '&bThe following conquered towns coul
 msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the nation tax.'
 #Added in 0.97
 status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
-msg_comptype_ruined: 'Ruined Status'
-msg_comptype_bankrupt: 'Bankrupt Status'
-msg_ruined: '&c(Ruined)'
-msg_bankrupt: '&c(Bankrupt)'
+msg_comptype_ruined: 'Griuvėsių būsena'
+msg_comptype_bankrupt: 'Bankroto būsena'
+msg_ruined: '&c(Griuvėsiai)'
+msg_bankrupt: '&c(Bankrutavęs)'
 #Added in 0.98
-msg_del_town2: '&bThe town of %s has been deleted!'
-msg_ruin_town: '&bThe town of %s fell into ruin!'
-gui_title_select_plot_type: 'Select PlotType'
-gui_title_no_restrictions: 'No restrictions for this plottype.'
+msg_del_town2: '&bMiestas %s buvo ištrintas!'
+msg_ruin_town: '&bMiestas %s sugriuvo!'
+gui_title_select_plot_type: 'Pasirinkti sklypo tipą'
+gui_title_no_restrictions: 'Jokių draudimų šiam sklypo tipui.'
 gui_title_towny_allowedblocks: '%s AllowedBlocks List'
 gui_title_towny_wildsblocks: 'Towny WildsBlocks List'
 gui_title_towny_itemuse: 'Towny ItemUse List'
@@ -1414,12 +1414,12 @@ msg_town_merge_err_too_many_purchased_townblocks: '&cMerge failed: Too many purc
 msg_town_merge_warning: '&cWarning: If accepted, merging with %s will cost %s.'
 msg_town_merge_debt_warning: '&cWarning: %s is currently in debt, you will have to pay their debt if accepted.'
 msg_town_merge_cost_breakdown: '&bCost breakdown: Base cost: %s, Townblock cost: %s, Bankruptcy cost: %s, BonusBlock cost: %s'
-msg_town_merge_failed: '&cMerge failed.'
-msg_town_merge_cancelled: '&cMerge canceled.'
+msg_town_merge_failed: '&cSusijungimas nepavyko.'
+msg_town_merge_cancelled: '&cSusijungimas atšauktas.'
 msg_town_merge_success: '&bThe town of %s, owned by %s, has successfully merged into the town of %s.'
 #Reasons for withdrawing/depositing for the bankhistory book.
-msg_town_merge_cost_withdraw: 'Town Merge Costs'
-msg_town_merge_transaction_reason: 'Town Merge'
+msg_town_merge_cost_withdraw: 'Miestų susijungimas kainuoja'
+msg_town_merge_transaction_reason: 'Miestų susijungimas'
 towny_prices_town_merge: '&e[Merging] &2Base Cost: &a%s &8| &2Per Plot: &a%s'
 #Added in 0.101
 msg_err_nation_not_allied_with: '&cYour nation isn''t allied with %s.'
@@ -1684,7 +1684,7 @@ msg_you_have_been_given_bonus_blocks: 'You have been given %s bonus townblocks.'
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Your town cannot purchase any more bonus blocks. Maximum amount reached.'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
-msg_err_capital_cannot_be_peaceful: 'Capital cities cannot toggle peaceful status.'
+msg_err_capital_cannot_be_peaceful: 'Sostinės negali pakeisti taikumo būsenos.'
 #Message shown as feedback for /t toggle nationzone command.
 msg_changed_nationzone: 'Nation Zone surrounding town is now %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
@@ -1744,7 +1744,7 @@ msg_confirmation_timed_out: 'Confirmation Timed Out.'
 tc_player_channel_sound_muted: 'The channel sound has been muted'
 tc_player_channel_sound_unmuted: 'The channel sound has been unmuted'
 #Added in 0.135
-msg_cant_toggle_pvp_outsider_in_plot: 'There is an outsider in your plot, you can''t change your pvp status!'
+msg_cant_toggle_pvp_outsider_in_plot: 'Jūsų sklype yra pašalietis, todėl Jūs negalite pakeisti PVP būsenos!'
 #Added in 0.136
 msg_view_on_web: '&7Click to view on the web.'
 #Added in 0.137
