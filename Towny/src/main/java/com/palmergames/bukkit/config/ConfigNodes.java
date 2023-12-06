@@ -2231,6 +2231,7 @@ public enum ConfigNodes {
 			"600s",
 			"",
 			"# The time that the town and nation bank accounts' balances are cached for, in seconds.",
+			"# This time is also used for the resident tax-owing value.",
 			"# Default of 600s is equal to ten minutes. Requires the server to be stopped and started if you want to change this.",
 			"# Cached balances are used for PlaceholderAPI placeholders, town and nation lists."),
 	ECO_TOWN_PREFIX(

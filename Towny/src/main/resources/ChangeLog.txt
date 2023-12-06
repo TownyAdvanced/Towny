@@ -9241,3 +9241,8 @@ v0.92.0.11:
   - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.6.2 to 3.6.3.
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.47.0 to 3.56.0.
   - Bump net.tnemc:Reserve from 0.1.5.0 to 0.1.5.4.
+0.100.0.9:
+  - New PAPIPlaceholder: %townyadvanced_daily_resident_tax%
+    - A placeholder that shows how much a resident will pay daily in taxes.
+    - This number is the total of any town tax as well as any plot taxes they owe.
+    - Taxes owed are cached for a period of time using the config's economy.bank_account_cache_timeou setting.
