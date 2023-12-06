@@ -9246,3 +9246,5 @@ v0.92.0.11:
     - A placeholder that shows how much a resident will pay daily in taxes.
     - This number is the total of any town tax as well as any plot taxes they owe.
     - Taxes owed are cached for a period of time using the config's economy.bank_account_cache_timeou setting.
+  - New PAPIPlaceholder: %townyadvanced_daily_resident_tax_unformatted%
+    - A placeholder that shows how much a resident will pay daily in taxes, but unformatted, just a raw number.

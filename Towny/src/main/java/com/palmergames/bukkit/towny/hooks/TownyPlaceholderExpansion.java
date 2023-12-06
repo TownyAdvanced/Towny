@@ -443,6 +443,8 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			return name;
 		case "daily_resident_tax": // %townyadvanced_daily_resident_tax%
 			return getMoney(resident.getTaxOwing(true));
+		case "daily_resident_tax_unformatted": // %townyadvanced_daily_resident_tax_unformatted%
+			return String.valueOf(resident.getTaxOwing(true));
 		case "daily_town_upkeep": // %townyadvanced_daily_town_upkeep%
 			if (resident.hasTown()) {
 				cost = TownySettings.getTownUpkeepCost(resident.getTownOrNull());
