@@ -3050,8 +3050,25 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
 	}
 	
+	/**
+	 * @deprecated since 0.100.0.9, use {@link #getNationProximityToCapital()} instead.
+	 * @return getNationProximityToCapital()
+	 */
+	@Deprecated
 	public static double getNationRequiresProximity() {
-		return getDouble(ConfigNodes.GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY);
+		return getNationProximityToCapital();
+	}
+
+	public static double getNationProximityToCapital() {
+		return getDouble(ConfigNodes.GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL);
+	}
+
+	public static double getNationProximityToOtherNationTowns() {
+		return getDouble(ConfigNodes.GNATION_SETTINGS_NATION_PROXIMITY_TO_OTHER_NATION_TOWNS);
+	}
+
+	public static double getNationProximityAbsoluteMaximum() {
+		return getDouble(ConfigNodes.GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL_CAP);
 	}
 
 	public static List<String> getFarmAnimals() {
