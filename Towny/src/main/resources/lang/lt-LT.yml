@@ -1254,28 +1254,28 @@ msg_nation_already_not_peaceful: '&cValstybė jau yra netaiki.'
 #Added in 0.89
 status_world_friendlyfire: 'Draugiška ugnis:'
 status_world_wildernessmobs: 'Monstrai tyrlaukiuose:'
-msg_outlaw_kick_cooldown: '&cYou''re considered an outlaw in %s. You have %s remaining for you to leave the town, otherwise, you will get teleported back to your spawnpoint.'
-msg_outlaw_kicked: '&4You are not welcome in %s. You were teleported away.'
-msg_outlaw_town_notify: '&cAn outlaw, %s, has entered your town''s territory.'
-msg_your_town_payed_upkeep_with_debt: '&cYour town paid the daily upkeep of %s with debt.'
-msg_payed_nation_tax_with_debt: '&cYour town paid the nation tax of %s with debt.'
+msg_outlaw_kick_cooldown: '&cJūs esate laikomas nepageidaujamu asmeniu %s. Jums liko %s, kad paliktumėte miestą, nes kitaip Jūs būsite teleportuoti atgal į savo atsiradimo vietą.'
+msg_outlaw_kicked: '&4Jūs esate nepageidaujamas %s. Jūs buvote išteleportuotas.'
+msg_outlaw_town_notify: '&cNepageidaujamas asmuo %s įžengė į Jūsų miesto teritoriją.'
+msg_your_town_payed_upkeep_with_debt: '&cJūsų miestas apmokėjo %s išlaikymo išlaidas su skola.'
+msg_payed_nation_tax_with_debt: '&cJūsų miestas apmokėjo %s valstybės mokestį su skola.'
 #Added in 0.90
 status_plot_clear_deletion: 'PlotClearBlockDelete:'
-msg_err_plot_clear_disabled_in_this_world: 'The /plot clear command is disabled in this world.'
+msg_err_plot_clear_disabled_in_this_world: '/plot clear komanda yra išjungta šiame pasaulyje.'
 #Added in 0.91
 msg_universe_attribution: 'Autoriai: '
-msg_universe_contributors: ' And contributors like you. '
+msg_universe_contributors: ' Ir pagalbininkai, tokie kaip Jūs. '
 msg_universe_heart: '<3'
 townblock_plu: 'Miesto sklypai'
 #Added in 0.92
 #Town Ruins
-msg_newhour_success: 'newhour command executed successfully'
-town_help_12: 'Reclaim your town from a ruined state.'
-msg_warning_town_ruined_if_deleted: "WARNING!!!: If you delete your town it will enter a ruined state for %d hours. After this time full deletion will occur. In the ruined state, all perms are enabled and the town can be griefed."
-msg_warning_town_ruined_if_deleted2: "The town can be reclaimed by any town resident by using ''/t reclaim'' after %d hours."
-msg_err_cannot_reclaim_town_unless_ruined: '&cYou cannot reclaim your town because it is not ruined.'
-msg_err_cannot_reclaim_town_yet: '&cYou cannot reclaim your town for another %d hours.'
-msg_town_reclaimed: '&b%s has reclaimed the town of %s.'
+msg_newhour_success: 'naujos valandos komanda buvo sėkmingai įvykdyta'
+town_help_12: 'Prikelkite miestą iš griuvėsių ir jį atgaukite.'
+msg_warning_town_ruined_if_deleted: "ĮSPĖJIMAS!!!: Jeigu Jūs panaikinsite savo miestą, jis pavirs griuvėsiais ateinančioms %d valandoms. Po šio laiko jis bus visiškai ištrintas. Mieste, esančiame griuvėsių būsenoje, visi leidimai yra įjungti ir jį bet kas galės apiplėšti."
+msg_warning_town_ruined_if_deleted2: "Miestą gali atgauti bet kuris jo gyventojas, panaudojęs \"/t reclaim\" po %d valandų."
+msg_err_cannot_reclaim_town_unless_ruined: '&cJūs negalite atgauti savo miesto, nes jis nėra pavirtęs griuvėsiais.'
+msg_err_cannot_reclaim_town_yet: '&cJūs negalite atgauti savo miesto dar %d valandoms.'
+msg_town_reclaimed: '&b%s atgavo miestą %s.'
 msg_err_cannot_use_command_because_town_ruined: "&cYou cannot use this command because your town is ruined. To resume normal command usage, either reclaim the town using ''/town reclaim'', or leave the town using ''/town leave''."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined state for %d more hours. Use ''/town reclaim'' to save the town and become mayor.'
 msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
