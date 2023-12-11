@@ -25,6 +25,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
@@ -41,6 +42,7 @@ public class TownyAsciiMap {
 	private static final int MAP_LOWER_BOUNDS = 7;
 	public static int lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
 	public static int halfLineWidth = lineWidth / 2;
+	public static String defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
 	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
 	public static String homeSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_HOME.getDefault();
 	public static String outpostSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_OUTPOST.getDefault();
@@ -48,6 +50,7 @@ public class TownyAsciiMap {
 	
 	static {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> {
+			defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
 			forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
 			homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
 			outpostSymbol = parseSymbol(TownySettings.outpostMapSymbol());
@@ -61,13 +64,13 @@ public class TownyAsciiMap {
 		final Translator translator = Translator.locale(player);
 		
 		return new Component[] {
-			text("  ").append(text("-", DARK_GRAY)).append(text(" = ", GRAY)).append(translator.component("towny_map_unclaimed").color(GRAY)),
-			text("  ").append(text("+", WHITE)).append(text(" = ", GRAY)).append(translator.component("towny_map_claimed").color(GRAY)),
-			text("  ").append(text("$", WHITE)).append(text(" = ", GRAY)).append(translator.component("towny_map_forsale").color(GRAY)),
-			text("  ").append(text("+", GREEN)).append(text(" = ", GRAY)).append(translator.component("towny_map_yourtown").color(GRAY)),
-			text("  ").append(text("+", YELLOW)).append(text(" = ", GRAY)).append(translator.component("towny_map_yourplot").color(GRAY)),
-			text("  ").append(text("+", DARK_GREEN)).append(text(" = ", GRAY)).append(translator.component("towny_map_ally").color(GRAY)),
-			text("  ").append(text("+", DARK_RED)).append(text(" = ", GRAY)).append(translator.component("towny_map_enemy").color(GRAY)),
+			text("  ").append(text(wildernessSymbol, DARK_GRAY)).append(text(" = ", GRAY)).append(translator.component("towny_map_unclaimed").color(GRAY)),
+			text("  ").append(text(defaultSymbol, WHITE)).append(text(" = ", GRAY)).append(translator.component("towny_map_claimed").color(GRAY)),
+			text("  ").append(text(forSaleSymbol, WHITE)).append(text(" = ", GRAY)).append(translator.component("towny_map_forsale").color(GRAY)),
+			text("  ").append(text(defaultSymbol, GREEN)).append(text(" = ", GRAY)).append(translator.component("towny_map_yourtown").color(GRAY)),
+			text("  ").append(text(defaultSymbol, YELLOW)).append(text(" = ", GRAY)).append(translator.component("towny_map_yourplot").color(GRAY)),
+			text("  ").append(text(defaultSymbol, DARK_GREEN)).append(text(" = ", GRAY)).append(translator.component("towny_map_ally").color(GRAY)),
+			text("  ").append(text(defaultSymbol, DARK_RED)).append(text(" = ", GRAY)).append(translator.component("towny_map_enemy").color(GRAY)),
 		};
 	}
 
