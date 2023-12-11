@@ -676,7 +676,7 @@ public class Town extends Government implements TownBlockOwner {
 
 		Nation townNation = getNationOrNull();
 		if (townNation == null || !townNation.getCapital().hasHomeBlock()
-			|| !ProximityUtil.isTownTooFarFromNation(this, townNation))
+			|| !ProximityUtil.isTownTooFarFromNation(this, townNation.getCapital(), townNation.getTowns()))
 			return;
 
 		TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
