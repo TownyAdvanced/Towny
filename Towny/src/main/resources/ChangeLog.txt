@@ -9250,3 +9250,4 @@ v0.92.0.11:
     - A placeholder that shows how much a resident will pay daily in taxes, but unformatted, just a raw number.
   - Make the ASCII map legend use the symbols that are set in the config.
     - Closes #7117.
+  - Add automatic protection for the bottoms of glowberry plants being harvestable.

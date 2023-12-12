@@ -212,7 +212,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of harvestable berries
 	 */
-	public static final ItemLists HARVESTABLE_BERRIES = newBuilder().add("CAVE_VINES_PLANT","SWEET_BERRY_BUSH").build();
+	public static final ItemLists HARVESTABLE_BERRIES = newBuilder().add("CAVE_VINES_PLANT","CAVE_VINES","SWEET_BERRY_BUSH").build();
 
 	/*
 	 * List of blocks which will be allowed to kill Minecarts.
