@@ -31,6 +31,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.EnderPearl;
@@ -838,7 +839,9 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Prevent players based on their PlayerCache/towny's cancellable event.
-		if (disallowedTargetSwitch(hitBlock, player) || disallowedProjectileBlockBreak(hitBlock, event.getEntity(), player)) {
+		if (disallowedTargetSwitch(hitBlock, player) ||
+			disallowedProjectileBlockBreak(hitBlock, event.getEntity(), player) ||
+			disallowedCampfireLighting(hitBlock, event.getEntity(), player)) {
 			cancelProjectileHitEvent(event, hitBlock);
 		}
 	}
@@ -858,6 +861,11 @@ public class TownyEntityListener implements Listener {
 			return false;
 
 		return ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType()) && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType());
+	}
+
+	private boolean disallowedCampfireLighting(Block hitBlock, Projectile projectile, Player player) {
+		return ItemLists.CAMPFIRES.contains(hitBlock.getType()) && projectile instanceof Arrow arrow
+				&& arrow.getFireTicks() > 0 && !TownyActionEventExecutor.canDestroy(player, hitBlock);
 	}
 
 	private void cancelProjectileHitEvent(ProjectileHitEvent event, Block block) {
