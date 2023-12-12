@@ -31,6 +31,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.EnderPearl;
@@ -827,7 +828,7 @@ public class TownyEntityListener implements Listener {
 		 */
 		Block hitBlock = event.getHitBlock();
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) 
-			|| hitBlock == null || (hitBlock.getType() != Material.TARGET && !ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType())))
+			|| hitBlock == null || projectileIsIrrelevantToBlock(hitBlock))
 			return;
 
 		// Prevent non-player actions outright if it is in a town.
@@ -838,9 +839,22 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Prevent players based on their PlayerCache/towny's cancellable event.
-		if (disallowedTargetSwitch(hitBlock, player) || disallowedProjectileBlockBreak(hitBlock, event.getEntity(), player)) {
+		if (disallowedTargetSwitch(hitBlock, player) ||
+			disallowedProjectileBlockBreak(hitBlock, event.getEntity(), player) ||
+			disallowedCampfireLighting(hitBlock, event.getEntity(), player)) {
 			cancelProjectileHitEvent(event, hitBlock);
 		}
+	}
+
+	/**
+	 * Weeds out scenarios where we don't care what an arrow would do when it hits a
+	 * block.
+	 * 
+	 * @param hitBlock Block that is hit by an arrow.
+	 * @return true if we don't care about this arrow hitting the block.
+	 */
+	private boolean projectileIsIrrelevantToBlock(Block hitBlock) {
+		return hitBlock.getType() != Material.TARGET && !ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType()) && !ItemLists.CAMPFIRES.contains(hitBlock.getType());
 	}
 
 	private boolean disallowedTargetSwitch(Block hitBlock, Player player) {
@@ -858,6 +872,14 @@ public class TownyEntityListener implements Listener {
 			return false;
 
 		return ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType()) && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType());
+	}
+
+	private boolean disallowedCampfireLighting(Block hitBlock, Projectile projectile, Player player) {
+		return ItemLists.CAMPFIRES.contains(hitBlock.getType()) && isFireArrow(projectile) && !TownyActionEventExecutor.canDestroy(player, hitBlock);
+	}
+
+	private boolean isFireArrow(Projectile projectile) {
+		return projectile instanceof Arrow arrow && arrow.getFireTicks() > 0;
 	}
 
 	private void cancelProjectileHitEvent(ProjectileHitEvent event, Block block) {
