@@ -45,9 +45,9 @@ help_0: 'Ajuda Geral do Towny'
 help_1: 'Tenta os seguintes comandos para saberes mais sobre o Towny.'
 help_2: 'Chat da Cidade'
 help_3: 'Chat do país'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
+help_4: 'Comandos de ajuda do residente.'
+help_5: 'Comandos de ajuda da cidade.'
+help_6: 'Comandos de ajuda da nação.'
 help_7: 'Plot command help.'
 help_8: 'Towny command help.'
 help_9: 'Townyadmin command help.'
@@ -87,14 +87,14 @@ town_help_25: "Used to modify your town's outlaws."
 town_help_26: "List all towns, see /t list ? for help."
 town_help_27: "Leave the town you're a member of."
 town_help_28: "Withdraw money from your town's bank."
-town_help_29: "Use /t claim ? for help."
-town_help_30: "Used to unclaim land from your town."
-town_help_31: "Add or remove residents."
-town_help_32: "Use /t set ? for help."
-town_help_33: "Use /t buy ? for help."
-town_help_34: "Use /t toggle ? for help."
-town_help_35: "Use /t rank ? for help."
-town_list_help_0: "View the specified page."
+town_help_29: "Use /t claim ? para obter ajuda."
+town_help_30: "Usado para deixar de reivindicar terras da sua cidade."
+town_help_31: "Adicionar ou remover residentes."
+town_help_32: "Use /t set ? para obter ajuda."
+town_help_33: "Use /t buy ? para obter ajuda."
+town_help_34: "Use /t toggle ? para obter ajuda."
+town_help_35: "Use /t rank ? para obter ajuda."
+town_list_help_0: "Ver a página especificada."
 town_list_help_1: "List towns by resident-count, with the specified page."
 town_list_help_2: "List towns which are open, with the specified page."
 town_list_help_3: "List towns using bank balance, with the specified page."
