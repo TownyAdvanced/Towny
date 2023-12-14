@@ -41,12 +41,11 @@ public class ProximityUtil {
 		return gatherOutOfRangeTowns(nation, nation.getCapital());
 	}
 
-	public static List<Town> gatherOutOfRangeTowns(Nation nation, Town newCapital) {
+	public static List<Town> gatherOutOfRangeTowns(Nation nation, Town capital) {
 		List<Town> removedTowns = new ArrayList<>();
 		if (TownySettings.getNationProximityToCapital() <= 0)
 			return removedTowns;
 
-		Town capital = newCapital;
 		final TownBlock capitalHomeBlock = capital.getHomeBlockOrNull();
 		// This is unlikely to happen but if a capital has no homeblock by some error we don't want to remove every town.
 		if (capitalHomeBlock == null)
@@ -57,7 +56,7 @@ public class ProximityUtil {
 		List<Town> localRemovedTowns = townsToCheck;
 		// We want to parse over the towns to check until we're no longer getting an above 0 amount of towns being removed.
 		while (localRemovedTowns.size() > 0) {
-			localRemovedTowns = getListOfOutOfRangeTownsFromList(townsToCheck, newCapital, capitalCoord);
+			localRemovedTowns = getListOfOutOfRangeTownsFromList(townsToCheck, capital, capitalCoord);
 			for (Town localTown : localRemovedTowns) {
 				if (!removedTowns.contains(localTown))
 					removedTowns.add(localTown);
@@ -67,26 +66,15 @@ public class ProximityUtil {
 		return removedTowns;
 	}
 
-	private static List<Town> getListOfOutOfRangeTownsFromList(List<Town> towns, Town newCapital, WorldCoord capitalCoord) {
+	private static List<Town> getListOfOutOfRangeTownsFromList(List<Town> towns, Town capital, WorldCoord capitalCoord) {
 		List<Town> removedTowns = new ArrayList<>();
-		WorldCoord townCoord;
 		for (Town town : towns) {
 			// Town is the capital we're measuring against.
-			if (town.equals(newCapital))
+			if (town.equals(capital))
 				continue;
-			// Town missing homeblock, they shouldn't be in the nation any more.
-			if (!town.hasHomeBlock()) {
-				removedTowns.add(town);
-				continue;
-			}
-			townCoord = town.getHomeBlockOrNull().getWorldCoord();
-			// Town homeblock in the wrong world, they shouldn't be in the nation any more.
-			if (capitalCoord.getWorldName().equals(townCoord.getWorldName())){
-				removedTowns.add(town);
-				continue;
-			}
-			// Town homeblock too far away, they shouldn't be in the nation any more.
-			if (isTownTooFarFromNation(town, newCapital, towns))
+			// Check that the town missing is not missing a homeblock, and that the
+			// homeblocks are in the same world, and the distance between.
+			if (isTownTooFarFromNation(town, capital, towns))
 				removedTowns.add(town);
 		}
 		return removedTowns;
