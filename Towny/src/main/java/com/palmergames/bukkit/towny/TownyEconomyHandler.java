@@ -50,6 +50,8 @@ public class TownyEconomyHandler {
 	
 	public static String getServerAccount() {
 		return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
+		// TODO: in the future when everything is UUID based use this UUID
+		// for the towny-server account: a73f39b0-1b7c-4930-b4a3-ce101812d926
 	}
 
 	public static void initialize(Towny plugin) {
