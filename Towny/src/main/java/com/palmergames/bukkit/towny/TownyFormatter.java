@@ -1002,7 +1002,7 @@ public class TownyFormatter {
 	public static List<String> getFormattedTownyNames(List<TownyObject> objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
-			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.White);
+			names.add(Colors.translateColorCodes(objs.size() < 20 ? obj.getFormattedName() : obj.getName()) + Colors.RESET);
 		}
 		
 		return names;
@@ -1016,7 +1016,7 @@ public class TownyFormatter {
 	public static String[] getFormattedNames(TownyObject[] objs) {
 		List<String> names = new ArrayList<>();
 		for (TownyObject obj : objs) {
-			names.add(Colors.translateColorCodes(obj.getFormattedName()) + Colors.White);
+			names.add(Colors.translateColorCodes(obj.getFormattedName()) + Colors.RESET);
 		}
 		
 		return names.toArray(new String[0]);
@@ -1026,7 +1026,7 @@ public class TownyFormatter {
 		List<String> names = new ArrayList<>(objects.size());
 		
 		for (Nameable object : objects)
-			names.add(Colors.translateColorCodes(object.getFormattedName()) + Colors.White);
+			names.add(Colors.translateColorCodes(object.getFormattedName()) + Colors.RESET);
 		
 		return names;
 	}

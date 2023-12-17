@@ -9253,3 +9253,4 @@ v0.92.0.11:
   - Add automatic protection for the bottoms of glowberry plants being harvestable.
 0.100.0.10:
   - Prevent players without plot perms lighting campfires with flame arrows.
+  - Reset bolding/italics/etc and not just colours in formatted names list outputs.
