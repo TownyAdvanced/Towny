@@ -4,8 +4,12 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.economy.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.economy.TownyTransactionEvent;
 import com.palmergames.bukkit.towny.object.economy.adapter.ReserveEconomyAdapter;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
 import com.palmergames.bukkit.towny.object.economy.adapter.VaultEconomyAdapter;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -19,7 +23,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
 import java.util.concurrent.Executor;
 
 /**
@@ -50,8 +56,42 @@ public class TownyEconomyHandler {
 	
 	public static String getServerAccount() {
 		return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
-		// TODO: in the future when everything is UUID based use this UUID
-		// for the towny-server account: a73f39b0-1b7c-4930-b4a3-ce101812d926
+	}
+
+	/**
+	 * Method which can be used by Economy plugins in order to get a valid UUID from
+	 * a Towny object, for use in making FakePlayer accounts.
+	 * 
+	 * @param accountName String name which Towny uses when interacting with Vault's
+	 *                    Economy class.
+	 * @return the TownyObject's UUID or null if no Towny Object could be resolved.
+	 */
+	@Nullable
+	public static UUID getTownyObjectUUID(String accountName) {
+	
+		if (accountName.equalsIgnoreCase(getServerAccount()))
+			return TownyServerAccount.getUUID();
+
+		String name;
+		if (accountName.startsWith(TownySettings.getNPCPrefix())) {
+			name = accountName.substring(TownySettings.getNPCPrefix().length());
+			Resident resident = TownyAPI.getInstance().getResident(name);
+			return resident != null ? resident.getUUID() : null;
+		}
+
+		if (accountName.startsWith(TownySettings.getTownAccountPrefix())) {
+			name = accountName.substring(TownySettings.getTownAccountPrefix().length());
+			Town town = TownyAPI.getInstance().getTown(name);
+			return town != null ? town.getUUID() : null;
+		}
+
+		if (accountName.startsWith(TownySettings.getNationAccountPrefix())) {
+			name = accountName.substring(TownySettings.getNationAccountPrefix().length());
+			Nation nation = TownyAPI.getInstance().getNation(name);
+			return nation != null ? nation.getUUID() : null;
+		}
+
+		return null;
 	}
 
 	public static void initialize(Towny plugin) {
