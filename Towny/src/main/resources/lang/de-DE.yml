@@ -45,21 +45,21 @@ help_0: 'Allgemeine Towny Hilfe'
 help_1: 'Verwende folgende Befehle, um mehr über Towny zu erfahren.'
 help_2: 'Stadtchat'
 help_3: 'Nationschat'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
-towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
-towny_help_4: "Display time until a new day"
-towny_help_5: "Displays stats"
-towny_help_6: "Displays the version of Towny"
-towny_top_help_0: "List top residents based on subcommand."
-towny_top_help_1: "List top land-owners based on subcommand."
+help_4: 'Resident-Befehls-Liste.'
+help_5: 'Stadt-Befehls-Liste.'
+help_6: 'Stadt-Befehls-Liste.'
+help_7: 'Plot-Befehls-Liste.'
+help_8: 'Towny-Befehls-Liste.'
+help_9: 'Townyadmin-Befehls-Liste.'
+towny_help_0: "Allgemeine Hilfe für Towny"
+towny_help_1: "Zeigt eine Karte der nahegelegenen Stadtblöcke an"
+towny_help_2: "Zeigt die Preise der Wirtschaft an"
+towny_help_3: "Zeigt die Highscores"
+towny_help_4: "Zeigt die Zeit bis zum nächsten Tag an"
+towny_help_5: "Zeigt die Statistiken"
+towny_help_6: "Zeigt die Version von Towny an"
+towny_top_help_0: "Listet die Top-Bewohner in einem Unterbefehl auf."
+towny_top_help_1: "Listet die Top-Stadtbesitzer in einem Unterbefehl auf."
 towny_top_help_2: "List wealthiest based on subcommand."
 town_help_1: 'Zeigt dir den Status deiner Stadt an.'
 town_help_2: '[Bürgermeister]'
@@ -591,7 +591,7 @@ msg_plot_for_sale_amount: '&b%s hat das Grundstück (%s) zum Verkauf für %s fre
 msg_plot_set_type: '&bGrundstücksttyp wurde auf %s gesetzt.'
 msg_cache_block_error: '&cDu wirst von Towny nicht erkannt. Versuche dich neu einzuloggen.'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
-msg_cache_block_error_plot: '&c Der Besitzer erlaubt %s nicht auf disem Platz %s zu tun.'
+msg_cache_block_error_plot: '&cDer Besitzer erlaubt %s nicht, an dieser Stelle zu %s.'
 msg_cache_block_error_town_resident: '&c Bürgern ist %s hier verboten.'
 msg_cache_block_error_town_allies: '&c Verbündeten ist %s hier verboten.'
 msg_cache_block_error_town_outsider: '&c Aussenstehenden ist %s hier verboten.'
@@ -1194,7 +1194,7 @@ msg_err_teleport_cancelled: 'Bewegen hat deinen Teleport abgebrochen.'
 msg_cache_block_error_plot_friends: 'freunde'
 msg_cache_block_error_plot_allies: 'allierte'
 msg_cache_block_error_plot_outsiders: 'Außenseiter'
-msg_cache_block_error_plot_town_members: 'stadtmitglieder'
+msg_cache_block_error_plot_town_members: 'Stadtmitgliedern'
 msg_err_invalid_nation_map_color: '&cUnbekannte Kartenfarbe. Erlaubte Farben sind %s.'
 msg_nation_map_color_changed: '&bDie Farbe der Nationkarte wurde auf %s geändert.'
 msg_err_unable_to_add_more_residents_without_nation: 'Deine Stadt kann nicht mehr als %s Einwohner einladen, ohne zuvor einer Nation beizutreten oder eine zu schaffen.'
