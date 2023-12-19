@@ -32,7 +32,7 @@ public class ProximityUtil {
 			throw new TownyException(Translatable.of("msg_err_nation_homeblock_in_another_world"));
 		}
 
-		if (!closeEnoughToCapital(town, capital)) {
+		if (isTownTooFarFromNation(town, capital, nation.getTowns())) {
 			throw new TownyException(Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 		}
 	}
@@ -97,9 +97,7 @@ public class ProximityUtil {
 	}
 
 	public static boolean isTownTooFarFromNation(Town town, Town newCapital, List<Town> towns) {
-		if (closeEnoughToCapital(town, newCapital))
-			return false;
-		if (closeEnoughToOtherNationTowns(town, newCapital, towns))
+		if (closeEnoughToCapital(town, newCapital) || closeEnoughToOtherNationTowns(town, newCapital, towns))
 			return false;
 		return true;
 	}
