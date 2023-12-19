@@ -189,7 +189,7 @@ res_2: '[玩家名]'
 res_3: '目标玩家信息'
 res_4: '列出所有活跃玩家'
 res_5: '来查看帮助'
-res_6: '邀请一个玩家加入你的城镇/踢出你的城镇内的一名玩家'
+res_6: 'Online match'
 res_7: '申请添加一个离线玩家为好友'
 res_8: '只是一个卑微的农民'
 res_9: "How much tax you will pay per day."
@@ -451,7 +451,7 @@ msg_not_king_ass: '&b你不是国家的领导者或助手。'
 msg_own_nation_disallow: '&b你不能在自己的国家这么做.'
 msg_no_perms_claim: '&b你没有权限来扩大你的城镇.'
 msg_outpost_disable: '&b前哨现在不可用.'
-msg_kicked_by: '&b你被踢出了 %s.'
+msg_kicked_by: '&b你被%s踢出了城镇。'
 msg_kicked: '&b%s 把 %s 踢出了城镇.'
 msg_nation_kicked_by: '&b你的城镇被 %s 踢出了国家.'
 msg_town_left_nation: '&b你的城镇脱离了 %s.'
@@ -1984,7 +1984,7 @@ msg_err_amount_must_be_greater_than_zero: "数量必须大于0。"
 #Message shown when taking over claims is disabled on a server.
 msg_err_taking_over_claims_is_not_enabled: "这个服务器没有开启领地掠夺。"
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "这个城镇区块不能被接管，它所属的城镇没有被进行领地掠夺。"
+msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
 msg_err_you_cannot_make_this_your_homeblock: "你不能声明这里，这会使得这个城镇区块成为Homeblock，但这是不允许的。"
 #Message shown when taking over a claim is stopped by another plugin.
@@ -1996,9 +1996,9 @@ msg_warning_you_are_almost_out_of_townblocks: "警告: 您已经快要用完您�
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
 msg_warning_your_town_is_overclaimed: "警告: 您的城镇区块数量超出上限。当你有太多的城镇区块时，其他城镇可以接管你的城镇的地块，考虑删除一些领地。"
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[过度圈地可用]"
+chunk_notification_takeover_available: " <red>[领地掠夺可用]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "你不能接管这个区块，因为这会把城镇分成两部分。你必须从其他的的方向进行过度声明。"
+msg_err_you_cannot_over_claim_would_cut_into_two: "你不能接管这个区块，因为这会把城镇分成两部分。你必须从其他的的方向来进行领地掠夺。"
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
 msg_err_that_town_is_not_conquered: "%s 已经不在处于被征服状态。"
 #Message shown when a town has its conquered status removed by an admin.
@@ -2025,7 +2025,7 @@ msg_tax_collected_from_conquered_towns: "<aqua>你的国家从被征服的各个
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被免除了国家所征收的税。"
 msg_nation_set_conquered_tax__amount_set: "%s把征服的税额设置为%s。"
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "你不能将征服税额设置到%s以上。"
-msg_err_your_town_is_not_old_enough_to_overclaim: "你的城镇存在时间太短，不足以进行过度声明。你必须再等%s。"
+msg_err_your_town_is_not_old_enough_to_overclaim: "你的城镇存在时间太短，不足以进行领地掠夺。你必须再等%s。"
 msg_err_your_cannot_overclaim_for_another: "你不可以在%s的时间内再次进行领地掠夺。"
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>世界未加载。"
