@@ -9256,3 +9256,5 @@ v0.92.0.11:
   - Reset bolding/italics/etc and not just colours in formatted names list outputs.
   - API: add getTownyObjectUUID utility method to TownyEconomyHandler.
     - A useful method that an Economy plugin can use in order to get the correct UUID associated with Towny objects' economy accounts.
+  - Fix plot set outpost throwing an error on servers where using_economy is false.
+    - Closes #7125.

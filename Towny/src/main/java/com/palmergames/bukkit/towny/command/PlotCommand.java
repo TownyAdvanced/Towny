@@ -645,11 +645,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		TownyWorld townyWorld = townBlock.getWorld();
 		Coord key = Coord.parseCoord(player.getLocation());
 
-		if (OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true)) {
-			// Test if they can pay.
-			if (TownyEconomyHandler.isActive() && !town.getAccount().canPayFromHoldings(TownySettings.getOutpostCost())) 
-				throw new TownyException(Translatable.of("msg_err_cannot_afford_to_set_outpost"));
-			 
+		// Throws a TownyException with message if outpost should not be set.
+		OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true);
+
+		if (TownyEconomyHandler.isActive() && TownySettings.getOutpostCost() > 0) {
 			// Create a confirmation for setting outpost.
 			Confirmation.runOnAccept(() -> {
 				// Set the outpost spawn and display feedback.
@@ -659,6 +658,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			.setCost(new ConfirmationTransaction(() -> TownySettings.getOutpostCost(), town.getAccount(), "PlotSetOutpost", Translatable.of("msg_err_cannot_afford_to_set_outpost")))
 			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost())))
 			.sendTo(player);
+		} else {
+			// Set the outpost spawn and display feedback with no cost confirmation.
+			town.addOutpostSpawn(player.getLocation());
+			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_set_cost", TownyEconomyHandler.getFormattedBalance(TownySettings.getOutpostCost()), Translatable.of("outpost")));
 		}
 	}
 
