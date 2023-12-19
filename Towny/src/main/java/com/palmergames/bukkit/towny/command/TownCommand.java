@@ -100,6 +100,7 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
@@ -1808,7 +1809,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		Resident resident;
-		Nation nation = null;
 		Player player = null;
 		if (sender instanceof Player p) {
 			catchRuinedTown(p);
@@ -1820,9 +1820,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town = resident.getTown();
 		} else // Have the resident being tested be the mayor.
 			resident = town.getMayor();
-
-		if (town.hasNation())
-			nation = town.getNationOrNull();
 
 		if (split[0].equalsIgnoreCase("board")) {
 
@@ -1903,7 +1900,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			catchConsole(sender);
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_HOMEBLOCK.getNode());
-			townSetHomeblock(player, town, nation);
+			townSetHomeblock(player, town);
 			
 		} else if (split[0].equalsIgnoreCase("spawn")) {
 
@@ -1943,10 +1940,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		town.save();
-
-		if (nation != null)
-			nation.save();
-
 	}
 
 	public static void townSetBoard(CommandSender sender, String board, Town town) throws TownyException {
@@ -2294,10 +2287,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public static void townSetHomeblock(Player player, Town town, @Nullable Nation nation) throws TownyException {
-		Coord coord = Coord.parseCoord(player);
-		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
+	public static void townSetHomeblock(Player player, final Town town) throws TownyException {
+		final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(player);
+		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
 
 		if (world == null || townBlock == null || !townBlock.hasTown() || townBlock.getTownOrNull() != town)
 			throw new TownyException(Translatable.of("msg_area_not_own"));
@@ -2317,7 +2309,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
 			TownySettings.getMinDistanceBetweenHomeblocks() > 0) {
 				
-			final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTownsHomeBlocks(coord, town);
+			final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTownsHomeBlocks(Coord.parseCoord(player), town);
 			if (distanceToNextNearestHomeblock < TownySettings.getMinDistanceFromTownHomeblocks() ||
 				distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
 				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
@@ -2336,40 +2328,26 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.ifCancelledThenThrow(new TownPreSetHomeBlockEvent(town, townBlock, player));
 
 		// Test whether towns will be removed from the nation
-		if (nation != null && TownySettings.getNationRequiresProximity() > 0 && town.isCapital()) {
+		if (town.isCapital() && TownySettings.getNationProximityToCapital() > 0) {
+			final Nation nation = town.getNationOrNull();
 			// Determine if some of the nation's towns' homeblocks will be out of range.
-			List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), town);
-			
+			List<Town> removedTowns = ProximityUtil.gatherOutOfRangeTowns(nation);
+
 			// Oh no, some the nation will lose at least one town, better make a confirmation.
 			if (!removedTowns.isEmpty()) {
-				final Town finalTown = town;
-				final TownBlock finalTB = townBlock;
-				final Nation finalNation = nation;
 				final Location playerLocation = player.getLocation();
 				Confirmation.runOnAccept(() -> {
 					// Set town homeblock and remove the out of range towns.
-					finalTown.setHomeBlock(finalTB);
-					finalTown.setSpawn(playerLocation);
-					town.setMovedHomeBlockAt(System.currentTimeMillis());
-					finalNation.removeOutOfRangeTowns();
-					TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
-				}).setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
-				  .sendTo(player);
-
-			// Phew, the nation won't lose any towns, let's do this.
-			} else {
-				town.setHomeBlock(townBlock);
-				town.setSpawn(player.getLocation());		
-				town.setMovedHomeBlockAt(System.currentTimeMillis());
-				TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
+					town.playerSetsHomeBlock(townBlock, playerLocation, player);
+					ProximityUtil.removeOutOfRangeTowns(nation);
+				})
+				.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
+				.sendTo(player);
+				return;
 			}
-		// No nation to check proximity for/proximity isn't tested anyways.
-		} else {
-			town.setHomeBlock(townBlock);
-			town.setSpawn(player.getLocation());
-			town.setMovedHomeBlockAt(System.currentTimeMillis());
-			TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", coord.toString()));
+			// Phew, the nation won't lose any towns, let's do this.
 		}
+		town.playerSetsHomeBlock(townBlock, player.getLocation(), player);
 	}
 
 	public static void townSetSpawn(Player player, Town town, boolean admin) throws TownyException {

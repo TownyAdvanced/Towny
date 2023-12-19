@@ -47,7 +47,6 @@ import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.InviteReceiver;
 import com.palmergames.bukkit.towny.invites.InviteSender;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -55,7 +54,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.inviteobjects.NationAllyNationInvite;
@@ -67,6 +65,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BookFactory;
@@ -677,17 +676,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (!testNationMaxResidents(nation, town))
 				throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
 
-			if (TownySettings.getNationRequiresProximity() > 0) {
-				Coord capitalCoord = nation.getCapital().getHomeBlock().getCoord();
-				Coord townCoord = town.getHomeBlock().getCoord();
-				if (!nation.getCapital().getHomeBlock().getWorld().getName().equals(town.getHomeBlock().getWorld().getName())) {
-					throw new TownyException(Translatable.of("msg_err_nation_homeblock_in_another_world"));
-				}
-				if (MathUtil.distance(capitalCoord, townCoord) > TownySettings.getNationRequiresProximity()) {
-					throw new TownyException(Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
-				}
-			}
-			
+			if (TownySettings.getNationProximityToCapital() > 0)
+				ProximityUtil.testTownProximityToNation(town, nation); // Throws TownyException with error message when it fails.
+
 			// Check if the command is not cancelled
 			BukkitTools.ifCancelledThenThrow(new NationPreAddTownEvent(nation, town));
 
@@ -1039,10 +1030,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		TownyMessaging.sendMsg(king, Translatable.of("msg_would_you_merge_your_nation_into_other_nation", nation, remainingNation, remainingNation));
-		if (TownySettings.getNationRequiresProximity() > 0) {
+		if (TownySettings.getNationProximityToCapital() > 0) {
 			List<Town> towns = new ArrayList<>(nation.getTowns());
 			towns.addAll(remainingNation.getTowns());
-			List<Town> removedTowns = remainingNation.gatherOutOfRangeTowns(towns, remainingNation.getCapital());
+			List<Town> removedTowns = ProximityUtil.gatherOutOfRangeTowns(remainingNation);
 			if (!removedTowns.isEmpty()) {
 				TownyMessaging.sendMsg(nation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")));
 				TownyMessaging.sendMsg(remainingNation.getKing(), Translatable.of("msg_warn_the_following_towns_will_be_removed_from_the_merged_nation", StringMgmt.join(removedTowns, ", ")));
@@ -1052,8 +1043,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			BukkitTools.fireEvent(new NationMergeEvent(nation, remainingNation));
 			TownyUniverse.getInstance().getDataSource().mergeNation(nation, remainingNation);
 			TownyMessaging.sendGlobalMessage(Translatable.of("nation1_has_merged_with_nation2", nation, remainingNation));
-			if (TownySettings.getNationRequiresProximity() > 0)
-				remainingNation.removeOutOfRangeTowns();
+			if (TownySettings.getNationProximityToCapital() > 0)
+				ProximityUtil.removeOutOfRangeTowns(remainingNation);
 		}).runOnCancel(() -> {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));     // These messages don't use the word Town or Nation.
 			TownyMessaging.sendMsg(nation.getKing(), Translatable.of("msg_town_merge_cancelled"));
@@ -1090,7 +1081,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_left_nation", StringMgmt.remUnderscore(nation.getName())));
 
-			nation.removeOutOfRangeTowns();
+			ProximityUtil.removeOutOfRangeTowns(nation);
 		}).sendTo(player);
 	}
 
@@ -1238,20 +1229,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				continue;
 			}
 
-			if (TownySettings.getNationRequiresProximity() > 0) {
-				if (!nation.getCapital().hasHomeBlock() || !town.hasHomeBlock()) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_homeblock_has_not_been_set"));
-					continue;
-				}
-				WorldCoord capitalCoord = nation.getCapital().getHomeBlockOrNull().getWorldCoord();
-				WorldCoord townCoord = town.getHomeBlockOrNull().getWorldCoord();
-				if (!capitalCoord.getWorldName().equalsIgnoreCase(townCoord.getWorldName())) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_nation_homeblock_in_another_world"));
-					continue;
-				}
-
-				if (MathUtil.distance(capitalCoord, townCoord) > TownySettings.getNationRequiresProximity()) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
+			if (TownySettings.getNationProximityToCapital() > 0) {
+				try {
+					ProximityUtil.testTownProximityToNation(town, nation);
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 					continue;
 				}
 			}
@@ -2227,7 +2209,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		changeNationOwnership(sender, nation, newCapital, admin);
 	}
 	
-	private static void changeNationOwnership(CommandSender sender, Nation nation, Town newCapital, boolean admin) {
+	private static void changeNationOwnership(CommandSender sender, final Nation nation, Town newCapital, boolean admin) {
 		final Town existingCapital = nation.getCapital();
 		if (existingCapital != null && existingCapital.getUUID().equals(newCapital.getUUID())) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_warn_town_already_capital", newCapital.getName()));
@@ -2253,29 +2235,29 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			NationKingChangeEvent nationKingChangeEvent = new NationKingChangeEvent(oldKing, newKing);
 
 			// Do proximity tests.
-			if (TownySettings.getNationRequiresProximity() > 0 ) {
-				List<Town> removedTowns = nation.gatherOutOfRangeTowns(nation.getTowns(), newCapital);
+			if (TownySettings.getNationProximityToCapital() > 0 ) {
+				List<Town> removedTowns = ProximityUtil.gatherOutOfRangeTowns(nation, newCapital);
 
 				// There are going to be some towns removed from the nation, so we'll do a Confirmation.
 				if (!removedTowns.isEmpty()) {
-					final Nation finalNation = nation;
 					Confirmation.runOnAccept(() -> {
 						if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin) {
 							TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
 							return;
 						}
 						
-						finalNation.setCapital(newCapital);
-						finalNation.removeOutOfRangeTowns();
+						nation.setCapital(newCapital);
+						ProximityUtil.removeOutOfRangeTowns(nation);
 						plugin.resetCache();
-						TownyMessaging.sendPrefixedNationMessage(finalNation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
+						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
 						
 						if (admin)
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), finalNation.getName()));
+							TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
 						
 						nation.save();
-					}).setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
-						.sendTo(sender);
+					})
+					.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
+					.sendTo(sender);
 					
 					return;
 				}
@@ -2297,8 +2279,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
 
 				nation.save();
-			}).setTitle(Translatable.of("msg_warn_are_you_sure_you_want_to_transfer_nation_ownership", newCapital.getMayor().getName()))
-					.sendTo(sender);
+			})
+			.setTitle(Translatable.of("msg_warn_are_you_sure_you_want_to_transfer_nation_ownership", newCapital.getMayor().getName()))
+			.sendTo(sender);
 		};
 
 		if (capitalNotEnoughResidents || capitalTooManyResidents)

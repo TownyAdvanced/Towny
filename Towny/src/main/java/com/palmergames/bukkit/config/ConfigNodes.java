@@ -950,14 +950,6 @@ public enum ConfigNodes {
 			"",
 			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
 	),
-	GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY(
-			"global_town_settings.nation_requires_proximity",
-			"0.0",
-			"",
-			"# The maximum number of townblocks a town can be away from a nation capital,",
-			"# Automatically precludes towns from one world joining a nation in another world.",
-			"# If the number is 0, towns will not a proximity to a nation."
-	),
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
@@ -1313,7 +1305,38 @@ public enum ConfigNodes {
 			"-1",
 			"",
 			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
-
+	GNATION_SETTINGS_PROXIMITY_ROOT(
+			"global_nation_settings.proximity", "", ""),
+	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL(
+			"global_nation_settings.proximity.nation_proximity_to_capital_city",
+			"0.0",
+			"",
+			"# The maximum number of townblocks a town's homeblock can be away from their nation capital's homeblock.",
+			"# Automatically precludes towns from one world joining a nation in another world.",
+			"# If the number is 0, towns will not a proximity to a nation."
+	),
+	GNATION_SETTINGS_NATION_PROXIMITY_TO_OTHER_NATION_TOWNS(
+			"global_nation_settings.proximity.nation_proximity_to_other_nation_towns",
+			"0.0",
+			"",
+			"# The maximum number of townblocks a town's homeblock can be away from other towns's homeblocks in the nation.",
+			"# This setting is only used when nation_proximity_to_capital_city is above 0.",
+			"# When used, and a town is out of range of their capital city, the remaining towns in the nation will be parsed,",
+			"# if one of those towns' homeblocks is close enough to the town's homeblock, the town can remain in the nation.",
+			"# Leave this setting at 0.0 in order to de-activate nations' towns granting further range for towns in the nation."
+	),
+	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL_CAP(
+			"global_nation_settings.proximity.absolute_distance_from_capital",
+			"0.0",
+			"",
+			"# The maximum number of townblocks a town's homeblock can be away from their nation's capital's homeblock,",
+			"# when the town is being allowed to go further out from the capital because of the nation_proximity_to_other_nation_towns",
+			"# setting above.",
+			"# This setting is what will stop a nation being able to go incredibly wide due to towns 'chaining' together.",
+			"# This setting is only used when nation_proximity_to_capital_city is above 0.",
+			"# Leave this setting at 0.0 in order to allow nations to chain towns together to go as wide as they like."
+	),
+	
 	GNATION_SETTINGS_ALLOW_NUMBERS_IN_NATION_NAME(
 		"global_nation_settings.allow_numbers_in_nation_name",
 		"true",

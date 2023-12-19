@@ -35,9 +35,9 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -307,6 +307,8 @@ public class Town extends Government implements TownBlockOwner {
 		
 		this.save();
 		BukkitTools.fireEvent(new NationRemoveTownEvent(this, oldNation));
+
+		ProximityUtil.removeOutOfRangeTowns(oldNation);
 	}
 	
 	public void setNation(Nation nation) throws AlreadyRegisteredException {
@@ -640,6 +642,13 @@ public class Town extends Government implements TownBlockOwner {
 		this.purchasedBlocks += purchasedBlocks;
 	}
 
+	public void playerSetsHomeBlock(TownBlock townBlock, Location location, Player player) {
+		setHomeBlock(townBlock);
+		setSpawn(location);
+		setMovedHomeBlockAt(System.currentTimeMillis());
+		TownyMessaging.sendMsg(player, Translatable.of("msg_set_town_home", townBlock.getCoord().toString()));
+	}
+
 	/**
 	 * Sets the HomeBlock of a town
 	 * 
@@ -662,30 +671,16 @@ public class Town extends Government implements TownBlockOwner {
 			spawn = null;
 		}
 
-		Nation townNation = TownyAPI.getInstance().getTownNationOrNull(this);
-		if (this.hasNation() && townNation != null && !townNation.getCapital().equals(this) 
-			&& TownySettings.getNationRequiresProximity() > 0
-			&& townNation.getCapital().hasHomeBlock() && hasHomeBlock()) {
-			
-			WorldCoord capitalCoord = townNation.getCapital().getHomeBlockOrNull().getWorldCoord();
-			WorldCoord townCoord = this.getHomeBlockOrNull().getWorldCoord();
-			
-			if (!townNation.getCapital().getHomeblockWorld().equals(getHomeblockWorld())) {
-				TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
-				removeNation();
-			}
-			
-			int x1 = capitalCoord.getX();
-			int x2 = townCoord.getX();
-			int y1 = capitalCoord.getZ();
-			int y2 = townCoord.getZ();
-			double  distance = MathUtil.distance(x1, x2, y1, y2);
-			
-			if (distance > TownySettings.getNationRequiresProximity()) {
-				TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
-				removeNation();
-			}
-		}
+		if (!hasNation() || TownySettings.getNationProximityToCapital() <= 0 || isCapital())
+			return;
+
+		Nation townNation = getNationOrNull();
+		if (townNation == null || !townNation.getCapital().hasHomeBlock()
+			|| !ProximityUtil.isTownTooFarFromNation(this, townNation.getCapital(), townNation.getTowns()))
+			return;
+
+		TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+		removeNation();
 	}
 	
 	/**

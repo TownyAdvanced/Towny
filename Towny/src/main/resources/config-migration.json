@@ -517,4 +517,14 @@
       }
     ]
   }
+  {
+    "version": "0.100.0.9",
+    "changes": [
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.nation_requires_proximity",
+        "value": "global_nation_settings.proximity.nation_proximity_to_capital_city"
+      }
+    ]
+  }
 ]
