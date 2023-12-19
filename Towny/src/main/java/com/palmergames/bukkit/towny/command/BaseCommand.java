@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.command;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.ResidentNPCException;
@@ -389,5 +390,9 @@ public class BaseCommand implements TabCompleter{
 	public static void catchNPCResident(Resident resident) throws ResidentNPCException {
 		if (resident.isNPC())
 			throw new ResidentNPCException();
+	}
+
+	public static String prettyMoney(double cost) {
+		return TownyEconomyHandler.getFormattedBalance(cost);
 	}
 }

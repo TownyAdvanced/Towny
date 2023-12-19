@@ -285,6 +285,8 @@ public class TownyEconomyHandler {
 	 * @return string containing the formatted balance
 	 */
 	public static String getFormattedBalance(double balance) {
+		if (!isActive())
+			return String.valueOf(balance);
 
 		String formattedBalance = economy.getFormattedBalance(balance);
 		if (formattedBalance != null) {

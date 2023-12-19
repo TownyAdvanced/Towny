@@ -153,14 +153,11 @@ public class TownRuinUtil {
 			if (TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town) > 0)
 				throw new TownyException(Translatable.of("msg_err_cannot_reclaim_town_yet", TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town)));
 
-			if (TownyEconomyHandler.isActive() && townReclaimCost > 0) { 
-				Confirmation.runOnAccept(() -> reclaimTown(resident, town))
-					.setCost(new ConfirmationTransaction(() -> townReclaimCost, resident.getAccount(), "Cost of town reclaim.", Translatable.of("msg_insuf_funds")))
-					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
-					.sendTo(player);
-			} else {
-				reclaimTown(resident, town);
-			}
+			//Ask them to confirm they want to reclaim the town.
+			Confirmation.runOnAccept(() -> reclaimTown(resident, town))
+			.setCost(new ConfirmationTransaction(() -> townReclaimCost, resident, "Cost of town reclaim.", Translatable.of("msg_insuf_funds")))
+			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
+			.sendTo(player);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}

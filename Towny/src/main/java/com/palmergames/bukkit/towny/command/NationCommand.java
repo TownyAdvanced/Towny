@@ -954,8 +954,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			// If it isn't free to make a nation, send a confirmation.
 			if (!noCharge && TownyEconomyHandler.isActive()) {
 				// Test if they can pay.
-				if (!capitalTown.getAccount().canPayFromHoldings(TownySettings.getNewNationPrice()))			
-					throw new TownyException(Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice()));
+				double cost = TownySettings.getNewNationPrice();
+				if (!capitalTown.getAccount().canPayFromHoldings(cost))
+					throw new TownyException(Translatable.of("msg_no_funds_new_nation2", cost));
 
 				final String finalName = filteredName;
 				Confirmation.runOnAccept(() -> {
@@ -968,9 +969,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(finalName)));
 
 				})
-					.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown.getAccount(), "New Nation Cost",
-							Translatable.of("msg_no_funds_new_nation2", TownySettings.getNewNationPrice())))
-					.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())))
+					.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown, "New Nation Cost",
+							Translatable.of("msg_no_funds_new_nation2", cost)))
+					.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
 					.sendTo(sender);
 				
 			// Or, it is free, so just make the nation.
@@ -1991,11 +1992,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (!TownySettings.getNationColorsMap().containsKey(color))
 			throw new TownyException(Translatable.of("msg_err_invalid_nation_map_color", TownySettings.getNationColorsMap().keySet().toString()));
 
-		if (TownySettings.getNationSetMapColourCost() > 0)
+		double cost = TownySettings.getNationSetMapColourCost();
+		if (cost > 0)
 			Confirmation
 				.runOnAccept(() -> setNationMapColor(nation, color, admin, sender))
-				.setTitle(Translatable.of("msg_confirm_purchase", TownySettings.getNationSetMapColourCost()))
-				.setCost(new ConfirmationTransaction(()-> TownySettings.getNationSetMapColourCost(), nation.getAccount(), "Cost of setting nation map color."))
+				.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
+				.setCost(new ConfirmationTransaction(() -> cost, nation, "Cost of setting nation map color."))
 				.sendTo(sender);
 		else 
 			setNationMapColor(nation, color, admin, sender);
