@@ -45,22 +45,22 @@ help_0: 'Allgemeine Towny Hilfe'
 help_1: 'Verwende folgende Befehle, um mehr über Towny zu erfahren.'
 help_2: 'Stadtchat'
 help_3: 'Nationschat'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
-towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
-towny_help_4: "Display time until a new day"
-towny_help_5: "Displays stats"
-towny_help_6: "Displays the version of Towny"
-towny_top_help_0: "List top residents based on subcommand."
-towny_top_help_1: "List top land-owners based on subcommand."
-towny_top_help_2: "List wealthiest based on subcommand."
+help_4: 'Resident-Befehls-Liste.'
+help_5: 'Stadt-Befehls-Liste.'
+help_6: 'Stadt-Befehls-Liste.'
+help_7: 'Plot-Befehls-Liste.'
+help_8: 'Towny-Befehls-Liste.'
+help_9: 'Townyadmin-Befehls-Liste.'
+towny_help_0: "Allgemeine Hilfe für Towny"
+towny_help_1: "Zeigt eine Karte der nahegelegenen Stadtblöcke an"
+towny_help_2: "Zeigt die Preise der Wirtschaft an"
+towny_help_3: "Zeigt die Highscores"
+towny_help_4: "Zeigt die Zeit bis zum nächsten Tag an"
+towny_help_5: "Zeigt die Statistiken"
+towny_help_6: "Zeigt die Version von Towny an"
+towny_top_help_0: "Listet die Top-Bewohner in einem Unterbefehl auf."
+towny_top_help_1: "Listet die Top-Stadtbesitzer in einem Unterbefehl auf."
+towny_top_help_2: "Listet die reichsten Städte in einem Unterbefehl auf."
 town_help_1: 'Zeigt dir den Status deiner Stadt an.'
 town_help_2: '[Bürgermeister]'
 town_help_3: 'Status der ausgewählten Stadt anzeigen.'
@@ -71,36 +71,36 @@ town_help_7: 'Eine neue Stadt mit ausgewählten Bürgermeister gründen.'
 town_help_8: 'Befehlsliste für Bürgermeister.'
 town_help_9: 'Heute ist der Tag!'
 town_help_10: 'Listet aller Bürger die online sind, auf.'
-town_help_13: "See a list of residents in the town."
-town_help_14: "See a list of ranks in the town."
-town_help_15: "See a list of outlaws in the town."
-town_help_16: "See a list of plotgroups in the town."
-town_help_17: "See a list of plot types in the town."
-town_help_18: "Say a message to the town members."
-town_help_19: "Set your town for sale, able to be bought by other players."
-town_help_20: "Set your town not for sale."
-town_help_21: "Buy the given town, as long as it is for sale."
-town_help_22: "Deposit money into your town's bank."
-town_help_23: "Used to modify your resident's town ranks."
-town_help_24: "Used to delete your town."
-town_help_25: "Used to modify your town's outlaws."
-town_help_26: "List all towns, see /t list ? for help."
-town_help_27: "Leave the town you're a member of."
-town_help_28: "Withdraw money from your town's bank."
-town_help_29: "Use /t claim ? for help."
-town_help_30: "Used to unclaim land from your town."
-town_help_31: "Add or remove residents."
-town_help_32: "Use /t set ? for help."
-town_help_33: "Use /t buy ? for help."
-town_help_34: "Use /t toggle ? for help."
-town_help_35: "Use /t rank ? for help."
-town_list_help_0: "View the specified page."
-town_list_help_1: "List towns by resident-count, with the specified page."
-town_list_help_2: "List towns which are open, with the specified page."
-town_list_help_3: "List towns using bank balance, with the specified page."
-town_list_help_4: "List towns in alphabetical order, with the specified page."
-town_list_help_5: "List towns by claimed land, with the specified page."
-town_list_help_6: "List towns by number online, with the specified page."
+town_help_13: "Zeigt eine Liste mit den Bewohnern in der Stadt."
+town_help_14: "Zeigt eine Liste mit den Rängen in der Stadt an."
+town_help_15: "Zeigt eine Liste der Vogelfreien in der Stadt."
+town_help_16: "Zeigt eine Liste der Plotgruppen in der Stadt."
+town_help_17: "Zeigt eine Liste der Plot-Typen in der Stadt."
+town_help_18: "Sende eine Nachricht an die Stadt Bewohner."
+town_help_19: "Stelle deine Stadt zum verkauf, sodass andere Spieler sie kaufen können."
+town_help_20: "Stelle deine Stadt nicht zum Verkauf."
+town_help_21: "Kaufe die ausgewählte Stadt, solange sie zum Verkauf steht."
+town_help_22: "Zahle Geld in die Stadtbank ein."
+town_help_23: "Wird verwendet, um die Ränge der Bewohner anzupassen."
+town_help_24: "Wird benutzt, um die Stadt aufzulösen."
+town_help_25: "Wird benutzt, um die Vogelfreien in der Stadt anzupassen."
+town_help_26: "Listet alles Städte auf, benutze /t list für Hilfe."
+town_help_27: "Verlasse die Stadt, in der du gerade bist."
+town_help_28: "Hebe Geld von der Stadtbank ab."
+town_help_29: "Benutze /t claim für Hilfe."
+town_help_30: "Wird benutzt, um Chunks von der Stadt zu entfernen."
+town_help_31: "Füge Bewohner zu, oder entferne Bewohner."
+town_help_32: "Benutze /t set für Hilfe."
+town_help_33: "Benutze /t buy für Hilfe."
+town_help_34: "Benutze /t toggle für Hilfe."
+town_help_35: "Benutze /t rank für Hilfe."
+town_list_help_0: "Zeigt die angegebene Seite an."
+town_list_help_1: "Listet die Städte nach der Anzahl der Bewohner mit der angegebenen Seite auf."
+town_list_help_2: "Listet die geöffneten Städte mit der angegebenen Seite auf."
+town_list_help_3: "Listet die Städte mit dem höchsten Bankkonto auf."
+town_list_help_4: "Listet Städte in alphabetischer Reihenfolge mit der angegebenen Seite auf."
+town_list_help_5: "Listet Städte nach beanspruchtem Land mit der angegebenen Seite auf."
+town_list_help_6: "Listet die Städte, mit den meisten Bewohnern online mit der angegebenen Seite auf."
 town_set_help_0: "Set your town's board."
 town_set_help_1: "Set your town's homeblock to where you're standing."
 town_set_help_2: "Sets the spawn point in your homeblock or an outpost spawnpoint when stood in an outpost."
@@ -591,7 +591,7 @@ msg_plot_for_sale_amount: '&b%s hat das Grundstück (%s) zum Verkauf für %s fre
 msg_plot_set_type: '&bGrundstücksttyp wurde auf %s gesetzt.'
 msg_cache_block_error: '&cDu wirst von Towny nicht erkannt. Versuche dich neu einzuloggen.'
 msg_cache_block_error_wild: '&c %s ist in der Wildnis nicht erlaubt.'
-msg_cache_block_error_plot: '&c Der Besitzer erlaubt %s nicht auf disem Platz %s zu tun.'
+msg_cache_block_error_plot: '&cDer Besitzer erlaubt %s nicht, an dieser Stelle zu %s.'
 msg_cache_block_error_town_resident: '&c Bürgern ist %s hier verboten.'
 msg_cache_block_error_town_allies: '&c Verbündeten ist %s hier verboten.'
 msg_cache_block_error_town_outsider: '&c Aussenstehenden ist %s hier verboten.'
@@ -1194,7 +1194,7 @@ msg_err_teleport_cancelled: 'Bewegen hat deinen Teleport abgebrochen.'
 msg_cache_block_error_plot_friends: 'freunde'
 msg_cache_block_error_plot_allies: 'allierte'
 msg_cache_block_error_plot_outsiders: 'Außenseiter'
-msg_cache_block_error_plot_town_members: 'stadtmitglieder'
+msg_cache_block_error_plot_town_members: 'Stadtmitgliedern'
 msg_err_invalid_nation_map_color: '&cUnbekannte Kartenfarbe. Erlaubte Farben sind %s.'
 msg_nation_map_color_changed: '&bDie Farbe der Nationkarte wurde auf %s geändert.'
 msg_err_unable_to_add_more_residents_without_nation: 'Deine Stadt kann nicht mehr als %s Einwohner einladen, ohne zuvor einer Nation beizutreten oder eine zu schaffen.'
