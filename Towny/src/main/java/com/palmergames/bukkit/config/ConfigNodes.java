@@ -1313,7 +1313,7 @@ public enum ConfigNodes {
 			"",
 			"# The maximum number of townblocks a town's homeblock can be away from their nation capital's homeblock.",
 			"# Automatically precludes towns from one world joining a nation in another world.",
-			"# If the number is 0, towns will not a proximity to a nation."
+			"# If the number is 0, towns will not require a proximity to a nation."
 	),
 	GNATION_SETTINGS_NATION_PROXIMITY_TO_OTHER_NATION_TOWNS(
 			"global_nation_settings.proximity.nation_proximity_to_other_nation_towns",
