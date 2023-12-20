@@ -547,7 +547,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						case "sanctiontown":
 							if (args.length == 4)
 								return NameUtil.filterByStart(Arrays.asList("add","remove","list"), args[3]);
-							if (args.length == 5)
+							if (args.length == 5 && args[3].equalsIgnoreCase("add") || args[4].equalsIgnoreCase("remove"))
 								return NameUtil.filterByStart(TownyUniverse.getInstance().getTowns()
 										.stream()
 										.filter(t -> !nation.hasTown(t))

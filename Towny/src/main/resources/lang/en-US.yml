@@ -208,7 +208,8 @@ nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead
 
 nation_sanction_help_1: "Adds a town to the SanctionedTown list."
 nation_sanction_help_2: "Removes a town from the SanctionedTown list."
-nation_sanction_help_3: "Lists the nation's Sanctioned Towns."
+nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
+nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
 
 king_help_1: 'Nation Leader Help'
 king_help_2: 'Set your alliance.'
@@ -2387,7 +2388,7 @@ msg_err_nation_town_sanctioned: "Your nation has now sanctioned %s, they will no
 
 msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
 
-msg_err_nation_has_no_sanctioned_towns: "Your nation has no sanctioned towns."
+msg_err_nation_has_no_sanctioned_towns: "The nation has no sanctioned towns."
 
 title_nation_sanctioned_towns: 'Sanctioned Towns'
 

@@ -17,6 +17,8 @@ import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationPreRemoveEnemyEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
+import com.palmergames.bukkit.towny.event.nation.NationSanctionTownAddEvent;
+import com.palmergames.bukkit.towny.event.nation.NationSanctionTownRemoveEvent;
 import com.palmergames.bukkit.towny.event.nation.NationSetSpawnEvent;
 import com.palmergames.bukkit.towny.event.nation.NationTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveEnemyEvent;
@@ -239,12 +241,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "sanctiontown":
 					if (args.length == 2) 
 						return NameUtil.filterByStart(Arrays.asList("add", "remove", "list"), args[1]); 
-					if (args.length == 3)
+					if (args.length == 3 && args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))
 						return NameUtil.filterByStart(TownyUniverse.getInstance().getTowns()
 							.stream()
 							.filter(t -> !nation.hasTown(t))
 							.map(Town::getName)
 							.collect(Collectors.toList()), args[2]);
+					if (args.length == 3 && args[1].equalsIgnoreCase("list"))
+						return getTownyStartingWith(args[2], "n");
 					break;
 				case "add":
 					return getTownyStartingWith(args[args.length - 1], "t");
@@ -1435,6 +1439,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_no_nation_cannot_do"));
 
 		if (args[0].toLowerCase(Locale.ROOT).equals("list")) {
+			if (args.length == 2)
+				nation = getNationOrThrow(args[1]);
 			nationSanctionTownList(sender, nation);
 			return;
 		}
@@ -1453,13 +1459,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationSanctionTownList(CommandSender sender, Nation nation) {
-
-		if (nation.getSanctionedTowns().isEmpty())
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_error_nation_has_no_enemies"));
-		else {
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle(nation.getName() + " " + Translatable.of("title_nation_sanctioned_towns").forLocale(sender)));
-			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("title_nation_sanctioned_towns").forLocale(sender), new ArrayList<>(nation.getSanctionedTowns())));
+		if (nation.getSanctionedTowns().isEmpty()) {
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_err_nation_has_no_sanctioned_towns"));
+			return;
 		}
+		Translator translator = Translator.locale(sender);
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(nation.getName() + " " + translator.of("title_nation_sanctioned_towns")));
+		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(translator.of("title_nation_sanctioned_towns"), new ArrayList<>(nation.getSanctionedTowns())));
 	}
 
 	private static void nationSanctionTownAdd(CommandSender sender, Nation nation, Town town) throws TownyException {
@@ -1467,7 +1473,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_nation_cannot_sanction_own_town"));
 
 		if (nation.hasSanctionedTown(town))
-			throw new TownyException(Translatable.of("msg_err_nation_cannot_sanction_own_town"));
+			throw new TownyException(Translatable.of("msg_err_nation_town_already_sanctioned"));
+
+		BukkitTools.ifCancelledThenThrow(new NationSanctionTownAddEvent(nation, town));
 
 		nation.addSanctionedTown(town);
 		nation.save();
@@ -1477,6 +1485,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void nationSactionTownRemove(CommandSender sender, Nation nation, Town town) throws TownyException {
 		if (!nation.hasSanctionedTown(town))
 			throw new TownyException(Translatable.of("msg_err_nation_town_isnt_sanctioned"));
+
+		BukkitTools.ifCancelledThenThrow(new NationSanctionTownRemoveEvent(nation, town));
 
 		nation.removeSanctionedTown(town);
 		nation.save();
