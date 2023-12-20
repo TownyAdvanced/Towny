@@ -5,10 +5,7 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
-import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.economy.Account;
 
@@ -23,15 +20,15 @@ public class ConfirmationTransaction {
 	 * A transaction which must succeed for a Confirmation to complete.
 	 *
 	 * @param costSupplier cost of the transaction. 
-	 * @param townyObject TownyObject which will have to pay.
+	 * @param townyObject EconomyHandler which will have to pay, this will be a Resident, Town or Nation.
 	 * @param loggedMessage The message logged in the money.csv file.
 	 * @param insufficientFundsMessage Transatable which will display the cannot pay message.
 	 */
-	public ConfirmationTransaction(Supplier<Double> costSupplier, TownyObject townyObject, String loggedMessage, Translatable insufficientFundsMessage) {
+	public ConfirmationTransaction(Supplier<Double> costSupplier, EconomyHandler townyObject, String loggedMessage, Translatable insufficientFundsMessage) {
 		this.costSupplier = costSupplier;
 		this.loggedMessage = loggedMessage;
 		this.insufficientFundsMessage = insufficientFundsMessage;
-		this.payee = setPayee(townyObject);
+		this.payee = !TownyEconomyHandler.isActive() ? null : townyObject.getAccount();
 	}
 
 	/**
@@ -39,14 +36,14 @@ public class ConfirmationTransaction {
 	 * Uses the default no money error message.
 	 *
 	 * @param costSupplier cost of the transaction. 
-	 * @param townyObject TownyObject which will have to pay.
+	 * @param townyObject EconomyHandler which will have to pay, this will be a Resident, Town or Nation.
 	 * @param loggedMessage The message logged in the money.csv file.
 	 */
-	public ConfirmationTransaction(Supplier<Double> costSupplier, TownyObject townyObject, String loggedMessage) {
+	public ConfirmationTransaction(Supplier<Double> costSupplier, EconomyHandler townyObject, String loggedMessage) {
 		this.costSupplier = costSupplier;
 		this.loggedMessage = loggedMessage;
 		this.insufficientFundsMessage = null;
-		this.payee = setPayee(townyObject);
+		this.payee = !TownyEconomyHandler.isActive() ? null : townyObject.getAccount();
 	}
 
 	public void supplyCost() {
@@ -70,24 +67,10 @@ public class ConfirmationTransaction {
 		return insufficientFundsMessage != null ? insufficientFundsMessage : Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(getCost()));
 	}
 
-	private Account setPayee(TownyObject townyObject) {
-		if (!TownyEconomyHandler.isActive())
-			return null;
-
-		if (townyObject instanceof Resident resident) {
-			return resident.getAccount();
-		} else if (townyObject instanceof Town town) {
-			return town.getAccount();
-		} else if (townyObject instanceof Nation nation) {
-			return nation.getAccount();
-		} else
-			return null;
-	}
-
 	/**
 	 * A transaction which must succeed for a Confirmation to complete.
 	 *
-	 * @deprecated since 0.100.0.10 use {@link #ConfirmationTransaction(Supplier, TownyObject, String, Translatable)} instead.
+	 * @deprecated since 0.100.0.10 use {@link #ConfirmationTransaction(Supplier, EconomyHandler, String, Translatable)} instead.
 	 * @param costSupplier cost of the transaction. 
 	 * @param payee Account which will have to pay.
 	 * @param loggedMessage The message logged in the money.csv file.
@@ -105,7 +88,7 @@ public class ConfirmationTransaction {
 	 * A transaction which must succeed for a Confirmation to complete.
 	 * Uses the default no money error message.
 	 *
-	 * @deprecated since 0.100.0.10 use {@link #ConfirmationTransaction(Supplier, TownyObject, String)} instead.
+	 * @deprecated since 0.100.0.10 use {@link #ConfirmationTransaction(Supplier, EconomyHandler, String)} instead.
 	 * @param costSupplier cost of the transaction. 
 	 * @param payee Account which will have to pay.
 	 * @param loggedMessage The message logged in the money.csv file.
