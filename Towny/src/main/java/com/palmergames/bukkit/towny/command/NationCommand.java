@@ -1431,7 +1431,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation = getNationFromPlayerOrThrow(player);
 
 		if (nation == null)
-			throw new TownyException(Translatable.of(""));
+			throw new TownyException(Translatable.of("msg_err_no_nation_cannot_do"));
 
 		if (args[0].toLowerCase(Locale.ROOT).equals("list")) {
 			nationSanctionTownList(sender, nation);

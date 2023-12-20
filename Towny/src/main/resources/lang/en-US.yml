@@ -2394,3 +2394,5 @@ title_nation_sanctioned_towns: 'Sanctioned Towns'
 msg_err_cannot_add_sanctioned_town: "Your nation cannot add %s, your nation has sanctioned them."
 
 msg_err_cannot_join_nation_sanctioned_town: "Your town cannot join %s, this nation has sanctioned your town."
+
+msg_err_no_nation_cannot_do: "You cannot perform this action because no nation was able to be determined."
