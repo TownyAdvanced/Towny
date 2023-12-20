@@ -9284,3 +9284,5 @@ v0.92.0.11:
     - This setting is what will stop a nation being able to go incredibly wide due to towns 'chaining' together.
     - This setting is only used when nation_proximity_to_capital_city is above 0.
     - Leave this setting at 0.0 in order to allow nations to chain towns together to go as wide as they like.
+0.100.0.11:
+  - Fix config migrator file formatting, courtesy of Warrior with PR #7128.
