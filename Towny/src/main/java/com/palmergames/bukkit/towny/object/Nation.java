@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -41,6 +42,7 @@ public class Nation extends Government {
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	private final List<Town> towns = new ArrayList<>();
+	private final List<Town> sanctionedTowns = new ArrayList<>();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
@@ -697,5 +699,35 @@ public class Nation extends Government {
 
 	public void playerBroadCastMessageToNation(Player player, String message) {
 		TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("town_say_format", player.getName(), TownyComponents.stripClickTags(message)));
+	}
+
+
+	public List<Town> getSanctionedTowns() {
+		return sanctionedTowns;
+	}
+
+	public boolean hasSanctionedTown(Town town) {
+		return sanctionedTowns.contains(town);
+	}
+
+	public void addSanctionedTown(Town town) {
+		if (!sanctionedTowns.contains(town))
+			sanctionedTowns.add(town);
+	}
+
+	public void removeSanctionedTown(Town town) {
+		sanctionedTowns.remove(town);
+	}
+
+	public List<String> getSanctionedTownsForSaving() {
+		return sanctionedTowns.stream().map(t -> t.getUUID().toString()).collect(Collectors.toList());
+	}
+
+	public void loadSanctionedTowns(String[] tokens) {
+		for (String stringUUID : tokens) {
+			UUID uuid = UUID.fromString(stringUUID);
+			if (uuid != null && TownyAPI.getInstance().getTown(uuid) != null)
+				sanctionedTowns.add(TownyAPI.getInstance().getTown(uuid));
+		}
 	}
 }

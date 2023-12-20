@@ -269,6 +269,7 @@ public class SQLSchema {
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`conqueredTax` float NOT NULL");
+		columns.add("`sanctionedTowns` mediumtext DEFAULT NULL");
 		return columns;
 	}
 

@@ -90,6 +90,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_NATION_BANKHISTORY("towny.command.nation.bankhistory"),
 	TOWNY_COMMAND_NATION_BALTOP("towny.command.nation.baltop"),
 	TOWNY_COMMAND_NATION_KICK("towny.command.nation.kick"),
+	TOWNY_COMMAND_NATION_SANCTIONTOWN("towny.command.nation.sanctiontown"),
 	
 	/*
 	 * Town command permissions
