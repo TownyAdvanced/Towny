@@ -211,6 +211,7 @@ permissions:
             towny.command.nation.othernation: true
             towny.command.nation.withdraw: true
             towny.command.nation.rank.*: true
+            towny.command.nation.sanctiontown: true
             towny.command.nation.say: true
             towny.command.nation.set.*: true
             towny.command.nation.spawn: true
@@ -746,6 +747,7 @@ permissions:
             towny.command.townyadmin.nation.rank: true
             towny.command.townyadmin.nation.recheck: true
             towny.command.townyadmin.nation.rename: true
+            towny.command.townyadmin.nation.sanctiontown: true
             towny.command.townyadmin.nation.set: true
             towny.command.townyadmin.nation.set.*: true
             towny.command.townyadmin.nation.toggle: true

@@ -245,6 +245,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							.filter(t -> !nation.hasTown(t))
 							.map(Town::getName)
 							.collect(Collectors.toList()), args[2]);
+					break;
 				case "add":
 					return getTownyStartingWith(args[args.length - 1], "t");
 				case "kick":
@@ -1421,7 +1422,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
 	}
 
-	private void nationSanctionTown(CommandSender sender, Nation nation, String[] args) throws TownyException {
+	public static void nationSanctionTown(CommandSender sender, Nation nation, String[] args) throws TownyException {
 		if (args.length == 0 || args[0].equals("?")) {
 			HelpMenu.NATION_SANCTIONTOWN.send(sender);
 			return;
@@ -1447,10 +1448,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		switch(args[0].toLowerCase(Locale.ROOT)) {
 		case "add" -> nationSanctionTownAdd(sender, nation, town);
 		case "remove" -> nationSactionTownRemove(sender, nation, town);
+		default -> HelpMenu.NATION_SANCTIONTOWN.send(sender);
 		}
 	}
 
-	private void nationSanctionTownList(CommandSender sender, Nation nation) {
+	private static void nationSanctionTownList(CommandSender sender, Nation nation) {
 
 		if (nation.getSanctionedTowns().isEmpty())
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_error_nation_has_no_enemies"));
@@ -1460,7 +1462,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private void nationSanctionTownAdd(CommandSender sender, Nation nation, Town town) throws TownyException {
+	private static void nationSanctionTownAdd(CommandSender sender, Nation nation, Town town) throws TownyException {
 		if (nation.hasTown(town))
 			throw new TownyException(Translatable.of("msg_err_nation_cannot_sanction_own_town"));
 
@@ -1472,7 +1474,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_err_nation_town_sanctioned", town.getName()));
 	}
 
-	private void nationSactionTownRemove(CommandSender sender, Nation nation, Town town) throws TownyException {
+	private static void nationSactionTownRemove(CommandSender sender, Nation nation, Town town) throws TownyException {
 		if (!nation.hasSanctionedTown(town))
 			throw new TownyException(Translatable.of("msg_err_nation_town_isnt_sanctioned"));
 
