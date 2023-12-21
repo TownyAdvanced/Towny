@@ -1042,7 +1042,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			String plotTypeLine = translator.of("msg_town_plots_type_line", type.getFormattedName(), residentOwned, 
 				typeCache.getNumTownBlocks(type, CacheType.FORSALE), typeCache.getNumTownBlocks(type, CacheType.ALL));
 			if (TownyEconomyHandler.isActive())
-				plotTypeLine += translator.of("msg_town_plots_type_line_revenue", TownyEconomyHandler.getFormattedBalance(residentOwned * type.getTax(town)));
+				plotTypeLine += translator.of("msg_town_plots_type_line_revenue", prettyMoney(residentOwned * type.getTax(town)));
 			out.add(plotTypeLine);
 		}
 		out.add(Translatable.of("msg_town_plots_revenue_disclaimer").forLocale(player));
@@ -1175,7 +1175,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					
 					Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
 					if (TownyEconomyHandler.isActive())
-						spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+						spawnCost = Translatable.of("msg_spawn_cost", prettyMoney(town.getSpawnCost()));
 
 					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
 					output.add(Pair.pair(town.getUUID(), townName));
@@ -1419,7 +1419,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// If they setting neutral status on send a message confirming they paid something, if they did.
 		if (peacefulState && TownyEconomyHandler.isActive() && cost > 0) {
 			town.getAccount().withdraw(cost, "Peaceful Town Cost");
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_paid", TownyEconomyHandler.getFormattedBalance(cost)));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_paid", prettyMoney(cost)));
 		}
 
 		// Set the toggle setting.
@@ -2258,12 +2258,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		if(TownyEconomyHandler.isActive() && TownySettings.getTownRenameCost() > 0) {
 			if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))
-				throw new TownyException(Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())));
+				throw new TownyException(Translatable.of("msg_err_no_money", prettyMoney(TownySettings.getTownRenameCost())));
 			
 			final Town finalTown = town;
 			final String finalName = name;
 			Confirmation.runOnAccept(() -> townRename(sender, finalTown, finalName))
-				.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getTownRenameCost())))
+				.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(TownySettings.getTownRenameCost())))
 				.sendTo(sender);
 		} else {
 			townRename(sender, town, name);
@@ -2413,8 +2413,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.getTownSetMapColourCost() > 0)
 			Confirmation
 				.runOnAccept(()-> setTownMapColor(town, color))
-				.setTitle(Translatable.of("msg_confirm_purchase", TownySettings.getTownSetMapColourCost()))
-				.setCost(new ConfirmationTransaction(()-> TownySettings.getTownSetMapColourCost(), town.getAccount(), "Cost of setting town map color."))
+				.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(TownySettings.getTownSetMapColourCost())))
+				.setCost(new ConfirmationTransaction(TownySettings::getTownSetMapColourCost, town, "Cost of setting town map color."))
 				.sendTo(sender);
 		else 
 			setTownMapColor(town, color);
@@ -2435,7 +2435,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		town.setMaxPercentTaxAmount(Double.parseDouble(split[1]));
 
-		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), TownyEconomyHandler.getFormattedBalance(town.getMaxPercentTaxAmount())));
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_tax_max_percent_amount", sender.getName(), prettyMoney(town.getMaxPercentTaxAmount())));
 	}
 
 	private static void parseTownBaltop(Player player, Town town) throws TownyException {
@@ -2447,7 +2447,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	
 			int i = 0;
 			for (Resident res : residents)
-				sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), TownyEconomyHandler.getFormattedBalance(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
+				sb.append(Translatable.of("msg_baltop_book_format", ++i, res.getName(), prettyMoney(res.getAccount().getCachedBalance())).forLocale(player) + "\n");
 
 			ItemStack book = BookFactory.makeBook("Town Baltop", town.getName(), sb.toString());
 			plugin.getScheduler().run(player, () -> player.openBook(book));
@@ -2472,7 +2472,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 0 || !split[0].equalsIgnoreCase("bonus")) {
 			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town buy"));
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
-			TownyMessaging.sendMessage(sender, String.format(line, TownyEconomyHandler.getFormattedBalance(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
+			TownyMessaging.sendMessage(sender, String.format(line, prettyMoney(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
 				TownyMessaging.sendMessage(sender, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
 			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
@@ -2514,16 +2514,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		double cost = town.getBonusBlockCostN(n);
 		// Test if the town can pay and throw economy exception if not.
 		if (!town.getAccount().canPayFromHoldings(cost))
-			throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+			throw new TownyException(Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), prettyMoney(cost)));
 		
 		Confirmation.runOnAccept(() -> {
 			town.addPurchasedBlocks(n);
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost)));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_buy", n, Translatable.of("bonus_townblocks"), prettyMoney(cost)));
 			town.save();
 		})
-			.setCost(new ConfirmationTransaction(() -> cost, town.getAccount(), String.format("Town Buy Bonus (%d)", n),
-					Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), TownyEconomyHandler.getFormattedBalance(cost))))
-			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+			.setCost(new ConfirmationTransaction(() -> cost, town, String.format("Town Buy Bonus (%d)", n),
+					Translatable.of("msg_no_funds_to_buy", n, Translatable.of("bonus_townblocks"), prettyMoney(cost))))
+			.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
 			.sendTo(sender); 
 	}
 
@@ -2587,8 +2587,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Test if the resident can afford the town.
-		if (!resident.getAccount().canPayFromHoldings(TownySettings.getNewTownPrice()))
-			throw new TownyException(Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice()));
+		double cost = TownySettings.getNewTownPrice();
+		if (!resident.getAccount().canPayFromHoldings(cost))
+			throw new TownyException(Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), cost));
 
 		// Send a confirmation before taking their money and throwing the PreNewTownEvent.
 		final String finalName = name;
@@ -2603,9 +2604,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 		})
 		.setCancellableEvent(new PreNewTownEvent(player, name, spawnLocation))
-		.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewTownPrice())))
-		.setCost(new ConfirmationTransaction(TownySettings::getNewTownPrice, resident.getAccount(), "New Town Cost",
-			Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), TownySettings.getNewTownPrice())))
+		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
+		.setCost(new ConfirmationTransaction(() -> cost, resident, "New Town Cost",
+			Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), prettyMoney(cost))))
 		.sendTo(player);
 	}
 
@@ -2751,7 +2752,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		double renameCost = TownySettings.getTownRenameCost();
 		if (TownyEconomyHandler.isActive() && renameCost > 0 && !town.getAccount().withdraw(renameCost, String.format("Town renamed to: %s", newName))) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(renameCost)));
+			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", prettyMoney(renameCost)));
 			return;
 		}
 
@@ -3637,7 +3638,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (!town.getAccount().canPayFromHoldings(blockCost)) {
 						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-						throw new TownyException(Translatable.of("msg_no_funds_claim2", finalSelection.size(), TownyEconomyHandler.getFormattedBalance(blockCost), TownyEconomyHandler.getFormattedBalance(missingAmount), new DecimalFormat("#").format(missingAmount)));
+						throw new TownyException(Translatable.of("msg_no_funds_claim2", finalSelection.size(), prettyMoney(blockCost), prettyMoney(missingAmount), new DecimalFormat("#").format(missingAmount)));
 					}
 
 					town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", finalSelection.size(), player.getName()));
@@ -3721,19 +3722,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() < 0) {
 			double cost = Math.abs(TownySettings.getClaimRefundPrice() * selection.size());
 			if (!town.getAccount().canPayFromHoldings(cost)) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", prettyMoney(cost)));
 				return;
 			}
 			List<WorldCoord> finalSelection = selection;
 			Confirmation.runOnAccept(()-> {
 				if (!town.getAccount().canPayFromHoldings(cost)) {
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(cost)));
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", prettyMoney(cost)));
 					return;
 				}
 				// Set the area to unclaim
 				plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, finalSelection, false, false, false));
 			})
-			.setTitle(Translatable.of("confirmation_unclaiming_costs", TownyEconomyHandler.getFormattedBalance(cost)))
+			.setTitle(Translatable.of("confirmation_unclaiming_costs", prettyMoney(cost)))
 			.sendTo(player);
 			return;
 		}
@@ -3751,7 +3752,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() < 0) {
 			int numTownBlocks = town.getTownBlocks().size() - (town.hasHomeBlock() ? 1 : 0); 
-			String formattedCost = TownyEconomyHandler.getFormattedBalance(Math.abs(TownySettings.getClaimRefundPrice() * numTownBlocks));
+			String formattedCost = prettyMoney(Math.abs(TownySettings.getClaimRefundPrice() * numTownBlocks));
 			// Unclaiming will cost the player money because of a negative refund price. Have them confirm the cost.
 			Confirmation
 				.runOnAcceptAsync(new TownClaim(plugin, player, town, null, false, false, false)) 
@@ -3825,11 +3826,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_another_plugin_cancelled_takeover"));
 
 		double cost = TownySettings.getTakeoverClaimPrice();
-		String costSlug = !TownyEconomyHandler.isActive() || cost <= 0 ? Translatable.of("msg_spawn_cost_free").forLocale(player) : TownyEconomyHandler.getFormattedBalance(cost);
+		String costSlug = !TownyEconomyHandler.isActive() || cost <= 0 ? Translatable.of("msg_spawn_cost_free").forLocale(player) : prettyMoney(cost);
 		String townName = wc.getTownOrNull().getName();
 		Confirmation.runOnAccept(() -> Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, Arrays.asList(wc), false, true, false)))
 			.setTitle(Translatable.of("confirmation_you_are_about_to_take_over_a_claim", townName, costSlug))
-			.setCost(new ConfirmationTransaction(() -> cost, town.getAccount(), "Takeover Claim (" + wc.toString() + ") from " + townName + "."))
+			.setCost(new ConfirmationTransaction(() -> cost, town, "Takeover Claim (" + wc.toString() + ") from " + townName + "."))
 			.sendTo(player);
 	}
 
@@ -3970,10 +3971,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_town_merge_err_not_enough_money", prettyMoney(remainingTown.getAccount().getHoldingBalance()), prettyMoney(cost)));
 
 		return mergeCost;
-	}
-
-	private static String prettyMoney(double cost) {
-		return TownyEconomyHandler.getFormattedBalance(cost);
 	}
 
 	private static void sendTownMergeRequest(CommandSender sender, Town remainingTown, Town succumbingTown, double cost) {

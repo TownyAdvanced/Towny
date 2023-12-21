@@ -389,7 +389,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_unable_to_pay_bail"));
 			}
 		})
-		.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
 		.sendTo(player);
 	}
 
