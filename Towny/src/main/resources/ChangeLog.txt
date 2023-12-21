@@ -9286,3 +9286,5 @@ v0.92.0.11:
     - Leave this setting at 0.0 in order to allow nations to chain towns together to go as wide as they like.
 0.100.0.11:
   - Fix config migrator file formatting, courtesy of Warrior with PR #7128.
+0.100.0.12:
+  - Bump adventure-platform to 4.3.2 for 1.20.4 compatibility.
