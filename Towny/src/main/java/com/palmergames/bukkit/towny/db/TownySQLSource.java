@@ -1387,6 +1387,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (SQLException ignored) {
 			}
 
+			line = rs.getString("sanctionedTowns");
+			if (line != null) {
+				nation.loadSanctionedTowns(line.split("#"));
+			}
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
@@ -2349,7 +2354,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				nat_hm.put("metadata", "");
 
 			nat_hm.put("conqueredTax", nation.getConqueredTax());
-
+			nat_hm.put("sanctionedTowns", StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
 			updateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
 		} catch (Exception e) {

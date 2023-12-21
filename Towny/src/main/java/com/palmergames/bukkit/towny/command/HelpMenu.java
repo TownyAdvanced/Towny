@@ -937,6 +937,17 @@ public enum HelpMenu {
 		}
 	},
 
+	NATION_SANCTIONTOWN {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation sanctiontown")
+				.add("add [town]", Translatable.of("nation_sanction_help_1"))
+				.add("remove [town]", Translatable.of("nation_sanction_help_2"))
+				.add("list", Translatable.of("nation_sanction_help_3"))
+				.add("list [nation]", Translatable.of("nation_sanction_help_4"));
+		}
+	},
+
 	ALLIES_STRING {
 		@Override
 		protected MenuBuilder load() {

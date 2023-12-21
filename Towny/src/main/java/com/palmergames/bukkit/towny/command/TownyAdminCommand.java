@@ -172,6 +172,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"rename",
 		"delete",
 		"toggle",
+		"sanctiontown",
 		"set",
 		"meta",
 		"deposit",
@@ -508,6 +509,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (args.length == 2) {
 					return filterByStartOrGetTownyStartingWith(Collections.singletonList("new"), args[1], "+n");
 				} else if (args.length > 2 && !args[1].equalsIgnoreCase("new")) {
+					Nation nation = TownyUniverse.getInstance().getNation(args[1]);
+					if (nation == null)
+						return Collections.emptyList();
 					switch (args[2].toLowerCase(Locale.ROOT)) {
 						case "add":
 							if (args.length == 4)
@@ -518,14 +522,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							else if (args.length == 5)
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
 						case "set": {
-							Nation nation = TownyUniverse.getInstance().getNation(args[1]);
-							if (nation != null) {
-								if (args.length == 4) {
-									return NameUtil.filterByStart(adminNationSetTabCompletes, args[3]);
-								}
-							}
-							else {
-								return Collections.emptyList();
+							if (args.length == 4) {
+								return NameUtil.filterByStart(adminNationSetTabCompletes, args[3]);
 							}
 						}
 						case "meta":
@@ -546,6 +544,16 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return getTownyStartingWith(args[4], "r");
 							else if (args.length == 6)
 								return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[5]);
+						case "sanctiontown":
+							if (args.length == 4)
+								return NameUtil.filterByStart(Arrays.asList("add","remove","list"), args[3]);
+							if (args.length == 5 && args[3].equalsIgnoreCase("add") || args[4].equalsIgnoreCase("remove"))
+								return NameUtil.filterByStart(TownyUniverse.getInstance().getTowns()
+										.stream()
+										.filter(t -> !nation.hasTown(t))
+										.map(Town::getName)
+										.collect(Collectors.toList()), args[4]);
+							break;
 						case "enemy":
 						case "ally":
 							if (args.length == 4)
@@ -1632,6 +1640,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "kick":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_KICK.getNode());
 			NationCommand.nationKick(sender, nation, TownyAPI.getInstance().getTowns(StringMgmt.remArgs(split, 2)));
+			break;
+		case "sanctiontown":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SANCTIONTOWN.getNode());
+			NationCommand.nationSanctionTown(sender, nation, StringMgmt.remArgs(split, 2));
 			break;
 		case "delete":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode());

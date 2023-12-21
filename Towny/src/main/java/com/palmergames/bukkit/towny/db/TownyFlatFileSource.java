@@ -1218,6 +1218,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					nation.setConqueredTax(Double.parseDouble(line));
 
+				line = keys.get("sanctionedTowns");
+				if (line != null) {
+					nation.loadSanctionedTowns(line.split("#"));
+				}
+
 			} catch (Exception e) {
 				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()), e);
 				return false;
@@ -2136,6 +2141,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + serializeMetadata(nation));
 		
 		list.add("conqueredTax=" + nation.getConqueredTax());
+
+		// SanctionedTowns
+		list.add("sanctionedTowns=" + StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
 		/*
 		 *  Make sure we only save in async
 		 */
