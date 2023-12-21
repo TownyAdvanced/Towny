@@ -9288,3 +9288,7 @@ v0.92.0.11:
   - Fix config migrator file formatting, courtesy of Warrior with PR #7128.
 0.100.0.12:
   - Bump adventure-platform to 4.3.2 for 1.20.4 compatibility.
+0.100.0.13:
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.1.2 to 3.2.3.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.56.0 to 3.58.0.
+  - Make Towny more resiliant to errors which come from having no Economy present on the server.
