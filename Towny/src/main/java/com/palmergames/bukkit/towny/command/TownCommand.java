@@ -3548,9 +3548,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Select the area, can be one or many.
 			selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split, true);
-			
-			if (selection.size() > 1) 
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE.getNode());
 		}
 
 		// Filter out any TownBlocks which aren't Wilderness. 

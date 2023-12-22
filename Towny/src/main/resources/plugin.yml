@@ -60,7 +60,6 @@ permissions:
             towny.command.townyworld.*: true
             towny.command.towny.*: true
             towny.command.town.*: true
-            towny.command.town.claim.town.multiple: true
             towny.command.nation.*: true
             towny.command.plot.*: true
             towny.town.resident: true
@@ -424,7 +423,6 @@ permissions:
         children:
             towny.command.town.claim.town: true
             towny.command.town.claim.outpost: true
-            towny.command.town.claim.town.multiple: false
             towny.command.town.claim.fill: true
 
     towny.command.town.invite.*:

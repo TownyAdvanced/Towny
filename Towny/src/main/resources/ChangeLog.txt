@@ -9316,3 +9316,7 @@ v0.92.0.11:
     - A cancellable event which is fired before a town becomes unsanctioned.
 0.100.0.14:
   - Fix potential IllegalArgumentException by loading sanctioned towns in a safer way.
+0.100.0.15:
+  - Removed Permission Node: towny.command.town.claim.town.multiple
+    - Towny over the years has made great progress towards making claiming more light weight on the server.
+    - Therefore it makes sense to allow the use of /t claim # and other multi-claiming commands by default.
