@@ -1013,6 +1013,7 @@ public class TownyMessaging {
 	 * @param message {@link String} message which will be made into a {@link TextComponent} and shown in the ActioBar.
 	 */
 	public static void sendActionBarMessageToPlayer(Player player, String message) {
+		Towny.getPlugin().getLogger().info(String.format("% is being sent an action bar string: '%s'", player.getName(), message));
 		sendActionBarMessageToPlayer(player, TownyComponents.miniMessage(message));
 	}
 	
@@ -1022,6 +1023,7 @@ public class TownyMessaging {
 	 * @param component {@link Component} message which will be shown to the player.
 	 */
 	public static void sendActionBarMessageToPlayer(Player player, Component component) {
+		Towny.getPlugin().getLogger().info(String.format("% is being sent an action bar component: '%s'", player.getName(), TownyComponents.plain(component)));
 		Towny.getAdventure().player(player).sendActionBar(component); 
 	}
 	
