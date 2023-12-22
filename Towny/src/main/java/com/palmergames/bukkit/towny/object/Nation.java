@@ -725,9 +725,13 @@ public class Nation extends Government {
 
 	public void loadSanctionedTowns(String[] tokens) {
 		for (String stringUUID : tokens) {
-			UUID uuid = UUID.fromString(stringUUID);
-			if (uuid != null && TownyAPI.getInstance().getTown(uuid) != null)
-				sanctionedTowns.add(TownyAPI.getInstance().getTown(uuid));
+			try {
+				Town town = TownyAPI.getInstance().getTown(UUID.fromString(stringUUID));
+				if (town != null)
+					sanctionedTowns.add(town);
+			} catch (IllegalArgumentException ignored) {
+				continue;
+			}
 		}
 	}
 }

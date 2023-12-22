@@ -9314,3 +9314,5 @@ v0.92.0.11:
     - A cancellable event which is fired before a town becomes sanctioned.
   - API: Added NationSanctionTownRemoveEvent
     - A cancellable event which is fired before a town becomes unsanctioned.
+0.100.0.14:
+  - Fix potential IllegalArgumentException by loading sanctioned towns in a safer way.
