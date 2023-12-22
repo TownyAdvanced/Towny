@@ -97,7 +97,8 @@ public class ProximityUtil {
 	}
 
 	public static boolean isTownTooFarFromNation(Town town, Town newCapital, List<Town> towns) {
-		if (closeEnoughToCapital(town, newCapital) || closeEnoughToOtherNationTowns(town, newCapital, towns))
+		if (closeEnoughToCapital(town, newCapital) || 
+			TownySettings.getNationProximityToOtherNationTowns() > 0 && closeEnoughToOtherNationTowns(town, newCapital, towns))
 			return false;
 		return true;
 	}
@@ -109,10 +110,10 @@ public class ProximityUtil {
 	private static boolean closeEnoughToOtherNationTowns(Town town, Town newCapital, List<Town> towns) {
 		double maxDistanceFromOtherTowns = TownySettings.getNationProximityToOtherNationTowns();
 		double maxDistanceFromTheCapital = TownySettings.getNationProximityAbsoluteMaximum();
-
-		// Other towns in the nation are not giving any proximity buff, only the capital is counted.
-		if (maxDistanceFromOtherTowns <= 0)
-			return false;
+//
+//		// Other towns in the nation are not giving any proximity buff, only the capital is counted.
+//		if (maxDistanceFromOtherTowns <= 0)
+//			return false;
 
 		// The town is too far from the nation's absolute cap on proximity from the capital homeblock.
 		if (maxDistanceFromTheCapital > 0 && !closeEnoughToTown(town, newCapital, maxDistanceFromTheCapital))
