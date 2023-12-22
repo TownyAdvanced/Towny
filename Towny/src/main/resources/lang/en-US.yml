@@ -206,6 +206,11 @@ nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n s
 nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
 nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
 
+nation_sanction_help_1: "Adds a town to the SanctionedTown list."
+nation_sanction_help_2: "Removes a town from the SanctionedTown list."
+nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
+nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
+
 king_help_1: 'Nation Leader Help'
 king_help_2: 'Set your alliance.'
 king_help_3: 'Set your enemies.'
@@ -2372,3 +2377,23 @@ msg_err_resident_is_npc: "You cannot do this to an NPC resident."
 msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
 
 msg_unnamed: "Unnamed"
+
+msg_err_nation_cannot_sanction_own_town: "You cannot sanction a town that is a part of your nation."
+
+msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
+
+msg_err_nation_town_already_sanctioned: "Your nation already sanctions that town."
+
+msg_err_nation_town_sanctioned: "Your nation has now sanctioned %s, they will not be allowed to join your nation."
+
+msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
+
+msg_err_nation_has_no_sanctioned_towns: "The nation has no sanctioned towns."
+
+title_nation_sanctioned_towns: 'Sanctioned Towns'
+
+msg_err_cannot_add_sanctioned_town: "Your nation cannot add %s, your nation has sanctioned them."
+
+msg_err_cannot_join_nation_sanctioned_town: "Your town cannot join %s, this nation has sanctioned your town."
+
+msg_err_no_nation_cannot_do: "You cannot perform this action because no nation was able to be determined."
