@@ -909,9 +909,11 @@ public class TownyPlayerListener implements Listener {
 			return;
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
-		if (to.isWilderness() && from.isWilderness()) 
+		if (to.isWilderness() && from.isWilderness()) {
+			Towny.getPlugin().getLogger().info(String.format("TownyPlayerListener#onPlayerChangPlotEvent | %s has moved from wilderness to wilderness.", event.getPlayer().getName()));
 			// Both are wilderness, no event will fire.
 			return;
+		}
 		if (to.isWilderness()) {
 			// Gone from a Town into the wilderness.
 			BukkitTools.fireEvent(new PlayerExitsFromTownBorderEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));

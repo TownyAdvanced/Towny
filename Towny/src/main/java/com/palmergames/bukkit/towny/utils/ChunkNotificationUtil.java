@@ -44,9 +44,15 @@ public class ChunkNotificationUtil {
 		ChunkNotificationEvent cne = new ChunkNotificationEvent(player, msg, to, from);
 		BukkitTools.fireEvent(cne);
 		msg = cne.getMessage();
-		if (cne.isCancelled() || msg == null || msg.isEmpty())
+		if (cne.isCancelled() || msg == null || msg.isEmpty()) {
+			Towny.getPlugin().getLogger().info(String.format("ChunkNotificationUtil#showChunkNotification | %s ChunkNotificationEvent failed.", player.getName()));
+			Towny.getPlugin().getLogger().info(String.format("ChunkNotificationUtil#showChunkNotification | %s ChunkNotificationEvent cancelled: %s.", player.getName(), String.valueOf(cne.isCancelled())));
+			Towny.getPlugin().getLogger().info(String.format("ChunkNotificationUtil#showChunkNotification | %s ChunkNotificationEvent msg null: %s.", player.getName(), String.valueOf(msg == null)));
+			Towny.getPlugin().getLogger().info(String.format("ChunkNotificationUtil#showChunkNotification | %s ChunkNotificationEvent msg empty: %s.", player.getName(), String.valueOf(msg.isEmpty())));
 			return;
+		}
 
+		Towny.getPlugin().getLogger().info(String.format("ChunkNotificationUtil#showChunkNotification | %s is being sent a Chunk Notification.", player.getName()));
 		sendChunkNoticiation(player, msg);
 	}
 
@@ -64,6 +70,7 @@ public class ChunkNotificationUtil {
 	}
 	
 	private static void sendActionBarChunkNotification(Player player, Component msgComponent) {
+		Towny.getPlugin().getLogger().info(String.format("ChunkNotificationUtil#sendActionBarChunkNotification | %s is being sent a sendActionBarChunkNotification.", player.getName()));
 		int seconds = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION);
 		if (seconds > 3) {
 			// Towny is showing the actionbar message longer than vanilla MC allows, using a scheduled task.
@@ -88,6 +95,7 @@ public class ChunkNotificationUtil {
 	}
 
 	private static void sendBossBarChunkNotification(Player player, Component message) {
+		Towny.getPlugin().getLogger().info(String.format("ChunkNotificationUtil#sendBossBarChunkNotification | %s is being sent a sendBossBarChunkNotification.", player.getName()));
 		int ticks = TownySettings.getInt(ConfigNodes.NOTIFICATION_DURATION) * 20;
 		if (playerBossBarMap.containsKey(player.getUniqueId())) {
 			removePlayerActionTasks(player);

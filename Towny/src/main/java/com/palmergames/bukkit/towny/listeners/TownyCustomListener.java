@@ -64,9 +64,11 @@ public class TownyCustomListener implements Listener {
 		WorldCoord from = event.getFrom();
 		WorldCoord to = event.getTo();
 		
+		Towny.getPlugin().getLogger().info(String.format("TownyCustomListener#onPlayerChangPlotEvent | %s has PlayerChangePlotEvent.", event.getPlayer().getName()));
 		if (!TownyAPI.getInstance().isTownyWorld(to.getBukkitWorld()))
 			return;
-		
+
+		Towny.getPlugin().getLogger().info(String.format("TownyCustomListener#onPlayerChangPlotEvent | %s is in a TownyWorld.", event.getPlayer().getName()));
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident == null)
 			return;
@@ -87,8 +89,12 @@ public class TownyCustomListener implements Listener {
 			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, to));
 
 		// Check if player has entered a new town/wilderness
-		if (event.isShowingPlotNotifications())
+		if (event.isShowingPlotNotifications()) {
+			Towny.getPlugin().getLogger().info(String.format("TownyCustomListener#onPlayerChangPlotEvent | %s PlayerChangePlotEvent is showing Notifications.", event.getPlayer().getName()));
 			ChunkNotificationUtil.showChunkNotification(player, resident, to, from);
+		} else {
+			Towny.getPlugin().getLogger().info(String.format("TownyCustomListener#onPlayerChangPlotEvent | %s PlayerChangePlotEvent is not showing Notifications.", event.getPlayer().getName()));
+		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
