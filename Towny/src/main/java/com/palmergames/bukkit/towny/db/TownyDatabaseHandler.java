@@ -117,12 +117,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		
 		/*
-		 * Start our Async queue for pushing data to the flatfile database.
+		 * Start our async queue for pushing data to the database.
 		 */
 		task = plugin.getScheduler().runAsyncRepeating(() -> {
-			while (!this.queryQueue.isEmpty()) {
-				Runnable operation = this.queryQueue.poll();
-				operation.run();
+			synchronized(queryQueue) {
+				while (!this.queryQueue.isEmpty()) {
+					Runnable operation = this.queryQueue.poll();
+					operation.run();
+				}
 			}
 		}, 5L, 5L);
 	}

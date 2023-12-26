@@ -92,7 +92,8 @@ public class TownyUniverse {
     
     private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
     private final String rootFolder;
-    private TownyDataSource dataSource;
+	private TownyDataSource loadDataSource;
+	private TownyDataSource saveDataSource;
     private TownyPermissionSource permissionSource;
 
     private TownyUniverse() {
@@ -141,21 +142,17 @@ public class TownyUniverse {
      * @param loadDbType - load setting from the config.
      * @param saveDbType - save setting from the config.
      */
-	void loadAndSaveDatabase(String loadDbType, String saveDbType) {
+	void loadAndSaveDatabase(String loadDbType, String saveDbType) throws TownyInitException {
     	towny.getLogger().info("Database: [Load] " + loadDbType + " [Save] " + saveDbType);
-		try {
-			// Try loading the database.
-			loadDatabase(loadDbType);
-		} catch (TownyInitException e) {
-			throw new TownyInitException(e.getMessage(), e.getError());
+		
+		loadDatabase(loadDbType);
+		saveDatabase(saveDbType);
+		
+		// Dispose of the load data source if it's no longer needed
+		if (this.loadDataSource != this.saveDataSource) {
+			this.loadDataSource.finishTasks();
+			this.loadDataSource = null;
 		}
-        
-        try {
-            // Try saving the database.
-        	saveDatabase(saveDbType);
-		} catch (TownyInitException e) {
-			throw new TownyInitException(e.getMessage(), e.getError());
-		}        	
     }
     
     /**
@@ -174,22 +171,25 @@ public class TownyUniverse {
         switch (loadDbType.toLowerCase(Locale.ROOT)) {
             case "ff":
             case "flatfile": {
-                this.dataSource = new TownyFlatFileSource(towny, this);
+                this.loadDataSource = new TownyFlatFileSource(towny, this);
                 break;
             }
             case "mysql": {
-                this.dataSource = new TownySQLSource(towny, this);
+                this.loadDataSource = new TownySQLSource(towny, this);
                 break;
             }
             default: {
             	throw new TownyInitException("Database: Database.yml unsupported load format: " + loadDbType, TownyInitException.TownyError.DATABASE_CONFIG);
             }
         }
+		
+		// Loading the database can cause saving, so save that back to the load source
+		this.saveDataSource = this.loadDataSource;
         
         /*
          * Load the actual database.
          */
-        if (!dataSource.loadAll())
+        if (!loadDataSource.loadAll())
         	throw new TownyInitException("Database: Failed to load database.", TownyInitException.TownyError.DATABASE);
 
         long time = System.currentTimeMillis() - startTime;
@@ -215,11 +215,11 @@ public class TownyUniverse {
             switch (saveDbType.toLowerCase(Locale.ROOT)) {
                 case "ff":
                 case "flatfile": {
-                    this.dataSource = new TownyFlatFileSource(towny, this);
+                    this.saveDataSource = this.loadDataSource instanceof TownyFlatFileSource ? this.loadDataSource : new TownyFlatFileSource(towny, this);
                     break;
                 }
                 case "mysql": {
-                    this.dataSource = new TownySQLSource(towny, this);
+                    this.saveDataSource = this.loadDataSource instanceof TownySQLSource ? this.loadDataSource : new TownySQLSource(towny, this);
                     break;
                 }
                 default: {
@@ -229,10 +229,10 @@ public class TownyUniverse {
 
             if (TownySettings.getLoadDatabase().equalsIgnoreCase(saveDbType)) {
                 // Update all Worlds data files
-                dataSource.saveAllWorlds();                
+                saveDataSource.saveAllWorlds();                
             } else {
                 //Formats are different so save ALL data.
-                dataSource.saveAll();
+                saveDataSource.saveAll();
             }
             return true;
         } catch (UnsupportedOperationException e) {
@@ -261,7 +261,7 @@ public class TownyUniverse {
      */
 
     public TownyDataSource getDataSource() {
-        return dataSource;
+        return saveDataSource;
     }
     
     public TownyPermissionSource getPermissionSource() {
