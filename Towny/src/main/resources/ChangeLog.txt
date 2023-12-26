@@ -9320,3 +9320,9 @@ v0.92.0.11:
   - Removed Permission Node: towny.command.town.claim.town.multiple
     - Towny over the years has made great progress towards making claiming more light weight on the server.
     - Therefore it makes sense to allow the use of /t claim # and other multi-claiming commands by default.
+  - Update attribution in /towny universe to reflect 2023 stats.
+  - Update Towny/Sponsor plugins list.
+  - Correct townblock reporting in debug messages no one sees.
+  - Make the TownyUniverse code a bit more readable.
+  - Seperate the load and save data sources, courtesy of Warrior with PR #7100.
+    - Fixes a minor memory/connection leak when using mysql, the load datasource is now properly shut down when it's no longer needed and re-used if possible.
