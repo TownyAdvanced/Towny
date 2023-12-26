@@ -40,9 +40,9 @@ public class PluginIntegrations {
 	private static PluginIntegrations instance; 
 	private final String[] TOWNYADVANCED_PLUGINS = { "TownyChat", "TownyFlight", "TownyCultures", "TownyResources",
 			"TownyCombat", "FlagWar", "SiegeWar", "MapTowny", "Dynmap-Towny", "ChestShop-Towny", "mcMMO-Towny",
-			"Towny-TNE", "WorldGuard-Towny" };
+			"Towny-TNE", "WorldGuard-Towny", "TownyProvinces" };
 	private final String[] SPONSOR_PLUGINS = { "EventWar", "SiegeConquest", "TownyCamps", "TownyHistories", "TownyRTP",
-			"TownyWayPointTravel", "TownOptionalLWC" };
+			"TownyWayPointTravel", "TownOptionalLWC", "TowerOfBable", "TownyCaptureSites" };
 	private final String NEWLINE_STRING = System.lineSeparator() + "                           ";
 	private final Map<String, Level> warnings = new LinkedHashMap<>();
 
