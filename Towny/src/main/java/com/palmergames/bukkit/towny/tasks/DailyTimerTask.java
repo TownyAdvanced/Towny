@@ -132,7 +132,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		TownyMessaging.sendDebugMsg("    Towns: " + universe.getTowns().size());
 		TownyMessaging.sendDebugMsg("    Nations: " + universe.getNumNations());
 		for (TownyWorld world : universe.getTownyWorlds())
-			TownyMessaging.sendDebugMsg("    " + world.getName() + " (townblocks): " + universe.getTownBlocks().size());
+			TownyMessaging.sendDebugMsg("    " + world.getName() + " (townblocks): " + world.getTownBlocks().size());
 
 		TownyMessaging.sendDebugMsg("Memory (Java Heap):");
 		TownyMessaging.sendDebugMsg(String.format("%8d Mb (max)", Runtime.getRuntime().maxMemory() / 1024 / 1024));
