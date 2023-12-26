@@ -362,17 +362,27 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public List<String> getUniverseStats(Translator translator) {
+		String heart1 = "\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   ";
+		String heart2 = "\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   ";
+		String heart3 = "\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   ";
+		String heart4 = "\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-";
+		String heart5 = "\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   ";
+		String heart6 = "\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   ";
+		String heart7 = "\u00A70-----\u00A74#\u00A70-----   ";
+		String splitter = Colors.Gray + " | ";
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<String> output = new ArrayList<>();
-		
 		output.add(""); // Intentionally left blank
-		output.add("\u00A70-\u00A74###\u00A70---\u00A74###\u00A70-   " + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
-		output.add("\u00A74#\u00A7c###\u00A74#\u00A70-\u00A74#\u00A7c###\u00A74#\u00A70   " + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "LlmDl, Warrior, ElgarL, Chris H (Shade)");
-		output.add("\u00A74#\u00A7c####\u00A74#\u00A7c####\u00A74#   " + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
-		output.add("\u00A70-\u00A74#\u00A7c#######\u00A74#\u00A70-");
-		output.add("\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   " + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + Colors.Gray + " | " + Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyUniverse.getTowns().size() + Colors.Gray + " | " + Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
-		output.add("\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   " + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyUniverse.getTownyWorlds().size() + Colors.Gray + " | " + Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
-		output.add("\u00A70-----\u00A74#\u00A70-----   " + Colors.LightGreen + "https://TownyAdvanced.github.io/");
+		output.add(heart1 + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
+		output.add(heart2 + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "LlmDl, Warrior, ElgarL, Chris H (Shade)");
+		output.add(heart3 + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
+		output.add(heart4);
+		output.add(heart5 + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + splitter
+				+ Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyUniverse.getTowns().size() + splitter
+				+ Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
+		output.add(heart6 + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyUniverse.getTownyWorlds().size() + splitter
+				+ Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
+		output.add(heart7 + Colors.LightGreen + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
 
 		// Other TownyAdvanced plugins to report versions
