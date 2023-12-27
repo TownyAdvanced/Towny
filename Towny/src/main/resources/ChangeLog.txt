@@ -9326,3 +9326,8 @@ v0.92.0.11:
   - Make the TownyUniverse code a bit more readable.
   - Seperate the load and save data sources, courtesy of Warrior with PR #7100.
     - Fixes a minor memory/connection leak when using mysql, the load datasource is now properly shut down when it's no longer needed and re-used if possible.
+0.100.0.16:
+  - Reorganize the config, creating dedicated sections for Claiming and Spawning.
+    - Existing config.yml's will have ~60 entries moved into their new locations with their settings preserved.
+    - Over 13 years of Towny development there have been many settings added into the section that was a "best-fit".
+    - The creation of Spawning and Claiming section will ease the addition of future settings in these areas.
