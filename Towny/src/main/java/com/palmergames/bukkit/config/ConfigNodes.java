@@ -1352,7 +1352,7 @@ public enum ConfigNodes {
 			"",
 			"# Town respawn only happens when the player dies in the same world as the town's spawn point."),
 	SPAWNING_RESPAWN_ANCHOR_HIGHER_PRECEDENCE(
-			"spawning.respawning.town_respawn.respawn_anchor_higher_precendence",
+			"spawning.respawning.respawn_anchor_higher_precendence",
 			"true",
 			"",
 			"# When this is true, players will respawn to respawn anchors on death rather than their own town."),

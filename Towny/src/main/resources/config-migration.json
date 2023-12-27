@@ -758,7 +758,7 @@
       {
         "type": "MOVE",
         "path": "global_town_settings.spawning_cooldowns.town_spawn_cooldown_time",
-        "value": "spawning.spawning_cooldowns.town_spawn_cooldown_time"
+        "value": "spawning.town_spawn.spawning_cooldowns.town_spawn_cooldown_time"
       },
       {
         "type": "MOVE",
@@ -773,7 +773,7 @@
       {
         "type": "MOVE",
         "path": "global_town_settings.respawn_anchor_higher_precendence",
-        "value": "spawning.respawning.town_respawn.respawn_anchor_higher_precendence"
+        "value": "spawning.respawning.respawn_anchor_higher_precendence"
       },
       {
         "type": "MOVE",
