@@ -1257,7 +1257,7 @@ public class TownySettings {
 
 		n += getNationBonusBlocks(town);
 		
-		int ratioSizeLimit = getInt(ConfigNodes.TOWN_TOWN_BLOCK_LIMIT);
+		int ratioSizeLimit = getInt(ConfigNodes.CLAIMING_TOWN_BLOCK_LIMIT);
 		if (ratio != 0 && ratioSizeLimit > 0)
 			n = Math.min(ratioSizeLimit, n);
 
@@ -1335,12 +1335,12 @@ public class TownySettings {
 	
 	public static int getTownBlockRatio() {
 
-		return getInt(ConfigNodes.TOWN_TOWN_BLOCK_RATIO);
+		return getInt(ConfigNodes.CLAIMING_TOWN_BLOCK_RATIO);
 	}
 
 	public static int getTownBlockSize() {
 
-		return getInt(ConfigNodes.TOWN_TOWN_BLOCK_SIZE);
+		return getInt(ConfigNodes.CLAIMING_TOWN_BLOCK_SIZE);
 	}
 
 	public static boolean isFriendlyFireEnabled() {
@@ -1607,14 +1607,14 @@ public class TownySettings {
 
 	public static int getTownLimit() {
 
-		return getInt(ConfigNodes.TOWN_LIMIT);
+		return getInt(ConfigNodes.GTOWN_SETTINGS_LIMIT);
 	}
 
 	public static int getMaxPurchasedBlocks(Town town, int residents) {
 		if (isBonusBlocksPerTownLevel())
 			return getMaxBonusBlocks(town, residents);
 		else
-			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+			return getInt(ConfigNodes.CLAIMING_MAX_PURCHASED_BLOCKS);
 	}
 	
 	public static int getMaxPurchasedBlocks(Town town) {
@@ -1622,33 +1622,33 @@ public class TownySettings {
 		if (isBonusBlocksPerTownLevel())
 			return getMaxBonusBlocks(town);
 		else
-			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+			return getInt(ConfigNodes.CLAIMING_MAX_PURCHASED_BLOCKS);
 	}
 	
 	public static int getMaxPurchasedBlocksNode() {
 		
-			return getInt(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS);
+			return getInt(ConfigNodes.CLAIMING_MAX_PURCHASED_BLOCKS);
 	}
 	
 	public static int getMaxClaimRadiusValue() {
 		
-		return getInt(ConfigNodes.TOWN_MAX_CLAIM_RADIUS_VALUE);
+		return getInt(ConfigNodes.CLAIMING_MAX_CLAIM_RADIUS_VALUE);
 	}
 
 	public static boolean isOverClaimingAllowingStolenLand() {
-		return getBoolean(ConfigNodes.TOWN_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND);
+		return getBoolean(ConfigNodes.CLAIMING_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND);
 	}
 
 	public static boolean isOverClaimingPreventedByHomeBlockRadius() {
-		return getBoolean(ConfigNodes.TOWN_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS);
+		return getBoolean(ConfigNodes.CLAIMING_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS);
 	}
 
 	public static long getOverclaimingTownAgeRequirement() {
-		return getMillis(ConfigNodes.TOWN_OVERCLAIMING_TOWN_AGE_REQUIREMENT);
+		return getMillis(ConfigNodes.CLAIMING_OVERCLAIMING_TOWN_AGE_REQUIREMENT);
 	}
 
 	public static int getOverclaimingCommandCooldownInSeconds() {
-		return (int) getSeconds(ConfigNodes.TOWN_OVERCLAIMING_COMMAND_COOLDOWN);
+		return (int) getSeconds(ConfigNodes.CLAIMING_OVERCLAIMING_COMMAND_COOLDOWN);
 	}
 
 	public static boolean isSellingBonusBlocks(Town town) {
@@ -1658,7 +1658,7 @@ public class TownySettings {
 	
 	public static boolean isBonusBlocksPerTownLevel() { 
 		
-		return getBoolean(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS);
+		return getBoolean(ConfigNodes.CLAIMING_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS);
 	}
 
 	public static double getPurchasedBonusBlocksCost() {
@@ -1711,17 +1711,17 @@ public class TownySettings {
 
 	public static boolean isAllowingOutposts() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTPOSTS);
+		return getBoolean(ConfigNodes.CLAIMING_ALLOW_OUTPOSTS);
 	}
 	
 	public static boolean isOutpostsLimitedByLevels() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_LIMIT_OUTPOST_USING_LEVELS);
+		return getBoolean(ConfigNodes.CLAIMING_LIMIT_OUTPOST_USING_LEVELS);
 	}
 	
 	public static boolean isOutpostLimitStoppingTeleports() {
 		
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OVER_OUTPOST_LIMIT_STOP_TELEPORT);
+		return getBoolean(ConfigNodes.CLAIMING_OVER_OUTPOST_LIMIT_STOP_TELEPORT);
 	}
 
 	public static double getOutpostCost() {
@@ -1880,34 +1880,34 @@ public class TownySettings {
 
 	public static SpawnLevel isAllowingTownSpawn() {
 
-		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN);
+		return getSpawnLevel(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN);
 	}
 
 	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
 
-		return getSpawnLevel(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+		return getSpawnLevel(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
 
 	public static boolean isConfigAllowingPublicTownSpawnTravel() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL);
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
 	
 	public static boolean isConfigAllowingPublicNationSpawnTravel() {
 
-		return getBoolean(ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL);
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN_TRAVEL);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
-		return getStrArr(ConfigNodes.GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN);
+		return getStrArr(ConfigNodes.SPAWNING_PREVENT_TOWN_SPAWN_IN);
 	}
 
 	public static boolean areEnemiesAllowedToSpawnToPeacefulTowns() {
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ENEMIES_ALLOWED_TO_SPAWN_TO_PEACEFUL_TOWNS);
+		return getBoolean(ConfigNodes.SPAWNING_ENEMIES_ALLOWED_TO_SPAWN_TO_PEACEFUL_TOWNS);
 	}
 
 	public static boolean isSpawnWarnConfirmationUsed() {
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_SPAWN_WARNINGS);
+		return getBoolean(ConfigNodes.SPAWNING_COST_SPAWN_WARNINGS);
 	}
 
 	public static boolean isTaxingDaily() {
@@ -2444,16 +2444,16 @@ public class TownySettings {
 
 	public static boolean isTownRespawning() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN);
+		return getBoolean(ConfigNodes.SPAWNING_TOWN_RESPAWN);
 	}
 
 	public static boolean isTownRespawningInOtherWorlds() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY);
+		return getBoolean(ConfigNodes.SPAWNING_TOWN_RESPAWN_SAME_WORLD_ONLY);
 	}
 	
 	public static boolean isRespawnAnchorHigherPrecedence() {
-		return getBoolean(ConfigNodes.GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE);
+		return getBoolean(ConfigNodes.SPAWNING_RESPAWN_ANCHOR_HIGHER_PRECEDENCE);
 	}
 	
 	public static int getHomeBlockMovementCooldownHours() {
@@ -2507,25 +2507,25 @@ public class TownySettings {
 
 	public static int getMinDistanceFromTownHomeblocks() {
 
-		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
+		return getInt(ConfigNodes.CLAIMING_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
 	}
 	
 	public static int getMinDistanceForOutpostsFromPlot() {
 		
-		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT);
+		return getInt(ConfigNodes.CLAIMING_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT);
 	}
 	
 	public static int getMaxDistanceForOutpostsFromTown() {
-		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_FOR_OUTPOST_FROM_TOWN_PLOT);
+		return getInt(ConfigNodes.CLAIMING_MAX_DISTANCE_FOR_OUTPOST_FROM_TOWN_PLOT);
 	}
 
 	public static int getMinDistanceFromTownPlotblocks() {
 
-		return getInt(ConfigNodes.TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
+		return getInt(ConfigNodes.CLAIMING_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
 	}
 
 	public static int getMaxDistanceForTownMerge() {
-		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_FOR_MERGE);
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_DISTANCE_FOR_MERGE);
 	}
 
 	public static int getBaseCostForTownMerge() {
@@ -2538,27 +2538,27 @@ public class TownySettings {
 	
 	public static boolean isMinDistanceIgnoringTownsInSameNation() {
 
-		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS);
+		return getBoolean(ConfigNodes.CLAIMING_MIN_DISTANCE_IGNORED_FOR_NATIONS);
 	}
 
 	public static boolean isMinDistanceIgnoringTownsInAlliedNation() {
-		return getBoolean(ConfigNodes.TOWN_MIN_DISTANCE_IGNORED_FOR_ALLIES);
+		return getBoolean(ConfigNodes.CLAIMING_MIN_DISTANCE_IGNORED_FOR_ALLIES);
 	}
 
 	public static int getMinDistanceBetweenHomeblocks() {
-		return getInt(ConfigNodes.TOWN_MIN_DISTANCE_BETWEEN_HOMEBLOCKS);
+		return getInt(ConfigNodes.CLAIMING_MIN_DISTANCE_BETWEEN_HOMEBLOCKS);
 	}
 	
 	public static int getMaxDistanceBetweenHomeblocks() {
 
-		return getInt(ConfigNodes.TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS);
+		return getInt(ConfigNodes.CLAIMING_MAX_DISTANCE_BETWEEN_HOMEBLOCKS);
 	}
 
 	public static int getMaxResidentPlots(Resident resident) {
 
 		int maxPlots = TownyUniverse.getInstance().getPermissionSource().getGroupPermissionIntNode(resident.getName(), PermissionNodes.TOWNY_MAX_PLOTS.getNode());
 		if (maxPlots == -1)
-			maxPlots = getInt(ConfigNodes.TOWN_MAX_PLOTS_PER_RESIDENT);
+			maxPlots = getInt(ConfigNodes.GTOWN_SETTINGS_MAX_PLOTS_PER_RESIDENT);
 		return maxPlots;
 	}
 	
@@ -2918,22 +2918,22 @@ public class TownySettings {
 
 	public static int getTeleportWarmupTime() {
 
-		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_TIMER);
+		return getInt(ConfigNodes.SPAWNING_WARMUP_TIMER);
 	}
 	
 	public static boolean isMovementCancellingSpawnWarmup() {
 
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP);
+		return getBoolean(ConfigNodes.SPAWNING_MOVEMENT_CANCELS_SPAWN_WARMUP);
 	}
 	
 	public static boolean isDamageCancellingSpawnWarmup() {
 		
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP);
+		return getBoolean(ConfigNodes.SPAWNING_DAMAGE_CANCELS_SPAWN_WARMUP);
 	}
 	
 	public static int getSpawnCooldownTime() {
 		
-		return getInt(ConfigNodes.GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER);
+		return getInt(ConfigNodes.SPAWNING_TOWN_SPAWN_COOLDOWN_TIMER);
 	}
 	
 	public static int getPVPCoolDownTime() {
@@ -3104,7 +3104,7 @@ public class TownySettings {
 	}
 
 	public static int getAmountOfResidentsForOutpost() {
-		return getInt(ConfigNodes.GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
+		return getInt(ConfigNodes.CLAIMING_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS);
 	}
 
 	public static int getMaximumInvitesSentTown() {
@@ -3148,7 +3148,7 @@ public class TownySettings {
 	}
 	
 	public static boolean isNationSpawnOnlyAllowedInCapital() { 
-		return getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_SPAWN);
+		return getBoolean(ConfigNodes.SPAWNING_FORCE_NATION_SPAWN_IN_CAPITAL);
 	}
 	
 	public static int getMaxTownsPerNation() {
@@ -3168,15 +3168,15 @@ public class TownySettings {
 	}
 	
 	public static boolean isAllySpawningRequiringPublicStatus() {
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS);
+		return getBoolean(ConfigNodes.SPAWNING_IS_ALLY_TOWN_SPAWNING_REQUIRING_PUBLIC_STATUS);
 	}
 	
 	public static boolean trustedResidentsGetToSpawnToTown() {
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_TRUSTED_RESIDENTS_COUNT_AS_RESIDENTS);
+		return getBoolean(ConfigNodes.SPAWNING_SETTINGS_IS_TRUSTED_RESIDENTS_COUNT_AS_RESIDENTS);
 	}
 	
 	public static boolean isPromptingNewResidentsToTownSpawn() {
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN);
+		return getBoolean(ConfigNodes.SPAWNING_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN);
 	}
 	
 	public static String getNotificationTitlesTownTitle() {
@@ -3451,7 +3451,7 @@ public class TownySettings {
 	}
 
 	public static boolean getVisualizedSpawnPointsEnabled() {
-		return getBoolean(ConfigNodes.PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED);
+		return getBoolean(ConfigNodes.SPAWNING_VISUALIZED_SPAWN_POINTS_ENABLED);
 	}
 
 	public static List<String> getBlacklistedNames() {
@@ -3563,7 +3563,7 @@ public class TownySettings {
 	}
 
 	public static long getSpawnProtectionDuration() {
-		return TimeTools.getTicks(getString(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION_TIME));
+		return TimeTools.getTicks(getString(ConfigNodes.SPAWNING_RESPAWN_PROTECTION_TIME));
 	}
 	
 	public static boolean isUsingWebMapStatusScreens() {
@@ -3620,7 +3620,7 @@ public class TownySettings {
 	}
 	
 	public static boolean getRespawnProtectionAllowPickup() {
-		return getBoolean(ConfigNodes.GTOWN_SETTINGS_RESPAWN_PROTECTION_ALLOW_PICKUP);
+		return getBoolean(ConfigNodes.SPAWNING_RESPAWN_PROTECTION_ALLOW_PICKUP);
 	}
 	
 	public static String getNotificationsAppearAs() {
@@ -3707,15 +3707,15 @@ public class TownySettings {
 	}
 	
 	public static int getNewTownMinDistanceFromTownPlots() {
-		return getInt(ConfigNodes.TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_PLOT);
+		return getInt(ConfigNodes.CLAIMING_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_PLOT);
 	}
 	
 	public static int getNewTownMinDistanceFromTownHomeblocks() {
-		return getInt(ConfigNodes.TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
+		return getInt(ConfigNodes.CLAIMING_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK);
 	}
 	
 	public static int getMinAdjacentBlocks() {
-		return Math.min(3, getInt(ConfigNodes.TOWN_MIN_ADJACENT_BLOCKS));
+		return Math.min(3, getInt(ConfigNodes.CLAIMING_MIN_ADJACENT_BLOCKS));
 	}
 	
 	public static boolean isDeletingOldResidentsRemovingTownOnly() {
@@ -3739,7 +3739,7 @@ public class TownySettings {
 	}
 
 	public static double maxBuyTownPrice() {
-		return getDouble(ConfigNodes.TOWN_MAX_BUYTOWN_PRICE);
+		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
 	}
 }
 

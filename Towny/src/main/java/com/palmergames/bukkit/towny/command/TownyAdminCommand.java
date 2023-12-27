@@ -2822,7 +2822,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			toggleWildernessUsage(parseBoolean(context.getSessionData(0)));
 			toggleRevertUnclaim(parseBoolean(context.getSessionData(1)));
-			TownySettings.setProperty(ConfigNodes.TOWN_TOWN_BLOCK_RATIO.getRoot(), Integer.parseInt((String) context.getSessionData(2)));
+			TownySettings.setProperty(ConfigNodes.CLAIMING_TOWN_BLOCK_RATIO.getRoot(), Integer.parseInt((String) context.getSessionData(2)));
 			
 			if (TownyEconomyHandler.isActive()) {
 				TownySettings.setProperty(ConfigNodes.ECO_PRICE_NEW_TOWN.getRoot(), Integer.parseInt((String) context.getSessionData(3)));
