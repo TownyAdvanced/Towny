@@ -12,29 +12,29 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 
 public enum NationSpawnLevel {
 	PART_OF_NATION(
-			ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN,
+			ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN,
 			"msg_err_nation_spawn_forbidden",
 			"msg_err_nation_spawn_forbidden_war",
 			"msg_err_nation_spawn_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL,
 			PermissionNodes.TOWNY_NATION_SPAWN_NATION.getNode(),
-			ConfigNodes.GNATION_SETTINGS_NATION_MEMBER_COOLDOWN_TIMER),
+			ConfigNodes.SPAWNING_NATION_SPAWN_NATION_MEMBER_COOLDOWN_TIMER),
 	NATION_ALLY(
-			ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL_ALLY,
+			ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN_TRAVEL_ALLY,
 			"msg_err_nation_spawn_ally_forbidden",
 			"msg_err_nation_spawn_nation_forbidden_war",
 			"msg_err_nation_spawn_nation_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_ALLY,
 			PermissionNodes.TOWNY_NATION_SPAWN_ALLY.getNode(),
-			ConfigNodes.GNATION_SETTINGS_NATION_ALLY_COOLDOWN_TIMER),
+			ConfigNodes.SPAWNING_NATION_SPAWN_NATION_ALLY_COOLDOWN_TIMER),
 	UNAFFILIATED(
-			ConfigNodes.GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL,
+			ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN_TRAVEL,
 			"msg_err_public_nation_spawn_forbidden",
 			"msg_err_public_nation_spawn_forbidden_war",
 			"msg_err_public_nation_spawn_forbidden_peace",
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC,
 			PermissionNodes.TOWNY_NATION_SPAWN_PUBLIC.getNode(),
-			ConfigNodes.GNATION_SETTINGS_NATION_UNAFFILIATED_COOLDOWN_TIMER),
+			ConfigNodes.SPAWNING_NATION_SPAWN_NATION_UNAFFILIATED_COOLDOWN_TIMER),
 	ADMIN(
 			null,
 			null,

@@ -526,5 +526,315 @@
         "value": "global_nation_settings.proximity.nation_proximity_to_capital_city"
       }
     ]
+  },
+  {
+    "version": "0.100.0.16",
+    "changes": [
+      {
+        "type": "MOVE",
+        "path": "town.town_block_ratio",
+        "value": "claiming.town_block_ratio"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.town_block_limit",
+        "value": "claiming.town_block_limit"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.town_block_size",
+        "value": "claiming.town_block_size"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.min_adjacent_blocks",
+        "value": "claiming.min_adjacent_blocks"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_claim_radius_value",
+        "value": "claiming.max_claim_radius_value"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.min_distances_ignored_for_towns_in_same_nation",
+        "value": "claiming.distance_rules.min_distances_ignored_for_towns_in_same_nation"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.min_distances_ignored_for_towns_in_allied_nation",
+        "value": "claiming.distance_rules.min_distances_ignored_for_towns_in_allied_nation"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.min_plot_distance_from_town_plot",
+        "value": "claiming.distance_rules.min_plot_distance_from_town_plot"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.min_distance_from_town_homeblock",
+        "value": "claiming.distance_rules.min_distance_from_town_homeblock"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.min_distance_for_outpost_from_plot",
+        "value": "claiming.distance_rules.min_distance_for_outpost_from_plot"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_distance_for_outpost_from_town_plot",
+        "value": "claiming.distance_rules.max_distance_for_outpost_from_town_plot"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.min_distance_between_homeblocks",
+        "value": "claiming.distance_rules.min_distance_between_homeblocks"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_distance_between_homeblocks",
+        "value": "claiming.distance_rules.max_distance_between_homeblocks"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.new_town_min_distance_from_town_plot",
+        "value": "claiming.distance_rules.new_town_min_distance_from_town_plot"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.new_town_min_distance_from_town_homeblock",
+        "value": "claiming.distance_rules.new_town_min_distance_from_town_homeblock"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.allow_outposts",
+        "value": "claiming.outposts.allow_outposts"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.limit_outposts_using_town_and_nation_levels",
+        "value": "claiming.outposts.limit_outposts_using_town_and_nation_levels"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.over_outpost_limits_stops_teleports",
+        "value": "claiming.outposts.over_outpost_limits_stops_teleports"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.overclaiming.being_overclaimed_allows_other_towns_to_steal_land",
+        "value": "claiming.overclaiming.being_overclaimed_allows_other_towns_to_steal_land"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.overclaiming.overclaiming_prevented_by_homeblock_radius",
+        "value": "claiming.overclaiming.overclaiming_prevented_by_homeblock_radius"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.overclaiming.town_age_requirement",
+        "value": "claiming.overclaiming.town_age_requirement"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.overclaiming.command_cooldown",
+        "value": "claiming.overclaiming.command_cooldown"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_purchased_blocks",
+        "value": "claiming.purchased_bonus_blocks.max_purchased_blocks"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_purchased_blocks_uses_town_levels",
+        "value": "claiming.purchased_bonus_blocks.max_purchased_blocks_uses_town_levels"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_plots_per_resident",
+        "value": "global_town_settings.max_plots_per_resident"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_buytown_price",
+        "value": "global_town_settings.max_buytown_price"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.town_limit",
+        "value": "global_town_settings.town_limit"
+      },
+      {
+        "type": "MOVE",
+        "path": "town.max_distance_for_merge",
+        "value": "global_town_settings.max_distance_for_merge"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
+        "value": "claiming.outposts.minimum_amount_of_residents_in_town_for_outpost"
+      },
+      {
+        "type": "MOVE",
+        "path": "plugin.visualized_spawn_points_enabled",
+        "value": "spawning.visualized_spawn_points_enabled"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.allow_town_spawn",
+        "value": "spawning.town_spawn.allow_town_spawn"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.allow_town_spawn_travel",
+        "value": "spawning.town_spawn.allow_town_spawn_travel"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.allow_town_spawn_travel_nation",
+        "value": "spawning.town_spawn.allow_town_spawn_travel_nation"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.allow_town_spawn_travel_ally",
+        "value": "spawning.town_spawn.allow_town_spawn_travel_ally"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.is_nation_ally_spawning_requiring_public_status",
+        "value": "spawning.town_spawn.is_nation_ally_spawning_to_town_requiring_public_status"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.do_trusted_residents_count_as_residents",
+        "value": "spawning.town_spawn.do_trusted_residents_count_as_residents"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.are_new_residents_prompted_to_town_spawn",
+        "value": "spawning.town_spawn.are_new_residents_prompted_to_town_spawn"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.teleport_warmup_time",
+        "value": "spawning.spawning_warmups.teleport_warmup_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.movement_cancels_spawn_warmup",
+        "value": "spawning.spawning_warmups.movement_cancels_spawn_warmup"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.damage_cancels_spawn_warmup",
+        "value": "spawning.spawning_warmups.damage_cancels_spawn_warmup"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawning_cooldowns.town_spawn_cooldown_time",
+        "value": "spawning.town_spawn.spawning_cooldowns.town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawning_cooldowns.outpost_cooldown_time",
+        "value": "spawning.town_spawn.spawning_cooldowns.outpost_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawning_cooldowns.nation_member_town_spawn_cooldown_time",
+        "value": "spawning.town_spawn.spawning_cooldowns.nation_member_town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawning_cooldowns.nation_ally_town_spawn_cooldown_time",
+        "value": "spawning.town_spawn.spawning_cooldowns.nation_ally_town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawning_cooldowns.unaffiliated_town_spawn_cooldown_time",
+        "value": "spawning.town_spawn.spawning_cooldowns.unaffiliated_town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawning_cooldowns.town_spawn_cooldown_time",
+        "value": "spawning.town_spawn.spawning_cooldowns.town_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.spawn_warnings",
+        "value": "spawning.spawn_cost_warnings"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.town_respawn",
+        "value": "spawning.respawning.town_respawn"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.respawn_anchor_higher_precendence",
+        "value": "spawning.respawning.respawn_anchor_higher_precendence"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.respawn_protection.time",
+        "value": "spawning.respawning.respawn_protection.time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.respawn_protection.allow_pickup",
+        "value": "spawning.respawning.respawn_protection.allow_pickup"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.town_respawn_same_world_only",
+        "value": "spawning.respawning.town_respawn_same_world_only"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.prevent_town_spawn_in",
+        "value": "spawning.town_spawn.prevent_town_spawn_in"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_town_settings.allow_enemies_spawn_to_peaceful_towns",
+        "value": "spawning.town_spawn.allow_enemies_spawn_to_peaceful_towns"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_nation_settings.capital_spawn",
+        "value": "spawning.nation_spawn.force_nation_spawn_in_capital"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_nation_settings.allow_nation_spawn",
+        "value": "spawning.nation_spawn.allow_nation_spawn"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_nation_settings.allow_nation_spawn_travel",
+        "value": "spawning.nation_spawn.allow_nation_spawn_travel"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_nation_settings.allow_nation_spawn_travel_ally",
+        "value": "spawning.nation_spawn.allow_nation_spawn_travel_ally"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_nation_settings.spawning_cooldowns.nation_member_nation_spawn_cooldown_time",
+        "value": "spawning.nation_spawn.spawning_cooldowns.nation_member_nation_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_nation_settings.spawning_cooldowns.nation_ally_nation_spawn_cooldown_time",
+        "value": "spawning.nation_spawn.spawning_cooldowns.nation_ally_nation_spawn_cooldown_time"
+      },
+      {
+        "type": "MOVE",
+        "path": "global_nation_settings.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time",
+        "value": "spawning.nation_spawn.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time"
+      }
+    ]
   }
 ]

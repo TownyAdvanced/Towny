@@ -247,7 +247,7 @@ public class TownyCustomListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onResidentJoinTown(TownAddResidentEvent event) {
-		if (!TownySettings.isPromptingNewResidentsToTownSpawn() || !TownySettings.getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_TOWN_SPAWN))
+		if (!TownySettings.isPromptingNewResidentsToTownSpawn() || !TownySettings.getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN))
 			return;
 
 		Town town = event.getTown();

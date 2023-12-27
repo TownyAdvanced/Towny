@@ -22,8 +22,8 @@ public class BonusBlockPurchaseTests {
 		town = new Town("test");
 		
 		// No limit on bought townblocks
-		TownySettings.getConfig().set(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS.getRoot(), Integer.MAX_VALUE);
-		TownySettings.getConfig().set(ConfigNodes.TOWN_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS.getRoot(), false);
+		TownySettings.getConfig().set(ConfigNodes.CLAIMING_MAX_PURCHASED_BLOCKS.getRoot(), Integer.MAX_VALUE);
+		TownySettings.getConfig().set(ConfigNodes.CLAIMING_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS.getRoot(), false);
 	}
 	
 	@BeforeEach
