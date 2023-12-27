@@ -1635,6 +1635,14 @@ public class TownySettings {
 		return getInt(ConfigNodes.CLAIMING_MAX_CLAIM_RADIUS_VALUE);
 	}
 
+	public static boolean isOceanClaimingBlocked() {
+		return getBoolean(ConfigNodes.CLAIMING_BIOME_BLOCK_OCEAN_CLAIMS);
+	}
+
+	public static int getOceanBlockThreshold() {
+		return getInt(ConfigNodes.CLAIMING_BIOME_BLOCK_OCEAN_THRESHOLD);
+	}
+
 	public static boolean isOverClaimingAllowingStolenLand() {
 		return getBoolean(ConfigNodes.CLAIMING_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND);
 	}

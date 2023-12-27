@@ -1015,6 +1015,19 @@ public enum ConfigNodes {
 			"# set to 0 to disable limiting of claim radius value check.",
 			"# keep in mind that the default value of 4 is a radius, ",
 			"# and it will allow claiming 9x9 (80 plots) at once."),
+
+	CLAIMING_BIOME_RULES("claiming.biome_rules","","",""),
+	CLAIMING_BIOME_BLOCK_OCEAN_CLAIMS("claiming.biome_rules.block_ocean_claims",
+			"false",
+			"",
+			"# When true, any wilderness plot which has more Ocean biome in it than the allowed threshold (see below,)",
+			"# will not be able to be claimed."),
+	CLAIMING_BIOME_BLOCK_OCEAN_THRESHOLD("claiming.biome_rules.ocean_threshold",
+			"55",
+			"",
+			"# The max amount of ocean biome as a percent, that will be allowed in plots being claimed by towns. If a",
+			"# townblock would be more than X percent ocean it will not be able to be claimed."),
+
 	CLAIMING_DISTANCE_RULES("claiming.distance_rules","","",""),
 	CLAIMING_MIN_DISTANCE_IGNORED_FOR_NATIONS(
 			"claiming.distance_rules.min_distances_ignored_for_towns_in_same_nation",

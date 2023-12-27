@@ -3553,6 +3553,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Filter out any TownBlocks which aren't Wilderness. 
 		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 
+		// Filter out any TownBlocks which have too much of the disallowed biomes.
+		selection = AreaSelectionUtil.filterOutIncorrectBiomeWorldCoords(selection);
+
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 

@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.util.BiomeUtil;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 
@@ -523,6 +524,22 @@ public class AreaSelectionUtil {
 			} catch (NotRegisteredException ignored) {
 			}
 		return out;
+	}
+
+	/**
+	 * Returns a List containing only WorldCoords which are not composed of "too much"
+	 * bad biomes, with the threshold determined by the config. Currently focuses on oceans only.
+	 * 
+	 * @param selection List of WorldCoords.
+	 * @return a List of WorldCoords which have passed the biome requirements.
+	 */
+	public static List<WorldCoord> filterOutIncorrectBiomeWorldCoords(List<WorldCoord> selection) {
+		if (!TownySettings.isOceanClaimingBlocked())
+			return selection;
+
+		return selection.stream()
+				.filter(wc -> BiomeUtil.getWorldCoordOceanBiomePercent(wc) < TownySettings.getOceanBlockThreshold())
+				.collect(Collectors.toList());
 	}
 
 	public static int getAreaSelectPivot(String[] args) {
