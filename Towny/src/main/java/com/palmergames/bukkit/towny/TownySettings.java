@@ -1635,6 +1635,18 @@ public class TownySettings {
 		return getInt(ConfigNodes.CLAIMING_MAX_CLAIM_RADIUS_VALUE);
 	}
 
+	public static boolean isUnwantedBiomeClaimingEnabled() {
+		return getBoolean(ConfigNodes.CLAIMING_BIOME_UNWANTED_BIOMES_ENABLED);
+	}
+
+	public static int getUnwantedBiomeThreshold() {
+		return getInt(ConfigNodes.CLAIMING_BIOME_UNWANTED_BIOMES_THRESHOLD);
+	}
+
+	public static List<String> getUnwantedBiomeNames() {
+		return getStrArr(ConfigNodes.CLAIMING_BIOME_UNWANTED_BIOMES);
+	}
+
 	public static boolean isOceanClaimingBlocked() {
 		return getBoolean(ConfigNodes.CLAIMING_BIOME_BLOCK_OCEAN_CLAIMS);
 	}

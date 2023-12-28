@@ -3554,8 +3554,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 
 		// Filter out any TownBlocks which have too much of the disallowed biomes.
-		selection = AreaSelectionUtil.filterOutIncorrectBiomeWorldCoords(selection);
+		selection = AreaSelectionUtil.filterOutUnwantedBiomeWorldCoords(player, selection);
 
+		// Filter out any TownBlocks which have too much ocean biomes.
+		selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
+		
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 

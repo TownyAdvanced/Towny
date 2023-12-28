@@ -19,7 +19,11 @@ import com.palmergames.util.StringMgmt;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.bukkit.entity.Player;
 
 public class AreaSelectionUtil {
 	
@@ -528,18 +532,52 @@ public class AreaSelectionUtil {
 
 	/**
 	 * Returns a List containing only WorldCoords which are not composed of "too much"
-	 * bad biomes, with the threshold determined by the config. Currently focuses on oceans only.
+	 * bad biomes, with the threshold determined by the config.
+	 * @param player 
 	 * 
+	 * @param player Player trying to claim.
 	 * @param selection List of WorldCoords.
 	 * @return a List of WorldCoords which have passed the biome requirements.
 	 */
-	public static List<WorldCoord> filterOutIncorrectBiomeWorldCoords(List<WorldCoord> selection) {
+	public static List<WorldCoord> filterOutUnwantedBiomeWorldCoords(Player player, List<WorldCoord> selection) {
+		if (!TownySettings.isUnwantedBiomeClaimingEnabled())
+			return selection;
+		Predicate<WorldCoord> biomeThresholdTest = wc -> BiomeUtil.getWorldCoordUnwantedBiomePercent(wc) < TownySettings.getUnwantedBiomeThreshold();
+		return filterOutByBiome(player, selection, biomeThresholdTest, "msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome");
+	}
+
+	/**
+	 * Returns a List containing only WorldCoords which are not composed of "too much"
+	 * ocean biomes, with the threshold determined by the config.
+	 * 
+	 * @param player Player trying to claim.
+	 * @param selection List of WorldCoords.
+	 * @return a List of WorldCoords which have passed the biome requirements.
+	 */
+	public static List<WorldCoord> filterOutOceanBiomeWorldCoords(Player player, List<WorldCoord> selection) {
 		if (!TownySettings.isOceanClaimingBlocked())
 			return selection;
 
-		return selection.stream()
-				.filter(wc -> BiomeUtil.getWorldCoordOceanBiomePercent(wc) < TownySettings.getOceanBlockThreshold())
-				.collect(Collectors.toList());
+		Predicate<WorldCoord> biomeThresholdTest = wc -> BiomeUtil.getWorldCoordOceanBiomePercent(wc) < TownySettings.getOceanBlockThreshold();
+		return filterOutByBiome(player, selection, biomeThresholdTest, "msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome");
+	}
+
+	public static List<WorldCoord> filterOutByBiome(Player player, List<WorldCoord> selection, Predicate<WorldCoord> biomeThresholdTest, String errorMsg) {
+		// Strip list into succesful and failing lists of WorldCoords.
+		Map<Boolean, List<WorldCoord>> worldCoords = selection.stream().collect(Collectors.partitioningBy(biomeThresholdTest));
+
+		// Feedback as to why a plot isn't claimable due to biome.
+		if (!worldCoords.get(false).isEmpty())
+			TownyMessaging.sendErrorMsg(Translatable.of(errorMsg, prettyWorldCoordList(worldCoords.get(false))));
+
+		// Return successful selections.
+		return worldCoords.get(true);
+	}
+
+	private static String prettyWorldCoordList(List<WorldCoord> worldCoords) {
+		return StringMgmt.join(worldCoords.stream()
+				.map(wc -> String.format("(%s)", wc.getCoord().toString()))
+				.collect(Collectors.toList()), ", ");
 	}
 
 	public static int getAreaSelectPivot(String[] args) {

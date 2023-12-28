@@ -1,19 +1,22 @@
 package com.palmergames.bukkit.util;
 
 import java.util.function.Predicate;
-
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 
 public class BiomeUtil {
 
 	private static Predicate<Biome> isOceanPredicate = (biome) -> biome.name().contains("OCEAN");
+	private static Predicate<Biome> isUnwantedBiomePredicate = (biome) -> TownySettings.getUnwantedBiomeNames().contains(biome.name());
 
 	public static int getWorldCoordOceanBiomePercent(WorldCoord worldCoord) {
 		return getWorldCoordBadBiomePercent(worldCoord, isOceanPredicate);
+	}
+
+	public static int getWorldCoordUnwantedBiomePercent(WorldCoord worldCoord) {
+		return getWorldCoordBadBiomePercent(worldCoord, isUnwantedBiomePredicate);
 	}
 
 	public static int getWorldCoordBadBiomePercent(WorldCoord worldCoord, Predicate<Biome> biomePredicate) {
