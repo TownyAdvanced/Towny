@@ -2575,6 +2575,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!TownyAPI.getInstance().isWilderness(spawnLocation))
 			throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
+		// Check that a town isn't being formed inside of a biome that isn't allowed to be claimed.
+		if (TownySettings.isUnwantedBiomeClaimingEnabled() || TownySettings.isOceanClaimingBlocked()) {
+			List<WorldCoord> selection = Arrays.asList(WorldCoord.parseWorldCoord(spawnLocation));
+			selection = AreaSelectionUtil.filterOutUnwantedBiomeWorldCoords(player, selection);
+			selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
+			if (selection.isEmpty())
+				throw new TownyException("msg_err_cannot_begin_town_in_this_biome");
+		}
+
 		if (world.hasTowns())
 			testDistancesOrThrow(world, key);
 
@@ -3553,10 +3562,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Filter out any TownBlocks which aren't Wilderness. 
 		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 
-		// Filter out any TownBlocks which have too much of the disallowed biomes.
+		// Filter out any TownBlocks which have too much of the unwanted biomes, when enabled.
 		selection = AreaSelectionUtil.filterOutUnwantedBiomeWorldCoords(player, selection);
 
-		// Filter out any TownBlocks which have too much ocean biomes.
+		// Filter out any TownBlocks which have too much ocean biomes, when enabled.
 		selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
 		
 		if (selection.isEmpty())

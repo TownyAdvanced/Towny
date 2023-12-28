@@ -1639,8 +1639,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.CLAIMING_BIOME_UNWANTED_BIOMES_ENABLED);
 	}
 
-	public static int getUnwantedBiomeThreshold() {
-		return getInt(ConfigNodes.CLAIMING_BIOME_UNWANTED_BIOMES_THRESHOLD);
+	public static double getUnwantedBiomeThreshold() {
+		return getDouble(ConfigNodes.CLAIMING_BIOME_UNWANTED_BIOMES_THRESHOLD) / 100;
 	}
 
 	public static List<String> getUnwantedBiomeNames() {
@@ -1651,8 +1651,8 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.CLAIMING_BIOME_BLOCK_OCEAN_CLAIMS);
 	}
 
-	public static int getOceanBlockThreshold() {
-		return getInt(ConfigNodes.CLAIMING_BIOME_BLOCK_OCEAN_THRESHOLD);
+	public static double getOceanBlockThreshold() {
+		return getDouble(ConfigNodes.CLAIMING_BIOME_BLOCK_OCEAN_THRESHOLD) / 100;
 	}
 
 	public static boolean isOverClaimingAllowingStolenLand() {

@@ -2361,7 +2361,7 @@ townyadmin_town_set_help_0: "Sets the founding date of a town."
 townyadmin_nation_set_help_0: "Sets the founding date of a nation."
 msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
 msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
-msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
+msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."s
 
 # The format used for the /t say and /n say commands.
 town_say_format: "%s says: %s"
@@ -2402,3 +2402,4 @@ msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Your town is sanctioned by
 
 msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "The following coordinate(s) cannot be claimed because they contain too much of an unwanted biome: %s."
 msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The following coordinate(s) cannot be claimed because they contain too much ocean biome: %s."
+msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome."

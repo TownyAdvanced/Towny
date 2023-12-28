@@ -568,7 +568,7 @@ public class AreaSelectionUtil {
 
 		// Feedback as to why a plot isn't claimable due to biome.
 		if (!worldCoords.get(false).isEmpty())
-			TownyMessaging.sendErrorMsg(Translatable.of(errorMsg, prettyWorldCoordList(worldCoords.get(false))));
+			TownyMessaging.sendErrorMsg(player, Translatable.of(errorMsg, prettyWorldCoordList(worldCoords.get(false))));
 
 		// Return successful selections.
 		return worldCoords.get(true);
