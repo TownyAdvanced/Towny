@@ -9338,3 +9338,22 @@ v0.92.0.11:
 0.100.0.17:
   - Fix creatures-using-stone-pressure-plates config setting being overridden.
     - Closes #7150.
+  - Add the ability to block claiming in plots which have too much Ocean or otherwise Unwanted biome in them.
+    - Closes #7136.
+  - New Config Option: claiming.biome_rules.unwanted_biomes.enabled
+    - Default: false
+    - When true, unwanted biomes will be tested for when a player is claiming land.
+  - New Config Option: claiming.biome_rules.unwanted_biomes.biomes
+    - Default: "the_end,end_barrens,end_highlands,end_midlands,small_end_islands"
+    - A comma separated list of biome names that will add up towards a townblock's un-claim-ability.
+  - New Config Option: claiming.biome_rules.unwanted_biomes.threshold
+    - Default: 55
+    - The max amount of combined unwanted biomes as a percent, that will be allowed in plots being claimed by towns.
+    - For example, if a townblock would be more than X percent ocean it will not be able to be claimed.
+  - New Config Option: claiming.biome_rules.ocean_blocking.enabled
+    - Default: false
+    - When true, any wilderness plot which has more Ocean biome in it than the allowed threshold (see below,) will not be able to be claimed.
+  - New Config Option: claiming.biome_rules.ocean_blocking.threshold
+    - Default: 55
+    - The max amount of combined ocean biomes as a percent, that will be allowed in plots being claimed by towns.
+    - For example, if a townblock would be more than X percent ocean it will not be able to be claimed.
