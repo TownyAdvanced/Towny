@@ -142,7 +142,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -3482,27 +3481,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
 			throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
 
-		// Prevent straight line claims if configured, and the town has enough townblocks claimed, and this is not an outpost.
-		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
-		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
-			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
-			WorldCoord firstWorldCoord = selection.get(0);
-			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, firstWorldCoord);
-			// The number of adjacement TBs is not enough and there is not a nearby outpost.
-			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, firstWorldCoord) == 0)
-				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
-		}
+		// Prevent straight line claims if configured, and the town has enough
+		// townblocks claimed, and this is not an outpost.
+		ProximityUtil.testAdjacentClaimsRulesOrThrow(selection.get(0), town, outpost);
 
-		// When not claiming an outpost, make sure at least one of the selection is attached to a claimed plot.
+		// When not claiming an outpost, make sure at least one of the selection is
+		// attached to a claimed plot.
 		if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
 			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
-	}
-
-	private static boolean townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(Town town, int minAdjacentBlocks) {
-		if (minAdjacentBlocks == 3 && town.getTownBlocks().size() < 5)
-			// Special rule that makes sure a town can claim a fifth plot after claiming a 2x2 square.
-			return false;
-		return town.getTownBlocks().size() > minAdjacentBlocks;
 	}
 
 	private static void fireTownPreClaimEventOrThrow(Player player, Town town, boolean outpost, List<WorldCoord> selection) throws TownyException {
@@ -3585,14 +3571,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
 		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
-		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+		if (minAdjacentBlocks > 0 && ProximityUtil.townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
 			WorldCoord firstWorldCoord = selection.get(0);
 			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
 				if (wc.isWilderness() || !wc.hasTown(town))
 					continue;
-				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
+				int numAdjacent = ProximityUtil.numAdjacentTownOwnedTownBlocks(town, wc);
 				// The number of adjacement TBs is not enough and there is not a nearby outpost.
-				if (numAdjacent - 1 < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
+				if (numAdjacent - 1 < minAdjacentBlocks && ProximityUtil.numAdjacentOutposts(town, wc) == 0)
 					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
 			}
 		}
@@ -3698,14 +3684,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
 
 		// Prevent straight line claims if configured, and the town has enough townblocks claimed, and this is not an outpost.
-		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
-		if (minAdjacentBlocks > 0 && town.getTownBlocks().size() > minAdjacentBlocks) {
-			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
-			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
-			// The number of adjacement TBs is not enough and there is not a nearby outpost.
-			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
-				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
-		}
+		ProximityUtil.testAdjacentClaimsRulesOrThrow(wc, town, false);
 
 		// Prevent claiming that would cut off a section of a town from the main body. 
 		if (takeoverWouldCutATownIntoTwoSections(wc, town))
@@ -3931,21 +3910,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return true;
 		}
 		return false;
-	}
-
-	public static int numAdjacentTownOwnedTownBlocks(Town town, WorldCoord worldCoord) {
-		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
-			.filter(wc -> wc.hasTown(town))
-			.count();
-	}
-
-	public static int numAdjacentOutposts(Town town, WorldCoord worldCoord) {
-		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
-			.filter(wc -> wc.hasTown(town))
-			.map(WorldCoord::getTownBlockOrNull)
-			.filter(Objects::nonNull)
-			.filter(TownBlock::isOutpost)
-			.count();
 	}
 
 	public static List<Resident> getValidatedResidentsForInviteRevoke(Object sender, String[] names, Town town) {
