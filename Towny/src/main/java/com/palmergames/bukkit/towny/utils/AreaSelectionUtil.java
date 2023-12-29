@@ -327,7 +327,6 @@ public class AreaSelectionUtil {
 	 * Returns a list containing only townblocks that can be claimed.
 	 * Filters out townblocks too close to other towns as set in the config.
 	 * 
-
 	 * @param selection - List&lt;WorldCoord&gt; of coordinates
 	 * @param town - Town to check distance from
 	 * @return List of {@link WorldCoord}

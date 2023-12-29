@@ -4,17 +4,68 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.util.MathUtil;
 
 public class ProximityUtil {
+
+	/*
+	 * Town Proximity Methods
+	 */
+
+	public static void allowTownHomeBlockOrThrow(TownyWorld world, Coord key, @Nullable Town town, boolean newTown) throws TownyException {
+		if (!world.hasTowns()) // No towns exist yet, we cannot be too close to any other town.
+			return;
+
+		if (newTown) { // Tests run only when there is a new town involved.
+			if (TownySettings.getMinDistanceFromTownPlotblocks() > 0 || TownySettings.getNewTownMinDistanceFromTownPlots() > 0) {
+				// Sometimes new towns have special min. distances from other towns.
+				int minDistance = TownySettings.getNewTownMinDistanceFromTownPlots();
+				if (minDistance <= 0)
+					minDistance = TownySettings.getMinDistanceFromTownPlotblocks();
+
+				// throws when a new town is being made to close to another town's land.
+				if (world.getMinDistanceFromOtherTownsPlots(key) < minDistance)
+					throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+			}
+		}
+
+		if (TownySettings.getMinDistanceFromTownHomeblocks() > 0 ||
+			TownySettings.getMaxDistanceBetweenHomeblocks() > 0 ||
+			TownySettings.getMinDistanceBetweenHomeblocks() > 0 ||
+			(newTown && TownySettings.getNewTownMinDistanceFromTownHomeblocks() > 0)) {
+
+			final int distanceToNextNearestHomeblock = world.getMinDistanceFromOtherTownsHomeBlocks(key, town);
+			// Sometimes new towns have special min. distances from other towns' homeblocks.
+			int minDistance = newTown ? TownySettings.getNewTownMinDistanceFromTownHomeblocks() : 0;
+			if (minDistance <= 0)
+				minDistance = TownySettings.getMinDistanceFromTownHomeblocks();
+
+			// throws when the town's homeblock is too close to another homeblock.
+			if (distanceToNextNearestHomeblock < minDistance || distanceToNextNearestHomeblock < TownySettings.getMinDistanceBetweenHomeblocks()) 
+				throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+
+			// throws when the town's homeblock would be too far from other towns' homeblocks.
+			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
+				distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
+				throw new TownyException(Translatable.of("msg_too_far"));
+		}
+	}
+
+	/*
+	 * Nation Promixity Methods
+	 */
 
 	public static void testTownProximityToNation(Town town, Nation nation) throws TownyException {
 		if (TownySettings.getNationProximityToCapital() <= 0)

@@ -9357,3 +9357,5 @@ v0.92.0.11:
     - Default: 55
     - The max amount of combined ocean biomes as a percent, that will be allowed in plots being claimed by towns.
     - For example, if a townblock would be more than X percent ocean it will not be able to be claimed.
+0.100.0.18:
+  - Refactor town homeblock proximity tests into new ProximityUtil method.
