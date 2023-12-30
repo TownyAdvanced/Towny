@@ -953,4 +953,17 @@ public class TownyAPI {
 
 		ProximityUtil.allowTownClaimOrThrow(coordToClaim.getTownyWorld(), coordToClaim, town, outpost);
 	}
+
+	/**
+	 * Test a WorldCoord to see if Towny would allow the area to be unclaimed by the
+	 * given town.
+	 * 
+	 * @param town           Town that would unclaim the land.
+	 * @param coordToUnclaim WorldCoord which is to be unclaimed.
+	 * @throws TownyException thrown when Towny would not allow the unclaim, with
+	 *                        message for the reason why.
+	 */
+	public void testTownUnlaimOrThrow(Town town, WorldCoord coordToUnclaim) throws TownyException {
+		ProximityUtil.allowTownUnclaimOrThrow(coordToUnclaim.getTownyWorld(), coordToUnclaim, town);
+	}
 }

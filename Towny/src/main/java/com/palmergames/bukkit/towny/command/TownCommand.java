@@ -3570,18 +3570,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
-		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
-		if (minAdjacentBlocks > 0 && ProximityUtil.townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
-			WorldCoord firstWorldCoord = selection.get(0);
-			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
-				if (wc.isWilderness() || !wc.hasTown(town))
-					continue;
-				int numAdjacent = ProximityUtil.numAdjacentTownOwnedTownBlocks(town, wc);
-				// The number of adjacement TBs is not enough and there is not a nearby outpost.
-				if (numAdjacent - 1 < minAdjacentBlocks && ProximityUtil.numAdjacentOutposts(town, wc) == 0)
-					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
-			}
-		}
+		ProximityUtil.testAdjacentUnclaimsRulesOrThrow(selection.get(0), town);
 
 		BukkitTools.ifCancelledThenThrow(new TownPreUnclaimCmdEvent(town, resident, world, selection));
 
