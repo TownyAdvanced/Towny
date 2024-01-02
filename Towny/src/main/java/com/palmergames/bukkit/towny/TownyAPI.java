@@ -963,7 +963,7 @@ public class TownyAPI {
 	 * @throws TownyException thrown when Towny would not allow the unclaim, with
 	 *                        message for the reason why.
 	 */
-	public void testTownUnlaimOrThrow(Town town, WorldCoord coordToUnclaim) throws TownyException {
+	public void testTownUnclaimOrThrow(Town town, WorldCoord coordToUnclaim) throws TownyException {
 		ProximityUtil.allowTownUnclaimOrThrow(coordToUnclaim.getTownyWorld(), coordToUnclaim, town);
 	}
 }
