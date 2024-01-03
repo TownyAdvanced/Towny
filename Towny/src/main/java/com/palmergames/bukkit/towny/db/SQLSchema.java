@@ -157,6 +157,7 @@ public class SQLSchema {
 		columns.add("`groupName` mediumtext NOT NULL");
 		columns.add("`groupPrice` float DEFAULT NULL");
 		columns.add("`town` VARCHAR(32) NOT NULL");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 

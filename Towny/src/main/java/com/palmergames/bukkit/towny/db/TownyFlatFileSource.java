@@ -2085,6 +2085,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("groupName=" + group.getName());
 			list.add("groupPrice=" + group.getPrice());
 			list.add("town=" + group.getTown().getName());
+			list.add("metadata=" + serializeMetadata(group));
 		} catch (Exception e) {
 			logger.warn("An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
 		}
