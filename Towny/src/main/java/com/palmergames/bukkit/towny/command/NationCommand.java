@@ -238,7 +238,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 3) {
 						return Collections.singletonList("-ignore");
 					}
+					break;
 				case "sanctiontown":
+					if (nation == null)
+						break;
 					if (args.length == 2) 
 						return NameUtil.filterByStart(Arrays.asList("add", "remove", "list"), args[1]); 
 					if (args.length == 3 && args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))
