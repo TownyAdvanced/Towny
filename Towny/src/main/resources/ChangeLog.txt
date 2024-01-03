@@ -9365,3 +9365,7 @@ v0.92.0.11:
     - Default: false
     - When true, when the towns involved in the overclaiming both have nations, the overclaiming town's nation will have to have the overclaimed town's nation declared as an enemy.
     - Towns with no nation are not affected by this rule.
+  - Fix two nation command tab complete exceptions, courtesy of Warrior with PR #7158.
+  - Make plot groups extend townyobject, courtesy of Warrior with PR #7141.
+    - Closes #6092.
+  - Bump org.apache.logging.log4j:log4j-core from 2.22.0 to 2.22.1.
