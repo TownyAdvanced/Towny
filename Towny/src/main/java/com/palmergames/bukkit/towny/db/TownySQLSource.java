@@ -1997,6 +1997,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					group.setPrice(Float.parseFloat(line.trim()));
 				} catch (Exception ignored) {}
 			}
+			
+			line = rs.getString("metadata");
+			if (line != null) {
+				MetadataLoader.getInstance().deserializeMetadata(group, line);
+			}
 		} catch (SQLException e) {
 			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading plot group: " + uuid
 			+ " at line: " + line + " in the sql database", e);
@@ -2267,6 +2272,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			pltgrp_hm.put("groupName", group.getName());
 			pltgrp_hm.put("groupPrice", group.getPrice());
 			pltgrp_hm.put("town", group.getTown().getName());
+			pltgrp_hm.put("metadata", serializeMetadata(group));
 
 			updateDB("PLOTGROUPS", pltgrp_hm, Collections.singletonList("groupID"));
 

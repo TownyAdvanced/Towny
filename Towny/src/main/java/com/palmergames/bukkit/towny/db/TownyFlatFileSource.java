@@ -1609,6 +1609,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("groupPrice");
 				if (line != null && !line.isEmpty())
 					group.setPrice(Double.parseDouble(line.trim()));
+				
+				line = keys.get("metadata");
+				if (line != null)
+					MetadataLoader.getInstance().deserializeMetadata(group, line.trim());
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", path, line));
@@ -2081,6 +2085,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("groupName=" + group.getName());
 			list.add("groupPrice=" + group.getPrice());
 			list.add("town=" + group.getTown().getName());
+			list.add("metadata=" + serializeMetadata(group));
 		} catch (Exception e) {
 			logger.warn("An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
 		}

@@ -46,6 +46,11 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 		return super.toString() + "," + getTown().toString() + "," + getPrice();
 	}
 
+	@Override
+	public boolean exists() {
+		return this.town != null && this.town.exists() && this.town.hasPlotGroupName(getName());
+	}
+
 	/**
 	 * Override the name change method to internally rehash the plot group map.
 	 * @param name The name of the group.
