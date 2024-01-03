@@ -9359,3 +9359,9 @@ v0.92.0.11:
     - For example, if a townblock would be more than X percent ocean it will not be able to be claimed.
 0.100.0.18:
   - Refactor town homeblock proximity tests into new ProximityUtil method.
+  - Add ability for overclaiming to require enemy status, when nations are involved.
+    - Closes #7159.
+  - New Config Option: claiming.overclaiming.nations_required_to_be_enemies
+    - Default: false
+    - When true, when the towns involved in the overclaiming both have nations, the overclaiming town's nation will have to have the overclaimed town's nation declared as an enemy.
+    - Towns with no nation are not affected by this rule.

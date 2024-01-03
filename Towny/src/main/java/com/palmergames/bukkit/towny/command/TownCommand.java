@@ -3749,13 +3749,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (wc.isWilderness())
 			throw new TownyException(Translatable.of("msg_not_own_place"));
 
+		Town overclaimedTown = wc.getTownOrNull();
+
 		// Make sure the town doesn't already own this land.
-		if (wc.getTownOrNull().equals(town))
+		if (overclaimedTown.equals(town))
 			throw new TownyException(Translatable.of("msg_already_claimed_1"));
 
 		// Make sure this is in a town which is overclaimed, allowing for stealing land.
 		if (!wc.canBeStolen())
 			throw new TownyException(Translatable.of("msg_err_this_townblock_cannot_be_taken_over"));
+
+		// Make sure that if nations are involved and the setting is true, that the
+		// overclaiming nation has the other declared as an enemy.
+		if (TownySettings.isOverclaimingWithNationsRequiringEnemy()) {
+			Nation overclaimingNation = town.getNationOrNull();
+			Nation overclaimedNation = overclaimedTown.getNationOrNull();
+			if (overclaimingNation != null && overclaimedNation != null && !overclaimingNation.hasEnemy(overclaimedNation)) {
+				throw new TownyException(Translatable.of("msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy"));
+			}
+		}
 
 		// Not enough available claims.
 		if (!town.hasUnlimitedClaims() && town.availableTownBlocks() < 1)
@@ -3788,7 +3800,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		double cost = TownySettings.getTakeoverClaimPrice();
 		String costSlug = !TownyEconomyHandler.isActive() || cost <= 0 ? Translatable.of("msg_spawn_cost_free").forLocale(player) : prettyMoney(cost);
-		String townName = wc.getTownOrNull().getName();
+		String townName = overclaimedTown.getName();
 		Confirmation.runOnAccept(() -> Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, Arrays.asList(wc), false, true, false)))
 			.setTitle(Translatable.of("confirmation_you_are_about_to_take_over_a_claim", townName, costSlug))
 			.setCost(new ConfirmationTransaction(() -> cost, town, "Takeover Claim (" + wc.toString() + ") from " + townName + "."))

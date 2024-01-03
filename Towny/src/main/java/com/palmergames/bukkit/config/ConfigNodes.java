@@ -1178,6 +1178,12 @@ public enum ConfigNodes {
 			"0m",
 			"",
 			"# When in use, requires an amount of time to pass before the /t takeoverclaim command can be used again."),
+	CLAIMING_OVERCLAIMING_REQUIRES_NATIONS_TO_BE_ENEMIES(
+			"claiming.overclaiming.nations_required_to_be_enemies",
+			"false",
+			"",
+			"# When true, when the towns involved in the overclaiming both have nations, the overclaiming town's nation will have to have the overclaimed town's nation declared as an enemy.",
+			"# Towns with no nation are not affected by this rule."),
 
 	CLAIMING_BUY_BONUS_ROOT("claiming.purchased_bonus_blocks", "", "", ""),
 	CLAIMING_MAX_PURCHASED_BLOCKS(

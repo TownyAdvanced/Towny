@@ -1671,6 +1671,10 @@ public class TownySettings {
 		return (int) getSeconds(ConfigNodes.CLAIMING_OVERCLAIMING_COMMAND_COOLDOWN);
 	}
 
+	public static boolean isOverclaimingWithNationsRequiringEnemy() {
+		return getBoolean(ConfigNodes.CLAIMING_OVERCLAIMING_REQUIRES_NATIONS_TO_BE_ENEMIES);
+	}
+
 	public static boolean isSellingBonusBlocks(Town town) {
 
 		return getMaxPurchasedBlocks(town) != 0;
