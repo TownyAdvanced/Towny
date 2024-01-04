@@ -9377,3 +9377,6 @@ v0.92.0.11:
     - Requires the above is_banking_limited_to_bank_plots to be true as well.
   - Fix plots not losing their trusted residents when the owner of the plot changes.
     - Closes #7161.
+0.100.0.19:
+  - Make /ta town new [townname] bypass the proximity/claiming rules.
+    - Closes #7163.

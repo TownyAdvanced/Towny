@@ -1393,7 +1393,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_player_is_not_online", split[2]));
 			player = resident.getPlayer();
 		}
-		TownCommand.newTown(player, split[1], resident, true);
+		TownCommand.newTown(player, split[1], resident, true, true);
 	}
 
 	private void parseAdminTownSet(CommandSender sender, Town town, String[] split) throws TownyException {
