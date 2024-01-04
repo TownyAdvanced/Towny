@@ -36,6 +36,10 @@ public class TownUnclaimEvent extends Event {
     return handlers;
   }
 
+	/**
+	 * Whether the unclaim has resulted from takeoverclaim.
+	 * @return true if the unclaim resulted from /t takeoverclaim.
+	 */
   public boolean isOverClaim() {
   	return isOverClaim;
   }
