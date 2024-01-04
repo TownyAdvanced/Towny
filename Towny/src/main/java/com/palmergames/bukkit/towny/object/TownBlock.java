@@ -23,6 +23,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -164,6 +165,7 @@ public class TownBlock extends TownyObject {
 			this.resident.removeTownBlock(this);
 			unclaim = true;
 			this.town.getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
+			new ArrayList<>(this.getTrustedResidents()).forEach(this::removeTrustedResident);
 		}
 		this.resident = resident;
 		if (resident != null && !resident.hasTownBlock(this)) {
@@ -497,7 +499,7 @@ public class TownBlock extends TownyObject {
 	public void clear() {
 
 		setTown(null);
-		setResident(null);
+		removeResident();
 	}
 
 	@Override
@@ -621,7 +623,7 @@ public class TownBlock extends TownyObject {
 	}
 	
 	public void evictOwnerFromTownBlock() {
-		this.setResident(null);
+		this.removeResident();
 		this.setPlotPrice(-1);
 		this.setType(getType());
 		this.save();

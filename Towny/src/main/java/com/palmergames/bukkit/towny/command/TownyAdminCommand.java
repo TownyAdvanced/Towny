@@ -2110,7 +2110,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		TownBlock tb = TownyAPI.getInstance().getTownBlock(player);
 		if (tb != null) {
 			Town newTown = getTownOrThrow(split[1]);
-			tb.setResident(null);
+			tb.removeResident();
 			tb.setTown(newTown);
 			tb.setType(TownBlockType.RESIDENTIAL);
 			tb.setName("");

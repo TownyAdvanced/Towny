@@ -9375,3 +9375,5 @@ v0.92.0.11:
     - Default: false
     - If true, towns which have one or more bank plots will no longer be able to use their homeblock for withdraw/depositing.
     - Requires the above is_banking_limited_to_bank_plots to be true as well.
+  - Fix plots not losing their trusted residents when the owner of the plot changes.
+    - Closes #7161.

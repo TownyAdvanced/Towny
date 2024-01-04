@@ -103,7 +103,7 @@ public class TownRuinUtil {
 		//Return town blocks to the basic, unowned, type
 		for(TownBlock townBlock: town.getTownBlocks()) {
 			if (townBlock.hasResident())
-				townBlock.setResident(null);              // Removes any personal ownership.
+				townBlock.removeResident();               // Removes any personal ownership.
 			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
 			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
 			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.

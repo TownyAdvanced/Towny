@@ -565,7 +565,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		}
 
 		// Could not pay the plot tax, remove the resident from the plot.
-		townBlock.setResident(null);
+		townBlock.removeResident();
 
 		// Set the plot price.
 		if (TownySettings.doesPlotTaxNonPaymentSetPlotForSale())
