@@ -2405,3 +2405,7 @@ msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The foll
 msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome."
 
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
+
+msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
+
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'

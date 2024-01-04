@@ -178,8 +178,8 @@ public class MoneyUtil {
 				throw new TownyException(Translatable.of("msg_err_deposit_capped", bankcap));
 		}
 		
-		if (TownySettings.isBankActionLimitedToBankPlots() && !isInTownsBankPlotOrAllowedHomeBlock(town, loc))
-			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot"));
+		if (TownySettings.isBankActionLimitedToBankPlots())
+			testBankPlotRules(town, loc);
 		
 		if (TownySettings.isBankActionDisallowedOutsideTown() && isNotInOwnTown(town, loc)) {
 			if (nation)
@@ -198,21 +198,22 @@ public class MoneyUtil {
 			
 	}
 
-	private static boolean isInTownsBankPlotOrAllowedHomeBlock(Town town, Location loc) {
+	private static void testBankPlotRules(Town town, Location loc) throws TownyException {
 		if (isNotInOwnTown(town, loc))
-			return false;
+			throw new TownyException(Translatable.of("msg_err_unable_to_command_outside_of_town"));
 
 		TownBlock tb = TownyAPI.getInstance().getTownBlock(loc);
 		// TownBlock is a bank, we're good.
 		if (tb.getType().equals(TownBlockType.BANK))
-			return true;
+			return;
 
 		// The config doesn't allow towns to use their homeblock after they have one or more bank plots.
 		if (TownySettings.doHomeblocksNoLongerWorkWhenATownHasBankPlots() && town.getTownBlockTypeCache().getNumTownBlocks(TownBlockType.BANK, CacheType.ALL) > 0)
-			return false;
+			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock"));
 
 		// The config does allow towns to use their homeblocks, or the town has no bank plots.
-		return tb.isHomeBlock();
+		if (!tb.isHomeBlock())
+			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot"));
 	}
 	
 	private static boolean isNotInOwnTown(Town town, Location loc) {
