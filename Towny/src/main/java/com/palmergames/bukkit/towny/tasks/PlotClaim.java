@@ -141,7 +141,7 @@ public class PlotClaim extends Thread {
 		group.setPrice(-1);
 		TownyMessaging.sendPrefixedTownMessage(townBlock.getTownOrNull(), Translatable.of("msg_player_successfully_bought_group_x", player.getName(), group.getName()));
 		group.save();
-		finishWithMessage(group.getTownBlocks().size());
+		finishWithMessage();
 	}
 
 	private void residentGroupClaim(PlotGroup group) {
@@ -155,17 +155,15 @@ public class PlotClaim extends Thread {
 	}
 
 	private void residentClaim(List<WorldCoord> selection) {
-		int claimed = 0;
-
 		for (WorldCoord worldCoord : selection) {
 			try {
-				if (residentClaim(worldCoord))
-					claimed++;
+				if (!residentClaim(worldCoord))
+					this.selection.remove(worldCoord);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
 		}
-		finishWithMessage(claimed);
+		finishWithMessage();
 	}
 
 	private boolean residentClaim(WorldCoord worldCoord) throws TownyException {
@@ -226,18 +224,17 @@ public class PlotClaim extends Thread {
 	}
 
 	private void residentUnclaim(List<WorldCoord> selection) {
-		int unclaimed = 0;
 		for (WorldCoord coord : selection) {
 			if (!TownyAPI.getInstance().isTownyWorld(coord.getBukkitWorld()))
 				continue;
 
-			if(residentUnclaim(coord))
-				unclaimed++;
-			else
+			if(!residentUnclaim(coord)) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_own_place"));
+				this.selection.remove(coord);
+			}
 		}
 
-		finishWithMessage(unclaimed);
+		finishWithMessage();
  	}
 
  	private boolean residentUnclaim(WorldCoord worldCoord) {
@@ -258,14 +255,13 @@ public class PlotClaim extends Thread {
 	 * Used via /ta plot claim {name}
 	 */
 	private void adminClaim(List<WorldCoord> selection) {
-		int claimed = 0;
 		for (WorldCoord wc : selection) {
-			if (adminClaim(wc))
-				claimed++;
-			else
+			if (!adminClaim(wc)) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_claimed", wc.toString()));
+				this.selection.remove(wc);
+			}
 		}
-		finishWithMessage(claimed);
+		finishWithMessage();
 	}
 
 	private boolean adminClaim(WorldCoord worldCoord) {
@@ -282,25 +278,22 @@ public class PlotClaim extends Thread {
 		return true;
 	}
 
-	private void finishWithMessage(int claimed) {
-		if (player != null) {
-			if (claim) {
-				if ((selection != null) && (selection.size() > 0) && (claimed > 0)) {
-					TownyMessaging.sendMsg(player, Translatable.of("msg_claimed").append(" ")
-							.append(selection.size() > 5 ? Translatable.of("msg_total_townblocks").forLocale(player) + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
-				} else {
-					TownyMessaging.sendMsg(player, Translatable.of("msg_not_claimed_1"));
-				}
-			} else if (selection != null) {
-				TownyMessaging.sendMsg(player, Translatable.of("msg_unclaimed").append(" ")
+	private void finishWithMessage() {
+		if (player == null) 
+			return;
+		if (claim) {
+			if ((selection != null) && (selection.size() > 0)) {
+				TownyMessaging.sendMsg(player, Translatable.of("msg_claimed").append(" ")
 						.append(selection.size() > 5 ? Translatable.of("msg_total_townblocks").forLocale(player) + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 			} else {
-				TownyMessaging.sendMsg(player, Translatable.of("msg_unclaimed"));
+				TownyMessaging.sendMsg(player, Translatable.of("msg_not_claimed_1"));
 			}
+		} else if (selection != null) {
+			TownyMessaging.sendMsg(player, Translatable.of("msg_unclaimed").append(" ")
+					.append(selection.size() > 5 ? Translatable.of("msg_total_townblocks").forLocale(player) + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
+		} else {
+			TownyMessaging.sendMsg(player, Translatable.of("msg_unclaimed"));
 		}
-		
-		resident.save();
-		plugin.resetCache();
 	}
 
 	private void testMaxPlotsOrThrow(int plotsToBuy) throws TownyException {
