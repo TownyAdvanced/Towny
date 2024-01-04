@@ -57,6 +57,19 @@ public class TownClaim implements Runnable {
 	 * @param forced admin forced claim/unclaim
 	 * @param isOutpost if claim is/was an Outpost   
 	 */
+	public TownClaim(Towny plugin, Player player, Town town, List<WorldCoord> selection, boolean isOutpost, boolean claim, boolean forced) {
+		this.plugin = plugin;
+		this.player = player;
+		if (this.player != null)
+			this.outpostLocation = player.getLocation();
+		this.town = town;
+		this.selection = selection;
+		this.outpost = isOutpost;
+		this.claim = claim;
+		this.forced = forced;
+		this.runningRefund = 0.0;
+	}
+
 	public TownClaim(Towny plugin, Player player, Town town, List<WorldCoord> selection, boolean isOutpost, boolean claim, boolean forced, boolean isOverClaim) {
 		this.plugin = plugin;
 		this.player = player;
@@ -80,7 +93,7 @@ public class TownClaim implements Runnable {
 				TownyMessaging.sendMsg(player, claim ? Translatable.of("msg_process_town_claim") : Translatable.of("msg_process_town_unclaim"));
 
 			if (selection != null) // Selection is never null unless a resident has done /t unclaim all.
-				processSelection(isOverClaim);
+				processSelection();
 			else if (!claim) // Selection was null, someone has used /t unclaim all.
 				runUnclaimAll();
 
@@ -96,13 +109,13 @@ public class TownClaim implements Runnable {
 		}
 	}
 
-	private void processSelection(boolean isOverClaim) {
+	private void processSelection() {
 		List<WorldCoord> disallowedWorldCoords = new ArrayList<>();
 
 		for (WorldCoord worldCoord : selection) {
 			try {
 				if (claim)
-					townClaim(worldCoord, isOverClaim);
+					townClaim(worldCoord);
 				else
 					townUnclaim(worldCoord);
 
@@ -175,7 +188,7 @@ public class TownClaim implements Runnable {
 		}
 	}
 
-	private void townClaim(WorldCoord worldCoord, boolean isOverClaim) throws TownyException {
+	private void townClaim(WorldCoord worldCoord) throws TownyException {
 		boolean alreadyClaimed = worldCoord.hasTownBlock();
 
 		if (alreadyClaimed && !worldCoord.canBeStolen())

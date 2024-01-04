@@ -1082,7 +1082,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
-		plugin.getScheduler().runAsync(new TownClaim(plugin, player, null, selection, false, false, true, false));
+		plugin.getScheduler().runAsync(new TownClaim(plugin, player, null, selection, false, false, true));
 	}
 
 	public void parseAdminResidentCommand(CommandSender sender, String[] split) throws TownyException {
@@ -2126,7 +2126,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
 			TownyMessaging.sendDebugMsg("Admin Initiated townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 			
-			plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, false, true, false, false));
+			plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, false, true, false));
 
 		}
 	}
