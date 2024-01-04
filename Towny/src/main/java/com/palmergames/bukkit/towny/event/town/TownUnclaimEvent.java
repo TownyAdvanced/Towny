@@ -17,11 +17,13 @@ public class TownUnclaimEvent extends Event {
   private static final HandlerList handlers = new HandlerList();
   private final Town town;
   private final WorldCoord worldCoord;
+  private boolean isOverClaim;
 
-  public TownUnclaimEvent(Town town, WorldCoord worldCoord) {
+  public TownUnclaimEvent(Town town, WorldCoord worldCoord, boolean isOverClaim) {
     super(!Bukkit.getServer().isPrimaryThread());
     this.town = town;
     this.worldCoord = worldCoord;
+	this.isOverClaim = isOverClaim;
   }
 
   @NotNull
@@ -34,7 +36,11 @@ public class TownUnclaimEvent extends Event {
     return handlers;
   }
 
-  /**
+  public boolean isOverClaim() {
+  	return isOverClaim;
+  }
+
+	/**
    * @return {@link Town} which is unclaiming land.
    */
   @Nullable

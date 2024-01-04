@@ -371,7 +371,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyRegenAPI.addToRegenQueueList(townBlock.getWorldCoord(), true);
 
 		// Raise an event to signal the unclaim
-		BukkitTools.fireEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
+		BukkitTools.fireEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord(), false));
 	}
 
 	@Override

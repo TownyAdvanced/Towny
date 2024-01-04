@@ -3605,7 +3605,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", finalSelection.size(), player.getName()));
 					
 					// Start the claiming process after a successful withdraw.
-					plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, finalSelection, isOutpost, true, false));
+					plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, finalSelection, isOutpost, true, false, false));
 				} catch (NullPointerException e2) {
 					TownyMessaging.sendErrorMsg(player, "The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
 				} catch (TownyException e) {
@@ -3614,7 +3614,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			});
 		} else {
 			// Economy isn't enabled, start the claiming process immediately.
-			plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, outpost, true, false));
+			plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, outpost, true, false, false));
 		}
 	}
 
@@ -3693,14 +3693,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					return;
 				}
 				// Set the area to unclaim
-				plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, finalSelection, false, false, false));
+				plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, finalSelection, false, false, false, false));
 			})
 			.setTitle(Translatable.of("confirmation_unclaiming_costs", prettyMoney(cost)))
 			.sendTo(player);
 			return;
 		}
 		// Set the area to unclaim without a unclaim refund.
-		plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, false, false, false));
+		plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, false, false, false, false));
 	}
 
 	private static void parseTownUnclaimAllCommand(Player player, Town town, Resident resident, TownyWorld world) throws TownyException {
@@ -3716,13 +3716,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			String formattedCost = prettyMoney(Math.abs(TownySettings.getClaimRefundPrice() * numTownBlocks));
 			// Unclaiming will cost the player money because of a negative refund price. Have them confirm the cost.
 			Confirmation
-				.runOnAcceptAsync(new TownClaim(plugin, player, town, null, false, false, false)) 
+				.runOnAcceptAsync(new TownClaim(plugin, player, town, null, false, false, false, false)) 
 				.setTitle(Translatable.of("confirmation_unclaiming_costs", formattedCost))
 				.sendTo(player);
 			return;
 		}
 		// No cost to unclaim the land.
-		plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, null, false, false, false));
+		plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, null, false, false, false, false));
 	}
 
 	private void parseTownTakeoverClaimCommand(Player player) throws TownyException {
@@ -3801,7 +3801,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		double cost = TownySettings.getTakeoverClaimPrice();
 		String costSlug = !TownyEconomyHandler.isActive() || cost <= 0 ? Translatable.of("msg_spawn_cost_free").forLocale(player) : prettyMoney(cost);
 		String townName = overclaimedTown.getName();
-		Confirmation.runOnAccept(() -> Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, Arrays.asList(wc), false, true, false)))
+		Confirmation.runOnAccept(() -> Bukkit.getScheduler().runTask(plugin, new TownClaim(plugin, player, town, Arrays.asList(wc), false, true, false, true)))
 			.setTitle(Translatable.of("confirmation_you_are_about_to_take_over_a_claim", townName, costSlug))
 			.setCost(new ConfirmationTransaction(() -> cost, town, "Takeover Claim (" + wc.toString() + ") from " + townName + "."))
 			.sendTo(player);
