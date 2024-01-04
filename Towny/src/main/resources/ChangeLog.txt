@@ -9380,3 +9380,4 @@ v0.92.0.11:
 0.100.0.19:
   - Make /ta town new [townname] bypass the proximity/claiming rules.
     - Closes #7163.
+  - Fix outsiders being charged money for plotgroups they cannot actually /plot group claim, (not embassy plots.)

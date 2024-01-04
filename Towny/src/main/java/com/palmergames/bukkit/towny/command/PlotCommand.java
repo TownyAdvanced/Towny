@@ -337,8 +337,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(message);
 		}
 
-		// Filter to just plots that are for sale.
-		selection = AreaSelectionUtil.filterPlotsForSale(selection);
+		// Filter to just plots that are for sale, which can actually be bought by the
+		// resident, (ie: outsiders can only buy Embassy plots.)
+		selection = AreaSelectionUtil.filterPlotsForSale(resident, selection);
 
 		// Filter out plots already owned by the player.
 		selection = AreaSelectionUtil.filterUnownedBlocks(resident, selection);

@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.BiomeUtil;
@@ -469,27 +470,65 @@ public class AreaSelectionUtil {
 	}
 
 	/**
-	 * Gather plots that are for sale only.
+	 * Gather plots that are for sale only, using a resident to determine whether they can be bought.
+	 * 
+	 * @param resident Resident who would be buying the plots.
+	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are for sale.
+	 * @return List&lt;WorldCoord&gt; that are all for sale.
+	 */
+	public static List<WorldCoord> filterPlotsForSale(Resident resident, List<WorldCoord> selection) {
+
+		List<WorldCoord> out = new ArrayList<>();
+		for (WorldCoord worldCoord : selection) {
+			TownBlock townBlock = worldCoord.getTownBlockOrNull();
+			if (townBlock == null || !residentCanBuyTownBlock(resident, townBlock))
+				continue;
+
+			// Plot Groups do not set a townblock's individual plot price. 
+			if (townBlock.hasPlotObjectGroup()) {
+				out.clear();             // Remove any other plots from the selection. 
+				out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
+				return out;              // Return the one plot-group-having townblock.
+			}
+
+			out.add(worldCoord);
+		}
+		return out;
+	}
+
+	/**
+	 * Gather plots that are for sale only, currently used only for setting plots to notforsale.
+	 * 
 	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are for sale.
 	 * @return List&lt;WorldCoord&gt; that are all for sale.
 	 */
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				// Plot Groups do not set a townblock's individual plot price. 
-				if (worldCoord.getTownBlock().hasPlotObjectGroup() && worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
-					out.clear();             // Remove any other plots from the selection. 
-					out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
-					return out;              // Return the one plot-group-having townblock.
-				}
+		for (WorldCoord worldCoord : selection) {
+			TownBlock townBlock = worldCoord.getTownBlockOrNull();
+			if (townBlock == null || !townBlockIsForSale(townBlock))
+				continue;
 
-				if (worldCoord.getTownBlock().isForSale())
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
+			// Plot Groups do not set a townblock's individual plot price. 
+			if (townBlock.hasPlotObjectGroup()) {
+				out.clear();             // Remove any other plots from the selection. 
+				out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
+				return out;              // Return the one plot-group-having townblock.
 			}
+
+			out.add(worldCoord);
+		}
 		return out;
+	}
+
+	private static boolean residentCanBuyTownBlock(Resident resident, TownBlock townBlock) {
+		Town town = townBlock.getTownOrNull();
+		return town != null && townBlockIsForSale(townBlock) && (town.hasResident(resident) || townBlock.getType().equals(TownBlockType.EMBASSY));
+	}
+
+	private static boolean townBlockIsForSale(TownBlock townBlock) {
+		return townBlock.isForSale() || (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPrice() != -1);
 	}
 
 	/**
