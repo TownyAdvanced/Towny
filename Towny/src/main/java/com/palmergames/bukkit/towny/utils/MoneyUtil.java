@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -177,7 +178,7 @@ public class MoneyUtil {
 				throw new TownyException(Translatable.of("msg_err_deposit_capped", bankcap));
 		}
 		
-		if (TownySettings.isBankActionLimitedToBankPlots() && isNotInBankPlot(town, loc))
+		if (TownySettings.isBankActionLimitedToBankPlots() && !isInTownsBankPlotOrAllowedHomeBlock(town, loc))
 			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot"));
 		
 		if (TownySettings.isBankActionDisallowedOutsideTown() && isNotInOwnTown(town, loc)) {
@@ -197,15 +198,21 @@ public class MoneyUtil {
 			
 	}
 
-	private static boolean isNotInBankPlot(Town town, Location loc) {
+	private static boolean isInTownsBankPlotOrAllowedHomeBlock(Town town, Location loc) {
 		if (isNotInOwnTown(town, loc))
-			return true;
-		
+			return false;
+
 		TownBlock tb = TownyAPI.getInstance().getTownBlock(loc);
-		if (!tb.getType().equals(TownBlockType.BANK) && !tb.isHomeBlock())
+		// TownBlock is a bank, we're good.
+		if (tb.getType().equals(TownBlockType.BANK))
 			return true;
 
-		return false;
+		// The config doesn't allow towns to use their homeblock after they have one or more bank plots.
+		if (TownySettings.doHomeblocksNoLongerWorkWhenATownHasBankPlots() && town.getTownBlockTypeCache().getNumTownBlocks(TownBlockType.BANK, CacheType.ALL) > 0)
+			return false;
+
+		// The config does allow towns to use their homeblocks, or the town has no bank plots.
+		return tb.isHomeBlock();
 	}
 	
 	private static boolean isNotInOwnTown(Town town, Location loc) {

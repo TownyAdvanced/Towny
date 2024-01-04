@@ -3053,6 +3053,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.BANK_IS_LIMTED_TO_BANK_PLOTS);
 	}
 
+	public static boolean doHomeblocksNoLongerWorkWhenATownHasBankPlots() {
+		return getBoolean(ConfigNodes.BANK_BANK_PLOTS_STOP_HOME_BLOCK_BEING_USED);
+	}
+
 	public static void SetNationBankAllowWithdrawls(boolean newSetting) {
 
 		setProperty(ConfigNodes.ECO_BANK_NATION_ALLOW_WITHDRAWALS.getRoot(), newSetting);

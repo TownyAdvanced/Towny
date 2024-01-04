@@ -3025,6 +3025,12 @@ public enum ConfigNodes {
 			"",
 			"# If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.",
 			"# Home plots will also allow deposit and withdraw commands."),
+	BANK_BANK_PLOTS_STOP_HOME_BLOCK_BEING_USED(
+			"bank.do_homeblocks_not_work_when_a_town_has_bank_plots",
+			"false",
+			"",
+			"# If true, towns which have one or more bank plots will no longer be able to use their homeblock for withdraw/depositing.",
+			"# Requires the above is_banking_limited_to_bank_plots to be true as well."),
 	
 	TOWN_RUINING_HEADER("town_ruining", "", "", "",
 			"############################################################",

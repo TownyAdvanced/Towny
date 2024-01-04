@@ -9369,3 +9369,9 @@ v0.92.0.11:
   - Make plot groups extend townyobject, courtesy of Warrior with PR #7141.
     - Closes #6092.
   - Bump org.apache.logging.log4j:log4j-core from 2.22.0 to 2.22.1.
+  - Add option to prevent players depositing/withdrawing in their homeblocks when they have a bank plot available (all while deposit/withdraw is restricted to bank plots.)
+    - Closes #7162.
+  - New Config Option: bank.do_homeblocks_not_work_when_a_town_has_bank_plots
+    - Default: false
+    - If true, towns which have one or more bank plots will no longer be able to use their homeblock for withdraw/depositing.
+    - Requires the above is_banking_limited_to_bank_plots to be true as well.
