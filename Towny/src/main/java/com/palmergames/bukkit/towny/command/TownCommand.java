@@ -2471,20 +2471,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException when a new town isn't allowed.
 	 */
 	public static void newTown(Player player, String name, Resident resident, boolean noCharge) throws TownyException {
-		newTown(player, name, resident, noCharge, false);
-	}
-
-	/**
-	 * Create a new town. Command: /town new [townname] or /ta town new [townname]
-	 *
-	 * @param player Player using the command.
-	 * @param name Name of town
-	 * @param resident The resident in charge of the town.
-	 * @param noCharge Charging for creation - /ta town new NAME MAYOR has no charge.
-	 * @param adminCreated true when an admin has used /ta town new [NAME].
-	 * @throws TownyException when a new town isn't allowed.
-	 */
-	public static void newTown(Player player, String name, Resident resident, boolean noCharge, boolean adminCreated) throws TownyException {
 		if (TownySettings.hasTownLimit() && TownyUniverse.getInstance().getTowns().size() >= TownySettings.getTownLimit())
 			throw new TownyException(Translatable.of("msg_err_universe_limit"));
 
@@ -2512,18 +2498,16 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!TownyAPI.getInstance().isWilderness(spawnLocation))
 			throw new TownyException(Translatable.of("msg_already_claimed_1", key));
 
-		if (!adminCreated) {
-			// Check that a town isn't being formed inside of a biome that isn't allowed to be claimed.
-			if (TownySettings.isUnwantedBiomeClaimingEnabled() || TownySettings.isOceanClaimingBlocked()) {
-				List<WorldCoord> selection = Arrays.asList(WorldCoord.parseWorldCoord(spawnLocation));
-				selection = AreaSelectionUtil.filterOutUnwantedBiomeWorldCoords(player, selection);
-				selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
-				if (selection.isEmpty())
-					throw new TownyException("msg_err_cannot_begin_town_in_this_biome");
-			}
-	
-			ProximityUtil.allowTownHomeBlockOrThrow(world, key, null, true);
+		// Check that a town isn't being formed inside of a biome that isn't allowed to be claimed.
+		if (TownySettings.isUnwantedBiomeClaimingEnabled() || TownySettings.isOceanClaimingBlocked()) {
+			List<WorldCoord> selection = Arrays.asList(WorldCoord.parseWorldCoord(spawnLocation));
+			selection = AreaSelectionUtil.filterOutUnwantedBiomeWorldCoords(player, selection);
+			selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
+			if (selection.isEmpty())
+				throw new TownyException("msg_err_cannot_begin_town_in_this_biome");
 		}
+
+		ProximityUtil.allowTownHomeBlockOrThrow(world, key, null, true);
 
 		// If the town doesn't cost money to create, just make the Town.
 		if (noCharge || !TownyEconomyHandler.isActive()) {
