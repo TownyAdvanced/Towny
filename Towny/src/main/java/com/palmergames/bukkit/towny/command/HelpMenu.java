@@ -25,6 +25,22 @@ public enum HelpMenu {
 				.add("/plot", "?", Translatable.of("help_7"))
 				.add("/towny", "?", Translatable.of("help_8"))
 				.add("/tc", "[msg]", Translatable.of("help_2"))
+				.add("/nc", "[msg]", Translatable.of("help_3"));
+		}
+	},
+
+	GENERAL_HELP_ADMIN {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder()
+				.addTitle(Translation.of("help_0"))
+				.add(Translatable.of("help_1"))
+				.add("/resident", "?", Translatable.of("help_4"))
+				.add("/town", "?", Translatable.of("help_5"))
+				.add("/nation", "?", Translatable.of("help_6"))
+				.add("/plot", "?", Translatable.of("help_7"))
+				.add("/towny", "?", Translatable.of("help_8"))
+				.add("/tc", "[msg]", Translatable.of("help_2"))
 				.add("/nc", "[msg]", Translatable.of("help_3"))
 				.add(Translation.of("admin_sing"), "/townyadmin", "?", Translatable.of("help_9"));
 		}

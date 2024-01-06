@@ -140,7 +140,10 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 	private void parseTownyCommand(CommandSender sender, String[] split) {
 		if (split.length == 0) {
-			HelpMenu.GENERAL_HELP.send(sender);
+			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))
+				HelpMenu.GENERAL_HELP_ADMIN.send(sender);
+			else
+				HelpMenu.GENERAL_HELP.send(sender);
 			return;
 		} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 			HelpMenu.HELP.send(sender);
