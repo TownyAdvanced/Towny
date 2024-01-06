@@ -110,6 +110,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"withdraw",
 		"deposit",
 		"new",
+		"create",
 		"add",
 		"kick",
 		"delete",

@@ -9383,3 +9383,4 @@ v0.92.0.11:
   - Fix outsiders being charged money for plotgroups they cannot actually /plot group claim, (not embassy plots.)
   - Fix non-standard minecarts being unprotected.
   - Hide /ta ? from the /towny ? screen when players are not admins.
+  - Add /t create and /n create tab completions.

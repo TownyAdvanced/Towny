@@ -29,7 +29,7 @@ public class NameValidation {
 					"outlawlist","deposit","outlaw","outpost","ranklist","rank","reclaim","reslist","say","set","toggle","join",
 					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge","jail",
 					"plotgrouplist","trust","purge","leader","baltop","all","help", "spawn", "takeoverclaim", "ban", "unjail",
-					"trusttown","forsale","fs","notforsale","nfs","buytown","sanctiontown"));
+					"trusttown","forsale","fs","notforsale","nfs","buytown","sanctiontown","create"));
 	}
 
 	/**

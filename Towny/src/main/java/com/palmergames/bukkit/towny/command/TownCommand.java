@@ -163,6 +163,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"list",
 		"online",
 		"new",
+		"create",
 		"plots",
 		"add",
 		"kick",
