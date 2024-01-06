@@ -36,7 +36,7 @@ public class DrawUtil {
 					continue;
 				}
 
-				int start = world.getHighestBlockYAt(x, z);
+				int start = BlockUtil.getHighestNonLeafY(world, x, z);
 				int end = (start + height) < world.getMaxHeight() ? (start + height - 1) : world.getMaxHeight();
 				for (int y = start; y <= end; y++) {
 					locationConsumer.accept(new Location(world, x, y, z));

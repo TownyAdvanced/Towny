@@ -77,6 +77,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists TREES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("logs")).withTag(Tag.REGISTRY_BLOCKS, minecraft("leaves")).endsWith("_WOOD").endsWith("_HYPHAE").notStartsWith("STRIPPED_").endsWith("_LEAVES").endsWith("_LOG").add("CRIMSON_STEM", "WARPED_STEM").add("BAMBOO_BLOCK").build();
 
 	/**
+	 * List of Leaves.
+	 */
+	public static final ItemLists LEAVES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("leaves")).endsWith("_LEAVES").build();
+	
+	/**
 	 * List of Beds.
 	 */
 	public static final ItemLists BEDS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("beds")).endsWith("_BED").build();
