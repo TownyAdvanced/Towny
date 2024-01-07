@@ -9384,3 +9384,4 @@ v0.92.0.11:
   - Fix non-standard minecarts being unprotected.
   - Hide /ta ? from the /towny ? screen when players are not admins.
   - Add /t create and /n create tab completions.
+  - Render border particles under leaves.
