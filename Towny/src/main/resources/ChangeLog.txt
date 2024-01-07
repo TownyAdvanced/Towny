@@ -9388,3 +9388,5 @@ v0.92.0.11:
   - Fix PlayerChangePlotEvent reactions running too early.
     - /res toggle townclaim mode and the ChunkNotifications that follow.
   - Add an isOverClaim property to TownClaimEvent and TownUnclaimEvent, courtesy of Fruitloopins with PR #7165.
+0.100.0.20:
+  - Refactor PermHud class.
