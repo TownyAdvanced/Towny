@@ -40,7 +40,6 @@ import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -208,9 +207,9 @@ public class TownyCustomListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onTownClaim(TownClaimEvent event) {
-		Towny.getPlugin().getScheduler().runAsync(() ->
-			CellSurface.getCellSurface(event.getTownBlock().getWorldCoord())
-				.runClaimingParticleOverSurfaceAtPlayer(event.getResident().getPlayer(), Color.GREEN, 2));
+		if (TownySettings.isShowingClaimParticleEffect())
+			Towny.getPlugin().getScheduler().runAsync(() ->
+				CellSurface.getCellSurface(event.getTownBlock().getWorldCoord()).runClaimingParticleOverSurfaceAtPlayer(event.getResident().getPlayer()));
 
 		if (!TownySettings.isOverClaimingAllowingStolenLand())
 			return;

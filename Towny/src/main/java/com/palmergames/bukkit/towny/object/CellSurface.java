@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.object;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -17,6 +16,7 @@ import com.palmergames.bukkit.util.BlockUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 
 public class CellSurface {
+	private static final long PARTICLE_DELAY = 1L;
 	private final Particle.DustOptions CLAIMING_PARTICLE = new Particle.DustOptions(Color.LIME, 2);
 	private final WorldCoord worldCoord;
 
@@ -28,26 +28,25 @@ public class CellSurface {
 		return new CellSurface(worldCoord);
 	}
 
-	public void runClaimingParticleOverSurfaceAtPlayer(Player player, Color color, int edgeHeight) {
+	@Desugar
+	public record BlockPos(int x, int z) {}
 
-		int startingX = getX(player.getLocation());
-		int startingZ = getZ(player.getLocation());
-		Map<Integer, Set<BlockPos>> toRender = mapRingsOfClaimParticles(startingX, startingZ);
+	public void runClaimingParticleOverSurfaceAtPlayer(Player player) {
 
-		// Spread particles outwards from the player location.
-		for (Entry<Integer, Set<BlockPos>> entry : toRender.entrySet()) {
-			// Key stores the int which will also act as a delay added to each successive ring's rendering.
-			for (BlockPos position : entry.getValue()) {
-				int x = position.x;
-				int z = position.z;
-				Towny.getPlugin().getScheduler().runAsyncLater(()-> drawClaimingParticleOnTopOfBlock(player, x, z), entry.getKey() * 1L);
-			}
-		}
+		// Create a Map of rings of BlockPos' which will expand outwards from the Player
+		// location if they are stood in the WorldCoord (or from the correct edge block
+		// of the WorldCoord if they are stood outside of it.)
+		Map<Integer, Set<BlockPos>> toRender = mapRingsOfClaimParticles(getX(player.getLocation()), getZ(player.getLocation()));
 
-		// Splash the edes of the plot last with extra height.
-		long finalDelay = toRender.keySet().size() + 1 * 1L;
+		// Parse over the Map to generate particles on each successive ring with an
+		// added tick of delay (using the Map's Integer key to determine delay.)
+		toRender.entrySet().forEach(e -> e.getValue().forEach(pos -> 
+				Towny.getPlugin().getScheduler().runAsyncLater(()-> drawClaimingParticleOnTopOfBlock(player, pos.x, pos.z), e.getKey() * PARTICLE_DELAY)));
+
+		// Splash the edges of the WorldCoord last with extra height to add definition to the boundaries.
+		long finalDelay = toRender.keySet().size() + 1 * PARTICLE_DELAY;
 		Towny.getPlugin().getScheduler().runAsyncLater(()-> 
-			BorderUtil.getPlotBorder(worldCoord).runBorderedOnSurface(edgeHeight, edgeHeight, DrawSmokeTaskFactory.showToPlayer(player, color)), finalDelay);
+			BorderUtil.getPlotBorder(worldCoord).runBorderedOnSurface(2, 2, DrawSmokeTaskFactory.showToPlayer(player, Color.GREEN)), finalDelay);
 		
 	}
 
@@ -62,7 +61,7 @@ public class CellSurface {
 			for (int x = startingX + Math.negateExact(ringNum); x <= startingX + ringNum; x++) {
 				for (int z = startingZ + Math.negateExact(ringNum); z <= startingZ + ringNum; z++) {
 
-					pos = BlockPos.of(x, z);
+					pos = new BlockPos(x, z);
 					// We've already covered this in an earlier ring.
 					if (traveled.contains(pos))
 						continue;
@@ -72,7 +71,7 @@ public class CellSurface {
 					traveled.add(pos);
 
 					// We might be outside of the WorldCoord.
-					if (!locationWithinCell(x, z))
+					if (!worldCoord.getBoundingBox().contains(x, 1, z))
 						continue;
 
 					localRing.add(pos);
@@ -89,8 +88,11 @@ public class CellSurface {
 	private void drawClaimingParticleOnTopOfBlock(Player player, int x, int z) {
 		if (!player.isOnline())
 			return;
-		Location loc = new Location(worldCoord.getBukkitWorld(), x, BlockUtil.getHighestNonLeafY(worldCoord.getBukkitWorld(), x, z) + 1.0, z);
-		player.spawnParticle(Particle.REDSTONE, loc, 5, CLAIMING_PARTICLE);
+		player.spawnParticle(Particle.REDSTONE, getParticleLocation(x, z), 5, CLAIMING_PARTICLE);
+	}
+
+	private Location getParticleLocation(int x, int z) {
+		return new Location(worldCoord.getBukkitWorld(), x, BlockUtil.getHighestNonLeafY(worldCoord.getBukkitWorld(), x, z), z).add(0.5, 0.95, 0.5); // centre and raise slightly.
 	}
 
 	private int getX(Location playerLoc) {
@@ -111,16 +113,5 @@ public class CellSurface {
 
 	private int findSuitableXorZ(int player, double max, double min) {
 		return (int) Math.max(Math.min(player, max), min);
-	}
-
-	private boolean locationWithinCell(int x, int z) {
-		return worldCoord.getBoundingBox().contains(x, 1, z);
-	}
-
-	@Desugar
-	private record BlockPos(int x, int z) {
-		public static BlockPos of(int x, int z) {
-			return new BlockPos(x, z);
-		}
 	}
 }
