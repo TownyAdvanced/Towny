@@ -9385,3 +9385,5 @@ v0.92.0.11:
   - Hide /ta ? from the /towny ? screen when players are not admins.
   - Add /t create and /n create tab completions.
   - Render border particles under leaves.
+  - Fix PlayerChangePlotEvent reactions running too early.
+    - /res toggle townclaim mode and the ChunkNotifications that follow.

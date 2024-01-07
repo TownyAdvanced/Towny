@@ -71,24 +71,30 @@ public class TownyCustomListener implements Listener {
 		if (resident == null)
 			return;
 
-		try {
-			if (resident.hasMode("townclaim"))
-				TownCommand.parseTownClaimCommand(player, new String[] {});
-			if (resident.hasMode("townunclaim"))
-				TownCommand.parseTownUnclaimCommand(player, new String[] {});
-			if (resident.hasMode("plotgroup") && resident.hasPlotGroupName()) 
-				Towny.getPlugin().getScheduler().runLater(player, () -> Bukkit.dispatchCommand(player, "plot group add " + resident.getPlotGroupName()), 1l);
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-		}
-		if (resident.hasMode("map"))
-			TownyCommand.showMap(player);
-		if (resident.hasMode("plotborder") || resident.hasMode("constantplotborder"))
-			BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, to));
+		// Run the following with a one tick delay, so that everything has a chance to take in the player's position.
+		plugin.getScheduler().runLater(() -> {
+			try {
+				if (resident.hasMode("townclaim"))
+					TownCommand.parseTownClaimCommand(player, new String[] {});
+				if (resident.hasMode("townunclaim"))
+					TownCommand.parseTownUnclaimCommand(player, new String[] {});
+				if (resident.hasMode("plotgroup") && resident.hasPlotGroupName()) 
+					Towny.getPlugin().getScheduler().runLater(player, () -> Bukkit.dispatchCommand(player, "plot group add " + resident.getPlotGroupName()), 1l);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			}
+			if (resident.hasMode("map"))
+				TownyCommand.showMap(player);
 
+			if (resident.hasMode("plotborder") || resident.hasMode("constantplotborder"))
+				BorderUtil.getPlotBorder(to).runBorderedOnSurface(1, 2, DrawSmokeTaskFactory.showToPlayer(player, to));
+
+		}, 1L);
+
+		// Run the following with a two tick delay, so that newly claimed land will appear correctly.
 		// Check if player has entered a new town/wilderness
 		if (event.isShowingPlotNotifications())
-			ChunkNotificationUtil.showChunkNotification(player, resident, to, from);
+			plugin.getScheduler().runLater(() -> ChunkNotificationUtil.showChunkNotification(player, resident, to, from), 2L);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
