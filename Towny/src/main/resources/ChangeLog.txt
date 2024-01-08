@@ -9397,3 +9397,11 @@ v0.92.0.11:
     - Allows other plugins to cancel the event, in which case Towny will tell itself that the town is not overclaimed.
   - Add plot costs and plot group information to the /plot perm hud when applicable.
     - Closes #7173.
+0.100.0.21:
+  - Prevent the drops that spawn from problem blocks which can be duped in explosion regenerations.
+    - These were things like carpets, pressureplates and other blocks that attach to blocks.
+    - Closes #7154, #5689.
+  - Add claiming particle effect.
+  - New Config Option: claiming.show_claiming_particles
+    - Default: true
+    - When false players will not see the particle flood effect when they claim townblocks.
