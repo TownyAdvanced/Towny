@@ -2,8 +2,11 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.ItemLists;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
@@ -167,6 +170,24 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 					anyMatchPredicates.add(t -> t.equals(match));
 				else {
 					TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
+					anyMatchPredicates.add(t -> false);
+				}
+			}
+
+			return this;
+		}
+
+		/**
+		 * Adds an entire ItemLists contents.
+		 * @param itemList ItemLists to add.
+		 */
+		public Builder<T, F> addItemList(@NotNull ItemLists itemList) {
+			for (Material mat: itemList.tagged) {
+				final T match = BukkitTools.matchRegistry(this.registry, mat.name());
+				if (match != null)
+					anyMatchPredicates.add(t -> t.equals(match));
+				else {
+					TownyMessaging.sendDebugMsg("Expected element with name '" + mat.name() + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
 					anyMatchPredicates.add(t -> false);
 				}
 			}

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	 * List of Plants.
 	 */
 	public static final ItemLists PLANTS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF", "TORCHFLOWER").build();
+
+	/**
+	 * List of Flowers.
+	 */
+	public static final ItemLists FLOWERS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).add("ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE").build();
 
 	/**
 	 * List of Ores and Valuable Raw Materials.
@@ -251,6 +257,24 @@ public class ItemLists extends AbstractRegistryList<Material> {
 		.add("CHORUS_FLOWER", "POINTED_DRIPSTONE")
 		.conditionally(() -> CURRENT_VERSION.isNewerThanOrEquals(MINECRAFT_1_20_3), builder -> builder.add("DECORATED_POT"))
 		.build();
+
+	/**
+	 * List of blocks which, when exploded, will not have their drops set to false, despite our asking.
+	 */
+	public static final ItemLists EXPLODABLE_ATTACHABLES = newBuilder()
+			.add("LANTERN","SOUL_LANTERN")
+			.add("REDSTONE_WIRE","COMPARATOR","REPEATER","LEVER")
+			.endsWith("_CARPET")
+			.endsWith("_BANNER")
+			.endsWith("_BUTTON")
+			.endsWith("RAIL")
+			.endsWith("PUMPKIN_STEM").endsWith("MELON_STEM")
+			.endsWith("_AMETHYST_BUD").add("AMETHYST_CLUSTER")
+			.addItemList(FLOWERS)
+			.addItemList(SAPLINGS)
+			.addItemList(PRESSURE_PLATES)
+			.addItemList(WOOD_DOORS)
+			.build();
 
 	/**
 	 * Config-useable material groups.

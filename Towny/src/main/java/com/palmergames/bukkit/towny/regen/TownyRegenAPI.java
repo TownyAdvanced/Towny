@@ -9,11 +9,15 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.util.ItemLists;
 
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -297,9 +301,29 @@ public class TownyRegenAPI {
 			else if (event instanceof BlockExplodeEvent)
 				((BlockExplodeEvent) event).setYield(0);
 
+			// Set extra-special blocks to air so we're not duping items.
+			handlePeskyBlocks(block);
+
 			return true;
 		}
 		return false;
+	}
+
+	private static void handlePeskyBlocks(Block block) {
+		if (ItemLists.EXPLODABLE_ATTACHABLES.contains(block.getType())) {
+			if (!(block.getBlockData() instanceof Door door)) 
+				// Not a Door, set the pesky block to AIR so an item doesn't drop.
+				block.setType(Material.AIR);
+
+			// Doors are double-tall and especially pesky. We parse over exploded blocks
+			// from bottom to top, so if we don't handle doors backwards we regenerate doors
+			// with only a bottom half.
+			else if (door.getHalf().equals(Half.TOP)) {
+				// Remove the bottom along with the top here.
+				block.getRelative(BlockFace.DOWN).setType(Material.AIR);
+				block.setType(Material.AIR);
+			}
+		}
 	}
 
 	/**
