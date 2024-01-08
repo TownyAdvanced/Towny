@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownCalculateTownLevelNumberEvent;
 import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
+import com.palmergames.bukkit.towny.event.town.TownIsTownOverClaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourNationalCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangedEvent;
@@ -1241,7 +1242,11 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean isOverClaimed() {
-		return !hasUnlimitedClaims() && getTownBlocks().size() > getMaxTownBlocks();
+		if (hasUnlimitedClaims() || getTownBlocks().size() <= getMaxTownBlocks())
+			return false;
+
+		TownIsTownOverClaimedEvent event = new TownIsTownOverClaimedEvent(this);
+		return !BukkitTools.isEventCancelled(event);
 	}
 	
 	/**

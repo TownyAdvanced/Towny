@@ -154,11 +154,11 @@ public class OnPlayerLogin implements Runnable {
 				// Send any warning messages at login.
 				if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
 					final Resident finalResident = resident;
-					TownyEconomyHandler.economyExecutor().execute(() -> warningMessage(finalResident, town, nation));
+					TownyEconomyHandler.economyExecutor().execute(() -> bankWarningMessage(finalResident, town, nation));
 				}
 				
 				// Send a message warning of being overclaimed while the takeoverclaims feature is enabled.
-				if (TownySettings.isOverClaimingAllowingStolenLand() && town.getTownBlocks().size() > town.getMaxTownBlocks())
+				if (TownySettings.isOverClaimingAllowingStolenLand() && town.isOverClaimed())
 					TownyMessaging.sendMsg(resident, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
 				
 				// Send a message warning of ruined status and time until deletion.
@@ -217,7 +217,7 @@ public class OnPlayerLogin implements Runnable {
 	 * @param town Town which the resident is part of.
 	 * @param nation Nation which the town is a part of or null.
 	 */
-	private void warningMessage(Resident resident, Town town, Nation nation) {
+	private void bankWarningMessage(Resident resident, Town town, Nation nation) {
 		if (town.hasUpkeep()) {
 			double upkeep = TownySettings.getTownUpkeepCost(town);
 			if (upkeep > 0 && !town.getAccount().canPayFromHoldings(upkeep)) {

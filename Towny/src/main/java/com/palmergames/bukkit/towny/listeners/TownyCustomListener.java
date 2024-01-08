@@ -222,7 +222,7 @@ public class TownyCustomListener implements Listener {
 	public void onTownLosesResident(TownRemoveResidentEvent event) {
 		if (!TownySettings.isOverClaimingAllowingStolenLand())
 			return;
-		if (event.getTown().getTownBlocks().size() > event.getTown().getMaxTownBlocks())
+		if (event.getTown().isOverClaimed())
 			TownyMessaging.sendPrefixedTownMessage(event.getTown(), Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
 	}
 
