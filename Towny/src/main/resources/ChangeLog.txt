@@ -9395,3 +9395,5 @@ v0.92.0.11:
   - API: add TownIsTownOverClaimedEvent.
     - Thrown when Towny asks if a Town is overclaimed, and it is.
     - Allows other plugins to cancel the event, in which case Towny will tell itself that the town is not overclaimed.
+  - Add plot costs and plot group information to the /plot perm hud when applicable.
+    - Closes #7173.

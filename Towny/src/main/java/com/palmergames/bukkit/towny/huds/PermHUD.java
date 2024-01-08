@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
@@ -37,7 +38,8 @@ public class PermHUD {
 	/* Scoreboards use Teams here is our team names.*/
 	private static final String HUD_OBJECTIVE = "PERM_HUD_OBJ";
 	private static final String TEAM_PERMS_TITLE = "permsTitle";
-	private static final String PLOT_NAME = "plot_name";
+	private static final String TEAM_PLOT_NAME = "plot_name";
+	private static final String TEAM_PLOT_COST = "plot_cost";
 	private static final String TEAM_BUILD = "build";
 	private static final String TEAM_DESTROY = "destroy";
 	private static final String TEAM_SWITCH = "switching";
@@ -54,6 +56,10 @@ public class PermHUD {
 
 	public static void updatePerms (Player p) {
 		updatePerms(p, WorldCoord.parseWorldCoord(p));
+	}
+
+	public static String permHudTestKey() {
+		return TEAM_PLOT_NAME;
 	}
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
@@ -81,11 +87,22 @@ public class PermHUD {
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
 		TownBlockOwner owner = townBlock.getTownBlockOwner();
+		boolean plotGroup = townBlock.hasPlotObjectGroup();
 
 		// Displays the name of the owner, and if the owner is a resident the town name as well.
 		title = GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 
+
+		// Plot Type
 		type = townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName();
-		plotName = townBlock.getName().isEmpty() ? "" : translator.of("msg_perm_hud_plot_name") + townBlock.getName();
+
+		// Plot or PlotGroup Name.
+		plotName = plotGroup && !townBlock.getPlotObjectGroup().getName().isEmpty()
+				? townBlock.getPlotObjectGroup().getName()
+				: !townBlock.getName().isEmpty() ? townBlock.getName() : "";
+		plotName = plotName.isEmpty() ? " " : HUDManager.check(DARK_GREEN + translator.of(plotGroup ? "msg_perm_hud_plotgroup_name" : "msg_perm_hud_plot_name") + WHITE + plotName);
+
+		// Plot Price or "No"
+		String forSale = getPlotPrice(translator, townBlock, plotGroup);
 
 		TownyPermission tp = townBlock.getPermissions();
 		boolean residentOwned = owner instanceof Resident;
@@ -103,8 +120,9 @@ public class PermHUD {
 
 		// Set the values to our Scoreboard's teams.
 		board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(title));
-		board.getTeam(PLOT_NAME).setSuffix(!plotName.isEmpty() ? HUDManager.check(plotName) : " ");
+		board.getTeam(TEAM_PLOT_NAME).setSuffix(plotName);
 		board.getTeam(TEAM_PLOT_TYPE).setSuffix(type);
+		board.getTeam(TEAM_PLOT_COST).setSuffix(forSale);
 
 		board.getTeam(TEAM_BUILD).setSuffix(build);
 		board.getTeam(TEAM_DESTROY).setSuffix(destroy);
@@ -115,7 +133,20 @@ public class PermHUD {
 		board.getTeam(TEAM_EXPLOSIONS).setSuffix(explosions);
 		board.getTeam(TEAM_FIRESPREAD).setSuffix(firespread);
 		board.getTeam(TEAM_MOBSPAWNING).setSuffix(mobspawn);
+	}
 
+	private static String getPlotPrice(Translator translator, TownBlock townBlock, boolean plotGroup) {
+		String forSale = translator.of("msg_perm_hud_no");
+		if (TownyEconomyHandler.isActive()) {
+			forSale = plotGroup && townBlock.getPlotObjectGroup().getPrice() > -1
+				? prettyMoney(townBlock.getPlotObjectGroup().getPrice())
+				: townBlock.isForSale() ? prettyMoney(townBlock.getPlotPrice()) : forSale;
+		} else {
+			// No economy is active but plots can be put up for sale (they're just free.)
+			forSale = (plotGroup && townBlock.getPlotObjectGroup().getPrice() > -1) || (!plotGroup && townBlock.isForSale())
+					? translator.of("msg_perm_hud_yes") : forSale;
+		}
+		return forSale;
 	}
 
 	private static String getPermLine(TownyPermission tp, ActionType actionType, boolean residentOwned) {
@@ -133,8 +164,9 @@ public class PermHUD {
 		Scoreboard board = p.getScoreboard();
 		try {
 			board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
-			board.getTeam(PLOT_NAME).setSuffix(" ");
+			board.getTeam(TEAM_PLOT_NAME).setSuffix(" ");
 			board.getTeam(TEAM_PLOT_TYPE).setSuffix(" ");
+			board.getTeam(TEAM_PLOT_COST).setSuffix(" ");
 
 			board.getTeam(TEAM_BUILD).setSuffix(" ");
 			board.getTeam(TEAM_DESTROY).setSuffix(" ");
@@ -174,9 +206,10 @@ public class PermHUD {
 
 	private static void initializeScoreboard(Translator translator, Scoreboard board) {
 		String PERM_HUD_TITLE = GOLD + "";
-		String plotName_entry = DARK_GREEN + "";
+		String plotName_entry = "";
 		String keyPlotType_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_type");
-		
+		String forSale_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_for_sale") + GRAY;
+
 		String permsTitle_entry = YELLOW + "" + UNDERLINE + translator.of("msg_perm_hud_title");
 		String build_entry =   DARK_GREEN + translator.of("msg_perm_hud_build") + GRAY;
 		String destroy_entry = DARK_GREEN + translator.of("msg_perm_hud_destroy") + GRAY;
@@ -200,9 +233,10 @@ public class PermHUD {
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(PERM_HUD_TITLE);
 		//register teams
-		Team plotName = board.registerNewTeam(PLOT_NAME);
+		Team plotName = board.registerNewTeam(TEAM_PLOT_NAME);
 		Team keyPlotType = board.registerNewTeam(TEAM_PLOT_TYPE);
-		
+		Team forSaleTitle = board.registerNewTeam(TEAM_PLOT_COST);
+
 		Team permsTitle = board.registerNewTeam(TEAM_PERMS_TITLE);
 		Team build = board.registerNewTeam(TEAM_BUILD);
 		Team destroy = board.registerNewTeam(TEAM_DESTROY);
@@ -222,6 +256,7 @@ public class PermHUD {
 		//add each team as an entry (this sets the prefix to each line of the HUD.)
 		plotName.addEntry(plotName_entry);
 		keyPlotType.addEntry(keyPlotType_entry);
+		forSaleTitle.addEntry(forSale_entry);
 
 		permsTitle.addEntry(permsTitle_entry);
 		build.addEntry(build_entry);
@@ -240,8 +275,9 @@ public class PermHUD {
 		keyAlly.addEntry(keyAlly_entry);
 
 		//set scores for positioning
-		obj.getScore(plotName_entry).setScore(15);
-		obj.getScore(keyPlotType_entry).setScore(14);
+		obj.getScore(plotName_entry).setScore(16);
+		obj.getScore(keyPlotType_entry).setScore(15);
+		obj.getScore(forSale_entry).setScore(14);
 		obj.getScore(permsTitle_entry).setScore(13);
 		obj.getScore(build_entry).setScore(12);
 		obj.getScore(destroy_entry).setScore(11);
@@ -255,5 +291,9 @@ public class PermHUD {
 		obj.getScore(keyResident_entry).setScore(3);
 		obj.getScore(keyNation_entry).setScore(2);
 		obj.getScore(keyAlly_entry).setScore(1);
+	}
+
+	private static String prettyMoney(double price) {
+		return TownyEconomyHandler.getFormattedBalance(price);
 	}
 }
