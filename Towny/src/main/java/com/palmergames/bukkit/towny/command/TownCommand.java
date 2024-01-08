@@ -425,7 +425,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return townInviteTabComplete(sender, args, player, town);
 		case "buy":
 			if (args.length == 2)
-				return NameUtil.filterByStart(Collections.singletonList("bonus"), args[1]);
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_BUY, Collections.singletonList("bonus")), args[1]);
 			break;
 		case "toggle":
 			return switch (args.length) {
@@ -2447,7 +2447,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel())
-			throw new TownyException("Config.yml has bonus blocks diabled at max_purchased_blocks: '0' ");
+			throw new TownyException("Config.yml has bonus blocks disabled at max_purchased_blocks: '0' ");
 		else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0)
 			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
 
