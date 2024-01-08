@@ -2476,12 +2476,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
 		
 		if (split.length < 2) {
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town buy"));
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
 			TownyMessaging.sendMessage(sender, String.format(line, prettyMoney(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
 				TownyMessaging.sendMessage(sender, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 			return;
 		}
 				
