@@ -357,7 +357,7 @@ permissions:
         default: false
         children:
             towny.command.town.bankhistory: true
-            towny.command.town.buy: true
+            towny.command.town.buy.*: true
             towny.command.town.claim.*: true
             towny.command.town.delete: true
             towny.command.town.deposit: true
@@ -517,6 +517,12 @@ permissions:
     towny.command.town.deposit.othertown:
         description: User can deposit money into another town bank using /t deposit amount townname.
         default: false
+        
+    towny.command.town.buy.*:
+        description: User can access all commands related to buying for the town.
+        default: false
+        children:
+            towny.command.town.buy.bonus: true
 
       # Plot command permissions
     towny.command.plot.*:
