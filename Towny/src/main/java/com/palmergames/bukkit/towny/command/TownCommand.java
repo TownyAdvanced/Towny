@@ -1648,7 +1648,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static double setBail(CommandSender sender, String[] split) {
-		double bail = Math.min(1, Double.parseDouble(split[2]));
+		double bail = Math.max(1, Double.parseDouble(split[2]));
 		
 		if (bail > TownySettings.getBailMaxAmount()) {
 			bail = TownySettings.getBailMaxAmount();
