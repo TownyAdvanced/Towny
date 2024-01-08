@@ -1343,6 +1343,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.CLAIMING_TOWN_BLOCK_SIZE);
 	}
 
+	public static boolean isShowingClaimParticleEffect() {
+		return getBoolean(ConfigNodes.CLAIMING_SHOW_CLAIM_PARTICLES);
+	}
+
 	public static boolean isFriendlyFireEnabled() {
 
 		return getBoolean(ConfigNodes.NWS_FRIENDLY_FIRE_ENABLED);

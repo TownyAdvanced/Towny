@@ -1000,6 +1000,11 @@ public enum ConfigNodes {
 			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
 			"# Each cell is (town_block_size * town_block_size * height-of-the-world) in size, with height-of-the-world",
 			"# being from the bottom to the top of the build-able world."),
+	CLAIMING_SHOW_CLAIM_PARTICLES(
+			"claiming.show_claiming_particles",
+			"true",
+			"",
+			"# When false players will not see the particle flood effect when they claim townblocks."),
 	CLAIMING_MIN_ADJACENT_BLOCKS(
 			"claiming.min_adjacent_blocks",
 			"-1",

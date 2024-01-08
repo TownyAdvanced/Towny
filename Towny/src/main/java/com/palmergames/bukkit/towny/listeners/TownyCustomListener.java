@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.CellSurface;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -200,12 +201,16 @@ public class TownyCustomListener implements Listener {
 
 	/**
 	 * Used to warn towns when they're approaching their claim limit, when the
-	 * takeoverclaim feature is enabled
+	 * takeoverclaim feature is enabled, as well as claiming particles.
 	 * 
 	 * @param event TownClaimEvent.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onTownClaim(TownClaimEvent event) {
+		if (TownySettings.isShowingClaimParticleEffect())
+			Towny.getPlugin().getScheduler().runAsync(() ->
+				CellSurface.getCellSurface(event.getTownBlock().getWorldCoord()).runClaimingParticleOverSurfaceAtPlayer(event.getResident().getPlayer()));
+
 		if (!TownySettings.isOverClaimingAllowingStolenLand())
 			return;
 		if (event.getTown().availableTownBlocks() <= TownySettings.getTownBlockRatio())
