@@ -3439,6 +3439,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		final List<WorldCoord> selection = getTownClaimSelectionOrThrow(player, split, town);
 
 		// Check the Town can claim the vetted selection, available claimblocks/adjacent
+		// claims/edge blocks, etc.
 		vetTownAllowedTheseClaims(town, outpost, selection);
 
 		// Allow other plugins to have a say in whether the claim is allowed.
