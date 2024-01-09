@@ -2446,7 +2446,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (town == null && sender instanceof Player player) {
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_BUY.getNode(split[0].toLowerCase(Locale.ROOT)));
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_BUY.getNode());
 			catchRuinedTown(player);
 			town = getTownFromPlayerOrThrow(player);
 		}
@@ -2470,6 +2470,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	 * @throws TownyException - Exception.
 	 */
 	public static void townBuyBonus(Town town, String[] split, CommandSender sender) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_BUY_BONUS.getNode());
+		
 		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel())
 			throw new TownyException("Config.yml has bonus blocks disabled at max_purchased_blocks: '0' ");
 		else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0)
