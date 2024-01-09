@@ -2456,7 +2456,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			default -> {
 				if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_BUY, split[0])) {
 					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_BUY, split[0]).execute(sender, "town", split);
+					return;
 				}
+				HelpMenu.TOWN_BUY.send(sender);
 			}
 		}
 	}
