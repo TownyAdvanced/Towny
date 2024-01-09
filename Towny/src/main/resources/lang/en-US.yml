@@ -155,8 +155,6 @@ town_towntrust_help_0: "Adds a town as Trusted in the town."
 town_towntrust_help_1: "Removes a town as Trusted in the town."
 town_towntrust_help_2: "Lists the Trusted towns of a town."
 
-town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
-
 mayor_help_3: 'Claim area not attached to town'
 mayor_help_4: 'Claim around you to a radius of X'
 mayor_help_5: 'Claim to the maximum radius'
