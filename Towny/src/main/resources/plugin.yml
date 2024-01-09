@@ -529,7 +529,7 @@ permissions:
         children:
             towny.command.town.buy.bonus: true
 
-      # Plot command permissions
+    # Plot command permissions
     towny.command.plot.*:
         description: User can access all town related commands.
         default: false

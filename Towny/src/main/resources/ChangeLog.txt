@@ -9405,3 +9405,12 @@ v0.92.0.11:
   - New Config Option: claiming.show_claiming_particles
     - Default: true
     - When false players will not see the particle flood effect when they claim townblocks.
+  - API: New CommandAddonAPI for /town buy, courtesy of lexiccn with PR #7177. (First-Time Contributor!)
+    - It is now possible for other plugins to add subcommands to the /town buy command.
+    - Closes #6379.
+  - New Permission Node: towny.command.town.buy.*
+    - Child Nodes:
+      - towny.command.town.buy.bonus - Allows mayors to use /t buy bonus.
+      - No change required in your townyperms.yml,
+        the old node towny.command.town.buy will continue to point to towny.command.town.buy.bonus,
+        although it is recommended you change over to using the new towny.command.town.buy.* instead.
