@@ -1724,87 +1724,70 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		catchRuinedTown(player);
 		if (split.length == 0) {
 			// Help output.
-			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/town rank"));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("", "/town rank", "add/remove [resident] rank", ""));
+			HelpMenu.TOWN_RANK.send(player);
 			return;
 		}
 
-		Resident target;
-		Town town = null;
-		String rank;
-
-		/*
-		 * Does the command have enough arguments?
-		 */
+		// Does the command have enough arguments?
 		if (split.length < 3)
 			throw new TownyException("Eg: /town rank add/remove [resident] [rank]");
 
-		target = getResidentOrThrow(split[1]);
-		town = getTownFromPlayerOrThrow(player);
-
-		if (town != target.getTown())
+		// Make sure the target resident is part of the Player's town.
+		Resident target = getResidentOrThrow(split[1]);
+		if (!getTownFromPlayerOrThrow(player).hasResident(target))
 			throw new TownyException(Translatable.of("msg_resident_not_your_town"));
 
-		/*
-		 * Match casing to an existing rank, returns null if Town rank doesn't exist.
-		 */
-		rank = TownyPerms.matchTownRank(split[2]);
+		// Match casing to an existing rank, returns null if Town rank doesn't exist.
+		String rank = TownyPerms.matchTownRank(split[2]);
 		if (rank == null)
 			throw new TownyException(Translatable.of("msg_unknown_rank_available_ranks", split[2], StringMgmt.join(TownyPerms.getTownRanks(), ", ")));
 
-		/*
-		 * Only allow the player to assign ranks if they have the grant perm
-		 * for it.
-		 */
+		// Only allow the player to assign ranks if they have the grant perm for it.
 		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANK.getNode(rank.toLowerCase(Locale.ROOT)), Translatable.of("msg_no_permission_to_give_rank"));
 
-		if (split[0].equalsIgnoreCase("add")) {
-
-			if (!target.hasTownRank(rank)) {
-				BukkitTools.ifCancelledThenThrow(new TownAddResidentRankEvent(target, rank, town));
-
-				target.addTownRank(rank);
-				if (target.isOnline()) {
-					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", Translatable.of("town_sing"), rank));
-					plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-				}
-				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", Translatable.of("town_sing"), rank, target.getName()));
-			} else {
-				// Must already have this rank
-				TownyMessaging.sendMsg(player, Translatable.of("msg_resident_already_has_rank", target.getName(), Translatable.of("town_sing")));
-				return;
-			}
-
-		} else if (split[0].equalsIgnoreCase("remove")) {
-
-			if (target.hasTownRank(rank)) {
-				BukkitTools.ifCancelledThenThrow(new TownRemoveResidentRankEvent(target, rank, town));
-
-				target.removeTownRank(rank);
-				if (target.isOnline()) {
-					TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", Translatable.of("town_sing"), rank));
-					plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
-				}
-				TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", Translatable.of("town_sing"), rank, target.getName()));
-			} else {
-				// Doesn't have this rank
-				TownyMessaging.sendMsg(player, Translatable.of("msg_resident_doesnt_have_rank", target.getName(), Translatable.of("town_sing")));
-				return;
-			}
-
-		} else {
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", split[0]));
-			return;
+		// Try to apply the rank to the resident.
+		switch (split[0].toLowerCase(Locale.ROOT)) {
+		case "add" -> rankAdd(player, target, rank);
+		case "remove" -> rankRemove(player, target, rank);
+		default -> HelpMenu.TOWN_RANK.send(player);
 		}
-
-		/*
-		 * If we got here we have made a change Save the altered resident
-		 * data.
-		 */
-		target.save();
-
 	}
 
+	private void rankAdd(Player player, Resident target, String rank) throws TownyException {
+		Translatable townWord = Translatable.of("town_sing");
+		if (target.hasTownRank(rank)) 
+			throw new TownyException(Translatable.of("msg_resident_already_has_rank", target.getName(), townWord));
+
+		BukkitTools.ifCancelledThenThrow(new TownAddResidentRankEvent(target, rank, target.getTownOrNull()));
+
+		target.addTownRank(rank);
+		target.save();
+
+		// Feedback
+		TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", townWord, rank, target.getName()));
+		if (target.isOnline()) {
+			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_given_rank", townWord, rank));
+			plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
+		}
+	}
+
+	private void rankRemove(Player player, Resident target, String rank) throws TownyException {
+		Translatable townWord = Translatable.of("town_sing");
+		if (!target.hasTownRank(rank))
+			throw new TownyException(Translatable.of("msg_resident_doesnt_have_rank", target.getName(), townWord));
+
+		BukkitTools.ifCancelledThenThrow(new TownRemoveResidentRankEvent(target, rank, target.getTownOrNull()));
+
+		target.removeTownRank(rank);
+		target.save();
+
+		// Feedback
+		TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", townWord, rank, target.getName()));
+		if (target.isOnline()) {
+			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_had_rank_taken", townWord, rank));
+			plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
+		}
+	}
 
 	private void parseTownSayCommand(final Player player, String[] split) throws NoPermissionException, TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_SAY.getNode());

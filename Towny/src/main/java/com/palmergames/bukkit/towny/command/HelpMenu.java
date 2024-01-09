@@ -564,6 +564,14 @@ public enum HelpMenu {
 				.add("{page #} by online", Translatable.of("town_list_help_6"));
 		}
 	},
+
+	TOWN_RANK {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town rank")
+					.add("add|remove [resident] [rank]", Translatable.of("nation_help_17")); // This fits for the town command.
+		}
+	},
 	
 	TOWN_SET {
 		@Override
