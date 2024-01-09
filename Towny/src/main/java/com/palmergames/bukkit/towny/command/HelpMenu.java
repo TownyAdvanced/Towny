@@ -676,6 +676,14 @@ public enum HelpMenu {
 		}
 	},
 
+	TOWN_BUY {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town buy")
+				.add("bonus [n]", Translatable.of("town_buy_help"));
+		}
+	},
+
 	RESIDENT_HELP {
 		@Override
 		protected MenuBuilder load() {

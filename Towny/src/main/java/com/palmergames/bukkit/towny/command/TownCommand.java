@@ -425,7 +425,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			return townInviteTabComplete(sender, args, player, town);
 		case "buy":
 			if (args.length == 2)
-				return NameUtil.filterByStart(Collections.singletonList("bonus"), args[1]);
+				return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_BUY, Collections.singletonList("bonus")), args[1]);
 			break;
 		case "toggle":
 			return switch (args.length) {
@@ -2440,32 +2440,52 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!TownyEconomyHandler.isActive())
 			throw new TownyException(Translatable.of("msg_err_no_economy"));
 
+		if (split.length == 0 || split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
+			HelpMenu.TOWN_BUY.send(sender);
+			return;
+		}
+
 		if (town == null && sender instanceof Player player) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_BUY.getNode());
 			catchRuinedTown(player);
 			town = getTownFromPlayerOrThrow(player);
 		}
 
+		switch(split[0].toLowerCase(Locale.ROOT)) {
+			case "bonus" -> townBuyBonus(town, split, sender);
+			default -> {
+				if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_BUY, split[0])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_BUY, split[0]).execute(sender, "town", split);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Town tries to buy bonus blocks or checks the cost and increase.
+	 *
+	 * @param town - Towm object.
+	 * @param split - List of command arguments.
+	 * @param sender - Player.
+	 * @throws TownyException - Exception.
+	 */
+	public static void townBuyBonus(Town town, String[] split, CommandSender sender) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_BUY_BONUS.getNode());
+		
 		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel())
-			throw new TownyException("Config.yml has bonus blocks diabled at max_purchased_blocks: '0' ");
+			throw new TownyException("Config.yml has bonus blocks disabled at max_purchased_blocks: '0' ");
 		else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0)
 			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
-
-		if (split.length == 0 || !split[0].equalsIgnoreCase("bonus")) {
-			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("/town buy"));
+		
+		if (split.length < 2) {
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
 			TownyMessaging.sendMessage(sender, String.format(line, prettyMoney(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
 				TownyMessaging.sendMessage(sender, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
-			TownyMessaging.sendMessage(sender, ChatTools.formatCommand("", "/town buy", "bonus [n]", ""));
 			return;
 		}
-		
-		// They have used `/t buy bonus`, check that they have specified an amount to purchase.
-		if (split.length == 2)
-			townBuyBonusTownBlocks(town, MathUtil.getIntOrThrow(split[1].trim()), sender);
-		else
-			throw new TownyException(Translatable.of("msg_must_specify_amnt", "/town buy bonus"));
+				
+		townBuyBonusTownBlocks(town, MathUtil.getIntOrThrow(split[1].trim()), sender);
 	}
 
 	/**
