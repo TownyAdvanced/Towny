@@ -129,6 +129,7 @@ town_trust_help_2: "Lists the Trusted residents of a town."
 town_towntrust_help_0: "Adds a town as Trusted in the town."
 town_towntrust_help_1: "Removes a town as Trusted in the town."
 town_towntrust_help_2: "Lists the Trusted towns of a town."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: 'Área reivindicada separada do resto da cidade'
 mayor_help_4: 'Reivindicar à tua volta num raio de X'
 mayor_help_5: 'Anexar no maior raio possível'
