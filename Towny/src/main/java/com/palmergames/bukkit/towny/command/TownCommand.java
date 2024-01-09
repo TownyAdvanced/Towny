@@ -945,34 +945,35 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} catch (AlreadyRegisteredException ignored) {}
 		town.save();
 
-		// Send feedback messages.
-		if (target.isOnline()) {
-			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_declared_outlaw", town.getName()));
-			Location loc = target.getPlayer().getLocation();
-
-			// If the newly-outlawed player is within the town's borders and is meant to be teleported away, 
-			// send them using the outlaw teleport warmup time, potentially giving them the chance to escape
-			// the borders.
-			if (TownySettings.areNewOutlawsTeleportedAway() 
-				&& !TownyAPI.getInstance().isWilderness(loc)
-				&& TownyAPI.getInstance().getTown(loc) == town) {
-				
-				OutlawTeleportEvent event = new OutlawTeleportEvent(target, town, loc);
-				if (BukkitTools.isEventCancelled(event))
-					return;
-				
-				if (TownySettings.getOutlawTeleportWarmup() > 0)
-					TownyMessaging.sendMsg(target, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
-				
-				plugin.getScheduler().runLater(() -> {
-					if (TownyAPI.getInstance().getTown(loc) == town)
-						SpawnUtil.outlawTeleport(town, target);
-				}, TownySettings.getOutlawTeleportWarmup() * 20L);
-			}
-		}
+		// Send feedback messages and potentially teleport the new outlaw out of town.
+		if (target.isOnline())
+			handleOnlineNewlyMintedOutlaw(town, target);
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
 		if (admin)
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_declared_an_outlaw", target.getName(), town.getName()));
+	}
+
+	private static void handleOnlineNewlyMintedOutlaw(Town town, Resident target) {
+		TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_declared_outlaw", town.getName()));
+		Player player = target.getPlayer();
+		Location loc = player.getLocation();
+
+		if (!TownySettings.areNewOutlawsTeleportedAway() || TownyAPI.getInstance().isWilderness(loc)
+			|| !TownyAPI.getInstance().getTown(loc).equals(town) || !BukkitTools.isEventCancelled(new OutlawTeleportEvent(target, town, loc)))
+			return;
+
+		// If the newly-outlawed player is within the town's borders send them using the
+		// outlaw teleport warmup time, potentially giving them the chance to escape the
+		// borders.
+		int warmupTime = TownySettings.getOutlawTeleportWarmup();
+		if (warmupTime > 0)
+			TownyMessaging.sendMsg(target, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(warmupTime)));
+
+		plugin.getScheduler().runLater(() -> {
+			// Send them away if they're still within the town.
+			if (player.isOnline() && TownyAPI.getInstance().getTown(player.getLocation()).equals(town))
+				SpawnUtil.outlawTeleport(town, target);
+		}, warmupTime * 20L);
 	}
 
 	private static void parseTownOutlawRemoveCommand(CommandSender sender, boolean admin, Town town, Resident target) throws TownyException {

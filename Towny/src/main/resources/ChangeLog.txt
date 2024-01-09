@@ -9419,3 +9419,4 @@ v0.92.0.11:
 0.100.0.22:
   - Refactor the parseJailCommand method.
   - Refactor the parseTownClaimCommand method.
+  - Fix new outlaws being teleported when they have in fact left the town's borders.
