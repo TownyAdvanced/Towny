@@ -1876,6 +1876,14 @@ msg_perm_hud_nation: '国家'
 msg_perm_hud_outsider: '外人'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: '地皮: '
+#Seen in /plot perm hud:
+msg_perm_hud_plotgroup_name: 'Plot Group: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'For Sale: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'No'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Yes'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: '城镇 %s 已将其城镇级别设置为 %s。'
