@@ -100,17 +100,24 @@ public class TownyCustomListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerCreateTown(NewTownEvent event) {
-		Town town = event.getTown();
-		double upkeep = TownySettings.getTownUpkeepCost(town);
-		if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily() && upkeep > 0) {
-			String cost = TownyEconomyHandler.getFormattedBalance(upkeep);
-			String time = TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true));
-			TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_new_town_advice", cost, time));
-		}
+		final Town town = event.getTown();
+		Resident mayor = town.getMayor();
+		if (mayor.isOnline() && town.hasHomeBlock())
+		CellSurface.getCellSurface(town.getHomeBlockOrNull().getWorldCoord()).runClaimingParticleOverSurfaceAtPlayer(mayor.getPlayer());
+
+		// Run the bank warning with a 10 second delay.
+		plugin.getScheduler().runLater(() -> {
+			double upkeep = TownySettings.getTownUpkeepCost(town);
+			if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily() && upkeep > 0) {
+				String cost = TownyEconomyHandler.getFormattedBalance(upkeep);
+				String time = TimeMgmt.formatCountdownTime(TimeMgmt.townyTime(true));
+				TownyMessaging.sendTownMessagePrefixed(town, Translatable.of("msg_new_town_advice", cost, time));
+			}
+		}, 200L);
+
 		//TODO: at some point it might be nice to have a written_book given to mayors 
 		// which could contain the above advice about depositing money, or containing
 		// links to the commands page on the wiki.
-		
 	}
 	
 	/**
@@ -216,7 +223,7 @@ public class TownyCustomListener implements Listener {
 		if (event.getTown().availableTownBlocks() <= TownySettings.getTownBlockRatio())
 			TownyMessaging.sendMsg(event.getResident(), Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_you_are_almost_out_of_townblocks")));
 	}
-
+	
 	/**
 	 * Used to warn towns when they've lost a resident, so they know they're at risk
 	 * of having claims stolen in the takeoverclaim feature.
