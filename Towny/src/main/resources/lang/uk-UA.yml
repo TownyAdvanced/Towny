@@ -129,6 +129,7 @@ town_trust_help_2: "Список довірених жителів(гравці�
 town_towntrust_help_0: "Додати місто як довірене в місті."
 town_towntrust_help_1: "Видалити місто як довірене в місті."
 town_towntrust_help_2: "Lists the Trusted towns of a town."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: 'Територія не приєднана до міста'
 mayor_help_4: 'Привласнити місцевість в радіусі X навколо вас'
 mayor_help_5: 'Привласнити максимальний радіус'
