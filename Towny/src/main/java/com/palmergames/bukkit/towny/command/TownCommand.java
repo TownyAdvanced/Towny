@@ -1058,18 +1058,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_ONLINE.getNode());
 		catchRuinedTown(player);
 		Translator translator = Translator.locale(player);
-		if (split.length > 0) {
-			Town town = getTownOrThrow(split[0]);
-
-			List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
-			if (onlineResidents.size() > 0) {
-				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), town, player));
-			} else {
-				TownyMessaging.sendMessage(player, Colors.White + "0 " + translator.of("res_list") + " " + (translator.of("msg_town_online") + ": " + town));
-			}
-		} else {
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), getTownFromPlayerOrThrow(player), player));
-		}
+		Town town = split.length > 0 ? getTownOrThrow(split[0]) : getTownFromPlayerOrThrow(player);
+		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
+		String output = onlineResidents.size() > 0
+			? TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), town, player)
+			: Colors.White + "0 " + translator.of("res_list") + " " + (translator.of("msg_town_online") + ": " + town);
+		TownyMessaging.sendMessage(player, output);
 	}
 
 	private void parseTownHereCommand(final Player player) throws NoPermissionException, TownyException {
