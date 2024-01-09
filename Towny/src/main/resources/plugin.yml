@@ -517,11 +517,12 @@ permissions:
     towny.command.town.deposit.othertown:
         description: User can deposit money into another town bank using /t deposit amount townname.
         default: false
+
     towny.command.town.buy:
         description: Users are able to use the /t buy bonus command, for legacy townyperms file support. Replacing this node with towny.command.town.buy.bonus is recommended.
         default: false
         children:
-             towny.command.town.buy.bonus: true
+            towny.command.town.buy.bonus: true
 
     towny.command.town.buy.*:
         description: User can access all commands related to buying for the town.

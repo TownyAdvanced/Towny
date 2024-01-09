@@ -9414,3 +9414,5 @@ v0.92.0.11:
       - No change required in your townyperms.yml,
         the old node towny.command.town.buy will continue to point to towny.command.town.buy.bonus,
         although it is recommended you change over to using the new towny.command.town.buy.* instead.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.58.0 to 3.60.0.
+  - Bump net.coreprotect:coreprotect from 22.2 to 22.3.
