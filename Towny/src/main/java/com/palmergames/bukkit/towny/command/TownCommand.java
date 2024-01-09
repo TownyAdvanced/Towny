@@ -63,6 +63,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -3497,68 +3498,101 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		catchRuinedTown(player);
-		Resident resident = getResidentOrThrow(player);
-		Town town = getTownFromResidentOrThrow(resident);
+		Town town = getTownFromPlayerOrThrow(player);
+		catchBankruptTownWithLand(town);
+		final boolean outpost = split.length == 1 && split[0].equalsIgnoreCase("outpost");
 
+		// Make initial selection of WorldCoord(s), test whether the player has the
+		// required permission node, and vet the selection for proximity, biome,
+		// wilderness rules.
+		final List<WorldCoord> selection = getTownClaimSelectionOrThrow(player, split, town);
+
+		// Check the Town can claim the vetted selection, available claimblocks/adjacent
+		// claims/edge blocks, etc.
+		vetTownAllowedTheseClaims(town, outpost, selection);
+
+		// Allow other plugins to have a say in whether the claim is allowed.
+		fireTownPreClaimEventOrThrow(player, town, outpost, selection);
+
+		// See if the Town can pay (if required.)
+		vetTheTownCanPayIfRequired(player, town, outpost, selection);
+
+		// Begin the actual TownClaim task.
+		plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, outpost, true, false));
+	}
+
+	private static void catchBankruptTownWithLand(Town town) throws TownyException {
 		// Allow a bankrupt town to claim a single plot.
 		if (town.isBankrupt() && !town.getTownBlocks().isEmpty())
 			throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_claim"));
+	}
 
-		final TownyWorld world = TownyAPI.getInstance().getTownyWorld(player.getWorld());
+	private static List<WorldCoord> getTownClaimSelectionOrThrow(Player player, String[] split, Town town) throws TownyException {
+		List<WorldCoord> selection;
+		WorldCoord playerWorldCoord = WorldCoord.parseWorldCoord(player);
+		final TownyWorld world = playerWorldCoord.getTownyWorld();
 
 		if (world == null || !world.isUsingTowny())
 			throw new TownyException(Translatable.of("msg_set_use_towny_off"));
-		
+
 		if (!world.isClaimable())
 			throw new TownyException(Translatable.of("msg_not_claimable"));
 
-		List<WorldCoord> selection;
-		boolean outpost = false;
-		boolean isAdmin = resident.isAdmin();
-		WorldCoord key = WorldCoord.parseWorldCoord(player);
+		// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
+		if (split.length != 0 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
+			throw new TownyException(Translatable.of("tc_err_invalid_command"));
 
-		/*
-		 * Make initial selection of WorldCoord(s)
-		 */
 		if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
-
 			if (!TownySettings.isAllowingOutposts())
 				throw new TownyException(Translatable.of("msg_outpost_disable"));
 
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
-			
+
+			Resident resident = getResidentOrThrow(player);
 			// Run various tests required by configuration/permissions through Util.
-			OutpostUtil.OutpostTests(town, resident, world, key, isAdmin, false);
-			
-			if (key.hasTownBlock())
-				throw new TownyException(Translatable.of("msg_already_claimed_1", key));
+			OutpostUtil.OutpostTests(town, resident, world, playerWorldCoord, resident.isAdmin(), false);
+
+			if (playerWorldCoord.hasTownBlock())
+				throw new TownyException(Translatable.of("msg_already_claimed", playerWorldCoord.getTownOrNull()));
 
 			// Select a single WorldCoord using the AreaSelectionUtil.
 			selection = new ArrayList<>();
-			selection.add(key);
-			outpost = true;
+			selection.add(playerWorldCoord);
 
 		} else if (split.length == 1 && "fill".equalsIgnoreCase(split[0])) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_FILL.getNode());
-			
-			final BorderUtil.FloodfillResult result = BorderUtil.getFloodFillableCoords(town, key);
+
+			final BorderUtil.FloodfillResult result = BorderUtil.getFloodFillableCoords(town, playerWorldCoord);
 			if (result.type() != BorderUtil.FloodfillResult.Type.SUCCESS)
 				throw result.feedback() != null ? new TownyException(result.feedback()) : new TownyException();
 			else if (result.feedback() != null)
 				TownyMessaging.sendMsg(player, result.feedback());
-			
+
 			selection = new ArrayList<>(result.coords());
 		} else {
-			
-			// Prevent someone manually running /t claim world x z (a command which should only be run via /plot claim world x z)
-			if (split.length != 0 && TownyAPI.getInstance().getTownyWorld(split[0]) != null)
-				throw new TownyException(Translatable.of("tc_err_invalid_command"));
-
+			// Standard /t claim [args] behaviour
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_TOWN.getNode());
 
 			// Select the area, can be one or many.
-			selection = AreaSelectionUtil.selectWorldCoordArea(town, new WorldCoord(world.getName(), key), split, true);
+			selection = AreaSelectionUtil.selectWorldCoordArea(town, playerWorldCoord, split, true);
+
+			// Fast fail when we're claiming a single worldcoord and it is already claimed.
+			if (selection.size() == 1 && playerWorldCoord.hasTownBlock())
+				throw new TownyException(Translatable.of("msg_already_claimed", playerWorldCoord.getTownOrNull()));
 		}
+
+		if (selection.isEmpty())
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+
+		// Vet the selection for all sorts of proximity, biome, already-claimed, etc rules.
+		return vetTownClaimSelection(player, town, selection);
+	}
+
+	private static List<WorldCoord> vetTownClaimSelection(Player player, Town town, List<WorldCoord> selection) throws TownyException {
+		/*
+		 * Filter out any unallowed claims.
+		 */
+		TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 
 		// Filter out any TownBlocks which aren't Wilderness. 
 		selection = AreaSelectionUtil.filterOutTownOwnedBlocks(selection);
@@ -3568,22 +3602,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Filter out any TownBlocks which have too much ocean biomes, when enabled.
 		selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
-		
+
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
-
-		// Not enough available claims.
-		if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
-			throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
-
-		// If this is a single claim and it is already claimed, by someone else.
-		if (selection.size() == 1 && selection.get(0).getTownOrNull() != null)
-			throw new TownyException(Translatable.of("msg_already_claimed", selection.get(0).getTownOrNull()));
-		
-		/*
-		 * Filter out any unallowed claims.
-		 */
-		TownyMessaging.sendDebugMsg("townClaim: Pre-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
 
 		// Filter out townblocks too close to another Town's homeblock.
 		selection = AreaSelectionUtil.filterInvalidProximityToHomeblock(selection, town);
@@ -3595,6 +3616,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
+		TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection [" + selection.size() + "] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
+		return selection;
+	}
+
+	private static void vetTownAllowedTheseClaims(Town town, boolean outpost, List<WorldCoord> selection) throws TownyException {
+		// Not enough available claims.
+		if (!town.hasUnlimitedClaims() && selection.size() > town.availableTownBlocks())
+			throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
+
 		// Prevent straight line claims if configured, and the town has enough townblocks claimed, and this is not an outpost.
 		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
 		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
@@ -3605,69 +3635,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, firstWorldCoord) == 0)
 				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
 		}
-		
-		TownyMessaging.sendDebugMsg("townClaim: Post-Filter Selection ["+selection.size()+"] " + Arrays.toString(selection.toArray(new WorldCoord[0])));
-		
+
 		// When not claiming an outpost, make sure at least one of the selection is attached to a claimed plot.
 		if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
 			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
-						
-		/*
-		 * Allow other plugins to have a say in whether the claim is allowed.
-		 */
-		int blockedClaims = 0;
-
-		String cancelMessage = "";
-		boolean isHomeblock = town.getTownBlocks().size() == 0;
-		for (WorldCoord coord : selection) {
-			//Use the user's current world
-			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord.getX(), coord.getZ(), world), player, outpost, isHomeblock, false);
-			if(BukkitTools.isEventCancelled(preClaimEvent)) {
-				blockedClaims++;
-				cancelMessage = preClaimEvent.getCancelMessage();
-			}
-		}
-
-		if (blockedClaims > 0) {
-			throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
-		}
-		
-		/*
-		 * See if the Town can pay (if required.)
-		 */
-		if (TownyEconomyHandler.isActive()) {
-			final boolean isOutpost = outpost;
-			final List<WorldCoord> finalSelection = selection;
-			
-			TownyEconomyHandler.economyExecutor().execute(() -> {
-				double blockCost;
-				try {
-					if (isOutpost)
-						blockCost = TownySettings.getOutpostCost();
-					else if (finalSelection.size() == 1)
-						blockCost = town.getTownBlockCost();
-					else
-						blockCost = town.getTownBlockCostN(finalSelection.size());
-
-					if (!town.getAccount().canPayFromHoldings(blockCost)) {
-						double missingAmount = blockCost - town.getAccount().getHoldingBalance();
-						throw new TownyException(Translatable.of("msg_no_funds_claim2", finalSelection.size(), prettyMoney(blockCost), prettyMoney(missingAmount), new DecimalFormat("#").format(missingAmount)));
-					}
-
-					town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", finalSelection.size(), player.getName()));
-					
-					// Start the claiming process after a successful withdraw.
-					plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, finalSelection, isOutpost, true, false));
-				} catch (NullPointerException e2) {
-					TownyMessaging.sendErrorMsg(player, "The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-				}
-			});
-		} else {
-			// Economy isn't enabled, start the claiming process immediately.
-			plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, outpost, true, false));
-		}
 	}
 
 	private static boolean townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(Town town, int minAdjacentBlocks) {
@@ -3675,6 +3646,46 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Special rule that makes sure a town can claim a fifth plot after claiming a 2x2 square.
 			return false;
 		return town.getTownBlocks().size() > minAdjacentBlocks;
+	}
+
+	private static void fireTownPreClaimEventOrThrow(Player player, Town town, boolean outpost, List<WorldCoord> selection) throws TownyException {
+		int blockedClaims = 0;
+		String cancelMessage = "";
+		boolean isHomeblock = town.getTownBlocks().size() == 0;
+		for (WorldCoord coord : selection) {
+			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord), player, outpost, isHomeblock, false);
+			if(BukkitTools.isEventCancelled(preClaimEvent)) {
+				blockedClaims++;
+				cancelMessage = preClaimEvent.getCancelMessage();
+			}
+		}
+		if (blockedClaims > 0)
+			throw new TownyException(String.format(cancelMessage, blockedClaims, selection.size()));
+	}
+
+	private static void vetTheTownCanPayIfRequired(Player player, Town town, final boolean outpost, final List<WorldCoord> selection) throws TownyException {
+		if (TownyEconomyHandler.isActive()) {
+			Account townAccount = town.getAccount();
+			if (townAccount == null) // This is usually right about the time when admins find out their Economy plugin doesn't work well with Towny. 
+				throw new TownyException("The server economy plugin " + TownyEconomyHandler.getVersion() + " could not return the Town account!");
+
+			int selectionSize = selection.size();
+			double blockCost = getSelectionCost(town, outpost, selectionSize);
+
+			if (!townAccount.canPayFromHoldings(blockCost)) {
+				double missingAmount = blockCost - townAccount.getHoldingBalance();
+				throw new TownyException(Translatable.of("msg_no_funds_claim2", selectionSize, prettyMoney(blockCost), prettyMoney(missingAmount), new DecimalFormat("#").format(missingAmount)));
+			}
+
+			// Charge the town for the claim.
+			TownyEconomyHandler.economyExecutor().execute(() ->
+				town.getAccount().withdraw(blockCost, String.format("Town Claim (%d) by %s", selectionSize, player.getName())));
+		}
+	}
+
+	private static double getSelectionCost(Town town, final boolean outpost, int selectionSize) throws TownyException {
+		return outpost ? TownySettings.getOutpostCost()
+				: selectionSize == 1 ? town.getTownBlockCost() : town.getTownBlockCostN(selectionSize);
 	}
 
 	public static void parseTownUnclaimCommand(Player player, String[] split) throws TownyException {
