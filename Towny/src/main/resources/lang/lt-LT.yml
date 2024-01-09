@@ -129,6 +129,7 @@ town_trust_help_2: "Išvardija miesto patikimus žmones."
 town_towntrust_help_0: "Prideda miestą į miesto patikimų miestų sąrašą."
 town_towntrust_help_1: "Pašalina miestą iš miesto patikimų miestų sąrašo."
 town_towntrust_help_2: "Išvardija miesto patikimus miestus."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: 'Užimti teritoriją, kuri nebūtinai liečiasi su pagrindine miesto teritorija'
 mayor_help_4: 'Užimti teritoriją aplink save X spinduliu'
 mayor_help_5: 'Užimti teritoriją didžiausiu spinduliu'
