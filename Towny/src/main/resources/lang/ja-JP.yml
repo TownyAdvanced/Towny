@@ -129,6 +129,7 @@ town_trust_help_2: "町の信頼できる住民をリストします。"
 town_towntrust_help_0: "町を信頼できる町として追加します。"
 town_towntrust_help_1: "町をその町内の信頼済みとして削除します。"
 town_towntrust_help_2: "町の信頼できる町をリストします。"
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: '町でないエリアの領有を主張する'
 mayor_help_4: 'あなたの周囲Xブロック分（円又は四角）のエリアの領有を主張する'
 mayor_help_5: '自動で最大半径のエリアの領有を主張する'
