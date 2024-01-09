@@ -129,6 +129,7 @@ town_trust_help_2: "Lists the Trusted residents of a town."
 town_towntrust_help_0: "Adds a town as Trusted in the town."
 town_towntrust_help_1: "Removes a town as Trusted in the town."
 town_towntrust_help_2: "Lists the Trusted towns of a town."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: 'Gør krav på område som ikke er tilknyttet byen'
 mayor_help_4: 'Gør krav på områder rundt om dig med en radius på X'
 mayor_help_5: 'Gør krav på områder rundt om dig med den maximale radius'
