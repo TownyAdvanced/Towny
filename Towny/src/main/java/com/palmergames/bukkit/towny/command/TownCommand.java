@@ -2900,64 +2900,56 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		plugin.resetCache();
 	}
 
-	public static void townAddResidents(CommandSender sender, Town town, List<Resident> invited) {
-		String name;
-		boolean admin = false;
-		if (sender instanceof Player) {
-			name = ((Player) sender).getName();
-			if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin((Player) sender))
-				admin = true;				
-		} else {
-			name = "Console";
-			admin = true;
+	public static void townAddResidents(CommandSender sender, Town town, List<Resident> invited) throws TownyException {
+		List<String> invitedResidents = invited.stream()
+				.filter(res -> inviteResidentToTownOrThrow(sender, res, town))
+				.map(Resident::getName)
+				.collect(Collectors.toList());
+
+		if (invitedResidents.isEmpty()) 
+			throw new TownyException(Translatable.of("msg_invalid_name"));
+
+		String name = sender instanceof Player player ? player.getName() : "Console";
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_invited_join_town", name, StringMgmt.join(invitedResidents, ", ")));
+		town.save();
+	}
+
+	private static boolean inviteResidentToTownOrThrow(CommandSender sender, Resident newMember, Town town) {
+		final boolean admin = !(sender instanceof Player player) || TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player);
+		try {
+			if (!admin)
+				BukkitTools.ifCancelledThenThrow(new TownPreAddResidentEvent(town, newMember));
+
+			// Not online
+			if (!newMember.isOnline()) 
+				throw new TownyException(Translatable.of("msg_offline_no_join", newMember.getName()));
+
+			// only add players with the right permissions.
+			if (!newMember.hasPermissionNode(PermissionNodes.TOWNY_TOWN_RESIDENT.getNode()))
+				throw new TownyException(Translatable.of("msg_not_allowed_join", newMember.getName()));
+
+			if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))
+				throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
+
+			if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+				throw new TownyException(Translatable.of("msg_err_cannot_add_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation(), newMember.getName()));
+
+			if (!admin && TownySettings.getTownInviteCooldown() > 0 && (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < TownySettings.getTownInviteCooldown())
+				throw new TownyException(Translatable.of("msg_err_resident_doesnt_meet_invite_cooldown", newMember));
+
+			if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation())
+				throw new TownyException(Translatable.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
+
+			// Throws when the player has a town or is in this town already.
+			town.addResidentCheck(newMember);
+
+			// Throws when the player cannot use the invite. Otherwise this will send an invite to the resident.
+			townInviteResident(sender, town, newMember);
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			return false;
 		}
-
-		for (Resident newMember : new ArrayList<>(invited)) {
-			try {
-
-				if (!admin)
-					BukkitTools.ifCancelledThenThrow(new TownPreAddResidentEvent(town, newMember));
-
-				// only add players with the right permissions.
-				if (!newMember.isOnline()) { // Not online
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_offline_no_join", newMember.getName()));
-					invited.remove(newMember);
-				} else if (!newMember.hasPermissionNode(PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_allowed_join", newMember.getName()));
-					invited.remove(newMember);
-				} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town)){
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
-					invited.remove(newMember);
-				} else if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation()) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_cannot_add_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation(), newMember.getName()));
-					invited.remove(newMember);
-				} else if (!admin && TownySettings.getTownInviteCooldown() > 0 && ( (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < (TownySettings.getTownInviteCooldown()) )) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_resident_doesnt_meet_invite_cooldown", newMember));
-					invited.remove(newMember);
-				} else if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation()) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
-					invited.remove(newMember);
-				} else {
-					town.addResidentCheck(newMember);
-					townInviteResident(sender, town, newMember);
-				}
-			} catch (TownyException e) {
-				invited.remove(newMember);
-				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-			}
-		}
-
-		if (invited.size() > 0) {
-			StringBuilder msg = new StringBuilder();
-			for (Resident newMember : invited)
-				msg.append(newMember.getName()).append(", ");
-
-			msg = new StringBuilder(msg.substring(0, msg.length() - 2));
-			
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_invited_join_town", name, msg.toString()));
-			town.save();
-		} else
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
+		return true;
 	}
 
 	public static void townAddResident(Town town, Resident resident) throws AlreadyRegisteredException {

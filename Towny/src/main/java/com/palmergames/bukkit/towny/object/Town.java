@@ -399,8 +399,8 @@ public class Town extends Government implements TownBlockOwner {
 			throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), getFormattedName()));
 		
 		final Town residentTown = resident.getTownOrNull();
-		if (residentTown != null && !this.equals(residentTown)) {
-			throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), residentTown.getFormattedName()));			}
+		if (residentTown != null && !this.equals(residentTown))
+			throw new AlreadyRegisteredException(Translation.of("msg_err_already_in_town", resident.getName(), residentTown.getFormattedName()));
 	}
 
 	public boolean isMayor(Resident resident) {
