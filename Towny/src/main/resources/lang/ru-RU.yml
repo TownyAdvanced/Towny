@@ -129,6 +129,7 @@ town_trust_help_2: "Показывает доверенных в этом гор
 town_towntrust_help_0: "Делает город доверенным в городе."
 town_towntrust_help_1: "Делает город не доверенным в городе."
 town_towntrust_help_2: "Показывает доверенные в этом городе города."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: 'Участок не прилегает к городу'
 mayor_help_4: 'Заприватить местность в радиусе X вокруг вас'
 mayor_help_5: 'Заприватить максимальный радиус'
