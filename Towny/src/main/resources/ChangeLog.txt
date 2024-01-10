@@ -9437,3 +9437,4 @@ v0.92.0.11:
     - TownyAPI#testTownUnclaimOrThrow(Town town, WorldCoord coordToUnclaim)
   - Create Town object methods for determining if a town has enough residents to be a part of a nation, or to be the capital of a nation.
     - Moves backing logic into TownUtil.
+  - Remove some verbose boolean returns.

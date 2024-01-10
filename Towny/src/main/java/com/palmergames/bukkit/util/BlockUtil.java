@@ -113,10 +113,7 @@ public class BlockUtil {
 				return false;
 			
 			if (tb.hasResident() != tb2.hasResident()) // One is player-owned and one isn't.
-				if (isResidentActingMayorOfTown(resident, tb.getTownOrNull()))
-					return true;
-				else
-					return false;
+				return isResidentActingMayorOfTown(resident, tb.getTownOrNull());
 
 			if (!tb.hasResident() && !tb2.hasResident()) // Both plots are town-owned.
 				return true;
