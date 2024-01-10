@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&b%s için %d %s satın aldı.'
 msg_buy_resident_plot: '&b%s, %s için %s arsasını satın aldı!'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s vergi ödeyemedi ve %s tarafından atıldı.'
 msg_couldnt_pay_plot_taxes: '&b%s vergi ödeyemedi ve bir arsasını kaybetti.'
 msg_payed_town_tax: '&bÖdenen şehir vergisi '
