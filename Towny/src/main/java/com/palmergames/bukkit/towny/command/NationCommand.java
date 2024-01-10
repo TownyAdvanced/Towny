@@ -693,7 +693,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (nation.hasSanctionedTown(town))
 				throw new TownyException(Translatable.of("msg_err_cannot_join_nation_sanctioned_town", nation.getName()));
 
-			if (!testTownHasEnoughResidents(town))
+			if (!town.hasEnoughResidentsToJoinANation())
 				throw new TownyException(Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
 
 			if (!testNationMaxTowns(nation))
@@ -919,19 +919,20 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 	private void newNation(Player player, String[] split) throws TownyException {
 		Resident resident = getResidentOrThrow(player);
-		if (TownySettings.getNumResidentsCreateNation() > 0 && resident.getTown().getNumResidents() < TownySettings.getNumResidentsCreateNation())
+		Town town = getTownFromResidentOrThrow(resident);
+		if (!town.hasEnoughResidentsToBeANationCapital())
 			throw new TownyException(Translatable.of("msg_err_not_enough_residents_new_nation"));
 
 		if (split.length == 1)
 			throw new TownyException(Translatable.of("msg_specify_nation_name"));
 
-		if (!resident.isMayor() && !resident.getTown().hasResidentWithRank(resident, "assistant"))
+		if (!resident.isMayor() && !town.hasResidentWithRank(resident, "assistant"))
 			throw new TownyException(Translatable.of("msg_peasant_right"));
 		
 		boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
 		
 		String nationName = String.join("_", StringMgmt.remFirstArg(split));
-		newNation(player, nationName, resident.getTown(), noCharge);
+		newNation(player, nationName, town, noCharge);
 	}
 	
 	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
@@ -1258,7 +1259,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				continue;
 			}	
 
-			if (!testTownHasEnoughResidents(town)) {
+			if (!town.hasEnoughResidentsToJoinANation()) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
 				continue;
 			}
@@ -1303,7 +1304,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					continue;
 				}
 
-				if (!testTownHasEnoughResidents(town)) {
+				if (!town.hasEnoughResidentsToJoinANation()) {
 					// Town has dropped below min.-residents-to-join-nation limit. 
 					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
 					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
@@ -1334,12 +1335,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return true;
 		return !(nation.getResidents().size() + town.getResidents().size() > maxResidentPerNation);
 
-	}
-
-	private static boolean testTownHasEnoughResidents(Town town) {
-		if (TownySettings.getNumResidentsJoinNation() < 1)
-			return true;
-		return !(town.getNumResidents() < TownySettings.getNumResidentsJoinNation());
 	}
 
 	private static boolean testNationMaxTowns(Nation nation) {
@@ -2318,7 +2313,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		boolean capitalNotEnoughResidents = TownySettings.getNumResidentsCreateNation() > 0 && newCapital.getNumResidents() < TownySettings.getNumResidentsCreateNation();
+		boolean capitalNotEnoughResidents = !newCapital.hasEnoughResidentsToBeANationCapital();
 		if (capitalNotEnoughResidents && !admin) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
 			return;

@@ -3,7 +3,14 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 
@@ -27,4 +34,63 @@ public class TownUtil {
 				.collect(Collectors.toList());
 	}
 
+	public static void checkNationResidentsRequirementsOfTown(Town town) {
+		if (!town.hasNation())
+			return;
+		Nation nation = town.getNationOrNull();
+
+		// Check non-capital rules first, towns must maintain a number of residents to be a part of a nation.
+		if (!town.isCapital() && !town.hasEnoughResidentsToJoinANation()) {
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_not_enough_residents_left_nation", town.getName()));
+			town.removeNation();
+			return;
+		}
+
+		// Check the nation-creation rules that apply to nation capitals. Towns must maintain a number of residents to do so.
+		if (town.isCapital() && !town.hasEnoughResidentsToBeANationCapital()) {
+			// If a new capital can be found we don't delete the nation.
+			if (findNewCapital(town, nation))
+				return;
+
+			// No new capital found, delete the nation and potentially refund the capital town.
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
+			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+
+			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
+				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_not_enough_residents_refunded", TownySettings.getNewNationPrice()));
+			}
+		} 
+	}
+
+	private static boolean findNewCapital(Town town, Nation nation) {
+		for (Town newCapital : nation.getTowns())
+			if (newCapital.hasEnoughResidentsToBeANationCapital()) {
+				// We've found a suitable new capital that has enough residents.
+				nation.setCapital(newCapital);
+				// Check if the old capital can remain in the nation as a non-capital town.
+				if (!town.hasEnoughResidentsToJoinANation()) {
+					town.removeNation();
+					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_capital_not_enough_residents_left_nation", town.getName()));
+				}
+				// Announce the new capital and return true.
+				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_not_enough_residents_no_longer_capital", newCapital.getName()));
+				return true;
+			}
+		// Return false and require the nation to be deleted.
+		return false;
+	}
+
+	public static boolean townHasEnoughResidentsToBeANationCapital(Town town) {
+		if (TownySettings.getNumResidentsCreateNation() < 1)
+			return true;
+		return town.getNumResidents() >= TownySettings.getNumResidentsCreateNation();
+	}
+
+	public static boolean townHasEnoughResidentsToJoinANation(Town town) {
+		if (TownySettings.getNumResidentsJoinNation() < 1)
+			return true;
+		return town.getNumResidents() >= TownySettings.getNumResidentsJoinNation();
+	}
 }

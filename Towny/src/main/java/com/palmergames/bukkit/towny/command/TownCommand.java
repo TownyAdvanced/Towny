@@ -2711,7 +2711,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_left_town", resident.getName()));
 			TownyMessaging.sendMsg(player, Translatable.of("msg_left_town", resident.getName()));
 
-			checkTownResidents(town);
+			town.checkTownHasEnoughResidentsForNationRequirements();
 		})
 		.setCancellableEvent(new TownLeaveEvent(resident, town))
 		.sendTo(player);
@@ -2968,39 +2968,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(sender, Translation.translateTranslatables(sender, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), Translatable.of("msg_kicked", kickerName, message)));
 			}
 			town.save();
+			town.checkTownHasEnoughResidentsForNationRequirements();
 		} else {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
-		}
-
-		checkTownResidents(town);
-	}
-
-	public static void checkTownResidents(Town town) {
-		if (!town.hasNation())
-			return;
-		Nation nation = town.getNationOrNull();
-		if (town.isCapital() && TownySettings.getNumResidentsCreateNation() > 0 && town.getNumResidents() < TownySettings.getNumResidentsCreateNation()) {
-			for (Town newCapital : nation.getTowns())
-				if (newCapital.getNumResidents() >= TownySettings.getNumResidentsCreateNation()) {
-					nation.setCapital(newCapital);
-					if (TownySettings.getNumResidentsJoinNation() > 0 && town.getNumResidents() < TownySettings.getNumResidentsJoinNation()) {
-						town.removeNation();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_capital_not_enough_residents_left_nation", town.getName()));
-					}
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_not_enough_residents_no_longer_capital", newCapital.getName()));
-					return;
-				}
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
-
-			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
-				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_not_enough_residents_refunded", TownySettings.getNewNationPrice()));
-			}
-		} else if (!town.isCapital() && TownySettings.getNumResidentsJoinNation() > 0 && town.getNumResidents() < TownySettings.getNumResidentsJoinNation()) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_town_not_enough_residents_left_nation", town.getName()));
-			town.removeNation();
 		}
 	}
 

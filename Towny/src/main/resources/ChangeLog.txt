@@ -9435,3 +9435,5 @@ v0.92.0.11:
   - API: Added new methods to TownyAPI class to determine claim-ability:
     - TownyAPI#testTownClaimOrThrow(Town town, WorldCoord coordToClaim, boolean outpost, boolean newTown)
     - TownyAPI#testTownUnclaimOrThrow(Town town, WorldCoord coordToUnclaim)
+  - Create Town object methods for determining if a town has enough residents to be a part of a nation, or to be the capital of a nation.
+    - Moves backing logic into TownUtil.

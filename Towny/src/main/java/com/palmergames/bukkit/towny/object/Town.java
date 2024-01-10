@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
+import com.palmergames.bukkit.towny.utils.TownUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.kyori.adventure.audience.Audience;
@@ -1908,5 +1909,17 @@ public class Town extends Government implements TownBlockOwner {
 
 	public void playerBroadCastMessageToTown(Player player, String message) {
 		TownyMessaging.sendPrefixedTownMessage(this, Translatable.of("town_say_format", player.getName(), TownyComponents.stripClickTags(message)));
+	}
+
+	public void checkTownHasEnoughResidentsForNationRequirements() {
+		TownUtil.checkNationResidentsRequirementsOfTown(this);
+	}
+
+	public boolean hasEnoughResidentsToJoinANation() {
+		return TownUtil.townHasEnoughResidentsToJoinANation(this);
+	}
+
+	public boolean hasEnoughResidentsToBeANationCapital() {
+		return TownUtil.townHasEnoughResidentsToBeANationCapital(this);
 	}
 }
