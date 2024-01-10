@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&b%d %s를 %s에 구매하였습니다.'
 msg_buy_resident_plot: '&b%s는 %ss 만큼의 %s 땅을 구매하였습니다.'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s님은 세금을 미납하여 %s에서 추방되었습니다.'
 msg_couldnt_pay_plot_taxes: '&b%s님은 세금을 미납하여 땅의 소유권을 잃었습니다.'
 msg_payed_town_tax: '&b지불한 마을 세금: '
