@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&b%d %s を %s で購入しました'
 msg_buy_resident_plot: '&b%s が %s のプロットを %s で購入しました！'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s は税金を払うことができなかったため、 %s からキックされました'
 msg_couldnt_pay_plot_taxes: '&s%s は税金を払うことができなかったため、プロットの所有権を失いました'
 msg_payed_town_tax: '%b税金を支払いました： '
