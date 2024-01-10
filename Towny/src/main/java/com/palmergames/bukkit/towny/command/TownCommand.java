@@ -3101,79 +3101,35 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownRuinUtil.processRuinedTownReclaimRequest(player);
 	}
 
-	/**
-	 * If no arguments are given (or error), send usage of command. If sender is
-	 * a player: args = [town]. Elsewise: args = [resident] [town]
-	 *
-	 * @param sender - Sender of command.
-	 * @param args - Current command arguments.
-	 */
-	public static void parseTownJoin(CommandSender sender, String[] args) {
+	private static void parseTownJoin(Player player, String[] args) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_JOIN.getNode());
+		Resident resident = getResidentOrThrow(player);
+		if (resident.hasTown())
+			throw new TownyException(Translatable.of("msg_err_already_res2", "You"));
 
-		try {
-			Resident resident;
-			Town town;
-			String residentName, townName, contextualResidentName;
-			boolean console = false;
-			String exceptionMsg;
+		Town town = getTownOrThrow(args[0]);
 
-			if (sender instanceof Player) {
-				// Player
-				if (args.length < 1)
-					throw new TownyException(Translatable.of("msg_usage", "/town join [town]"));
+		// Check if town is town is free to join.
+		if (!town.isOpen())
+			throw new TownyException(Translatable.of("msg_err_not_open", town.getFormattedName()));
 
-				Player player = (Player) sender;
-				checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_JOIN.getNode());
-				residentName = player.getName();
-				townName = args[0];
-				contextualResidentName = "You";
-				exceptionMsg = "msg_err_already_res2";
-			} else {
-				// Console
-				if (args.length < 2)
-					throw new TownyException(Translatable.of("msg_usage", "town join [resident] [town]"));
+		if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+			throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
 
-				residentName = args[0];
-				townName = args[1];
-				contextualResidentName = residentName;
-				exceptionMsg = "msg_err_already_res";
-			}
-			
-			resident = getResidentOrThrow(residentName);
-			town = getTownOrThrow(townName);
+		if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))
+			throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 
-			// Check if resident is currently in a town.
-			if (resident.hasTown())
-				throw new TownyException(Translatable.of(exceptionMsg, contextualResidentName));
+		if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation())
+			throw new TownyException(Translatable.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
 
-			if (!console) {
-				// Check if town is town is free to join.
-				if (!town.isOpen())
-					throw new TownyException(Translatable.of("msg_err_not_open", town.getFormattedName()));
-				if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation())
-					throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
-				if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))
-					throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
-				if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation())
-					throw new TownyException(Translatable.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
-				if (town.hasOutlaw(resident))
-					throw new TownyException(Translatable.of("msg_err_outlaw_in_open_town"));
-			}
+		if (town.hasOutlaw(resident))
+			throw new TownyException(Translatable.of("msg_err_outlaw_in_open_town"));
 
-			BukkitTools.ifCancelledThenThrow(new TownPreAddResidentEvent(town, resident));
+		BukkitTools.ifCancelledThenThrow(new TownPreAddResidentEvent(town, resident));
 
-			// Check if player is already in selected town (Pointless)
-			// Then add player to town.
-			townAddResident(town, resident);
+		townAddResident(town, resident);
 
-			// Resident was added successfully.
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_join_town", resident.getName()));
-
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-		} catch (Exception e) {
-			TownyMessaging.sendErrorMsg(sender, e.getMessage());
-		}
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_join_town", resident.getName()));
 	}
 
 	/**
