@@ -102,8 +102,8 @@ public class TownyCustomListener implements Listener {
 	public void onPlayerCreateTown(NewTownEvent event) {
 		final Town town = event.getTown();
 		Resident mayor = town.getMayor();
-		if (mayor.isOnline() && town.hasHomeBlock())
-		CellSurface.getCellSurface(town.getHomeBlockOrNull().getWorldCoord()).runClaimingParticleOverSurfaceAtPlayer(mayor.getPlayer());
+		if (mayor.isOnline() && town.hasHomeBlock() && TownySettings.isShowingClaimParticleEffect())
+			CellSurface.getCellSurface(town.getHomeBlockOrNull().getWorldCoord()).runClaimingParticleOverSurfaceAtPlayer(mayor.getPlayer());
 
 		// Run the bank warning with a 10 second delay.
 		plugin.getScheduler().runLater(() -> {
