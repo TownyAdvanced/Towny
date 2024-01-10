@@ -129,6 +129,7 @@ town_trust_help_2: "Lista os residentes confiáveis de uma cidade."
 town_towntrust_help_0: "Adiciona uma cidade como confiável na cidade."
 town_towntrust_help_1: "Remove uma cidade como confiável na cidade."
 town_towntrust_help_2: "Lista as cidades confiáveis de uma cidade."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: 'Reivindicar área separada da cidade'
 mayor_help_4: 'Reivindicar à sua volta num raio de X'
 mayor_help_5: 'Reivindicar no raio máximo'

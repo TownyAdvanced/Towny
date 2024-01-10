@@ -129,6 +129,7 @@ town_trust_help_2: "Lists the Trusted residents of a town."
 town_towntrust_help_0: "Adds a town as Trusted in the town."
 town_towntrust_help_1: "Removes a town as Trusted in the town."
 town_towntrust_help_2: "Lists the Trusted towns of a town."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
 mayor_help_3: 'Marken är inte sammankopplad med din stad.'
 mayor_help_4: 'Köp marken omkring dig med en radius på X'
 mayor_help_5: 'Köp all mark du kan åt alla håll.'
