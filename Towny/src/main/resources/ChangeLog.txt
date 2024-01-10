@@ -9432,3 +9432,6 @@ v0.92.0.11:
     - Refactor townSet and the subcommands.
   - Refactor the TownyWorldCommand class.
   - Refactor the PlotClaim task.
+  - API: Added new methods to TownyAPI class to determine claim-ability:
+    - TownyAPI#testTownClaimOrThrow(Town town, WorldCoord coordToClaim, boolean outpost, boolean newTown)
+    - TownyAPI#testTownUnclaimOrThrow(Town town, WorldCoord coordToUnclaim)
