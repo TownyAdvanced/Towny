@@ -1198,7 +1198,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "kick":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_KICK.getNode());
-			TownCommand.townKickResidents(sender, town.getMayor(), town, ResidentUtil.getValidatedResidentsOfTown(sender, town, StringMgmt.remArgs(split, 2)));
+			// Force-kick command for admins.
+			if (split.length < 3)
+				throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME kick PLAYERNAME"));
+			resident = getResidentOrThrow(split[2]);
+			if (!town.hasResident(resident))
+				throw new TownyException(Translatable.of("msg_err_townadmintownrank_wrong_town"));
+			if (resident.isMayor())
+				throw new TownyException(Translatable.of("msg_you_cannot_kick_this_resident", resident.getName()));
+			resident.removeTown();
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_kicked", "Console", resident.getName()));
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_kicked", "You", resident.getName()));
+			if (resident.isOnline())
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_kicked_by", "Console"));
 			break;
 		case "delete":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode());
