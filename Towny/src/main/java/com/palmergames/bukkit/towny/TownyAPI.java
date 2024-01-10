@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.MathUtil;
 
@@ -931,5 +932,38 @@ public class TownyAPI {
 
 			// Nothing to complain about, this resident is the owner of the townblock's town or an admin.
 		}
+	}
+
+	/**
+	 * Test a WorldCoord to see if Towny would allow the area to be claimed by the
+	 * given town.
+	 * 
+	 * @param town         Town who would become owner of the land.
+	 * @param coordToClaim WorldCoord which is to be claimed.
+	 * @param outpost      whether this would be an outpost, with no connected town
+	 *                     land.
+	 * @param newTown      whether this would be a brand new town claiming their
+	 *                     first plot.
+	 * @throws TownyException thrown when Towny would not allow the claim, with
+	 *                        message for the reason why.
+	 */
+	public void testTownClaimOrThrow(Town town, WorldCoord coordToClaim, boolean outpost, boolean newTown) throws TownyException {
+		if (newTown)
+			ProximityUtil.allowTownHomeBlockOrThrow(coordToClaim.getTownyWorld(), coordToClaim, town, true);
+
+		ProximityUtil.allowTownClaimOrThrow(coordToClaim.getTownyWorld(), coordToClaim, town, outpost);
+	}
+
+	/**
+	 * Test a WorldCoord to see if Towny would allow the area to be unclaimed by the
+	 * given town.
+	 * 
+	 * @param town           Town that would unclaim the land.
+	 * @param coordToUnclaim WorldCoord which is to be unclaimed.
+	 * @throws TownyException thrown when Towny would not allow the unclaim, with
+	 *                        message for the reason why.
+	 */
+	public void testTownUnclaimOrThrow(Town town, WorldCoord coordToUnclaim) throws TownyException {
+		ProximityUtil.allowTownUnclaimOrThrow(coordToUnclaim.getTownyWorld(), coordToUnclaim, town);
 	}
 }

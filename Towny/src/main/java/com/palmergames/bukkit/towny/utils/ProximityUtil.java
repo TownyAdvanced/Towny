@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -60,6 +62,112 @@ public class ProximityUtil {
 			if (TownySettings.getMaxDistanceBetweenHomeblocks() > 0 &&
 				distanceToNextNearestHomeblock > TownySettings.getMaxDistanceBetweenHomeblocks())
 				throw new TownyException(Translatable.of("msg_too_far"));
+		}
+	}
+
+	public static void allowTownClaimOrThrow(TownyWorld world, WorldCoord townBlockToClaim, @Nullable Town town, boolean outpost) throws TownyException {
+		// Check if the town has claims available.
+		if (!town.hasUnlimitedClaims() && town.availableTownBlocks() <= 0)
+			throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
+
+		// Check if this is already claimed by someone.
+		if (!townBlockToClaim.isWilderness())
+			throw new TownyException(Translatable.of("msg_already_claimed", townBlockToClaim.getTownOrNull()));
+
+		// Check distance to other homeblocks.
+		if (AreaSelectionUtil.isTooCloseToHomeBlock(townBlockToClaim, town))
+			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
+
+		// Check distance to other townblocks.
+		if (world.getMinDistanceFromOtherTownsPlots(townBlockToClaim, town) >= TownySettings.getMinDistanceFromTownPlotblocks())
+			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+
+		// Check adjacent claims rules.
+		testAdjacentClaimsRulesOrThrow(townBlockToClaim, town, outpost);
+
+		// Check that we're on an edge if it is not an outpost.
+		if (!outpost && !isEdgeBlock(town, townBlockToClaim) && !town.getTownBlocks().isEmpty())
+			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
+	}
+
+	public static void testAdjacentClaimsRulesOrThrow(WorldCoord townBlockToClaim, Town town, boolean outpost) throws TownyException {
+		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
+			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, townBlockToClaim);
+			// The number of adjacement TBs is not enough and there is not a nearby outpost.
+			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, townBlockToClaim) == 0)
+				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
+		}
+	}
+
+	private static boolean townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(Town town, int minAdjacentBlocks) {
+		if (minAdjacentBlocks == 3 && town.getTownBlocks().size() < 5)
+			// Special rule that makes sure a town can claim a fifth plot after claiming a 2x2 square.
+			return false;
+		return town.getTownBlocks().size() > minAdjacentBlocks;
+	}
+
+	private static int numAdjacentTownOwnedTownBlocks(Town town, WorldCoord worldCoord) {
+		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
+			.filter(wc -> wc.hasTown(town))
+			.count();
+	}
+
+	private static int numAdjacentOutposts(Town town, WorldCoord worldCoord) {
+		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
+			.filter(wc -> wc.hasTown(town))
+			.map(WorldCoord::getTownBlockOrNull)
+			.filter(Objects::nonNull)
+			.filter(TownBlock::isOutpost)
+			.count();
+	}
+
+	private static boolean isEdgeBlock(TownBlockOwner owner, WorldCoord worldCoord) {
+
+		for (WorldCoord wc : worldCoord.getCardinallyAdjacentWorldCoords()) {
+			if (wc.isWilderness()) {
+				continue;
+			}
+			if (!wc.getTownBlockOrNull().isOwner(owner)) {
+				continue;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 * Town Unclaim Methods
+	 */
+
+	public static void allowTownUnclaimOrThrow(TownyWorld world, WorldCoord townBlockToUnclaim, @Nullable Town town) throws TownyException {
+
+		if (townBlockToUnclaim.isWilderness())
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+
+		if (!townBlockToUnclaim.getTownBlockOrNull().getTownOrNull().equals(town))
+			throw new TownyException(Translatable.of("msg_not_own_area"));
+
+		if (townBlockToUnclaim.getTownBlock().isHomeBlock())
+			throw new TownyException(Translatable.of("msg_err_cannot_unclaim_homeblock"));
+
+		 testAdjacentUnclaimsRulesOrThrow(townBlockToUnclaim, town);
+	}
+
+	public static void testAdjacentUnclaimsRulesOrThrow(WorldCoord townBlockToUnclaim, Town town) throws TownyException {
+		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
+		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+			WorldCoord firstWorldCoord = townBlockToUnclaim;
+			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
+				if (wc.isWilderness() || !wc.hasTown(town))
+					continue;
+				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
+				// The number of adjacement TBs is not enough and there is not a nearby outpost.
+				if (numAdjacent - 1 < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
+					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
+			}
 		}
 	}
 

@@ -260,7 +260,7 @@ public class TownClaim implements Runnable {
 		// Check if a plot snapshot exists for this townblock already (inactive, unqueued regeneration.)
 		if (!TownyUniverse.getInstance().getDataSource().hasPlotData(townBlock)) {
 			// Queue to have a snapshot made if there is not already an earlier snapshot.
-			plugin.getScheduler().run(worldCoord.getLowerMostCornerLocation(), () -> TownyRegenAPI.handleNewSnapshot(townBlock));
+			plugin.getScheduler().runAsync(() -> TownyRegenAPI.handleNewSnapshot(townBlock));
 		}
 	}
 
