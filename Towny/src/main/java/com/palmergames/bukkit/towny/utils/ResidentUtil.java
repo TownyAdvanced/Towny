@@ -70,7 +70,7 @@ public class ResidentUtil {
 	 * @param names - Names to be converted.
 	 * @return - List of residents to be used later.
 	 */
-	public static List<Resident> getValidatedResidents(CommandSender sender, String[] names) {
+	public static List<Resident> getValidatedResidents(CommandSender sender, List<String> names) {
 		List<Resident> residents = new ArrayList<>();
 		for (String name : names) {
 			List<Player> matches = BukkitTools.matchPlayer(name);
