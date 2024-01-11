@@ -2785,27 +2785,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}).sendTo(player);
 	}
 
-	/**
-	 * Transforms a list of names into a list of residents to be kicked.
-	 * Command: /town kick [resident] .. [resident]
-	 *
-	 * @param player - Player who initiated the kick command.
-	 * @param names - List of names to kick.
-	 * @throws TownyException on error.
-	 */
-	public static void townKick(Player player, String[] names) throws TownyException {
-		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_KICK.getNode());
-		catchRuinedTown(player);
-		Resident resident = getResidentOrThrow(player);
-		Town town = resident.getTown();
-
-		townKickResidents(player, resident, town, ResidentUtil.getValidatedResidentsOfTown(player, town, names));
-
-		// Reset everyones cache permissions as this player leaving can affect
-		// multiple areas.
-		plugin.resetCache();
-	}
-
 	public static void townAddResidents(CommandSender sender, Town town, List<Resident> invited) throws TownyException {
 		List<String> invitedResidents = invited.stream()
 				.filter(res -> inviteResidentToTownOrThrow(sender, res, town))
@@ -2914,68 +2893,76 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Method for kicking residents from a town.
-	 * 
-	 * @param sender - CommandSender who initiated the kick.
-	 * @param resident - Resident who initiated the kick.
-	 * @param town - Town the list of Residents are being kicked from.
-	 * @param kicking - List of Residents being kicked from Towny.
+	 * Transforms a list of names into a list of residents to be kicked.
+	 * Command: /town kick [resident] .. [resident]
+	 *
+	 * @param player - Player who initiated the kick command.
+	 * @param names - List of names to kick.
+	 * @throws TownyException on error.
 	 */
-	public static void townKickResidents(CommandSender sender, Resident resident, Town town, List<Resident> kicking) {
+	public static void townKick(Player player, String[] names) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_KICK.getNode());
+		catchRuinedTown(player);
+		Resident resident = getResidentOrThrow(player);
+		Town town = resident.getTown();
 
-		Resident senderResident = sender instanceof Player player ? TownyAPI.getInstance().getResident(player) : null;
-		
-		for (Resident member : new ArrayList<>(kicking)) {
-			if (!town.hasResident(member)) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_resident_not_your_town"));
-				kicking.remove(member);
-				continue;
-			}
+		townKickResidents(player, resident, town, ResidentUtil.getValidatedResidentsOfTown(player, town, names));
 
-			if (member.equals(resident)) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_you_cannot_kick_yourself"));
-				kicking.remove(member);
-				continue;
-			}
-
-			// The player being kicked is either the mayor or has an 'unkickable' rank (usually an assistant)
-			// The rank check is bypassed if the sender is either not a player or not in the same town as the player being kicked, for townyadmin purposes
-			if (member.isMayor() || (senderResident != null && !senderResident.isMayor() && town.hasResident(senderResident) && TownySettings.getTownUnkickableRanks().stream().anyMatch(member::hasTownRank))) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_you_cannot_kick_this_resident", member));
-				kicking.remove(member);
-				continue;
-			}
-
-			TownKickEvent townKickEvent = new TownKickEvent(member, sender);
-			if (BukkitTools.isEventCancelled(townKickEvent)) {
-				TownyMessaging.sendErrorMsg(sender, townKickEvent.getCancelMessage());
-				kicking.remove(member);
-			} else
-				member.removeTown();
-		}
-		
-		if (kicking.size() > 0) {
-			String message = kicking.stream().map(Resident::getName).collect(Collectors.joining(", "));
-			String kickerName = sender instanceof Player player ? player.getName() : "CONSOLE";
-
-			for (Resident member : kicking)
-				TownyMessaging.sendMsg(member, Translatable.of("msg_kicked_by", kickerName));
-
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_kicked", kickerName, message));
-
-			if (!(sender instanceof Player kickingPlayer) || !town.hasResident(kickingPlayer)) {
-				// For when the an admin uses /ta town {name} kick {residents}
-				TownyMessaging.sendMessage(sender, Translation.translateTranslatables(sender, "", Translatable.of("default_town_prefix", StringMgmt.remUnderscore(town.getName())), Translatable.of("msg_kicked", kickerName, message)));
-			}
-			town.save();
-			town.checkTownHasEnoughResidentsForNationRequirements();
-		} else {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
-		}
+		// Reset everyones cache permissions as this player leaving can affect
+		// multiple areas.
+		plugin.resetCache();
 	}
 
-	private void parseTownRanklistCommand(final Player player, String[] split)
-			throws NoPermissionException, TownyException {
+	/**
+	 * Method for kicking residents from a town.
+	 * 
+	 * @param sender   CommandSender who initiated the kick.
+	 * @param resident Resident who initiated the kick.
+	 * @param town     Town the list of Residents are being kicked from.
+	 * @param kicking  List of Residents being kicked from Towny.
+	 * @throws TownyException when there is no one to kick.
+	 */
+	private static void townKickResidents(CommandSender sender, Resident resident, Town town, List<Resident> kicking) throws TownyException {
+		List<String> kickedResidents = kicking.stream()
+				.filter(res -> kickResidentFromTownOrThrow(sender, resident, res, town))
+				.map(Resident::getName)
+				.collect(Collectors.toList());
+
+		if (kickedResidents.isEmpty())
+			throw new TownyException(Translatable.of("msg_invalid_name"));
+
+		town.checkTownHasEnoughResidentsForNationRequirements();
+		town.save();
+
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_kicked",  resident.getName(), StringMgmt.join(kickedResidents, ", ")));
+	}
+
+	private static boolean kickResidentFromTownOrThrow(CommandSender sender, Resident senderResident, Resident resToKick, Town town) {
+		try {
+			if (!town.hasResident(resToKick))
+				throw new TownyException(Translatable.of("msg_resident_not_your_town"));
+
+			if (senderResident.equals(resToKick))
+				throw new TownyException(Translatable.of("msg_you_cannot_kick_yourself"));
+
+			if (resToKick.isMayor())
+				throw new TownyException(Translatable.of("msg_you_cannot_kick_this_resident", resToKick));
+
+			if (!senderResident.isMayor() && TownySettings.getTownUnkickableRanks().stream().anyMatch(resToKick::hasTownRank))
+				throw new TownyException(Translatable.of("msg_you_cannot_kick_this_resident", resToKick));
+
+			BukkitTools.ifCancelledThenThrow(new TownKickEvent(resToKick, sender));
+
+			// Finally kick the resident.
+			resToKick.removeTown();
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			return false;
+		}
+		return true;
+	}
+
+	private void parseTownRanklistCommand(final Player player, String[] split) throws NoPermissionException, TownyException {
 		Town town;
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANKLIST.getNode());
 		catchRuinedTown(player);
