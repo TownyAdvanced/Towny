@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Parduoti sklypus spinduliu.'
 ############################################################
 msg_buy: '&bNusipirkote %d %s už %s.'
 msg_buy_resident_plot: '&b%s nusipirko %s sklypą už %s!'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s negalėjo sumokėti mokesčių ir buvo išmestas iš %s.'
 msg_couldnt_pay_plot_taxes: '&b%s negalėjo sumokėti mokesčių ir prarado sklypo nuosavybės teises.'
 msg_payed_town_tax: '&b Sumokėtas miesto mokestis '

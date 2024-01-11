@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Wystawia podany promień działek na sprzedaż.'
 ############################################################
 msg_buy: '&bKupiono %s (%d szt.) za %s.'
 msg_buy_resident_plot: '&b%s kupił działkę od %s za %s!'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&bMieszkaniec %s nie mógł zapłacić podatków i został wyrzucony z %s.'
 msg_couldnt_pay_plot_taxes: '&b%s nie mógł zapłacić podatków i został wysiedlony ze swojej działki.'
 msg_payed_town_tax: '&bZapłacono podatki miejskie: '

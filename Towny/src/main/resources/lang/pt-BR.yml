@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&bComprou %d %s por %s.'
 msg_buy_resident_plot: '&b%s comprou o terreno de %s por %s!'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s não conseguiu pagar os impostos e foi expulso de %s.'
 msg_couldnt_pay_plot_taxes: '&b%s não conseguiu pagar os impostos e perdeu a posse de um terreno.'
 msg_payed_town_tax: '&bVocê pagou o imposto da cidade de '

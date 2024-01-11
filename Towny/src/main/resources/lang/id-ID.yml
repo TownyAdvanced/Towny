@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&bMembeli %d %s seharga %s.'
 msg_buy_resident_plot: '&b%s membeli %s lahan seharga %s!'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s tidak mampu membayar pajak, dan dikeluarkan dari %s.'
 msg_couldnt_pay_plot_taxes: '&b%s tidak mampu membayar pajak, dan kepemilikan lahan di hapus.'
 msg_payed_town_tax: '&bMembayar pajak kota '

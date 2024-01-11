@@ -424,6 +424,7 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&bBinili %d %s para sa %s.'
 msg_buy_resident_plot: '&b%s ay binili ang plot ni%s para sa %s!'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: 'Si &b%s ay hindi nakapag-bayad nang buwis at ito ay natanggal sa %s.'
 msg_couldnt_pay_plot_taxes: 'Si &b%s ay hindi makapag-bayad nang buwis at nawala nito ang pag-mamay ari sa lupa.'
 msg_payed_town_tax: '&bBinayaran ang buwis ng '
