@@ -57,7 +57,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			return;
 
 		// Heal and saturate if allowed based on Location.
-		if (playerAllowedToHealHere(town, TownyAPI.getInstance().getTownBlock(player)));
+		if (playerAllowedToHealHere(town, TownyAPI.getInstance().getTownBlock(player)))
 			evaluateHealth(player);
 	}
 
