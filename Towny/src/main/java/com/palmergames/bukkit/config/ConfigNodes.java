@@ -492,6 +492,11 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_REGEN_ENABLE(
 			"global_town_settings.health_regen.enable",
 			"true"),
+	GTOWN_SETTINGS_REGEN_PREVENT_SATURATION_LOSS(
+			"global_town_settings.saturation_regen.also_prevent_saturation_loss",
+			"true",
+			"",
+			"# When true players cannot become hungrier when in their own or an allied town."),
 
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",

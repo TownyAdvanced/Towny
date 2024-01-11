@@ -9438,3 +9438,10 @@ v0.92.0.11:
   - Create Town object methods for determining if a town has enough residents to be a part of a nation, or to be the capital of a nation.
     - Moves backing logic into TownUtil.
   - Remove some verbose boolean returns.
+  - Fix issues discovered in HealthRegenTimerTask where saturation gain was being unable to happen consistently when server TPS drops.
+    - Code is now run Async during player evaluation, becoming Sync'd when we are about to heal someone.
+    - Towny now properly uses the EntityRegainHealthEvent, reporting the correct amount of health gain, as well as not healing players if this event is cancelled. 
+  - Added config option to turn on/off the saturation top-up that goes along with the health-regen in towns. 
+  - New Config Option: global_town_settings.saturation_regen.also_prevent_saturation_loss
+    - Default: true
+    - When true players cannot become hungrier when in their own or an allied town.

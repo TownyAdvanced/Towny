@@ -97,7 +97,7 @@ public class TownyTimerHandler{
 	public static void toggleHealthRegen(boolean on) {
 
 		if (on && !isHealthRegenRunning()) {
-			healthRegenTask = plugin.getScheduler().runRepeating(new HealthRegenTimerTask(plugin, BukkitTools.getServer()), 1, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
+			healthRegenTask = plugin.getScheduler().runAsyncRepeating(new HealthRegenTimerTask(plugin, BukkitTools.getServer()), 1, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
 		} else if (!on && isHealthRegenRunning()) {
 			healthRegenTask.cancel();
 			healthRegenTask = null;
