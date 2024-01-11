@@ -9445,3 +9445,4 @@ v0.92.0.11:
   - New Config Option: global_town_settings.saturation_regen.also_prevent_saturation_loss
     - Default: true
     - When true players cannot become hungrier when in their own or an allied town.
+  - Refactor the TownCommand's town kicking method, and decouple the admin version of town kicking.
