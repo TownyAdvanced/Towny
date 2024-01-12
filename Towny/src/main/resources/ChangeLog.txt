@@ -9448,3 +9448,4 @@ v0.92.0.11:
   - Refactor the TownCommand's town kicking method, and decouple the admin version of town kicking.
 0.100.1.2:
   - Fix non-mayors being able to add non-kickable-ranked residents as outlaws, which would have allowed them to be kicked.
+  - Refactor MapHUD class.
