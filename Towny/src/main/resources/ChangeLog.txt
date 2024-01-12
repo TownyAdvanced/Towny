@@ -9446,3 +9446,5 @@ v0.92.0.11:
     - Default: true
     - When true players cannot become hungrier when in their own or an allied town.
   - Refactor the TownCommand's town kicking method, and decouple the admin version of town kicking.
+0.100.1.2:
+  - Fix non-mayors being able to add non-kickable-ranked residents as outlaws, which would have allowed them to be kicked.
