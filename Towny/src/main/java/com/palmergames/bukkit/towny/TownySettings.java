@@ -3377,6 +3377,10 @@ public class TownySettings {
 		
 		if (fraction == 1.00)
 			return "100%";
+		if (fraction > 0.98)
+			return "99%";
+		if (fraction > 0.95)
+			return "95%+";
 		if (fraction > 0.89)
 			return "90%+";
 		if (fraction > 0.79)
