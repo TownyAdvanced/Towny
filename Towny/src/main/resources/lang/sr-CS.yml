@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cMorate pripadati nekom gradu kako biste claim-oval
 msg_err_must_belong_town: '&cMorate pripadati nekom gradu.'
 msg_err_dont_belong_town: '&cNe pripadate nijednom gradu.'
 msg_err_dont_belong_nation: '&bNe pripadate nijednoj naciji.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s ne pripada Vašoj naciji.'
 msg_err_rect_auto: '&cSamo gradovi i stanovnici mogu da koriste ''auto''.'
 msg_err_invalid_radius: '&cNevažeći poluprečnik. Koristite celi broj ili ''auto''.'
