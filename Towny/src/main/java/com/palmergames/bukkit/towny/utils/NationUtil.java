@@ -56,4 +56,8 @@ public class NationUtil {
 		return TownyFormatter.colourKeyValue(translator.of("status_joined_nation"),
 				town.getJoinedNationAt() > 0 ? TownyFormatter.lastOnlineFormatIncludeYear.format(town.getJoinedNationAt()) : translator.of("status_unknown"));
 	}
+
+	public static boolean hasReachedMaximumAllies(Nation nation) {
+		return TownySettings.getMaxNationAllies() >= 0 && nation.getAllies().size() >= TownySettings.getMaxNationAllies();
+	}
 }

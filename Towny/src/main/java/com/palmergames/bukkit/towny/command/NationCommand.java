@@ -1650,7 +1650,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (toAccept != null) {
 			
 			// Nation has reached the max amount of allies
-			if (TownySettings.getMaxNationAllies() >= 0 && nation.getAllies().size() >= TownySettings.getMaxNationAllies()) {
+			if (nation.hasReachedMaximumAllies()) {
 				toAccept.getReceiver().deleteReceivedInvite(toAccept);
 				toAccept.getSender().deleteSentInvite(toAccept);
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_ally_limit_reached"));

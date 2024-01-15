@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.NationUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -304,6 +305,9 @@ public class Nation extends Government {
 		return allies;
 	}
 
+	public boolean hasReachedMaximumAllies() {
+		return NationUtil.hasReachedMaximumAllies(this);
+	}
 	public List<Nation> getMutualAllies() {
 		List<Nation> result = new ArrayList<>();
 		for(Nation ally: getAllies()) {

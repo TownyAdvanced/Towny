@@ -9453,3 +9453,4 @@ v0.92.0.11:
   - Fix returning null in the relational placeholder code, returning the no-relation colour instead.
   - Refactor some of TownyFormatter's methods, mainly moving some component-creation out into their related Util classes.
   - Add NationUtil.
+  - Move max allies test into NationUtil.
