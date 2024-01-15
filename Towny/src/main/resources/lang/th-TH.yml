@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: 'คุณต้องอยู่ใน Town เพ�
 msg_err_must_belong_town: 'คุณต้องอยู่ใน Town.'
 msg_err_dont_belong_town: '&cคุณไม่ได้อยู่ใน Town.'
 msg_err_dont_belong_nation: '&bคุณไม่ได้เป็นของ Nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s ไม่ได้เป็นของ Nation ของคุณ.'
 msg_err_rect_auto: '&cเฉพาะ Town และ Residents เท่านั้นที่สามารถใช้อัตโนมัติได้.'
 msg_err_invalid_radius: '&cรัศมีไม่ถูกต้อง ใช้จำนวนเต็มหรืออัตโนมัติ.'
