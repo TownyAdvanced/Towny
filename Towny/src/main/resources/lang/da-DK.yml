@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cDu skal tilhøre en by for at gøre krav på grund
 msg_err_must_belong_town: '&cDu skal tilhøre en by.'
 msg_err_dont_belong_town: '&cDu tilhører ikke nogen by.'
 msg_err_dont_belong_nation: '&cDu tilhører ikke en nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s tilhører ikke din nation.'
 msg_err_rect_auto: '&cKun byer og indbyggere kan bruge auto.'
 msg_err_invalid_radius: '&cInvalid radius. Brug et heltal eller ''auto''.'
