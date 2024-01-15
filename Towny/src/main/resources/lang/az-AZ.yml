@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cSən şəhərə mənsub olmalısan ki, topraq təl
 msg_err_must_belong_town: '&cSiz gərək ki, hansısa şəhərə mənsub olasınız.'
 msg_err_dont_belong_town: '&cBir şəhərə ait deyilsən.'
 msg_err_dont_belong_nation: '&bBir millətə aid deyilsən.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s millətinizə aid deyil.'
 msg_err_rect_auto: '&cAvtomobili yalnız şəhərlər və sakinlər işlədə bilər.'
 msg_err_invalid_radius: '&cYolverilməz radius. Tam və ya "avtomatik" istifadə edin.'
