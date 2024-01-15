@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cSolange du in keiner Stadt bist, kannst du keine B
 msg_err_must_belong_town: '&cDu musst einer Stadt angehören.'
 msg_err_dont_belong_town: '&cDu gehörst zu keiner Stadt.'
 msg_err_dont_belong_nation: '&bDu gehörst zu keiner Nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s gehört nicht zu deiner Nation.'
 msg_err_rect_auto: '&cNur Städte oder Bürger können ''auto'' benutzen.'
 msg_err_invalid_radius: '&cUngültiger Radius. Benutze eine ganze Zahl oder ''auto''.'
