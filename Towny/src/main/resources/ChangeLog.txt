@@ -9454,3 +9454,5 @@ v0.92.0.11:
   - Refactor some of TownyFormatter's methods, mainly moving some component-creation out into their related Util classes.
   - Add NationUtil.
   - Move max allies test into NationUtil.
+  - Add more nation-joining tests to the NationUtil.
+  - Refactor nation adding towns in the NationCommand class.

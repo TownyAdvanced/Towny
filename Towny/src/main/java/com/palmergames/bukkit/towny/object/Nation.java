@@ -330,6 +330,18 @@ public class Nation extends Government {
 		return numResidents;
 	}
 
+	public boolean canAddResidents(int additionalResidents) {
+		return NationUtil.canAddTownsResidentCount(this, additionalResidents);
+	}
+
+	public boolean hasReachedMaxResidents() {
+		return NationUtil.hasReachedMaximumResidents(this);
+	}
+
+	public boolean hasReachedMaxTowns() {
+		return NationUtil.hasReachedMaximumTowns(this);
+	}
+
 	/**
 	 * Should only be called by Town.removeNation();
 	 * Removes town from {@link #towns} list and will choose a
@@ -738,4 +750,6 @@ public class Nation extends Government {
 			}
 		}
 	}
+
+
 }

@@ -60,4 +60,22 @@ public class NationUtil {
 	public static boolean hasReachedMaximumAllies(Nation nation) {
 		return TownySettings.getMaxNationAllies() >= 0 && nation.getAllies().size() >= TownySettings.getMaxNationAllies();
 	}
+
+	public static boolean hasReachedMaximumResidents(Nation nation) {
+		int maxResidentsPerNation = TownySettings.getMaxResidentsPerNation();
+		return maxResidentsPerNation > 0 && nation.getResidents().size() >= maxResidentsPerNation;
+	}
+
+	public static boolean canAddTownsResidentCount(Nation nation, int additionalResidents) {
+		if (hasReachedMaximumResidents(nation))
+			return false;
+		int maxResidentPerNation = TownySettings.getMaxResidentsPerNation();
+		return maxResidentPerNation > 0 && (nation.getResidents().size() + additionalResidents) >= maxResidentPerNation;
+	}
+
+	public static boolean hasReachedMaximumTowns(Nation nation) {
+		int maxTownsPerNation = TownySettings.getMaxTownsPerNation();
+		return maxTownsPerNation > 0 && nation.getTowns().size() >= maxTownsPerNation;
+	}
+
 }
