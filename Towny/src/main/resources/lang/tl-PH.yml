@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cIkaw ay dapat kasapi sa isang bayan para makapagku
 msg_err_must_belong_town: '&cIkaw ay dapat kasapi sa isang bayan.'
 msg_err_dont_belong_town: '&cHindi ka kasapi nang anumang bayan.'
 msg_err_dont_belong_nation: '&bIkaw hindi kasapi nang anumang nasyon.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s ay hindi kasapi sa iyong nasyon.'
 msg_err_rect_auto: '&cMga bayan at mga residente lamang ang pwede gumamit nito.'
 msg_err_invalid_radius: '&cHindi wasto ang radius. Gumamit nang integer o kaya nang ''auto''.'
