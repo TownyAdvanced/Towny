@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
@@ -8,6 +9,11 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translator;
+import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
+
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 
 public class OutpostUtil {
 	
@@ -68,4 +74,20 @@ public class OutpostUtil {
 		return true;		
 	}
 
+	public static void addOutpostComponent(Town town, StatusScreen screen, Translator translator) {
+		String outpostLine = "";
+		if (TownySettings.isOutpostsLimitedByLevels()) {
+			outpostLine = TownyFormatter.colourKeyValue(translator.of("status_town_outposts"), translator.of("status_fractions", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
+			if (town.hasNation()) {
+				int nationBonus = town.getNationOrNull().getNationLevel().nationBonusOutpostLimit();
+				if (nationBonus > 0)
+					outpostLine += TownyFormatter.colourBracketElement(translator.of("status_town_size_nationbonus"), String.valueOf(nationBonus));
+			}
+		} else if (town.hasOutpostSpawn()) {
+			outpostLine = TownyFormatter.colourKeyValue(translator.of("status_town_outposts"), String.valueOf(town.getMaxOutpostSpawn()));
+		}
+		screen.addComponentOf("outposts", outpostLine,
+				HoverEvent.showText(translator.component("status_hover_click_for_more")),
+				ClickEvent.runCommand("/towny:town outpost list"));
+	}
 }

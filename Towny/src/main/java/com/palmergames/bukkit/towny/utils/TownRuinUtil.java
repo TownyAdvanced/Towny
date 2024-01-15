@@ -4,6 +4,7 @@ package com.palmergames.bukkit.towny.utils;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -21,6 +22,8 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translator;
+import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 
@@ -236,5 +239,15 @@ public class TownRuinUtil {
     
 	public static int getTimeSinceRuining(Town town) {
 		return TimeTools.getHours(System.currentTimeMillis() - town.getRuinedTime());
+	}
+
+	public static void addRuinedComponents(Town town, StatusScreen screen, Translator translator) {
+		screen.addComponentOf("ruinedTime", TownyFormatter.colourKey(translator.of("msg_time_remaining_before_full_removal", TownySettings.getTownRuinsMaxDurationHours() - getTimeSinceRuining(town))));
+		if (TownySettings.getTownRuinsReclaimEnabled()) {
+			if (TownRuinUtil.getTimeSinceRuining(town) < TownySettings.getTownRuinsMinDurationHours())
+				screen.addComponentOf("reclaim", TownyFormatter.colourKeyImportant(translator.of("msg_time_until_reclaim_available", TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town))));
+			else 
+				screen.addComponentOf("reclaim", TownyFormatter.colourKeyImportant(translator.of("msg_reclaim_available")));
+		}
 	}
 }

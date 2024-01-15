@@ -25,6 +25,8 @@ import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
+import com.palmergames.bukkit.towny.utils.NationUtil;
+import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
@@ -40,8 +42,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -300,10 +300,10 @@ public class TownyFormatter {
 			screen.addComponentOf("townblocks", colourKeyValue(translator.of("status_town_size"), translator.of("status_fractions", town.getTownBlocks().size(), town.getMaxTownBlocksAsAString())));
 
 		if (town.isPublic()) {
-			Component homeComponent = TownyComponents.miniMessage(!town.isPublic() ? "" : (translator.of("status_home_element", (TownySettings.getTownDisplaysXYZ() ?
-				(town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town")) :
-				(town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
-			))));
+			Component homeComponent = TownyComponents.miniMessage(translator.of("status_home_element", TownySettings.getTownDisplaysXYZ()
+						? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town"))
+						: (town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
+			));
 
 			String webUrl = formatWebUrl(town);
 			if (!webUrl.isEmpty())
@@ -313,22 +313,8 @@ public class TownyFormatter {
 		}
 
 		// Outposts: 3
-		if (TownySettings.isAllowingOutposts()) {
-			String outpostLine = "";
-			if (TownySettings.isOutpostsLimitedByLevels()) {
-				outpostLine = colourKeyValue(translator.of("status_town_outposts"), translator.of("status_fractions", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
-				if (town.hasNation()) {
-					int nationBonus = town.getNationOrNull().getNationLevel().nationBonusOutpostLimit();
-					if (nationBonus > 0)					
-						outpostLine += colourBracketElement(translator.of("status_town_size_nationbonus"), String.valueOf(nationBonus));
-				}
-			} else if (town.hasOutpostSpawn()) {
-				outpostLine = colourKeyValue(translator.of("status_town_outposts"), String.valueOf(town.getMaxOutpostSpawn()));
-			}
-			screen.addComponentOf("outposts", outpostLine,
-					HoverEvent.showText(translator.component("status_hover_click_for_more")),
-					ClickEvent.runCommand("/towny:town outpost list"));
-		}
+		if (TownySettings.isAllowingOutposts())
+			OutpostUtil.addOutpostComponent(town, screen, translator);
 
 		// Permissions: B=rnao D=---- S=rna- I=rnao
 		screen.addComponentOf("perm", colourKeyValue(translator.of("status_perm"), town.getPermissions().getColourString().replace("f", "r")));
@@ -337,18 +323,13 @@ public class TownyFormatter {
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (town.hasMobs() || town.isAdminEnabledMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off")));
 
 		if (TownySettings.getTownRuinsEnabled() && town.isRuined()) {
-			screen.addComponentOf("ruinedTime", colourKey(translator.of("msg_time_remaining_before_full_removal", TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town))));
-			if (TownySettings.getTownRuinsReclaimEnabled()) {
-				if (TownRuinUtil.getTimeSinceRuining(town) < TownySettings.getTownRuinsMinDurationHours())
-					screen.addComponentOf("reclaim", colourKeyImportant(translator.of("msg_time_until_reclaim_available", TownySettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town))));
-				else 
-					screen.addComponentOf("reclaim", colourKeyImportant(translator.of("msg_reclaim_available")));
-			}
-			// Only display the remaining fields if town is not ruined
+			TownRuinUtil.addRuinedComponents(town, screen, translator);
+
+		// Only display the remaining fields if town is not ruined
 		} else {
 			// | Bank: 534 coins
 			if (TownyEconomyHandler.isActive())
-				addTownMoneyComponents(town, translator, screen);
+				MoneyUtil.addTownMoneyComponents(town, translator, screen);
 
 			// Mayor: MrSand
 			if (town.getMayor() != null) {
@@ -362,35 +343,11 @@ public class TownyFormatter {
 				screen.addComponentOf("mayor", colourKeyValue(translator.of("rank_list_mayor"), translator.of("status_no_town")));
 
 			// Nation: Azur Empire
-			if (town.hasNation()) {
-				// Shown in Hover Text: Towns [44]: James City, Carry Grove, Mason Town
-				List<String> towns = getFormattedNames(town.getNationOrNull().getTowns());
-				if (towns.size() > 10)
-					shortenOverLengthList(towns, 11, translator);
+			if (town.hasNation())
+				NationUtil.addNationComponenents(town, screen, translator);
 
-				Component hover = TownyComponents.miniMessage(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
-						.append(Component.newline())
-						.append(TownyComponents.miniMessage(getTownJoinedNationDate(town, translator)))
-						.append(Component.newline())
-						.append(TownyComponents.miniMessage(colourKeyValue(translator.of("status_nation_king"), town.getNationOrNull().getCapital().getMayor().getFormattedName())))
-						.append(Component.newline())
-						.append(TownyComponents.miniMessage(colourKeyValue(translator.of("town_plu"), StringMgmt.join(towns, ", "))));
-				
-				int nationZoneSize = town.getNationZoneSize();
-				if (nationZoneSize > 0)
-					hover = hover.append(Component.newline().append(TownyComponents.miniMessage(colourKeyValue(translator.of("status_nation_zone_size"), town.isNationZoneEnabled() ? String.valueOf(nationZoneSize) : translator.of("status_off_bad")))));
-				
-				hover = hover.append(Component.newline())
-						.append(translator.component("status_hover_click_for_more"));
-				
-				screen.addComponentOf("nation", colourKeyValue(translator.of("status_town_nation"), town.getNationOrNull().getName() + formatPopulationBrackets(town.getNationOrNull().getTowns().size())), 
-						hover.asHoverEvent(),
-						ClickEvent.runCommand("/towny:nation " + town.getNationOrNull().getName())
-						);
-			}
-			
 			screen.addComponentOf("newline", Component.newline());
-			// Assistants [2]: Sammy, Ginger
+			// [Rank List] with hover including ranks and their residents.
 			List<String> ranklist = getRanks(town, translator);
 			if (ranklist.size() > 0)
 				screen.addComponentOf("townranks", colourHoverKey(translator.of("status_rank_list")),
@@ -399,7 +356,7 @@ public class TownyFormatter {
 							.append(translator.component("status_hover_click_for_more"))),
 						ClickEvent.runCommand("/towny:town ranklist " + town.getName()));
 
-			// Residents [3]: James, Carry, Mason
+			// [Residents] with hover showing residents names.
 			List<String> residents = getFormattedNames(town.getResidents());
 			if (residents.size() > 34)
 				shortenOverLengthList(residents, 35, translator);
@@ -410,7 +367,7 @@ public class TownyFormatter {
 					.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
 			
-			// Plots 
+			// [Plots] with hover. 
 			TextComponent text = Component.empty();
 			Map<TownBlockType, Integer> cache = town.getTownBlockTypeCache().getCache(TownBlockTypeCache.CacheType.ALL);
 			for (TownBlockType type : TownBlockTypeHandler.getTypes().values()) {
@@ -462,7 +419,7 @@ public class TownyFormatter {
 
 		// Bank: 534 coins
 		if (TownyEconomyHandler.isActive())
-			addNationMoneyComponentsToScreen(nation, translator, screen);
+			MoneyUtil.addNationMoneyComponentsToScreen(nation, translator, screen);
 
 		if (nation.isPublic()) {
 			Component homeComponent = translator.component("status_home_element", (nation.hasSpawn() ? Coord.parseCoord(nation.getSpawnOrNull()).toString() : translator.of("status_no_town")));
@@ -675,11 +632,7 @@ public class TownyFormatter {
 	private static String getResidentJoinedTownDate(Resident resident, Translator translator) {
 		return colourKeyValue(translator.of("status_joined_town"), resident.getJoinedTownAt() > 0 ? lastOnlineFormatIncludeYear.format(resident.getJoinedTownAt()) : translator.of("status_unknown"));
 	}
-	
-	private static String getTownJoinedNationDate(Town town, Translator translator) {
-		return colourKeyValue(translator.of("status_joined_nation"), town.getJoinedNationAt() > 0 ? lastOnlineFormatIncludeYear.format(town.getJoinedNationAt()) : translator.of("status_unknown"));
-	}
-	
+
 	private static boolean sameYear(Resident resident) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(resident.getLastOnline());
@@ -755,66 +708,9 @@ public class TownyFormatter {
 		return array;
 	}
 	
-	private static void shortenOverLengthList(List<String> list, int i, Translator translator) {
+	public static void shortenOverLengthList(List<String> list, int i, Translator translator) {
 		list.subList(Math.min(i, list.size() - 1), list.size() - 1).clear();
 		list.add(translator.of("status_town_reslist_overlength"));
-	}
-
-	/**
-	 * Populates the StatusScreen with the various bank and money components.
-	 * @param town Town of which to generate a bankstring.
-	 * @param translator Translator used in choosing language.
-	 * @param screen StatusScreen to add components to.
-	 */
-	private static void addTownMoneyComponents(Town town, Translator translator, StatusScreen screen) {
-		screen.addComponentOf("moneynewline", Component.newline());
-		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), town.getAccount().getHoldingFormattedBalance()));
-		if (town.isBankrupt()) {
-			if (town.getAccount().getDebtCap() == 0)
-				town.getAccount().setDebtCap(MoneyUtil.getTownDebtCap(town, TownySettings.getTownUpkeepCost(town)));
-
-			screen.addComponentOf("bankrupt", translator.of("status_bank_bankrupt") + " " + colourKeyValue(translator.of("status_debtcap"), "-" + formatMoney(town.getAccount().getDebtCap())));
-		}
-		
-		if (TownySettings.isTaxingDaily()) {
-			if (town.hasUpkeep())
-				screen.addComponentOf("upkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2")) + " " + colourKeyImportant(formatMoney(BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue())));
-			
-			if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
-				screen.addComponentOf("upkeepPenalty", translator.of("status_splitter") + colourKey(translator.of("status_bank_town_penalty_upkeep")) + " " + colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
-			
-			if (town.isNeutral()) {
-				double neutralCost = TownySettings.getTownNeutralityCost(town);
-				if (neutralCost > 0)
-					screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(neutralCost))));
-			}
-
-			screen.addComponentOf("towntax", translator.of("status_splitter") + colourKey(translator.of("status_bank_town3")) + " " + colourKeyImportant(town.isTaxPercentage() ? town.getTaxes() + "%" : formatMoney(town.getTaxes())));
-		}
-	}
-
-	/**
-	 * Populates the StatusScreen with the various bank and money components.
-	 * @param nation Nation of which to generate a bankstring.
-	 * @param translator Translator used in choosing language.
-	 * @param screen StatusScreen to add components to.
-	 */
-	private static void addNationMoneyComponentsToScreen(Nation nation, Translator translator, StatusScreen screen) {
-		screen.addComponentOf("moneynewline", Component.newline());
-		screen.addComponentOf("bankString", colourKeyValue(translator.of("status_bank"), nation.getAccount().getHoldingFormattedBalance()));
-		
-		if (TownySettings.isTaxingDaily()) {
-			if (TownySettings.getNationUpkeepCost(nation) > 0)
-				screen.addComponentOf("nationupkeep", translator.of("status_splitter") + colourKey(translator.of("status_bank_town2") + " " + colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation)))));
-			if (nation.isNeutral()) {
-				double neutralCost = TownySettings.getNationNeutralityCost(nation);				
-				if (neutralCost > 0)
-					screen.addComponentOf("neutralityCost", translator.of("status_splitter") + colourKey(translator.of("status_neutrality_cost") + " " + colourKeyImportant(formatMoney(neutralCost))));
-			}
-
-			screen.addComponentOf("nationtax", translator.of("status_splitter") + colourKey(translator.of("status_nation_tax")) + " " + colourKeyImportant(nation.isTaxPercentage() ? nation.getTaxes() + "%" : formatMoney(nation.getTaxes())));
-			screen.addComponentOf("nationConqueredTax", translator.of("status_splitter") + colourKey(translator.of("status_nation_conquered_tax")) + " " + colourKeyImportant(formatMoney(nation.getConqueredTax())));
-		}
 	}
 
 	private static String formatMoney(double money) {
