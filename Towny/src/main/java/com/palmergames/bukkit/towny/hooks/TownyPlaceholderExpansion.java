@@ -123,12 +123,12 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 
 	private String getRelationalPlaceholder(Player player, Player player2, String identifier) {
 		if (!identifier.equalsIgnoreCase("color"))
-			return null;
+			return TownySettings.getPAPIRelationNone();
 
 		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		Resident res2 = TownyUniverse.getInstance().getResident(player2.getUniqueId());
 		if (res == null || res2 == null)
-			return null;
+			return TownySettings.getPAPIRelationNone();
 		
 		if (!res2.hasTown()) 
 			return TownySettings.getPAPIRelationNoTown();
