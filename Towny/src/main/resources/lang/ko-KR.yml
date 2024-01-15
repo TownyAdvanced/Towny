@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&c귀하는 개인 토지를 점유하기 위해 마
 msg_err_must_belong_town: '&c마을에 속해 있어야 합니다.'
 msg_err_dont_belong_town: '&c마을에 속해 있지 않습니다.'
 msg_err_dont_belong_nation: '&b국가에 속해 있지 않습니다.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s은(는) 귀하의 국가에 속해 있지 않습니다.'
 msg_err_rect_auto: '&c오직 마을과 주민만 "자동"을 사용 할 수 있습니다.'
 msg_err_invalid_radius: '&c잘못된 거리입니다. 정수를 입력하거나 자동을 사용하세요.'
