@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cDevi appartenere a una città per poter claimare l
 msg_err_must_belong_town: '&cDevi appartenere a una città.'
 msg_err_dont_belong_town: '&cNon appartieni a una città.'
 msg_err_dont_belong_nation: '&bNon appartieni a una nazione.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s non appartiene alla tua nazione.'
 msg_err_rect_auto: '&cSolo le città e i residenti possono usare auto.'
 msg_err_invalid_radius: '&cRaggio non valido. Usa un numero intero o ''auto''.'
