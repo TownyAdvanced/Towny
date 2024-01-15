@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&c土地を請求するためには、町に所属�
 msg_err_must_belong_town: '&cあなたは町に所属している必要があります。'
 msg_err_dont_belong_town: '&cあなたは町に所属していません。'
 msg_err_dont_belong_nation: '&bあなたは国に属していません。'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s はあなたの国に属していません。'
 msg_err_rect_auto: '&cautoは町や住民のみ利用できます。'
 msg_err_invalid_radius: '&cは無効な半径です。整数または ''auto'' を使用してください。'
