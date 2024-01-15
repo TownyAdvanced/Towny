@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cYou must belong to a town in order to claim plots.
 msg_err_must_belong_town: '&cYou must belong to a town.'
 msg_err_dont_belong_town: '&cYou don''t belong to a town.'
 msg_err_dont_belong_nation: '&bYou don''t belong to a nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s doesn''t belong to your nation.'
 msg_err_rect_auto: '&cOnly towns and residents can use auto.'
 msg_err_invalid_radius: '&cInvalid radius. Use an integer or ''auto''.'
