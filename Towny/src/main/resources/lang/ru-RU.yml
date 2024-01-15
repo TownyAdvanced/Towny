@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cВы должны быть в городе, что
 msg_err_must_belong_town: '&cВы должны быть жителем города.'
 msg_err_dont_belong_town: '&cУ вас нет родного города.'
 msg_err_dont_belong_nation: '&bУ вас нет нации.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s не принадлежит к нации'
 msg_err_rect_auto: '&cТолько города и горожане могут использовать авто режим.'
 msg_err_invalid_radius: '&cНеверный радиус. Используйте целое число или ''auto''.'
