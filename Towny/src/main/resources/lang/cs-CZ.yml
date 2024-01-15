@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cAbys mohl/a zabírat parcely, musíš patřit do m
 msg_err_must_belong_town: '&cMusíš patřit do města.'
 msg_err_dont_belong_town: '&cNepatříš do města.'
 msg_err_dont_belong_nation: '&bNepatříš do národa.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s nepatří do tvého národa.'
 msg_err_rect_auto: '&cPouze obyvatelé mohou požívat Auto.'
 msg_err_invalid_radius: '&cNeplatný radius. Požij celé číslo nebo auto.'
