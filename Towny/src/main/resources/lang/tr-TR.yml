@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bÜlke çok fazla istek gönderdi, tekr
 msg_err_nation_has_too_many_requests: '&b%s ülkesinin çok fazla isteği var, tekrar istemeden önce bazılarını reddetmelerini isteyin.'
 player_received_invites: '&b%a/%m davet aldınız.'
 town_revoke_invite: '&bKasaba %s, onlara katılma davetinizi iptal etti.'
-town_revoke_invite_successful: '&bKasabanıza katılma davetini başarıyla geri aldınız.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bKasaba %a/%m davet aldı.'
 town_sent_invites: '&bKasaba% a/%m davet gönderdi.'
 nation_revoke_invite: '&b%s ülkesi, onlara katılma davetinizi iptal etti.'
