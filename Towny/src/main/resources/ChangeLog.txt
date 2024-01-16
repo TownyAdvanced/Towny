@@ -9459,3 +9459,9 @@ v0.92.0.11:
 0.100.1.3:
   - Refactor townAdd method to better handle adding and revoking invites.
   - Fix not being able to add towns to nations when the residents-per-nation setting is 0.
+  - Add a configurable amount of bonus townblocks given to new towns.
+    - Closes #7195.
+  - New Config Option: claiming.new_town_bonus_claims
+    - Default: 0
+    - An amount of additional townblocks that a town will receive when it is first created, in addition to any amount given via the town_block_ratio or town_levels.
+    - As an example: This can be used to add 10 townblocks to a town when it is made so the borders can be grown a bit more before the mayor has to seek out residents.
