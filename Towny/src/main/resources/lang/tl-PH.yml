@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNagpadala ang bansa ng napakaraming ka
 msg_err_nation_has_too_many_requests: 'Masyadong maraming kahilingan ang Bansa %s, hilingin sa kanila na tanggihan ang ilan, bago humiling muli.'
 player_received_invites: '&bNakatanggap ka ng %a/%m imbitasyon.'
 town_revoke_invite: '&bBinawi ng Bayan ng %s ang iyong imbitasyon na sumali sa kanila.'
-town_revoke_invite_successful: '&bMatagumpay mong binawi ang isang imbitasyon na sumali sa iyong bayan.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bNakatanggap ang bayan ng %a/%m imbitasyon.'
 town_sent_invites: '&bNagpadala ang bayan ng %a/%m imbitasyon.'
 nation_revoke_invite: '&bBinawi ang Bansang %s ang iyong imbitasyon na sumali sa kanila.'
