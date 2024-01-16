@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bLa nación ha enviado demasiadas solic
 msg_err_nation_has_too_many_requests: '&bLa nación %s tiene demasiadas solicitudes, pide que rechacen algunas, antes de volver a intentarlo.'
 player_received_invites: '&bHas recibido %a/%m invitaciones.'
 town_revoke_invite: '&b%s, rechazó tu invitación de unión.'
-town_revoke_invite_successful: '&bHas rechazado una invitación de unión a tu ciudad.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bLa ciudad ha recibido %a/%m invitaciones.'
 town_sent_invites: '&bLa ciudad ha enviado %a/%m invitaciones.'
 nation_revoke_invite: '&bLa nación %s, rechazó tu invitación de unión.'
