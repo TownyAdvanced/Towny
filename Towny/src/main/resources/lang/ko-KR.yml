@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&b국가가 너무 많은 요청을 전�
 msg_err_nation_has_too_many_requests: '&b국가 %s에는 너무 많은 요청이 있습니다. 다시 요청하기 전에 몇몇 요청을 취소하도록 요청하세요.'
 player_received_invites: '&b귀하는 %a/%m 초대를 수신하였습니다.'
 town_revoke_invite: '&b마을 %s이(가) 초대를 취소하였습니다.'
-town_revoke_invite_successful: '&b마을 초대를 성공적으로 취소하였습니다.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&b마을이 %a/%m 초대를 수신하였습니다.'
 town_sent_invites: '&b마을에서 %a/%m 초대를 전송하였습니다.'
 nation_revoke_invite: '&b국가 %s이(가) 초대를 취소하였습니다.'
