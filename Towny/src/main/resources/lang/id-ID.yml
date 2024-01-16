@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNegara terlalu banyak mengirim permint
 msg_err_nation_has_too_many_requests: '&bNegara %s telalu banyak memiliki permintaan, tanyakan mereka untuk menolak beberapa, sebelum mencoba kembali.'
 player_received_invites: '&bKamu telah menerima %a/%m undangan.'
 town_revoke_invite: '&bKota %s, telah mencaut undangan yang di kirim ke kamu.'
-town_revoke_invite_successful: '&bBerhasil mencabut undangan untuk bergabung ke kota.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bKota mendapatkan %a/%m undangan.'
 town_sent_invites: '&bKota telah mengirimkan %a/%m undangan.'
 nation_revoke_invite: '&bNegara %s, mencabut undangan yang mereka kirim ke kota mu.'
