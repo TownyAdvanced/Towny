@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&b送信した招待が多すぎます�
 msg_err_nation_has_too_many_requests: '&b%sは招待が多すぎるため、しばらくしてから再度、送信してください。'
 player_received_invites: '&b%a/%mの招待を受け取りました。'
 town_revoke_invite: '&b%sは、あなたの招待を削除しました。'
-town_revoke_invite_successful: '&bあなたの町への招待を削除しました。'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&b%a/%mの招待を受け取りました。'
 town_sent_invites: '&b%a/%mの招待を受け取りました。'
 nation_revoke_invite: '&b%sは、あなたの招待を削除しました。'
