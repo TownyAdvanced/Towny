@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&A nação já enviou demasiados pedidos
 msg_err_nation_has_too_many_requests: '&bA nação %s tem demasiados pedidos de aliança, pergunte-lhes para recusar alguns antes de convidar outra vez.'
 player_received_invites: '&bVocê recebeu %a/%m convites.'
 town_revoke_invite: '&bA cidade %s cancelou o convite para você entrar.'
-town_revoke_invite_successful: '&bVocê cancelou um convite para entrarem na sua cidade com sucesso.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bA cidade recebeu %a/%m convites.'
 town_sent_invites: '&bA cidade recebeu %a/%m convites.'
 nation_revoke_invite: '&bA nação %s cancelou o convite para você entrar.'
