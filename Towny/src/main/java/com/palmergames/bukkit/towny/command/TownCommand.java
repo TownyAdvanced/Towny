@@ -2876,25 +2876,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static void townRevokeInviteResident(CommandSender sender, Town town, List<Resident> residents) {
-
-		for (Resident invited : residents) {
-			if (InviteHandler.inviteIsActive(town, invited)) {
-				for (Invite invite : invited.getReceivedInvites()) {
-					if (invite.getSender().equals(town)) {
-						try {
-							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMsg(sender, Translatable.of("town_revoke_invite_successful"));
-							break;
-						} catch (InvalidObjectException e) {
-							plugin.getLogger().log(Level.WARNING, "An exception occurred while revoking invites for town " + town.getName(), e);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	/**
 	 * Transforms a list of names into a list of residents to be kicked.
 	 * Command: /town kick [resident] .. [resident]
@@ -3013,117 +2994,106 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Confirm player is a mayor or assistant, then get list of filter names
-	 * with online players and invite them to town. Command: /town add
-	 * [resident] .. [resident]
+	 * Checks if the player is allowed to handle adding invites, then checks through
+	 * a list of names to be invited, or to have their invites revoked. Will
+	 * dispatch invites and/or revoke invites from names beginning with -.
 	 *
-	 * @param sender - Sender.
-	 * @param specifiedTown - Town to add to if not null.
-	 * @param names - Names to add.
-	 * @throws TownyException - General Exception, or if Town's spawn has not been set
+	 * @param sender        Sender.
+	 * @param specifiedTown Town to add to if not null.
+	 * @param names         Names to add.
+	 * @throws TownyException Thrown when an the invites are not allowed because of
+	 *                        lack of permissions, ruined/bankruptcy, or the town
+	 *                        having no spawn set.
 	 */
 	public static void townAdd(CommandSender sender, Town specifiedTown, String[] names) throws TownyException {
-		String name;
-		boolean console = false;
-		if (sender instanceof Player player) {
-			name = player.getName();
+		Player player = null;
+		if (sender instanceof Player p) {
+			player = p;
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ADD.getNode());
 			catchRuinedTown(player);
-		} else {
-			name = "Console";
-			console = true;
 		}
 
-		Resident resident;
-		Town town;
-		try {
-			if (console) {
-				town = specifiedTown;
-			} else {
-				resident = getResidentOrThrow(name);
-				if (specifiedTown == null)
-					town = resident.getTown();
-				else
-					town = specifiedTown;
-			}
-
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(sender, x.getMessage(sender));
-			return;
-		}
-
+		// The /ta command can specify a town, the /t command cannot.
+		Town town = specifiedTown != null ? specifiedTown : getTownFromPlayerOrThrow(player);
 		if (town.isBankrupt())
 			throw new TownyException(Translatable.of("msg_err_bankrupt_town_cannot_invite"));
 
-		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() > 0) {
+		List<String> nameList = new ArrayList<>(Arrays.asList(names));
+		if (TownySettings.getMaxDistanceFromTownSpawnForInvite() > 0)
+			nameList = gatherNearbyPlayerNames(sender, nameList, town);
 
-			if (!town.hasSpawn())
-				throw new TownyException(Translatable.of("msg_err_townspawn_has_not_been_set"));
-		
-			Location spawnLoc = town.getSpawn();
-			ArrayList<String> newNames = new ArrayList<>();
-			int maxDistance = TownySettings.getMaxDistanceFromTownSpawnForInvite();
+		// Get a list of valid names to invite.
+		List<String> toInviteList = nameList.stream()
+				.filter(name -> !name.startsWith("-") && !town.hasResident(name))
+				.collect(Collectors.toList());
 
-			for (String nameForDistanceTest : names) {
-				Player player = BukkitTools.getPlayerExact(nameForDistanceTest);
-				if (player == null)
-					continue;
-				
-				Location playerLoc = player.getLocation();
-				
-				double distance;
-				try {
-					distance = spawnLoc.distance(playerLoc);
-				} catch (Exception e) {
-					// Can throw an exception if the player is in another world
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_player_too_far_from_town_spawn", nameForDistanceTest, maxDistance));
-					continue;
-				}
+		// Get a list of negated names to revoke an invite from. 
+		// (Legacy code also included anyone that is already a resident of the town for some reason.)
+		List<String> toRevokeInviteList = nameList.stream()
+				.filter(name -> name.startsWith("-") || town.hasResident(name))
+				.map(name -> name.startsWith("-") ? name.substring(1) : name)
+				.collect(Collectors.toList());
 
-				if (distance <= maxDistance)
-					newNames.add(nameForDistanceTest);
-				else {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_player_too_far_from_town_spawn", nameForDistanceTest, maxDistance));
-				}
-			}
-			names = newNames.toArray(new String[0]);
-		}
-		List<String> resList = new ArrayList<>(Arrays.asList(names));
-		// Our Arraylist is above
-		List<String> newResList = new ArrayList<>();
-		// The list of valid invites is above, there are currently none
-		List<String> removeInvites = new ArrayList<>();
-		// List of invites to be removed;
-		for (String resName : resList) {
-			if (resName.startsWith("-")) {
-				removeInvites.add(resName.substring(1));
-				// Add to removing them, remove the "-"
-			} else {
-				if (!town.hasResident(resName))
-					newResList.add(resName);// add to adding them,
-				else 
-					removeInvites.add(resName);
-			}
-		}
-		
-		if (newResList.size() + removeInvites.size() > 1)
+		// There's a special permission node to prevent invite spam.
+		if (toInviteList.size() + toRevokeInviteList.size() > 1)
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ADD_MULTIPLE.getNode());
-		
-		names = newResList.toArray(new String[0]);
-		String[] namesToRemove = removeInvites.toArray(new String[0]);
-		if (namesToRemove.length != 0) {
-			List<Resident> toRevoke = getValidatedResidentsForInviteRevoke(sender, namesToRemove, town);
-			if (!toRevoke.isEmpty())
-				townRevokeInviteResident(sender, town, toRevoke);
-		}
 
-		if (names.length != 0) {
-			townAddResidents(sender, town, ResidentUtil.getValidatedResidents(sender, names));
-		}
+		// Begin process of sending invites.
+		if (!toInviteList.isEmpty())
+			townAddResidents(sender, town, ResidentUtil.getValidatedResidents(sender, toInviteList));
 
-		// Reset this players cached permissions
-		if (!console)
-			plugin.resetCache(BukkitTools.getPlayerExact(name));
+		// Pare down revoke list to names that have received invites, then revoke the invite.
+		if (!toRevokeInviteList.isEmpty()) {
+			townRevokeResidentInvites(sender, town, 
+				ResidentUtil.getValidatedResidents(sender, town.getSentInvites().stream()          // Take the towns sent invites.
+					.filter(invite -> toRevokeInviteList.contains(invite.getReceiver().getName())) // Find an invite which matches one of our names.
+					.map(invite -> invite.getReceiver().getName())                                 // Get the name of that person who was invited.
+					.collect(Collectors.toList())));
+		}
+	}
+
+	private static List<String> gatherNearbyPlayerNames(CommandSender sender, List<String> names, Town town) throws TownyException {
+		if (!town.hasSpawn())
+			throw new TownyException(Translatable.of("msg_err_townspawn_has_not_been_set"));
+
+		Location spawnLoc = town.getSpawn();
+		int maxDistance = TownySettings.getMaxDistanceFromTownSpawnForInvite();
+		return names.stream()
+			.filter(name -> playerIsNearEnoughToTownSpawn(sender, name, spawnLoc, maxDistance))
+			.collect(Collectors.toList());
+	}
+
+	private static boolean playerIsNearEnoughToTownSpawn(CommandSender sender, String name, Location spawnLoc, int maxDistance) {
+		try {
+			Player player = BukkitTools.getPlayerExact(name);
+			if (player == null)
+				return false;
+
+			Location playerLoc = player.getLocation();
+			if (!playerLoc.getWorld().equals(spawnLoc.getWorld()))
+				throw new TownyException(Translatable.of("msg_err_player_too_far_from_town_spawn", name, maxDistance));
+
+			double distance = spawnLoc.distance(playerLoc);
+			if (distance > maxDistance)
+				throw new TownyException(Translatable.of("msg_err_player_too_far_from_town_spawn", name, maxDistance));
+
+			return true;
+		} catch (TownyException e) {
+			TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			return false;
+		}
+	}
+
+	private static void townRevokeResidentInvites(CommandSender sender, Town town, List<Resident> residents) {
+		residents.forEach((resident) ->
+			InviteHandler.getActiveInvitesFor(town, resident).forEach(invite -> {
+				try {
+					InviteHandler.declineInvite(invite, true);
+					TownyMessaging.sendMsg(sender, Translatable.of("town_revoke_invite_successful", resident.getName()));
+				} catch (InvalidObjectException e) {
+					plugin.getLogger().log(Level.WARNING, "An exception occurred while revoking invite for resident " + resident.getName() + " from town " + town.getName(), e);
+				}
+			}));
 	}
 
 	// wrapper function for non friend setting of perms
@@ -3861,22 +3831,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		return false;
 	}
 
-	public static List<Resident> getValidatedResidentsForInviteRevoke(Object sender, String[] names, Town town) {
-		List<Resident> toRevoke = new ArrayList<>();
-		for (Invite invite : town.getSentInvites()) {
-			for (String name : names) {
-				if (invite.getReceiver().getName().equalsIgnoreCase(name)) {
-					Resident revokeRes = TownyUniverse.getInstance().getResident(name);
-					if (revokeRes != null) {
-						toRevoke.add(revokeRes);
-					}
-				}
-			}
-			
-		}
-		return toRevoke;		
-	}
-	
 	private static void townTransaction(Player player, String[] args, boolean withdraw) {
 		try {
 			if (args.length == 0)

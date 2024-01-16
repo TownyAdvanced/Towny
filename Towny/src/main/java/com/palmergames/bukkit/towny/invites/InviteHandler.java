@@ -11,8 +11,10 @@ import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author - Articdive
@@ -96,6 +98,12 @@ public class InviteHandler {
 				return true;
 		}
 		return false;
+	}
+
+	public static List<Invite> getActiveInvitesFor(InviteSender sender, InviteReceiver receiver) {
+		return ACTIVE_INVITES.keySet().stream()
+				.filter(activeInvite -> activeInvite.getReceiver().equals(receiver) && activeInvite.getSender().equals(sender))
+				.collect(Collectors.toList());
 	}
 
 	public static int getSentAllyRequestsMaxAmount(Nation sender) {
