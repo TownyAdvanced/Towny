@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bValstybė turi per daug prašymų, at�
 msg_err_nation_has_too_many_requests: '&bValstybė %s turi per daug prašymų, paprašykite jų atmesti keletą prieš Jums išsiunčiant prašymą iš naujo.'
 player_received_invites: '&bJūs gavote %a/%m pakvietimų.'
 town_revoke_invite: '&bMiestas %s atšaukė Jūsų pakvietimą prie jų prisijungti.'
-town_revoke_invite_successful: '&bJūs sėkmingai atšaukėte pakvietimą prisijungti prie Jūsų miesto.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bMiestas gavo %a/%m pakvietimų.'
 town_sent_invites: '&bMiestas išsiuntė %a/%m pakvietimų.'
 nation_revoke_invite: '&bValstybė %s atšaukė Jūsų pakvietimą prie jų prisijungti.'
