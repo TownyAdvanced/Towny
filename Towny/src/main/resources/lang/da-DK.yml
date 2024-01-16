@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNationen har sendt for mange anmodning
 msg_err_nation_has_too_many_requests: '&bNationen %s har for mange anmodninger. Bed dem om at afvise nogle, før du anmoder igen.'
 player_received_invites: '&bDu har modtaget %a/%m invitationer.'
 town_revoke_invite: '&bByen %s tilbagekaldte din invitation om at tilslutte dem.'
-town_revoke_invite_successful: '&bDu har succesfuldt tilbagekaldt en invitation om at tilslutte sig din by.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bByen har modtaget %a/%m invitationer.'
 town_sent_invites: '&bByen har sendt %a/%m invitationer.'
 nation_revoke_invite: '&Nationen %s tilbagekaldte din invitation om at tilslutte dem.'
