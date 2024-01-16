@@ -3707,8 +3707,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			newResidentsAmount > TownySettings.getMaxResidentsForTown(remainingTown))
 			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsForTown(remainingTown)));
 
-		if (!remainingTown.hasUnlimitedClaims() && 
-			(remainingTown.getNumTownBlocks() + succumbingTown.getNumTownBlocks()) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount))
+		if (!remainingTown.hasUnlimitedClaims() && townWouldHaveTooManyTownBlocks(remainingTown, succumbingTown, newResidentsAmount))
 			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_townblocks", TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount)));
 
 		if ((remainingTown.getPurchasedBlocks() + succumbingTown.getPurchasedBlocks()) > TownySettings.getMaxPurchasedBlocks(remainingTown, newResidentsAmount))
@@ -3729,6 +3728,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (!BukkitTools.isOnline(succumbingTown.getMayor().getName()) || succumbingTown.getMayor().isNPC())
 			throw new TownyException(Translatable.of("msg_town_merge_other_offline", succumbingTown.getName(), succumbingTown.getMayor().getName()));
+	}
+
+	private static boolean townWouldHaveTooManyTownBlocks(Town remainingTown, Town succumbingTown, int newResidentsAmount) {
+		int newTownBonus = TownySettings.getNewTownBonusBlocks();
+		int succumbingTownTBAmount = succumbingTown.getNumTownBlocks();
+		if (newTownBonus > 0 && succumbingTown.getBonusBlocks() >= newTownBonus)
+			succumbingTownTBAmount = succumbingTownTBAmount - newTownBonus;
+
+		return (remainingTown.getNumTownBlocks() + succumbingTownTBAmount) > TownySettings.getMaxTownBlocks(remainingTown, newResidentsAmount);
 	}
 
 	private static double[] getMergeCosts(Town remainingTown, Town succumbingTown, boolean admin) throws TownyException {

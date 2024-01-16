@@ -1145,7 +1145,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
 
 		mergeInto.addPurchasedBlocks(mergeFrom.getPurchasedBlocks());
-		mergeInto.addBonusBlocks(mergeFrom.getBonusBlocks());
+
+		int mergeFromBonus = mergeFrom.getBonusBlocks();
+		int newTownBonus = TownySettings.getNewTownBonusBlocks();
+		if (newTownBonus > 0 && mergeFromBonus >= newTownBonus)
+			mergeFromBonus = mergeFromBonus - newTownBonus;
+		mergeInto.addBonusBlocks(mergeFromBonus);
 
 		for (TownBlock tb : mergeFrom.getTownBlocks()) {
 			tb.setTown(mergeInto);
