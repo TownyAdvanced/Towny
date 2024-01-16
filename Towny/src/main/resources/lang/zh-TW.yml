@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&b城邦已經發出了太多的要求�
 msg_err_nation_has_too_many_requests: '&b城邦%s有太多的邀請，需要他們拒絕一些請求，然後再進行邀請 '
 player_received_invites: '&b你已經收到%a/%m 邀請 '
 town_revoke_invite: '&b市鎮%s，撤銷了你的加入邀請 '
-town_revoke_invite_successful: '&b你已成功撤銷邀請你加入的市鎮'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&b市鎮已收到%a/%m 邀請 '
 town_sent_invites: '&b市鎮已發送%a/%m 邀請 '
 nation_revoke_invite: '&b城邦%s，撤銷了你的邀請以加入 '
