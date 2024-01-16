@@ -115,6 +115,11 @@ public class TownyCustomListener implements Listener {
 			}
 		}, 200L);
 
+		// Award new town with any potential bonus blocks.
+		int bonus = TownySettings.getNewTownBonusBlocks();
+		if (bonus > 0)
+			town.setBonusBlocks(town.getBonusBlocks() + bonus);
+
 		//TODO: at some point it might be nice to have a written_book given to mayors 
 		// which could contain the above advice about depositing money, or containing
 		// links to the commands page on the wiki.

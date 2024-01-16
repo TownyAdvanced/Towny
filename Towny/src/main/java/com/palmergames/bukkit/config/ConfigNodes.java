@@ -990,6 +990,12 @@ public enum ConfigNodes {
 			"# The maximum townblocks available to a town is (numResidents * ratio).",
 			"# Setting this value to 0 will instead use the level based jump values determined in the town level config.",
 			"# Setting this to -1 will result in every town having unlimited claims."),
+	CLAIMING_DEF_BONUS_CLAIMS(
+			"claiming.new_town_bonus_claims",
+			"0",
+			"",
+			"# An amount of additional townblocks that a town will receive when it is first created, in addition to any amount given via the town_block_ratio or town_levels.",
+			"# As an example: This can be used to add 10 townblocks to a town when it is made so the borders can be grown a bit more before the mayor has to seek out residents."),
 	CLAIMING_TOWN_BLOCK_LIMIT(
 			"claiming.town_block_limit",
 			"0",

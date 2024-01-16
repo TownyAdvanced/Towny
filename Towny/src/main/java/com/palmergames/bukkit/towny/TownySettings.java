@@ -1338,6 +1338,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.CLAIMING_TOWN_BLOCK_RATIO);
 	}
 
+	public static int getNewTownBonusBlocks() {
+		return getInt(ConfigNodes.CLAIMING_DEF_BONUS_CLAIMS);
+	}
+
 	public static int getTownBlockSize() {
 
 		return getInt(ConfigNodes.CLAIMING_TOWN_BLOCK_SIZE);
