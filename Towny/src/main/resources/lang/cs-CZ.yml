@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cAbys mohl/a zabírat parcely, musíš patřit do m
 msg_err_must_belong_town: '&cMusíš patřit do města.'
 msg_err_dont_belong_town: '&cNepatříš do města.'
 msg_err_dont_belong_nation: '&bNepatříš do národa.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s nepatří do tvého národa.'
 msg_err_rect_auto: '&cPouze obyvatelé mohou požívat Auto.'
 msg_err_invalid_radius: '&cNeplatný radius. Požij celé číslo nebo auto.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNárod odeslal příliš mnoho žádos
 msg_err_nation_has_too_many_requests: '&bFrakce %s má příliš mnoho pozvánek, požádejte je, aby některé odmítli, než zkusíte znovu.'
 player_received_invites: '&bObdrželi jste %a/%m pozvání.'
 town_revoke_invite: '&bMěsto %s zrušilo tvoji pozvánku o připojení se k nim.'
-town_revoke_invite_successful: '&bÚspěšně jsi zrušil pozvánku o připojení k tvému městu.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bMěsto obdrželo %a/%m pozvání.'
 town_sent_invites: '&bMěsto odeslalo %a/%m pozvánek.'
 nation_revoke_invite: '&bNárod%s zrušil tvoji pozvánku o připojení se k nim.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

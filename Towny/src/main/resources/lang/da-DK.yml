@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cDu skal tilhøre en by for at gøre krav på grund
 msg_err_must_belong_town: '&cDu skal tilhøre en by.'
 msg_err_dont_belong_town: '&cDu tilhører ikke nogen by.'
 msg_err_dont_belong_nation: '&cDu tilhører ikke en nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s tilhører ikke din nation.'
 msg_err_rect_auto: '&cKun byer og indbyggere kan bruge auto.'
 msg_err_invalid_radius: '&cInvalid radius. Brug et heltal eller ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNationen har sendt for mange anmodning
 msg_err_nation_has_too_many_requests: '&bNationen %s har for mange anmodninger. Bed dem om at afvise nogle, før du anmoder igen.'
 player_received_invites: '&bDu har modtaget %a/%m invitationer.'
 town_revoke_invite: '&bByen %s tilbagekaldte din invitation om at tilslutte dem.'
-town_revoke_invite_successful: '&bDu har succesfuldt tilbagekaldt en invitation om at tilslutte sig din by.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bByen har modtaget %a/%m invitationer.'
 town_sent_invites: '&bByen har sendt %a/%m invitationer.'
 nation_revoke_invite: '&Nationen %s tilbagekaldte din invitation om at tilslutte dem.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

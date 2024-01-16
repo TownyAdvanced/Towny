@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cJe moet tot een stad behoren om plots te claimen.'
 msg_err_must_belong_town: '&cJe moet tot een stad behoren.'
 msg_err_dont_belong_town: '&cJe behoort niet tot een stad.'
 msg_err_dont_belong_nation: '&bJe behoort niet tot een natie.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s behoort niet tot jouw natie.'
 msg_err_rect_auto: '&cAlleen steden in inwoners kunnen auto gebruiken.'
 msg_err_invalid_radius: '&cOngeldige radius. Gebruik een geheel getal of ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNation has sent too many requests, rev
 msg_err_nation_has_too_many_requests: '&bNation %s has too many requests, ask them to decline some, before requesting again.'
 player_received_invites: '&bYou have received %a/%m invites.'
 town_revoke_invite: '&bTown %s, revoked your invite to join them.'
-town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bTown has received %a/%m invites.'
 town_sent_invites: '&bTown has sent %a/%m invites.'
 nation_revoke_invite: '&bNation %s, revoked your invite to join them.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

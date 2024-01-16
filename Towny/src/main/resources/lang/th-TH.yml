@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: 'คุณต้องอยู่ใน Town เพ�
 msg_err_must_belong_town: 'คุณต้องอยู่ใน Town.'
 msg_err_dont_belong_town: '&cคุณไม่ได้อยู่ใน Town.'
 msg_err_dont_belong_nation: '&bคุณไม่ได้เป็นของ Nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s ไม่ได้เป็นของ Nation ของคุณ.'
 msg_err_rect_auto: '&cเฉพาะ Town และ Residents เท่านั้นที่สามารถใช้อัตโนมัติได้.'
 msg_err_invalid_radius: '&cรัศมีไม่ถูกต้อง ใช้จำนวนเต็มหรืออัตโนมัติ.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNation ส่งคำขอมาก�
 msg_err_nation_has_too_many_requests: '&bNation %s มีคำขอมากเกินไป ขอให้พวกเขาปฏิเสธบางคำขอ ก่อนที่คุณจะขออีกครั้ง.'
 player_received_invites: '&bคุณได้รับ %a/%m คำเชิญ.'
 town_revoke_invite: '&bTown %s, ยกเลิกคำขอให้เข้าร่วมของคุณ.'
-town_revoke_invite_successful: '&bคุณได้ยกเลิกคำเชิญเข้าร่วม Town ของคุณสำเร็จแล้ว.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bTown ได้รับ %a/%m คำเชิญ.'
 town_sent_invites: '&bTown ได้ส่ง %a/%m คำเชิญ.'
 nation_revoke_invite: '&bNation %s, ยกเลิกคำเชิญเข้าร่วมของคุณ.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

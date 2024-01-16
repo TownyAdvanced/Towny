@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&c土地を請求するためには、町に所属�
 msg_err_must_belong_town: '&cあなたは町に所属している必要があります。'
 msg_err_dont_belong_town: '&cあなたは町に所属していません。'
 msg_err_dont_belong_nation: '&bあなたは国に属していません。'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s はあなたの国に属していません。'
 msg_err_rect_auto: '&cautoは町や住民のみ利用できます。'
 msg_err_invalid_radius: '&cは無効な半径です。整数または ''auto'' を使用してください。'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&b送信した招待が多すぎます�
 msg_err_nation_has_too_many_requests: '&b%sは招待が多すぎるため、しばらくしてから再度、送信してください。'
 player_received_invites: '&b%a/%mの招待を受け取りました。'
 town_revoke_invite: '&b%sは、あなたの招待を削除しました。'
-town_revoke_invite_successful: '&bあなたの町への招待を削除しました。'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&b%a/%mの招待を受け取りました。'
 town_sent_invites: '&b%a/%mの招待を受け取りました。'
 nation_revoke_invite: '&b%sは、あなたの招待を削除しました。'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cIkaw ay dapat kasapi sa isang bayan para makapagku
 msg_err_must_belong_town: '&cIkaw ay dapat kasapi sa isang bayan.'
 msg_err_dont_belong_town: '&cHindi ka kasapi nang anumang bayan.'
 msg_err_dont_belong_nation: '&bIkaw hindi kasapi nang anumang nasyon.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s ay hindi kasapi sa iyong nasyon.'
 msg_err_rect_auto: '&cMga bayan at mga residente lamang ang pwede gumamit nito.'
 msg_err_invalid_radius: '&cHindi wasto ang radius. Gumamit nang integer o kaya nang ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNagpadala ang bansa ng napakaraming ka
 msg_err_nation_has_too_many_requests: 'Masyadong maraming kahilingan ang Bansa %s, hilingin sa kanila na tanggihan ang ilan, bago humiling muli.'
 player_received_invites: '&bNakatanggap ka ng %a/%m imbitasyon.'
 town_revoke_invite: '&bBinawi ng Bayan ng %s ang iyong imbitasyon na sumali sa kanila.'
-town_revoke_invite_successful: '&bMatagumpay mong binawi ang isang imbitasyon na sumali sa iyong bayan.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bNakatanggap ang bayan ng %a/%m imbitasyon.'
 town_sent_invites: '&bNagpadala ang bayan ng %a/%m imbitasyon.'
 nation_revoke_invite: '&bBinawi ang Bansang %s ang iyong imbitasyon na sumali sa kanila.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&你必须加入城镇才能声明这块土地.'
 msg_err_must_belong_town: '&c你必须是一个城镇居民.'
 msg_err_dont_belong_town: '&c你不属于一个城镇.'
 msg_err_dont_belong_nation: '&b你不属于一个国家的臣民.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s不属于你的国家.'
 msg_err_rect_auto: '&c只有城镇及其居民才能使用 auto.'
 msg_err_invalid_radius: '&c无效半径. 输入整数或 auto.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&b国家已经发出了太多的要求�
 msg_err_nation_has_too_many_requests: '&b国家 %s 有太多的邀请, 需要他们拒绝一些请求, 然后再进行邀请.'
 player_received_invites: '&b你已经收到 %a/%m 邀请.'
 town_revoke_invite: '&b城镇 %s, 撤销了你的邀请加入.'
-town_revoke_invite_successful: '&b你已成功撤销邀请你加入的城镇'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&b城镇已收到 %a/%m 邀请.'
 town_sent_invites: '&b城镇已发送 %a/%m 邀请.'
 nation_revoke_invite: '&b国家 %s, 撤销了您的邀请以加入.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

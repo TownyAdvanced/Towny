@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cDebes pertenecer a una ciudad para claimear parcel
 msg_err_must_belong_town: '&cDebes pertenecer a una ciudad.'
 msg_err_dont_belong_town: '&cNo perteneces a una ciudad.'
 msg_err_dont_belong_nation: '&bNo perteneces a un país.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s no pertenece a tu pais'
 msg_err_rect_auto: '&cSolo las ciudades y los habitantes pueden usar ''auto''.'
 msg_err_invalid_radius: '&cRadio inválido. Use un número entero o ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bLa nación ha enviado demasiadas solic
 msg_err_nation_has_too_many_requests: '&bLa nación %s tiene demasiadas solicitudes, pide que rechacen algunas, antes de volver a intentarlo.'
 player_received_invites: '&bHas recibido %a/%m invitaciones.'
 town_revoke_invite: '&b%s, rechazó tu invitación de unión.'
-town_revoke_invite_successful: '&bHas rechazado una invitación de unión a tu ciudad.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bLa ciudad ha recibido %a/%m invitaciones.'
 town_sent_invites: '&bLa ciudad ha enviado %a/%m invitaciones.'
 nation_revoke_invite: '&bLa nación %s, rechazó tu invitación de unión.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

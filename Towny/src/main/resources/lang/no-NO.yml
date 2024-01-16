@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cDu må tilhøre en by for å kreve tomter.'
 msg_err_must_belong_town: '&cDu må høre til en by.'
 msg_err_dont_belong_town: '&cDu tilhører ikke en by.'
 msg_err_dont_belong_nation: '&bDu tilhører ikke en nasjon.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s tilhører ikke din nasjon.'
 msg_err_rect_auto: '&cBare byer og innbyggere kan bruke auto.'
 msg_err_invalid_radius: '&cUgyldig radius. Bruk et heltall eller ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNasjon har sendt for mange forespørsl
 msg_err_nation_has_too_many_requests: '&bNation %s has too many requests, ask them to decline some, before inviting again.'
 player_received_invites: '&bDu har mottatt %a/%m invitasjoner.'
 town_revoke_invite: '&bTown %s, revoked your invite to join them'
-town_revoke_invite_successful: '&bDu har opphevet en invitasjon til å bli med i byen din.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bBy har mottatt %a/%m invitasjoner.'
 town_sent_invites: '&bByen har sendt %a/%m invitasjoner.'
 nation_revoke_invite: '&bNasjon %s, opphevet invitasjonen din til å bli med dem.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cMusisz należeć do miasta, aby móc pozyskiwać d
 msg_err_must_belong_town: '&cMusisz należeć do miasta.'
 msg_err_dont_belong_town: '&cNie należysz do żadnego miasta.'
 msg_err_dont_belong_nation: '&bNie należysz do nacji.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s nie należy do twojej nacji.'
 msg_err_rect_auto: '&cTylko miasta i mieszkańcy mogą z tego skorzystać.'
 msg_err_invalid_radius: '&cNieprawidłowy promień. Użyj liczby całkowitej lub trybu "auto".'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNacja wysłała zbyt dużo zaproszeń,
 msg_err_nation_has_too_many_requests: '&bNacja %s ma zbyt dużo zaproszeń. Poproś ją o odrzucenie paru.'
 player_received_invites: '&bOtrzymałeś %a/%m zaproszeń.'
 town_revoke_invite: '&bMiasto %s odrzuciło twoją prośbę o dołączenie.'
-town_revoke_invite_successful: '&bUnieważniłeś zaproszenie do dołączenia do twojego miasta.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bMiasto otrzymało %a/%m zaproszeń.'
 town_sent_invites: '&bMiasto wysłało %a/%m zaproszeń.'
 nation_revoke_invite: '&bNacja %s odrzuciła Twoje propozycję dołączenie do nich.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

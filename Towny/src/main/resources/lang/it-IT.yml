@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cDevi appartenere a una città per poter claimare l
 msg_err_must_belong_town: '&cDevi appartenere a una città.'
 msg_err_dont_belong_town: '&cNon appartieni a una città.'
 msg_err_dont_belong_nation: '&bNon appartieni a una nazione.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s non appartiene alla tua nazione.'
 msg_err_rect_auto: '&cSolo le città e i residenti possono usare auto.'
 msg_err_invalid_radius: '&cRaggio non valido. Usa un numero intero o ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bLa Nazione ha inviato troppe richieste
 msg_err_nation_has_too_many_requests: '&bLa Nazione %s ha ricevuto troppe richieste, chiedi di annullarne qualcuna, prima di invitarli di nuovo.'
 player_received_invites: '&bHai ricevuto %a/%m inviti.'
 town_revoke_invite: '&bLa Città %s, ha annullato il loro invito ad entrare da loro.'
-town_revoke_invite_successful: '&bHai annullato un invito ad entrare nella tua Città.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bLa Città ha ricevuto %a/%m inviti.'
 town_sent_invites: '&bLa Città ha inviato %a/%m inviti.'
 nation_revoke_invite: '&bLa Nazione %s, ha annullato il loro invito ad entrare da loro.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

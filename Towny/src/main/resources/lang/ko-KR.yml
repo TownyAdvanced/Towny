@@ -45,7 +45,7 @@ help_0: '타우니 도움말'
 help_1: '다음 명령어를 사용해보며 타우니에 대해 배워보세요.'
 help_2: '도시 내 채팅'
 help_3: '국가 내 채팅'
-help_4: 'Resident command help.'
+help_4: ''
 help_5: 'Town command help.'
 help_6: 'Nation command help.'
 help_7: 'Plot command help.'
@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&c귀하는 개인 토지를 점유하기 위해 마
 msg_err_must_belong_town: '&c마을에 속해 있어야 합니다.'
 msg_err_dont_belong_town: '&c마을에 속해 있지 않습니다.'
 msg_err_dont_belong_nation: '&b국가에 속해 있지 않습니다.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s은(는) 귀하의 국가에 속해 있지 않습니다.'
 msg_err_rect_auto: '&c오직 마을과 주민만 "자동"을 사용 할 수 있습니다.'
 msg_err_invalid_radius: '&c잘못된 거리입니다. 정수를 입력하거나 자동을 사용하세요.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&b국가가 너무 많은 요청을 전�
 msg_err_nation_has_too_many_requests: '&b국가 %s에는 너무 많은 요청이 있습니다. 다시 요청하기 전에 몇몇 요청을 취소하도록 요청하세요.'
 player_received_invites: '&b귀하는 %a/%m 초대를 수신하였습니다.'
 town_revoke_invite: '&b마을 %s이(가) 초대를 취소하였습니다.'
-town_revoke_invite_successful: '&b마을 초대를 성공적으로 취소하였습니다.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&b마을이 %a/%m 초대를 수신하였습니다.'
 town_sent_invites: '&b마을에서 %a/%m 초대를 전송하였습니다.'
 nation_revoke_invite: '&b국가 %s이(가) 초대를 취소하였습니다.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cDu måste tillhöra en stad för att kunna köpa m
 msg_err_must_belong_town: '&cDu måste tillhöra en stad.'
 msg_err_dont_belong_town: '&cDu tillhör inte en stad.'
 msg_err_dont_belong_nation: '&bDu tillhör inte en nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s tillhör inte din nation.'
 msg_err_rect_auto: '&cEndast städer och invånare kan använda auto.'
 msg_err_invalid_radius: '&cOgiltig radie. Använd ett heltal eller ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNationen har skickat för många förf
 msg_err_nation_has_too_many_requests: '&bNationen %s har för många förfrågningar, be dem att avböja några, innan du begär igen.'
 player_received_invites: '&bDu har fått %a/%m inbjudningar.'
 town_revoke_invite: '&bStaden %s, återkallade din inbjudan att gå med i den.'
-town_revoke_invite_successful: '&bDu har framgångsrikt återkallat en inbjudan att gå med i din stad.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bStaden har fått %a/%m inbjudningar.'
 town_sent_invites: '&bStaden har skickat %a/%m inbjudningar.'
 nation_revoke_invite: '&bNationen %s, återkallade din inbjudan om att ansluta till dem.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cVous devez appartenir à une ville afin d''annexer
 msg_err_must_belong_town: '&cVous devez appartenir à une ville.'
 msg_err_dont_belong_town: '&cVous n''appartenez pas à une ville.'
 msg_err_dont_belong_nation: '&bVous n''appartenez pas à une nation.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s n''appartient pas à votre nation.'
 msg_err_rect_auto: '&cUniquement les villes et les résidents peuvent utiliser ''auto''.'
 msg_err_invalid_radius: '&cRayon invalide. Utilisez un entier ou ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bLa nation a envoyé trop de demandes, 
 msg_err_nation_has_too_many_requests: '&bLa nation %s a trop de demandes, demandez d''en refuser, avant d''inviter à nouveau.'
 player_received_invites: '&bVous avez reçu %a/%m invitations.'
 town_revoke_invite: '&bLa ville %s, a annulé votre invitation pour les rejoindre.'
-town_revoke_invite_successful: '&bVous avez annulé avec succès une invitation à rejoindre votre ville.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bLa ville a reçu %a/%m invitations.'
 town_sent_invites: '&bLa ville a envoyé %a/%m invitations.'
 nation_revoke_invite: '&bLa nation %s, a annulé votre invitation pour les rejoindre.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."

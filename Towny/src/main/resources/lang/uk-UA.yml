@@ -622,6 +622,8 @@ msg_err_not_in_town_claim: '&cВи повинні бути в місті, щоб
 msg_err_must_belong_town: '&cВи маєте бути жителем міста.'
 msg_err_dont_belong_town: '&cВи не належите до міста.'
 msg_err_dont_belong_nation: '&bВи не належите до нації.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s не належить до нації.'
 msg_err_rect_auto: '&cТільки міста та городяни можуть використовувати авто режим.'
 msg_err_invalid_radius: '&cПомилковий радіус. Вкажіть ціле число або ''auto''.'
@@ -797,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bНація надіслала зана
 msg_err_nation_has_too_many_requests: '&bНація %s має занадто багато запрошень, попросіть відхилити деякі з них, перед тим як спробувати знову.'
 player_received_invites: '&bВи отримали %a/%m повідомлень.'
 town_revoke_invite: '&bМісто %s відхилило ваше запрошення приєднатися до них.'
-town_revoke_invite_successful: '&bВи успішно відкликали запрошення приєднатися до вашого міста.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bМісто отримало %a/%m запрошень.'
 town_sent_invites: '&bМісто відправило %a/%m запрошень.'
 nation_revoke_invite: '&bНація %s- відкликала ваше запрошення приєднатися до них.'
@@ -2092,3 +2094,5 @@ msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome.
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
