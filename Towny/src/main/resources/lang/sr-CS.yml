@@ -799,7 +799,7 @@ msg_err_nation_sent_too_many_requests: '&bNacija je poslala previše zahteva, po
 msg_err_nation_has_too_many_requests: '&bNacija %s ima previše zahteva, pitajte ih da odbiju neke pre nego što ponovo zatražite.'
 player_received_invites: '&bPrimili ste %a/%m poziva.'
 town_revoke_invite: '&bGrad %s je povukao poziv da mu se pridružite.'
-town_revoke_invite_successful: '&bUspešno ste povukli poziv za ulazak u Vaš grad.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bGrad je primio %a/%m poziva.'
 town_sent_invites: '&bGrad je poslao %a/%m poziva.'
 nation_revoke_invite: '&bNacija %s je povukla poziv da im se pridružite.'
