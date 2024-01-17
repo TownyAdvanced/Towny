@@ -1922,4 +1922,15 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean hasEnoughResidentsToBeANationCapital() {
 		return TownUtil.townHasEnoughResidentsToBeANationCapital(this);
 	}
+
+	/**
+	 * Is this town allowed to have the given number of residents?
+	 * 
+	 * @param residentCount Number of residents to test with.
+	 * @param isCapital When false, the a capital city will be tested as a non-Capital city.
+	 * @return true if the town can support the number of residents.
+	 */
+	public boolean townCanHaveThisAmountOfResidents(int residentCount, boolean isCapital) {
+		return TownUtil.townCanHaveThisAmountOfResidents(this, residentCount, isCapital);
+	}
 }
