@@ -70,7 +70,7 @@ public class NationUtil {
 		if (hasReachedMaximumResidents(nation))
 			return false;
 		int maxResidentPerNation = TownySettings.getMaxResidentsPerNation();
-		return maxResidentPerNation == 0 || (nation.getResidents().size() + additionalResidents) < maxResidentPerNation;
+		return maxResidentPerNation == 0 || (nation.getResidents().size() + additionalResidents) <= maxResidentPerNation;
 	}
 
 	public static boolean hasReachedMaximumTowns(Nation nation) {

@@ -95,8 +95,8 @@ public class TownUtil {
 	}
 
 	public static boolean townCanHaveThisAmountOfResidents(Town town, int residentCount, boolean isCapital) {
-		int maxResidents = !town.isCapital() || !isCapital
-				? !town.hasNation() && TownySettings.getMaxNumResidentsWithoutNation() > 0 ? TownySettings.getMaxNumResidentsWithoutNation() : TownySettings.getMaxResidentsPerTown()
+		int maxResidents = !isCapital
+				? !town.hasNation() && TownySettings.getMaxNumResidentsWithoutNation() > 0 ? TownySettings.getMaxNumResidentsWithoutNation() : TownySettings.getMaxResidentsPerTown() 
 				: TownySettings.getMaxResidentsPerTownCapitalOverride();
 
 		return maxResidents == 0 || residentCount <= maxResidents;
