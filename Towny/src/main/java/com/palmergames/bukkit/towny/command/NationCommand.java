@@ -493,8 +493,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "new":
 		case "create":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode());
-			newNation(player, split);
+			newNation(player, StringMgmt.remFirstArg(split));
 			break;
 		case "join":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_JOIN.getNode());
@@ -864,88 +863,90 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void newNation(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode());
+		if (split.length == 0)
+			throw new TownyException(Translatable.of("msg_specify_nation_name"));
+
+		String nationName = String.join("_", split);
+		Town town = getTownForNationCapital(player);
+		boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
+		newNation((CommandSender) player, nationName, town, noCharge);
+	}
+
+	private Town getTownForNationCapital(Player player) throws TownyException {
 		Resident resident = getResidentOrThrow(player);
 		Town town = getTownFromResidentOrThrow(resident);
 		if (!town.hasEnoughResidentsToBeANationCapital())
 			throw new TownyException(Translatable.of("msg_err_not_enough_residents_new_nation"));
 
-		if (split.length == 1)
-			throw new TownyException(Translatable.of("msg_specify_nation_name"));
-
 		if (!resident.isMayor() && !town.hasResidentWithRank(resident, "assistant"))
 			throw new TownyException(Translatable.of("msg_peasant_right"));
-		
-		boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
-		
-		String nationName = String.join("_", StringMgmt.remFirstArg(split));
-		newNation(player, nationName, town, noCharge);
+		return town;
 	}
-	
-	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
-		newNation((CommandSender) player, name, capitalTown, noCharge);
-	}
-	
+
 	/**
-	 * Create a new nation. Command: /nation new [nation] *[capital]
+	 * Ties together the player-run /new nation and the admin-run /ta nation new
+	 * NAME CAPITAL code. Vets the name supplied, throws the cancellable event and
+	 * then charges (if required) before creating a new nation.
 	 *
-	 * @param sender Sender who initiated the creation of the nation.
-	 * @param name Nation name.
-	 * @param capitalTown Capital city town.
-	 * @param noCharge charging for creation - /ta nation new NAME CAPITAL has no charge.
+	 * @param sender      Sender who initiated the creation of the nation.
+	 * @param name        Nation name to vet.
+	 * @param capitalTown Town which will become the capital city.
+	 * @param noCharge    when true and the Economy is enabled we charge the new
+	 *                    nation cost
 	 */
-	public static void newNation(CommandSender sender, String name, Town capitalTown, boolean noCharge) {
+	public static void newNation(CommandSender sender, String name, Town capitalTown, boolean noCharge) throws TownyException {
 
-		try {
-			if (capitalTown.hasNation())
-				throw new TownyException(Translatable.of("msg_err_already_nation"));
-			
-			if (TownySettings.getTownAutomaticCapitalisationEnabled())
-				name = StringMgmt.capitalizeStrings(name);
+		if (capitalTown.hasNation())
+			throw new TownyException(Translatable.of("msg_err_already_nation"));
 
-			// Check the name is valid and doesn't already exist.
-			String filteredName;
-			try {
-				filteredName = NameValidation.checkAndFilterName(name);
-			} catch (InvalidNameException e) {
-				filteredName = null;
-			}
+		final String filteredName = validateNationNameOrThrow(name);
 
-			if (filteredName == null || TownyUniverse.getInstance().hasNation(filteredName) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(filteredName)))
-				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+		BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
 
-			BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
-
-			// If it isn't free to make a nation, send a confirmation.
-			if (!noCharge && TownyEconomyHandler.isActive()) {
-				// Test if they can pay.
-				double cost = TownySettings.getNewNationPrice();
-				if (!capitalTown.getAccount().canPayFromHoldings(cost))
-					throw new TownyException(Translatable.of("msg_no_funds_new_nation2", cost));
-
-				final String finalName = filteredName;
-				Confirmation.runOnAccept(() -> {
-					try {
-						newNation(finalName, capitalTown);
-					} catch (AlreadyRegisteredException | NotRegisteredException e) {
-						TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-						return;
-					}
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(finalName)));
-
-				})
-					.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown, "New Nation Cost",
-							Translatable.of("msg_no_funds_new_nation2", cost)))
-					.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
-					.sendTo(sender);
-				
-			// Or, it is free, so just make the nation.
-			} else {
-				newNation(filteredName, capitalTown);
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(filteredName)));
-			}
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(sender, x.getMessage(sender));
+		if (noCharge || !TownyEconomyHandler.isActive()) {
+			// It's free so make the nation.
+			Nation nation = newNation(filteredName, capitalTown);
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
+			return;
 		}
+
+		// It isn't free to make a nation, send a confirmation.
+		double cost = TownySettings.getNewNationPrice();
+		// Test if they can pay.
+		if (!capitalTown.getAccount().canPayFromHoldings(cost))
+			throw new TownyException(Translatable.of("msg_no_funds_new_nation2", prettyMoney(cost)));
+
+		Confirmation.runOnAccept(() -> {
+			try {
+				Nation nation = newNation(filteredName, capitalTown);
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
+			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			}
+		})
+		.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown, "New Nation Cost",
+				Translatable.of("msg_no_funds_new_nation2", prettyMoney(cost))))
+		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
+		.sendTo(sender);
+	}
+
+	private static String validateNationNameOrThrow(String name) throws TownyException {
+		if (TownySettings.getTownAutomaticCapitalisationEnabled())
+			name = StringMgmt.capitalizeStrings(name);
+
+		// Check the name is valid and doesn't already exist.
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			filteredName = null;
+		}
+
+		if (filteredName == null || TownyUniverse.getInstance().hasNation(filteredName) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(filteredName)))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+
+		return filteredName;
 	}
 
 	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
@@ -960,6 +961,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(String.format("Error fetching new nation with name %s; it was not properly registered!", name));
 			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", name));
 		}
+
 		nation.setRegistered(System.currentTimeMillis());
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		town.setNation(nation);
@@ -970,8 +972,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.getAccount().setBalance(0, "New Nation Account");
 
 		if (TownySettings.isNationTagSetAutomatically())
-			nation.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())).replace("_","").replace("-", ""));
-			
+			nation.setTag(NameUtil.getTagFromName(name));
+
 		town.save();
 		nation.save();
 
