@@ -2,9 +2,6 @@ package com.palmergames.bukkit.towny.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,14 +25,16 @@ public class PopulationTests {
 		TownySettings.loadDefaultConfig();
 		nation = new Nation("testNation");
 		town = new Town("testTown");
-		List<Resident> residents = new ArrayList<>(List.of(
-				new Resident("leonardo"),
-				new Resident("donatello"),
-				new Resident("raphael"),
-				new Resident("michelangelo"),
-				new Resident("splinter")));
-		for (Resident resident : residents)
-			town.addResident(resident);
+		Resident res1 = new Resident("leonardo");
+		Resident res2 = new Resident("donatello");
+		Resident res3 = new Resident("raphael");
+		Resident res4 = new Resident("michelangelo");
+		Resident res5 = new Resident("splinter");
+		town.addResident(res1);
+		town.addResident(res2);
+		town.addResident(res3);
+		town.addResident(res4);
+		town.addResident(res5);
 	}
 	
 	@BeforeEach
