@@ -382,14 +382,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		return !resident.hasTown() &&
 			town.isOpen() &&
 			!townBlock.getType().equals(TownBlockType.EMBASSY) &&
-			!townNotPermittedAnotherResident(town) &&
+			!town.isAllowedThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()) &&
 			!town.hasOutlaw(resident) &&
 			resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_TOWN_JOIN.getNode());
-	}
-
-	private boolean townNotPermittedAnotherResident(Town town) {
-		return (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation()) ||
-				(TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town));
 	}
 
 	public void parsePlotClear(Resident resident, TownBlock townBlock) throws TownyException {

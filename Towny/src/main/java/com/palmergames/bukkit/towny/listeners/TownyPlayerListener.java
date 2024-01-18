@@ -878,7 +878,7 @@ public class TownyPlayerListener implements Listener {
 			// Non-player catches are tested for destroy permissions.
 			} else {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				test = TownyActionEventExecutor.canDestroy(player, caught.getLocation(), Material.GRASS);
+				test = TownyActionEventExecutor.canDestroy(player, caught.getLocation(), Material.DIRT);
 			}
 			if (!test) {
 				event.setCancelled(true);

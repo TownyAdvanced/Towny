@@ -47,6 +47,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -390,7 +391,14 @@ public class Town extends Government implements TownBlockOwner {
 		return hasResident(resident) && resident.hasTownRank(rank);
 	}
 
-	void addResident(Resident resident) {
+	/**
+	 * DO NOT USE THIS. This is visiable for testing only!
+	 * Use {@link Resident#setTown(Town)} instead.
+	 *
+	 * @param resident Resident that gets added to the town.
+	 */
+	@VisibleForTesting
+	public void addResident(Resident resident) {
 		residents.add(resident);
 	}
 
@@ -1921,5 +1929,18 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean hasEnoughResidentsToBeANationCapital() {
 		return TownUtil.townHasEnoughResidentsToBeANationCapital(this);
+	}
+
+	/**
+	 * Is this town allowed to have the given number of residents?
+	 * 
+	 * @param residentCount Number of residents to test with.
+	 * @param isCapital     When false, a capital city will be tested as though it
+	 *                      were not a non-Capital city.
+	 * @return true if the town can support the number of residents based on the
+	 *         rules configured on the server.
+	 */
+	public boolean isAllowedThisAmountOfResidents(int residentCount, boolean isCapital) {
+		return TownUtil.townCanHaveThisAmountOfResidents(this, residentCount, isCapital);
 	}
 }

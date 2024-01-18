@@ -2816,17 +2816,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!newMember.hasPermissionNode(PermissionNodes.TOWNY_TOWN_RESIDENT.getNode()))
 				throw new TownyException(Translatable.of("msg_not_allowed_join", newMember.getName()));
 
-			if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))
+			if (!town.isAllowedThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()))
 				throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 
-			if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+			if (town.hasNation() && !town.getNationOrNull().canAddResidents(1))
 				throw new TownyException(Translatable.of("msg_err_cannot_add_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation(), newMember.getName()));
 
 			if (!admin && TownySettings.getTownInviteCooldown() > 0 && (System.currentTimeMillis()/1000 - newMember.getRegistered()/1000) < TownySettings.getTownInviteCooldown())
 				throw new TownyException(Translatable.of("msg_err_resident_doesnt_meet_invite_cooldown", newMember));
-
-			if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation())
-				throw new TownyException(Translatable.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
 
 			// Throws when the player has a town or is in this town already.
 			town.addResidentCheck(newMember);
@@ -2974,14 +2971,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!town.isOpen())
 			throw new TownyException(Translatable.of("msg_err_not_open", town.getFormattedName()));
 
-		if (town.hasNation() && TownySettings.getMaxResidentsPerNation() > 0 && town.getNationOrNull().getResidents().size() >= TownySettings.getMaxResidentsPerNation())
+		if (town.hasNation() && !town.getNationOrNull().canAddResidents(1))
 			throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
 
-		if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsForTown(town))
+		if (!town.isAllowedThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()))
 			throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
-
-		if (TownySettings.getMaxNumResidentsWithoutNation() > 0 && !town.hasNation() && town.getResidents().size() >= TownySettings.getMaxNumResidentsWithoutNation())
-			throw new TownyException(Translatable.of("msg_err_unable_to_add_more_residents_without_nation", TownySettings.getMaxNumResidentsWithoutNation()));
 
 		if (town.hasOutlaw(resident))
 			throw new TownyException(Translatable.of("msg_err_outlaw_in_open_town"));
@@ -3703,8 +3697,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		int newResidentsAmount = remainingTown.getNumResidents() + succumbingTown.getNumResidents();
 
-		if (TownySettings.getMaxResidentsPerTown() > 0 && 
-			newResidentsAmount > TownySettings.getMaxResidentsForTown(remainingTown))
+		if (!remainingTown.isAllowedThisAmountOfResidents(newResidentsAmount, remainingTown.isCapital()))
 			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsForTown(remainingTown)));
 
 		if (!remainingTown.hasUnlimitedClaims() && townWouldHaveTooManyTownBlocks(remainingTown, succumbingTown, newResidentsAmount))
