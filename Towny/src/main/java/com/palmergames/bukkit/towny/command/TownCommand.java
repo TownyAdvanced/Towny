@@ -2816,7 +2816,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (!newMember.hasPermissionNode(PermissionNodes.TOWNY_TOWN_RESIDENT.getNode()))
 				throw new TownyException(Translatable.of("msg_not_allowed_join", newMember.getName()));
 
-			if (!town.townCanHaveThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()))
+			if (!town.isAllowedThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()))
 				throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 
 			if (town.hasNation() && !town.getNationOrNull().canAddResidents(1))
@@ -2974,7 +2974,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town.hasNation() && !town.getNationOrNull().canAddResidents(1))
 			throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
 
-		if (!town.townCanHaveThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()))
+		if (!town.isAllowedThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()))
 			throw new TownyException(Translatable.of("msg_err_max_residents_per_town_reached", TownySettings.getMaxResidentsForTown(town)));
 
 		if (town.hasOutlaw(resident))
@@ -3697,7 +3697,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		int newResidentsAmount = remainingTown.getNumResidents() + succumbingTown.getNumResidents();
 
-		if (!remainingTown.townCanHaveThisAmountOfResidents(newResidentsAmount, remainingTown.isCapital()))
+		if (!remainingTown.isAllowedThisAmountOfResidents(newResidentsAmount, remainingTown.isCapital()))
 			throw new TownyException(Translatable.of("msg_town_merge_err_too_many_residents", TownySettings.getMaxResidentsForTown(remainingTown)));
 
 		if (!remainingTown.hasUnlimitedClaims() && townWouldHaveTooManyTownBlocks(remainingTown, succumbingTown, newResidentsAmount))

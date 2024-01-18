@@ -36,7 +36,7 @@ public class PopulationTests {
 		town.addResident(res4);
 		town.addResident(res5);
 	}
-	
+
 	@BeforeEach
 	void reset() {
 		town.removeNation();
@@ -54,12 +54,12 @@ public class PopulationTests {
 
 	@Test
 	void testSuccessAddResidentNoRestrictionsWithoutCapital() {
-		assertEquals(town.townCanHaveThisAmountOfResidents(10, false), true);
+		assertEquals(town.isAllowedThisAmountOfResidents(10, false), true);
 	}
 
 	@Test
 	void testSuccessAddResidentNoRestrictionsWithCapital() {
-		assertEquals(town.townCanHaveThisAmountOfResidents(10, true), true);
+		assertEquals(town.isAllowedThisAmountOfResidents(10, true), true);
 	}
 
 	/*
@@ -70,14 +70,14 @@ public class PopulationTests {
 	void testSuccessAllowTownPopulationWithRestrictionsWithoutCapital() {
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN.getRoot(), 5);
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_CAPITAL_OVERRIDE.getRoot(), 10);
-		assertEquals(town.townCanHaveThisAmountOfResidents(5, false), true);
+		assertEquals(town.isAllowedThisAmountOfResidents(5, false), true);
 	}
 
 	@Test
 	void testFailAllowTownPopulationWithRestrictionsWithoutCapital() {
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN.getRoot(), 5);
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_CAPITAL_OVERRIDE.getRoot(), 10);
-		assertEquals(town.townCanHaveThisAmountOfResidents(10, false), false);
+		assertEquals(town.isAllowedThisAmountOfResidents(10, false), false);
 	}
 
 	/*
@@ -88,14 +88,14 @@ public class PopulationTests {
 	void testSuccessAllowTownPopulationWithRestrictionsWithCapital() {
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN.getRoot(), 5);
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_CAPITAL_OVERRIDE.getRoot(), 10);
-		assertEquals(town.townCanHaveThisAmountOfResidents(10, true), true);
+		assertEquals(town.isAllowedThisAmountOfResidents(10, true), true);
 	}
 
 	@Test
 	void testFailureAllowTownPopulationWithRestrictionsWithCapital() {
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN.getRoot(), 5);
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_CAPITAL_OVERRIDE.getRoot(), 10);
-		assertEquals(town.townCanHaveThisAmountOfResidents(11, true), false);
+		assertEquals(town.isAllowedThisAmountOfResidents(11, true), false);
 	}
 
 	/*
@@ -106,21 +106,21 @@ public class PopulationTests {
 	void testSuccessAllowNationlessTownPopulationWithFeatureDisabled() {
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN.getRoot(), 10);
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION.getRoot(), 0);
-		assertEquals(town.townCanHaveThisAmountOfResidents(5, false), true);
+		assertEquals(town.isAllowedThisAmountOfResidents(5, false), true);
 	}
 
 	@Test
 	void testSuccessAllowNationlessTownPopulation() {
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN.getRoot(), 10);
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION.getRoot(), 5);
-		assertEquals(town.townCanHaveThisAmountOfResidents(5, false), true);
+		assertEquals(town.isAllowedThisAmountOfResidents(5, false), true);
 	}
 
 	@Test
 	void testFailureAllowNationlessTownPopulation() {
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN.getRoot(), 10);
 		TownySettings.getConfig().set(ConfigNodes.GTOWN_SETTINGS_MAX_NUMBER_RESIDENTS_WITHOUT_NATION.getRoot(), 5);
-		assertEquals(town.townCanHaveThisAmountOfResidents(6, false), false);
+		assertEquals(town.isAllowedThisAmountOfResidents(6, false), false);
 	}
 
 	/*

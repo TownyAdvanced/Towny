@@ -1089,7 +1089,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		boolean tooManyResidents = false;
 		if (town.isCapital()) {
 			// Check that the capital wont have too many residents after deletion. 
-			tooManyResidents = town.townCanHaveThisAmountOfResidents(town.getNumResidents(), false);
+			tooManyResidents = town.isAllowedThisAmountOfResidents(town.getNumResidents(), false);
 			// Show a message preceding the confirmation message if they will lose residents. 
 			if (tooManyResidents) {
 				int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
@@ -1122,7 +1122,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Town town = getTownFromResidentOrThrow(resident);
 				Nation nation = getNationFromResidentOrThrow(resident);
 				// Check that the capital wont have too many residents after deletion. 
-				boolean tooManyResidents = !town.townCanHaveThisAmountOfResidents(town.getNumResidents(), false); 
+				boolean tooManyResidents = !town.isAllowedThisAmountOfResidents(town.getNumResidents(), false); 
 				// Show a message preceding the confirmation message if they will lose residents. 
 				if (tooManyResidents) {
 					int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
@@ -2325,7 +2325,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 		
-		boolean capitalTooManyResidents = !existingCapital.townCanHaveThisAmountOfResidents(existingCapital.getNumResidents(), false); 
+		boolean capitalTooManyResidents = !existingCapital.isAllowedThisAmountOfResidents(existingCapital.getNumResidents(), false); 
 		if (capitalTooManyResidents && !admin) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
 			return;

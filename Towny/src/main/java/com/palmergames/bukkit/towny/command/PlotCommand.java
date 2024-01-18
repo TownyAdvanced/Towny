@@ -382,7 +382,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		return !resident.hasTown() &&
 			town.isOpen() &&
 			!townBlock.getType().equals(TownBlockType.EMBASSY) &&
-			!town.townCanHaveThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()) &&
+			!town.isAllowedThisAmountOfResidents(town.getNumResidents() + 1, town.isCapital()) &&
 			!town.hasOutlaw(resident) &&
 			resident.hasPermissionNode(PermissionNodes.TOWNY_COMMAND_TOWN_JOIN.getNode());
 	}

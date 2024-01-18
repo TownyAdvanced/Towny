@@ -2501,6 +2501,7 @@ public class TownySettings {
 	}
 	
 	public static int getMaxResidentsPerTown() {
+		
 		return getInt(ConfigNodes.GTOWN_MAX_RESIDENTS_PER_TOWN);
 	}
 	
