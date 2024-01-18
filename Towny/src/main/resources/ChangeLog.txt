@@ -9465,3 +9465,8 @@ v0.92.0.11:
     - Default: 0
     - An amount of additional townblocks that a town will receive when it is first created, in addition to any amount given via the town_block_ratio or town_levels.
     - As an example: This can be used to add 10 townblocks to a town when it is made so the borders can be grown a bit more before the mayor has to seek out residents.
+0.100.1.4:
+  - Refactor max residents per town code into TownUtil accessed via a new Town method.
+  - Bump Spigot 1.20.2 to 1.20.4.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.60.0 to 3.65.0.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.2.3 to 3.2.5.

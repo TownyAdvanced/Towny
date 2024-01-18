@@ -305,9 +305,12 @@ public class TownyEntityListener implements Listener {
 
 			/*
 			 * Check to see if any of the potion effects are protected.
+			 * TODO: Make up a wrapper of some kind in order to support older versions while
+			 * using the new methods when possible. 
 			 */
-			
-			if (detrimentalPotions.contains(effect.getType().getName())) {
+			@SuppressWarnings("deprecation")
+			String name = effect.getType().getName();
+			if (detrimentalPotions.contains(name)) {
 				detrimental = true;
 				break;
 			}
@@ -939,7 +942,9 @@ public class TownyEntityListener implements Listener {
 		final List<String> detrimentalPotions = TownySettings.getPotionTypes().stream().map(type -> type.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
 
 		for (final PotionEffect effect : effects) {
-			// This should use getKey when 1.18 becomes the minimum supported version.
+			// TODO: Make up a wrapper of some kind in order to support older versions while
+			// using the new methods when possible.
+			@SuppressWarnings("deprecation")
 			final String name = effect.getType().getName().toLowerCase(Locale.ROOT);
 
 			/*
