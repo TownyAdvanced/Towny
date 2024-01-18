@@ -567,7 +567,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationEnemy(player, StringMgmt.remFirstArg(split));
 			break;
 		case "delete":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DELETE.getNode());
 			nationDelete(player, StringMgmt.remFirstArg(split));
 			break;
 		case "online":
@@ -1058,46 +1057,39 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}).sendTo(player);
 	}
 
-	public void nationDelete(Player player, String[] split) {
-
+	public void nationDelete(Player player, String[] split) throws TownyException {
 		// Player is using "/n delete"
 		if (split.length == 0) {
-			try {
-				Resident resident = getResidentOrThrow(player);
-				Town town = getTownFromResidentOrThrow(resident);
-				Nation nation = getNationFromResidentOrThrow(resident);
-				// Check that the capital wont have too many residents after deletion. 
-				boolean tooManyResidents = !town.isAllowedThisAmountOfResidents(town.getNumResidents(), false); 
-				// Show a message preceding the confirmation message if they will lose residents. 
-				if (tooManyResidents) {
-					int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
-					TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
-				}
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DELETE.getNode());
 
-				Confirmation.runOnAccept(() -> {
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);
-					if (tooManyResidents)
-						ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
-				})
-				.sendTo(player);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+			Town town = getTownFromPlayerOrThrow(player);
+			Nation nation = getNationFromTownOrThrow(town);
+			// Check that the capital wont have too many residents after deletion. 
+			boolean tooManyResidents = !town.isAllowedThisAmountOfResidents(town.getNumResidents(), false); 
+			// Show a message preceding the confirmation message if they will lose residents. 
+			if (tooManyResidents) {
+				int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
+				TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
 			}
+
+			Confirmation.runOnAccept(() -> {
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+				TownyUniverse.getInstance().getDataSource().removeNation(nation);
+				if (tooManyResidents)
+					ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
+			})
+			.sendTo(player);
+			return;
+		}
+
 		// Admin is using "/n delete NATIONNAME"
-		} else
-			try {
-				checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode(), Translatable.of("msg_err_admin_only_delete_nation"));
+		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode(), Translatable.of("msg_err_admin_only_delete_nation"));
 
-				Nation nation = getNationOrThrow(split[0]);
-				Confirmation.runOnAccept(() -> {
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);					
-				})
-				.sendTo(player);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
-			}
+		Nation nation = getNationOrThrow(split[0]);
+		Confirmation.runOnAccept(() -> {
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+		}).sendTo(player);
 	}
 
 	public void nationKing(Player player, String[] split) {
