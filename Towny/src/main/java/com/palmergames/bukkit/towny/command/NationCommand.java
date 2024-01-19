@@ -1038,18 +1038,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		// Check that the capital wont have too many residents after deletion.
 		final boolean tooManyResidents = town.isCapital() && town.isAllowedThisAmountOfResidents(town.getNumResidents(), false);
+		if (tooManyResidents) {
+			// Show a message preceding the confirmation message if they will lose residents.
+			int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
+			TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
+		}
 
 		Confirmation.runOnAccept(() -> {
 			BukkitTools.fireEvent(new NationTownLeaveEvent(nation, town));
 			town.removeNation();
 
-			if (tooManyResidents) {
-				// Show a message preceding the confirmation message if they will lose residents.
-				int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
-				TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
-
+			if (tooManyResidents)
 				ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
-			}
+
 			plugin.resetCache();
 
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
