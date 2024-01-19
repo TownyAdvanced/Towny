@@ -1943,4 +1943,8 @@ public class Town extends Government implements TownBlockOwner {
 	public boolean isAllowedThisAmountOfResidents(int residentCount, boolean isCapital) {
 		return TownUtil.townCanHaveThisAmountOfResidents(this, residentCount, isCapital);
 	}
+
+	public int getMaxAllowedNumberOfResidentsWithoutNation() {
+		return TownUtil.getMaxAllowedNumberOfResidentsWithoutNation(this);
+	}
 }

@@ -2514,8 +2514,8 @@ public class TownySettings {
 		if (town.isCapital())
 			return getMaxResidentsPerTownCapitalOverride();
 		else 
-			return !town.hasNation() && getMaxNumResidentsWithoutNation() > 0
-					? getMaxNumResidentsWithoutNation()
+			return !town.hasNation()
+					? town.getMaxAllowedNumberOfResidentsWithoutNation()
 					: getMaxResidentsPerTown();
 	}
 

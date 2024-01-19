@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nameable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,5 +49,9 @@ public class NameUtil {
 			return Collections.emptyList();
 		}
 		return list.stream().filter(name -> name.toLowerCase(Locale.ROOT).startsWith(startingWith.toLowerCase(Locale.ROOT))).collect(Collectors.toList());
+	}
+
+	public static String getTagFromName(String name) {
+		return name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())).replace("_","").replace("-", "");
 	}
 }

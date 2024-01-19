@@ -493,8 +493,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "new":
 		case "create":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode());
-			newNation(player, split);
+			newNation(player, StringMgmt.remFirstArg(split));
 			break;
 		case "join":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_JOIN.getNode());
@@ -567,7 +566,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationEnemy(player, StringMgmt.remFirstArg(split));
 			break;
 		case "delete":
-			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DELETE.getNode());
 			nationDelete(player, StringMgmt.remFirstArg(split));
 			break;
 		case "online":
@@ -661,57 +659,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		List<Nation> enemiedByList = TownyAPI.getInstance().getNations().stream().filter(n-> n.hasEnemy(nation)).collect(Collectors.toList());
 		if (!enemiedByList.isEmpty()) {
 			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_nation_enemied_by").forLocale(player), new ArrayList<>(enemiedByList)));
-		}
-	}
-
-	private void parseNationJoin(Player player, String[] args) {
-		
-		try {
-			Resident resident;
-			Town town;
-			Nation nation;
-			String nationName;
-
-			if (args.length < 1)
-				throw new TownyException(Translatable.of("msg_usage", "/nation join [nation]"));
-
-			nationName = args[0];
-			
-			resident = getResidentOrThrow(player);
-			town = resident.getTown();
-			nation = getNationOrThrow(nationName);
-
-			// Check if town is currently in a nation.
-			if (town.hasNation())
-				throw new TownyException(Translatable.of("msg_err_already_in_a_nation"));
-
-			// Check if town is town is free to join.
-			if (!nation.isOpen())
-				throw new TownyException(Translatable.of("msg_err_nation_not_open", nation.getFormattedName()));
-
-			// Check if the town is sanctioned and not allowed to join.
-			if (nation.hasSanctionedTown(town))
-				throw new TownyException(Translatable.of("msg_err_cannot_join_nation_sanctioned_town", nation.getName()));
-
-			if (!town.hasEnoughResidentsToJoinANation())
-				throw new TownyException(Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
-
-			if (nation.hasReachedMaxTowns())
-				throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
-
-			if (!nation.canAddResidents(town.getNumResidents()))
-				throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
-
-			if (TownySettings.getNationProximityToCapital() > 0)
-				ProximityUtil.testTownProximityToNation(town, nation); // Throws TownyException with error message when it fails.
-
-			// Check if the command is not cancelled
-			BukkitTools.ifCancelledThenThrow(new NationPreAddTownEvent(nation, town));
-
-			nationAdd(nation, town);
-
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 		}
 	}
 
@@ -916,88 +863,90 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void newNation(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_NEW.getNode());
+		if (split.length == 0)
+			throw new TownyException(Translatable.of("msg_specify_nation_name"));
+
+		String nationName = String.join("_", split);
+		Town town = getTownForNationCapital(player);
+		boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
+		newNation((CommandSender) player, nationName, town, noCharge);
+	}
+
+	private Town getTownForNationCapital(Player player) throws TownyException {
 		Resident resident = getResidentOrThrow(player);
 		Town town = getTownFromResidentOrThrow(resident);
 		if (!town.hasEnoughResidentsToBeANationCapital())
 			throw new TownyException(Translatable.of("msg_err_not_enough_residents_new_nation"));
 
-		if (split.length == 1)
-			throw new TownyException(Translatable.of("msg_specify_nation_name"));
-
 		if (!resident.isMayor() && !town.hasResidentWithRank(resident, "assistant"))
 			throw new TownyException(Translatable.of("msg_peasant_right"));
-		
-		boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
-		
-		String nationName = String.join("_", StringMgmt.remFirstArg(split));
-		newNation(player, nationName, town, noCharge);
+		return town;
 	}
-	
-	public static void newNation(Player player, String name, Town capitalTown, boolean noCharge) {
-		newNation((CommandSender) player, name, capitalTown, noCharge);
-	}
-	
+
 	/**
-	 * Create a new nation. Command: /nation new [nation] *[capital]
+	 * Ties together the player-run /new nation and the admin-run /ta nation new
+	 * NAME CAPITAL code. Vets the name supplied, throws the cancellable event and
+	 * then charges (if required) before creating a new nation.
 	 *
-	 * @param sender Sender who initiated the creation of the nation.
-	 * @param name Nation name.
-	 * @param capitalTown Capital city town.
-	 * @param noCharge charging for creation - /ta nation new NAME CAPITAL has no charge.
+	 * @param sender      Sender who initiated the creation of the nation.
+	 * @param name        Nation name to vet.
+	 * @param capitalTown Town which will become the capital city.
+	 * @param noCharge    when true and the Economy is enabled we charge the new
+	 *                    nation cost
 	 */
-	public static void newNation(CommandSender sender, String name, Town capitalTown, boolean noCharge) {
+	public static void newNation(CommandSender sender, String name, Town capitalTown, boolean noCharge) throws TownyException {
 
-		try {
-			if (capitalTown.hasNation())
-				throw new TownyException(Translatable.of("msg_err_already_nation"));
-			
-			if (TownySettings.getTownAutomaticCapitalisationEnabled())
-				name = StringMgmt.capitalizeStrings(name);
+		if (capitalTown.hasNation())
+			throw new TownyException(Translatable.of("msg_err_already_nation"));
 
-			// Check the name is valid and doesn't already exist.
-			String filteredName;
-			try {
-				filteredName = NameValidation.checkAndFilterName(name);
-			} catch (InvalidNameException e) {
-				filteredName = null;
-			}
+		final String filteredName = validateNationNameOrThrow(name);
 
-			if (filteredName == null || TownyUniverse.getInstance().hasNation(filteredName) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(filteredName)))
-				throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+		BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
 
-			BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
-
-			// If it isn't free to make a nation, send a confirmation.
-			if (!noCharge && TownyEconomyHandler.isActive()) {
-				// Test if they can pay.
-				double cost = TownySettings.getNewNationPrice();
-				if (!capitalTown.getAccount().canPayFromHoldings(cost))
-					throw new TownyException(Translatable.of("msg_no_funds_new_nation2", cost));
-
-				final String finalName = filteredName;
-				Confirmation.runOnAccept(() -> {
-					try {
-						newNation(finalName, capitalTown);
-					} catch (AlreadyRegisteredException | NotRegisteredException e) {
-						TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
-						return;
-					}
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(finalName)));
-
-				})
-					.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown, "New Nation Cost",
-							Translatable.of("msg_no_funds_new_nation2", cost)))
-					.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
-					.sendTo(sender);
-				
-			// Or, it is free, so just make the nation.
-			} else {
-				newNation(filteredName, capitalTown);
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), StringMgmt.remUnderscore(filteredName)));
-			}
-		} catch (TownyException x) {
-			TownyMessaging.sendErrorMsg(sender, x.getMessage(sender));
+		if (noCharge || !TownyEconomyHandler.isActive()) {
+			// It's free so make the nation.
+			Nation nation = newNation(filteredName, capitalTown);
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
+			return;
 		}
+
+		// It isn't free to make a nation, send a confirmation.
+		double cost = TownySettings.getNewNationPrice();
+		// Test if they can pay.
+		if (!capitalTown.getAccount().canPayFromHoldings(cost))
+			throw new TownyException(Translatable.of("msg_no_funds_new_nation2", prettyMoney(cost)));
+
+		Confirmation.runOnAccept(() -> {
+			try {
+				Nation nation = newNation(filteredName, capitalTown);
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
+			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
+			}
+		})
+		.setCost(new ConfirmationTransaction(TownySettings::getNewNationPrice, capitalTown, "New Nation Cost",
+				Translatable.of("msg_no_funds_new_nation2", prettyMoney(cost))))
+		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
+		.sendTo(sender);
+	}
+
+	private static String validateNationNameOrThrow(String name) throws TownyException {
+		if (TownySettings.getTownAutomaticCapitalisationEnabled())
+			name = StringMgmt.capitalizeStrings(name);
+
+		// Check the name is valid and doesn't already exist.
+		String filteredName;
+		try {
+			filteredName = NameValidation.checkAndFilterName(name);
+		} catch (InvalidNameException e) {
+			filteredName = null;
+		}
+
+		if (filteredName == null || TownyUniverse.getInstance().hasNation(filteredName) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(filteredName)))
+			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
+
+		return filteredName;
 	}
 
 	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
@@ -1012,6 +961,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(String.format("Error fetching new nation with name %s; it was not properly registered!", name));
 			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", name));
 		}
+
 		nation.setRegistered(System.currentTimeMillis());
 		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
 		town.setNation(nation);
@@ -1022,8 +972,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.getAccount().setBalance(0, "New Nation Account");
 
 		if (TownySettings.isNationTagSetAutomatically())
-			nation.setTag(name.substring(0, Math.min(name.length(), TownySettings.getMaxTagLength())).replace("_","").replace("-", ""));
-			
+			nation.setTag(NameUtil.getTagFromName(name));
+
 		town.save();
 		nation.save();
 
@@ -1086,24 +1036,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	
 		BukkitTools.ifCancelledThenThrow(new NationPreTownLeaveEvent(nation, town));
 
-		boolean tooManyResidents = false;
-		if (town.isCapital()) {
-			// Check that the capital wont have too many residents after deletion. 
-			tooManyResidents = town.isAllowedThisAmountOfResidents(town.getNumResidents(), false);
-			// Show a message preceding the confirmation message if they will lose residents. 
-			if (tooManyResidents) {
-				int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
-				TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
-			}
+		// Check that the capital wont have too many residents after deletion.
+		final boolean tooManyResidents = town.isCapital() && town.isAllowedThisAmountOfResidents(town.getNumResidents(), false);
+		if (tooManyResidents) {
+			// Show a message preceding the confirmation message if they will lose residents.
+			int maxResidentsPerTown = town.getMaxAllowedNumberOfResidentsWithoutNation();
+			TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
 		}
-		final boolean finalTooManyResidents = tooManyResidents;
+
 		Confirmation.runOnAccept(() -> {
 			BukkitTools.fireEvent(new NationTownLeaveEvent(nation, town));
 			town.removeNation();
 
-			if (finalTooManyResidents)
+			if (tooManyResidents)
 				ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
-			
+
 			plugin.resetCache();
 
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_town_left", StringMgmt.remUnderscore(town.getName())));
@@ -1113,46 +1060,39 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}).sendTo(player);
 	}
 
-	public void nationDelete(Player player, String[] split) {
-
+	public void nationDelete(Player player, String[] split) throws TownyException {
 		// Player is using "/n delete"
 		if (split.length == 0) {
-			try {
-				Resident resident = getResidentOrThrow(player);
-				Town town = getTownFromResidentOrThrow(resident);
-				Nation nation = getNationFromResidentOrThrow(resident);
-				// Check that the capital wont have too many residents after deletion. 
-				boolean tooManyResidents = !town.isAllowedThisAmountOfResidents(town.getNumResidents(), false); 
-				// Show a message preceding the confirmation message if they will lose residents. 
-				if (tooManyResidents) {
-					int maxResidentsPerTown = TownySettings.getMaxResidentsPerTown();
-					TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
-				}
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DELETE.getNode());
 
-				Confirmation.runOnAccept(() -> {
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);
-					if (tooManyResidents)
-						ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
-				})
-				.sendTo(player);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
+			Town town = getTownFromPlayerOrThrow(player);
+			Nation nation = getNationFromTownOrThrow(town);
+			// Check that the capital wont have too many residents after deletion. 
+			boolean tooManyResidents = !town.isAllowedThisAmountOfResidents(town.getNumResidents(), false); 
+			// Show a message preceding the confirmation message if they will lose residents. 
+			if (tooManyResidents) {
+				int maxResidentsPerTown = town.getMaxAllowedNumberOfResidentsWithoutNation();
+				TownyMessaging.sendMsg(player, Translatable.of("msg_deleting_nation_will_result_in_losing_residents", maxResidentsPerTown, town.getNumResidents() - maxResidentsPerTown));
 			}
+
+			Confirmation.runOnAccept(() -> {
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+				TownyUniverse.getInstance().getDataSource().removeNation(nation);
+				if (tooManyResidents)
+					ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
+			})
+			.sendTo(player);
+			return;
+		}
+
 		// Admin is using "/n delete NATIONNAME"
-		} else
-			try {
-				checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode(), Translatable.of("msg_err_admin_only_delete_nation"));
+		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode(), Translatable.of("msg_err_admin_only_delete_nation"));
 
-				Nation nation = getNationOrThrow(split[0]);
-				Confirmation.runOnAccept(() -> {
-					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-					TownyUniverse.getInstance().getDataSource().removeNation(nation);					
-				})
-				.sendTo(player);
-			} catch (TownyException x) {
-				TownyMessaging.sendErrorMsg(player, x.getMessage(player));
-			}
+		Nation nation = getNationOrThrow(split[0]);
+		Confirmation.runOnAccept(() -> {
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+		}).sendTo(player);
 	}
 
 	public void nationKing(Player player, String[] split) {
@@ -1161,15 +1101,58 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.KING_HELP.send(player);
 	}
 
+
+	private void parseNationJoin(Player player, String[] args) throws TownyException {
+		if (args.length < 1)
+			throw new TownyException(Translatable.of("msg_usage", "/nation join [nation]"));
+
+		Town town = getTownFromPlayerOrThrow(player);
+		Nation nation = getNationOrThrow(args[0]);
+
+		// Check if the nation open able to be joined without an invite.
+		if (!nation.isOpen())
+			throw new TownyException(Translatable.of("msg_err_nation_not_open", nation.getFormattedName()));
+
+		// Vet whether the town can join the nation.
+		testNationAddTownOrThrow(town, nation);
+
+		// Actually go through with adding the town.
+		nationAdd(nation, town);
+	}
+
+	private void testNationAddTownOrThrow(Town town, Nation nation) throws TownyException {
+		// Check if town is currently in a nation.
+		if (nation.hasTown(town) || town.hasNation())
+			throw new TownyException(Translatable.of("msg_err_already_in_town", town.getName(), town.getNationOrNull().getName()));
+
+		if (!town.hasEnoughResidentsToJoinANation())
+			throw new TownyException(Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
+
+		// Check if the town is sanctioned and not allowed to join.
+		if (nation.hasSanctionedTown(town))
+			throw new TownyException(Translatable.of("msg_err_cannot_join_nation_sanctioned_town", nation.getName()));
+
+		if (nation.hasReachedMaxTowns())
+			throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
+
+		if (!nation.canAddResidents(town.getNumResidents()))
+			throw new TownyException(Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation()));
+
+		if (TownySettings.getNationProximityToCapital() > 0)
+			ProximityUtil.testTownProximityToNation(town, nation); // Throws TownyException with error message when it fails.
+
+		// Check if the command is not cancelled
+		BukkitTools.ifCancelledThenThrow(new NationPreAddTownEvent(nation, town));
+	}
+
 	/**
-	 * First stage of adding towns to a nation.
+	 * First stage of adding towns to a nation. We go through the player-submitted
+	 * list of Names, vet them for invite or invite-revocation, then either send
+	 * them an invite or revoke their invite when a town name is preceded by "-".
 	 * 
-	 * Tests here are performed to make sure Nation is allowed to add the towns:
-	 * - make sure the nation hasn't already hit the max towns (if that is required in teh config.)
-	 * 
-	 * @param player - Player using the command.
-	 * @param names - Names that will be matched to towns.
-	 * @throws TownyException generic
+	 * @param player Player using the command.
+	 * @param names  Names that will be matched to towns.
+	 * @throws TownyException when no towns were able to be invited.
 	 */
 	public void nationAdd(Player player, String[] names) throws TownyException {
 
@@ -1177,117 +1160,55 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /nation add [names]");
 
 		Nation nation = getNationFromPlayerOrThrow(player);
-		
-		if (nation.hasReachedMaxTowns())
-			throw new TownyException(Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
 
-		// The list of valid invites.
-		List<String> newtownlist = new ArrayList<>();
-		// List of invites to be removed.
-		List<String> removeinvites = new ArrayList<>();
-		for (String townname : new ArrayList<>(Arrays.asList(names))) {
-			if (townname.startsWith("-")) {
-				// Add them to removing, remove the "-"
-				removeinvites.add(townname.substring(1));
-				continue;
-			}
+		// Our list of names to scan through.
+		List<String> nameList = new ArrayList<>(Arrays.asList(names));
 
-			Town town = null;
-			try {
-				town = getTownOrThrow(townname);
-			} catch (NotRegisteredException e) {
-				// The Town doesn't actually exist or was mis-spelled.
-				removeinvites.add(townname);
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_registered_1", townname));
-				continue;
-			}
+		// Revoke invites from towns who have already had invites sent.
+		nameList.stream()
+				.filter(name -> name.startsWith("-") || nation.hasTown(name))
+				.map(name -> name.startsWith("-") ? name.substring(1) : name)
+				.filter(name -> TownyAPI.getInstance().getTown(name) != null)
+				.map(name -> TownyAPI.getInstance().getTown(name))
+				.filter(town -> nation.getSentInvites().stream().anyMatch(invite -> town.equals(invite.getReceiver())))
+				.forEach(town -> nationRevokeInviteTown(player, nation, town));
 
-			if (nation.hasTown(town) || town.hasNation()) {
-				// Town is already part of the nation.
-				removeinvites.add(townname);
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_already_in_town", townname, town.getNationOrNull().getName()));
-				continue;
-			}
+		// Gather a list of Towns able to receive an invite to the nation, sending back
+		// error messages for the towns that cannot, finally dumping them to a list for
+		// the feedback message.
+		List<String> invitedNames = nameList.stream()
+				.filter(name -> !name.startsWith("-"))
+				.filter(name -> TownyAPI.getInstance().getTown(name) != null)
+				.map(name -> TownyAPI.getInstance().getTown(name))
+				.filter(town -> {
+					try {
+						// test that the town can join the nation. 
+						testNationAddTownOrThrow(town, nation);
+						// Send the actual invite to the town being added to the nation.
+						nationInviteTown(player, nation, town);
+					} catch (TownyException e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+						return false;
+					}
+					return true;
+				})
+				.map(town -> town.getName())
+				.collect(Collectors.toList());
 
-			if (nation.hasSanctionedTown(town)) {
-				// Town is sanctioned and cannot join.
-				removeinvites.add(townname);
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_add_sanctioned_town", townname));
-				continue;
-			}
-
-			if (!nation.canAddResidents(town.getNumResidents())) {
-				// Town has too many residents to join the nation
-				removeinvites.add(townname);
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_cannot_join_nation_over_resident_limit", TownySettings.getMaxResidentsPerNation(), townname));
-				continue;
-			}
-
-			// add them to adding.
-			newtownlist.add(townname); 
-		}
-		names = newtownlist.toArray(new String[0]);
-		String[] namestoremove = removeinvites.toArray(new String[0]);
-		if (namestoremove.length >= 1) {
-			nationRevokeInviteTown(player, nation, TownyAPI.getInstance().getTowns(namestoremove));
-		}
-
-		if (names.length >= 1) {
-			nationAdd(player, nation, TownyAPI.getInstance().getTowns(names));
-		}
+		// Send the feedback message.
+		if (!invitedNames.isEmpty())
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_invited_join_nation", player.getName(), String.join(", ", invitedNames)));
 	}
 
-	/**
-	 * Second stage of adding towns to a nation.
-	 * 
-	 * Tests here are performed to make sure the Towns are allowed to join the Nation:
-	 * - make sure the town has no nation.
-	 * - make sure the town has enough residents to join a nation (if it is required in the config.)
-	 * - make sure the town is close enough to the nation capital (if it is required in the config.)
-	 * 
-	 * Lastly, invites are sent and if successful, the third stage is called by the invite handler.
-	 * 
-	 * @param player player sending the request
-	 * @param nation Nation sending the request
-	 * @param invited the Town(s) being invited to the Nation
-	 * @throws TownyException executed when the arraylist (invited) returns empty (no valid town was entered)
-	 */
-	public static void nationAdd(Player player, Nation nation, List<Town> invited) throws TownyException {
-
-		List<String> invitedNames = new ArrayList<>(invited.size());
-		for (Town town : invited) {
-			if (town.hasNation()) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_already_nation"));
-				continue;
-			}	
-
-			if (!town.hasEnoughResidentsToJoinANation()) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_enough_residents_join_nation", town.getName()));
-				continue;
+	private static void nationRevokeInviteTown(CommandSender sender, Nation nation, Town town) {
+		InviteHandler.getActiveInvitesFor(nation, town).forEach(invite -> {
+			try {
+				InviteHandler.declineInvite(invite, true);
+				TownyMessaging.sendMsg(sender, Translatable.of("nation_revoke_invite_successful"));
+			} catch (InvalidObjectException e) {
+				plugin.getLogger().log(Level.WARNING, "unknown exception occurred while revoking invite", e);
 			}
-
-			if (TownySettings.getNationProximityToCapital() > 0) {
-				try {
-					ProximityUtil.testTownProximityToNation(town, nation);
-				} catch (TownyException e) {
-					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-					continue;
-				}
-			}
-
-			// Check if the command is not cancelled
-			BukkitTools.ifCancelledThenThrow(new NationPreAddTownEvent(nation, town));
-
-			nationInviteTown(player, nation, town);
-			invitedNames.add(town.getName());
-		}
-
-		if (invitedNames.size() > 0) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_invited_join_nation", player.getName(), String.join(", ", invitedNames)));
-		} else {
-			// This is executed when the arraylist returns empty (no valid town was entered).
-			throw new TownyException(Translatable.of("msg_invalid_name"));
-		}
+		});
 	}
 
 	/**
@@ -1325,6 +1246,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		if (nation.hasSanctionedTown(town)) {
+			// Nation has sanctioned this town, since inviting them.
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_err_cannot_add_sanctioned_town", town.getName()));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_err_cannot_join_nation_sanctioned_town", nation.getName()));
+			return;
+		}
+
 		if (nation.hasReachedMaxTowns()) {
 			// Nation has hit the max-towns limit.
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_err_nation_over_town_limit", TownySettings.getMaxTownsPerNation()));
@@ -1339,6 +1267,16 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
+		if (TownySettings.getNationProximityToCapital() > 0) {
+			try {
+				ProximityUtil.testTownProximityToNation(town, nation);
+			} catch (TownyException e) {
+				TownyMessaging.sendPrefixedNationMessage(nation, e.getMessage());
+				TownyMessaging.sendPrefixedTownMessage(town, e.getMessage());
+				return;
+			}
+		}
+
 		try {
 			town.setNation(nation);
 		} catch (AlreadyRegisteredException ignored) {}
@@ -1349,25 +1287,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyAPI.getInstance().getOnlinePlayers(town).forEach(p-> plugin.resetCache(p));
 	}
 
-	private static void nationRevokeInviteTown(CommandSender sender, Nation nation, List<Town> towns) {
-
-		for (Town town : towns) {
-			if (InviteHandler.inviteIsActive(nation, town)) {
-				for (Invite invite : town.getReceivedInvites()) {
-					if (invite.getSender().equals(nation)) {
-						try {
-							InviteHandler.declineInvite(invite, true);
-							TownyMessaging.sendMsg(sender, Translatable.of("nation_revoke_invite_successful"));
-							break;
-						} catch (InvalidObjectException e) {
-							plugin.getLogger().log(Level.WARNING, "unknown exception occurred while revoking invite", e);
-						}
-					}
-				}
-			}
-		}
-	}
-	
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws TownyException {
 
 		TownJoinNationInvite invite = new TownJoinNationInvite(player, town, nation);
