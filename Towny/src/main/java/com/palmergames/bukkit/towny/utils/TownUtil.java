@@ -96,9 +96,14 @@ public class TownUtil {
 
 	public static boolean townCanHaveThisAmountOfResidents(Town town, int residentCount, boolean isCapital) {
 		int maxResidents = !isCapital
-				? !town.hasNation() && TownySettings.getMaxNumResidentsWithoutNation() > 0 ? TownySettings.getMaxNumResidentsWithoutNation() : TownySettings.getMaxResidentsPerTown() 
+				? !town.hasNation() ? getMaxAllowedNumberOfResidentsWithoutNation(town) : TownySettings.getMaxResidentsPerTown()
 				: TownySettings.getMaxResidentsPerTownCapitalOverride();
 
 		return maxResidents == 0 || residentCount <= maxResidents;
+	}
+
+	public static int getMaxAllowedNumberOfResidentsWithoutNation(Town town) {
+		int maxResidents = TownySettings.getMaxNumResidentsWithoutNation() > 0 ? TownySettings.getMaxNumResidentsWithoutNation() : TownySettings.getMaxResidentsPerTown();
+		return maxResidents == 0 ? Integer.MAX_VALUE : maxResidents;
 	}
 }
