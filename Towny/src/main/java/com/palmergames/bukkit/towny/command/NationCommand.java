@@ -1196,9 +1196,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				.collect(Collectors.toList());
 
 		// Send the feedback message.
-		if (invitedNames.isEmpty())
-			throw new TownyException(Translatable.of("msg_invalid_name"));
-		else
+		if (!invitedNames.isEmpty())
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_invited_join_nation", player.getName(), String.join(", ", invitedNames)));
 	}
 
