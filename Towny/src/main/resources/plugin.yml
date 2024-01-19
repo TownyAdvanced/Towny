@@ -423,6 +423,7 @@ permissions:
         children:
             towny.command.town.claim.town: true
             towny.command.town.claim.outpost: true
+            towny.command.town.claim.town.multiple: true
             towny.command.town.claim.fill: true
 
     towny.command.town.invite.*:

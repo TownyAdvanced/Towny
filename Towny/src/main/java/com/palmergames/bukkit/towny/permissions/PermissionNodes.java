@@ -177,6 +177,7 @@ public enum PermissionNodes {
 		
 		TOWNY_COMMAND_TOWN_CLAIM("towny.command.town.claim.*"),
 			TOWNY_COMMAND_TOWN_CLAIM_TOWN("towny.command.town.claim.town"),
+				TOWNY_COMMAND_TOWN_CLAIM_TOWN_MULTIPLE("towny.command.town.claim.town.multiple"),
 			TOWNY_COMMAND_TOWN_CLAIM_OUTPOST("towny.command.town.claim.outpost"),
 			TOWNY_COMMAND_TOWN_CLAIM_FILL("towny.command.town.claim.fill"),
 		
