@@ -222,7 +222,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void newNation(String name, @Nullable UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
-			filteredName = NameValidation.checkAndFilterName(name);
+			filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
@@ -598,7 +598,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			String filteredName;
 			try {
-				filteredName = NameValidation.checkAndFilterName(newName);
+				filteredName = NameValidation.checkAndFilterTownNameOrThrow(newName);
 			} catch (InvalidNameException e) {
 				throw new NotRegisteredException(e.getMessage());
 			}
@@ -704,7 +704,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			String filteredName;
 
 			try {
-				filteredName = NameValidation.checkAndFilterName(newName);
+				filteredName = NameValidation.checkAndFilterNationNameOrThrow(newName);
 			} catch (InvalidNameException e) {
 				throw new NotRegisteredException(e.getMessage());
 			}

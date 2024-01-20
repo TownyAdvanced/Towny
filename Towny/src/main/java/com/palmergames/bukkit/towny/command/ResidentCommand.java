@@ -573,7 +573,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else if ("none".equalsIgnoreCase(about) || "clear".equalsIgnoreCase(about)) {
 			about = "";
 		} else {
-			if (!NameValidation.isValidString(about)) {
+			if (!NameValidation.isValidBoardString(about)) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_string_about_not_set"));
 				return;
 			}

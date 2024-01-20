@@ -1113,10 +1113,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (split.length != 3)
 			throw new TownyException("Eg: /townyadmin resident [resident] rename [newname]");
 
-		if (NameValidation.isBlacklistName(split[2]))
-			throw new TownyException(Translatable.of("msg_invalid_name"));
+		String name = NameValidation.checkAndFilterPlayerName(split[2]);
+//		if (NameValidation.isBlacklistName(split[2]))
+//			throw new TownyException(Translatable.of("msg_invalid_name"));
 
-		TownyUniverse.getInstance().getDataSource().renamePlayer(resident, split[2]);
+		TownyUniverse.getInstance().getDataSource().renamePlayer(resident, name);
 	}
 
 	private void residentFriend(CommandSender sender, String[] split, Resident resident) throws TownyException {
@@ -1223,13 +1224,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_RENAME.getNode());
 			if (split.length < 3)
 				throw new TownyException(Translatable.of("msg_err_invalid_input", "/ta town TOWNNAME rename NEWNAME"));
-			String name = String.join("_", StringMgmt.remArgs(split, 2));
-
+			String name = NameValidation.checkAndFilterTownNameOrThrow(String.join("_", StringMgmt.remArgs(split, 2)));
 			BukkitTools.ifCancelledThenThrow(new TownPreRenameEvent(town, name));
-
-			if (NameValidation.isBlacklistName(name) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(name)))
-				throw new TownyException(Translatable.of("msg_invalid_name"));
-
 			townyUniverse.getDataSource().renameTown(town, name);
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_set_name", getSenderFormatted(sender), town.getName()));
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_set_name", getSenderFormatted(sender), town.getName()));
@@ -1677,10 +1673,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "rename":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_RENAME.getNode());
-			String name = String.join("_", StringMgmt.remArgs(split, 2));
+			String name = NameValidation.checkAndFilterNationNameOrThrow(String.join("_", StringMgmt.remArgs(split, 2)));
 			BukkitTools.ifCancelledThenThrow(new NationPreRenameEvent(nation, name));
-			if (NameValidation.isBlacklistName(name) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(name)))
-				throw new TownyException(Translatable.of("msg_invalid_name"));
 			townyUniverse.getDataSource().renameNation(nation, name);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_set_name", getSenderFormatted(sender), nation.getName()));
@@ -2187,13 +2181,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else
 			resident = getResidentOrThrow(split[1]);
 
-		split = StringMgmt.remArgs(split, 2);
-		if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
-			return;
-		}
-
-		String surname = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
 		resident.setSurname(surname + " ");
 		resident.save();
 
@@ -2217,13 +2205,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		} else
 			resident = getResidentOrThrow(split[1]);
 
-		split = StringMgmt.remArgs(split, 2);
-		if (StringMgmt.join(split).length() > TownySettings.getMaxTitleLength()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
-			return;
-		}
-
-		String title = StringMgmt.join(NameValidation.checkAndFilterArray(split));
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
 		resident.setTitle(title + " ");
 		resident.save();
 
