@@ -168,10 +168,9 @@ public class NameValidation {
 	 * @throws InvalidNameException if the title or surname is invalid.
 	 */	
 	public static String checkAndFilterTitlesSurnameOrThrow(String[] words) throws InvalidNameException {
-		for (String word : words)
-			testForConfigBlacklistedNameAndThrow(word);
-
 		String title = StringMgmt.join(NameValidation.filterNameArray(words));
+
+		testForConfigBlacklistedNameAndThrow(title);
 
 		if (title.length() > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(title + " is too long to use as a title or surname.");
@@ -213,9 +212,7 @@ public class NameValidation {
 		try {
 			testForBadSymbolsAndThrow(message);
 
-			String[] words = message.split(" ");
-			for (String word : words)
-				testForConfigBlacklistedNameAndThrow(word);
+			testForConfigBlacklistedNameAndThrow(message);
 		} catch (InvalidNameException e1) {
 			return false;
 		}
@@ -266,12 +263,14 @@ public class NameValidation {
 	/**
 	 * Does this name not pass the config blacklist at plugin.name_blacklist
 	 * 
-	 * @param name String name to check.
+	 * @param line String to check.
 	 * @throws InvalidNameException if the string is blacklisted in the config.
 	 */
-	private static void testForConfigBlacklistedNameAndThrow(String name) throws InvalidNameException {
-		if(!name.isEmpty() && TownySettings.getBlacklistedNames().stream().anyMatch(name::equalsIgnoreCase))
-			throw new InvalidNameException(name + " is not permitted.");
+	private static void testForConfigBlacklistedNameAndThrow(String line) throws InvalidNameException {
+		String[] words = line.split(" ");
+		for (String word : words)
+			if(!word.isEmpty() && TownySettings.getBlacklistedNames().stream().anyMatch(word::equalsIgnoreCase))
+				throw new InvalidNameException(line + " is not permitted.");
 	}
 
 	/**
