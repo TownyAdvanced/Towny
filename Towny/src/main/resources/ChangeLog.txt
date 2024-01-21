@@ -9474,3 +9474,5 @@ v0.92.0.11:
     - A child node of towny.command.town.claim.*.
     - Negate this node to stop towns claiming multiple plots at once, ie: with /t claim auto.
   - Refactor parts of the NationCommand class, cleaning up edge case scenarios when towns might join/create nations when they shouldn't.
+0.100.1.5:
+  - Remove unneeded annotations.

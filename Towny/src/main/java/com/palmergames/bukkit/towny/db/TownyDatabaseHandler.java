@@ -690,7 +690,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.fireEvent(new RenameTownEvent(oldName, town));
 	}
 		
-	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 

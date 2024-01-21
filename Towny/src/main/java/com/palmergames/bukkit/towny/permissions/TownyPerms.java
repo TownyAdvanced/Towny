@@ -127,7 +127,6 @@ public class TownyPerms {
 	 * @param resident - Resident to check if player is valid
 	 * @param player - Player to register permission
 	 */
-	@SuppressWarnings("unchecked")
 	public static void assignPermissions(Resident resident, Player player) {
 
 		if (resident == null) {

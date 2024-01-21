@@ -152,7 +152,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	 * @deprecated Deprecated as of 0.99.0.6, use {@link #setTask(ScheduledTask)} instead. 
 	 */
 	@Deprecated
-	@SuppressWarnings("unused")
 	public void setTaskId(int taskId) {
 		
 	}

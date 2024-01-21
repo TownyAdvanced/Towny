@@ -57,7 +57,6 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		return this.tagged;
 	}
 
-	@SuppressWarnings("unused")
 	public static class Builder<T extends Keyed, F extends AbstractRegistryList<T>> {
 		private final Registry<T> registry;
 		private final Class<T> clazz;

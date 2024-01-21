@@ -44,7 +44,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TownyEntityMonitorListener implements Listener {
 
-	@SuppressWarnings("unused")
 	private final Towny plugin;
 
 	public TownyEntityMonitorListener(Towny instance) {

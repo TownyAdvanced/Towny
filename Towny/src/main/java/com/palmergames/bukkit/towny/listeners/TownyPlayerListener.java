@@ -102,7 +102,6 @@ import java.util.Map;
  * @author Shade/ElgarL
  * 
  */
-@SuppressWarnings("deprecation")
 public class TownyPlayerListener implements Listener {
 
 	private final Towny plugin;
@@ -246,7 +245,6 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
-	@SuppressWarnings({"unchecked"})
 	private boolean isEndPortalRespawn(PlayerRespawnEvent event) {
 		try {
 			final Collection<Enum<?>> respawnFlags = (Collection<Enum<?>>) GET_RESPAWN_FLAGS.invoke(event);
