@@ -24,6 +24,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
@@ -328,6 +329,14 @@ public class BukkitTools {
 		return lowercased ? getWorlds().stream().map(world -> world.getName().toLowerCase(Locale.ROOT)).collect(Collectors.toList()) : getWorldNames();
 	}
 
+	@SuppressWarnings("deprecation")
+	public static String potionEffectName(PotionEffectType type) {
+		if (MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_20_3))
+			return type.getName().toLowerCase(Locale.ROOT);
+		else
+			return type.getKey().getKey().toLowerCase(Locale.ROOT);
+	}
+	
 	@SuppressWarnings("deprecation")
 	public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
 		Objective objective;
