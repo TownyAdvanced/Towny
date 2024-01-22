@@ -294,29 +294,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		boolean detrimental = false;
-
-		/*
-		 * List of potion effects blocked from PvP.
-		 */
-		List<String> detrimentalPotions = TownySettings.getPotionTypes();
-		
-		for (PotionEffect effect : event.getPotion().getEffects()) {
-
-			/*
-			 * Check to see if any of the potion effects are protected.
-			 * TODO: Make up a wrapper of some kind in order to support older versions while
-			 * using the new methods when possible. 
-			 */
-			@SuppressWarnings("deprecation")
-			String name = effect.getType().getName();
-			if (detrimentalPotions.contains(name)) {
-				detrimental = true;
-				break;
-			}
-		}
-		
-		if (!detrimental)
+		if (!hasDetrimentalEffects(event.getPotion().getEffects()))
 			return;
 		
 		for (LivingEntity defender : event.getAffectedEntities()) {
@@ -935,31 +913,26 @@ public class TownyEntityListener implements Listener {
 	private boolean hasDetrimentalEffects(Collection<PotionEffect> effects) {
 		if (effects.isEmpty())
 			return false;
-		
+
 		/*
 		 * List of potion effects blocked from PvP.
 		 */
 		final List<String> detrimentalPotions = TownySettings.getPotionTypes().stream().map(type -> type.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
 
-		for (final PotionEffect effect : effects) {
-			// TODO: Make up a wrapper of some kind in order to support older versions while
-			// using the new methods when possible.
-			@SuppressWarnings("deprecation")
-			final String name = effect.getType().getName().toLowerCase(Locale.ROOT);
+		return effects.stream()
+			.map(effect -> BukkitTools.potionEffectName(effect.getType()))
+			.anyMatch(name -> {
+				// Check to see if any of the potion effects are protected against.
+				if (detrimentalPotions.contains(name))
+					return true;
 
-			/*
-			 * Check to see if any of the potion effects are protected.
-			 */
-			if (detrimentalPotions.contains(name))
-				return true;
-			
-			// Account for PotionEffect#getType possibly returning the new name post enum removal.
-			final String legacyName = POTION_LEGACY_NAMES.inverse().get(name);
-			if (legacyName != null && detrimentalPotions.contains(legacyName))
-				return true;
-		}
-		
-		return false;
+				// Account for PotionEffect#getType possibly returning the new name post enum removal.
+				final String legacyName = POTION_LEGACY_NAMES.inverse().get(name);
+				if (legacyName != null && detrimentalPotions.contains(legacyName))
+					return true;
+
+				return false;
+			});
 	}
 	
 	@ApiStatus.Internal
