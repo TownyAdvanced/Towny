@@ -387,7 +387,9 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_wilderness_use_set_to", toggle, world.getName()));
 	}
 
-	public void worldSet(CommandSender sender, TownyWorld world, String[] split) {
+	public void worldSet(CommandSender sender, TownyWorld world, String[] split) throws NoPermissionException {
+
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode());
 
 		if (split.length == 0) {
 			HelpMenu.TOWNYWORLD_SET.send(sender);
