@@ -1313,7 +1313,7 @@ towny_prices_title: 'Harga'
 towny_prices_town_nation: '&e[New] &2Kota: &a%s &8| &2Negara: &a%s'
 towny_prices_reclaim: '&e[Reclaim] &2Kota: &a%s'
 towny_prices_upkeep: '&e[Upkeep] &2Kota: &a%s &8| &2Negara: &a%s'
-towny_prices_overclaimed_upkeep: '&e[Overclaimed Upkeep] &2Kota: &a%s'
+towny_prices_overclaimed_upkeep: '&e[Pemeliharaan klaim berlebih] &2Kota: &a%s'
 towny_prices_claiming_townblock: '&e[Claiming] &2BlokKota: &a%s'
 towny_prices_claiming_townblock_increase: ' &8| &2Tingkatkan tiap BlokKota: &a+%s'
 towny_prices_claiming_outposts: '&e[Claiming] &2PosTerdepan: &a%s'
@@ -2010,11 +2010,11 @@ confirmation_you_are_about_to_take_over_a_claim: "You are about to take over a c
 #Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
 msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up your available townblocks for claiming. If you lose a resident you will be at risk of your town being able to have townblocks stolen by other towns."
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
-msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
+msg_warning_your_town_is_overclaimed: "Peringatan: Kota Anda terlalu banyak diklaim. Ketika Anda memiliki terlalu banyak blok kota yang diklaim, maka akan memungkinkan bagi kota lain untuk mengambil alih lahan di kota Anda, pertimbangkan untuk tidak mengklaim beberapa lahan."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[Tersedia ambil alih klaim berlebih]"
 #Message shown when a takeover claim would cut a town into two sections.
-msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
+msg_err_you_cannot_over_claim_would_cut_into_two: "Anda tidak dapat mengambil alih plot ini, karena hal itu akan membagi kota menjadi dua bagian. Anda harus mengambil alih dari arah yang berbeda."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
 msg_err_that_town_is_not_conquered: "%s is already not conquered."
 #Message shown when a town has its conquered status removed by an admin.
@@ -2041,8 +2041,8 @@ msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
 msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
 msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
-msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
-msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "Kota Anda belum cukup lama untuk melakukan klaim berlebih, Anda harus menunggu %s lagi."
+msg_err_your_cannot_overclaim_for_another: "Anda tidak dapat melakukan klaim berlebih lagi untuk %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
 #Message shown when a mayor toggles a plots taxed status.
