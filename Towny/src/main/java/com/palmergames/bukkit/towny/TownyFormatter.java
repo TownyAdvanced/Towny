@@ -518,7 +518,7 @@ public class TownyFormatter {
 				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("status_nation_sanctioned_towns"), sanctionedTowns, nation.getSanctionedTowns().size()))
 					.append(Component.newline())
 					.append(translator.component("status_hover_click_for_more"))),
-				ClickEvent.runCommand("/towny:nation sanctiontown list"));
+				ClickEvent.runCommand("/towny:nation sanctiontown list " + nation.getName()));
 
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(nation);
