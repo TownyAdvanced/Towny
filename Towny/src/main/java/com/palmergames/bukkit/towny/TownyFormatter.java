@@ -508,7 +508,7 @@ public class TownyFormatter {
 						.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:nation enemylist " + nation.getName()));
 		
-		// Sanctioned Towns [3]: Prague, Berlin, Vienna
+		// [Sanctioned Towns] with hover showing Sanctioned Towns [3]: Prague, Berlin, Vienna
 		List<String> sanctionedTowns = getFormattedNames(nation.getSanctionedTowns());
 		if (sanctionedTowns.size() > 10)
 			shortenOverLengthList(sanctionedTowns, 11, translator);
