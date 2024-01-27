@@ -5,9 +5,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.jetbrains.annotations.Nullable;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.notification.TitleNotification;
 
 public class PlayerExitsFromTownBorderEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
@@ -17,6 +21,7 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 	private final WorldCoord from;
 	private final Player player;
 	private final WorldCoord to;
+	private final TitleNotification titleNotification;
 
 	@Override
 	public HandlerList getHandlers() {
@@ -34,10 +39,16 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 		this.from = from;
 		this.pme = pme;
 		this.to = to;
+		this.titleNotification = new TitleNotification(from.getTownOrNull(), to);
 	}
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	@Nullable
+	public Resident getResident() {
+		return TownyAPI.getInstance().getResident(player);
 	}
 
 	public PlayerMoveEvent getPlayerMoveEvent() {
@@ -54,5 +65,14 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 
 	public WorldCoord getTo() {
 		return to;
+	}
+
+	/**
+	 * @return returns the {@link TitleNotification} object which determines what
+	 *         the Title and Subtitle will look like if Towny is using them for
+	 *         notifications.
+	 */
+	public TitleNotification getTitleNotification() {
+		return titleNotification;
 	}
 }
