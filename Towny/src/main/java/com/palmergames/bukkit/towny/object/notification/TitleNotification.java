@@ -96,6 +96,8 @@ public class TitleNotification {
 		if (subtitle.contains("{townname}")) {
 			subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(town.getName()));
 		}
+		setTitleNotification(title);
+		setSubtitleNotification(subtitle);
 	}
 
 	private Object getCapitalSlug(String townName, String nationName) {

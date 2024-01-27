@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.TitleNotificationEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
@@ -24,6 +25,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
+import com.palmergames.bukkit.towny.object.notification.TitleNotification;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -1046,8 +1048,10 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		if (TownySettings.isNotificationUsingTitles() && resident.isSeeingBorderTitles()) {
-			String title = event.getTitleNotification().getTitleNotification();
-			String subtitle = event.getTitleNotification().getSubtitleNotification();
+			TitleNotificationEvent tne = new TitleNotificationEvent(new TitleNotification(town, event.getTo()), event.getPlayer());
+			BukkitTools.fireEvent(tne);
+			String title = tne.getTitleNotification().getTitleNotification();
+			String subtitle = tne.getTitleNotification().getSubtitleNotification();
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle, TownySettings.getNotificationTitlesDurationTicks());
 		}
 	}
@@ -1069,8 +1073,10 @@ public class TownyPlayerListener implements Listener {
 			return;
 
 		if (TownySettings.isNotificationUsingTitles() && resident.isSeeingBorderTitles()) {
-			String title = event.getTitleNotification().getTitleNotification();
-			String subtitle = event.getTitleNotification().getSubtitleNotification();
+			TitleNotificationEvent tne = new TitleNotificationEvent(new TitleNotification(event.getLeftTown(), event.getTo()), event.getPlayer());
+			BukkitTools.fireEvent(tne);
+			String title = tne.getTitleNotification().getTitleNotification();
+			String subtitle = tne.getTitleNotification().getSubtitleNotification();
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle, TownySettings.getNotificationTitlesDurationTicks());
 		}
 
