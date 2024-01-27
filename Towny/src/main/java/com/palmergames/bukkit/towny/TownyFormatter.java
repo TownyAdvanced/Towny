@@ -507,6 +507,18 @@ public class TownyFormatter {
 						.append(Component.newline())
 						.append(translator.component("status_hover_click_for_more"))),
 				ClickEvent.runCommand("/towny:nation enemylist " + nation.getName()));
+		
+		// [Sanctioned Towns] with hover showing Sanctioned Towns [3]: Prague, Berlin, Vienna
+		List<String> sanctionedTowns = getFormattedNames(nation.getSanctionedTowns());
+		if (sanctionedTowns.size() > 10)
+			shortenOverLengthList(sanctionedTowns, 11, translator);
+		
+		if (sanctionedTowns.size() > 0)
+			screen.addComponentOf("sanctionedtowns", colourHoverKey(translator.of("status_nation_sanctioned_towns")),
+				HoverEvent.showText(TownyComponents.miniMessage(getFormattedStrings(translator.of("status_nation_sanctioned_towns"), sanctionedTowns, nation.getSanctionedTowns().size()))
+					.append(Component.newline())
+					.append(translator.component("status_hover_click_for_more"))),
+				ClickEvent.runCommand("/towny:nation sanctiontown list " + nation.getName()));
 
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(nation);
