@@ -1747,6 +1747,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				int x = rs.getInt("x");
 				int z = rs.getInt("z");
 
+				if (!universe.hasTownyWorld(worldName))
+					continue;
+
 				try {
 					townBlock = universe.getTownBlock(new WorldCoord(worldName, x, z));
 				} catch (NotRegisteredException ex) {

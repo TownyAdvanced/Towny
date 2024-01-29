@@ -9485,3 +9485,5 @@ v0.92.0.11:
   - Fix Title/Subtitle notification regression from 0.100.1.7.
   - API: Add TitleNotificationEvent.
     - Used by other plugins to alter what Title and Subtitle is shown by Towny when using_titles is enabled.
+0.100.1.8:
+  - Fix SQL db's trying to load TownBlocks from world which aren't loaded into Towny.
