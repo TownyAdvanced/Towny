@@ -1541,7 +1541,7 @@ public enum ConfigNodes {
 			"plugin.hour_timer.hour_interval",
 			"60m",
 			"",
-			"# The number of minutes in each \"day\".",
+			"# The number of minutes in each \"hour\".",
 			"# Default is 60m."),
 	PLUGIN_NEWHOUR_TIME(
 			"plugin.hour_timer.new_hour_time",
