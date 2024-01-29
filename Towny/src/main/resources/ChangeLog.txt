@@ -9487,3 +9487,6 @@ v0.92.0.11:
     - Used by other plugins to alter what Title and Subtitle is shown by Towny when using_titles is enabled.
 0.100.1.8:
   - Fix SQL db's trying to load TownBlocks from world which aren't loaded into Towny.
+  - API: TownListDisplayedNumResidentsCalculationEvent.
+    - Useful for when you want to artifically alter a town's resident count in the /t list pages.
+    - Closes #7214.
