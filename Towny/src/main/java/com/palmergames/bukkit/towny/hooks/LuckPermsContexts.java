@@ -35,6 +35,7 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 
 	public LuckPermsContexts(@NotNull Towny plugin) {
 		registerContext("towny:resident", resident -> Collections.singleton(String.valueOf(resident.hasTown())), () -> Arrays.asList("true", "false"));
+		registerContext("towny:nation_resident", resident -> Collections.singleton(String.valueOf(resident.hasNation())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:mayor", resident -> Collections.singleton(String.valueOf(resident.isMayor())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:king", resident -> Collections.singleton(String.valueOf(resident.isKing())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:insidetown", resident -> {
