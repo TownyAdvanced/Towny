@@ -9490,3 +9490,4 @@ v0.92.0.11:
   - API: TownListDisplayedNumResidentsCalculationEvent.
     - Useful for when you want to artifically alter a town's resident count in the /t list pages.
     - Closes #7214.
+  - Add nation_resident LuckPerms context, courtesy of Sybsuper with PR #7218. (First-Time Contributor!)
