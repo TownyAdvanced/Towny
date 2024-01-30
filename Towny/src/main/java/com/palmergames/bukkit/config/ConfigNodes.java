@@ -3146,7 +3146,14 @@ public enum ConfigNodes {
 			"27",
 			"",
 			"# The width of the map shown in /towny map and /res toggle map.",
-			"# Minimum 7, maximum 27, only odd numbers are accepted.");
+			"# Minimum 7, maximum 27, only odd numbers are accepted."),
+	ASCII_MAP_SEND_COMMANDS_NAMESPACED("ascii_map_symbols.send_commands_namespaced",
+			"true",
+			"",
+			"# Whether commands send when a player clicks on the map",
+			"# should start with the towny namespace.",
+			"# If this is true: /towny:plot ...",
+			"# If this is false: /plot ...");
 	
 	private final String Root;
 	private final String Default;

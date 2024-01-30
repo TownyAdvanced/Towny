@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.asciimap;
 
+import com.palmergames.bukkit.towny.TownySettings;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -14,7 +15,7 @@ public class WildernessMapEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private String mapSymbol = TownyAsciiMap.wildernessSymbol;
 	private TextComponent hoverText;
-	private String clickCommand = "/towny:townyworld";
+	private String clickCommand = "/" + (TownySettings.sendMapOnClickCommandsNamespaced() ? "towny:" : "") + "townyworld";
 	final private WorldCoord worldCoord;
 	
 	public WildernessMapEvent(WorldCoord worldCoord) {

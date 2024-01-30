@@ -214,9 +214,10 @@ public class TownyAsciiMap {
 						.append(claimedAtComponent)
 						.append(translator.component("towny_map_detailed_information").color(NamedTextColor.DARK_GREEN));
 					
+					String command = "/" + (TownySettings.sendMapOnClickCommandsNamespaced() ? "towny:" : "") + "plot";
 					ClickEvent clickEvent = forSaleComponent.equals(Component.empty()) 
-						? ClickEvent.runCommand("/towny:plot info " + tby + " " + tbx)
-						: ClickEvent.runCommand("/towny:plot claim " + world.getName() + " x" + tby + " z" + tbx);
+						? ClickEvent.runCommand(command + " info " + tby + " " + tbx)
+						: ClickEvent.runCommand(command + " claim " + world.getName() + " x" + tby + " z" + tbx);
 					
 					townyMap[y][x] = townyMap[y][x].hoverEvent(HoverEvent.showText(hoverComponent)).clickEvent(clickEvent);
 				} else {

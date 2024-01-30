@@ -3710,6 +3710,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.ASCII_MAP_WIDTH);
 	}
 
+	public static boolean sendMapOnClickCommandsNamespaced() {
+		return getBoolean(ConfigNodes.ASCII_MAP_SEND_COMMANDS_NAMESPACED);
+	}
+
 	public static void addReloadListener(NamespacedKey key, @NotNull Consumer<CommentedConfiguration> consumer) {
 		if (key == null)
 			throw new IllegalArgumentException("Key cannot be null");
