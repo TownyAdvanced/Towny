@@ -5,14 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.Color;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
-import com.palmergames.bukkit.util.BlockUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 
 public class CellSurface {
@@ -41,11 +42,11 @@ public class CellSurface {
 		// Parse over the Map to generate particles on each successive ring with an
 		// added tick of delay (using the Map's Integer key to determine delay.)
 		toRender.entrySet().forEach(e -> e.getValue().forEach(pos -> 
-				Towny.getPlugin().getScheduler().runAsyncLater(()-> drawClaimingParticleOnTopOfBlock(player, pos.x, pos.z), e.getKey() * PARTICLE_DELAY)));
+				Towny.getPlugin().getScheduler().runLater(player, ()-> drawClaimingParticleOnTopOfBlock(player, pos.x, pos.z), e.getKey() * PARTICLE_DELAY)));
 
 		// Splash the edges of the WorldCoord last with extra height to add definition to the boundaries.
 		long finalDelay = toRender.keySet().size() + 1 * PARTICLE_DELAY;
-		Towny.getPlugin().getScheduler().runAsyncLater(()-> 
+		Towny.getPlugin().getScheduler().runLater(player, ()-> 
 			BorderUtil.getPlotBorder(worldCoord).runBorderedOnSurface(2, 2, DrawSmokeTaskFactory.showToPlayer(player, Color.GREEN)), finalDelay);
 		
 	}
@@ -88,11 +89,13 @@ public class CellSurface {
 	private void drawClaimingParticleOnTopOfBlock(Player player, int x, int z) {
 		if (!player.isOnline())
 			return;
-		player.spawnParticle(Particle.REDSTONE, getParticleLocation(x, z), 5, CLAIMING_PARTICLE);
+		Location loc = getParticleLocation(x, z); // This has to occur sync or we make folia unhappy.
+		Towny.getPlugin().getScheduler().runAsync(() -> player.spawnParticle(Particle.REDSTONE, loc, 5, CLAIMING_PARTICLE));
 	}
 
 	private Location getParticleLocation(int x, int z) {
-		return new Location(worldCoord.getBukkitWorld(), x, BlockUtil.getHighestNonLeafY(worldCoord.getBukkitWorld(), x, z), z).add(0.5, 0.95, 0.5); // centre and raise slightly.
+		World world = worldCoord.getBukkitWorld();
+		return new Location(world, x, world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES), z).add(0.5, 0.95, 0.5); // centre and raise slightly.
 	}
 
 	private int getX(Location playerLoc) {

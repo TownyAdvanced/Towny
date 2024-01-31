@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.util;
 
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -36,7 +37,7 @@ public class DrawUtil {
 					continue;
 				}
 
-				int start = BlockUtil.getHighestNonLeafY(world, x, z);
+				int start = world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES);
 				int end = (start + height) < world.getMaxHeight() ? (start + height - 1) : world.getMaxHeight();
 				for (int y = start; y <= end; y++) {
 					locationConsumer.accept(new Location(world, x, y, z));
