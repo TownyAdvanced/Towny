@@ -3,9 +3,6 @@ package com.palmergames.bukkit.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -20,35 +17,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 public class BlockUtil {
 	
 	public static List<BlockFace> CARDINAL_BLOCKFACES = new ArrayList<>(Arrays.asList(BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST));
-
-	/**
-	 * Return the highest non-leaf/non-air block's Y coordinate given an x, z in a world.
-	 * When searching deeper than 30 blocks below the highest leaf block, this will fall back to the highest y block.
-	 * 
-	 * @param world World to search in.
-	 * @param x Coordinate to use.
-	 * @param z Coordinate to use.
-	 * @return the highest non-leaf and non-air block, hopefully.
-	 */
-	public static int getHighestNonLeafY(World world, int x, int z) {
-		Block block = world.getHighestBlockAt(x, z);
-		if (!ItemLists.LEAVES.contains(block.getType()))
-			return block.getY();
-
-		int start = block.getY() - 1;
-		int end = block.getY() - 30; // How tall can trees be, really.
-		// Search below our leaf block for a non-air, non-leaf block.
-		for (int y = start; y > end; y--)
-			if (aSuitableMaterial(world.getBlockAt(x, y, z).getType()))
-				return y;
-
-		// Fallback to the highest block again.
-		return world.getHighestBlockYAt(x, z);
-	}
-
-	private static boolean aSuitableMaterial(Material mat) {
-		return !mat.equals(Material.AIR) && !ItemLists.LEAVES.contains(mat);
-	}
 
 	/**
 	 * Are the blocks owned by the same resident or same town (if not player-owned.)
