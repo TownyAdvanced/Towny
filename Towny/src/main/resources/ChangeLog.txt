@@ -9493,3 +9493,6 @@ v0.92.0.11:
   - Add nation_resident LuckPerms context, courtesy of Sybsuper with PR #7218. (First-Time Contributor!)
   - Fix claiming particles breaking on Folia servers.
     - Closes #7222.
+0.100.1.9:
+  - Fix using_titles messages when entering towns.
+    - Closes #7227.

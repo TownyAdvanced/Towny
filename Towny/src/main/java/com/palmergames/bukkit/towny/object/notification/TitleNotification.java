@@ -75,9 +75,11 @@ public class TitleNotification {
 		placeholders.put("{nationcapital}", !town.isCapital() ? "" : getCapitalSlug(town.getName(), nation.getName()));
 
 		for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
-			setTitleNotification(title.replace(placeholder.getKey(), placeholder.getValue().toString()));
-			setSubtitleNotification(subtitle.replace(placeholder.getKey(), placeholder.getValue().toString()));
+			title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
+			subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
 		}
+		setTitleNotification(title);
+		setSubtitleNotification(subtitle);
 	}
 
 	private void makeWildernessTitles() {
