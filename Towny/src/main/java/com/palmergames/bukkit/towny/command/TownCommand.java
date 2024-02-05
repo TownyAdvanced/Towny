@@ -920,10 +920,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static void parseTownOutlawAddCommand(CommandSender sender, boolean admin, Town town, Resident resident, Resident target) throws TownyException {
 		// Don't allow a resident to outlaw their own mayor.
-		if (resident.getTown().getMayor().equals(target))
+		if (town.getMayor().equals(target))
 			throw new TownyException(Translatable.of("msg_err_you_cannot_outlaw_your_mayor"));
 
-		if (!resident.isMayor() && TownySettings.getTownUnkickableRanks().stream().anyMatch(target::hasTownRank))
+		if (!resident.isMayor() && town.hasResident(target) && TownySettings.getTownUnkickableRanks().stream().anyMatch(target::hasTownRank))
 			throw new TownyException(Translatable.of("msg_err_you_cannot_outlaw_because_of_rank", target.getName()));
 
 		if (town.hasOutlaw(target))

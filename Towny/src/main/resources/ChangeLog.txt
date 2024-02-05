@@ -9496,3 +9496,5 @@ v0.92.0.11:
 0.100.1.9:
   - Fix using_titles messages when entering towns.
     - Closes #7227.
+0.100.1.10:
+  - Fix unkickable ranks preventing the outlawing of non-town members.
