@@ -406,7 +406,7 @@ public class NameValidation {
 	 * @param name - Town/Nation name {@link String}
 	 * @return result of getNameCheckRegex
 	 * @throws InvalidNameException if the name parsed is blacklisted
-	 * @deprecated 0.100.1.5 use any of the other checkAndFilter methods found in this class.
+	 * @deprecated 0.100.1.10 use any of the other checkAndFilter methods found in this class.
 	 */
 	@Deprecated
 	public static String checkAndFilterName(String name) throws InvalidNameException {
