@@ -55,7 +55,7 @@ public class NameValidation {
 		testForBadSymbolsAndThrow(name);
 
 		if (!isNameAllowedViaRegex(out))
-			throw new InvalidNameException(out + " contains characters which aren't allowed in the Towny regex settings.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_invalid_characters", out));
 
 		return out;
 	}
@@ -79,10 +79,10 @@ public class NameValidation {
 		testForSubcommandAndThrow(out);
 
 		if (out.startsWith(TownySettings.getTownAccountPrefix()))
-			throw new InvalidNameException(out + " begins with letters used in the economy features, you cannot use this name.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
 
 		if (TownyUniverse.getInstance().hasTown(out))
-			throw new InvalidNameException(out + " is a name that is already in use.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
 
 		return out;
 	}
@@ -106,10 +106,10 @@ public class NameValidation {
 		testForSubcommandAndThrow(out);
 
 		if (out.startsWith(TownySettings.getNationAccountPrefix()))
-			throw new InvalidNameException(out + " begins with letters used in the economy features, you cannot use this name.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
 
 		if (TownyUniverse.getInstance().hasNation(out))
-			throw new InvalidNameException(out + " is a name that is already in use.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
 
 		return out;
 	}
@@ -173,7 +173,7 @@ public class NameValidation {
 		testForConfigBlacklistedNameAndThrow(title);
 
 		if (title.length() > TownySettings.getMaxTitleLength())
-			throw new InvalidNameException(title + " is too long to use as a title or surname.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
 
 		testForEmptyAndThrow(title);
 
@@ -246,7 +246,7 @@ public class NameValidation {
 		testForBadSymbolsAndThrow(name);
 
 		if (!isNameAllowedViaRegex(name))
-			throw new InvalidNameException(name + " contains characters which aren't allowed in the Towny regex settings.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_invalid_characters", name));
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class NameValidation {
 	 */
 	private static void testForEmptyAndThrow(String name) throws InvalidNameException {
 		if (name.isEmpty())
-			throw new InvalidNameException(name + " is empty.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_is_empty"));
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class NameValidation {
 		String[] words = line.split(" ");
 		for (String word : words)
 			if(!word.isEmpty() && TownySettings.getBlacklistedNames().stream().anyMatch(word::equalsIgnoreCase))
-				throw new InvalidNameException(line + " is not permitted.");
+				throw new InvalidNameException(Translatable.of("msg_err_name_validation_is_not_permitted"));
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class NameValidation {
 		for (char letter : name.toCharArray())
 			if (letter != '_')
 				return;
-		throw new InvalidNameException(name + " is entirely underscores.");
+		throw new InvalidNameException(Translatable.of("msg_err_name_validation_is_all_underscores", name));
 	}
 
 	/**
@@ -295,7 +295,7 @@ public class NameValidation {
 	 */
 	private static void testForBadSymbolsAndThrow(String message) throws InvalidNameException {
 		if (message.contains("'") || message.contains("`"))
-			throw new InvalidNameException(message + " contains symbols that could be harmful.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_contains_harmful_characters", message));
 	}
 
 	/**
@@ -306,7 +306,7 @@ public class NameValidation {
 	 */
 	private static void testForSubcommandAndThrow(String name) throws InvalidNameException {
 		if (isBannedName(name))
-			throw new InvalidNameException(name + " is used in the command structure, you cannot use this name.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_used_in_command_structure", name));
 	}
 
 	/**
@@ -318,7 +318,7 @@ public class NameValidation {
 	 */
 	private static void testNameLengthAndThrow(String name) throws InvalidNameException {
 		if (name.length() > TownySettings.getMaxNameLength())
-			throw new InvalidNameException(name + " is too long to use as a name.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_too_long", name));
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class NameValidation {
 	 */
 	private static void testForNumbersAndThrow(String name) throws InvalidNameException {
 		if (TownySettings.areNumbersAllowedInNationNames() && numberPattern.matcher(name).find())
-			throw new InvalidNameException(name + " contains numbers which aren't allowed in names.");
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_contains_numbers", name));
 	}
 
 	/**
