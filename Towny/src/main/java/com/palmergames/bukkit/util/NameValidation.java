@@ -235,7 +235,7 @@ public class NameValidation {
 	 * @param name Name to validate.
 	 * @throws InvalidNameException when the name is now allowed.
 	 */
-	private static void testForImproperNameAndThrow(String name) throws InvalidNameException {
+	public static void testForImproperNameAndThrow(String name) throws InvalidNameException {
 
 		testForEmptyAndThrow(name);
 
@@ -270,7 +270,7 @@ public class NameValidation {
 		String[] words = line.split(" ");
 		for (String word : words)
 			if(!word.isEmpty() && TownySettings.getBlacklistedNames().stream().anyMatch(word::equalsIgnoreCase))
-				throw new InvalidNameException(Translatable.of("msg_err_name_validation_is_not_permitted"));
+				throw new InvalidNameException(Translatable.of("msg_err_name_validation_is_not_permitted", word));
 	}
 
 	/**
