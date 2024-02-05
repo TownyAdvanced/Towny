@@ -9498,3 +9498,4 @@ v0.92.0.11:
     - Closes #7227.
 0.100.1.10:
   - Fix unkickable ranks preventing the outlawing of non-town members.
+  - Handle recently deprecated player.getBedSpawnLocation.

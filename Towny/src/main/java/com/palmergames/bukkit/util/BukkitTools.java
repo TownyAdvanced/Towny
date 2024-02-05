@@ -330,23 +330,21 @@ public class BukkitTools {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static String potionEffectName(PotionEffectType type) {
-		if (MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_20_3))
-			return type.getName().toLowerCase(Locale.ROOT);
-		else
-			return type.getKey().getKey().toLowerCase(Locale.ROOT);
+	public static Location getBedOrRespawnLocation(Player player) {
+		return MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_20_3)
+			? player.getBedSpawnLocation() : player.getRespawnLocation();
 	}
-	
+
+	@SuppressWarnings("deprecation")
+	public static String potionEffectName(PotionEffectType type) {
+		return MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_20_3)
+			? type.getName().toLowerCase(Locale.ROOT) : type.getKey().getKey().toLowerCase(Locale.ROOT);
+	}
+
 	@SuppressWarnings("deprecation")
 	public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
-		Objective objective;
-		try {
-			objective = board.registerNewObjective(name, Criteria.DUMMY, displayName);
-		} catch (NoClassDefFoundError e) {
-			// TODO: Remove when 1.19.2 is the lowest supported version.
-			objective = board.registerNewObjective(name, "dummy", displayName);
-		}
-		return objective;
+		return MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_19_1)
+			? board.registerNewObjective(name, "dummy", displayName) : board.registerNewObjective(name, Criteria.DUMMY, displayName);
 	}
 
 	/**

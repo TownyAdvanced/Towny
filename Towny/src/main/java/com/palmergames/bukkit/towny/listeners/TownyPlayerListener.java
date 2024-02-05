@@ -216,7 +216,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Towny might be prioritizing bed spawns over town spawns.
 		if (TownySettings.getBedUse()) {
-			Location bed = player.getBedSpawnLocation();
+			Location bed = BukkitTools.getBedOrRespawnLocation(player);
 			if (bed != null)
 				respawn = bed;
 		}
