@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.gui.SelectionGUI.SelectionType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.settingsbuilders.ResidentSettingsBuilder;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
@@ -93,6 +94,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public Resident(String name) {
 		super(name);
 		permissions.loadDefault(this);
+	}
+
+	public ResidentSettingsBuilder changeSettings() {
+		return new ResidentSettingsBuilder(this);
 	}
 
 	@Override

@@ -470,7 +470,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		notifyPerms(player, perm);
 		resident.save();
-
+		resident.changeSettings().addFriend(resident).save();
 	}
 
 	/**

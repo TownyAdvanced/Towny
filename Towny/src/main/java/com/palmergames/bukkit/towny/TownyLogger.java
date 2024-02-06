@@ -188,7 +188,11 @@ public class TownyLogger {
 	}
 
 	public void logSettingChange(TownyObject townyObject, CommandSender sender, String setting, Object value) {
-		LOGGER_DATABASE.info(String.format("Sender %s set % to % in %.", sender.getName(), setting, String.valueOf(value), townyObject.getName()));
+		if (sender == null) {
+			LOGGER_DATABASE.info(String.format("Set % to % in %.", setting, String.valueOf(value), townyObject.getName()));
+		} else {
+			LOGGER_DATABASE.info(String.format("Sender %s set % to % in %.", sender.getName(), setting, String.valueOf(value), townyObject.getName()));
+		}
 	}
 
 	public static TownyLogger getInstance() {
