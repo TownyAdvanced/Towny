@@ -335,9 +335,9 @@ public class BukkitTools {
 			? player.getBedSpawnLocation() : player.getRespawnLocation();
 	}
 
-	@SuppressWarnings({"deprecation", "ConstantValue"})
+	@SuppressWarnings({"deprecation", "RedundantCast", "ConstantValue"})
 	public static String potionEffectName(final @NotNull PotionEffectType type) {
-		return ((Object) type instanceof Keyed keyed ? keyed.getKey().getKey() : type.getName()).toLowerCase(Locale.ROOT);
+		return (type instanceof Keyed ? ((Keyed) type).getKey().getKey() : type.getName()).toLowerCase(Locale.ROOT);
 	}
 
 	@SuppressWarnings("deprecation")
