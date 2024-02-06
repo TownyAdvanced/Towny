@@ -17,7 +17,7 @@ public class TownyServerListener implements Listener {
 	public void onTownyNameUpdaterEnabled(PluginEnableEvent event) {
 		if (event.getPlugin().getName().equalsIgnoreCase("TownyNameUpdater")) {
 			plugin.getLogger().info("Disabling unneeded TownyNameUpdater.jar, you may delete this .jar.");
-			plugin.getPluginLoader().disablePlugin(event.getPlugin());
+			plugin.getServer().getPluginManager().disablePlugin(event.getPlugin());
 		}
 	}
 }
