@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.bukkit.command.CommandSender;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -26,6 +28,7 @@ public class TownyLogger {
 	private static final String TOWNY_DATABASE = "Towny-Database";
 	private static final TownyLogger instance = new TownyLogger();
 	private static final Logger LOGGER_MONEY = LogManager.getLogger("com.palmergames.bukkit.towny.money");
+	private static final Logger LOGGER_DATABASE = LogManager.getLogger("com.palmergames.bukkit.towny.database");
 
 	private TownyLogger() {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
@@ -139,6 +142,7 @@ public class TownyLogger {
 				.withRefs(new AppenderRef[0])
 				.build();
 		townyDatabaseConfig.addAppender(townyDatabaseAppender, Level.ALL, null);
+		config.addLogger("com.palmergames.bukkit.towny.database", townyDatabaseConfig);
 		
 		ctx.updateLoggers();
 	}
@@ -181,6 +185,10 @@ public class TownyLogger {
 		} else {
 			LOGGER_MONEY.info(String.format("%s,%s,%s,%s", reason, a, amount, b));
 		}
+	}
+
+	public void logSettingChange(TownyObject townyObject, CommandSender sender, String setting, Object value) {
+		LOGGER_DATABASE.info(String.format("Sender %s set % to % in %.", sender.getName(), setting, String.valueOf(value), townyObject.getName()));
 	}
 
 	public static TownyLogger getInstance() {
