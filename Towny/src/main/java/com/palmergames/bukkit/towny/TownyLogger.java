@@ -19,10 +19,14 @@ import java.nio.charset.StandardCharsets;
  * @author Articdive
  */
 public class TownyLogger {
+	private static final String TOWNY_MAIN_LOG = "Towny-Main-Log";
+	private static final String TOWNY = "Towny";
+	private static final String TOWNY_MONEY = "Towny-Money";
+	private static final String TOWNY_DEBUG = "Towny-Debug";
+	private static final String TOWNY_DATABASE = "Towny-Database";
 	private static final TownyLogger instance = new TownyLogger();
 	private static final Logger LOGGER_MONEY = LogManager.getLogger("com.palmergames.bukkit.towny.money");
-	
-	@SuppressWarnings("deprecation") // Until Mojang updates their log4j included with minecraft we have to use the deprecated methods.
+
 	private TownyLogger() {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
 		Configuration config = ctx.getConfiguration();
@@ -31,13 +35,13 @@ public class TownyLogger {
 		
 		Appender townyMainAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "towny.log")
-			.withName("Towny-Main-Log")
+			.setName(TOWNY_MAIN_LOG)
 			.withAppend(TownySettings.isAppendingToLog())
-			.withIgnoreExceptions(false)
-			.withBufferedIo(false)
-			.withBufferSize(0)
+			.setIgnoreExceptions(false)
+			.setBufferedIo(false)
+			.setBufferSize(0)
 			.setConfiguration(config)
-			.withLayout(PatternLayout.newBuilder()
+			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
 				.withPattern("%d [%t]: %m%n")
 				.withConfiguration(config)
@@ -45,13 +49,13 @@ public class TownyLogger {
 			.build();
 		Appender townyMoneyAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "money.csv")
-			.withName("Towny-Money")
+			.setName(TOWNY_MONEY)
 			.withAppend(TownySettings.isAppendingToLog())
-			.withIgnoreExceptions(false)
-			.withBufferedIo(false)
-			.withBufferSize(0)
+			.setIgnoreExceptions(false)
+			.setBufferedIo(false)
+			.setBufferSize(0)
 			.setConfiguration(config)
-			.withLayout(PatternLayout.newBuilder()
+			.setLayout(PatternLayout.newBuilder()
 				// The comma after the date is to seperate it in CSV, this is a really nice workaround
 				// And avoids having to use apache-csv to make it work with Log4J
 				.withCharset(StandardCharsets.UTF_8)
@@ -61,13 +65,13 @@ public class TownyLogger {
 			.build();
 		Appender townyDebugAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "debug.log")
-			.withName("Towny-Debug")
+			.setName(TOWNY_DEBUG)
 			.withAppend(TownySettings.isAppendingToLog())
-			.withIgnoreExceptions(false)
-			.withBufferedIo(false)
-			.withBufferSize(0)
+			.setIgnoreExceptions(false)
+			.setBufferedIo(false)
+			.setBufferSize(0)
 			.setConfiguration(config)
-			.withLayout(PatternLayout.newBuilder()
+			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
 				.withPattern("%d [%t]: %m%n")
 				.withConfiguration(config)
@@ -75,13 +79,13 @@ public class TownyLogger {
 			.build();
 		Appender townyDatabaseAppender = FileAppender.newBuilder()
 			.withFileName(logFolderName + File.separator + "database.log")
-			.withName("Towny-Database")
+			.setName(TOWNY_DATABASE)
 			.withAppend(TownySettings.isAppendingToLog())
-			.withIgnoreExceptions(false)
-			.withBufferedIo(false)
-			.withBufferSize(0)
+			.setIgnoreExceptions(false)
+			.setBufferedIo(false)
+			.setBufferSize(0)
 			.setConfiguration(config)
-			.withLayout(PatternLayout.newBuilder()
+			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
 				.withPattern("%d [%t]: %m%n")
 				.withConfiguration(config)
@@ -94,22 +98,46 @@ public class TownyLogger {
 		townyDatabaseAppender.start();
 		
 		// Towny Main
-		LoggerConfig townyMainConfig = LoggerConfig.createLogger(true, Level.ALL, "Towny", null, new AppenderRef[0], null, config, null);
+		LoggerConfig townyMainConfig = LoggerConfig.newBuilder()
+				.withAdditivity(true)
+				.withLevel(Level.ALL)
+				.withLoggerName(TOWNY)
+				.withConfig(config)
+				.withRefs(new AppenderRef[0])
+				.build();
 		townyMainConfig.addAppender(townyMainAppender, Level.ALL, null);
 		config.addLogger(Towny.class.getName(), townyMainConfig);
 		
 		// Debug
-		LoggerConfig townyDebugConfig = LoggerConfig.createLogger(TownySettings.getDebug(), Level.ALL, "Towny-Debug", null, new AppenderRef[0], null, config, null);
+		LoggerConfig townyDebugConfig = LoggerConfig.newBuilder()
+				.withAdditivity(TownySettings.getDebug())
+				.withLevel(Level.ALL)
+				.withLoggerName(TOWNY_DEBUG)
+				.withRefs(new AppenderRef[0])
+				.withConfig(config)
+				.build();
 		townyDebugConfig.addAppender(townyDebugAppender, Level.ALL, null);
 		config.addLogger("com.palmergames.bukkit.towny.debug", townyDebugConfig);
 		
 		// Money
-		LoggerConfig townyMoneyConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Money", null, new AppenderRef[0], null, config, null);
+		LoggerConfig townyMoneyConfig = LoggerConfig.newBuilder()
+				.withAdditivity(false)
+				.withLevel(Level.ALL)
+				.withLoggerName(TOWNY_MONEY)
+				.withConfig(config)
+				.withRefs(new AppenderRef[0])
+				.build();
 		townyMoneyConfig.addAppender(townyMoneyAppender, Level.ALL, null);
 		config.addLogger("com.palmergames.bukkit.towny.money", townyMoneyConfig);
 		
 		// Database
-		LoggerConfig townyDatabaseConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Database", null, new AppenderRef[0], null, config, null);
+		LoggerConfig townyDatabaseConfig = LoggerConfig.newBuilder()
+				.withAdditivity(false)
+				.withLevel(Level.ALL)
+				.withLoggerName(TOWNY_DATABASE)
+				.withConfig(config)
+				.withRefs(new AppenderRef[0])
+				.build();
 		townyDatabaseConfig.addAppender(townyDatabaseAppender, Level.ALL, null);
 		
 		ctx.updateLoggers();
