@@ -11,7 +11,7 @@ description: >
     Resident-Town-Nation hierarchy combined with a grid based
     protection system, many features and an expansive API.
 
-softdepend: [Citizens,Vault,Reserve,TheNewChat,PlaceholderAPI,GroupManager,LuckPerms,CoreProtect]
+softdepend: [Vault, Reserve, TheNewChat, PlaceholderAPI, GroupManager, LuckPerms, CoreProtect]
 
 ############################################################
 # +------------------------------------------------------+ #

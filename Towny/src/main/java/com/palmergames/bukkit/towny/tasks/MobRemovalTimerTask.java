@@ -99,7 +99,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			
 			for (final LivingEntity entity : entities) {
 				// Check if entity is a player or Citizens NPC
-				if (entity instanceof Player || PluginIntegrations.getInstance().checkCitizens(entity))
+				if (entity instanceof Player || PluginIntegrations.getInstance().isNPC(entity))
 					continue;
 
 				// Handles entities Globally.
