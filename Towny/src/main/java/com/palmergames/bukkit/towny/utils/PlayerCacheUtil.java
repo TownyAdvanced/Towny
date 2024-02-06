@@ -190,7 +190,7 @@ public class PlayerCacheUtil {
 		
 		if (resident == null) {
 			// Check if entity is a Citizens NPC
-			if (PluginIntegrations.getInstance().checkCitizens(player))
+			if (PluginIntegrations.getInstance().isNPC(player))
 				return TownBlockStatus.NOT_REGISTERED;
  
 			// Retry getting a resident with the ability to get a fake player resident.

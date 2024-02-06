@@ -59,7 +59,7 @@ public class TownyEntityMonitorListener implements Listener {
 		if (!(event.getEntity() instanceof Player player)
 				|| !TownySettings.isDamageCancellingSpawnWarmup() 
 				|| !TownyTimerHandler.isTeleportWarmupRunning() 
-				|| PluginIntegrations.getInstance().checkCitizens(player))
+				|| PluginIntegrations.getInstance().isNPC(player))
 			return;
 
 		Resident resident = TownyAPI.getInstance().getResident(player);

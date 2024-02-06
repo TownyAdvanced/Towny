@@ -77,7 +77,7 @@ public class BukkitTools {
 		
 		for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
 			String iterPlayerName = iterPlayer.getName();
-			if (PluginIntegrations.getInstance().checkCitizens(iterPlayer)) {
+			if (PluginIntegrations.getInstance().isNPC(iterPlayer)) {
 				continue;
 			}
 			if (name.equalsIgnoreCase(iterPlayerName)) {

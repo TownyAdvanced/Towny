@@ -344,7 +344,7 @@ public class TownyEntityListener implements Listener {
 	}
 
 	private boolean entityIsExempt(LivingEntity livingEntity, CreatureSpawnEvent.SpawnReason spawnReason) {
-		return PluginIntegrations.getInstance().checkCitizens(livingEntity)
+		return PluginIntegrations.getInstance().isNPC(livingEntity)
 			|| entityIsExemptByName(livingEntity)
 			|| MobRemovalTimerTask.isSpawnReasonIgnored(livingEntity, spawnReason);
 	}

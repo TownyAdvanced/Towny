@@ -714,7 +714,7 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		// Let's ignore Citizens NPCs
-		if (PluginIntegrations.getInstance().checkCitizens(event.getPlayer()))
+		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
 		
 		if (plugin.isError()) {
@@ -760,7 +760,7 @@ public class TownyPlayerListener implements Listener {
 		// Let's ignore Citizens NPCs. This must come before the safemode check, as Citizens stores their NPCs
 		// at the world spawn until a player loads a chunk, to which the NPC is then teleported. Towny would
 		// prevent them teleporting, leaving them at spawn even after Safe Mode is cleaned up.
-		if (PluginIntegrations.getInstance().checkCitizens(event.getPlayer()))
+		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
 		
 		if (plugin.isError()) {
