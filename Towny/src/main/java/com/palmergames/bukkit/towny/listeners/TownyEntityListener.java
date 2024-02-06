@@ -928,11 +928,9 @@ public class TownyEntityListener implements Listener {
 
 				// Account for PotionEffect#getType possibly returning the new name post enum removal.
 				final String legacyName = POTION_LEGACY_NAMES.inverse().get(name);
-				if (legacyName != null && detrimentalPotions.contains(legacyName))
-					return true;
 
-				return false;
-			});
+                return legacyName != null && detrimentalPotions.contains(legacyName);
+            });
 	}
 	
 	@ApiStatus.Internal

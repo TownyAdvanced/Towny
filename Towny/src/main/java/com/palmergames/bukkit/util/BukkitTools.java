@@ -335,10 +335,9 @@ public class BukkitTools {
 			? player.getBedSpawnLocation() : player.getRespawnLocation();
 	}
 
-	@SuppressWarnings("deprecation")
-	public static String potionEffectName(PotionEffectType type) {
-		return MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_20_3)
-			? type.getName().toLowerCase(Locale.ROOT) : type.getKey().getKey().toLowerCase(Locale.ROOT);
+	@SuppressWarnings({"deprecation", "RedundantCast", "ConstantValue"})
+	public static String potionEffectName(final @NotNull PotionEffectType type) {
+		return (type instanceof Keyed ? ((Keyed) type).getKey().getKey() : type.getName()).toLowerCase(Locale.ROOT);
 	}
 
 	@SuppressWarnings("deprecation")
