@@ -7,6 +7,8 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.BankAccount;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -244,10 +246,12 @@ public class MoneyUtil {
 	private static void convertLegacyDebtAccounts() {
 		for (Town town : TownyUniverse.getInstance().getTowns()) {
 			final String name = "[DEBT]-" + town.getName();
-			if (TownyEconomyHandler.hasAccount(name)) {
-				town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
+			final Account debtAccount = new BankAccount(name, town);
+			
+			if (TownyEconomyHandler.hasAccount(debtAccount)) {
+				town.setDebtBalance(TownyEconomyHandler.getBalance(debtAccount));
 				town.save();
-				TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
+				TownyEconomyHandler.setBalance(debtAccount, 0);
 			}
 		}
 		Towny.getPlugin().saveResource("debtAccountsConverted.txt", false);

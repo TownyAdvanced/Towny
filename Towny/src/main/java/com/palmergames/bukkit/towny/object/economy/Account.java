@@ -2,18 +2,36 @@ package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
+import com.palmergames.bukkit.towny.object.Identifiable;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.JavaUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 /**
@@ -24,21 +42,23 @@ import java.util.logging.Level;
  * @see BankAccount
  * @see EconomyAccount
  */
-public abstract class Account implements Nameable {
+public abstract class Account implements Nameable, Identifiable {
 	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
 	private final List<AccountObserver> observers = new ArrayList<>();
 	private final EconomyHandler economyHandler;
 	private AccountAuditor auditor;
-	protected CachedBalance cachedBalance = null;
-	public static final TownyServerAccount SERVER_ACCOUNT = TownyEconomyHandler.initializeTownyServerAccount();
+	CachedBalance cachedBalance = new CachedBalance(0);
 	
-	String name;
-	World world;
+	private String name;
+	private UUID uuid;
+	private final Supplier<TownyWorld> worldSupplier;
 	
-	public Account(EconomyHandler economyHandler, String name) {
+	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
+		this.economyHandler = owner;
 		this.name = name;
-		this.economyHandler = economyHandler;
+		this.uuid = uuid;
+		this.worldSupplier = worldSupplier;
 		
 		// ALL account transactions will route auditing data through this
 		// central auditor.
@@ -48,14 +68,23 @@ public abstract class Account implements Nameable {
 			this.cachedBalance = new CachedBalance(getHoldingBalance(false));
 		} catch (Exception e) {
 			Towny.getPlugin().getLogger().log(Level.WARNING, String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name), e);
-			
-			this.cachedBalance = new CachedBalance(0);
 		}
 	}
 	
+	@Deprecated
 	public Account(EconomyHandler economyHandler, String name, World world) {
-		this(economyHandler, name);
-		this.world = world;
+		this.name = name;
+		this.economyHandler = economyHandler;
+		
+		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
+		this.worldSupplier = () -> townyWorld;
+	}
+
+	@Deprecated
+	public Account(EconomyHandler economyHandler, String name) {
+		this.name = name;
+		this.economyHandler = economyHandler;
+		this.worldSupplier = () -> TownyUniverse.getInstance().getTownyWorlds().get(0);
 	}
 	
 	// Template methods
@@ -118,17 +147,17 @@ public abstract class Account implements Nameable {
 	
 	protected synchronized boolean payToServer(double amount, String reason) {
 		// Put it back into the server.
-		boolean success = Account.SERVER_ACCOUNT.addToServer(this, amount, getBukkitWorld());
+		boolean success = TownyServerAccount.addToServer(this, amount, getWorld());
 		if (success)
-			notifyObserversDeposit(Account.SERVER_ACCOUNT, amount, reason);
+			notifyObserversDeposit(TownyServerAccount.ACCOUNT, amount, reason);
 		return success;
 	}
 	
 	protected synchronized boolean payFromServer(double amount, String reason) {
 		// Remove it from the server economy.
-		boolean success = Account.SERVER_ACCOUNT.subtractFromServer(this, amount, getBukkitWorld());
+		boolean success = TownyServerAccount.subtractFromServer(this, amount, getWorld());
 		if (success)
-			notifyObserversWithdraw(Account.SERVER_ACCOUNT, amount, reason);
+			notifyObserversWithdraw(TownyServerAccount.ACCOUNT, amount, reason);
 		return success;
 	}
 
@@ -157,8 +186,14 @@ public abstract class Account implements Nameable {
 	 *
 	 * @return Bukkit world for the object
 	 */
+	@Nullable
 	public World getBukkitWorld() {
-		return BukkitTools.getWorlds().get(0);
+		return getWorld().getBukkitWorld();
+	}
+	
+	@NotNull
+	public TownyWorld getWorld() {
+		return this.worldSupplier.get();
 	}
 
 	/**
@@ -195,7 +230,7 @@ public abstract class Account implements Nameable {
 	 * @return The amount in this account.
 	 */
 	public synchronized double getHoldingBalance(boolean setCache) {
-		double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		double balance = TownyEconomyHandler.getBalance(this);
 		if (setCache)
 			cachedBalance.setBalance(balance);
 		return balance;
@@ -208,7 +243,7 @@ public abstract class Account implements Nameable {
 	 * @return true if there is enough.
 	 */
 	public synchronized boolean canPayFromHoldings(double amount) {
-		return TownyEconomyHandler.hasEnough(getName(), amount, getBukkitWorld());
+		return TownyEconomyHandler.hasEnough(this, amount);
 	}
 
 	/**
@@ -225,11 +260,12 @@ public abstract class Account implements Nameable {
 	 */
 	public void removeAccount() {
 		if (TownySettings.isEcoClosedEconomyEnabled()) {
-			double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+			double balance = TownyEconomyHandler.getBalance(this);
 			if (balance > 0)
-				Account.SERVER_ACCOUNT.addToServer(this, balance, getBukkitWorld());
+				TownyServerAccount.addToServer(this, balance, getWorld());
 		}
-		TownyEconomyHandler.removeAccount(getName());
+		
+		TownyEconomyHandler.removeAccount(this);
 	}
 
 	/**
@@ -248,13 +284,26 @@ public abstract class Account implements Nameable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/**
+	 * @apiNote The returned uuid's version may differ from the object this represents in the case of NPC accounts.
+	 */
+	@Override
+	public @NotNull UUID getUUID() {
+		return this.uuid;
+	}
+	
+	@Override
+	public void setUUID(final @NotNull UUID uuid) {
+		this.uuid = uuid;
+	}
 
 	/**
 	 * Gets the observers of this account.
 	 * 
 	 * @return A list of account observers.
 	 */
-	public List<AccountObserver> getObservers() {
+	public @Unmodifiable List<AccountObserver> getObservers() {
 		return Collections.unmodifiableList(observers);
 	}
 	
@@ -314,8 +363,8 @@ public abstract class Account implements Nameable {
 		private double balance = 0;
 		private long time;
 
-		CachedBalance(double _balance) {
-			balance = _balance;
+		CachedBalance(double balance) {
+			this.balance = balance;
 			time = System.currentTimeMillis();
 		}
 
@@ -363,5 +412,56 @@ public abstract class Account implements Nameable {
 			cachedBalance.updateCache();
 
 		return cachedBalance.getBalance();
+	}
+	
+	private static final MethodHandle GAMEPROFILE_CONSTRUCTOR = JavaUtil.make(() -> {
+		try {
+			return MethodHandles.publicLookup().findConstructor(Class.forName("com.mojang.authlib.GameProfile"), MethodType.methodType(void.class, UUID.class, String.class));
+		} catch (Throwable throwable) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, "Could not find game profile constructor", throwable);
+			return null;
+		}
+	});
+	
+	private static final MethodHandle OFFLINEPLAYER_CONSTRUCTOR = JavaUtil.make(() -> {
+		try {
+			final String cbPackagePath = Bukkit.getServer().getClass().getPackage().getName();
+			Class<?> offlinePlayer = Class.forName(cbPackagePath + ".CraftOfflinePlayer");
+			Constructor<?> constructor = offlinePlayer.getDeclaredConstructor(Class.forName(cbPackagePath + ".CraftServer"), Class.forName("com.mojang.authlib.GameProfile"));
+			constructor.setAccessible(true);
+			
+			return MethodHandles.lookup().unreflectConstructor(constructor);
+		} catch (Throwable throwable) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, "Could not find craft offline player constructor", throwable);
+			return null;
+		}
+	});
+	
+	@ApiStatus.Internal
+	public @NotNull OfflinePlayer asOfflinePlayer() {
+		// This account could belong to an online player
+		if (this instanceof EconomyAccount && this.uuid.version() != 2) {
+			final Player player = Bukkit.getServer().getPlayer(this.uuid);
+			if (player != null)
+				return player;
+		}
+		
+		try {
+			final Object gameProfile = GAMEPROFILE_CONSTRUCTOR.invoke(this.uuid, this.name);
+			
+			return (OfflinePlayer) OFFLINEPLAYER_CONSTRUCTOR.invoke(Bukkit.getServer(), gameProfile);
+		} catch (Throwable throwable) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred when creating offline player for account " + this.getUUID(), throwable);
+			return Bukkit.getServer().getOfflinePlayer(this.uuid); // panic
+		}
+	}
+	
+	@ApiStatus.Internal
+	public static UUID modifyNPCUUID(final UUID uuid) {
+		final int version = TownySettings.getInt(ConfigNodes.ECO_ADVANCED_NPC_UUID_VERSION);
+		if (version < 0 || version > 15)
+			return uuid;
+		
+		return JavaUtil.changeUUIDVersion(uuid, version);
 	}
 }

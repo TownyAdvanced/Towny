@@ -1,28 +1,27 @@
 package com.palmergames.bukkit.towny;
 
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.economy.TownyPreTransactionEvent;
-import com.palmergames.bukkit.towny.object.economy.adapter.ReserveEconomyAdapter;
+import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
-import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
-import com.palmergames.bukkit.towny.object.economy.TownyServerAccountEconomyHandler;
+import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
-import com.palmergames.bukkit.towny.object.economy.adapter.VaultEconomyAdapter;
+import com.palmergames.bukkit.towny.object.economy.provider.EconomyProvider;
+import com.palmergames.bukkit.towny.object.economy.provider.ReserveEconomyProvider;
+import com.palmergames.bukkit.towny.object.economy.provider.VaultEconomyProvider;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
-import net.milkbowl.vault.economy.Economy;
 import net.tnemc.core.Reserve;
 
 import org.bukkit.World;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 
@@ -36,7 +35,7 @@ public class TownyEconomyHandler {
 
 	private static Towny plugin = null;
 	private static EconomyAdapter economy = null;
-	private static EcoType Type = EcoType.NONE;
+	private static EconomyProvider provider = null;
 	private static String version = "";
 	
 	private static final Executor ECONOMY_EXECUTOR = runnable -> {
@@ -52,8 +51,9 @@ public class TownyEconomyHandler {
 		NONE, VAULT, RESERVE
 	}
 	
+	@Deprecated
 	public static String getServerAccount() {
-		return TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
+		return TownyServerAccount.ACCOUNT.getName();
 	}
 
 	/**
@@ -66,27 +66,32 @@ public class TownyEconomyHandler {
 	 */
 	@Nullable
 	public static UUID getTownyObjectUUID(String accountName) {
+		return Optional.ofNullable(getTownyObjectAccount(accountName)).map(Account::getUUID).orElse(null);
+	}
 	
-		if (accountName.equalsIgnoreCase(getServerAccount()))
-			return TownyServerAccount.getUUID();
+	@Nullable
+	public static Account getTownyObjectAccount(String accountName) {
+	
+		if (accountName.equalsIgnoreCase(TownyServerAccount.ACCOUNT.getName()))
+			return TownyServerAccount.ACCOUNT;
 
 		String name;
 		if (accountName.startsWith(TownySettings.getNPCPrefix())) {
 			name = accountName.substring(TownySettings.getNPCPrefix().length());
 			Resident resident = TownyAPI.getInstance().getResident(name);
-			return resident != null ? resident.getUUID() : null;
+			return resident != null ? resident.getAccount() : null;
 		}
 
 		if (accountName.startsWith(TownySettings.getTownAccountPrefix())) {
 			name = accountName.substring(TownySettings.getTownAccountPrefix().length());
 			Town town = TownyAPI.getInstance().getTown(name);
-			return town != null ? town.getUUID() : null;
+			return town != null ? town.getAccount() : null;
 		}
 
 		if (accountName.startsWith(TownySettings.getNationAccountPrefix())) {
 			name = accountName.substring(TownySettings.getNationAccountPrefix().length());
 			Nation nation = TownyAPI.getInstance().getNation(name);
-			return nation != null ? nation.getUUID() : null;
+			return nation != null ? nation.getAccount() : null;
 		}
 
 		return null;
@@ -96,17 +101,11 @@ public class TownyEconomyHandler {
 		TownyEconomyHandler.plugin = plugin;
 	}
 
-	public static TownyServerAccount initializeTownyServerAccount() {
-		TownyServerAccountEconomyHandler economyHandler = new TownyServerAccount();
-		TownyServerAccount account = new TownyServerAccount(economyHandler);
-		return account;
-	}
-
 	/**
 	 * @return the economy type we have detected.
 	 */
 	public static EcoType getType() {
-		return Type;
+		return provider == null ? EcoType.NONE : provider.economyType();
 	}
 
 	/**
@@ -115,7 +114,7 @@ public class TownyEconomyHandler {
 	 * @return true if we found one.
 	 */
 	public static boolean isActive() {
-		return (Type != EcoType.NONE && TownySettings.isUsingEconomy());
+		return (getType() != EcoType.NONE && TownySettings.isUsingEconomy());
 	}
 
 	/**
@@ -126,52 +125,28 @@ public class TownyEconomyHandler {
 	}
 
 	/**
-	 * Internal function to set the version string.
-	 * 
-	 * @param version The version of this eco.
-	 */
-	private static void setVersion(String version) {
-		TownyEconomyHandler.version = version;
-	}
-
-	/**
 	 * Find and configure a suitable economy provider
 	 * 
 	 * @return true if successful.
 	 */
 	public static boolean setupEconomy() {
 
-		Plugin economyProvider;
+		if (plugin.getServer().getPluginManager().isPluginEnabled("Vault"))
+			provider = new VaultEconomyProvider();
+		else if (plugin.getServer().getPluginManager().isPluginEnabled("Reserve"))
+			provider = new ReserveEconomyProvider((Reserve) plugin.getServer().getPluginManager().getPlugin("Reserve"));
+		
+		if (provider != null) {
+			economy = provider.mainAdapter();
 
-		/*
-		 * Attempt to find Vault for Economy handling
-		 */
-		try {
-			RegisteredServiceProvider<Economy> vaultEcoProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-			if (vaultEcoProvider != null) {
-				/*
-				 * Flag as using Vault hooks
-				 */
-				economy = new VaultEconomyAdapter(vaultEcoProvider.getProvider());
-				setVersion(String.format("%s %s", vaultEcoProvider.getProvider().getName(), "via Vault" ));
-				Type = EcoType.VAULT;
+			if (economy != null) {
+				version = economy.name() + " via " + provider.name();
+				
+				if (provider.isLegacy())
+					version += " (Legacy)";
+				
 				return true;
 			}
-		} catch (NoClassDefFoundError ignored) {
-		}
-
-		/*
-		 * Attempt to find Reserve for Economy handling
-		 */
-		economyProvider = plugin.getServer().getPluginManager().getPlugin("Reserve");
-		if(economyProvider != null && ((Reserve)economyProvider).economyProvided()) {
-			/*
-			 * Flat as using Reserve Hooks.
-			 */
-			economy = new ReserveEconomyAdapter(((Reserve) economyProvider).economy());
-			setVersion(String.format("%s %s", ((Reserve) economyProvider).economy().name(), "via Reserve" ));
-			Type = EcoType.RESERVE;
-			return true;
 		}
 
 		/*
@@ -180,48 +155,79 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
+	@Deprecated
+	public static void removeAccount(String accountName) {
+		final Account account = getTownyObjectAccount(accountName);
+		if (account != null)
+			removeAccount(account);
+	}
+
 	/**
 	 * Attempt to delete the economy account.
 	 * 
-	 * @param accountName name of the account to delete
+	 * @param account account to delete
 	 */
-	public static void removeAccount(String accountName) {
-		economy.deleteAccount(accountName);
+	public static void removeAccount(Account account) {
+		economy.deleteAccount(account);
 	}
 
 	/**
 	 * Returns the accounts current balance
 	 * 
-	 * @param accountName name of the economy account
-	 * @param world name of world to check in (for TNE Reserve)   
+	 * @param account The economy account
 	 * @return double containing the total in the account
 	 */
+	public static double getBalance(final @NotNull Account account) {
+		checkNewAccount(account);
+		return economy.getBalance(account);
+	}
+	
+	@Deprecated
 	public static double getBalance(String accountName, World world) {
-		checkNewAccount(accountName);
-		return economy.getBalance(accountName, world);
+		final Account account = getTownyObjectAccount(accountName);
+		
+		return account == null ? 0 : getBalance(account);
+	}
+
+	@Deprecated
+	public static boolean hasEnough(String accountName, double amount, World world) {
+		final Account account = getTownyObjectAccount(accountName);
+		
+		return account != null && hasEnough(account, amount);
 	}
 
 	/**
 	 * Returns true if the account has enough money
 	 * 
-	 * @param accountName name of an economy account
+	 * @param account economy account
 	 * @param amount minimum amount to check against (Double)
-	 * @param world name of the world to check in (for TNE Reserve)   
 	 * @return true if there is enough in the account
 	 */
-	public static boolean hasEnough(String accountName, double amount, World world) {
-		return getBalance(accountName, world) >= amount;
+	public static boolean hasEnough(Account account, double amount) {
+		return getBalance(account) >= amount;
 	}
 	
-	private static boolean runPreChecks(Transaction transaction, String accountName) {
+	private static boolean runPreChecks(Transaction transaction) {
 		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
 		if (BukkitTools.isEventCancelled(preEvent) && transaction.getSendingPlayer() != null) {
 			TownyMessaging.sendErrorMsg(transaction.getSendingPlayer(), preEvent.getCancelMessage());
 			return false;
 		}
 
-		checkNewAccount(accountName);
+		if (transaction.hasReceiverAccount())
+			checkNewAccount(transaction.getReceivingAccount());
+
+		if (transaction.hasSenderAccount())
+			checkNewAccount(transaction.getSendingAccount());
+
 		return true;
+	}
+	
+	@Deprecated
+	public static boolean subtract(String accountName, double amount, World world) {
+		final Account account = getTownyObjectAccount(accountName);
+		
+		return account != null && subtract(account, amount);
 	}
 
 	/**
@@ -229,20 +235,22 @@ public class TownyEconomyHandler {
 	 * 
 	 * @param account the Account losing money.
 	 * @param amount amount of currency to remove from the account
-	 * @param world name of the world in which to check in (TNE Reserve)   
 	 * @return true if successful
 	 */
-	public static boolean subtract(Account account, double amount, World world) {
+	public static boolean subtract(Account account, double amount) {
 
-		if (!runPreChecks(Transaction.subtract(amount).paidBy(account).build(), account.getName())) {
+		if (!runPreChecks(Transaction.subtract(amount).paidBy(account).build())) {
 			return false;
 		}
+
+		return economy.subtract(account, amount);
+	}
+
+	@Deprecated
+	public static boolean add(String accountName, double amount, World world) {
+		final Account account = getTownyObjectAccount(accountName);
 		
-		if (economy.subtract(account.getName(), amount, world)) {
-			return true;
-		}
-		
-		return false;
+		return account != null && add(account, amount);
 	}
 
 	/**
@@ -250,25 +258,27 @@ public class TownyEconomyHandler {
 	 * 
 	 * @param account the Account receiving money.
 	 * @param amount amount of currency to add
-	 * @param world name of world (for TNE Reserve)
 	 * @return true if successful
 	 */
-	public static boolean add(Account account, double amount, World world) {
+	public static boolean add(Account account, double amount) {
 
-		if (!runPreChecks(Transaction.add(amount).paidTo(account).build(), account.getName())) {
+		if (!runPreChecks(Transaction.add(amount).paidTo(account).build())) {
 			return false;
 		}
 
-		if (economy.add(account.getName(), amount, world)) {
-			return true;
-		}
-
-		return false;
+		return economy.add(account, amount);
 	}
 
+	@Deprecated
 	public static boolean setBalance(String accountName, double amount, World world) {
-		checkNewAccount(accountName);
-		return economy.setBalance(accountName, amount, world);
+		final Account account = getTownyObjectAccount(accountName);
+		
+		return account != null && setBalance(account, amount);
+	}
+
+	public static boolean setBalance(Account account, double amount) {
+		checkNewAccount(account);
+		return economy.setBalance(account, amount);
 	}
 
 	/**
@@ -291,18 +301,22 @@ public class TownyEconomyHandler {
 	}
 
 	
-	private static void checkNewAccount(String accountName) {
+	private static void checkNewAccount(Account account) {
 		// Check if the account exists, if not create one.
-		if (!economy.hasAccount(accountName)) {
-//			if (isEssentials()) {
-//				plugin.getLogger().info("Vault told Towny that the " + accountName + " economy account does not exist yet. Requesting a new account.");
-//			}
-			economy.newAccount(accountName);
+		if (!economy.hasAccount(account)) {
+			economy.newAccount(account);
 		}
 	}
 	
+	public static boolean hasAccount(Account account) {
+		return economy.hasAccount(account);
+	}
+	
+	@Deprecated
 	public static boolean hasAccount(String accountName) {
-		return economy.hasAccount(accountName);
+		final Account account = getTownyObjectAccount(accountName);
+		
+		return account != null && hasAccount(account);
 	}
 
 	public static boolean isEssentials() {
@@ -314,5 +328,16 @@ public class TownyEconomyHandler {
 	 */
 	public static Executor economyExecutor() {
 		return ECONOMY_EXECUTOR;
+	}
+	
+	@ApiStatus.Internal
+	public static EconomyProvider getProvider() {
+		return provider;
+	}
+	
+	@ApiStatus.Internal
+	@Nullable
+	public static EconomyAdapter activeAdapter() {
+		return economy;
 	}
 }
