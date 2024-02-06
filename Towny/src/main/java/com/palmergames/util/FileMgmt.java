@@ -234,7 +234,6 @@ public final class FileMgmt {
 		return new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
 	}
 	
-	@SuppressWarnings("SimplifyStreamApiCallChains")
 	public static void tar(File destination, File... sources) throws IOException {
 		try {
 			readLock.lock();
@@ -243,7 +242,7 @@ public final class FileMgmt {
 				for (File sourceFile : sources) {
 					Path source = sourceFile.toPath();
 					try (Stream<Path> files = Files.walk(source)) {
-						for (Path path : files.collect(Collectors.toList())) {
+						for (Path path : files.toList()) {
 							if (Files.isDirectory(path))
 								continue;
 							

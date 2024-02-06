@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.hooks;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -107,6 +106,5 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		return builder.build();
 	}
 	
-	@Desugar
 	private record Calculator(String context, Function<Resident, Iterable<String>> function, Supplier<Iterable<String>> suggestions) {}
 }
