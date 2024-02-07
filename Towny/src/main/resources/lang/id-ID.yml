@@ -772,6 +772,7 @@ town_invite_help_3: 'Seluruh daftar undangan yang dikirim oleh mu'
 town_invite_help_4: 'Seluruh daftar undangan yang kamu terima'
 town_invite_help_5: 'Terima undangan untuk bergabung dengan negara tersebut'
 town_invite_help_6: 'Tolak undangan bergabung dengan negara'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'Mengundang kota ke negara mu'
 nation_invite_help_2: 'Mencabut undangan, yang dikirim ke kota'
 nation_invite_help_3: 'Seluruh daftar undangan mu ke kota-kota'
@@ -2097,3 +2098,4 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
