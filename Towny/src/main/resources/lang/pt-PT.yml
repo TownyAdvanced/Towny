@@ -772,6 +772,7 @@ town_invite_help_3: 'Lista de todos os convites que enviaste'
 town_invite_help_4: 'Lista de todos os convites que recebeste'
 town_invite_help_5: 'Aceitar um convite para entrar numa nação'
 town_invite_help_6: 'Recusar um convite para entrar numa nação'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'Convidar uma cidade para a tua nação'
 nation_invite_help_2: 'Cancelar um convite enviado a uma cidade'
 nation_invite_help_3: 'Lista de todos os convites enviados a cidades'
@@ -2097,3 +2098,4 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
