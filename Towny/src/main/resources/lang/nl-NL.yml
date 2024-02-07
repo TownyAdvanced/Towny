@@ -772,6 +772,7 @@ town_invite_help_3: 'Toon een lijst van al je gestuurde uitnodigingen'
 town_invite_help_4: 'Toont alle uitnodigingen die je hebt ontvangen'
 town_invite_help_5: 'Accepteer een verzoek om lid te worden van een natie'
 town_invite_help_6: 'Weiger een verzoek om lid te worden van een natie'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'Nodig een stad uit voor uw natie'
 nation_invite_help_2: 'Trek een uitnodiging in, die gestuurd was naar een stad.'
 nation_invite_help_3: 'Lijst van alle uitnodigingen die naar steden verstuurd zijn.'
@@ -2097,3 +2098,4 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
