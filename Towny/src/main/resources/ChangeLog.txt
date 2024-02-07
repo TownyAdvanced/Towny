@@ -9503,3 +9503,5 @@ v0.92.0.11:
   - Remove version check from potion effect name method, courtesy of Warrior with PR #7235.
   - Remove explicit citizens dependency, courtesy of Warrior with PR #7236.
   - Replace deprecated plugin loader with manager, courtesy of Warrior with PR #7237.
+  - Fix potential NPE when two towns are merged with no nation.
+    - Closes #7240.

@@ -3714,7 +3714,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// When determining the future-max outposts we have to determine how many towns the potential nation might have,
 			// nations can add bonus outposts to towns and the nation_level can be determined using the amount of towns a nation has.
 			int nationTownsAmount = !remainingTown.hasNation() ? 0 : remainingTown.getNationOrNull().getTowns().size();
-			if (remainingTown.getNationOrNull().hasTown(succumbingTown))
+			if (remainingTown.hasNation() && remainingTown.getNationOrNull().hasTown(succumbingTown))
 				nationTownsAmount--;
 
 			int maxOutposts = TownySettings.getMaxOutposts(remainingTown, newResidentsAmount, nationTownsAmount);
