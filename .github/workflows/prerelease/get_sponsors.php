@@ -13,7 +13,7 @@ $node = $xpath->query( '//h4[@class="mb-3"]')->item( 0);
 $totalSponsors = $node->textContent;
 $res = preg_replace("/[^0-9]/", "", $totalSponsors );
 $totalSponsorCount = intval($res);
-$totalPages = round($totalSponsorCount / 50);
+$totalPages = ceil($totalSponsorCount / 54);
 $publicSponsorCount = 0;
 $testarray = array();
 
