@@ -9505,3 +9505,8 @@ v0.92.0.11:
   - Replace deprecated plugin loader with manager, courtesy of Warrior with PR #7237.
   - Fix potential NPE when two towns are merged with no nation.
     - Closes #7240.
+  - Add /t invite sent removeall command.
+    - Closes #7238.
+  - New Command: /town invite sent removeall
+    - Removes all of the invites which a town has sent.
+    - Requires the towny.command.town.invite.add permission node to use (same node used for removing one by one.)

@@ -678,6 +678,7 @@ public enum HelpMenu {
 				.add("[player]", Translatable.of("town_invite_help_1"))
 				.add("-[player]", Translatable.of("town_invite_help_2"))
 				.add("sent", Translatable.of("town_invite_help_3"))
+				.add("sent removeall", Translatable.of("town_invite_help_7"))
 				.add("received", Translatable.of("town_invite_help_4"))
 				.add("accept [nation]", Translatable.of("town_invite_help_5"))
 				.add("deny [nation]", Translatable.of("town_invite_help_6"));
