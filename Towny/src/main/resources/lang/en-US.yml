@@ -885,6 +885,7 @@ town_invite_help_3: 'Lists all of your sent invites'
 town_invite_help_4: 'Lists all of the invites you''ve received'
 town_invite_help_5: 'Accept a request to join a nation'
 town_invite_help_6: 'Deny a request to join a nation'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'Invite a town to your nation'
 nation_invite_help_2: 'Revoke an invite, that was sent to a town'
 nation_invite_help_3: 'List all of the invites sent to towns'
@@ -2429,3 +2430,5 @@ msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
     
 status_nation_sanctioned_towns: "Sanctioned Towns"
+
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
