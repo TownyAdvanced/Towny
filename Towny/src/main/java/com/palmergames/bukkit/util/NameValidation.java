@@ -52,7 +52,7 @@ public class NameValidation {
 
 		String out = filterName(name);
 
-		testForBadSymbolsAndThrow(name);
+		testForBadSymbols(name);
 
 		if (!isNameAllowedViaRegex(out))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_invalid_characters", out));
@@ -70,13 +70,13 @@ public class NameValidation {
 	public static String checkAndFilterTownNameOrThrow(String name) throws InvalidNameException {
 		String out = filterName(name);
 
-		testNameLengthAndThrow(out);
+		testNameLength(out);
 
-		testForNumbersAndThrow(out);
+		testForNumbers(out);
 
 		testForImproperNameAndThrow(out);
 
-		testForSubcommandAndThrow(out);
+		testForSubcommand(out);
 
 		if (out.startsWith(TownySettings.getTownAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
@@ -97,13 +97,13 @@ public class NameValidation {
 	public static String checkAndFilterNationNameOrThrow(String name) throws InvalidNameException {
 		String out = filterName(name);
 
-		testNameLengthAndThrow(out);
+		testNameLength(out);
 
-		testForNumbersAndThrow(out);
+		testForNumbers(out);
 
 		testForImproperNameAndThrow(out);
 
-		testForSubcommandAndThrow(out);
+		testForSubcommand(out);
 
 		if (out.startsWith(TownySettings.getNationAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
@@ -142,7 +142,7 @@ public class NameValidation {
 	public static String checkAndFilterPlotNameOrThrow(String name) throws InvalidNameException {
 		name = filterName(name);
 
-		testNameLengthAndThrow(name);
+		testNameLength(name);
 
 		testForImproperNameAndThrow(name);
 
@@ -170,12 +170,12 @@ public class NameValidation {
 	public static String checkAndFilterTitlesSurnameOrThrow(String[] words) throws InvalidNameException {
 		String title = StringMgmt.join(NameValidation.filterNameArray(words));
 
-		testForConfigBlacklistedNameAndThrow(title);
+		testForConfigBlacklistedName(title);
 
 		if (title.length() > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
 
-		testForEmptyAndThrow(title);
+		testForEmptyName(title);
 
 		return title;
 	}
@@ -193,9 +193,9 @@ public class NameValidation {
 		if (tag.length() > TownySettings.getMaxTagLength())
 			throw new TownyException(Translatable.of("msg_err_tag_too_long"));
 
-		testForEmptyAndThrow(tag);
+		testForEmptyName(tag);
 
-		testAllUnderscoresAndThrow(tag);
+		testAllUnderscores(tag);
 
 		testForImproperNameAndThrow(tag);
 
@@ -210,9 +210,9 @@ public class NameValidation {
 	 */
 	public static boolean isValidBoardString(String message) {
 		try {
-			testForBadSymbolsAndThrow(message);
+			testForBadSymbols(message);
 
-			testForConfigBlacklistedNameAndThrow(message);
+			testForConfigBlacklistedName(message);
 		} catch (InvalidNameException e1) {
 			return false;
 		}
@@ -233,17 +233,17 @@ public class NameValidation {
 	 * bad symbols, using characters not in the name regex.
 	 * 
 	 * @param name Name to validate.
-	 * @throws InvalidNameException when the name is now allowed.
+	 * @throws InvalidNameException when the name is not allowed.
 	 */
 	public static void testForImproperNameAndThrow(String name) throws InvalidNameException {
 
-		testForEmptyAndThrow(name);
+		testForEmptyName(name);
 
-		testForConfigBlacklistedNameAndThrow(name);
+		testForConfigBlacklistedName(name);
 
-		testAllUnderscoresAndThrow(name);
+		testAllUnderscores(name);
 
-		testForBadSymbolsAndThrow(name);
+		testForBadSymbols(name);
 
 		if (!isNameAllowedViaRegex(name))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_invalid_characters", name));
@@ -255,7 +255,7 @@ public class NameValidation {
 	 * @param name String to validate.
 	 * @throws InvalidNameException thrown when name is an empty String.
 	 */
-	private static void testForEmptyAndThrow(String name) throws InvalidNameException {
+	private static void testForEmptyName(String name) throws InvalidNameException {
 		if (name.isEmpty())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_is_empty"));
 	}
@@ -266,7 +266,7 @@ public class NameValidation {
 	 * @param line String to check.
 	 * @throws InvalidNameException if the string is blacklisted in the config.
 	 */
-	private static void testForConfigBlacklistedNameAndThrow(String line) throws InvalidNameException {
+	private static void testForConfigBlacklistedName(String line) throws InvalidNameException {
 		String[] words = line.split(" ");
 		for (String word : words)
 			if(!word.isEmpty() && TownySettings.getBlacklistedNames().stream().anyMatch(word::equalsIgnoreCase))
@@ -280,7 +280,7 @@ public class NameValidation {
 	 * @param name String submitted for testing.
 	 * @throws InvalidNameException when the name is entirely underscores.
 	 */
-	private static void testAllUnderscoresAndThrow(String name) throws InvalidNameException {
+	private static void testAllUnderscores(String name) throws InvalidNameException {
 		for (char letter : name.toCharArray())
 			if (letter != '_')
 				return;
@@ -293,7 +293,7 @@ public class NameValidation {
 	 * @param message String to validate.
 	 * @throws InvalidNameException when escape characters are present. 
 	 */
-	private static void testForBadSymbolsAndThrow(String message) throws InvalidNameException {
+	private static void testForBadSymbols(String message) throws InvalidNameException {
 		if (message.contains("'") || message.contains("`"))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_contains_harmful_characters", message));
 	}
@@ -304,7 +304,7 @@ public class NameValidation {
 	 * @param name String to validate.
 	 * @throws InvalidNameException thrown when a name is used as a subcommand.
 	 */
-	private static void testForSubcommandAndThrow(String name) throws InvalidNameException {
+	private static void testForSubcommand(String name) throws InvalidNameException {
 		if (isBannedName(name))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_used_in_command_structure", name));
 	}
@@ -316,7 +316,7 @@ public class NameValidation {
 	 * @param name String to check
 	 * @throws InvalidNameException if the name is too long.
 	 */
-	private static void testNameLengthAndThrow(String name) throws InvalidNameException {
+	private static void testNameLength(String name) throws InvalidNameException {
 		if (name.length() > TownySettings.getMaxNameLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_too_long", name));
 	}
@@ -327,7 +327,7 @@ public class NameValidation {
 	 * @param name String to validate.
 	 * @throws InvalidNameException thrown when numbers aren't allowed and they are present.
 	 */
-	private static void testForNumbersAndThrow(String name) throws InvalidNameException {
+	private static void testForNumbers(String name) throws InvalidNameException {
 		if (TownySettings.areNumbersAllowedInNationNames() && numberPattern.matcher(name).find())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_contains_numbers", name));
 	}
@@ -412,8 +412,8 @@ public class NameValidation {
 	public static String checkAndFilterName(String name) throws InvalidNameException {
 
 		String out = filterName(name);
-		testForEmptyAndThrow(out);
-		testAllUnderscoresAndThrow(out);
+		testForEmptyName(out);
+		testAllUnderscores(out);
 		testForImproperNameAndThrow(out);
 
 		return out;
