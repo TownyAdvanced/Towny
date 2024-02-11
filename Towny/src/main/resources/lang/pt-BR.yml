@@ -179,7 +179,7 @@ nation_toggle_help_3: "Alterna o percentual de imposto, fazendo com que as cidad
 nation_sanction_help_1: "Adiciona uma cidade à lista de cidades sancionadas."
 nation_sanction_help_2: "Remove uma cidade da lista de cidades sancionadas."
 nation_sanction_help_3: "Lista as cidades sancionadas da sua nação."
-nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
+nation_sanction_help_4: "Lista as cidades sancionadas da nação em questão."
 king_help_1: 'Ajuda do Líder da Nação'
 king_help_2: 'Definir alianças.'
 king_help_3: 'Definir inimigos.'
