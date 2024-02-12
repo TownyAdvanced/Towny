@@ -71,10 +71,12 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -826,26 +828,31 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			Resident oldResident = new Resident(oldName);
 			
 			// Search and update all friends lists
-			List<Resident> toSaveResident = new ArrayList<>(universe.getResidents());
-			for (Resident toCheck : toSaveResident){
+			Set<Resident> residentsToSave = new HashSet<>();
+			for (Resident toCheck : new ArrayList<>(universe.getResidents())){
 				if (toCheck.hasFriend(oldResident)) {
 					toCheck.removeFriend(oldResident);
 					toCheck.addFriend(resident);
+					residentsToSave.add(toCheck);
 				}
 			}
-			for (Resident toCheck : toSaveResident)
-				saveResident(toCheck);
-			
-			// Search and update all outlaw lists.
-			List<Town> toSaveTown = new ArrayList<>(universe.getTowns());
-			for (Town toCheckTown : toSaveTown) {
+			residentsToSave.forEach(res -> res.save());
+
+			// Search and update all town outlaw, trustedresidents lists.
+			Set<Town> townsToSave = new HashSet<>();
+			for (Town toCheckTown : new ArrayList<>(universe.getTowns())) {
 				if (toCheckTown.hasOutlaw(oldResident)) {
 					toCheckTown.removeOutlaw(oldResident);
 					toCheckTown.addOutlaw(resident);
+					townsToSave.add(toCheckTown);
+				}
+				if (toCheckTown.hasTrustedResident(oldResident)) {
+					toCheckTown.removeTrustedResident(oldResident);
+					toCheckTown.addTrustedResident(resident);
+					townsToSave.add(toCheckTown);
 				}
 			}
-			for (Town toCheckTown : toSaveTown)
-				saveTown(toCheckTown);	
+			townsToSave.forEach(town -> town.save());
 
 			//delete the old resident and tidy up files
 			deleteResident(oldResident);
