@@ -668,13 +668,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.save();
 			return;
 		}
-		
-		String newName = StringMgmt.join(name, "_");
-		
-		// Test if the plot name contains invalid characters.
-		if (NameValidation.isBlacklistName(newName))
-			throw new TownyException(Translatable.of("msg_invalid_name"));
 
+		String newName = NameValidation.checkAndFilterPlotNameOrThrow(StringMgmt.join(name, "_"));
 		townBlock.setName(newName);
 		townBlock.save();
 		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_name_set_to", townBlock.getName()));
@@ -1236,9 +1231,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (split.length != 2 && !resident.hasPlotGroupName())
 			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
 
-		String plotGroupName = split.length == 2 ? NameValidation.filterName(split[1]) : 
-				resident.hasPlotGroupName() ? resident.getPlotGroupName() : null;
-		plotGroupName = NameValidation.filterCommas(plotGroupName);
+		String plotGroupName = split.length == 2
+				? NameValidation.checkAndFilterPlotGroupNameOrThrow(split[1])
+				: resident.hasPlotGroupName()
+					? resident.getPlotGroupName()
+					: null;
 
 		if (town.hasPlotGroupName(plotGroupName)) {
 			TownBlockType groupType = town.getPlotObjectGroupFromName(plotGroupName).getTownBlockType();

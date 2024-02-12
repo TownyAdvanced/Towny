@@ -2432,3 +2432,25 @@ msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a to
 status_nation_sanctioned_towns: "Sanctioned Towns"
 
 msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
+
+msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+
+msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
+
+msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
+
+msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+
+msg_err_name_validation_name_too_long: "%s is too long to use as a name."
+
+msg_err_name_validation_is_empty: "You cannot supply an empty name."
+
+msg_err_name_validation_is_not_permitted: "%s is not permitted."
+
+msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
+
+msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
+
+msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
+
+msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."

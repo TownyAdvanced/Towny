@@ -41,7 +41,6 @@ import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -868,6 +867,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_specify_nation_name"));
 
 		String nationName = String.join("_", split);
+		if (TownySettings.getTownAutomaticCapitalisationEnabled())
+			nationName = StringMgmt.capitalizeStrings(nationName);
+
 		Town town = getTownForNationCapital(player);
 		boolean noCharge = TownySettings.getNewNationPrice() == 0.0 || !TownyEconomyHandler.isActive();
 		newNation((CommandSender) player, nationName, town, noCharge);
@@ -900,7 +902,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (capitalTown.hasNation())
 			throw new TownyException(Translatable.of("msg_err_already_nation"));
 
-		final String filteredName = validateNationNameOrThrow(name);
+		String filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
 
 		BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
 
@@ -929,24 +931,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				Translatable.of("msg_no_funds_new_nation2", prettyMoney(cost))))
 		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
 		.sendTo(sender);
-	}
-
-	private static String validateNationNameOrThrow(String name) throws TownyException {
-		if (TownySettings.getTownAutomaticCapitalisationEnabled())
-			name = StringMgmt.capitalizeStrings(name);
-
-		// Check the name is valid and doesn't already exist.
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			filteredName = null;
-		}
-
-		if (filteredName == null || TownyUniverse.getInstance().hasNation(filteredName) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(filteredName)))
-			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
-
-		return filteredName;
 	}
 
 	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
@@ -2021,7 +2005,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
 
 			if (!line.equals("none")) {
-				if (!NameValidation.isValidString(line)) {
+				if (!NameValidation.isValidBoardString(line)) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_nationboard_not_set"));
 					return;
 				}
@@ -2048,17 +2032,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		String surname = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
-		if (surname.length() > TownySettings.getMaxTitleLength()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
-			return;
-		}
-		
-		if (NameValidation.isConfigBlacklistedName(surname)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
-			return;
-		}
-		
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
 		resident.setSurname(surname);
 		resident.save();
 
@@ -2087,17 +2061,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		String title = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 2)));
-		if (title.length() > TownySettings.getMaxTitleLength()) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_input_too_long"));
-			return;
-		}
-		
-		if (NameValidation.isConfigBlacklistedName(title)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_invalid_name"));
-			return;
-		}
-		
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
 		resident.setTitle(title);
 		resident.save();
 
@@ -2121,10 +2085,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nation.setTag(" ");
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_reset_nation_tag", name));
 		} else {
-			if (split[1].length() > TownySettings.getMaxTagLength())
-				throw new TownyException(Translatable.of("msg_err_tag_too_long"));
-			
-			nation.setTag(NameValidation.checkAndFilterName(split[1]));
+			String tag = NameValidation.checkAndFilterTagOrThrow(split[1]);
+			nation.setTag(tag);
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_set_nation_tag", name, nation.getTag()));
 			if (admin)
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_nation_tag", name, nation.getTag()));
@@ -2140,10 +2102,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		else {
 			
 			String name = String.join("_", StringMgmt.remFirstArg(split));
-			
-			if (NameValidation.isBlacklistName(name) || TownyUniverse.getInstance().hasNation(name) || (!TownySettings.areNumbersAllowedInNationNames() && NameValidation.containsNumbers(name)))
-				throw new TownyException(Translatable.of("msg_invalid_name"));
-			
+
+			name = NameValidation.checkAndFilterGovernmentNameOrThrow(name, nation);
+
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
 				name = StringMgmt.capitalizeStrings(name);
 			

@@ -49,7 +49,6 @@ import com.palmergames.bukkit.towny.event.town.toggle.TownToggleTaxPercentEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustTownAddEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustTownRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
@@ -1877,7 +1876,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} else if ("none".equalsIgnoreCase(board) || "clear".equalsIgnoreCase(board)) {
 			board = "";
 		} else {
-			if (!NameValidation.isValidString(board)) {
+			if (!NameValidation.isValidBoardString(board)) {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_board_not_set"));
 				return;
 			}
@@ -1900,41 +1899,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /town set title bilbo Jester");
 
 		Resident resident = getResidentOrThrow(split[0]);
-		String title = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 1)));
-		
-		townSetTitle(sender, resident, title, admin);
-	}
-
-	/**
-	 * @param sender The command sender who initiated the command.
-	 * @param resident The resident to set the title for.
-	 * @param title The title to set.
-	 * @param admin Whether to skip the same-town test.
-	 * @throws TownyException If the title wasn't able to be set.
-	 */
-	public static void townSetTitle(@NotNull CommandSender sender, @NotNull Resident resident, @NotNull String title, boolean admin) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE.getNode());
-
 		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
-		
+
 		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
-		
-		title = NameValidation.filterName(title);
-		
-		if (title.length() > TownySettings.getMaxTitleLength())
-			throw new TownyException(Translatable.of("msg_err_input_too_long"));
 
-		if (NameValidation.isConfigBlacklistedName(title))
-			throw new TownyException(Translatable.of("msg_invalid_name"));
-
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
 		resident.setTitle(title);
 		resident.save();
 
 		Translatable message = resident.hasTitle()
 			? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
 			: Translatable.of("msg_clear_title_surname", "Title", resident.getName());
-		
+
 		TownyMessaging.sendPrefixedTownMessage(resident, message);
 
 		if (admin && !sameTown)
@@ -1946,36 +1923,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Give the resident a surname
 		if (split.length == 0)
 			throw new TownyException("Eg: /town set surname bilbo the dwarf ");
-		
-		Resident resident = getResidentOrThrow(split[0]);
-		String surname = StringMgmt.join(NameValidation.checkAndFilterArray(StringMgmt.remArgs(split, 1)));
-		
-		townSetSurname(sender, resident, surname, admin);
-	}
 
-	/**
-	 * @param sender The command sender who initiated the command.
-	 * @param resident The resident to set the surname for.
-	 * @param surname The surname to set.
-	 * @param admin Whether to skip the same-town test.
-	 * @throws TownyException If the surname wasn't able to be set.
-	 */
-	public static void townSetSurname(@NotNull CommandSender sender, @NotNull Resident resident, @NotNull String surname, boolean admin) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode());
-		
+		Resident resident = getResidentOrThrow(split[0]);
 		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
-		
+
 		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
-		
-		surname = NameValidation.filterName(surname);
 
-		if (surname.length() > TownySettings.getMaxTitleLength())
-			throw new TownyException(Translatable.of("msg_err_input_too_long"));
-
-		if (NameValidation.isConfigBlacklistedName(surname))
-			throw new TownyException(Translatable.of("msg_invalid_name"));
-		
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
 		resident.setSurname(surname);
 		resident.save();
 
@@ -1984,7 +1939,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			: Translatable.of("msg_clear_title_surname", "Surname", resident.getName());
 
 		TownyMessaging.sendPrefixedTownMessage(resident, message);
-		
+
 		if (admin && !sameTown)
 			TownyMessaging.sendMsg(sender, message);
 	}
@@ -2170,15 +2125,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Eg: /town set name BillyBobTown");
 
 		String name = String.join("_", split);
-		
-		if (NameValidation.isBlacklistName(name) 
-			|| TownyUniverse.getInstance().hasTown(name)
-			|| (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(name)))
-			throw new TownyException(Translatable.of("msg_invalid_name"));
 
 		if (TownySettings.getTownAutomaticCapitalisationEnabled())
 			name = StringMgmt.capitalizeStrings(name);
-		
+		name = NameValidation.checkAndFilterGovernmentNameOrThrow(name, town);
+
 		if(TownyEconomyHandler.isActive() && TownySettings.getTownRenameCost() > 0) {
 			if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))
 				throw new TownyException(Translatable.of("msg_err_no_money", prettyMoney(TownySettings.getTownRenameCost())));
@@ -2202,10 +2153,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_reset_town_tag", sender.getName()));
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_reset_town_tag", sender.getName()));
 		} else {
-			if (split[0].length() > TownySettings.getMaxTagLength())
-				throw new TownyException(Translatable.of("msg_err_tag_too_long"));
-			
-			town.setTag(NameValidation.checkAndFilterName(split[0]));
+			String tag = NameValidation.checkAndFilterTagOrThrow(split[0]);
+			town.setTag(tag);
 			town.save();
 			if (admin) TownyMessaging.sendMsg(sender, Translatable.of("msg_set_town_tag", sender.getName(), town.getTag()));
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_set_town_tag", sender.getName(), town.getTag()));
@@ -2513,7 +2462,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_cannot_create_new_town_x_seconds_remaining",
 					CooldownTimerTask.getCooldownRemaining(player.getName(), CooldownType.TOWN_DELETE)));
 
-		name = filterNameOrThrow(name);
+		if (TownySettings.getTownAutomaticCapitalisationEnabled())
+			name = StringMgmt.capitalizeStrings(name);
+
+		name = NameValidation.checkAndFilterTownNameOrThrow(name);
 
 		if (resident.hasTown())
 			throw new TownyException(Translatable.of("msg_err_already_res", resident.getName()));
@@ -2648,25 +2600,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.fireEvent(new NewTownEvent(town));
 
 		return town;
-	}
-
-	private static String filterNameOrThrow(String name) throws TownyException {
-		if (TownySettings.getTownAutomaticCapitalisationEnabled())
-			name = StringMgmt.capitalizeStrings(name);
-		
-		// Check the name is valid and doesn't already exist.
-		String filteredName;
-		try {
-			filteredName = NameValidation.checkAndFilterName(name);
-		} catch (InvalidNameException e) {
-			filteredName = null;
-		}
-
-		if (filteredName == null || TownyUniverse.getInstance().hasTown(filteredName) || (!TownySettings.areNumbersAllowedInTownNames() && NameValidation.containsNumbers(filteredName)))
-			throw new TownyException(Translatable.of("msg_err_invalid_name", name));
-		
-		name = filteredName;
-		return name;
 	}
 
 	public static void townRename(CommandSender sender, Town town, String newName) {
