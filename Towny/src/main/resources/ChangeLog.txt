@@ -9510,6 +9510,7 @@ v0.92.0.11:
   - New Command: /town invite sent removeall
     - Removes all of the invites which a town has sent.
     - Requires the towny.command.town.invite.add permission node to use (same node used for removing one by one.)
+0.100.1.12:
   - Cause trusted residents who have changed their names to auto-matically carry their trusted status in a town over, without a server restart required.
     - Closes #7249.
   - Overhaul the NameValidation class.
