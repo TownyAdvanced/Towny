@@ -51,7 +51,7 @@ public class TownyTimerHandler{
 	public static void toggleDebugRepeatingTimer(boolean on) {
 		Towny.getPlugin().getLogger().info("Bread Log: toggling debugRepeatingTimerTask: " + (on ? "on" : "off"));
 		if (on && !isTownyDebugRepeatingTaskRunning()) {
-			townyDebugRepeatingTask = plugin.getScheduler().runRepeating(new DebugRepeatingTimerTask(plugin), 1, TimeTools.convertToTicks(10L));
+			townyDebugRepeatingTask = plugin.getScheduler().runAsyncRepeating(new DebugRepeatingTimerTask(plugin), 1, TimeTools.convertToTicks(10L));
 		} else if (!on && isTownyDebugRepeatingTaskRunning()) {
 			townyDebugRepeatingTask.cancel();
 			townyDebugRepeatingTask = null;
@@ -161,7 +161,7 @@ public class TownyTimerHandler{
 		Towny.getPlugin().getLogger().info("Bread Log:     debug task is null: " + String.valueOf(townyDebugRepeatingTask == null));
 		if (townyDebugRepeatingTask != null)
 			Towny.getPlugin().getLogger().info("Bread Log:     debug task is cancelled: " + String.valueOf(townyDebugRepeatingTask.isCancelled()));
-		Towny.getPlugin().getLogger().info("Bread Log:      isTownyDebugRepeatingTaskRunning: " + String.valueOf(townyDebugRepeatingTask != null && !townyDebugRepeatingTask.isCancelled()));
+		Towny.getPlugin().getLogger().info("Bread Log:     isTownyDebugRepeatingTaskRunning: " + String.valueOf(townyDebugRepeatingTask != null && !townyDebugRepeatingTask.isCancelled()));
 		return townyDebugRepeatingTask != null && !townyDebugRepeatingTask.isCancelled();
 
 	}
