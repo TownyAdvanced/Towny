@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
+import com.palmergames.bukkit.towny.tasks.DebugRepeatingTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
 import com.palmergames.bukkit.towny.tasks.DrawSpawnPointsTask;
 import com.palmergames.bukkit.towny.tasks.HealthRegenTimerTask;
@@ -29,6 +30,7 @@ public class TownyTimerHandler{
 		TownyTimerHandler.plugin = plugin;
 	}
 	
+	private static ScheduledTask townyDebugRepeatingTask = null;
 	private static ScheduledTask townyRepeatingTask = null;
 	private static ScheduledTask hourlyTask = null;
 	private static ScheduledTask shortTask = null;
@@ -44,6 +46,17 @@ public class TownyTimerHandler{
 			toggleHourlyTimer(true);
 
 		plugin.getScheduler().run(new HourlyTimerTask(plugin));
+	}
+
+	public static void toggleDebugRepeatingTimer(boolean on) {
+		Towny.getPlugin().getLogger().info("Bread Log: toggling debugRepeatingTimerTask: " + (on ? "on" : "off"));
+		if (on && !isTownyDebugRepeatingTaskRunning()) {
+			townyDebugRepeatingTask = plugin.getScheduler().runRepeating(new DebugRepeatingTimerTask(plugin), 1, TimeTools.convertToTicks(10L));
+		} else if (!on && isTownyDebugRepeatingTaskRunning()) {
+			townyDebugRepeatingTask.cancel();
+			townyDebugRepeatingTask = null;
+		}
+		Towny.getPlugin().getLogger().info("Bread Log: debugRepeatingTimerTask status: " + String.valueOf(isTownyDebugRepeatingTaskRunning()));
 	}
 
 	public static void toggleTownyRepeatingTimer(boolean on) {
@@ -141,6 +154,16 @@ public class TownyTimerHandler{
 			drawSpawnPointsTask.cancel();
 			drawSpawnPointsTask = null;
 		}
+	}
+
+	public static boolean isTownyDebugRepeatingTaskRunning() {
+
+		Towny.getPlugin().getLogger().info("Bread Log:     debug task is null: " + String.valueOf(townyDebugRepeatingTask == null));
+		if (townyDebugRepeatingTask != null)
+			Towny.getPlugin().getLogger().info("Bread Log:     debug task is cancelled: " + String.valueOf(townyDebugRepeatingTask.isCancelled()));
+		Towny.getPlugin().getLogger().info("Bread Log:      isTownyDebugRepeatingTaskRunning: " + String.valueOf(townyDebugRepeatingTask != null && !townyDebugRepeatingTask.isCancelled()));
+		return townyDebugRepeatingTask != null && !townyDebugRepeatingTask.isCancelled();
+
 	}
 
 	public static boolean isTownyRepeatingTaskRunning() {

@@ -447,6 +447,7 @@ public class Towny extends JavaPlugin {
 	private void cycleTimers() {
 
 		toggleTimersOff();
+		TownyTimerHandler.toggleDebugRepeatingTimer(true);
 		TownyTimerHandler.toggleTownyRepeatingTimer(true);
 		TownyTimerHandler.toggleDailyTimer(true);
 		TownyTimerHandler.toggleHourlyTimer(true);
@@ -460,7 +461,7 @@ public class Towny extends JavaPlugin {
 	}
 	
 	private void toggleTimersOff() {
-
+		TownyTimerHandler.toggleDebugRepeatingTimer(false);
 		TownyTimerHandler.toggleTownyRepeatingTimer(false);
 		TownyTimerHandler.toggleDailyTimer(false);
 		TownyTimerHandler.toggleHourlyTimer(false);
