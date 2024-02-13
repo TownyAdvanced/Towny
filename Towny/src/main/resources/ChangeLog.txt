@@ -9513,3 +9513,4 @@ v0.92.0.11:
   - Cause trusted residents who have changed their names to auto-matically carry their trusted status in a town over, without a server restart required.
     - Closes #7249.
   - Overhaul the NameValidation class.
+  - Add the towny.command.resident.jail to the nomad section of the townyperms.yml file, so that players without a town can pay bail if they're jailed. 

@@ -28,6 +28,7 @@ nomad:
     - towny.chat.general
     - towny.command.towny.war.hud
     - towny.command.resident.set.about
+    - towny.command.resident.jail
 
 towns:
     default:
