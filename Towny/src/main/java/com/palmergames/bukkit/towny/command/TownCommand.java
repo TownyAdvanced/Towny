@@ -2129,6 +2129,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.getTownAutomaticCapitalisationEnabled())
 			name = StringMgmt.capitalizeStrings(name);
 		name = NameValidation.checkAndFilterGovernmentNameOrThrow(name, town);
+		if (TownyUniverse.getInstance().hasTown(name))
+			throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", name));
 
 		if(TownyEconomyHandler.isActive() && TownySettings.getTownRenameCost() > 0) {
 			if (!town.getAccount().canPayFromHoldings(TownySettings.getTownRenameCost()))
@@ -2466,6 +2468,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			name = StringMgmt.capitalizeStrings(name);
 
 		name = NameValidation.checkAndFilterTownNameOrThrow(name);
+		if (TownyUniverse.getInstance().hasTown(name))
+			throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", name));
 
 		if (resident.hasTown())
 			throw new TownyException(Translatable.of("msg_err_already_res", resident.getName()));

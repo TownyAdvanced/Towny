@@ -9516,3 +9516,5 @@ v0.92.0.11:
   - Overhaul the NameValidation class.
   - Add the towny.command.resident.jail to the nomad section of the townyperms.yml file, so that players without a town can pay bail if they're jailed. 
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.65.0 to 3.72.0.
+0.100.1.13:
+  - Fix NameValidation issues.

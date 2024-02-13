@@ -2,7 +2,6 @@ package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Government;
@@ -81,9 +80,6 @@ public class NameValidation {
 		if (out.startsWith(TownySettings.getTownAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
 
-		if (TownyUniverse.getInstance().hasTown(out))
-			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
-
 		return out;
 	}
 
@@ -107,9 +103,6 @@ public class NameValidation {
 
 		if (out.startsWith(TownySettings.getNationAccountPrefix()))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_begins_with_eco_prefix", out));
-
-		if (TownyUniverse.getInstance().hasNation(out))
-			throw new InvalidNameException(Translatable.of("msg_err_name_validation_name_already_in_use", out));
 
 		return out;
 	}
@@ -328,7 +321,7 @@ public class NameValidation {
 	 * @throws InvalidNameException thrown when numbers aren't allowed and they are present.
 	 */
 	private static void testForNumbers(String name) throws InvalidNameException {
-		if (TownySettings.areNumbersAllowedInNationNames() && numberPattern.matcher(name).find())
+		if (!TownySettings.areNumbersAllowedInNationNames() && numberPattern.matcher(name).find())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_contains_numbers", name));
 	}
 

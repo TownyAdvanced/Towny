@@ -903,6 +903,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_already_nation"));
 
 		String filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
+		if (TownyUniverse.getInstance().hasNation(filteredName))
+			throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", filteredName));
 
 		BukkitTools.ifCancelledThenThrow(new PreNewNationEvent(capitalTown, filteredName));
 
@@ -2104,6 +2106,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			String name = String.join("_", StringMgmt.remFirstArg(split));
 
 			name = NameValidation.checkAndFilterGovernmentNameOrThrow(name, nation);
+			if (TownyUniverse.getInstance().hasNation(name))
+				throw new TownyException(Translatable.of("msg_err_name_validation_name_already_in_use", name));
+
 
 			if (TownySettings.getTownAutomaticCapitalisationEnabled())
 				name = StringMgmt.capitalizeStrings(name);
