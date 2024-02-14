@@ -58,7 +58,7 @@ towny_help_3: "Показати ТОП"
 towny_help_4: "Показати час до початку нового дня"
 towny_help_5: "Показати статистику"
 towny_help_6: "Показати версію Towny"
-towny_top_help_0: "List top residents based on subcommand."
+towny_top_help_0: "Список найбагатших на основі субкоманди."
 towny_top_help_1: "Топ землевласників на основі субкоманди."
 towny_top_help_2: "Список найбагатших на основі субкоманди."
 town_help_1: 'Статус вашого міста'
