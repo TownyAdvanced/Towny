@@ -1517,7 +1517,11 @@ public class TownySettings {
 	public static List<String> getWildExplosionRevertBlockWhitelist() {
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST);
 	}
-	
+
+	public static List<String> getWildExplosionRevertMaterialsToNotOverwrite() {
+		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCKS_TO_NOT_OVERWRITE);
+	}
+
 	public static List<String> getWildExplosionProtectionBlocks() {
 		return getStrArr(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_BLOCK_REVERT_LIST);
 	}

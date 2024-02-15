@@ -308,6 +308,7 @@ public class SQLSchema {
 		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenBlockWhitelist` mediumtext NOT NULL");
+		columns.add("`wildRegenBlocksToNotOverwrite` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
 		columns.add("`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		

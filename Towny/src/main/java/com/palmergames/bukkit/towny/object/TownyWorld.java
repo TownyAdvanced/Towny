@@ -52,6 +52,7 @@ public class TownyWorld extends TownyObject {
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
 	private Set<EntityType> entityExplosionProtection = null;
 	private Set<Material> plotManagementWildRevertBlockWhitelist = null;
+	private Set<Material> wildRevertMaterialsToNotOverwrite = null;
 	
 	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
 	private Set<Material> blockExplosionProtection = null;
@@ -393,6 +394,7 @@ public class TownyWorld extends TownyObject {
 		setUsingPlotManagementWildBlockRevert(TownySettings.isUsingPlotManagementWildBlockRegen());
 		blockExplosionProtection = null;
 		plotManagementWildRevertBlockWhitelist = null;
+		wildRevertMaterialsToNotOverwrite = null;
 		// Entities protected from explosions
 		entityExplosionProtection = null;
 	}
@@ -617,6 +619,24 @@ public class TownyWorld extends TownyObject {
 			return !isPlotManagementIgnoreIds(mat);
 		else
 			return isPlotManagementWildRevertWhitelistedBlock(mat);
+	}
+
+	public void setWildRevertMaterialsToNotOverwrite(List<String> mats) {
+		wildRevertMaterialsToNotOverwrite = new HashSet<>();
+		wildRevertMaterialsToNotOverwrite.addAll(TownySettings.toMaterialSet(mats));
+	}
+
+	public Collection<Material> getWildRevertMaterialsToNotOverwrite() {
+		if (wildRevertMaterialsToNotOverwrite == null)
+			setWildRevertMaterialsToNotOverwrite(TownySettings.getWildExplosionRevertMaterialsToNotOverwrite());
+		return wildRevertMaterialsToNotOverwrite;
+	}
+
+	public boolean isMaterialNotAllowedToBeOverwrittenByWildRevert(Material mat) {
+		if (wildRevertMaterialsToNotOverwrite == null)
+			setWildRevertMaterialsToNotOverwrite(TownySettings.getWildExplosionRevertMaterialsToNotOverwrite());
+
+		return wildRevertMaterialsToNotOverwrite.contains(mat);
 	}
 
 	/**

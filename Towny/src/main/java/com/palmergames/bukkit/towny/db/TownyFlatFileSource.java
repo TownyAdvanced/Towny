@@ -1518,6 +1518,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("wildRegenBlocksToNotOverwrite");
+				if (line != null)
+					try {
+						List<String> mats = new ArrayList<>();
+						for (String s : line.split(","))
+							if (!s.isEmpty())
+								try {
+									mats.add(s.trim());
+								} catch (NumberFormatException ignored) {
+								}
+						world.setWildRevertMaterialsToNotOverwrite(mats);
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("usingPlotManagementWildRegenDelay");
 				if (line != null)
 					try {
@@ -2287,6 +2301,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertBlockWhitelist() != null)
 			list.add("PlotManagementWildRegenBlockWhitelist=" + StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), ","));
+
+		list.add("# The list of blocks to that should not get replaced when an explosion is reverted in the wilderness, ie: a chest placed in a creeper hole that is reverting.");
+		// Wilderness Explosion materials to not overwrite.
+		if (world.getWildRevertMaterialsToNotOverwrite() != null)
+			list.add("wildRegenBlocksToNotOverwrite=" + StringMgmt.join(world.getWildRevertMaterialsToNotOverwrite(), ","));
 
 		list.add("# The delay after which the explosion reverts will begin.");
 		// Using PlotManagement Wild Regen Delay
