@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b!סך הכל (%3$s) בעבור (%2$s) קנה את הח
 msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b.%s-לא עמד בתשלום מיסים וגורש מ s%'
 msg_couldnt_pay_plot_taxes: '&b%s לא עמד בתשלום מיסים ואיבד בעלות על חלקה.'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&b שילם מס לעיר בסכום של '
 msg_payed_plot_cost: '&b(%3$s)חלקות ב (%2$s) עבור (%1$s) שילם'
 msg_payed_resident_tax: '&b שילם מס תושב בסכום של '
