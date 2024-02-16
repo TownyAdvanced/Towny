@@ -163,8 +163,8 @@ nation_list_help_6: "Ver un listado de naciones según el terreno reclamado con 
 nation_list_help_7: "Ver un listado de naciones según los residentes conectados con la página especificada."
 nation_set_help_0: "Cambia el líder de la nación."
 nation_set_help_1: "Cambia la capital de la nación."
-nation_set_help_2: "Set the amount of tax that towns will pay."
-nation_set_help_3: "Set the amount of tax that conquered towns will pay."
+nation_set_help_2: "Establezca la cantidad de impuestos que las ciudades pagarán."
+nation_set_help_3: "Establezca la cantidad de impuestos que las ciudades conquistadas pagarán."
 nation_set_help_4: "Cambia el nombre de la nación."
 nation_set_help_5: "Cambia el título y apellido de un residente."
 nation_set_help_6: "Cambia la etiqueta de la nación."
@@ -172,23 +172,23 @@ nation_set_help_7: "Cambia el tablero de anuncios de la nación."
 nation_set_help_8: "Cambia el punto de spawn de la nación."
 nation_set_help_9: "Cambia el costo de usar /n spawn."
 nation_set_help_10: "Cambia el color en el mapa de plugins de mapeo."
-nation_toggle_help_0: "Toggles peaceful status of the nation."
+nation_toggle_help_0: "Activa el estado pacífico de la nación."
 nation_toggle_help_1: "Cambia el estado público, permitiendo a los extranjeros usar /n spawn."
-nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
-nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
-nation_sanction_help_1: "Adds a town to the SanctionedTown list."
-nation_sanction_help_2: "Removes a town from the SanctionedTown list."
-nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
-nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
+nation_toggle_help_2: "Activar o desactivar la apertura de la nación, permitiendo que ciudades se usan a esta sin invitación."
+nation_toggle_help_3: "Activa el porcentaje de impuestos, haciendo que las ciudades paguen porcentajes en lugar de un valor fijo."
+nation_sanction_help_1: "Agregar una ciudad a la lista de ciudades sancionadas."
+nation_sanction_help_2: "Quita una ciudad de la lista de ciudades sancionadas."
+nation_sanction_help_3: "Ver las ciudades sancionadas por la nación."
+nation_sanction_help_4: "Ver las ciudades sancionadas por la nación dada."
 king_help_1: 'Ayuda para el Líder'
 king_help_2: 'Establece tus alianzas.'
 king_help_3: 'Establece tus enemistades.'
-king_help_4: "Withdraw money from your nation bank."
-king_help_5: "Add or remove towns from your nation."
+king_help_4: "Retirar dinero del banco de tu nación."
+king_help_5: "Agregar o quitar ciudades de tu nación."
 king_help_6: "Use /n set ? para obtener ayuda."
 king_help_7: "Use /n toggle ? para obtener ayuda."
 king_help_8: "Utilizado para absorber a otra nación en la tuya."
-king_help_9: "Used to message everyone in your nation."
+king_help_9: "Usado para mensajear a todos en tu nación."
 res_1: 'Tu estado'
 res_2: '[habitante]'
 res_3: 'Estado del habitante seleccionado'
@@ -196,7 +196,7 @@ res_4: 'Lista de todos los juegadores activos'
 res_5: 'para ayuda'
 res_6: 'Coincidencia en línea'
 res_7: 'Nombre exacto'
-res_8: 'Just a humble farmer'
+res_8: 'Solo un humilde agricultor'
 res_9: "How much tax you will pay per day."
 res_10: "Use /res jail ? para obtener ayuda."
 res_11: "Use /res toggle ? para obtener ayuda."
@@ -293,11 +293,11 @@ townyadmin_town_help_9: "Usar el comando toggle de una ciudad."
 townyadmin_town_help_10: "Editar los metadatos de una ciudad."
 townyadmin_town_help_11: "Merge the 2nd town into the first town."
 townyadmin_town_help_12: "Merge the 2nd town into the first town, ignoring any rules."
-townyadmin_town_help_13: "Put money into the town bank."
-townyadmin_town_help_14: "Take money from the town bank."
-townyadmin_town_help_15: "Open the town's bankhistory book."
-townyadmin_town_help_16: "Alter a town's outlaws."
-townyadmin_town_help_17: "Make the town leave their nation."
+townyadmin_town_help_13: "Poner dinero en el banco de la ciudad."
+townyadmin_town_help_14: "Quitar dinero del banco de la ciudad."
+townyadmin_town_help_15: "Abrir el libro de finanzas de la ciudad."
+townyadmin_town_help_16: "Editar los bandidos de una ciudad."
+townyadmin_town_help_17: "Hacer que la ciudad abandone su nación."
 townyadmin_town_help_18: "Eliminar el estado de conquista de una ciudad."
 townyadmin_town_toggle_help_0: "Activa o desactiva el combate en la ciudad."
 townyadmin_town_toggle_help_1: "Activar o desactiva el combate forzado de la ciudad, evitando que los alcaldes lo desactiven."
@@ -413,7 +413,7 @@ plot_jailcell_help_1: "Quita una celda donde estás parado."
 msg_block_claim: 'Reclama este terreno de la ciudad'
 msg_block_claim_radius: 'Reclama un radio de terrenos alrededor tuyo.'
 msg_plot_nfs: 'Remueve el estado de en venta de un terreno'
-msg_plot_nfs_radius: 'Take down a radius of plots for sale'
+msg_plot_nfs_radius: 'Quita un radio de terrenos de la venta'
 msg_nfs_abr: '&e''fs'' y ''nfs'' son abreviaciones aceptadas para ''forsale'' y ''notforsale''.'
 msg_plot_fs: 'Pon este terreno en venta.'
 msg_plot_fs_radius: 'Pon un radio de terrenos a la venta.'
@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b%s compró el terreno de %s por %s!'
 msg_buy_resident_plot_group: '&b%s compró el grupo de %s por %s!'
 msg_couldnt_pay_taxes: '&b%s no pudo pagar los impuestos y fue expulsado de %s.'
 msg_couldnt_pay_plot_taxes: '&b%s no pudo pagar los impuestos y perdió la propiedad de un terreno.'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&bPagaste los impuestos de la ciudad '
 msg_payed_plot_cost: '&bPagaste %s por %s terrenos en %s'
 msg_payed_resident_tax: '&bPagaste los impuestos de residencia en '
@@ -2058,16 +2060,16 @@ msg_town_buytown_not_forsale: "Specified town is not for sale."
 msg_town_buytown_ruined: "Ruined towns cannot be bought."
 msg_resident_about_reset: "&bResident about reset."
 msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
-msg_set_about: "%s's about was set to %s."
-msg_clear_about: "%s's about was cleared."
+msg_set_about: "La columna sobre de %s se estableció en %s."
+msg_clear_about: "La columna sobre de %s fue limpiada."
 #Message shown when toggling town visibleontoplists setting
-msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
+msg_town_visibleontoplist_setting_set_to: 'Se cambió el ajuste a %2$s respecto a la visiblidad en los tops de %1$s.'
 #Message shown when an admin overrides a town founding date via townyadmin.
-townyadmin_town_set_help_0: "Sets the founding date of a town."
-townyadmin_nation_set_help_0: "Sets the founding date of a nation."
-msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
+townyadmin_town_set_help_0: "Establece la fecha de fundación de una ciudad."
+townyadmin_nation_set_help_0: "Establece la fecha de fundación de una nación."
+msg_town_registered_set: "Se cambió la fecha de fundación de la ciudad '%s' a '%s'."
 msg_nation_registered_set: "Se cambió la fecha de fundación de la nación '%s' a '%s'."
-msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
+msg_err_time_cannot_be_in_the_future: "El tiempo especificado no puede ser en el futuro."
 #The format used for the /t say and /n say commands.
 town_say_format: "%s dice: %s"
 msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
@@ -2078,31 +2080,31 @@ msg_err_resident_is_npc: "No puedes hacerle esto a un residente NPC."
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
 msg_err_resident_doesnt_own_any_land: "El residente no posee ningun terreno personal."
 msg_unnamed: "Sin nombre"
-msg_err_nation_cannot_sanction_own_town: "You cannot sanction a town that is a part of your nation."
-msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
-msg_err_nation_town_already_sanctioned: "Your nation already sanctions that town."
-msg_err_nation_town_sanctioned: "Your nation has now sanctioned %s, they will not be allowed to join your nation."
-msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
-msg_err_nation_has_no_sanctioned_towns: "The nation has no sanctioned towns."
-title_nation_sanctioned_towns: 'Sanctioned Towns'
-msg_err_cannot_add_sanctioned_town: "Your nation cannot add %s, your nation has sanctioned them."
-msg_err_cannot_join_nation_sanctioned_town: "Your town cannot join %s, this nation has sanctioned your town."
-msg_err_no_nation_cannot_do: "You cannot perform this action because no nation was able to be determined."
-msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Your town is sanctioned by %s, you cannot spawn there."
-msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "The following coordinate(s) cannot be claimed because they contain too much of an unwanted biome: %s."
-msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The following coordinate(s) cannot be claimed because they contain too much ocean biome: %s."
-msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome."
-msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
-msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
-msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
-msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
-msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
-status_nation_sanctioned_towns: "Sanctioned Towns"
-msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
-msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
-msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
-msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
-msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+msg_err_nation_cannot_sanction_own_town: "No se puede sancionar a una ciudad que forma parte de tu nación."
+msg_err_nation_town_isnt_sanctioned: "Tu nación no está sancionando a esa ciudad."
+msg_err_nation_town_already_sanctioned: "Tu nación ya está sancionando a esa ciudad."
+msg_err_nation_town_sanctioned: "Tu nación ha sancionado a %s, no se le permitirá unirse a tu nación."
+msg_err_nation_town_unsanctioned: "Tu nación ya no está sancionando a %s."
+msg_err_nation_has_no_sanctioned_towns: "La nación no tiene ciudades sancionadas."
+title_nation_sanctioned_towns: 'Ciudades Sancionadas'
+msg_err_cannot_add_sanctioned_town: "Tu nación no puede añadir %s, tu nación los ha sancionado."
+msg_err_cannot_join_nation_sanctioned_town: "Tu ciudad no puede unirse a %s, esta nación ha sancionado tu ciudad."
+msg_err_no_nation_cannot_do: "No se puede realizar esta acción porque ninguna nación pudo ser determinada."
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Tu ciudad está sancionada por %s, no puedes spawnear allí."
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "Las siguientes coordenadas no se pueden reclamar porque contienen demasiado de un bioma no deseado: %s."
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "Las siguientes coordenadas no se pueden reclamar porque contienen demasiado de un bioma oceanico: %s."
+msg_err_cannot_begin_town_in_this_biome: "No puedes fundar una ciudad en este bioma."
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "No puedes tomar esta ciudad porque tu nación no considera que su nación sea un enemigo."
+msg_err_unable_to_command_outside_of_town: 'No puedes usar ese comando fuera de tu ciudad.'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'No puedes usar ese comando fuera de un terreno de banco.'
+msg_err_you_cannot_outlaw_your_mayor: "No puedes declarar como bandido al alcalde."
+msg_err_you_cannot_outlaw_because_of_rank: "No puedes declarar como bandido a %s por el rol comunal que tiene."
+status_nation_sanctioned_towns: "Ciudades Sancionadas"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "Todas las invitaciones enviadas han sido canceladas."
+msg_err_name_validation_invalid_characters: "%s contiene caracteres que no están permitidos en los ajustes de RegEx de Towny."
+msg_err_name_validation_begins_with_eco_prefix: "%s comienza con letras usadas en las funciones de economía, no puedes usar este nombre."
+msg_err_name_validation_name_already_in_use: "%s ya esta en uso."
+msg_err_name_validation_title_too_long: "%s es muy largo para ser usado como un título o apellido."
 msg_err_name_validation_name_too_long: "%s es muy largo para ser usado como un nombre."
 msg_err_name_validation_is_empty: "No puedes proporcionar un nombre vacío."
 msg_err_name_validation_is_not_permitted: "%s no está permitido."
