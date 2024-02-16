@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 
 /**
@@ -217,8 +218,8 @@ public class TownRuinUtil {
 	 */
     public static void evaluateRuinedTownRemovals() {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
-		List<Town> towns = new ArrayList<>(townyUniverse.getTowns());
-		ListIterator<Town> townItr = towns.listIterator();
+		List<Town> ruinedTowns = new ArrayList<>(townyUniverse.getTowns().stream().filter(Town::isRuined).collect(Collectors.toList()));
+		ListIterator<Town> townItr = ruinedTowns.listIterator();
 		Town town;
 
 		while (townItr.hasNext()) {
@@ -228,15 +229,18 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (town.exists() && town.isRuined()
-					&& town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings
-					.getTownRuinsMaxDurationHours()) {
+			if (town.exists() && hasRuinTimeExpired(town)) {
 				//Ruin found & recently ruined end time reached. Delete town now.
+				TownyMessaging.sendMsg(Translatable.of("msg_ruined_town_being_deleted", town.getName(), TownySettings.getTownRuinsMaxDurationHours()));
 				townyUniverse.getDataSource().removeTown(town, false);
 			}
 		}
-    }
-    
+	}
+
+	private static boolean hasRuinTimeExpired(Town town ) {
+		return town.getRuinedTime() != 0 && getTimeSinceRuining(town) > TownySettings.getTownRuinsMaxDurationHours();
+	}
+
 	public static int getTimeSinceRuining(Town town) {
 		return TimeTools.getHours(System.currentTimeMillis() - town.getRuinedTime());
 	}

@@ -9520,3 +9520,4 @@ v0.92.0.11:
   - Fix NameValidation issues.
 0.100.1.14:
   - Fix missing feedback messages when a resident cannot pay their plot or town taxes.
+  - Add log messages describing why a town was deleted when it was ruined for too long, and when the last resident leaves town.
