@@ -51,7 +51,7 @@ public class TownyTimerHandler{
 	public static void toggleDebugRepeatingTimer(boolean on) {
 		Towny.getPlugin().getLogger().info("Bread Log: toggling debugRepeatingTimerTask: " + (on ? "on" : "off"));
 		if (on && !isTownyDebugRepeatingTaskRunning()) {
-			townyDebugRepeatingTask = plugin.getScheduler().runAsyncRepeating(new DebugRepeatingTimerTask(plugin), 1, TimeTools.convertToTicks(60L));
+			townyDebugRepeatingTask = plugin.getScheduler().runRepeating(new DebugRepeatingTimerTask(plugin), 1, TimeTools.convertToTicks(60L));
 		} else if (!on && isTownyDebugRepeatingTaskRunning()) {
 			townyDebugRepeatingTask.cancel();
 			townyDebugRepeatingTask = null;

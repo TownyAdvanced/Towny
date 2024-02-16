@@ -46,9 +46,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   townyRepeatingTask status: " + status(active));
 		if (active) {
 			townyRepeatingTask++;
-			plugin.getLogger().info("Bread Log:    townyRepeatingTask has been confirmed active " + townyRepeatingTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     townyRepeatingTask has been confirmed active " + townyRepeatingTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart townyRepeatingTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart townyRepeatingTask!");
 			TownyTimerHandler.toggleTownyRepeatingTimer(true);
 			townyRepeatingTask = 0L;
 		}
@@ -59,9 +59,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   townMobRemovalTask status: " + status(active));
 		if (active) {
 			townMobRemovalTask++;
-			plugin.getLogger().info("Bread Log:    townMobRemovalTask has been confirmed active " + townMobRemovalTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     townMobRemovalTask has been confirmed active " + townMobRemovalTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart townMobRemovalTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart townMobRemovalTask!");
 			TownyTimerHandler.toggleMobRemoval(true);
 			townMobRemovalTask = 0L;
 		}
@@ -72,9 +72,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   dailyTimerTask status: " + status(active));
 		if (active) {
 			dailyTimerTask++;
-			plugin.getLogger().info("Bread Log:    dailyTimerTask has been confirmed active " + dailyTimerTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     dailyTimerTask has been confirmed active " + dailyTimerTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart dailyTimerTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart dailyTimerTask!");
 			TownyTimerHandler.toggleDailyTimer(true);
 			dailyTimerTask = 0L;
 		}
@@ -85,9 +85,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   hourlyTimerTask status: " + status(active));
 		if (active) {
 			hourlyTimerTask++;
-			plugin.getLogger().info("Bread Log:    hourlyTimerTask has been confirmed active " + hourlyTimerTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     hourlyTimerTask has been confirmed active " + hourlyTimerTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart hourlyTimerTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart hourlyTimerTask!");
 			TownyTimerHandler.toggleHourlyTimer(true);
 			hourlyTimerTask = 0L;
 		}
@@ -98,9 +98,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   shortTimerTask status: " + status(active));
 		if (active) {
 			shortTimerTask++;
-			plugin.getLogger().info("Bread Log:    shortTimerTask has been confirmed active " + shortTimerTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     shortTimerTask has been confirmed active " + shortTimerTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart shortTimerTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart shortTimerTask!");
 			TownyTimerHandler.toggleShortTimer(true);
 			shortTimerTask = 0L;
 		}
@@ -111,9 +111,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   healthTimerTask status: " + status(active));
 		if (active) {
 			healthTimerTask++;
-			plugin.getLogger().info("Bread Log:    healthTimerTask has been confirmed active " + healthTimerTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     healthTimerTask has been confirmed active " + healthTimerTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart healthTimerTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart healthTimerTask!");
 			TownyTimerHandler.toggleHealthRegen(true);
 			healthTimerTask = 0L;
 		}
@@ -124,9 +124,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   teleportWarmupTask status: " + status(active));
 		if (active) {
 			teleportWarmupTask++;
-			plugin.getLogger().info("Bread Log:    teleportWarmupTask has been confirmed active " + teleportWarmupTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     teleportWarmupTask has been confirmed active " + teleportWarmupTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart teleportWarmupTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart teleportWarmupTask!");
 			TownyTimerHandler.toggleTeleportWarmup(true);
 			teleportWarmupTask = 0L;
 		}
@@ -137,9 +137,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   teleportCooldownTask status: " + status(active));
 		if (active) {
 			teleportCooldownTask++;
-			plugin.getLogger().info("Bread Log:    teleportCooldownTask has been confirmed active " + teleportCooldownTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     teleportCooldownTask has been confirmed active " + teleportCooldownTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart teleportCooldownTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart teleportCooldownTask!");
 			TownyTimerHandler.toggleCooldownTimer(true);
 			teleportCooldownTask = 0L;
 		}
@@ -150,9 +150,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   drawSmokeTask status: " + status(active));
 		if (active) {
 			drawSmokeTask++;
-			plugin.getLogger().info("Bread Log:    drawSmokeTask has been confirmed active " + drawSmokeTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     drawSmokeTask has been confirmed active " + drawSmokeTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart drawSmokeTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart drawSmokeTask!");
 			TownyTimerHandler.toggleDrawSmokeTask(true);
 			drawSmokeTask = 0L;
 		}
@@ -163,9 +163,9 @@ public class DebugRepeatingTimerTask extends TownyTimerTask {
 		plugin.getLogger().info("Bread Log:   drawSpawnPointTask status: " + status(active));
 		if (active) {
 			drawSpawnPointTask++;
-			plugin.getLogger().info("Bread Log:    drawSpawnPointTask has been confirmed active " + drawSpawnPointTask + " times in a row.");
+			plugin.getLogger().info("Bread Log:     drawSpawnPointTask has been confirmed active " + drawSpawnPointTask + " times in a row.");
 		} else {
-			plugin.getLogger().info("Bread Log:    Attempting to restart drawSpawnPointTask!");
+			plugin.getLogger().info("Bread Log:     Attempting to restart drawSpawnPointTask!");
 			TownyTimerHandler.toggleDrawSpointsTask(true);
 			drawSpawnPointTask = 0L;
 		}
