@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b%s が %s のプロットを %s で購入しました�
 msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s は税金を払うことができなかったため、 %s からキックされました'
 msg_couldnt_pay_plot_taxes: '&s%s は税金を払うことができなかったため、プロットの所有権を失いました'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '%b税金を支払いました： '
 msg_payed_plot_cost: '&b %s を %s (%s)プロットに支払いました'
 msg_payed_resident_tax: '&b住民税を払いました： '
