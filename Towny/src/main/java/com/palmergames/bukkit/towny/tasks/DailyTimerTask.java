@@ -490,6 +490,8 @@ public class DailyTimerTask extends TownyTimerTask {
 			taxCollected += tax;
 			return true;
 		}
+
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_you_couldnt_pay_town_tax", prettyMoney(tax), town.getFormattedName()));
 		// remove this resident from the town, they cannot pay the town tax.
 		resident.removeTown();
 		return false;
@@ -564,6 +566,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			return true;
 		}
 
+		TownyMessaging.sendMsg(resident, Translatable.of("msg_you_couldnt_pay_plot_tax", prettyMoney(tax), townBlock.toString()));
 		// Could not pay the plot tax, remove the resident from the plot.
 		townBlock.removeResident();
 
