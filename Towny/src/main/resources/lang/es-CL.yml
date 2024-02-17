@@ -1292,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cTu ciudad será considerada
 msg_time_remaining_before_full_removal: 'Tiempo hasta que sea eliminado completamente: %d horas.'
 msg_time_until_reclaim_available: 'Tiempo hasta que se pueda volver a reclamar: %d horas.'
 msg_reclaim_available: 'Reclamo disponible.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cLa neutralidad de la ciudad ahora está %s.'
 msg_err_town_unclaim_canceled: '&cAbandono cancelado. No puedes realizar esta operación ahora mismo.'
@@ -2112,3 +2113,4 @@ msg_err_name_validation_is_all_underscores: "%s solo tiene guiones bajos."
 msg_err_name_validation_contains_harmful_characters: "%s contiene símbolos que pueden ser dañinos."
 msg_err_name_validation_contains_numbers: "%s contiene números que no están permitidos en nombres."
 msg_err_name_validation_used_in_command_structure: "%s se usa en la estructura de los comandos, no puedes usar este nombre."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
