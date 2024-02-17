@@ -1292,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cVaš grad leži u urušenom
 msg_time_remaining_before_full_removal: 'Vreme preostalo do potpunog uklanjanja: %d sati.'
 msg_time_until_reclaim_available: 'Vreme do dostupnosti reclaim-a: %d sati.'
 msg_reclaim_available: 'Reclaim dostupan.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cNeutralnost/mirnoća grada je sada %s.'
 msg_err_town_unclaim_canceled: '&cUnclaim otkazan. Ne možete unclaim-ovati ovu oblast u ovo vreme.'
@@ -2112,3 +2113,4 @@ msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
 msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
