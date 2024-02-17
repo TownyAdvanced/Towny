@@ -9521,3 +9521,16 @@ v0.92.0.11:
 0.100.1.14:
   - Fix missing feedback messages when a resident cannot pay their plot or town taxes.
   - Add log messages describing why a town was deleted when it was ruined for too long, and when the last resident leaves town.
+  - Fix comod error when removing all sent invites, courtesy of Warrior with PR #7254.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.10.1 to 5.10.2.
+  - Bump org.junit.jupiter:junit-jupiter from 5.10.1 to 5.10.2.
+  - Add do-not-overwrite block list to worlds that affects wilderness explosion reverts.
+    - Prevents wilderness explosions from overwriting newly placed blocks, ie chests inside of creeper holes.
+    - Closes #7255.
+  - New Config Option: new_world_settings.plot_management.wild_revert_explosions_blocks_to_not_replace
+    - Default: ""
+    - This section is applied to new worlds as default settings when new worlds are detected.
+    - This is the list of blocks that should not be overwritten by wilderness explosion reverts.
+    - (if empty all blocks placed into regenerating explosions will be overwritten with the original pre-explosion blocks.)
+    - This list is useful if you have a death chest plugin which could put a player's inventory inside chest that is inside of a regenerating creeper explosion pit.
+    - For Example: By putting CHEST here you can prevent the chest from being overwritten by the dirt block that used to be there.
