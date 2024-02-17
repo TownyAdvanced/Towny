@@ -1457,6 +1457,8 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cYour town lies in a ruined 
 msg_time_remaining_before_full_removal: 'Time remaining before full removal: %d hours.'
 msg_time_until_reclaim_available: 'Time until reclaim available: %d hours.'
 msg_reclaim_available: 'Reclaim available.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
+
 
 #Added in 0.93
 msg_changed_peaceful: '&cTown neutrality/peacefullness is now %s.'
@@ -2456,3 +2458,5 @@ msg_err_name_validation_contains_harmful_characters: "%s contains symbols that c
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
