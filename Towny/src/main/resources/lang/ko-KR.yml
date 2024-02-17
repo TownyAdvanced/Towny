@@ -1292,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&c당신의 마을은 %d 동�
 msg_time_remaining_before_full_removal: '전체 삭제까지 남은시간: %d 남음.'
 msg_time_until_reclaim_available: '재점유 가능한 시간: %d'
 msg_reclaim_available: '재점유가 가능합니다.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&c마을의 중립/평화도는 %s입니다.'
 msg_err_town_unclaim_canceled: '&c점유 해제가 취소됨. 지금 해당 지역을 점유 해제 할 수 없습니다.'
@@ -2112,3 +2113,4 @@ msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
 msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
