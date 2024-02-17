@@ -1292,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cВаш город нахо�
 msg_time_remaining_before_full_removal: 'Время до полного удаления: %d часов.'
 msg_time_until_reclaim_available: 'Время до того, как будет доступен переприват: %d часов.'
 msg_reclaim_available: 'Переприват доступен.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cНейтралитет/мирность города теперь %s.'
 msg_err_town_unclaim_canceled: '&cРасприват отменён. Вы не можете расприватить этот участок в данный момент.'
@@ -2112,3 +2113,4 @@ msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
 msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
