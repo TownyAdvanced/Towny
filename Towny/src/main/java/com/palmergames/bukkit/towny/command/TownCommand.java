@@ -819,7 +819,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private void removeAllTownSentInvites(Resident resident, Player player) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ADD.getNode());
-		resident.getTown().getSentInvites().forEach(i -> i.decline(true));
+
+		for (final Invite invite : new ArrayList<>(resident.getTown().getSentInvites()))
+			invite.decline(true);
+
 		TownyMessaging.sendMessage(player, Translatable.of("msg_all_of_your_towns_sent_invites_have_been_cancelled"));
 	}
 
