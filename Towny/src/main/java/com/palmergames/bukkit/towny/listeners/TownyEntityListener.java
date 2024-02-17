@@ -489,6 +489,12 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
+		// Prevent blocks from falling while their plot is being regenerated back to it's pre-claimed state.
+		if (ItemLists.FALLING_BLOCKS.contains(blockMat) && TownyRegenAPI.hasActiveRegeneration(WorldCoord.parseWorldCoord(event.getBlock()))) {
+			event.setCancelled(true);
+			return;
+		}
+
 		// Test other instances of Entities altering blocks.
 		if (entityType == EntityType.ENDERMAN) {
 			event.setCancelled(townyWorld.isEndermanProtect());

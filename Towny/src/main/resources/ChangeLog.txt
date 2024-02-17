@@ -9534,3 +9534,6 @@ v0.92.0.11:
     - (if empty all blocks placed into regenerating explosions will be overwritten with the original pre-explosion blocks.)
     - This list is useful if you have a death chest plugin which could put a player's inventory inside chest that is inside of a regenerating creeper explosion pit.
     - For Example: By putting CHEST here you can prevent the chest from being overwritten by the dirt block that used to be there.
+0.100.1.15:
+  - Prevent falling blocks falling during unclaimed land regeneration.
+    - Closes #7259.
