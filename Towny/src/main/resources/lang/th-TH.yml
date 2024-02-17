@@ -1292,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cTown ของคุณจ�
 msg_time_remaining_before_full_removal: '&cเวลาที่เหลือก่อนลบทั้งหมด: %d ชั่วโมง'
 msg_time_until_reclaim_available: '&cเวลาจนกว่าจะเรียกคืนได้: %d ชั่วโมง'
 msg_reclaim_available: '&aReclaim ใช้ได้'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cความเป็นกลางของเมือง/ความปลอดภัยตอนนี้คือ %s'
 msg_err_town_unclaim_canceled: '&cยกเลิกการ Claim แล้ว คุณไม่สามารถยกเลิกการ Claim พื้นที่นี้ได้ในขณะนี้'
@@ -2112,3 +2113,4 @@ msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
 msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
