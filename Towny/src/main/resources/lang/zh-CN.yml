@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b%s 花费了 %s 购买了 %s 的土地!'
 msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s 因为交不起税而被踢出了 %s.'
 msg_couldnt_pay_plot_taxes: '&b%s 交不起税而失去了他的土地所有权.'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&b缴纳城镇税: '
 msg_payed_plot_cost: '&b缴纳 %s 作为 %s 在 %s 的土地税'
 msg_payed_resident_tax: '&b缴纳个人所得税: '
@@ -772,6 +774,7 @@ town_invite_help_3: '列出你发送的所有邀请'
 town_invite_help_4: '列出你收到的所有邀请'
 town_invite_help_5: '接受加入国家的邀请'
 town_invite_help_6: '拒绝加入来自国家的邀请'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: '邀请一个城镇加入你的国家'
 nation_invite_help_2: '撤消发送给城镇的邀请'
 nation_invite_help_3: '列出发送给城镇的所有邀请'
@@ -1289,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&c你的城镇已倒闭%d小�
 msg_time_remaining_before_full_removal: '距离完全删除：%d小时。'
 msg_time_until_reclaim_available: '距离可收复时间：%d小时。'
 msg_reclaim_available: '可收复。'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&c城镇中立/和平的状态现在是%s。'
 msg_err_town_unclaim_canceled: '&c放弃圈地已取消，你不能在这个时候放弃这片区域。'
@@ -1714,7 +1718,7 @@ msg_jailed_war: '作为战俘监禁。'
 #Jail handbook messages
 msg_jailed_handbook_1: '看起来你因为%s而被监禁了。'
 #Jail handbook messages
-msg_jailed_handbook_2: '啊……太糟糕了，实在太糟糕了。但是你又不能干些什么……不过，这里有一些被监禁时的小贴士，它们或许可以帮你。'
+msg_jailed_handbook_2: '啊……太糟糕了，实在太糟糕了。但是你能干什么呢？这里有一些被监禁时的小贴士，读一读吧，这或许可以帮你。'
 #Jail handbook messages
 msg_jailed_handbook_3: '你已经被监禁%s小时了，服刑后你将得到自由。'
 #Jail handbook messages
@@ -1730,11 +1734,11 @@ msg_jailed_handbook_5: '如果你坚持逃离到了城镇外的野地，你将�
 #Jail handbook messages
 msg_jailed_handbook_6: '但是在到达野地之前不要死亡，否则你将被送回监狱。'
 #Jail handbook messages
-msg_jailed_teleport: '但幸运的是……如果你手中有一些末影珍珠和紫颂果，你可以在监狱里使用它们来帮助你越狱。'
+msg_jailed_teleport: '但幸运的是——如果你有末影珍珠或是紫颂果的话，你可以使用它们，这可以帮助你越狱。'
 #Jail handbook messages
 msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
-msg_jailed_title: '所以……你就这样被监禁了:('
+msg_jailed_title: '所以……你被监禁了:('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco。'
 #Added in 0.130
@@ -2097,3 +2101,16 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
+msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
+msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
+msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+msg_err_name_validation_name_too_long: "%s is too long to use as a name."
+msg_err_name_validation_is_empty: "You cannot supply an empty name."
+msg_err_name_validation_is_not_permitted: "%s is not permitted."
+msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
+msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
+msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
+msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."

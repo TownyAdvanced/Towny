@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b%s花費了%s購買了%s地段！'
 msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s因為交不起稅而被%s放逐 '
 msg_couldnt_pay_plot_taxes: '&b%s因為交不起稅而失去了他的地段所有權 '
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&b繳納市鎮地方稅 '
 msg_payed_plot_cost: '&b繳納%s作為%s在%s的地段稅'
 msg_payed_resident_tax: '&b繳納個人所得稅 '
@@ -471,8 +473,8 @@ msg_invited_join_town: '&b%s邀請%s加入市鎮 '
 msg_invited_join_nation: '&b%s邀請%s加入城邦 '
 msg_deny_invite: '&b%s拒絕了你的邀請 '
 msg_invited: '&b你被邀請加入%s '
-msg_town_online: '城邑之在線者'
-msg_nation_online: '國家之在線者'
+msg_town_online: '邑之在線者'
+msg_nation_online: '國之在線者'
 msg_allied_nations: '&b%s與%s結為友。'
 msg_enemy_nations: '&b%s將%s視為敵國  '
 msg_enemy_to_neutral: '&b%s把%s調整為中立狀態 '
@@ -518,7 +520,7 @@ msg_specify_nation_name: '&b請取得城邦名'
 msg_peasant_right: '&b賤民沒有權利強迫他的領導者讓出寶座 '
 msg_cost_spawn: '&b你花費了%s來傳送到市鎮傳送點 '
 msg_cost_spawn_refund: '&b你獲得了被退回的市鎮傳送費用 '
-msg_town_spawn_warmup: '待傳……'
+msg_town_spawn_warmup: '方傳送……'
 msg_town_rename_disabled: '&b已關閉市鎮重命名'
 msg_town_set_name: '&b%s更邑名為%s。'
 msg_nation_set_name: '&b%s更邦名為%s。'
@@ -772,6 +774,7 @@ town_invite_help_3: '列出你發送的所有邀請'
 town_invite_help_4: '列出你收到的所有邀請'
 town_invite_help_5: '接受加入城邦的邀請'
 town_invite_help_6: '拒絕加入來自城邦的邀請'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: '邀請一個市鎮加入你的城邦'
 nation_invite_help_2: '撤消發送給市鎮的邀請'
 nation_invite_help_3: '列出發送給市鎮的所有邀請'
@@ -946,7 +949,7 @@ msg_plot_evict: '已依法收復地段 '
 msg_no_one_to_evict: '沒有人放棄這個地段 '
 #Added in 0.46
 nation_help_10: '傳送到城邦傳送點 '
-msg_nation_spawn_warmup: '&b等待傳送中   '
+msg_nation_spawn_warmup: '&b方傳送……'
 msg_set_nation_spawn: '&b已重新設定城邦傳送點 '
 msg_err_cant_afford_tp_nation: '&c無法傳送到%s '
 msg_err_nationspawn_has_not_been_set: '&c城邦傳送點尚未設定 '
@@ -1289,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&c你的市鎮在一個毀滅
 msg_time_remaining_before_full_removal: '距離完全清除前還剩%d小時 '
 msg_time_until_reclaim_available: '距離可重新取得還須%d小時 '
 msg_reclaim_available: '可以重新取得了 '
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&c現在市鎮中立/和平%s '
 msg_err_town_unclaim_canceled: '&c取消收復 此時收復此地段失敗 '
@@ -1778,7 +1782,7 @@ msg_your_town_paid_x_to_unclaim: '你的市鎮支付了%s以註銷土地 '
 confirmation_unclaiming_costs: '註銷土地將花費%s，是否繼續？'
 #Added in 0.140
 #Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny 以客户端置（%s）译之。 请注意，译或阙字符串。'
+msg_your_locale: 'Towny 以客户端置（%s）译之。 請君留意，译或阙字符串。'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必須再等待%s秒才能重新命名你的市鎮 '
 #Added in 1.141
@@ -2097,3 +2101,16 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
+msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
+msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
+msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+msg_err_name_validation_name_too_long: "%s is too long to use as a name."
+msg_err_name_validation_is_empty: "You cannot supply an empty name."
+msg_err_name_validation_is_not_permitted: "%s is not permitted."
+msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
+msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
+msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
+msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."

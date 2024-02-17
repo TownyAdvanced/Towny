@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b%s는 %ss 만큼의 %s 땅을 구매하였습니다.'
 msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s님은 세금을 미납하여 %s에서 추방되었습니다.'
 msg_couldnt_pay_plot_taxes: '&b%s님은 세금을 미납하여 땅의 소유권을 잃었습니다.'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&b지불한 마을 세금: '
 msg_payed_plot_cost: '&b %s을 %s 만큼의 %s의 땅을 위해 지불하였습니다'
 msg_payed_resident_tax: '&b지불한 주민 세금: '
@@ -464,7 +466,7 @@ msg_town_left_nation: '&b귀하의 도시가 %s에서 나갔습니다.'
 msg_nation_town_left: '&b%s시가 국가에서 나갔습니다.'
 msg_nation_kicked: '&b%s님이 %s을(를) 국가에서 추방하였습니다.'
 msg_raised_ass: '&b%s님이 %s을/를 %s의 도움이로 선택하였습니다.'
-msg_lowered_to_res_by: '&b%s님에 의해 시민으로 강등되었습니다.'
+msg_lowered_to_res_by: '&b%s님에 의해 일반 주민으로 강등되었습니다.'
 msg_lowered_to_res: '&b%s님이 %s을/를 시민으로 강등시켰습니다.'
 msg_invalid_name: '&b이름에 의해서 에러가 생겼습니다. 다시 시도해주세요.'
 msg_invited_join_town: '&b%s님이 %s님을 도시에 초대하였습니다.'
@@ -772,6 +774,7 @@ town_invite_help_3: '귀하가 전송한 초대 목록'
 town_invite_help_4: '귀하가 수신한 초대 목록'
 town_invite_help_5: '국가 초대를 수락합니다.'
 town_invite_help_6: '국가 초대를 거부합니다.'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: '마을을 귀하의 국가에 초대합니다.'
 nation_invite_help_2: '마을에게 전송된 초대를 취소합니다.'
 nation_invite_help_3: '마을에게 전송한 초대 목록'
@@ -1158,7 +1161,7 @@ msg_plot_was_put_into_group_x: '플롯 &9(%s,%s) 이(가) &2그룹 %s에 속합�
 msg_err_plot_not_associated_with_a_group: '해당 토지는 그룹과 연결되어 있지 않습니다.'
 msg_plot_was_removed_from_group_x: '토지 &9(%s,%s) 이(가) &2그룹 %s에서 제거 되었습니다.'
 msg_plot_renamed_from_x_to_y: '땅 %s을/를 %s(으)로 계명했습니다.'
-msg_err_plot_group_specify_price: '가격을 정해주십시오, 예: /plot group fs [price]'
+msg_err_plot_group_specify_price: '가격을 정해주십시오, 예: /plot group fs [값]'
 msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
 msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: '그룹 유형을 설정할 수 없습니다. - '
@@ -1263,10 +1266,10 @@ msg_nation_already_not_peaceful: '국가는 이미 평화상태가 아닙니다.
 status_world_friendlyfire: '아군 공격:'
 status_world_wildernessmobs: '야생 몹:'
 msg_outlaw_kick_cooldown: '당신은 %s에서 법외추방자로 지정되었습니다. 당신은 이 도시에서 %s초 이내에 떠나지 않을 경우, 자동으로 지정된 스폰으로 TP 됩니다.'
-msg_outlaw_kicked: '&4당신은 %s에서 불청객이므로. 텔레포트 되어 쫓겨납니다!'
+msg_outlaw_kicked: '&4당신은 %s에서 불청객이므로. 텔레포트 되어 쫓겨났습니다!'
 msg_outlaw_town_notify: '법외추방자인 %s가 영토에 진입하였습니다.'
-msg_your_town_payed_upkeep_with_debt: '&b당신의 마을이 하루 유지비 %s 를 냈습니다..'
-msg_payed_nation_tax_with_debt: '&b당신의 국가가 하루 유지비 %s 를 냈습니다.'
+msg_your_town_payed_upkeep_with_debt: '&b당신의 마을이 하루 유지비 %s을(를) 냈습니다.'
+msg_payed_nation_tax_with_debt: '&b당신의 국가가 하루 유지비 %s을(를) 냈습니다.'
 #Added in 0.90
 status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: '해당 월드에서 /plot clear 커맨드가 비활성화 되어 있습니다.'
@@ -1277,18 +1280,19 @@ msg_universe_heart: '<3'
 townblock_plu: '마을 블록'
 #Added in 0.92
 #Town Ruins
-msg_newhour_success: '새로운 시간 커맨드가 성공적으로 실행 되었습니다!'
+msg_newhour_success: 'newhour 커맨드가 성공적으로 실행 되었습니다!'
 town_help_12: '페허가된 상태에서 마을을 재점유합니다.'
-msg_warning_town_ruined_if_deleted: "명령어 ''/t reclaim'' 를 사용하였을 때 %d 만큼이 지나면 마을주민 누구든 마을을 재점유 할 수 있습니다."
-msg_warning_town_ruined_if_deleted2: "명령어 ''/t reclaim'' 를 사용하였을 때 %d 만큼이 지나면 마을주민 누구든 마을을 재점유 할 수 있습니다."
+msg_warning_town_ruined_if_deleted: "경고!!!: 마을을 지울 시에 마을이 패허 상태로 %d 시간동안 전환됩니다. %d 시간 이후, 완전히 삭제됩니다. 패허 상태일때는 모든 권한이 일반 시민과 외부인에게 까지 부여되며 마을 회손이 가능합니다."
+msg_warning_town_ruined_if_deleted2: "명령어 \"/t reclaim\"으로 %d시간 후에 일반 시민 누구나 마을을 재점유 할 수 있습니다."
 msg_err_cannot_reclaim_town_unless_ruined: '&c폐허가 되지 않았기 때문에 마을을 재점유 할 수 없습니다.'
-msg_err_cannot_reclaim_town_yet: '&c당신은 마을을 %d 동안 재점유 할 수 없습니다.'
+msg_err_cannot_reclaim_town_yet: '&c당신은 마을을 %d시간 동안 재점유 할 수 없습니다.'
 msg_town_reclaimed: '&b%s이(가) 마을 %s을(를) 재점유 했습니다.'
-msg_err_cannot_use_command_because_town_ruined: "&c마을이 폐허가 되었으므로 커맨드를 쓸 수 없습니다. 노말 커맨드를 사용하려면 ''/town reclaim'', 또는 ''/town leave''을 사용하여 마을을 떠나십시오."
-msg_warning_your_town_is_ruined_for_x_more_hours: '&c당신의 마을은 %d 동안 폐허 상태에 있습니다. 마을을 되찾으려면 ''''/town reclaim'''' 하여 관리 하세요.'
-msg_time_remaining_before_full_removal: '전체 삭제까지 남은시간: %d 남음.'
-msg_time_until_reclaim_available: '재점유 가능한 시간: %d'
+msg_err_cannot_use_command_because_town_ruined: "&c마을이 폐허가 되었으므로 커맨드를 쓸 수 없습니다. 이 커맨드와 더불어 기본 마을 커멘드를 사용하려면 ''/town reclaim'', 또는 ''/town leave''를 사용하여 마을을 떠나십시오."
+msg_warning_your_town_is_ruined_for_x_more_hours: '&c당신의 마을은 %d시간 동안 폐허 상태로 전환 되있습니다. 마을을 되찾으려면 ''''/town reclaim'''' 하여 되찾고 시장이 되세요.'
+msg_time_remaining_before_full_removal: '완전 삭제까지 남은 시간: %d시간 남음.'
+msg_time_until_reclaim_available: '재점유 가능한 시간: %d시간 남음'
 msg_reclaim_available: '재점유가 가능합니다.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&c마을의 중립/평화도는 %s입니다.'
 msg_err_town_unclaim_canceled: '&c점유 해제가 취소됨. 지금 해당 지역을 점유 해제 할 수 없습니다.'
@@ -1471,7 +1475,7 @@ msg_err_player_is_not_jailed: '그 플레이어는 수감되지 않았습니다.
 msg_you_have_paid_bail: '당신은 보석금을 지불했습니다.'
 msg_you_have_been_freed_via_jailbreak: '탈옥입니다! 당신은 자유에요!!'
 msg_you_have_served_your_sentence_and_are_free: '감옥에서 제대로 복역했고 이젠 자유입니다!'
-msg_x_has_served_their_sentence_and_is_free: '%s님은 성실히 복역했고 이젠 자유입니다!'
+msg_x_has_served_their_sentence_and_is_free: '%s님은 성실히 복역했고 이젠 자유를 만끽합니다!'
 msg_you've_been_jailed_for_x_hours: '당신은 %s 시간동안 수감되었습니다.'
 msg_you_are_being_sent_to_jail: '당신은 곧 감옥에 갈 것입니다.'
 msg_err_you_cannot_remove_the_last_cell: '감옥에 다른 감방이 추가될 때까지 마지막 감방을 제거할 수 없습니다.'
@@ -2097,3 +2101,16 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
+msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
+msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
+msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+msg_err_name_validation_name_too_long: "%s is too long to use as a name."
+msg_err_name_validation_is_empty: "You cannot supply an empty name."
+msg_err_name_validation_is_not_permitted: "%s is not permitted."
+msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
+msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
+msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
+msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."

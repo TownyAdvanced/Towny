@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b%s ซื้อพล็อตของ %s สำห�
 msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s ไม่สามารถจ่ายภาษีได้และถูกไล่ออกจาก %s'
 msg_couldnt_pay_plot_taxes: '&b%s ไม่สามารถจ่ายภาษีได้และเสียความเป็นเจ้าของ plot'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&bจ่ายภาษีเมืองของ'
 msg_payed_plot_cost: '&bจ่าย %s สำหรับ %s แปลงใน %s'
 msg_payed_resident_tax: '&bชำระภาษีที่อยู่อาศัยของ'
@@ -772,6 +774,7 @@ town_invite_help_3: 'แสดงรายการคำเชิญที่�
 town_invite_help_4: 'แสดงรายการคำเชิญทั้งหมดที่คุณได้รับ'
 town_invite_help_5: 'ยอมรับคำขอเข้าร่วม Nation'
 town_invite_help_6: 'ปฎิเสธขอร่วม Nation'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'เชิญ Town เข้าสู่ Nation ของคุณ'
 nation_invite_help_2: 'ปฏิเสทคำเชิญ, ที่ส่งไปยัง Town'
 nation_invite_help_3: 'รายชื่อคำเชิญทั้งหมดที่ส่งไปยัง Town'
@@ -1289,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cTown ของคุณจ�
 msg_time_remaining_before_full_removal: '&cเวลาที่เหลือก่อนลบทั้งหมด: %d ชั่วโมง'
 msg_time_until_reclaim_available: '&cเวลาจนกว่าจะเรียกคืนได้: %d ชั่วโมง'
 msg_reclaim_available: '&aReclaim ใช้ได้'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cความเป็นกลางของเมือง/ความปลอดภัยตอนนี้คือ %s'
 msg_err_town_unclaim_canceled: '&cยกเลิกการ Claim แล้ว คุณไม่สามารถยกเลิกการ Claim พื้นที่นี้ได้ในขณะนี้'
@@ -2097,3 +2101,16 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
+msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
+msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
+msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+msg_err_name_validation_name_too_long: "%s is too long to use as a name."
+msg_err_name_validation_is_empty: "You cannot supply an empty name."
+msg_err_name_validation_is_not_permitted: "%s is not permitted."
+msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
+msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
+msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
+msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."

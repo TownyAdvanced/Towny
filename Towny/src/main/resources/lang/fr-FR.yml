@@ -106,30 +106,30 @@ town_set_help_1: "Mettre le homeblock de votre ville ici."
 town_set_help_2: "Mets le point de spawn dans votre homeblock ou votre point de spawn d'avant-poste quand vous êtes dans un avant-poste."
 town_set_help_3: "Voir /town set perm ? pour obtenir de l'aide."
 town_set_help_4: "Définissez le montant d'impôt de votre ville."
-town_set_help_5: "Set the special amounts for per-plot taxes."
-town_set_help_6: "Set the default prices for buying plots."
-town_set_help_7: "Set the cost to use /t spawn."
-town_set_help_8: "Set your town's name."
-town_set_help_9: "Set your town's tag."
-town_set_help_10: "Set the title or surname of your resident."
-town_set_help_11: "Set the max amount of money a percentage tax can take from a resident."
-town_jail_help_0: "List the town's jails."
-town_jail_help_1: "Jail a resident in the primary jail."
-town_jail_help_2: "Jail a resident in the primary jail, for the specified hours."
-town_jail_help_3: "Jail a resident in the primary jail, for the specified hours, in the specified jail."
-town_jail_help_4: "Jail a resident in the primary jail, for the specified hours, in the specified jail and cell."
-town_jail_help_5: "Jail a resident in the primary jail, for the specified hours, with the given bail amount."
-town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
-town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
-town_jail_help_8: "Unjails the resident."
-town_purge_help: "Purges residents that have not logged in for the given amount of days."
-town_trust_help_0: "Adds a resident as Trusted in the town."
-town_trust_help_1: "Removes a resident as Trusted in the town."
-town_trust_help_2: "Lists the Trusted residents of a town."
-town_towntrust_help_0: "Adds a town as Trusted in the town."
-town_towntrust_help_1: "Removes a town as Trusted in the town."
-town_towntrust_help_2: "Lists the Trusted towns of a town."
-town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
+town_set_help_5: "Défini les montants spéciaux pour les taxes par parcelle."
+town_set_help_6: "Défini les prix par défaut pour l'achat de parcelles."
+town_set_help_7: "Défini le coût pour utiliser /t spawn."
+town_set_help_8: "Défini le nom de votre ville."
+town_set_help_9: "Défini le tag de votre ville."
+town_set_help_10: "Défini le titre ou le surnom de votre résident."
+town_set_help_11: "Défini le montant maximal d'argent qu'un pourcentage de taxe peut prendre à un résident."
+town_jail_help_0: "Lister les prisons de la ville."
+town_jail_help_1: "Emprisonner un résident dans la prison principale."
+town_jail_help_2: "Emprisonner un résident dans la prison principale pendant les heures spécifiées."
+town_jail_help_3: "Emprisonner un résident dans la prison principale, pendant les heures spécifiées, dans la prison spécifiée."
+town_jail_help_4: "Emprisonner un résident dans la prison principale, pendant les heures spécifiées, dans la prison et la cellulle spécifiée."
+town_jail_help_5: "Emprisonner un résident dans la prison principale, pendant les heures spécifiées, avec la caution spécifiée."
+town_jail_help_6: "Emprisonner un résident dans la prison principale, pendant les heures spécifiées, avec la caution spécifiée, dans la prison spécifiée."
+town_jail_help_7: "Emprisonner un résident dans la prison principale, pendant les heures spécifiées, avec la caution spécifiée, dans la prison et la cellule spécifiée."
+town_jail_help_8: "Libère le résident emprisonné."
+town_purge_help: "Expulse les résidents ne s'étant pas connectés pendant le montant donné de jours."
+town_trust_help_0: "Ajoute un résident de confiance dans la ville."
+town_trust_help_1: "Retire un résident de confiance dans la ville."
+town_trust_help_2: "Liste les résidents de confiance d'une ville."
+town_towntrust_help_0: "Ajoute une ville de confiance dans la ville."
+town_towntrust_help_1: "Retire une ville de confiance de la ville."
+town_towntrust_help_2: "Liste les villes de confiance d'une ville."
+town_buy_help: "Achètes des blocs de ville bonus pour augmenter la limite de revendication de la ville."
 mayor_help_3: 'Parcelle non attachée à la ville'
 mayor_help_4: 'Annexe autour de vous dans un rayon de X'
 mayor_help_5: 'Annexe au rayon maximal'
@@ -145,25 +145,25 @@ nation_help_6: 'Créer une nouvelle nation'
 nation_help_7: 'Lister les commandes de dirigeant de nation'
 nation_help_8: 'Créer une nouvelle nation'
 nation_help_9: 'Liste tout les résidents en ligne de la nation'
-nation_help_11: "Lists the towns in the nation."
-nation_help_12: "Lists the allied nations of the nation."
-nation_help_13: "Lists the enemied nations of the nation."
-nation_help_14: "Used to join open nations."
-nation_help_15: "Deposits money into the nation bank."
-nation_help_16: "Used to delete your nation."
-nation_help_17: "Used to add or remove ranks from residents."
-nation_help_18: "See /n rank ? for help."
-nation_list_help_0: "View the specified page."
-nation_list_help_1: "List nations by resident-count, with the specified page."
-nation_list_help_2: "List nations by town-count, with the specified page."
-nation_list_help_3: "List nations which are open, with the specified page."
-nation_list_help_4: "List nations using bank balance, with the specified page."
-nation_list_help_5: "List nations in alphabetical order, with the specified page."
-nation_list_help_6: "List nations by claimed land, with the specified page."
-nation_list_help_7: "List nations by number online, with the specified page."
-nation_set_help_0: "Change the leader of the nation."
-nation_set_help_1: "Change the capital city of the nation."
-nation_set_help_2: "Set the amount of tax that towns will pay."
+nation_help_11: "Liste les villes de la nation."
+nation_help_12: "Liste les nations alliées de la nation."
+nation_help_13: "Liste les nations ennemies de la nation."
+nation_help_14: "Utilisé pour rejoindre les nations ouvertes."
+nation_help_15: "Dépose de l'argent dans la banque de la nation."
+nation_help_16: "Utilisé pour supprimer votre nation."
+nation_help_17: "Utilisé pour ajouter ou retirer un rang des résidents."
+nation_help_18: "Voir /n rank ? pour de l'aide."
+nation_list_help_0: "Voir la page spécifiée."
+nation_list_help_1: "Liste les nations par nombre de résidents, avec la page spécifiée."
+nation_list_help_2: "Liste les nations par nombre de villes, avec la page spécifiée."
+nation_list_help_3: "Liste les nations ouvertes avec la page spécifiée."
+nation_list_help_4: "Liste les nations par solde bancaire avec la page spécifiée."
+nation_list_help_5: "Liste les nations par ordre alphabétique avec la page spécifiée."
+nation_list_help_6: "Liste les nations par possessions de terres avec la page spécifiée."
+nation_list_help_7: "Liste les nations par joueurs en ligne, avec la page spécifiée."
+nation_set_help_0: "Change le chef de la nation."
+nation_set_help_1: "Change la capitale de la nation."
+nation_set_help_2: "Définis le montant de taxe qu'une ville va payer."
 nation_set_help_3: "Set the amount of tax that conquered towns will pay."
 nation_set_help_4: "Set the name of the nation."
 nation_set_help_5: "Set the title or surname of one of your residents."
@@ -427,6 +427,8 @@ msg_buy_resident_plot: '&b%s Achète la parcelle de %s pour %s !'
 msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s ne pouvait pas payer les impôts et a été exclu de la %s.'
 msg_couldnt_pay_plot_taxes: '&b%s ne pouvait pas payer les impôts et a perdu la propriété d''une parcelle.'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&ba payé les impôts de la ville de '
 msg_payed_plot_cost: '&ba payé %s pour %s parcelles dans %s'
 msg_payed_resident_tax: '&ba payé l''impôt résidentiel de '
@@ -772,6 +774,7 @@ town_invite_help_3: 'Liste de toutes les invitation envoyées'
 town_invite_help_4: 'Liste toutes les invitations que vous avez reçues'
 town_invite_help_5: 'Accepter une demande pour rejoindre une nation'
 town_invite_help_6: 'Rejeter une demande pour rejoindre une nation'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'Inviter une ville dans votre nation'
 nation_invite_help_2: 'Annuler une invitation envoyée à une ville'
 nation_invite_help_3: 'Liste toutes les invitations envoyées aux villes'
@@ -1289,6 +1292,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cVotre ville est en ruine pe
 msg_time_remaining_before_full_removal: 'Temps restant avant la suppression complète : %d heures.'
 msg_time_until_reclaim_available: 'Temps jusqu''à ce que la récupération soit disponible: %d heures.'
 msg_reclaim_available: 'Récupération disponible.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cLa neutralité / pacificité de la ville est maintenant %s.'
 msg_err_town_unclaim_canceled: '&cDésannexion annulée. Vous ne pouvez pas désannexer cette zone pour le moment.'
@@ -2097,3 +2101,16 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
 status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
+msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
+msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
+msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+msg_err_name_validation_name_too_long: "%s is too long to use as a name."
+msg_err_name_validation_is_empty: "You cannot supply an empty name."
+msg_err_name_validation_is_not_permitted: "%s is not permitted."
+msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
+msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
+msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
+msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
