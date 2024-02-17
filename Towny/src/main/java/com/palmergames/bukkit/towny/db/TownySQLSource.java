@@ -1674,6 +1674,21 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				} catch (Exception ignored) {
 				}
 
+			line = rs.getString("wildRegenBlocksToNotOverwrite");
+			if (line != null)
+				try {
+					List<String> materials = new ArrayList<>();
+					search = (line.contains("#")) ? "#" : ",";
+					for (String split : line.split(search))
+						if (!split.isEmpty())
+							try {
+								materials.add(split.trim());
+							} catch (NumberFormatException ignored) {
+							}
+					world.setWildRevertMaterialsToNotOverwrite(materials);
+				} catch (Exception ignored) {
+				}
+
 			resultLong = rs.getLong("plotManagementWildRegenSpeed");
 			try {
 				world.setPlotManagementWildRevertDelay(resultLong);
@@ -2421,6 +2436,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (world.getPlotManagementWildRevertBlockWhitelist() != null)
 				nat_hm.put("PlotManagementWildRegenBlockWhitelist",
 						StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), "#"));
+
+			// Wilderness Explosion Protection Materials to not overwrite.
+			if (world.getWildRevertMaterialsToNotOverwrite() != null)
+				nat_hm.put("wildRegenBlocksToNotOverwrite",
+						StringMgmt.join(world.getWildRevertMaterialsToNotOverwrite(), "#"));
 
 			// Using PlotManagement Wild Regen Delay
 			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());
