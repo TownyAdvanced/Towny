@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author ElgarL
  * 
  */
-public class PlotClaim extends Thread {
+public class PlotClaim implements Runnable {
 
 	Towny plugin;
 	private final Player player;
@@ -55,7 +55,6 @@ public class PlotClaim extends Thread {
 		this.claim = claim;
 		this.admin = admin;
 		this.groupClaim = groupClaim;
-		this.setPriority(MIN_PRIORITY);
 	}
 
 	@Override
