@@ -66,7 +66,7 @@ public class SpawnPoint {
 					// This can potentially throw an exception if we're running this async and a player disconnects while it's sending particles.
 					world.spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
 				} catch (Exception ignored) {}
-			}, i * RING_DELAY_TICKSL);
+			}, (long) i * RING_DELAY_TICKS);
 			i++;
 		}
 	}
