@@ -1871,10 +1871,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_no_funds_claim_plot", prettyMoney(cost)));
 
 		if (cost != 0) {
-			final List<WorldCoord> finalSelection = selection;
 			Confirmation.runOnAcceptAsync(
 				// Start the claim task
-				new PlotClaim(plugin, player, resident, finalSelection, true, false, false)
+				new PlotClaim(plugin, player, resident, selection, true, false, false)
 			)
 			.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
 			.sendTo(player);
