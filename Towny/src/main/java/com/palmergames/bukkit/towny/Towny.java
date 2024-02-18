@@ -437,6 +437,7 @@ public class Towny extends JavaPlugin {
 
 		this.townyUniverse = null;
 
+		// Used to be required, but in the latest versions the server will cancel these tasks for us as well.
 		if (this.scheduler instanceof FoliaTaskScheduler foliaScheduler)
 			foliaScheduler.cancelTasks();
 
