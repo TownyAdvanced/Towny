@@ -58,7 +58,7 @@ public class TownyTimerHandler{
 
 	public static void toggleMobRemoval(boolean on) {
 
-		if (on && !isMobRemovalRunning()) {
+		if (on && !isMobRemovalRunning() && !plugin.isFolia()) {
 			mobRemoveTask = plugin.getScheduler().runRepeating(new MobRemovalTimerTask(plugin), 1, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 		} else if (!on && isMobRemovalRunning()) {
 			mobRemoveTask.cancel();
