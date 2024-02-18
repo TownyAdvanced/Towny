@@ -71,7 +71,7 @@ public class NameValidation {
 
 		testNameLength(out);
 
-		testForNumbers(out);
+		testForNumbersInTownName(out);
 
 		testForImproperNameAndThrow(out);
 
@@ -95,7 +95,7 @@ public class NameValidation {
 
 		testNameLength(out);
 
-		testForNumbers(out);
+		testForNumbersInNationName(out);
 
 		testForImproperNameAndThrow(out);
 
@@ -315,14 +315,29 @@ public class NameValidation {
 	}
 
 	/**
-	 * Stops numbers in town and nation names, when these are disallowed.
+	 * Stops numbers in nation names, when these are disallowed.
 	 * 
 	 * @param name String to validate.
 	 * @throws InvalidNameException thrown when numbers aren't allowed and they are present.
 	 */
-	private static void testForNumbers(String name) throws InvalidNameException {
-		if (!TownySettings.areNumbersAllowedInNationNames() && numberPattern.matcher(name).find())
+	private static void testForNumbersInNationName(String name) throws InvalidNameException {
+		if (!TownySettings.areNumbersAllowedInNationNames() && nameContainsNumbers(name))
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_contains_numbers", name));
+	}
+	
+	/**
+	 * Stops numbers in town names, when these are disallowed.
+	 * 
+	 * @param name String to validate.
+	 * @throws InvalidNameException thrown when numbers aren't allowed and they are present.
+	 */
+	private static void testForNumbersInTownName(String name) throws InvalidNameException {
+		if (!TownySettings.areNumbersAllowedInTownNames() && nameContainsNumbers(name))
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_contains_numbers", name));
+	}
+
+	private static boolean nameContainsNumbers(String name) {
+		return numberPattern.matcher(name).find();
 	}
 
 	/**
