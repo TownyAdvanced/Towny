@@ -649,8 +649,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public boolean loadResidents() {
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
-		TownySettings.setUUIDCount(0);
-
 		try (Connection connection = getConnection();
 			 Statement s = connection.createStatement();
 			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "RESIDENTS")) {
@@ -675,10 +673,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					plugin.getLogger().severe("Loading Error: Could not read resident data '" + resident.getName() + "'.");
 					return false;
 				}
-				
-				if (resident.hasUUID())
-					TownySettings.incrementUUIDCount();
-
 			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load resident sql error : " + e.getMessage());
