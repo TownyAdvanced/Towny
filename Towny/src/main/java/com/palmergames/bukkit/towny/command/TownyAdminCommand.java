@@ -942,7 +942,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		String world = player.getWorld().getName();
 		List<WorldCoord> selection = new ArrayList<>();
 		selection.add(new WorldCoord(world, Coord.parseCoord(player)));
-		new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false).start();
+		plugin.getScheduler().runAsync(new PlotClaim(plugin, player, resOpt.get(), selection, true, true, false));
 	}
 
 	private void parseAdminPlotClaimedAt(Player player) throws TownyException {
