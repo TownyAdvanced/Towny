@@ -37,7 +37,12 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	public static List<Class<?>> classesOfWildernessMobsToRemove = new ArrayList<>();
 	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
 	private static final Set<String> ignoredSpawnReasons = new HashSet<>();
-	private boolean isRemovingKillerBunny;
+	private static boolean isRemovingKillerBunny;
+	
+	static {
+		populateFields();
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:mob-removal-task"), config -> populateFields());
+	}
 	
 	// https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getEntitySpawnReason()
 	private static final MethodHandle GET_SPAWN_REASON = JavaUtil.getMethodHandle(Entity.class, "getEntitySpawnReason");
@@ -46,7 +51,6 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		super(plugin);
 
 		populateFields();
-		TownySettings.addReloadListener(NamespacedKey.fromString("towny:mob-removal-task"), config -> this.populateFields());
 	}
 
 	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
@@ -86,79 +90,98 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		for (final World world : Bukkit.getWorlds()) {
 			// Filter worlds not using towny.
 			final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
-			if (townyWorld == null || !townyWorld.isUsingTowny())
+			if (!isRemovingEntities(townyWorld))
 				continue;
 
-			// Filter worlds that will always pass all checks in a world, regardless of possible conditions.
-			if (townyWorld.isForceTownMobs() && townyWorld.hasWorldMobs())
-				continue;
-
-			final List<LivingEntity> entities = world.getLivingEntities();
-			if (entities.isEmpty())
-				continue;
-			
-			for (final LivingEntity entity : entities) {
-				// Check if entity is a player or Citizens NPC
-				if (entity instanceof Player || PluginIntegrations.getInstance().isNPC(entity))
-					continue;
-
-				// Handles entities Globally.
-				if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(entity)) {
-					removeEntity(entity);
-					continue;
-				}
-
-				final Runnable runnable = () -> {
-					final Location livingEntityLoc = entity.getLocation();
-					final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
-						
-					// Handles entities in the wilderness.
-					if (townBlock == null) {
-						if (townyWorld.hasWildernessMobs() || !isRemovingWildernessEntity(entity))
-							return;
-					} else {
-						// The entity is inside of a town.
-	
-						// Check if mobs are always allowed inside towns in this world, if the townblock allows it, or if the town has mobs forced on.
-						if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs || townBlock.getTownOrNull().isAdminEnabledMobs())
-							return;
-	
-						// Check that Towny is removing this type of entity inside towns.
-						if (!isRemovingTownEntity(entity))
-							return;
-					}
-	
-					// Check if this is an EliteMob before we do any skipping-removal-of-named-mobs.
-					if (PluginIntegrations.getInstance().checkHostileEliteMobs(entity)) {
-						removeEntity(entity);
-						return;
-					}
-
-					// Special check if it's a rabbit, for the Killer Bunny variant.
-					if (entity instanceof Rabbit rabbit && isRemovingKillerBunny && rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) {
-						removeEntity(entity);
-						return;
-					}
-
-					if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
-						return;
-					
-					// Don't remove if the entity's spawn reason is considered ignored by the config
-					if (isSpawnReasonIgnored(entity))
-						return;
-
-					removeEntity(entity);
-				};
-				
-				if (plugin.isFolia())
-					plugin.getScheduler().run(entity, runnable);
-				else
-					runnable.run();
+			for (final LivingEntity entity : world.getLivingEntities()) {
+				checkEntity(plugin, townyWorld, entity);
 			}
 		}
 	}
+
+	/**
+	 * @param world The world to check
+	 * @return Whether entities have a chance of being removed in this world
+	 */
+	public static boolean isRemovingEntities(final @Nullable TownyWorld world) {
+		if (world == null || !world.isUsingTowny())
+			return false;
+
+		// Filter worlds that will always pass all checks in a world, regardless of possible conditions.
+		if (world.isForceTownMobs() && world.hasWorldMobs())
+			return false;
+
+		return true;
+	}
+
+	/**
+	 * Checks and removes entities if necessary. Can be called from any thread.
+	 * @param plugin Towny's plugin instance
+	 * @param townyWorld The world the entity is in
+	 * @param ent The entity to check
+	 */
+	public static void checkEntity(final @NotNull Towny plugin, final @NotNull TownyWorld townyWorld, final @NotNull Entity ent) {
+		if (!(ent instanceof LivingEntity entity))
+			return;
+
+		if (entity instanceof Player || PluginIntegrations.getInstance().isNPC(entity))
+			return;
+
+		// Handles entities Globally.
+		if (!townyWorld.hasWorldMobs() && isRemovingWorldEntity(entity)) {
+			removeEntity(plugin, entity);
+			return;
+		}
+
+		final Runnable runnable = () -> {
+			final Location livingEntityLoc = entity.getLocation();
+			final TownBlock townBlock = TownyAPI.getInstance().getTownBlock(livingEntityLoc);
+
+			// Handles entities in the wilderness.
+			if (townBlock == null) {
+				if (townyWorld.hasWildernessMobs() || !isRemovingWildernessEntity(entity))
+					return;
+			} else {
+				// The entity is inside of a town.
+
+				// Check if mobs are always allowed inside towns in this world, if the townblock allows it, or if the town has mobs forced on.
+				if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs || townBlock.getTownOrNull().isAdminEnabledMobs())
+					return;
+
+				// Check that Towny is removing this type of entity inside towns.
+				if (!isRemovingTownEntity(entity))
+					return;
+			}
+
+			// Check if this is an EliteMob before we do any skipping-removal-of-named-mobs.
+			if (PluginIntegrations.getInstance().checkHostileEliteMobs(entity)) {
+				removeEntity(plugin, entity);
+				return;
+			}
+
+			// Special check if it's a rabbit, for the Killer Bunny variant.
+			if (entity instanceof Rabbit rabbit && isRemovingKillerBunny && rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) {
+				removeEntity(plugin, entity);
+				return;
+			}
+
+			if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
+				return;
+
+			// Don't remove if the entity's spawn reason is considered ignored by the config
+			if (isSpawnReasonIgnored(entity))
+				return;
+
+			removeEntity(plugin, entity);
+		};
+		
+		if (plugin.getScheduler().isEntityThread(entity))
+			runnable.run();
+		else 
+			plugin.getScheduler().run(entity, runnable);
+	}
 	
-	private void removeEntity(@NotNull Entity entity) {
+	private static void removeEntity(final @NotNull Towny plugin, final @NotNull Entity entity) {
 		if (MobRemovalEvent.getHandlerList().getRegisteredListeners().length > 0 && BukkitTools.isEventCancelled(new MobRemovalEvent(entity)))
 			return;
 
@@ -168,7 +191,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 			entity.remove();
 	}
 	
-	private void populateFields() {
+	private static void populateFields() {
 		classesOfWorldMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
 		classesOfWildernessMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWildernessMobRemovalEntities(),"WildernessMob: ");
 		classesOfTownMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");

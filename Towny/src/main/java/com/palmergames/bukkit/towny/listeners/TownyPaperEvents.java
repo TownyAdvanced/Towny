@@ -3,9 +3,14 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.util.JavaUtil;
+import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -13,6 +18,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
@@ -22,6 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
@@ -52,6 +59,8 @@ public class TownyPaperEvents implements Listener {
 
 	public static final MethodHandle DRAGON_FIREBALL_GET_EFFECT_CLOUD = JavaUtil.getMethodHandle(DRAGON_FIREBALL_HIT_EVENT, "getAreaEffectCloud");
 	
+	public static final String ADD_TO_WORLD_EVENT = "com.destroystokyo.paper.event.entity.EntityAddToWorldEvent";
+	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
 	}
@@ -77,6 +86,10 @@ public class TownyPaperEvents implements Listener {
 		if (DRAGON_FIREBALL_GET_EFFECT_CLOUD != null) {
 			registerEvent(DRAGON_FIREBALL_HIT_EVENT, this::dragonFireballHitEventListener, EventPriority.LOW, true);
 			TownyMessaging.sendDebugMsg("Using " + DRAGON_FIREBALL_GET_EFFECT_CLOUD + " listener.");
+		}
+		
+		if (this.plugin.isFolia()) {
+			registerEvent(ADD_TO_WORLD_EVENT, this::entityAddToWorldListener, EventPriority.MONITOR, false /* n/a */);
 		}
 	}
 	
@@ -187,6 +200,23 @@ public class TownyPaperEvents implements Listener {
 
 			if (TownyEntityListener.discardAreaEffectCloud(effectCloud))
 				((Cancellable) event).setCancelled(true);
+		};
+	}
+	
+	private Consumer<EntityEvent> entityAddToWorldListener() {
+		return event -> {
+			if (!(event.getEntity() instanceof LivingEntity entity))
+				return;
+			
+			if (entity instanceof Player || PluginIntegrations.getInstance().isNPC(entity))
+				return;
+			
+			plugin.getScheduler().runRepeating(entity, () -> {
+				final TownyWorld world = TownyAPI.getInstance().getTownyWorld(entity.getWorld());
+				
+				if (MobRemovalTimerTask.isRemovingEntities(world))
+					MobRemovalTimerTask.checkEntity(plugin, world, entity);
+			}, 1L, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 		};
 	}
 }
