@@ -401,7 +401,7 @@ public class NameValidation {
 	 * @param name String to check.
 	 * @return true if this is a banned name.
 	 */
-	protected static boolean isBannedName(String name) {
+	static boolean isBannedName(String name) {
 		return bannedNames.contains(name.toLowerCase(Locale.ROOT));
 	}
 

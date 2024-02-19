@@ -46,7 +46,7 @@ public class CommandList {
 		current.endOfWord = true;
 	}
 	
-	protected static String normalizeCommand(String command) {
+	static String normalizeCommand(String command) {
 		// Replace slash and/or space from the start of a command
 		command = REMOVE_LEADING_SPACE.matcher(command).replaceAll("");
 		
