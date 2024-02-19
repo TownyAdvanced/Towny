@@ -836,5 +836,15 @@
         "value": "spawning.nation_spawn.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time"
       }
     ]
+  },
+  {
+    "version": "0.100.1.15",
+    "changes": [
+      {
+        "type": "MOVE",
+        "path": "plugin.interfacing.using_economy",
+        "value": "economy.using_economy"
+      }
+    ]
   }
 ]

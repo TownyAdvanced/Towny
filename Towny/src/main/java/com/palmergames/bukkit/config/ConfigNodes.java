@@ -1471,14 +1471,6 @@ public enum ConfigNodes {
 			"plugin.interfacing.tekkit.fake_residents",
 			"[IndustrialCraft],[BuildCraft],[Redpower],[Forestry],[Turtle]",
 			"# Add any fake players for client/server mods (aka Tekkit) here"),
-	PLUGIN_USING_ECONOMY(
-			"plugin.interfacing.using_economy",
-			"true",
-			"",
-			"# This enables/disables all the economy functions of Towny.",
-			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
-			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
-			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	
 	PLUGIN_LUCKPERMS_ROOT("plugin.interfacing.luckperms","",""),
 	PLUGIN_LUCKPERMS_CONTEXTS(
@@ -2328,6 +2320,14 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	ECO_USING_ECONOMY(
+			"economy.using_economy",
+			"true",
+			"",
+			"# This enables/disables all the economy functions of Towny.",
+			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
+			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
+			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	ECO_USE_ASYNC(
 			"economy.use_async",
 			"true",
