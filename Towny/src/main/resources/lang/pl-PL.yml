@@ -400,6 +400,7 @@ plot_group_toggle_help_0: "Przełącza PVP w grupie działek."
 plot_group_toggle_help_1: "Przełącza eksplozje w grupie działek."
 plot_group_toggle_help_2: "Przełącza Podpalanie w grupie działek."
 plot_group_toggle_help_3: "Przełącza moby w grupie działek."
+plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
 plot_set_help_0: "Np.: Gospoda, Dzicz, Plener, Ambasada itd."
 plot_set_help_1: "Ustawia działkę na Placówkę."
 plot_set_help_2: "Przywraca domyślny rodzaj działki."
@@ -2051,6 +2052,7 @@ msg_err_your_cannot_overclaim_for_another: "Nie możesz podebrać działki przez
 msg_err_world_not_loaded: "<red>Świat nie jest załadowany."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cStan opodatkowania tej działki został ustawiony na %s.'
+msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
 status_forsale: "&a(Na sprzedaż: %s)"
 msg_town_forsale: "Miasto %s zostało wystawione na sprzedaż za %s."
 msg_town_notforsale: "Miasto %s nie jest już na sprzedaż."
