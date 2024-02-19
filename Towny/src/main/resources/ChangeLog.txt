@@ -9539,3 +9539,13 @@ v0.92.0.11:
     - Closes #7259.
   - Make use of the disallow numbers in town names config option again.
   - Fix being unable to unset titles and surnames.
+  - Remove magic values from spawnpoint ring offsets, courtesy of Warrior with PR #7267.
+  - Fix mob removal on folia, courtesy of Warrior with PR #7262.
+    - Closes #7261, #7221, #7202, #7253.
+  - Make our custom registered commands identifiable, courtesy of Warrior with PR #7263.
+  - Move using_economy to the eco section of the config, courtesy of Warrior with PR #7265.
+  - Automatic config edit:
+    - plugin.interfacing.using_economy moves to economy.using_economy
+  - Remove uuid percentage tracking, courtesy of Warrior with PR #7266.
+  - Make PlotClaim a runnable, courtesy of Warrior with PR #7268.
+  - Reorganize test directory layout, courtesy of Warrior with PR #7269.

@@ -97,7 +97,6 @@ public class TownySettings {
 
 	private static CommentedConfiguration config;
 	private static CommentedConfiguration newConfig;
-	private static int uuidCount;
 	private static boolean areLevelTypeLimitsConfigured;
 
 	private static final SortedMap<Integer, TownLevel> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
