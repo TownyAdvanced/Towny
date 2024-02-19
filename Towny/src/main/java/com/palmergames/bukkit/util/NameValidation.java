@@ -168,8 +168,6 @@ public class NameValidation {
 		if (title.length() > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
 
-		testForEmptyName(title);
-
 		return title;
 	}
 

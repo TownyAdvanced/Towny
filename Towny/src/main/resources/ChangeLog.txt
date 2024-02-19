@@ -9538,3 +9538,4 @@ v0.92.0.11:
   - Prevent falling blocks falling during unclaimed land regeneration.
     - Closes #7259.
   - Make use of the disallow numbers in town names config option again.
+  - Fix being unable to unset titles and surnames.
