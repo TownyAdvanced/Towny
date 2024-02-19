@@ -1,6 +1,9 @@
 package com.palmergames.bukkit.towny.object;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import com.github.bsideup.jabel.Desugar;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 
@@ -13,7 +16,9 @@ public class SpawnPoint {
 	private final SpawnPointType type;
 	private final SpawnPointLocation spawnLocation;
 	
-	private static final ArrayList<RingCoord> RING_PATTERN = createRing();
+	private static final List<RingCoord> RING_PATTERN = createRingOffsets();
+	public static final int RING_POINT_COUNT = 12;
+	public static final int RING_DELAY_TICKS = 4;
 	
 	public SpawnPoint(Location loc, SpawnPointType type) {
 		this(Position.ofLocation(loc), type);
@@ -55,13 +60,13 @@ public class SpawnPoint {
 		int i = 0;
 
 		for (RingCoord ringPosition : RING_PATTERN) {
-			Location point = origin.clone().add(ringPosition.getX(), 0.0d, ringPosition.getZ());
+			Location point = origin.clone().add(ringPosition.x(), 0.0d, ringPosition.z());
 			Towny.getPlugin().getScheduler().runAsyncLater(() -> {
 				try {
 					// This can potentially throw an exception if we're running this async and a player disconnects while it's sending particles.
 					world.spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
 				} catch (Exception ignored) {}
-			}, i * 4L);
+			}, (long) i * RING_DELAY_TICKS);
 			i++;
 		}
 	}
@@ -73,21 +78,20 @@ public class SpawnPoint {
 		return loc;
 	}
 	
-	private static ArrayList<RingCoord> createRing() {
+	private static List<RingCoord> createRingOffsets() {
 		ArrayList<RingCoord> ring = new ArrayList<>();
-		ring.add(RingCoord.of(0.0, 0.45));
-		ring.add(RingCoord.of(0.225, 0.3897));
-		ring.add(RingCoord.of(0.3897, 0.225));
-		ring.add(RingCoord.of(0.45, 0.00));
-		ring.add(RingCoord.of(0.3897, -0.225));
-		ring.add(RingCoord.of(0.225, -0.3897));
-		ring.add(RingCoord.of(0.00, -0.45));
-		ring.add(RingCoord.of(-0.225, -0.3897));
-		ring.add(RingCoord.of(-0.3897, -0.225));
-		ring.add(RingCoord.of(-0.45, 0.0));
-		ring.add(RingCoord.of(-0.3897, 0.225));
-		ring.add(RingCoord.of(-0.225, 0.3897));
-		return ring;		
+
+		final double radius = 0.45;
+		final double angleIncrement = 2 * Math.PI / RING_POINT_COUNT;
+
+		for (int i = 0; i < RING_POINT_COUNT; i++) {
+			double angle = i * angleIncrement;
+			double x = radius * Math.sin(angle);
+			double y = radius * Math.cos(angle);
+			ring.add(RingCoord.offset(x, y));
+		}
+
+		return ring;
 	}
 	
 	public enum SpawnPointType {
@@ -97,24 +101,9 @@ public class SpawnPoint {
 		JAIL_SPAWN
 	}
 	
-	private static class RingCoord {
-		private double x;
-		private double z;
-		
-		private RingCoord(double x, double z) {
-			this.x = x;
-			this.z = z;
-		}
-		
-		private double getX() {
-			return this.x;
-		}
-		
-		private double getZ() {
-			return this.z;
-		}
-		
-		private static RingCoord of(double a, double b) {
+	@Desugar
+	private record RingCoord(double x, double z) {
+		private static RingCoord offset(double a, double b) {
 			return new RingCoord(a, b);
 		}
 	}
