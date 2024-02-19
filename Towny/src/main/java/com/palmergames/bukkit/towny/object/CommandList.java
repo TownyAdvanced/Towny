@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -47,8 +46,7 @@ public class CommandList {
 		current.endOfWord = true;
 	}
 	
-	@VisibleForTesting
-	public static String normalizeCommand(String command) {
+	protected static String normalizeCommand(String command) {
 		// Replace slash and/or space from the start of a command
 		command = REMOVE_LEADING_SPACE.matcher(command).replaceAll("");
 		

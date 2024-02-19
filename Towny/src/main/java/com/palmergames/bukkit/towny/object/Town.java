@@ -398,7 +398,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @param resident Resident that gets added to the town.
 	 */
 	@VisibleForTesting
-	public void addResident(Resident resident) {
+	protected void addResident(Resident resident) {
 		residents.add(resident);
 	}
 

@@ -1,12 +1,51 @@
-package com.palmergames.bukkit.towny.test.text;
+package com.palmergames.bukkit.util;
 
-import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.StringMgmt;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LegacyConversionTests {
+public class ColorConversionTests {
 	
+	// https://github.com/TownyAdvanced/Towny/issues/6291
+	// MiniMessage gradient tags should be untouched
+	@Test
+	void testNoHexGradientConversion() {
+		final String gradient = "<gradient:#AA076B:#61045F>";
+		assertEquals(gradient, Colors.translateLegacyHex(gradient));
+	}
+	
+	// MiniMessage hex tags should also not be touched
+	@Test
+	void testNoMiniMessageConversion() {
+		final String hex = "<#aaaaaa>";
+		assertEquals(hex, Colors.translateLegacyHex(hex));
+	}
+	
+	@Test
+	void testUnusualRepeatingPattern() {
+		final String hexFormat = "§x§a§a§a§a§a§a";
+		assertEquals("<#aaaaaa>", Colors.translateLegacyHex(hexFormat));
+	}
+	
+	@Test
+	void testAmpersandPoundFormat() {
+		String hexFormat = "&#aaaaaa";
+		assertEquals("<#aaaaaa>", Colors.translateLegacyHex(hexFormat));
+	}
+	
+	@Test
+	void testBracketFormat() {
+		String hexFormat = "{aaaaaa}";
+		assertEquals("<#aaaaaa>", Colors.translateLegacyHex(hexFormat));
+	}
+	
+	@Test
+	void testMiniMessageToLegacy() {
+		String hex = "<#aaaaaa>";
+		assertEquals("§x§a§a§a§a§a§a", StringMgmt.translateHexColors(hex));
+	}
+
 	@Test
 	void testLegacyConversions() {
 		assertEquals(Colors.BLACK, Colors.translateLegacyCharacters(Colors.Black));
@@ -19,7 +58,7 @@ public class LegacyConversionTests {
 		assertEquals(Colors.GRAY, Colors.translateLegacyCharacters(Colors.LightGray));
 		assertEquals(Colors.DARK_GRAY, Colors.translateLegacyCharacters(Colors.Gray));
 		assertEquals(Colors.BLUE, Colors.translateLegacyCharacters(Colors.DarkPurple));
-		
+
 		assertEquals(Colors.GREEN, Colors.translateLegacyCharacters(Colors.LightGreen));
 		assertEquals(Colors.AQUA, Colors.translateLegacyCharacters(Colors.LightBlue));
 		assertEquals(Colors.RED, Colors.translateLegacyCharacters(Colors.Rose));
@@ -34,7 +73,7 @@ public class LegacyConversionTests {
 		assertEquals(Colors.ITALIC, Colors.translateLegacyCharacters("§o"));
 		assertEquals(Colors.RESET, Colors.translateLegacyCharacters("§r"));
 	}
-	
+
 	@Test
 	void testNoLegacyUnaffected() {
 		assertEquals("test", Colors.translateLegacyCharacters("test"));

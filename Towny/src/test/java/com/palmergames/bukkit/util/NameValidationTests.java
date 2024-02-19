@@ -1,8 +1,7 @@
-package com.palmergames.bukkit.towny.test;
+package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.command.NationCommand;
 import com.palmergames.bukkit.towny.command.TownCommand;
-import com.palmergames.bukkit.util.NameValidation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
