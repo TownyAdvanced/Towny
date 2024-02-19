@@ -84,7 +84,6 @@ public class OnPlayerLogin implements Runnable {
 				 */
 				try {
 					resident = universe.getDataSource().newResident(player.getName(), player.getUniqueId());
-					TownySettings.incrementUUIDCount();
 					
 					if (TownySettings.isShowingLocaleMessage())
 					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
@@ -204,7 +203,6 @@ public class OnPlayerLogin implements Runnable {
 				} catch (AlreadyRegisteredException e) {
 					plugin.getLogger().log(Level.WARNING, "uuid for resident " + resident.getName() + " was already registered! (" + player.getUniqueId() + ")", e);
 				}
-				TownySettings.incrementUUIDCount();
 			}
 			resident.save();
 		}, 5);

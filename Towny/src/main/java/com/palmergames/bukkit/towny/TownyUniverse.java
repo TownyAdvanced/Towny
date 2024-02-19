@@ -194,7 +194,6 @@ public class TownyUniverse {
 
         long time = System.currentTimeMillis() - startTime;
         towny.getLogger().info("Database: Loaded in " + time + "ms.");
-        towny.getLogger().info("Database: " + TownySettings.getUUIDPercent() + " of residents have stored UUIDs."); // TODO: remove this when we're using UUIDs directly in the database.
 
         // Throw Event.
         BukkitTools.fireEvent(new TownyLoadedDatabaseEvent());

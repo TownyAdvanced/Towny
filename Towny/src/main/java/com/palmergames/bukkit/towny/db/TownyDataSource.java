@@ -158,16 +158,11 @@ public abstract class TownyDataSource {
 
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
-		TownySettings.setUUIDCount(0);
-		
 		for (Resident resident : universe.getResidents()) {
 			if (!loadResident(resident)) {
 				plugin.getLogger().severe("Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				return false;
 			}
-
-			if (resident.hasUUID())
-				TownySettings.incrementUUIDCount();
 		}
 		return true;
 	}
