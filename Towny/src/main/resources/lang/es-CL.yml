@@ -400,6 +400,7 @@ plot_group_toggle_help_0: "Activa el combate en el grupo."
 plot_group_toggle_help_1: "Activa las explosiones en el grupo."
 plot_group_toggle_help_2: "Activa el fuego en el grupo."
 plot_group_toggle_help_3: "Permite los mobs en el grupo."
+plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
 plot_set_help_0: "Ej: Hotel, Campo, Granja, Embajada, etc."
 plot_set_help_1: "Cambia un terreno a un outpost."
 plot_set_help_2: "Quita el tipo de un terreno."
@@ -2051,6 +2052,7 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 msg_err_world_not_loaded: "<red>El mundo no está cargado."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
+msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
 status_forsale: "&a(Venta: %s)"
 msg_town_forsale: "%s está a la venta por %s."
 msg_town_notforsale: "%s ya no está a la venta."
