@@ -781,10 +781,10 @@ public class Towny extends JavaPlugin {
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	private void registerSpecialCommands() {
 		List<Command> commands = new ArrayList<>(4);
-		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
-		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
-		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
-		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+		commands.add(new AcceptCommand(this, TownySettings.getAcceptCommand()));
+		commands.add(new DenyCommand(this, TownySettings.getDenyCommand()));
+		commands.add(new ConfirmCommand(this, TownySettings.getConfirmCommand()));
+		commands.add(new CancelCommand(this, TownySettings.getCancelCommand()));
 
 		try {
 			BukkitTools.getCommandMap().registerAll("towny", commands);
