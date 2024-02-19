@@ -1,6 +1,5 @@
-package com.palmergames.bukkit.towny.test;
+package com.palmergames.util;
 
-import com.palmergames.util.Trie;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

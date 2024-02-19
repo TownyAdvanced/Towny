@@ -18,8 +18,6 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.jetbrains.annotations.VisibleForTesting;
-
 /**
  * @author ElgarL
  * 
@@ -401,8 +399,7 @@ public class NameValidation {
 	 * @param name String to check.
 	 * @return true if this is a banned name.
 	 */
-	@VisibleForTesting
-	public static boolean isBannedName(String name) {
+	static boolean isBannedName(String name) {
 		return bannedNames.contains(name.toLowerCase(Locale.ROOT));
 	}
 

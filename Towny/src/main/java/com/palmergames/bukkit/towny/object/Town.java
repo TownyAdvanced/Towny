@@ -47,7 +47,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -397,8 +396,7 @@ public class Town extends Government implements TownBlockOwner {
 	 *
 	 * @param resident Resident that gets added to the town.
 	 */
-	@VisibleForTesting
-	public void addResident(Resident resident) {
+	void addResident(Resident resident) {
 		residents.add(resident);
 	}
 

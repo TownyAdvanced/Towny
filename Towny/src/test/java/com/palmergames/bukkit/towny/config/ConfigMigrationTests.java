@@ -1,4 +1,4 @@
-package com.palmergames.bukkit.towny.test;
+package com.palmergames.bukkit.towny.config;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.config.CommentedConfiguration;
