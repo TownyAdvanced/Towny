@@ -843,7 +843,8 @@ public enum HelpMenu {
 				.add("pvp", Translatable.of("plot_group_toggle_help_0"))
 				.add("explosion", Translatable.of("plot_group_toggle_help_1"))
 				.add("fire", Translatable.of("plot_group_toggle_help_2"))
-				.add("mobs", Translatable.of("plot_group_toggle_help_3"));
+				.add("mobs", Translatable.of("plot_group_toggle_help_3"))
+				.add("taxed", Translatable.of("plot_group_toggle_help_4"));
 		}
 	},
 	

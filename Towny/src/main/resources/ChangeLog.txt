@@ -9549,3 +9549,6 @@ v0.92.0.11:
   - Remove uuid percentage tracking, courtesy of Warrior with PR #7266.
   - Make PlotClaim a runnable, courtesy of Warrior with PR #7268.
   - Reorganize test directory layout, courtesy of Warrior with PR #7269.
+0.100.1.16:
+  - Enabled /plot group toggle taxed command for plot groups.
+    - You can now properly enabled/disable plot taxes for groups of plots.

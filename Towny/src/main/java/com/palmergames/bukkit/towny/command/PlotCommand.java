@@ -1659,6 +1659,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "mobs":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_MOBS.getNode());
 			break;
+		case "taxed":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+			break;
 		}
 
 		for (TownBlock groupBlock : plotGroup.getTownBlocks()) {
@@ -1683,6 +1686,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					tryToggleTownBlockMobs(player, groupBlock, split, choice);
 					endingMessage = Translatable.of("msg_changed_mobs", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled"));
 					break;
+				case "taxed":
+					 tryToggleTownBlockTaxed(player, groupBlock, split, choice);
+					 endingMessage = Translatable.of("msg_changed_plotgroup_taxed", groupBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled"));
 				default:
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "plot"));
 					return;
