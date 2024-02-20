@@ -37,6 +37,7 @@ import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.LlamaSpit;
@@ -490,7 +491,7 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Prevent blocks from falling while their plot is being regenerated back to it's pre-claimed state.
-		if (ItemLists.FALLING_BLOCKS.contains(blockMat) && TownyRegenAPI.hasActiveRegeneration(WorldCoord.parseWorldCoord(event.getBlock()))) {
+		if (entity instanceof FallingBlock && TownyRegenAPI.hasActiveRegeneration(WorldCoord.parseWorldCoord(event.getBlock()))) {
 			event.setCancelled(true);
 			return;
 		}
