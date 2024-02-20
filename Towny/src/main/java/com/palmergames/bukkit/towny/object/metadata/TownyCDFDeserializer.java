@@ -29,5 +29,8 @@ public class TownyCDFDeserializer {
 
 	static final DataFieldDeserializer<LocationDataField> LOCATION_DF =
 			(key, value) -> deserializeDF(new LocationDataField(key), value);
+	
+	static final DataFieldDeserializer<ListDataField> LIST_DF =
+		(key, value) -> deserializeDF(new ListDataField(key), value);
 
 }
