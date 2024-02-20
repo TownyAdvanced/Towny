@@ -197,7 +197,7 @@ res_5: 'para ayuda'
 res_6: 'Coincidencia en línea'
 res_7: 'Nombre exacto'
 res_8: 'Solo un humilde agricultor'
-res_9: "How much tax you will pay per day."
+res_9: "Cuánto impuesto pagarás por día."
 res_10: "Use /res jail ? para obtener ayuda."
 res_11: "Use /res toggle ? para obtener ayuda."
 res_12: "Use /res set ? para obtener ayuda."
@@ -214,15 +214,15 @@ res_toggle_help_8: "Activa la capacidad de ir reclamando terrenos mientras camin
 res_toggle_help_9: "Activa la capacidad de ver el mapa al cambiar entre terrenos."
 res_toggle_help_10: "Eliminar todos los modos."
 res_toggle_help_11: "Espíar en los canales de chat."
-res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
-res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
-res_toggle_help_14: "Toggle the ability to unclaim where you walk."
-res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
-res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
-res_jail_help_0: "Pays the bail cost to get out of jail."
-res_set_help_0: "Set your resident's About/Bio"
-res_set_help_1: "Set your resident's default plot permissions."
-res_set_help_2: "Set your resident's modes."
+res_toggle_help_12: "Activa la habilidad de añadir terrenos a un grupo que iniciaste."
+res_toggle_help_13: "Activa la habilidad de ver títulos al cambiar de terreno."
+res_toggle_help_14: "Activa la habilidad de abandonar terrenos mientras caminas."
+res_toggle_help_15: "Activa la habilidad de usar la herramienta de información para ver los nombres de los bloques/entidades."
+res_toggle_help_16: "Activa la habilidad de desactivar tus privilegios de administrador."
+res_jail_help_0: "Paga la fianza para salir de la cárcel."
+res_set_help_0: "Establecer tu biografía"
+res_set_help_1: "Establecer tus permisos de terreno predeterminados."
+res_set_help_2: "Establecer tus modos."
 mode_1: 'Mostrar el mapa entre cada terreno de la ciudad'
 mode_2: 'Intentar reclamar al caminar'
 mode_3: 'Intentar abandonar al caminar'
@@ -247,31 +247,31 @@ world_help_2: '[mundo]'
 world_help_3: 'Estado del mundo seleccionado'
 world_help_4: 'Lista de todos los mundos'
 world_help_5: 'Regenerar este chunk'
-world_help_6: 'See /tw toggle ? for help'
-world_help_7: 'See /tw set ? for help'
-world_set_help_0: "Set the world's wilderness name."
-world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
-world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
-world_toggle_help_2: "Toggle on/off if wars can happen in this world."
-world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
-world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
-world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
-world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
+world_help_6: 'Use /tw toggle ? para obtener ayuda'
+world_help_7: 'Use /tw set ? para obtener ayuda'
+world_set_help_0: "Establecer el nombre del Exterior en este mundo."
+world_toggle_help_0: "Permitir que las ciudades reclamen terrenos en este mundo."
+world_toggle_help_1: "Activar o desactivar Towny en este mundo."
+world_toggle_help_2: "Activar o desactivar guerras en este mundo."
+world_toggle_help_3: "Activa o desactiva si el combate voluntario o forzado está habilitado en este mundo."
+world_toggle_help_4: "Activar o desactivar el combate amistoso en este mundo."
+world_toggle_help_5: "Activar o desactivar las explosiones en este mundo."
+world_toggle_help_6: "Activar o desactivar los incendios en este mundo."
 world_toggle_help_7: "Activa o desactiva los ajustes de aparición de mobs del mundo."
-world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
-world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
-world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
-world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_8: "Activar o desactivar la función revertir-al-abandonar en este mundo."
+world_toggle_help_9: "Activar o desactivar la función revertir-explosiones en este mundo."
+world_toggle_help_10: "Activar o desactivar la función plot-clear-elimina-los-bloques en este mundo."
+world_toggle_help_11: "Activar o desactivar la función abandonar-elimina-los-bloques en este mundo."
 townyadmin_help_1: 'Abandonar este terreno de la ciudad'
 townyadmin_help_2: 'Intentar abandonar alrededor de ti.'
 admin_panel_1: "Use /ta set ? para obtener ayuda"
 admin_panel_2: 'Reiniciar Towny'
 admin_panel_3: 'Forzar el inicio de un nuevo día'
-admin_panel_4: "Unclaim an space surrounding you"
+admin_panel_4: "Abandonar un terreno alrededor tuyo"
 admin_panel_5: "Use /ta plot ? para obtener ayuda"
-admin_panel_6: "Give a positive or negative amount of townblocks to a player or town"
+admin_panel_6: "Dar o quitar terrenos a una ciudad o jugador"
 admin_panel_7: "Use /ta toggle ? para obtener ayuda"
-admin_panel_8: "Commands for controlling these objects"
+admin_panel_8: "Comandos para controlar estos objetos"
 admin_panel_9: "Teletransportarse al terreno especificado"
 admin_panel_10: "Comprueba si el jugador tiene un nodo de permiso"
 admin_panel_11: "Restablecer tu configuración"
@@ -281,8 +281,8 @@ admin_panel_14: "Forzar el guardado o cargado de la base de datos"
 admin_panel_15: "Ejecutar el código de un nuevo día"
 admin_panel_16: "Purgar residentes antiguos"
 townyadmin_town_help_0: "Crear una ciudad con el nombre y alcalde dados."
-townyadmin_town_help_1: "Show the town status screen."
-townyadmin_town_help_2: "Add or remove residents from a town."
+townyadmin_town_help_1: "Mostrar la pantalla del estado comunal."
+townyadmin_town_help_2: "Añadir o eliminar residentes de una ciudad."
 townyadmin_town_help_3: "Renombrar una ciudad."
 townyadmin_town_help_4: "Eliminar una ciudad."
 townyadmin_town_help_5: "Spawnear en una ciudad."
@@ -291,8 +291,8 @@ townyadmin_town_help_7: "Usar el comando rank de una ciudad."
 townyadmin_town_help_8: "Usar el comando set de una ciudad."
 townyadmin_town_help_9: "Usar el comando toggle de una ciudad."
 townyadmin_town_help_10: "Editar los metadatos de una ciudad."
-townyadmin_town_help_11: "Merge the 2nd town into the first town."
-townyadmin_town_help_12: "Merge the 2nd town into the first town, ignoring any rules."
+townyadmin_town_help_11: "Fusionar la segunda ciudad en la primera ciudad."
+townyadmin_town_help_12: "Fusionar la segunda ciudad en la primera ciudad, ignorando cualquier regla."
 townyadmin_town_help_13: "Poner dinero en el banco de la ciudad."
 townyadmin_town_help_14: "Quitar dinero del banco de la ciudad."
 townyadmin_town_help_15: "Abrir el libro de finanzas de la ciudad."
@@ -354,8 +354,8 @@ ta_set_help_8: "Usa el tamaño 0 para quitar la anulación de la zona nacional."
 ta_purge_help_0: "Purga a los residentes que no han iniciado sesión durante más tiempo de los días dados, opcionalmente puede usarse para eliminar sólo a jugadores sin ciudades, o especificar una ciudad para purgar sólo a los residentes de esta."
 ta_townmeta_help_1: "Ver los metadatos de la ciudad especificada."
 ta_townmeta_help_2: "Establece la clave y valor de los metadatos de una ciudad."
-ta_townmeta_help_3: "Add or remove a metadata by key from the town."
-ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
+ta_townmeta_help_3: "Añadir o quitar metadatos por la clave de la ciudad."
+ta_residentmeta_help_1: "Ver los metadatos del residente especificado."
 ta_residentmeta_help_2: "Establece la clave y valor de los metadatos de un residente."
 ta_residentmeta_help_3: "Añadir o quitar metadatos por la clave del residente."
 ta_nationmeta_help_1: "Ver los metadatos de la nación especificada."
@@ -400,13 +400,13 @@ plot_group_toggle_help_0: "Activa el combate en el grupo."
 plot_group_toggle_help_1: "Activa las explosiones en el grupo."
 plot_group_toggle_help_2: "Activa el fuego en el grupo."
 plot_group_toggle_help_3: "Permite los mobs en el grupo."
-plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
+plot_group_toggle_help_4: "Activar el cobro de impuestos del grupo."
 plot_set_help_0: "Ej: Hotel, Campo, Granja, Embajada, etc."
 plot_set_help_1: "Cambia un terreno a un outpost."
 plot_set_help_2: "Quita el tipo de un terreno."
 plot_set_help_3: "Nombra un terreno."
 plot_set_help_4: "Activa todos los permisos."
-plot_set_help_5: "Sets the permissions of a level or type to on or off."
+plot_set_help_5: "Establece los permisos de un nivel o un tipo en activado o desactivado."
 plot_set_help_6: "Sets the permission of a level and type to on or off."
 plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
 plot_jailcell_help_0: "Agrega una celda donde estás parado."
@@ -916,7 +916,7 @@ status_town_nation: 'Nación:'
 status_town_reslist_overlength: 'y más...'
 status_nation_king: 'Líder:'
 status_nation_tax: 'ImpuestoNación:'
-status_nation_conquered_tax: 'ConqueredTax:'
+status_nation_conquered_tax: 'ImpuestoConquistado:'
 status_nation_towns: 'Ciudades'
 status_nation_allies: 'Aliados'
 status_nation_enemies: 'Enemigos'
@@ -936,7 +936,7 @@ status_res_taxexempt: 'El personal municipal está exento de los impuestos.'
 status_res_tax: 'Impuesto de la Ciudad:'
 status_res_plottax: 'Impuesto total de los terrenos:'
 status_res_totaltax: 'Impuesto total:'
-status_townblock_plottax: 'Cargar impuesto: '
+status_townblock_plottax: 'ImpuestoTerreno: '
 status_townblock_untaxed: 'Untaxed'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'No puedes interactuar con el banco de la nación fuera de la capital.'
@@ -1106,10 +1106,10 @@ msg_err_key_cannot_be_deleted: 'No se puede borrar una clave que no existe.'
 msg_err_this_town_doesnt_have_any_associated_metadata: 'Esta ciudad no tiene metadatos asociados a ella.'
 msg_err_key_x_is_not_part_of_this_town: 'La clave %s no es parte de esta ciudad, dentro de lo posible, añadela.'
 msg_custom_data_was_successfully_added_to_town: '¡Se han añadido datos personalizados a la ciudad!'
-msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
-msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'Este residente no tiene metadatos asociados.'
+msg_err_key_x_is_not_part_of_this_resident: 'La clave %s no es parte de este residente, dentro de lo posible, añadela.'
 msg_custom_data_was_successfully_added_to_resident: '¡Se añadieron datos personalizados al residente!'
-msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'Esta nación no tiene metadatos asociados a ella.'
 msg_err_key_x_is_not_part_of_this_nation: 'La clave %s no es parte de esta nación, dentro de lo posible, añadela.'
 msg_custom_data_was_successfully_added_to_nation: '¡Se han añadido datos personalizados a la nación!'
 msg_error_too_many_pages: 'Hay demasiadas páginas.'
@@ -1293,7 +1293,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cTu ciudad será considerada
 msg_time_remaining_before_full_removal: 'Tiempo hasta que sea eliminado completamente: %d horas.'
 msg_time_until_reclaim_available: 'Tiempo hasta que se pueda volver a reclamar: %d horas.'
 msg_reclaim_available: 'Reclamo disponible.'
-msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
+msg_ruined_town_being_deleted: "%s estuvo en las ruinas por %s y será eliminado."
 #Added in 0.93
 msg_changed_peaceful: '&cLa neutralidad de la ciudad ahora está %s.'
 msg_err_town_unclaim_canceled: '&cAbandono cancelado. No puedes realizar esta operación ahora mismo.'
