@@ -9558,3 +9558,5 @@ v0.92.0.11:
   - Add list metadata type, courtesy of Warrior with PR #7274.
   - Remove locale message on first join, courtesy of Warrior with PR #7276.
   - Skip copying light data for our chunk snapshots, courtesy of Warrior with PR #7281.
+0.100.1.17:
+  - Replace usage of deprecated IOUtils method.
