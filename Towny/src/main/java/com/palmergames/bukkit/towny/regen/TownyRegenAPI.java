@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
 import com.palmergames.bukkit.util.ItemLists;
 
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
@@ -24,6 +25,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -51,6 +53,9 @@ public class TownyRegenAPI {
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static final Set<Block> protectionPlaceholders = new HashSet<>();
+	
+	// https://jd.papermc.io/paper/1.20/org/bukkit/Chunk.html#getChunkSnapshot(boolean,boolean,boolean,boolean)
+	private static final MethodHandle GET_CHUNK_SNAPSHOT = JavaUtil.getMethodHandle(Chunk.class, "getChunkSnapshot", boolean.class, boolean.class, boolean.class, boolean.class);
 
 	/**
 	 * Removes a TownyWorld from the various Revert-on-Unclaim feature Lists/Table.
@@ -447,7 +452,15 @@ public class TownyRegenAPI {
 		final List<ChunkSnapshot> snapshots = new ArrayList<>();
 		final Collection<CompletableFuture<Chunk>> futures = townBlock.getWorldCoord().getChunks();
 		
-		futures.forEach(future -> future.thenAccept(chunk -> snapshots.add(chunk.getChunkSnapshot(false, false, false))));
+		futures.forEach(future -> future.thenAccept(chunk -> {
+			try {
+				if (GET_CHUNK_SNAPSHOT != null) {
+					snapshots.add((ChunkSnapshot) GET_CHUNK_SNAPSHOT.invoke(chunk, false, false, false, false));
+				}
+			} catch (Throwable throwable) {
+				snapshots.add(chunk.getChunkSnapshot(false, false, false));
+			}
+		}));
 		
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[]{})).thenApplyAsync(v -> {
 			final PlotBlockData data = new PlotBlockData(townBlock);
