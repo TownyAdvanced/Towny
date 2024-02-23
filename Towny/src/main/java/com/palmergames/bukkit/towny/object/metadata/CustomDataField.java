@@ -7,30 +7,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class CustomDataField<T> implements Cloneable {
-    private T value;
-    private final String key;
+    T value;
+    final String key;
     
     protected String label;
     
-    public CustomDataField(String key, T value, String label)
-    {
+    public CustomDataField(String key, T value, String label) {
         this.setValue(value);
         this.key = key;
         this.label = label;
     }
 
-	public CustomDataField(String key, T value)
-	{
+	public CustomDataField(String key, T value) {
 		this(key, value, null);
 	}
 
-	public CustomDataField(String key, String label)
-	{
+	public CustomDataField(String key, String label) {
 		this(key, null, label);
 	}
 
-    public CustomDataField(String key)
-    {
+    public CustomDataField(String key) {
         this(key, null, null);
     }
 
@@ -111,23 +107,14 @@ public abstract class CustomDataField<T> implements Cloneable {
 
 	// Not used for serialization anymore. Just for human readable format.
 	@Override
-    public String toString() {
-        String out = "";
-        
-        // Type
-        out += getTypeID();
-        
-        // Key
-        out += "," + getKey();
-        
-        // Value
-        out += "," + getValue();
-        
-        // Label
-        out += "," + getLabel();
-        
-        return out;
-    }
+	public String toString() {
+		return getClass().getSimpleName() + "{" +
+			"type=" + getTypeID() +
+			", key='" + key + '\'' +
+			", value=" + value + '\'' +
+			", label='" + label + '\'' +
+			'}';
+	}
 
 	/**
 	 * Determines whether the given input can be parsed to the appropriate value.
@@ -154,7 +141,7 @@ public abstract class CustomDataField<T> implements Cloneable {
 
 	/**
 	 * Get the value as a formatted component.
-	 * 
+	 * <p>
 	 * This function is intentionally overridable by child classes.
 	 * 
 	 * @return formatted component of value.
@@ -177,7 +164,5 @@ public abstract class CustomDataField<T> implements Cloneable {
         return getKey().hashCode();
     }
     
-    @NotNull
-    public abstract CustomDataField<T> clone();
-    
+    public abstract @NotNull CustomDataField<T> clone();
 }
