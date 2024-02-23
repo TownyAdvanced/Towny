@@ -84,10 +84,6 @@ public class OnPlayerLogin implements Runnable {
 				 */
 				try {
 					resident = universe.getDataSource().newResident(player.getName(), player.getUniqueId());
-					
-					if (TownySettings.isShowingLocaleMessage())
-					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
-
 					resident.setRegistered(System.currentTimeMillis());
 
 					final Resident finalResident = resident;

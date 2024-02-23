@@ -3595,10 +3595,6 @@ public class TownySettings {
 	public static Map<Integer, NationLevel> getConfigNationLevel() {
 		return configNationLevel;
 	}
-
-	public static boolean isShowingLocaleMessage() {
-		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_LOCALE_MESSAGE);
-	}
 	
 	public static boolean isLanguageEnabled(@NotNull String locale) {
 		// Either all languages are enabled or, we auto-enable English: Addons that only

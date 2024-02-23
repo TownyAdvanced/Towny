@@ -2015,8 +2015,6 @@ confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want t
 
 #Added in 0.140
 
-#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
 
