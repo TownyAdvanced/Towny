@@ -881,6 +881,20 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableCollection(townBlocks);
 	}
 
+	/**
+	 * @return All towns that the resident is outlawed in
+	 */
+	public List<Town> getTownsOutlawedIn() {
+		List<Town> townsOutlawedIn = new ArrayList<>();
+
+		for (Town town : TownyUniverse.getInstance().getTowns()) {
+			if (town.hasOutlaw(this))
+				townsOutlawedIn.add(town);
+		}
+
+		return townsOutlawedIn;
+	}
+
 	@Override
 	public boolean hasTownBlock(TownBlock townBlock) {
 		return townBlocks.contains(townBlock);
