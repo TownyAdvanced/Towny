@@ -55,6 +55,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
 	private List<Resident> friends = new ArrayList<>();
@@ -885,14 +886,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	 * @return All towns that the resident is outlawed in
 	 */
 	public List<Town> getTownsOutlawedIn() {
-		List<Town> townsOutlawedIn = new ArrayList<>();
-
-		for (Town town : TownyUniverse.getInstance().getTowns()) {
-			if (town.hasOutlaw(this))
-				townsOutlawedIn.add(town);
-		}
-
-		return townsOutlawedIn;
+		return TownyUniverse.getInstance().getTowns().stream().filter(t -> t.hasOutlaw(this)).collect(Collectors.toList());
 	}
 
 	@Override

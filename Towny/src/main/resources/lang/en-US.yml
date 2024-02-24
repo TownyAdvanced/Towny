@@ -2462,3 +2462,5 @@ msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allo
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
 
 msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
+    
+outlawed_in: "Outlawed in:"

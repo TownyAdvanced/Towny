@@ -177,10 +177,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 3)
 						return Collections.singletonList("[page #]");
 					break;
-				case "outlawlist":
-					if (args.length == 2)
-						return getTownyStartingWith(args[1], "r");
 				case "tax":
+				case "outlawlist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "r");
 					break;
@@ -362,7 +360,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			resident = getResidentOrThrow(split[0]);
 		}
 
-		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlaws").forLocale(player), new ArrayList<>(resident.getTownsOutlawedIn())));
+		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlawed_in").forLocale(player), new ArrayList<>(resident.getTownsOutlawedIn())));
 	}
 
 	private void parseResidentJail(Player player, String[] split) throws TownyException {
