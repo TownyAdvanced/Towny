@@ -1782,8 +1782,6 @@ msg_your_town_paid_x_to_unclaim: 'Vaš grad je platio %s za unclaim-ovanje zemlj
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Unclaim-ovanje ovog zemljišta će koštati %s, da li želite da nastavite?'
 #Added in 0.140
-#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny koristi Vaš lokalni klijent (%s) za prevođenje poruka.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Morate sačekati %s sekundi pre nego što ponovo budete mogli da promenite ime grada.'
 #Added in 1.141
