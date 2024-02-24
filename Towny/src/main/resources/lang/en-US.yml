@@ -2463,4 +2463,4 @@ msg_err_name_validation_used_in_command_structure: "%s is used in the command st
 
 msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
     
-outlawed_in: "Outlawed in:"
+outlawed_in: "Outlawed in"
