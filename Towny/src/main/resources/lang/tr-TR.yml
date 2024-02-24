@@ -1782,8 +1782,6 @@ msg_your_town_paid_x_to_unclaim: 'Kasabanız bir arsayı bünyesinden çıkarmak
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Arsa hakkından vazgeçmek size %s altına mâl olucaktır. Devam etmek istiyormusunuz?'
 #Added in 0.140
-#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny, mesajlarını çevirmek için oyuncu bilgisayarının yerel ayarını (%s) kullanır. Çevirilerde eksik dizeler olabileceğini unutmayın.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Kasabanı yeniden adlandırmak için %s saniye beklemelisin.'
 #Added in 1.141
