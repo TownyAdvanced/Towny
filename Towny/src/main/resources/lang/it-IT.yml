@@ -1782,8 +1782,6 @@ msg_your_town_paid_x_to_unclaim: 'La tua città ha pagato %s per rimuovere il lo
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Rimuovere questo lotto costerà %s, si desidera continuare?'
 #Added in 0.140
-#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny utilizza la localizzazione del tuo client (%s) per tradurre i suoi messaggi. Essere consapevoli delle traduzioni potrebbero essere stringhe mancanti.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Devi aspettare %s secondi prima di poter rinominare nuovamente la tua città.'
 #Added in 1.141
