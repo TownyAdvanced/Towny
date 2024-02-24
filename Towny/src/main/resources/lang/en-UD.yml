@@ -34,62 +34,62 @@ description: >
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
-unclaimed_plot_name: 'Unowned'
+unclaimed_plot_name: 'pǝuʍou∩'
 unclaimed_zone_name: 'ssǝuɹǝplᴉM'
 ############################################################
 #+------------------------------------------------------+ #
 #|help messages                                         | #
 #+------------------------------------------------------+ #
 ############################################################
-help_0: 'General Towny Help'
-help_1: 'Try the following commands to learn more about towny.'
-help_2: 'Town Chat'
-help_3: 'Nation Chat'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
-towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
-towny_help_4: "Display time until a new day"
-towny_help_5: "Displays stats"
-towny_help_6: "Displays the version of Towny"
-towny_top_help_0: "List top residents based on subcommand."
-towny_top_help_1: "List top land-owners based on subcommand."
-towny_top_help_2: "List wealthiest based on subcommand."
-town_help_1: 'Your town''s status'
-town_help_2: '[mayor]'
-town_help_3: 'Selected town''s status'
-town_help_4: 'Shortcut to the town''s status of your location.'
-town_help_5: 'Teleport to town''s spawn.'
-town_help_6: 'New town with you as mayor.'
-town_help_7: 'New town with target mayor.'
-town_help_8: 'List commands for mayors.'
-town_help_9: 'Today''s the day!'
-town_help_10: 'List all online residents in town'
-town_help_13: "See a list of residents in the town."
-town_help_14: "See a list of ranks in the town."
-town_help_15: "See a list of outlaws in the town."
-town_help_16: "See a list of plotgroups in the town."
-town_help_17: "See a list of plot types in the town."
-town_help_18: "Say a message to the town members."
-town_help_19: "Set your town for sale, able to be bought by other players."
-town_help_20: "Set your town not for sale."
-town_help_21: "Buy the given town, as long as it is for sale."
-town_help_22: "Deposit money into your town's bank."
-town_help_23: "Used to modify your resident's town ranks."
-town_help_24: "Used to delete your town."
-town_help_25: "Used to modify your town's outlaws."
-town_help_26: "List all towns, see /t list ? for help."
-town_help_27: "Leave the town you're a member of."
-town_help_28: "Withdraw money from your town's bank."
-town_help_29: "Use /t claim ? for help."
-town_help_30: "Used to unclaim land from your town."
-town_help_31: "Add or remove residents."
+help_0: 'dꞁǝH ʎuʍo⟘ ꞁɐɹǝuǝ⅁'
+help_1: '˙ʎuʍoʇ ʇnoqɐ ǝɹoɯ uɹɐǝꞁ oʇ spuɐɯɯoɔ ᵷuᴉʍoꞁꞁoɟ ǝɥʇ ʎɹ⟘'
+help_2: 'ʇɐɥƆ uʍo⟘'
+help_3: 'ʇɐɥƆ uoᴉʇɐN'
+help_4: '˙dꞁǝɥ puɐɯɯoɔ ʇuǝpᴉsǝᴚ'
+help_5: '˙dꞁǝɥ puɐɯɯoɔ uʍo⟘'
+help_6: '˙dꞁǝɥ puɐɯɯoɔ uoᴉʇɐN'
+help_7: '˙dꞁǝɥ puɐɯɯoɔ ʇoꞁԀ'
+help_8: '˙dꞁǝɥ puɐɯɯoɔ ʎuʍo⟘'
+help_9: '˙dꞁǝɥ puɐɯɯoɔ uᴉɯpɐʎuʍo⟘'
+towny_help_0: "ʎuʍo⟘ ɹoɟ dꞁǝɥ ꞁɐɹǝuǝ⅁"
+towny_help_1: "sʞɔoꞁquʍoʇ ʎqɹɐǝu ǝɥʇ ɟo dɐɯ ɐ sʎɐꞁdsᴉᗡ"
+towny_help_2: "ʎɯouoɔƎ ɥʇᴉʍ pǝsn sǝɔᴉɹd ǝɥʇ ʎɐꞁdsᴉᗡ"
+towny_help_3: "sǝɹoɔsɥᵷᴉɥ ʎɐꞁdsᴉᗡ"
+towny_help_4: "ʎɐp ʍǝu ɐ ꞁᴉʇun ǝɯᴉʇ ʎɐꞁdsᴉᗡ"
+towny_help_5: "sʇɐʇs sʎɐꞁdsᴉᗡ"
+towny_help_6: "ʎuʍo⟘ ɟo uoᴉsɹǝʌ ǝɥʇ sʎɐꞁdsᴉᗡ"
+towny_top_help_0: "˙puɐɯɯoɔqns uo pǝsɐq sʇuǝpᴉsǝɹ doʇ ʇsᴉꞀ"
+towny_top_help_1: "˙puɐɯɯoɔqns uo pǝsɐq sɹǝuʍo-puɐꞁ doʇ ʇsᴉꞀ"
+towny_top_help_2: "˙puɐɯɯoɔqns uo pǝsɐq ʇsǝᴉɥʇꞁɐǝʍ ʇsᴉꞀ"
+town_help_1: 'snʇɐʇs s,uʍoʇ ɹno⅄'
+town_help_2: '[ɹoʎɐɯ]'
+town_help_3: 'snʇɐʇs s,uʍoʇ pǝʇɔǝꞁǝS'
+town_help_4: '˙uoᴉʇɐɔoꞁ ɹnoʎ ɟo snʇɐʇs s,uʍoʇ ǝɥʇ oʇ ʇnɔʇɹoɥS'
+town_help_5: '˙uʍɐds s,uʍoʇ oʇ ʇɹodǝꞁǝ⟘'
+town_help_6: '˙ɹoʎɐɯ sɐ noʎ ɥʇᴉʍ uʍoʇ ʍǝN'
+town_help_7: '˙ɹoʎɐɯ ʇǝᵷɹɐʇ ɥʇᴉʍ uʍoʇ ʍǝN'
+town_help_8: '˙sɹoʎɐɯ ɹoɟ spuɐɯɯoɔ ʇsᴉꞀ'
+town_help_9: '¡ʎɐp ǝɥʇ s,ʎɐpo⟘'
+town_help_10: 'uʍoʇ uᴉ sʇuǝpᴉsǝɹ ǝuᴉꞁuo ꞁꞁɐ ʇsᴉꞀ'
+town_help_13: "˙uʍoʇ ǝɥʇ uᴉ sʇuǝpᴉsǝɹ ɟo ʇsᴉꞁ ɐ ǝǝS"
+town_help_14: "˙uʍoʇ ǝɥʇ uᴉ sʞuɐɹ ɟo ʇsᴉꞁ ɐ ǝǝS"
+town_help_15: "˙uʍoʇ ǝɥʇ uᴉ sʍɐꞁʇno ɟo ʇsᴉꞁ ɐ ǝǝS"
+town_help_16: "˙uʍoʇ ǝɥʇ uᴉ sdnoɹᵷʇoꞁd ɟo ʇsᴉꞁ ɐ ǝǝS"
+town_help_17: "˙uʍoʇ ǝɥʇ uᴉ sǝdʎʇ ʇoꞁd ɟo ʇsᴉꞁ ɐ ǝǝS"
+town_help_18: "˙sɹǝqɯǝɯ uʍoʇ ǝɥʇ oʇ ǝᵷɐssǝɯ ɐ ʎɐS"
+town_help_19: "˙sɹǝʎɐꞁd ɹǝɥʇo ʎq ʇɥᵷnoq ǝq oʇ ǝꞁqɐ 'ǝꞁɐs ɹoɟ uʍoʇ ɹnoʎ ʇǝS"
+town_help_20: "˙ǝꞁɐs ɹoɟ ʇou uʍoʇ ɹnoʎ ʇǝS"
+town_help_21: "˙ǝꞁɐs ɹoɟ sᴉ ʇᴉ sɐ ᵷuoꞁ sɐ 'uʍoʇ uǝʌᴉᵷ ǝɥʇ ʎnᗺ"
+town_help_22: "˙ʞuɐq s,uʍoʇ ɹnoʎ oʇuᴉ ʎǝuoɯ ʇᴉsodǝᗡ"
+town_help_23: "˙sʞuɐɹ uʍoʇ s,ʇuǝpᴉsǝɹ ɹnoʎ ʎɟᴉpoɯ oʇ pǝs∩"
+town_help_24: "˙uʍoʇ ɹnoʎ ǝʇǝꞁǝp oʇ pǝs∩"
+town_help_25: "˙sʍɐꞁʇno s,uʍoʇ ɹnoʎ ʎɟᴉpoɯ oʇ pǝs∩"
+town_help_26: "˙dꞁǝɥ ɹoɟ ¿ ʇsᴉꞁ ʇ/ ǝǝs 'suʍoʇ ꞁꞁɐ ʇsᴉꞀ"
+town_help_27: "˙ɟo ɹǝqɯǝɯ ɐ ǝɹ,noʎ uʍoʇ ǝɥʇ ǝʌɐǝꞀ"
+town_help_28: "˙ʞuɐq s,uʍoʇ ɹnoʎ ɯoɹɟ ʎǝuoɯ ʍɐɹpɥʇᴉM"
+town_help_29: "˙dꞁǝɥ ɹoɟ ¿ ɯᴉɐꞁɔ ʇ/ ǝs∩"
+town_help_30: "˙uʍoʇ ɹnoʎ ɯoɹɟ puɐꞁ ɯᴉɐꞁɔun oʇ pǝs∩"
+town_help_31: "˙sʇuǝpᴉsǝɹ ǝʌoɯǝɹ ɹo ppⱯ"
 town_help_32: "Use /t set ? for help."
 town_help_33: "Use /t buy ? for help."
 town_help_34: "Use /t toggle ? for help."
@@ -140,56 +140,56 @@ nation_help_1: 'Your nation''s status'
 nation_help_2: '[nation]'
 nation_help_3: 'Target nation''s status'
 nation_help_4: 'List all nations'
-nation_help_5: 'Leave your nation'
-nation_help_6: 'Create a new nation'
-nation_help_7: 'List the nation leader commands'
-nation_help_8: 'Create a new nation'
-nation_help_9: 'List all online residents in nation'
-nation_help_11: "Lists the towns in the nation."
-nation_help_12: "Lists the allied nations of the nation."
-nation_help_13: "Lists the enemied nations of the nation."
-nation_help_14: "Used to join open nations."
-nation_help_15: "Deposits money into the nation bank."
-nation_help_16: "Used to delete your nation."
-nation_help_17: "Used to add or remove ranks from residents."
-nation_help_18: "See /n rank ? for help."
-nation_list_help_0: "View the specified page."
-nation_list_help_1: "List nations by resident-count, with the specified page."
-nation_list_help_2: "List nations by town-count, with the specified page."
-nation_list_help_3: "List nations which are open, with the specified page."
-nation_list_help_4: "List nations using bank balance, with the specified page."
-nation_list_help_5: "List nations in alphabetical order, with the specified page."
-nation_list_help_6: "List nations by claimed land, with the specified page."
-nation_list_help_7: "List nations by number online, with the specified page."
-nation_set_help_0: "Change the leader of the nation."
-nation_set_help_1: "Change the capital city of the nation."
-nation_set_help_2: "Set the amount of tax that towns will pay."
-nation_set_help_3: "Set the amount of tax that conquered towns will pay."
-nation_set_help_4: "Set the name of the nation."
-nation_set_help_5: "Set the title or surname of one of your residents."
-nation_set_help_6: "Set the nation tag."
-nation_set_help_7: "Set the nation board message."
-nation_set_help_8: "Set the nation spawn point."
-nation_set_help_9: "Set the cost to use /n spawn."
-nation_set_help_10: "Set the mapcolor used in Mapping plugins."
-nation_toggle_help_0: "Toggles peaceful status of the nation."
-nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
-nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
-nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
-nation_sanction_help_1: "Adds a town to the SanctionedTown list."
-nation_sanction_help_2: "Removes a town from the SanctionedTown list."
-nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
-nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
-king_help_1: 'Nation Leader Help'
-king_help_2: 'Set your alliance.'
-king_help_3: 'Set your enemies.'
-king_help_4: "Withdraw money from your nation bank."
-king_help_5: "Add or remove towns from your nation."
-king_help_6: "Use /n set ? for help."
-king_help_7: "Use /n toggle ? for help."
-king_help_8: "Used to absorb another nation into your nation."
-king_help_9: "Used to message everyone in your nation."
-res_1: 'Your status'
+nation_help_5: 'uoᴉʇɐu ɹnoʎ ǝʌɐǝꞀ'
+nation_help_6: 'uoᴉʇɐu ʍǝu ɐ ǝʇɐǝɹƆ'
+nation_help_7: 'spuɐɯɯoɔ ɹǝpɐǝꞁ uoᴉʇɐu ǝɥʇ ʇsᴉꞀ'
+nation_help_8: 'uoᴉʇɐu ʍǝu ɐ ǝʇɐǝɹƆ'
+nation_help_9: 'uoᴉʇɐu uᴉ sʇuǝpᴉsǝɹ ǝuᴉꞁuo ꞁꞁɐ ʇsᴉꞀ'
+nation_help_11: "˙uoᴉʇɐu ǝɥʇ uᴉ suʍoʇ ǝɥʇ sʇsᴉꞀ"
+nation_help_12: "˙uoᴉʇɐu ǝɥʇ ɟo suoᴉʇɐu pǝᴉꞁꞁɐ ǝɥʇ sʇsᴉꞀ"
+nation_help_13: "˙uoᴉʇɐu ǝɥʇ ɟo suoᴉʇɐu pǝᴉɯǝuǝ ǝɥʇ sʇsᴉꞀ"
+nation_help_14: "˙suoᴉʇɐu uǝdo uᴉoɾ oʇ pǝs∩"
+nation_help_15: "˙ʞuɐq uoᴉʇɐu ǝɥʇ oʇuᴉ ʎǝuoɯ sʇᴉsodǝᗡ"
+nation_help_16: "˙uoᴉʇɐu ɹnoʎ ǝʇǝꞁǝp oʇ pǝs∩"
+nation_help_17: "˙sʇuǝpᴉsǝɹ ɯoɹɟ sʞuɐɹ ǝʌoɯǝɹ ɹo ppɐ oʇ pǝs∩"
+nation_help_18: "˙dꞁǝɥ ɹoɟ ¿ ʞuɐɹ u/ ǝǝS"
+nation_list_help_0: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ʍǝᴉɅ"
+nation_list_help_1: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ɥʇᴉʍ 'ʇunoɔ-ʇuǝpᴉsǝɹ ʎq suoᴉʇɐu ʇsᴉꞀ"
+nation_list_help_2: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ɥʇᴉʍ 'ʇunoɔ-uʍoʇ ʎq suoᴉʇɐu ʇsᴉꞀ"
+nation_list_help_3: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ɥʇᴉʍ 'uǝdo ǝɹɐ ɥɔᴉɥʍ suoᴉʇɐu ʇsᴉꞀ"
+nation_list_help_4: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ɥʇᴉʍ 'ǝɔuɐꞁɐq ʞuɐq ᵷuᴉsn suoᴉʇɐu ʇsᴉꞀ"
+nation_list_help_5: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ɥʇᴉʍ 'ɹǝpɹo ꞁɐɔᴉʇǝqɐɥdꞁɐ uᴉ suoᴉʇɐu ʇsᴉꞀ"
+nation_list_help_6: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ɥʇᴉʍ 'puɐꞁ pǝɯᴉɐꞁɔ ʎq suoᴉʇɐu ʇsᴉꞀ"
+nation_list_help_7: "˙ǝᵷɐd pǝᴉɟᴉɔǝds ǝɥʇ ɥʇᴉʍ 'ǝuᴉꞁuo ɹǝqɯnu ʎq suoᴉʇɐu ʇsᴉꞀ"
+nation_set_help_0: "˙uoᴉʇɐu ǝɥʇ ɟo ɹǝpɐǝꞁ ǝɥʇ ǝᵷuɐɥƆ"
+nation_set_help_1: "˙uoᴉʇɐu ǝɥʇ ɟo ʎʇᴉɔ ꞁɐʇᴉdɐɔ ǝɥʇ ǝᵷuɐɥƆ"
+nation_set_help_2: "˙ʎɐd ꞁꞁᴉʍ suʍoʇ ʇɐɥʇ xɐʇ ɟo ʇunoɯɐ ǝɥʇ ʇǝS"
+nation_set_help_3: "˙ʎɐd ꞁꞁᴉʍ suʍoʇ pǝɹǝnbuoɔ ʇɐɥʇ xɐʇ ɟo ʇunoɯɐ ǝɥʇ ʇǝS"
+nation_set_help_4: "˙uoᴉʇɐu ǝɥʇ ɟo ǝɯɐu ǝɥʇ ʇǝS"
+nation_set_help_5: "˙sʇuǝpᴉsǝɹ ɹnoʎ ɟo ǝuo ɟo ǝɯɐuɹns ɹo ǝꞁʇᴉʇ ǝɥʇ ʇǝS"
+nation_set_help_6: "˙ᵷɐʇ uoᴉʇɐu ǝɥʇ ʇǝS"
+nation_set_help_7: "˙ǝᵷɐssǝɯ pɹɐoq uoᴉʇɐu ǝɥʇ ʇǝS"
+nation_set_help_8: "˙ʇuᴉod uʍɐds uoᴉʇɐu ǝɥʇ ʇǝS"
+nation_set_help_9: "˙uʍɐds u/ ǝsn oʇ ʇsoɔ ǝɥʇ ʇǝS"
+nation_set_help_10: "˙suᴉᵷnꞁd ᵷuᴉddɐW uᴉ pǝsn ɹoꞁoɔdɐɯ ǝɥʇ ʇǝS"
+nation_toggle_help_0: "˙uoᴉʇɐu ǝɥʇ ɟo snʇɐʇs ꞁnɟǝɔɐǝd sǝꞁᵷᵷo⟘"
+nation_toggle_help_1: "˙uʍɐds u/ ǝsn oʇ sʇuǝpᴉsǝɹ-uou ᵷuᴉʍoꞁꞁɐ 'snʇɐʇs ɔᴉꞁqnd sǝꞁᵷᵷo⟘"
+nation_toggle_help_2: "˙ǝʇᴉʌuᴉ uɐ ʇnoɥʇᴉʍ uᴉoɾ oʇ suʍoʇ ᵷuᴉʍoꞁꞁɐ 'snʇɐʇs uǝdo sǝꞁᵷᵷo⟘"
+nation_toggle_help_3: "˙ǝʇɐɹ pǝxᴉɟ ɟo pɐǝʇsuᴉ ǝᵷɐʇuǝɔɹǝd ɐ ʎɐd suʍoʇ ᵷuᴉʞɐɯ 'ʇuǝɔɹǝdxɐʇ sǝꞁᵷᵷo⟘"
+nation_sanction_help_1: "˙ʇsᴉꞁ uʍo⟘pǝuoᴉʇɔuɐS ǝɥʇ oʇ uʍoʇ ɐ sppⱯ"
+nation_sanction_help_2: "˙ʇsᴉꞁ uʍo⟘pǝuoᴉʇɔuɐS ǝɥʇ ɯoɹɟ uʍoʇ ɐ sǝʌoɯǝᴚ"
+nation_sanction_help_3: "˙suʍo⟘ pǝuoᴉʇɔuɐS s,uoᴉʇɐu ɹnoʎ sʇsᴉꞀ"
+nation_sanction_help_4: "˙suʍo⟘ pǝuoᴉʇɔuɐS s,uoᴉʇɐu uǝʌᴉᵷ ǝɥʇ sʇsᴉꞀ"
+king_help_1: 'dꞁǝH ɹǝpɐǝꞀ uoᴉʇɐN'
+king_help_2: '˙ǝɔuɐᴉꞁꞁɐ ɹnoʎ ʇǝS'
+king_help_3: '˙sǝᴉɯǝuǝ ɹnoʎ ʇǝS'
+king_help_4: "˙ʞuɐq uoᴉʇɐu ɹnoʎ ɯoɹɟ ʎǝuoɯ ʍɐɹpɥʇᴉM"
+king_help_5: "˙uoᴉʇɐu ɹnoʎ ɯoɹɟ suʍoʇ ǝʌoɯǝɹ ɹo ppⱯ"
+king_help_6: "˙dꞁǝɥ ɹoɟ ¿ ʇǝs u/ ǝs∩"
+king_help_7: "˙dꞁǝɥ ɹoɟ ¿ ǝꞁᵷᵷoʇ u/ ǝs∩"
+king_help_8: "˙uoᴉʇɐu ɹnoʎ oʇuᴉ uoᴉʇɐu ɹǝɥʇouɐ qɹosqɐ oʇ pǝs∩"
+king_help_9: "˙uoᴉʇɐu ɹnoʎ uᴉ ǝuoʎɹǝʌǝ ǝᵷɐssǝɯ oʇ pǝs∩"
+res_1: 'snʇɐʇs ɹno⅄'
 res_2: '[resident]'
 res_3: 'Target player''s status'
 res_4: 'List all active players'
@@ -240,27 +240,27 @@ nation_sing: 'Nation'
 nation_plu: 'Nations'
 king_sing: 'Leader'
 town_plu: 'Towns'
-world_plu: 'Worlds'
-world_sing: 'World'
-world_help_1: 'Current world''s status'
+world_plu: 'spꞁɹoM'
+world_sing: 'pꞁɹoM'
+world_help_1: 'snʇɐʇs s,pꞁɹoʍ ʇuǝɹɹnƆ'
 world_help_2: '[world]'
-world_help_3: 'Target worlds''s status'
-world_help_4: 'List all worlds'
-world_help_5: 'Regenerate this chunk'
-world_help_6: 'See /tw toggle ? for help'
-world_help_7: 'See /tw set ? for help'
-world_set_help_0: "Set the world's wilderness name."
-world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
-world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
-world_toggle_help_2: "Toggle on/off if wars can happen in this world."
-world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
-world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
-world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
-world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
-world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
-world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
-world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
-world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
+world_help_3: 'snʇɐʇs s,spꞁɹoʍ ʇǝᵷɹɐ⟘'
+world_help_4: 'spꞁɹoʍ ꞁꞁɐ ʇsᴉꞀ'
+world_help_5: 'ʞunɥɔ sᴉɥʇ ǝʇɐɹǝuǝᵷǝᴚ'
+world_help_6: 'dꞁǝɥ ɹoɟ ¿ ǝꞁᵷᵷoʇ ʍʇ/ ǝǝS'
+world_help_7: 'dꞁǝɥ ɹoɟ ¿ ʇǝs ʍʇ/ ǝǝS'
+world_set_help_0: "˙ǝɯɐu ssǝuɹǝpꞁᴉʍ s,pꞁɹoʍ ǝɥʇ ʇǝS"
+world_toggle_help_0: "˙pꞁɹoʍ sᴉɥʇ uᴉ puɐꞁ ɯᴉɐꞁɔ uɐɔ suʍoʇ ɟᴉ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_1: "˙pꞁɹoʍ sᴉɥʇ uᴉ pǝꞁqɐuǝ sᴉ ʎuʍo⟘ ɟᴉ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_2: "˙pꞁɹoʍ sᴉɥʇ uᴉ uǝddɐɥ uɐɔ sɹɐʍ ɟᴉ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_3: "˙pꞁɹoʍ sᴉɥʇ uᴉ pǝꞁqɐuǝ sᴉ dʌdǝɔɹoɟ ɹo dʌd ɟᴉ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_4: "˙pꞁɹoʍ sᴉɥʇ uᴉ pǝꞁqɐuǝ sᴉ ǝɹᴉɟʎꞁpuǝᴉɹɟ ɟᴉ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_5: "˙pꞁɹoʍ sᴉɥʇ uᴉ pǝɔɹoɟ ɹo pǝꞁqɐuǝ ǝɹɐ suoᴉsoꞁdxǝ ɟᴉ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_6: "˙pꞁɹoʍ sᴉɥʇ uᴉ pǝɔɹoɟ ɹo pǝꞁqɐuǝ ǝɹɐ sǝɹᴉɟ ɟᴉ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_7: "˙pꞁɹoʍ sᴉɥʇ uᴉ sᵷuᴉʇʇǝs ᵷuᴉuʍɐds sqoɯ snoᴉɹɐʌ ǝɥʇ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_8: "˙pꞁɹoʍ sᴉɥʇ uᴉ ǝɹnʇɐǝɟ ɯᴉɐꞁɔun-uo-ʇɹǝʌǝɹ ǝɥʇ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_9: "˙pꞁɹoʍ sᴉɥʇ uᴉ sǝɹnʇɐǝɟ pǝʇɹǝʌǝɹ-ǝɹɐ-suoᴉsoꞁdxǝ ǝɥʇ ɟɟo/uo ǝꞁᵷᵷo⟘"
+world_toggle_help_10: "˙pꞁɹoʍ sᴉɥʇ uᴉ puɐɯɯoɔ sʞɔoꞁq-sǝʇǝꞁǝp-ɹɐǝꞁɔ-ʇoꞁd ǝɥʇ ɟɟo/uo ǝꞁᵷᵷo⟘"
 world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
 townyadmin_help_1: 'Unclaim this town block'
 townyadmin_help_2: 'Attempt to unclaim around you.'
@@ -1782,8 +1782,6 @@ msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
 #Added in 0.140
-#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
 #Added in 1.141
