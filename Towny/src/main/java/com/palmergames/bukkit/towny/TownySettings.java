@@ -1112,13 +1112,13 @@ public class TownySettings {
 			final String element = e.trim();
 			
 			if (element.startsWith("*"))
-				builder.startsWith(element.substring(1));
+				builder.endsWith(element.substring(1));
 			else if (element.startsWith("!*"))
-				builder.notStartsWith(element.substring(2));
+				builder.notEndsWith(element.substring(2));
 			else if (element.endsWith("*"))
-				builder.endsWith(element.substring(0, element.length() - 1));
+				builder.startsWith(element.substring(0, element.length() - 1));
 			else if (element.startsWith("!") && element.endsWith("*"))
-				builder.notEndsWith(element.substring(1, element.length() - 1));
+				builder.notStartsWith(element.substring(1, element.length() - 1));
 			else if (element.startsWith("#"))
 				builder.withTag(registryName, Optional.ofNullable(NamespacedKey.fromString(element.substring(1))).orElseThrow(() -> new TownyInitException(element.substring(1) + " is not a valid key", TownyInitException.TownyError.MAIN_CONFIG)));
 			else if (element.startsWith("!#"))
