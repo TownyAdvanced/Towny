@@ -1097,15 +1097,17 @@ public class TownySettings {
 	}
 	
 	private static void loadCustomRegistryLists() {
+		ItemLists.clearCustomGroups();
 		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ITEM_LISTS).entrySet())
-			ItemLists.addGroup(entry.getKey(), (ItemLists) constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList(entry.getValue().split(",")), mat -> mat.data));
+			ItemLists.addGroup(entry.getKey(), constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList(entry.getValue().split(",")), mat -> mat.data));
 		
+		EntityLists.clearGroups();
 		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ENTITY_LISTS).entrySet())
-			EntityLists.addGroup(entry.getKey(), (EntityLists) constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList(entry.getValue().split(",")), EntityType::getEntityClass));
+			EntityLists.addGroup(entry.getKey(), constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList(entry.getValue().split(",")), EntityType::getEntityClass));
 	}
 	
 	@VisibleForTesting
-	public static <T extends Keyed, F extends AbstractRegistryList<T>> AbstractRegistryList<T> constructRegistryList(final AbstractRegistryList.Builder<T, F> builder, final String registryName, final Iterable<String> elements, final Function<T, Class<?>> classExtractor) throws TownyInitException {
+	public static <T extends Keyed, F extends AbstractRegistryList<T>> F constructRegistryList(final AbstractRegistryList.Builder<T, F> builder, final String registryName, final Iterable<String> elements, final Function<T, Class<?>> classExtractor) throws TownyInitException {
 		for (final String e : elements) {
 			final String element = e.trim();
 			

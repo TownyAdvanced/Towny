@@ -6,6 +6,7 @@ import org.bukkit.Registry;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -61,6 +62,11 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 		final EntityLists grouping = GROUPS.get(groupName.toLowerCase(Locale.ROOT));
 
 		return grouping != null ? ImmutableSet.copyOf(grouping.tagged) : ImmutableSet.of();
+	}
+	
+	@ApiStatus.Internal
+	public static void clearGroups() {
+		GROUPS.clear();
 	}
 
 	public static boolean hasGroup(@NotNull String groupName) {

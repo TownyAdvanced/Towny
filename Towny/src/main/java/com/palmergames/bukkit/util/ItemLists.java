@@ -3,6 +3,7 @@ package com.palmergames.bukkit.util;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -315,6 +317,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			}
 		}));
 	
+	private static final Set<String> CUSTOM_GROUPS = new HashSet<>();
+	
 	/**
 	 * Returns a pre-configured list from the GROUPS.
 	 * 
@@ -335,6 +339,13 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	
 	public static void addGroup(@NotNull String groupName, @NotNull ItemLists group) {
 		GROUPS.put(groupName.toLowerCase(Locale.ROOT), group);
+		CUSTOM_GROUPS.add(groupName.toLowerCase(Locale.ROOT));
+	}
+	
+	@ApiStatus.Internal
+	public static void clearCustomGroups() {
+		CUSTOM_GROUPS.forEach(GROUPS::remove);
+		CUSTOM_GROUPS.clear();
 	}
 	
 	public static Builder<Material, ItemLists> newBuilder() {

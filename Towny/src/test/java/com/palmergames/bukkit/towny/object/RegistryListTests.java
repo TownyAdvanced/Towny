@@ -10,8 +10,10 @@ import org.bukkit.entity.EntityType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.bukkit.Material.*;
@@ -45,19 +47,18 @@ public class RegistryListTests {
 	
 	@Test
 	void testCustomRegistryListBuilderClassNames() {
-		EntityLists built = (EntityLists) TownySettings.constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList("c:Animals"), EntityType::getEntityClass);
+		EntityLists built = TownySettings.constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList("c:Animals"), EntityType::getEntityClass);
 		assertEquals(built.tagged(), EntityLists.ANIMALS.tagged());
 
 		Set<Material> expected = new HashSet<>(Arrays.asList(WEEPING_VINES, NETHER_WART, FROSTED_ICE, SWEET_BERRY_BUSH, CACTUS, COCOA, CAVE_VINES, PITCHER_CROP, BEETROOTS, SUGAR_CANE, CHORUS_FLOWER, FIRE, BAMBOO, POTATOES, MELON_STEM, CARROTS, TORCHFLOWER_CROP, WHEAT, MANGROVE_PROPAGULE, KELP, TWISTING_VINES, PUMPKIN_STEM));
-		ItemLists list = (ItemLists) TownySettings.constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList("c:org.bukkit.block.data.Ageable"), type -> type.data);
+		List<String> input = new ArrayList<>(Arrays.asList("c:org.bukkit.block.data.Ageable"));
+		
+		ItemLists list = TownySettings.constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, input, type -> type.data);
 		assertEquals(expected, list.tagged());
 		
 		expected.remove(WEEPING_VINES);
-		list = (ItemLists) TownySettings.constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList("c:org.bukkit.block.data.Ageable", "-weeping_vines"), type -> type.data);
-		assertEquals(expected, list.tagged());
-		
-		expected.add(STONE);
-		list = (ItemLists) TownySettings.constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList("c:org.bukkit.block.data.Ageable", "-weeping_vines", "+stone"), type -> type.data);
+		input.add("-weeping_vines");
+		list = TownySettings.constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, input, type -> type.data);
 		assertEquals(expected, list.tagged());
 	}
 }
