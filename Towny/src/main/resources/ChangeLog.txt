@@ -9560,3 +9560,4 @@ v0.92.0.11:
   - Skip copying light data for our chunk snapshots, courtesy of Warrior with PR #7281.
 0.100.1.17:
   - Replace usage of deprecated IOUtils methods.
+  - Add hint to use /t or /n deposit when your town/nation is running out of money in the login warning message.
