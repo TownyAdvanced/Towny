@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+@ApiStatus.Internal
 public class DataFieldIO {
 	
 	public static String serializeCDFs(Collection<CustomDataField<?>> cdfs) {
@@ -71,7 +73,7 @@ public class DataFieldIO {
 		}
 	}
 	
-	private static Collection<CustomDataField<?>> deserializeMetaToRaw(String metadata) throws IOException {
+	public static Collection<CustomDataField<?>> deserializeMetaToRaw(String metadata) throws IOException {
 		JsonArray array = convertToArray(metadata);
 		List<CustomDataField<?>> cdfList = new ArrayList<>(array.size());
 		for (JsonElement element : array) {

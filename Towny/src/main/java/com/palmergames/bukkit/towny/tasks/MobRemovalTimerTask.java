@@ -145,7 +145,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				// The entity is inside of a town.
 
 				// Check if mobs are always allowed inside towns in this world, if the townblock allows it, or if the town has mobs forced on.
-				if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs || townBlock.getTownOrNull().isAdminEnabledMobs())
+				if (townyWorld.isForceTownMobs() || townBlock.getPermissions().mobs || (townBlock.getTownOrNull() != null && townBlock.getTownOrNull().isAdminEnabledMobs()))
 					return;
 
 				// Check that Towny is removing this type of entity inside towns.

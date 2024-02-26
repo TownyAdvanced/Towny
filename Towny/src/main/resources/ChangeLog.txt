@@ -9552,3 +9552,13 @@ v0.92.0.11:
 0.100.1.16:
   - Enabled /plot group toggle taxed command for plot groups.
     - You can now properly enabled/disable plot taxes for groups of plots.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.72.0 to 3.74.0.
+  - Bump org.apache.commons:commons-compress from 1.25.0 to 1.26.0.
+  - Futureproof falling block checking, courtesy of Warrior with PR #7273.
+  - Add list metadata type, courtesy of Warrior with PR #7274.
+  - Remove locale message on first join, courtesy of Warrior with PR #7276.
+  - Skip copying light data for our chunk snapshots, courtesy of Warrior with PR #7281.
+0.100.1.17:
+  - Replace usage of deprecated IOUtils methods.
+  - Add hint to use /t or /n deposit when your town/nation is running out of money in the login warning message.
+  - Fix mob removal npe when townblock has no town, courtesy of Warrior with PR #7285.

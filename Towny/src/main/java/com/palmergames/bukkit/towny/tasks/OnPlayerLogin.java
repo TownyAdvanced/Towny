@@ -84,10 +84,6 @@ public class OnPlayerLogin implements Runnable {
 				 */
 				try {
 					resident = universe.getDataSource().newResident(player.getName(), player.getUniqueId());
-					
-					if (TownySettings.isShowingLocaleMessage())
-					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
-
 					resident.setRegistered(System.currentTimeMillis());
 
 					final Resident finalResident = resident;
@@ -230,6 +226,7 @@ public class OnPlayerLogin implements Runnable {
 				} else {
 					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_delete", town.getName()));
 				}
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_town_deposit_hint"));
 			}
 		}
 			
@@ -240,6 +237,7 @@ public class OnPlayerLogin implements Runnable {
 				 *  Warn that the nation is due to be deleted.
 				 */
 				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_delete", nation.getName()));
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_nation_deposit_hint"));
 			}
 		}
 	}

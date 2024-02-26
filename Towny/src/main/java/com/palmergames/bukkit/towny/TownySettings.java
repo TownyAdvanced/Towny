@@ -3595,16 +3595,13 @@ public class TownySettings {
 	public static Map<Integer, NationLevel> getConfigNationLevel() {
 		return configNationLevel;
 	}
-
-	public static boolean isShowingLocaleMessage() {
-		return getBoolean(ConfigNodes.RES_SETTING_IS_SHOWING_LOCALE_MESSAGE);
-	}
 	
 	public static boolean isLanguageEnabled(@NotNull String locale) {
 		// Either all languages are enabled or, we auto-enable English: Addons that only
 		// have english translations and/or are missing a translation for the enabled
 		// language(s) on this server need to be able to inject their english
 		// tranlations.
+		locale = locale.replace("-", "_");
 		if (getString(ConfigNodes.ENABLED_LANGUAGES).equals("*") || locale.equalsIgnoreCase("en_us"))
 			return true;
 		

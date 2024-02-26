@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.100.1.16</version>
+    <version>0.100.1.17</version>
 
     <licenses>
         <license>
@@ -142,7 +142,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
-            <version>1.25.0</version>
+            <version>1.26.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -246,7 +246,7 @@
         <dependency>
             <groupId>com.github.seeseemelk</groupId>
             <artifactId>MockBukkit-v1.20</artifactId>
-            <version>3.72.0</version>
+            <version>3.74.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
