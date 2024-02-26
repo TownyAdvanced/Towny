@@ -9569,3 +9569,4 @@ v0.92.0.11:
     - Child node of towny.command.resident.*
     - No changes required to the townyperms.yml.
   - New automatic townyperms.yml edit: towny.command.resident.outlawlist will be added to the townyperms.yml nomad section. 
+  - Close a loophole using out-of-jail teleports.
