@@ -249,6 +249,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_RESIDENT_LIST("towny.command.resident.list"),
 	TOWNY_COMMAND_RESIDENT_TAX("towny.command.resident.tax"),
 	TOWNY_COMMAND_RESIDENT_PLOTLIST("towny.command.resident.plotlist"),
+	TOWNY_COMMAND_RESIDENT_OUTLAWLIST("towny.command.resident.outlawlist"),
 	TOWNY_COMMAND_RESIDENT_JAIL("towny.command.resident.jail"),
 	TOWNY_COMMAND_RESIDENT_SET("towny.command.resident.set.*"),
 		TOWNY_COMMAND_RESIDENT_SET_PERM("towny.command.resident.set.perm"),

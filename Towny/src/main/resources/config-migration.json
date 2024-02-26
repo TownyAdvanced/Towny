@@ -846,5 +846,15 @@
         "value": "economy.using_economy"
       }
     ]
+  },
+  {
+    "version": "0.100.1.17",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.resident.outlawlist"
+      }
+    ]
   }
 ]
