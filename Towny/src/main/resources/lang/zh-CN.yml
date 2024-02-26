@@ -77,8 +77,8 @@ town_help_15: "参见该镇不法分子名单。"
 town_help_16: "参见该镇地皮组的清单。"
 town_help_17: "参见该镇的地皮类型清单。"
 town_help_18: "向该镇成员发送一条消息"
-town_help_19: "Set your town for sale, able to be bought by other players."
-town_help_20: "Set your town not for sale."
+town_help_19: "设置您的城镇为待售，供其他玩家购买。"
+town_help_20: "设置您的城镇状态为不供出售"
 town_help_21: "购买给定的城镇（只要它是出售的）。"
 town_help_22: "向您的城镇银行存钱。"
 town_help_23: "用来修改您城镇居民的头衔。"
@@ -106,30 +106,30 @@ town_set_help_1: "将城镇的Home区块设置到你所站立的地方。"
 town_set_help_2: "在Home区块中设置传送点，或者你站在前哨里，设置前哨的传送点。"
 town_set_help_3: "查看/town set perm ?以获得帮助。"
 town_set_help_4: "设置你城镇的税额。"
-town_set_help_5: "Set the special amounts for per-plot taxes."
+town_set_help_5: "设置每个区块的特殊税收"
 town_set_help_6: "设置购买地皮的默认价格。"
 town_set_help_7: "设置使用/t spawn的费用。"
 town_set_help_8: "设置你城镇的名称。"
 town_set_help_9: "设置你城镇的简称。"
 town_set_help_10: "设置一个居民的头衔或后缀。"
-town_set_help_11: "Set the max amount of money a percentage tax can take from a resident."
+town_set_help_11: "设置可以税收的最高金额"
 town_jail_help_0: "列出城镇的监狱。"
 town_jail_help_1: "将一个居民关在初级监狱。"
 town_jail_help_2: "将一个居民以指定的时间关在初级监狱。"
 town_jail_help_3: "将一个居民以指定的时间关在指定的初级监狱。"
-town_jail_help_4: "Jail a resident in the primary jail, for the specified hours, in the specified jail and cell."
-town_jail_help_5: "Jail a resident in the primary jail, for the specified hours, with the given bail amount."
+town_jail_help_4: "在规定的时间内，在指定的监狱和牢房中将一名居民监禁"
+town_jail_help_5: "将一名居住在初级监狱的人判处特定时间并提供保释金"
 town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
 town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
 town_jail_help_8: "释放这个居民。"
-town_purge_help: "Purges residents that have not logged in for the given amount of days."
+town_purge_help: "清理指定天数没有上线的居民"
 town_trust_help_0: "在这个城镇中，增加一个受信任的玩家。"
 town_trust_help_1: "在这个城镇中，移除一个受信任的玩家。"
 town_trust_help_2: "列出一个城镇中受信任的玩家。"
 town_towntrust_help_0: "在这个城镇中，增加一个受信任的城镇。"
 town_towntrust_help_1: "在这个城镇中，移除一个受信任的城镇。"
 town_towntrust_help_2: "列出一个城镇所信任的城镇。"
-town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
+town_buy_help: "购买额外区块上限"
 mayor_help_3: '你所选择的区域不附属于城镇'
 mayor_help_4: '声明你附近半径为X的区块'
 mayor_help_5: '声明最大半径内的所有区块'
@@ -171,24 +171,24 @@ nation_set_help_6: "设置国家简称。"
 nation_set_help_7: "设置国家公告栏信息。"
 nation_set_help_8: "设置国家传送点。"
 nation_set_help_9: "设置使用/n spawn的费用。"
-nation_set_help_10: "Set the mapcolor used in Mapping plugins."
-nation_toggle_help_0: "Toggles peaceful status of the nation."
+nation_set_help_10: "设置地图插件中的地图颜色"
+nation_toggle_help_0: "切换国家的和平状态"
 nation_toggle_help_1: "切换国家“公开”的状态，允许不是居民的玩家使用/n spawn。"
 nation_toggle_help_2: "切换国家“开放”的状态，允许没有被邀请的城市加入。"
 nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
-nation_sanction_help_1: "Adds a town to the SanctionedTown list."
-nation_sanction_help_2: "Removes a town from the SanctionedTown list."
-nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
-nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
+nation_sanction_help_1: "添加一个城镇到受制裁城镇"
+nation_sanction_help_2: "从受制裁城镇中移除一个城镇"
+nation_sanction_help_3: "列出你的国家的制裁城镇"
+nation_sanction_help_4: "列出某个国家制裁城镇列表"
 king_help_1: '国家领导者帮助'
 king_help_2: '设置你的盟国.'
 king_help_3: '设置你的敌国.'
 king_help_4: "从您的国家银行取钱。"
-king_help_5: "Add or remove towns from your nation."
+king_help_5: "从你的国家中添加或移除一个城镇"
 king_help_6: "使用指令/n set ?以获得帮助。"
 king_help_7: "使用指令/n toggle ?以获得帮助。"
-king_help_8: "Used to absorb another nation into your nation."
-king_help_9: "Used to message everyone in your nation."
+king_help_8: "用来合并一个国家到你的国家"
+king_help_9: "用来向你的国家中的所有人发送消息"
 res_1: '你的信息'
 res_2: '[玩家名]'
 res_3: '目标玩家信息'
@@ -214,15 +214,15 @@ res_toggle_help_8: "切换是否认领你所走过的地方的能力"
 res_toggle_help_9: "切换当您更改地皮时查看地图的能力。"
 res_toggle_help_10: "移除所有模式。"
 res_toggle_help_11: "窃听该聊天频道"
-res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
-res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
-res_toggle_help_14: "Toggle the ability to unclaim where you walk."
-res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
-res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
-res_jail_help_0: "Pays the bail cost to get out of jail."
-res_set_help_0: "Set your resident's About/Bio"
-res_set_help_1: "Set your resident's default plot permissions."
-res_set_help_2: "Set your resident's modes."
+res_toggle_help_12: "切换向你创建的区块组中添加区块的资格"
+res_toggle_help_13: "切换当你切换区块的时候标题显示"
+res_toggle_help_14: "切换是否取消认领你所走过的地方的能力"
+res_toggle_help_15: "切换使用信息工具学习正确的方块/实体名称的功能"
+res_toggle_help_16: "切换禁用管理员特权的资格"
+res_jail_help_0: "支付保释金以出狱"
+res_set_help_0: "设置你的居民的简历/生平"
+res_set_help_1: "设置居民在区块内的默认权限"
+res_set_help_2: "设置你的居民状态"
 mode_1: '显示城镇区块地图'
 mode_2: '在你移动到每个区块时自动声明土地'
 mode_3: '在你移动到每个区块时自动放弃声明土地'
@@ -249,7 +249,7 @@ world_help_4: '列出所有世界'
 world_help_5: '重新生成这个区块'
 world_help_6: '查看/tw toggle ?以获得帮助。'
 world_help_7: '查看/tw set ?以获得帮助。'
-world_set_help_0: "Set the world's wilderness name."
+world_set_help_0: "设置世界中野外的名称"
 world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
 world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
 world_toggle_help_2: "Toggle on/off if wars can happen in this world."
@@ -299,26 +299,26 @@ townyadmin_town_help_15: "Open the town's bankhistory book."
 townyadmin_town_help_16: "Alter a town's outlaws."
 townyadmin_town_help_17: "Make the town leave their nation."
 townyadmin_town_help_18: "Remove a town's conquered status."
-townyadmin_town_toggle_help_0: "Toggle the Town's PVP."
+townyadmin_town_toggle_help_0: "切换城镇PVP状态"
 townyadmin_town_toggle_help_1: "Toggle the Town's ForcePVP, preventing mayors from turning off pvp."
-townyadmin_town_toggle_help_2: "Toggle the Town's Public status, allowing non-residents to teleport there."
-townyadmin_town_toggle_help_3: "Toggle the Town's Explosion setting."
-townyadmin_town_toggle_help_4: "Toggle the Town's Fire setting."
+townyadmin_town_toggle_help_2: "切换城镇的公共状态，允许非居民向城镇传送"
+townyadmin_town_toggle_help_3: "切换城镇的爆炸设置"
+townyadmin_town_toggle_help_4: "切换城镇的火焰蔓延设置"
 townyadmin_town_toggle_help_5: "Toggle the Town's Mob setting."
 townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
 townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
 townyadmin_nation_help_0: "Create a nation with the given name and capital city."
-townyadmin_nation_help_1: "Show the nation status screen."
-townyadmin_nation_help_2: "Add towns from the nation."
-townyadmin_nation_help_3: "Remove towns from the nation."
-townyadmin_nation_help_4: "Rename a nation."
-townyadmin_nation_help_5: "Delete a town."
-townyadmin_nation_help_6: "Recheck the nation's towns to make sure they're close enough to the capital."
-townyadmin_nation_help_7: "Merge the 2nd nation into the first nation."
-townyadmin_nation_help_8: "Merge the 2nd nation into the first nation, ignoring any rules."
-townyadmin_nation_help_9: "Use a nation's toggle command."
-townyadmin_nation_help_10: "Use a nation's set command."
-townyadmin_nation_help_11: "Put money into the nation bank."
+townyadmin_nation_help_1: "显示一个国家的状态"
+townyadmin_nation_help_2: "添加一个城镇到国家"
+townyadmin_nation_help_3: "移除一个城镇到国家"
+townyadmin_nation_help_4: "重命名国家"
+townyadmin_nation_help_5: "重命名城镇"
+townyadmin_nation_help_6: "重新检查要加入国家的城镇，他们需要和首都距离更近一些"
+townyadmin_nation_help_7: "合并第二的国家到第一的国家"
+townyadmin_nation_help_8: "无视规则，合并第二国家到第一国家"
+townyadmin_nation_help_9: "使用一个国家的切换命令"
+townyadmin_nation_help_10: "使用国家的设置指令"
+townyadmin_nation_help_11: "把钱存入国家银行"
 townyadmin_nation_help_12: "Take money from the nation bank."
 townyadmin_nation_help_13: "Open the nation's bankhistory book."
 townyadmin_nation_help_14: "Place the town into the nation."
@@ -405,7 +405,7 @@ plot_set_help_0: "例如：Inn, Wilds, Farm, Embassy等。"
 plot_set_help_1: "Sets a plot to an Outpost."
 plot_set_help_2: "Removes a plot type."
 plot_set_help_3: "Names a plot."
-plot_set_help_4: "Toggle all permissions."
+plot_set_help_4: "切换所有权限"
 plot_set_help_5: "Sets the permissions of a level or type to on or off."
 plot_set_help_6: "Sets the permission of a level and type to on or off."
 plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
@@ -748,7 +748,7 @@ outpost_plu: '城镇前哨'
 #Added in 0.36
 msg_err_not_enough_residents: '城镇居民数不足,你不能这么做.'
 #Added in 0.37
-msg_err_friendly_fire_disable: '好友的火势蔓延已被禁用!'
+msg_err_friendly_fire_disable: '好友的战斗状态已被禁用!'
 #Added in 0.38
 msg_claim_error: '&c另一个插件阻止了 (%s)/(%s) 城镇区块声明, 无法完成操作.'
 #Added in 0.39
@@ -1888,9 +1888,9 @@ msg_perm_hud_plotgroup_name: 'Plot Group: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'For Sale: '
 #Seen in /plot perm hud:
-msg_perm_hud_no: 'No'
+msg_perm_hud_no: '取消'
 #Seen in /plot perm hud:
-msg_perm_hud_yes: 'Yes'
+msg_perm_hud_yes: '确认'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: '城镇 %s 已将其城镇级别设置为 %s。'
@@ -2079,7 +2079,7 @@ msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain o
 #Message shown when a resident is an NPC and is not allowed to do something.
 msg_err_resident_is_npc: "You cannot do this to an NPC resident."
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
-msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
+msg_err_resident_doesnt_own_any_land: "该居民没有拥有任何个人土地"
 msg_unnamed: "Unnamed"
 msg_err_nation_cannot_sanction_own_town: "You cannot sanction a town that is a part of your nation."
 msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
@@ -2114,5 +2114,6 @@ msg_err_name_validation_contains_harmful_characters: "%s contains symbols that c
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
 msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
+outlawed_in: "Outlawed in"
 msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
 msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
