@@ -2114,5 +2114,6 @@ msg_err_name_validation_contains_harmful_characters: "%s contains symbols that c
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
 msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
+outlawed_in: "Outlawed in"
 msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
 msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
