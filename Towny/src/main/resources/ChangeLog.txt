@@ -9561,3 +9561,4 @@ v0.92.0.11:
 0.100.1.17:
   - Replace usage of deprecated IOUtils methods.
   - Add hint to use /t or /n deposit when your town/nation is running out of money in the login warning message.
+  - Fix mob removal npe when townblock has no town, courtesy of Warrior with PR #7285.
