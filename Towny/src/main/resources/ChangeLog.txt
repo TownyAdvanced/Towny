@@ -9562,3 +9562,10 @@ v0.92.0.11:
   - Replace usage of deprecated IOUtils methods.
   - Add hint to use /t or /n deposit when your town/nation is running out of money in the login warning message.
   - Fix mob removal npe when townblock has no town, courtesy of Warrior with PR #7285.
+  - Add /res outlawlist command, courtesy of Fruitloopins with PR #7280.
+    - Closes #7278.
+  - New Command: /res outlawlist {playername} - Display the list of towns in which a resident is outlawed in. Leave out the optional player name to see the towns in which you are an outlaw.
+  - New Permission Node: towny.command.resident.outlawlist
+    - Child node of towny.command.resident.*
+    - No changes required to the townyperms.yml.
+  - New automatic townyperms.yml edit: towny.command.resident.outlawlist will be added to the townyperms.yml nomad section. 
