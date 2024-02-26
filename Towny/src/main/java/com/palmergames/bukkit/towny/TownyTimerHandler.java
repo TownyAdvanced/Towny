@@ -29,18 +29,28 @@ public class TownyTimerHandler{
 		
 		TownyTimerHandler.plugin = plugin;
 	}
-	
+	// Repeating Tasks
 	private static ScheduledTask townyDebugRepeatingTask = null;
 	private static ScheduledTask townyRepeatingTask = null;
-	private static ScheduledTask hourlyTask = null;
-	private static ScheduledTask shortTask = null;
 	private static ScheduledTask mobRemoveTask = null;
 	private static ScheduledTask healthRegenTask = null;
 	private static ScheduledTask teleportWarmupTask = null;
+	
+	// Async Repeating Tasks
+	private static ScheduledTask hourlyTask = null;
+	private static ScheduledTask shortTask = null;
 	private static ScheduledTask cooldownTimerTask = null;
 	private static ScheduledTask drawSmokeTask = null;
 	private static ScheduledTask drawSpawnPointsTask = null;
 
+	private static DrawSmokeTask drawSmokeRunnable;
+	private static DrawSpawnPointsTask drawSpawnPointRunnable;
+	private static CooldownTimerTask coolDownTimerRunnable;
+	private static HourlyTimerTask hourlyTimerRunnable;
+	private static ShortTimerTask shortTimerRunnable;
+	
+
+	
 	public static void newHour() {
 		if (!isHourlyTimerRunning())
 			toggleHourlyTimer(true);
@@ -89,21 +99,27 @@ public class TownyTimerHandler{
 
 	public static void toggleHourlyTimer(boolean on) {
 		if (on && !isHourlyTimerRunning()) {
-			hourlyTask = plugin.getScheduler().runAsyncRepeating(new HourlyTimerTask(plugin), TimeTools.convertToTicks(getTimeUntilNextHourInSeconds()), TimeTools.convertToTicks(TownySettings.getHourInterval()));
+			if (hourlyTimerRunnable == null)
+				hourlyTimerRunnable = new HourlyTimerTask(plugin);
+			hourlyTask = plugin.getScheduler().runAsyncRepeating(() -> hourlyTimerRunnable.run(), TimeTools.convertToTicks(getTimeUntilNextHourInSeconds()), TimeTools.convertToTicks(TownySettings.getHourInterval()));
 		} else if (!on && isHourlyTimerRunning()) {
 			hourlyTask.cancel();
 			hourlyTask = null;
+			hourlyTimerRunnable = null; 
 		}
 	}
 
 	public static void toggleShortTimer(boolean on) {
 		if (on && !isShortTimerRunning()) {
+			if (shortTimerRunnable == null)
+				shortTimerRunnable = new ShortTimerTask(plugin);
 			//This small delay is a safeguard against race conditions
 			long delayTicks = TimeTools.convertToTicks(60);
-			shortTask = plugin.getScheduler().runAsyncRepeating(new ShortTimerTask(plugin), delayTicks, TimeTools.convertToTicks(TownySettings.getShortInterval()));
+			shortTask = plugin.getScheduler().runAsyncRepeating(() -> shortTimerRunnable.run(), delayTicks, TimeTools.convertToTicks(TownySettings.getShortInterval()));
 		} else if (!on && isShortTimerRunning()) {
 			shortTask.cancel();
 			shortTask = null;
+			shortTimerRunnable = null;
 		}
 	}
 
@@ -130,29 +146,38 @@ public class TownyTimerHandler{
 	public static void toggleCooldownTimer(boolean on) {
 		
 		if (on && !isCooldownTimerRunning()) {
-			cooldownTimerTask = plugin.getScheduler().runAsyncRepeating(new CooldownTimerTask(plugin), 1, 20);
+			if (coolDownTimerRunnable == null)
+				coolDownTimerRunnable = new CooldownTimerTask(plugin);
+			cooldownTimerTask = plugin.getScheduler().runAsyncRepeating(() -> coolDownTimerRunnable.run(), 1, 20);
 		} else if (!on && isCooldownTimerRunning()) {
 			cooldownTimerTask.cancel();
 			cooldownTimerTask = null;
+			coolDownTimerRunnable = null;
 		}
 	}
 	
 	public static void toggleDrawSmokeTask(boolean on) {
 		if (on && !isDrawSmokeTaskRunning()) {
-			drawSmokeTask = plugin.getScheduler().runAsyncRepeating(new DrawSmokeTask(plugin), 1, 40);
+			if (drawSmokeRunnable == null)
+				drawSmokeRunnable = new DrawSmokeTask(plugin);
+			drawSmokeTask = plugin.getScheduler().runAsyncRepeating(() -> drawSmokeRunnable.run(), 1, 40);
 		} else if (!on && isDrawSmokeTaskRunning()) {
 			drawSmokeTask.cancel();
 			drawSmokeTask = null;
+			drawSmokeRunnable = null;
 		}
 	}
 	
 	public static void toggleDrawSpointsTask(boolean on) {
 		if (on && !isDrawSpawnPointsTaskRunning()) {
+			if (drawSpawnPointRunnable == null)
+				drawSpawnPointRunnable = new DrawSpawnPointsTask(plugin);
 			// This is given a delay because it was causing ConcurrentModificationExceptions on startup on one server.
-			drawSpawnPointsTask = plugin.getScheduler().runAsyncRepeating(new DrawSpawnPointsTask(plugin), 40, 52);
+			drawSpawnPointsTask = plugin.getScheduler().runAsyncRepeating(() -> drawSpawnPointRunnable.run(), 40, 52);
 		} else if (!on && isDrawSpawnPointsTaskRunning()) {
 			drawSpawnPointsTask.cancel();
 			drawSpawnPointsTask = null;
+			drawSpawnPointRunnable = null;
 		}
 	}
 
