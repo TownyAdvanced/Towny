@@ -9570,3 +9570,6 @@ v0.92.0.11:
     - No changes required to the townyperms.yml.
   - New automatic townyperms.yml edit: towny.command.resident.outlawlist will be added to the townyperms.yml nomad section. 
   - Close a loophole using out-of-jail teleports.
+0.100.1.18:
+  - Add town price to the PreNewTownEvent.
+    - Unblocks https://github.com/TownyAdvanced/TownyProvinces/issues/52.
