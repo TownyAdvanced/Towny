@@ -119,8 +119,8 @@ town_jail_help_2: "将一个居民以指定的时间关在初级监狱。"
 town_jail_help_3: "将一个居民以指定的时间关在指定的初级监狱。"
 town_jail_help_4: "在规定的时间内，在指定的监狱和牢房中将一名居民监禁"
 town_jail_help_5: "将一名居住在初级监狱的人判处特定时间并提供保释金"
-town_jail_help_6: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail."
-town_jail_help_7: "Jail a resident in the primary jail, for the specified hours, with the given bail amount, in the specified jail and cell."
+town_jail_help_6: "将一位居民判处特定小时并将其关在特定的监狱，同时需提供一定的保释金额。"
+town_jail_help_7: "将一位居民判处特定小时并将其关在特定的监狱，同时需提供一定的保释金额和关押牢房。"
 town_jail_help_8: "释放这个居民。"
 town_purge_help: "清理指定天数没有上线的居民"
 town_trust_help_0: "在这个城镇中，增加一个受信任的玩家。"
@@ -175,7 +175,7 @@ nation_set_help_10: "设置地图插件中的地图颜色"
 nation_toggle_help_0: "切换国家的和平状态"
 nation_toggle_help_1: "切换国家“公开”的状态，允许不是居民的玩家使用/n spawn。"
 nation_toggle_help_2: "切换国家“开放”的状态，允许没有被邀请的城市加入。"
-nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
+nation_toggle_help_3: "切换税率，让城镇支付一定百分比而不是固定税率"
 nation_sanction_help_1: "添加一个城镇到受制裁城镇"
 nation_sanction_help_2: "从受制裁城镇中移除一个城镇"
 nation_sanction_help_3: "列出你的国家的制裁城镇"
@@ -250,14 +250,14 @@ world_help_5: '重新生成这个区块'
 world_help_6: '查看/tw toggle ?以获得帮助。'
 world_help_7: '查看/tw set ?以获得帮助。'
 world_set_help_0: "设置世界中野外的名称"
-world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
-world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
-world_toggle_help_2: "Toggle on/off if wars can happen in this world."
-world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
-world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
-world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
-world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
-world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
+world_toggle_help_0: "开启/关闭 城镇此世界宣称土地的权限"
+world_toggle_help_1: "开启/关闭 对于城镇在这个世界存在的许可。"
+world_toggle_help_2: "开启/关闭 在该世界上的战争。"
+world_toggle_help_3: "开启/关闭 在该世界上的 pvp 或 强制pvp。"
+world_toggle_help_4: "开启/关闭 在该世界上对好友的战斗状态。"
+world_toggle_help_5: "开启/关闭 爆炸是否被允许或强制在该世界上出现。"
+world_toggle_help_6: "开启/关闭 火势是否被允许或强制在该世界上出现。"
+world_toggle_help_7: "开启/关闭 在该世界杀上多种生物的生成设置。"
 world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
 world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
 world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
@@ -267,7 +267,7 @@ townyadmin_help_2: '放弃声明你附近的城镇区块.'
 admin_panel_1: "查看/ta set ?以获得帮助。"
 admin_panel_2: '重载城镇'
 admin_panel_3: '执行新一天指令'
-admin_panel_4: "Unclaim an space surrounding you"
+admin_panel_4: "取消对你所处区块的宣称。"
 admin_panel_5: "查看/ta plot ?以获得帮助。"
 admin_panel_6: "给玩家或城镇一个正数或负数的区块"
 admin_panel_7: "查看/ta toggle ?以获得帮助。"
@@ -360,7 +360,7 @@ ta_residentmeta_help_2: "Set resident metadata key and value."
 ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
 ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
 ta_nationmeta_help_2: "Set nation metadata key and value."
-ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
+ta_nationmeta_help_3: "使用键添加或移除一个国家的元数据"
 ta_reload_help_0: "重新载入数据库"
 ta_reload_help_1: "重载配置"
 ta_reload_help_2: "重新加载语言文件"
@@ -389,22 +389,22 @@ plot_group_help_7: "例如：/plot group notforsale"
 plot_group_help_8: "添加或移除一个信任村民"
 plot_group_help_9: "添加一个居民到区块组的信任列表中"
 plot_group_help_10: "Removes a resident as Trusted in the plotgroup."
-plot_group_help_11: "Opens the plot perm GUI."
-plot_group_help_12: "Adds a player to the plot perm GUI."
-plot_group_help_13: "Removes a player to the plot perm GUI."
-plot_toggle_help_0: "Toggles pvp in the plot."
-plot_toggle_help_1: "Toggles explosions in the plot."
-plot_toggle_help_2: "Toggles fire in the plot."
-plot_toggle_help_3: "Toggles mobs in the plot."
-plot_group_toggle_help_0: "Toggles pvp in the plot group."
-plot_group_toggle_help_1: "Toggles explosions in the plot group."
-plot_group_toggle_help_2: "Toggles fire in the plot group."
-plot_group_toggle_help_3: "Toggles mobs in the plot group."
-plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
+plot_group_help_11: "打开区块权限设置界面"
+plot_group_help_12: "添加一个玩家到区块权限GUI"
+plot_group_help_13: "从区块权限GUI中移除一个玩家"
+plot_toggle_help_0: "切换区块中的PVP"
+plot_toggle_help_1: "切换区块中的爆炸"
+plot_toggle_help_2: "切换区块中的火焰蔓延"
+plot_toggle_help_3: "切换区块中的怪物生成"
+plot_group_toggle_help_0: "切换区块组中的PVP"
+plot_group_toggle_help_1: "切换区块组中的爆炸"
+plot_group_toggle_help_2: "切换你所在的区块组的火焰蔓延"
+plot_group_toggle_help_3: "切换你所在的区块组的怪物生成"
+plot_group_toggle_help_4: "切换你所在的区块组的收税状态"
 plot_set_help_0: "例如：Inn, Wilds, Farm, Embassy等。"
-plot_set_help_1: "Sets a plot to an Outpost."
-plot_set_help_2: "Removes a plot type."
-plot_set_help_3: "Names a plot."
+plot_set_help_1: "设置一个区块为哨站"
+plot_set_help_2: "删除一个区块类型"
+plot_set_help_3: "命名一个区块"
 plot_set_help_4: "切换所有权限"
 plot_set_help_5: "Sets the permissions of a level or type to on or off."
 plot_set_help_6: "Sets the permission of a level and type to on or off."
@@ -417,7 +417,7 @@ msg_plot_nfs: '关闭这块土地的出售状态'
 msg_plot_nfs_radius: 'Take down a radius of plots for sale'
 msg_nfs_abr: '&efs 和 nfs 分别是 forsale(出售) 和 notforsale(不供出售)的缩写.'
 msg_plot_fs: '出售这块土地.'
-msg_plot_fs_radius: 'Put up a radius of plots for sale.'
+msg_plot_fs_radius: '出售你输入的半径的地皮'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -936,8 +936,8 @@ status_res_taxexempt: '管理者免交市政税。'
 status_res_tax: '市政税：'
 status_res_plottax: '总计地税：'
 status_res_totaltax: '需要缴纳税费：'
-status_townblock_plottax: 'Plot Tax: '
-status_townblock_untaxed: 'Untaxed'
+status_townblock_plottax: '区块税: '
+status_townblock_untaxed: '免税'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
 msg_err_unable_to_use_bank_outside_your_town: '你不能在城镇外使用城镇银行.'
@@ -1601,7 +1601,7 @@ status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a ho
 status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
 status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[中心区块：%s]'
-status_about: "About:"
+status_about: "关于:"
 status_registered: '注册于：'
 status_lastonline: '最后在线时间：'
 status_fractions: '%s/%s'
@@ -1884,7 +1884,7 @@ msg_perm_hud_outsider: '外人'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: '地皮: '
 #Seen in /plot perm hud:
-msg_perm_hud_plotgroup_name: 'Plot Group: '
+msg_perm_hud_plotgroup_name: '区块组: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: '出售中: '
 #Seen in /plot perm hud:
@@ -2055,7 +2055,7 @@ status_forsale: "&a(For Sale: %s)"
 msg_town_forsale: "%s has been set for sale at %s."
 msg_town_notforsale: "%s is no longer for sale."
 msg_town_sell_confirmation: "This will put your town up for sale for %s. Are you sure you want to continue?"
-msg_town_buytown_already_mayor: "You are already mayor of %s."
+msg_town_buytown_already_mayor: "您已经是 %s的市长了"
 msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
 msg_town_buytown_not_forsale: "Specified town is not for sale."
 msg_town_buytown_ruined: "Ruined towns cannot be bought."
@@ -2066,54 +2066,54 @@ msg_clear_about: "%s's about was cleared."
 #Message shown when toggling town visibleontoplists setting
 msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
 #Message shown when an admin overrides a town founding date via townyadmin.
-townyadmin_town_set_help_0: "Sets the founding date of a town."
-townyadmin_nation_set_help_0: "Sets the founding date of a nation."
+townyadmin_town_set_help_0: "设置一个城镇的创建日期"
+townyadmin_nation_set_help_0: "设置一个国家的创建日期"
 msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
 msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
 msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
 #The format used for the /t say and /n say commands.
-town_say_format: "%s says: %s"
+town_say_format: "%s说: %s"
 msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
 msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
 msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
 #Message shown when a resident is an NPC and is not allowed to do something.
-msg_err_resident_is_npc: "You cannot do this to an NPC resident."
+msg_err_resident_is_npc: "你不能对一个NPC居民这么做"
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
 msg_err_resident_doesnt_own_any_land: "该居民没有拥有任何个人土地"
-msg_unnamed: "Unnamed"
-msg_err_nation_cannot_sanction_own_town: "You cannot sanction a town that is a part of your nation."
+msg_unnamed: "无名"
+msg_err_nation_cannot_sanction_own_town: "你不能制裁一个属于你的国家的城镇"
 msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
-msg_err_nation_town_already_sanctioned: "Your nation already sanctions that town."
-msg_err_nation_town_sanctioned: "Your nation has now sanctioned %s, they will not be allowed to join your nation."
-msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
-msg_err_nation_has_no_sanctioned_towns: "The nation has no sanctioned towns."
-title_nation_sanctioned_towns: 'Sanctioned Towns'
-msg_err_cannot_add_sanctioned_town: "Your nation cannot add %s, your nation has sanctioned them."
-msg_err_cannot_join_nation_sanctioned_town: "Your town cannot join %s, this nation has sanctioned your town."
-msg_err_no_nation_cannot_do: "You cannot perform this action because no nation was able to be determined."
-msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Your town is sanctioned by %s, you cannot spawn there."
+msg_err_nation_town_already_sanctioned: "你的国家已经城镇进行了制裁"
+msg_err_nation_town_sanctioned: "你的国家已经制裁了%s, 他们将无法加入你的国家"
+msg_err_nation_town_unsanctioned: "你的国家不再制裁%s"
+msg_err_nation_has_no_sanctioned_towns: "你的国家没有制裁的城镇"
+title_nation_sanctioned_towns: '受制裁的城镇'
+msg_err_cannot_add_sanctioned_town: "你的国家无法添加%s, 因为你的国家已经制裁了他们"
+msg_err_cannot_join_nation_sanctioned_town: "你的城镇无法加入%s, 这个国家已经制裁了你的城镇"
+msg_err_no_nation_cannot_do: "你不能执行这个操作，因为没有国家被执行"
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "你的城镇受到了%s的制裁, 你无法传送到那里"
 msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "The following coordinate(s) cannot be claimed because they contain too much of an unwanted biome: %s."
 msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The following coordinate(s) cannot be claimed because they contain too much ocean biome: %s."
 msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome."
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
 msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
-msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
-msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
-status_nation_sanctioned_towns: "Sanctioned Towns"
-msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
-msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+msg_err_you_cannot_outlaw_your_mayor: "你不能放逐你的镇长"
+msg_err_you_cannot_outlaw_because_of_rank: "你不能放逐%s, 因为它持有一些城镇头衔"
+status_nation_sanctioned_towns: "受制裁的城镇"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "您的城镇发出的邀请已被取消"
+msg_err_name_validation_invalid_characters: "%s 包含一些在正则表达式中不被允许的字符"
 msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
-msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
-msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
-msg_err_name_validation_name_too_long: "%s is too long to use as a name."
-msg_err_name_validation_is_empty: "You cannot supply an empty name."
-msg_err_name_validation_is_not_permitted: "%s is not permitted."
-msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
-msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
-msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
-msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
-msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
-outlawed_in: "Outlawed in"
-msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
-msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
+msg_err_name_validation_name_already_in_use: "%s 已经被使用了"
+msg_err_name_validation_title_too_long: "%s 不能用作前缀，因为字数太太太太长了"
+msg_err_name_validation_name_too_long: "%s 不能用作名称，因为字数太太太太长了"
+msg_err_name_validation_is_empty: "你不能提供一个空名称"
+msg_err_name_validation_is_not_permitted: "%s 是不被允许的"
+msg_err_name_validation_is_all_underscores: "%s 里头全是下划线!"
+msg_err_name_validation_contains_harmful_characters: "%s 包含可能有害的符号"
+msg_err_name_validation_contains_numbers: "%s 包含数字，数字是不被允许的"
+msg_err_name_validation_used_in_command_structure: "%s 在指令结构中被使用，所以你不能用它作为名称"
+msg_town_being_deleted_because_no_residents: "%s 将要被删除，因为它的最后一个居民也离开了"
+outlawed_in: "放逐于"
+msg_warning_town_deposit_hint: "如果要把钱存入城镇银行，请使用/town deposit [amount]"
+msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/country deposit [amount]。"
