@@ -190,28 +190,28 @@ king_help_7: "˙dꞁǝɥ ɹoɟ ¿ ǝꞁᵷᵷoʇ u/ ǝs∩"
 king_help_8: "˙uoᴉʇɐu ɹnoʎ oʇuᴉ uoᴉʇɐu ɹǝɥʇouɐ qɹosqɐ oʇ pǝs∩"
 king_help_9: "˙uoᴉʇɐu ɹnoʎ uᴉ ǝuoʎɹǝʌǝ ǝᵷɐssǝɯ oʇ pǝs∩"
 res_1: 'snʇɐʇs ɹno⅄'
-res_2: '[resident]'
-res_3: 'Target player''s status'
-res_4: 'List all active players'
-res_5: 'for help'
-res_6: 'Online match'
-res_7: 'Exact name'
-res_8: 'Just a humble farmer'
-res_9: "How much tax you will pay per day."
-res_10: "See /res jail ? for help."
-res_11: "See /res toggle ? for help."
-res_12: "See /res set ? for help."
-res_13: "Spawn to your town or bed."
-res_toggle_help_0: "Toggle your plots' pvp status."
-res_toggle_help_1: "Toggle your plots' fire status."
-res_toggle_help_2: "Toggle your plots' mobs status."
-res_toggle_help_3: "Toggle your plots' explosion status."
-res_toggle_help_4: "Toggle the ability to see plot borders."
-res_toggle_help_5: "Toggle the ability to see constant plot borders."
-res_toggle_help_6: "Toggle the ability to see town borders."
-res_toggle_help_7: "Toggle the ability to see plot notifications."
-res_toggle_help_8: "Toggle the ability to claim where you walk."
-res_toggle_help_9: "Toggle the ability to see the map when you change plots."
+res_2: '[ʇuǝpᴉsǝɹ]'
+res_3: 'snʇɐʇs s,ɹǝʎɐꞁd ʇǝᵷɹɐ⟘'
+res_4: 'sɹǝʎɐꞁd ǝʌᴉʇɔɐ ꞁꞁɐ ʇsᴉꞀ'
+res_5: 'dꞁǝɥ ɹoɟ'
+res_6: 'ɥɔʇɐɯ ǝuᴉꞁuO'
+res_7: 'ǝɯɐu ʇɔɐxƎ'
+res_8: 'ɹǝɯɹɐɟ ǝꞁqɯnɥ ɐ ʇsnՐ'
+res_9: "˙ʎɐp ɹǝd ʎɐd ꞁꞁᴉʍ noʎ xɐʇ ɥɔnɯ ʍoH"
+res_10: "˙dꞁǝɥ ɹoɟ ¿ ꞁᴉɐɾ sǝɹ/ ǝǝS"
+res_11: "˙dꞁǝɥ ɹoɟ ¿ ǝꞁᵷᵷoʇ sǝɹ/ ǝǝS"
+res_12: "˙dꞁǝɥ ɹoɟ ¿ ʇǝs sǝɹ/ ǝǝS"
+res_13: "˙pǝq ɹo uʍoʇ ɹnoʎ oʇ uʍɐdS"
+res_toggle_help_0: "˙snʇɐʇs dʌd ,sʇoꞁd ɹnoʎ ǝꞁᵷᵷo⟘"
+res_toggle_help_1: "˙snʇɐʇs ǝɹᴉɟ ,sʇoꞁd ɹnoʎ ǝꞁᵷᵷo⟘"
+res_toggle_help_2: "˙snʇɐʇs sqoɯ ,sʇoꞁd ɹnoʎ ǝꞁᵷᵷo⟘"
+res_toggle_help_3: "˙snʇɐʇs uoᴉsoꞁdxǝ ,sʇoꞁd ɹnoʎ ǝꞁᵷᵷo⟘"
+res_toggle_help_4: "˙sɹǝpɹoq ʇoꞁd ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_5: "˙sɹǝpɹoq ʇoꞁd ʇuɐʇsuoɔ ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_6: "˙sɹǝpɹoq uʍoʇ ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_7: "˙suoᴉʇɐɔᴉɟᴉʇou ʇoꞁd ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_8: "˙ʞꞁɐʍ noʎ ǝɹǝɥʍ ɯᴉɐꞁɔ oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_9: "˙sʇoꞁd ǝᵷuɐɥɔ noʎ uǝɥʍ dɐɯ ǝɥʇ ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
 res_toggle_help_10: "Remove all modes."
 res_toggle_help_11: "Spy on chat channels."
 res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
