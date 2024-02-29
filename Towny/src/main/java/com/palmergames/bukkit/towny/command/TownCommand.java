@@ -376,8 +376,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			break;
 		case "outpost":
-			if (args.length == 2)
-				return Collections.singletonList("list");
+			if (args.length == 2) {
+				List<String> outpostNames = town.getOutpostNames();
+				outpostNames.add("list");
+				return NameUtil.filterByStart(outpostNames, args[1]);
+			}
 			break;
 		case "outlaw":
 		case "ban":

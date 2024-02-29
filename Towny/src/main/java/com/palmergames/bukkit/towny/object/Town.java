@@ -1038,6 +1038,23 @@ public class Town extends Government implements TownBlockOwner {
 		outpostSpawns.remove(Position.ofLocation(loc));
 	}
 
+	public List<String> getOutpostNames() {
+		List<String> outpostNames = new ArrayList<>();
+		int i = 0;
+		for (Location loc : getAllOutpostSpawns()) {
+			i++;
+			TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
+			if (tboutpost != null) {
+				String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
+				if (!name.isEmpty())
+					outpostNames.add(name);
+				else
+					outpostNames.add(String.valueOf(i));
+			}
+		}
+		return outpostNames;
+	}
+
 	/**
 	 * Sets the town for sale.
 	 *

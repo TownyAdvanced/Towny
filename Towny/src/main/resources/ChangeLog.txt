@@ -9573,3 +9573,4 @@ v0.92.0.11:
 0.100.1.18:
   - Add town price to the PreNewTownEvent.
     - Unblocks https://github.com/TownyAdvanced/TownyProvinces/issues/52.
+  - Fix tab complete for /t outpost missing the outposts and named outposts.
