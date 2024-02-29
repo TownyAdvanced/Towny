@@ -212,34 +212,34 @@ res_toggle_help_6: "˙sɹǝpɹoq uʍoʇ ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁ�
 res_toggle_help_7: "˙suoᴉʇɐɔᴉɟᴉʇou ʇoꞁd ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
 res_toggle_help_8: "˙ʞꞁɐʍ noʎ ǝɹǝɥʍ ɯᴉɐꞁɔ oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
 res_toggle_help_9: "˙sʇoꞁd ǝᵷuɐɥɔ noʎ uǝɥʍ dɐɯ ǝɥʇ ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
-res_toggle_help_10: "Remove all modes."
-res_toggle_help_11: "Spy on chat channels."
-res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
-res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
-res_toggle_help_14: "Toggle the ability to unclaim where you walk."
-res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
-res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
-res_jail_help_0: "Pays the bail cost to get out of jail."
-res_set_help_0: "Set your resident's About/Bio"
-res_set_help_1: "Set your resident's default plot permissions."
-res_set_help_2: "Set your resident's modes."
-mode_1: 'Show the map between each townblock'
-mode_2: 'Attempt to claim as you walk'
-mode_3: 'Attempt to unclaim as you walk'
-mode_4: 'Default chat to town channel'
-mode_5: 'Default chat to nation channel'
-mode_6: 'Can place %s in enemy borders to make warzones.'
-plot_perms: 'Use %s instead of %s for plot permissions.'
-plot_perms_1: 'Resident plots don''t make use of outsider permissions.'
-res_list: 'Residents'
-res_sing: 'Resident'
-mayor_sing: 'Mayor'
-admin_sing: 'Admin'
-town_sing: 'Town'
-nation_sing: 'Nation'
-nation_plu: 'Nations'
-king_sing: 'Leader'
-town_plu: 'Towns'
+res_toggle_help_10: "˙sǝpoɯ ꞁꞁɐ ǝʌoɯǝᴚ"
+res_toggle_help_11: "˙sꞁǝuuɐɥɔ ʇɐɥɔ uo ʎdS"
+res_toggle_help_12: "˙pǝʇɹɐʇs ǝʌɐɥ noʎ dnoɹᵷʇoꞁd ɐ oʇ sʇoꞁd ppɐ oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_13: "˙sʇoꞁd ǝᵷuɐɥɔ noʎ uǝɥʍ sǝᵷɐssǝɯ ǝꞁʇᴉʇ ǝǝs oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_14: "˙ʞꞁɐʍ noʎ ǝɹǝɥʍ ɯᴉɐꞁɔun oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_15: "˙sǝɯɐu ʎʇᴉʇuǝ/ʞɔoꞁq ɹǝdoɹd uɹɐǝꞁ oʇ ꞁooʇoɟuᴉ ǝɥʇ ǝsn oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_toggle_help_16: "˙sǝᵷpǝꞁᴉʌᴉɹd uᴉɯpɐ ɹnoʎ ǝʇɐʌᴉʇɔɐǝp oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ǝꞁᵷᵷo⟘"
+res_jail_help_0: "˙ꞁᴉɐɾ ɟo ʇno ʇǝᵷ oʇ ʇsoɔ ꞁᴉɐq ǝɥʇ sʎɐԀ"
+res_set_help_0: "oᴉᗺ/ʇnoqⱯ s,ʇuǝpᴉsǝɹ ɹnoʎ ʇǝS"
+res_set_help_1: "˙suoᴉssᴉɯɹǝd ʇoꞁd ʇꞁnɐɟǝp s,ʇuǝpᴉsǝɹ ɹnoʎ ʇǝS"
+res_set_help_2: "˙sǝpoɯ s,ʇuǝpᴉsǝɹ ɹnoʎ ʇǝS"
+mode_1: 'ʞɔoꞁquʍoʇ ɥɔɐǝ uǝǝʍʇǝq dɐɯ ǝɥʇ ʍoɥS'
+mode_2: 'ʞꞁɐʍ noʎ sɐ ɯᴉɐꞁɔ oʇ ʇdɯǝʇʇⱯ'
+mode_3: 'ʞꞁɐʍ noʎ sɐ ɯᴉɐꞁɔun oʇ ʇdɯǝʇʇⱯ'
+mode_4: 'ꞁǝuuɐɥɔ uʍoʇ oʇ ʇɐɥɔ ʇꞁnɐɟǝᗡ'
+mode_5: 'ꞁǝuuɐɥɔ uoᴉʇɐu oʇ ʇɐɥɔ ʇꞁnɐɟǝᗡ'
+mode_6: '˙sǝuozɹɐʍ ǝʞɐɯ oʇ sɹǝpɹoq ʎɯǝuǝ uᴉ %s ǝɔɐꞁd uɐƆ'
+plot_perms: '˙suoᴉssᴉɯɹǝd ʇoꞁd ɹoɟ %s ɟo pɐǝʇsuᴉ %s ǝs∩'
+plot_perms_1: '˙suoᴉssᴉɯɹǝd ɹǝpᴉsʇno ɟo ǝsn ǝʞɐɯ ʇ,uop sʇoꞁd ʇuǝpᴉsǝᴚ'
+res_list: 'sʇuǝpᴉsǝᴚ'
+res_sing: 'ʇuǝpᴉsǝᴚ'
+mayor_sing: 'ɹoʎɐW'
+admin_sing: 'uᴉɯpⱯ'
+town_sing: 'uʍo⟘'
+nation_sing: 'uoᴉʇɐN'
+nation_plu: 'suoᴉʇɐN'
+king_sing: 'ɹǝpɐǝꞀ'
+town_plu: 'suʍo⟘'
 world_plu: 'spꞁɹoM'
 world_sing: 'pꞁɹoM'
 world_help_1: 'snʇɐʇs s,pꞁɹoʍ ʇuǝɹɹnƆ'
@@ -311,56 +311,56 @@ townyadmin_nation_help_0: "˙ʎʇᴉɔ ꞁɐʇᴉdɐɔ puɐ ǝɯɐu uǝʌᴉᵷ 
 townyadmin_nation_help_1: "˙uǝǝɹɔs snʇɐʇs uoᴉʇɐu ǝɥʇ ʍoɥS"
 townyadmin_nation_help_2: "˙uoᴉʇɐu ǝɥʇ ɯoɹɟ suʍoʇ ppⱯ"
 townyadmin_nation_help_3: "˙uoᴉʇɐu ǝɥʇ ɯoɹɟ suʍoʇ ǝʌoɯǝᴚ"
-townyadmin_nation_help_4: "Rename a nation."
-townyadmin_nation_help_5: "Delete a town."
-townyadmin_nation_help_6: "Recheck the nation's towns to make sure they're close enough to the capital."
-townyadmin_nation_help_7: "Merge the 2nd nation into the first nation."
-townyadmin_nation_help_8: "Merge the 2nd nation into the first nation, ignoring any rules."
-townyadmin_nation_help_9: "Use a nation's toggle command."
-townyadmin_nation_help_10: "Use a nation's set command."
-townyadmin_nation_help_11: "Put money into the nation bank."
-townyadmin_nation_help_12: "Take money from the nation bank."
-townyadmin_nation_help_13: "Open the nation's bankhistory book."
-townyadmin_nation_help_14: "Place the town into the nation."
-townyadmin_nation_help_15: "Use the nation's rank command."
-townyadmin_nationrank_help_0: "Adds a nation rank to the resident."
-townyadmin_nationrank_help_1: "Removes a nation rank from the resident."
-townyadmin_database_help_0: "Force saves the database."
-townyadmin_database_help_1: "Force loads the database."
-townyadmin_database_help_2: "Removes all titles and surnames from every resident."
-ta_plot_help_0: "Claim a plot for a player."
-ta_plot_help_1: "View the metadata stored in the plot you are stood in."
-ta_plot_help_2: "Set plot metadata key and value."
-ta_plot_help_3: "Add or remove a metadata by key."
-ta_resident_help_0: "Rename a resident."
-ta_resident_help_1: "Add or remove a friend."
-ta_resident_help_2: "List or clear the friend list."
-ta_resident_help_3: "Delete a resident from the database."
-ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
-ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
-ta_toggle_help_2: "Turn on/off devmode, shows extra logging messages to the player specified in the config."
-ta_toggle_help_3: "Turn on/off debug mode, showing extra messages in the log."
-ta_toggle_help_4: "Turn on/off the ability for towns or nations to remove money from their banks."
-ta_toggle_help_5: "Make a player an NPC or not."
-ta_set_help_0: "Set a towns mayor to the given player."
-ta_set_help_1: "Set a town with a new NPC mayor, they pay no upkeep."
-ta_set_help_2: "Set the capital of a nation."
-ta_set_help_3: "Set a nation's nationzone size."
-ta_set_help_4: "Set a resident's title."
-ta_set_help_5: "Set a resident's surname."
-ta_set_help_6: "Set a plot to a different town."
-ta_set_help_7: "Set a town's founder name."
-ta_set_help_8: "Use size 0 to remove nationzone override."
-ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
-ta_townmeta_help_1: "View the metadata stored on the town you specify."
-ta_townmeta_help_2: "Set town metadata key and value."
-ta_townmeta_help_3: "Add or remove a metadata by key from the town."
-ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
-ta_residentmeta_help_2: "Set resident metadata key and value."
-ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
-ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
-ta_nationmeta_help_2: "Set nation metadata key and value."
-ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
+townyadmin_nation_help_4: "˙uoᴉʇɐu ɐ ǝɯɐuǝᴚ"
+townyadmin_nation_help_5: "˙uʍoʇ ɐ ǝʇǝꞁǝᗡ"
+townyadmin_nation_help_6: "˙ꞁɐʇᴉdɐɔ ǝɥʇ oʇ ɥᵷnouǝ ǝsoꞁɔ ǝɹ,ʎǝɥʇ ǝɹns ǝʞɐɯ oʇ suʍoʇ s,uoᴉʇɐu ǝɥʇ ʞɔǝɥɔǝᴚ"
+townyadmin_nation_help_7: "˙uoᴉʇɐu ʇsɹᴉɟ ǝɥʇ oʇuᴉ uoᴉʇɐu puᘔ ǝɥʇ ǝᵷɹǝW"
+townyadmin_nation_help_8: "˙sǝꞁnɹ ʎuɐ ᵷuᴉɹouᵷᴉ 'uoᴉʇɐu ʇsɹᴉɟ ǝɥʇ oʇuᴉ uoᴉʇɐu puᘔ ǝɥʇ ǝᵷɹǝW"
+townyadmin_nation_help_9: "˙puɐɯɯoɔ ǝꞁᵷᵷoʇ s,uoᴉʇɐu ɐ ǝs∩"
+townyadmin_nation_help_10: "˙puɐɯɯoɔ ʇǝs s,uoᴉʇɐu ɐ ǝs∩"
+townyadmin_nation_help_11: "˙ʞuɐq uoᴉʇɐu ǝɥʇ oʇuᴉ ʎǝuoɯ ʇnԀ"
+townyadmin_nation_help_12: "˙ʞuɐq uoᴉʇɐu ǝɥʇ ɯoɹɟ ʎǝuoɯ ǝʞɐ⟘"
+townyadmin_nation_help_13: "˙ʞooq ʎɹoʇsᴉɥʞuɐq s,uoᴉʇɐu ǝɥʇ uǝdO"
+townyadmin_nation_help_14: "˙uoᴉʇɐu ǝɥʇ oʇuᴉ uʍoʇ ǝɥʇ ǝɔɐꞁԀ"
+townyadmin_nation_help_15: "˙puɐɯɯoɔ ʞuɐɹ s,uoᴉʇɐu ǝɥʇ ǝs∩"
+townyadmin_nationrank_help_0: "˙ʇuǝpᴉsǝɹ ǝɥʇ oʇ ʞuɐɹ uoᴉʇɐu ɐ sppⱯ"
+townyadmin_nationrank_help_1: "˙ʇuǝpᴉsǝɹ ǝɥʇ ɯoɹɟ ʞuɐɹ uoᴉʇɐu ɐ sǝʌoɯǝᴚ"
+townyadmin_database_help_0: "˙ǝsɐqɐʇɐp ǝɥʇ sǝʌɐs ǝɔɹoℲ"
+townyadmin_database_help_1: "˙ǝsɐqɐʇɐp ǝɥʇ spɐoꞁ ǝɔɹoℲ"
+townyadmin_database_help_2: "˙ʇuǝpᴉsǝɹ ʎɹǝʌǝ ɯoɹɟ sǝɯɐuɹns puɐ sǝꞁʇᴉʇ ꞁꞁɐ sǝʌoɯǝᴚ"
+ta_plot_help_0: "˙ɹǝʎɐꞁd ɐ ɹoɟ ʇoꞁd ɐ ɯᴉɐꞁƆ"
+ta_plot_help_1: "˙uᴉ pooʇs ǝɹɐ noʎ ʇoꞁd ǝɥʇ uᴉ pǝɹoʇs ɐʇɐpɐʇǝɯ ǝɥʇ ʍǝᴉɅ"
+ta_plot_help_2: "˙ǝnꞁɐʌ puɐ ʎǝʞ ɐʇɐpɐʇǝɯ ʇoꞁd ʇǝS"
+ta_plot_help_3: "˙ʎǝʞ ʎq ɐʇɐpɐʇǝɯ ɐ ǝʌoɯǝɹ ɹo ppⱯ"
+ta_resident_help_0: "˙ʇuǝpᴉsǝɹ ɐ ǝɯɐuǝᴚ"
+ta_resident_help_1: "˙puǝᴉɹɟ ɐ ǝʌoɯǝɹ ɹo ppⱯ"
+ta_resident_help_2: "˙ʇsᴉꞁ puǝᴉɹɟ ǝɥʇ ɹɐǝꞁɔ ɹo ʇsᴉꞀ"
+ta_resident_help_3: "˙ǝsɐqɐʇɐp ǝɥʇ ɯoɹɟ ʇuǝpᴉsǝɹ ɐ ǝʇǝꞁǝᗡ"
+ta_toggle_help_0: "˙spꞁɹoʍ ꞁꞁɐ uᴉ ssǝuɹǝpꞁᴉM ǝɥʇ ǝsn oʇ ʎʇᴉꞁᴉqɐ ǝɥʇ ɟɟo/uo uɹn⟘"
+ta_toggle_help_1: "˙spꞁɹoʍ ꞁꞁɐ uᴉ sǝɹnʇɐǝɟ uoᴉʇɐɹǝuǝᵷǝɹ ǝɥʇ ɟɟo/uo uɹn⟘"
+ta_toggle_help_2: "˙ᵷᴉɟuoɔ ǝɥʇ uᴉ pǝᴉɟᴉɔǝds ɹǝʎɐꞁd ǝɥʇ oʇ sǝᵷɐssǝɯ ᵷuᴉᵷᵷoꞁ ɐɹʇxǝ sʍoɥs 'ǝpoɯʌǝp ɟɟo/uo uɹn⟘"
+ta_toggle_help_3: "˙ᵷoꞁ ǝɥʇ uᴉ sǝᵷɐssǝɯ ɐɹʇxǝ ᵷuᴉʍoɥs 'ǝpoɯ ᵷnqǝp ɟɟo/uo uɹn⟘"
+ta_toggle_help_4: "˙sʞuɐq ɹᴉǝɥʇ ɯoɹɟ ʎǝuoɯ ǝʌoɯǝɹ oʇ suoᴉʇɐu ɹo suʍoʇ ɹoɟ ʎʇᴉꞁᴉqɐ ǝɥʇ ɟɟo/uo uɹn⟘"
+ta_toggle_help_5: "˙ʇou ɹo ƆԀN uɐ ɹǝʎɐꞁd ɐ ǝʞɐW"
+ta_set_help_0: "˙ɹǝʎɐꞁd uǝʌᴉᵷ ǝɥʇ oʇ ɹoʎɐɯ suʍoʇ ɐ ʇǝS"
+ta_set_help_1: "˙dǝǝʞdn ou ʎɐd ʎǝɥʇ 'ɹoʎɐɯ ƆԀN ʍǝu ɐ ɥʇᴉʍ uʍoʇ ɐ ʇǝS"
+ta_set_help_2: "˙uoᴉʇɐu ɐ ɟo ꞁɐʇᴉdɐɔ ǝɥʇ ʇǝS"
+ta_set_help_3: "˙ǝzᴉs ǝuozuoᴉʇɐu s,uoᴉʇɐu ɐ ʇǝS"
+ta_set_help_4: "˙ǝꞁʇᴉʇ s,ʇuǝpᴉsǝɹ ɐ ʇǝS"
+ta_set_help_5: "˙ǝɯɐuɹns s,ʇuǝpᴉsǝɹ ɐ ʇǝS"
+ta_set_help_6: "˙uʍoʇ ʇuǝɹǝɟɟᴉp ɐ oʇ ʇoꞁd ɐ ʇǝS"
+ta_set_help_7: "˙ǝɯɐu ɹǝpunoɟ s,uʍoʇ ɐ ʇǝS"
+ta_set_help_8: "˙ǝpᴉɹɹǝʌo ǝuozuoᴉʇɐu ǝʌoɯǝɹ oʇ 0 ǝzᴉs ǝs∩"
+ta_purge_help_0: "˙sʇuǝpᴉsǝɹ s,uʍoʇ ǝuo ǝᵷɹnd ʎꞁuo oʇ ǝɯɐuuʍoʇ ɐ ʎɟᴉɔǝds ɹo 'sɹǝʎɐꞁd ssǝꞁuʍoʇ ʎꞁuo ǝʌoɯǝɹ oʇ ssǝꞁuʍoʇ ʇǝs ʎꞁꞁɐuoᴉʇdo 'sʎɐp uǝʌᴉᵷ ǝɥʇ uɐɥʇ ɹǝᵷuoꞁ ɹoɟ uᴉ pǝᵷᵷoꞁ ʇ,uǝʌɐɥ oɥʍ sʇuǝpᴉsǝɹ sǝᵷɹnԀ"
+ta_townmeta_help_1: "˙ʎɟᴉɔǝds noʎ uʍoʇ ǝɥʇ uo pǝɹoʇs ɐʇɐpɐʇǝɯ ǝɥʇ ʍǝᴉɅ"
+ta_townmeta_help_2: "˙ǝnꞁɐʌ puɐ ʎǝʞ ɐʇɐpɐʇǝɯ uʍoʇ ʇǝS"
+ta_townmeta_help_3: "˙uʍoʇ ǝɥʇ ɯoɹɟ ʎǝʞ ʎq ɐʇɐpɐʇǝɯ ɐ ǝʌoɯǝɹ ɹo ppⱯ"
+ta_residentmeta_help_1: "˙ʎɟᴉɔǝds noʎ ʇuǝpᴉsǝɹ ǝɥʇ uo pǝɹoʇs ɐʇɐpɐʇǝɯ ǝɥʇ ʍǝᴉɅ"
+ta_residentmeta_help_2: "˙ǝnꞁɐʌ puɐ ʎǝʞ ɐʇɐpɐʇǝɯ ʇuǝpᴉsǝɹ ʇǝS"
+ta_residentmeta_help_3: "˙ʇuǝpᴉsǝɹ ǝɥʇ ɯoɹɟ ʎǝʞ ʎq ɐʇɐpɐʇǝɯ ɐ ǝʌoɯǝɹ ɹo ppⱯ"
+ta_nationmeta_help_1: "˙ʎɟᴉɔǝds noʎ uoᴉʇɐu ǝɥʇ uo pǝɹoʇs ɐʇɐpɐʇǝɯ ǝɥʇ ʍǝᴉɅ"
+ta_nationmeta_help_2: "˙ǝnꞁɐʌ puɐ ʎǝʞ ɐʇɐpɐʇǝɯ uoᴉʇɐu ʇǝS"
+ta_nationmeta_help_3: "˙uoᴉʇɐu ǝɥʇ ɯoɹɟ ʎǝʞ ʎq ɐʇɐpɐʇǝɯ ɐ ǝʌoɯǝɹ ɹo ppⱯ"
 ta_reload_help_0: "˙ǝsɐqɐʇɐp spɐoꞁǝᴚ"
 ta_reload_help_1: "˙ᵷᴉɟuoɔ spɐoꞁǝᴚ"
 ta_reload_help_2: "˙sǝꞁᴉɟ ǝᵷɐnᵷuɐꞁ spɐoꞁǝᴚ"
@@ -411,13 +411,13 @@ plot_set_help_6: "˙ɟɟo ɹo uo oʇ ǝdʎʇ puɐ ꞁǝʌǝꞁ ɐ ɟo uoᴉssᴉ
 plot_set_help_7: "˙sʇoꞁd ǝɥʇ suʍo ʇɐɥʇ uʍoʇ ɹo ʇuǝpᴉsǝɹ ǝɥʇ oʇ suoᴉssᴉɯɹǝd ǝɥʇ sʇǝS"
 plot_jailcell_help_0: "˙puɐʇs noʎ ǝɹǝɥʍ ꞁꞁǝƆꞁᴉɐՐ ɐ sppⱯ"
 plot_jailcell_help_1: "˙puɐʇs noʎ ǝɹǝɥʍ ꞁꞁǝƆꞁᴉɐՐ ɐ sǝʌoɯǝᴚ"
-msg_block_claim: 'Claim this town block'
-msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
-msg_plot_nfs: 'Take down a plot for sale'
-msg_plot_nfs_radius: 'Take down a radius of plots for sale'
+msg_block_claim: 'ʞɔoꞁq uʍoʇ sᴉɥʇ ɯᴉɐꞁƆ'
+msg_block_claim_radius: '˙noʎ ᵷuᴉpunoɹɹns sʇoꞁd ɟo snᴉpɐɹ ɐ ɯᴉɐꞁƆ'
+msg_plot_nfs: 'ǝꞁɐs ɹoɟ ʇoꞁd ɐ uʍop ǝʞɐ⟘'
+msg_plot_nfs_radius: 'ǝꞁɐs ɹoɟ sʇoꞁd ɟo snᴉpɐɹ ɐ uʍop ǝʞɐ⟘'
 msg_nfs_abr: '&e''fs'' and ''nfs'' are accepted abbreviations for ''forsale'' and ''notforsale''.'
-msg_plot_fs: 'Put this area up for auction.'
-msg_plot_fs_radius: 'Put up a radius of plots for sale.'
+msg_plot_fs: '˙uoᴉʇɔnɐ ɹoɟ dn ɐǝɹɐ sᴉɥʇ ʇnԀ'
+msg_plot_fs_radius: '˙ǝꞁɐs ɹoɟ sʇoꞁd ɟo snᴉpɐɹ ɐ dn ʇnԀ'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -433,8 +433,8 @@ msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have b
 msg_payed_town_tax: '&bPayed town tax of '
 msg_payed_plot_cost: '&bPayed %s for %s plots in %s'
 msg_payed_resident_tax: '&bPayed resident tax of '
-msg_bankrupt_town: ' couldn''t afford to remain a town.'
-msg_bankrupt_nation: ' couldn''t afford to remain a nation.'
+msg_bankrupt_town: '˙uʍoʇ ɐ uᴉɐɯǝɹ oʇ pɹoɟɟɐ ʇ,upꞁnoɔ '
+msg_bankrupt_nation: '˙uoᴉʇɐu ɐ uᴉɐɯǝɹ oʇ pɹoɟɟɐ ʇ,upꞁnoɔ '
 msg_nation_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
 msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
 msg_peaceful_disabled: '&bNation peace is disabled globally.'
@@ -474,8 +474,8 @@ msg_invited_join_town: '&b%s invited %s to the town.'
 msg_invited_join_nation: '&b%s invited %s to the nation.'
 msg_deny_invite: '&b%s denied your invite.'
 msg_invited: '&bYou''ve been invited to join the %s.'
-msg_town_online: 'Online in Town'
-msg_nation_online: 'Online in Nation'
+msg_town_online: 'uʍo⟘ uᴉ ǝuᴉꞁuO'
+msg_nation_online: 'uoᴉʇɐN uᴉ ǝuᴉꞁuO'
 msg_allied_nations: '&b%s allied with the nations %s.'
 msg_enemy_nations: '&b%s developed a hatred for the nations %s.'
 msg_enemy_to_neutral: '&b%s has changed it''s status to peaceful towards %s.'
@@ -533,7 +533,7 @@ msg_changed_mobs: '&cMonster spawns in %s are now %s.'
 msg_the_plot_group: 'dnoɹ⅁ ʇoꞁԀ ǝɥʇ'
 msg_changed_taxpercent: '&cPercentage based taxes are now %s.'
 msg_changed_open: '&cInviteless joining is now %s.'
-msg_toggle_open_on_warning: 'Warning: Townperms should be turned off if town is set open. Type ''/town set perm off'' followed by ''/town set perm reset''.'
+msg_toggle_open_on_warning: '˙,ʇǝsǝɹ ɯɹǝd ʇǝs uʍoʇ/, ʎq pǝʍoꞁꞁoɟ ,ɟɟo ɯɹǝd ʇǝs uʍoʇ/, ǝdʎ⟘ ˙uǝdo ʇǝs sᴉ uʍoʇ ɟᴉ ɟɟo pǝuɹnʇ ǝq pꞁnoɥs sɯɹǝduʍo⟘ :ᵷuᴉuɹɐM'
 msg_changed_world_setting: '&c%s for %s is: %s.'
 msg_world_pvp: '&cThis world is PvP only.'
 msg_world_mobs: '&cThis world has Monster spawns forced on.'
@@ -550,7 +550,7 @@ msg_xx_withdrew_xx: '&b%s withdrew %s from the %s bank.'
 msg_xx_deposited_xx: '&b%s deposited %s into the %s bank.'
 msg_insuf_funds: '&cYou don''t have that much.'
 msg_err_withdraw_disabled: '¡pǝꞁqɐsᴉp sᴉ ʞuɐq sᴉɥʇ ɯoɹɟ ᵷuᴉʍɐɹpɥʇᴉM'
-msg_err_deposit_capped: 'Unable to desposit money. This bank is capped at %s.'
+msg_err_deposit_capped: '˙%s ʇɐ pǝddɐɔ sᴉ ʞuɐq sᴉɥ⟘ ˙ʎǝuoɯ ʇᴉsodsǝp oʇ ǝꞁqɐu∩'
 msg_set_town_home: '&bSuccessfully changed town''s home block to %s'
 msg_set_town_spawn: '&bSuccessfully changed town''s spawn.'
 msg_set_outpost_spawn: '&bSuccessfully changed outpost''s spawn.'
@@ -580,7 +580,7 @@ msg_town_set_alttax: '&b%s has set the daily tax of %s plots at %s'
 msg_town_set_altprice: '&b%s has set the price of %s plots at %s'
 msg_town_set_nation_tax: '&b%s has set the nation tax at %s'
 msg_set_nation_tag: '&b%s has set the nation tag to [%s]'
-msg_set_town_tag: '&b%s has set the town tag to [%s]'
+msg_set_town_tag: '[%s] oʇ ᵷɐʇ uʍoʇ ǝɥʇ ʇǝs sɐɥ &b%s'
 msg_reset_nation_tag: '&b%s has cleared the nation tag.'
 msg_reset_town_tag: '&b%s has cleared the town tag.'
 msg_mayor_abandon: '&bYou would abandon your people? Choose another mayor with ''/town set mayor'' if you''re sure.'
@@ -686,10 +686,10 @@ msg_no_permission_to_give_rank: '˙ʞuɐɹ sᴉɥʇ ʇuɐɹᵷ oʇ uoᴉssᴉɯ�
 msg_you_have_been_given_rank: '˙%s ɟo ʞuɐɹ %s ǝɥʇ pǝʇuɐɹᵷ uǝǝq ǝʌɐɥ no⅄'
 msg_you_have_given_rank: '˙%s oʇ %s ɟo ʞuɐɹ %s ǝɥʇ pǝʇuɐɹᵷ ǝʌɐɥ no⅄'
 msg_resident_not_your_town: '¡uʍoʇ ɐ ɟo ɹǝqɯǝɯ ɐ ʇ,usᴉ ʇuǝpᴉsǝɹ ʇɐɥ⟘'
-msg_resident_already_has_rank: '%s already holds this %s rank.'
+msg_resident_already_has_rank: '˙ʞuɐɹ %s sᴉɥʇ spꞁoɥ ʎpɐǝɹꞁɐ %s'
 msg_you_have_had_rank_taken: '˙%s ɟo ʞuɐɹ %s ǝɥʇ ɯoɹɟ pǝʇoɯǝp uǝǝq ǝʌɐɥ no⅄'
 msg_you_have_taken_rank_from: '˙%s ɯoɹɟ %s ɟo ʞuɐɹ %s ǝɥʇ pǝʌoɯǝɹ ǝʌɐɥ no⅄'
-msg_resident_doesnt_have_rank: '%s doesn''t hold this %s rank.'
+msg_resident_doesnt_have_rank: '˙ʞuɐɹ %s sᴉɥʇ pꞁoɥ ʇ,usǝop %s'
 msg_town_has_no_jails: '˙ʇǝs sꞁᴉɐɾ ʎuɐ ǝʌɐɥ ʇou sǝop uʍo⟘'
 msg_no_permission_to_jail_your_residents: '˙sʇuǝpᴉsǝɹ uʍo ɹnoʎ ꞁᴉɐɾ oʇ uoᴉssᴉɯɹǝd ǝʌɐɥ ʇou op no⅄'
 msg_resident_not_part_of_any_town: '˙uʍoʇ ʎuɐ ɟo ʇɹɐd ɐ ʇou sᴉ ɹǝʎɐꞁd ʇɐɥ⟘'
@@ -725,32 +725,32 @@ msg_town_set_perm_syntax_error: '˙xɐʇuʎs puɐɯɯoɔ ɹǝdoɹd ɹoℲ ,¿ ɯ
 msg_plot_set_perm_syntax_error: '˙xɐʇuʎs puɐɯɯoɔ ɹǝdoɹd ɹoℲ ,¿ ɯɹǝd ʇǝs ʇoꞁd/, ǝǝS ˙puɐɯɯoɔ sᴉɥʇ ɹoɟ uoᴉʇɐuᴉqɯoɔ pɹoʍ pᴉꞁɐʌuI'
 #Added in 0.32
 msg_err_townadmintownrank_wrong_town: '˙uʍoʇ ʇɐɥʇ oʇ ᵷuoꞁǝq ʇ,usǝop ʇuǝpᴉsǝɹ ʇɐɥ⟘'
-msg_err_resident_already_an_outlaw: 'That player is already considered an outlaw by your town.'
-msg_err_not_outlaw_in_your_town: 'You cannot set a town member as an outlaw.'
-msg_you_have_been_declared_outlaw: 'You have been declared an outlaw in %s. Don''t be caught dead in that town.'
-msg_you_have_declared_an_outlaw: '%s has been declared an outlaw in %s.'
-msg_you_have_been_undeclared_outlaw: 'You are no longer an outlaw in %s.'
-msg_you_have_undeclared_an_outlaw: '%s is no longer an outlaw in %s.'
-msg_err_player_not_an_outlaw: 'That player was not listed as an outlaw.'
-msg_err_outlaw_in_open_town: 'You cannot join an open town that has deemed you an outlaw.'
+msg_err_resident_already_an_outlaw: '˙uʍoʇ ɹnoʎ ʎq ʍɐꞁʇno uɐ pǝɹǝpᴉsuoɔ ʎpɐǝɹꞁɐ sᴉ ɹǝʎɐꞁd ʇɐɥ⟘'
+msg_err_not_outlaw_in_your_town: '˙ʍɐꞁʇno uɐ sɐ ɹǝqɯǝɯ uʍoʇ ɐ ʇǝs ʇouuɐɔ no⅄'
+msg_you_have_been_declared_outlaw: '˙uʍoʇ ʇɐɥʇ uᴉ pɐǝp ʇɥᵷnɐɔ ǝq ʇ,uoᗡ ˙%s uᴉ ʍɐꞁʇno uɐ pǝɹɐꞁɔǝp uǝǝq ǝʌɐɥ no⅄'
+msg_you_have_declared_an_outlaw: '˙%s uᴉ ʍɐꞁʇno uɐ pǝɹɐꞁɔǝp uǝǝq sɐɥ %s'
+msg_you_have_been_undeclared_outlaw: '˙%s uᴉ ʍɐꞁʇno uɐ ɹǝᵷuoꞁ ou ǝɹɐ no⅄'
+msg_you_have_undeclared_an_outlaw: '˙%s uᴉ ʍɐꞁʇno uɐ ɹǝᵷuoꞁ ou sᴉ %s'
+msg_err_player_not_an_outlaw: '˙ʍɐꞁʇno uɐ sɐ pǝʇsᴉꞁ ʇou sɐʍ ɹǝʎɐꞁd ʇɐɥ⟘'
+msg_err_outlaw_in_open_town: '˙ʍɐꞁʇno uɐ noʎ pǝɯǝǝp sɐɥ ʇɐɥʇ uʍoʇ uǝdo uɐ uᴉoɾ ʇouuɐɔ no⅄'
 msg_you_are_an_outlaw_in_this_town: '&4Be careful %s considers you an outlaw, dying here could mean jail.'
-msg_err_town_not_close_enough_to_nation: '%s''s homeblock isn''t near enough to your capital''s homeblock to join your nation.'
-msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too far away from your nation''s capital''s homeblock and has been removed from your nation.'
+msg_err_town_not_close_enough_to_nation: '˙uoᴉʇɐu ɹnoʎ uᴉoɾ oʇ ʞɔoꞁqǝɯoɥ s,ꞁɐʇᴉdɐɔ ɹnoʎ oʇ ɥᵷnouǝ ɹɐǝu ʇ,usᴉ ʞɔoꞁqǝɯoɥ s,%s'
+msg_nation_town_moved_their_homeblock_too_far: '˙uoᴉʇɐu ɹnoʎ ɯoɹɟ pǝʌoɯǝɹ uǝǝq sɐɥ puɐ ʞɔoꞁqǝɯoɥ s,ꞁɐʇᴉdɐɔ s,uoᴉʇɐu ɹnoʎ ɯoɹɟ ʎɐʍɐ ɹɐɟ ooʇ pǝʌoɯ sɐʍ ʞɔoꞁqǝɯoɥ s,%s'
 #Added in 0.33
 msg_err_invalid_radius_number: '&cInvalid radius amount. Use an %s or less.'
 #Added in 0.34
 msg_err_max_residents_per_town_reached: '&cMaximum number of residents (%s) already reached.'
 #Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&cThe player %s has not been on the server long enough to be invited to a town, please wait.'
-msg_cant_toggle_pvp_outsider_in_town: 'There is an outsider in your town, you can''t change your pvp status!'
-msg_err_unclaim_not_outpost: 'Unable to unclaim, this plot is not an outpost!'
-outpost_plu: 'Outposts'
+msg_cant_toggle_pvp_outsider_in_town: '¡snʇɐʇs dʌd ɹnoʎ ǝᵷuɐɥɔ ʇ,uɐɔ noʎ ''uʍoʇ ɹnoʎ uᴉ ɹǝpᴉsʇno uɐ sᴉ ǝɹǝɥ⟘'
+msg_err_unclaim_not_outpost: '¡ʇsodʇno uɐ ʇou sᴉ ʇoꞁd sᴉɥʇ ''ɯᴉɐꞁɔun oʇ ǝꞁqɐu∩'
+outpost_plu: 'sʇsodʇnO'
 #Added in 0.36
-msg_err_not_enough_residents: 'There are not enough residents in this town to do that.'
+msg_err_not_enough_residents: '˙ʇɐɥʇ op oʇ uʍoʇ sᴉɥʇ uᴉ sʇuǝpᴉsǝɹ ɥᵷnouǝ ʇou ǝɹɐ ǝɹǝɥ⟘'
 #Added in 0.37
-msg_err_friendly_fire_disable: 'Friendly fire is disabled!'
+msg_err_friendly_fire_disable: '¡pǝꞁqɐsᴉp sᴉ ǝɹᴉɟ ʎꞁpuǝᴉɹℲ'
 #Added in 0.38
-msg_claim_error: '&cAnother plugin stopped the claim of (%s)/(%s) town blocks, could not complete the operation.'
+msg_claim_error: '&c˙uoᴉʇɐɹǝdo ǝɥʇ ǝʇǝꞁdɯoɔ ʇou pꞁnoɔ ''sʞɔoꞁq uʍoʇ (%s)/(%s) ɟo ɯᴉɐꞁɔ ǝɥʇ pǝddoʇs uᴉᵷnꞁd ɹǝɥʇouⱯ'
 #Added in 0.39
 msg_err_town_spawn_forbidden_war: '&cTown spawn travel is only allowed during war.'
 msg_err_town_spawn_forbidden_peace: '&cTown spawn travel is forbidden during war.'
@@ -761,15 +761,15 @@ msg_err_town_spawn_ally_forbidden_false: '&cTown spawn travel to towns allied wi
 msg_err_public_spawn_forbidden_war: '&cPublic spawn travel to other towns is only allowed during war.'
 msg_err_public_spawn_forbidden_peace: '&cPublic spawn travel to other towns is forbidden during war.'
 #Added in 0.40
-mayor_help_9: 'Attempt to unclaim an outpost'
+mayor_help_9: 'ʇsodʇno uɐ ɯᴉɐꞁɔun oʇ ʇdɯǝʇʇⱯ'
 #Added in 0.41 (Invite-Update)
-invite_plu: 'Invites'
-invite_sent_by: 'Invite Sent By'
-invite_help_1: 'Accept an invite to join a town'
-invite_help_2: 'Decline an invite to join a town'
-invite_help_4: 'Decline all invites to join a town'
-invite_help_3: 'List all of your invites'
-town_invite_help_1: 'Invite a player to your town'
+invite_plu: 'sǝʇᴉʌuI'
+invite_sent_by: 'ʎᗺ ʇuǝS ǝʇᴉʌuI'
+invite_help_1: 'uʍoʇ ɐ uᴉoɾ oʇ ǝʇᴉʌuᴉ uɐ ʇdǝɔɔⱯ'
+invite_help_2: 'uʍoʇ ɐ uᴉoɾ oʇ ǝʇᴉʌuᴉ uɐ ǝuᴉꞁɔǝᗡ'
+invite_help_4: 'uʍoʇ ɐ uᴉoɾ oʇ sǝʇᴉʌuᴉ ꞁꞁɐ ǝuᴉꞁɔǝᗡ'
+invite_help_3: 'sǝʇᴉʌuᴉ ɹnoʎ ɟo ꞁꞁɐ ʇsᴉꞀ'
+town_invite_help_1: 'uʍoʇ ɹnoʎ oʇ ɹǝʎɐꞁd ɐ ǝʇᴉʌuI'
 town_invite_help_2: 'ɹǝʎɐꞁd ɐ oʇ ʇuǝs sɐʍ ʇɐɥʇ ''ǝʇᴉʌuᴉ uɐ ǝʞoʌǝᴚ'
 town_invite_help_3: 'sǝʇᴉʌuᴉ ʇuǝs ɹnoʎ ɟo ꞁꞁɐ sʇsᴉꞀ'
 town_invite_help_4: 'pǝʌᴉǝɔǝɹ ǝʌ,noʎ sǝʇᴉʌuᴉ ǝɥʇ ɟo ꞁꞁɐ sʇsᴉꞀ'
@@ -876,7 +876,7 @@ msg_err_over_outposts_limit: '%s/%s ʇᴉɯᴉꞁ ɹnoʎ ɹǝʌo ǝɹɐ noʎ ''�
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
 outlaws: ':sʍɐꞁʇnO' #Used on /t outlawlist
-online: '(ǝuᴉꞁuO)&a'
+online: '&a(ǝuᴉꞁuO)'
 registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s' #Used in mayor hover text in /town status screen.
 status_perm: 'Perm:' #Used on /plot perm, /res
 status_on: '&4ON'
