@@ -276,13 +276,13 @@ admin_panel_9: "传送到一个指定的区块"
 admin_panel_10: "检查玩家是否有权限节点"
 admin_panel_11: "重置配置文件"
 admin_panel_12: "Make a backup of your Towny data"
-admin_panel_13: "Dump your mysql db to flatfile"
-admin_panel_14: "Force save or load your database"
-admin_panel_15: "Run the newhour code"
-admin_panel_16: "Purge old residents"
-townyadmin_town_help_0: "Create a town with the given name and mayor."
-townyadmin_town_help_1: "Show the town status screen."
-townyadmin_town_help_2: "Add or remove residents from a town."
+admin_panel_13: "导出你的mysql db到flatfile"
+admin_panel_14: "强制保存或加载你的数据库"
+admin_panel_15: "运行下一小时的代码"
+admin_panel_16: "清除老居民"
+townyadmin_town_help_0: "根据你给出的名称和设置的市长创建一个城镇"
+townyadmin_town_help_1: "显示一个城镇的状态"
+townyadmin_town_help_2: "添加或移除城镇居民"
 townyadmin_town_help_3: "重命名城镇"
 townyadmin_town_help_4: "删除城镇"
 townyadmin_town_help_5: "复活在城镇"
@@ -352,9 +352,9 @@ ta_set_help_6: "将区块设置到另一个城镇"
 ta_set_help_7: "设置城镇的创建者名称"
 ta_set_help_8: "使用大小0来移除覆盖的民族区域"
 ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
-ta_townmeta_help_1: "View the metadata stored on the town you specify."
-ta_townmeta_help_2: "Set town metadata key and value."
-ta_townmeta_help_3: "Add or remove a metadata by key from the town."
+ta_townmeta_help_1: "查看您指定的城镇中存储的元数据"
+ta_townmeta_help_2: "设置城镇元数据密钥和值"
+ta_townmeta_help_3: "使用键添加或移除城镇的元数据。"
 ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
 ta_residentmeta_help_2: "Set resident metadata key and value."
 ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
@@ -388,7 +388,7 @@ plot_group_help_6: "例如：/plot group forsale 50"
 plot_group_help_7: "例如：/plot group notforsale"
 plot_group_help_8: "添加或移除一个信任村民"
 plot_group_help_9: "添加一个居民到区块组的信任列表中"
-plot_group_help_10: "Removes a resident as Trusted in the plotgroup."
+plot_group_help_10: "在这个区块组中，移除一个受信任的玩家。"
 plot_group_help_11: "打开区块权限设置界面"
 plot_group_help_12: "添加一个玩家到区块权限GUI"
 plot_group_help_13: "从区块权限GUI中移除一个玩家"
@@ -406,15 +406,15 @@ plot_set_help_1: "设置一个区块为哨站"
 plot_set_help_2: "删除一个区块类型"
 plot_set_help_3: "命名一个区块"
 plot_set_help_4: "切换所有权限"
-plot_set_help_5: "Sets the permissions of a level or type to on or off."
-plot_set_help_6: "Sets the permission of a level and type to on or off."
-plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
-plot_jailcell_help_0: "Adds a JailCell where you stand."
-plot_jailcell_help_1: "Removes a JailCell where you stand."
+plot_set_help_5: "开启/关闭 一些级别或类型的权限。"
+plot_set_help_6: "开启/关闭 一个级别或类型的权限。"
+plot_set_help_7: "为拥有这个区块的居民或城镇设置权限。"
+plot_jailcell_help_0: "将你目前站的区块设置为监狱区块。"
+plot_jailcell_help_1: "将你目前站的区块取消设置为监狱区块。"
 msg_block_claim: '声明这个城镇区块'
-msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
+msg_block_claim_radius: '声明在你周围一定半径的区块。'
 msg_plot_nfs: '关闭这块土地的出售状态'
-msg_plot_nfs_radius: 'Take down a radius of plots for sale'
+msg_plot_nfs_radius: '停止出售你输入的半径的地皮。'
 msg_nfs_abr: '&efs 和 nfs 分别是 forsale(出售) 和 notforsale(不供出售)的缩写.'
 msg_plot_fs: '出售这块土地.'
 msg_plot_fs_radius: '出售你输入的半径的地皮'
@@ -425,18 +425,18 @@ msg_plot_fs_radius: '出售你输入的半径的地皮'
 ############################################################
 msg_buy: '&b用 %s 购买了 %d %s .'
 msg_buy_resident_plot: '&b%s 花费了 %s 购买了 %s 的土地!'
-msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
+msg_buy_resident_plot_group: '&b%s为%s购买了%s的区块。'
 msg_couldnt_pay_taxes: '&b%s 因为交不起税而被踢出了 %s.'
 msg_couldnt_pay_plot_taxes: '&b%s 交不起税而失去了他的土地所有权.'
-msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
-msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
+msg_you_couldnt_pay_plot_tax: '&b你无法支付 %s 的地块税所以失去了对%s地块的所有权。'
+msg_you_couldnt_pay_town_tax: '&b你无法支付 %s 的市政税，所以已经从 %s 中移除。'
 msg_payed_town_tax: '&b缴纳城镇税: '
 msg_payed_plot_cost: '&b缴纳 %s 作为 %s 在 %s 的土地税'
 msg_payed_resident_tax: '&b缴纳个人所得税: '
 msg_bankrupt_town: ' 银行资金不足以维持城镇的日常开销.'
 msg_bankrupt_nation: ' 银行资金不足以维持国家的日常开销.'
 msg_nation_not_peaceful: '&b国家的和平已被打破.'
-msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
+msg_nation_cant_peaceful: '&b国家支付不起转变为和平国家的费用。你必须能够每天支付%的费用。'
 msg_peaceful_disabled: '&b所有国家的和平都已被打破.'
 msg_you_paid: '&b你花费了 %s 来保持战时中立.'
 msg_nation_set_peace: '&b成功改变国家状态.'
@@ -625,8 +625,8 @@ msg_err_not_in_town_claim: '&你必须加入城镇才能声明这块土地.'
 msg_err_must_belong_town: '&c你必须是一个城镇居民.'
 msg_err_dont_belong_town: '&c你不属于一个城镇.'
 msg_err_dont_belong_nation: '&b你不属于一个国家的臣民.'
-msg_err_already_belong_nation: '&bYou already belong to a nation.'
-msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
+msg_err_already_belong_nation: '&b你应经属于一个国家了。'
+msg_err_town_already_belong_nation: '&b %s 已经属于国家 %s 了。'
 msg_err_not_same_nation: '&b%s不属于你的国家.'
 msg_err_rect_auto: '&c只有城镇及其居民才能使用 auto.'
 msg_err_invalid_radius: '&c无效半径. 输入整数或 auto.'
@@ -775,7 +775,7 @@ town_invite_help_3: '列出你发送的所有邀请'
 town_invite_help_4: '列出你收到的所有邀请'
 town_invite_help_5: '接受加入国家的邀请'
 town_invite_help_6: '拒绝加入来自国家的邀请'
-town_invite_help_7: 'Remove all of the invites your town has sent out'
+town_invite_help_7: '取消所有你的城镇所发出的邀请。'
 nation_invite_help_1: '邀请一个城镇加入你的国家'
 nation_invite_help_2: '撤消发送给城镇的邀请'
 nation_invite_help_3: '列出发送给城镇的所有邀请'
@@ -803,7 +803,7 @@ msg_err_nation_sent_too_many_requests: '&b国家已经发出了太多的要求�
 msg_err_nation_has_too_many_requests: '&b国家 %s 有太多的邀请, 需要他们拒绝一些请求, 然后再进行邀请.'
 player_received_invites: '&b你已经收到 %a/%m 邀请.'
 town_revoke_invite: '&b城镇 %s, 撤销了你的邀请加入.'
-town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
+town_revoke_invite_successful: '&b你成功撤销了一个对 %s 发出的城镇邀请。'
 town_received_invites: '&b城镇已收到 %a/%m 邀请.'
 town_sent_invites: '&b城镇已发送 %a/%m 邀请.'
 nation_revoke_invite: '&b国家 %s, 撤销了您的邀请以加入.'
@@ -1110,7 +1110,7 @@ msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn'
 msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
 msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
 msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
-msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
+msg_err_key_x_is_not_part_of_this_nation: 'Key%s 不是这个城镇的一部分， 如果能够支付，请添加它到城镇中。'
 msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: '页数过多.'
 msg_err_location_is_not_within_a_town: '该地点不在城镇内.'
@@ -1163,8 +1163,8 @@ msg_err_plot_not_associated_with_a_group: '这片土地不属于任何一个土�
 msg_plot_was_removed_from_group_x: '土地 &9(%s,%s) &2被移出了 %s 土地组'
 msg_plot_renamed_from_x_to_y: '土地 %s 已重命名为 %s.'
 msg_err_plot_group_specify_price: '请设置价格, 指令示例: /plot group fs [价格]'
-msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
-msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
+msg_player_put_group_up_for_sale_amount: '%s 将土地组 %s 以 %s 的价格出售!'
+msg_player_put_group_up_for_sale: '%s 正在出售区块组 %s!'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
@@ -1488,7 +1488,7 @@ msg_resident_has_not_played_long_enough_to_be_jailed: '%s游玩的时间太短�
 msg_town_not_peaceful: '&b城镇的和平已被打破。'
 msg_town_already_peaceful: '&b城镇已处于和平状态。'
 msg_town_already_not_peaceful: '&b城镇已不再和平。'
-msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town. You need to be able to pay %s per day.'
+msg_town_cant_peaceful: '&b城镇支付不起转变为和平城镇的费用。你必须能够每天支付%s的费用。'
 msg_town_paid_for_neutral_status: '&b你的城镇支付了%s以保持中立。'
 msg_nation_paid_for_neutral_status: '&b你的国家支付了%s以保持中立。'
 your_town_has_been_invited_to_join_nation: '你的城镇被邀请加入国家：%s'
@@ -2060,20 +2060,20 @@ msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any t
 msg_town_buytown_not_forsale: "Specified town is not for sale."
 msg_town_buytown_ruined: "Ruined towns cannot be bought."
 msg_resident_about_reset: "&bResident about reset."
-msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
-msg_set_about: "%s's about was set to %s."
-msg_clear_about: "%s's about was cleared."
+msg_err_invalid_string_about_not_set: "无效字符串，居民公告栏设置失败"
+msg_set_about: "%s的内容被设置为 %s"
+msg_clear_about: "%s的内容已被清除"
 #Message shown when toggling town visibleontoplists setting
-msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
+msg_town_visibleontoplist_setting_set_to: '城镇 %s 已将排行榜列表可见设置为 %s。'
 #Message shown when an admin overrides a town founding date via townyadmin.
 townyadmin_town_set_help_0: "设置一个城镇的创建日期"
 townyadmin_nation_set_help_0: "设置一个国家的创建日期"
-msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
-msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
-msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
+msg_town_registered_set: "城镇创建日期：'%s'设置为：'%s'"
+msg_nation_registered_set: "国家创建日期：'%s'设置为：'%s'"
+msg_err_time_cannot_be_in_the_future: "指定的时间不能是未来"
 #The format used for the /t say and /n say commands.
 town_say_format: "%s说: %s"
-msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
+msg_err_floodfill_not_in_wild: "当你站在自定义区域时，您不能使用洪水填充"
 msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
 msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
 #Message shown when a resident is an NPC and is not allowed to do something.
@@ -2094,10 +2094,10 @@ msg_err_no_nation_cannot_do: "你不能执行这个操作，因为没有国家�
 msg_err_cannot_nation_spawn_your_town_is_sanctioned: "你的城镇受到了%s的制裁, 你无法传送到那里"
 msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "The following coordinate(s) cannot be claimed because they contain too much of an unwanted biome: %s."
 msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The following coordinate(s) cannot be claimed because they contain too much ocean biome: %s."
-msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome."
+msg_err_cannot_begin_town_in_this_biome: "你不能在这个生物群落中创建一个城镇"
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
-msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
-msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_unable_to_command_outside_of_town: '你不能在你的城镇之外使用这个指令'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: '您不能在银行区块之外使用该命令'
 msg_err_you_cannot_outlaw_your_mayor: "你不能放逐你的镇长"
 msg_err_you_cannot_outlaw_because_of_rank: "你不能放逐%s, 因为它持有一些城镇头衔"
 status_nation_sanctioned_towns: "受制裁的城镇"
