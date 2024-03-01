@@ -114,8 +114,12 @@ public class TownyBlockListener implements Listener {
 				continue;
 			}
 			Chest data = (Chest) block.getBlockData();            // We are only going to glitch out chests which are facing
-			Chest testData = (Chest) testBlock.getBlockData();    // the same direction as our newly-placed chest.  
-			if (!data.getFacing().equals(testData.getFacing())) 
+			Chest testData = (Chest) testBlock.getBlockData();    // the same direction as our newly-placed chest. 
+
+			if (data.getType() != Chest.Type.SINGLE) // The chest is already a double chest, so it cannot be merged into.
+				continue;
+
+			if (!data.getFacing().equals(testData.getFacing())) // The chests aren't facing the same direction. 
 				continue;
 
 			if ((data.getFacing().equals(BlockFace.SOUTH) || data.getFacing().equals(BlockFace.NORTH))

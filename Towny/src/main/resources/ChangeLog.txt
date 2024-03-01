@@ -9574,3 +9574,4 @@ v0.92.0.11:
   - Add town price to the PreNewTownEvent.
     - Unblocks https://github.com/TownyAdvanced/TownyProvinces/issues/52.
   - Fix tab complete for /t outpost missing the outposts and named outposts.
+  - Fix visual glitch caused by the chest merging protection code not skipping over instances of double chests.
