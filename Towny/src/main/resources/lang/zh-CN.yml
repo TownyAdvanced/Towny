@@ -260,8 +260,8 @@ world_toggle_help_6: "开启/关闭 火势是否被允许或强制在该世界�
 world_toggle_help_7: "开启/关闭 在该世界杀上多种生物的生成设置。"
 world_toggle_help_8: "打开/关闭这个世界中的不可恢复功能"
 world_toggle_help_9: "打开/关闭这个世界上的爆炸恢复"
-world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
-world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_10: "打开/关闭 这个世界的区块清除后删除方块指令"
+world_toggle_help_11: "打开/关闭这个世界中的区块-无索赔-删除-块功能。"
 townyadmin_help_1: '放弃声明这个城镇区块'
 townyadmin_help_2: '放弃声明你附近的城镇区块.'
 admin_panel_1: "查看/ta set ?以获得帮助。"
@@ -275,7 +275,7 @@ admin_panel_8: "用于控制这些物品的指令"
 admin_panel_9: "传送到一个指定的区块"
 admin_panel_10: "检查玩家是否有权限节点"
 admin_panel_11: "重置配置文件"
-admin_panel_12: "Make a backup of your Towny data"
+admin_panel_12: "备份Towny的数据"
 admin_panel_13: "导出你的mysql db到flatfile"
 admin_panel_14: "强制保存或加载你的数据库"
 admin_panel_15: "运行下一小时的代码"
@@ -351,15 +351,15 @@ ta_set_help_5: "为居民设置一个前缀"
 ta_set_help_6: "将区块设置到另一个城镇"
 ta_set_help_7: "设置城镇的创建者名称"
 ta_set_help_8: "使用大小0来移除覆盖的民族区域"
-ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
+ta_purge_help_0: "清除超过指定天数未登录的居民，可以选择将无城镇设置为仅删除无城镇玩家，或者指定城镇名称以仅清除一个城镇的居民"
 ta_townmeta_help_1: "查看您指定的城镇中存储的元数据"
 ta_townmeta_help_2: "设置城镇元数据密钥和值"
 ta_townmeta_help_3: "使用键添加或移除城镇的元数据。"
-ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
-ta_residentmeta_help_2: "Set resident metadata key and value."
-ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
-ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
-ta_nationmeta_help_2: "Set nation metadata key and value."
+ta_residentmeta_help_1: "查看您指定的玩家中存储的元数据"
+ta_residentmeta_help_2: "设置居民元数据密钥和值"
+ta_residentmeta_help_3: "使用键添加或移除一个居民的元数据"
+ta_nationmeta_help_1: "查看您指定的国家中存储的元数据"
+ta_nationmeta_help_2: "设置国家元数据密钥和值"
 ta_nationmeta_help_3: "使用键添加或移除一个国家的元数据"
 ta_reload_help_0: "重新载入数据库"
 ta_reload_help_1: "重载配置"
@@ -1106,12 +1106,12 @@ msg_err_key_cannot_be_deleted: '无法删除不存在的Key!'
 msg_err_this_town_doesnt_have_any_associated_metadata: '这个城镇没有相关的元数据.'
 msg_err_key_x_is_not_part_of_this_town: 'Key %s 不是这个城镇的一部分.'
 msg_custom_data_was_successfully_added_to_town: '成功添加自定义数据到城镇内!'
-msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
-msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
-msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
-msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
+msg_err_this_resident_doesnt_have_any_associated_metadata: '这个居民没有相关的元数据。'
+msg_err_key_x_is_not_part_of_this_resident: 'Key%s 不是这个国家的一部分， 如果能够支付，请添加它到城镇中。'
+msg_custom_data_was_successfully_added_to_resident: '成功添加自定义数据到居民内！'
+msg_err_this_nation_doesnt_have_any_associated_metadata: '这个国家没有相关的元数据'
 msg_err_key_x_is_not_part_of_this_nation: 'Key%s 不是这个城镇的一部分， 如果能够支付，请添加它到城镇中。'
-msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
+msg_custom_data_was_successfully_added_to_nation: '成功添加自定义数据到国家内！'
 msg_error_too_many_pages: '页数过多.'
 msg_err_location_is_not_within_a_town: '该地点不在城镇内.'
 msg_err_location_is_not_within_a_jail_plot: '该地点不在监狱内.'
@@ -1293,7 +1293,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&c你的城镇已倒闭%d小�
 msg_time_remaining_before_full_removal: '距离完全删除：%d小时。'
 msg_time_until_reclaim_available: '距离可收复时间：%d小时。'
 msg_reclaim_available: '可收复。'
-msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
+msg_ruined_town_being_deleted: "%s 将在 %s 小时内被删除"
 #Added in 0.93
 msg_changed_peaceful: '&c城镇中立/和平的状态现在是%s。'
 msg_err_town_unclaim_canceled: '&c放弃圈地已取消，你不能在这个时候放弃这片区域。'
@@ -2003,7 +2003,7 @@ msg_err_amount_must_be_greater_than_zero: "数量必须大于0。"
 #Message shown when taking over claims is disabled on a server.
 msg_err_taking_over_claims_is_not_enabled: "这个服务器没有开启领地掠夺。"
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
-msg_err_this_townblock_cannot_be_taken_over: "This TownBlock cannot be taken over, the town that it belongs to is not overclaimed."
+msg_err_this_townblock_cannot_be_taken_over: "这个城镇不能被接管，它所属的城镇不会被过度圈地"
 #Message shown when taking over a claim would also set the homeblock because the town has no claims.
 msg_err_you_cannot_make_this_your_homeblock: "你不能声明这里，这会使得这个城镇区块成为Homeblock，但这是不允许的。"
 #Message shown when taking over a claim is stopped by another plugin.
@@ -2030,15 +2030,15 @@ msg_err_cannot_unclaim_not_enough_adjacent_claims: "您不能取消声明这个�
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>你的国家从自己的各个城镇中征收了%s的税。"
 #Message shown when a nation pays taxes to its towns.
-msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
+msg_tax_paid_to_towns: "<aqua>你的国家向自己的各个城镇中支付了%s的税。"
 #Message shown when a town collects taxes from its residents.
 msg_tax_collected_from_residents: "<aqua>你的城镇从自己的各个居民那里征收了%s的税。"
 #Message shown when a town pays taxes to its residents.
-msg_tax_paid_to_residents: "<aqua>Your town paid %s in tax to its residents."
+msg_tax_paid_to_residents: "<aqua>你的城镇向自己的各个居民那里支付了%s的税。"
 #Message shown when a town collects taxes from its plottaxes.
 msg_tax_collected_from_plots: "<aqua>你的城镇从各个土地税中收取了%s的税。"
 #Message shown when a town pays taxes to its plottaxes.
-msg_tax_paid_to_residents_for_plots: "<aqua>Your town paid %s in tax to the land owners via plot taxes."
+msg_tax_paid_to_residents_for_plots: "<aqua>你的城镇通过地皮税向土地所有者支付了 %s 税。"
 #Message shown when a nation collects taxes from its towns that are conquered.
 msg_tax_collected_from_conquered_towns: "<aqua>你的国家从被征服的各个城镇中征收了%s的税。"
 msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>你的城镇被免除了国家所征收的税。"
@@ -2049,17 +2049,17 @@ msg_err_your_cannot_overclaim_for_another: "你不可以在%s的时间内再次�
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>世界未加载。"
 #Message shown when a mayor toggles a plots taxed status.
-msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
-msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
-status_forsale: "&a(For Sale: %s)"
-msg_town_forsale: "%s has been set for sale at %s."
-msg_town_notforsale: "%s is no longer for sale."
+msg_changed_plot_taxed: '&c此区块已将其税收状态设置为 %s'
+msg_changed_plotgroup_taxed: '&c此区块组已将其税收状态设置为 %s'
+status_forsale: "&a(出售中: %s)"
+msg_town_forsale: "%s 已被设置为在 %s 出售"
+msg_town_notforsale: "%s不再出售."
 msg_town_sell_confirmation: "这将把你的城镇以%s的价格出售 ，你确定要继续吗？"
 msg_town_buytown_already_mayor: "您已经是 %s的市长了"
-msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
-msg_town_buytown_not_forsale: "Specified town is not for sale."
-msg_town_buytown_ruined: "Ruined towns cannot be bought."
-msg_resident_about_reset: "&bResident about reset."
+msg_town_buytown_confirmation: "购买 %s 将消耗 %s 并将您从您目前可能属于的任何城镇中移除。您确定要继续吗？"
+msg_town_buytown_not_forsale: "指定城镇没有出售"
+msg_town_buytown_ruined: "城镇废墟无法被购买"
+msg_resident_about_reset: "&b重置居民简介"
 msg_err_invalid_string_about_not_set: "无效字符串，居民公告栏设置失败"
 msg_set_about: "%s的内容被设置为 %s"
 msg_clear_about: "%s的内容已被清除"
@@ -2074,15 +2074,15 @@ msg_err_time_cannot_be_in_the_future: "指定的时间不能是未来"
 #The format used for the /t say and /n say commands.
 town_say_format: "%s说: %s"
 msg_err_floodfill_not_in_wild: "当你站在自定义区域时，您不能使用洪水填充"
-msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
-msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
+msg_err_floodfill_out_of_bounds: "声明形状必须完全封闭才能填充"
+msg_err_floodfill_cannot_contain_towns: "洪水填充选区不能包含其他城镇"
 #Message shown when a resident is an NPC and is not allowed to do something.
 msg_err_resident_is_npc: "你不能对一个NPC居民这么做"
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
 msg_err_resident_doesnt_own_any_land: "该居民没有拥有任何个人土地"
 msg_unnamed: "无名"
 msg_err_nation_cannot_sanction_own_town: "你不能制裁一个属于你的国家的城镇"
-msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
+msg_err_nation_town_isnt_sanctioned: "你的国家没有对那个城镇进行制裁"
 msg_err_nation_town_already_sanctioned: "你的国家已经城镇进行了制裁"
 msg_err_nation_town_sanctioned: "你的国家已经制裁了%s, 他们将无法加入你的国家"
 msg_err_nation_town_unsanctioned: "你的国家不再制裁%s"
@@ -2092,10 +2092,10 @@ msg_err_cannot_add_sanctioned_town: "你的国家无法添加%s, 因为你的国
 msg_err_cannot_join_nation_sanctioned_town: "你的城镇无法加入%s, 这个国家已经制裁了你的城镇"
 msg_err_no_nation_cannot_do: "你不能执行这个操作，因为没有国家被执行"
 msg_err_cannot_nation_spawn_your_town_is_sanctioned: "你的城镇受到了%s的制裁, 你无法传送到那里"
-msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "The following coordinate(s) cannot be claimed because they contain too much of an unwanted biome: %s."
-msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The following coordinate(s) cannot be claimed because they contain too much ocean biome: %s."
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "以下坐标不能被认领，因为他所在的生物群系无法被认领： %s。"
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "以下坐标不能被认领，因为他所在的海洋群系无法被认领： %s"
 msg_err_cannot_begin_town_in_this_biome: "你不能在这个生物群落中创建一个城镇"
-msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "你不能领地掠夺这个城镇，因为你的国家不认为对方是一个敌人"
 msg_err_unable_to_command_outside_of_town: '你不能在你的城镇之外使用这个指令'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: '您不能在银行区块之外使用该命令'
 msg_err_you_cannot_outlaw_your_mayor: "你不能放逐你的镇长"
