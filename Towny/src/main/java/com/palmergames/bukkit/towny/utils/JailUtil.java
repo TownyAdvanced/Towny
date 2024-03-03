@@ -111,7 +111,7 @@ public class JailUtil {
 
 		// Set the jail, cells, hours, bail, and add resident to the Universe's jailed resident map.
 		resident.setJail(jail);
-		resident.setJailCell(cell - 1);
+		resident.setJailCell(Math.max(0, cell - 1));
 		resident.setJailHours(hours);
 		resident.setJailBailCost(bail);
 		resident.save();
