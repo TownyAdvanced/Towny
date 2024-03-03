@@ -206,7 +206,7 @@ public class PlayerCacheUtil {
 		if (town.isMayor(resident))
 			return TownBlockStatus.TOWN_OWNER;
 		
-		if (town.hasTrustedResident(resident))
+		if (town.hasTrustedResident(resident) && (!townBlock.hasResident() || TownySettings.doTrustedPlayersGetPermsOnPersonallyOwnedLand()))
 			return TownBlockStatus.TOWN_TRUSTED;
 		
 		if (townBlock.hasTrustedResident(resident) && !townBlock.hasResident(resident))

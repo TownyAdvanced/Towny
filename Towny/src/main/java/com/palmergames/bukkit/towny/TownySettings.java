@@ -3701,6 +3701,10 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_UNKICKABLE_RANKS);
 	}
 	
+	public static boolean doTrustedPlayersGetPermsOnPersonallyOwnedLand() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_DO_TRUSTED_PLAYERS_GET_PERMS_ON_PERSONALLY_OWNED_LAND);
+	}
+
 	public static boolean areProtectedEntitiesProtectedAgainstMobs() {
 		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_MOB_BYPASS);
 	}

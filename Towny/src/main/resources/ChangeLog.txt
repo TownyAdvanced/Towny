@@ -9576,3 +9576,9 @@ v0.92.0.11:
   - Fix tab complete for /t outpost missing the outposts and named outposts.
   - Fix visual glitch caused by the chest merging protection code not skipping over instances of double chests.
   - Fix typo in error message shown when the town_levels don't allow buying bonus blocks.
+  - Add config setting to prevent trusted players using personally-owned land in towns.
+    - Closes #7296.
+  - New Config Option: global_town_settings.do_trusted_players_get_full_perms_in_personally_owned_land
+    - Default: true
+    - When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.
+    - When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms.

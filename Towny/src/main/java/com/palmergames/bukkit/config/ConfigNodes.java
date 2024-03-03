@@ -853,6 +853,12 @@ public enum ConfigNodes {
 			"assistant",
 			"",
 			"# List of ranks (separated by a comma) that will prevent a player from being kicked from a town."),
+	GTOWN_SETTINGS_DO_TRUSTED_PLAYERS_GET_PERMS_ON_PERSONALLY_OWNED_LAND(
+			"global_town_settings.do_trusted_players_get_full_perms_in_personally_owned_land",
+			"true",
+			"",
+			"# When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.",
+			"# When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms."),
 
 
 	GNATION_SETTINGS(
