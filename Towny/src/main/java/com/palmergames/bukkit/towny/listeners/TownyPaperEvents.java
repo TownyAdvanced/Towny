@@ -51,7 +51,6 @@ public class TownyPaperEvents implements Listener {
 	private static final String USED_SIGN_OPEN_EVENT = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
 
 	private static final String PLAYER_ELYTRA_BOOST_EVENT = "com.destroystokyo.paper.event.player.PlayerElytraBoostEvent";
-	private static final MethodHandle GET_BOOSTING_PLAYER = JavaUtil.getMethodHandle(PLAYER_ELYTRA_BOOST_EVENT, "getPlayer");
 
 	private static final String DRAGON_FIREBALL_HIT_EVENT = "com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent";
 
@@ -92,9 +91,7 @@ public class TownyPaperEvents implements Listener {
 			TownyMessaging.sendDebugMsg("Using " + DRAGON_FIREBALL_GET_EFFECT_CLOUD + " listener.");
 		}
 		
-		if (JavaUtil.classExists(PLAYER_ELYTRA_BOOST_EVENT)) {
-			registerEvent(PLAYER_ELYTRA_BOOST_EVENT, this::playerElytraBoostListener, EventPriority.LOW, true);
-		}
+		registerEvent(PLAYER_ELYTRA_BOOST_EVENT, this::playerElytraBoostListener, EventPriority.LOW, true);
 		
 		if (this.plugin.isFolia()) {
 			registerEvent(ADD_TO_WORLD_EVENT, this::entityAddToWorldListener, EventPriority.MONITOR, false /* n/a */);
@@ -115,16 +112,9 @@ public class TownyPaperEvents implements Listener {
 	}
 	
 	// https://jd.papermc.io/paper/1.15/index.html?com/destroystokyo/paper/event/player/PlayerElytraBoostEvent.html
-	private Consumer<Event> playerElytraBoostListener() {
+	private Consumer<PlayerEvent> playerElytraBoostListener() {
 		return event -> {
-			Player player = null;
-			try {
-				player = (Player) GET_BOOSTING_PLAYER.invoke((PlayerEvent) event);
-			} catch (Throwable e) {
-				// Player never gets set here, causing an NPE.
-				plugin.getLogger().log(Level.WARNING, "An exception occurred while invoking " + PLAYER_ELYTRA_BOOST_EVENT + "#getPlayer reflectively", e);
-				return;
-			}
+			Player player = event.getPlayer();
 			if (!TownySettings.isItemUseMaterial(Material.FIREWORK_ROCKET, player.getLocation()))
 				return;
 
