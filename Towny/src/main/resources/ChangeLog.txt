@@ -9582,3 +9582,8 @@ v0.92.0.11:
     - Default: true
     - When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.
     - When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms.
+0.100.1.19:
+  - Add listener for Paper's PlayerElytraBoostEvent.
+    - When using Paper, Towny can now treat Firework_Rockets as an item_use item, preventing players using boosting while gliding on an Elytra.
+    - Closes #7286. 
+      
