@@ -9586,4 +9586,5 @@ v0.92.0.11:
   - Add listener for Paper's PlayerElytraBoostEvent.
     - When using Paper, Towny can now treat Firework_Rockets as an item_use item, preventing players using boosting while gliding on an Elytra.
     - Closes #7286. 
-      
+  - Fix the TownBlockType migrator running opposite of when it ought to, resulting in farm plot allowed blocks being reset when Towny is updated.
+    - Closes #7300.
