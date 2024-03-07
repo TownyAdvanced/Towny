@@ -231,11 +231,16 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			allowPermissionsOnRuinedTownBlocks(town);
-			if (town.exists() && hasRuinTimeExpired(town)) {
+			if (!town.exists())
+				continue;
+
+			if (hasRuinTimeExpired(town)) {
 				//Ruin found & recently ruined end time reached. Delete town now.
 				TownyMessaging.sendMsg(Translatable.of("msg_ruined_town_being_deleted", town.getName(), TownySettings.getTownRuinsMaxDurationHours()));
 				townyUniverse.getDataSource().removeTown(town, false);
+			} else {
+				// We are configured to slowly open up plots' permissions while a town is ruined.
+				allowPermissionsOnRuinedTownBlocks(town);
 			}
 		}
 	}
