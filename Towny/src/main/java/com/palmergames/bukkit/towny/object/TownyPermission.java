@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object;
 import com.palmergames.bukkit.towny.TownySettings;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 public class TownyPermission {
 	public enum ActionType {
@@ -111,6 +112,10 @@ public class TownyPermission {
 		for (boolean[] permLevel : perms) {
 			Arrays.fill(permLevel, b);
 		}
+	}
+
+	public boolean equalsNonEnvironmental(TownyPermission other) {
+		return Arrays.deepEquals(perms, other.perms);
 	}
 
 	public void setAll(boolean b) {
@@ -299,5 +304,27 @@ public class TownyPermission {
 			mobs = owner.getPermissions().mobs;
 		}
 
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(perms);
+		result = prime * result + Objects.hash(explosion, fire, mobs, pvp);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TownyPermission other = (TownyPermission) obj;
+		return explosion == other.explosion && fire == other.fire && mobs == other.mobs
+				&& Arrays.deepEquals(perms, other.perms) && pvp == other.pvp;
 	}
 }

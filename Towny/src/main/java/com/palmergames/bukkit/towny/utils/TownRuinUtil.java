@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
@@ -31,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
@@ -229,6 +231,7 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
+			allowPermissionsOnRuinedTownBlocks(town);
 			if (town.exists() && hasRuinTimeExpired(town)) {
 				//Ruin found & recently ruined end time reached. Delete town now.
 				TownyMessaging.sendMsg(Translatable.of("msg_ruined_town_being_deleted", town.getName(), TownySettings.getTownRuinsMaxDurationHours()));
@@ -252,6 +255,35 @@ public class TownRuinUtil {
 				screen.addComponentOf("reclaim", TownyFormatter.colourKeyImportant(translator.of("msg_time_until_reclaim_available", TownySettings.getTownRuinsMinDurationHours() - getTimeSinceRuining(town))));
 			else 
 				screen.addComponentOf("reclaim", TownyFormatter.colourKeyImportant(translator.of("msg_reclaim_available")));
+		}
+	}
+
+	public static void allowPermissionsOnRuinedTownBlocks(Town town) {
+		int hoursTotal = TownySettings.getTownRuinsMaxDurationHours();
+		int timeSinceRuining = getTimeSinceRuining(town);
+		int hoursLeft = hoursTotal - timeSinceRuining;
+		if (hoursLeft >= hoursTotal)
+			return;
+
+		int numTownBlocks = town.getNumTownBlocks();
+		int townBlocksPerHour = numTownBlocks / hoursLeft;
+		double end = numTownBlocks > hoursTotal
+				? townBlocksPerHour * timeSinceRuining // We will be opening perms on 1 or more townblocks every hour.
+				: numTownBlocks * ((double) timeSinceRuining / hoursTotal); // Single townblocks will open up every X hours.
+
+		// Order townblocks from newest claim to oldest.
+		List<TownBlock> townBlocks = town.getTownBlocks().stream().sorted(Comparator.comparingLong(TownBlock::getClaimedAt).reversed()).collect(Collectors.toList());
+
+		TownyPermission openPerms = new TownyPermission();
+		openPerms.setAllNonEnvironmental(true);
+		TownBlock tb;
+		for (int i = 1; i < end; i++) {
+			tb = townBlocks.get(i - 1);
+			if (tb == null || tb.getPermissions().equalsNonEnvironmental(openPerms))
+				continue; // This townblock has already had all of its permissions set to RNAO.
+
+			tb.getPermissions().setAllNonEnvironmental(true);
+			tb.save();
 		}
 	}
 }
