@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.entity.Player;
@@ -238,9 +239,13 @@ public class TownRuinUtil {
 				//Ruin found & recently ruined end time reached. Delete town now.
 				TownyMessaging.sendMsg(Translatable.of("msg_ruined_town_being_deleted", town.getName(), TownySettings.getTownRuinsMaxDurationHours()));
 				townyUniverse.getDataSource().removeTown(town, false);
-			} else {
+				continue;
+			}
+
+			if(TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
+				final Town finalTown = town;
 				// We are configured to slowly open up plots' permissions while a town is ruined.
-				allowPermissionsOnRuinedTownBlocks(town);
+				Towny.getPlugin().getScheduler().runAsync(() -> allowPermissionsOnRuinedTownBlocks(finalTown));
 			}
 		}
 	}
@@ -263,32 +268,53 @@ public class TownRuinUtil {
 		}
 	}
 
-	public static void allowPermissionsOnRuinedTownBlocks(Town town) {
+	private static void allowPermissionsOnRuinedTownBlocks(Town town) {
+		long unprotectedBlockCount = getNumTownblocksWithNoProtection(town);
+		if (unprotectedBlockCount <= 0L)
+			return;
+
+		TownyPermission openPerms = new TownyPermission();
+		openPerms.setAllNonEnvironmental(true);
+
+		// List how many plots are getting their permission lines opened up.
+		List<TownBlock> alteredBlocks = town.getTownBlocks().stream()
+			.sorted(Comparator.comparingLong(TownBlock::getClaimedAt).reversed()) // Order them newest-claim to oldest-claim.
+			.limit(unprotectedBlockCount) // Limit to only X plots.
+			.filter(tb -> tryAndAllowPermsInPlot(tb, openPerms)) // Filter down to only the plots which are newly opened up to griefing.
+			.collect(Collectors.toList());
+
+		if (alteredBlocks.size() > 0) {
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_ruined_town_plot_permissions_allowed_on_x_plots", alteredBlocks.size()));
+			TownyMessaging.sendMsg(Translatable.of("console_msg_ruined_town_plot_permissions_allowed_on_x_plots", town.getName(), alteredBlocks.size(), StringMgmt.join(alteredBlocks, ", ")));
+		}
+	}
+
+	private static long getNumTownblocksWithNoProtection(Town town) {
 		int hoursTotal = TownySettings.getTownRuinsMaxDurationHours();
 		int timeSinceRuining = getTimeSinceRuining(town);
 		int hoursLeft = hoursTotal - timeSinceRuining;
 		if (hoursLeft >= hoursTotal)
-			return;
+			return 0L;
 
 		int numTownBlocks = town.getNumTownBlocks();
 		int townBlocksPerHour = numTownBlocks / hoursLeft;
 		double end = numTownBlocks > hoursTotal
-				? townBlocksPerHour * timeSinceRuining // We will be opening perms on 1 or more townblocks every hour.
-				: numTownBlocks * ((double) timeSinceRuining / hoursTotal); // Single townblocks will open up every X hours.
+			? townBlocksPerHour * timeSinceRuining       // We will be opening perms on 1 or more townblocks every hour.
+			: numTownBlocks * ((double) timeSinceRuining / hoursTotal); // Single townblocks will open up every X hours.
+		return (long) end;
+	}
 
-		// Order townblocks from newest claim to oldest.
-		List<TownBlock> townBlocks = town.getTownBlocks().stream().sorted(Comparator.comparingLong(TownBlock::getClaimedAt).reversed()).collect(Collectors.toList());
+	private static boolean tryAndAllowPermsInPlot(TownBlock tb, TownyPermission openPerms) {
+		// Filter out any null townblocks (shouldn't happen), and then parse out
+		// townblocks which are already set to allow all BDSI.
+		if (tb == null || tb.getPermissions().equalsNonEnvironmental(openPerms))
+			return false;
 
-		TownyPermission openPerms = new TownyPermission();
-		openPerms.setAllNonEnvironmental(true);
-		TownBlock tb;
-		for (int i = 1; i < end; i++) {
-			tb = townBlocks.get(i - 1);
-			if (tb == null || tb.getPermissions().equalsNonEnvironmental(openPerms))
-				continue; // This townblock has already had all of its permissions set to RNAO.
-
+		// Allows all BDSI perms and saves.
+		Towny.getPlugin().getScheduler().runAsync(() -> {
 			tb.getPermissions().setAllNonEnvironmental(true);
 			tb.save();
-		}
+		});
+		return true;
 	}
 }
