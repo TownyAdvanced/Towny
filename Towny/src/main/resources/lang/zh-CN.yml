@@ -2117,3 +2117,5 @@ msg_town_being_deleted_because_no_residents: "%s 将要被删除，因为它的�
 outlawed_in: "放逐于"
 msg_warning_town_deposit_hint: "如果要把钱存入城镇银行，请使用/town deposit [amount]"
 msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/country deposit [amount]。"
+teleport_warmup_title_dont_move: "&6Don't move!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
