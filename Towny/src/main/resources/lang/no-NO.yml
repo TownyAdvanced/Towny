@@ -2117,3 +2117,5 @@ msg_town_being_deleted_because_no_residents: "%s is being deleted because it los
 outlawed_in: "Outlawed in"
 msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
 msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
+teleport_warmup_title_dont_move: "&6Don't move!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
