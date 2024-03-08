@@ -9588,3 +9588,9 @@ v0.92.0.11:
     - Closes #7286. 
   - Fix the TownBlockType migrator running opposite of when it ought to, resulting in farm plot allowed blocks being reset when Towny is updated.
     - Closes #7300.
+  - Add optional title message showing how long until a player will spawn, when using the spawning warmup timer.
+    - Partially fills #7303.
+  - New Config Option: spawning.spawning_warmups.uses_title_message
+    - Default: false
+    - When set to true, players get a large Title message showing how long until their teleport will happen,
+      as well as a message telling them not to move if movement_cancels_spawn_warmup is true. 

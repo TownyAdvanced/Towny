@@ -49,8 +49,9 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			Map.Entry<Resident, TeleportRequest> next = iterator.next();
 			final Resident resident = next.getKey();
 			final TeleportRequest request = next.getValue();
+			long teleportTime = request.requestTime() + (TownySettings.getTeleportWarmupTime() * 1000L);
 
-			if (currentTime > request.requestTime() + (TownySettings.getTeleportWarmupTime() * 1000L)) {
+			if (currentTime > teleportTime) {
 				iterator.remove();
 				
 				Player player = resident.getPlayer();
@@ -62,6 +63,18 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				
 				if (request.cooldown() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", request.cooldown());
+				continue;
+			}
+			
+			// Send a title message.
+			if (TownySettings.isTeleportWarmupUsingTitleMessage()) {
+				String title = TownySettings.isMovementCancellingSpawnWarmup() ? Translatable.of("teleport_warmup_title_dont_move").forLocale(resident) : "";
+				long millis = teleportTime - currentTime;
+				if (millis < 1000)
+					continue;
+				int seconds = (int) Math.max(1, millis/1000);
+				String subtitle = Translatable.of("teleport_warmup_subtitle_seconds_remaining", seconds).forLocale(resident);
+				resident.getPlayer().sendTitle(title, subtitle, 0, 25, (seconds == 1 ? 15 : 0));
 			}
 		}
 	}

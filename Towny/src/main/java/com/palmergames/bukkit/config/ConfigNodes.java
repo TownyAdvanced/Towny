@@ -1268,6 +1268,12 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
+	SPAWNING_WARMUP_USES_TITLE_MESSAGE(
+			"spawning.spawning_warmups.uses_title_message",
+			"false",
+			"",
+			"# When set to true, players get a large Title message showing how long until their teleport will happen,",
+			"# as well as a message telling them not to move if movement_cancels_spawn_warmup is true."),
 
 	SPAWNING_TOWN_SPAWN_ROOT("spawning.town_spawn","",""),
 	SPAWNING_ALLOW_TOWN_SPAWN(

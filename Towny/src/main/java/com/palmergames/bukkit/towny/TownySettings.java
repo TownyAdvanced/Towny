@@ -2972,6 +2972,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.SPAWNING_DAMAGE_CANCELS_SPAWN_WARMUP);
 	}
 	
+	public static boolean isTeleportWarmupUsingTitleMessage() {
+		return getBoolean(ConfigNodes.SPAWNING_WARMUP_USES_TITLE_MESSAGE);
+	}
+	
 	public static int getSpawnCooldownTime() {
 		
 		return getInt(ConfigNodes.SPAWNING_TOWN_SPAWN_COOLDOWN_TIMER);
