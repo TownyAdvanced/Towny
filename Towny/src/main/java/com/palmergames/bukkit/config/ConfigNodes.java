@@ -1274,6 +1274,11 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, players get a large Title message showing how long until their teleport will happen,",
 			"# as well as a message telling them not to move if movement_cancels_spawn_warmup is true."),
+	SPAWNING_WARMUP_SHOWS_PARTICLE(
+			"spawning.spawning_warmups.uses_particle_effect",
+			"true",
+			"",
+			"# When set to true, players get a particle effect matching the towny spawn particles, which appears around them for the warmup duration."),
 
 	SPAWNING_TOWN_SPAWN_ROOT("spawning.town_spawn","",""),
 	SPAWNING_ALLOW_TOWN_SPAWN(

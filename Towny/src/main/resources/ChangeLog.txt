@@ -9594,3 +9594,8 @@ v0.92.0.11:
     - Default: false
     - When set to true, players get a large Title message showing how long until their teleport will happen,
       as well as a message telling them not to move if movement_cancels_spawn_warmup is true. 
+  - Add optional teleport warmup particle effect, which looks similar to the spawn point particles, and will swirl downwards from head to toe while a teleport warmup is occuring.
+    - Closes #7303.
+  - New Config Option: spawning.spawning_warmups.uses_particle_effect
+    - Default: true
+    - When set to true, players get a particle effect matching the towny spawn particles, which appears around them for the warmup duration.
