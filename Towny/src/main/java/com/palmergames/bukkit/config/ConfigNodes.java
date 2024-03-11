@@ -1731,6 +1731,11 @@ public enum ConfigNodes {
 			"&2",
 			"",
 			"# Used when two players are in the same nation."),
+	FILTERS_PAPI_REL_FORMATTING_CONQUERED_TOWN(
+			"filters_colour_chat.papi_relational_formatting.conquered_town",
+			"&e",
+			"",
+			"# Used when the player is a member of one of your nation's conquered towns."),
 	FILTERS_PAPI_REL_FORMATTING_ALLY(
 			"filters_colour_chat.papi_relational_formatting.ally",
 			"&b",

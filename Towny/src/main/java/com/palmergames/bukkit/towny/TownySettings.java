@@ -3335,6 +3335,10 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_SAME_NATION);
 	}
 	
+	public static String getPAPIRelationConqueredTown() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_CONQUERED_TOWN);
+	}
+	
 	public static String getPAPIRelationAlly() {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_ALLY);
 	}

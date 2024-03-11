@@ -9599,3 +9599,10 @@ v0.92.0.11:
   - New Config Option: spawning.spawning_warmups.uses_particle_effect
     - Default: true
     - When set to true, players get a particle effect matching the towny spawn particles, which appears around them for the warmup duration.
+0.100.1.20: 
+  - New Relational Placeholder colour: conquered town.
+    - A member of your nation which is from a conquered town will appear as a separate colour from your normal same-nation coloured players.
+    - Closes #7307.
+  - New Config Option: filters_colour_chat.papi_relational_formatting.conquered_town
+    - Default: &e
+    - Used when the player is a member of one of your nation's conquered towns.
