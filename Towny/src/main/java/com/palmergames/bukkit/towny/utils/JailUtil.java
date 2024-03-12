@@ -111,7 +111,7 @@ public class JailUtil {
 
 		// Set the jail, cells, hours, bail, and add resident to the Universe's jailed resident map.
 		resident.setJail(jail);
-		resident.setJailCell(cell - 1);
+		resident.setJailCell(Math.max(0, cell - 1));
 		resident.setJailHours(hours);
 		resident.setJailBailCost(bail);
 		resident.save();
@@ -146,7 +146,7 @@ public class JailUtil {
 		String jailName = jail.hasName() ? jail.getName() : ", cell unknown.";
 		Town town = null;
 		switch (reason) {
-		case ESCAPE:
+		case ESCAPE -> {
 			town = resident.getTownOrNull();
 			
 			// First show a message to the resident, either by broadcasting to the resident's town or just the resident (if they have no town.)
@@ -158,57 +158,55 @@ public class JailUtil {
 			// Second, show a message to the town which has just had a prisoner escape.
 			if (town != null && !town.getUUID().equals(jail.getTown().getUUID()))
 				TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_escaped_jail_into_wilderness", resident.getName(), jail.getWildName()));
-			break;
-
-		case BAIL:
-			teleportAwayFromJail(resident);
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_paid_bail"));
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_has_paid_bail", resident.getName()));
-
-			break;
-		case SENTENCE_SERVED:
-			teleportAwayFromJail(resident);
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_served_your_sentence_and_are_free"));
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_x_has_served_their_sentence_and_is_free", resident.getName()));
-			break;
-		case LEFT_TOWN:
+			unJailResident(resident);
+		}
+		case LEFT_TOWN -> {
 			town = resident.getTownOrNull();
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_player_escaped_jail_by_leaving_town", resident.getName()));
-			break;
-		case OUT_OF_SPACE:
-			teleportAwayFromJail(resident);
+			unJailResident(resident);
+		}
+		case BAIL -> {
+			unjailAndTeleportAwayFromJail(resident);
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_paid_bail"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_has_paid_bail", resident.getName()));
+		}
+		case SENTENCE_SERVED -> {
+			unjailAndTeleportAwayFromJail(resident);
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_served_your_sentence_and_are_free"));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_x_has_served_their_sentence_and_is_free", resident.getName()));
+		}
+		case OUT_OF_SPACE -> {
+			unjailAndTeleportAwayFromJail(resident);
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_were_released_as_town_ran_out_of_slots"));
 			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_x_has_been_released_as_jail_slots_ran_out", resident.getName()));
-			break; 
-		case INSUFFICIENT_FUNDS:
-			teleportAwayFromJail(resident);
+		} 
+		case INSUFFICIENT_FUNDS -> {
+			unjailAndTeleportAwayFromJail(resident);
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_were_released_as_town_ran_out_of_upkeep_funds"));
 			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_x_has_been_released_ran_out_of_upkeep_funds", resident.getName()));
-			break;
-		case PARDONED:
-		case JAIL_DELETED:
-		case ADMIN:
-			teleportAwayFromJail(resident);
+		}
+		case PARDONED, JAIL_DELETED, ADMIN -> {
+			unjailAndTeleportAwayFromJail(resident);
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_from_jail"));
 			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_x_has_been_freed_from_x", resident.getName(), jailName));
-			break;
-		case JAILBREAK:
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_via_jailbreak"));			
-			break;
-		default:
 		}
+		case JAILBREAK -> {
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_have_been_freed_via_jailbreak"));
+			unJailResident(resident);
+		}
+		}
+	}
 
+	public static void unJailResident(Resident resident) {
 		TownyUniverse.getInstance().getJailedResidentMap().remove(resident);
 		resident.setJailCell(0);
 		resident.setJailHours(0);
 		resident.setJail(null);
 		resident.setJailBailCost(0.00);
 		resident.save();
-		
 		BukkitTools.fireEvent(new ResidentUnjailEvent(resident));
 	}
-
 
 	/**
 	 * A wonderful little handbook to help out the sorry jailed person.
@@ -265,11 +263,24 @@ public class JailUtil {
 		townBlock.setJail(jail);
 	}
 	
-	private static void teleportAwayFromJail(Resident resident) {
+	private static void unjailAndTeleportAwayFromJail(Resident resident) {
 		// Don't teleport a player who isn't online.
 		if (!resident.isOnline()) return;
-		// Don't teleport a player if the config is set to not allow it.
-		if (!TownySettings.doesUnjailingTeleportPlayer()) return;
+		// Don't teleport a player if the config is set to not allow it, but unjail them.
+		if (!TownySettings.doesUnjailingTeleportPlayer()) {
+			unJailResident(resident);
+			return;
+		}
+
+		// Players were exploiting a back-to-body tp command in between being unjailed and their teleport out of jail,
+		// allowing them to pay bail, tp to their body, then have towny tp them to their town spawn.
+		// Being unjailed means that Towny doesn't block the player using the blocked-jails-commands.
+		// This delay is used to unjail them 10 ticks earlier than their teleport by Towny, so that they are
+		// blocked from using any denied-while-jailed commands until right before they tp.
+		long delay = Math.max(0, ((TownySettings.getTeleportWarmupTime() * 20L) - 10L));
+		Towny.getPlugin().getScheduler().runLater(resident.getPlayer(), () -> unJailResident(resident), delay);
+
+		// Set up for a teleport out of jail.
 		SpawnUtil.jailAwayTeleport(resident);
 	}
 	

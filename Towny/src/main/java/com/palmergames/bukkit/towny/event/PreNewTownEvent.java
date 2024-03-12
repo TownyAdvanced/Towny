@@ -13,12 +13,14 @@ public class PreNewTownEvent extends CancellableTownyEvent {
 	private final String townName;
 	private final Location spawnLocation;
 	private final WorldCoord worldCoord;
+	private double price;
 
-	public PreNewTownEvent(Player player, String townName, Location spawnLocation) {
+	public PreNewTownEvent(Player player, String townName, Location spawnLocation, double price) {
 		this.player = player;
 		this.townName = townName;
 		this.spawnLocation = spawnLocation;
 		this.worldCoord = WorldCoord.parseWorldCoord(spawnLocation);
+		this.setPrice(price);
 	}
 
 	public Player getPlayer() {
@@ -35,6 +37,14 @@ public class PreNewTownEvent extends CancellableTownyEvent {
 	
 	public WorldCoord getTownWorldCoord() {
 		return this.worldCoord;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public static HandlerList getHandlerList() {

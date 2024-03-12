@@ -616,6 +616,7 @@ permissions:
             towny.command.resident.jail: true
             towny.command.resident.list: true
             towny.command.resident.plotlist: true
+            towny.command.resident.outlawlist: true
             towny.command.resident.set.*: true
             towny.command.resident.otherresident: true
             towny.command.resident.tax: true

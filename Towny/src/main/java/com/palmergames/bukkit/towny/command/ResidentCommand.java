@@ -54,6 +54,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"list",
 		"jail",
 		"plotlist",
+		"outlawlist",
 		"spawn",
 		"toggle",
 		"set",
@@ -177,6 +178,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						return Collections.singletonList("[page #]");
 					break;
 				case "tax":
+				case "outlawlist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "r");
 					break;
@@ -276,6 +278,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		case "list" -> listResidents(player); 
 		case "tax" -> parseResidentTax(player, StringMgmt.remFirstArg(split));
 		case "plotlist" -> parseResidentPlotlist(player, StringMgmt.remFirstArg(split));
+		case "outlawlist" -> parseResidentOutlawlist(player, StringMgmt.remFirstArg(split));
 		case "jail" -> parseResidentJail(player, StringMgmt.remFirstArg(split));
 		case "set" -> residentSet(player, StringMgmt.remFirstArg(split));
 		case "toggle" -> residentToggle(player, StringMgmt.remFirstArg(split));
@@ -345,6 +348,19 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 
 		TownyMessaging.sendPlotList(player, res, page, total);
+	}
+
+	private void parseResidentOutlawlist(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_OUTLAWLIST.getNode());
+
+		Resident resident;
+		if (split.length == 0) {
+			resident = getResidentOrThrow(player);
+		} else {
+			resident = getResidentOrThrow(split[0]);
+		}
+
+		TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlawed_in").forLocale(player), new ArrayList<>(resident.getTownsOutlawedIn())));
 	}
 
 	private void parseResidentJail(Player player, String[] split) throws TownyException {

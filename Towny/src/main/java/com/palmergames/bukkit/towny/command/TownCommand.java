@@ -376,8 +376,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			}
 			break;
 		case "outpost":
-			if (args.length == 2)
-				return Collections.singletonList("list");
+			if (args.length == 2) {
+				List<String> outpostNames = town.getOutpostNames();
+				outpostNames.add("list");
+				return NameUtil.filterByStart(outpostNames, args[1]);
+			}
 			break;
 		case "outlaw":
 		case "ban":
@@ -2370,7 +2373,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!TownySettings.isSellingBonusBlocks(town) && !TownySettings.isBonusBlocksPerTownLevel())
 			throw new TownyException("Config.yml has bonus blocks disabled at max_purchased_blocks: '0' ");
 		else if (TownySettings.isBonusBlocksPerTownLevel() && TownySettings.getMaxBonusBlocks(town) == 0)
-			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBonusBuyAmount: 0");
+			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBuyBonusLimit: 0");
 		
 		if (split.length < 2) {
 			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
@@ -2506,14 +2509,18 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// If the town doesn't cost money to create, just make the Town.
 		if (noCharge || !TownyEconomyHandler.isActive()) {
-			BukkitTools.ifCancelledThenThrow(new PreNewTownEvent(player, name, spawnLocation));
+			BukkitTools.ifCancelledThenThrow(new PreNewTownEvent(player, name, spawnLocation, 0));
 			newTown(world, name, resident, key, spawnLocation, player);
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
 			return;
 		}
 
+		// Fire a cancellable event that allows allows plugins to alter the price of a town.
+		PreNewTownEvent pnte = new PreNewTownEvent(player, name, spawnLocation, TownySettings.getNewTownPrice());
+		BukkitTools.ifCancelledThenThrow(pnte);
+
 		// Test if the resident can afford the town.
-		double cost = TownySettings.getNewTownPrice();
+		double cost = pnte.getPrice();
 		if (!resident.getAccount().canPayFromHoldings(cost))
 			throw new TownyException(Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), cost));
 
@@ -2529,7 +2536,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				plugin.getLogger().log(Level.WARNING, "An exception occurred while creating a new town", e);
 			}
 		})
-		.setCancellableEvent(new PreNewTownEvent(player, name, spawnLocation))
 		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
 		.setCost(new ConfirmationTransaction(() -> cost, resident, "New Town Cost",
 			Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), prettyMoney(cost))))

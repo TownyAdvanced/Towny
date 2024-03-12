@@ -853,6 +853,12 @@ public enum ConfigNodes {
 			"assistant",
 			"",
 			"# List of ranks (separated by a comma) that will prevent a player from being kicked from a town."),
+	GTOWN_SETTINGS_DO_TRUSTED_PLAYERS_GET_PERMS_ON_PERSONALLY_OWNED_LAND(
+			"global_town_settings.do_trusted_players_get_full_perms_in_personally_owned_land",
+			"true",
+			"",
+			"# When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.",
+			"# When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms."),
 
 
 	GNATION_SETTINGS(
@@ -1262,6 +1268,17 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
+	SPAWNING_WARMUP_USES_TITLE_MESSAGE(
+			"spawning.spawning_warmups.uses_title_message",
+			"false",
+			"",
+			"# When set to true, players get a large Title message showing how long until their teleport will happen,",
+			"# as well as a message telling them not to move if movement_cancels_spawn_warmup is true."),
+	SPAWNING_WARMUP_SHOWS_PARTICLE(
+			"spawning.spawning_warmups.uses_particle_effect",
+			"true",
+			"",
+			"# When set to true, players get a particle effect matching the towny spawn particles, which appears around them for the warmup duration."),
 
 	SPAWNING_TOWN_SPAWN_ROOT("spawning.town_spawn","",""),
 	SPAWNING_ALLOW_TOWN_SPAWN(
@@ -1714,6 +1731,11 @@ public enum ConfigNodes {
 			"&2",
 			"",
 			"# Used when two players are in the same nation."),
+	FILTERS_PAPI_REL_FORMATTING_CONQUERED_TOWN(
+			"filters_colour_chat.papi_relational_formatting.conquered_town",
+			"&e",
+			"",
+			"# Used when the player is a member of one of your nation's conquered towns."),
 	FILTERS_PAPI_REL_FORMATTING_ALLY(
 			"filters_colour_chat.papi_relational_formatting.ally",
 			"&b",
@@ -3104,6 +3126,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank."),
+	TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY(
+			"town_ruining.town_ruins.do_plots_permissions_change_to_allow_all",
+			"false",
+			"",
+			"# If this is true, when a town becomes a ruin, every hour more and more of their plots will have their permissions turned to allow",
+			"# build, destroy, switch, itemuse to on. This will affect the newest claims first and progress until the first claims made are opened up",
+			"# right before the max_duration_hours have passed. When a town has more claims than max_duration_hours, multiple plots will be opened up",
+			"# each hour, ie: 500 claims and 72 max hours = 7 claims per hour.",
+			"# If a Town has less claims than max_duration hours, those claims' permissions are opened up much more slowly with hours passing between",
+			"# plots opening up, ie: 36 claims and 72 max hours = 1 claim every 2 hours.",
+			"# This system is meant to give players across many time zones the chance to loot a town when it falls into ruin."),
+
 
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
 			"############################################################",

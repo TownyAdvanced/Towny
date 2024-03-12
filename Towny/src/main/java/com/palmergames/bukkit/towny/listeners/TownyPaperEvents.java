@@ -13,6 +13,7 @@ import com.palmergames.util.JavaUtil;
 import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.AreaEffectCloud;
@@ -48,6 +49,8 @@ public class TownyPaperEvents implements Listener {
 	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";
 	private static final String SPIGOT_SIGN_OPEN_EVENT = "org.bukkit.event.player.PlayerSignOpenEvent";
 	private static final String USED_SIGN_OPEN_EVENT = JavaUtil.classExists(SIGN_OPEN_EVENT) ? SIGN_OPEN_EVENT : SPIGOT_SIGN_OPEN_EVENT;
+
+	private static final String PLAYER_ELYTRA_BOOST_EVENT = "com.destroystokyo.paper.event.player.PlayerElytraBoostEvent";
 
 	private static final String DRAGON_FIREBALL_HIT_EVENT = "com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent";
 
@@ -88,6 +91,8 @@ public class TownyPaperEvents implements Listener {
 			TownyMessaging.sendDebugMsg("Using " + DRAGON_FIREBALL_GET_EFFECT_CLOUD + " listener.");
 		}
 		
+		registerEvent(PLAYER_ELYTRA_BOOST_EVENT, this::playerElytraBoostListener, EventPriority.LOW, true);
+		
 		if (this.plugin.isFolia()) {
 			registerEvent(ADD_TO_WORLD_EVENT, this::entityAddToWorldListener, EventPriority.MONITOR, false /* n/a */);
 		}
@@ -104,6 +109,17 @@ public class TownyPaperEvents implements Listener {
 	@SuppressWarnings("unchecked")
 	private <T extends Event> void registerEvent(Class<T> eventClass, Consumer<T> consumer, EventPriority eventPriority, boolean ignoreCancelled) {
 		Bukkit.getPluginManager().registerEvent(eventClass, this, eventPriority, (listener, event) -> consumer.accept((T) event), plugin, ignoreCancelled);
+	}
+	
+	// https://jd.papermc.io/paper/1.15/index.html?com/destroystokyo/paper/event/player/PlayerElytraBoostEvent.html
+	private Consumer<PlayerEvent> playerElytraBoostListener() {
+		return event -> {
+			Player player = event.getPlayer();
+			if (!TownySettings.isItemUseMaterial(Material.FIREWORK_ROCKET, player.getLocation()))
+				return;
+
+			((Cancellable) event).setCancelled(!TownyActionEventExecutor.canItemuse(player, player.getLocation(), Material.FIREWORK_ROCKET));
+		};
 	}
 	
 	// https://papermc.io/javadocs/paper/1.19/com/destroystokyo/paper/event/block/TNTPrimeEvent.html

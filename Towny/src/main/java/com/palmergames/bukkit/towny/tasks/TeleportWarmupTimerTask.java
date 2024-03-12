@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.TeleportWarmupParticle;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -43,14 +44,16 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	public void run() {
 
 		long currentTime = System.currentTimeMillis();
+		int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 		Iterator<Map.Entry<Resident, TeleportRequest>> iterator = TELEPORT_QUEUE.entrySet().iterator();
 
 		while (iterator.hasNext()) {
 			Map.Entry<Resident, TeleportRequest> next = iterator.next();
 			final Resident resident = next.getKey();
 			final TeleportRequest request = next.getValue();
+			long teleportTime = request.requestTime() + (teleportWarmupTime * 1000L);
 
-			if (currentTime > request.requestTime() + (TownySettings.getTeleportWarmupTime() * 1000L)) {
+			if (currentTime > teleportTime) {
 				iterator.remove();
 				
 				Player player = resident.getPlayer();
@@ -62,6 +65,22 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				
 				if (request.cooldown() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", request.cooldown());
+				continue;
+			}
+
+			long millis = teleportTime - currentTime;
+			int seconds = (int) Math.max(1, millis/1000);
+			// Send a title message.
+			if (TownySettings.isTeleportWarmupUsingTitleMessage() && millis >= 1000) {
+				String title = TownySettings.isMovementCancellingSpawnWarmup() ? Translatable.of("teleport_warmup_title_dont_move").forLocale(resident) : "";
+				String subtitle = Translatable.of("teleport_warmup_subtitle_seconds_remaining", seconds).forLocale(resident);
+				resident.getPlayer().sendTitle(title, subtitle, 0, 25, (seconds == 1 ? 15 : 0));
+			}
+			// Send a particle that drops from above the player to their feet over the course of the warmup.
+			if (TownySettings.isTeleportWarmupShowingParticleEffect()) {
+				double progress = (double) (teleportWarmupTime - seconds) / teleportWarmupTime;
+				double offset = 2.0 + (progress * -2.0);
+				new TeleportWarmupParticle(resident.getPlayer().getLocation().add(0.0, offset, 0.0));
 			}
 		}
 	}
