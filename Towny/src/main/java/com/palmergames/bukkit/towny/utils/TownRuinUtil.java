@@ -21,16 +21,19 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
@@ -229,10 +232,20 @@ public class TownRuinUtil {
 			 * exists.
 			 * We are running in an Async thread so MUST verify all objects.
 			 */
-			if (town.exists() && hasRuinTimeExpired(town)) {
+			if (!town.exists())
+				continue;
+
+			if (hasRuinTimeExpired(town)) {
 				//Ruin found & recently ruined end time reached. Delete town now.
 				TownyMessaging.sendMsg(Translatable.of("msg_ruined_town_being_deleted", town.getName(), TownySettings.getTownRuinsMaxDurationHours()));
 				townyUniverse.getDataSource().removeTown(town, false);
+				continue;
+			}
+
+			if(TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
+				final Town finalTown = town;
+				// We are configured to slowly open up plots' permissions while a town is ruined.
+				Towny.getPlugin().getScheduler().runAsync(() -> allowPermissionsOnRuinedTownBlocks(finalTown));
 			}
 		}
 	}
@@ -253,5 +266,55 @@ public class TownRuinUtil {
 			else 
 				screen.addComponentOf("reclaim", TownyFormatter.colourKeyImportant(translator.of("msg_reclaim_available")));
 		}
+	}
+
+	private static void allowPermissionsOnRuinedTownBlocks(Town town) {
+		long unprotectedBlockCount = getNumTownblocksWithNoProtection(town);
+		if (unprotectedBlockCount <= 0L)
+			return;
+
+		TownyPermission openPerms = new TownyPermission();
+		openPerms.setAllNonEnvironmental(true);
+
+		// List how many plots are getting their permission lines opened up.
+		List<TownBlock> alteredBlocks = town.getTownBlocks().stream()
+			.sorted(Comparator.comparingLong(TownBlock::getClaimedAt).reversed()) // Order them newest-claim to oldest-claim.
+			.limit(unprotectedBlockCount) // Limit to only X plots.
+			.filter(tb -> tryAndAllowPermsInPlot(tb, openPerms)) // Filter down to only the plots which are newly opened up to griefing.
+			.collect(Collectors.toList());
+
+		if (alteredBlocks.size() > 0) {
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_ruined_town_plot_permissions_allowed_on_x_plots", alteredBlocks.size()));
+			TownyMessaging.sendMsg(Translatable.of("console_msg_ruined_town_plot_permissions_allowed_on_x_plots", town.getName(), alteredBlocks.size(), StringMgmt.join(alteredBlocks, ", ")));
+		}
+	}
+
+	private static long getNumTownblocksWithNoProtection(Town town) {
+		int hoursTotal = TownySettings.getTownRuinsMaxDurationHours();
+		int timeSinceRuining = getTimeSinceRuining(town);
+		int hoursLeft = hoursTotal - timeSinceRuining;
+		if (hoursLeft >= hoursTotal)
+			return 0L;
+
+		int numTownBlocks = town.getNumTownBlocks();
+		int townBlocksPerHour = numTownBlocks / hoursLeft;
+		double end = numTownBlocks > hoursTotal
+			? townBlocksPerHour * timeSinceRuining       // We will be opening perms on 1 or more townblocks every hour.
+			: numTownBlocks * ((double) timeSinceRuining / hoursTotal); // Single townblocks will open up every X hours.
+		return (long) end;
+	}
+
+	private static boolean tryAndAllowPermsInPlot(TownBlock tb, TownyPermission openPerms) {
+		// Filter out any null townblocks (shouldn't happen), and then parse out
+		// townblocks which are already set to allow all BDSI.
+		if (tb == null || tb.getPermissions().equalsNonEnvironmental(openPerms))
+			return false;
+
+		// Allows all BDSI perms and saves.
+		Towny.getPlugin().getScheduler().runAsync(() -> {
+			tb.getPermissions().setAllNonEnvironmental(true);
+			tb.save();
+		});
+		return true;
 	}
 }
