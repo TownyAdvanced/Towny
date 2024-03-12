@@ -1782,8 +1782,6 @@ msg_your_town_paid_x_to_unclaim: '你的市鎮支付了%s以註銷土地 '
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: '註銷土地將花費%s，是否繼續？'
 #Added in 0.140
-#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny會依照系統語言設定（%s）來轉換文字 當心翻譯可能不完整，請見諒 '
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必須再等待%s秒才能重新命名你的市鎮 '
 #Added in 1.141
@@ -2116,3 +2114,8 @@ msg_err_name_validation_contains_harmful_characters: "%s contains symbols that c
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
 msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
+outlawed_in: "Outlawed in"
+msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
+msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
+teleport_warmup_title_dont_move: "&6Don't move!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
