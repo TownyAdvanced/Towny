@@ -9606,3 +9606,8 @@ v0.92.0.11:
   - New Config Option: filters_colour_chat.papi_relational_formatting.conquered_town
     - Default: &e
     - Used when the player is a member of one of your nation's conquered towns.
+  - Bump net.kyori:adventure-text-minimessage from 4.15.0 to 4.16.0.
+  - Bump net.kyori:adventure-text-serializer-plain from 4.15.0 to 4.16.0.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.1 to 3.5.2.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.74.0 to 3.78.0.
+  - Bump org.apache.logging.log4j:log4j-core from 2.22.1 to 2.23.1.
