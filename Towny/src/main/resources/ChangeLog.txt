@@ -9606,6 +9606,17 @@ v0.92.0.11:
   - New Config Option: filters_colour_chat.papi_relational_formatting.conquered_town
     - Default: &e
     - Used when the player is a member of one of your nation's conquered towns.
+  - Make it possible for ruined towns to slowly open up their plot permissions.
+    - Closes #7275.
+  - New Config Option: town_ruining.town_ruins.do_plots_permissions_change_to_allow_all
+    - Default: false
+    - If this is true, when a town becomes a ruin, every hour more and more of their plots will have their permissions turned to allow
+      build, destroy, switch, itemuse to on. This will affect the newest claims first and progress until the first claims made are opened up
+      right before the max_duration_hours have passed. When a town has more claims than max_duration_hours, multiple plots will be opened up
+      each hour, ie: 500 claims and 72 max hours = 7 claims per hour.
+    - If a Town has less claims than max_duration hours, those claims' permissions are opened up much more slowly with hours passing between
+      plots opening up, ie: 36 claims and 72 max hours = 1 claim every 2 hours.
+    - This system is meant to give players across many time zones the chance to loot a town when it falls into ruin.
   - Bump net.kyori:adventure-text-minimessage from 4.15.0 to 4.16.0.
   - Bump net.kyori:adventure-text-serializer-plain from 4.15.0 to 4.16.0.
   - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.1 to 3.5.2.
