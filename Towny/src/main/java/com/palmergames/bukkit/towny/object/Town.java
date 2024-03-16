@@ -1096,7 +1096,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setPlotPrice(double plotPrice) {
-		this.plotPrice = Math.min(Math.max(plotPrice, -1), TownySettings.getMaxPlotPrice());
+		if (plotPrice < 0)
+			plotPrice = -1;
+		
+		this.plotPrice = Math.min(plotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getPlotPrice() {
@@ -1114,7 +1117,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
-		this.commercialPlotPrice = Math.min(Math.max(commercialPlotPrice, -1), TownySettings.getMaxPlotPrice());
+		if (commercialPlotPrice < 0)
+			commercialPlotPrice = -1;
+		
+		this.commercialPlotPrice = Math.min(commercialPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getCommercialPlotPrice() {
@@ -1123,7 +1129,10 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setEmbassyPlotPrice(double embassyPlotPrice) {
-		this.embassyPlotPrice = Math.min(Math.max(embassyPlotPrice, -1), TownySettings.getMaxPlotPrice());
+		if (embassyPlotPrice < 0)
+			embassyPlotPrice = -1;
+		
+		this.embassyPlotPrice = Math.min(embassyPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 
 	public double getEmbassyPlotPrice() {
