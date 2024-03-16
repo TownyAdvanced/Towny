@@ -234,7 +234,7 @@ public class Towny extends JavaPlugin {
 		TownBlockTypeHandler.initialize();
 
 		// Initialize the special log4j hook logger.
-		TownyLogger.getInstance();
+		TownyLogger.initialize();
 
 		// Clear all objects from the TownyUniverse class.
 		townyUniverse.clearAllObjects();
