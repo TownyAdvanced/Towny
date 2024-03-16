@@ -55,7 +55,6 @@ import java.util.UUID;
 
 public class TownyMessaging {
 	private static final Logger LOGGER = LogManager.getLogger("Towny");
-	private static final Logger LOGGER_DEBUG = LogManager.getLogger("com.palmergames.bukkit.towny.debug");
 
 	/*
 	 * NON-TRANSLATABLE MESSAGING METHODS
@@ -180,7 +179,7 @@ public class TownyMessaging {
 	 */
 	public static void sendDebugMsg(String msg) {
 		if (TownySettings.getDebug()) {
-			LOGGER_DEBUG.info(Colors.strip("[Towny] Debug: " + msg));
+			LOGGER.debug(Colors.strip("[Towny] Debug: " + msg));
 		}
 		sendDevMsg(msg);
 	}
