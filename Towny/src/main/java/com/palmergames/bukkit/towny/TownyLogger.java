@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
@@ -38,8 +39,8 @@ public final class TownyLogger {
 			.setName("Towny-Main-Log")
 			.withAppend(TownySettings.isAppendingToLog())
 			.setIgnoreExceptions(false)
-			.setBufferedIo(false)
-			.setBufferSize(0)
+			.withBufferedIo(false)
+			.withBufferSize(0)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
@@ -53,8 +54,8 @@ public final class TownyLogger {
 			.setName("Towny-Money")
 			.withAppend(TownySettings.isAppendingToLog())
 			.setIgnoreExceptions(false)
-			.setBufferedIo(false)
-			.setBufferSize(0)
+			.withBufferedIo(false)
+			.withBufferSize(0)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				// The comma after the date is to seperate it in CSV, this is a really nice workaround
@@ -70,8 +71,8 @@ public final class TownyLogger {
 			.setName("Towny-Debug")
 			.withAppend(TownySettings.isAppendingToLog())
 			.setIgnoreExceptions(false)
-			.setBufferedIo(false)
-			.setBufferSize(0)
+			.withBufferedIo(false)
+			.withBufferSize(0)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
@@ -85,8 +86,8 @@ public final class TownyLogger {
 			.setName("Towny-Database")
 			.withAppend(TownySettings.isAppendingToLog())
 			.setIgnoreExceptions(false)
-			.setBufferedIo(false)
-			.setBufferSize(0)
+			.withBufferedIo(false)
+			.withBufferSize(0)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
@@ -101,7 +102,7 @@ public final class TownyLogger {
 		townyDatabaseAppender.start();
 
 		// Towny Main
-		LoggerConfig townyMainConfig = LoggerConfig.newBuilder().withAdditivity(true).withLevel(Level.ALL).withLoggerName("Towny").withConfig(config).build();
+		LoggerConfig townyMainConfig = LoggerConfig.createLogger(true, Level.ALL, "Towny", null, new AppenderRef[0], null, config, null);
 		townyMainConfig.addAppender(townyMainAppender, Level.INFO, null);
 		if (TownySettings.getDebug()) {
 			townyMainConfig.addAppender(townyDebugAppender, Level.DEBUG, null);
@@ -110,12 +111,12 @@ public final class TownyLogger {
 		config.addLogger("Towny", townyMainConfig);
 
 		// Money
-		LoggerConfig townyMoneyConfig = LoggerConfig.newBuilder().withAdditivity(false).withLevel(Level.ALL).withLoggerName("Towny-Money").withConfig(config).build();
+		LoggerConfig townyMoneyConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Money", null, new AppenderRef[0], null, config, null);
 		townyMoneyConfig.addAppender(townyMoneyAppender, Level.ALL, null);
 		config.addLogger("com.palmergames.bukkit.towny.money", townyMoneyConfig);
 
 		// Database
-		LoggerConfig townyDatabaseConfig = LoggerConfig.newBuilder().withAdditivity(false).withLevel(Level.ALL).withLoggerName("Towny-Database").withConfig(config).build();
+		LoggerConfig townyDatabaseConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Database", null, new AppenderRef[0], null, config, null);
 		townyDatabaseConfig.addAppender(townyDatabaseAppender, Level.ALL, null);
 
 		ctx.updateLoggers();
