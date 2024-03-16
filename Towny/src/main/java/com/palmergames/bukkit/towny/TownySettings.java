@@ -3335,6 +3335,10 @@ public class TownySettings {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_SAME_NATION);
 	}
 	
+	public static String getPAPIRelationConqueredTown() {
+		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_CONQUERED_TOWN);
+	}
+	
 	public static String getPAPIRelationAlly() {
 		return getString(ConfigNodes.FILTERS_PAPI_REL_FORMATTING_ALLY);
 	}
@@ -3578,6 +3582,10 @@ public class TownySettings {
 
 	public static boolean areRuinedTownsBanksPaidToNation() {
 		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_DEPOSITS_BANK_TO_NATION);
+	}
+
+	public static boolean doRuinsPlotPermissionsProgressivelyAllowAll() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY);
 	}
 
 	public static void saveConfig() {

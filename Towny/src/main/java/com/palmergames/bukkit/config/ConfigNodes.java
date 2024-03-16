@@ -1731,6 +1731,11 @@ public enum ConfigNodes {
 			"&2",
 			"",
 			"# Used when two players are in the same nation."),
+	FILTERS_PAPI_REL_FORMATTING_CONQUERED_TOWN(
+			"filters_colour_chat.papi_relational_formatting.conquered_town",
+			"&e",
+			"",
+			"# Used when the player is a member of one of your nation's conquered towns."),
 	FILTERS_PAPI_REL_FORMATTING_ALLY(
 			"filters_colour_chat.papi_relational_formatting.ally",
 			"&b",
@@ -3121,6 +3126,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank."),
+	TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY(
+			"town_ruining.town_ruins.do_plots_permissions_change_to_allow_all",
+			"false",
+			"",
+			"# If this is true, when a town becomes a ruin, every hour more and more of their plots will have their permissions turned to allow",
+			"# build, destroy, switch, itemuse to on. This will affect the newest claims first and progress until the first claims made are opened up",
+			"# right before the max_duration_hours have passed. When a town has more claims than max_duration_hours, multiple plots will be opened up",
+			"# each hour, ie: 500 claims and 72 max hours = 7 claims per hour.",
+			"# If a Town has less claims than max_duration hours, those claims' permissions are opened up much more slowly with hours passing between",
+			"# plots opening up, ie: 36 claims and 72 max hours = 1 claim every 2 hours.",
+			"# This system is meant to give players across many time zones the chance to loot a town when it falls into ruin."),
+
 
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
 			"############################################################",
