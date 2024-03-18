@@ -9622,3 +9622,6 @@ v0.92.0.11:
   - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.1 to 3.5.2.
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.74.0 to 3.78.0.
   - Bump org.apache.logging.log4j:log4j-core from 2.22.1 to 2.23.1.
+0.100.1.21:
+  - Fix snapshot taking on older versions, courtesy of Warrior with PR #7316.
+    - Fixes the regression started in 0.100.1.16 which caused the revert on unclaim to turn everything into air down to bedrock.
