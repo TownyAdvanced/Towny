@@ -456,6 +456,8 @@ public class TownyRegenAPI {
 			try {
 				if (GET_CHUNK_SNAPSHOT != null) {
 					snapshots.add((ChunkSnapshot) GET_CHUNK_SNAPSHOT.invoke(chunk, false, false, false, false));
+				} else {
+					snapshots.add(chunk.getChunkSnapshot(false, false, false));
 				}
 			} catch (Throwable throwable) {
 				snapshots.add(chunk.getChunkSnapshot(false, false, false));
