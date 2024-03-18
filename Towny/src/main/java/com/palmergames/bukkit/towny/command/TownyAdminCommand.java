@@ -827,6 +827,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			else
 				HelpMenu.TA_RELOAD.send(sender);
 		}}
+		Towny.getPlugin().resetCache();
 	}
 
 	private void parseAdminReset(CommandSender sender) throws NoPermissionException {

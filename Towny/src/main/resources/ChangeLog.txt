@@ -9628,3 +9628,4 @@ v0.92.0.11:
 0.100.1.22:
   - Fix PaperEvents listeners not registering, causing sign edits and other things to use outdated tests.
     - Fixes the regression which started in 0.100.1.16. 
+  - Reset player caches when using /ta reload.
