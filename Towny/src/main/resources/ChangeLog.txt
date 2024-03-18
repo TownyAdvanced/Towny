@@ -9625,3 +9625,6 @@ v0.92.0.11:
 0.100.1.21:
   - Fix snapshot taking on older versions, courtesy of Warrior with PR #7316.
     - Fixes the regression started in 0.100.1.16 which caused the revert on unclaim to turn everything into air down to bedrock.
+0.100.1.22:
+  - Fix PaperEvents listeners not registering, causing sign edits and other things to use outdated tests.
+    - Fixes the regression which started in 0.100.1.16. 
