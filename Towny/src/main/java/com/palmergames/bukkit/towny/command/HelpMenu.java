@@ -606,7 +606,15 @@ public enum HelpMenu {
 				.add("open", Translatable.of("townyadmin_town_toggle_help_7"));
 		}
 	},
-	
+
+	TOWN_CEDE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town cede")
+				.add("plot [townname]", Translatable.of("town_cede_help"));
+		}
+	},
+
 	TOWN_CLAIM {
 		@Override
 		protected MenuBuilder load() {
