@@ -20,6 +20,7 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
     private boolean isHomeblock = false;
     private boolean isOutpost = false;
 	private boolean isOverClaim = false;
+	private List<WorldCoord> selection;
 
 	/**
 	 * This event runs when a town is made and when a town attempts to claim land.
@@ -40,16 +41,28 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
 	 * @param isOutpost True if the TownBlock will become an outpost.
 	 * @param isHomeblock True if the TownBlock will become a homeblock.
 	 * @param isOverClaim True if the claim has resulted from takeoverclaim.
+	 * @param selection WorldCoord selection which is claiming   
 	 */
-    public TownPreClaimEvent(Town town, TownBlock townBlock, Player player, boolean isOutpost, boolean isHomeblock, boolean isOverClaim) {
+    public TownPreClaimEvent(Town town, TownBlock townBlock, Player player, boolean isOutpost, boolean isHomeblock, boolean isOverClaim,List<WorldCoord> selection) {
         this.town = town;
         this.townBlock = townBlock;
         this.player = player;
         this.isOutpost = isOutpost;
         this.isHomeblock = isHomeblock;
 		this.isOverClaim = isOverClaim;
+		this.selection = selection;
         setCancelMessage(Translation.of("msg_claim_error"));
     }
+
+	public TownPreClaimEvent(Town town, TownBlock townBlock, Player player, boolean isOutpost, boolean isHomeblock, boolean isOverClaim) {
+		this.town = town;
+		this.townBlock = townBlock;
+		this.player = player;
+		this.isOutpost = isOutpost;
+		this.isHomeblock = isHomeblock;
+		this.isOverClaim = isOverClaim;
+		setCancelMessage(Translation.of("msg_claim_error"));
+	}
 
 	/**
 	 * Whether the claim has resulted from takeoverclaim.
@@ -118,9 +131,17 @@ public class TownPreClaimEvent extends CancellableTownyEvent {
     	return player;
     }
 
+	/**
+	 * Useful to get selections of a claim action. 
+	 *
+	 * @return the selections of this claim.
+	 */
+	public List<WorldCoord> getSelection() {return selection}
+
 	public static HandlerList getHandlerList() {
 		return HANDLER_LIST;
 	}
+	
 
 	@NotNull
 	@Override
