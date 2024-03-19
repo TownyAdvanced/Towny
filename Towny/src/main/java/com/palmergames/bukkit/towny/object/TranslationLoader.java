@@ -294,6 +294,26 @@ public class TranslationLoader {
 		// Return the normal translation of the entry.
 		return String.valueOf(entry.getValue());
 	}
+
+	void createReadmeFile() {
+		try (InputStream resourceAsStream = clazz.getResourceAsStream("/README - Translations.txt")) {
+			if (resourceAsStream == null)
+				return;
+
+			Path readmePath = langFolderPath.resolve("README - Translations.txt");
+			if (Files.exists(readmePath))
+				return;
+			if (!FileMgmt.checkOrCreateFile(readmePath.toString()))
+				throw new TownyInitException("Failed to touch '" + readmePath + "'.", TownyInitException.TownyError.LOCALIZATION);
+			try {
+				Files.copy(resourceAsStream, readmePath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (FileAlreadyExistsException ignored) {
+				// Should not be possible.
+			} catch (IOException e) {
+				throw new TownyInitException("Failed to copy README - Translations.txt from the JAR to '" + readmePath + "'", TownyInitException.TownyError.LOCALIZATION, e);
+			}
+		} catch (IOException ignored) {}
+	}
 	
 	/*
 	 * Global.yml methods.

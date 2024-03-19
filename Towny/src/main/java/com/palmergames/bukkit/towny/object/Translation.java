@@ -64,7 +64,10 @@ public final class Translation {
 
 		// Load optional global file.
 		loader.loadGlobalFile();
-		
+
+		// Create the readme file.
+		loader.createReadmeFile();
+
 		// Get the finalized translation back from the loader.
 		translations = loader.getTranslations();
 		// Set the defaultLocale.
