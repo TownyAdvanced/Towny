@@ -49,8 +49,8 @@ help_4: 'Aiuto dei comandi residenti.'
 help_5: 'Aiuto dei comandi della città.'
 help_6: 'Aiuto dei comandi della nazione.'
 help_7: 'Aiuto dei comandi del plot.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
+help_8: 'Aiuto dei comandi del Towny.'
+help_9: 'Aiuto dei comandi del TownyAdmin.'
 towny_help_0: "Aiuto generale per Towny"
 towny_help_1: "Visualizza una mappa dei blocchi urbani vicini"
 towny_help_2: "Visualizza i prezzi usati con Economy"
@@ -74,9 +74,9 @@ town_help_10: 'Elenca tutti i residenti online in una città'
 town_help_13: "Vedi un elenco di residenti nella città."
 town_help_14: "Vedi un elenco di ranghi nella città."
 town_help_15: "Vedi un elenco di fuorilegge nella città."
-town_help_16: "See a list of plotgroups in the town."
-town_help_17: "See a list of plot types in the town."
-town_help_18: "Say a message to the town members."
+town_help_16: "Vedi la lista dei gruppi di plot nella città."
+town_help_17: "Vedi la lista dei tipi di plot in città."
+town_help_18: "Di' un messaggio ai membri della città."
 town_help_19: "Set your town for sale, able to be bought by other players."
 town_help_20: "Set your town not for sale."
 town_help_21: "Buy the given town, as long as it is for sale."
