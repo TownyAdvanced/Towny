@@ -2553,7 +2553,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		TownBlock townBlock = new TownBlock(key.getX(), key.getZ(), world);
 		townBlock.setTown(town);
-		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true, false);
+		TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, townBlock, player, false, true, false, 1);
 		preClaimEvent.setCancelMessage(Translation.of("msg_claim_error", 1, 1));
 		
 		if (BukkitTools.isEventCancelled(preClaimEvent)) {
@@ -3387,7 +3387,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		String cancelMessage = "";
 		boolean isHomeblock = town.getTownBlocks().size() == 0;
 		for (WorldCoord coord : selection) {
-			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord), player, outpost, isHomeblock, false);
+			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord), player, outpost, isHomeblock, false, selection);
 			if(BukkitTools.isEventCancelled(preClaimEvent)) {
 				blockedClaims++;
 				cancelMessage = preClaimEvent.getCancelMessage();
