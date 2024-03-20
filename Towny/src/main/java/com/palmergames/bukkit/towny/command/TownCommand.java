@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
+import com.palmergames.bukkit.towny.event.town.TownCedePlotEvent;
 import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
@@ -3269,9 +3270,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_town_cede_the_mayor_is_not_online", townGainingPlot, townGainingPlot.getMayor()));
 		Player otherMayor = townGainingPlot.getMayor().getPlayer();
 
-		BukkitTools.ifCancelledThenThrow(new TownPreClaimEvent(townGainingPlot, worldCoord.getTownBlock(), otherMayor, false, false, false));
-
 		Confirmation.runOnAccept(() -> offerPlotToTown(playerTown, townGainingPlot, player, otherMayor, worldCoord))
+		.setCancellableEvent(new TownCedePlotEvent(playerTown, townGainingPlot, worldCoord.getTownBlock()))
 		.setTitle(Translatable.of("msg_town_cede_plot_confirmation_give_plot", townGainingPlot))
 		.sendTo(player);
 	}
@@ -3292,14 +3292,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				tb.setTown(townGainingPlot);
 				tb.save();
 
-				TownyMessaging.sendMessage(playerGainingPlot, Translatable.of("msg_town_cede_plot_you_have_accepted", worldCoord.toString()));
-				TownyMessaging.sendMessage(playerGivingPlot, Translatable.of("msg_town_cede_plot_accepted", playerGainingPlot.getName()));
+				TownyMessaging.sendMsg(playerGainingPlot, Translatable.of("msg_town_cede_plot_you_have_accepted", worldCoord.toString()));
+				TownyMessaging.sendMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_accepted", playerGainingPlot.getName()));
 			} catch (TownyException e) {
-				TownyMessaging.sendMessage(playerGainingPlot, e.getMessage(playerGainingPlot));
-				TownyMessaging.sendMessage(playerGivingPlot, Translatable.of("msg_town_cede_plot_unable_to_accept", playerGainingPlot.getName()));
+				TownyMessaging.sendErrorMsg(playerGainingPlot, e.getMessage(playerGainingPlot));
+				TownyMessaging.sendErrorMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_unable_to_accept", playerGainingPlot.getName()));
 			}
 		})
-		.runOnCancel(() -> TownyMessaging.sendMessage(playerGivingPlot, Translatable.of("msg_town_cede_plot_denied", playerGainingPlot.getName())))
+		.setCancellableEvent(new TownPreClaimEvent(townGainingPlot, worldCoord.getTownBlockOrNull(), playerGainingPlot, false, false, false))
+		.runOnCancel(() -> TownyMessaging.sendErrorMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_denied", playerGainingPlot.getName())))
 		.setTitle(Translatable.of("msg_town_cede_plot_confirmation_accept_plot", playerGivingPlot.getName(), worldCoord.toString()))
 		.sendTo(playerGainingPlot);
 	}
