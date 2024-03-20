@@ -961,7 +961,7 @@ msg_err_nation_not_public: '&c그 국가는 공용이 아닙니다.'
 msg_nation_toggle_public: '&a성공적으로 국가 공용 설정을 토글하였습니다.'
 status_yes: '&a예'
 status_no: '&c아니오'
-msg_err_unable_to_use_bank_outside_bank_plot: '이 명령어는 은행 토지 또는 홈 블록 외부에서 사용할 수 없습니다.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&c국가 스폰 여행이 금지되었습니다.'
 msg_err_nation_spawn_forbidden_war: '&c국가 스폰 여행은 전쟁 중에만 허용됩니다.'
 msg_err_nation_spawn_forbidden_peace: '&c국가 스폰 여행은 전쟁 중에 금지됩니다.'
@@ -2119,3 +2119,5 @@ msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit
 msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
 teleport_warmup_title_dont_move: "&6Don't move!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."

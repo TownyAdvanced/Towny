@@ -961,7 +961,7 @@ msg_err_nation_not_public: '&cCette nation n''est pas publique.'
 msg_nation_toggle_public: '&aLa nation a changé son statut à publique avec succès.'
 status_yes: '&aOUI'
 status_no: '&cNON'
-msg_err_unable_to_use_bank_outside_bank_plot: 'Vous ne pouvez pas utiliser cette commande en dehors d''une banque ou d''une zone principale.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&cLe voyage vers le spawn de la nation est interdit.'
 msg_err_nation_spawn_forbidden_war: '&cLe voyage vers le spawn de la ville est autorisé que pendant la guerre.'
 msg_err_nation_spawn_forbidden_peace: '&cLe voyage vers le spawn de la ville est autorisé en paix.'
@@ -2119,3 +2119,5 @@ msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit
 msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
 teleport_warmup_title_dont_move: "&6Don't move!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."

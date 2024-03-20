@@ -961,7 +961,7 @@ msg_err_nation_not_public: '&cНация не публичная.'
 msg_nation_toggle_public: '&aУспешно переключен режим публичности нации.'
 status_yes: '&aДА'
 status_no: '&cНЕТ'
-msg_err_unable_to_use_bank_outside_bank_plot: 'Вы не можете использовать эту команду за пределами банка или домашнего участка.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&cТелепортация на спавн Нации запрещена.'
 msg_err_nation_spawn_forbidden_war: '&cСпавн нации допускается только во время войны.'
 msg_err_nation_spawn_forbidden_peace: '&cСпавн нации запрещен во время войны.'
@@ -2119,3 +2119,5 @@ msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit
 msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
 teleport_warmup_title_dont_move: "&6Don't move!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."

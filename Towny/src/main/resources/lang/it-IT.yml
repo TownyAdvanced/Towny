@@ -45,12 +45,12 @@ help_0: 'Aiuto Generale Towny'
 help_1: 'Prova i seguenti comandi per saperne di più sul Towny.'
 help_2: 'Chat Città'
 help_3: 'Chat Nazione'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
+help_4: 'Aiuto dei comandi residenti.'
+help_5: 'Aiuto dei comandi della città.'
+help_6: 'Aiuto dei comandi della nazione.'
+help_7: 'Aiuto dei comandi del plot.'
+help_8: 'Aiuto dei comandi del Towny.'
+help_9: 'Aiuto dei comandi del TownyAdmin.'
 towny_help_0: "Aiuto generale per Towny"
 towny_help_1: "Visualizza una mappa dei blocchi urbani vicini"
 towny_help_2: "Visualizza i prezzi usati con Economy"
@@ -74,30 +74,30 @@ town_help_10: 'Elenca tutti i residenti online in una città'
 town_help_13: "Vedi un elenco di residenti nella città."
 town_help_14: "Vedi un elenco di ranghi nella città."
 town_help_15: "Vedi un elenco di fuorilegge nella città."
-town_help_16: "See a list of plotgroups in the town."
-town_help_17: "See a list of plot types in the town."
-town_help_18: "Say a message to the town members."
-town_help_19: "Set your town for sale, able to be bought by other players."
-town_help_20: "Set your town not for sale."
-town_help_21: "Buy the given town, as long as it is for sale."
-town_help_22: "Deposit money into your town's bank."
-town_help_23: "Used to modify your resident's town ranks."
-town_help_24: "Used to delete your town."
-town_help_25: "Used to modify your town's outlaws."
-town_help_26: "List all towns, see /t list ? for help."
-town_help_27: "Leave the town you're a member of."
-town_help_28: "Withdraw money from your town's bank."
-town_help_29: "Use /t claim ? for help."
-town_help_30: "Used to unclaim land from your town."
-town_help_31: "Add or remove residents."
-town_help_32: "Use /t set ? for help."
-town_help_33: "Use /t buy ? for help."
-town_help_34: "Use /t toggle ? for help."
-town_help_35: "Use /t rank ? for help."
-town_list_help_0: "View the specified page."
-town_list_help_1: "List towns by resident-count, with the specified page."
-town_list_help_2: "List towns which are open, with the specified page."
-town_list_help_3: "List towns using bank balance, with the specified page."
+town_help_16: "Vedi la lista dei gruppi di plot nella città."
+town_help_17: "Vedi la lista dei tipi di plot in città."
+town_help_18: "Di' un messaggio ai membri della città."
+town_help_19: "Imposta la tua città in vendita, per essere in grado di essere acquistata dai altri giocatori."
+town_help_20: "Imposta la tua città non in vendita."
+town_help_21: "Compra la città data, finchè è in vendita."
+town_help_22: "Deposita denaro nella banca della tua città."
+town_help_23: "Utilizzato per modificare i ranghi della tua città residente."
+town_help_24: "Utilizzato per eliminare la tua città."
+town_help_25: "Usato per modificare i fuorilegge della tua città."
+town_help_26: "Elenca tutte le città, vedi /t list ? per aiuto."
+town_help_27: "Lascia la città di cui sei membro."
+town_help_28: "Preleva denaro dalla banca della tua città."
+town_help_29: "Usare /t claim ? per aiuto."
+town_help_30: "Utilizzato per annullare la rivendicazione di terreni dalla tua città."
+town_help_31: "Aggiungi o rimuovi residenti."
+town_help_32: "Usare /t set ? per aiuto."
+town_help_33: "Usare /t buy ? per aiuto."
+town_help_34: "Usare /t toggle ? per aiuto."
+town_help_35: "Usare /t rank ? per aiuto."
+town_list_help_0: "Visualizza la pagina specificata."
+town_list_help_1: "Elenca le città per numero residente, con la pagina specificata."
+town_list_help_2: "Elenca le città che sono aperte, con la pagina specificata."
+town_list_help_3: "Elenca le città usando il saldo bancario, con la pagina specificata."
 town_list_help_4: "List towns in alphabetical order, with the specified page."
 town_list_help_5: "List towns by claimed land, with the specified page."
 town_list_help_6: "List towns by number online, with the specified page."
@@ -961,7 +961,7 @@ msg_err_nation_not_public: '&cQuella nazione non è pubblica.'
 msg_nation_toggle_public: '&aCambiata con successo l''impostazione pubblica della nazione.'
 status_yes: '&aSI'
 status_no: '&cNO'
-msg_err_unable_to_use_bank_outside_bank_plot: 'Non puoi usare quel comando al di fuori di una banca o di un lotto base.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&cIl teletrasporto allo spawn delle nazioni non è consentito.'
 msg_err_nation_spawn_forbidden_war: '&cIl teletrasporto allo spawn delle nazioni è consentito solo durante la guerra.'
 msg_err_nation_spawn_forbidden_peace: '&cIl teletrasporto allo spawn delle nazioni non è consentito durante la guerra.'
@@ -2119,3 +2119,5 @@ msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit
 msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
 teleport_warmup_title_dont_move: "&6Don't move!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."

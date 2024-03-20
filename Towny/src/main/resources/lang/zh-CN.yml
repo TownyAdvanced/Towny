@@ -961,7 +961,7 @@ msg_err_nation_not_public: '&c这个国家不是公开的.'
 msg_nation_toggle_public: '&a成功开放国家.'
 status_yes: '&a是'
 status_no: '&c否'
-msg_err_unable_to_use_bank_outside_bank_plot: '你不能在城镇之家或银行外使用此命令.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&c国家传送已关闭.'
 msg_err_nation_spawn_forbidden_war: '&c国家传送点只在战争时期开放.'
 msg_err_nation_spawn_forbidden_peace: '&c战争期间禁止国家传送.'
@@ -2117,5 +2117,7 @@ msg_town_being_deleted_because_no_residents: "%s 将要被删除，因为它的�
 outlawed_in: "放逐于"
 msg_warning_town_deposit_hint: "如果要把钱存入城镇银行，请使用/town deposit [amount]"
 msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/country deposit [amount]。"
-teleport_warmup_title_dont_move: "&6Don't move!"
+teleport_warmup_title_dont_move: ""
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
