@@ -9630,3 +9630,4 @@ v0.92.0.11:
     - Fixes the regression which started in 0.100.1.16. 
   - Reset player caches when using /ta reload.
   - Create a readme file that generates in Towny's lang folder, explaining how to properly use the translation files.
+  - Fix regresssion that started in 0.100.1.1, solving the proximity test to nearest town being flipped.

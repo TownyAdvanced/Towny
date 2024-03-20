@@ -79,7 +79,7 @@ public class ProximityUtil {
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
 		// Check distance to other townblocks.
-		if (world.getMinDistanceFromOtherTownsPlots(townBlockToClaim, town) >= TownySettings.getMinDistanceFromTownPlotblocks())
+		if (world.getMinDistanceFromOtherTownsPlots(townBlockToClaim, town) < TownySettings.getMinDistanceFromTownPlotblocks())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
 		// Check adjacent claims rules.
