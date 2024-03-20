@@ -130,6 +130,7 @@ town_towntrust_help_0: "Thêm một thị trấn là đáng tin cậy trong th�
 town_towntrust_help_1: "Loại bỏ một thị trấn là đáng tin cậy trong thị trấn."
 town_towntrust_help_2: "Liệt kê các thị trấn đáng tin cậy của một thị trấn."
 town_buy_help: "Mua thêm các khối thị trấn để tăng giới hạn yêu cầu của thị trấn."
+town_cede_help: "Offers the plot you are stood in to be taken over by the given Town."
 mayor_help_3: 'Chiếm khu vực không thuộc thị trấn'
 mayor_help_4: 'Chiếm khu vực xung quanh bạn trong bán kính X'
 mayor_help_5: 'Chiếm theo bán kính lớn nhất'
@@ -2121,3 +2122,14 @@ teleport_warmup_title_dont_move: "&6Don't move!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
 console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "You cannot cede a plot to your own town."
+msg_err_town_cede_you_cannot_cede_your_homeblock: "You cannot cede your town's homeblock."
+msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
+msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
+msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
+msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
+msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
+msg_town_cede_plot_denied: "%s has declined your offer."
+msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
+msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
