@@ -358,6 +358,7 @@ permissions:
         children:
             towny.command.town.bankhistory: true
             towny.command.town.buy.*: true
+            towny.command.town.cede.*: true
             towny.command.town.claim.*: true
             towny.command.town.delete: true
             towny.command.town.deposit: true
@@ -530,6 +531,12 @@ permissions:
         default: false
         children:
             towny.command.town.buy.bonus: true
+
+    towny.command.town.cede.*:
+        description: User can access all commands related to ceding plots.
+        default: false
+        children:
+            towny.command.town.cede.plot: true
 
     # Plot command permissions
     towny.command.plot.*:

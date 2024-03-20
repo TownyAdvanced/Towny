@@ -124,6 +124,8 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWN_MERGE("towny.command.town.merge"),
 		TOWNY_COMMAND_TOWN_BUY("towny.command.town.buy.*"),
 			TOWNY_COMMAND_TOWN_BUY_BONUS("towny.command.town.buy.bonus"),
+		TOWNY_COMMAND_TOWN_CEDE("towny.command.town.cede.*"),
+			TOWNY_COMMAND_TOWN_CEDE_PLOT("towny.command.town.cede.plot"),
 		TOWNY_COMMAND_TOWN_JAIL("towny.command.town.jail"),
 		TOWNY_COMMAND_TOWN_JAIL_LIST("towny.command.town.jail.list"),
 		TOWNY_COMMAND_TOWN_UNJAIL("towny.command.town.unjail"),

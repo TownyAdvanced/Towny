@@ -23,6 +23,7 @@ import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.event.teleport.OutlawTeleportEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
+import com.palmergames.bukkit.towny.event.town.TownCedePlotEvent;
 import com.palmergames.bukkit.towny.event.town.TownKickEvent;
 import com.palmergames.bukkit.towny.event.town.TownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownMayorChangeEvent;
@@ -156,53 +157,54 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	@VisibleForTesting
 	public static final List<String> townTabCompletes = Arrays.asList(
+		"add",
+		"allylist",
+		"baltop",
+		"buytown",
+		"ban",
+		"bankhistory",
+		"buy",
+		"cede",
+		"claim",
+		"create",
+		"deposit",
+		"delete",
+		"enemylist",
+		"forsale",
+		"fs",
 		"here",
+		"invite",
+		"jail",
+		"join",
+		"kick",
 		"leave",
 		"list",
-		"online",
+		"mayor",
+		"merge",
 		"new",
-		"create",
-		"plots",
-		"add",
-		"kick",
-		"spawn",
-		"takeoverclaim",
-		"claim",
-		"unclaim",
-		"withdraw",
-		"delete",
-		"outlawlist",
-		"deposit",
-		"outlaw",
-		"ban",
+		"nfs",
+		"notforsale",
+		"online",
 		"outpost",
-		"purge",
+		"outlaw",
+		"outlawlist",
 		"plotgrouplist",
-		"ranklist",
+		"plots",
+		"purge",
 		"rank",
+		"ranklist",
 		"reclaim",
 		"reslist",
 		"say",
 		"set",
+		"spawn",
+		"takeoverclaim",
 		"toggle",
-		"join",
-		"invite",
-		"buy",
-		"mayor",
-		"bankhistory",
-		"merge",
-		"jail",
-		"unjail",
 		"trust",
 		"trusttown",
-		"allylist",
-		"enemylist",
-		"baltop",
-		"forsale",
-		"fs",
-		"notforsale",
-		"nfs",
-		"buytown"
+		"unclaim",
+		"unjail",
+		"withdraw"
 		);
 	@VisibleForTesting
 	public static final List<String> townSetTabCompletes = Arrays.asList(
@@ -398,6 +400,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			default:
 				return Collections.emptyList();
 			}
+		case "cede":
+			if (args.length == 2)
+				return Arrays.asList("plot");
+			if (args.length == 3)
+				return getTownyStartingWith(args[2], "t");
+			break;
 		case "claim":
 			switch (args.length) {
 			case 2:
@@ -641,6 +649,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "bankhistory"-> parseTownBankHistoryCommand(player, split);
 		case "buy"-> townBuy(player, subArg, null, false);
 		case "buytown"-> parseTownBuyTownCommand(player, subArg);
+		case "cede" -> parseTownCedeCommand(player, subArg);
 		case "claim"-> parseTownClaimCommand(player, subArg);
 		case "delete"-> townDelete(player, subArg);
 		case "deposit"-> parseTownDepositCommand(player, split);
@@ -3231,6 +3240,69 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Reset all caches as this can affect everyone.
 		plugin.resetCache();
+	}
+
+	private void parseTownCedeCommand(Player player, String[] args) throws TownyException {
+		catchConsole(player);
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CEDE_PLOT.getNode());
+
+		if (args.length < 2 || !args[0].equalsIgnoreCase("plot")) {
+			HelpMenu.TOWN_CEDE.send(player);
+			return;
+		}
+
+		Town playerTown = getTownFromPlayerOrThrow(player);
+		WorldCoord worldCoord = WorldCoord.parseWorldCoord(player);
+		Town wcTown = worldCoord.getTownOrNull();
+		if (wcTown == null || !wcTown.equals(playerTown))
+			throw new TownyException(Translatable.of("msg_not_own_area"));
+
+		if (worldCoord.getTownBlock().isHomeBlock())
+			throw new TownyException(Translatable.of("msg_err_town_cede_you_cannot_cede_your_homeblock"));
+
+		Town townGainingPlot = getTownOrThrow(args[1]);
+		if (playerTown.equals(townGainingPlot))
+			throw new TownyException(Translatable.of("msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town"));
+
+		ProximityUtil.allowTownClaimOrThrow(worldCoord.getTownyWorld(), worldCoord, townGainingPlot, false, true);
+
+		if (!townGainingPlot.getMayor().isOnline())
+			throw new TownyException(Translatable.of("msg_err_town_cede_the_mayor_is_not_online", townGainingPlot, townGainingPlot.getMayor()));
+		Player otherMayor = townGainingPlot.getMayor().getPlayer();
+
+		Confirmation.runOnAccept(() -> offerPlotToTown(playerTown, townGainingPlot, player, otherMayor, worldCoord))
+		.setCancellableEvent(new TownCedePlotEvent(playerTown, townGainingPlot, worldCoord.getTownBlock()))
+		.setTitle(Translatable.of("msg_town_cede_plot_confirmation_give_plot", townGainingPlot))
+		.sendTo(player);
+	}
+
+	private void offerPlotToTown(Town townLosingPlot, Town townGainingPlot, Player playerGivingPlot, Player playerGainingPlot, WorldCoord worldCoord) {
+		Confirmation.runOnAccept(() -> {
+			try {
+				ProximityUtil.allowTownClaimOrThrow(worldCoord.getTownyWorld(), worldCoord, townGainingPlot, false, true);
+
+				TownBlock tb = worldCoord.getTownBlockOrNull();
+				if (tb == null)
+					throw new TownyException(Translatable.of("msg_not_claimed_1"));
+				if (!tb.getTownOrNull().equals(townLosingPlot))
+					throw new TownyException(Translatable.of("msg_err_town_no_longer_owns_this_plot", townLosingPlot));
+				if (tb.isHomeBlock())
+					throw new TownyException(Translatable.of("msg_err_town_cede_town_cannot_cede_their_homeblock", townLosingPlot));
+
+				tb.setTown(townGainingPlot);
+				tb.save();
+
+				TownyMessaging.sendMsg(playerGainingPlot, Translatable.of("msg_town_cede_plot_you_have_accepted", worldCoord.toString()));
+				TownyMessaging.sendMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_accepted", playerGainingPlot.getName()));
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(playerGainingPlot, e.getMessage(playerGainingPlot));
+				TownyMessaging.sendErrorMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_unable_to_accept", playerGainingPlot.getName()));
+			}
+		})
+		.setCancellableEvent(new TownPreClaimEvent(townGainingPlot, worldCoord.getTownBlockOrNull(), playerGainingPlot, false, false, false))
+		.runOnCancel(() -> TownyMessaging.sendErrorMsg(playerGivingPlot, Translatable.of("msg_town_cede_plot_denied", playerGainingPlot.getName())))
+		.setTitle(Translatable.of("msg_town_cede_plot_confirmation_accept_plot", playerGivingPlot.getName(), worldCoord.toString()))
+		.sendTo(playerGainingPlot);
 	}
 
 	public static void parseTownClaimCommand(Player player, String[] split) throws TownyException {
