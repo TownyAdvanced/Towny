@@ -534,10 +534,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_plot_belongs_to_group_set"));
 
 		switch(split[0].toLowerCase(Locale.ROOT)) {
-		case "minJoinDays":
+		case "minjoindays":
 			parsePlotSetMinJoinDays(player, resident, townBlock, StringMgmt.remFirstArg(split));
 			break;
-		case "maxJoinDays":
+		case "maxjoindays":
 			parsePlotSetMaxJoinDays(player, resident, townBlock, StringMgmt.remFirstArg(split));
 			break;
 		case "perm":
