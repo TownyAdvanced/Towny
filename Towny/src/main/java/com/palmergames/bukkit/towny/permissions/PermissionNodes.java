@@ -68,6 +68,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_NATION_SET_TAXES("towny.command.nation.set.taxes"),
 		TOWNY_COMMAND_NATION_SET_NAME("towny.command.nation.set.name"),
 		TOWNY_COMMAND_NATION_SET_TITLE("towny.command.nation.set.title"),
+		TOWNY_COMMAND_NATION_SET_TITLE_COLOUR("towny.command.nation.set.title.colour"),
 		TOWNY_COMMAND_NATION_SET_SURNAME("towny.command.nation.set.surname"),
 		TOWNY_COMMAND_NATION_SET_TAG("towny.command.nation.set.tag"),
 		TOWNY_COMMAND_NATION_SET_BOARD("towny.command.nation.set.board"),
@@ -158,6 +159,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
 			TOWNY_COMMAND_TOWN_SET_JAIL("towny.command.town.set.jail"),
 			TOWNY_COMMAND_TOWN_SET_TITLE("towny.command.town.set.title"),
+			TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR("towny.command.town.set.title.colour"),
 			TOWNY_COMMAND_TOWN_SET_SURNAME("towny.command.town.set.surname"),
 			TOWNY_COMMAND_TOWN_SET_TAXPERCENTCAP("towny.command.town.set.taxpercentcap"),
 		

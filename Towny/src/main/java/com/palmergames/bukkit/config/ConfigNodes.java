@@ -1664,12 +1664,18 @@ public enum ConfigNodes {
 			"4",
 			"",
 			"# Maximum length for Town and Nation tags."),
-	FILTERS_MODIFY_CHAT_MAX_LGTH(
+	FILTERS_MODIFY_CHAT_MAX_TITLE_LENGTH(
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",
 			"",
 			"# Maximum length of titles and surnames."),
-	
+	FILTERS_MODIFY_CHAT_DO_TITLES_AND_SURTITLES_REQUIRE_PERMISSION_FOR_COLOUR_CODES(
+			"filters_colour_chat.modify_chat.does_adding_colour_codes_require_permission_node",
+			"false",
+			"",
+			"# When true, a mayor or king will need the permission node in order to add colour codes to residents' titles and surtitles.",
+			"# Kings require towny.command.nation.set.title.colours, mayors require towny.command.town.set.title.colours."),
+
 	FILTERS_PAPI_CHAT_FORMATTING(
 			"filters_colour_chat.papi_chat_formatting","","",
 			"# See the Placeholders wiki page for list of PAPI placeholders.",

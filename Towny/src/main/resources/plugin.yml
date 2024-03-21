@@ -338,6 +338,7 @@ permissions:
             towny.command.nation.set.tag: true
             towny.command.nation.set.taxes: true
             towny.command.nation.set.title: true
+            towny.command.nation.set.title.colours: true
             towny.command.nation.set.mapcolor: true
             towny.command.nation.set.taxpercentcap: true
             towny.command.nation.set.conqueredtax: true
@@ -493,6 +494,7 @@ permissions:
             towny.command.town.set.embassytax: true
             towny.command.town.set.taxpercentcap: true
             towny.command.town.set.title: true
+            towny.command.town.set.title.colours: true
             towny.command.town.set.surname: true
 
     towny.command.town.toggle.*:

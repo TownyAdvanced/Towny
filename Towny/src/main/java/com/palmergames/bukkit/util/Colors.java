@@ -151,6 +151,10 @@ public class Colors {
 		return TownySettings.getPAPIFormattingKing();
 	}
 
+	public static boolean containsColourCode(String input) {
+		return LEGACY_PATTERN.matcher(input).find() || input.length() != strip(input).length();
+	}
+
 	static {
 		LEGACY_LOOKUP.put("0", BLACK);
 		LEGACY_LOOKUP.put("1", DARK_BLUE);
