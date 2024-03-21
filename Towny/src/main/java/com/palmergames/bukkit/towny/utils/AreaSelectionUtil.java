@@ -527,7 +527,7 @@ public class AreaSelectionUtil {
 			townBlock.testTownMembershipAgePreventsThisClaimOrThrow(resident);
 		} catch (TownyException e) {
 			if (resident.isOnline())
-				TownyMessaging.sendErrorMsg(e.getMessage(resident.getPlayer()));
+				TownyMessaging.sendErrorMsg(resident.getPlayer(), e.getMessage(resident.getPlayer()));
 			return false;
 		}
 		Town town = townBlock.getTownOrNull();

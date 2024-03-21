@@ -686,7 +686,7 @@ public class TownBlock extends TownyObject {
 	 */
 	public void setMinTownMembershipDays(int minTownMembershipDays) {
 		// 32766 because this is stored as a SMALLINT when MYSQL is used.
-		this.minTownMembershipDays = Math.max(32766, minTownMembershipDays);
+		this.minTownMembershipDays = Math.min(32766, minTownMembershipDays);
 	}
 
 	/**
@@ -715,7 +715,7 @@ public class TownBlock extends TownyObject {
 	 */
 	public void setMaxTownMembershipDays(int maxTownMembershipDays) {
 		// 32766 because this is stored as a SMALLINT when MYSQL is used.
-		this.maxTownMembershipDays = Math.max(32766, maxTownMembershipDays);
+		this.maxTownMembershipDays = Math.min(32766, maxTownMembershipDays);
 	}
 
 	@ApiStatus.Internal
