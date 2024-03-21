@@ -862,6 +862,8 @@ public enum HelpMenu {
 			return new MenuBuilder("plot set")
 				.add("[plottype]", Translatable.of("plot_set_help_0"))
 				.add("outpost", Translatable.of("plot_set_help_1"))
+				.add("minjoindays", Translatable.of("plot_set_help_1.5"))
+				.add("maxjoindays", Translatable.of("plot_set_help_1.6"))
 				.add("reset", Translatable.of("plot_set_help_2"))
 				.add("[name]", Translatable.of("plot_set_help_3"))
 				.add("Valid Levels: [resident/ally/outsider]")
