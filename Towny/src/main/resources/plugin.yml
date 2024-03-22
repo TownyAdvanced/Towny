@@ -500,7 +500,7 @@ permissions:
             towny.command.town.set.surname: true
 
     towny.command.town.set.title.colours:
-        description: The node required for leaders to set nation resident titles and surnames, when enabled in the config.
+        description: The node required for mayors to set town resident titles and surnames, when enabled in the config.
         default: false
 
     towny.command.town.toggle.*:
