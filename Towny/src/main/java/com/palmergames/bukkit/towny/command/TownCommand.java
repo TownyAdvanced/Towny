@@ -1920,6 +1920,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 
 		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
+
+		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(title))
+			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR.getNode(),
+					Translatable.of("msg_err_you_dont_have_permission_to_use_colours"));
+
 		resident.setTitle(title);
 		resident.save();
 
@@ -1946,6 +1951,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 
 		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
+
+		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(surname))
+			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR.getNode(),
+					Translatable.of("msg_err_you_dont_have_permission_to_use_colours"));
+
 		resident.setSurname(surname);
 		resident.save();
 
