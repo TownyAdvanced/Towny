@@ -9654,3 +9654,18 @@ v0.92.0.11:
     - When true, a mayor or king will need the permission node in order to add colour codes to residents' titles and surtitles.
     - Kings require towny.command.nation.set.title.colours, mayors require towny.command.town.set.title.colours.
     - These nodes are not given out by the default townyperms.yml and must be added to the mayor and king section when this setting has been made true.
+  - Add MinJoinDays and MaxJoinDays to TownBlocks.
+    - A new system that allows mayors to reserve plots to only-new, or only-established town residents.
+    - This means that residents cannot use /plot claim on every plot that is for sale, if min or max days are set.
+    - This does not apply to embassy plots being bought by non-town-residents.
+    - When set, the min join days number will mean that a resident would have to be a resident of the town for a minimum of X days.
+    - When set, the max join days number will mean that a resident would have to be a resident of the town for a maximum of X days.
+    - When both set, the resident must be a town resident for a number of days between the min and max amounts.
+    - These values are showing on the /plot info screen, as well as in the denial message seen when /plot claim fails  
+    - Closes #7164.
+  - New Command: /plot set minjoindays {# | clear}
+    - Sets the # of days, or removes the minjoindays amount when clear is used.
+    - Requires the towny.command.plot.asmayor permission node.
+  - New Command: /plot set maxjoindays {# | clear}
+    - Sets the # of days, or removes the maxjoindays amount when clear is used.
+    - Requires the towny.command.plot.asmayor permission node.
