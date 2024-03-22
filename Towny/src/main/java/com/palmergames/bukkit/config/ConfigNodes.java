@@ -1674,7 +1674,9 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true, a mayor or king will need the permission node in order to add colour codes to residents' titles and surtitles.",
-			"# Kings require towny.command.nation.set.title.colours, mayors require towny.command.town.set.title.colours."),
+			"# Kings require towny.command.nation.set.title.colours, mayors require towny.command.town.set.title.colours.",
+			"# These nodes are not given out by the default townyperms.yml and must be added to the mayor and king section",
+			"# when this setting has been made true."),
 
 	FILTERS_PAPI_CHAT_FORMATTING(
 			"filters_colour_chat.papi_chat_formatting","","",

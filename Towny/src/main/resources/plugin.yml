@@ -338,11 +338,14 @@ permissions:
             towny.command.nation.set.tag: true
             towny.command.nation.set.taxes: true
             towny.command.nation.set.title: true
-            towny.command.nation.set.title.colours: true
             towny.command.nation.set.mapcolor: true
             towny.command.nation.set.taxpercentcap: true
             towny.command.nation.set.conqueredtax: true
 
+    towny.command.nation.set.title.colours:
+        description: The node required for leaders to set nation resident titles and surnames, when enabled in the config.
+        default: false
+    
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
         default: false
@@ -494,8 +497,11 @@ permissions:
             towny.command.town.set.embassytax: true
             towny.command.town.set.taxpercentcap: true
             towny.command.town.set.title: true
-            towny.command.town.set.title.colours: true
             towny.command.town.set.surname: true
+
+    towny.command.town.set.title.colours:
+        description: The node required for leaders to set nation resident titles and surnames, when enabled in the config.
+        default: false
 
     towny.command.town.toggle.*:
         description: User can toggle all town settings.
