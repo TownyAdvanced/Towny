@@ -404,6 +404,8 @@ plot_group_toggle_help_3: "Toggles mobs in the plot group."
 plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
 plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
 plot_set_help_1: "Sets a plot to an Outpost."
+plot_set_help_1.5: "Sets the minimum number of days a player must be a town member to purchase the plot."
+plot_set_help_1.6: "Sets the maximum number of days a player must be a town member to purchase the plot."
 plot_set_help_2: "Removes a plot type."
 plot_set_help_3: "Names a plot."
 plot_set_help_4: "Toggle all permissions."
@@ -655,6 +657,7 @@ msg_err_input_too_long: '&c你輸入的內容太長了 '
 msg_err_invalid_choice: '&c無效的選擇'
 msg_err_invalid_sub: '&c無效的子指令 '
 msg_err_command_disable: '&c你沒有足夠的權限使用這個指令 '
+msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
 msg_err_universe_limit: '&c這個世界不能再有更多的市鎮了 '
 msg_err_too_many_npc: '&cNPC太多了 '
 msg_err_negative_money: '&c你不能擁有負數的錢 '
@@ -939,6 +942,9 @@ status_res_plottax: '地段稅收加總：'
 status_res_totaltax: '需要負擔的總稅額：'
 status_townblock_plottax: 'Plot Tax: '
 status_townblock_untaxed: 'Untaxed'
+status_townblock_max_and_minjoindays: 'Town membership of between %s and %s days required for plot purchase.'
+status_townblock_minjoindays: 'Town membership more than %s days required for plot purchase.'
+status_townblock_maxjoindays: 'Town membership less than %s days required for plot purchase.'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在國外使用城邦銀行 '
 msg_err_unable_to_use_bank_outside_your_town: '你不能在市鎮外使用市鎮銀行 '
@@ -2133,3 +2139,9 @@ msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
 msg_town_cede_plot_denied: "%s has declined your offer."
 msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
 msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
+msg_err_cannot_claim_plot_join_date_too_low: "You cannot claim this plot until you have been a town resident for %s days."
+msg_err_cannot_claim_plot_join_date_too_high: "You cannot claim this plot, it is for residents who have been town members for less than %s days."
+msg_townblock_min_join_days_removed: "This TownBlock has had its min-join-days requirement removed."
+msg_townblock_max_join_days_removed: "This TownBlock has had its max-join-days requirement removed."
+msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days requirement set to %s. Only players joined for more than that number of days will be able to use /plot claim."
+msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
