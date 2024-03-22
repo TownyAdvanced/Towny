@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,10 @@ public class ItemLists extends AbstractRegistryList<Material> {
 		return contains(itemStack.getType());
 	}
 
+	public List<String> getMaterialNameList() {
+		return tagged.stream().map(Material::name).collect(Collectors.toList());
+	}
+
 	/**
 	 * List of Axe items.
 	 */
@@ -59,7 +64,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * List of Plants.
 	 */
-	public static final ItemLists PLANTS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF", "TORCHFLOWER").build();
+	public static final ItemLists PLANTS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF","TORCHFLOWER","PITCHER_POD").build();
 
 	/**
 	 * List of Flowers.
@@ -77,14 +82,19 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists SAPLINGS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("saplings")).endsWith("_SAPLING").add("MANGROVE_PROPAGULE","CRIMSON_FUNGUS","WARPED_FUNGUS").build();
 
 	/**
+	 * List of Crops.
+	 */
+	public static final ItemLists CROPS = newBuilder().add("BEETROOTS,COCOA,CARROTS,WHEAT,POTATOES,SWEET_BERRY_BUSH,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,MELON,MELON_STEM,ATTACHED_MELON_STEM").build();
+
+	/**
 	 * List of Trees and Leaves.
 	 */
-	public static final ItemLists TREES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("logs")).withTag(Tag.REGISTRY_BLOCKS, minecraft("leaves")).endsWith("_WOOD").endsWith("_HYPHAE").notStartsWith("STRIPPED_").endsWith("_LEAVES").endsWith("_LOG").add("CRIMSON_STEM", "WARPED_STEM").add("BAMBOO_BLOCK").build();
-
+	public static final ItemLists TREES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("logs")).withTag(Tag.REGISTRY_BLOCKS, minecraft("leaves")).endsWith("_WOOD").endsWith("_HYPHAE").notStartsWith("STRIPPED_").endsWith("_LEAVES").endsWith("_WART_BLOCK").endsWith("_LOG").add("CRIMSON_STEM", "WARPED_STEM").add("BAMBOO_BLOCK").build();
+	
 	/**
 	 * List of Leaves.
 	 */
-	public static final ItemLists LEAVES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("leaves")).endsWith("_LEAVES").build();
+	public static final ItemLists LEAVES = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("leaves")).endsWith("_LEAVES").endsWith("_WART_BLOCK").build();
 	
 	/**
 	 * List of Beds.
