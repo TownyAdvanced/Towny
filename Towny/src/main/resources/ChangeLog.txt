@@ -9642,3 +9642,15 @@ v0.92.0.11:
     - No changes required to the townyperms.yml
   - API: Added TownCedePlotEvent
     - A cancellable event thrown when a mayor uses /town cede plot {townname}.
+0.100.1.23:
+  - Add optional permission node required to add colours to title and surnames.
+    - Closes #7217.
+  - New Permission Node: towny.command.town.set.title.colours
+    - Not a child node, must be given if you enable does_adding_colour_codes_require_permission_node.
+  - New Permission Node: towny.command.town.set.title.colours
+    - Not a child node, must be given if you enable does_adding_colour_codes_require_permission_node.
+  - New Config Option: filters_colour_chat.modify_chat.does_adding_colour_codes_require_permission_node
+    - Default: false
+    - When true, a mayor or king will need the permission node in order to add colour codes to residents' titles and surtitles.
+    - Kings require towny.command.nation.set.title.colours, mayors require towny.command.town.set.title.colours.
+    - These nodes are not given out by the default townyperms.yml and must be added to the mayor and king section when this setting has been made true.
