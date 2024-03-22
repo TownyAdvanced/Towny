@@ -62,6 +62,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -128,6 +129,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"jail",
 		"farm",
 		"bank",
+		"minjoindays",
+		"maxjoindays",
 		"outpost",
 		"name",
 		"perm"
@@ -199,6 +202,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					}
 					if (args.length == 3 && args[1].equalsIgnoreCase("outpost")) {
 						return Arrays.asList("spawn");
+					}
+					if (args.length == 3 && (args[1].equalsIgnoreCase("minjoindays") || args[1].equalsIgnoreCase("maxjoindays"))) {
+						List<String> numbersAndClear = new ArrayList<>(numbers);
+						numbersAndClear.add("clear");
+						return NameUtil.filterByStart(numbersAndClear, args[2]);
 					}
 					if (args.length > 2 && args[1].equalsIgnoreCase("perm")) {
 						return permTabComplete(StringMgmt.remArgs(args, 2));
@@ -338,7 +346,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Filter to just plots that are for sale, which can actually be bought by the
-		// resident, (ie: outsiders can only buy Embassy plots.)
+		// resident, (ie: outsiders can only buy Embassy plots, some residents cannot 
+		// purchase a plot because they have been a resident of town for too little or 
+		// too long.)
 		selection = AreaSelectionUtil.filterPlotsForSale(resident, selection);
 
 		// Filter out plots already owned by the player.
@@ -524,6 +534,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_plot_belongs_to_group_set"));
 
 		switch(split[0].toLowerCase(Locale.ROOT)) {
+		case "minjoindays":
+			parsePlotSetMinJoinDays(player, resident, townBlock, StringMgmt.remFirstArg(split));
+			break;
+		case "maxjoindays":
+			parsePlotSetMaxJoinDays(player, resident, townBlock, StringMgmt.remFirstArg(split));
+			break;
 		case "perm":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_SET_PERM.getNode());
 			TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock); // Test we are allowed to work on this plot
@@ -549,6 +565,52 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			 */
 			tryPlotSetType(player, resident, townBlock, split);
 		}
+	}
+
+	private void parsePlotSetMinJoinDays(Player player, Resident resident, TownBlock townBlock, String[] args) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock); // Test we are allowed to work on this plot
+
+		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
+			HelpMenu.PLOT_SET.send(player);
+			return;
+		}
+		if (args[0].equalsIgnoreCase("clear")) {
+			townBlock.setMinTownMembershipDays(-1);
+			townBlock.save();
+			TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_min_join_days_removed"));
+			return;
+		}
+
+		int days = MathUtil.getPositiveIntOrThrow(args[0]);
+		if (days == 0)
+			throw new TownyException(Translatable.of("msg_err_days_must_be_greater_than_0"));
+		townBlock.setMinTownMembershipDays(days);
+		townBlock.save();
+		TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_min_join_days_set_to", townBlock.getMinTownMembershipDays()));
+	}
+
+	private void parsePlotSetMaxJoinDays(Player player, Resident resident, TownBlock townBlock, String[] args) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock); // Test we are allowed to work on this plot
+
+		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
+			HelpMenu.PLOT_SET.send(player);
+			return;
+		}
+		if (args[0].equalsIgnoreCase("clear")) {
+			townBlock.setMaxTownMembershipDays(-1);
+			townBlock.save();
+			TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_max_join_days_removed"));
+			return;
+		}
+
+		int days = MathUtil.getPositiveIntOrThrow(args[0]);
+		if (days == 0)
+			throw new TownyException(Translatable.of("msg_err_days_must_be_greater_than_0"));
+		townBlock.setMaxTownMembershipDays(days);
+		townBlock.save();
+		TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_max_join_days_set_to", townBlock.getMaxTownMembershipDays()));
 	}
 
 	private void tryPlotSetType(Player player, Resident resident, TownBlock townBlock, String[] split) throws TownyException {

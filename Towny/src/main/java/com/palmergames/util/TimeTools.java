@@ -9,6 +9,11 @@ import java.util.regex.Pattern;
  */
 public class TimeTools {
 
+	private static final long MILLIS_PER_SECOND = 1000L;
+	private static final long MILLIS_PER_MINUTE = MILLIS_PER_SECOND * 60L;
+	private static final long MILLIS_PER_HOUR = MILLIS_PER_MINUTE * 60L;
+	private static final long MILLIS_PER_DAY = MILLIS_PER_HOUR * 24L;
+
 	/**
 	 * This will parse a time string such as 2d30m to an equivalent amount of
 	 * seconds.
@@ -88,5 +93,25 @@ public class TimeTools {
     
 	public static int getHours(long milliSeconds) {
 		return (int) ((milliSeconds /1000) / 60) /60;
+	}
+
+	public static int getDays(long milliSeconds) {
+		return (int) (((milliSeconds /1000) / 60) /60) /24;
+	}
+
+	public static long getTimeInMillisXSecondsAgo(int seconds) {
+		return System.currentTimeMillis() - (MILLIS_PER_SECOND * seconds); 
+	}
+
+	public static long getTimeInMillisXMinutesAgo(int minutes) {
+		return System.currentTimeMillis() - (MILLIS_PER_MINUTE * minutes); 
+	}
+
+	public static long getTimeInMillisXHoursAgo(int hours) {
+		return System.currentTimeMillis() - (MILLIS_PER_HOUR * hours); 
+	}
+
+	public static long getTimeInMillisXDaysAgo(int days) {
+		return System.currentTimeMillis() - (MILLIS_PER_DAY * days); 
 	}
 }
