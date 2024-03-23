@@ -46,15 +46,15 @@ help_1: '다음 명령어를 사용해보며 타우니에 대해 배워보세요
 help_2: '도시 내 채팅'
 help_3: '국가 내 채팅'
 help_4: ''
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
-towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
+help_5: '타운 명령어 도움말입니다.'
+help_6: '국가 명령어 도움말입니다.'
+help_7: '도면 명령어 도움말입니다.'
+help_8: '타우니 명령어 도움말입니다.'
+help_9: '타우니 관리자 명령어 도움말입니다.'
+towny_help_0: "타우니 일반 도움말입니다."
+towny_help_1: "주변 마을 블럭을 맵에 표시합니다."
+towny_help_2: "이코노미에 사용되는 가격을 표시합니다."
+towny_help_3: "높은 점수를 표시합니다."
 towny_help_4: "Display time until a new day"
 towny_help_5: "Displays stats"
 towny_help_6: "Displays the version of Towny"
