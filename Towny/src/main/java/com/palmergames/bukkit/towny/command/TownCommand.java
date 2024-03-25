@@ -2085,9 +2085,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_PLOTPRICE.getNode());
 		if (split.length == 0)
 			throw new TownyException("Eg: /town set plotprice 50");
+		
 		double amount = MathUtil.getDoubleOrThrow(split[0]);
-		if (amount < 0) 
-			throw new TownyException(Translatable.of("msg_err_negative_money"));
 
 		town.setPlotPrice(amount);
 		town.save();
@@ -2100,9 +2099,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SHOPPRICE.getNode());
 		if (split.length == 0)
 			throw new TownyException("Eg: /town set shopprice 50");
+		
 		double amount = MathUtil.getDoubleOrThrow(split[0]);
-		if (amount < 0)
-			throw new TownyException(Translatable.of("msg_err_negative_money"));
 
 		town.setCommercialPlotPrice(amount);
 		town.save();
@@ -2115,9 +2113,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_EMBASSYPRICE.getNode());
 		if (split.length == 0)
 			throw new TownyException("Eg: /town set embassyprice 50");
+		
 		double amount = MathUtil.getDoubleOrThrow(split[0]);
-		if (amount < 0)
-			throw new TownyException(Translatable.of("msg_err_negative_money"));
 
 		town.setEmbassyPlotPrice(amount);
 		town.save();
