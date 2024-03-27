@@ -2551,7 +2551,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			CooldownTimerTask.getCooldowns().putAll(new Gson().fromJson(data, new TypeToken<Map<String, Long>>(){}.getType()));
 		} catch (JsonSyntaxException e) {
 			logger.warn("Could not load saved cooldowns due to a json syntax exception", e);
-		}
+		} catch (NullPointerException ignored) {}
 		
 		return true;
 	}
