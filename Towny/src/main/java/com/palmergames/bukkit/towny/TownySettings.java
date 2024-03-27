@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.object.AbstractRegistryList;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -24,16 +25,20 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
+import org.bukkit.Keyed;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
+import org.bukkit.Tag;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +57,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -451,6 +457,7 @@ public class TownySettings {
 
 		config.save();
 
+		loadCustomRegistryLists();
 		loadSwitchAndItemUseMaterialsLists();
 		loadProtectedMobsList();
 		ChunkNotification.loadFormatStrings();
@@ -487,38 +494,25 @@ public class TownySettings {
 		 * Scan over them and replace any grouping with the contents of the group.
 		 * Add single item or grouping to SwitchUseMaterials.
 		 */
-		List<String> switches = getStrArr(ConfigNodes.PROT_SWITCH_MAT);
-		for (String matName : switches) {
-			if (ItemLists.GROUPS.contains(matName)) {
-				switchUseMaterials.addAll(ItemLists.getGrouping(matName));
-			} else {
-				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, matName);
-				if (material != null)
-					switchUseMaterials.add(material);
-			}
-		}
+		switchUseMaterials.addAll(toMaterialSet(getStrArr(ConfigNodes.PROT_SWITCH_MAT)));
 
 		/*
 		 * Load items from config value.
 		 * Scan over them and replace any grouping with the contents of the group.
 		 * Add single item or grouping to ItemUseMaterials.
 		 */
-		List<String> items = getStrArr(ConfigNodes.PROT_ITEM_USE_MAT);
-		for (String matName : items) {
-			if (ItemLists.GROUPS.contains(matName)) {
-				itemUseMaterials.addAll(ItemLists.getGrouping(matName));
-			} else {
-				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, matName);
-				if (material != null)
-					itemUseMaterials.add(material);
-			}
-		}
+		itemUseMaterials.addAll(toMaterialSet(getStrArr(ConfigNodes.PROT_ITEM_USE_MAT)));
 	}
 
 	public static Set<EntityType> toEntityTypeSet(final List<String> entityList) {
 		final Set<EntityType> entities = new HashSet<>();
 		
 		for (final String entityName : entityList) {
+			if (EntityLists.hasGroup(entityName)) {
+				entities.addAll(EntityLists.getGrouping(entityName));
+				continue;
+			}
+			
 			final EntityType type = BukkitTools.matchRegistry(Registry.ENTITY_TYPE, switch (entityName.toLowerCase(Locale.ROOT)) {
 				// This is needed because some of the entity type fields don't/didn't match the actual key.
 				//<editor-fold desc="Lots of switch cases">
@@ -558,8 +552,8 @@ public class TownySettings {
 			if (materialName.isEmpty())
 				continue;
 			
-			if (ItemLists.GROUPS.contains(materialName.toUpperCase(Locale.ROOT))) {
-				materials.addAll(ItemLists.getGrouping(materialName.toUpperCase(Locale.ROOT)));
+			if (ItemLists.hasGroup(materialName)) {
+				materials.addAll(ItemLists.getGrouping(materialName));
 			} else {
 				Material material = BukkitTools.matchRegistry(Registry.MATERIAL, materialName);
 				if (material != null)
@@ -672,6 +666,19 @@ public class TownySettings {
 			return 1;
 		}
 	}
+	
+	public static Map<String, String> getMap(ConfigNodes node) {
+		final Map<String, String> map = new HashMap<>();
+		
+		final ConfigurationSection section = config.getConfigurationSection(node.getRoot());
+		if (section == null)
+			return map;
+		
+		for (String key : section.getKeys(false))
+			map.put(key, section.getString(key));
+		
+		return map;
+	}
 
 	public static void addComment(String root, String... comments) {
 
@@ -705,10 +712,10 @@ public class TownySettings {
 			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
 			} else if (root.getRoot().equals(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot())) {
-				setNewProperty(root.getRoot(), root.getDefault());
+				setNewProperty(root.getRoot(), root.defaultValue());
 				setTownBlockTypes();
 			} else	
-				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase(Locale.ROOT)) != null) ? config.get(root.getRoot().toLowerCase(Locale.ROOT)) : root.getDefault());
+				setNewProperty(root.getRoot(), (config.get(root.getRoot().toLowerCase(Locale.ROOT)) != null) ? config.get(root.getRoot().toLowerCase(Locale.ROOT)) : root.defaultValue());
 
 		}
 
@@ -1086,6 +1093,85 @@ public class TownySettings {
 			// The TownBlockTypes section exists, use the existing config's values.
 			newConfig.set(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot(), config.get(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()));
 	}
+	
+	private static void loadCustomRegistryLists() {
+		ItemLists.clearCustomGroups();
+		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ITEM_LISTS).entrySet())
+			ItemLists.addGroup(entry.getKey(), constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList(entry.getValue().split(",")), mat -> mat.data));
+		
+		EntityLists.clearGroups();
+		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ENTITY_LISTS).entrySet())
+			EntityLists.addGroup(entry.getKey(), constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList(entry.getValue().split(",")), EntityType::getEntityClass));
+	}
+	
+	@VisibleForTesting
+	public static <T extends Keyed, F extends AbstractRegistryList<T>> F constructRegistryList(final AbstractRegistryList.Builder<T, F> builder, final String registryName, final Iterable<String> elements, final Function<T, Class<?>> classExtractor) throws TownyInitException {
+		for (final String e : elements) {
+			final String element = e.trim();
+			
+			if (element.startsWith("*"))
+				builder.endsWith(element.substring(1));
+			else if (element.startsWith("!*"))
+				builder.notEndsWith(element.substring(2));
+			else if (element.endsWith("*"))
+				builder.startsWith(element.substring(0, element.length() - 1));
+			else if (element.startsWith("!") && element.endsWith("*"))
+				builder.notStartsWith(element.substring(1, element.length() - 1));
+			else if (element.startsWith("#"))
+				builder.withTag(registryName, Optional.ofNullable(NamespacedKey.fromString(element.substring(1))).orElseThrow(() -> new TownyInitException(element.substring(1) + " is not a valid key", TownyInitException.TownyError.MAIN_CONFIG)));
+			else if (element.startsWith("!#"))
+				builder.excludeTag(registryName, Optional.ofNullable(NamespacedKey.fromString(element.substring(2))).orElseThrow(() -> new TownyInitException(element.substring(2) + " is not a valid key", TownyInitException.TownyError.MAIN_CONFIG)));
+			else if (element.startsWith("+"))
+				builder.add(element.substring(1));
+			else if (element.startsWith("-"))
+				builder.not(element.substring(1));
+			else if (element.startsWith("~"))
+				builder.contains(element.substring(1));
+			else if (element.startsWith("!~"))
+				builder.notContains(element.substring(2));
+			else if (element.startsWith("c:")) {
+				final String className = element.substring(2);
+				boolean classFound = false;
+				
+				// Check certain packages so that fully qualified names aren't required, i.e. 'Animals' will work.
+				for (String packageName : REGISTRY_LIST_PACKAGES)
+					classFound |= checkClass(builder, classExtractor, packageName + "." + className);
+				
+				// Check exact class, since this could be a fully qualified name already.
+				classFound |= checkClass(builder, classExtractor, className);
+				
+				// The user's class name might be wrong/wrongly cased, let them know about it.
+				if (!classFound)
+					throw new TownyInitException("Could not find class named " + className, TownyInitException.TownyError.MAIN_CONFIG);
+			} else 
+				TownyMessaging.sendErrorMsg("Invalid format for element " + element);
+		}
+		
+		return builder.build();
+	}
+	
+	private static <T extends Keyed, F extends AbstractRegistryList<T>> boolean checkClass(AbstractRegistryList.Builder<T, F> builder, Function<T, Class<?>> classExtractor, String className) {
+		final Class<?> desired;
+		try {
+			desired = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+		
+		builder.filter(t -> {
+			final Class<?> clazz = classExtractor.apply(t);
+			return clazz != null && desired.isAssignableFrom(clazz);
+		});
+		
+		return true;
+	}
+	
+	private static final List<String> REGISTRY_LIST_PACKAGES = Arrays.asList(
+		"org.bukkit.entity",
+		"org.bukkit.entity.minecart",
+		"org.bukkit.block.data",
+		"org.bukkit.block.data.type"
+	);
 	
 	public static String getDefaultFarmblocks() {
 		return "COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG,BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS,SHEARS";
@@ -1835,7 +1921,7 @@ public class TownySettings {
 			TownyMessaging.sendDebugMsg("value is null for " + root.toLowerCase(Locale.ROOT));
 			value = "";
 		}
-		newConfig.set(root.toLowerCase(Locale.ROOT), value.toString());
+		newConfig.set(root.toLowerCase(Locale.ROOT), value);
 	}
 	
 	public static void setLanguage(String lang) {
