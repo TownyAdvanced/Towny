@@ -62,14 +62,9 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists POTTED_PLANTS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("potted_plants")).startsWith("POTTED_").build();
 
 	/**
-	 * List of Plants.
-	 */
-	public static final ItemLists PLANTS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).add("TALL_GRASS","BROWN_MUSHROOM","RED_MUSHROOM","CACTUS","ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE","CRIMSON_FUNGUS","LARGE_FERN","PUMPKIN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","COCOA","SUGAR_CANE","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF","TORCHFLOWER","PITCHER_POD").build();
-
-	/**
 	 * List of Flowers.
 	 */
-	public static final ItemLists FLOWERS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).add("ALLIUM","AZURE_BLUET","BLUE_ORCHID","CORNFLOWER","DANDELION","LILAC","LILY_OF_THE_VALLEY","ORANGE_TULIP","OXEYE_DAISY","PEONY","PINK_TULIP","POPPY","RED_TULIP","ROSE_BUSH","SUNFLOWER","WHITE_TULIP","WITHER_ROSE").build();
+	public static final ItemLists FLOWERS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("flowers")).build();
 
 	/**
 	 * List of Ores and Valuable Raw Materials.
@@ -82,9 +77,14 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists SAPLINGS = newBuilder().withTag(Tag.REGISTRY_BLOCKS, minecraft("saplings")).endsWith("_SAPLING").add("MANGROVE_PROPAGULE","CRIMSON_FUNGUS","WARPED_FUNGUS").build();
 
 	/**
+	 * List of Plantable plants.
+	 */
+	public static final ItemLists PLANTABLES = newBuilder().add("BAMBOO","BEETROOT_SEEDS","BROWN_MUSHROOM","CACTUS","CARROTS","CHORUS_FRUIT","COCOA_BEANS","CRIMSON_FUNGUS","KELP","MELON_SEEDS","NETHER_WART","PITCHER_POD","POTATOES","PUMPKIN_SEEDS","RED_MUSHROOM","SEA_PICKLE","SUGAR_CANE","TORCHFLOWER_SEEDS","WARPED_FUNGUS","WHEAT_SEEDS").build();
+
+	/**
 	 * List of Crops.
 	 */
-	public static final ItemLists CROPS = newBuilder().add("BEETROOTS,COCOA,CARROTS,WHEAT,POTATOES,SWEET_BERRY_BUSH,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,MELON,MELON_STEM,ATTACHED_MELON_STEM").build();
+	public static final ItemLists CROPS = newBuilder().add("ATTACHED_MELON_STEM","ATTACHED_PUMPKIN_STEM","BEETROOTS","CARROTS","COCOA","MELON","MELON_STEM","PITCHER_CROP","PITCHER_PLANT","POTATOES","PUMPKIN","PUMPKIN_STEM","SWEET_BERRY_BUSH","WHEAT").build();
 
 	/**
 	 * List of Trees and Leaves.
@@ -266,6 +266,15 @@ public class ItemLists extends AbstractRegistryList<Material> {
 		.add("CHORUS_FLOWER", "POINTED_DRIPSTONE")
 		.conditionally(() -> CURRENT_VERSION.isNewerThanOrEquals(MINECRAFT_1_20_3), builder -> builder.add("DECORATED_POT"))
 		.build();
+
+	/**
+	 * List of Plants.
+	 */
+	public static final ItemLists PLANTS = newBuilder()
+			.addItemList(FLOWERS)
+			.addItemList(CROPS)
+			.addItemList(PLANTABLES)
+			.add("TALL_GRASS","LARGE_FERN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF").build();
 
 	public static final ItemLists FALLING_BLOCKS = newBuilder()
 			.add("SAND", "RED_SAND", "GRAVEL", "SUSPICIOUS_SAND", "SUSPICIOUS_GRAVEL")
