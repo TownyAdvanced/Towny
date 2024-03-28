@@ -76,7 +76,7 @@ public final class TownyLogger {
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
-				.withPattern("%d [%t] [%C#%M:%L]: %m%n")
+				.withPattern("%d [%t]: %m%n")
 				.withConfiguration(config)
 				.build())
 			.build();
