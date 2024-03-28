@@ -3469,7 +3469,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		String cancelMessage = "";
 		boolean isHomeblock = town.getTownBlocks().size() == 0;
 		for (WorldCoord coord : selection) {
-			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord), player, outpost, isHomeblock, false);
+			TownPreClaimEvent preClaimEvent = new TownPreClaimEvent(town, new TownBlock(coord), player, outpost, isHomeblock, false, selection);
 			if(BukkitTools.isEventCancelled(preClaimEvent)) {
 				blockedClaims++;
 				cancelMessage = preClaimEvent.getCancelMessage();
