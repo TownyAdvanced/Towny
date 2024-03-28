@@ -274,10 +274,10 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.endsWith("RAIL")
 			.endsWith("PUMPKIN_STEM").endsWith("MELON_STEM")
 			.endsWith("_AMETHYST_BUD").add("AMETHYST_CLUSTER")
-			.addItemList(FLOWERS)
-			.addItemList(SAPLINGS)
-			.addItemList(PRESSURE_PLATES)
-			.addItemList(WOOD_DOORS)
+			.includeList(FLOWERS)
+			.includeList(SAPLINGS)
+			.includeList(PRESSURE_PLATES)
+			.includeList(WOOD_DOORS)
 			.build();
 
 	/**
