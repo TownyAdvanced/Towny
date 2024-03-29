@@ -130,6 +130,7 @@ town_towntrust_help_0: "在这个城镇中，增加一个受信任的城镇。"
 town_towntrust_help_1: "在这个城镇中，移除一个受信任的城镇。"
 town_towntrust_help_2: "列出一个城镇所信任的城镇。"
 town_buy_help: "购买额外区块上限"
+town_cede_help: "Offers the plot you are stood in to be taken over by the given Town."
 mayor_help_3: '你所选择的区域不附属于城镇'
 mayor_help_4: '声明你附近半径为X的区块'
 mayor_help_5: '声明最大半径内的所有区块'
@@ -403,6 +404,8 @@ plot_group_toggle_help_3: "切换你所在的区块组的怪物生成"
 plot_group_toggle_help_4: "切换你所在的区块组的收税状态"
 plot_set_help_0: "例如：Inn, Wilds, Farm, Embassy等。"
 plot_set_help_1: "设置一个区块为哨站"
+plot_set_help_1.5: "Sets the minimum number of days a player must be a town member to purchase the plot."
+plot_set_help_1.6: "Sets the maximum number of days a player must be a town member to purchase the plot."
 plot_set_help_2: "删除一个区块类型"
 plot_set_help_3: "命名一个区块"
 plot_set_help_4: "切换所有权限"
@@ -654,6 +657,7 @@ msg_err_input_too_long: '&c你输入的内容太长了.'
 msg_err_invalid_choice: '&c无效的选择'
 msg_err_invalid_sub: '&c无效的子命令.'
 msg_err_command_disable: '&c你没有足够的权限使用这个指令.'
+msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
 msg_err_universe_limit: '&c这个世界不能再有更多的城镇了.'
 msg_err_too_many_npc: '&c已注册的NPC太多了.'
 msg_err_negative_money: '&c你不能拥有负数的钱.'
@@ -938,6 +942,9 @@ status_res_plottax: '总计地税：'
 status_res_totaltax: '需要缴纳税费：'
 status_townblock_plottax: '区块税: '
 status_townblock_untaxed: '免税'
+status_townblock_max_and_minjoindays: 'Town membership of between %s and %s days required for plot purchase.'
+status_townblock_minjoindays: 'Town membership more than %s days required for plot purchase.'
+status_townblock_maxjoindays: 'Town membership less than %s days required for plot purchase.'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
 msg_err_unable_to_use_bank_outside_your_town: '你不能在城镇外使用城镇银行.'
@@ -2121,3 +2128,20 @@ teleport_warmup_title_dont_move: ""
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
 console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "You cannot cede a plot to your own town."
+msg_err_town_cede_you_cannot_cede_your_homeblock: "You cannot cede your town's homeblock."
+msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
+msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
+msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
+msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
+msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
+msg_town_cede_plot_denied: "%s has declined your offer."
+msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
+msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
+msg_err_cannot_claim_plot_join_date_too_low: "You cannot claim this plot until you have been a town resident for %s days."
+msg_err_cannot_claim_plot_join_date_too_high: "You cannot claim this plot, it is for residents who have been town members for less than %s days."
+msg_townblock_min_join_days_removed: "This TownBlock has had its min-join-days requirement removed."
+msg_townblock_max_join_days_removed: "This TownBlock has had its max-join-days requirement removed."
+msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days requirement set to %s. Only players joined for more than that number of days will be able to use /plot claim."
+msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
