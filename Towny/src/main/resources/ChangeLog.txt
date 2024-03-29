@@ -9673,3 +9673,5 @@ v0.92.0.11:
   - Fix minimum_amount_of_residents_in_town_for_outpost being used while limit_outposts_using_town_and_nation_levels is also true.
     - While you limit your outposts by the town/nation levels Towny will ignore any minimum_amount_of_residents_in_town_for_outpost value.
   - Fix potential NPE when loading empty cooldowns.json making Towny unable to load.
+  - Fix creatures unable to use switches in the wilderness.
+    - Closes #7334.

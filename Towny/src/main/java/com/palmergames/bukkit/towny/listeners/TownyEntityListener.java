@@ -443,6 +443,10 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
+		// Prevent protecting the wilderness from switch use.
+		if (TownyAPI.getInstance().isWilderness(block))
+			return;
+
 		// Prevent creatures triggering switch items.
 		if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())) {
 			event.setCancelled(true);
