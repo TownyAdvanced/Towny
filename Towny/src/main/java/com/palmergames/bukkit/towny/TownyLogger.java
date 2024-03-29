@@ -27,7 +27,7 @@ public final class TownyLogger {
 
 	}
 
-	private static final Logger LOGGER_MONEY = LogManager.getLogger("com.palmergames.bukkit.towny.money");
+	private static final Logger LOGGER_MONEY = LogManager.getLogger("Towny-Money");
 	
 	private static Appender townyDebugAppender;
 
@@ -88,26 +88,26 @@ public final class TownyLogger {
 				.build())
 			.build();
 
-		Appender townyDatabaseAppender = FileAppender.newBuilder()
-			.withFileName(logFolderName + File.separator + "database.log")
-			.setName("Towny-Database")
-			.withAppend(TownySettings.isAppendingToLog())
-			.setIgnoreExceptions(false)
-			.withBufferedIo(false)
-			.withBufferSize(0)
-			.withLocking(false)
-			.setConfiguration(config)
-			.setLayout(PatternLayout.newBuilder()
-				.withCharset(StandardCharsets.UTF_8)
-				.withPattern("%d{dd MMM yyyy HH:mm:ss} [%t]: %m%n")
-				.withConfiguration(config)
-				.build())
-			.build();
+//		Appender townyDatabaseAppender = FileAppender.newBuilder()
+//			.withFileName(logFolderName + File.separator + "database.log")
+//			.setName("Towny-Database")
+//			.withAppend(TownySettings.isAppendingToLog())
+//			.setIgnoreExceptions(false)
+//			.withBufferedIo(false)
+//			.withBufferSize(0)
+//			.withLocking(false)
+//			.setConfiguration(config)
+//			.setLayout(PatternLayout.newBuilder()
+//				.withCharset(StandardCharsets.UTF_8)
+//				.withPattern("%d{dd MMM yyyy HH:mm:ss} [%t]: %m%n")
+//				.withConfiguration(config)
+//				.build())
+//			.build();
 
 		townyMainAppender.start();
 		townyDebugAppender.start();
 		townyMoneyAppender.start();
-		townyDatabaseAppender.start();
+//		townyDatabaseAppender.start();
 
 		// Towny Main
 		LoggerConfig townyMainConfig = LoggerConfig.createLogger(true, Level.ALL, "Towny", null, new AppenderRef[0], null, config, null);
@@ -118,11 +118,11 @@ public final class TownyLogger {
 		// Money
 		LoggerConfig townyMoneyConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Money", null, new AppenderRef[0], null, config, null);
 		townyMoneyConfig.addAppender(townyMoneyAppender, Level.ALL, null);
-		config.addLogger("com.palmergames.bukkit.towny.money", townyMoneyConfig);
+		config.addLogger("Towny-Money", townyMoneyConfig);
 
 		// Database
-		LoggerConfig townyDatabaseConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Database", null, new AppenderRef[0], null, config, null);
-		townyDatabaseConfig.addAppender(townyDatabaseAppender, Level.ALL, null);
+//		LoggerConfig townyDatabaseConfig = LoggerConfig.createLogger(false, Level.ALL, "Towny-Database", null, new AppenderRef[0], null, config, null);
+//		townyDatabaseConfig.addAppender(townyDatabaseAppender, Level.ALL, null);
 
 		ctx.updateLoggers();
 		refreshDebugLogger();

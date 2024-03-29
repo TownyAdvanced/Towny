@@ -63,8 +63,6 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
-	private static final Logger LOGGER_DATABASE = LogManager.getLogger("Towny-Database");
-
 	private final String newLine = System.lineSeparator();
 	
 	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
@@ -2105,7 +2103,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("town=" + group.getTown().getName());
 			list.add("metadata=" + serializeMetadata(group));
 		} catch (Exception e) {
-			LOGGER_DATABASE.warn("An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
 		}
 		
 		// Save file
@@ -2533,14 +2531,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			data = new String(Files.readAllBytes(cooldownsFile), StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			LOGGER_DATABASE.warn("An exception occurred when reading cooldowns.json", e);
+			plugin.getLogger().log(Level.WARNING, "An exception occurred when reading cooldowns.json", e);
 			return true;
 		}
 		
 		try {
 			CooldownTimerTask.getCooldowns().putAll(new Gson().fromJson(data, new TypeToken<Map<String, Long>>(){}.getType()));
 		} catch (JsonSyntaxException e) {
-			LOGGER_DATABASE.warn("Could not load saved cooldowns due to a json syntax exception", e);
+			plugin.getLogger().log(Level.WARNING, "Could not load saved cooldowns due to a json syntax exception", e);
 		}
 		
 		return true;
@@ -2558,7 +2556,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				Files.write(Paths.get(dataFolderPath).resolve("cooldowns.json"), new GsonBuilder().setPrettyPrinting().create().toJson(object).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 			} catch (IOException e) {
-				LOGGER_DATABASE.warn("An exception occurred when writing cooldowns.json", e);
+				plugin.getLogger().log(Level.WARNING, "An exception occurred when writing cooldowns.json", e);
 			}
 		});
 		

@@ -65,8 +65,6 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class TownySQLSource extends TownyDatabaseHandler {
-	private static final Logger LOGGER_DATABASE = LogManager.getLogger("Towny-Database");
-
 	private final String tb_prefix;
 
 	private final HikariDataSource hikariDataSource;
@@ -135,7 +133,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// Initialize database schema.
 			SQLSchema.initTables(connection);
 		} catch (SQLException e) {
-			LOGGER_DATABASE.error("Failed to connect to the database", e);
+			plugin.getLogger().log(Level.SEVERE, "Failed to connect to the database", e);
 		}
 	}
 
@@ -411,7 +409,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		try (Connection connection = getConnection()) {
 			SQLSchema.cleanup(connection);
 		} catch (SQLException e) {
-			LOGGER_DATABASE.warn("An exception occurred when cleaning up SQL schema.", e);
+			plugin.getLogger().log(Level.WARNING, "An exception occurred when cleaning up SQL schema.", e);
 		}
 
 		return true;
@@ -613,14 +611,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					universe.newPlotGroupInternal(UUID.fromString(rs.getString("groupID")));
 				} catch (IllegalArgumentException e) {
-					LOGGER_DATABASE.warn("ID for plot group is not a valid uuid, skipped loading plot group {}", rs.getString("groupID"));
+					plugin.getLogger().log(Level.WARNING, "ID for plot group is not a valid uuid, skipped loading plot group {}", rs.getString("groupID"));
 				}
 			}
 			
 			return true;
 
 		} catch (SQLException e) {
-			LOGGER_DATABASE.error("An exception occurred while loading plot group list", e);
+			plugin.getLogger().log(Level.SEVERE, "An exception occurred while loading plot group list", e);
 		}
 		
 		return false;
@@ -639,7 +637,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			return true;
 		} catch (Exception e) {
-			LOGGER_DATABASE.error("An exception occurred while loading jail list", e);
+			plugin.getLogger().log(Level.SEVERE, "An exception occurred while loading jail list", e);
 		}
 		
 		return false;
@@ -1957,7 +1955,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			while (resultSet.next())
 				CooldownTimerTask.getCooldowns().put(resultSet.getString("key"), resultSet.getLong("expiry"));
 		} catch (SQLException e) {
-			LOGGER_DATABASE.warn("An exception occurred when loading cooldowns", e);
+			plugin.getLogger().log(Level.WARNING, "An exception occurred when loading cooldowns", e);
 			return false;
 		}
 		
