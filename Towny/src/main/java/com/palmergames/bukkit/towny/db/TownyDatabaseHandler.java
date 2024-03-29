@@ -87,14 +87,13 @@ import java.util.zip.ZipFile;
  * @author ElgarL
  */
 public abstract class TownyDatabaseHandler extends TownyDataSource {
+	private static final Logger LOGGER_DATABASE = LogManager.getLogger("Towny-Database");
 	public static final SimpleDateFormat BACKUP_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH_mm_ssZ");
 	final String rootFolderPath;
 	final String dataFolderPath;
 	final String settingsFolderPath;
 	final String logFolderPath;
 	final String backupFolderPath;
-
-	Logger logger = LogManager.getLogger(TownyDatabaseHandler.class);
 	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final ScheduledTask task;
 	
@@ -343,13 +342,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			// Log as error because TownBlocks *must* have a town.
-			logger.error(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", townBlock.getWorld().getName(), townBlock.getX(), townBlock.getZ()));
+			LOGGER_DATABASE.error(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", townBlock.getWorld().getName(), townBlock.getX(), townBlock.getZ()));
 
 		TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock);
 		if (BukkitTools.isEventCancelled(event)) {
 			// Log as Warn because the event has been processed
 			if (!event.getCancelMessage().isEmpty())
-				logger.warn(event.getCancelMessage());
+				LOGGER_DATABASE.warn(event.getCancelMessage());
 			return;
 		}
 		

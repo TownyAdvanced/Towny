@@ -31,6 +31,7 @@ public final class TownyLogger {
 	
 	private static Appender townyDebugAppender;
 
+	@SuppressWarnings("deprecation")
 	public static void initialize() {
 		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
 		Configuration config = ctx.getConfiguration();
