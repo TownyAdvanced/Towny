@@ -172,14 +172,13 @@ public class TownyMessaging {
 	}
 
 	/**
-	 * Sends a message to the log and console
-	 * prefixed by [Towny] Debug:
+	 * Sends a message to the debug logger (and hence the console and debug.log)
 	 *
 	 * @param msg the message to be sent
 	 */
 	public static void sendDebugMsg(String msg) {
 		if (TownySettings.getDebug()) {
-			LOGGER.debug(Colors.strip("[Towny] Debug: " + msg));
+			LOGGER.debug(Colors.strip(msg));
 		}
 		sendDevMsg(msg);
 	}

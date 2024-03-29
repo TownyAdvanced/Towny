@@ -6,11 +6,14 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.filter.CompositeFilter;
+import org.apache.logging.log4j.core.filter.LevelMatchFilter;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import java.io.File;
@@ -41,10 +44,11 @@ public final class TownyLogger {
 			.setIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
+			.withLocking(false)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
-				.withPattern("%d [%t]: %m%n")
+				.withPattern("%d{dd MMM yyyy HH:mm:ss} [%t]: %m%n")
 				.withConfiguration(config)
 				.build())
 			.build();
@@ -56,6 +60,7 @@ public final class TownyLogger {
 			.setIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
+			.withLocking(false)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				// The comma after the date is to seperate it in CSV, this is a really nice workaround
@@ -73,10 +78,11 @@ public final class TownyLogger {
 			.setIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
+			.withLocking(false)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
-				.withPattern("%d [%t]: %m%n")
+				.withPattern("%d{dd MMM yyyy HH:mm:ss} [%t]: %m%n")
 				.withConfiguration(config)
 				.build())
 			.build();
@@ -88,10 +94,11 @@ public final class TownyLogger {
 			.setIgnoreExceptions(false)
 			.withBufferedIo(false)
 			.withBufferSize(0)
+			.withLocking(false)
 			.setConfiguration(config)
 			.setLayout(PatternLayout.newBuilder()
 				.withCharset(StandardCharsets.UTF_8)
-				.withPattern("%d [%t]: %m%n")
+				.withPattern("%d{dd MMM yyyy HH:mm:ss} [%t]: %m%n")
 				.withConfiguration(config)
 				.build())
 			.build();
@@ -104,9 +111,6 @@ public final class TownyLogger {
 		// Towny Main
 		LoggerConfig townyMainConfig = LoggerConfig.createLogger(true, Level.ALL, "Towny", null, new AppenderRef[0], null, config, null);
 		townyMainConfig.addAppender(townyMainAppender, Level.INFO, null);
-		if (TownySettings.getDebug()) {
-			townyMainConfig.addAppender(townyDebugAppender, Level.DEBUG, null);
-		}
 		// Spigot/Paper decided to name the loggers with their plugin's simple name.
 		config.addLogger("Towny", townyMainConfig);
 
@@ -120,6 +124,7 @@ public final class TownyLogger {
 		townyDatabaseConfig.addAppender(townyDatabaseAppender, Level.ALL, null);
 
 		ctx.updateLoggers();
+		refreshDebugLogger();
 	}
 
 	public static void refreshDebugLogger() {
@@ -132,7 +137,13 @@ public final class TownyLogger {
 			loggerConfig.removeAppender("Towny-Debug");
 			loggerConfig.removeAppender("TerminalConsole");
 			loggerConfig.addAppender(townyDebugAppender, Level.DEBUG, null);
-			loggerConfig.addAppender(console, Level.DEBUG, null);
+			// only accept debug and trace messages for the debug console.
+			loggerConfig.addAppender(console, Level.DEBUG, CompositeFilter.createFilters(
+				new Filter[]{
+					LevelMatchFilter.newBuilder().setLevel(Level.DEBUG).setOnMatch(Filter.Result.ACCEPT).setOnMismatch(Filter.Result.DENY).build(),
+					LevelMatchFilter.newBuilder().setLevel(Level.TRACE).setOnMatch(Filter.Result.ACCEPT).setOnMismatch(Filter.Result.DENY).build()
+				}
+			));
 		} else {
 			loggerConfig.removeAppender("Towny-Debug");
 			loggerConfig.removeAppender("TerminalConsole");
