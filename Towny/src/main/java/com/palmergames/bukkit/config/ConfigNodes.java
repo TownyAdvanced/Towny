@@ -462,10 +462,12 @@ public enum ConfigNodes {
 	NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST(
 		"new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist",
 		"",
+		"",
 		"# This section is applied to new worlds as default settings when new worlds are detected.",
 		"# The list of blocks to regenerate for block and entity explosions. (if empty all blocks will regenerate)"),
 	NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCKS_TO_NOT_OVERWRITE(
 			"new_world_settings.plot_management.wild_revert_explosions_blocks_to_not_replace",
+			"",
 			"",
 			"# This section is applied to new worlds as default settings when new worlds are detected.",
 			"# This is the list of blocks that should not be overwritten by wilderness explosion reverts. (if empty all ",
