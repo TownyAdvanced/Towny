@@ -64,79 +64,79 @@ towny_top_help_2: "サブコマンドに基づいて一番お金を持ってい�
 town_help_1: '町の状態'
 town_help_2: '[市長]'
 town_help_3: '指定した町の状態を表示'
-town_help_4: '今いるの町のステータスへのショートカット。'
+town_help_4: '今いる町のステータスへのショートカット。'
 town_help_5: '町のスポーン地点にテレポートします。'
 town_help_6: 'あなたが市長である新しい町'
 town_help_7: '目標とした市長がいる新しい町'
-town_help_8: '市長のためのリストコマンド'
+town_help_8: '市長のためコマンドリスト'
 town_help_9: '当日です！'
-town_help_10: '町に住む住民でログインしている人を一覧表示'
+town_help_10: '町のオンラインの住民の一覧を表示'
 town_help_13: "町の住民一覧を表示"
 town_help_14: "町のランクのリストを表示"
-town_help_15: "町の無法者のリストを参照してください。"
-town_help_16: "町のプロットグループの一覧を参照してください。"
-town_help_17: "町のプロットタイプの一覧を参照してください。"
-town_help_18: "町の人たちにメッセージを伝えてください。"
-town_help_19: "他のプレイヤーが購入できる、販売のための町を設定します。"
-town_help_20: "売りに出さないように町を設定してください。"
-town_help_21: "販売されている限り、指定された町を購入します。"
-town_help_22: "町の銀行にお金を預けてください。"
+town_help_15: "町の無法者のリストを表示"
+town_help_16: "町のプロットグループの一覧を表示"
+town_help_17: "町のプロットタイプの一覧を表示"
+town_help_18: "町の人たちにメッセージを伝える"
+town_help_19: "町を他のプレイヤーが買えるように売りに出す"
+town_help_20: "町を売りに出さない"
+town_help_21: "売りに出されている町を購入する"
+town_help_22: "町の銀行にお金を預ける"
 town_help_23: "住民の町のランクを変更するために使用します。"
 town_help_24: "町を削除するために使用します。"
 town_help_25: "町の無法者を変更するために使用されます。"
-town_help_26: "すべての町を一覧表示するには、/t list ? を参照してください。"
-town_help_27: "メンバーとなっている町を離れてください。"
+town_help_26: "すべての町の一覧を表示するには、/t list ? を参照してください。"
+town_help_27: "自分が所属している町を抜ける"
 town_help_28: "町の銀行からお金を引き出します。"
 town_help_29: "/t claim ? を使用して、ヘルプを参照してください。"
-town_help_30: "あなたの町から土地を奪うのに使われました。"
+town_help_30: "あなたの町から土地を放棄するのに使われます"
 town_help_31: "住所を追加または削除します。"
 town_help_32: "/t set ? を使用して、ヘルプを参照してください。"
 town_help_33: "/t buy ? を使用して、ヘルプを参照してください。"
 town_help_34: "/t toggle ? を使用して、ヘルプを参照してください。"
 town_help_35: "/t rank ? を使用して、ヘルプを参照してください。"
 town_list_help_0: "指定されたページを表示"
-town_list_help_1: "住民ごとの町数、指定されたページで表示されます。"
-town_list_help_2: "指定されたページで開いている町の一覧を表示します。"
-town_list_help_3: "指定されたページで、銀行残高を使用して町を一覧表示します。"
-town_list_help_4: "町名をアルファベット順に一覧表示します。"
-town_list_help_5: "指定されたページで、所有地で町を一覧表示します。"
-town_list_help_6: "指定されたページで、オンラインで町を一覧表示します。"
-town_set_help_0: "町の掲示板を設定してください。"
-town_set_help_1: "あなたの町のホームブロックを現在地に設定します。"
-town_set_help_2: "ホームブロック内のスポーン地点を設定します。"
-town_set_help_3: "/town set perm ? を参照してください。"
-town_set_help_4: "町の税金額を設定します。"
-town_set_help_5: "プロットごとの税の特別な金額を設定します。"
-town_set_help_6: "プロットを購入する際のデフォルト価格を設定します。"
-town_set_help_7: "/t spawn を使用するコストを設定します。"
-town_set_help_8: "町名を設定してください。"
-town_set_help_9: "町のタグを設定します。"
-town_set_help_10: "住民の氏名を設定します。"
-town_set_help_11: "住民からの税率の最大額を設定します。"
-town_jail_help_0: "町の刑務所をリストします。"
-town_jail_help_1: "主な刑務所に居住者を投獄します。"
-town_jail_help_2: "指定された時間、第一刑務所の居住者を投獄します"
-town_jail_help_3: "刑務所に入れられる居住者は、所定の時間、所定の刑務所に入れられます。"
-town_jail_help_4: "最初の刑務所の居住者を、指定された時間、指定された刑務所と独房に投獄します。"
-town_jail_help_5: "定された保釈金で、指定された時間、第一刑務所の居住者を投獄します。"
-town_jail_help_6: "指定された保釈金で、指定された時間、指定された刑務所の居住者を拘留します。"
-town_jail_help_7: "指定された保釈金で、指定された時間、指定された刑務所と独房に居住者を投獄します。"
-town_jail_help_8: "住人を釈放する。"
-town_purge_help: "一定日数ログインしていない住人を排除します。"
+town_list_help_1: "指定されたページに住民の数順に町を表示"
+town_list_help_2: "指定されたページに公開している町の一覧を表示します。"
+town_list_help_3: "指定されたページに銀行残高順に町の一覧を表示します。"
+town_list_help_4: "指定されたページにアルファベット順で町の一覧を表示します。"
+town_list_help_5: "指定されたページに所有地順で町の一覧を表示します。"
+town_list_help_6: "指定されたページにオンラインの住民数順で町の一覧を表示します。"
+town_set_help_0: "町の掲示板を設定"
+town_set_help_1: "あなたの町のホームブロックを現在地に設定"
+town_set_help_2: "ホームブロックまたはアウトポスト内のスポーン地点を設定"
+town_set_help_3: "ヘルプは/town set perm ? を参照してください。"
+town_set_help_4: "町の税金額を設定"
+town_set_help_5: "プロットごとの特別な税金額を設定"
+town_set_help_6: "プロットを購入する際のデフォルトの価格を設定"
+town_set_help_7: "/t spawn を使用するコストを設定"
+town_set_help_8: "町の名前を設定"
+town_set_help_9: "町のタグを設定"
+town_set_help_10: "住民の氏名またはタイトルを設定"
+town_set_help_11: "住民からの税率の最大額を設定"
+town_jail_help_0: "町の刑務所の一覧を表示"
+town_jail_help_1: "主刑務所に住民を投獄する"
+town_jail_help_2: "指定された時間の間、主刑務所に住民を投獄します"
+town_jail_help_3: "特定の時間の間、住民を主刑務所の特定の刑務所に投獄します"
+town_jail_help_4: "特定の時間の間、住民を主刑務所の特定の刑務所の特定の独房に投獄します"
+town_jail_help_5: "定められた寄託の金額で住民を特定の時間の間主刑務所に投獄します"
+town_jail_help_6: "定められた寄託の金額で住民を特定の時間の間主刑務所の特定の刑務所に投獄します"
+town_jail_help_7: "定められた寄託の金額で住民を特定の時間の間主刑務所の特定の刑務所の特定の独房に投獄します"
+town_jail_help_8: "住人を釈放する"
+town_purge_help: "一定日数ログインしていない住人を排除します"
 town_trust_help_0: "住民を町の信頼できる人物として追加します。"
 town_trust_help_1: "住民を町の信頼できる人物として削除します。"
-town_trust_help_2: "町の信頼できる住民をリストします。"
+town_trust_help_2: "町の信頼できる住民の一覧を表示"
 town_towntrust_help_0: "町を信頼できる町として追加します。"
-town_towntrust_help_1: "町をその町内の信頼済みとして削除します。"
-town_towntrust_help_2: "町の信頼できる町をリストします。"
-town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
-town_cede_help: "Offers the plot you are stood in to be taken over by the given Town."
+town_towntrust_help_1: "町を信頼できる町として削除します。"
+town_towntrust_help_2: "町の信頼できる町の一覧を表示"
+town_buy_help: "追加のタウンブロックを購入して町で所有できる土地の上限をあげます"
+town_cede_help: "立っている土地を指定された町に提供する"
 mayor_help_3: '町でないエリアの領有を主張する'
 mayor_help_4: 'あなたの周囲Xブロック分（円又は四角）のエリアの領有を主張する'
 mayor_help_5: '自動で最大半径のエリアの領有を主張する'
 mayor_help_6: '町の一区画分のエリアの領有を解除する'
 mayor_help_7: 'あなたの周りのエリアの領有を解除することを試みる'
-mayor_help_8: 'すべての町の区画の要求を解除しようとしています。'
+mayor_help_8: '全ての町のエリアの領有を解除することを試みる'
 nation_help_1: 'あなたの国のステータス'
 nation_help_2: '[国]'
 nation_help_3: '指定した国の状態を表示'
@@ -146,41 +146,41 @@ nation_help_6: '新しい国を作成する'
 nation_help_7: '国のリーダーコマンドを一覧表示する'
 nation_help_8: '新しい国を作成する'
 nation_help_9: 'オンラインの国民の一覧を表示する'
-nation_help_11: "全国の町を一覧表示します。"
-nation_help_12: "国の同盟国を一覧表示します。"
-nation_help_13: "国の敵国をリストします。"
-nation_help_14: "開かれた国に参加するために使用します。"
-nation_help_15: "国立銀行にお金を預けます。"
-nation_help_16: "国家を削除するために使用されます。"
+nation_help_11: "国の町の一覧を表示"
+nation_help_12: "国の同盟国の一覧を表示"
+nation_help_13: "国の敵国の一覧を表示"
+nation_help_14: "公開されている国に参加するために使用します。"
+nation_help_15: "国の銀行にお金を預けます。"
+nation_help_16: "国を削除するために使用されます。"
 nation_help_17: "住民のランクを追加または削除するために使用されます。"
 nation_help_18: "ヘルプについては /n rank ? を参照してください。"
 nation_list_help_0: "指定されたページを表示します。"
-nation_list_help_1: "指定されたページを使用して、居住者数別に国をリストします。"
-nation_list_help_2: "指定されたページで、町の数ごとに国をリストします。"
-nation_list_help_3: "指定されたページで公開されている国をリストします。"
-nation_list_help_4: "指定されたページで、銀行残高を使用して国をリストします。"
-nation_list_help_5: "指定されたページを使用して、アルファベット順に国をリストします。"
-nation_list_help_6: "指定されたページを使用して、権利を主張する土地ごとに国をリストします。"
-nation_list_help_7: "指定されたページを使用して、オンラインで国を番号順にリストします。"
+nation_list_help_1: "指定されたページで、住民数順に国の一覧を表示"
+nation_list_help_2: "指定されたページで、町の数順に国の一覧を表示"
+nation_list_help_3: "指定されたページで公開されている国の一覧を表示"
+nation_list_help_4: "指定されたページで、銀行残高順に国の一覧を表示"
+nation_list_help_5: "指定されたページを使用して、アルファベット順に国の一覧を表示"
+nation_list_help_6: "指定されたページで、所有地順に国の一覧を表示"
+nation_list_help_7: "指定されたページで、オンライン住民数で国の一覧を表示"
 nation_set_help_0: "国のリーダーを変える。"
-nation_set_help_1: "国の首都を変更します。"
+nation_set_help_1: "国の首都を変更"
 nation_set_help_2: "町が支払う税額を設定します。"
 nation_set_help_3: "征服した町が支払う税額を設定します。"
-nation_set_help_4: "国家名を設定します。"
-nation_set_help_5: "居住者の 1 人の肩書または姓を設定します。"
-nation_set_help_6: "国家タグを設定します。"
-nation_set_help_7: "国の表示メッセージを設定します。"
+nation_set_help_4: "国名を設定します。"
+nation_set_help_5: "住民の 1 人の肩書または姓を設定します。"
+nation_set_help_6: "国のタグを設定します。"
+nation_set_help_7: "国の掲示板のメッセージを設定します。"
 nation_set_help_8: "国のスポーン地点を設定します。"
 nation_set_help_9: "/n spawn を使用するコストを設定します。"
 nation_set_help_10: "マッピングプラグインで使用されるマップカラーを設定します。"
-nation_toggle_help_0: "国家の平和な状態を切り替えます。"
+nation_toggle_help_0: "国の平和状態を切り替えます。"
 nation_toggle_help_1: "公開状態を切り替え、居住者でない人が /n spawnを使用できるようにします。"
 nation_toggle_help_2: "オープンステータスを切り替え、招待なしで参加できるようにする。"
-nation_toggle_help_3: "税率を切り替えて、町が固定税率ではなく割合で支払うようにします。"
-nation_sanction_help_1: "SanctionedTownのリストに町を追加する。"
-nation_sanction_help_2: "SanctionedTownのリストから町を削除する"
-nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
-nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
+nation_toggle_help_3: "税率を切り替えて、町の税金を固定金額ではなく税率で支払うようにします。"
+nation_sanction_help_1: "制裁町のリストに町を追加する。"
+nation_sanction_help_2: "制裁町のリストから町を削除する"
+nation_sanction_help_3: "国の制裁町の一覧を表示"
+nation_sanction_help_4: "指定された国の制裁町の一覧を表示"
 king_help_1: '国家リーダーヘルプ'
 king_help_2: '同盟を設定'
 king_help_3: '敵を設定'
@@ -190,15 +190,15 @@ king_help_6: "/n set ? を使用してヘルプを参照します。"
 king_help_7: "/n toggle ? を使用してヘルプを参照します。"
 king_help_8: "他の国を自分の国に併合するために使用されます。"
 king_help_9: "自国の全員にメッセージを送る時に使います。"
-res_1: 'ステータス'
+res_1: 'あなたのステータス'
 res_2: '[住民]'
-res_3: 'ターゲットプレイヤーの状態'
+res_3: '指定したプレイヤーのステータス'
 res_4: 'すべてのオンラインプレイヤーの一覧を表示します'
 res_5: 'ヘルプ'
 res_6: 'オンラインの一致'
 res_7: '正確な名前'
 res_8: '謙虚な農民'
-res_9: "1日あたりの納税額はいくらにしますか"
+res_9: "あなたの1日当たりの納税額"
 res_10: "/res jail ? を使用してヘルプを参照します。"
 res_11: "/res toggle ? を使用してヘルプを参照します。"
 res_12: "/res set ? を使用してヘルプを参照します。"
@@ -208,25 +208,25 @@ res_toggle_help_1: "区画の火災状態を切り替える。"
 res_toggle_help_2: "区画のモブのステータスを切り替える。"
 res_toggle_help_3: "区画の爆発ステータスを切り替える。"
 res_toggle_help_4: "区画の境界線を表示するかどうかを切り替えます。"
-res_toggle_help_5: ""
-res_toggle_help_6: "Toggle the ability to see town borders."
-res_toggle_help_7: "Toggle the ability to see plot notifications."
-res_toggle_help_8: "Toggle the ability to claim where you walk."
-res_toggle_help_9: "Toggle the ability to see the map when you change plots."
+res_toggle_help_5: "常に区画の境界線を表示するかどうかを切り替えます。"
+res_toggle_help_6: "町のボーダーの表示を切り替え"
+res_toggle_help_7: "区画の通知の表示を切り替え"
+res_toggle_help_8: "歩いた土地を所有する状態を切り替え"
+res_toggle_help_9: "区画を変更した際に地図を表示する状態を切り替え"
 res_toggle_help_10: "すべてのモードを削除"
 res_toggle_help_11: "チャットチャンネルをスパイする"
-res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
-res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
-res_toggle_help_14: "Toggle the ability to unclaim where you walk."
-res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
-res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
-res_jail_help_0: "Pays the bail cost to get out of jail."
-res_set_help_0: "Set your resident's About/Bio"
-res_set_help_1: "Set your resident's default plot permissions."
-res_set_help_2: "Set your resident's modes."
+res_toggle_help_12: "開始したプロットグループにプロットを追加する機能を切り替える"
+res_toggle_help_13: "区画を変更した際にタイトルメッセージを表示する機能を切り替え"
+res_toggle_help_14: "歩いた土地を放棄する状態を切り替え"
+res_toggle_help_15: "インフォツールを使用して、適切なブロック/エンティティの名前を知る機能を切り替え"
+res_toggle_help_16: "管理者権限を無効にする機能を切り替え"
+res_jail_help_0: "刑務所から出るために寄託を支払う"
+res_set_help_0: "住民の情報を設定"
+res_set_help_1: "住民のデフォルトの土地権限を設定"
+res_set_help_2: "住民のモードを設定"
 mode_1: '各タウンブロック間の地図を表示する'
-mode_2: '歩いた場所を獲得する'
-mode_3: '歩いた場所を手放す'
+mode_2: '歩いた土地を所有しようと試みる'
+mode_3: '歩いた場所を放棄しようと試みる'
 mode_4: 'デフォルトのチャットを町のチャットに切り替える'
 mode_5: 'デフォルトのチャットを国のチャットに切り替える'
 mode_6: '%s を敵国の境界に置いて、戦争地帯を作成する'
@@ -245,20 +245,20 @@ world_plu: 'ワールド'
 world_sing: 'ワールド'
 world_help_1: '現在のワールドの状況'
 world_help_2: '[ワールド]'
-world_help_3: '対象国のステータス'
+world_help_3: '対象のワールドのステータス'
 world_help_4: 'すべてのワールド一覧'
 world_help_5: 'このチャンクを再生成する'
-world_help_6: 'See /tw toggle ? for help'
-world_help_7: 'See /tw set ? for help'
-world_set_help_0: "Set the world's wilderness name."
-world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
-world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
-world_toggle_help_2: "Toggle on/off if wars can happen in this world."
-world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
-world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
-world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
-world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
-world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
+world_help_6: '/tw toggle ? を使用してヘルプを参照します。'
+world_help_7: '/tw set ? を使用してヘルプを参照します。'
+world_set_help_0: "ワールドの荒野の名前を設定"
+world_toggle_help_0: "このワールドで町が土地を所有できるかを切り替える"
+world_toggle_help_1: "このワールドでタウニーが有効か無効かを切り替える"
+world_toggle_help_2: "このワールドで戦争が起きれるかを切り替える"
+world_toggle_help_3: "このワールドでpvpか強制pvpが有効か無効かを切り替える"
+world_toggle_help_4: "このワールドで味方同士の攻撃が有効か無効かを切り替える"
+world_toggle_help_5: "このワールドで爆発またはそれが強制されているかを切り替える"
+world_toggle_help_6: "このワールドで火災またはそれが強制されているかを切り替える"
+world_toggle_help_7: "このワールドで様々なモブのスポーンが有効か無効かを切り替える"
 world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
 world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
 world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
