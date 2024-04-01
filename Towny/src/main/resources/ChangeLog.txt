@@ -9675,3 +9675,5 @@ v0.92.0.11:
   - Fix potential NPE when loading empty cooldowns.json making Towny unable to load.
   - Fix creatures unable to use switches in the wilderness.
     - Closes #7334.
+0.100.2.0:
+  - Bump version for release.
