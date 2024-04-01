@@ -49,6 +49,7 @@ com.palmergames.bukkit.towny.object.inviteobjects
 com.palmergames.bukkit.towny.object.jail
 com.palmergames.bukkit.towny.object.map
 com.palmergames.bukkit.towny.object.metadata
+com.palmergames.bukkit.towny.object.notification
 com.palmergames.bukkit.towny.object.spawnlevel
 com.palmergames.bukkit.towny.object.statusscreens
 com.palmergames.bukkit.towny.permissions
