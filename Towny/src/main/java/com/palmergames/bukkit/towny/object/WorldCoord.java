@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -33,8 +34,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class WorldCoord extends Coord {
 
-	private final String worldName;
-	private UUID worldUUID;
+	private final @NotNull String worldName;
+	private @Nullable UUID worldUUID;
 	private Reference<World> worldRef = new WeakReference<>(null);
 
 	public WorldCoord(String worldName, int x, int z) {
@@ -340,5 +341,15 @@ public class WorldCoord extends Coord {
 
 	public boolean canBeStolen() {
 		return TownySettings.isOverClaimingAllowingStolenLand() && hasTownBlock() && getTownOrNull().isOverClaimed();
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable UUID worldUUID() {
+		return this.worldUUID;
+	}
+	
+	@ApiStatus.Internal
+	public @NotNull String worldName() {
+		return this.worldName;
 	}
 }

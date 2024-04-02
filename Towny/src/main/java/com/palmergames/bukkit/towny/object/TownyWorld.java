@@ -877,21 +877,23 @@ public class TownyWorld extends TownyObject {
 	 * @param homeTown Players town
 	 * @return the closest distance to another towns nearest plot.
 	 */
-	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
+	public int getMinDistanceFromOtherTownsPlots(@NotNull Coord key, @Nullable Town homeTown) {
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
 		for (Town town : getTowns().values()) {
-			if (homeTown != null)
+			if (homeTown != null) {
 				// If the townblock either: the town is the same as homeTown OR 
 				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
 				if (homeTown.getUUID().equals(town.getUUID())
 					|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
 					|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 					continue;
-			for (TownBlock b : town.getTownBlocks()) {
-				if (!b.getWorld().equals(this)) continue;
+			}
+			
+			for (final TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorldCoord().worldName().equals(this.getName())) continue;
 
 				final int tbX = b.getX();
 				final int tbZ = b.getZ();
@@ -922,7 +924,7 @@ public class TownyWorld extends TownyObject {
 		
 		double minSqr = -1;
 		for (TownBlock b : town.getTownBlocks()) {
-			if (!b.getWorld().equals(this)) continue;
+			if (!b.getWorldCoord().worldName().equals(this.getName())) continue;
 
 			final int tbX = b.getX();
 			final int tbZ = b.getZ();
