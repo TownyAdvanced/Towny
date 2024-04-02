@@ -115,10 +115,10 @@ public interface TaskScheduler {
 	}
 	
 	default ScheduledTask runAsyncLater(Runnable runnable, long delay) {
-		return runAsyncLater(task -> runnable.run(), delay, TimeUnit.MILLISECONDS);
+		return runAsyncLater(task -> runnable.run(), delay * 50, TimeUnit.MILLISECONDS);
 	}
 	
 	default ScheduledTask runAsyncRepeating(Runnable runnable, long delay, long period) {
-		return runAsyncRepeating(task -> runnable.run(), delay, period, TimeUnit.MILLISECONDS);
+		return runAsyncRepeating(task -> runnable.run(), delay * 50, period * 50, TimeUnit.MILLISECONDS);
 	}
 }
