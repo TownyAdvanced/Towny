@@ -2516,3 +2516,5 @@ msg_townblock_max_join_days_removed: "This TownBlock has had its max-join-days r
 msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days requirement set to %s. Only players joined for more than that number of days will be able to use /plot claim."
 
 msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
+
+msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"

@@ -9677,3 +9677,5 @@ v0.92.0.11:
     - Closes #7334.
 0.100.2.0:
   - Bump version for release.
+0.100.2.1:
+  - Fix regression dating back to 0.99.5.17 which broke the are_new_residents_prompted_to_town_spawn feature. 

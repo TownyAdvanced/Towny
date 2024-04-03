@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.command.TownyCommand;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
@@ -276,17 +277,33 @@ public class TownyCustomListener implements Listener {
 
 		Town town = event.getTown();
 		Player player = event.getResident().getPlayer();
-		Town residentTown = event.getResident().getTownOrNull();
+		Town playerLocationTown = TownyAPI.getInstance().getTown(player.getLocation());
 
-		if (player == null || residentTown == null || residentTown.equals(town))
+		if (player == null || (playerLocationTown != null && playerLocationTown.equals(town)))
 			return;
 		
 		String notAffordMsg = Translatable.of("msg_err_cant_afford_tp").forLocale(player);
 
-		try {
-			SpawnUtil.sendToTownySpawn(player, new String[0], town, notAffordMsg, false, false, SpawnType.TOWN);
-		} catch (TownyException e) {
-			TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+		double cost = town.getSpawnCost();
+		if (cost > 0) {
+			// The costed spawn will have its own Confirmation.
+			try {
+				SpawnUtil.sendToTownySpawn(player, new String[0], town, notAffordMsg, false, false, SpawnType.TOWN);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+			}
+		} else {
+			// No cost, so lets offer the new resident a choice.
+			Confirmation.runOnAccept(() -> {
+				try {
+					SpawnUtil.sendToTownySpawn(player, new String[0], town, notAffordMsg, false, false, SpawnType.TOWN);
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				}
+			})
+			.setTitle(Translatable.of("msg_new_resident_spawn_to_town_prompt"))
+			.sendTo(player);
+			
 		}
 	}
 
