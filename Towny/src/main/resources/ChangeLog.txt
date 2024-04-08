@@ -9679,3 +9679,7 @@ v0.92.0.11:
   - Bump version for release.
 0.100.2.1:
   - Fix regression dating back to 0.99.5.17 which broke the are_new_residents_prompted_to_town_spawn feature. 
+  - Fix regression dating back to 0.100.1.8, which caused the hasWorld causing SQL dbs to not load worlds with capital letters' townblocks.
+    - Closes #7337.
+  - Fix unclaim entity delete not working on folia, courtesy of Warrior with PR #7345.
+  - Fix potential NPE in the TownyDamageEvent, courtesy of FiLKoNd with PR #7339. (First-Time Contributor!)
