@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.regen;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.Towny;
