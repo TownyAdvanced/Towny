@@ -800,7 +800,7 @@ public class TownyUniverse {
 		if (worldName.isEmpty())
 			return false;
 
-		return worlds.containsKey(worldName);
+		return worlds.containsKey(worldName.toLowerCase(Locale.ROOT));
 	}
     /*
      * Towny Tree command output.
