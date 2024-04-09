@@ -9683,3 +9683,5 @@ v0.92.0.11:
     - Closes #7337.
   - Fix unclaim entity delete not working on folia, courtesy of Warrior with PR #7345.
   - Fix potential NPE in the TownyDamageEvent, courtesy of FiLKoNd with PR #7339. (First-Time Contributor!)
+0.100.2.2:
+  - Fix issue with max-allies-per-nation not being respected.

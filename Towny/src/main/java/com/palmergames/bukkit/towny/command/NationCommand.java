@@ -1560,11 +1560,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 		if (toAccept != null) {
 			
-			// Nation has reached the max amount of allies
+			// Check if either nation has reached the max amount of allies
 			if (nation.hasReachedMaximumAllies()) {
 				toAccept.getReceiver().deleteReceivedInvite(toAccept);
 				toAccept.getSender().deleteSentInvite(toAccept);
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_ally_limit_reached"));
+				return;
+			}
+			if (sendernation.hasReachedMaximumAllies()) {
+				toAccept.getReceiver().deleteReceivedInvite(toAccept);
+				toAccept.getSender().deleteSentInvite(toAccept);
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_ally_limit_reached_cannot_accept", sendernation));
 				return;
 			}
 			
@@ -1689,6 +1695,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Could not add " + targetNation + " as Ally because your Player is null! This shouldn't be possible!");
 		if (nation.hasAlly(targetNation))
 			throw new TownyException(Translatable.of("msg_already_ally", targetNation));
+		if (nation.hasReachedMaximumAllies())
+			throw new TownyException(Translatable.of("msg_err_ally_limit_reached_cannot_send", targetNation));
+		if (targetNation.hasReachedMaximumAllies())
+			throw new TownyException(Translatable.of("msg_err_ally_limit_reached_cannot_send_targetNation", targetNation, targetNation));
 		if (!targetNation.hasEnemy(nation)) {
 			BukkitTools.ifCancelledThenThrow(new NationPreAddAllyEvent(nation, targetNation));
 
