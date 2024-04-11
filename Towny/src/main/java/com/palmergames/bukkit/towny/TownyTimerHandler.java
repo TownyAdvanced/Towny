@@ -50,7 +50,7 @@ public class TownyTimerHandler{
 	public static void toggleTownyRepeatingTimer(boolean on) {
 
 		if (on && !isTownyRepeatingTaskRunning()) {
-			townyRepeatingTask = plugin.getScheduler().runRepeating(new RepeatingTimerTask(plugin), 1, TimeTools.convertToTicks(1L));
+			townyRepeatingTask = plugin.getScheduler().runRepeating(new RepeatingTimerTask(plugin), 1, 1);
 		} else if (!on && isTownyRepeatingTaskRunning()) {
 			townyRepeatingTask.cancel();
 			townyRepeatingTask = null;

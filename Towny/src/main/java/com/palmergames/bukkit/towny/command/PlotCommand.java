@@ -418,7 +418,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (materialsToDelete.isEmpty())
 			return;
 
-		WorldCoordMaterialRemover.queueDeleteWorldCoordMaterials(townBlock.getWorldCoord(), materialsToDelete);
+		plugin.getScheduler().run(townBlock.getWorldCoord().getLowerMostCornerLocation(), () -> WorldCoordMaterialRemover.deleteMaterialsFromWorldCoord(townBlock.getWorldCoord(), materialsToDelete));
 		TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_plot_material", StringMgmt.join(materialsToDelete, ", ")));
 
 		// Raise an event.

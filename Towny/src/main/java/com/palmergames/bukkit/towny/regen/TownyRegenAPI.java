@@ -53,9 +53,6 @@ public class TownyRegenAPI {
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static final Set<Block> protectionPlaceholders = new HashSet<>();
-	
-	// https://jd.papermc.io/paper/1.20/org/bukkit/Chunk.html#getChunkSnapshot(boolean,boolean,boolean,boolean)
-	private static final MethodHandle GET_CHUNK_SNAPSHOT = JavaUtil.getMethodHandle(Chunk.class, "getChunkSnapshot", boolean.class, boolean.class, boolean.class, boolean.class);
 
 	/**
 	 * Removes a TownyWorld from the various Revert-on-Unclaim feature Lists/Table.
@@ -430,45 +427,10 @@ public class TownyRegenAPI {
 	}
 
 	/**
-	 * Creates a new snapshot and handles saving it
+	 * Queues a new snapshot to be made
 	 * @param townBlock The townblock to take a snapshot of
 	 */
 	public static void handleNewSnapshot(final @NotNull TownBlock townBlock) {
-		createPlotSnapshot(townBlock).thenAcceptAsync(data -> {
-			if (data.getBlockList().isEmpty())
-				return;
-
-			addPlotChunkSnapshot(data);
-		}).exceptionally(e -> {
-			if (e.getCause() != null)
-				e = e.getCause();
-
-			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while creating a plot snapshot for " + townBlock.getWorldCoord().toString(), e);
-			return null;
-		});
-	}
-
-	public static CompletableFuture<PlotBlockData> createPlotSnapshot(final @NotNull TownBlock townBlock) {
-		final List<ChunkSnapshot> snapshots = new ArrayList<>();
-		final Collection<CompletableFuture<Chunk>> futures = townBlock.getWorldCoord().getChunks();
-		
-		futures.forEach(future -> future.thenAccept(chunk -> {
-			try {
-				if (GET_CHUNK_SNAPSHOT != null) {
-					snapshots.add((ChunkSnapshot) GET_CHUNK_SNAPSHOT.invoke(chunk, false, false, false, false));
-				} else {
-					snapshots.add(chunk.getChunkSnapshot(false, false, false));
-				}
-			} catch (Throwable throwable) {
-				snapshots.add(chunk.getChunkSnapshot(false, false, false));
-			}
-		}));
-		
-		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[]{})).thenApplyAsync(v -> {
-			final PlotBlockData data = new PlotBlockData(townBlock);
-			data.initialize(snapshots);
-			
-			return data;
-		});
+		PlotSnapshotQueue.getInstance().enqueue(townBlock.getWorldCoord());
 	}
 }

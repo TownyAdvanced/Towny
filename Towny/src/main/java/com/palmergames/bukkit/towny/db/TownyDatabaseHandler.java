@@ -363,10 +363,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deleteTownBlock(townBlock);
 
 		if (townBlock.getWorld().isDeletingEntitiesOnUnclaim())
-			WorldCoordEntityRemover.addToQueue(townBlock.getWorldCoord());
+			WorldCoordEntityRemover.getInstance().enqueue(townBlock.getWorldCoord());
 
 		if (townBlock.getWorld().isUsingPlotManagementDelete())
-			WorldCoordMaterialRemover.addToQueue(townBlock.getWorldCoord());
+			WorldCoordMaterialRemover.getInstance().enqueue(townBlock.getWorldCoord());
 
 		// Move the plot to be restored
 		if (townBlock.getWorld().isUsingPlotManagementRevert())
