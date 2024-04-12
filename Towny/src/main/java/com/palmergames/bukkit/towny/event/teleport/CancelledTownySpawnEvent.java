@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.teleport;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -24,6 +25,7 @@ public class CancelledTownySpawnEvent extends Event {
 	private final CancelledSpawnReason reason;
 
 	public CancelledTownySpawnEvent(Resident resident, Location location, double teleportCost, CancelledSpawnReason reason) {
+		super(!Bukkit.isPrimaryThread());
 		this.resident = resident;
 		this.location = location;
 		this.teleportCost = teleportCost;
