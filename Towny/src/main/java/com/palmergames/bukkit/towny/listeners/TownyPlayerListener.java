@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledTeleportReason;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.CommandList;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -736,7 +737,7 @@ public class TownyPlayerListener implements Listener {
 		if (this.teleportWarmupTime > 0 && this.isMovementCancellingWarmup) {
 			final Resident resident = TownyAPI.getInstance().getResident(player);
 			
-			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident))
+			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident, CancelledTeleportReason.MOVEMENT))
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
 		}
 
