@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
-import com.palmergames.bukkit.towny.event.teleport.CancelledTownySpawnEvent.CancelledSpawnReason;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledSpawnReason;
 import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;

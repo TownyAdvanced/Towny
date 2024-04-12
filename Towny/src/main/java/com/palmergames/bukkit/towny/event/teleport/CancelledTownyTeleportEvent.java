@@ -16,7 +16,7 @@ import com.palmergames.bukkit.towny.object.Resident;
  * @since 0.100.2.2
  * @author LlmDl
  */
-public class CancelledTownySpawnEvent extends Event {
+public class CancelledTownyTeleportEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private final Resident resident;
@@ -24,7 +24,7 @@ public class CancelledTownySpawnEvent extends Event {
 	private final double teleportCost;
 	private final CancelledSpawnReason reason;
 
-	public CancelledTownySpawnEvent(Resident resident, Location location, double teleportCost, CancelledSpawnReason reason) {
+	public CancelledTownyTeleportEvent(Resident resident, Location location, double teleportCost, CancelledSpawnReason reason) {
 		super(!Bukkit.isPrimaryThread());
 		this.resident = resident;
 		this.location = location;

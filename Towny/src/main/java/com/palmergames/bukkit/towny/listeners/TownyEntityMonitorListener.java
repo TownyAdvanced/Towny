@@ -11,7 +11,7 @@ import com.palmergames.bukkit.towny.event.deathprice.NationPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.PlayerPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.TownPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
-import com.palmergames.bukkit.towny.event.teleport.CancelledTownySpawnEvent.CancelledSpawnReason;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledSpawnReason;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;

@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
-import com.palmergames.bukkit.towny.event.teleport.CancelledTownySpawnEvent;
-import com.palmergames.bukkit.towny.event.teleport.CancelledTownySpawnEvent.CancelledSpawnReason;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledSpawnReason;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TeleportWarmupParticle;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
@@ -136,7 +136,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_cost_spawn_refund"));
 		}
 
-		BukkitTools.fireEvent(new CancelledTownySpawnEvent(resident, request.destinationLocation(), request.teleportCost(), reason));
+		BukkitTools.fireEvent(new CancelledTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost(), reason));
 
 		return true;
 	}

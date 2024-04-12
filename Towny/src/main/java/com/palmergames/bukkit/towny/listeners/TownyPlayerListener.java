@@ -15,7 +15,7 @@ import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
-import com.palmergames.bukkit.towny.event.teleport.CancelledTownySpawnEvent.CancelledSpawnReason;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledSpawnReason;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.CommandList;
 import com.palmergames.bukkit.towny.object.PlayerCache;
