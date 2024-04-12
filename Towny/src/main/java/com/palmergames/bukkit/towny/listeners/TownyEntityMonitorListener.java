@@ -11,7 +11,7 @@ import com.palmergames.bukkit.towny.event.deathprice.NationPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.PlayerPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.deathprice.TownPaysDeathPriceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKilledPlayerEvent;
-import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledSpawnReason;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledTeleportReason;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -65,7 +65,7 @@ public class TownyEntityMonitorListener implements Listener {
 
 		Resident resident = TownyAPI.getInstance().getResident(player);
 
-		if (TeleportWarmupTimerTask.abortTeleportRequest(resident, CancelledSpawnReason.DAMAGE))
+		if (TeleportWarmupTimerTask.abortTeleportRequest(resident, CancelledTeleportReason.DAMAGE))
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled_damage"));}
 	
 	/**

@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent;
-import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledSpawnReason;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledTeleportReason;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TeleportWarmupParticle;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
@@ -113,7 +113,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	 */
 	@Contract("null -> false")
 	public static boolean abortTeleportRequest(@Nullable Resident resident) {
-		return abortTeleportRequest(resident, CancelledSpawnReason.UNKNOWN);
+		return abortTeleportRequest(resident, CancelledTeleportReason.UNKNOWN);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	 * @return Whether the resident had an active teleport request.
 	 */
 	@Contract("null -> false")
-	public static boolean abortTeleportRequest(@Nullable Resident resident, CancelledSpawnReason reason) {
+	public static boolean abortTeleportRequest(@Nullable Resident resident, CancelledTeleportReason reason) {
 		if (resident == null)
 			return false;
 

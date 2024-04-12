@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import com.palmergames.bukkit.towny.object.Resident;
 
 /**
- * An event thrown by Towny when a player that was supposed to spawn to the
+ * An event thrown by Towny when a player that was supposed to teleport to the
  * /res, /town, or /nation spawn, but the action was cancelled. This can be due
  * to Movement, Damage or an Unknown source (when cancelled via the TownyAPI
  * class.
@@ -22,9 +22,9 @@ public class CancelledTownyTeleportEvent extends Event {
 	private final Resident resident;
 	private final Location location;
 	private final double teleportCost;
-	private final CancelledSpawnReason reason;
+	private final CancelledTeleportReason reason;
 
-	public CancelledTownyTeleportEvent(Resident resident, Location location, double teleportCost, CancelledSpawnReason reason) {
+	public CancelledTownyTeleportEvent(Resident resident, Location location, double teleportCost, CancelledTeleportReason reason) {
 		super(!Bukkit.isPrimaryThread());
 		this.resident = resident;
 		this.location = location;
@@ -54,10 +54,10 @@ public class CancelledTownyTeleportEvent extends Event {
 	}
 
 	/**
-	 * @return the {@link CancelledSpawnReason} that the resident will not teleport.
+	 * @return the {@link CancelledTeleportReason} that the resident will not teleport.
 	 *         When cancelled via the TownyAPI class, this will return UNKNOWN.
 	 */
-	public CancelledSpawnReason getReason() {
+	public CancelledTeleportReason getReason() {
 		return reason;
 	}
 
@@ -71,7 +71,7 @@ public class CancelledTownyTeleportEvent extends Event {
 		return handlers;
 	}
 
-	public enum CancelledSpawnReason {
+	public enum CancelledTeleportReason {
 		MOVEMENT, DAMAGE, UNKNOWN
 	}
 }
