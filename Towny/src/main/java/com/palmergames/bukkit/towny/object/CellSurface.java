@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
+import org.bukkit.util.BoundingBox;
 
 public class CellSurface {
 	private static final long PARTICLE_DELAY = 1L;
@@ -30,9 +31,12 @@ public class CellSurface {
 	}
 
 	@Desugar
-	public record BlockPos(int x, int z) {}
+	private record BlockPos(int x, int z) {}
 
 	public void runClaimingParticleOverSurfaceAtPlayer(Player player) {
+		final World world = worldCoord.getBukkitWorld();
+		if (world == null)
+			return;
 
 		// Create a Map of rings of BlockPos' which will expand outwards from the Player
 		// location if they are stood in the WorldCoord (or from the correct edge block
@@ -41,11 +45,11 @@ public class CellSurface {
 
 		// Parse over the Map to generate particles on each successive ring with an
 		// added tick of delay (using the Map's Integer key to determine delay.)
-		toRender.entrySet().forEach(e -> e.getValue().forEach(pos -> 
-				Towny.getPlugin().getScheduler().runLater(player, ()-> drawClaimingParticleOnTopOfBlock(player, pos.x, pos.z), e.getKey() * PARTICLE_DELAY)));
+		toRender.forEach((key, value) -> value.forEach(pos ->
+                Towny.getPlugin().getScheduler().runLater(player, () -> drawClaimingParticleOnTopOfBlock(player, world, pos.x, pos.z), key * PARTICLE_DELAY)));
 
 		// Splash the edges of the WorldCoord last with extra height to add definition to the boundaries.
-		long finalDelay = toRender.keySet().size() + 1 * PARTICLE_DELAY;
+		long finalDelay = toRender.keySet().size() + PARTICLE_DELAY;
 		Towny.getPlugin().getScheduler().runLater(player, ()-> 
 			BorderUtil.getPlotBorder(worldCoord).runBorderedOnSurface(2, 2, DrawSmokeTaskFactory.showToPlayer(player, Color.GREEN)), finalDelay);
 		
@@ -53,11 +57,12 @@ public class CellSurface {
 
 	private Map<Integer, Set<BlockPos>> mapRingsOfClaimParticles(int startingX, int startingZ) {
 		Set<BlockPos> traveled = new HashSet<>();
-		Map<Integer, Set<BlockPos>> toRender = new HashMap<Integer, Set<BlockPos>>();
+		Map<Integer, Set<BlockPos>> toRender = new HashMap<>();
 
 		BlockPos pos;
 		Set<BlockPos> localRing = new HashSet<>();
 		int maxRadius = TownySettings.getTownBlockSize();
+		final BoundingBox worldCoordBB = worldCoord.getBoundingBox();
 		for (int ringNum = 1; ringNum <= maxRadius; ringNum++) {
 			for (int x = startingX + Math.negateExact(ringNum); x <= startingX + ringNum; x++) {
 				for (int z = startingZ + Math.negateExact(ringNum); z <= startingZ + ringNum; z++) {
@@ -72,7 +77,7 @@ public class CellSurface {
 					traveled.add(pos);
 
 					// We might be outside of the WorldCoord.
-					if (!worldCoord.getBoundingBox().contains(x, 1, z))
+					if (!worldCoordBB.contains(x, 1, z))
 						continue;
 
 					localRing.add(pos);
@@ -86,15 +91,12 @@ public class CellSurface {
 		return toRender;
 	}
 
-	private void drawClaimingParticleOnTopOfBlock(Player player, int x, int z) {
-		if (!player.isOnline())
-			return;
-		Location loc = getParticleLocation(x, z); // This has to occur sync or we make folia unhappy.
+	private void drawClaimingParticleOnTopOfBlock(Player player, World world, int x, int z) {
+		Location loc = getParticleLocation(world, x, z);
 		Towny.getPlugin().getScheduler().runAsync(() -> player.spawnParticle(Particle.REDSTONE, loc, 5, CLAIMING_PARTICLE));
 	}
 
-	private Location getParticleLocation(int x, int z) {
-		World world = worldCoord.getBukkitWorld();
+	private Location getParticleLocation(World world, int x, int z) {
 		return new Location(world, x, world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES), z).add(0.5, 0.95, 0.5); // centre and raise slightly.
 	}
 

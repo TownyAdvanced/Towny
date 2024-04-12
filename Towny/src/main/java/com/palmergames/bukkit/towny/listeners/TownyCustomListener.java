@@ -221,7 +221,7 @@ public class TownyCustomListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onTownClaim(TownClaimEvent event) {
-		if (TownySettings.isShowingClaimParticleEffect())
+		if (TownySettings.isShowingClaimParticleEffect() && event.getTownBlock().getWorldCoord().isFullyLoaded())
 			Towny.getPlugin().getScheduler().runAsync(() ->
 				CellSurface.getCellSurface(event.getTownBlock().getWorldCoord()).runClaimingParticleOverSurfaceAtPlayer(event.getResident().getPlayer()));
 
