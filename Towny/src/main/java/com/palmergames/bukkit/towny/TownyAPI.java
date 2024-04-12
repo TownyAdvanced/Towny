@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny;
 
 import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownySpawnEvent.CancelledSpawnReason;
 import com.palmergames.bukkit.towny.event.townblockstatus.NationZoneTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -713,10 +714,13 @@ public class TownyAPI {
 		}
     }
     
-    public void abortTeleportRequest(Resident resident) {
-        
-        TeleportWarmupTimerTask.abortTeleportRequest(resident);
-    }
+	public void abortTeleportRequest(Resident resident) {
+		abortTeleportRequest(resident, CancelledSpawnReason.UNKNOWN);
+	}
+
+	public void abortTeleportRequest(Resident resident, CancelledSpawnReason reason) {
+		TeleportWarmupTimerTask.abortTeleportRequest(resident, reason);
+	}
     
     public void registerCustomDataField(CustomDataField<?> field) throws KeyAlreadyRegisteredException {
     	townyUniverse.addCustomCustomDataField(field);
