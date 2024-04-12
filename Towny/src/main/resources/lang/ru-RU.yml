@@ -179,17 +179,17 @@ nation_toggle_help_2: "Переключает статус \"открыто\", �
 nation_toggle_help_3: "Переключает налоговый процент, заставляя города платить процент вместо фиксированной ставки."
 nation_sanction_help_1: "Добавляет город в список санкционированных городов."
 nation_sanction_help_2: "Удаляет город из списка Санкционирования."
-nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
+nation_sanction_help_3: "Список ваших городов под санкциями."
 nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
 king_help_1: 'Помощь для лидеров наций'
 king_help_2: 'Установить альянс.'
 king_help_3: 'Установить врагов.'
 king_help_4: "Снять деньги со счёта вашей нации."
-king_help_5: "Add or remove towns from your nation."
-king_help_6: "Use /n set ? for help."
+king_help_5: "Добавить или удалить города из вашей нации."
+king_help_6: "Используйте /n set ? для помощи."
 king_help_7: "Use /n toggle ? for help."
-king_help_8: "Used to absorb another nation into your nation."
-king_help_9: "Used to message everyone in your nation."
+king_help_8: "Используется для поглощения другой нации в вашу нацию."
+king_help_9: "Используется для отправки сообщений всем в вашей нации."
 res_1: 'Ваш статус'
 res_2: '[Горожанин]'
 res_3: 'Статус указанного игрока'
@@ -197,20 +197,20 @@ res_4: 'Список всех активных игроков'
 res_5: 'для помощи'
 res_6: 'Совпадения в сети'
 res_7: 'Точное имя'
-res_8: 'Just a humble farmer'
-res_9: "How much tax you will pay per day."
-res_10: "See /res jail ? for help."
-res_11: "See /res toggle ? for help."
-res_12: "See /res set ? for help."
-res_13: "Spawn to your town or bed."
-res_toggle_help_0: "Toggle your plots' pvp status."
-res_toggle_help_1: "Toggle your plots' fire status."
-res_toggle_help_2: "Toggle your plots' mobs status."
-res_toggle_help_3: "Toggle your plots' explosion status."
-res_toggle_help_4: "Toggle the ability to see plot borders."
-res_toggle_help_5: "Toggle the ability to see constant plot borders."
-res_toggle_help_6: "Toggle the ability to see town borders."
-res_toggle_help_7: "Toggle the ability to see plot notifications."
+res_8: 'Просто скромный фермер'
+res_9: "Сколько налогов вы будете платить в день."
+res_10: "Используйте /res jail ? для помощи."
+res_11: "Используйте /res toggle ? для помощи."
+res_12: "Используйте /res set ? для помощи."
+res_13: "Спавн к вашему городу или кровати."
+res_toggle_help_0: "Переключить PVP для плотов."
+res_toggle_help_1: "Переключить распространение огня для плотов."
+res_toggle_help_2: "Переключить спавн мобов для плотов."
+res_toggle_help_3: "Переключить взрывы для плотов."
+res_toggle_help_4: "Переключить возможность видеть границы участка."
+res_toggle_help_5: "Переключить возможность видеть границы постоянных плотов."
+res_toggle_help_6: "Переключить возможность видеть границы города."
+res_toggle_help_7: "Переключить возможность отображения уведомлений от плотов."
 res_toggle_help_8: "Toggle the ability to claim where you walk."
 res_toggle_help_9: "Toggle the ability to see the map when you change plots."
 res_toggle_help_10: "Remove all modes."
@@ -1556,6 +1556,9 @@ msg_cache_block_err: '&cВам запрещено %s здесь.'
 msg_err_plot_belongs_to_group: '&cУчасток принадлежит к группе, используйте %s.'
 plotgroup_sing: 'Группа участков'
 msg_err_ally_limit_reached: 'Ваша нация достигла лимита союзников, принять невозможно.'
+msg_err_ally_limit_reached_cannot_accept: 'The nation of %s has reached their ally limit, unable to accept.'
+msg_err_ally_limit_reached_cannot_send: 'Your nation has reached the ally limit, unable to invite %s to become your ally.'
+msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
 #Added in 0.114
 msg_err_group_not_found: 'Группа %s не найдена.'
 msg_err_expected_command_format: 'Неверный синтаксис, ожидалось: %s'
