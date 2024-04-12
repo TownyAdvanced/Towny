@@ -309,11 +309,6 @@ public class WorldCoord extends Coord {
 		return new Location(getBukkitWorld(), getX() * getCellSize(), 0, getZ() * getCellSize());
 	}
 	
-	// Used to get a location representing sub coordinates of a WorldCoord, to ease the lookup of a corresponding Chunk. 
-	private Location getSubCorner(int x, int z) {
-		return getCorner().add(x * 16, 0, z * 16);
-	}
-	
 	/**
 	 * @return Return a Bukkit bounding box containg the space of the WorldCoord.
 	 */

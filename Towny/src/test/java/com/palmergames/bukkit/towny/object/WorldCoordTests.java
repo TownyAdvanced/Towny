@@ -10,8 +10,6 @@ import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldCoordTests {
