@@ -52,6 +52,16 @@ public class BukkitTaskScheduler implements TaskScheduler {
 	}
 
 	@Override
+	public ScheduledTask run(Entity entity, Consumer<ScheduledTask> task) {
+		return run(task);
+	}
+
+	@Override
+	public ScheduledTask run(Location location, Consumer<ScheduledTask> task) {
+		return run(task);
+	}
+
+	@Override
 	public ScheduledTask runLater(Consumer<ScheduledTask> task, long delay) {
 		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
 		taskRef.set(new BukkitScheduledTask(this.scheduler.runTaskLater(this.plugin, () -> task.accept(taskRef.get()), delay)));
@@ -60,11 +70,31 @@ public class BukkitTaskScheduler implements TaskScheduler {
 	}
 
 	@Override
+	public ScheduledTask runLater(Entity entity, Consumer<ScheduledTask> task, long delay) {
+		return runLater(task, delay);
+	}
+
+	@Override
+	public ScheduledTask runLater(Location location, Consumer<ScheduledTask> task, long delay) {
+		return runLater(task, delay);
+	}
+
+	@Override
 	public ScheduledTask runRepeating(Consumer<ScheduledTask> task, long delay, long period) {
 		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
 		taskRef.set(new BukkitScheduledTask(this.scheduler.runTaskTimer(this.plugin, () -> task.accept(taskRef.get()), delay, period), true));
 		
 		return taskRef.get();
+	}
+
+	@Override
+	public ScheduledTask runRepeating(Entity entity, Consumer<ScheduledTask> task, long delay, long period) {
+		return runRepeating(task, delay, period);
+	}
+
+	@Override
+	public ScheduledTask runRepeating(Location location, Consumer<ScheduledTask> task, long delay, long period) {
+		return runRepeating(task, delay, period);
 	}
 
 	@Override

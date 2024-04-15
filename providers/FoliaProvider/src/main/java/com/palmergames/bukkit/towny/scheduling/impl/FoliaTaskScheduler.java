@@ -50,7 +50,7 @@ public class FoliaTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask run(final Consumer<ScheduledTask> task) {
-		return runAsync(task);
+		return runGlobal(task);
 	}
 
 	@Override

@@ -21,33 +21,21 @@ public interface TaskScheduler {
 
 	ScheduledTask run(Consumer<ScheduledTask> task);
 
-	default ScheduledTask run(Entity entity, Consumer<ScheduledTask> task) {
-		return run(task);
-	}
+	ScheduledTask run(Entity entity, Consumer<ScheduledTask> task);
 
-	default ScheduledTask run(Location location, Consumer<ScheduledTask> task) {
-		return run(task);
-	}
+	ScheduledTask run(Location location, Consumer<ScheduledTask> task);
 	
 	ScheduledTask runLater(Consumer<ScheduledTask> task, long delay);
-	
-	default ScheduledTask runLater(Entity entity, Consumer<ScheduledTask> task, long delay) {
-		return runLater(task, delay);
-	}
-	
-	default ScheduledTask runLater(Location location, Consumer<ScheduledTask> task, long delay) {
-		return runLater(task, delay);
-	}
+
+	ScheduledTask runLater(Entity entity, Consumer<ScheduledTask> task, long delay);
+
+	ScheduledTask runLater(Location location, Consumer<ScheduledTask> task, long delay);
 	
 	ScheduledTask runRepeating(Consumer<ScheduledTask> task, long delay, long period);
-	
-	default ScheduledTask runRepeating(Entity entity, Consumer<ScheduledTask> task, long delay, long period) {
-		return runRepeating(task, delay, period);
-	}
 
-	default ScheduledTask runRepeating(Location location, Consumer<ScheduledTask> task, long delay, long period) {
-		return runRepeating(task, delay, period);
-	}
+	ScheduledTask runRepeating(Entity entity, Consumer<ScheduledTask> task, long delay, long period);
+
+	ScheduledTask runRepeating(Location location, Consumer<ScheduledTask> task, long delay, long period);
 	
 	ScheduledTask runAsync(Consumer<ScheduledTask> task);
 	
@@ -79,11 +67,11 @@ public interface TaskScheduler {
 	}
 
 	default ScheduledTask run(Entity entity, Runnable runnable) {
-		return run(runnable);
+		return run(entity, task -> runnable.run());
 	}
 
 	default ScheduledTask run(Location location, Runnable runnable) {
-		return run(runnable);
+		return run(location, task -> runnable.run());
 	}
 	
 	default ScheduledTask runLater(Runnable runnable, long delay) {
@@ -91,11 +79,11 @@ public interface TaskScheduler {
 	}
 	
 	default ScheduledTask runLater(Entity entity, Runnable runnable, long delay) {
-		return runLater(runnable, delay);
+		return runLater(entity, task -> runnable.run(), delay);
 	}
 	
 	default ScheduledTask runLater(Location location, Runnable runnable, long delay) {
-		return runLater(runnable, delay);
+		return runLater(location, task -> runnable.run(), delay);
 	}
 	
 	default ScheduledTask runRepeating(Runnable runnable, long delay, long period) {
@@ -103,11 +91,11 @@ public interface TaskScheduler {
 	}
 	
 	default ScheduledTask runRepeating(Entity entity, Runnable runnable, long delay, long period) {
-		return runRepeating(runnable, delay, period);
+		return runRepeating(entity, task -> runnable.run(), delay, period);
 	}
 	
 	default ScheduledTask runRepeating(Location location, Runnable runnable, long delay, long period) {
-		return runRepeating(runnable, delay, period);
+		return runRepeating(location, task -> runnable.run(), delay, period);
 	}
 	
 	default ScheduledTask runAsync(Runnable runnable) {
