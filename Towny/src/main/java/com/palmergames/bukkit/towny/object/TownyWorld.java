@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
@@ -875,14 +876,17 @@ public class TownyWorld extends TownyObject {
 	 * 
 	 * @param key - Coord to check from.
 	 * @param homeTown Players town
+	 * @param isConcernedTown Predicate to filter out towns that should not be considered.
 	 * @return the closest distance to another towns nearest plot.
 	 */
-	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
+	private int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown, @NotNull Predicate<Town> isConcernedTown) {
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
 		for (Town town : getTowns().values()) {
+			if (!isConcernedTown.test(town)) continue;
+			
 			if (homeTown != null)
 				// If the townblock either: the town is the same as homeTown OR 
 				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
@@ -905,6 +909,28 @@ public class TownyWorld extends TownyObject {
 			}
 		}
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
+	}
+
+	/**
+	 * Checks the distance from a another town's plots.
+	 * 
+	 * @param key - Coord to check from.
+	 * @param homeTown Players town
+	 * @return the closest distance to another towns nearest plot.
+	 */
+	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
+		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> true);
+	}
+
+	/**
+	 * Checks the distance from a another town's plots.
+	 * 
+	 * @param key - Coord to check from.
+	 * @param homeTown Players town
+	 * @return the closest distance to another older towns nearest plot.
+	 */
+	public int getMinDistanceFromOtherOlderTownsPlots(Coord key, Town homeTown) {
+		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> t.getRegistered() < homeTown.getRegistered());
 	}
 	
 	

@@ -336,7 +336,8 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
-			if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
+			if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks() &&
+				worldCoord.getTownyWorld().getMinDistanceFromOtherOlderTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromOlderTownPlotblocks()) {
 				out.add(worldCoord);
 			} else {
 				TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );

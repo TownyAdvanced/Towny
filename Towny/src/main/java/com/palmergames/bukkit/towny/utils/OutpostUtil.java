@@ -68,8 +68,10 @@ public class OutpostUtil {
 		}
 		// Outposts can have a minimum required distance from other towns' townblocks.
 		int minDistance = world.getMinDistanceFromOtherTownsPlots(key, isPlotSetOutpost ? town : null);
+		int minDistanceOlder = world.getMinDistanceFromOtherOlderTownsPlots(key, isPlotSetOutpost ? town : null);
 		// Outposts can have a minimum required distance from other outposts.
 		if (minDistance < TownySettings.getMinDistanceFromTownPlotblocks() ||
+			minDistanceOlder < TownySettings.getMinDistanceFromOlderTownPlotblocks() ||
 			minDistance < TownySettings.getMinDistanceForOutpostsFromPlot())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 

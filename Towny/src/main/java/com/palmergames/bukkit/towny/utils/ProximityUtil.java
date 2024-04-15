@@ -31,11 +31,13 @@ public class ProximityUtil {
 			return;
 
 		if (newTown) { // Tests run only when there is a new town involved.
-			if (TownySettings.getMinDistanceFromTownPlotblocks() > 0 || TownySettings.getNewTownMinDistanceFromTownPlots() > 0) {
+			if (TownySettings.getMinDistanceFromTownPlotblocks() > 0 ||
+				TownySettings.getMinDistanceFromOlderTownPlotblocks() > 0 ||
+				TownySettings.getNewTownMinDistanceFromTownPlots() > 0) {
 				// Sometimes new towns have special min. distances from other towns.
 				int minDistance = TownySettings.getNewTownMinDistanceFromTownPlots();
 				if (minDistance <= 0)
-					minDistance = TownySettings.getMinDistanceFromTownPlotblocks();
+					minDistance = Math.max(TownySettings.getMinDistanceFromTownPlotblocks(), TownySettings.getMinDistanceFromOlderTownPlotblocks());
 
 				// throws when a new town is being made to close to another town's land.
 				if (world.getMinDistanceFromOtherTownsPlots(key) < minDistance)
@@ -84,6 +86,10 @@ public class ProximityUtil {
 
 		// Check distance to other townblocks.
 		if (world.getMinDistanceFromOtherTownsPlots(townBlockToClaim, town) < TownySettings.getMinDistanceFromTownPlotblocks())
+			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+
+		// Check distance to other older townblocks.
+		if (world.getMinDistanceFromOtherOlderTownsPlots(townBlockToClaim, town) < TownySettings.getMinDistanceFromOlderTownPlotblocks())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
 		// Check adjacent claims rules.
