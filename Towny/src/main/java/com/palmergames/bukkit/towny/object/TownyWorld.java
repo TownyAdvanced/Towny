@@ -930,7 +930,7 @@ public class TownyWorld extends TownyObject {
 	 * @return the closest distance to another older towns nearest plot.
 	 */
 	public int getMinDistanceFromOtherOlderTownsPlots(Coord key, Town homeTown) {
-		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> t.getRegistered() < homeTown.getRegistered());
+		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> homeTown == null || t.getRegistered() < homeTown.getRegistered());
 	}
 	
 	
