@@ -876,21 +876,44 @@ public class TownyWorld extends TownyObject {
 	 * 
 	 * @param key - Coord to check from.
 	 * @param homeTown Players town
-	 * @param isConcernedTown Predicate to filter out towns that should not be considered.
 	 * @return the closest distance to another towns nearest plot.
 	 */
-	private int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown, @NotNull Predicate<Town> isConcernedTown) {
+	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
+		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> false);
+	}
+
+	/**
+	 * Checks the distance from a another older town's plots.
+	 * It have the same behavior than {@link #getMinDistanceFromOtherTownsPlots(Coord, Town)}
+	 * but it will only consider towns that are older than the homeTown.
+	 * 
+	 * @param key - Coord to check from.
+	 * @param homeTown Players town
+	 * @return the closest distance to another older towns nearest plot.
+	 */
+	public int getMinDistanceFromOtherOlderTownsPlots(Coord key, Town homeTown) {
+		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> t.getRegistered() > homeTown.getRegistered());
+	}
+
+	/**
+	 * Checks the distance from a another town's plots.
+	 * 
+	 * @param key - Coord to check from.
+	 * @param homeTown Players town
+	 * @param isIgnorableTown Predicate to filter out towns that should not be considered.
+	 * @return the closest distance to another towns nearest plot.
+	 */
+	private int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown, @NotNull Predicate<Town> isIgnorableTown) {
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
 		for (Town town : getTowns().values()) {
-			if (!isConcernedTown.test(town)) continue;
-			
 			if (homeTown != null)
-				// If the townblock either: the town is the same as homeTown OR 
+				// If the townblock either: the town is the same as homeTown OR is ignorable OR
 				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
 				if (homeTown.getUUID().equals(town.getUUID())
+					|| isIgnorableTown.test(town)
 					|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
 					|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
 					continue;
@@ -909,28 +932,6 @@ public class TownyWorld extends TownyObject {
 			}
 		}
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
-	}
-
-	/**
-	 * Checks the distance from a another town's plots.
-	 * 
-	 * @param key - Coord to check from.
-	 * @param homeTown Players town
-	 * @return the closest distance to another towns nearest plot.
-	 */
-	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
-		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> true);
-	}
-
-	/**
-	 * Checks the distance from a another town's plots.
-	 * 
-	 * @param key - Coord to check from.
-	 * @param homeTown Players town
-	 * @return the closest distance to another older towns nearest plot.
-	 */
-	public int getMinDistanceFromOtherOlderTownsPlots(Coord key, Town homeTown) {
-		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> homeTown == null || t.getRegistered() < homeTown.getRegistered());
 	}
 	
 	
