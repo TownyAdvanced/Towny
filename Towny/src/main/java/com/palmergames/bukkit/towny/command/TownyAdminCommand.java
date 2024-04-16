@@ -1083,7 +1083,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
-		plugin.getScheduler().runAsync(new TownClaim(plugin, player, null, selection, false, false, true));
+		Town town = selection.get(0).getTownOrNull();
+		if (town == null)
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+
+		plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, false, false, true));
 	}
 
 	public void parseAdminResidentCommand(CommandSender sender, String[] split) throws TownyException {
