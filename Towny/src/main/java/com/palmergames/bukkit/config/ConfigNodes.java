@@ -1109,7 +1109,8 @@ public enum ConfigNodes {
 			"claiming.distance_rules.min_plot_distance_from_older_town_plot",
 			"5",
 			"",
-			"# Minimum number of plots any towns plot must be from the next older town's own plots.",
+			"# Minimum number of plots required between a town and any nearby, older town.",
+
 			"# It work exactly as min_plot_distance_from_town_plot except that only the new town need to leave this space to the older one.",
 			"# Only higher value than min_plot_distance_from_town_plot will have an effect.",
 			"# Does not affect towns which are in the same nation.",
