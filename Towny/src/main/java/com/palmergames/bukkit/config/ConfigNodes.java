@@ -1111,7 +1111,8 @@ public enum ConfigNodes {
 			"",
 			"# Minimum number of plots required between a town and any nearby, older town.",
 
-			"# It work exactly as min_plot_distance_from_town_plot except that only the new town need to leave this space to the older one.",
+			"# It works exactly as min_plot_distance_from_town_plot except that is only affects towns created newer than already-existing towns.",
+
 			"# Only higher value than min_plot_distance_from_town_plot will have an effect.",
 			"# Does not affect towns which are in the same nation.",
 			"# This will prevent old towns from being unable to expand outwards towards newer towns, which might have tried to claim-block them."),
