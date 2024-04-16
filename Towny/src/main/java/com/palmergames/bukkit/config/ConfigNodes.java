@@ -1113,7 +1113,8 @@ public enum ConfigNodes {
 			"# It work exactly as min_plot_distance_from_town_plot except that only the new town need to leave this space to the older one.",
 			"# Only higher value than min_plot_distance_from_town_plot will have an effect.",
 			"# Does not affect towns which are in the same nation.",
-			"# This will prevent old town to be blocked in there expansion by new town to a certain degree."),
+			"# This will prevent old towns from being unable to expand outwards towards newer towns, which might have tried to claim-block them."),
+
 	CLAIMING_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
 			"claiming.distance_rules.min_distance_from_town_homeblock",
 			"5",
