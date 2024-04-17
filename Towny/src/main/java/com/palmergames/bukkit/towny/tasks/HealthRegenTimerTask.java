@@ -84,7 +84,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			return;
 
 		// Drop back to Sync so we can throw the EntityRegainHealthEvent.
-		plugin.getScheduler().run(()-> tryIncreaseHealth(player, currentHP, maxHP, gained));
+		plugin.getScheduler().run(player, () -> tryIncreaseHealth(player, currentHP, maxHP, gained));
 	}
 
 	private void tryIncreaseHealth(Player player, double currentHealth, double maxHealth, double gained) {

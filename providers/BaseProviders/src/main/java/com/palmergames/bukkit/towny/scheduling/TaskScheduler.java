@@ -79,11 +79,11 @@ public interface TaskScheduler {
 	}
 
 	default ScheduledTask run(Entity entity, Runnable runnable) {
-		return run(runnable);
+		return run(entity, task -> runnable.run());
 	}
 
 	default ScheduledTask run(Location location, Runnable runnable) {
-		return run(runnable);
+		return run(location, task -> runnable.run());
 	}
 	
 	default ScheduledTask runLater(Runnable runnable, long delay) {
@@ -91,11 +91,11 @@ public interface TaskScheduler {
 	}
 	
 	default ScheduledTask runLater(Entity entity, Runnable runnable, long delay) {
-		return runLater(runnable, delay);
+		return runLater(entity, task -> runnable.run(), delay);
 	}
 	
 	default ScheduledTask runLater(Location location, Runnable runnable, long delay) {
-		return runLater(runnable, delay);
+		return runLater(location, task -> runnable.run(), delay);
 	}
 	
 	default ScheduledTask runRepeating(Runnable runnable, long delay, long period) {
@@ -103,11 +103,11 @@ public interface TaskScheduler {
 	}
 	
 	default ScheduledTask runRepeating(Entity entity, Runnable runnable, long delay, long period) {
-		return runRepeating(runnable, delay, period);
+		return runRepeating(entity, task -> runnable.run(), delay, period);
 	}
 	
 	default ScheduledTask runRepeating(Location location, Runnable runnable, long delay, long period) {
-		return runRepeating(runnable, delay, period);
+		return runRepeating(location, task -> runnable.run(), delay, period);
 	}
 	
 	default ScheduledTask runAsync(Runnable runnable) {
