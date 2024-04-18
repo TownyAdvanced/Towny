@@ -96,6 +96,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"notforsale",
 		"nfs",
 		"evict",
+		"info",
 		"perm",
 		"set",
 		"toggle",

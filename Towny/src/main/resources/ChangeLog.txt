@@ -9696,3 +9696,4 @@ v0.92.0.11:
 0.100.2.3:
   - Stop non-Towny-using worlds showing a ChunkNotification when entered.
   - Fix /ta unclaim throwing an NPE while the refund on unclaim feature is active.
+  - Fix missing "info" from plot command tab completes.
