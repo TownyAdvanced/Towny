@@ -130,7 +130,7 @@ town_towntrust_help_0: "在这个城镇中，增加一个受信任的城镇。"
 town_towntrust_help_1: "在这个城镇中，移除一个受信任的城镇。"
 town_towntrust_help_2: "列出一个城镇所信任的城镇。"
 town_buy_help: "购买额外区块上限"
-town_cede_help: "Offers the plot you are stood in to be taken over by the given Town."
+town_cede_help: "提供您当前所占据的地皮并交由特定的城镇接管。"
 mayor_help_3: '你所选择的区域不附属于城镇'
 mayor_help_4: '声明你附近半径为X的区块'
 mayor_help_5: '声明最大半径内的所有区块'
@@ -404,8 +404,8 @@ plot_group_toggle_help_3: "切换你所在的区块组的怪物生成"
 plot_group_toggle_help_4: "切换你所在的区块组的收税状态"
 plot_set_help_0: "例如：Inn, Wilds, Farm, Embassy等。"
 plot_set_help_1: "设置一个区块为哨站"
-plot_set_help_1.5: "Sets the minimum number of days a player must be a town member to purchase the plot."
-plot_set_help_1.6: "Sets the maximum number of days a player must be a town member to purchase the plot."
+plot_set_help_1.5: "设置玩家在成为城镇成员多少天以后可以购买地皮。"
+plot_set_help_1.6: "设置玩家在成为城镇成员多少天以内可以购买地皮。"
 plot_set_help_2: "删除一个区块类型"
 plot_set_help_3: "命名一个区块"
 plot_set_help_4: "切换所有权限"
@@ -657,7 +657,7 @@ msg_err_input_too_long: '&c你输入的内容太长了.'
 msg_err_invalid_choice: '&c无效的选择'
 msg_err_invalid_sub: '&c无效的子命令.'
 msg_err_command_disable: '&c你没有足够的权限使用这个指令.'
-msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
+msg_err_you_dont_have_permission_to_use_colours: "您没有权限在头衔和姓氏中使用彩色代码。"
 msg_err_universe_limit: '&c这个世界不能再有更多的城镇了.'
 msg_err_too_many_npc: '&c已注册的NPC太多了.'
 msg_err_negative_money: '&c你不能拥有负数的钱.'
@@ -942,9 +942,9 @@ status_res_plottax: '总计地税：'
 status_res_totaltax: '需要缴纳税费：'
 status_townblock_plottax: '区块税: '
 status_townblock_untaxed: '免税'
-status_townblock_max_and_minjoindays: 'Town membership of between %s and %s days required for plot purchase.'
-status_townblock_minjoindays: 'Town membership more than %s days required for plot purchase.'
-status_townblock_maxjoindays: 'Town membership less than %s days required for plot purchase.'
+status_townblock_max_and_minjoindays: '购买地皮需要 %s 和 %s 天的城镇成员资格。'
+status_townblock_minjoindays: '购买地皮需要超过 %s 天的城镇成员资格。'
+status_townblock_maxjoindays: '购买地皮需要城镇成员资格少于%s天。'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
 msg_err_unable_to_use_bank_outside_your_town: '你不能在城镇外使用城镇银行.'
