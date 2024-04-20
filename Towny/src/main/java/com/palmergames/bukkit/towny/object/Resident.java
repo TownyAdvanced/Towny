@@ -628,16 +628,20 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 
 	}
-	
+
 	public void clearModes() {
+		clearModes(true);
+	}
+
+	public void clearModes(boolean notify) {
 
 		this.modes.clear();
-		TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
+		if (notify)
+			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
 
-		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), true), 1);
-
+		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), notify), 1);
 	}
-	
+
 	/**
 	 * Only for internal Towny use. NEVER call this from any other plugin.
 	 *

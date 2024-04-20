@@ -9698,3 +9698,5 @@ v0.92.0.11:
   - Fix /ta unclaim throwing an NPE while the refund on unclaim feature is active.
   - Fix missing "info" from plot command tab completes.
   - Fix regression from 0.100.2.2 which broke the folia tasks.
+0.100.2.4:
+  - Skip showing the "Modes set:" message when someone has their town removed.
