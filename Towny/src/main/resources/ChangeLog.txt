@@ -9713,3 +9713,6 @@ v0.92.0.11:
     - Default: &e[For Sale by %s: %s]
   - Removed Config Option: notification.plot.forsale
   - Add better error message when you try to buy a plot you already own.
+  - Update logging code, courtesy of Articdive with PR #7314.
+    - Drops the usage of deprecated methods and begins using the towny.log file again. 
+    - Closes #5855.
