@@ -9706,3 +9706,4 @@ v0.92.0.11:
     - Default: true
     - When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.
     - This will only succeed if the town or nation has a mayor or leader.
+  - Fix OutlawTeleportEvent being able to be thrown async.
