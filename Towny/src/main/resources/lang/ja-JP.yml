@@ -259,17 +259,17 @@ world_toggle_help_4: "このワールドで味方同士の攻撃が有効か無�
 world_toggle_help_5: "このワールドで爆発またはそれが強制されているかを切り替える"
 world_toggle_help_6: "このワールドで火災またはそれが強制されているかを切り替える"
 world_toggle_help_7: "このワールドで様々なモブのスポーンが有効か無効かを切り替える"
-world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
-world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
-world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
-world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_8: "このワールドの元に戻す、アンクレーム機能のオン/オフを切り替えます。"
+world_toggle_help_9: "このワールドの爆発が元に戻された機能のオン/オフを切り替えます。"
+world_toggle_help_10: "このワールドのplot-clear-deletes-blocksコマンドをオン/オフにします。"
+world_toggle_help_11: "Plot-unclaiming-deletes-blocks機能のオン/オフを切り替えます。"
 townyadmin_help_1: 'このタウンブロックを手放す'
 townyadmin_help_2: '周りにあるチャンクを手放す'
-admin_panel_1: "See /ta set ? for help"
+admin_panel_1: "/ta set ? を使用してヘルプを参照します。"
 admin_panel_2: 'Townyを再読み込みする'
 admin_panel_3: '新しい日付コードを実行する'
-admin_panel_4: "Unclaim an space surrounding you"
-admin_panel_5: "See /ta plot ? for help"
+admin_panel_4: "周囲の領域を放棄する"
+admin_panel_5: "/ta plot ? を使用してヘルプを参照します。"
 admin_panel_6: "Give a positive or negative amount of townblocks to a player or town"
 admin_panel_7: "See /ta toggle ? for help"
 admin_panel_8: "Commands for controlling these objects"
