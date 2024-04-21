@@ -9716,3 +9716,6 @@ v0.92.0.11:
   - Update logging code, courtesy of Articdive with PR #7314.
     - Drops the usage of deprecated methods and begins using the towny.log file again. 
     - Closes #5855.
+0.100.2.5:
+  - Fix spawn particles able to be drawn while Towny is disabled.
+    - Closes #7372.

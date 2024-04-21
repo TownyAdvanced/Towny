@@ -52,6 +52,9 @@ public class SpawnPoint {
 	}
 
 	public void drawParticle() {
+		if (!Towny.getPlugin().isEnabled())
+			return;
+		
 		final World world = position.world().getBukkitWorld();
 		if (world == null)
 			return;
