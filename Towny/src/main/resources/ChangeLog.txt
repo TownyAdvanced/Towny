@@ -9700,3 +9700,9 @@ v0.92.0.11:
   - Fix regression from 0.100.2.2 which broke the folia tasks.
 0.100.2.4:
   - Skip showing the "Modes set:" message when someone has their town removed.
+  - Add ability to pay out town and nation bank balances to the mayor or nation leader when possible, when a town or nation is deleted.
+    - Closes #7370.
+  - New Config Option: economy.banks.is_deleted_town_and_nation_bank_balances_paid_to_owner
+    - Default: true
+    - When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.
+    - This will only succeed if the town or nation has a mayor or leader.

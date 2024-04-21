@@ -2623,6 +2623,12 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, players can only use their town withdraw/deposit commands while inside of their own town.",
 			"# Likewise, nation banks can only be withdrawn/deposited to while in the capital city."),
+	ECO_BANK_IS_DELETED_OBJECT_BALANCE_PAID_TO_OWNER(
+			"economy.banks.is_deleted_town_and_nation_bank_balances_paid_to_owner",
+			"true",
+			"",
+			"# When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.",
+			"# This will only succeed if the town or nation has a mayor or leader."),
 
 	ECO_CLOSED_ECONOMY("economy.closed_economy", "", ""),
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(

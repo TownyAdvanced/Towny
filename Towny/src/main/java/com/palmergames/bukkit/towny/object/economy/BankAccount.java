@@ -1,11 +1,15 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.event.economy.TownEntersBankruptcyEvent;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.World;
@@ -120,6 +124,50 @@ public class BankAccount extends Account {
 	@Nullable
 	private Town getTown() {
 		return isTownAccount() ? (Town) government : null;
+	}
+
+	/*
+	 * Town and Nation Bank Account removal methods.
+	 */
+
+	/**
+	 * Attempt to delete the economy account of a Town or Nation.
+	 */
+	@Override
+	public void removeAccount() {
+		double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
+		if (balance > 0) {
+			if (TownySettings.isDeletedObjectBalancePaidToMayor() && ableToPayBalanceToOwner()) {
+				payBalanceToOwner(balance);
+			} else if (TownySettings.isEcoClosedEconomyEnabled()) {
+				TownyEconomyHandler.addToServer(balance, getBukkitWorld());
+			}
+		}
+		TownyEconomyHandler.removeAccount(getName());
+	}
+
+	/**
+	 * @return true when the Government still has a mayor or leader, and that leader is not an NPC.
+	 */
+	private boolean ableToPayBalanceToOwner() {
+		if (isTownAccount())
+			return getTown().hasMayor() && !getTown().getMayor().isNPC();
+		else
+			return ((Nation) government).hasKing() && !((Nation) government).getKing().isNPC();
+	}
+
+	private void payBalanceToOwner(double balance) {
+		Resident owner = getGovernmentOwner();
+		if (owner.isOnline())
+			TownyMessaging.sendMsg(owner, Translatable.of("msg_recieved_refund_for_deleted_object", TownyEconomyHandler.getFormattedBalance(balance)));
+		payTo(balance, owner, "Deleted Town or Nation bank balance refund.");
+	}
+
+	private Resident getGovernmentOwner() {
+		if (isTownAccount())
+			return getTown().getMayor();
+		else
+			return ((Nation) government).getKing();
 	}
 
 	/*
