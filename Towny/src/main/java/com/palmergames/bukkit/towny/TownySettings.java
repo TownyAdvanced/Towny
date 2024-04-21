@@ -1438,9 +1438,13 @@ public class TownySettings {
 		return Translation.of("UNCLAIMED_ZONE_NAME");
 	}
 
+	public static boolean doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() {
+		return getBoolean(ConfigNodes.FILTERS_MODIFY_CHAT_DO_TITLES_AND_SURTITLES_REQUIRE_PERMISSION_FOR_COLOUR_CODES);
+	}
+
 	public static int getMaxTitleLength() {
 
-		return getInt(ConfigNodes.FILTERS_MODIFY_CHAT_MAX_LGTH);
+		return getInt(ConfigNodes.FILTERS_MODIFY_CHAT_MAX_TITLE_LENGTH);
 	}
 
 	public static int getMaxNameLength() {

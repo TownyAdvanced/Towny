@@ -131,6 +131,10 @@ public class ChunkNotification {
 		List<String> out = new ArrayList<String>();
 		String output;
 
+		// Show nothing if the world doesn't use Towny.
+		if (!to.getTownyWorld().isUsingTowny())
+			return out;
+
 		output = getAreaNotification(resident);
 		if (output != null && output.length() > 0)
 			out.add(output);

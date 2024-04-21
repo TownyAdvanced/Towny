@@ -342,6 +342,10 @@ permissions:
             towny.command.nation.set.taxpercentcap: true
             towny.command.nation.set.conqueredtax: true
 
+    towny.command.nation.set.title.colours:
+        description: The node required for leaders to set nation resident titles and surnames, when enabled in the config.
+        default: false
+    
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
         default: false
@@ -358,6 +362,7 @@ permissions:
         children:
             towny.command.town.bankhistory: true
             towny.command.town.buy.*: true
+            towny.command.town.cede.*: true
             towny.command.town.claim.*: true
             towny.command.town.delete: true
             towny.command.town.deposit: true
@@ -494,6 +499,10 @@ permissions:
             towny.command.town.set.title: true
             towny.command.town.set.surname: true
 
+    towny.command.town.set.title.colours:
+        description: The node required for mayors to set town resident titles and surnames, when enabled in the config.
+        default: false
+
     towny.command.town.toggle.*:
         description: User can toggle all town settings.
         default: false
@@ -530,6 +539,12 @@ permissions:
         default: false
         children:
             towny.command.town.buy.bonus: true
+
+    towny.command.town.cede.*:
+        description: User can access all commands related to ceding plots.
+        default: false
+        children:
+            towny.command.town.cede.plot: true
 
     # Plot command permissions
     towny.command.plot.*:

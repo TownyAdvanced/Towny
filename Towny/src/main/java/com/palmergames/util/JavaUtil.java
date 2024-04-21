@@ -94,7 +94,13 @@ public class JavaUtil {
 	}
 
 	public static @Nullable MethodHandle getMethodHandle(final @NotNull Class<?> clazz, final @NotNull String methodName) {
-		return getMethodHandle(clazz, methodName, (Class<?>) null);
+		try {
+			final Method method = clazz.getDeclaredMethod(methodName);
+			method.setAccessible(true);
+			return MethodHandles.publicLookup().unreflect(method);
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
 	}
 	
 	public static @Nullable MethodHandle getMethodHandle(final @NotNull Class<?> clazz, final @NotNull String methodName, final Class<?>... paramTypes) {

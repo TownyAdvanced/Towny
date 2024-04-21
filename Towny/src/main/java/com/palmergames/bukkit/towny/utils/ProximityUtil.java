@@ -66,12 +66,16 @@ public class ProximityUtil {
 	}
 
 	public static void allowTownClaimOrThrow(TownyWorld world, WorldCoord townBlockToClaim, @Nullable Town town, boolean outpost) throws TownyException {
+		allowTownClaimOrThrow(world, townBlockToClaim, town, outpost, false);
+	}
+
+	public static void allowTownClaimOrThrow(TownyWorld world, WorldCoord townBlockToClaim, @Nullable Town town, boolean outpost, boolean trade) throws TownyException {
 		// Check if the town has claims available.
 		if (!town.hasUnlimitedClaims() && town.availableTownBlocks() <= 0)
 			throw new TownyException(Translatable.of("msg_err_not_enough_blocks"));
 
-		// Check if this is already claimed by someone.
-		if (!townBlockToClaim.isWilderness())
+		// Check if this is already claimed by someone, as long as this isn't a townblock being ceded to another town.
+		if (!trade && !townBlockToClaim.isWilderness())
 			throw new TownyException(Translatable.of("msg_already_claimed", townBlockToClaim.getTownOrNull()));
 
 		// Check distance to other homeblocks.
@@ -79,7 +83,7 @@ public class ProximityUtil {
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("homeblock")));
 
 		// Check distance to other townblocks.
-		if (world.getMinDistanceFromOtherTownsPlots(townBlockToClaim, town) >= TownySettings.getMinDistanceFromTownPlotblocks())
+		if (world.getMinDistanceFromOtherTownsPlots(townBlockToClaim, town) < TownySettings.getMinDistanceFromTownPlotblocks())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
 		// Check adjacent claims rules.

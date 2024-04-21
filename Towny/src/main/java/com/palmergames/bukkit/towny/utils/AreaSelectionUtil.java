@@ -523,6 +523,13 @@ public class AreaSelectionUtil {
 	}
 
 	private static boolean residentCanBuyTownBlock(Resident resident, TownBlock townBlock) {
+		try {
+			townBlock.testTownMembershipAgePreventsThisClaimOrThrow(resident);
+		} catch (TownyException e) {
+			if (resident.isOnline())
+				TownyMessaging.sendErrorMsg(resident.getPlayer(), e.getMessage(resident.getPlayer()));
+			return false;
+		}
 		Town town = townBlock.getTownOrNull();
 		return town != null && townBlockIsForSale(townBlock) && (town.hasResident(resident) || townBlock.getType().equals(TownBlockType.EMBASSY));
 	}

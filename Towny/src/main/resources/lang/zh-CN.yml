@@ -130,6 +130,7 @@ town_towntrust_help_0: "在这个城镇中，增加一个受信任的城镇。"
 town_towntrust_help_1: "在这个城镇中，移除一个受信任的城镇。"
 town_towntrust_help_2: "列出一个城镇所信任的城镇。"
 town_buy_help: "购买额外区块上限"
+town_cede_help: "提供您当前所占据的地皮并交由特定的城镇接管。"
 mayor_help_3: '你所选择的区域不附属于城镇'
 mayor_help_4: '声明你附近半径为X的区块'
 mayor_help_5: '声明最大半径内的所有区块'
@@ -403,6 +404,8 @@ plot_group_toggle_help_3: "切换你所在的区块组的怪物生成"
 plot_group_toggle_help_4: "切换你所在的区块组的收税状态"
 plot_set_help_0: "例如：Inn, Wilds, Farm, Embassy等。"
 plot_set_help_1: "设置一个区块为哨站"
+plot_set_help_1.5: "设置玩家在成为城镇成员多少天以后可以购买地皮。"
+plot_set_help_1.6: "设置玩家在成为城镇成员多少天以内可以购买地皮。"
 plot_set_help_2: "删除一个区块类型"
 plot_set_help_3: "命名一个区块"
 plot_set_help_4: "切换所有权限"
@@ -654,6 +657,7 @@ msg_err_input_too_long: '&c你输入的内容太长了.'
 msg_err_invalid_choice: '&c无效的选择'
 msg_err_invalid_sub: '&c无效的子命令.'
 msg_err_command_disable: '&c你没有足够的权限使用这个指令.'
+msg_err_you_dont_have_permission_to_use_colours: "您没有权限在头衔和姓氏中使用彩色代码。"
 msg_err_universe_limit: '&c这个世界不能再有更多的城镇了.'
 msg_err_too_many_npc: '&c已注册的NPC太多了.'
 msg_err_negative_money: '&c你不能拥有负数的钱.'
@@ -938,6 +942,9 @@ status_res_plottax: '总计地税：'
 status_res_totaltax: '需要缴纳税费：'
 status_townblock_plottax: '区块税: '
 status_townblock_untaxed: '免税'
+status_townblock_max_and_minjoindays: '购买地皮需要 %s 和 %s 天的城镇成员资格。'
+status_townblock_minjoindays: '购买地皮需要超过 %s 天的城镇成员资格。'
+status_townblock_maxjoindays: '购买地皮需要城镇成员资格少于%s天。'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在国都外使用国家银行.'
 msg_err_unable_to_use_bank_outside_your_town: '你不能在城镇外使用城镇银行.'
@@ -961,7 +968,7 @@ msg_err_nation_not_public: '&c这个国家不是公开的.'
 msg_nation_toggle_public: '&a成功开放国家.'
 status_yes: '&a是'
 status_no: '&c否'
-msg_err_unable_to_use_bank_outside_bank_plot: '你不能在城镇之家或银行外使用此命令.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&c国家传送已关闭.'
 msg_err_nation_spawn_forbidden_war: '&c国家传送点只在战争时期开放.'
 msg_err_nation_spawn_forbidden_peace: '&c战争期间禁止国家传送.'
@@ -1549,6 +1556,9 @@ msg_cache_block_err: '&c你没有权限在这里%s。'
 msg_err_plot_belongs_to_group: '&c这片土地属于一个土地组，请使用%s。'
 plotgroup_sing: '土地组'
 msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
+msg_err_ally_limit_reached_cannot_accept: 'The nation of %s has reached their ally limit, unable to accept.'
+msg_err_ally_limit_reached_cannot_send: 'Your nation has reached the ally limit, unable to invite %s to become your ally.'
+msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
 #Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
 msg_err_expected_command_format: '语法错误，预期传入%s'
@@ -2117,5 +2127,25 @@ msg_town_being_deleted_because_no_residents: "%s 将要被删除，因为它的�
 outlawed_in: "放逐于"
 msg_warning_town_deposit_hint: "如果要把钱存入城镇银行，请使用/town deposit [amount]"
 msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/country deposit [amount]。"
-teleport_warmup_title_dont_move: "&6Don't move!"
+teleport_warmup_title_dont_move: ""
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "You cannot cede a plot to your own town."
+msg_err_town_cede_you_cannot_cede_your_homeblock: "You cannot cede your town's homeblock."
+msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
+msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
+msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
+msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
+msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
+msg_town_cede_plot_denied: "%s has declined your offer."
+msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
+msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
+msg_err_cannot_claim_plot_join_date_too_low: "You cannot claim this plot until you have been a town resident for %s days."
+msg_err_cannot_claim_plot_join_date_too_high: "You cannot claim this plot, it is for residents who have been town members for less than %s days."
+msg_townblock_min_join_days_removed: "This TownBlock has had its min-join-days requirement removed."
+msg_townblock_max_join_days_removed: "This TownBlock has had its max-join-days requirement removed."
+msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days requirement set to %s. Only players joined for more than that number of days will be able to use /plot claim."
+msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
+msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"

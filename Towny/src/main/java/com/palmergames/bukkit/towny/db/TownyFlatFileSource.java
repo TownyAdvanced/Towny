@@ -34,7 +34,6 @@ import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.StringMgmt;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
@@ -1756,7 +1755,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						try {
 							townBlock.setClaimedAt(Long.parseLong(line));
 						} catch (Exception ignored) {}
-					
+
+					line = keys.get("minTownMembershipDays");
+					if (line != null && !line.isEmpty())
+						townBlock.setMinTownMembershipDays(Integer.valueOf(line));
+
+					line = keys.get("maxTownMembershipDays");
+					if (line != null && !line.isEmpty())
+						townBlock.setMaxTownMembershipDays(Integer.valueOf(line));
+
 					line = keys.get("metadata");
 					if (line != null && !line.isEmpty())
 						MetadataLoader.getInstance().deserializeMetadata(townBlock, line.trim());
@@ -2382,7 +2389,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("changed=" + townBlock.isChanged());
 
 		list.add("claimedAt=" + townBlock.getClaimedAt());
-		
+
+		if (townBlock.hasMinTownMembershipDays())
+			list.add("minTownMembershipDays=" + townBlock.getMinTownMembershipDays());
+
+		if (townBlock.hasMaxTownMembershipDays())
+			list.add("maxTownMembershipDays=" + townBlock.getMaxTownMembershipDays());
+
 		// Metadata
 		list.add("metadata=" + serializeMetadata(townBlock));
 		
@@ -2539,7 +2552,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			CooldownTimerTask.getCooldowns().putAll(new Gson().fromJson(data, new TypeToken<Map<String, Long>>(){}.getType()));
 		} catch (JsonSyntaxException e) {
 			plugin.getLogger().log(Level.WARNING, "Could not load saved cooldowns due to a json syntax exception", e);
-		}
+		} catch (NullPointerException ignored) {}
 		
 		return true;
 	}

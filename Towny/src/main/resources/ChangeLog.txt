@@ -9622,3 +9622,81 @@ v0.92.0.11:
   - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.1 to 3.5.2.
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.74.0 to 3.78.0.
   - Bump org.apache.logging.log4j:log4j-core from 2.22.1 to 2.23.1.
+0.100.1.21:
+  - Fix snapshot taking on older versions, courtesy of Warrior with PR #7316.
+    - Fixes the regression started in 0.100.1.16 which caused the revert on unclaim to turn everything into air down to bedrock.
+0.100.1.22:
+  - Fix PaperEvents listeners not registering, causing sign edits and other things to use outdated tests.
+    - Fixes the regression which started in 0.100.1.16. 
+  - Reset player caches when using /ta reload.
+  - Create a readme file that generates in Towny's lang folder, explaining how to properly use the translation files.
+  - Fix regresssion that started in 0.100.1.1, solving the proximity test to nearest town being flipped.
+  - Add the ability for Towns to cede plots to other towns, using /town cede plot {townname}
+    - Their ability to give a plot away also requires the other town to be able to claim the plot,
+      meaning that any rule applicable to /town claim is also applicable here.
+    - Closes #7149.
+  - New Command: /town cede plot {townname}
+    - Attempts to give the townblock the player is stood in, to the given town.
+  - New Permission Node: towny.command.town.cede.plot
+    - Child Node of towny.command.town.cede.* which is a child node of towny.command.town.*
+    - No changes required to the townyperms.yml
+  - API: Added TownCedePlotEvent
+    - A cancellable event thrown when a mayor uses /town cede plot {townname}.
+0.100.1.23:
+  - Add optional permission node required to add colours to title and surnames.
+    - Closes #7217.
+  - New Permission Node: towny.command.town.set.title.colours
+    - Not a child node, must be given if you enable does_adding_colour_codes_require_permission_node.
+  - New Permission Node: towny.command.town.set.title.colours
+    - Not a child node, must be given if you enable does_adding_colour_codes_require_permission_node.
+  - New Config Option: filters_colour_chat.modify_chat.does_adding_colour_codes_require_permission_node
+    - Default: false
+    - When true, a mayor or king will need the permission node in order to add colour codes to residents' titles and surtitles.
+    - Kings require towny.command.nation.set.title.colours, mayors require towny.command.town.set.title.colours.
+    - These nodes are not given out by the default townyperms.yml and must be added to the mayor and king section when this setting has been made true.
+  - Add MinJoinDays and MaxJoinDays to TownBlocks.
+    - A new system that allows mayors to reserve plots to only-new, or only-established town residents.
+    - This means that residents cannot use /plot claim on every plot that is for sale, if min or max days are set.
+    - This does not apply to embassy plots being bought by non-town-residents.
+    - When set, the min join days number will mean that a resident would have to be a resident of the town for a minimum of X days.
+    - When set, the max join days number will mean that a resident would have to be a resident of the town for a maximum of X days.
+    - When both set, the resident must be a town resident for a number of days between the min and max amounts.
+    - These values are showing on the /plot info screen, as well as in the denial message seen when /plot claim fails  
+    - Closes #7164.
+  - New Command: /plot set minjoindays {# | clear}
+    - Sets the # of days, or removes the minjoindays amount when clear is used.
+    - Requires the towny.command.plot.asmayor permission node.
+  - New Command: /plot set maxjoindays {# | clear}
+    - Sets the # of days, or removes the maxjoindays amount when clear is used.
+    - Requires the towny.command.plot.asmayor permission node.
+0.100.1.24:
+  - Fix minimum_amount_of_residents_in_town_for_outpost being used while limit_outposts_using_town_and_nation_levels is also true.
+    - While you limit your outposts by the town/nation levels Towny will ignore any minimum_amount_of_residents_in_town_for_outpost value.
+  - Fix potential NPE when loading empty cooldowns.json making Towny unable to load.
+  - Fix creatures unable to use switches in the wilderness.
+    - Closes #7334.
+0.100.2.0:
+  - Bump version for release.
+0.100.2.1:
+  - Fix regression dating back to 0.99.5.17 which broke the are_new_residents_prompted_to_town_spawn feature. 
+  - Fix regression dating back to 0.100.1.8, which caused the hasWorld causing SQL dbs to not load worlds with capital letters' townblocks.
+    - Closes #7337.
+  - Fix unclaim entity delete not working on folia, courtesy of Warrior with PR #7345.
+  - Fix potential NPE in the TownyDamageEvent, courtesy of FiLKoNd with PR #7339. (First-Time Contributor!)
+0.100.2.2:
+  - Fix issue with max-allies-per-nation not being respected.
+  - Add CancelledTownyTeleportEvent, thrown when a player has their towny spawn cancelled via moving, damage, or via the TownyAPI class.
+    - Closes #7353.
+  - Skip processing claim particles for unloaded chunks, courtesy of Warrior with PR #7351.
+  - Add consumer methods to the task scheduler, courtesy of Warrior with PR #7264.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.12.1 to 3.13.0.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.78.0 to 3.80.0.
+  - Bump org.apache.maven.plugins:maven-source-plugin from 3.3.0 to 3.3.1.
+  - Bump org.apache.commons:commons-compress from 1.26.0 to 1.26.1.
+0.100.2.3:
+  - Stop non-Towny-using worlds showing a ChunkNotification when entered.
+  - Fix /ta unclaim throwing an NPE while the refund on unclaim feature is active.
+  - Fix missing "info" from plot command tab completes.
+  - Fix regression from 0.100.2.2 which broke the folia tasks.
+0.100.2.4:
+  - Skip showing the "Modes set:" message when someone has their town removed.

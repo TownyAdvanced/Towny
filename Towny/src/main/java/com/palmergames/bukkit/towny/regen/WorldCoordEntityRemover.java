@@ -1,9 +1,10 @@
 package com.palmergames.bukkit.towny.regen;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.Towny;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,23 +98,28 @@ public class WorldCoordEntityRemover {
 	 * @param worldCoord - WorldCoord for the Town Block
 	 */
 	public static void doDeleteTownBlockEntities(WorldCoord worldCoord) {
-		TownyWorld world = worldCoord.getTownyWorld();
-		if (world == null || !world.isUsingTowny() || !world.isDeletingEntitiesOnUnclaim())
+		final TownyWorld world = worldCoord.getTownyWorld();
+		if (world == null || !world.isUsingTowny() || !world.isDeletingEntitiesOnUnclaim()) {
+			worldCoordQueue.remove(worldCoord);
 			return;
-		
-		addToActiveQueue(worldCoord);
-		List<Entity> toRemove = new ArrayList<>();
-		Collection<Entity> entities = worldCoord.getBukkitWorld().getNearbyEntities(worldCoord.getBoundingBox());
-		for (Entity entity : entities) {
-			if (world.getUnclaimDeleteEntityTypes().contains(entity.getType()))
-				toRemove.add(entity);
 		}
 		
-		for (Entity entity : toRemove)
-			entity.remove();
-		
-		worldCoordQueue.remove(worldCoord);
-		activeQueue.remove(worldCoord);
+		addToActiveQueue(worldCoord);
+		Towny.getPlugin().getScheduler().run(worldCoord.getLowerMostCornerLocation(), () -> {
+			try {
+				final World bukkitWorld = world.getBukkitWorld();
+				if (bukkitWorld == null)
+					return;
+
+				for (final Entity entity : bukkitWorld.getNearbyEntities(worldCoord.getBoundingBox())) {
+					if (world.getUnclaimDeleteEntityTypes().contains(entity.getType()))
+						entity.remove();
+				}
+			} finally {
+				worldCoordQueue.remove(worldCoord);
+				activeQueue.remove(worldCoord);
+			}
+		});
 	}
 
 }

@@ -117,6 +117,13 @@ public class TownyFormatter {
 		if (TownyEconomyHandler.isActive())
 			screen.addComponentOf("plottax", colourKeyValue(translator.of("status_townblock_plottax"), townBlock.isTaxed() ? formatMoney(townBlock.getPlotTax()) : translator.of("status_townblock_untaxed")));
 
+		if (townBlock.hasMinTownMembershipDays() && townBlock.hasMaxTownMembershipDays())
+			screen.addComponentOf("minAndMaxJoinDate", colourKey(translator.of("status_townblock_max_and_minjoindays", townBlock.getMinTownMembershipDays(), townBlock.getMaxTownMembershipDays())));
+		else if (townBlock.hasMinTownMembershipDays())
+			screen.addComponentOf("minJoinDate", colourKey(translator.of("status_townblock_minjoindays", townBlock.getMinTownMembershipDays())));
+		else if (townBlock.hasMaxTownMembershipDays())
+			screen.addComponentOf("maxJoinDate", colourKey(translator.of("status_townblock_maxjoindays", townBlock.getMaxTownMembershipDays())));
+
 		// Add any metadata which opt to be visible.
 		List<Component> fields = getExtraFields(townBlock);
 		if (!fields.isEmpty())

@@ -336,6 +336,8 @@ public class SQLSchema {
 		columns.add("`claimedAt` BIGINT NOT NULL");
 		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
 		columns.add("`customPermissionData` mediumtext DEFAULT NULL");
+		columns.add("`minTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
+		columns.add("`maxTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
 		return columns;
 	}
 	

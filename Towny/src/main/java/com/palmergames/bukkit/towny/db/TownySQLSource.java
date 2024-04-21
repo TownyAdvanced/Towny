@@ -1855,6 +1855,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 				townBlock.setClaimedAt(rs.getLong("claimedAt"));
 
+				
+				line = rs.getString("minTownMembershipDays");
+				if (line != null && !line.isEmpty())
+					townBlock.setMinTownMembershipDays(Integer.valueOf(line));
+
+				line = rs.getString("maxTownMembershipDays");
+				if (line != null && !line.isEmpty())
+					townBlock.setMaxTownMembershipDays(Integer.valueOf(line));
+
 				try {
 					line = rs.getString("metadata");
 					if (line != null && !line.isEmpty()) {
@@ -2490,6 +2499,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("changed", townBlock.isChanged());
 			tb_hm.put("claimedAt", townBlock.getClaimedAt());
+			tb_hm.put("minTownMembershipDays", townBlock.getMinTownMembershipDays());
+			tb_hm.put("maxTownMembershipDays", townBlock.getMaxTownMembershipDays());
 			if (townBlock.hasPlotObjectGroup())
 				tb_hm.put("groupID", townBlock.getPlotObjectGroup().getUUID().toString());
 			else

@@ -5,12 +5,16 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledTeleportReason;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TeleportWarmupParticle;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.util.BukkitTools;
+
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Location;
@@ -109,6 +113,17 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	 */
 	@Contract("null -> false")
 	public static boolean abortTeleportRequest(@Nullable Resident resident) {
+		return abortTeleportRequest(resident, CancelledTeleportReason.UNKNOWN);
+	}
+
+	/**
+	 * Aborts the current active teleport request for the given resident.
+	 * @param resident The resident to abort the request for.
+	 * @param reason   The CancelledSpawnReason this player has had their teleport request cancel.
+	 * @return Whether the resident had an active teleport request.
+	 */
+	@Contract("null -> false")
+	public static boolean abortTeleportRequest(@Nullable Resident resident, CancelledTeleportReason reason) {
 		if (resident == null)
 			return false;
 
@@ -120,6 +135,8 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			TownyEconomyHandler.economyExecutor().execute(() -> request.teleportAccount().payTo(request.teleportCost(), resident.getAccount(), Translation.of("msg_cost_spawn_refund")));
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_cost_spawn_refund"));
 		}
+
+		BukkitTools.fireEvent(new CancelledTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost(), reason));
 
 		return true;
 	}

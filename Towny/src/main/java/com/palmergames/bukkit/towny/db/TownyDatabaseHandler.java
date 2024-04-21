@@ -428,7 +428,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		}
 
 		for (Resident resident : toSave) {
-			resident.clearModes();
+			resident.clearModes(false);
 			resident.removeTown(true);
 		}
 		
