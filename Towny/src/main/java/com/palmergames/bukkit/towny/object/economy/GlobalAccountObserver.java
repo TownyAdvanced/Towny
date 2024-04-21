@@ -11,12 +11,12 @@ import com.palmergames.bukkit.towny.TownyLogger;
 public final class GlobalAccountObserver implements AccountObserver {
 
 	@Override
-	public final void withdrew(Account account, double amount, String reason) {
-		TownyLogger.getInstance().logMoneyTransaction(account, amount, null, reason);
+	public void withdrew(Account account, double amount, String reason) {
+		TownyLogger.logMoneyTransaction(account, amount, null, reason);
 	}
 
 	@Override
-	public final void deposited(Account account, double amount, String reason) {
-		TownyLogger.getInstance().logMoneyTransaction(account, amount, null, reason);
+	public void deposited(Account account, double amount, String reason) {
+		TownyLogger.logMoneyTransaction(account, amount, null, reason);
 	}
 }
