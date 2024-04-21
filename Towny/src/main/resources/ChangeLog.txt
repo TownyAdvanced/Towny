@@ -9707,3 +9707,9 @@ v0.92.0.11:
     - When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.
     - This will only succeed if the town or nation has a mayor or leader.
   - Fix OutlawTeleportEvent being able to be thrown async.
+  - Add the ability to see who is selling a plot.
+    - Closes #7371.
+  - New Config Option: notification.plot.forsaleby
+    - Default: &e[For Sale by %s: %s]
+  - Removed Config Option: notification.plot.forsale
+  - Add better error message when you try to buy a plot you already own.
