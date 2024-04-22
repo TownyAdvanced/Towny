@@ -2053,7 +2053,7 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_DEATH_NATION);
 	}
 	
-	public static boolean isDeletedObjectBalancePaidToMayor() {
+	public static boolean isDeletedObjectBalancePaidToOwner() {
 		return getBoolean(ConfigNodes.ECO_BANK_IS_DELETED_OBJECT_BALANCE_PAID_TO_OWNER);
 	}
 
