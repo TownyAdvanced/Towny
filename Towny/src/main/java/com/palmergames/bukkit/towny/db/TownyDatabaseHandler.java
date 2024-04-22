@@ -613,9 +613,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive())
 				try {
 					townBalance = town.getAccount().getHoldingBalance();
-					town.getAccount().removeAccount();
+					town.getAccount().withdraw(townBalance, "Rename Town - Transfer from old account");
 				} catch (Exception ignored) {
-					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + ", could not be received from the economy plugin and will not be able to be converted.");
+					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + " could not be received from the economy plugin and will not be able to be converted.");
 				}
 				
 			UUID oldUUID = town.getUUID();
@@ -716,7 +716,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive())
 				try {
 					nationBalance = nation.getAccount().getHoldingBalance();
-					nation.getAccount().removeAccount();
+					nation.getAccount().setBalance(0, "Rename Nation - Transfer from old account");
 				} catch (Exception ignored) {
 					TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
 				}

@@ -135,39 +135,24 @@ public class BankAccount extends Account {
 	 */
 	@Override
 	public void removeAccount() {
-		double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
-		if (balance > 0) {
-			if (TownySettings.isDeletedObjectBalancePaidToMayor() && ableToPayBalanceToOwner()) {
-				payBalanceToOwner(balance);
-			} else if (TownySettings.isEcoClosedEconomyEnabled()) {
-				TownyEconomyHandler.addToServer(balance, getBukkitWorld());
+		if (TownySettings.isDeletedObjectBalancePaidToOwner()) {
+			final Resident owner = getGovernmentOwner();
+			
+			if (owner != null && !owner.isNPC()) {
+				double balance = getHoldingBalance();
+				if (balance > 0) {
+					TownyMessaging.sendMsg(owner, Translatable.of("msg_recieved_refund_for_deleted_object", TownyEconomyHandler.getFormattedBalance(balance)));
+					payTo(balance, owner, "Deleted " + (isTownAccount() ? "Town" : "Nation") + " bank balance refund.");
+				}
 			}
 		}
-		TownyEconomyHandler.removeAccount(getName());
+
+		super.removeAccount();
 	}
 
-	/**
-	 * @return true when the Government still has a mayor or leader, and that leader is not an NPC.
-	 */
-	private boolean ableToPayBalanceToOwner() {
-		if (isTownAccount())
-			return getTown().hasMayor() && !getTown().getMayor().isNPC();
-		else
-			return ((Nation) government).hasKing() && !((Nation) government).getKing().isNPC();
-	}
-
-	private void payBalanceToOwner(double balance) {
-		Resident owner = getGovernmentOwner();
-		if (owner.isOnline())
-			TownyMessaging.sendMsg(owner, Translatable.of("msg_recieved_refund_for_deleted_object", TownyEconomyHandler.getFormattedBalance(balance)));
-		payTo(balance, owner, "Deleted Town or Nation bank balance refund.");
-	}
-
+	@Nullable
 	private Resident getGovernmentOwner() {
-		if (isTownAccount())
-			return getTown().getMayor();
-		else
-			return ((Nation) government).getKing();
+		return government instanceof Town town ? town.getMayor() : government instanceof Nation nation ? nation.getKing() : null;
 	}
 
 	/*
