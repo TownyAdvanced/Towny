@@ -9719,3 +9719,5 @@ v0.92.0.11:
 0.100.2.5:
   - Fix spawn particles able to be drawn while Towny is disabled.
     - Closes #7372.
+  - Fix regression from 0.100.2.4 where deleted town/nation bank refunds could cause money duplication, courtesy of Warrior with PR #7375.
+    - Closes #7374.
