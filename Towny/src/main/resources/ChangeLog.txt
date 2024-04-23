@@ -9723,3 +9723,5 @@ v0.92.0.11:
     - Closes #7374.
 0.100.2.6:
   - Fix async LoadedMetadataEvent call on folia, courtesy of Warrior with PR #7377.
+  - Fix Ascii map throwing CommandException when plot is for sale.
+    - Closes #7378.

@@ -176,7 +176,7 @@ public class TownyAsciiMap {
 							? townblock.getPlotObjectGroup().getPrice()
 							: townblock.getPlotPrice();
 						if (cost > -1)
-							forSaleComponent = TownyComponents.miniMessage(String.format(ChunkNotification.forSaleNotificationFormat, TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + translator.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
+							forSaleComponent = TownyComponents.miniMessage(String.format(ChunkNotification.forSaleNotificationFormat, getOwner(townblock), TownyEconomyHandler.getFormattedBalance(cost)).replaceAll("[\\[\\]]", "") + " " + translator.of("msg_click_purchase")).color(NamedTextColor.YELLOW).append(Component.newline());
 					}
 					
 					if (townblock.getClaimedAt() > 0)
@@ -334,5 +334,9 @@ public class TownyAsciiMap {
 	private static String parseUnicode(String symbol) {
 		// remove the "\\u" before we get the resulting unicode symbol.
 		return String.valueOf(Character.toChars(Integer.parseInt(symbol.substring(2))));
+	}
+
+	private static String getOwner(TownBlock townblock) {
+		return townblock.hasResident() ? townblock.getResidentOrNull().getName() : townblock.getTownOrNull().getName();
 	}
 }
