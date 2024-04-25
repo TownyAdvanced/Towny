@@ -277,7 +277,7 @@ public class TownyCustomListener implements Listener {
 
 		Town town = event.getTown();
 		Player player = event.getResident().getPlayer();
-		Town playerLocationTown = TownyAPI.getInstance().getTown(player.getLocation());
+		Town playerLocationTown = Optional.ofNullable(player).map(p -> TownyAPI.getInstance().getTown(p.getLocation())).orElse(null);
 
 		if (player == null || (playerLocationTown != null && playerLocationTown.equals(town)))
 			return;
