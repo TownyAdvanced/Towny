@@ -9725,3 +9725,4 @@ v0.92.0.11:
   - Fix async LoadedMetadataEvent call on folia, courtesy of Warrior with PR #7377.
   - Fix Ascii map throwing CommandException when plot is for sale.
     - Closes #7378.
+  - Fix npe in town add resident event listener, courtesy of Warrior with PR #7382.
