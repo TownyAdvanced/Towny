@@ -298,7 +298,7 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
-	abstract public void removeNation(Nation nation);
+	abstract public boolean removeNation(Nation nation);
 
 	abstract public @NotNull Resident newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 

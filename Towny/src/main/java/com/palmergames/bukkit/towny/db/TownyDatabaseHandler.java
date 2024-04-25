@@ -463,11 +463,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeNation(Nation nation) {
+	public boolean removeNation(Nation nation) {
 
 		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation);
 		if (BukkitTools.isEventCancelled(preEvent))
-			return;
+			return false;
 
 		Resident king = null;
 		if (nation.hasKing())
@@ -543,6 +543,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 
 		BukkitTools.fireEvent(new DeleteNationEvent(nation, king));
+
+		return true;
 	}
 
 	@Override

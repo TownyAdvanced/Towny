@@ -52,11 +52,13 @@ public class TownUtil {
 			if (findNewCapital(town, nation))
 				return;
 
+			if (!TownyUniverse.getInstance().getDataSource().removeNation(nation))
+				return;
+
 			// No new capital found, delete the nation and potentially refund the capital town.
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
 
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
 				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_not_enough_residents_refunded", TownySettings.getNewNationPrice()));

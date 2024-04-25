@@ -1062,10 +1062,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			Confirmation.runOnAccept(() -> {
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-				TownyUniverse.getInstance().getDataSource().removeNation(nation);
-				if (tooManyResidents)
-					ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
+				if (TownyUniverse.getInstance().getDataSource().removeNation(nation)) {
+					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+					if (tooManyResidents)
+						ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
+				}
 			})
 			.sendTo(player);
 			return;

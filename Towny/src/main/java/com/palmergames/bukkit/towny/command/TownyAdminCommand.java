@@ -1663,11 +1663,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "delete":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode());
 			Confirmation.runOnAccept(() -> {
-				if (sender instanceof Player)
-					TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
-				
-				TownyUniverse.getInstance().getDataSource().removeNation(nation);
-				TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
+				if (TownyUniverse.getInstance().getDataSource().removeNation(nation)) {
+					if (sender instanceof Player)
+						TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
+					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+				}
 			}).sendTo(sender);
 			break;
 		case "meta":
