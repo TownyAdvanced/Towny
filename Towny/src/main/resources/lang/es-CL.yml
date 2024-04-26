@@ -194,10 +194,6 @@ res_1: 'Tu estado'
 res_2: '[habitante]'
 res_3: 'Estado del habitante seleccionado'
 res_4: 'Lista de todos los juegadores activos'
-res_5: 'para ayuda'
-res_6: 'Coincidencia en línea'
-res_7: 'Nombre exacto'
-res_8: 'Solo un humilde agricultor'
 res_9: "Cuánto impuesto pagarás por día."
 res_10: "Use /res jail ? para obtener ayuda."
 res_11: "Use /res toggle ? para obtener ayuda."
@@ -2151,3 +2147,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
