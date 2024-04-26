@@ -35,7 +35,7 @@ default_towny_prefix: '&6[Towny]&b'
 default_town_prefix: '&6[%s] &b'
 default_nation_prefix: '&6[%s] &6'
 unclaimed_plot_name: '無主之地'
-unclaimed_zone_name: '荒蕪之地'
+unclaimed_zone_name: '荒郊野地'
 ############################################################
 #+------------------------------------------------------+ #
 #|help messages                                         | #
@@ -70,7 +70,7 @@ town_help_6: '闢新城邑，君為城邑之主。'
 town_help_7: '闢新城邑，择一人为城邑之主。'
 town_help_8: '列城鎮主之令。'
 town_help_9: '今日是也！'
-town_help_10: '列城邑之在線邑人'
+town_help_10: '列城邑之在線者'
 town_help_13: "列出市鎮內的市民清單"
 town_help_14: "列出市鎮內的排行榜"
 town_help_15: "列出市鎮內的囚犯名單"
@@ -194,10 +194,6 @@ res_1: '君之狀態'
 res_2: '[resident]'
 res_3: '目標玩家狀態'
 res_4: '列活躍之眾'
-res_5: '來查看幫助'
-res_6: '在線對應表'
-res_7: '確切名稱'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -841,7 +837,7 @@ msg_err_homeblock_has_not_been_set: '尚未設定市鎮之家，使用 ''/town s
 msg_err_spawn_not_within_homeblock: '傳送點不在 homeBlock，使用 ''/town set homeblock'' 設定 '
 #Added in 0.44
 #TownyChat language strings
-tc_err_invalid_command: '誤：無效之令！'
+tc_err_invalid_command: '誤：令無效！'
 tc_settings_reloaded: '[市鎮聊天] 已重置聊天配置！'
 tc_err_unrecognized_command_format: '錯誤：無法識別的指令格式！'
 tc_channel_list_status: '（狀態）'
@@ -1616,7 +1612,7 @@ status_registered: '已註冊：'
 status_lastonline: '最近上線：'
 status_fractions: '%s/%s'
 status_rank_list: '排名列表'
-status_hover_click_for_more: '點擊取得更多資訊 '
+status_hover_click_for_more: '點擊以閱其詳。'
 status_jailed: '囚禁：'
 status_bad_yes: '&c是'
 status_good_no: '&a否'
@@ -1673,7 +1669,7 @@ msg_resident_unjailed: '%s已經出獄了 '
 #Shown when an admin uses /ta toggle devmode.
 msg_admin_toggle_devmode: '開發模式：%s'
 #Shown when an admin uses /ta toggle debug.
-msg_admin_toggle_debugmode: '除錯模式：%s'
+msg_admin_toggle_debugmode: '調試模式：%s'
 #Shown when an admin uses /ta toggle townwithdraw
 msg_admin_toggle_townwithdraw: '市鎮餘額提領：%s'
 #Shown when an admin uses /ta toggle nationwithdraw
@@ -1759,7 +1755,7 @@ msg_error_town_has_no_allies: '此市鎮沒有盟邦 '
 msg_error_town_has_no_enemies: '此市鎮沒有敵人 '
 #Added in 0.132
 #Message shown in the lines of the baltop books
-msg_baltop_book_format: '%s%s|%s'
+msg_baltop_book_format: '%s. %s | %s'
 #Added in 0.133
 #Message shown when a confirmation times out.
 msg_confirmation_timed_out: '請求確認已超時 '
@@ -1898,9 +1894,9 @@ msg_perm_hud_plotgroup_name: 'Plot Group: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'For Sale: '
 #Seen in /plot perm hud:
-msg_perm_hud_no: 'No'
+msg_perm_hud_no: '否'
 #Seen in /plot perm hud:
-msg_perm_hud_yes: 'Yes'
+msg_perm_hud_yes: '是'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
@@ -1927,7 +1923,7 @@ msg_town_board_reset: '&bTown board reset.'
 msg_town_has_no_jailslots: '市鎮監獄已經滿員 '
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s已發送%s至號碼%s花了%s小時，由%s發送 '
-msg_you_have_been_jailed_your_bail_is_x: 'You have been jailed, your bail is %s.'
+msg_you_have_been_jailed_your_bail_is_x: '君已入獄，以%s之金保釋。'
 msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
 msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
@@ -2025,7 +2021,7 @@ msg_warning_you_are_almost_out_of_townblocks: "Warning: You have nearly used up 
 #Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
 msg_warning_your_town_is_overclaimed: "Warning: Your town is overclaimed. While you have too many townblocks claimed, it will be possible for other towns to takeover plots of your town, consider unclaiming some land."
 #Chunk Notification slug, shown when entering a plot that can be stolen.
-chunk_notification_takeover_available: " <red>[TakeoverClaim Available]"
+chunk_notification_takeover_available: " <red>[可領地凌駕]"
 #Message shown when a takeover claim would cut a town into two sections.
 msg_err_you_cannot_over_claim_would_cut_into_two: "You cannot take over this plot, because doing so would split the town into two segments. You will have to overclaim from a different direction."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
@@ -2087,10 +2083,10 @@ msg_err_floodfill_not_in_wild: "你不能在已被認領的地區內使用填充
 msg_err_floodfill_out_of_bounds: "認領選取區必須為封閉型狀"
 msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
 #Message shown when a resident is an NPC and is not allowed to do something.
-msg_err_resident_is_npc: "You cannot do this to an NPC resident."
+msg_err_resident_is_npc: "君不可如此于NPC居民。"
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
-msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
-msg_unnamed: "未命名"
+msg_err_resident_doesnt_own_any_land: "此人未擁有土地。"
+msg_unnamed: "無名"
 msg_err_nation_cannot_sanction_own_town: "You cannot sanction a town that is a part of your nation."
 msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
 msg_err_nation_town_already_sanctioned: "Your nation already sanctions that town."
@@ -2151,3 +2147,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
