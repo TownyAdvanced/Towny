@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
@@ -57,6 +58,12 @@ public class TownyCustomListener implements Listener {
 
 	public TownyCustomListener(Towny instance) {
 		plugin = instance;
+	}
+
+	@EventHandler
+	public void onNationDelete(PreDeleteNationEvent event) {
+		System.out.println("Cancelling nation delete.");
+		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)

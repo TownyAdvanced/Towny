@@ -2525,3 +2525,5 @@ msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you ju
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 
 msg_err_you_already_own_this_plot: "You already own this plot."
+
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

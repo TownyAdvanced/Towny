@@ -53,9 +53,12 @@ public class TownUtil {
 				return;
 
 			// No new capital found, delete the nation and potentially refund the capital town.
+			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+			if (nation.exists()) // The PreDeleteNationEvent was cancelled.
+				return;
+
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
 
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
 				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");

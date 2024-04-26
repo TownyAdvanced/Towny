@@ -780,9 +780,12 @@ public class DailyTimerTask extends TownyTimerTask {
 				totalNationUpkeep = totalNationUpkeep + upkeep;
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_payed_upkeep", prettyMoney(upkeep)));
 			} else {
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", prettyMoney(upkeep)));
 				universe.getDataSource().removeNation(nation);
-				removedNations.add(nation.getName());
+				if (!nation.exists()) { // The PreDeleteNationEvent was not cancelled.
+					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", prettyMoney(upkeep)));
+					removedNations.add(nation.getName());
+					return;
+				}
 			}
 		} else if (upkeep < 0) {
 			nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");
