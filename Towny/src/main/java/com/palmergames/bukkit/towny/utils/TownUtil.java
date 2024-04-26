@@ -3,6 +3,9 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.entity.Player;
+
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -52,10 +55,14 @@ public class TownUtil {
 			if (findNewCapital(town, nation))
 				return;
 
+			List<Player> onlinePlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation);
 			// No new capital found, delete the nation and potentially refund the capital town.
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
 			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+			if (nation.exists()) // The PreDeleteNationEvent was cancelled.
+				return;
+
+			onlinePlayers.forEach(p -> TownyMessaging.sendMsg(p, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName())));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
 				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");

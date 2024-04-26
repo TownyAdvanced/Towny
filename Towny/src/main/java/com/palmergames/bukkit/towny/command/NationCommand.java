@@ -1062,8 +1062,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			Confirmation.runOnAccept(() -> {
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 				TownyUniverse.getInstance().getDataSource().removeNation(nation);
+				if (nation.exists()) { // The PreDeleteNationEvent was cancelled.
+					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_cannot_delete_this_nation"));
+					return;
+				}
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 				if (tooManyResidents)
 					ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 			})
@@ -1076,8 +1080,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Nation nation = getNationOrThrow(split[0]);
 		Confirmation.runOnAccept(() -> {
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+			if (nation.exists()) {// The PreDeleteNationEvent was cancelled.
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_cannot_delete_this_nation"));
+				return;
+			}
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 		}).sendTo(player);
 	}
 

@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -23,6 +24,8 @@ import com.palmergames.util.StringMgmt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import org.bukkit.entity.Player;
 
 public class DailyTimerTask extends TownyTimerTask {
 	
@@ -780,9 +783,14 @@ public class DailyTimerTask extends TownyTimerTask {
 				totalNationUpkeep = totalNationUpkeep + upkeep;
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_payed_upkeep", prettyMoney(upkeep)));
 			} else {
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", prettyMoney(upkeep)));
+				List<Player> onlinePlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation); 
 				universe.getDataSource().removeNation(nation);
-				removedNations.add(nation.getName());
+				if (!nation.exists()) { // The PreDeleteNationEvent was not cancelled.
+					String formattedUpkeep = prettyMoney(upkeep);
+					onlinePlayers.forEach(p -> TownyMessaging.sendMsg(p, Translatable.of("msg_your_nation_couldnt_pay_upkeep", formattedUpkeep)));
+					removedNations.add(nation.getName());
+					return;
+				}
 			}
 		} else if (upkeep < 0) {
 			nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");

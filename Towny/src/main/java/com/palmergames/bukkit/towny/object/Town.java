@@ -292,7 +292,8 @@ public class Town extends Government implements TownBlockOwner {
 			oldNation.removeTown(this);
 		} catch (EmptyNationException e) {
 			TownyUniverse.getInstance().getDataSource().removeNation(oldNation);
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
+			if (!nation.exists()) // The PreDeleteNationEvent was not cancelled.
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
 		}
 		
 		try {
