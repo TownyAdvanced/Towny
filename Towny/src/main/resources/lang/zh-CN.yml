@@ -73,7 +73,7 @@ town_help_9: '就在今天！'
 town_help_10: '查看城镇内在线的玩家'
 town_help_13: "参见该镇居民名单。"
 town_help_14: "参见该镇的头衔清单。"
-town_help_15: "参见该镇不法分子名单。"
+town_help_15: "参见该镇被放逐者名单。"
 town_help_16: "参见该镇地皮组的清单。"
 town_help_17: "参见该镇的地皮类型清单。"
 town_help_18: "向该镇成员发送一条消息"
@@ -968,7 +968,7 @@ msg_err_nation_not_public: '&c这个国家不是公开的.'
 msg_nation_toggle_public: '&a成功开放国家.'
 status_yes: '&a是'
 status_no: '&c否'
-msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
+msg_err_unable_to_use_bank_outside_bank_plot: '你不能在bank或home区块以外使用这个命令。可以使用/plot set bank设置bank区块。'
 msg_err_nation_spawn_forbidden: '&c国家传送已关闭.'
 msg_err_nation_spawn_forbidden_war: '&c国家传送点只在战争时期开放.'
 msg_err_nation_spawn_forbidden_peace: '&c战争期间禁止国家传送.'
@@ -1556,8 +1556,8 @@ msg_cache_block_err: '&c你没有权限在这里%s。'
 msg_err_plot_belongs_to_group: '&c这片土地属于一个土地组，请使用%s。'
 plotgroup_sing: '土地组'
 msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
-msg_err_ally_limit_reached_cannot_accept: 'The nation of %s has reached their ally limit, unable to accept.'
-msg_err_ally_limit_reached_cannot_send: 'Your nation has reached the ally limit, unable to invite %s to become your ally.'
+msg_err_ally_limit_reached_cannot_accept: '国家%s的盟友数量已经达到了上限，无法接受新的邀请。'
+msg_err_ally_limit_reached_cannot_send: '这个国家的盟友已达到上限，因此无法邀请%s成为你的盟友。'
 msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
 #Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
@@ -2128,17 +2128,17 @@ outlawed_in: "放逐于"
 msg_warning_town_deposit_hint: "如果要把钱存入城镇银行，请使用/town deposit [amount]"
 msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/country deposit [amount]。"
 teleport_warmup_title_dont_move: ""
-teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+teleport_warmup_subtitle_seconds_remaining: "&7离开始传送还有&c%s&7秒。"
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
 console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
-msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "You cannot cede a plot to your own town."
-msg_err_town_cede_you_cannot_cede_your_homeblock: "You cannot cede your town's homeblock."
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "你不能把一块地割让给自己的城镇。"
+msg_err_town_cede_you_cannot_cede_your_homeblock: "你不能割让你城镇的home区块。"
 msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
-msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
+msg_err_town_no_longer_owns_this_plot: "%s不再拥有此区块。"
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
-msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
-msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
-msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
+msg_town_cede_plot_confirmation_give_plot: "你确定你要把这个区块给%s吗？"
+msg_town_cede_plot_confirmation_accept_plot: "%s想要将在%s的区块割让给你的城镇。你接受吗？"
+msg_town_cede_plot_accepted: "%s已接收你所割让的区块。"
 msg_town_cede_plot_denied: "%s has declined your offer."
 msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
 msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
