@@ -77,7 +77,7 @@ town_help_15: "参见该镇被放逐者名单。"
 town_help_16: "参见该镇地皮组的清单。"
 town_help_17: "参见该镇的地皮类型清单。"
 town_help_18: "向该镇成员发送一条消息"
-town_help_19: "设置您的城镇为待售，供其他玩家购买。"
+town_help_19: "将您的城镇设置为出售，供其他玩家购买。"
 town_help_20: "设置您的城镇状态为不供出售"
 town_help_21: "购买给定的城镇（只要它是出售的）。"
 town_help_22: "向您的城镇银行存钱。"
@@ -85,7 +85,7 @@ town_help_23: "用来修改您城镇居民的头衔。"
 town_help_24: "用来删除您的城镇。"
 town_help_25: "用来修改您城镇所放逐的玩家。"
 town_help_26: "列出所有的城镇，查看/t list ?以获得帮助。"
-town_help_27: "离开你所属的城镇。"
+town_help_27: "离开你所在的城镇。"
 town_help_28: "从您的城镇银行取钱。"
 town_help_29: "使用指令/t claim ?以获得帮助。"
 town_help_30: "用来取消声明你城镇的土地。"
@@ -129,7 +129,7 @@ town_trust_help_2: "列出一个城镇中受信任的玩家。"
 town_towntrust_help_0: "在这个城镇中，增加一个受信任的城镇。"
 town_towntrust_help_1: "在这个城镇中，移除一个受信任的城镇。"
 town_towntrust_help_2: "列出一个城镇所信任的城镇。"
-town_buy_help: "购买额外区块上限"
+town_buy_help: "购买额外的区块上限，以增加整个城镇的区块上限"
 town_cede_help: "提供您当前所占据的地皮并交由特定的城镇接管。"
 mayor_help_3: '你所选择的区域不附属于城镇'
 mayor_help_4: '声明你附近半径为X的区块'
@@ -179,7 +179,7 @@ nation_toggle_help_2: "切换国家“开放”的状态，允许没有被邀请
 nation_toggle_help_3: "切换税率，让城镇支付一定百分比而不是固定税率"
 nation_sanction_help_1: "添加一个城镇到受制裁城镇"
 nation_sanction_help_2: "从受制裁城镇中移除一个城镇"
-nation_sanction_help_3: "列出你的国家的制裁城镇"
+nation_sanction_help_3: "列出你国家所制裁的城镇"
 nation_sanction_help_4: "列出某个国家制裁城镇列表"
 king_help_1: '国家领导者帮助'
 king_help_2: '设置你的盟国.'
@@ -188,16 +188,12 @@ king_help_4: "从您的国家银行取钱。"
 king_help_5: "从你的国家中添加或移除一个城镇"
 king_help_6: "使用指令/n set ?以获得帮助。"
 king_help_7: "使用指令/n toggle ?以获得帮助。"
-king_help_8: "用来合并一个国家到你的国家"
+king_help_8: "用来把一个国家合并到你的国家。"
 king_help_9: "用来向你的国家中的所有人发送消息"
 res_1: '你的信息'
 res_2: '[玩家名]'
 res_3: '目标玩家信息'
 res_4: '列出所有活跃玩家'
-res_5: '来查看帮助'
-res_6: '在线比赛'
-res_7: '申请添加一个离线玩家为好友'
-res_8: '只是一个卑微的农民'
 res_9: "您将每天支付多少税款。"
 res_10: "查看/res jail ?以获得帮助。"
 res_11: "查看/res toggle ?以获得帮助。"
@@ -252,9 +248,9 @@ world_help_6: '查看/tw toggle ?以获得帮助。'
 world_help_7: '查看/tw set ?以获得帮助。'
 world_set_help_0: "设置世界中野外的名称"
 world_toggle_help_0: "开启/关闭 城镇此世界宣称土地的权限"
-world_toggle_help_1: "开启/关闭 对于城镇在这个世界存在的许可。"
+world_toggle_help_1: "开启/关闭 Towny是否在该世界启用。"
 world_toggle_help_2: "开启/关闭 在该世界上的战争。"
-world_toggle_help_3: "开启/关闭 在该世界上的 pvp 或 强制pvp。"
+world_toggle_help_3: "开启/关闭 在该世界上的pvp或强制pvp。"
 world_toggle_help_4: "开启/关闭 在该世界上对好友的战斗状态。"
 world_toggle_help_5: "开启/关闭 爆炸是否被允许或强制在该世界上出现。"
 world_toggle_help_6: "开启/关闭 火势是否被允许或强制在该世界上出现。"
@@ -284,10 +280,10 @@ admin_panel_16: "清除老居民"
 townyadmin_town_help_0: "根据你给出的名称和设置的市长创建一个城镇"
 townyadmin_town_help_1: "显示一个城镇的状态"
 townyadmin_town_help_2: "添加或移除城镇居民"
-townyadmin_town_help_3: "重命名城镇"
-townyadmin_town_help_4: "删除城镇"
-townyadmin_town_help_5: "复活在城镇"
-townyadmin_town_help_6: "复活在一个城镇哨站"
+townyadmin_town_help_3: "重命名一个城镇"
+townyadmin_town_help_4: "删除一个城镇"
+townyadmin_town_help_5: "复活在一个城镇"
+townyadmin_town_help_6: "复活在一个城镇前哨"
 townyadmin_town_help_7: "使用一个国家头衔指令"
 townyadmin_town_help_8: "使用城镇的设置指令"
 townyadmin_town_help_9: "使用一个城镇的切换命令"
@@ -297,7 +293,7 @@ townyadmin_town_help_12: "无视规则，合并第二城镇到第一城镇"
 townyadmin_town_help_13: "把钱存入城镇银行"
 townyadmin_town_help_14: "从城镇银行中取钱"
 townyadmin_town_help_15: "打开城镇银行历史"
-townyadmin_town_help_16: "改变一个城镇的不法行为"
+townyadmin_town_help_16: "改变一个城镇的被放逐者"
 townyadmin_town_help_17: "让城镇离开自己的国家"
 townyadmin_town_help_18: "解除一个城镇的征服状态"
 townyadmin_town_toggle_help_0: "切换城镇PVP状态"
@@ -312,8 +308,8 @@ townyadmin_nation_help_0: "根据你给出的名称和设置的首都创建一�
 townyadmin_nation_help_1: "显示一个国家的状态"
 townyadmin_nation_help_2: "添加一个城镇到国家"
 townyadmin_nation_help_3: "移除一个城镇到国家"
-townyadmin_nation_help_4: "重命名国家"
-townyadmin_nation_help_5: "重命名城镇"
+townyadmin_nation_help_4: "重命名一个国家"
+townyadmin_nation_help_5: "重命名一个城镇"
 townyadmin_nation_help_6: "重新检查要加入国家的城镇，他们需要和首都距离更近一些"
 townyadmin_nation_help_7: "合并第二的国家到第一的国家"
 townyadmin_nation_help_8: "无视规则，合并第二国家到第一国家"
@@ -348,7 +344,7 @@ ta_set_help_1: "设置一个NPC为市长，他们无需维护费"
 ta_set_help_2: "设置一个国家的首都"
 ta_set_help_3: "设置一个国家的国家区域大小"
 ta_set_help_4: "为居民设置一个称号"
-ta_set_help_5: "为居民设置一个前缀"
+ta_set_help_5: "为居民设置一个后缀"
 ta_set_help_6: "将区块设置到另一个城镇"
 ta_set_help_7: "设置城镇的创建者名称"
 ta_set_help_8: "使用大小0来移除覆盖的民族区域"
@@ -363,7 +359,7 @@ ta_nationmeta_help_1: "查看您指定的国家中存储的元数据"
 ta_nationmeta_help_2: "设置国家元数据密钥和值"
 ta_nationmeta_help_3: "使用键添加或移除一个国家的元数据"
 ta_reload_help_0: "重新载入数据库"
-ta_reload_help_1: "重载配置"
+ta_reload_help_1: "重新加载配置"
 ta_reload_help_2: "重新加载语言文件"
 ta_reload_help_3: "重新加载城镇权限"
 ta_reload_help_4: "重新加载城镇的所有组件"
@@ -387,7 +383,7 @@ plot_group_help_4: "例如：/plot group set perm resident on"
 plot_group_help_5: "例如：/plot group toggle [pvp|fire|mobs]"
 plot_group_help_6: "例如：/plot group forsale 50"
 plot_group_help_7: "例如：/plot group notforsale"
-plot_group_help_8: "添加或移除一个信任村民"
+plot_group_help_8: "添加或删除受信任的居民。"
 plot_group_help_9: "添加一个居民到区块组的信任列表中"
 plot_group_help_10: "在这个区块组中，移除一个受信任的玩家。"
 plot_group_help_11: "打开区块权限设置界面"
@@ -629,7 +625,7 @@ msg_err_must_belong_town: '&c你必须是一个城镇居民.'
 msg_err_dont_belong_town: '&c你不属于一个城镇.'
 msg_err_dont_belong_nation: '&b你不属于一个国家的臣民.'
 msg_err_already_belong_nation: '&b你应经属于一个国家了。'
-msg_err_town_already_belong_nation: '&b %s 已经属于国家 %s 了。'
+msg_err_town_already_belong_nation: '&b%s已经属于国家%s了。'
 msg_err_not_same_nation: '&b%s不属于你的国家.'
 msg_err_rect_auto: '&c只有城镇及其居民才能使用 auto.'
 msg_err_invalid_radius: '&c无效半径. 输入整数或 auto.'
@@ -1208,7 +1204,7 @@ msg_reloaded_perms: '&2成功重载权限.'
 msg_reloaded_db: '&2成功重载数据库'
 msg_reloaded_lang: '&2成功重载语言文件'
 msg_reset_config: '&2成功重置配置'
-msg_err_teleport_cancelled: '传送时移动导致取消传送.'
+msg_err_teleport_cancelled: '传送时的移动取消了你的传送.'
 #Added in 0.79
 msg_cache_block_error_plot_friends: '朋友'
 msg_cache_block_error_plot_allies: '盟友'
@@ -1227,7 +1223,7 @@ bonus_townblocks: '奖励城镇区块'
 nomad_sing: '流浪者'
 msg_new_town_advice: '建城配置! 你的城镇需要消耗%s的每日维护费用.你可以输入 ''/t deposit #''将你的钱捐到城镇银行内. 银行内没钱且支付不起每日维护费用的城镇将会被删除.你随时可以输入/towny prices 查看费用. 下一次维护费用为%s.'
 #Added in 0.81
-msg_err_teleport_cancelled_damage: '伤害取消了你的传送.'
+msg_err_teleport_cancelled_damage: '传送时的伤害取消了你的传送.'
 #Added in 0.82
 invitation_prefix: "&8[&7邀请&8] &9"
 confirmation_prefix: "&8[&7确认&8] &9"
@@ -1436,7 +1432,7 @@ msg_town_merge_debt_warning: '&c警告：城镇%s目前正负债，在接受后�
 msg_town_merge_cost_breakdown: '&b费用明细：基础费用：%s，城镇区块费用：%s，破产花费：%s，加成区块费用：%s'
 msg_town_merge_failed: '&c合并失败。'
 msg_town_merge_cancelled: '&c合并已取消。'
-msg_town_merge_success: '&b城镇%s（由%s拥有）已成功地与城镇%s合并。'
+msg_town_merge_success: '&b%2$s拥有的城镇%1$s已成功地与城镇%3$s合并。'
 #Reasons for withdrawing/depositing for the bankhistory book.
 msg_town_merge_cost_withdraw: '城镇合并金额'
 msg_town_merge_transaction_reason: '城镇合并'
@@ -1898,9 +1894,9 @@ msg_perm_hud_plotgroup_name: '区块组: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: '出售中: '
 #Seen in /plot perm hud:
-msg_perm_hud_no: '取消'
+msg_perm_hud_no: '否'
 #Seen in /plot perm hud:
-msg_perm_hud_yes: '确认'
+msg_perm_hud_yes: '是'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: '城镇 %s 已将其城镇级别设置为 %s。'
@@ -2151,3 +2147,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
