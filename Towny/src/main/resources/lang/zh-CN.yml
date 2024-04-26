@@ -1557,7 +1557,7 @@ msg_err_plot_belongs_to_group: '&c这片土地属于一个土地组，请使用%
 plotgroup_sing: '土地组'
 msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
 msg_err_ally_limit_reached_cannot_accept: '国家%s的盟友数量已经达到了上限，无法接受新的邀请。'
-msg_err_ally_limit_reached_cannot_send: 'Your nation has reached the ally limit, unable to invite %s to become your ally.'
+msg_err_ally_limit_reached_cannot_send: '这个国家的盟友已达到上限，因此无法邀请%s成为你的盟友。'
 msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
 #Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
