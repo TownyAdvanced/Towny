@@ -194,10 +194,6 @@ res_1: 'snʇɐʇs ɹno⅄'
 res_2: '[ʇuǝpᴉsǝɹ]'
 res_3: 'snʇɐʇs s,ɹǝʎɐꞁd ʇǝᵷɹɐ⟘'
 res_4: 'sɹǝʎɐꞁd ǝʌᴉʇɔɐ ꞁꞁɐ ʇsᴉꞀ'
-res_5: 'dꞁǝɥ ɹoɟ'
-res_6: 'ɥɔʇɐɯ ǝuᴉꞁuO'
-res_7: 'ǝɯɐu ʇɔɐxƎ'
-res_8: 'ɹǝɯɹɐɟ ǝꞁqɯnɥ ɐ ʇsnՐ'
 res_9: "˙ʎɐp ɹǝd ʎɐd ꞁꞁᴉʍ noʎ xɐʇ ɥɔnɯ ʍoH"
 res_10: "˙dꞁǝɥ ɹoɟ ¿ ꞁᴉɐɾ sǝɹ/ ǝǝS"
 res_11: "˙dꞁǝɥ ɹoɟ ¿ ǝꞁᵷᵷoʇ sǝɹ/ ǝǝS"
@@ -2151,3 +2147,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
