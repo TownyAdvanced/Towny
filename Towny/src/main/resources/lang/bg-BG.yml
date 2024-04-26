@@ -194,10 +194,6 @@ res_1: 'Вашето състояние'
 res_2: '[жител]'
 res_3: 'Състоянието на избран играч'
 res_4: 'Списък с всички активни играчи'
-res_5: 'за помощ'
-res_6: 'Онлайн мач'
-res_7: 'Точно име'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -2151,3 +2147,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
