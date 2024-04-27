@@ -251,12 +251,12 @@ world_toggle_help_0: "开启/关闭 城镇此世界宣称土地的权限"
 world_toggle_help_1: "开启/关闭 Towny是否在该世界启用。"
 world_toggle_help_2: "开启/关闭 在该世界上的战争。"
 world_toggle_help_3: "开启/关闭 在该世界上的pvp或强制pvp。"
-world_toggle_help_4: "开启/关闭 在该世界上对好友的战斗状态。"
-world_toggle_help_5: "开启/关闭 爆炸是否被允许或强制在该世界上出现。"
-world_toggle_help_6: "开启/关闭 火势是否被允许或强制在该世界上出现。"
-world_toggle_help_7: "开启/关闭 在该世界杀上多种生物的生成设置。"
+world_toggle_help_4: "切换此世界是否启用对好友的战斗状态。"
+world_toggle_help_5: "切换此世界是否启用，或者强制爆炸。"
+world_toggle_help_6: "切换此世界是否启用，或者强制火焰蔓延。"
+world_toggle_help_7: "切换此世界各种怪物是否生成的设置。"
 world_toggle_help_8: "打开/关闭这个世界中的不可恢复功能"
-world_toggle_help_9: "打开/关闭这个世界上的爆炸恢复"
+world_toggle_help_9: "切换此世界是否启用爆炸恢复功能。"
 world_toggle_help_10: "打开/关闭 这个世界的区块清除后删除方块指令"
 world_toggle_help_11: "打开/关闭这个世界中的区块-无索赔-删除-块功能。"
 townyadmin_help_1: '放弃声明这个城镇区块'
@@ -335,8 +335,8 @@ ta_resident_help_2: "列出或清除好友列表"
 ta_resident_help_3: "从数据库中删除一个居民"
 ta_toggle_help_0: "开启/关闭 所有世界的野外功能"
 ta_toggle_help_1: "开启/关闭所有世界的再生功能"
-ta_toggle_help_2: "开启/关闭 devmode, 它会给设置在配置文件中的玩家显示额外的日志信息"
-ta_toggle_help_3: "开启/关闭 调试模式，在日志中显示额外信息"
+ta_toggle_help_2: "开启/关闭开发模式， 它会给设置在配置文件中的玩家显示额外的日志信息。"
+ta_toggle_help_3: "开启/关闭调试模式，在日志中显示额外信息。"
 ta_toggle_help_4: "开启/关闭 城镇或国家从银行提款的资格"
 ta_toggle_help_5: "是否让玩家成为NPC"
 ta_set_help_0: "设置指定玩家为城镇市长"
@@ -498,8 +498,8 @@ msg_abandoned_area_1: '&b你的城镇放弃了这片区域'
 msg_no_money_purchase_plot: '&c你没有足够的钱来购买这块土地.'
 msg_town_no_money_purchase_plot: '&c城镇没有足够的钱来买回这块土地.'
 msg_no_funds_new_town: '&c%s 没有足够的建城资金.'
-msg_no_funds_claim: '&c城镇现在没有足够的资金来声明%s个城镇区块，因为这需要%s。您……捐些钱到城镇银行吧。'
-msg_no_funds_to_buy: '&c城镇现在没有足够的资金来购买%s %s，因为这需要花费%s。您……捐些钱到城镇银行吧。'
+msg_no_funds_claim: '&c城镇现在没有足够的资金来声明%s个城镇区块，因为这需要%s。您捐些钱到城镇银行吧。'
+msg_no_funds_to_buy: '&c城镇现在没有足够的资金来购买%s %s，因为这需要花费%s。您捐些钱到城镇银行吧。'
 msg_annexed_area: '&2被吞并的区域 %s'
 msg_max_plot_own: '&c你不能拥有多于 %s 块的土地.'
 msg_max_outposts_own: '&c你不能声明多余 %s 个的前哨.'
@@ -1725,7 +1725,7 @@ msg_jailed_war: '作为战俘监禁。'
 #Jail handbook messages
 msg_jailed_handbook_1: '看起来你因为%s而被监禁了。'
 #Jail handbook messages
-msg_jailed_handbook_2: '啊……太糟糕了，实在太糟糕了。但是你能干什么呢？这里有一些被监禁时的小贴士，读一读吧，这或许可以帮你。'
+msg_jailed_handbook_2: '啊……太糟糕了。但是你能怎么办？这有一些被监禁时的小贴士，读一读吧，这或许可以帮你。'
 #Jail handbook messages
 msg_jailed_handbook_3: '你已经被监禁%s小时了，服刑后你将得到自由。'
 #Jail handbook messages
@@ -1745,7 +1745,7 @@ msg_jailed_teleport: '但幸运的是——如果你有末影珍珠或是紫颂�
 #Jail handbook messages
 msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
-msg_jailed_title: '所以……你被监禁了:('
+msg_jailed_title: '所以，你被监禁了:('
 #Jail handbook author
 msg_jailed_author: 'Towny Jailco。'
 #Added in 0.130
@@ -2108,7 +2108,7 @@ msg_err_you_cannot_outlaw_your_mayor: "你不能放逐你的镇长"
 msg_err_you_cannot_outlaw_because_of_rank: "你不能放逐%s, 因为它持有一些城镇头衔"
 status_nation_sanctioned_towns: "受制裁的城镇"
 msg_all_of_your_towns_sent_invites_have_been_cancelled: "您的城镇发出的邀请已被取消"
-msg_err_name_validation_invalid_characters: "%s 包含一些在正则表达式中不被允许的字符"
+msg_err_name_validation_invalid_characters: "%s包含了一些在Towny正则表达式中不被允许的字符。"
 msg_err_name_validation_begins_with_eco_prefix: "%s 以经济中使用的字母开头，您不能使用此名称"
 msg_err_name_validation_name_already_in_use: "%s 已经被使用了"
 msg_err_name_validation_title_too_long: "%s 不能用作前缀，因为字数太太太太长了"
@@ -2117,7 +2117,7 @@ msg_err_name_validation_is_empty: "你不能提供一个空名称"
 msg_err_name_validation_is_not_permitted: "%s 是不被允许的"
 msg_err_name_validation_is_all_underscores: "%s 里头全是下划线!"
 msg_err_name_validation_contains_harmful_characters: "%s 包含可能有害的符号"
-msg_err_name_validation_contains_numbers: "%s 包含数字，数字是不被允许的"
+msg_err_name_validation_contains_numbers: "%s包含数字，而数字不允许出现在名称中。"
 msg_err_name_validation_used_in_command_structure: "%s 在指令结构中被使用，所以你不能用它作为名称"
 msg_town_being_deleted_because_no_residents: "%s 将要被删除，因为它的最后一个居民也离开了"
 outlawed_in: "放逐于"
@@ -2146,5 +2146,5 @@ msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days re
 msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
-msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_already_own_this_plot: "你已经拥有这个区块。"
 msg_err_you_cannot_delete_this_nation: "您已被阻止删除这个国家。"
