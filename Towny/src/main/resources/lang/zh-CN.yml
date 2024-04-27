@@ -1824,7 +1824,7 @@ msg_removed_x_invalid_outpost_spawns: '删除了%d个无效的前哨出生点。
 msg_your_town_is_bankrupt: '你的城镇破产了，使用 /town deposit {amount} 存入资金。'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
-msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: '您不能使用这个命令，因为您已经是一个城镇的成员。 如果您想要继续，您必须先使用命令“/t leave”。'
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: '您已是一个城镇的成员，所以您不能使用这个命令。 您若要继续，必须先使用命令“/t leave”。'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
 msg_a_town_you_are_outlawed_in: '你在这个城镇是放逐者。'
 #Message shown when TownyRTP could not find any towns to teleport to.
@@ -2064,7 +2064,7 @@ msg_town_sell_confirmation: "这将把你的城镇以%s的价格出售 ，你确
 msg_town_buytown_already_mayor: "您已经是 %s的市长了"
 msg_town_buytown_confirmation: "购买 %s 将消耗 %s 并将您从您目前可能属于的任何城镇中移除。您确定要继续吗？"
 msg_town_buytown_not_forsale: "指定城镇没有出售"
-msg_town_buytown_ruined: "城镇废墟无法被购买"
+msg_town_buytown_ruined: "已沦为废墟的城镇无法被购买。"
 msg_resident_about_reset: "&b重置居民简介"
 msg_err_invalid_string_about_not_set: "无效字符串，居民公告栏设置失败"
 msg_set_about: "%s的内容被设置为 %s"
@@ -2147,4 +2147,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
-msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
+msg_err_you_cannot_delete_this_nation: "您已被阻止删除这个国家。"
