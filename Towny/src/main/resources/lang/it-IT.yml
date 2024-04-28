@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s non è più un fuorilegge in %s.'
 msg_err_player_not_an_outlaw: 'Quel giocatore non è stato contrassegnato come un fuorilegge.'
 msg_err_outlaw_in_open_town: 'Non puoi entrare in una città aperta che ti ha ritenuto un fuorilegge.'
 msg_you_are_an_outlaw_in_this_town: '&4Fai attenzione %s considera che sei un fuorilegge, morire qui significherebbe la prigione.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Il lotto base di %s non è abbastanza vicino al lotto base della tua capitale per entrare nella tua nazione.'
 msg_nation_town_moved_their_homeblock_too_far: 'Il lotto base di %s è stato spostato troppo lontano dal lotto base della capitale della tua nazione, quindi la città è stata rimossa dalla tua nazione.'
 #Added in 0.33
