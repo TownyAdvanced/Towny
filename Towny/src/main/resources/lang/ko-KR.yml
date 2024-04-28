@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s은(는) 더이상 %s에서 무법자로 �
 msg_err_player_not_an_outlaw: '그 플레이어는 무법자로 간주되지 않습니다.'
 msg_err_outlaw_in_open_town: '귀하를 무법자로 간주하는 공용 마을에 가입할 수 없습니다.'
 msg_you_are_an_outlaw_in_this_town: '&4%s은(는) 귀하를 무법자로 간주합니다. 이 마을 영토에 접근시 불이익이 있습니다.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s의 홈 블록이 수도의 홈 블록에서 너무 멀어 국가에 가입할 수 없습니다.'
 msg_nation_town_moved_their_homeblock_too_far: '%s의 홈 블록이 수도의 홈 블록에서 너무 멀리 이동되어 귀하의 국가에서 제거되었습니다.'
 #Added in 0.33
