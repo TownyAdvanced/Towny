@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s artık %s içinde bir kanun kaçağı de�
 msg_err_player_not_an_outlaw: 'Bu oyuncu kanun kaçağı olarak listelenmedi.'
 msg_err_outlaw_in_open_town: 'Seni haydut sayan açık bir kasabaya katılamazsın.'
 msg_you_are_an_outlaw_in_this_town: '&4Dikkatli ol %s seni kanun kaçağı olarak görüyor, burada ölmek hapis anlamına gelebilir.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s nin ana bloğu, başkentinizin ana bloğuna ulusunuza katılacak kadar yakın değil.'
 msg_nation_town_moved_their_homeblock_too_far: '%s nin ana bloğu, ulusunuzun başkentinin ana blokundan çok uzağa taşındı ve ulusunuzdan kaldırıldı.'
 #Added in 0.33
