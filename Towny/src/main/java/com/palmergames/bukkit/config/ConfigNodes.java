@@ -1528,6 +1528,12 @@ public enum ConfigNodes {
 			"",
 			"# If enabled, players will be prompted to open a url when clicking on coordinates in towny status screens."
 	),
+	PLUGIN_WEB_MAP_WORLD_NAME_USES_KEY(
+		"plugin.interfacing.web_map.world_name_uses_world_key",
+		"false",
+		"",
+		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name."
+	),
 	
 	PLUGIN_WEB_MAP_URL(
 			"plugin.interfacing.web_map.url",
