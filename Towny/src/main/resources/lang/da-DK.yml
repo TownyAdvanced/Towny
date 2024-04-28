@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s er ikke længere en lovløs i %s.'
 msg_err_player_not_an_outlaw: 'Den spiller var ikke på listen over lovløse.'
 msg_err_outlaw_in_open_town: 'Du kan ikke tilslutte dig en åben by, der betragter dig som en lovløs.'
 msg_you_are_an_outlaw_in_this_town: '&4Vær'' forsigtig. %s betragter dig som en lovløs. At dø her kan betyde fængsel.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s''s hjemblok er ikke tæt nok på dit hovedsteds hjemblok til at tilslutte sig din nation.'
 msg_nation_town_moved_their_homeblock_too_far: '%s''s hjemblok blev rygget for langt væk fra din nations hovedsteds hjemblok og er blevet fjernet fra din nation.'
 #Added in 0.33
