@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s tidak lagi menjadi penjahat di %s.'
 msg_err_player_not_an_outlaw: 'Pemain tersebut tidak termasuk dalam daftar penjahat.'
 msg_err_outlaw_in_open_town: 'Kamu tidak bisa bergabung dengan kota yang menganggap kamu adalah penjahat.'
 msg_you_are_an_outlaw_in_this_town: '&4Hati-hati %s memutuskan kamu sebagai penjahat, mati di sini sama dengan penjara.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Wilayah %s tidak cukup dekat dengan ibukota mu untuk bergabung dengan negara.'
 msg_nation_town_moved_their_homeblock_too_far: 'Wilayah %s berpindah terlalu jauh dari ibukota mu dan telah di hapus dari negara mu.'
 #Added in 0.33
