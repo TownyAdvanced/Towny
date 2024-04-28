@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s不再是%s的放逐者 '
 msg_err_player_not_an_outlaw: '那個玩家不再被視為放逐者 '
 msg_err_outlaw_in_open_town: '你無法加入一個已經把你視為放逐者的公開市鎮 '
 msg_you_are_an_outlaw_in_this_town: '&4小心，%s放逐了你，死在這你將會被監禁 '
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%ss 的市鎮中心離你的首都中心太遠了所以不能加入你的城邦 '
 msg_nation_town_moved_their_homeblock_too_far: '由於%ss 的市鎮中心離你的首都中心太遠了所以已不再屬於這個城邦 '
 #Added in 0.33
