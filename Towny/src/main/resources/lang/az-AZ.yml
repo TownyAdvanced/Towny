@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s is no longer an outlaw in %s.'
 msg_err_player_not_an_outlaw: 'That player was not listed as an outlaw.'
 msg_err_outlaw_in_open_town: 'You cannot join an open town that has deemed you an outlaw.'
 msg_you_are_an_outlaw_in_this_town: '&4Be careful %s considers you an outlaw, dying here could mean jail.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s''s homeblock isn''t near enough to your capital''s homeblock to join your nation.'
 msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too far away from your nation''s capital''s homeblock and has been removed from your nation.'
 #Added in 0.33
