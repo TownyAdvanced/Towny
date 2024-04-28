@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s nie jest już wygnańcem w %s.'
 msg_err_player_not_an_outlaw: 'Ten gracz nie był uznany jako wygnaniec.'
 msg_err_outlaw_in_open_town: 'Nie możesz dołączyć do otwartego miasta, które uznało cię za wygnańca.'
 msg_you_are_an_outlaw_in_this_town: '&4Bądź ostrożny. Miasto %s wygnało cię, śmierć tutaj może oznaczać więzienie.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Blok Macierzysty %s jest za daleko od Bloku Macierzystego stolicy nacji, więc miasto nie może dołączyć do twojej nacji.'
 msg_nation_town_moved_their_homeblock_too_far: 'Blok Macierzysty miasta %s został przesunięty zbyt daleko od stolicy twojej nacji, więc miasto zostało usunięte z nacji.'
 #Added in 0.33
