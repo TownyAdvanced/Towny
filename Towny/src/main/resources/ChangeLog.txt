@@ -9729,3 +9729,6 @@ v0.92.0.11:
   - Fix nation deleted message showing when a predeletenationevent is cancelled.
     - Closes #7380.
   - Fix potential ConcurrentModificationException while using Folia.
+0.100.2.7:
+  - Add extra message shown to outlaws when they enter towns, describing what the length of the jail time is, as well as potential bail costs.
+    - Closes #7389.
