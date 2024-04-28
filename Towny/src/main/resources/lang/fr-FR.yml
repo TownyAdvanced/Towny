@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s n''est plus un hors-la-loi dans %s.'
 msg_err_player_not_an_outlaw: 'Ce joueur ne figurait pas sur la liste des hors-la-loi.'
 msg_err_outlaw_in_open_town: 'Vous ne pouvez pas rejoindre une ville qui vous a considéré comme un hors-la-loi.'
 msg_you_are_an_outlaw_in_this_town: '&4Faites attention %s vous considère comme un hors-la-loi, mourir ici pourrait vous envoyer en prison.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Le Centre ville de %s n''est pas assez proche du quartier général de votre capitale pour rejoindre votre nation.'
 msg_nation_town_moved_their_homeblock_too_far: 'Le Centre ville de %s a été déplacé trop loin du Centre ville de la capitale de votre nation et a été retiré de votre nation.'
 #Added in 0.33
