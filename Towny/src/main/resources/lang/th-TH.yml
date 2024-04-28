@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s ไม่ได้เป็นพวก O
 msg_err_player_not_an_outlaw: 'Player คนนั้นไม่ได้ถูกระบุว่าเป็น Outlaw.'
 msg_err_outlaw_in_open_town: 'คุณไม่สามารถเข้าร่วม Town ที่ประกาศให้คุณเป็น Outlaw.'
 msg_you_are_an_outlaw_in_this_town: '&4ระวังตัวด้วย %s ประกาศให้คุณเป็น Outlaw, ถ้าตายที่นี่อาจหมายถึง ail.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Homeblock %s ต้องอยู่ไกลจาก Capital Homeblock(Chunk ที่เป็นเมืองหลวง) ของคุณเพื่อเข้าร่วม Nation.'
 msg_nation_town_moved_their_homeblock_too_far: 'HomeBlock ของ %s ถูกย้ายออกห่างจาก HomeBlock ของเมืองหลวงของ Nation คุณมากเกินไป และถูกนำออกจาก Nation ของคุณแล้ว'
 #Added in 0.33
