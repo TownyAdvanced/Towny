@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '˙%s uᴉ ʍɐꞁʇno uɐ ɹǝᵷuoꞁ ou s�
 msg_err_player_not_an_outlaw: '˙ʍɐꞁʇno uɐ sɐ pǝʇsᴉꞁ ʇou sɐʍ ɹǝʎɐꞁd ʇɐɥ⟘'
 msg_err_outlaw_in_open_town: '˙ʍɐꞁʇno uɐ noʎ pǝɯǝǝp sɐɥ ʇɐɥʇ uʍoʇ uǝdo uɐ uᴉoɾ ʇouuɐɔ no⅄'
 msg_you_are_an_outlaw_in_this_town: '&4Be careful %s considers you an outlaw, dying here could mean jail.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '˙uoᴉʇɐu ɹnoʎ uᴉoɾ oʇ ʞɔoꞁqǝɯoɥ s,ꞁɐʇᴉdɐɔ ɹnoʎ oʇ ɥᵷnouǝ ɹɐǝu ʇ,usᴉ ʞɔoꞁqǝɯoɥ s,%s'
 msg_nation_town_moved_their_homeblock_too_far: '˙uoᴉʇɐu ɹnoʎ ɯoɹɟ pǝʌoɯǝɹ uǝǝq sɐɥ puɐ ʞɔoꞁqǝɯoɥ s,ꞁɐʇᴉdɐɔ s,uoᴉʇɐu ɹnoʎ ɯoɹɟ ʎɐʍɐ ɹɐɟ ooʇ pǝʌoɯ sɐʍ ʞɔoꞁqǝɯoɥ s,%s'
 #Added in 0.33
