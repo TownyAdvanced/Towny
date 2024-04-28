@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s はもう %s での無法者ではあり�
 msg_err_player_not_an_outlaw: 'そのプレーヤーは無法者としてリストされていませんでした。'
 msg_err_outlaw_in_open_town: 'あなたは無法者とみなされたオープンな町に入ることはできません。'
 msg_you_are_an_outlaw_in_this_town: '&4 %s はあなたを無法者と見なし、ここで死ぬことはジャイルを意味する可能性があります。'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%sのホームブロックは、あなたの国に参加するためのあなたの首都のホームブロックに近くありません。'
 msg_nation_town_moved_their_homeblock_too_far: '%sのホームブロックは、あなたの国の首都から遠すぎるため、あなたの国から削除されました。'
 #Added in 0.33
