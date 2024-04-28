@@ -734,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s är inte längre laglös i %s.'
 msg_err_player_not_an_outlaw: 'Den spelaren listades inte som laglös.'
 msg_err_outlaw_in_open_town: 'Du kan inte gå med i en öppen stad som har bedömt dig laglös.'
 msg_you_are_an_outlaw_in_this_town: '&4Var försiktig %s ser dig som laglös, att dö här kan innebära fängesle.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%ss hemblock är inte tillräckligt nära din huvudstads hemblock för att gå med i din nation.'
 msg_nation_town_moved_their_homeblock_too_far: '%ss hemblock flyttades för långt ifrån din nations huvudstad och har tagits bort från din nation.'
 #Added in 0.33
