@@ -90,7 +90,7 @@ public class ProximityUtil {
 
 		// Check distance to other older townblocks.
 		if (world.getMinDistanceFromOtherOlderTownsPlots(townBlockToClaim, town) < TownySettings.getMinDistanceFromOlderTownPlotblocks())
-			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
+			throw new TownyException(Translatable.of("msg_too_close3", Translatable.of("townblock")));
 
 		// Check adjacent claims rules.
 		testAdjacentClaimsRulesOrThrow(townBlockToClaim, town, outpost);

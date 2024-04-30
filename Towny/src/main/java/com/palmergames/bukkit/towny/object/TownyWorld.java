@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.util.MathUtil;
 
 import com.palmergames.util.StringMgmt;
@@ -909,14 +910,9 @@ public class TownyWorld extends TownyObject {
 		
 		double minSqr = -1;
 		for (Town town : getTowns().values()) {
-			if (homeTown != null)
-				// If the townblock either: the town is the same as homeTown OR is ignorable OR
-				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
-				if (homeTown.getUUID().equals(town.getUUID())
-					|| isIgnorableTown.test(town)
-					|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
-					|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
-					continue;
+			if (homeTown != null && townSkippedByProximityFilter(town, homeTown, isIgnorableTown))
+				continue;
+
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 
@@ -933,8 +929,25 @@ public class TownyWorld extends TownyObject {
 		}
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
-	
-	
+
+	/** 
+	 * Skip over the proximity filter if the town is any one of the following: 
+	 * the same as homeTown OR is ignorable for a reason set in the Predicate<Town>
+	 * OR both towns are in the same nation OR both towns are in allied nations  
+	 * (and nation/alliednations are set to ignore distance in the config.)
+	 * 
+	 * @param town Town we are testing against.
+	 * @param homeTown the Town which is attempting to claim land.
+	 * @param isIgnorableTown Predicate<Town> which tests the town variable to see if it can be ignored by the proximity test.
+	 * @return true if town can claim near to homeTown.
+	 */
+	private boolean townSkippedByProximityFilter(Town town, Town homeTown, @NotNull Predicate<Town> isIgnorableTown) {
+		return homeTown.equals(town)
+			|| isIgnorableTown.test(town)
+			|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && CombatUtil.isSameNation(town, homeTown))
+			|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town));
+	}
+
 	/**
 	 * Returns the distance to the closest townblock 
 	 * from the given coord, for the give town. 
