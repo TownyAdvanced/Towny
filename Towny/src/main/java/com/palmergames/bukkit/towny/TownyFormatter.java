@@ -1049,7 +1049,8 @@ public class TownyFormatter {
 		String webUrl = "";
 		if (TownySettings.isUsingWebMapStatusScreens() && spawnLocation.hasSpawn() && !TownySettings.getWebMapUrl().isEmpty()) {
 			World world = spawnLocation.getSpawnOrNull().getWorld();
-			String worldName = TownySettings.isUsingWorldKeyForWorldName() ? world.getKey().toString() : world.getName();
+			String worldName = TownySettings.isUsingWorldKeyForWorldName() && (PaperLib.isPaper() || MinecraftVersion.isNewerThanOrEquals(MinecraftVersion.1_18_2)) ? world.getKey().toString() : world.getName();
+
 			webUrl = TownySettings.getWebMapUrl()
 				.replaceAll("\\{world}", worldName)
 				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
