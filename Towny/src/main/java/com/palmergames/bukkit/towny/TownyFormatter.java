@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NationUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
@@ -34,6 +35,8 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
+import io.papermc.lib.PaperLib;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -1047,16 +1050,18 @@ public class TownyFormatter {
 	
 	private static String formatWebUrl(SpawnLocation spawnLocation) {
 		String webUrl = "";
-		if (TownySettings.isUsingWebMapStatusScreens() && spawnLocation.hasSpawn() && !TownySettings.getWebMapUrl().isEmpty()) {
-			World world = spawnLocation.getSpawnOrNull().getWorld();
-			String worldName = TownySettings.isUsingWorldKeyForWorldName() && (PaperLib.isPaper() || MinecraftVersion.isNewerThanOrEquals(MinecraftVersion.1_18_2)) ? world.getKey().toString() : world.getName();
-
+		if (TownySettings.isUsingWebMapStatusScreens() && spawnLocation.hasSpawn() && !TownySettings.getWebMapUrl().isEmpty())
 			webUrl = TownySettings.getWebMapUrl()
-				.replaceAll("\\{world}", worldName)
+				.replaceAll("\\{world}", getWorldSlugForMapURL(spawnLocation.getSpawnOrNull().getWorld()))
 				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
 				.replaceAll("\\{z}", "" + spawnLocation.getSpawnOrNull().getBlockZ());
-		}
+
 		return webUrl;
 	}
 
+	private static String getWorldSlugForMapURL(World world) {
+		return TownySettings.isUsingWorldKeyForWorldName() && (PaperLib.isPaper() || MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_18_2))
+				? world.getKey().toString()
+				: world.getName();
+	}
 }

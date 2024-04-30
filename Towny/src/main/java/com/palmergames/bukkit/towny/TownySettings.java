@@ -3785,3 +3785,4 @@ public class TownySettings {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
 	}
 }
+

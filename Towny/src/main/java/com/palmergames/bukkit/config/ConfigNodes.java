@@ -1532,7 +1532,8 @@ public enum ConfigNodes {
 		"plugin.interfacing.web_map.world_name_uses_world_key",
 		"false",
 		"",
-		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name."
+		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name.",
+		"# This should be enabled if you use SquareMap."
 	),
 	
 	PLUGIN_WEB_MAP_URL(
