@@ -531,7 +531,7 @@ msg_changed_fire: '&c%s 中的火势蔓延变更为 %s.'
 msg_changed_mobs: '&c%s 中的怪物生成变更为 %s.'
 msg_the_plot_group: '地皮组'
 msg_changed_taxpercent: '&c按比例收税模式变更为 %s.'
-msg_changed_open: '&c城镇邀请加入变更为 %s.'
+msg_changed_open: '&c免邀请加入变更为 %s.'
 msg_toggle_open_on_warning: '警告: 如果城镇设为开放那么城镇权限最好关闭. 输入 /town set perm off 关闭,  /town set perm reset重置.'
 msg_changed_world_setting: '&c%s 的 %s 状态变更为: %s.'
 msg_world_pvp: '&c这个世界强制开启PVP.'
@@ -604,7 +604,7 @@ msg_cache_block_error_town_resident: '&c居民不能在这里%s。'
 msg_cache_block_error_town_allies: '&c盟友不能%s。'
 msg_cache_block_error_town_outsider: '&c外来者不能%s。'
 msg_err_cant_afford_tp_town: '&c你没有钱传送到 %s.'
-msg_err_not_public: '&c那个城镇不对外开放.'
+msg_err_not_public: '&c那个城镇不对外公开.'
 msg_err_not_open: '&c城镇 %s 不对每个人都开放它的大门. 如果你想要加入这个城镇,请询问城主及其助手.'
 msg_err_town_spawn_forbidden: '&c禁止城镇传送.'
 msg_err_town_spawn_nation_forbidden: '&c你的国家禁止你传送到其他城镇.'
@@ -734,8 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s 不再被 %s 放逐.'
 msg_err_player_not_an_outlaw: '那个玩家不再被视为被放逐者.'
 msg_err_outlaw_in_open_town: '你无法加入一个已经将你放逐的公开城镇.'
 msg_you_are_an_outlaw_in_this_town: '&4小心, %s 放逐了你,死在这你将会被监禁.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
-msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4违法者被监禁%s小时'
+msg_you_are_an_outlaw_in_this_town_bail_amount: '你的保释金需要%s'
 msg_err_town_not_close_enough_to_nation: '%ss 的城镇中心离你的首都中心太远了所以不能加入你的国家.'
 msg_nation_town_moved_their_homeblock_too_far: '由于%ss 的城镇中心离你的首都中心太远了所以已不再属于这个国家.'
 #Added in 0.33
@@ -1206,7 +1206,7 @@ msg_reloaded_perms: '&2成功重载权限.'
 msg_reloaded_db: '&2成功重载数据库'
 msg_reloaded_lang: '&2成功重载语言文件'
 msg_reset_config: '&2成功重置配置'
-msg_err_teleport_cancelled: '传送时的移动取消了你的传送.'
+msg_err_teleport_cancelled: '传送时进行的移动取消了你的传送。'
 #Added in 0.79
 msg_cache_block_error_plot_friends: '朋友'
 msg_cache_block_error_plot_allies: '盟友'
@@ -1219,13 +1219,13 @@ msg_the_following_towns_were_deleted_for_having_0_claims: '城镇%s已被删除�
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: '因为离新的首都不够近，所以城镇 %s 将从您的国家中移除。您确定要继续吗?'
-msg_ta_deposit_all_success: '成功卷轴%s到所有国家和城镇的银行内.'
+msg_ta_deposit_all_success: '已成功将%s存入所有国家和城镇的银行。'
 bonus_townblocks: '奖励城镇区块'
 #Added in 0.80
 nomad_sing: '流浪者'
-msg_new_town_advice: '建城配置! 你的城镇需要消耗%s的每日维护费用.你可以输入 ''/t deposit #''将你的钱捐到城镇银行内. 银行内没钱且支付不起每日维护费用的城镇将会被删除.你随时可以输入/towny prices 查看费用. 下一次维护费用为%s.'
+msg_new_town_advice: '恭喜你创建了自己的城镇！您的城镇将需要支付每日维护费，目前的费用是%s。您可以使用“/t deposit #”将钱存入您的城镇银行。如果没有钱来支付维护费用，那么城镇将被删除。您可以随时使用/towny prices查看所需的费用。下次的每日维护费将在%s内收取。'
 #Added in 0.81
-msg_err_teleport_cancelled_damage: '传送时的伤害取消了你的传送.'
+msg_err_teleport_cancelled_damage: '传送时受到的伤害取消了你的传送。'
 #Added in 0.82
 invitation_prefix: "&8[&7邀请&8] &9"
 confirmation_prefix: "&8[&7确认&8] &9"
@@ -1267,7 +1267,7 @@ status_world_explrevert_entity: '生物爆炸回溯：'
 status_world_explrevert_block: '方块爆炸回溯：'
 #Added in 0.88
 msg_nation_already_peaceful: '&c国家已处于和平状态。'
-msg_nation_already_not_peaceful: '&c国家已不再和平了。'
+msg_nation_already_not_peaceful: '&c国家已不再和平。'
 #Added in 0.89
 status_world_friendlyfire: '友伤：'
 status_world_wildernessmobs: '荒地生成生物：'
@@ -1317,7 +1317,7 @@ msg_no_funds_claim_plot_group: '&c你没有足够的资金来圈这%s块总价�
 status_town_title_peaceful: '&b(和平)'
 #Added in 0.95
 status_public: '&b(公开)'
-msg_days: ' 天'
+msg_days: '天'
 msg_comptype_public: '公开状态'
 towny_prices_title: '价格'
 towny_prices_town_nation: '&e[建立新的] &2城镇：&a%s &8| &2国家：&a%s'
@@ -1556,7 +1556,7 @@ plotgroup_sing: '土地组'
 msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
 msg_err_ally_limit_reached_cannot_accept: '国家%s的盟友数量已经达到了上限，无法接受新的邀请。'
 msg_err_ally_limit_reached_cannot_send: '这个国家的盟友已达到上限，因此无法邀请%s成为你的盟友。'
-msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
+msg_err_ally_limit_reached_cannot_send_targetNation: '国家%s的盟友已达到上限，因此无法邀请%s成为你的盟友。'
 #Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
 msg_err_expected_command_format: '语法错误，预期传入%s'
@@ -1743,7 +1743,7 @@ msg_jailed_handbook_5: '如果你坚持逃离到了城镇外的野地，你将�
 #Jail handbook messages
 msg_jailed_handbook_6: '但是在到达野地之前不要死亡，否则你将被送回监狱。'
 #Jail handbook messages
-msg_jailed_teleport: '但幸运的是——如果你有末影珍珠或是紫颂果的话，你可以使用它们，这可以帮助你越狱。'
+msg_jailed_teleport: '但幸运的是——如果你有末影珍珠或是紫颂果，那么你可以使用它们来帮助你越狱。'
 #Jail handbook messages
 msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
@@ -2127,16 +2127,16 @@ msg_warning_town_deposit_hint: "如果要把钱存入城镇银行，请使用/to
 msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/country deposit [amount]。"
 teleport_warmup_title_dont_move: ""
 teleport_warmup_subtitle_seconds_remaining: "&7离开始传送还有&c%s&7秒。"
-msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
-console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为你的城镇已经被毁， %s 区块许可线已经改变，故不再提供对城镇的任何保护。"
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为他们部分地块被摧毁，%s已使用%s在区块限制内的区块用于保护%s区块"
 msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "你不能把一块地割让给自己的城镇。"
 msg_err_town_cede_you_cannot_cede_your_homeblock: "你不能割让你城镇的home区块。"
-msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
+msg_err_town_cede_the_mayor_is_not_online: "%s的市长%s不在线，因此无法接受您的地皮。"
 msg_err_town_no_longer_owns_this_plot: "%s不再拥有此区块。"
 msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
 msg_town_cede_plot_confirmation_give_plot: "你确定你要把这个区块给%s吗？"
 msg_town_cede_plot_confirmation_accept_plot: "%s想要将在%s的区块割让给你的城镇。你接受吗？"
-msg_town_cede_plot_accepted: "%s已接收你所割让的区块。"
+msg_town_cede_plot_accepted: "%s已接受你所割让的区块。"
 msg_town_cede_plot_denied: "%s has declined your offer."
 msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
 msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
