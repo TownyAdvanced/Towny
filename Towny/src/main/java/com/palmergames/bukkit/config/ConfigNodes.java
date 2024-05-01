@@ -1427,6 +1427,16 @@ public enum ConfigNodes {
 			"",
 			"# Number of seconds that must pass before a player who is not a member or ally can use /n spawn."),
 
+	SPAWNING_Y_LIMITS_ROOT("spawning.y_limits","",""),
+	SPAWNING_Y_LIMITS_ENABLED("spawning.y_limits.enabled",
+			"false",
+			"",
+			"# Should towns, nations be limited in how low they can set a spawn point, or an outpost spawn point?"),
+	SPAWNING_Y_LIMITS_LOWEST_Y_ALLOWED("spawning.y_limits.lowest_y_allowed",
+			"0",
+			"",
+			"# When limiting is configured, what is the lowest y level allowed?"),
+
 	SPAWNING_RESPAWN_ROOT("spawning.respawning","",""),
 	SPAWNING_TOWN_RESPAWN(
 			"spawning.respawning.town_respawn",

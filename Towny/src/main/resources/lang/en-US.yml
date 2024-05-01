@@ -2525,3 +2525,5 @@ msg_recieved_refund_for_deleted_object: "You have received the bank balance of y
 msg_err_you_already_own_this_plot: "You already own this plot."
 
 msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
+
+msg_err_you_cannot_set_this_spawn_point_below: "You cannot set this spawn point below y level %s."

@@ -21,7 +21,10 @@ import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
+import com.palmergames.bukkit.towny.event.nation.NationSetSpawnEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
+import com.palmergames.bukkit.towny.event.town.TownSetOutpostSpawnEvent;
+import com.palmergames.bukkit.towny.event.town.TownSetSpawnEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.CellSurface;
 import com.palmergames.bukkit.towny.object.PlayerCache;
@@ -321,5 +324,32 @@ public class TownyCustomListener implements Listener {
 		if (cache == null || !cache.getLastTownBlock().equals(worldCoord) || PlayerCacheUtil.isOwnerCache(cache))
 			return;
 		Towny.getPlugin().resetCache(player);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onTownSetSpawn(TownSetSpawnEvent event) {
+		if (!TownySettings.isSpawnYLevelLimitingEnabled() 
+			|| event.getNewSpawn().getY() >= TownySettings.getSpawningLowestYLevelAllowed())
+			return;
+		event.setCancelMessage(Translatable.of("msg_err_you_cannot_set_this_spawn_point_below", TownySettings.getSpawningLowestYLevelAllowed()).forLocale(event.getPlayer()));
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onTownSetOutpostSpawn(TownSetOutpostSpawnEvent event) {
+		if (!TownySettings.isSpawnYLevelLimitingEnabled() 
+			|| event.getNewSpawn().getY() >= TownySettings.getSpawningLowestYLevelAllowed())
+			return;
+		event.setCancelMessage(Translatable.of("msg_err_you_cannot_set_this_spawn_point_below", TownySettings.getSpawningLowestYLevelAllowed()).forLocale(event.getPlayer()));
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onNationSetSpawn(NationSetSpawnEvent event) {
+		if (!TownySettings.isSpawnYLevelLimitingEnabled() 
+			|| event.getNewSpawn().getY() >= TownySettings.getSpawningLowestYLevelAllowed())
+			return;
+		event.setCancelMessage(Translatable.of("msg_err_you_cannot_set_this_spawn_point_below", TownySettings.getSpawningLowestYLevelAllowed()).forLocale(event.getPlayer()));
+		event.setCancelled(true);
 	}
 }
