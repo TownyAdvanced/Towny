@@ -62,7 +62,7 @@ towny_top_help_0: "依照指令參數列出市民排行"
 towny_top_help_1: "依照指令參數列出地主排名"
 towny_top_help_2: "依照指令參數列出富裕排名"
 town_help_1: '君城邑之態'
-town_help_2: '[城之主]'
+town_help_2: '[城主]'
 town_help_3: '擇君城邑之態'
 town_help_4: '您當前所處市鎮的狀態'
 town_help_5: '傳送至城邑。'
@@ -1925,7 +1925,7 @@ msg_town_board_reset: '&bTown board reset.'
 msg_town_has_no_jailslots: '市鎮監獄已經滿員 '
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s已發送%s至號碼%s花了%s小時，由%s發送 '
-msg_you_have_been_jailed_your_bail_is_x: '君已入獄，以%s之金保釋。'
+msg_you_have_been_jailed_your_bail_is_x: '汝已入獄，以%s之金保釋。'
 msg_err_higher_than_max_allowed_bail_x: 'Your set bail was higher then the maximum which is %s.'
 msg_err_higher_than_max_allowed_hours_x: 'Your set hours were higher then the maximum which is %s.'
 msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Not enough in town bank to jail %s, fee is %s.'
