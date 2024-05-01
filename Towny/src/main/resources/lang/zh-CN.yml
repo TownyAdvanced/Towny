@@ -1775,7 +1775,7 @@ town1_has_merged_with_town2: '&6城镇%s同意与主城镇%s合并。'
 status_neutrality_cost: '中立成本：'
 #Added in 0.138
 #Line 1 of the givebonus warning.
-msg_ptw_warning_1: '如果您已经为这些城镇区块支付了任何实际生活费用，请了解：您正在玩的服务器违反了 Minecraft EULA 和 Towny 许可协议。'
+msg_ptw_warning_1: '如果您为这些城镇区块支付了任何现实中的金钱，那么请了解：您正在玩的服务器违反了 Minecraft EULA 和 Towny 许可协议。'
 #Line 2 of the givebonus warning.
 msg_ptw_warning_2: 'Towny团队从未打算用真钱购买城镇区块。'
 #Line 3 of the givebonus warning.
@@ -1834,9 +1834,9 @@ msg_err_could_not_find_any_towns_to_rtp: '找不到任何拥有可出售地块�
 #Message showing payment for RTP.
 msg_cost_spawn_rtp: '&bYou 被收取了传送到随机的销售城镇地皮的费用 %s。'
 #Message shown to a player when they use the town rtp command.
-msg_you_are_about_to_be_teleported_to_a_plot: '您即将被传送到一块在 %s 中被禁止销售的地皮，这将让您加入。 当您到达时，使用“/plot claim”来声称您的地皮。'
+msg_you_are_about_to_be_teleported_to_a_plot: '您将被传送到%s中出售的地块，这会让您加入它。到达后，可使用"/plot claim "声明您的地块。'
 #Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
-townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "%s镇有你可以购买的地皮，你想要传送到你现在可以购买的地皮吗？"
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "%s有你可以购买的地皮，你想要传送到你现在可以购买的地皮吗？"
 #Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
 townyrtp.you_have_arrived: "你已经传送到一个你可以购买的地皮。如果要购买，请使用“/plot claim”。"
 #Used in the town's status screen to display plots
