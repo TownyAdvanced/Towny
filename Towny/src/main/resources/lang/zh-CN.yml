@@ -126,7 +126,7 @@ town_purge_help: "清理指定天数没有上线的居民"
 town_trust_help_0: "在这个城镇中，增加一个受信任的玩家。"
 town_trust_help_1: "在这个城镇中，移除一个受信任的玩家。"
 town_trust_help_2: "列出一个城镇中受信任的玩家。"
-town_towntrust_help_0: "在这个城镇中，增加一个受信任的城镇。"
+town_towntrust_help_0: "在这个城镇中，添加一个受信任的城镇。"
 town_towntrust_help_1: "在这个城镇中，移除一个受信任的城镇。"
 town_towntrust_help_2: "列出一个城镇所信任的城镇。"
 town_buy_help: "购买额外的区块上限，以增加整个城镇的区块上限"
@@ -467,7 +467,7 @@ msg_nation_town_left: '&b城镇 %s 离开了你的国家.'
 msg_nation_kicked: '&b%s 把 %s 从这个国家踢出.'
 msg_raised_ass: '&b%s 把 %s 提升为 %s 助手.'
 msg_lowered_to_res_by: '&b你被 %s 降职了.'
-msg_lowered_to_res: '&b%2$s被%1$s炒了鱿鱼，使得%2$s成为了普通居民。'
+msg_lowered_to_res: '&b%2$s被%1$s炒了鱿鱼，使其成为了普通居民。'
 msg_invalid_name: '&b无效名称.'
 msg_invited_join_town: '&b%s 邀请 %s 加入城镇.'
 msg_invited_join_nation: '&b%s 邀请 %s 加入国家.'
@@ -538,7 +538,7 @@ msg_world_pvp: '&c这个世界强制开启PVP.'
 msg_world_mobs: '&c这个世界强制开启怪物生成.'
 msg_world_expl: '&c这个世界强制开启爆炸.'
 msg_world_fire: '&c这个世界强制开启火势蔓延.'
-msg_town_mobs: '&c这个世界强制怪物生成.'
+msg_town_mobs: '&c这个世界强制生成怪物。'
 msg_plot_pvp: '&c不能在一个竞技场中开启或关闭PVP.'
 msg_plot_regen_wrong_size: '&c回溯只支持默认的区块大小(16).'
 msg_reloaded: '&2城镇设置已重载.'
@@ -551,11 +551,11 @@ msg_insuf_funds: '&c你没有这么多钱.'
 msg_err_withdraw_disabled: '取款功能已关闭!'
 msg_err_deposit_capped: '无法捐款. 银行资金上限为 %s.'
 msg_set_town_home: '&b成功把城镇之家的位置变为 %s'
-msg_set_town_spawn: '&b城镇传送点已成功更改.'
+msg_set_town_spawn: '&b城镇传送点已成功更改。'
 msg_set_outpost_spawn: '&b成功改变前哨传送点.'
 msg_set_title: '&b%s 获得了 %s &b的头衔.'
 msg_set_surname: '&b%s 获得了 %s&b的后缀.'
-msg_clear_title_surname: '&b%2$s的%1$s被清除了.'
+msg_clear_title_surname: '&b%2$s的%1$s被清除了。'
 msg_clear_plot_material: '&b这块地皮已经被清除了%s的区块类型'
 msg_set_perms: '&b成功将权限设置为:'
 msg_set_claim: '&b成功改变 %s 的可声明状态为 %s'
@@ -598,7 +598,7 @@ msg_plot_for_sale: '&b%s 将 (%s) 区块挂出出售!'
 msg_plot_for_sale_amount: '&b%s将位于（%s）的土地以%s的价格出售！'
 msg_plot_set_type: '&b设置土地类型为 %s'
 msg_cache_block_error: '&c城镇没有你的信息. 请尝试重新登录.'
-msg_cache_block_error_wild: '&c你不能在荒郊野地中%s。'
+msg_cache_block_error_wild: '&c你不能在野地%s。'
 msg_cache_block_error_plot: '&c地主不允许%s%s。'
 msg_cache_block_error_town_resident: '&c居民不能在这里%s。'
 msg_cache_block_error_town_allies: '&c盟友不能%s。'
@@ -1206,7 +1206,7 @@ msg_reloaded_perms: '&2成功重载权限.'
 msg_reloaded_db: '&2成功重载数据库'
 msg_reloaded_lang: '&2成功重载语言文件'
 msg_reset_config: '&2成功重置配置'
-msg_err_teleport_cancelled: '传送时进行的移动取消了你的传送。'
+msg_err_teleport_cancelled: '你的传送因进行了移动而取消。'
 #Added in 0.79
 msg_cache_block_error_plot_friends: '朋友'
 msg_cache_block_error_plot_allies: '盟友'
@@ -1225,7 +1225,7 @@ bonus_townblocks: '奖励城镇区块'
 nomad_sing: '流浪者'
 msg_new_town_advice: '恭喜你创建了自己的城镇！您的城镇将需要支付每日维护费，目前的费用是%s。您可以使用“/t deposit #”将钱存入您的城镇银行。如果没有钱来支付维护费用，那么城镇将被删除。您可以随时使用/towny prices查看所需的费用。下次的每日维护费将在%s内收取。'
 #Added in 0.81
-msg_err_teleport_cancelled_damage: '传送时受到的伤害取消了你的传送。'
+msg_err_teleport_cancelled_damage: '你的传送因受到了伤害而取消。'
 #Added in 0.82
 invitation_prefix: "&8[&7邀请&8] &9"
 confirmation_prefix: "&8[&7确认&8] &9"
