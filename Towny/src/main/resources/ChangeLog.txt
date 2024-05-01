@@ -9732,3 +9732,5 @@ v0.92.0.11:
 0.100.2.7:
   - Add extra message shown to outlaws when they enter towns, describing what the length of the jail time is, as well as potential bail costs.
     - Closes #7389.
+  - API: Add TownSetOutpostSpawnEvent.
+    - A cancellable event thrown before a player uses /t set outpost, which is used to set an outpost's spawn point.
