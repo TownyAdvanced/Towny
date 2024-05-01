@@ -65,7 +65,6 @@ import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
@@ -2279,10 +2278,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!townBlock.getTownOrNull().equals(town))
 			throw new TownyException(Translatable.of("msg_not_own_area"));
 
-		Location newSpawn = Position.ofLocation(player.getLocation()).asLocation();
-		BukkitTools.ifCancelledThenThrow(new TownSetOutpostSpawnEvent(town, player, newSpawn));
+		TownSetOutpostSpawnEvent event = new TownSetOutpostSpawnEvent(town, player, player.getLocation());
+		BukkitTools.ifCancelledThenThrow(event);
 
-		town.addOutpostSpawn(player.getLocation());
+		town.addOutpostSpawn(event.getNewSpawn());
 		town.save();
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_set_outpost_spawn"));
 	}
