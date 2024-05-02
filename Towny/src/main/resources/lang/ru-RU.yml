@@ -187,17 +187,13 @@ king_help_3: 'Установить врагов.'
 king_help_4: "Снять деньги со счёта вашей нации."
 king_help_5: "Добавить или удалить города из вашей нации."
 king_help_6: "Используйте /n set ? для помощи."
-king_help_7: "Use /n toggle ? for help."
+king_help_7: "Используйте /n toggle ? для большей информации."
 king_help_8: "Используется для поглощения другой нации в вашу нацию."
 king_help_9: "Используется для отправки сообщений всем в вашей нации."
 res_1: 'Ваш статус'
 res_2: '[Горожанин]'
 res_3: 'Статус указанного игрока'
 res_4: 'Список всех активных игроков'
-res_5: 'для помощи'
-res_6: 'Совпадения в сети'
-res_7: 'Точное имя'
-res_8: 'Просто скромный фермер'
 res_9: "Сколько налогов вы будете платить в день."
 res_10: "Используйте /res jail ? для помощи."
 res_11: "Используйте /res toggle ? для помощи."
@@ -213,8 +209,8 @@ res_toggle_help_6: "Переключить возможность видеть �
 res_toggle_help_7: "Переключить возможность отображения уведомлений от плотов."
 res_toggle_help_8: "Toggle the ability to claim where you walk."
 res_toggle_help_9: "Toggle the ability to see the map when you change plots."
-res_toggle_help_10: "Remove all modes."
-res_toggle_help_11: "Spy on chat channels."
+res_toggle_help_10: "Удалить все режимы."
+res_toggle_help_11: "Шпионаж за чатами."
 res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
 res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
 res_toggle_help_14: "Toggle the ability to unclaim where you walk."
@@ -275,7 +271,7 @@ admin_panel_7: "See /ta toggle ? for help"
 admin_panel_8: "Commands for controlling these objects"
 admin_panel_9: "Teleport to the specified plot"
 admin_panel_10: "Check if the player has a permission node"
-admin_panel_11: "Reset your config"
+admin_panel_11: "Сброс конфигурации"
 admin_panel_12: "Make a backup of your Towny data"
 admin_panel_13: "Dump your mysql db to flatfile"
 admin_panel_14: "Force save or load your database"
@@ -284,9 +280,9 @@ admin_panel_16: "Purge old residents"
 townyadmin_town_help_0: "Create a town with the given name and mayor."
 townyadmin_town_help_1: "Show the town status screen."
 townyadmin_town_help_2: "Add or remove residents from a town."
-townyadmin_town_help_3: "Rename a town."
+townyadmin_town_help_3: "Переименовать город."
 townyadmin_town_help_4: "Удалить город."
-townyadmin_town_help_5: "Spawn at a town."
+townyadmin_town_help_5: "Спавнится в городе."
 townyadmin_town_help_6: "Spawn at a town's outpost."
 townyadmin_town_help_7: "Use a town's rank command."
 townyadmin_town_help_8: "Use a town's set command."
@@ -310,10 +306,10 @@ townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
 townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
 townyadmin_nation_help_0: "Create a nation with the given name and capital city."
 townyadmin_nation_help_1: "Show the nation status screen."
-townyadmin_nation_help_2: "Add towns from the nation."
-townyadmin_nation_help_3: "Remove towns from the nation."
-townyadmin_nation_help_4: "Rename a nation."
-townyadmin_nation_help_5: "Delete a town."
+townyadmin_nation_help_2: "Добавить города в нацию."
+townyadmin_nation_help_3: "Удалить города из нации."
+townyadmin_nation_help_4: "Переименовать нацию."
+townyadmin_nation_help_5: "Удалить город."
 townyadmin_nation_help_6: "Recheck the nation's towns to make sure they're close enough to the capital."
 townyadmin_nation_help_7: "Merge the 2nd nation into the first nation."
 townyadmin_nation_help_8: "Merge the 2nd nation into the first nation, ignoring any rules."
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s больше не преступник в
 msg_err_player_not_an_outlaw: 'Этот игрок не был указан в качестве преступника.'
 msg_err_outlaw_in_open_town: 'Вы не можете присоединиться к городу где вас считают преступником.'
 msg_you_are_an_outlaw_in_this_town: '&4Будьте осторожны, %s считает вас преступником. Если вы погибните здесь, то окажитесь в тюрьме.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Городской блок %s недостаточно близок к городским блокоам вашей столицы, для того чтобы войти в нацию.'
 msg_nation_town_moved_their_homeblock_too_far: '%s городские блоки были слишком далеко от столичных и они были удалены из нации.'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

@@ -194,10 +194,6 @@ res_1: 'Ваш статус'
 res_2: '[громадянин]'
 res_3: 'Статус вибраного гравця'
 res_4: 'Список усіх активних гравців'
-res_5: 'для допомоги'
-res_6: 'Збіги в мережі'
-res_7: 'Точне ім''я'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s більше не злочинець у �
 msg_err_player_not_an_outlaw: 'Цей гравець не був вказаний як злочинець.'
 msg_err_outlaw_in_open_town: 'Ви не можете приєднатися до міста, де вас вважають злочинцем.'
 msg_you_are_an_outlaw_in_this_town: '&4Будьте обережні, місто %s оголосило вас поза законом, смерть тут може значити для вас ув''язнення.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Міський блок %s недостатньо близький до міських блоків вашої столиці, щоб увійти в націю.'
 msg_nation_town_moved_their_homeblock_too_far: '%s міські блоки були надто далеко від столичних і вони були вилучені з нації.'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

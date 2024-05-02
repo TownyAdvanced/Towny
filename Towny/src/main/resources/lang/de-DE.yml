@@ -194,10 +194,6 @@ res_1: 'Dein Status'
 res_2: '[Bürger]'
 res_3: 'Status der Zielperson'
 res_4: 'Listet alle aktiven Spieler auf'
-res_5: 'für Hilfe'
-res_6: 'Online übereinstimmung'
-res_7: 'Exakter Name'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s ist nicht länger vogelfrei in %s.'
 msg_err_player_not_an_outlaw: 'Dieser Spieler ist nicht als Vogelfreier gelistet.'
 msg_err_outlaw_in_open_town: 'Du kannst keiner offenen Stadt beitreten, in der du ein Vogelfreier bist.'
 msg_you_are_an_outlaw_in_this_town: '&4Sei vorsichtig, da du in %s ein Vogelfreier bist und dafür ins Gefängnis kommen kannst.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Der Stadtplatz von %s ist nicht nah genug an der Hauptstadt der Nation und kann daher nicht beitreten.'
 msg_nation_town_moved_their_homeblock_too_far: '%s hat seinen Stadtplatz verschoben und dieser ist zu weit weg von der Hauptstadt der Nation, daher wurde die Stadt von der Nation entfernt.'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

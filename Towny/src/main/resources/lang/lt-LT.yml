@@ -194,10 +194,6 @@ res_1: 'Jūsų informacija'
 res_2: '[gyventojas]'
 res_3: 'Nurodyto žaidėjo informacija'
 res_4: 'Išvardyti visus prisijungusius žaidėjus'
-res_5: 'norėdami sužinoti tolimesnes komandas'
-res_6: 'Būtinas prisijungusio žaidėjo vardas'
-res_7: 'Būtinas tikslus vardas'
-res_8: 'Tik paprastas ūkininkas'
 res_9: "Tiek mokėsite mokesčių per dieną."
 res_10: "Naudokite /res jail ? tolimesnėms komandoms."
 res_11: "Naudokite /res toggle ? tolimesnėms komandoms."
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s nebėra nepageidaujamas mieste pavadinimu
 msg_err_player_not_an_outlaw: 'Tas žaidėjas nebuvo paskelbtas nepageidaujamu.'
 msg_err_outlaw_in_open_town: 'Jūs negalite prisijungti prie atviro miesto, kuris Jus yra paskelbęs nepageidaujamu.'
 msg_you_are_an_outlaw_in_this_town: '&4Būkite atsargus, %s laiko Jus nepageidaujamu, todėl žūtis šiame mieste galėtų reikšti kalėjimą.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s pagrindinis sklypas yra nepakankamai arti Jūsų sostinės pagrindinio sklypo, kad galėtų prisijungti prie Jūsų valstybės.'
 msg_nation_town_moved_their_homeblock_too_far: '%s pagrindinis sklypas buvo perkeltas pernelyg toli nuo Jūsų valstybės sostinės pagrindinio sklypo ir buvo išmestas iš Jūsų valstybės.'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

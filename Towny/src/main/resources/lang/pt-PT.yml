@@ -194,10 +194,6 @@ res_1: 'O teu estado'
 res_2: '[habitante]'
 res_3: 'Estado do jogador selecionado'
 res_4: 'Lista de todos os jogadores ativos'
-res_5: 'para ajuda'
-res_6: 'Correspondência online'
-res_7: 'Nome exato'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s já não está exilado de %s.'
 msg_err_player_not_an_outlaw: 'Esse jogador não foi listado como exilado.'
 msg_err_outlaw_in_open_town: 'Não te podes juntar a uma cidade onde foste exilado.'
 msg_you_are_an_outlaw_in_this_town: '&4Tem cuidado, estás exilado de %s, podem prender-te se morreres aqui.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'O terreno de spawn de %s não está suficientemente perto do terreno de spawn da capital para entrar na nação.'
 msg_nation_town_moved_their_homeblock_too_far: 'O terreno de spawn de %s foi realocado para demasiado longe do terreno de spawn da capital e foi removido da nação.'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

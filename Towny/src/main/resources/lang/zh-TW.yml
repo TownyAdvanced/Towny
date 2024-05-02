@@ -194,10 +194,6 @@ res_1: '你的狀態'
 res_2: '[resident]'
 res_3: '目標玩家狀態'
 res_4: '列出所有活躍玩家'
-res_5: '來查看幫助'
-res_6: '在線對應表'
-res_7: '確切名稱'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s不再是%s的放逐者 '
 msg_err_player_not_an_outlaw: '那個玩家不再被視為放逐者 '
 msg_err_outlaw_in_open_town: '你無法加入一個已經把你視為放逐者的公開市鎮 '
 msg_you_are_an_outlaw_in_this_town: '&4小心，%s放逐了你，死在這你將會被監禁 '
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%ss 的市鎮中心離你的首都中心太遠了所以不能加入你的城邦 '
 msg_nation_town_moved_their_homeblock_too_far: '由於%ss 的市鎮中心離你的首都中心太遠了所以已不再屬於這個城邦 '
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

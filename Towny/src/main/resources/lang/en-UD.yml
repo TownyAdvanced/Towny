@@ -194,10 +194,6 @@ res_1: 'snʇɐʇs ɹno⅄'
 res_2: '[ʇuǝpᴉsǝɹ]'
 res_3: 'snʇɐʇs s,ɹǝʎɐꞁd ʇǝᵷɹɐ⟘'
 res_4: 'sɹǝʎɐꞁd ǝʌᴉʇɔɐ ꞁꞁɐ ʇsᴉꞀ'
-res_5: 'dꞁǝɥ ɹoɟ'
-res_6: 'ɥɔʇɐɯ ǝuᴉꞁuO'
-res_7: 'ǝɯɐu ʇɔɐxƎ'
-res_8: 'ɹǝɯɹɐɟ ǝꞁqɯnɥ ɐ ʇsnՐ'
 res_9: "˙ʎɐp ɹǝd ʎɐd ꞁꞁᴉʍ noʎ xɐʇ ɥɔnɯ ʍoH"
 res_10: "˙dꞁǝɥ ɹoɟ ¿ ꞁᴉɐɾ sǝɹ/ ǝǝS"
 res_11: "˙dꞁǝɥ ɹoɟ ¿ ǝꞁᵷᵷoʇ sǝɹ/ ǝǝS"
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '˙%s uᴉ ʍɐꞁʇno uɐ ɹǝᵷuoꞁ ou s�
 msg_err_player_not_an_outlaw: '˙ʍɐꞁʇno uɐ sɐ pǝʇsᴉꞁ ʇou sɐʍ ɹǝʎɐꞁd ʇɐɥ⟘'
 msg_err_outlaw_in_open_town: '˙ʍɐꞁʇno uɐ noʎ pǝɯǝǝp sɐɥ ʇɐɥʇ uʍoʇ uǝdo uɐ uᴉoɾ ʇouuɐɔ no⅄'
 msg_you_are_an_outlaw_in_this_town: '&4Be careful %s considers you an outlaw, dying here could mean jail.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '˙uoᴉʇɐu ɹnoʎ uᴉoɾ oʇ ʞɔoꞁqǝɯoɥ s,ꞁɐʇᴉdɐɔ ɹnoʎ oʇ ɥᵷnouǝ ɹɐǝu ʇ,usᴉ ʞɔoꞁqǝɯoɥ s,%s'
 msg_nation_town_moved_their_homeblock_too_far: '˙uoᴉʇɐu ɹnoʎ ɯoɹɟ pǝʌoɯǝɹ uǝǝq sɐɥ puɐ ʞɔoꞁqǝɯoɥ s,ꞁɐʇᴉdɐɔ s,uoᴉʇɐu ɹnoʎ ɯoɹɟ ʎɐʍɐ ɹɐɟ ooʇ pǝʌoɯ sɐʍ ʞɔoꞁqǝɯoɥ s,%s'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

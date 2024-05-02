@@ -194,10 +194,6 @@ res_1: 'あなたのステータス'
 res_2: '[住民]'
 res_3: '指定したプレイヤーのステータス'
 res_4: 'すべてのオンラインプレイヤーの一覧を表示します'
-res_5: 'ヘルプ'
-res_6: 'オンラインの一致'
-res_7: '正確な名前'
-res_8: '謙虚な農民'
 res_9: "あなたの1日当たりの納税額"
 res_10: "/res jail ? を使用してヘルプを参照します。"
 res_11: "/res toggle ? を使用してヘルプを参照します。"
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s はもう %s での無法者ではあり�
 msg_err_player_not_an_outlaw: 'そのプレーヤーは無法者としてリストされていませんでした。'
 msg_err_outlaw_in_open_town: 'あなたは無法者とみなされたオープンな町に入ることはできません。'
 msg_you_are_an_outlaw_in_this_town: '&4 %s はあなたを無法者と見なし、ここで死ぬことはジャイルを意味する可能性があります。'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%sのホームブロックは、あなたの国に参加するためのあなたの首都のホームブロックに近くありません。'
 msg_nation_town_moved_their_homeblock_too_far: '%sのホームブロックは、あなたの国の首都から遠すぎるため、あなたの国から削除されました。'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

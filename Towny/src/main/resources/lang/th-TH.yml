@@ -194,10 +194,6 @@ res_1: 'สถานะของคุณ'
 res_2: '[พลเมือง]'
 res_3: 'สถานะของผู้เล่นคนนั้น'
 res_4: 'รายชื่อผู้เล่นที่ออนไลน์อยู่ขณะนี้'
-res_5: 'การขอความช่วยเหลือ'
-res_6: 'Online match'
-res_7: 'ชื่อจริง'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -738,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s ไม่ได้เป็นพวก O
 msg_err_player_not_an_outlaw: 'Player คนนั้นไม่ได้ถูกระบุว่าเป็น Outlaw.'
 msg_err_outlaw_in_open_town: 'คุณไม่สามารถเข้าร่วม Town ที่ประกาศให้คุณเป็น Outlaw.'
 msg_you_are_an_outlaw_in_this_town: '&4ระวังตัวด้วย %s ประกาศให้คุณเป็น Outlaw, ถ้าตายที่นี่อาจหมายถึง ail.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: 'Homeblock %s ต้องอยู่ไกลจาก Capital Homeblock(Chunk ที่เป็นเมืองหลวง) ของคุณเพื่อเข้าร่วม Nation.'
 msg_nation_town_moved_their_homeblock_too_far: 'HomeBlock ของ %s ถูกย้ายออกห่างจาก HomeBlock ของเมืองหลวงของ Nation คุณมากเกินไป และถูกนำออกจาก Nation ของคุณแล้ว'
 #Added in 0.33
@@ -2151,3 +2149,4 @@ msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days re
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
 msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
 msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
