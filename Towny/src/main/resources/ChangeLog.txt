@@ -9735,3 +9735,6 @@ v0.92.0.11:
   - API: Add TownSetOutpostSpawnEvent.
     - A cancellable event thrown before a player uses /t set outpost, which is used to set an outpost's spawn point.
   - Fix invites becoming unusable after an invite receiver changes their name.
+  - Bump org.apache.commons:commons-text from 1.11.0 to 1.12.0.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.80.0 to 3.86.0.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.2 to 3.5.3.
