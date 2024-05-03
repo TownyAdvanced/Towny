@@ -2124,7 +2124,7 @@ msg_err_name_validation_used_in_command_structure: "%s 在指令结构中被使�
 msg_town_being_deleted_because_no_residents: "%s 将要被删除，因为它的最后一个居民也离开了"
 outlawed_in: "放逐于"
 msg_warning_town_deposit_hint: "如果要把钱存入城镇银行，请使用/town deposit [amount]"
-msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/country deposit [amount]。"
+msg_warning_nation_deposit_hint: "若要将钱放入您的国家银行，请使用/nation deposit [amount]。"
 teleport_warmup_title_dont_move: ""
 teleport_warmup_subtitle_seconds_remaining: "&7离开始传送还有&c%s&7秒。"
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "因为你的城镇已经被毁， %s 区块许可线已经改变，故不再提供对城镇的任何保护。"
