@@ -347,7 +347,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						case 2:
 							return Collections.singletonList("by");
 						case 3:
-							return NameUtil.filterByStart(nationListTabCompletes, args[2]);
+							return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.NATION_LIST_BY, nationListTabCompletes), args[2]);
 						default:
 							return Collections.emptyList();
 					}
@@ -810,6 +810,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) { // Is a case of someone using /n list by {comparator}
+				if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_LIST_BY, split[i+1])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.NATION_LIST_BY, split[i+1]).execute(sender, "nation", split);
+					return;
+				}
+
 				if (comparatorSet) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_multiple_comparators_nation"));
 					return;
