@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -19,7 +20,11 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sittable;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import com.palmergames.bukkit.towny.Towny;
@@ -669,9 +674,42 @@ public class SpawnUtil {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
-			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+			
+			List<Entity> pets = getPets(player);
+			pets.add(player);
+			teleportEntities(spawnLoc, pets, TeleportCause.COMMAND);
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
 				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
+		}
+	}
+
+	/**
+	 * Gets any pets owned by the specified player that are nearby them
+	 * 
+	 * @param player The player to get the pets of
+	 */
+	public static List<Entity> getPets(Player player) {
+		List<Entity> pets = new ArrayList<>();
+		
+		for (Entity entity : player.getNearbyEntities(16, 16, 16)) {
+			if (!(entity instanceof Tameable tameable)) continue;
+
+			AnimalTamer tamer = tameable.getOwner();
+			if (tamer == null) continue;
+
+			if (!(entity instanceof Sittable sittable)) continue;
+			if (sittable.isSitting()) continue;
+			
+			if (tamer.equals(player))
+				pets.add(entity);
+		}
+		
+		return pets;
+	}
+	
+	public static void teleportEntities(Location loc, List<Entity> entities, TeleportCause cause) {
+		for (Entity entity : entities) {
+			PaperLib.teleportAsync(entity, loc, cause);
 		}
 	}
 
@@ -745,8 +783,11 @@ public class SpawnUtil {
 		final Player player = resident.getPlayer();
 		if (player == null)
 			return;
+
+		List<Entity> pets = getPets(player);
+		pets.add(player);
 		
-		plugin.getScheduler().runLater(player, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
+		plugin.getScheduler().runLater(player, () -> teleportEntities(loc, pets, TeleportCause.PLUGIN),
 			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L);
 	}
 

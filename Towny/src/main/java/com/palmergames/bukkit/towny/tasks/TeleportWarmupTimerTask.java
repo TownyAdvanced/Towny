@@ -13,12 +13,14 @@ import com.palmergames.bukkit.towny.object.TeleportRequest;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.jetbrains.annotations.Contract;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -64,8 +67,10 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				// Only teleport & add cooldown if player is valid
 				if (player == null)
 					continue;
-				
-				PaperLib.teleportAsync(player, request.destinationLocation(), TeleportCause.COMMAND);
+
+				List<Entity> pets = SpawnUtil.getPets(player);
+				pets.add(player);
+				SpawnUtil.teleportEntities(request.destinationLocation(), pets, TeleportCause.COMMAND);
 				
 				if (request.cooldown() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", request.cooldown());
