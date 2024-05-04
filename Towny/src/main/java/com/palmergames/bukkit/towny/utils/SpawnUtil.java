@@ -706,7 +706,14 @@ public class SpawnUtil {
 		
 		return pets;
 	}
-	
+
+	/**
+	 * Teleports all specified entities to the specified location
+	 * 
+	 * @param loc Location to teleport to
+	 * @param entities Entities to teleport
+	 * @param cause What caused the teleport
+	 */
 	public static void teleportEntities(Location loc, List<Entity> entities, TeleportCause cause) {
 		for (Entity entity : entities) {
 			PaperLib.teleportAsync(entity, loc, cause);
