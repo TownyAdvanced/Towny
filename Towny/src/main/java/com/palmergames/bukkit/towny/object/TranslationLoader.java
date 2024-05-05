@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.compress.utils.FileNameUtils;
 import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -193,8 +192,9 @@ public class TranslationLoader {
 			uri = clazz.getResource("").toURI();
 			
 			try (final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap()); Stream<Path> stream  = Files.list(fs.getRootDirectories().iterator().next().resolve("/lang"))) {
-				stream.filter(p -> TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(p)))
-					.forEach(p -> lang.add(FileNameUtils.getBaseName(p)));
+				stream.map(FileMgmt::getFileName)
+					.filter(TownySettings::isLanguageEnabled)
+					.forEach(lang::add);
 			}
 		} catch (URISyntaxException | IOException e) {
 			plugin.getLogger().log(Level.WARNING, "An exception occurred while getting language file names from the plugin jar", e);
@@ -247,11 +247,11 @@ public class TranslationLoader {
 		File[] overrideFiles = new File(langFolderPath + File.separator + "override").listFiles();
 		if (overrideFiles != null) {
 			for (File file : overrideFiles) {
-				if (file.isFile() && FileNameUtils.getExtension(file.toPath()).equalsIgnoreCase("yml") 
-					&& !file.getName().equalsIgnoreCase("global.yml") && TownySettings.isLanguageEnabled(FileNameUtils.getBaseName(file.toPath()))) {
+				if (file.isFile() && FileMgmt.getExtension(file.toPath()).equalsIgnoreCase("yml") 
+					&& !file.getName().equalsIgnoreCase("global.yml") && TownySettings.isLanguageEnabled(FileMgmt.getFileName(file.toPath()))) {
 					try (FileInputStream is = new FileInputStream(file)) {
 						Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
-						String lang = FileNameUtils.getBaseName(file.toPath()).replaceAll("-", "_");
+						String lang = FileMgmt.getFileName(file.toPath()).replaceAll("-", "_");
 
 						if (values != null) {
 							newTranslations.computeIfAbsent(lang, k -> new HashMap<>());
