@@ -1113,7 +1113,7 @@ public class Town extends Government implements TownBlockOwner {
 			default -> getPlotPrice();
 		};
 		
-		return Math.max(plotPrice, -1);
+		return Math.max(plotPrice, 0);
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
