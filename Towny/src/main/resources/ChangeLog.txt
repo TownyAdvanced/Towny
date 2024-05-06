@@ -9740,3 +9740,18 @@ v0.92.0.11:
   - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.2 to 3.5.3.
 0.100.2.8:
   - Fix town bank being paid to someone who is not the mayor, when the mayor uses /t delete and is_deleted_town_and_nation_bank_balances_paid_to_owner is true.
+  - Fix workflows running twice on pull requests, courtesy of Warrior with PR #7402.
+  - Fix Towny not loading on older minecraft servers missing FileNameUtils modern methods, courtesy of Warrior with PR #7403.
+    - Closes #7399.
+  - Allow setting a default plot price of -1, courtesy of Warrior with PR #7313.
+    - A town can now prevent their plots going up for sale by setting a plot price of -1, using /t set plotprice -1.
+    - Closes #7295.
+  - Add option to use world key instead of world name, courtesy of gecko10000 with PR #7388. (First-Time Contributor!)
+  - New Config Option: plugin.interfacing.web_map.world_name_uses_world_key
+    - Default: false
+    - If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name.
+    - This should be enabled if you use SquareMap.
+  - Bump adventure platform bukkit to 4.3.3-SNAPSHOT, courtesy of Warrior with PR #7395.
+    - Adds support for 1.20.5/6 in Towny.
+  - API: add NATION_LIST_BY, TOWN_LIST_BY TownyCommandAddons.
+    - Closes #7397.
