@@ -9738,3 +9738,5 @@ v0.92.0.11:
   - Bump org.apache.commons:commons-text from 1.11.0 to 1.12.0.
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.80.0 to 3.86.0.
   - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.2 to 3.5.3.
+0.100.2.8:
+  - Fix town bank being paid to someone who is not the mayor, when the mayor uses /t delete and is_deleted_town_and_nation_bank_balances_paid_to_owner is true.

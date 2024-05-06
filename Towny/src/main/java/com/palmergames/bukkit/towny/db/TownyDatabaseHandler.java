@@ -425,6 +425,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.removeNation();
 		}
 
+		if (TownyEconomyHandler.isActive())
+			town.getAccount().removeAccount();
+
 		for (Resident resident : toSave) {
 			resident.clearModes(false);
 			resident.removeTown(true);
@@ -435,9 +438,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		new ArrayList<>(universe.getJailedResidentMap()).stream()
 			.filter(resident -> resident.hasJailTown(town.getName()))
 			.forEach(resident -> JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED));
-
-		if (TownyEconomyHandler.isActive())
-			town.getAccount().removeAccount();
 
 		if (townyWorld != null) {
 			try {
