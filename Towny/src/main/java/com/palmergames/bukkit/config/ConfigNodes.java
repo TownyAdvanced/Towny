@@ -496,7 +496,8 @@ public enum ConfigNodes {
 			"global_town_settings.max_distance_for_merge",
 			"10",
 			"",
-			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging."),
+			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging.",
+			"# Set to this to 0 to disable the distance test."),
 
 	GTOWN_SETTINGS_HEALTH_REGEN(
 			"global_town_settings.health_regen",
