@@ -2,8 +2,6 @@ name: Run Tests
 on:
     push:
         branches-ignore: [l10n_master]
-    pull_request:
-        branches-ignore: [l10n_master]
 jobs:
     test:
         runs-on: ubuntu-latest
