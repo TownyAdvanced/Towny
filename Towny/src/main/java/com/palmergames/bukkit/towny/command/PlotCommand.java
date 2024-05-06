@@ -456,7 +456,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (town == null) //Shouldn't be able to happen but check anyways.
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
-		double plotPrice = town.getPlotTypePrice(townBlock.getType());
+		double plotPrice = Math.max(town.getPlotTypePrice(townBlock.getType()), 0);
 
 		if (split.length == 0) {
 			/*
