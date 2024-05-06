@@ -9755,3 +9755,5 @@ v0.92.0.11:
     - Adds support for 1.20.5/6 in Towny.
   - API: add NATION_LIST_BY, TOWN_LIST_BY TownyCommandAddons.
     - Closes #7397.
+0.100.2.9:
+  - Fix scheduling 0 tick delayed task on paper, courtesy of Warrior with PR #7404.
