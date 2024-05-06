@@ -3608,6 +3608,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_USING_STATUSSCREEN);
 	}
 	
+	public static boolean isUsingWorldKeyForWorldName() {
+		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_WORLD_NAME_USES_KEY);
+	}
+	
 	public static String getWebMapUrl() {
 		return getString(ConfigNodes.PLUGIN_WEB_MAP_URL);
 	}

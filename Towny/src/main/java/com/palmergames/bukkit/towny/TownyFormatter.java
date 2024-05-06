@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NationUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
@@ -34,11 +35,14 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
+
+import io.papermc.lib.PaperLib;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -1048,11 +1052,16 @@ public class TownyFormatter {
 		String webUrl = "";
 		if (TownySettings.isUsingWebMapStatusScreens() && spawnLocation.hasSpawn() && !TownySettings.getWebMapUrl().isEmpty())
 			webUrl = TownySettings.getWebMapUrl()
-				.replaceAll("\\{world}", spawnLocation.getSpawnOrNull().getWorld().getName())
+				.replaceAll("\\{world}", getWorldSlugForMapURL(spawnLocation.getSpawnOrNull().getWorld()))
 				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
 				.replaceAll("\\{z}", "" + spawnLocation.getSpawnOrNull().getBlockZ());
 
 		return webUrl;
 	}
 
+	private static String getWorldSlugForMapURL(World world) {
+		return TownySettings.isUsingWorldKeyForWorldName() && (PaperLib.isPaper() || MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_18_2))
+				? world.getKey().toString()
+				: world.getName();
+	}
 }
