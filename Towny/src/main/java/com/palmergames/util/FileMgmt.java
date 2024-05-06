@@ -7,6 +7,8 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -477,5 +479,29 @@ public final class FileMgmt {
 		try (FileOutputStream fos = new FileOutputStream(path.toFile())) {
 			fos.write(string.getBytes(StandardCharsets.UTF_8));
 		}
+	}
+
+	/**
+	 * @param path The file path
+	 * @return The file name for the given path (minus file extension)
+	 */
+	@NotNull
+	public static String getFileName(final @NotNull Path path) {
+		String fileName = path.getFileName().toString();
+		if (fileName.contains("."))
+			fileName = fileName.substring(0, fileName.lastIndexOf("."));
+
+		return fileName;
+	}
+	
+	@NotNull
+	public static String getExtension(final @NotNull Path path) {
+		String fileName = path.getFileName().toString();
+		
+		final int index = fileName.lastIndexOf(".");
+		if (index == -1)
+			return "";
+		
+		return fileName.substring(index + 1);
 	}
 }
