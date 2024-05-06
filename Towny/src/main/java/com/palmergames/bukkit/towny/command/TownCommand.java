@@ -447,7 +447,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "list":
 			return switch (args.length) {
 			case 2 -> Collections.singletonList("by");
-			case 3 -> NameUtil.filterByStart(townListTabCompletes, args[2]);
+			case 3 -> NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.TOWN_LIST_BY, townListTabCompletes), args[2]);
 			default -> Collections.emptyList();
 			};
 		case "trust":
@@ -1144,6 +1144,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		int total = (int) Math.ceil(((double) townsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) { // Is a case of someone using /n list by {comparator}
+				if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_LIST_BY, split[i+1])) {
+					TownyCommandAddonAPI.getAddonCommand(CommandType.TOWN_LIST_BY, split[i+1]).execute(sender, "town", split);
+					return;
+				}
+
 				if (comparatorSet) {
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_multiple_comparators"));
 					return;
