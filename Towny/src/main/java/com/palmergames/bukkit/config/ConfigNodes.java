@@ -73,8 +73,14 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
-	LEVELS_TOWN_LEVEL("levels.town_level", "", "", "# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level"),
-	LEVELS_NATION_LEVEL("levels.nation_level", "", "", "# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level"),
+	LEVELS_TOWN_LEVEL("levels.town_level", "", "",
+			"# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level",
+			"# One note: You can add and remove levels from this list, but you should never remove the first numResidents: 0 block."),
+	LEVELS_NATION_LEVEL("levels.nation_level", "", "",
+			"# Guide On How to Configure: https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#configuring-town_level-and-nation_level",
+			"# One note: You can add and remove levels from this list, but you should never remove the first numResidents: 0 block."),
+
+
 	TOWN(
 			"town",
 			"",
@@ -82,7 +88,7 @@ public enum ConfigNodes {
 			"",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
-			"# |               Town Claim/new defaults                | #",
+			"# |                   New Town Defaults                  | #",
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
@@ -159,170 +165,8 @@ public enum ConfigNodes {
 			"# A required minimum tax amount for the default_tax, will not change any towns which already have a tax set.",
 			"# Do not forget to set the default_tax to more than 0 or new towns will still begin with a tax of zero.",
 			"# This setting has no effect when negative taxes are allowed."),
-	TOWN_MAX_PURCHASED_BLOCKS(
-			"town.max_purchased_blocks",
-			"0",
-			"",
-			"# Limits the maximum amount of bonus blocks a town can buy.",
-			"# This setting does nothing when town.max_purchased_blocks_uses_town_levels is set to true."),
-	TOWN_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS(
-			"town.max_purchased_blocks_uses_town_levels",
-			"true",
-			"",
-			"# When set to true, the town_level section of the config determines the maximum number of bonus blocks a town can purchase."),
-	TOWN_MAX_PLOTS_PER_RESIDENT(
-			"town.max_plots_per_resident",
-			"100",
-			"",
-			"# maximum number of plots any single resident can own"),
-	TOWN_MAX_CLAIM_RADIUS_VALUE(
-			"town.max_claim_radius_value",
-			"4",
-			"",
-			"# maximum number used in /town claim/unclaim # commands.",
-			"# set to 0 to disable limiting of claim radius value check.",
-			"# keep in mind that the default value of 4 is a radius, ",
-			"# and it will allow claiming 9x9 (80 plots) at once."),
 
-	TOWN_OVERCLAIMING_ROOT("town.overclaiming", "", "", ""),
-	TOWN_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(
-			"town.overclaiming.being_overclaimed_allows_other_towns_to_steal_land",
-			"false",
-			"",
-			"# A feature that allows towns which have too many townblocks claimed (overclaimed) ie: 120/100 TownBlocks, ",
-			"# to have their land stolen by other towns which are not overclaimed. Using this incentivises Towns to keep",
-			"# their residents from leaving, and will mean that mayors will be more careful about which land they choose",
-			"# to claim.",
-			"# Overclaiming does not allow a town to be split into two separate parts, requiring the Town that is stealing",
-			"# land to work from the outside inwards.",
-			"# It is highly recommended to only use this on servers where outposts are disabled, and requiring ",
-			"# a number of adjacent claims over 1 is enabled.",
-			"# Towns take land using /t takeoverclaim."),
-	TOWN_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS(
-			"town.overclaiming.overclaiming_prevented_by_homeblock_radius",
-			"true",
-			"",
-			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
-			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
-	TOWN_OVERCLAIMING_TOWN_AGE_REQUIREMENT(
-			"town.overclaiming.town_age_requirement",
-			"7d",
-			"",
-			"# When in use, requires that a town be of a minimum age in order to overclaim another town. This prevents new towns being made just to overclaim someone.",
-			"# Default is for 7 days."),
-	TOWN_OVERCLAIMING_COMMAND_COOLDOWN(
-			"town.overclaiming.command_cooldown",
-			"0m",
-			"",
-			"# When in use, requires an amount of time to pass before the /t takeoverclaim command can be used again."),
 
-	TOWN_LIMIT(
-			"town.town_limit",
-			"3000",
-			"",
-			"# Maximum number of towns allowed on the server."),
-	TOWN_MAX_DISTANCE_FOR_MERGE(
-			"town.max_distance_for_merge",
-			"10",
-			"",
-			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging."),
-	TOWN_MIN_DISTANCE_IGNORED_FOR_NATIONS(
-			"town.min_distances_ignored_for_towns_in_same_nation",
-			"true",
-			"",
-			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
-			"# will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same."),
-	TOWN_MIN_DISTANCE_IGNORED_FOR_ALLIES(
-			"town.min_distances_ignored_for_towns_in_allied_nation",
-			"false",
-			"",
-			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
-			"# will be ignored for towns that are mutually allied. Setting to false will keep all towns separated the same."),
-	TOWN_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
-			"town.min_plot_distance_from_town_plot",
-			"5",
-			"",
-			"# Minimum number of plots any towns plot must be from the next town's own plots.",
-			"# Put in other words: the buffer area around every claim that no other town can claim into.",
-			"# Does not affect towns which are in the same nation.",
-			"# This will prevent town encasement to a certain degree."),
-	TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
-			"town.min_distance_from_town_homeblock",
-			"5",
-			"",
-			"# Minimum number of plots any towns home plot must be from the next town.",
-			"# Put in other words: the buffer area around every homeblock that no other town can claim into.",
-			"# Does not affect towns which are in the same nation.",
-			"# This will prevent someone founding a town right on your doorstep"),
-    TOWN_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
-    		"town.min_distance_for_outpost_from_plot",
-    		"5",
-    		"",
-    		"# Minimum number of plots an outpost must be from any other town's plots.",
-    		"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
-    		"# near to each other, but want to keep outposts away from towns."),
-    TOWN_MAX_DISTANCE_FOR_OUTPOST_FROM_TOWN_PLOT(
-    		"town.max_distance_for_outpost_from_town_plot",
-    		"0",
-    		"",
-    		"# Set to 0 to disable. When above 0 an outpost may only be claimed within the given number of townblocks from a townblock owned by the town.",
-    		"# Setting this to any value above 0 will stop outposts being made off-world from the town's homeworld.",
-    		"# Do not set lower than min_distance_for_outpost_from_plot above."),
-	TOWN_MIN_DISTANCE_BETWEEN_HOMEBLOCKS(
-			"town.min_distance_between_homeblocks",
-			"0",
-			"",
-			"# Minimum distance between homeblocks."),
-	TOWN_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
-			"town.max_distance_between_homeblocks",
-			"0",
-			"",
-			"# Maximum distance between homeblocks.",
-			"# This will force players to build close together."),
-	TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_PLOT(
-			"town.new_town_min_distance_from_town_plot",
-			"-1",
-			"",
-			"# The minimum distance that a new town must be from nearby towns' plots.",
-
-			"# When set to -1, this will use the value of the min_plot_distance_from_town_plot option."),
-	TOWN_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
-			"town.new_town_min_distance_from_town_homeblock",
-			"-1",
-			"",
-			"# The minimum distance that a new town must be from nearby towns' homeblocks.",
-
-			"# When set to -1, this will use the value of the min_distance_from_town_homeblock setting."),
-	TOWN_TOWN_BLOCK_RATIO(
-			"town.town_block_ratio",
-			"8",
-			"",
-			"# The maximum townblocks available to a town is (numResidents * ratio).",
-			"# Setting this value to 0 will instead use the level based jump values determined in the town level config.",
-			"# Setting this to -1 will result in every town having unlimited claims."),
-	TOWN_TOWN_BLOCK_LIMIT(
-			"town.town_block_limit",
-			"0",
-			"",
-			"# The maximimum amount of townblocks a town can have, if town_block_ratio is 0 the max size will be decided by the town_levels.",
-			"# Set to 0 to have no size limit."),
-	TOWN_TOWN_BLOCK_SIZE(
-			"town.town_block_size",
-			"16",
-			"",
-			"# The size of the square grid cell. Changing this value is suggested only when you first install Towny.",
-			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
-			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
-			"# Each cell is (town_block_size * town_block_size * height-of-the-world) in size, with height-of-the-world",
-			"# being from the bottom to the top of the build-able world."),
-	TOWN_MIN_ADJACENT_BLOCKS(
-			"town.min_adjacent_blocks",
-			"-1",
-			"",
-			"# The minimum adjacent town blocks required to expand.",
-			"# This can prevent long lines and snake-like patterns.",
-			"# Set to -1 to disable. Set to 3 to force wider expansions of towns."),
-	
 	NATION("nation", "", "", "",
 			"############################################################",
 			"# +------------------------------------------------------+ #",
@@ -376,6 +220,8 @@ public enum ConfigNodes {
 			"100",
 			"",
 			"# The maximum amount of money that can be charge by a nation on their conquered towns."),
+
+
 	NWS(
 			"new_world_settings",
 			"",
@@ -395,7 +241,6 @@ public enum ConfigNodes {
 			"#                                                          #",
 			"############################################################",
 			""),
-
 	NWS_WORLD_USING_TOWNY("new_world_settings.using_towny", "true",
 			"# Do new worlds have Towny enabled by default?",
 			"# You can adjust this setting for an existing world using /townyworld toggle usingtowny"),
@@ -405,7 +250,6 @@ public enum ConfigNodes {
 			"# Are new worlds claimable by default?",
 			"# Setting this to false means that Towny will still be active but no land can be claimed by towns.",
 			"# You can adjust this setting for an existing world using /townyworld toggle claimable"),
-
 	NWS_WORLD_PVP_HEADER("new_world_settings.pvp", "", ""),
 	NWS_WORLD_PVP(
 			"new_world_settings.pvp.world_pvp",
@@ -433,7 +277,6 @@ public enum ConfigNodes {
 			"",
 			"# Do new worlds have their war_allowed enabled by default?",
 			"# You can adjust this setting for an existing world using /townyworld toggle warallowed"),
-	
 	NWS_WORLD_MONSTERS_HEADER("new_world_settings.mobs", "", ""),
 	NWS_WORLD_MONSTERS_ON(
 			"new_world_settings.mobs.world_monsters_on",
@@ -453,7 +296,6 @@ public enum ConfigNodes {
 			"# Do new worlds have force_town_monsters_on enabled by default?",
 			"# This setting overrides a towns' setting.",
 			"# You can adjust this setting for an existing world using /townyworld toggle townmobs"),
-
 	NWS_WORLD_EXPLOSION_HEADER("new_world_settings.explosions", "", ""),
 	NWS_WORLD_EXPLOSION(
 			"new_world_settings.explosions.world_explosions_enabled",
@@ -467,7 +309,6 @@ public enum ConfigNodes {
 			"# Do new worlds have force_explosions_on enabled by default.",
 			"# This setting overrides a towns' setting, preventing them from turning explosions off in their town.",
 			"# You can adjust this setting for an existing world using /townyworld toggle forceexplosion"),
-
 	NWS_WORLD_FIRE_HEADER("new_world_settings.fire", "", ""),
 	NWS_WORLD_FIRE(
 			"new_world_settings.fire.world_firespread_enabled",
@@ -481,25 +322,21 @@ public enum ConfigNodes {
 			"# Do new worlds have force_fire_on enabled by default?",
 			"# This setting overrides a towns' setting.",
 			"# You can adjust this setting for an existing world using /townyworld toggle forcefire"),
-
 	NWS_WORLD_ENDERMAN(
 			"new_world_settings.enderman_protect",
 			"true",
 			"",
 			"# Do new worlds prevent Endermen from picking up and placing blocks, by default?"),
-
 	NWS_DISABLE_CREATURE_CROP_TRAMPLING(
 			"new_world_settings.disable_creature_crop_trampling",
 			"true",
 			"",
 			"# Do new worlds disable creatures trampling crops, by default?"),
-
 	NWS_PLOT_MANAGEMENT_HEADER(
 			"new_world_settings.plot_management",
 			"",
 			"",
 			"# World management settings to deal with un/claiming plots"),
-
 	NWS_PLOT_MANAGEMENT_DELETE_HEADER(
 			"new_world_settings.plot_management.block_delete",
 			"",
@@ -515,7 +352,6 @@ public enum ConfigNodes {
 			"BEDS,TORCHES,REDSTONE_WIRE,SIGNS,DOORS,PRESSURE_PLATES",
 			"",
 			"# These items will be deleted upon a plot being unclaimed"),
-
 	NWS_PLOT_MANAGEMENT_ENTITY_DELETE_HEADER(
 			"new_world_settings.plot_management.entity_delete",
 			"",
@@ -530,7 +366,6 @@ public enum ConfigNodes {
 			"",
 			"# These entities will be deleted upon a plot being unclaimed.",
 			"# Valid EntityTypes can be found here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"),
-
 	NWS_PLOT_MANAGEMENT_MAYOR_DELETE_HEADER(
 			"new_world_settings.plot_management.mayor_plotblock_delete",
 			"",
@@ -547,7 +382,6 @@ public enum ConfigNodes {
 			"",
 			"# These items will be deleted upon a mayor using /plot clear",
 			"# To disable deleting replace the current entries with NONE."),
-
 	NWS_PLOT_MANAGEMENT_REVERT_HEADER(
 			"new_world_settings.plot_management.revert_on_unclaim",
 			"",
@@ -588,7 +422,6 @@ public enum ConfigNodes {
 			"# useful when you allow players to build/destroy in the wilderness.",
 			"# Like other options in the new_world_settings section, this is only applied as a default setting for new worlds.",
 			"# Configure the list found in the towny\\data\\worlds\\WORLDNAME.txt files."),
-
 	NWS_PLOT_MANAGEMENT_WILD_MOB_REVERT_HEADER(
 			"new_world_settings.plot_management.wild_revert_on_mob_explosion",
 			"",
@@ -629,8 +462,19 @@ public enum ConfigNodes {
 	NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCK_WHITELIST(
 		"new_world_settings.plot_management.wild_revert_on_explosion_block_whitelist",
 		"",
-		"# The list of blocks to regenerate. (if empty all blocks will regenerate)"),
-		
+		"",
+		"# This section is applied to new worlds as default settings when new worlds are detected.",
+		"# The list of blocks to regenerate for block and entity explosions. (if empty all blocks will regenerate)"),
+	NWS_PLOT_MANAGEMENT_WILD_REVERT_BLOCKS_TO_NOT_OVERWRITE(
+			"new_world_settings.plot_management.wild_revert_explosions_blocks_to_not_replace",
+			"",
+			"",
+			"# This section is applied to new worlds as default settings when new worlds are detected.",
+			"# This is the list of blocks that should not be overwritten by wilderness explosion reverts. (if empty all ",
+			"# blocks placed into regenerating explosions will be overwritten with the original pre-explosion blocks.)",
+			"# This list is useful if you have a death chest plugin which could put a player's inventory inside chest",
+			"# that is inside of a regenerating creeper explosion pit. For Example: By putting CHEST here you can ",
+			"# prevent the chest from being overwritten by the dirt block that used to be there."),
 
 	GTOWN_SETTINGS(
 			"global_town_settings",
@@ -643,6 +487,18 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	GTOWN_SETTINGS_LIMIT(
+			"global_town_settings.town_limit",
+			"3000",
+			"",
+			"# Maximum number of towns allowed on the server."),
+	GTOWN_SETTINGS_MAX_DISTANCE_FOR_MERGE(
+			"global_town_settings.max_distance_for_merge",
+			"10",
+			"",
+			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging.",
+			"# Set to this to 0 to disable the distance test."),
+
 	GTOWN_SETTINGS_HEALTH_REGEN(
 			"global_town_settings.health_regen",
 			"",
@@ -652,127 +508,12 @@ public enum ConfigNodes {
 	GTOWN_SETTINGS_REGEN_ENABLE(
 			"global_town_settings.health_regen.enable",
 			"true"),
-	GTOWN_SETTINGS_ALLOW_OUTPOSTS(
-			"global_town_settings.allow_outposts",
+	GTOWN_SETTINGS_REGEN_PREVENT_SATURATION_LOSS(
+			"global_town_settings.saturation_regen.also_prevent_saturation_loss",
 			"true",
 			"",
-			"# Allow towns to claim outposts (a townblock not connected to town)."),
-	GTOWN_SETTINGS_LIMIT_OUTPOST_USING_LEVELS(
-			"global_town_settings.limit_outposts_using_town_and_nation_levels",
-			"false",
-			"",
-			"# When set to true outposts can be limited by the townOutpostLimit value of the Town Levels and",
-			"# the nationBonusOutpostLimit value in the Nation Levels. In this way nations can be made to be",
-			"# the only way of receiving outposts, or as an incentive to receive more outposts. Towns which are",
-			"# larger can have more outposts.",
-			"# When activated, this setting will not cause towns who already have higher than their limit",
-			"# to lose outposts. They will not be able to start new outposts until they have unclaimed outposts",
-			"# to become under their limit. Likewise, towns that join a nation and receive bonus outposts will",
-			"# be over their limit if they leave the nation."),
-	GTOWN_SETTINGS_OVER_OUTPOST_LIMIT_STOP_TELEPORT(
-			"global_town_settings.over_outpost_limits_stops_teleports",
-			"false",
-			"",
-			"# When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost",
-			"# limit will not be able to use their /town outpost teleports for the outpost #'s higher than their limit,",
-			"# until they have dropped below their limit.",
-			"# eg: If their limit is 3 then they cannot use /t outpost 4"),
-	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN(
-			"global_town_settings.allow_town_spawn",
-			"true",
-			"",
-			"# Allow the use of /town spawn",
-			"# Valid values are: true, false, war, peace",
-			"# When war or peace is set, it is only possible to teleport to the town,",
-			"# when there is a war or peace."),
-	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL(
-			"global_town_settings.allow_town_spawn_travel",
-			"true",
-			"",
-			"# Allow regular residents to use /town spawn [town] (TP to other towns if they are public).",
-			"# Valid values are: true, false, war, peace",
-			"# When war or peace is set, it is only possible to teleport to the town,",
-			"# when there is a war or peace."),
-	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_NATION(
-			"global_town_settings.allow_town_spawn_travel_nation",
-			"true",
-			"",
-			"# Allow regular residents to use /town spawn [town] to other towns in your nation.",
-			"# Valid values are: true, false, war, peace",
-			"# When war or peace is set, it is only possible to teleport to the town,",
-			"# when there is a war or peace."),
-	GTOWN_SETTINGS_ALLOW_TOWN_SPAWN_TRAVEL_ALLY(
-			"global_town_settings.allow_town_spawn_travel_ally",
-			"true",
-			"",
-			"# Allow regular residents to use /town spawn [town] to other towns in a nation allied with your nation.",
-			"# Valid values are: true, false, war, peace",
-			"# When war or peace is set, it is only possible to teleport to the town,",
-			"# when there is a war or peace."),
-	GTOWN_SETTINGS_IS_ALLY_SPAWNING_REQUIRING_PUBLIC_STATUS(
-			"global_town_settings.is_nation_ally_spawning_requiring_public_status",
-			"false",
-			"",
-			"# When set to true both nation and ally spawn travel will also require the target town to have their status set to public."),
-	GTOWN_SETTINGS_IS_TRUSTED_RESIDENTS_COUNT_AS_RESIDENTS(
-			"global_town_settings.do_trusted_residents_count_as_residents",
-			"false",
-			"",
-			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.",
-			"# Allows allows the residents of entire an town when that town is trusted by the town."),
-	GTOWN_SETTINGS_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN(
-			"global_town_settings.are_new_residents_prompted_to_town_spawn",
-			"false",
-			"",
-			"# When a resident joins a town, should they be prompted to use spawn to the town?",
-			"# This requires them to not already be standing in the town, and also to be able to use /t spawn and whatever costs may be associated with it."),
-	GTOWN_SETTINGS_SPAWN_TIMER(
-			"global_town_settings.teleport_warmup_time",
-			"0",
-			"",
-			"# If non zero it delays any spawn request by x seconds."),
-	GTOWN_SETTINGS_MOVEMENT_CANCELS_SPAWN_WARMUP(
-			"global_town_settings.movement_cancels_spawn_warmup",
-			"false",
-			"",
-			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
-	GTOWN_SETTINGS_DAMAGE_CANCELS_SPAWN_WARMUP(
-			"global_town_settings.damage_cancels_spawn_warmup",
-			"false",
-			"",
-			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
-	GTOWN_SETTINGS_COOLDOWN_ROOT(
-			"global_town_settings.spawning_cooldowns", "", ""),
-	GTOWN_SETTINGS_SPAWN_COOLDOWN_TIMER(
-			"global_town_settings.spawning_cooldowns.town_spawn_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
-	GTOWN_SETTINGS_OUTPOST_COOLDOWN_TIMER(
-			"global_town_settings.spawning_cooldowns.outpost_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player can use /t outpost."),
-	GTOWN_SETTINGS_NATION_MEMBER_COOLDOWN_TIMER(
-			"global_town_settings.spawning_cooldowns.nation_member_town_spawn_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player of the same nation can use /t spawn."),
-	GTOWN_SETTINGS_NATION_ALLY_COOLDOWN_TIMER(
-			"global_town_settings.spawning_cooldowns.nation_ally_town_spawn_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player in an allied nation can use /t spawn."),
-	GTOWN_SETTINGS_UNAFFILIATED_COOLDOWN_TIMER(
-			"global_town_settings.spawning_cooldowns.unaffiliated_town_spawn_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player who is not a member or ally of town can use /t spawn."),
-	GTOWN_SETTINGS_SPAWN_WARNINGS(
-			"global_town_settings.spawn_warnings",
-			"true",
-			"",
-			"# Decides whether confirmations should appear if you spawn to an area with an associated cost."),
+			"# When true players cannot become hungrier when in their own or an allied town."),
+
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",
 			"30",
@@ -795,47 +536,6 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# Number of seconds that must pass before a town that has unclaimed a townblock can claim it again."),
-	
-	GTOWN_SETTINGS_TOWN_RESPAWN(
-			"global_town_settings.town_respawn",
-			"false",
-			"",
-			"# When true Towny will handle respawning, with town or resident spawns."),
-	GTOWN_SETTINGS_RESPAWN_PROTECTION_ROOT("global_town_settings.respawn_protection", "", ""),
-	GTOWN_SETTINGS_RESPAWN_PROTECTION_TIME(
-			"global_town_settings.respawn_protection.time",
-			"10s",
-			"",
-			"# When greater than 0s, the amount of time a player who has respawned is considered invulnerable.",
-			"# Invulnerable players who attack other players will lose their invulnerability.",
-			"# Invulnerable players who teleport after respawn will also lose their invulnerability."),
-	GTOWN_SETTINGS_RESPAWN_PROTECTION_ALLOW_PICKUP(
-			"global_town_settings.respawn_protection.allow_pickup",
-			"true",
-			"",
-			"# If disabled, players will not be able to pickup items while under respawn protection."),
-	GTOWN_SETTINGS_TOWN_RESPAWN_SAME_WORLD_ONLY(
-			"global_town_settings.town_respawn_same_world_only",
-			"false",
-			"",
-			"# Town respawn only happens when the player dies in the same world as the town's spawn point."),
-	GTOWN_SETTINGS_PREVENT_TOWN_SPAWN_IN(
-			"global_town_settings.prevent_town_spawn_in",
-			"enemy,outlaw",
-			"",
-			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.",
-			"# Allowed options: unclaimed,enemy,neutral,outlaw"),
-	GTOWN_SETTINGS_ENEMIES_ALLOWED_TO_SPAWN_TO_PEACEFUL_TOWNS(
-			"global_town_settings.allow_enemies_spawn_to_peaceful_towns",
-			"false",
-			"",
-			"# When true, players will be allowed to spawn to peaceful/neutral towns in which they are considered enemies.",
-			"# Setting this to true will make town spawn points unsafe for private towns which are part of nations with enemies."),
-	GTOWN_RESPAWN_ANCHOR_HIGHER_PRECEDENCE(
-			"global_town_settings.respawn_anchor_higher_precendence",
-			"true",
-			"",
-			"# When this is true, players will respawn to respawn anchors on death rather than their own town. 1.16+ only."),
 	GTOWN_HOMEBLOCK_MOVEMENT_COOLDOWN(
 			"global_town_settings.homeblock_movement_cooldown_hours",
 			"0",
@@ -944,14 +644,6 @@ public enum ConfigNodes {
 			"",
 			"# If set to true, if a nation is disbanded due to a lack of residents, the capital will be refunded the cost of nation creation."
 	),
-	GTOWN_SETTINGS_NATION_REQUIRES_PROXIMITY(
-			"global_town_settings.nation_requires_proximity",
-			"0.0",
-			"",
-			"# The maximum number of townblocks a town can be away from a nation capital,",
-			"# Automatically precludes towns from one world joining a nation in another world.",
-			"# If the number is 0, towns will not a proximity to a nation."
-	),
 	GTOWN_FARM_ANIMALS(
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
@@ -998,13 +690,6 @@ public enum ConfigNodes {
 			"",
 			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
 			"# Does not have any effect when Event War is active."),
-	GTOWN_SETTINGS_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
-			"global_town_settings.minimum_amount_of_residents_in_town_for_outpost",
-			"0",
-			"",
-			"# The amount of residents a town needs to claim an outpost,",
-			"# Setting this value to 0, means a town can claim outposts no matter how many residents"
-	),
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",
@@ -1047,12 +732,25 @@ public enum ConfigNodes {
 			"# If People should keep their experience on death in an arena townblock.",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
+	GTOWN_SETTINGS_MAX_BUYTOWN_PRICE(
+			"global_town_settings.max_buytown_price",
+			"999999999",
+			"",
+			"# The Maximum price that a town can be put for sale at. This refers to the price that",
+			"# someone could pay if they ran /t buytown, to buy a town that has been put up for sale."
+	),
 	GTOWN_MAX_PLOT_PRICE_COST(
 			"global_town_settings.maximum_plot_price_cost",
 			"1000000.0",
 			"",
 			"# Maximum amount that a town can set their plot, embassy, shop, etc plots' prices to.",
 			"# Setting this higher can be dangerous if you use Towny in a mysql database. Large numbers can become shortened to scientific notation. "
+	),
+	GTOWN_SETTINGS_MAX_PLOTS_PER_RESIDENT(
+			"global_town_settings.max_plots_per_resident",
+			"100",
+			"",
+			"# maximum number of plots any single resident can own"
 	),
 	GTOWN_SETTINGS_DISPLAY_XYZ_INSTEAD_OF_TOWNY_COORDS(
 			"global_town_settings.display_xyz_instead_of_towny_coords",
@@ -1080,7 +778,6 @@ public enum ConfigNodes {
 			"",
 			"# When enabled, blocks like lava or water will be unable to flow into other plots, if the owners aren't the same."
 	),
-	
 	GTOWN_SETTINGS_COMMAND_BLACKLISTING(
 			"global_town_settings.town_command_blacklisting",
 			"",
@@ -1099,14 +796,12 @@ public enum ConfigNodes {
 			"# Allows blocking commands inside towns through the town_blacklisted_commands setting.",
 			"# This boolean allows you to disable this feature altogether if you don't need it"
 	),
-	
 	GTOWN_TOWN_BLACKLISTED_COMMANDS(
 			"global_town_settings.town_command_blacklisting.town_blacklisted_commands",
 			"somecommandhere,othercommandhere",
 			"",
 			"# Comma separated list of commands which cannot be run inside of any town."
 	),
-
 	GTOWN_TOWN_LIMITED_COMMANDS(
 			"global_town_settings.town_command_blacklisting.player_owned_plot_limited_commands",
 			"sethome,home",
@@ -1117,7 +812,6 @@ public enum ConfigNodes {
 			"# Players with the towny.claimed.owntown.* permission node (given to mayors/assistants usually,)",
 			"# will also not be limited by this command blacklist."
 	),
-
 	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS(
 			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands",
 			"sethome,home",
@@ -1127,7 +821,6 @@ public enum ConfigNodes {
 			"# Players with the towny.globally_welcome permission node are not going to be limited by this list.",
 			"# Commands have to be on town_command_blacklisting.town_blacklisted_commands, else this is not going to be checked."
 	),
-
 	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_TRUSTED_BYPASS(
 			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands_allow_trusted_residents",
 			"true",
@@ -1136,7 +829,6 @@ public enum ConfigNodes {
 			"# as well as residents that are members of a town that is trusted,) will be able to use",
 			"# commands that only town residents could use."
 	),
-
 	GTOWN_TOWN_TOURIST_BLOCKED_COMMANDS_ALLIES_BYPASS(
 			"global_town_settings.town_command_blacklisting.own_town_and_wilderness_limited_commands_allow_allies",
 			"false",
@@ -1144,25 +836,21 @@ public enum ConfigNodes {
 			"# When set to true, residents which are allies of the town (which could be nation members as well as allied nations' members) will be able to use",
 			"# commands that only town residents could use."
 	),
-
 	GTOWN_SETTINGS_AUTOMATIC_CAPITALISATION(
 			"global_town_settings.automatic_capitalisation",
 			"false",
 			"",
 			"# When enabled, town (and nation) names will automatically be capitalised upon creation."
 	),
-	
 	GTOWN_SETTINGS_ALLOW_NUMBERS_IN_TOWN_NAME(
 			"global_town_settings.allow_numbers_in_town_name",
 			"true",
 			"",
 			"# When disabled, towns will not be able to be created with or renamed to a name that contains numbers.",
 			"# Disabling this option does not affect already created towns."),
-	
 	GTOWN_SETTINGS_ALLOWED_TOWN_COLORS(
 			"global_town_settings.allowed_map_colors",
 			"aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00",
-
 			"",
 			"# This setting determines the list of allowed town map colors.",
 			"# The color codes are in hex format."
@@ -1172,7 +860,14 @@ public enum ConfigNodes {
 			"assistant",
 			"",
 			"# List of ranks (separated by a comma) that will prevent a player from being kicked from a town."),
-	
+	GTOWN_SETTINGS_DO_TRUSTED_PLAYERS_GET_PERMS_ON_PERSONALLY_OWNED_LAND(
+			"global_town_settings.do_trusted_players_get_full_perms_in_personally_owned_land",
+			"true",
+			"",
+			"# When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.",
+			"# When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms."),
+
+
 	GNATION_SETTINGS(
 			"global_nation_settings",
 			"",
@@ -1231,52 +926,6 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If true the capital city of nation cannot be neutral/peaceful."),
-	GNATION_SETTINGS_CAPITAL_SPAWN(
-			"global_nation_settings.capital_spawn",
-			"true",
-			"",
-			"# If enabled, only allow the nation spawn to be set in the capital city."),
-    GNATION_SETTINGS_ALLOW_NATION_SPAWN(
-			"global_nation_settings.allow_nation_spawn",
-			"true",
-			"",
-			"# Allow the use of /nation spawn",
-			"# Valid values are: true, false, war, peace",
-			"# When war or peace is set, it is only possible to teleport to the nation,",
-			"# when there is a war or peace."),
-	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL(
-			"global_nation_settings.allow_nation_spawn_travel",
-			"true",
-			"",
-			"# Allow regular residents to use /nation spawn [nation] (TP to other nations if they are public).",
-			"# Valid values are: true, false, war, peace",
-			"# When war or peace is set, it is only possible to teleport to the nation,",
-			"# when there is a war or peace."),
-	GNATION_SETTINGS_ALLOW_NATION_SPAWN_TRAVEL_ALLY(
-			"global_nation_settings.allow_nation_spawn_travel_ally",
-			"true",
-			"",
-			"# Allow regular residents to use /nation spawn [nation] to other nations allied with your nation.",
-			"# Valid values are: true, false, war, peace",
-			"# When war or peace is set, it is only possible to teleport to the nations,",
-			"# when there is a war or peace."),
-	GNATION_SETTINGS_COOLDOWN_ROOT(
-			"global_nation_settings.spawning_cooldowns", "", ""),
-	GNATION_SETTINGS_NATION_MEMBER_COOLDOWN_TIMER(
-			"global_nation_settings.spawning_cooldowns.nation_member_nation_spawn_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player of the same nation can use /n spawn."),
-	GNATION_SETTINGS_NATION_ALLY_COOLDOWN_TIMER(
-			"global_nation_settings.spawning_cooldowns.nation_ally_nation_spawn_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player allied with the nation can use /n spawn."),
-	GNATION_SETTINGS_NATION_UNAFFILIATED_COOLDOWN_TIMER(
-			"global_nation_settings.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time",
-			"30",
-			"",
-			"# Number of seconds that must pass before a player who is not a member or ally can use /n spawn."),
 	GNATION_SETTINGS_NATION_LEVEL_IS_DETERMINED_BY_TOWNS_COUNT(
 			"global_nation_settings.nation_level_is_determined_by_town_count_instead_of_resident_count",
 			"false",
@@ -1298,7 +947,6 @@ public enum ConfigNodes {
 	GNATION_SETTINGS_ALLOWED_NATION_COLORS(
 			"global_nation_settings.allowed_map_colors",
 			"aqua:00ffff, azure:f0ffff, beige:f5f5dc, black:000000, blue:0000ff, brown:a52a2a, cyan:00ffff, darkblue:00008b, darkcyan:008b8b, darkgrey:a9a9a9, darkgreen:006400, darkkhaki:bdb76b, darkmagenta:8b008b, darkolivegreen:556b2f, darkorange:ff8c00, darkorchid:9932cc, darkred:8b0000, darksalmon:e9967a, darkviolet:9400d3, fuchsia:ff00ff, gold:ffd700, green:008000, indigo:4b0082, khaki:f0e68c, lightblue:add8e6, lightcyan:e0ffff, lightgreen:90ee90, lightgrey:d3d3d3, lightpink:ffb6c1, lightyellow:ffffe0, lime:00ff00, magenta:ff00ff, maroon:800000, navy:000080, olive:808000, orange:ffa500, pink:ffc0cb, purple:800080, violet:800080, red:ff0000, silver:c0c0c0, white:ffffff, yellow:ffff00",
-
 			"",
 			"# This setting determines the list of allowed nation map colors.",
 			"# The color codes are in hex format."),
@@ -1307,13 +955,509 @@ public enum ConfigNodes {
 			"-1",
 			"",
 			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
-
+	GNATION_SETTINGS_PROXIMITY_ROOT(
+			"global_nation_settings.proximity", "", ""),
+	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL(
+			"global_nation_settings.proximity.nation_proximity_to_capital_city",
+			"0.0",
+			"",
+			"# The maximum number of townblocks a town's homeblock can be away from their nation capital's homeblock.",
+			"# Automatically precludes towns from one world joining a nation in another world.",
+			"# If the number is 0, towns will not require a proximity to a nation."
+	),
+	GNATION_SETTINGS_NATION_PROXIMITY_TO_OTHER_NATION_TOWNS(
+			"global_nation_settings.proximity.nation_proximity_to_other_nation_towns",
+			"0.0",
+			"",
+			"# The maximum number of townblocks a town's homeblock can be away from other towns's homeblocks in the nation.",
+			"# This setting is only used when nation_proximity_to_capital_city is above 0.",
+			"# When used, and a town is out of range of their capital city, the remaining towns in the nation will be parsed,",
+			"# if one of those towns' homeblocks is close enough to the town's homeblock, the town can remain in the nation.",
+			"# Leave this setting at 0.0 in order to de-activate nations' towns granting further range for towns in the nation."
+	),
+	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL_CAP(
+			"global_nation_settings.proximity.absolute_distance_from_capital",
+			"0.0",
+			"",
+			"# The maximum number of townblocks a town's homeblock can be away from their nation's capital's homeblock,",
+			"# when the town is being allowed to go further out from the capital because of the nation_proximity_to_other_nation_towns",
+			"# setting above.",
+			"# This setting is what will stop a nation being able to go incredibly wide due to towns 'chaining' together.",
+			"# This setting is only used when nation_proximity_to_capital_city is above 0.",
+			"# Leave this setting at 0.0 in order to allow nations to chain towns together to go as wide as they like."
+	),
 	GNATION_SETTINGS_ALLOW_NUMBERS_IN_NATION_NAME(
 		"global_nation_settings.allow_numbers_in_nation_name",
 		"true",
 		"",
 		"# When disabled, nations will not be able to be created with or renamed to a name that contains numbers.",
 		"# Disabling this option does not affect already created nations."),
+
+
+	CLAIMING(
+			"claiming",
+			"",
+			"",
+			"",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                Town Claiming Settings                | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
+			""),
+	CLAIMING_TOWN_BLOCK_RATIO(
+			"claiming.town_block_ratio",
+			"8",
+			"",
+			"# The maximum townblocks available to a town is (numResidents * ratio).",
+			"# Setting this value to 0 will instead use the level based jump values determined in the town level config.",
+			"# Setting this to -1 will result in every town having unlimited claims."),
+	CLAIMING_DEF_BONUS_CLAIMS(
+			"claiming.new_town_bonus_claims",
+			"0",
+			"",
+			"# An amount of additional townblocks that a town will receive when it is first created, in addition to any amount given via the town_block_ratio or town_levels.",
+			"# As an example: This can be used to add 10 townblocks to a town when it is made so the borders can be grown a bit more before the mayor has to seek out residents."),
+	CLAIMING_TOWN_BLOCK_LIMIT(
+			"claiming.town_block_limit",
+			"0",
+			"",
+			"# The maximimum amount of townblocks a town can have, if town_block_ratio is 0 the max size will be decided by the town_levels.",
+			"# Set to 0 to have no size limit."),
+	CLAIMING_TOWN_BLOCK_SIZE(
+			"claiming.town_block_size",
+			"16",
+			"",
+			"# The size of the square grid cell. Changing this value is suggested only when you first install Towny.",
+			"# Doing so after entering data will shift things unwantedly. Using smaller value will allow higher precision,",
+			"# at the cost of more work setting up. Also, extremely small values will render the caching done useless.",
+			"# Each cell is (town_block_size * town_block_size * height-of-the-world) in size, with height-of-the-world",
+			"# being from the bottom to the top of the build-able world."),
+	CLAIMING_SHOW_CLAIM_PARTICLES(
+			"claiming.show_claiming_particles",
+			"true",
+			"",
+			"# When false players will not see the particle flood effect when they claim townblocks."),
+	CLAIMING_MIN_ADJACENT_BLOCKS(
+			"claiming.min_adjacent_blocks",
+			"-1",
+			"",
+			"# The minimum adjacent town blocks required to expand.",
+			"# This can prevent long lines and snake-like patterns.",
+			"# Set to -1 to disable. Set to 3 to force wider expansions of towns."),
+	CLAIMING_MAX_CLAIM_RADIUS_VALUE(
+			"claiming.max_claim_radius_value",
+			"4",
+			"",
+			"# maximum number used in /town claim/unclaim # commands.",
+			"# set to 0 to disable limiting of claim radius value check.",
+			"# keep in mind that the default value of 4 is a radius, ",
+			"# and it will allow claiming 9x9 (80 plots) at once."),
+
+	CLAIMING_BIOME_RULES("claiming.biome_rules","","",""),
+
+	CLAIMING_UNWANTED_BIOMES_ROOT("claiming.biome_rules.unwanted_biomes","","",
+			"# When a townblock is made up of too many blocks of these biomes, it will not be able to be claimed by a town."),
+	CLAIMING_BIOME_UNWANTED_BIOMES_ENABLED("claiming.biome_rules.unwanted_biomes.enabled",
+			"false",
+			"",
+			"# When true, unwanted biomes will be tested for when a player is claiming land."),
+	CLAIMING_BIOME_UNWANTED_BIOMES("claiming.biome_rules.unwanted_biomes.biomes",
+			"the_end,end_barrens,end_highlands,end_midlands,small_end_islands",
+			"",
+			"# A comma separated list of biome names that will add up towards a townblock's un-claim-ability.",
+			"# Use lower-case only or this will not work properly for you."),
+	CLAIMING_BIOME_UNWANTED_BIOMES_THRESHOLD("claiming.biome_rules.unwanted_biomes.threshold",
+			"55",
+			"",
+			"# The max amount of combined unwanted biomes as a percent, that will be allowed in plots being claimed by towns.",
+			"# For example, if a townblock would be more than X percent ocean it will not be able to be claimed."),
+
+	CLAIMING_BIOME_OCEAN_BLOCKING_ROOT("claiming.biome_rules.ocean_blocking","","",""),	
+	CLAIMING_BIOME_BLOCK_OCEAN_CLAIMS("claiming.biome_rules.ocean_blocking.enabled",
+			"false",
+			"",
+			"# When true, any wilderness plot which has more Ocean biome in it than the allowed threshold (see below,)",
+			"# will not be able to be claimed."),
+	CLAIMING_BIOME_BLOCK_OCEAN_THRESHOLD("claiming.biome_rules.ocean_blocking.threshold",
+			"55",
+			"",
+			"# The max amount of combined ocean biomes as a percent, that will be allowed in plots being claimed by towns.",
+			"# For example, if a townblock would be more than X percent ocean it will not be able to be claimed."),
+
+	CLAIMING_DISTANCE_RULES("claiming.distance_rules","","",""),
+	CLAIMING_MIN_DISTANCE_IGNORED_FOR_NATIONS(
+			"claiming.distance_rules.min_distances_ignored_for_towns_in_same_nation",
+			"true",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are in the same nation. Setting to false will keep all towns separated the same."),
+	CLAIMING_MIN_DISTANCE_IGNORED_FOR_ALLIES(
+			"claiming.distance_rules.min_distances_ignored_for_towns_in_allied_nation",
+			"false",
+			"",
+			"# If true, the below settings: min_plot_distance_from_town_plot and min_distance_from_town_homeblock",
+			"# will be ignored for towns that are mutually allied. Setting to false will keep all towns separated the same."),
+	CLAIMING_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT(
+			"claiming.distance_rules.min_plot_distance_from_town_plot",
+			"5",
+			"",
+			"# Minimum number of plots any towns plot must be from the next town's own plots.",
+			"# Put in other words: the buffer area around every claim that no other town can claim into.",
+			"# Does not affect towns which are in the same nation.",
+			"# This will prevent town encasement to a certain degree."),
+	CLAIMING_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
+			"claiming.distance_rules.min_distance_from_town_homeblock",
+			"5",
+			"",
+			"# Minimum number of plots any towns home plot must be from the next town.",
+			"# Put in other words: the buffer area around every homeblock that no other town can claim into.",
+			"# Does not affect towns which are in the same nation.",
+			"# This will prevent someone founding a town right on your doorstep"),
+	CLAIMING_MIN_DISTANCE_FOR_OUTPOST_FROM_PLOT(
+			"claiming.distance_rules.min_distance_for_outpost_from_plot",
+			"5", 
+			"", 
+			"# Minimum number of plots an outpost must be from any other town's plots.",
+			"# Useful when min_plot_distance_from_town_plot is set to near-zero to allow towns to have claims",
+			"# near to each other, but want to keep outposts away from towns."),
+	CLAIMING_MAX_DISTANCE_FOR_OUTPOST_FROM_TOWN_PLOT(
+			"claiming.distance_rules.max_distance_for_outpost_from_town_plot",
+			"0",
+			"",
+			"# Set to 0 to disable. When above 0 an outpost may only be claimed within the given number of townblocks from a townblock owned by the town.",
+			"# Setting this to any value above 0 will stop outposts being made off-world from the town's homeworld.",
+			"# Do not set lower than min_distance_for_outpost_from_plot above."),
+	CLAIMING_MIN_DISTANCE_BETWEEN_HOMEBLOCKS(
+			"claiming.distance_rules.min_distance_between_homeblocks",
+			"0",
+			"",
+			"# Minimum distance between homeblocks."),
+	CLAIMING_MAX_DISTANCE_BETWEEN_HOMEBLOCKS(
+			"claiming.distance_rules.max_distance_between_homeblocks",
+			"0",
+			"",
+			"# Maximum distance between homeblocks.",
+			"# This will force players to build close together."),
+	CLAIMING_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_PLOT(
+			"claiming.distance_rules.new_town_min_distance_from_town_plot",
+			"-1",
+			"",
+			"# The minimum distance that a new town must be from nearby towns' plots.",
+			"# When set to -1, this will use the value of the min_plot_distance_from_town_plot option."),
+	CLAIMING_NEW_TOWN_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
+			"claiming.distance_rules.new_town_min_distance_from_town_homeblock",
+			"-1",
+			"",
+			"# The minimum distance that a new town must be from nearby towns' homeblocks.",
+			"# When set to -1, this will use the value of the min_distance_from_town_homeblock setting."),
+
+	CLAIMING_OUTPOSTS("claiming.outposts","","",""),
+	CLAIMING_ALLOW_OUTPOSTS(
+			"claiming.outposts.allow_outposts",
+			"true",
+			"",
+			"# Allow towns to claim outposts (a townblock not connected to town)."),
+	CLAIMING_LIMIT_OUTPOST_USING_LEVELS(
+			"claiming.outposts.limit_outposts_using_town_and_nation_levels",
+			"false",
+			"",
+			"# When set to true outposts can be limited by the townOutpostLimit value of the Town Levels and",
+			"# the nationBonusOutpostLimit value in the Nation Levels. In this way nations can be made to be",
+			"# the only way of receiving outposts, or as an incentive to receive more outposts. Towns which are",
+			"# larger can have more outposts.",
+			"# When activated, this setting will not cause towns who already have higher than their limit",
+			"# to lose outposts. They will not be able to start new outposts until they have unclaimed outposts",
+			"# to become under their limit. Likewise, towns that join a nation and receive bonus outposts will",
+			"# be over their limit if they leave the nation."),
+	CLAIMING_OVER_OUTPOST_LIMIT_STOP_TELEPORT(
+			"claiming.outposts.over_outpost_limits_stops_teleports",
+			"false",
+			"",
+			"# When limit_outposts_using_town_and_nation_levels is also true, towns which are over their outpost",
+			"# limit will not be able to use their /town outpost teleports for the outpost #'s higher than their limit,",
+			"# until they have dropped below their limit.",
+			"# eg: If their limit is 3 then they cannot use /t outpost 4"),
+	CLAIMING_MINIMUM_AMOUNT_RESIDENTS_FOR_OUTPOSTS(
+			"claiming.outposts.minimum_amount_of_residents_in_town_for_outpost",
+			"0",
+			"",
+			"# The amount of residents a town needs to claim an outpost,",
+			"# Setting this value to 0, means a town can claim outposts no matter how many residents.",
+			"# This setting is ignored when limit_outposts_using_town_and_nation_levels is set to true."),
+
+	CLAIMING_OVERCLAIMING_ROOT("claiming.overclaiming", "", "", ""),
+	CLAIMING_OVER_ALLOWED_CLAIM_LIMITS_ALLOWS_STEALING_LAND(
+			"claiming.overclaiming.being_overclaimed_allows_other_towns_to_steal_land",
+			"false",
+			"",
+			"# A feature that allows towns which have too many townblocks claimed (overclaimed) ie: 120/100 TownBlocks, ",
+			"# to have their land stolen by other towns which are not overclaimed. Using this incentivises Towns to keep",
+			"# their residents from leaving, and will mean that mayors will be more careful about which land they choose",
+			"# to claim.",
+			"# Overclaiming does not allow a town to be split into two separate parts, requiring the Town that is stealing",
+			"# land to work from the outside inwards.",
+			"# It is highly recommended to only use this on servers where outposts are disabled, and requiring ",
+			"# a number of adjacent claims over 1 is enabled.",
+			"# Towns take land using /t takeoverclaim."),
+	CLAIMING_OVERCLAIMING_PREVENTED_BY_HOMEBLOCK_RADIUS(
+			"claiming.overclaiming.overclaiming_prevented_by_homeblock_radius",
+			"true",
+			"",
+			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
+			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
+	CLAIMING_OVERCLAIMING_TOWN_AGE_REQUIREMENT(
+			"claiming.overclaiming.town_age_requirement",
+			"7d",
+			"",
+			"# When in use, requires that a town be of a minimum age in order to overclaim another town. This prevents new towns being made just to overclaim someone.",
+			"# Default is for 7 days."),
+	CLAIMING_OVERCLAIMING_COMMAND_COOLDOWN(
+			"claiming.overclaiming.command_cooldown",
+			"0m",
+			"",
+			"# When in use, requires an amount of time to pass before the /t takeoverclaim command can be used again."),
+	CLAIMING_OVERCLAIMING_REQUIRES_NATIONS_TO_BE_ENEMIES(
+			"claiming.overclaiming.nations_required_to_be_enemies",
+			"false",
+			"",
+			"# When true, when the towns involved in the overclaiming both have nations, the overclaiming town's nation will have to have the overclaimed town's nation declared as an enemy.",
+			"# Towns with no nation are not affected by this rule."),
+
+	CLAIMING_BUY_BONUS_ROOT("claiming.purchased_bonus_blocks", "", "", ""),
+	CLAIMING_MAX_PURCHASED_BLOCKS(
+			"claiming.purchased_bonus_blocks.max_purchased_blocks",
+			"0",
+			"",
+			"# Limits the maximum amount of bonus blocks a town can buy.",
+			"# This setting does nothing when town.max_purchased_blocks_uses_town_levels is set to true."),
+	CLAIMING_MAX_PURCHASED_BLOCKS_USES_TOWN_LEVELS(
+			"claiming.purchased_bonus_blocks.max_purchased_blocks_uses_town_levels",
+			"true",
+			"",
+			"# When set to true, the town_level section of the config determines the maximum number of bonus blocks a town can purchase."),
+
+
+	SPAWNING(
+			"spawning",
+			"",
+			"",
+			"",
+			"############################################################",
+			"# +------------------------------------------------------+ #",
+			"# |                   Spawning Settings                  | #",
+			"# +------------------------------------------------------+ #",
+			"############################################################",
+			""),
+	SPAWNING_COST_SPAWN_WARNINGS(
+			"spawning.spawn_cost_warnings",
+			"true",
+			"",
+			"# Decides whether confirmations should appear if you spawn to an area with an associated cost."),
+	SPAWNING_VISUALIZED_SPAWN_POINTS_ENABLED(
+			"spawning.visualized_spawn_points_enabled",
+			"true",
+			"",
+			"# If enabled, particles will appear around town, nation, outpost & jail spawns."),
+
+	SPAWNING_WARMUP_ROOT("spawning.spawning_warmups","",""),
+	SPAWNING_WARMUP_TIMER(
+			"spawning.spawning_warmups.teleport_warmup_time",
+			"0",
+			"",
+			"# If non zero it delays any spawn request by x seconds."),
+	SPAWNING_MOVEMENT_CANCELS_SPAWN_WARMUP(
+			"spawning.spawning_warmups.movement_cancels_spawn_warmup",
+			"false",
+			"",
+			"# When set to true, if players are currently in a spawn warmup, moving will cancel their spawn."),
+	SPAWNING_DAMAGE_CANCELS_SPAWN_WARMUP(
+			"spawning.spawning_warmups.damage_cancels_spawn_warmup",
+			"false",
+			"",
+			"# When set to true, if players are damaged in any way while in a spawn warmup, their spawning will be cancelled."),
+	SPAWNING_WARMUP_USES_TITLE_MESSAGE(
+			"spawning.spawning_warmups.uses_title_message",
+			"false",
+			"",
+			"# When set to true, players get a large Title message showing how long until their teleport will happen,",
+			"# as well as a message telling them not to move if movement_cancels_spawn_warmup is true."),
+	SPAWNING_WARMUP_SHOWS_PARTICLE(
+			"spawning.spawning_warmups.uses_particle_effect",
+			"true",
+			"",
+			"# When set to true, players get a particle effect matching the towny spawn particles, which appears around them for the warmup duration."),
+
+	SPAWNING_TOWN_SPAWN_ROOT("spawning.town_spawn","",""),
+	SPAWNING_ALLOW_TOWN_SPAWN(
+			"spawning.town_spawn.allow_town_spawn",
+			"true",
+			"",
+			"# Allow the use of /town spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
+	SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL(
+			"spawning.town_spawn.allow_town_spawn_travel",
+			"true",
+			"",
+			"# Allow regular residents to use /town spawn [town] (TP to other towns if they are public).",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
+	SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL_NATION(
+			"spawning.town_spawn.allow_town_spawn_travel_nation",
+			"true",
+			"",
+			"# Allow regular residents to use /town spawn [town] to other towns in your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
+	SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL_ALLY(
+			"spawning.town_spawn.allow_town_spawn_travel_ally",
+			"true",
+			"",
+			"# Allow regular residents to use /town spawn [town] to other towns in a nation allied with your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the town,",
+			"# when there is a war or peace."),
+	SPAWNING_IS_ALLY_TOWN_SPAWNING_REQUIRING_PUBLIC_STATUS(
+			"spawning.town_spawn.is_nation_ally_spawning_to_town_requiring_public_status",
+			"false",
+			"",
+			"# When set to true both nation and ally spawn travel will also require the target town to have their status set to public."),
+	SPAWNING_SETTINGS_IS_TRUSTED_RESIDENTS_COUNT_AS_RESIDENTS(
+			"spawning.town_spawn.do_trusted_residents_count_as_residents",
+			"false",
+			"",
+			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.",
+			"# Allows allows the residents of entire an town when that town is trusted by the town."),
+	SPAWNING_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN(
+			"spawning.town_spawn.are_new_residents_prompted_to_town_spawn",
+			"false",
+			"",
+			"# When a resident joins a town, should they be prompted to use spawn to the town?",
+			"# This requires them to not already be standing in the town, and also to be able to use /t spawn and whatever costs may be associated with it."),
+	SPAWNING_PREVENT_TOWN_SPAWN_IN(
+			"spawning.town_spawn.prevent_town_spawn_in",
+			"enemy,outlaw",
+			"",
+			"# Prevent players from using /town spawn while within unclaimed areas and/or enemy/neutral towns.",
+			"# Allowed options: unclaimed,enemy,neutral,outlaw"),
+	SPAWNING_ENEMIES_ALLOWED_TO_SPAWN_TO_PEACEFUL_TOWNS(
+			"spawning.town_spawn.allow_enemies_spawn_to_peaceful_towns",
+			"false",
+			"",
+			"# When true, players will be allowed to spawn to peaceful/neutral towns in which they are considered enemies.",
+			"# Setting this to true will make town spawn points unsafe for private towns which are part of nations with enemies."),
+
+	SPAWNING_TOWN_SPAWN_COOLDOWN_ROOT(
+			"spawning.town_spawn.spawning_cooldowns", "", ""),
+	SPAWNING_TOWN_SPAWN_COOLDOWN_TIMER(
+			"spawning.town_spawn.spawning_cooldowns.town_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player can use /t spawn or /res spawn."),
+	SPAWNING_TOWN_SPAWN_OUTPOST_COOLDOWN_TIMER(
+			"spawning.town_spawn.spawning_cooldowns.outpost_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player can use /t outpost."),
+	SPAWNING_TOWN_SPAWN_NATION_MEMBER_COOLDOWN_TIMER(
+			"spawning.town_spawn.spawning_cooldowns.nation_member_town_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player of the same nation can use /t spawn."),
+	SPAWNING_TOWN_SPAWN_NATION_ALLY_COOLDOWN_TIMER(
+			"spawning.town_spawn.spawning_cooldowns.nation_ally_town_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player in an allied nation can use /t spawn."),
+	SPAWNING_TOWN_SPAWN_UNAFFILIATED_COOLDOWN_TIMER(
+			"spawning.town_spawn.spawning_cooldowns.unaffiliated_town_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player who is not a member or ally of town can use /t spawn."),
+
+	SPAWNING_NATION_SPAWN_ROOT("spawning.nation_spawn","",""),
+	SPAWNING_FORCE_NATION_SPAWN_IN_CAPITAL(
+			"spawning.nation_spawn.force_nation_spawn_in_capital",
+			"true",
+			"",
+			"# If enabled, only allow the nation spawn to be set in the capital city."),
+	SPAWNING_ALLOW_NATION_SPAWN(
+			"spawning.nation_spawn.allow_nation_spawn",
+			"true",
+			"",
+			"# Allow the use of /nation spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	SPAWNING_ALLOW_NATION_SPAWN_TRAVEL(
+			"spawning.nation_spawn.allow_nation_spawn_travel",
+			"true",
+			"",
+			"# Allow regular residents to use /nation spawn [nation] (TP to other nations if they are public).",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	SPAWNING_ALLOW_NATION_SPAWN_TRAVEL_ALLY(
+			"spawning.nation_spawn.allow_nation_spawn_travel_ally",
+			"true",
+			"",
+			"# Allow regular residents to use /nation spawn [nation] to other nations allied with your nation.",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nations,",
+			"# when there is a war or peace."),
+
+	SPAWNING_NATION_SPAWN_COOLDOWN_ROOT(
+			"spawning.nation_spawn.spawning_cooldowns", "", ""),
+	SPAWNING_NATION_SPAWN_NATION_MEMBER_COOLDOWN_TIMER(
+			"spawning.nation_spawn.spawning_cooldowns.nation_member_nation_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player of the same nation can use /n spawn."),
+	SPAWNING_NATION_SPAWN_NATION_ALLY_COOLDOWN_TIMER(
+			"spawning.nation_spawn.spawning_cooldowns.nation_ally_nation_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player allied with the nation can use /n spawn."),
+	SPAWNING_NATION_SPAWN_NATION_UNAFFILIATED_COOLDOWN_TIMER(
+			"spawning.nation_spawn.spawning_cooldowns.unaffiliated_nation_spawn_cooldown_time",
+			"30",
+			"",
+			"# Number of seconds that must pass before a player who is not a member or ally can use /n spawn."),
+
+	SPAWNING_RESPAWN_ROOT("spawning.respawning","",""),
+	SPAWNING_TOWN_RESPAWN(
+			"spawning.respawning.town_respawn",
+			"false",
+			"",
+			"# When true Towny will handle respawning, with town or resident spawns."),
+	SPAWNING_TOWN_RESPAWN_SAME_WORLD_ONLY(
+			"spawning.respawning.town_respawn_same_world_only",
+			"false",
+			"",
+			"# Town respawn only happens when the player dies in the same world as the town's spawn point."),
+	SPAWNING_RESPAWN_ANCHOR_HIGHER_PRECEDENCE(
+			"spawning.respawning.respawn_anchor_higher_precendence",
+			"true",
+			"",
+			"# When this is true, players will respawn to respawn anchors on death rather than their own town."),
+
+	SPAWNING_RESPAWN_PROTECTION_ROOT("spawning.respawning.respawn_protection", "", ""),
+	SPAWNING_RESPAWN_PROTECTION_TIME(
+			"spawning.respawning.respawn_protection.time",
+			"10s",
+			"",
+			"# When greater than 0s, the amount of time a player who has respawned is considered invulnerable.",
+			"# Invulnerable players who attack other players will lose their invulnerability.",
+			"# Invulnerable players who teleport after respawn will also lose their invulnerability."),
+	SPAWNING_RESPAWN_PROTECTION_ALLOW_PICKUP(
+			"spawning.respawning.respawn_protection.allow_pickup",
+			"true",
+			"",
+			"# If disabled, players will not be able to pickup items while under respawn protection."),
 
 	PLUGIN(
 			"plugin",
@@ -1352,14 +1496,6 @@ public enum ConfigNodes {
 			"plugin.interfacing.tekkit.fake_residents",
 			"[IndustrialCraft],[BuildCraft],[Redpower],[Forestry],[Turtle]",
 			"# Add any fake players for client/server mods (aka Tekkit) here"),
-	PLUGIN_USING_ECONOMY(
-			"plugin.interfacing.using_economy",
-			"true",
-			"",
-			"# This enables/disables all the economy functions of Towny.",
-			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
-			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
-			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	
 	PLUGIN_LUCKPERMS_ROOT("plugin.interfacing.luckperms","",""),
 	PLUGIN_LUCKPERMS_CONTEXTS(
@@ -1374,7 +1510,7 @@ public enum ConfigNodes {
 			"*",
 			"",
 			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
-			"# Available contexts: towny:resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank",
+			"# Available contexts: towny:resident, towny:nation_resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank",
 			"# towny:nationrank, towny:town, towny:nation"
 	),
 	
@@ -1392,6 +1528,13 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If enabled, players will be prompted to open a url when clicking on coordinates in towny status screens."
+	),
+	PLUGIN_WEB_MAP_WORLD_NAME_USES_KEY(
+		"plugin.interfacing.web_map.world_name_uses_world_key",
+		"false",
+		"",
+		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name.",
+		"# This should be enabled if you use SquareMap."
 	),
 	
 	PLUGIN_WEB_MAP_URL(
@@ -1430,7 +1573,8 @@ public enum ConfigNodes {
 	PLUGIN_HOUR_INTERVAL(
 			"plugin.hour_timer.hour_interval",
 			"60m",
-			"# The number of minutes in each \"day\".",
+			"",
+			"# The number of minutes in each \"hour\".",
 			"# Default is 60m."),
 	PLUGIN_NEWHOUR_TIME(
 			"plugin.hour_timer.new_hour_time",
@@ -1458,7 +1602,7 @@ public enum ConfigNodes {
 			"",
 			"# Spams the player named in dev_name with all messages related to towny."),
 	PLUGIN_DEV_MODE_ENABLE("plugin.dev_mode.enable", "false"),
-	PLUGIN_DEV_MODE_DEV_NAME("plugin.dev_mode.dev_name", "ElgarL"),
+	PLUGIN_DEV_MODE_DEV_NAME("plugin.dev_mode.dev_name", "LlmDl"),
 	PLUGIN_RESET_LOG_ON_BOOT(
 			"plugin.reset_log_on_boot",
 			"true",
@@ -1469,12 +1613,6 @@ public enum ConfigNodes {
 		"10",
 		"",
 		"# Sets the default size that /towny top commands display."
-	),
-	PLUGIN_VISUALIZED_SPAWN_POINTS_ENABLED(
-		"plugin.visualized_spawn_points_enabled",
-		"true",
-		"",
-		"# If enabled, particles will appear around town, nation, outpost & jail spawns."
 	),
 	PLUGIN_NAME_BLACKLIST(
 		"plugin.name_blacklist",
@@ -1541,12 +1679,20 @@ public enum ConfigNodes {
 			"4",
 			"",
 			"# Maximum length for Town and Nation tags."),
-	FILTERS_MODIFY_CHAT_MAX_LGTH(
+	FILTERS_MODIFY_CHAT_MAX_TITLE_LENGTH(
 			"filters_colour_chat.modify_chat.max_title_length",
 			"10",
 			"",
 			"# Maximum length of titles and surnames."),
-	
+	FILTERS_MODIFY_CHAT_DO_TITLES_AND_SURTITLES_REQUIRE_PERMISSION_FOR_COLOUR_CODES(
+			"filters_colour_chat.modify_chat.does_adding_colour_codes_require_permission_node",
+			"false",
+			"",
+			"# When true, a mayor or king will need the permission node in order to add colour codes to residents' titles and surtitles.",
+			"# Kings require towny.command.nation.set.title.colours, mayors require towny.command.town.set.title.colours.",
+			"# These nodes are not given out by the default townyperms.yml and must be added to the mayor and king section",
+			"# when this setting has been made true."),
+
 	FILTERS_PAPI_CHAT_FORMATTING(
 			"filters_colour_chat.papi_chat_formatting","","",
 			"# See the Placeholders wiki page for list of PAPI placeholders.",
@@ -1608,6 +1754,11 @@ public enum ConfigNodes {
 			"&2",
 			"",
 			"# Used when two players are in the same nation."),
+	FILTERS_PAPI_REL_FORMATTING_CONQUERED_TOWN(
+			"filters_colour_chat.papi_relational_formatting.conquered_town",
+			"&e",
+			"",
+			"# Used when the player is a member of one of your nation's conquered towns."),
 	FILTERS_PAPI_REL_FORMATTING_ALLY(
 			"filters_colour_chat.papi_relational_formatting.ally",
 			"&b",
@@ -1830,10 +1981,10 @@ public enum ConfigNodes {
 			"",
 			"  # Example:",
 			"  # [notification.format]",
-			"  # ~ [notification.area_[wilderness/town]][notification.splitter][notification.[no_]owner][notification.splitter][notification.plot.format]",
+			"  # ~ [notification.area_[wilderness/town]][notification.splitter][notification.[no_owner][notification.splitter][notification.plot.format]",
 			"  # ... [notification.plot.format]",
-			"  # ... [notification.plot.homeblock][notification.plot.splitter][notification.plot.forsale][notification.plot.splitter][notification.plot.type]",
-			"  # ~ Wak Town - Lord Jebus - [Home] [For Sale: 50 Beli] [Shop]",
+			"  # ... [notification.plot.homeblock][notification.plot.splitter][notification.plot.forsaleby][notification.plot.splitter][notification.plot.type]",
+			"  # ~ Wak Town - Lord Jebus - [Home] [For Sale by Jebus: 50 Beli] [Shop]",
 			""),
 	NOTIFICATION_FORMAT("notification.format", "&6 ~ %s"),
 	NOTIFICATION_SPLITTER("notification.splitter", "&7 - "),
@@ -1849,7 +2000,7 @@ public enum ConfigNodes {
 	// TODO: Make the following 4 nodes use something that is translatable.
 	NOTIFICATION_PLOT_HOMEBLOCK("notification.plot.homeblock", "&b[Home]"),
 	NOTIFICATION_PLOT_OUTPOSTBLOCK("notification.plot.outpostblock","&b[Outpost]"),
-	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
+	NOTIFICATION_PLOT_FORSALEBY("notification.plot.forsaleby", "&e[For Sale by %s: %s]"),
 	NOTIFICATION_PLOT_NOTFORSALE("notification.plot.notforsale", "&e[Not For Sale]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	NOTIFICATION_GROUP("notification.group", "&f[%s]"),
@@ -2193,11 +2344,6 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If true, players can only use beds in plots they personally own."),
-	RES_SETTING_IS_SHOWING_LOCALE_MESSAGE(
-			"resident_settings.is_showing_locale_message",
-			"true",
-			"",
-			"# If true, players who join the server for the first time will be informed about their locale, and about Towny translatable system."),
 	RES_SETTING_DEFAULT_ABOUT(
 			"resident_settings.default_about",
 			"/res set about [msg]",
@@ -2214,6 +2360,14 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	ECO_USING_ECONOMY(
+			"economy.using_economy",
+			"true",
+			"",
+			"# This enables/disables all the economy functions of Towny.",
+			"# This will first attempt to use Vault or Reserve to bridge your economy plugin with Towny.",
+			"# If Reserve/Vault is not present it will attempt to find a supported economy plugin.",
+			"# If neither Vault/Reserve or supported economy are present it will not be possible to create towns or do any operations that require money."),
 	ECO_USE_ASYNC(
 			"economy.use_async",
 			"true",
@@ -2225,6 +2379,7 @@ public enum ConfigNodes {
 			"600s",
 			"",
 			"# The time that the town and nation bank accounts' balances are cached for, in seconds.",
+			"# This time is also used for the resident tax-owing value.",
 			"# Default of 600s is equal to ten minutes. Requires the server to be stopped and started if you want to change this.",
 			"# Cached balances are used for PlaceholderAPI placeholders, town and nation lists."),
 	ECO_TOWN_PREFIX(
@@ -2476,6 +2631,12 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, players can only use their town withdraw/deposit commands while inside of their own town.",
 			"# Likewise, nation banks can only be withdrawn/deposited to while in the capital city."),
+	ECO_BANK_IS_DELETED_OBJECT_BALANCE_PAID_TO_OWNER(
+			"economy.banks.is_deleted_town_and_nation_bank_balances_paid_to_owner",
+			"true",
+			"",
+			"# When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.",
+			"# This will only succeed if the town or nation has a mayor or leader."),
 
 	ECO_CLOSED_ECONOMY("economy.closed_economy", "", ""),
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(
@@ -2935,6 +3096,12 @@ public enum ConfigNodes {
 			"",
 			"# If true players will only be able to use /t deposit, /t withdraw, /n deposit & /n withdraw while inside bank plots belonging to the town or nation capital respectively.",
 			"# Home plots will also allow deposit and withdraw commands."),
+	BANK_BANK_PLOTS_STOP_HOME_BLOCK_BEING_USED(
+			"bank.do_homeblocks_not_work_when_a_town_has_bank_plots",
+			"false",
+			"",
+			"# If true, towns which have one or more bank plots will no longer be able to use their homeblock for withdraw/depositing.",
+			"# Requires the above is_banking_limited_to_bank_plots to be true as well."),
 	
 	TOWN_RUINING_HEADER("town_ruining", "", "", "",
 			"############################################################",
@@ -2988,6 +3155,18 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If this is true, when a town becomes a ruin, and they are a member of a nation, any money in the town bank will be deposited to the nation bank."),
+	TOWN_RUINING_TOWN_PLOTS_PERMISSIONS_OPEN_UP_PROGRESSIVELY(
+			"town_ruining.town_ruins.do_plots_permissions_change_to_allow_all",
+			"false",
+			"",
+			"# If this is true, when a town becomes a ruin, every hour more and more of their plots will have their permissions turned to allow",
+			"# build, destroy, switch, itemuse to on. This will affect the newest claims first and progress until the first claims made are opened up",
+			"# right before the max_duration_hours have passed. When a town has more claims than max_duration_hours, multiple plots will be opened up",
+			"# each hour, ie: 500 claims and 72 max hours = 7 claims per hour.",
+			"# If a Town has less claims than max_duration hours, those claims' permissions are opened up much more slowly with hours passing between",
+			"# plots opening up, ie: 36 claims and 72 max hours = 1 claim every 2 hours.",
+			"# This system is meant to give players across many time zones the chance to loot a town when it falls into ruin."),
+
 
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
 			"############################################################",

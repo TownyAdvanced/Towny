@@ -52,8 +52,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,10 +69,12 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -91,8 +91,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String settingsFolderPath;
 	final String logFolderPath;
 	final String backupFolderPath;
-
-	Logger logger = LogManager.getLogger(TownyDatabaseHandler.class);
 	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final ScheduledTask task;
 	
@@ -117,12 +115,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 		
 		/*
-		 * Start our Async queue for pushing data to the flatfile database.
+		 * Start our async queue for pushing data to the database.
 		 */
 		task = plugin.getScheduler().runAsyncRepeating(() -> {
-			while (!this.queryQueue.isEmpty()) {
-				Runnable operation = this.queryQueue.poll();
-				operation.run();
+			synchronized(queryQueue) {
+				while (!this.queryQueue.isEmpty()) {
+					Runnable operation = this.queryQueue.poll();
+					operation.run();
+				}
 			}
 		}, 5L, 5L);
 	}
@@ -218,7 +218,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void newNation(String name, @Nullable UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
-			filteredName = NameValidation.checkAndFilterName(name);
+			filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
 		} catch (InvalidNameException e) {
 			throw new NotRegisteredException(e.getMessage());
 		}
@@ -339,13 +339,13 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			// Log as error because TownBlocks *must* have a town.
-			logger.error(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", townBlock.getWorld().getName(), townBlock.getX(), townBlock.getZ()));
+			plugin.getLogger().severe(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", townBlock.getWorld().getName(), townBlock.getX(), townBlock.getZ()));
 
 		TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock);
 		if (BukkitTools.isEventCancelled(event)) {
 			// Log as Warn because the event has been processed
 			if (!event.getCancelMessage().isEmpty())
-				logger.warn(event.getCancelMessage());
+				plugin.getLogger().warning(event.getCancelMessage());
 			return;
 		}
 		
@@ -369,7 +369,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownyRegenAPI.addToRegenQueueList(townBlock.getWorldCoord(), true);
 
 		// Raise an event to signal the unclaim
-		BukkitTools.fireEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord()));
+		BukkitTools.fireEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord(), false));
 	}
 
 	@Override
@@ -425,8 +425,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.removeNation();
 		}
 
+		if (TownyEconomyHandler.isActive())
+			town.getAccount().removeAccount();
+
 		for (Resident resident : toSave) {
-			resident.clearModes();
+			resident.clearModes(false);
 			resident.removeTown(true);
 		}
 		
@@ -435,9 +438,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		new ArrayList<>(universe.getJailedResidentMap()).stream()
 			.filter(resident -> resident.hasJailTown(town.getName()))
 			.forEach(resident -> JailUtil.unJailResident(resident, UnJailReason.JAIL_DELETED));
-
-		if (TownyEconomyHandler.isActive())
-			town.getAccount().removeAccount();
 
 		if (townyWorld != null) {
 			try {
@@ -594,7 +594,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			String filteredName;
 			try {
-				filteredName = NameValidation.checkAndFilterName(newName);
+				filteredName = NameValidation.checkAndFilterTownNameOrThrow(newName);
 			} catch (InvalidNameException e) {
 				throw new NotRegisteredException(e.getMessage());
 			}
@@ -613,9 +613,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive())
 				try {
 					townBalance = town.getAccount().getHoldingBalance();
-					town.getAccount().removeAccount();
+					town.getAccount().withdraw(townBalance, "Rename Town - Transfer from old account");
 				} catch (Exception ignored) {
-					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + ", could not be received from the economy plugin and will not be able to be converted.");
+					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + " could not be received from the economy plugin and will not be able to be converted.");
 				}
 				
 			UUID oldUUID = town.getUUID();
@@ -688,7 +688,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		BukkitTools.fireEvent(new RenameTownEvent(oldName, town));
 	}
 		
-	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void renameNation(Nation nation, String newName) throws AlreadyRegisteredException, NotRegisteredException {
 
@@ -701,7 +700,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			String filteredName;
 
 			try {
-				filteredName = NameValidation.checkAndFilterName(newName);
+				filteredName = NameValidation.checkAndFilterNationNameOrThrow(newName);
 			} catch (InvalidNameException e) {
 				throw new NotRegisteredException(e.getMessage());
 			}
@@ -717,7 +716,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive())
 				try {
 					nationBalance = nation.getAccount().getHoldingBalance();
-					nation.getAccount().removeAccount();
+					nation.getAccount().setBalance(0, "Rename Nation - Transfer from old account");
 				} catch (Exception ignored) {
 					TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
 				}
@@ -825,26 +824,31 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			Resident oldResident = new Resident(oldName);
 			
 			// Search and update all friends lists
-			List<Resident> toSaveResident = new ArrayList<>(universe.getResidents());
-			for (Resident toCheck : toSaveResident){
+			Set<Resident> residentsToSave = new HashSet<>();
+			for (Resident toCheck : new ArrayList<>(universe.getResidents())){
 				if (toCheck.hasFriend(oldResident)) {
 					toCheck.removeFriend(oldResident);
 					toCheck.addFriend(resident);
+					residentsToSave.add(toCheck);
 				}
 			}
-			for (Resident toCheck : toSaveResident)
-				saveResident(toCheck);
-			
-			// Search and update all outlaw lists.
-			List<Town> toSaveTown = new ArrayList<>(universe.getTowns());
-			for (Town toCheckTown : toSaveTown) {
+			residentsToSave.forEach(res -> res.save());
+
+			// Search and update all town outlaw, trustedresidents lists.
+			Set<Town> townsToSave = new HashSet<>();
+			for (Town toCheckTown : new ArrayList<>(universe.getTowns())) {
 				if (toCheckTown.hasOutlaw(oldResident)) {
 					toCheckTown.removeOutlaw(oldResident);
 					toCheckTown.addOutlaw(resident);
+					townsToSave.add(toCheckTown);
+				}
+				if (toCheckTown.hasTrustedResident(oldResident)) {
+					toCheckTown.removeTrustedResident(oldResident);
+					toCheckTown.addTrustedResident(resident);
+					townsToSave.add(toCheckTown);
 				}
 			}
-			for (Town toCheckTown : toSaveTown)
-				saveTown(toCheckTown);	
+			townsToSave.forEach(town -> town.save());
 
 			//delete the old resident and tidy up files
 			deleteResident(oldResident);
@@ -1143,7 +1147,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
 
 		mergeInto.addPurchasedBlocks(mergeFrom.getPurchasedBlocks());
-		mergeInto.addBonusBlocks(mergeFrom.getBonusBlocks());
+
+		int mergeFromBonus = mergeFrom.getBonusBlocks();
+		int newTownBonus = TownySettings.getNewTownBonusBlocks();
+		if (newTownBonus > 0 && mergeFromBonus >= newTownBonus)
+			mergeFromBonus = mergeFromBonus - newTownBonus;
+		mergeInto.addBonusBlocks(mergeFromBonus);
 
 		for (TownBlock tb : mergeFrom.getTownBlocks()) {
 			tb.setTown(mergeInto);

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.regen.block;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 
 import java.util.Objects;
 
@@ -64,6 +65,14 @@ public class BlockLocation {
 		return false;
 	}
 
+	public Location getLocation() {
+		return new Location(world, x, y, z);
+	}
+
+	public Block getBlock() {
+		return world.getBlockAt(getLocation());
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -83,12 +92,5 @@ public class BlockLocation {
 		return hash;
 	}
 
-//	public boolean isLocation(BlockLocation blockLocation) {
-//
-//		if ((blockLocation.getWorld() == getWorld()) && (blockLocation.getX() == getX()) && (blockLocation.getY() == getY()) && (blockLocation.getZ() == getZ()))
-//			return true;
-//
-//		return false;
-//	}
 
 }

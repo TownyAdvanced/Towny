@@ -31,11 +31,13 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.LlamaSpit;
@@ -293,26 +295,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		boolean detrimental = false;
-
-		/*
-		 * List of potion effects blocked from PvP.
-		 */
-		List<String> detrimentalPotions = TownySettings.getPotionTypes();
-		
-		for (PotionEffect effect : event.getPotion().getEffects()) {
-
-			/*
-			 * Check to see if any of the potion effects are protected.
-			 */
-			
-			if (detrimentalPotions.contains(effect.getType().getName())) {
-				detrimental = true;
-				break;
-			}
-		}
-		
-		if (!detrimental)
+		if (!hasDetrimentalEffects(event.getPotion().getEffects()))
 			return;
 		
 		for (LivingEntity defender : event.getAffectedEntities()) {
@@ -362,7 +345,7 @@ public class TownyEntityListener implements Listener {
 	}
 
 	private boolean entityIsExempt(LivingEntity livingEntity, CreatureSpawnEvent.SpawnReason spawnReason) {
-		return PluginIntegrations.getInstance().checkCitizens(livingEntity)
+		return PluginIntegrations.getInstance().isNPC(livingEntity)
 			|| entityIsExemptByName(livingEntity)
 			|| MobRemovalTimerTask.isSpawnReasonIgnored(livingEntity, spawnReason);
 	}
@@ -453,10 +436,19 @@ public class TownyEntityListener implements Listener {
 		if (entity instanceof Villager && ItemLists.WOOD_DOORS.contains(block.getType()))
 			return;
 
-		// Prevent creatures triggering switch items,
-		// OR prevent creatures triggering stone pressure plates (if the config denies it.)
-		if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())
-			|| (TownySettings.isCreatureTriggeringPressurePlateDisabled() && block.getType() == Material.STONE_PRESSURE_PLATE)) {
+		// Special case protecting stone pressure plates triggered by creatures.
+		if (block.getType() == Material.STONE_PRESSURE_PLATE) {
+			if(TownySettings.isCreatureTriggeringPressurePlateDisabled())
+				event.setCancelled(true);
+			return;
+		}
+
+		// Prevent protecting the wilderness from switch use.
+		if (TownyAPI.getInstance().isWilderness(block))
+			return;
+
+		// Prevent creatures triggering switch items.
+		if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation())) {
 			event.setCancelled(true);
 			return;
 		}
@@ -464,14 +456,18 @@ public class TownyEntityListener implements Listener {
 	}
 
 	/**
-	 * Handles:
+	 * Handles: 
 	 *  Enderman thieving protected blocks.
 	 *  Ravagers breaking protected blocks.
 	 *  Withers blowing up protected blocks.
 	 *  Water being used to put out campfires.
+	 *  Boats breaking lilypads.
 	 *  Crop Trampling.
 	 * 
-	 * @param event - onEntityChangeBlockEvent
+	 * Because we use ignoreCancelled = true we dont need to worry about setting the
+	 * cancelled state to false overriding other plugins.
+	 * 
+	 * @param event onEntityChangeBlockEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEntityChangeBlockEvent(EntityChangeBlockEvent event) {
@@ -480,59 +476,57 @@ public class TownyEntityListener implements Listener {
 			return;
 		}
 
-		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getBlock().getWorld());
-
+		final Block block = event.getBlock();
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(block.getWorld());
 		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
 
-		
+		final Material blockMat = block.getType();
+		final Entity entity = event.getEntity();
+		final EntityType entityType = event.getEntityType();
+
 		// Crop trampling protection done here.
-		if (event.getBlock().getType().equals(Material.FARMLAND)) {
-			// Handle creature trampling crops if disabled in the world.
-			if (!event.getEntityType().equals(EntityType.PLAYER) && townyWorld.isDisableCreatureTrample()) {
-				event.setCancelled(true);
-				return;
-			}
-			// Handle player trampling crops if disabled in the world.
-			if (event.getEntity() instanceof Player player) {
-				event.setCancelled(TownySettings.isPlayerCropTramplePrevented() || !TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.FARMLAND));
-				return;
-			}
+		if (blockMat.equals(Material.FARMLAND)) {
+			if (entity instanceof Player player) // Handle player trampling crops if disabled in the world.
+				event.setCancelled(TownySettings.isPlayerCropTramplePrevented() || !TownyActionEventExecutor.canDestroy(player, block));
+			else                                 // Handle creature trampling crops if disabled in the world.
+				event.setCancelled(townyWorld.isDisableCreatureTrample());
+			return;
 		}
 
-		final EntityType type = event.getEntityType();
-		
-		if (type == EntityType.ENDERMAN) {
-			if (townyWorld.isEndermanProtect())
-				event.setCancelled(true);
-		} else if (EntityLists.BOATS.contains(type)) {
-			/* Protect lily pads. */
-			if (!event.getBlock().getType().equals(Material.LILY_PAD))
-				return;
+		// Prevent blocks from falling while their plot is being regenerated back to it's pre-claimed state.
+		if (entity instanceof FallingBlock && TownyRegenAPI.hasActiveRegeneration(WorldCoord.parseWorldCoord(event.getBlock()))) {
+			event.setCancelled(true);
+			return;
+		}
 
-			final List<Entity> passengers = event.getEntity().getPassengers();
+		// Test other instances of Entities altering blocks.
+		if (entityType == EntityType.ENDERMAN) {
+			event.setCancelled(townyWorld.isEndermanProtect());
 
-			if (!passengers.isEmpty() && passengers.get(0) instanceof Player player)
-				// Test if the player can break here.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
-			else if (!TownyAPI.getInstance().isWilderness(event.getBlock()))
-				// Protect townland from non-player-ridden boats. (Maybe someone is pushing a boat?)
-				event.setCancelled(true);
-		} else if (type == EntityType.RAVAGER) {
-			if (townyWorld.isDisableCreatureTrample())
-				event.setCancelled(true);
-		} else if (type == EntityType.WITHER) {
-			List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(Collections.singletonList(event.getBlock()), event.getBlock().getType(), event.getEntity(), event);
+		} else if (entityType == EntityType.RAVAGER) {
+			event.setCancelled(townyWorld.isDisableCreatureTrample());
+
+		} else if (entityType == EntityType.WITHER) {
+			List<Block> allowed = TownyActionEventExecutor.filterExplodableBlocks(Collections.singletonList(block), blockMat, entity, event);
 			event.setCancelled(allowed.isEmpty());
-		} else if (event.getEntity() instanceof ThrownPotion potion) {
-			// Check that the affected block is a campfire and that a water bottle (no effects) was used.
-			if (event.getBlock().getType() != Material.CAMPFIRE || !potion.getEffects().isEmpty())
-				return;
 
+		} else if (EntityLists.BOATS.contains(entityType) && blockMat.equals(Material.LILY_PAD)) {
+			// Protect lily pads.
+			final List<Entity> passengers = entity.getPassengers();
+			if (!passengers.isEmpty() && passengers.get(0) instanceof Player player)
+				// Test if the player driving the boat can break here.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
+			else 
+				// Protect townland from non-player-ridden boats. (Maybe someone is pushing a boat?)
+				event.setCancelled(!TownyAPI.getInstance().isWilderness(block));
+
+		} else if (entity instanceof ThrownPotion potion && potion.getEffects().isEmpty() && ItemLists.CAMPFIRES.contains(blockMat)) {
+			// Protect campfires from being extinguished by plain Water Bottles (which are potions with no effects.)
 			if (potion.getShooter() instanceof BlockProjectileSource bps)
-				event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), event.getBlock()));
+				event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), block));
 			else if (potion.getShooter() instanceof Player player)
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.CAMPFIRE));
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
 		}
 	}
 
@@ -827,7 +821,7 @@ public class TownyEntityListener implements Listener {
 		 */
 		Block hitBlock = event.getHitBlock();
 		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) 
-			|| hitBlock == null || (hitBlock.getType() != Material.TARGET && !ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType())))
+			|| hitBlock == null || projectileIsIrrelevantToBlock(hitBlock))
 			return;
 
 		// Prevent non-player actions outright if it is in a town.
@@ -838,9 +832,22 @@ public class TownyEntityListener implements Listener {
 		}
 
 		// Prevent players based on their PlayerCache/towny's cancellable event.
-		if (disallowedTargetSwitch(hitBlock, player) || disallowedProjectileBlockBreak(hitBlock, event.getEntity(), player)) {
+		if (disallowedTargetSwitch(hitBlock, player) ||
+			disallowedProjectileBlockBreak(hitBlock, event.getEntity(), player) ||
+			disallowedCampfireLighting(hitBlock, event.getEntity(), player)) {
 			cancelProjectileHitEvent(event, hitBlock);
 		}
+	}
+
+	/**
+	 * Weeds out scenarios where we don't care what an arrow would do when it hits a
+	 * block.
+	 * 
+	 * @param hitBlock Block that is hit by an arrow.
+	 * @return true if we don't care about this arrow hitting the block.
+	 */
+	private boolean projectileIsIrrelevantToBlock(Block hitBlock) {
+		return hitBlock.getType() != Material.TARGET && !ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType()) && !ItemLists.CAMPFIRES.contains(hitBlock.getType());
 	}
 
 	private boolean disallowedTargetSwitch(Block hitBlock, Player player) {
@@ -858,6 +865,14 @@ public class TownyEntityListener implements Listener {
 			return false;
 
 		return ItemLists.PROJECTILE_BREAKABLE_BLOCKS.contains(hitBlock.getType()) && !TownyActionEventExecutor.canDestroy(player, hitBlock.getLocation(), hitBlock.getType());
+	}
+
+	private boolean disallowedCampfireLighting(Block hitBlock, Projectile projectile, Player player) {
+		return ItemLists.CAMPFIRES.contains(hitBlock.getType()) && isFireArrow(projectile) && !TownyActionEventExecutor.canDestroy(player, hitBlock);
+	}
+
+	private boolean isFireArrow(Projectile projectile) {
+		return projectile instanceof Arrow arrow && arrow.getFireTicks() > 0;
 	}
 
 	private void cancelProjectileHitEvent(ProjectileHitEvent event, Block block) {
@@ -909,29 +924,24 @@ public class TownyEntityListener implements Listener {
 	private boolean hasDetrimentalEffects(Collection<PotionEffect> effects) {
 		if (effects.isEmpty())
 			return false;
-		
+
 		/*
 		 * List of potion effects blocked from PvP.
 		 */
 		final List<String> detrimentalPotions = TownySettings.getPotionTypes().stream().map(type -> type.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
 
-		for (final PotionEffect effect : effects) {
-			// This should use getKey when 1.18 becomes the minimum supported version.
-			final String name = effect.getType().getName().toLowerCase(Locale.ROOT);
+		return effects.stream()
+			.map(effect -> BukkitTools.potionEffectName(effect.getType()))
+			.anyMatch(name -> {
+				// Check to see if any of the potion effects are protected against.
+				if (detrimentalPotions.contains(name))
+					return true;
 
-			/*
-			 * Check to see if any of the potion effects are protected.
-			 */
-			if (detrimentalPotions.contains(name))
-				return true;
-			
-			// Account for PotionEffect#getType possibly returning the new name post enum removal.
-			final String legacyName = POTION_LEGACY_NAMES.inverse().get(name);
-			if (legacyName != null && detrimentalPotions.contains(legacyName))
-				return true;
-		}
-		
-		return false;
+				// Account for PotionEffect#getType possibly returning the new name post enum removal.
+				final String legacyName = POTION_LEGACY_NAMES.inverse().get(name);
+
+                return legacyName != null && detrimentalPotions.contains(legacyName);
+            });
 	}
 	
 	@ApiStatus.Internal

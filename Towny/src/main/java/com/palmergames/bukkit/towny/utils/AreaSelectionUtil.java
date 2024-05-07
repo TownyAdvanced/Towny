@@ -10,15 +10,21 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
+import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.util.BiomeUtil;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.bukkit.entity.Player;
 
 public class AreaSelectionUtil {
 	
@@ -322,7 +328,6 @@ public class AreaSelectionUtil {
 	 * Returns a list containing only townblocks that can be claimed.
 	 * Filters out townblocks too close to other towns as set in the config.
 	 * 
-
 	 * @param selection - List&lt;WorldCoord&gt; of coordinates
 	 * @param town - Town to check distance from
 	 * @return List of {@link WorldCoord}
@@ -465,27 +470,72 @@ public class AreaSelectionUtil {
 	}
 
 	/**
-	 * Gather plots that are for sale only.
+	 * Gather plots that are for sale only, using a resident to determine whether they can be bought.
+	 * 
+	 * @param resident Resident who would be buying the plots.
+	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are for sale.
+	 * @return List&lt;WorldCoord&gt; that are all for sale.
+	 */
+	public static List<WorldCoord> filterPlotsForSale(Resident resident, List<WorldCoord> selection) {
+
+		List<WorldCoord> out = new ArrayList<>();
+		for (WorldCoord worldCoord : selection) {
+			TownBlock townBlock = worldCoord.getTownBlockOrNull();
+			if (townBlock == null || !residentCanBuyTownBlock(resident, townBlock))
+				continue;
+
+			// Plot Groups do not set a townblock's individual plot price. 
+			if (townBlock.hasPlotObjectGroup()) {
+				out.clear();             // Remove any other plots from the selection. 
+				out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
+				return out;              // Return the one plot-group-having townblock.
+			}
+
+			out.add(worldCoord);
+		}
+		return out;
+	}
+
+	/**
+	 * Gather plots that are for sale only, currently used only for setting plots to notforsale.
+	 * 
 	 * @param selection List&lt;WorldCoord&gt; from which to get plots that are for sale.
 	 * @return List&lt;WorldCoord&gt; that are all for sale.
 	 */
 	public static List<WorldCoord> filterPlotsForSale(List<WorldCoord> selection) {
 
 		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				// Plot Groups do not set a townblock's individual plot price. 
-				if (worldCoord.getTownBlock().hasPlotObjectGroup() && worldCoord.getTownBlock().getPlotObjectGroup().getPrice() != -1) {
-					out.clear();             // Remove any other plots from the selection. 
-					out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
-					return out;              // Return the one plot-group-having townblock.
-				}
+		for (WorldCoord worldCoord : selection) {
+			TownBlock townBlock = worldCoord.getTownBlockOrNull();
+			if (townBlock == null || !townBlockIsForSale(townBlock))
+				continue;
 
-				if (worldCoord.getTownBlock().isForSale())
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
+			// Plot Groups do not set a townblock's individual plot price. 
+			if (townBlock.hasPlotObjectGroup()) {
+				out.clear();             // Remove any other plots from the selection. 
+				out.add(worldCoord);     // Put in the one plot-group-having townblock, the rest of the group will be added later.
+				return out;              // Return the one plot-group-having townblock.
 			}
+
+			out.add(worldCoord);
+		}
 		return out;
+	}
+
+	private static boolean residentCanBuyTownBlock(Resident resident, TownBlock townBlock) {
+		try {
+			townBlock.testTownMembershipAgePreventsThisClaimOrThrow(resident);
+		} catch (TownyException e) {
+			if (resident.isOnline())
+				TownyMessaging.sendErrorMsg(resident.getPlayer(), e.getMessage(resident.getPlayer()));
+			return false;
+		}
+		Town town = townBlock.getTownOrNull();
+		return town != null && townBlockIsForSale(townBlock) && (town.hasResident(resident) || townBlock.getType().equals(TownBlockType.EMBASSY));
+	}
+
+	private static boolean townBlockIsForSale(TownBlock townBlock) {
+		return townBlock.isForSale() || (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPrice() != -1);
 	}
 
 	/**
@@ -523,6 +573,56 @@ public class AreaSelectionUtil {
 			} catch (NotRegisteredException ignored) {
 			}
 		return out;
+	}
+
+	/**
+	 * Returns a List containing only WorldCoords which are not composed of "too much"
+	 * bad biomes, with the threshold determined by the config.
+	 * @param player 
+	 * 
+	 * @param player Player trying to claim.
+	 * @param selection List of WorldCoords.
+	 * @return a List of WorldCoords which have passed the biome requirements.
+	 */
+	public static List<WorldCoord> filterOutUnwantedBiomeWorldCoords(Player player, List<WorldCoord> selection) {
+		if (!TownySettings.isUnwantedBiomeClaimingEnabled())
+			return selection;
+		Predicate<WorldCoord> biomeThresholdTest = wc -> BiomeUtil.getWorldCoordUnwantedBiomePercent(wc) < TownySettings.getUnwantedBiomeThreshold();
+		return filterOutByBiome(player, selection, biomeThresholdTest, "msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome");
+	}
+
+	/**
+	 * Returns a List containing only WorldCoords which are not composed of "too much"
+	 * ocean biomes, with the threshold determined by the config.
+	 * 
+	 * @param player Player trying to claim.
+	 * @param selection List of WorldCoords.
+	 * @return a List of WorldCoords which have passed the biome requirements.
+	 */
+	public static List<WorldCoord> filterOutOceanBiomeWorldCoords(Player player, List<WorldCoord> selection) {
+		if (!TownySettings.isOceanClaimingBlocked())
+			return selection;
+
+		Predicate<WorldCoord> biomeThresholdTest = wc -> BiomeUtil.getWorldCoordOceanBiomePercent(wc) < TownySettings.getOceanBlockThreshold();
+		return filterOutByBiome(player, selection, biomeThresholdTest, "msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome");
+	}
+
+	public static List<WorldCoord> filterOutByBiome(Player player, List<WorldCoord> selection, Predicate<WorldCoord> biomeThresholdTest, String errorMsg) {
+		// Strip list into succesful and failing lists of WorldCoords.
+		Map<Boolean, List<WorldCoord>> worldCoords = selection.stream().collect(Collectors.partitioningBy(biomeThresholdTest));
+
+		// Feedback as to why a plot isn't claimable due to biome.
+		if (!worldCoords.get(false).isEmpty())
+			TownyMessaging.sendErrorMsg(player, Translatable.of(errorMsg, prettyWorldCoordList(worldCoords.get(false))));
+
+		// Return successful selections.
+		return worldCoords.get(true);
+	}
+
+	private static String prettyWorldCoordList(List<WorldCoord> worldCoords) {
+		return StringMgmt.join(worldCoords.stream()
+				.map(wc -> String.format("(%s)", wc.getCoord().toString()))
+				.collect(Collectors.toList()), ", ");
 	}
 
 	public static int getAreaSelectPivot(String[] args) {

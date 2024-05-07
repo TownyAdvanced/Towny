@@ -11,8 +11,11 @@ import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author - Articdive
@@ -29,23 +32,30 @@ public class InviteHandler {
 	}
 
 	public static void acceptInvite(Invite invite) throws InvalidObjectException, TownyException {
-		if (ACTIVE_INVITES.containsKey(invite)) {
-			invite.accept();
-			removeInvite(invite);
-			return;
-		}
-		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
-		// It shouldn't be possible for this exception to happen via normally using Towny
+		Optional<Invite> matchingInvite = ACTIVE_INVITES.keySet().stream()
+			.filter(inv -> inv.equals(invite))
+			.findFirst();
+
+		// This probably shouldn't happen but in the past, it has.
+		if (!matchingInvite.isPresent())
+			throw new InvalidObjectException("Invite not valid!");
+
+
+		invite.accept();
+		removeInvite(matchingInvite.get());
 	}
 
 	public static void declineInvite(Invite invite, boolean fromSender) throws InvalidObjectException {
-		if (ACTIVE_INVITES.containsKey(invite)) {
-			invite.decline(fromSender);
-			removeInvite(invite);
-			return;
-		}
-		throw new InvalidObjectException("Invite not valid!"); // I throw this as a backup (failsafe)
-		// It shouldn't be possible for this exception to happen via normally using Towny
+		Optional<Invite> matchingInvite = ACTIVE_INVITES.keySet().stream()
+				.filter(inv -> inv.equals(invite))
+				.findFirst();
+
+		// This probably shouldn't happen but in the past, it has.
+		if (!matchingInvite.isPresent())
+			throw new InvalidObjectException("Invite not valid!");
+
+		invite.decline(fromSender);
+		removeInvite(matchingInvite.get());
 	}
 	
 	public static void addInvite(Invite invite) {
@@ -96,6 +106,12 @@ public class InviteHandler {
 				return true;
 		}
 		return false;
+	}
+
+	public static List<Invite> getActiveInvitesFor(InviteSender sender, InviteReceiver receiver) {
+		return ACTIVE_INVITES.keySet().stream()
+				.filter(activeInvite -> activeInvite.getReceiver().equals(receiver) && activeInvite.getSender().equals(sender))
+				.collect(Collectors.toList());
 	}
 
 	public static int getSentAllyRequestsMaxAmount(Nation sender) {

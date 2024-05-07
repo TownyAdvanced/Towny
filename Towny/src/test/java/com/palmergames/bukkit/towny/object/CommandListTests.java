@@ -1,6 +1,5 @@
-package com.palmergames.bukkit.towny.test;
+package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.object.CommandList;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

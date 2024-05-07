@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.logging.Level;
 
@@ -49,7 +50,7 @@ import java.util.logging.Level;
 public class TownyPerms {
 
 	protected static final LinkedHashMap<String, Permission> registeredPermissions = new LinkedHashMap<>();
-	protected static final HashMap<String, PermissionAttachment> attachments = new HashMap<>();
+	protected static final Map<String, PermissionAttachment> attachments = new ConcurrentHashMap<>();
 	private static final HashMap<String, List<String>> groupPermsMap = new HashMap<>();
 	private static CommentedConfiguration perms;
 	private static Towny plugin;
@@ -127,7 +128,6 @@ public class TownyPerms {
 	 * @param resident - Resident to check if player is valid
 	 * @param player - Player to register permission
 	 */
-	@SuppressWarnings("unchecked")
 	public static void assignPermissions(Resident resident, Player player) {
 
 		if (resident == null) {

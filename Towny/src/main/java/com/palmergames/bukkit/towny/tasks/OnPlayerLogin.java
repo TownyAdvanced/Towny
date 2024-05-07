@@ -84,11 +84,6 @@ public class OnPlayerLogin implements Runnable {
 				 */
 				try {
 					resident = universe.getDataSource().newResident(player.getName(), player.getUniqueId());
-					TownySettings.incrementUUIDCount();
-					
-					if (TownySettings.isShowingLocaleMessage())
-					    TownyMessaging.sendMsg(resident, Translatable.of("msg_your_locale", player.getLocale()));
-
 					resident.setRegistered(System.currentTimeMillis());
 
 					final Resident finalResident = resident;
@@ -154,11 +149,11 @@ public class OnPlayerLogin implements Runnable {
 				// Send any warning messages at login.
 				if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
 					final Resident finalResident = resident;
-					TownyEconomyHandler.economyExecutor().execute(() -> warningMessage(finalResident, town, nation));
+					TownyEconomyHandler.economyExecutor().execute(() -> bankWarningMessage(finalResident, town, nation));
 				}
 				
 				// Send a message warning of being overclaimed while the takeoverclaims feature is enabled.
-				if (TownySettings.isOverClaimingAllowingStolenLand() && town.getTownBlocks().size() > town.getMaxTownBlocks())
+				if (TownySettings.isOverClaimingAllowingStolenLand() && town.isOverClaimed())
 					TownyMessaging.sendMsg(resident, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
 				
 				// Send a message warning of ruined status and time until deletion.
@@ -204,7 +199,6 @@ public class OnPlayerLogin implements Runnable {
 				} catch (AlreadyRegisteredException e) {
 					plugin.getLogger().log(Level.WARNING, "uuid for resident " + resident.getName() + " was already registered! (" + player.getUniqueId() + ")", e);
 				}
-				TownySettings.incrementUUIDCount();
 			}
 			resident.save();
 		}, 5);
@@ -217,7 +211,7 @@ public class OnPlayerLogin implements Runnable {
 	 * @param town Town which the resident is part of.
 	 * @param nation Nation which the town is a part of or null.
 	 */
-	private void warningMessage(Resident resident, Town town, Nation nation) {
+	private void bankWarningMessage(Resident resident, Town town, Nation nation) {
 		if (town.hasUpkeep()) {
 			double upkeep = TownySettings.getTownUpkeepCost(town);
 			if (upkeep > 0 && !town.getAccount().canPayFromHoldings(upkeep)) {
@@ -232,6 +226,7 @@ public class OnPlayerLogin implements Runnable {
 				} else {
 					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_delete", town.getName()));
 				}
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_town_deposit_hint"));
 			}
 		}
 			
@@ -242,6 +237,7 @@ public class OnPlayerLogin implements Runnable {
 				 *  Warn that the nation is due to be deleted.
 				 */
 				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_delete", nation.getName()));
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_nation_deposit_hint"));
 			}
 		}
 	}

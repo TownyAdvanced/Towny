@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.huds;
 
 import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
@@ -25,9 +25,41 @@ import org.bukkit.scoreboard.Team;
 
 public class PermHUD {
 
+	/* Scoreboards use old-timey colours. */
+	private static final ChatColor DARK_RED = ChatColor.DARK_RED;
+	private static final ChatColor WHITE = ChatColor.WHITE;
+	private static final ChatColor GRAY = ChatColor.GRAY;
+	private static final ChatColor YELLOW = ChatColor.YELLOW;
+	private static final ChatColor DARK_GREEN = ChatColor.DARK_GREEN;
+	private static final ChatColor GOLD = ChatColor.GOLD;
+	private static final ChatColor BOLD = ChatColor.BOLD;
+	private static final ChatColor UNDERLINE = ChatColor.UNDERLINE;
+
+	/* Scoreboards use Teams here is our team names.*/
+	private static final String HUD_OBJECTIVE = "PERM_HUD_OBJ";
+	private static final String TEAM_PERMS_TITLE = "permsTitle";
+	private static final String TEAM_PLOT_NAME = "plot_name";
+	private static final String TEAM_PLOT_COST = "plot_cost";
+	private static final String TEAM_BUILD = "build";
+	private static final String TEAM_DESTROY = "destroy";
+	private static final String TEAM_SWITCH = "switching";
+	private static final String TEAM_ITEMUSE = "item";
+	private static final String TEAM_PLOT_TYPE = "plotType";
+	private static final String TEAM_PVP = "pvp";
+	private static final String TEAM_EXPLOSIONS = "explosions";
+	private static final String TEAM_FIRESPREAD = "firespread";
+	private static final String TEAM_MOBSPAWNING = "mobspawn";
+	private static final String TEAM_TITLE = "keyTitle";
+	private static final String TEAM_RESIDENT = "keyResident";
+	private static final String TEAM_FRIEND = "keyFriend";
+	private static final String TEAM_ALLY = "keyAlly";
+
 	public static void updatePerms (Player p) {
-		WorldCoord worldCoord = new WorldCoord(p.getWorld(), Coord.parseCoord(p));
-		updatePerms(p, worldCoord);
+		updatePerms(p, WorldCoord.parseWorldCoord(p));
+	}
+
+	public static String permHudTestKey() {
+		return TEAM_PLOT_NAME;
 	}
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
@@ -42,10 +74,10 @@ public class PermHUD {
 			toggleOn(p);
 			return;
 		}
-		
-		if (board.getObjective("PERM_HUD_OBJ") == null) { // Some other plugin's scoreboard has  
-			HUDManager.toggleOff(p);                      // likely been activated, meaning we
-			return;                                       // will throw NPEs if we continue.
+
+		if (board.getObjective(HUD_OBJECTIVE) == null) { // Some other plugin's scoreboard has  
+			HUDManager.toggleOff(p);                     // likely been activated, meaning we
+			return;                                      // will throw NPEs if we continue.
 		}
 
 		if (worldCoord.isWilderness()) {
@@ -55,61 +87,103 @@ public class PermHUD {
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
 		TownBlockOwner owner = townBlock.getTownBlockOwner();
-		TownyWorld world = townBlock.getWorld();
-		TownyPermission tp = townBlock.getPermissions();
-		String v = (owner instanceof Resident) ? "f" : "r";
-		String u = (owner instanceof Resident) ? "t" : "n";
-		build = (tp.getResidentPerm(ActionType.BUILD) ? v : "-") + (tp.getNationPerm(ActionType.BUILD) ? u : "-") + (tp.getAllyPerm(ActionType.BUILD) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.BUILD) ? "o" : "-");
-		destroy = (tp.getResidentPerm(ActionType.DESTROY) ? v : "-") + (tp.getNationPerm(ActionType.DESTROY) ? u : "-") + (tp.getAllyPerm(ActionType.DESTROY) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.DESTROY) ? "o" : "-");
-		switching = (tp.getResidentPerm(ActionType.SWITCH) ? v : "-") + (tp.getNationPerm(ActionType.SWITCH) ? u : "-") + (tp.getAllyPerm(ActionType.SWITCH) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.SWITCH) ? "o" : "-");
-		item = (tp.getResidentPerm(ActionType.ITEM_USE) ? v : "-") + (tp.getNationPerm(ActionType.ITEM_USE) ? u : "-") + (tp.getAllyPerm(ActionType.ITEM_USE) ? "a" : "-") + (tp.getOutsiderPerm(ActionType.ITEM_USE) ? "o" : "-");
-		type = townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName();
-		pvp = !CombatUtil.preventPvP(worldCoord.getTownyWorld(), townBlock) ? translator.of("status_on") : translator.of("status_off");
-		explosions = (world.isForceExpl() || tp.explosion) ? translator.of("status_on") : translator.of("status_off");
-		firespread = (world.isForceFire() || tp.fire) ? translator.of("status_on") : translator.of("status_off");
-		mobspawn = (world.isForceTownMobs() || tp.mobs || townBlock.getTownOrNull().isAdminEnabledMobs()) ? translator.of("status_on") : translator.of("status_off");
+		boolean plotGroup = townBlock.hasPlotObjectGroup();
 
 		// Displays the name of the owner, and if the owner is a resident the town name as well.
-		title = ChatColor.GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 
+		title = GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 
 
-		plotName = townBlock.getName().isEmpty() ? "" : translator.of("msg_perm_hud_plot_name") + townBlock.getName();
-		if (!plotName.isEmpty())
-			board.getTeam("plot").setSuffix(HUDManager.check(plotName));
-		else
-			board.getTeam("plot").setSuffix(" ");
-		board.getTeam("build").setSuffix(build);
-		board.getTeam("destroy").setSuffix(destroy);
-		board.getTeam("switching").setSuffix(switching);
-		board.getTeam("item").setSuffix(item);
-		board.getTeam("plotType").setSuffix(type);
-		board.getTeam("pvp").setSuffix(pvp);
-		board.getTeam("explosions").setSuffix(explosions);
-		board.getTeam("firespread").setSuffix(firespread);
-		board.getTeam("mobspawn").setSuffix(mobspawn);
-		board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(title));
+		// Plot Type
+		type = townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName();
+
+		// Plot or PlotGroup Name.
+		plotName = plotGroup && !townBlock.getPlotObjectGroup().getName().isEmpty()
+				? townBlock.getPlotObjectGroup().getName()
+				: !townBlock.getName().isEmpty() ? townBlock.getName() : "";
+		plotName = plotName.isEmpty() ? " " : HUDManager.check(DARK_GREEN + translator.of(plotGroup ? "msg_perm_hud_plotgroup_name" : "msg_perm_hud_plot_name") + WHITE + plotName);
+
+		// Plot Price or "No"
+		String forSale = getPlotPrice(translator, townBlock, plotGroup);
+
+		TownyPermission tp = townBlock.getPermissions();
+		boolean residentOwned = owner instanceof Resident;
+		build = getPermLine(tp, ActionType.BUILD, residentOwned);
+		destroy = getPermLine(tp, ActionType.DESTROY, residentOwned);
+		switching = getPermLine(tp, ActionType.SWITCH, residentOwned);
+		item = getPermLine(tp, ActionType.ITEM_USE, residentOwned);
+
+		TownyWorld world = townBlock.getWorld();
+		pvp = getTranslatedOnOrOff(!CombatUtil.preventPvP(world, townBlock), translator);
+		explosions = getTranslatedOnOrOff(world.isForceExpl() || tp.explosion, translator);
+		firespread = getTranslatedOnOrOff(world.isForceFire() || tp.fire, translator);
+		mobspawn = getTranslatedOnOrOff(world.isForceTownMobs() || tp.mobs || townBlock.getTownOrNull().isAdminEnabledMobs(), translator);
+
+
+		// Set the values to our Scoreboard's teams.
+		board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(title));
+		board.getTeam(TEAM_PLOT_NAME).setSuffix(plotName);
+		board.getTeam(TEAM_PLOT_TYPE).setSuffix(type);
+		board.getTeam(TEAM_PLOT_COST).setSuffix(forSale);
+
+		board.getTeam(TEAM_BUILD).setSuffix(build);
+		board.getTeam(TEAM_DESTROY).setSuffix(destroy);
+		board.getTeam(TEAM_SWITCH).setSuffix(switching);
+		board.getTeam(TEAM_ITEMUSE).setSuffix(item);
+
+		board.getTeam(TEAM_PVP).setSuffix(pvp);
+		board.getTeam(TEAM_EXPLOSIONS).setSuffix(explosions);
+		board.getTeam(TEAM_FIRESPREAD).setSuffix(firespread);
+		board.getTeam(TEAM_MOBSPAWNING).setSuffix(mobspawn);
+	}
+
+	private static String getPlotPrice(Translator translator, TownBlock townBlock, boolean plotGroup) {
+		String forSale = translator.of("msg_perm_hud_no");
+		if (TownyEconomyHandler.isActive()) {
+			forSale = plotGroup && townBlock.getPlotObjectGroup().getPrice() > -1
+				? prettyMoney(townBlock.getPlotObjectGroup().getPrice())
+				: townBlock.isForSale() ? prettyMoney(townBlock.getPlotPrice()) : forSale;
+		} else {
+			// No economy is active but plots can be put up for sale (they're just free.)
+			forSale = (plotGroup && townBlock.getPlotObjectGroup().getPrice() > -1) || (!plotGroup && townBlock.isForSale())
+					? translator.of("msg_perm_hud_yes") : forSale;
+		}
+		return forSale;
+	}
+
+	private static String getPermLine(TownyPermission tp, ActionType actionType, boolean residentOwned) {
+		String v = residentOwned ? "f" : "r";
+		String u = residentOwned ? "t" : "n";
+		return (tp.getResidentPerm(actionType) ? v : "-") + (tp.getNationPerm(actionType) ? u : "-") +
+				(tp.getAllyPerm(actionType) ? "a" : "-") + (tp.getOutsiderPerm(actionType) ? "o" : "-");
+	}
+
+	private static String getTranslatedOnOrOff(boolean test, Translator translator) {
+		return test ? translator.of("status_on") : translator.of("status_off");
 	}
 
 	private static void clearPerms (Player p) {
 		Scoreboard board = p.getScoreboard();
 		try {
-			board.getTeam("plot").setSuffix(" ");
-			board.getTeam("build").setSuffix(" ");
-			board.getTeam("destroy").setSuffix(" ");
-			board.getTeam("switching").setSuffix(" ");
-			board.getTeam("item").setSuffix(" ");
-			board.getTeam("plotType").setSuffix(" ");
-			board.getTeam("pvp").setSuffix(" ");
-			board.getTeam("explosions").setSuffix(" ");
-			board.getTeam("firespread").setSuffix(" ");
-			board.getTeam("mobspawn").setSuffix(" ");
-			board.getObjective("PERM_HUD_OBJ").setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+			board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+			board.getTeam(TEAM_PLOT_NAME).setSuffix(" ");
+			board.getTeam(TEAM_PLOT_TYPE).setSuffix(" ");
+			board.getTeam(TEAM_PLOT_COST).setSuffix(" ");
+
+			board.getTeam(TEAM_BUILD).setSuffix(" ");
+			board.getTeam(TEAM_DESTROY).setSuffix(" ");
+			board.getTeam(TEAM_SWITCH).setSuffix(" ");
+			board.getTeam(TEAM_ITEMUSE).setSuffix(" ");
+
+			board.getTeam(TEAM_PVP).setSuffix(" ");
+			board.getTeam(TEAM_EXPLOSIONS).setSuffix(" ");
+			board.getTeam(TEAM_FIRESPREAD).setSuffix(" ");
+			board.getTeam(TEAM_MOBSPAWNING).setSuffix(" ");
 		} catch (NullPointerException e) {
 			toggleOn(p);
 		}
 	}
 	
 	private static String getFormattedWildernessName(World w) {
-		StringBuilder wildernessName = new StringBuilder().append(ChatColor.DARK_RED).append(ChatColor.BOLD);
+		StringBuilder wildernessName = new StringBuilder().append(DARK_RED).append(BOLD);
 		if (TownyAPI.getInstance().isTownyWorld(w)) 
 			wildernessName.append(TownyAPI.getInstance().getTownyWorld(w).getFormattedUnclaimedZoneName());
 		else 
@@ -119,72 +193,97 @@ public class PermHUD {
 	}
 	
 	public static void toggleOn (Player p) {
-		Translator translator = Translator.locale(p);
-		String PERM_HUD_TITLE = ChatColor.GOLD + "";
-		String permsTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + translator.of("msg_perm_hud_title");
-		String plotName_entry = ChatColor.DARK_GREEN + "";
-		String build_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_build") + ChatColor.GRAY;
-		String destroy_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_destroy") + ChatColor.GRAY;
-		String switching_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_switch") + ChatColor.GRAY;
-		String item_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_item_use") + ChatColor.GRAY;
-		String keyPlotType_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_plot_type");
-		String pvp_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ";
-		String explosions_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ";
-		String firespread_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ";
-		String mobspawn_entry = ChatColor.DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ";
-		String keyTitle_entry = ChatColor.YELLOW + "" + ChatColor.UNDERLINE + translator.of("msg_perm_hud_key");
-		String keyResident_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "f" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_friend") + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "r" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_resident");
-		String keyNation_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "t" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_town") + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "n" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_nation");
-		String keyAlly_entry = ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "a" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_ally") + ChatColor.DARK_GREEN + " " + ChatColor.BOLD + "o" + ChatColor.WHITE + " - " + ChatColor.GRAY + translator.of("msg_perm_hud_outsider");
-
-		//init objective
+		//init scoreboard
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective obj = BukkitTools.objective(board, "PERM_HUD_OBJ", PERM_HUD_TITLE);
+		initializeScoreboard(Translator.locale(p), board);
+
+		//set the board onto the player
+		p.setScoreboard(board);
+
+		//call for the board's values to be populated
+		updatePerms(p);
+	}
+
+	private static void initializeScoreboard(Translator translator, Scoreboard board) {
+		String PERM_HUD_TITLE = GOLD + "";
+		String plotName_entry = "";
+		String keyPlotType_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_type");
+		String forSale_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_for_sale") + GRAY;
+
+		String permsTitle_entry = YELLOW + "" + UNDERLINE + translator.of("msg_perm_hud_title");
+		String build_entry =   DARK_GREEN + translator.of("msg_perm_hud_build") + GRAY;
+		String destroy_entry = DARK_GREEN + translator.of("msg_perm_hud_destroy") + GRAY;
+		String switching_entry = DARK_GREEN + translator.of("msg_perm_hud_switch") + GRAY;
+		String item_entry = DARK_GREEN + translator.of("msg_perm_hud_item_use") + GRAY;
+
+		String pvp_entry = DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ";
+		String explosions_entry = DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ";
+		String firespread_entry = DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ";
+		String mobspawn_entry = DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ";
+
+		String keyTitle_entry = YELLOW + "" + UNDERLINE + translator.of("msg_perm_hud_key");
+		String keyResident_entry = DARK_GREEN + "" + BOLD + "f" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_friend") +
+				DARK_GREEN + " " + BOLD + "r" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_resident");
+		String keyNation_entry = DARK_GREEN + "" + BOLD + "t" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_town") +
+				DARK_GREEN + " " + BOLD + "n" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_nation");
+		String keyAlly_entry = DARK_GREEN + "" + BOLD + "a" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_ally") +
+				DARK_GREEN + " " + BOLD + "o" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_outsider");
+
+		Objective obj = BukkitTools.objective(board, HUD_OBJECTIVE, PERM_HUD_TITLE);
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(PERM_HUD_TITLE);
 		//register teams
-		Team permsTitle = board.registerNewTeam("permsTitle");
-		Team plotName = board.registerNewTeam("plot");
-		Team build = board.registerNewTeam("build");
-		Team destroy = board.registerNewTeam("destroy");
-		Team switching = board.registerNewTeam("switching");
-		Team item = board.registerNewTeam("item");
-		Team keyPlotType = board.registerNewTeam("plotType");
-		Team pvp = board.registerNewTeam("pvp");
-		Team explosions = board.registerNewTeam("explosions");
-		Team firespread = board.registerNewTeam("firespread");
-		Team mobspawn= board.registerNewTeam("mobspawn");
-		Team keyTitle = board.registerNewTeam("keyTitle");
-		Team keyResident = board.registerNewTeam("keyResident");
-		Team keyFriend = board.registerNewTeam("keyFriend");
-		Team keyAlly = board.registerNewTeam("keyAlly");
+		Team plotName = board.registerNewTeam(TEAM_PLOT_NAME);
+		Team keyPlotType = board.registerNewTeam(TEAM_PLOT_TYPE);
+		Team forSaleTitle = board.registerNewTeam(TEAM_PLOT_COST);
 
-		//register players
-		permsTitle.addEntry(permsTitle_entry);
+		Team permsTitle = board.registerNewTeam(TEAM_PERMS_TITLE);
+		Team build = board.registerNewTeam(TEAM_BUILD);
+		Team destroy = board.registerNewTeam(TEAM_DESTROY);
+		Team switching = board.registerNewTeam(TEAM_SWITCH);
+		Team item = board.registerNewTeam(TEAM_ITEMUSE);
+
+		Team pvp = board.registerNewTeam(TEAM_PVP);
+		Team explosions = board.registerNewTeam(TEAM_EXPLOSIONS);
+		Team firespread = board.registerNewTeam(TEAM_FIRESPREAD);
+		Team mobspawn= board.registerNewTeam(TEAM_MOBSPAWNING);
+
+		Team keyTitle = board.registerNewTeam(TEAM_TITLE);
+		Team keyResident = board.registerNewTeam(TEAM_RESIDENT);
+		Team keyFriend = board.registerNewTeam(TEAM_FRIEND);
+		Team keyAlly = board.registerNewTeam(TEAM_ALLY);
+
+		//add each team as an entry (this sets the prefix to each line of the HUD.)
 		plotName.addEntry(plotName_entry);
+		keyPlotType.addEntry(keyPlotType_entry);
+		forSaleTitle.addEntry(forSale_entry);
+
+		permsTitle.addEntry(permsTitle_entry);
 		build.addEntry(build_entry);
 		destroy.addEntry(destroy_entry);
 		switching.addEntry(switching_entry);
 		item.addEntry(item_entry);
-		keyPlotType.addEntry(keyPlotType_entry);
+
 		pvp.addEntry(pvp_entry);
 		explosions.addEntry(explosions_entry);
 		firespread.addEntry(firespread_entry);
 		mobspawn.addEntry(mobspawn_entry);
+
 		keyTitle.addEntry(keyTitle_entry);
 		keyResident.addEntry(keyResident_entry);
 		keyFriend.addEntry(keyNation_entry);
 		keyAlly.addEntry(keyAlly_entry);
 
 		//set scores for positioning
-		obj.getScore(permsTitle_entry).setScore(15);
-		obj.getScore(plotName_entry).setScore(14);
-		obj.getScore(build_entry).setScore(13);
-		obj.getScore(destroy_entry).setScore(12);
-		obj.getScore(switching_entry).setScore(11);
-		obj.getScore(item_entry).setScore(10);
+		obj.getScore(plotName_entry).setScore(16);
+		obj.getScore(keyPlotType_entry).setScore(15);
+		obj.getScore(forSale_entry).setScore(14);
+		obj.getScore(permsTitle_entry).setScore(13);
+		obj.getScore(build_entry).setScore(12);
+		obj.getScore(destroy_entry).setScore(11);
+		obj.getScore(switching_entry).setScore(10);
+		obj.getScore(item_entry).setScore(9);
 		obj.getScore(pvp_entry).setScore(8);
-		obj.getScore(keyPlotType_entry).setScore(9);
 		obj.getScore(explosions_entry).setScore(7);
 		obj.getScore(firespread_entry).setScore(6);
 		obj.getScore(mobspawn_entry).setScore(5);
@@ -192,9 +291,9 @@ public class PermHUD {
 		obj.getScore(keyResident_entry).setScore(3);
 		obj.getScore(keyNation_entry).setScore(2);
 		obj.getScore(keyAlly_entry).setScore(1);
-		
-		//set the board
-		p.setScoreboard(board);
-		updatePerms(p);
+	}
+
+	private static String prettyMoney(double price) {
+		return TownyEconomyHandler.getFormattedBalance(price);
 	}
 }

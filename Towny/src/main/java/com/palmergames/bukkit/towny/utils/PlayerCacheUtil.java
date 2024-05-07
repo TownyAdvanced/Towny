@@ -190,7 +190,7 @@ public class PlayerCacheUtil {
 		
 		if (resident == null) {
 			// Check if entity is a Citizens NPC
-			if (PluginIntegrations.getInstance().checkCitizens(player))
+			if (PluginIntegrations.getInstance().isNPC(player))
 				return TownBlockStatus.NOT_REGISTERED;
  
 			// Retry getting a resident with the ability to get a fake player resident.
@@ -206,7 +206,7 @@ public class PlayerCacheUtil {
 		if (town.isMayor(resident))
 			return TownBlockStatus.TOWN_OWNER;
 		
-		if (town.hasTrustedResident(resident))
+		if (town.hasTrustedResident(resident) && (!townBlock.hasResident() || TownySettings.doTrustedPlayersGetPermsOnPersonallyOwnedLand()))
 			return TownBlockStatus.TOWN_TRUSTED;
 		
 		if (townBlock.hasTrustedResident(resident) && !townBlock.hasResident(resident))

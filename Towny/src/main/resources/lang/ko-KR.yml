@@ -45,16 +45,16 @@ help_0: '타우니 도움말'
 help_1: '다음 명령어를 사용해보며 타우니에 대해 배워보세요.'
 help_2: '도시 내 채팅'
 help_3: '국가 내 채팅'
-help_4: 'Resident command help.'
-help_5: 'Town command help.'
-help_6: 'Nation command help.'
-help_7: 'Plot command help.'
-help_8: 'Towny command help.'
-help_9: 'Townyadmin command help.'
-towny_help_0: "General help for Towny"
-towny_help_1: "Displays a map of the nearby townblocks"
-towny_help_2: "Display the prices used with Economy"
-towny_help_3: "Display highscores"
+help_4: ''
+help_5: '타운 명령어 도움말입니다.'
+help_6: '국가 명령어 도움말입니다.'
+help_7: '도면 명령어 도움말입니다.'
+help_8: '타우니 명령어 도움말입니다.'
+help_9: '타우니 관리자 명령어 도움말입니다.'
+towny_help_0: "타우니 일반 도움말입니다."
+towny_help_1: "주변 마을 블럭을 맵에 표시합니다."
+towny_help_2: "이코노미에 사용되는 가격을 표시합니다."
+towny_help_3: "높은 점수를 표시합니다."
 towny_help_4: "Display time until a new day"
 towny_help_5: "Displays stats"
 towny_help_6: "Displays the version of Towny"
@@ -129,6 +129,8 @@ town_trust_help_2: "Lists the Trusted residents of a town."
 town_towntrust_help_0: "Adds a town as Trusted in the town."
 town_towntrust_help_1: "Removes a town as Trusted in the town."
 town_towntrust_help_2: "Lists the Trusted towns of a town."
+town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
+town_cede_help: "Offers the plot you are stood in to be taken over by the given Town."
 mayor_help_3: '도시에 인접하지 않는 토지 구매'
 mayor_help_4: '반지름이 X인 땅을 원형으로 구매'
 mayor_help_5: '최대 반지름 내의 토지 구매'
@@ -175,6 +177,10 @@ nation_toggle_help_0: "Toggles peaceful status of the nation."
 nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
 nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
 nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
+nation_sanction_help_1: "Adds a town to the SanctionedTown list."
+nation_sanction_help_2: "Removes a town from the SanctionedTown list."
+nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
+nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
 king_help_1: '국가 리더 도움말'
 king_help_2: '동맹국 설정'
 king_help_3: '적국 설정'
@@ -188,10 +194,6 @@ res_1: '귀하의 상태'
 res_2: '[주민]'
 res_3: '해당 플레이어의 상태'
 res_4: '접속중인 주민 목록'
-res_5: '에 대한 도움말'
-res_6: '접속중인 주민 중에서'
-res_7: '사용할 수 있는 이름'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -395,8 +397,11 @@ plot_group_toggle_help_0: "Toggles pvp in the plot group."
 plot_group_toggle_help_1: "Toggles explosions in the plot group."
 plot_group_toggle_help_2: "Toggles fire in the plot group."
 plot_group_toggle_help_3: "Toggles mobs in the plot group."
+plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
 plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
 plot_set_help_1: "Sets a plot to an Outpost."
+plot_set_help_1.5: "Sets the minimum number of days a player must be a town member to purchase the plot."
+plot_set_help_1.6: "Sets the maximum number of days a player must be a town member to purchase the plot."
 plot_set_help_2: "Removes a plot type."
 plot_set_help_3: "Names a plot."
 plot_set_help_4: "Toggle all permissions."
@@ -419,8 +424,11 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&b%d %s를 %s에 구매하였습니다.'
 msg_buy_resident_plot: '&b%s는 %ss 만큼의 %s 땅을 구매하였습니다.'
+msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s님은 세금을 미납하여 %s에서 추방되었습니다.'
 msg_couldnt_pay_plot_taxes: '&b%s님은 세금을 미납하여 땅의 소유권을 잃었습니다.'
+msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
+msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&b지불한 마을 세금: '
 msg_payed_plot_cost: '&b %s을 %s 만큼의 %s의 땅을 위해 지불하였습니다'
 msg_payed_resident_tax: '&b지불한 주민 세금: '
@@ -458,7 +466,7 @@ msg_town_left_nation: '&b귀하의 도시가 %s에서 나갔습니다.'
 msg_nation_town_left: '&b%s시가 국가에서 나갔습니다.'
 msg_nation_kicked: '&b%s님이 %s을(를) 국가에서 추방하였습니다.'
 msg_raised_ass: '&b%s님이 %s을/를 %s의 도움이로 선택하였습니다.'
-msg_lowered_to_res_by: '&b%s님에 의해 시민으로 강등되었습니다.'
+msg_lowered_to_res_by: '&b%s님에 의해 일반 주민으로 강등되었습니다.'
 msg_lowered_to_res: '&b%s님이 %s을/를 시민으로 강등시켰습니다.'
 msg_invalid_name: '&b이름에 의해서 에러가 생겼습니다. 다시 시도해주세요.'
 msg_invited_join_town: '&b%s님이 %s님을 도시에 초대하였습니다.'
@@ -616,6 +624,8 @@ msg_err_not_in_town_claim: '&c귀하는 개인 토지를 점유하기 위해 마
 msg_err_must_belong_town: '&c마을에 속해 있어야 합니다.'
 msg_err_dont_belong_town: '&c마을에 속해 있지 않습니다.'
 msg_err_dont_belong_nation: '&b국가에 속해 있지 않습니다.'
+msg_err_already_belong_nation: '&bYou already belong to a nation.'
+msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s은(는) 귀하의 국가에 속해 있지 않습니다.'
 msg_err_rect_auto: '&c오직 마을과 주민만 "자동"을 사용 할 수 있습니다.'
 msg_err_invalid_radius: '&c잘못된 거리입니다. 정수를 입력하거나 자동을 사용하세요.'
@@ -643,6 +653,7 @@ msg_err_input_too_long: '&c너무 길게 입력하셨습니다.'
 msg_err_invalid_choice: '&c잘못된 선택'
 msg_err_invalid_sub: '&c잘못된 하위 명령어'
 msg_err_command_disable: '&c이 명령어를 사용할 권한이 없습니다.'
+msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
 msg_err_universe_limit: '&c더 이상 마을을 세을 수 없습니다.'
 msg_err_too_many_npc: '&c너무 많은 NPC가 생성되었습니다.'
 msg_err_negative_money: '&c돈은 자연수로 입력되어야 합니다.'
@@ -723,6 +734,8 @@ msg_you_have_undeclared_an_outlaw: '%s은(는) 더이상 %s에서 무법자로 �
 msg_err_player_not_an_outlaw: '그 플레이어는 무법자로 간주되지 않습니다.'
 msg_err_outlaw_in_open_town: '귀하를 무법자로 간주하는 공용 마을에 가입할 수 없습니다.'
 msg_you_are_an_outlaw_in_this_town: '&4%s은(는) 귀하를 무법자로 간주합니다. 이 마을 영토에 접근시 불이익이 있습니다.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s의 홈 블록이 수도의 홈 블록에서 너무 멀어 국가에 가입할 수 없습니다.'
 msg_nation_town_moved_their_homeblock_too_far: '%s의 홈 블록이 수도의 홈 블록에서 너무 멀리 이동되어 귀하의 국가에서 제거되었습니다.'
 #Added in 0.33
@@ -764,6 +777,7 @@ town_invite_help_3: '귀하가 전송한 초대 목록'
 town_invite_help_4: '귀하가 수신한 초대 목록'
 town_invite_help_5: '국가 초대를 수락합니다.'
 town_invite_help_6: '국가 초대를 거부합니다.'
+town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: '마을을 귀하의 국가에 초대합니다.'
 nation_invite_help_2: '마을에게 전송된 초대를 취소합니다.'
 nation_invite_help_3: '마을에게 전송한 초대 목록'
@@ -791,7 +805,7 @@ msg_err_nation_sent_too_many_requests: '&b국가가 너무 많은 요청을 전�
 msg_err_nation_has_too_many_requests: '&b국가 %s에는 너무 많은 요청이 있습니다. 다시 요청하기 전에 몇몇 요청을 취소하도록 요청하세요.'
 player_received_invites: '&b귀하는 %a/%m 초대를 수신하였습니다.'
 town_revoke_invite: '&b마을 %s이(가) 초대를 취소하였습니다.'
-town_revoke_invite_successful: '&b마을 초대를 성공적으로 취소하였습니다.'
+town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&b마을이 %a/%m 초대를 수신하였습니다.'
 town_sent_invites: '&b마을에서 %a/%m 초대를 전송하였습니다.'
 nation_revoke_invite: '&b국가 %s이(가) 초대를 취소하였습니다.'
@@ -926,6 +940,9 @@ status_res_plottax: '납부할 토지 세금 합계: '
 status_res_totaltax: '납부해야하는 세금의 합계:'
 status_townblock_plottax: 'Plot Tax: '
 status_townblock_untaxed: 'Untaxed'
+status_townblock_max_and_minjoindays: 'Town membership of between %s and %s days required for plot purchase.'
+status_townblock_minjoindays: 'Town membership more than %s days required for plot purchase.'
+status_townblock_maxjoindays: 'Town membership less than %s days required for plot purchase.'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '국가 수도 밖에서 국가 금고를 이용할 수 없습니다.'
 msg_err_unable_to_use_bank_outside_your_town: '마을 밖에서 마을 금고를 이용할 수 없습니다.'
@@ -949,7 +966,7 @@ msg_err_nation_not_public: '&c그 국가는 공용이 아닙니다.'
 msg_nation_toggle_public: '&a성공적으로 국가 공용 설정을 토글하였습니다.'
 status_yes: '&a예'
 status_no: '&c아니오'
-msg_err_unable_to_use_bank_outside_bank_plot: '이 명령어는 은행 토지 또는 홈 블록 외부에서 사용할 수 없습니다.'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&c국가 스폰 여행이 금지되었습니다.'
 msg_err_nation_spawn_forbidden_war: '&c국가 스폰 여행은 전쟁 중에만 허용됩니다.'
 msg_err_nation_spawn_forbidden_peace: '&c국가 스폰 여행은 전쟁 중에 금지됩니다.'
@@ -1150,7 +1167,7 @@ msg_plot_was_put_into_group_x: '플롯 &9(%s,%s) 이(가) &2그룹 %s에 속합�
 msg_err_plot_not_associated_with_a_group: '해당 토지는 그룹과 연결되어 있지 않습니다.'
 msg_plot_was_removed_from_group_x: '토지 &9(%s,%s) 이(가) &2그룹 %s에서 제거 되었습니다.'
 msg_plot_renamed_from_x_to_y: '땅 %s을/를 %s(으)로 계명했습니다.'
-msg_err_plot_group_specify_price: '가격을 정해주십시오, 예: /plot group fs [price]'
+msg_err_plot_group_specify_price: '가격을 정해주십시오, 예: /plot group fs [값]'
 msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
 msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: '그룹 유형을 설정할 수 없습니다. - '
@@ -1255,10 +1272,10 @@ msg_nation_already_not_peaceful: '국가는 이미 평화상태가 아닙니다.
 status_world_friendlyfire: '아군 공격:'
 status_world_wildernessmobs: '야생 몹:'
 msg_outlaw_kick_cooldown: '당신은 %s에서 법외추방자로 지정되었습니다. 당신은 이 도시에서 %s초 이내에 떠나지 않을 경우, 자동으로 지정된 스폰으로 TP 됩니다.'
-msg_outlaw_kicked: '&4당신은 %s에서 불청객이므로. 텔레포트 되어 쫓겨납니다!'
+msg_outlaw_kicked: '&4당신은 %s에서 불청객이므로. 텔레포트 되어 쫓겨났습니다!'
 msg_outlaw_town_notify: '법외추방자인 %s가 영토에 진입하였습니다.'
-msg_your_town_payed_upkeep_with_debt: '&b당신의 마을이 하루 유지비 %s 를 냈습니다..'
-msg_payed_nation_tax_with_debt: '&b당신의 국가가 하루 유지비 %s 를 냈습니다.'
+msg_your_town_payed_upkeep_with_debt: '&b당신의 마을이 하루 유지비 %s을(를) 냈습니다.'
+msg_payed_nation_tax_with_debt: '&b당신의 국가가 하루 유지비 %s을(를) 냈습니다.'
 #Added in 0.90
 status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: '해당 월드에서 /plot clear 커맨드가 비활성화 되어 있습니다.'
@@ -1269,18 +1286,19 @@ msg_universe_heart: '<3'
 townblock_plu: '마을 블록'
 #Added in 0.92
 #Town Ruins
-msg_newhour_success: '새로운 시간 커맨드가 성공적으로 실행 되었습니다!'
+msg_newhour_success: 'newhour 커맨드가 성공적으로 실행 되었습니다!'
 town_help_12: '페허가된 상태에서 마을을 재점유합니다.'
-msg_warning_town_ruined_if_deleted: "명령어 ''/t reclaim'' 를 사용하였을 때 %d 만큼이 지나면 마을주민 누구든 마을을 재점유 할 수 있습니다."
-msg_warning_town_ruined_if_deleted2: "명령어 ''/t reclaim'' 를 사용하였을 때 %d 만큼이 지나면 마을주민 누구든 마을을 재점유 할 수 있습니다."
+msg_warning_town_ruined_if_deleted: "경고!!!: 마을을 지울 시에 마을이 패허 상태로 %d 시간동안 전환됩니다. %d 시간 이후, 완전히 삭제됩니다. 패허 상태일때는 모든 권한이 일반 시민과 외부인에게 까지 부여되며 마을 회손이 가능합니다."
+msg_warning_town_ruined_if_deleted2: "명령어 \"/t reclaim\"으로 %d시간 후에 일반 시민 누구나 마을을 재점유 할 수 있습니다."
 msg_err_cannot_reclaim_town_unless_ruined: '&c폐허가 되지 않았기 때문에 마을을 재점유 할 수 없습니다.'
-msg_err_cannot_reclaim_town_yet: '&c당신은 마을을 %d 동안 재점유 할 수 없습니다.'
+msg_err_cannot_reclaim_town_yet: '&c당신은 마을을 %d시간 동안 재점유 할 수 없습니다.'
 msg_town_reclaimed: '&b%s이(가) 마을 %s을(를) 재점유 했습니다.'
-msg_err_cannot_use_command_because_town_ruined: "&c마을이 폐허가 되었으므로 커맨드를 쓸 수 없습니다. 노말 커맨드를 사용하려면 ''/town reclaim'', 또는 ''/town leave''을 사용하여 마을을 떠나십시오."
-msg_warning_your_town_is_ruined_for_x_more_hours: '&c당신의 마을은 %d 동안 폐허 상태에 있습니다. 마을을 되찾으려면 ''''/town reclaim'''' 하여 관리 하세요.'
-msg_time_remaining_before_full_removal: '전체 삭제까지 남은시간: %d 남음.'
-msg_time_until_reclaim_available: '재점유 가능한 시간: %d'
+msg_err_cannot_use_command_because_town_ruined: "&c마을이 폐허가 되었으므로 커맨드를 쓸 수 없습니다. 이 커맨드와 더불어 기본 마을 커멘드를 사용하려면 ''/town reclaim'', 또는 ''/town leave''를 사용하여 마을을 떠나십시오."
+msg_warning_your_town_is_ruined_for_x_more_hours: '&c당신의 마을은 %d시간 동안 폐허 상태로 전환 되있습니다. 마을을 되찾으려면 ''''/town reclaim'''' 하여 되찾고 시장이 되세요.'
+msg_time_remaining_before_full_removal: '완전 삭제까지 남은 시간: %d시간 남음.'
+msg_time_until_reclaim_available: '재점유 가능한 시간: %d시간 남음'
 msg_reclaim_available: '재점유가 가능합니다.'
+msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&c마을의 중립/평화도는 %s입니다.'
 msg_err_town_unclaim_canceled: '&c점유 해제가 취소됨. 지금 해당 지역을 점유 해제 할 수 없습니다.'
@@ -1463,7 +1481,7 @@ msg_err_player_is_not_jailed: '그 플레이어는 수감되지 않았습니다.
 msg_you_have_paid_bail: '당신은 보석금을 지불했습니다.'
 msg_you_have_been_freed_via_jailbreak: '탈옥입니다! 당신은 자유에요!!'
 msg_you_have_served_your_sentence_and_are_free: '감옥에서 제대로 복역했고 이젠 자유입니다!'
-msg_x_has_served_their_sentence_and_is_free: '%s님은 성실히 복역했고 이젠 자유입니다!'
+msg_x_has_served_their_sentence_and_is_free: '%s님은 성실히 복역했고 이젠 자유를 만끽합니다!'
 msg_you've_been_jailed_for_x_hours: '당신은 %s 시간동안 수감되었습니다.'
 msg_you_are_being_sent_to_jail: '당신은 곧 감옥에 갈 것입니다.'
 msg_err_you_cannot_remove_the_last_cell: '감옥에 다른 감방이 추가될 때까지 마지막 감방을 제거할 수 없습니다.'
@@ -1536,6 +1554,9 @@ msg_cache_block_err: '&cYou are not allowed to %s here.'
 msg_err_plot_belongs_to_group: '&cPlot belongs to a group, use %s.'
 plotgroup_sing: '땅 그룹'
 msg_err_ally_limit_reached: 'Your nation has reached the ally limit, unable to accept.'
+msg_err_ally_limit_reached_cannot_accept: 'The nation of %s has reached their ally limit, unable to accept.'
+msg_err_ally_limit_reached_cannot_send: 'Your nation has reached the ally limit, unable to invite %s to become your ally.'
+msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
 #Added in 0.114
 msg_err_group_not_found: 'Group %s not found.'
 msg_err_expected_command_format: 'Incorrect syntax, expected: %s'
@@ -1769,8 +1790,6 @@ msg_your_town_paid_x_to_unclaim: 'Your town paid %s to unclaim the land.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Unclaiming this land will cost %s, do you want to continue?'
 #Added in 0.140
-#Message shown on first join, making players aware they can change how Towny messages appear using their Client's language setting.
-msg_your_locale: 'Towny uses your client''s locale (%s) to translate its messages. Be aware translations may be missing strings.'
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds before you can rename your town again.'
 #Added in 1.141
@@ -1872,6 +1891,14 @@ msg_perm_hud_nation: '국가'
 msg_perm_hud_outsider: '외부인'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Plot: '
+#Seen in /plot perm hud:
+msg_perm_hud_plotgroup_name: 'Plot Group: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'For Sale: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'No'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Yes'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'The town %s has had their townlevel set to %s.'
@@ -2031,6 +2058,7 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 msg_err_world_not_loaded: "<red>World is not loaded."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
+msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
 status_forsale: "&a(For Sale: %s)"
 msg_town_forsale: "%s has been set for sale at %s."
 msg_town_notforsale: "%s is no longer for sale."
@@ -2061,3 +2089,64 @@ msg_err_resident_is_npc: "You cannot do this to an NPC resident."
 #Message shown when a resident doesn't own any land and the /res plotlist command is used.
 msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
 msg_unnamed: "Unnamed"
+msg_err_nation_cannot_sanction_own_town: "You cannot sanction a town that is a part of your nation."
+msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
+msg_err_nation_town_already_sanctioned: "Your nation already sanctions that town."
+msg_err_nation_town_sanctioned: "Your nation has now sanctioned %s, they will not be allowed to join your nation."
+msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
+msg_err_nation_has_no_sanctioned_towns: "The nation has no sanctioned towns."
+title_nation_sanctioned_towns: 'Sanctioned Towns'
+msg_err_cannot_add_sanctioned_town: "Your nation cannot add %s, your nation has sanctioned them."
+msg_err_cannot_join_nation_sanctioned_town: "Your town cannot join %s, this nation has sanctioned your town."
+msg_err_no_nation_cannot_do: "You cannot perform this action because no nation was able to be determined."
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Your town is sanctioned by %s, you cannot spawn there."
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "The following coordinate(s) cannot be claimed because they contain too much of an unwanted biome: %s."
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The following coordinate(s) cannot be claimed because they contain too much ocean biome: %s."
+msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome."
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
+msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
+msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
+msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
+status_nation_sanctioned_towns: "Sanctioned Towns"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
+msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
+msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
+msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
+msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
+msg_err_name_validation_name_too_long: "%s is too long to use as a name."
+msg_err_name_validation_is_empty: "You cannot supply an empty name."
+msg_err_name_validation_is_not_permitted: "%s is not permitted."
+msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
+msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
+msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
+msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
+msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
+outlawed_in: "Outlawed in"
+msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
+msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
+teleport_warmup_title_dont_move: "&6Don't move!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "You cannot cede a plot to your own town."
+msg_err_town_cede_you_cannot_cede_your_homeblock: "You cannot cede your town's homeblock."
+msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
+msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
+msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
+msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
+msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
+msg_town_cede_plot_denied: "%s has declined your offer."
+msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
+msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
+msg_err_cannot_claim_plot_join_date_too_low: "You cannot claim this plot until you have been a town resident for %s days."
+msg_err_cannot_claim_plot_join_date_too_high: "You cannot claim this plot, it is for residents who have been town members for less than %s days."
+msg_townblock_min_join_days_removed: "This TownBlock has had its min-join-days requirement removed."
+msg_townblock_max_join_days_removed: "This TownBlock has had its max-join-days requirement removed."
+msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days requirement set to %s. Only players joined for more than that number of days will be able to use /plot claim."
+msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
+msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
+msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
+msg_err_you_already_own_this_plot: "You already own this plot."
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

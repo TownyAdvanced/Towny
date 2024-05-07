@@ -24,6 +24,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
@@ -76,7 +77,7 @@ public class BukkitTools {
 		
 		for (Player iterPlayer : Bukkit.getOnlinePlayers()) {
 			String iterPlayerName = iterPlayer.getName();
-			if (PluginIntegrations.getInstance().checkCitizens(iterPlayer)) {
+			if (PluginIntegrations.getInstance().isNPC(iterPlayer)) {
 				continue;
 			}
 			if (name.equalsIgnoreCase(iterPlayerName)) {
@@ -329,15 +330,20 @@ public class BukkitTools {
 	}
 
 	@SuppressWarnings("deprecation")
+	public static Location getBedOrRespawnLocation(Player player) {
+		return MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_20_3)
+			? player.getBedSpawnLocation() : player.getRespawnLocation();
+	}
+
+	@SuppressWarnings({"deprecation", "RedundantCast", "ConstantValue"})
+	public static String potionEffectName(final @NotNull PotionEffectType type) {
+		return (type instanceof Keyed ? ((Keyed) type).getKey().getKey() : type.getName()).toLowerCase(Locale.ROOT);
+	}
+
+	@SuppressWarnings("deprecation")
 	public static Objective objective(Scoreboard board, @NotNull String name, @NotNull String displayName) {
-		Objective objective;
-		try {
-			objective = board.registerNewObjective(name, Criteria.DUMMY, displayName);
-		} catch (NoClassDefFoundError e) {
-			// TODO: Remove when 1.19.2 is the lowest supported version.
-			objective = board.registerNewObjective(name, "dummy", displayName);
-		}
-		return objective;
+		return MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_19_1)
+			? board.registerNewObjective(name, "dummy", displayName) : board.registerNewObjective(name, Criteria.DUMMY, displayName);
 	}
 
 	/**

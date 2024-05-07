@@ -234,7 +234,7 @@ public class Towny extends JavaPlugin {
 		TownBlockTypeHandler.initialize();
 
 		// Initialize the special log4j hook logger.
-		TownyLogger.getInstance();
+		TownyLogger.initialize();
 
 		// Clear all objects from the TownyUniverse class.
 		townyUniverse.clearAllObjects();
@@ -437,6 +437,7 @@ public class Towny extends JavaPlugin {
 
 		this.townyUniverse = null;
 
+		// Used to be required, but in the latest versions the server will cancel these tasks for us as well.
 		if (this.scheduler instanceof FoliaTaskScheduler foliaScheduler)
 			foliaScheduler.cancelTasks();
 
@@ -781,10 +782,10 @@ public class Towny extends JavaPlugin {
 	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	private void registerSpecialCommands() {
 		List<Command> commands = new ArrayList<>(4);
-		commands.add(new AcceptCommand(TownySettings.getAcceptCommand()));
-		commands.add(new DenyCommand(TownySettings.getDenyCommand()));
-		commands.add(new ConfirmCommand(TownySettings.getConfirmCommand()));
-		commands.add(new CancelCommand(TownySettings.getCancelCommand()));
+		commands.add(new AcceptCommand(this, TownySettings.getAcceptCommand()));
+		commands.add(new DenyCommand(this, TownySettings.getDenyCommand()));
+		commands.add(new ConfirmCommand(this, TownySettings.getConfirmCommand()));
+		commands.add(new CancelCommand(this, TownySettings.getCancelCommand()));
 
 		try {
 			BukkitTools.getCommandMap().registerAll("towny", commands);
@@ -838,8 +839,6 @@ public class Towny extends JavaPlugin {
 		metrics.addCustomChart(new SimplePie("town_block_size", () -> String.valueOf(TownySettings.getTownBlockSize())));
 		
 		metrics.addCustomChart(new SimplePie("closed_economy_enabled", () -> String.valueOf(TownySettings.isEcoClosedEconomyEnabled())));
-		
-		metrics.addCustomChart(new SimplePie("resident_uuids_stored", TownySettings::getUUIDPercent));
 	}
 
 	/**

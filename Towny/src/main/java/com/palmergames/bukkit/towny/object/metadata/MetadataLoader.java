@@ -16,15 +16,14 @@ import java.util.logging.Level;
 
 public class MetadataLoader {
 	
-	private static final MetadataLoader instance = new MetadataLoader();
+	private static final MetadataLoader INSTANCE = new MetadataLoader();
 	
 	public static MetadataLoader getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 	
-	Map<String, DataFieldDeserializer<?>> deserializerMap = new HashMap<>();
-	ArrayList<TownyObject> storedMetadata = new ArrayList<>();
-	
+	private final Map<String, DataFieldDeserializer<?>> deserializerMap = new HashMap<>();
+	private final ArrayList<TownyObject> storedMetadata = new ArrayList<>();
 	
 	private MetadataLoader() {
 		
@@ -36,6 +35,7 @@ public class MetadataLoader {
 		deserializerMap.put(LongDataField.typeID(), TownyCDFDeserializer.LONG_DF);
 		deserializerMap.put(ByteDataField.typeID(), TownyCDFDeserializer.BYTE_DF);
 		deserializerMap.put(LocationDataField.typeID(), TownyCDFDeserializer.LOCATION_DF);
+		deserializerMap.put(ListDataField.typeID(), TownyCDFDeserializer.LIST_DF);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class MetadataLoader {
 					continue;
 				
 				// Did not convert, so it has to be a custom meta type
-				if (cdf instanceof RawDataField)
+				if (cdf instanceof RawDataField || (cdf instanceof ListDataField listField && listField.getValue().stream().anyMatch(field -> field instanceof RawDataField)))
 					hasCustomTypes = true;
 					
 				object.addMetaData(cdf, false);
@@ -105,28 +105,12 @@ public class MetadataLoader {
 		if (storedMetadata.isEmpty())
 			return;
 
-		List<CustomDataField<?>> deserializedFields = new ArrayList<>();
 		for (TownyObject tObj : storedMetadata) {
-			// Convert all RawDataFields to actual CustomDataField classes.
-			for (CustomDataField<?> cdf : tObj.getMetadata()) {
-				if (!(cdf instanceof RawDataField))
-					continue;
-				
-				CustomDataField<?> convertedCDF = convertRawMetadata((RawDataField) cdf);
-				
-				if (convertedCDF == null ||
-					convertedCDF instanceof RawDataField)
-					continue;
-				
-				deserializedFields.add(convertedCDF);
-			}
-			
-			if (!deserializedFields.isEmpty()) {
-				for (CustomDataField<?> cdf : deserializedFields) {
-					// Will override the metadata
-					tObj.addMetaData(cdf, false);
-				}
-				deserializedFields.clear();
+			final List<CustomDataField<?>> deserializedFields = deserializeStoredMeta(tObj.getMetadata());
+
+			for (CustomDataField<?> cdf : deserializedFields) {
+				// Will override the metadata
+				tObj.addMetaData(cdf, false);
 			}
 		}
 		
@@ -136,6 +120,33 @@ public class MetadataLoader {
 		
 		// Call event
 		BukkitTools.fireEvent(new LoadedMetadataEvent());
+	}
+	
+	private List<CustomDataField<?>> deserializeStoredMeta(Collection<CustomDataField<?>> meta) {
+		final List<CustomDataField<?>> deserializedFields = new ArrayList<>();
+		
+		// Convert all RawDataFields to actual CustomDataField classes.
+		for (CustomDataField<?> cdf : meta) {
+			if (cdf instanceof ListDataField listField) {
+				//noinspection ErrorNotRethrown
+				try {
+					listField.setValue(deserializeStoredMeta(listField.getValue()));
+				} catch (StackOverflowError ignored) {}
+			}
+
+			if (!(cdf instanceof RawDataField raw))
+				continue;
+
+			CustomDataField<?> convertedCDF = convertRawMetadata(raw);
+
+			if (convertedCDF == null ||
+				convertedCDF instanceof RawDataField)
+				continue;
+
+			deserializedFields.add(convertedCDF);
+		}
+		
+		return deserializedFields;
 	}
 	
 	private CustomDataField<?> convertRawMetadata(RawDataField rdf) {

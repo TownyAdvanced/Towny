@@ -123,19 +123,19 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 
 	private String getRelationalPlaceholder(Player player, Player player2, String identifier) {
 		if (!identifier.equalsIgnoreCase("color"))
-			return null;
+			return TownySettings.getPAPIRelationNone();
 
 		Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		Resident res2 = TownyUniverse.getInstance().getResident(player2.getUniqueId());
 		if (res == null || res2 == null)
-			return null;
+			return TownySettings.getPAPIRelationNone();
 		
 		if (!res2.hasTown()) 
 			return TownySettings.getPAPIRelationNoTown();
 		else if (CombatUtil.isSameTown(res, res2))
 			return TownySettings.getPAPIRelationSameTown();
 		else if (CombatUtil.isSameNation(res, res2))
-			return TownySettings.getPAPIRelationSameNation();
+			return res2.getTownOrNull().isConquered() ? TownySettings.getPAPIRelationConqueredTown() : TownySettings.getPAPIRelationSameNation();
 		else if (CombatUtil.isAlly(res, res2))
 			return TownySettings.getPAPIRelationAlly();
 		else if (CombatUtil.isEnemy(res, res2))
@@ -441,6 +441,10 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				name = StringMgmt.remUnderscore(resident.getNationOrNull().getCapital().getName());
 			}
 			return name;
+		case "daily_resident_tax": // %townyadvanced_daily_resident_tax%
+			return getMoney(resident.getTaxOwing(true));
+		case "daily_resident_tax_unformatted": // %townyadvanced_daily_resident_tax_unformatted%
+			return String.valueOf(resident.getTaxOwing(true));
 		case "daily_town_upkeep": // %townyadvanced_daily_town_upkeep%
 			if (resident.hasTown()) {
 				cost = TownySettings.getTownUpkeepCost(resident.getTownOrNull());

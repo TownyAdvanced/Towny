@@ -142,10 +142,10 @@ public class HUDManager implements Listener{
 	}
 
 	public static boolean isPermHUDActive(Player player) {
-		return player.getScoreboard().getTeam("plot") != null;
+		return player.getScoreboard().getTeam(PermHUD.permHudTestKey()) != null;
 	}
 
 	public static boolean isMapHudActive(Player player) {
-		return player.getScoreboard().getTeam("mapTeam1") != null;
+		return player.getScoreboard().getTeam(MapHUD.mapHudTestKey()) != null;
 	}
 }

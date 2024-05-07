@@ -18,6 +18,7 @@ public class TownClaimEvent extends Event  {
     
     private final TownBlock townBlock;
     private Resident resident;
+	private boolean isOverClaim;
 
     @Override
     public HandlerList getHandlers() {
@@ -28,13 +29,22 @@ public class TownClaimEvent extends Event  {
 		return handlers;
 	}
 
-    public TownClaimEvent(TownBlock townBlock, Player player) {
+    public TownClaimEvent(TownBlock townBlock, Player player, boolean isOverClaim) {
     	super(!Bukkit.getServer().isPrimaryThread());
         this.townBlock = townBlock;
         this.resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
+		this.isOverClaim = isOverClaim;
 	}
 
-    /**
+	/**
+	 * Whether the claim has resulted from takeoverclaim.
+	 * @return true if the claim resulted from /t takeoverclaim.
+	 */
+	public boolean isOverClaim() {
+		return isOverClaim;
+	}
+
+	/**
      *
      * @return the new TownBlock.
      */

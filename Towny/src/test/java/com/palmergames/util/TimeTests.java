@@ -1,6 +1,5 @@
-package com.palmergames.bukkit.towny.test;
+package com.palmergames.util;
 
-import com.palmergames.util.TimeTools;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;

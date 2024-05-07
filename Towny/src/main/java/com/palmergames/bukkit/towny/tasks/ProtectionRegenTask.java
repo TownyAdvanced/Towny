@@ -1,14 +1,18 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import io.papermc.lib.PaperLib;
 import net.coreprotect.CoreProtect;
+
+import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -67,11 +71,15 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	}
 
 	public void replaceProtections() {
+		// Don't replace blocks if a new block has appeared which should not be
+		// overwritten with the pre-explosion block. ie: death-chests.
+		if (unreplaceableBlockHasAppeared())
+			return;
 		
 		Block block = state.getBlock();
 		
 		// Replace physical block.
-		BlockData blockData = state.getBlockData().clone();			
+		BlockData blockData = state.getBlockData().clone();
 		block.setType(state.getType(), false);
 		block.setBlockData(blockData);
 		
@@ -116,6 +124,17 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		}
 	}
 
+	private boolean unreplaceableBlockHasAppeared() {
+		Block block = blockLocation.getBlock();
+		// We should only skip replacement when we're in the wilderness and not air.
+		if (block.getType() == Material.AIR || !TownyAPI.getInstance().isWilderness(block))
+			return false;
+
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(blockLocation.getWorld());
+		return world != null && world.isMaterialNotAllowedToBeOverwrittenByWildRevert(block.getType());
+	}
+
+
 	/**
 	 * @return the blockLocation
 	 */
@@ -152,7 +171,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	 * @deprecated Deprecated as of 0.99.0.6, use {@link #setTask(ScheduledTask)} instead. 
 	 */
 	@Deprecated
-	@SuppressWarnings("unused")
 	public void setTaskId(int taskId) {
 		
 	}

@@ -8,15 +8,16 @@ import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
+import com.palmergames.bukkit.towny.event.TitleNotificationEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
+import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledTeleportReason;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.CommandList;
-import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -25,6 +26,7 @@ import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
+import com.palmergames.bukkit.towny.object.notification.TitleNotification;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -42,8 +44,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.JavaUtil;
-import com.palmergames.util.StringMgmt;
-
 import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
@@ -92,8 +92,6 @@ import org.bukkit.metadata.MetadataValue;
 import java.lang.invoke.MethodHandle;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Handle events for all Player related events
@@ -102,7 +100,6 @@ import java.util.Map;
  * @author Shade/ElgarL
  * 
  */
-@SuppressWarnings("deprecation")
 public class TownyPlayerListener implements Listener {
 
 	private final Towny plugin;
@@ -219,8 +216,8 @@ public class TownyPlayerListener implements Listener {
 		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
 
 		// Towny might be prioritizing bed spawns over town spawns.
-		if (TownySettings.getBedUse()) { 
-			Location bed = player.getBedSpawnLocation();
+		if (TownySettings.getBedUse()) {
+			Location bed = BukkitTools.getBedOrRespawnLocation(player);
 			if (bed != null)
 				respawn = bed;
 		}
@@ -246,7 +243,6 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
-	@SuppressWarnings({"unchecked"})
 	private boolean isEndPortalRespawn(PlayerRespawnEvent event) {
 		try {
 			final Collection<Enum<?>> respawnFlags = (Collection<Enum<?>>) GET_RESPAWN_FLAGS.invoke(event);
@@ -719,7 +715,7 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		// Let's ignore Citizens NPCs
-		if (PluginIntegrations.getInstance().checkCitizens(event.getPlayer()))
+		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
 		
 		if (plugin.isError()) {
@@ -741,7 +737,7 @@ public class TownyPlayerListener implements Listener {
 		if (this.teleportWarmupTime > 0 && this.isMovementCancellingWarmup) {
 			final Resident resident = TownyAPI.getInstance().getResident(player);
 			
-			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident))
+			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident, CancelledTeleportReason.MOVEMENT))
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
 		}
 
@@ -765,7 +761,7 @@ public class TownyPlayerListener implements Listener {
 		// Let's ignore Citizens NPCs. This must come before the safemode check, as Citizens stores their NPCs
 		// at the world spawn until a player loads a chunk, to which the NPC is then teleported. Towny would
 		// prevent them teleporting, leaving them at spawn even after Safe Mode is cleaned up.
-		if (PluginIntegrations.getInstance().checkCitizens(event.getPlayer()))
+		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
 		
 		if (plugin.isError()) {
@@ -775,7 +771,7 @@ public class TownyPlayerListener implements Listener {
 		
 		Player player = event.getPlayer();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		boolean isAdmin = resident != null && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
+		boolean isAdmin = !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && resident != null && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
 		// Cancel teleport if Jailed by Towny and not an admin.
 		if (resident != null && resident.isJailed() && !isAdmin) {
 			if ((event.getCause() == TeleportCause.COMMAND)) {
@@ -878,7 +874,7 @@ public class TownyPlayerListener implements Listener {
 			// Non-player catches are tested for destroy permissions.
 			} else {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				test = TownyActionEventExecutor.canDestroy(player, caught.getLocation(), Material.GRASS);
+				test = TownyActionEventExecutor.canDestroy(player, caught.getLocation(), Material.DIRT);
 			}
 			if (!test) {
 				event.setCancelled(true);
@@ -951,8 +947,7 @@ public class TownyPlayerListener implements Listener {
 	}
 
 	/**
-	 * onPlayerDieInTown
-	 * - Handles death events and the KeepInventory/KeepLevel options are being used.
+	 * - Handles the KeepInventory/KeepLevel aspects of Towny's feature-set.
 	 * - Throws API events which can allow other plugins to cancel Towny saving
 	 *   inventory and/or experience.
 	 * 
@@ -961,47 +956,23 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	// Why Highest??, so that we are the last ones to check for if it keeps their inventory, and then have no problems with it.
-	public void onPlayerDieInTown(PlayerDeathEvent event) {
+	public void onPlayerDeathHandleKeepLevelAndInventory(PlayerDeathEvent event) {
 		Resident resident = TownyAPI.getInstance().getResident(event.getEntity());
-		TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
-		if (resident == null || tb == null)
+		if (resident == null)
 			return;
-		boolean keepInventory = event.getKeepInventory();
-		boolean keepLevel = event.getKeepLevel();
-		if (TownySettings.getKeepExperienceInTowns() && !keepLevel)
-			keepLevel = tryKeepExperience(event);
-		
-		if (TownySettings.getKeepInventoryInTowns() && !keepInventory)
-			keepInventory = tryKeepInventory(event);
-		
-		if (resident.hasTown() && !keepInventory) {
-			Town town = resident.getTownOrNull();
-			Town tbTown = tb.getTownOrNull();
-			if (TownySettings.getKeepInventoryInOwnTown() && tbTown.equals(town))
-				keepInventory = tryKeepInventory(event);
-			if (TownySettings.getKeepInventoryInAlliedTowns() && !keepInventory && tbTown.isAlliedWith(town))
-				keepInventory = tryKeepInventory(event);
-		}
-		
-		if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb.getType() == TownBlockType.ARENA)
-			tryKeepInventory(event);
-		
-		if (TownySettings.getKeepExperienceInArenas() && !keepLevel && tb.getType() == TownBlockType.ARENA)
-			tryKeepExperience(event);
+
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getEntity().getLocation());
+
+		/* Handle Inventory Keeping with our own PlayerKeepsInventoryEvent. */
+		tryKeepInventory(event, resident, tb);
+
+		/* Handle Experience Keeping with our own PlayerKeepsExperienceEvent. */
+		tryKeepExperience(event, tb);
 	}
 
-	private boolean tryKeepExperience(PlayerDeathEvent event) {
-		PlayerKeepsExperienceEvent pkee = new PlayerKeepsExperienceEvent(event);
-		if (!BukkitTools.isEventCancelled(pkee)) {
-			event.setKeepLevel(true);
-			event.setDroppedExp(0);
-			return true;
-		}
-		return false;
-	}
-
-	private boolean tryKeepInventory(PlayerDeathEvent event) {
-		PlayerKeepsInventoryEvent pkie = new PlayerKeepsInventoryEvent(event);
+	private boolean tryKeepInventory(PlayerDeathEvent event, Resident resident, TownBlock tb) {
+		boolean keepInventory = getKeepInventoryValue(event.getKeepInventory(), resident, tb);
+		PlayerKeepsInventoryEvent pkie = new PlayerKeepsInventoryEvent(event, keepInventory);
 		if (!BukkitTools.isEventCancelled(pkie)) {
 			event.setKeepInventory(true);
 			event.getDrops().clear();
@@ -1010,52 +981,82 @@ public class TownyPlayerListener implements Listener {
 		return false;
 	}
 
+	private boolean getKeepInventoryValue(boolean keepInventory, Resident resident, TownBlock tb) {
+		// Run it this way so that we will override a plugin that has kept the
+		// inventory, but they're in the wilderness where we don't want to keep
+		// inventories.
+		// Sometimes we keep the inventory when they are in any town.
+		keepInventory = TownySettings.getKeepInventoryInTowns() && tb != null;
+
+		// All of the other tests require a town.
+		if (tb == null)
+			return keepInventory;
+
+		if (resident.hasTown() && !keepInventory) {
+			Town town = resident.getTownOrNull();
+			Town tbTown = tb.getTownOrNull();
+			// Sometimes we keep the inventory only when they are in their own town.
+			if (TownySettings.getKeepInventoryInOwnTown() && tbTown.equals(town))
+				keepInventory = true;
+			// Sometimes we keep the inventory only when they are in a Town that considers them an ally.
+			if (TownySettings.getKeepInventoryInAlliedTowns() && !keepInventory && tbTown.isAlliedWith(town))
+				keepInventory = true;
+		}
+
+		// Sometimes we keep the inventory when they are in an Arena plot.
+		if (TownySettings.getKeepInventoryInArenas() && !keepInventory && tb.getType() == TownBlockType.ARENA)
+			keepInventory = true;
+
+		return keepInventory;
+	}
+
+	private boolean tryKeepExperience(PlayerDeathEvent event, TownBlock tb) {
+		boolean keepExperience = getKeepExperienceValue(tb != null, tb != null ? tb.getType() : null); 
+		PlayerKeepsExperienceEvent pkee = new PlayerKeepsExperienceEvent(event, keepExperience);
+		if (!BukkitTools.isEventCancelled(pkee)) {
+			event.setKeepLevel(true);
+			event.setDroppedExp(0);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean getKeepExperienceValue(boolean inTown, TownBlockType type) {
+		// We never keep experience in the wilderness.
+		if (!inTown)
+			return false;
+
+		// We sometimes keep experience if its in town.
+		if (TownySettings.getKeepExperienceInTowns())
+			return true;
+
+		// We sometimes keep experience in Arena Plots.
+		return type != null && type == TownBlockType.ARENA && TownySettings.getKeepExperienceInArenas();
+	}
 
 	/**
 	 * PlayerEnterTownEvent
 	 * Currently used for:
 	 *   - showing NotificationsUsingTitles upon entering a town.
 	 *   
-	 * @param event - PlayerEnterTownEvent
+	 * @param event PlayerEntersIntoTownBorderEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerEnterTown(PlayerEntersIntoTownBorderEvent event) {
-		
-		Resident resident = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
+		Resident resident = event.getResident();
 		Town town = event.getEnteredTown();
-		
-		if (resident != null && resident.isSeeingBorderTitles() && town != null && TownySettings.isNotificationUsingTitles()) {
-			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
-			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
-			
-			HashMap<String, Object> placeholders = new HashMap<>();
-			placeholders.put("{townname}", StringMgmt.remUnderscore(TownySettings.isNotificationsTownNamesVerbose() ? town.getFormattedName() : town.getName()));
-			placeholders.put("{town_motd}", town.getBoard());
-			placeholders.put("{town_residents}", town.getNumResidents());
-			placeholders.put("{town_residents_online}", TownyAPI.getInstance().getOnlinePlayers(town).size());
+		if (resident == null || town == null)
+			return;
 
-			Nation nation = town.getNationOrNull();
-			placeholders.put("{nationname}", nation == null ? "" : String.format(TownySettings.getNotificationTitlesNationNameFormat(), nation.getName()));
-			placeholders.put("{nation_residents}", nation == null ? "" : nation.getNumResidents());
-			placeholders.put("{nation_residents_online}", nation == null ? "" : TownyAPI.getInstance().getOnlinePlayers(nation).size());
-			placeholders.put("{nation_motd}", nation == null ? "" : nation.getBoard());
-			placeholders.put("{nationcapital}", !town.isCapital() ? "" : getCapitalSlug(town.getName(), nation.getName()));
-
-			for(Map.Entry<String, Object> placeholder: placeholders.entrySet()) {
-				title = title.replace(placeholder.getKey(), placeholder.getValue().toString());
-				subtitle = subtitle.replace(placeholder.getKey(), placeholder.getValue().toString());
-			}
+		if (TownySettings.isNotificationUsingTitles() && resident.isSeeingBorderTitles()) {
+			TitleNotificationEvent tne = new TitleNotificationEvent(new TitleNotification(town, event.getTo()), event.getPlayer());
+			BukkitTools.fireEvent(tne);
+			String title = tne.getTitleNotification().getTitleNotification();
+			String subtitle = tne.getTitleNotification().getSubtitleNotification();
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle, TownySettings.getNotificationTitlesDurationTicks());
 		}
 	}
 	
-	private Object getCapitalSlug(String townName, String nationName) {
-		String format = TownySettings.getNotificationTitlesNationCapitalFormat();
-		if (format.contains("%t") || format.contains("%n"))
-			return format.replace("%t", townName).replace("%n", nationName);
-		else 
-			return String.format(format, nationName, townName);
-	}
 
 	/**
 	 * PlayerLeaveTownEvent
@@ -1063,32 +1064,20 @@ public class TownyPlayerListener implements Listener {
 	 *   - showing NotificationsUsingTitles upon entering the wilderness.
 	 *   - unjailing residents
 	 *   
-	 * @param event - PlayerLeaveTownEvent
+	 * @param event PlayerExitsFromTownBorderEvent
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLeaveTown(PlayerExitsFromTownBorderEvent event) {
-		Resident resident = TownyAPI.getInstance().getResident(event.getPlayer().getUniqueId());
-		String worldName = TownyAPI.getInstance().getTownyWorld(event.getPlayer().getWorld()).getFormattedUnclaimedZoneName();
-
+		Resident resident = event.getResident();
 		// Likely a Citizens NPC.
-		if (resident == null || worldName == null)
+		if (resident == null || !event.getTo().isWilderness())
 			return;
-		
-		if (TownySettings.isNotificationUsingTitles() && resident.isSeeingBorderTitles() && event.getTo().getTownBlockOrNull() == null) {
-			String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
-			String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
-			if (title.contains("{wilderness}")) {
-				title = title.replace("{wilderness}", worldName);
-			}
-			if (subtitle.contains("{wilderness}")) {
-				subtitle = subtitle.replace("{wilderness}", worldName);
-			}
-			if (title.contains("{townname}")) {
-				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
-			}
-			if (subtitle.contains("{townname}")) {
-				subtitle = subtitle.replace("{townname}", StringMgmt.remUnderscore(event.getFrom().getTownOrNull().getName()));
-			}
+
+		if (TownySettings.isNotificationUsingTitles() && resident.isSeeingBorderTitles()) {
+			TitleNotificationEvent tne = new TitleNotificationEvent(new TitleNotification(event.getLeftTown(), event.getTo()), event.getPlayer());
+			BukkitTools.fireEvent(tne);
+			String title = tne.getTitleNotification().getTitleNotification();
+			String subtitle = tne.getTitleNotification().getSubtitleNotification();
 			TownyMessaging.sendTitleMessageToResident(resident, title, subtitle, TownySettings.getNotificationTitlesDurationTicks());
 		}
 

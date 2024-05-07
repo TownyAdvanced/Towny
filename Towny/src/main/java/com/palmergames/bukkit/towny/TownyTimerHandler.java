@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DrawSmokeTask;
@@ -58,7 +59,7 @@ public class TownyTimerHandler{
 
 	public static void toggleMobRemoval(boolean on) {
 
-		if (on && !isMobRemovalRunning()) {
+		if (on && !isMobRemovalRunning() && !plugin.isFolia()) {
 			mobRemoveTask = plugin.getScheduler().runRepeating(new MobRemovalTimerTask(plugin), 1, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 		} else if (!on && isMobRemovalRunning()) {
 			mobRemoveTask.cancel();
@@ -97,7 +98,7 @@ public class TownyTimerHandler{
 	public static void toggleHealthRegen(boolean on) {
 
 		if (on && !isHealthRegenRunning()) {
-			healthRegenTask = plugin.getScheduler().runRepeating(new HealthRegenTimerTask(plugin, BukkitTools.getServer()), 1, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
+			healthRegenTask = plugin.getScheduler().runAsyncRepeating(new HealthRegenTimerTask(plugin, BukkitTools.getServer()), 1, TimeTools.convertToTicks(TownySettings.getHealthRegenSpeed()));
 		} else if (!on && isHealthRegenRunning()) {
 			healthRegenTask.cancel();
 			healthRegenTask = null;
@@ -136,7 +137,7 @@ public class TownyTimerHandler{
 	public static void toggleDrawSpointsTask(boolean on) {
 		if (on && !isDrawSpawnPointsTaskRunning()) {
 			// This is given a delay because it was causing ConcurrentModificationExceptions on startup on one server.
-			drawSpawnPointsTask = plugin.getScheduler().runAsyncRepeating(new DrawSpawnPointsTask(plugin), 40, 52);
+			drawSpawnPointsTask = plugin.getScheduler().runAsyncRepeating(new DrawSpawnPointsTask(plugin), 40, SpawnPoint.RING_POINT_COUNT * SpawnPoint.RING_DELAY_TICKS);
 		} else if (!on && isDrawSpawnPointsTaskRunning()) {
 			drawSpawnPointsTask.cancel();
 			drawSpawnPointsTask = null;

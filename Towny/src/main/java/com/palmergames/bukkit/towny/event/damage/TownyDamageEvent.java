@@ -53,7 +53,7 @@ public abstract class TownyDamageEvent extends Event implements Cancellable {
 	 */
 	@Nullable
 	public Town getTown() {
-		return townblock.getTownOrNull();
+		return townblock == null ? null : townblock.getTownOrNull();
 	}
 
 	/**

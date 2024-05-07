@@ -157,6 +157,7 @@ public class SQLSchema {
 		columns.add("`groupName` mediumtext NOT NULL");
 		columns.add("`groupPrice` float DEFAULT NULL");
 		columns.add("`town` VARCHAR(32) NOT NULL");
+		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}
 
@@ -269,6 +270,7 @@ public class SQLSchema {
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`conqueredTax` float NOT NULL");
+		columns.add("`sanctionedTowns` mediumtext DEFAULT NULL");
 		return columns;
 	}
 
@@ -306,6 +308,7 @@ public class SQLSchema {
 		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenBlockWhitelist` mediumtext NOT NULL");
+		columns.add("`wildRegenBlocksToNotOverwrite` mediumtext NOT NULL");
 		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
 		columns.add("`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'");
 		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
@@ -333,6 +336,8 @@ public class SQLSchema {
 		columns.add("`claimedAt` BIGINT NOT NULL");
 		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
 		columns.add("`customPermissionData` mediumtext DEFAULT NULL");
+		columns.add("`minTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
+		columns.add("`maxTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
 		return columns;
 	}
 	

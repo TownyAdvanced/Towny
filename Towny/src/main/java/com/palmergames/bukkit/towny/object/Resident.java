@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object;
 
 import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -54,6 +55,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
 	private List<Resident> friends = new ArrayList<>();
@@ -87,6 +89,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private ScheduledTask respawnProtectionTask = null;
 	private boolean respawnPickupWarningShown = false; // Prevents chat spam when a player attempts to pick up an item while under respawn protection.
 	private String plotGroupName = null;
+	protected CachedTaxOwing cachedTaxOwing = null;
 
 	public Resident(String name) {
 		super(name);
@@ -342,8 +345,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		try {
 			town.removeResident(this);
 		} catch (EmptyTownException e) {
-			if (!townDeleted)
+			if (!townDeleted) {
+				TownyMessaging.sendMsg(Translatable.of("msg_town_being_deleted_because_no_residents", town.getName()));
 				TownyUniverse.getInstance().getDataSource().removeTown(town, false);
+			}
 		} catch (NotRegisteredException ignored) {}
 
 		try {
@@ -623,16 +628,20 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 
 	}
-	
+
 	public void clearModes() {
+		clearModes(true);
+	}
+
+	public void clearModes(boolean notify) {
 
 		this.modes.clear();
-		TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
+		if (notify)
+			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
 
-		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), true), 1);
-
+		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), notify), 1);
 	}
-	
+
 	/**
 	 * Only for internal Towny use. NEVER call this from any other plugin.
 	 *
@@ -877,6 +886,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return Collections.unmodifiableCollection(townBlocks);
 	}
 
+	/**
+	 * @return All towns that the resident is outlawed in
+	 */
+	public List<Town> getTownsOutlawedIn() {
+		return TownyUniverse.getInstance().getTowns().stream().filter(t -> t.hasOutlaw(this)).collect(Collectors.toList());
+	}
+
 	@Override
 	public boolean hasTownBlock(TownBlock townBlock) {
 		return townBlocks.contains(townBlock);
@@ -1049,5 +1065,89 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public boolean exists() {
 		return TownyUniverse.getInstance().hasResident(getName());
+	}
+
+	public double getTaxOwing(boolean useCache) {
+		if (useCache)
+			return getCachedTaxOwing();
+
+		Town town;
+		boolean taxExempt = hasPermissionNode("towny.tax_exempt");
+		double plotTax = 0.0;
+		double townTax = 0.0;
+
+		if (hasTown() && !taxExempt) {
+			town = getTownOrNull();
+			townTax = town.getTaxes();
+			if (town.isTaxPercentage())
+				townTax = Math.min(getAccount().getHoldingBalance() * townTax / 100, town.getMaxPercentTaxAmount());
+		}
+
+		if (getTownBlocks().size() > 0) {
+			for (TownBlock townBlock : new ArrayList<>(getTownBlocks())) {
+				town = townBlock.getTownOrNull();
+				if (town == null) // Shouldn't happen but worth checking.
+					continue;
+
+				if (taxExempt && town.hasResident(this)) // Resident will not pay any tax for plots owned by their towns.
+					continue;
+				plotTax += townBlock.getType().getTax(town);
+			}
+		}
+		return plotTax + townTax;
+	}
+
+
+	/**
+	 * Returns a cached amount of taxes that a resident will pay daily.
+	 *
+	 * @return tax {@link Double} which is from a {@link CachedTaxOwing#owing}.
+	 */
+	public double getCachedTaxOwing() {
+		return getCachedTaxOwing(true);
+	}
+
+	/**
+	 * Returns a cached amount of taxes that a resident will pay daily, with the
+	 * ability to only refresh the cache if it is stale.
+	 *
+	 * @param refreshIfStale when true, if the cache is stale it will update.
+	 * @return cachedTaxOwing {@link Double} which is from a {@link CachedTaxOwing#owing}.
+	 */
+	public synchronized double getCachedTaxOwing(boolean refreshIfStale) {
+		if (cachedTaxOwing == null)
+			cachedTaxOwing = new CachedTaxOwing(getTaxOwing(false));
+		else if (refreshIfStale && cachedTaxOwing.isStale())
+			cachedTaxOwing.updateCache();
+
+		return cachedTaxOwing.getOwing();
+	}
+
+	class CachedTaxOwing {
+		private double owing = 0;
+		private long time;
+
+		CachedTaxOwing(double _owing) {
+			owing = _owing;
+			time = System.currentTimeMillis();
+		}
+
+		double getOwing() {
+			return owing;
+		}
+
+		boolean isStale() {
+			return System.currentTimeMillis() - time > TownySettings.getCachedBankTimeout();
+		}
+
+		void setOwing(double _balance) {
+			owing = _balance;
+			time = System.currentTimeMillis();
+		}
+
+		void updateCache() {
+			time = System.currentTimeMillis();
+			TownyEconomyHandler.economyExecutor().execute(() -> setOwing(getTaxOwing(false)));
+		}
 	}
 }

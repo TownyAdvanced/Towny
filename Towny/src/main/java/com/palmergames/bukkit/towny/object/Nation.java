@@ -17,9 +17,10 @@ import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.NationUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.util.MathUtil;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -34,6 +35,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -41,6 +43,7 @@ public class Nation extends Government {
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getNationAccountPrefix();
 
 	private final List<Town> towns = new ArrayList<>();
+	private final List<Town> sanctionedTowns = new ArrayList<>();
 	private List<Nation> allies = new ArrayList<>();
 	private List<Nation> enemies = new ArrayList<>();
 	private Town capital;
@@ -302,6 +305,9 @@ public class Nation extends Government {
 		return allies;
 	}
 
+	public boolean hasReachedMaximumAllies() {
+		return NationUtil.hasReachedMaximumAllies(this);
+	}
 	public List<Nation> getMutualAllies() {
 		List<Nation> result = new ArrayList<>();
 		for(Nation ally: getAllies()) {
@@ -322,6 +328,18 @@ public class Nation extends Government {
 		for (Town town : getTowns())
 			numResidents += town.getNumResidents();
 		return numResidents;
+	}
+
+	public boolean canAddResidents(int additionalResidents) {
+		return NationUtil.canAddTownsResidentCount(this, additionalResidents);
+	}
+
+	public boolean hasReachedMaxResidents() {
+		return NationUtil.hasReachedMaximumResidents(this);
+	}
+
+	public boolean hasReachedMaxTowns() {
+		return NationUtil.hasReachedMaximumTowns(this);
 	}
 
 	/**
@@ -398,44 +416,25 @@ public class Nation extends Government {
 	 * nation capital homeblock. Results in towns whose homeblocks are no 
 	 * longer close enough to the capital homeblock being removed from 
 	 * the nation.
+	 * 
+	 * @deprecated since 0.100.0.9 use {@link ProximityUtil#removeOutOfRangeTowns(Nation)} instead.
 	 */
+	@Deprecated
 	public void removeOutOfRangeTowns() {
-		if(capital != null && TownySettings.getNationRequiresProximity() > 0) {
-			List<Town> toRemove = gatherOutOfRangeTowns(new ArrayList<>(getTowns()), capital);
-			if (!toRemove.isEmpty())
-				toRemove.stream().forEach(town -> {
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_left_nation", this.getName()));
-					TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("msg_nation_town_left", town.getName()));
-					town.removeNation();
-					town.save();
-				});
-		}
+		ProximityUtil.removeOutOfRangeTowns(this);
 	}
 	
 	/**
 	 * A method which returns a list of Towns too far from the given capital town.
 	 * 
+	 * @deprecated since 0.100.0.9 use {@link ProximityUtil#gatherOutOfRangeTowns(Nation)} instead.
 	 * @param towns - The list of towns to check.
 	 * @param capital - The Town from which to check the distance.
 	 * @return removedTowns - A list of Towns which would be removed by removeOutOfRangeTowns().
 	 */
+	@Deprecated
 	public List<Town> gatherOutOfRangeTowns(List<Town> towns, Town capital) {
-		List<Town> removedTowns = new ArrayList<>();
-		final TownBlock capitalHomeBlock = capital.getHomeBlockOrNull();
-		if (capital.hasHomeBlock() && TownySettings.getNationRequiresProximity() > 0 && capitalHomeBlock != null) {
-			final Coord capitalCoord = capitalHomeBlock.getCoord();
-			
-			for (Town town : towns) {
-				TownBlock townHomeBlock = town.getHomeBlockOrNull();
-				if (town.hasHomeBlock() && capital.getHomeblockWorld().equals(town.getHomeblockWorld()) && townHomeBlock != null) {
-					Coord townCoord = townHomeBlock.getCoord();
-					final double distance = MathUtil.distance(capitalCoord.getX(), townCoord.getX(), capitalCoord.getZ(), townCoord.getZ());
-					if (distance > TownySettings.getNationRequiresProximity())
-						removedTowns.add(town);
-				}
-			}
-		}
-		return removedTowns;
+		return ProximityUtil.gatherOutOfRangeTowns(this);
 	}	
 
 	public void setKing(Resident king) throws TownyException {
@@ -717,4 +716,40 @@ public class Nation extends Government {
 	public void playerBroadCastMessageToNation(Player player, String message) {
 		TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("town_say_format", player.getName(), TownyComponents.stripClickTags(message)));
 	}
+
+
+	public List<Town> getSanctionedTowns() {
+		return sanctionedTowns;
+	}
+
+	public boolean hasSanctionedTown(Town town) {
+		return sanctionedTowns.contains(town);
+	}
+
+	public void addSanctionedTown(Town town) {
+		if (!sanctionedTowns.contains(town))
+			sanctionedTowns.add(town);
+	}
+
+	public void removeSanctionedTown(Town town) {
+		sanctionedTowns.remove(town);
+	}
+
+	public List<String> getSanctionedTownsForSaving() {
+		return sanctionedTowns.stream().map(t -> t.getUUID().toString()).collect(Collectors.toList());
+	}
+
+	public void loadSanctionedTowns(String[] tokens) {
+		for (String stringUUID : tokens) {
+			try {
+				Town town = TownyAPI.getInstance().getTown(UUID.fromString(stringUUID));
+				if (town != null)
+					sanctionedTowns.add(town);
+			} catch (IllegalArgumentException ignored) {
+				continue;
+			}
+		}
+	}
+
+
 }

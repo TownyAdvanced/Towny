@@ -46,6 +46,7 @@ public class TownClaim implements Runnable {
 	private double runningRefund = 0.0;
 	private double insufficientFunds = 0.0;
 	private boolean successfulRun = false;
+	private boolean isOverClaim = false;
 
 	/**
 	 * @param plugin reference to towny
@@ -67,6 +68,20 @@ public class TownClaim implements Runnable {
 		this.claim = claim;
 		this.forced = forced;
 		this.runningRefund = 0.0;
+	}
+
+	public TownClaim(Towny plugin, Player player, Town town, List<WorldCoord> selection, boolean isOutpost, boolean claim, boolean forced, boolean isOverClaim) {
+		this.plugin = plugin;
+		this.player = player;
+		if (this.player != null)
+			this.outpostLocation = player.getLocation();
+		this.town = town;
+		this.selection = selection;
+		this.outpost = isOutpost;
+		this.claim = claim;
+		this.forced = forced;
+		this.runningRefund = 0.0;
+		this.isOverClaim = isOverClaim;
 	}
 
 	@Override
@@ -193,7 +208,7 @@ public class TownClaim implements Runnable {
 			Town oldTown = worldCoord.getTownOrNull();
 
 			//  Fire an event for other plugins.
-			BukkitTools.fireEvent(new TownUnclaimEvent(oldTown, worldCoord));
+			BukkitTools.fireEvent(new TownUnclaimEvent(oldTown, worldCoord, isOverClaim));
 
 			if (townBlock.hasResident())
 				townBlock.setResident(null, false);
@@ -226,7 +241,7 @@ public class TownClaim implements Runnable {
 		townBlock.save();
 
 		// Raise an event for the claim
-		BukkitTools.fireEvent(new TownClaimEvent(townBlock, player));
+		BukkitTools.fireEvent(new TownClaimEvent(townBlock, player, isOverClaim));
 	}
 
 	private void handleRevertOnUnclaimPossiblities(WorldCoord worldCoord, TownBlock townBlock) {
@@ -245,7 +260,7 @@ public class TownClaim implements Runnable {
 		// Check if a plot snapshot exists for this townblock already (inactive, unqueued regeneration.)
 		if (!TownyUniverse.getInstance().getDataSource().hasPlotData(townBlock)) {
 			// Queue to have a snapshot made if there is not already an earlier snapshot.
-			plugin.getScheduler().run(worldCoord.getLowerMostCornerLocation(), () -> TownyRegenAPI.handleNewSnapshot(townBlock));
+			plugin.getScheduler().runAsync(() -> TownyRegenAPI.handleNewSnapshot(townBlock));
 		}
 	}
 

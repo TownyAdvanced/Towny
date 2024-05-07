@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumOnlinePla
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownBlocksCalculationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationListDisplayedNumTownsCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownListDisplayedNumResidentsCalculationEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -92,10 +93,10 @@ public class ComparatorCaches {
 				slug = "(" + town.getTownBlocks().size() + ")";
 				break;
 			case RUINED:
-				slug = "(" + town.getResidents().size() + ") " + (town.isRuined() ? Translation.of("msg_ruined"):"");
+				slug = "(" + getResidentCount(town) + ") " + (town.isRuined() ? Translation.of("msg_ruined"):"");
 				break;
 			case BANKRUPT:
-				slug = "(" + town.getResidents().size() + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
+				slug = "(" + getResidentCount(town) + ") " + (town.isBankrupt() ? Translation.of("msg_bankrupt"):"");
 				break;
 			case ONLINE:
 				slug = "(" + TownyAPI.getInstance().getOnlinePlayersInTown(town).size() + ")";
@@ -108,7 +109,7 @@ public class ComparatorCaches {
 				slug = "(" + TownyEconomyHandler.getFormattedBalance(TownySettings.getTownUpkeepCost(town)) + ")";
 				break;
 			default:
-				slug = "(" + town.getResidents().size() + ")";
+				slug = "(" + getResidentCount(town) + ")";
 				break;
 			}
 			
@@ -127,7 +128,13 @@ public class ComparatorCaches {
 		
 		return output;
 	}
-	
+
+	private static int getResidentCount(Town town) {
+		TownListDisplayedNumResidentsCalculationEvent resCountEvent = new TownListDisplayedNumResidentsCalculationEvent(town.getResidents().size(), town);
+		BukkitTools.fireEvent(resCountEvent);
+		return resCountEvent.getDisplayedValue();
+	}
+
 	@SuppressWarnings("unchecked")
 	private static List<Pair<UUID, Component>> gatherNationLines(ComparatorType compType) {
 		List<Pair<UUID, Component>> output = new ArrayList<>();

@@ -18,11 +18,13 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.TimeTools;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +37,8 @@ public class TownBlock extends TownyObject {
 
 	private Town town = null;
 	private Resident resident = null;
+	private int minTownMembershipDays = -1;
+	private int maxTownMembershipDays = -1;
 	private TownBlockType type = TownBlockType.RESIDENTIAL;
 	private final WorldCoord worldCoord;
 	private double plotPrice = -1;
@@ -79,6 +83,8 @@ public class TownBlock extends TownyObject {
 				setClaimedAt(System.currentTimeMillis());
 			
 			permissionOverrides.clear();
+			minTownMembershipDays = -1;
+			maxTownMembershipDays = -1;
 		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
 	}
 
@@ -164,6 +170,7 @@ public class TownBlock extends TownyObject {
 			this.resident.removeTownBlock(this);
 			unclaim = true;
 			this.town.getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(this);
+			new ArrayList<>(this.getTrustedResidents()).forEach(this::removeTrustedResident);
 		}
 		this.resident = resident;
 		if (resident != null && !resident.hasTownBlock(this)) {
@@ -217,13 +224,16 @@ public class TownBlock extends TownyObject {
 
 	public void setPlotPrice(double price) {
 		if (this.town != null) {
-			if (isForSale() && price == -1.0)
+			if (isForSale() && price < 0)
 				// Plot is no longer for sale.
 				this.town.getTownBlockTypeCache().removeTownBlockOfTypeForSale(this);
-			else if (!isForSale() && price > -1.0)
+			else if (!isForSale() && price >= 0)
 				// Plot is being put up for sale.
 				this.town.getTownBlockTypeCache().addTownBlockOfTypeForSale(this);
 		}
+		
+		if (price < 0)
+			price = -1;
 
 		this.plotPrice = price;
 	}
@@ -235,7 +245,7 @@ public class TownBlock extends TownyObject {
 
 	public boolean isForSale() {
 
-		return getPlotPrice() != -1.0;
+		return getPlotPrice() >= 0.0;
 	}
 
 	public boolean isTaxed() {
@@ -497,7 +507,7 @@ public class TownBlock extends TownyObject {
 	public void clear() {
 
 		setTown(null);
-		setResident(null);
+		removeResident();
 	}
 
 	@Override
@@ -621,10 +631,94 @@ public class TownBlock extends TownyObject {
 	}
 	
 	public void evictOwnerFromTownBlock() {
-		this.setResident(null);
+		this.removeResident();
 		this.setPlotPrice(-1);
 		this.setType(getType());
 		this.save();
+	}
+
+	/**
+	 * Tests whether a Resident's Town membership age (join date) is too high or
+	 * low, preventing them from claiming this TownBlock personally with /plot
+	 * claim.
+	 * 
+	 * @param resident Resident who wants to buy the TownBlock.
+	 * @throws TownyException thrown with error message when the Resident is not
+	 *                        allowed to claim the land.
+	 */
+	public void testTownMembershipAgePreventsThisClaimOrThrow(Resident resident) throws TownyException {
+		if ((this.getType().equals(TownBlockType.EMBASSY) && !town.hasResident(resident)) 
+				|| (!hasMinTownMembershipDays() && !hasMaxTownMembershipDays()))
+			return;
+
+		Town residentTown = resident.getTownOrNull();
+		if (residentTown == null || !residentTown.equals(this.town))
+			return;
+
+		long joinDate = resident.getJoinedTownAt();
+
+		if (hasMaxTownMembershipDays() && TimeTools.getTimeInMillisXDaysAgo(getMaxTownMembershipDays()) > joinDate)
+			throw new TownyException(Translatable.of("msg_err_cannot_claim_plot_join_date_too_high", getMaxTownMembershipDays()));
+
+		if (hasMinTownMembershipDays() && TimeTools.getTimeInMillisXDaysAgo(getMinTownMembershipDays()) < joinDate)
+			throw new TownyException(Translatable.of("msg_err_cannot_claim_plot_join_date_too_low", getMinTownMembershipDays()));
+	}
+
+	/**
+	 * @return does this plot have a min number of days the player has to be a
+	 *         member of the town, before they can claim?
+	 */
+	public boolean hasMinTownMembershipDays() {
+		return minTownMembershipDays > 0; 
+	}
+
+	/**
+	 * @return how many days a town member has to be a part of the town in order to
+	 *         claim this plot personally using /plot claim.
+	 */
+	public int getMinTownMembershipDays() {
+		return minTownMembershipDays;
+	}
+
+	/**
+	 * Sets the number of days that a town member must be a part of the town before
+	 * they can claim the plot personally using /plot claim.
+	 * 
+	 * @param minTownMembershipDays days they have to be a part of the town for,
+	 *                              before they can claim.
+	 */
+	public void setMinTownMembershipDays(int minTownMembershipDays) {
+		// 32766 because this is stored as a SMALLINT when MYSQL is used.
+		this.minTownMembershipDays = Math.min(32766, minTownMembershipDays);
+	}
+
+	/**
+	 * @return does this plot have a max number of days the player can be a member
+	 *         of the town, before they cannot claim?
+	 */
+	public boolean hasMaxTownMembershipDays() {
+		return maxTownMembershipDays > 0; 
+	}
+
+	/**
+	 * @return how the maximum number of days a town member can be a part of the
+	 *         town before they are unable to claim this plot personally using /plot
+	 *         claim.
+	 */
+	public int getMaxTownMembershipDays() {
+		return maxTownMembershipDays;
+	}
+
+	/**
+	 * Sets the maximum number of days that a town member can be a part of the town
+	 * before they unable to claim the plot personally using /plot claim.
+	 * 
+	 * @param maxTownMembershipDays days they can be a part of the town for, until
+	 *                              they cannot claim.
+	 */
+	public void setMaxTownMembershipDays(int maxTownMembershipDays) {
+		// 32766 because this is stored as a SMALLINT when MYSQL is used.
+		this.maxTownMembershipDays = Math.min(32766, maxTownMembershipDays);
 	}
 
 	@ApiStatus.Internal

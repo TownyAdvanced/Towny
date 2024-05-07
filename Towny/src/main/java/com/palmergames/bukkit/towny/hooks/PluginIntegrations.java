@@ -32,7 +32,6 @@ import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.StringMgmt;
 
-import net.citizensnpcs.api.CitizensAPI;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 
@@ -40,17 +39,16 @@ public class PluginIntegrations {
 	private static PluginIntegrations instance; 
 	private final String[] TOWNYADVANCED_PLUGINS = { "TownyChat", "TownyFlight", "TownyCultures", "TownyResources",
 			"TownyCombat", "FlagWar", "SiegeWar", "MapTowny", "Dynmap-Towny", "ChestShop-Towny", "mcMMO-Towny",
-			"Towny-TNE", "WorldGuard-Towny" };
+			"Towny-TNE", "WorldGuard-Towny", "TownyProvinces" };
 	private final String[] SPONSOR_PLUGINS = { "EventWar", "SiegeConquest", "TownyCamps", "TownyHistories", "TownyRTP",
-			"TownyWayPointTravel", "TownOptionalLWC" };
+			"TownyWayPointTravel", "TownOptionalLWC", "TowerOfBable", "TownyCaptureSites" };
 	private final String NEWLINE_STRING = System.lineSeparator() + "                           ";
 	private final Map<String, Level> warnings = new LinkedHashMap<>();
 
 	private TownyPlaceholderExpansion papiExpansion = null;
 	private LuckPermsContexts luckPermsContexts;
-	private boolean citizens2 = false;
 	private NamespacedKey eliteKey;
-	private Version POWERRANKS_FIXED_VERSION = Version.fromString("1.10.8");
+	private static final Version POWERRANKS_FIXED_VERSION = Version.fromString("1.10.8");
 
 	public static PluginIntegrations getInstance() {
 		if (instance == null)
@@ -145,9 +143,6 @@ public class PluginIntegrations {
 		if(Bukkit.getPluginManager().isPluginEnabled("TheNewChat")) {
 			TNCRegister.initialize();
 		}
-
-		// Test for Citizens2 so we can avoid removing their NPC's.
-		setCitizens2(Bukkit.getServer().getPluginManager().isPluginEnabled("Citizens"));
 
 		// Test for EliteMobs.
 		Plugin eliteMobs = Bukkit.getServer().getPluginManager().getPlugin("EliteMobs");
@@ -288,7 +283,6 @@ public class PluginIntegrations {
 	public void disable3rdPartyPluginIntegrations() {
 		unregisterLuckPermsContexts();
 		unloadPAPIExpansion(true);
-		setCitizens2(false);
 	}
 
 	/*
@@ -342,24 +336,19 @@ public class PluginIntegrations {
 	 * 
 	 * @param entity Entity to check.
 	 * @return true if the entity is an NPC.
+	 * @deprecated Deprecated as of 0.100.1.10, please use {@link #isNPC(Entity)} instead.
 	 */
+	@Deprecated
 	public boolean checkCitizens(Entity entity) {
-		if (isCitizens2()) {
-			try {
-				return CitizensAPI.getNPCRegistry().isNPC(entity);
-			} catch (NoClassDefFoundError e) {
-				setCitizens2(false);
-			}
-		}
-		return false;
+		return entity != null && isNPC(entity);
 	}
 
-	private boolean isCitizens2() {
-		return citizens2;
-	}
-
-	public void setCitizens2(boolean b) {
-		citizens2 = b;
+	/**
+	 * @param entity Entity to check.
+	 * @return true if the entity is a plugin-created NPC.
+	 */
+	public boolean isNPC(final @NotNull Entity entity) {
+		return entity.hasMetadata("NPC");
 	}
 
 	/*

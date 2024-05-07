@@ -9,17 +9,23 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.util.ItemLists;
 
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected.Half;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -47,6 +53,9 @@ public class TownyRegenAPI {
 	
 	// List of protection blocks placed to prevent blockPhysics.
 	private static final Set<Block> protectionPlaceholders = new HashSet<>();
+	
+	// https://jd.papermc.io/paper/1.20/org/bukkit/Chunk.html#getChunkSnapshot(boolean,boolean,boolean,boolean)
+	private static final MethodHandle GET_CHUNK_SNAPSHOT = JavaUtil.getMethodHandle(Chunk.class, "getChunkSnapshot", boolean.class, boolean.class, boolean.class, boolean.class);
 
 	/**
 	 * Removes a TownyWorld from the various Revert-on-Unclaim feature Lists/Table.
@@ -297,9 +306,29 @@ public class TownyRegenAPI {
 			else if (event instanceof BlockExplodeEvent)
 				((BlockExplodeEvent) event).setYield(0);
 
+			// Set extra-special blocks to air so we're not duping items.
+			handlePeskyBlocks(block);
+
 			return true;
 		}
 		return false;
+	}
+
+	private static void handlePeskyBlocks(Block block) {
+		if (ItemLists.EXPLODABLE_ATTACHABLES.contains(block.getType())) {
+			if (!(block.getBlockData() instanceof Door door)) 
+				// Not a Door, set the pesky block to AIR so an item doesn't drop.
+				block.setType(Material.AIR);
+
+			// Doors are double-tall and especially pesky. We parse over exploded blocks
+			// from bottom to top, so if we don't handle doors backwards we regenerate doors
+			// with only a bottom half.
+			else if (door.getHalf().equals(Half.TOP)) {
+				// Remove the bottom along with the top here.
+				block.getRelative(BlockFace.DOWN).setType(Material.AIR);
+				block.setType(Material.AIR);
+			}
+		}
 	}
 
 	/**
@@ -423,7 +452,17 @@ public class TownyRegenAPI {
 		final List<ChunkSnapshot> snapshots = new ArrayList<>();
 		final Collection<CompletableFuture<Chunk>> futures = townBlock.getWorldCoord().getChunks();
 		
-		futures.forEach(future -> future.thenAccept(chunk -> snapshots.add(chunk.getChunkSnapshot(false, false, false))));
+		futures.forEach(future -> future.thenAccept(chunk -> {
+			try {
+				if (GET_CHUNK_SNAPSHOT != null) {
+					snapshots.add((ChunkSnapshot) GET_CHUNK_SNAPSHOT.invoke(chunk, false, false, false, false));
+				} else {
+					snapshots.add(chunk.getChunkSnapshot(false, false, false));
+				}
+			} catch (Throwable throwable) {
+				snapshots.add(chunk.getChunkSnapshot(false, false, false));
+			}
+		}));
 		
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[]{})).thenApplyAsync(v -> {
 			final PlotBlockData data = new PlotBlockData(townBlock);

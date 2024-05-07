@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
-import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -158,16 +157,11 @@ public abstract class TownyDataSource {
 
 		TownyMessaging.sendDebugMsg("Loading Residents");
 
-		TownySettings.setUUIDCount(0);
-		
 		for (Resident resident : universe.getResidents()) {
 			if (!loadResident(resident)) {
 				plugin.getLogger().severe("Loading Error: Could not read resident data '" + resident.getName() + "'.");
 				return false;
 			}
-
-			if (resident.hasUUID())
-				TownySettings.incrementUUIDCount();
 		}
 		return true;
 	}

@@ -23,7 +23,7 @@ public abstract class NationToggleEvent extends CancellableTownyEvent {
 	public NationToggleEvent(CommandSender sender, Nation nation, boolean admin) {
 		this.sender = sender;
 		if (sender instanceof Player)
-			this.player = (Player) sender;;
+			this.player = (Player) sender;
 		this.nation = nation;
 		this.isAdminAction = admin;
 		setCancelMessage(Translation.of("msg_err_command_disable"));

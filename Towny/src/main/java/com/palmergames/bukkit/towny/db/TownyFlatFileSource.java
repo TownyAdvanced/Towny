@@ -60,7 +60,6 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
-
 	private final String newLine = System.lineSeparator();
 	
 	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
@@ -1218,6 +1217,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null && !line.isEmpty())
 					nation.setConqueredTax(Double.parseDouble(line));
 
+				line = keys.get("sanctionedTowns");
+				if (line != null) {
+					nation.loadSanctionedTowns(line.split("#"));
+				}
+
 			} catch (Exception e) {
 				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()), e);
 				return false;
@@ -1513,6 +1517,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("wildRegenBlocksToNotOverwrite");
+				if (line != null)
+					try {
+						List<String> mats = new ArrayList<>();
+						for (String s : line.split(","))
+							if (!s.isEmpty())
+								try {
+									mats.add(s.trim());
+								} catch (NumberFormatException ignored) {
+								}
+						world.setWildRevertMaterialsToNotOverwrite(mats);
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("usingPlotManagementWildRegenDelay");
 				if (line != null)
 					try {
@@ -1604,6 +1622,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("groupPrice");
 				if (line != null && !line.isEmpty())
 					group.setPrice(Double.parseDouble(line.trim()));
+				
+				line = keys.get("metadata");
+				if (line != null)
+					MetadataLoader.getInstance().deserializeMetadata(group, line.trim());
 
 			} catch (Exception e) {
 				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_group_file_at_line", path, line));
@@ -1731,7 +1753,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						try {
 							townBlock.setClaimedAt(Long.parseLong(line));
 						} catch (Exception ignored) {}
-					
+
+					line = keys.get("minTownMembershipDays");
+					if (line != null && !line.isEmpty())
+						townBlock.setMinTownMembershipDays(Integer.valueOf(line));
+
+					line = keys.get("maxTownMembershipDays");
+					if (line != null && !line.isEmpty())
+						townBlock.setMaxTownMembershipDays(Integer.valueOf(line));
+
 					line = keys.get("metadata");
 					if (line != null && !line.isEmpty())
 						MetadataLoader.getInstance().deserializeMetadata(townBlock, line.trim());
@@ -2076,8 +2106,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("groupName=" + group.getName());
 			list.add("groupPrice=" + group.getPrice());
 			list.add("town=" + group.getTown().getName());
+			list.add("metadata=" + serializeMetadata(group));
 		} catch (Exception e) {
-			logger.warn("An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
 		}
 		
 		// Save file
@@ -2136,6 +2167,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("metadata=" + serializeMetadata(nation));
 		
 		list.add("conqueredTax=" + nation.getConqueredTax());
+
+		// SanctionedTowns
+		list.add("sanctionedTowns=" + StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
 		/*
 		 *  Make sure we only save in async
 		 */
@@ -2275,6 +2309,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (world.getPlotManagementWildRevertBlockWhitelist() != null)
 			list.add("PlotManagementWildRegenBlockWhitelist=" + StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), ","));
 
+		list.add("# The list of blocks to that should not get replaced when an explosion is reverted in the wilderness, ie: a chest placed in a creeper hole that is reverting.");
+		// Wilderness Explosion materials to not overwrite.
+		if (world.getWildRevertMaterialsToNotOverwrite() != null)
+			list.add("wildRegenBlocksToNotOverwrite=" + StringMgmt.join(world.getWildRevertMaterialsToNotOverwrite(), ","));
+
 		list.add("# The delay after which the explosion reverts will begin.");
 		// Using PlotManagement Wild Regen Delay
 		list.add("usingPlotManagementWildRegenDelay=" + world.getPlotManagementWildRevertDelay());
@@ -2348,7 +2387,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("changed=" + townBlock.isChanged());
 
 		list.add("claimedAt=" + townBlock.getClaimedAt());
-		
+
+		if (townBlock.hasMinTownMembershipDays())
+			list.add("minTownMembershipDays=" + townBlock.getMinTownMembershipDays());
+
+		if (townBlock.hasMaxTownMembershipDays())
+			list.add("maxTownMembershipDays=" + townBlock.getMaxTownMembershipDays());
+
 		// Metadata
 		list.add("metadata=" + serializeMetadata(townBlock));
 		
@@ -2497,15 +2542,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			data = new String(Files.readAllBytes(cooldownsFile), StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			logger.warn("An exception occurred when reading cooldowns.json", e);
+			plugin.getLogger().log(Level.WARNING, "An exception occurred when reading cooldowns.json", e);
 			return true;
 		}
 		
 		try {
 			CooldownTimerTask.getCooldowns().putAll(new Gson().fromJson(data, new TypeToken<Map<String, Long>>(){}.getType()));
 		} catch (JsonSyntaxException e) {
-			logger.warn("Could not load saved cooldowns due to a json syntax exception", e);
-		}
+			plugin.getLogger().log(Level.WARNING, "Could not load saved cooldowns due to a json syntax exception", e);
+		} catch (NullPointerException ignored) {}
 		
 		return true;
 	}
@@ -2522,7 +2567,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			try {
 				Files.write(Paths.get(dataFolderPath).resolve("cooldowns.json"), new GsonBuilder().setPrettyPrinting().create().toJson(object).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 			} catch (IOException e) {
-				logger.warn("An exception occurred when writing cooldowns.json", e);
+				plugin.getLogger().log(Level.WARNING, "An exception occurred when writing cooldowns.json", e);
 			}
 		});
 		

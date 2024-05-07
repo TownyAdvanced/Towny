@@ -25,6 +25,22 @@ public enum HelpMenu {
 				.add("/plot", "?", Translatable.of("help_7"))
 				.add("/towny", "?", Translatable.of("help_8"))
 				.add("/tc", "[msg]", Translatable.of("help_2"))
+				.add("/nc", "[msg]", Translatable.of("help_3"));
+		}
+	},
+
+	GENERAL_HELP_ADMIN {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder()
+				.addTitle(Translation.of("help_0"))
+				.add(Translatable.of("help_1"))
+				.add("/resident", "?", Translatable.of("help_4"))
+				.add("/town", "?", Translatable.of("help_5"))
+				.add("/nation", "?", Translatable.of("help_6"))
+				.add("/plot", "?", Translatable.of("help_7"))
+				.add("/towny", "?", Translatable.of("help_8"))
+				.add("/tc", "[msg]", Translatable.of("help_2"))
 				.add("/nc", "[msg]", Translatable.of("help_3"))
 				.add(Translation.of("admin_sing"), "/townyadmin", "?", Translatable.of("help_9"));
 		}
@@ -548,6 +564,14 @@ public enum HelpMenu {
 				.add("{page #} by online", Translatable.of("town_list_help_6"));
 		}
 	},
+
+	TOWN_RANK {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town rank")
+					.add("add|remove [resident] [rank]", Translatable.of("nation_help_17")); // This fits for the town command.
+		}
+	},
 	
 	TOWN_SET {
 		@Override
@@ -582,7 +606,15 @@ public enum HelpMenu {
 				.add("open", Translatable.of("townyadmin_town_toggle_help_7"));
 		}
 	},
-	
+
+	TOWN_CEDE {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town cede")
+				.add("plot [townname]", Translatable.of("town_cede_help"));
+		}
+	},
+
 	TOWN_CLAIM {
 		@Override
 		protected MenuBuilder load() {
@@ -654,9 +686,18 @@ public enum HelpMenu {
 				.add("[player]", Translatable.of("town_invite_help_1"))
 				.add("-[player]", Translatable.of("town_invite_help_2"))
 				.add("sent", Translatable.of("town_invite_help_3"))
+				.add("sent removeall", Translatable.of("town_invite_help_7"))
 				.add("received", Translatable.of("town_invite_help_4"))
 				.add("accept [nation]", Translatable.of("town_invite_help_5"))
 				.add("deny [nation]", Translatable.of("town_invite_help_6"));
+		}
+	},
+
+	TOWN_BUY {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("town buy")
+				.add("bonus [n]", Translatable.of("town_buy_help"));
 		}
 	},
 
@@ -810,7 +851,8 @@ public enum HelpMenu {
 				.add("pvp", Translatable.of("plot_group_toggle_help_0"))
 				.add("explosion", Translatable.of("plot_group_toggle_help_1"))
 				.add("fire", Translatable.of("plot_group_toggle_help_2"))
-				.add("mobs", Translatable.of("plot_group_toggle_help_3"));
+				.add("mobs", Translatable.of("plot_group_toggle_help_3"))
+				.add("taxed", Translatable.of("plot_group_toggle_help_4"));
 		}
 	},
 	
@@ -820,6 +862,8 @@ public enum HelpMenu {
 			return new MenuBuilder("plot set")
 				.add("[plottype]", Translatable.of("plot_set_help_0"))
 				.add("outpost", Translatable.of("plot_set_help_1"))
+				.add("minjoindays", Translatable.of("plot_set_help_1.5"))
+				.add("maxjoindays", Translatable.of("plot_set_help_1.6"))
 				.add("reset", Translatable.of("plot_set_help_2"))
 				.add("[name]", Translatable.of("plot_set_help_3"))
 				.add("Valid Levels: [resident/ally/outsider]")
@@ -934,6 +978,17 @@ public enum HelpMenu {
 				.add("delete", Translatable.of("nation_help_16"))
 				.add("merge [nation]", Translatable.of("king_help_8"))
 				.add("say", "[message]", Translatable.of("king_help_9"));
+		}
+	},
+
+	NATION_SANCTIONTOWN {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("nation sanctiontown")
+				.add("add [town]", Translatable.of("nation_sanction_help_1"))
+				.add("remove [town]", Translatable.of("nation_sanction_help_2"))
+				.add("list", Translatable.of("nation_sanction_help_3"))
+				.add("list [nation]", Translatable.of("nation_sanction_help_4"));
 		}
 	},
 

@@ -55,9 +55,7 @@ public class ShopPlotUtil {
 	 * @return true if the player can build and the plot is a shop
 	 */
 	public static boolean doesPlayerHaveAbilityToEditShopPlot(Player player, Location location) {
-		if (TownyActionEventExecutor.canBuild(player, location, Material.DIRT) && isShopPlot(location))
-			return true;
-		else return false;
+		return TownyActionEventExecutor.canBuild(player, location, Material.DIRT) && isShopPlot(location);
 	}
 
 	/**
@@ -81,9 +79,7 @@ public class ShopPlotUtil {
 	 */
 	public static boolean isShopPlot(TownBlock townblock) {
 		if (townblock != null) {
-			if (townblock.getType().equals(TownBlockType.COMMERCIAL))
-				return true;
-			else return false;
+			return townblock.getType().equals(TownBlockType.COMMERCIAL);
 		} else return false;
 	}
 }

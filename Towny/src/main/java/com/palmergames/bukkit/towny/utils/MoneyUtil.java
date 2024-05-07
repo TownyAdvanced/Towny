@@ -1,14 +1,19 @@
 package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translator;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -22,9 +27,13 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
+import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.towny.object.Transaction;
 import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.util.BukkitTools;
+
+import net.kyori.adventure.text.Component;
 
 public class MoneyUtil {
 
@@ -177,8 +186,8 @@ public class MoneyUtil {
 				throw new TownyException(Translatable.of("msg_err_deposit_capped", bankcap));
 		}
 		
-		if (TownySettings.isBankActionLimitedToBankPlots() && isNotInBankPlot(town, loc))
-			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot"));
+		if (TownySettings.isBankActionLimitedToBankPlots())
+			testBankPlotRules(town, loc);
 		
 		if (TownySettings.isBankActionDisallowedOutsideTown() && isNotInOwnTown(town, loc)) {
 			if (nation)
@@ -193,19 +202,26 @@ public class MoneyUtil {
 		else
 			minAmount = nation ? TownySettings.getNationMinDeposit() : TownySettings.getTownMinDeposit();
 		if (amount < minAmount)
-			throw new TownyException(Translatable.of("msg_err_must_be_greater_than_or_equal_to", TownyEconomyHandler.getFormattedBalance(minAmount)));
+			throw new TownyException(Translatable.of("msg_err_must_be_greater_than_or_equal_to", formatMoney(minAmount)));
 			
 	}
 
-	private static boolean isNotInBankPlot(Town town, Location loc) {
+	private static void testBankPlotRules(Town town, Location loc) throws TownyException {
 		if (isNotInOwnTown(town, loc))
-			return true;
-		
-		TownBlock tb = TownyAPI.getInstance().getTownBlock(loc);
-		if (!tb.getType().equals(TownBlockType.BANK) && !tb.isHomeBlock())
-			return true;
+			throw new TownyException(Translatable.of("msg_err_unable_to_command_outside_of_town"));
 
-		return false;
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(loc);
+		// TownBlock is a bank, we're good.
+		if (tb.getType().equals(TownBlockType.BANK))
+			return;
+
+		// The config doesn't allow towns to use their homeblock after they have one or more bank plots.
+		if (TownySettings.doHomeblocksNoLongerWorkWhenATownHasBankPlots() && town.getTownBlockTypeCache().getNumTownBlocks(TownBlockType.BANK, CacheType.ALL) > 0)
+			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock"));
+
+		// The config does allow towns to use their homeblocks, or the town has no bank plots.
+		if (!tb.isHomeBlock())
+			throw new TownyException(Translatable.of("msg_err_unable_to_use_bank_outside_bank_plot"));
 	}
 	
 	private static boolean isNotInOwnTown(Town town, Location loc) {
@@ -296,5 +312,79 @@ public class MoneyUtil {
 		// sum = a * (1 - r^n) / (1 - r) where r != 1
 		final double cost = blockCost * (1 - Math.pow(increaseValue, n)) / (1 - increaseValue);
 		return Math.round(cost);
+	}
+
+
+	/**
+	 * Populates the StatusScreen with the various bank and money components.
+	 * @param town Town of which to generate a bankstring.
+	 * @param translator Translator used in choosing language.
+	 * @param screen StatusScreen to add components to.
+	 */
+	public static void addTownMoneyComponents(Town town, Translator translator, StatusScreen screen) {
+		screen.addComponentOf("moneynewline", Component.newline());
+		screen.addComponentOf("bankString", TownyFormatter.colourKeyValue(translator.of("status_bank"), town.getAccount().getHoldingFormattedBalance()));
+		if (town.isBankrupt()) {
+			if (town.getAccount().getDebtCap() == 0)
+				town.getAccount().setDebtCap(getTownDebtCap(town, TownySettings.getTownUpkeepCost(town)));
+
+			screen.addComponentOf("bankrupt", translator.of("status_bank_bankrupt") +
+					" " + TownyFormatter.colourKeyValue(translator.of("status_debtcap"), "-" + formatMoney(town.getAccount().getDebtCap())));
+		}
+
+		if (!TownySettings.isTaxingDaily())
+			return;
+
+		if (town.hasUpkeep())
+			screen.addComponentOf("upkeep", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_bank_town2")) +
+					" " + TownyFormatter.colourKeyImportant(formatMoney(BigDecimal.valueOf(TownySettings.getTownUpkeepCost(town)).setScale(2, RoundingMode.HALF_UP).doubleValue())));
+
+		if (TownySettings.getUpkeepPenalty() > 0 && town.isOverClaimed())
+			screen.addComponentOf("upkeepPenalty", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_bank_town_penalty_upkeep")) +
+					" " + TownyFormatter.colourKeyImportant(formatMoney(TownySettings.getTownPenaltyUpkeepCost(town))));
+
+		if (town.isNeutral()) {
+			double neutralCost = TownySettings.getTownNeutralityCost(town);
+			if (neutralCost > 0)
+				screen.addComponentOf("neutralityCost", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_neutrality_cost") +
+						" " + TownyFormatter.colourKeyImportant(formatMoney(neutralCost))));
+		}
+
+		screen.addComponentOf("towntax", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_bank_town3")) +
+				" " + TownyFormatter.colourKeyImportant(town.isTaxPercentage() ? town.getTaxes() + "%" : formatMoney(town.getTaxes())));
+	}
+
+	/**
+	 * Populates the StatusScreen with the various bank and money components.
+	 * @param nation Nation of which to generate a bankstring.
+	 * @param translator Translator used in choosing language.
+	 * @param screen StatusScreen to add components to.
+	 */
+	public static void addNationMoneyComponentsToScreen(Nation nation, Translator translator, StatusScreen screen) {
+		screen.addComponentOf("moneynewline", Component.newline());
+		screen.addComponentOf("bankString", TownyFormatter.colourKeyValue(translator.of("status_bank"), nation.getAccount().getHoldingFormattedBalance()));
+
+		if (!TownySettings.isTaxingDaily())
+			return;
+
+		if (TownySettings.getNationUpkeepCost(nation) > 0)
+			screen.addComponentOf("nationupkeep", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_bank_town2") +
+					" " + TownyFormatter.colourKeyImportant(formatMoney(TownySettings.getNationUpkeepCost(nation)))));
+		if (nation.isNeutral()) {
+			double neutralCost = TownySettings.getNationNeutralityCost(nation);
+			if (neutralCost > 0)
+				screen.addComponentOf("neutralityCost", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_neutrality_cost") +
+						" " + TownyFormatter.colourKeyImportant(formatMoney(neutralCost))));
+		}
+
+		screen.addComponentOf("nationtax", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_nation_tax")) +
+				" " + TownyFormatter.colourKeyImportant(nation.isTaxPercentage() ? nation.getTaxes() + "%" : formatMoney(nation.getTaxes())));
+		screen.addComponentOf("nationConqueredTax", translator.of("status_splitter") + TownyFormatter.colourKey(translator.of("status_nation_conquered_tax")) +
+				" " + TownyFormatter.colourKeyImportant(formatMoney(nation.getConqueredTax())));
+
+	}
+
+	private static String formatMoney(double money) {
+		return TownyEconomyHandler.getFormattedBalance(money);
 	}
 }

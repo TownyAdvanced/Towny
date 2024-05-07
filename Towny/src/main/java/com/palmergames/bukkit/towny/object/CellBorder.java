@@ -7,7 +7,6 @@ import org.bukkit.World;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-@SuppressWarnings("deprecation")
 public class CellBorder extends WorldCoord {
 
 	public boolean[] border;

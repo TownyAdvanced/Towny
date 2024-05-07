@@ -103,6 +103,16 @@ public class JavaUtil {
 		}
 	}
 	
+	public static @Nullable MethodHandle getMethodHandle(final @NotNull Class<?> clazz, final @NotNull String methodName, final Class<?>... paramTypes) {
+		try {
+			final Method method = clazz.getDeclaredMethod(methodName, paramTypes);
+			method.setAccessible(true);
+			return MethodHandles.publicLookup().unreflect(method);
+		} catch (ReflectiveOperationException e) {
+			return null;
+		}
+	}
+	
 	public static @Nullable MethodHandle getFieldHandle(final @NotNull Class<?> clazz, final @NotNull String fieldName) {
 		try {
 			final Field field = clazz.getDeclaredField(fieldName);

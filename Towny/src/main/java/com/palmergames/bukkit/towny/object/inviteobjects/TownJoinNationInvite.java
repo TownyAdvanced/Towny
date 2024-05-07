@@ -8,9 +8,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 	
 	public TownJoinNationInvite(CommandSender directSender, Town receiver, Nation sender) {
@@ -20,14 +17,8 @@ public class TownJoinNationInvite extends AbstractInvite<Nation, Town> {
 	@Override
 	public void accept() throws TownyException {
 		Town town = getReceiver();
-		List<Town> towns = new ArrayList<>();
-		towns.add(town);
 		Nation nation = getSender();
-		if(!town.hasNation()){
-			NationCommand.nationAdd(nation, towns);
-		} else {
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_err_already_nation", town.getName()));
-		}
+		NationCommand.nationAdd(nation, town);
 		// Message handled in nationAdd()
 		town.deleteReceivedInvite(this);
 		nation.deleteSentInvite(this);

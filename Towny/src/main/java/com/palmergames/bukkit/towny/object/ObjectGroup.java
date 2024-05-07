@@ -7,9 +7,8 @@ import java.util.UUID;
  * 
  * @author Suneet Tipirneni (Siris)
  */
-public abstract class ObjectGroup implements Nameable, Identifiable {
+public abstract class ObjectGroup extends TownyObject implements Identifiable {
 	private UUID uuid;
-	private String name;
 
 	/**
 	 * The constructor for the Group object.
@@ -17,8 +16,8 @@ public abstract class ObjectGroup implements Nameable, Identifiable {
 	 * @param name An alias for the id used for player in-game interaction via commands.
 	 */
 	public ObjectGroup(UUID id, String name) {
-		this.uuid = id;
-		this.name = name;
+        super(name);
+        this.uuid = id;
 	}
 
 	public UUID getUUID() {
@@ -28,13 +27,6 @@ public abstract class ObjectGroup implements Nameable, Identifiable {
 	public void setUUID(UUID id) {
 		this.uuid = id;
 	}
-	
-	@Override
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) { this.name = name; }
 
 	/**
 	 * Determines whether a group is equivalent or not.
@@ -56,7 +48,7 @@ public abstract class ObjectGroup implements Nameable, Identifiable {
 	 */
 	@Override
 	public String toString() {
-		return name + "," + uuid;
+		return getName() + "," + uuid;
 	}
 
 	/**

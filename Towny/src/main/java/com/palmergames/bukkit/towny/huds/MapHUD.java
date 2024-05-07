@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
-import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.map.TownyMapData;
@@ -27,28 +26,47 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 public class MapHUD {
+
+	/* Scoreboards use old-timey colours. */
+	private static final ChatColor WHITE = ChatColor.WHITE;
+	private static final ChatColor GOLD = ChatColor.GOLD;
+	private static final ChatColor GREEN = ChatColor.GREEN;
+	private static final ChatColor DARK_GREEN = ChatColor.DARK_GREEN;
+
+	/* Scoreboards use Teams here is our team names.*/
+	private static final String HUD_OBJECTIVE = "MAP_HUD_OBJ";
+	private static final String TEAM_MAP_PREFIX = "mapTeam";
+	private static final String TEAM_OWNER = "ownerTeam";
+	private static final String TEAM_TOWN = "townTeam";
+
 	private static int lineWidth = 19, lineHeight = 10;
-	
+	private static int halfLineWidth = lineWidth/2;
+	private static int halfLineHeight = lineHeight/2;
+
+	public static String mapHudTestKey() {
+		return "mapTeam1";
+	}
+
 	public static void toggleOn(Player player) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
-		Objective objective = BukkitTools.objective(board, "MAP_HUD_OBJ", "maphud");
+		Objective objective = BukkitTools.objective(board, HUD_OBJECTIVE, "maphud");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		int score = lineHeight + 2;
 		ChatColor[] colors = ChatColor.values();
 		for (int i = 0; i < lineHeight; i++) {
-			board.registerNewTeam("mapTeam" + i).addEntry(colors[i].toString());
+			board.registerNewTeam(TEAM_MAP_PREFIX + i).addEntry(colors[i].toString());
 			objective.getScore(colors[i].toString()).setScore(score);
 			score--;
 		}
 		
-		String townEntry = ChatColor.DARK_GREEN + Translatable.of("town_sing").forLocale(player) + ": ";
-		String ownerEntry = ChatColor.DARK_GREEN + Translatable.of("owner_status").forLocale(player) + ": ";
+		String townEntry = DARK_GREEN + Translatable.of("town_sing").forLocale(player) + ": ";
+		String ownerEntry = DARK_GREEN + Translatable.of("owner_status").forLocale(player) + ": ";
 		
-		board.registerNewTeam("townTeam").addEntry(townEntry);
+		board.registerNewTeam(TEAM_TOWN).addEntry(townEntry);
 		objective.getScore(townEntry).setScore(2);
 		
-		board.registerNewTeam("ownerTeam").addEntry(ownerEntry);
+		board.registerNewTeam(TEAM_OWNER).addEntry(ownerEntry);
 		objective.getScore(ownerEntry).setScore(1);
 		
 		player.setScoreboard(board);
@@ -64,128 +82,155 @@ public class MapHUD {
 		if (board == null) {
 			toggleOn(player);
 			return;
-		} else if (board.getObjective("MAP_HUD_OBJ") == null) {
+		} else if (board.getObjective(HUD_OBJECTIVE) == null || wc.getTownyWorld() == null || !wc.getTownyWorld().isUsingTowny()) {
 			HUDManager.toggleOff(player);
 			return;
 		}
 
-		Objective objective = board.getObjective("MAP_HUD_OBJ");
-		objective.setDisplayName(ChatColor.GOLD + "Towny Map " + ChatColor.WHITE + "(" + wc.getX() + ", " + wc.getZ() + ")");
+		int wcX = wc.getX();
+		int wcZ = wc.getZ();
+		// Set the board title.
+		String boardTitle = String.format("%sTowny Map %s(%s, %s)", GOLD, WHITE, wcX, wcZ);
+		board.getObjective(HUD_OBJECTIVE).setDisplayName(boardTitle);
 
-		TownyWorld world = wc.getTownyWorld();
-		World bukkitWorld = player.getWorld();
-		if (world == null || !world.isUsingTowny()) {
-			HUDManager.toggleOff(player);
-			return;
-		}
-		
-		Resident resident = TownyAPI.getInstance().getResident(player.getName());
-
-		int halfLineWidth = lineWidth/2;
-		int halfLineHeight = lineHeight/2;
-		
+		// Populate our map into an array.
 		String[][] map = new String[lineWidth][lineHeight];
+		fillMapArray(wcX, wcZ, TownyAPI.getInstance().getResident(player.getName()), player.getWorld(), map);
+
+		// Write out the map to the board.
+		writeMapToBoard(board, map);
+
+		TownBlock tb = wc.getTownBlockOrNull();
+		board.getTeam(TEAM_TOWN).setSuffix(GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
+		board.getTeam(TEAM_OWNER).setSuffix(GREEN + (tb != null && tb.hasResident() ? tb.getResidentOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
+	}
+
+	private static void fillMapArray(int wcX, int wcZ, Resident resident, World bukkitWorld, String[][] map) {
 		int x, y = 0;
-		for (int tby = wc.getX() + (lineWidth - halfLineWidth - 1); tby >= wc.getX() - halfLineWidth; tby--) {
+		for (int tby = wcX + (lineWidth - halfLineWidth - 1); tby >= wcX - halfLineWidth; tby--) {
 			x = 0;
-			for (int tbx = wc.getZ() - halfLineHeight; tbx <= wc.getZ() + (lineHeight - halfLineHeight - 1); tbx++) {
-				map[y][x] = Colors.White;
+			for (int tbx = wcZ - halfLineHeight; tbx <= wcZ + (lineHeight - halfLineHeight - 1); tbx++) {
 				final WorldCoord worldCoord = new WorldCoord(bukkitWorld, tby, tbx);
-				final TownBlock townBlock = worldCoord.getTownBlockOrNull();
-				
-				if (townBlock != null) {
-					Town town = townBlock.getTownOrNull();
-					if (x == halfLineHeight && y == halfLineWidth)
-						// This is the player's location, colour it special.
-						map[y][x] = Colors.Gold;
-					else if (townBlock.hasResident(resident))
-						//own plot
-						map[y][x] = Colors.Yellow;
-					else if (resident.hasTown())
-						if (town.hasResident(resident)) {
-							// own town
-							map[y][x] = Colors.LightGreen;
-						} else if (resident.hasNation()) {
-							Nation resNation = resident.getNationOrNull();
-							if (resNation.hasTown(town))
-								// own nation
-								map[y][x] = Colors.Green;
-							else if (town.hasNation()) {
-								Nation townBlockNation = town.getNationOrNull();
-								if (resNation.hasAlly(townBlockNation))
-									map[y][x] = Colors.Green;
-								else if (resNation.hasEnemy(townBlockNation))
-									map[y][x] = Colors.Red;
-							}
-						}
-
-					// If this is not where the player is currently locationed,
-					// set the colour of the townblocktype if it has one.
-					if (!(x == halfLineHeight && y == halfLineWidth) && townBlock.getData().hasColour())
-						map[y][x] = map[y][x] = Colors.getLegacyFromNamedTextColor(townBlock.getData().getColour());
-
-					// Registered town block
-					if (townBlock.getPlotPrice() != -1 || townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPrice() != -1) {
-						map[y][x] += TownyAsciiMap.forSaleSymbol;
-					} else if (townBlock.isHomeBlock())
-						map[y][x] += TownyAsciiMap.homeSymbol;
-					else if (townBlock.isOutpost())
-						map[y][x] += TownyAsciiMap.outpostSymbol;
-					else
-						map[y][x] += townBlock.getType().getAsciiMapKey();
-				} else {
-					// Unregistered town block
-					
-					if (x == halfLineHeight && y == halfLineWidth)
-						map[y][x] = Colors.Gold;
-					else
-						map[y][x] = Colors.Gray;
-
-					String symbol;
-					// Cached TownyMapData is present and not old.
-					final TownyMapData data = getWildernessMapDataMap().get(worldCoord);
-					
-					if (data != null && !data.isOld()) {
-						TownyMapData mapData = getWildernessMapDataMap().get(worldCoord);
-						symbol = mapData.getSymbol();
-					// Cached TownyMapData is either not present or was considered old.
-					} else {
-						WildernessMapEvent wildMapEvent = new WildernessMapEvent(worldCoord);
-						BukkitTools.fireEvent(wildMapEvent);
-						symbol = wildMapEvent.getMapSymbol();
-						getWildernessMapDataMap().put(worldCoord, new TownyMapData(worldCoord, symbol, wildMapEvent.getHoverText(), wildMapEvent.getClickCommand()));
-						
-						Towny.getPlugin().getScheduler().runAsyncLater(() -> {
-							getWildernessMapDataMap().computeIfPresent(worldCoord, (key, cachedData) -> cachedData.isOld() ? null : cachedData);
-						}, 20 * 35);
-					}
-
-					/* 
-					 * We are only using symbol here but we have generated hovertext and clickcommands because the same
-					 * TownyMapData cache is used for the ascii map seen in the /towny map commands. We would not want
-					 * to fill only a part of that cache.
-					 */
-					map[y][x] += symbol;
-				}
+				if (worldCoord.hasTownBlock())
+					mapTownBlock(resident, map, x, y, worldCoord.getTownBlockOrNull());
+				else
+					mapWilderness(map, x, y, worldCoord);
 				x++;
 			}
 			y++;
 		}
+	}
+
+	private static void mapTownBlock(Resident resident, String[][] map, int x, int y, final TownBlock townBlock) {
+		// Set the townblock colour.
+		map[y][x] = getTownBlockColour(resident, x, y, townBlock);
+
+		// Set the townblock symbol.
+		if (isForSale(townBlock))
+			map[y][x] += TownyAsciiMap.forSaleSymbol;
+		else if (townBlock.isHomeBlock())
+			map[y][x] += TownyAsciiMap.homeSymbol;
+		else if (townBlock.isOutpost())
+			map[y][x] += TownyAsciiMap.outpostSymbol;
+		else
+			map[y][x] += townBlock.getType().getAsciiMapKey();
+	}
+
+	private static String getTownBlockColour(Resident resident, int x, int y, final TownBlock townBlock) {
+		if (playerLocatedAtThisCoord(x, y))
+			// This is the player's location, colour it special.
+			return Colors.Gold;
+		else if (townBlock.hasResident(resident))
+			// Resident's own plot
+			return Colors.Yellow;
+		else if (townBlock.getData().hasColour())
+			// Set the colour of the townblocktype if it has one.
+			return Colors.getLegacyFromNamedTextColor(townBlock.getData().getColour());
+		else if (resident.hasTown())
+			// The townblock could have a variety of colours.
+			return getTownBlockColour(resident, townBlock.getTownOrNull());
+		else
+			// Default fallback.
+			return Colors.White;
+	}
+
+	private static String getTownBlockColour(Resident resident, Town townAtTownBlock) {
+		// The player is a part of this town.
+		if (townAtTownBlock.hasResident(resident))
+			return Colors.LightGreen;
+
+		if (!resident.hasNation())
+			return Colors.White;
+
+		Nation resNation = resident.getNationOrNull();
+		// Another town in the player's nation.
+		if (resNation.hasTown(townAtTownBlock))
+			return Colors.Green;
+
+		if (!townAtTownBlock.hasNation())
+			return Colors.White;
+
+		Nation townBlockNation = townAtTownBlock.getNationOrNull();
+		if (resNation.hasAlly(townBlockNation))
+			return Colors.Green;
+		else if (resNation.hasEnemy(townBlockNation))
+			return Colors.Red;
+		else 
+			return Colors.White;
+	}
+
+	private static boolean playerLocatedAtThisCoord(int x, int y) {
+		return x == halfLineHeight && y == halfLineWidth;
+	}
+
+	private static boolean isForSale(final TownBlock townBlock) {
+		return townBlock.getPlotPrice() != -1 || townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPrice() != -1;
+	}
+
+
+	private static void mapWilderness(String[][] map, int x, int y, final WorldCoord worldCoord) {
+		// Colour gold if this is the player loc, otherwise normal gray.
+		map[y][x] = playerLocatedAtThisCoord(x, y) ?  Colors.Gold : Colors.Gray;
+
+		String symbol;
+		// Cached TownyMapData is present and not old.
+		final TownyMapData data = getWildernessMapDataMap().get(worldCoord);
 		
+		if (data != null && !data.isOld()) {
+			TownyMapData mapData = getWildernessMapDataMap().get(worldCoord);
+			symbol = mapData.getSymbol();
+		// Cached TownyMapData is either not present or was considered old.
+		} else {
+			WildernessMapEvent wildMapEvent = new WildernessMapEvent(worldCoord);
+			BukkitTools.fireEvent(wildMapEvent);
+			symbol = wildMapEvent.getMapSymbol();
+			getWildernessMapDataMap().put(worldCoord, new TownyMapData(worldCoord, symbol, wildMapEvent.getHoverText(), wildMapEvent.getClickCommand()));
+			
+			Towny.getPlugin().getScheduler().runAsyncLater(() -> {
+				getWildernessMapDataMap().computeIfPresent(worldCoord, (key, cachedData) -> cachedData.isOld() ? null : cachedData);
+			}, 20 * 35);
+		}
+
+		/* 
+		 * We are only using symbol here but we have generated hovertext and clickcommands because the same
+		 * TownyMapData cache is used for the ascii map seen in the /towny map commands. We would not want
+		 * to fill only a part of that cache.
+		 */
+		map[y][x] += symbol;
+	}
+
+	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
+		return TownyUniverse.getInstance().getWildernessMapDataMap();
+	}
+
+	private static void writeMapToBoard(Scoreboard board, String[][] map) {
 		for (int my = 0; my < lineHeight; my++) {
 			String line = "";
 			for (int mx = lineWidth - 1; mx >= 0; mx--)
 				line += map[mx][my];
 
-			board.getTeam("mapTeam" + my).setSuffix(line);
+			board.getTeam(TEAM_MAP_PREFIX + my).setSuffix(line);
 		}
-		
-		TownBlock tb = wc.getTownBlockOrNull();
-		board.getTeam("townTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
-		board.getTeam("ownerTeam").setSuffix(ChatColor.GREEN + (tb != null && tb.hasResident() ? tb.getResidentOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
 	}
 	
-	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
-		return TownyUniverse.getInstance().getWildernessMapDataMap();
-	}
 }

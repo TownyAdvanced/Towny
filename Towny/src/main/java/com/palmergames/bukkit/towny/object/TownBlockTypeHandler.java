@@ -196,7 +196,7 @@ public final class TownBlockTypeHandler {
 		
 		public static void checkForLegacyOptions(CommentedConfiguration config) {
 			
-			if (!config.contains(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()))
+			if (config.contains(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot()))
 				return;
 			
 			double shopCost = parseDouble(config.getString("economy.plot_type_costs.set_commercial"));

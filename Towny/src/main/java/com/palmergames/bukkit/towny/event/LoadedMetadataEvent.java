@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,10 @@ import org.jetbrains.annotations.NotNull;
 public class LoadedMetadataEvent extends Event  {
 	
 	private static final HandlerList handlers = new HandlerList();
+	
+	public LoadedMetadataEvent() {
+		super(!Bukkit.getServer().isPrimaryThread());
+	}
 	
 	@NotNull
 	@Override

@@ -5,7 +5,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.jetbrains.annotations.Nullable;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 
@@ -38,6 +41,11 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	@Nullable
+	public Resident getResident() {
+		return TownyAPI.getInstance().getResident(player);
 	}
 
 	public PlayerMoveEvent getPlayerMoveEvent() {

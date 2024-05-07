@@ -37,7 +37,7 @@ public class ChunkNotification {
 	public static String plotNotificationFormat = "%s";
 	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
 	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
-	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale: %s]";
+	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale by %s: %s]";
 	public static String notForSaleNotificationFormat = Colors.Yellow + "[Not For Sale]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
 	public static String groupNotificationFormat = Colors.White + "[%s]";
@@ -60,7 +60,7 @@ public class ChunkNotification {
 		plotNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORMAT));
 		homeBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_HOMEBLOCK));
 		outpostBlockNotification = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_OUTPOSTBLOCK));
-		forSaleNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORSALE));
+		forSaleNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_FORSALEBY));
 		notForSaleNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_NOTFORSALE));
 		plotTypeNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_TYPE));
 		groupNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_GROUP));
@@ -130,6 +130,10 @@ public class ChunkNotification {
 
 		List<String> out = new ArrayList<String>();
 		String output;
+
+		// Show nothing if the world doesn't use Towny.
+		if (!to.getTownyWorld().isUsingTowny())
+			return out;
 
 		output = getAreaNotification(resident);
 		if (output != null && output.length() > 0)
@@ -294,17 +298,25 @@ public class ChunkNotification {
 
 		// Were heading to a plot group do some things differently
 		if (toForSale && toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
-			return String.format(forSaleNotificationFormat, TownyEconomyHandler.isActive() ? TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotObjectGroup().getPrice()) : "$ 0");
+			return String.format(forSaleNotificationFormat, getOwner(), getCost(toTownBlock.getPlotObjectGroup().getPrice()));
 		
 		if (toForSale && !toPlotGroupBlock)
-			return String.format(forSaleNotificationFormat, TownyEconomyHandler.isActive() ? TownyEconomyHandler.getFormattedBalance(toTownBlock.getPlotPrice()): "$ 0");
+			return String.format(forSaleNotificationFormat, getOwner(), getCost(toTownBlock.getPlotPrice()));
 		
 		if (!toForSale && fromForSale && !toWild)
 			return notForSaleNotificationFormat;
 		
 		return null;
 	}
-	
+
+	private String getOwner() {
+		return toTownBlock.hasResident() ? toTownBlock.getResidentOrNull().getName() : toTownBlock.getTownOrNull().getName();
+	}
+
+	private String getCost(double cost) {
+		return TownyEconomyHandler.isActive() ? TownyEconomyHandler.getFormattedBalance(cost) : "$ 0";
+	}
+
 	public String getGroupNotification() {
 		if (toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
 			return String.format(groupNotificationFormat, StringMgmt.remUnderscore(toTownBlock.getPlotObjectGroup().getName()));

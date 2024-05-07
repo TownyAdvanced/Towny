@@ -3,7 +3,6 @@ package com.palmergames.bukkit.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -82,10 +81,7 @@ public class BlockUtil {
 				return false;
 			
 			if (tb.hasResident() != tb2.hasResident()) // One is player-owned and one isn't.
-				if (isResidentActingMayorOfTown(resident, tb.getTownOrNull()))
-					return true;
-				else
-					return false;
+				return isResidentActingMayorOfTown(resident, tb.getTownOrNull());
 
 			if (!tb.hasResident() && !tb2.hasResident()) // Both plots are town-owned.
 				return true;

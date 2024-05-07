@@ -682,7 +682,7 @@ public class CombatUtil {
 	}
 
 	private static boolean isNotNPC(Entity entity) {
-		return !PluginIntegrations.getInstance().checkCitizens(entity);
+		return !PluginIntegrations.getInstance().isNPC(entity);
 	}
 	
 	private static final @Nullable MethodHandle GET_LIGHTNING_CAUSING_ENTITY;

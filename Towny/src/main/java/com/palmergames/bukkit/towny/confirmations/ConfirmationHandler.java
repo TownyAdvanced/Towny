@@ -141,9 +141,9 @@ public class ConfirmationHandler {
 			// Determine the cost, done in this phase in case the cost could be manipulated before confirming.
 			transaction.supplyCost();
 			double cost = transaction.getCost();
+			Account payee = transaction.getPayee();
 			// Can they pay the cost?
-			if (cost > 0) {
-				Account payee = transaction.getPayee();
+			if (cost > 0 && payee != null) {
 				if (!payee.canPayFromHoldings(cost)) {
 					TownyMessaging.sendErrorMsg(sender, transaction.getInsufficientFundsMessage());
 					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_you_need_x_to_pay", cost));

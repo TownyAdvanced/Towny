@@ -535,6 +535,11 @@ public class SpawnUtil {
 			if (townAtPlayerLoc != null) {
 				if (townAtPlayerLoc.hasOutlaw(player.getName()) && disallowedZones.contains("outlaw"))
 					throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", "RTP", Translatable.of("msg_a_town_you_are_outlawed_in")));
+				if (resident.hasTown() && townAtPlayerLoc.hasNation()) {
+					Nation townLocNation = townAtPlayerLoc.getNationOrNull();
+					if (townLocNation.hasSanctionedTown(resident.getTownOrNull()))
+						throw new TownyException(Translatable.of("msg_err_cannot_nation_spawn_your_town_is_sanctioned", townLocNation.getName()));
+				}
 				if (resident.hasNation() && townAtPlayerLoc.hasNation()) {
 					if (CombatUtil.isEnemy(resident.getTownOrNull(), townAtPlayerLoc) && disallowedZones.contains("enemy"))
 						throw new TownyException(Translatable.of("msg_err_x_spawn_disallowed_from_x", spawnType.typeName(), Translatable.of("msg_enemy_areas")));
