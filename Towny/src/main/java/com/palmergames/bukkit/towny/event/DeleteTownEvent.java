@@ -92,6 +92,10 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 	public enum Cause {
 		UNKNOWN,
 		/**
+		 * The town was removed during database loading
+		 */
+		LOAD,
+		/**
 		 * The mayor of the town used the delete command.
 		 * @see #isCommand() 
 		 */
@@ -138,7 +142,7 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 		
 		@ApiStatus.Internal
 		public boolean ignoresPreEvent() {
-			return this == ADMIN_COMMAND || this == MERGED || this == NO_RESIDENTS;
+			return this == LOAD || this == ADMIN_COMMAND || this == MERGED || this == NO_RESIDENTS;
 		}
 	}
 
