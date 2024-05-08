@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -235,14 +236,13 @@ public class TownRuinUtil {
 			if (!town.exists())
 				continue;
 
-			if (hasRuinTimeExpired(town)) {
+			if (hasRuinTimeExpired(town) && townyUniverse.getDataSource().removeTown(town, DeleteTownEvent.Cause.RUINED)) {
 				//Ruin found & recently ruined end time reached. Delete town now.
 				TownyMessaging.sendMsg(Translatable.of("msg_ruined_town_being_deleted", town.getName(), TownySettings.getTownRuinsMaxDurationHours()));
-				townyUniverse.getDataSource().removeTown(town, false);
 				continue;
 			}
 
-			if(TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
+			if (TownySettings.doRuinsPlotPermissionsProgressivelyAllowAll()) {
 				final Town finalTown = town;
 				// We are configured to slowly open up plots' permissions while a town is ruined.
 				Towny.getPlugin().getScheduler().runAsync(() -> allowPermissionsOnRuinedTownBlocks(finalTown));

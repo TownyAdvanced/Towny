@@ -2,7 +2,9 @@ package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -13,7 +15,9 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -310,9 +314,15 @@ public abstract class TownyDataSource {
 
 	abstract public void newWorld(String name) throws AlreadyRegisteredException;
 
-	abstract public void removeTown(Town town);
+	public boolean removeTown(Town town, @NotNull DeleteTownEvent.Cause cause) {
+		return removeTown(town, cause, null);
+	}
 
-	abstract public void removeTown(Town town, boolean delayFullRemoval);
+	public boolean removeTown(@NotNull Town town, @NotNull DeleteTownEvent.Cause cause, @Nullable CommandSender sender) {
+		return removeTown(town, cause, sender, TownySettings.getTownRuinsEnabled() && !town.isRuined());
+	}
+
+	abstract public boolean removeTown(@NotNull Town town, @NotNull DeleteTownEvent.Cause cause, @Nullable CommandSender sender, boolean delayFullRemoval);
 
 	abstract public void removeWorld(TownyWorld world) throws UnsupportedOperationException;
 
@@ -331,4 +341,13 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+	
+	@Deprecated
+	public void removeTown(Town town) {
+		removeTown(town, DeleteTownEvent.Cause.UNKNOWN);
+	}
+	
+	private void removeTown$$bridge$$public(Town town, boolean delayFullRemoval) {
+		removeTown(town, DeleteTownEvent.Cause.UNKNOWN, null, delayFullRemoval);
+	}
 }

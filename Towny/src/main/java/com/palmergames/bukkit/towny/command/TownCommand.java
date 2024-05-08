@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PreNewTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
@@ -2760,9 +2761,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_warning_town_ruined_if_deleted2", TownySettings.getTownRuinsMinDurationHours()));
 			}
 			Confirmation.runOnAccept(() -> {
-				townyUniverse.getDataSource().removeTown(town);
-				if (TownySettings.getTownUnclaimCoolDownTime() > 0)
-					CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TOWN_DELETE);
+				if (townyUniverse.getDataSource().removeTown(town, DeleteTownEvent.Cause.COMMAND, player)) {
+					if (TownySettings.getTownUnclaimCoolDownTime() > 0)
+						CooldownTimerTask.addCooldownTimer(player.getName(), CooldownType.TOWN_DELETE);
+				}
 			}).sendTo(player);
 			return;
 		}
@@ -2772,7 +2774,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Confirmation.runOnAccept(() -> {
 			TownyMessaging.sendMsg(player, Translatable.of("town_deleted_by_admin", town.getName()));
-			townyUniverse.getDataSource().removeTown(town);
+			townyUniverse.getDataSource().removeTown(town, DeleteTownEvent.Cause.ADMIN_COMMAND, player);
 		}).sendTo(player);
 	}
 
