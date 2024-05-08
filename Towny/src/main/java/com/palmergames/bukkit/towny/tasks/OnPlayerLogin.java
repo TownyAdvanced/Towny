@@ -105,7 +105,7 @@ public class OnPlayerLogin implements Runnable {
 					}
 					
 					resident.save();
-					BukkitTools.fireEvent(new NewResidentEvent(resident));
+					plugin.getScheduler().run(player, () -> BukkitTools.fireEvent(new NewResidentEvent(finalResident)));
 					
 				} catch (NotRegisteredException e) {
 					plugin.getLogger().log(Level.WARNING, "Could not register resident '" + player.getName() + "' (" + player.getUniqueId() + ") due to an error, Towny features might be limited for this player until it is resolved", e);
