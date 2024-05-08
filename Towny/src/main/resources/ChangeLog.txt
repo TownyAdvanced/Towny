@@ -9757,3 +9757,4 @@ v0.92.0.11:
     - Closes #7397.
 0.100.2.9:
   - Fix scheduling 0 tick delayed task on paper, courtesy of Warrior with PR #7404.
+  - Call NewResidentThread sync on Folia, courtesy of Warrior with PR #7394.
