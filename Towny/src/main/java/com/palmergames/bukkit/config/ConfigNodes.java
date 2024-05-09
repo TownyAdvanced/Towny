@@ -690,6 +690,13 @@ public enum ConfigNodes {
 			"",
 			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
 			"# Does not have any effect when Event War is active."),
+	GTOWN_SETTINGS_ADMINS_CAN_ALWAYS_PVP(
+			"global_town_settings.admins_can_always_pvp",
+			"false",
+			"",
+			"# If set to true, any player with towny.admin (or OP,) will be able to hurt other players overriding any location's PVP setting.",
+			"# Setting this to true will create avenues for admins to abuse players."),
+
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",

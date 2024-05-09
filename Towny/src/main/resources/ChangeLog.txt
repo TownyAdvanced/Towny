@@ -9758,3 +9758,8 @@ v0.92.0.11:
 0.100.2.9:
   - Fix scheduling 0 tick delayed task on paper, courtesy of Warrior with PR #7404.
   - Call NewResidentThread sync on Folia, courtesy of Warrior with PR #7394.
+  - Disable admins-bypassing-pvp settings by default.
+  - New Config Option: global_town_settings.admins_can_always_pvp
+    - Default: false
+    - If set to true, any player with towny.admin (or OP,) will be able to hurt other players overriding any location's PVP setting.
+    - Setting this to true will create avenues for admins to abuse players.

@@ -2922,6 +2922,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP);
 	}
 
+	public static boolean isPVPAlwaysAllowedForAdmins() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ADMINS_CAN_ALWAYS_PVP);
+	}
+
 	public static int getConfirmationTimeoutSeconds() {
 		return getInt(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_TIMEOUT);
 	}
