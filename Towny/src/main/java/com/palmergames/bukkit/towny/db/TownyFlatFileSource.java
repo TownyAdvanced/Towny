@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -1077,7 +1078,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							nation.forceSetCapital(town);
 						} catch (EmptyNationException e1) {
 							plugin.getLogger().warning(cantLoadCapital);
-							removeNation(nation);
+							removeNation(nation, DeleteNationEvent.Cause.LOAD);
 							return true;
 						}
 					}
@@ -1085,7 +1086,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_cannot_set_capital_try_next", nation.getName(), line));
 						if (!nation.findNewCapital()) {
 							plugin.getLogger().warning(cantLoadCapital);
-							removeNation(nation);
+							removeNation(nation, DeleteNationEvent.Cause.LOAD);
 							return true;
 						}
 					}
@@ -1093,7 +1094,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_undefined_capital_select_new", nation.getName()));
 					if (!nation.findNewCapital()) {
 						plugin.getLogger().warning(cantLoadCapital);
-						removeNation(nation);
+						removeNation(nation, DeleteNationEvent.Cause.LOAD);
 						return true;
 					}
 				}

@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.conversation.SetupConversation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
@@ -1664,11 +1665,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "delete":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode());
 			Confirmation.runOnAccept(() -> {
-				TownyUniverse.getInstance().getDataSource().removeNation(nation);
-				if (nation.exists()) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_you_cannot_delete_this_nation"));
-					return;
-				}
+				TownyUniverse.getInstance().getDataSource().removeNation(nation, DeleteNationEvent.Cause.ADMIN_COMMAND, sender);
 				TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
 				if (sender instanceof Player)
 					TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));

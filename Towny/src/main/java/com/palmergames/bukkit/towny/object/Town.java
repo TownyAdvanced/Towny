@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySettings.TownLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
@@ -291,8 +292,7 @@ public class Town extends Government implements TownBlockOwner {
 		try {
 			oldNation.removeTown(this);
 		} catch (EmptyNationException e) {
-			TownyUniverse.getInstance().getDataSource().removeNation(oldNation);
-			if (!nation.exists()) // The PreDeleteNationEvent was not cancelled.
+			if (TownyUniverse.getInstance().getDataSource().removeNation(oldNation, DeleteNationEvent.Cause.NO_TOWNS))
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
 		}
 		

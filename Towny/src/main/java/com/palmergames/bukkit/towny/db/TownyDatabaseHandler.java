@@ -461,11 +461,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeNation(Nation nation) {
+	public boolean removeNation(@NotNull Nation nation, @NotNull DeleteNationEvent.Cause cause, @Nullable CommandSender sender) {
 
-		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation);
-		if (BukkitTools.isEventCancelled(preEvent))
-			return;
+		PreDeleteNationEvent preEvent = new PreDeleteNationEvent(nation, cause, sender);
+		if (sender != null)
+			preEvent.setCancelMessage(Translatable.of("msg_err_you_cannot_delete_this_nation").forLocale(sender));
+		
+		if (!cause.ignoresPreEvent() && BukkitTools.isEventCancelled(preEvent)) {
+			if (sender != null && !preEvent.getCancelMessage().isEmpty())
+				TownyMessaging.sendErrorMsg(preEvent.getCancelMessage());
+			
+			return false;
+		}
 
 		Resident king = null;
 		if (nation.hasKing())
@@ -540,7 +547,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		plugin.resetCache();
 
-		BukkitTools.fireEvent(new DeleteNationEvent(nation, king));
+		BukkitTools.fireEvent(new DeleteNationEvent(nation, king, cause, sender));
+		return true;
 	}
 
 	@Override

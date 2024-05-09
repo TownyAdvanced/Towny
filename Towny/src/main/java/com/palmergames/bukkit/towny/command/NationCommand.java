@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
@@ -1067,14 +1068,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			Confirmation.runOnAccept(() -> {
-				TownyUniverse.getInstance().getDataSource().removeNation(nation);
-				if (nation.exists()) { // The PreDeleteNationEvent was cancelled.
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_cannot_delete_this_nation"));
-					return;
+				if (TownyUniverse.getInstance().getDataSource().removeNation(nation, DeleteNationEvent.Cause.COMMAND, player)) {
+					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+					if (tooManyResidents)
+						ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 				}
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-				if (tooManyResidents)
-					ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 			})
 			.sendTo(player);
 			return;
@@ -1085,11 +1083,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Nation nation = getNationOrThrow(split[0]);
 		Confirmation.runOnAccept(() -> {
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
-			if (nation.exists()) {// The PreDeleteNationEvent was cancelled.
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_cannot_delete_this_nation"));
-				return;
-			}
+			TownyUniverse.getInstance().getDataSource().removeNation(nation, DeleteNationEvent.Cause.ADMIN_COMMAND, player);
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 		}).sendTo(player);
 	}
