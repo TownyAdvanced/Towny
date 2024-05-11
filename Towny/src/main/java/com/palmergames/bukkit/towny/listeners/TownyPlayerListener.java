@@ -506,7 +506,7 @@ public class TownyPlayerListener implements Listener {
 		if (block.getType() != Material.DRAGON_EGG)
 			return;
 		
-		if (TownyActionEventExecutor.canSwitch(player, block.getLocation(), Material.DRAGON_EGG))
+		if (TownyActionEventExecutor.canDestroy(player, block))
 			return;
 		
 		event.setCancelled(true);
