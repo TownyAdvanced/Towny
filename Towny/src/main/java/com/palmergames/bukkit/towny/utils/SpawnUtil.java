@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -675,25 +676,32 @@ public class SpawnUtil {
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
 			
-			List<Entity> pets = getPets(player);
-			pets.add(player);
-			teleportEntities(spawnLoc, pets, TeleportCause.COMMAND);
+			Collection<Entity> entities = getPets(player);
+			entities.add(player);
+			
+			teleportEntities(spawnLoc, entities, TeleportCause.COMMAND);
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
 				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
 	}
 
 	/**
-	 * Gets any pets owned by the specified player that are nearby them
+	 * Gets any conventional following/sittable pets owned by the specified player that are nearby them
 	 * 
 	 * @param player The player to get the pets of
 	 */
-	public static List<Entity> getPets(Player player) {
+	public static Collection<Entity> getPets(Player player) {
 		List<Entity> pets = new ArrayList<>();
 		
-		for (Entity entity : player.getNearbyEntities(16, 16, 16)) {
-			if (!(entity instanceof Tameable tameable)) continue;
-
+		Collection<Entity> entities = player.getWorld().getNearbyEntities(
+			player.getLocation(),
+			16, 16, 16,
+			e -> e instanceof Tameable
+		);
+		
+		for (Entity entity : entities) {
+			Tameable tameable = (Tameable) entity;
+			
 			AnimalTamer tamer = tameable.getOwner();
 			if (tamer == null) continue;
 
@@ -714,7 +722,7 @@ public class SpawnUtil {
 	 * @param entities Entities to teleport
 	 * @param cause What caused the teleport
 	 */
-	public static void teleportEntities(Location loc, List<Entity> entities, TeleportCause cause) {
+	public static void teleportEntities(Location loc, Iterable<Entity> entities, TeleportCause cause) {
 		for (Entity entity : entities) {
 			PaperLib.teleportAsync(entity, loc, cause);
 		}
