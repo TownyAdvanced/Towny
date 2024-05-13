@@ -86,7 +86,7 @@ public class TownyMessaging {
 	 * @param msg    the message to send
 	 */
 	public static void sendErrorMsg(Object sender, String msg) {
-		if (sender == null || msg.isEmpty())
+		if (sender == null || msg == null || msg.isEmpty())
 			return;
 
 		if (sender instanceof CommandSender toSend) {
@@ -131,7 +131,7 @@ public class TownyMessaging {
 	 * @param msg the message being sent
 	 */
 	public static void sendMsg(CommandSender sender, String msg) {
-		if (sender == null || msg.isEmpty())
+		if (sender == null || msg == null ||  msg.isEmpty())
 			return;
 		
 		if (sender instanceof Player p) {
