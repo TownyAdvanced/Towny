@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.regen.block;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 
 /**
@@ -28,6 +29,10 @@ public class BlockObject {
 		return this.blockData;
 	}
 	
+	public BlockState getBlockState() {
+		return blockData.createBlockState();
+	}
+
 	public void setBlockData(BlockData blockData) {
 		this.blockData = blockData;
 	}

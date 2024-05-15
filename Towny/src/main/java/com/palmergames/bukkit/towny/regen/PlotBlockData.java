@@ -13,7 +13,9 @@ import org.bukkit.ChunkSnapshot;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.sign.Side;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -74,7 +76,6 @@ public class PlotBlockData {
 		final World world = this.townBlock.getWorldCoord().getBukkitWorld();
 		if (world == null)
 			return blocks;
-		
 		for (int z = 0; z < size; z++)
 			for (int x = 0; x < size; x++)
 				for (int y = height; y > minHeight; y--) { // Top down to account for falling blocks.
@@ -163,8 +164,23 @@ public class PlotBlockData {
 
 			// Actually set the block back to what we have in the snapshot.
 			block.setType(mat, false);
-			block.setBlockData(storedData.getBlockData());
-			
+			BlockState state = block.getState();
+			state.setBlockData(storedData.getBlockData());
+			if (state instanceof org.bukkit.block.Sign sign) {
+				System.out.println("Found a sign");
+				org.bukkit.block.data.type.WallSign storedSign = (org.bukkit.block.data.type.WallSign) storedData.getBlockData();
+				System.out.println("storedSign as String: " + storedSign.getAsString());
+				BlockState storedState = storedSign.createBlockState();
+				if (storedState instanceof org.bukkit.block.Sign storedSignState) {
+					System.out.println("storedSignState as String: " + storedSignState.getBlockData().getAsString());
+					for (int i = 0; i < 4; i++) {
+						sign.getSide(Side.FRONT).setLine(i, storedSignState.getSide(Side.FRONT).getLine(i));
+						sign.getSide(Side.BACK).setLine(i, storedSignState.getSide(Side.BACK).getLine(i));
+					}
+				}
+			}
+			state.update();
+
 			if (TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect"))
 				CoreProtect.getInstance().getAPI().logPlacement("#towny", block.getLocation(), mat, storedData.getBlockData());
 			
