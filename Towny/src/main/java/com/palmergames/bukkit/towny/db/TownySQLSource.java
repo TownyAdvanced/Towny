@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -1234,7 +1235,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					nation.forceSetCapital(town);
 				} catch (EmptyNationException e1) {
 					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
-					removeNation(nation);
+					removeNation(nation, DeleteNationEvent.Cause.LOAD);
 					return true;
 				}
 			}
@@ -1242,7 +1243,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownyMessaging.sendDebugMsg("Nation " + name + " could not set capital to " + rs.getString("capital") + ", selecting a new capital...");
 				if (!nation.findNewCapital()) {
 					plugin.getLogger().warning("The nation " + nation.getName() + " could not load a capital city and is being disbanded.");
-					removeNation(nation);
+					removeNation(nation, DeleteNationEvent.Cause.LOAD);
 					return true;
 				}
 			}

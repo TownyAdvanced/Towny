@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -302,7 +303,11 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlocks(Town town);
 
-	abstract public void removeNation(Nation nation);
+	public boolean removeNation(@NotNull Nation nation, @NotNull DeleteNationEvent.Cause cause) {
+		return removeNation(nation, cause, null);
+	}
+
+	abstract public boolean removeNation(@NotNull Nation nation, @NotNull DeleteNationEvent.Cause cause, @Nullable CommandSender sender);
 
 	abstract public @NotNull Resident newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
@@ -349,5 +354,9 @@ public abstract class TownyDataSource {
 	
 	private void removeTown$$bridge$$public(Town town, boolean delayFullRemoval) {
 		removeTown(town, DeleteTownEvent.Cause.UNKNOWN, null, delayFullRemoval);
+	}
+
+	public void removeNation(Nation nation) {
+		removeNation(nation, DeleteNationEvent.Cause.UNKNOWN, null);
 	}
 }

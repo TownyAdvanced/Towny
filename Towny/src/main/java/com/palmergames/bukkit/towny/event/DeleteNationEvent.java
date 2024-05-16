@@ -1,36 +1,31 @@
 package com.palmergames.bukkit.towny.event;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class DeleteNationEvent extends TownyObjDeleteEvent  {
+    private static final HandlerList HANDLER_LIST = new HandlerList();
 
-    private static final HandlerList handlers = new HandlerList();
-
-    @Override
-    public HandlerList getHandlers() {
-    	
-        return handlers;
-    }
-    
-    public static HandlerList getHandlerList() {
-
-		return handlers;
-	}
-
-    private final UUID kingUUID;
     private final Resident king;
+	private final Cause cause;
+	private final CommandSender sender;
 
-    public DeleteNationEvent(Nation nation, Resident king) {
+    public DeleteNationEvent(Nation nation, Resident king, Cause cause, CommandSender sender) {
         super(nation.getName(), nation.getUUID(), nation.getRegistered());
-        
         this.king = king;
-        this.kingUUID = king == null ? null : king.getUUID();
+		this.cause = cause;
+		this.sender = sender;
     }
 
     /**
@@ -60,7 +55,7 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 	 */
 	@Nullable
 	public UUID getLeaderUUID() {
-		return kingUUID;
+		return king != null ? king.getUUID() : null;
 	}
 
 	/**
@@ -71,4 +66,72 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 		return king;
 	}
 
+	public Cause getCause() {
+		return cause;
+	}
+
+	/**
+	 * @return The command sender who caused the deletion
+	 */
+	@Nullable
+	public CommandSender getSender() {
+		return sender;
+	}
+
+	/**
+	 * @return The {@link #getSender()} as a resident.
+	 */
+	@Nullable
+	public Resident getSenderResident() {
+		return sender instanceof Player player ? TownyAPI.getInstance().getResident(player) : null;
+	}
+	
+	public enum Cause {
+		UNKNOWN,
+		/**
+		 * The nation was removed during database loading.
+		 */
+		LOAD,
+		/**
+		 * The owner of the nation used the delete command.
+		 * @see #isCommand() 
+		 */
+		COMMAND,
+		/**
+		 * An admin used the townyadmin command to delete the nation.
+		 * @see #isCommand()
+		 */
+		ADMIN_COMMAND,
+		/**
+		 * The nation was removed for not having any towns in it.
+		 */
+		NO_TOWNS,
+		/**
+		 * The nation did not have a town that could satisfy {@link TownySettings#getNumResidentsCreateNation()} in order to be the capital.
+		 */
+		NOT_ENOUGH_RESIDENTS,
+		/**
+		 * The nation could not pay its daily upkeep.
+		 */
+		UPKEEP;
+		
+		public boolean isCommand() {
+			return this == COMMAND || this == ADMIN_COMMAND;
+		}
+		
+		@ApiStatus.Internal
+		public boolean ignoresPreEvent() {
+			return this == LOAD || this == ADMIN_COMMAND || this == NO_TOWNS;
+
+		}
+	}
+
+	@Override
+	public @NotNull HandlerList getHandlers() {
+		return HANDLER_LIST;
+	}
+
+	public static HandlerList getHandlerList() {
+		return HANDLER_LIST;
+	}
 }
