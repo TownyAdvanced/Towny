@@ -347,15 +347,25 @@ public abstract class TownyDataSource {
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
 	
+	/**
+	 * @deprecated since 0.100.2.9 use {@link #removeTown(Town, com.palmergames.bukkit.towny.event.DeleteTownEvent.Cause)} instead.
+	 * @param town
+	 */
 	@Deprecated
 	public void removeTown(Town town) {
 		removeTown(town, DeleteTownEvent.Cause.UNKNOWN);
 	}
 	
+	@SuppressWarnings("unused")
 	private void removeTown$$bridge$$public(Town town, boolean delayFullRemoval) {
 		removeTown(town, DeleteTownEvent.Cause.UNKNOWN, null, delayFullRemoval);
 	}
 
+	/**
+	 * @deprecated since 0.100.2.96 use {@link #removeNation(Nation, com.palmergames.bukkit.towny.event.DeleteNationEvent.Cause)} instead.
+	 * @param nation
+	 */
+	@Deprecated
 	public void removeNation(Nation nation) {
 		removeNation(nation, DeleteNationEvent.Cause.UNKNOWN, null);
 	}
