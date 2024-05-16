@@ -9763,3 +9763,11 @@ v0.92.0.11:
     - Default: false
     - If set to true, any player with towny.admin (or OP,) will be able to hurt other players overriding any location's PVP setting.
     - Setting this to true will create avenues for admins to abuse players.
+  - Expand DeleteTownEvent and DeleteNationEvent with sender & causes, courtesy of Warrior with PRs #7412 & #7415.
+    - Closes #7410.
+  - Fix dragon egg teleportation on left click, courtesy of gecko10000 with PR #7419.
+  - Fix TownyMessaging sending null messages.
+  - Bump net.coreprotect:coreprotect from 22.3 to 22.4.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.86.0 to 3.86.1.
+  - Bump net.kyori:adventure-text-minimessage from 4.16.0 to 4.17.0.
+  - Bump net.kyori:adventure-text-serializer-plain from 4.16.0 to 4.17.0.
