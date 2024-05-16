@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.conversation.SetupConversation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
@@ -1222,7 +1223,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode());
 			Confirmation.runOnAccept(() -> {
 				TownyMessaging.sendMsg(sender, Translatable.of("town_deleted_by_admin", town.getName()));
-				TownyUniverse.getInstance().getDataSource().removeTown(town);
+				TownyUniverse.getInstance().getDataSource().removeTown(town, DeleteTownEvent.Cause.ADMIN_COMMAND, sender);
 			}).sendTo(sender);
 			break;
 		case "rename":

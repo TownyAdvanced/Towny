@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -606,7 +607,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.forceSetMayor(res);
 					} catch (TownyException e1) {
 						if (town.getResidents().isEmpty())
-							deleteTown(town);
+							removeTown(town, DeleteTownEvent.Cause.LOAD, null, false);
 						else 
 							town.findNewMayor();
 
@@ -1045,7 +1046,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()), e);
 				return false;
 			} finally {
-				saveTown(town);
+				if (town.exists())
+					saveTown(town);
 			}
 			return true;
 		} else {

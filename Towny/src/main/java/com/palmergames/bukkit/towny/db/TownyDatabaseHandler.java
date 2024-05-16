@@ -53,6 +53,7 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -380,32 +381,28 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeTown(Town town) {
-		
-		/*
-		 * If Town Ruining is enabled set the town into a ruined state
-		 * rather than deleting.
-		 */
-		removeTown(town, TownySettings.getTownRuinsEnabled() && !town.isRuined());
-	}
-
-	@Override
-	public void removeTown(Town town, boolean delayFullRemoval) {
+	public boolean removeTown(@NotNull Town town, @NotNull DeleteTownEvent.Cause cause, @Nullable CommandSender sender, boolean delayFullRemoval) {
 		if (delayFullRemoval) {
 			/*
 			 * When Town ruining is active, send the Town into a ruined state, prior to real
 			 * removal, if the TownPreRuinedEvent is not cancelled.
 			 */
-			TownPreRuinedEvent tpre = new TownPreRuinedEvent(town);
+			TownPreRuinedEvent tpre = new TownPreRuinedEvent(town, cause, sender);
 			if (!BukkitTools.isEventCancelled(tpre)) {
 				TownRuinUtil.putTownIntoRuinedState(town);
-				return;
+				return false;
+			} else if (sender != null && !tpre.getCancelMessage().isEmpty()) {
+				TownyMessaging.sendErrorMsg(tpre.getCancelMessage());
 			}
 		}
 
-		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town);
-		if (BukkitTools.isEventCancelled(preEvent))
-			return;
+		PreDeleteTownEvent preEvent = new PreDeleteTownEvent(town, cause, sender);
+		if (!cause.ignoresPreEvent() && BukkitTools.isEventCancelled(preEvent)) {
+			if (sender != null && !preEvent.getCancelMessage().isEmpty())
+				TownyMessaging.sendErrorMsg(sender, preEvent.getCancelMessage());
+			
+			return false;
+		}
 		
 		Resident mayor = town.getMayor();
 		TownyWorld townyWorld = town.getHomeblockWorld();
@@ -457,9 +454,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 		deleteTown(town);
 		
-		BukkitTools.fireEvent(new DeleteTownEvent(town, mayor));
+		BukkitTools.fireEvent(new DeleteTownEvent(town, mayor, cause, sender));
 		
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_town2", town.getName()));
+		return true;
 	}
 
 	@Override
@@ -1200,7 +1198,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			mergeInto.addOutpostSpawn(outpost);
 
 		lock.unlock();
-		removeTown(mergeFrom, false);
+		removeTown(mergeFrom, DeleteTownEvent.Cause.MERGED, null, false);
 
 		mergeInto.save();
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));

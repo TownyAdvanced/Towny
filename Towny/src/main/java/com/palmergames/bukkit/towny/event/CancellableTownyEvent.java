@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationBuilder;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A class extended by Towny Events which are Cancellable and which contain a
@@ -54,6 +55,7 @@ public abstract class CancellableTownyEvent extends Event implements Cancellable
 	 *         informing them that the action they commited is being denied, if
 	 *         cancelMessage is blank then no message will be displayed.
 	 */
+	@NotNull
 	public String getCancelMessage() {
 		return cancelMessage;
 	}
@@ -64,7 +66,7 @@ public abstract class CancellableTownyEvent extends Event implements Cancellable
 	 * 
 	 * @param msg cancelMessage to display as feedback.
 	 */
-	public void setCancelMessage(String msg) {
+	public void setCancelMessage(@NotNull String msg) {
 		this.cancelMessage = msg;
 	}
 
