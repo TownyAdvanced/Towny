@@ -121,7 +121,8 @@ public class DeleteNationEvent extends TownyObjDeleteEvent  {
 		
 		@ApiStatus.Internal
 		public boolean ignoresPreEvent() {
-			return this == ADMIN_COMMAND || this == NO_TOWNS;
+			return this == LOAD || this == ADMIN_COMMAND || this == NO_TOWNS;
+
 		}
 	}
 
