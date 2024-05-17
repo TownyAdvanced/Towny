@@ -1103,11 +1103,16 @@ public class TownySettings {
 		return StringMgmt.join(farmMaterials, ",");
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void updateFarmBlocks() {
+		// Change what we store in memory.
 		TownBlockTypeHandler.getType("farm").getData().getAllowedBlocks().clear();
 		List<Material> mats = Stream.of(getDefaultFarmblocks().split(",")).map(s -> Material.matchMaterial(s)).collect(Collectors.toList());
 		TownBlockTypeHandler.getType("farm").getData().getAllowedBlocks().addAll(mats);
-		config.set("townblocktypes.types.farm.allowedBlocks", getDefaultFarmblocks()); // TODO: This breaks existing configs whole townblocktypes section. 
+
+		// Change the config.
+		config.getMapList("townblocktypes.types").stream().filter(plotType -> plotType.get("name").equals("farm"))
+			.forEach(plotType -> ((Map<String, Object>) plotType).replace("allowedBlocks", getDefaultFarmblocks()));
 		config.save();
 	}
 	
