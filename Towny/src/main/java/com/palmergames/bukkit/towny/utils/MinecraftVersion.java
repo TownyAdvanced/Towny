@@ -16,4 +16,14 @@ public class MinecraftVersion {
 	
 	public static final Version CURRENT_VERSION = Version.fromString(Bukkit.getBukkitVersion());
 	public static final Version OLDEST_VERSION_SUPPORTED = MINECRAFT_1_16;
+
+	private static boolean MC_UPDATED = false;
+
+	public static void checkIfMinecraftUpdated(Version lastRunMinecraftVersion) {
+		MC_UPDATED = CURRENT_VERSION.isNewerThan(lastRunMinecraftVersion); 
+	}
+
+	public static boolean hasMinecraftBeenUpdated() {
+		return MC_UPDATED;
+	}
 }

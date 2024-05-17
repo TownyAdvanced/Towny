@@ -176,6 +176,12 @@ public class Towny extends JavaPlugin {
 
 			if (!TownySettings.getLastRunVersion().equals(getVersion()))
 				TownySettings.setLastRunVersion(getVersion());
+
+			Version lastRunMinecraftVersion = Version.fromString(TownySettings.getLastRunMinecraftVersion());
+			if (!lastRunMinecraftVersion.equals(MinecraftVersion.CURRENT_VERSION)) {
+				MinecraftVersion.checkIfMinecraftUpdated(lastRunMinecraftVersion);
+				TownySettings.setLastRunMinecraftVersion(MinecraftVersion.CURRENT_VERSION.toString());
+			}
 		}
 		
 		// It is probably a good idea to always handle permissions

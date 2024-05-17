@@ -10,6 +10,12 @@ public enum ConfigNodes {
 			"version.last_run_version",
 			"",
 			"# This is for showing the changelog on updates. Please do not edit."),
+	LAST_RUN_MC_VERSION(
+			"version.last_run_minecraft_version",
+			"",
+			"",
+			"# Used for automatic edits made when a server increases their minecraft version. Please do not edit."),
+
 	LANGUAGE_ROOT(
 		"language",
 		"",

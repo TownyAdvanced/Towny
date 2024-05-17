@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
+import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.resident.NewResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
@@ -16,6 +17,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
@@ -175,6 +177,17 @@ public class OnPlayerLogin implements Runnable {
 				
 				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).locale(player).component().clickEvent(clickEvent));
 				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download")).locale(player).component().clickEvent(clickEvent));
+			}
+
+			// Towny prompts admins if they want their Farm Plot Blocks list updated when MC has been updated.
+			if (MinecraftVersion.hasMinecraftBeenUpdated() && universe.getPermissionSource().isTownyAdmin(player)) {
+				Confirmation.runOnAccept(() -> {
+						TownySettings.updateFarmBlocks();
+						TownyMessaging.sendMsg(player, Translatable.of("msg_farm_plot_blocks_updated"));
+						MinecraftVersion.checkIfMinecraftUpdated(MinecraftVersion.CURRENT_VERSION);
+					})
+					.setTitle(Translatable.of("msg_update_confirmation_farm_plot_blocks"))
+					.sendTo(player);
 			}
 		}
 	}
