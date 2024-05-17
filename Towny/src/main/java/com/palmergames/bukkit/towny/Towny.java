@@ -55,11 +55,10 @@ import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
-import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
-import com.palmergames.util.StringMgmt;
+
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
 import io.papermc.lib.PaperLib;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -217,25 +216,6 @@ public class Towny extends JavaPlugin {
 					scheduler.run(new OnPlayerLogin(this, player));
 				}
 		}
-		
-		showMeTheBlocks();
-	}
-
-	private void showMeTheBlocks() {
-		Bukkit.getLogger().info("PLANTS: " + StringMgmt.join(
-				ItemLists.PLANTS.getMaterialNameList(), ", "));
-		Bukkit.getLogger().info("");
-		Bukkit.getLogger().info("FLOWERS: " + StringMgmt.join(
-				ItemLists.FLOWERS.getMaterialNameList(), ", "));
-		Bukkit.getLogger().info("");
-		Bukkit.getLogger().info("SAPLINGS: " + StringMgmt.join(
-				ItemLists.SAPLINGS.getMaterialNameList(), ", "));
-		Bukkit.getLogger().info("");
-		Bukkit.getLogger().info("TREES: " + StringMgmt.join(
-				ItemLists.TREES.getMaterialNameList(), ", "));
-		Bukkit.getLogger().info("");
-		Bukkit.getLogger().info("CROPS: " + StringMgmt.join(
-				ItemLists.CROPS.getMaterialNameList(), ", "));
 	}
 
 	public void loadFoundation(boolean reload) {
