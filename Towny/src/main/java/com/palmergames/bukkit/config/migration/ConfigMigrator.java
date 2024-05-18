@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
+
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
