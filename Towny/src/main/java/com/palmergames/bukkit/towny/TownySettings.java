@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
@@ -59,7 +58,6 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TownySettings {
 
@@ -706,8 +704,6 @@ public class TownySettings {
 				setNewProperty(root.getRoot(), version);
 			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_VERSION.getRoot())) {
 				setNewProperty(root.getRoot(), getLastRunVersion(version));
-			} else if (root.getRoot().equals(ConfigNodes.LAST_RUN_MC_VERSION.getRoot())) {
-				setNewProperty(root.getRoot(), getLastRunMinecraftVersion());
 			} else if (root.getRoot().equals(ConfigNodes.TOWNBLOCKTYPES_TYPES.getRoot())) {
 				setNewProperty(root.getRoot(), root.getDefault());
 				setTownBlockTypes();
@@ -1093,27 +1089,14 @@ public class TownySettings {
 	
 	public static String getDefaultFarmblocks() {
 		Set<String> farmMaterials = new HashSet<>();
-		farmMaterials.addAll(ItemLists.SAPLINGS.getMaterialNameList());
-		farmMaterials.addAll(ItemLists.TREES.getMaterialNameList()); // Includes Leaves.
-		farmMaterials.addAll(ItemLists.PLANTS.getMaterialNameList());
-		farmMaterials.addAll(ItemLists.CROPS.getMaterialNameList());
+		farmMaterials.addAll(ItemLists.SAPLINGS.getMaterialNameCollection());
+		farmMaterials.addAll(ItemLists.TREES.getMaterialNameCollection()); // Includes Leaves.
+		farmMaterials.addAll(ItemLists.PLANTS.getMaterialNameCollection());
+		farmMaterials.addAll(ItemLists.CROPS.getMaterialNameCollection());
 		farmMaterials.addAll(Arrays.asList("COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG")); // For milking tests.
 		farmMaterials.add("SHROOMLIGHT");
 		farmMaterials.add("SHEARS");
 		return StringMgmt.join(farmMaterials, ",");
-	}
-
-	@SuppressWarnings("unchecked")
-	public static void updateFarmBlocks() {
-		// Change what we store in memory.
-		TownBlockTypeHandler.getType("farm").getData().getAllowedBlocks().clear();
-		List<Material> mats = Stream.of(getDefaultFarmblocks().split(",")).map(s -> Material.matchMaterial(s)).collect(Collectors.toList());
-		TownBlockTypeHandler.getType("farm").getData().getAllowedBlocks().addAll(mats);
-
-		// Change the config.
-		config.getMapList("townblocktypes.types").stream().filter(plotType -> plotType.get("name").equals("farm"))
-			.forEach(plotType -> ((Map<String, Object>) plotType).replace("allowedBlocks", getDefaultFarmblocks()));
-		config.save();
 	}
 	
 	public static String getDefaultWildsblocks() {
@@ -2576,15 +2559,6 @@ public class TownySettings {
 	public static void setLastRunVersion(String currentVersion) {
 
 		setProperty(ConfigNodes.LAST_RUN_VERSION.getRoot(), currentVersion);
-		config.save();
-	}
-
-	public static String getLastRunMinecraftVersion() {
-		return getString(ConfigNodes.LAST_RUN_MC_VERSION.getRoot(), MinecraftVersion.CURRENT_VERSION.toString());
-	}
-
-	public static void setLastRunMinecraftVersion(String currentVersion) {
-		setProperty(ConfigNodes.LAST_RUN_MC_VERSION.getRoot(), currentVersion);
 		config.save();
 	}
 

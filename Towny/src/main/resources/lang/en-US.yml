@@ -2201,9 +2201,6 @@ msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
 
-msg_update_confirmation_farm_plot_blocks: "Towny has detected a newer version of Minecraft. Would you like to have Towny update the farm plot blocks?"
-msg_farm_plot_blocks_updated: "Your server farm plot blocks have been updated, to see the new list use /towny allowedblocks."
-
 #Message shown when a nation cannot add a town because of the max-residents-limit.
 msg_err_cannot_add_nation_over_resident_limit: '&cYour nation has reached the maximum number of allowed residents-per-nation, %s, and cannot add %s.'
 #Message shown to a town when they cannot join a nation because of the max-residents-limit.

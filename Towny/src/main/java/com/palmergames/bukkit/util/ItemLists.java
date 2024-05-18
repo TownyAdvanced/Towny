@@ -16,6 +16,7 @@ import org.bukkit.Tag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.ApiStatus.Internal;
 
 import static com.palmergames.bukkit.towny.utils.MinecraftVersion.*;
 import static org.bukkit.NamespacedKey.minecraft;
@@ -37,7 +38,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 		return contains(itemStack.getType());
 	}
 
-	public List<String> getMaterialNameList() {
+	@Internal
+	public Collection<String> getMaterialNameCollection() {
 		return tagged.stream().map(Material::name).collect(Collectors.toList());
 	}
 
