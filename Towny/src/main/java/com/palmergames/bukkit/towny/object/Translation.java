@@ -8,11 +8,13 @@ import com.palmergames.bukkit.towny.command.HelpMenu;
 import com.palmergames.bukkit.towny.event.TranslationLoadEvent;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.util.JavaUtil;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -33,13 +35,13 @@ public final class Translation {
 	
 	private static Map<String, Map<String, String>> translations = new HashMap<>();
 	private static Locale defaultLocale = new Locale("en", "US"); // en-US here by default, in case of safe mode happening before translations are loaded.
-	private static Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
+	private static final Locale englishLocale = new Locale("en", "US"); // Our last-ditch fall back locale.
 	
 	public static void loadTranslationRegistry() {
 		translations.clear();
 		Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
 		TranslationLoader loader = new TranslationLoader(langFolder, Towny.getPlugin(), Towny.class);
-		loader.updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
+		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
 		// Load built-in translations into memory.
 		// Dumps built-in language files into reference folder. These are for reading
@@ -187,7 +189,7 @@ public final class Translation {
 			if (shouldWarn)
 				Towny.getPlugin().getLogger().warning(String.format("Could not convert '%s' into a locale, falling back to en_US.", fileName));
 			
-			return new Locale("en", "US");
+			return englishLocale;
 		}
 	}
 	
@@ -262,5 +264,40 @@ public final class Translation {
 			return false;
 		
 		return language.get(key) != null;
+	}
+
+	private static void updateLegacyLangFileName(String lang) {
+		Map<String, String> oldLangFileNames = createLegacyLangMap();
+		
+		if (!oldLangFileNames.containsKey(lang))
+			return;
+		
+		String path = Towny.getPlugin().getDataFolder().getPath() + File.separator + "settings" + File.separator ;
+		File oldFile = new File(path + lang);
+		File newFile = new File(path + oldLangFileNames.get(lang));
+		boolean rename = oldFile.renameTo(newFile);
+		if (rename) {
+			Towny.getPlugin().getLogger().info("Language file name updated.");
+			TownySettings.setLanguage(oldLangFileNames.get(lang));
+		} else
+			Towny.getPlugin().getLogger().warning("Language file was not updated.");
+	}
+
+	private static Map<String, String> createLegacyLangMap() {
+		return JavaUtil.make(new HashMap<>(), map -> {
+			map.put("danish.yml", "da-DK.yml");
+			map.put("german.yml", "de-DE.yml");
+			map.put("english.yml", "en-US.yml");
+			map.put("spanish.yml", "es-ES.yml");
+			map.put("french.yml", "fr-FR.yml");
+			map.put("italian.yml", "it-IT.yml");
+			map.put("korean.yml", "ko-KR.yml");
+			map.put("norwegian.yml", "no-NO.yml");
+			map.put("polish.yml", "pl-PL.yml");
+			map.put("pt-br.yml", "pt-BR.yml");
+			map.put("russian.yml", "ru-RU.yml");
+			map.put("sv-SE.yml", "sv-SE.yml");
+			map.put("chinese.yml", "zh-CN.yml");
+		});
 	}
 }
