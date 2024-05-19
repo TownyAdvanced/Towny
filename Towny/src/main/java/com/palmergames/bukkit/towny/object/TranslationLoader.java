@@ -164,7 +164,7 @@ public class TranslationLoader {
 		
 		// Collect contents of the default lang file, used for saving reference files
 		String defaultLangContent = null;
-		try (InputStream is = clazz.getResourceAsStream("/lang/en_US.yml")) {
+		try (InputStream is = clazz.getResourceAsStream("/lang/en-US.yml")) {
 			if (is != null) {
 				try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 					defaultLangContent = reader.lines().collect(Collectors.joining("\n"));
@@ -180,15 +180,15 @@ public class TranslationLoader {
 				
 				try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 					String content = reader.lines().collect(Collectors.joining("\n"));
-					Map<String, String> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(content);
+					Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(content);
 
 					saveReferenceFile(lang, defaultLangContent, content, values);
 
 					lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
 
 					Map<String, String> translations = newTranslations.computeIfAbsent(lang, k -> new HashMap<>());
-					for (Map.Entry<String, String> entry : values.entrySet())
-						translations.put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());
+					for (Map.Entry<String, Object> entry : values.entrySet())
+						translations.put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
 				}
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
@@ -225,7 +225,7 @@ public class TranslationLoader {
 	 * @param content The contents of the resource file
 	 * @param translations The contents, parsed through yaml
 	 */
-	private void saveReferenceFile(String lang, String defaultLangContent, String content, Map<String, String> translations) {
+	private void saveReferenceFile(String lang, String defaultLangContent, String content, Map<String, Object> translations) {
 		// Resolves langfolder/reference/whatever_language.yml
 		Path langPath = langFolderPath.resolve("reference").resolve(lang + ".yml");
 		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
@@ -235,7 +235,7 @@ public class TranslationLoader {
 			if (!Files.exists(langPath))
 				Files.createFile(langPath);
 
-			if (defaultLangContent == null) {
+			if (defaultLangContent == null || lang.equals("en-US")) {
 				try (Stream<String> lines = Files.lines(langPath)) {
 					if (!content.equals(lines.collect(Collectors.joining("\n"))))
 						FileMgmt.writeString(langPath, content);
@@ -253,9 +253,15 @@ public class TranslationLoader {
 				if (line.contains(":")) {
 					String key = line.substring(0, line.indexOf(":"));
 					
-					String translated = translations.get(key);
+					Object translated = translations.get(key);
 					if (translated != null) {
-						iterator.set(key + ": " + translated);
+						String replace = String.valueOf(translated);
+						if (replace.contains("'"))
+							replace = '"' + replace + '"';
+						else 
+							replace = "'" + replace + "'";
+						
+						iterator.set(key + ": " + replace);
 					}
 				}
 			}
