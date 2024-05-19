@@ -1,39 +1,6 @@
 ---
-name: Towny
 language: Turkish
-author: ElgarL
 website: 'https://townyadvanced.github.io/'
-description: >
-  Language file for all game messages for this Locale.
-#A note on editing this file.
-#----------------------------
-#Do not alter this file if it is in the reference folder.
-#Before you edit this file, read about how Towny handles
-#language files:
-#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny status_title_pvpinserts words.)
-#----------------------------------------------------
-#You MUST retain spacing in the texts.
-#If a text begins or ends with a space, it must remain that
-#way.
-#%s = data to be supplied by the plugin.
-#If you find that a line has multiple %s variables which would
-#be in a different order in your language, you can change them
-#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
-#will always use the 4th variable, no matter where it is
-#placed on the line.
-#A note on text colouring and formatting.
-#----------------------------------------
-#Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
-#Purple = &5, Gold = &6, LightGray = &7, Gray = &8
-#DarkPurple = &9, LightGreen = &a, LightBlue = &b
-#Rose = &c, LightPurple = &d, Yellow = &e, White = &f
-#This language file also supports using MiniMessage for colours
-#and formatting. Learn about MiniMessage formatting here:
-#https://docs.adventure.kyori.net/minimessage/format.html
-default_towny_prefix: '&6[Towny] &b'
-default_town_prefix: '&6[%s] &b'
-default_nation_prefix: '&6[%s] &6'
 unclaimed_plot_name: 'Sahipsiz'
 unclaimed_zone_name: 'Vahşi Doğa'
 ############################################################
@@ -158,12 +125,7 @@ nation_list_help_0: "Belirtilen sayfayı görüntüleyin."
 nation_list_help_1: "Ulusları, belirtilen sayfayla birlikte sakinsayısına göre listeleyin."
 nation_list_help_2: "Ulusları kasaba sayısına göre, belirtilen sayfa ile listeleyin."
 nation_list_help_3: "Belirtilen sayfa ile Katılıma açık olan ulusları listeler."
-nation_list_help_4: "List nations using bank balance, with the specified page."
 nation_list_help_5: "Ulusları belirtilen sayfayla birlikte alfabetik sırayla listeleyin."
-nation_list_help_6: "List nations by claimed land, with the specified page."
-nation_list_help_7: "List nations by number online, with the specified page."
-nation_set_help_0: "Change the leader of the nation."
-nation_set_help_1: "Change the capital city of the nation."
 nation_set_help_2: "Kasabaların ödeyeceği vergi miktarını belirleyin."
 nation_set_help_3: "Fethedilen kasabaların ödeyeceği vergi miktarını ayarlayın."
 nation_set_help_4: "Ulusun ismini düzenle."
@@ -174,18 +136,9 @@ nation_set_help_8: "Ulusun spawn noktasını ayarlayın."
 nation_set_help_9: "/n spawn komutunu kullanmanın ücretini belirleyin."
 nation_set_help_10: "Haritalama eklentilerinde kullanılan harita rengini ayarlayın."
 nation_toggle_help_0: "Ulusun barışçıl durumunu değiştirir."
-nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
-nation_toggle_help_2: "Toggles open status, allowing towns to join without an invite."
-nation_toggle_help_3: "Toggles taxpercent, making towns pay a percentage instead of fixed rate."
-nation_sanction_help_1: "Adds a town to the SanctionedTown list."
-nation_sanction_help_2: "Removes a town from the SanctionedTown list."
-nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
-nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
 king_help_1: 'Ulus Lideri Yardımı'
 king_help_2: 'İttifakınızı kurun.'
 king_help_3: 'Düşmanlarınızı ayarlayın.'
-king_help_4: "Withdraw money from your nation bank."
-king_help_5: "Add or remove towns from your nation."
 king_help_6: "yardım için /n set komutunu kullanın."
 king_help_7: "yardım için /n toggle komutunu kullanın."
 king_help_8: "Başka bir ulusu kendi ulusunuza katmak için kullanılır."
@@ -202,24 +155,6 @@ res_13: "Kasabanıza veya yatağınıza ışınlanın."
 res_toggle_help_0: "Arazilerinizin pvp durumunu değiştirin."
 res_toggle_help_1: "Arazilerinizin ateş durumunu değiştirin."
 res_toggle_help_2: "Arazilerinizin yaratıklarının durumunu değiştirin."
-res_toggle_help_3: "Toggle your plots' explosion status."
-res_toggle_help_4: "Toggle the ability to see plot borders."
-res_toggle_help_5: "Toggle the ability to see constant plot borders."
-res_toggle_help_6: "Toggle the ability to see town borders."
-res_toggle_help_7: "Toggle the ability to see plot notifications."
-res_toggle_help_8: "Toggle the ability to claim where you walk."
-res_toggle_help_9: "Toggle the ability to see the map when you change plots."
-res_toggle_help_10: "Remove all modes."
-res_toggle_help_11: "Spy on chat channels."
-res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
-res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
-res_toggle_help_14: "Toggle the ability to unclaim where you walk."
-res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
-res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
-res_jail_help_0: "Pays the bail cost to get out of jail."
-res_set_help_0: "Set your resident's About/Bio"
-res_set_help_1: "Set your resident's default plot permissions."
-res_set_help_2: "Set your resident's modes."
 mode_1: 'Her kasaba bloğu arasındaki haritayı göster'
 mode_2: 'Yürürken iddia etmeye çalış'
 mode_3: 'Yürürken hak talebini reddetmeye çalış'
@@ -246,34 +181,12 @@ world_help_4: 'Tüm dünyaları listeleyin'
 world_help_5: 'Bu parçayı yeniden oluştur'
 world_help_6: 'yardım için /tw toggle komutunu kullanın.'
 world_help_7: 'yardım için /tw set komutunu kullanın.'
-world_set_help_0: "Set the world's wilderness name."
-world_toggle_help_0: "Toggle on/off if towns can claim land in this world."
-world_toggle_help_1: "Toggle on/off if Towny is enabled in this world."
-world_toggle_help_2: "Toggle on/off if wars can happen in this world."
-world_toggle_help_3: "Toggle on/off if pvp or forcepvp is enabled in this world."
-world_toggle_help_4: "Toggle on/off if friendlyfire is enabled in this world."
-world_toggle_help_5: "Toggle on/off if explosions are enabled or forced in this world."
-world_toggle_help_6: "Toggle on/off if fires are enabled or forced in this world."
-world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
-world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world."
-world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
-world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
-world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
 townyadmin_help_1: 'Bu kasaba bloğunun hak talebini kaldır'
 townyadmin_help_2: 'Çevrenizdeki hak talebinden vazgeçmeye çalışın.'
-admin_panel_1: "See /ta set ? for help"
 admin_panel_2: 'Kasabayı yeniden yükle'
 admin_panel_3: 'Yeni gün kodunu çalıştırın'
-admin_panel_4: "Unclaim an space surrounding you"
-admin_panel_5: "See /ta plot ? for help"
-admin_panel_6: "Give a positive or negative amount of townblocks to a player or town"
-admin_panel_7: "See /ta toggle ? for help"
-admin_panel_8: "Commands for controlling these objects"
-admin_panel_9: "Teleport to the specified plot"
-admin_panel_10: "Check if the player has a permission node"
 admin_panel_11: "Configi sıfırla."
 admin_panel_12: "towny datası için backup oluştur."
-admin_panel_13: "Dump your mysql db to flatfile"
 admin_panel_14: "Veritabanınızı kaydetmeye veya yüklemeye zorla"
 admin_panel_15: "newhour kodunu çalıştırın"
 admin_panel_16: "Eski sakinleri temizle."
@@ -287,7 +200,6 @@ townyadmin_town_help_6: "Kasabın sınırlarının dışında spawn ol."
 townyadmin_town_help_7: "Kasabanın rütbe komutunu kullanın."
 townyadmin_town_help_8: "Kasabanın set komutunu kullanın."
 townyadmin_town_help_9: "Kasabanın değiştirme komutunu kullanın."
-townyadmin_town_help_10: "Alter a town's metadata."
 townyadmin_town_help_11: "İkinci kasabayı ilk kasabayla birleştirin."
 townyadmin_town_help_12: "Kuralları göz ardı ederek 2. kasabayı ilk kasabayla birleştirin."
 townyadmin_town_help_13: "Kasabanın bankasına para ekle."
@@ -302,81 +214,16 @@ townyadmin_town_toggle_help_2: "Kasabanın statüsünü değiştirerek sakin olm
 townyadmin_town_toggle_help_3: "Kasabanın Patlama ayarını değiştirin."
 townyadmin_town_toggle_help_4: "Kasabanın Ateş ayarını değiştirin."
 townyadmin_town_toggle_help_5: "Kasabanın yaratık ayarını değiştirin."
-townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
-townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
-townyadmin_nation_help_0: "Create a nation with the given name and capital city."
-townyadmin_nation_help_1: "Show the nation status screen."
-townyadmin_nation_help_2: "Add towns from the nation."
-townyadmin_nation_help_3: "Remove towns from the nation."
-townyadmin_nation_help_4: "Rename a nation."
-townyadmin_nation_help_5: "Delete a town."
-townyadmin_nation_help_6: "Recheck the nation's towns to make sure they're close enough to the capital."
-townyadmin_nation_help_7: "Merge the 2nd nation into the first nation."
-townyadmin_nation_help_8: "Merge the 2nd nation into the first nation, ignoring any rules."
-townyadmin_nation_help_9: "Use a nation's toggle command."
-townyadmin_nation_help_10: "Use a nation's set command."
-townyadmin_nation_help_11: "Put money into the nation bank."
-townyadmin_nation_help_12: "Take money from the nation bank."
-townyadmin_nation_help_13: "Open the nation's bankhistory book."
-townyadmin_nation_help_14: "Place the town into the nation."
-townyadmin_nation_help_15: "Use the nation's rank command."
-townyadmin_nationrank_help_0: "Adds a nation rank to the resident."
-townyadmin_nationrank_help_1: "Removes a nation rank from the resident."
-townyadmin_database_help_0: "Force saves the database."
-townyadmin_database_help_1: "Force loads the database."
-townyadmin_database_help_2: "Removes all titles and surnames from every resident."
-ta_plot_help_0: "Claim a plot for a player."
-ta_plot_help_1: "View the metadata stored in the plot you are stood in."
-ta_plot_help_2: "Set plot metadata key and value."
-ta_plot_help_3: "Add or remove a metadata by key."
 ta_resident_help_0: "Sakinin ismini değiştirin."
-ta_resident_help_1: "Add or remove a friend."
 ta_resident_help_2: "Arkadaş listenizi listeleyin veya temizleyin."
 ta_resident_help_3: "Sakini kayıtlardan sil."
-ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
-ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
-ta_toggle_help_2: "Turn on/off devmode, shows extra logging messages to the player specified in the config."
-ta_toggle_help_3: "Turn on/off debug mode, showing extra messages in the log."
-ta_toggle_help_4: "Turn on/off the ability for towns or nations to remove money from their banks."
-ta_toggle_help_5: "Make a player an NPC or not."
-ta_set_help_0: "Set a towns mayor to the given player."
-ta_set_help_1: "Set a town with a new NPC mayor, they pay no upkeep."
-ta_set_help_2: "Set the capital of a nation."
-ta_set_help_3: "Set a nation's nationzone size."
-ta_set_help_4: "Set a resident's title."
-ta_set_help_5: "Set a resident's surname."
-ta_set_help_6: "Set a plot to a different town."
-ta_set_help_7: "Set a town's founder name."
-ta_set_help_8: "Use size 0 to remove nationzone override."
-ta_purge_help_0: "Purges residents who haven't logged in for longer than the given days, optionally set townless to remove only townless players, or specify a townname to only purge one town's residents."
-ta_townmeta_help_1: "View the metadata stored on the town you specify."
-ta_townmeta_help_2: "Set town metadata key and value."
-ta_townmeta_help_3: "Add or remove a metadata by key from the town."
-ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
-ta_residentmeta_help_2: "Set resident metadata key and value."
-ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
-ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
-ta_nationmeta_help_2: "Set nation metadata key and value."
-ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
 ta_reload_help_0: "Kayıtları yeniden yükle."
 ta_reload_help_1: "configi yeniden yükle."
 ta_reload_help_2: "Dil dosyalarını yeniden yükle."
 ta_reload_help_3: "Towny izinleri yeniden yükle."
-ta_reload_help_4: "Reloads all components of Towny."
-ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
-plot_help_0: "Turns on the plot info HUD."
 plot_help_1: "Arsanın sahibini kaldır."
-plot_help_2: "Deletes a list of blocks from the plot."
-plot_help_3: "See /plot set ? for help."
-plot_help_4: "See /plot toggle ? for help."
 plot_help_5: "Yardım için /plot group komutunu kullan."
-plot_help_6: "Removes permission overrides for a player."
-plot_help_7: "Adds default permission overrides for a player."
-plot_help_8: "Opens the permission editor gui."
-plot_help_9: "Adds a resident as Trusted in the plot."
-plot_help_10: "Removes a resident as Trusted in the plot."
 plot_group_help_0: "Ör: /plot group new ExpensivePlots"
-plot_group_help_1: "Removes a plot from the specified group."
 plot_group_help_2: "Arsa grubunu tamamen kaldır."
 plot_group_help_3: "Üzerinde durduğunuz grubu yeniden adlandır."
 plot_group_help_4: "Ör: /plot group set perm resident on"
@@ -385,10 +232,6 @@ plot_group_help_6: "Ör: /plot group forsale 50"
 plot_group_help_7: "Ör: /plot group notforsale"
 plot_group_help_8: "Güvenilir sakin ekle veya çıkar."
 plot_group_help_9: "Sakini arsa grubuna güvenilir kişi olarak ekle."
-plot_group_help_10: "Removes a resident as Trusted in the plotgroup."
-plot_group_help_11: "Opens the plot perm GUI."
-plot_group_help_12: "Adds a player to the plot perm GUI."
-plot_group_help_13: "Removes a player to the plot perm GUI."
 plot_toggle_help_0: "Arsada PVP'ye izin ver."
 plot_toggle_help_1: "Arsada patlamalara izin ver."
 plot_toggle_help_2: "Arsada ateşe izin ver."
@@ -397,26 +240,16 @@ plot_group_toggle_help_0: "Arsa grubunda PVP'ye izin ver."
 plot_group_toggle_help_1: "Arsa grubunda patlamalara izin ver."
 plot_group_toggle_help_2: "Arsa grubunda ateşe izin ver."
 plot_group_toggle_help_3: "Arsa grubunda yaratıklara izin ver."
-plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
 plot_set_help_0: "Ör: Inn, Wilds, Farm, Embassy, vb."
-plot_set_help_1: "Sets a plot to an Outpost."
-plot_set_help_1.5: "Sets the minimum number of days a player must be a town member to purchase the plot."
-plot_set_help_1.6: "Sets the maximum number of days a player must be a town member to purchase the plot."
 plot_set_help_2: "Arsa türünü kaldır."
 plot_set_help_3: "Arsayı adlandır."
 plot_set_help_4: "Tüm izinleri ayarla."
-plot_set_help_5: "Sets the permissions of a level or type to on or off."
-plot_set_help_6: "Sets the permission of a level and type to on or off."
-plot_set_help_7: "Sets the permissions to the resident or town that owns the plots."
 plot_jailcell_help_0: "Bulunduğun yere bir hapishane hücresi ata."
 plot_jailcell_help_1: "Bulunduğun yerdeki hapishane hücresi kaldır."
 msg_block_claim: 'Bu kasaba bloğunu sahiplen'
-msg_block_claim_radius: 'Claim a radius of plots surrounding you.'
 msg_plot_nfs: 'Satılık arsayı yıkın'
-msg_plot_nfs_radius: 'Take down a radius of plots for sale'
 msg_nfs_abr: '&e'' fs '' ve '' nfs '', '' satış öncesi '' ve '' satış dışı '' kısaltmaları olarak kabul edilir.'
 msg_plot_fs: 'Bu alanı açık arttırmaya çıkarın.'
-msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -424,18 +257,14 @@ msg_plot_fs_radius: 'Put up a radius of plots for sale.'
 ############################################################
 msg_buy: '&b%s için %d %s satın aldı.'
 msg_buy_resident_plot: '&b%s, %s için %s arsasını satın aldı!'
-msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&b%s vergi ödeyemedi ve %s tarafından atıldı.'
 msg_couldnt_pay_plot_taxes: '&b%s vergi ödeyemedi ve bir arsasını kaybetti.'
-msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
-msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&bÖdenen şehir vergisi '
 msg_payed_plot_cost: '&b%s içindeki %s parseller için %s ödendi'
 msg_payed_resident_tax: '&bÖdenen ikamet vergisi '
 msg_bankrupt_town: ' kasaba olarak kalmayı göze alamazdım.'
 msg_bankrupt_nation: ' bir ulus olarak kalmayı göze alamazdım.'
 msg_nation_not_peaceful: '&bUlus, barışçıl devleti karşılayamaz.'
-msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
 msg_peaceful_disabled: '&bUlus barışı küresel olarak devre dışı bırakıldı.'
 msg_you_paid: '&bBarışçıl bir statü ayarlamak için %s altın ödediniz.'
 msg_nation_set_peace: '&bUlusun devleti başarıyla değiştirildi.'
@@ -624,8 +453,6 @@ msg_err_not_in_town_claim: '&cArsa talep etmek için bir şehire ait olmalısın
 msg_err_must_belong_town: '&cBir şehire ait olmalısın.'
 msg_err_dont_belong_town: '&cBir şehire ait değilsin.'
 msg_err_dont_belong_nation: '&bBir ulusa ait değilsin.'
-msg_err_already_belong_nation: '&bYou already belong to a nation.'
-msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s ulusunuza ait değil.'
 msg_err_rect_auto: '&cOtomobili yalnızca şehirler ve sakinler kullanabilir.'
 msg_err_invalid_radius: '&cGeçersiz yarıçap. Bir tam sayı veya "otomatik" kullanın.'
@@ -653,7 +480,6 @@ msg_err_input_too_long: '&cGiriş çok uzun.'
 msg_err_invalid_choice: '&cGeçersiz seçim'
 msg_err_invalid_sub: '&cGeçersiz alt komut.'
 msg_err_command_disable: '&cBu komut için yeterli izne sahip değilsiniz.'
-msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
 msg_err_universe_limit: '&cEvren daha fazla kasaba tutamaz.'
 msg_err_too_many_npc: '&cÇok fazla npc kayıtlı.'
 msg_err_negative_money: '&cNegatif paranız olamaz.'
@@ -734,7 +560,6 @@ msg_you_have_undeclared_an_outlaw: '%s artık %s içinde bir kanun kaçağı de�
 msg_err_player_not_an_outlaw: 'Bu oyuncu kanun kaçağı olarak listelenmedi.'
 msg_err_outlaw_in_open_town: 'Seni haydut sayan açık bir kasabaya katılamazsın.'
 msg_you_are_an_outlaw_in_this_town: '&4Dikkatli ol %s seni kanun kaçağı olarak görüyor, burada ölmek hapis anlamına gelebilir.'
-msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Kefalet ücretin %s.'
 msg_err_town_not_close_enough_to_nation: '%s nin ana bloğu, başkentinizin ana bloğuna ulusunuza katılacak kadar yakın değil.'
 msg_nation_town_moved_their_homeblock_too_far: '%s nin ana bloğu, ulusunuzun başkentinin ana blokundan çok uzağa taşındı ve ulusunuzdan kaldırıldı.'
@@ -777,7 +602,6 @@ town_invite_help_3: 'Gönderdiğiniz tüm davetleri listeler'
 town_invite_help_4: 'Aldığınız tüm davetleri listeler'
 town_invite_help_5: 'Bir ulusa katılma talebini kabul edin'
 town_invite_help_6: 'Bir ulusa katılma talebini reddedin'
-town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'Bir şehri milletinize davet edin'
 nation_invite_help_2: 'Bir şehire gönderilen daveti iptal et'
 nation_invite_help_3: 'Kasabalara gönderilen tüm davetleri listeleyin'
@@ -805,7 +629,6 @@ msg_err_nation_sent_too_many_requests: '&bÜlke çok fazla istek gönderdi, tekr
 msg_err_nation_has_too_many_requests: '&b%s ülkesinin çok fazla isteği var, tekrar istemeden önce bazılarını reddetmelerini isteyin.'
 player_received_invites: '&b%a/%m davet aldınız.'
 town_revoke_invite: '&bKasaba %s, onlara katılma davetinizi iptal etti.'
-town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bKasaba %a/%m davet aldı.'
 town_sent_invites: '&bKasaba% a/%m davet gönderdi.'
 nation_revoke_invite: '&b%s ülkesi, onlara katılma davetinizi iptal etti.'
@@ -918,7 +741,6 @@ status_town_nation: 'Ulus:'
 status_town_reslist_overlength: 've dahası...'
 status_nation_king: 'Lider:'
 status_nation_tax: 'Ulus Vergisi:'
-status_nation_conquered_tax: 'ConqueredTax:'
 status_nation_towns: 'Kasabalar'
 status_nation_allies: 'Müttefikler'
 status_nation_enemies: 'Düşmanlar'
@@ -940,7 +762,6 @@ status_res_plottax: 'Toplam arsa vergileri:'
 status_res_totaltax: 'Ödenmesi_gereken_toplam_vergi:'
 status_townblock_plottax: 'Arsa vergisi:'
 status_townblock_untaxed: 'Vergilendirilmemiş'
-status_townblock_max_and_minjoindays: 'Town membership of between %s and %s days required for plot purchase.'
 status_townblock_minjoindays: 'Arsa satın alımı için %s günden fazla kasabanın üyesi olman lazım.'
 status_townblock_maxjoindays: 'Bu arsayı satın almak %s günden az kasaba üyeliği gerektirir.'
 #Added in 0.45
@@ -966,7 +787,6 @@ msg_err_nation_not_public: '&cBu millet halka açık değil.'
 msg_nation_toggle_public: '&aUlus ayarı başarıyla değiştirildi.'
 status_yes: '&aEVET'
 status_no: '&cHAYIR'
-msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&cUlus doğma yolculuğu yasaklandı.'
 msg_err_nation_spawn_forbidden_war: '&cUlus doğma yolculuğuna yalnızca savaş sırasında izin verilir.'
 msg_err_nation_spawn_forbidden_peace: '&cSavaş sırasında ulus doğma yolculuğu yasaktır.'
@@ -1015,15 +835,6 @@ msg_process_unclaim: 'İşleniyor Arsa Hak Talebi...'
 msg_total_townblocks: 'Toplam Kasaba Blokları: '
 #Added in 0.50
 friend_list: 'Arkadaşlar Listesi'
-#The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
-#nationranks lists on the /nation screen; and probably more lists of residents.
-res_format_list_1: '&2' #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
-res_format_list_2: '&a' #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
-res_format_list_3: '&f' #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
-townboard_message_colour_1: '&6'
-townboard_message_colour_2: '&e'
-nationboard_message_colour_1: '&6'
-nationboard_message_colour_2: '&e'
 not_registered: 'Kayıtlı değil.'
 msg_error_missing_comparator: '&bNeye göre sıralanacağını belirtmelidir.'
 msg_error_invalid_comparator: '&bGeçersiz karşılaştırıcı.'
@@ -1111,12 +922,6 @@ msg_err_key_cannot_be_deleted: 'Anahtar mevcut olmadığı için silinemez!'
 msg_err_this_town_doesnt_have_any_associated_metadata: 'Bu kasabanın ilişkili herhangi bir meta verisi yok.'
 msg_err_key_x_is_not_part_of_this_town: '%s anahtarı bu kasabanın bir parçası değil, mümkünse lütfen ekleyin.'
 msg_custom_data_was_successfully_added_to_town: 'Özel veriler şehire başarıyla eklendi!'
-msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
-msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
-msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
-msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
-msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
-msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'Çok fazla sayfa.'
 msg_err_location_is_not_within_a_town: 'Konum bir kasaba içinde değil.'
 msg_err_location_is_not_within_a_jail_plot: 'Konum bir Hapishane arsası içinde değil.'
@@ -1168,8 +973,6 @@ msg_err_plot_not_associated_with_a_group: 'Bu arsa bir grupla ilişkili değil.'
 msg_plot_was_removed_from_group_x: 'Arsa &9 (%s,%s) &2,%s grubundan kaldırıldı'
 msg_plot_renamed_from_x_to_y: '%s arsa,%s olarak yeniden adlandırıldı.'
 msg_err_plot_group_specify_price: 'Lütfen fiyatı belirtin, örn.: /plot group fs [price]'
-msg_player_put_group_up_for_sale_amount: '%s put group %s up for sale for %s!'
-msg_player_put_group_up_for_sale: '%s put group %s up for sale!'
 msg_err_could_not_set_group_type: 'Grup türü ayarlanamadı - '
 msg_set_group_type_to_x: 'Çizim grubunun türü %s olarak değiştirildi'
 msg_player_successfully_bought_group_x: '%s,%s arsa grubunu başarıyla satın aldı'
@@ -1282,7 +1085,6 @@ msg_err_plot_clear_disabled_in_this_world: 'Bu dünyada /plot clear komutu devre
 #Added in 0.91
 msg_universe_attribution: 'Yapımcılar: '
 msg_universe_contributors: ' Ve sizin gibi katkıda bulunanlar. '
-msg_universe_heart: '<3'
 townblock_plu: 'Town Blokları'
 #Added in 0.92
 #Town Ruins
@@ -1298,7 +1100,6 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cKasabanız %d saat daha har
 msg_time_remaining_before_full_removal: 'Tam silinmeden önce kalan zaman: %d saat.'
 msg_time_until_reclaim_available: 'Alınabilirlik süresi: %d saat.'
 msg_reclaim_available: 'Geri alma mevcut.'
-msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cKasabanın tarafsızlığı / barışseverliği artık %s.'
 msg_err_town_unclaim_canceled: '&cHak talebi iptal edildi. Bu bölgeyi şu anda hak talebinde bulunamazsınız.'
@@ -1364,57 +1165,6 @@ gui_title_towny_wildsblocks: 'Towny Vahşi Doğa Blokları Listesi'
 gui_title_towny_itemuse: 'Towny ItemUse Listesi'
 gui_title_towny_switch: 'Towny Switch Listesi'
 gui_title_towny_plotclear: 'Towny Plot Clear Delete Listesi'
-#Added in 0.99 - FlatFile L10N
-#NOTICE
-#While these strings can be translated, we caution you to keep them in English.
-flatfile_dbg_cannot_set_capital_try_next: 'Nation %s could not set capital to %s, selecting a new capital...'
-flatfile_dbg_deleting_duplicate: 'Deleting: %s which is a duplicate of %s'
-flatfile_dbg_folders_found: 'Folders found %s'
-flatfile_dbg_group_file_missing_town_delete: 'Group file missing Town, deleting %s'
-flatfile_dbg_loading_group_list: 'Loading Group list...'
-flatfile_dbg_loading_nation: 'Loading Nation: %s'
-flatfile_dbg_loading_nation_list: 'Loading Nation list...'
-flatfile_dbg_loading_resident: 'Loading Resident: %s'
-flatfile_dbg_loading_resident_list: 'Loading Resident list...'
-flatfile_dbg_loading_server_world_list: 'Loading Server World List...'
-flatfile_dbg_loading_town: 'Loading Town: %s'
-flatfile_dbg_loading_town_list: 'Loading Town list...'
-flatfile_dbg_loading_townblock_list: 'Loading TownBlock list...'
-flatfile_dbg_loading_world: 'Loading World: %s'
-flatfile_dbg_loading_world_list: 'Loading World List...'
-flatfile_dbg_mismatched_townblock_size: '%s townblocks were found with a town_block_size that does not match your config, they were not loaded into memory.'
-flatfile_dbg_missing_file_delete_group_entry: 'Missing file: %s deleting entry in group.txt'
-flatfile_dbg_missing_file_delete_groups_entry: 'Missing file: %s deleting entry in groups.txt'
-flatfile_dbg_removing_nation_not_found: 'Removing %s because they are not found in the nations.txt'
-flatfile_dbg_removing_resident_not_found: 'Removing %s because they are not found in the residents.txt'
-flatfile_dbg_removing_town_not_found: 'Removing %s because they are not found in the towns.txt.'
-flatfile_dbg_town_fetch_outlaw: 'Town Fetching Outlaw: %s'
-flatfile_dbg_undefined_capital_select_new: 'Nation %s did not have a capital defined, selecting a new capital...'
-flatfile_dbg_world_loaded_townblocks: 'World: %s loaded %s TownBlocks.'
-flatfile_err_cannot_create_defaults: 'Could not create flatfile default files and folders.'
-flatfile_err_could_not_add_to_town: 'Could not add to town!'
-flatfile_err_exception_reading_file: 'Loading Error: Exception while reading file %s'
-flatfile_err_exception_reading_group_file_at_line: 'Loading Error: Exception while reading Group file %s at line: %s'
-flatfile_err_exception_reading_townblock_file_at_line: 'Loading Error: Exception while reading TownBlock file %s at line: %s.'
-flatfile_err_exception_reading_world_file_at_line: 'Loading Error: Exception while reading world file %s at line: %s, in towny/data/worlds/%s.txt'
-flatfile_err_file_error_reading_world_file_at_line: 'Loading Error: File error while reading %s at line: %s, in towny/data/worlds/%s.txt'
-flatfile_err_homeblock_load_invalid_location: '[Warning] %s - HomeBlock tried to load invalid Location.'
-flatfile_err_homeblock_load_invalid_townblock: '[Warning] %s - HomeBlock tried to load invalid TownBlock.'
-flatfile_err_homeblock_load_invalid_world: '[Warning] %s - HomeBlock tried to load invalid World.'
-flatfile_err_invalid_townblock_resident: 'Invalid resident for TownBlock %s. Skipped setting resident for TownBlock...'
-flatfile_err_loading_group_list_at_line: 'Error loading Group List at %s, in towny/data/groups.txt'
-flatfile_err_loading_world_list_at_line: 'Error loading World list at %s, in towny/data/worlds.txt'
-flatfile_err_nation_could_not_load_capital_disband: 'The nation %s could not load a capital city and is being disbanded.'
-flatfile_err_reading_nation_file_at_line: 'Loading Error: Exception while reading nation file %s at line %s, in towny/data/nations/%s.txt'
-flatfile_err_reading_outlaw_of_town_duplicate: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s is duplicated! Skipping adding duplicate...'
-flatfile_err_reading_outlaw_of_town_not_exist: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s does not exist! Removing from list...'
-flatfile_err_reading_resident_at_line: 'Loading Error: Exception while reading resident file %s at line: %s, in towny/data/residents/%s.txt'
-flatfile_err_reading_town_file_at_line: 'Loading Error: Exception while reading town file %s at line: %s, in towny/data/towns/%s.txt'
-flatfile_err_resident_tried_load_invalid_town: 'Loading Error: %s tried to load the town %s which is invalid. Removing town from the resident.'
-flatfile_err_town_homeblock_not_exist: '[Warning] %s does not have a HomeBlock.'
-flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
-flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
-flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
 msg_ta_removed_all_titles_and_surnames_removed: 'Tüm sakinlerin unvanları ve soyadları kaldırıldı.'
 msg_err_homeblock_already_set_here: 'Bu konum zaten şehrinizin ana bloğu.'
 #Added in 0.100
@@ -1493,7 +1243,6 @@ msg_resident_has_not_played_long_enough_to_be_jailed: '%s hapse atılacak kadar 
 msg_town_not_peaceful: '&bTown barışçıl bir devleti karşılayamazdı.'
 msg_town_already_peaceful: '&bŞehir zaten barışçıl.'
 msg_town_already_not_peaceful: '&bKasaba zaten barışçıl değil.'
-msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town. You need to be able to pay %s per day.'
 msg_town_paid_for_neutral_status: '&bKasabanız, barışçıl statünüzü korumak için %s altın ödedi.'
 msg_nation_paid_for_neutral_status: '&bUlusunuz, barışçıl statünüzü korumak için %s altın ödedi.'
 your_town_has_been_invited_to_join_nation: 'Kasabanız ulusa katılmaya davet edildi: %s'
@@ -1554,9 +1303,6 @@ msg_cache_block_err: '&cBurada %s yapmanıza izin verilmiyor.'
 msg_err_plot_belongs_to_group: '&cArsa bir gruba ait, %s kullanın.'
 plotgroup_sing: 'Arsa Grubu'
 msg_err_ally_limit_reached: 'Milletiniz müttefik sınırına ulaştı, kabul edemiyor.'
-msg_err_ally_limit_reached_cannot_accept: 'The nation of %s has reached their ally limit, unable to accept.'
-msg_err_ally_limit_reached_cannot_send: 'Your nation has reached the ally limit, unable to invite %s to become your ally.'
-msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
 #Added in 0.114
 msg_err_group_not_found: '%s grubu bulunamadı.'
 msg_err_expected_command_format: 'Yanlış sözdizimi, bekleniyor: %s'
@@ -1595,19 +1341,6 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Düşman say�
 #Added in 0.120
 msg_resident_prompt: 'Sohbette oyuncunun adını girin veya çıkmak için Q tuşuna basın. Bu işlem, 30 saniye içinde otomatik olarak zaman aşımına uğrayacaktır.'
 msg_prompt_cancel: 'İştem iptal edildi veya zaman aşımına uğradı.'
-#Added in 0.121
-status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
-status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
-status_format_list_1: '&2' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
-status_format_list_2: '&a' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
-status_format_list_3: '&f' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
-status_format_key_value_key: '&2' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
-status_format_key_value_value: '&a' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
-status_format_bracket_element: '&b' #Colour applied to a status element within a bracket, ex: [Bonus: #].
-status_format_hover_key: '&a' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
-status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
-status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
-status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Ana Arsa: %s]'
 status_about: "Hakkında."
 status_registered: 'Kayıt:'
@@ -1619,10 +1352,6 @@ status_jailed: 'Hapis_Durumu:'
 status_bad_yes: '&cEVET'
 status_good_no: '&aHAYIR'
 status_resident_tax_title: '%s Vergisi'
-help_menu_command: '<blue>'
-help_menu_subcommand: '<aqua>'
-help_menu_explanation: '<gray>'
-help_menu_requirement: '<red>'
 #Added in 0.122
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: "Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.\n"
 #Added in 0.123
@@ -2032,68 +1761,27 @@ msg_err_that_town_is_not_conquered: "%s zaten fethedilmedi."
 msg_conquered_status_removed: "%s fethedilme durumunu kaldırdı."
 msg_setup_command_folia: "/ta install komutu şu anda konuşma API'sinin çalışmaması nedeniyle Folia'da çalışmıyor, bunun yerine aşağıdaki kurulum kılavuzuna bakın."
 msg_perm_gui_folia: "Bu düğme şu anda konuşma API'sinin çalışmaması nedeniyle Folia'da çalışmıyor, bunun yerine /plot perm add <name> komutunu kullanın."
-msg_folia_scoreboard: "Changing scoreboards is currently not supported on Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "%s,%s adresindeki kasaba bloğu yeterli sayıda bitişik hak talebine sahip olmayacağından (%s gereklidir.)"
-#Message shown when a nation collects taxes from its towns.
-msg_tax_collected_from_towns: "<aqua>Your nation collected %s in tax from its towns."
-#Message shown when a nation pays taxes to its towns.
-msg_tax_paid_to_towns: "<aqua>Your nation paid %s in tax to its towns."
-#Message shown when a town collects taxes from its residents.
-msg_tax_collected_from_residents: "<aqua>Your town collected %s in tax from its residents."
-#Message shown when a town pays taxes to its residents.
-msg_tax_paid_to_residents: "<aqua>Your town paid %s in tax to its residents."
-#Message shown when a town collects taxes from its plottaxes.
-msg_tax_collected_from_plots: "<aqua>Your town collected %s in tax from its plots' taxes."
 #Message shown when a town pays taxes to its plottaxes.
 msg_tax_paid_to_residents_for_plots: "<aqua>Kasabanız arsa vergileri ile arsa sahiplerine %s vergi ödedi."
-#Message shown when a nation collects taxes from its towns that are conquered.
-msg_tax_collected_from_conquered_towns: "<aqua>Your nation collected %s in extra tax from its conquered towns."
-msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Your town was exempt from the nation's conquered tax."
-msg_nation_set_conquered_tax__amount_set: "%s has set the conquered tax amount to %s."
-msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "You cannot set the conquered tax above %s."
-msg_err_your_town_is_not_old_enough_to_overclaim: "Your town is not old enough to overclaim, you must wait another %s."
-msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for another %s."
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red> Dünya yüklenmedi."
-#Message shown when a mayor toggles a plots taxed status.
-msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
-msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
 status_forsale: "&a(Satışta: %s)"
 msg_town_forsale: "%s %s fiyatına satışa çıkartıldı."
 msg_town_notforsale: "%s artık satışta değil."
 msg_town_sell_confirmation: "Kasaban %s fiyatına satışa çıkartılıcak. Devam etmek istediğine emin misin?"
 msg_town_buytown_already_mayor: "Zaten %s kasabasının belediye başkanısın."
-msg_town_buytown_confirmation: "Buying %s will cost %s and remove you from any town you may currently be a part of. Are you sure you want to continue?"
 msg_town_buytown_not_forsale: "Bu kasaba satışta değil."
 msg_town_buytown_ruined: "Mahvolmuş kasabalar satın alınamaz."
 msg_resident_about_reset: "&b Sakin silinmek üzere."
-msg_err_invalid_string_about_not_set: "Invalid string, resident about not set."
-msg_set_about: "%s's about was set to %s."
-msg_clear_about: "%s's about was cleared."
-#Message shown when toggling town visibleontoplists setting
-msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
-#Message shown when an admin overrides a town founding date via townyadmin.
-townyadmin_town_set_help_0: "Sets the founding date of a town."
-townyadmin_nation_set_help_0: "Sets the founding date of a nation."
-msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
-msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
-msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
 #The format used for the /t say and /n say commands.
 town_say_format: "%s diyorki: %s\n"
-msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
-msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
-msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
-#Message shown when a resident is an NPC and is not allowed to do something.
-msg_err_resident_is_npc: "You cannot do this to an NPC resident."
-#Message shown when a resident doesn't own any land and the /res plotlist command is used.
-msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
 msg_unnamed: "İsimlendirilmemiş."
 msg_err_nation_cannot_sanction_own_town: "Ulusun parçası olan bir kasabaya yaptırım uygulayamazsın."
 msg_err_nation_town_isnt_sanctioned: "Ulusun bu kasabaya yaptırım uygulamıyor."
 msg_err_nation_town_already_sanctioned: "Ulusun halihazırda bu kasabaya yaptırım uyguluyor.\n"
 msg_err_nation_town_sanctioned: "Ulusun artık yaptırım uyguluyor. Artık ulusuna katılamazlar."
-msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
 msg_err_nation_has_no_sanctioned_towns: "Ulusun yaptırım uyguladığı bir kasaba bulunmuyor."
 title_nation_sanctioned_towns: 'Yaptırım uygulanmış Şehirler.'
 msg_err_cannot_add_sanctioned_town: "Ulusunuz %s ekleyemez. Ulusunuz tarafından yaptırım uygulandı."
@@ -2115,37 +1803,16 @@ msg_err_name_validation_begins_with_eco_prefix: "%s Ekonomi özelliklerinde kull
 msg_err_name_validation_name_already_in_use: "%s daha önceden alınmış."
 msg_err_name_validation_title_too_long: "%s soyad olarak kullanmak için çok uzun."
 msg_err_name_validation_name_too_long: "%s isim olarak kullanmak için çok uzun."
-msg_err_name_validation_is_empty: "You cannot supply an empty name."
-msg_err_name_validation_is_not_permitted: "%s is not permitted."
-msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
-msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
-msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
-msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
-msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
 outlawed_in: "Yasaklandı"
-msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
-msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
 teleport_warmup_title_dont_move: "&6Hareket etme!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &Işınlanmanıza 7 saniye kaldı."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Kasaban mahvolmuş durumda. %s arsa koruma sınırları kaldırıldı."
-console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
-msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "You cannot cede a plot to your own town."
-msg_err_town_cede_you_cannot_cede_your_homeblock: "You cannot cede your town's homeblock."
-msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
 msg_err_town_no_longer_owns_this_plot: "%s artık bu arsanın sahibi değil.\n"
-msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
 msg_town_cede_plot_confirmation_give_plot: "Arsayı %s adlı oyuncuya devretmek istediğine emin misin.\n"
-msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
-msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
 msg_town_cede_plot_denied: "%s teklifini reddetti."
 msg_town_cede_plot_unable_to_accept: "%s adlı oyuncu teklifini kabul edemez.\n"
-msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
 msg_err_cannot_claim_plot_join_date_too_low: "Bu arsayı alabilmek için %s süredir kasabanın üyesi olmanız lazım."
 msg_err_cannot_claim_plot_join_date_too_high: "Bu arsa %s günden daha az süredir kasaba üyesi olan oyuncular içindir."
-msg_townblock_min_join_days_removed: "This TownBlock has had its min-join-days requirement removed."
-msg_townblock_max_join_days_removed: "This TownBlock has had its max-join-days requirement removed."
-msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days requirement set to %s. Only players joined for more than that number of days will be able to use /plot claim."
-msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
 msg_new_resident_spawn_to_town_prompt: "Katıldığın kasabada doğmak ister misin?"
 msg_recieved_refund_for_deleted_object: "Silinen kasabanızın veya ülkenizin banka bakiyesi ( %s ) hesabınıza aktarıldı."
 msg_err_you_already_own_this_plot: "Bu arsaya zaten sahipsin."
