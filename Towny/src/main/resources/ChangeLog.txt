@@ -9771,3 +9771,5 @@ v0.92.0.11:
   - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.86.0 to 3.86.1.
   - Bump net.kyori:adventure-text-minimessage from 4.16.0 to 4.17.0.
   - Bump net.kyori:adventure-text-serializer-plain from 4.16.0 to 4.17.0.
+0.100.2.10:
+  - Fix money being taken from town creation when the creation is cancelled because the town is prevented from claiming the homeblock.

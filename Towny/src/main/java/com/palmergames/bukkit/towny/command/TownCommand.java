@@ -2536,7 +2536,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// If the town doesn't cost money to create, just make the Town.
 		if (noCharge || !TownyEconomyHandler.isActive()) {
 			BukkitTools.ifCancelledThenThrow(new PreNewTownEvent(player, name, spawnLocation, 0));
-			newTown(world, name, resident, key, spawnLocation, player);
+			newTown(world, name, resident, key, spawnLocation, player, 0);
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
 			return;
 		}
@@ -2555,7 +2555,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Confirmation.runOnAccept(() -> {
 			try {
 				// Make town.
-				newTown(world, finalName, resident, key, spawnLocation, player);
+				newTown(world, finalName, resident, key, spawnLocation, player, cost);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
@@ -2568,7 +2568,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		.sendTo(player);
 	}
 
-	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
+	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player, double cost) throws TownyException {
 
 		TownyUniverse.getInstance().newTown(name);
 		Town town = TownyUniverse.getInstance().getTown(name);
@@ -2587,6 +2587,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			TownyUniverse.getInstance().unregisterTown(town);
 			town = null;
 			townBlock = null;
+			if (TownyEconomyHandler.isActive() && cost > 0)
+				resident.getAccount().deposit(cost, "Cancelled town creation refund.");
 			throw new TownyException(preClaimEvent.getCancelMessage());
 		}
 
