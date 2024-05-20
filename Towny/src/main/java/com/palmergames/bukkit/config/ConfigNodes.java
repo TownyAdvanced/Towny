@@ -2893,6 +2893,21 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does a conquered town which cannot pay the nation tax get deleted?"),
+	
+	ECO_ADVANCED_MODERN(
+			"economy.advanced.modern",
+			"true",
+			"",
+			"# When enabled, Towny will use UUIDs when communicating with your economy plugin.",
+			"# Most users will never have to touch this, but for existing servers this option will automatically be set to false.",
+			"# If this option is disabled and you wish to avoid losing data, use the `/townyadmin eco convert modern` command to convert."),
+	
+	ECO_ADVANCED_NPC_UUID_VERSION(
+			"economy.advanced.npc_uuid_version",
+			"2",
+			"",
+			"# The UUID version to use for non-player accounts. This is used so that economy plugins can more easily differentiate between player and NPC accounts.",
+			"# Set to -1 to disable modifying npc uuids."),
 
 	BANKHISTORY(
 		"bank_history",

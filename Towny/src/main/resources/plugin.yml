@@ -688,6 +688,7 @@ permissions:
             towny.command.townyadmin.resident.*: true
             towny.command.townyadmin.depositall: true
             towny.command.townyadmin.resetbanks: true
+            towny.command.townyadmin.eco.convert: true
             towny.command.townyadmin.install: true
 
     towny.command.townyadmin.resident.*:

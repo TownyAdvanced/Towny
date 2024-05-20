@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.UUID;
 
 /**
@@ -14,6 +16,7 @@ public interface Identifiable {
 	 * This should only be used by internal loading methods!
 	 * @param uuid the UUID to set.
 	 */
+	@ApiStatus.Internal
 	void setUUID(UUID uuid);
 	
 }

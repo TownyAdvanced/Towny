@@ -856,5 +856,14 @@
         "value": "towny.command.resident.outlawlist"
       }
     ]
+  },
+  {
+    "version": "0.100.2.10",
+    "changes": [
+      {
+        "type": "RUNNABLE",
+        "key": "disable_modern_eco"
+      }
+    ]
   }
 ]

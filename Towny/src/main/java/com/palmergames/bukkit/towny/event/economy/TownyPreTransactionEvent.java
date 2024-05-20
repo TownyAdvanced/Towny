@@ -41,19 +41,13 @@ public class TownyPreTransactionEvent extends CancellableTownyEvent {
 	 *         cancelled.
 	 */
 	public int getNewBalance() {
-		switch (transaction.getType()) {
-		case ADD:
-			return (int) (TownyEconomyHandler.getBalance(transaction.getPlayer().getName(),
-					transaction.getPlayer().getWorld()) + transaction.getAmount());
-		case SUBTRACT:
-			return (int) (TownyEconomyHandler.getBalance(transaction.getPlayer().getName(),
-					transaction.getPlayer().getWorld()) - transaction.getAmount());
-		default:
-			break;
-		}
+        return switch (transaction.getType()) {
+            case ADD -> (int) (TownyEconomyHandler.getBalance(transaction.getAccount()) + transaction.getAmount());
+            case SUBTRACT -> (int) (TownyEconomyHandler.getBalance(transaction.getAccount()) - transaction.getAmount());
+            default -> 0;
+        };
 
-		return 0;
-	}
+    }
 
 	public static HandlerList getHandlerList() {
 		return HANDLER_LIST;

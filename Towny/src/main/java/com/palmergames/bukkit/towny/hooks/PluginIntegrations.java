@@ -107,9 +107,7 @@ public class PluginIntegrations {
 
 		// Check if the economy is enabled in the config and attempt to set it up.
 		if (configSetForEconomy && TownyEconomyHandler.setupEconomy()) {
-			ecowarn = TownyEconomyHandler.isEssentials()
-					? "EssentialsX Economy has been known to reset town and nation bank accounts on rare occasions."
-					: "";
+			ecowarn = "";
 			MoneyUtil.checkLegacyDebtAccounts();
 		}
 
