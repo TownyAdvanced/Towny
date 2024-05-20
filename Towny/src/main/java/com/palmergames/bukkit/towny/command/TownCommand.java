@@ -2536,7 +2536,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// If the town doesn't cost money to create, just make the Town.
 		if (noCharge || !TownyEconomyHandler.isActive()) {
 			BukkitTools.ifCancelledThenThrow(new PreNewTownEvent(player, name, spawnLocation, 0));
-			newTown(world, name, resident, key, spawnLocation, player, 0);
+			newTown(world, name, resident, key, spawnLocation, player);
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
 			return;
 		}
@@ -2566,6 +2566,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		.setCost(new ConfirmationTransaction(() -> cost, resident, "New Town Cost",
 			Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), prettyMoney(cost))))
 		.sendTo(player);
+	}
+
+	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player) throws TownyException {
+		return newTown(world, name, resident, key, spawn, player, 0);
 	}
 
 	public static Town newTown(TownyWorld world, String name, Resident resident, Coord key, Location spawn, Player player, double cost) throws TownyException {
