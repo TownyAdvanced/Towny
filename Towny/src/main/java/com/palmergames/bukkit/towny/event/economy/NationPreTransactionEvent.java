@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.event.economy;
 
 import com.palmergames.bukkit.towny.event.CancellableTownyEvent;
 import com.palmergames.bukkit.towny.object.Nation;
-import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import com.palmergames.bukkit.towny.object.economy.BankAccount;
 
 import org.bukkit.event.HandlerList;

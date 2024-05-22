@@ -2,7 +2,7 @@ package com.palmergames.bukkit.towny.object.economy;
 
 import java.text.SimpleDateFormat;
 
-import com.palmergames.bukkit.towny.object.TransactionType;
+import com.palmergames.bukkit.towny.object.economy.transaction.TransactionType;
 
 public class BankTransaction {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d ''yy '@' HH:mm:ss");

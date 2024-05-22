@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.Nameable;
+import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.World;
 
@@ -24,17 +25,20 @@ import java.util.logging.Level;
  * @see EconomyAccount
  */
 public abstract class Account implements Nameable {
+	public static final TownyServerAccount SERVER_ACCOUNT = TownyEconomyHandler.initializeTownyServerAccount();
 	private static final long CACHE_TIMEOUT = TownySettings.getCachedBankTimeout();
 	private static final AccountObserver GLOBAL_OBSERVER = new GlobalAccountObserver();
 	private final List<AccountObserver> observers = new ArrayList<>();
+	private final EconomyHandler economyHandler;
 	private AccountAuditor auditor;
 	protected CachedBalance cachedBalance = null;
 	
 	String name;
 	World world;
 	
-	public Account(String name) {
+	public Account(EconomyHandler economyHandler, String name) {
 		this.name = name;
+		this.economyHandler = economyHandler;
 		
 		// ALL account transactions will route auditing data through this
 		// central auditor.
@@ -49,8 +53,8 @@ public abstract class Account implements Nameable {
 		}
 	}
 	
-	public Account(String name, World world) {
-		this(name);
+	public Account(EconomyHandler economyHandler, String name, World world) {
+		this(economyHandler, name);
 		this.world = world;
 	}
 	
@@ -72,6 +76,7 @@ public abstract class Account implements Nameable {
 			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
 				return payFromServer(amount, reason);
 
+			BukkitTools.fireEvent(Transaction.add(amount).paidTo(this).asTownyTransactionEvent());
 			return true;
 		}
 		
@@ -92,6 +97,7 @@ public abstract class Account implements Nameable {
 			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
 				return payToServer(amount, reason);
 
+			BukkitTools.fireEvent(Transaction.subtract(amount).paidBy(this).asTownyTransactionEvent());
 			return true;
 		}
 		
@@ -111,15 +117,19 @@ public abstract class Account implements Nameable {
 	}
 	
 	protected synchronized boolean payToServer(double amount, String reason) {
-		notifyObserversDeposit(EconomyAccount.SERVER_ACCOUNT, amount, reason);
 		// Put it back into the server.
-		return TownyEconomyHandler.addToServer(amount, getBukkitWorld());
+		boolean success = Account.SERVER_ACCOUNT.addToServer(this, amount, getBukkitWorld());
+		if (success)
+			notifyObserversDeposit(Account.SERVER_ACCOUNT, amount, reason);
+		return success;
 	}
 	
 	protected synchronized boolean payFromServer(double amount, String reason) {
-		notifyObserversWithdraw(EconomyAccount.SERVER_ACCOUNT, amount, reason);
 		// Remove it from the server economy.
-		return TownyEconomyHandler.subtractFromServer(amount, getBukkitWorld());
+		boolean success = Account.SERVER_ACCOUNT.subtractFromServer(this, amount, getBukkitWorld());
+		if (success)
+			notifyObserversWithdraw(Account.SERVER_ACCOUNT, amount, reason);
+		return success;
 	}
 
 	/**
@@ -136,7 +146,10 @@ public abstract class Account implements Nameable {
 			return false;
 		}
 
-		return withdraw(amount, reason) && collector.deposit(amount, reason);
+		boolean success = withdraw(amount, reason) && collector.deposit(amount, reason);
+		if (success)
+			BukkitTools.fireEvent(Transaction.add(amount).paidBy(this).paidTo(collector).asTownyTransactionEvent());
+		return success;
 	}
 
 	/**
@@ -214,9 +227,17 @@ public abstract class Account implements Nameable {
 		if (TownySettings.isEcoClosedEconomyEnabled()) {
 			double balance = TownyEconomyHandler.getBalance(getName(), getBukkitWorld());
 			if (balance > 0)
-				TownyEconomyHandler.addToServer(balance, getBukkitWorld());
+				Account.SERVER_ACCOUNT.addToServer(this, balance, getBukkitWorld());
 		}
 		TownyEconomyHandler.removeAccount(getName());
+	}
+
+	/**
+	 * @return the EconomyHandler that this Account represents. Could be a Resident,
+	 *         Town, Nation or the TownyServerAccount.
+	 */
+	public EconomyHandler getEconomyHandler() {
+		return economyHandler;
 	}
 
 	@Override

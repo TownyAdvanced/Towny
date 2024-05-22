@@ -1,10 +1,5 @@
-package com.palmergames.bukkit.towny.object;
+package com.palmergames.bukkit.towny.object.economy.transaction;
 
-
-/**
- * @deprecated since 0.100.3.1 use {@link com.palmergames.bukkit.towny.object.economy.transaction.TransactionType} instead.
- */
-@Deprecated
 public enum TransactionType {
 	DEPOSIT("Deposit"), WITHDRAW("Withdraw"), ADD("Add"), SUBTRACT("Subtract");
 	

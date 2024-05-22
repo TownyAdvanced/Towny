@@ -353,7 +353,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private void payNationTaxToTown(Nation nation, Town town, double tax) {
 		if (!nation.getAccount().canPayFromHoldings(tax))
 			return;
-		nation.getAccount().payTo(tax, town.getAccount(), "Nation Tax Payment To Town");
+		nation.getAccount().payTo(tax, town, "Nation Tax Payment To Town");
 		taxCollected += tax;
 	}
 
@@ -505,7 +505,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private void payTownTaxToResidents(Town town, Resident resident, double tax) {
 		if (!town.getAccount().canPayFromHoldings(tax))
 			return;
-		town.getAccount().payTo(tax, resident.getAccount(), "Town Tax Payment To Resident");
+		town.getAccount().payTo(tax, resident, "Town Tax Payment To Resident");
 		taxCollected += tax;
 	}
 
@@ -591,7 +591,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private void payPlotTaxToResidents(double tax, Resident resident, Town town, String typeName) {
 		if (!town.getAccount().canPayFromHoldings(tax))
 			return;
-		town.getAccount().payTo(tax, resident.getAccount(), String.format("Plot Tax Payment To Resident (%s)", typeName));
+		town.getAccount().payTo(tax, resident, String.format("Plot Tax Payment To Resident (%s)", typeName));
 		taxCollected += tax;
 	}
 

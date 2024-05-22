@@ -818,7 +818,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				world = BukkitTools.getWorlds().get(0);
 			}
 
-			account = new EconomyAccount(accountName, world);
+			account = new EconomyAccount(this, accountName, world);
 		}
 		
 		return account;

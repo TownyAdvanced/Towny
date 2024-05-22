@@ -81,7 +81,7 @@ public class TownRuinUtil {
 		if (nation != null) {
 			double bankBalance = town.getAccount().getHoldingBalance();
 			if (TownySettings.areRuinedTownsBanksPaidToNation() && bankBalance > 0)
-				town.getAccount().payTo(bankBalance, nation.getAccount(), String.format("Ruined Town (%s) Paid Remaining Bank To Nation", town.getName()));
+				town.getAccount().payTo(bankBalance, nation, String.format("Ruined Town (%s) Paid Remaining Bank To Nation", town.getName()));
 			town.removeNation();
 		}
 

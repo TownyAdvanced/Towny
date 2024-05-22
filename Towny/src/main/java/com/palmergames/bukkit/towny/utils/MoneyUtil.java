@@ -29,8 +29,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
-import com.palmergames.bukkit.towny.object.Transaction;
-import com.palmergames.bukkit.towny.object.TransactionType;
+import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import net.kyori.adventure.text.Component;
@@ -59,9 +58,9 @@ public class MoneyUtil {
 		
 		try {
 			commonTests(amount, resident, town, player.getLocation(), false, true);
-			
-			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
-			
+
+			Transaction transaction = Transaction.withdraw(amount).paidBy(town).paidTo(resident).build();
+
 			BukkitTools.ifCancelledThenThrow(new TownPreTransactionEvent(town, transaction));
 			
 			// Withdraw from bank.
@@ -81,8 +80,8 @@ public class MoneyUtil {
 		try {
 			commonTests(amount, resident, town, player.getLocation(), false, false);
 
-			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
-			
+			Transaction transaction = Transaction.deposit(amount).paidBy(resident).paidTo(town).build();
+
 			BukkitTools.ifCancelledThenThrow(new TownPreTransactionEvent(town, transaction));
 			
 			if (nation == null) {
@@ -108,7 +107,7 @@ public class MoneyUtil {
 		try {
 			commonTests(amount, resident, nation.getCapital(), player.getLocation(), true, true);
 
-			Transaction transaction = new Transaction(TransactionType.WITHDRAW, player, amount);
+			Transaction transaction = Transaction.withdraw(amount).paidBy(nation).paidTo(resident).build();
 			
 			BukkitTools.ifCancelledThenThrow(new NationPreTransactionEvent(nation, transaction));
 
@@ -128,7 +127,7 @@ public class MoneyUtil {
 		try {
 			commonTests(amount, resident, nation.getCapital(), player.getLocation(), true, false);
 
-			Transaction transaction = new Transaction(TransactionType.DEPOSIT, player, amount);
+			Transaction transaction = Transaction.deposit(amount).paidBy(resident).paidTo(nation).build();
 			
 			BukkitTools.ifCancelledThenThrow(new NationPreTransactionEvent(nation, transaction));
 			

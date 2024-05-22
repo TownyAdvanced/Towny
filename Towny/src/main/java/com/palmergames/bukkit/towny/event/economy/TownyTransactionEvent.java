@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.event.economy;
 
-import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
