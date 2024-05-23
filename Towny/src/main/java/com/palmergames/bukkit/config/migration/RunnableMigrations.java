@@ -1,7 +1,10 @@
 package com.palmergames.bukkit.config.migration;
 
 import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.StringMgmt;
+
 import org.bukkit.Registry;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +27,7 @@ public class RunnableMigrations {
 		BY_NAME.put("add_townblocktype_limits", ADD_TOWNBLOCKTYPE_LIMITS);
 		BY_NAME.put("convert_entity_class_names", CONVERT_ENTITY_CLASS_NAMES);
 		BY_NAME.put("add_milkable_animals_to_farm_plot", ADD_MILKABLE_ANIMALS);
+		BY_NAME.put("update_farm_blocks", UPDATE_FARM_BLOCKS);
 	}
 	
 	@Nullable
@@ -81,6 +85,23 @@ public class RunnableMigrations {
 				String allowedBlocks = (String) plotType.get("allowedBlocks");
 				((Map<String, Object>) plotType).replace("allowedBlocks", "COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG," + allowedBlocks);
 			}
+		}
+	};
+
+	/**
+	 * 0.100.2.10 included a change which revamped the ItemLists used to construct the farm blocks, resulting in a more comprehensive list.
+	 * This runnable will add any blocks that older configs may have had which were missing from older configs.
+	 */
+	@SuppressWarnings("unchecked")
+	private final Consumer<CommentedConfiguration> UPDATE_FARM_BLOCKS = config -> {
+		for (Map<?, ?> plotType : config.getMapList("townblocktypes.types")) {
+			if (!plotType.get("name").equals("farm"))
+				continue;
+			List<String> currentBlocks = Arrays.asList(((String) plotType.get("allowedBlocks")).split(","));
+			Arrays.asList(TownySettings.getDefaultFarmblocks().split(",")).stream()
+				.filter(block -> !currentBlocks.contains(block))
+				.forEach(block -> currentBlocks.add(block));
+			((Map<String, Object>) plotType).replace("allowedBlocks", StringMgmt.join(currentBlocks, ","));
 		}
 	};
 }
