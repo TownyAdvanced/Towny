@@ -93,6 +93,9 @@ public class PluginIntegrations {
 
 		// Potentially warn about other plugins which are present.
 		printPluginWarnings();
+
+		// Run the leakchecker.
+		LeakChecker.checkForLeaks();
 	}
 
 	private void detectAndPrintPermissions(Towny towny) {
