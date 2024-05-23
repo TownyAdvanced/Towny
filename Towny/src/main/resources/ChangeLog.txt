@@ -9773,3 +9773,8 @@ v0.92.0.11:
   - Bump net.kyori:adventure-text-serializer-plain from 4.16.0 to 4.17.0.
 0.100.2.10:
   - Fix money being taken from town creation when the creation is cancelled because the town is prevented from claiming the homeblock.
+  - Set mappings namespace in manifest, courtesy of Warrior with PR #7427.
+    - Also includes other pom maintenance.
+  - Update FarmPlotBlocks to automatically update from ItemLists when generating defaults.
+    - Also adds a new ConfigMigration type specifically for farm blocks.
+    - Existing configs will add in any missing farm blocks.
