@@ -122,6 +122,10 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Setting this to true will set a town's tag automatically using the first four characters of the town's name."),
+	TOWN_DEF_MAP_COLOR("town.default_map_color",
+			"",
+			"",
+			"# When set, all new Towns will have their map color set to this color. You must use a colour listed in the global_town_settings.allowed_map_colors setting below, ie aqua, azure, etc."),
 	TOWN_DEF_TAXES(
 			"town.default_taxes", 
 			"",
@@ -187,6 +191,11 @@ public enum ConfigNodes {
 			"/nation set board [msg]",
 			"",
 			"# Default nation board"),
+	NATION_DEF_MAP_COLOR("nation.default_map_color",
+			"",
+			"",
+			"# When set, all new Nations will have their map color set to this color. You must use a colour listed in the global_nation_settings.allowed_map_colors setting below, ie aqua, azure, etc."),
+
 	NATION_DEF_TAG("nation.set_tag_automatically",
 			"false",
 			"",

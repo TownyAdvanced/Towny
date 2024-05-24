@@ -64,7 +64,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
-import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
@@ -955,7 +954,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		nation.setRegistered(System.currentTimeMillis());
-		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+		nation.setMapColorHexCode(TownySettings.getDefaultNationMapColor());
 		town.setNation(nation);
 		nation.setCapital(town);
 		nation.setSpawn(town.getSpawnOrNull());

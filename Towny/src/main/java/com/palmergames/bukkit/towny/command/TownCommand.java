@@ -98,7 +98,6 @@ import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.JailUtil;
-import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
@@ -2597,7 +2596,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		town.setRegistered(System.currentTimeMillis());
-		town.setMapColorHexCode(MapUtil.generateRandomTownColourAsHexCode());
+		town.setMapColorHexCode(TownySettings.getDefaultTownMapColor());
 		resident.setTown(town);
 		town.setMayor(resident, false);
 		town.setFounder(resident.getName());

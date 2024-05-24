@@ -9779,4 +9779,13 @@ v0.92.0.11:
     - Also adds a new ConfigMigration type specifically for farm blocks.
     - Existing configs will add in any missing farm blocks.
 0.100.2.11:
-  - Fix FarmPlotBlock migration failing on server upgrade. 
+  - Fix FarmPlotBlock migration failing on server upgrade.
+0.100.2.12:
+  - Add ability to set default town and nation map colors.
+    - Closes #7429.
+  - New Config Option: town.default_map_color
+    - Default: ""
+    - When set, all new Towns will have their map color set to this color. You must use a colour listed in the global_town_settings.allowed_map_colors setting below, ie aqua, azure, etc.
+  - New Config Option: nation.default_map_color
+    - Default: ""
+    - When set, all new Nations will have their map color set to this color. You must use a colour listed in the global_nation_settings.allowed_map_colors setting below, ie aqua, azure, etc.

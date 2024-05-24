@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
@@ -3412,7 +3413,21 @@ public class TownySettings {
 		}
 		return townColorsMap;
 	}
-	
+
+	public static String getDefaultNationMapColor() {
+		String colorName = getString(ConfigNodes.NATION_DEF_MAP_COLOR);
+		if (colorName.isEmpty() || !getNationColorsMap().containsKey(colorName))
+			return MapUtil.generateRandomNationColourAsHexCode();
+		return getNationColorsMap().get(colorName);
+	}
+
+	public static String getDefaultTownMapColor() {
+		String colorName = getString(ConfigNodes.TOWN_DEF_MAP_COLOR);
+		if (colorName.isEmpty() || !getTownColorsMap().containsKey(colorName))
+			return MapUtil.generateRandomTownColourAsHexCode();
+		return getTownColorsMap().get(colorName);
+	}
+
 	public static boolean isTownBankruptcyEnabled() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
 	}
