@@ -17,6 +17,7 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class RunnableMigrations {
@@ -97,11 +98,12 @@ public class RunnableMigrations {
 		for (Map<?, ?> plotType : config.getMapList("townblocktypes.types")) {
 			if (!plotType.get("name").equals("farm"))
 				continue;
-			List<String> currentBlocks = Arrays.asList(((String) plotType.get("allowedBlocks")).split(","));
-			Arrays.asList(TownySettings.getDefaultFarmblocks().split(",")).stream()
+			String rawBlocks = (String) plotType.get("allowedBlocks");
+			List<String> currentBlocks = Arrays.asList(rawBlocks.split(","));
+			List<String> missingBlocks = Arrays.asList(TownySettings.getDefaultFarmblocks().split(",")).stream()
 				.filter(block -> !currentBlocks.contains(block))
-				.forEach(block -> currentBlocks.add(block));
-			((Map<String, Object>) plotType).replace("allowedBlocks", StringMgmt.join(currentBlocks, ","));
+				.collect(Collectors.toList());
+			((Map<String, Object>) plotType).replace("allowedBlocks", rawBlocks + "," + StringMgmt.join(missingBlocks, ","));
 		}
 	};
 }

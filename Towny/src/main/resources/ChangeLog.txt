@@ -9778,3 +9778,5 @@ v0.92.0.11:
   - Update FarmPlotBlocks to automatically update from ItemLists when generating defaults.
     - Also adds a new ConfigMigration type specifically for farm blocks.
     - Existing configs will add in any missing farm blocks.
+0.100.2.11:
+  - Fix FarmPlotBlock migration failing on server upgrade. 
