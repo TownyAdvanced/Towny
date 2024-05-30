@@ -263,7 +263,7 @@ public class CommentedConfiguration extends YamlConfiguration {
 	 */
 	private String shrinkCurrentPath(String currentPath, int newDepth) {
 		for (int i = 0; i < depth - newDepth; i++)
-			currentPath = currentPath.replace(currentPath.substring(currentPath.lastIndexOf(".")), "");
+			currentPath = currentPath.substring(0, currentPath.lastIndexOf("."));
 		return currentPath;
 	}
 
@@ -281,9 +281,8 @@ public class CommentedConfiguration extends YamlConfiguration {
 			// If there isn't a final period, set the current path to nothing because we're at root
 			currentPath = "";
 		} else {
-			// If there is a final period, replace everything after it with nothing
-			currentPath = currentPath.replace(currentPath.substring(lastIndex), "");
-			currentPath += ".";
+			// If there is a final period, trim everything after it
+			currentPath = currentPath.substring(0, lastIndex+1);
 		}
 		return currentPath += nodeName;
 	}
