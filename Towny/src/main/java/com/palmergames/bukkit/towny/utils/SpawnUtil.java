@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
 import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
 import com.palmergames.bukkit.towny.object.SpawnInformation;
 import com.palmergames.bukkit.towny.object.Translatable;
@@ -658,18 +659,20 @@ public class SpawnUtil {
 	 * @param refundAccount The account that the player paid the cost to, used for refunds if the player aborts the teleport.   
 	 */
 	private static void initiateSpawn(Player player, Location spawnLoc, int cooldown, double cost, @Nullable Account refundAccount) {
+		Resident resident = TownyAPI.getInstance().getResident(player);
+		if (resident == null)
+			return;
+
 		if (TownyTimerHandler.isTeleportWarmupRunning() && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP)) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
-
-			Resident resident = TownyAPI.getInstance().getResident(player);
-			if (resident != null)
-				TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown, refundAccount, cost);
+			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown, refundAccount, cost);
 		} else {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
+			BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc));
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
 				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
