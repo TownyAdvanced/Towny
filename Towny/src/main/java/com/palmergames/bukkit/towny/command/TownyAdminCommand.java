@@ -23,6 +23,8 @@ import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
+import com.palmergames.bukkit.towny.event.economy.NationTransactionEvent;
+import com.palmergames.bukkit.towny.event.economy.TownTransactionEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
@@ -39,6 +41,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
@@ -1289,6 +1293,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int deposit = MathUtil.getIntOrThrow(split[2]);
 			if (town.getAccount().deposit(deposit, "Admin Deposit")) {
+				BukkitTools.fireEvent(new TownTransactionEvent(town, new Transaction(TransactionType.DEPOSIT, sender, deposit)));
 				// Send notifications
 				Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(sender), deposit, Translatable.of("town_sing"));
 				TownyMessaging.sendMsg(sender, depositMessage);
@@ -1309,6 +1314,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int withdraw = MathUtil.getIntOrThrow(split[2]);
 			if (town.getAccount().withdraw(withdraw, "Admin Withdraw")) {
+				BukkitTools.fireEvent(new TownTransactionEvent(town, new Transaction(TransactionType.WITHDRAW, sender, withdraw)));
 				// Send notifications
 				Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(sender), withdraw, Translatable.of("town_sing"));
 				TownyMessaging.sendMsg(sender, withdrawMessage);
@@ -1728,6 +1734,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_invalid_input", "deposit [amount]"));
 
 			int deposit = MathUtil.getPositiveIntOrThrow(split[2]);
+
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, new Transaction(TransactionType.DEPOSIT, sender, deposit)));
+
 			nation.getAccount().deposit(deposit, "Admin Deposit");
 			// Send notifications
 			Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(sender), deposit,  Translatable.of("nation_sing"));
@@ -1743,6 +1752,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_invalid_input", "withdraw [amount]"));
 
 			int withdraw = MathUtil.getPositiveIntOrThrow(split[2]);
+
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, new Transaction(TransactionType.WITHDRAW, sender, withdraw)));
+
 			nation.getAccount().withdraw(withdraw, "Admin Withdraw");
 			// Send notifications
 			Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(sender), withdraw,  Translatable.of("nation_sing"));
