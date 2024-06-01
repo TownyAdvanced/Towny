@@ -378,20 +378,23 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			Iterator<? extends Map.Entry<String, ?>> i = args.entrySet().iterator();
 			while (i.hasNext()) {
 				Map.Entry<String, ?> me = i.next();
-				wherecode.append("`").append(me.getKey()).append("` = ");
-				if (me.getValue() instanceof String)
-					wherecode.append("'").append(((String) me.getValue()).replace("'", "''")).append("'");
-				else if (me.getValue() instanceof Boolean)
-					wherecode.append("'").append(((Boolean) me.getValue()) ? "1" : "0").append("'");
-				else
-					wherecode.append("'").append(me.getValue()).append("'");
-
+				wherecode.append("`").append(me.getKey()).append("` = ?");
 				wherecode.append(i.hasNext() ? " AND " : "");
 			}
 			int rs;
 			try (Connection connection = getConnection();
-				 Statement statement = connection.createStatement()) {
-				rs = statement.executeUpdate(wherecode.toString());
+				 PreparedStatement statement = connection.prepareStatement(wherecode.toString())) {
+				Object[] values = args.values().stream().toArray();
+				for (int count = 0; count < values.length; count++) {
+					Object object = values[count];
+					if (object instanceof String)
+						statement.setString(count + 1, (String) object);
+					else if (object instanceof Boolean)
+						statement.setBoolean(count + 1, (Boolean) object);
+					else
+						statement.setObject(count + 1, object);
+				}
+				rs = statement.executeUpdate();
 			}
 			if (rs == 0) {
 				TownyMessaging.sendDebugMsg("SQL: delete returned 0: " + wherecode);
@@ -2621,10 +2624,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public CompletableFuture<Optional<Long>> getHibernatedResidentRegistered(UUID uuid) {
 		return CompletableFuture.supplyAsync(() -> {
-			try (Connection connection = getConnection();
-				 Statement statement = connection.createStatement();
-				 ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tb_prefix + "HIBERNATEDRESIDENTS WHERE uuid = '" + uuid + "' LIMIT 1")) {
-				
+			try (Connection connection = getConnection(); 
+				 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + tb_prefix + "HIBERNATEDRESIDENTS WHERE uuid = ? LIMIT 1")) {
+				preparedStatement.setString(1, uuid.toString());
+				ResultSet resultSet = preparedStatement.executeQuery();
 				final String registered;
 				if (resultSet.next() && (registered = resultSet.getString("registered")) != null && !registered.isEmpty()) {
 					return Optional.of(Long.parseLong(registered));
