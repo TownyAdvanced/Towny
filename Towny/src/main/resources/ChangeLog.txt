@@ -9792,3 +9792,8 @@ v0.92.0.11:
   - Fix players who log into an area where they are outlawed not using the correct town.
   - API: Add SuccessfulTownyTeleportEvent
     - Thrown when a player is spawned by Towny after they use /res, /town, or /nation spawn.
+  - Make addItemList accept any list of the same type, courtesy of Warrior with PR #7333.
+  - Add TransactionEvents thrown by /ta withdraw and deposit commands.
+  - Go into safemode if no sql connection could be made, courtesy of Warrior with PR #7432.
+  - Bump org.apache.commons:commons-compress from 1.26.1 to 1.26.2.
+  - Bump me.clip:placeholderapi from 2.11.5 to 2.11.6.
