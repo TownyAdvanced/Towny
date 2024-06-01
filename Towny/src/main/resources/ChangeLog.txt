@@ -9797,3 +9797,5 @@ v0.92.0.11:
   - Go into safemode if no sql connection could be made, courtesy of Warrior with PR #7432.
   - Bump org.apache.commons:commons-compress from 1.26.1 to 1.26.2.
   - Bump me.clip:placeholderapi from 2.11.5 to 2.11.6.
+0.100.2.13:
+  - Improve a couple SQL operations, courtesy of xyzeva with PR #7438. (First-Time Contributor!)
