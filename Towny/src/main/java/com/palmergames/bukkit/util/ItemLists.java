@@ -273,9 +273,9 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	 * List of Plants.
 	 */
 	public static final ItemLists PLANTS = newBuilder()
-			.addItemList(FLOWERS)
-			.addItemList(CROPS)
-			.addItemList(PLANTABLES)
+			.includeList(FLOWERS)
+			.includeList(CROPS)
+			.includeList(PLANTABLES)
 			.add("TALL_GRASS","LARGE_FERN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF").build();
 
 	public static final ItemLists FALLING_BLOCKS = newBuilder()
