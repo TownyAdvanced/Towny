@@ -17,6 +17,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -37,6 +38,7 @@ import com.palmergames.util.StringMgmt;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import com.zaxxer.hikari.pool.HikariPool;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
@@ -107,8 +109,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		config.setMaxLifetime(TownySettings.getMaxLifetime());
 		config.setConnectionTimeout(TownySettings.getConnectionTimeout());
 
-		this.hikariDataSource = new HikariDataSource(config);
-
 		/*
 		 * Register the driver (if possible)
 		 */
@@ -126,13 +126,17 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			plugin.getLogger().severe("Driver error: " + e);
 		}
 
-		try (Connection connection = getConnection()) {
-			TownyMessaging.sendDebugMsg("Connected to the database");
+		try {
+			this.hikariDataSource = new HikariDataSource(config);
+			
+			try (Connection connection = getConnection()) {
+				TownyMessaging.sendDebugMsg("Connected to the database");
 
-			// Initialize database schema.
-			SQLSchema.initTables(connection);
-		} catch (SQLException e) {
-			plugin.getLogger().log(Level.SEVERE, "Failed to connect to the database", e);
+				// Initialize database schema.
+				SQLSchema.initTables(connection);
+			}
+		} catch (SQLException | HikariPool.PoolInitializationException e) {
+			throw new TownyInitException("Failed to connect to the database", TownyInitException.TownyError.DATABASE, e);
 		}
 	}
 
