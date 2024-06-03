@@ -42,7 +42,6 @@ import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -930,7 +929,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Nation nation = newNation(filteredName, capitalTown);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
-			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 			}
 		})
@@ -940,17 +939,17 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		.sendTo(sender);
 	}
 
-	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+	public static Nation newNation(String name, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		UUID nationUUID = UUID.randomUUID();
 		townyUniverse.getDataSource().newNation(name, nationUUID);
 		Nation nation = townyUniverse.getNation(nationUUID);
 		
-		// Should never happen
+		// Should never happen.
 		if (nation == null) {
 			TownyMessaging.sendErrorMsg(String.format("Error fetching new nation with name %s; it was not properly registered!", name));
-			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", name));
+			throw new TownyException(Translatable.of("msg_err_not_registered_1", name));
 		}
 
 		nation.setRegistered(System.currentTimeMillis());
