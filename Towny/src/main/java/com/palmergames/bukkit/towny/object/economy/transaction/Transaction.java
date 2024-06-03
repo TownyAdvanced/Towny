@@ -39,17 +39,27 @@ public class Transaction {
 		return type;
 	}
 
+	@Nullable
 	public Account getReceivingAccount() {
 		return receivingAccount;
 	}
 
+	public boolean hasReceiverAccount() {
+		return receivingAccount != null;
+	}
+
+	@Nullable
 	public Account getSendingAccount() {
 		return sendingAccount;
 	}
 
+	public boolean hasSenderAccount() {
+		return sendingAccount != null;
+	}
+
 	@Nullable
 	public Player getPlayer() {
-		return Bukkit.getServer().getPlayerExact(getSendingAccount().getName());
+		return getSendingAccount() != null ? Bukkit.getServer().getPlayerExact(getSendingAccount().getName()) : null;
 	}
 
 	public double getAmount() {
