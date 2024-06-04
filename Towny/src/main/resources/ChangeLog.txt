@@ -9799,3 +9799,4 @@ v0.92.0.11:
   - Bump me.clip:placeholderapi from 2.11.5 to 2.11.6.
 0.100.2.13:
   - Improve a couple SQL operations, courtesy of xyzeva with PR #7438. (First-Time Contributor!)
+  - Fix the relational placeholder that showed conquered status not being used for the player which are conquered.
