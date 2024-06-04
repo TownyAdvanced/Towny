@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreReclaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownReclaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownRuinedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
@@ -165,6 +166,7 @@ public class TownRuinUtil {
 			Confirmation.runOnAccept(() -> reclaimTown(resident, town))
 			.setCost(new ConfirmationTransaction(() -> townReclaimCost, resident, "Cost of town reclaim.", Translatable.of("msg_insuf_funds")))
 			.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(townReclaimCost)))
+			.setCancellableEvent(new TownPreReclaimEvent(town, resident, player))
 			.sendTo(player);
 		} catch (TownyException e) {
 			TownyMessaging.sendErrorMsg(player, e.getMessage(player));

@@ -9800,3 +9800,5 @@ v0.92.0.11:
 0.100.2.13:
   - Improve a couple SQL operations, courtesy of xyzeva with PR #7438. (First-Time Contributor!)
   - Fix the relational placeholder that showed conquered status not being used for the player which are conquered.
+  - API: Add TownPreReclaimEvent.
+    - A cancellable event thrown before a player can reclaim a town.
