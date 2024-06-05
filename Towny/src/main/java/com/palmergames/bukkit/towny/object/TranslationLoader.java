@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -42,6 +41,7 @@ public class TranslationLoader {
 	private final Path langFolderPath;
 	private final Plugin plugin;
 	private final Class<?> clazz;
+	private boolean updateReferenceFiles = true;
 	private Map<String, Map<String, String>> newTranslations = new HashMap<>();
 	
 	/**
@@ -164,13 +164,15 @@ public class TranslationLoader {
 		
 		// Collect contents of the default lang file, used for saving reference files
 		String defaultLangContent = null;
-		try (InputStream is = clazz.getResourceAsStream("/lang/en-US.yml")) {
-			if (is != null) {
-				try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-					defaultLangContent = reader.lines().collect(Collectors.joining("\n"));
+		if (updateReferenceFiles) {
+			try (InputStream is = clazz.getResourceAsStream("/lang/en-US.yml")) {
+				if (is != null) {
+					try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+						defaultLangContent = reader.lines().collect(Collectors.joining("\n"));
+					}
 				}
-			}
-		} catch (IOException ignored) {}
+			} catch (IOException ignored) {}
+		}
 		
 		// Load bundled language files
 		for (String lang : getLangFileNamesFromPlugin()) {
@@ -182,7 +184,8 @@ public class TranslationLoader {
 					String content = reader.lines().collect(Collectors.joining("\n"));
 					Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(content);
 
-					saveReferenceFile(lang, defaultLangContent, content, values);
+					if (updateReferenceFiles)
+						saveReferenceFile(lang, defaultLangContent, content, values);
 
 					lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
 
@@ -222,6 +225,7 @@ public class TranslationLoader {
 	 * Saves a copy of the language file for admin reference.
 	 * 
 	 * @param lang String locale and file name to be used for the reference file.
+	 * @param defaultLangContent The contents of the default language file (the one that has ALL translations)   
 	 * @param content The contents of the resource file
 	 * @param translations The contents, parsed through yaml
 	 */
@@ -436,5 +440,12 @@ public class TranslationLoader {
 			for (String lang : newTranslations.keySet()) {
 				newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 			}
+	}
+
+	/**
+	 * @param update Whether to create & update reference files.
+	 */
+	public void updateReferenceFiles(final boolean update) {
+		this.updateReferenceFiles = update;
 	}
 }

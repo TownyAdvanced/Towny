@@ -41,6 +41,7 @@ public final class Translation {
 		translations.clear();
 		Path langFolder = Paths.get(TownyUniverse.getInstance().getRootFolder()).resolve("settings").resolve("lang");
 		TranslationLoader loader = new TranslationLoader(langFolder, Towny.getPlugin(), Towny.class);
+		loader.updateReferenceFiles(!TownySettings.getLastRunVersion().equals(Towny.getPlugin().getVersion()));
 		updateLegacyLangFileName(TownySettings.getString(ConfigNodes.LANGUAGE));
 
 		// Load built-in translations into memory.
