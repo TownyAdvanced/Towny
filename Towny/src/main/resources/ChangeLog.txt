@@ -9802,3 +9802,6 @@ v0.92.0.11:
   - Fix the relational placeholder that showed conquered status not being used for the player which are conquered.
   - API: Add TownPreReclaimEvent.
     - A cancellable event thrown before a player can reclaim a town.
+0.100.2.14:
+  - Add new LuckPerms context: towny:istownconquered
+    - When a player is part of a town that it conquered by a nation, this will return true.
