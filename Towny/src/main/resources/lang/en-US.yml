@@ -2,7 +2,8 @@ name: Towny
 language: english
 author: ElgarL
 website: 'https://townyadvanced.github.io/'
-description: Language file for all game messages for this Locale.
+description: >
+    Language file for all game messages for this Locale.
 
 # A note on editing this file.
 # ----------------------------
