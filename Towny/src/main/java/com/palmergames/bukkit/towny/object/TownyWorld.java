@@ -930,6 +930,33 @@ public class TownyWorld extends TownyObject {
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
 
+	public boolean worldCoordNotTooCloseToOtherTowns(Coord key, Town homeTown) {
+		final Map<Integer, Predicate<Town>> minDistances = Map.of(TownySettings.getMinDistanceFromTownPlotblocks(), t -> false, TownySettings.getMinDistanceFromOlderTownPlotblocks(), t -> t.getRegistered() > homeTown.getRegistered());
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+
+		for(Town town : getTowns().values()){
+			if (homeTown != null && townSkippedByProximityFilter(town, homeTown, t -> false)) // No skip with the predicate here because it will be done later by the map.
+				continue;
+
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this)) continue;
+
+				final int tbX = b.getX();
+				final int tbZ = b.getZ();
+				
+				if (keyX == tbX && keyZ == tbZ)
+					continue;
+				
+				final double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
+				// If there is a town that is too close, return false.
+				if (minDistances.entrySet().stream().anyMatch(entry -> distSqr >= entry.getKey() && !entry.getValue().test(town)))
+					return false;
+			}
+		}
+		return true;
+	}
+
 	/** 
 	 * Skip over the proximity filter if the town is any one of the following: 
 	 * the same as homeTown OR is ignorable for a reason set in the Predicate<Town>
