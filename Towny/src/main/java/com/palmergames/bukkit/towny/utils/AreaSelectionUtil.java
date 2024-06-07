@@ -554,7 +554,6 @@ public class AreaSelectionUtil {
 	/**
 	 * Returns a List containing only WorldCoords which are not composed of "too much"
 	 * bad biomes, with the threshold determined by the config.
-	 * @param player 
 	 * 
 	 * @param player Player trying to claim.
 	 * @param selection List of WorldCoords.

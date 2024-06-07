@@ -443,7 +443,7 @@ public class TranslationLoader {
 	}
 
 	/**
-	 * @param update Whether to create & update reference files.
+	 * @param update Whether to create and update reference files.
 	 */
 	public void updateReferenceFiles(final boolean update) {
 		this.updateReferenceFiles = update;
