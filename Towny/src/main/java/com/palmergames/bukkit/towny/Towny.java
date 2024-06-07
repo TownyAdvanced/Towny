@@ -567,15 +567,6 @@ public class Towny extends JavaPlugin {
 		return errors;
 	}
 
-	public World getServerWorld(String name) throws NotRegisteredException {
-		World world = BukkitTools.getWorld(name);
-		
-		if (world == null)
-			throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
-		
-		return world;
-	}
-
 	public boolean hasCache(Player player) {
 
 		return playerCache.containsKey(player.getUniqueId());
@@ -869,5 +860,21 @@ public class Towny extends JavaPlugin {
 	@NotNull
 	public TaskScheduler getScheduler() {
 		return this.scheduler;
+	}
+
+	/**
+	 * @deprecated since 0.100.2.13, unused by Towny for many years. Use {@link BukkitTools#getWorld(String)} instead.
+	 * @param name Name of the World.
+	 * @return a World
+	 * @throws NotRegisteredException if the world doesn't exist.
+	 */
+	@Deprecated
+	public World getServerWorld(String name) throws NotRegisteredException {
+		World world = BukkitTools.getWorld(name);
+		
+		if (world == null)
+			throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
+		
+		return world;
 	}
 }

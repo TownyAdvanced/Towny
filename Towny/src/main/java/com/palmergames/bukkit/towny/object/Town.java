@@ -776,18 +776,16 @@ public class Town extends Government implements TownBlockOwner {
 		return mayor != null;
 	}
 
-	public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
+	public void removeResident(Resident resident) throws EmptyTownException {
 
-		if (!hasResident(resident)) {
-			throw new NotRegisteredException();
-		} else {
+		if (!hasResident(resident))
+			return;
 
-			remove(resident);
-			resident.setJoinedTownAt(0);
+		remove(resident);
+		resident.setJoinedTownAt(0);
 
-			if (getNumResidents() == 0) {
-				throw new EmptyTownException(this);
-			}
+		if (getNumResidents() == 0) {
+			throw new EmptyTownException(this);
 		}
 	}
 

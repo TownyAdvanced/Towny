@@ -350,7 +350,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 				TownyMessaging.sendMsg(Translatable.of("msg_town_being_deleted_because_no_residents", town.getName()));
 				TownyUniverse.getInstance().getDataSource().removeTown(town, DeleteTownEvent.Cause.NO_RESIDENTS, null, false);
 			}
-		} catch (NotRegisteredException ignored) {}
+		}
 
 		try {
 			setTown(null);

@@ -1846,21 +1846,26 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			line = keys.get("townblock");
 			if (line != null) {
 				tokens = line.split(",");
-				TownBlock tb = null;
+				WorldCoord wc = null;
 				try {
-					tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
-					jail.setTownBlock(tb);
-					jail.setTown(tb.getTown());
-					tb.setJail(jail);
-					tb.getTown().addJail(jail);
-				} catch (NumberFormatException | NotRegisteredException e) {
+					wc = new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim()));
+					if (wc.isWilderness() || wc.getTownOrNull() == null) // Not a number format exception but it gets handled the same so why not.
+						throw new NumberFormatException();
+				} catch (NumberFormatException e) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
 					removeJail(jail);
 					deleteJail(jail);
 					return true;
 				}
+
+				TownBlock tb = wc.getTownBlockOrNull();
+				Town town = tb.getTownOrNull();
+				jail.setTownBlock(tb);
+				jail.setTown(town);
+				tb.setJail(jail);
+				town.addJail(jail);
 			}
-			
+
 			line = keys.get("spawns");
 			if (line != null) {
 				String[] jails = line.split(";");
@@ -1927,10 +1932,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("about=" + resident.getAbout());
 
 		if (resident.hasTown()) {
-			try {
-				list.add("town=" + resident.getTown().getName());
-			} catch (NotRegisteredException ignored) {
-			}
+			list.add("town=" + resident.getTownOrNull().getName());
 			list.add("town-ranks=" + StringMgmt.join(resident.getTownRanks(), ","));
 			list.add("nation-ranks=" + StringMgmt.join(resident.getNationRanks(), ","));
 		}
@@ -2349,6 +2351,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public boolean saveTownBlock(TownBlock townBlock) {
 
+		if (!townBlock.hasTown())
+			return false;
+
 		FileMgmt.checkOrCreateFolder(dataFolderPath + File.separator + "townblocks" + File.separator + townBlock.getWorld().getName());
 
 		List<String> list = new ArrayList<>();
@@ -2362,11 +2367,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// taxed
 		list.add("taxed=" + townBlock.isTaxed());
 
-		// town
-		try {
-			list.add("town=" + townBlock.getTown().getName());
-		} catch (NotRegisteredException ignored) {
-		}
+		list.add("town=" + townBlock.getTownOrNull().getName());
 
 		// resident
 		if (townBlock.hasResident())
@@ -2481,24 +2482,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public void deleteTownBlock(TownBlock townBlock) {
 
 		File file = new File(getTownBlockFilename(townBlock));
-		
-		queryQueue.add(() -> {
-			if (file.exists()) {
-				// TownBlocks can end up being deleted because they do not contain valid towns.
-				// This will move a deleted townblock to either: 
-				// towny\townblocks\worldname\deleted\townname folder, or the
-				// towny\townblocks\worldname\deleted\ folder if there is not valid townname.
-				String name = null;
-				try {
-					name = townBlock.getTown().getName();
-				} catch (NotRegisteredException ignored) {
-				}
-				if (name != null)
-					FileMgmt.moveTownBlockFile(file, "deleted", name);
-				else
-					FileMgmt.moveTownBlockFile(file, "deleted", "");
-			}
-		});
+		if (!file.exists())
+			return;
+
+		// TownBlocks can end up being deleted because they do not contain valid towns.
+		// This will move a deleted townblock to either: 
+		// towny\townblocks\worldname\deleted\townname folder, or the
+		// towny\townblocks\worldname\deleted\ folder if there is not valid townname.
+		queryQueue.add(() -> FileMgmt.moveTownBlockFile(file, "deleted", townBlock.hasTown() ? townBlock.getTownOrNull().getName() : ""));
 	}
 	
 	@Override

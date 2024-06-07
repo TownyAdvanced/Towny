@@ -2087,19 +2087,24 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("townBlock");
 			if (line != null) {
 				tokens = line.split("#");
-				TownBlock tb = null;
+				WorldCoord wc = null;
 				try {
-					tb = universe.getTownBlock(new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
-					jail.setTownBlock(tb);
-					jail.setTown(tb.getTown());
-					tb.setJail(jail);
-					tb.getTown().addJail(jail);
-				} catch (NumberFormatException | NotRegisteredException e) {
+					wc = new WorldCoord(tokens[0], Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim()));
+					if (wc.isWilderness() || wc.getTownOrNull() == null) // Not a number format exception but it gets handled the same so why not.
+						throw new NumberFormatException();
+				} catch (NumberFormatException e) {
 					TownyMessaging.sendErrorMsg("Jail " + jail.getUUID() + " tried to load invalid townblock " + line + " deleting jail.");
 					removeJail(jail);
 					deleteJail(jail);
 					return true;
 				}
+
+				TownBlock tb = wc.getTownBlockOrNull();
+				Town town = tb.getTownOrNull();
+				jail.setTownBlock(tb);
+				jail.setTown(town);
+				tb.setJail(jail);
+				town.addJail(jail);
 			}
 			
 			line = rs.getString("spawns");
