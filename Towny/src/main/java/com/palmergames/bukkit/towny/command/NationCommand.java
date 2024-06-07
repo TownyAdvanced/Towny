@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreAddAllyEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreInviteTownEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownKickEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
@@ -1282,6 +1283,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws TownyException {
 
 		TownJoinNationInvite invite = new TownJoinNationInvite(player, town, nation);
+		
+		BukkitTools.ifCancelledThenThrow(new NationPreInviteTownEvent(invite));
+
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) { 
 				town.newReceivedInvite(invite);

@@ -9805,3 +9805,6 @@ v0.92.0.11:
 0.100.2.14:
   - Add new LuckPerms context: towny:istownconquered
     - When a player is part of a town that it conquered by a nation, this will return true.
+  - API: Add NationPreInviteTownEvent.
+    - A cancellable event thrown before a town is sent an invite to join a nation.
+    - Closes #7453. 
