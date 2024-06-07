@@ -29,7 +29,7 @@ public class NationPreInviteTownEvent extends CancellableTownyEvent {
      * Convenience method for getting the town that was invited.
      * @return The {@link Town} that was invited.
      */
-    public Town getInvitedResident() {
+    public Town getInvitedTown() {
         return (Town) invite.getReceiver();
     }
 
