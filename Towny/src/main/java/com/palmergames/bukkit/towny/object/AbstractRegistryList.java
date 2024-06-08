@@ -164,7 +164,10 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 				if (match != null)
 					anyMatchPredicates.add(t -> t.equals(match));
 				else {
-					TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
+					try {
+						TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
+					} catch (final Exception ignored) {}
+					
 					anyMatchPredicates.add(t -> false);
 				}
 			}
