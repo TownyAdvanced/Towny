@@ -9816,3 +9816,6 @@ v0.92.0.11:
   - Support partial reference files, courtesy of Warrior with PR #7428.
     - Reference language files will only be re-written when Towny's version is also changing.
     - This will allow Towny's reference files to eventually leave a smaller footprint on the Towny.jar filesize. 
+0.100.2.15:
+  - Fix failure on startup due to debug messaging, courtesy of Warrior with PR #7455.
+    - Closes #7452.
