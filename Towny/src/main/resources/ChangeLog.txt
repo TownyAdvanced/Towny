@@ -9819,3 +9819,5 @@ v0.92.0.11:
 0.100.2.15:
   - Fix failure on startup due to debug messaging, courtesy of Warrior with PR #7455.
     - Closes #7452.
+0.100.3.0:
+  - Bump version for release.
