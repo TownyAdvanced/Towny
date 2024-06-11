@@ -228,7 +228,7 @@ public enum ConfigNodes {
 			"nation.default_taxes.max_nation_conquered_tax",
 			"100",
 			"",
-			"# The maximum amount of money that can be charge by a nation on their conquered towns."),
+			"# The maximum amount of money that can be charged by a nation on their conquered towns."),
 
 
 	NWS(
@@ -1220,7 +1220,7 @@ public enum ConfigNodes {
 			"claiming.overclaiming.overclaiming_prevented_by_homeblock_radius",
 			"true",
 			"",
-			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
+			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting.",
 			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
 	CLAIMING_OVERCLAIMING_TOWN_AGE_REQUIREMENT(
 			"claiming.overclaiming.town_age_requirement",
