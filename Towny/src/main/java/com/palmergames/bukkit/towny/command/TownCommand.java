@@ -992,7 +992,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Location loc = player.getLocation();
 
 		if (!TownySettings.areNewOutlawsTeleportedAway() || TownyAPI.getInstance().isWilderness(loc)
-			|| !TownyAPI.getInstance().getTown(loc).equals(town) || !BukkitTools.isEventCancelled(new OutlawTeleportEvent(target, town, loc)))
+			|| !TownyAPI.getInstance().getTown(loc).equals(town) || BukkitTools.isEventCancelled(new OutlawTeleportEvent(target, town, loc)))
 			return;
 
 		// If the newly-outlawed player is within the town's borders send them using the
