@@ -74,14 +74,14 @@ public class TownyCustomListener implements Listener {
 			return;
 
 		// Run the following with a one tick delay, so that everything has a chance to take in the player's position.
-		plugin.getScheduler().runLater(() -> {
+		plugin.getScheduler().runLater(player, () -> {
 			try {
 				if (resident.hasMode("townclaim"))
 					TownCommand.parseTownClaimCommand(player, new String[] {});
 				if (resident.hasMode("townunclaim"))
 					TownCommand.parseTownUnclaimCommand(player, new String[] {});
 				if (resident.hasMode("plotgroup") && resident.hasPlotGroupName()) 
-					Towny.getPlugin().getScheduler().runLater(player, () -> Bukkit.dispatchCommand(player, "plot group add " + resident.getPlotGroupName()), 1L);
+					Towny.getPlugin().getScheduler().runGlobalLater(task -> Bukkit.dispatchCommand(player, "plot group add " + resident.getPlotGroupName()), 1L);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
