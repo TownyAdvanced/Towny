@@ -81,7 +81,7 @@ public class TownyCustomListener implements Listener {
 				if (resident.hasMode("townunclaim"))
 					TownCommand.parseTownUnclaimCommand(player, new String[] {});
 				if (resident.hasMode("plotgroup") && resident.hasPlotGroupName()) 
-					Towny.getPlugin().getScheduler().runGlobalLater(task -> Bukkit.dispatchCommand(player, "plot group add " + resident.getPlotGroupName()), 1L);
+					Towny.getPlugin().getScheduler().runLater(player, () -> Bukkit.dispatchCommand(player, "plot group add " + resident.getPlotGroupName()), 1L);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
