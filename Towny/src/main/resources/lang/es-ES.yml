@@ -18,6 +18,7 @@ help_6: 'Ayuda del comando nation.'
 help_7: 'Ayuda del comando plot.'
 help_8: 'Ayuda del comando towny.'
 help_9: 'Ayuda del comando townyadmin.'
+towny_help_0: "Ayuda general para Towny"
 town_help_1: 'Estado de tu ciudad'
 town_help_2: '[alcalde]'
 town_help_3: 'Estado de la ciudad seleccionada'
