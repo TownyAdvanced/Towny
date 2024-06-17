@@ -242,7 +242,7 @@ public class TranslationLoader {
 			if (defaultLangContent == null || lang.equals("en-US")) {
 				try (Stream<String> lines = Files.lines(langPath)) {
 					if (!content.equals(lines.collect(Collectors.joining("\n"))))
-						FileMgmt.writeString(langPath, content);
+						Files.writeString(langPath, content);
 				}
 				
 				return;
@@ -270,7 +270,7 @@ public class TranslationLoader {
 				}
 			}
 			
-			FileMgmt.writeString(langPath, String.join("\n", list));			
+			Files.writeString(langPath, String.join("\n", list));			
 		} catch (IOException e) {
 			plugin.getLogger().log(Level.WARNING, "Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + "' during a reference language file update.", e);
 		}

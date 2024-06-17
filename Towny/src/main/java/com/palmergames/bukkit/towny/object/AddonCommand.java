@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 
 import com.palmergames.util.StringMgmt;
@@ -116,7 +115,6 @@ public class AddonCommand extends Command {
 		return tabCompleter.onTabComplete(sender, this, this.name, StringMgmt.remFirstArg(args));
 	}
 
-	@Desugar
 	private record LegacyTabCompleter(AddonCommand command) implements TabCompleter {
 		@Override
 		public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {

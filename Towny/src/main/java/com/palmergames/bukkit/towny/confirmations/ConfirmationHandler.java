@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.confirmations;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -30,7 +29,6 @@ public class ConfirmationHandler {
 	private final static Towny plugin = Towny.getPlugin();
 	private final static Map<CommandSender, ConfirmationContext> confirmations = new ConcurrentHashMap<>();
 	
-	@Desugar
 	private record ConfirmationContext(Confirmation confirmation, ScheduledTask task) {}
 
 	/**

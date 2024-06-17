@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
@@ -30,7 +29,6 @@ public class CellSurface {
 		return new CellSurface(worldCoord);
 	}
 
-	@Desugar
 	private record BlockPos(int x, int z) {}
 
 	public void runClaimingParticleOverSurfaceAtPlayer(Player player) {

@@ -26,7 +26,7 @@ If you do not agree with the terms of our license, do not contribute to the Town
 > Towny uses an [.editorconfig](https://editorconfig.org) file. IDEs that have [native EditorConfig support](https://editorconfig.org/#pre-installed) will automatically follow these rules.
     
 1. You must use tabs for indentation. 
-2. Keep your environment in Java 16-17. The code will automatically be converted into code compatible with Java 8 by [Jabel](https://github.com/bsideup/jabel).[^jabel-warning]
+2. Keep your environment in Java 17.
 3. Do not use wildcard imports.
 4. Do not make unnecessary changes.[^changes]
    - All IDEs are different, we do this to keep consistency in the codebase.
@@ -53,8 +53,6 @@ For the sanity of the rest of us, and the maintainability of the project, please
 All translation on the core Towny plugin is done via [Crowdin](https://crowdin.com/project/townyadvanced).
 
 Strings are formatted using [Java's `java.util.Formatter`](https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/Formatter.html) allowing specification of variable order, and more. This means that if you find that a line has multiple variables which would be in a different order in your language, you can change them to `%NUMBER$s` (replacing `NUMBER` with the variable index) to change their order. 
-
-[^jabel-warning]: Keep in mind that, while you will be able to use modern language features that way (like patterns), some standard library methods added after JDK 8 will not work **even after being processed** and cause "Cannot find symbol" errors when building (like `String#isBlank`).
 
 [^changes]: This includes formatting and whitespace changes.
 

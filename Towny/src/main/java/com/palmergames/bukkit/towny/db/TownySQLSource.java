@@ -155,9 +155,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	 * @return true if we successfully connected to the db.
 	 * @deprecated as of 0.99.1.2, use {@link #getConnection()} to obtain a connection instead.
 	 */
-	@Deprecated
-	@SuppressWarnings("RedundantScheduledForRemovalAnnotation") // The forRemoval = true attribute did not exist in java 8
-	@ApiStatus.ScheduledForRemoval
+	@Deprecated(forRemoval = true)
 	public boolean getContext() {
 		return isReady();
 	}

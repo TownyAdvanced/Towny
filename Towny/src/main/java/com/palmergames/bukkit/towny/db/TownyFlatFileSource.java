@@ -2525,7 +2525,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		});
 	}
 
-	@SuppressWarnings("ReadWriteStringCanBeUsed")
 	@Override
 	public boolean loadCooldowns() {
 		final Path cooldownsFile = Paths.get(dataFolderPath).resolve("cooldowns.json");
@@ -2534,7 +2533,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		final String data;
 		try {
-			data = new String(Files.readAllBytes(cooldownsFile), StandardCharsets.UTF_8);
+			data = Files.readString(cooldownsFile);
 		} catch (IOException e) {
 			plugin.getLogger().log(Level.WARNING, "An exception occurred when reading cooldowns.json", e);
 			return true;
@@ -2549,7 +2548,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	@SuppressWarnings("ReadWriteStringCanBeUsed")
 	@Override
 	public boolean saveCooldowns() {
 		final JsonObject object = new JsonObject();
@@ -2559,7 +2557,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		this.queryQueue.add(() -> {
 			try {
-				Files.write(Paths.get(dataFolderPath).resolve("cooldowns.json"), new GsonBuilder().setPrettyPrinting().create().toJson(object).getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+				Files.writeString(Paths.get(dataFolderPath).resolve("cooldowns.json"), new GsonBuilder().setPrettyPrinting().create().toJson(object), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 			} catch (IOException e) {
 				plugin.getLogger().log(Level.WARNING, "An exception occurred when writing cooldowns.json", e);
 			}

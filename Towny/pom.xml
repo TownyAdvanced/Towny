@@ -30,7 +30,6 @@
     </organization>
 
     <properties>
-        <java.version>17</java.version>
         <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
         <skipTests>true</skipTests>
     </properties>
@@ -171,12 +170,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.bsideup.jabel</groupId>
-            <artifactId>jabel-javac-plugin</artifactId>
-            <version>1.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>solar.squares</groupId>
             <artifactId>pixel-width-core</artifactId>
             <version>1.1.0</version>
@@ -259,12 +252,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.13.0</version>
                     <configuration>
-                        <release>8</release>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <compilerArgs>
-                            <arg>-Xplugin:jabel</arg>
-                        </compilerArgs>
+                        <release>${java.version}</release>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -288,7 +276,7 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <source>16</source>
+                        <source>${java.version}</source>
                         <doclint>all,-missing</doclint>
                         <doctitle>Towny - ${project.version}</doctitle>
                         <groups>
@@ -465,29 +453,6 @@
             <properties>
                 <skipTests>false</skipTests>
             </properties>
-        </profile>
-
-        <profile>
-            <id>intellij-idea-only</id>
-            <activation>
-                <property>
-                    <name>idea.maven.embedder.version</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <release>${java.version}</release>
-                            <compilerArgs>
-                                <arg>--enable-preview</arg>
-                            </compilerArgs>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 </project>
