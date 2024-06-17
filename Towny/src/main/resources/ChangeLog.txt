@@ -9822,4 +9822,7 @@ v0.92.0.11:
 0.100.3.0:
   - Bump version for release.
 0.100.3.1:
-  - Fix new outlaws not being teleported out of the town they were outlawed in. 
+  - Fix new outlaws not being teleported out of the town they were outlawed in.
+  - Fix a bad scheduler call in take over claim code, courtesy of Warrior with PR #7466.
+  - Fix plot border modes on Folia, courtesy of Warrior with PR #7467.
+  - Raise java version to 17, courtesy of Warrior with PR #7401.
