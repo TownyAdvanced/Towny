@@ -21,6 +21,9 @@ import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustAddEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustRemoveEvent;
+import com.palmergames.bukkit.towny.event.plot.group.PlotGroupAddEvent;
+import com.palmergames.bukkit.towny.event.plot.group.PlotGroupCreatedEvent;
+import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
@@ -1318,42 +1321,53 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			Confirmation.runOnAccept( ()-> {
 				PlotGroup oldGroup = townBlock.getPlotObjectGroup();
 				oldGroup.removeTownBlock(townBlock);
-				if (oldGroup.getTownBlocks().isEmpty()) {
+				if (oldGroup.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(oldGroup, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
 					String oldName = oldGroup.getName();
 					town.removePlotGroup(oldGroup);
 					TownyUniverse.getInstance().getDataSource().removePlotGroup(oldGroup);
 					TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_deleted", oldName));
 				} else 
 					oldGroup.save();
-				createOrAddOnToPlotGroup(townBlock, town, name);
-				resident.setPlotGroupName(name);
-				TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_transferred_from_x_to_x_group", oldGroup.getName(), townBlock.getPlotObjectGroup().getName()));
+				
+				try {
+					createOrAddOnToPlotGroup(townBlock, town, player, name);
+					resident.setPlotGroupName(name);
+					TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_transferred_from_x_to_x_group", oldGroup.getName(), townBlock.getPlotObjectGroup().getName()));
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				}
 			})
 			.setTitle(Translatable.of("msg_plot_group_already_exists_did_you_want_to_transfer", townBlock.getPlotObjectGroup().getName(), split[1]))
 			.sendTo(player);
 		} else {
 			// Create a brand new plot group.
-			createOrAddOnToPlotGroup(townBlock, town, plotGroupName);
+			createOrAddOnToPlotGroup(townBlock, town, player, plotGroupName);
 			resident.setPlotGroupName(plotGroupName);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), townBlock.getPlotObjectGroup().getName()));
 		}
 	}
 
-	private void createOrAddOnToPlotGroup(TownBlock townBlock, Town town, String plotGroupName) {
-		PlotGroup newGroup = null;
+	private void createOrAddOnToPlotGroup(TownBlock townBlock, Town town, Player player, String plotGroupName) throws TownyException {
+		PlotGroup newGroup;
 		
 		// Don't add the group to the town data if it's already there.
 		if (town.hasPlotGroupName(plotGroupName)) {
 			newGroup = town.getPlotObjectGroupFromName(plotGroupName);
+			
+			BukkitTools.ifCancelledThenThrow(new PlotGroupAddEvent(newGroup, townBlock, player));
+			
 			townBlock.setPermissions(newGroup.getPermissions().toString());
 			townBlock.setChanged(!townBlock.getPermissions().toString().equals(town.getPermissions().toString()));
-		} else {			
+		} else {
 			// This is a brand new PlotGroup, register it.
 			newGroup = new PlotGroup(UUID.randomUUID(), plotGroupName, town);
-			TownyUniverse.getInstance().registerGroup(newGroup);
 			newGroup.setPermissions(townBlock.getPermissions());
 			newGroup.setTrustedResidents(townBlock.getTrustedResidents());
 			newGroup.setPermissionOverrides(townBlock.getPermissionOverrides());
+			
+			BukkitTools.ifCancelledThenThrow(new PlotGroupCreatedEvent(newGroup, townBlock, player));
+
+			TownyUniverse.getInstance().registerGroup(newGroup);
 		}
 
 		// Add group to townblock, this also adds the townblock to the group.
@@ -1378,9 +1392,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		Confirmation.runOnAccept(()-> {
 			String name = group.getName();
-			town.removePlotGroup(group);
-			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_deleted", name));
+			if (!BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.DELETED))) {
+				town.removePlotGroup(group);
+				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+				TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_deleted", name));
+			}
 		}).sendTo(player);
 	}
 
@@ -1483,7 +1499,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.save();
 		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
 		
-		if (group.getTownBlocks().isEmpty()) {
+		if (group.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
 			town.removePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_empty_deleted", name));
