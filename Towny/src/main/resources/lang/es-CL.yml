@@ -3,8 +3,7 @@ name: Towny
 language: es-cl
 author: GNosii
 website: 'https://townyadvanced.github.io/'
-description: >
-  Language file for all game messages for this Locale.
+description: Language file for all game messages for this Locale.
 #A note on editing this file.
 #----------------------------
 #Do not alter this file if it is in the reference folder.
@@ -2125,3 +2124,5 @@ msg_town_being_deleted_because_no_residents: "%s está siendo eliminado porque p
 outlawed_in: "Excluido en"
 msg_warning_town_deposit_hint: "Para depositar dinero en tu banco de ciudad utiliza /town deposit [amount]."
 msg_warning_nation_deposit_hint: "Para depositar dinero en tu banco de nación usa /nation deposit [amount]."
+teleport_warmup_title_dont_move: "&6¡No te muevas!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7segundos restantes para teletransportarse."
