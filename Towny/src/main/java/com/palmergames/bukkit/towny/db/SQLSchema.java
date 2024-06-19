@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.db;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
@@ -402,7 +401,6 @@ public class SQLSchema {
 		}
 	}
 
-	@Desugar
 	private record ColumnUpdate(String table, String column) {
 		private static ColumnUpdate update(String table, String column) {
 			return new ColumnUpdate(SQLSchema.TABLE_PREFIX + table, column);

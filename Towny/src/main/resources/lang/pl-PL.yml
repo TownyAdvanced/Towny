@@ -1,39 +1,5 @@
 ---
-name: Towny
 language: polish
-author: ElgarL
-website: 'https://townyadvanced.github.io/'
-description: >
-  Language file for all game messages for this Locale.
-#A note on editing this file.
-#----------------------------
-#Do not alter this file if it is in the reference folder.
-#Before you edit this file, read about how Towny handles
-#language files:
-#https://github.com/TownyAdvanced/Towny/wiki/How-Towny-Works#multi-language.
-#A note on text formatting (how Towny status_title_pvpinserts words.)
-#----------------------------------------------------
-#You MUST retain spacing in the texts.
-#If a text begins or ends with a space, it must remain that
-#way.
-#%s = data to be supplied by the plugin.
-#If you find that a line has multiple %s variables which would
-#be in a different order in your language, you can change them
-#to %1$s, %2$s, %4$s, %3$s to change their order. ie: %4$s
-#will always use the 4th variable, no matter where it is
-#placed on the line.
-#A note on text colouring and formatting.
-#----------------------------------------
-#Black = &0, Navy = &1, Green = &2, Blue = &3, Red = &4
-#Purple = &5, Gold = &6, LightGray = &7, Gray = &8
-#DarkPurple = &9, LightGreen = &a, LightBlue = &b
-#Rose = &c, LightPurple = &d, Yellow = &e, White = &f
-#This language file also supports using MiniMessage for colours
-#and formatting. Learn about MiniMessage formatting here:
-#https://docs.adventure.kyori.net/minimessage/format.html
-default_towny_prefix: '&6[Towny] &b'
-default_town_prefix: '&6[%s] &b'
-default_nation_prefix: '&6[%s] &6'
 unclaimed_plot_name: 'Bezpańska'
 unclaimed_zone_name: 'Dzicz'
 ############################################################
@@ -129,8 +95,6 @@ town_trust_help_2: "Lista zaufanch mieszkańców w mieście."
 town_towntrust_help_0: "Dodaje miasto do grona zaufanych twojego miata."
 town_towntrust_help_1: "Usuwa miasto z grona zaufanych twojego miasta."
 town_towntrust_help_2: "Lista zaufanych miast podanego miasta."
-town_buy_help: "Purchases bonus townblocks to increase the claim limit of the town."
-town_cede_help: "Offers the plot you are stood in to be taken over by the given Town."
 mayor_help_3: 'Pozyskaj teren nieprzylegajacy do miasta'
 mayor_help_4: 'Pozyskaj dookoła w promieniu X'
 mayor_help_5: 'Pozyskuje wszystko w maksymalnym promieniu'
@@ -177,10 +141,6 @@ nation_toggle_help_0: "Przełącza stan pokojowy nacji."
 nation_toggle_help_1: "Przełącza status publiczny, pozwalając graczom spoza nacji użyć /n spawn."
 nation_toggle_help_2: "Przełącza status otwarty, pozwalając miastom dołączyć bez zaproszenia."
 nation_toggle_help_3: "Przełącza obowiązywanie podatku procentowego. Miasta będą płaciły procent od posiadanych pieniędzy, zamiast stałej stawki."
-nation_sanction_help_1: "Adds a town to the SanctionedTown list."
-nation_sanction_help_2: "Removes a town from the SanctionedTown list."
-nation_sanction_help_3: "Lists your nation's Sanctioned Towns."
-nation_sanction_help_4: "Lists the given nation's Sanctioned Towns."
 king_help_1: 'Pomoc Lidera Nacji'
 king_help_2: 'Wyznacz swoich sojuszników.'
 king_help_3: 'Wyznacz swoich wrogów.'
@@ -194,10 +154,6 @@ res_1: 'Twój Status'
 res_2: '[mieszkaniec]'
 res_3: 'Status wskazanego gracza'
 res_4: 'Lista wszystkich aktywnych graczy'
-res_5: 'po pomoc'
-res_6: 'Aktywna osoba'
-res_7: 'Dokładna nazwa'
-res_8: 'Prosty chłop ze wsi'
 res_9: "Sprawdza, ile podatków dziennie płacisz."
 res_10: "Użyj \"/res jail ?\", by uzyskać pomoc."
 res_11: "Użyj \"/res toggle ?\", by uzyskać pomoc."
@@ -353,15 +309,7 @@ ta_set_help_6: "Przypisuje działkę innemu miastu."
 ta_set_help_7: "Ustaw nazwę założyciela miasta."
 ta_set_help_8: "Użyj 0 dla rozmiaru, aby usunąć nadpisane Strefy Nacji."
 ta_purge_help_0: "Usuwa mieszkańców, którzy nie logowali się ponad podaną liczbę dni, opcjonalnie z parametrem \"townless\" wyłącza graczy należących do miast, a z nazwą miasta w parametrze, usuwa jedynie dane nieaktywnych mieszkańców konkretnego miasta."
-ta_townmeta_help_1: "View the metadata stored on the town you specify."
 ta_townmeta_help_2: "Ustaw klucz i wartość metadanych miasta."
-ta_townmeta_help_3: "Add or remove a metadata by key from the town."
-ta_residentmeta_help_1: "View the metadata stored on the resident you specify."
-ta_residentmeta_help_2: "Set resident metadata key and value."
-ta_residentmeta_help_3: "Add or remove a metadata by key from the resident."
-ta_nationmeta_help_1: "View the metadata stored on the nation you specify."
-ta_nationmeta_help_2: "Set nation metadata key and value."
-ta_nationmeta_help_3: "Add or remove a metadata by key from the nation."
 ta_reload_help_0: "Przeładowuje bazę danych."
 ta_reload_help_1: "Przeładowuje config."
 ta_reload_help_2: "Przeładowuje pliki językowe."
@@ -401,11 +349,8 @@ plot_group_toggle_help_0: "Przełącza PVP w grupie działek."
 plot_group_toggle_help_1: "Przełącza eksplozje w grupie działek."
 plot_group_toggle_help_2: "Przełącza Podpalanie w grupie działek."
 plot_group_toggle_help_3: "Przełącza moby w grupie działek."
-plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
 plot_set_help_0: "Np.: Gospoda, Dzicz, Plener, Ambasada itd."
 plot_set_help_1: "Ustawia działkę na Placówkę."
-plot_set_help_1.5: "Sets the minimum number of days a player must be a town member to purchase the plot."
-plot_set_help_1.6: "Sets the maximum number of days a player must be a town member to purchase the plot."
 plot_set_help_2: "Przywraca domyślny rodzaj działki."
 plot_set_help_3: "Ustawia nazwę działki."
 plot_set_help_4: "Przełącza wszystkie uprawnienia."
@@ -428,18 +373,14 @@ msg_plot_fs_radius: 'Wystawia podany promień działek na sprzedaż.'
 ############################################################
 msg_buy: '&bKupiono %s (%d szt.) za %s.'
 msg_buy_resident_plot: '&b%s kupił działkę od %s za %s!'
-msg_buy_resident_plot_group: '&b%s bought %s''s plotgroup for %s!'
 msg_couldnt_pay_taxes: '&bMieszkaniec %s nie mógł zapłacić podatków i został wyrzucony z %s.'
 msg_couldnt_pay_plot_taxes: '&b%s nie mógł zapłacić podatków i został wysiedlony ze swojej działki.'
-msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
-msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
 msg_payed_town_tax: '&bZapłacono podatki miejskie: '
 msg_payed_plot_cost: '&bZapłacono %s za %s działek w %s'
 msg_payed_resident_tax: '&bZapłacono podatek mieszkańca w wysokości '
 msg_bankrupt_town: ' nie było stać na dalsze bycie miastem.'
 msg_bankrupt_nation: ' nie stać na opłacenie podatków, aby pozostać nacją.'
 msg_nation_not_peaceful: '&bNacji nie było stać na stan pokojowy.'
-msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
 msg_peaceful_disabled: '&bPokojowość nacji jest odgórnie zabroniona.'
 msg_you_paid: '&bZapłaciłeś %s, aby zmienić status neutralności.'
 msg_nation_set_peace: '&bZmieniono stosunek nacji.'
@@ -628,8 +569,6 @@ msg_err_not_in_town_claim: '&cMusisz należeć do miasta, aby móc pozyskiwać d
 msg_err_must_belong_town: '&cMusisz należeć do miasta.'
 msg_err_dont_belong_town: '&cNie należysz do żadnego miasta.'
 msg_err_dont_belong_nation: '&bNie należysz do nacji.'
-msg_err_already_belong_nation: '&bYou already belong to a nation.'
-msg_err_town_already_belong_nation: '&b%s already belongs to a nation: %s.'
 msg_err_not_same_nation: '&b%s nie należy do twojej nacji.'
 msg_err_rect_auto: '&cTylko miasta i mieszkańcy mogą z tego skorzystać.'
 msg_err_invalid_radius: '&cNieprawidłowy promień. Użyj liczby całkowitej lub trybu "auto".'
@@ -657,7 +596,6 @@ msg_err_input_too_long: '&cWprowadzone dane są za długie.'
 msg_err_invalid_choice: '&cNieprawidłowy wybór'
 msg_err_invalid_sub: '&cNieprawidłowe polecenie podrzędne.'
 msg_err_command_disable: '&cNie masz wymaganych uprawnień, aby użyć tego polecenia.'
-msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
 msg_err_universe_limit: '&cŚwiat nie może mieć więcej miast.'
 msg_err_too_many_npc: '&cZbyt wiele zarejestrowanych NPC.'
 msg_err_negative_money: '&cNie możesz mieć ujemnego stanu konta.'
@@ -779,7 +717,6 @@ town_invite_help_3: 'Lista wysłanych przez ciebie zaproszeń'
 town_invite_help_4: 'Lista wszystkich zaproszeń, które otrzymałeś'
 town_invite_help_5: 'Zaakceptuj prośbę o dołączenie do nacji'
 town_invite_help_6: 'Odrzuć prośbę dołączenia do nacji'
-town_invite_help_7: 'Remove all of the invites your town has sent out'
 nation_invite_help_1: 'Zaproś miasto do swojej nacji'
 nation_invite_help_2: 'Anuluj zaproszenie, ktore wysłałeś do miasta'
 nation_invite_help_3: 'Lista wszystkich zaproszeń wysłanych do miast'
@@ -807,7 +744,6 @@ msg_err_nation_sent_too_many_requests: '&bNacja wysłała zbyt dużo zaproszeń,
 msg_err_nation_has_too_many_requests: '&bNacja %s ma zbyt dużo zaproszeń. Poproś ją o odrzucenie paru.'
 player_received_invites: '&bOtrzymałeś %a/%m zaproszeń.'
 town_revoke_invite: '&bMiasto %s odrzuciło twoją prośbę o dołączenie.'
-town_revoke_invite_successful: '&bYou have successfully revoked an invite to join your town sent to %s.'
 town_received_invites: '&bMiasto otrzymało %a/%m zaproszeń.'
 town_sent_invites: '&bMiasto wysłało %a/%m zaproszeń.'
 nation_revoke_invite: '&bNacja %s odrzuciła Twoje propozycję dołączenie do nich.'
@@ -942,9 +878,6 @@ status_res_plottax: 'Suma Podatków Od Działki:'
 status_res_totaltax: 'Suma Podatków do zapłaty:'
 status_townblock_plottax: 'Podatek od Działek: '
 status_townblock_untaxed: 'Nieopodatkowany'
-status_townblock_max_and_minjoindays: 'Town membership of between %s and %s days required for plot purchase.'
-status_townblock_minjoindays: 'Town membership more than %s days required for plot purchase.'
-status_townblock_maxjoindays: 'Town membership less than %s days required for plot purchase.'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Nie możesz dokonywać operacji na koncie bankowym nacji, kiedy nie przebywasz w stolicy nacji.'
 msg_err_unable_to_use_bank_outside_your_town: 'Nie możesz operować kontem bankowym miasta, kiedy nie przebywasz w mieście.'
@@ -968,7 +901,6 @@ msg_err_nation_not_public: '&cNacja nie jest publiczna.'
 msg_nation_toggle_public: '&aZmieniono publiczny status nacji.'
 status_yes: '&aTAK'
 status_no: '&cNIE'
-msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&cSpawn do nacji jest zabroniony.'
 msg_err_nation_spawn_forbidden_war: '&cTeleportacja na spawn nacji jest dozwolona tylko podczas wojny.'
 msg_err_nation_spawn_forbidden_peace: '&cSpawn w nacji jest niedozwolony podczas wojny.'
@@ -1017,15 +949,6 @@ msg_process_unclaim: 'Porzucenie Działki...'
 msg_total_townblocks: 'Wszystkich Bloków Miasta: '
 #Added in 0.50
 friend_list: 'Lista Znajomych'
-#The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
-#nationranks lists on the /nation screen; and probably more lists of residents.
-res_format_list_1: '&2' #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
-res_format_list_2: '&a' #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
-res_format_list_3: '&f' #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
-townboard_message_colour_1: '&6'
-townboard_message_colour_2: '&e'
-nationboard_message_colour_1: '&6'
-nationboard_message_colour_2: '&e'
 not_registered: 'Nie zarejestrowano.'
 msg_error_missing_comparator: '&bMusisz określić, według czego chcesz posortować.'
 msg_error_invalid_comparator: '&bNieprawidłowy typ sortowania.'
@@ -1113,12 +1036,6 @@ msg_err_key_cannot_be_deleted: 'Klucz nie może być usunięty, ponieważ nie is
 msg_err_this_town_doesnt_have_any_associated_metadata: 'To miasto nie ma żadnych metadanych.'
 msg_err_key_x_is_not_part_of_this_town: 'Klucz %s nie jest częścią tego miasta, jeśli jest to możliwe proszę dodać go.'
 msg_custom_data_was_successfully_added_to_town: 'Niestandardowe dane zostały dodane do miasta!'
-msg_err_this_resident_doesnt_have_any_associated_metadata: 'This resident doesn''t have any associated metadata.'
-msg_err_key_x_is_not_part_of_this_resident: 'Key %s is not part of this resident, if possible please add it.'
-msg_custom_data_was_successfully_added_to_resident: 'Custom data was successfully added to resident!'
-msg_err_this_nation_doesnt_have_any_associated_metadata: 'This nation doesn''t have any associated metadata.'
-msg_err_key_x_is_not_part_of_this_nation: 'Key %s is not part of this nation, if possible please add it.'
-msg_custom_data_was_successfully_added_to_nation: 'Custom data was successfully added to nation!'
 msg_error_too_many_pages: 'Za dużo stron.'
 msg_err_location_is_not_within_a_town: 'To miejsce nie znajduje się w mieście.'
 msg_err_location_is_not_within_a_jail_plot: 'To miejsce nie jest na działce rodzaju Jail.'
@@ -1300,7 +1217,6 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cTwoje miasto będzie w ruin
 msg_time_remaining_before_full_removal: 'Czas przed całkowitym usunięciem: %d godzin.'
 msg_time_until_reclaim_available: 'Odzyskanie tego miasta będzie możliwe za %d godzin.'
 msg_reclaim_available: 'Odzysk jest możliwy.'
-msg_ruined_town_being_deleted: "%s was ruined for %s hours and is being deleted."
 #Added in 0.93
 msg_changed_peaceful: '&cNeutralność miasta jest teraz %s.'
 msg_err_town_unclaim_canceled: '&cPorzucenie anulowane. Nie możesz w tej chwili porzucić tego Bloku Miasta.'
@@ -1366,57 +1282,6 @@ gui_title_towny_wildsblocks: 'Lista Bloków Dziczy Towny'
 gui_title_towny_itemuse: 'Przykłady uprawnienia ItemUse'
 gui_title_towny_switch: 'Przykłady Przełączania'
 gui_title_towny_plotclear: 'Lista bloków usuwanych razem z działką'
-#Added in 0.99 - FlatFile L10N
-#NOTICE
-#While these strings can be translated, we caution you to keep them in English.
-flatfile_dbg_cannot_set_capital_try_next: 'Nation %s could not set capital to %s, selecting a new capital...'
-flatfile_dbg_deleting_duplicate: 'Deleting: %s which is a duplicate of %s'
-flatfile_dbg_folders_found: 'Folders found %s'
-flatfile_dbg_group_file_missing_town_delete: 'Group file missing Town, deleting %s'
-flatfile_dbg_loading_group_list: 'Loading Group list...'
-flatfile_dbg_loading_nation: 'Loading Nation: %s'
-flatfile_dbg_loading_nation_list: 'Loading Nation list...'
-flatfile_dbg_loading_resident: 'Loading Resident: %s'
-flatfile_dbg_loading_resident_list: 'Loading Resident list...'
-flatfile_dbg_loading_server_world_list: 'Loading Server World List...'
-flatfile_dbg_loading_town: 'Loading Town: %s'
-flatfile_dbg_loading_town_list: 'Loading Town list...'
-flatfile_dbg_loading_townblock_list: 'Loading TownBlock list...'
-flatfile_dbg_loading_world: 'Loading World: %s'
-flatfile_dbg_loading_world_list: 'Loading World List...'
-flatfile_dbg_mismatched_townblock_size: '%s townblocks were found with a town_block_size that does not match your config, they were not loaded into memory.'
-flatfile_dbg_missing_file_delete_group_entry: 'Missing file: %s deleting entry in group.txt'
-flatfile_dbg_missing_file_delete_groups_entry: 'Missing file: %s deleting entry in groups.txt'
-flatfile_dbg_removing_nation_not_found: 'Removing %s because they are not found in the nations.txt'
-flatfile_dbg_removing_resident_not_found: 'Removing %s because they are not found in the residents.txt'
-flatfile_dbg_removing_town_not_found: 'Removing %s because they are not found in the towns.txt.'
-flatfile_dbg_town_fetch_outlaw: 'Town Fetching Outlaw: %s'
-flatfile_dbg_undefined_capital_select_new: 'Nation %s did not have a capital defined, selecting a new capital...'
-flatfile_dbg_world_loaded_townblocks: 'World: %s loaded %s TownBlocks.'
-flatfile_err_cannot_create_defaults: 'Could not create flatfile default files and folders.'
-flatfile_err_could_not_add_to_town: 'Could not add to town!'
-flatfile_err_exception_reading_file: 'Loading Error: Exception while reading file %s'
-flatfile_err_exception_reading_group_file_at_line: 'Loading Error: Exception while reading Group file %s at line: %s'
-flatfile_err_exception_reading_townblock_file_at_line: 'Loading Error: Exception while reading TownBlock file %s at line: %s.'
-flatfile_err_exception_reading_world_file_at_line: 'Loading Error: Exception while reading world file %s at line: %s, in towny/data/worlds/%s.txt'
-flatfile_err_file_error_reading_world_file_at_line: 'Loading Error: File error while reading %s at line: %s, in towny/data/worlds/%s.txt'
-flatfile_err_homeblock_load_invalid_location: '[Warning] %s - HomeBlock tried to load invalid Location.'
-flatfile_err_homeblock_load_invalid_townblock: '[Warning] %s - HomeBlock tried to load invalid TownBlock.'
-flatfile_err_homeblock_load_invalid_world: '[Warning] %s - HomeBlock tried to load invalid World.'
-flatfile_err_invalid_townblock_resident: 'Invalid resident for TownBlock %s. Skipped setting resident for TownBlock...'
-flatfile_err_loading_group_list_at_line: 'Error loading Group List at %s, in towny/data/groups.txt'
-flatfile_err_loading_world_list_at_line: 'Error loading World list at %s, in towny/data/worlds.txt'
-flatfile_err_nation_could_not_load_capital_disband: 'The nation %s could not load a capital city and is being disbanded.'
-flatfile_err_reading_nation_file_at_line: 'Loading Error: Exception while reading nation file %s at line %s, in towny/data/nations/%s.txt'
-flatfile_err_reading_outlaw_of_town_duplicate: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s is duplicated! Skipping adding duplicate...'
-flatfile_err_reading_outlaw_of_town_not_exist: 'Loading Error: Exception while reading an outlaw of town file %s.txt. The outlaw %s does not exist! Removing from list...'
-flatfile_err_reading_resident_at_line: 'Loading Error: Exception while reading resident file %s at line: %s, in towny/data/residents/%s.txt'
-flatfile_err_reading_town_file_at_line: 'Loading Error: Exception while reading town file %s at line: %s, in towny/data/towns/%s.txt'
-flatfile_err_resident_tried_load_invalid_town: 'Loading Error: %s tried to load the town %s which is invalid. Removing town from the resident.'
-flatfile_err_town_homeblock_not_exist: '[Warning] %s does not have a HomeBlock.'
-flatfile_err_townblock_file_contains_unregistered_town_delete: 'TownBlock file contains unregistered Town: %s, deleting %s'
-flatfile_err_townblock_file_missing_town_delete: 'TownBlock file missing Town, deleting %s'
-flatfile_err_townblock_file_unknown_err: 'TownBlock file contains unknown error, deleting %s.'
 msg_ta_removed_all_titles_and_surnames_removed: 'Wszyscy mieszkańcy zostali pozbawieni swoich tytułów i nazwisk.'
 msg_err_homeblock_already_set_here: 'Ta działka już jest Blokiem Macierzystym twojego miasta.'
 #Added in 0.100
@@ -1495,7 +1360,6 @@ msg_resident_has_not_played_long_enough_to_be_jailed: '%s nie grał wystarczają
 msg_town_not_peaceful: '&bMiasta nie było stać na stan pokojowy.'
 msg_town_already_peaceful: '&bMiasto już jest pokojowe.'
 msg_town_already_not_peaceful: '&bMiasto już teraz nie jest pokojowe.'
-msg_town_cant_peaceful: '&bTown couldn''t afford to become a peaceful town. You need to be able to pay %s per day.'
 msg_town_paid_for_neutral_status: '&bTwoje miasto zapłaciło %s, aby zachować swój pokojowy status.'
 msg_nation_paid_for_neutral_status: '&bTwoja nacja zapłaciła %s na utrzymanie statusu pokojowego.'
 your_town_has_been_invited_to_join_nation: 'Twoje miasto zostało zaproszone do dołączenia do nacji: %s'
@@ -1556,9 +1420,6 @@ msg_cache_block_err: '&cNie możesz w tym miejscu wykonywać czynności %s.'
 msg_err_plot_belongs_to_group: '&cDziałka należy do grupy, użyj %s.'
 plotgroup_sing: 'Grupa Działek'
 msg_err_ally_limit_reached: 'Twoja nacja osiągnęła limit sojuszników, nie możesz zaakceptować propozycji.'
-msg_err_ally_limit_reached_cannot_accept: 'The nation of %s has reached their ally limit, unable to accept.'
-msg_err_ally_limit_reached_cannot_send: 'Your nation has reached the ally limit, unable to invite %s to become your ally.'
-msg_err_ally_limit_reached_cannot_send_targetNation: 'The nation of %s has reached their ally limit, unable to invite %s to become your ally.'
 #Added in 0.114
 msg_err_group_not_found: 'Grupa %s nie została znaleziona.'
 msg_err_expected_command_format: 'Niepoprawna składnia, oczekiwano: %s'
@@ -1597,19 +1458,6 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Nie możesz w
 #Added in 0.120
 msg_resident_prompt: 'Wprowadź nazwę gracza na czacie lub wpisz "q", aby wyjść. Wygaśnie automatycznie za 30 sekund.'
 msg_prompt_cancel: 'Anulowano lub przekroczono limitu czasu.'
-#Added in 0.121
-status_title_primary_colour: '&6' #Used to colour the majority of the title bar.
-status_title_secondary_colour: '&e' #Used to colour the words in the title bar.
-status_format_list_1: '&2' #First colour applied to status screen lists, ex: on /res, the friend list's Friends section.
-status_format_list_2: '&a' #Second colour applied to status screen lists, ex: on /res, the friend list's [1] section.
-status_format_list_3: '&f' #Third colour applied to status screen lists, ex: on /res, the friend list's list of friends' names section.
-status_format_key_value_key: '&2' #Colour applied to a status screen element which is just a line of text, or the key in a key/value element.
-status_format_key_value_value: '&a' #Colour applied to the value in a status screen element which has two parts, ex: Registered: SomeDate. (SomeDate is the value.)
-status_format_bracket_element: '&b' #Colour applied to a status element within a bracket, ex: [Bonus: #].
-status_format_hover_key: '&a' #Colour applied to a status screen element which is a hover-able key, ex: [Rank List]
-status_format_hover_bracket_colour: '&7' #Colour applied to the brackets of a hover-able status screen element.
-status_format_key_important: '&c' #Colour applied to an important status screen value, ex: (BANKRUPT), Ruined town reclaim lines, taxes/upkeep costs.
-status_splitter: ' &7| ' #Used in status screens where a splitter is used between values.
 status_home_element: ' &7[Blok Macierzysty: %s]'
 status_about: "Bio:"
 status_registered: 'Zarejestrowano:'
@@ -1893,14 +1741,6 @@ msg_perm_hud_nation: 'nacja'
 msg_perm_hud_outsider: 'obcy'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Działka: '
-#Seen in /plot perm hud:
-msg_perm_hud_plotgroup_name: 'Plot Group: '
-#Seen in /plot perm hud:
-msg_perm_hud_plot_for_sale: 'For Sale: '
-#Seen in /plot perm hud:
-msg_perm_hud_no: 'No'
-#Seen in /plot perm hud:
-msg_perm_hud_yes: 'Yes'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'Poziom miasta %s został ustawiony na %s.'
@@ -2060,7 +1900,6 @@ msg_err_your_cannot_overclaim_for_another: "Nie możesz podebrać działki przez
 msg_err_world_not_loaded: "<red>Świat nie jest załadowany."
 #Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cStan opodatkowania tej działki został ustawiony na %s.'
-msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
 status_forsale: "&a(Na sprzedaż: %s)"
 msg_town_forsale: "Miasto %s zostało wystawione na sprzedaż za %s."
 msg_town_notforsale: "Miasto %s nie jest już na sprzedaż."
@@ -2068,84 +1907,7 @@ msg_town_sell_confirmation: "Wystawisz swoje miasto na sprzedaż za %s. Jesteś 
 msg_town_buytown_already_mayor: "Już jesteś Burmistrzem miasta %s."
 msg_town_buytown_confirmation: "Zakup miasta %s będzie kosztować %s i usunie cię miasta, do którego aktualnie należysz. Czy na pewno chcesz kontynuować?"
 msg_town_buytown_not_forsale: "To miasto nie jest na sprzedaż."
-msg_town_buytown_ruined: "Ruined towns cannot be bought."
 msg_resident_about_reset: "&bResetowanie bio mieszkańca."
 msg_err_invalid_string_about_not_set: "Niepoprawna treść, bio nie zostało ustawione."
 msg_set_about: "Bio mieszkańca %s zostało ustawione na %s."
 msg_clear_about: "Bio %s zostało usunięte."
-#Message shown when toggling town visibleontoplists setting
-msg_town_visibleontoplist_setting_set_to: 'The town %s has had their visible-on-top-lists setting set to %s.'
-#Message shown when an admin overrides a town founding date via townyadmin.
-townyadmin_town_set_help_0: "Sets the founding date of a town."
-townyadmin_nation_set_help_0: "Sets the founding date of a nation."
-msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
-msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
-msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
-#The format used for the /t say and /n say commands.
-town_say_format: "%s says: %s"
-msg_err_floodfill_not_in_wild: "You cannot use floodfill while standing in a claimed area."
-msg_err_floodfill_out_of_bounds: "Claim shape must be fully closed off in order to floodfill."
-msg_err_floodfill_cannot_contain_towns: "Flood fill selection must not contain other towns."
-#Message shown when a resident is an NPC and is not allowed to do something.
-msg_err_resident_is_npc: "You cannot do this to an NPC resident."
-#Message shown when a resident doesn't own any land and the /res plotlist command is used.
-msg_err_resident_doesnt_own_any_land: "The resident does not own any land personally."
-msg_unnamed: "Unnamed"
-msg_err_nation_cannot_sanction_own_town: "You cannot sanction a town that is a part of your nation."
-msg_err_nation_town_isnt_sanctioned: "Your nation is not sanctioning that town."
-msg_err_nation_town_already_sanctioned: "Your nation already sanctions that town."
-msg_err_nation_town_sanctioned: "Your nation has now sanctioned %s, they will not be allowed to join your nation."
-msg_err_nation_town_unsanctioned: "Your nation is no longer sanctioning %s."
-msg_err_nation_has_no_sanctioned_towns: "The nation has no sanctioned towns."
-title_nation_sanctioned_towns: 'Sanctioned Towns'
-msg_err_cannot_add_sanctioned_town: "Your nation cannot add %s, your nation has sanctioned them."
-msg_err_cannot_join_nation_sanctioned_town: "Your town cannot join %s, this nation has sanctioned your town."
-msg_err_no_nation_cannot_do: "You cannot perform this action because no nation was able to be determined."
-msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Your town is sanctioned by %s, you cannot spawn there."
-msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "The following coordinate(s) cannot be claimed because they contain too much of an unwanted biome: %s."
-msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "The following coordinate(s) cannot be claimed because they contain too much ocean biome: %s."
-msg_err_cannot_begin_town_in_this_biome: "You cannot start a town in this biome."
-msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "You are not able to overclaim this town because your nation does not consider their nation an enemy."
-msg_err_unable_to_command_outside_of_town: 'You cannot use that command outside of your town.'
-msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that command outside of a bank plot.'
-msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
-msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
-status_nation_sanctioned_towns: "Sanctioned Towns"
-msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
-msg_err_name_validation_invalid_characters: "%s contains characters which aren't allowed in the Towny regex settings."
-msg_err_name_validation_begins_with_eco_prefix: "%s begins with letters used in the economy features, you cannot use this name."
-msg_err_name_validation_name_already_in_use: "%s is a name that is already in use."
-msg_err_name_validation_title_too_long: "%s is too long to use as a title or surname."
-msg_err_name_validation_name_too_long: "%s is too long to use as a name."
-msg_err_name_validation_is_empty: "You cannot supply an empty name."
-msg_err_name_validation_is_not_permitted: "%s is not permitted."
-msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
-msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
-msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
-msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
-msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
-outlawed_in: "Outlawed in"
-msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."
-msg_warning_nation_deposit_hint: "To put money in your nation bank use /nation deposit [amount]."
-teleport_warmup_title_dont_move: "&6Don't move!"
-teleport_warmup_subtitle_seconds_remaining: "&c%s &7seconds remaining until teleport."
-msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because your town has a ruined status, %s plot(s) permission lines have had changed to provide no protections."
-console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Because of their ruined status, %s has had %s plot(s) permission lines changed to provide no protections: %s."
-msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "You cannot cede a plot to your own town."
-msg_err_town_cede_you_cannot_cede_your_homeblock: "You cannot cede your town's homeblock."
-msg_err_town_cede_the_mayor_is_not_online: "The mayor of %s, %s is not online to accept your plot."
-msg_err_town_no_longer_owns_this_plot: "%s no longer owns this plot."
-msg_err_town_cede_town_cannot_cede_their_homeblock: "%s cannot cede their if homeblock."
-msg_town_cede_plot_confirmation_give_plot: "Are you sure you want to give %s this plot?"
-msg_town_cede_plot_confirmation_accept_plot: "%s would like to cede the townblock at %s to your town, will you accept?"
-msg_town_cede_plot_accepted: "%s has accepted ceding of your plot."
-msg_town_cede_plot_denied: "%s has declined your offer."
-msg_town_cede_plot_unable_to_accept: "%s was unable to accept your offer."
-msg_town_cede_plot_you_have_accepted: "You have gained control of the plot at %s."
-msg_err_cannot_claim_plot_join_date_too_low: "You cannot claim this plot until you have been a town resident for %s days."
-msg_err_cannot_claim_plot_join_date_too_high: "You cannot claim this plot, it is for residents who have been town members for less than %s days."
-msg_townblock_min_join_days_removed: "This TownBlock has had its min-join-days requirement removed."
-msg_townblock_max_join_days_removed: "This TownBlock has had its max-join-days requirement removed."
-msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days requirement set to %s. Only players joined for more than that number of days will be able to use /plot claim."
-msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
-msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"

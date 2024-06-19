@@ -96,6 +96,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"notforsale",
 		"nfs",
 		"evict",
+		"info",
 		"perm",
 		"set",
 		"toggle",
@@ -330,19 +331,21 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode());
 		List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, WorldCoord.parseWorldCoord(player), args, true);
 
-		// Fast-fail if this is a single plot and it is already claimed.
-		if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident() && !selection.get(0).getTownBlock().isForSale()) {
-			final Translatable message = Translatable.of("msg_already_claimed", selection.get(0).getTownBlock().getResidentOrNull());
-
-			// Add extra message if the player has permission to evict 
-			if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode())) {
-				try {
-					TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
-					message.append(Translatable.of("msg_plot_claim_consider_evict_instead"));
-				} catch (TownyException ignored) {}
+		// Fast-fail if this is a single plot and it is already claimed, or the resident already owns this plot.
+		if (selection.size() == 1 && selection.get(0).hasTownBlock() && selection.get(0).getTownBlock().hasResident()) { 
+			if (!selection.get(0).getTownBlock().isForSale()) {
+				final Translatable message = Translatable.of("msg_already_claimed", selection.get(0).getTownBlock().getResidentOrNull());
+				// Add extra message if the player has permission to evict 
+				if (player.hasPermission(PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode())) {
+					try {
+						TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
+						message.append(Translatable.of("msg_plot_claim_consider_evict_instead"));
+					} catch (TownyException ignored) {}
+				}
+				throw new TownyException(message);
+			} else if (selection.get(0).getTownBlock().hasResident(resident)) {
+				throw new TownyException(Translatable.of("msg_err_you_already_own_this_plot"));
 			}
-			
-			throw new TownyException(message);
 		}
 
 		// Filter to just plots that are for sale, which can actually be bought by the
@@ -453,7 +456,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (town == null) //Shouldn't be able to happen but check anyways.
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
-		double plotPrice = town.getPlotTypePrice(townBlock.getType());
+		double plotPrice = Math.max(town.getPlotTypePrice(townBlock.getType()), 0);
 
 		if (split.length == 0) {
 			/*

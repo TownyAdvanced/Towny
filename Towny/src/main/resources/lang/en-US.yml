@@ -2,8 +2,7 @@ name: Towny
 language: english
 author: ElgarL
 website: 'https://townyadvanced.github.io/'
-description: >
-    Language file for all game messages for this Locale.
+description: Language file for all game messages for this Locale.
 
 # A note on editing this file.
 # ----------------------------
@@ -229,10 +228,6 @@ res_1: 'Your status'
 res_2: '[resident]'
 res_3: 'Target player''s status'
 res_4: 'List all active players'
-res_5: 'for help'
-res_6: 'Online match'
-res_7: 'Exact name'
-res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -843,6 +838,8 @@ msg_you_have_undeclared_an_outlaw: '%s is no longer an outlaw in %s.'
 msg_err_player_not_an_outlaw: 'That player was not listed as an outlaw.'
 msg_err_outlaw_in_open_town: 'You cannot join an open town that has deemed you an outlaw.'
 msg_you_are_an_outlaw_in_this_town: '&4Be careful %s considers you an outlaw, dying here could mean jail.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Outlaws are jailed for %s hours.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Your bail would cost %s.'
 msg_err_town_not_close_enough_to_nation: '%s''s homeblock isn''t near enough to your capital''s homeblock to join your nation.'
 msg_nation_town_moved_their_homeblock_too_far: '%s''s homeblock was moved too far away from your nation''s capital''s homeblock and has been removed from your nation.'
 
@@ -2522,3 +2519,9 @@ msg_townblock_min_join_days_set_to: "This TownBlock has had its min-join-days re
 msg_townblock_max_join_days_set_to: "This TownBlock has had its max-join-days requirement set to %s. Only players joined for less than that number of days will be able to use /plot claim."
 
 msg_new_resident_spawn_to_town_prompt: "Did you want to spawn to the town you just joined?"
+
+msg_recieved_refund_for_deleted_object: "You have received the bank balance of your deleted town or nation, a sum of %s."
+
+msg_err_you_already_own_this_plot: "You already own this plot."
+
+msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."

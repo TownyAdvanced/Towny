@@ -6,6 +6,7 @@ public enum MigrationType {
 	NATION_LEVEL_ADD(false),
 	TOWN_LEVEL_ADD(false),
 	TOWNYPERMS_ADD(false),
+	FARMBLOCK_ADD(false),
 	REPLACE(false),
 	REMOVE(true),
 	MOVE(true),

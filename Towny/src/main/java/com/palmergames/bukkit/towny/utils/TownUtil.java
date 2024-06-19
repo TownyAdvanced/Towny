@@ -3,6 +3,10 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
+import org.bukkit.entity.Player;
+
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -35,9 +39,9 @@ public class TownUtil {
 	}
 
 	public static void checkNationResidentsRequirementsOfTown(Town town) {
-		if (!town.hasNation())
-			return;
 		Nation nation = town.getNationOrNull();
+		if (nation == null)
+			return;
 
 		// Check non-capital rules first, towns must maintain a number of residents to be a part of a nation.
 		if (!town.isCapital() && !town.hasEnoughResidentsToJoinANation()) {
@@ -52,10 +56,13 @@ public class TownUtil {
 			if (findNewCapital(town, nation))
 				return;
 
+			List<Player> onlinePlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation);
 			// No new capital found, delete the nation and potentially refund the capital town.
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName()));
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation));
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
+			if (!TownyUniverse.getInstance().getDataSource().removeNation(nation, DeleteNationEvent.Cause.NOT_ENOUGH_RESIDENTS))
+				return;
+
+			onlinePlayers.forEach(p -> TownyMessaging.sendMsg(p, Translatable.of("msg_nation_disbanded_town_not_enough_residents", town.getName())));
+			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
 				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");

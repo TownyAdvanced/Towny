@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownBlockTypeCache.CacheType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
 
@@ -30,6 +31,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -42,6 +44,8 @@ import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.TimeMgmt;
+
+import net.kyori.adventure.text.Component;
 
 public class ResidentUtil {
 	
@@ -301,6 +305,21 @@ public class ResidentUtil {
 		// If outlaws can enter towns OR the outlaw has towny.admin.outlaw.teleport_bypass perm, player is warned but not teleported.
 		if (TownySettings.canOutlawsEnterTowns() || hasBypassNode) {
 			TownyMessaging.sendMsg(outlaw, Translatable.of("msg_you_are_an_outlaw_in_this_town", town));
+			if (town.getTownBlockTypeCache().getNumTownBlocks(TownBlockType.JAIL, CacheType.ALL) < 1)
+				return;
+
+			// If the Town actually has a jail explain how long jail lasts and the potential bail costs.
+			Translatable bailMsg = null;
+			if (TownySettings.isAllowingBail() && TownyEconomyHandler.isActive()) {
+				double bail = TownySettings.getBailAmount();
+				if (outlaw.isMayor())
+					bail = outlaw.isKing() ? TownySettings.getBailAmountKing() : TownySettings.getBailAmountMayor();
+				bailMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_bail_amount", TownyEconomyHandler.getFormattedBalance(bail));
+			}
+			Translatable timeMsg = Translatable.of("msg_you_are_an_outlaw_in_this_town_jail_time", TownySettings.getJailedOutlawJailHours());
+			if (bailMsg != null)
+				timeMsg.append(Component.space()).append(bailMsg);
+			TownyMessaging.sendMsg(outlaw, timeMsg);
 		} else {
 			if (TownySettings.getOutlawTeleportWarmup() > 0) {
 				TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));

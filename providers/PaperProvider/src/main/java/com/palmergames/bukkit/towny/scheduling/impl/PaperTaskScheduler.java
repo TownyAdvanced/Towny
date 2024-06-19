@@ -35,6 +35,9 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 
 	@Override
 	public ScheduledTask runLater(final Consumer<ScheduledTask> task, long delay) {
+		if (delay == 0)
+			return run(task);
+		
 		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
 		taskRef.set(new FoliaScheduledTask(globalRegionScheduler.runDelayed(plugin, t -> task.accept(taskRef.get()), delay)));
 

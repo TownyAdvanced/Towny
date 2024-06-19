@@ -1,9 +1,12 @@
 package com.palmergames.bukkit.towny.tasks;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.NewDayTaxAndUpkeepPreCollectionEvent;
@@ -23,6 +26,8 @@ import com.palmergames.util.StringMgmt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import org.bukkit.entity.Player;
 
 public class DailyTimerTask extends TownyTimerTask {
 	
@@ -92,10 +97,10 @@ public class DailyTimerTask extends TownyTimerTask {
 			for (Town town : universe.getTowns()) {
 				if (!town.exists())
 					continue;
-				if (town.getTownBlocks().size() == 0) {
+				if (town.getTownBlocks().isEmpty()) {
 					deletedTowns.add(town.getName());
 					removedTowns.add(town.getName());
-					universe.getDataSource().removeTown(town);
+					universe.getDataSource().removeTown(town, DeleteTownEvent.Cause.NO_TOWNBLOCKS);
 				}
 			}
 			if (!deletedTowns.isEmpty())
@@ -300,7 +305,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		// OR Bankruptcy enabled but towns aren't allowed to use debt to pay nation tax. 
 			
 			if (TownySettings.doesNationTaxDeleteConqueredTownsWhichCannotPay() && town.isConquered()) {
-				universe.getDataSource().removeTown(town);
+				universe.getDataSource().removeTown(town, DeleteTownEvent.Cause.UPKEEP);
 				return "destroyed";
 			}
 
@@ -673,9 +678,10 @@ public class DailyTimerTask extends TownyTimerTask {
 		// Town is unable to pay the upkeep.
 		if (!TownySettings.isTownBankruptcyEnabled()) {
 			// Bankruptcy is disabled, remove the town for not paying upkeep.
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", prettyMoney(upkeep)));
-			universe.getDataSource().removeTown(town);
-			removedTowns.add(town.getName());
+			if (universe.getDataSource().removeTown(town, DeleteTownEvent.Cause.UPKEEP)) {
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", prettyMoney(upkeep)));
+				removedTowns.add(town.getName());
+			}
 			return;
 		}
 
@@ -690,10 +696,11 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (TownySettings.isUpkeepDeletingTownsThatReachDebtCap()) {
 				// Alternatively, if configured, towns will not be allowed to exceed
 				// their debt and be deleted from the server for non-payment finally.
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", prettyMoney(upkeep)));
-				universe.getDataSource().removeTown(town);
-				removedTowns.add(town.getName());
-				return;
+				if (universe.getDataSource().removeTown(town, DeleteTownEvent.Cause.BANKRUPTCY)) {
+					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_your_town_couldnt_pay_upkeep", prettyMoney(upkeep)));
+					removedTowns.add(town.getName());
+					return;
+				}
 			}
 			upkeep = town.getAccount().getDebtCap() - Math.abs(town.getAccount().getHoldingBalance());
 		}
@@ -780,9 +787,13 @@ public class DailyTimerTask extends TownyTimerTask {
 				totalNationUpkeep = totalNationUpkeep + upkeep;
 				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_payed_upkeep", prettyMoney(upkeep)));
 			} else {
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_your_nation_couldnt_pay_upkeep", prettyMoney(upkeep)));
-				universe.getDataSource().removeNation(nation);
-				removedNations.add(nation.getName());
+				List<Player> onlinePlayers = TownyAPI.getInstance().getOnlinePlayersInNation(nation); 
+				if (universe.getDataSource().removeNation(nation, DeleteNationEvent.Cause.UPKEEP)) {
+					String formattedUpkeep = prettyMoney(upkeep);
+					onlinePlayers.forEach(p -> TownyMessaging.sendMsg(p, Translatable.of("msg_your_nation_couldnt_pay_upkeep", formattedUpkeep)));
+					removedNations.add(nation.getName());
+					return;
+				}
 			}
 		} else if (upkeep < 0) {
 			nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");

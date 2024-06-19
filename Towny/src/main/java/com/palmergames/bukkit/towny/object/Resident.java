@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
@@ -347,9 +348,9 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		} catch (EmptyTownException e) {
 			if (!townDeleted) {
 				TownyMessaging.sendMsg(Translatable.of("msg_town_being_deleted_because_no_residents", town.getName()));
-				TownyUniverse.getInstance().getDataSource().removeTown(town, false);
+				TownyUniverse.getInstance().getDataSource().removeTown(town, DeleteTownEvent.Cause.NO_RESIDENTS, null, false);
 			}
-		} catch (NotRegisteredException ignored) {}
+		}
 
 		try {
 			setTown(null);
@@ -628,16 +629,20 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 
 	}
-	
+
 	public void clearModes() {
+		clearModes(true);
+	}
+
+	public void clearModes(boolean notify) {
 
 		this.modes.clear();
-		TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
+		if (notify)
+			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
 
-		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), true), 1);
-
+		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), notify), 1);
 	}
-	
+
 	/**
 	 * Only for internal Towny use. NEVER call this from any other plugin.
 	 *

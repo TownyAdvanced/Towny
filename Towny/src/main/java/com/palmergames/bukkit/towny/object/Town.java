@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySettings.TownLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NationAddTownEvent;
 import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
@@ -291,8 +292,8 @@ public class Town extends Government implements TownBlockOwner {
 		try {
 			oldNation.removeTown(this);
 		} catch (EmptyNationException e) {
-			TownyUniverse.getInstance().getDataSource().removeNation(oldNation);
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
+			if (TownyUniverse.getInstance().getDataSource().removeNation(oldNation, DeleteNationEvent.Cause.NO_TOWNS))
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", e.getNation().getName()));
 		}
 		
 		try {
@@ -775,18 +776,16 @@ public class Town extends Government implements TownBlockOwner {
 		return mayor != null;
 	}
 
-	public void removeResident(Resident resident) throws EmptyTownException, NotRegisteredException {
+	public void removeResident(Resident resident) throws EmptyTownException {
 
-		if (!hasResident(resident)) {
-			throw new NotRegisteredException();
-		} else {
+		if (!hasResident(resident))
+			return;
 
-			remove(resident);
-			resident.setJoinedTownAt(0);
+		remove(resident);
+		resident.setJoinedTownAt(0);
 
-			if (getNumResidents() == 0) {
-				throw new EmptyTownException(this);
-			}
+		if (getNumResidents() == 0) {
+			throw new EmptyTownException(this);
 		}
 	}
 
@@ -1095,6 +1094,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setPlotPrice(double plotPrice) {
+		if (plotPrice < 0)
+			plotPrice = -1;
+		
 		this.plotPrice = Math.min(plotPrice, TownySettings.getMaxPlotPrice());
 	}
 
@@ -1113,6 +1115,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setCommercialPlotPrice(double commercialPlotPrice) {
+		if (commercialPlotPrice < 0)
+			commercialPlotPrice = -1;
+		
 		this.commercialPlotPrice = Math.min(commercialPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 
@@ -1122,6 +1127,9 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public void setEmbassyPlotPrice(double embassyPlotPrice) {
+		if (embassyPlotPrice < 0)
+			embassyPlotPrice = -1;
+		
 		this.embassyPlotPrice = Math.min(embassyPlotPrice, TownySettings.getMaxPlotPrice());
 	}
 

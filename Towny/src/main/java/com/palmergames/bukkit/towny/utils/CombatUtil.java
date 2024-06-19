@@ -145,9 +145,9 @@ public class CombatUtil {
 
 				/*
 				 * Both townblocks are not Arena plot and Player is not considered an Admin by Towny.
-				 * Arena plots never prevent pvp, admins are never prevented from pvping.
+				 * Arena plots never prevent pvp, admins can some times bypass pvp settings.
 				 */
-				if (!isArenaPlot(attackerTB, defenderTB) && !isTownyAdmin(attackingPlayer)) {
+				if (!isArenaPlot(attackerTB, defenderTB) && !isTownyAdminBypassingPVP(attackingPlayer)) {
 					/*
 					 * Check if we are preventing friendly fire between allies
 					 * Check the attackers TownBlock for its PvP status, else the world.
@@ -710,7 +710,7 @@ public class CombatUtil {
 		}
 	}
 
-	private static boolean isTownyAdmin(Player attackingPlayer) {
-		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(attackingPlayer);
+	private static boolean isTownyAdminBypassingPVP(Player attackingPlayer) {
+		return TownySettings.isPVPAlwaysAllowedForAdmins() && TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(attackingPlayer);
 	}
 }

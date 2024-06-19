@@ -85,7 +85,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 /**
  * 
@@ -920,7 +919,6 @@ public class TownyEntityListener implements Listener {
 		map.put("damage_resistance", "resistance");
 	});
 
-	@SuppressWarnings("SimplifyStreamApiCallChains")
 	private boolean hasDetrimentalEffects(Collection<PotionEffect> effects) {
 		if (effects.isEmpty())
 			return false;
@@ -928,7 +926,7 @@ public class TownyEntityListener implements Listener {
 		/*
 		 * List of potion effects blocked from PvP.
 		 */
-		final List<String> detrimentalPotions = TownySettings.getPotionTypes().stream().map(type -> type.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+		final List<String> detrimentalPotions = TownySettings.getPotionTypes().stream().map(type -> type.toLowerCase(Locale.ROOT)).toList();
 
 		return effects.stream()
 			.map(effect -> BukkitTools.potionEffectName(effect.getType()))

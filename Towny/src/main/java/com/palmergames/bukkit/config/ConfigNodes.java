@@ -122,6 +122,10 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Setting this to true will set a town's tag automatically using the first four characters of the town's name."),
+	TOWN_DEF_MAP_COLOR("town.default_map_color",
+			"",
+			"",
+			"# When set, all new Towns will have their map color set to this color. You must use a colour listed in the global_town_settings.allowed_map_colors setting below, ie aqua, azure, etc."),
 	TOWN_DEF_TAXES(
 			"town.default_taxes", 
 			"",
@@ -187,6 +191,11 @@ public enum ConfigNodes {
 			"/nation set board [msg]",
 			"",
 			"# Default nation board"),
+	NATION_DEF_MAP_COLOR("nation.default_map_color",
+			"",
+			"",
+			"# When set, all new Nations will have their map color set to this color. You must use a colour listed in the global_nation_settings.allowed_map_colors setting below, ie aqua, azure, etc."),
+
 	NATION_DEF_TAG("nation.set_tag_automatically",
 			"false",
 			"",
@@ -219,7 +228,7 @@ public enum ConfigNodes {
 			"nation.default_taxes.max_nation_conquered_tax",
 			"100",
 			"",
-			"# The maximum amount of money that can be charge by a nation on their conquered towns."),
+			"# The maximum amount of money that can be charged by a nation on their conquered towns."),
 
 
 	NWS(
@@ -496,7 +505,8 @@ public enum ConfigNodes {
 			"global_town_settings.max_distance_for_merge",
 			"10",
 			"",
-			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging."),
+			"# The maximum distance (in townblocks) that 2 town's homeblocks can be to be eligible for merging.",
+			"# Set to this to 0 to disable the distance test."),
 
 	GTOWN_SETTINGS_HEALTH_REGEN(
 			"global_town_settings.health_regen",
@@ -689,6 +699,13 @@ public enum ConfigNodes {
 			"",
 			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
 			"# Does not have any effect when Event War is active."),
+	GTOWN_SETTINGS_ADMINS_CAN_ALWAYS_PVP(
+			"global_town_settings.admins_can_always_pvp",
+			"false",
+			"",
+			"# If set to true, any player with towny.admin (or OP,) will be able to hurt other players overriding any location's PVP setting.",
+			"# Setting this to true will create avenues for admins to abuse players."),
+
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",
@@ -1212,7 +1229,7 @@ public enum ConfigNodes {
 			"claiming.overclaiming.overclaiming_prevented_by_homeblock_radius",
 			"true",
 			"",
-			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
+			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting.",
 			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
 	CLAIMING_OVERCLAIMING_TOWN_AGE_REQUIREMENT(
 			"claiming.overclaiming.town_age_requirement",
@@ -1519,7 +1536,7 @@ public enum ConfigNodes {
 			"",
 			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
 			"# Available contexts: towny:resident, towny:nation_resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank",
-			"# towny:nationrank, towny:town, towny:nation"
+			"# towny:nationrank, towny:town, towny:nation, towny:istownconquered"
 	),
 	
 	PLUGIN_COREPROTECT_SUPPORT(
@@ -1536,6 +1553,13 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# If enabled, players will be prompted to open a url when clicking on coordinates in towny status screens."
+	),
+	PLUGIN_WEB_MAP_WORLD_NAME_USES_KEY(
+		"plugin.interfacing.web_map.world_name_uses_world_key",
+		"false",
+		"",
+		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name.",
+		"# This should be enabled if you use SquareMap."
 	),
 	
 	PLUGIN_WEB_MAP_URL(
@@ -1982,10 +2006,10 @@ public enum ConfigNodes {
 			"",
 			"  # Example:",
 			"  # [notification.format]",
-			"  # ~ [notification.area_[wilderness/town]][notification.splitter][notification.[no_]owner][notification.splitter][notification.plot.format]",
+			"  # ~ [notification.area_[wilderness/town]][notification.splitter][notification.[no_owner][notification.splitter][notification.plot.format]",
 			"  # ... [notification.plot.format]",
-			"  # ... [notification.plot.homeblock][notification.plot.splitter][notification.plot.forsale][notification.plot.splitter][notification.plot.type]",
-			"  # ~ Wak Town - Lord Jebus - [Home] [For Sale: 50 Beli] [Shop]",
+			"  # ... [notification.plot.homeblock][notification.plot.splitter][notification.plot.forsaleby][notification.plot.splitter][notification.plot.type]",
+			"  # ~ Wak Town - Lord Jebus - [Home] [For Sale by Jebus: 50 Beli] [Shop]",
 			""),
 	NOTIFICATION_FORMAT("notification.format", "&6 ~ %s"),
 	NOTIFICATION_SPLITTER("notification.splitter", "&7 - "),
@@ -2001,7 +2025,7 @@ public enum ConfigNodes {
 	// TODO: Make the following 4 nodes use something that is translatable.
 	NOTIFICATION_PLOT_HOMEBLOCK("notification.plot.homeblock", "&b[Home]"),
 	NOTIFICATION_PLOT_OUTPOSTBLOCK("notification.plot.outpostblock","&b[Outpost]"),
-	NOTIFICATION_PLOT_FORSALE("notification.plot.forsale", "&e[For Sale: %s]"),
+	NOTIFICATION_PLOT_FORSALEBY("notification.plot.forsaleby", "&e[For Sale by %s: %s]"),
 	NOTIFICATION_PLOT_NOTFORSALE("notification.plot.notforsale", "&e[Not For Sale]"),
 	NOTIFICATION_PLOT_TYPE("notification.plot.type", "&6[%s]"),
 	NOTIFICATION_GROUP("notification.group", "&f[%s]"),
@@ -2632,6 +2656,12 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, players can only use their town withdraw/deposit commands while inside of their own town.",
 			"# Likewise, nation banks can only be withdrawn/deposited to while in the capital city."),
+	ECO_BANK_IS_DELETED_OBJECT_BALANCE_PAID_TO_OWNER(
+			"economy.banks.is_deleted_town_and_nation_bank_balances_paid_to_owner",
+			"true",
+			"",
+			"# When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.",
+			"# This will only succeed if the town or nation has a mayor or leader."),
 
 	ECO_CLOSED_ECONOMY("economy.closed_economy", "", ""),
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(

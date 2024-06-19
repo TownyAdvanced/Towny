@@ -74,7 +74,7 @@ public class TownyCustomListener implements Listener {
 			return;
 
 		// Run the following with a one tick delay, so that everything has a chance to take in the player's position.
-		plugin.getScheduler().runLater(() -> {
+		plugin.getScheduler().runLater(player, () -> {
 			try {
 				if (resident.hasMode("townclaim"))
 					TownCommand.parseTownClaimCommand(player, new String[] {});
@@ -277,7 +277,7 @@ public class TownyCustomListener implements Listener {
 
 		Town town = event.getTown();
 		Player player = event.getResident().getPlayer();
-		Town playerLocationTown = TownyAPI.getInstance().getTown(player.getLocation());
+		Town playerLocationTown = Optional.ofNullable(player).map(p -> TownyAPI.getInstance().getTown(p.getLocation())).orElse(null);
 
 		if (player == null || (playerLocationTown != null && playerLocationTown.equals(town)))
 			return;

@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.teleport;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -19,6 +20,7 @@ public class OutlawTeleportEvent extends Event implements Cancellable {
 	private Location outlawLocation;
 	
     public OutlawTeleportEvent(Resident outlaw, Town town, Location loc) {
+        super(!Bukkit.isPrimaryThread());
         this.outlaw = outlaw;
         this.town = town;
         this.outlawLocation = loc;

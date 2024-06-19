@@ -16,11 +16,15 @@ import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.conversation.SetupConversation;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NationPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownPreRenameEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentRankEvent;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
+import com.palmergames.bukkit.towny.event.economy.NationTransactionEvent;
+import com.palmergames.bukkit.towny.event.economy.TownTransactionEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankAddEvent;
 import com.palmergames.bukkit.towny.event.nation.NationRankRemoveEvent;
 import com.palmergames.bukkit.towny.exceptions.InvalidMetadataTypeException;
@@ -37,6 +41,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Transaction;
+import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
@@ -1083,7 +1089,11 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (selection.isEmpty())
 			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
 
-		plugin.getScheduler().runAsync(new TownClaim(plugin, player, null, selection, false, false, true));
+		Town town = selection.get(0).getTownOrNull();
+		if (town == null)
+			throw new TownyException(Translatable.of("msg_err_empty_area_selection"));
+
+		plugin.getScheduler().runAsync(new TownClaim(plugin, player, town, selection, false, false, true));
 	}
 
 	public void parseAdminResidentCommand(CommandSender sender, String[] split) throws TownyException {
@@ -1218,7 +1228,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_DELETE.getNode());
 			Confirmation.runOnAccept(() -> {
 				TownyMessaging.sendMsg(sender, Translatable.of("town_deleted_by_admin", town.getName()));
-				TownyUniverse.getInstance().getDataSource().removeTown(town);
+				TownyUniverse.getInstance().getDataSource().removeTown(town, DeleteTownEvent.Cause.ADMIN_COMMAND, sender);
 			}).sendTo(sender);
 			break;
 		case "rename":
@@ -1283,6 +1293,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int deposit = MathUtil.getIntOrThrow(split[2]);
 			if (town.getAccount().deposit(deposit, "Admin Deposit")) {
+				BukkitTools.fireEvent(new TownTransactionEvent(town, new Transaction(TransactionType.DEPOSIT, sender, deposit)));
 				// Send notifications
 				Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(sender), deposit, Translatable.of("town_sing"));
 				TownyMessaging.sendMsg(sender, depositMessage);
@@ -1303,6 +1314,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int withdraw = MathUtil.getIntOrThrow(split[2]);
 			if (town.getAccount().withdraw(withdraw, "Admin Withdraw")) {
+				BukkitTools.fireEvent(new TownTransactionEvent(town, new Transaction(TransactionType.WITHDRAW, sender, withdraw)));
 				// Send notifications
 				Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(sender), withdraw, Translatable.of("town_sing"));
 				TownyMessaging.sendMsg(sender, withdrawMessage);
@@ -1659,11 +1671,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "delete":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_DELETE.getNode());
 			Confirmation.runOnAccept(() -> {
+				TownyUniverse.getInstance().getDataSource().removeNation(nation, DeleteNationEvent.Cause.ADMIN_COMMAND, sender);
+				TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
 				if (sender instanceof Player)
 					TownyMessaging.sendMsg(sender, Translatable.of("nation_deleted_by_admin", nation.getName()));
-				
-				TownyUniverse.getInstance().getDataSource().removeNation(nation);
-				TownyMessaging.sendGlobalMessage(Translatable.of("MSG_DEL_NATION", nation.getName()));
 			}).sendTo(sender);
 			break;
 		case "meta":
@@ -1723,6 +1734,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_invalid_input", "deposit [amount]"));
 
 			int deposit = MathUtil.getPositiveIntOrThrow(split[2]);
+
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, new Transaction(TransactionType.DEPOSIT, sender, deposit)));
+
 			nation.getAccount().deposit(deposit, "Admin Deposit");
 			// Send notifications
 			Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(sender), deposit,  Translatable.of("nation_sing"));
@@ -1738,6 +1752,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_err_invalid_input", "withdraw [amount]"));
 
 			int withdraw = MathUtil.getPositiveIntOrThrow(split[2]);
+
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, new Transaction(TransactionType.WITHDRAW, sender, withdraw)));
+
 			nation.getAccount().withdraw(withdraw, "Admin Withdraw");
 			// Send notifications
 			Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(sender), withdraw,  Translatable.of("nation_sing"));
@@ -2386,7 +2403,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void adminToggleDebug(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG.getNode());
 		TownySettings.setDebug(choice.orElse(!TownySettings.getDebug()));
-		TownyLogger.getInstance().refreshDebugLogger();
+		TownyLogger.refreshDebugLogger();
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Translatable.literal(Colors.Green).append(Translatable.of("enabled")) : Translatable.literal(Colors.Red).append(Translatable.of("disabled")))));	}
 
 	private void adminToggleTownWithDraw(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {

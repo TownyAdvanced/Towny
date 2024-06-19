@@ -1,7 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.github.bsideup.jabel.Desugar;
-
 import java.util.Collection;
 
 /**
@@ -13,5 +11,4 @@ import java.util.Collection;
  * @param nextVersionIndex The line index of where the first version changelog for the first version after the last version starts.
  * @param totalSize The total line count of the changelog.
  */
-@Desugar
 public record ChangelogResult(Collection<String> lines, boolean successful, boolean limitReached, int nextVersionIndex, int totalSize) {}

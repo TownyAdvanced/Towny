@@ -1,11 +1,15 @@
 package com.palmergames.bukkit.towny.object.economy;
 
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.EconomyAccount;
 import com.palmergames.bukkit.towny.object.Government;
+import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.event.economy.TownEntersBankruptcyEvent;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import org.bukkit.World;
@@ -120,6 +124,35 @@ public class BankAccount extends Account {
 	@Nullable
 	private Town getTown() {
 		return isTownAccount() ? (Town) government : null;
+	}
+
+	/*
+	 * Town and Nation Bank Account removal methods.
+	 */
+
+	/**
+	 * Attempt to delete the economy account of a Town or Nation.
+	 */
+	@Override
+	public void removeAccount() {
+		if (TownySettings.isDeletedObjectBalancePaidToOwner()) {
+			final Resident owner = getGovernmentOwner();
+			
+			if (owner != null && !owner.isNPC()) {
+				double balance = getHoldingBalance();
+				if (balance > 0) {
+					TownyMessaging.sendMsg(owner, Translatable.of("msg_recieved_refund_for_deleted_object", TownyEconomyHandler.getFormattedBalance(balance)));
+					payTo(balance, owner, "Deleted " + (isTownAccount() ? "Town" : "Nation") + " bank balance refund.");
+				}
+			}
+		}
+
+		super.removeAccount();
+	}
+
+	@Nullable
+	private Resident getGovernmentOwner() {
+		return government instanceof Town town ? town.getMayor() : government instanceof Nation nation ? nation.getKing() : null;
 	}
 
 	/*

@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
@@ -22,6 +21,7 @@ import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
@@ -62,7 +62,6 @@ import java.util.stream.Collectors;
 public class TownySettings {
 
 	// Town Level
-	@Desugar
 	public record TownLevel(
 			String namePrefix,
 			String namePostfix,
@@ -79,7 +78,6 @@ public class TownySettings {
 			Map<String, Integer> townBlockTypeLimits) {}
 
 	// Nation Level
-	@Desugar
 	public record NationLevel(
 			String namePrefix,
 			String namePostfix,
@@ -1088,7 +1086,15 @@ public class TownySettings {
 	}
 	
 	public static String getDefaultFarmblocks() {
-		return "COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG,BAMBOO,BAMBOO_SAPLING,JUNGLE_LOG,JUNGLE_SAPLING,JUNGLE_LEAVES,OAK_LOG,OAK_SAPLING,OAK_LEAVES,BIRCH_LOG,BIRCH_SAPLING,BIRCH_LEAVES,ACACIA_LOG,ACACIA_SAPLING,ACACIA_LEAVES,DARK_OAK_LOG,DARK_OAK_SAPLING,DARK_OAK_LEAVES,SPRUCE_LOG,SPRUCE_SAPLING,SPRUCE_LEAVES,BEETROOTS,COCOA,CHORUS_PLANT,CHORUS_FLOWER,SWEET_BERRY_BUSH,KELP,SEAGRASS,TALL_SEAGRASS,GRASS,TALL_GRASS,FERN,LARGE_FERN,CARROTS,WHEAT,POTATOES,PUMPKIN,PUMPKIN_STEM,ATTACHED_PUMPKIN_STEM,NETHER_WART,COCOA,VINE,MELON,MELON_STEM,ATTACHED_MELON_STEM,SUGAR_CANE,CACTUS,ALLIUM,AZURE_BLUET,BLUE_ORCHID,CORNFLOWER,DANDELION,LILAC,LILY_OF_THE_VALLEY,ORANGE_TULIP,OXEYE_DAISY,PEONY,PINK_TULIP,POPPY,RED_TULIP,ROSE_BUSH,SUNFLOWER,WHITE_TULIP,WITHER_ROSE,CRIMSON_FUNGUS,CRIMSON_STEM,CRIMSON_HYPHAE,CRIMSON_ROOTS,MUSHROOM_STEM,NETHER_WART_BLOCK,BROWN_MUSHROOM,BROWN_MUSHROOM_BLOCK,RED_MUSHROOM,RED_MUSHROOM_BLOCK,SHROOMLIGHT,WARPED_FUNGUS,WARPED_HYPHAE,WARPED_ROOTS,WARPED_STEM,WARPED_WART_BLOCK,WEEPING_VINES_PLANT,WEEPING_VINES,NETHER_SPROUTS,SHEARS";
+		Set<String> farmMaterials = new HashSet<>();
+		farmMaterials.addAll(ItemLists.SAPLINGS.getMaterialNameCollection());
+		farmMaterials.addAll(ItemLists.TREES.getMaterialNameCollection()); // Includes Leaves.
+		farmMaterials.addAll(ItemLists.PLANTS.getMaterialNameCollection());
+		farmMaterials.addAll(ItemLists.CROPS.getMaterialNameCollection());
+		farmMaterials.addAll(Arrays.asList("COW_SPAWN_EGG,GOAT_SPAWN_EGG,MOOSHROOM_SPAWN_EGG")); // For milking tests.
+		farmMaterials.add("SHROOMLIGHT");
+		farmMaterials.add("SHEARS");
+		return StringMgmt.join(farmMaterials, ",");
 	}
 	
 	public static String getDefaultWildsblocks() {
@@ -2053,6 +2059,10 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_DEATH_NATION);
 	}
 	
+	public static boolean isDeletedObjectBalancePaidToOwner() {
+		return getBoolean(ConfigNodes.ECO_BANK_IS_DELETED_OBJECT_BALANCE_PAID_TO_OWNER);
+	}
+
 	public static boolean isEcoClosedEconomyEnabled() {
 		
 		return getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED);
@@ -2922,6 +2932,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_HOMEBLOCKS_PREVENT_FORCEPVP);
 	}
 
+	public static boolean isPVPAlwaysAllowedForAdmins() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ADMINS_CAN_ALWAYS_PVP);
+	}
+
 	public static int getConfirmationTimeoutSeconds() {
 		return getInt(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_TIMEOUT);
 	}
@@ -3400,7 +3414,21 @@ public class TownySettings {
 		}
 		return townColorsMap;
 	}
-	
+
+	public static String getDefaultNationMapColor() {
+		String colorName = getString(ConfigNodes.NATION_DEF_MAP_COLOR);
+		if (colorName.isEmpty() || !getNationColorsMap().containsKey(colorName))
+			return MapUtil.generateRandomNationColourAsHexCode();
+		return getNationColorsMap().get(colorName);
+	}
+
+	public static String getDefaultTownMapColor() {
+		String colorName = getString(ConfigNodes.TOWN_DEF_MAP_COLOR);
+		if (colorName.isEmpty() || !getTownColorsMap().containsKey(colorName))
+			return MapUtil.generateRandomTownColourAsHexCode();
+		return getTownColorsMap().get(colorName);
+	}
+
 	public static boolean isTownBankruptcyEnabled() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_ENABLED);
 	}
@@ -3606,6 +3634,10 @@ public class TownySettings {
 	
 	public static boolean isUsingWebMapStatusScreens() {
 		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_USING_STATUSSCREEN);
+	}
+	
+	public static boolean isUsingWorldKeyForWorldName() {
+		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_WORLD_NAME_USES_KEY);
 	}
 	
 	public static String getWebMapUrl() {

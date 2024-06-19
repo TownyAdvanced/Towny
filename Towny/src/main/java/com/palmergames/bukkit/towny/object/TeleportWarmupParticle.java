@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
 
 public class TeleportWarmupParticle {
@@ -55,7 +54,6 @@ public class TeleportWarmupParticle {
 		return ring;
 	}
 
-	@Desugar
 	private record RingCoord(double x, double z) {
 		private static RingCoord offset(double a, double b) {
 			return new RingCoord(a, b);

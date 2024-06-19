@@ -234,7 +234,7 @@ public class Towny extends JavaPlugin {
 		TownBlockTypeHandler.initialize();
 
 		// Initialize the special log4j hook logger.
-		TownyLogger.getInstance();
+		TownyLogger.initialize();
 
 		// Clear all objects from the TownyUniverse class.
 		townyUniverse.clearAllObjects();
@@ -525,7 +525,7 @@ public class Towny extends JavaPlugin {
 			if (result.limitReached()) {
 				plugin.getLogger().info("<snip>");
 				plugin.getLogger().info("Changelog continues for another " + (result.totalSize() - (result.nextVersionIndex() + 99)) + " lines.");
-				plugin.getLogger().info("To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/resources/ChangeLog.txt#L" + (result.nextVersionIndex() + 1));
+				plugin.getLogger().info("To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt#L" + (result.nextVersionIndex() + 1));
 			}
 			
 			plugin.getLogger().info("------------------------------------");
@@ -565,15 +565,6 @@ public class Towny extends JavaPlugin {
 	@NotNull
 	public Collection<TownyInitException.TownyError> getErrors() {
 		return errors;
-	}
-
-	public World getServerWorld(String name) throws NotRegisteredException {
-		World world = BukkitTools.getWorld(name);
-		
-		if (world == null)
-			throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
-		
-		return world;
 	}
 
 	public boolean hasCache(Player player) {
@@ -869,5 +860,21 @@ public class Towny extends JavaPlugin {
 	@NotNull
 	public TaskScheduler getScheduler() {
 		return this.scheduler;
+	}
+
+	/**
+	 * @deprecated since 0.100.2.13, unused by Towny for many years. Use {@link BukkitTools#getWorld(String)} instead.
+	 * @param name Name of the World.
+	 * @return a World
+	 * @throws NotRegisteredException if the world doesn't exist.
+	 */
+	@Deprecated
+	public World getServerWorld(String name) throws NotRegisteredException {
+		World world = BukkitTools.getWorld(name);
+		
+		if (world == null)
+			throw new NotRegisteredException(String.format("A world called '$%s' has not been registered.", name));
+		
+		return world;
 	}
 }
