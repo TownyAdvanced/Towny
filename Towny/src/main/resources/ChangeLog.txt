@@ -9826,3 +9826,10 @@ v0.92.0.11:
   - Fix a bad scheduler call in take over claim code, courtesy of Warrior with PR #7466.
   - Fix plot border modes on Folia, courtesy of Warrior with PR #7467.
   - Raise java version to 17, courtesy of Warrior with PR #7401.
+0.100.3.2:
+  - Fix WorldCoord#unloadChunks adding plugin chunk tickets, courtesy of galacticwarrior9 with PR #7478.
+  - Handle empty towns during duplicate resident removal, courtesy of Warrior with PR #7474.
+  - Add plot group creation/deletion events #7476, courtesy of Warrior with PR.
+    - Closes #7475.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.2.5 to 3.3.0.
+  - Drop support for MC 1.16-1.18, update the readme.
