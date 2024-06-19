@@ -345,12 +345,6 @@ public class AreaSelectionUtil {
 		return out;
 	}
 
-	// private static boolean worldCoordNotTooCloseToOtherTowns(Town town, WorldCoord worldCoord) {
-	// 	TownyWorld townyWorld = worldCoord.getTownyWorld();
-	// 	return townyWorld != null 
-	// 			&& townyWorld.getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()
-	// 			&& townyWorld.getMinDistanceFromOtherOlderTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromOlderTownPlotblocks();
-	// }
 	private static boolean worldCoordNotTooCloseToOtherTowns(Town town, WorldCoord worldCoord) {
 		TownyWorld townyWorld = worldCoord.getTownyWorld();
 		return townyWorld != null 
