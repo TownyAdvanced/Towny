@@ -6,38 +6,33 @@ ___
 
 Hello Towny community,
 
-Deciding to write this has not been easy, but I think it is better to get this out here rather than have you in the dark.
+To the folks already sponsoring me: you are all awesome, the words below do not apply to you. I am grateful for the help you've provided me over the years (some of you, you know who you are,) and I am incredibly grateful for the support you've given.
 
-To the folks already sponsoring me: you are all awesome and you can expect my regular old self. You will have my full attention, the words below do not apply to you. I am grateful for the help you've provided me over the years (some of you, you know who you are,) and I am incredibly grateful for the support you've given over the last 4 months.
+I have been working with Towny since 2011. I have been in charge of the project since 2014. I have put in more than 13 years of service to an Open Source project that you use. I have not run a minecraft server, or played minecraft in over 7 years.
 
-I have been working with Towny since 2011. I have been in charge of the project since 2014. I have put in more than 12 years of service to an Open Source project that you use. I have not run a minecraft server, or played minecraft in over 4.5 years.
-
-Some of you may know this, some may not: Late last year my source of income ceased, resulting in not getting paid many thousands of dollars that are owed to me (which I had expected and budgeted for.) Because of the nature of that company's failures I am unlikely to ever see this money. Up until that point, my normal job fully-subsidized the time I put into coding Towny and its many add-on plugin. You all have enjoyed my works because I was able to feed and house my family via my regular work whilst paying myself to work on Towny.
+Some of you may know this, some may not: In 2021 my IRL work was up-ended, resulting in a major reset of my career. The result was that I have not been bringing in the same income as I was before, something I require to feed, cloth and house my wife and young children. Up until that point, my normal job fully-subsidized the time I put into coding Towny and its many add-on plugin. You all have enjoyed my works because I was able to feed and house my family via my regular work whilst paying myself to work on Towny.
 
 I make myself available regularly on Discord answering mundane and complex questions alike. Bugs are usually fixed the same day they are reported. Other developers that contribute Pull Requests to Towny get reviews right away, and jr developers can usually expect me to help with commits so their work gets merged.
 
-99% of Towny server admins are not sponsoring the work that I put into Towny. As of this posting, just after Github dropped support for Paypal, I have 120 sponsors, down from 148 (nearly reaching my current goal.)
+99% of Towny server admins are not sponsoring the work that I put into Towny. The truth about well-managed open source projects is that the developers of them need to be compensated for the time and energy they put into their software. Developers of large projects are unfortunately rarely compensated, and in fact receive a lot of push back from people who expect free software at no cost.
 
-This is somehow a normal thing for Open Source developers. If we put up paywalls in front of Downloads or in front of Support we can expect get nasty comments about being greedy, we can expect to receive negative reviews for not providing instant support. How dare an Open Source developer try to monetize what everyone gets to take for granted! Here's a look at what the worst-case scenario looks like for Open Source developers: <https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md> 
+There are days that I enjoy every minute of what I do with Towny. Helping out the new server admins with their greenleaf in the Discord as they learn the ropes around Towny can be fun. Making a sponsor's feature request a reality. Creating a brand new add-on plugin from nothing but code and the TownyAPI that I have spent years fostering. As of this posting Towny has a 4.7/5 rating on Spigot, with 145 reviews. Nearly all of the reviews cite me and my efforts. I enjoy coding or I would not still be doing it.
 
-There are days that I enjoy every minute of what I do with Towny. Helping out the new server admins with their greenleaf in the Discord as they learn the ropes around Towny can be fun. Making a sponsor's feature request a reality. Creating a brand new add-on plugin from nothing but code and the TownyAPI that I have spent years fostering. As of this posting Towny has a 4.8/5 rating on Spigot, with 115 reviews. Nearly all of the reviews cite me and my efforts. I enjoy coding or I would not still be doing it.
+And then there are days that I do not enjoy every minute of it, but you will not find any days that I have not answered every question asked on the Discord by new admins or sponsors.
 
-And then there are days that I do not enjoy every minute of it, but you will be hard-pressed to find any days that I have not answered every question asked on the Discord.
+I not only provide server owners with amazing support I also provide many plugins. It is not uncommon for servers to use Towny with side-plugins I am also in charge of: SiegeWar, Dynmap-Towny, iConomy5, TownyResources, TownyProvinces all playing very large roles on the server with other plugins like TownyChat, TownyFlight, TownyCultures, and others playing smaller roles. I read people's startup logs when they need my help and they tend to use a lot of my plugins if they use Towny.
 
-I not only provide server owners with amazing support I also provide many plugins. It is not uncommon for servers to use Towny with side-plugins I am also in charge of: SiegeWar, Dynmap-Towny, iConomy5, TownyResources all playing very large roles on the server with other plugins like TownyChat, TownyFlight, TownyCultures, and others playing smaller roles. I read people's startup logs when they need my help and they tend to use a lot of my plugins if they use Towny.
+I remember the time that Goosius decided to stop working on his fork of Towny that had SiegeWar built into it. He spent a little more than a year doing intense, active development, constantly getting feedback from server admins and players, constantly tweaking things. And then he vanished, burnt out from everything. He logged out of his SiegeWar discord and that was seemingly it. When I joined the SiegeWar discord in late 2020, I was surprised at how many people were clamouring for SiegeWar, willing to throw money at anyone that would continue coding SiegeWar. The developer left, and all of a sudden people were willing to pay. I have pulled SiegeWar from the ashes twice now, and yet the greater reward is not their.
 
-I remember the time that Goosius decided to stop working on his fork of Towny that had SiegeWar built into it. He spent a little more than a year doing intense, active development, constantly getting feedback from server admins and players, constantly tweaking things. And then he vanished, burnt out from everything. He logged out of his SiegeWar discord and that was seemingly it. When I joined the SiegeWar discord in late 2020, I was surprised at how many people were clamouring for SiegeWar, willing to throw money at anyone that would continue coding SiegeWar. The developer left, and all of a sudden people were willing to pay.
-
-Is that what it will take with Towny? I have to outright quit in order for server owners to realize how much they rely on Towny?
-
-I am going to change how I handle things for the time being: 
+As of the start of 2024 I have enacted a new policy:
  - If you're expecting support on the Discord: I expect you to sponsor. Companies that provide software do not provide support for free. I will probably still respond to you if you're brand new and need that extra bit of help. If you can find something that isn't already documented on the Wiki, let me know and I'll add it. 
  - If you are not sponsoring, please do not make suggestions for new features, I don't need ideas right now.
- 
-Right now I need to pay my bills and provide food to my wife and children.
 
-The ball is in your collective hands as to whether you'll continue to see my presence felt here.
+This is due to underfunding, if sponsorships rise to a level at which I can sustain myself and my family the time I can devote to Towny will expand and the support floodgates will re-open. My time coding is being devoted to the people who are giving back by [sponsoring](https://github.com/sponsors/LlmDl) me.
 
+Thank you for reading,
+
+- LlmDl
 ___
 
 ### The normal Readme
@@ -59,13 +54,14 @@ ___
 
 ### Current Recommended Versions
 * [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.16.* & 1.17.* & 1.18.* & 1.19.* & 1.20.*.
-* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports MC 1.16.* & 1.17.* & 1.18.* & 1.19.* & 1.20.*.
+* [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports 1.19.* & 1.20.* & 1.21.*.
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.20.* </td><td rowspan=5> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.100.3.0>0.100.3.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.21.* </td><td> Use the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.20.* </td><td rowspan=2> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.100.3.0>0.100.3.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
 <tr align=center><td> MC 1.19.* </td>
-<tr align=center><td> MC 1.18.* </td>
+<tr align=center><td> MC 1.18.* </td><td rowspan=3> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.100.3.0>0.100.3.0</a></td>
 <tr align=center><td> MC 1.17.* </td>
 <tr align=center><td> MC 1.16.* </td>
 <tr align=center><td> MC 1.15.2 </td><td rowspan=2> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.98.1.0>0.98.1.0</a></td>
@@ -108,7 +104,7 @@ Here on GitHub's [Issue Tracker](https://github.com/TownyAdvanced/Towny/issues) 
 
 If you still need help, join us on the [Discord server]( https://discord.gg/gnpVs5m ), where you'll find Channels for support, add-on plugins, [SponsorPlugins](https://github.com/LlmDl/SponsorPlugins#readme), plugin-development and just regular old discussion of the plugin.
 
-If you want to support the developer consider [becoming a Sponsor](https://github.com/sponsors/LlmDl).
+**Note: that if you are not a new Towny admin, it is expected that you [become a Sponsor](https://github.com/sponsors/LlmDl) if you want hands on support from LlmDl.**
 
 ___
 

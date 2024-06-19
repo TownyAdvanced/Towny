@@ -24,7 +24,6 @@ import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NationUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
@@ -36,7 +35,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
-import io.papermc.lib.PaperLib;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -1060,8 +1058,6 @@ public class TownyFormatter {
 	}
 
 	private static String getWorldSlugForMapURL(World world) {
-		return TownySettings.isUsingWorldKeyForWorldName() && (PaperLib.isPaper() || MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_18_2))
-				? world.getKey().toString()
-				: world.getName();
+		return TownySettings.isUsingWorldKeyForWorldName() ? world.getKey().toString() : world.getName();
 	}
 }

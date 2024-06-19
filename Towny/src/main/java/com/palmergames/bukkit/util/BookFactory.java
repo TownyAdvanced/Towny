@@ -89,20 +89,8 @@ public class BookFactory {
 							continue;
 						}
 
-						/*
-						 * Required because Bukkit builds older than Nov 3 2020 (MC 1.16.3)
-						 * believe a space is only 2 pixels wide while it is in fact 3 pixels wide.
-						 */
-						int spaces = 0; // Number of pixels to add to the line length test later on.
-						if (FontUtil.font.getWidth(" ") == 2) {
-							spaces = 1; // Because one space will be added in the test.
-							for (int i = 0; i < line.length(); ++i)
-								if (line.charAt(i) == ' ')
-									spaces++;
-						}
-
 						// Current line + word is too long to be one line
-						if (FontUtil.measureWidth(line + " " + word) + spaces > MAX_LINE_WIDTH) {
+						if (FontUtil.measureWidth(line + " " + word) > MAX_LINE_WIDTH) {
 							// Add our current line
 							lines.add(line + "\n");
 							// Set our next line to start off with this word

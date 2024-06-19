@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 env:
   CURR_VER: 0.0.0.0
-  SUPPORTED: " for MC 1.16.* & 1.17.* & 1.18.* & 1.19.* & 1.20.*"
+  SUPPORTED: " for MC 1.19.* & 1.20.* & 1.21.*"
 jobs:
   deploy_prerelease:
     runs-on: ubuntu-latest

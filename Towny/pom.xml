@@ -30,7 +30,7 @@
     </organization>
 
     <properties>
-        <project.bukkitAPIVersion>1.16</project.bukkitAPIVersion>
+        <project.bukkitAPIVersion>1.19</project.bukkitAPIVersion>
         <skipTests>true</skipTests>
     </properties>
 

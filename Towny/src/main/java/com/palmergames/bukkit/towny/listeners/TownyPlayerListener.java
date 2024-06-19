@@ -536,7 +536,7 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Catches respawn anchors blowing up and allows us to track their explosions.
 			 */
-			if (block.getType() == Material.RESPAWN_ANCHOR && !isRespawnAnchorWorking(block)) {
+			if (block.getType() == Material.RESPAWN_ANCHOR && !block.getWorld().isRespawnAnchorWorks()) {
 				RespawnAnchor anchor = ((RespawnAnchor) block.getBlockData());
 				if (anchor.getCharges() > 0)
 					BukkitTools.fireEvent(new BedExplodeEvent(player, blockLoc, null, block.getType()));
@@ -597,18 +597,6 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
-	private boolean isRespawnAnchorWorking(Block block) {
-		boolean allowedInWorld = false;
-		try {
-			allowedInWorld = block.getWorld().isRespawnAnchorWorks();
-		} catch (NoSuchMethodError ignored) {
-			// Pre-1.18 versions of the Bukkit API do not have an isRespawnAnchorWorks() method.
-			// TODO: Drop this when Towny no longer supports earlier than MC 1.18.
-			allowedInWorld = block.getWorld().getEnvironment().equals(Environment.NETHER);
-		}
-		return allowedInWorld;
-	}
-
 	/*
 	 * This method will stop a player Right Clicking on a respawn anchor if:
 	 * - The world is an anchor-allowed world (the nether) and,
@@ -617,7 +605,7 @@ public class TownyPlayerListener implements Listener {
 	 * - The Item in their hand is nothing or (not-glowstone or the charges are full.) 
 	 */
 	private boolean disallowedAnchorClick(PlayerInteractEvent event, Block block) {
-		return isRespawnAnchorWorking(block)
+		return block.getWorld().isRespawnAnchorWorks()
 			&& block.getBlockData() instanceof RespawnAnchor anchor 
 			&& anchor.getCharges() > 0 
 			&& (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()));
@@ -665,8 +653,7 @@ public class TownyPlayerListener implements Listener {
 			ActionType actionType = ActionType.DESTROY;
 			EntityType entityType = event.getRightClicked().getType();
 			
-			// PlayerInventory#getItem(EquipmentSlot) does not exist on <1.16, so this has to be used
-			Material item = event.getHand().equals(EquipmentSlot.HAND) ? event.getPlayer().getInventory().getItemInMainHand().getType() : event.getPlayer().getInventory().getItemInOffHand().getType();
+			Material item = player.getInventory().getItem(EquipmentSlot.HAND).getType();
 
 			/*
 			 * The following will get us a Material substituted in for an Entity so that we can run permission tests.
