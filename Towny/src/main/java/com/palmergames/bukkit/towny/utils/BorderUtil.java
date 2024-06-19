@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.CellBorder;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -257,7 +256,6 @@ public class BorderUtil {
 		return FloodfillResult.success(valid);
 	}
 
-	@Desugar
 	public record FloodfillResult(@NotNull Type type, @Nullable Translatable feedback, @NotNull Collection<WorldCoord> coords) {
 		public enum Type {
 			SUCCESS,

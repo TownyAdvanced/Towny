@@ -9757,3 +9757,72 @@ v0.92.0.11:
     - Closes #7397.
 0.100.2.9:
   - Fix scheduling 0 tick delayed task on paper, courtesy of Warrior with PR #7404.
+  - Call NewResidentThread sync on Folia, courtesy of Warrior with PR #7394.
+  - Disable admins-bypassing-pvp settings by default.
+  - New Config Option: global_town_settings.admins_can_always_pvp
+    - Default: false
+    - If set to true, any player with towny.admin (or OP,) will be able to hurt other players overriding any location's PVP setting.
+    - Setting this to true will create avenues for admins to abuse players.
+  - Expand DeleteTownEvent and DeleteNationEvent with sender & causes, courtesy of Warrior with PRs #7412 & #7415.
+    - Closes #7410.
+  - Fix dragon egg teleportation on left click, courtesy of gecko10000 with PR #7419.
+  - Fix TownyMessaging sending null messages.
+  - Bump net.coreprotect:coreprotect from 22.3 to 22.4.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.86.0 to 3.86.1.
+  - Bump net.kyori:adventure-text-minimessage from 4.16.0 to 4.17.0.
+  - Bump net.kyori:adventure-text-serializer-plain from 4.16.0 to 4.17.0.
+0.100.2.10:
+  - Fix money being taken from town creation when the creation is cancelled because the town is prevented from claiming the homeblock.
+  - Set mappings namespace in manifest, courtesy of Warrior with PR #7427.
+    - Also includes other pom maintenance.
+  - Update FarmPlotBlocks to automatically update from ItemLists when generating defaults.
+    - Also adds a new ConfigMigration type specifically for farm blocks.
+    - Existing configs will add in any missing farm blocks.
+0.100.2.11:
+  - Fix FarmPlotBlock migration failing on server upgrade.
+0.100.2.12:
+  - Add ability to set default town and nation map colors.
+    - Closes #7429.
+  - New Config Option: town.default_map_color
+    - Default: ""
+    - When set, all new Towns will have their map color set to this color. You must use a colour listed in the global_town_settings.allowed_map_colors setting below, ie aqua, azure, etc.
+  - New Config Option: nation.default_map_color
+    - Default: ""
+    - When set, all new Nations will have their map color set to this color. You must use a colour listed in the global_nation_settings.allowed_map_colors setting below, ie aqua, azure, etc.
+  - Fix players who log into an area where they are outlawed not using the correct town.
+  - API: Add SuccessfulTownyTeleportEvent
+    - Thrown when a player is spawned by Towny after they use /res, /town, or /nation spawn.
+  - Make addItemList accept any list of the same type, courtesy of Warrior with PR #7333.
+  - Add TransactionEvents thrown by /ta withdraw and deposit commands.
+  - Go into safemode if no sql connection could be made, courtesy of Warrior with PR #7432.
+  - Bump org.apache.commons:commons-compress from 1.26.1 to 1.26.2.
+  - Bump me.clip:placeholderapi from 2.11.5 to 2.11.6.
+0.100.2.13:
+  - Improve a couple SQL operations, courtesy of xyzeva with PR #7438. (First-Time Contributor!)
+  - Fix the relational placeholder that showed conquered status not being used for the player which are conquered.
+  - API: Add TownPreReclaimEvent.
+    - A cancellable event thrown before a player can reclaim a town.
+0.100.2.14:
+  - Add new LuckPerms context: towny:istownconquered
+    - When a player is part of a town that it conquered by a nation, this will return true.
+  - API: Add NationPreInviteTownEvent.
+    - A cancellable event thrown before a town is sent an invite to join a nation.
+    - Closes #7453.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.5.3 to 3.6.0.
+  - Bump net.kyori:adventure-platform-bukkit from 4.3.3-SNAPSHOT to 4.3.3.
+  - Bump com.github.seeseemelk:MockBukkit-v1.20 from 3.86.1 to 3.88.1.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.6.3 to 3.7.0.
+  - Remove more potential NotRegisteredExceptions.
+  - Support partial reference files, courtesy of Warrior with PR #7428.
+    - Reference language files will only be re-written when Towny's version is also changing.
+    - This will allow Towny's reference files to eventually leave a smaller footprint on the Towny.jar filesize. 
+0.100.2.15:
+  - Fix failure on startup due to debug messaging, courtesy of Warrior with PR #7455.
+    - Closes #7452.
+0.100.3.0:
+  - Bump version for release.
+0.100.3.1:
+  - Fix new outlaws not being teleported out of the town they were outlawed in.
+  - Fix a bad scheduler call in take over claim code, courtesy of Warrior with PR #7466.
+  - Fix plot border modes on Folia, courtesy of Warrior with PR #7467.
+  - Raise java version to 17, courtesy of Warrior with PR #7401.

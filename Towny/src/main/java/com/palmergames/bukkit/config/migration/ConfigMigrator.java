@@ -7,15 +7,18 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.util.Version;
+import com.palmergames.util.StringMgmt;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +146,7 @@ public class ConfigMigrator {
 				addPermissions(change.path, change.value);
 				TownyMessaging.sendDebugMsg("Updating townyperms.yml, adding " + change.value + " to " + change.path + " group.");
 			}
+			case FARMBLOCK_ADD -> addFarmBlock(change.key, change.value);
 			case REPLACE -> {
 				Object value = config.get(change.path);
 				if (value instanceof String string)
@@ -231,6 +235,19 @@ public class ConfigMigrator {
 		}
 
 		config.set("levels.nation_level", mapList);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addFarmBlock(String key, String value) {
+		for (Map<?, ?> plotType : config.getMapList("townblocktypes.types")) {
+			if (!plotType.get("name").equals("farm"))
+				continue;
+			List<String> currentBlocks = Arrays.asList(((String) plotType.get("allowedBlocks")).split(","));
+			Arrays.asList(TownySettings.getDefaultFarmblocks().split(",")).stream()
+				.filter(block -> !currentBlocks.contains(block))
+				.forEach(block -> currentBlocks.add(block));
+			((Map<String, Object>) plotType).replace("allowedBlocks", StringMgmt.join(currentBlocks, ","));
+		}
 	}
 
 	public RunnableMigrations getRunnableMigrations() {

@@ -122,6 +122,10 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Setting this to true will set a town's tag automatically using the first four characters of the town's name."),
+	TOWN_DEF_MAP_COLOR("town.default_map_color",
+			"",
+			"",
+			"# When set, all new Towns will have their map color set to this color. You must use a colour listed in the global_town_settings.allowed_map_colors setting below, ie aqua, azure, etc."),
 	TOWN_DEF_TAXES(
 			"town.default_taxes", 
 			"",
@@ -187,6 +191,11 @@ public enum ConfigNodes {
 			"/nation set board [msg]",
 			"",
 			"# Default nation board"),
+	NATION_DEF_MAP_COLOR("nation.default_map_color",
+			"",
+			"",
+			"# When set, all new Nations will have their map color set to this color. You must use a colour listed in the global_nation_settings.allowed_map_colors setting below, ie aqua, azure, etc."),
+
 	NATION_DEF_TAG("nation.set_tag_automatically",
 			"false",
 			"",
@@ -219,7 +228,7 @@ public enum ConfigNodes {
 			"nation.default_taxes.max_nation_conquered_tax",
 			"100",
 			"",
-			"# The maximum amount of money that can be charge by a nation on their conquered towns."),
+			"# The maximum amount of money that can be charged by a nation on their conquered towns."),
 
 
 	NWS(
@@ -690,6 +699,13 @@ public enum ConfigNodes {
 			"",
 			"# If set to true, when a world has forcepvp set to true, homeblocks of towns will not be affected and have PVP set to off.",
 			"# Does not have any effect when Event War is active."),
+	GTOWN_SETTINGS_ADMINS_CAN_ALWAYS_PVP(
+			"global_town_settings.admins_can_always_pvp",
+			"false",
+			"",
+			"# If set to true, any player with towny.admin (or OP,) will be able to hurt other players overriding any location's PVP setting.",
+			"# Setting this to true will create avenues for admins to abuse players."),
+
 	GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_TOWN(
 			"global_town_settings.keep_inventory_on_death_in_town",
 			"false",
@@ -1204,7 +1220,7 @@ public enum ConfigNodes {
 			"claiming.overclaiming.overclaiming_prevented_by_homeblock_radius",
 			"true",
 			"",
-			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting below.",
+			"# While true, overclaiming is stopped by the min_distance_from_town_homeblock setting.",
 			"# This prevents a town from having townblocks stolen surrounding their homeblocks."),
 	CLAIMING_OVERCLAIMING_TOWN_AGE_REQUIREMENT(
 			"claiming.overclaiming.town_age_requirement",
@@ -1511,7 +1527,7 @@ public enum ConfigNodes {
 			"",
 			"# Configure what contexts to enable/disable here, contexts must be separated by a comma.",
 			"# Available contexts: towny:resident, towny:nation_resident, towny:mayor, towny:king, towny:insidetown, towny:insideowntown, towny:insideownplot, towny:townrank",
-			"# towny:nationrank, towny:town, towny:nation"
+			"# towny:nationrank, towny:town, towny:nation, towny:istownconquered"
 	),
 	
 	PLUGIN_COREPROTECT_SUPPORT(

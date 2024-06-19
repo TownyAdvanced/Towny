@@ -9,7 +9,6 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,8 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +31,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -146,17 +142,7 @@ public final class FileMgmt {
 				for (String aChildren : children)
 					copyDirectory(new File(sourceLocation, aChildren), new File(targetLocation, aChildren));
 			} else {
-				try (OutputStream out = new FileOutputStream(targetLocation);
-					InputStream in = new FileInputStream(sourceLocation)) {
-					// Copy the bits from in stream to out stream.
-					byte[] buf = new byte[1024];
-					int len;
-					while ((len = in.read(buf)) > 0)
-						out.write(buf, 0, len);
-				} catch (IOException ex) {
-					// failed to access file.
-					Towny.getPlugin().getLogger().warning("Error: Could not access: " + sourceLocation);
-				}
+				Files.copy(sourceLocation.toPath(), targetLocation.toPath());
 			}
 		} finally {
 			writeLock.unlock();
@@ -173,14 +159,8 @@ public final class FileMgmt {
 	public static boolean listToFile(Collection<String> source, String targetLocation) {
 		try {
 			writeLock.lock();
-			File file = new File(targetLocation);
-			try(OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-				BufferedWriter bufferedWriter = new BufferedWriter(osw)) {
-
-				for (String aSource : source) {
-					bufferedWriter.write(aSource + System.lineSeparator());
-				}
-
+			try {
+				Files.write(Path.of(targetLocation), source);
 				return true;
 			} catch (IOException e) {
 				Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while writing to " + targetLocation, e);
@@ -234,7 +214,6 @@ public final class FileMgmt {
 		return new SimpleDateFormat("yyyy-MM-dd HH-mm").format(t);
 	}
 	
-	@SuppressWarnings("SimplifyStreamApiCallChains")
 	public static void tar(File destination, File... sources) throws IOException {
 		try {
 			readLock.lock();
@@ -243,7 +222,7 @@ public final class FileMgmt {
 				for (File sourceFile : sources) {
 					Path source = sourceFile.toPath();
 					try (Stream<Path> files = Files.walk(source)) {
-						for (Path path : files.collect(Collectors.toList())) {
+						for (Path path : files.toList()) {
 							if (Files.isDirectory(path))
 								continue;
 							
@@ -406,7 +385,7 @@ public final class FileMgmt {
 				}
 			}
 
-			if (deleted.size() > 0) {
+			if (!deleted.isEmpty()) {
 				Towny.getPlugin().getLogger().info(String.format("Deleting %d Old Backups (%s).", deleted.size(), (deleted.size() > 1 ? String.format("%d-%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first()), TimeUnit.MILLISECONDS.toDays(deleted.last())) : String.format("%d days old", TimeUnit.MILLISECONDS.toDays(deleted.first())))));
 			}
 
@@ -472,12 +451,6 @@ public final class FileMgmt {
 			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while saving plot data to " + file.getName(), e1);
 		} finally {
 			writeLock.unlock();
-		}
-	}
-
-	public static void writeString(Path path, String string) throws IOException {
-		try (FileOutputStream fos = new FileOutputStream(path.toFile())) {
-			fos.write(string.getBytes(StandardCharsets.UTF_8));
 		}
 	}
 

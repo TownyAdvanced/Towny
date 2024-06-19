@@ -105,7 +105,7 @@ public class OnPlayerLogin implements Runnable {
 					}
 					
 					resident.save();
-					BukkitTools.fireEvent(new NewResidentEvent(resident));
+					plugin.getScheduler().run(player, () -> BukkitTools.fireEvent(new NewResidentEvent(finalResident)));
 					
 				} catch (NotRegisteredException e) {
 					plugin.getLogger().log(Level.WARNING, "Could not register resident '" + player.getName() + "' (" + player.getUniqueId() + ") due to an error, Towny features might be limited for this player until it is resolved", e);
@@ -164,7 +164,7 @@ public class OnPlayerLogin implements Runnable {
 			// Check if this is a player spawning into a Town in which they are outlawed.
 			Town insideTown = TownyAPI.getInstance().getTown(player.getLocation());
 			if (insideTown != null && insideTown.hasOutlaw(resident))
-				ResidentUtil.outlawEnteredTown(resident, town, player.getLocation());
+				ResidentUtil.outlawEnteredTown(resident, insideTown, player.getLocation());
 
 			//Schedule to setup default modes when the player has finished loading
 			plugin.getScheduler().runLater(player, new SetDefaultModes(player.getName(), false), 1);

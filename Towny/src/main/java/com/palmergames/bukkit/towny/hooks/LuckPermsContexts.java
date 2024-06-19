@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.hooks;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -61,6 +60,7 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		}, () -> Arrays.asList("true", "false"));
 		registerContext("towny:townrank", Resident::getTownRanks, TownyPerms::getTownRanks);
 		registerContext("towny:nationrank", Resident::getNationRanks, TownyPerms::getNationRanks);
+		registerContext("towny:istownconquered", resident -> Collections.singleton(String.valueOf(resident.hasTown() && resident.getTownOrNull().isConquered())), () -> Arrays.asList("true", "false"));
 		registerContext("towny:town", resident -> resident.hasTown() ? Collections.singleton(resident.getTownOrNull().getName()) : Collections.emptyList(), () -> TownyUniverse.getInstance().getTowns().stream().map(Town::getName).collect(Collectors.toSet()));
 		registerContext("towny:nation", resident -> resident.hasNation() ? Collections.singleton(resident.getNationOrNull().getName()) : Collections.emptyList(), () -> TownyUniverse.getInstance().getNations().stream().map(Nation::getName).collect(Collectors.toSet()));
 	
@@ -106,6 +106,5 @@ public class LuckPermsContexts implements ContextCalculator<Player> {
 		return builder.build();
 	}
 	
-	@Desugar
 	private record Calculator(String context, Function<Resident, Iterable<String>> function, Supplier<Iterable<String>> suggestions) {}
 }

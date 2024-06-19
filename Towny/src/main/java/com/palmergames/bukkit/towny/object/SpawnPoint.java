@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.bsideup.jabel.Desugar;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 
@@ -104,7 +103,6 @@ public class SpawnPoint {
 		JAIL_SPAWN
 	}
 	
-	@Desugar
 	private record RingCoord(double x, double z) {
 		private static RingCoord offset(double a, double b) {
 			return new RingCoord(a, b);

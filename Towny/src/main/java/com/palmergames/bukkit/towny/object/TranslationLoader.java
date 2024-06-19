@@ -1,13 +1,12 @@
 package com.palmergames.bukkit.towny.object;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -15,9 +14,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -39,8 +41,8 @@ public class TranslationLoader {
 	private final Path langFolderPath;
 	private final Plugin plugin;
 	private final Class<?> clazz;
-	private static Map<String, Map<String, String>> newTranslations = new HashMap<>();
-	private static final Map<String, String> oldLangFileNames = createLegacyLangMap();
+	private boolean updateReferenceFiles = true;
+	private Map<String, Map<String, String>> newTranslations = new HashMap<>();
 	
 	/**
 	 * An object which allows a plugin to load language files into Towny's
@@ -159,22 +161,38 @@ public class TranslationLoader {
 		} catch (IOException e) {
 			throw new TownyInitException("Failed to create language reference folder.", TownyInitException.TownyError.LOCALIZATION, e);
 		}
+		
+		// Collect contents of the default lang file, used for saving reference files
+		String defaultLangContent = null;
+		if (updateReferenceFiles) {
+			try (InputStream is = clazz.getResourceAsStream("/lang/en-US.yml")) {
+				if (is != null) {
+					try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+						defaultLangContent = reader.lines().collect(Collectors.joining("\n"));
+					}
+				}
+			} catch (IOException ignored) {}
+		}
+		
 		// Load bundled language files
 		for (String lang : getLangFileNamesFromPlugin()) {
 			try (InputStream is = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
 				if (is == null)
 					throw new TownyInitException("Could not find " + "'/lang/" + lang + ".yml'" + " in the JAR", TownyInitException.TownyError.LOCALIZATION);
 				
-				Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
-				
-				saveReferenceFile(lang);
-				
-				lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
-				if (!newTranslations.containsKey(lang))
-					newTranslations.put(lang, new HashMap<>());
-				
-				for (Map.Entry<String, Object> entry : values.entrySet())
-					newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+					String content = reader.lines().collect(Collectors.joining("\n"));
+					Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(content);
+
+					if (updateReferenceFiles)
+						saveReferenceFile(lang, defaultLangContent, content, values);
+
+					lang = lang.replace("-", "_"); // Locale#toString uses underscores instead of dashes
+
+					Map<String, String> translations = newTranslations.computeIfAbsent(lang, k -> new HashMap<>());
+					for (Map.Entry<String, Object> entry : values.entrySet())
+						translations.put(entry.getKey().toLowerCase(Locale.ROOT), String.valueOf(entry.getValue()));
+				}
 			} catch (Exception e) {
 				// An IO exception occured, or the file had invalid yaml
 				plugin.getLogger().log(Level.WARNING, "Unabled to read yaml file: '" + lang + ".yml' from within the " + plugin.getName() + ".jar.", e);
@@ -187,11 +205,12 @@ public class TranslationLoader {
 	 */
 	private Set<String> getLangFileNamesFromPlugin() {
 		final Set<String> lang = new HashSet<>();
-		final URI uri;
 		try {
-			uri = clazz.getResource("").toURI();
+			URL root = clazz.getResource("");
+			if (root == null)
+				return lang;
 			
-			try (final FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap()); Stream<Path> stream  = Files.list(fs.getRootDirectories().iterator().next().resolve("/lang"))) {
+			try (final FileSystem fs = FileSystems.newFileSystem(root.toURI(), Collections.emptyMap()); Stream<Path> stream  = Files.list(fs.getRootDirectories().iterator().next().resolve("/lang"))) {
 				stream.map(FileMgmt::getFileName)
 					.filter(TownySettings::isLanguageEnabled)
 					.forEach(lang::add);
@@ -206,28 +225,52 @@ public class TranslationLoader {
 	 * Saves a copy of the language file for admin reference.
 	 * 
 	 * @param lang String locale and file name to be used for the reference file.
+	 * @param defaultLangContent The contents of the default language file (the one that has ALL translations)   
+	 * @param content The contents of the resource file
+	 * @param translations The contents, parsed through yaml
 	 */
-	private void saveReferenceFile(String lang) {
+	private void saveReferenceFile(String lang, String defaultLangContent, String content, Map<String, Object> translations) {
 		// Resolves langfolder/reference/whatever_language.yml
 		Path langPath = langFolderPath.resolve("reference").resolve(lang + ".yml");
 		// Files.copy takes care of the creation of lang.yml AS LONG AS the parent directory exists
 		// Which we take care of right before the languages are looped through.
 		
-		// Get the resource
-		try (InputStream resource = clazz.getResourceAsStream("/lang/" + lang + ".yml")) {
-			if (resource == null)
-				return;
-			
+		try {
 			if (!Files.exists(langPath))
 				Files.createFile(langPath);
 
-			try (BufferedReader br = new BufferedReader(new InputStreamReader(resource)); Stream<String> lines = Files.lines(langPath)) {
-				String string = br.lines().collect(Collectors.joining("\n"));
-
-				// If the contents of the jar's lang file don't match the saved reference file's contents, replace the contents.
-				if (!string.equals(lines.collect(Collectors.joining("\n"))))
-					FileMgmt.writeString(langPath, string);
+			if (defaultLangContent == null || lang.equals("en-US")) {
+				try (Stream<String> lines = Files.lines(langPath)) {
+					if (!content.equals(lines.collect(Collectors.joining("\n"))))
+						Files.writeString(langPath, content);
+				}
+				
+				return;
 			}
+			
+			List<String> list = Arrays.asList(defaultLangContent.split("\n"));
+			ListIterator<String> iterator = list.listIterator();
+			
+			while (iterator.hasNext()) {
+				String line = iterator.next();
+				
+				if (line.contains(":")) {
+					String key = line.substring(0, line.indexOf(":"));
+					
+					Object translated = translations.get(key);
+					if (translated != null) {
+						String replace = String.valueOf(translated);
+						if (replace.contains("'"))
+							replace = '"' + replace + '"';
+						else 
+							replace = "'" + replace + "'";
+						
+						iterator.set(key + ": " + replace);
+					}
+				}
+			}
+			
+			Files.writeString(langPath, String.join("\n", list));			
 		} catch (IOException e) {
 			plugin.getLogger().log(Level.WARNING, "Failed to copy " + "'/lang/" + lang + ".yml'" + " from the JAR to '" + langPath.toAbsolutePath() + "' during a reference language file update.", e);
 		}
@@ -239,30 +282,29 @@ public class TranslationLoader {
 	 */
 	void loadOverrideFiles() {
 		try {
-			Files.createDirectories(langFolderPath.resolve("override"));
-		} catch (IOException e) {
-			throw new TownyInitException("Failed to create language override folder.", TownyInitException.TownyError.LOCALIZATION, e);
-		}
-		
-		File[] overrideFiles = new File(langFolderPath + File.separator + "override").listFiles();
-		if (overrideFiles != null) {
-			for (File file : overrideFiles) {
-				if (file.isFile() && FileMgmt.getExtension(file.toPath()).equalsIgnoreCase("yml") 
-					&& !file.getName().equalsIgnoreCase("global.yml") && TownySettings.isLanguageEnabled(FileMgmt.getFileName(file.toPath()))) {
-					try (FileInputStream is = new FileInputStream(file)) {
+			Path overrides = Files.createDirectories(langFolderPath.resolve("override"));
+			
+			try (Stream<Path> overrideStream = Files.list(overrides)) {
+				for (final Path path : overrideStream.collect(Collectors.toList())) {
+					if (!FileMgmt.getExtension(path).equalsIgnoreCase("yml"))
+						return;
+					
+					final String fileName = FileMgmt.getFileName(path);
+					if (fileName.equals("global") || !TownySettings.isLanguageEnabled(fileName))
+						return;
+					
+					try (InputStream is = Files.newInputStream(path)) {
 						Map<String, Object> values = new Yaml(new SafeConstructor(new LoaderOptions())).load(is);
-						String lang = FileMgmt.getFileName(file.toPath()).replaceAll("-", "_");
+						String lang = fileName.replaceAll("-", "_");
 
-						if (values != null) {
-							newTranslations.computeIfAbsent(lang, k -> new HashMap<>());
-							for (Map.Entry<String, Object> entry : values.entrySet())
-								newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
-						}
-					} catch (Exception e) {
-						plugin.getLogger().log(Level.WARNING, "Unabled to read yaml file: '" + file.getName() + "' in the override folder.", e);
+						Map<String, String> translations = newTranslations.computeIfAbsent(lang, k -> new HashMap<>());
+						for (Map.Entry<String, Object> entry : values.entrySet())
+							translations.put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 					}
-				}
+				};
 			}
+		} catch (IOException e) {
+			throw new TownyInitException("Failed to read language override folder.", TownyInitException.TownyError.LOCALIZATION, e);
 		}
 	}
 
@@ -274,7 +316,7 @@ public class TranslationLoader {
 	 * @return string language value of a locale's language key.
 	 */
 	private static String getTranslationValue(Map.Entry<String, Object> entry) {
-		// Messages blocked from being overriden.
+		// Messages blocked from being overridden.
 		if (entry.getKey().toLowerCase(Locale.ROOT).startsWith("msg_ptw_warning")) {
 			// Get the defaultLocale's translation of the PTW warnings.
 			String msg = String.valueOf(entry.getValue());
@@ -399,47 +441,11 @@ public class TranslationLoader {
 				newTranslations.get(lang).put(entry.getKey().toLowerCase(Locale.ROOT), getTranslationValue(entry));
 			}
 	}
-	
-	/*
-	 * Legacy file name methods.
-	 */
-	
-	/**
-	 * Attempt to rename old languages files (ie: english.yml to en-US.yml.)
-	 * 
-	 * @param lang String name of the language file in the config's language setting.
-	 * @since 0.97.0.21
-	 */
-	void updateLegacyLangFileName(String lang) {
-		if (!oldLangFileNames.containsKey(lang))
-			return;
-		String path = Towny.getPlugin().getDataFolder().getPath() + File.separator + "settings" + File.separator ;
-		File oldFile = new File(path + lang);
-		File newFile = new File(path + oldLangFileNames.get(lang));
-		boolean rename = oldFile.renameTo(newFile);
-		if (rename) {
-			Towny.getPlugin().getLogger().info("Language file name updated.");
-			TownySettings.setLanguage(oldLangFileNames.get(lang));
-		} else 
-			Towny.getPlugin().getLogger().warning("Language file was not updated.");
-	}
-	
-	private static Map<String, String> createLegacyLangMap() {
-		Map<String, String> oldLangFileNames = new HashMap<>();
-		oldLangFileNames.put("danish.yml", "da-DK.yml");
-		oldLangFileNames.put("german.yml", "de-DE.yml");
-		oldLangFileNames.put("english.yml", "en-US.yml");
-		oldLangFileNames.put("spanish.yml", "es-ES.yml");
-		oldLangFileNames.put("french.yml", "fr-FR.yml");
-		oldLangFileNames.put("italian.yml", "it-IT.yml");
-		oldLangFileNames.put("korean.yml", "ko-KR.yml");
-		oldLangFileNames.put("norwegian.yml", "no-NO.yml");
-		oldLangFileNames.put("polish.yml", "pl-PL.yml");
-		oldLangFileNames.put("pt-br.yml", "pt-BR.yml");
-		oldLangFileNames.put("russian.yml", "ru-RU.yml");
-		oldLangFileNames.put("sv-SE.yml", "sv-SE.yml");
-		oldLangFileNames.put("chinese.yml", "zh-CN.yml");
-		return oldLangFileNames;
-	}
 
+	/**
+	 * @param update Whether to create and update reference files.
+	 */
+	public void updateReferenceFiles(final boolean update) {
+		this.updateReferenceFiles = update;
+	}
 }

@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent;
 import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledTeleportReason;
+import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TeleportWarmupParticle;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
@@ -67,6 +68,8 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				
 				PaperLib.teleportAsync(player, request.destinationLocation(), TeleportCause.COMMAND);
 				
+				BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation()));
+
 				if (request.cooldown() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", request.cooldown());
 				continue;

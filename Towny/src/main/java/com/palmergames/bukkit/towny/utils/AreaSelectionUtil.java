@@ -2,9 +2,7 @@ package com.palmergames.bukkit.towny.utils;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -451,21 +449,11 @@ public class AreaSelectionUtil {
 	
 	public static HashSet<PlotGroup> getPlotGroupsFromSelection(List<WorldCoord> selection) {
 		HashSet<PlotGroup> seenGroups = new HashSet<>();
-		
 		for (WorldCoord coord : selection) {
-			
-			PlotGroup group = null;
-			try {
-				group = coord.getTownBlock().getPlotObjectGroup();
-			} catch (NotRegisteredException ignored) {}
-			
-			if (seenGroups.contains(group))
+			if (!coord.hasTownBlock() || !coord.getTownBlockOrNull().hasPlotObjectGroup())
 				continue;
-			
-			seenGroups.add(group);
-			
+			seenGroups.add(coord.getTownBlockOrNull().getPlotObjectGroup());
 		}
-		
 		return seenGroups;
 	}
 
@@ -545,14 +533,7 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterPlotsNotForSale(List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				if (!worldCoord.getTownBlock().isForSale())
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
-			}
-		return out;
+		return selection.stream().filter(wc -> wc.hasTownBlock() && wc.getTownBlockOrNull().isForSale()).collect(Collectors.toList());
 	}
 	
 	/**
@@ -565,20 +546,14 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterOutResidentBlocks(Resident resident, List<WorldCoord> selection) {
 
-		List<WorldCoord> out = new ArrayList<>();
-		for (WorldCoord worldCoord : selection)
-			try {
-				if (!worldCoord.getTownBlock().hasResident() || (worldCoord.getTownBlock().hasResident() && worldCoord.getTownBlock().getResidentOrNull().equals(resident)))
-					out.add(worldCoord);
-			} catch (NotRegisteredException ignored) {
-			}
-		return out;
+		return selection.stream().filter(wc -> wc.hasTownBlock()
+				&& !wc.getTownBlockOrNull().hasResident() || !wc.getTownBlockOrNull().hasResident(resident))
+				.collect(Collectors.toList());
 	}
 
 	/**
 	 * Returns a List containing only WorldCoords which are not composed of "too much"
 	 * bad biomes, with the threshold determined by the config.
-	 * @param player 
 	 * 
 	 * @param player Player trying to claim.
 	 * @param selection List of WorldCoords.
@@ -635,17 +610,6 @@ public class AreaSelectionUtil {
 	}
 
 	public static boolean isOnEdgeOfOwnership(TownBlockOwner owner, WorldCoord worldCoord) {
-
-		int[][] offset = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-		for (int i = 0; i < 4; i++)
-			try {
-				TownBlock edgeTownBlock = worldCoord.getTownyWorld().getTownBlock(new Coord(worldCoord.getX() + offset[i][0], worldCoord.getZ() + offset[i][1]));
-				if (!edgeTownBlock.isOwner(owner)) {
-					return true;
-				}
-			} catch (NotRegisteredException e) {
-				return true;
-			}
-		return false;
+		return worldCoord.getCardinallyAdjacentWorldCoords(false).stream().filter(wc -> !wc.hasTownBlock() || !wc.getTownBlockOrNull().isOwner(owner)).findAny().isPresent();
 	}
 }

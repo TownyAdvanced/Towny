@@ -487,6 +487,32 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onDragonEggLeftClick(PlayerInteractEvent event) {
+		
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+		
+		Player player = event.getPlayer();
+		if (!TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+			return;
+		
+		if (!event.hasBlock() || event.getAction() != Action.LEFT_CLICK_BLOCK)
+			return;
+		
+		Block block = event.getClickedBlock();
+		if (block.getType() != Material.DRAGON_EGG)
+			return;
+		
+		if (TownyActionEventExecutor.canDestroy(player, block))
+			return;
+		
+		event.setCancelled(true);
+		
+	}
+
 	/**
 	 * Handles clicking on beds in the nether/respawn anchors in the overworld sending blocks to a map so we can track when explosions occur from beds.
 	 * Spigot API's BlockExplodeEvent#getBlock() always returns AIR for beds/anchors exploding, which is why this is necessary.

@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.confirmations.ConfirmationTransaction;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NationInviteTownEvent;
 import com.palmergames.bukkit.towny.event.NationPreAddEnemyEvent;
@@ -26,6 +27,7 @@ import com.palmergames.bukkit.towny.event.NationRequestAllyNationEvent;
 import com.palmergames.bukkit.towny.event.NewNationEvent;
 import com.palmergames.bukkit.towny.event.nation.NationMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreAddAllyEvent;
+import com.palmergames.bukkit.towny.event.nation.NationPreInviteTownEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreMergeEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownKickEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
@@ -41,7 +43,6 @@ import com.palmergames.bukkit.towny.event.NationDenyAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.NationAcceptAllyRequestEvent;
 import com.palmergames.bukkit.towny.event.nation.NationKingChangeEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -63,7 +64,6 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
-import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
@@ -930,7 +930,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			try {
 				Nation nation = newNation(filteredName, capitalTown);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_nation", sender.getName(), nation.getFormattedName()));
-			} catch (AlreadyRegisteredException | NotRegisteredException e) {
+			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(sender, e.getMessage(sender));
 			}
 		})
@@ -940,21 +940,21 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		.sendTo(sender);
 	}
 
-	public static Nation newNation(String name, Town town) throws AlreadyRegisteredException, NotRegisteredException {
+	public static Nation newNation(String name, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
 		UUID nationUUID = UUID.randomUUID();
 		townyUniverse.getDataSource().newNation(name, nationUUID);
 		Nation nation = townyUniverse.getNation(nationUUID);
 		
-		// Should never happen
+		// Should never happen.
 		if (nation == null) {
 			TownyMessaging.sendErrorMsg(String.format("Error fetching new nation with name %s; it was not properly registered!", name));
-			throw new NotRegisteredException(Translatable.of("msg_err_not_registered_1", name));
+			throw new TownyException(Translatable.of("msg_err_not_registered_1", name));
 		}
 
 		nation.setRegistered(System.currentTimeMillis());
-		nation.setMapColorHexCode(MapUtil.generateRandomNationColourAsHexCode());
+		nation.setMapColorHexCode(TownySettings.getDefaultNationMapColor());
 		town.setNation(nation);
 		nation.setCapital(town);
 		nation.setSpawn(town.getSpawnOrNull());
@@ -1067,14 +1067,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 
 			Confirmation.runOnAccept(() -> {
-				TownyUniverse.getInstance().getDataSource().removeNation(nation);
-				if (nation.exists()) { // The PreDeleteNationEvent was cancelled.
-					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_cannot_delete_this_nation"));
-					return;
+				if (TownyUniverse.getInstance().getDataSource().removeNation(nation, DeleteNationEvent.Cause.COMMAND, player)) {
+					TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
+					if (tooManyResidents)
+						ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 				}
-				TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
-				if (tooManyResidents)
-					ResidentUtil.reduceResidentCountToFitTownMaxPop(town);
 			})
 			.sendTo(player);
 			return;
@@ -1085,11 +1082,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 
 		Nation nation = getNationOrThrow(split[0]);
 		Confirmation.runOnAccept(() -> {
-			TownyUniverse.getInstance().getDataSource().removeNation(nation);
-			if (nation.exists()) {// The PreDeleteNationEvent was cancelled.
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_you_cannot_delete_this_nation"));
-				return;
-			}
+			TownyUniverse.getInstance().getDataSource().removeNation(nation, DeleteNationEvent.Cause.ADMIN_COMMAND, player);
 			TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_nation", nation.getName()));
 		}).sendTo(player);
 	}
@@ -1289,6 +1282,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void nationInviteTown(Player player, Nation nation, Town town) throws TownyException {
 
 		TownJoinNationInvite invite = new TownJoinNationInvite(player, town, nation);
+		
+		BukkitTools.ifCancelledThenThrow(new NationPreInviteTownEvent(invite));
+
 		try {
 			if (!InviteHandler.inviteIsActive(invite)) { 
 				town.newReceivedInvite(invite);

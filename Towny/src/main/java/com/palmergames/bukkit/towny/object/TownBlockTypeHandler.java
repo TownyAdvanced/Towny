@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.github.bsideup.jabel.Desugar;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
@@ -241,7 +240,6 @@ public final class TownBlockTypeHandler {
 			migrations.clear();
 		}
 		
-		@Desugar
 		private record Migration(String type, String key, Object value) {}
 	}
 }
