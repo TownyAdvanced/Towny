@@ -931,10 +931,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public boolean worldCoordNotTooCloseToOtherTowns(Coord key, Town homeTown) {
-		// final Map<Integer, Predicate<Town>> minDistances = Map.of(TownySettings.getMinDistanceFromTownPlotblocks(), t -> false, TownySettings.getMinDistanceFromOlderTownPlotblocks(), t -> t.getRegistered() > homeTown.getRegistered());
-		final Map<Integer, Predicate<Town>> minDistances = new HashMap<>();
-		minDistances.put(TownySettings.getMinDistanceFromTownPlotblocks(), t -> false);
-		minDistances.put(TownySettings.getMinDistanceFromOlderTownPlotblocks(), t -> t.getRegistered() > homeTown.getRegistered());
+		final Map<Integer, Predicate<Town>> minDistances = Map.of(TownySettings.getMinDistanceFromTownPlotblocks(), t -> false, TownySettings.getMinDistanceFromOlderTownPlotblocks(), t -> t.getRegistered() > homeTown.getRegistered());
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
 
