@@ -240,7 +240,7 @@ public class WorldCoord extends Coord {
 	}
 
 	private void unloadChunks(Towny plugin) {
-		getChunks().forEach(future -> future.thenAccept(chunk -> chunk.addPluginChunkTicket(plugin)));
+		getChunks().forEach(future -> future.thenAccept(chunk -> chunk.removePluginChunkTicket(plugin)));
 	}
 
 	/**
