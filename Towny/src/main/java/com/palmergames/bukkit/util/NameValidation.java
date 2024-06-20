@@ -18,6 +18,8 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.bukkit.NamespacedKey;
+
 /**
  * @author ElgarL
  * 
@@ -36,6 +38,11 @@ public class NameValidation {
 					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge","jail",
 					"plotgrouplist","trust","purge","leader","baltop","all","help", "spawn", "takeoverclaim", "ban", "unjail",
 					"trusttown","forsale","fs","notforsale","nfs","buytown","sanctiontown","create","cede"));
+
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:regex-patterns"), () -> {
+			namePattern = null;
+			stringPattern = null;
+		});
 	}
 
 	/**

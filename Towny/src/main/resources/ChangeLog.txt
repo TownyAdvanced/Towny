@@ -9833,3 +9833,5 @@ v0.92.0.11:
     - Closes #7475.
   - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.2.5 to 3.3.0.
   - Drop support for MC 1.16-1.18, update the readme.
+0.100.3.3:
+  - Fix regex settings not refreshing when using /ta reload {config}.
