@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
@@ -41,6 +42,7 @@ public class ChunkNotification {
 	public static String notForSaleNotificationFormat = Colors.Yellow + "[Not For Sale]";
 	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
 	public static String groupNotificationFormat = Colors.White + "[%s]";
+	public static String districtNotificationFormat = Colors.DARK_GREEN + "[%s]";
 
 	/**
 	 * Called on Config load.
@@ -64,16 +66,18 @@ public class ChunkNotification {
 		notForSaleNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_NOTFORSALE));
 		plotTypeNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_PLOT_TYPE));
 		groupNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_GROUP));
+		districtNotificationFormat = Colors.translateColorCodes(TownySettings.getString(ConfigNodes.NOTIFICATION_DISTRICT));
 	}
 
 	WorldCoord from, to;
 	boolean fromWild = false, toWild = false, toForSale = false, fromForSale = false,
-			toHomeBlock = false, toOutpostBlock = false, toPlotGroupBlock = false;
+			toHomeBlock = false, toOutpostBlock = false, toPlotGroupBlock = false,  toDistrictBlock = false;
 	TownBlock fromTownBlock, toTownBlock = null;
 	Town fromTown = null, toTown = null;
 	Resident fromResident = null, toResident = null;
 	TownBlockType fromPlotType = null, toPlotType = null;
 	PlotGroup fromPlotGroup = null, toPlotGroup = null;
+	District fromDistrict = null, toDistrict = null;
 
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
 
@@ -87,6 +91,9 @@ public class ChunkNotification {
 			if (fromTownBlock.hasPlotObjectGroup()) {
 				fromPlotGroup = fromTownBlock.getPlotObjectGroup();
 				fromForSale = fromPlotGroup.getPrice() != -1;
+			}
+			if (fromTownBlock.hasDistrict()) {
+				fromDistrict = fromTownBlock.getDistrict();
 			}
 			fromTown = fromTownBlock.getTownOrNull();
 			fromResident = fromTownBlock.getResidentOrNull();
@@ -109,7 +116,10 @@ public class ChunkNotification {
 				toPlotGroup = toTownBlock.getPlotObjectGroup();
 				toForSale = toPlotGroup.getPrice() != -1;
 			}
-			
+			toDistrictBlock = toTownBlock.hasDistrict();
+			if (toDistrictBlock) {
+				toDistrict = toTownBlock.getDistrict();
+			}
 		} else {
 			toWild = true;
 		}
@@ -277,6 +287,10 @@ public class ChunkNotification {
 		if (output != null && output.length() > 0)
 			out.add(output);
 
+		output = getDistrictNotification();
+		if (output != null && output.length() > 0)
+			out.add(output);
+
 		return out;
 	}
 
@@ -320,6 +334,12 @@ public class ChunkNotification {
 	public String getGroupNotification() {
 		if (toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
 			return String.format(groupNotificationFormat, StringMgmt.remUnderscore(toTownBlock.getPlotObjectGroup().getName()));
+		return null;
+	}
+
+	public String getDistrictNotification() {
+		if (toDistrictBlock && (fromDistrict != toDistrict))
+			return String.format(districtNotificationFormat, StringMgmt.remUnderscore(toDistrict.getName()));
 		return null;
 	}
 
