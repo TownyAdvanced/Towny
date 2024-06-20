@@ -65,6 +65,7 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -1297,7 +1298,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "rename" ->  parseDistrictRename(split, townBlock, player);
 		default -> {
 			HelpMenu.PLOT_DISTRICT_HELP.send(player);
-			if (townBlock.hasPlotObjectGroup())
+			if (townBlock.hasDistrict())
 				TownyMessaging.sendMsg(player, Translatable.of("status_district_name_and_size", townBlock.getDistrict().getName(), townBlock.getDistrict().getTownBlocks().size()));
 		}
 		}
@@ -1309,7 +1310,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		Resident resident = getResidentOrThrow(player);
 
 		if (split.length != 2 && !resident.hasDistrictName())
-			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
+			throw new TownyException(Translatable.of("msg_err_district_name_required"));
 
 		String districtName = split.length == 2
 				? NameValidation.checkAndFilterDistrictNameOrThrow(split[1])
@@ -1320,10 +1321,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (townBlock.hasDistrict()) {
 			// Already has a District and it is the same name being used to re-add.
 			if (townBlock.getDistrict().getName().equalsIgnoreCase(districtName))
-				throw new TownyException(Translatable.of("msg_err_this_plot_is_already_part_of_the_plot_group_x", districtName));
+				throw new TownyException(Translatable.of("msg_err_this_plot_is_already_part_of_the_district_x", districtName));
 
 			final String name = districtName;
-			// Already has a PlotGroup, ask if they want to transfer from one group to another.
+			// Already has a District, ask if they want to transfer from one district to another.
 			Confirmation.runOnAccept( ()-> {
 				District oldDistrict = townBlock.getDistrict();
 				oldDistrict.removeTownBlock(townBlock);
@@ -1343,44 +1344,47 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 				}
 			})
-			.setTitle(Translatable.of("msg_plot_group_already_exists_did_you_want_to_transfer", townBlock.getPlotObjectGroup().getName(), split[1]))
+			.setTitle(Translatable.of("msg_district_already_exists_did_you_want_to_transfer", townBlock.getDistrict().getName(), split[1]))
 			.sendTo(player);
 		} else {
-			// Create a brand new plot group.
+			// Create a brand new district.
 			createOrAddOnToDistrict(townBlock, town, player, districtName);
 			resident.setDistrictName(districtName);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), townBlock.getDistrict().getName()));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_put_into_district_x", townBlock.getX(), townBlock.getZ(), townBlock.getDistrict().getName()));
 		}
 	}
 
 	private void createOrAddOnToDistrict(TownBlock townBlock, Town town, Player player, String districtName) throws TownyException {
 		District newDistrict;
 		
-		// Don't add the group to the town data if it's already there.
+		// Don't add the district to the town data if it's already there.
 		if (town.hasDistrictName(districtName)) {
 			newDistrict = town.getDistrictFromName(districtName);
-			
+
+			ProximityUtil.testAdjacentClaimsRulesOrThrow(townBlock.getWorldCoord(), town, false, 1);
+
 			BukkitTools.ifCancelledThenThrow(new DistrictAddEvent(newDistrict, townBlock, player));
 
 		} else {
-			// This is a brand new PlotGroup, register it.
+			// This is a brand new District, register it.
 			newDistrict = new District(UUID.randomUUID(), districtName, town);
-			
+
 			BukkitTools.ifCancelledThenThrow(new DistrictCreatedEvent(newDistrict, townBlock, player));
 
 			TownyUniverse.getInstance().registerDistrict(newDistrict);
 		}
 
-		// Add group to townblock, this also adds the townblock to the group.
+		// Add district to townblock, this also adds the townblock to the district.
 		townBlock.setDistrict(newDistrict);
 
-		// Add the plot group to the town set.
+		// Add the district to the town set.
 		town.addDistrict(newDistrict);
 
 		// Save changes.
 		newDistrict.save();
 		townBlock.save(); 
 	}
+
 	public void parseDistrictDelete(TownBlock townBlock, Player player, Town town) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_DISTRICT_DELETE.getNode());
 
@@ -1401,6 +1405,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		District district = catchMissingDistrict(townBlock);
 		String name = district.getName();
+		
+		try {
+			ProximityUtil.testAdjacentUnclaimsRulesOrThrow(townBlock.getWorldCoord(), town, 1);
+		} catch (TownyException e) {
+			throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", name));
+		}
+		
 		// Remove the plot from the district.
 		district.removeTownBlock(townBlock);
 
@@ -1422,7 +1433,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_DISTRICT_RENAME.getNode());
 
 		if (split.length == 1)
-			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
+			throw new TownyException(Translatable.of("msg_err_rename_district_name_required"));
 
 		District district = catchMissingDistrict(townBlock);
 		String newName= split[1];

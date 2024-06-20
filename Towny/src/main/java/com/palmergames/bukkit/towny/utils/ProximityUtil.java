@@ -96,6 +96,10 @@ public class ProximityUtil {
 
 	public static void testAdjacentClaimsRulesOrThrow(WorldCoord townBlockToClaim, Town town, boolean outpost) throws TownyException {
 		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		testAdjacentClaimsRulesOrThrow(townBlockToClaim, town, outpost, minAdjacentBlocks);
+	}
+
+	public static void testAdjacentClaimsRulesOrThrow(WorldCoord townBlockToClaim, Town town, boolean outpost, int minAdjacentBlocks) throws TownyException {
 		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
 			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
 			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, townBlockToClaim);
@@ -162,6 +166,11 @@ public class ProximityUtil {
 	public static void testAdjacentUnclaimsRulesOrThrow(WorldCoord townBlockToUnclaim, Town town) throws TownyException {
 		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
 		int minAdjacentBlocks = TownySettings.getMinAdjacentBlocks();
+		testAdjacentUnclaimsRulesOrThrow(townBlockToUnclaim, town, minAdjacentBlocks);
+	}
+	
+	public static void testAdjacentUnclaimsRulesOrThrow(WorldCoord townBlockToUnclaim, Town town, int minAdjacentBlocks) throws TownyException {
+		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
 		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
 			WorldCoord firstWorldCoord = townBlockToUnclaim;
 			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
@@ -170,7 +179,7 @@ public class ProximityUtil {
 				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
 				// The number of adjacement TBs is not enough and there is not a nearby outpost.
 				if (numAdjacent - 1 < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
-					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
+					throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
 			}
 		}
 	}
