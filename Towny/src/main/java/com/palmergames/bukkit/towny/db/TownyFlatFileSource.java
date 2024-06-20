@@ -1685,6 +1685,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					UUID uuid = UUID.fromString(line.trim());
 					if (uuid == null) {
 						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_district_entry", path));
+						deleteDistrict(district);
 						return true;
 					}
 					Town town = universe.getTown(uuid);
@@ -2522,7 +2523,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		
 		list.add("districtID=" + districtID);
-		
+
 		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), ","));
 		
 		Map<String, String> stringMap = new HashMap<>();
@@ -2611,7 +2612,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     	File file = new File(getPlotGroupFilename(group));
     	queryQueue.add(new DeleteFileTask(file, false));
 	}
-
+	
 	@Override
 	public void deleteDistrict(District district) {
 		File file = new File(getDistrictFilename(district));
@@ -2685,5 +2686,4 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		return true;
 	}
-
 }

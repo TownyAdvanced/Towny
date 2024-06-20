@@ -629,7 +629,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		
 		return false;
 	}
-
+	
 	@Override
 	public boolean loadDistrictList() {
 		TownyMessaging.sendDebugMsg("Loading District List");
@@ -2758,7 +2758,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		pltgrp_hm.put("groupID", group.getUUID());
 		DeleteDB("PLOTGROUPS", pltgrp_hm);
 	}
-
+	
 	@Override
 	public void deleteDistrict(District district) {
 		HashMap<String, Object> district_hm = new HashMap<>();
@@ -2795,5 +2795,4 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public HikariDataSource getHikariDataSource() {
 		return hikariDataSource;
 	}
-
 }
