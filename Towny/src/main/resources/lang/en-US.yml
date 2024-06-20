@@ -2538,6 +2538,8 @@ status_district_name_and_size: 'Townblock is part of District: %s. District has 
 
 msg_err_district_name_required: 'You must specify district name ie, /plot district add {name}'
 
+msg_err_rename_district_name_required: 'You must specify district name ie, /plot district rename {name}'
+
 msg_district_renamed_from_x_to_y: 'District %s has been renamed to %s.'
 
 msg_err_plot_not_associated_with_a_district: 'This plot is not associated with a district.'
@@ -2555,3 +2557,5 @@ msg_townblock_transferred_from_x_to_x_district: 'Townblock transferred from %s t
 msg_district_already_exists_did_you_want_to_transfer: 'This townblock is already a part of the %s district. Are you certain you want to transfer it to the %s district.'
 
 msg_plot_was_put_into_district_x: 'Plot &9(%s,%s) &2was put into district %s.'
+
+msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "You cannot remove this townblock from the district %s, because the a part of the District would be detached from the rest."
