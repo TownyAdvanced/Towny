@@ -2109,7 +2109,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	private boolean loadDistrict(ResultSet rs) {
 		String line = null;
-		String uuid = null;
+		String uuidString = null;
 		
 		try {
 			PlotGroup district = universe.getGroup(UUID.fromString(rs.getString("districtID")));
@@ -2117,7 +2117,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				TownyMessaging.sendErrorMsg("SQL: A district was not registered properly on load!");
 				return true;
 			}
-			uuid = district.getUUID().toString();
+			uuidString = district.getUUID().toString();
 			
 			line = rs.getString("districtName");
 			if (line != null)
@@ -2128,7 +2128,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			line = rs.getString("town");
 			if (line != null) {
-				Town town = universe.getTown(line.trim());
+				UUID uuid = UUID.fromString(line.trim());
+				if (uuid == null) {
+					deletePlotGroup(district);
+					return true;
+				}
+				Town town = universe.getTown(uuid);
 				if (town != null) {
 					district.setTown(town);
 				} else {
@@ -2142,7 +2147,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				MetadataLoader.getInstance().deserializeMetadata(district, line);
 			}
 		} catch (SQLException e) {
-			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading district: " + uuid
+			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading district: " + uuidString
 			+ " at line: " + line + " in the sql database", e);
 			return false;
 		}
@@ -2433,7 +2438,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			HashMap<String, Object> pltgrp_hm = new HashMap<>();
 			pltgrp_hm.put("districtID", district.getUUID().toString());
 			pltgrp_hm.put("districtName", district.getName());
-			pltgrp_hm.put("town", district.getTown().getName());
+			pltgrp_hm.put("town", district.getTown().getUUID().toString());
 			pltgrp_hm.put("metadata", serializeMetadata(district));
 
 			updateDB("DISTRICTS", pltgrp_hm, Collections.singletonList("districtID"));

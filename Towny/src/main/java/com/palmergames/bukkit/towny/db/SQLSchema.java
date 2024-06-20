@@ -166,7 +166,7 @@ public class SQLSchema {
 	private static List<String> getDistrictColumns() {
 		List<String> columns = new ArrayList<>();
 		columns.add("`districtName` mediumtext NOT NULL");
-		columns.add("`town` VARCHAR(32) NOT NULL");
+		columns.add("`town` VARCHAR(36) NOT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
 	}

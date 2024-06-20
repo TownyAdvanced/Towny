@@ -1682,7 +1682,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("town");
 				if (line != null && !line.isEmpty()) {
-					Town town = universe.getTown(line.trim());
+					UUID uuid = UUID.fromString(line.trim());
+					if (uuid == null) {
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_district_entry", path));
+						return true;
+					}
+					Town town = universe.getTown(uuid);
 					if (town != null) {
 						district.setTown(town);
 					} else {
@@ -2211,7 +2216,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		try {
 			list.add("districtName=" + district.getName());
-			list.add("town=" + district.getTown().getName());
+			list.add("town=" + district.getTown().getUUID().toString());
 			list.add("metadata=" + serializeMetadata(district));
 		} catch (Exception e) {
 			plugin.getLogger().log(Level.WARNING, "An exception occurred while saving district " + Optional.ofNullable(district).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
