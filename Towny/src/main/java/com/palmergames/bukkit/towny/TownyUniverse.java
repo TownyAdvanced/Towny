@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.KeyAlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Position;
@@ -89,6 +90,7 @@ public class TownyUniverse {
     private final Map<UUID, Jail> jailUUIDMap = new ConcurrentHashMap<>();
     private final Map<String, String> replacementNamesMap = new ConcurrentHashMap<>();
     private final Map<UUID, PlotGroup> plotGroupUUIDMap = new ConcurrentHashMap<>();
+    private final Map<UUID, District> districtUUIDMap = new ConcurrentHashMap<>();
     
     private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
     private final String rootFolder;
@@ -903,6 +905,57 @@ public class TownyUniverse {
 	@Nullable
 	public PlotGroup getGroup(UUID groupID) {
 		return plotGroupUUIDMap.get(groupID);
+	}
+
+    /*
+     * District Stuff.
+     */
+
+    /**
+     * Used in loading only.
+     * @param uuid UUID to assign to the District.
+     */
+    public void newDistrictInternal(UUID uuid) {
+    	District district = new District(uuid, null, null);
+    	registerDistrict(district);
+    }
+    
+	
+	public void registerDistrict(District district) {
+		districtUUIDMap.put(district.getUUID(), district);
+	}
+
+	public void unregisterDistrict(UUID uuid) {
+		District district = districtUUIDMap.get(uuid);
+		if (district == null)
+			return;
+		district.getTown().removeDistrict(district);
+		districtUUIDMap.remove(uuid);
+	}
+
+	/**
+	 * Get all the districts from all towns
+	 * Returns a collection that does not reflect any district additions/removals
+	 * 
+	 * @return collection of District
+	 */
+	public Collection<District> getDistricts() {
+    	return new ArrayList<>(districtUUIDMap.values());
+	}
+
+	public Set<UUID> getDistrictUUIDs() {
+		return districtUUIDMap.keySet();
+	}
+
+	/**
+	 * Gets the district from the town name and the district UUID 
+	 * 
+	 * @param districtID UUID of the district
+	 * @return District if found, null if none found.
+	 */
+	@Nullable
+	public District getDistrict(UUID districtID) {
+		return districtUUIDMap.get(districtID);
 	}
 
 	/*

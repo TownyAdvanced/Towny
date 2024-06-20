@@ -81,6 +81,7 @@ public class Town extends Government implements TownBlockOwner {
 	private List<Jail> jails = null;
 	private HashMap<String, PlotGroup> plotGroups = null;
 	private TownBlockTypeCache plotTypeCache = new TownBlockTypeCache();
+	private HashMap<String, District> districts = null;
 	
 	private Resident mayor;
 	private String founderName;
@@ -1444,6 +1445,53 @@ public class Town extends Government implements TownBlockOwner {
 		return null;
 	}
 
+	public void renameDistrict(String oldName, District district) {
+		districts.remove(oldName);
+		districts.put(district.getName(), district);
+	}
+
+	public void addDistrict(District district) {
+		if (!hasDistricts())
+			districts = new HashMap<>();
+		
+		districts.put(district.getName(), district);
+	}
+
+	public void removeDistrict(District district) {
+		if (hasDistricts() && districts.remove(district.getName()) != null) {
+			for (TownBlock tb : new ArrayList<>(district.getTownBlocks())) {
+				if (tb.hasDistrict() && tb.getDistrict().getUUID().equals(district.getUUID())) {
+					district.removeTownBlock(tb);
+					tb.removeDistrict();
+					tb.save();
+				}
+			}
+		}
+	}
+
+	// Abstract to collection in case we want to change structure in the future
+	public Collection<District> getDistricts() {
+		if (districts == null || districts.isEmpty())
+			return Collections.emptyList();
+		
+		return Collections.unmodifiableCollection(districts.values());
+	}
+
+	public boolean hasDistricts() {
+		return districts != null;
+	}
+
+	public boolean hasDistrictName(String name) {
+		return hasDistricts() && districts.containsKey(name);
+	}
+
+	@Nullable
+	public District getDistrictFromName(String name) {
+		if (hasDistricts() && hasDistrictName(name))
+			return districts.get(name);
+		return null;
+	}
+	
 	@Override
 	public double getBankCap() {
 		return TownySettings.getTownBankCap(this);

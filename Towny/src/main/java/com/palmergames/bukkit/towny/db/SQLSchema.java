@@ -48,6 +48,9 @@ public class SQLSchema {
 		initTable(cntx, TownyDBTableType.PLOTGROUP);
 		updateTable(cntx, TownyDBTableType.PLOTGROUP, getPlotGroupColumns());
 
+		initTable(cntx, TownyDBTableType.DISTRICT);
+		updateTable(cntx, TownyDBTableType.DISTRICT, getDistrictColumns());
+
 		initTable(cntx, TownyDBTableType.JAIL);
 		updateTable(cntx, TownyDBTableType.JAIL, getJailsColumns());
 
@@ -155,6 +158,14 @@ public class SQLSchema {
 		List<String> columns = new ArrayList<>();
 		columns.add("`groupName` mediumtext NOT NULL");
 		columns.add("`groupPrice` float DEFAULT NULL");
+		columns.add("`town` VARCHAR(32) NOT NULL");
+		columns.add("`metadata` text DEFAULT NULL");
+		return columns;
+	}
+
+	private static List<String> getDistrictColumns() {
+		List<String> columns = new ArrayList<>();
+		columns.add("`districtName` mediumtext NOT NULL");
 		columns.add("`town` VARCHAR(32) NOT NULL");
 		columns.add("`metadata` text DEFAULT NULL");
 		return columns;
