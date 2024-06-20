@@ -2548,8 +2548,6 @@ msg_district_empty_deleted: 'The district %s had no townblocks and has been dele
 
 msg_district_deleted: 'The district %s has been deleted.'
 
-msg_err_district_name_required: 'You must specify a district name ie, /plot district add {name}'
-
 msg_err_this_plot_is_already_part_of_the_district_x: 'This townblock is already part of the district: %s.'
 
 msg_townblock_transferred_from_x_to_x_district: 'Townblock transferred from %s to %s district.'
