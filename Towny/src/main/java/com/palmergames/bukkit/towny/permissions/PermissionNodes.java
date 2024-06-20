@@ -231,6 +231,13 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_PLOT_SET_SPLEEF("towny.command.plot.set.spleef"),
 			TOWNY_COMMAND_PLOT_SET_INN("towny.command.plot.set.inn"),
 			TOWNY_COMMAND_PLOT_SET_JAIL("towny.command.plot.set.jail"),
+
+		TOWNY_COMMAND_PLOT_DISTRICT("towny.command.plot.district.*"),
+		TOWNY_COMMAND_PLOT_DISTRICT_ADD("towny.command.plot.district.add"),
+		TOWNY_COMMAND_PLOT_DISTRICT_REMOVE("towny.command.plot.district.remove"),
+		TOWNY_COMMAND_PLOT_DISTRICT_DELETE("towny.command.plot.district.delete"),
+		TOWNY_COMMAND_PLOT_DISTRICT_RENAME("towny.command.plot.district.rename"),
+
 		
 		TOWNY_COMMAND_PLOT_GROUP("towny.command.plot.group.*"),
 		    TOWNY_COMMAND_PLOT_GROUP_ADD("towny.command.plot.group.add"),

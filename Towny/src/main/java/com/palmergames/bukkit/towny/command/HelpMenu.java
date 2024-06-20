@@ -827,6 +827,17 @@ public enum HelpMenu {
 				.add(Translatable.of("msg_nfs_abr"));
 		}
 	},
+
+	PLOT_DISTRICT_HELP {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot district")
+				.add("add|new|create [name]", Translatable.of("plot_district_help_0"))
+				.add("remove", Translatable.of("plot_district_help_1"))
+				.add("delete", Translatable.of("plot_district_help_2"))
+				.add("rename [newName]", Translatable.of("plot_district_help_3"));
+		}
+	},
 	
 	PLOT_GROUP_HELP {
 		@Override

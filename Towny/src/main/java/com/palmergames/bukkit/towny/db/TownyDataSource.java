@@ -367,6 +367,8 @@ public abstract class TownyDataSource {
 	abstract public void removeJail(Jail jail);
 	
 	abstract public void removePlotGroup(PlotGroup group);
+	
+	abstract public void removeDistrict(District district);
 
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
@@ -379,6 +381,8 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+	
+	abstract public void renameDistrict(District district, String newName) throws AlreadyRegisteredException;
 	
 	/**
 	 * @deprecated since 0.100.2.9 use {@link #removeTown(Town, com.palmergames.bukkit.towny.event.DeleteTownEvent.Cause)} instead.
