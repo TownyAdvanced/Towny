@@ -2561,5 +2561,3 @@ msg_plot_was_put_into_district_x: 'Plot <blue>(%s,%s) <dark_green>was put into d
 msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "You cannot remove this townblock from the district %s, because the a part of the District would be detached from the rest."
 
 map_hover_district: 'District: '
-
-status_district_name_and_size: 'Townblock is part of District: %s. District has %s Townblocks total.'
