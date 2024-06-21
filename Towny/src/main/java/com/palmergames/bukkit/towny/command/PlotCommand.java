@@ -1279,10 +1279,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
+		
+		if (!town.hasResident(player))
+			throw new TownyException(Translatable.of("msg_err_not_part_town"));
 
-		// Test we are allowed to work on this plot
-		// If this fails it will trigger a TownyException.
-		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
+		try {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+		} catch (NoPermissionException e) {
+			throw new TownyException(Translatable.of("msg_not_mayor_ass"));
+		}
 
 		if (split.length <= 0 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.PLOT_DISTRICT_HELP.send(player);

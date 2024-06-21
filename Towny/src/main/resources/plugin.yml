@@ -564,6 +564,7 @@ permissions:
             towny.command.plot.set.*: true
             towny.command.plot.unclaim: true
             towny.command.plot.group.*: true
+            towny.command.plot.district.*: true
             towny.command.plot.trust: true
 
     towny.command.plot.toggle.*:
@@ -606,6 +607,15 @@ permissions:
             towny.command.plot.perm.gui: true
             towny.command.plot.perm.add: true
             towny.command.plot.perm.remove: true
+
+    towny.command.plot.district.*:
+        description: User can access the plot district command.
+        default: false
+        children:
+            towny.command.plot.district.add: true
+            towny.command.plot.district.remove: true
+            towny.command.plot.district.delete: true
+            towny.command.plot.district.rename: true
 
     towny.command.plot.group.*:
         description: User can access the plot group command.
