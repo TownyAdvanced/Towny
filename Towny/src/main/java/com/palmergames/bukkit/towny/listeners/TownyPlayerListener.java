@@ -926,41 +926,20 @@ public class TownyPlayerListener implements Listener {
 		if (to.isWilderness()) {
 			// Gone from a Town into the wilderness.
 			BukkitTools.fireEvent(new PlayerExitsFromTownBorderEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
-			
-			if (from.getTownBlockOrNull().hasDistrict())
-				BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, from.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));
 		} else if (from.isWilderness()) {
 			// Gone from wilderness into Town.
 			BukkitTools.fireEvent(new PlayerEntersIntoTownBorderEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
-			if (to.getTownBlockOrNull().hasDistrict())
-				BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, to.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));
 		// Both to and from have towns.
 		} else if (to.getTownOrNull().equals(from.getTownOrNull())) {
 			// The towns are the same, no event will fire.
-			if (from.getTownBlockOrNull().hasDistrict() && to.getTownBlockOrNull().hasDistrict()) {
-				if (!from.getTownBlockOrNull().getDistrict().getName().equals(to.getTownBlockOrNull().getDistrict().getName())) {
-					BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, from.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));	
-					BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, to.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));
-				}
-			} else if (!from.getTownBlockOrNull().hasDistrict() && to.getTownBlockOrNull().hasDistrict()) {
-				BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, to.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));
-			} else if (from.getTownBlockOrNull().hasDistrict() && !to.getTownBlockOrNull().hasDistrict()) {
-				BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, from.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));
-			}
-
 			return;
 		} else {
 			// Player has left one Town and immediately entered a different one.
 			BukkitTools.fireEvent(new PlayerEntersIntoTownBorderEvent(event.getPlayer(), to, from, to.getTownOrNull(), event.getMoveEvent()));
 			BukkitTools.fireEvent(new PlayerExitsFromTownBorderEvent(event.getPlayer(), to, from, from.getTownOrNull(), event.getMoveEvent()));
-		
-			if (from.getTownBlockOrNull().hasDistrict())
-				BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, from.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));
-			if (to.getTownBlockOrNull().hasDistrict())
-				BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, to.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));
 		}
 	}
-
+	
 	/*
 	* PlayerChangePlotEvent that can fire the PlayerExitsFromDistrictEvent and PlayerEntersIntoDistrictEvent
 	*/
@@ -984,7 +963,7 @@ public class TownyPlayerListener implements Listener {
 
 		} else if (to.getTownOrNull().equals(from.getTownOrNull())
 			&& from.getTownBlockOrNull().hasDistrict() && to.getTownBlockOrNull().hasDistrict()
-			&& !from.getTownBlockOrNull().getDistrict().getName().equals(to.getTownBlockOrNull().getDistrict().getName())) {
+			&& !from.getTownBlockOrNull().getDistrict().equals(to.getTownBlockOrNull().getDistrict())) {
 				// Moving in same town, between two different Districts.
 				BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, from.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));	
 				BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, to.getTownBlockOrNull().getDistrict(), event.getMoveEvent()));

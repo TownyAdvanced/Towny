@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -65,6 +66,26 @@ public class District extends ObjectGroup implements Nameable, Savable {
 		}
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(town, townBlocks, getName());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		District other = (District) obj;
+		return Objects.equals(town, other.town) && Objects.equals(getName(), other.getName());
+	}
+
 	public Town getTown() {
 		return town;
 	}

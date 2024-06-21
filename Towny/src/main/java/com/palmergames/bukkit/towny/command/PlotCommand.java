@@ -1328,10 +1328,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (townBlock.getDistrict().getName().equalsIgnoreCase(districtName))
 				throw new TownyException(Translatable.of("msg_err_this_plot_is_already_part_of_the_district_x", districtName));
 
+			District oldDistrict = townBlock.getDistrict();
+			ProximityUtil.testAdjacentRemoveDistrictRulesOrThrow(townBlock.getWorldCoord(), town, oldDistrict, 1);
+
 			final String name = districtName;
 			// Already has a District, ask if they want to transfer from one district to another.
 			Confirmation.runOnAccept( ()-> {
-				District oldDistrict = townBlock.getDistrict();
+
 				oldDistrict.removeTownBlock(townBlock);
 				if (oldDistrict.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new DistrictDeletedEvent(oldDistrict, player, DistrictDeletedEvent.Cause.NO_TOWNBLOCKS))) {
 					String oldName = oldDistrict.getName();
@@ -1366,7 +1369,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (town.hasDistrictName(districtName)) {
 			newDistrict = town.getDistrictFromName(districtName);
 
-			ProximityUtil.testAdjacentAddDistrictRulesOrThrow(townBlock.getWorldCoord(), town, newDistrict, 0);
+			ProximityUtil.testAdjacentAddDistrictRulesOrThrow(townBlock.getWorldCoord(), town, newDistrict, 1);
 
 			BukkitTools.ifCancelledThenThrow(new DistrictAddEvent(newDistrict, townBlock, player));
 

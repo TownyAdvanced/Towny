@@ -217,7 +217,7 @@ public class ProximityUtil {
 		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
 			.filter(wc -> wc.hasTown(town) && wc.getTownBlockOrNull() != null)
 			.map(wc -> wc.getTownBlockOrNull())
-			.filter(tb -> tb.hasDistrict() && tb.getDistrict().getName().equals(district.getName()))
+			.filter(tb -> tb.hasDistrict() && tb.getDistrict().equals(district))
 			.count();
 	}
 
