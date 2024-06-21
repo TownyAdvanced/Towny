@@ -170,6 +170,7 @@ public class TownyAsciiMap {
 					Component forSaleComponent = Component.empty();
 					Component claimedAtComponent = Component.empty();
 					Component groupComponent = Component.empty();
+					Component districtComponent = Component.empty();
 					
 					if (TownyEconomyHandler.isActive()) {
 						double cost = townblock.hasPlotObjectGroup() 
@@ -192,6 +193,13 @@ public class TownyAsciiMap {
 							.append(translator.component("map_hover_plots", townblock.getPlotObjectGroup().getTownBlocks().size()).color(NamedTextColor.GREEN)
 							.append(Component.newline()))));
 					
+					if (townblock.hasDistrict())
+						districtComponent = translator.component("map_hover_district").color(NamedTextColor.DARK_GREEN)
+							.append(Component.text(townblock.getDistrict().getFormattedName(), NamedTextColor.GREEN)
+							.append(translator.component("map_hover_plot_group_size").color(NamedTextColor.DARK_GREEN)
+							.append(translator.component("map_hover_plots", townblock.getDistrict().getTownBlocks().size()).color(NamedTextColor.GREEN)
+							.append(Component.newline()))));
+					
 					if (townblock.hasResident())
 						residentComponent = Component.text(" (" + townblock.getResidentOrNull().getName() + ")", NamedTextColor.GREEN);
 					
@@ -209,6 +217,7 @@ public class TownyAsciiMap {
 					
 					Component hoverComponent = townComponent
 						.append(plotTypeComponent)
+						.append(districtComponent)
 						.append(groupComponent)
 						.append(forSaleComponent)
 						.append(claimedAtComponent)

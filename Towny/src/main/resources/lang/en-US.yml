@@ -2559,3 +2559,7 @@ msg_district_already_exists_did_you_want_to_transfer: 'This townblock is already
 msg_plot_was_put_into_district_x: 'Plot <blue>(%s,%s) <dark_green>was put into district %s.'
 
 msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "You cannot remove this townblock from the district %s, because the a part of the District would be detached from the rest."
+
+map_hover_district: 'District: '
+
+status_district_name_and_size: 'Townblock is part of District: %s. District has %s Townblocks total.'
