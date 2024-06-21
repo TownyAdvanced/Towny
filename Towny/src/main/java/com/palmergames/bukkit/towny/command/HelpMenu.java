@@ -844,6 +844,16 @@ public enum HelpMenu {
 		}
 	},
 	
+	PLOT_GROUP_SET {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("plot group set")
+				.add("maxjoindays", Translatable.of("plot_set_help_1.6"))
+				.add("minjoindays", Translatable.of("plot_set_help_1.5"))
+				.add("[plottype]", Translatable.of("plot_set_help_0"));
+		}
+	},
+
 	PLOT_GROUP_TOGGLE {
 		@Override
 		protected MenuBuilder load() {

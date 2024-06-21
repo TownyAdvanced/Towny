@@ -9835,3 +9835,4 @@ v0.92.0.11:
   - Drop support for MC 1.16-1.18, update the readme.
 0.100.3.3:
   - Fix regex settings not refreshing when using /ta reload {config}.
+  - Fix PlotGroups not being able to support max and min joindays amounts like TownBlocks.

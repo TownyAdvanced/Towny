@@ -248,6 +248,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						break;
 					
 					switch (args[1].toLowerCase(Locale.ROOT)) {
+						case "set":
+							if (args.length == 3)
+								return NameUtil.filterByStart(Arrays.asList("perm", "maxjoindays", "minjoindays"), args[2]);
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
@@ -1358,6 +1361,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			
 			townBlock.setPermissions(newGroup.getPermissions().toString());
 			townBlock.setChanged(!townBlock.getPermissions().toString().equals(town.getPermissions().toString()));
+			townBlock.setMaxTownMembershipDays(newGroup.getMaxTownMembershipDays());
+			townBlock.setMinTownMembershipDays(newGroup.getMinTownMembershipDays());
 		} else {
 			// This is a brand new PlotGroup, register it.
 			newGroup = new PlotGroup(UUID.randomUUID(), plotGroupName, town);
@@ -1528,32 +1533,37 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		TownBlockOwner townBlockOwner = townBlock.getTownBlockOwner();
 		if (split.length < 2) {
-			TownyMessaging.sendMessage(player, ChatTools.formatTitle("/plot group set"));
-			if (townBlockOwner instanceof Town)
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
-			if (townBlockOwner instanceof Resident)
-				TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[on/off]", "Toggle all permissions"));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[level/type] [on/off]", ""));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[level] [type] [on/off]", ""));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "reset", ""));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Eg", "/plot group set perm", "friend build on", ""));
-			TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "[townblocktype]", "", "Farm, Wilds, Bank, Embassy, etc."));
+			showPlotGroupHelp(player, townBlockOwner);
 			return;
 		}
 
 		split = StringMgmt.remFirstArg(split);
 		switch(split[0].toLowerCase(Locale.ROOT)) {
-		case "perm":
-			parsePlotGroupSetPerm(split, townBlock, player, town, group, townBlockOwner);
-			break;
-		default:
-			/*
-			 * After all other set commands are tested for we attempt to set the townblocktype.
-			 */
-			parsePlotGroupSetTownBlockType(split, resident, townBlock, group, player, town);
+		case "perm" -> parsePlotGroupSetPerm(split, townBlock, player, town, group, townBlockOwner);
+		case "maxjoindays" -> parsePlotGroupSetMaxJoinDays(player, resident, townBlock, group, StringMgmt.remFirstArg(split));
+		case "minjoindays" -> parsePlotGroupSetMinJoinDays(player, resident, townBlock, group, StringMgmt.remFirstArg(split));
+
+		/*
+		 * After all other set commands are tested for we attempt to set the townblocktype.
+		 */
+		default -> parsePlotGroupSetTownBlockType(split, resident, townBlock, group, player, town);
+			
 		}
+	}
+
+	private void showPlotGroupHelp(Player player, TownBlockOwner townBlockOwner) {
+		HelpMenu.PLOT_GROUP_SET.send(player);
+		if (townBlockOwner instanceof Town)
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[resident/nation/ally/outsider]", "", ""));
+		if (townBlockOwner instanceof Resident)
+			TownyMessaging.sendMessage(player, ChatTools.formatCommand("Level", "[friend/town/ally/outsider]", "", ""));
+		TownyMessaging.sendMessage(player, ChatTools.formatCommand("Type", "[build/destroy/switch/itemuse]", "", ""));
+		TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[on/off]", "Toggle all permissions"));
+		TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[level/type] [on/off]", ""));
+		TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "[level] [type] [on/off]", ""));
+		TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "perm", "reset", ""));
+		TownyMessaging.sendMessage(player, ChatTools.formatCommand("Eg", "/plot group set perm", "friend build on", ""));
+		TownyMessaging.sendMessage(player, ChatTools.formatCommand("/plot group set", "[townblocktype]", "", "Farm, Wilds, Bank, Embassy, etc."));
 	}
 
 	public void parsePlotGroupSetPerm(String[] args, TownBlock townBlock, Player player, Town town, PlotGroup plotGroup, TownBlockOwner townBlockOwner) {
@@ -1610,6 +1620,60 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		Confirmation.runOnAccept(permHandler)
 			.setTitle(Translatable.of("msg_plot_group_set_perm_confirmation", plotGroup.getTownBlocks().size()).append(" ").append(Translatable.of("are_you_sure_you_want_to_continue")))
 			.sendTo(player);
+	}
+
+	private void parsePlotGroupSetMinJoinDays(Player player, Resident resident, TownBlock townBlock, PlotGroup plotGroup, String[] args) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock); // Test we are allowed to work on this plot
+
+		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
+			showPlotGroupHelp(player, townBlock.getTownBlockOwner());
+			return;
+		}
+		if (args[0].equalsIgnoreCase("clear")) {
+			plotGroup.getTownBlocks().forEach(tb -> {
+				tb.setMinTownMembershipDays(-1);
+				tb.save();
+			});
+			TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_min_join_days_removed"));
+			return;
+		}
+
+		int days = MathUtil.getPositiveIntOrThrow(args[0]);
+		if (days == 0)
+			throw new TownyException(Translatable.of("msg_err_days_must_be_greater_than_0"));
+		plotGroup.getTownBlocks().forEach(tb -> {
+			tb.setMinTownMembershipDays(days);
+			tb.save();
+		});
+		TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_min_join_days_set_to", townBlock.getMinTownMembershipDays()));
+	}
+
+	private void parsePlotGroupSetMaxJoinDays(Player player, Resident resident, TownBlock townBlock, PlotGroup plotGroup, String[] args) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock); // Test we are allowed to work on this plot
+
+		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
+			showPlotGroupHelp(player, townBlock.getTownBlockOwner());
+			return;
+		}
+		if (args[0].equalsIgnoreCase("clear")) {
+			plotGroup.getTownBlocks().forEach(tb -> {
+				tb.setMinTownMembershipDays(-1);
+				tb.save();
+			});
+			TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_max_join_days_removed"));
+			return;
+		}
+
+		int days = MathUtil.getPositiveIntOrThrow(args[0]);
+		if (days == 0)
+			throw new TownyException(Translatable.of("msg_err_days_must_be_greater_than_0"));
+		plotGroup.getTownBlocks().forEach(tb -> {
+			tb.setMinTownMembershipDays(days);
+			tb.save();
+		});
+		TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_max_join_days_set_to", townBlock.getMaxTownMembershipDays()));
 	}
 
 	public void parsePlotGroupSetTownBlockType(String[] split, Resident resident, TownBlock townBlock, PlotGroup group, Player player, Town town) throws TownyException {
@@ -1916,6 +1980,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					
 					if (TownyEconomyHandler.isActive() && (!resident.getAccount().canPayFromHoldings(group.getPrice())))
 						throw new TownyException(Translatable.of("msg_no_funds_claim_plot_group", group.getTownBlocks().size(), prettyMoney(group.getPrice())));
+
+					tb.testTownMembershipAgePreventsThisClaimOrThrow(resident);
 
 					// Add the confirmation for claiming a plot group.
 					Confirmation.runOnAccept(() -> {

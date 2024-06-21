@@ -237,4 +237,12 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 			}
 		}
 	}
+
+	public int getMinTownMembershipDays() {
+		return hasTownBlocks() ? townBlocks.get(0).getMinTownMembershipDays() : -1;
+	}
+
+	public int getMaxTownMembershipDays() {
+		return hasTownBlocks() ? townBlocks.get(0).getMaxTownMembershipDays() : -1;
+	}
 }
