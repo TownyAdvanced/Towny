@@ -22,12 +22,14 @@ import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.CellSurface;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
@@ -35,6 +37,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
@@ -210,6 +213,25 @@ public class TownyCustomListener implements Listener {
 				event.setCancelMessage(Translatable.of("msg_cant_unclaim_outsider_in_town").forLocale(event.getResident()));
 				break;
 			}
+		}
+	}
+
+	/**
+	 * Used to prevent unclaiming when a District would be cut in two parts.
+	 * 
+	 * @param event {@link TownPreUnclaimEvent} thrown when someone runs /t unclaim.
+	 */
+	@EventHandler(ignoreCancelled = true)
+	public void onTownUnclaimDistrict(TownPreUnclaimEvent event) {
+		TownBlock townBlock = event.getTownBlock();
+		if (!townBlock.hasDistrict())
+			return;
+
+		try {
+			ProximityUtil.testAdjacentRemoveDistrictRulesOrThrow(townBlock.getWorldCoord(), event.getTown(), townBlock.getDistrict(), 1);
+		} catch (TownyException e) {
+			event.setCancelled(true);
+			event.setCancelMessage(e.getMessage());
 		}
 	}
 

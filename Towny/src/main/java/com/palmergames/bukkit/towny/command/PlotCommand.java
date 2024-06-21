@@ -1366,7 +1366,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (town.hasDistrictName(districtName)) {
 			newDistrict = town.getDistrictFromName(districtName);
 
-			ProximityUtil.testAdjacentClaimsRulesOrThrow(townBlock.getWorldCoord(), town, false, 1);
+			ProximityUtil.testAdjacentAddDistrictRulesOrThrow(townBlock.getWorldCoord(), town, newDistrict, 0);
 
 			BukkitTools.ifCancelledThenThrow(new DistrictAddEvent(newDistrict, townBlock, player));
 
@@ -1412,7 +1412,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		String name = district.getName();
 		
 		try {
-			ProximityUtil.testAdjacentUnclaimsRulesOrThrow(townBlock.getWorldCoord(), town, 1);
+			ProximityUtil.testAdjacentRemoveDistrictRulesOrThrow(townBlock.getWorldCoord(), town, district, 1);
 		} catch (TownyException e) {
 			throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", name));
 		}

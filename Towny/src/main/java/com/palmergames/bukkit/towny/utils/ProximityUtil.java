@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
@@ -179,9 +180,45 @@ public class ProximityUtil {
 				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
 				// The number of adjacement TBs is not enough and there is not a nearby outpost.
 				if (numAdjacent - 1 < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
+					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
+			}
+		}
+	}
+
+	/*
+	 * District add/remove methods
+	 */
+
+	public static void testAdjacentAddDistrictRulesOrThrow(WorldCoord townBlockToClaim, Town town, District district, int minAdjacentBlocks) throws TownyException {
+		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+			int numAdjacent = numAdjacentDistrictTownBlocks(town, district, townBlockToClaim);
+			// The number of adjacement TBs with the same District is not enough.
+			if (numAdjacent < minAdjacentBlocks)
+				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
+		}
+	}
+
+	public static void testAdjacentRemoveDistrictRulesOrThrow(WorldCoord townBlockToUnclaim, Town town, District district, int minAdjacentBlocks) throws TownyException {
+		// Prevent removing parts of Districts that would cause a district to split into two sections.
+		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+			WorldCoord firstWorldCoord = townBlockToUnclaim;
+			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
+				if (wc.isWilderness() || !wc.hasTown(town) || !wc.getTownBlock().hasDistrict() || !wc.getTownBlock().getDistrict().getName().equals(district.getName()))
+					continue;
+				int numAdjacent = numAdjacentDistrictTownBlocks(town, district, wc);
+				// The number of adjacement TBs with the same District is not enough
+				if (numAdjacent - 1 < minAdjacentBlocks)
 					throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
 			}
 		}
+	}
+
+	private static int numAdjacentDistrictTownBlocks(Town town, District district, WorldCoord worldCoord) {
+		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
+			.filter(wc -> wc.hasTown(town) && wc.getTownBlockOrNull() != null)
+			.map(wc -> wc.getTownBlockOrNull())
+			.filter(tb -> tb.hasDistrict() && tb.getDistrict().getName().equals(district.getName()))
+			.count();
 	}
 
 	/*
