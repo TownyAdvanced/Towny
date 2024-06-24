@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.event.asciimap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -18,6 +19,7 @@ public class WildernessMapEvent extends Event {
 	final private WorldCoord worldCoord;
 	
 	public WildernessMapEvent(WorldCoord worldCoord) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.worldCoord = worldCoord;
 		this.hoverText = Component.text(worldCoord.getTownyWorld().getFormattedUnclaimedZoneName(), NamedTextColor.DARK_RED).append(Component.text(" (" + worldCoord.getX() + ", " + worldCoord.getZ() + ")", NamedTextColor.WHITE));
 	}

@@ -9836,3 +9836,4 @@ v0.92.0.11:
 0.100.3.3:
   - Fix regex settings not refreshing when using /ta reload {config}.
   - Fix PlotGroups not being able to support max and min joindays amounts like TownBlocks.
+  - Fix WildernessMapEvent being able to be thrown async.
