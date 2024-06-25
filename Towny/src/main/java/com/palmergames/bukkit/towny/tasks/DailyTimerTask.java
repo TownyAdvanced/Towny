@@ -436,12 +436,13 @@ public class DailyTimerTask extends TownyTimerTask {
 			if (!resident.exists())
 				continue;
 
-			if (TownyPerms.getResidentPerms(resident).get("towny.tax_exempt") == Boolean.TRUE || resident.isNPC() || resident.isMayor()) {
+			if (TownyPerms.getResidentPerms(resident).get("towny.tax_exempt") == Boolean.TRUE || resident.isNPC() || (!TownySettings.doMayorsPayTownTax() && resident.isMayor())) {
 				TownyMessaging.sendMsg(resident, Translatable.of("msg_tax_exempt"));
 				continue;
 			}
 
-			if (!collectTownTaxFromResident(tax, resident, town))
+			// Remove the resident for non-payment unless they're a mayor (who might be made to pay tax.)
+			if (!collectTownTaxFromResident(tax, resident, town) && !resident.isMayor())
 				removedResidents.add(resident.getName());
 		}
 
@@ -496,9 +497,13 @@ public class DailyTimerTask extends TownyTimerTask {
 			return true;
 		}
 
-		TownyMessaging.sendMsg(resident, Translatable.of("msg_you_couldnt_pay_town_tax", prettyMoney(tax), town.getFormattedName()));
-		// remove this resident from the town, they cannot pay the town tax.
-		resident.removeTown();
+		// Mayors can still be made to pay the tax, but are exempt of any real punishments.
+		if (!resident.isMayor()) {
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_you_couldnt_pay_town_tax", prettyMoney(tax), town.getFormattedName()));
+			// remove this resident from the town, they cannot pay the town tax.
+			resident.removeTown();
+		}
+
 		return false;
 	}
 

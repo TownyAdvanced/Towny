@@ -9837,3 +9837,9 @@ v0.92.0.11:
   - Fix regex settings not refreshing when using /ta reload {config}.
   - Fix PlotGroups not being able to support max and min joindays amounts like TownBlocks.
   - Fix WildernessMapEvent being able to be thrown async.
+  - Add option to make mayors pay their own town's tax, which could prevent towns from dying to upkeep.
+    - Closes #7482.
+  - New Config Option: economy.daily_taxes.do_mayors_pay_town_tax
+    - Default: false
+    - When true, a town's mayor will pay the town tax. This feature is a bit redundant because the mayor can
+      withdraw from the bank anyways, but it might keep towns from being deleted for not paying their upkeep.

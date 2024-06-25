@@ -2678,6 +2678,14 @@ public enum ConfigNodes {
 			"# if a resident can't pay his plot tax he loses his plot.",
 			"# if a resident can't pay his town tax then he is kicked from the town.",
 			"# if a town or nation fails to pay it's upkeep it is deleted."),
+	ECO_DAILY_TAXES_DO_MAYORS_PAY_TOWN_TAX(
+			"economy.daily_taxes.do_mayors_pay_town_tax",
+			"false",
+			"",
+			"# When true, a town's mayor will pay the town tax.",
+			"# This feature is a bit redundant because the mayor can withdraw from the bank anyways,",
+			"# but it might keep towns from being deleted for not paying their upkeep."),
+
 	ECO_DAILY_TAXES_MAX_PLOT_TAX(
 			"economy.daily_taxes.max_plot_tax_amount",
 			"1000.0",
