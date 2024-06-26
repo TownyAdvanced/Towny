@@ -3091,6 +3091,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Make sure we are allowed to set these permissions.
 		toggleTest(town, StringMgmt.join(split, " "));
 		setTownBlockPermissions(sender, town, town.getPermissions(), split, false);
+		town.save();
 	}
 
 	public static void setTownBlockPermissions(CommandSender sender, TownBlockOwner townBlockOwner, TownyPermission perm, String[] split, boolean friend) {
