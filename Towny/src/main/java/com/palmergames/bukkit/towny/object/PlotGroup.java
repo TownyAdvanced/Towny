@@ -122,6 +122,8 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	}
 
 	public Collection<TownBlock> getTownBlocks() {
+		if (townBlocks == null)
+			return Collections.emptyList();
 		return Collections.unmodifiableCollection(townBlocks);
 	}
 	
@@ -131,7 +133,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 
 	@Override
 	public boolean hasTownBlock(TownBlock townBlock) {
-		return townBlocks.contains(townBlock);
+		return townBlocks != null && townBlocks.contains(townBlock);
 	}
 
 	public void setPrice(double price) {
