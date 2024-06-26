@@ -9843,3 +9843,4 @@ v0.92.0.11:
     - Default: false
     - When true, a town's mayor will pay the town tax. This feature is a bit redundant because the mayor can
       withdraw from the bank anyways, but it might keep towns from being deleted for not paying their upkeep.
+  - Fix potential NPEs in PlotGroup, courtesy of galacticwarrior9 with PR #7483.
