@@ -9846,3 +9846,4 @@ v0.92.0.11:
   - Fix potential NPEs in PlotGroup, courtesy of galacticwarrior9 with PR #7483.
 0.100.3.4:
   - Fix town plot permissions changing not causing the town to save.
+  - Improve /ta town new TOWNNAME MAYORNAME, to support town names entered with spaces in them.

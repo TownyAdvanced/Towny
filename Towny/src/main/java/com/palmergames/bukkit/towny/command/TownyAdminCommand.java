@@ -1179,7 +1179,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		// Special case where we can create a new Town before we use split[0] to get a Town.
 		if (split[0].equalsIgnoreCase("new")) {
-			parseAdminNewTownCommand(sender, split);
+			parseAdminNewTownCommand(sender, StringMgmt.remFirstArg(split));
 			return;
 		}
 
@@ -1398,25 +1398,27 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminNewTownCommand(CommandSender sender, String[] split) throws TownyException {
-		if (split.length != 3)
+		if (split.length < 2)
 			throw new TownyException(Translatable.of("msg_err_not_enough_variables") + "/ta town new [townname] [mayor]");
 
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_NEW.getNode());
 
+		String mayorName = split[split.length - 1];
+		String townName = StringMgmt.join(StringMgmt.remLastArg(split), "_");
 		Player player = sender instanceof Player p ? p : null;
 		Resident resident;
-		if ("npc".equalsIgnoreCase(split[2]) && player != null) // Avoid creating a new npc resident if command is ran from console.
+		if ("npc".equalsIgnoreCase(mayorName) && player != null) // Avoid creating a new npc resident if command is ran from console.
 			resident = ResidentUtil.createAndGetNPCResident();
 		else
-			resident = getResidentOrThrow(split[2]);
+			resident = getResidentOrThrow(mayorName);
 
 		// If the command is being run from console, try to sub in the specfied player.
 		if (player == null) {
 			if (!resident.isOnline())
-				throw new TownyException(Translatable.of("msg_player_is_not_online", split[2]));
+				throw new TownyException(Translatable.of("msg_player_is_not_online", mayorName));
 			player = resident.getPlayer();
 		}
-		TownCommand.newTown(player, split[1], resident, true, true);
+		TownCommand.newTown(player, townName, resident, true, true);
 	}
 
 	private void parseAdminTownSet(CommandSender sender, Town town, String[] split) throws TownyException {
