@@ -17,13 +17,15 @@ import com.palmergames.bukkit.towny.object.Resident;
 public class SuccessfulTownyTeleportEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	private Resident resident;
-	private Location teleportLocation;
+	private final Resident resident;
+	private final Location teleportLocation;
+	private final double teleportCost;
 
-	public SuccessfulTownyTeleportEvent(Resident resident, Location loc) {
+	public SuccessfulTownyTeleportEvent(Resident resident, Location loc, double cost) {
 		super(!Bukkit.isPrimaryThread());
 		this.resident = resident;
 		this.teleportLocation = loc;
+		this.teleportCost = cost;
 	}
 
 	@NotNull
@@ -44,4 +46,10 @@ public class SuccessfulTownyTeleportEvent extends Event {
 		return teleportLocation;
 	}
 
+	/**
+	 * @return The price that the player paid to teleport.
+	 */
+	public double getTeleportCost() {
+		return this.teleportCost;
+	}
 }

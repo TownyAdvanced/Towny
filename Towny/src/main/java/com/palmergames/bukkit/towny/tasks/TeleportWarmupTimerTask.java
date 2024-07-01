@@ -68,7 +68,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				
 				PaperLib.teleportAsync(player, request.destinationLocation(), TeleportCause.COMMAND);
 				
-				BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation()));
+				BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost()));
 
 				if (request.cooldown() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", request.cooldown());
