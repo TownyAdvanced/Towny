@@ -306,9 +306,10 @@ public class TownyPlayerListener implements Listener {
 		
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
-		
-		// Bail if we're filling air, usually a milked cow.
-		if (event.getBlockClicked().getType().equals(Material.AIR))
+
+		// Bail if we're milking a cow, goat, or if we're filling air.
+		if (event.getItemStack().getType().equals(Material.MILK_BUCKET)
+			|| event.getBlockClicked().getType().equals(Material.AIR))
 			return;
 		
 		// Test whether we can fill the bucket by testing if they would be able to destroy the liquid it is picking up.
@@ -663,9 +664,10 @@ public class TownyPlayerListener implements Listener {
 				actionType = ActionType.SWITCH;
 			} else if (EntityLists.DYEABLE.contains(entityType) && ItemLists.DYES.contains(item))
 				mat = item;
-			else if (item != null && item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType))
+			else if (item != null && item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType)) {
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
-			else if (item != null && item == Material.COOKIE && EntityType.PARROT.equals(entityType))
+				actionType = ActionType.ITEM_USE;
+			} else if (item != null && item == Material.COOKIE && EntityType.PARROT.equals(entityType))
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 			else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType))
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);

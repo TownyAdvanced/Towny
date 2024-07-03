@@ -9847,3 +9847,4 @@ v0.92.0.11:
 0.100.3.4:
   - Fix town plot permissions changing not causing the town to save.
   - Improve /ta town new TOWNNAME MAYORNAME, to support town names entered with spaces in them.
+  - Fix milking animals sometimes being able to get cancelled by the PlayerBucketFillEvent.
