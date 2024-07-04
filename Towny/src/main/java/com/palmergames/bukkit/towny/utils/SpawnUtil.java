@@ -672,7 +672,7 @@ public class SpawnUtil {
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc));
+			BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost));
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
 				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
