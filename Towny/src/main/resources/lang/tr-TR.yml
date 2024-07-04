@@ -129,6 +129,8 @@ nation_list_help_4: "Kasabaları banka bakiyelerine göre listelenmiş sayfada g
 nation_list_help_5: "Ulusları belirtilen sayfayla birlikte alfabetik sırayla listeleyin."
 nation_list_help_6: "Talep edilen bölgeye göre kasabaları listeleyin"
 nation_list_help_7: "Kasabaları çevrim içi sayılarına göre listele."
+nation_set_help_0: "Ulusunuzun liderini değiştirin."
+nation_set_help_1: "Ulusunuzun başkentini değiştirin."
 nation_set_help_2: "Kasabaların ödeyeceği vergi miktarını belirleyin."
 nation_set_help_3: "Fethedilen kasabaların ödeyeceği vergi miktarını ayarlayın."
 nation_set_help_4: "Ulusun ismini düzenle."
@@ -139,6 +141,12 @@ nation_set_help_8: "Ulusun spawn noktasını ayarlayın."
 nation_set_help_9: "/n spawn komutunu kullanmanın ücretini belirleyin."
 nation_set_help_10: "Haritalama eklentilerinde kullanılan harita rengini ayarlayın."
 nation_toggle_help_0: "Ulusun barışçıl durumunu değiştirir."
+nation_toggle_help_1: "Herkese açık durumu değiştirir, üyelerinizden başkasının /n spawn komutunu kullanmasını engeller."
+nation_toggle_help_2: "Herkese açık katılım durumunu değiştirir, davete ihtiyaç duymadan kasabanıza üye olabilirler."
+nation_toggle_help_3: "Vergi miktarını değiştirir, kasabaların normal vergiden farklı bir ödeme yapmasını sağlar."
+nation_sanction_help_1: "Bir kasabayı, AmbargoKasabaları listesine ekler."
+nation_sanction_help_2: "Bir kasabayı, AmbargoKasabaları listesinden kaldırır."
+nation_sanction_help_3: "Ulusunuzdaki AmbargoKasabalarını listeler."
 king_help_1: 'Ulus Lideri Yardımı'
 king_help_2: 'İttifakınızı kurun.'
 king_help_3: 'Düşmanlarınızı ayarlayın.'
