@@ -9853,3 +9853,5 @@ v0.92.0.11:
   - Bump org.junit.jupiter:junit-jupiter from 5.10.2 to 5.10.3.
   - Bump org.junit.jupiter:junit-jupiter-api from 5.10.2 to 5.10.3.
   - Bump org.apache.maven.plugins:maven-jar-plugin from 3.4.1 to 3.4.2.
+0.100.3.5:
+  - Fix TownBlocks which load replacement town names save the new town name in the database.

@@ -1654,7 +1654,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String line = "";
 		String path;
 		
-
+		List<TownBlock> toSave = new ArrayList<>();
 		for (TownBlock townBlock : universe.getTownBlocks().values()) {
 			path = getTownBlockFilename(townBlock);
 			
@@ -1662,7 +1662,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			if (fileTownBlock.exists() && fileTownBlock.isFile()) {
 
 				try {
-					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTownBlock);			
+					HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTownBlock);
 
 					line = keys.get("town");
 					if (line != null) {
@@ -1675,8 +1675,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						Town town = null;
 						if (universe.hasTown(line.trim()))
 							town = universe.getTown(line.trim());
-						else if (universe.getReplacementNameMap().containsKey(line.trim()))
-							town = universe.getTown(universe.getReplacementNameMap().get(line).trim());
+						else if (universe.getReplacementNameMap().containsKey(line.trim())) {
+							town = universe.getTown(universe.getReplacementNameMap().get(line.trim()));
+							toSave.add(townBlock);
+						}
 						
 						if (town == null) {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_contains_unregistered_town_delete", line, path));
@@ -1838,6 +1840,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				deleteTownBlock(townBlock);
 			}
 		}
+		
+		// Some townblocks have had their town name change. Save the townblocks.
+		if (!toSave.isEmpty())
+			toSave.forEach(TownBlock::save);
 		
 		return true;
 	}
