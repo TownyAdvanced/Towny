@@ -80,6 +80,8 @@ public class NameValidation {
 
 		testForImproperNameAndThrow(out);
 
+		testCapitalization(out);
+
 		testForSubcommand(out);
 
 		if (out.startsWith(TownySettings.getTownAccountPrefix()))
@@ -103,6 +105,8 @@ public class NameValidation {
 		testForNumbersInNationName(out);
 
 		testForImproperNameAndThrow(out);
+
+		testCapitalization(out);
 
 		testForSubcommand(out);
 
@@ -281,6 +285,27 @@ public class NameValidation {
 			if (letter != '_')
 				return;
 		throw new InvalidNameException(Translatable.of("msg_err_name_validation_is_all_underscores", name));
+	}
+
+	/**
+	 * Stops objects being named with too many capital letters.
+	 * 
+	 * @param name String submitted for testing.
+	 * @throws InvalidNameException when the name uses too many capital letters.
+	 */
+	private static void testCapitalization(String name) throws InvalidNameException {
+		int maxCapitals = TownySettings.getMaxNameCapitalLetters();
+		if (maxCapitals == -1)
+			return;
+
+		int capitals = 0;
+		for (char letter : name.toCharArray()) {
+			if (Character.isLowerCase(letter))
+				continue;
+			capitals++;
+			if (capitals > maxCapitals)
+				throw new InvalidNameException(Translatable.of("msg_err_name_validation_too_many_capitals", name, maxCapitals));
+		}
 	}
 
 	/**

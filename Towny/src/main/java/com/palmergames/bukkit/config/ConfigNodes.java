@@ -1690,6 +1690,12 @@ public enum ConfigNodes {
 			"",
 			"# Maximum length of Town and Nation names. Setting this to a number below your current max_name_length could result in",
 			"# safe mode if the new value is below of your existing town and nation name lengths."),
+	FILTERS_MAX_NAME_CAPITAL_LETTERS(
+			"filters_colour_chat.modify_chat.max_name_capital_letters",
+			"-1",
+			"",
+			"# Maximum number of capital letters that can be used in Town and Nation names.",
+			"# Use this value to prevent towns or nations being named with all capital letters, or too many capital letters."),
 	FILTERS_MAX_TAG_LENGTH(
 			"filters_colour_chat.modify_chat.max_tag_length",
 			"4",

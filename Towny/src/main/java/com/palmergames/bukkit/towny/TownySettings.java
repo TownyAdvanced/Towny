@@ -1458,6 +1458,11 @@ public class TownySettings {
 		return getInt(ConfigNodes.FILTERS_MAX_NAME_LGTH);
 	}
 
+	public static int getMaxNameCapitalLetters() {
+
+		return getInt(ConfigNodes.FILTERS_MAX_NAME_CAPITAL_LETTERS);
+	}
+
 	public static long getDeleteTime() {
 
 		return getSeconds(ConfigNodes.RES_SETTING_DELETE_OLD_RESIDENTS_TIME);
