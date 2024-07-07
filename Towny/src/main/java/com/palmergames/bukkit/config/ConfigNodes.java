@@ -534,7 +534,7 @@ public enum ConfigNodes {
 			"global_town_settings.peaceful_cooldown_time",
 			"30",
 			"",
-			"# Number of seconds that must pass before peacfulness can be toggled by a town or nation."),
+			"# Number of seconds that must pass before peacefulness can be toggled by a town or nation."),
 	GTOWN_SETTINGS_TOWN_DELETE_COOLDOWN_TIMER(
 			"global_town_settings.town_delete_cooldown_time",
 			"0",
