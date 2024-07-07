@@ -299,12 +299,24 @@ public class NameValidation {
 			return;
 
 		int capitals = 0;
+		boolean skip = true;
 		for (char letter : name.toCharArray()) {
-			if (Character.isLowerCase(letter))
+			if (skip) { // First character of the name or character after a _.
+				skip = false;
 				continue;
+			}
+
+			if (letter == '_') { // Next character will be allowed to be capitalized.
+				skip = true;
+				continue;
+			}
+
+			if (Character.isLowerCase(letter)) // Not a capital.
+				continue;
+
 			capitals++;
 			if (capitals > maxCapitals)
-				throw new InvalidNameException(Translatable.of("msg_err_name_validation_too_many_capitals", name, maxCapitals));
+				throw new InvalidNameException(Translatable.of("msg_err_name_validation_too_many_capitals", name, capitals, maxCapitals));
 		}
 	}
 
