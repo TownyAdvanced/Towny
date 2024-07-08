@@ -1696,7 +1696,7 @@ public enum ConfigNodes {
 			"",
 			"# Maximum number of capital letters that can be used in Town and Nation names.",
 			"# This count does not include the first letter of a town, and does not count capitalized letters that come after a _ character.",
-			"# This means that a town names New York would register 0 capitals. While McDonalds would register 1."),
+			"# This means that a town named New_York would register 0 capitals. While McDonalds would register 1. COOLTOWN would register 7 capital letters."),
 	FILTERS_MAX_TAG_LENGTH(
 			"filters_colour_chat.modify_chat.max_tag_length",
 			"4",
