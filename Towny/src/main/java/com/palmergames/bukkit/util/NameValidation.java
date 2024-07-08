@@ -315,9 +315,10 @@ public class NameValidation {
 				continue;
 
 			capitals++;
-			if (capitals > maxCapitals)
-				throw new InvalidNameException(Translatable.of("msg_err_name_validation_too_many_capitals", name, capitals, maxCapitals));
 		}
+
+		if (capitals > maxCapitals)
+			throw new InvalidNameException(Translatable.of("msg_err_name_validation_too_many_capitals", name, capitals, maxCapitals));
 	}
 
 	/**
