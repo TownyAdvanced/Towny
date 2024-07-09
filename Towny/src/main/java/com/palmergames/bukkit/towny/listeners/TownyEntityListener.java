@@ -208,14 +208,14 @@ public class TownyEntityListener implements Listener {
 	}
 	
 	/**
-	 * Prevent block explosions and lightning from hurting entities.
+	 * Prevent entity and block explosions and lightning from hurting entities.
 	 * 
 	 * Doesn't stop damage to vehicles or hanging entities.
 	 *  
 	 * @param event - EntityDamageEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityTakesBlockExplosionDamage(EntityDamageEvent event) {
+	public void onEntityTakesExplosionDamage(EntityDamageEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -224,10 +224,17 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if ((event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.LIGHTNING) && entityProtectedFromExplosiveDamageHere(event.getEntity(), event.getCause())) {
+		if (causeIsExplosive(event.getCause()) && entityProtectedFromExplosiveDamageHere(event.getEntity(), event.getCause())) {
 			event.setDamage(0);
 			event.setCancelled(true);
 		}
+	}
+
+	private boolean causeIsExplosive(DamageCause cause) {
+		return switch(cause) {
+		case ENTITY_EXPLOSION, BLOCK_EXPLOSION, LIGHTNING -> true;
+		default -> false;
+		};
 	}
 
 	/**

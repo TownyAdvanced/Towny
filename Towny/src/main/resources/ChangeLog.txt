@@ -9855,3 +9855,4 @@ v0.92.0.11:
   - Bump org.apache.maven.plugins:maven-jar-plugin from 3.4.1 to 3.4.2.
 0.100.3.5:
   - Fix TownBlocks which load replacement town names save the new town name in the database.
+  - Make more explosive entities throw TownyExplosionDamagesEntityEvent events when they explode and damage entities.
