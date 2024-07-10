@@ -666,7 +666,7 @@ msg_admin_only_create_town: '&c只有管理员能够创建城镇!'
 msg_err_not_enough_residents_new_nation: '&c你的城镇居民数不足以建国.'
 msg_err_not_enough_residents_join_nation: '&b城镇 %s 没有足够的居民数所以无法加入国家.'
 msg_not_enough_residents_no_longer_capital: '&b国家旧都居民数不足所以不再是首都.新的首都将在 %s.'
-msg_town_not_enough_residents_left_nation: '&b因为城镇 %s 不再有有足够的居民来成为国家的一员，所以它被赶出了国家。'
+msg_town_not_enough_residents_left_nation: '&b城镇%s被赶出了国家，因为它不再有足够的居民来成为国家的一员。'
 msg_nation_disbanded_town_not_enough_residents: '&b城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
 msg_not_enough_residents_refunded: '&b你的国家由于居民数不足而灭亡了,因此你获得了 $%s .'
 msg_not_enough_residents_capital: '&b城镇 %s 没有足够的居民来作为首都.'
@@ -844,7 +844,7 @@ tc_err_you_dont_have_unmute_perm: '您没有解除禁言的权限'
 tc_err_no_channel_called_channel: '没有名为&f%s的频道'
 tc_err_no_muted_players_in_channel_players: '解除禁言玩家 &f%s'
 tc_players_muted_in_channel: '[城镇聊天] &f%n &2玩家被禁言了 &f%s&2: &f%s'
-tc_err_no_online_players_with_name: '没有在线玩家的名字是&f%s'
+tc_err_no_online_players_with_name: '没有在线玩家名为&f%s'
 tc_err_you_dont_have_mute_perms: '您没有禁言权限'
 tc_err_you_cant_mute_admin: '你不能禁言一个城镇管理员.'
 tc_err_you_cant_mute_chat_mod: '你不能禁言聊天管理者.'
@@ -1199,7 +1199,7 @@ msg_cache_block_error_plot_outsiders: '外来者'
 msg_cache_block_error_plot_town_members: '城镇居民'
 msg_err_invalid_nation_map_color: '&c未知的地图颜色. 可用颜色有%s.'
 msg_nation_map_color_changed: '&b国家地图颜色已更改为%s.'
-msg_err_unable_to_add_more_residents_without_nation: '在第一次加入其他国家或建国前，你的城镇无法邀请多于%s位居民。'
+msg_err_unable_to_add_more_residents_without_nation: '在加入其他国家或建国前，你的城镇无法邀请多于%s位居民。'
 msg_the_following_towns_were_deleted_for_having_0_claims: '城镇%s已被删除，因为这些城镇没有声明任何土地。'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
@@ -1439,7 +1439,7 @@ msg_err_outlawed_players_no_teleport: '&4你被你所在的城镇列为被放逐
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4你不能在把你列为被放逐者的城镇里使用此命令。'
 #Added in 0.110
 msg_safe_mode: "[Error] 已锁定安全模式！"
-msg_safe_mode_base: '[Error] Towny因产生了一个错误而被锁定于安全模式下！'
+msg_safe_mode_base: '[Error] 由于错误，Towny被锁定在安全模式下！ '
 msg_safe_mode_player: '告诉管理员去检查服务器后台。'
 msg_safe_mode_admin: '查看服务器后台以获取详细信息。'
 msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: '你只能在中心区块所在的世界里声明前哨。'
@@ -1645,31 +1645,31 @@ msg_jailed_outlaw: '作为被放逐者杀死。'
 #Jail causes
 msg_jailed_war: '作为战俘监禁。'
 #Jail handbook messages
-msg_jailed_handbook_1: '看起来你因为%s而被监禁了。'
+msg_jailed_handbook_1: '看起来你因%s而被监禁。'
 #Jail handbook messages
-msg_jailed_handbook_2: '啊……太糟糕了。但是你能怎么办？这有一些被监禁时的小贴士，读一读吧，这或许可以帮你。'
+msg_jailed_handbook_2: '很遗憾，但你该当如何？这些小贴士或许有用，看一看吧。'
 #Jail handbook messages
-msg_jailed_handbook_3: '你已经被监禁%s小时了，服刑后你将得到自由。'
+msg_jailed_handbook_3: '你被监禁了%s小时，服刑后你将自由。'
 #Jail handbook messages
-msg_jailed_handbook_4_can: '你可以通过使用“/town leave”离开城镇来逃离监狱。'
+msg_jailed_handbook_4_can: '你可使用“/town leave”离开城镇来逃离监狱。'
 #Jail handbook messages
-msg_jailed_handbook_4_cant: '监禁期间你不能通过离开城镇来逃离城镇。'
+msg_jailed_handbook_4_cant: '监禁期间你不能靠离开城镇来越狱。'
 #Jail handbook messages
-msg_jailed_handbook_bail_1: '你可以使用“/res jail paybail”缴纳保释金来离开监狱。'
+msg_jailed_handbook_bail_1: '你可以使用“/res jail paybail”缴纳保释金来获释。'
 #Jail handbook messages
 msg_jailed_handbook_bail_2: '保释费用为%s。'
 #Jail handbook messages
-msg_jailed_handbook_5: '如果你坚持逃离到了城镇外的野地，你将获得自由。'
+msg_jailed_handbook_5: '若你坚持逃离到达野地，你将获得自由。'
 #Jail handbook messages
 msg_jailed_handbook_6: '但是在到达野地之前不要死亡，否则你将被送回监狱。'
 #Jail handbook messages
-msg_jailed_teleport: '但幸运的是——如果你有末影珍珠或是紫颂果，那么你可以使用它们来帮助你越狱。'
+msg_jailed_teleport: '幸运的是，你可以用末影珍珠或紫颂果来帮助你越狱，现在你只需弄到一些。'
 #Jail handbook messages
 msg_jailed_war_prisoner: '作为战俘，如果你的国家攻陷了监狱（HP降为0）或城镇退出了战争，你将获得自由。'
 #Jail handbook title
 msg_jailed_title: '所以，你被监禁了:('
 #Jail handbook author
-msg_jailed_author: 'Towny Jailco。'
+msg_jailed_author: 'Towny Jailco.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: '此城镇没有同盟。'

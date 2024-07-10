@@ -96,6 +96,7 @@ town_towntrust_help_0: "Thêm một thị trấn là đáng tin cậy trong th�
 town_towntrust_help_1: "Loại bỏ một thị trấn là đáng tin cậy trong thị trấn."
 town_towntrust_help_2: "Liệt kê các thị trấn đáng tin cậy của một thị trấn."
 town_buy_help: "Mua thêm các khối thị trấn để tăng giới hạn yêu cầu của thị trấn."
+town_cede_help: ""
 mayor_help_3: 'Chiếm khu vực không thuộc thị trấn'
 mayor_help_4: 'Chiếm khu vực xung quanh bạn trong bán kính X'
 mayor_help_5: 'Chiếm theo bán kính lớn nhất'
@@ -128,6 +129,10 @@ nation_list_help_5: "Liệt kê các quốc gia theo thứ tự bảng chữ cá
 nation_list_help_6: "Liệt kê các quốc gia theo vùng đất được tuyên bố chủ quyền, với trang được chỉ định."
 nation_list_help_7: "Liệt kê các quốc gia theo số lượng trực tuyến, với trang được chỉ định."
 nation_set_help_0: "Thay đổi người lãnh đạo đất nước."
+nation_set_help_1: ""
+nation_set_help_2: ""
+nation_set_help_3: "."
+nation_set_help_4: "."
 king_help_1: 'Trợ giúp dành cho lãnh đạo quốc gia'
 king_help_2: 'Đặt liên minh của bạn.'
 king_help_3: 'Đặt kẻ thù của bạn.'

@@ -181,6 +181,8 @@ res_toggle_help_11: "Espie canais de bate-papo."
 res_toggle_help_12: "Alterne a capacidade de adicionar gráficos a um grupo de gráficos que você iniciou."
 res_toggle_help_13: "Alterna a capacidade de ver mensagens de título quando você mudar de quarteirão."
 res_toggle_help_14: "Alterna a habilidade de desfazer a reivindicação por onde você anda."
+res_toggle_help_15: "."
+res_toggle_help_16: "Alterne a habilidade de desativar seus contornos de administrador."
 mode_1: 'Mostra o mapa entre cada terreno da cidade'
 mode_2: 'Tentar reivindicar terreno ao andar'
 mode_3: 'Tentar abandonar terreno ao andar'

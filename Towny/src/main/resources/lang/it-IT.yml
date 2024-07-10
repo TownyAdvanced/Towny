@@ -67,6 +67,9 @@ town_list_help_2: "Elenca le città che sono aperte, con la pagina specificata."
 town_list_help_3: "Elenca le città usando il saldo bancario, con la pagina specificata."
 town_list_help_4: "Elenca le città in ordine alfabetico, con la pagina specificata."
 town_list_help_5: "Elenca le città per terra reclamata, con la pagina specificata."
+town_set_help_7: "Imposta il costo per usare /t spawn."
+town_set_help_8: "Imposta il nome della tua città."
+town_jail_help_0: "Elenca le prigioni della città."
 mayor_help_3: 'Claima una zona non confinante con la città'
 mayor_help_4: 'Claima intorno a te in un raggio X'
 mayor_help_5: 'Claima per il raggio massimo'
@@ -82,6 +85,10 @@ nation_help_6: 'Crea una nuova nazione'
 nation_help_7: 'Elenca i comandi del leader della nazione'
 nation_help_8: 'Crea una nuova nazione'
 nation_help_9: 'Elenca tutti i residenti online nella nazione'
+nation_help_11: "Elenca le città della nazione."
+nation_help_12: "Elenca le nazioni alleate della nazione."
+nation_help_13: "Elenca le nazioni nemiche della nazione."
+nation_help_14: "Utilizzato per unirsi alle nazioni aperte."
 king_help_1: 'Guida del Re della nazione'
 king_help_2: 'Scegli le tue alleanze.'
 king_help_3: 'Scegli i tuoi nemici.'
@@ -89,6 +96,7 @@ res_1: 'Il tuo stato'
 res_2: '[residente]'
 res_3: 'Stato del giocatore specificato'
 res_4: 'Elenca tutti i giocatori attivi'
+res_jail_help_0: "Paga il costo della cauzione per uscire di prigione."
 mode_1: 'Mostra la mappa tra ogni lotto di città'
 mode_2: 'Prova a claimare camminando'
 mode_3: 'Prova ad unclaimare i lotti camminando'
