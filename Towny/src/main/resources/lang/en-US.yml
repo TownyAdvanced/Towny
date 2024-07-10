@@ -2461,8 +2461,6 @@ msg_err_name_validation_is_not_permitted: "%s is not permitted."
 
 msg_err_name_validation_is_all_underscores: "%s is entirely underscores."
 
-msg_err_name_validation_too_many_capitals: "%s contains %s capital letters which were not allowed, use less than %s."
-
 msg_err_name_validation_contains_harmful_characters: "%s contains symbols that could be harmful."
 
 msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allowed in names."
