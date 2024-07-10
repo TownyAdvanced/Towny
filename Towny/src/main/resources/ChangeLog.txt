@@ -9856,3 +9856,11 @@ v0.92.0.11:
 0.100.3.5:
   - Fix TownBlocks which load replacement town names save the new town name in the database.
   - Make more explosive entities throw TownyExplosionDamagesEntityEvent events when they explode and damage entities.
+  - Add the ability to limit the number of capital letters used in Town and Nation names.
+    - Closes 7497.
+  - New Config Option: filters_colour_chat.modify_chat.max_name_capital_letters
+    - Default: -1
+    - Maximum number of capital letters that can be used in Town and Nation names.
+    - This count does not include the first letter of a town, and does not count capitalized letters that come after a _ character.			
+    - This means that a town named New_York would register 0 capitals. While McDonalds would register 1. COOLTOWN would register 7 capital letters.
+  - Fix config typo, courtesy of auriasmc with PR #7498. (First-Time Contributor!)
