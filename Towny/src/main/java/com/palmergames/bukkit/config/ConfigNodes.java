@@ -1690,6 +1690,13 @@ public enum ConfigNodes {
 			"",
 			"# Maximum length of Town and Nation names. Setting this to a number below your current max_name_length could result in",
 			"# safe mode if the new value is below of your existing town and nation name lengths."),
+	FILTERS_MAX_NAME_CAPITAL_LETTERS(
+			"filters_colour_chat.modify_chat.max_name_capital_letters",
+			"-1",
+			"",
+			"# Maximum number of capital letters that can be used in Town and Nation names. Set to -1 to disable this feature.",
+			"# This count does not include the first letter of a town, and does not count capitalized letters that come after a _ character.",
+			"# This means that a town named New_York would register 0 capitals. While McDonalds would register 1. COOLTOWN would register 7 capital letters."),
 	FILTERS_MAX_TAG_LENGTH(
 			"filters_colour_chat.modify_chat.max_tag_length",
 			"4",
