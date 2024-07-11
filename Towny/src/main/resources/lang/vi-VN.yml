@@ -133,9 +133,25 @@ nation_set_help_1: ""
 nation_set_help_2: ""
 nation_set_help_3: "."
 nation_set_help_4: "."
+nation_set_help_5: "Đặt chức danh hoặc họ của một trong những cư dân của bạn."
+nation_set_help_6: "Đặt thẻ quốc gia."
+nation_set_help_7: "Đặt thông báo bảng quốc gia."
+nation_set_help_8: "Đặt điểm xuất hiện của quốc gia."
+nation_set_help_9: "Đặt chi phí để sử dụng /n spawn."
+nation_set_help_10: "Đặt màu bản đồ được sử dụng trong plugin Bản đồ."
+nation_toggle_help_0: "Chuyển đổi trạng thái hòa bình của đất nước."
+nation_toggle_help_1: "Chuyển đổi trạng thái công khai, cho phép những người không cư trú sử dụng /n spawn."
+nation_toggle_help_2: "Chuyển đổi trạng thái mở, cho phép các thị trấn tham gia mà không cần lời mời."
+nation_toggle_help_3: "Chuyển đổi phần trăm thuế, khiến các thị trấn phải trả phần trăm thay vì tỷ lệ cố định."
+nation_sanction_help_1: "Thêm một thị trấn vào danh sách SanctionedTown."
+nation_sanction_help_2: "Xóa một thị trấn khỏi danh sách SanctionedTown."
+nation_sanction_help_3: "Liệt kê các thị trấn bị trừng phạt của quốc gia bạn."
+nation_sanction_help_4: "Liệt kê các thị trấn bị trừng phạt của quốc gia nhất định."
 king_help_1: 'Trợ giúp dành cho lãnh đạo quốc gia'
 king_help_2: 'Đặt liên minh của bạn.'
 king_help_3: 'Đặt kẻ thù của bạn.'
+king_help_4: "Rút tiền từ ngân hàng quốc gia của bạn."
+king_help_5: "Thêm hoặc xóa các thị trấn khỏi quốc gia của bạn."
 res_1: 'Trạng thái của bạn'
 res_2: '[Cư dân]'
 res_3: 'Trạng thái của người chơi mục tiêu'
