@@ -423,7 +423,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	public enum TownyDBTableType {
 		JAIL("JAILS", "SELECT uuid FROM ", "uuid"),
 		PLOTGROUP("PLOTGROUPS", "SELECT groupID FROM ", "groupID"),
-		DISTRICT("DISTRICTS", "SELECT districtID FROM ", "districtID"),
+		DISTRICT("DISTRICTS", "SELECT uuid FROM ", "uuid"),
 		RESIDENT("RESIDENTS", "SELECT name FROM ", "name"),
 		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", "", "uuid"),
 		TOWN("TOWNS", "SELECT name FROM ", "name"),
@@ -636,13 +636,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		try (Connection connection = getConnection();
 			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT districtID FROM " + tb_prefix + "DISTRICTS")) {
+			 ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "DISTRICTS")) {
 
 			while (rs.next()) {
 				try {
-					universe.newDistrictInternal(UUID.fromString(rs.getString("districtID")));
+					universe.newDistrictInternal(UUID.fromString(rs.getString("uuid")));
 				} catch (IllegalArgumentException e) {
-					plugin.getLogger().log(Level.WARNING, "ID for district is not a valid uuid, skipped loading district {}", rs.getString("districtID"));
+					plugin.getLogger().log(Level.WARNING, "ID for district is not a valid uuid, skipped loading district {}", rs.getString("uuid"));
 				}
 			}
 			
@@ -1924,7 +1924,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				try {
-					line = rs.getString("groupID");
+					line = rs.getString("districtID");
 					if (line != null && !line.isEmpty()) {
 						try {
 							UUID districtID = UUID.fromString(line.trim());
@@ -2112,7 +2112,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String uuidString = null;
 		
 		try {
-			PlotGroup district = universe.getGroup(UUID.fromString(rs.getString("districtID")));
+			PlotGroup district = universe.getGroup(UUID.fromString(rs.getString("uuid")));
 			if (district == null) {
 				TownyMessaging.sendErrorMsg("SQL: A district was not registered properly on load!");
 				return true;
@@ -2436,12 +2436,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		TownyMessaging.sendDebugMsg("Saving district " + district.getName());
 		try {
 			HashMap<String, Object> pltgrp_hm = new HashMap<>();
-			pltgrp_hm.put("districtID", district.getUUID().toString());
+			pltgrp_hm.put("uuid", district.getUUID().toString());
 			pltgrp_hm.put("districtName", district.getName());
 			pltgrp_hm.put("town", district.getTown().getUUID().toString());
 			pltgrp_hm.put("metadata", serializeMetadata(district));
 
-			updateDB("DISTRICTS", pltgrp_hm, Collections.singletonList("districtID"));
+			updateDB("DISTRICTS", pltgrp_hm, Collections.singletonList("uuid"));
 
 		} catch (Exception e) {
 			plugin.getLogger().log(Level.WARNING, "SQL: Save Districts unknown error", e);
@@ -2762,7 +2762,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public void deleteDistrict(District district) {
 		HashMap<String, Object> district_hm = new HashMap<>();
-		district_hm.put("districtID", district.getUUID());
+		district_hm.put("uuid", district.getUUID());
 		DeleteDB("DISTRICTS", district_hm);
 	}
 

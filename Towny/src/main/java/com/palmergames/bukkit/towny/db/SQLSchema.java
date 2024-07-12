@@ -81,6 +81,7 @@ public class SQLSchema {
 			case TOWNBLOCK -> fetchCreateTownBlocksStatement();
 			case JAIL -> fetchCreateUUIDStatement(tableType);
 			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
+			case DISTRICT -> fetchCreateUUIDStatement(tableType);
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
 			case WORLD -> fetchCreateWorldStatemnt(tableType);
 			case HIBERNATED_RESIDENT -> fetchCreateUUIDStatement(tableType);
@@ -343,6 +344,7 @@ public class SQLSchema {
 		columns.add("`changed` bool NOT NULL DEFAULT '0'");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
+		columns.add("`districtID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`claimedAt` BIGINT NOT NULL");
 		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
 		columns.add("`customPermissionData` mediumtext DEFAULT NULL");

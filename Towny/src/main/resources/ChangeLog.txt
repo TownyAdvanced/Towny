@@ -9900,3 +9900,4 @@ v0.92.0.11:
     - If a plugin you use has broken, the author needs only change their imports section, switching to the re-located Transaction, TransactionType classes.
     - Plugins under the umbrella of the TownyAdvanced organization which are known to have broken include EventWar, FlagWar.
       - Do not update your Towny if you use either of these plugins until you see they have had a compatibility update.
+  - Fix for SQL db code related to new Districts.
