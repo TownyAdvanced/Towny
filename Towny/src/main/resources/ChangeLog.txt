@@ -9888,3 +9888,15 @@ v0.92.0.11:
       - towny.command.plot.district.remove: true
       - towny.command.plot.district.delete: true
       - towny.command.plot.district.rename: true
+0.100.3.7:
+  - Account and Transaction changes.
+    - A non-insignificant change was been made under the hood which could affect plugins using Towny's various Transaction Events.
+    - The end result is that classes have been re-located to a new com.palmergames.bukkit.towny.object.economy.transaction pacakge.
+    - This has resulted in a more robust system:
+      - Transactions are better able to represent when money moves between your server's Towny objects.
+      - Transaction events are now thrown much more often, allowing plugins to track transactions more accurately.
+      - Accounts now backed by an EconomyHandler (think Resident, Town, Nation,) instead of a name, which should ease the transition to using UUIDs.
+      - The TownyServerAccount is now a proper EconomyHandler, reducing jank in the code that is used in the Closed Economy feature.
+    - If a plugin you use has broken, the author needs only change their imports section, switching to the re-located Transaction, TransactionType classes.
+    - Plugins under the umbrella of the TownyAdvanced organization which are known to have broken include EventWar, FlagWar.
+      - Do not update your Towny if you use either of these plugins until you see they have had a compatibility update.
