@@ -24,6 +24,7 @@ com.palmergames.bukkit.towny.event.nation.toggle
 com.palmergames.bukkit.towny.event.player
 com.palmergames.bukkit.towny.event.plot
 com.palmergames.bukkit.towny.event.plot.changeowner
+com.palmergames.bukkit.towny.event.plot.district
 com.palmergames.bukkit.towny.event.plot.group
 com.palmergames.bukkit.towny.event.plot.toggle
 com.palmergames.bukkit.towny.event.resident
