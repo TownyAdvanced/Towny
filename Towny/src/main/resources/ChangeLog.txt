@@ -9866,3 +9866,25 @@ v0.92.0.11:
   - Fix config typo, courtesy of auriasmc with PR #7498. (First-Time Contributor!)
 0.100.3.6:
   - Add ignoreotherchannels to /res toggle and /res set mode tabcompleters.
+  - Add Districts to Towns and TownBlocks.
+    - Districts are groupings of townblocks, owned by a town.
+    - These are similar to PlotGroups but with less restrictions:
+      - Districts' townblocks are not required to have the same plot permissions, plot type, owner, or name.
+    - Districts currently show in the chunk notifications, map hud, and in the /towny map hover.
+    - Districts will lead to future features being possible including districts appearing on Mappers.
+    - Townblocks in districts are required to be adjacent to each other.
+    - Closes #7479.
+  - New Commands: /plot district
+    - Subcommands:
+      - create|new [name]: creates a new district with the given name.
+      - add {name}: adds a townblock to the given district, if you are actively adding to a distric you do not need to continue supplying the name.
+      - rename [name]: changes the name of a district.
+      - remove: removes the townblock you are stood in from a district.
+      - delete: deletes the district in which you are stood.
+  - New Permission Node: towny.command.plot.district.*
+    - Child node of towny.command.plot.*
+    - Child Nodes:
+      - towny.command.plot.district.add: true
+      - towny.command.plot.district.remove: true
+      - towny.command.plot.district.delete: true
+      - towny.command.plot.district.rename: true
