@@ -135,7 +135,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			return false;
 
 		if (request.teleportCost() != 0 && TownyEconomyHandler.isActive() && request.teleportAccount() != null) {
-			TownyEconomyHandler.economyExecutor().execute(() -> request.teleportAccount().payTo(request.teleportCost(), resident.getAccount(), Translation.of("msg_cost_spawn_refund")));
+			TownyEconomyHandler.economyExecutor().execute(() -> request.teleportAccount().payTo(request.teleportCost(), resident, Translation.of("msg_cost_spawn_refund")));
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_cost_spawn_refund"));
 		}
 

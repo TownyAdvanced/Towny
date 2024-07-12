@@ -4,6 +4,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+
+/**
+ * @deprecated since 0.100.4.0 use {@link com.palmergames.bukkit.towny.object.economy.transaction.Transaction} instead.
+ */
+@Deprecated
 public class Transaction {
 	private final TransactionType type;
 	private final CommandSender sender;

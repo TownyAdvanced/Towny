@@ -41,10 +41,9 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import com.palmergames.bukkit.towny.object.Transaction;
-import com.palmergames.bukkit.towny.object.TransactionType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -1293,7 +1292,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int deposit = MathUtil.getIntOrThrow(split[2]);
 			if (town.getAccount().deposit(deposit, "Admin Deposit")) {
-				BukkitTools.fireEvent(new TownTransactionEvent(town, new Transaction(TransactionType.DEPOSIT, sender, deposit)));
+				BukkitTools.fireEvent(new TownTransactionEvent(town, Transaction.deposit(deposit).paidTo(town).build()));
 				// Send notifications
 				Translatable depositMessage = Translatable.of("msg_xx_deposited_xx", getSenderFormatted(sender), deposit, Translatable.of("town_sing"));
 				TownyMessaging.sendMsg(sender, depositMessage);
@@ -1314,7 +1313,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int withdraw = MathUtil.getIntOrThrow(split[2]);
 			if (town.getAccount().withdraw(withdraw, "Admin Withdraw")) {
-				BukkitTools.fireEvent(new TownTransactionEvent(town, new Transaction(TransactionType.WITHDRAW, sender, withdraw)));
+				BukkitTools.fireEvent(new TownTransactionEvent(town, Transaction.withdraw(withdraw).paidBy(town).build()));
 				// Send notifications
 				Translatable withdrawMessage = Translatable.of("msg_xx_withdrew_xx", getSenderFormatted(sender), withdraw, Translatable.of("town_sing"));
 				TownyMessaging.sendMsg(sender, withdrawMessage);
@@ -1737,7 +1736,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int deposit = MathUtil.getPositiveIntOrThrow(split[2]);
 
-			BukkitTools.fireEvent(new NationTransactionEvent(nation, new Transaction(TransactionType.DEPOSIT, sender, deposit)));
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, Transaction.deposit(deposit).paidTo(nation).build()));
 
 			nation.getAccount().deposit(deposit, "Admin Deposit");
 			// Send notifications
@@ -1755,7 +1754,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 			int withdraw = MathUtil.getPositiveIntOrThrow(split[2]);
 
-			BukkitTools.fireEvent(new NationTransactionEvent(nation, new Transaction(TransactionType.WITHDRAW, sender, withdraw)));
+			BukkitTools.fireEvent(new NationTransactionEvent(nation, Transaction.withdraw(withdraw).paidBy(nation).build()));
 
 			nation.getAccount().withdraw(withdraw, "Admin Withdraw");
 			// Send notifications

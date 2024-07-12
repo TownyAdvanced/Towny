@@ -32,7 +32,7 @@ public class BankAccount extends Account {
 	 * @param government Town or Nation that is getting a BankAccount.
 	 */
 	public BankAccount(String name, World world, Government government) {
-		super(name, world);
+		super(government, name, world);
 		this.government = government;
 	}
 
@@ -71,7 +71,7 @@ public class BankAccount extends Account {
 		}
 
 		// Otherwise continue like normal.
-		return TownyEconomyHandler.subtract(getName(), amount, world);
+		return TownyEconomyHandler.subtract(this, amount, world);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class BankAccount extends Account {
 			return removeDebt(amount);
 
 		// Otherwise continue like normal.
-		return TownyEconomyHandler.add(getName(), amount, world);
+		return TownyEconomyHandler.add(this, amount, world);
 	}
 
 	@Override
