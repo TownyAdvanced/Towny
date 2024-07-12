@@ -215,8 +215,8 @@ public class TownyEconomyHandler {
 	
 	private static boolean runPreChecks(Transaction transaction, String accountName) {
 		TownyPreTransactionEvent preEvent = new TownyPreTransactionEvent(transaction);
-		if (BukkitTools.isEventCancelled(preEvent) && transaction.getPlayer() != null) {
-			TownyMessaging.sendErrorMsg(transaction.getPlayer(), preEvent.getCancelMessage());
+		if (BukkitTools.isEventCancelled(preEvent) && transaction.getSendingPlayer() != null) {
+			TownyMessaging.sendErrorMsg(transaction.getSendingPlayer(), preEvent.getCancelMessage());
 			return false;
 		}
 
