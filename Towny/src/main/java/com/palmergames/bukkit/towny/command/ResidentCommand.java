@@ -78,6 +78,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"constantplotborder",
 		"townborder",
 		"ignoreplots",
+		"ignoreotherchannels",
 		"bordertitles",
 		"townclaim",
 		"townunclaim",
@@ -97,6 +98,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"constantplotborder",
 		"townborder",
 		"ignoreplots",
+		"ignoreotherchannels",
 		"reset",
 		"clear",
 		"infotool"

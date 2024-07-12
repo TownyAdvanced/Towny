@@ -9864,3 +9864,5 @@ v0.92.0.11:
     - This count does not include the first letter of a town, and does not count capitalized letters that come after a _ character.			
     - This means that a town named New_York would register 0 capitals. While McDonalds would register 1. COOLTOWN would register 7 capital letters.
   - Fix config typo, courtesy of auriasmc with PR #7498. (First-Time Contributor!)
+0.100.3.6:
+  - Add ignoreotherchannels to /res toggle and /res set mode tabcompleters.
