@@ -45,6 +45,7 @@ public class TownBlock extends TownyObject {
 	private boolean taxed = true;
 	private boolean outpost = false;
 	private PlotGroup plotGroup;
+	private District district;
 	private long claimedAt;
 	private Jail jail;
 	private Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
@@ -558,6 +559,27 @@ public class TownBlock extends TownyObject {
 			setPermissionOverrides(group.getPermissionOverrides());
 		} catch (NullPointerException e) {
 			TownyMessaging.sendErrorMsg("Townblock failed to setPlotObjectGroup(group), group is null. ");
+		}
+	}
+
+
+	public boolean hasDistrict() { return district != null; }
+	
+	public District getDistrict() {
+		return district;
+	}
+	
+	public void removeDistrict() {
+		this.district = null;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+
+		try {
+			district.addTownBlock(this);
+		} catch (NullPointerException e) {
+			TownyMessaging.sendErrorMsg("Townblock failed to setDistrict(district), district is null. ");
 		}
 	}
 

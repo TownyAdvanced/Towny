@@ -438,6 +438,11 @@ plot_help_8: "Opens the permission editor gui."
 plot_help_9: "Adds a resident as Trusted in the plot."
 plot_help_10: "Removes a resident as Trusted in the plot."
 
+plot_district_help_0: "Ex: /plot district new ExpensivePlots"
+plot_district_help_1: "Removes a plot from the specified district."
+plot_district_help_2: "Deletes a district completely."
+plot_district_help_3: "Renames the district you are standing in."
+
 plot_group_help_0: "Ex: /plot group new ExpensivePlots"
 plot_group_help_1: "Removes a plot from the specified group."
 plot_group_help_2: "Deletes a plotgroup completely."
@@ -1545,6 +1550,10 @@ flatfile_dbg_deleting_duplicate: 'Deleting: %s which is a duplicate of %s'
 flatfile_dbg_folders_found: 'Folders found %s'
 flatfile_dbg_group_file_missing_town_delete: 'Group file missing Town, deleting %s'
 flatfile_dbg_loading_group_list: 'Loading Group list...'
+flatfile_dbg_district_file_missing_town_delete: 'District file missing Town, deleting %s'
+flatfile_dbg_missing_file_delete_district_entry: 'Missing file: %s deleting entry in [districtuuid].data'
+flatfile_err_exception_reading_district_file_at_line: 'Loading Error: Exception while reading District file %s at line: %s'
+flatfile_dbg_loading_district_list: 'Loading District list...'
 flatfile_dbg_loading_nation: 'Loading Nation: %s'
 flatfile_dbg_loading_nation_list: 'Loading Nation list...'
 flatfile_dbg_loading_resident: 'Loading Resident: %s'
@@ -2526,3 +2535,31 @@ msg_recieved_refund_for_deleted_object: "You have received the bank balance of y
 msg_err_you_already_own_this_plot: "You already own this plot."
 
 msg_err_you_cannot_delete_this_nation: "You have been prevented from deleting this nation."
+
+status_district_name_and_size: 'Townblock is part of District: %s. District has %s Townblocks total.'
+
+msg_err_district_name_required: 'You must specify district name ie, /plot district add {name}'
+
+msg_err_rename_district_name_required: 'You must specify district name ie, /plot district rename {name}'
+
+msg_district_renamed_from_x_to_y: 'District %s has been renamed to %s.'
+
+msg_err_plot_not_associated_with_a_district: 'This plot is not associated with a district.'
+
+msg_plot_was_removed_from_district_x: 'Plot <blue>(%s,%s) <dark_green>was removed from district %s.'
+
+msg_district_empty_deleted: 'The district %s had no townblocks and has been deleted.'
+
+msg_district_deleted: 'The district %s has been deleted.'
+
+msg_err_this_plot_is_already_part_of_the_district_x: 'This townblock is already part of the district: %s.'
+
+msg_townblock_transferred_from_x_to_x_district: 'Townblock transferred from %s to %s district.'
+
+msg_district_already_exists_did_you_want_to_transfer: 'This townblock is already a part of the %s district. Are you certain you want to transfer it to the %s district.'
+
+msg_plot_was_put_into_district_x: 'Plot <blue>(%s,%s) <dark_green>was put into district %s.'
+
+msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "You cannot remove this townblock from the district %s, because the a part of the District would be detached from the rest."
+
+map_hover_district: 'District: '

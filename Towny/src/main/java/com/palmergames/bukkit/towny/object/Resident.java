@@ -90,6 +90,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private ScheduledTask respawnProtectionTask = null;
 	private boolean respawnPickupWarningShown = false; // Prevents chat spam when a player attempts to pick up an item while under respawn protection.
 	private String plotGroupName = null;
+	private String districtName = null;
 	protected CachedTaxOwing cachedTaxOwing = null;
 
 	public Resident(String name) {
@@ -1060,6 +1061,18 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	public void setPlotGroupName(String plotGroupName) {
 		this.plotGroupName = plotGroupName;
+	}
+
+	public boolean hasDistrictName() {
+		return districtName != null;
+	}
+
+	public String getDistrictName() {
+		return districtName;
+	}
+
+	public void setDistrictName(String districtName) {
+		this.districtName = districtName;
 	}
 
 	@ApiStatus.Internal

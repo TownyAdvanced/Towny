@@ -162,6 +162,18 @@ public class NameValidation {
 		return checkAndFilterPlotNameOrThrow(filterCommas(name));
 	}
 
+
+	/**
+	 * Check and perform regex on District names
+	 * 
+	 * @param name of a District object in {@link String} format.
+	 * @return String of the valid name result.
+	 * @throws InvalidNameException if the District name is invalid.
+	 */
+	public static String checkAndFilterDistrictNameOrThrow(String name) throws InvalidNameException {
+		return checkAndFilterPlotNameOrThrow(filterCommas(name));
+	}
+
 	/**
 	 * Check and perform regex on Titles and Surnames given to residents.
 	 * 

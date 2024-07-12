@@ -24,6 +24,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -585,6 +586,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		deletePlotGroup(group);
 	}
 
+	@Override
+	public void removeDistrict(District district) {
+		universe.unregisterDistrict(district.getUUID());
+		deleteDistrict(district);
+	}
+
 	/*
 	 * Rename Object Methods
 	 */
@@ -781,6 +788,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		// Save
 		savePlotGroup(group);
+	}
+
+	@Override
+	public void renameDistrict(District district, String newName) throws AlreadyRegisteredException {
+		// Create new one
+		district.setName(newName);
+		
+		// Save
+		saveDistrict(district);
 	}
 
 	@Override

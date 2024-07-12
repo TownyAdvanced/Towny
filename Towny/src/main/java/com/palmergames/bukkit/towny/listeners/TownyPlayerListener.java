@@ -11,13 +11,16 @@ import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TitleNotificationEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.event.player.PlayerDeniedBedUseEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoDistrictEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
+import com.palmergames.bukkit.towny.event.player.PlayerExitsFromDistrictEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsExperienceEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerKeepsInventoryEvent;
 import com.palmergames.bukkit.towny.event.teleport.CancelledTownyTeleportEvent.CancelledTeleportReason;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.CommandList;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -940,6 +943,48 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
+	/*
+	* PlayerChangePlotEvent that can fire the PlayerExitsFromDistrictEvent and PlayerEntersIntoDistrictEvent
+	*/
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerChangeDistricts(PlayerChangePlotEvent event) {
+		if (!TownyUniverse.getInstance().hasResident(event.getPlayer().getUniqueId()))
+			return;
+
+		WorldCoord from = event.getFrom();
+		WorldCoord to = event.getTo();
+		boolean fromHasDistrict = !from.isWilderness() && from.getTownBlockOrNull().hasDistrict();
+		boolean toHasDistrict = !to.isWilderness() && to.getTownBlockOrNull().hasDistrict();
+		if (to.isWilderness() && from.isWilderness() || (!fromHasDistrict && !toHasDistrict)) 
+			// Both are wilderness, or neither plot involves a District. No event will fire.
+			return;
+
+		District fromDistrict = fromHasDistrict ? from.getTownBlockOrNull().getDistrict() : null;
+		District toDistrict = toHasDistrict ? to.getTownBlockOrNull().getDistrict() : null;
+
+		if (to.isWilderness() && fromHasDistrict) {
+			// Gone from a Town into the wilderness.
+			BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, fromDistrict, event.getMoveEvent()));
+
+		} else if (from.isWilderness() && toHasDistrict) {
+			// Gone from wilderness into Town.
+			BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, toDistrict, event.getMoveEvent()));
+
+		} else if (!to.isWilderness() && !from.isWilderness() && to.getTownOrNull().equals(from.getTownOrNull())
+			&& fromHasDistrict && toHasDistrict && !fromDistrict.equals(toDistrict)) {
+				// Moving in same town, between two different Districts.
+				BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, fromDistrict, event.getMoveEvent()));
+				BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, toDistrict, event.getMoveEvent()));
+
+		} else {
+			// Player has left one Town and immediately entered a different one, check if there were districts.
+			if (fromHasDistrict)
+				BukkitTools.fireEvent(new PlayerExitsFromDistrictEvent(event.getPlayer(), to, from, fromDistrict, event.getMoveEvent()));
+			if (toHasDistrict)
+				BukkitTools.fireEvent(new PlayerEntersIntoDistrictEvent(event.getPlayer(), to, from, toDistrict, event.getMoveEvent()));
+		}
+	}
+
 	/*
 	 * onOutlawEnterTown
 	 * - Handles outlaws entering a town they are outlawed in.

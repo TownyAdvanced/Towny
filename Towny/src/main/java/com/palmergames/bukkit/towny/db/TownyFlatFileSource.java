@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -83,6 +84,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "townblocks",
 			dataFolderPath + File.separator + "plotgroups",
 			dataFolderPath + File.separator + "plotgroups" + File.separator + "deleted",
+			dataFolderPath + File.separator + "districts",
+			dataFolderPath + File.separator + "districts" + File.separator + "deleted",
 			dataFolderPath + File.separator + "jails",
 			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
 		)) {
@@ -135,6 +138,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	
 	public String getPlotGroupFilename(PlotGroup group) {
 		return dataFolderPath + File.separator + "plotgroups" + File.separator + group.getUUID() + ".data";
+	}
+
+	public String getDistrictFilename(District district) {
+		return dataFolderPath + File.separator + "districts" + File.separator + district.getUUID() + ".data";
 	}
 
 	public String getJailFilename(Jail jail) {
@@ -214,6 +221,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		for (File plotGroup : plotGroupFiles)
 			universe.newPlotGroupInternal(UUID.fromString(plotGroup.getName().replace(".data", "")));
+		
+		return true;
+	}
+
+	@Override
+	public boolean loadDistrictList() {
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_district_list"));
+		File[] districtFiles = receiveObjectFiles("districts", ".data");
+		
+		if (districtFiles == null)
+			return true; 
+		
+		for (File districtFile : districtFiles)
+			universe.newDistrictInternal(UUID.fromString(districtFile.getName().replace(".data", "")));
 		
 		return true;
 	}
@@ -1647,6 +1668,54 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		return true;
 	}
+
+	public boolean loadDistrict(District district) {
+		String line = "";
+		String path = getDistrictFilename(district);
+
+		File districtFile = new File(path);
+		if (districtFile.exists() && districtFile.isFile()) {
+			try {
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(districtFile);
+				
+				line = keys.get("districtName");
+				if (line != null)
+					district.setName(line.trim());
+				
+				line = keys.get("town");
+				if (line != null && !line.isEmpty()) {
+					UUID uuid = UUID.fromString(line.trim());
+					if (uuid == null) {
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_district_entry", path));
+						deleteDistrict(district);
+						return true;
+					}
+					Town town = universe.getTown(uuid);
+					if (town != null) {
+						district.setTown(town);
+					} else {
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_district_file_missing_town_delete", path));
+						deleteDistrict(district); 
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_district_entry", path));
+						return true;
+					}
+				} else {
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
+					deleteDistrict(district);
+				}
+
+				line = keys.get("metadata");
+				if (line != null)
+					MetadataLoader.getInstance().deserializeMetadata(district, line.trim());
+
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_district_file_at_line", path, line));
+				return false;
+			}
+		}
+		
+		return true;
+	}
 	
 	@Override
 	public boolean loadTownBlocks() {
@@ -1794,6 +1863,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 								group.setResident(townBlock.getResidentOrNull());
 						} else {
 							townBlock.removePlotObjectGroup();
+						}
+					}
+
+					line = keys.get("districtID");
+					UUID districtID = null;
+					if (line != null && !line.isEmpty()) {
+						districtID = UUID.fromString(line.trim());
+					}
+					
+					if (districtID != null) {
+						District district = universe.getDistrict(districtID);
+						if (district != null) {
+							townBlock.setDistrict(district);
+						} else {
+							townBlock.removeDistrict();
 						}
 					}
 
@@ -2136,6 +2220,24 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	}
 
 	@Override
+	public boolean saveDistrict(District district) {
+		List<String> list = new ArrayList<>();
+
+		try {
+			list.add("districtName=" + district.getName());
+			list.add("town=" + district.getTown().getUUID().toString());
+			list.add("metadata=" + serializeMetadata(district));
+		} catch (Exception e) {
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while saving district " + Optional.ofNullable(district).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
+		}
+		
+		// Save file
+		this.queryQueue.add(new FlatFileSaveTask(list, getDistrictFilename(district)));
+		
+		return true;
+	}
+
+	@Override
 	public boolean saveNation(Nation nation) {
 
 		List<String> list = new ArrayList<>();
@@ -2421,7 +2523,15 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		
 		list.add("groupID=" + groupID);
+
+		// District ID
+		StringBuilder districtID = new StringBuilder();
+		if (townBlock.hasDistrict()) {
+			districtID.append(townBlock.getDistrict().getUUID());
+		}
 		
+		list.add("districtID=" + districtID);
+
 		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), ","));
 		
 		Map<String, String> stringMap = new HashMap<>();
@@ -2511,6 +2621,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
     	queryQueue.add(new DeleteFileTask(file, false));
 	}
 	
+	@Override
+	public void deleteDistrict(District district) {
+		File file = new File(getDistrictFilename(district));
+		queryQueue.add(new DeleteFileTask(file, false));
+	}
+
 	@Override
 	public void deleteJail(Jail jail) {
 		File file = new File(getJailFilename(jail));

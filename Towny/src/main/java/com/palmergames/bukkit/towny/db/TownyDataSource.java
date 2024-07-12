@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -54,12 +55,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadJails() && loadRegenList() && loadCooldowns();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadDistrictList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadDistricts() && loadJails() && loadRegenList() && loadCooldowns();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveTownBlocks() && saveJails() && saveRegenList() && saveCooldowns();
+		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveDistricts() && saveTownBlocks() && saveJails() && saveRegenList() && saveCooldowns();
 	}
 
 	public boolean saveAllWorlds() {
@@ -104,6 +105,10 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadPlotGroup(PlotGroup group);
 
+	abstract public boolean loadDistrictList();
+
+	abstract public boolean loadDistrict(District district);
+
 	abstract public boolean saveRegenList();
 
 	abstract public boolean saveResident(Resident resident);
@@ -113,6 +118,8 @@ public abstract class TownyDataSource {
 	abstract public boolean saveTown(Town town);
 	
 	abstract public boolean savePlotGroup(PlotGroup group);
+	
+	abstract public boolean saveDistrict(District district);
 	
 	abstract public boolean saveJail(Jail jail);
 
@@ -147,6 +154,8 @@ public abstract class TownyDataSource {
 	abstract public void deleteFile(String file);
 	
 	abstract public void deletePlotGroup(PlotGroup group);
+	
+	abstract public void deleteDistrict(District district);
 	
 	abstract public void deleteJail(Jail jail);
 	
@@ -226,6 +235,17 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
+	public boolean loadDistricts() {
+		TownyMessaging.sendDebugMsg("Loading Districts");
+		for (District district : universe.getDistricts()) {
+			if (!loadDistrict(district)) {
+				plugin.getLogger().severe("Loading Error: Could not read District data: '" + district.getUUID() + "'.");
+				return false;
+			}
+		}
+		return true;
+	}
+
 	abstract public boolean loadCooldowns();
 
 	/*
@@ -250,6 +270,19 @@ public abstract class TownyDataSource {
 				savePlotGroup(plotGroup);
 			else
 				deletePlotGroup(plotGroup); 
+		return true;
+	}
+
+	public boolean saveDistricts() {
+		TownyMessaging.sendDebugMsg("Saving Districts");
+		for (District district : universe.getDistricts())
+			/*
+			 * Only save districts which actually have townblocks associated with them.
+			 */
+			if (district.hasTownBlocks())
+				saveDistrict(district);
+			else
+				deleteDistrict(district); 
 		return true;
 	}
 
@@ -334,6 +367,8 @@ public abstract class TownyDataSource {
 	abstract public void removeJail(Jail jail);
 	
 	abstract public void removePlotGroup(PlotGroup group);
+	
+	abstract public void removeDistrict(District district);
 
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
@@ -346,6 +381,8 @@ public abstract class TownyDataSource {
 	abstract public void renamePlayer(Resident resident, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void renameGroup(PlotGroup group, String newName) throws AlreadyRegisteredException;
+	
+	abstract public void renameDistrict(District district, String newName) throws AlreadyRegisteredException;
 	
 	/**
 	 * @deprecated since 0.100.2.9 use {@link #removeTown(Town, com.palmergames.bukkit.towny.event.DeleteTownEvent.Cause)} instead.

@@ -21,6 +21,9 @@ import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotSetForSaleEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustAddEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotTrustRemoveEvent;
+import com.palmergames.bukkit.towny.event.plot.district.DistrictAddEvent;
+import com.palmergames.bukkit.towny.event.plot.district.DistrictCreatedEvent;
+import com.palmergames.bukkit.towny.event.plot.district.DistrictDeletedEvent;
 import com.palmergames.bukkit.towny.event.plot.group.PlotGroupAddEvent;
 import com.palmergames.bukkit.towny.event.plot.group.PlotGroupCreatedEvent;
 import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
@@ -35,6 +38,7 @@ import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
+import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -61,6 +65,7 @@ import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
+import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
@@ -105,6 +110,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"toggle",
 		"clear",
 		"group",
+		"district",
 		"jailcell",
 		"trust"
 	);
@@ -121,6 +127,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"perm",
 		"rename",
 		"trust"
+	);
+	
+	private static final List<String> districtTabCompletes = Arrays.asList(
+		"add",
+		"delete",
+		"remove",
+		"rename"
 	);
 	
 	private static final List<String> plotSetTabCompletes = Arrays.asList(
@@ -240,6 +253,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						default:
 							return Collections.emptyList();
 					}
+				case "district":
+					if (args.length == 2)
+						return NameUtil.filterByStart(districtTabCompletes, args[1]);
+					if (args.length < 2)
+						break;
 				case "group":
 					if (args.length == 2)
 						return NameUtil.filterByStart(plotGroupTabCompletes, args[1]);
@@ -315,6 +333,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "evict" -> parsePlotEvict(resident, townBlock);
 		case "fs", "forsale" -> parsePlotForSale(player, StringMgmt.remFirstArg(split), resident, townBlock);
 		case "group" -> parsePlotGroup(StringMgmt.remFirstArg(split), resident, townBlock, player);
+		case "district" -> parseDistrict(StringMgmt.remFirstArg(split), resident, townBlock, player);
 		case "info" -> sendPlotInfo(player, StringMgmt.remFirstArg(split));
 		case "jailcell" -> parsePlotJailCell(player, resident, townBlock, StringMgmt.remFirstArg(split));
 		case "nfs", "notforsale" -> parsePlotNotForSale(player, StringMgmt.remFirstArg(split), resident, townBlock);
@@ -1258,6 +1277,183 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
+	private void parseDistrict(String[] split, Resident resident, TownBlock townBlock, Player player) throws TownyException {
+
+		Town town = townBlock.getTownOrNull();
+		if (town == null)
+			throw new TownyException(Translatable.of("msg_not_claimed_1"));
+		
+		if (!town.hasResident(player))
+			throw new TownyException(Translatable.of("msg_err_not_part_town"));
+
+		try {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
+		} catch (NoPermissionException e) {
+			throw new TownyException(Translatable.of("msg_not_mayor_ass"));
+		}
+
+		if (split.length <= 0 || split[0].equalsIgnoreCase("?")) {
+			HelpMenu.PLOT_DISTRICT_HELP.send(player);
+			if (townBlock.hasDistrict())
+				TownyMessaging.sendMsg(player, Translatable.of("status_district_name_and_size", townBlock.getDistrict().getName(), townBlock.getDistrict().getTownBlocks().size()));
+			return;
+		}
+
+		switch (split[0].toLowerCase(Locale.ROOT)) {
+		case "add", "new", "create" -> parseDistrictAdd(split, townBlock, player, town);
+		case "delete" -> parseDistrictDelete(townBlock, player, town);
+		case "remove" -> parseDistrictRemove(townBlock, player, town);
+		case "rename" ->  parseDistrictRename(split, townBlock, player);
+		default -> {
+			HelpMenu.PLOT_DISTRICT_HELP.send(player);
+			if (townBlock.hasDistrict())
+				TownyMessaging.sendMsg(player, Translatable.of("status_district_name_and_size", townBlock.getDistrict().getName(), townBlock.getDistrict().getTownBlocks().size()));
+		}
+		}
+	}
+
+	public void parseDistrictAdd(String[] split, TownBlock townBlock, Player player, Town town) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_DISTRICT_ADD.getNode());
+
+		Resident resident = getResidentOrThrow(player);
+
+		if (split.length != 2 && !resident.hasDistrictName())
+			throw new TownyException(Translatable.of("msg_err_district_name_required"));
+
+		String districtName = split.length == 2
+				? NameValidation.checkAndFilterDistrictNameOrThrow(split[1])
+				: resident.hasDistrictName()
+					? resident.getDistrictName()
+					: null;
+
+		if (townBlock.hasDistrict()) {
+			// Already has a District and it is the same name being used to re-add.
+			if (townBlock.getDistrict().getName().equalsIgnoreCase(districtName))
+				throw new TownyException(Translatable.of("msg_err_this_plot_is_already_part_of_the_district_x", districtName));
+
+			District oldDistrict = townBlock.getDistrict();
+			ProximityUtil.testAdjacentRemoveDistrictRulesOrThrow(townBlock.getWorldCoord(), town, oldDistrict, 1);
+
+			final String name = districtName;
+			// Already has a District, ask if they want to transfer from one district to another.
+			Confirmation.runOnAccept( ()-> {
+
+				oldDistrict.removeTownBlock(townBlock);
+				if (oldDistrict.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new DistrictDeletedEvent(oldDistrict, player, DistrictDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+					String oldName = oldDistrict.getName();
+					town.removeDistrict(oldDistrict);
+					TownyUniverse.getInstance().getDataSource().removeDistrict(oldDistrict);
+					TownyMessaging.sendMsg(player, Translatable.of("msg_district_deleted", oldName));
+				} else 
+					oldDistrict.save();
+				
+				try {
+					createOrAddOnToDistrict(townBlock, town, player, name);
+					resident.setDistrictName(name);
+					TownyMessaging.sendMsg(player, Translatable.of("msg_townblock_transferred_from_x_to_x_district", oldDistrict.getName(), townBlock.getDistrict().getName()));
+				} catch (TownyException e) {
+					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				}
+			})
+			.setTitle(Translatable.of("msg_district_already_exists_did_you_want_to_transfer", townBlock.getDistrict().getName(), split[1]))
+			.sendTo(player);
+		} else {
+			// Create a brand new district.
+			createOrAddOnToDistrict(townBlock, town, player, districtName);
+			resident.setDistrictName(districtName);
+			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_put_into_district_x", townBlock.getX(), townBlock.getZ(), townBlock.getDistrict().getName()));
+		}
+	}
+
+	private void createOrAddOnToDistrict(TownBlock townBlock, Town town, Player player, String districtName) throws TownyException {
+		District newDistrict;
+		
+		// Don't add the district to the town data if it's already there.
+		if (town.hasDistrictName(districtName)) {
+			newDistrict = town.getDistrictFromName(districtName);
+
+			ProximityUtil.testAdjacentAddDistrictRulesOrThrow(townBlock.getWorldCoord(), town, newDistrict, 1);
+
+			BukkitTools.ifCancelledThenThrow(new DistrictAddEvent(newDistrict, townBlock, player));
+
+		} else {
+			// This is a brand new District, register it.
+			newDistrict = new District(UUID.randomUUID(), districtName, town);
+
+			BukkitTools.ifCancelledThenThrow(new DistrictCreatedEvent(newDistrict, townBlock, player));
+
+			TownyUniverse.getInstance().registerDistrict(newDistrict);
+		}
+
+		// Add district to townblock, this also adds the townblock to the district.
+		townBlock.setDistrict(newDistrict);
+
+		// Add the district to the town set.
+		town.addDistrict(newDistrict);
+
+		// Save changes.
+		newDistrict.save();
+		townBlock.save(); 
+	}
+
+	public void parseDistrictDelete(TownBlock townBlock, Player player, Town town) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_DISTRICT_DELETE.getNode());
+
+		District district = catchMissingDistrict(townBlock);
+
+		Confirmation.runOnAccept(()-> {
+			String name = district.getName();
+			if (!BukkitTools.isEventCancelled(new DistrictDeletedEvent(district, player, DistrictDeletedEvent.Cause.DELETED))) {
+				town.removeDistrict(district);
+				TownyUniverse.getInstance().getDataSource().removeDistrict(district);
+				TownyMessaging.sendMsg(player, Translatable.of("msg_district_deleted", name));
+			}
+		}).sendTo(player);
+	}
+
+	public void parseDistrictRemove(TownBlock townBlock, Player player, Town town) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_DISTRICT_REMOVE.getNode());
+
+		District district = catchMissingDistrict(townBlock);
+		String name = district.getName();
+		
+		try {
+			ProximityUtil.testAdjacentRemoveDistrictRulesOrThrow(townBlock.getWorldCoord(), town, district, 1);
+		} catch (TownyException e) {
+			throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", name));
+		}
+		
+		// Remove the plot from the district.
+		district.removeTownBlock(townBlock);
+
+		// Detach district from townblock.
+		townBlock.removeDistrict();
+
+		// Save
+		townBlock.save();
+		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_removed_from_district_x", townBlock.getX(), townBlock.getZ(), name));
+		
+		if (district.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new DistrictDeletedEvent(district, player, DistrictDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+			town.removeDistrict(district);
+			TownyUniverse.getInstance().getDataSource().removeDistrict(district);
+			TownyMessaging.sendMsg(player, Translatable.of("msg_district_empty_deleted", name));
+		}
+	}
+	
+	public void parseDistrictRename(String[] split, TownBlock townBlock, Player player) throws TownyException, AlreadyRegisteredException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_DISTRICT_RENAME.getNode());
+
+		if (split.length == 1)
+			throw new TownyException(Translatable.of("msg_err_rename_district_name_required"));
+
+		District district = catchMissingDistrict(townBlock);
+		String newName= split[1];
+		String oldName = district.getName();
+		// Change name;
+		TownyUniverse.getInstance().getDataSource().renameDistrict(district, newName);
+		TownyMessaging.sendMsg(player, Translatable.of("msg_district_renamed_from_x_to_y", oldName, newName));
+	}
+
 	private void parsePlotGroup(String[] split, Resident resident, TownBlock townBlock, Player player) throws TownyException {
 
 		Town town = townBlock.getTownOrNull();
@@ -2137,5 +2333,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_plot_not_associated_with_a_group"));
 		
 		return townBlock.getPlotObjectGroup();
+	}
+	
+	private District catchMissingDistrict(TownBlock townBlock) throws TownyException {
+		// Make sure that the player is in a plotgroup.
+		if (!townBlock.hasDistrict())
+			throw new TownyException(Translatable.of("msg_err_plot_not_associated_with_a_district"));
+		
+		return townBlock.getDistrict();
 	}
 }

@@ -38,6 +38,7 @@ public class PermHUD {
 	/* Scoreboards use Teams here is our team names.*/
 	private static final String HUD_OBJECTIVE = "PERM_HUD_OBJ";
 	private static final String TEAM_PERMS_TITLE = "permsTitle";
+	private static final String TEAM_DISTRICT_NAME = "districtName";
 	private static final String TEAM_PLOT_NAME = "plot_name";
 	private static final String TEAM_PLOT_COST = "plot_cost";
 	private static final String TEAM_BUILD = "build";
@@ -64,7 +65,7 @@ public class PermHUD {
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
 		Translator translator = Translator.locale(p);
-		String plotName, build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn, title;
+		String districtName, plotName, build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn, title;
 		Scoreboard board = p.getScoreboard();
 		// Due to tick delay (probably not confirmed), a HUD can actually be removed from the player.
 		// Causing board to return null, and since we don't create a new board, a NullPointerException occurs.
@@ -92,6 +93,9 @@ public class PermHUD {
 		// Displays the name of the owner, and if the owner is a resident the town name as well.
 		title = GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 
 
+		// District name
+		districtName = townBlock.hasDistrict() ? townBlock.getDistrict().getFormattedName() : "";
+		
 		// Plot Type
 		type = townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName();
 
@@ -120,6 +124,7 @@ public class PermHUD {
 
 		// Set the values to our Scoreboard's teams.
 		board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(title));
+		board.getTeam(TEAM_DISTRICT_NAME).setSuffix(districtName);
 		board.getTeam(TEAM_PLOT_NAME).setSuffix(plotName);
 		board.getTeam(TEAM_PLOT_TYPE).setSuffix(type);
 		board.getTeam(TEAM_PLOT_COST).setSuffix(forSale);
@@ -164,6 +169,7 @@ public class PermHUD {
 		Scoreboard board = p.getScoreboard();
 		try {
 			board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
+			board.getTeam(TEAM_DISTRICT_NAME).setSuffix(" ");
 			board.getTeam(TEAM_PLOT_NAME).setSuffix(" ");
 			board.getTeam(TEAM_PLOT_TYPE).setSuffix(" ");
 			board.getTeam(TEAM_PLOT_COST).setSuffix(" ");
@@ -206,6 +212,7 @@ public class PermHUD {
 
 	private static void initializeScoreboard(Translator translator, Scoreboard board) {
 		String PERM_HUD_TITLE = GOLD + "";
+		String districtName_entry = "";
 		String plotName_entry = "";
 		String keyPlotType_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_type");
 		String forSale_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_for_sale") + GRAY;
@@ -233,6 +240,7 @@ public class PermHUD {
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(PERM_HUD_TITLE);
 		//register teams
+		Team districtName = board.registerNewTeam(TEAM_DISTRICT_NAME);
 		Team plotName = board.registerNewTeam(TEAM_PLOT_NAME);
 		Team keyPlotType = board.registerNewTeam(TEAM_PLOT_TYPE);
 		Team forSaleTitle = board.registerNewTeam(TEAM_PLOT_COST);
@@ -254,6 +262,7 @@ public class PermHUD {
 		Team keyAlly = board.registerNewTeam(TEAM_ALLY);
 
 		//add each team as an entry (this sets the prefix to each line of the HUD.)
+		districtName.addEntry(districtName_entry);
 		plotName.addEntry(plotName_entry);
 		keyPlotType.addEntry(keyPlotType_entry);
 		forSaleTitle.addEntry(forSale_entry);
@@ -275,6 +284,7 @@ public class PermHUD {
 		keyAlly.addEntry(keyAlly_entry);
 
 		//set scores for positioning
+		obj.getScore(districtName_entry).setScore(17);
 		obj.getScore(plotName_entry).setScore(16);
 		obj.getScore(keyPlotType_entry).setScore(15);
 		obj.getScore(forSale_entry).setScore(14);
