@@ -18,6 +18,10 @@ help_6: 'Ayuda del comando nation.'
 help_7: 'Ayuda del comando plot.'
 help_8: 'Ayuda del comando towny.'
 help_9: 'Ayuda del comando townyadmin.'
+towny_help_0: "Ayuda general para Towny"
+towny_help_1: "Muestra un mapa de los poblados cercanos"
+towny_help_2: "Mostrar los precios utilizados con Economía"
+towny_help_3: "Mostrar puntuaciones altas"
 town_help_1: 'El estado de tu ciudad'
 town_help_2: '[alcalde]'
 town_help_3: 'Estado de la ciudad seleccionada'
