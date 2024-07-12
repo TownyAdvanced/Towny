@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * @deprecated since 0.100.3.1 use {@link com.palmergames.bukkit.towny.object.economy.transaction.Transaction} instead.
+ * @deprecated since 0.100.4.0 use {@link com.palmergames.bukkit.towny.object.economy.transaction.Transaction} instead.
  */
 @Deprecated
 public class Transaction {
