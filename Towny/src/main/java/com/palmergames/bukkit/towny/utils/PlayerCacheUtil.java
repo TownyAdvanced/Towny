@@ -316,7 +316,7 @@ public class PlayerCacheUtil {
 			/*
 			 * Handle the possiblity that NationZones are enabled the 
 			 * TownBlockStatus is NATION_ZONE instead of UNCLAIMED_ZONE.
-			 * In all situations the player still has to hasWildOverride.
+			 * In all situations the player still has to have hasWildOverride.
 			 */
 			if (TownySettings.getNationZonesEnabled() && status == TownBlockStatus.NATION_ZONE) {
 				// Admins that also have wilderness permission can bypass the nation zone.
@@ -330,11 +330,21 @@ public class PlayerCacheUtil {
 				}
 
 				// We know that the nearest Town will have a nation because the TownBlockStatus.
-				Nation nearestNation = TownyAPI.getInstance().getTownNationOrNull(pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), null));
+				Town nearestTown = pos.getTownyWorld().getClosestTownWithNationFromCoord(pos.getCoord(), null);
+				Nation nearestNation = nearestTown.getNationOrNull();
 
-				// If the player has a Nation and is a member of this NationZone's nation.
-				if (res.hasNation() && res.getNationOrNull().getUUID().equals(nearestNation.getUUID()))
+				// This player is in their nation's nationzone.
+				if (nearestNation.hasResident(res)) {
+
+					// Prevent conquered towns using their nation's Nation Zone, unless that nation zone is surrounding the conquered town.
+					if (TownySettings.getNationZonesSkipConqueredTowns() && res.getTownOrNull().isConquered() && !nearestTown.hasResident(res)) {
+						cacheBlockErrMsg(player, Translatable.of("nation_zone_conquered_status_denies_use").forLocale(res));
+						return false;
+					}
+
+					// Allow a resident to use their nation's nation zone.
 					return true;
+				}
 
 				// The player is not a nation member of this NationZone.
 				cacheBlockErrMsg(player, Translatable.of("nation_zone_this_area_under_protection_of", pos.getTownyWorld().getFormattedUnclaimedZoneName(), nearestNation.getName()).forLocale(player));

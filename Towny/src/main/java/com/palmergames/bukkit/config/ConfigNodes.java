@@ -921,6 +921,12 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# Amount of buffer added to nation zone width surrounding capitals only. Creates a larger buffer around nation capitals."),
+	GNATION_SETTINGS_NATIONZONE_SKIPS_CONQUERED_TOWNS(
+			"global_nation_settings.nationzone.not_for_conquered_towns",
+			"false",
+			"",
+			"# When set to true, players which are part of a conquered town, will not have access to their nation's nationzone.",
+			"# They will still be able to use the nation_zone outside of their own town."),
 	GNATION_SETTINGS_NATIONZONE_WAR_DISABLES(
 			"global_nation_settings.nationzone.war_disables",
 			"true",
