@@ -899,9 +899,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		throw new TownyException(Translatable.of("msg_err_mysql_not_being_used"));
 	}
 
-	private void parseAdminNewDay(CommandSender sender) throws NoPermissionException, TownyException {
+	private void parseAdminNewDay(CommandSender sender) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NEWDAY.getNode());
-		if (NewDayScheduler.isNewDayScheduled())
+		if (NewDayScheduler.isNewDayRunning())
 			throw new TownyException(Translatable.of("msg_newday_already_scheduled_soon"));
 
 		// Turn the daily timer scheduler on if it wasn't running already.

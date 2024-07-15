@@ -3754,10 +3754,6 @@ public class TownySettings {
 		CONFIG_RELOAD_LISTENERS.remove(key);
 	}
 	
-	public static boolean doesNewDayUseTimer() {
-		return getBoolean(ConfigNodes.PLUGIN_NEWDAY_USES_JAVA_TIMER);
-	}
-	
 	public static List<String> getTownUnkickableRanks() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_UNKICKABLE_RANKS);
 	}
