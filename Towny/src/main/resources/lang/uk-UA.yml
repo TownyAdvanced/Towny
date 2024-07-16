@@ -1029,7 +1029,7 @@ towny_prices_taxes_plot: '&c    [Податки]    &2Гравець: &a%s &8| &
 towny_prices_taxes_shop: '&c            &2Магазин: &a%s &8| &2Посольство: &a%s'
 towny_prices_town_neutral_tax: '&c            &2Нейтралітет: &a%s'
 towny_prices_plots: '&c    [Налаштування ділянок]'
-towny_prices_type_single: '            2%s: &a%s'
+towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cНація: &6%s'
 towny_prices_nation_tax: '&c    [Податки] &2Місто: &a%s &8| &2Нейтралітет: &a%s'
