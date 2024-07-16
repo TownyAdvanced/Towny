@@ -130,7 +130,7 @@ public class JailUtil {
 		teleportToJail(resident);
 		
 		// Call ResidentJailEvent.
-		BukkitTools.fireEvent(new ResidentJailEvent(resident));
+		BukkitTools.fireEvent(new ResidentJailEvent(resident, reason, jailer instanceof Player player ? player : null));
 	
 	}
 
@@ -196,6 +196,7 @@ public class JailUtil {
 			unJailResident(resident);
 		}
 		}
+		BukkitTools.fireEvent(new ResidentUnjailEvent(resident, reason));
 	}
 
 	public static void unJailResident(Resident resident) {
@@ -205,7 +206,6 @@ public class JailUtil {
 		resident.setJail(null);
 		resident.setJailBailCost(0.00);
 		resident.save();
-		BukkitTools.fireEvent(new ResidentUnjailEvent(resident));
 	}
 
 	/**
