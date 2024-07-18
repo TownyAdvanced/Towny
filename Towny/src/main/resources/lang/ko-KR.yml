@@ -49,6 +49,7 @@ towny_help_0: "타우니 일반 도움말입니다."
 towny_help_1: "주변 마을 블럭을 맵에 표시합니다."
 towny_help_2: "이코노미에 사용되는 가격을 표시합니다."
 towny_help_3: "높은 점수를 표시합니다."
+towny_help_4: "새로운 날까지의 시간 표시"
 town_help_1: '속해있는 도시의 상태'
 town_help_2: '[시장]'
 town_help_3: '해당 도시의 상태'
