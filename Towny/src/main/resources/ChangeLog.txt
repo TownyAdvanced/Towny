@@ -9910,3 +9910,7 @@ v0.92.0.11:
     - When set to true, players which are part of a conquered town, will not have access to their nation's nationzone.
     - They will still be able to use the nation_zone outside of their own town.
   - API: Add more information to the ResidentJailEvent and ResidentUnjailEvent.
+0.100.3.9:
+  - Changed commands: 
+    - /res set mode clear - Removes all of your modes (ie: townclaim, map)
+    - /res set mode reset - Same behaviour as before, it will remove your nodes and then apply the default modes for your player. 

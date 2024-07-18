@@ -566,7 +566,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		if (split[0].equalsIgnoreCase("reset") || split[0].equalsIgnoreCase("clear")) {
+		if (split[0].equalsIgnoreCase("clear")) {
+			plugin.removePlayerModes(player);
+			return;
+		}
+
+		if (split[0].equalsIgnoreCase("reset")) {
 			plugin.removePlayerMode(player);
 			return;
 		}

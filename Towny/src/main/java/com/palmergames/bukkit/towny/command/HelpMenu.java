@@ -765,6 +765,7 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident set mode")
 				.add("", "/resident set mode", "clear", Translatable.of("res_toggle_help_10"))
+				.add("", "/resident set mode", "reset", Translatable.of("res_toggle_help_10.5"))
 				.add("/resident set mode [mode]...[mode]")
 				.add("tc", "", Translatable.of("mode_4"))
 				.add("nc", "", Translatable.of("mode_5"))

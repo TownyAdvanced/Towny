@@ -705,6 +705,18 @@ public class Towny extends JavaPlugin {
 	}
 
 	/**
+	 * Remove ALL current modes.
+	 * 
+	 * @param player - player, whose modes are to be reset (all removed).
+	 */
+	public void removePlayerModes(Player player) {
+
+		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
+		if (resident != null)
+			resident.resetModes(new String[0], true);
+	}	
+	
+	/**
 	 * Fetch a list of all the players current modes.
 	 * 
 	 * @param player - player, whose modes are to be listed, taken.
