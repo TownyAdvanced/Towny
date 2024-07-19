@@ -416,7 +416,7 @@ msg_plot_fs_radius: '出售你输入的半径的地皮'
 #|   Messages                                           | #
 #+------------------------------------------------------+ #
 ############################################################
-msg_buy: '&b用 %s 购买了 %d %s .'
+msg_buy: '&b你花费%3$s购买了%1$d个%2$s。'
 msg_buy_resident_plot: '&b%1$s花费%$3s购买了%$2s的土地！'
 msg_buy_resident_plot_group: '&b%s为%s购买了%s的区块。'
 msg_couldnt_pay_taxes: '&b%s 因为交不起税而被踢出了 %s.'
@@ -1158,7 +1158,7 @@ msg_player_put_group_up_for_sale: '%s 正在出售区块组 %s!'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
-status_plot_group_name_and_size: '这个城镇区块是地皮组%s的一部分，这个地皮组共包含%s个城镇区块。'
+status_plot_group_name_and_size: '这个城镇区块是地皮组“%s”的一部分，这个地皮组共包含%s个城镇区块。'
 msg_player_made_group_not_for_sale: '%s 停止出售 %s .'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: '土地组无法设置为监狱.'
@@ -1191,7 +1191,7 @@ msg_reloaded_perms: '&2成功重载权限.'
 msg_reloaded_db: '&2成功重载数据库'
 msg_reloaded_lang: '&2成功重载语言文件'
 msg_reset_config: '&2成功重置配置'
-msg_err_teleport_cancelled: '你的传送因进行了移动而取消。'
+msg_err_teleport_cancelled: '传送因进行了移动而取消。'
 #Added in 0.79
 msg_cache_block_error_plot_friends: '朋友'
 msg_cache_block_error_plot_allies: '盟友'
@@ -1210,7 +1210,7 @@ bonus_townblocks: '奖励城镇区块'
 nomad_sing: '流浪者'
 msg_new_town_advice: '恭喜你创建了自己的城镇！您的城镇将需要支付每日维护费，目前的费用是%s。您可以使用“/t deposit #”将钱存入您的城镇银行。如果没有钱来支付维护费用，那么城镇将被删除。您可以随时使用/towny prices查看所需的费用。下次的每日维护费将在%s内收取。'
 #Added in 0.81
-msg_err_teleport_cancelled_damage: '你的传送因受到了伤害而取消。'
+msg_err_teleport_cancelled_damage: '传送因受到了伤害而取消。'
 #Added in 0.82
 invitation_prefix: "&8[&7邀请&8] &9"
 confirmation_prefix: "&8[&7确认&8] &9"
@@ -1448,13 +1448,13 @@ msg_err_you_have_moved_your_homeblock_too_recently_wait_x: '你移动中心区�
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: '你中心区块移动得太远了，最大距离%s个城镇区块，这里离原中心区块%s个城镇区块。'
 msg_err_usingtowny_disabled: '此世界已禁用Towny，使用/townyworld来开启Towny的使用。'
 #Added in 0.111
-msg_plot_group_already_exists_did_you_want_to_transfer: '这个城镇区块已经是%s地皮组的一部分了，你确定要把它转移到%s地皮组中吗？'
+msg_plot_group_already_exists_did_you_want_to_transfer: '这个城镇区块已经是地皮组“%s”的一部分了，你确定要把它转移到地皮组“%s”中吗？'
 msg_townblock_transferred_from_x_to_x_group: '城镇区块已从土地组%s转移至%s中。'
-msg_plotgroup_deleted: '地皮组%s已删除。'
-msg_plotgroup_empty_deleted: '地皮组%s未包含任何城镇区块，已自动删除。'
+msg_plotgroup_deleted: '地皮组“%s”已删除。'
+msg_plotgroup_empty_deleted: '地皮组“%s”未包含任何城镇区块，已自动删除。'
 plotgroup_plu: '地皮组'
 msg_err_this_town_has_no_plot_groups: '指定城镇没有地皮组。'
-msg_err_this_plot_is_already_part_of_the_plot_group_x: '这个城镇区块已经是地皮组%s的一部分了。'
+msg_err_this_plot_is_already_part_of_the_plot_group_x: '这个城镇区块已经是地皮组“%s”的一部分了。'
 map_hover_plot_group: '地皮组： '
 map_hover_plot_group_size: ' 大小： '
 map_hover_plots: '%s块地皮'
