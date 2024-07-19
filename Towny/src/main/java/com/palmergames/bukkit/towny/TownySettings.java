@@ -91,7 +91,8 @@ public class TownySettings {
 			double peacefulCostMultiplier,
 			double bankCapModifier,
 			int nationZonesSize,
-			int nationBonusOutpostLimit) {}
+			int nationBonusOutpostLimit,
+			int nationCapitalBonusOutpostLimit) {}
 
 	private static CommentedConfiguration config;
 	private static CommentedConfiguration newConfig;
@@ -153,7 +154,8 @@ public class TownySettings {
 			double peacefulCostMultiplier,
 			double bankCapModifier,
 			int nationZonesSize,
-			int nationBonusOutpostLimit) {
+			int nationBonusOutpostLimit,
+			int nationCapitalBonusOutpostLimit) {
 
 		configNationLevel.put(numResidents, new NationLevel(
 			namePrefix,
@@ -168,7 +170,8 @@ public class TownySettings {
 			peacefulCostMultiplier,
 			bankCapModifier,
 			nationZonesSize,
-			nationBonusOutpostLimit
+			nationBonusOutpostLimit,
+			nationCapitalBonusOutpostLimit
 		));
 	}
 
@@ -249,7 +252,7 @@ public class TownySettings {
 		
 		// Some configs end up having their numResident: 0 level removed which causes big errors.
 		// Add a 0 level nation_level here which may get replaced when the config's nation_levels are loaded below.
-		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1.0, 1.0, 1, 0);
+		newNationLevel(0, "Land of ", " (Nation)", "", "", "Leader ", "", 10, 1.0, 1.0, 1.0, 1.0, 1, 0, 0);
 
 		List<Map<?, ?>> levels = config.getMapList("levels.nation_level");
 		for (int i = 0; i < levels.size(); i++) {
@@ -273,7 +276,8 @@ public class TownySettings {
 					levelGetAndParse(level, description, numResidentsIndex, "peacefulCostMultiplier", 1.0, Double::parseDouble),
 					levelGetAndParse(level, description, numResidentsIndex, "bankCapModifier", 1.0, Double::parseDouble),
 					levelGetAndParse(level, description, numResidentsIndex, "nationZonesSize", 1, Integer::parseInt),
-					levelGetAndParse(level, description, numResidentsIndex, "nationBonusOutpostLimit", 1, Integer::parseInt)
+					levelGetAndParse(level, description, numResidentsIndex, "nationBonusOutpostLimit", 0, Integer::parseInt),
+					levelGetAndParse(level, description, numResidentsIndex, "nationCapitalBonusOutpostLimit", 0, Integer::parseInt)
 				);
 			} catch (Exception e) {
 				Towny.getPlugin().getLogger().warning("An exception occurred when a loading nation level with " + numResidentsIndex + ", this can be caused by having an outdated nation_level section.");
@@ -1305,6 +1309,8 @@ public class TownySettings {
 			Nation nation = town.getNationOrNull();
 			if (nation != null)
 				nationOutposts = nation.getNationLevel().nationBonusOutpostLimit();
+			if (town.isCapital())
+				nationOutposts += nation.getNationLevel().nationCapitalBonusOutpostLimit();
 		}
 		
 		return townOutposts + nationOutposts;

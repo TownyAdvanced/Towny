@@ -9920,3 +9920,9 @@ v0.92.0.11:
     - Default: 0m
     - How long does a resident have to wait to join a town, after joining the server.
     - Set to 0m to disable. 1m = 1 minute, 1h = 1 hour, 1d = 1 day.
+  - Added the ability to give Nation Capitals an additional bonus number of outposts.
+    - Requires that your config has limit_outposts_using_town_and_nation_levels set to true.
+    - In the nation_level sections of your config a new setting will be added: nationCapitalBonusOutpostLimit.
+    - The amount set there will be added to a nation capital (in addition to the already applied nationBonusOutpostLimit amount.)
+    - Closes #7447.
+  - Automatic Config Edit: nationCapitalBonusOutpostLimit will be added to each nation_level section with a value of 0.

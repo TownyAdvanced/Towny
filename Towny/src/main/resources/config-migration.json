@@ -865,5 +865,15 @@
         "key": "update_farm_blocks"
       }
     ]
+  },
+  {
+    "version": "0.100.3.9",
+    "changes": [
+      {
+        "type": "NATION_LEVEL_ADD",
+        "key": "nationCapitalBonusOutpostLimit",
+        "value": "0"
+      }
+    ]
   }
 ]
