@@ -151,7 +151,6 @@ nation_sanction_help_4: "Ulusunuzdaki AmbargoKasabalarını listeler."
 king_help_1: 'Ulus Lideri Yardımı'
 king_help_2: 'İttifakınızı kurun.'
 king_help_3: 'Düşmanlarınızı ayarlayın.'
-king_help_4: "."
 king_help_6: "yardım için /n set komutunu kullanın."
 king_help_7: "yardım için /n toggle komutunu kullanın."
 king_help_8: "Başka bir ulusu kendi ulusunuza katmak için kullanılır."
