@@ -3818,6 +3818,10 @@ public class TownySettings {
 		return getString(ConfigNodes.RES_SETTING_DEFAULT_ABOUT);
 	}
 
+	public static long getResidentMinTimeToJoinTown() {
+		return TimeTools.getMillis(getString(ConfigNodes.RES_SETTING_MIN_TIME_TO_JOIN_TOWN));
+	}
+
 	public static double maxBuyTownPrice() {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
 	}

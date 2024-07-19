@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
+import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
@@ -290,6 +291,23 @@ public class TownyCustomListener implements Listener {
 		String message = event.getMessage() + Translatable.of("chunk_notification_takeover_available").forLocale(event.getPlayer());
 		event.setMessage(message);
 
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true) 
+	public void onResidentPreJoinTown(TownPreAddResidentEvent event) {
+		Resident resident = event.getResident();
+
+		long minTime = TownySettings.getResidentMinTimeToJoinTown();
+		if (minTime <= 0L)
+			return;
+
+		long timePlayed = System.currentTimeMillis() - resident.getRegistered();
+		if (timePlayed >= minTime)
+			return;
+
+		String timeRemaining = TimeMgmt.getFormattedTimeValue(minTime - timePlayed);
+		event.setCancelled(true);
+		event.setCancelMessage(Translatable.of("msg_err_you_cannot_join_town_you_have_not_played_long_enough", timeRemaining).forLocale(resident));
 	}
 
 	@EventHandler(ignoreCancelled = true)

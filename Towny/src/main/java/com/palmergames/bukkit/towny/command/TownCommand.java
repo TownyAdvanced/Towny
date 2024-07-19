@@ -4316,6 +4316,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				town.save();
 			})
 		.setTitle(Translatable.of("msg_town_buytown_confirmation", town.getName(), prettyMoney(town.getForSalePrice())))
+		.setCancellableEvent(new TownPreAddResidentEvent(town, resident))
 		.sendTo(player);
 	}
 }

@@ -2379,6 +2379,12 @@ public enum ConfigNodes {
 			"/res set about [msg]",
 			"",
 			"# The default resident about text, shown in the resident's status screen."),
+	RES_SETTING_MIN_TIME_TO_JOIN_TOWN(
+			"resident_settings.min_time_to_join_town",
+			"0m",
+			"",
+			"# How long does a resident have to wait to join a town, after joining the server.",
+			"# Set to 0m to disable. 1m = 1 minute, 1h = 1 hour, 1d = 1 day."),
 	ECO(
 			"economy",
 			"",

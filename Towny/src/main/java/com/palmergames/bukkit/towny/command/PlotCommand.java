@@ -15,6 +15,7 @@ import com.palmergames.bukkit.towny.event.PlotClearEvent;
 import com.palmergames.bukkit.towny.event.PlotPreChangeTypeEvent;
 import com.palmergames.bukkit.towny.event.PlotPreClearEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
+import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
 import com.palmergames.bukkit.towny.event.plot.PlayerChangePlotTypeEvent;
 import com.palmergames.bukkit.towny.event.plot.PlotNotForSaleEvent;
@@ -410,6 +411,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				}
 			})
 			.setTitle(Translatable.of("msg_you_must_join_this_town_to_claim_this_plot", town.getName()))
+			.setCancellableEvent(new TownPreAddResidentEvent(town, resident))
 			.sendTo(player);
 			return;
 		}

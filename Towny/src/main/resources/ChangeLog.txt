@@ -9913,4 +9913,10 @@ v0.92.0.11:
 0.100.3.9:
   - Changed commands: 
     - /res set mode clear - Removes all of your modes (ie: townclaim, map)
-    - /res set mode reset - Same behaviour as before, it will remove your nodes and then apply the default modes for your player. 
+    - /res set mode reset - Same behaviour as before, it will remove your nodes and then apply the default modes for your player.
+  - Added the ability to prevent players joining towns until they have been on the server for a configured time.
+    - Closes #7516.
+  - New Config Option: resident_settings.min_time_to_join_town
+    - Default: 0m
+    - How long does a resident have to wait to join a town, after joining the server.
+    - Set to 0m to disable. 1m = 1 minute, 1h = 1 hour, 1d = 1 day.
