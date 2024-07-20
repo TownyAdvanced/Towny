@@ -152,7 +152,7 @@ public class BankAccount extends Account {
 
 	@Nullable
 	private Resident getGovernmentOwner() {
-		return government instanceof Town town ? town.getMayor() : government instanceof Nation nation ? nation.getKing() : null;
+		return government instanceof Town town ? town.getMayor() : government instanceof Nation nation && nation.hasCapital() ? nation.getKing() : null;
 	}
 
 	/*
