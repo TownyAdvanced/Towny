@@ -151,6 +151,8 @@ nation_sanction_help_4: "Ulusunuzdaki AmbargoKasabalarını listeler."
 king_help_1: 'Ulus Lideri Yardımı'
 king_help_2: 'İttifakınızı kurun.'
 king_help_3: 'Düşmanlarınızı ayarlayın.'
+king_help_4: "Şehrin bankasından para çek."
+king_help_5: "Ulusundan kasabaları ekle yada çıkar."
 king_help_6: "yardım için /n set komutunu kullanın."
 king_help_7: "yardım için /n toggle komutunu kullanın."
 king_help_8: "Başka bir ulusu kendi ulusunuza katmak için kullanılır."
@@ -167,6 +169,9 @@ res_13: "Kasabanıza veya yatağınıza ışınlanın."
 res_toggle_help_0: "Arazilerinizin pvp durumunu değiştirin."
 res_toggle_help_1: "Arazilerinizin ateş durumunu değiştirin."
 res_toggle_help_2: "Arazilerinizin yaratıklarının durumunu değiştirin."
+res_toggle_help_3: "Arazinin Patlama durumunu değiştirin."
+res_toggle_help_4: "Arazinizin duvarlarını görmeyi ayarlayın."
+res_toggle_help_10: "Tüm Ayarlamaları kaldır."
 mode_1: 'Her kasaba bloğu arasındaki haritayı göster'
 mode_2: 'Yürürken iddia etmeye çalış'
 mode_3: 'Yürürken hak talebini reddetmeye çalış'
@@ -195,8 +200,11 @@ world_help_6: 'yardım için /tw toggle komutunu kullanın.'
 world_help_7: 'yardım için /tw set komutunu kullanın.'
 townyadmin_help_1: 'Bu kasaba bloğunun hak talebini kaldır'
 townyadmin_help_2: 'Çevrenizdeki hak talebinden vazgeçmeye çalışın.'
+admin_panel_1: "Yardım için /ta set ? komutunu kullanın"
 admin_panel_2: 'Kasabayı yeniden yükle'
 admin_panel_3: 'Yeni gün kodunu çalıştırın'
+admin_panel_5: "Yardım için /ta plot ? komutunu kullanın"
+admin_panel_7: "Yardım için /ta toggle ? komutunu kullanın"
 admin_panel_11: "Configi sıfırla."
 admin_panel_12: "towny datası için backup oluştur."
 admin_panel_14: "Veritabanınızı kaydetmeye veya yüklemeye zorla"
@@ -226,6 +234,10 @@ townyadmin_town_toggle_help_2: "Kasabanın statüsünü değiştirerek sakin olm
 townyadmin_town_toggle_help_3: "Kasabanın Patlama ayarını değiştirin."
 townyadmin_town_toggle_help_4: "Kasabanın Ateş ayarını değiştirin."
 townyadmin_town_toggle_help_5: "Kasabanın yaratık ayarını değiştirin."
+townyadmin_town_toggle_help_6: "Kasabanın vergi ayarlarını değiştirin."
+townyadmin_nation_help_2: "Ulusa kasaba ekleyin."
+townyadmin_nation_help_3: "Ulustan kasabayı kaldırın."
+townyadmin_nation_help_15: "Ulusun rütbe komutunu kullanın."
 ta_resident_help_0: "Sakinin ismini değiştirin."
 ta_resident_help_2: "Arkadaş listenizi listeleyin veya temizleyin."
 ta_resident_help_3: "Sakini kayıtlardan sil."
