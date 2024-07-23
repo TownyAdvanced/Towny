@@ -948,6 +948,8 @@ this_message_will_expire: 'This will auto-expire in 20 seconds'
 player_sing: 'Player'
 nation_zone_this_area_under_protection_of: 'This part of the %s is under the protection of %s'
 nation_zone_conquered_status_denies_use: "Your town's conquered status prevents you from using this nation zone."
+nation_zone_conquered_status_denies_use_2: "Your are unable to use this conquered town's nation zone."
+nation_spawn_not_allowed_for_conquered_towns: "Your town's conquered status prevents you from spawning to your nation's spawn point."
 
 # Added in 0.42
 you_have_been_invited_to_join2: 'You have been invited to join %s'
