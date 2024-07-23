@@ -342,6 +342,12 @@ public class PlayerCacheUtil {
 						return false;
 					}
 
+					// Prevent conquering nations using the nation zones surrounding a conquered town.
+					if (TownySettings.getNationZonesProtectsConqueredTowns() && nearestTown.isConquered() && !nearestTown.hasResident(res)) {
+						cacheBlockErrMsg(player, Translatable.of("nation_zone_conquered_status_denies_use").forLocale(res));
+						return false;
+					}
+
 					// Allow a resident to use their nation's nation zone.
 					return true;
 				}

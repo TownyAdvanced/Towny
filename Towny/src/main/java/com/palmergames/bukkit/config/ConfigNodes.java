@@ -927,6 +927,12 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, players which are part of a conquered town, will not have access to their nation's nationzone.",
 			"# They will still be able to use the nation_zone outside of their own town."),
+	GNATION_SETTINGS_NATIONZONE_PROTECTS_CONQUERED_TOWNS(
+			"global_nation_settings.nationzone.protect_conquered_towns",
+			"false",
+			"",
+			"# When set to true, the nation zone of a conquered town will only be usable by the conquered town's players.",
+			"# The players belonging to the conquering nation will not be able to use the nation zone."),
 	GNATION_SETTINGS_NATIONZONE_WAR_DISABLES(
 			"global_nation_settings.nationzone.war_disables",
 			"true",

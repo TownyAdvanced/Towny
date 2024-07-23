@@ -3233,6 +3233,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_SKIPS_CONQUERED_TOWNS);
 	}
 	
+	public static boolean getNationZonesProtectsConqueredTowns() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_NATIONZONE_PROTECTS_CONQUERED_TOWNS);
+	}
+	
 	public static int getNationZonesCapitalBonusSize() {
 		return getInt(ConfigNodes.GNATION_SETTINGS_NATIONZONE_CAPITAL_BONUS_SIZE);
 	}

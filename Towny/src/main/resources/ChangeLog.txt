@@ -9933,3 +9933,9 @@ v0.92.0.11:
   - New Config Option: spawning.nation_spawn.deny_conquered_towns_use_of_nation_spawn
     - Default: false
     - When set to true, towns conquered by their nation will not be allowed to use /n spawn.
+  - Add the ability to prevent the nation zone surrounding a conquered town being used by the nation who conquered the town.
+    - Closes #7518.
+  - New Config Option: global_nation_settings.nationzone.protect_conquered_towns
+    - Default: false
+    - When set to true, the nation zone of a conquered town will only be usable by the conquered town's players.
+    - The players belonging to the conquering nation will not be able to use the nation zone.
