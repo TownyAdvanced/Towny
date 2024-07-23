@@ -2525,17 +2525,23 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Wrapper for the nationSpawn() method. All calls should be through here unless
-	 * bypassing for admins.
+	 * Performs final checks before sending to SpawnUtil.
 	 *
-	 * @param player        - Player.
-	 * @param split         - Current command arguments.
-	 * @param ignoreWarning - Whether to ignore the cost
-	 * @throws TownyException - Exception.
+	 * @param player        Player spawning.
+	 * @param split         Current command arguments.
+	 * @param ignoreWarning Whether to ignore the cost
+	 * @throws TownyException Exception thrown to deliver feedback message denying
+	 *                        spawn.
 	 */
 	public static void nationSpawn(Player player, String[] split, boolean ignoreWarning) throws TownyException {
 
 		Nation nation = getPlayerNationOrNationFromArg(player, split);
+		if (TownySettings.isConqueredTownsDeniedNationSpawn()) {
+			Town town = TownyAPI.getInstance().getTown(player);
+			if (town != null && nation.hasTown(town) && town.isConquered())
+				throw new TownyException(Translatable.of("nation_spawn_not_allowed_for_conquered_towns"));
+		}
+
 		String notAffordMSG = split.length == 0 ? 
 			Translatable.of("msg_err_cant_afford_tp").forLocale(player) : 
 			Translatable.of("msg_err_cant_afford_tp_nation", nation.getName()).forLocale(player);

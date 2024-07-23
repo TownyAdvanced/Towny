@@ -1431,6 +1431,11 @@ public enum ConfigNodes {
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the nations,",
 			"# when there is a war or peace."),
+	SPAWNING_DENY_CONQUERED_TOWNS_USE_OF_NATION_SPAWN(
+			"spawning.nation_spawn.deny_conquered_towns_use_of_nation_spawn",
+			"false",
+			"",
+			"# When set to true, towns conquered by their nation will not be allowed to use /n spawn."),
 
 	SPAWNING_NATION_SPAWN_COOLDOWN_ROOT(
 			"spawning.nation_spawn.spawning_cooldowns", "", ""),

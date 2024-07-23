@@ -2520,6 +2520,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.SPAWNING_RESPAWN_ANCHOR_HIGHER_PRECEDENCE);
 	}
 	
+	public static boolean isConqueredTownsDeniedNationSpawn() {
+		return getBoolean(ConfigNodes.SPAWNING_DENY_CONQUERED_TOWNS_USE_OF_NATION_SPAWN);
+	}
+	
 	public static int getHomeBlockMovementCooldownHours() {
 		return getInt(ConfigNodes.GTOWN_HOMEBLOCK_MOVEMENT_COOLDOWN);
 	}

@@ -9928,3 +9928,8 @@ v0.92.0.11:
   - Automatic Config Edit: nationCapitalBonusOutpostLimit will be added to each nation_level section with a value of 0.
 0.100.3.10:
   - Fix potential NPE thrown when nations are deleted and the nation bank is meant to be paid to the king.
+  - Add the ability to deny conquered towns from using /n spawn.
+    - Closes #7522.
+  - New Config Option: spawning.nation_spawn.deny_conquered_towns_use_of_nation_spawn
+    - Default: false
+    - When set to true, towns conquered by their nation will not be allowed to use /n spawn.
