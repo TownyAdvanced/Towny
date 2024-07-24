@@ -50,6 +50,11 @@ towny_help_1: "주변 마을 블럭을 맵에 표시합니다."
 towny_help_2: "이코노미에 사용되는 가격을 표시합니다."
 towny_help_3: "높은 점수를 표시합니다."
 towny_help_4: "새로운 날까지의 시간 표시"
+towny_help_5: "통계 표시"
+towny_help_6: "타우니 버전 표시"
+towny_top_help_0: "매개변수를 기준으로 상위 주민 나열"
+towny_top_help_1: "매개변수를 기준으로 상위 토지 소유자 나열"
+towny_top_help_2: "매개변수를 기준으로 가장 부유한 사람 나열"
 town_help_1: '속해있는 도시의 상태'
 town_help_2: '[시장]'
 town_help_3: '해당 도시의 상태'
@@ -60,6 +65,11 @@ town_help_7: '해당 사람이 시장인 새 마을 만들기'
 town_help_8: '시장 명령어 확인하기'
 town_help_9: '오늘이 그 날입니다!'
 town_help_10: '접속 중인 시민 목록'
+town_help_13: "마을의 주민 목록 보기"
+town_help_14: "마을의 순위 목록 보기"
+town_set_help_7: "/t spawn을 사용하기 위한 비용을 설정"
+town_set_help_8: "나의 마을 이름 설정"
+town_set_help_9: "나의 마을 태그 설정"
 mayor_help_3: '도시에 인접하지 않는 토지 구매'
 mayor_help_4: '반지름이 X인 땅을 원형으로 구매'
 mayor_help_5: '최대 반지름 내의 토지 구매'
