@@ -500,7 +500,7 @@ msg_err_universe_limit: '&cМаксимальный предел городов 
 msg_err_too_many_npc: '&cСлишком много NPC зарегистрировано.'
 msg_err_negative_money: '&cОтрицательное количество денег.'
 msg_err_not_percentage: '&cПроценты должны быть ниже 100.'
-msg_err_no_economy: '&cЭкономика включена.'
+msg_err_no_economy: '&cЭкономия не активирована.'
 msg_err_not_block_type: '&cНеверный тип участка!'
 msg_not_allowed_join: '&c%s не разрешено присоединяться к городам.'
 msg_offline_no_join: '&c%s не в сети, но по правам он не сможет присоединиться к городу.'
