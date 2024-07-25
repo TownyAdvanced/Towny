@@ -704,6 +704,7 @@ permissions:
         description: User can access admin resident commands
         default: false
         children:
+            towny.command.townyadmin.resident.about: true
             towny.command.townyadmin.resident.rename: true
             towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.resident.friend: true

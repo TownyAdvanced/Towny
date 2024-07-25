@@ -254,6 +254,7 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin resident")
 				.add("[resident]", Translatable.of("res_3"))
+				.add("[resident] about clear", Translatable.of("ta_resident_help_4"))
 				.add("[resident] rename [newname]", Translatable.of("ta_resident_help_0"))
 				.add("[resident] friend... [add|remove] [resident]", Translatable.of("ta_resident_help_1"))
 				.add("[resident] friend... [list|clear]", Translatable.of("ta_resident_help_2"))

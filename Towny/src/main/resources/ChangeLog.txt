@@ -9939,3 +9939,6 @@ v0.92.0.11:
     - Default: false
     - When set to true, the nation zone of a conquered town will only be usable by the conquered town's players.
     - The players belonging to the conquering nation will not be able to use the nation zone.
+0.100.3.11:
+  - New Command: /ta resident NAME about clear
+    - Used by an admin to remove a Resident's About line.

@@ -403,6 +403,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					case 3:
 						return NameUtil.filterByStart(adminResidentTabCompletes, args[2]);
 					case 4:
+						if (args[2].equalsIgnoreCase("about"))
+							return Collections.singletonList("clear");
 						if (args[2].equalsIgnoreCase("friend"))
 							return NameUtil.filterByStart(adminResidentFriendTabCompletes, args[3]);
 						if (args[2].equalsIgnoreCase("meta"))
@@ -1114,8 +1116,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "meta" -> handleResidentMetaCommand(sender, resident, split);
 		case "unjail" -> residentUnjail(sender, resident);
 		case "delete" -> residentDelete(sender, resident);
+		case "about" -> residentAbout(sender, split, resident); 
 		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[1]));
 		}
+	}
+
+	private void residentAbout(CommandSender sender, String[] split, Resident resident) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_ABOUT.getNode());
+		if (split.length < 3 || !split[2].equalsIgnoreCase("clear"))
+			throw new TownyException("Eg: /townyadmin resident [resident] about clear");
+		resident.setAbout("");
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_about", resident.getName()));
 	}
 
 	private void residentRename(CommandSender sender, String[] split, Resident resident) throws TownyException {
