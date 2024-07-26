@@ -387,6 +387,7 @@ ta_resident_help_0: "Rename a resident."
 ta_resident_help_1: "Add or remove a friend."
 ta_resident_help_2: "List or clear the friend list."
 ta_resident_help_3: "Delete a resident from the database."
+ta_resident_help_4: "Removes a players about line."
 
 ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
 ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
