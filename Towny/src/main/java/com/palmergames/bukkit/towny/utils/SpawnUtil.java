@@ -20,6 +20,9 @@ import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -440,17 +443,68 @@ public class SpawnUtil {
 							return player.getWorld().getSpawnLocation();
 					});
 				} else if (town != null && town.hasSpawn())
-					yield CompletableFuture.completedFuture(town.getSpawnOrNull());
+					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawnOrNull()));
 				else
 					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
-					yield CompletableFuture.completedFuture(getOutpostSpawnLocation(town, split));
+					yield CompletableFuture.completedFuture(getSafeLocation(getOutpostSpawnLocation(town, split)));
 				else
-					yield CompletableFuture.completedFuture(town.getSpawn());
+					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawn()));
 			case NATION:
-				yield CompletableFuture.completedFuture(nation.getSpawn());
+				yield CompletableFuture.completedFuture(getSafeLocation(nation.getSpawn()));
 		};
+	}
+	
+	private static Location getSafeLocation(Location location) {
+		
+		if (isSafeLocation(location))
+			return location;
+
+		Location up = location.clone();
+		Location down = location.clone();
+		
+		// look for 50 blocks up and down for a safe location, 
+		// if you can't find it fail the teleport
+		// maybe add a translation key and add the player 
+		// as a parameter to print him an error message
+		for(int i = 0; i < 50; i++) {
+			up = up.add(0,1,0);
+			down = down.subtract(0, 1, 0);
+			
+			if (isSafeLocation(up))
+				return up;
+			if (isSafeLocation(down))
+				return down;
+		}
+		
+		return null;
+	}
+
+	private static boolean isSafeLocation(Location location) {
+		World world = location.getWorld();
+		if (world == null) return false;
+
+		// Check if location is in a block
+		Block block = world.getBlockAt(location);
+		if (!block.getType().isAir()) {
+			return false;
+		}
+
+		// Check if block below is lava or water or nothing
+		Block belowBlock = world.getBlockAt(location.clone().subtract(0, 1, 0));
+		Material belowType = belowBlock.getType();
+		if (belowType == Material.LAVA || belowType == Material.WATER || belowType == Material.BUBBLE_COLUMN || belowType.isAir()) {
+			return false;
+		}
+
+		// Check if the location is directly above a solid block
+		Block aboveBlock = world.getBlockAt(location.clone().add(0, 1, 0));
+		if (!aboveBlock.getType().isAir()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
