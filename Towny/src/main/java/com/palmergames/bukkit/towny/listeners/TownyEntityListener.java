@@ -215,7 +215,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event - EntityDamageEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityTakesExplosionDamage(  event) {
+	public void onEntityTakesExplosionDamage(EntityDamageEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
