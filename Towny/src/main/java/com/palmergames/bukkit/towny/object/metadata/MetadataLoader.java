@@ -102,9 +102,6 @@ public class MetadataLoader {
 	}
 	
 	private void runDeserialization() {
-		if (storedMetadata.isEmpty())
-			return;
-
 		for (TownyObject tObj : storedMetadata) {
 			final List<CustomDataField<?>> deserializedFields = deserializeStoredMeta(tObj.getMetadata());
 
