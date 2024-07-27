@@ -215,7 +215,7 @@ public class TownyEntityListener implements Listener {
 	 * @param event - EntityDamageEvent
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onEntityTakesExplosionDamage(EntityDamageEvent event) {
+	public void onEntityTakesExplosionDamage(  event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -224,7 +224,7 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 
-		if (causeIsExplosive(event.getCause()) && entityProtectedFromExplosiveDamageHere(event.getEntity(), event.getCause())) {
+		if (event.getCause() != null && causeIsExplosive(event.getCause()) && entityProtectedFromExplosiveDamageHere(event.getEntity(), event.getCause())) {
 			event.setDamage(0);
 			event.setCancelled(true);
 		}

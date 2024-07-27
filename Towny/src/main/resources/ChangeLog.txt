@@ -9942,3 +9942,4 @@ v0.92.0.11:
 0.100.3.11:
   - New Command: /ta resident NAME about clear
     - Used by an admin to remove a Resident's About line.
+  - Prevent potential NPE caused by EntityDamageEvents with no DamageCause. 
