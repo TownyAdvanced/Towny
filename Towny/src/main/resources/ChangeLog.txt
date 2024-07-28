@@ -9943,3 +9943,7 @@ v0.92.0.11:
   - New Command: /ta resident NAME about clear
     - Used by an admin to remove a Resident's About line.
   - Prevent potential NPE caused by EntityDamageEvents with no DamageCause. 
+  - Always fire loaded metadata event, courtesy of Warrior with PR #7531.
+  - Remove newday timer option, courtesy of Warrior with PR #7509.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.3.0 to 3.3.1.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.7.0 to 3.8.0.
