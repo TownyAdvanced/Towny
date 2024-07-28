@@ -2112,7 +2112,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		String uuidString = null;
 		
 		try {
-			PlotGroup district = universe.getGroup(UUID.fromString(rs.getString("uuid")));
+			District district = universe.getDistrict(UUID.fromString(rs.getString("uuid")));
 			if (district == null) {
 				TownyMessaging.sendErrorMsg("SQL: A district was not registered properly on load!");
 				return true;
@@ -2130,14 +2130,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null) {
 				UUID uuid = UUID.fromString(line.trim());
 				if (uuid == null) {
-					deletePlotGroup(district);
+					deleteDistrict(district);
 					return true;
 				}
 				Town town = universe.getTown(uuid);
 				if (town != null) {
 					district.setTown(town);
 				} else {
-					deletePlotGroup(district);
+					deleteDistrict(district);
 					return true;
 				}
 			}
