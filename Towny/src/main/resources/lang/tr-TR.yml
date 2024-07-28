@@ -171,6 +171,7 @@ res_toggle_help_1: "Arazilerinizin ateş durumunu değiştirin."
 res_toggle_help_2: "Arazilerinizin yaratıklarının durumunu değiştirin."
 res_toggle_help_3: "Arazinin Patlama durumunu değiştirin."
 res_toggle_help_4: "Arazinizin duvarlarını görmeyi ayarlayın."
+res_toggle_help_5: "Arazinizin duvarlarını görmeyi ayarlayın."
 res_toggle_help_10: "Tüm Ayarlamaları kaldır."
 mode_1: 'Her kasaba bloğu arasındaki haritayı göster'
 mode_2: 'Yürürken iddia etmeye çalış'
