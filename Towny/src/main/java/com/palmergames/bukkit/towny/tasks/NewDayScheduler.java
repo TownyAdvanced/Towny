@@ -9,8 +9,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
 import com.palmergames.util.TimeMgmt;
 import org.bukkit.NamespacedKey;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class NewDayScheduler extends TownyTimerTask {
@@ -30,7 +28,6 @@ public class NewDayScheduler extends TownyTimerTask {
 		});
 	}
 
-	private static Timer newDayTimer;
 	private static ScheduledTask scheduleTask = null;
 	private static ScheduledTask newDayTask = null;
 	
@@ -41,28 +38,16 @@ public class NewDayScheduler extends TownyTimerTask {
 		
 		newDayInterval = TownySettings.getDayInterval();
 
-		if (!TownySettings.doesNewDayUseTimer()) {
-			long secondsUntilNextNewDay = TimeMgmt.townyTime();
-			
-			// If the next new day is less than 2 minutes away, schedule the new day.
-			if (plugin.getScheduler() instanceof FoliaTaskScheduler || secondsUntilNextNewDay < TimeUnit.MINUTES.toSeconds(2)) {
-				TownyMessaging.sendDebugMsg("New Day time finalized for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay) + " from now.");
-				scheduleUpComingNewDay(secondsUntilNextNewDay);
-				// Else the new day scheduler will run again at half the secondsUntilNextNewDay, to check again.
-			} else {
-				scheduleTask = plugin.getScheduler().runLater(new NewDayScheduler(plugin), (secondsUntilNextNewDay / 2) * 20);
-				TownyMessaging.sendDebugMsg("Re-evaluation of New Day time scheduled for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay / 2) + " from now.");
-			}
-		} else {
-			TownyMessaging.sendDebugMsg("Starting new new day scheduler timer.");
+		long secondsUntilNextNewDay = TimeMgmt.townyTime();
 
-			newDayTimer = new Timer("towny-new-day-scheduler", true);
-			newDayTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					newDay();
-				}
-			}, TimeUnit.SECONDS.toMillis(TimeMgmt.townyTime()), TimeUnit.SECONDS.toMillis(TownySettings.getDayInterval()));
+		// If the next new day is less than 2 minutes away, schedule the new day.
+		if (plugin.getScheduler() instanceof FoliaTaskScheduler || secondsUntilNextNewDay < TimeUnit.MINUTES.toSeconds(2)) {
+			TownyMessaging.sendDebugMsg("New Day time finalized for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay) + " from now.");
+			scheduleUpComingNewDay(secondsUntilNextNewDay);
+			// Else the new day scheduler will run again at half the secondsUntilNextNewDay, to check again.
+		} else {
+			scheduleTask = plugin.getScheduler().runLater(new NewDayScheduler(plugin), (secondsUntilNextNewDay / 2) * 20);
+			TownyMessaging.sendDebugMsg("Re-evaluation of New Day time scheduled for: " + TimeMgmt.formatCountdownTime(secondsUntilNextNewDay / 2) + " from now.");
 		}
 	}
 
@@ -71,13 +56,10 @@ public class NewDayScheduler extends TownyTimerTask {
 	 * @param secondsUntilNextNewDay long seconds until the next task.
 	 */
 	private void scheduleUpComingNewDay(long secondsUntilNextNewDay) {
-		plugin.getScheduler().runAsyncLater(() -> TownyEconomyHandler.economyExecutor().execute(new DailyTimerTask(plugin)), secondsUntilNextNewDay * 20);
+		newDayTask = plugin.getScheduler().runAsyncLater(() -> TownyEconomyHandler.economyExecutor().execute(new DailyTimerTask(plugin)), secondsUntilNextNewDay * 20);
 	}
 	
 	public static boolean isNewDaySchedulerRunning() {
-		if (TownySettings.doesNewDayUseTimer())
-			return newDayTimer != null;
-		
 		return scheduleTask != null && !scheduleTask.isCancelled();
 	}
 	
@@ -85,12 +67,11 @@ public class NewDayScheduler extends TownyTimerTask {
 		return newDayTask != null && !newDayTask.isCancelled();
 	}
 	
+	public static boolean isNewDayRunning() {
+		return newDayTask != null && newDayTask.isCurrentlyRunning();
+	}
+	
 	public static void cancelScheduledNewDay() {
-		if (newDayTimer != null) {
-			newDayTimer.cancel();
-			newDayTimer = null;
-		}
-		
 		if (scheduleTask != null) {
 			scheduleTask.cancel();
 			scheduleTask = null;

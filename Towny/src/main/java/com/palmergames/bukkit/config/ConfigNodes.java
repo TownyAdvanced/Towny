@@ -1592,11 +1592,6 @@ public enum ConfigNodes {
 			"# The time each \"day\", when taxes will be collected.",
 			"# Only used when less than day_interval. Default is 12h (midday).",
 			"# If day_interval is set to something like 20m, the new_day_time is not used, day_interval will be used instead."),
-	PLUGIN_NEWDAY_USES_JAVA_TIMER(
-			"plugin.day_timer.uses_java_timer",
-			"false",
-			"",
-			"# If enabled (disabled by default), a Java Timer will be used for scheduling new days, which is more accurate than Towny's Bukkit timer task but uses an extra thread."),
 	PLUGIN_NEWDAY_DELETE_0_PLOT_TOWNS(
 			"plugin.day_timer.delete_0_plot_towns",
 			"false",

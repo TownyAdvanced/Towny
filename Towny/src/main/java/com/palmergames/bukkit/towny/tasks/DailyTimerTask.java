@@ -30,6 +30,7 @@ import java.util.ListIterator;
 import org.bukkit.entity.Player;
 
 public class DailyTimerTask extends TownyTimerTask {
+	private static final Object NEW_DAY_LOCK = new Object();
 	
 	private double totalTownUpkeep = 0.0;
 	private double totalNationUpkeep = 0.0;
@@ -46,6 +47,12 @@ public class DailyTimerTask extends TownyTimerTask {
 
 	@Override
 	public void run() {
+		synchronized (NEW_DAY_LOCK) {
+			doNewDay();
+		}
+	}
+
+	public void doNewDay() {
 
 		long start = System.currentTimeMillis();
 		totalTownUpkeep = 0.0;
