@@ -2037,6 +2037,7 @@ msg_you_must_wait_x_seconds_before_renaming_your_town: 'You must wait %s seconds
 
 #Added in 1.141
 msg_newday_already_scheduled_soon: 'A new day task is already scheduled to happen soon.'
+msg_newday_already_running: 'A new day task is already currently running.'
 
 #Added in 0.142
 
