@@ -32,6 +32,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Creeper;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
@@ -222,6 +223,11 @@ public class TownyEntityListener implements Listener {
 		}
 		
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+
+		// Don't make Creeper damage tied to the explosion setting of a plot, otherwise
+		// Creepers are completely useless.
+		if (event instanceof EntityDamageByEntityEvent eevent && eevent.getDamager() instanceof Creeper)
 			return;
 
 		if (event.getCause() != null && causeIsExplosive(event.getCause()) && entityProtectedFromExplosiveDamageHere(event.getEntity(), event.getCause())) {
