@@ -3663,6 +3663,10 @@ public class TownySettings {
 		return getString(ConfigNodes.PLUGIN_WEB_MAP_URL);
 	}
 	
+	public static boolean getSafetyTeleport() { 
+		return getBoolean(ConfigNodes.SAFE_TELEPORT);
+	}
+	
 	public static Map<Integer, TownLevel> getConfigTownLevel() {
 		return configTownLevel;
 	}

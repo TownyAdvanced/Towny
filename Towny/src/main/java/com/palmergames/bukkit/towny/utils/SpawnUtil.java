@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
@@ -17,6 +18,7 @@ import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
 import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.util.ItemLists;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -455,27 +457,42 @@ public class SpawnUtil {
 				yield CompletableFuture.completedFuture(getSafeLocation(nation.getSpawn()));
 		};
 	}
-	
+
+	/**
+	 * Tries to find a safe location nearby to teleport the player to
+	 * if safety teleport is enabled, otherwise does nothing.
+	 * 
+	 * @param location Starting location
+	 * @return A safe location nearby, same location if already safe
+	 */
 	private static Location getSafeLocation(Location location) {
-		
-		if (isSafeLocation(location))
+		//if safety teleport isn't enabled do nothing
+		if (!TownySettings.getSafetyTeleport()) {
 			return location;
+		}
+		
+		if (isSafeLocation(location)) {
+			return location;
+		}
 
 		Location up = location.clone();
 		Location down = location.clone();
 		
-		// look for 50 blocks up and down for a safe location, 
+		// look for 20 blocks up and down for a safe location, 
 		// if you can't find it fail the teleport
 		// maybe add a translation key and add the player 
 		// as a parameter to print him an error message
-		for(int i = 0; i < 50; i++) {
+		for(int i = 0; i < 20; i++) {
 			up = up.add(0,1,0);
 			down = down.subtract(0, 1, 0);
 			
-			if (isSafeLocation(up))
+			if (isSafeLocation(up)) {
 				return up;
-			if (isSafeLocation(down))
+			}
+			
+			if (isSafeLocation(down)) {
 				return down;
+			}
 		}
 		
 		return null;
@@ -487,20 +504,23 @@ public class SpawnUtil {
 
 		// Check if location is in a block
 		Block block = world.getBlockAt(location);
-		if (!block.getType().isAir()) {
+		Material type = block.getType();
+		
+		if (!ItemLists.NOT_SOLID_BLOCKS.contains(type) || ItemLists.LIQUID_BLOCKS.contains(type)) {
 			return false;
 		}
 
 		// Check if block below is lava or water or nothing
 		Block belowBlock = world.getBlockAt(location.clone().subtract(0, 1, 0));
 		Material belowType = belowBlock.getType();
-		if (belowType == Material.LAVA || belowType == Material.WATER || belowType == Material.BUBBLE_COLUMN || belowType.isAir()) {
+		if (ItemLists.AIR_TYPES.contains(belowType) || ItemLists.LIQUID_BLOCKS.contains(type)) {
 			return false;
 		}
 
 		// Check if the location is directly above a solid block
 		Block aboveBlock = world.getBlockAt(location.clone().add(0, 1, 0));
-		if (!aboveBlock.getType().isAir()) {
+		Material aboveType = aboveBlock.getType();
+		if (!ItemLists.NOT_SOLID_BLOCKS.contains(aboveType) || ItemLists.LIQUID_BLOCKS.contains(aboveType)) {
 			return false;
 		}
 
