@@ -36,13 +36,6 @@ public enum ConfigNodes {
 			"# Your players will select what locale that Towny shows them ",
 			"# by changing their Minecraft client's locale."),
 	
-	SAFE_TELEPORT(
-		"safety.teleport",
-		"false",
-		"# If enabled tries to find a safe location when teleporting to a town spawn/nation spawn/outpost",
-		"# can be used to prevent players from making kill boxes at those locations."
-	),
-	
 	ENABLED_LANGUAGES(
 			"language.enabled_languages",
 			"*",
@@ -1284,6 +1277,12 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	SPAWNING_SAFE_TELEPORT(
+		"spawning.safe_teleport",
+		"false",
+		"# If enabled tries to find a safe location when teleporting to a town spawn/nation spawn/outpost",
+		"# can be used to prevent players from making kill boxes at those locations."
+	),
 	SPAWNING_COST_SPAWN_WARNINGS(
 			"spawning.spawn_cost_warnings",
 			"true",

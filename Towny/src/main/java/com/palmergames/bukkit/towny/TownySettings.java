@@ -3664,7 +3664,7 @@ public class TownySettings {
 	}
 	
 	public static boolean getSafetyTeleport() { 
-		return getBoolean(ConfigNodes.SAFE_TELEPORT);
+		return getBoolean(ConfigNodes.SPAWNING_SAFE_TELEPORT);
 	}
 	
 	public static Map<Integer, TownLevel> getConfigTownLevel() {
