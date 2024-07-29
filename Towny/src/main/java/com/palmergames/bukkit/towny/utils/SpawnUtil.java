@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
@@ -466,8 +465,8 @@ public class SpawnUtil {
 	 * @return A safe location nearby, same location if already safe
 	 */
 	private static Location getSafeLocation(Location location) {
-		//if safety teleport isn't enabled do nothing
-		if (!TownySettings.getSafetyTeleport()) {
+		//if safety teleport isn't enabled do anything
+		if (!TownySettings.isSafeTeleportUsed()) {
 			return location;
 		}
 		
