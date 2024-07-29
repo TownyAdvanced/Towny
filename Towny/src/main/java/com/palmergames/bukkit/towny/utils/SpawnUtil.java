@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -474,24 +475,45 @@ public class SpawnUtil {
 			return location;
 		}
 
-		Location up = location.clone();
-		Location down = location.clone();
+		LinkedList<Boolean> isLiquidMap = new LinkedList<>();
+		LinkedList<Boolean> isSolidMap = new LinkedList<>();
+		
 		
 		// look for 20 blocks up and down for a safe location, 
 		// if you can't find it fail the teleport
 		// maybe add a translation key and add the player 
 		// as a parameter to print him an error message
-		for(int i = 0; i < 20; i++) {
-			up = up.add(0,1,0);
-			down = down.subtract(0, 1, 0);
+		
+		final int range = 20;
+		Location temp = location.clone().subtract(0, range, 0);
+		
+		//build the linked lists
+		for(int i = 0; i < range * 2; i++) {
+			Material type = temp.getBlock().getType();
 			
-			if (isSafeLocation(up)) {
-				return up;
+			isLiquidMap.add(ItemLists.LIQUID_BLOCKS.contains(type));
+			isSolidMap.add(!ItemLists.NOT_SOLID_BLOCKS.contains(type));
+			
+			temp = temp.add(0,1,0);
+		}
+		
+		for (int i = 0; i < (range * 2) - 2; i++) {
+			// i 	 = bottom block
+			// i + 1 = middle block
+			// i + 2 = top block
+			if(!isSolidMap.get(i) || isLiquidMap.get(i)) {
+				continue;
 			}
 			
-			if (isSafeLocation(down)) {
-				return down;
+			if (isSolidMap.get(i+1) || isLiquidMap.get(i+1)) {
+				continue;
 			}
+			
+			if (isSolidMap.get(i+2) || isLiquidMap.get(i+2)) {
+				continue;
+			}
+			
+			return location.clone().add(0, i + 1- range, 0);
 		}
 		
 		return null;
