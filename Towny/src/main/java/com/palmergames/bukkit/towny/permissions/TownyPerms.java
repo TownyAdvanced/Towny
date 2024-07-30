@@ -299,9 +299,13 @@ public class TownyPerms {
 				permList.add("towny.nationless");
 			}
 			
-			if (isPeaceful(resident.getTownOrNull()))
+			if (isPeaceful(town))
 				permList.addAll(getList("peaceful"));
-				
+
+			if (town.isConquered())
+				permList.addAll(getList("conquered"));
+			else
+				permList.addAll(getList("unconquered"));
 		} else {
 			permList.add("towny.townless");
 			permList.add("towny.nationless");
@@ -497,6 +501,10 @@ public class TownyPerms {
 
 	public static boolean hasPeacefulNodes() {
 		return !getList("peaceful").isEmpty();
+	}
+
+	public static boolean hasConqueredNodes() {
+		return !getList("conquered").isEmpty() || !getList("unconquered").isEmpty();
 	}
 
 	/*
@@ -745,7 +753,7 @@ public class TownyPerms {
 				"# /ta townyperms group [name] addperm [node] command.                                       #",
 				"#                                                                                           #",
 				"# You may change the names of any of the ranks except: nomad, default, mayor, king, ranks,  #",
-				"# peaceful.                                                                                 #",
+				"# peaceful, conquered, unconquered.                                                         #",
 				"#                                                                                           #",
 				"# If you want to, you can negate permissions nodes from nodes by doing the following:       #",
 				"# Ex:                                                                                       #",

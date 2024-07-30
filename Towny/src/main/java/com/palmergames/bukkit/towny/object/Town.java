@@ -1314,6 +1314,9 @@ public class Town extends Government implements TownBlockOwner {
 		if (!callEvent)
 			return;
 
+		if (TownyPerms.hasConqueredNodes())
+			TownyPerms.updateTownPerms(this);
+
 		if (this.isConquered)
 			BukkitTools.fireEvent(new TownConqueredEvent(this));
 		else

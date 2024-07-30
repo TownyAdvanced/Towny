@@ -109,3 +109,5 @@ nations:
             - towny.command.nation.add
 
 peaceful:
+conquered:
+unconquered:
