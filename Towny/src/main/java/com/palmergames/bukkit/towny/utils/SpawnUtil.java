@@ -445,16 +445,16 @@ public class SpawnUtil {
 							return player.getWorld().getSpawnLocation();
 					});
 				} else if (town != null && town.hasSpawn())
-					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawnOrNull()));
+					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawnOrNull(), player));
 				else
 					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
-					yield CompletableFuture.completedFuture(getSafeLocation(getOutpostSpawnLocation(town, split)));
+					yield CompletableFuture.completedFuture(getSafeLocation(getOutpostSpawnLocation(town, split), player));
 				else
-					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawn()));
+					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawn(), player));
 			case NATION:
-				yield CompletableFuture.completedFuture(getSafeLocation(nation.getSpawn()));
+				yield CompletableFuture.completedFuture(getSafeLocation(nation.getSpawn(), player));
 		};
 	}
 
@@ -465,7 +465,7 @@ public class SpawnUtil {
 	 * @param location Starting location
 	 * @return A safe location nearby, same location if already safe
 	 */
-	private static Location getSafeLocation(Location location) {
+	private static Location getSafeLocation(Location location, Player p) {
 		//if safety teleport isn't enabled do anything
 		if (!TownySettings.isSafeTeleportUsed()) {
 			return location;
@@ -516,6 +516,7 @@ public class SpawnUtil {
 			return location.clone().add(0, i + 1- range, 0);
 		}
 		
+		TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_fail_safe_teleport"));
 		return null;
 	}
 
