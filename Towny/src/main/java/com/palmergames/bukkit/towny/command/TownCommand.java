@@ -2526,7 +2526,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				selection = AreaSelectionUtil.filterOutUnwantedBiomeWorldCoords(player, selection);
 				selection = AreaSelectionUtil.filterOutOceanBiomeWorldCoords(player, selection);
 				if (selection.isEmpty())
-					throw new TownyException("msg_err_cannot_begin_town_in_this_biome");
+					throw new TownyException(Translatable.of("msg_err_cannot_begin_town_in_this_biome"));
 			}
 	
 			ProximityUtil.allowTownHomeBlockOrThrow(world, key, null, true);
