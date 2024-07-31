@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -475,8 +475,10 @@ public class SpawnUtil {
 			return location;
 		}
 
-		LinkedList<Boolean> isLiquidMap = new LinkedList<>();
-		LinkedList<Boolean> isSolidMap = new LinkedList<>();
+		final int range = 20;
+		
+		ArrayList<Boolean> isLiquidMap = new ArrayList<>(range * 2);
+		ArrayList<Boolean> isSolidMap = new ArrayList<>(range * 2);
 		
 		
 		// look for 20 blocks up and down for a safe location, 
@@ -484,7 +486,6 @@ public class SpawnUtil {
 		// maybe add a translation key and add the player 
 		// as a parameter to print him an error message
 		
-		final int range = 20;
 		Location temp = location.clone().subtract(0, range, 0);
 		
 		//build the linked lists
