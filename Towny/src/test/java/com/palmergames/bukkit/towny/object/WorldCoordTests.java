@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import be.seeseemelk.mockbukkit.ServerMock;
 import com.google.common.collect.Iterables;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.Pair;
@@ -13,9 +14,11 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldCoordTests {
+	static ServerMock server;
+	
 	@BeforeAll
 	static void init() {
-		MockBukkit.getOrCreateMock();
+		server = MockBukkit.getOrCreateMock();
 		TownySettings.loadDefaultConfig();
 	}
 	
@@ -48,5 +51,19 @@ public class WorldCoordTests {
 	@RepeatedTest(16)
 	void testSmallerCellSizes(RepetitionInfo info) {
 		assertEquals(1, new WorldCoord("a", 0, 0).getChunkPositions(info.getCurrentRepetition()).size());
+	}
+	
+	@Test
+	void testCorners() {
+		int chunkX = -10;
+		int chunkZ = -10;
+		
+		server.addSimpleWorld("world");
+		WorldCoord coord = new WorldCoord("world", chunkX, chunkZ);
+		assertEquals(chunkX, coord.getUpperMostCornerLocation().getChunk().getX());
+		assertEquals(chunkZ, coord.getUpperMostCornerLocation().getChunk().getZ());
+
+		assertEquals(chunkX, coord.getLowerMostCornerLocation().getChunk().getX());
+		assertEquals(chunkZ, coord.getLowerMostCornerLocation().getChunk().getZ());
 	}
 }
