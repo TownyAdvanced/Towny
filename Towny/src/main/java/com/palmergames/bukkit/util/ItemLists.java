@@ -324,7 +324,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.add("SAND", "RED_SAND", "GRAVEL", "SUSPICIOUS_SAND", "SUSPICIOUS_GRAVEL")
 			.endsWith("_CONCRETE_POWDER")
 			.build();
-	
+
 	/**
 	 * List of blocks which, when exploded, will not have their drops set to false, despite our asking.
 	 */

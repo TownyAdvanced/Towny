@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -476,10 +476,9 @@ public class SpawnUtil {
 		}
 
 		final int range = 20;
-		
-		ArrayList<Boolean> isLiquidMap = new ArrayList<>(range * 2);
-		ArrayList<Boolean> isSolidMap = new ArrayList<>(range * 2);
-		
+
+		BitSet isLiquidMap = new BitSet(range * 2);
+		BitSet isSolidMap = new BitSet(range * 2);
 		
 		// look for 20 blocks up and down for a safe location, 
 		// if you can't find it fail the teleport
@@ -492,8 +491,13 @@ public class SpawnUtil {
 		for(int i = 0; i < range * 2; i++) {
 			Material type = temp.getBlock().getType();
 			
-			isLiquidMap.add(ItemLists.LIQUID_BLOCKS.contains(type));
-			isSolidMap.add(!ItemLists.NOT_SOLID_BLOCKS.contains(type));
+			if (ItemLists.LIQUID_BLOCKS.contains(type)) {
+				isLiquidMap.set(i);
+			}
+			
+			if (!ItemLists.NOT_SOLID_BLOCKS.contains(type)) {
+				isSolidMap.set(i);
+			}
 			
 			temp = temp.add(0,1,0);
 		}
