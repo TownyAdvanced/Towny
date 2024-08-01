@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
@@ -475,7 +476,7 @@ public class SpawnUtil {
 			return location;
 		}
 
-		final int range = 20;
+		final int range = 22;
 
 		BitSet isLiquidMap = new BitSet(range * 2);
 		BitSet isSolidMap = new BitSet(range * 2);
@@ -502,27 +503,40 @@ public class SpawnUtil {
 			temp = temp.add(0,1,0);
 		}
 		
-		for (int i = 0; i < (range * 2) - 2; i++) {
-			// i 	 = bottom block
-			// i + 1 = middle block
-			// i + 2 = top block
-			if(!isSolidMap.get(i) || isLiquidMap.get(i)) {
+		// 0 1 -1 2 -2 ...
+		for (int i = 0; Math.abs(i) < range - 2; i = next(i) ) {
+			// value 	 = bottom block
+			// value + 1 = middle block
+			// value + 2 = top block
+			int value = i + range;
+			
+			if(!isSolidMap.get(value) || isLiquidMap.get(value)) {
 				continue;
 			}
 			
-			if (isSolidMap.get(i+1) || isLiquidMap.get(i+1)) {
+			if (isSolidMap.get(value+1) || isLiquidMap.get(value+1)) {
 				continue;
 			}
 			
-			if (isSolidMap.get(i+2) || isLiquidMap.get(i+2)) {
+			if (isSolidMap.get(value+2) || isLiquidMap.get(value+2)) {
 				continue;
 			}
 			
-			return location.clone().add(0, i + 1- range, 0);
+			return location.clone().add(0, value + 1, 0);
 		}
 		
 		TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_fail_safe_teleport"));
 		return null;
+	}
+	
+	private static int next(int i) {
+		if (i <= 0) {
+			i = -i;
+			i++;
+		} else {
+			i = -i;
+		}
+		return i;
 	}
 
 	private static boolean isSafeLocation(Location location) {
