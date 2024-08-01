@@ -327,7 +327,7 @@ public class WorldCoord extends Coord {
 	 * @return Location of the upper-most corner of a WorldCoord.
 	 */
 	public Location getUpperMostCornerLocation() {
-		return getCorner().add(getCellSize(), getBukkitWorld().getMaxHeight(), getCellSize());
+		return getCorner().add(getCellSize() - 1, getBukkitWorld().getMaxHeight() - 1, getCellSize() - 1);
 	}
 
 	/**
