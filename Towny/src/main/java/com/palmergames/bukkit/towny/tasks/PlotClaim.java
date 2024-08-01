@@ -254,7 +254,7 @@ public class PlotClaim implements Runnable {
 	 * Used via /ta plot claim {name}
 	 */
 	private void adminClaim(List<WorldCoord> selection) {
-		for (WorldCoord wc : selection) {
+		for (WorldCoord wc : new ArrayList<>(selection)) {
 			if (!adminClaim(wc)) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_claimed", wc.toString()));
 				this.selection.remove(wc);

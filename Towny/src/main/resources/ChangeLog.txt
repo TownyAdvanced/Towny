@@ -9957,3 +9957,4 @@ v0.92.0.11:
     - Closes #7537.
   - Support custom biomes with the unwanted biomes feature, courtesy of Warrior with PR #7540.
   - Fix worldcoord upper corners being in another worldcoord, courtesy of Warrior with PR #7539.
+  - Fix possible ConcurrentModificationException when using /ta plot claim {residentname}
