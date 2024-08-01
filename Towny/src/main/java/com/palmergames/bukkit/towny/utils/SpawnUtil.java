@@ -540,7 +540,7 @@ public class SpawnUtil {
 		// Check if block below is lava or water or nothing
 		Block belowBlock = world.getBlockAt(location.clone().subtract(0, 1, 0));
 		Material belowType = belowBlock.getType();
-		if (ItemLists.AIR_TYPES.contains(belowType) || ItemLists.LIQUID_BLOCKS.contains(type)) {
+		if (ItemLists.NOT_SOLID_BLOCKS.contains(belowType) || ItemLists.LIQUID_BLOCKS.contains(type)) {
 			return false;
 		}
 
