@@ -746,9 +746,10 @@ public class TownyPlayerListener implements Listener {
 		Location from = event.getFrom();
 
 		/*
-		 * Abort if we haven't really moved
+		 * Abort if we haven't really moved, or if the event.getTo() is null (which is allowed...)
 		 */
-		if (from.getBlockX() == to.getBlockX() && from.getBlockZ() == to.getBlockZ() && from.getBlockY() == to.getBlockY()) {
+		if (to == null
+			|| from.getBlockX() == to.getBlockX() && from.getBlockZ() == to.getBlockZ() && from.getBlockY() == to.getBlockY()) {
 			return;
 		}
 
