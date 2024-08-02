@@ -1134,6 +1134,15 @@ public enum ConfigNodes {
 			"# Put in other words: the buffer area around every claim that no other town can claim into.",
 			"# Does not affect towns which are in the same nation.",
 			"# This will prevent town encasement to a certain degree."),
+	CLAIMING_MIN_PLOT_DISTANCE_FROM_OLDER_TOWN_PLOT(
+			"claiming.distance_rules.min_plot_distance_from_older_town_plot",
+			"5",
+			"",
+			"# The minimum number of plots required between a town and older towns. Must be higher than min_plot_distance_from_town_plot.",
+			"# Does not affect towns which are in the same nation when min_distances_ignored_for_towns_in_same_nation is set to true.",
+			"# Does not affect towns which are in the allied when min_distances_ignored_for_towns_in_allied_nation is set to true.",
+			"# This works exactly as min_plot_distance_from_town_plot except that it only affects towns created newer than already-existing towns.",
+			"# This will prevent old towns from being unable to expand outwards towards newer towns, which might have tried to claim-block them."),
 	CLAIMING_MIN_DISTANCE_FROM_TOWN_HOMEBLOCK(
 			"claiming.distance_rules.min_distance_from_town_homeblock",
 			"5",
