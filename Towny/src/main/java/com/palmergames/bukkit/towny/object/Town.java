@@ -1044,13 +1044,18 @@ public class Town extends Government implements TownBlockOwner {
 		for (Location loc : getAllOutpostSpawns()) {
 			i++;
 			TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
-			if (tboutpost != null) {
-				String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
-				if (!name.isEmpty())
-					outpostNames.add(name);
-				else
-					outpostNames.add(String.valueOf(i));
+
+			if (tboutpost == null) {
+				removeOutpostSpawn(loc);
+				save();
+				continue;
 			}
+
+			String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
+			if (!name.isEmpty())
+				outpostNames.add(name);
+			else
+				outpostNames.add(String.valueOf(i));
 		}
 		return outpostNames;
 	}

@@ -638,7 +638,12 @@ public class TownyAPI {
      */
     @Nullable
     public TownBlock getTownBlock(Location location) {
-        WorldCoord worldCoord = WorldCoord.parseWorldCoord(location);
+        WorldCoord worldCoord;
+		try {
+			worldCoord = WorldCoord.parseWorldCoord(location);
+		} catch (IllegalArgumentException ignored) {
+			return null;
+		}
 		return worldCoord.getTownBlockOrNull();
     }
     

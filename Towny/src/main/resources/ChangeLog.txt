@@ -9959,3 +9959,4 @@ v0.92.0.11:
   - Fix worldcoord upper corners being in another worldcoord, courtesy of Warrior with PR #7539.
   - Fix possible ConcurrentModificationException when using /ta plot claim {residentname}
   - Fix potential NPE thrown by PlayerMoveEvent and PlayerTeleportEvents with a null destination location.
+  - Fix potential NPE thrown in outpost name tab completer, caused by outposts in non-existent worlds.
