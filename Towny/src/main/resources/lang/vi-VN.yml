@@ -153,6 +153,7 @@ king_help_3: 'Đặt kẻ thù của bạn.'
 king_help_4: "Rút tiền từ ngân hàng quốc gia của bạn."
 king_help_5: "Thêm hoặc xóa các thị trấn khỏi quốc gia của bạn."
 king_help_6: "Sử dụng /n set ? để được trợ giúp."
+king_help_7: "Sử dụng /t toggle ? để được hướng dẫn."
 king_help_8: "Sử dụng đế sát nhập một lãnh thổ khác vào quốc gia của bạn."
 king_help_9: "Được sử dụng để nhắn tin cho tất cả mọi người trong quốc gia của bạn."
 res_1: 'Trạng thái của bạn'
@@ -384,4 +385,5 @@ msg_already_claimed_2: '&cKhu vực này đã được sở hữu.'
 msg_too_close: '&cKhu vực này quá gần với thị trấn khác.'
 msg_town_spawn_warmup: '&bĐang chờ dịch chuyển...'
 msg_town_set_name: '&b%s đã đổi tên thị trấn thành %s.'
+msg_err_dont_belong_town: '&cBạn không thuộc thị trấn nào.'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Bạn đã được thả ra vì những người cai tù của bạn không còn đủ khả năng để giam cầm bạn.'
