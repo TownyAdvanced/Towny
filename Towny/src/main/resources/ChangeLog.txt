@@ -9960,3 +9960,4 @@ v0.92.0.11:
   - Fix possible ConcurrentModificationException when using /ta plot claim {residentname}
   - Fix potential NPE thrown by PlayerMoveEvent and PlayerTeleportEvents with a null destination location.
   - Fix potential NPE thrown in outpost name tab completer, caused by outposts in non-existent worlds.
+  - Fix SQL Databases loading towns, nations, and worlds which had not been properly registered in the TownyUniverse. 

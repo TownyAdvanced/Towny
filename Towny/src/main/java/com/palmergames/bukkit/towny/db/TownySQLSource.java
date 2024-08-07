@@ -908,6 +908,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			 Statement s = connection.createStatement();
 			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "TOWNS ")) {
 			while (rs.next()) {
+				String townName;
+				try {
+					townName = rs.getString("name");
+				} catch (SQLException ex) {
+					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a town name from SQL Database. Skipping loading town..", ex);
+					continue;
+				}
+				Town town = universe.getTown(townName);
+				if (town == null) {
+					plugin.getLogger().severe(String.format("Loading Error: Could not fetch town '%s' from Towny universe while loading from SQL DB.", townName));
+					continue;
+				}
+
 				if (!loadTown(rs)) {
 					plugin.getLogger().warning("Loading Error: Could not read town data properly.");
 					return false;
@@ -1221,6 +1234,19 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "NATIONS")) {
 			
 			while (rs.next()) {
+				String nationName;
+				try {
+					nationName = rs.getString("name");
+				} catch (SQLException ex) {
+					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a nation name from SQL Database. Skipping loading nation..", ex);
+					continue;
+				}
+				Nation nation = universe.getNation(nationName);
+				if (nation == null) {
+					plugin.getLogger().severe(String.format("Loading Error: Could not fetch nation '%s' from Towny universe while loading from SQL DB.", nationName));
+					continue;
+				}
+
 				if (!loadNation(rs)) {
 					plugin.getLogger().warning("Loading Error: Could not properly read nation data.");
 					return false;
@@ -1394,6 +1420,18 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "WORLDS")) {
 
 			while (rs.next()) {
+				String worldName;
+				try {
+					worldName = rs.getString("name");
+				} catch (SQLException ex) {
+					plugin.getLogger().log(Level.SEVERE, "Loading Error: Error fetching a world name from SQL Database. Skipping loading world..", ex);
+					continue;
+				}
+				TownyWorld world = universe.getWorld(worldName);
+				if (world == null) {
+					plugin.getLogger().severe(String.format("Loading Error: Could not fetch world '%s' from Towny universe while loading from SQL DB.", worldName));
+					continue;
+				}
 				if (!loadWorld(rs)) {
 					plugin.getLogger().warning("Loading Error: Could not read properly world data.");
 					return false;
