@@ -152,10 +152,35 @@ king_help_2: 'Đặt liên minh của bạn.'
 king_help_3: 'Đặt kẻ thù của bạn.'
 king_help_4: "Rút tiền từ ngân hàng quốc gia của bạn."
 king_help_5: "Thêm hoặc xóa các thị trấn khỏi quốc gia của bạn."
+king_help_6: "Sử dụng /n set ? để được trợ giúp."
+king_help_7: "Sử dụng /t toggle ? để được hướng dẫn."
+king_help_8: "Sử dụng đế sát nhập một lãnh thổ khác vào quốc gia của bạn."
+king_help_9: "Được sử dụng để nhắn tin cho tất cả mọi người trong quốc gia của bạn."
 res_1: 'Trạng thái của bạn'
 res_2: '[Cư dân]'
 res_3: 'Trạng thái của người chơi mục tiêu'
 res_4: 'Liệt kê tất cả những người chơi đang hoạt động'
+res_9: "Bạn sẽ phải trả bao nhiêu thuế mỗi ngày."
+res_13: "Di chuyển đến đại sảnh của thi trấn hoặc home."
+res_toggle_help_0: "Chuyển đổi trạng thái chiến đấu trong mảnh đất."
+res_toggle_help_1: "Chuyển đổi trạng thái cháy lan trong mảnh đất của bạn."
+res_toggle_help_2: "Chuyển đổi trạng thái của thực thể trong mảnh đất của bạn."
+res_toggle_help_3: "Chuyển đổi trạng thái nổ trong mảnh đất của bạn."
+res_toggle_help_4: "Chuyển đổi vòng bảo vệ trong mảnh đất."
+res_toggle_help_5: "Chuyển đổi hiển thị liên tục vòng bảo vệ trong mảnh đất."
+res_toggle_help_6: "Chuyển đổi hiển thị biên giới thị trấn."
+res_toggle_help_7: "Chuyển đổi thông báo về mảnh đất."
+res_toggle_help_8: "Chuyển đổi chiếm đóng khu vực khi đi bộ."
+res_toggle_help_9: "Chuyển đổi bản đồ khi bạn thay đổi khu vực của mình."
+res_toggle_help_10: "Xóa bỏ mọi chế độ."
+res_toggle_help_10.5: "Xóa bỏ tất cả các chế độ và áp dụng về mặc định."
+res_toggle_help_11: "Bật theo dõi kênh trò chuyện."
+res_toggle_help_12: "Chuyển đổi thêm mảnh đất vào một nhóm khu vực mà bạn đã bắt đầu."
+res_toggle_help_13: "Chuyển đổi tin nhắn khi bạn thay đổi khu đất."
+res_toggle_help_14: "Chuyển đổi hủy chiếm đất khi bạn đi bộ."
+res_toggle_help_15: "Chuyển đổi hiển thị Infotool để xem thông tin khối/thực thể thích hợp."
+res_toggle_help_16: "Chuyển đổi hủy kích hoạt quản trị viên cho bạn."
+res_jail_help_0: "Thanh toán chi phí để được bảo lãnh ra tù."
 res_set_help_2: "Đặt chế độ của cư dân của bạn."
 mode_1: 'Hiển thị bản đồ giữa các mảnh đất'
 mode_2: 'Chiếm đất khi bạn đi bộ tới'
@@ -347,7 +372,7 @@ msg_not_claimable: '&cThế giới này không cho phép chiếm đất.'
 msg_abandoned_area: '&bĐã vứt bỏ vùng %s'
 msg_admin_unclaim_area: '&cĐã bắt buộc huỷ sở hữu khu vực %s'
 msg_abandoned_area_1: '&bThị trấn của bạn đã huỷ sở hữu khu vực'
-msg_no_money_purchase_plot: '&cBạn không có đủ tiền để mua mảnh đất này.'
+msg_no_money_purchase_plot: '&cThị trấn không có đủ tiền để mua mảnh đất này.'
 msg_town_no_money_purchase_plot: '&cThị trấn không có đủ tiền để mua mảnh đất này.'
 msg_no_funds_claim: '&cThị trấn không đủ khả năng sở hữu mảnh đất %s tốn %s. Hãy thêm nhiều tiền hơn vào ngân hàng.'
 msg_no_funds_to_buy: '&cThị trấn không đủ khả năng mua %s mảnh đất %s tốn %s. Hãy thêm nhiều tiền hơn vào ngân hàng.'
@@ -360,4 +385,7 @@ msg_already_claimed_2: '&cKhu vực này đã được sở hữu.'
 msg_too_close: '&cKhu vực này quá gần với thị trấn khác.'
 msg_town_spawn_warmup: '&bĐang chờ dịch chuyển...'
 msg_town_set_name: '&b%s đã đổi tên thị trấn thành %s.'
+msg_err_dont_belong_town: '&cBạn không thuộc thị trấn nào.'
+msg_err_command_disable: '&cBạn không có đủ quyền để thực hiện lệnh này.'
+tc_err_you_dont_have_mute_perms: 'Bạn không có đủ quyền để cấm mõm người khác'
 msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Bạn đã được thả ra vì những người cai tù của bạn không còn đủ khả năng để giam cầm bạn.'
