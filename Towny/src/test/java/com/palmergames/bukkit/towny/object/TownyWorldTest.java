@@ -1,17 +1,15 @@
 package com.palmergames.bukkit.towny.object;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.command.TownyCommand;
 import be.seeseemelk.mockbukkit.MockBukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.bukkit.Location;
 
 class TownyWorldTest {
 
@@ -19,11 +17,7 @@ class TownyWorldTest {
 	static void init() {
 		MockBukkit.getOrCreateMock();
 		TownySettings.loadDefaultConfig();
-	}
-
-	@BeforeEach
-	void reset() {
-		// TownySettings.getConfig().set(ConfigNodes.X.getRoot(), 0);
+		// new Towny();
 	}
 
 	@Test
@@ -32,19 +26,40 @@ class TownyWorldTest {
 		Town town = new Town("testTown");
 		town.setWorld(world);
 
-		// Player testTownOwnerPlayer = MockBukkit.getOrCreateMock().addPlayer("testTownOwner");
-		// Resident testTownOwner = new Resident(testTownOwnerPlayer.getName());
-		// town.setMayor(testTownOwner);
-		// add a claim to the town
-		// town.addClaim(new TownBlock(town, new WorldCoord(town.getWorld(), 0, 0)));
-		// Towny plugin = MockBukkit.load(Towny.class);
-		// Player player = null;
-		// new TownClaim(plugin, player, town, List.of(new WorldCoord("world", 0, 0)), false, true, false, false);
 		assertTrue(world.hasTowns());
 		assertTrue(world.worldCoordNotTooCloseToOtherTowns(new Coord(0, 0), town));
-		// TownyCommand.onCommand(testTownOwnerPlayer, @NotNull Command cmd, @NotNull String label, String[] args);
-		// Run command to claim a townblock
-		// testTownOwnerPlayer.teleport(new Location(MockBukkit.getOrCreateMock().getWorld("world"), 1, 0, 1));
-		// testTownOwnerPlayer.performCommand("town claim");
 	}
+
+	@ParameterizedTest
+	@CsvSource({"0,0, 0,0,0,false", "0,1, 0,0,0,true", "0,1, 1,0,0,false", "0,1, 0,1,0,false", "0,1, 0,0,1,false", "0,2, 1,0,0,true",
+			"0,2, 0,1,0,true", "0,2, 0,0,1,true"})
+	void testTownCreationWithOneOtherTown(int x, int z, int minDistanceBetweenHomeblocks, int minPlotDistanceFromTownPlot,
+			int minPlotDistanceFromOlderTownPlot, boolean expected) {
+		TownySettings.getConfig().set(ConfigNodes.CLAIMING_MIN_DISTANCE_BETWEEN_HOMEBLOCKS.getRoot(), minDistanceBetweenHomeblocks);
+		TownySettings.getConfig().set(ConfigNodes.CLAIMING_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT.getRoot(), minPlotDistanceFromTownPlot);
+		TownySettings.getConfig().set(ConfigNodes.CLAIMING_MIN_PLOT_DISTANCE_FROM_OLDER_TOWN_PLOT.getRoot(),
+				minPlotDistanceFromOlderTownPlot);
+		TownyWorld world = new TownyWorld("world");
+		Town oldTown = new Town("oldTown");
+		oldTown.setUUID(UUID.randomUUID());
+		oldTown.setWorld(world);
+		TownBlock townBlock = new TownBlock(0, 0, world);
+		// townBlock.setTown(oldTown);
+		// Upper line throws:
+		// java.lang.IllegalStateException: Attempted to use getPlugin() while the plugin is null, are you shading Towny? If you do not
+		// understand this message, join the Towny discord using https://discord.com/invite/gnpVs5m and ask for support.
+		// at com.palmergames.bukkit.towny.Towny.getPlugin(Towny.java:764)
+		// at com.palmergames.bukkit.towny.TownyUniverse.(TownyUniverse.java:100)
+		// at com.palmergames.bukkit.towny.TownyUniverse.getInstance(TownyUniverse.java:106)
+		// at com.palmergames.bukkit.towny.object.TownBlock.setTown(TownBlock.java:79)
+		// at com.palmergames.bukkit.towny.object.TownBlock.setTown(TownBlock.java:68)
+
+		Town newTown = new Town("newTown");
+		newTown.setUUID(UUID.randomUUID());
+		newTown.setWorld(world);
+
+
+		assertEquals(expected, world.worldCoordNotTooCloseToOtherTowns(new Coord(x, z), newTown));
+	}
+
 }
