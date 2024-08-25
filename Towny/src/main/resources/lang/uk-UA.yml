@@ -1412,8 +1412,6 @@ confirmation_unclaiming_costs: 'Зняття привату з цієї діля
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Зачекайте %s секунд перед тим, як ви зможете змінити ім''я вашого міста знову.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Задача вже запланована.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Ви зможете перемкнути нейтралітет через %s секунд.'
