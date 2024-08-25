@@ -1072,7 +1072,7 @@ public class TownyPlayerListener implements Listener {
 		return keepInventory;
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onArmourDamageEvent(PlayerItemDamageEvent event) {
 		if (!TownySettings.arenaPlotPreventArmourDegrade())
 			return;
