@@ -1282,6 +1282,7 @@ gui_title_towny_wildsblocks: 'Lista Bloków Dziczy Towny'
 gui_title_towny_itemuse: 'Przykłady uprawnienia ItemUse'
 gui_title_towny_switch: 'Przykłady Przełączania'
 gui_title_towny_plotclear: 'Lista bloków usuwanych razem z działką'
+flatfile_dbg_district_file_missing_town_delete: 'Plik okręgu brakuje miasta, usuwanie %s'
 msg_ta_removed_all_titles_and_surnames_removed: 'Wszyscy mieszkańcy zostali pozbawieni swoich tytułów i nazwisk.'
 msg_err_homeblock_already_set_here: 'Ta działka już jest Blokiem Macierzystym twojego miasta.'
 #Added in 0.100
