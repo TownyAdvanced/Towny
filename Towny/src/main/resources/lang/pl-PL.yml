@@ -1642,8 +1642,6 @@ confirmation_unclaiming_costs: 'Porzucenie tej ziemi będzie kosztować %s, czy 
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Musisz poczekać %s sekund przed ponowną zmianą nazwy miasta.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Wydarzenie Nowy Dzień jest już zaplanowane.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Nie możesz zmienić statusu neutralności, odczekaj %s sekund.'
