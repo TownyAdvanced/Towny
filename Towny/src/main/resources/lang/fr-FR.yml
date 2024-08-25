@@ -1454,8 +1454,6 @@ confirmation_unclaiming_costs: 'Désannexer cette terre vous coûtera %s, voulez
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Vous devez attendre %s secondes avant de pouvoir renommer votre ville à nouveau.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Une nouvelle tâche journalière est déjà prévue pour bientôt.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Vous ne pouvez pas activer/désactiver la neutralité, %s secondes restantes.'
