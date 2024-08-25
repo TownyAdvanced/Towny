@@ -1554,8 +1554,6 @@ confirmation_unclaiming_costs: 'Расприват будет стоить %s, �
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Вы сможете снова сменить название вашего города через %s секунд.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Задача уже запланирована.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Вы сможете переключить нейтралитет через %s секунд.'
