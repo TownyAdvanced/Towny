@@ -1398,8 +1398,6 @@ confirmation_unclaiming_costs: 'Rimuovere questo lotto costerà %s, si desidera 
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Devi aspettare %s secondi prima di poter rinominare nuovamente la tua città.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Un nuovo giorno di lavoro è già programmato.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Non puoi attivare/disattivare la neutralità, rimanenti %s secondi.'
