@@ -1720,8 +1720,6 @@ confirmation_unclaiming_costs: '取消这片土地将消耗 %s，你想要继续
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必须再等待%s秒才能重命名你的城镇。'
-#Added in 1.141
-msg_newday_already_scheduled_soon: '一个新的一天的任务已经被安排在之后执行。'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: '你必须等待%s秒后才可以再次调整中立性。'
