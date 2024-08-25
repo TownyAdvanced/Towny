@@ -1325,8 +1325,6 @@ confirmation_unclaiming_costs: 'Att unclaima denna mark kommer kosta %s, vill du
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Du måste vänta %s sekunder innan du kan namn ändra din stad igen.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'En ny dagsuppgift är redan planerad att ske snart.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Du kan inte växla neutralitet, %s sekunder kvar.'
