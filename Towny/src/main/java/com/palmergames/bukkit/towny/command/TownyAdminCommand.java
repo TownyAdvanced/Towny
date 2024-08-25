@@ -903,8 +903,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private void parseAdminNewDay(CommandSender sender) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NEWDAY.getNode());
-		if (NewDayScheduler.isNewDayScheduled())
-			throw new TownyException(Translatable.of("msg_newday_already_scheduled_soon"));
 		if (NewDayScheduler.isNewDayRunning())
 			throw new TownyException(Translatable.of("msg_newday_already_running"));
 

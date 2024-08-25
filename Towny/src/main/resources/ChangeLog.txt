@@ -9961,3 +9961,5 @@ v0.92.0.11:
   - Fix potential NPE thrown by PlayerMoveEvent and PlayerTeleportEvents with a null destination location.
   - Fix potential NPE thrown in outpost name tab completer, caused by outposts in non-existent worlds.
   - Fix SQL Databases loading towns, nations, and worlds which had not been properly registered in the TownyUniverse. 
+0.100.3.13:
+  - Fix /ta newday not working.
