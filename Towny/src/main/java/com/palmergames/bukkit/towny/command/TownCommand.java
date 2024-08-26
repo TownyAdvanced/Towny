@@ -4121,19 +4121,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void parseTownTrustTownCommand(CommandSender sender, String[] args, @Nullable Town town) throws TownyException {
 
-		if (args.length < 1
-			|| args.length < 2 && ("add".equalsIgnoreCase(args[0]) || "remove".equalsIgnoreCase(args[0]))
-			|| args.length == 1 && !"list".equalsIgnoreCase(args[0])) {
+		if (args.length < 1) {
 			HelpMenu.TOWN_TRUSTTOWN_HELP.send(sender);
 			return;
 		}
-		
+
 		if (town == null && sender instanceof Player player) {
 			town = getTownFromPlayerOrThrow(player);
 			catchRuinedTown(player);
 		}
+
 		if ("list".equalsIgnoreCase(args[0])) {
 			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("status_trustedlist").forLocale(sender), new ArrayList<>(town.getTrustedTowns())));
+			return;
+		}
+
+		if (args.length < 2) {
+			HelpMenu.TOWN_TRUSTTOWN_HELP.send(sender);
 			return;
 		}
 
@@ -4141,40 +4145,40 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Town trustTown = getTownOrThrow(args[1]);
 
-		if (args[0].equalsIgnoreCase("add")) {
-			if (town.hasTrustedTown(trustTown)) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
-				return;
-			}
-			else if (town == trustTown) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
-				return;
-			}
-			BukkitTools.ifCancelledThenThrow(new TownTrustTownAddEvent(sender, trustTown, town));
-			@Nullable Town finalTown = town;
-			Confirmation.runOnAccept(()-> {
-					trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
-
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", trustTown.getName(), Translatable.of("town_sing")));
-					finalTown.addTrustedTown(trustTown);
-				})
-				.setTitle(Translatable.of("confirmation_msg_trusttown_consequences"))
-				.sendTo(sender);
-		} else if (args[0].equalsIgnoreCase("remove")) {
-			if (!town.hasTrustedTown(trustTown)) {
-				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_trusted", trustTown.getName(), Translatable.of("town_sing")));
-				return;
-			}
-			BukkitTools.ifCancelledThenThrow(new TownTrustTownRemoveEvent(sender, trustTown, town));
-			town.removeTrustedTown(trustTown);
-			trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", trustTown.getName(), Translatable.of("town_sing")));
-		} else {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_property", args[0]));
-			return;
+		switch (args[0].toLowerCase(Locale.ROOT)) {
+		case "add" -> parseTownTrustTownAddCommand(sender, town, trustTown);
+		case "remove" -> parseTownTrustTownRemoveCommand(sender, town, trustTown);
+		default -> HelpMenu.TOWN_TRUSTTOWN_HELP.send(sender);
 		}
+	}
 
+	private static void parseTownTrustTownAddCommand(CommandSender sender, Town town, Town trustTown) throws TownyException {
+		if (town.hasTrustedTown(trustTown))
+			throw new TownyException(Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
+
+		if (town == trustTown)
+			throw new TownyException(Translatable.of("msg_cannot_trust_your_own_town"));
+
+		BukkitTools.ifCancelledThenThrow(new TownTrustTownAddEvent(sender, trustTown, town));
+		Confirmation.runOnAccept(()-> {
+				town.addTrustedTown(trustTown);
+				town.save();
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_added", trustTown.getName(), Translatable.of("town_sing")));
+				trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
+			})
+			.setTitle(Translatable.of("confirmation_msg_trusttown_consequences"))
+			.sendTo(sender);
+	}
+
+	private static void parseTownTrustTownRemoveCommand(CommandSender sender, Town town, Town trustTown) throws TownyException {
+		if (!town.hasTrustedTown(trustTown))
+			throw new TownyException(Translatable.of("msg_not_trusted", trustTown.getName(), Translatable.of("town_sing")));
+
+		BukkitTools.ifCancelledThenThrow(new TownTrustTownRemoveEvent(sender, trustTown, town));
+		town.removeTrustedTown(trustTown);
 		town.save();
+		trustTown.getResidents().forEach(res -> plugin.deleteCache(res));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_trusted_removed", trustTown.getName(), Translatable.of("town_sing")));
 	}
 
 	public static List<String> getTrustedResidentsFromResident(Player player){
