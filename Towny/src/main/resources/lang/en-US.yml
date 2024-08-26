@@ -1746,6 +1746,7 @@ permission_gui_header: 'Towny Permission GUI'
 msg_last_edited: '&7&oLast changed at %s by %s.'
 msg_trusted_added: '&bAdded %s as trusted in this %s.' # Last %s is either town or townblock
 msg_already_trusted: '&b%s is already trusted in this %s.'
+msg_cannot_trust_your_own_town: '&bYou cannot trust your own town.'
 msg_trusted_added_2: '&b%s has trusted you in a %s: %s.' # Last %s is the town name or worldcoord.
 msg_not_trusted: '&b%s is not trusted in this %s.'
 msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
