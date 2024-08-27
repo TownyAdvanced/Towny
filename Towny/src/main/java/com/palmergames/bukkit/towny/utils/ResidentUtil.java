@@ -137,8 +137,12 @@ public class ResidentUtil {
 	
 	public static void openGUIInventory(Resident resident, Collection<Material> set, String name) {
 		ArrayList<ItemStack> items = new ArrayList<>();
-		for (Material material : set)
+		for (Material material : set) {
+			if (!material.isItem())
+				continue;
+			
 			items.add(new ItemStack(material));
+		}
 		
 		createTownyGUI(resident, items, name);
 	}
