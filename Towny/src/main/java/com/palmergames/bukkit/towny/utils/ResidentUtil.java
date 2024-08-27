@@ -43,6 +43,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import com.palmergames.bukkit.util.MaterialUtil;
 import com.palmergames.util.TimeMgmt;
 
 import net.kyori.adventure.text.Component;
@@ -138,8 +139,11 @@ public class ResidentUtil {
 	public static void openGUIInventory(Resident resident, Collection<Material> set, String name) {
 		ArrayList<ItemStack> items = new ArrayList<>();
 		for (Material material : set) {
-			if (!material.isItem())
-				continue;
+			if (!material.isItem()) {
+				material = MaterialUtil.getItemFromMaterial(material);
+				if (material == null)
+					continue;
+			}
 			
 			items.add(new ItemStack(material));
 		}
