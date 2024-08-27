@@ -848,8 +848,6 @@ confirmation_unclaiming_costs: 'Ang pag-alis sa pag-aangkin sa lupaing ito ay na
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Kailangan mong maghintay ng %s segundo bago mo muling mapalitan ang pangalan ng iyong bayan.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Ang isang bagong araw na gawain ay naka-iskedyul na mangyari sa lalong madaling panahon.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Hindi mo maaaring i-toggle ang neutrality, %s segundo ang natitira.'

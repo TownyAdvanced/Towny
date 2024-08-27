@@ -1282,6 +1282,7 @@ gui_title_towny_wildsblocks: 'Lista Bloków Dziczy Towny'
 gui_title_towny_itemuse: 'Przykłady uprawnienia ItemUse'
 gui_title_towny_switch: 'Przykłady Przełączania'
 gui_title_towny_plotclear: 'Lista bloków usuwanych razem z działką'
+flatfile_dbg_district_file_missing_town_delete: 'Plik okręgu brakuje miasta, usuwanie %s'
 msg_ta_removed_all_titles_and_surnames_removed: 'Wszyscy mieszkańcy zostali pozbawieni swoich tytułów i nazwisk.'
 msg_err_homeblock_already_set_here: 'Ta działka już jest Blokiem Macierzystym twojego miasta.'
 #Added in 0.100
@@ -1642,8 +1643,6 @@ confirmation_unclaiming_costs: 'Porzucenie tej ziemi będzie kosztować %s, czy 
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Musisz poczekać %s sekund przed ponowną zmianą nazwy miasta.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Wydarzenie Nowy Dzień jest już zaplanowane.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Nie możesz zmienić statusu neutralności, odczekaj %s sekund.'

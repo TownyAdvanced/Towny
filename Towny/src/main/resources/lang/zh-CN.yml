@@ -71,8 +71,8 @@ town_help_15: "参见该镇被放逐者名单。"
 town_help_16: "参见该镇地皮组的清单。"
 town_help_17: "参见该镇的地皮类型清单。"
 town_help_18: "向该镇成员发送一条消息"
-town_help_19: "将您的城镇设置为出售，可供其他玩家购买。"
-town_help_20: "设置您的城镇状态为不供出售"
+town_help_19: "将您的城镇设置为“出售”，可供其他玩家购买。"
+town_help_20: "将您的城镇设置为“不出售”。"
 town_help_21: "购买给定的城镇（只要它是出售的）。"
 town_help_22: "向您的城镇银行存钱。"
 town_help_23: "用来修改您城镇居民的头衔。"
@@ -827,6 +827,9 @@ you_have_been_requested_to_ally: '你被要求结盟 '
 this_message_will_expire: '这将在 20 秒内自动过期'
 player_sing: '玩家'
 nation_zone_this_area_under_protection_of: '这部分 %s 已受保护 %s'
+nation_zone_conquered_status_denies_use: "你城镇的被占领状态使你无法使用这块国域。"
+nation_zone_conquered_status_denies_use_2: "你无法使用这块被占领城镇的国域。"
+nation_spawn_not_allowed_for_conquered_towns: "您城镇的被占领状态使您无法传送到你国家的传送点。"
 #Added in 0.42
 you_have_been_invited_to_join2: '你被邀请加入 %s'
 you_have_been_requested_to_ally2: '你被要求和 %s 结盟'
@@ -1717,8 +1720,6 @@ confirmation_unclaiming_costs: '取消这片土地将消耗 %s，你想要继续
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必须再等待%s秒才能重命名你的城镇。'
-#Added in 1.141
-msg_newday_already_scheduled_soon: '一个新的一天的任务已经被安排在之后执行。'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: '你必须等待%s秒后才可以再次调整中立性。'
@@ -2075,3 +2076,4 @@ msg_new_resident_spawn_to_town_prompt: "你想传送到你刚刚加入的城镇�
 msg_recieved_refund_for_deleted_object: "您收到了您已删除的城镇或民族的银行余额，金额为 %s。"
 msg_err_you_already_own_this_plot: "你已经拥有这个区块。"
 msg_err_you_cannot_delete_this_nation: "您已被阻止删除这个国家。"
+msg_err_you_cannot_join_town_you_have_not_played_long_enough: "你在服务器上的时间尚不够长，须再等待 %s 后才可加入一座城镇。"

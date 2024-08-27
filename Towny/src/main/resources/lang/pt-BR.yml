@@ -1131,6 +1131,7 @@ gui_title_towny_wildsblocks: 'Lista de Towny WildsBlocks'
 gui_title_towny_itemuse: 'Lista de Itens da Cidade Uso'
 gui_title_towny_switch: 'Lista de interruptores urbanos'
 gui_title_towny_plotclear: 'Terreno de Terreno Limpar Lista de Apagar'
+flatfile_dbg_district_file_missing_town_delete: 'Arquivo de distrito sem cidade, excluindo %s'
 msg_ta_removed_all_titles_and_surnames_removed: 'Todos os residentes tiveram os seus títulos e apelidos removidos.'
 msg_err_homeblock_already_set_here: 'Este local já é o principal bloco da sua cidade.'
 #Added in 0.100

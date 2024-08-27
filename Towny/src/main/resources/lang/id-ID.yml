@@ -1331,8 +1331,6 @@ confirmation_unclaiming_costs: 'Tidak mengeklaim lahan ini akan seharga %s, apak
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Anda harus menunggu %s detik sebelum dapat menamai ulang kota Anda lagi.'
-#Added in 1.141
-msg_newday_already_scheduled_soon: 'Tugas harian baru telah dijadwalkan untuk segera tiba.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Anda tidak dapat mengalihkan netralitas, tersisa %s detik lagi.'
