@@ -895,6 +895,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.getSaveDatabase().equalsIgnoreCase("mysql") && TownySettings.getLoadDatabase().equalsIgnoreCase("mysql")) {
 			TownyDataSource dataSource = new TownyFlatFileSource(plugin, TownyUniverse.getInstance());
 			dataSource.saveAll();
+			dataSource.finishTasks();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_mysql_dump_success"));
 			return;
 		}
