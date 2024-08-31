@@ -9966,3 +9966,6 @@ v0.92.0.11:
   - Break /t trusttown subcommands into separate methods.
   - Add MaterialUtil, which includes a method to grab Materials with an item from Materials with no corresponding item.
   - Don't attempt to display non-items in guis, courtesy of Warrior with PR #7576.
+0.100.3.14:
+  - Fix NPE when player without town tab completes /t outpost, courtesy of Warrior with PR #7581.
+    - Closes #7580.
