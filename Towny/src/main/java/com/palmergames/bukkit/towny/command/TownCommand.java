@@ -380,7 +380,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "outpost":
 			if (args.length == 2) {
-				List<String> outpostNames = town.getOutpostNames();
+				List<String> outpostNames = town == null ? new ArrayList<>() : town.getOutpostNames();
 				outpostNames.add("list");
 				return NameUtil.filterByStart(outpostNames, args[1]);
 			}
