@@ -140,6 +140,7 @@ nation_set_help_8: "Définissez le point d'apparition de la nation."
 nation_toggle_help_0: "Active/désactive le statut pacifique de la nation."
 nation_toggle_help_1: "Active/désactive le statut public, permettant aux non-résidents d'utiliser /n spawn."
 nation_toggle_help_2: "Active/désactive le statut ouvert, permettant aux villes de rejoindre sans invitation."
+nation_toggle_help_3: "Active/désactive le pourcentage de taxe, ce qui fait que les villes paient un pourcentage au lieu d'un taux fixe."
 nation_sanction_help_1: "Ajoute une ville à la liste des villes sanctionnées."
 nation_sanction_help_2: "Supprime une ville de la liste des villes sanctionnées."
 nation_sanction_help_3: "Liste les villes sanctionnées par votre nation."
@@ -149,6 +150,7 @@ king_help_2: 'Gérer vos alliances.'
 king_help_3: 'Gérer vos ennemis.'
 king_help_4: "Retirez de l'argent de votre banque nationale."
 king_help_5: "Ajouter ou supprimer des villes de votre nation."
+king_help_6: "."
 res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
