@@ -11,6 +11,15 @@ help_0: 'Allmän hjälp för Towny'
 help_1: 'Testa några av följande kommandon för att lära dig mer om Towny.'
 help_2: 'Stadschatt'
 help_3: 'Nationschatt'
+help_4: 'Invånare kommando hjälp.'
+help_5: 'Stad kommando hjälp.'
+help_6: 'Land kommando hjälp.'
+help_7: 'Tomt kommando hjälp.'
+help_8: 'Tony kommando hjälp.'
+help_9: 'Townyadmin kommando hjälp.'
+towny_help_0: "Allmän hjälp för Towny"
+towny_help_1: "Visar en karta över närliggande townblockar"
+towny_help_2: "Visar priserna använd genom Ekonomi"
 town_help_1: 'Skriver ut information om din stad i chatten.'
 town_help_2: '[borgmästare]'
 town_help_3: 'Information om den staden.'
