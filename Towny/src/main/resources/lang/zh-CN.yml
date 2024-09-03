@@ -879,10 +879,13 @@ msg_err_over_outposts_limit: '你无法传送到城镇前哨, 已经超过你的
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '被放逐者：' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: '被放逐者：'
 online: '&a(在线)'
-registered_last_online: '&2注册时间: &a%s &8| &2最后在线: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: '权限：' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2注册时间: &a%s &8| &2最后在线: &a%s'
+#Used on /plot perm, /res
+status_perm: '权限：'
 status_on: '&4开'
 status_off: '&a关'
 status_on_good: '&a开'
@@ -1341,7 +1344,8 @@ msg_town_destroyed_by_nation_tax: '&b被占领的城镇%s因无力上缴国税�
 msg_town_destroyed_by_nation_tax_multiple: '&b以下被占领城镇因无力上缴国税而倒闭： '
 msg_your_town_was_exempt_from_the_nation_tax: '&b你的城镇被免除了国税。'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: '倒闭状态'
 msg_comptype_bankrupt: '破产状态'
 msg_ruined: '&c（已倒闭）'
@@ -1481,10 +1485,12 @@ status_trustedlist: '已信任'
 msg_click_to_edit: '&b点击编辑。'
 permission_gui_header: 'Towny权限面板'
 msg_last_edited: '&7&o上一次更改于%s，由%s更改。'
-msg_trusted_added: '&b成功在此%2$s中信任%1$s。' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b成功在此%2$s中信任%1$s。'
 msg_already_trusted: '&b%s已被信任于此%s。'
 msg_cannot_trust_your_own_town: '&b你不能信任你自己的城镇'
-msg_trusted_added_2: '&b%s将你列入了%s%s的信任列表中。' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s将你列入了%s%s的信任列表中。'
 msg_not_trusted: '&b%s未受此%s的信任。'
 msg_trusted_removed: '&b%s不再受此%s的信任。'
 msg_trusted_removed_2: '&b%s取消了你在%s%s的信任。'
