@@ -19,7 +19,7 @@ nomad:
     - towny.command.plot.perm.hud
     - towny.command.plot.trust
     - towny.command.nation.list.*
-    - towny.command.nation.townlist  
+    - towny.command.nation.townlist
     - towny.command.nation.allylist
     - towny.command.nation.enemylist
     - towny.command.nation.ranklist
@@ -80,7 +80,7 @@ towns:
             - towny.command.town.unjail
             - towny.command.town.jail.list
             - towny.outlaw.jailer
-            
+
 # This section of permissions covers players who are members of any town in a nation.
 nations:
     default:
@@ -97,7 +97,7 @@ nations:
     king:
         - towny.command.nation.*
         - towny.command.nation.deposit.other
-        
+
     ranks:
         assistant:
             - towny.command.nation.rank.helper

@@ -41,7 +41,7 @@ description: Language file for all game messages for this Locale.
 # and formatting. Learn about MiniMessage formatting here:
 # https://docs.adventure.kyori.net/minimessage/format.html
 #
-# 
+#
 
 default_towny_prefix: '&6[Towny] &b'
 default_town_prefix: '&6[%s] &b'
@@ -201,8 +201,8 @@ nation_set_help_5: "Set the title or surname of one of your residents."
 nation_set_help_6: "Set the nation tag."
 nation_set_help_7: "Set the nation board message."
 nation_set_help_8: "Set the nation spawn point."
-nation_set_help_9: "Set the cost to use /n spawn." 
-nation_set_help_10: "Set the mapcolor used in Mapping plugins." 
+nation_set_help_9: "Set the cost to use /n spawn."
+nation_set_help_10: "Set the mapcolor used in Mapping plugins."
 
 nation_toggle_help_0: "Toggles peaceful status of the nation."
 nation_toggle_help_1: "Toggles public status, allowing non-residents to use /n spawn."
@@ -1005,10 +1005,16 @@ msg_err_over_outposts_limit: 'You cannot teleport to your outpost, you are over 
 # These are translated because we may (or may not) be handling longer words in a smart way.
 # If you are a translator feel free to skip over this section, as it may or may not appear very nice
 # in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:'                    # Used on /t outlawlist
+
+# Used on /t outlawlist
+outlaws: 'Outlaws:'
 online: '&a(Online)'
-registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Perm:'                     # Used on /plot perm, /res
+
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registered: &a%s &8| &2Last Online: &a%s'
+
+# Used on /plot perm, /res
+status_perm: 'Perm:'
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'
@@ -1150,11 +1156,15 @@ msg_total_townblocks: 'Total TownBlocks: '
 
 # Added in 0.50
 friend_list: 'Friends List'
-                         # The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
-                         # nationranks lists on the /nation screen; and probably more lists of residents.
-res_format_list_1: '&2'  #First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
-res_format_list_2: '&a'  #Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
-res_format_list_3: '&f'  #Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
+
+# The following formatting lists apply to friends lists on the /res screen; townranks lists on the /town screen;
+# nationranks lists on the /nation screen; and probably more lists of residents.
+#First colour applied to Resident lists, ex: on /res, the friend list's Friends section.
+res_format_list_1: '&2'
+#Second colour applied to Resident lists, ex: on /res, the friend list's [1] section.
+res_format_list_2: '&a'
+#Third colour applied to Resident lists, ex: on /res, the friend list's list of friends' names section.
+res_format_list_3: '&f'
 townboard_message_colour_1: '&6'
 townboard_message_colour_2: '&e'
 nationboard_message_colour_1: '&6'
@@ -1530,7 +1540,8 @@ msg_town_destroyed_by_nation_tax_multiple: '&bThe following conquered towns coul
 msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the nation tax.'
 
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' # The Build = ---- Destroy = ---- seen in the status screen.
+# The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
@@ -1744,10 +1755,12 @@ status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Click to edit.'
 permission_gui_header: 'Towny Permission GUI'
 msg_last_edited: '&7&oLast changed at %s by %s.'
-msg_trusted_added: '&bAdded %s as trusted in this %s.' # Last %s is either town or townblock
+# Last %s is either town or townblock
+msg_trusted_added: '&bAdded %s as trusted in this %s.'
 msg_already_trusted: '&b%s is already trusted in this %s.'
 msg_cannot_trust_your_own_town: '&bYou cannot trust your own town.'
-msg_trusted_added_2: '&b%s has trusted you in a %s: %s.' # Last %s is the town name or worldcoord.
+# Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s has trusted you in a %s: %s.'
 msg_not_trusted: '&b%s is not trusted in this %s.'
 msg_trusted_removed: '&bRemoved %s as trusted in this %s.'
 msg_trusted_removed_2: '&b%s has removed you as trusted in a %s: %s.'
@@ -2455,7 +2468,7 @@ msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'You cannot use that 
 msg_err_you_cannot_outlaw_your_mayor: "You cannot outlaw your town's mayor."
 
 msg_err_you_cannot_outlaw_because_of_rank: "You cannot outlaw %s because of a town rank they hold."
-    
+
 status_nation_sanctioned_towns: "Sanctioned Towns"
 
 msg_all_of_your_towns_sent_invites_have_been_cancelled: "All of your town's sent invites have been cancelled."
@@ -2485,7 +2498,7 @@ msg_err_name_validation_contains_numbers: "%s contains numbers which aren't allo
 msg_err_name_validation_used_in_command_structure: "%s is used in the command structure, you cannot use this name."
 
 msg_town_being_deleted_because_no_residents: "%s is being deleted because it lost its last resident."
-    
+
 outlawed_in: "Outlawed in"
 
 msg_warning_town_deposit_hint: "To put money in your town bank use /town deposit [amount]."

@@ -345,7 +345,7 @@ permissions:
     towny.command.nation.set.title.colours:
         description: The node required for leaders to set nation resident titles and surnames, when enabled in the config.
         default: false
-    
+
     towny.command.nation.toggle.*:
         description: User can toggle any available nation setting.
         default: false
