@@ -728,10 +728,13 @@ msg_err_over_outposts_limit: 'Karakoluna ışınlanamazsın, limitini aştın %s
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Haydutlar:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Haydutlar:'
 online: '&a(Aktif)'
-registered_last_online: '&2Kayıtlı: &a%s &8| &2Son Çevrimiçi: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Yetki:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Kayıtlı: &a%s &8| &2Son Çevrimiçi: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Yetki:'
 status_on: '&4AÇIK'
 status_off: '&aKAPALI'
 status_on_good: '&aAÇIK'
@@ -1178,7 +1181,8 @@ msg_town_destroyed_by_nation_tax: '&bFethedilen şehir %s ülke vergisini ödeye
 msg_town_destroyed_by_nation_tax_multiple: '&bAşağıdaki fethedilen şehirler ulus vergisini karşılayamadı ve düştü: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bKasabanız ulus vergisinden muaftı.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Yıkık Durumu'
 msg_comptype_bankrupt: 'İflas Durumu'
 msg_ruined: '&c(Yıkık)'
@@ -1317,9 +1321,11 @@ status_trustedlist: 'Güvenilir'
 msg_click_to_edit: '&6Düzenlemek için tıkla.'
 permission_gui_header: 'Towny İzni GUI'
 msg_last_edited: '&7&oEn son %s ile %s değiştirilmiştir.'
-msg_trusted_added: '&b%s, bu %s''ye güvenilir olarak eklendi.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b%s, bu %s''ye güvenilir olarak eklendi.'
 msg_already_trusted: '&b%s, bu %s için zaten güvenilir.'
-msg_trusted_added_2: '&b%s, size %s konusunda güvendi: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s, size %s konusunda güvendi: %s.'
 msg_not_trusted: '&b%s, bu %s için güvenilir değil.'
 msg_trusted_removed: '&b%s, bu %s içinde güvenilir olarak kaldırıldı.'
 msg_trusted_removed_2: '&b%s, sizi bir %s: %s içinde güvenilir olarak çıkardı.'
