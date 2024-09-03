@@ -586,10 +586,13 @@ msg_err_over_outposts_limit: 'Du kannst dich nicht zu deinem Außenposten telepo
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Banditen' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Banditen'
 online: '&a (Online)'
-registered_last_online: '&2Registriert: &a%s &8| &2Zuletzt Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Rechte:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registriert: &a%s &8| &2Zuletzt Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Rechte:'
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'
@@ -1032,7 +1035,8 @@ msg_town_destroyed_by_nation_tax: '&bDie eroberte Stadt %s konnte die Landessteu
 msg_town_destroyed_by_nation_tax_multiple: '&bDie folgenden eroberten Städte konnten sich die Nationalsteuer nicht leisten und sind gefallen: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bDeine Stadt wurde von der Nationalsteuer befreit.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Ruinierter-Status'
 msg_comptype_bankrupt: 'Bankrott-Status'
 msg_ruined: '&c(Ruiniert)'
@@ -1170,9 +1174,11 @@ status_trustedlist: 'Vertraut'
 msg_click_to_edit: '&6Hier klicken, um zu bearbeiten.'
 permission_gui_header: 'Towny Berechtigungen GUI'
 msg_last_edited: '&7&oZuletzt um %s von %s geändert.'
-msg_trusted_added: '&bFügte %s als vertrauenswürdig in diesem %s hinzu.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bFügte %s als vertrauenswürdig in diesem %s hinzu.'
 msg_already_trusted: '&b%s wird bereits in diesem %s vertraut.'
-msg_trusted_added_2: '&b%s hat dir vertraut, in einem %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s hat dir vertraut, in einem %s: %s.'
 msg_not_trusted: '&b%s wird diesem %s nicht vertraut.'
 msg_trusted_removed: '&bEntfernte %s als vertrauenswürdig in diesem %s.'
 msg_trusted_removed_2: '&b%s hat dich als vertrauenswürdig in einem %s: %s entfernt.'
