@@ -703,10 +703,13 @@ msg_err_over_outposts_limit: '前哨基地にテレポートすることはで�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '無法者：' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: '無法者：'
 online: '&a(オンライン)'
-registered_last_online: '&2登録日: &a%s &8| &2オンライン: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: '権限:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2登録日: &a%s &8| &2オンライン: &a%s'
+#Used on /plot perm, /res
+status_perm: '権限:'
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'
@@ -1025,7 +1028,8 @@ towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&c国: &6%s'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 gui_title_select_plot_type: 'プロットタイプを選択してください。'
 gui_title_no_restrictions: 'このプロットタイプには制限がありません。'
 gui_title_towny_allowedblocks: '%s 許可されたブロック一覧'
