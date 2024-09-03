@@ -527,10 +527,13 @@ msg_err_over_outposts_limit: 'Du kan inte teleportera till dina kolonier, du har
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Laglösa:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Laglösa:'
 online: '&a(Inloggad)'
-registered_last_online: '&2Registerad: &a%s &8| &2Senast Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Behörighet:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registerad: &a%s &8| &2Senast Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Behörighet:'
 status_on: '&4PÅ'
 status_off: '&aAV'
 status_on_good: '&aPÅ'
@@ -966,7 +969,8 @@ msg_town_destroyed_by_nation_tax: '&bDen erövrade staden %s kunde inte betala n
 msg_town_destroyed_by_nation_tax_multiple: '&bFöljande erövrade städer hade inte råd med nationskatten och har fallit: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bYour stad var undantagen från nationsskatten.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Förstörd status'
 msg_comptype_bankrupt: 'Bankrutt Status'
 msg_ruined: '&c(Förstörd)'
@@ -1105,9 +1109,11 @@ status_trustedlist: 'Betrodd'
 msg_click_to_edit: '&6Klicka för att ändra.'
 permission_gui_header: 'Towny Behörighets-GUI'
 msg_last_edited: '&7&oSenast ändrad vid %s av %s.'
-msg_trusted_added: '&bLade till %s som betrodd i denna %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bLade till %s som betrodd i denna %s.'
 msg_already_trusted: '&b%s är redan betrodd i denna %s.'
-msg_trusted_added_2: '&b%s har betrott dig med en %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s har betrott dig med en %s: %s.'
 msg_not_trusted: '&b%s är inte betrodd i denna %s.'
 msg_trusted_removed: '&bTog bort %s som betrodd i denna %s.'
 msg_trusted_removed_2: '&b%s har tagit bort dig som betrodd i en %s: %s.'
