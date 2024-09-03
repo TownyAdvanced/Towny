@@ -514,10 +514,13 @@ msg_err_over_outposts_limit: 'Ne možete se teleportovati do svog kampa, nalazit
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Razbojnici:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Razbojnici:'
 online: '&a(Online)'
-registered_last_online: '&2Registrovan: &a%s &8| &2Poslednji Put Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Dozv:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registrovan: &a%s &8| &2Poslednji Put Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Dozv:'
 status_on: '&4UKLJUČENO'
 status_off: '&aISKLJUČENO'
 status_on_good: '&aUKLJUČENO'
@@ -948,7 +951,8 @@ msg_town_destroyed_by_nation_tax: '&bOsvojeni grad %s nije mogao da plati nacion
 msg_town_destroyed_by_nation_tax_multiple: '&bSledeći osvojeni gradovi nisu mogli da plate nacionalni porez i pali su: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bVaš grad je pošteđen nacionalnog poreza.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Status Urušenosti'
 msg_comptype_bankrupt: 'Status Bankrotstva'
 msg_ruined: '&c(Urušen)'
@@ -1086,9 +1090,11 @@ status_trustedlist: 'Pouzdano'
 msg_click_to_edit: '&6Kliknite da menjate.'
 permission_gui_header: 'Towny GUI Dozvola'
 msg_last_edited: '&7&oPoslednji put promenjeno na %s od %s.'
-msg_trusted_added: '&bDodat %s kao pouzdan u ovom %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bDodat %s kao pouzdan u ovom %s.'
 msg_already_trusted: '&b%s je već trust-ovan/a u ovom %s.'
-msg_trusted_added_2: '&b%s Vas je trust-ovao u %s:%s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s Vas je trust-ovao u %s:%s.'
 msg_not_trusted: '&b%s nije trust-ovan u ovom %s.'
 msg_trusted_removed: '&bUklonjen/a %s kao trust-ovan u ovom %s.'
 msg_trusted_removed_2: '&b%s Vas je uklonio/la kao trust-ovanog u %s: %s.'
