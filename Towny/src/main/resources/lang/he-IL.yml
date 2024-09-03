@@ -649,9 +649,11 @@ msg_you_must_join_this_town_to_claim_this_plot: 'אתה חייב להצטרף ל
 msg_click_to_edit: '&6לחץ לעריכה.'
 permission_gui_header: 'ממשק גרפי ל - Towny (הרשאות)'
 msg_last_edited: '&7&oשונה לאחרונה ב- %s על ידי %s.'
-msg_trusted_added: '&bהוסיף את %s כמהימן ב%s זאת.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bהוסיף את %s כמהימן ב%s זאת.'
 msg_already_trusted: '&b%s כבר נחשב כאמין ב - %s.'
-msg_trusted_added_2: '&b%s כבר בטח בך ב - %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s כבר בטח בך ב - %s: %s.'
 msg_not_trusted: '&b%s אינו מהימן ב- %s.'
 msg_trusted_removed: '&bמחק את הגדרתו של %s כמהימן ב-%s.'
 msg_trusted_removed_2: '&b%s מחק את הגדרתך כמהימן ב-%s: %s.'
