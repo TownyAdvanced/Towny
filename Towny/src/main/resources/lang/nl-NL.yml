@@ -485,10 +485,13 @@ msg_err_not_enough_outposts_free_to_claim: 'Niet genoeg outposts beschikbaar om 
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Outlaws:'
 online: '&a(Online)'
-registered_last_online: '&2Geregistreerd: &a%s &8| &2Laatst Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Perm:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Geregistreerd: &a%s &8| &2Laatst Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Perm:'
 status_on: '&4AAN'
 status_off: '&aUIT'
 status_on_good: '&aAAN'
@@ -699,7 +702,8 @@ towny_prices_upkeep_num_plots: 'aantal plots.'
 towny_prices_upkeep_town_level: 'stad niveau (aantal bewoners)'
 towny_prices_overclaimed_flat_cost: 'een vlakke prijs van'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Geruïneerde Status'
 msg_ruined: '&c(Ruïne)'
 msg_bankrupt: '&c(Failliet)'
@@ -829,9 +833,11 @@ status_trustedlist: 'Vertrouwd'
 msg_click_to_edit: 'Klik om te bewerken.'
 permission_gui_header: 'Towny Permissie GUI'
 msg_last_edited: '&7&oLaatst gewijzigd op %s door %s.'
-msg_trusted_added: '&bToegevoegd %s als vertrouwd in deze %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bToegevoegd %s als vertrouwd in deze %s.'
 msg_already_trusted: '&b%s is al vertrouwd in deze %s.'
-msg_trusted_added_2: '&b%s heeft je vertrouwd in een %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s heeft je vertrouwd in een %s: %s.'
 msg_not_trusted: '&b%s is niet vertrouwd in deze %s.'
 msg_trusted_removed: '&bVerwijderd %s als vertrouwd in deze %s.'
 msg_trusted_removed_2: '&b%s heeft je verwijderd als vertrouwd in een %s: %s.'
