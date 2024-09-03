@@ -520,10 +520,13 @@ msg_err_over_outposts_limit: 'Tidak bisa teleportasi ke outpost, kamu sudah mela
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Penjahat:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Penjahat:'
 online: '&a(Sedang aktif)'
-registered_last_online: '&2Terdaftar: &a%s &8| &2Terakhir online:&a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Permanen:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Terdaftar: &a%s &8| &2Terakhir online:&a%s'
+#Used on /plot perm, /res
+status_perm: 'Permanen:'
 status_on: '&4NYALA'
 status_off: '&aMATI'
 status_on_good: '&aNYALA'
@@ -962,7 +965,8 @@ msg_town_destroyed_by_nation_tax: '&bKota yang ditaklukkan %s tidak dapat membay
 msg_town_destroyed_by_nation_tax_multiple: '&bKota-kota berikut yang tidak mampu membayar pajak negara: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bKota mu telah dibebaskan dari pajak negara.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Status Kehancuran'
 msg_comptype_bankrupt: 'Status Kepailitan'
 msg_ruined: '&c(Hancur)'
@@ -1100,9 +1104,11 @@ status_trustedlist: 'Terpercaya'
 msg_click_to_edit: '&6Klik untuk mengubah.'
 permission_gui_header: 'GUI Izin Towny'
 msg_last_edited: '&7&oPerubahan terakhir pada %s oleh %s.'
-msg_trusted_added: '&bMenambahkan %s sebagai player tepercaya untuk mengakses %s ini.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bMenambahkan %s sebagai player tepercaya untuk mengakses %s ini.'
 msg_already_trusted: '&b%s sudah dipercaya di tempat %s ini.'
-msg_trusted_added_2: '&b%s mempercayai Anda di %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s mempercayai Anda di %s: %s.'
 msg_not_trusted: '&b%s tidak dipercaya di %s ini.'
 msg_trusted_removed: '&bMenghapus %s sebagai player terpercaya di %s ini.'
 msg_trusted_removed_2: '&b%s telah menghapus Anda sebagai player terpercaya di %s: %s.'
