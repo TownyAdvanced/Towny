@@ -633,10 +633,13 @@ msg_err_over_outposts_limit: 'Ви не можете телепортувати�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Злочинці:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Злочинці:'
 online: '&a(Онлайн)'
-registered_last_online: '&2Зареєстрований: &a%s &8| &2Останній онлайн: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Право:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Зареєстрований: &a%s &8| &2Останній онлайн: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Право:'
 status_on: '&4ВМК'
 status_off: '&aВИМК'
 status_on_good: '&aВМК'
@@ -1083,7 +1086,8 @@ msg_town_destroyed_by_nation_tax: '&bЗахоплене місто %s не зм�
 msg_town_destroyed_by_nation_tax_multiple: '&bЦі міста не змогли оплатити податок нації і тому перетворилися на руїни: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bВаше місто звільнено від податків нації.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Статус руїни'
 msg_comptype_bankrupt: 'Статус банкрута'
 msg_ruined: '&c(Руїни)'
@@ -1221,9 +1225,11 @@ status_trustedlist: 'Довірені'
 msg_click_to_edit: '&6Клацніть, щоб редагувати.'
 permission_gui_header: 'Інтерфейс прав Towny'
 msg_last_edited: '&7&оВостаннє змінено о %s користувачем %s.'
-msg_trusted_added: '&bДоданий %s як довірений у цьому %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bДоданий %s як довірений у цьому %s.'
 msg_already_trusted: '&b%s уже довірений у цьому %s.'
-msg_trusted_added_2: '&b%s довірив вам у %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s довірив вам у %s: %s.'
 msg_not_trusted: '&b%s не є довіреним у цьому %s.'
 msg_trusted_removed: '&b%s більше не довірений у цьому %s.'
 msg_trusted_removed_2: '&b%s вилучив вас з посади довіреного у %s: %s.'
