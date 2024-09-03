@@ -501,10 +501,13 @@ msg_err_over_outposts_limit: 'คุณไม่สามารถวาปไ�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '&2Outlaws: &f' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: '&2Outlaws: &f'
 online: '&a(Online)'
-registered_last_online: '&2ลงทะเบียนแล้ว: &a%s &8| &2ออนไลน์ล่าสุด: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: '&2การอนุญาต: ' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2ลงทะเบียนแล้ว: &a%s &8| &2ออนไลน์ล่าสุด: &a%s'
+#Used on /plot perm, /res
+status_perm: '&2การอนุญาต: '
 status_on: '&cเปิด'
 status_off: '&aปิด'
 status_on_good: '&aเปิด'
@@ -928,7 +931,8 @@ msg_town_destroyed_by_nation_tax: '&bTown ที่ถูกยึดครอ�
 msg_town_destroyed_by_nation_tax_multiple: '&bTown ที่ถูกยึดครองต่อไปนี้ไม่สามารถจ่ายภาษีของ Nation และ ล่มสลาย: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bTown ของคุณได้รับการยกเว้นภาษี Nation .'
 #Added in 0.97
-status_perm_line_format: '&a%s = &7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s = &7'
 msg_comptype_ruined: 'Ruined Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
