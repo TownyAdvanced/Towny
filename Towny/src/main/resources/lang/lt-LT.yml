@@ -841,10 +841,13 @@ msg_err_over_outposts_limit: 'Jūs negalite teleportuotis į savo tolimąją ter
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Nepageidaujami asmenys:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Nepageidaujami asmenys:'
 online: '&a(Prisijungęs)'
-registered_last_online: '&2Registruotas: &a%s &8| &2Paskutinį kartą prisijungė: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Leidimas:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registruotas: &a%s &8| &2Paskutinį kartą prisijungė: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Leidimas:'
 status_on: '&4ĮJUNGTA'
 status_off: '&aIŠJUNGTA'
 status_on_good: '&aĮJUNGTA'
@@ -1270,7 +1273,8 @@ msg_town_destroyed_by_nation_tax: '&bNukariautas miestas %s negalėjo susimokėt
 msg_town_destroyed_by_nation_tax_multiple: '&bŠie nkariauti miestai negalėjo susimokėti valstybės mokesčio ir žlugo: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bJūsų miestas buvo atleistas nuo valstybės mokesčio.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Griuvėsių būsena'
 msg_comptype_bankrupt: 'Bankroto būsena'
 msg_ruined: '&c(Griuvėsiai)'
