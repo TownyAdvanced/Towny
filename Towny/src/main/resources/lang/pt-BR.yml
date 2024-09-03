@@ -671,10 +671,13 @@ msg_err_over_outposts_limit: 'Você não pode se teleportar para o seu posto ava
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Fora-da-Lei:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Fora-da-Lei:'
 online: '&a(Online)'
-registered_last_online: '&2Registrado: &a%s &8| &2Última vez online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Permissão:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registrado: &a%s &8| &2Última vez online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Permissão:'
 status_on: '&4ATIVADO'
 status_off: '&aDESATIVADO'
 status_on_good: '&aATIVADO'
@@ -1116,7 +1119,8 @@ msg_town_destroyed_by_nation_tax: '&bA cidade conquistada %s não conseguiu paga
 msg_town_destroyed_by_nation_tax_multiple: '&bAs seguintes cidades não podiam pagar os impostos e faliram: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bSua cidade foi isenta de impostos nacionais.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Status Arruinado'
 msg_comptype_bankrupt: 'Situação de falência'
 msg_ruined: '&c(Ruínas)'
