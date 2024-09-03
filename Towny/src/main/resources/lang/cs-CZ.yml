@@ -548,10 +548,13 @@ msg_err_over_outposts_limit: 'Nemůžete se teleportovat k vaší základnu, jst
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Psanci:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Psanci:'
 online: '&a(Online)'
-registered_last_online: '&2Registrován: &a%s &8| &2Naposledy online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Práva:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registrován: &a%s &8| &2Naposledy online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Práva:'
 status_on: '&4ZAP'
 status_off: '&aVYP'
 status_on_good: '&aZAP'
