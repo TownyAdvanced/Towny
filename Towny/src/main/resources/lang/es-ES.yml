@@ -22,6 +22,12 @@ towny_help_0: "Ayuda general para Towny"
 towny_help_1: "Muestra un mapa de los poblados cercanos"
 towny_help_2: "Mostrar los precios utilizados con Economía"
 towny_help_3: "Mostrar puntuaciones altas"
+towny_help_4: "Mostrar tiempo hasta un nuevo día"
+towny_help_5: "Mostrar estadísticas"
+towny_help_6: "Muestra la versión de Towny"
+towny_top_help_0: "Listar a los mejores residentes basados en subcomando."
+towny_top_help_1: "Listar los mejores propietarios basados en subcomando."
+towny_top_help_2: "Listar adinerados basado en subcomando."
 town_help_1: 'Estado de tu ciudad'
 town_help_2: '[alcalde]'
 town_help_3: 'Estado de la ciudad seleccionada'
@@ -32,6 +38,61 @@ town_help_7: 'Crear una ciudad con otro usuario como alcalde'
 town_help_8: 'Lista de comandos para alcaldes'
 town_help_9: 'Hoy es el dia!'
 town_help_10: 'Lista de los habitantes conectados'
+town_help_13: "Ver una lista de residentes en la ciudad."
+town_help_14: "Ver una lista de rangos en la ciudad."
+town_help_15: "Ver una lista de forajidos en la ciudad."
+town_help_16: "Ver una lista de los grupos de la ciudad."
+town_help_17: "Ver una lista de tipos de parcelas en la ciudad."
+town_help_18: "Enviar un mensaje a los miembros de la ciudad."
+town_help_19: "Establece tu ciudad a la venta, puede ser comprada por otros jugadores."
+town_help_20: "Establezca su ciudad no a la venta."
+town_help_21: "Compre la ciudad dada, siempre y cuando esté a la venta."
+town_help_22: "Deposita dinero en el banco de tu ciudad."
+town_help_23: "Utilizado para modificar los rangos de la ciudad de su residente."
+town_help_24: "Utilizado para eliminar tu ciudad."
+town_help_25: "Utilizado para modificar los forajidos de tu ciudad."
+town_help_26: "Listar todas las ciudades, mira la lista /t ? para obtener ayuda."
+town_help_27: "Deja la ciudad de la que eres miembro."
+town_help_28: "Retira dinero del banco de tu ciudad."
+town_help_29: "Usa /t claim ? para ayuda."
+town_help_30: "Utilizado para liberar tierra de tu ciudad."
+town_help_31: "Añadir o eliminar residentes."
+town_help_32: "Usa /t set ? para obtener ayuda."
+town_help_33: "Usa /t buy ? para obtener ayuda."
+town_help_34: "Usa /t toggle ? para obtener ayuda."
+town_help_35: "Usa /t rank ? para obtener ayuda."
+town_list_help_0: "Ver la página especificada."
+town_list_help_1: "Listar ciudades por conteo de residentes, con la página especificada."
+town_list_help_2: "Listar ciudades abiertas, con la página especificada."
+town_list_help_3: "Listar ciudades utilizando el saldo bancario, con la página especificada."
+town_list_help_4: "Listar ciudades en orden alfabético, con la página especificada."
+town_list_help_5: "Listar ciudades por tierra reclamada, con la página especificada."
+town_list_help_6: "Listar ciudades por número en línea con la página especificada."
+town_set_help_0: "Establece el tablero de tu ciudad."
+town_set_help_1: "Establece el homeblock de tu ciudad en donde estés."
+town_set_help_2: "Establece el punto de aparición en tu homeblock o un punto de aparición de entrada cuando esté en una entrada."
+town_set_help_3: "Ver /town set perm ? para obtener ayuda."
+town_set_help_4: "Establezca la cantidad de impuestos de su ciudad."
+town_set_help_5: "Establece los importes especiales para los impuestos por tráfico."
+town_set_help_6: "Establecer los precios por defecto para las parcelas de compra."
+town_set_help_7: "Ajuste el coste para usar el /t spawn."
+town_set_help_8: "Establece el nombre de tu ciudad."
+town_set_help_9: "Establece la etiqueta de tu ciudad."
+town_set_help_10: "Establezca el título o apellido de su residente."
+town_set_help_11: "Establecer la cantidad máxima de dinero que un impuesto porcentual puede tomar de un residente."
+town_jail_help_0: "Listar las cárceles de la ciudad."
+town_jail_help_1: "Cárcel residente en la cárcel primaria."
+town_jail_help_2: "Encarcelar a un residente en la cárcel primaria, durante las horas especificadas."
+town_jail_help_3: "Encarcelar a un residente en la cárcel primaria, durante las horas especificadas, en la cárcel especificada."
+town_jail_help_4: "Cárcel residente en la cárcel primaria, durante las horas especificadas, en la cárcel y celda especificadas."
+town_jail_help_5: "Encarcelar a un residente en la cárcel primaria, durante las horas especificadas, con el monto de la fianza."
+town_jail_help_6: "Encarcelar a un residente en la cárcel primaria, durante las horas especificadas, con la cantidad de la fianza dada, en la cárcel especificada."
+town_jail_help_7: "Cárcel residente en la cárcel primaria, durante las horas especificadas, con la cantidad de la fianza dada, en la cárcel y celda especificadas."
+town_jail_help_8: "Desencarcela al residente."
+town_purge_help: "Purga a los residentes que no han iniciado sesión por la cantidad de días dados."
+town_trust_help_0: "Añade a un residente como de confianza en la ciudad."
+town_trust_help_1: "Elimina a un residente de confianza en la ciudad."
+town_trust_help_2: "Lista a los residentes de confianza de una ciudad."
 mayor_help_3: 'Claimear area externa'
 mayor_help_4: 'Claimear area de un radio X'
 mayor_help_5: 'Claimear el máximo radio posible'
@@ -82,6 +143,7 @@ townyadmin_help_1: 'Unclaimear esta parcela'
 townyadmin_help_2: 'Unclaimear a tu alrededor'
 admin_panel_2: 'Recargar Towny'
 admin_panel_3: 'Pasar al día siguiente'
+townyadmin_town_help_16: "Cambia los forajidos de una ciudad."
 msg_block_claim: 'Claimear esta tierra'
 msg_plot_nfs: 'Quitar esta parcela de la venta'
 msg_nfs_abr: '&e''fs'' and ''nfs'' son abreviaciones aceptadas para ''forsale'' y ''notforsale''.'
@@ -396,6 +458,8 @@ msg_you_have_undeclared_an_outlaw: '%s ya no es un bandido en %s.'
 msg_err_player_not_an_outlaw: 'Este jugador no estaba marcado como un bandido.'
 msg_err_outlaw_in_open_town: 'No puedes entrar a una ciudad abierta que te ha declarado como bandido.'
 msg_you_are_an_outlaw_in_this_town: '&4Se cuidadoso %s te considera un bandido, morir aquí te enviará a la carcel.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Los forajidos están encarcelados por %s horas.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Tu fianza costaría %s.'
 msg_err_town_not_close_enough_to_nation: 'El spawn de %s no está lo suficientemente cerca del spawn de tu capital para unirse a tu país.'
 msg_nation_town_moved_their_homeblock_too_far: 'El spawn de %s fue movido demasiado lejos del spawn te tu capital y fue eliminado de tu nación.'
 #Added in 0.33
@@ -1170,7 +1234,7 @@ msg_err_this_townblock_doesnt_match_the_groups_type: 'Este bloque no puede ser a
 #Added in 0.118
 status_title_nopvp: '&a(No hay PVP)'
 #Added in 0.119
-msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'No puedes encarcelar a tu residente porque esta en una localidad en donde esta ilegalizado.'
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'No puedes encarcelar a tu residente porque están en un lugar donde están ilegalizados.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'No puedes encarcelar a tu residente porque esta en una localidad donde es considerado un enemigo.'
 #Added in 0.120
 msg_resident_prompt: 'Introduce el nombre del jugador en el chat o presiona q para salir. Esto se acabara en 30 segundos.'
@@ -1287,7 +1351,7 @@ towny_prices_upkeep_nation_level: 'nivel de la Nación (num residentes)'
 #Jail causes
 msg_jailed_mayor: 'Encarcelado por el alcalde'
 #Jail causes
-msg_jailed_outlaw: 'Asesinado como un delincuente'
+msg_jailed_outlaw: 'Asesinado como un forajido.'
 #Jail causes
 msg_jailed_war: 'Prisionero de Guerra.'
 #Jail handbook messages
@@ -1392,7 +1456,7 @@ msg_your_town_is_bankrupt: 'Tu ciudad ha caído en bancarrota, añade dinero a t
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'No puedes usar este comando, porque ya eres miembro de una ciudad. Si quieres continuar debes usar ''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
-msg_a_town_you_are_outlawed_in: 'una ciudad en la que eres un bandido.'
+msg_a_town_you_are_outlawed_in: 'una ciudad en la que eres un forajido.'
 #Message shown when TownyRTP could not find any towns to teleport to.
 msg_err_could_not_find_any_towns_to_rtp: 'No se pudo encontrar ningún pueblo abierto, público con parcelas a la venta (que usted puede permitirse,) a rtp a.'
 #Message showing payment for RTP.
@@ -1505,3 +1569,6 @@ msg_err_townyobject_x_has_no_nation: "%s no pertenece a ninguna nación."
 msg_err_townblock_has_no_claimedat_data: "Este bloque de ciudad no tiene datos sobre cuándo fue reclamado."
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "Necesitas %s para pagar."
+msg_err_you_cannot_outlaw_your_mayor: "No se puede proscribir al alcalde de su ciudad."
+msg_err_you_cannot_outlaw_because_of_rank: "No puedes proscribir a %s debido a un rango de pueblo que tienen."
+outlawed_in: "Excluido en"
