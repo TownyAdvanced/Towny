@@ -2587,47 +2587,47 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// Deleting EntityTypes from Townblocks on Unclaim.
 			nat_hm.put("isDeletingEntitiesOnUnclaim", world.isDeletingEntitiesOnUnclaim());
 			if (world.getUnclaimDeleteEntityTypes() != null)
-				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(BukkitTools.convertKeyedToString(world.getUnclaimDeleteEntityTypes()), "#"));
+				nat_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(BukkitTools.toMinimalEntityCollection(world.getUnclaimDeleteEntityTypes()), "#"));
 
 			// Using PlotManagement Delete
 			nat_hm.put("usingPlotManagementDelete", world.isUsingPlotManagementDelete());
 			// Plot Management Delete Ids
 			if (world.getPlotManagementDeleteIds() != null)
-				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(world.getPlotManagementDeleteIds(), "#"));
+				nat_hm.put("plotManagementDeleteIds", StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementDeleteIds()), "#"));
 
 			// Using PlotManagement Mayor Delete
 			nat_hm.put("usingPlotManagementMayorDelete", world.isUsingPlotManagementMayorDelete());
 			// Plot Management Mayor Delete
 			if (world.getPlotManagementMayorDelete() != null)
-				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(world.getPlotManagementMayorDelete(), "#"));
+				nat_hm.put("plotManagementMayorDelete", StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementMayorDelete()), "#"));
 
 			// Using PlotManagement Revert
 			nat_hm.put("usingPlotManagementRevert", world.isUsingPlotManagementRevert());
 
 			// Plot Management Ignore Ids
 			if (world.getPlotManagementIgnoreIds() != null)
-				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(world.getPlotManagementIgnoreIds(), "#"));
+				nat_hm.put("plotManagementIgnoreIds", StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementIgnoreIds()), "#"));
 
 			// Revert on Unclaim whitelisted materials
 			if (world.getRevertOnUnclaimWhitelistMaterials() != null)
-				nat_hm.put("revertOnUnclaimWhitelistMaterials", StringMgmt.join(world.getRevertOnUnclaimWhitelistMaterials(), "#"));
+				nat_hm.put("revertOnUnclaimWhitelistMaterials", StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getRevertOnUnclaimWhitelistMaterials()), "#"));
 
 			// Using PlotManagement Wild Regen
 			nat_hm.put("usingPlotManagementWildRegen", world.isUsingPlotManagementWildEntityRevert());
 
 			// Wilderness Explosion Protection entities
 			if (world.getPlotManagementWildRevertEntities() != null)
-				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(BukkitTools.convertKeyedToString(world.getPlotManagementWildRevertEntities()), "#"));
+				nat_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(BukkitTools.toMinimalEntityCollection(world.getPlotManagementWildRevertEntities()), "#"));
 
 			// Wilderness Explosion Protection Block Whitelist
 			if (world.getPlotManagementWildRevertBlockWhitelist() != null)
 				nat_hm.put("PlotManagementWildRegenBlockWhitelist",
-						StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), "#"));
+						StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementWildRevertBlockWhitelist()), "#"));
 
 			// Wilderness Explosion Protection Materials to not overwrite.
 			if (world.getWildRevertMaterialsToNotOverwrite() != null)
 				nat_hm.put("wildRegenBlocksToNotOverwrite",
-						StringMgmt.join(world.getWildRevertMaterialsToNotOverwrite(), "#"));
+						StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getWildRevertMaterialsToNotOverwrite()), "#"));
 
 			// Using PlotManagement Wild Regen Delay
 			nat_hm.put("plotManagementWildRegenSpeed", world.getPlotManagementWildRevertDelay());

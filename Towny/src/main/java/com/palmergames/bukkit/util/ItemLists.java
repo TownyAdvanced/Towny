@@ -348,7 +348,12 @@ public class ItemLists extends AbstractRegistryList<Material> {
 		CUSTOM_GROUPS.clear();
 	}
 	
+	@Internal
+	public static Map<String, Collection<Material>> allGroups() {
+		return GROUPS.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().tagged()));
+	}
+	
 	public static Builder<Material, ItemLists> newBuilder() {
-		return new Builder<>(Registry.MATERIAL, Material.class, ItemLists::new).notStartsWith("LEGACY_");
+		return new Builder<>(Registry.MATERIAL, Material.class, ItemLists::new);
 	}
 }

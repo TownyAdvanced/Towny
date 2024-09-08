@@ -19,6 +19,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -40,9 +41,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -423,12 +425,47 @@ public class BukkitTools {
 	
 	@ApiStatus.Internal
 	public static Collection<String> convertKeyedToString(@NotNull Collection<? extends Keyed> keys) {
-		final Set<String> set = new HashSet<>();
+		final Set<String> set = new LinkedHashSet<>();
 		
 		for (Keyed keyed : keys)
 			set.add(keyAsString(keyed.getKey()));
 		
 		return set;
+	}
+
+	/**
+	 * Converts a collection of materials into a minimal length representation of itself as strings, by using item lists
+	 */
+	@ApiStatus.Internal
+	public static Collection<String> toMinimalMaterialCollection(Collection<Material> materials) {
+		LinkedHashSet<String> names = new LinkedHashSet<>(convertKeyedToString(materials));
+		
+		for (Map.Entry<String, Collection<Material>> group : ItemLists.allGroups().entrySet()) {
+			Collection<String> asString = convertKeyedToString(group.getValue());
+			
+			if (names.containsAll(asString)) {
+				names.removeAll(asString);
+				names.add(group.getKey());
+			}
+		}
+		
+		return names;
+	}
+
+	@ApiStatus.Internal
+	public static Collection<String> toMinimalEntityCollection(Collection<EntityType> entityTypes) {
+		LinkedHashSet<String> names = new LinkedHashSet<>(convertKeyedToString(entityTypes));
+
+		for (Map.Entry<String, Collection<EntityType>> group : EntityLists.allGroups().entrySet()) {
+			Collection<String> asString = convertKeyedToString(group.getValue());
+
+			if (names.containsAll(asString)) {
+				names.removeAll(asString);
+				names.add(group.getKey());
+			}
+		}
+		
+		return names;
 	}
 	
 	static {

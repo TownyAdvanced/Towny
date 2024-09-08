@@ -6,15 +6,19 @@ import org.bukkit.Registry;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Monster;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EntityLists extends AbstractRegistryList<EntityType> {
 
@@ -52,9 +56,22 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists PVP_EXPLOSIVE = newBuilder().add("firework_rocket", "tnt_minecart", "tnt", "end_crystal").build();
 	
-	public static final EntityLists ANIMALS = newBuilder().filter(type -> type.getEntityClass() != null && Animals.class.isAssignableFrom(type.getEntityClass())).build();
+	public static final EntityLists ANIMALS = newBuilder().addIf(type -> type.getEntityClass() != null && Animals.class.isAssignableFrom(type.getEntityClass())).build();
 	
-	private static final Map<String, EntityLists> GROUPS = new HashMap<>();
+	public static final EntityLists MONSTERS = newBuilder().addIf(type -> type.getEntityClass() != null && Monster.class.isAssignableFrom(type.getEntityClass())).build();
+	
+	private static final Map<String, EntityLists> GROUPS = Arrays.stream(EntityLists.class.getFields())
+		.filter(field -> Modifier.isStatic(field.getModifiers()))
+		.filter(field -> field.getType().equals(EntityLists.class))
+		.collect(Collectors.toMap(field -> field.getName().toLowerCase(Locale.ROOT), field -> {
+			try {
+				return (EntityLists) field.get(null);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}));
+
+	private static final Set<String> CUSTOM_GROUPS = new HashSet<>();
 
 	@NotNull
 	@Unmodifiable
@@ -63,11 +80,6 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 
 		return grouping != null ? ImmutableSet.copyOf(grouping.tagged) : ImmutableSet.of();
 	}
-	
-	@ApiStatus.Internal
-	public static void clearGroups() {
-		GROUPS.clear();
-	}
 
 	public static boolean hasGroup(@NotNull String groupName) {
 		return GROUPS.containsKey(groupName.toLowerCase(Locale.ROOT));
@@ -75,9 +87,21 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 
 	public static void addGroup(@NotNull String groupName, @NotNull EntityLists group) {
 		GROUPS.put(groupName.toLowerCase(Locale.ROOT), group);
+		CUSTOM_GROUPS.add(groupName.toLowerCase(Locale.ROOT));
+	}
+
+	@ApiStatus.Internal
+	public static void clearCustomGroups() {
+		CUSTOM_GROUPS.forEach(GROUPS::remove);
+		CUSTOM_GROUPS.clear();
+	}
+
+	@ApiStatus.Internal
+	public static Map<String, Collection<EntityType>> allGroups() {
+		return GROUPS.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().tagged()));
 	}
 	
 	public static Builder<EntityType, EntityLists> newBuilder() {
-		return new Builder<>(Registry.ENTITY_TYPE, EntityType.class, EntityLists::new).filter(type -> type != EntityType.UNKNOWN);
+		return new Builder<>(Registry.ENTITY_TYPE, EntityType.class, EntityLists::new);
 	}
 }

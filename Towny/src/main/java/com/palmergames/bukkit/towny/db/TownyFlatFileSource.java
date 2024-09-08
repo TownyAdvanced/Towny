@@ -2360,7 +2360,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// Unclaimed Zone Ignore Ids
 		if (world.getUnclaimedZoneIgnoreMaterials() != null)
-			list.add("unclaimedZoneIgnoreIds=" + StringMgmt.join(world.getUnclaimedZoneIgnoreMaterials(), ","));
+			list.add("unclaimedZoneIgnoreIds=" + StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getUnclaimedZoneIgnoreMaterials()), ","));
 
 		// PlotManagement Delete
 		list.add("");
@@ -2369,7 +2369,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("usingPlotManagementDelete=" + world.isUsingPlotManagementDelete());
 		// Plot Management Delete Ids
 		if (world.getPlotManagementDeleteIds() != null)
-			list.add("plotManagementDeleteIds=" + StringMgmt.join(world.getPlotManagementDeleteIds(), ","));
+			list.add("plotManagementDeleteIds=" + StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementDeleteIds()), ","));
 
 		// EntityType removal on unclaim.
 		list.add("");
@@ -2377,7 +2377,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# Valid EntityTypes are listed here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
 		list.add("isDeletingEntitiesOnUnclaim=" + world.isDeletingEntitiesOnUnclaim());
 		if (world.getUnclaimDeleteEntityTypes() != null)
-			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(BukkitTools.convertKeyedToString(world.getUnclaimDeleteEntityTypes()), ","));
+			list.add("unclaimDeleteEntityTypes=" + StringMgmt.join(BukkitTools.toMinimalEntityCollection(world.getUnclaimDeleteEntityTypes()), ","));
 
 		// PlotManagement
 		list.add("");
@@ -2398,10 +2398,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# Any block Id's listed here will not be respawned. Instead it will revert to air. This list also world on the WildRegen settings below.");
 		// Plot Management Ignore Ids
 		if (world.getPlotManagementIgnoreIds() != null)
-			list.add("plotManagementIgnoreIds=" + StringMgmt.join(world.getPlotManagementIgnoreIds(), ","));
+			list.add("plotManagementIgnoreIds=" + StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementIgnoreIds()), ","));
 		// Revert on Unclaim whitelisted Materials.
 		if (world.getRevertOnUnclaimWhitelistMaterials() != null)
-			list.add("revertOnUnclaimWhitelistMaterials=" + StringMgmt.join(world.getRevertOnUnclaimWhitelistMaterials(), "#"));
+			list.add("revertOnUnclaimWhitelistMaterials=" + StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getRevertOnUnclaimWhitelistMaterials()), "#"));
 
 		// PlotManagement Wild Regen
 		list.add("");
@@ -2413,7 +2413,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# The list of entities whose explosions would be reverted.");
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertEntities() != null)
-			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(BukkitTools.convertKeyedToString(world.getPlotManagementWildRevertEntities()), ","));
+			list.add("PlotManagementWildRegenEntities=" + StringMgmt.join(BukkitTools.toMinimalEntityCollection(world.getPlotManagementWildRevertEntities()), ","));
 
 		list.add("# If enabled any damage caused by block explosions will repair itself.");
 		// Using PlotManagement Wild Block Regen
@@ -2422,17 +2422,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# The list of blocks whose explosions would be reverted.");
 		// Wilderness Explosion Protection blocks
 		if (world.getPlotManagementWildRevertBlocks() != null)
-			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(world.getPlotManagementWildRevertBlocks(), ","));
+			list.add("PlotManagementWildRegenBlocks=" + StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementWildRevertBlocks()), ","));
 
 		list.add("# The list of blocks to regenerate. (if empty all blocks will regenerate)");
 		// Wilderness Explosion Protection entities
 		if (world.getPlotManagementWildRevertBlockWhitelist() != null)
-			list.add("PlotManagementWildRegenBlockWhitelist=" + StringMgmt.join(world.getPlotManagementWildRevertBlockWhitelist(), ","));
+			list.add("PlotManagementWildRegenBlockWhitelist=" + StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getPlotManagementWildRevertBlockWhitelist()), ","));
 
 		list.add("# The list of blocks to that should not get replaced when an explosion is reverted in the wilderness, ie: a chest placed in a creeper hole that is reverting.");
 		// Wilderness Explosion materials to not overwrite.
 		if (world.getWildRevertMaterialsToNotOverwrite() != null)
-			list.add("wildRegenBlocksToNotOverwrite=" + StringMgmt.join(world.getWildRevertMaterialsToNotOverwrite(), ","));
+			list.add("wildRegenBlocksToNotOverwrite=" + StringMgmt.join(BukkitTools.toMinimalMaterialCollection(world.getWildRevertMaterialsToNotOverwrite()), ","));
 
 		list.add("# The delay after which the explosion reverts will begin.");
 		// Using PlotManagement Wild Regen Delay

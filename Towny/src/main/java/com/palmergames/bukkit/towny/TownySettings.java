@@ -54,6 +54,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,6 +64,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TownySettings {
@@ -507,7 +509,7 @@ public class TownySettings {
 	}
 
 	public static Set<EntityType> toEntityTypeSet(final List<String> entityList) {
-		final Set<EntityType> entities = new HashSet<>();
+		final Set<EntityType> entities = new LinkedHashSet<>();
 		
 		for (final String entityName : entityList) {
 			if (EntityLists.hasGroup(entityName)) {
@@ -548,7 +550,7 @@ public class TownySettings {
 	}
 
 	public static Collection<Material> toMaterialSet(List<String> materialList) {
-		Set<Material> materials = new HashSet<>();
+		Set<Material> materials = new LinkedHashSet<>();
 		
 		for (String materialName : materialList) {
 			if (materialName.isEmpty())
@@ -1101,7 +1103,7 @@ public class TownySettings {
 		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ITEM_LISTS).entrySet())
 			ItemLists.addGroup(entry.getKey(), constructRegistryList(ItemLists.newBuilder(), Tag.REGISTRY_BLOCKS, Arrays.asList(entry.getValue().split(",")), mat -> mat.data));
 		
-		EntityLists.clearGroups();
+		EntityLists.clearCustomGroups();
 		for (Map.Entry<String, String> entry : getMap(ConfigNodes.CUSTOM_LISTS_ENTITY_LISTS).entrySet())
 			EntityLists.addGroup(entry.getKey(), constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList(entry.getValue().split(",")), EntityType::getEntityClass));
 	}
@@ -1131,16 +1133,24 @@ public class TownySettings {
 				builder.contains(element.substring(1));
 			else if (element.startsWith("!~"))
 				builder.notContains(element.substring(2));
-			else if (element.startsWith("c:")) {
-				final String className = element.substring(2);
+			else if (element.startsWith("c:") || element.startsWith("!c:")) {
+				int substr = 2;
+				boolean add = true;
+				
+				if (element.startsWith("!")) {
+					substr++;
+					add = false;
+				}
+				
+				final String className = element.substring(substr);
 				boolean classFound = false;
 				
 				// Check certain packages so that fully qualified names aren't required, i.e. 'Animals' will work.
 				for (String packageName : REGISTRY_LIST_PACKAGES)
-					classFound |= checkClass(builder, classExtractor, packageName + "." + className);
+					classFound |= checkClass(builder, classExtractor, packageName + "." + className, add);
 				
 				// Check exact class, since this could be a fully qualified name already.
-				classFound |= checkClass(builder, classExtractor, className);
+				classFound |= checkClass(builder, classExtractor, className, add);
 				
 				// The user's class name might be wrong/wrongly cased, let them know about it.
 				if (!classFound)
@@ -1152,7 +1162,7 @@ public class TownySettings {
 		return builder.build();
 	}
 	
-	private static <T extends Keyed, F extends AbstractRegistryList<T>> boolean checkClass(AbstractRegistryList.Builder<T, F> builder, Function<T, Class<?>> classExtractor, String className) {
+	private static <T extends Keyed, F extends AbstractRegistryList<T>> boolean checkClass(AbstractRegistryList.Builder<T, F> builder, Function<T, Class<?>> classExtractor, String className, boolean add) {
 		final Class<?> desired;
 		try {
 			desired = Class.forName(className);
@@ -1160,10 +1170,15 @@ public class TownySettings {
 			return false;
 		}
 		
-		builder.filter(t -> {
+		Predicate<T> predicate = t -> {
 			final Class<?> clazz = classExtractor.apply(t);
 			return clazz != null && desired.isAssignableFrom(clazz);
-		});
+		};
+		
+		if (add)
+			builder.addIf(predicate);
+		else 
+			builder.removeIf(predicate);
 		
 		return true;
 	}

@@ -9,10 +9,17 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -58,10 +65,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		private final Class<T> clazz;
 		private final Function<Collection<T>, F> convertFunction;
 
-		// Predicates where all should match, this is used for functions that exclude certain elements. (notStartsWith, contains, etc.)
-		private final Set<Predicate<T>> allMatchPredicates = new HashSet<>();
-		// Predicates where only 1 has to match, this is used for functions that include new elements. (endsWith, startsWith)
-		private final Set<Predicate<T>> anyMatchPredicates = new HashSet<>();
+		private final List<LayerConsumer<T>> layers = new ArrayList<>();
 
 		/**
 		 * @param registry The bukkit registry, used for matching strings into {@link T}.
@@ -75,53 +79,80 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		}
 
 		public F build() {
+			Set<T> allValues = new HashSet<>();
+			
+			for (final T value : registry) {
+				allValues.add(value);
+			}
+			
+			allValues = Collections.unmodifiableSet(allValues);
+			
 			final Set<T> matches = new HashSet<>();
 
-			if (!allMatchPredicates.isEmpty() || !anyMatchPredicates.isEmpty()) {
-				for (final T element : registry)
-					if (allMatchPredicates.stream().allMatch(predicate -> predicate.test(element)) && (anyMatchPredicates.isEmpty() || anyMatchPredicates.stream().anyMatch(predicate -> predicate.test(element))))
-						matches.add(element);
+			for (final LayerConsumer<T> layer : layers) {
+				layer.accept(matches, allValues);
 			}
 
 			return convertFunction.apply(matches);
 		}
 
 		public Builder<T, F> startsWith(String startingWith) {
-			anyMatchPredicates.add((s) -> s.getKey().getKey().regionMatches(true, 0, startingWith, 0, startingWith.length()));
+			layers.add((currentSet, allPossible) -> {
+				for (final T value : allPossible)
+					if (value.getKey().getKey().regionMatches(true, 0, startingWith, 0, startingWith.length()))
+						currentSet.add(value);
+			});
 			return this;
 		}
 
 		public Builder<T, F> endsWith(@NotNull String endingWith) {
 			final String endingWithLower = endingWith.toLowerCase(Locale.ROOT);
-			anyMatchPredicates.add((s) -> s.getKey().getKey().endsWith(endingWithLower));
+			layers.add((currentSet, allPossible) -> {
+				for (final T value : allPossible)
+					if (value.getKey().getKey().endsWith(endingWithLower))
+						currentSet.add(value);
+			});
 			return this;
 		}
 
 		public Builder<T, F> not(@NotNull String name) {
-			allMatchPredicates.add((s) -> !s.getKey().getKey().equalsIgnoreCase(name));
+			final T value = get(name);
+			if (value != null)
+				layers.add((currentSet, allPossible) -> currentSet.remove(value));
+
 			return this;
 		}
 
 		public Builder<T, F> notStartsWith(@NotNull String notStartingWith) {
-			allMatchPredicates.add((s) -> !s.getKey().getKey().regionMatches(true, 0, notStartingWith, 0, notStartingWith.length()));
+			layers.add((currentSet, allPossible) -> {
+				currentSet.removeIf(value -> value.getKey().getKey().regionMatches(true, 0, notStartingWith, 0, notStartingWith.length()));
+			});
 			return this;
 		}
 
 		public Builder<T, F> notEndsWith(@NotNull String notEndingWith) {
 			final String notEndingLower = notEndingWith.toLowerCase(Locale.ROOT);
-			allMatchPredicates.add((s) -> !s.getKey().getKey().endsWith(notEndingLower));
+			layers.add((currentSet, allPossible) -> {
+				currentSet.removeIf(value -> value.getKey().getKey().endsWith(notEndingLower));
+			});
 			return this;
 		}
 
 		public Builder<T, F> contains(@NotNull String containing) {
 			final String containingLower = containing.toLowerCase(Locale.ROOT);
-			allMatchPredicates.add((s) -> s.getKey().getKey().contains(containingLower));
+			layers.add((currentSet, allPossible) -> {
+				for (final T value : allPossible)
+					if (value.getKey().getKey().contains(containingLower))
+						currentSet.add(value);
+			});
 			return this;
 		}
 
 		public Builder<T, F> notContains(@NotNull String notContaining) {
 			final String notContainingLower = notContaining.toLowerCase(Locale.ROOT);
-			allMatchPredicates.add((s) -> !s.getKey().getKey().contains(notContainingLower));
+			layers.add((currentSet, allPossible) -> {
+				currentSet.removeIf(value -> value.getKey().getKey().contains(notContainingLower));
+			});
 			return this;
 		}
 
@@ -135,7 +166,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 			final Tag<T> tag = Bukkit.getServer().getTag(registry, key, this.clazz);
 
 			if (tag != null)
-				anyMatchPredicates.add(tag::isTagged);
+				layers.add((currentSet, allPossible) -> currentSet.addAll(tag.getValues()));
 
 			return this;
 		}
@@ -149,7 +180,7 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 			final Tag<T> tag = Bukkit.getServer().getTag(registry, key, this.clazz);
 
 			if (tag != null)
-				allMatchPredicates.add(s -> !tag.isTagged(s));
+				layers.add((currentSet, allPossible) -> currentSet.removeAll(tag.getValues()));
 
 			return this;
 		}
@@ -160,15 +191,13 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		 */
 		public Builder<T, F> add(@NotNull String... names) {
 			for (String name : names) {
-				final T match = BukkitTools.matchRegistry(this.registry, name);
+				final T match = get(name);
 				if (match != null)
-					anyMatchPredicates.add(t -> t.equals(match));
+					layers.add((currentSet, allPossible) -> currentSet.add(match));
 				else {
 					try {
 						TownyMessaging.sendDebugMsg("Expected element with name '" + name + "' was not found in the " + this.clazz.getSimpleName() + " registry.");
 					} catch (final Exception ignored) {}
-					
-					anyMatchPredicates.add(t -> false);
 				}
 			}
 
@@ -180,15 +209,33 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		 * @param list list to add.
 		 */
 		public Builder<T, F> includeList(@NotNull AbstractRegistryList<T> list) {
-			for (final T element : list.tagged) {
-				anyMatchPredicates.add(t -> t.equals(element));
-			}
+			layers.add((currentSet, allPossible) -> {
+				currentSet.addAll(list.tagged());
+			});
 
 			return this;
 		}
+		
+		public Builder<T, F> retainList(@NotNull AbstractRegistryList<T> list) {
+			layers.add(((currentSet, allPossible) -> {
+				currentSet.retainAll(list.tagged());
+			}));
+			return this;
+		}
 
-		public Builder<T, F> filter(@NotNull Predicate<T> predicate) {
-			allMatchPredicates.add(predicate);
+		public Builder<T, F> removeIf(@NotNull Predicate<T> predicate) {
+			layers.add((currentSet, allPossible) -> {
+				currentSet.removeIf(predicate);
+			});
+			return this;
+		}
+
+		public Builder<T, F> addIf(@NotNull Predicate<T> predicate) {
+			layers.add((currentSet, allPossible) -> {
+				for (final T value : allPossible)
+					if (predicate.test(value))
+						currentSet.add(value);
+			});
 			return this;
 		}
 		
@@ -197,6 +244,16 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 				consumer.accept(this);
 			
 			return this;
+		}
+		
+		@Nullable
+		private T get(final String name) {
+			return BukkitTools.matchRegistry(this.registry, name);
+		}
+		
+		private interface LayerConsumer<T> extends BiConsumer<Collection<T>, Collection<T>> {
+			@Override
+			void accept(final @NotNull Collection<T> currentSet, final @NotNull @Unmodifiable Collection<T> allPossible);
 		}
 	}
 }

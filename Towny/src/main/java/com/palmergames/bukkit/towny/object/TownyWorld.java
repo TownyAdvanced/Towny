@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -572,8 +573,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
-		entityExplosionProtection = new HashSet<>();
-		entityExplosionProtection.addAll(TownySettings.toEntityTypeSet(entities));
+		entityExplosionProtection = new LinkedHashSet<>(TownySettings.toEntityTypeSet(entities));
 	}
 
 	public Collection<EntityType> getPlotManagementWildRevertEntities() {
@@ -594,8 +594,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertBlockWhitelist(List<String> mats) {
-		plotManagementWildRevertBlockWhitelist = new HashSet<>();
-		plotManagementWildRevertBlockWhitelist.addAll(TownySettings.toMaterialSet(mats));
+		plotManagementWildRevertBlockWhitelist = new LinkedHashSet<>(TownySettings.toMaterialSet(mats));
 	}
 
 	public Collection<Material> getPlotManagementWildRevertBlockWhitelist() {
@@ -650,7 +649,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
-		blockExplosionProtection = new HashSet<>(TownySettings.toMaterialSet(mats));
+		blockExplosionProtection = new LinkedHashSet<>(TownySettings.toMaterialSet(mats));
 	}
 
 	public Collection<Material> getPlotManagementWildRevertBlocks() {
@@ -672,9 +671,9 @@ public class TownyWorld extends TownyObject {
 
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 		if (unclaimedZoneIgnoreIds == null)
-			this.unclaimedZoneIgnoreBlockMaterials = new HashSet<>(TownySettings.getUnclaimedZoneIgnoreMaterials());
+			this.unclaimedZoneIgnoreBlockMaterials = new LinkedHashSet<>(TownySettings.getUnclaimedZoneIgnoreMaterials());
 		else
-			this.unclaimedZoneIgnoreBlockMaterials = new HashSet<>(TownySettings.toMaterialSet(unclaimedZoneIgnoreIds));
+			this.unclaimedZoneIgnoreBlockMaterials = new LinkedHashSet<>(TownySettings.toMaterialSet(unclaimedZoneIgnoreIds));
 	}
 	
 	public Collection<Material> getUnclaimedZoneIgnoreMaterials() {
