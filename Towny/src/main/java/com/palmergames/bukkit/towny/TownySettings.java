@@ -109,8 +109,8 @@ public class TownySettings {
 	private static final SortedMap<Integer, TownLevel> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, NationLevel> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	
-	private static final Set<Material> itemUseMaterials = new HashSet<>();
-	private static final Set<Material> switchUseMaterials = new HashSet<>();
+	private static final Set<Material> itemUseMaterials = new LinkedHashSet<>();
+	private static final Set<Material> switchUseMaterials = new LinkedHashSet<>();
 	private static final List<Class<?>> protectedMobs = new ArrayList<>();
 	
 	private static final Map<NamespacedKey, Consumer<CommentedConfiguration>> CONFIG_RELOAD_LISTENERS = new HashMap<>();
@@ -1938,9 +1938,9 @@ public class TownySettings {
 		return getFireSpreadBypassMaterials().contains(mat);
 	}
 	
-	public static Collection<Material> getUnclaimedZoneIgnoreMaterials() {
+	public static Collection<String> getUnclaimedZoneIgnoreMaterials() {
 
-		return toMaterialSet(getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE));
+		return getStrArr(ConfigNodes.UNCLAIMED_ZONE_IGNORE);
 	}
 	
 	public static List<Class<?>> getProtectedEntityTypes() {

@@ -6,6 +6,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -271,7 +272,6 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 	 * A class to allow round tripping with string names
 	 */
 	@SuppressWarnings("unchecked")
-	@ApiStatus.Internal
 	public static class CompactableCollection<T extends Keyed> extends AbstractCollection<T> {
 		private final List<String> names = new ArrayList<>();
 		private final Class<T> clazz;
@@ -280,6 +280,25 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 
 		public CompactableCollection(Class<T> clazz) {
 			this.clazz = clazz;
+		}
+
+		@ApiStatus.Internal
+		protected static CompactableCollection<Material> materials() {
+			return new CompactableCollection<>(Material.class);
+		}
+		
+		protected static CompactableCollection<Material> materials(final @NotNull Collection<String> materials) {
+			return JavaUtil.make(materials(), m -> m.setNames(materials));
+		}
+
+		@ApiStatus.Internal
+		protected static CompactableCollection<EntityType> entityTypes() {
+			return new CompactableCollection<>(EntityType.class);
+		}
+
+		@ApiStatus.Internal
+		protected static CompactableCollection<EntityType> entityTypes(final @NotNull Collection<String> entityTypes) {
+			return JavaUtil.make(entityTypes(), m -> m.setNames(entityTypes));
 		}
 		
 		public void setNames(final Collection<String> names) {

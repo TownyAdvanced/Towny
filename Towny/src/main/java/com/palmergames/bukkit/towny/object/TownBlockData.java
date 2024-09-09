@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
  import java.util.EnumSet;
- import java.util.HashSet;
+ import java.util.LinkedHashSet;
  import java.util.Set;
 
 public class TownBlockData {
@@ -18,9 +18,9 @@ public class TownBlockData {
 	private NamedTextColor colour = null;
 	private double cost = 0.0;
 	private double tax = 0.0;
-	private final Set<Material> itemUseIds = new HashSet<>(); // List of item names that will trigger an item use test.
-	private final Set<Material> switchIds = new HashSet<>(); // List of item names that will trigger a switch test.
-	private final Set<Material> allowedBlocks = new HashSet<>(); // List of item names that will always be allowed.
+	private final Set<Material> itemUseIds = new LinkedHashSet<>(); // List of item names that will trigger an item use test.
+	private final Set<Material> switchIds = new LinkedHashSet<>(); // List of item names that will trigger a switch test.
+	private final Set<Material> allowedBlocks = new LinkedHashSet<>(); // List of item names that will always be allowed.
 	
 	public String getMapKey() {
 		return mapKey;

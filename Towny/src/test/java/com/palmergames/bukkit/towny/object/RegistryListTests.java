@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.object;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 import org.bukkit.Material;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,17 +52,6 @@ public class RegistryListTests {
 	}
 	
 	@Test
-	void testMinimalEntityCollection() {
-		List<String> input = List.of("wolf", "monsters");
-		List<EntityType> inputAsEntityType = new ArrayList<>(TownySettings.constructRegistryList(EntityLists.newBuilder(), Tag.REGISTRY_ENTITY_TYPES, Arrays.asList("+wolf", "c:Monster"), EntityType::getEntityClass).tagged);
-		
-		Collection<String> minimal = BukkitTools.toMinimalEntityCollection(inputAsEntityType);
-		
-		assertEquals(input.size(), minimal.size());
-		assertTrue(input.containsAll(minimal));
-	}
-	
-	@Test
 	void testCompactableCollectionRemoval() {
 		AbstractRegistryList.CompactableCollection<EntityType> collection = new AbstractRegistryList.CompactableCollection<>(EntityType.class);
 		collection.setNames(List.of("wolf", "monsters"));
@@ -89,7 +76,7 @@ public class RegistryListTests {
 	
 	@Test
 	void testCompactableCollectionCompact() {
-		AbstractRegistryList.CompactableCollection<EntityType> collection = new AbstractRegistryList.CompactableCollection<>(EntityType.class);
+		AbstractRegistryList.CompactableCollection<EntityType> collection = AbstractRegistryList.CompactableCollection.entityTypes();
 		collection.setNames(List.of("monsters"));
 		
 		collection.remove(EntityType.ZOMBIE);
@@ -107,7 +94,7 @@ public class RegistryListTests {
 	
 	@Test
 	void testCompactableDuplicateRemoval() {
-		AbstractRegistryList.CompactableCollection<EntityType> collection = new AbstractRegistryList.CompactableCollection<>(EntityType.class);
+		AbstractRegistryList.CompactableCollection<EntityType> collection = AbstractRegistryList.CompactableCollection.entityTypes();
 		collection.setNames(List.of("monsters", "zombie"));
 		
 		assertTrue(collection.remove(EntityType.ZOMBIE));
