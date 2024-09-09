@@ -9969,3 +9969,4 @@ v0.92.0.11:
 0.100.3.14:
   - Fix NPE when player without town tab completes /t outpost, courtesy of Warrior with PR #7581.
     - Closes #7580.
+  - Bump net.kyori:adventure-platform-bukkit from 4.3.3 to 4.3.4.
