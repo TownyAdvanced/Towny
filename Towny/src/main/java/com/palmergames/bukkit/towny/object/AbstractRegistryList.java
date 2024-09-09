@@ -1,23 +1,33 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import com.palmergames.bukkit.util.EntityLists;
+import com.palmergames.bukkit.util.ItemLists;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
+import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
@@ -254,6 +264,143 @@ public abstract class AbstractRegistryList<T extends Keyed> {
 		private interface LayerConsumer<T> extends BiConsumer<Collection<T>, Collection<T>> {
 			@Override
 			void accept(final @NotNull Collection<T> currentSet, final @NotNull @Unmodifiable Collection<T> allPossible);
+		}
+	}
+
+	/**
+	 * A class to allow round tripping with string names
+	 */
+	@SuppressWarnings("unchecked")
+	@ApiStatus.Internal
+	public static class CompactableCollection<T extends Keyed> extends AbstractCollection<T> {
+		private final List<String> names = new ArrayList<>();
+		private final Class<T> clazz;
+		
+		private final Set<T> cachedValues = new HashSet<>();
+
+		public CompactableCollection(Class<T> clazz) {
+			this.clazz = clazz;
+		}
+		
+		public void setNames(final Collection<String> names) {
+			synchronized (this.names) {
+				this.names.clear();
+				this.names.addAll(names);
+			}
+			
+			updateCache();
+		}
+		
+		public Collection<String> getNames() {
+			return this.names;
+		}
+
+		@Override
+		public @NotNull Iterator<T> iterator() {
+			synchronized (cachedValues) {
+				return cachedValues.iterator();
+			}
+		}
+
+		@Override
+		public int size() {
+			synchronized (cachedValues) {
+				return cachedValues.size();
+			}
+		}
+		
+		@Override
+		public boolean add(final T value) {
+			Objects.requireNonNull(value, "value");
+			final String asString = BukkitTools.keyAsString(value.getKey());
+
+			//noinspection ConstantValue
+			final boolean result = !this.names.contains(asString) && this.names.add(asString);
+			if (result) updateCache();
+			
+			return result;
+		}
+		
+		@Override
+		public boolean remove(final Object object) {
+			Objects.requireNonNull(object, "value");
+			
+			if (!object.getClass().equals(this.clazz) || !(object instanceof Keyed key))
+				throw new ClassCastException(object.getClass() + " is not a " + this.clazz);
+			
+			final T value = (T) object;
+			final String asString = BukkitTools.keyAsString(value.getKey());
+
+			final boolean result = this.names.remove(BukkitTools.keyAsString(key.getKey()));
+			if (result) updateCache();
+			
+			// Value is still part of the cached values despite being removed from names, which must mean they're part of a group
+			if (this.cachedValues.contains(value) && !this.names.contains(asString)) {
+				// Find the group
+				for (final Map.Entry<String, Collection<? extends Keyed>> group : getAllGroups().entrySet()) {
+					int index = this.names.indexOf(group.getKey());
+					
+					if (index != -1 && group.getValue().contains(value)) {
+						this.names.remove(index);
+						
+						// Create a copy of the group values without the element that's being removed
+						Set<? extends Keyed> replacingValues = new HashSet<>(group.getValue());
+						replacingValues.remove(value);
+						
+						this.names.addAll(index, BukkitTools.convertKeyedToString(replacingValues));
+						updateCache();
+						
+						return true;
+					}
+				}
+				
+			}
+
+			return result;
+		}
+
+		/**
+		 * @return {@code true} if names were able to be compacted into a group
+		 */
+		public boolean compact() {
+			final int oldSize = this.names.size();
+
+			Collection<String> newNames = BukkitTools.convertKeyedToString(this.cachedValues);
+
+			for (Map.Entry<String, Collection<? extends Keyed>> group : getAllGroups().entrySet()) {
+				Collection<String> asString = BukkitTools.convertKeyedToString(group.getValue());
+
+				if (newNames.containsAll(asString)) {
+					newNames.removeAll(asString);
+					newNames.add(group.getKey());
+				}
+			}
+			
+			this.setNames(newNames);
+			
+			return this.names.size() != oldSize;
+		}
+		
+		private void updateCache() {
+			synchronized (cachedValues) {
+				cachedValues.clear();
+				
+				if (this.clazz == Material.class)
+					cachedValues.addAll((Collection<T>) TownySettings.toMaterialSet(this.names));
+				else if (this.clazz == EntityType.class)
+					cachedValues.addAll((Collection<T>) TownySettings.toEntityTypeSet(this.names));
+				else 
+					throw new UnsupportedOperationException("Unsupported class " + this.clazz);
+			}
+		}
+		
+		private Map<String, Collection<? extends Keyed>> getAllGroups() {
+			if (this.clazz == Material.class)
+				return ItemLists.allGroups();
+			else if (this.clazz == EntityType.class) {
+				return EntityLists.allGroups();
+			} else
+				throw new UnsupportedOperationException("Unsupported class " + this.clazz);
 		}
 	}
 }

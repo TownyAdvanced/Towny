@@ -2,6 +2,7 @@ package com.palmergames.bukkit.util;
 
 import com.google.common.collect.ImmutableSet;
 import com.palmergames.bukkit.towny.object.AbstractRegistryList;
+import org.bukkit.Keyed;
 import org.bukkit.Registry;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
@@ -97,7 +98,7 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	}
 
 	@ApiStatus.Internal
-	public static Map<String, Collection<EntityType>> allGroups() {
+	public static Map<String, Collection<? extends Keyed>> allGroups() {
 		return GROUPS.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().tagged()));
 	}
 	

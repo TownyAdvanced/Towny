@@ -436,11 +436,12 @@ public class BukkitTools {
 	/**
 	 * Converts a collection of materials into a minimal length representation of itself as strings, by using item lists
 	 */
+	@Deprecated
 	@ApiStatus.Internal
 	public static Collection<String> toMinimalMaterialCollection(Collection<Material> materials) {
 		LinkedHashSet<String> names = new LinkedHashSet<>(convertKeyedToString(materials));
 		
-		for (Map.Entry<String, Collection<Material>> group : ItemLists.allGroups().entrySet()) {
+		for (Map.Entry<String, Collection<? extends Keyed>> group : ItemLists.allGroups().entrySet()) {
 			Collection<String> asString = convertKeyedToString(group.getValue());
 			
 			if (names.containsAll(asString)) {
@@ -452,11 +453,12 @@ public class BukkitTools {
 		return names;
 	}
 
+	@Deprecated
 	@ApiStatus.Internal
 	public static Collection<String> toMinimalEntityCollection(Collection<EntityType> entityTypes) {
 		LinkedHashSet<String> names = new LinkedHashSet<>(convertKeyedToString(entityTypes));
 
-		for (Map.Entry<String, Collection<EntityType>> group : EntityLists.allGroups().entrySet()) {
+		for (Map.Entry<String, Collection<? extends Keyed>> group : EntityLists.allGroups().entrySet()) {
 			Collection<String> asString = convertKeyedToString(group.getValue());
 
 			if (names.containsAll(asString)) {

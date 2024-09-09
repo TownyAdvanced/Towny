@@ -507,8 +507,13 @@ public class TownySettings {
 		 */
 		itemUseMaterials.addAll(toMaterialSet(getStrArr(ConfigNodes.PROT_ITEM_USE_MAT)));
 	}
+	
+	@Deprecated
+	private static Set<EntityType> toEntityTypeSet$$bridge$$public(final List<String> entityList) {
+		return toEntityTypeSet(entityList);
+	}
 
-	public static Set<EntityType> toEntityTypeSet(final List<String> entityList) {
+	public static Set<EntityType> toEntityTypeSet(final Collection<String> entityList) {
 		final Set<EntityType> entities = new LinkedHashSet<>();
 		
 		for (final String entityName : entityList) {
@@ -549,7 +554,12 @@ public class TownySettings {
 		return entities;
 	}
 
-	public static Collection<Material> toMaterialSet(List<String> materialList) {
+	@Deprecated
+	private static Collection<Material> toMaterialSet$$bridge$$public(List<String> materialList) {
+		return toMaterialSet(materialList);
+	}
+
+	public static Collection<Material> toMaterialSet(Collection<String> materialList) {
 		Set<Material> materials = new LinkedHashSet<>();
 		
 		for (String materialName : materialList) {

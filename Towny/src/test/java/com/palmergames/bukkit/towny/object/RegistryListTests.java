@@ -63,4 +63,54 @@ public class RegistryListTests {
 		assertEquals(input.size(), minimal.size());
 		assertTrue(input.containsAll(minimal));
 	}
+	
+	@Test
+	void testCompactableCollectionRemoval() {
+		AbstractRegistryList.CompactableCollection<EntityType> collection = new AbstractRegistryList.CompactableCollection<>(EntityType.class);
+		collection.setNames(List.of("wolf", "monsters"));
+
+		assertTrue(collection.contains(EntityType.WOLF));
+		assertTrue(collection.contains(EntityType.ZOMBIE));
+		
+		collection.remove(EntityType.ZOMBIE);
+		assertFalse(collection.contains(EntityType.ZOMBIE));
+		
+		// Zombie is removed now, so the group gets unwrapped and the size of the backing names must increase
+		assertTrue(collection.getNames().size() > 10);
+		
+		// Test compaction
+		assertTrue(collection.add(EntityType.ZOMBIE));
+		assertTrue(collection.compact());
+		
+		assertEquals(2, collection.getNames().size());
+		
+		assertFalse(collection.compact()); // Nothing to compact
+	}
+	
+	@Test
+	void testCompactableCollectionCompact() {
+		AbstractRegistryList.CompactableCollection<EntityType> collection = new AbstractRegistryList.CompactableCollection<>(EntityType.class);
+		collection.setNames(List.of("monsters"));
+		
+		collection.remove(EntityType.ZOMBIE);
+		
+		assertTrue(collection.getNames().size() > 10);
+		
+		collection.add(EntityType.ZOMBIE);
+		
+		assertTrue(collection.getNames().size() > 10);
+		assertTrue(collection.compact());
+		
+		assertEquals(1, collection.getNames().size());
+		assertFalse(collection.compact());
+	}
+	
+	@Test
+	void testCompactableDuplicateRemoval() {
+		AbstractRegistryList.CompactableCollection<EntityType> collection = new AbstractRegistryList.CompactableCollection<>(EntityType.class);
+		collection.setNames(List.of("monsters", "zombie"));
+		
+		assertTrue(collection.remove(EntityType.ZOMBIE));
+		assertTrue(collection.getNames().size() > 10);
+	}
 }
