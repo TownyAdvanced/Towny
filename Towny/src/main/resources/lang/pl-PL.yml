@@ -815,10 +815,13 @@ msg_err_over_outposts_limit: 'Nie możesz teleportować się do swojej Placówki
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Wygnańcy:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Wygnańcy:'
 online: '&a(Online)'
-registered_last_online: '&2Zarejestrowany: &a%s &8| &2Ostatno Aktywny: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Uprawnienia:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Zarejestrowany: &a%s &8| &2Ostatno Aktywny: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Uprawnienia:'
 status_on: '&4TAK'
 status_off: '&aNIE'
 status_on_good: '&aTAK'
@@ -1267,7 +1270,8 @@ msg_town_destroyed_by_nation_tax: '&bPodbitego miasta %s nie było stać na poda
 msg_town_destroyed_by_nation_tax_multiple: '&bNastępujących podbitych miast nie było stać na podatek na nację i upadły: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bTwoje miasto zostało zwolnione z podatku dla nacji.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Status Ruiny'
 msg_comptype_bankrupt: 'Stan Bankructwa'
 msg_ruined: '&c(Zrujnowane)'
@@ -1407,9 +1411,11 @@ status_trustedlist: 'Zaufani'
 msg_click_to_edit: '&6Kliknij, aby edytować.'
 permission_gui_header: 'Okienko Zarzadzania Uprawnieniami Towny'
 msg_last_edited: '&7&oOstatniej zmiany dokonano %s przez %s.'
-msg_trusted_added: '&bDodano %s do grona zaufanych w regionie %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bDodano %s do grona zaufanych w regionie %s.'
 msg_already_trusted: '&b%s już należy do grona zaufanych w regionie %s.'
-msg_trusted_added_2: '&b%s dodał cię do grona zaufanych w regionie %s %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s dodał cię do grona zaufanych w regionie %s %s.'
 msg_not_trusted: '&b%s nie należy do grona zaufanych w regionie %s.'
 msg_trusted_removed: '&bUsunięto %s z grona zaufanych w regionie %s.'
 msg_trusted_removed_2: '&b%s usunął cię z grona zaufanych regionu %s %s.'

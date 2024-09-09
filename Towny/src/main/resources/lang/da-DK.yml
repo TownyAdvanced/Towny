@@ -486,7 +486,8 @@ msg_admin_set_plot_help_1: 'Når i en by.'
 msg_admin_set_plot_help_2: 'Når i ødemarken.'
 msg_err_not_enough_outposts_free_to_claim: 'Ikke nok forposter tilgængelige til at gøre krav på %s/%s'
 msg_err_over_outposts_limit: 'Du kan ikke teleportere til din forpost. Du er over din grænse %s/%s'
-registered_last_online: '&2Registreret: &a%s &8| &2Sidst online: &a%s' #Used in mayor hover text in /town status screen.
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registreret: &a%s &8| &2Sidst online: &a%s'
 status_on: '&4TIL'
 status_off: '&aFRA'
 status_on_good: '&aTIL'
@@ -971,9 +972,11 @@ msg_click_purchase: 'Klik for at købe'
 msg_you_must_join_this_town_to_claim_this_plot: 'Du skal tilslutte dig denne by: %s, for at gøre krav på denne grund. Vil du være med i byen og fortsætte med at gøre krav?'
 msg_click_to_edit: '&6Klik for at redigere.'
 msg_last_edited: '&7&oSidst ændret ved %s af %s.'
-msg_trusted_added: '&bTilføjede %s som betroet i denne %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bTilføjede %s som betroet i denne %s.'
 msg_already_trusted: '&b%s har allerede tillid til denne %s.'
-msg_trusted_added_2: '&b%s har stolet på dig i en %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s har stolet på dig i en %s: %s.'
 msg_not_trusted: '&b%s har ikke tillid til denne %s.'
 msg_trusted_removed: '&bFjernede %s som betroet i denne %s.'
 msg_trusted_removed_2: '&b%s har fjernet dig som betroet i en %s: %s.'

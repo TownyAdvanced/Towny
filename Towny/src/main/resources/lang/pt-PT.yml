@@ -519,10 +519,13 @@ msg_err_over_outposts_limit: 'Não te podes teletransportar para o teu posto ava
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Exilados:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Exilados:'
 online: '&a(Online)'
-registered_last_online: '&2Registado a &a%s &8| &2Online pela última vez a &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Permissão:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registado a &a%s &8| &2Online pela última vez a &a%s'
+#Used on /plot perm, /res
+status_perm: 'Permissão:'
 status_on: '&4ATIVADO'
 status_off: '&aDESATIVADO'
 status_on_good: '&aATIVADO'
@@ -1083,9 +1086,11 @@ status_trustedlist: 'Confiado'
 msg_click_to_edit: '&6Clica para editar.'
 permission_gui_header: 'Interface de Permissões do Towny'
 msg_last_edited: '&7&oÚltima alteração em %s por %s.'
-msg_trusted_added: '&bAdicionado %s como confiável neste %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bAdicionado %s como confiável neste %s.'
 msg_already_trusted: '&b%s já é confiável nisso %s.'
-msg_trusted_added_2: '&b%s confiou em você em um %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s confiou em você em um %s: %s.'
 msg_not_trusted: '&b%s não é confiável nisso %s.'
 msg_trusted_removed: '&bRemovido %s como confiavel neste %s.'
 msg_trusted_removed_2: '&b%s removeu você como confiável em um %s: %s.'

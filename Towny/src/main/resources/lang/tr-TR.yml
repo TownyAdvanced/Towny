@@ -71,7 +71,7 @@ town_list_help_6: "Kasabaları çevrim içi sayılarına göre listele."
 town_set_help_0: "Kasabanın ismini değiştir."
 town_set_help_1: "Üzerinde durduğunuz bloğa kasaba için spawn noktası ekleyin."
 town_set_help_2: "Kasabanın doğma noktasını veya bir sınır dışında dururken bir sınır dışı doğma noktasını ayarlar."
-town_set_help_3: "yardım için /town set perm komutunu kullan.\n"
+town_set_help_3: "yardım için /town set perm komutunu kullan."
 town_set_help_4: "Şehrin vergi miktarını ayarla."
 town_set_help_5: "Arsa başına vergiler için özel miktar ayarlayın."
 town_set_help_6: "Arsa satın almak için varsayılan fiyatları ayarlayın."
@@ -728,10 +728,13 @@ msg_err_over_outposts_limit: 'Karakoluna ışınlanamazsın, limitini aştın %s
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Haydutlar:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Haydutlar:'
 online: '&a(Aktif)'
-registered_last_online: '&2Kayıtlı: &a%s &8| &2Son Çevrimiçi: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Yetki:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Kayıtlı: &a%s &8| &2Son Çevrimiçi: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Yetki:'
 status_on: '&4AÇIK'
 status_off: '&aKAPALI'
 status_on_good: '&aAÇIK'
@@ -788,7 +791,7 @@ status_res_taxexempt: 'Yetkili, şehir vergilerini ödemekten muaftır.'
 status_res_tax: 'Şehir vergisi:'
 status_res_plottax: 'Toplam arsa vergileri:'
 status_res_totaltax: 'Ödenmesi_gereken_toplam_vergi:'
-status_townblock_plottax: 'Arsa vergisi:'
+status_townblock_plottax: 'Arsa vergisi: '
 status_townblock_untaxed: 'Vergilendirilmemiş'
 status_townblock_minjoindays: 'Arsa satın alımı için %s günden fazla kasabanın üyesi olman lazım.'
 status_townblock_maxjoindays: 'Bu arsayı satın almak %s günden az kasaba üyeliği gerektirir.'
@@ -1178,7 +1181,8 @@ msg_town_destroyed_by_nation_tax: '&bFethedilen şehir %s ülke vergisini ödeye
 msg_town_destroyed_by_nation_tax_multiple: '&bAşağıdaki fethedilen şehirler ulus vergisini karşılayamadı ve düştü: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bKasabanız ulus vergisinden muaftı.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Yıkık Durumu'
 msg_comptype_bankrupt: 'İflas Durumu'
 msg_ruined: '&c(Yıkık)'
@@ -1317,9 +1321,11 @@ status_trustedlist: 'Güvenilir'
 msg_click_to_edit: '&6Düzenlemek için tıkla.'
 permission_gui_header: 'Towny İzni GUI'
 msg_last_edited: '&7&oEn son %s ile %s değiştirilmiştir.'
-msg_trusted_added: '&b%s, bu %s''ye güvenilir olarak eklendi.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b%s, bu %s''ye güvenilir olarak eklendi.'
 msg_already_trusted: '&b%s, bu %s için zaten güvenilir.'
-msg_trusted_added_2: '&b%s, size %s konusunda güvendi: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s, size %s konusunda güvendi: %s.'
 msg_not_trusted: '&b%s, bu %s için güvenilir değil.'
 msg_trusted_removed: '&b%s, bu %s içinde güvenilir olarak kaldırıldı.'
 msg_trusted_removed_2: '&b%s, sizi bir %s: %s içinde güvenilir olarak çıkardı.'
@@ -1381,7 +1387,7 @@ status_bad_yes: '&cEVET'
 status_good_no: '&aHAYIR'
 status_resident_tax_title: '%s Vergisi'
 #Added in 0.122
-msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: "Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.\n"
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Ülke başkentinize yeterince yakın olmayacakları için, birleştirme tamamlandığında şu kasabalar kaldırılacak: %s.'
 #Added in 0.123
 msg_err_invalid_townyworld: "'%s' geçerli bir towny dünyası değil."
 msg_err_enter_world_name_first: 'Lütfen önce dünyanın adını girin.'
@@ -1502,7 +1508,7 @@ msg_jailed_handbook_6: 'Ama vahşi doğaya ulaşmadan ölme, yoksa hemen hapse g
 #Jail handbook messages
 msg_jailed_teleport: 'Neyse ki, ender incilerin ve koro meyvesinin kaçmanıza yardımcı olması için kullanılmasına izin veriliyor, şimdi sadece bazılarını ele geçirmeniz gerekiyor.'
 #Jail handbook messages
-msg_jailed_war_prisoner: "Bir savaş tutsağı olarak, yurttaşlarınız hapishane planının Canını 0''a indirebilirse veya hapse attığınız kasaba savaştan çıkarılırsa serbest bırakılırsınız.\n"
+msg_jailed_war_prisoner: 'Bir savaş tutsağı olarak, yurttaşlarınız hapishane planının Canını 0''''a indirebilirse veya hapse attığınız kasaba savaştan çıkarılırsa serbest bırakılırsınız.'
 #Jail handbook title
 msg_jailed_title: 'Hapse atıldınız :('
 #Jail handbook author
@@ -1647,9 +1653,9 @@ msg_perm_hud_outsider: 'yabancı'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_name: 'Arsa: '
 #Seen in /plot perm hud:
-msg_perm_hud_plotgroup_name: 'Arsa grubu:'
+msg_perm_hud_plotgroup_name: 'Arsa grubu: '
 #Seen in /plot perm hud:
-msg_perm_hud_plot_for_sale: 'Satışta:'
+msg_perm_hud_plot_for_sale: 'Satışta: '
 #Seen in /plot perm hud:
 msg_perm_hud_no: 'Hayır.'
 #Seen in /plot perm hud:
@@ -1802,11 +1808,11 @@ msg_town_buytown_not_forsale: "Bu kasaba satışta değil."
 msg_town_buytown_ruined: "Mahvolmuş kasabalar satın alınamaz."
 msg_resident_about_reset: "&b Sakin silinmek üzere."
 #The format used for the /t say and /n say commands.
-town_say_format: "%s diyorki: %s\n"
+town_say_format: "%s diyorki: %s"
 msg_unnamed: "İsimlendirilmemiş."
 msg_err_nation_cannot_sanction_own_town: "Ulusun parçası olan bir kasabaya yaptırım uygulayamazsın."
 msg_err_nation_town_isnt_sanctioned: "Ulusun bu kasabaya yaptırım uygulamıyor."
-msg_err_nation_town_already_sanctioned: "Ulusun halihazırda bu kasabaya yaptırım uyguluyor.\n"
+msg_err_nation_town_already_sanctioned: "Ulusun halihazırda bu kasabaya yaptırım uyguluyor."
 msg_err_nation_town_sanctioned: "Ulusun artık yaptırım uyguluyor. Artık ulusuna katılamazlar."
 msg_err_nation_has_no_sanctioned_towns: "Ulusun yaptırım uyguladığı bir kasaba bulunmuyor."
 title_nation_sanctioned_towns: 'Yaptırım uygulanmış Şehirler.'
@@ -1816,14 +1822,14 @@ msg_err_no_nation_cannot_do: "Bu eylemi gerçekleştiremezsiniz çünkü belirli
 msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Kasabanız %s tarafından yaptırıma tabi tutuldu, burada doğamazsınız."
 msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "Aşağıdaki koordinatlar alınamaz çünkü uygun olmayan bir biyomu içeriyorlar: %s."
 msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "Aşağıdaki koordinatlar alınamaz çünkü çok fazla okyanus biyomu içeriyorlar: %s."
-msg_err_cannot_begin_town_in_this_biome: "Bu biyomda bir kasaba kuramazsınız.\n"
+msg_err_cannot_begin_town_in_this_biome: "Bu biyomda bir kasaba kuramazsınız."
 msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "Bu kasabayı ele geçiremizsiniz. Ulusunuz karşı ulusu düşman olarak görmüyor."
 msg_err_unable_to_command_outside_of_town: 'Bu komutu kasaba sınırları dışında kullanamazsınız.'
 msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'Bu komutu bankanın dışında kullanamazsınız.'
 msg_err_you_cannot_outlaw_your_mayor: "Kasabanın belediye başkanını yasaklayamazsınız."
 msg_err_you_cannot_outlaw_because_of_rank: "%s sahip olduğu kasaba rütbesi gereği yasaklanamaz."
 status_nation_sanctioned_towns: "Yaptırım uygulanmış Şehirler."
-msg_all_of_your_towns_sent_invites_have_been_cancelled: "Gönderilmiş tüm kasaba davetleri iptal edildi.\n"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "Gönderilmiş tüm kasaba davetleri iptal edildi."
 msg_err_name_validation_invalid_characters: "%s Towny regex ayarlarında izin verilmeyen karakterler içeriyor."
 msg_err_name_validation_begins_with_eco_prefix: "%s Ekonomi özelliklerinde kullanılan harfler ile başlıyor, bu adı kullanamazsınız."
 msg_err_name_validation_name_already_in_use: "%s daha önceden alınmış."
@@ -1833,10 +1839,10 @@ outlawed_in: "Yasaklandı"
 teleport_warmup_title_dont_move: "&6Hareket etme!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &Işınlanmanıza 7 saniye kaldı."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Kasaban mahvolmuş durumda. %s arsa koruma sınırları kaldırıldı."
-msg_err_town_no_longer_owns_this_plot: "%s artık bu arsanın sahibi değil.\n"
-msg_town_cede_plot_confirmation_give_plot: "Arsayı %s adlı oyuncuya devretmek istediğine emin misin.\n"
+msg_err_town_no_longer_owns_this_plot: "%s artık bu arsanın sahibi değil."
+msg_town_cede_plot_confirmation_give_plot: "Arsayı %s adlı oyuncuya devretmek istediğine emin misin."
 msg_town_cede_plot_denied: "%s teklifini reddetti."
-msg_town_cede_plot_unable_to_accept: "%s adlı oyuncu teklifini kabul edemez.\n"
+msg_town_cede_plot_unable_to_accept: "%s adlı oyuncu teklifini kabul edemez."
 msg_err_cannot_claim_plot_join_date_too_low: "Bu arsayı alabilmek için %s süredir kasabanın üyesi olmanız lazım."
 msg_err_cannot_claim_plot_join_date_too_high: "Bu arsa %s günden daha az süredir kasaba üyesi olan oyuncular içindir."
 msg_new_resident_spawn_to_town_prompt: "Katıldığın kasabada doğmak ister misin?"

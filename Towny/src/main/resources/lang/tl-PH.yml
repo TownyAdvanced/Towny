@@ -513,10 +513,13 @@ msg_err_over_outposts_limit: 'Hindi ka maaaring mag-teleport sa iyong outpost, l
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Mga Outlaws:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Mga Outlaws:'
 online: '&a(Online)'
-registered_last_online: '&2Nakarehistro: &a%s &8| &2Huling Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Perm:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Nakarehistro: &a%s &8| &2Huling Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Perm:'
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'

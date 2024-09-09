@@ -140,6 +140,7 @@ nation_set_help_8: "Définissez le point d'apparition de la nation."
 nation_toggle_help_0: "Active/désactive le statut pacifique de la nation."
 nation_toggle_help_1: "Active/désactive le statut public, permettant aux non-résidents d'utiliser /n spawn."
 nation_toggle_help_2: "Active/désactive le statut ouvert, permettant aux villes de rejoindre sans invitation."
+nation_toggle_help_3: "Active/désactive le pourcentage de taxe, ce qui fait que les villes paient un pourcentage au lieu d'un taux fixe."
 nation_sanction_help_1: "Ajoute une ville à la liste des villes sanctionnées."
 nation_sanction_help_2: "Supprime une ville de la liste des villes sanctionnées."
 nation_sanction_help_3: "Liste les villes sanctionnées par votre nation."
@@ -149,6 +150,7 @@ king_help_2: 'Gérer vos alliances.'
 king_help_3: 'Gérer vos ennemis.'
 king_help_4: "Retirez de l'argent de votre banque nationale."
 king_help_5: "Ajouter ou supprimer des villes de votre nation."
+king_help_6: "."
 res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
@@ -634,10 +636,13 @@ msg_err_over_outposts_limit: 'Vous ne pouvez pas vous téléporter vers votre av
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Hors-la-loi :' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Hors-la-loi :'
 online: '&a(En ligne)'
-registered_last_online: '&2Enregistré: &a%s &8| &2Dernière connexion: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Permission :' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Enregistré: &a%s &8| &2Dernière connexion: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Permission :'
 status_on: '&4ACTIF'
 status_off: '&aDésactivé'
 status_on_good: '&aActif'
@@ -1081,7 +1086,8 @@ msg_town_destroyed_by_nation_tax: '&bLa ville conquise %s n''a pas pu payer la t
 msg_town_destroyed_by_nation_tax_multiple: '&bLes villes conquises suivantes ne pouvaient pas payer la taxe nationale et sont tombées: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bVotre ville était dispensée de la taxe nationale.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Statut en Ruine'
 msg_comptype_bankrupt: 'Statut en Banqueroute'
 msg_ruined: '&c(Ruiné)'
@@ -1219,9 +1225,11 @@ status_trustedlist: 'De confiance'
 msg_click_to_edit: 'Cliquez pour modifier.'
 permission_gui_header: 'Interface de permission de la ville'
 msg_last_edited: '&7&oDernière modification à %s par %s.'
-msg_trusted_added: '&b %s a été ajouté comme fiable dans cette %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b %s a été ajouté comme fiable dans cette %s.'
 msg_already_trusted: '&b%s est déjà de confiance dans ce %s.'
-msg_trusted_added_2: '&b%s vous a fait confiance dans %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s vous a fait confiance dans %s: %s.'
 msg_not_trusted: '&b%s n''est pas encore de confiance dans ce %s.'
 msg_trusted_removed: '&b %s n’est plus de confiance dans ce %s.'
 msg_trusted_removed_2: '&b%s vous a retiré dans ce %s: %s.'

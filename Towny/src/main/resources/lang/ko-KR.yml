@@ -573,10 +573,13 @@ msg_err_over_outposts_limit: '귀하는 전초기지로 이동할 수 없습니�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '무법자:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: '무법자:'
 online: '&a(접속중)'
-registered_last_online: '&2최초 접속일: &a%s &8| &2최근 접속일: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: '권한:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2최초 접속일: &a%s &8| &2최근 접속일: &a%s'
+#Used on /plot perm, /res
+status_perm: '권한:'
 status_on: '&4켜짐'
 status_off: '&a꺼짐'
 status_on_good: '&a켜짐'
@@ -1101,9 +1104,11 @@ status_trustedlist: '신뢰됨'
 msg_click_to_edit: '&6클릭하여 수정'
 permission_gui_header: '타우니 권한 GUI'
 msg_last_edited: '&7&o마지막 수정: %s, 수정자: %s'
-msg_trusted_added: '&b%s을(를) %s에 신뢰하는 것으로 추가함.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b%s을(를) %s에 신뢰하는 것으로 추가함.'
 msg_already_trusted: '&b%s이(가) %s에서 이미 신뢰 되어있음.'
-msg_trusted_added_2: '&b%s이(가) %s에 당신을 신뢰 했습니다: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s이(가) %s에 당신을 신뢰 했습니다: %s.'
 msg_not_trusted: '&b%s이(가) %s에 신뢰 되어있지 않음.'
 msg_trusted_removed: '&b%s을(를) %s의 신뢰에서 삭제함.'
 msg_trusted_removed_2: '&b%s이(가) 당신을 %s의 신뢰에서 삭제함: %s.'
