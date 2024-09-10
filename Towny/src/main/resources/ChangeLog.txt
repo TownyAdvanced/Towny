@@ -9972,3 +9972,5 @@ v0.92.0.11:
   - Bump net.kyori:adventure-platform-bukkit from 4.3.3 to 4.3.4.
 0.100.4.0:
   - Bump version number for release.
+0.100.4.1:
+  - PAPI: change %townyadvanced_town_unformatted% to no longer remove underscores.
