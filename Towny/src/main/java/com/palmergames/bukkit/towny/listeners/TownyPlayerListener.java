@@ -82,6 +82,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -1069,6 +1070,29 @@ public class TownyPlayerListener implements Listener {
 			keepInventory = true;
 
 		return keepInventory;
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onArmourDamageEvent(PlayerItemDamageEvent event) {
+		if (!TownySettings.arenaPlotPreventArmourDegrade())
+			return;
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
+			return;
+
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getPlayer());
+		if (tb == null || !tb.getType().equals(TownBlockType.ARENA))
+			return;
+
+		if (!ItemLists.ARMOURS.contains(event.getItem()) && !ItemLists.WEAPONS.contains(event.getItem()))
+			return;
+
+		event.setCancelled(true);
 	}
 
 	private boolean tryKeepExperience(PlayerDeathEvent event, TownBlock tb) {

@@ -748,6 +748,12 @@ public enum ConfigNodes {
 			"# If People should keep their experience on death in an arena townblock.",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
+	GTOWN_SETTINGS_PREVENT_ITEM_DEGRADE_IN_ARENAS(
+			"global_town_settings.prevent_item_degrading_in_arenas",
+			"false",
+			"",
+			"# While true, weapons and armour items worn by players in Arena plots will not lose durability."),
+
 	GTOWN_SETTINGS_MAX_BUYTOWN_PRICE(
 			"global_town_settings.max_buytown_price",
 			"999999999",

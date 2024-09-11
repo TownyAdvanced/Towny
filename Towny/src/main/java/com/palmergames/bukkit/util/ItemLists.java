@@ -49,6 +49,39 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists AXES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("axes")).endsWith("_AXE").build();
 
 	/**
+	 * List of Sword items.
+	 */
+	public static final ItemLists SWORDS = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("swords")).endsWith("_SWORD").build();
+
+	/**
+	 * List of Bow items.
+	 */
+	public static final ItemLists BOWS = newBuilder().add("BOW","CROSSBOW").build();
+
+	/**
+	 * List of Weapon items.
+	 */
+	public static final ItemLists WEAPONS = newBuilder()
+			.includeList(AXES)
+			.includeList(SWORDS)
+			.includeList(BOWS)
+			.build();
+
+	/**
+	 * List of Armour items.
+	 */
+	public static final ItemLists ARMOURS = newBuilder()
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("chest_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("head_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("foot_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("leg_armor"))
+			.endsWith("_CHESTPLATE")
+			.endsWith("_HELMET")
+			.endsWith("_LEGGINGS")
+			.endsWith("_BOOTS")
+			.build();
+	
+	/**
 	 * List of Dye items.
 	 */
 	public static final ItemLists DYES = newBuilder().endsWith("_DYE").endsWith("INK_SAC").build();

@@ -3177,6 +3177,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_ARENA);
 	}
 	
+	public static boolean arenaPlotPreventArmourDegrade() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_PREVENT_ITEM_DEGRADE_IN_ARENAS);
+	}
+
 	public static boolean getKeepInventoryInArenas() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA);
 	}
