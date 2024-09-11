@@ -9974,4 +9974,10 @@ v0.92.0.11:
   - Bump version number for release.
 0.100.4.1:
   - PAPI: change %townyadvanced_town_unformatted% to no longer remove underscores.
-  - Fix WorldCoord#getBoundingBox missing two edges of the WorldCoord's blocks in the resulting BoundingBox. 
+  - Fix WorldCoord#getBoundingBox missing two edges of the WorldCoord's blocks in the resulting BoundingBox.
+  - Shutdown saving task when making an sql dump, courtesy of Warrior with PR #7591.
+  - Add the ability to stop weapons and armour degrading in arena plots.
+    - Closes #7549.
+  - New Config Option: global_town_settings.prevent_item_degrading_in_arenas
+    - Default: false
+    - While true, weapons and armour items worn by players in Arena plots will not lose durability.
