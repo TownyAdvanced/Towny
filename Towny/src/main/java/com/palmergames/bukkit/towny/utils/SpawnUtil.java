@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
 import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
 import com.palmergames.bukkit.towny.object.SpawnInformation;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
 import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
@@ -793,6 +794,10 @@ public class SpawnUtil {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
+
+			// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
+			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
+
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
 			BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost));
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
@@ -882,5 +887,18 @@ public class SpawnUtil {
 	
 	private static boolean hasPerm(Player player, PermissionNodes node) {
 		return TownyUniverse.getInstance().getPermissionSource().testPermission(player, node.getNode());
+	}
+
+	/**
+	 * On some servers, when the player is teleported the chunk they left will
+	 * unload before the server ticks, causing any pets they have following them to
+	 * be abandoned. This method will cause a chunk to remain loaded long enough for
+	 * the pets to be teleported to the player naturally.
+	 * 
+	 * @param wc WorldCoord from which the player is leaving.
+	 */
+	public static void addAndRemoveChunkTicket(WorldCoord wc) {
+		wc.loadChunks();
+		Towny.getPlugin().getScheduler().runAsyncLater(() -> wc.unloadChunks(), 20L);
 	}
 }
