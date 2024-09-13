@@ -62,6 +62,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.PlotClaim;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.AreaSelectionUtil;
+import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.OutpostUtil;
@@ -83,11 +84,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 /**
  * Send a list of all general towny plot help commands to player Command: /plot
@@ -118,6 +124,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> plotGroupTabCompletes = Arrays.asList(
 		"add",
+		"fill",
 		"delete",
 		"remove",
 		"set",
@@ -1475,6 +1482,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		switch (split[0].toLowerCase(Locale.ROOT)) {
 		case "add", "new", "create" -> parsePlotGroupAdd(split, townBlock, player, town);
+		case "fill" -> parsePlotGroupFill(split, townBlock, player, town, split[1].equalsIgnoreCase("rem"));// if rem - delete all towny claims in floodfill'/'
 		case "delete" -> parsePlotGroupDelete(townBlock, player, town);
 		case "fs", "forsale" -> parsePlotGroupForSale(split, resident, townBlock, player, town);
 		case "nfs", "notforsale" -> parsePlotGroupNotForSale(resident, townBlock, player, town);
@@ -1545,6 +1553,84 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			createOrAddOnToPlotGroup(townBlock, town, player, plotGroupName);
 			resident.setPlotGroupName(plotGroupName);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_put_into_group_x", townBlock.getX(), townBlock.getZ(), townBlock.getPlotObjectGroup().getName()));
+		}
+	}
+	
+	public void parsePlotGroupFill(String[] split, TownBlock townBlock, Player player, Town town, boolean isDelete) throws TownyException {
+		if (isDelete) 	checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_ADD.getNode());
+		else 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_GROUP_REMOVE.getNode());
+
+		Resident resident = getResidentOrThrow(player);
+
+		if (split.length != 2 && !resident.hasPlotGroupName())
+			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
+
+		WorldCoord playerWorldCoord = WorldCoord.parseWorldCoord(player);
+		
+		//сюда записать все блоки города заполненные по алгоритму floodfill
+		List<TownBlock> townBlockList = new ArrayList<>();
+
+		final Set<WorldCoord> valid = new HashSet<>();
+		final Set<WorldCoord> visited = new HashSet<>();
+
+		final Queue<WorldCoord> queue = new LinkedList<>();
+		
+		
+		queue.offer(playerWorldCoord);
+		visited.add(playerWorldCoord);
+		
+		final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+		while (!queue.isEmpty()) {
+			final WorldCoord current = queue.poll();
+
+			valid.add(current);
+
+			for (final int[] direction : DIRECTIONS) {
+				final int xOffset = direction[0];
+				final int zOffset = direction[1];
+				
+				//in this code not needed check Max and min because town is not infinity
+
+				final WorldCoord candidate = current.add(xOffset, zOffset);
+
+				final TownBlock checked_townBlock = candidate.getTownBlockOrNull();
+				
+					if (checked_townBlock != null &&
+						checked_townBlock.hasTown() &&
+						checked_townBlock.getTown().equals(town) &&
+						checked_townBlock.getType().equals(townBlock.getType()) &&
+						!visited.contains(candidate)) {
+
+						queue.offer(candidate);
+						visited.add(candidate);
+					}
+			}
+		}
+		
+		for (WorldCoord worldCoord : valid) {
+			TownBlock townBlock1 = worldCoord.getTownBlockOrNull();
+			
+			if (isDelete) {
+				if (townBlock != null) {
+					try {
+						parsePlotGroupRemove(townBlock1, player, town);
+
+					} catch (TownyException e) {
+						//I don't know, for now I'll do it so that I can go through each chunk from the set
+					}
+				}
+			}
+			else {
+				if (townBlock1 != null) {
+					try {
+						parsePlotGroupAdd(split, townBlock1, player, town);
+						
+					} catch (TownyException e) {
+						//I don't know, for now I'll do it so that I can go through each chunk from the set
+					}
+					
+				}
+			}
 		}
 	}
 
