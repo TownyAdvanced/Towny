@@ -47,6 +47,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnUtil {
@@ -446,17 +447,24 @@ public class SpawnUtil {
 							return player.getWorld().getSpawnLocation();
 					});
 				} else if (town != null && town.hasSpawn())
-					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawnOrNull(), player));
+					yield adaptSpawnLocation(town.getSpawn(), player);
 				else
 					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
-					yield CompletableFuture.completedFuture(getSafeLocation(getOutpostSpawnLocation(town, split), player));
+					yield adaptSpawnLocation(getOutpostSpawnLocation(town, split), player);
 				else
-					yield CompletableFuture.completedFuture(getSafeLocation(town.getSpawn(), player));
+					yield adaptSpawnLocation(town.getSpawn(), player);
 			case NATION:
-				yield CompletableFuture.completedFuture(getSafeLocation(nation.getSpawn(), player));
+				yield adaptSpawnLocation(nation.getSpawn(), player);
 		};
+	}
+	
+	private static CompletableFuture<Location> adaptSpawnLocation(final @NotNull Location location, final @NotNull Player player) {
+		if (!TownySettings.isSafeTeleportUsed())
+			return CompletableFuture.completedFuture(location);
+		
+		return PaperLib.getChunkAtAsync(location).thenApply(chunk -> getSafeLocation(location, player));
 	}
 
 	/**
