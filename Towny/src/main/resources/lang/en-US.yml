@@ -1114,6 +1114,7 @@ msg_err_public_nation_spawn_forbidden: '&cPublic spawn travel to other nations i
 msg_err_public_nation_spawn_forbidden_war: '&cPublic spawn travel to other nations is only allowed during war.'
 msg_err_public_nation_spawn_forbidden_peace: '&cPublic spawn travel to other nations is forbidden during war.'
 msg_spawn_cost_set_to: '&b%s has set the price of using /%s spawn to %s'
+msg_spawn_fail_safe_teleport: '&cTeleportation failed, the location is not safe, ask the mayor of your town to change the teleport location.'
 msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher than %s'
 msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'
 msg_nation_changed_public: '&cThe Nation''s public status is now %s.'
