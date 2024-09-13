@@ -9990,3 +9990,5 @@ v0.92.0.11:
       This can be used to prevent players from making kill boxes at those locations.
 0.100.4.2:
   - Fix safe spawn checking causing a sync chunk load, courtesy of Warrior with PR #7595.
+  - Fix pets being abandoned in chunks that unload too fast after the player teleports away.
+    - Closes #7593.
