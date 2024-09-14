@@ -239,12 +239,17 @@ public class Town extends Government implements TownBlockOwner {
 	public void setMayor(Resident mayor, boolean callEvent) {
 		if (!hasResident(mayor))
 			return;
+		
+		final Resident oldMayor = this.mayor;
 
 		if (callEvent)
 			BukkitTools.fireEvent(new TownMayorChangedEvent(this.mayor, mayor));
 
 		this.mayor = mayor;
 
+		if (oldMayor != null)
+			TownyPerms.assignPermissions(oldMayor, null);
+		
 		TownyPerms.assignPermissions(mayor, null);
 	}
 
