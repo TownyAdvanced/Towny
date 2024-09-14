@@ -212,7 +212,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "set":
 					if (args.length == 2) {
@@ -298,8 +298,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "trust":
 					if (args.length == 2)
 						return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
-					if (args.length == 3)
-						return getTownyStartingWith(args[2], "r");
+					if (args.length == 3) {
+						if ("remove".equalsIgnoreCase(args[1])) {
+							final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
+							if (townBlock != null) {
+								return townBlock.getTrustedResidents().stream().map(Resident::getName).toList();
+							}
+						} else {
+							return getTownyStartingWith(args[2], "r");
+						}
+					}
 				default:
 					if (args.length == 1)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT, plotTabCompletes), args[0]);
