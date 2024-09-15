@@ -9992,3 +9992,9 @@ v0.92.0.11:
   - Fix safe spawn checking causing a sync chunk load, courtesy of Warrior with PR #7595.
   - Fix pets being abandoned in chunks that unload too fast after the player teleports away.
     - Closes #7593.
+  - Re-assign permissions for previous mayor after a new mayor is set, courtesy of Warrior with PR #7600.
+  - Limit /plot trust remove suggestions to trusted residents, courtesy of Warrior with PR #7599.
+  - Fix error message shown when using /plot group toggle taxed, courtesy of Alienn-Know with PR #7598. (First-Time Contributor!)
+  - Bump org.apache.commons:commons-compress from 1.26.2 to 1.27.1.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.3.1 to 3.5.0.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.8.0 to 3.10.0.
