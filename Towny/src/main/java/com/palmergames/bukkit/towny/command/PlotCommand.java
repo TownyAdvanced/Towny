@@ -2040,6 +2040,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "taxed":
 					 tryToggleTownBlockTaxed(player, groupBlock, split, choice);
 					 endingMessage = Translatable.of("msg_changed_plotgroup_taxed", groupBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled"));
+					 break;
 				default:
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "plot"));
 					return;
