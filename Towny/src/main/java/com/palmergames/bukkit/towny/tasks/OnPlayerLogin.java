@@ -159,6 +159,9 @@ public class OnPlayerLogin implements Runnable {
 				// Send a message warning of ruined status and time until deletion.
 				if (town.isRuined())
 					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+
+				if (nationHasPendingAllyInvites(nation))
+					plugin.getScheduler().runLater(player, ()-> TownyMessaging.sendMsg(player, Translatable.of("msg_your_nation_has_pending_ally_invites")), 20L * 10);
 			}
 			
 			// Check if this is a player spawning into a Town in which they are outlawed.
@@ -240,5 +243,10 @@ public class OnPlayerLogin implements Runnable {
 				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_nation_deposit_hint"));
 			}
 		}
+	}
+
+	private boolean nationHasPendingAllyInvites(Nation nation) {
+		return nation != null && !nation.getReceivedInvites().isEmpty()
+				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode());
 	}
 }
