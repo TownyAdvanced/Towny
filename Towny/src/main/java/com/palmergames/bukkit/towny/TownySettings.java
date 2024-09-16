@@ -2204,6 +2204,10 @@ public class TownySettings {
 		double townMultiplier = isUpkeepByPlot() ? town.getTownBlocks().size() : town.getTownLevel().upkeepModifier();
 		// If the town has a nation we will be altering thing with the nation's TownUpkeepModifier, or 1.0 if no nation.
 		double nationMultiplier = town.hasNation() ? town.getNationOrNull().getNationLevel().nationTownUpkeepModifier() : 1.0;
+		// Nation's multiplier should only affect plot-based-upkeep if the config is set for it.
+		if (isUpkeepByPlot() && !isTownLevelModifiersAffectingPlotBasedUpkeep())
+			nationMultiplier = 1.0;
+
 		// There's the chance that even with per-plot-upkeep, the townLevel upkeep modifier is still used, or 1.0 if not. 
 		double townLevelPlotModifier = isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep() ? town.getTownLevel().upkeepModifier() : 1.0;
 		// Amount is calculated using the above multipliers.

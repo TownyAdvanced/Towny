@@ -10001,3 +10001,4 @@ v0.92.0.11:
 0.100.4.3:
   - Add a message notifying a player when their nation has pending ally invites.
     - Closes #7588.
+  - Fix town_plotbased_upkeep_affected_by_town_level_modifier in the config not being respected for the nation_levels' nationTownUpkeepModifier.
