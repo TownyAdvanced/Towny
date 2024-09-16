@@ -6,9 +6,11 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.TimeTools;
 import org.bukkit.Bukkit;
@@ -54,6 +56,8 @@ public class TownyPaperEvents implements Listener {
 
 	private static final String DRAGON_FIREBALL_HIT_EVENT = "com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent";
 
+	private static final String BEACON_EFFECT_EVENT = "com.destroystokyo.paper.event.block.BeaconEffectEvent";
+
 	public static final MethodHandle SIGN_OPEN_GET_CAUSE = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getCause");
 	private static final MethodHandle SIGN_OPEN_GET_SIGN = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getSign");
 
@@ -61,6 +65,8 @@ public class TownyPaperEvents implements Listener {
 	private static final MethodHandle GET_PRIMER_ENTITY = JavaUtil.getMethodHandle(PAPER_PRIME_EVENT, "getPrimerEntity");
 
 	public static final MethodHandle DRAGON_FIREBALL_GET_EFFECT_CLOUD = JavaUtil.getMethodHandle(DRAGON_FIREBALL_HIT_EVENT, "getAreaEffectCloud");
+
+	public static final MethodHandle BEACON_EFFECT_GET_PLAYER = JavaUtil.getMethodHandle(BEACON_EFFECT_EVENT, "getPlayer");
 	
 	public static final String ADD_TO_WORLD_EVENT = "com.destroystokyo.paper.event.entity.EntityAddToWorldEvent";
 	
@@ -89,6 +95,11 @@ public class TownyPaperEvents implements Listener {
 		if (DRAGON_FIREBALL_GET_EFFECT_CLOUD != null) {
 			registerEvent(DRAGON_FIREBALL_HIT_EVENT, this::dragonFireballHitEventListener, EventPriority.LOW, true);
 			TownyMessaging.sendDebugMsg("Using " + DRAGON_FIREBALL_GET_EFFECT_CLOUD + " listener.");
+		}
+
+		if (BEACON_EFFECT_GET_PLAYER != null) {
+			registerEvent(BEACON_EFFECT_EVENT, this::beaconEffectEventListener, EventPriority.LOW, true);
+			TownyMessaging.sendDebugMsg("Using " + BEACON_EFFECT_GET_PLAYER + " listener.");
 		}
 		
 		registerEvent(PLAYER_ELYTRA_BOOST_EVENT, this::playerElytraBoostListener, EventPriority.LOW, true);
@@ -219,6 +230,31 @@ public class TownyPaperEvents implements Listener {
 		};
 	}
 	
+	private Consumer<Event> beaconEffectEventListener() {
+		return event -> {
+			if (BEACON_EFFECT_GET_PLAYER == null || !TownySettings.beaconsForTownMembersOnly())
+				return;
+
+			final Player player;
+			final Block block;
+
+			try {
+				player = (Player) BEACON_EFFECT_GET_PLAYER.invoke(event);
+				block = ((BlockEvent) event).getBlock();
+			} catch (final Throwable thr) {
+				plugin.getLogger().log(Level.WARNING, "An exception occurred when invoking " + BEACON_EFFECT_EVENT + "#getBlock or #getPlayer reflectively.", thr);
+				return;
+			}
+
+			Town blockTown = TownyAPI.getInstance().getTown(block.getLocation());
+			Town playerTown = TownyAPI.getInstance().getTown(player);
+			if (blockTown == null || (playerTown != null && CombatUtil.isAlly(playerTown, blockTown)))
+				return;
+
+			((Cancellable) event).setCancelled(true);
+		};
+	}
+
 	private Consumer<EntityEvent> entityAddToWorldListener() {
 		return event -> {
 			if (!(event.getEntity() instanceof LivingEntity entity))
