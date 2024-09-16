@@ -989,6 +989,13 @@ public enum ConfigNodes {
 			"-1",
 			"",
 			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
+	GNATION_SETTINGS_ARE_CONQUERED_TOWNS_CONSIDERED_ALLIES(
+			"global_nation_settings.are_conquered_towns_considered_allies",
+			"true",
+			"",
+			"# While true, conquered towns will be considered a member of good standing in the nation.",
+			"# When set to false CombatUtil#isAlly() tests will treat conquered towns and their nations as not allied.",
+			"# Setting this to false could result in strange unforseen behaviour."),
 	GNATION_SETTINGS_PROXIMITY_ROOT(
 			"global_nation_settings.proximity", "", ""),
 	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL(

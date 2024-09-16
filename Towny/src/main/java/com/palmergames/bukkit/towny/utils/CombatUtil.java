@@ -476,8 +476,10 @@ public class CombatUtil {
 			return true;
 		if (a.hasAlly(b))
 			return true;
-		if (isSameNation(a, b))
+		if (isSameNation(a, b) && TownySettings.areConqueredTownsConsideredAllied())
 			return true;
+		if (isSameNation(a, b) && !TownySettings.areConqueredTownsConsideredAllied() && ((a.isConquered() && !b.isConquered()) || (!a.isConquered() && b.isConquered())))
+			return false;
 		if (a.hasNation() && b.hasNation() && a.getNationOrNull().hasAlly(b.getNationOrNull()))
 			return true;
 		return false;
