@@ -2585,3 +2585,5 @@ msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "You cannot remo
 map_hover_district: 'District: '
 
 msg_err_you_cannot_join_town_you_have_not_played_long_enough: "You have not been on the server long enough, you must wait another %s before you can join a town."
+
+msg_your_nation_has_pending_ally_invites: "Your nation has invitations become an ally with one or more nations. Use '/n ally received' to view your invitations."
