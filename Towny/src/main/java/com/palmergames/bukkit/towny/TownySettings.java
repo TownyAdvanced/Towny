@@ -1569,6 +1569,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_BEACONS_FOR_ALLIES_ONLY);
 	}
 
+	public static boolean beaconsExcludeConqueredTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_BEACONS_EXCLUDE_CONQUERED_TOWNS);
+	}
+
 	public static boolean getTownDefaultPublic() {
 
 		return getBoolean(ConfigNodes.TOWN_DEF_PUBLIC);

@@ -523,11 +523,18 @@ public enum ConfigNodes {
 			"",
 			"# When true players cannot become hungrier when in their own or an allied town."),
 
+	GTOWN_SETTINGS_BEACONS_ROOT(
+			"global_town_settings.beacons","","",""),
 	GTOWN_SETTINGS_BEACONS_FOR_ALLIES_ONLY(
-			"global_town_settings.beacons_for_allies_only",
+			"global_town_settings.beacons.beacons_for_allies_only",
 			"false",
 			"",
 			"# When true, a beacon placed in a town will only affect the allies of the town. This includes residents, nation residents and allied nation residents."),
+	GTOWN_SETTINGS_BEACONS_EXCLUDE_CONQUERED_TOWNS(
+			"global_town_settings.beacons.exclude_conquered_towns",
+			"false",
+			"",
+			"# When true, conquered towns are not considered allies."),
 
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",

@@ -248,8 +248,15 @@ public class TownyPaperEvents implements Listener {
 
 			Town blockTown = TownyAPI.getInstance().getTown(block.getLocation());
 			Town playerTown = TownyAPI.getInstance().getTown(player);
-			if (blockTown == null || (playerTown != null && CombatUtil.isAlly(playerTown, blockTown)))
+			
+			// Beacon is in the wild.
+			if (blockTown == null)
 				return;
+			
+			if (playerTown != null && CombatUtil.isAlly(playerTown, blockTown)) {
+				if (!(playerTown.isConquered() && blockTown.hasNation() && blockTown.getNationOrNull().hasTown(playerTown) && TownySettings.beaconsExcludeConqueredTowns()))
+					return;
+			}
 
 			((Cancellable) event).setCancelled(true);
 		};
