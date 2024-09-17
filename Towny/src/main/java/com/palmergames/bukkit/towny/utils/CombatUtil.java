@@ -478,8 +478,10 @@ public class CombatUtil {
 			return true;
 		if (isSameNation(a, b) && TownySettings.areConqueredTownsConsideredAllied())
 			return true;
-		if (isSameNation(a, b) && !TownySettings.areConqueredTownsConsideredAllied() && ((a.isConquered() && !b.isConquered()) || (!a.isConquered() && b.isConquered())))
+		if (isSameNation(a, b) && !TownySettings.areConqueredTownsConsideredAllied() && ((a.isConquered() && !b.isConquered()) || (!a.isConquered() && b.isConquered()))) {
+			TownyMessaging.sendDebugMsg(String.format("The isAlly test between %s and %s was overridden because one of the two towns is conquered by the other.", a.getName(), b.getName()));
 			return false;
+		}
 		if (a.hasNation() && b.hasNation() && a.getNationOrNull().hasAlly(b.getNationOrNull()))
 			return true;
 		return false;
