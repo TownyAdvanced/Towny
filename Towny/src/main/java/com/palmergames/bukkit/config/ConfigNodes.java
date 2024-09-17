@@ -524,7 +524,8 @@ public enum ConfigNodes {
 			"# When true players cannot become hungrier when in their own or an allied town."),
 
 	GTOWN_SETTINGS_BEACONS_ROOT(
-			"global_town_settings.beacons","","",""),
+			"global_town_settings.beacons","","",
+			"# These beacons settings will only work on Paper or Paper-derived servers. They will not have any effect on Spigot servers."),
 	GTOWN_SETTINGS_BEACONS_FOR_ALLIES_ONLY(
 			"global_town_settings.beacons.beacons_for_allies_only",
 			"false",
