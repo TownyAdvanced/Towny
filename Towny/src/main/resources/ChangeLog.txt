@@ -10021,3 +10021,6 @@ v0.92.0.11:
   - Bump org.bstats:bstats-bukkit from 3.0.2 to 3.0.3.
   - Bump org.junit.jupiter:junit-jupiter from 5.10.3 to 5.11.0.
   - Bump org.junit.jupiter:junit-jupiter-api from 5.10.3 to 5.11.0.
+  - Fix deleting objects from the SQL DB which are keyed by a UUID.
+    - Closes #7592.
+  - Fix /plot group tab completion. 

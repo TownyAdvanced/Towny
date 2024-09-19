@@ -270,6 +270,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						case "set":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("perm", "maxjoindays", "minjoindays"), args[2]);
+							if (args.length > 3 && args[2].equalsIgnoreCase("perm"))
+								return permTabComplete(StringMgmt.remArgs(args, 3));
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
@@ -281,7 +283,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 4)
 								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
 						default:
-							return permTabComplete(StringMgmt.remFirstArg(args));
+							return Collections.emptyList();
 					}
 
 				case "jailcell":
