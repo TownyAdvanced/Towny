@@ -10002,3 +10002,22 @@ v0.92.0.11:
   - Add a message notifying a player when their nation has pending ally invites.
     - Closes #7588.
   - Fix town_plotbased_upkeep_affected_by_town_level_modifier in the config not being respected for the nation_levels' nationTownUpkeepModifier.
+  - Add the ability to block non-allies gaining benefits from Beacons placed in towns.
+    - Requires Paper to work.
+    - Closes #7532.
+  - New Config Option: global_town_settings.beacons_for_allies_only
+    - Default: false
+    - When true, a beacon placed in a town will only affect the allies of the town. This includes residents, nation residents and allied nation residents.
+  - New Config Option: global_town_settings.beacons.exclude_conquered_towns
+    - Default: false
+    - When true, conquered towns are not considered allies.
+  - Add experimental option to consider conquered towns as not allies.
+  - New Config Option: global_nation_settings.are_conquered_towns_considered_allies
+    - Default: true
+    - While true, conquered towns will be considered a member of good standing in the nation.
+    - When set to false CombatUtil#isAlly() tests will treat conquered towns and their nations as not allied.
+    - Setting this to false could result in strange unforseen behaviour.
+  - Bump org.apache.logging.log4j:log4j-core from 2.23.1 to 2.24.0.
+  - Bump org.bstats:bstats-bukkit from 3.0.2 to 3.0.3.
+  - Bump org.junit.jupiter:junit-jupiter from 5.10.3 to 5.11.0.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.10.3 to 5.11.0.
