@@ -3619,6 +3619,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_ALLIES);
 	}
 	
+	public static boolean areConqueredTownsConsideredAllied() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ARE_CONQUERED_TOWNS_CONSIDERED_ALLIES);
+	}
+	
 	public static String getBankHistoryBookFormat() {
 		return getString(ConfigNodes.BANKHISTORY_BOOK);
 	}
