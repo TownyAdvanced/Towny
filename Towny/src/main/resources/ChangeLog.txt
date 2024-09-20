@@ -10024,3 +10024,6 @@ v0.92.0.11:
   - Fix deleting objects from the SQL DB which are keyed by a UUID.
     - Closes #7592.
   - Fix /plot group tab completion. 
+0.100.4.4:
+  - Add a message notifying a player of their pending town and nation invites.
+    - Closes #7607.

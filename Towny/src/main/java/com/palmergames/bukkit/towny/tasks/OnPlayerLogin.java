@@ -38,6 +38,7 @@ public class OnPlayerLogin implements Runnable {
 	private final Towny plugin;
 	private final TownyUniverse universe = TownyUniverse.getInstance();
 	private final Player player;
+	private final long inviteNotificationTicksDelay = 20L * 10;
 	
 	/**
 	 * Constructor
@@ -133,52 +134,58 @@ public class OnPlayerLogin implements Runnable {
 			loginExistingResident(resident);
 		}
 
-		if (resident != null) {
-			TownyPerms.assignPermissions(resident, player);
-			
-			final Town town = resident.getTownOrNull();
-			if (town != null) {
-				Nation nation = resident.getNationOrNull();
-				
-				if (TownySettings.getShowTownBoardOnLogin() && !town.getBoard().isEmpty())
-					TownyMessaging.sendTownBoard(player, town);
+		if (resident == null)
+			return;
 
-				if (TownySettings.getShowNationBoardOnLogin() && nation != null && !nation.getBoard().isEmpty())
-					TownyMessaging.sendNationBoard(player, nation);
-				
-				// Send any warning messages at login.
-				if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
-					final Resident finalResident = resident;
-					TownyEconomyHandler.economyExecutor().execute(() -> bankWarningMessage(finalResident, town, nation));
-				}
-				
-				// Send a message warning of being overclaimed while the takeoverclaims feature is enabled.
-				if (TownySettings.isOverClaimingAllowingStolenLand() && town.isOverClaimed())
-					TownyMessaging.sendMsg(resident, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
-				
-				// Send a message warning of ruined status and time until deletion.
-				if (town.isRuined())
-					TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+		TownyPerms.assignPermissions(resident, player);
 
-				if (nationHasPendingAllyInvites(nation))
-					plugin.getScheduler().runLater(player, ()-> TownyMessaging.sendMsg(player, Translatable.of("msg_your_nation_has_pending_ally_invites")), 20L * 10);
+		final Town town = resident.getTownOrNull();
+		if (town != null) {
+			Nation nation = resident.getNationOrNull();
+
+			if (TownySettings.getShowTownBoardOnLogin() && !town.getBoard().isEmpty())
+				TownyMessaging.sendTownBoard(player, town);
+
+			if (TownySettings.getShowNationBoardOnLogin() && nation != null && !nation.getBoard().isEmpty())
+				TownyMessaging.sendNationBoard(player, nation);
+
+			// Send any warning messages at login.
+			if (TownyEconomyHandler.isActive() && TownySettings.isTaxingDaily()) {
+				final Resident finalResident = resident;
+				TownyEconomyHandler.economyExecutor().execute(() -> bankWarningMessage(finalResident, town, nation));
 			}
-			
-			// Check if this is a player spawning into a Town in which they are outlawed.
-			Town insideTown = TownyAPI.getInstance().getTown(player.getLocation());
-			if (insideTown != null && insideTown.hasOutlaw(resident))
-				ResidentUtil.outlawEnteredTown(resident, insideTown, player.getLocation());
 
-			//Schedule to setup default modes when the player has finished loading
-			plugin.getScheduler().runLater(player, new SetDefaultModes(player.getName(), false), 1);
-			
-			if (TownyUpdateChecker.shouldShowNotification() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
-				Audience audience = Towny.getAdventure().player(player);
-				ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
-				
-				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).locale(player).component().clickEvent(clickEvent));
-				audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download")).locale(player).component().clickEvent(clickEvent));
-			}
+			// Send a message warning of being overclaimed while the takeoverclaims feature is enabled.
+			if (TownySettings.isOverClaimingAllowingStolenLand() && town.isOverClaimed())
+				TownyMessaging.sendMsg(resident, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
+
+			// Send a message warning of ruined status and time until deletion.
+			if (town.isRuined())
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_warning_your_town_is_ruined_for_x_more_hours", TownySettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
+
+			if (townHasPendingNationInvites(town))
+				plugin.getScheduler().runLater(player, ()-> TownyMessaging.sendMsg(player, Translatable.of("msg_your_town_has_pending_nation_invites")), inviteNotificationTicksDelay);
+			else if (nationHasPendingAllyInvites(nation))
+				plugin.getScheduler().runLater(player, ()-> TownyMessaging.sendMsg(player, Translatable.of("msg_your_nation_has_pending_ally_invites")), inviteNotificationTicksDelay);
+		}
+
+		if (residentHasPendingTownInvites(resident))
+			plugin.getScheduler().runLater(player, ()-> TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_pending_town_invites")), inviteNotificationTicksDelay);
+
+		// Check if this is a player spawning into a Town in which they are outlawed.
+		Town insideTown = TownyAPI.getInstance().getTown(player.getLocation());
+		if (insideTown != null && insideTown.hasOutlaw(resident))
+			ResidentUtil.outlawEnteredTown(resident, insideTown, player.getLocation());
+
+		//Schedule to setup default modes when the player has finished loading
+		plugin.getScheduler().runLater(player, new SetDefaultModes(player.getName(), false), 1);
+
+		if (TownyUpdateChecker.shouldShowNotification() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
+			Audience audience = Towny.getAdventure().player(player);
+			ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
+
+			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).locale(player).component().clickEvent(clickEvent));
+			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download")).locale(player).component().clickEvent(clickEvent));
 		}
 	}
 	
@@ -249,4 +256,15 @@ public class OnPlayerLogin implements Runnable {
 		return nation != null && !nation.getReceivedInvites().isEmpty()
 				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_ALLY_ACCEPT.getNode());
 	}
+
+	private boolean townHasPendingNationInvites(Town town) {
+		return !town.hasNation() && !town.getReceivedInvites().isEmpty()
+				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_INVITE_ACCEPT.getNode());
+	}
+
+	private boolean residentHasPendingTownInvites(Resident resident) {
+		return !resident.hasTown() &&  !resident.getReceivedInvites().isEmpty()
+				&& universe.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_TOWN_RESIDENT.getNode());
+	}
+	
 }
