@@ -2587,3 +2587,7 @@ map_hover_district: 'District: '
 msg_err_you_cannot_join_town_you_have_not_played_long_enough: "You have not been on the server long enough, you must wait another %s before you can join a town."
 
 msg_your_nation_has_pending_ally_invites: "Your nation has invitations become an ally with one or more nations. Use '/n ally received' to view your invitations."
+
+msg_your_town_has_pending_nation_invites: "Your town has invitations to join one or more nations. Use '/t invite received' to view your invitations."
+
+msg_you_have_pending_town_invites: "You have invitations to join one or more towns. Use '/invite list' to view your invitations, or use '/invite deny all' to decline all of these invites."
