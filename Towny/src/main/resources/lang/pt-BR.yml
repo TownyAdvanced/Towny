@@ -213,8 +213,12 @@ world_help_2: '[mundo]'
 world_help_3: 'Estado do mundo selecionado'
 world_help_4: 'Lista de todos os mundos'
 world_help_5: 'Regenerar este chunk'
+world_help_6: 'Use /tw toggle para obter ajuda'
+world_help_7: 'Use /tw set para obter ajuda'
+world_set_help_0: "Defina o nome da região selvagem do mundo."
 townyadmin_help_1: 'Abandonar este terreno da cidade'
 townyadmin_help_2: 'Tentar abandonar terreno ao seu redor.'
+admin_panel_1: "Use /ta set para obter ajuda"
 admin_panel_2: 'recarregar o Towny'
 admin_panel_3: 'Executar o código do novo dia'
 admin_panel_11: "Redefine suas configurações"
