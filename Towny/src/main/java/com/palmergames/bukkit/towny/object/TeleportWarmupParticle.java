@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 
@@ -37,6 +38,8 @@ public class TeleportWarmupParticle {
 					for (final Player trackingPlayer : player.getTrackedBy()) {
 						trackingPlayer.spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
 					}
+				} else if (!BukkitTools.hasVanishedMeta(player)) {
+					player.getWorld().spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
 				}
 			}, (long) i * RING_DELAY_TICKS);
 			i++;
