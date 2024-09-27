@@ -53,13 +53,13 @@ Towny is one of the oldest still-in-development plugins for Minecraft. Shadeness
 ___
 
 ### Current Recommended Versions
-* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.16.* & 1.17.* & 1.18.* & 1.19.* & 1.20.*.
+* [Latest Release](https://github.com/TownyAdvanced/Towny/releases/latest/) supports MC 1.19.* & 1.20.* & 1.21.*.
 * [Latest Pre-Release](https://github.com/TownyAdvanced/Towny/releases) <img src="https://img.shields.io/github/tag/townyadvanced/towny.svg?sort=semver&label=">  supports 1.19.* & 1.20.* & 1.21.*.
 
 <table>
 <tr><th> Minecraft Version</th><th>Towny Version</th></tr>
-<tr align=center><td> MC 1.21.* </td><td> Use the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
-<tr align=center><td> MC 1.20.* </td><td rowspan=2> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.100.3.0>0.100.3.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.21.* </td><td rowspan=3> Use <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.100.4.0>0.100.4.0</a> or the <a href=https://github.com/TownyAdvanced/Towny/releases>the Latest Pre-Release.</a></td>
+<tr align=center><td> MC 1.20.* </td>
 <tr align=center><td> MC 1.19.* </td>
 <tr align=center><td> MC 1.18.* </td><td rowspan=3> <a href=https://github.com/TownyAdvanced/Towny/releases/tag/0.100.3.0>0.100.3.0</a></td>
 <tr align=center><td> MC 1.17.* </td>
