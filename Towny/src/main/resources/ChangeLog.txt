@@ -10027,3 +10027,10 @@ v0.92.0.11:
 0.100.4.4:
   - Add a message notifying a player of their pending town and nation invites.
     - Closes #7607.
+  - Add new resident mode: bedspawn
+    - This mode will make a player spawn at their bed instead of their town spawn.
+    - Mode is added and removed using /res toggle bedspawn.
+    - When no bed is owned by a player they will spawn at their town, if they have one.
+    - Closes #7616.
+  - New Command: /res toggle bedspawn
+    - Turns on and off the respawn-to-bed option.

@@ -74,6 +74,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"mobs",
 		"explosion",
 		"adminbypass",
+		"bedspawn",
 		"plotborder",
 		"constantplotborder",
 		"townborder",

@@ -201,26 +201,22 @@ public class TownyPlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		if (plugin.isError() || isEndPortalRespawn(event)) {
+		if (plugin.isError() || isEndPortalRespawn(event) || !TownySettings.isTownRespawning()) {
 			return;
 		}
-		
-		Player player = event.getPlayer();
-		
-		if (!TownySettings.isTownRespawning()) {
-			return;
-		}
-		
+
 		// If respawn anchors have higher precedence than town spawns, use them instead.
 		if (event.isAnchorSpawn() && TownySettings.isRespawnAnchorHigherPrecedence()) {
 			return;
 		}
 
-		Location respawn;
-		respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
+		Player player = event.getPlayer();
+		Location respawn = TownyAPI.getInstance().getTownSpawnLocation(player);
+		Resident resident = TownyAPI.getInstance().getResident(player);
 
-		// Towny might be prioritizing bed spawns over town spawns.
-		if (TownySettings.getBedUse()) {
+		// Towny or the Resident might be prioritizing bed spawns over town spawns.
+		if (TownySettings.getBedUse() ||
+			(resident != null && resident.hasMode("bedspawn"))) {
 			Location bed = BukkitTools.getBedOrRespawnLocation(player);
 			if (bed != null)
 				respawn = bed;
@@ -238,13 +234,8 @@ public class TownyPlayerListener implements Listener {
 		
 		// Handle Spawn protection
 		long protectionTime = TownySettings.getSpawnProtectionDuration();
-		if (protectionTime > 0L) {
-			Resident res = TownyAPI.getInstance().getResident(player);
-			if (res == null)
-				return;
-			
-			res.addRespawnProtection(protectionTime);
-		}
+		if (protectionTime > 0L && resident != null)
+			resident.addRespawnProtection(protectionTime);
 	}
 	
 	private boolean isEndPortalRespawn(PlayerRespawnEvent event) {
