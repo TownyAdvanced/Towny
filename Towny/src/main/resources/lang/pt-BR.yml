@@ -98,6 +98,7 @@ town_towntrust_help_0: "Adiciona uma cidade como confiável na cidade."
 town_towntrust_help_1: "Remove uma cidade como confiável na cidade."
 town_towntrust_help_2: "Lista as cidades confiáveis de uma cidade."
 town_buy_help: "Compra quarteirões bônus para aumentar o limite de reivindicação da cidade."
+town_cede_help: "Oferece o lote em que você está para ser tomado pela cidade fornecida."
 mayor_help_3: 'Reivindicar área separada da cidade'
 mayor_help_4: 'Reivindicar à sua volta num raio de X'
 mayor_help_5: 'Reivindicar no raio máximo'
@@ -177,12 +178,17 @@ res_toggle_help_7: "Ative a capacidade de ver notificações do lote."
 res_toggle_help_8: "Alterna a capacidade de reivindicar onde você caminha."
 res_toggle_help_9: "Alterne a capacidade de ver o mapa ao alterar os gráficos."
 res_toggle_help_10: "Remova todos os modos."
+res_toggle_help_10.5: "Remova todos os modos e aplique novamente seus padrões."
 res_toggle_help_11: "Espie canais de bate-papo."
 res_toggle_help_12: "Alterne a capacidade de adicionar gráficos a um grupo de gráficos que você iniciou."
 res_toggle_help_13: "Alterna a capacidade de ver mensagens de título quando você mudar de quarteirão."
 res_toggle_help_14: "Alterna a habilidade de desfazer a reivindicação por onde você anda."
 res_toggle_help_15: "."
 res_toggle_help_16: "Alterne a habilidade de desativar seus contornos de administrador."
+res_jail_help_0: "Paga o custo da fiança para sair da cadeia."
+res_set_help_0: "Definir estado/biografia do seu habitante"
+res_set_help_1: "Defina as permissões de lote padrão do seu residente."
+res_set_help_2: "Defina os modos de seu morador."
 mode_1: 'Mostra o mapa entre cada terreno da cidade'
 mode_2: 'Tentar reivindicar terreno ao andar'
 mode_3: 'Tentar abandonar terreno ao andar'
@@ -207,8 +213,12 @@ world_help_2: '[mundo]'
 world_help_3: 'Estado do mundo selecionado'
 world_help_4: 'Lista de todos os mundos'
 world_help_5: 'Regenerar este chunk'
+world_help_6: 'Use /tw toggle para obter ajuda'
+world_help_7: 'Use /tw set para obter ajuda'
+world_set_help_0: "Defina o nome da região selvagem do mundo."
 townyadmin_help_1: 'Abandonar este terreno da cidade'
 townyadmin_help_2: 'Tentar abandonar terreno ao seu redor.'
+admin_panel_1: "Use /ta set para obter ajuda"
 admin_panel_2: 'recarregar o Towny'
 admin_panel_3: 'Executar o código do novo dia'
 admin_panel_11: "Redefine suas configurações"
