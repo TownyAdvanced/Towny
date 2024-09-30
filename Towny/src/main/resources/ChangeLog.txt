@@ -10034,3 +10034,6 @@ v0.92.0.11:
     - Closes #7616.
   - New Command: /res toggle bedspawn
     - Turns on and off the respawn-to-bed option.
+  - Don't show warmup particles for hidden/invisible players, courtesy of Warrior with PR #7611.
+  - Fix tab complete exception in sanctiontown, courtesy of Warrior with PR #7613.
+  - Bump org.bstats:bstats-bukkit from 3.0.3 to 3.1.0.
