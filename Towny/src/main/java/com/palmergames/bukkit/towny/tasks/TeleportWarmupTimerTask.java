@@ -91,8 +91,8 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			// Send a particle that drops from above the player to their feet over the course of the warmup.
 			if (TownySettings.isTeleportWarmupShowingParticleEffect()) {
 				double progress = (double) (teleportWarmupTime - seconds) / teleportWarmupTime;
-				double offset = 2.0 + (progress * -2.0);
-				new TeleportWarmupParticle(resident.getPlayer().getLocation().add(0.0, offset, 0.0));
+				double yOffset = 2.0 + (progress * -2.0);
+				TeleportWarmupParticle.drawParticles(resident.getPlayer(), yOffset);
 			}
 		}
 	}

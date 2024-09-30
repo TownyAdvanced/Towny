@@ -123,6 +123,15 @@ public class BukkitTools {
 		return getServer().getPlayer(playerUUID);
 	}
 	
+	public static boolean hasVanishedMeta(final @NotNull Player player) {
+		for (MetadataValue meta : player.getMetadata("vanished")) {
+			if (meta.asBoolean())
+				return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Test whether an Player can see another Player. Staff on servers tend to enjoy
 	 * their privacy while vanished.
@@ -136,11 +145,7 @@ public class BukkitTools {
 		// is of a specific version.
 		if (Bukkit.getPluginManager().isPluginEnabled("PremiumVanish") &&
 			MinecraftVersion.CURRENT_VERSION.isOlderThanOrEquals(MinecraftVersion.MINECRAFT_1_19_3)) {
-			for (MetadataValue meta : seen.getMetadata("vanished")) {
-				if (meta.asBoolean())
-					return false;
-			}
-			return true;
+			return !hasVanishedMeta(seen);
 		}
 		// Vanish plugins should be able to correctly set the results of player#canSee(Player).
 		return seeing.canSee(seen);
