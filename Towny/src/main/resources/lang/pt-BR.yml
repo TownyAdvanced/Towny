@@ -237,6 +237,12 @@ townyadmin_nation_help_10: "Use o comando definido de uma nação."
 townyadmin_nation_help_11: "Coloque dinheiro no banco nacional."
 townyadmin_nation_help_12: "Retire dinheiro do banco nacional."
 townyadmin_nation_help_13: "Abra o histórico bancário nacional."
+townyadmin_nation_help_14: "Coloque a cidade na nação."
+townyadmin_nation_help_15: "Use o comando de ranque da nação."
+townyadmin_nationrank_help_0: "Adiciona uma classificação de nação ao residente."
+townyadmin_nationrank_help_1: "Remove uma classificação de nação do residente."
+townyadmin_database_help_0: "Força o armazenamento do banco de dados."
+townyadmin_database_help_1: "Forçar carregamento do banco de dados."
 msg_block_claim: 'Reivindicar este terreno da cidade'
 msg_plot_nfs: 'Cancelar a venda de um terreno'
 msg_nfs_abr: '&e''fs'' e ''nfs'' são abreviações aceites para ''forsale'' e ''notforsale''.'
