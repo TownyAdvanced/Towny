@@ -227,8 +227,16 @@ townyadmin_town_help_4: "Exclui a cidade."
 townyadmin_town_help_13: "Coloque dinheiro no banco da cidade."
 townyadmin_town_help_14: "Retire dinheiro do banco da cidade."
 townyadmin_town_help_15: "Abra o histórico bancário da cidade."
+townyadmin_nation_help_3: "Remova as cidades da nação."
 townyadmin_nation_help_4: "Renomeie uma cidade."
 townyadmin_nation_help_5: "Exclua uma cidade."
+townyadmin_nation_help_7: "Junte a segunda nação na primeira nação."
+townyadmin_nation_help_8: "Mesclar a segunda nação na primeira nação, ignorando quaisquer regras."
+townyadmin_nation_help_9: "Use o comando de alternar de uma nação."
+townyadmin_nation_help_10: "Use o comando definido de uma nação."
+townyadmin_nation_help_11: "Coloque dinheiro no banco nacional."
+townyadmin_nation_help_12: "Retire dinheiro do banco nacional."
+townyadmin_nation_help_13: "Abra o histórico bancário nacional."
 msg_block_claim: 'Reivindicar este terreno da cidade'
 msg_plot_nfs: 'Cancelar a venda de um terreno'
 msg_nfs_abr: '&e''fs'' e ''nfs'' são abreviações aceites para ''forsale'' e ''notforsale''.'
