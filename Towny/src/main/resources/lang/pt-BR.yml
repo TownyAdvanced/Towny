@@ -293,6 +293,7 @@ townyadmin_nationrank_help_0: "Adiciona uma classificação de nação ao reside
 townyadmin_nationrank_help_1: "Remove uma classificação de nação do residente."
 townyadmin_database_help_0: "Força o armazenamento do banco de dados."
 townyadmin_database_help_1: "Forçar carregamento do banco de dados."
+ta_plot_help_0: "Reivindicar um terreno para um jogador."
 plot_help_9: "Adiciona um residente como Confiável no lote."
 plot_help_10: "Remove um residente como Confiável no lote."
 plot_district_help_0: "Ex: /plot distrito novo ExpensivePlots"
