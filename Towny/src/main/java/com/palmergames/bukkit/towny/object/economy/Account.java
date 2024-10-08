@@ -73,7 +73,7 @@ public abstract class Account implements Nameable {
 	public synchronized boolean deposit(double amount, String reason) {
 		if (addMoney(amount)) {
 			notifyObserversDeposit(this, amount, reason);
-			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
+			if (!isTownyServerAccount() && TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
 				return payFromServer(amount, reason);
 
 			BukkitTools.fireEvent(Transaction.add(amount).paidTo(this).asTownyTransactionEvent());
@@ -94,7 +94,7 @@ public abstract class Account implements Nameable {
 	public synchronized boolean withdraw(double amount, String reason) {
 		if (subtractMoney(amount)) {
 			notifyObserversWithdraw(this, amount, reason);
-			if (TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
+			if (!isTownyServerAccount() && TownySettings.getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED))
 				return payToServer(amount, reason);
 
 			BukkitTools.fireEvent(Transaction.subtract(amount).paidBy(this).asTownyTransactionEvent());
@@ -363,5 +363,9 @@ public abstract class Account implements Nameable {
 			cachedBalance.updateCache();
 
 		return cachedBalance.getBalance();
+	}
+
+	private boolean isTownyServerAccount() {
+		return this instanceof TownyServerAccount;
 	}
 }
