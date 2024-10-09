@@ -724,9 +724,9 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
             case "player_plot_is_trusted": // %townyadvanced_player_plot_is_trusted%
                 return townblock != null ? String.valueOf(townblock.hasTrustedResident(resident)) : "";
 			case "player_location_town_or_wildname": // %townyadvanced_player_location_town_or_wildname%
-				return townblock != null ? townblock.getTownOrNull().getName() : TownyAPI.getInstance().getTownyWorld(player.getWorld()).getFormattedUnclaimedZoneName();
+				return townblock != null ? townblock.getTownOrNull().getName() : Translatable.of("unclaimed_zone_name").forLocale(resident);
 			case "player_location_formattedtown_or_wildname": // %townyadvanced_player_location_formattedtown_or_wildname%
-				return townblock != null ? townblock.getTownOrNull().getFormattedName() : TownyAPI.getInstance().getTownyWorld(player.getWorld()).getFormattedUnclaimedZoneName();
+				return townblock != null ? townblock.getTownOrNull().getFormattedName() : Translatable.of("unclaimed_zone_name").forLocale(resident);
 			case "player_location_plot_name": // %townyadvanced_player_location_plot_name%
 				return townblock != null ? (!townblock.getName().isEmpty() ? townblock.getName() : (townblock.hasPlotObjectGroup() ? townblock.getPlotObjectGroup().getName() : "")) : "";
 			case "player_location_plot_forsale": { // %townyadvanced_player_location_plot_forsale%
