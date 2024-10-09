@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownBlockTypeCache;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -588,7 +589,9 @@ public class TownyFormatter {
 			// Wilderness:
 			//     Build, Destroy, Switch, ItemUse
 			//     Ignored Blocks: see /towny wildsblocks
-			screen.addComponentOf("wilderness", colourKey(world.getFormattedUnclaimedZoneName() + ": \n"));
+			if (sender instanceof Player player) 	{ screen.addComponentOf("wilderness", colourKey(Translatable.of("unclaimed_zone_name").forLocale(player) + ": \n")); }
+			else 									{ screen.addComponentOf("wilderness", colourKey(world.getFormattedUnclaimedZoneName() + ": \n"));}
+				
 			screen.addComponentOf("perms1", "    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + translator.of("build") + Colors.Gray + ", " + 
 													(world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + translator.of("destroy") + Colors.Gray + ", " + 
 													(world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + translator.of("switch") + Colors.Gray + ", " + 
