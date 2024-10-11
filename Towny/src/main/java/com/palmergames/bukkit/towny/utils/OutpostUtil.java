@@ -73,6 +73,11 @@ public class OutpostUtil {
 			minDistance < TownySettings.getMinDistanceForOutpostsFromPlot())
 			throw new TownyException(Translatable.of("msg_too_close2", Translatable.of("townblock")));
 
+		// Newer towns can be prevented from claiming near to older towns.
+		if (!isPlotSetOutpost &&
+			world.getMinDistanceFromOtherOlderTownsPlots(key, town) < TownySettings.getMinDistanceFromOlderTownPlotblocks())
+				throw new TownyException(Translatable.of("msg_too_close3", Translatable.of("townblock")));
+
 		return true;		
 	}
 

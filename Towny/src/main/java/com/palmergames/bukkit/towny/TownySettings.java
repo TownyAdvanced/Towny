@@ -2606,6 +2606,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.CLAIMING_MIN_PLOT_DISTANCE_FROM_TOWN_PLOT);
 	}
 
+	public static int getMinDistanceFromOlderTownPlotblocks() {
+		return getInt(ConfigNodes.CLAIMING_MIN_PLOT_DISTANCE_FROM_OLDER_TOWN_PLOT);
+	}
+
 	public static int getMaxDistanceForTownMerge() {
 		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_DISTANCE_FOR_MERGE);
 	}
