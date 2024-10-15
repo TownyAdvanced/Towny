@@ -1360,6 +1360,7 @@ gui_title_towny_wildsblocks: '城镇荒地区块列表'
 gui_title_towny_itemuse: '城镇物品使用权限列表'
 gui_title_towny_switch: 'Towny交互权限列表'
 gui_title_towny_plotclear: 'Towny土地清除列表'
+flatfile_dbg_loading_district_list: '正在加载区块列表...'
 msg_ta_removed_all_titles_and_surnames_removed: '所有居民的头衔与称谓已被移除。'
 msg_err_homeblock_already_set_here: '这个位置已经在你的城镇中心区块内了。'
 #Added in 0.100
