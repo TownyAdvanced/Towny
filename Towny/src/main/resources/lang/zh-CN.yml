@@ -1361,6 +1361,7 @@ gui_title_towny_wildsblocks: '城镇荒地区块列表'
 gui_title_towny_itemuse: '城镇物品使用权限列表'
 gui_title_towny_switch: 'Towny交互权限列表'
 gui_title_towny_plotclear: 'Towny土地清除列表'
+flatfile_dbg_district_file_missing_town_delete: '选区文件缺失，删除%s'
 flatfile_err_exception_reading_district_file_at_line: '加载错误：在线读取 %s 选区文件时出现异常： %s'
 flatfile_dbg_loading_district_list: '正在加载选区列表...'
 msg_ta_removed_all_titles_and_surnames_removed: '所有居民的头衔与称谓已被移除。'
@@ -2093,6 +2094,7 @@ msg_err_rename_district_name_required: '你必须设置选区名称，请输入 
 msg_district_renamed_from_x_to_y: '选区%s已经重命名为%s'
 msg_err_plot_not_associated_with_a_district: '这块地皮没有与选区相连'
 msg_plot_was_removed_from_district_x: '地皮 <blue>(%s,%s) <dark_green>已经从%s选区中移除'
+msg_district_empty_deleted: '这个选区%s中未包含任何城镇区块，已被删除'
 msg_district_deleted: '选区%s已被删除'
 msg_err_you_cannot_join_town_you_have_not_played_long_enough: "你在服务器上的时间尚不够长，须再等待 %s 后才可加入一座城镇。"
 msg_your_nation_has_pending_ally_invites: "您的国家收到了其他国家的盟友邀请，使用'/n ally received'查看您收到的邀请"
