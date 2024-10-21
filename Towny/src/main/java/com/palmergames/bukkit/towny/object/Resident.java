@@ -7,13 +7,11 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
-import com.palmergames.bukkit.towny.event.resident.ResidentToggleModeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -28,9 +26,9 @@ import com.palmergames.bukkit.towny.object.gui.SelectionGUI.SelectionType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
-import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
@@ -54,7 +52,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -70,7 +67,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private String title = "";
 	private String surname = "";
 	private String about = TownySettings.getDefaultResidentAbout();
-	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
 	private transient EconomyAccount account;
@@ -566,69 +562,19 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public List<String> getModes() {
-		return Collections.unmodifiableList(modes);
+		return ResidentModeHandler.getResidentModesNames(this);
 	}
 	
 	public boolean hasMode(String mode) {
-		return this.modes.contains(mode.toLowerCase(Locale.ROOT));
+		return getModes().contains(mode.toLowerCase(Locale.ROOT));
 	}
 	
 	public void toggleMode(String[] newModes, boolean notify) {
-
-		/*
-		 * Toggle any modes passed to us on/off.
-		 */
-		for (int i = 0; i < newModes.length; i++) {
-			String mode = newModes[i].toLowerCase(Locale.ROOT);
-			
-			Optional<Boolean> choice = Optional.empty();
-			if (i + 1 < newModes.length) {
-				String bool = newModes[i + 1].toLowerCase(Locale.ROOT);
-				if (BaseCommand.setOnOffCompletes.contains(bool)) {
-					choice = Optional.of(bool.equalsIgnoreCase("on"));
-					i++;
-				}
-			}
-			
-			boolean modeEnabled = this.modes.contains(mode);
-			
-			ResidentToggleModeEvent event = new ResidentToggleModeEvent(this, mode);
-			if (BukkitTools.isEventCancelled(event)) {
-				TownyMessaging.sendErrorMsg(this, event.getCancelMessage());				
-				continue;
-			}
-			
-			if (choice.orElse(!modeEnabled)) {
-				if (!modeEnabled) {
-					this.modes.add(mode);
-				}
-			} else {
-				this.modes.remove(mode);
-			}
-		}
-		
-		/*
-		 *  If we have toggled all modes off we need to set their defaults.
-		 */
-		if (this.modes.isEmpty()) {
-
-			clearModes();
-			return;
-		}
-
-		if (notify)
-			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
+		ResidentModeHandler.toggleModes(this, newModes, notify);
 	}
 	
 	public void setModes(String[] modes, boolean notify) {
-
-		this.modes.clear();
-		this.toggleMode(modes, false);
-
-		if (notify)
-			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
-
-
+		ResidentModeHandler.toggleModes(this, modes, notify);
 	}
 
 	public void clearModes() {
@@ -636,12 +582,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void clearModes(boolean notify) {
-
-		this.modes.clear();
-		if (notify)
-			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
-
-		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), notify), 1);
+		ResidentModeHandler.clearModes(this, notify);
 	}
 
 	/**
@@ -651,12 +592,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	 * @param notify - If notifications should be sent
 	 */
 	public void resetModes(String[] modes, boolean notify) {
-
-		if (modes.length > 0)
-			this.toggleMode(modes, false);
-
-		if (notify)
-			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
+		ResidentModeHandler.resetModes(this, notify);
 	}
 	
 	@Nullable

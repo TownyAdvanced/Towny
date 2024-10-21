@@ -42,6 +42,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.scheduling.TaskScheduler;
@@ -235,6 +236,9 @@ public class Towny extends JavaPlugin {
 
 		// Initialize the special log4j hook logger.
 		TownyLogger.initialize();
+
+		// Initialize the ResidentModeHandler.
+		ResidentModeHandler.initialize();
 
 		// Clear all objects from the TownyUniverse class.
 		townyUniverse.clearAllObjects();
@@ -682,46 +686,59 @@ public class Towny extends JavaPlugin {
 		getCache(player).resetAndUpdate(WorldCoord.parseWorldCoord(player));
 	}
 
+	/**
+	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#toggleModes(Player, String[], boolean)} instead.
+	 * @param player Player to act upon.
+	 * @param modes String[] of mode names to toggle.
+	 * @param notify whether to notify the player of their modes afterwards.
+	 */
+	@Deprecated
 	public void setPlayerMode(Player player, String[] modes, boolean notify) {
 
 		if (player == null)
 			return;
 
 		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
-		if (resident != null)
-			resident.setModes(modes, notify);
+		if (resident == null)
+			return;
+
+		ResidentModeHandler.toggleModes(resident, modes, notify);
 	}
 
 	/**
 	 * Remove ALL current modes (and set the defaults)
 	 * 
-	 * @param player - player, whose modes are to be reset (all removed).
+	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#clearModes(Player))} instead.
+	 * @param player Player, whose modes are to be reset (all removed).
 	 */
+	@Deprecated
 	public void removePlayerMode(Player player) {
-
 		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
 		if (resident != null)
-			resident.clearModes();
+			ResidentModeHandler.clearModes(resident, false);
 	}
 
 	/**
 	 * Remove ALL current modes.
 	 * 
+	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#clearModes(Player)} instead.
 	 * @param player - player, whose modes are to be reset (all removed).
 	 */
+	@Deprecated
 	public void removePlayerModes(Player player) {
 
 		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
-		if (resident != null)
-			resident.resetModes(new String[0], true);
-	}	
+		ResidentModeHandler.clearModes(resident, false);
+	}
 	
 	/**
 	 * Fetch a list of all the players current modes.
 	 * 
+	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#getModes(Player)} instead.
 	 * @param player - player, whose modes are to be listed, taken.
 	 * @return list of modes
 	 */
+	@Deprecated
 	public List<String> getPlayerMode(Player player) {
 
 		return getPlayerMode(player.getName());

@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -429,7 +430,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.getAccount().removeAccount();
 
 		for (Resident resident : toSave) {
-			resident.clearModes(false);
+			ResidentModeHandler.resetModes(resident, false);
 			resident.removeTown(true);
 		}
 		

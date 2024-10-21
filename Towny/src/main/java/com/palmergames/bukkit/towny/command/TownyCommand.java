@@ -27,6 +27,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -274,10 +275,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 				case "spy": {
 					catchConsole(sender);
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_CHAT_SPY.getNode());
-
-					Resident resident = getResidentOrThrow(player);
-					resident.toggleMode(split, true);
+					ResidentModeHandler.toggleMode(getResidentOrThrow(player), "spy", true);
 					break;
 				}
 				default: {
