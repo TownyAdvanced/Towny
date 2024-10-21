@@ -25,7 +25,6 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
@@ -134,13 +133,13 @@ public class ResidentModeHandler {
 		clearModes(resident, false);
 		for (String mode : names)
 			try {
-				ResidentModeHandler.toggleMode(resident, mode, false);
+				toggleMode(resident, mode, false);
 			} catch (TownyException e) {
 				if (resident.isOnline())
 					TownyMessaging.sendErrorMsg(resident.getPlayer(), e.getMessage(resident.getPlayer()));
 			}
 	
-		if (notify)
+		if (notify && !getModes(resident).isEmpty())
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ",")));
 	}
 
@@ -190,7 +189,7 @@ public class ResidentModeHandler {
 		if (!isValidMode(mode))
 			throw new TownyException(Translatable.of("msg_err_mode_does_not_exist", mode.name));
 
-		if (!mode.permissionNode.isEmpty() && !resident.hasPermissionNode(mode.permissionNode) && !isNotBecauseOfDefaultModes(resident, mode.name))
+		if (!mode.permissionNode.isEmpty() && !resident.hasPermissionNode(mode.permissionNode) && isNotBecauseOfDefaultModes(resident, mode.name))
 			throw new NoPermissionException();
 
 		BukkitTools.ifCancelledThenThrow(new ResidentToggleModeEvent(resident, mode.name));
@@ -210,8 +209,7 @@ public class ResidentModeHandler {
 	 * @return true if the player does not have the mode in their default modes.
 	 */
 	private static boolean isNotBecauseOfDefaultModes(Resident resident, String name) {
-		String modeString = TownyUniverse.getInstance().getPermissionSource().getPlayerPermissionStringNode(resident.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode());
-		List<String> defaultModes = Stream.of(modeString.split(",")).collect(Collectors.toList());
+		List<String> defaultModes = Stream.of(getDefaultModes(resident).split(",")).collect(Collectors.toList());
 		return !StringMgmt.containsIgnoreCase(defaultModes, name);
 	}
 
@@ -251,9 +249,22 @@ public class ResidentModeHandler {
 		if (residentModesMap.containsKey(resident))
 			residentModesMap.get(resident).clear();
 
-		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(resident.getName(), notify), 1);
+		Towny.getPlugin().getScheduler().runAsyncLater(() -> applyDefaultModes(resident, notify), 1);
 	}
 
+	public static void applyDefaultModes(Resident resident, boolean notify) {
+		// Is the player still available
+		if (resident == null || !resident.isOnline())
+			return;
+
+		try {
+			String modeString = getDefaultModes(resident);
+			if (modeString.isEmpty())
+				return;
+			toggleModes(resident, modeString.split(","), notify);
+		} catch (NullPointerException ignored) {}
+	}
+	
 	protected static void addMode(Resident resident, AbstractResidentMode mode) {
 		if (!residentModesMap.containsKey(resident)) {
 			residentModesMap.put(resident, new HashSet<>(Arrays.asList(mode)));
@@ -290,5 +301,9 @@ public class ResidentModeHandler {
 		if (resident == null)
 			throw new TownyException(String.format("The player with the name '%s' is not registered!", player.getName()));
 		return resident;
+	}
+
+	private static String getDefaultModes(Resident resident) {
+		return TownyUniverse.getInstance().getPermissionSource().getPlayerPermissionStringNode(resident.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode());
 	}
 }

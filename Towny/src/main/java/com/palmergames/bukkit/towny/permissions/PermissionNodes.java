@@ -269,11 +269,12 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_RESIDENT_SET_ABOUT("towny.command.resident.set.about"),
 	
 	TOWNY_COMMAND_RESIDENT_TOGGLE("towny.command.resident.toggle.*"),
+		// Plot-permission-related
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PVP("towny.command.resident.toggle.pvp"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_EXPLOSION("towny.command.resident.toggle.explosion"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_FIRE("towny.command.resident.toggle.fire"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_MOBS("towny.command.resident.toggle.mobs"),
-
+		// Generic Modes
 		TOWNY_COMMAND_RESIDENT_TOGGLE_BEDSPAWN("towny.command.resident.toggle.bedspawn"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES("towny.command.resident.toggle.bordertitles"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREOTHERCHANNELS("towny.command.resident.toggle.ignoreotherchannels"),
@@ -281,13 +282,13 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_RESIDENT_TOGGLE_INFOTOOL("towny.command.resident.toggle.infotool"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_MAP("towny.command.resident.toggle.map"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTGROUP("towny.command.resident.toggle.plotgroup"),
+		// Border Modes
 		TOWNY_COMMAND_RESIDENT_TOGGLE_CONSTANTPLOTBORDER("towny.command.resident.toggle.constantplotborder"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTBORDER("towny.command.resident.toggle.plotborder"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNBORDER("towny.command.resident.toggle.townborder"),
-
+		// Claiming Modes
 		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNCLAIM("towny.command.resident.toggle.townclaim"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNUNCLAIM("towny.command.resident.toggle.townunclaim"),
-
 	
 	TOWNY_COMMAND_RESIDENT_FRIEND("towny.command.resident.friend"),
 	TOWNY_COMMAND_RESIDENT_SPAWN("towny.command.resident.spawn"),	

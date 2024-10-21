@@ -187,12 +187,9 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 					Group group = event.getGroup();
 					// Update all players who are in this group.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-						if (toUpdate != null && group.toString().equals(getPlayerGroup(toUpdate))) {
-							updateDefaultResidentModes(toUpdate.getName());
-						}
-					}
-
+					for (Player player : BukkitTools.getOnlinePlayers())
+						if (player != null && group.toString().equals(getPlayerGroup(player)))
+							updateDefaultResidentModes(player.getName());
 				}
 			} catch (IllegalArgumentException e) {
 				// Not tracking this event type
@@ -205,12 +202,9 @@ public class GroupManagerSource extends TownyPermissionSource {
 			try {
 				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getAction().name()) != null) {
 					// Update all players.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-						if (toUpdate != null) {
-							updateDefaultResidentModes(toUpdate.getName());
-						}
-					}
-
+					for (Player player : BukkitTools.getOnlinePlayers())
+						if (player != null)
+							updateDefaultResidentModes(player.getName());
 				}
 			} catch (IllegalArgumentException e) {
 				// Not tracking this event type
@@ -220,15 +214,10 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		private void updateDefaultResidentModes(String name) {
 			Resident resident = TownyUniverse.getInstance().getResident(name);
-			if (resident == null)
+			if (resident == null || !resident.isOnline())
 				return;
-
-			//setup default modes for this player.
-			String[] modes = getPlayerPermissionStringNode(resident.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-			ResidentModeHandler.toggleModes(resident, modes, false);
-
-			if (resident.isOnline())
-				plugin.resetCache(resident.getPlayer());
+			ResidentModeHandler.applyDefaultModes(resident, false);
+			plugin.resetCache(resident.getPlayer());
 		}
 	}
 	
