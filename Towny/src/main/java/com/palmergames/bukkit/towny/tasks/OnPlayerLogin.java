@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -102,7 +103,7 @@ public class OnPlayerLogin implements Runnable {
 			ResidentUtil.outlawEnteredTown(resident, insideTown, player.getLocation());
 
 		//Schedule to setup default modes when the player has finished loading
-		plugin.getScheduler().runLater(player, new SetDefaultModes(player.getName(), false), 1);
+		plugin.getScheduler().runLater(player, () -> ResidentModeHandler.applyDefaultModes(resident, false), 1);
 
 		if (TownyUpdateChecker.shouldShowNotification() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
 			Audience audience = Towny.getAdventure().player(player);

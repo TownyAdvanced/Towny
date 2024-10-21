@@ -713,6 +713,7 @@ public class Towny extends JavaPlugin {
 	 */
 	@Deprecated
 	public void removePlayerMode(Player player) {
+
 		Resident resident = TownyUniverse.getInstance().getResident(player.getName());
 		if (resident != null)
 			ResidentModeHandler.clearModes(resident, false);

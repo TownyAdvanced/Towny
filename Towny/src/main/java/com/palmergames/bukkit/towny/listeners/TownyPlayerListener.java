@@ -30,7 +30,6 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.object.notification.TitleNotification;
-import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
@@ -186,7 +185,7 @@ public class TownyPlayerListener implements Listener {
 			// Don't set last online if the player was vanished.
 			if (!event.getPlayer().getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean))
 				resident.setLastOnline(System.currentTimeMillis());
-			ResidentModeHandler.clearModes(resident, false);
+			resident.clearModes(false);
 			resident.save();
 
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {

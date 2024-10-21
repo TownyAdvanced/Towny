@@ -95,7 +95,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 	private static final List<String> residentToggleModeTabCompletes = ResidentModeHandler.getValidModeNames();
 
-	private static final List<String> residentSetModeTabCompletes = Stream.concat(
+	private static final List<String> residentSetModeTabCompletesWithClearAndReset = Stream.concat(
 		Arrays.asList("reset", "clear").stream(),
 		new ArrayList<>(residentToggleModeTabCompletes).stream()
 	).collect(Collectors.toList());
@@ -103,11 +103,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> residentCompleteToggleChoices = Stream.concat(
 		new ArrayList<>(residentToggleChoices).stream(),
 		new ArrayList<>(residentToggleModeTabCompletes).stream()
-	).collect(Collectors.toList());
-
-	private static final List<String> residentToggleModesUnionToggles = Stream.concat(
-		new ArrayList<>(residentToggleModeTabCompletes).stream(),
-		BaseCommand.setOnOffCompletes.stream()
 	).collect(Collectors.toList());
 
 	public ResidentCommand(Towny instance) {
@@ -165,13 +160,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentCompleteToggleChoices), args[1]);
 					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase(Locale.ROOT))) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
-					} else if (args.length >= 3) {
-						String prevArg = args[args.length - 2].toLowerCase(Locale.ROOT);
-						if (residentToggleModeTabCompletes.contains(prevArg)) {
-							return NameUtil.filterByStart(residentToggleModesUnionToggles, args[args.length - 1]);
-						} else if (BaseCommand.setOnOffCompletes.contains(prevArg)) {
-							return NameUtil.filterByStart(residentToggleModeTabCompletes, args[args.length - 1]);
-						}
 					}
 					break;
 				case "set":
@@ -183,7 +171,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "mode":
-								return NameUtil.filterByStart(residentSetModeTabCompletes, args[args.length - 1]);
+								if (args.length == 3)
+									return NameUtil.filterByStart(residentSetModeTabCompletesWithClearAndReset, args[2]);
+								else
+									return NameUtil.filterByStart(residentToggleModeTabCompletes, args[args.length - 1]);
 							case "perm":
 								return permTabComplete(StringMgmt.remArgs(args, 2));
 							case "about":
@@ -411,8 +402,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			ResidentModeHandler.resetModes(resident, false);
 			return;
 		}
-
-		
 		TownyPermission perm = resident.getPermissions();
 		
 		Optional<Boolean> choice = Optional.empty();
@@ -538,12 +527,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		if (split[0].equalsIgnoreCase("clear")) {
 			checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE_CLEAR.getNode());
-			ResidentModeHandler.clearModes(resident, false);
+			ResidentModeHandler.clearModes(resident, true);
 			return;
 		}
 
 		if (split[0].equalsIgnoreCase("reset")) {
-			ResidentModeHandler.resetModes(resident, false);
+			ResidentModeHandler.resetModes(resident, true);
 			return;
 		}
 
