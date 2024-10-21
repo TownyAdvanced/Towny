@@ -45,11 +45,11 @@ public class ResidentModeHandler {
 		addMode(new GenericResidentMode("infotool", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_INFOTOOL.getNode()));
 		addMode(new GenericResidentMode("map", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_MAP.getNode()));
 		addMode(new GenericResidentMode("plotgroup", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTGROUP.getNode()));
+		addMode(new GenericResidentMode("townborder", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNBORDER.getNode()));
 		addMode(new GenericResidentMode("spy", PermissionNodes.TOWNY_CHAT_SPY.getNode()));
 
 		addMode(new BorderResidentMode("constantplotborder", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_CONSTANTPLOTBORDER.getNode()));
 		addMode(new BorderResidentMode("plotborder", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTBORDER.getNode()));
-		addMode(new BorderResidentMode("townborder", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNBORDER.getNode()));
 
 		addMode(new ClaimingResidentMode("townclaim", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNCLAIM.getNode()));
 		addMode(new ClaimingResidentMode("townunclaim", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNUNCLAIM.getNode()));
