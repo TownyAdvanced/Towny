@@ -195,12 +195,8 @@ public class BankAccount extends Account {
 			double netMoney = amount - getTownDebt();
 			//Clear debt account
 			setTownDebt(0.0);
-			// Sometimes there's money in the bank account 
-			// (from a player manually putting money in via
-			// eco plugin, maybe.)
-			double bankBalance = getHoldingBalance();
 			//Set positive balance in regular account
-			TownyEconomyHandler.setBalance(this, bankBalance + netMoney);
+			TownyEconomyHandler.setBalance(this, getHoldingBalance() + netMoney);
 			return true;
 		} else {
 			setTownDebt(getTownDebt() - amount);
