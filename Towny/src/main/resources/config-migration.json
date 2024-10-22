@@ -867,6 +867,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "version": "0.100.3.9",
     "changes": [
       {
@@ -877,7 +878,7 @@
     ]
   },
   {
-    "version": "0.100.2.10",
+    "version": "0.100.4.6",
     "changes": [
       {
         "type": "RUNNABLE",
