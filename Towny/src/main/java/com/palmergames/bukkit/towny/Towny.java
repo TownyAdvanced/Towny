@@ -702,7 +702,7 @@ public class Towny extends JavaPlugin {
 		if (resident == null)
 			return;
 
-		ResidentModeHandler.toggleModes(resident, modes, notify);
+		ResidentModeHandler.toggleModes(resident, modes, notify, false);
 	}
 
 	/**
