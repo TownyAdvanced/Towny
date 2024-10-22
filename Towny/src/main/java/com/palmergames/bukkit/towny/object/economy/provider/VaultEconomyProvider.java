@@ -15,9 +15,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class VaultEconomyProvider extends EconomyProvider {
+public final class VaultEconomyProvider extends EconomyProvider {
 	private final Function<RegisteredServiceProvider<Economy>, EconomyAdapter> adapterFunction = registration -> !isLegacy() ? new VaultEconomyAdapter(registration.getProvider()) : new VaultEconomyAdapter.Legacy(registration.getProvider());
-	
+
 	@Override
 	public String name() {
 		return "Vault";
@@ -46,7 +46,7 @@ public class VaultEconomyProvider extends EconomyProvider {
 	public @Nullable EconomyAdapter getEconomyAdapter(@NotNull String name) {
 		return Optional.ofNullable(getEconomyRegistrations().get(name)).map(adapterFunction).orElse(null);
 	}
-	
+
 	private Map<String, RegisteredServiceProvider<Economy>> getEconomyRegistrations() {
 		return Bukkit.getServer().getServicesManager().getRegistrations(Economy.class).stream().collect(Collectors.toMap(registration -> registration.getProvider().getName(), registration -> registration));
 	}

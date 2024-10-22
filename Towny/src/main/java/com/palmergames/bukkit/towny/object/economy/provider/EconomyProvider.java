@@ -10,14 +10,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public abstract class EconomyProvider {
+@ApiStatus.Internal
+public sealed abstract class EconomyProvider permits VaultEconomyProvider, ReserveEconomyProvider {
 	private boolean isLegacy = !TownySettings.getBoolean(ConfigNodes.ECO_ADVANCED_MODERN);
-	
+
 	/**
 	 * @return The name of the plugin that provides the economy API in use, e.g. "Vault".
 	 */
 	public abstract String name();
-	
+
 	public abstract TownyEconomyHandler.EcoType economyType();
 
 	/**
@@ -30,7 +31,7 @@ public abstract class EconomyProvider {
 	 * @return All existing registered adapters
 	 */
 	public abstract Collection<EconomyAdapter> economyAdapters();
-	
+
 	@Nullable
 	public abstract EconomyAdapter getEconomyAdapter(final @NotNull String name);
 	
@@ -38,7 +39,7 @@ public abstract class EconomyProvider {
 	public boolean isLegacy() {
 		return this.isLegacy;
 	}
-	
+
 	@ApiStatus.Internal
 	public void setLegacy(final boolean legacy) {
 		this.isLegacy = legacy;

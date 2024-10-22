@@ -13,10 +13,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ReserveEconomyProvider extends EconomyProvider {
+public final class ReserveEconomyProvider extends EconomyProvider {
 	private final Reserve reserve;
 	private final Function<EconomyAPI, ReserveEconomyAdapter> adapterFunction = api -> !isLegacy() ? new ReserveEconomyAdapter(api) :  new ReserveEconomyAdapter.Legacy(api);
-	
+
 	public ReserveEconomyProvider(Reserve reserve) {
 		this.reserve = reserve;
 	}
