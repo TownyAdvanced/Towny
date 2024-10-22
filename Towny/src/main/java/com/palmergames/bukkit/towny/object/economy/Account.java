@@ -424,7 +424,7 @@ public abstract class Account implements Nameable, Identifiable {
 
 		return cachedBalance.getBalance();
 	}
-	
+
 	private static final MethodHandle GAMEPROFILE_CONSTRUCTOR = JavaUtil.make(() -> {
 		try {
 			return MethodHandles.publicLookup().findConstructor(Class.forName("com.mojang.authlib.GameProfile"), MethodType.methodType(void.class, UUID.class, String.class));
@@ -433,7 +433,7 @@ public abstract class Account implements Nameable, Identifiable {
 			return null;
 		}
 	});
-	
+
 	private static final MethodHandle OFFLINEPLAYER_CONSTRUCTOR = JavaUtil.make(() -> {
 		try {
 			final String cbPackagePath = Bukkit.getServer().getClass().getPackage().getName();
@@ -447,7 +447,7 @@ public abstract class Account implements Nameable, Identifiable {
 			return null;
 		}
 	});
-	
+
 	@ApiStatus.Internal
 	public @NotNull OfflinePlayer asOfflinePlayer() {
 		// This account could belong to an online player
@@ -465,14 +465,5 @@ public abstract class Account implements Nameable, Identifiable {
 			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred when creating offline player for account " + this.getUUID(), throwable);
 			return Bukkit.getServer().getOfflinePlayer(this.uuid); // panic
 		}
-	}
-	
-	@ApiStatus.Internal
-	public static UUID modifyNPCUUID(final UUID uuid) {
-		final int version = TownySettings.getInt(ConfigNodes.ECO_ADVANCED_NPC_UUID_VERSION);
-		if (version < 0 || version > 15)
-			return uuid;
-		
-		return JavaUtil.changeUUIDVersion(uuid, version);
 	}
 }

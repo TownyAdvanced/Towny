@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny;
 
+import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.economy.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -14,6 +15,7 @@ import com.palmergames.bukkit.towny.object.economy.provider.VaultEconomyProvider
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
+import com.palmergames.util.JavaUtil;
 import net.tnemc.core.Reserve;
 
 import org.bukkit.World;
@@ -21,7 +23,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 
@@ -356,6 +360,7 @@ public class TownyEconomyHandler {
 		return account != null && hasAccount(account);
 	}
 
+	@Deprecated
 	public static boolean isEssentials() {
 		return getVersion().startsWith("EssentialsX Economy") || getVersion().startsWith("Essentials Economy");
 	}
@@ -376,5 +381,22 @@ public class TownyEconomyHandler {
 	@Nullable
 	public static EconomyAdapter activeAdapter() {
 		return economy;
+	}
+
+	// Names of economy implementations that use v2 uuids to identify NPC accounts
+	// v4 is used by default by towny so that the uuids of towns/nations in economy plugins line up with the uuid used by towny
+	private static final Set<String> USE_V2_UUID = JavaUtil.make(new HashSet<>(), set -> set.add("EssentialsX Economy"));
+
+	@ApiStatus.Internal
+	public static UUID modifyNPCUUID(final UUID uuid) {
+		if (economy != null && USE_V2_UUID.contains(economy.name())) {
+			return JavaUtil.changeUUIDVersion(uuid, 2);
+		}
+
+		final int version = TownySettings.getInt(ConfigNodes.ECO_ADVANCED_NPC_UUID_VERSION);
+		if (version < 0 || version > 15)
+			return uuid;
+
+		return JavaUtil.changeUUIDVersion(uuid, version);
 	}
 }

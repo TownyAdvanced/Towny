@@ -812,7 +812,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 			UUID uuid = this.uuid;
 			if (this.isNPC())
-				uuid = Account.modifyNPCUUID(uuid);
+				uuid = TownyEconomyHandler.modifyNPCUUID(uuid);
 
 			account = new EconomyAccount(this, accountName, uuid, () -> {
 				final Player player = getPlayer();
