@@ -265,18 +265,30 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_RESIDENT_SET("towny.command.resident.set.*"),
 		TOWNY_COMMAND_RESIDENT_SET_PERM("towny.command.resident.set.perm"),
 		TOWNY_COMMAND_RESIDENT_SET_MODE("towny.command.resident.set.mode"),
+		TOWNY_COMMAND_RESIDENT_SET_MODE_CLEAR("towny.command.resident.set.mode.clear"),
 		TOWNY_COMMAND_RESIDENT_SET_ABOUT("towny.command.resident.set.about"),
 	
 	TOWNY_COMMAND_RESIDENT_TOGGLE("towny.command.resident.toggle.*"),
+		// Plot-permission-related
 		TOWNY_COMMAND_RESIDENT_TOGGLE_PVP("towny.command.resident.toggle.pvp"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_EXPLOSION("towny.command.resident.toggle.explosion"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_FIRE("towny.command.resident.toggle.fire"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_MOBS("towny.command.resident.toggle.mobs"),
-		TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTBORDER("towny.command.resident.toggle.plotborder"),
-		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNCLAIM("towny.command.resident.toggle.townclaim"),
-		TOWNY_COMMAND_RESIDENT_TOGGLE_CONSTANTPLOTBORDER("towny.command.resident.toggle.constantplotborder"),
-		TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS("towny.command.resident.toggle.ignoreplots"),
+		// Generic Modes
+		TOWNY_COMMAND_RESIDENT_TOGGLE_BEDSPAWN("towny.command.resident.toggle.bedspawn"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES("towny.command.resident.toggle.bordertitles"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREOTHERCHANNELS("towny.command.resident.toggle.ignoreotherchannels"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS("towny.command.resident.toggle.ignoreplots"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_INFOTOOL("towny.command.resident.toggle.infotool"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_MAP("towny.command.resident.toggle.map"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTGROUP("towny.command.resident.toggle.plotgroup"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNBORDER("towny.command.resident.toggle.townborder"),
+		// Border Modes
+		TOWNY_COMMAND_RESIDENT_TOGGLE_CONSTANTPLOTBORDER("towny.command.resident.toggle.constantplotborder"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTBORDER("towny.command.resident.toggle.plotborder"),
+		// Claiming Modes
+		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNCLAIM("towny.command.resident.toggle.townclaim"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNUNCLAIM("towny.command.resident.toggle.townunclaim"),
 	
 	TOWNY_COMMAND_RESIDENT_FRIEND("towny.command.resident.friend"),
 	TOWNY_COMMAND_RESIDENT_SPAWN("towny.command.resident.spawn"),	

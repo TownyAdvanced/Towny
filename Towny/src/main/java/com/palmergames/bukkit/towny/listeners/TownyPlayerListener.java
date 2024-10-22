@@ -185,7 +185,7 @@ public class TownyPlayerListener implements Listener {
 			// Don't set last online if the player was vanished.
 			if (!event.getPlayer().getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean))
 				resident.setLastOnline(System.currentTimeMillis());
-			resident.clearModes();
+			resident.clearModes(false);
 			resident.save();
 
 			if (TownyTimerHandler.isTeleportWarmupRunning()) {
