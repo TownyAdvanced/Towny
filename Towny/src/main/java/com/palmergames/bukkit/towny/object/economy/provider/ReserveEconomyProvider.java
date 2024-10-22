@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class ReserveEconomyProvider extends EconomyProvider {
 	private final Reserve reserve;
-	private final Function<EconomyAPI, ReserveEconomyAdapter> adapterFunction = api -> !isLegacy() ? new ReserveEconomyAdapter.Legacy(api) : new ReserveEconomyAdapter(api);
+	private final Function<EconomyAPI, ReserveEconomyAdapter> adapterFunction = api -> !isLegacy() ? new ReserveEconomyAdapter(api) :  new ReserveEconomyAdapter.Legacy(api);
 	
 	public ReserveEconomyProvider(Reserve reserve) {
 		this.reserve = reserve;
