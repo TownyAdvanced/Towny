@@ -71,6 +71,12 @@ public abstract class Account implements Nameable, Identifiable {
 		}
 	}
 	
+	/**
+	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier)} instead.
+	 * @param economyHandler economyHandler that owns this account.
+	 * @param name name of the account owner.
+	 * @param world world in which the account would exist.
+	 */
 	@Deprecated
 	public Account(EconomyHandler economyHandler, String name, World world) {
 		this.name = name;
@@ -80,6 +86,11 @@ public abstract class Account implements Nameable, Identifiable {
 		this.worldSupplier = () -> townyWorld;
 	}
 
+	/**
+	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier)} instead.
+	 * @param economyHandler economyHandler that owns this account.
+	 * @param name name of the account owner.
+	 */
 	@Deprecated
 	public Account(EconomyHandler economyHandler, String name) {
 		this.name = name;

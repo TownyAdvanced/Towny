@@ -155,6 +155,10 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
+	/**
+	 * @deprecated since 0.100.4.6, use {@link #removeAccount(Account)} instead.
+	 * @param accountName legacy account name.
+	 */
 	@Deprecated
 	public static void removeAccount(String accountName) {
 		final Account account = getTownyObjectAccount(accountName);
@@ -181,7 +185,12 @@ public class TownyEconomyHandler {
 		checkNewAccount(account);
 		return economy.getBalance(account);
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.6, use {@link #getBalance(Account)} instead.
+	 * @param accountName legacy account name.
+	 * @param world world.
+	 */
 	@Deprecated
 	public static double getBalance(String accountName, World world) {
 		final Account account = getTownyObjectAccount(accountName);
@@ -189,6 +198,12 @@ public class TownyEconomyHandler {
 		return account == null ? 0 : getBalance(account);
 	}
 
+	/**
+	 * @deprecated since 0.100.4.6, use {@link #hasEnough(Account, double)} instead.
+	 * @param accountName legacy account name.
+	 * @param amount amount to test for.
+	 * @param world world
+	 */
 	@Deprecated
 	public static boolean hasEnough(String accountName, double amount, World world) {
 		final Account account = getTownyObjectAccount(accountName);
@@ -222,7 +237,13 @@ public class TownyEconomyHandler {
 
 		return true;
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.6, use {@link #subtract(Account, double)} instead.
+	 * @param accountName legacy account name.
+	 * @param amount amount to remove.
+	 * @param world world
+	 */
 	@Deprecated
 	public static boolean subtract(String accountName, double amount, World world) {
 		final Account account = getTownyObjectAccount(accountName);
@@ -246,6 +267,12 @@ public class TownyEconomyHandler {
 		return economy.subtract(account, amount);
 	}
 
+	/**
+	 * @deprecated since 0.100.4.6, use {@link #add(Account, double)} instead.
+	 * @param accountName legacy account name.
+	 * @param amount amount to add.
+	 * @param world world
+	 */
 	@Deprecated
 	public static boolean add(String accountName, double amount, World world) {
 		final Account account = getTownyObjectAccount(accountName);
@@ -269,6 +296,12 @@ public class TownyEconomyHandler {
 		return economy.add(account, amount);
 	}
 
+	/**
+	 * @deprecated since 0.100.4.6, use {@link #setBalance(Account, double)} instead.
+	 * @param accountName legacy account name.
+	 * @param amount amount to set as a balance.
+	 * @param world world
+	 */
 	@Deprecated
 	public static boolean setBalance(String accountName, double amount, World world) {
 		final Account account = getTownyObjectAccount(accountName);
@@ -311,7 +344,11 @@ public class TownyEconomyHandler {
 	public static boolean hasAccount(Account account) {
 		return economy.hasAccount(account);
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.6, use {@link #hasAccount(Account)} instead.
+	 * @param accountName legacy account name.
+	 */
 	@Deprecated
 	public static boolean hasAccount(String accountName) {
 		final Account account = getTownyObjectAccount(accountName);
