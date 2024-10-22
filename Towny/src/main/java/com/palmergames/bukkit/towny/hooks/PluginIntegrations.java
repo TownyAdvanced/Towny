@@ -26,7 +26,6 @@ import com.palmergames.bukkit.towny.chat.TNCRegister;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
-import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
@@ -110,8 +109,7 @@ public class PluginIntegrations {
 
 		// Check if the economy is enabled in the config and attempt to set it up.
 		if (configSetForEconomy && TownyEconomyHandler.setupEconomy()) {
-			ecowarn = "";
-			MoneyUtil.checkLegacyDebtAccounts();
+			ecowarn = ""; // Used to be useful, hopefully we don't need to use it again.
 		}
 
 		if (TownyEconomyHandler.isActive())
