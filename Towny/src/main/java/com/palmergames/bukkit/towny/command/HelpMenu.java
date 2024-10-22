@@ -417,15 +417,37 @@ public enum HelpMenu {
 				.add("all", Translatable.of("ta_reload_help_4"));
 		}
 	},
-	
+
+	TA_ECO {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco")
+				.add("resetbanks {amount}", Translatable.of("ta_eco_resetbanks_help"))
+				.add("depositall [amount]", Translatable.of("ta_depositall_help_0"))
+				.add("convert modern", Translatable.of("ta_eco_convert_help"))
+				.add("info ?", Translatable.of("ta_eco_info_help"));
+		}
+	},
+
 	TA_DEPOSITALL {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("townyadmin depositall")
+			return new MenuBuilder("townyadmin eco depositall")
 				.add("[amount]", Translatable.of("ta_depositall_help_0"));
 		}
 	},
-	
+
+	TA_ECO_INFO {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco info")
+				.add("nation [nationname]", Translatable.of("ta_info_help_0"))
+				.add("resident [residentname]", Translatable.of("ta_info_help_1"))
+				.add("serveraccount", Translatable.of("ta_info_help_2"))
+				.add("town [townname]", Translatable.of("ta_info_help_3"));
+		}
+	},
+
 	TOWNYWORLD_HELP {
 		@Override
 		protected MenuBuilder load(MenuBuilder builder) {

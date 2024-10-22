@@ -280,11 +280,19 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> adminEcoTabCompletes = Arrays.asList(
-		"resetbanks",
+		"convert",
 		"depositall",
-		"convert"
+		"info",
+		"resetbanks"
 	);
 
+	private static final List<String> adminEcoInfoTabCompletes = Arrays.asList(
+			"nation",
+			"resident",
+			"serveraccount",
+			"town"
+		);
+	
 	public TownyAdminCommand(Towny towny) {
 		this.plugin = towny;
 	}
@@ -639,6 +647,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 							convertChoices.add("modern");
 						
 						return NameUtil.filterByStart(convertChoices, args[2]);
+					}
+					if ("info".equalsIgnoreCase(args[1])) {
+						if (args.length == 3)
+							return NameUtil.filterByStart(adminEcoInfoTabCompletes, args[2]);
+						if (args.length == 4) {
+							switch (args[2].toLowerCase(Locale.ROOT)) {
+							case "nation": return BaseCommand.getTownyStartingWith(args[3], "n");
+							case "resident": return BaseCommand.getTownyStartingWith(args[3], "r");
+							case "town": return BaseCommand.getTownyStartingWith(args[3], "t");
+							default: return Collections.emptyList();
+							}
+						}
 					}
 				}
 				
@@ -2838,14 +2858,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void parseAdminEcoCommand(CommandSender sender, String[] split) throws TownyException {
 		if (!TownyEconomyHandler.isActive())
 			throw new TownyException(Translatable.of("msg_err_no_economy"));
-		
+
+		if (split.length < 1) {
+			HelpMenu.TA_ECO.send(sender);
+			return;
+		} 
+
 		switch (split[0].toLowerCase(Locale.ROOT)) {
 			case "depositall" -> parseAdminDepositAllCommand(sender, StringMgmt.remFirstArg(split));
 			case "resetbanks" -> parseAdminResetBanksCommand(sender, StringMgmt.remFirstArg(split));
 			case "convert" -> parseAdminConvertEconomyCommand(sender, StringMgmt.remFirstArg(split));
+			case "info" -> parseAdminEcoInfoCommand(sender, StringMgmt.remFirstArg(split));
 		}
 	}
-	
+
 	private void parseAdminDepositAllCommand(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_ECO_DEPOSITALL.getNode());
 		if (split.length != 1) {
@@ -2943,6 +2969,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			TownyMessaging.sendMsg(sender, "Economy conversion successful.");
 		})).sendTo(sender);
+	}
+
+	private void parseAdminEcoInfoCommand(CommandSender sender, String[] args) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_ECO_INFO.getNode());
+		if (args.length == 0 || (!args[0].equalsIgnoreCase("serveraccount") && args.length < 2)) {
+			HelpMenu.TA_ECO_INFO.send(sender);
+			return;
+		}
+		Account account = switch (args[0].toLowerCase(Locale.ROOT)) {
+		case "serveraccount" -> TownyServerAccount.ACCOUNT;
+		case "nation" -> getNationOrThrow(args[1]).getAccount();
+		case "resident" -> getResidentOrThrow(args[1]).getAccount();
+		case "town" -> getTownOrThrow(args[1]).getAccount();
+		default -> null;
+		};
+		if (account == null)
+			throw new TownyException("Account not found.");
+
+		TownyMessaging.sendMessage(sender, ChatTools.formatTitle("Account Info"));
+		TownyMessaging.sendMessage(sender, "Name: " + account.getName());
+		TownyMessaging.sendMessage(sender, "UUID: " + account.getUUID());
+		TownyMessaging.sendMessage(sender, "Balance: " + account.getHoldingBalance());
 	}
 
 	private void parseAdminInstall(CommandSender sender) throws NoPermissionException {

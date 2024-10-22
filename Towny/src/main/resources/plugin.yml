@@ -716,6 +716,7 @@ permissions:
             towny.command.townyadmin.eco.depositall: true
             towny.command.townyadmin.eco.resetbanks: true
             towny.command.townyadmin.eco.convert: true
+            towny.command.townyadmin.eco.info: true
 
     towny.command.townyadmin.town.spawn.*:
         description: User can access town spawns
