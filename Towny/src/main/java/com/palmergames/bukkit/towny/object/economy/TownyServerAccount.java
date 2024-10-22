@@ -17,11 +17,11 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.Internal
 public final class TownyServerAccount extends Account {
-	public static final TownyServerAccount ACCOUNT = new TownyServerAccount();
 
 	private static final UUID uuid = UUID.fromString("a73f39b0-1b7c-2930-b4a3-ce101812d926");
 	private static final String name = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
 	private static final ThreadLocal<TownyWorld> worldLocal = ThreadLocal.withInitial(() -> TownyUniverse.getInstance().getTownyWorlds().get(0));
+	public static final TownyServerAccount ACCOUNT = new TownyServerAccount();
 
 	private TownyServerAccount() {
 		super(new EconomyHandlerHolder(), name, uuid, worldLocal::get);
