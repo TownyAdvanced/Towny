@@ -568,13 +568,27 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	public boolean hasMode(String mode) {
 		return getModes().contains(mode.toLowerCase(Locale.ROOT));
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean)} instead.
+	 * 
+	 * @param newModes
+	 * @param notify
+	 */
+	@Deprecated
 	public void toggleMode(String[] newModes, boolean notify) {
-		ResidentModeHandler.toggleModes(this, newModes, notify);
+		ResidentModeHandler.toggleModes(this, newModes, notify, false);
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean)} instead.
+	 * 
+	 * @param newModes
+	 * @param notify
+	 */
+	@Deprecated
 	public void setModes(String[] modes, boolean notify) {
-		ResidentModeHandler.toggleModes(this, modes, notify);
+		ResidentModeHandler.toggleModes(this, modes, notify, false);
 	}
 
 	public void clearModes() {

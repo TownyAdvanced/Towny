@@ -119,18 +119,21 @@ public class ResidentModeHandler {
 	 * @param notify whether to notify the Player of their new modes.
 	 */
 	public static void toggleModes(Player player, String[] names, boolean notify) throws TownyException {
-		toggleModes(getResident(player), names, notify);
+		toggleModes(getResident(player), names, notify, false);
 	}
 
 	/**
 	 * Will clear a Resident's modes and then apply all of the given named Modes.
 	 * 
-	 * @param resident Resident to toggle modes on.
-	 * @param names    String[] of all modes to add to the Resident.
-	 * @param notify   whether to notify the Resident of their new modes.
+	 * @param resident   Resident to toggle modes on.
+	 * @param names      String[] of all modes to add to the Resident.
+	 * @param notify     whether to notify the Resident of their new modes.
+	 * @param clearModes whether a resident's nodes are cleared before toggling
+	 *                   happens.
 	 */
-	public static void toggleModes(Resident resident, String[] names, boolean notify) {
-		clearModes(resident, false);
+	public static void toggleModes(Resident resident, String[] names, boolean notify, boolean clearModes) {
+		if (clearModes)
+			clearModes(resident, false);
 		for (String mode : names)
 			try {
 				toggleMode(resident, mode, false);
@@ -261,7 +264,7 @@ public class ResidentModeHandler {
 			String modeString = getDefaultModes(resident);
 			if (modeString.isEmpty())
 				return;
-			toggleModes(resident, modeString.split(","), notify);
+			toggleModes(resident, modeString.split(","), notify, true);
 		} catch (NullPointerException ignored) {}
 	}
 	

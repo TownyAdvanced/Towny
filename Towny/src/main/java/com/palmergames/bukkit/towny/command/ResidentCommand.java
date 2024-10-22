@@ -536,7 +536,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			return;
 		}
 
-		ResidentModeHandler.toggleModes(resident, split, true);
+		ResidentModeHandler.toggleModes(resident, split, true, false);
 	}
 
 	private void setAbout(Player player, String about, Resident resident) throws TownyException {
