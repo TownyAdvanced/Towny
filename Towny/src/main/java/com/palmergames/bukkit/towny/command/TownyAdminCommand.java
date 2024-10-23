@@ -2961,9 +2961,20 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			balances.put(TownyServerAccount.ACCOUNT, TownyServerAccount.ACCOUNT.getHoldingBalance());
-			
+
+			TownyMessaging.sendMessage(sender, Translatable.of("msg_admin_eco_convert_x_accounts_found", balances.size()));
+			HashMap<Integer, String> progressMap = new HashMap<>();
+			int tenPercent = balances.size() / 10;
+			for (int i = 1; i < 10; i++)
+				progressMap.put(tenPercent * i, i + "0%");
+
+			int i = 0;
 			// And set them to the target economy adapter
 			for (Map.Entry<Account, Double> entry : balances.entrySet()) {
+				i++;
+				if (progressMap.containsKey(i))
+					TownyMessaging.sendMessage(sender, Translatable.of("msg_admin_eco_convert_conversion_progress", progressMap.get(i)));
+
 				// Skip accounts with no balance
 				if (entry.getValue() == 0)
 					continue;
