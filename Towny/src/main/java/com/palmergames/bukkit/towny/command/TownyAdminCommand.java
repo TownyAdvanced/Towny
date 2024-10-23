@@ -643,7 +643,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 						if (active != null)
 							convertChoices.remove(active.name());
 						
-						if (TownyEconomyHandler.getProvider().isLegacy())
+						if (TownyEconomyHandler.getProvider().isLegacy() && args.length < 4)
 							convertChoices.add("modern");
 						
 						return NameUtil.filterByStart(convertChoices, args[2]);
