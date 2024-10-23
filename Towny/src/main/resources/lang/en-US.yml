@@ -427,7 +427,8 @@ ta_reload_help_3: "Reloads Towny permissions."
 ta_reload_help_4: "Reloads all components of Towny."
 
 ta_eco_resetbanks_help: "Resets town and nation banks to the given amount or 0."
-ta_eco_convert_help: "Converts your Towny accounts into our modern variety, able to use Vault's OfflinePlayer."
+ta_eco_convert_modern_help: "Converts your Towny accounts into our modern variety, able to use Vault's OfflinePlayer."
+ta_eco_convert_help: "Converts your Towny accounts to the target economy implementation, useful for transferring data between economy plugins."
 ta_eco_info_help: "Gives information about economy accounts on the server."
 ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
 

@@ -424,7 +424,8 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin eco")
 				.add("resetbanks {amount}", Translatable.of("ta_eco_resetbanks_help"))
 				.add("depositall [amount]", Translatable.of("ta_depositall_help_0"))
-				.add("convert modern", Translatable.of("ta_eco_convert_help"))
+				.add("convert modern", Translatable.of("ta_eco_convert_modern_help"))
+				.add("convert [economy]", Translatable.of("ta_eco_convert_help"))
 				.add("info ?", Translatable.of("ta_eco_info_help"));
 		}
 	},
