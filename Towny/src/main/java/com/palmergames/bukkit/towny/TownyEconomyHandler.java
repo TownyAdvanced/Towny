@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
 import com.palmergames.bukkit.towny.object.economy.provider.EconomyProvider;
 import com.palmergames.bukkit.towny.object.economy.provider.ReserveEconomyProvider;
 import com.palmergames.bukkit.towny.object.economy.provider.VaultEconomyProvider;
+import com.palmergames.bukkit.towny.object.economy.provider.VaultUnlockedEconomyProvider;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -52,7 +53,7 @@ public class TownyEconomyHandler {
 	};
 	
 	public enum EcoType {
-		NONE, VAULT, RESERVE
+		NONE, VAULT, RESERVE, VAULTUNLOCKED
 	}
 	
 	@Deprecated
@@ -136,6 +137,8 @@ public class TownyEconomyHandler {
 	public static boolean setupEconomy() {
 
 		if (plugin.getServer().getPluginManager().isPluginEnabled("Vault"))
+			provider = new VaultUnlockedEconomyProvider();
+		else if (plugin.getServer().getPluginManager().isPluginEnabled("Vault"))
 			provider = new VaultEconomyProvider();
 		else if (plugin.getServer().getPluginManager().isPluginEnabled("Reserve"))
 			provider = new ReserveEconomyProvider((Reserve) plugin.getServer().getPluginManager().getPlugin("Reserve"));
