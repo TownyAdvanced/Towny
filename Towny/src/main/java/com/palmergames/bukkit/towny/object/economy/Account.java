@@ -80,6 +80,7 @@ public abstract class Account implements Nameable, Identifiable {
 	@Deprecated
 	public Account(EconomyHandler economyHandler, String name, World world) {
 		this.name = name;
+		this.uuid = economyHandler instanceof Identifiable identifiable ? identifiable.getUUID() : null;
 		this.economyHandler = economyHandler;
 		
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
@@ -94,6 +95,7 @@ public abstract class Account implements Nameable, Identifiable {
 	@Deprecated
 	public Account(EconomyHandler economyHandler, String name) {
 		this.name = name;
+		this.uuid = economyHandler instanceof Identifiable identifiable ? identifiable.getUUID() : null;
 		this.economyHandler = economyHandler;
 		this.worldSupplier = () -> TownyUniverse.getInstance().getTownyWorlds().get(0);
 	}
