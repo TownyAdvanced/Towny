@@ -67,6 +67,10 @@ town_help_9: '오늘이 그 날입니다!'
 town_help_10: '접속 중인 시민 목록'
 town_help_13: "마을의 주민 목록 보기"
 town_help_14: "마을의 순위 목록 보기"
+town_help_15: "마을의 수배자 목록 보기"
+town_help_16: "마을의 플롯 그룹 보기"
+town_help_17: "마을의 플롯 그룹 종류 보기"
+town_help_18: "마을 주민에게 메세지 보내기"
 town_set_help_7: "/t spawn을 사용하기 위한 비용을 설정"
 town_set_help_8: "나의 마을 이름 설정"
 town_set_help_9: "나의 마을 태그 설정"

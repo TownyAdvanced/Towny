@@ -982,6 +982,7 @@ msg_err_public_nation_spawn_forbidden: '&c公开传送到其他国家是禁止�
 msg_err_public_nation_spawn_forbidden_war: '&c只有在战争期间才能禁止传送到开放的国家.'
 msg_err_public_nation_spawn_forbidden_peace: '&c在战争期间禁止传送到开放的国家.'
 msg_spawn_cost_set_to: '&b%s 将使用 /%s spawn 的价格设置为 %s.'
+msg_spawn_fail_safe_teleport: '&c传送失败，位置不安全，请联系您城镇的市长更改传送地点。'
 msg_err_cannot_set_spawn_cost_more_than: '&c你不能将生产成本高于 %s'
 msg_err_ally_isnt_public: '&c你的盟国, %s, 没有启用公共传送点. 传送已被取消.'
 msg_nation_changed_public: '&c国家公开状态变更为 %s.'
@@ -1360,6 +1361,9 @@ gui_title_towny_wildsblocks: '城镇荒地区块列表'
 gui_title_towny_itemuse: '城镇物品使用权限列表'
 gui_title_towny_switch: 'Towny交互权限列表'
 gui_title_towny_plotclear: 'Towny土地清除列表'
+flatfile_dbg_district_file_missing_town_delete: '选区文件缺失，删除%s'
+flatfile_err_exception_reading_district_file_at_line: '加载错误：在线读取 %s 选区文件时出现异常： %s'
+flatfile_dbg_loading_district_list: '正在加载选区列表...'
 msg_ta_removed_all_titles_and_surnames_removed: '所有居民的头衔与称谓已被移除。'
 msg_err_homeblock_already_set_here: '这个位置已经在你的城镇中心区块内了。'
 #Added in 0.100
@@ -1727,6 +1731,8 @@ confirmation_unclaiming_costs: '取消这片土地将消耗 %s，你想要继续
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必须再等待%s秒才能重命名你的城镇。'
+#Added in 1.141
+msg_newday_already_running: '正在执行一个新的日程'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: '你必须等待%s秒后才可以再次调整中立性。'
@@ -2083,4 +2089,14 @@ msg_new_resident_spawn_to_town_prompt: "你想传送到你刚刚加入的城镇�
 msg_recieved_refund_for_deleted_object: "您收到了您已删除的城镇或民族的银行余额，金额为 %s。"
 msg_err_you_already_own_this_plot: "你已经拥有这个区块。"
 msg_err_you_cannot_delete_this_nation: "您已被阻止删除这个国家。"
+msg_err_district_name_required: '你必须设置选区名称，请输入/plot district add {name}来命名'
+msg_err_rename_district_name_required: '你必须设置选区名称，请输入 /plot district rename {name}来命名'
+msg_district_renamed_from_x_to_y: '选区%s已经重命名为%s'
+msg_err_plot_not_associated_with_a_district: '这块地皮没有与选区相连'
+msg_plot_was_removed_from_district_x: '地皮 <blue>(%s,%s) <dark_green>已经从%s选区中移除'
+msg_district_empty_deleted: '这个选区%s中未包含任何城镇区块，已被删除'
+msg_district_deleted: '选区%s已被删除'
 msg_err_you_cannot_join_town_you_have_not_played_long_enough: "你在服务器上的时间尚不够长，须再等待 %s 后才可加入一座城镇。"
+msg_your_nation_has_pending_ally_invites: "您的国家收到了其他国家的盟友邀请，使用'/n ally received'查看您收到的邀请"
+msg_your_town_has_pending_nation_invites: "您的城镇收到了加入国家的邀请，使用 '/t invite received' 查看您收到的邀请。"
+msg_you_have_pending_town_invites: "你收到了其他城市的邀请。 使用 '/invite list' 查看您收到的邀请，或使用 '/invite all' 拒绝所有邀请。"
