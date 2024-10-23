@@ -2964,6 +2964,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			
 			// And set them to the target economy adapter
 			for (Map.Entry<Account, Double> entry : balances.entrySet()) {
+				// Skip accounts with no balance
+				if (entry.getValue() == 0)
+					continue;
+				
 				if (!target.hasAccount(entry.getKey()))
 					target.newAccount(entry.getKey());
 
