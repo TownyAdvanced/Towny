@@ -2941,14 +2941,24 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			Map<Account, Double> balances = new HashMap<>();
 			
 			// Gather up all the balances
-			for (Town town : TownyUniverse.getInstance().getTowns())
+			for (Town town : TownyUniverse.getInstance().getTowns()) {
 				balances.put(town.getAccount(), town.getAccount().getHoldingBalance());
+
+				town.getAccount().setUUID(TownyEconomyHandler.modifyNPCUUID(town.getUUID()));
+			}
 			
-			for (Nation nation : TownyUniverse.getInstance().getNations())
+			for (Nation nation : TownyUniverse.getInstance().getNations()) {
 				balances.put(nation.getAccount(), nation.getAccount().getHoldingBalance());
+
+				nation.getAccount().setUUID(TownyEconomyHandler.modifyNPCUUID(nation.getUUID()));
+			}
 			
-			for (Resident resident : TownyUniverse.getInstance().getResidents())
+			for (Resident resident : TownyUniverse.getInstance().getResidents()) {
 				balances.put(resident.getAccount(), resident.getAccount().getHoldingBalance());
+
+				if (resident.isNPC())
+					resident.getAccount().setUUID(TownyEconomyHandler.modifyNPCUUID(resident.getUUID()));
+			}
 			
 			balances.put(TownyServerAccount.ACCOUNT, TownyServerAccount.ACCOUNT.getHoldingBalance());
 			
