@@ -199,7 +199,7 @@ public abstract class Account implements Nameable, Identifiable {
 	/**
 	 * Fetch the current world for this object
 	 *
-	 * @deprecated since 0.100.4.6 use {@link #getWorld().getBukkitWorld()} instead.
+	 * @deprecated since 0.100.4.6 use {@link #getWorld()#getBukkitWorld()} instead.
 	 * @return Bukkit world for the object
 	 */
 	@Deprecated
