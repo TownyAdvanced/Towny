@@ -10047,3 +10047,34 @@ v0.92.0.11:
   - Bump org.jetbrains:annotations from 24.1.0 to 25.0.0.
   - Bump org.junit.jupiter:junit-jupiter from 5.11.0 to 5.11.2.
   - Bump org.junit.jupiter:junit-jupiter-api from 5.11.0 to 5.11.2.
+0.100.4.6:
+  - Add OfflinePlayer and UUID support to Economy backend, courtesy of Warrior with PR #7425.
+    - Adds a "modern" economy implementation for Vault and Reserve back ends, while maintaining "legacy" implementations.
+      - Already established servers will have their server set to legacy, while new installs will begin using the modern system right away.
+    - The modern implementation makes use of Vault's OfflinePlayer methods, making Towny better suited to newer economy plugins that might not have fully implemented VaultAPI in their code.
+    - Towny's Account class has been revamped with the Towny objects' UUIDs being used.
+    - In cases where a server is using EssentialsX Economy, Towny will convert our non-player accounts' UUIDs into V2 UUIDs, allowing EssEco to know they do not belong to players.
+  - Changed command: /ta depositall has changed to /ta eco depositall
+  - Changed command: /ta resetbanks has changed to /ta eco resetbanks
+  - New Command: /ta eco info [TownyObject] {name}
+    - Used to see information about a resident, town, nation, or the Towny serveraccount's economy Account.
+  - New Command: /ta eco convert modern
+    - Will convert your Towny legacy accounts into modern accounts in your Economy plugin.
+  - New Command: /ta eco convert {economyplugin}
+    - Will convert your Towny economy accounts from your existing economy plugin, into the given economy plugin.
+  - New Permission Node: towny.command.townyadmin.eco.*
+    - A child node of towny.command.townyadmin.*, no changes required in your permission plugin.
+    - Child Nodes:
+      - towny.command.townyadmin.eco.depositall
+      - towny.command.townyadmin.eco.resetbanks
+      - towny.command.townyadmin.eco.info
+      - towny.command.townyadmin.eco.convert
+  - New Config Option: economy.advanced.modern
+    - Default: true (on existing installs this will default to false)
+    - When enabled, Towny will use UUIDs when communicating with your economy plugin.
+    - Most users will never have to touch this, but for existing servers this option will automatically be set to false.
+    - If this option is disabled and you wish to avoid losing data, use the `/townyadmin eco convert modern` command to convert.
+  - New Config Option: economy.advanced.npc_uuid_version
+    - Default: -1
+    - The UUID version to use for non-player accounts. This is used so that economy plugins can more easily differentiate between player and NPC accounts.
+    - The default is -1, which disables modifying npc uuids.
