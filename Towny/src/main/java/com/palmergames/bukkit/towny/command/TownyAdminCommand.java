@@ -2937,6 +2937,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (target == null)
 			throw new TownyException(Translatable.of("msg_admin_eco_convert_target_not_found", targetName, provider.economyAdapters().stream().map(EconomyAdapter::name).collect(Collectors.joining(", "))));
 
+		if (Bukkit.getOnlinePlayers().size() > 0) 
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_eco_convert_online_players_warning"));
+
 		Confirmation.runOnAccept(() -> TownyEconomyHandler.economyExecutor().execute(() -> {
 			Map<Account, Double> balances = new HashMap<>();
 			

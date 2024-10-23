@@ -2606,6 +2606,7 @@ msg_admin_eco_convert_no_provider_specified: "<red>No economy provider specified
 msg_admin_eco_convert_no_target_specified: "<red>No target economy specified"
 msg_admin_eco_convert_target_not_found: "<red>No economy adapter found by name '%s', available adapters: [%s]"
 msg_admin_eco_convert_already_modern: "<red>Cannot convert to modern; provider is already in modern mode"
+msg_admin_eco_convert_online_players_warning: "<red>Warning: It is recommended to convert while there are no players on the server."
 msg_admin_eco_convert_x_accounts_found: "Found %s accounts to convert. Beginning conversion now."
 msg_admin_eco_convert_conversion_progress: "Account conversion in progress, %s complete..."
 msg_admin_eco_convert_success: "Economy conversion successful"
