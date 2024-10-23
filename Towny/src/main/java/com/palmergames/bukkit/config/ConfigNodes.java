@@ -2981,10 +2981,10 @@ public enum ConfigNodes {
 	
 	ECO_ADVANCED_NPC_UUID_VERSION(
 			"economy.advanced.npc_uuid_version",
-			"4",
+			"-1",
 			"",
 			"# The UUID version to use for non-player accounts. This is used so that economy plugins can more easily differentiate between player and NPC accounts.",
-			"# Set to -1 to disable modifying npc uuids."),
+			"# The default is -1, which disables modifying npc uuids."),
 
 	BANKHISTORY(
 		"bank_history",
