@@ -2968,10 +2968,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				if (entry.getValue() == 0)
 					continue;
 				
-				if (!target.hasAccount(entry.getKey()))
+				if (!target.hasAccount(entry.getKey())) {
+					TownyMessaging.sendDebugMsg("Creating new account for " + entry.getKey().getUUID());
 					target.newAccount(entry.getKey());
+				}
 
 				target.setBalance(entry.getKey(), entry.getValue());
+				TownyMessaging.sendDebugMsg("Setting balance of account " + entry.getKey().getUUID() + " to " + entry.getValue());
 			}
 			
 			// Change config to modern & setup economy again
