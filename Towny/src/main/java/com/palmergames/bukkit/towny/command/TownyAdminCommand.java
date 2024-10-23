@@ -2977,20 +2977,24 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_ECO_INFO.send(sender);
 			return;
 		}
+
 		Account account = switch (args[0].toLowerCase(Locale.ROOT)) {
-		case "serveraccount" -> TownyServerAccount.ACCOUNT;
-		case "nation" -> getNationOrThrow(args[1]).getAccount();
-		case "resident" -> getResidentOrThrow(args[1]).getAccount();
-		case "town" -> getTownOrThrow(args[1]).getAccount();
-		default -> null;
+			case "serveraccount" -> TownyServerAccount.ACCOUNT;
+			case "nation" -> getNationOrThrow(args[1]).getAccount();
+			case "resident" -> getResidentOrThrow(args[1]).getAccount();
+			case "town" -> getTownOrThrow(args[1]).getAccount();
+			default -> null;
 		};
+
 		if (account == null)
 			throw new TownyException("Account not found.");
 
-		TownyMessaging.sendMessage(sender, ChatTools.formatTitle("Account Info"));
-		TownyMessaging.sendMessage(sender, "Name: " + account.getName());
-		TownyMessaging.sendMessage(sender, "UUID: " + account.getUUID());
-		TownyMessaging.sendMessage(sender, "Balance: " + account.getHoldingBalance());
+		TownyEconomyHandler.economyExecutor().execute(() -> {
+			TownyMessaging.sendMessage(sender, ChatTools.formatTitle("Account Info"));
+			TownyMessaging.sendMessage(sender, "Name: " + account.getName());
+			TownyMessaging.sendMessage(sender, "UUID: " + account.getUUID());
+			TownyMessaging.sendMessage(sender, "Balance: " + account.getHoldingBalance());
+		});
 	}
 
 	private void parseAdminInstall(CommandSender sender) throws NoPermissionException {
