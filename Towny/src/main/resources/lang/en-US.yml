@@ -2599,3 +2599,10 @@ msg_your_nation_has_pending_ally_invites: "Your nation has invitations become an
 msg_your_town_has_pending_nation_invites: "Your town has invitations to join one or more nations. Use '/t invite received' to view your invitations."
 
 msg_you_have_pending_town_invites: "You have invitations to join one or more towns. Use '/invite list' to view your invitations, or use '/invite deny all' to decline all of these invites."
+
+msg_admin_eco_convert_no_providers: "<red>No economy providers available"
+msg_admin_eco_convert_no_provider_specified: "<red>No economy provider specified"
+msg_admin_eco_convert_no_target_specified: "<red>No target economy specified"
+msg_admin_eco_convert_target_not_found: "<red>No economy adapter found by name '%s', available adapters: [%s]"
+msg_admin_eco_convert_already_modern: "<red>Cannot convert to modern; provider is already in modern mode"
+msg_admin_eco_convert_success: "Economy conversion successful"

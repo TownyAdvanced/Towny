@@ -2911,17 +2911,17 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		
 		EconomyProvider provider = TownyEconomyHandler.getProvider();
 		if (provider == null)
-			throw new TownyException("No economy provider available");
+			throw new TownyException(Translatable.of("msg_admin_eco_convert_no_providers"));
 		
 		if (args.length == 0)
-			throw new TownyException("No target economy specified");
+			throw new TownyException(Translatable.of("msg_admin_eco_convert_no_target_specified"));
 		
 		EconomyAdapter target;
 		
 		final String targetName = String.join(" ", args);
 		if ("modern".equalsIgnoreCase(targetName)) {
 			if (!provider.isLegacy())
-				throw new TownyException("Cannot convert to modern; provider is already in modern mode");
+				throw new TownyException(Translatable.of("msg_admin_eco_convert_already_modern"));
 			
 			// Temporarily set to modern to create a non-legacy adapter as the target
 			provider.setLegacy(false);
@@ -2935,7 +2935,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (target == null)
-			throw new TownyException("No economy adapter found by name " + targetName + ", available adapters: " + provider.economyAdapters().stream().map(EconomyAdapter::name).collect(Collectors.joining(", ")));
+			throw new TownyException(Translatable.of("msg_admin_eco_convert_target_not_found", targetName, provider.economyAdapters().stream().map(EconomyAdapter::name).collect(Collectors.joining(", "))));
 
 		Confirmation.runOnAccept(() -> TownyEconomyHandler.economyExecutor().execute(() -> {
 			Map<Account, Double> balances = new HashMap<>();
@@ -2967,7 +2967,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				TownyEconomyHandler.setupEconomy();
 			}
 			
-			TownyMessaging.sendMsg(sender, "Economy conversion successful.");
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_eco_convert_success"));
 		})).sendTo(sender);
 	}
 
