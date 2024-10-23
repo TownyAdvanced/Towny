@@ -54,6 +54,8 @@ public abstract class Account implements Nameable, Identifiable {
 	private UUID uuid;
 	private final Supplier<TownyWorld> worldSupplier;
 	
+	private OfflinePlayer cachedOfflinePlayer;
+	
 	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
 		this.economyHandler = owner;
 		this.name = name;
@@ -298,6 +300,7 @@ public abstract class Account implements Nameable, Identifiable {
 
 	public void setName(String name) {
 		this.name = name;
+		this.cachedOfflinePlayer = null;
 	}
 	
 	/**
@@ -311,6 +314,7 @@ public abstract class Account implements Nameable, Identifiable {
 	@Override
 	public void setUUID(final @NotNull UUID uuid) {
 		this.uuid = uuid;
+		this.cachedOfflinePlayer = null;
 	}
 
 	/**
@@ -460,11 +464,14 @@ public abstract class Account implements Nameable, Identifiable {
 			if (player != null)
 				return player;
 		}
-		
+
+		if (this.cachedOfflinePlayer != null)
+			return this.cachedOfflinePlayer;
+
 		try {
 			final Object gameProfile = GAMEPROFILE_CONSTRUCTOR.invoke(this.uuid, this.name);
-			
-			return (OfflinePlayer) OFFLINEPLAYER_CONSTRUCTOR.invoke(Bukkit.getServer(), gameProfile);
+
+			return (this.cachedOfflinePlayer = (OfflinePlayer) OFFLINEPLAYER_CONSTRUCTOR.invoke(Bukkit.getServer(), gameProfile));
 		} catch (Throwable throwable) {
 			Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred when creating offline player for account " + this.getUUID(), throwable);
 			return Bukkit.getServer().getOfflinePlayer(this.uuid); // panic
