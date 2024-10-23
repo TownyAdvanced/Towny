@@ -426,7 +426,16 @@ ta_reload_help_2: "Reloads language files."
 ta_reload_help_3: "Reloads Towny permissions."
 ta_reload_help_4: "Reloads all components of Towny."
 
+ta_eco_resetbanks_help: "Resets town and nation banks to the given amount or 0."
+ta_eco_convert_modern_help: "Converts your Towny accounts into our modern variety, able to use Vault's OfflinePlayer."
+ta_eco_convert_help: "Converts your Towny accounts to the target economy implementation, useful for transferring data between economy plugins."
+ta_eco_info_help: "Gives information about economy accounts on the server."
 ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
+
+ta_info_help_0: "View eco info for the given nation."
+ta_info_help_1: "View eco info for the given resident."
+ta_info_help_2: "View eco info for the towny server account."
+ta_info_help_3: "View eco info for the given town."
 
 plot_help_0: "Turns on the plot info HUD."
 plot_help_1: "Removes the owner of the plot."
@@ -2591,3 +2600,13 @@ msg_your_nation_has_pending_ally_invites: "Your nation has invitations become an
 msg_your_town_has_pending_nation_invites: "Your town has invitations to join one or more nations. Use '/t invite received' to view your invitations."
 
 msg_you_have_pending_town_invites: "You have invitations to join one or more towns. Use '/invite list' to view your invitations, or use '/invite deny all' to decline all of these invites."
+
+msg_admin_eco_convert_no_providers: "<red>No economy providers available"
+msg_admin_eco_convert_no_provider_specified: "<red>No economy provider specified"
+msg_admin_eco_convert_no_target_specified: "<red>No target economy specified"
+msg_admin_eco_convert_target_not_found: "<red>No economy adapter found by name '%s', available adapters: [%s]"
+msg_admin_eco_convert_already_modern: "<red>Cannot convert to modern; provider is already in modern mode"
+msg_admin_eco_convert_online_players_warning: "<red>Warning: It is recommended to convert while there are no players on the server."
+msg_admin_eco_convert_x_accounts_found: "Found %s accounts to convert. Beginning conversion now."
+msg_admin_eco_convert_conversion_progress: "Account conversion in progress, %s complete..."
+msg_admin_eco_convert_success: "Economy conversion successful"

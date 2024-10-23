@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object.economy.transaction;
 import com.palmergames.bukkit.towny.event.economy.TownyTransactionEvent;
 import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 
 public class TransactionBuilder {
 	TransactionType type;
@@ -26,7 +27,7 @@ public class TransactionBuilder {
 	}
 
 	public TransactionBuilder paidToServer() {
-		this.receivingAccount = Account.SERVER_ACCOUNT;
+		this.receivingAccount = TownyServerAccount.ACCOUNT;
 		return this;
 	}
 
@@ -41,7 +42,7 @@ public class TransactionBuilder {
 	}
 
 	public TransactionBuilder paidByServer() {
-		this.sendingAccount = Account.SERVER_ACCOUNT;
+		this.sendingAccount = TownyServerAccount.ACCOUNT;
 		return this;
 	}
 

@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.object.SpawnInformation;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
 import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 
@@ -108,7 +109,7 @@ public class SpawnUtil {
 			if (spawnInfo.travelCost > 0) {
 				// Get paymentMsg for the money.csv and the Account being paid.
 				final String paymentMsg = getPaymentMsg(spawnInfo.townSpawnLevel, spawnInfo.nationSpawnLevel, spawnType);
-				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : Account.SERVER_ACCOUNT;
+				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : TownyServerAccount.ACCOUNT;
 				initiateCostedSpawn(player, resident, spawnLoc, spawnInfo.travelCost, payee, paymentMsg, ignoreWarn, spawnInfo.cooldown);
 				// No Cost so skip confirmation system.
 			} else
@@ -738,7 +739,7 @@ public class SpawnUtil {
 	 */
 	private static Account getPayee(Town town, Nation nation, SpawnType spawnType) {
 		return switch(spawnType) {
-		case RESIDENT -> town == null ? Account.SERVER_ACCOUNT : town.getAccount(); 
+		case RESIDENT -> town == null ? TownyServerAccount.ACCOUNT : town.getAccount(); 
 		case TOWN -> town.getAccount();
 		case NATION -> nation.getAccount();
 		};

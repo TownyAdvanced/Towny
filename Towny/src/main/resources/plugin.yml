@@ -696,8 +696,7 @@ permissions:
             towny.command.townyadmin.plot.*: true
             towny.command.townyadmin.tpplot: true
             towny.command.townyadmin.resident.*: true
-            towny.command.townyadmin.depositall: true
-            towny.command.townyadmin.resetbanks: true
+            towny.command.townyadmin.eco.*: true
             towny.command.townyadmin.install: true
 
     towny.command.townyadmin.resident.*:
@@ -709,6 +708,15 @@ permissions:
             towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.resident.friend: true
             towny.command.townyadmin.resident.unjail: true
+
+    towny.command.townyadmin.eco.*:
+        description: User can access the admin eco commands.
+        default: false
+        children:
+            towny.command.townyadmin.eco.depositall: true
+            towny.command.townyadmin.eco.resetbanks: true
+            towny.command.townyadmin.eco.convert: true
+            towny.command.townyadmin.eco.info: true
 
     towny.command.townyadmin.town.spawn.*:
         description: User can access town spawns
