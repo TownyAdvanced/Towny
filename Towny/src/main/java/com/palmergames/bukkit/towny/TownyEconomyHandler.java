@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.economy.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -266,11 +267,12 @@ public class TownyEconomyHandler {
 	 * @return true if successful
 	 */
 	public static boolean subtract(Account account, double amount) {
-
+		System.out.println("TownyEconomyHandler#subtract 1");
 		if (!runPreChecks(Transaction.subtract(amount).paidBy(account).build())) {
+			System.out.println("TownyEconomyHandler#subtract 2");
 			return false;
 		}
-
+		System.out.println("TownyEconomyHandler#subtract 3");
 		return economy.subtract(account, amount);
 	}
 
@@ -300,6 +302,7 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
+		System.out.println("TownyEconomyHandler#add " + account.getName());
 		return economy.add(account, amount);
 	}
 
@@ -401,5 +404,15 @@ public class TownyEconomyHandler {
 			return uuid;
 
 		return JavaUtil.changeUUIDVersion(uuid, version);
+	}
+
+	public static boolean canRenameAccounts() {
+		return getType().equals(EcoType.VAULTUNLOCKED);
+	}
+
+	public static void rename(Government gov, String newName) {
+		if (getType().equals(EcoType.VAULTUNLOCKED)) {
+			economy.renameAccount(gov.getAccount(), newName);
+		}
 	}
 }

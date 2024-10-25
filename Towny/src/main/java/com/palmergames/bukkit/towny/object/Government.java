@@ -266,9 +266,12 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		if (!TownyEconomyHandler.isActive()) {
 			throw new TownyException(Translation.of("msg_err_no_economy"));
 		}
+		
+		System.out.println("Government#depositToBank 1");
 		if (!resident.getAccount().payTo(amount, this, "Deposit from " + resident.getName())) {
 			throw new TownyException(Translation.of("msg_insuf_funds"));
 		}
+		System.out.println("Government#depositToBank 1");
 	}
 
 	@Override

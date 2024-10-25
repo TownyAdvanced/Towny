@@ -3,8 +3,6 @@ package com.palmergames.bukkit.towny.object.economy.adapter;
 import java.math.BigDecimal;
 
 import com.palmergames.bukkit.towny.object.economy.Account;
-import com.palmergames.bukkit.towny.utils.TownyComponents;
-
 import net.milkbowl.vault2.economy.Economy;
 import net.milkbowl.vault2.economy.EconomyResponse;
 
@@ -51,12 +49,12 @@ public class VaultUnlockedEconomyAdapter implements EconomyAdapter {
 
 	@Override
 	public void deleteAccount(Account account) {
-		// Attempt to zero the account as Vault provides no delete method.
-		if (!hasAccount(account)) {
-			return;
-		}
+		economy.deleteAccount(TOWNY, account.getUUID());
+	}
 
-		subtract(account, getBalance(account));
+	@Override
+	public void renameAccount(Account account, String newName) {
+		economy.renameAccount(TOWNY, account.getUUID(), newName);
 	}
 
 	@Override
@@ -77,6 +75,6 @@ public class VaultUnlockedEconomyAdapter implements EconomyAdapter {
 	@Override
 	public String getFormattedBalance(double balance) {
 		BigDecimal bd = BigDecimal.valueOf(balance);
-		return economy.format(bd);
+		return economy.format(TOWNY, bd);
 	}
 }

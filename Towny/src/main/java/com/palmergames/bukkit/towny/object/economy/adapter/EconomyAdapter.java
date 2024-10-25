@@ -60,6 +60,14 @@ public interface EconomyAdapter {
 	void deleteAccount(Account account);
 
 	/**
+	 * Renames an account.
+	 * 
+	 * @param account the Account to rename.
+	 * @param newName the name to give the Account.
+	 */
+	void renameAccount(Account account, String newName);
+
+	/**
 	 * Sets the balance of the account.
 	 * 
 	 * @param account The account.

@@ -75,8 +75,9 @@ public class MoneyUtil {
 	public static void townDeposit(Player player, Resident resident, Town town, Nation nation, int amount) {
 		
 		try {
+			System.out.println("MoneyUtil#townDeposit 1");
 			commonTests(amount, resident, town, player.getLocation(), false, false);
-
+			System.out.println("MoneyUtil#townDeposit 2");
 			Transaction transaction = Transaction.deposit(amount).paidBy(resident).paidTo(town).build();
 
 			BukkitTools.ifCancelledThenThrow(new TownPreTransactionEvent(town, transaction));
@@ -159,9 +160,10 @@ public class MoneyUtil {
 		if (amount < 0)
 			throw new TownyException(Translatable.of("msg_err_negative_money"));
 		
+		System.out.println("MoneyUtil#commonTests 1");
 		if (!withdraw && !resident.getAccount().canPayFromHoldings(amount))
 			throw new TownyException(Translatable.of("msg_insuf_funds"));
-		
+		System.out.println("MoneyUtil#commonTests 2");
 		if (!nation && town.isRuined())
 			throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 		
