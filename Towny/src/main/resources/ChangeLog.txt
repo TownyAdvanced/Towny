@@ -10080,3 +10080,22 @@ v0.92.0.11:
     - The default is -1, which disables modifying npc uuids.
 0.100.4.7:
   - Fix regression from 0.100.4.2 which caused empty .tar backups to be created.
+0.100.4.8:
+  - Update Resident Modes system.
+    - The modes system (townclaim, map, spy) code has been updated to more robust system than just a simple list.
+    - Adds the ability to assign a permission node to a mode, and when present, will require the player to have the permission node to toggle a node.
+    - This permission node is not required if the mode is part of a player's default modes set via the permission plugin.
+    - Additionally, the ability to clear a residents modes via command now requires a permission node.
+    - All together this makes it possible for admins to set modes that players cannot remove.
+    - Modes can have types, allowing for modes to be exclusive of each other, ie: you can no longer have townclaim and townunclaim modes active at the same time.
+  - API: Added ResidentModesInitializeEvent with which plugins can add Resident Modes.
+  - New Permission Nodes:
+    - No changes required in the townyperms.yml.
+    - towny.command.resident.set.mode.clear
+    - towny.command.resident.toggle.bedspawn
+    - towny.command.resident.toggle.bordertitles
+    - towny.command.resident.toggle.ignoreotherchannels
+    - towny.command.resident.toggle.infotool
+    - towny.command.resident.toggle.plotgroup
+    - towny.command.resident.toggle.townborder
+    - towny.command.resident.toggle.townunclaim
