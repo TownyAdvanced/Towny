@@ -46,6 +46,7 @@ com.palmergames.bukkit.towny.object
 com.palmergames.bukkit.towny.object.comparators
 com.palmergames.bukkit.towny.object.economy
 com.palmergames.bukkit.towny.object.economy.adapter
+com.palmergames.bukkit.towny.object.economy.provider
 com.palmergames.bukkit.towny.object.economy.transaction
 com.palmergames.bukkit.towny.object.gui
 com.palmergames.bukkit.towny.object.inviteobjects
