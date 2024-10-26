@@ -199,7 +199,7 @@ public abstract class Account implements Nameable, Identifiable {
 	/**
 	 * Fetch the current world for this object
 	 *
-	 * @deprecated since 0.100.4.6 use {@link #getWorld().getBukkitWorld()} instead.
+	 * @deprecated since 0.100.4.6 use {@link #getWorld()} instead.
 	 * @return Bukkit world for the object
 	 */
 	@Deprecated
@@ -304,7 +304,7 @@ public abstract class Account implements Nameable, Identifiable {
 	}
 	
 	/**
-	 * @apiNote The returned uuid's version may differ from the object this represents in the case of NPC accounts.
+	 * apiNote The returned uuid's version may differ from the object this represents in the case of NPC accounts.
 	 */
 	@Override
 	public @NotNull UUID getUUID() {
