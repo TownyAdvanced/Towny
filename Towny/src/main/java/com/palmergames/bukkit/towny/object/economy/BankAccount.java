@@ -82,7 +82,6 @@ public class BankAccount extends Account {
 		if (isBankrupt())
 			return removeDebt(amount);
 
-		System.out.println("BankAccount#addMoney 1");
 		// Otherwise continue like normal.
 		return TownyEconomyHandler.add(this, amount);
 	}

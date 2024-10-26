@@ -29,7 +29,6 @@ public class EconomyAccount extends Account {
 
 	@Override
 	protected synchronized boolean subtractMoney(double amount) {
-		System.out.println("EconomyAccount#subtractMoney 1");
 		return TownyEconomyHandler.subtract(this, amount);
 	}
 }

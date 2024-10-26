@@ -142,7 +142,6 @@ public abstract class Account implements Nameable, Identifiable {
 				return payToServer(amount, reason);
 
 			BukkitTools.fireEvent(Transaction.subtract(amount).paidBy(this).asTownyTransactionEvent());
-			System.out.println("Account#withdraw 1");
 			return true;
 		}
 		
@@ -186,12 +185,11 @@ public abstract class Account implements Nameable, Identifiable {
 	 * @return boolean indicating success.
 	 */
 	public synchronized boolean payTo(double amount, Account collector, String reason) {
-		System.out.println("Account#payTo 1");
+		
 		if (amount > getHoldingBalance()) {
-			System.out.println("Account#payTo 2");
 			return false;
 		}
-		System.out.println("Account#payTo 3");
+
 		boolean success = withdraw(amount, reason) && collector.deposit(amount, reason);
 		if (success)
 			BukkitTools.fireEvent(Transaction.add(amount).paidBy(this).paidTo(collector).asTownyTransactionEvent());

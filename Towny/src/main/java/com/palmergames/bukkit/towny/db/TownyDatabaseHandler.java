@@ -638,7 +638,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					}
 				}
 				
-
 			UUID oldUUID = town.getUUID();
 			long oldregistration = town.getRegistered();
 

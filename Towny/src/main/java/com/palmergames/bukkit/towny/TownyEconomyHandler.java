@@ -45,7 +45,7 @@ public class TownyEconomyHandler {
 	private static EconomyAdapter economy = null;
 	private static EconomyProvider provider = null;
 	private static String version = "";
-
+	
 	private static final Executor ECONOMY_EXECUTOR = runnable -> {
 		if (TownySettings.isEconomyAsync() && plugin.getScheduler().isTickThread())
 			plugin.getScheduler().runAsync(runnable);
@@ -281,12 +281,11 @@ public class TownyEconomyHandler {
 	 * @return true if successful
 	 */
 	public static boolean subtract(Account account, double amount) {
-		System.out.println("TownyEconomyHandler#subtract 1");
+
 		if (!runPreChecks(Transaction.subtract(amount).paidBy(account).build())) {
-			System.out.println("TownyEconomyHandler#subtract 2");
 			return false;
 		}
-		System.out.println("TownyEconomyHandler#subtract 3");
+
 		return economy.subtract(account, amount);
 	}
 
@@ -316,7 +315,6 @@ public class TownyEconomyHandler {
 			return false;
 		}
 
-		System.out.println("TownyEconomyHandler#add " + account.getName());
 		return economy.add(account, amount);
 	}
 
