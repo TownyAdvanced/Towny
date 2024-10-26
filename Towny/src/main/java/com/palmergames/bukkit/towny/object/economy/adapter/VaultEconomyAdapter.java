@@ -73,8 +73,9 @@ public class VaultEconomyAdapter implements EconomyAdapter {
 	}
 
 	@Override
-	public void renameAccount(Account account, String newName) {
+	public boolean renameAccount(Account account, String newName) {
 		// Unused in Vault.
+		return true;
 	}
 
 	@SuppressWarnings("deprecation")

@@ -63,8 +63,9 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 	}
 
 	@Override
-	public void renameAccount(Account account, String newName) {
+	public boolean renameAccount(Account account, String newName) {
 		// Unused in Reserve.
+		return true;
 	}
 
 	public static class Legacy extends ReserveEconomyAdapter {

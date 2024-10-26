@@ -53,8 +53,8 @@ public class VaultUnlockedEconomyAdapter implements EconomyAdapter {
 	}
 
 	@Override
-	public void renameAccount(Account account, String newName) {
-		economy.renameAccount(TOWNY, account.getUUID(), newName);
+	public boolean renameAccount(Account account, String newName) {
+		return economy.renameAccount(TOWNY, account.getUUID(), newName);
 	}
 
 	@Override
