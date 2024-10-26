@@ -652,6 +652,7 @@ permissions:
         default: false
         children:
             towny.command.resident.set.mode: true
+            towny.command.resident.set.mode.clear: true
             towny.command.resident.set.perm: true
             towny.command.resident.set.about: true
 
@@ -661,14 +662,20 @@ permissions:
         children:
             towny.command.resident.toggle.explosion: true
             towny.command.resident.toggle.fire: true
-            towny.command.resident.toggle.map: true
             towny.command.resident.toggle.mobs: true
-            towny.command.resident.toggle.plotborder: true
             towny.command.resident.toggle.pvp: true
-            towny.command.resident.toggle.townclaim: true
-            towny.command.resident.toggle.constantplotborder: true
-            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.bedspawn: true
             towny.command.resident.toggle.bordertitles: true
+            towny.command.resident.toggle.ignoreotherchannels: true
+            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.infotool: true
+            towny.command.resident.toggle.map: true
+            towny.command.resident.toggle.plotgroup: true
+            towny.command.resident.toggle.constantplotborder: true
+            towny.command.resident.toggle.plotborder: true
+            towny.command.resident.toggle.townborder: true
+            towny.command.resident.toggle.townclaim: true
+            towny.command.resident.toggle.townunclaim: true
 
     # TownyAdmin command permissions
     towny.command.townyadmin.*:
