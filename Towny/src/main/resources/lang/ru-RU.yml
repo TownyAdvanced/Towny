@@ -240,6 +240,7 @@ world_help_3: 'Статус указанного мира'
 world_help_4: 'Список миров'
 world_help_5: 'Регенерировать этот чанк'
 world_help_6: 'See /tw toggle ? for help'
+world_set_help_0: "Установите название дикой природы в мире."
 townyadmin_help_1: 'Расприватить участок города'
 townyadmin_help_2: 'Попытаться расприватить участок вокруг вас.'
 admin_panel_2: 'Перезагрузить плагин'
