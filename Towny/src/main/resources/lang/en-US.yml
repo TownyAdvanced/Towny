@@ -2612,3 +2612,5 @@ msg_admin_eco_convert_conversion_progress: "Account conversion in progress, %s c
 msg_admin_eco_convert_success: "Economy conversion successful"
 
 msg_err_mode_does_not_exist: "The mode %s is not recognized."
+
+msg_err_not_allowed_to_switch: "You aren't allowed to Switch here."
