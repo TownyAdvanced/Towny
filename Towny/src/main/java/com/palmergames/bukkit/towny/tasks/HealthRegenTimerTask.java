@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
@@ -76,7 +77,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		// Heal 1 HP while in town.
 		final double currentHP = player.getHealth();
 		final double futureHP = currentHP + 1;
-		final double maxHP = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		final double maxHP = player.getAttribute(getAttribute()).getValue();
 
 		// Shrink gained to fit below the maxHP.
 		final double gained = futureHP > maxHP ? 1.0 - (futureHP - maxHP) : 1.0;
@@ -85,6 +86,14 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 
 		// Drop back to Sync so we can throw the EntityRegainHealthEvent.
 		plugin.getScheduler().run(player, () -> tryIncreaseHealth(player, currentHP, maxHP, gained));
+	}
+
+	@SuppressWarnings("deprecation")
+	private Attribute getAttribute()	{
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThan(MinecraftVersion.MINECRAFT_1_21_3))
+			return Attribute.MAX_HEALTH;
+		else
+			return Attribute.valueOf("GENERIC_MAX_HEALTH");
 	}
 
 	private void tryIncreaseHealth(Player player, double currentHealth, double maxHealth, double gained) {
