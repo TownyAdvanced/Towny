@@ -90,7 +90,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 
 	@SuppressWarnings("deprecation")
 	private Attribute getAttribute()	{
-		if (MinecraftVersion.CURRENT_VERSION.isNewerThan(MinecraftVersion.MINECRAFT_1_21_3))
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21_3))
 			return Attribute.MAX_HEALTH;
 		else
 			return Attribute.valueOf("GENERIC_MAX_HEALTH");
