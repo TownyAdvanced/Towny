@@ -10099,3 +10099,5 @@ v0.92.0.11:
     - towny.command.resident.toggle.plotgroup
     - towny.command.resident.toggle.townborder
     - towny.command.resident.toggle.townunclaim
+  - Update spigot-api to 1.21.3.
+  - Add compatibility layer for renamed Particle names.

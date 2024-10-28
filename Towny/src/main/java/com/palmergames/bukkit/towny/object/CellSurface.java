@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
+import com.palmergames.bukkit.util.BukkitParticle;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import org.bukkit.util.BoundingBox;
 
@@ -91,7 +92,7 @@ public class CellSurface {
 
 	private void drawClaimingParticleOnTopOfBlock(Player player, World world, int x, int z) {
 		Location loc = getParticleLocation(world, x, z);
-		Towny.getPlugin().getScheduler().runAsync(() -> player.spawnParticle(Particle.REDSTONE, loc, 5, CLAIMING_PARTICLE));
+		Towny.getPlugin().getScheduler().runAsync(() -> player.spawnParticle(BukkitParticle.getBorderParticle(), loc, 5, CLAIMING_PARTICLE));
 	}
 
 	private Location getParticleLocation(World world, int x, int z) {
