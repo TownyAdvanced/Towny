@@ -10101,3 +10101,4 @@ v0.92.0.11:
     - towny.command.resident.toggle.townunclaim
   - Update spigot-api to 1.21.3.
   - Add compatibility layer for renamed Particle names.
+  - Fix testing broken in 1.21 bump, update workflows to use java 21, add paper-api with test scope to make MockBukkit happy again.
