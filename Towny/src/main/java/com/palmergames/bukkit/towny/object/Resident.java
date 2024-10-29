@@ -44,6 +44,7 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.w3c.dom.UserDataHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -570,7 +571,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	/**
-	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean)} instead.
+	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean, boolean)} instead.
 	 * 
 	 * @param newModes
 	 * @param notify
@@ -581,9 +582,8 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	/**
-	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean)} instead.
-	 * 
-	 * @param newModes
+	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean, boolean)} instead.
+	 * @param modes
 	 * @param notify
 	 */
 	@Deprecated

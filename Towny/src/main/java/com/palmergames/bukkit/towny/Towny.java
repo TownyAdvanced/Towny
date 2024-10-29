@@ -708,7 +708,7 @@ public class Towny extends JavaPlugin {
 	/**
 	 * Remove ALL current modes (and set the defaults)
 	 * 
-	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#clearModes(Player))} instead.
+	 * @deprecated since 0.100.4.6, use {@link ResidentModeHandler#clearModes(Player)} instead.
 	 * @param player Player, whose modes are to be reset (all removed).
 	 */
 	@Deprecated
