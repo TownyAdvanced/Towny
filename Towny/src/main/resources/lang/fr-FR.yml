@@ -155,6 +155,9 @@ res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
 res_4: 'Liste tout les joueurs actifs'
+res_9: "Combien de taxes vous payerez par jour."
+res_toggle_help_10: "Supprimer tous les modes."
+res_toggle_help_11: "Espionner sur les canaux du chat."
 mode_1: 'Afficher la carte entre chaque parcelles de ville'
 mode_2: 'Essaye d''annexer lorsque vous marchez'
 mode_3: 'Essaye de déxannexer lorsque vous marchez'
