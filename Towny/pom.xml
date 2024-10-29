@@ -76,6 +76,7 @@
     </repositories>
 
     <dependencies>
+        <!-- Here to satisfy MockBukkit testing. -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
