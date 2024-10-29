@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
+import com.palmergames.bukkit.util.BukkitParticle;
 import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -23,12 +24,13 @@ public class TeleportWarmupParticle {
 	}
 
 	public static void drawParticles(final Player player, final double yOffset) {
+		Particle spawnParticle = BukkitParticle.getSpawnPointParticle();
 		int i = 0;
 		for (RingCoord ringPosition : RING_PATTERN) {
 			Towny.getPlugin().getScheduler().runLater(player, () -> {
 				final Location point = player.getLocation().add(ringPosition.x(), yOffset, ringPosition.z());
 
-				player.spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
+				player.spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
 
 				// Don't show particles for other players if the player is invisible
 				if (player.isInvisible())
@@ -36,10 +38,10 @@ public class TeleportWarmupParticle {
 
 				if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20_2)) {
 					for (final Player trackingPlayer : player.getTrackedBy()) {
-						trackingPlayer.spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
+						trackingPlayer.spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
 					}
 				} else if (!BukkitTools.hasVanishedMeta(player)) {
-					player.getWorld().spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
+					player.getWorld().spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
 				}
 			}, (long) i * RING_DELAY_TICKS);
 			i++;
