@@ -61,7 +61,13 @@ public class ReserveEconomyAdapter implements EconomyAdapter {
 		BigDecimal bd = BigDecimal.valueOf(balance);
 		return economy.format(bd);
 	}
-	
+
+	@Override
+	public boolean renameAccount(Account account, String newName) {
+		// Unused in Reserve.
+		return true;
+	}
+
 	public static class Legacy extends ReserveEconomyAdapter {
 		public Legacy(EconomyAPI economy) {
 			super(economy);

@@ -72,6 +72,12 @@ public class VaultEconomyAdapter implements EconomyAdapter {
 		return economy.format(balance);
 	}
 
+	@Override
+	public boolean renameAccount(Account account, String newName) {
+		// Unused in Vault.
+		return true;
+	}
+
 	@SuppressWarnings("deprecation")
 	public static class Legacy extends VaultEconomyAdapter {
 		public Legacy(Economy economy) {

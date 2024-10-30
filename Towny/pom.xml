@@ -73,6 +73,11 @@
             <id>playpro-repo</id>
             <url>https://maven.playpro.com</url>
         </repository>
+        <!-- VaultUnlockedAPI -->
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -117,6 +122,12 @@
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultUnlockedAPI</artifactId>
+            <version>2.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

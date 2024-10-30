@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.Internal
-public sealed abstract class EconomyProvider permits VaultEconomyProvider, ReserveEconomyProvider {
+public sealed abstract class EconomyProvider permits VaultEconomyProvider, ReserveEconomyProvider, VaultUnlockedEconomyProvider {
 	private boolean isLegacy = !TownySettings.getBoolean(ConfigNodes.ECO_ADVANCED_MODERN);
 
 	/**

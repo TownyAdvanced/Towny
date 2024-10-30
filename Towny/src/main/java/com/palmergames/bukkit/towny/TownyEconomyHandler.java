@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.event.economy.TownyPreTransactionEvent;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -12,6 +13,7 @@ import com.palmergames.bukkit.towny.object.economy.adapter.EconomyAdapter;
 import com.palmergames.bukkit.towny.object.economy.provider.EconomyProvider;
 import com.palmergames.bukkit.towny.object.economy.provider.ReserveEconomyProvider;
 import com.palmergames.bukkit.towny.object.economy.provider.VaultEconomyProvider;
+import com.palmergames.bukkit.towny.object.economy.provider.VaultUnlockedEconomyProvider;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -19,6 +21,7 @@ import com.palmergames.util.JavaUtil;
 import net.tnemc.core.Reserve;
 
 import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executor;
+import java.util.function.Function;
 
 /**
  * Economy handler to interface with Register or Vault directly.
@@ -52,7 +56,7 @@ public class TownyEconomyHandler {
 	};
 	
 	public enum EcoType {
-		NONE, VAULT, RESERVE
+		NONE, VAULT, RESERVE, VAULTUNLOCKED
 	}
 	
 	@Deprecated
@@ -135,7 +139,9 @@ public class TownyEconomyHandler {
 	 */
 	public static boolean setupEconomy() {
 
-		if (plugin.getServer().getPluginManager().isPluginEnabled("Vault"))
+		if (vaultUnlockedPresent())
+			provider = new VaultUnlockedEconomyProvider();
+		else if (vaultPresent())
 			provider = new VaultEconomyProvider();
 		else if (plugin.getServer().getPluginManager().isPluginEnabled("Reserve"))
 			provider = new ReserveEconomyProvider((Reserve) plugin.getServer().getPluginManager().getPlugin("Reserve"));
@@ -157,6 +163,18 @@ public class TownyEconomyHandler {
 		 * No compatible Economy system found.
 		 */
 		return false;
+	}
+
+	private static Function<Plugin, Boolean> vaultVersionFun = (vault) -> vault.getDescription().getVersion().startsWith("1");
+
+	private static boolean vaultUnlockedPresent() {
+		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
+		return vault != null && vault.isEnabled() && !vaultVersionFun.apply(vault);
+	}
+
+	private static boolean vaultPresent() {
+		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
+		return vault != null && vault.isEnabled() && vaultVersionFun.apply(vault);
 	}
 
 	/**
@@ -398,5 +416,15 @@ public class TownyEconomyHandler {
 			return uuid;
 
 		return JavaUtil.changeUUIDVersion(uuid, version);
+	}
+
+	public static boolean canRenameAccounts() {
+		return getType().equals(EcoType.VAULTUNLOCKED);
+	}
+
+	public static void rename(Government gov, String newName) {
+		if (getType().equals(EcoType.VAULTUNLOCKED)) {
+			economy.renameAccount(gov.getAccount(), newName);
+		}
 	}
 }
