@@ -44,8 +44,6 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.w3c.dom.UserDataHandler;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
