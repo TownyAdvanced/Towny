@@ -81,13 +81,13 @@
     </repositories>
 
     <dependencies>
-        <!-- Here to satisfy MockBukkit testing. -->
+        <!-- Here to satisfy MockBukkit testing.
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
