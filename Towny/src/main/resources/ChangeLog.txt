@@ -10104,3 +10104,8 @@ v0.92.0.11:
   - Fix testing broken in 1.21 bump, update workflows to use java 21, add paper-api with test scope to make MockBukkit happy again.
   - Prevent wind charge exploits on switch blocks.
     - Closes #7648.
+0.100.4.9:
+  - Add support for VaultUnlocked as an Economy Provider.
+  - Bump org.jetbrains:annotations from 25.0.0 to 26.0.1.
+  - Bump org.junit.jupiter:junit-jupiter from 5.11.2 to 5.11.3.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.11.2 to 5.11.3.
