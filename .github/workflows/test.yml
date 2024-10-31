@@ -1,8 +1,7 @@
 name: Run Tests
 on:
-    workflow_dispatch:
-#    push:
-#        branches-ignore: [l10n_master]
+    push:
+        branches-ignore: [l10n_master]
 jobs:
     test:
         runs-on: ubuntu-latest
