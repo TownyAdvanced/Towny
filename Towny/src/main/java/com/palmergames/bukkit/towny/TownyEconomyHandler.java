@@ -378,6 +378,10 @@ public class TownyEconomyHandler {
 		return account != null && hasAccount(account);
 	}
 
+	/**
+	 * @deprecated since 0.100.4.6, with no replacement.
+	 * @return true if the Server economy is Essentials Economy.
+	 */
 	@Deprecated
 	public static boolean isEssentials() {
 		return getVersion().startsWith("EssentialsX Economy") || getVersion().startsWith("Essentials Economy");

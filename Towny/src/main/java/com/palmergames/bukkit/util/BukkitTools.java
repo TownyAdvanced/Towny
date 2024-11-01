@@ -25,7 +25,6 @@ import org.bukkit.event.Event;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -56,6 +55,7 @@ import java.util.stream.Collectors;
 
 public class BukkitTools {
 
+	@SuppressWarnings("unused")
 	private static Towny plugin = null;
 	private static final MethodHandle GET_OFFLINE_PLAYER_CACHED;
 	
@@ -193,72 +193,6 @@ public class BukkitTools {
 	
 	public static PluginManager getPluginManager() {
 		return getServer().getPluginManager();
-	}
-	
-	/**
-	 * @deprecated Deprecated as of 0.99.0.6, use the {@link Towny#getScheduler()} instead.
-	 */
-	@Deprecated
-	public static BukkitScheduler getScheduler() {
-		return getServer().getScheduler();
-	}
-	
-	/**
-	 * Accepts a Runnable object and a delay (-1 for no delay)
-	 * 
-	 * @param task runnable object
-	 * @param delay ticks to delay starting
-	 * @return -1 if unable to schedule or an index to the task is successful.
-	 *
-	 * @deprecated Deprecated as of 0.99.0.6, use the {@link Towny#getScheduler()} instead.
-	 */
-	@Deprecated
-	public static int scheduleSyncDelayedTask(Runnable task, long delay) {
-		return getScheduler().scheduleSyncDelayedTask(plugin, task, delay);
-	}
-	
-	/**
-	 * Accepts a {@link Runnable} object and a delay (-1 for no delay)
-	 * 
-	 * @param task - Runnable
-	 * @param delay - ticks to delay starting ({@link Long})
-	 * @return -1 if unable to schedule or an index to the task is successful.
-	 * 
-	 * @deprecated Deprecated as of 0.99.0.6, use the {@link Towny#getScheduler()} instead.
-	 */
-	@Deprecated
-	public static int scheduleAsyncDelayedTask(Runnable task, long delay) {
-		return getScheduler().runTaskLaterAsynchronously(plugin, task, delay).getTaskId();
-	}
-	
-	/**
-	 * Accepts a {@link Runnable} object with a delay/repeat (-1 for no delay)
-	 * 
-	 * @param task runnable object
-	 * @param delay ticks to delay starting ({@link Long})
-	 * @param repeat ticks to repeat after ({@link Long})
-	 * @return -1 if unable to schedule or an index to the task is successful.
-	 *
-	 * @deprecated Deprecated as of 0.99.0.6, use the {@link Towny#getScheduler()} instead.
-	 */
-	@Deprecated
-	public static int scheduleSyncRepeatingTask(Runnable task, long delay, long repeat) {
-		return getScheduler().scheduleSyncRepeatingTask(plugin, task, delay, repeat);
-	}
-	
-	/**
-	 * Accepts a {@link Runnable} object with a delay/repeat (-1 for no delay)
-	 * 
-	 * @param task runnable object
-	 * @param delay ticks to delay starting ({@link Long})
-	 * @param repeat ticks to repeat after ({@link Long})
-	 * @return -1 if unable to schedule or an index to the task is successful.
-	 *
-	 * @deprecated Deprecated as of 0.99.0.6, use the {@link Towny#getScheduler()} instead.
-	 */
-	@Deprecated
-	public static int scheduleAsyncRepeatingTask(Runnable task, long delay, long repeat) {
-		return getScheduler().runTaskTimerAsynchronously(plugin, task, delay, repeat).getTaskId();
 	}
 	
 	/**

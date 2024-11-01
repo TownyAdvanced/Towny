@@ -323,19 +323,6 @@ public class TownySettings {
 		return getTownLevel(town.getLevelNumber());
 	}
 
-	/**
-	 * @deprecated since 0.99.6.3 use {@link #getTownLevelWithModifier(int, Town)}
-	 *             instead.
-	 * @param town      Town to test with.
-	 * @param residents an int representing what modifies a townlevel, typically the
-	 *                  number of residents in the town.
-	 * @return the TownLevel given the number of residents.
-	 */
-	@Deprecated
-	public static TownLevel getTownLevel(Town town, int residents) {
-		return getTownLevelWithModifier(residents, town);
-	}
-
 	public static TownLevel getTownLevelWithModifier(int modifier, Town town) {
 		return getTownLevel(getTownLevelFromGivenInt(modifier, town));
 	}
@@ -392,19 +379,6 @@ public class TownySettings {
 		return getNationLevel(nation.getLevelNumber());
 	}
 
-	/**
-	 * @deprecated since 0.99.6.2 use {@link #getNationLevelWithModifier(int)} instead.
-	 * @param nation    Nation to test with, unused.
-	 * @param residents an int representing what modifies a nationlevel.
-	 *                  {@link #isNationLevelDeterminedByTownCount()} decides
-	 *                  whether it is residents or towns.
-	 * @return the NationLevel given the number of residents/towns.
-	 */
-	@Deprecated
-	public static NationLevel getNationLevel(Nation nation, int residents) {
-		return getNationLevelWithModifier(residents);
-	}
-	
 	public static NationLevel getNationLevelWithModifier(int modifier) {
 		return getNationLevel(getNationLevelFromGivenInt(modifier));
 	}

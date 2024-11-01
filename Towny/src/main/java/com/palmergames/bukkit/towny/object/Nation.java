@@ -674,45 +674,6 @@ public class Nation extends Government {
 		return TownyUniverse.getInstance().hasNation(getName());
 	}
 
-	/**
-	 * @deprecated since 0.99.6.2, use {@link #getLevelNumber()} instead.
-	 * Get the Nation's current Nation Level.
-	 * <p>
-	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.	 
-	 * </p>
-	 * @return Nation Level (int) for current population or amount of towns.
-	 */
-	@Deprecated
-	public int getLevel() {
-		return getLevelNumber();
-	}
-
-	/**
-	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelMax()} instead.
-	 * Get the maximum level a Nation may achieve.
-	 * @return Size of TownySettings' configNationLevel SortedMap.
-	 */
-	@Deprecated
-	public int getMaxLevel() {
-		return TownySettings.getConfigNationLevel().size();
-	}
-
-	/**
-	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelFromGivenInt(int)} instead.
-	 * Get the Nation's Level for a supposed population size.
-	 * <p>
-	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.	 
-	 * </p>
-	 * @param populationSize Number of residents in the Nation, theoretical or real.
-	 * @return Nation Level (int) for the supplied populationSize.
-	 */
-	@Deprecated
-	public int getLevel(int populationSize) {
-		return TownySettings.getNationLevelFromGivenInt(populationSize);
-	}
-
 	public void playerBroadCastMessageToNation(Player player, String message) {
 		TownyMessaging.sendPrefixedNationMessage(this, Translatable.of("town_say_format", player.getName(), TownyComponents.stripClickTags(message)));
 	}

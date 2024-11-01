@@ -124,14 +124,6 @@ public class Jail implements Savable {
 		return jailCellMap.size() - 1 >= index;
 	}
 	
-	/**
-	 * @deprecated Deprecated as of 0.99.5.9, the cell map types are an implementation detail and not guaranteed.
-	 */
-	@Deprecated
-	public Map<String, Location> getCellMap() {
-		return this.jailCellMap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().asLocation()));
-	}
-	
 	public String getWildName() {
 		return getTownBlock().getWorld().getFormattedUnclaimedZoneName();
 	}
