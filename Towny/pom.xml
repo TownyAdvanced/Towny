@@ -81,13 +81,29 @@
     </repositories>
 
     <dependencies>
-        <!-- Here to satisfy MockBukkit testing.
+        <!-- Here to satisfy MockBukkit testing. -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>test</scope>
-        </dependency> -->
+            <exclusions>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-api</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-serializer-gson</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>
+                  adventure-text-serializer-legacy
+                </artifactId>
+              </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -376,10 +392,6 @@
                             <relocation>
                                 <pattern>net.kyori.adventure</pattern>
                                 <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.examination</pattern>
-                                <shadedPattern>com.palmergames.examination</shadedPattern>
                             </relocation>
                             <relocation>
                                 <pattern>org.bstats</pattern>
