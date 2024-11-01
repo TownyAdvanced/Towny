@@ -87,6 +87,22 @@
             <artifactId>paper-api</artifactId>
             <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>test</scope>
+            <exclusions>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-api</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-serializer-gson</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>
+                  adventure-text-serializer-legacy
+                </artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -374,39 +390,7 @@
                                 <shadedPattern>com.palmergames.compress</shadedPattern>
                             </relocation>
                             <relocation>
-                                <pattern>net.kyori.adventure-platform-bukkit</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-platform-api</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-text-serializer-bungeecord</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-nbt</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-text-serializer-gson-legacy-impl</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-platform-facet</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-platform-viaversion</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-text-serializer-plain</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure-text-minimessage</pattern>
+                                <pattern>net.kyori.adventure</pattern>
                                 <shadedPattern>com.palmergames.adventure</shadedPattern>
                             </relocation>
                             <relocation>
