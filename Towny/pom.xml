@@ -98,9 +98,7 @@
               </exclusion>
               <exclusion>
                 <groupId>net.kyori</groupId>
-                <artifactId>
-                  adventure-text-serializer-legacy
-                </artifactId>
+                <artifactId>adventure-text-serializer-legacy</artifactId>
               </exclusion>
             </exclusions>
         </dependency>
@@ -430,7 +428,7 @@
                 <plugin>
                     <groupId>com.github.TownyAdvanced</groupId>
                     <artifactId>bridger</artifactId>
-                    <version>1.7.1.Final</version>
+                    <version>1.7.2.Final</version>
                     <executions>
                         <!-- run after "compile", runs bridger on main classes -->
                         <execution>
