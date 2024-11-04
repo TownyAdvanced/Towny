@@ -10099,7 +10099,7 @@ v0.92.0.11:
     - towny.command.resident.toggle.plotgroup
     - towny.command.resident.toggle.townborder
     - towny.command.resident.toggle.townunclaim
-  - Update spigot-api to 1.21.3.
+  - Update spigot-api to 1.21.1.
   - Add compatibility layer for renamed Particle names.
   - Fix testing broken in 1.21 bump, update workflows to use java 21, add paper-api with test scope to make MockBukkit happy again.
   - Prevent wind charge exploits on switch blocks.
@@ -10114,3 +10114,5 @@ v0.92.0.11:
   - Fix adventure relocation not excluding things from paper-api.
   - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.10.0 to 3.10.1.
   - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.0 to 3.5.1.
+  - Bump spigot-api to 1.21.3.
+  - Adapt to Attributes change.
