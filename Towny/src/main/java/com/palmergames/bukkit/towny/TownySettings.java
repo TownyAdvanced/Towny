@@ -2218,8 +2218,12 @@ public class TownySettings {
 
 		// There's the chance that even with per-plot-upkeep, the townLevel upkeep modifier is still used, or 1.0 if not. 
 		double townLevelPlotModifier = isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep() ? town.getTownLevel().upkeepModifier() : 1.0;
+
+		// outposts can have an added cost to the town's upkeep.
+		double outpostCost = getPerOutpostUpkeepCost() * town.getMaxOutpostSpawn();
+		double baseUpkeep = getTownUpkeep() + outpostCost;
 		// Amount is calculated using the above multipliers.
-		double amount = ((getTownUpkeep() * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
+		double amount = ((baseUpkeep * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
 
 		// When per-plot-upkeep is in use, there can be min/max amounts.
 		if (isUpkeepByPlot()) {
@@ -2305,6 +2309,10 @@ public class TownySettings {
     	
     	return getBoolean(ConfigNodes.ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED);
     }
+
+	public static double getPerOutpostUpkeepCost() {
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_OUTPOST_UPKEEP_COST);
+	}
 
 	public static double getNationUpkeep() {
 

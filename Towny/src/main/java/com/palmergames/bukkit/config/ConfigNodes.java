@@ -2851,6 +2851,12 @@ public enum ConfigNodes {
 			"",
 			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
 			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
+	ECO_PRICE_TOWN_OUTPOST_UPKEEP_COST(
+			"economy.daily_taxes.per_outpost_cost",
+			"0.0",
+			"",
+			"# An optional price that a town must pay for each outpost they own. This number is added to the town upkeep",
+			"# before any other upkeep modifiers are applied to the Town's upkeep costs."),
 	ECO_TAXES_ALLOW_PLOT_PAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",

@@ -10119,3 +10119,8 @@ v0.92.0.11:
   - Update bridger for java 21 support, courtesy of Warrior with PR #7658.
   - Add messages to residents when they pay town and plot taxes.
     - Closes #7657.
+  - Add the ability to charge additional upkeep per outpost controlled by a town.
+    - Closes #7664.
+  - New Config Option: economy.daily_taxes.per_outpost_cost
+    - Default: 0.0
+    - An optional price that a town must pay for each outpost they own. This number is added to the town upkeep before any other upkeep modifiers are applied to the Town's upkeep costs.
