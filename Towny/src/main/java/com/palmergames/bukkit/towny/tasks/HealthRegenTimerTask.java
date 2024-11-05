@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -17,10 +16,10 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 
 public class HealthRegenTimerTask extends TownyTimerTask {
-	private static final Attribute MAX_HEALTH = Registry.ATTRIBUTE.get(NamespacedKey.minecraft("max_health"));
 
 	static {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:health-regen-task"), () -> TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen()));
@@ -79,7 +78,7 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 		// Heal 1 HP while in town.
 		final double currentHP = player.getHealth();
 		final double futureHP = currentHP + 1;
-		final double maxHP = player.getAttribute(MAX_HEALTH).getValue();
+		final double maxHP = player.getAttribute(getMaxHealthAttribute()).getValue();
 
 		// Shrink gained to fit below the maxHP.
 		final double gained = futureHP > maxHP ? 1.0 - (futureHP - maxHP) : 1.0;
@@ -96,5 +95,13 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 			return;
 
 		player.setHealth(Math.min(maxHealth, event.getAmount() + currentHealth));
+	}
+
+	@SuppressWarnings("deprecation")
+	private Attribute getMaxHealthAttribute() {
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21_3))
+			return Attribute.MAX_HEALTH;
+		else
+			return Attribute.valueOf("GENERIC_MAX_HEALTH");
 	}
 }
