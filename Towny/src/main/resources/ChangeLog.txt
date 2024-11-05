@@ -10117,3 +10117,5 @@ v0.92.0.11:
   - Bump spigot-api to 1.21.3.
   - Adapt to Attributes change.
   - Update bridger for java 21 support, courtesy of Warrior with PR #7658.
+  - Add messages to residents when they pay town and plot taxes.
+    - Closes #7657.
