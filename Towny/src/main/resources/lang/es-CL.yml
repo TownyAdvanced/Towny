@@ -1908,9 +1908,9 @@ msg_perm_hud_resident: 'residente'
 msg_perm_hud_nation: 'nación'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'extranjero'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Parcela: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: 'Grupo: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'A la venta: '
