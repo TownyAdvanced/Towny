@@ -1555,7 +1555,7 @@ msg_perm_hud_resident: 'житель'
 msg_perm_hud_nation: 'нація'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'чужинець'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Ділянка: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
