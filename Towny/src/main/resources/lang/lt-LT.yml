@@ -1409,7 +1409,7 @@ msg_perm_hud_resident: 'gyventojas'
 msg_perm_hud_nation: 'valstybė'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'pašalietis'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Sklypas: '
 #Added in 0.154
 msg_comptype_upkeep: 'Išlaikymas'
