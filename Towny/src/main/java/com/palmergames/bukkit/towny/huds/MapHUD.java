@@ -39,6 +39,7 @@ public class MapHUD {
 	private static final String TEAM_TOWN = "townTeam";
 	private static final String TEAM_OWNER = "ownerTeam";
 	private static final String TEAM_DISTRICT = "districtTeam";
+	private static final String TEAM_OUTPOST_NAME = "outpostName";
 	private static final String TEAM_PLOTNAME = "plotnameTeam";
 
 	private static final int mapLineWidth = 19, mapLineHeight = 10;
@@ -56,7 +57,7 @@ public class MapHUD {
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		// We have a number of lines below the map, this is how many.
-		int nonMapLines = Math.max(4, MAX_NON_MAP_LINES);
+		int nonMapLines = Math.max(5, MAX_NON_MAP_LINES);
 		int score = mapLineHeight + nonMapLines;
 		ChatColor[] colors = ChatColor.values();
 		for (int i = 0; i < mapLineHeight; i++) {
@@ -70,6 +71,7 @@ public class MapHUD {
 		String ownerEntry = WHITE.toString();
 		String districtEntry = GOLD.toString();
 		String plotnameEntry = DARK_GREEN.toString();
+		String outpostEntry = GREEN.toString();
 
 		score = nonMapLines;
 		board.registerNewTeam(TEAM_TOWN).addEntry(townEntry);
@@ -80,6 +82,9 @@ public class MapHUD {
 
 		board.registerNewTeam(TEAM_DISTRICT).addEntry(districtEntry);
 		objective.getScore(districtEntry).setScore(score--);
+
+		board.registerNewTeam(TEAM_OUTPOST_NAME).addEntry(outpostEntry);
+		objective.getScore(outpostEntry).setScore(score--);
 
 		board.registerNewTeam(TEAM_PLOTNAME).addEntry(plotnameEntry);
 		objective.getScore(plotnameEntry).setScore(score--);
@@ -119,6 +124,7 @@ public class MapHUD {
 		board.getTeam(TEAM_TOWN).setSuffix(GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
 		board.getTeam(TEAM_OWNER).setSuffix(getOwnerName(tb, player));
 		board.getTeam(TEAM_DISTRICT).setSuffix(getDistrictName(tb, player));
+		board.getTeam(TEAM_OUTPOST_NAME).setSuffix(getOutpostName(tb, player));
 		board.getTeam(TEAM_PLOTNAME).setSuffix(getPlotName(tb, player));
 	}
 
@@ -137,6 +143,15 @@ public class MapHUD {
 			return name;
 		name = !tb.hasDistrict() ? "" : tb.getDistrict().getFormattedName();
 		String prefix = Translatable.of("msg_map_hud_district").forLocale(player);
+		return HUDManager.check(DARK_GREEN + prefix + GREEN + name);
+	}
+
+	private static String getOutpostName(TownBlock tb, Player player) {
+		String name = "";
+		if (tb == null)
+			return name;
+		name = !tb.hasOutpostObject() ? "" : tb.getOutpost().getFormattedName();
+		String prefix = Translatable.of("msg_map_hud_outpost").forLocale(player);
 		return HUDManager.check(DARK_GREEN + prefix + GREEN + name);
 	}
 
