@@ -1825,9 +1825,9 @@ msg_perm_hud_resident: '居民'
 msg_perm_hud_nation: '国家'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: '外人'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: '地皮: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: '区块组: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: '出售中: '
