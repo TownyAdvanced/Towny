@@ -1647,9 +1647,9 @@ msg_perm_hud_resident: 'sakin'
 msg_perm_hud_nation: 'ulus'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'yabancı'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Arsa: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: 'Arsa grubu: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'Satışta: '
