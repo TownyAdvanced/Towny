@@ -1827,9 +1827,9 @@ msg_perm_hud_resident: '居民'
 msg_perm_hud_nation: '城邦'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: '局外人'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: '情節：'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: '繪圖組：'
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: '待售：'
