@@ -2186,6 +2186,8 @@ msg_perm_hud_plot_name: 'Plot: '
 msg_perm_hud_plotgroup_name: 'Plot Group: '
 #Seen in /towny map hud:
 msg_map_hud_district: 'District: '
+#Seen in /towny map hud:
+msg_map_hud_outpost: 'Outpost: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'For Sale: '
 #Seen in /plot perm hud:
