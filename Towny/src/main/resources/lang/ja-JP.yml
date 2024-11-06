@@ -1227,7 +1227,7 @@ msg_perm_hud_town: '町'
 msg_perm_hud_ally: '同盟国'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: '国'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'プロット: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
