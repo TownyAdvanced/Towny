@@ -1425,7 +1425,7 @@ msg_perm_hud_resident: 'penduduk'
 msg_perm_hud_nation: 'negara'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'orang luar'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Lahan: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
