@@ -10,6 +10,7 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -55,12 +56,12 @@ public abstract class TownyDataSource {
 
 	public boolean loadAll() {
 
-		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadDistrictList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadTownBlocks() && loadPlotGroups() && loadDistricts() && loadJails() && loadRegenList() && loadCooldowns();
+		return loadWorldList() && loadNationList() && loadTownList() && loadPlotGroupList() && loadDistrictList() && loadOutpostList() && loadJailList() && loadResidentList() && loadTownBlockList() && loadWorlds() && loadResidents() && loadTowns() && loadNations() && loadOutposts() && loadTownBlocks() && loadPlotGroups() && loadDistricts() && loadJails() && loadRegenList() && loadCooldowns();
 	}
 
 	public boolean saveAll() {
 
-		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveDistricts() && saveTownBlocks() && saveJails() && saveRegenList() && saveCooldowns();
+		return saveWorlds() && saveNations() && saveTowns() && saveResidents() && savePlotGroups() && saveDistricts() && saveOutposts() && saveTownBlocks() && saveJails() && saveRegenList() && saveCooldowns();
 	}
 
 	public boolean saveAllWorlds() {
@@ -109,6 +110,10 @@ public abstract class TownyDataSource {
 
 	abstract public boolean loadDistrict(District district);
 
+	abstract public boolean loadOutpostList();
+
+	abstract public boolean loadOutpost(Outpost outpost);
+
 	abstract public boolean saveRegenList();
 
 	abstract public boolean saveResident(Resident resident);
@@ -120,7 +125,9 @@ public abstract class TownyDataSource {
 	abstract public boolean savePlotGroup(PlotGroup group);
 	
 	abstract public boolean saveDistrict(District district);
-	
+
+	abstract public boolean saveOutpost(Outpost outpost);
+
 	abstract public boolean saveJail(Jail jail);
 
 	abstract public boolean saveNation(Nation nation);
@@ -156,6 +163,8 @@ public abstract class TownyDataSource {
 	abstract public void deletePlotGroup(PlotGroup group);
 	
 	abstract public void deleteDistrict(District district);
+	
+	abstract public void deleteOutpost(Outpost outpost);
 	
 	abstract public void deleteJail(Jail jail);
 	
@@ -246,6 +255,17 @@ public abstract class TownyDataSource {
 		return true;
 	}
 
+	public boolean loadOutposts() {
+		TownyMessaging.sendDebugMsg("Loading Outposts");
+		for (Outpost outpost : universe.getOutposts()) {
+			if (!loadOutpost(outpost)) {
+				plugin.getLogger().severe("Loading Error: Could not read Outpost data: '" + outpost.getUUID() + "'.");
+				return false;
+			}
+		}
+		return true;
+	}
+
 	abstract public boolean loadCooldowns();
 
 	/*
@@ -283,6 +303,19 @@ public abstract class TownyDataSource {
 				saveDistrict(district);
 			else
 				deleteDistrict(district); 
+		return true;
+	}
+
+	public boolean saveOutposts() {
+		TownyMessaging.sendDebugMsg("Saving Outposts");
+		for (Outpost outpost : universe.getOutposts())
+			/*
+			 * Only save outposts which actually have townblocks associated with them.
+			 */
+			if (outpost.hasTownBlocks())
+				saveOutpost(outpost);
+			else
+				deleteOutpost(outpost); 
 		return true;
 	}
 
@@ -369,6 +402,8 @@ public abstract class TownyDataSource {
 	abstract public void removePlotGroup(PlotGroup group);
 	
 	abstract public void removeDistrict(District district);
+
+	abstract public void removeOutpost(Outpost outpost);
 
 	abstract public void renameTown(Town town, String newName) throws AlreadyRegisteredException, NotRegisteredException;
 

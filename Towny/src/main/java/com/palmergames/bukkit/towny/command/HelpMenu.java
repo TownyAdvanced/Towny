@@ -644,7 +644,7 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("town claim")
 				.add("", Translatable.of("msg_block_claim"))
-				.add("outpost", Translatable.of("mayor_help_3"))
+				.add("outpost [name]", Translatable.of("mayor_help_3"))
 				.add("[auto]", Translatable.of("mayor_help_5"))
 				.add("[circle/rect] [radius]", Translatable.of("mayor_help_4"))
 				.add("[circle/rect] auto", Translatable.of("mayor_help_5"));

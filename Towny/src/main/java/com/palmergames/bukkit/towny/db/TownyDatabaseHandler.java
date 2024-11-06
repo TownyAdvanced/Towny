@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -54,7 +55,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -593,6 +593,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removeDistrict(District district) {
 		universe.unregisterDistrict(district.getUUID());
 		deleteDistrict(district);
+	}
+
+	@Override
+	public void removeOutpost(Outpost outpost) {
+		universe.unregisterOutpost(outpost.getUUID());
+		deleteOutpost(outpost);
 	}
 
 	/*
@@ -1177,7 +1183,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		List<Jail> jails = universe.getJailUUIDMap().values().stream()
 				.filter(jail -> jail.getTown().equals(mergeFrom))
 				.collect(Collectors.toList());
-		List<Location> outposts = new ArrayList<Location>(mergeFrom.getAllOutpostSpawns());
+		List<Outpost> outposts = new ArrayList<Outpost>(mergeFrom.getOutposts());
 
 		mergeInto.addPurchasedBlocks(mergeFrom.getPurchasedBlocks());
 
@@ -1229,8 +1235,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			jail.setTown(mergeInto);
 		}
 
-		for (Location outpost : outposts)
-			mergeInto.addOutpostSpawn(outpost);
+		for (Outpost outpost : outposts)
+			mergeInto.addOutpost(outpost);
 
 		lock.unlock();
 		removeTown(mergeFrom, DeleteTownEvent.Cause.MERGED, null, false);

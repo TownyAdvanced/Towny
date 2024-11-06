@@ -163,4 +163,9 @@ public class Position {
 		
 		return new Position(world, x, y, z, pitch, yaw);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s - %s, %s, %s", this.world.getName(), x, y, z); 
+	}
 }

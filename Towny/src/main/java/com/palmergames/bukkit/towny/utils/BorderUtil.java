@@ -256,6 +256,58 @@ public class BorderUtil {
 		return FloodfillResult.success(valid);
 	}
 
+	@ApiStatus.Internal
+	public static @NotNull FloodfillResult getFloodFillableCoordsForOutpostConversion(final @NotNull Town town, final @NotNull WorldCoord origin) {
+		final TownyWorld originWorld = origin.getTownyWorld();
+		if (originWorld == null)
+			return FloodfillResult.fail(null);
+
+		if (!origin.hasTownBlock())
+			return FloodfillResult.fail(Translatable.of("msg_err_floodfill_not_in_wild"));
+
+		// Filter out any coords not in the same world
+		final Set<WorldCoord> coords = new HashSet<>(town.getTownBlockMap().keySet());
+		coords.removeIf(coord -> !originWorld.equals(coord.getTownyWorld()));
+		if (coords.isEmpty())
+			return FloodfillResult.fail(null);
+
+		final Set<WorldCoord> valid = new HashSet<>();
+		final Set<WorldCoord> visited = new HashSet<>();
+
+		final Queue<WorldCoord> queue = new LinkedList<>();
+		queue.offer(origin);
+		visited.add(origin);
+
+		while (!queue.isEmpty()) {
+			if (valid.size() >= town.getMaxAllowedOutpostLandmass())
+				return FloodfillResult.success(valid);
+
+			final WorldCoord current = queue.poll();
+			valid.add(current);
+
+			for (final int[] direction : DIRECTIONS) {
+				final int xOffset = direction[0];
+				final int zOffset = direction[1];
+
+				final WorldCoord candidate = current.add(xOffset, zOffset);
+
+				if (visited.contains(candidate))
+					continue;
+				visited.add(candidate);
+
+				final TownBlock townBlock = candidate.getTownBlockOrNull();
+				// Fail if we're touching another town or the wilderness.
+				if (townBlock == null || !town.hasTownBlock(townBlock)) {
+					continue;
+				}
+
+				queue.offer(candidate);
+			}
+		}
+
+		return FloodfillResult.success(valid);
+	}
+
 	public record FloodfillResult(@NotNull Type type, @Nullable Translatable feedback, @NotNull Collection<WorldCoord> coords) {
 		public enum Type {
 			SUCCESS,

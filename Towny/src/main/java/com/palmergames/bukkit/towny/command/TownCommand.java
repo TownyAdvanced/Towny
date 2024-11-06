@@ -66,6 +66,8 @@ import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.economy.Account;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Outpost;
+import com.palmergames.bukkit.towny.object.OutpostWorldCoord;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
@@ -3384,6 +3386,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length == 1 && split[0].equalsIgnoreCase("outpost")) {
 			if (!TownySettings.isAllowingOutposts())
 				throw new TownyException(Translatable.of("msg_outpost_disable"));
+			
+			String name = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+			if (name.isEmpty())
+				throw new TownyException("You must specify a name for this outpost.");
 
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_OUTPOST.getNode());
 
@@ -3396,7 +3402,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Select a single WorldCoord using the AreaSelectionUtil.
 			selection = new ArrayList<>();
-			selection.add(playerWorldCoord);
+			selection.add(new OutpostWorldCoord(name, playerWorldCoord));
 
 		} else if (split.length == 1 && "fill".equalsIgnoreCase(split[0])) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_CLAIM_FILL.getNode());
@@ -3476,6 +3482,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// attached to a claimed plot.
 		if (!outpost && !isEdgeBlock(town, selection) && !town.getTownBlocks().isEmpty())
 			throw new TownyException(Translatable.of("msg_err_not_attached_edge"));
+
+		// Prevent an outpost's landmass growing too large.
+		Optional<Outpost> outpostOptional = selection.get(0).getCardinallyAdjacentWorldCoords(false).stream()
+				.filter(wc -> wc.hasTownBlock() && wc.getTownBlockOrNull().hasOutpostObject())
+				.map(wc -> wc.getTownBlockOrNull().getOutpost())
+				.findFirst();
+		if (outpostOptional.isPresent()) {
+			Outpost outpostObject = outpostOptional.get();
+			if (outpostObject.getNumTownBlocks() >= town.getMaxAllowedOutpostLandmass())
+				throw new TownyException(String.format("Your town is unable to make an outpost larger than %s.", town.getMaxAllowedOutpostLandmass()));
+		}
 	}
 
 	private static void fireTownPreClaimEventOrThrow(Player player, Town town, boolean outpost, List<WorldCoord> selection) throws TownyException {

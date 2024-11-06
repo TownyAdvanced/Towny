@@ -40,8 +40,10 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.District;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
+import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.Town;
@@ -735,13 +737,18 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			if (!townBlock.isOutpost())
 				throw new TownyException(Translatable.of("msg_err_location_is_not_within_an_outpost_plot"));
 
-			town.addOutpostSpawn(player.getLocation());
+			Outpost outpost = townBlock.getOutpost();
+			outpost.setSpawn(Position.ofLocation(player.getLocation()));
+			outpost.save();
 			TownyMessaging.sendMsg(player, Translatable.of("msg_set_outpost_spawn"));
 			return;
 		}
 
 		TownyWorld townyWorld = townBlock.getWorld();
 		Coord key = Coord.parseCoord(player.getLocation());
+
+		if (townBlock.hasOutpostObject())
+			throw new TownyException("msg_err_plot_already_part_of_outpost_group");
 
 		// Throws a TownyException with message if outpost should not be set.
 		OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true);

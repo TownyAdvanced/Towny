@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Position;
@@ -34,6 +35,7 @@ import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
+import com.palmergames.bukkit.towny.tasks.LegacyOutpostConversionTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -86,6 +88,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			dataFolderPath + File.separator + "plotgroups" + File.separator + "deleted",
 			dataFolderPath + File.separator + "districts",
 			dataFolderPath + File.separator + "districts" + File.separator + "deleted",
+			dataFolderPath + File.separator + "outposts",
+			dataFolderPath + File.separator + "outposts" + File.separator + "deleted",
 			dataFolderPath + File.separator + "jails",
 			dataFolderPath + File.separator + "jails" + File.separator + "deleted"
 		)) {
@@ -142,6 +146,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public String getDistrictFilename(District district) {
 		return dataFolderPath + File.separator + "districts" + File.separator + district.getUUID() + ".data";
+	}
+
+	public String getOutpostFilename(Outpost outpost) {
+		return dataFolderPath + File.separator + "outposts" + File.separator + outpost.getUUID() + ".data";
 	}
 
 	public String getJailFilename(Jail jail) {
@@ -238,7 +246,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		return true;
 	}
-	
+
+	@Override
+	public boolean loadOutpostList() {
+		TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_outpost_list"));
+		File[] outpostFiles = receiveObjectFiles("outposts", ".data");
+		
+		if (outpostFiles == null)
+			return true; 
+		
+		for (File outpostFile : outpostFiles)
+			universe.newOutpostInternal(UUID.fromString(outpostFile.getName().replace(".data", "")));
+		
+		return true;
+	}
+
 	@Override
 	public boolean loadResidentList() {
 		
@@ -907,11 +929,14 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("outpostspawns");
 				if (line != null) {
 					String[] outposts = line.split(";");
+					int i = 0;
 					for (String spawn : outposts) {
+						i++;
 						tokens = spawn.split(",");
 						if (tokens.length >= 4)
 							try {
-								town.forceAddOutpostSpawn(Position.deserialize(tokens));
+								Position pos = Position.deserialize(tokens);
+								plugin.getScheduler().runLater(new LegacyOutpostConversionTask(plugin, pos, town), i * 100L);
 							} catch (IllegalArgumentException e) {
 								plugin.getLogger().warning("Failed to load an outpost spawn location for town " + town.getName() + ": " + e.getMessage());
 							}
@@ -1716,7 +1741,44 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		return true;
 	}
-	
+
+	public boolean loadOutpost(Outpost outpost) {
+		String line = "";
+		String path = getOutpostFilename(outpost);
+
+		File districtFile = new File(path);
+		if (districtFile.exists() && districtFile.isFile()) {
+			try {
+				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(districtFile);
+				
+				line = keys.get("outpostName");
+				if (line != null)
+					outpost.setName(line.trim());
+
+				line = keys.get("spawn");
+				if (line != null) {
+					String[] tokens = line.split("#");
+					if (tokens.length >= 4)
+						try {
+							outpost.setSpawn(Position.deserialize(tokens));
+						} catch (IllegalArgumentException e) {
+							plugin.getLogger().warning("Failed to load outpost spawn location for outpost " + outpost.getName() + ": " + e.getMessage());
+						}
+				}
+
+				line = keys.get("metadata");
+				if (line != null)
+					MetadataLoader.getInstance().deserializeMetadata(outpost, line.trim());
+
+			} catch (Exception e) {
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_exception_reading_outpost_file_at_line", path, line));
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
 	@Override
 	public boolean loadTownBlocks() {
 		
@@ -1808,13 +1870,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						} catch (Exception ignored) {
 						}
 					
-					line = keys.get("outpost");
-					if (line != null)
-						try {
-							townBlock.setOutpost(Boolean.parseBoolean(line));
-						} catch (Exception ignored) {
-						}
-					
 					line = keys.get("permissions");
 					if ((line != null) && !line.isEmpty())
 						try {
@@ -1878,6 +1933,24 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.setDistrict(district);
 						} else {
 							townBlock.removeDistrict();
+						}
+					}
+
+					line = keys.get("outpostID");
+					UUID outpostID = null;
+					if (line != null && !line.isEmpty()) {
+						outpostID = UUID.fromString(line.trim());
+					}
+					
+					if (outpostID != null) {
+						Outpost outpost = universe.getOutpost(outpostID);
+						if (outpost != null) {
+							outpost.addTownblock(townBlock);
+							townBlock.setOutpostObject(outpost);
+							if (outpost.getNumTownBlocks() <= 1)
+								townBlock.getTownOrNull().addOutpost(outpost);
+						} else {
+							townBlock.removeOutpost();
 						}
 					}
 
@@ -2152,14 +2225,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (spawnPos != null)
 			list.add("spawn=" + String.join(",", spawnPos.serialize()));
 
-		// Outpost Spawns
-		StringBuilder outpostArray = new StringBuilder("outpostspawns=");
-		if (town.hasOutpostSpawn())
-			for (Position spawn : town.getOutpostSpawns()) {
-				outpostArray.append(String.join(",", spawn.serialize())).append(";");
-			}
-		list.add(outpostArray.toString());
-
 		// Outlaws
 		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
 
@@ -2233,6 +2298,25 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		// Save file
 		this.queryQueue.add(new FlatFileSaveTask(list, getDistrictFilename(district)));
+		
+		return true;
+	}
+
+	@Override
+	public boolean saveOutpost(Outpost outpost) {
+		List<String> list = new ArrayList<>();
+
+		try {
+			list.add("outpostName=" + outpost.getName());
+			if (outpost.getSpawn() != null)
+				list.add("spawn=" + String.join("#", outpost.getSpawn().serialize()));
+			list.add("metadata=" + serializeMetadata(outpost));
+		} catch (Exception e) {
+			plugin.getLogger().log(Level.WARNING, "An exception occurred while saving outpost " + Optional.ofNullable(outpost).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
+		}
+		
+		// Save file
+		this.queryQueue.add(new FlatFileSaveTask(list, getOutpostFilename(outpost)));
 		
 		return true;
 	}
@@ -2491,9 +2575,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// type
 		list.add("type=" + townBlock.getTypeName());
 
-		// outpost
-		list.add("outpost=" + townBlock.isOutpost());
-
 		/*
 		 * Only include a permissions line IF the plot perms are custom.
 		 */
@@ -2531,6 +2612,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		}
 		
 		list.add("districtID=" + districtID);
+
+		// Outpost ID
+		if (townBlock.hasOutpostObject())
+			list.add("outpostID=" + townBlock.getOutpostUUID());
 
 		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), ","));
 		
@@ -2624,6 +2709,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	@Override
 	public void deleteDistrict(District district) {
 		File file = new File(getDistrictFilename(district));
+		queryQueue.add(new DeleteFileTask(file, false));
+	}
+
+	@Override
+	public void deleteOutpost(Outpost outpost) {
+		File file = new File(getOutpostFilename(outpost));
 		queryQueue.add(new DeleteFileTask(file, false));
 	}
 

@@ -1055,14 +1055,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		int removed = 0;
 		for (Town town : towns) {
 			for (Location loc : town.getAllOutpostSpawns()) {
-				boolean save = false;
 				if (TownyAPI.getInstance().isWilderness(loc) || !TownyAPI.getInstance().getTown(loc).getUUID().equals(town.getUUID())) {
-					town.removeOutpostSpawn(loc);
-					save = true;
+					town.removeOutpost(loc);
 					removed++;
 				}
-				if (save)
-					town.save();
 			}
 		}
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_removed_x_invalid_outpost_spawns", removed));

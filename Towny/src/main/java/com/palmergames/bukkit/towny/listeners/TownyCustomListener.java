@@ -26,6 +26,7 @@ import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.CellSurface;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -238,7 +239,8 @@ public class TownyCustomListener implements Listener {
 
 	/**
 	 * Used to warn towns when they're approaching their claim limit, when the
-	 * takeoverclaim feature is enabled, as well as claiming particles.
+	 * takeoverclaim feature is enabled, as well as claiming particles, and to
+	 * add an outpost object to townblocks.
 	 * 
 	 * @param event TownClaimEvent.
 	 */
@@ -247,6 +249,16 @@ public class TownyCustomListener implements Listener {
 		if (TownySettings.isShowingClaimParticleEffect() && event.getTownBlock().getWorldCoord().isFullyLoaded())
 			Towny.getPlugin().getScheduler().runAsync(() ->
 				CellSurface.getCellSurface(event.getTownBlock().getWorldCoord()).runClaimingParticleOverSurfaceAtPlayer(event.getResident().getPlayer()));
+
+		// Add the outpost object to the newly claimed townblock, if it is part of an outpost's landmass.
+		if (!event.getTownBlock().hasOutpostObject()) {
+			Optional<Outpost> outpost = event.getTownBlock().getWorldCoord().getCardinallyAdjacentWorldCoords(false).stream()
+					.filter(wc -> wc.hasTownBlock() && wc.getTownBlockOrNull().hasOutpostObject())
+					.map(wc -> wc.getTownBlockOrNull().getOutpost())
+					.findFirst();
+			if (outpost.isPresent())
+				event.getTownBlock().setOutpostObject(outpost.get());
+		}
 
 		if (!TownySettings.isOverClaimingAllowingStolenLand())
 			return;

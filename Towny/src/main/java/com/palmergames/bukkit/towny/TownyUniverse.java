@@ -12,6 +12,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -91,6 +92,7 @@ public class TownyUniverse {
     private final Map<String, String> replacementNamesMap = new ConcurrentHashMap<>();
     private final Map<UUID, PlotGroup> plotGroupUUIDMap = new ConcurrentHashMap<>();
     private final Map<UUID, District> districtUUIDMap = new ConcurrentHashMap<>();
+    private final Map<UUID, Outpost> outpostUUIDMap = new ConcurrentHashMap<>();
     
     private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
     private final String rootFolder;
@@ -134,6 +136,8 @@ public class TownyUniverse {
         spawnPoints.clear();
         jailUUIDMap.clear();
         plotGroupUUIDMap.clear();
+        districtUUIDMap.clear();
+        outpostUUIDMap.clear();
         wildernessMapDataMap.clear();
         replacementNamesMap.clear();
     }
@@ -956,6 +960,58 @@ public class TownyUniverse {
 	@Nullable
 	public District getDistrict(UUID districtID) {
 		return districtUUIDMap.get(districtID);
+	}
+
+
+	/*
+	 * Outpost Stuff.
+	 */
+
+	/**
+	 * Used in loading only.
+	 * 
+	 * @param uuid UUID to assign to the Outpost.
+	 */
+	public void newOutpostInternal(UUID uuid) {
+		Outpost outpost = new Outpost(uuid, null);
+		registerOutpost(outpost);
+	}
+	
+	public void registerOutpost(Outpost outpost) {
+		outpostUUIDMap.put(outpost.getUUID(), outpost);
+	}
+
+	public void unregisterOutpost(UUID uuid) {
+		Outpost outpost = outpostUUIDMap.get(uuid);
+		if (outpost == null)
+			return;
+		outpost.getTown().removeOutpost(outpost);
+		outpostUUIDMap.remove(uuid);
+	}
+
+	/**
+	 * Get all the outposts from all towns
+	 * Returns a collection that does not reflect any outpost additions/removals
+	 * 
+	 * @return collection of Outpost
+	 */
+	public Collection<Outpost> getOutposts() {
+		return new ArrayList<>(outpostUUIDMap.values());
+	}
+
+	public Set<UUID> getOutpostUUIDs() {
+		return outpostUUIDMap.keySet();
+	}
+
+	/**
+	 * Gets the outpost from the town name and the outpost UUID 
+	 * 
+	 * @param outpostID UUID of the outpost
+	 * @return Outpost if found, null if none found.
+	 */
+	@Nullable
+	public Outpost getOutpost(UUID outpostID) {
+		return outpostUUIDMap.get(outpostID);
 	}
 
 	/*

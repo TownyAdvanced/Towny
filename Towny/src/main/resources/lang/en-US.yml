@@ -1579,6 +1579,7 @@ flatfile_dbg_district_file_missing_town_delete: 'District file missing Town, del
 flatfile_dbg_missing_file_delete_district_entry: 'Missing file: %s deleting entry in [districtuuid].data'
 flatfile_err_exception_reading_district_file_at_line: 'Loading Error: Exception while reading District file %s at line: %s'
 flatfile_dbg_loading_district_list: 'Loading District list...'
+flatfile_dbg_loading_outpost_list: 'Loading Outpost list...'
 flatfile_dbg_loading_nation: 'Loading Nation: %s'
 flatfile_dbg_loading_nation_list: 'Loading Nation list...'
 flatfile_dbg_loading_resident: 'Loading Resident: %s'
@@ -2615,3 +2616,7 @@ msg_admin_eco_convert_success: "Economy conversion successful"
 msg_err_mode_does_not_exist: "The mode %s is not recognized."
 
 msg_err_not_allowed_to_switch: "You aren't allowed to Switch here."
+
+status_outpost_name_and_size: 'Townblock is part of Outpost: %s. Outpost has %s Townblocks total.'
+
+msg_err_plot_already_part_of_outpost_group: "You cannot create a new Outpost within an already existing Outpost."

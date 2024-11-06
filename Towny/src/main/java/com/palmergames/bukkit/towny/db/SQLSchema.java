@@ -51,6 +51,9 @@ public class SQLSchema {
 		initTable(cntx, TownyDBTableType.DISTRICT);
 		updateTable(cntx, TownyDBTableType.DISTRICT, getDistrictColumns());
 
+		initTable(cntx, TownyDBTableType.OUTPOST);
+		updateTable(cntx, TownyDBTableType.OUTPOST, getOutpostColumns());
+
 		initTable(cntx, TownyDBTableType.JAIL);
 		updateTable(cntx, TownyDBTableType.JAIL, getJailsColumns());
 
@@ -81,7 +84,7 @@ public class SQLSchema {
 			case TOWNBLOCK -> fetchCreateTownBlocksStatement();
 			case JAIL -> fetchCreateUUIDStatement(tableType);
 			case PLOTGROUP -> fetchCreatePlotGroupStatement(tableType);
-			case DISTRICT -> fetchCreateUUIDStatement(tableType);
+			case DISTRICT, OUTPOST -> fetchCreateUUIDStatement(tableType);
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
 			case WORLD -> fetchCreateWorldStatemnt(tableType);
 			case HIBERNATED_RESIDENT -> fetchCreateUUIDStatement(tableType);
@@ -172,6 +175,14 @@ public class SQLSchema {
 		return columns;
 	}
 
+	private static List<String> getOutpostColumns() {
+		List<String> columns = new ArrayList<>();
+		columns.add("`outpostName` mediumtext NOT NULL");
+		columns.add("`spawn` mediumtext NOT NULL");
+		columns.add("`metadata` text DEFAULT NULL");
+		return columns;
+	}
+
 	private static List<String> getResidentColumns(){
 		List<String> columns = new ArrayList<>();
 		columns.add("`town` mediumtext");
@@ -229,7 +240,6 @@ public class SQLSchema {
 		columns.add("`allowedToWar` bool NOT NULL DEFAULT '1'");
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
-		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
 		columns.add("`jailSpawns` mediumtext DEFAULT NULL");
 		columns.add("`outlaws` mediumtext DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
@@ -338,13 +348,13 @@ public class SQLSchema {
 		columns.add("`resident` mediumtext");
 		columns.add("`type` TINYINT NOT  NULL DEFAULT '0'");
 		columns.add("`typeName` mediumtext");
-		columns.add("`outpost` bool NOT NULL DEFAULT '0'");
 		columns.add("`permissions` mediumtext NOT NULL");
 		columns.add("`locked` bool NOT NULL DEFAULT '0'");
 		columns.add("`changed` bool NOT NULL DEFAULT '0'");
 		columns.add("`metadata` text DEFAULT NULL");
 		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`districtID` VARCHAR(36) DEFAULT NULL");
+		columns.add("`outpostID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`claimedAt` BIGINT NOT NULL");
 		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
 		columns.add("`customPermissionData` mediumtext DEFAULT NULL");
@@ -381,6 +391,8 @@ public class SQLSchema {
 		cleanups.add(ColumnUpdate.update("TOWNS", "jailSpawns"));
 		cleanups.add(ColumnUpdate.update("WORLDS", "disableplayertrample"));
 		cleanups.add(ColumnUpdate.update("TOWNS", "assistants"));
+		cleanups.add(ColumnUpdate.update("TOWNBLOCKS", "outpost"));
+		cleanups.add(ColumnUpdate.update("TOWNS", "outpostSpawns"));
 
 		for (ColumnUpdate update : cleanups)
 			dropColumn(connection, update.table(), update.column());
