@@ -1,1 +1,21 @@
 ---
+unclaimed_plot_name: 'Szabad'
+unclaimed_zone_name: 'Vadon'
+############################################################
+#+------------------------------------------------------+ #
+#|help messages                                         | #
+#+------------------------------------------------------+ #
+############################################################
+help_0: 'Alap Towny Súgó'
+help_1: 'Próbáld a következő parancsokat, hogy többet megtudj a towny-ról.'
+help_2: 'Városi Chat'
+help_3: 'Nemzeti Chat'
+help_4: 'Lakossági parancsok.'
+help_5: 'Városi parancsok.'
+help_6: 'Nemzeti parancsok.'
+help_7: 'Területi parancsok.'
+help_8: 'Towny parancsok.'
+help_9: 'Towny Admin parancsok.'
+towny_help_0: "Általános segítség a Towny kezeléséhez."
+towny_help_1: "Megjeleníti a közeli várostömbök térképét"
+towny_help_2: "Megjeleníti a gazd"
