@@ -42,3 +42,603 @@ town_help_15: "A városban lévő törvényszegők listája."
 town_help_16: "A városban lévő telek csoportok listája."
 town_help_17: "A városban lévő telektípusok listája."
 town_help_18: "Üzenet küldése a város tagjainak."
+town_help_19: "Állítsd be a városodat eladásra, más játékosok vásárolhatják."
+town_help_20: "Állítsd be a városodat nem eladásra."
+town_help_21: "Vásárold meg a megadott várost, ha eladásra van."
+town_help_22: "Pénz letétbe helyezése a város bankjába."
+town_help_23: "A lakosok városi rangjainak módosításához használd."
+town_help_24: "A városod törléséhez használd."
+town_help_25: "A városod törvényszegőinek módosításához használd."
+town_help_26: "Minden város listázása, segítségért használd a /t list ? parancsot."
+town_help_27: "Hagyd el a várost, amelynek tagja vagy."
+town_help_28: "Pénz felvétele a város bankjából."
+town_help_29: "Használd a /t claim ? parancsot segítségért."
+town_help_30: "Használd a /t unclaim ? parancsot a terület eltávolításához."
+town_help_31: "Lakosok hozzáadása vagy eltávolítása."
+town_help_32: "Használd a /t set ? parancsot segítségért."
+town_help_33: "Használd a /t buy ? parancsot segítségért."
+town_help_34: "Használd a /t toggle ? parancsot segítségért."
+town_help_35: "Használd a /t rank ? parancsot segítségért."
+town_list_help_0: "A megadott oldal megtekintése."
+town_list_help_1: "Listázd a városokat a lakószám alapján, a megadott oldalon."
+town_list_help_2: "Listázd a nyitott városokat, a megadott oldalon."
+town_list_help_3: "Listázd a városokat a banki egyenlegük alapján, a megadott oldalon."
+town_list_help_4: "Listázd a városokat ABC sorrendben, a megadott oldalon."
+town_list_help_5: "Listázd a városokat a kibérelt területük alapján, a megadott oldalon."
+town_list_help_6: "Listázd a városokat az online játékosok száma alapján, a megadott oldalon."
+town_set_help_0: "Beállítja a városod tábláját."
+town_set_help_1: "Beállítja a városod homeblockját arra a helyre, ahol állsz."
+town_set_help_2: "Beállítja a spawn pontot a homeblockban vagy egy előőrs spawn pontját, ha előőrsön állsz."
+town_set_help_3: "Lásd a /town set perm ? parancsot segítséghez."
+town_set_help_4: "Beállítja a városod adó mértékét."
+town_set_help_5: "Beállítja a telekhez tartozó adókat."
+town_set_help_6: "Beállítja a telek vásárlásának alapárát."
+town_set_help_7: "Beállítja a /t spawn használatának költségét."
+town_set_help_8: "Beállítja a városod nevét."
+town_set_help_9: "Beállítja a városod jelét."
+town_set_help_10: "Beállítja a lakosod címét vagy vezetéknevét."
+town_set_help_11: "Beállítja a maximális összeget, amit a százalékos adó levonhat a lakostól."
+town_jail_help_0: "Listázza a város börtöneit."
+town_jail_help_1: "Börtönbe zár egy lakost az alap börtönbe."
+town_jail_help_2: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra."
+town_jail_help_3: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe."
+town_jail_help_4: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába."
+town_jail_help_5: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába, az adott óvadékkal."
+town_jail_help_6: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába, az adott óvadékkal."
+town_jail_help_7: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába, az adott óvadékkal."
+town_jail_help_8: "Felszabadítja a lakost a börtönből."
+town_purge_help: "Törli azokat a lakosokat, akik a megadott napok óta nem jelentkeztek be."
+town_trust_help_0: "Hozzáad egy lakost a város megbecsült lakosai közé."
+town_trust_help_1: "Eltávolít egy lakost a város megbecsült lakosai közül."
+town_trust_help_2: "Listázza a város megbecsült lakosait."
+town_towntrust_help_0: "Hozzáad egy várost a megbecsült városok közé."
+town_towntrust_help_1: "Eltávolít egy várost a megbecsült városok közül."
+town_towntrust_help_2: "Listázza a város megbecsült városait."
+town_buy_help: "Vásárol bonusz városblokkokat a város területének bővítéséhez."
+town_cede_help: "Felajánlja azt a telket, ahol állsz, hogy egy másik város vegye át."
+mayor_help_3: 'Terület igénylése, amely nincs csatlakoztatva a városhoz'
+mayor_help_4: 'Igényelj területet körülötted, X sugarú körben'
+mayor_help_5: 'Igényelj területet a maximális sugáron'
+mayor_help_6: 'Mentesítsd ezt a városi blokkot'
+mayor_help_7: 'Próbálj meg körülötted területet mentesíteni.'
+mayor_help_8: 'Próbálj meg minden városi blokkot mentesíteni.'
+nation_help_1: 'A nemzeted státusza'
+nation_help_2: '[nemzet]'
+nation_help_3: 'Célzott nemzet státusza'
+nation_help_4: 'Listázza az összes nemzetet'
+nation_help_5: 'Hagyja el a nemzetét'
+nation_help_6: 'Új nemzet létrehozása'
+nation_help_7: 'Listázza a nemzet vezetői parancsait'
+nation_help_8: 'Új nemzet létrehozása'
+nation_help_9: 'Listázza az összes online lakost a nemzetben'
+nation_help_11: "Listázza a városokat a nemzetben."
+nation_help_12: "Listázza a nemzet szövetséges városait."
+nation_help_13: "Listázza a nemzet ellenséges városait."
+nation_help_14: "Használja, hogy csatlakozzon a nyitott nemzetekhez."
+nation_help_15: "Pénzt helyez el a nemzet bankjában."
+nation_help_16: "Használja a nemzet törléséhez."
+nation_help_17: "Használja, hogy rangokat adjon hozzá vagy vegyen el lakosoktól."
+nation_help_18: "Lásd a /n rank ? parancsot segítséghez."
+nation_list_help_0: "A megadott oldal megtekintése."
+nation_list_help_1: "A nemzetek listázása a lakosok száma alapján, a megadott oldalon."
+nation_list_help_2: "A nemzetek listázása a városok száma alapján, a megadott oldalon."
+nation_list_help_3: "A nyitott nemzetek listázása, a megadott oldalon."
+nation_list_help_4: "A bankegyenleggel rendelkező nemzetek listázása, a megadott oldalon."
+nation_list_help_5: "A nemzetek listázása ábécés sorrendben, a megadott oldalon."
+nation_list_help_6: "A nemzetek listázása az elfoglalt terület alapján, a megadott oldalon."
+nation_list_help_7: "A nemzetek listázása az online játékosok száma alapján, a megadott oldalon."
+nation_set_help_0: "A nemzet vezetőjének megváltoztatása."
+nation_set_help_1: "A nemzet fővárosának megváltoztatása."
+nation_set_help_2: "A városok által fizetendő adó mértékének beállítása."
+nation_set_help_3: "A meghódított városok adójának beállítása."
+nation_set_help_4: "A nemzet nevének beállítása."
+nation_set_help_5: "Egy lakos címének vagy vezetéknevének beállítása."
+nation_set_help_6: "A nemzet címkéjének beállítása."
+nation_set_help_7: "A nemzet üzenőfal üzenetének beállítása."
+nation_set_help_8: "A nemzet spawn pontjának beállítása."
+nation_set_help_9: "A /n spawn használatának költségének beállítása."
+nation_set_help_10: "A térképen használt szín beállítása a térképező pluginokhoz."
+nation_toggle_help_0: "A nemzet békés státuszának váltogatása."
+nation_toggle_help_1: "A nyilvános státusz váltogatása, lehetővé téve, hogy a nem lakosok használhassák a /n spawn parancsot."
+nation_toggle_help_2: "A nyitott státusz váltogatása, lehetővé téve, hogy a városok meghívás nélkül csatlakozhassanak."
+nation_toggle_help_3: "Az adó százalékos beállítása, lehetővé téve, hogy a városok fix összeg helyett százalékban fizessenek."
+nation_sanction_help_1: "Egy város hozzáadása a szankcionált városok listájához."
+nation_sanction_help_2: "Egy város eltávolítása a szankcionált városok listájából."
+nation_sanction_help_3: "A nemzet szankcionált városainak listázása."
+nation_sanction_help_4: "A megadott nemzet szankcionált városainak listázása."
+king_help_1: 'Nemzeti vezetői segítség'
+king_help_2: 'Szövetség beállítása.'
+king_help_3: 'Ellenségek beállítása.'
+king_help_4: "Pénz kivonása a nemzet bankjából."
+king_help_5: "Városok hozzáadása vagy eltávolítása a nemzetből."
+king_help_6: "Használj /n set ?-et a segítséghez."
+king_help_7: "Használj /n toggle ?-et a segítséghez."
+king_help_8: "Használható egy másik nemzet beszívására a nemzetedbe."
+king_help_9: "Használható üzenet küldésére a nemzeted összes tagjának."
+res_1: 'A te státuszod'
+res_2: '[lakó]'
+res_3: 'Célpont játékos státusza'
+res_4: 'Listázd az összes aktív játékost'
+res_9: "Mennyi adót kell fizetned naponta."
+res_10: "Nézd meg a /res jail ? parancsot a segítséghez."
+res_11: "Nézd meg a /res toggle ? parancsot a segítséghez."
+res_12: "Nézd meg a /res set ? parancsot a segítséghez."
+res_13: "Spawnozz a városodba vagy az ágyadhoz."
+res_toggle_help_0: "Kapcsold be vagy ki a telkek PvP státuszát."
+res_toggle_help_1: "Kapcsold be vagy ki a telkek tűz státuszát."
+res_toggle_help_2: "Kapcsold be vagy ki a telkek mobok státuszát."
+res_toggle_help_3: "Kapcsold be vagy ki a telkek robbanás státuszát."
+res_toggle_help_4: "Kapcsold be vagy ki a telkek határainak megjelenítését."
+res_toggle_help_5: "Kapcsold be vagy ki a folyamatos telkehatarok megjelenítését."
+res_toggle_help_6: "Kapcsold be vagy ki a városok határainak megjelenítését."
+res_toggle_help_7: "Kapcsold be vagy ki a telkek értesítéseinek megjelenítését."
+res_toggle_help_8: "Kapcsold be vagy ki a telkek igénylésének képességét, ahol jársz."
+res_toggle_help_9: "Kapcsold be vagy ki a térkép megjelenítését, amikor telket váltasz."
+res_toggle_help_10: "Távolítsd el az összes módot."
+res_toggle_help_10.5: "Távolítsd el az összes módot és alkalmazd újra az alapértelmezett beállításaidat."
+res_toggle_help_11: "Kémkedj a chat csatornákon."
+res_toggle_help_12: "Kapcsold be vagy ki a telkek hozzáadásának képességét a saját telkek csoportjához."
+res_toggle_help_13: "Kapcsold be vagy ki a címüzenetek megjelenítését, amikor telket váltasz."
+res_toggle_help_14: "Kapcsold be vagy ki a telkek eltávolításának képességét, ahol jársz."
+res_toggle_help_15: "Kapcsold be vagy ki az infotool használatát a helyes blokk/entitásnevek megismerésére."
+res_toggle_help_16: "Kapcsold be vagy ki az adminisztrátori jogosultságaid deaktiválását."
+res_jail_help_0: "Fizess a váltságdíjat a börtönből való szabadulásért."
+res_set_help_0: "Állítsd be a lakóid bemutatkozó/bio szövegét."
+res_set_help_1: "Állítsd be a lakóid alapértelmezett telekengedélyeit."
+res_set_help_2: "Állítsd be a lakóid módjait."
+mode_1: 'Mutasd a térképet minden egyes városblokknál.'
+mode_2: 'Próbálj meg telket igényelni, miközben sétálsz.'
+mode_3: 'Próbálj meg telket eltávolítani, miközben sétálsz.'
+mode_4: 'Alapértelmezett csevegés a városi csatornára.'
+mode_5: 'Alapértelmezett csevegés a nemzeti csatornára.'
+mode_6: 'Lehetőséged van %s-t elhelyezni az ellenséges határokon háborús zónák létrehozásához.'
+plot_perms: 'Használj %s-t %s helyett a telekengedélyekhez.'
+plot_perms_1: 'A lakói telkek nem használják az idegen engedélyeket.'
+res_list: 'Lakók'
+res_sing: 'Lakó'
+mayor_sing: 'Polgármester'
+town_sing: 'Város'
+nation_sing: 'Nemzet'
+nation_plu: 'Nemzetek'
+king_sing: 'Vezető'
+town_plu: 'Városok'
+world_plu: 'Világok'
+world_sing: 'Világ'
+world_help_1: 'A jelenlegi világ státusza'
+world_help_2: '[világ]'
+world_help_3: 'A célzott világ státusza'
+world_help_4: 'Listázd az összes világot'
+world_help_5: 'Regeneráld ezt a chunkot'
+world_help_6: 'Nézd meg a /tw toggle ? parancsot a segítséghez'
+world_help_7: 'Nézd meg a /tw set ? parancsot a segítséghez'
+world_set_help_0: "Állítsd be a világ vadon neveit."
+world_toggle_help_0: "Kapcsold be vagy ki, hogy a városok igényelhetnek-e földet ebben a világban."
+world_toggle_help_1: "Kapcsold be vagy ki, hogy a Towny engedélyezve van-e ebben a világban."
+world_toggle_help_2: "Kapcsold be vagy ki, hogy háborúk történhetnek-e ebben a világban."
+world_toggle_help_3: "Kapcsold be vagy ki, hogy pvp vagy forcepvp engedélyezve van-e ebben a világban."
+world_toggle_help_4: "Kapcsold be vagy ki, hogy a barátságos tűz engedélyezve van-e ebben a világban."
+world_toggle_help_5: "Kapcsold be vagy ki, hogy robbanások engedélyezve vagy kényszerítve vannak-e ebben a világban."
+world_toggle_help_6: "Kapcsold be vagy ki, hogy tűz engedélyezve vagy kényszerítve van-e ebben a világban."
+world_toggle_help_7: "Kapcsold be vagy ki, hogy a különböző mobok spawnolása engedélyezve van-e ebben a világban."
+world_toggle_help_8: "Kapcsold be vagy ki a visszavonás-az-eltávolítás-jellemzőt ebben a világban."
+world_toggle_help_9: "Kapcsold be vagy ki a robbanások-visszavonása-jellemzőt ebben a világban."
+world_toggle_help_10: "Kapcsold be vagy ki a telek-törlés-blokkokat parancsot ebben a világban."
+world_toggle_help_11: "Kapcsold be vagy ki a telek-eltávolítás-blokkokat jellemzőt ebben a világban."
+townyadmin_help_1: 'Telek eltávolítása a város blokkjából'
+townyadmin_help_2: 'Próbálj meg eltávolítani egy területet körülötted.'
+admin_panel_1: "Nézd meg a /ta set ? parancsot a segítséghez"
+admin_panel_2: 'Töltsd újra a Towny-t'
+admin_panel_3: 'Futtasd az új nap kódját'
+admin_panel_4: "Eltávolítsd a körülötted lévő területet"
+admin_panel_5: "Nézd meg a /ta plot ? parancsot a segítséghez"
+admin_panel_6: "Adj pozitív vagy negatív számú városblokkokat egy játékosnak vagy városnak"
+admin_panel_7: "Nézd meg a /ta toggle ? parancsot a segítséghez"
+admin_panel_8: "Parancsok ezen objektumok vezérlésére"
+admin_panel_9: "Teleportálj a megadott telekre"
+admin_panel_10: "Ellenőrizd, hogy a játékosnak van-e jogosultsági csomópontja"
+admin_panel_11: "Állítsd vissza a konfigurációdat"
+admin_panel_12: "Készíts biztonsági másolatot a Towny adataidról"
+admin_panel_13: "Dumpold az mysql adatbázisodat flatfile-ra"
+admin_panel_14: "Kényszerítsd az adatbázis mentését vagy betöltését"
+admin_panel_15: "Futtasd az új óra kódját"
+admin_panel_16: "Tisztítsd meg a régi lakókat"
+townyadmin_town_help_0: "Hozz létre egy várost a megadott névvel és polgármesterrel."
+townyadmin_town_help_1: "Mutasd meg a város státusz képernyőjét."
+townyadmin_town_help_2: "Adj hozzá vagy távolíts el lakókat egy városból."
+townyadmin_town_help_3: "Nevezd át a várost."
+townyadmin_town_help_4: "Töröld a várost."
+townyadmin_town_help_5: "Spawnolj egy városba."
+townyadmin_town_help_6: "Spawnolj egy város külterületére."
+townyadmin_town_help_7: "Használj egy város rang parancsát."
+townyadmin_town_help_8: "Használj egy város beállító parancsát."
+townyadmin_town_help_9: "Használj egy város kapcsoló parancsát."
+townyadmin_town_help_10: "Módosítsd egy város metaadatait."
+townyadmin_town_help_11: "Olvaszd össze a második várost az elsőbe."
+townyadmin_town_help_12: "Olvaszd össze a második várost az elsőbe, figyelmen kívül hagyva minden szabályt."
+townyadmin_town_help_13: "Tegyél pénzt a város bankjába."
+townyadmin_town_help_14: "Vedd ki a pénzt a város bankjából."
+townyadmin_town_help_15: "Nyisd meg a város banktörténeti könyvét."
+townyadmin_town_help_16: "Módosítsd a város kívülállóit."
+townyadmin_town_help_17: "Hagyd el a város nemzetét."
+townyadmin_town_help_18: "Távolítsd el a város meghódított státuszát."
+townyadmin_town_toggle_help_0: "Kapcsold ki/be a város védelmét, hogy a város területére mások ne tudjanak belépni."
+townyadmin_town_toggle_help_1: "Kapcsold ki/be a város nyilvános státuszát, hogy a nem lakók települhessenek ott."
+townyadmin_town_toggle_help_2: "Kapcsold ki/be a város nyilvános státuszát, lehetővé téve a nem lakóknak, hogy oda teleportáljanak."
+townyadmin_town_toggle_help_3: "Kapcsold ki/be a város robbanási beállítását."
+townyadmin_town_toggle_help_4: "Kapcsold ki/be a város tűz beállítását."
+townyadmin_town_toggle_help_5: "Kapcsold ki/be a város szörnyek beállítását."
+townyadmin_town_toggle_help_6: "Kapcsold ki/be a város adókulcs beállítását."
+townyadmin_town_toggle_help_7: "Kapcsold ki/be a város nyitottságát, hogy bárki csatlakozhasson meghívó nélkül."
+townyadmin_nation_help_0: "Hozz létre egy nemzetet a megadott névvel és fővárossal."
+townyadmin_nation_help_1: "Mutasd a nemzet státusz képernyőt."
+townyadmin_nation_help_2: "Towns hozzáadása a nemzethez."
+townyadmin_nation_help_3: "Towns eltávolítása a nemzetből."
+townyadmin_nation_help_4: "Név módosítása a nemzethez."
+townyadmin_nation_help_5: "Város törlése."
+townyadmin_nation_help_6: "Frissítsd a nemzet városait, hogy ellenőrizd, hogy elég közel vannak-e a fővároshoz."
+townyadmin_nation_help_7: "Két nemzet egyesítése."
+townyadmin_nation_help_8: "Két nemzet egyesítése, figyelmen kívül hagyva a szabályokat."
+townyadmin_nation_help_9: "Használj egy nemzet kapcsoló parancsot."
+townyadmin_nation_help_10: "Használj egy nemzet beállító parancsot."
+townyadmin_nation_help_11: "Tedd a pénzt a nemzet bankjába."
+townyadmin_nation_help_12: "Vedd el a pénzt a nemzet bankjából."
+townyadmin_nation_help_13: "Nyisd meg a nemzet banktörténeti könyvét."
+townyadmin_nation_help_14: "Helyezd el a várost a nemzetben."
+townyadmin_nation_help_15: "Használj a nemzet rang parancsot."
+townyadmin_nationrank_help_0: "Hozzáad egy rangot a lakosnak."
+townyadmin_nationrank_help_1: "Eltávolít egy rangot a lakostól."
+townyadmin_database_help_0: "Kényszerített adatbázis mentés."
+townyadmin_database_help_1: "Kényszerített adatbázis betöltés."
+townyadmin_database_help_2: "Eltávolítja az összes címet és vezetéknevet minden lakostól."
+ta_plot_help_0: "Hozzáad egy telket egy játékos számára."
+ta_plot_help_1: "Nézd meg a telken tárolt metainformációkat, ahol állsz."
+ta_plot_help_2: "Állítsd be a telek metaadat kulcsát és értékét."
+ta_plot_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján."
+ta_resident_help_0: "Átnevez egy lakost."
+ta_resident_help_1: "Barát hozzáadása vagy eltávolítása."
+ta_resident_help_2: "Barát lista megjelenítése vagy törlése."
+ta_resident_help_3: "Egy lakos törlése az adatbázisból."
+ta_resident_help_4: "Eltávolítja egy játékos 'about' sorát."
+ta_toggle_help_0: "Kapcsold ki/be a vadon használatának lehetőségét minden világban."
+ta_toggle_help_1: "Kapcsold ki/be a regenerációs funkciókat minden világban."
+ta_toggle_help_2: "Kapcsold ki/be a fejlesztői módot, amely extra naplóüzeneteket mutat a konfigurációban megadott játékosnak."
+ta_toggle_help_3: "Kapcsold ki/be a hibakereső módot, amely extra naplóüzeneteket mutat."
+ta_toggle_help_4: "Kapcsold ki/be a városok vagy nemzetek pénz eltávolításának lehetőségét a bankjaikból."
+ta_toggle_help_5: "Játékos NPC-vé alakítása vagy vissza."
+ta_set_help_0: "Állítsd be a város polgármesterét a megadott játékosra."
+ta_set_help_1: "Állítsd be a város új NPC polgármesterét, akik nem fizetnek fenntartási díjat."
+ta_set_help_2: "Állítsd be egy nemzet fővárosát."
+ta_set_help_3: "Állítsd be egy nemzet zóna méretét."
+ta_set_help_4: "Állítsd be egy lakos címét."
+ta_set_help_5: "Állítsd be egy lakos vezetéknevét."
+ta_set_help_6: "Állítsd át a telek tulajdonosát egy másik városra."
+ta_set_help_7: "Állítsd be a város alapító nevét."
+ta_set_help_8: "Használj 0-t a nemzetzóna felülbírálásának eltávolításához."
+ta_purge_help_0: "Törölj minden lakost, akik hosszabb ideje nem jelentkeztek be, beállítható 'townless' a város nélküli játékosok eltávolításához, vagy megadhatsz városnevet csak egy város lakóinak törlésére."
+ta_townmeta_help_1: "Nézd meg a tárolt metainformációkat a megadott városban."
+ta_townmeta_help_2: "Állítsd be a város metaadat kulcsát és értékét."
+ta_townmeta_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján a városban."
+ta_residentmeta_help_1: "Nézd meg a tárolt metainformációkat a megadott lakosban."
+ta_residentmeta_help_2: "Állítsd be a lakos metaadat kulcsát és értékét."
+ta_residentmeta_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján a lakosnál."
+ta_nationmeta_help_1: "Nézd meg a tárolt metainformációkat a megadott nemzetben."
+ta_nationmeta_help_2: "Állítsd be a nemzet metaadat kulcsát és értékét."
+ta_nationmeta_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján a nemzetnél."
+ta_reload_help_0: "Adatbázis újratöltése."
+ta_reload_help_1: "Konfiguráció újratöltése."
+ta_reload_help_2: "Nyelvi fájlok újratöltése."
+ta_reload_help_3: "Towny jogosultságok újratöltése."
+ta_reload_help_4: "Towny összes komponensének újratöltése."
+ta_eco_resetbanks_help: "Visszaállítja a városok és nemzetek bankjait a megadott összegre vagy 0-ra."
+ta_eco_convert_modern_help: "Átalakítja a Towny számlákat modern változatra, amelyek képesek Vault OfflinePlayer-t használni."
+ta_eco_convert_help: "Átalakítja a Towny számlákat a célnak megfelelő gazdasági implementációra, hasznos gazdasági pluginok közötti adatátvitelhez."
+ta_eco_info_help: "Információkat ad a gazdasági számlákról a szerveren."
+ta_depositall_help_0: "Tedd be a megadott összeget az összes város és nemzet bankjába."
+ta_info_help_0: "Nézd meg a gazdasági információkat a megadott nemzethez."
+ta_info_help_1: "Nézd meg a gazdasági információkat a megadott lakoshoz."
+ta_info_help_2: "Nézd meg a gazdasági információkat a Towny szerverhez."
+ta_info_help_3: "Megjeleníti a megadott város gazdasági (eco) információit."
+plot_help_0: "Bekapcsolja a telek információs HUD-ját."
+plot_help_1: "Eltávolítja a telek tulajdonosát."
+plot_help_2: "Törli a telkek listáját."
+plot_help_3: "Lásd a /plot set ? parancsot a segítséghez."
+plot_help_4: "Lásd a /plot toggle ? parancsot a segítséghez."
+plot_help_5: "Lásd a /plot group ? parancsot a segítséghez."
+plot_help_6: "Eltávolítja a játékos engedély-átírásait."
+plot_help_7: "Alapértelmezett engedély-átírásokat ad hozzá egy játékoshoz."
+plot_help_8: "Megnyitja az engedélyek szerkesztő GUI-ját."
+plot_help_9: "Hozzáad egy lakót a telek megbízható listájához."
+plot_help_10: "Eltávolítja a lakót a telek megbízható listájából."
+plot_district_help_0: "Pl.: /plot district new ExpensivePlots"
+plot_district_help_1: "Eltávolít egy telket a megadott kerületből."
+plot_district_help_2: "Teljesen törli egy kerületet."
+plot_district_help_3: "Átnevezi a kerületet, amelyben állsz."
+plot_group_help_0: "Pl.: /plot group new ExpensivePlots"
+plot_group_help_1: "Eltávolít egy telket a megadott csoportból."
+plot_group_help_2: "Teljesen törli egy telek csoportot."
+plot_group_help_3: "Átnevezi a csoportot, amelyben állsz."
+plot_group_help_4: "Pl.: /plot group set perm resident on."
+plot_group_help_5: "Pl.: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Pl.: /plot group forsale 50"
+plot_group_help_7: "Pl.: /plot group notforsale"
+plot_group_help_8: "Hozzáad vagy eltávolít egy lakót a megbízható listából."
+plot_group_help_9: "Hozzáad egy lakót a telek csoport megbízható listájához."
+plot_group_help_10: "Eltávolít egy lakót a telek csoport megbízható listájából."
+plot_group_help_11: "Megnyitja a telek engedély GUI-ját."
+plot_group_help_12: "Hozzáad egy játékost a telek engedély GUI-jához."
+plot_group_help_13: "Eltávolít egy játékost a telek engedély GUI-jából."
+plot_toggle_help_0: "Kapcsolja a PvP-t a telekhez."
+plot_toggle_help_1: "Kapcsolja a robbanásokat a telekhez."
+plot_toggle_help_2: "Kapcsolja a tüzet a telekhez."
+plot_toggle_help_3: "Kapcsolja a szörnyeket a telekhez."
+plot_group_toggle_help_0: "Kapcsolja a PvP-t a telek csoporthoz."
+plot_group_toggle_help_1: "Kapcsolja a robbanásokat a telek csoporthoz."
+plot_group_toggle_help_2: "Kapcsolja a tüzet a telek csoporthoz."
+plot_group_toggle_help_3: "Kapcsolja a szörnyeket a telek csoporthoz."
+plot_group_toggle_help_4: "Kapcsolja a telek csoport adózott státuszát."
+plot_set_help_0: "Pl.: Inn, Wilds, Farm, Embassy, stb."
+plot_set_help_1: "Beállítja a telket előőrsnek."
+plot_set_help_1.5: "Beállítja a minimális napok számát, amit egy játékosnak a város tagjának kell lennie a telek megvásárlásához."
+plot_set_help_1.6: "Beállítja a maximális napok számát, amit egy játékosnak a város tagjának kell lennie a telek megvásárlásához."
+plot_set_help_2: "Eltávolít egy telek típust."
+plot_set_help_3: "Elnevezi a telket."
+plot_set_help_4: "Minden engedély kapcsolása."
+plot_set_help_5: "Beállítja az engedélyeket egy szinthez vagy típushoz, hogy be vagy ki legyenek kapcsolva."
+plot_set_help_6: "Beállítja az engedélyeket egy szinthez és típushoz, hogy be vagy ki legyenek kapcsolva."
+plot_set_help_7: "Beállítja az engedélyeket a telek tulajdonosa vagy a város számára."
+plot_jailcell_help_0: "Hozzáad egy börtön cellát ott, ahol állsz."
+plot_jailcell_help_1: "Eltávolít egy börtön cellát ott, ahol állsz."
+msg_block_claim: 'Foglalja el ezt a városi blokkot'
+msg_block_claim_radius: 'Foglalja el a körülette lévő telkek körzetét.'
+msg_plot_nfs: 'Vegye le a telket eladásról'
+msg_plot_nfs_radius: 'Vegye le a körülette lévő telkeket eladásról'
+msg_nfs_abr: '&e''fs'' és ''nfs'' elfogadott rövidítések a ''forsale'' és ''notforsale'' kifejezésekre.'
+msg_plot_fs: 'Helyezze aukcióra ezt a területet.'
+msg_plot_fs_radius: 'Tegye eladásra a körülette lévő telkek körzetét.'
+############################################################
+#+------------------------------------------------------+ #
+#|   Messages                                           | #
+#+------------------------------------------------------+ #
+############################################################
+msg_buy: '&bVásároltál %d %s-t %s-ért.'
+msg_buy_resident_plot: '&b%s megvásárolta %s telekét %s-ért!'
+msg_buy_resident_plot_group: '&b%s megvásárolta %s telekcsoportját %s-ért!'
+msg_couldnt_pay_taxes: '&b%s nem tudta kifizetni az adót, és ki lett dobva a %s-ból.'
+msg_couldnt_pay_plot_taxes: '&b%s nem tudta kifizetni a telekadót és elveszítette a telek tulajdonjogát.'
+msg_you_couldnt_pay_plot_tax: '&bNem tudtad kifizetni a telekadót %s értékben és elveszítetted a tulajdonjogot a %s-nél lévő telek felett.'
+msg_you_couldnt_pay_town_tax: '&bNem tudtad kifizetni a városi adót %s értékben, és eltávolítottak a %s-ból.'
+msg_you_paid_town_tax: '&bKifizetted a város adóját %s értékben.'
+msg_you_paid_plottax_to_town: '&bKifizetted a telekadót összesen %s a(z) %s városnak.'
+msg_bankrupt_town: '&b%s nem tudta fenntartani a várost.'
+msg_bankrupt_nation: '&b%s nem tudta fenntartani a nemzetet.'
+msg_nation_not_peaceful: '&bA nemzet nem tudta fenntartani a békés állapotát.'
+msg_nation_cant_peaceful: '&bA nemzet nem tudta békés állapotúvá válni. Naponta %s szükséges ehhez.'
+msg_peaceful_disabled: '&bA nemzeti béke globálisan le van tiltva.'
+msg_you_paid: '&bKifizetted a %s összeget a békés státusz beállításához.'
+msg_nation_set_peace: '&bSikeresen megváltoztattad a nemzet állapotát.'
+msg_nation_allow_peaceful: '&bA nemzet engedélyei a békés állapot fenntartásához mostantól: %s'
+msg_mobremoval_world: '&bA világ mob spawn-jait blokkolja: %s'
+msg_mobremoval_town: '&bA város mob spawn-jait blokkolja: %s'
+msg_nation_peaceful: '&bA nemzeted most már békés.'
+msg_tax_exempt: '&bA városi alkalmazottak mentesülnek az adó alól.'
+msg_del_nation: '&bA %s nemzet feloszlott!'
+msg_del_resident: '&b%s elvesztette az összes Towny adatát!'
+msg_join_nation: '&bA(z) %s város csatlakozott a nemzethez!'
+msg_join_town: '&b%s csatlakozott a városhoz!'
+msg_friend_add: '&b%s barátnak jelölt meg.'
+msg_friend_remove: '&b%s eltávolított téged a barátai közül.'
+msg_left_town: '&b%s elhagyta a várost.'
+msg_you_left: '&bTe elhagytad a %s várost.'
+msg_not_mayor: '&bNem te vagy a polgármester.'
+msg_not_king: '&bNem te vagy a nemzet vezetője.'
+msg_not_mayor_ass: '&bNem te vagy a polgármester vagy segéd.'
+msg_not_king_ass: '&bNem te vagy a nemzet vezetője vagy segéd.'
+msg_own_nation_disallow: '&bNem csinálhatsz ilyet a saját nemzeteddel.'
+msg_no_perms_claim: '&bNincs jogod területet igényelni.'
+msg_outpost_disable: '&bA kihelyezett posztok nem elérhetők.'
+msg_kicked_by: '&bKi lettél rúgva a városból %s által.'
+msg_kicked: '&b%s kirúgta %s-t a városból.'
+msg_nation_kicked_by: '&bA városodat kiűzte %s a nemzetből.'
+msg_town_left_nation: '&bA városod elhagyta a %s nemzetet.'
+msg_nation_town_left: '&bA %s város elhagyta a nemzeted.'
+msg_nation_kicked: '&b%s kirúgta %s-t a nemzetből.'
+msg_raised_ass: '&b%s felemelte %s-t %s segéddé.'
+msg_lowered_to_res_by: '&bTe lettél visszahelyezve alapvető lakóként %s által.'
+msg_lowered_to_res: '&b%s visszahelyezte %s-t alapvető lakóvá.'
+msg_invalid_name: '&bEgyik név sem volt érvényes.'
+msg_invited_join_town: '&b%s meghívta %s-t a városba.'
+msg_invited_join_nation: '&b%s meghívta %s-t a nemzetbe.'
+msg_deny_invite: '&b%s visszautasította a meghívásodat.'
+msg_invited: '&bMeghívtak a %s városba.'
+msg_town_online: 'Online a városban'
+msg_nation_online: 'Online a nemzetben'
+msg_allied_nations: '&b%s szövetséget kötött a következő nemzetekkel: %s.'
+msg_enemy_nations: '&b%s ellenségeskedik a következő nemzetekkel: %s.'
+msg_enemy_to_neutral: '&b%s békés állapotba helyezte %s-t.'
+msg_added_ally: '&b%s szövetséget kötött a te nemzeteddel.'
+msg_removed_ally: '&b%s megszüntette a szövetséget a te nemzeteddel.'
+msg_added_enemy: '&b%s ellenségeskedni kezdett a te nemzeteddel.'
+msg_removed_enemy: '&b%s békés állapotba helyezkedett a te nemzeteddel.'
+msg_unable_ally_enemy: '&cNem lehet szövetséget kötni %s-szel, mert ellenségek vagyunk.'
+msg_deny_ally: '&b%s visszautasította a szövetségre tett ajánlatodat.'
+msg_accept_ally: '&bA %s nemzet elfogadta a szövetségre tett ajánlatodat.'
+msg_ally_req_sent: '&bA szövetségi kérvény el lett küldve a %s nemzetnek.'
+msg_ally_request: '&bA %s szövetséget szeretne kötni.'
+msg_unable_ally_offline: "&cNem lehet szövetséget kérni, mert a célország vezetője offline."
+msg_unable_ally_npc: "&cNem lehet szövetséget kérni, mert a célország vezetője NPC."
+msg_claimed: '&2Sikeresen igényelted'
+msg_unclaimed: '&2Sikeresen feloldottad az igénylést'
+msg_not_claimable: '&cEz a világ nem igényelhető.'
+msg_abandoned_area: '&bElhagyott terület: %s'
+msg_admin_unclaim_area: '&cErőszakkal feloldottuk a terület igénylését: %s'
+msg_abandoned_area_1: '&bA városod elhagyta a területet.'
+msg_no_money_purchase_plot: '&cNincs elég pénzed ahhoz, hogy megvásárold ezt a telket.'
+msg_town_no_money_purchase_plot: '&cA város nem rendelkezik elegendő pénzzel a telek visszavásárlásához.'
+msg_no_funds_new_town: '&c%s nem tudja megfizetni az új város létrehozását.'
+msg_no_funds_claim: '&cA város nem tudja megfizetni %s városi blokk igénylését, ami %s-ba kerül. Adj hozzá több pénzt a város pénztárába.'
+msg_no_funds_to_buy: '&cA város nem tudja megfizetni a %s %s megvásárlásának költségét, ami %s. Adj hozzá több pénzt a város pénztárába.'
+msg_annexed_area: '&2Befoglalt terület: %s'
+msg_max_plot_own: '&cNem birtokolhatsz több mint %s telket.'
+msg_max_outposts_own: '&cNem birtokolhatsz több mint %s előőrsöt.'
+msg_no_funds_new_nation: '&cA város nem tudja megfizetni egy új nemzet alapítását.'
+msg_already_claimed: '&cEz a terület már el van foglalva: %s'
+msg_already_claimed_1: '&cEz a terület (%s) már valakié.'
+msg_already_claimed_2: '&cEz a terület már el van foglalva.'
+msg_too_close: '&cEz a terület túl közel van egy másik városhoz.'
+msg_too_far: '&cEz a terület túl messze van a többi várostól.'
+msg_not_claimed: '&bEz a terület (%s) még nincs elfoglalva.'
+msg_not_claimed_1: '&bEz a terület nincs elfoglalva.'
+msg_not_own_area: '&cNem a tiéd a kijelölt terület.'
+msg_not_own_place: '&bEz a hely nincs senki tulajdonában.'
+msg_area_not_own: '&cEz a terület nem a tiéd.'
+msg_area_not_recog: '&cEz a terület nincs felismerve a Towny által.'
+msg_specify_name: '&bAdd meg a város nevét'
+msg_specify_nation_name: '&bAdd meg a nemzet nevét'
+msg_peasant_right: '&bA parasztnak nincs joga arra, hogy rákényszerítse vezetőit a trónra.'
+msg_cost_spawn: '&b%s összeget fizettél a város spawn-jába teleportálásért.'
+msg_cost_spawn_refund: '&bVisszakaptad a városi spawn használati díját.'
+msg_town_spawn_warmup: '&bTeleportálásra várakozás...'
+msg_town_rename_disabled: '&bA város átnevezése letiltva.'
+msg_town_set_name: '&b%s átnevezte a várost %s-re.'
+msg_nation_set_name: '&b%s átnevezte a nemzetet %s-ra.'
+msg_changed_pvp: '&c%s PVP módja %s lett.'
+msg_changed_public: '&cA város nyilvános státusza most %s.'
+msg_changed_expl: '&cA robbanások %s-ban most %s.'
+msg_changed_fire: '&cA tűz terjedése %s-ban most %s.'
+msg_changed_mobs: '&cA szörnyek spawndolása %s-ban most %s.'
+msg_the_plot_group: 'A terület csoport'
+msg_changed_taxpercent: '&cA százalékos alapú adók most %s.'
+msg_changed_open: '&cA meghívó nélküli csatlakozás most %s.'
+msg_toggle_open_on_warning: 'Figyelmeztetés: A város engedélyeit ki kell kapcsolni, ha nyitott a város. Használd a " /town set perm off" parancsot, majd a " /town set perm reset"-et.'
+msg_changed_world_setting: '&c%s a következő beállítással rendelkezik: %s.'
+msg_world_pvp: '&cEz a világ csak PVP.'
+msg_world_mobs: '&cEz a világban kötelezőek a szörnyek spawndolásai.'
+msg_world_expl: '&cEz a világban kötelezőek a robbanások.'
+msg_world_fire: '&cEz a világban kötelező a tűz terjedése.'
+msg_town_mobs: '&cEbben a városban kötelezőek a szörnyek spawndolásai.'
+msg_plot_pvp: '&cPVP nem kapcsolható ki egy Aréna területen.'
+msg_plot_regen_wrong_size: '&cA regenerálás csak akkor hajtható végre, ha az alapértelmezett területméretet (16) használják.'
+msg_reloaded: '&2A Towny beállításai újratöltődtek.'
+msg_undo_complete: '&2A visszavonás befejeződött.'
+msg_give_total: '&b%s bónuszt kaptál. (Összesen: %s)'
+mag_backup_success: '&2A biztonsági mentés sikeres.'
+msg_xx_withdrew_xx: '&b%s %s összeget vett fel a %s bankból.'
+msg_xx_deposited_xx: '&b%s %s összeget helyezett el a %s bankban.'
+msg_insuf_funds: '&cNincs ennyi pénzed.'
+msg_err_withdraw_disabled: 'A banki pénzfelvétel letiltva!'
+msg_err_deposit_capped: 'Nem lehet pénzt elhelyezni. A bank elérte a maximális összeget: %s.'
+msg_set_town_home: '&bSikeresen megváltoztattad a város otthoni blokkját %s-ra.'
+msg_set_town_spawn: '&bSikeresen megváltoztattad a város spawn-ját.'
+msg_set_outpost_spawn: '&bSikeresen megváltoztattad az előretolt poszt spawn-ját.'
+msg_set_title: '&b%s kapta meg a ''%s&b'' címet.'
+msg_set_surname: '&b%s kapta meg a ''%s&b'' vezetéknevet.'
+msg_clear_title_surname: '&bA %s eltávolítva a ''%s'' címről.'
+msg_clear_plot_material: '&bA terület törlésre került a következő blokk típusokkal: %s.'
+msg_set_perms: '&bSikeresen megváltoztattad az engedélyeket:'
+msg_set_claim: '&bSikeresen megváltoztattad %s birtoklását %s-ra.'
+msg_set_perms_reset: '&bSikeresen visszaállítottad az összes %s terület engedélyeit.'
+msg_usedefault: '&bEz a világ (%s) mostantól a globális alapértelmezett beállításokat használja.'
+msg_set_wild_perms: '&bSikeresen megváltoztattad %s vad engedélyeit %s-ra.'
+msg_set_wild_ignore: '&bSikeresen megváltoztattad %s vad figyelmen kívül hagyott blokkjait %s-ra.'
+msg_set_wild_name: '&bSikeresen megváltoztattad %s vad nevét %s-ra.'
+msg_set_wild_regen: '&bSikeresen megváltoztattad %s vad regenerálódását ''%s''-ra.'
+msg_set_use_towny_on: '&bEz a világ mostantól Towny szabályokat követ.'
+msg_set_use_towny_off: '&cEz a világ mentes minden Towny interakciótól.'
+msg_error_must_be_int: '&bAz összegnek egész számnak kell lennie.'
+msg_error_input_must_be_int: '&c%s egész számnak kell lennie'
+msg_error_must_be_num: '&bAz összegnek számnak kell lennie.'
+msg_error_input_must_be_num: '&c%s számnak kell lennie'
+msg_must_specify_amnt: '&bMeg kell adni az összeget. Például: %s 54'
+msg_town_set_tax: '&b%s beállította a napi lakos adót %s-ra.'
+msg_town_set_plottax: '&b%s beállította a napi telek adót %s-ra.'
+msg_town_set_plotprice: '&b%s beállította a telek árát %s-ra.'
+msg_town_set_alttax: '&b%s beállította a %s telkek napi adóját %s-ra.'
+msg_town_set_altprice: '&b%s beállította a %s telkek árát %s-ra.'
+msg_town_set_nation_tax: '&b%s beállította a nemzeti adót %s-ra.'
+msg_set_nation_tag: '&b%s beállította a nemzet címkét [%s]-re.'
+msg_set_town_tag: '&b%s beállította a város címkét [%s]-re.'
+msg_reset_nation_tag: '&b%s törölte a nemzet címkét.'
+msg_reset_town_tag: '&b%s törölte a város címkét.'
+msg_mayor_abandon: '&bEl akarod hagyni a népedet? Ha biztos vagy benne, válassz másik polgármestert a ''/town set mayor'' paranccsal.'
+msg_new_day_tax: '&bÚj nap van! Az adók és bérleti díjak beszedésre kerültek.'
+msg_new_day: '&bÚj nap van!'
+msg_new_king: '&b%s mostantól a %s nemzet vezetője!'
+msg_err_new_king_notmayor: '&cAz új nemzetvezető nem polgármester.'
+msg_err_king_not_in_nation: '&cAz új nemzetvezető nem tartozik ehhez a nemzethez.'
+msg_err_fight_like_king: '&cA béke nem opció! Harcolj, mint egy vezető!'
+msg_no_access_nation_bank: '&cNincs hozzáférésed a nemzet bankjához.'
+msg_err_no_money: '&cNincs elég pénz a bankban.'
+msg_new_mayor: '&b%s mostantól a polgármester!'
+msg_new_nation: '&b%s új nemzetet alapított, melynek neve: %s'
+msg_new_town: '&b%s új várost alapított, melynek neve: %s'
+msg_plot_for_sale: '&b%s eladóvá tette a telek (%s)!'
+msg_plot_for_sale_amount: '&b%s eladóvá tette a telek (%s) %s összegért!'
+msg_plot_set_type: '&bA telek típusa beállítva: %s'
+msg_cache_block_error: '&cNem vagy regisztrálva a Towny rendszerében. Próbálj meg újra bejelentkezni.'
+msg_cache_block_error_wild: '&cNem engedélyezett a wild területen való %s.'
+msg_cache_block_error_plot: '&cA tulajdonos nem engedélyezi, hogy itt %s végezz.'
+msg_cache_block_error_town_resident: '&cA város lakói nem végezhetnek itt %s műveletet.'
+msg_cache_block_error_town_allies: '&cSzövetségesek nem végezhetnek itt %s műveletet.'
+msg_cache_block_error_town_outsider: '&cKívülállók nem végezhetnek itt %s műveletet.'
+msg_err_cant_afford_tp_town: '&cNem engedheted meg magadnak, hogy teleportálj a %s városba.'
+msg_err_not_public: '&cEz a város nem nyilvános.'
+msg_err_not_open: '&cA(z) %s város nem nyitott mindenki előtt. Kérd meg a polgármestert vagy egy asszisztenst, hogy csatlakozz.'
+msg_err_town_spawn_forbidden: '&cA városi spawn használata tilos.'
+msg_err_town_spawn_nation_forbidden: '&cA városi spawn használata más városokba a nemzeteden belül tilos.'
+msg_err_town_spawn_ally_forbidden: '&cA városi spawn használata a szövetséges városokba tilos.'
+msg_err_public_spawn_forbidden: '&cA nyilvános spawn használata más városokba tilos.'
+msg_err_public_spawn_enemy: '&cA nyilvános spawn használata ellenséges városokba tilos.'
+msg_err_town_spawn_disallowed_from: '&cA városi spawn használata nem engedélyezett innen: %s.'
+msg_err_outpost_spawn: '&cNincs kijelölt előőrs spawn erre a városra.'
+msg_err_cant_afford_tp: '&bNem engedheted meg magadnak, hogy teleportálj a városod spawn pontjára.'
+msg_err_plot_nfs: '&cEz a telek nem eladó.'
+msg_err_not_part_town: '&cA kiválasztott terület nem része a városodnak.'
+msg_err_not_attached_edge: '&cA kiválasztott terület nincs csatlakoztatva az élehez.'
+msg_err_empty_area_selection: '&cA kiválasztott terület nem tartalmaz érvényes telkeket.'
+msg_err_not_enough_blocks: '&cNincs elég szabad városi blokk a kiválasztott területhez.'
+msg_err_cant_afford_blocks: '&cA város nem engedheti meg magának, hogy elvegye a(z) %s telekblokkot %s összegért.'
+msg_err_not_in_town_claim: '&cVárosban kell lenned ahhoz, hogy telkeket igényelj.'
+msg_err_must_belong_town: '&cVároshoz kell tartoznod.'
+msg_err_dont_belong_town: '&cNem tartozol városhoz.'
+msg_err_dont_belong_nation: '&bNem tartozol nemzethez.'
+msg_err_already_belong_nation: '&bMár tartozol egy nemzethez.'
+msg_err_town_already_belong_nation: '&b%s már egy nemzethez tartozik: %s.'
+msg_err_not_same_nation: '&b%s nem tartozik a te nemzetedhez.'
+msg_err_rect_auto: '&cCsak városok és lakosok használhatják az auto parancsot.'
+msg_err_invalid_radius: '&cÉrvénytelen sugár. Használj egész számot vagy "auto"-t.'
+msg_err_not_configured: '&cEz a világ nincs konfigurálva a Towny által.'
+msg_err_updating_item_perms: '&cHiba a tárgyhasználati jogosultságok frissítése közben.'
+msg_err_updating_switch_perms: '&cHiba a kapcsoló jogosultságok frissítése közben.'
+msg_err_updating_destroy_perms: '&cHiba a pusztítási jogosultságok frissítése közben.'
+msg_err_updating_build_perms: '&cHiba az építési jogosultságok frissítése közben.'
+msg_err_admin_only: '&cCsak adminisztrátor használhatja ezt a parancsot.'
+msg_err_admin_only_delete: '&cCsak adminisztrátor törölheti más lakosok adatát.'
+msg_err_admin_only_delete_town: '&cCsak adminisztrátor törölheti más városok adatát.'
+msg_err_admin_only_delete_nation: '&cCsak adminisztrátor törölheti más nemzetek adatát.'
+msg_err_online_or_npc: '&c%s online vagy NPC.'
+msg_err_not_registered: '&cNem vagy regisztrálva.'
+msg_err_not_registered_1: '&c%s nincs regisztrálva.'
+msg_err_invalid_name: '&c%s érvénytelen név.'
+msg_err_already_res: '&c%s már tartozik egy városhoz.'
+msg_err_already_in_town: '&c%s már a(z) %s város része.'
+msg_err_already_nation: '&cA célváros már tartozik egy nemzethez.'
+msg_err_invalid_property: '&cÉrvénytelen "%s" tulajdonság.'
+msg_err_not_supported: '&cMég nem támogatott.'
+msg_err_invalid_input: '&cÉrvénytelen bemenet. Használj %s'
+msg_err_negative: '&cA bemenet nem lehet negatív.'
+msg_err_input_too_long: '&cA bemenet túl hosszú.'
+msg_err_invalid_choice: '&cÉrvénytelen választás.'
+msg_err_invalid_sub: '&cÉrvénytelen alparancs.'
+msg_err_command_disable: '&cNincs elég jogosultságod ehhez a parancshoz.'
+msg_err_you_dont_have_permission_to_use_colours: "Nincs jogosultságod színkódok használatára a címekben és vezetéknevekben."
+msg_err_universe_limit: '&cAz univerzum nem képes több várost tartani.'
+msg_err_too_many_npc: '&cTúl sok NPC van regisztrálva.'
+msg_err_negative_money: '&cNem lehet negatív pénzed.'
+msg_err_not_percentage: '&cA százalékok nem haladhatják meg a 100%-ot.'
+msg_err_no_economy: '&cA gazdaság nincs bekapcsolva.'
+msg_err_not_block_type: '&cEz nem érvényes telektípus!'
+msg_not_allowed_join: '&c%s nem csatlakozhat a városhoz.'
+msg_offline_no_join: '&c%s offline, de jogosultsága nincs a városhoz csatlakozáshoz.'
+msg_err_cannot_perform_action: '&cNem hajtható végre ez a művelet a %s területen.'
+msg_npc_flag: '&bNPC zászló mostantól %s a %s számára.'
+msg_warning_delete: '&4*** FIGYELEM, %s TÖRÖLVE LESZ A KÖVETKEZŐ ÚJ NAP ALKALMÁVAL A PÉNZHIÁNY MIATT ***'
