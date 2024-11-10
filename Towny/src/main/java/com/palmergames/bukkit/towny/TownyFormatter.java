@@ -113,6 +113,9 @@ public class TownyFormatter {
 		if (townBlock.hasDistrict())
 			screen.addComponentOf("district", colourKey(translator.of("status_district_name_and_size", townBlock.getDistrict().getName(), townBlock.getDistrict().getTownBlocks().size())));
 
+		if (townBlock.hasOutpostObject())
+			screen.addComponentOf("outpost", colourKey(translator.of("status_outpost_name_and_size", townBlock.getOutpost().getName(), townBlock.getOutpost().getNumTownBlocks())));
+
 		if (townBlock.hasPlotObjectGroup())
 			screen.addComponentOf("plotgroup", colourKey(translator.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size())));
 		

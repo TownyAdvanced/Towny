@@ -9,6 +9,9 @@ import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.Outpost;
+import com.palmergames.bukkit.towny.object.OutpostWorldCoord;
+import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
@@ -25,6 +28,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -228,9 +232,11 @@ public class TownClaim implements Runnable {
 		townBlock.setTown(town);
 		townBlock.setType(!alreadyClaimed ? townBlock.getType() : TownBlockType.RESIDENTIAL); // Sets the plot permissions to mirror the towns.
 		if (outpost) {
-			townBlock.setOutpost(true);
-			town.addOutpostSpawn(outpostLocation);
-			outpost = false; // Reset so we only flag the first plot as an outpost.
+			Outpost outpostObject = new Outpost(UUID.randomUUID(), ((OutpostWorldCoord) worldCoord).getName());
+			outpostObject.setSpawn(Position.ofLocation(outpostLocation));
+			outpostObject.addTownblock(townBlock);
+			town.addOutpost(outpostObject);
+			outpostObject.save();
 		}
 
 		if (!alreadyClaimed)

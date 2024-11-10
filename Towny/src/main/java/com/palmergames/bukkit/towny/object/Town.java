@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.google.common.collect.Lists;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -48,6 +47,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,7 +78,7 @@ public class Town extends Government implements TownBlockOwner {
 	private Map<UUID, Town> enemies = new LinkedHashMap<>();
 	private final Set<Resident> trustedResidents = new HashSet<>();
 	private final Map<UUID, Town> trustedTowns = new LinkedHashMap<>();
-	private final List<Position> outpostSpawns = new ArrayList<>();
+	private List<Outpost> outposts = new ArrayList<>();
 	private List<Jail> jails = null;
 	private HashMap<String, PlotGroup> plotGroups = null;
 	private TownBlockTypeCache plotTypeCache = new TownBlockTypeCache();
@@ -893,11 +894,9 @@ public class Town extends Government implements TownBlockOwner {
 
 		if (hasTownBlock(townBlock)) {
 			// Remove the spawn point for this outpost.
-			if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
-				removeOutpostSpawn(townBlock.getCoord());
-				townBlock.setOutpost(false);
-				townBlock.save();
-			}
+			if (townBlock.hasOutpostObject())
+				townBlock.getOutpost().removeTownblock(townBlock);
+
 			if (townBlock.isJail()) {
 				removeJail(townBlock.getJail());
 			}
@@ -939,51 +938,25 @@ public class Town extends Government implements TownBlockOwner {
 	public TownyPermission getPermissions() {
 		return permissions;
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.10 with no replacement.
+	 * @param outpostSpawns List of Locations that made up the town's outpostspawns.
+	 */
+	@Deprecated
+	public void setOutpostSpawns(List<Location> outpostSpawns) {
+	}
+
 	public void addOutpostSpawn(Location location) {
-		addOutpostSpawn(Position.ofLocation(location));
-	}
+		TownBlock townBlock = TownyAPI.getInstance().getTownBlock(location);
+		Outpost outpost = townBlock.hasOutpostObject()
+				? townBlock.getOutpost()
+				: new Outpost(UUID.randomUUID(), !townBlock.getName().isEmpty() ? townBlock.getName() : "UnnamedOutpost" + String.valueOf(outposts.size() + 1));
 
-	/**
-	 * Add or update an outpost spawn for a town.
-	 * Saves the TownBlock if it is not already an Outpost.
-	 * Saves the Town when finished.
-	 * 
-	 * @param position Position to set an outpost's spawn point
-	 */
-	public void addOutpostSpawn(Position position) {
-		TownBlock townBlock = position.worldCoord().getTownBlockOrNull();
-		if (townBlock == null || !this.equals(townBlock.getTownOrNull()))
-			return;
-		
-		// Remove any potential previous outpost spawn at this location (when run via /t set outpost.)
-		removeOutpostSpawn(position.worldCoord());
-
-		// Set the TownBlock to be an outpost.
-		if (!townBlock.isOutpost()) {
-			townBlock.setOutpost(true);
-			townBlock.save();
-		}
-
-		// Add to the towns' outpost list.
-		outpostSpawns.add(position);
-		
-		// Add a SpawnPoint so a particle effect is displayed.
-		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(spawn, SpawnPointType.OUTPOST_SPAWN));
-		
-		// Save the town.
-		this.save();
-	}
-	
-	/**
-	 * Only to be called from the Loading methods.
-	 * 
-	 * @param position Location to set Outpost's spawn point
-	 */
-	@ApiStatus.Internal
-	public void forceAddOutpostSpawn(Position position) {
-		outpostSpawns.add(position);
-		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(position, SpawnPointType.OUTPOST_SPAWN));
+		outpost.setSpawn(Position.ofLocation(location));
+		if (outpost.getNumTownBlocks() == 0)
+			outpost.addTownblock(townBlock);
+		outpost.save();
 	}
 
 	/**
@@ -998,20 +971,15 @@ public class Town extends Government implements TownBlockOwner {
 		if (getMaxOutpostSpawn() == 0 && TownySettings.isOutpostsLimitedByLevels())
 			throw new TownyException(Translation.of("msg_err_town_has_no_outpost_spawns_set"));
 
-		return outpostSpawns.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1))).asLocation();
+		return outposts.get(Math.min(getMaxOutpostSpawn() - 1, Math.max(0, index - 1))).getSpawn().asLocation();
 	}
 
 	public int getMaxOutpostSpawn() {
-		return outpostSpawns.size();
+		return outposts.size();
 	}
 
 	public boolean hasOutpostSpawn() {
-		return !outpostSpawns.isEmpty();
-	}
-
-	// Used because (perhaps) some mysql databases do not properly save a townblock's outpost flag.
-	private boolean isAnOutpost(Coord coord) {
-		return new ArrayList<>(outpostSpawns).stream().anyMatch(spawn -> spawn.worldCoord().equals(coord));
+		return getMaxOutpostSpawn() > 0;
 	}
 
 	/**
@@ -1020,49 +988,71 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return List of outpostSpawns
 	 */
 	public List<Location> getAllOutpostSpawns() {
-		return Collections.unmodifiableList(Lists.transform(this.outpostSpawns, Position::asLocation));
+		return outposts.stream().filter(o -> o.getSpawn() != null).map(Outpost::getSpawn).map(Position::asLocation).collect(Collectors.toUnmodifiableList());
 	}
 
 	/**
 	 * @return Similar to {@link #getAllOutpostSpawns()}, but with positions.
 	 */
 	public Collection<Position> getOutpostSpawns() {
-		return Collections.unmodifiableList(this.outpostSpawns);
+		return outposts.stream().filter(o -> o.getSpawn() != null).map(Outpost::getSpawn).collect(Collectors.toUnmodifiableList());
 	}
 
-	public void removeOutpostSpawn(Coord coord) {
-		new ArrayList<>(getAllOutpostSpawns()).stream()
-			.filter(spawn -> Coord.parseCoord(spawn).equals(coord))
-			.forEach(spawn -> {
-				removeOutpostSpawn(spawn);
-				TownyUniverse.getInstance().removeSpawnPoint(spawn);
-			});
-	}
-
-	public void removeOutpostSpawn(Location loc) {
-		outpostSpawns.remove(Position.ofLocation(loc));
+	public void removeOutpost(Location loc) {
+		Optional<Outpost> optOutpost = outposts.stream().filter(o -> o.getTownblocks().contains(TownyAPI.getInstance().getTownBlock(loc))).findFirst();
+		if (optOutpost.isPresent())
+			removeOutpost(optOutpost.get());
 	}
 
 	public List<String> getOutpostNames() {
-		List<String> outpostNames = new ArrayList<>();
-		int i = 0;
-		for (Location loc : getAllOutpostSpawns()) {
-			i++;
-			TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
+		return getOutposts().stream().map(Outpost::getName).collect(Collectors.toList());
+//		List<String> outpostNames = new ArrayList<>();
+//		int i = 0;
+//		for (Location loc : getAllOutpostSpawns()) {
+//			i++;
+//			TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
+//
+//			if (tboutpost == null) {
+//				removeOutpostSpawn(loc);
+//				save();
+//				continue;
+//			}
+//
+//			String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
+//			if (!name.isEmpty())
+//				outpostNames.add(name);
+//			else
+//				outpostNames.add(String.valueOf(i));
+//		}
+//		return outpostNames;
+	}
 
-			if (tboutpost == null) {
-				removeOutpostSpawn(loc);
-				save();
-				continue;
-			}
+	@Unmodifiable
+	public List<Outpost> getOutposts() {
+		return Collections.unmodifiableList(outposts);
+	}
 
-			String name = !tboutpost.hasPlotObjectGroup() ? tboutpost.getName() : tboutpost.getPlotObjectGroup().getName();
-			if (!name.isEmpty())
-				outpostNames.add(name);
-			else
-				outpostNames.add(String.valueOf(i));
-		}
-		return outpostNames;
+	public boolean addOutpost(Outpost outpost) {
+		return outposts.add(outpost);
+	}
+
+	public boolean removeOutpost(Outpost outpost) {
+		return outposts.remove(outpost);
+	}
+
+	public boolean hasOutpost(UUID uuid) {
+		return !getOutposts().stream().map(Outpost::getUUID).filter(oUUID -> oUUID.equals(uuid)).collect(Collectors.toList()).isEmpty();
+	}
+
+	@Nullable
+	public Outpost getOutpost(UUID uuid) {
+		Optional<Outpost> outpost = getOutposts().stream().filter(o -> o.getUUID().equals(uuid)).findFirst();
+		return outpost.isPresent() ? outpost.get() : null; 
+	}
+
+	public int getMaxAllowedOutpostLandmass() {
+		// TODO: Real logic here
+		return 10;
 	}
 
 	/**
@@ -1262,13 +1252,6 @@ public class Town extends Government implements TownBlockOwner {
 
 	public boolean hasValidUUID() {
 		return uuid != null;
-	}
-
-	public void setOutpostSpawns(List<Location> outpostSpawns) {
-		this.outpostSpawns.clear();
-		
-		for (Location location : outpostSpawns)
-			addOutpostSpawn(location);
 	}
 
 	public boolean isAlliedWith(Town othertown) {

@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 public class TownBlock extends TownyObject {
 
@@ -43,7 +44,7 @@ public class TownBlock extends TownyObject {
 	private final WorldCoord worldCoord;
 	private double plotPrice = -1;
 	private boolean taxed = true;
-	private boolean outpost = false;
+	private Outpost outpostObject = null;
 	private PlotGroup plotGroup;
 	private District district;
 	private long claimedAt;
@@ -296,19 +297,38 @@ public class TownBlock extends TownyObject {
 	}
 
 	/**
-	 * @return the outpost
+	 * @return True if this townblock is home to the Outpost's spawn point.
 	 */
 	public boolean isOutpost() {
 
-		return outpost;
+		return hasOutpostObject() && getOutpost().isOutpostHomeBlock(this);
 	}
 
 	/**
 	 * @param outpost the outpost to set
 	 */
+	@Deprecated
 	public void setOutpost(boolean outpost) {
+	}
 
-		this.outpost = outpost;
+	public Outpost getOutpost() {
+		return outpostObject;
+	}
+
+	public UUID getOutpostUUID() {
+		return outpostObject.getUUID();
+	}
+
+	public void setOutpostObject(Outpost outpost) {
+		this.outpostObject = outpost;
+	}
+
+	public boolean hasOutpostObject() {
+		return outpostObject != null;
+	}
+
+	public void removeOutpost() {
+		this.outpostObject = null;
 	}
 
 	public TownBlockType getType() {

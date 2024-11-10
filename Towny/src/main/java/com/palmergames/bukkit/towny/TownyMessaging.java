@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -26,7 +27,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -588,7 +588,7 @@ public class TownyMessaging {
 		Translator translator = Translator.locale(player);
 		int outpostsCount = town.getAllOutpostSpawns().size();
 		int iMax = Math.min(page * 10, outpostsCount);
-		List<Location> outposts = town.getAllOutpostSpawns();
+		List<Outpost> outpostObjects = town.getOutposts();
 		
 		TextComponent[] outpostsFormatted;
 		
@@ -599,19 +599,19 @@ public class TownyMessaging {
 		}
 		
 		for (int i = (page - 1) * 10; i < iMax; i++) {
-			Location outpost = outposts.get(i);
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
-			if (tb == null)
+			Outpost outpost = outpostObjects.get(i);
+			TownBlock tb = outpost.getSpawnTownBlock();
+			if (outpost.getSpawn() == null || tb == null)
 				continue;
-			String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
+			String name = outpost.getName();
 			TextComponent dash = Component.text(" - ", NamedTextColor.DARK_GRAY);		
 			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD)
 				.clickEvent(ClickEvent.runCommand("/towny:town outpost " + (i + 1)))
 				.append(dash);
 
 			TextComponent outpostName = Component.text(name, NamedTextColor.GREEN);
-			TextComponent worldName = Component.text(Optional.ofNullable(outpost.getWorld()).map(w -> w.getName()).orElse("null"), NamedTextColor.BLUE);
-			TextComponent coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")", NamedTextColor.BLUE);
+			TextComponent worldName = Component.text(Optional.ofNullable(outpost.getSpawn().world()).map(w -> w.getName()).orElse("null"), NamedTextColor.BLUE);
+			TextComponent coords = Component.text("(" + outpost.getSpawn().blockX() + "," + outpost.getSpawn().blockZ()+ ")", NamedTextColor.BLUE);
 
 			if (!name.equalsIgnoreCase("")) {
 				line = line.append(outpostName).append(dash);

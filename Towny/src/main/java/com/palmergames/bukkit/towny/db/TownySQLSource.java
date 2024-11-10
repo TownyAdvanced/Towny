@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Outpost;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Position;
@@ -32,6 +33,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
+import com.palmergames.bukkit.towny.tasks.LegacyOutpostConversionTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
@@ -426,6 +428,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		JAIL("JAILS", "SELECT uuid FROM ", "uuid"),
 		PLOTGROUP("PLOTGROUPS", "SELECT groupID FROM ", "groupID"),
 		DISTRICT("DISTRICTS", "SELECT uuid FROM ", "uuid"),
+		OUTPOST("OUTPOSTS", "SELECT uuid FROM ", "uuid"),
 		RESIDENT("RESIDENTS", "SELECT name FROM ", "name"),
 		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", "", "uuid"),
 		TOWN("TOWNS", "SELECT name FROM ", "name"),
@@ -656,6 +659,31 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		} catch (SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "An exception occurred while loading district list", e);
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean loadOutpostList() {
+		TownyMessaging.sendDebugMsg("Loading Outpost List");
+
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT uuid FROM " + tb_prefix + "OUTPOSTS")) {
+
+			while (rs.next()) {
+				try {
+					universe.newOutpostInternal(UUID.fromString(rs.getString("uuid")));
+				} catch (IllegalArgumentException e) {
+					plugin.getLogger().log(Level.WARNING, "ID for outpost is not a valid uuid, skipped loading outpost {}", rs.getString("uuid"));
+				}
+			}
+			
+			return true;
+
+		} catch (SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "An exception occurred while loading outpost list", e);
 		}
 		
 		return false;
@@ -1078,12 +1106,15 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("outpostSpawns");
 			if (line != null) {
 				String[] outposts = line.split(";");
+				int i = 0;
 				for (String spawn : outposts) {
+					i++;
 					search = (line.contains("#")) ? "#" : ",";
 					tokens = spawn.split(search);
 					if (tokens.length >= 4)
 						try {
-							town.forceAddOutpostSpawn(Position.deserialize(tokens));
+							Position pos = Position.deserialize(tokens);
+							plugin.getScheduler().runLater(new LegacyOutpostConversionTask(plugin, pos, town), i * 100L);
 						} catch (IllegalArgumentException e) {
 							plugin.getLogger().warning("Failed to load an outpost spawn location for town " + town.getName() + ": " + e.getMessage());
 						}
@@ -1908,12 +1939,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				if (line != null) 
 					townBlock.setType(TownBlockTypeHandler.getTypeInternal(line));
 
-				boolean outpost = rs.getBoolean("outpost");
-				try {
-					townBlock.setOutpost(outpost);
-				} catch (Exception ignored) {
-				}
-
 				line = rs.getString("permissions");
 				if ((line != null) && !line.isEmpty())
 					try {
@@ -1975,6 +2000,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 							District district = universe.getDistrict(districtID);
 							if (district != null) {
 								townBlock.setDistrict(district);
+							}
+						} catch (Exception ignored) {
+						}
+
+					}
+				} catch (SQLException ignored) {
+				}
+
+				try {
+					line = rs.getString("outpostID");
+					if (line != null && !line.isEmpty()) {
+						try {
+							UUID outpostID = UUID.fromString(line.trim());
+							Outpost outpost = universe.getOutpost(outpostID);
+							if (outpost != null) {
+								outpost.addTownblock(townBlock);
+								townBlock.setOutpostObject(outpost);
+								if (outpost.getNumTownBlocks() <= 1)
+									townBlock.getTownOrNull().addOutpost(outpost);
 							}
 						} catch (Exception ignored) {
 						}
@@ -2061,6 +2105,27 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			}
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load District sql Error - " + e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean loadOutposts() {
+		TownyMessaging.sendDebugMsg("Loading outposts.");
+		
+		try (Connection connection = getConnection();
+			 Statement s = connection.createStatement();
+			 ResultSet rs = s.executeQuery("SELECT * FROM " + tb_prefix + "OUTPOSTS ")) {
+			while (rs.next()) {
+				if (!loadOutpost(rs)) {
+					plugin.getLogger().warning("Loading Error: Could not read outpost data properly.");
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL: Load Outpost sql Error - " + e.getMessage());
 			return false;
 		}
 
@@ -2204,6 +2269,54 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		return true;
 	}
 	
+	private boolean loadOutpost(ResultSet rs) {
+		String line = null;
+		String uuidString = null;
+		
+		try {
+			Outpost outpost = universe.getOutpost(UUID.fromString(rs.getString("uuid")));
+			if (outpost == null) {
+				TownyMessaging.sendErrorMsg("SQL: A outpost was not registered properly on load!");
+				return true;
+			}
+			uuidString = outpost.getUUID().toString();
+			
+			line = rs.getString("outpostName");
+			if (line != null)
+				try {
+					outpost.setName(line.trim());
+				} catch (Exception ignored) {
+				}
+			
+			line = rs.getString("spawn");
+			if (line != null) {
+				String[] tokens = line.split("#");
+				if (tokens.length >= 4)
+					try {
+						outpost.setSpawn(Position.deserialize(tokens));
+					} catch (IllegalArgumentException e) {
+						plugin.getLogger().warning("Failed to load spawn location for town " + outpost.getName() + ": " + e.getMessage());
+					}
+			}
+
+			line = rs.getString("metadata");
+			if (line != null) {
+				MetadataLoader.getInstance().deserializeMetadata(outpost, line);
+			}
+		} catch (SQLException e) {
+			plugin.getLogger().log(Level.WARNING, "Loading Error: Exception while reading outpost: " + uuidString
+			+ " at line: " + line + " in the sql database", e);
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean loadOutpost(Outpost outpost) {
+		// Unused in SQL.
+		return true;
+	}
+
 	@Override
 	public boolean loadJails() {
 		TownyMessaging.sendDebugMsg("Loading Jails");
@@ -2417,13 +2530,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			
 			final Position spawnPos = town.spawnPosition();
 			twn_hm.put("spawn", spawnPos != null ? String.join("#", spawnPos.serialize()) : "");
-			// Outpost Spawns
-			StringBuilder outpostArray = new StringBuilder();
-			if (town.hasOutpostSpawn())
-				for (Position spawn : town.getOutpostSpawns()) {
-					outpostArray.append(String.join("#", spawn.serialize())).append(";");
-				}
-			twn_hm.put("outpostSpawns", outpostArray.toString());
+
 			if (town.hasValidUUID()) {
 				twn_hm.put("uuid", town.getUUID());
 			} else {
@@ -2489,6 +2596,25 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		} catch (Exception e) {
 			plugin.getLogger().log(Level.WARNING, "SQL: Save Districts unknown error", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean saveOutpost(Outpost outpost) {
+		TownyMessaging.sendDebugMsg("Saving outpost " + outpost.getName());
+		try {
+			HashMap<String, Object> outpost_hm = new HashMap<>();
+			outpost_hm.put("uuid", outpost.getUUID().toString());
+			outpost_hm.put("outpostName", outpost.getName());
+			final Position spawnPos = outpost.getSpawn();
+			outpost_hm.put("spawn", spawnPos != null ? String.join("#", spawnPos.serialize()) : "");
+			outpost_hm.put("metadata", serializeMetadata(outpost));
+
+			updateDB("OUTPOSTS", outpost_hm, Collections.singletonList("uuid"));
+
+		} catch (Exception e) {
+			plugin.getLogger().log(Level.WARNING, "SQL: Save Outpost unknown error", e);
 		}
 		return false;
 	}
@@ -2682,7 +2808,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			tb_hm.put("town", townBlock.getTown().getName());
 			tb_hm.put("resident", (townBlock.hasResident()) ? townBlock.getResidentOrNull().getName() : "");
 			tb_hm.put("typeName", townBlock.getTypeName());
-			tb_hm.put("outpost", townBlock.isOutpost());
 			tb_hm.put("permissions",
 					(townBlock.isChanged()) ? townBlock.getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("changed", townBlock.isChanged());
@@ -2697,6 +2822,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				tb_hm.put("districtID", townBlock.getDistrict().getUUID().toString());
 			else
 				tb_hm.put("districtID", "");
+			if (townBlock.hasOutpostObject())
+				tb_hm.put("outpostID", townBlock.getOutpostUUID().toString());
+			else
+				tb_hm.put("outpostID", "");
 			if (townBlock.hasMeta())
 				tb_hm.put("metadata", serializeMetadata(townBlock));
 			else
@@ -2816,6 +2945,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		HashMap<String, Object> jail_hm = new HashMap<>();
 		jail_hm.put("uuid", jail.getUUID());
 		DeleteDB("JAILS", jail_hm);
+	}
+
+	@Override
+	public void deleteOutpost(Outpost outpost) {
+		HashMap<String, Object> outpost_hm = new HashMap<>();
+		outpost_hm.put("uuid", outpost.getUUID());
+		DeleteDB("OUTPOSTS", outpost_hm);
 	}
 
 	@Override
