@@ -16,6 +16,29 @@ help_6: 'Nemzeti parancsok.'
 help_7: 'Területi parancsok.'
 help_8: 'Towny parancsok.'
 help_9: 'Towny Admin parancsok.'
-towny_help_0: "Általános segítség a Towny kezeléséhez."
+towny_help_0: "Általános segítség a Towny kezeléséhez"
 towny_help_1: "Megjeleníti a közeli várostömbök térképét"
-towny_help_2: "Megjeleníti a gazd"
+towny_help_2: "Megjeleníti az árakat az Economyban használva"
+towny_help_3: "Megjeleníti a toplistát"
+towny_help_4: "Megjeleníti az időt a következő napig"
+towny_help_5: "Megjeleníti a statisztikát"
+towny_help_6: "Megjeleníti a Towny verziószámát"
+towny_top_help_0: "A lakosok listázása a megadott parancs alapján."
+towny_top_help_1: "Listázd a legtöbb területtel rendelkezőket a megadott parancs alapján."
+towny_top_help_2: "Listázd a leggazdagabbakat a megadott parancs alapján."
+town_help_1: 'A városod státusza'
+town_help_2: '[polgármester]'
+town_help_3: 'Kiválasztott város státusza'
+town_help_4: 'Gyorselérés a helyszíned városának státuszához.'
+town_help_5: 'Teleportálás a város spawn pontjára.'
+town_help_6: 'Új város, úgy, hogy Te vagy a polgármester.'
+town_help_7: 'Új város megadott polgármesterrel.'
+town_help_8: 'Parancsok listázása polgármesterek számára.'
+town_help_9: 'Ma van a nap!'
+town_help_10: 'Minden online lakos listázása a városban'
+town_help_13: "A város lakosainak listája."
+town_help_14: "A város rangjainak listája."
+town_help_15: "A városban lévő törvényszegők listája."
+town_help_16: "A városban lévő telek csoportok listája."
+town_help_17: "A városban lévő telektípusok listája."
+town_help_18: "Üzenet küldése a város tagjainak."
