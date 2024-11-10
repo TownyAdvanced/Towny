@@ -39,7 +39,7 @@ public class MapHUD {
 	private static final String TEAM_TOWN = "townTeam";
 	private static final String TEAM_OWNER = "ownerTeam";
 	private static final String TEAM_DISTRICT = "districtTeam";
-	private static final String TEAM_OUTPOST_NAME = "outpostName";
+	private static final String TEAM_OUTPOST_NAME = "outpostNameTeam";
 	private static final String TEAM_PLOTNAME = "plotnameTeam";
 
 	private static final int mapLineWidth = 19, mapLineHeight = 10;
