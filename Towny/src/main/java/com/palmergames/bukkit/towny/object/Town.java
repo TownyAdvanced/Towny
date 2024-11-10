@@ -690,12 +690,16 @@ public class Town extends Government implements TownBlockOwner {
 			return;
 
 		Nation townNation = getNationOrNull();
-		if (townNation == null || !townNation.getCapital().hasHomeBlock()
-			|| !ProximityUtil.isTownTooFarFromNation(this, townNation.getCapital(), townNation.getTowns()))
+		if (townNation == null || !townNation.getCapital().hasHomeBlock())
 			return;
 
-		TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
-		removeNation();
+		List<Town> outOfRangeTowns = ProximityUtil.gatherOutOfRangeTowns(townNation);
+		if (outOfRangeTowns.size() > 0) {
+			if (outOfRangeTowns.contains(this))
+				TownyMessaging.sendNationMessagePrefixed(townNation, Translatable.of("msg_nation_town_moved_their_homeblock_too_far", getName()));
+
+			ProximityUtil.removeOutOfRangeTowns(townNation);
+		}
 	}
 	
 	/**
