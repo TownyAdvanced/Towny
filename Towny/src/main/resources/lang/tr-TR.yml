@@ -287,9 +287,6 @@ msg_buy: '&b%s için %d %s satın aldı.'
 msg_buy_resident_plot: '&b%s, %s için %s arsasını satın aldı!'
 msg_couldnt_pay_taxes: '&b%s vergi ödeyemedi ve %s tarafından atıldı.'
 msg_couldnt_pay_plot_taxes: '&b%s vergi ödeyemedi ve bir arsasını kaybetti.'
-msg_payed_town_tax: '&bÖdenen şehir vergisi '
-msg_payed_plot_cost: '&b%s içindeki %s parseller için %s ödendi'
-msg_payed_resident_tax: '&bÖdenen ikamet vergisi '
 msg_bankrupt_town: ' kasaba olarak kalmayı göze alamazdım.'
 msg_bankrupt_nation: ' bir ulus olarak kalmayı göze alamazdım.'
 msg_nation_not_peaceful: '&bUlus, barışçıl devleti karşılayamaz.'
@@ -1650,9 +1647,9 @@ msg_perm_hud_resident: 'sakin'
 msg_perm_hud_nation: 'ulus'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'yabancı'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Arsa: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: 'Arsa grubu: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'Satışta: '

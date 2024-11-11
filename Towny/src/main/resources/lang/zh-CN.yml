@@ -428,9 +428,6 @@ msg_couldnt_pay_taxes: '&b%s 因为交不起税而被踢出了 %s.'
 msg_couldnt_pay_plot_taxes: '&b%s 交不起税而失去了他的土地所有权.'
 msg_you_couldnt_pay_plot_tax: '&b你无法支付 %s 的地块税所以失去了对%s地块的所有权。'
 msg_you_couldnt_pay_town_tax: '&b你无法支付 %s 的市政税，所以已经从 %s 中移除。'
-msg_payed_town_tax: '&b缴纳城镇税: '
-msg_payed_plot_cost: '&b缴纳 %s 作为 %s 在 %s 的土地税'
-msg_payed_resident_tax: '&b缴纳个人所得税: '
 msg_bankrupt_town: ' 银行资金不足以维持城镇的日常开销.'
 msg_bankrupt_nation: ' 银行资金不足以维持国家的日常开销.'
 msg_nation_not_peaceful: '&b国家的和平已被打破.'
@@ -1828,9 +1825,9 @@ msg_perm_hud_resident: '居民'
 msg_perm_hud_nation: '国家'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: '外人'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: '地皮: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: '区块组: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: '出售中: '

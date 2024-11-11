@@ -146,9 +146,6 @@ msg_buy: '&bKaufte %d %s für %s.'
 msg_buy_resident_plot: '&b%s kaufte %s'' Grundstück für %s!'
 msg_couldnt_pay_taxes: '&b%s konnte die Steuern nicht bezahlen und wurde deshalb aus %s rausgeschmissen.'
 msg_couldnt_pay_plot_taxes: '&b%s konnte die Steuern für die Plots nicht bezahlen und verliert den Anspruch auf ein Grundstück.'
-msg_payed_town_tax: '&bSteuern wurden bezahlt an '
-msg_payed_plot_cost: '&b %s bezahlte %s für Grundstücke in %s'
-msg_payed_resident_tax: '&b bezahlte die Bürgersteuer für '
 msg_bankrupt_town: ' konnte es sich nicht mehr leisten, weiterhin eine Stadt zu sein.'
 msg_bankrupt_nation: ' konnte es sich nicht mehr leisten, weiterhin eine Nation zu sein.'
 msg_nation_not_peaceful: 'Die &bNation kann es sich nicht mehr leisten, Neutal zu sein.'
@@ -1506,7 +1503,7 @@ msg_perm_hud_resident: 'bürger'
 msg_perm_hud_nation: 'nation'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'außenseiter'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Grundstück: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

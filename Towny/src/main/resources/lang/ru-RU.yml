@@ -287,9 +287,6 @@ msg_buy: '&bКуплено %d %s за %s.'
 msg_buy_resident_plot: '&b%s купил участок %s за %s!'
 msg_couldnt_pay_taxes: '&b%s не смог оплатить налоги, и был изгнан из города %s.'
 msg_couldnt_pay_plot_taxes: '&b%s не смог заплатить налоги и потерял свой участок.'
-msg_payed_town_tax: '&bЗаплатил налог городу '
-msg_payed_plot_cost: '&bЗаплатил %s за %s участков в %s'
-msg_payed_resident_tax: '&bЗаплатил налог в '
 msg_bankrupt_town: ' не смог себе позволить остаться городом.'
 msg_bankrupt_nation: ' больше не может быть нацией, так как не имеет денег на содержание.'
 msg_nation_not_peaceful: '&bНация не может себе позволить быть мирной.'
@@ -1661,7 +1658,7 @@ msg_perm_hud_resident: 'житель'
 msg_perm_hud_nation: 'нация'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'чужак'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Участок: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

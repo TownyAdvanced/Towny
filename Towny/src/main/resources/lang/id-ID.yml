@@ -84,9 +84,6 @@ msg_buy: '&bMembeli %d %s seharga %s.'
 msg_buy_resident_plot: '&b%s membeli %s lahan seharga %s!'
 msg_couldnt_pay_taxes: '&b%s tidak mampu membayar pajak, dan dikeluarkan dari %s.'
 msg_couldnt_pay_plot_taxes: '&b%s tidak mampu membayar pajak, dan kepemilikan lahan di hapus.'
-msg_payed_town_tax: '&bMembayar pajak kota '
-msg_payed_plot_cost: '&bTelah membayar %s seharga %s di lahan %s'
-msg_payed_resident_tax: '&bMembayar pajak penduduk '
 msg_bankrupt_town: ' Kota ini sudah bangkrut.'
 msg_bankrupt_nation: ' Negara ini sudah bangkrut.'
 msg_nation_not_peaceful: '&bNegara tidak mampu membuat keadaan yang damai.'
@@ -1428,7 +1425,7 @@ msg_perm_hud_resident: 'penduduk'
 msg_perm_hud_nation: 'negara'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'orang luar'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Lahan: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

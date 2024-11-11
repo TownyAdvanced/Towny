@@ -68,9 +68,36 @@ town_list_help_3: "Elenca le città usando il saldo bancario, con la pagina spec
 town_list_help_4: "Elenca le città in ordine alfabetico, con la pagina specificata."
 town_list_help_5: "Elenca le città per terra reclamata, con la pagina specificata."
 town_list_help_6: "Elenca le città per numero di persone online, con pagina specifica."
+town_set_help_0: "Imposta la bacheca della tua città."
+town_set_help_1: "Imposta l'homeblock della tua città nel luogo in cui sei."
+town_set_help_2: "Imposta il punto di rigenerazione nel tuo homeblock o un punto di rigenerazione di un avamposto quando sei in un avamposto."
+town_set_help_3: "Consulta /town set perm ? per aiuto."
+town_set_help_4: "Imposta l'importo di tasse della tua città."
+town_set_help_5: "Imposta gli importi speciali sulle tasse per plot."
+town_set_help_6: "Imposta i prezzi predefiniti per comprare plot."
 town_set_help_7: "Imposta il costo per usare /t spawn."
 town_set_help_8: "Imposta il nome della tua città."
+town_set_help_9: "Imposta il tag della tua città."
+town_set_help_10: "Imposta il titolo o il soprannome del tuo residente."
+town_set_help_11: "Imposta l'importo massimo di soldi che una tassa percentuale può prendere da un residente."
 town_jail_help_0: "Elenca le prigioni della città."
+town_jail_help_1: "Imprigiona un residente nella prigione primaria."
+town_jail_help_2: "Imprigiona un residente nella prigione primaria, per determinate ore."
+town_jail_help_3: "Imprigiona un residente nella prigione primaria, per determinate ore, nella prigione specificata."
+town_jail_help_4: "Imprigiona un residente nella prigione primaria, per determinate ore, nella cella e prigione specificate."
+town_jail_help_5: "Imprigiona un residente nella prigione primaria, per determinate ore, dato il costo della cauzione."
+town_jail_help_6: "Imprigiona un residente nella prigione primaria, per determinate ore, dato il costo della cauzione, nella prigione specificata."
+town_jail_help_7: "Imprigiona un residente nella prigione primaria, per determinate ore, dato il costo della cauzione, nella cella e prigione specificate."
+town_jail_help_8: "Scagiona il residente."
+town_purge_help: "Epura i residenti che non hanno effettuato l'accesso per la quantità data di giorni."
+town_trust_help_0: "Aggiunge un residente come Trustato nella città."
+town_trust_help_1: "Rimuove un residente come Trustato nella città."
+town_trust_help_2: "Elenca i residenti Trustati di una città."
+town_towntrust_help_0: "Aggiunge una città come Trustata nella città."
+town_towntrust_help_1: "Rimuove una città come Trustata nella città."
+town_towntrust_help_2: "Elenca i residenti Trustati di una città."
+town_buy_help: "Acquista blocchi aggiuntivi per aumentare il limite di claim della città."
+town_cede_help: "Permette al plot in cui sei di essere preso dalla città specificata."
 mayor_help_3: 'Claima una zona non confinante con la città'
 mayor_help_4: 'Claima intorno a te in un raggio X'
 mayor_help_5: 'Claima per il raggio massimo'
@@ -90,6 +117,29 @@ nation_help_11: "Elenca le città della nazione."
 nation_help_12: "Elenca le nazioni alleate della nazione."
 nation_help_13: "Elenca le nazioni nemiche della nazione."
 nation_help_14: "Utilizzato per unirsi alle nazioni aperte."
+nation_help_15: "Deposita soldi nella banca della nazione."
+nation_help_16: "Utilizzato per eliminare la tua nazione."
+nation_help_17: "Utilizzato per aggiungere o rimuovere i rank dai residenti."
+nation_help_18: "Consulta /n rank ? per aiuto."
+nation_list_help_0: "Visualizza la pagina specificata."
+nation_list_help_1: "Elenca le nazioni per numero di residenti, con la pagina specificata."
+nation_list_help_2: "Elenca le nazioni per numero di città, con la pagina specificata."
+nation_list_help_3: "Elenca le nazioni aperte, con la pagina specificata."
+nation_list_help_4: "Elenca le nazioni per bilancio, con la pagina specificata."
+nation_list_help_5: "Elenca le città in ordine alfabetico, con la pagina specificata."
+nation_list_help_6: "Elenca le città per terra claimata, con la pagina specificata."
+nation_list_help_7: "Elenca le città per numero di persone online, con pagina specifica."
+nation_set_help_0: "Cambia il leader della nazione."
+nation_set_help_1: "Cambia la capitale della nazione."
+nation_set_help_2: "Imposta l'importo della tassa che le città pagheranno."
+nation_set_help_3: "Imposta l'importo della tassa che le città conquistate pagheranno."
+nation_set_help_4: "Imposta il nome della nazione."
+nation_set_help_5: "Imposta il titolo o il soprannome di uno dei tuoi residenti."
+nation_set_help_6: "Imposta il tag della nazione."
+nation_set_help_7: "Imposta il messaggio della bacheca della nazione."
+nation_set_help_8: "Imposta il punto di generazione della nazione."
+nation_set_help_9: "Imposta il costo per usare /n spawn."
+nation_set_help_10: "Imposta il colore della mappa usato nei plugin di mappatura."
 king_help_1: 'Guida del Re della nazione'
 king_help_2: 'Scegli le tue alleanze.'
 king_help_3: 'Scegli i tuoi nemici.'
@@ -122,6 +172,9 @@ world_help_2: '[mondo]'
 world_help_3: 'Stato del mondo specificato'
 world_help_4: 'Elenca tutti i mondi'
 world_help_5: 'Rigenera questo chunk'
+world_toggle_help_7: "Attiva/disattiva le impostazioni di generazione dei vari mob nel mondo."
+world_toggle_help_8: "Attiva/disattiva la funzione revert-on-unclaim in questo mondo."
+world_toggle_help_9: "Attiva/disattiva le funzioni di explosions-are-reverted in questo mondo."
 townyadmin_help_1: 'Unclaima questo lotto di città'
 townyadmin_help_2: 'Tenta di unclaimare lotti intorno a te.'
 admin_panel_2: 'ricarica il Towny'
@@ -139,9 +192,6 @@ msg_buy: '&bComprato %d %s per %s.'
 msg_buy_resident_plot: '&b%s ha comprato il lotto di %s per %s!'
 msg_couldnt_pay_taxes: '&b%s non poteva pagare le tasse ed è stato cacciato da %s.'
 msg_couldnt_pay_plot_taxes: '&b%s non poteva pagare le tasse e ha perso la proprietà di un lotto.'
-msg_payed_town_tax: '&bSono state pagate le tasse della città di '
-msg_payed_plot_cost: '&bPagato %s per %s lotti in %s'
-msg_payed_resident_tax: '&bSono state pagate le tasse da residente di '
 msg_bankrupt_town: ' non poteva permettersi di rimanere una città.'
 msg_bankrupt_nation: ' non poteva permettersi di rimanere una nazione.'
 msg_nation_not_peaceful: '&bLa nazione non poteva permettersi il suo stato pacifico.'
@@ -1500,7 +1550,7 @@ msg_perm_hud_resident: 'residente'
 msg_perm_hud_nation: 'nazione'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'esterno'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Lotti: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

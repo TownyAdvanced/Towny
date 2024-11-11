@@ -402,9 +402,6 @@ msg_couldnt_pay_taxes: '&b%s no pudo pagar los impuestos y fue echado de %s.'
 msg_couldnt_pay_plot_taxes: '&b%s no pudo pagar los impuestos y perdió una parcela.'
 msg_you_couldnt_pay_plot_tax: '&bNo pudiste pagar el impuesto de parcela de %s y pediste la propiedad de la parcela en %s.'
 msg_you_couldnt_pay_town_tax: '&bNo pudiste pagar el impuesto de la ciudad de %s y se te ha eliminado de %s.'
-msg_payed_town_tax: '&bPagó los impuestos de '
-msg_payed_plot_cost: '&bPago %s por %s parcelas en %s'
-msg_payed_resident_tax: '&bImpuestos de habitante de '
 msg_bankrupt_town: ' no podía permitirse el lujo de seguir siendo una ciudad.'
 msg_bankrupt_nation: ' no podía permitirse el lujo de seguir siendo un país.'
 msg_nation_not_peaceful: '&bEl país no puede pagar su por su estado pacífico.'
@@ -1803,9 +1800,9 @@ msg_perm_hud_resident: 'habitante'
 msg_perm_hud_nation: 'nación'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'forastero'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Parcela: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: 'Grupo de parcelas: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'Se Vende: '
