@@ -10131,3 +10131,4 @@ v0.92.0.11:
   - Move plotname and district information from /plot perm hud, to /towny map hud.
   - Fix the proximity-to-nation test not removing too-far-away towns in every situation.
     - Closes #7668. 
+  - Add message to the plot forsale notification, shown when a player has no claimed townblocks, advising them how to claim a plot. 

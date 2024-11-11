@@ -78,6 +78,7 @@ public class ChunkNotification {
 	TownBlockType fromPlotType = null, toPlotType = null;
 	PlotGroup fromPlotGroup = null, toPlotGroup = null;
 	District fromDistrict = null, toDistrict = null;
+	Resident viewerResident = null;
 
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
 
@@ -130,6 +131,7 @@ public class ChunkNotification {
 
 		if (notificationFormat.length() == 0)
 			return null;
+		viewerResident = resident;
 		List<String> outputContent = getNotificationContent(resident);
 		if (outputContent.size() == 0)
 			return null;
@@ -312,15 +314,22 @@ public class ChunkNotification {
 
 		// Were heading to a plot group do some things differently
 		if (toForSale && toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
-			return String.format(forSaleNotificationFormat, getOwner(), getCost(toTownBlock.getPlotObjectGroup().getPrice()));
+			return getCostNotification(toTownBlock.getPlotObjectGroup().getPrice());
 		
 		if (toForSale && !toPlotGroupBlock)
-			return String.format(forSaleNotificationFormat, getOwner(), getCost(toTownBlock.getPlotPrice()));
+			return getCostNotification(toTownBlock.getPlotPrice());
 		
 		if (!toForSale && fromForSale && !toWild)
 			return notForSaleNotificationFormat;
 		
 		return null;
+	}
+
+	private String getCostNotification(double price) {
+		String forSaleSlug = String.format(forSaleNotificationFormat, getOwner(), getCost(price));
+		if (viewerResident.getTownBlocks().isEmpty())
+			forSaleSlug += Translatable.of("chunknotification_plot_claim_help_message").forLocale(viewerResident);
+		return forSaleSlug;
 	}
 
 	private String getOwner() {
