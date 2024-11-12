@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -241,9 +242,27 @@ public class ProximityUtil {
 			throw new TownyException(Translatable.of("msg_err_nation_homeblock_in_another_world"));
 		}
 
-		if (isTownTooFarFromNation(town, capital, nation.getTowns())) {
+		List<Town> townsClosestToFarthest = sortTownsClosestToFarthest(nation);
+		if (isTownTooFarFromNation(town, capital, townsClosestToFarthest)) {
 			throw new TownyException(Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 		}
+	}
+
+	private static List<Town> sortTownsClosestToFarthest(Nation nation) {
+		List<Town> sortedTowns = nation.getTowns().stream()
+				.sorted(Comparator.comparingInt(t-> getDistanceFromCapital(t, nation)))
+				.collect(Collectors.toList());
+		return sortedTowns; 
+	}
+
+	private static int getDistanceFromCapital(Town town, Nation nation) {
+		TownBlock capitalHomeblock = nation.getCapital().getHomeBlockOrNull();
+		TownBlock townHomeblock = town.getHomeBlockOrNull();
+		if (capitalHomeblock == null || townHomeblock == null)
+			return Integer.MAX_VALUE;
+		if (!capitalHomeblock.getWorld().equals(townHomeblock.getWorld()))
+			return Integer.MAX_VALUE;
+		return (int) MathUtil.distance(capitalHomeblock.getCoord(), townHomeblock.getCoord());
 	}
 
 	public static List<Town> gatherOutOfRangeTowns(Nation nation) {
@@ -261,7 +280,7 @@ public class ProximityUtil {
 			return removedTowns;
 
 		final WorldCoord capitalCoord = capitalHomeBlock.getWorldCoord();
-		List<Town> townsToCheck = nation.getTowns();
+		List<Town> townsToCheck = sortTownsClosestToFarthest(nation);
 		List<Town> localTownsToKeep = new ArrayList<>();
 		townsToCheck.remove(capital);
 		localTownsToKeep.add(capital);
@@ -294,7 +313,7 @@ public class ProximityUtil {
 				continue;
 			// Check that the town missing is not missing a homeblock, and that the
 			// homeblocks are in the same world, and the distance between.
-			if (isTownCloseEnoughToNation(town, capital, townsToCheck,  validTowns))
+			if (isTownCloseEnoughToNation(town, capital, townsToCheck, validTowns))
 				allowedTowns.add(town);
 		}		
 		return allowedTowns;
@@ -319,9 +338,11 @@ public class ProximityUtil {
 			return false;
 
 		// Try to find at least one town in the nation which is close enough to this town.
-		return townsToCheck.stream()
-				.filter(t -> !t.equals(town) && !t.isCapital() && validTowns.contains(t))
-				.anyMatch(t -> closeEnoughToTown(town, t, maxDistanceFromOtherTowns));
+		for (Town validTown : validTowns) {
+			if (closeEnoughToTown(validTown, town, maxDistanceFromOtherTowns))
+				return true;
+		}
+		return false;
 	}
 
 	public static void removeOutOfRangeTowns(Nation nation) {

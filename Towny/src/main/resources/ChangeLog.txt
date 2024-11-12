@@ -10133,3 +10133,5 @@ v0.92.0.11:
     - Closes #7668. 
   - Add message to the plot forsale notification, shown when a player has no claimed townblocks, advising them how to claim a plot. 
   - New Language: Hungarian.
+0.100.4.13:
+  - Fix another issue with the proximity-to-nation test.
