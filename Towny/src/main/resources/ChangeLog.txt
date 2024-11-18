@@ -10137,3 +10137,4 @@ v0.92.0.11:
   - Fix another issue with the proximity-to-nation test.
 0.100.4.14:
   - Fix a null economy not returning false in the TownyEconomyHandler.isActive() test.
+  - Fix explosion regeneration not able to handle sign text.

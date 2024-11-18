@@ -9,16 +9,20 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 import com.palmergames.bukkit.towny.tasks.ProtectionRegenTask;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.ItemLists;
 
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.Bisected.Half;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.block.sign.Side;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -306,15 +310,15 @@ public class TownyRegenAPI {
 			else if (event instanceof BlockExplodeEvent)
 				((BlockExplodeEvent) event).setYield(0);
 
-			// Set extra-special blocks to air so we're not duping items.
-			handlePeskyBlocks(block);
+			// Set extra-special blocks to air so we're not duping items, and signs.
+			handlePeskyBlocks(block, (world.getPlotManagementWildRevertDelay() + count++) * 20);
 
 			return true;
 		}
 		return false;
 	}
 
-	private static void handlePeskyBlocks(Block block) {
+	private static void handlePeskyBlocks(Block block, long delay) {
 		if (ItemLists.EXPLODABLE_ATTACHABLES.contains(block.getType())) {
 			if (!(block.getBlockData() instanceof Door door)) 
 				// Not a Door, set the pesky block to AIR so an item doesn't drop.
@@ -329,6 +333,63 @@ public class TownyRegenAPI {
 				block.setType(Material.AIR);
 			}
 		}
+
+		if (ItemLists.SIGNS.contains(block.getType())) {
+			regenerateSign(block, delay);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private static void regenerateSign(Block block, long delay) {
+		Sign sign = (Sign) block.getState();
+		// MC 1.20 added SignSide.
+		if (MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20)) {
+			String[] lines = sign.getLines();
+			boolean glowing = sign.isGlowingText();
+			DyeColor color = sign.getColor();
+
+			Towny.getPlugin().getScheduler().runLater(block.getLocation(), () -> {
+				int lineNum = 0;
+				for (String line : lines) {
+					sign.setLine(lineNum, line);
+					lineNum++;
+				}
+				sign.setGlowingText(glowing);
+				sign.setColor(color);
+				sign.update(true);
+			}, delay);
+
+			return;
+		}
+
+		// Non-Legacy Sign.
+		String[] frontLines = sign.getSide(Side.FRONT).getLines();
+		String[] backLines = sign.getSide(Side.BACK).getLines();
+		boolean waxed = sign.isWaxed();
+		boolean frontGlowing = sign.getSide(Side.FRONT).isGlowingText();
+		boolean backGlowing = sign.getSide(Side.BACK).isGlowingText();
+		DyeColor frontColor = sign.getSide(Side.FRONT).getColor();
+		DyeColor backColor = sign.getSide(Side.BACK).getColor();
+
+		Towny.getPlugin().getScheduler().runLater(block.getLocation(), () -> {
+			int lineNum = 0;
+			for (String line : frontLines) {
+				sign.getSide(Side.FRONT).setLine(lineNum, line);
+				lineNum++;
+			}
+			lineNum = 0;
+			for (String line : backLines) {
+				sign.getSide(Side.BACK).setLine(lineNum, line);
+				lineNum++;
+			}
+			sign.setWaxed(waxed);
+			sign.getSide(Side.FRONT).setGlowingText(frontGlowing);
+			sign.getSide(Side.BACK).setGlowingText(backGlowing);
+			sign.getSide(Side.FRONT).setColor(frontColor);
+			sign.getSide(Side.BACK).setColor(backColor);
+
+			sign.update(true);
+		}, delay);
 	}
 
 	/**
