@@ -83,6 +83,10 @@ town_set_help_10: "Legen Sie den Titel oder den Nachnamen Ihres Bewohners fest."
 town_set_help_11: "Legen Sie den maximalen Geldbetrag fest, den eine prozentuale Steuer von einem Residenten abnehmen kann."
 town_jail_help_0: "Liste der Gefängnisse der Stadt."
 town_jail_help_1: "Inhaftiere einen Bewohner im Hauptgefängnis."
+town_jail_help_2: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, ins Primärgefängnis."
+town_jail_help_3: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis."
+town_jail_help_4: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis und Zelle."
+town_jail_help_8: "Entlasse einen Bewohner aus dem Gefängnis."
 mayor_help_3: 'Anspruchsbereich grenzt nicht an die Stadt.'
 mayor_help_4: 'Beanspruche Land um dich herum in einem Radius von X'
 mayor_help_5: 'Beanspruche Land mit dem maximalen Radius'
