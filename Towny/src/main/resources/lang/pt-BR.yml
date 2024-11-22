@@ -1442,6 +1442,7 @@ msg_safe_mode_base: '[Error] towny está bloqueado no Modo Seguro devido a um er
 msg_safe_mode_player: 'Diga a um administrador para verificar o console do servidor.'
 msg_safe_mode_admin: 'Verifique o console do servidor para mais informações.'
 msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Você só pode reivindicar postos avançados no seu mundo homeblock.'
+msg_err_not_close_enough_to_your_town_nearest_plot: 'Não foi possível reivindicar o posto avançado, você é um bloco de %s no seu reivindicação mais próximo. Distância máxima permitida: %s townblocks.'
 plotgroup_plu: 'Grupos de terrenos'
 map_hover_plot_group: 'Grupo de terreno: '
 map_hover_plot_group_size: ' Tamanho: '
