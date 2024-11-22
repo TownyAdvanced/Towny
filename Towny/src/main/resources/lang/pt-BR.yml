@@ -1426,8 +1426,22 @@ msg_town_not_peaceful: '&bA cidade não tinha dinheiro suficiente para manter-se
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
 msg_town_cant_peaceful: '&bA cidade não conseguiu se tornar uma cidade pacífica. Você deve poder pagar %s diariamente.'
+msg_town_paid_for_neutral_status: '&bSua cidade pagou %s para manter seu status de pacífica.'
+msg_nation_paid_for_neutral_status: '&bSua nação pagou %s para manter seu status de pacífica.'
+your_town_has_been_invited_to_join_nation: 'Sua cidade foi convidada a participar da nação: %s'
+#Added in 0.109
+msg_err_no_one_to_purge: '&bNão há membros inativos para limpar.'
+msg_purging_will_remove_the_following_residents: '&bPor favor, confirme que você deseja limpar os seguintes residentes: %s'
+msg_purge_complete_x_removed: '&bLimpa concluída, %s residentes removidos.'
+msg_err_days_must_be_greater_than_0: 'Dias devem ser maiores que zero.'
+msg_err_outlawed_players_no_teleport: '&4Você está banido da cidade em que está atualmente e não pode se teletransportar!'
+msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Você não pode usar esse comando enquanto estiver em uma cidade em que esteja banido.'
 #Added in 0.110
 msg_safe_mode: "[Error] Bloqueado no modo de segurança!"
+msg_safe_mode_base: '[Error] towny está bloqueado no Modo Seguro devido a um erro! '
+msg_safe_mode_player: 'Diga a um administrador para verificar o console do servidor.'
+msg_safe_mode_admin: 'Verifique o console do servidor para mais informações.'
+msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Você só pode reivindicar postos avançados no seu mundo homeblock.'
 plotgroup_plu: 'Grupos de terrenos'
 map_hover_plot_group: 'Grupo de terreno: '
 map_hover_plot_group_size: ' Tamanho: '
