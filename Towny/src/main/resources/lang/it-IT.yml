@@ -140,6 +140,9 @@ nation_set_help_7: "Imposta il messaggio della bacheca della nazione."
 nation_set_help_8: "Imposta il punto di generazione della nazione."
 nation_set_help_9: "Imposta il costo per usare /n spawn."
 nation_set_help_10: "Imposta il colore della mappa usato nei plugin di mappatura."
+nation_toggle_help_0: "Attiva/Disattiva lo stato pacifico della nazione."
+nation_toggle_help_1: "Attiva/Disattiva lo stato pubblico, consentendo ai non residenti di utilizzare /n spawn."
+nation_toggle_help_2: "Attiva/Disattiva lo stato aperto, permettendo alle città di unirsi senza un invito."
 king_help_1: 'Guida del Re della nazione'
 king_help_2: 'Scegli le tue alleanze.'
 king_help_3: 'Scegli i tuoi nemici.'
