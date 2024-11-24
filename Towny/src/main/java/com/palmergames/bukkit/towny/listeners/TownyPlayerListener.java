@@ -774,81 +774,81 @@ public class TownyPlayerListener implements Listener {
 		// prevent them teleporting, leaving them at spawn even after Safe Mode is cleaned up.
 		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
-		
+
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
-		
+
 		Player player = event.getPlayer();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
-		boolean isAdmin = !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && resident != null && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
-		// Cancel teleport if Jailed by Towny and not an admin.
-		if (resident != null && resident.isJailed() && !isAdmin) {
-			if ((event.getCause() == TeleportCause.COMMAND)) {
+		if (resident == null)
+			return;
+
+		boolean isAdmin = !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
+		if (isAdmin) {
+			// Admins don't get restricted further but they do need to fire the PlayerChangePlotEvent.
+			onPlayerMove(event);
+			return;
+		}
+
+		// Cancel teleport if Jailed by Towny.
+		if (resident.isJailed()) {
+			if (event.getCause() == TeleportCause.COMMAND) {
 				TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
 				return;
 			}
-			if (event.getCause() == TeleportCause.PLUGIN)
-				return;
-			if ((event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT) && !TownySettings.JailAllowsTeleportItems()) {
+			if (!TownySettings.JailAllowsTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT)) {
 				TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
+				return;
 			}
 		}
-		
-		// Cancel teleport if resident is outlawed in Town and not an admin.
-		if (resident != null && !TownySettings.canOutlawsTeleportOutOfTowns() && !isAdmin) {
+
+		// Cancel teleport if resident is outlawed in Town.
+		if (!TownySettings.canOutlawsTeleportOutOfTowns()) {
 			TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getFrom());
 			if (tb != null && tb.hasTown()) {
 				Town town = tb.getTownOrNull();
-				
 				if (town != null && town.hasOutlaw(resident)) {
-					if ((event.getCause() == TeleportCause.COMMAND)) {
+					if (event.getCause() == TeleportCause.COMMAND) {
 						TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_outlawed_players_no_teleport"));
 						event.setCancelled(true);
 						return;
 					}
-					if (event.getCause() == TeleportCause.PLUGIN)
-						return;
 					if (!TownySettings.canOutlawsUseTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT)) {
 						TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_outlawed_players_no_teleport"));
 						event.setCancelled(true);
+						return;
 					}
 				}
 			}
 		}
 
-		/*
-		 * Test to see if CHORUS_FRUIT is in the item_use list.
-		 */
-		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo()) && !isAdmin) {
+		// Test to see if CHORUS_FRUIT is in the item_use list.
+		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT)) {
 				event.setCancelled(true);
 				return;
 			}
-		}	
-			
-		/*
-		 * Test to see if Ender pearls are disabled.
-		 */		
-		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL, event.getTo()) && !isAdmin) {
+		}
+
+		// Test to see if Ender pearls is in the item_use list.
+		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL, event.getTo())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.ENDER_PEARL)) {
 				event.setCancelled(true);
 				return;
 			}
 		}
-		
-		/*
-		 * Remove spawn protection if the player is teleporting since spawning.
-		 */
-		if (resident != null && resident.hasRespawnProtection()) {
+
+		// Remove spawn protection if the player is teleporting since spawning.
+		if (resident.hasRespawnProtection())
 			resident.removeRespawnProtection();
-		}
-		
+
+		// Send the event to the onPlayerMove so Towny can fire the PlayerChangePlotEvent.
 		onPlayerMove(event);
 	}
 

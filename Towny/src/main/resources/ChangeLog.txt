@@ -10138,3 +10138,4 @@ v0.92.0.11:
 0.100.4.14:
   - Fix a null economy not returning false in the TownyEconomyHandler.isActive() test.
   - Fix explosion regeneration not able to handle sign text.
+  - Fix teleports that have a TeleportCause of PLUGIN not firing a onPlayerMove() when the player is Jailed or Outlawed.
