@@ -1459,6 +1459,7 @@ msg_click_purchase: 'Clique para comprar'
 status_trustedlist: 'Confiável'
 msg_overrides_already_set: '&b%s já tem substituições definidas para este(a) %s.'
 msg_cache_block_err: '&cVocê não tem permissão para %s aqui.'
+help_ta_perms_groupaddpermnode: 'Adicionar um nó a um grupo.'
 #Added in 0.115
 msg_comptype_founded: 'Data da Fundação'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Você não pode prender este residente porque ele está em um local onde ele é considerado um inimigo.'
