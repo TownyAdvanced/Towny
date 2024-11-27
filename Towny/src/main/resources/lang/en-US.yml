@@ -1759,10 +1759,6 @@ msg_up_to_date: '&aYou are up to date.'
 msg_click_purchase: 'Click to purchase'
 msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
 
-msg_legacy_economy_detected: "&bYour Towny's economy implementation is set to Legacy, it is recommended that you let Towny update itself to using the Modern implementation. This will improve compatibility with more Economy plugins."
-msg_click_to_convert_to_modern_economy: "&bClick here to convert your Towny's economy implementation from legacy to modern."
-
-
 #Added in 0.113
 status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Click to edit.'
