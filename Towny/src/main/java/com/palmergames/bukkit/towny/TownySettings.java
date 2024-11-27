@@ -2186,6 +2186,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_UNJAIL_TELEPORT);
 	}
 
+	public static boolean showBailTitle() {
+		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE);
+	}
+
 	public static boolean isDevMode() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DEV_MODE_ENABLE);

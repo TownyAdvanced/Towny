@@ -3183,7 +3183,12 @@ public enum ConfigNodes {
 			"",
 			"# Most types of unjailing result in a player being teleported when they are freed.",
 			"# Setting this to false will prevent that teleporting, resulting in the player not being teleported when they are freed."),
-	
+	JAIL_SHOW_BAIL_TITLE(
+			"jail.show_bail_command_in_title_message",
+			"false",
+			"",
+			"# When enabled, player that can pay their bail will see a title message telling them how to pay their bail."),
+
 	BANK(
 			"bank",
 			"",

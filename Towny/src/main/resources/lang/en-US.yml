@@ -2621,3 +2621,6 @@ msg_err_mode_does_not_exist: "The mode %s is not recognized."
 msg_err_not_allowed_to_switch: "You aren't allowed to Switch here."
 
 chunknotification_plot_claim_help_message: " Use '/plot claim' to buy this plot."
+
+titlemsg_pay_your_bail_title: "Pay your bail: %s"
+titlemsg_pay_your_bail_subtitle: "/res jail paybail"

@@ -10144,3 +10144,8 @@ v0.92.0.11:
   - Fix default configs missing the nationCapitalBonusOutpostLimit in the nation_level.
 0.101.0.0:
   - Bump version number for release.
+0.101.0.1:
+  - Add ability to spam jailed players with a title message showing them how to bail their bail.
+  - New Config Option: jail.show_bail_command_in_title_message
+    - Default: false
+    - When enabled, player that can pay their bail will see a title message telling them how to pay their bail.
