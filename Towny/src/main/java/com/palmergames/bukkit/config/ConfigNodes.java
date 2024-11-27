@@ -2976,7 +2976,8 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does a conquered town which cannot pay the nation tax get deleted?"),
-	
+
+	ECO_ADVANCED_ROOT("economy.advanced","",""),
 	ECO_ADVANCED_MODERN(
 			"economy.advanced.modern",
 			"true",
