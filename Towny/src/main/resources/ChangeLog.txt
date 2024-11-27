@@ -10142,3 +10142,5 @@ v0.92.0.11:
 0.100.4.15:
   - Add prompt to shown admins urging them to update their economy from legacy to modern. Requires the player to have the towny.admin.updatealerts permission node.
   - Fix default configs missing the nationCapitalBonusOutpostLimit in the nation_level.
+0.101.0.0:
+  - Bump version number for release.
