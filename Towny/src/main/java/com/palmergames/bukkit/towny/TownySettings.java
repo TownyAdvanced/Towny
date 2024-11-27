@@ -892,6 +892,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 0);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
@@ -908,6 +909,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 1);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
@@ -924,6 +926,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 2);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 30);
@@ -940,6 +943,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 3);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 40);
@@ -956,6 +960,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 4);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 60);
@@ -972,6 +977,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 3);
 			level.put("nationBonusOutpostLimit", 5);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);

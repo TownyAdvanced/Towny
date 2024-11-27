@@ -10141,3 +10141,4 @@ v0.92.0.11:
   - Fix teleports that have a TeleportCause of PLUGIN not firing a onPlayerMove() when the player is Jailed or Outlawed.
 0.100.4.15:
   - Add prompt to shown admins urging them to update their economy from legacy to modern. Requires the player to have the towny.admin.updatealerts permission node.
+  - Fix default configs missing the nationCapitalBonusOutpostLimit in the nation_level.
