@@ -137,7 +137,7 @@ public class JailUtil {
 	}
 
 	public static void showBailTitleMessage(Resident resident, Translator translator) {
-		if (!resident.isJailed() || resident.getJailBailCost() <= 0)
+		if (!resident.isOnline() || !resident.isJailed() || resident.getJailBailCost() <= 0)
 			return;
 		TownyMessaging.sendTitleMessageToResident(resident,
 				translator.of("titlemsg_pay_your_bail_title", TownyEconomyHandler.getFormattedBalance(resident.getJailBailCost())),
