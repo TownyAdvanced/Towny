@@ -10149,3 +10149,4 @@ v0.92.0.11:
   - New Config Option: jail.show_bail_command_in_title_message
     - Default: false
     - When enabled, player that can pay their bail will see a title message telling them how to pay their bail.
+  - Remove methods deprecated during the 0.99.*.* release cycle, in time for the beginning of the 0.101.*.* release cycle.
