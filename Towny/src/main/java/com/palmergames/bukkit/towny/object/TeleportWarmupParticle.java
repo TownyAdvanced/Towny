@@ -18,11 +18,6 @@ public class TeleportWarmupParticle {
 	public static final int RING_POINT_COUNT = 12;
 	public static final int RING_DELAY_TICKS = 2;
 
-	@Deprecated
-	public TeleportWarmupParticle(Location loc) {
-		
-	}
-
 	public static void drawParticles(final Player player, final double yOffset) {
 		Particle spawnParticle = BukkitParticle.getSpawnPointParticle();
 		int i = 0;

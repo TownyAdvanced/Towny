@@ -151,17 +151,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * open a connection to the SQL server.
-	 *
-	 * @return true if we successfully connected to the db.
-	 * @deprecated as of 0.99.1.2, use {@link #getConnection()} to obtain a connection instead.
-	 */
-	@Deprecated(forRemoval = true)
-	public boolean getContext() {
-		return isReady();
-	}
-
-	/**
 	 * @return Whether the datasource is initialized and running.
 	 */
 	public boolean isReady() {

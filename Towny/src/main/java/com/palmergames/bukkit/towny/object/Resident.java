@@ -427,23 +427,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return out;
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, clearing teleport requests is no longer needed.
-	 * Use {@link com.palmergames.bukkit.towny.TownyAPI#abortTeleportRequest(Resident)} to abort an active teleport request.
-	 */
-	@Deprecated
-	public void clearTeleportRequest() {
-
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportRequestTime() {
-
-	}
-
 	@ApiStatus.Obsolete
 	public long getTeleportRequestTime() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
@@ -451,27 +434,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return request == null ? -1 : request.requestTime();
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportDestination(Location spawnLoc) {
-
-	}
-
 	@ApiStatus.Obsolete
 	public Location getTeleportDestination() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
 
 		return request == null ? null : request.destinationLocation();
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportCooldown(int cooldown) {
-
 	}
 
 	@ApiStatus.Obsolete
@@ -488,29 +455,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return TeleportWarmupTimerTask.hasTeleportRequest(this);
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportCost(double cost) {
-
-	}
-
 	@ApiStatus.Obsolete
 	public double getTeleportCost() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
 
 		return request == null ? 0 : request.teleportCost();
 	}
-	
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportAccount(Account payee) {
 
-	}
-	
 	@ApiStatus.Obsolete
 	public Account getTeleportAccount() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);

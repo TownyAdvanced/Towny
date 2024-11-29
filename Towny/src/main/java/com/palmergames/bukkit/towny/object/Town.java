@@ -1906,58 +1906,6 @@ public class Town extends Government implements TownBlockOwner {
 		BukkitTools.fireEvent(tctle);
 		return tctle.getTownLevelNumber();
 	}
-	
-	/**
-	 * @deprecated since 0.99.6.3 use {@link #getLevelNumber()} instead.
-	 * Get the Town's current level, based on its population.
-	 * <p>
-	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.
-	 * </p>
-	 * @return Current Town Level.
-	 */
-	@Deprecated
-	public int getLevel() {
-		return getLevelNumber();
-	}
-
-	/**
-	 * @deprecated since 0.99.6.3 use {@link TownySettings#getTownLevelFromGivenInt(int, Town)} instead.
-	 * Get the town level for a given population size.
-	 * <p>
-	 *     Great for debugging, or just to see what the town level is for a given amount of residents. 
-	 *     But for most cases you'll want to use {@link Town#getLevel()}, which uses the town's current population.
-	 *     <br />
-	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.
-	 * </p>
-	 * @param populationSize Number of residents used to calculate the level.
-	 * @return The calculated Town Level. 0, if the town is ruined, or the method otherwise fails through.
-	 */
-	@Deprecated
-	public int getLevel(int populationSize) {
-		return TownySettings.getTownLevelFromGivenInt(populationSize, this);
-	}
-
-	/**
-	 * @deprecated since 0.99.6.3 use {@link TownySettings#getTownLevelMax()} instead.
-	 * Get the maximum level a Town may achieve.
-	 * @return Size of TownySettings' configTownLevel SortedMap.
-	 */
-	@Deprecated
-	public int getMaxLevel() {
-		return TownySettings.getConfigTownLevel().size();
-	}
-
-	/**
-	 * @deprecated since 0.99.6.3 use {@link #getLevelNumber()} instead.
-	 * Returns the Town Level ID.
-	 * @return id
-	 */
-	@Deprecated
-	public int getLevelID() {
-		return getLevelNumber();
-	}
 
 	/**
 	 * @return the manualTownLevel

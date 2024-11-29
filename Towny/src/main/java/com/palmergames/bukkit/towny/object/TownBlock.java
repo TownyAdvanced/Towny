@@ -443,25 +443,9 @@ public class TownBlock extends TownyObject {
 		super.setName(newName.replace("_", " ")); 
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
-	 */
-	@Deprecated
-	public void setX(int x) {
-
-	}
-
 	public int getX() {
 
 		return this.worldCoord.getX();
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
-	 */
-	@Deprecated
-	public void setZ(int z) {
-
 	}
 
 	public int getZ() {
@@ -477,14 +461,6 @@ public class TownBlock extends TownyObject {
 	public WorldCoord getWorldCoord() {
 
 		return this.worldCoord;
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.99.5.3, it is no longer possible to mutate the world/coordinates of a townblock.
-	 */
-	@Deprecated
-	public void setWorld(TownyWorld world) {
-
 	}
 
 	public TownyWorld getWorld() {
