@@ -1393,7 +1393,7 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.",
-			"# Allows allows the residents of entire an town when that town is trusted by the town."),
+			"# Allows the residents of entire an town when that town is trusted by the town."),
 	SPAWNING_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN(
 			"spawning.town_spawn.are_new_residents_prompted_to_town_spawn",
 			"false",
