@@ -1004,7 +1004,6 @@ public class TownyPlayerListener implements Listener {
 	 * - Throws API events which can allow other plugins to cancel Towny saving
 	 *   inventory and/or experience.
 	 * 
-	 * @author - Articdive, LlmDl
 	 * @param event - PlayerDeathEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)

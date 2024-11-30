@@ -331,7 +331,7 @@ public class TownySettings {
 	 * Get the town level for a given population size.
 	 * <p>
 	 *     Great for debugging, or just to see what the town level is for a given amount of residents. 
-	 *     But for most cases you'll want to use {@link Town#getLevel()}, which uses the town's current population.
+	 *     But for most cases you'll want to use {@link Town#getTownLevel()}, which uses the town's current population.
 	 *     <br />
 	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
 	 *     and may be different from the default configuration.
