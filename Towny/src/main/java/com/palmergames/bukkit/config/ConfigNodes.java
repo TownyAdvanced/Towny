@@ -2625,7 +2625,7 @@ public enum ConfigNodes {
 			"economy.new_expand.price_purchased_bonus_townblock_max_price",
 			"-1.0",
 			"",
-			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maxium."),
+			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maximum."),
 
 	ECO_DEATH("economy.death", "", ""),
 	ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", 
