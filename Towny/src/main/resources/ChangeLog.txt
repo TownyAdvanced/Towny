@@ -10150,3 +10150,10 @@ v0.92.0.11:
     - Default: false
     - When enabled, player that can pay their bail will see a title message telling them how to pay their bail.
   - Remove methods deprecated during the 0.99.*.* release cycle, in time for the beginning of the 0.101.*.* release cycle.
+  - Re-fix max health attribute, courtesy of Warrior with PR #7678.
+    - Closes #7687.
+  - Make the npc prefix check less strict and more precise, courtesy of Warrior with PR #7688.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.1 to 3.5.2.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.10.1 to 3.11.1.
+  - Bump org.apache.logging.log4j:log4j-core from 2.24.1 to 2.24.2.
+  - Bump com.zaxxer:HikariCP from 6.0.0 to 6.2.1.
