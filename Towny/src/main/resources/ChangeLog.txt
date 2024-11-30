@@ -10157,3 +10157,4 @@ v0.92.0.11:
   - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.10.1 to 3.11.1.
   - Bump org.apache.logging.log4j:log4j-core from 2.24.1 to 2.24.2.
   - Bump com.zaxxer:HikariCP from 6.0.0 to 6.2.1.
+  - Drop Java back to 17 to support 1.19.
