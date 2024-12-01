@@ -175,6 +175,7 @@ res_toggle_help_5: "Arazinizin duvarlarını görmeyi ayarlayın."
 res_toggle_help_6: "Şehir sınırlarını görme özelliğini değiştirin."
 res_toggle_help_7: "Arazinizin duvarlarını görmeyi ayarlayın."
 res_toggle_help_8: "Yürüdüğünüz yeri talep etme özelliğini değiştirin."
+res_toggle_help_9: "Toggle the ability to see the map when you change plots."
 res_toggle_help_10: "Tüm Ayarlamaları kaldır."
 mode_1: 'Her kasaba bloğu arasındaki haritayı göster'
 mode_2: 'Yürürken iddia etmeye çalış'
