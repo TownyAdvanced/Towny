@@ -323,19 +323,6 @@ public class TownySettings {
 		return getTownLevel(town.getLevelNumber());
 	}
 
-	/**
-	 * @deprecated since 0.99.6.3 use {@link #getTownLevelWithModifier(int, Town)}
-	 *             instead.
-	 * @param town      Town to test with.
-	 * @param residents an int representing what modifies a townlevel, typically the
-	 *                  number of residents in the town.
-	 * @return the TownLevel given the number of residents.
-	 */
-	@Deprecated
-	public static TownLevel getTownLevel(Town town, int residents) {
-		return getTownLevelWithModifier(residents, town);
-	}
-
 	public static TownLevel getTownLevelWithModifier(int modifier, Town town) {
 		return getTownLevel(getTownLevelFromGivenInt(modifier, town));
 	}
@@ -344,7 +331,7 @@ public class TownySettings {
 	 * Get the town level for a given population size.
 	 * <p>
 	 *     Great for debugging, or just to see what the town level is for a given amount of residents. 
-	 *     But for most cases you'll want to use {@link Town#getLevel()}, which uses the town's current population.
+	 *     But for most cases you'll want to use {@link Town#getTownLevel()}, which uses the town's current population.
 	 *     <br />
 	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
 	 *     and may be different from the default configuration.
@@ -392,19 +379,6 @@ public class TownySettings {
 		return getNationLevel(nation.getLevelNumber());
 	}
 
-	/**
-	 * @deprecated since 0.99.6.2 use {@link #getNationLevelWithModifier(int)} instead.
-	 * @param nation    Nation to test with, unused.
-	 * @param residents an int representing what modifies a nationlevel.
-	 *                  {@link #isNationLevelDeterminedByTownCount()} decides
-	 *                  whether it is residents or towns.
-	 * @return the NationLevel given the number of residents/towns.
-	 */
-	@Deprecated
-	public static NationLevel getNationLevel(Nation nation, int residents) {
-		return getNationLevelWithModifier(residents);
-	}
-	
 	public static NationLevel getNationLevelWithModifier(int modifier) {
 		return getNationLevel(getNationLevelFromGivenInt(modifier));
 	}
@@ -892,6 +866,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 0);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
@@ -908,6 +883,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 1);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
@@ -924,6 +900,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 2);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 30);
@@ -940,6 +917,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 3);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 40);
@@ -956,6 +934,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 4);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 60);
@@ -972,6 +951,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 3);
 			level.put("nationBonusOutpostLimit", 5);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);
@@ -1563,6 +1543,14 @@ public class TownySettings {
 
 	public static boolean preventSaturationLoss() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REGEN_PREVENT_SATURATION_LOSS);
+	}
+
+	public static boolean beaconsForTownMembersOnly() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_BEACONS_FOR_ALLIES_ONLY);
+	}
+
+	public static boolean beaconsExcludeConqueredTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_BEACONS_EXCLUDE_CONQUERED_TOWNS);
 	}
 
 	public static boolean getTownDefaultPublic() {
@@ -2172,6 +2160,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_UNJAIL_TELEPORT);
 	}
 
+	public static boolean showBailTitle() {
+		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE);
+	}
+
 	public static boolean isDevMode() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DEV_MODE_ENABLE);
@@ -2204,10 +2196,18 @@ public class TownySettings {
 		double townMultiplier = isUpkeepByPlot() ? town.getTownBlocks().size() : town.getTownLevel().upkeepModifier();
 		// If the town has a nation we will be altering thing with the nation's TownUpkeepModifier, or 1.0 if no nation.
 		double nationMultiplier = town.hasNation() ? town.getNationOrNull().getNationLevel().nationTownUpkeepModifier() : 1.0;
+		// Nation's multiplier should only affect plot-based-upkeep if the config is set for it.
+		if (isUpkeepByPlot() && !isTownLevelModifiersAffectingPlotBasedUpkeep())
+			nationMultiplier = 1.0;
+
 		// There's the chance that even with per-plot-upkeep, the townLevel upkeep modifier is still used, or 1.0 if not. 
 		double townLevelPlotModifier = isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep() ? town.getTownLevel().upkeepModifier() : 1.0;
+
+		// outposts can have an added cost to the town's upkeep.
+		double outpostCost = getPerOutpostUpkeepCost() * town.getMaxOutpostSpawn();
+		double baseUpkeep = getTownUpkeep() + outpostCost;
 		// Amount is calculated using the above multipliers.
-		double amount = ((getTownUpkeep() * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
+		double amount = ((baseUpkeep * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
 
 		// When per-plot-upkeep is in use, there can be min/max amounts.
 		if (isUpkeepByPlot()) {
@@ -2293,6 +2293,10 @@ public class TownySettings {
     	
     	return getBoolean(ConfigNodes.ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED);
     }
+
+	public static double getPerOutpostUpkeepCost() {
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_OUTPOST_UPKEEP_COST);
+	}
 
 	public static double getNationUpkeep() {
 
@@ -3186,6 +3190,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_ARENA);
 	}
 	
+	public static boolean arenaPlotPreventArmourDegrade() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_PREVENT_ITEM_DEGRADE_IN_ARENAS);
+	}
+
 	public static boolean getKeepInventoryInArenas() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA);
 	}
@@ -3612,6 +3620,10 @@ public class TownySettings {
 		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_ALLIES);
 	}
 	
+	public static boolean areConqueredTownsConsideredAllied() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ARE_CONQUERED_TOWNS_CONSIDERED_ALLIES);
+	}
+	
 	public static String getBankHistoryBookFormat() {
 		return getString(ConfigNodes.BANKHISTORY_BOOK);
 	}
@@ -3670,6 +3682,10 @@ public class TownySettings {
 	
 	public static String getWebMapUrl() {
 		return getString(ConfigNodes.PLUGIN_WEB_MAP_URL);
+	}
+	
+	public static boolean isSafeTeleportUsed() { 
+		return getBoolean(ConfigNodes.SPAWNING_SAFE_TELEPORT);
 	}
 	
 	public static Map<Integer, TownLevel> getConfigTownLevel() {

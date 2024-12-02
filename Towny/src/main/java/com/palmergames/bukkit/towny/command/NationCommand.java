@@ -244,7 +244,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						break;
 					if (args.length == 2) 
 						return NameUtil.filterByStart(Arrays.asList("add", "remove", "list"), args[1]); 
-					if (args.length == 3 && args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))
+					if (args.length == 3 && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove")))
 						return NameUtil.filterByStart(TownyUniverse.getInstance().getTowns()
 							.stream()
 							.filter(t -> !nation.hasTown(t))

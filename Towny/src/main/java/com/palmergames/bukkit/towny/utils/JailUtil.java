@@ -131,8 +131,21 @@ public class JailUtil {
 		
 		// Call ResidentJailEvent.
 		BukkitTools.fireEvent(new ResidentJailEvent(resident, reason, jailer instanceof Player player ? player : null));
-	
+
+		if (TownySettings.showBailTitle())
+			Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 80L);
 	}
+
+	public static void showBailTitleMessage(Resident resident, Translator translator) {
+		if (!resident.isOnline() || !resident.isJailed() || resident.getJailBailCost() <= 0)
+			return;
+		TownyMessaging.sendTitleMessageToResident(resident,
+				translator.of("titlemsg_pay_your_bail_title", TownyEconomyHandler.getFormattedBalance(resident.getJailBailCost())),
+				translator.of("titlemsg_pay_your_bail_subtitle"),
+				200); // 10 seconds
+		Towny.getPlugin().getScheduler().runLater(() -> showBailTitleMessage(resident, translator), 200L);
+	}
+
 
 	/**
 	 * Unjails a resident.

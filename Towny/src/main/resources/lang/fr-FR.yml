@@ -155,6 +155,9 @@ res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
 res_4: 'Liste tout les joueurs actifs'
+res_9: "Combien de taxes vous payerez par jour."
+res_toggle_help_10: "Supprimer tous les modes."
+res_toggle_help_11: "Espionner sur les canaux du chat."
 mode_1: 'Afficher la carte entre chaque parcelles de ville'
 mode_2: 'Essaye d''annexer lorsque vous marchez'
 mode_3: 'Essaye de déxannexer lorsque vous marchez'
@@ -196,9 +199,6 @@ msg_buy: '&bAchète %d %s pour %s.'
 msg_buy_resident_plot: '&b%s Achète la parcelle de %s pour %s !'
 msg_couldnt_pay_taxes: '&b%s ne pouvait pas payer les impôts et a été exclu de la %s.'
 msg_couldnt_pay_plot_taxes: '&b%s ne pouvait pas payer les impôts et a perdu la propriété d''une parcelle.'
-msg_payed_town_tax: '&ba payé les impôts de la ville de '
-msg_payed_plot_cost: '&ba payé %s pour %s parcelles dans %s'
-msg_payed_resident_tax: '&ba payé l''impôt résidentiel de '
 msg_bankrupt_town: ' n’avait pas les moyens de rester une ville.'
 msg_bankrupt_nation: ' n’avait pas les moyens de rester une nation.'
 msg_nation_not_peaceful: '&bLa nation n’avait pas les moyens de garder son état pacifique.'
@@ -1557,7 +1557,7 @@ msg_perm_hud_resident: 'résident'
 msg_perm_hud_nation: 'pays'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'étrangers'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Parcelles: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

@@ -652,6 +652,7 @@ permissions:
         default: false
         children:
             towny.command.resident.set.mode: true
+            towny.command.resident.set.mode.clear: true
             towny.command.resident.set.perm: true
             towny.command.resident.set.about: true
 
@@ -661,14 +662,20 @@ permissions:
         children:
             towny.command.resident.toggle.explosion: true
             towny.command.resident.toggle.fire: true
-            towny.command.resident.toggle.map: true
             towny.command.resident.toggle.mobs: true
-            towny.command.resident.toggle.plotborder: true
             towny.command.resident.toggle.pvp: true
-            towny.command.resident.toggle.townclaim: true
-            towny.command.resident.toggle.constantplotborder: true
-            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.bedspawn: true
             towny.command.resident.toggle.bordertitles: true
+            towny.command.resident.toggle.ignoreotherchannels: true
+            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.infotool: true
+            towny.command.resident.toggle.map: true
+            towny.command.resident.toggle.plotgroup: true
+            towny.command.resident.toggle.constantplotborder: true
+            towny.command.resident.toggle.plotborder: true
+            towny.command.resident.toggle.townborder: true
+            towny.command.resident.toggle.townclaim: true
+            towny.command.resident.toggle.townunclaim: true
 
     # TownyAdmin command permissions
     towny.command.townyadmin.*:
@@ -696,8 +703,7 @@ permissions:
             towny.command.townyadmin.plot.*: true
             towny.command.townyadmin.tpplot: true
             towny.command.townyadmin.resident.*: true
-            towny.command.townyadmin.depositall: true
-            towny.command.townyadmin.resetbanks: true
+            towny.command.townyadmin.eco.*: true
             towny.command.townyadmin.install: true
 
     towny.command.townyadmin.resident.*:
@@ -709,6 +715,15 @@ permissions:
             towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.resident.friend: true
             towny.command.townyadmin.resident.unjail: true
+
+    towny.command.townyadmin.eco.*:
+        description: User can access the admin eco commands.
+        default: false
+        children:
+            towny.command.townyadmin.eco.depositall: true
+            towny.command.townyadmin.eco.resetbanks: true
+            towny.command.townyadmin.eco.convert: true
+            towny.command.townyadmin.eco.info: true
 
     towny.command.townyadmin.town.spawn.*:
         description: User can access town spawns

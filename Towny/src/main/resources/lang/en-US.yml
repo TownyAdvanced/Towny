@@ -426,7 +426,16 @@ ta_reload_help_2: "Reloads language files."
 ta_reload_help_3: "Reloads Towny permissions."
 ta_reload_help_4: "Reloads all components of Towny."
 
+ta_eco_resetbanks_help: "Resets town and nation banks to the given amount or 0."
+ta_eco_convert_modern_help: "Converts your Towny accounts into our modern variety, able to use Vault's OfflinePlayer."
+ta_eco_convert_help: "Converts your Towny accounts to the target economy implementation, useful for transferring data between economy plugins."
+ta_eco_info_help: "Gives information about economy accounts on the server."
 ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
+
+ta_info_help_0: "View eco info for the given nation."
+ta_info_help_1: "View eco info for the given resident."
+ta_info_help_2: "View eco info for the towny server account."
+ta_info_help_3: "View eco info for the given town."
 
 plot_help_0: "Turns on the plot info HUD."
 plot_help_1: "Removes the owner of the plot."
@@ -506,9 +515,8 @@ msg_couldnt_pay_taxes: '&b%s couldn''t pay taxes and was kicked from the %s.'
 msg_couldnt_pay_plot_taxes: '&b%s couldn''t pay taxes and lost ownership of a plot.'
 msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
 msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
-msg_payed_town_tax: '&bPayed town tax of '
-msg_payed_plot_cost: '&bPayed %s for %s plots in %s'
-msg_payed_resident_tax: '&bPayed resident tax of '
+msg_you_paid_town_tax: '&bYou paid your town a tax of %s.'
+msg_you_paid_plottax_to_town: '&bYou paid plot taxes totalling %s to the town of %s.'
 msg_bankrupt_town: ' couldn''t afford to remain a town.'
 msg_bankrupt_nation: ' couldn''t afford to remain a nation.'
 msg_nation_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
@@ -1114,6 +1122,7 @@ msg_err_public_nation_spawn_forbidden: '&cPublic spawn travel to other nations i
 msg_err_public_nation_spawn_forbidden_war: '&cPublic spawn travel to other nations is only allowed during war.'
 msg_err_public_nation_spawn_forbidden_peace: '&cPublic spawn travel to other nations is forbidden during war.'
 msg_spawn_cost_set_to: '&b%s has set the price of using /%s spawn to %s'
+msg_spawn_fail_safe_teleport: '&cTeleportation failed, the location is not safe, ask the mayor of your town to change the teleport location.'
 msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher than %s'
 msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'
 msg_nation_changed_public: '&cThe Nation''s public status is now %s.'
@@ -1750,6 +1759,10 @@ msg_up_to_date: '&aYou are up to date.'
 msg_click_purchase: 'Click to purchase'
 msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
 
+msg_legacy_economy_detected: "&bYour Towny's economy implementation is set to Legacy, it is recommended that you let Towny update itself to using the Modern implementation. This will improve compatibility with more Economy plugins."
+msg_click_to_convert_to_modern_economy: "&bClick here to convert your Towny's economy implementation from legacy to modern."
+
+
 #Added in 0.113
 status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Click to edit.'
@@ -2170,10 +2183,12 @@ msg_perm_hud_resident: 'resident'
 msg_perm_hud_nation: 'nation'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'outsider'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Plot: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: 'Plot Group: '
+#Seen in /towny map hud:
+msg_map_hud_district: 'District: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'For Sale: '
 #Seen in /plot perm hud:
@@ -2584,3 +2599,28 @@ msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "You cannot remo
 map_hover_district: 'District: '
 
 msg_err_you_cannot_join_town_you_have_not_played_long_enough: "You have not been on the server long enough, you must wait another %s before you can join a town."
+
+msg_your_nation_has_pending_ally_invites: "Your nation has invitations become an ally with one or more nations. Use '/n ally received' to view your invitations."
+
+msg_your_town_has_pending_nation_invites: "Your town has invitations to join one or more nations. Use '/t invite received' to view your invitations."
+
+msg_you_have_pending_town_invites: "You have invitations to join one or more towns. Use '/invite list' to view your invitations, or use '/invite deny all' to decline all of these invites."
+
+msg_admin_eco_convert_no_providers: "<red>No economy providers available"
+msg_admin_eco_convert_no_provider_specified: "<red>No economy provider specified"
+msg_admin_eco_convert_no_target_specified: "<red>No target economy specified"
+msg_admin_eco_convert_target_not_found: "<red>No economy adapter found by name '%s', available adapters: [%s]"
+msg_admin_eco_convert_already_modern: "<red>Cannot convert to modern; provider is already in modern mode"
+msg_admin_eco_convert_online_players_warning: "<red>Warning: It is recommended to convert while there are no players on the server."
+msg_admin_eco_convert_x_accounts_found: "Found %s accounts to convert. Beginning conversion now."
+msg_admin_eco_convert_conversion_progress: "Account conversion in progress, %s complete..."
+msg_admin_eco_convert_success: "Economy conversion successful"
+
+msg_err_mode_does_not_exist: "The mode %s is not recognized."
+
+msg_err_not_allowed_to_switch: "You aren't allowed to Switch here."
+
+chunknotification_plot_claim_help_message: " Use '/plot claim' to buy this plot."
+
+titlemsg_pay_your_bail_title: "Pay your bail: %s"
+titlemsg_pay_your_bail_subtitle: "/res jail paybail"

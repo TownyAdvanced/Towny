@@ -2,14 +2,11 @@ package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class PlayerCache {
 
@@ -20,11 +17,8 @@ public class PlayerCache {
 
 	private WorldCoord lastWorldCoord;
 	private String blockErrMsg;
-	private final UUID playerUUID;
-
 	public PlayerCache(Player player) {
 		this.lastWorldCoord = WorldCoord.parseWorldCoord(player);
-		this.playerUUID = player.getUniqueId();
 	}
 
 	/**
@@ -196,25 +190,5 @@ public class PlayerCache {
 	public boolean hasBlockErrMsg() {
 
 		return blockErrMsg != null;
-	}
-
-	/**
-	 * Deprecated as of 0.99.5.9, location caching is no longer used.
-	 */
-	@Deprecated
-	public void setLastLocation(Location lastLocation) {
-
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.99.5.9, location caching is no longer used.
-	 */
-	@Deprecated
-	public Location getLastLocation() throws NullPointerException {
-		final Player player = Bukkit.getServer().getPlayer(this.playerUUID);
-		if (player == null)
-			throw new NullPointerException(); // adhere to the throws contract
-
-		return player.getLocation();
 	}
 }

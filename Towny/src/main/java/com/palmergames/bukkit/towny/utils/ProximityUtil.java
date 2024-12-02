@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.utils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -241,9 +242,27 @@ public class ProximityUtil {
 			throw new TownyException(Translatable.of("msg_err_nation_homeblock_in_another_world"));
 		}
 
-		if (isTownTooFarFromNation(town, capital, nation.getTowns())) {
+		List<Town> townsClosestToFarthest = sortTownsClosestToFarthest(nation);
+		if (isTownTooFarFromNation(town, capital, townsClosestToFarthest)) {
 			throw new TownyException(Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 		}
+	}
+
+	private static List<Town> sortTownsClosestToFarthest(Nation nation) {
+		List<Town> sortedTowns = nation.getTowns().stream()
+				.sorted(Comparator.comparingInt(t-> getDistanceFromCapital(t, nation)))
+				.collect(Collectors.toList());
+		return sortedTowns; 
+	}
+
+	private static int getDistanceFromCapital(Town town, Nation nation) {
+		TownBlock capitalHomeblock = nation.getCapital().getHomeBlockOrNull();
+		TownBlock townHomeblock = town.getHomeBlockOrNull();
+		if (capitalHomeblock == null || townHomeblock == null)
+			return Integer.MAX_VALUE;
+		if (!capitalHomeblock.getWorld().equals(townHomeblock.getWorld()))
+			return Integer.MAX_VALUE;
+		return (int) MathUtil.distance(capitalHomeblock.getCoord(), townHomeblock.getCoord());
 	}
 
 	public static List<Town> gatherOutOfRangeTowns(Nation nation) {
@@ -261,32 +280,69 @@ public class ProximityUtil {
 			return removedTowns;
 
 		final WorldCoord capitalCoord = capitalHomeBlock.getWorldCoord();
-		List<Town> townsToCheck = nation.getTowns();
-		List<Town> localRemovedTowns = townsToCheck;
+		List<Town> townsToCheck = sortTownsClosestToFarthest(nation);
+		List<Town> localTownsToKeep = new ArrayList<>();
+		townsToCheck.remove(capital);
+		localTownsToKeep.add(capital);
+
 		// We want to parse over the towns to check until we're no longer getting an above 0 amount of towns being removed.
-		while (localRemovedTowns.size() > 0) {
-			localRemovedTowns = getListOfOutOfRangeTownsFromList(townsToCheck, capital, capitalCoord);
-			for (Town localTown : localRemovedTowns) {
-				if (!removedTowns.contains(localTown))
-					removedTowns.add(localTown);
+		while (townsToCheck.size() > 0) {
+			// Get a list of towns which are OK based on their range to the capital OR if they're close enough to a town in range.
+			List<Town> recentValidTowns = getListOfInRangeTownsFromList(townsToCheck, localTownsToKeep, capital, capitalCoord);
+
+			// Stop the loop if we haven't gotten any valid towns this pass.
+			if (recentValidTowns.size() == 0)
+				break;
+
+			// Put any newly valid towns into the townToKeep List, remove them from being checked.
+			for (Town validTown : recentValidTowns) {
+				localTownsToKeep.add(validTown);
+				townsToCheck.remove(validTown);
 			}
-			townsToCheck = nation.getTowns().stream().filter(t -> !removedTowns.contains(t)).collect(Collectors.toList());
 		}
-		return removedTowns;
+
+		// Finalize a list of out of range towns.
+		return nation.getTowns().stream().filter(t -> !localTownsToKeep.contains(t)).collect(Collectors.toList());
 	}
 
-	private static List<Town> getListOfOutOfRangeTownsFromList(List<Town> towns, Town capital, WorldCoord capitalCoord) {
-		List<Town> removedTowns = new ArrayList<>();
-		for (Town town : towns) {
+	private static List<Town> getListOfInRangeTownsFromList(List<Town> townsToCheck, List<Town> validTowns, Town capital, WorldCoord capitalCoord) {
+		List<Town> allowedTowns = new ArrayList<>();
+		for (Town town : townsToCheck) {
 			// Town is the capital we're measuring against.
 			if (town.equals(capital))
 				continue;
 			// Check that the town missing is not missing a homeblock, and that the
 			// homeblocks are in the same world, and the distance between.
-			if (isTownTooFarFromNation(town, capital, towns))
-				removedTowns.add(town);
+			if (isTownCloseEnoughToNation(town, capital, townsToCheck, validTowns))
+				allowedTowns.add(town);
+		}		
+		return allowedTowns;
+	}
+
+	public static boolean isTownCloseEnoughToNation(Town town, Town newCapital, List<Town> townsToCheck, List<Town> validTowns) {
+		if (closeEnoughToCapital(town, newCapital) || closeEnoughToOtherNationTowns(town, newCapital, townsToCheck, validTowns))
+			return true;
+		return false;
+	}
+
+	private static boolean closeEnoughToOtherNationTowns(Town town, Town newCapital, List<Town> townsToCheck, List<Town> validTowns) {
+		double maxDistanceFromOtherTowns = TownySettings.getNationProximityToOtherNationTowns();
+		double maxDistanceFromTheCapital = TownySettings.getNationProximityAbsoluteMaximum();
+
+		// Other towns in the nation are not giving any proximity buff, only the capital is counted.
+		if (maxDistanceFromOtherTowns <= 0)
+			return false;
+
+		// The town is too far from the nation's absolute cap on proximity from the capital homeblock.
+		if (maxDistanceFromTheCapital > 0 && !closeEnoughToTown(town, newCapital, maxDistanceFromTheCapital))
+			return false;
+
+		// Try to find at least one town in the nation which is close enough to this town.
+		for (Town validTown : validTowns) {
+			if (closeEnoughToTown(validTown, town, maxDistanceFromOtherTowns))
+				return true;
 		}
-		return removedTowns;
+		return false;
 	}
 
 	public static void removeOutOfRangeTowns(Nation nation) {

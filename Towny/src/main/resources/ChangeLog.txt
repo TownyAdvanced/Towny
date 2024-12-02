@@ -9972,3 +9972,189 @@ v0.92.0.11:
   - Bump net.kyori:adventure-platform-bukkit from 4.3.3 to 4.3.4.
 0.100.4.0:
   - Bump version number for release.
+0.100.4.1:
+  - PAPI: change %townyadvanced_town_unformatted% to no longer remove underscores.
+  - Fix WorldCoord#getBoundingBox missing two edges of the WorldCoord's blocks in the resulting BoundingBox.
+  - Shutdown saving task when making an sql dump, courtesy of Warrior with PR #7591.
+  - Add the ability to stop weapons and armour degrading in arena plots.
+    - Closes #7549.
+  - New Config Option: global_town_settings.prevent_item_degrading_in_arenas
+    - Default: false
+    - While true, weapons and armour items worn by players in Arena plots will not lose durability.
+  - Add safe-teleport detection to spawn points, courtesy of Intybyte with PR #7530. (First-Time Contributor!)
+    - New detection system scans players' teleport destinations to make sure they will not suffocate or fall.
+    - Closes #7463.
+  - New Config Option: spawning.safe_teleport
+    - Default: false
+    - If enabled tries to find a safe location when teleporting to a town spawn/nation spawn/outpost.
+      This can be used to prevent players from making kill boxes at those locations.
+0.100.4.2:
+  - Fix safe spawn checking causing a sync chunk load, courtesy of Warrior with PR #7595.
+  - Fix pets being abandoned in chunks that unload too fast after the player teleports away.
+    - Closes #7593.
+  - Re-assign permissions for previous mayor after a new mayor is set, courtesy of Warrior with PR #7600.
+  - Limit /plot trust remove suggestions to trusted residents, courtesy of Warrior with PR #7599.
+  - Fix error message shown when using /plot group toggle taxed, courtesy of Alienn-Know with PR #7598. (First-Time Contributor!)
+  - Bump org.apache.commons:commons-compress from 1.26.2 to 1.27.1.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.3.1 to 3.5.0.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.8.0 to 3.10.0.
+0.100.4.3:
+  - Add a message notifying a player when their nation has pending ally invites.
+    - Closes #7588.
+  - Fix town_plotbased_upkeep_affected_by_town_level_modifier in the config not being respected for the nation_levels' nationTownUpkeepModifier.
+  - Add the ability to block non-allies gaining benefits from Beacons placed in towns.
+    - Requires Paper to work.
+    - Closes #7532.
+  - New Config Option: global_town_settings.beacons_for_allies_only
+    - Default: false
+    - When true, a beacon placed in a town will only affect the allies of the town. This includes residents, nation residents and allied nation residents.
+  - New Config Option: global_town_settings.beacons.exclude_conquered_towns
+    - Default: false
+    - When true, conquered towns are not considered allies.
+  - Add experimental option to consider conquered towns as not allies.
+  - New Config Option: global_nation_settings.are_conquered_towns_considered_allies
+    - Default: true
+    - While true, conquered towns will be considered a member of good standing in the nation.
+    - When set to false CombatUtil#isAlly() tests will treat conquered towns and their nations as not allied.
+    - Setting this to false could result in strange unforseen behaviour.
+  - Bump org.apache.logging.log4j:log4j-core from 2.23.1 to 2.24.0.
+  - Bump org.bstats:bstats-bukkit from 3.0.2 to 3.0.3.
+  - Bump org.junit.jupiter:junit-jupiter from 5.10.3 to 5.11.0.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.10.3 to 5.11.0.
+  - Fix deleting objects from the SQL DB which are keyed by a UUID.
+    - Closes #7592.
+  - Fix /plot group tab completion. 
+0.100.4.4:
+  - Add a message notifying a player of their pending town and nation invites.
+    - Closes #7607.
+  - Add new resident mode: bedspawn
+    - This mode will make a player spawn at their bed instead of their town spawn.
+    - Mode is added and removed using /res toggle bedspawn.
+    - When no bed is owned by a player they will spawn at their town, if they have one.
+    - Closes #7616.
+  - New Command: /res toggle bedspawn
+    - Turns on and off the respawn-to-bed option.
+  - Don't show warmup particles for hidden/invisible players, courtesy of Warrior with PR #7611.
+  - Fix tab complete exception in sanctiontown, courtesy of Warrior with PR #7613.
+  - Bump org.bstats:bstats-bukkit from 3.0.3 to 3.1.0.
+0.100.4.5:
+  - Refactor OnPlayerLogin task for readability.
+  - Fix SERVER_ACCOUNT initializing after GLOBAL_OBSERVER 
+    - Closes https://github.com/TownyAdvanced/SiegeWar/issues/916
+  - Fix /deny all not working, courtesy of Warrior with PR #7626.
+  - Bump com.zaxxer:HikariCP from 5.1.0 to 6.0.0.
+  - Bump org.apache.logging.log4j:log4j-core from 2.24.0 to 2.24.1.
+  - Bump org.jetbrains:annotations from 24.1.0 to 25.0.0.
+  - Bump org.junit.jupiter:junit-jupiter from 5.11.0 to 5.11.2.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.11.0 to 5.11.2.
+0.100.4.6:
+  - Add OfflinePlayer and UUID support to Economy backend, courtesy of Warrior with PR #7425.
+    - Adds a "modern" economy implementation for Vault and Reserve back ends, while maintaining "legacy" implementations.
+      - Already established servers will have their server set to legacy, while new installs will begin using the modern system right away.
+    - The modern implementation makes use of Vault's OfflinePlayer methods, making Towny better suited to newer economy plugins that might not have fully implemented VaultAPI in their code.
+    - Towny's Account class has been revamped with the Towny objects' UUIDs being used.
+    - In cases where a server is using EssentialsX Economy, Towny will convert our non-player accounts' UUIDs into V2 UUIDs, allowing EssEco to know they do not belong to players.
+  - Changed command: /ta depositall has changed to /ta eco depositall
+  - Changed command: /ta resetbanks has changed to /ta eco resetbanks
+  - New Command: /ta eco info [TownyObject] {name}
+    - Used to see information about a resident, town, nation, or the Towny serveraccount's economy Account.
+  - New Command: /ta eco convert modern
+    - Will convert your Towny legacy accounts into modern accounts in your Economy plugin.
+  - New Command: /ta eco convert {economyplugin}
+    - Will convert your Towny economy accounts from your existing economy plugin, into the given economy plugin.
+  - New Permission Node: towny.command.townyadmin.eco.*
+    - A child node of towny.command.townyadmin.*, no changes required in your permission plugin.
+    - Child Nodes:
+      - towny.command.townyadmin.eco.depositall
+      - towny.command.townyadmin.eco.resetbanks
+      - towny.command.townyadmin.eco.info
+      - towny.command.townyadmin.eco.convert
+  - New Config Option: economy.advanced.modern
+    - Default: true (on existing installs this will default to false)
+    - When enabled, Towny will use UUIDs when communicating with your economy plugin.
+    - Most users will never have to touch this, but for existing servers this option will automatically be set to false.
+    - If this option is disabled and you wish to avoid losing data, use the `/townyadmin eco convert modern` command to convert.
+  - New Config Option: economy.advanced.npc_uuid_version
+    - Default: -1
+    - The UUID version to use for non-player accounts. This is used so that economy plugins can more easily differentiate between player and NPC accounts.
+    - The default is -1, which disables modifying npc uuids.
+0.100.4.7:
+  - Fix regression from 0.100.4.2 which caused empty .tar backups to be created.
+0.100.4.8:
+  - Update Resident Modes system.
+    - The modes system (townclaim, map, spy) code has been updated to more robust system than just a simple list.
+    - Adds the ability to assign a permission node to a mode, and when present, will require the player to have the permission node to toggle a node.
+    - This permission node is not required if the mode is part of a player's default modes set via the permission plugin.
+    - Additionally, the ability to clear a residents modes via command now requires a permission node.
+    - All together this makes it possible for admins to set modes that players cannot remove.
+    - Modes can have types, allowing for modes to be exclusive of each other, ie: you can no longer have townclaim and townunclaim modes active at the same time.
+  - API: Added ResidentModesInitializeEvent with which plugins can add Resident Modes.
+  - New Permission Nodes:
+    - No changes required in the townyperms.yml.
+    - towny.command.resident.set.mode.clear
+    - towny.command.resident.toggle.bedspawn
+    - towny.command.resident.toggle.bordertitles
+    - towny.command.resident.toggle.ignoreotherchannels
+    - towny.command.resident.toggle.infotool
+    - towny.command.resident.toggle.plotgroup
+    - towny.command.resident.toggle.townborder
+    - towny.command.resident.toggle.townunclaim
+  - Update spigot-api to 1.21.1.
+  - Add compatibility layer for renamed Particle names.
+  - Fix testing broken in 1.21 bump, update workflows to use java 21, add paper-api with test scope to make MockBukkit happy again.
+  - Prevent wind charge exploits on switch blocks.
+    - Closes #7648.
+0.100.4.9:
+  - Add support for VaultUnlocked as an Economy Provider.
+  - Bump org.jetbrains:annotations from 25.0.0 to 26.0.1.
+  - Bump org.junit.jupiter:junit-jupiter from 5.11.2 to 5.11.3.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.11.2 to 5.11.3.
+  - Fix Audience not sending messages, tests will become broken again at this point.
+0.100.4.10:
+  - Fix adventure relocation not excluding things from paper-api.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.10.0 to 3.10.1.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.0 to 3.5.1.
+  - Bump spigot-api to 1.21.3.
+  - Adapt to Attributes change.
+  - Update bridger for java 21 support, courtesy of Warrior with PR #7658.
+  - Add messages to residents when they pay town and plot taxes.
+    - Closes #7657.
+  - Add the ability to charge additional upkeep per outpost controlled by a town.
+    - Closes #7664.
+  - New Config Option: economy.daily_taxes.per_outpost_cost
+    - Default: 0.0
+    - An optional price that a town must pay for each outpost they own. This number is added to the town upkeep before any other upkeep modifiers are applied to the Town's upkeep costs.
+0.100.4.11:
+  - Fix regressions in health regen task on MC versions under 1.21.3.
+0.100.4.12:
+  - Fix plot perm hud trying to show too many lines.
+  - Move plotname and district information from /plot perm hud, to /towny map hud.
+  - Fix the proximity-to-nation test not removing too-far-away towns in every situation.
+    - Closes #7668. 
+  - Add message to the plot forsale notification, shown when a player has no claimed townblocks, advising them how to claim a plot. 
+  - New Language: Hungarian.
+0.100.4.13:
+  - Fix another issue with the proximity-to-nation test.
+0.100.4.14:
+  - Fix a null economy not returning false in the TownyEconomyHandler.isActive() test.
+  - Fix explosion regeneration not able to handle sign text.
+  - Fix teleports that have a TeleportCause of PLUGIN not firing a onPlayerMove() when the player is Jailed or Outlawed.
+0.100.4.15:
+  - Add prompt to shown admins urging them to update their economy from legacy to modern. Requires the player to have the towny.admin.updatealerts permission node.
+  - Fix default configs missing the nationCapitalBonusOutpostLimit in the nation_level.
+0.101.0.0:
+  - Bump version number for release.
+0.101.0.1:
+  - Add ability to spam jailed players with a title message showing them how to pay their bail.
+  - New Config Option: jail.show_bail_command_in_title_message
+    - Default: false
+    - When enabled, player that can pay their bail will see a title message telling them how to pay their bail.
+  - Remove methods deprecated during the 0.99.*.* release cycle, in time for the beginning of the 0.101.*.* release cycle.
+  - Re-fix max health attribute, courtesy of Warrior with PR #7678.
+    - Closes #7687.
+  - Make the npc prefix check less strict and more precise, courtesy of Warrior with PR #7688.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.1 to 3.5.2.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.10.1 to 3.11.1.
+  - Bump org.apache.logging.log4j:log4j-core from 2.24.1 to 2.24.2.
+  - Bump com.zaxxer:HikariCP from 6.0.0 to 6.2.1.
+  - Drop Java back to 17 to support 1.19.

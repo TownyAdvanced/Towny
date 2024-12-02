@@ -648,16 +648,6 @@ public class TownyWorld extends TownyObject {
 		return wildRevertMaterialsToNotOverwrite.contains(mat);
 	}
 
-	/**
-	 * @deprecated in lieu of {@link #isExplodedBlockAllowedToRevert(Material)} in 0.99.1.5.
-	 * @param mat Material that is being checked
-	 * @return true if the block should be reverted after blocking up.
-	 */
-	@Deprecated
-	public boolean isBlockAllowedToRevert(Material mat) {
-		return isExplodedBlockAllowedToRevert(mat);
-	}
-
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
 		blockExplosionProtection = new HashSet<>(TownySettings.toMaterialSet(mats));
 	}
@@ -798,38 +788,11 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest homeblock.
 	 * 
-	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord)} instead.
-	 * 
-	 * @param key - Coord to check from.
-	 * @return the distance to nearest towns homeblock.
-	 */
-	@Deprecated
-	public int getMinDistanceFromOtherTowns(Coord key) {
-		return getMinDistanceFromOtherTownsHomeBlocks(key);
-	}
-
-	/**
-	 * Checks the distance from the closest homeblock.
-	 * 
 	 * @param key - Coord to check from.
 	 * @return the distance to nearest towns homeblock.
 	 */
 	public int getMinDistanceFromOtherTownsHomeBlocks(Coord key) {
 		return getMinDistanceFromOtherTownsHomeBlocks(key, null);
-	}
-
-	/**
-	 * Checks the distance from a another town's homeblock.
-	 * 
-	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord, Town)} instead.
-	 * 
-	 * @param key - Coord to check from.
-	 * @param homeTown Players town
-	 * @return the closest distance to another towns homeblock.
-	 */
-	@Deprecated
-	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
-		return getMinDistanceFromOtherTownsHomeBlocks(key, homeTown);
 	}
 
 	/**

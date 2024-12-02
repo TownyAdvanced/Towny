@@ -156,25 +156,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		return state;
 	}
 
-	/**
-	 * @return the taskId
-	 * @deprecated Deprecated as of 0.99.0.6, use {@link #getTask()} instead.
-	 */
-	@Deprecated
-	public int getTaskId() {
-
-		return -1;
-	}
-
-	/**
-	 * @param taskId the taskId to set
-	 * @deprecated Deprecated as of 0.99.0.6, use {@link #setTask(ScheduledTask)} instead. 
-	 */
-	@Deprecated
-	public void setTaskId(int taskId) {
-		
-	}
-	
 	public ScheduledTask getTask() {
 		return this.task;
 	}

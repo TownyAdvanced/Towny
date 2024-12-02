@@ -375,9 +375,6 @@ msg_buy: '&bKupiono %s (%d szt.) za %s.'
 msg_buy_resident_plot: '&b%s kupił działkę od %s za %s!'
 msg_couldnt_pay_taxes: '&bMieszkaniec %s nie mógł zapłacić podatków i został wyrzucony z %s.'
 msg_couldnt_pay_plot_taxes: '&b%s nie mógł zapłacić podatków i został wysiedlony ze swojej działki.'
-msg_payed_town_tax: '&bZapłacono podatki miejskie: '
-msg_payed_plot_cost: '&bZapłacono %s za %s działek w %s'
-msg_payed_resident_tax: '&bZapłacono podatek mieszkańca w wysokości '
 msg_bankrupt_town: ' nie było stać na dalsze bycie miastem.'
 msg_bankrupt_nation: ' nie stać na opłacenie podatków, aby pozostać nacją.'
 msg_nation_not_peaceful: '&bNacji nie było stać na stan pokojowy.'
@@ -1744,7 +1741,7 @@ msg_perm_hud_resident: 'mieszkaniec'
 msg_perm_hud_nation: 'nacja'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'obcy'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Działka: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

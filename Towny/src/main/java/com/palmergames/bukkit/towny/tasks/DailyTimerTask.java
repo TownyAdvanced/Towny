@@ -26,6 +26,8 @@ import com.palmergames.util.StringMgmt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 
@@ -39,6 +41,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private final List<String> bankruptedTowns = new ArrayList<>();
 	private final List<String> removedTowns = new ArrayList<>();
 	private final List<String> removedNations = new ArrayList<>();
+	private final Map<Resident, Map<Town, Double>> residentPlotTaxMap = new ConcurrentHashMap<>();
 
 	public DailyTimerTask(Towny plugin) {
 
@@ -61,6 +64,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		bankruptedTowns.clear();
 		removedTowns.clear();
 		removedNations.clear();
+		residentPlotTaxMap.clear();
 
 		BukkitTools.fireEvent(new PreNewDayEvent()); // Pre-New Day Event
 		
@@ -388,6 +392,9 @@ public class DailyTimerTask extends TownyTimerTask {
 
 			collectTownTaxes(town);
 		}
+
+		if (!residentPlotTaxMap.isEmpty())
+			messageResidentsAboutPlotTaxesPaid();
 	}
 
 	/**
@@ -485,6 +492,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				return true;
 			
 			resident.getAccount().payTo(tax, town, String.format("Town Tax (Percentage) paid by %s.", resident.getName()));
+			if (resident.isOnline())
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_you_paid_town_tax", prettyMoney(tax)));
 			taxCollected += tax;
 			return true;
 		}
@@ -500,6 +509,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		if (resident.getAccount().canPayFromHoldings(tax)) {
 			resident.getAccount().payTo(tax, town, String.format("Town tax (FlatRate) paid by %s.", resident.getName()));
+			if (resident.isOnline())
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_you_paid_town_tax", prettyMoney(tax)));
 			taxCollected += tax;
 			return true;
 		}
@@ -579,6 +590,10 @@ public class DailyTimerTask extends TownyTimerTask {
 	private boolean collectPlotTaxFromResident(double tax, Resident resident, Town town, TownBlock townBlock) {
 		if (resident.getAccount().canPayFromHoldings(tax)) {
 			resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s) paid by %s", townBlock.getTypeName(), resident.getName()));
+			
+			if (resident.isOnline())
+				addPaymentToPlotTaxMap(resident, town, tax);
+
 			taxCollected += tax;
 			return true;
 		}
@@ -598,6 +613,34 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		townBlock.save();
 		return false;
+	}
+
+	private void addPaymentToPlotTaxMap(Resident resident, Town town, double tax) {
+		if (!residentPlotTaxMap.containsKey(resident)) {
+			Map<Town, Double> townMap = new ConcurrentHashMap<>();
+			townMap.put(town, tax);
+			residentPlotTaxMap.put(resident, townMap);
+			return;
+		}
+
+		Map<Town, Double> townMap = residentPlotTaxMap.get(resident);
+		double amount = townMap.containsKey(town) ? townMap.get(town) + tax : tax;
+		townMap.put(town, amount);
+		residentPlotTaxMap.put(resident, townMap);
+	}
+
+	private void messageResidentsAboutPlotTaxesPaid() {
+		for (Resident resident : residentPlotTaxMap.keySet()) {
+			if (!resident.isOnline())
+				continue;
+			Map<Town, Double> townMap = residentPlotTaxMap.get(resident);
+			if (townMap.isEmpty())
+				continue;
+			for (Town townKey : townMap.keySet()) {
+				double tax = townMap.get(townKey);
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_you_paid_plottax_to_town", prettyMoney(tax), townKey));
+			}
+		}
 	}
 
 	private void payPlotTaxToResidents(double tax, Resident resident, Town town, String typeName) {

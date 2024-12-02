@@ -13,7 +13,9 @@ import com.palmergames.bukkit.towny.object.TeleportWarmupParticle;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
 import io.papermc.lib.PaperLib;
@@ -65,7 +67,10 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				// Only teleport & add cooldown if player is valid
 				if (player == null)
 					continue;
-				
+
+				// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
+				SpawnUtil.addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
+
 				PaperLib.teleportAsync(player, request.destinationLocation(), TeleportCause.COMMAND);
 				
 				BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost()));
@@ -86,8 +91,8 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			// Send a particle that drops from above the player to their feet over the course of the warmup.
 			if (TownySettings.isTeleportWarmupShowingParticleEffect()) {
 				double progress = (double) (teleportWarmupTime - seconds) / teleportWarmupTime;
-				double offset = 2.0 + (progress * -2.0);
-				new TeleportWarmupParticle(resident.getPlayer().getLocation().add(0.0, offset, 0.0));
+				double yOffset = 2.0 + (progress * -2.0);
+				TeleportWarmupParticle.drawParticles(resident.getPlayer(), yOffset);
 			}
 		}
 	}

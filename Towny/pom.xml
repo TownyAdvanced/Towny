@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.100.4.0</version>
+    <version>0.101.0.1</version>
 
     <licenses>
         <license>
@@ -73,13 +73,39 @@
             <id>playpro-repo</id>
             <url>https://maven.playpro.com</url>
         </repository>
+        <!-- VaultUnlockedAPI -->
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <!-- Here to satisfy MockBukkit testing. -->
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.1-R0.1-SNAPSHOT</version>
+            <scope>test</scope>
+            <exclusions>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-api</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-serializer-gson</artifactId>
+              </exclusion>
+              <exclusion>
+                <groupId>net.kyori</groupId>
+                <artifactId>adventure-text-serializer-legacy</artifactId>
+              </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.21.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -91,7 +117,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.1.0</version>
+            <version>6.2.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -113,6 +139,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultUnlockedAPI</artifactId>
+            <version>2.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.ElgarL</groupId>
             <artifactId>groupmanager</artifactId>
             <version>3.2</version>
@@ -122,7 +154,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.23.1</version>
+            <version>2.24.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -160,7 +192,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -210,13 +242,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.10.3</version>
+            <version>5.11.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.3</version>
+            <version>5.11.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -227,8 +259,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.seeseemelk</groupId>
-            <artifactId>MockBukkit-v1.20</artifactId>
-            <version>3.88.1</version>
+            <artifactId>MockBukkit-v1.21</artifactId>
+            <version>3.133.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -258,7 +290,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>3.11.1</version>
                     <executions>
                         <execution>
                             <id>install</id>
@@ -360,10 +392,6 @@
                                 <shadedPattern>com.palmergames.adventure</shadedPattern>
                             </relocation>
                             <relocation>
-                                <pattern>net.kyori.examination</pattern>
-                                <shadedPattern>com.palmergames.examination</shadedPattern>
-                            </relocation>
-                            <relocation>
                                 <pattern>org.bstats</pattern>
                                 <shadedPattern>com.palmergames.bukkit.metrics</shadedPattern>
                             </relocation>
@@ -400,7 +428,7 @@
                 <plugin>
                     <groupId>com.github.TownyAdvanced</groupId>
                     <artifactId>bridger</artifactId>
-                    <version>1.7.1.Final</version>
+                    <version>1.7.2.Final</version>
                     <executions>
                         <!-- run after "compile", runs bridger on main classes -->
                         <execution>
@@ -415,7 +443,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.5.2</version>
                     <configuration>
                         <skipTests>${skipTests}</skipTests>
                     </configuration>

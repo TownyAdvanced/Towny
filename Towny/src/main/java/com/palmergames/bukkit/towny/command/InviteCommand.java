@@ -164,7 +164,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			// We cut the first argument out of it so /invite deny args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
 			if (args[0].equalsIgnoreCase("all")) {
-				denyAllInvites(invites);
+				denyAllInvites(new ArrayList<>(invites));
 				TownyMessaging.sendMsg(resident, Translatable.of("msg_player_denied_all_invites"));
 				return;
 			}

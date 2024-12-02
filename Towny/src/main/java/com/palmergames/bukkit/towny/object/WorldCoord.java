@@ -313,7 +313,7 @@ public class WorldCoord extends Coord {
 	 * @return Return a Bukkit bounding box containg the space of the WorldCoord.
 	 */
 	public BoundingBox getBoundingBox() {
-		return BoundingBox.of(getLowerMostCornerLocation(), getUpperMostCornerLocation());
+		return BoundingBox.of(getLowerMostCornerLocation().getBlock(), getUpperMostCornerLocation().getBlock());
 	}
 	
 	/**

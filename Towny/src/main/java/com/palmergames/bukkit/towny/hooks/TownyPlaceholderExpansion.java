@@ -200,7 +200,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "town_unformatted": // %townyadvanced_town_unformatted%
 			if (resident.hasTown())
 				town = resident.getTownOrNull().getName();
-			return StringMgmt.remUnderscore(town);
+			return town;
 		case "town_formatted": // %townyadvanced_town_formatted%
 			if (resident.hasTown())
 				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getFormattedName());

@@ -3,36 +3,41 @@ package com.palmergames.bukkit.towny.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
+import com.palmergames.bukkit.util.BukkitParticle;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.World;
 
 import com.palmergames.bukkit.towny.Towny;
+import org.bukkit.entity.Player;
 
 public class TeleportWarmupParticle {
 
 	private static final List<RingCoord> RING_PATTERN = createRingOffsets();
 	public static final int RING_POINT_COUNT = 12;
 	public static final int RING_DELAY_TICKS = 2;
-	public final Location loc;
 
-	public TeleportWarmupParticle(Location loc) {
-		this.loc = loc;
-		drawParticle();
-	}
-
-	private void drawParticle() {
-		final World world = loc.getWorld();
-		if (world == null)
-			return;
+	public static void drawParticles(final Player player, final double yOffset) {
+		Particle spawnParticle = BukkitParticle.getSpawnPointParticle();
 		int i = 0;
 		for (RingCoord ringPosition : RING_PATTERN) {
-			Location point = loc.clone().add(ringPosition.x(), 0.0, ringPosition.z());
-			Towny.getPlugin().getScheduler().runAsyncLater(() -> {
-				try {
-					// This can potentially throw an exception if we're running this async and a player disconnects while it's sending particles.
-					world.spawnParticle(Particle.CRIT_MAGIC, point, 1, 0.0, 0.0, 0.0, 0.0);
-				} catch (Exception ignored) {}
+			Towny.getPlugin().getScheduler().runLater(player, () -> {
+				final Location point = player.getLocation().add(ringPosition.x(), yOffset, ringPosition.z());
+
+				player.spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
+
+				// Don't show particles for other players if the player is invisible
+				if (player.isInvisible())
+					return;
+
+				if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20_2)) {
+					for (final Player trackingPlayer : player.getTrackedBy()) {
+						trackingPlayer.spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
+					}
+				} else if (!BukkitTools.hasVanishedMeta(player)) {
+					player.getWorld().spawnParticle(spawnParticle, point, 1, 0.0, 0.0, 0.0, 0.0);
+				}
 			}, (long) i * RING_DELAY_TICKS);
 			i++;
 		}

@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,6 +47,39 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	 */
 	public static final ItemLists AXES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("axes")).endsWith("_AXE").build();
 
+	/**
+	 * List of Sword items.
+	 */
+	public static final ItemLists SWORDS = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("swords")).endsWith("_SWORD").build();
+
+	/**
+	 * List of Bow items.
+	 */
+	public static final ItemLists BOWS = newBuilder().add("BOW","CROSSBOW").build();
+
+	/**
+	 * List of Weapon items.
+	 */
+	public static final ItemLists WEAPONS = newBuilder()
+			.includeList(AXES)
+			.includeList(SWORDS)
+			.includeList(BOWS)
+			.build();
+
+	/**
+	 * List of Armour items.
+	 */
+	public static final ItemLists ARMOURS = newBuilder()
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("chest_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("head_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("foot_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("leg_armor"))
+			.endsWith("_CHESTPLATE")
+			.endsWith("_HELMET")
+			.endsWith("_LEGGINGS")
+			.endsWith("_BOOTS")
+			.build();
+	
 	/**
 	 * List of Dye items.
 	 */
@@ -258,6 +290,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists CAULDRON_FILLABLE = newBuilder().add("WATER_BUCKET", "LAVA_BUCKET", "POWDER_SNOW_BUCKET").build();
 
 	/**
+	 * List of liquid blocks
+	 */
+	public static final ItemLists LIQUID_BLOCKS = newBuilder().add("WATER", "LAVA", "BUBBLE_COLUMN").build();
+	
+	/**
 	 * List of hoes
 	 */
 	public static final ItemLists HOES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("hoes")).endsWith("_hoe").build();
@@ -278,6 +315,44 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.includeList(PLANTABLES)
 			.add("TALL_GRASS","LARGE_FERN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF").build();
 
+	/**
+	 * Minecraft uses 3 types of air
+	 */
+	public static final ItemLists AIR_TYPES = newBuilder()
+		.add("AIR")
+		.add("CAVE_AIR")
+		.add("VOID_AIR").build();
+
+	/**
+	 * List of all the banners
+	 */
+	public static final ItemLists BANNERS = newBuilder().endsWith("_BANNER").build();
+
+	/**
+	 * List of wall coral fans, players can fall through these
+	 */
+	public static final ItemLists CORAL_FANS = newBuilder()
+		.endsWith("_WALL_FAN")
+		.build();
+		
+	/**
+	 * List of solid blocks
+	 */
+	public static final ItemLists NOT_SOLID_BLOCKS = newBuilder()
+			.add("TRIPWIRE", "TRIPWIRE_HOOK")
+			.add("REDSTONE_WIRE","COMPARATOR","REPEATER","LEVER")
+			.includeList(CORAL_FANS)
+			.includeList(AIR_TYPES)
+			.includeList(SIGNS)
+			.includeList(BUTTONS)
+			.includeList(PRESSURE_PLATES)
+			.includeList(FENCE_GATES) //if open they are basically air
+			.includeList(TRAPDOORS) //if open they are basically air
+			.includeList(DOORS) ////if open they are basically air
+			.includeList(TORCHES)
+			.includeList(BANNERS)
+			.includeList(PLANTS).build();
+	
 	public static final ItemLists FALLING_BLOCKS = newBuilder()
 			.add("SAND", "RED_SAND", "GRAVEL", "SUSPICIOUS_SAND", "SUSPICIOUS_GRAVEL")
 			.endsWith("_CONCRETE_POWDER")

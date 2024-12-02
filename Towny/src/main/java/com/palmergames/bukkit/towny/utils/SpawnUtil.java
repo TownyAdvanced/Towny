@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
@@ -12,14 +14,20 @@ import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
 import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
 import com.palmergames.bukkit.towny.object.SpawnInformation;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
 import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
+import com.palmergames.bukkit.util.ItemLists;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -41,6 +49,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnUtil {
@@ -100,7 +109,7 @@ public class SpawnUtil {
 			if (spawnInfo.travelCost > 0) {
 				// Get paymentMsg for the money.csv and the Account being paid.
 				final String paymentMsg = getPaymentMsg(spawnInfo.townSpawnLevel, spawnInfo.nationSpawnLevel, spawnType);
-				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : Account.SERVER_ACCOUNT;
+				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : TownyServerAccount.ACCOUNT;
 				initiateCostedSpawn(player, resident, spawnLoc, spawnInfo.travelCost, payee, paymentMsg, ignoreWarn, spawnInfo.cooldown);
 				// No Cost so skip confirmation system.
 			} else
@@ -440,17 +449,133 @@ public class SpawnUtil {
 							return player.getWorld().getSpawnLocation();
 					});
 				} else if (town != null && town.hasSpawn())
-					yield CompletableFuture.completedFuture(town.getSpawnOrNull());
+					yield adaptSpawnLocation(town.getSpawn(), player);
 				else
 					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
-					yield CompletableFuture.completedFuture(getOutpostSpawnLocation(town, split));
+					yield adaptSpawnLocation(getOutpostSpawnLocation(town, split), player);
 				else
-					yield CompletableFuture.completedFuture(town.getSpawn());
+					yield adaptSpawnLocation(town.getSpawn(), player);
 			case NATION:
-				yield CompletableFuture.completedFuture(nation.getSpawn());
+				yield adaptSpawnLocation(nation.getSpawn(), player);
 		};
+	}
+	
+	private static CompletableFuture<Location> adaptSpawnLocation(final @NotNull Location location, final @NotNull Player player) {
+		if (!TownySettings.isSafeTeleportUsed())
+			return CompletableFuture.completedFuture(location);
+		
+		return PaperLib.getChunkAtAsync(location).thenApply(chunk -> getSafeLocation(location, player));
+	}
+
+	/**
+	 * Tries to find a safe location nearby to teleport the player to
+	 * if safety teleport is enabled, otherwise does nothing.
+	 * 
+	 * @param location Starting location
+	 * @return A safe location nearby, same location if already safe
+	 */
+	private static Location getSafeLocation(Location location, Player p) {
+		//if safety teleport isn't enabled do anything
+		if (!TownySettings.isSafeTeleportUsed()) {
+			return location;
+		}
+		
+		if (isSafeLocation(location)) {
+			return location;
+		}
+
+		final int range = 22;
+
+		BitSet isLiquidMap = new BitSet(range * 2);
+		BitSet isSolidMap = new BitSet(range * 2);
+		
+		// look for 20 blocks up and down for a safe location, 
+		// if you can't find it fail the teleport
+		// maybe add a translation key and add the player 
+		// as a parameter to print him an error message
+		
+		Location temp = location.clone().subtract(0, range, 0);
+		
+		//build the linked lists
+		for(int i = 0; i < range * 2; i++) {
+			Material type = temp.getBlock().getType();
+			
+			if (ItemLists.LIQUID_BLOCKS.contains(type)) {
+				isLiquidMap.set(i);
+			}
+			
+			if (!ItemLists.NOT_SOLID_BLOCKS.contains(type)) {
+				isSolidMap.set(i);
+			}
+			
+			temp = temp.add(0,1,0);
+		}
+		
+		// 0 1 -1 2 -2 ...
+		for (int i = 0; Math.abs(i) < range - 2; i = next(i) ) {
+			// value 	 = bottom block
+			// value + 1 = middle block
+			// value + 2 = top block
+			int value = i + range;
+			
+			if(!isSolidMap.get(value) || isLiquidMap.get(value)) {
+				continue;
+			}
+			
+			if (isSolidMap.get(value+1) || isLiquidMap.get(value+1)) {
+				continue;
+			}
+			
+			if (isSolidMap.get(value+2) || isLiquidMap.get(value+2)) {
+				continue;
+			}
+			
+			return location.clone().add(0, value + 1, 0);
+		}
+		
+		TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_fail_safe_teleport"));
+		return null;
+	}
+	
+	private static int next(int i) {
+		if (i <= 0) {
+			i = -i;
+			i++;
+		} else {
+			i = -i;
+		}
+		return i;
+	}
+
+	private static boolean isSafeLocation(Location location) {
+		World world = location.getWorld();
+		if (world == null) return false;
+
+		// Check if location is in a block
+		Block block = world.getBlockAt(location);
+		Material type = block.getType();
+		
+		if (!ItemLists.NOT_SOLID_BLOCKS.contains(type) || ItemLists.LIQUID_BLOCKS.contains(type)) {
+			return false;
+		}
+
+		// Check if block below is lava or water or nothing
+		Block belowBlock = world.getBlockAt(location.clone().subtract(0, 1, 0));
+		Material belowType = belowBlock.getType();
+		if (ItemLists.NOT_SOLID_BLOCKS.contains(belowType) || ItemLists.LIQUID_BLOCKS.contains(type)) {
+			return false;
+		}
+
+		// Check if the location is directly above a solid block
+		Block aboveBlock = world.getBlockAt(location.clone().add(0, 1, 0));
+		Material aboveType = aboveBlock.getType();
+		if (!ItemLists.NOT_SOLID_BLOCKS.contains(aboveType) || ItemLists.LIQUID_BLOCKS.contains(aboveType)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -614,7 +739,7 @@ public class SpawnUtil {
 	 */
 	private static Account getPayee(Town town, Nation nation, SpawnType spawnType) {
 		return switch(spawnType) {
-		case RESIDENT -> town == null ? Account.SERVER_ACCOUNT : town.getAccount(); 
+		case RESIDENT -> town == null ? TownyServerAccount.ACCOUNT : town.getAccount(); 
 		case TOWN -> town.getAccount();
 		case NATION -> nation.getAccount();
 		};
@@ -670,6 +795,10 @@ public class SpawnUtil {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
+
+			// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
+			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
+
 			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
 			BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost));
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
@@ -759,5 +888,18 @@ public class SpawnUtil {
 	
 	private static boolean hasPerm(Player player, PermissionNodes node) {
 		return TownyUniverse.getInstance().getPermissionSource().testPermission(player, node.getNode());
+	}
+
+	/**
+	 * On some servers, when the player is teleported the chunk they left will
+	 * unload before the server ticks, causing any pets they have following them to
+	 * be abandoned. This method will cause a chunk to remain loaded long enough for
+	 * the pets to be teleported to the player naturally.
+	 * 
+	 * @param wc WorldCoord from which the player is leaving.
+	 */
+	public static void addAndRemoveChunkTicket(WorldCoord wc) {
+		wc.loadChunks();
+		Towny.getPlugin().getScheduler().runAsyncLater(() -> wc.unloadChunks(), 20L);
 	}
 }

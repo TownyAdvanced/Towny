@@ -214,7 +214,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "set":
 					if (args.length == 2) {
@@ -272,6 +272,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						case "set":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("perm", "maxjoindays", "minjoindays"), args[2]);
+							if (args.length > 3 && args[2].equalsIgnoreCase("perm"))
+								return permTabComplete(StringMgmt.remArgs(args, 3));
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
@@ -283,7 +285,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 							if (args.length == 4)
 								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
 						default:
-							return permTabComplete(StringMgmt.remFirstArg(args));
+							return Collections.emptyList();
 					}
 
 				case "jailcell":
@@ -300,8 +302,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "trust":
 					if (args.length == 2)
 						return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
-					if (args.length == 3)
-						return getTownyStartingWith(args[2], "r");
+					if (args.length == 3) {
+						if ("remove".equalsIgnoreCase(args[1])) {
+							final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
+							if (townBlock != null) {
+								return townBlock.getTrustedResidents().stream().map(Resident::getName).toList();
+							}
+						} else {
+							return getTownyStartingWith(args[2], "r");
+						}
+					}
 				default:
 					if (args.length == 1)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT, plotTabCompletes), args[0]);
@@ -2060,6 +2070,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "taxed":
 					 tryToggleTownBlockTaxed(player, groupBlock, split, choice);
 					 endingMessage = Translatable.of("msg_changed_plotgroup_taxed", groupBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled"));
+					 break;
 				default:
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "plot"));
 					return;

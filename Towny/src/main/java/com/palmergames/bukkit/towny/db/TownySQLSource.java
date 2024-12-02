@@ -151,17 +151,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 
 	/**
-	 * open a connection to the SQL server.
-	 *
-	 * @return true if we successfully connected to the db.
-	 * @deprecated as of 0.99.1.2, use {@link #getConnection()} to obtain a connection instead.
-	 */
-	@Deprecated(forRemoval = true)
-	public boolean getContext() {
-		return isReady();
-	}
-
-	/**
 	 * @return Whether the datasource is initialized and running.
 	 */
 	public boolean isReady() {
@@ -390,10 +379,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				Object[] values = args.values().stream().toArray();
 				for (int count = 0; count < values.length; count++) {
 					Object object = values[count];
-					if (object instanceof String)
-						statement.setString(count + 1, (String) object);
-					else if (object instanceof Boolean)
-						statement.setBoolean(count + 1, (Boolean) object);
+					if (object instanceof String str)
+						statement.setString(count + 1, str);
+					else if (object instanceof Boolean b)
+						statement.setBoolean(count + 1, b);
+					else if (object instanceof UUID uuid)
+						statement.setObject(count + 1, uuid.toString());
 					else
 						statement.setObject(count + 1, object);
 				}
@@ -446,6 +437,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		
 		public String tableName() {
 			return tableName;
+		}
+		
+		public String primaryKey() {
+			return primaryKey;
 		}
 		
 		private String getSingular() {

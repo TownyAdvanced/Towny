@@ -60,6 +60,26 @@ public class TownyActionEventExecutor {
 	 * @return true if not cancelled by the cache or the event results.
 	 */
 	private static boolean isAllowedAction(Player player, Location loc, Material mat, ActionType action, TownyActionEvent event) {
+		return isAllowedAction(player, loc, mat, action, event, false);
+	}
+
+	/**
+	 * First checks the Player's cache using the PlayerCacheUtil, and sets the
+	 * cancellation of the Action-Type Event. Then fires the ActionType-based Event,
+	 * with which Towny will decide if Event War or Flag War change anything, or any
+	 * other plugin wanting to affect the outcome of an action-based decision.
+	 * 
+	 * Displays feedback to the player when an action is cancelled.
+	 * 
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
+	 * @param action - The ActionType of the event. ex: BUILD
+	 * @param event - One of the four ActionType-based events.
+	 * @param silent - Whether to suppress the message.
+	 * @return true if not cancelled by the cache or the event results.
+	 */
+	private static boolean isAllowedAction(Player player, Location loc, Material mat, ActionType action, TownyActionEvent event, boolean silent) {
 
 		/*
 		 * Use the PlayerCache to decide what Towny will do,
@@ -82,7 +102,7 @@ public class TownyActionEventExecutor {
 		/*
 		 * Send any feedback when the action is denied.
 		 */
-		if (event.isCancelled() && !event.isMessageSuppressed())
+		if (event.isCancelled() && !event.isMessageSuppressed() && !silent)
 			TownyMessaging.sendErrorMsg(player, event.getCancelMessage());
 
 		return !event.isCancelled();
@@ -248,8 +268,21 @@ public class TownyActionEventExecutor {
 	 * @return true if allowed.
 	 */
 	public static boolean canSwitch(Player player, Location loc, Material mat) {
+		return canSwitch(player, loc, mat, false);
+	}
+
+	/**
+	 * Can the player use switches of this material at this location?
+	 * 
+	 * @param player     - Player involved in the event.
+	 * @param loc   - Location of the event.
+	 * @param mat   - Material being involved in the event.
+	 * @param silent Whether to show an error message.
+	 * @return true if allowed.
+	 */
+	public static boolean canSwitch(Player player, Location loc, Material mat, boolean silent) {
 		TownySwitchEvent event = new TownySwitchEvent(player, loc, mat, getBlock(loc), TownyAPI.getInstance().getTownBlock(loc), false);
-		return isAllowedAction(player, loc, mat, ActionType.SWITCH, event);
+		return isAllowedAction(player, loc, mat, ActionType.SWITCH, event, silent);
 	}
 
 	/**

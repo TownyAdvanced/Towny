@@ -37,6 +37,7 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.metadata.DataFieldIO;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
@@ -133,13 +134,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void finishTasks() {
 		
 		// Cancel the repeating task as its not needed anymore.
-		if (task != null)
-			task.cancel();
-		
-		// Make sure that *all* tasks are saved before shutting down.
-		while (!queryQueue.isEmpty()) {
-			Runnable operation = this.queryQueue.poll();
-			operation.run();
+		synchronized (this.queryQueue) {
+			if (task != null)
+				task.cancel();
+
+			// Make sure that *all* tasks are saved before shutting down.
+			while (!this.queryQueue.isEmpty()) {
+				Runnable operation = this.queryQueue.poll();
+				operation.run();
+			}
 		}
 	}
 	
@@ -427,7 +430,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.getAccount().removeAccount();
 
 		for (Resident resident : toSave) {
-			resident.clearModes(false);
+			ResidentModeHandler.resetModes(resident, false);
 			resident.removeTown(true);
 		}
 		
@@ -624,11 +627,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Save the towns bank balance to set in the new account.
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
-				try {
-					townBalance = town.getAccount().getHoldingBalance();
-					town.getAccount().withdraw(townBalance, "Rename Town - Transfer from old account");
-				} catch (Exception ignored) {
-					TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + " could not be received from the economy plugin and will not be able to be converted.");
+				if (TownyEconomyHandler.canRenameAccounts()) {
+					TownyEconomyHandler.rename(town, newName);
+				} else {
+					try {
+						townBalance = town.getAccount().getHoldingBalance();
+						town.getAccount().withdraw(townBalance, "Rename Town - Transfer from old account");
+					} catch (Exception ignored) {
+						TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + " could not be received from the economy plugin and will not be able to be converted.");
+					}
 				}
 				
 			UUID oldUUID = town.getUUID();
@@ -670,7 +677,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			town.setRegistered(oldregistration);
 			if (TownyEconomyHandler.isActive()) {
 				town.getAccount().setName(TownySettings.getTownAccountPrefix() + town.getName());
-				town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
+				if (!TownyEconomyHandler.canRenameAccounts())
+					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
 			}
 
 			for (Resident resident : toSave) {
@@ -727,11 +735,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Save the nations bank balance to set in the new account.
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
-				try {
-					nationBalance = nation.getAccount().getHoldingBalance();
-					nation.getAccount().setBalance(0, "Rename Nation - Transfer from old account");
-				} catch (Exception ignored) {
-					TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
+				if (TownyEconomyHandler.canRenameAccounts()) {
+					TownyEconomyHandler.rename(nation, newName);
+				} else {
+					try {
+						nationBalance = nation.getAccount().getHoldingBalance();
+						nation.getAccount().setBalance(0, "Rename Nation - Transfer from old account");
+					} catch (Exception ignored) {
+						TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
+					}
 				}
 
 			//Tidy up old files
@@ -748,7 +760,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 			if (TownyEconomyHandler.isActive()) {
 				nation.getAccount().setName(TownySettings.getNationAccountPrefix() + nation.getName());
-				nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
+				if (!TownyEconomyHandler.canRenameAccounts())
+					nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
 			}
 
 			for (Town town : toSave) {
@@ -1129,8 +1142,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	 * 
 	 * @param succumbingNation - Nation to be removed, towns put into prevailingNation.
 	 * @param prevailingNation - Nation which survives, absorbs other nation's towns.
-	 * 
-	 * @author LlmDl
 	 */
 	public void mergeNation(Nation succumbingNation, Nation prevailingNation) {
 

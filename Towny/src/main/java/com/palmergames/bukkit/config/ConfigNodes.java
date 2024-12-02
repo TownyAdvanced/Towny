@@ -536,6 +536,20 @@ public enum ConfigNodes {
 			"",
 			"# When true players cannot become hungrier when in their own or an allied town."),
 
+	GTOWN_SETTINGS_BEACONS_ROOT(
+			"global_town_settings.beacons","","",
+			"# These beacons settings will only work on Paper or Paper-derived servers. They will not have any effect on Spigot servers."),
+	GTOWN_SETTINGS_BEACONS_FOR_ALLIES_ONLY(
+			"global_town_settings.beacons.beacons_for_allies_only",
+			"false",
+			"",
+			"# When true, a beacon placed in a town will only affect the allies of the town. This includes residents, nation residents and allied nation residents."),
+	GTOWN_SETTINGS_BEACONS_EXCLUDE_CONQUERED_TOWNS(
+			"global_town_settings.beacons.exclude_conquered_towns",
+			"false",
+			"",
+			"# When true, conquered towns are not considered allies."),
+
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",
 			"30",
@@ -761,6 +775,12 @@ public enum ConfigNodes {
 			"# If People should keep their experience on death in an arena townblock.",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
+	GTOWN_SETTINGS_PREVENT_ITEM_DEGRADE_IN_ARENAS(
+			"global_town_settings.prevent_item_degrading_in_arenas",
+			"false",
+			"",
+			"# While true, weapons and armour items worn by players in Arena plots will not lose durability."),
+
 	GTOWN_SETTINGS_MAX_BUYTOWN_PRICE(
 			"global_town_settings.max_buytown_price",
 			"999999999",
@@ -996,6 +1016,13 @@ public enum ConfigNodes {
 			"-1",
 			"",
 			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
+	GNATION_SETTINGS_ARE_CONQUERED_TOWNS_CONSIDERED_ALLIES(
+			"global_nation_settings.are_conquered_towns_considered_allies",
+			"true",
+			"",
+			"# While true, conquered towns will be considered a member of good standing in the nation.",
+			"# When set to false CombatUtil#isAlly() tests will treat conquered towns and their nations as not allied.",
+			"# Setting this to false could result in strange unforseen behaviour."),
 	GNATION_SETTINGS_PROXIMITY_ROOT(
 			"global_nation_settings.proximity", "", ""),
 	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL(
@@ -1290,6 +1317,13 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	SPAWNING_SAFE_TELEPORT(
+		"spawning.safe_teleport",
+		"false",
+		"",
+		"# If enabled tries to find a safe location when teleporting to a town spawn/nation spawn/outpost",
+		"# can be used to prevent players from making kill boxes at those locations."
+	),
 	SPAWNING_COST_SPAWN_WARNINGS(
 			"spawning.spawn_cost_warnings",
 			"true",
@@ -1372,7 +1406,7 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.",
-			"# Allows allows the residents of entire an town when that town is trusted by the town."),
+			"# Allows the residents of entire an town when that town is trusted by the town."),
 	SPAWNING_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN(
 			"spawning.town_spawn.are_new_residents_prompted_to_town_spawn",
 			"false",
@@ -2571,7 +2605,7 @@ public enum ConfigNodes {
 			"economy.new_expand.price_claim_townblock_increase",
 			"1.0",
 			"",
-			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost."),
+			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to the cost of every townblock claimed."),
 	ECO_MAX_PRICE_CLAIM_TOWNBLOCK(
 			"economy.new_expand.max_price_claim_townblock",
 			"-1.0", 
@@ -2605,7 +2639,7 @@ public enum ConfigNodes {
 			"economy.new_expand.price_purchased_bonus_townblock_max_price",
 			"-1.0",
 			"",
-			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maxium."),
+			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maximum."),
 
 	ECO_DEATH("economy.death", "", ""),
 	ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", 
@@ -2831,6 +2865,12 @@ public enum ConfigNodes {
 			"",
 			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
 			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
+	ECO_PRICE_TOWN_OUTPOST_UPKEEP_COST(
+			"economy.daily_taxes.per_outpost_cost",
+			"0.0",
+			"",
+			"# An optional price that a town must pay for each outpost they own. This number is added to the town upkeep",
+			"# before any other upkeep modifiers are applied to the Town's upkeep costs."),
 	ECO_TAXES_ALLOW_PLOT_PAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
@@ -2950,6 +2990,22 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does a conquered town which cannot pay the nation tax get deleted?"),
+
+	ECO_ADVANCED_ROOT("economy.advanced","",""),
+	ECO_ADVANCED_MODERN(
+			"economy.advanced.modern",
+			"true",
+			"",
+			"# When enabled, Towny will use UUIDs when communicating with your economy plugin.",
+			"# Most users will never have to touch this, but for existing servers this option will automatically be set to false.",
+			"# If this option is disabled and you wish to avoid losing data, use the `/townyadmin eco convert modern` command to convert."),
+	
+	ECO_ADVANCED_NPC_UUID_VERSION(
+			"economy.advanced.npc_uuid_version",
+			"-1",
+			"",
+			"# The UUID version to use for non-player accounts. This is used so that economy plugins can more easily differentiate between player and NPC accounts.",
+			"# The default is -1, which disables modifying npc uuids."),
 
 	BANKHISTORY(
 		"bank_history",
@@ -3141,7 +3197,12 @@ public enum ConfigNodes {
 			"",
 			"# Most types of unjailing result in a player being teleported when they are freed.",
 			"# Setting this to false will prevent that teleporting, resulting in the player not being teleported when they are freed."),
-	
+	JAIL_SHOW_BAIL_TITLE(
+			"jail.show_bail_command_in_title_message",
+			"false",
+			"",
+			"# When enabled, player that can pay their bail will see a title message telling them how to pay their bail."),
+
 	BANK(
 			"bank",
 			"",

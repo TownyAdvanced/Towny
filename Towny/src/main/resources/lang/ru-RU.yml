@@ -208,7 +208,12 @@ res_toggle_help_7: "Переключить возможность отображ
 res_toggle_help_8: "."
 res_toggle_help_9: ""
 res_toggle_help_10: "Удалить все режимы."
+res_toggle_help_10.5: "."
 res_toggle_help_11: "Шпионаж за чатами."
+res_toggle_help_12: ""
+res_toggle_help_13: ""
+res_toggle_help_14: "."
+res_toggle_help_15: "Переключить возможность использования Инфоинструмента для изучения правильных названий блоков/сущностей."
 res_set_help_1: "Установите разрешения на доступ к участку для вашего жителя по умолчанию."
 res_set_help_2: "Установите режимы вашего жителя."
 mode_1: 'Показать карту между каждым участком города'
@@ -236,6 +241,7 @@ world_help_3: 'Статус указанного мира'
 world_help_4: 'Список миров'
 world_help_5: 'Регенерировать этот чанк'
 world_help_6: 'See /tw toggle ? for help'
+world_set_help_0: "Установите название дикой природы в мире."
 townyadmin_help_1: 'Расприватить участок города'
 townyadmin_help_2: 'Попытаться расприватить участок вокруг вас.'
 admin_panel_2: 'Перезагрузить плагин'
@@ -249,6 +255,7 @@ townyadmin_town_help_8: "Используйте команду набора го
 townyadmin_town_help_13: "Положить деньги на счёт города."
 townyadmin_town_help_14: "Снять деньги со счёта города."
 townyadmin_town_help_15: "Показывает историю операций со счётом города."
+townyadmin_nation_help_1: "Показать окно статуса страны."
 townyadmin_nation_help_2: "Добавить города в нацию."
 townyadmin_nation_help_3: "Удалить города из нации."
 townyadmin_nation_help_4: "Переименовать нацию."
@@ -282,9 +289,6 @@ msg_buy: '&bКуплено %d %s за %s.'
 msg_buy_resident_plot: '&b%s купил участок %s за %s!'
 msg_couldnt_pay_taxes: '&b%s не смог оплатить налоги, и был изгнан из города %s.'
 msg_couldnt_pay_plot_taxes: '&b%s не смог заплатить налоги и потерял свой участок.'
-msg_payed_town_tax: '&bЗаплатил налог городу '
-msg_payed_plot_cost: '&bЗаплатил %s за %s участков в %s'
-msg_payed_resident_tax: '&bЗаплатил налог в '
 msg_bankrupt_town: ' не смог себе позволить остаться городом.'
 msg_bankrupt_nation: ' больше не может быть нацией, так как не имеет денег на содержание.'
 msg_nation_not_peaceful: '&bНация не может себе позволить быть мирной.'
@@ -1656,7 +1660,7 @@ msg_perm_hud_resident: 'житель'
 msg_perm_hud_nation: 'нация'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'чужак'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Участок: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
