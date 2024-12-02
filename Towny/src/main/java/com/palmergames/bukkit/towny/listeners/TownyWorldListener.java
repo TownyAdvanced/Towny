@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import java.util.List;
 
@@ -21,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.StructureGrowEvent;
@@ -170,22 +168,6 @@ public class TownyWorldListener implements Listener {
 				break;
 			}
 		}
-	}
-	
-	@EventHandler(ignoreCancelled = true)
-	public void onSnowForm(BlockFormEvent event) {
-		BlockState bs = event.getNewState();
-		
-		if (!bs.getType().equals(Material.SNOW)) return;
-
-		if (!TownyAPI.getInstance().isTownyWorld(bs.getWorld())) return;
-		
-		Town town = TownyAPI.getInstance().getTown(bs.getLocation());
-		if (town == null) return;
-		
-		if (town.isSnow()) return;
-		
-		event.setCancelled(true);
 	}
 
 }
