@@ -76,6 +76,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isForceTownMobs = TownySettings.isForcingMonsters();
 	private boolean isExplosion = TownySettings.isExplosions();
 	private boolean isForceExpl = TownySettings.isForcingExplosions();
+	private boolean isSnow = TownySettings.isSnow();
 	private boolean isForceSnow = TownySettings.isForcingSnow();
 	private boolean isEndermanProtect = TownySettings.getEndermanProtect();
 	
@@ -286,6 +287,14 @@ public class TownyWorld extends TownyObject {
 	public boolean isForceFire() {
 
 		return isForceFire;
+	}
+
+	public void setSnow(boolean isSnow) {
+		this.isSnow = isSnow;
+	}
+
+	public boolean isSnow() {
+		return isSnow;
 	}
 	
 	public void setForceSnow(boolean isSnow) {

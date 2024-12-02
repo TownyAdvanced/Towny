@@ -275,6 +275,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_RESIDENT_TOGGLE_EXPLOSION("towny.command.resident.toggle.explosion"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_FIRE("towny.command.resident.toggle.fire"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_MOBS("towny.command.resident.toggle.mobs"),
+		TOWNY_COMMAND_RESIDENT_TOGGLE_SNOW("towny.command.resident.toggle.snow"),
 		// Generic Modes
 		TOWNY_COMMAND_RESIDENT_TOGGLE_BEDSPAWN("towny.command.resident.toggle.bedspawn"),
 		TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES("towny.command.resident.toggle.bordertitles"),
@@ -436,6 +437,8 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCEEXPLOSION("towny.command.townyworld.toggle.forceexplosion"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FIRE("towny.command.townyworld.toggle.fire"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCEFIRE("towny.command.townyworld.toggle.forcefire"),
+		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_SNOW("towny.command.townyworld.toggle.snow"),
+		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCESNOW("towny.command.townyworld.toggle.forcesnow"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FRIENDLYFIRE("towny.command.townyworld.toggle.friendlyfire"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_TOWNMOBS("towny.command.townyworld.toggle.townmobs"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WORLDMOBS("towny.command.townyworld.toggle.worldmobs"),

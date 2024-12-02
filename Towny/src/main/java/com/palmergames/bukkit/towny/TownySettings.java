@@ -2448,6 +2448,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_FORCE_FIRE_ON);
 	}
 	
+	public static boolean isSnow() {
+		return getBoolean(ConfigNodes.NWS_WORLD_SNOW);
+	}
+	
 	public static boolean isForcingSnow() {
 		return getBoolean(ConfigNodes.NWS_FORCE_SNOW_ON);
 	}
