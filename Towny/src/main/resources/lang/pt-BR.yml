@@ -1554,6 +1554,75 @@ msg_err_invalid_response: 'Resposta inválida! Digite q para sair ou volte para 
 msg_setup_full_guide_link: '&bPara um link para o guia completo de instalação, clique aqui.'
 msg_setup_wildernessuse: 'Você gostaria de habilitar o uso de natureza selvagem? Isso permitirá aos jogadores quebrar/construir na natureza selvagem.'
 msg_setup_revertunclaim: 'Você gostaria de usar reverter quanto o pedido de reivindicação? Isso fará as townblocs regenerarem lentamente quando forem reivindicadas.'
+msg_setup_town_block_ratio: 'Em que ponto você gostaria de definir a relação entre blocos da cidade? O padrão é 8 townblocks por residente. Valores maiores permitirão que as cidades reivindiquem mais para cada residente que possuem. Definir isto para 0 fará com que ele use valores da town_levels.'
+msg_setup_town_cost: 'Quanto deverá ser o custo para criar uma nova cidade? O padrão é 250.'
+msg_setup_nation_cost: 'Quanto deverá ser o custo para criar uma nova nação? O padrão é 1000.'
+msg_setup_townblock_cost: 'Quanto deve custar para reivindicar um townblock? O padrão é 25. Um townblock tem o mesmo tamanho de um chunk (configurações padrão)'
+msg_setup_success: 'Valores de configuração alterados com sucesso para os novos valores.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s spawnou recentemente e não pode ser machucado.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_respawn_protection: 'Você perdeu a sua proteção de renascimento.'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'Você não pode pegar itens enquanto estiver sob proteção de respawn.'
+#Added in 0.126
+#Used in the nation screen:
+status_capital: 'Capital:'
+#Used in the resident screen's town hover, to denote when a player joined a town.
+status_joined_town: 'Cidade ingressada:'
+#Used in the town screen's nation hover, to denote when a town joined a nation.
+status_joined_nation: 'Nação ingressada:'
+#Shown in status screen elements where a value is not known.
+status_unknown: 'desconhecido'
+#Feedback given for the /ta set nationzoneoverride [townname] [size] command.
+msg_nationzone_override_set_to: '%s teve seu substituto de nationzone definido como %s.'
+#Feedback given for the /ta set nationzoneoverride [townname] 0 command.
+msg_nationzone_override_removed: '%s teve seu substituto de nationzone removido.'
+#Added in 0.127
+#Used in status screen:
+status_nation_zone_size: 'Tamanho da Zona Nacional:'
+#Shown when a player adds people to their friends list.
+msg_res_friend_added_to_list: 'Adicionado %s à sua lista de amigos.'
+#Shown when a player removes people from their friends list.
+msg_res_friend_removed_from_list: 'Removido %s da sua lista de amigos.'
+#Generic resident freed from jail message.
+msg_resident_unjailed: '%s foi solto.'
+#Shown when an admin uses /ta toggle devmode.
+msg_admin_toggle_devmode: 'Modo de Desenvolvedor: %s'
+#Shown when an admin uses /ta toggle debug.
+msg_admin_toggle_debugmode: 'Modo de Depuração: %s'
+#Shown when an admin uses /ta toggle townwithdraw
+msg_admin_toggle_townwithdraw: 'Retiradas da Cidade: %s'
+#Shown when an admin uses /ta toggle nationwithdraw
+msg_admin_toggle_nationwithdraw: 'Retiradas da Nação: %s'
+#Shown when claiming a town block for the town.
+msg_process_town_claim: 'Processando reivindicação da cidade...'
+#Shown when unclaiming a town block for the town.
+msg_process_town_unclaim: 'Processando cancelamento da reivindicação da cidade...'
+#Shown when there is nothing to unclaim.
+msg_err_nothing_to_unclaim: 'Nada para cancelar reivindicação!'
+#Given as feedback when /ta checkperm is used.
+msg_perm_true: 'Permissão Verdadeira.'
+#Given as feedback when /ta checkperm is used.
+msg_err_perm_false: 'Permissão Falsa.'
+#Shown at the bottom of the /towny map
+#First variable is townname or None, 2nd variable is plot owner's name or None.
+status_towny_map_town_line: '&2Município: &a%s| &7&2Proprietário: &a%s'
+#Shown on /towny version
+msg_towny_version: '&2Versão do Towny: &a%s'
+#Shown to admins and ops when a player has been blocked from logging into the server.
+msg_admin_blocked_login: '&2O jogador usando o endereço IP &c%s &2tentou fazer login usando um nome de conta %s que pode danificar a economia do seu servidor mas foi impedido pelo Towny. Considere banir este endereço IP!'
+#Shown during resident purge
+msg_scanning_for_old_residents: 'Buscando antigos residentes...'
+#Shown during resident purge
+msg_deleting_resident: 'Excluindo residente: %s.'
+#Shown during resident purge
+msg_purge_complete: 'Limpeza de residência concluída: %s excluída.'
+#Message to the Town, shown when a town is given bonus blocks.
+msg_you_have_been_given_bonus_blocks: 'Você recebeu townblocks a mais de %s a mais.'
+#Message shown when a town cannot purchase any more bonus blocks.
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Sua cidade não pode comprar mais blocos de bônus. Valor máximo alcançado.'
 #Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Preso pelo prefeito.'
