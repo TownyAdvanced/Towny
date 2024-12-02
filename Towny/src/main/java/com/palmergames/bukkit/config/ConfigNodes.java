@@ -339,7 +339,7 @@ public enum ConfigNodes {
 		"# You can adjust this setting for an existing world using /townyworld toggle snow"),
 	NWS_FORCE_SNOW_ON(
 		"new_world_settings.snow.force_snow_on",
-		"true",
+		"false",
 		"",
 		"# Do new worlds have force_snow_on enabled by default?",
 		"# This setting overrides a towns' setting.",
