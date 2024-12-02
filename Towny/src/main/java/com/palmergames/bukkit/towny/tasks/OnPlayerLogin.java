@@ -113,7 +113,7 @@ public class OnPlayerLogin implements Runnable {
 			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download")).locale(player).component().clickEvent(clickEvent));
 		}
 
-		if (TownyEconomyHandler.getProvider().isLegacy() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
+		if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getProvider().isLegacy() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
 			Audience audience = Towny.getAdventure().player(player);
 			ClickEvent clickEvent = ClickEvent.runCommand("/townyadmin eco convert modern");
 			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_legacy_economy_detected")).locale(player).component().clickEvent(clickEvent));
