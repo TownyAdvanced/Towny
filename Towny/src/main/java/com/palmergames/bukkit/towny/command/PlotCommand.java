@@ -32,6 +32,7 @@ import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleFireEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleMobsEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotTogglePvpEvent;
+import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleSnowEvent;
 import com.palmergames.bukkit.towny.event.plot.toggle.PlotToggleTaxedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
@@ -164,7 +165,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"fire",
 		"pvp",
 		"explosion",
-		"mobs"
+		"mobs",
+		"snow"
 	);
 	
 	private static final List<String> plotPermTabCompletes = Arrays.asList(
@@ -1043,7 +1045,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
 												   Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
 												   Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+												   Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") +
+												   Colors.Green + Translatable.of("snowfall").forLocale(player) + " " + ((perm.snow) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 			}
 
 
@@ -1143,7 +1146,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_MOBS.getNode());
 			tryToggleTownBlockMobs(player, townBlock, split, choice);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_mobs", "the Plot", townBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled")));
-			break;
+			break; 
+		case "snow":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_SNOW.getNode());
+			tryToggleTownBlockSnow(player, townBlock, split, choice);
+			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_snow", "the Plot", townBlock.getPermissions().snow ? Translatable.of("enabled") : Translatable.of("disabled")));
 		case "taxed":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
 			tryToggleTownBlockTaxed(player, townBlock, split, choice);
@@ -1230,6 +1237,15 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.getPermissions().mobs = choice.orElse(!townBlock.getPermissions().mobs);
 	}
 
+	private void tryToggleTownBlockSnow(Player player, TownBlock townBlock, String[] split, Optional<Boolean> choice) throws TownyException {
+		// Make sure we are allowed to set these permissions.
+		toggleTest(player, townBlock, StringMgmt.join(split, " "));
+		// Fire cancellable event directly before setting the toggle.
+		BukkitTools.ifCancelledThenThrow(new PlotToggleSnowEvent(townBlock, player, choice.orElse(!townBlock.getPermissions().snow)));
+
+		townBlock.getPermissions().snow = choice.orElse(!townBlock.getPermissions().snow);
+	}
+
 	private void tryToggleTownBlockTaxed(Player player, TownBlock townBlock, String[] split, Optional<Boolean> choice) throws TownyException {
 		// Fire cancellable event directly before setting the toggle.
 		BukkitTools.ifCancelledThenThrow(new PlotToggleTaxedEvent(townBlock, player, choice.orElse(!townBlock.isTaxed())));
@@ -1267,6 +1283,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (split.contains("explosion")) {
 			if (townBlock.getWorld().isForceExpl())
 				throw new TownyException(Translatable.of("msg_world_expl"));
+		}
+		
+		if (split.contains("snow")) {
+			if (townBlock.getWorld().isForceSnow())
+				throw new TownyException(Translatable.of("msg_world_snow"));
 		}
 
 		if (split.contains("pvp")) {
@@ -1810,7 +1831,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendMessage(player, Colors.Green + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + 
 													Colors.Green + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + 
 													Colors.Green + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) +  
-													Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")));
+													Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")) +
+													Colors.Green + translator.of("snowfall") + " " + (perm.snow ? translator.of("status_on") : translator.of("status_off")));
 			}
 		};
 
@@ -2002,6 +2024,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		case "mobs":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_MOBS.getNode());
 			break;
+		case "snow":
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_SNOW.getNode());
+			break;
 		case "taxed":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
 			break;
@@ -2029,6 +2054,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					tryToggleTownBlockMobs(player, groupBlock, split, choice);
 					endingMessage = Translatable.of("msg_changed_mobs", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().mobs ? Translatable.of("enabled") : Translatable.of("disabled"));
 					break;
+				case "snow":
+					tryToggleTownBlockSnow(player, groupBlock, split, choice);
+					endingMessage = Translatable.of("msg_changed_snow", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().snow ? Translatable.of("enabled") : Translatable.of("disabled"));
 				case "taxed":
 					 tryToggleTownBlockTaxed(player, groupBlock, split, choice);
 					 endingMessage = Translatable.of("msg_changed_plotgroup_taxed", groupBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled"));

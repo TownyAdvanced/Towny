@@ -40,6 +40,7 @@ import com.palmergames.bukkit.towny.event.town.TownSetSpawnEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustAddEvent;
 import com.palmergames.bukkit.towny.event.town.TownTrustRemoveEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleNeutralEvent;
+import com.palmergames.bukkit.towny.event.town.toggle.TownToggleSnowEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleUnknownEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleExplosionEvent;
 import com.palmergames.bukkit.towny.event.town.toggle.TownToggleFireEvent;
@@ -247,6 +248,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	static final List<String> townToggleTabCompletes = Arrays.asList(
 		"explosion",
 		"fire",
+		"snow",
 		"mobs",
 		"nationzone",
 		"neutral",
@@ -1247,6 +1249,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "explosion" -> townToggleExplosion(sender, split, admin, town, choice);
 		case "fire" -> townToggleFire(sender, split, admin, town, choice);
 		case "mobs" -> townToggleMobs(sender, split, admin, town, choice);
+		case "snow" -> townToggleSnow(sender, split, admin, town, choice);
 		case "taxpercent" -> townToggleTaxPercent(sender, admin, town, choice);
 		case "open" -> townToggleOpen(sender, admin, town, choice);
 		case "neutral", "peaceful" -> townToggleNeutral(sender, admin, town, permSource, choice);
@@ -1269,7 +1272,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Propagate perms to all unchanged, town owned, townblocks because it is a
 		// townblock-affecting toggle.
 		switch(split[0].toLowerCase(Locale.ROOT)) {
-		case "pvp", "explosion", "fire", "mobs" -> {
+		case "pvp", "explosion", "fire", "mobs", "snow" -> {
 			for (TownBlock townBlock : town.getTownBlocks()) {
 				if (!townBlock.hasResident() && !townBlock.isChanged()) {
 					townBlock.setType(townBlock.getType());
@@ -1391,6 +1394,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translatable.of("enabled") : Translatable.of("disabled")));
 		if (admin)
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_mobs", town.getName(), town.hasMobs() ? Translatable.of("enabled") : Translatable.of("disabled")));
+	}
+
+	private static void townToggleSnow(CommandSender sender, String[] split, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
+		// Make sure we are allowed to set these permissions.
+		if (!admin)
+			toggleTest(town, StringMgmt.join(split, " "));
+
+		// Fire cancellable event directly before setting the toggle.
+		TownToggleSnowEvent preEvent = new TownToggleSnowEvent(sender, town, admin, choice.orElse(!town.isSnow()));
+		BukkitTools.ifCancelledThenThrow(preEvent);
+
+		// Set the toggle setting.
+		town.setSnow(preEvent.getFutureState());
+
+		// TODO: add these messages
+		// Send message feedback.
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_snow", town.getName(), town.isSnow() ? Translatable.of("enabled") : Translatable.of("disabled")));
+		if (admin)
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_snow", town.getName(), town.isSnow() ? Translatable.of("enabled") : Translatable.of("disabled")));
 	}
 
 	private static void townToggleTaxPercent(CommandSender sender, boolean admin, Town town, Optional<Boolean> choice) throws TownyException {
@@ -1755,6 +1777,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.contains("pvp") && town.getHomeblockWorld().isForcePVP())
 			throw new TownyException(Translatable.of("msg_world_pvp"));
+		
+		if (split.contains("snow") && town.getHomeblockWorld().isForceSnow())
+			throw new TownyException(Translatable.of("msg_world_snow"));
 
 	}
 

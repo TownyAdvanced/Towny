@@ -69,7 +69,7 @@ public class TownyPermission {
 	// So they can inherently be represented by a 2d array
 	protected boolean[][] perms;
 	
-	public boolean pvp, fire, explosion, mobs;
+	public boolean pvp, fire, explosion, mobs, snow;
 
 	public TownyPermission() {
 		// Fill the perms array
@@ -125,6 +125,7 @@ public class TownyPermission {
 		fire = b;
 		explosion = b;
 		mobs = b;
+		snow = b;
 	}
 
 	// TODO Restructure how perms are saved
@@ -194,6 +195,9 @@ public class TownyPermission {
 			case "mobs":
 				mobs = b;
 				break;
+			case "snow":
+				snow = b;
+				break;
 			default:
 		}
 	}
@@ -234,6 +238,8 @@ public class TownyPermission {
 			output.append(output.length() > 0 ? "," : "").append("explosion");
 		if (mobs)
 			output.append(output.length() > 0 ? "," : "").append("mobs");
+		if (snow)
+			output.append(output.length() > 0 ? "," : "").append("snow");
 		
 		if (output.length() == 0)
 			return "denyAll";
@@ -297,11 +303,13 @@ public class TownyPermission {
 			fire = TownySettings.getPermFlag_Town_Default_FIRE();
 			explosion = TownySettings.getPermFlag_Town_Default_Explosion();
 			mobs = TownySettings.getPermFlag_Town_Default_Mobs();
+			snow = TownySettings.getPermFlag_Town_Default_Snow();
 		} else {
 			pvp = owner.getPermissions().pvp;
 			fire = owner.getPermissions().fire;
 			explosion = owner.getPermissions().explosion;
 			mobs = owner.getPermissions().mobs;
+			snow = owner.getPermissions().snow;
 		}
 
 	}
@@ -311,7 +319,7 @@ public class TownyPermission {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Arrays.deepHashCode(perms);
-		result = prime * result + Objects.hash(explosion, fire, mobs, pvp);
+		result = prime * result + Objects.hash(explosion, fire, mobs, pvp, snow);
 		return result;
 	}
 
@@ -324,7 +332,7 @@ public class TownyPermission {
 		if (getClass() != obj.getClass())
 			return false;
 		TownyPermission other = (TownyPermission) obj;
-		return explosion == other.explosion && fire == other.fire && mobs == other.mobs
+		return explosion == other.explosion && fire == other.fire && mobs == other.mobs && snow == other.snow
 				&& Arrays.deepEquals(perms, other.perms) && pvp == other.pvp;
 	}
 }

@@ -331,6 +331,19 @@ public enum ConfigNodes {
 			"# Do new worlds have force_fire_on enabled by default?",
 			"# This setting overrides a towns' setting.",
 			"# You can adjust this setting for an existing world using /townyworld toggle forcefire"),
+	NWS_WORLD_SNOW_HEADER("new_world_settings.snow", "", ""),
+	NWS_WORLD_SNOW(
+		"new_world_settings.snow.world_snowfall_enabled",
+		"true",
+		"# Do new worlds allow snow to fall in towns by default?",
+		"# You can adjust this setting for an existing world using /townyworld toggle snow"), // TODO: add these two commands
+	NWS_FORCE_SNOW_ON(
+		"new_world_settings.snow.force_snow_on",
+		"true",
+		"",
+		"# Do new worlds have force_snow_on enabled by default?",
+		"# This setting overrides a towns' setting.",
+		"# You can adjust this setting for an existing world using /townyworld toggle forcesnow"),
 	NWS_WORLD_ENDERMAN(
 			"new_world_settings.enderman_protect",
 			"true",
@@ -2206,6 +2219,7 @@ public enum ConfigNodes {
 			"default_perm_flags.town.default.explosion",
 			"false"),
 	FLAGS_TOWN_DEF_MOBS("default_perm_flags.town.default.mobs", "false"),
+	FLAGS_TOWN_DEF_SNOW("default_perm_flags.town.default.snow", "true"), // TODO: fruit add node to config
 
 	FLAGS_TOWN_RES_BUILD("default_perm_flags.town.resident.build", "true"),
 	FLAGS_TOWN_RES_DESTROY("default_perm_flags.town.resident.destroy", "true"),

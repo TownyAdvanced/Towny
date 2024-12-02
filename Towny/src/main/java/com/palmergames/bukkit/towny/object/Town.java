@@ -552,6 +552,14 @@ public class Town extends Government implements TownBlockOwner {
 
 		return this.permissions.fire;
 	}
+	
+	public void setSnow(boolean isSnow) {
+		this.permissions.snow = isSnow;
+	}
+	
+	public boolean isSnow() {
+		return this.permissions.snow;
+	}
 
 	public void setBonusBlocks(int bonusBlocks) {
 
