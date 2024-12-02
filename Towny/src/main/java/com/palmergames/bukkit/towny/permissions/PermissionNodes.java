@@ -219,7 +219,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_PLOT_TOGGLE_EXPLOSION("towny.command.plot.toggle.explosion"),
 			TOWNY_COMMAND_PLOT_TOGGLE_FIRE("towny.command.plot.toggle.fire"),
 			TOWNY_COMMAND_PLOT_TOGGLE_MOBS("towny.command.plot.toggle.mobs"),
-			TOWNY_COMMAND_PLOT_TOGGLE_SNOW("towny.command.plot.toggle.snow"), // TODO: add permission node
+			TOWNY_COMMAND_PLOT_TOGGLE_SNOW("towny.command.plot.toggle.snow"),
 		
 		TOWNY_COMMAND_PLOT_SET("towny.command.plot.set.*"),
 			TOWNY_COMMAND_PLOT_SET_NAME("towny.command.plot.set.name"),
