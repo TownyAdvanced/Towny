@@ -1466,16 +1466,94 @@ msg_click_to_download: '&bClique aqui para baixar.'
 msg_latest_version: '&2Versão do Towni: &a%s &2| Última versão: &a%s'
 msg_up_to_date: '&aVocê está atualizado.'
 msg_click_purchase: 'Clique para comprar'
+msg_you_must_join_this_town_to_claim_this_plot: 'Você deve entrar nesta cidade: %spara reivindicar este plot. Você gostaria de se juntar à cidade e continuar a reivindicar?'
+msg_legacy_economy_detected: "&bSua implementação econômica do Towny está definida como Legacy, é recomendável que você deixe o Towny se atualizar para usar a implementação moderna. Isto irá melhorar a compatibilidade com mais plugins económicos."
+msg_click_to_convert_to_modern_economy: "&bClique aqui para converter a implementação econômica do seu Towny de legado para moderno."
 #Added in 0.113
 status_trustedlist: 'Confiável'
+msg_click_to_edit: '&6Clique para editar.'
+permission_gui_header: 'HUD de Permissão do Towny'
+msg_last_edited: '&7&aÚltima alteração em %s por %s.'
+#Last %s is either town or townblock
+msg_trusted_added: '&bAdicionado %s como confiável neste %s.'
+msg_already_trusted: '&b%s já é confiável neste %s.'
+msg_cannot_trust_your_own_town: '&cVocê não pode confiar sua própria cidade.'
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s confiou em você em um %s: %s.'
+msg_not_trusted: '&b%s não é confiável neste %s.'
+msg_trusted_removed: '&bRemovido %s como confiável neste %s.'
+msg_trusted_removed_2: '&b%s removeu você como confiável em um %s: %s.'
+msg_overrides_removed: '&Removidas substituições de permissões para %s.'
+msg_overrides_added: '&Adiciona substituições padrões de permissões para %s.'
+msg_no_overrides_set: '&b%s não tem substituições definidas para este(a) %s.'
 msg_overrides_already_set: '&b%s já tem substituições definidas para este(a) %s.'
 msg_cache_block_err: '&cVocê não tem permissão para %s aqui.'
+msg_err_plot_belongs_to_group: '&cPlot pertence a um grupo, use %s.'
+plotgroup_sing: 'Grupo de plot'
+msg_err_ally_limit_reached: 'A sua nação atingiu o limite de aliados, incapaz de aceitar.'
+msg_err_ally_limit_reached_cannot_accept: 'A nação de %s atingiu o limite de aliados, incapaz de aceitar.'
+msg_err_ally_limit_reached_cannot_send: 'Sua nação atingiu o limite de aliados, incapaz de convidar %s para se tornar seu aliado.'
+msg_err_ally_limit_reached_cannot_send_targetNation: 'A nação de %s atingiu o limite de aliados, incapaz de convidar %s para se tornar seu aliado.'
+#Added in 0.114
+msg_err_group_not_found: 'Grupo %s não encontrado.'
+msg_err_expected_command_format: 'Sintaxe incorreta, esperado: %s'
+msg_err_group_already_has_node: 'O grupo %s já possui o nó %s.'
+msg_err_group_doesnt_have_node: 'O grupo %s não possui o nó %s.'
+msg_successfully_added_node_to_group: '%s adicionada com sucesso à %s.'
+msg_successfully_removed_node_from_group: '%s removida com sucesso à %s.'
+msg_err_there_is_already_a_town_or_nationrank_called_x: 'Já existe uma %s chamada %s.'
+msg_err_there_is_no_town_or_nationrank_called_x: 'Não existe nenhuma %s chamada %s.'
+msg_successfully_add_rank_to_the_town_or_nation_rank: '%s adicionada com sucesso à %s.'
+msg_successfully_removed_rank_from_the_town_or_nation_rank: '%s removida com sucesso à %s.'
+msg_err_group_has_no_nodes: 'O grupo %s não tem nenhum nó de permissão atribuído.'
+msg_title_group_permissions: '%s permissões'
+help_ta_perms_listgroups: 'Listar grupos.'
+help_ta_perms_group: 'Mostrar nós de permissões no grupo'
 help_ta_perms_groupaddpermnode: 'Adicionar um nó a um grupo.'
+help_ta_perms_groupremovepermnode: 'Remover um nó de um grupo.'
+help_ta_perms_townrankadd: 'Adiciona um rank de cidade ao arquivo townyperms.'
+help_ta_perms_townrankremove: 'Remove um rank de cidade ao arquivo townyperms.'
+help_ta_perms_nationrankadd: 'Adiciona um rank de nação ao arquivo townyperms.'
+help_ta_perms_nationrankremove: 'Remove um rank de nação ao arquivo townyperms.'
+msg_err_that_resident_doesnt_belong_to_that_nation: 'Esse habitante não pertence a essa cidade.'
 #Added in 0.115
 msg_comptype_founded: 'Data da Fundação'
+msg_err_must_be_greater_than_or_equal_to: 'Quantidade deve ser maior ou igual a %s'
+err_invalid_yaml: 'Erro ao carregar: Falha ao carregar o arquivo %s (passa um analisador yaml?).'
+#Added in 0.116
+msg_town_map_color_changed: '&bA cor do mapa da cidade foi alterada para %s.'
+#Added in 0.117
+msg_err_this_townblock_doesnt_match_the_groups_type: 'Este townblock não pode ser adicionado ao grupo porque não é do tipo: %s'
+#Added in 0.118
+status_title_nopvp: '&a(Sem PVP)'
+#Added in 0.119
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Você não pode prender este residente porque ele está em um local onde ele é considerado um fora da lei.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Você não pode prender este residente porque ele está em um local onde ele é considerado um inimigo.'
+#Added in 0.120
+msg_resident_prompt: 'Digite o nome do jogador no chat, ou q para sair. Isso irá expirar automaticamente em 30 segundos.'
+msg_prompt_cancel: 'Pedido cancelado ou expirado.'
+status_home_element: ' &7[Casa: %s]'
+status_about: "Sobre:"
+status_registered: 'Registrado:'
+status_lastonline: 'Última vez online:'
+status_fractions: '%s/%s'
+status_rank_list: 'Lista de ranques'
+status_hover_click_for_more: 'Clique para mais informação.'
 status_jailed: 'Preso:'
+status_bad_yes: '&cSIM'
+status_good_no: '&aNÃO'
 status_resident_tax_title: 'Imposto de %s'
+#Added in 0.122
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Como elas não serão perto o suficiente da sua capital de nação, as cidades a seguir serão removidas se a fusão for concluída: %s.'
+#Added in 0.123
+msg_err_invalid_townyworld: "'%s' não é um mundo Towny valido."
+msg_err_enter_world_name_first: 'Por favor, primeiro digite o nome do mundo.'
+msg_wilderness_use_set_to: '&bO uso da Natureza foi definido para %s em %s.'
+#Added in 0.124
+msg_err_invalid_response: 'Resposta inválida! Digite q para sair ou volte para à pergunta anterior.'
+msg_setup_full_guide_link: '&bPara um link para o guia completo de instalação, clique aqui.'
+msg_setup_wildernessuse: 'Você gostaria de habilitar o uso de natureza selvagem? Isso permitirá aos jogadores quebrar/construir na natureza selvagem.'
+msg_setup_revertunclaim: 'Você gostaria de usar reverter quanto o pedido de reivindicação? Isso fará as townblocs regenerarem lentamente quando forem reivindicadas.'
 #Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Preso pelo prefeito.'
