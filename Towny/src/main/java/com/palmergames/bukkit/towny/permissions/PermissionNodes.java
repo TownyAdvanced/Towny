@@ -169,6 +169,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_TOGGLE_EXPLOSION("towny.command.town.toggle.explosion"),
 			TOWNY_COMMAND_TOWN_TOGGLE_FIRE("towny.command.town.toggle.fire"),
 			TOWNY_COMMAND_TOWN_TOGGLE_MOBS("towny.command.town.toggle.mobs"),
+			TOWNY_COMMAND_TOWN_TOGGLE_SNOW("towny.command.town.toggle.snow"),
 			TOWNY_COMMAND_TOWN_TOGGLE_TAXPERCENT("towny.command.town.toggle.taxpercent"),
 			TOWNY_COMMAND_TOWN_TOGGLE_OPEN("towny.command.town.toggle.open"),
 			TOWNY_COMMAND_TOWN_TOGGLE_NEUTRAL("towny.command.town.toggle.neutral"),
