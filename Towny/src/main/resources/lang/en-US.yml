@@ -252,6 +252,7 @@ res_toggle_help_13: "Toggle the ability to see title messages when you change pl
 res_toggle_help_14: "Toggle the ability to unclaim where you walk."
 res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
 res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
+res_toggle_help_17: "Toggle your plots' snow status."
 
 res_jail_help_0: "Pays the bail cost to get out of jail."
 
@@ -303,6 +304,7 @@ world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world.
 world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
 world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
 world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_12: "Toggle on/off if snowfall is enabled or forced in this world."
 
 
 townyadmin_help_1: 'Unclaim this town block'
@@ -617,6 +619,7 @@ msg_changed_public: '&cThe Town''s public status is now %s.'
 msg_changed_expl: '&cExplosions in %s are now %s.'
 msg_changed_fire: '&cFirespread in %s is now %s.'
 msg_changed_mobs: '&cMonster spawns in %s are now %s.'
+msg_changed_snow: '&cSnowfall in %s is now %s'
 msg_the_plot_group: 'the Plot Group'
 msg_changed_taxpercent: '&cPercentage based taxes are now %s.'
 msg_changed_open: '&cInviteless joining is now %s.'
@@ -628,6 +631,7 @@ msg_world_pvp: '&cThis world is PvP only.'
 msg_world_mobs: '&cThis world has Monster spawns forced on.'
 msg_world_expl: '&cThis world has Explosions forced on.'
 msg_world_fire: '&cThis world has Fire spread forced on.'
+msg_world_snow: '&cThis world has Snowfall forced on.'
 
 msg_town_mobs: '&cThis town has Monster spawns forced on.'
 
@@ -1033,6 +1037,7 @@ status_pvp: 'PVP:'
 explosions: 'Explosions:'
 firespread: 'Firespread:'
 mobspawns: 'Mob Spawns:'
+snowfall: 'Snowfall:'
 owner_of_x_plots: 'Owner of %s plots.'
 status_bank: 'Bank:'
 status_town: 'Town:'
@@ -1070,6 +1075,8 @@ status_world_noclaims: '&cNoClaims'
 status_world_forcepvp: 'ForcePVP:'
 status_world_fire: 'Fire:'
 status_world_forcefire: 'Force Fire:'
+status_world_snow: 'Snow:'
+status_world_forcesnow: 'Force Snow:'
 status_world_forceexplosion: 'Force Explosion:'
 status_world_worldmobs: 'World Mobs:'
 status_world_forcetownmobs: 'Force TownMobs:'
@@ -2167,6 +2174,8 @@ msg_perm_hud_pvp: 'PVP: '
 msg_perm_hud_explosions: 'Explosions: '
 #Seen in /plot perm hud:
 msg_perm_hud_firespread: 'Firespread: '
+#Seen in /plot perm hud:
+msg_perm_hud_snowfall: 'Snowfall: '
 #Seen in /plot perm hud:
 msg_perm_hud_mobspawns: 'Mob Spawns: '
 #Seen in /plot perm hud:

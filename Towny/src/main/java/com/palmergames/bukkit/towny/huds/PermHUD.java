@@ -48,6 +48,7 @@ public class PermHUD {
 	private static final String TEAM_EXPLOSIONS = "explosions";
 	private static final String TEAM_FIRESPREAD = "firespread";
 	private static final String TEAM_MOBSPAWNING = "mobspawn";
+	private static final String TEAM_SNOWFALL = "snowfall";
 	private static final String TEAM_TITLE = "keyTitle";
 	private static final String TEAM_RESIDENT = "keyResident";
 	private static final String TEAM_FRIEND = "keyFriend";
@@ -210,6 +211,7 @@ public class PermHUD {
 		String explosions_entry = DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ";
 		String firespread_entry = DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ";
 		String mobspawn_entry = DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ";
+		String snowfall_entry = DARK_GREEN + translator.of("msg_perm_hud_snowfall") + " ";
 
 		String keyTitle_entry = YELLOW + "" + UNDERLINE + translator.of("msg_perm_hud_key");
 		String keyResident_entry = DARK_GREEN + "" + BOLD + "f" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_friend") +
@@ -236,6 +238,7 @@ public class PermHUD {
 		Team explosions = board.registerNewTeam(TEAM_EXPLOSIONS);
 		Team firespread = board.registerNewTeam(TEAM_FIRESPREAD);
 		Team mobspawn= board.registerNewTeam(TEAM_MOBSPAWNING);
+		Team snowfall = board.registerNewTeam(TEAM_SNOWFALL);
 
 		Team keyTitle = board.registerNewTeam(TEAM_TITLE);
 		Team keyResident = board.registerNewTeam(TEAM_RESIDENT);
@@ -256,6 +259,7 @@ public class PermHUD {
 		explosions.addEntry(explosions_entry);
 		firespread.addEntry(firespread_entry);
 		mobspawn.addEntry(mobspawn_entry);
+		snowfall.addEntry(snowfall_entry);
 
 		keyTitle.addEntry(keyTitle_entry);
 		keyResident.addEntry(keyResident_entry);
