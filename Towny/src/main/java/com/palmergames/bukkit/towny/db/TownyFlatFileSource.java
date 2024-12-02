@@ -1354,6 +1354,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 				
+				line = keys.get("snowfall");
+				if (line != null)
+					try {
+						world.setSnow(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
+				line = keys.get("forcesnowfall");
+				if (line != null)
+					try {
+						world.setForceSnow(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+				
 				line = keys.get("explosions");
 				if (line != null)
 					try {
@@ -2327,6 +2341,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// has firespread enabled
 		list.add("firespread=" + world.isFire());
 		list.add("forcefirespread=" + world.isForceFire());
+		// has snowfall enabled
+		list.add("snowfall=" + world.isSnow());
+		list.add("forcesnowfall=" + world.isForceSnow());
 		// has explosions enabled
 		list.add("explosions=" + world.isExpl());
 		list.add("forceexplosions=" + world.isForceExpl());
