@@ -1408,7 +1408,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Set the toggle setting.
 		town.setSnow(preEvent.getFutureState());
 
-		// TODO: add these messages
 		// Send message feedback.
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_changed_snow", town.getName(), town.isSnow() ? Translatable.of("enabled") : Translatable.of("disabled")));
 		if (admin)

@@ -1161,6 +1161,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_TOGGLE_SNOW.getNode());
 			tryToggleTownBlockSnow(player, townBlock, split, choice);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_changed_snow", "the Plot", townBlock.getPermissions().snow ? Translatable.of("enabled") : Translatable.of("disabled")));
+			break;
 		case "taxed":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_ASMAYOR.getNode());
 			tryToggleTownBlockTaxed(player, townBlock, split, choice);
@@ -2067,6 +2068,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "snow":
 					tryToggleTownBlockSnow(player, groupBlock, split, choice);
 					endingMessage = Translatable.of("msg_changed_snow", Translatable.of("msg_the_plot_group"), groupBlock.getPermissions().snow ? Translatable.of("enabled") : Translatable.of("disabled"));
+					break;
 				case "taxed":
 					 tryToggleTownBlockTaxed(player, groupBlock, split, choice);
 					 endingMessage = Translatable.of("msg_changed_plotgroup_taxed", groupBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled"));
