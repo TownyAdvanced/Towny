@@ -2253,7 +2253,7 @@ public enum ConfigNodes {
 			"default_perm_flags.town.default.explosion",
 			"false"),
 	FLAGS_TOWN_DEF_MOBS("default_perm_flags.town.default.mobs", "false"),
-	FLAGS_TOWN_DEF_SNOW("default_perm_flags.town.default.snow", "true"), // TODO: fruit add node to config
+	FLAGS_TOWN_DEF_SNOW("default_perm_flags.town.default.snow", "true"),
 
 	FLAGS_TOWN_RES_BUILD("default_perm_flags.town.resident.build", "true"),
 	FLAGS_TOWN_RES_DESTROY("default_perm_flags.town.resident.destroy", "true"),

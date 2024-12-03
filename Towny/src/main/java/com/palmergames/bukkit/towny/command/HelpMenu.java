@@ -157,6 +157,7 @@ public enum HelpMenu {
 				.add("explosion", Translatable.of("townyadmin_town_toggle_help_3"))
 				.add("fire", Translatable.of("townyadmin_town_toggle_help_4"))
 				.add("mobs", Translatable.of("townyadmin_town_toggle_help_5"))
+				.add("snow", Translatable.of("townyadmin_town_toggle_help_8"))
 				.add("taxpercent", Translatable.of("townyadmin_town_toggle_help_6"))
 				.add("open", Translatable.of("townyadmin_town_toggle_help_7"));
 		}
@@ -628,6 +629,7 @@ public enum HelpMenu {
 				.add("explosion", Translatable.of("townyadmin_town_toggle_help_3"))
 				.add("fire", Translatable.of("townyadmin_town_toggle_help_4"))
 				.add("mobs", Translatable.of("townyadmin_town_toggle_help_5"))
+				.add("snow", Translatable.of("townyadmin_town_toggle_help_8"))
 				.add("taxpercent", Translatable.of("townyadmin_town_toggle_help_6"))
 				.add("open", Translatable.of("townyadmin_town_toggle_help_7"));
 		}
@@ -901,6 +903,7 @@ public enum HelpMenu {
 				.add("explosion", Translatable.of("plot_group_toggle_help_1"))
 				.add("fire", Translatable.of("plot_group_toggle_help_2"))
 				.add("mobs", Translatable.of("plot_group_toggle_help_3"))
+				.add("snow", Translatable.of("plot_group_toggle_help_5"))
 				.add("taxed", Translatable.of("plot_group_toggle_help_4"));
 		}
 	},
@@ -935,7 +938,8 @@ public enum HelpMenu {
 				.add("pvp", Translatable.of("plot_toggle_help_0"))
 				.add("explosion", Translatable.of("plot_toggle_help_1"))
 				.add("fire", Translatable.of("plot_toggle_help_2"))
-				.add("mobs", Translatable.of("plot_toggle_help_3"));
+				.add("mobs", Translatable.of("plot_toggle_help_3"))
+				.add("snow", Translatable.of("plot_toggle_help_4"));
 		}
 	},
 	

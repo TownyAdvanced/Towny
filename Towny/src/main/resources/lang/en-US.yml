@@ -355,6 +355,7 @@ townyadmin_town_toggle_help_4: "Toggle the Town's Fire setting."
 townyadmin_town_toggle_help_5: "Toggle the Town's Mob setting."
 townyadmin_town_toggle_help_6: "Toggle the Town's Taxpercent setting."
 townyadmin_town_toggle_help_7: "Toggle the Town's Open setting, allowing people to join the town without an invite."
+townyadmin_town_toggle_help_8: "Toggle the Town's Snow setting."
 
 townyadmin_nation_help_0: "Create a nation with the given name and capital city."
 townyadmin_nation_help_1: "Show the nation status screen."
@@ -475,12 +476,14 @@ plot_toggle_help_0: "Toggles pvp in the plot."
 plot_toggle_help_1: "Toggles explosions in the plot."
 plot_toggle_help_2: "Toggles fire in the plot."
 plot_toggle_help_3: "Toggles mobs in the plot."
+plot_toggle_help_4: "Toggles snow in the plot."
 
 plot_group_toggle_help_0: "Toggles pvp in the plot group."
 plot_group_toggle_help_1: "Toggles explosions in the plot group."
 plot_group_toggle_help_2: "Toggles fire in the plot group."
 plot_group_toggle_help_3: "Toggles mobs in the plot group."
 plot_group_toggle_help_4: "Toggles the taxed status of the plot group."
+plot_group_toggle_help_5: "Toggles snow in the plot group."
 
 plot_set_help_0: "Ex: Inn, Wilds, Farm, Embassy, etc."
 plot_set_help_1: "Sets a plot to an Outpost."
@@ -2174,8 +2177,6 @@ msg_perm_hud_pvp: 'PVP: '
 msg_perm_hud_explosions: 'Explosions: '
 #Seen in /plot perm hud:
 msg_perm_hud_firespread: 'Firespread: '
-#Seen in /plot perm hud:
-msg_perm_hud_snowfall: 'Snowfall: '
 #Seen in /plot perm hud:
 msg_perm_hud_mobspawns: 'Mob Spawns: '
 #Seen in /plot perm hud:
