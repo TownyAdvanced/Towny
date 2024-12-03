@@ -2447,6 +2447,14 @@ public class TownySettings {
 
 		return getBoolean(ConfigNodes.NWS_FORCE_FIRE_ON);
 	}
+	
+	public static boolean isSnow() {
+		return getBoolean(ConfigNodes.NWS_WORLD_SNOW);
+	}
+	
+	public static boolean isForcingSnow() {
+		return getBoolean(ConfigNodes.NWS_FORCE_SNOW_ON);
+	}
 
 	public static boolean isDeletingEntitiesOnUnclaim() {
 		return getBoolean(ConfigNodes.NWS_PLOT_MANAGEMENT_ENTITY_DELETE_ENABLE);
@@ -2747,6 +2755,11 @@ public class TownySettings {
 	public static boolean getPermFlag_Town_Default_Mobs() {
 
 		return getBoolean(ConfigNodes.FLAGS_TOWN_DEF_MOBS);
+	}
+	
+	public static boolean getPermFlag_Town_Default_Snow() {
+		
+		return getBoolean(ConfigNodes.FLAGS_TOWN_DEF_SNOW);
 	}
 
 	public static boolean getPermFlag_Town_Resident_Build() {

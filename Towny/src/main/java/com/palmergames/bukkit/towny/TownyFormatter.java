@@ -109,6 +109,7 @@ public class TownyFormatter {
 		screen.addComponentOf("explosion", colourKeyValue(translator.of("explosions"), ((world.isForceExpl() || townBlock.getPermissions().explosion) ? translator.of("status_on"): translator.of("status_off")))); 
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), ((world.isForceFire() || townBlock.getPermissions().fire) ? translator.of("status_on"):translator.of("status_off")))); 
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), ((world.isForceTownMobs() || townBlock.getPermissions().mobs || town.isAdminEnabledMobs()) ?  translator.of("status_on"): translator.of("status_off"))));
+		screen.addComponentOf("snowfall", colourKeyValue(translator.of("snowfall"), ((world.isForceSnow() || townBlock.getPermissions().snow) ? translator.of("status_on") : translator.of("status_off"))));
 
 		if (townBlock.hasDistrict())
 			screen.addComponentOf("district", colourKey(translator.of("status_district_name_and_size", townBlock.getDistrict().getName(), townBlock.getDistrict().getTownBlocks().size())));
@@ -223,7 +224,8 @@ public class TownyFormatter {
 		screen.addComponentOf("explosions", colourKeyValue(translator.of("explosions"), (resident.getPermissions().explosion) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), (resident.getPermissions().fire) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (resident.getPermissions().mobs) ? translator.of("status_on"): translator.of("status_off")));
-		
+		screen.addComponentOf("snowfall", colourKeyValue(translator.of("snowfall"), (resident.getPermissions().snow) ? translator.of("status_on"): translator.of("status_off")));
+
 		if (resident.isNPC()) {
 			screen.addComponentOf("npcstatus", translator.of("msg_status_npc", resident.getName()));
 			// Add any metadata which opt to be visible.
@@ -333,6 +335,7 @@ public class TownyFormatter {
 		screen.addComponentOf("explosion", colourKeyValue(translator.of("explosions"), (town.isExplosion() || world.isForceExpl()) ? translator.of("status_on"): translator.of("status_off")));
 		screen.addComponentOf("firespread", colourKeyValue(translator.of("firespread"), (town.isFire() || world.isForceFire()) ? translator.of("status_on"): translator.of("status_off"))); 
 		screen.addComponentOf("mobspawns", colourKeyValue(translator.of("mobspawns"), (town.hasMobs() || town.isAdminEnabledMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off")));
+		screen.addComponentOf("snowfall", colourKeyValue(translator.of("snowfall"), (town.isSnow() || world.isForceSnow()) ? translator.of("status_on"): translator.of("status_off")));
 
 		if (TownySettings.getTownRuinsEnabled() && town.isRuined()) {
 			TownRuinUtil.addRuinedComponents(town, screen, translator);
@@ -576,6 +579,9 @@ public class TownyFormatter {
 			// WorldMobs: ON | Wilderness Mobs: ON
 			screen.addComponentOf("mobs", colourKeyValue(translator.of("status_world_worldmobs"), (world.hasWorldMobs() ? translator.of("status_on") : translator.of("status_off"))) + translator.of("status_splitter") + 
 				    colourKeyValue(translator.of("status_world_wildernessmobs"), (world.hasWildernessMobs() ? translator.of("status_on") : translator.of("status_off"))));
+			// Snow: ON | ForceSnow: ON
+			screen.addComponentOf("snow", colourKeyValue(translator.of("status_world_snow"), (world.isSnow() ? translator.of("status_on") : translator.of("status_off"))) + translator.of("status_splitter") +
+				colourKeyValue(translator.of("status_world_forcesnow"), (world.isForceSnow() ? translator.of("status_forced") : translator.of("status_adjustable"))));
 			// ForceTownMobs: ON
 			screen.addComponentOf("townmobs", colourKeyValue(translator.of("status_world_forcetownmobs"), (world.isForceTownMobs() ? translator.of("status_forced") : translator.of("status_adjustable"))));
 			// Unclaim Revert: ON
