@@ -297,6 +297,8 @@ public class SQLSchema {
 		columns.add("`wildernessmobs` bool NOT NULL DEFAULT '0'");
 		columns.add("`firespread` bool NOT NULL DEFAULT '0'");
 		columns.add("`forcefirespread` bool NOT NULL DEFAULT '0'");
+		columns.add("`snowfall` bool NOT NULL DEFAULT '0'");
+		columns.add("`forcesnowfall` bool NOT NULL DEFAULT '0'");
 		columns.add("`explosions` bool NOT NULL DEFAULT '0'");
 		columns.add("`forceexplosions` bool NOT NULL DEFAULT '0'");
 		columns.add("`endermanprotect` bool NOT NULL DEFAULT '0'");
