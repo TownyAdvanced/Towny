@@ -422,6 +422,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	private void setUseDefaults(CommandSender sender, TownyWorld world) {
 		Confirmation.runOnAccept(() -> {
 			world.setUsingDefault();
+			world.save();
 			plugin.resetCache();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", world.getName()));
 		})
@@ -431,22 +432,21 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	private void setWildPerm(CommandSender sender, TownyWorld world, String[] split) {
 		if (split.length < 2) {
-			// set default wildperm settings (/tw set wildperm)
-			world.setUsingDefault();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", world.getName()));
-		} else
-			try {
-				List<String> perms = Arrays.asList(String.join(",", StringMgmt.remFirstArg(split)).toLowerCase(Locale.ROOT).split(","));
-				world.setUnclaimedZoneBuild(perms.contains("build"));
-				world.setUnclaimedZoneDestroy(perms.contains("destroy"));
-				world.setUnclaimedZoneSwitch(perms.contains("switch"));
-				world.setUnclaimedZoneItemUse(perms.contains("itemuse") || perms.contains("item_use"));
+			TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
+			return;
+		}
+		try {
+			List<String> perms = Arrays.asList(String.join(",", StringMgmt.remFirstArg(split)).toLowerCase(Locale.ROOT).split(","));
+			world.setUnclaimedZoneBuild(perms.contains("build"));
+			world.setUnclaimedZoneDestroy(perms.contains("destroy"));
+			world.setUnclaimedZoneSwitch(perms.contains("switch"));
+			world.setUnclaimedZoneItemUse(perms.contains("itemuse") || perms.contains("item_use"));
 
-				plugin.resetCache();
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_perms", world.getName(), perms.toString()));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
-			}
+			plugin.resetCache();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_perms", world.getName(), perms.toString()));
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
+		}
 	}
 
 	private void setWildIgnore(CommandSender sender, TownyWorld world, String[] split) {

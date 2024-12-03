@@ -10167,3 +10167,5 @@ v0.92.0.11:
     - These will use the Towny config's town and nation placeholder formatting, but insert the town or nation's colour code before the town or nation name.
     - %townyadvanced_towny_tag_override_with_minimessage_colour%
     - This will use the town or nation's tag if they have a tag in use.
+  - Fix worlds not being saved after using /tw set usedefault.
+  - Remove ability for /tw set wild being able to set a world to the default settings when no arguments are supplied.
