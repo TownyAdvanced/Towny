@@ -10160,3 +10160,8 @@ v0.92.0.11:
   - Drop Java back to 17 to support 1.19.
 0.101.0.2:
   - Fix legacy economy provider check on admin logging in also running on servers with the economy aspect of Towny disabled.
+0.101.0.3:
+  - New Placeholders:
+    - %townyadvanced_town_formatted_with_town_minimessage_colour%
+    - %townyadvanced_nation_formatted_with_nation_minimessage_colour%
+    - These will use the Towny config's town and nation placeholder formatting, but insert the town or nation's colour code before the town or nation name.

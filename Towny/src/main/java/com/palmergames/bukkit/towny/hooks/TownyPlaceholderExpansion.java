@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.util.StringMgmt;
@@ -205,6 +206,14 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			if (resident.hasTown())
 				town = String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getFormattedName());
 			return StringMgmt.remUnderscore(town);
+		case "town_formatted_with_town_minimessage_colour": // %townyadvanced_town_formatted_with_town_minimessage_colour%
+			if (resident.hasTown()) {
+				Town residentTown = resident.getTownOrNull();
+				String townHexValue = residentTown.getMapColorHexCode();
+				if (townHexValue != null)
+					town = String.format(TownySettings.getPAPIFormattingTown(), "<#"+townHexValue+">" + residentTown.getFormattedName());
+			}
+			return StringMgmt.remUnderscore(town);
 		case "nation": // %townyadvanced_nation%
 			if (resident.hasNation())
 				nation = String.format(TownySettings.getPAPIFormattingNation(), resident.getNationOrNull().getName());
@@ -216,6 +225,14 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		case "nation_formatted": // %townyadvanced_nation_formatted%
 			if (resident.hasNation())
 				nation = String.format(TownySettings.getPAPIFormattingNation(), resident.getNationOrNull().getFormattedName());
+			return StringMgmt.remUnderscore(nation);
+		case "nation_formatted_with_nation_minimessage_colour": // %townyadvanced_nation_formatted_with_nation_minimessage_colour%
+			if (resident.hasNation()) {
+				Nation residentNation = resident.getNationOrNull();
+				String nationHexValue = residentNation.getMapColorHexCode();
+				if (nationHexValue != null)
+					nation = String.format(TownySettings.getPAPIFormattingNation(), "<#"+nationHexValue+">" + residentNation.getFormattedName());
+			}
 			return StringMgmt.remUnderscore(nation);
 		case "town_balance": // %townyadvanced_town_balance%
 			if (resident.hasTown() && TownyEconomyHandler.isActive())
