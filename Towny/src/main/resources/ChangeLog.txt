@@ -10165,3 +10165,5 @@ v0.92.0.11:
     - %townyadvanced_town_formatted_with_town_minimessage_colour%
     - %townyadvanced_nation_formatted_with_nation_minimessage_colour%
     - These will use the Towny config's town and nation placeholder formatting, but insert the town or nation's colour code before the town or nation name.
+    - %townyadvanced_towny_tag_override_with_minimessage_colour%
+    - This will use the town or nation's tag if they have a tag in use.

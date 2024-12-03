@@ -335,6 +335,31 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 			else if (!town.isEmpty())
 				tag = String.format(TownySettings.getPAPIFormattingTown(), town);
 			return tag;
+		case "towny_tag_override_with_minimessage_colour": // %townyadvanced_towny_tag_override_with_minimessage_colour%
+			if (resident.hasTown()) {
+				if (resident.getTownOrNull().hasTag())
+					town = resident.getTownOrNull().getTag();
+				else
+					town = StringMgmt.remUnderscore(resident.getTownOrNull().getName());
+				String townHexColour = resident.getTownOrNull().getMapColorHexCode();
+				if (townHexColour != null)
+					town = "<#"+townHexColour+">" + town;
+
+				if (resident.hasNation()) {
+					if (resident.getNationOrNull().hasTag())
+						nation = resident.getNationOrNull().getTag();
+					else
+						StringMgmt.remUnderscore(nation = resident.getNationOrNull().getName());
+					String nationHexColour = resident.getNationOrNull().getMapColorHexCode();
+					if (nationHexColour != null)
+						nation = "<#"+nationHexColour+">" + nation;
+				}
+			}
+			if (!nation.isEmpty())
+				tag = TownySettings.getPAPIFormattingBoth().replace("%t", town).replace("%n", nation);
+			else if (!town.isEmpty())
+				tag = String.format(TownySettings.getPAPIFormattingTown(), town);
+			return tag;
 		case "title": // %townyadvanced_title%
 			if (resident.hasTitle())
 				title = resident.getTitle();
