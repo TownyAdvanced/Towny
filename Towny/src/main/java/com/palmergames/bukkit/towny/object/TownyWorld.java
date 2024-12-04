@@ -6,6 +6,7 @@ import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.util.MathUtil;
 
 import com.palmergames.util.StringMgmt;
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
@@ -841,18 +843,39 @@ public class TownyWorld extends TownyObject {
 	 * @return the closest distance to another towns nearest plot.
 	 */
 	public int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown) {
+		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> false);
+	}
+
+	/**
+	 * Checks the distance from a another older town's plots.
+	 * It have the same behavior than {@link #getMinDistanceFromOtherTownsPlots(Coord, Town)}
+	 * but it will only consider towns that are older than the homeTown.
+	 * 
+	 * @param key - Coord to check from.
+	 * @param homeTown Players town
+	 * @return the closest distance to another older towns nearest plot.
+	 */
+	public int getMinDistanceFromOtherOlderTownsPlots(Coord key, Town homeTown) {
+		return getMinDistanceFromOtherTownsPlots(key, homeTown, t -> t.getRegistered() > homeTown.getRegistered());
+	}
+
+	/**
+	 * Checks the distance from a another town's plots.
+	 * 
+	 * @param key - Coord to check from.
+	 * @param homeTown Players town
+	 * @param isIgnorableTown Predicate to filter out towns that should not be considered.
+	 * @return the closest distance to another towns nearest plot.
+	 */
+	private int getMinDistanceFromOtherTownsPlots(Coord key, Town homeTown, @NotNull Predicate<Town> isIgnorableTown) {
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
 		for (Town town : getTowns().values()) {
-			if (homeTown != null)
-				// If the townblock either: the town is the same as homeTown OR 
-				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
-				if (homeTown.getUUID().equals(town.getUUID())
-					|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && homeTown.hasNation() && town.hasNation() && town.getNationOrNull().equals(homeTown.getNationOrNull()))
-					|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town)))
-					continue;
+			if (homeTown != null && townSkippedByProximityFilter(town, homeTown, isIgnorableTown))
+				continue;
+
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
 
@@ -869,8 +892,58 @@ public class TownyWorld extends TownyObject {
 		}
 		return minSqr == -1 ? Integer.MAX_VALUE : (int) Math.ceil(Math.sqrt(minSqr));
 	}
-	
-	
+
+	public boolean worldCoordNotTooCloseToOtherTowns(Coord key, Town homeTown) {
+		final Map<Integer, Predicate<Town>> minDistances = new HashMap<>();
+		if(TownySettings.getMinDistanceFromTownPlotblocks() > 0){
+			minDistances.put(TownySettings.getMinDistanceFromTownPlotblocks(), t -> false);
+		}
+		if (TownySettings.getMinDistanceFromOlderTownPlotblocks() > TownySettings.getMinDistanceFromTownPlotblocks()){
+			minDistances.put(TownySettings.getMinDistanceFromOlderTownPlotblocks(), t -> t.getRegistered() > homeTown.getRegistered());
+		}
+		final int keyX = key.getX();
+		final int keyZ = key.getZ();
+
+		for(Town town : getTowns().values()){
+			if (homeTown != null && townSkippedByProximityFilter(town, homeTown, t -> false)) // No skip with the predicate here because it will be done later by the map.
+				continue;
+
+			for (TownBlock b : town.getTownBlocks()) {
+				if (!b.getWorld().equals(this)) continue;
+
+				final int tbX = b.getX();
+				final int tbZ = b.getZ();
+				
+				if (keyX == tbX && keyZ == tbZ)
+					continue;
+				
+				final double distSqr = MathUtil.distanceSquared((double) tbX - keyX, (double) tbZ - keyZ);
+				// If there is a town that is too close, return false.
+				if (minDistances.entrySet().stream().anyMatch(entry -> distSqr >= entry.getKey() && !entry.getValue().test(town)))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	/** 
+	 * Skip over the proximity filter if the town is any one of the following: 
+	 * the same as homeTown OR is ignorable for a reason set in the Predicate<Town>
+	 * OR both towns are in the same nation OR both towns are in allied nations  
+	 * (and nation/alliednations are set to ignore distance in the config.)
+	 * 
+	 * @param town Town we are testing against.
+	 * @param homeTown the Town which is attempting to claim land.
+	 * @param isIgnorableTown Predicate<Town> which tests the town variable to see if it can be ignored by the proximity test.
+	 * @return true if town can claim near to homeTown.
+	 */
+	private boolean townSkippedByProximityFilter(Town town, Town homeTown, @NotNull Predicate<Town> isIgnorableTown) {
+		return homeTown.equals(town)
+			|| isIgnorableTown.test(town)
+			|| (TownySettings.isMinDistanceIgnoringTownsInSameNation() && CombatUtil.isSameNation(town, homeTown))
+			|| (TownySettings.isMinDistanceIgnoringTownsInAlliedNation() && homeTown.isAlliedWith(town));
+	}
+
 	/**
 	 * Returns the distance to the closest townblock 
 	 * from the given coord, for the give town. 
