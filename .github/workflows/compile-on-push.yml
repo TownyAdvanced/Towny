@@ -20,7 +20,7 @@ jobs:
             - name: Compile with Maven
               run: mvn package
             - name: Upload Artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: Towny
                   path: Towny/target/towny-*.jar
