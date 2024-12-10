@@ -10169,3 +10169,7 @@ v0.92.0.11:
     - This will use the town or nation's tag if they have a tag in use.
   - Fix worlds not being saved after using /tw set usedefault.
   - Remove ability for /tw set wild being able to set a world to the default settings when no arguments are supplied.
+  - New Placeholders:
+    - %townyadvanced_resident_join_date_unformatted% - returns the long value of the time in epoch milliseconds that a player joined the server.
+    - %townyadvanced_resident_join_date_formatted% - returns a human-readable date and time at which the player joined the server.
+    - Closes #7691.

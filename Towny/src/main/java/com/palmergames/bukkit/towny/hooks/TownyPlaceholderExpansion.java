@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
+import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -686,6 +687,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				: resident.hasNation()
 					? String.format(TownySettings.getPAPIFormattingNation(), StringMgmt.remUnderscore(resident.getNationOrNull().getName()))
 					: String.format(TownySettings.getPAPIFormattingTown(), StringMgmt.remUnderscore(resident.getTownOrNull().getName()));
+
+		case "resident_join_date_unformatted": // %townyadvanced_resident_join_date_unformatted%
+			return String.valueOf(resident.getRegistered());
+		case "resident_join_date_formatted":// %townyadvanced_resident_join_date_formatted%
+			return TownyFormatter.getFormattedResidentRegistration(resident);
 
 		default:
 			return "";

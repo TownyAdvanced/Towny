@@ -447,7 +447,7 @@ public class TownyFormatter {
 		if (nation.getNumTowns() > 0 && nation.hasCapital() && nation.getCapital().hasMayor()) {
 			Resident king = nation.getCapital().getMayor();
 			screen.addComponentOf("king", colourKeyValue(translator.of("status_nation_king"), king.getFormattedName()),
-					HoverEvent.showText(translator.component("registered_last_online", registeredFormat.format(king.getRegistered()), lastOnlineFormatIncludeYear.format(king.getLastOnline()))
+					HoverEvent.showText(translator.component("registered_last_online", getFormattedResidentRegistration(king), lastOnlineFormatIncludeYear.format(king.getLastOnline()))
 						.append(Component.newline())
 						.append(translator.component("status_hover_click_for_more"))),
 					ClickEvent.runCommand("/towny:resident " + king.getName())
@@ -640,7 +640,11 @@ public class TownyFormatter {
 	 * @return String with registered date formatted for use in the StatusScreen. 
 	 */
 	private static String getResidentRegisteredLine(Resident resident, Translator translator) {
-		return (!resident.isNPC() ? colourKeyValue(translator.of("status_registered"), registeredFormat.format(resident.getRegistered())) : colourKeyValue(translator.of("npc_created"), registeredFormat.format(resident.getRegistered())));
+		return (!resident.isNPC() ? colourKeyValue(translator.of("status_registered"), getFormattedResidentRegistration(resident)) : colourKeyValue(translator.of("npc_created"), getFormattedResidentRegistration(resident)));
+	}
+
+	public static String getFormattedResidentRegistration(Resident resident) {
+		return registeredFormat.format(resident.getRegistered());
 	}
 	
 	/**
