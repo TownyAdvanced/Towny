@@ -58,6 +58,7 @@ public class TownyPerms {
 	private static final HashMap<UUID, String> residentPrefixMap = new HashMap<>();
 	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
 	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
+	private static final String RANKREQUIREMENT_PREFIX = "towny.town_level_requirement.";
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -416,7 +417,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownRankPermissions(String rank) {
 
-		return getList("towns.ranks." + rank);//.toLowerCase());
+		return getList("towns.ranks." + rank);
 	}
 
 	/*
@@ -510,6 +511,7 @@ public class TownyPerms {
 	/*
 	 * Resident Primary Rank / Rank Prefix 
 	 */
+
 	public static String getResidentPrimaryRankPrefix(Resident resident) {
 		return residentPrefixMap.getOrDefault(resident.getUUID(), setResidentPrimaryRankPrefix(resident));
 	}
@@ -563,7 +565,7 @@ public class TownyPerms {
 		int topValue = 0;
 		for (String node : nodes) {
 			if (node.startsWith(RANKPRIORITY_PREFIX)) {
-				int priorityValue = getNodePriority(node);
+				int priorityValue = getNodePriority(node, RANKPRIORITY_PREFIX.length());
 				if (topValue >= priorityValue)
 					continue;
 				topValue = priorityValue;
@@ -572,13 +574,25 @@ public class TownyPerms {
 		return topValue;
 	}
 
-	private static int getNodePriority(String node) {
+	private static int getNodePriority(String node, int length) {
 		try {
-			return Integer.parseInt(node.substring(RANKPRIORITY_PREFIX.length()));
+			return Integer.parseInt(node.substring(length));
 		} catch (NumberFormatException ignored) {
 			return 0;
 		}
 	}
+
+	/*
+	 * TownLevel Rank Requirements 
+	 */
+
+	public static int getRankTownLevelReq(String rank) {
+		for (String node : getTownRankPermissions(rank))
+			if (node.startsWith(RANKREQUIREMENT_PREFIX))
+				return getNodePriority(node, RANKREQUIREMENT_PREFIX.length());
+		return 0;
+	}
+
 	/*
 	 * Permission utility functions taken from GroupManager (which I wrote anyway).
 	 */
@@ -772,6 +786,18 @@ public class TownyPerms {
 				"#    - towny.rankpriority.100                                                               #",
 				"#    - towny.rankprefix.&a<&2Sheriff&a>                                                     #",
 				"#                                                                                           #",
+				"# The towns.ranks and nations.ranks sections support requiring their town or nation to have #",
+				"# a minimum town_level or nation_level. This means that you can lock ranks behind a town or #",
+				"# nation's population. By adding a permission node to a rank you will set this requirement: #",
+				"# You can read about town_levels and nation_levels here: https://tinyurl.com/3e9ahk2m       #",
+				"# Ex:                                                                                       #",
+				"#    - towny.town_level_requirement.4                                                       #",
+				"# Adding this to a town rank will require the Town to have a town_level of 4 or more to be  #",
+				"# able to assign that rank to their residents. If the town lost population the residents    #",
+				"# with arank beyond their town's town_level will have that rank removed from them. When     #",
+				"# their town regains enough population, that rank will automatically be re-assigned to the  #",
+				"# resident.                                                                                 #",
+				"#                                                                                           #",
 				"#############################################################################################",
 				"",
 				"",
@@ -812,5 +838,4 @@ public class TownyPerms {
 	public static CommentedConfiguration getTownyPermsFile() {
 		return perms;
 	}
-	
 }
