@@ -30,6 +30,9 @@ public class MapHUD {
 	/* Scoreboards use old-timey colours. */
 	private static final ChatColor WHITE = ChatColor.WHITE;
 	private static final ChatColor GOLD = ChatColor.GOLD;
+	private static final ChatColor YELLOW = ChatColor.YELLOW;
+	private static final ChatColor LIGHT_PURPLE = ChatColor.LIGHT_PURPLE;
+	private static final ChatColor RED = ChatColor.RED;
 	private static final ChatColor GREEN = ChatColor.GREEN;
 	private static final ChatColor DARK_GREEN = ChatColor.DARK_GREEN;
 
@@ -66,10 +69,10 @@ public class MapHUD {
 		}
 		
 		String townEntry = DARK_GREEN + Translatable.of("town_sing").forLocale(player) + ": ";
-		// A blank entry has to have a unique, invisible character:
-		String ownerEntry = WHITE.toString();
-		String districtEntry = GOLD.toString();
-		String plotnameEntry = DARK_GREEN.toString();
+		// A blank entry has to have a unique, invisible character. The TEAM_MAP_PREFIX teams have taken colors 0-9.
+		String ownerEntry = YELLOW.toString();
+		String districtEntry = LIGHT_PURPLE.toString();
+		String plotnameEntry = RED.toString();
 
 		score = nonMapLines;
 		board.registerNewTeam(TEAM_TOWN).addEntry(townEntry);

@@ -10173,3 +10173,6 @@ v0.92.0.11:
     - %townyadvanced_resident_join_date_unformatted% - returns the long value of the time in epoch milliseconds that a player joined the server.
     - %townyadvanced_resident_join_date_formatted% - returns a human-readable date and time at which the player joined the server.
     - Closes #7691.
+0.101.0.4:
+  - Fix map hud missing lines 13 and 9.
+    - Closes #7699.
