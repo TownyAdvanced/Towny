@@ -30,6 +30,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -58,8 +59,8 @@ public abstract class Account implements Nameable, Identifiable {
 	
 	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
 		this.economyHandler = owner;
-		this.name = name;
-		this.uuid = uuid;
+		this.name = Objects.requireNonNull(name, "name");
+		this.uuid = Objects.requireNonNull(uuid, "uuid");
 		this.worldSupplier = worldSupplier;
 		
 		// ALL account transactions will route auditing data through this
