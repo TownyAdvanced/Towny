@@ -73,7 +73,7 @@ public final class TownyServerAccount extends Account {
 			boolean success = TownyEconomyHandler.subtract(ACCOUNT, amount);
 			if (success)
 				BukkitTools.fireEvent(Transaction.subtract(amount).paidByServer().paidTo(account).asTownyTransactionEvent());
- 
+
 			return success;
 		} finally {
 			worldLocal.remove();
