@@ -244,6 +244,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2)
 						return NameUtil.filterByStart(plotRectCircleCompletes, args[1]);
 					break;
+				case "evict":
+					if (args.length == 2)
+						return NameUtil.filterByStart(Collections.singletonList("forsale"), args[1]);
+					break;
 				case "forsale":
 				case "fs":
 					switch (args.length) {
@@ -341,7 +345,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		switch(split[0].toLowerCase(Locale.ROOT)) {
 		case "claim" -> parsePlotClaim(player, StringMgmt.remFirstArg(split), resident, townBlock);
 		case "clear" -> parsePlotClear(resident, townBlock);
-		case "evict" -> parsePlotEvict(resident, townBlock);
+		case "evict" -> parsePlotEvict(resident, townBlock, StringMgmt.remFirstArg(split));
 		case "fs", "forsale" -> parsePlotForSale(player, StringMgmt.remFirstArg(split), resident, townBlock);
 		case "group" -> parsePlotGroup(StringMgmt.remFirstArg(split), resident, townBlock, player);
 		case "district" -> parseDistrict(StringMgmt.remFirstArg(split), resident, townBlock, player);
@@ -465,7 +469,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.fireEvent(new PlotClearEvent(townBlock));
 	}
 
-	public void parsePlotEvict(Resident resident, TownBlock townBlock) throws TownyException {
+	public void parsePlotEvict(Resident resident, TownBlock townBlock, String[] split) throws TownyException {
 		checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode());
 
 		if (!townBlock.hasResident())
@@ -474,6 +478,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// If this fails it will trigger a TownyException.
 		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 
+		boolean resell = !split.toString().isEmpty() && split[0].equalsIgnoreCase("forsale");
+
 		if (townBlock.hasPlotObjectGroup()) {
 			townBlock.getPlotObjectGroup().getTownBlocks().stream().forEach(TownBlock::evictOwnerFromTownBlock);
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
@@ -481,7 +487,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Evict and save the townblock.
-		townBlock.evictOwnerFromTownBlock();
+		townBlock.evictOwnerFromTownBlock(resell);
 		TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_evict"));
 	}
 

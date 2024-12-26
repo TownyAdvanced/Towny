@@ -629,8 +629,12 @@ public class TownBlock extends TownyObject {
 	}
 	
 	public void evictOwnerFromTownBlock() {
+		evictOwnerFromTownBlock(false);
+	}
+
+	public void evictOwnerFromTownBlock(boolean forsale) {
 		this.removeResident();
-		this.setPlotPrice(-1);
+		this.setPlotPrice(forsale ? town.getPlotPrice() : -1);
 		this.setType(getType());
 		this.save();
 	}
