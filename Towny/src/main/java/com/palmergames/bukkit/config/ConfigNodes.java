@@ -2720,6 +2720,10 @@ public enum ConfigNodes {
 			"towny-server",
 			"",
 			"# The name of the account that all money that normally disappears goes into."),
+	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT_UUID("economy.closed_economy.server_account_uuid",
+		"a73f39b0-1b7c-2930-b4a3-ce101812d926",
+		"",
+		"# The UUID of the account that all money that normally disappears goes into."),
 	ECO_CLOSED_ECONOMY_ENABLED(
 			"economy.closed_economy.enabled",
 			"false",
