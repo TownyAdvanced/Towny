@@ -10179,3 +10179,11 @@ v0.92.0.11:
   - New Subcommand: /plot evict forsale
     - Cuases a newly evicted plot to be put back up for sale, using the town's default plot price.
     - Closes #7713.
+  - Add config option for Closed Economy UUID, courtesy of turtledude01 with PR #7704.
+  - New Config Option: economy.closed_economy.server_account_uuid
+    - Default: a73f39b0-1b7c-2930-b4a3-ce101812d926
+    - The UUID of the account that all money that normally disappears goes into.
+  - Bump org.junit.jupiter:junit-jupiter-api from 5.11.3 to 5.11.4.
+  - Bump org.junit.jupiter:junit-jupiter from 5.11.3 to 5.11.4.
+  - Bump org.apache.logging.log4j:log4j-core from 2.24.2 to 2.24.3.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.11.1 to 3.11.2.
