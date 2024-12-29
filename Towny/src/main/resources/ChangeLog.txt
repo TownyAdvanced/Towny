@@ -10193,3 +10193,6 @@ v0.92.0.11:
     - This will prevent Towny from remove mobs spawned by Trial Chambers, which resulted in unearned rewards.
     - Closes #7709.
   - New Config Migration: ",TRIAL_SPAWNER" will be added automatically to existing configs' town_mob_removal_ignored_spawn_causes list.
+  - New PAPI Placeholder: %townyadvanced_player_location_town_forsale_cost%
+    - Displays the cost of the town at the player's location, or "Not for sale." if it is not for sale.
+    - Closes #7708.

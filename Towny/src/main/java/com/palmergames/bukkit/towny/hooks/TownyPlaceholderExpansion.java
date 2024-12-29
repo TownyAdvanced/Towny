@@ -812,6 +812,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 						.filter(t -> t.isNeutral())
 						.filter(t -> t.getHomeblockWorld().equals(townblock.getWorld()))
 						.count());
+			case "player_location_town_forsale_cost": // %townyadvanced_player_location_town_forsale_cost%
+				return townblock == null ? "" : 
+					townblock.getTownOrNull().isForSale()
+						? getMoney(townblock.getTownOrNull().getForSalePrice())
+						: Translation.of("msg_not_for_sale");
 			default:
 				return null;
 		}
