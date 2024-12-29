@@ -1900,10 +1900,10 @@ public enum ConfigNodes {
 			"# Prevent the spawning of villager babies in towns."),
 	PROT_MOB_REMOVE_IGNORED_SPAWN_CAUSES(
 			"protection.town_mob_removal_ignored_spawn_causes",
-			"",
+			"TRIAL_SPAWNER",
 			"",
 			"# A comma seperated list of spawn causes, if an entity has a spawn cause that is in this list they will not be removed by town mob removal.",
-			"# For the list of valid spawn causes, see https://jd.papermc.io/paper/1.20/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html",
+			"# For the list of valid spawn causes, see https://jd.papermc.io/paper/1.21.4/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html",
 			"# Due to technical reasons, this setting only works on Paper servers."),
 
 	PROT_MOB_DISABLE_TRIGGER_PRESSURE_PLATE_STONE(
