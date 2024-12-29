@@ -884,5 +884,15 @@
         "key": "disable_modern_eco"
       }
     ]
+  },
+  {
+    "version": "0.101.0.5",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.town_mob_removal_ignored_spawn_causes",
+        "value": ",TRIAL_SPAWNER"
+      }
+    ]
   }
 ]
