@@ -10187,3 +10187,9 @@ v0.92.0.11:
   - Bump org.junit.jupiter:junit-jupiter from 5.11.3 to 5.11.4.
   - Bump org.apache.logging.log4j:log4j-core from 2.24.2 to 2.24.3.
   - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.11.1 to 3.11.2.
+0.101.0.5:
+  - Add TRIAL_SPAWNER to default list of reasons Towny won't remove mobs.
+    - Works only on Paper servers.
+    - This will prevent Towny from remove mobs spawned by Trial Chambers, which resulted in unearned rewards.
+    - Closes #7709.
+  - New Config Migration: ",TRIAL_SPAWNER" will be added automatically to existing configs' town_mob_removal_ignored_spawn_causes list.
