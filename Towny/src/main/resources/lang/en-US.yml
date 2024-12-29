@@ -2624,3 +2624,5 @@ chunknotification_plot_claim_help_message: " Use '/plot claim' to buy this plot.
 
 titlemsg_pay_your_bail_title: "Pay your bail: %s"
 titlemsg_pay_your_bail_subtitle: "/res jail paybail"
+
+msg_not_for_sale: "Not for sale."
