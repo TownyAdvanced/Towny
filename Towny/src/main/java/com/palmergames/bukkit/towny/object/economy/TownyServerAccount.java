@@ -24,7 +24,7 @@ public final class TownyServerAccount extends Account {
 	public static final TownyServerAccount ACCOUNT = new TownyServerAccount();
 
 	private TownyServerAccount() {
-		super(new EconomyHandlerHolder(), name, uuid, worldLocal::get);
+		super(new EconomyHandlerHolder(), name, uuid, worldLocal::get, false);
 	}
 
 	@Override
