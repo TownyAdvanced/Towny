@@ -53,14 +53,42 @@ public abstract class Account implements Nameable, Identifiable {
 	private String name;
 	private UUID uuid;
 	private final Supplier<TownyWorld> worldSupplier;
+	private boolean playerAccount;
 	
 	private OfflinePlayer cachedOfflinePlayer;
 	
+
+	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier, boolean playerAccount) {
+		this.economyHandler = owner;
+		this.name = name;
+		this.uuid = uuid;
+		this.worldSupplier = worldSupplier;
+		this.playerAccount = playerAccount;
+		
+		// ALL account transactions will route auditing data through this
+		// central auditor.
+		observers.add(GLOBAL_OBSERVER);
+		
+		try {
+			this.cachedBalance = new CachedBalance(getHoldingBalance(false));
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, String.format("An exception occurred when initializing cached balance for an account (name: %s), see the below error for more details.", name), e);
+		}
+	}
+
+	/**
+	 * @deprecated since 0.101.0.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
+	 * @param economyHandler economyHandler that owns this account.
+	 * @param name name of the account owner.
+	 * @param world world in which the account would exist.
+	 */
+	@Deprecated
 	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
 		this.economyHandler = owner;
 		this.name = name;
 		this.uuid = uuid;
 		this.worldSupplier = worldSupplier;
+		this.playerAccount = false;
 		
 		// ALL account transactions will route auditing data through this
 		// central auditor.
@@ -74,7 +102,7 @@ public abstract class Account implements Nameable, Identifiable {
 	}
 	
 	/**
-	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier)} instead.
+	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
 	 * @param economyHandler economyHandler that owns this account.
 	 * @param name name of the account owner.
 	 * @param world world in which the account would exist.
@@ -84,13 +112,14 @@ public abstract class Account implements Nameable, Identifiable {
 		this.name = name;
 		this.uuid = economyHandler instanceof Identifiable identifiable ? identifiable.getUUID() : null;
 		this.economyHandler = economyHandler;
+		this.playerAccount = false;
 		
 		TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(world);
 		this.worldSupplier = () -> townyWorld;
 	}
 
 	/**
-	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier)} instead.
+	 * @deprecated since 0.100.4.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
 	 * @param economyHandler economyHandler that owns this account.
 	 * @param name name of the account owner.
 	 */
@@ -100,6 +129,7 @@ public abstract class Account implements Nameable, Identifiable {
 		this.uuid = economyHandler instanceof Identifiable identifiable ? identifiable.getUUID() : null;
 		this.economyHandler = economyHandler;
 		this.worldSupplier = () -> TownyUniverse.getInstance().getTownyWorlds().get(0);
+		this.playerAccount = false;
 	}
 	
 	// Template methods
@@ -315,6 +345,14 @@ public abstract class Account implements Nameable, Identifiable {
 	public void setUUID(final @NotNull UUID uuid) {
 		this.uuid = uuid;
 		this.cachedOfflinePlayer = null;
+	}
+
+	public boolean isPlayerAccount() {
+		return playerAccount;
+	}
+
+	public void setPlayerAccount(boolean playerAccount) {
+		this.playerAccount = playerAccount;
 	}
 
 	/**

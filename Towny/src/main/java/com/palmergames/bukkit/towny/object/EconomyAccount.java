@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  */
 public class EconomyAccount extends Account {
 	protected EconomyAccount(Resident resident, String name, UUID uuid, Supplier<TownyWorld> worldSupplier) {
-		super(resident, name, uuid, worldSupplier);
+		super(resident, name, uuid, worldSupplier, true);
 	}
 
 	@Override

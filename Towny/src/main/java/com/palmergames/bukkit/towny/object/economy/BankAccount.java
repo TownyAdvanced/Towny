@@ -31,7 +31,7 @@ public class BankAccount extends Account {
 	 * @param government Town or Nation that is getting a BankAccount.
 	 */
 	public BankAccount(String name, Government government) {
-		super(government, name, TownyEconomyHandler.modifyNPCUUID(government.getUUID()), () -> TownyAPI.getInstance().getTownyWorld(government.getWorld()));
+		super(government, name, TownyEconomyHandler.modifyNPCUUID(government.getUUID()), () -> TownyAPI.getInstance().getTownyWorld(government.getWorld()), false);
 		this.government = government;
 	}
 
