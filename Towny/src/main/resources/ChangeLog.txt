@@ -10196,3 +10196,4 @@ v0.92.0.11:
   - New PAPI Placeholder: %townyadvanced_player_location_town_forsale_cost%
     - Displays the cost of the town at the player's location, or "Not for sale." if it is not for sale.
     - Closes #7708.
+  - Fix /plot evict command throwing ArrayIndexOutOfBoundsException.

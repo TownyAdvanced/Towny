@@ -478,7 +478,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// If this fails it will trigger a TownyException.
 		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 
-		boolean resell = !split.toString().isEmpty() && split[0].equalsIgnoreCase("forsale");
+		boolean resell = split.length > 0 && split[0].equalsIgnoreCase("forsale");
 
 		if (townBlock.hasPlotObjectGroup()) {
 			townBlock.getPlotObjectGroup().getTownBlocks().stream().forEach(TownBlock::evictOwnerFromTownBlock);
