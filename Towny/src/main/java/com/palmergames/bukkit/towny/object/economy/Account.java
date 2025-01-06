@@ -78,9 +78,10 @@ public abstract class Account implements Nameable, Identifiable {
 
 	/**
 	 * @deprecated since 0.101.0.6 use {@link #Account(EconomyHandler, String, UUID, Supplier, boolean)} instead.
-	 * @param economyHandler economyHandler that owns this account.
+	 * @param owner economyHandler that owns this account.
 	 * @param name name of the account owner.
-	 * @param world world in which the account would exist.
+	 * @param uuid UUID of the account owner.
+	 * @param worldSupplier world in which the account would exist.
 	 */
 	@Deprecated
 	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
