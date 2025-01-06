@@ -39,12 +39,12 @@ public class VaultUnlockedEconomyAdapter implements EconomyAdapter {
 
 	@Override
 	public double getBalance(Account account) {
-		return economy.getBalance(TOWNY, account.getUUID(), account.getWorld().getName()).doubleValue();
+		return economy.balance(TOWNY, account.getUUID(), account.getWorld().getName()).doubleValue();
 	}
 
 	@Override
 	public void newAccount(Account account) {
-		economy.createAccount(account.getUUID(), account.getName(), account.getWorld().getName());
+		economy.createAccount(account.getUUID(), account.getName(), account.getWorld().getName(), account.isPlayerAccount());
 	}
 
 	@Override
