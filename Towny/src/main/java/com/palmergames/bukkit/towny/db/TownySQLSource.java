@@ -2313,7 +2313,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				res_hm.put("about", resident.getAbout());
 			res_hm.put("town", resident.hasTown() ? resident.getTown().getName() : "");
 			res_hm.put("town-ranks", resident.hasTown() ? StringMgmt.join(resident.getTownRanksForSaving(), "#") : "");
-			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanks(), "#") : "");
+			res_hm.put("nation-ranks", resident.hasTown() ? StringMgmt.join(resident.getNationRanksForSaving(), "#") : "");
 			res_hm.put("friends", StringMgmt.join(resident.getFriends(), "#"));
 			res_hm.put("protectionStatus", resident.getPermissions().toString().replaceAll(",", "#"));
 

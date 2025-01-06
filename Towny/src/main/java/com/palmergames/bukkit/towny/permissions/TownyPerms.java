@@ -58,7 +58,8 @@ public class TownyPerms {
 	private static final HashMap<UUID, String> residentPrefixMap = new HashMap<>();
 	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
 	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
-	private static final String RANKREQUIREMENT_PREFIX = "towny.town_level_requirement.";
+	private static final String RANK_TOWN_LEVEL_REQUIREMENT_PREFIX = "towny.town_level_requirement.";
+	private static final String RANK_NATION_LEVEL_REQUIREMENT_PREFIX = "towny.nation_level_requirement.";
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -583,16 +584,23 @@ public class TownyPerms {
 	}
 
 	/*
-	 * TownLevel Rank Requirements 
+	 * TownLevel & NationLevel Rank Requirements 
 	 */
 
 	public static int getRankTownLevelReq(String rank) {
 		for (String node : getTownRankPermissions(rank))
-			if (node.startsWith(RANKREQUIREMENT_PREFIX))
-				return getNodePriority(node, RANKREQUIREMENT_PREFIX.length());
+			if (node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX))
+				return getNodePriority(node, RANK_TOWN_LEVEL_REQUIREMENT_PREFIX.length());
 		return 0;
 	}
 
+	public static int getRankNationLevelReq(String rank) {
+		for (String node : getNationRankPermissions(rank))
+			if (node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX))
+				return getNodePriority(node, RANK_NATION_LEVEL_REQUIREMENT_PREFIX.length());
+		return 0;
+	}
+	
 	/*
 	 * Permission utility functions taken from GroupManager (which I wrote anyway).
 	 */
@@ -794,9 +802,15 @@ public class TownyPerms {
 				"#    - towny.town_level_requirement.4                                                       #",
 				"# Adding this to a town rank will require the Town to have a town_level of 4 or more to be  #",
 				"# able to assign that rank to their residents. If the town lost population the residents    #",
-				"# with arank beyond their town's town_level will have that rank removed from them. When     #",
+				"# with a rank beyond their town's town_level will have that rank removed from them. When    #",
 				"# their town regains enough population, that rank will automatically be re-assigned to the  #",
-				"# resident.                                                                                 #",
+				"# resident. When a town rank does not contain this node it will have no town_level          #",
+				"# requirement.                                                                              #",
+				"# Likewise, nation ranks support an optional nation_level requirement, Ex:                  #",
+				"#    - towny.nation_level_requirement.4                                                     #",
+				"# When added to a nation rank this rank will only be granted when a nation is of level 4 or #",
+				"# greater. When a nation rank does not include this node it will not require any            #",
+				"# nation_level.                                                                             #",
 				"#                                                                                           #",
 				"#############################################################################################",
 				"",
