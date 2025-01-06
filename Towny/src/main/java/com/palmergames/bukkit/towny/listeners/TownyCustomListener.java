@@ -20,11 +20,16 @@ import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
+import com.palmergames.bukkit.towny.event.nation.NationLevelDecreaseEvent;
+import com.palmergames.bukkit.towny.event.nation.NationLevelIncreaseEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
+import com.palmergames.bukkit.towny.event.town.TownLevelDecreaseEvent;
+import com.palmergames.bukkit.towny.event.town.TownLevelIncreaseEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.CellSurface;
+import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -34,11 +39,13 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.ChunkNotificationUtil;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.DrawSmokeTaskFactory;
 import com.palmergames.util.TimeMgmt;
@@ -259,14 +266,27 @@ public class TownyCustomListener implements Listener {
 	 * Used to warn towns when they've lost a resident, so they know they're at risk
 	 * of having claims stolen in the takeoverclaim feature.
 	 * 
+	 * Used for town_level and nation_level decrease events.
+	 * 
 	 * @param event TownRemoveResidentEvent.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onTownLosesResident(TownRemoveResidentEvent event) {
+		Town town = event.getTown();
+		if (town.getLevelNumber() < TownySettings.getTownLevelFromGivenInt(town.getNumResidents() + 1, town)) {
+			BukkitTools.fireEvent(new TownLevelDecreaseEvent(town));
+		}
+		if (town.hasNation()) {
+			Nation nation = town.getNationOrNull();
+			if (nation.getLevelNumber() < TownySettings.getNationLevelFromGivenInt(nation.getNumResidents() + 1)) {
+				BukkitTools.fireEvent(new NationLevelDecreaseEvent(nation));
+			}	
+		}
+		
 		if (!TownySettings.isOverClaimingAllowingStolenLand())
 			return;
-		if (event.getTown().isOverClaimed())
-			TownyMessaging.sendPrefixedTownMessage(event.getTown(), Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
+		if (town.isOverClaimed())
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
 	}
 
 	/**
@@ -313,10 +333,21 @@ public class TownyCustomListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onResidentJoinTown(TownAddResidentEvent event) {
+		Town town = event.getTown();
+
+		if (town.getLevelNumber() > TownySettings.getTownLevelFromGivenInt(town.getNumResidents() - 1, town)) {
+			BukkitTools.fireEvent(new TownLevelIncreaseEvent(town));
+		}
+		if (town.hasNation()) {
+			Nation nation = town.getNationOrNull();
+			if (nation.getLevelNumber() > TownySettings.getNationLevelFromGivenInt(nation.getNumResidents() - 1)) {
+				BukkitTools.fireEvent(new NationLevelIncreaseEvent(nation));
+			}	
+		}
+
 		if (!TownySettings.isPromptingNewResidentsToTownSpawn() || !TownySettings.isConfigAllowingTownSpawn())
 			return;
 
-		Town town = event.getTown();
 		Player player = event.getResident().getPlayer();
 		Town playerLocationTown = Optional.ofNullable(player).map(p -> TownyAPI.getInstance().getTown(p.getLocation())).orElse(null);
 
@@ -362,5 +393,41 @@ public class TownyCustomListener implements Listener {
 		if (cache == null || !cache.getLastTownBlock().equals(worldCoord) || PlayerCacheUtil.isOwnerCache(cache))
 			return;
 		Towny.getPlugin().resetCache(player);
+	}
+
+	/*
+	 * Watch for town and nation level increasing/decreasing and reassign permissions in case the players have level-requirement permissions. 
+	 */
+
+	@EventHandler
+	public void onTownLevelIncrease(TownLevelIncreaseEvent event) {
+		event.getTown().getResidents()
+		.stream()
+		.filter(Resident::isOnline)
+		.forEach(r -> TownyPerms.assignPermissions(r, r.getPlayer()));
+	}
+	
+	@EventHandler
+	public void onTownLevelDecrease(TownLevelDecreaseEvent event) {
+		event.getTown().getResidents()
+		.stream()
+		.filter(Resident::isOnline)
+		.forEach(r -> TownyPerms.assignPermissions(r, r.getPlayer()));
+	}
+	
+	@EventHandler
+	public void onNationLevelIncrease(NationLevelIncreaseEvent event) {
+		event.getNation().getResidents()
+		.stream()
+		.filter(Resident::isOnline)
+		.forEach(r -> TownyPerms.assignPermissions(r, r.getPlayer()));
+	}
+	
+	@EventHandler
+	public void onNationLevelDecrease(NationLevelDecreaseEvent event) {
+		event.getNation().getResidents()
+		.stream()
+		.filter(Resident::isOnline)
+		.forEach(r -> TownyPerms.assignPermissions(r, r.getPlayer()));
 	}
 }
