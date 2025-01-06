@@ -10197,3 +10197,6 @@ v0.92.0.11:
     - Displays the cost of the town at the player's location, or "Not for sale." if it is not for sale.
     - Closes #7708.
   - Fix /plot evict command throwing ArrayIndexOutOfBoundsException.
+  - Update VaultUnlocked support 2.9.0.
+  - Bump net.kyori:adventure-text-serializer-plain from 4.17.0 to 4.18.0.
+  - Bump net.kyori:adventure-text-minimessage from 4.17.0 to 4.18.0.
