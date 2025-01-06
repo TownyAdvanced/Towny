@@ -600,7 +600,25 @@ public class TownyPerms {
 				return getNodePriority(node, RANK_NATION_LEVEL_REQUIREMENT_PREFIX.length());
 		return 0;
 	}
-	
+
+	public static boolean ranksWithTownLevelRequirementPresent() {
+		for (String rank : getTownRanks()) {
+			for (String node : getTownRankPermissions(rank))
+				if (node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX))
+					return true;
+		}
+		return false;
+	}
+
+	public static boolean ranksWithNationLevelRequirementPresent() {
+		for (String rank : getNationRanks()) {
+			for (String node : getNationRankPermissions(rank))
+				if (node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX))
+					return true;
+		}
+		return false;
+	}
+
 	/*
 	 * Permission utility functions taken from GroupManager (which I wrote anyway).
 	 */
