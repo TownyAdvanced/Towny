@@ -10200,3 +10200,5 @@ v0.92.0.11:
   - Update VaultUnlocked support 2.9.0.
   - Bump net.kyori:adventure-text-serializer-plain from 4.17.0 to 4.18.0.
   - Bump net.kyori:adventure-text-minimessage from 4.17.0 to 4.18.0.
+0.101.1.0:
+  - Bump version for release.
