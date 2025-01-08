@@ -205,6 +205,10 @@ public class TownyPermission {
 	public void load(String s) {
 
 		setAll(false);
+
+		// To update perm lines from before the snowfall toggle was added to make sure snow doesn't unexpectedly stop falling
+		snow = true; 
+		
 		String[] tokens = s.split(",");
 		for (String token : tokens)
 			set(token, true);
