@@ -26,14 +26,14 @@ public class UpdateCheckerTask implements Runnable {
 		towny.getLogger().info(Translation.of("msg_checking_for_updates"));
 
 		try {
+			// TODO: Replace deprecation when we are running on Java 20.
+			@SuppressWarnings("deprecation")
 			URL url = new URL("https://api.github.com/repos/TownyAdvanced/Towny/releases");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
 				try {
-					// TODO: Replace this when support for MC 1.16.* is dropped.
-					@SuppressWarnings("deprecation")
-					Version latestVersion = Version.fromString(new JsonParser().parse(reader).getAsJsonArray().get(0).getAsJsonObject().get("tag_name").getAsString());
+					Version latestVersion = Version.fromString(JsonParser.parseReader(reader).getAsJsonArray().get(0).getAsJsonObject().get("tag_name").getAsString());
 					boolean upToDate = Version.fromString(towny.getVersion()).isNewerThanOrEquals(latestVersion);
 					
 					if (!upToDate) {
