@@ -1200,20 +1200,25 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				List<Pair<UUID, Component>> output = new ArrayList<>();
 				List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 				Collections.shuffle(towns);
-				
+
+				boolean spawningFullyDisabled = !TownySettings.isConfigAllowingTownSpawn() && !TownySettings.isConfigAllowingPublicTownSpawnTravel()
+						&& !TownySettings.isConfigAllowingTownSpawnNationTravel() && !TownySettings.isConfigAllowingTownSpawnNationAllyTravel();
+
 				for (Town town : towns) {
-					TextComponent townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
-							.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+					TextComponent townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA);
 					townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY).append(Component.text("(" + town.getResidents().size() + ")", NamedTextColor.AQUA)));
 
 					if (town.isOpen())
 						townName = townName.append(Component.space()).append(Translatable.of("status_title_open").locale(sender).component());
 					
-					Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
-					if (TownyEconomyHandler.isActive())
-						spawnCost = Translatable.of("msg_spawn_cost", prettyMoney(town.getSpawnCost()));
+					if (!spawningFullyDisabled) {
+						Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
+						if (TownyEconomyHandler.isActive())
+							spawnCost = Translatable.of("msg_spawn_cost", prettyMoney(town.getSpawnCost()));
 
-					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
+						townName = townName.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+						townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
+					}
 					output.add(Pair.pair(town.getUUID(), townName));
 				}
 				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);

@@ -10204,3 +10204,4 @@ v0.92.0.11:
   - Bump version for release.
 0.101.1.1:
   - Replace a couple of deprecations required when we supported MC 1.16.*.
+  - Fix showing spawn hovers in the nation and town list, when the config is set to prevent all spawning.

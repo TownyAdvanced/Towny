@@ -79,10 +79,12 @@ public class ComparatorCaches {
 		List<Pair<UUID, Component>> output = new ArrayList<>();
 		List<Town> towns = TownyUniverse.getInstance().getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
 		towns.sort((Comparator<? super Town>) compType.getComparator());
-		
+
+		boolean spawningFullyDisabled = !TownySettings.isConfigAllowingTownSpawn() && !TownySettings.isConfigAllowingPublicTownSpawnTravel()
+				&& !TownySettings.isConfigAllowingTownSpawnNationTravel() && !TownySettings.isConfigAllowingTownSpawnNationAllyTravel();
+
 		for (Town town : towns) {
-			Component townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA)
-					.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+			Component townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA);
 				
 			String slug = "";
 			switch (compType) {
@@ -118,11 +120,14 @@ public class ComparatorCaches {
 			if (town.isOpen())
 				townName = townName.append(Component.space()).append(Translatable.of("status_title_open").component());
 
-			Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
-			if (TownyEconomyHandler.isActive())
-				spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+			if (!spawningFullyDisabled) {
+				Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
+				if (TownyEconomyHandler.isActive())
+					spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-			townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).component()));
+				townName = townName.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+				townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).component()));
+			}
 			output.add(Pair.pair(town.getUUID(), townName));
 		}
 		
@@ -146,9 +151,11 @@ public class ComparatorCaches {
 		BukkitTools.fireEvent(nationListSortEvent);
 		nations = nationListSortEvent.getNations();
 
+		boolean spawningFullyDisabled = !TownySettings.isConfigAllowingNationSpawn() && !TownySettings.isConfigAllowingPublicNationSpawnTravel()
+				&& !TownySettings.isConfigAllowingNationSpawnAllyTravel();
+
 		for (Nation nation : nations) {
-			Component nationName = Component.text(StringMgmt.remUnderscore(nation.getName()), NamedTextColor.AQUA)
-					.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
+			Component nationName = Component.text(StringMgmt.remUnderscore(nation.getName()), NamedTextColor.AQUA);
 
 			String slug = "";
 			switch (compType) {
@@ -193,11 +200,14 @@ public class ComparatorCaches {
 			if (nation.isOpen())
 				nationName = nationName.append(Component.space()).append(Translatable.of("status_title_open").component());
 
-			Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
-			if (TownyEconomyHandler.isActive())
-				spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
-			
-			nationName = nationName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", nation).append("\n").append(spawnCost).component()));
+			if (!spawningFullyDisabled) {
+				Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
+				if (TownyEconomyHandler.isActive())
+					spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
+
+				nationName = nationName.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
+				nationName = nationName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", nation).append("\n").append(spawnCost).component()));
+			}
 			output.add(Pair.pair(nation.getUUID(), nationName));
 		}
 		return output;

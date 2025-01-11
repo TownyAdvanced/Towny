@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -312,7 +311,7 @@ public class TownyCustomListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onResidentJoinTown(TownAddResidentEvent event) {
-		if (!TownySettings.isPromptingNewResidentsToTownSpawn() || !TownySettings.getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN))
+		if (!TownySettings.isPromptingNewResidentsToTownSpawn() || !TownySettings.isConfigAllowingTownSpawn())
 			return;
 
 		Town town = event.getTown();

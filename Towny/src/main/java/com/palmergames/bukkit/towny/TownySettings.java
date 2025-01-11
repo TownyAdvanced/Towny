@@ -1927,23 +1927,39 @@ public class TownySettings {
 	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
-
 		return getSpawnLevel(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN);
 	}
 
 	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
-
 		return getSpawnLevel(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
 
-	public static boolean isConfigAllowingPublicTownSpawnTravel() {
+	public static boolean isConfigAllowingTownSpawn() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN);
+	}
 
+	public static boolean isConfigAllowingPublicTownSpawnTravel() {
 		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
-	
-	public static boolean isConfigAllowingPublicNationSpawnTravel() {
 
+	public static boolean isConfigAllowingTownSpawnNationTravel() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL_NATION);
+	}
+
+	public static boolean isConfigAllowingTownSpawnNationAllyTravel() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL_ALLY);
+	}
+
+	public static boolean isConfigAllowingNationSpawn() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN);
+	}
+
+	public static boolean isConfigAllowingPublicNationSpawnTravel() {
 		return getBoolean(ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN_TRAVEL);
+	}
+
+	public static boolean isConfigAllowingNationSpawnAllyTravel() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN_TRAVEL_ALLY);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
