@@ -510,6 +510,7 @@ permissions:
             towny.command.town.toggle.explosion: true
             towny.command.town.toggle.fire: true
             towny.command.town.toggle.mobs: true
+            towny.command.town.toggle.snow: true
             towny.command.town.toggle.nationzone: true
             towny.command.town.toggle.neutral: true
             towny.command.town.toggle.open: true
@@ -575,6 +576,7 @@ permissions:
             towny.command.plot.toggle.fire: true
             towny.command.plot.toggle.mobs: true
             towny.command.plot.toggle.pvp: true
+            towny.command.plot.toggle.snow: true
 
     towny.command.plot.set.*:
         description: User can access the plot set command.
@@ -664,6 +666,7 @@ permissions:
             towny.command.resident.toggle.fire: true
             towny.command.resident.toggle.mobs: true
             towny.command.resident.toggle.pvp: true
+            towny.command.resident.toggle.snow: true
             towny.command.resident.toggle.bedspawn: true
             towny.command.resident.toggle.bordertitles: true
             towny.command.resident.toggle.ignoreotherchannels: true
@@ -882,8 +885,10 @@ permissions:
             towny.command.townyworld.toggle.claimable: true
             towny.command.townyworld.toggle.explosion: true
             towny.command.townyworld.toggle.fire: true
+            towny.command.townyworld.toggle.snow: true
             towny.command.townyworld.toggle.forceexplosion: true
             towny.command.townyworld.toggle.forcefire: true
+            towny.command.townyworld.toggle.forcesnow: true
             towny.command.townyworld.toggle.forcepvp: true
             towny.command.townyworld.toggle.friendlyfire: true
             towny.command.townyworld.toggle.plotcleardelete: true
