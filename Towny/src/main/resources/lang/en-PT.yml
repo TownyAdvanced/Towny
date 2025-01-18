@@ -1,7 +1,13 @@
 ---
 help_2: 'Chat of the Town'
 help_3: 'Chat of the Nation'
+towny_help_6: "Displays this here Towny's version"
+towny_top_help_0: "List of resident based on ye given subcommand."
+towny_top_help_1: "List of land-owners based on ye given subcommand."
+towny_top_help_2: "List of wealthiest based on ye given subcommand."
 town_help_1: 'Ye Town''s status'
+town_help_2: '[mayor]'
+town_help_3: 'Selected town''s status'
 town_help_5: 'Teleport to ye town''s spawn.'
 town_help_9: 'Today be the day!'
 nation_help_1: 'Ye nation''s status'
@@ -21,6 +27,10 @@ townyadmin_help_1: 'Unclaim this here town block'
 townyadmin_help_2: 'Try to unclaim thee lands around yeself.'
 admin_panel_2: 'reload Towny'
 admin_panel_3: 'Start a new day'
+admin_panel_11: "Reset ye config"
+admin_panel_12: "Make a backup of ye Towny data"
+admin_panel_13: "Throw your mysql db overboard into flatfile"
+admin_panel_16: "Purge ye olde residents"
 msg_block_claim: 'Claim this here town block'
 msg_err_negative: '&cYe knowledge of numbers below 0 is not required ye dog.'
 msg_err_input_too_long: '&cYe words ramble on too long.'
