@@ -147,7 +147,7 @@ public class CombatUtil {
 				 * Both townblocks are not Arena plot and Player is not considered an Admin by Towny.
 				 * Arena plots never prevent pvp, admins can some times bypass pvp settings.
 				 */
-				if (!isArenaPlot(attackerTB, defenderTB) && !isTownyAdminBypassingPVP(attackingPlayer)) {
+				if (!isArenaPlot(attackerTB, defenderTB) && !isOutlawInTown(defenderTB, attackingPlayer, defendingPlayer) && !isTownyAdminBypassingPVP(attackingPlayer)) {
 					/*
 					 * Check if we are preventing friendly fire between allies
 					 * Check the attackers TownBlock for its PvP status, else the world.
@@ -428,6 +428,25 @@ public class CombatUtil {
 		return false;
 	}
 
+	/**
+	 * Return true if the outlaw system allows for outlaws to harm/be harmed.
+	 * 
+	 * @param defenderTB TownBlock where the defendingPlayer is harmed.
+	 * @param attackingPlayer Player harming the defendingPlayer.
+	 * @param defendingPlayer Player getting harmed.
+	 * @return true if one of the players is an outlaw in a situation where that matters.
+	 */
+	private static boolean isOutlawInTown(TownBlock defenderTB, Player attackingPlayer, Player defendingPlayer) {
+		Town town = defenderTB.getTownOrNull();
+		if (town == null)
+			return false;
+		if (TownySettings.forcePVPForTownOutlaws() && town.hasOutlaw(defendingPlayer.getName()))
+			return true;
+		if (TownySettings.outlawsAlwaysAllowedToPVP() && town.hasOutlaw(attackingPlayer.getName()))
+			return true;
+		return false;
+	}
+	
 	/**
 	 * Is the defending resident an ally of the attacking resident?
 	 * 

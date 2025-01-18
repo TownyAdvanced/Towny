@@ -10205,3 +10205,11 @@ v0.92.0.11:
 0.101.1.1:
   - Replace a couple of deprecations required when we supported MC 1.16.*.
   - Fix showing spawn hovers in the nation and town list, when the config is set to prevent all spawning.
+  - Add the ability to harm outlaws, and separately make outlaws be able to always harm people in towns.
+    - Closes #7733.
+  - New Config Option: global_town_settings.force_pvp_on_outlaws
+    - Default: false
+    - While true, outlaws can always be harmed in towns they are outlawed in.
+  - New Config Option: global_town_settings.allows_outlaws_to_always_pvp
+    - Default: false
+    - While true, outlaws can always harm players in towns they are outlawed in, despite the town pvp setting.

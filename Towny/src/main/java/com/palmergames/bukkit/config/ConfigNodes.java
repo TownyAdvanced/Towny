@@ -577,6 +577,16 @@ public enum ConfigNodes {
 			"",
 			"# Enables the [~Home] TownName - PlotOwner - PlotName message line..",
 			"# If false players will not be shown any notifications when they move in and out of towns, between plots."),
+	GTOWN_SETTING_FORCE_PVP_ON_OUTLAWS(
+			"global_town_settings.force_pvp_on_outlaws",
+			"false",
+			"",
+			"# While true, outlaws can always be harmed in towns they are outlawed in."),
+	GTOWN_SETTING_ALLOW_OUTLAWS_TO_ALWAYS_PVP(
+			"global_town_settings.allows_outlaws_to_always_pvp",
+			"false",
+			"",
+			"# While true, outlaws can always harm players in towns they are outlawed in, despite the town pvp setting."),
 	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN(
 			"global_town_settings.allow_outlaws_to_enter_town",
 			"true",

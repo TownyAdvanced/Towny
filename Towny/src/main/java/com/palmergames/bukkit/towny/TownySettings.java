@@ -3516,6 +3516,14 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);
 	}
 
+	public static boolean forcePVPForTownOutlaws() {
+		return getBoolean(ConfigNodes.GTOWN_SETTING_FORCE_PVP_ON_OUTLAWS);
+	}
+
+	public static boolean outlawsAlwaysAllowedToPVP() {
+		return getBoolean(ConfigNodes.GTOWN_SETTING_ALLOW_OUTLAWS_TO_ALWAYS_PVP);
+	}
+
 	public static boolean canOutlawsEnterTowns() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN);
 	}
