@@ -437,6 +437,9 @@ public class CombatUtil {
 	 * @return true if one of the players is an outlaw in a situation where that matters.
 	 */
 	private static boolean isOutlawInTown(TownBlock defenderTB, Player attackingPlayer, Player defendingPlayer) {
+		if (defenderTB == null)
+			return false;
+		
 		Town town = defenderTB.getTownOrNull();
 		if (town == null)
 			return false;
