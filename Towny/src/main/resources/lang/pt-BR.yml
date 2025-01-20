@@ -1666,7 +1666,7 @@ msg_jailed_war_prisoner: 'Como prisioneiro de guerra, você será libertado se s
 #Jail handbook title
 msg_jailed_title: 'Então, você foi preso :('
 #Jail handbook author
-msg_jailed_author: ''
+msg_jailed_author: 'Towny Jailco.'
 #Added in 0.130
 #Message shown when there are no allies to list in /town allylist.
 msg_error_town_has_no_allies: 'A cidade não tem aliados para se listar.'
