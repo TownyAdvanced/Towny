@@ -10213,3 +10213,4 @@ v0.92.0.11:
   - New Config Option: global_town_settings.allows_outlaws_to_always_pvp
     - Default: false
     - While true, outlaws can always harm players in towns they are outlawed in, despite the town pvp setting.
+  - Fix an NPE in the isOutlawInTown method, courtesy of Warrior with PR #7736.
