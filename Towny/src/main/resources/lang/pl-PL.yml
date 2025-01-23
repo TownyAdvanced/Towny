@@ -95,6 +95,7 @@ town_trust_help_2: "Lista zaufanch mieszkańców w mieście."
 town_towntrust_help_0: "Dodaje miasto do grona zaufanych twojego miata."
 town_towntrust_help_1: "Usuwa miasto z grona zaufanych twojego miasta."
 town_towntrust_help_2: "Lista zaufanych miast podanego miasta."
+town_cede_help: "Oferuje działkę, na którą stoisz do przejęcia przez dane miasto."
 mayor_help_3: 'Pozyskaj teren nieprzylegajacy do miasta'
 mayor_help_4: 'Pozyskaj dookoła w promieniu X'
 mayor_help_5: 'Pozyskuje wszystko w maksymalnym promieniu'

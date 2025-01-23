@@ -1623,9 +1623,22 @@ msg_purge_complete: 'Limpeza de residência concluída: %s excluída.'
 msg_you_have_been_given_bonus_blocks: 'Você recebeu townblocks a mais de %s a mais.'
 #Message shown when a town cannot purchase any more bonus blocks.
 msg_err_you_cannot_purchase_any_more_bonus_blocks: 'Sua cidade não pode comprar mais blocos de bônus. Valor máximo alcançado.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'As cidades capitais não podem mudar o estado pacífico.'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'A Zona Nacional ao redor da cidade é agora %s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'A sua cidade não tem nenhuma Zona Nacional para alternar!'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'número de Cidades.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'nível da cidade (Número de residentes)'
 #Added in 0.130
 #Jail causes
 msg_jailed_mayor: 'Preso pelo prefeito.'
+#Jail causes
+msg_jailed_outlaw: 'Morto como um fora-da-lei.'
 #Jail causes
 msg_jailed_war: 'Prisioneiro de Guerra.'
 #Jail handbook messages
@@ -1633,13 +1646,50 @@ msg_jailed_handbook_1: 'Parece que você foi preso, pelo motivo %s'
 #Jail handbook messages
 msg_jailed_handbook_2: 'Isso é ruim né? Bem, o que você acha disso? Aqui estão algumas dicas úteis para você enquanto você cumpre sua sentença.'
 #Jail handbook messages
+msg_jailed_handbook_3: 'Você foi preso por %s horas. Ao cumprir sua sentença, você ficará livre.'
+#Jail handbook messages
 msg_jailed_handbook_4_can: 'Você pode escapar da prisão ao sair de sua cidade utilizando "/town leave".'
 #Jail handbook messages
+msg_jailed_handbook_4_cant: 'Enquanto você está preso, você não conseguirá sair de sua cidade para escapar da cadeia.'
+#Jail handbook messages
+msg_jailed_handbook_bail_1: 'Você pode ser liberado da prisão pagando a sua fiança usando ''/res jailbail''.'
+#Jail handbook messages
+msg_jailed_handbook_bail_2: 'A fiança irá custar %s.'
+#Jail handbook messages
+msg_jailed_handbook_5: 'Se persistirem e se esforçarem para escapar, se chegarem à natureza, ganharão também a vossa liberdade.'
+#Jail handbook messages
+msg_jailed_handbook_6: 'Mas não morra antes que você chegue à natureza ou você voltará à cadeia.'
+#Jail handbook messages
 msg_jailed_teleport: 'Felizmente, as pérolas do ender e a fruta do coro podem ser usadas para ajudá-lo a escapar, agora você só precisa conseguir algumas.'
+#Jail handbook messages
+msg_jailed_war_prisoner: 'Como prisioneiro de guerra, você será libertado se seus compatriotas poderem reduzir o HP do lote da prisão para 0, ou se a cidade em que você está preso for removida da guerra.'
 #Jail handbook title
 msg_jailed_title: 'Então, você foi preso :('
+#Jail handbook author
+msg_jailed_author: 'Towny Jailco.'
+#Added in 0.130
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'A cidade não tem aliados para se listar.'
 #Message shown when there are no enemies to list in /town enemylist.
 msg_error_town_has_no_enemies: 'A cidade não tem inimigos para listar.'
+#Added in 0.132
+#Message shown in the lines of the baltop books
+msg_baltop_book_format: '%s. %s %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'A confirmação expirou.'
+#Added in 0.134
+tc_player_channel_sound_muted: 'O som do canal foi silenciado'
+tc_player_channel_sound_unmuted: 'O som do canal foi ativado'
+#Added in 0.135
+msg_cant_toggle_pvp_outsider_in_plot: 'Há um estranho em seu lote, você não pode alterar seu status de pvp!'
+#Added in 0.136
+msg_view_on_web: 'Clique para ver na internet.'
+#Added in 0.137
+#Shown globally when a town merges with another town.
+town1_has_merged_with_town2: '&6A nação %s concordou com a fusão com a cidade predominante de %s.'
+#Shown in the town and nation status screens to inform about neutrality costs.
+status_neutrality_cost: 'Custo de Neutralidade:'
 #Added in 0.138
 #Line 1 of the givebonus warning.
 msg_ptw_warning_1: 'Se você pagou dinheiro da vida real por estes blocos, por favor entenda o seguinte: o servidor em que você joga viola o EULA do Minecraft e a licença do Towny.'
@@ -1647,5 +1697,66 @@ msg_ptw_warning_1: 'Se você pagou dinheiro da vida real por estes blocos, por f
 msg_ptw_warning_2: 'A equipe do Towny nunca pretendia que os blocos de cidade fossem compráveis com dinheiro de verdade.'
 #Line 3 of the givebonus warning.
 msg_ptw_warning_3: 'Se você pagou com dinheiro de verdade, você deveria considerar jogar em um servidor com que possua o Towny que respeite os desejos da Equipe do Towny.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'Você foi convidado para se juntar a %s&9 (Nação: %s&9)'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'Sua cidade não pode arcar com dinheiro para resgatar esta terra. %s necessário.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Sua cidade pagou %s para não reivindicar a terra.'
 #Confirmation message shown when a player will unclaim land that costs money.
 confirmation_unclaiming_costs: 'Reclamar esta terra irá custar %s, você deseja continuar?'
+#Added in 0.140
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'Você deve esperar %s segundos antes de poder renomear sua cidade novamente.'
+#Added in 1.141
+msg_newday_already_running: 'Uma nova tarefa diária já está em execução.'
+#Added in 0.142
+#Message shown when a player is toggling neutrality too fast.
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Você não pode alternar a neutralidade, %s segundos restantes.'
+#Added in 0.143
+#Message shown when a console sender uses a command meant for in game.
+msg_err_command_not_for_console_use: 'Este comando não pode ser usado no console.'
+#Added in 0.144
+#Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
+msg_town_unlimitedclaims_setting_set_to: 'A cidade %s teve sua configuração ilimitada de reivindicações definida como %s'
+#Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
+did_you_want_to_toggle_unlimited_claims: 'Você não tem lotes suficientes para reivindicar, você quer ativar a alegação ilimitada da cidade de %s'
+#Added in 0.145
+#Message shown when a conquered town tries to leave their nation.
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Você não pode deixar sua nação, sua cidade está conquistada.'
+msg_err_console_only: 'Esse comando só pode ser usado pelo console.'
+msg_err_player_only: 'Esse comando só pode ser usado por um jogador.'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'O título das mensagens mostradas ao cruzar fronteiras é %s.'
+#Added in 0.147
+#Message shown confirming that an admin wants to reset their Towny config
+this_will_reset_your_config: 'Executar este comando redefine seu config.yml para o arquivo padrão. Deseja continuar?'
+#Message shown when an admin is setting a new king or capital and would override the config by doing so
+msg_warn_overriding_server_config: 'Ao fazer isso, você está substituindo os limites de residência definidos na configuração do servidor. Você deseja continuar mesmo assim?'
+#Added in 0.148
+#Message shown when invalid outpost spawns are removed using the /ta commands.
+msg_removed_x_invalid_outpost_spawns: 'Foram removidos %d spawns de postos avançados inválidos.'
+#Added in 0.149
+#Message shown when a player logs in and their town is bankrupt.
+msg_your_town_is_bankrupt: 'Sua cidade está falida, adicione dinheiro ao seu banco utilizando /town deposit {amount}.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Você é incapaz de usar este comando, porque você já é um membro de uma cidade. Se quiser continuar, terá de usar "/t leave".'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'Uma cidade onde você é um fora da lei.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'Não foi possível encontrar cidades abertas e públicas com lotes à venda (que você pode pagar) para rtp.'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&bVocê foi cobrado de %s para se teleportar para uma localidade aleatória que está à venda.'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'Você está prestes a ser teletransportado para um lote que está à venda em %s, que permitirá que você participe. Use ''/plot claim'' para reivindicar seu lote quando chegar.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "A cidade de %s tem lotes que você pode comprar. Você quer ser teletransportado para um lote que pode comprar agora mesmo?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "Você foi teleportado para um lote que pode ser comprado. Use '/plot claim' se quiser reivindicar o lote."
+#Used in the town's status screen to display plots
+status_plot_string: 'lotes'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s'
