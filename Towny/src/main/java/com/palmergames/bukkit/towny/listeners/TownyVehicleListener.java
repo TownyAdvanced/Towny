@@ -1,6 +1,8 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -11,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -19,7 +22,9 @@ import org.bukkit.inventory.ItemStack;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.ItemLists;
 
@@ -153,5 +158,26 @@ public class TownyVehicleListener implements Listener {
 	private boolean isProtectedMobEnteringEmptyBoatInTown(Boat boat, Entity entity) {
 		return boat.isEmpty() && !TownyAPI.getInstance().isWilderness(entity.getLocation())
 				&& EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), entity);
+	}
+
+
+	/**
+	 * Handles entering a vehicle throwing a player change plot event.
+	 * 
+	 * @param event VehicleEnterEvent.
+	 */
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onVehicleEnterCheckingPlayerMovement(VehicleEnterEvent event) {
+		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
+			return;
+
+		if (event.getEntered() instanceof Player player) {
+			WorldCoord vehicleCoord = WorldCoord.parseWorldCoord(event.getVehicle());
+			WorldCoord playerCoord = WorldCoord.parseWorldCoord(player);
+			if (vehicleCoord.equals(playerCoord))
+				return;
+
+			BukkitTools.fireEvent(new PlayerChangePlotEvent(player, playerCoord, vehicleCoord, new PlayerMoveEvent(player, player.getLocation(), event.getVehicle().getLocation())));
+		}
 	}
 }

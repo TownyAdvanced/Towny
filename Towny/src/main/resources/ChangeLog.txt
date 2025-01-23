@@ -10214,3 +10214,4 @@ v0.92.0.11:
     - Default: false
     - While true, outlaws can always harm players in towns they are outlawed in, despite the town pvp setting.
   - Fix an NPE in the isOutlawInTown method, courtesy of Warrior with PR #7736.
+  - Fix PlayerChangePlotEvent not firing when a player changes plots by entering into a vehicle.
