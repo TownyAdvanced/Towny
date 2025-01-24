@@ -378,6 +378,7 @@ plot_group_toggle_help_1: "Chuyển đổi vụ nổ trong các nhóm ô đất.
 plot_group_toggle_help_2: "Chuyển đổi lửa cháy lan trong các nhóm ô đất."
 plot_group_toggle_help_3: "Chuyển đổi quái vật trong các nhóm ô đất."
 plot_group_toggle_help_4: "Chuyển đổi các trạng thái thuế của các nhóm ô đất."
+plot_set_help_0: ""
 plot_set_help_1: "Đặt các ô đất đi đến một đồn điền."
 plot_set_help_1.5: "Thiết lập số ngày tối thiểu mà người chơi là thành viên thị trấn để mua lô đất."
 plot_set_help_1.6: "Thiết lập số ngày tối đa mà người chơi là thành viên thị trấn để mua lô đất."
