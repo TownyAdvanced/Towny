@@ -269,6 +269,7 @@ townyadmin_town_toggle_help_2: "Bật/tắt chế độ Công khai cho town, cho
 townyadmin_town_toggle_help_3: "Bật/tắt chế độ cho phép gây nổ trong town."
 townyadmin_town_toggle_help_4: "Bật/tắt khả năng tạo lửa và để lửa lan trong town."
 townyadmin_town_toggle_help_5: "Bật/tắt việc xuất hiện các loại quái vật trong town."
+townyadmin_town_toggle_help_6: "."
 townyadmin_town_toggle_help_7: "Bật/tắt chế độ Mở cho town, cho phép mọi người vào town mà không cần phải được mời."
 townyadmin_nation_help_0: "Tạo một quốc gia mới với tên và town thủ đô đã cho."
 townyadmin_nation_help_1: "Xem trang thông tin của quốc gia."
@@ -513,6 +514,11 @@ msg_toggle_open_on_warning: 'Cảnh báo: Townperms phải được tắt nếu 
 msg_changed_world_setting: '&c%s cho %s là: %s.'
 msg_world_pvp: '&cThế giới này chỉ dành cho PvP.'
 msg_world_mobs: '&cQuái vật bắt buộc spawn ở thế giới này.'
+msg_world_expl: '.'
+msg_world_fire: '.'
+msg_town_mobs: '.'
+msg_plot_pvp: '.'
+msg_plot_regen_wrong_size: '.'
 msg_new_day: '&bMội ngày mới là đây!'
 msg_new_king: '&b%s hiện là người lãnh đạo quốc gia của %s!'
 msg_err_new_king_notmayor: '&cLãnh đạo quốc gia mới không phải là thị trưởng.'
