@@ -131,7 +131,7 @@ public class MapHUD {
 			return name;
 		name = !tb.hasResident() ? "" : tb.getResidentOrNull().getName();
 		String prefix = Translatable.of("owner_status").forLocale(player);
-		return HUDManager.check(DARK_GREEN + prefix + GREEN + name);
+		return HUDManager.check(DARK_GREEN + prefix + ": " + GREEN + name);
 	}
 
 	private static String getDistrictName(TownBlock tb, Player player) {
