@@ -98,6 +98,7 @@ town_towntrust_help_0: "Ajoute une ville de confiance dans la ville."
 town_towntrust_help_1: "Retire une ville de confiance de la ville."
 town_towntrust_help_2: "Liste les villes de confiance d'une ville."
 town_buy_help: "Achètes des blocs de ville bonus pour augmenter la limite de revendication de la ville."
+town_cede_help: "Offre la parcelle dans laquelle vous êtes debout pour être pris en charge par la ville donnée."
 mayor_help_3: 'Parcelle non attachée à la ville'
 mayor_help_4: 'Annexe autour de vous dans un rayon de X'
 mayor_help_5: 'Annexe au rayon maximal'
@@ -136,7 +137,10 @@ nation_set_help_3: "Définis le montant de taxe qu'une ville conquise va payer."
 nation_set_help_4: "Définissez le nom de la nation."
 nation_set_help_5: "Défini le titre ou le surnom d'un de vos résidents."
 nation_set_help_6: "Définissez le tag de la nation."
+nation_set_help_7: "Définit le message du tableau de la nation."
 nation_set_help_8: "Définissez le point d'apparition de la nation."
+nation_set_help_9: "Défini le coût pour utiliser /t spawn."
+nation_set_help_10: "Définissez la couleur de la carte utilisée dans les plugins de mappage."
 nation_toggle_help_0: "Active/désactive le statut pacifique de la nation."
 nation_toggle_help_1: "Active/désactive le statut public, permettant aux non-résidents d'utiliser /n spawn."
 nation_toggle_help_2: "Active/désactive le statut ouvert, permettant aux villes de rejoindre sans invitation."
@@ -151,11 +155,17 @@ king_help_3: 'Gérer vos ennemis.'
 king_help_4: "Retirez de l'argent de votre banque nationale."
 king_help_5: "Ajouter ou supprimer des villes de votre nation."
 king_help_6: "."
+king_help_7: "Utiliser /t toggle ? pour de l'aide."
+king_help_8: "Utilisé pour absorber une autre nation dans votre nation."
+king_help_9: "Utilisé pour envoyer un message à tout le monde dans votre nation."
 res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
 res_4: 'Liste tout les joueurs actifs'
 res_9: "Combien de taxes vous payerez par jour."
+res_10: "Voir /n rank ? pour de l'aide."
+res_11: "Voir /n rank ? pour de l'aide."
+res_12: "Voir /n rank ? pour de l'aide."
 res_toggle_help_10: "Supprimer tous les modes."
 res_toggle_help_11: "Espionner sur les canaux du chat."
 mode_1: 'Afficher la carte entre chaque parcelles de ville'
@@ -186,6 +196,15 @@ townyadmin_help_1: 'Désannexe cette parcelle de ville'
 townyadmin_help_2: 'Tente de désannexer autour de vous.'
 admin_panel_2: 'Rafraîchit Towny'
 admin_panel_3: 'Exécute le code du nouveau jour'
+admin_panel_6: "Donner un nombre positif ou négatif de blocs de ville à un joueur ou une ville"
+townyadmin_town_help_1: "Afficher l'écran d'état de la ville."
+townyadmin_town_help_2: "Ajouter ou supprimer des résidents d'une ville."
+townyadmin_town_help_3: "Renommer une ville."
+townyadmin_town_help_4: "Supprimer une ville."
+townyadmin_town_help_5: "Fait apparaître dans une ville."
+townyadmin_town_help_6: "Fait apparaître dans l'avant-poste d'une ville."
+townyadmin_town_help_7: "Utilisez la commande de rang d'une ville."
+townyadmin_town_help_8: "Utilisez la commande de set d'une ville."
 msg_block_claim: 'Annexe cette parcelle de ville'
 msg_plot_nfs: 'Enlève une parcelle en vente'
 msg_nfs_abr: '&e''fs'' et ''nfs'' sont des abréviations autorisées pour ''forsale'' et ''notforsale''.'
