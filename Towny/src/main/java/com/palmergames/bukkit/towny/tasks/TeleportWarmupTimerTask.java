@@ -71,9 +71,10 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
 				SpawnUtil.addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
 
-				PaperLib.teleportAsync(player, request.destinationLocation(), TeleportCause.COMMAND);
-				
-				BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost()));
+				PaperLib.teleportAsync(player, request.destinationLocation(), TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
+					if (successfulTeleport)
+						BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost()));
+				});
 
 				if (request.cooldown() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", request.cooldown());
@@ -130,7 +131,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	 * @param reason   The CancelledSpawnReason this player has had their teleport request cancel.
 	 * @return Whether the resident had an active teleport request.
 	 */
-	@Contract("null -> false")
+	@Contract("null, _ -> false")
 	public static boolean abortTeleportRequest(@Nullable Resident resident, CancelledTeleportReason reason) {
 		if (resident == null)
 			return false;
