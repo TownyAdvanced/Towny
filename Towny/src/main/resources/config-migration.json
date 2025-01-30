@@ -894,5 +894,14 @@
         "value": ",TRIAL_SPAWNER"
       }
     ]
+  },
+  {
+    "version": "0.101.1.2",
+    "changes": [
+      {
+        "type": "RUNNABLE",
+        "key": "add_pale_oak_to_farm_plot"
+      }
+    ]
   }
 ]

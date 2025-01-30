@@ -123,4 +123,16 @@ public class RunnableMigrations {
 	private static final Consumer<CommentedConfiguration> DISABLE_MODERN_ECO = config -> {
 		config.set(ConfigNodes.ECO_ADVANCED_MODERN.getRoot(), "false");
 	};
+
+	/**
+	 * Adds 1.21.4 Pale Oak items to farm blocks
+	 */
+	private static final Consumer<CommentedConfiguration> ADD_PALE_OAK_TO_FARM_PLOT = config -> {
+		for (Map<?, ?> plotType : config.getMapList("townblocktypes.types")) {
+			if (plotType.get("name").equals("farm")) {
+				String allowedBlocks = (String) plotType.get("allowedBlocks");
+				((Map<String, Object>) plotType).replace("allowedBlocks", "PALE_OAK_LOG,PALE_MOSS_BLOCK,PALE_MOSS_CARPET,PALE_OAK_SAPLING,PALE_HANGING_MOSS,PALE_OAK_LEAVES,CLOSED_EYEBLOSSOM,OPEN_EYEBLOSSOM," + allowedBlocks);
+			}
+		}
+	};
 }
