@@ -179,7 +179,6 @@ res_toggle_help_9: "Toggle the ability to see the map when you change plots."
 res_toggle_help_10: "Tüm Ayarlamaları kaldır."
 res_jail_help_0: "Hapisden çıkabilmek için kefaleti öder."
 res_set_help_0: "Şehir sakinlerinin Hakkında kısmını ayarla."
-res_set_help_1: ""
 mode_1: 'Her kasaba bloğu arasındaki haritayı göster'
 mode_2: 'Yürürken iddia etmeye çalış'
 mode_3: 'Yürürken hak talebini reddetmeye çalış'
