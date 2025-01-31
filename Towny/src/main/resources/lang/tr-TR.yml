@@ -177,6 +177,8 @@ res_toggle_help_7: "Arazinizin duvarlarını görmeyi ayarlayın."
 res_toggle_help_8: "Yürüdüğünüz yeri talep etme özelliğini değiştirin."
 res_toggle_help_9: "Toggle the ability to see the map when you change plots."
 res_toggle_help_10: "Tüm Ayarlamaları kaldır."
+res_jail_help_0: "Hapisden çıkabilmek için kefaleti öder."
+res_set_help_0: "Şehir sakinlerinin Hakkında kısmını ayarla."
 mode_1: 'Her kasaba bloğu arasındaki haritayı göster'
 mode_2: 'Yürürken iddia etmeye çalış'
 mode_3: 'Yürürken hak talebini reddetmeye çalış'
@@ -203,6 +205,12 @@ world_help_4: 'Tüm dünyaları listeleyin'
 world_help_5: 'Bu parçayı yeniden oluştur'
 world_help_6: 'yardım için /tw toggle komutunu kullanın.'
 world_help_7: 'yardım için /tw set komutunu kullanın.'
+world_set_help_0: "Dünyanın alınmamış yerlerinin ismini ayarlar."
+world_toggle_help_0: "Şehirlerin alan alıp anlamamasını ayarla."
+world_toggle_help_1: "Towny'yi bu dünya için aç yada kapa."
+world_toggle_help_2: "Dünyada savaşlar olup olamayacağını ayarla."
+world_toggle_help_3: "PVP yada ForcePVP açmak yada kapatmak için kullanılır."
+world_toggle_help_5: "Patlamaları aç yada kapat."
 townyadmin_help_1: 'Bu kasaba bloğunun hak talebini kaldır'
 townyadmin_help_2: 'Çevrenizdeki hak talebinden vazgeçmeye çalışın.'
 admin_panel_1: "Yardım için /ta set ? komutunu kullanın"
@@ -248,8 +256,14 @@ townyadmin_nation_help_11: "Ulus bankasına para yatır."
 townyadmin_nation_help_12: "Ulus bankasından para çek."
 townyadmin_nation_help_15: "Ulusun rütbe komutunu kullanın."
 ta_resident_help_0: "Sakinin ismini değiştirin."
+ta_resident_help_1: "Bir arkadaş ekle veya sil."
 ta_resident_help_2: "Arkadaş listenizi listeleyin veya temizleyin."
 ta_resident_help_3: "Sakini kayıtlardan sil."
+ta_set_help_2: "Bir milletin başkentini seç."
+ta_set_help_3: "Bir milletin millet alanını ayarla."
+ta_set_help_4: "Bir sakinin başlığını ayarla."
+ta_set_help_5: "Bir sakının soy ismini ayarla."
+ta_set_help_7: "Bir kasabanın kurucu adını belirleyin."
 ta_reload_help_0: "Kayıtları yeniden yükle."
 ta_reload_help_1: "configi yeniden yükle."
 ta_reload_help_2: "Dil dosyalarını yeniden yükle."
