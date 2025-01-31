@@ -10215,3 +10215,11 @@ v0.92.0.11:
     - While true, outlaws can always harm players in towns they are outlawed in, despite the town pvp setting.
   - Fix an NPE in the isOutlawInTown method, courtesy of Warrior with PR #7736.
   - Fix PlayerChangePlotEvent not firing when a player changes plots by entering into a vehicle.
+0.101.1.2:
+  - Fixed format for "Owner" in MapHUD, courtesy of SulkyWhale with PR #7744. (First-Time Contributor!)
+  - Use Java 21 on Jitpack, courtesy of PimvanderLoos with PR #7746. (First-Time Contributor!)
+  - Bump org.jetbrains:annotations from 26.0.1 to 26.0.2.
+  - Only fire successful teleport event on successful teleport, courtesy of Warrior with PR #7749.
+  - Automatically add the 1.21.4 tree, flower, and moss blocks to the farm allowed blocks in existing configs, courtesy of Momshroom with PR #7750.
+  - Automatic Config Edit:
+    - "PALE_OAK_LOG,PALE_MOSS_BLOCK,PALE_MOSS_CARPET,PALE_OAK_SAPLING,PALE_HANGING_MOSS,PALE_OAK_LEAVES,CLOSED_EYEBLOSSOM,OPEN_EYEBLOSSOM," will be added to your config's farm plot's allowedBlocks section.
