@@ -1630,6 +1630,9 @@ msg_err_capital_cannot_be_peaceful: 'As cidades capitais não podem mudar o esta
 msg_changed_nationzone: 'A Zona Nacional ao redor da cidade é agora %s'
 #Error message shown when a town tries to toggle their nationzone which doesn't exist.
 msg_err_your_town_has_no_nationzone_to_toggle: 'A sua cidade não tem nenhuma Zona Nacional para alternar!'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7Manutenção da nação é baseado &ano %s'
 #Shown in /towny prices, describing what controls nation upkeep when it is per town.
 towny_prices_upkeep_num_towns: 'número de Cidades.'
 #Shown in /towny prices, describing that controls nation upkeep when it is per resident.
@@ -1760,3 +1763,86 @@ townyrtp.you_have_arrived: "Você foi teleportado para um lote que pode ser comp
 status_plot_string: 'lotes'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s'
+#Usage:
+msg_usage: 'Uso: %s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: 'Nenhuma página para exibir!'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: 'Aquela nação não está filiada com você.'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: 'Aquela cidade não está filiada com você.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'Esta localização já tem uma célula na cadeia.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Permissões do lote'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Construir: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Destruir: '
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Interagir: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Item: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Tipo: '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'PVP: '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Explosões: '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'Propagação do Fogo: '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Spawn de Mobs: '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Chave'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'amigo'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'cidade'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'aliado'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'habitante'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'nação'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'forasteiros'
+#Seen in /towny map hud:
+msg_perm_hud_plot_name: 'Lote: '
+#Seen in /towny map hud:
+msg_perm_hud_plotgroup_name: 'Grupo de Lote: '
+#Seen in /towny map hud:
+msg_map_hud_district: 'Distrito: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'À venda: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'Não'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Sim'
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'A cidade %s teve seu nível de cidade definido como %s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'A cidade %s teve seu nível de cidade definido manualmente desdefinido. Nível atual da cidade é %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'A cidade %s não pode comprar cidades com base nas regras de configuração.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: 'A cidade %s teve seus townblocks comprados removidos.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: 'A cidade %s recebeu %s townblocks comprados, eles tem %s townblocks comprados.'
+#Added in 0.154
+msg_comptype_upkeep: 'Manutenção'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'A cidade %s teve configuração de manutenção configurada para %s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'Sua cidade atingiu o limite de %d %s lotes.'
+#Added in 0.156
+msg_spawn_cost_free: 'Grátis'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'Este terreno já é de tipo %s.'
+msg_town_board_reset: '&bLayout da cidade resetado.'
+msg_town_has_no_jailslots: 'A prisão da cidade está cheia.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s foi enviado para %s para o número de célula %s por %s horas com uma fiança de %s por %s.'
