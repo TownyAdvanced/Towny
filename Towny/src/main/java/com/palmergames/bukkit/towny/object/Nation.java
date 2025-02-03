@@ -661,7 +661,7 @@ public class Nation extends Government {
 	}
 
 	public double getConqueredTax() {
-		return conqueredTax;
+		return Math.min(conqueredTax, TownySettings.getMaxNationConqueredTaxAmount());
 	}
 
 	public void setConqueredTax(double conqueredTax) {

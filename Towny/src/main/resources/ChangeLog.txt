@@ -10223,3 +10223,6 @@ v0.92.0.11:
   - Automatically add the 1.21.4 tree, flower, and moss blocks to the farm allowed blocks in existing configs, courtesy of Momshroom with PR #7750.
   - Automatic Config Edit:
     - "PALE_OAK_LOG,PALE_MOSS_BLOCK,PALE_MOSS_CARPET,PALE_OAK_SAPLING,PALE_HANGING_MOSS,PALE_OAK_LEAVES,CLOSED_EYEBLOSSOM,OPEN_EYEBLOSSOM," will be added to your config's farm plot's allowedBlocks section.
+0.101.1.3:
+  - Enforce the max_nation_conquered_tax on nations who might have set a value that wouldn't be able to be set any longer.
+    - Closes ##7755.
