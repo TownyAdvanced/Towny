@@ -199,11 +199,29 @@ public class ProximityUtil {
 		}
 	}
 
-	public static void testAdjacentRemoveDistrictRulesOrThrow(WorldCoord townBlockToUnclaim, Town town, District district, int minAdjacentBlocks) throws TownyException {
+	private static int numAdjacentDistrictTownBlocks(Town town, District district, WorldCoord worldCoord) {
+		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
+			.filter(wc -> wc.hasTown(town) && wc.getTownBlockOrNull() != null)
+			.map(wc -> wc.getTownBlockOrNull())
+			.filter(tb -> tb.hasDistrict() && tb.getDistrict().equals(district))
+			.count();
+	}
+
+	public static void testAdjacentRemoveDistrictRulesOrThrow(WorldCoord districtCoordBeingRemoved, Town town, District district, int minAdjacentBlocks) throws TownyException {
 		// Prevent removing parts of Districts that would cause a district to split into two sections.
 		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
-			WorldCoord firstWorldCoord = townBlockToUnclaim;
-			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
+			List<WorldCoord> allAdjacentDistrictWorldCoords = getAdjacentDistrictWorldCoords(town, district, districtCoordBeingRemoved, false);
+			int districtPlots = allAdjacentDistrictWorldCoords.size();
+
+			// There's enough District plots unclaiming this TownBlock wouldn't matter.
+			if (districtPlots >= 7)
+				return;
+
+			// There's not enough District plots.
+			if (districtPlots < minAdjacentBlocks)
+				throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", district.getName()));
+
+			for (WorldCoord wc : allAdjacentDistrictWorldCoords) {
 				if (wc.isWilderness() || !wc.hasTown(town) || !wc.getTownBlock().hasDistrict() || !wc.getTownBlock().getDistrict().getName().equals(district.getName()))
 					continue;
 				int numAdjacent = numAdjacentDistrictTownBlocks(town, district, wc);
@@ -211,15 +229,46 @@ public class ProximityUtil {
 				if (numAdjacent - 1 < minAdjacentBlocks)
 					throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
 			}
+
+			/*
+			 * Handle the case where a single bridge plot connecting two sides of a District is being unclaimed.
+			 */
+
+			// Use only cardinally-adjacent districts now, a + district shape, with the centre being unclaimed.
+			List<WorldCoord> cardinallyAdjacentDistrictWorldCoords = getAdjacentDistrictWorldCoords(town, district, districtCoordBeingRemoved, true);
+			if (checkForTwoDistrictsPlotsOnOppositeSides(cardinallyAdjacentDistrictWorldCoords, district.getName()))
+				return;
+
+			// Same thing but testing for an X style district shape, with the centre being unclaimed.
+			for (WorldCoord coord : cardinallyAdjacentDistrictWorldCoords)
+				allAdjacentDistrictWorldCoords.remove(coord);
+
+			if (checkForTwoDistrictsPlotsOnOppositeSides(allAdjacentDistrictWorldCoords, district.getName()))
+				return;
 		}
 	}
 
-	private static int numAdjacentDistrictTownBlocks(Town town, District district, WorldCoord worldCoord) {
-		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
+	private static boolean checkForTwoDistrictsPlotsOnOppositeSides(List<WorldCoord> worldCoordsToTest, String districtName) throws TownyException {
+		// We only want to pay attention to cases where the district plots are on opposite sides of the districtCoord being removed.
+		if (worldCoordsToTest.size() != 2)
+			return true;
+
+		double distance = MathUtil.distance(worldCoordsToTest.get(0), worldCoordsToTest.get(1));
+		// A District on either side of the townBlockToUnclaim would have a distance of 2. 1.4 is when they are on a "corner". 
+		if (distance >= 2)
+			throw new TownyException(Translatable.of("msg_err_cannot_remove_from_district_not_enough_adjacent_claims", districtName));
+
+		// Safe to return.
+		return true;
+	}
+
+	private static List<WorldCoord> getAdjacentDistrictWorldCoords(Town town, District district, WorldCoord worldCoord, boolean cardinalOnly) {
+		return worldCoord.getCardinallyAdjacentWorldCoords(!cardinalOnly).stream()
 			.filter(wc -> wc.hasTown(town) && wc.getTownBlockOrNull() != null)
 			.map(wc -> wc.getTownBlockOrNull())
 			.filter(tb -> tb.hasDistrict() && tb.getDistrict().equals(district))
-			.count();
+			.map(TownBlock::getWorldCoord)
+			.collect(Collectors.toList());
 	}
 
 	/*
