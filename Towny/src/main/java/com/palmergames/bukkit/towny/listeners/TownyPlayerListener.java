@@ -51,6 +51,7 @@ import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -987,7 +988,7 @@ public class TownyPlayerListener implements Listener {
 
 		Resident outlaw = TownyUniverse.getInstance().getResident(event.getPlayer().getUniqueId());
 		
-		if (outlaw == null)
+		if (outlaw == null || event.getPlayer().getGameMode().equals(GameMode.SPECTATOR))
 			return;
 		
 		Town town = event.getEnteredTown();

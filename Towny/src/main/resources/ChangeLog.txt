@@ -10227,3 +10227,4 @@ v0.92.0.11:
   - Enforce the max_nation_conquered_tax on nations who might have set a value that wouldn't be able to be set any longer.
     - Closes ##7755.
   - Fix loophole that allowed a District to become separated from other townblocks in the District.
+  - Fix players in Spectator Mode triggering the the outlaw-entered-town feature.
