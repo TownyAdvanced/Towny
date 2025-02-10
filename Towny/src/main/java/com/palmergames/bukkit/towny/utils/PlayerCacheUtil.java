@@ -236,7 +236,7 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.TOWN_RESIDENT;
 		
 		// Nation group.
-		if (CombatUtil.isSameNation(town, resident.getTownOrNull()))
+		if (TownySettings.areConqueredTownsGivenNationPlotPerms() && CombatUtil.isSameNation(town, resident.getTownOrNull()))
 			return TownBlockStatus.TOWN_NATION;
 		
 		// Ally group.

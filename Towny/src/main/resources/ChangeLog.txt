@@ -10228,3 +10228,8 @@ v0.92.0.11:
     - Closes ##7755.
   - Fix loophole that allowed a District to become separated from other townblocks in the District.
   - Fix players in Spectator Mode triggering the the outlaw-entered-town feature.
+  - Add the ability to make conquered towns no longer included in a nation's plot perms.
+  - New Config Option: global_nation_settings.are_conquered_towns_given_nation_plot_perms
+    - Default: true
+    - While true, conquered towns will be considered a member of good standing in the nation, and will be treated as normal nation members when plot perms are calculated.
+    - When set to false plot permission tests will treat conquered towns' residents as not members of their nations, preventing them from using their host nation's plots while the nation's towns have nation plot perms enabled.

@@ -1020,6 +1020,14 @@ public enum ConfigNodes {
 			"# While true, conquered towns will be considered a member of good standing in the nation.",
 			"# When set to false CombatUtil#isAlly() tests will treat conquered towns and their nations as not allied.",
 			"# Setting this to false could result in strange unforseen behaviour."),
+	GNATION_SETTINGS_ARE_CONQUERED_TOWNS_GIVEN_NATION_PLOT_PERMS(
+			"global_nation_settings.are_conquered_towns_given_nation_plot_perms",
+			"true",
+			"",
+			"# While true, conquered towns will be considered a member of good standing in the nation, and will be",
+			"# treated as normal nation members when plot perms are calculated.",
+			"# When set to false plot permission tests will treat conquered towns' residents as not members of their nations,",
+			"# preventing them from using their host nation's plots while the nation's towns have nation plot perms enabled."),
 	GNATION_SETTINGS_PROXIMITY_ROOT(
 			"global_nation_settings.proximity", "", ""),
 	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL(

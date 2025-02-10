@@ -3638,6 +3638,10 @@ public class TownySettings {
 	public static boolean areConqueredTownsConsideredAllied() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_ARE_CONQUERED_TOWNS_CONSIDERED_ALLIES);
 	}
+
+	public static boolean areConqueredTownsGivenNationPlotPerms() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ARE_CONQUERED_TOWNS_GIVEN_NATION_PLOT_PERMS);
+	}
 	
 	public static String getBankHistoryBookFormat() {
 		return getString(ConfigNodes.BANKHISTORY_BOOK);
