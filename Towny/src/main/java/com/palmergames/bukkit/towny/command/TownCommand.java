@@ -340,6 +340,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			if (args.length == 3)
 				return Collections.singletonList("-ignore");
 			break;
+		case "leave":
+			if (args.length == 2)
+				return Collections.singletonList("-ignore");
+			break;
 		case "rank":
 			switch (args.length) {
 			case 2:
@@ -661,7 +665,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "jail"-> parseJailCommand(player, null, subArg, false);
 		case "join"-> parseTownJoin(player, subArg);
 		case "kick"-> townKick(player, subArg);
-		case "leave"-> townLeave(player);
+		case "leave"-> townLeave(player, StringMgmt.remFirstArg(split));
 		case "list" -> listTowns(player, split);
 		case "mayor" -> parseTownyMayorCommand(player);
 		case "merge"-> parseTownMergeCommand(player, subArg);
@@ -2692,7 +2696,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	public void townLeave(Player player) throws TownyException {
+	public void townLeave(Player player, String[] args) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_LEAVE.getNode());
 		Resident resident = getResidentOrThrow(player);
 		Town town = getTownFromResidentOrThrow(resident);
@@ -2703,20 +2707,27 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (resident.isJailed() && TownySettings.JailDeniesTownLeave() && resident.getJailTown().getName().equals(town.getName()))
 			throw new TownyException(Translatable.of("msg_cannot_abandon_town_while_jailed"));
 
-		Confirmation.runOnAccept(() -> {
-			if (resident.isJailed() && resident.getJailTown().getUUID().equals(town.getUUID()))
-				JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
+		if (args.length > 0 && args[0].equalsIgnoreCase("-ignore")) {
+			townLeave(player, resident, town);
+			return;
+		}
 
-			if (town.hasResident(resident))
-				resident.removeTown();
-
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_left_town", resident.getName()));
-			TownyMessaging.sendMsg(player, Translatable.of("msg_left_town", resident.getName()));
-
-			town.checkTownHasEnoughResidentsForNationRequirements();
-		})
+		Confirmation.runOnAccept(() -> townLeave(player, resident, town))
 		.setCancellableEvent(new TownLeaveEvent(resident, town))
 		.sendTo(player);
+	}
+
+	private void townLeave(Player player, Resident resident, Town town) {
+		if (resident.isJailed() && resident.getJailTown().getUUID().equals(town.getUUID()))
+			JailUtil.unJailResident(resident, UnJailReason.LEFT_TOWN);
+
+		if (town.hasResident(resident))
+			resident.removeTown();
+
+		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_left_town", resident.getName()));
+		TownyMessaging.sendMsg(player, Translatable.of("msg_left_town", resident.getName()));
+
+		town.checkTownHasEnoughResidentsForNationRequirements();
 	}
 
 	/**

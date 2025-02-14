@@ -10233,3 +10233,5 @@ v0.92.0.11:
     - Default: true
     - While true, conquered towns will be considered a member of good standing in the nation, and will be treated as normal nation members when plot perms are calculated.
     - When set to false plot permission tests will treat conquered towns' residents as not members of their nations, preventing them from using their host nation's plots while the nation's towns have nation plot perms enabled.
+  - Add optional -ignore subcommand to /town leave.
+    - When used, the player will not have to confirm their leaving the town. 
