@@ -329,6 +329,20 @@ ta_nationmeta_help_3: "Aggiungi o rimuovi un metadato tramite chiave dalla nazio
 ta_reload_help_0: "Ricarica il database."
 ta_reload_help_1: "Ricarica le configurazioni."
 ta_reload_help_2: "Ricarica i file delle lingue."
+ta_reload_help_3: "Ricarica i permessi del Towny."
+ta_reload_help_4: "Ricarica tutti i componenti del Towny."
+ta_eco_resetbanks_help: "Reimposta la banca della città o della nazione ad una data somma o 0."
+ta_eco_convert_modern_help: "Converte gli acconti del tuo Towny nella nostra varietà moderna, in grado di utilizzare OfflinePlayer di Vault."
+ta_eco_convert_help: "Converte gli acconti del tuo Towny nella specifica implementazione dell'economia, utile a trasferire dati tra plugin di economia."
+ta_eco_info_help: "Fornisce informazioni riguardo agli acconti economici nel server."
+ta_depositall_help_0: "Deposita la somma specificata in tutte le banche cittadine e nazionali."
+ta_info_help_0: "Consulta le informazioni economiche della nazione specifica."
+ta_info_help_1: "Consulta le informazioni economiche del residente specifico."
+ta_info_help_2: "Consulta le informazioni economiche dell'acconto del server towny."
+ta_info_help_3: "Consulta le informazioni economiche della città specificata."
+plot_help_0: "Attiva la HUD delle informazioni dei plot."
+plot_help_1: "Rimuove il proprietario del plot."
+plot_help_2: "Elimina una lista di blocchi dal plot."
 msg_block_claim: 'Claima questo lotto di città'
 msg_plot_nfs: 'Togli un lotto dalla vendita'
 msg_nfs_abr: '&e''fs'' e ''nfs'' sono abbreviazioni accettate per ''forsale'' e ''notforsale''.'
