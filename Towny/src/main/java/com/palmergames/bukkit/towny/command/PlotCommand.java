@@ -1373,7 +1373,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 				}
 			})
-			.setTitle(Translatable.of("msg_district_already_exists_did_you_want_to_transfer", townBlock.getDistrict().getName(), split[1]))
+			.setTitle(Translatable.of("msg_district_already_exists_did_you_want_to_transfer", townBlock.getDistrict().getName(), name))
 			.sendTo(player);
 		} else {
 			// Create a brand new district.
