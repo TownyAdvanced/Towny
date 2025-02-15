@@ -343,6 +343,41 @@ ta_info_help_3: "Consulta le informazioni economiche della città specificata."
 plot_help_0: "Attiva la HUD delle informazioni dei plot."
 plot_help_1: "Rimuove il proprietario del plot."
 plot_help_2: "Elimina una lista di blocchi dal plot."
+plot_help_3: "Consulta /plot set ? per aiuto."
+plot_help_4: "Consulta /plot toggle ? per aiuto."
+plot_help_5: "Consulta /plot group ? per aiuto."
+plot_help_6: "Rimuove le sovrascritture dei permessi di un giocatore."
+plot_help_7: "Aggiunge delle sovrascritture predefinite ai permessi di un giocatore."
+plot_help_8: "Apre la GUI per modificare i permessi."
+plot_help_9: "Aggiunge un residente come Trustato nel plot."
+plot_help_10: "Rimuove un residente come Trustato nel plot."
+plot_district_help_0: "Es: /plot district new ExpensivePlots"
+plot_district_help_1: "Rimuove un plot dal distretto specificato."
+plot_district_help_2: "Elimina completamente un distretto."
+plot_district_help_3: "Rinomina il distretto in cui ti trovi."
+plot_group_help_0: "Es: /plot group new ExpensivePlots"
+plot_group_help_1: "Rimuove un plot dal gruppo specificato."
+plot_group_help_2: "Elimina completamente un gruppo di plot."
+plot_group_help_3: "Rinomina il gruppo di plot in cui ti trovi."
+plot_group_help_4: "Es: /plot group set perm resident on."
+plot_group_help_5: "Es: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Es: /plot group forsale 50"
+plot_group_help_7: "Es: /plot group notforsale"
+plot_group_help_8: "Aggiunge o rimuove un residente come trustato."
+plot_group_help_9: "Aggiunge un residente come Trustato al gruppo di plot."
+plot_group_help_10: "Rimuove un residente come Trustato nel gruppo di plot."
+plot_group_help_11: "Apre la GUI dei permessi dei plot."
+plot_group_help_12: "Aggiunge un giocatore alla GUI dei permessi dei plot."
+plot_group_help_13: "Rimuove un giocatore dalla GUI dei permessi dei plot."
+plot_toggle_help_0: "Abilita/Disabilita il pvp nel plot."
+plot_toggle_help_1: "Abilita/Disabilita le esplosioni nel plot."
+plot_toggle_help_2: "Abilita/Disabilita il fuoco nel plot."
+plot_toggle_help_3: "Abilita/Disabilita i mob nel plot."
+plot_group_toggle_help_0: "Abilita/Disabilita il pvp nel gruppo di plot."
+plot_group_toggle_help_1: "Abilita/Disabilita le esplosioni nel gruppo di plot."
+plot_group_toggle_help_2: "Abilita/Disabilita il fuoco nel gruppo di plot."
+plot_group_toggle_help_3: "Abilita/Disabilita i mob nel gruppo di plot."
+plot_group_toggle_help_4: "Abilita/Disabilita lo status di tassato del gruppo di plot."
 msg_block_claim: 'Claima questo lotto di città'
 msg_plot_nfs: 'Togli un lotto dalla vendita'
 msg_nfs_abr: '&e''fs'' e ''nfs'' sono abbreviazioni accettate per ''forsale'' e ''notforsale''.'
@@ -1258,6 +1293,9 @@ gui_title_towny_wildsblocks: 'Lista Di Towny WildsBlock'
 gui_title_towny_itemuse: 'Elenco di utilizzo degli oggetti di Towny'
 gui_title_towny_switch: 'Lista Switch Città'
 gui_title_towny_plotclear: 'Towny Plot Clear Delete List'
+flatfile_dbg_missing_file_delete_district_entry: 'File mancante: %s eliminazione della registrazione in [districtuuid].data'
+flatfile_err_exception_reading_district_file_at_line: 'Errore di caricamento: Eccezione alla lettura del file dei distretti %s alla linea: %s'
+flatfile_dbg_loading_district_list: 'Caricamento della lista dei distretti...'
 msg_ta_removed_all_titles_and_surnames_removed: 'Tutti i residenti hanno avuto i loro titoli e cognomi rimossi.'
 msg_err_homeblock_already_set_here: 'Questa posizione è già il blocco della tua città.'
 #Added in 0.100
@@ -1336,6 +1374,7 @@ msg_resident_has_not_played_long_enough_to_be_jailed: '%s non ha giocato abbasta
 msg_town_not_peaceful: '&bLa città non poteva permettersi lo stato pacifico.'
 msg_town_already_peaceful: '&Town is already peaceful.'
 msg_town_already_not_peaceful: '&Town is already not peaceful.'
+msg_town_cant_peaceful: '&bLa città non ha potuto permettersi di diventare pacifica. Devi pagare %s al giorno.'
 msg_town_paid_for_neutral_status: '&bHai pagato %s per impostare uno stato pacifico.'
 msg_nation_paid_for_neutral_status: '&bLa tua nazione ha pagato %s per mantenere il tuo stato pacifico.'
 your_town_has_been_invited_to_join_nation: 'La tua città è stata invitata a unirsi alla nazione: %s'
@@ -1377,6 +1416,8 @@ msg_latest_version: '&2Versione di Towny: &a%s &2| Ultima versione: &a%s'
 msg_up_to_date: '&aIl software è aggiornato.'
 msg_click_purchase: 'Clicca per acquistare'
 msg_you_must_join_this_town_to_claim_this_plot: 'Devi unirti a questa città: %s, per poter rivendicare questo lotto. Vuoi unirti alla città e continuare a reclamare?'
+msg_legacy_economy_detected: "&bL'implementazione dell'economia del tuo Towny è impostata su Obsoleta, si consiglia di lasciare che Towny si aggiorni da solo utilizzando l'implementazione moderna. Questo migliorerà la compatibilità con più plugin di economia."
+msg_click_to_convert_to_modern_economy: "&bClicca qui per convertire l'implementazione dell'economia del tuo Towny da obsoleta a moderna."
 #Added in 0.113
 status_trustedlist: 'Autorizzato'
 msg_click_to_edit: '&6remi per modificare.'
@@ -1385,6 +1426,7 @@ msg_last_edited: '&7&oUltima modifica alle %s da %s.'
 #Last %s is either town or townblock
 msg_trusted_added: '&bAggiunto %s come attendibile in questo %s.'
 msg_already_trusted: '&b%s è già attendibile in questo %s.'
+msg_cannot_trust_your_own_town: '&bNon puoi trustare la tua stessa città.'
 #Last %s is the town name or worldcoord.
 msg_trusted_added_2: '&b%s si è fidato di te in un %s: %s.'
 msg_not_trusted: '&b%s non è attendibile in questo %s.'
@@ -1398,6 +1440,9 @@ msg_cache_block_err: '&cNon sei autorizzato a %s qui.'
 msg_err_plot_belongs_to_group: '&cPlot appartiene a un gruppo, usa %s.'
 plotgroup_sing: 'Gruppi di lotti'
 msg_err_ally_limit_reached: 'La tua nazione ha raggiunto il limite alleato, non sei in grado di accettare.'
+msg_err_ally_limit_reached_cannot_accept: 'La nazione %s ha raggiunto il limite di alleati, impossibile accettare.'
+msg_err_ally_limit_reached_cannot_send: 'La tua nazione ha raggiunto il limite di alleati, impossibile invitare %s ad essere tuo alleato.'
+msg_err_ally_limit_reached_cannot_send_targetNation: 'La nazione %s ha raggiunto il suo limite di alleati, impossibile invitare %s ad essere tuo alleato.'
 #Added in 0.114
 msg_err_group_not_found: 'Gruppo %s non trovato.'
 msg_err_expected_command_format: 'Sintassi errata, prevista: %s'
@@ -1437,6 +1482,7 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Non puoi impr
 msg_resident_prompt: 'Inserisci il nome del giocatore in chat o q per uscire. Questo si spegnerà automaticamente in 30 secondi.'
 msg_prompt_cancel: 'Prompt annullato o scaduto.'
 status_home_element: ' &7[Casa: %s]'
+status_about: "Riguardo a:"
 status_registered: 'Registrato il:'
 status_lastonline: 'Ultima volta online:'
 status_fractions: '%s/%s'
@@ -1619,6 +1665,8 @@ confirmation_unclaiming_costs: 'Rimuovere questo lotto costerà %s, si desidera 
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: 'Devi aspettare %s secondi prima di poter rinominare nuovamente la tua città.'
+#Added in 1.141
+msg_newday_already_running: 'Un''attività giornaliera è già in corso.'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Non puoi attivare/disattivare la neutralità, rimanenti %s secondi.'
@@ -1716,6 +1764,16 @@ msg_perm_hud_nation: 'nazione'
 msg_perm_hud_outsider: 'esterno'
 #Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Lotti: '
+#Seen in /towny map hud:
+msg_perm_hud_plotgroup_name: 'Gruppo di plot: '
+#Seen in /towny map hud:
+msg_map_hud_district: 'Distretto: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'In vendita: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'No'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Sì'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: 'La città %s ha il suo livello di città impostato a %s.'
@@ -1849,5 +1907,14 @@ msg_err_that_town_is_not_conquered: "%s è già non conquistata."
 msg_conquered_status_removed: "Lo stato di conquistato è stato rimosso a %s."
 msg_setup_command_folia: "Il comando /ta install attualmente non funziona con Folia per via del non funzionamento dell'API di conversione, fare riferimento alla guida d'installazione qua sotto."
 msg_perm_gui_folia: "Questo bottone attualmente non funziona per via del non funzionamento dell'API di conversione, invece usa /plot perm add <name>."
+msg_folia_scoreboard: "Cambiare la scoreboard non è attualmente supportato su Folia."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "Non puoi abbandonare questo blocco perché il blocco a %s,%s Non avrebbe abbastanza blocchi adiacenti (%s sono richiesti.)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>La tua nazione ha riscosso %s di tasse dalle sue città."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>La tua città ha riscosso %s di tasse dai suoi residenti."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>La tua città ha pagato %s di tasse ai suoi residenti."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>La tua città ha riscosso %s di tasse dalle tasse dei plot."
