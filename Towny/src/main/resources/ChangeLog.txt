@@ -10238,3 +10238,4 @@ v0.92.0.11:
   - Add the ability to use k, m and b in various money commands in Towny.
     - ex: /t deposit 1k, will deposit 1000 into the town bank.
     - Closes #7759.
+  - Fix ArrayIndexOutOfBoundsException in /plot district add, courtesy of SulkyWhale with PR #7760.
