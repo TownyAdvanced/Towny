@@ -83,6 +83,20 @@ town_jail_help_0: "Seznam městských věznic."
 town_jail_help_1: "Uvěznění rezidenta v hlavním vězení."
 town_jail_help_2: "Uvěznění rezidenta v hlavním vězení na stanovené hodiny."
 town_jail_help_3: "Uvěznění rezidenta v hlavním vězení, na určené hodiny, v určeném vězení."
+town_jail_help_4: "Uvěznění rezidenta v hlavním vězení, na určené hodiny, v určeném vězení."
+town_jail_help_5: "Uvěznění rezidenta v hlavním vězení, na určené hodiny, v určeném vězení."
+town_jail_help_6: "Uvěznění rezidenta v primárním vězení, na stanovené hodiny s danou částkou kauce, v určeném vězení."
+town_jail_help_7: "Žaloba rezidenta v primárním vězení, po stanovenou dobu s danou částkou kauce, v určeném vězení a buňce."
+town_jail_help_8: "Propustí vězně"
+town_purge_help: "Vymaže rezidenty, kteří se nepřihlásili za daný počet dní."
+town_trust_help_0: "Přidá rezidenta jako důvěryhodného ve městě."
+town_trust_help_1: "Odstraní obyvatele města jako důvěryhodný."
+town_trust_help_2: "Seznam důvěryhodných obyvatel města."
+town_towntrust_help_0: "Přidá město jako důvěryhodné ve městě."
+town_towntrust_help_1: "Odebere město jako důvěryhodné ve městě."
+town_towntrust_help_2: "Zobrazí důvěryhodná města."
+town_buy_help: "Koupí bonusové městské bloky ke zvýšení meze nároků."
+town_cede_help: "Nabízí pozemek, v němž jste, aby ho převzalo vámi dané město."
 mayor_help_3: 'Zaber území nepřipojené k tvému městu'
 mayor_help_4: 'Zaber území kolem sebe do vzdálenosti X'
 mayor_help_5: 'Zaber území do maximální vzdálenosti'
@@ -98,6 +112,16 @@ nation_help_6: 'Vytvořit nový národ'
 nation_help_7: 'Seznam příkazů vůdce frakce'
 nation_help_8: 'Vytvoří nový národ'
 nation_help_9: 'Zobrazí všechny onlien hráče v národu'
+nation_help_11: "Seznam měst v zemi."
+nation_help_12: "Seznam spojenců národa."
+nation_help_13: "Seznam nepřátelských států národa."
+nation_help_14: "Slouží k připojení se k veřejným národům."
+nation_help_15: "Vloží peníze do národní banky."
+nation_help_16: "Slouží k odstranění vašeho města."
+nation_help_17: "Slouží k přidání nebo odebrání hodností z rezidentů."
+nation_help_18: "Pokud si nevíte rady, nápovědu města získáte pomocí /t rank"
+nation_list_help_0: "Zobrazit vybranou stránku."
+nation_list_help_1: "Seznam měst podle počtu obyvatel se zadanou stránkou."
 king_help_1: 'Nápověda vůdce státu'
 king_help_2: 'Nastavení svých spojenců.'
 king_help_3: 'Nastavení svých nepřátel.'

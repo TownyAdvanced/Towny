@@ -1600,7 +1600,7 @@ msg_perm_true: 'Permiso Habilitado.'
 msg_err_perm_false: 'Permiso Deshabilitado.'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
-status_towny_map_town_line: '&Ciudad: &a%s &7| &Dueño: &a%s'
+status_towny_map_town_line: '&2Ciudad: &a%s &7| &2Dueño: &a%s'
 #Shown on /towny version
 msg_towny_version: '&2Versión de Towny: &a%s'
 #Shown to admins and ops when a player has been blocked from logging into the server.
