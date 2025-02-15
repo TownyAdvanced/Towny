@@ -10234,4 +10234,7 @@ v0.92.0.11:
     - While true, conquered towns will be considered a member of good standing in the nation, and will be treated as normal nation members when plot perms are calculated.
     - When set to false plot permission tests will treat conquered towns' residents as not members of their nations, preventing them from using their host nation's plots while the nation's towns have nation plot perms enabled.
   - Add optional -ignore subcommand to /town leave.
-    - When used, the player will not have to confirm their leaving the town. 
+    - When used, the player will not have to confirm their leaving the town.
+  - Add the ability to use k, m and b in various money commands in Towny.
+    - ex: /t deposit 1k, will deposit 1000 into the town bank.
+    - Closes #7759.
