@@ -45,6 +45,7 @@ public class ResidentModeHandler {
 		addMode(new GenericResidentMode("infotool", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_INFOTOOL.getNode()));
 		addMode(new GenericResidentMode("map", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_MAP.getNode()));
 		addMode(new GenericResidentMode("plotgroup", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PLOTGROUP.getNode()));
+		addMode(new GenericResidentMode("district", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_DISTRICT.getNode()));
 		addMode(new GenericResidentMode("townborder", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_TOWNBORDER.getNode()));
 		addMode(new GenericResidentMode("spy", PermissionNodes.TOWNY_CHAT_SPY.getNode()));
 
