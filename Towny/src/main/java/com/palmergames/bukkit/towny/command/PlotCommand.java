@@ -132,6 +132,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> districtTabCompletes = Arrays.asList(
 		"add",
+		"new",
+		"create",
 		"delete",
 		"remove",
 		"rename"
