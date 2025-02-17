@@ -867,7 +867,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					residentsToSave.add(toCheck);
 				}
 			}
-			residentsToSave.forEach(res -> res.save());
+			residentsToSave.forEach(Resident::save);
 
 			// Search and update all town outlaw, trustedresidents lists.
 			Set<Town> townsToSave = new HashSet<>();
@@ -883,7 +883,17 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					townsToSave.add(toCheckTown);
 				}
 			}
-			townsToSave.forEach(town -> town.save());
+			townsToSave.forEach(Town::save);
+
+			Set<TownBlock> townBlocksToSave = new HashSet<>();
+			for(TownBlock townBlock : new ArrayList<>(universe.getTownBlocks().values())) {
+				if (townBlock.hasTrustedResident(oldResident)) {
+					townBlock.removeTrustedResident(oldResident);
+					townBlock.addTrustedResident(resident);
+					townBlocksToSave.add(townBlock);
+				}
+			}
+			townBlocksToSave.forEach(TownBlock::save);
 
 			//delete the old resident and tidy up files
 			deleteResident(oldResident);
