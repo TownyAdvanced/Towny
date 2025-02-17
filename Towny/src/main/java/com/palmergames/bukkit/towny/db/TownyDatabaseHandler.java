@@ -857,6 +857,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			// Make an oldResident with the previous name for use in searching friends/outlawlists/deleting the old resident file.
 			Resident oldResident = new Resident(oldName);
+			oldResident.setUUID(resident.getUUID());
 			
 			// Search and update all friends lists
 			Set<Resident> residentsToSave = new HashSet<>();
