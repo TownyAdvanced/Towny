@@ -893,7 +893,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					townBlocksToSave.add(townBlock);
 				}
 			}
-			townBlocksToSave.forEach(TownBlock::save);
 
 			//delete the old resident and tidy up files
 			deleteResident(oldResident);
