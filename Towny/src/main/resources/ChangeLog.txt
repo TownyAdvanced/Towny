@@ -10239,3 +10239,5 @@ v0.92.0.11:
     - ex: /t deposit 1k, will deposit 1000 into the town bank.
     - Closes #7759.
   - Fix ArrayIndexOutOfBoundsException in /plot district add, courtesy of SulkyWhale with PR #7760.
+0.101.1.4:
+  - Fix config comments for plugin.interfacing.web_map.url.

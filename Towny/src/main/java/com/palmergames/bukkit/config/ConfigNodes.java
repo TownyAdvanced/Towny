@@ -1627,7 +1627,7 @@ public enum ConfigNodes {
 			"https://example.com/map/?worldname={world}&mapname=flat&zoom=5&x={x}&y=64&z={z}",
 			"",
 			"# The url that players will be prompted to open when clicking on a coordinate in a status screen.",
-			"# Valid placeholders are {world}, {x}, and {y}, for the world name, x, and y coordinates respectively."
+			"# Valid placeholders are {world}, {x}, and {z}, for the world name, x, and z coordinates respectively."
 	),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
