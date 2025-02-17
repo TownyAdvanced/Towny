@@ -885,14 +885,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			}
 			townsToSave.forEach(Town::save);
 
-			Set<TownBlock> townBlocksToSave = new HashSet<>();
-			for(TownBlock townBlock : new ArrayList<>(universe.getTownBlocks().values())) {
-				if (townBlock.hasTrustedResident(oldResident)) {
-					townBlock.removeTrustedResident(oldResident);
-					townBlock.addTrustedResident(resident);
-					townBlocksToSave.add(townBlock);
-				}
-			}
+			new ArrayList<>(universe.getTownBlocks().values()).stream()
+				.filter(tb -> tb.hasTrustedResident(oldResident))
+				.forEach(tb -> {
+					tb.removeTrustedResident(oldResident);
+					tb.addTrustedResident(resident);
+				});
 
 			//delete the old resident and tidy up files
 			deleteResident(oldResident);
