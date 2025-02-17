@@ -671,6 +671,7 @@ permissions:
             towny.command.resident.toggle.infotool: true
             towny.command.resident.toggle.map: true
             towny.command.resident.toggle.plotgroup: true
+            towny.command.resident.toggle.district: true
             towny.command.resident.toggle.constantplotborder: true
             towny.command.resident.toggle.plotborder: true
             towny.command.resident.toggle.townborder: true
