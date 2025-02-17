@@ -166,8 +166,29 @@ res_9: "Combien de taxes vous payerez par jour."
 res_10: "Voir /n rank ? pour de l'aide."
 res_11: "Voir /n rank ? pour de l'aide."
 res_12: "Voir /n rank ? pour de l'aide."
+res_13: "Apparaît dans ta ville ou dans ton lit."
+res_toggle_help_0: "Définit le status du Joueur contre Joueur dans ton terrain."
+res_toggle_help_1: "Définit le status du Feu dans ton terrain."
+res_toggle_help_2: "Définit le status de l'apparition des monstres dans ton terrain."
+res_toggle_help_3: "Définit le status des explosions dans ton terrain."
+res_toggle_help_4: "Définit la possibilité de voir les bordures de ton terrain."
+res_toggle_help_5: "Définit la possibilité de voir les bordures constantes de ton terrain."
+res_toggle_help_6: "Définit la possibilité de voir les bordures de la ville."
+res_toggle_help_7: "Définit la possibilité de voir les notifications de terrain."
+res_toggle_help_8: "Définit la possibilité de revendiquer le terrain où tu marches."
+res_toggle_help_9: "Définit la possibilité de voir la carte quand tu changes de terrains."
 res_toggle_help_10: "Supprimer tous les modes."
+res_toggle_help_10.5: "Supprime tous les modes et réapplique le mode par défaut."
 res_toggle_help_11: "Espionner sur les canaux du chat."
+res_toggle_help_12: "Définit la possibilité d'ajouter des terrains dans un groupe de terrains que tu as commencé."
+res_toggle_help_13: "Définit la possibilité de voir les messages-titres quand tu changes de terrain."
+res_toggle_help_14: "Définit la possibilité de ne plus revendiquer le terrain quand tu marches."
+res_toggle_help_15: "Définit la possibilité d'utiliser l'outil d'info pour apprendre les blocs et les entités autorisées."
+res_toggle_help_16: "Définit la possibilité de désactiver tes privilèges administrateur."
+res_jail_help_0: "Paye le coût d'incarcération pour sortir de prison."
+res_set_help_0: "Définit la Bio/A Propos des résidents."
+res_set_help_1: "Définit les permissions par défaut des résidents."
+res_set_help_2: "Définit les modes des résidents."
 mode_1: 'Afficher la carte entre chaque parcelles de ville'
 mode_2: 'Essaye d''annexer lorsque vous marchez'
 mode_3: 'Essaye de déxannexer lorsque vous marchez'
@@ -192,11 +213,40 @@ world_help_2: '[World]'
 world_help_3: 'Statut du monde cible'
 world_help_4: 'Liste tout les mondes'
 world_help_5: 'Régénérez cette parcelle'
+world_help_6: 'Voir /tw toggle ? pour obtenir de l''aide'
+world_help_7: 'Voir /tw set ? pour obtenir de l''aide'
+world_set_help_0: "Définit le nom de la faune sauvage du monde."
+world_toggle_help_0: "Active On/Off si les villes peuvent revendiquer des terrains dans ce monde."
+world_toggle_help_1: "Active On/Off si Towny est activé dans ce monde."
+world_toggle_help_2: "Active On/Off si des guerres peuvent se déclencher dans ce monde."
+world_toggle_help_3: "Active On/Off si le JcJ ou le JcJ forcé est actif dans ce monde."
+world_toggle_help_4: "Active On/Off si le tir allié est autorisé dans ce monde."
+world_toggle_help_5: "Active On/Off si les explosions sont activés dans ce monde."
+world_toggle_help_6: "Active On/Off si le feu est activé ou forcé dans ce monde."
+world_toggle_help_7: "Active On/Off si les monstres apparaissent ou pas dans ce monde."
+world_toggle_help_8: "Active On/Off si la nouveauté revenir-en-cas-de-non-réclamation est active dans ce monde."
+world_toggle_help_9: "Active On/Off si la nouveauté explosions-modifiées est active dans ce monde."
+world_toggle_help_10: "Active On/Off si la commande plot-clear-deletes-blocks est active dans ce monde."
+world_toggle_help_11: "Active On/Off si la nouveauté plot-unclaiming-deletes-blocks est active dans ce monde."
 townyadmin_help_1: 'Désannexe cette parcelle de ville'
 townyadmin_help_2: 'Tente de désannexer autour de vous.'
+admin_panel_1: "Voir /ta set ? pour obtenir de l'aide"
 admin_panel_2: 'Rafraîchit Towny'
 admin_panel_3: 'Exécute le code du nouveau jour'
+admin_panel_4: "Libérez l'espace qui vous entoure"
+admin_panel_5: "Voir /ta plot ? pour obtenir de l'aide."
 admin_panel_6: "Donner un nombre positif ou négatif de blocs de ville à un joueur ou une ville"
+admin_panel_7: "Voir /ta toggle ? pour obtenir de l'aide"
+admin_panel_8: "Commandes pour contrôler ces objets"
+admin_panel_9: "Téléporte à un terrain spécifique"
+admin_panel_10: "Voir si le joueur a la ou les permissions"
+admin_panel_11: "Réinitialise votre configuration"
+admin_panel_12: "Fais une sauvegarde de vos données Towny"
+admin_panel_13: "Vide ta base de données MySQL en fichier standard"
+admin_panel_14: "Sauvegarde de force ou charge ta base de données"
+admin_panel_15: "Lance le nouveau code horaire"
+admin_panel_16: "Purge les ancients résidents"
+townyadmin_town_help_0: "Crée une ville avec le nom donné et le maire attribué."
 townyadmin_town_help_1: "Afficher l'écran d'état de la ville."
 townyadmin_town_help_2: "Ajouter ou supprimer des résidents d'une ville."
 townyadmin_town_help_3: "Renommer une ville."
@@ -205,6 +255,7 @@ townyadmin_town_help_5: "Fait apparaître dans une ville."
 townyadmin_town_help_6: "Fait apparaître dans l'avant-poste d'une ville."
 townyadmin_town_help_7: "Utilisez la commande de rang d'une ville."
 townyadmin_town_help_8: "Utilisez la commande de set d'une ville."
+townyadmin_town_help_9: "Utilise une activation possible des paramètres des villes."
 msg_block_claim: 'Annexe cette parcelle de ville'
 msg_plot_nfs: 'Enlève une parcelle en vente'
 msg_nfs_abr: '&e''fs'' et ''nfs'' sont des abréviations autorisées pour ''forsale'' et ''notforsale''.'
