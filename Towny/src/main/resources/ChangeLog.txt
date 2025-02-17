@@ -10241,3 +10241,12 @@ v0.92.0.11:
   - Fix ArrayIndexOutOfBoundsException in /plot district add, courtesy of SulkyWhale with PR #7760.
 0.101.1.4:
   - Fix config comments for plugin.interfacing.web_map.url.
+  - Fix for resident rename weirdness, courtesy of Warrior with PR #7765.
+  - Fixes an issue where a renamed resident cannot access their trusted plots.
+  - Add a new resident district mode and aligned tab completion for /plot district with help and codebase, courtesy of SulkyWhale with PR #7761.
+  - New Command: /res toggle district
+    - When working with districts, toggling this Mode on will make all plots you walk into a part of the last district you set.
+  - New Permission Node: towny.command.resident.toggle.district
+    - Required to use /res toggle district command.
+  - Bump net.kyori:adventure-text-serializer-plain from 4.18.0 to 4.19.0.
+  - Bump net.kyori:adventure-text-minimessage from 4.18.0 to 4.19.0.
