@@ -10250,3 +10250,4 @@ v0.92.0.11:
     - Required to use /res toggle district command.
   - Bump net.kyori:adventure-text-serializer-plain from 4.18.0 to 4.19.0.
   - Bump net.kyori:adventure-text-minimessage from 4.18.0 to 4.19.0.
+  - Allow admins to bypass the outpost limit meant to stop spawning when a town is over their outpost limit.

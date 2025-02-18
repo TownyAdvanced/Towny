@@ -454,7 +454,7 @@ public class SpawnUtil {
 					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
-					yield adaptSpawnLocation(getOutpostSpawnLocation(town, split), player);
+					yield adaptSpawnLocation(getOutpostSpawnLocation(player, town, split), player);
 				else
 					yield adaptSpawnLocation(town.getSpawn(), player);
 			case NATION:
@@ -582,13 +582,14 @@ public class SpawnUtil {
 	 * Complicated code that parses the given split to a named, numbered or
 	 * unnumbered outpost.
 	 * 
+	 * @param player The Player doing the teleport.
 	 * @param town  Town which is being spawned to.
 	 * @param split String[] arguments to parse the outpost location from.
 	 * @return Location of the town's outpost spawn.
 	 * @throws TownyException thrown when there are no outposts, or the outpost
 	 *                        limit was capped.
 	 */
-	private static Location getOutpostSpawnLocation(Town town, String[] split) throws TownyException {
+	private static Location getOutpostSpawnLocation(Player player, Town town, String[] split) throws TownyException {
 		if (!town.hasOutpostSpawn())
 			throw new TownyException(Translatable.of("msg_err_outpost_spawn"));
 
@@ -615,7 +616,8 @@ public class SpawnUtil {
 			index = 1;
 		}
 
-		if (TownySettings.isOutpostLimitStoppingTeleports() 
+		if (!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)
+			&& TownySettings.isOutpostLimitStoppingTeleports() 
 			&& TownySettings.isOutpostsLimitedByLevels()
 			&& town.isOverOutpostLimit() 
 			&& Math.max(1, index) > town.getOutpostLimit()) {
