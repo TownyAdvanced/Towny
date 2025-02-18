@@ -195,7 +195,7 @@ public class ProximityUtil {
 			int numAdjacent = numAdjacentDistrictTownBlocks(town, district, townBlockToClaim);
 			// The number of adjacement TBs with the same District is not enough.
 			if (numAdjacent < minAdjacentBlocks)
-				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
+				throw new TownyException(Translatable.of("msg_min_adjacent_district_blocks", minAdjacentBlocks));
 		}
 	}
 
