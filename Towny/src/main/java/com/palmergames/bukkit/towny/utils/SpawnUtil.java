@@ -593,27 +593,28 @@ public class SpawnUtil {
 		if (!town.hasOutpostSpawn())
 			throw new TownyException(Translatable.of("msg_err_outpost_spawn"));
 
-		// No arguments, send them to the first outpost.
-		if (split.length == 0)
-			return town.getOutpostSpawn(1);
-
 		Integer index = null;
-		String userInput = split[split.length - 1];
-		try {
-			if (!userInput.contains("name:")) {
-				index = Integer.parseInt(userInput);
-			} else { // So now it say's name:123
-				index = getOutpostIndexFromName(town, index, userInput.replace("name:", "").replace("_", " "));
-			}
-		} catch (NumberFormatException e) {
-			// invalid entry so assume the first outpost, also note: We DO NOT HAVE a number
-			// now, which means: if you type abc, you get brought to that outpost.
-			// Let's consider the fact however: an outpost name begins with "123" and there
-			// are 123 Outposts. Then we put the prefix name:123 and that solves that.
-			index = getOutpostIndexFromName(town, index, userInput.replace("_", " "));
-		} catch (ArrayIndexOutOfBoundsException i) {
-			// Number not present so assume the first outpost.
+		// No arguments or negative number, send them to the first outpost.
+		if (split.length <= 0)
 			index = 1;
+		else {
+			String userInput = split[split.length - 1];
+			try {
+				if (!userInput.contains("name:")) {
+					index = Integer.parseInt(userInput);
+				} else { // So now it say's name:123
+					index = getOutpostIndexFromName(town, index, userInput.replace("name:", "").replace("_", " "));
+				}
+			} catch (NumberFormatException e) {
+				// invalid entry so assume the first outpost, also note: We DO NOT HAVE a number
+				// now, which means: if you type abc, you get brought to that outpost.
+				// Let's consider the fact however: an outpost name begins with "123" and there
+				// are 123 Outposts. Then we put the prefix name:123 and that solves that.
+				index = getOutpostIndexFromName(town, index, userInput.replace("_", " "));
+			} catch (ArrayIndexOutOfBoundsException i) {
+				// Number not present so assume the first outpost.
+				index = 1;
+			}
 		}
 
 		if (!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)

@@ -10251,3 +10251,4 @@ v0.92.0.11:
   - Bump net.kyori:adventure-text-serializer-plain from 4.18.0 to 4.19.0.
   - Bump net.kyori:adventure-text-minimessage from 4.18.0 to 4.19.0.
   - Allow admins to bypass the outpost limit meant to stop spawning when a town is over their outpost limit.
+  - Fix outpost limit of zero being able to be bypassed via command.
