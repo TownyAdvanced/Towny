@@ -320,7 +320,11 @@ public class TownySettings {
 	}
 
 	public static TownLevel getTownLevel(Town town) {
-		return getTownLevel(town.getLevelNumber());
+		// In order to look up the town level we always have to reference a number of
+		// residents (the key by which TownLevels are mapped,) even when dealing with
+		// manually-set TownLevels.
+		int numResidents = town.getManualTownLevel() == -1 ? town.getLevelNumber() : getTownLevelWhichIsManuallySet(town.getManualTownLevel());
+		return getTownLevel(numResidents);
 	}
 
 	public static TownLevel getTownLevelWithModifier(int modifier, Town town) {

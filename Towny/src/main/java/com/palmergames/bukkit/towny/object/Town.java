@@ -1880,6 +1880,7 @@ public class Town extends Government implements TownBlockOwner {
 	public TownLevel getTownLevel() {
 		return TownySettings.getTownLevel(this);
 	}
+
 	/**
 	 * Get the Town's current TownLevel number, based on its population.
 	 * <p>
@@ -1899,7 +1900,7 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public int getLevelNumber() {
 		int townLevelNumber = getManualTownLevel() > -1
-				? TownySettings.getTownLevelWhichIsManuallySet(getManualTownLevel())
+				? Math.min(getManualTownLevel(), TownySettings.getTownLevelMax())
 				: TownySettings.getTownLevelFromGivenInt(getNumResidents(), this);
 
 		TownCalculateTownLevelNumberEvent tctle = new TownCalculateTownLevelNumberEvent(this, townLevelNumber);
