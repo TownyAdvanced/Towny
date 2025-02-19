@@ -2305,6 +2305,8 @@ msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure 
 msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
 msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
 
+msg_min_adjacent_district_blocks: 'You are required to have at least %s adjacent district plots.'
+
 # Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
 
