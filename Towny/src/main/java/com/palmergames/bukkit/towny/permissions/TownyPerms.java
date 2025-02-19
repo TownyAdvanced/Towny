@@ -42,6 +42,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -60,6 +61,8 @@ public class TownyPerms {
 	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
 	private static final String RANK_TOWN_LEVEL_REQUIREMENT_PREFIX = "towny.town_level_requirement.";
 	private static final String RANK_NATION_LEVEL_REQUIREMENT_PREFIX = "towny.nation_level_requirement.";
+	private static boolean ranksWithTownLevelRequirementPresent = false;
+	private static boolean ranksWithNationLevelRequirementPresent = false;
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -102,9 +105,10 @@ public class TownyPerms {
 		 * Only do this once as we are really only interested in Towny perms.
 		 */
 		collectPermissions();
-		
+
+		checkForLevelRequirementPerms();
 	}
-	
+
 	/**
 	 * Check that all the vital groups Towny relies on are present in the townyperms.yml.
 	 * @throws TownyInitException - Thrown when a vital group is missing.
@@ -387,6 +391,12 @@ public class TownyPerms {
 		return new ArrayList<String>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
 	}
 
+	public static List<String> getTownRanks(Town town) {
+		if (!ranksWithTownLevelRequirementPresent())
+			return getTownRanks();
+		return getTownRanks().stream().filter(rank -> getRankTownLevelReq(rank) <= town.getLevelNumber()).collect(Collectors.toList());
+	}
+
 	/**
 	 * Default permissions everyone in a town gets
 	 * 
@@ -433,6 +443,12 @@ public class TownyPerms {
 	public static List<String> getNationRanks() {
 
 		return new ArrayList<String>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
+	}
+
+	public static List<String> getNationRanks(Nation nation) {
+		if (!ranksWithNationLevelRequirementPresent())
+			return getNationRanks();
+		return getNationRanks().stream().filter(rank -> getRankNationLevelReq(rank) <= nation.getLevelNumber()).collect(Collectors.toList());
 	}
 
 	/**
@@ -587,6 +603,12 @@ public class TownyPerms {
 	 * TownLevel & NationLevel Rank Requirements 
 	 */
 
+	
+	private static void checkForLevelRequirementPerms() {
+		ranksWithNationLevelRequirementPresent = getNationRanks().stream().anyMatch(rank -> getNationRankPermissions(rank).stream().anyMatch(node -> node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX)));
+		ranksWithTownLevelRequirementPresent = getTownRanks().stream().anyMatch(rank -> getTownRankPermissions(rank).stream().anyMatch(node -> node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX)));
+	}
+
 	public static int getRankTownLevelReq(String rank) {
 		for (String node : getTownRankPermissions(rank))
 			if (node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX))
@@ -602,21 +624,11 @@ public class TownyPerms {
 	}
 
 	public static boolean ranksWithTownLevelRequirementPresent() {
-		for (String rank : getTownRanks()) {
-			for (String node : getTownRankPermissions(rank))
-				if (node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX))
-					return true;
-		}
-		return false;
+		return ranksWithTownLevelRequirementPresent;
 	}
 
 	public static boolean ranksWithNationLevelRequirementPresent() {
-		for (String rank : getNationRanks()) {
-			for (String node : getNationRankPermissions(rank))
-				if (node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX))
-					return true;
-		}
-		return false;
+		return ranksWithNationLevelRequirementPresent;
 	}
 
 	/*

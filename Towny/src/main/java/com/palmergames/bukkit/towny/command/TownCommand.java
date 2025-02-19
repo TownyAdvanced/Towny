@@ -353,7 +353,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			case 4:
 				switch (args[1].toLowerCase(Locale.ROOT)) {
 				case "add":
-					return NameUtil.filterByStart(TownyPerms.getTownRanks(), args[3]);
+					if (town == null)
+						return Collections.emptyList();
+					return NameUtil.filterByStart(TownyPerms.getTownRanks(town), args[3]);
 				case "remove": {
 					Resident res = TownyUniverse.getInstance().getResident(args[2]);
 					if (res != null)
@@ -1804,6 +1806,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Translatable townWord = Translatable.of("town_sing");
 		if (target.hasTownRank(rank)) 
 			throw new TownyException(Translatable.of("msg_resident_already_has_rank", target.getName(), townWord));
+
+		if (TownyPerms.ranksWithTownLevelRequirementPresent()) {
+			int rankLevelReq = TownyPerms.getRankTownLevelReq(rank);
+			int levelNumber = target.getTownOrNull().getLevelNumber();
+			if (rankLevelReq > levelNumber)
+				throw new TownyException(Translatable.of("msg_town_or_nation_level_not_high_enough_for_this_rank", townWord, rank, townWord, levelNumber, rankLevelReq));
+		}
 
 		BukkitTools.ifCancelledThenThrow(new TownAddResidentRankEvent(target, rank, target.getTownOrNull()));
 

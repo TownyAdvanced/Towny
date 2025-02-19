@@ -593,7 +593,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public List<String> getTownRanks() {
-		if (!townRanks.isEmpty() && hasTown()) {
+		if (TownyPerms.ranksWithTownLevelRequirementPresent() && !townRanks.isEmpty() && hasTown()) {
 			ArrayList<String> out = new ArrayList<>();
 			for (String rank : new ArrayList<>(townRanks)) {
 				int requiredTownLevelForRank = TownyPerms.getRankTownLevelReq(rank);
@@ -663,7 +663,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public List<String> getNationRanks() {
-		if (!nationRanks.isEmpty() && hasNation()) {
+		if (TownyPerms.ranksWithNationLevelRequirementPresent() && !nationRanks.isEmpty() && hasNation()) {
 			ArrayList<String> out = new ArrayList<>();
 			for (String rank : new ArrayList<>(nationRanks)) {
 				int requiredNationLevelForRank = TownyPerms.getRankTownLevelReq(rank);

@@ -798,6 +798,7 @@ msg_you_have_been_given_rank: 'You have been granted the %s rank of %s.'
 msg_you_have_given_rank: 'You have granted the %s rank of %s to %s.'
 msg_resident_not_your_town: 'That resident isn''t a member of a town!'
 msg_resident_already_has_rank: '%s already holds this %s rank.'
+msg_town_or_nation_level_not_high_enough_for_this_rank: "Your %s level is not high enough to assign the %s rank. Your %s's Level: %s/%s required."
 msg_you_have_had_rank_taken: 'You have been demoted from the %s rank of %s.'
 msg_you_have_taken_rank_from: 'You have removed the %s rank of %s from %s.'
 msg_resident_doesnt_have_rank: '%s doesn''t hold this %s rank.'
