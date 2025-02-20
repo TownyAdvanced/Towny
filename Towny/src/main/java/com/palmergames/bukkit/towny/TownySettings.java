@@ -349,15 +349,14 @@ public class TownySettings {
 		if (town.isRuined())
 			return 0;
 
-		for (int level : configTownLevel.keySet()) {
+		for (int level : configTownLevel.keySet())
 			if (threshold >= level)
 				return level;
-		}
 		return 0;
 	}
 
 	/**
-	 * Gets the TownLevel for manually-set towns, returning the key in the SortedMap which corresponds with the position of the key in the SortedMap's keySet.
+	 * Gets the number of residents required to look up the TownLevel in the SortedMap.
 	 * @param level The number used to get the key from the keySet array. 
 	 * @return the number of residents which will get us the correct TownLevel in the TownLevel SortedMap.
 	 */
