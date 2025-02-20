@@ -308,7 +308,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					case 4:
 						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "add":
-								return NameUtil.filterByStart(TownyPerms.getNationRanks(), args[3]);
+								if (nation == null)
+									return Collections.emptyList();
+								return NameUtil.filterByStart(TownyPerms.getNationRanks(nation), args[3]);
 							case "remove": {
 								Resident rankHaver = TownyUniverse.getInstance().getResident(args[2]);
 								if (rankHaver != null)
@@ -737,30 +739,38 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		 */
 		checkPermOrThrowWithMessage(player, PermissionNodes.TOWNY_COMMAND_NATION_RANK.getNode(rank.toLowerCase(Locale.ROOT)), Translatable.of("msg_no_permission_to_give_rank"));
 
+		Translatable nationWord = Translatable.of("nation_sing");
 		if (split[0].equalsIgnoreCase("add")) {
 			if (target.hasNationRank(rank)) // Must already have this rank
-				throw new TownyException(Translatable.of("msg_resident_already_has_rank", target.getName(), Translatable.of("nation_sing")));
+				throw new TownyException(Translatable.of("msg_resident_already_has_rank", target.getName(), nationWord));
+
+			if (TownyPerms.ranksWithNationLevelRequirementPresent()) {
+				int rankLevelReq = TownyPerms.getRankNationLevelReq(rank);
+				int levelNumber = target.getNationOrNull().getLevelNumber();
+				if (rankLevelReq > levelNumber)
+					throw new TownyException(Translatable.of("msg_town_or_nation_level_not_high_enough_for_this_rank", nationWord, rank, nationWord, levelNumber, rankLevelReq));
+			}
 
 			BukkitTools.ifCancelledThenThrow(new NationRankAddEvent(nation, rank, target));
 
 			target.addNationRank(rank);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", Translatable.of("nation_sing"), rank, target.getName()));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_given_rank", nationWord, rank, target.getName()));
 			if (target.isOnline()) {
-				TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_been_given_rank", Translatable.of("nation_sing"), rank));
+				TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_been_given_rank", nationWord, rank));
 				plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 			}
 		}
 
 		if (split[0].equalsIgnoreCase("remove")) {
 			if (!target.hasNationRank(rank)) // Doesn't have this rank
-				throw new TownyException(Translatable.of("msg_resident_doesnt_have_rank", target.getName(), Translatable.of("nation_sing")));
+				throw new TownyException(Translatable.of("msg_resident_doesnt_have_rank", target.getName(), nationWord));
 
 			BukkitTools.ifCancelledThenThrow(new NationRankRemoveEvent(nation, rank, target));
 
 			target.removeNationRank(rank);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", Translatable.of("nation_sing"), rank, target.getName()));
+			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_taken_rank_from", nationWord, rank, target.getName()));
 			if (target.isOnline()) {
-				TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_had_rank_taken", Translatable.of("nation_sing"), rank));
+				TownyMessaging.sendMsg(target.getPlayer(), Translatable.of("msg_you_have_had_rank_taken", nationWord, rank));
 				plugin.deleteCache(TownyAPI.getInstance().getPlayer(target));
 			}
 		}

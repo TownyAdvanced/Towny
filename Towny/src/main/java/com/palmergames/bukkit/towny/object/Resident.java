@@ -593,9 +593,27 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public List<String> getTownRanks() {
+		if (TownyPerms.ranksWithTownLevelRequirementPresent() && !townRanks.isEmpty() && hasTown()) {
+			ArrayList<String> out = new ArrayList<>();
+			int townLevel = getTownOrNull().getLevelNumber();
+			for (String rank : new ArrayList<>(townRanks)) {
+				int requiredTownLevelForRank = TownyPerms.getRankTownLevelReq(rank);
+				if (requiredTownLevelForRank == 0 || townLevel >= requiredTownLevelForRank)
+					out.add(rank);
+			}
+			// Return out modified list of ranks, so that the player will not lose ranks
+			// they've been assigned when their town goes down in a level temporarily. This
+			// ensures they save and load their proper list of ranks.
+			return Collections.unmodifiableList(out);
+		}
 		return Collections.unmodifiableList(townRanks);
 	}
-	
+
+	@ApiStatus.Internal
+	public List<String> getTownRanksForSaving() {
+		return Collections.unmodifiableList(townRanks);
+	}
+
 	public boolean removeTownRank(String rank) {
 
 		if (hasTownRank(rank)) {
@@ -646,6 +664,24 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public List<String> getNationRanks() {
+		if (TownyPerms.ranksWithNationLevelRequirementPresent() && !nationRanks.isEmpty() && hasNation()) {
+			ArrayList<String> out = new ArrayList<>();
+			int nationLevel = getNationOrNull().getLevelNumber();
+			for (String rank : new ArrayList<>(nationRanks)) {
+				int requiredNationLevelForRank = TownyPerms.getRankTownLevelReq(rank);
+				if (requiredNationLevelForRank == 0 || nationLevel >= requiredNationLevelForRank)
+					out.add(rank);
+			}
+			// Return out modified list of ranks, so that the player will not lose ranks
+			// they've been assigned when their nation goes down in a level temporarily. This
+			// ensures they save and load their proper list of ranks.
+			return Collections.unmodifiableList(out);
+		}
+		return Collections.unmodifiableList(nationRanks);
+	}
+
+	@ApiStatus.Internal
+	public List<String> getNationRanksForSaving() {
 		return Collections.unmodifiableList(nationRanks);
 	}
 

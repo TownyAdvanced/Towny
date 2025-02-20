@@ -42,6 +42,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * @author ElgarL
@@ -58,6 +59,10 @@ public class TownyPerms {
 	private static final HashMap<UUID, String> residentPrefixMap = new HashMap<>();
 	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
 	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
+	private static final String RANK_TOWN_LEVEL_REQUIREMENT_PREFIX = "towny.town_level_requirement.";
+	private static final String RANK_NATION_LEVEL_REQUIREMENT_PREFIX = "towny.nation_level_requirement.";
+	private static boolean ranksWithTownLevelRequirementPresent = false;
+	private static boolean ranksWithNationLevelRequirementPresent = false;
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -100,9 +105,10 @@ public class TownyPerms {
 		 * Only do this once as we are really only interested in Towny perms.
 		 */
 		collectPermissions();
-		
+
+		checkForLevelRequirementPerms();
 	}
-	
+
 	/**
 	 * Check that all the vital groups Towny relies on are present in the townyperms.yml.
 	 * @throws TownyInitException - Thrown when a vital group is missing.
@@ -385,6 +391,13 @@ public class TownyPerms {
 		return new ArrayList<String>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
 	}
 
+	public static List<String> getTownRanks(Town town) {
+		if (!ranksWithTownLevelRequirementPresent())
+			return getTownRanks();
+		int level = town.getLevelNumber();
+		return getTownRanks().stream().filter(rank -> getRankTownLevelReq(rank) <= level).collect(Collectors.toList());
+	}
+
 	/**
 	 * Default permissions everyone in a town gets
 	 * 
@@ -416,7 +429,7 @@ public class TownyPerms {
 	 */
 	public static List<String> getTownRankPermissions(String rank) {
 
-		return getList("towns.ranks." + rank);//.toLowerCase());
+		return getList("towns.ranks." + rank);
 	}
 
 	/*
@@ -431,6 +444,13 @@ public class TownyPerms {
 	public static List<String> getNationRanks() {
 
 		return new ArrayList<String>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
+	}
+
+	public static List<String> getNationRanks(Nation nation) {
+		if (!ranksWithNationLevelRequirementPresent())
+			return getNationRanks();
+		int level = nation.getLevelNumber();
+		return getNationRanks().stream().filter(rank -> getRankNationLevelReq(rank) <= level).collect(Collectors.toList());
 	}
 
 	/**
@@ -510,6 +530,7 @@ public class TownyPerms {
 	/*
 	 * Resident Primary Rank / Rank Prefix 
 	 */
+
 	public static String getResidentPrimaryRankPrefix(Resident resident) {
 		return residentPrefixMap.getOrDefault(resident.getUUID(), setResidentPrimaryRankPrefix(resident));
 	}
@@ -563,7 +584,7 @@ public class TownyPerms {
 		int topValue = 0;
 		for (String node : nodes) {
 			if (node.startsWith(RANKPRIORITY_PREFIX)) {
-				int priorityValue = getNodePriority(node);
+				int priorityValue = getNodePriority(node, RANKPRIORITY_PREFIX.length());
 				if (topValue >= priorityValue)
 					continue;
 				topValue = priorityValue;
@@ -572,13 +593,46 @@ public class TownyPerms {
 		return topValue;
 	}
 
-	private static int getNodePriority(String node) {
+	private static int getNodePriority(String node, int length) {
 		try {
-			return Integer.parseInt(node.substring(RANKPRIORITY_PREFIX.length()));
+			return Integer.parseInt(node.substring(length));
 		} catch (NumberFormatException ignored) {
 			return 0;
 		}
 	}
+
+	/*
+	 * TownLevel & NationLevel Rank Requirements 
+	 */
+
+	
+	private static void checkForLevelRequirementPerms() {
+		ranksWithNationLevelRequirementPresent = getNationRanks().stream().anyMatch(rank -> getNationRankPermissions(rank).stream().anyMatch(node -> node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX)));
+		ranksWithTownLevelRequirementPresent = getTownRanks().stream().anyMatch(rank -> getTownRankPermissions(rank).stream().anyMatch(node -> node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX)));
+	}
+
+	public static int getRankTownLevelReq(String rank) {
+		for (String node : getTownRankPermissions(rank))
+			if (node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX))
+				return getNodePriority(node, RANK_TOWN_LEVEL_REQUIREMENT_PREFIX.length());
+		return 0;
+	}
+
+	public static int getRankNationLevelReq(String rank) {
+		for (String node : getNationRankPermissions(rank))
+			if (node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX))
+				return getNodePriority(node, RANK_NATION_LEVEL_REQUIREMENT_PREFIX.length());
+		return 0;
+	}
+
+	public static boolean ranksWithTownLevelRequirementPresent() {
+		return ranksWithTownLevelRequirementPresent;
+	}
+
+	public static boolean ranksWithNationLevelRequirementPresent() {
+		return ranksWithNationLevelRequirementPresent;
+	}
+
 	/*
 	 * Permission utility functions taken from GroupManager (which I wrote anyway).
 	 */
@@ -772,6 +826,24 @@ public class TownyPerms {
 				"#    - towny.rankpriority.100                                                               #",
 				"#    - towny.rankprefix.&a<&2Sheriff&a>                                                     #",
 				"#                                                                                           #",
+				"# The towns.ranks and nations.ranks sections support requiring their town or nation to have #",
+				"# a minimum town_level or nation_level. This means that you can lock ranks behind a town or #",
+				"# nation's population. By adding a permission node to a rank you will set this requirement: #",
+				"# You can read about town_levels and nation_levels here: https://tinyurl.com/3e9ahk2m       #",
+				"# Ex:                                                                                       #",
+				"#    - towny.town_level_requirement.4                                                       #",
+				"# Adding this to a town rank will require the Town to have a town_level of 4 or more to be  #",
+				"# able to assign that rank to their residents. If the town lost population the residents    #",
+				"# with a rank beyond their town's town_level will have that rank removed from them. When    #",
+				"# their town regains enough population, that rank will automatically be re-assigned to the  #",
+				"# resident. When a town rank does not contain this node it will have no town_level          #",
+				"# requirement.                                                                              #",
+				"# Likewise, nation ranks support an optional nation_level requirement, Ex:                  #",
+				"#    - towny.nation_level_requirement.4                                                     #",
+				"# When added to a nation rank this rank will only be granted when a nation is of level 4 or #",
+				"# greater. When a nation rank does not include this node it will not require any            #",
+				"# nation_level.                                                                             #",
+				"#                                                                                           #",
 				"#############################################################################################",
 				"",
 				"",
@@ -812,5 +884,4 @@ public class TownyPerms {
 	public static CommentedConfiguration getTownyPermsFile() {
 		return perms;
 	}
-	
 }
