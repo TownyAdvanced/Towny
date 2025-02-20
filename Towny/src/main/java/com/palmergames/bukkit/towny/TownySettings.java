@@ -323,7 +323,7 @@ public class TownySettings {
 		// In order to look up the town level we always have to reference a number of
 		// residents (the key by which TownLevels are mapped,) even when dealing with
 		// manually-set TownLevels.
-		int numResidents = town.getManualTownLevel() == -1 ? town.getLevelNumber() : getTownLevelWhichIsManuallySet(town.getManualTownLevel());
+		int numResidents = getResidentCountForTownLevel(town.getLevelNumber());
 		return getTownLevel(numResidents);
 	}
 
@@ -349,9 +349,10 @@ public class TownySettings {
 		if (town.isRuined())
 			return 0;
 
-		for (int level : configTownLevel.keySet())
+		for (int level : configTownLevel.keySet()) {
 			if (threshold >= level)
 				return level;
+		}
 		return 0;
 	}
 
@@ -360,7 +361,7 @@ public class TownySettings {
 	 * @param level The number used to get the key from the keySet array. 
 	 * @return the number of residents which will get us the correct TownLevel in the TownLevel SortedMap.
 	 */
-	public static int getTownLevelWhichIsManuallySet(int level) {
+	public static int getResidentCountForTownLevel(int level) {
 		
 		Integer[] keys = configTownLevel.keySet().toArray(new Integer[] {});
 		// keys is always ordered from biggest to lowest (despite what the javadocs say
@@ -371,6 +372,27 @@ public class TownySettings {
 		return keys[level];
 	}
 
+	/**
+	 * Gets the number of the TownLevel for towns, returning the position in the
+	 * SortedMap which corresponds with the given number of residents.
+	 * 
+	 * @param resident The number used to get the key from the keySet array.
+	 * @param town The town being checked, in case it is ruined.
+	 * @return the number of the TownLevel.
+	 */
+	public static int getTownLevelWhichIsNotManuallySet(int residents, Town town) {
+		if (town.isRuined())
+			return 0;
+
+		int i = 0;
+		for (int level : configTownLevel.keySet()) {
+			if (residents >= level)
+				return i;
+			i++;
+		}
+		return 0;
+	}
+	
 	public static int getTownLevelMax() {
 		return configTownLevel.size();
 	}
