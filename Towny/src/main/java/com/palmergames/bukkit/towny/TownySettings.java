@@ -375,7 +375,7 @@ public class TownySettings {
 	 * Gets the number of the TownLevel for towns, returning the position in the
 	 * SortedMap which corresponds with the given number of residents.
 	 * 
-	 * @param resident The number used to get the key from the keySet array.
+	 * @param residents The number used to get the key from the keySet array.
 	 * @param town The town being checked, in case it is ruined.
 	 * @return the number of the TownLevel.
 	 */
