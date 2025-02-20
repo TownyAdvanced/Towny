@@ -141,6 +141,8 @@ nation_help_7: '국가 리더의 명령어를 나열'
 nation_help_8: '새로운 국가 세우기'
 nation_help_9: '접속중인 국가원 목록'
 nation_help_11: "국가에 속한 마을 목록."
+nation_help_12: "국가의 동맹국 목록."
+nation_help_13: "국가에 대한 적대국들의 목록."
 king_help_1: '국가 리더 도움말'
 king_help_2: '동맹국 설정'
 king_help_3: '적국 설정'
