@@ -394,7 +394,8 @@ public class TownyPerms {
 	public static List<String> getTownRanks(Town town) {
 		if (!ranksWithTownLevelRequirementPresent())
 			return getTownRanks();
-		return getTownRanks().stream().filter(rank -> getRankTownLevelReq(rank) <= town.getLevelNumber()).collect(Collectors.toList());
+		int level = town.getLevelNumber();
+		return getTownRanks().stream().filter(rank -> getRankTownLevelReq(rank) <= level).collect(Collectors.toList());
 	}
 
 	/**
@@ -448,7 +449,8 @@ public class TownyPerms {
 	public static List<String> getNationRanks(Nation nation) {
 		if (!ranksWithNationLevelRequirementPresent())
 			return getNationRanks();
-		return getNationRanks().stream().filter(rank -> getRankNationLevelReq(rank) <= nation.getLevelNumber()).collect(Collectors.toList());
+		int level = nation.getLevelNumber();
+		return getNationRanks().stream().filter(rank -> getRankNationLevelReq(rank) <= level).collect(Collectors.toList());
 	}
 
 	/**
