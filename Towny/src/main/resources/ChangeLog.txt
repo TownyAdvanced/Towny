@@ -10253,3 +10253,17 @@ v0.92.0.11:
   - Allow admins to bypass the outpost limit meant to stop spawning when a town is over their outpost limit.
   - Fix outpost limit of zero being able to be bypassed via command.
   - Fix adjacent district plot error message.
+  - Add the ability to make town and nation ranks require a town or nation level.
+    - The towns.ranks and nations.ranks sections support requiring their town or nation to have a minimum town_level or nation_level.
+    - This means that you can lock ranks behind a town or nation's population. By adding a permission node to a rank you will set this requirement:
+      - towny.town_level_requirement.4
+    - Adding this to a town rank will require the Town to have a town_level of 4 or more to be able to assign that rank to their residents.
+    - If the town lost population the residents with a rank beyond their town's town_level will have that rank removed from them.
+    - When their town regains enough population, that rank will automatically be re-assigned to the resident.
+    - When a town rank does not contain this node it will have no town_level requirement.
+    - Likewise, nation ranks support an optional nation_level requirement, Ex:
+      - towny.nation_level_requirement.4
+    - When added to a nation rank this rank will only be granted when a nation is of level 4 or greater.
+    - When a nation rank does not include this node it will not require any nation_level.
+    - Closes #7681 & #7541.
+  - Fix Town#getLevelNumber returning funny numbers on Towns. Make the code more understandable.
