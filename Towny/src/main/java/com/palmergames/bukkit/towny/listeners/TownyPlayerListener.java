@@ -874,6 +874,10 @@ public class TownyPlayerListener implements Listener {
 			Player player = event.getPlayer();
 			Entity caught = event.getCaught();
 			boolean test = false;
+
+			// Required because some times a plugin will throw the PlayerFishEvent with a null caught.
+			if (caught == null)
+				return;
 			
 			// Caught players are tested for pvp at the location of the catch.
 			if (caught.getType().equals(EntityType.PLAYER)) {
