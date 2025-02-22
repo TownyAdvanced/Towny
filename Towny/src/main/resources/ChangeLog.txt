@@ -10267,3 +10267,6 @@ v0.92.0.11:
     - When a nation rank does not include this node it will not require any nation_level.
     - Closes #7681 & #7541.
   - Fix Town#getLevelNumber returning funny numbers on Towns. Make the code more understandable.
+0.101.1.5:
+  - Fix edge-case scenario where towns that have grown via purchased townblocks are prevented from merging with another town.
+    - Closes #7719.
