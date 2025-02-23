@@ -331,6 +331,10 @@ public class Town extends Government implements TownBlockOwner {
 
 		if (nation == null) {
 			this.nation = null;
+			if (isConquered()) {
+				setConquered(false);
+				setConqueredDays(0);
+			}
 			return;
 		}
 
