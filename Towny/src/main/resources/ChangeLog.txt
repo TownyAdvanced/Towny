@@ -10272,3 +10272,4 @@ v0.92.0.11:
     - Closes #7719.
   - Fix conquered towns not losing their conquered status when their nation is removed.
   - Fix Towns reporting an incorrect Town level number.
+  - Fix rare instance of a plugin breaking the PlayerFishEvent.
