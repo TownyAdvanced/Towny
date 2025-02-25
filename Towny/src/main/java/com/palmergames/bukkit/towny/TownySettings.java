@@ -383,11 +383,12 @@ public class TownySettings {
 		if (town.isRuined())
 			return 0;
 
-		int i = 0;
+		int i = TownySettings.getTownLevelMax() - 1; // Remove one in order to get the index of an array.
 		for (int level : configTownLevel.keySet()) {
 			if (residents >= level)
 				return i;
-			i++;
+
+			i--;
 		}
 		return 0;
 	}

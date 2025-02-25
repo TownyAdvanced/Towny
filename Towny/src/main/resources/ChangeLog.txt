@@ -10271,3 +10271,4 @@ v0.92.0.11:
   - Fix edge-case scenario where towns that have grown via purchased townblocks are prevented from merging with another town.
     - Closes #7719.
   - Fix conquered towns not losing their conquered status when their nation is removed.
+  - Fix Towns reporting an incorrect Town level number.
