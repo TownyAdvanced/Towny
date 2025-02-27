@@ -329,6 +329,7 @@ ta_reload_help_1: "Perkrauna konfigūraciją."
 ta_reload_help_2: "Perkrauna kalbų failus."
 ta_reload_help_3: "Pekrauna Towny leidimus."
 ta_reload_help_4: "Perkrauna visus Towny komponentus."
+ta_eco_resetbanks_help: "Atstato miestų ir valstybių bankų balansus į nurodytą kiekį arba 0."
 ta_depositall_help_0: "Įnešti nurodytą sumą į visus miestų ir valstybių bankus."
 plot_help_0: "Įjungia sklypo informacijos HUD."
 plot_help_1: "Pašalina sklypo savininką."
@@ -396,7 +397,7 @@ msg_couldnt_pay_plot_taxes: '&b%s negalėjo sumokėti mokesčių ir prarado skly
 msg_you_couldnt_pay_plot_tax: '&bJūs neįstengėte sumokėti %s sklypo mokesčio ir praradote nuosavybės teises į %s sklypą.'
 msg_you_couldnt_pay_town_tax: '&bJūs neįstengėte sumokėti %s miesto mokesčio ir buvote pašalintas iš %s.'
 msg_bankrupt_town: ' neturėjo pakankamai lėšų išlikti miestu.'
-msg_bankrupt_nation: ' neturėjo pakankamai lėšų išlikti valstybe.'
+msg_bankrupt_nation: ' neturėjo pakankamai lėšų valstybingumui išlaikyti.'
 msg_nation_not_peaceful: '&bValstybė neturėjo pakankamai lėšų išlaikyti savo taikios būsenos.'
 msg_nation_cant_peaceful: '&bValstybė neturi pakankamai lėšų, kad galėtų tapti taiki. Jūs privalote turėti pakankamai pinigų, kad galėtumėte kasdien mokėti %.'
 msg_peaceful_disabled: '&bValstybės taika yra išjungta visame pasaulyje.'
@@ -697,6 +698,7 @@ msg_you_have_undeclared_an_outlaw: '%s nebėra nepageidaujamas mieste pavadinimu
 msg_err_player_not_an_outlaw: 'Tas žaidėjas nebuvo paskelbtas nepageidaujamu.'
 msg_err_outlaw_in_open_town: 'Jūs negalite prisijungti prie atviro miesto, kuris Jus yra paskelbęs nepageidaujamu.'
 msg_you_are_an_outlaw_in_this_town: '&4Būkite atsargus, %s laiko Jus nepageidaujamu, todėl žūtis šiame mieste galėtų reikšti kalėjimą.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Jūsų užstatas kainuotų %s.'
 msg_err_town_not_close_enough_to_nation: '%s pagrindinis sklypas yra nepakankamai arti Jūsų sostinės pagrindinio sklypo, kad galėtų prisijungti prie Jūsų valstybės.'
 msg_nation_town_moved_their_homeblock_too_far: '%s pagrindinis sklypas buvo perkeltas pernelyg toli nuo Jūsų valstybės sostinės pagrindinio sklypo ir buvo išmestas iš Jūsų valstybės.'
 #Added in 0.33
@@ -981,9 +983,9 @@ msg_total_townblocks: 'Miesto sklypų suma: '
 friend_list: 'Draugų sąrašas'
 not_registered: 'Neregistruotas.'
 msg_error_missing_comparator: '&bPrivaloma nurodyti, pagal ką rūšiuoti.'
-msg_error_invalid_comparator: '&bNetinkama lyginamoji priemonė.'
+msg_error_invalid_comparator: '&bNetinkamas kriterijus.'
 msg_error_multiple_comparators: '&bPer daug lyginamųjų priemonių. Nurodykite tik vieną.'
-msg_error_comparator_failed: '&bLyginamoji priemonė nesuveikė. Pamėginkite kitą.'
+msg_error_comparator_failed: '&bKriterijus nesuveikė. Pamėginkite kitą.'
 number_of_residents: '(Gyventojų skaičius)'
 number_of_towns: '(Miestų skaičius)'
 town_name: 'Miesto pavadinimas'
@@ -999,8 +1001,8 @@ msg_bankrupt_town2: '&b%s neturėjo pakankamai lėšų išlikti miestu.'
 msg_bankrupt_nation2: '&b%s neturėjo pakankamai lėšų išlikti valstybe.'
 status_embassy_town: 'Ambasados'
 #Added in 0.51:
-msg_error_invalid_comparator_nation: '&bNetinkama lyginamoji priemonė. Mėginkite %s.'
-msg_error_invalid_comparator_town: '&bNetinkama lyginamoji priemonė. Mėginkite %s.'
+msg_error_invalid_comparator_nation: '&bNetinkamas kriterijus. Mėginkite %s.'
+msg_error_invalid_comparator_town: '&bNetinkamas kriterijus. Mėginkite %s.'
 msg_err_merging_for_kings_only: '&bSusijungimą gali atlikti tik valstybės vadovas.'
 msg_err_king_of_that_nation_is_not_online: '&bValstybės %s vadovas %s yra neprisijungęs. Susijungimas nepavyko.'
 nation1_has_merged_with_nation2: '&6Valstybė %s sutiko susijungti su dominuojančia valstybe %s.'
@@ -1155,9 +1157,19 @@ msg_cache_block_error_plot_friends: 'draugai'
 msg_cache_block_error_plot_allies: 'sąjungininkai'
 msg_cache_block_error_plot_outsiders: 'pašaliečiai'
 msg_cache_block_error_plot_town_members: 'miesto nariai'
+msg_nation_map_color_changed: '&bVastybės spalva žemėlapyje buvo pakeista į %s.'
+msg_spawn_warn: 'Pasinaudojimas atsiradimo vieta kainuoja %s. Ar norite tęsti? Patarimas: pridėkite -ignore norėdami praleisti šiuos patvirtinimus.'
+msg_confirm_purchase: 'Šis veiksmas kainuos %s. Ar norite tęsti?'
 bonus_townblocks: 'papildomi miesto sklypai'
 #Added in 0.80
 nomad_sing: 'Bastūnas'
+msg_new_town_advice: 'Sveikiname sukūrus savo miestą! Jūsų miestas mokės kasdienes išlaikymo išlaidas, siekiančias %s. Jūs galite įnešti pinigų į savo miesto banką naudodami ''/t deposit #''. Be pinigų išlaikymo išlaidoms padengti Jūsų miestas bus panaikintas. Jūs galite pamatyti savo išlaidas bet kada naudodami /towny prices. Kitos kasdienės išlaikymo išlaidos bus nuskaičiuotos po %s.'
+#Added in 0.81
+msg_err_teleport_cancelled_damage: 'Dėl žalos buvo atšaukta Jūsų teleportacija.'
+#Added in 0.82
+invitation_prefix: "&8[&7Pakvietimas&8] &9"
+confirmation_prefix: "&8[&7Patvirtinimas&8] &9"
+this_message_will_expire2: '&9Tai automatiškai nustos galioti po %s sekundžių'
 msg_hover_next_page: 'Kitas puslapis'
 msg_hover_previous_page: 'Ankstesnis puslapis'
 #Added in 0.83
