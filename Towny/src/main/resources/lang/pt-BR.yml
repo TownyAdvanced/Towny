@@ -668,6 +668,7 @@ msg_you_have_been_given_rank: 'Lhe foi concedido o cargo de %s de %s.'
 msg_you_have_given_rank: 'Lhe foi concedido o cargo de %s de %s para %s.'
 msg_resident_not_your_town: 'Esse habitante não é um membro de sua cidade!'
 msg_resident_already_has_rank: '%s já tem o cargo de %s.'
+msg_town_or_nation_level_not_high_enough_for_this_rank: "Seu nível %s não é alto o suficiente para atribuir o rank %s. O seu é %s Nível: %s/%s requerido."
 msg_you_have_had_rank_taken: 'Você foi rebaixado ao cargo de %s de %s.'
 msg_you_have_taken_rank_from: 'Foi lhe removido o cargo de %s de %s de %s.'
 msg_resident_doesnt_have_rank: '%s não tem o cargo de %s.'
@@ -1908,6 +1909,7 @@ msg_you_have_unclaimed_everything_but_your_homeblock: "Você não reivindicou tu
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red> Tem certeza que deseja transferir a sua nação para %s? Esta ação é irreversível!"
 msg_warn_town_already_capital: "<red>A cidade de %s já é a capital da nação."
 msg_min_adjacent_blocks: 'Você precisa ter pelo menos %s blocos de cidade adjacentes. Há apenas %s.'
+msg_min_adjacent_district_blocks: 'Você deve ter pelo menos %s de lotes de distritos adjacentes.'
 #Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', talvez você esteja procurando /plot evict em vez disso?'
 #Shown to a player when Towny does not know of them.
@@ -1938,6 +1940,16 @@ msg_err_this_townblock_cannot_be_taken_over: "Esse TownBlock não pode ser ocupa
 msg_err_you_cannot_make_this_your_homeblock: "Você não pode reivindicar essa reivindicação porque ela faria deste bloco da Cidade o seu homeblock, que não é permitido."
 #Message shown when taking over a claim is stopped by another plugin.
 msg_err_another_plugin_cancelled_takeover: "Outro plugin parou sua tomada desta terra."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "Você está prestes a assumir uma reivindicação pertencente a %s pelo custo: %s. Você deseja continuar?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "Aviso: Você quase usou seus blocos de aluguel disponíveis para reclamação. Se você perder um residente arrisca que a sua cidade possa ter blocos roubadas por outras cidades."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "Aviso: Sua cidade tem excesso de clamação. Enquanto você afirma haver muitas lotes, outras cidades poderão tomar lotes da sua cidade, considere soltar algumas terras."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[Reivindicação Disponível]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "Você não pode assumir este lote porque fazê-lo dividiria a cidade em dois segmentos. Você terá que reivindicar de uma direção diferente."
 #Message shown when an admin tries to toggle conquered off of a town that is not conquered.
 msg_err_that_town_is_not_conquered: "%s já não foi conquistado."
 #Message shown when a town has its conquered status removed by an admin.
@@ -1953,3 +1965,41 @@ msg_tax_collected_from_towns: "<aqua>Sua nação coletou %s com imposto a partir
 msg_tax_paid_to_towns: "<aqua>Sua nação pagou %s em taxas de suas cidades."
 #Message shown when a town collects taxes from its residents.
 msg_tax_collected_from_residents: "<aqua>Sua cidade coletou %s em taxas de seus moradores."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>Sua cidade coletou %s em taxas de seus moradores."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>Sua cidade coletou %s em taxas de seus lotes."
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>A sua cidade pagou %s com imposto aos proprietários de terras através de impostos planejados."
+#Message shown when a nation collects taxes from its towns that are conquered.
+msg_tax_collected_from_conquered_towns: "<aqua>Sua nação coletou %s com imposto a partir de sua cidade."
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>Sua cidade foi isenta de impostos nacionais."
+msg_nation_set_conquered_tax__amount_set: "%s definiu o valor de imposto conquistado para %s."
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "Você não pode definir o imposto de conquista acima de %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "Sua cidade não tem idade suficiente para reivindicar demais, você deve esperar outro %s."
+msg_err_your_cannot_overclaim_for_another: "Você não pode reivindicar novamente para outra %s."
+#Generic error message for when a world isn't loaded
+msg_err_world_not_loaded: "<red>Mundo não está carregado."
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cEste lote teve seu status de imposto definido para %s.'
+msg_changed_plotgroup_taxed: '&cEste grupo de lote teve seu status de imposto definido para %s.'
+status_forsale: "&a(À venda: %s)"
+msg_town_forsale: "%s foi definido para venda a %s."
+msg_town_notforsale: "%s Não está mais a venda."
+msg_town_sell_confirmation: "Isso vai colocar sua cidade à venda por %s. Tem certeza que deseja continuar?"
+msg_town_buytown_already_mayor: "Você já é prefeito de %s."
+msg_town_buytown_confirmation: "Comprar %s vai custar %s e te remover de qualquer cidade de que você pode fazer parte atualmente. Tem certeza que deseja continuar?"
+msg_town_buytown_not_forsale: "A cidade especificada não está à venda."
+msg_town_buytown_ruined: "Não se podem comprar cidades arruinadas."
+msg_resident_about_reset: "&bResidente sobre reinicialização."
+msg_err_invalid_string_about_not_set: "Linha inválida, sobre residente não setado."
+msg_set_about: "Sobre de %s foi setado para %s."
+msg_clear_about: "Sobre de %s foi limpo."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'A cidade %s teve sua definição visível nas lista superiores definida como %s.'
+#Message shown when an admin overrides a town founding date via townyadmin.
+townyadmin_town_set_help_0: "Define a data de fundação de uma cidade."
+townyadmin_nation_set_help_0: "Define a data de fundação de uma cidade."
+msg_town_registered_set: "Data de fundação da cidade: '%s' definido para: '%s'."
+msg_nation_registered_set: "Data de fundação da nação: '%s' definido para: '%s'."
+msg_err_time_cannot_be_in_the_future: "O tempo especificado não pode ser no futuro."
