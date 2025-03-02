@@ -328,6 +328,7 @@ ta_resident_help_0: "重命名一个居民"
 ta_resident_help_1: "添加或移除一个好友"
 ta_resident_help_2: "列出或清除好友列表"
 ta_resident_help_3: "从数据库中删除一个居民"
+ta_resident_help_4: "Removes a players about line."
 ta_toggle_help_0: "开启/关闭 所有世界的野外功能"
 ta_toggle_help_1: "开启/关闭所有世界的再生功能"
 ta_toggle_help_2: "开启/关闭开发模式， 它会给设置在配置文件中的玩家显示额外的日志信息。"
@@ -662,7 +663,6 @@ msg_err_not_percentage: '&c税率必须小于100.'
 msg_err_no_economy: '&c无经济插件支持.'
 msg_err_not_block_type: '&c这不是一个有效的土地类型!'
 msg_not_allowed_join: '&c%s 不允许加入城镇.'
-msg_offline_no_join: '&c%s 不在线所以无法加入城镇.'
 msg_err_cannot_perform_action: '&c你无法在 %s 执行这个操作.'
 msg_npc_flag: '&bNPC flag 现在 %s for %s.'
 msg_warning_delete: '&4*** 警告,由于资金不足, %s 这个城镇将在明天倒闭! ***'

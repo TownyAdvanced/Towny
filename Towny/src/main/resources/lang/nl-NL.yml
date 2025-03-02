@@ -11,6 +11,22 @@ help_0: 'Algemene Towny Help'
 help_1: 'Probeer de volgende commando''s om meer te leren over Towny.'
 help_2: 'Stad Chat'
 help_3: 'Natie Chat'
+help_4: 'Inwoner commando hulp.'
+help_5: 'Dorp commando hulp.'
+help_6: 'Natie commando hulp.'
+help_7: 'Plot commando hulp.'
+help_8: 'Towny commando hulp.'
+help_9: 'Townyadmin commando hulp.'
+towny_help_0: "Algemene hulp voor Towny"
+towny_help_1: "Geeft een kaart weer van de dichtstbijzijnde steden."
+towny_help_2: "Weergeeft de prijzen die gebruikt worden met de economie"
+towny_help_3: "Hoogtepunten weergeven"
+towny_help_4: "Weergeef tijd tot een nieuwe dag."
+towny_help_5: "Weergeeft statistieken"
+towny_help_6: "Weergeeft de versie van Towny"
+towny_top_help_0: "Lijst van top inwoners gebaseerd op subcommando."
+towny_top_help_1: "Lijst van top land-eigenaren gebaseerd op basis van subcommando."
+towny_top_help_2: "Lijst van rijkste gebaseerd van subcommando."
 town_help_1: 'De status van je stad'
 town_help_2: '[burgemeester]'
 town_help_3: 'Status van geselecteerde stad'
@@ -21,6 +37,8 @@ town_help_7: 'Nieuwe stad met doelburgemeester.'
 town_help_8: 'Toon commando''s voor burgemeesters.'
 town_help_9: 'Vandaag de dag!'
 town_help_10: 'Toon alle online inwoners in de stad'
+town_help_13: "Bekijk een lijst van inwoners in het dorp."
+town_help_14: "Bekijk een lijst van gelederen in het dorp."
 mayor_help_3: 'Claim gebied niet gekoppeld aan stad'
 mayor_help_4: 'Claim om je heen in een radius van X'
 mayor_help_5: 'Claim in de maximale radius'
@@ -306,7 +324,6 @@ msg_err_not_percentage: '&cPercentages moeten minder dan 100 zijn.'
 msg_err_no_economy: '&cEconomie is niet ingeschakeld.'
 msg_err_not_block_type: '&cDat is geen geldig plot type!'
 msg_not_allowed_join: '&c%s is niet toegestaan lid te worden van een stad.'
-msg_offline_no_join: '&c%s is offline maar het gebruik van permissies kan daarom geen lid worden van een stad.'
 msg_err_cannot_perform_action: '&cKan deze actie niet uitvoeren in de %s.'
 msg_npc_flag: '&bNPC flag is nu %s voor %s.'
 msg_warning_delete: '&4*** WAARSCHUWING, %s ZAL WORDEN VERWIJDERD TIJDENS VOLGENDE NIEUWE DAG DOOR GEBREK AAN GELD ***'
