@@ -2830,7 +2830,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Not online
 			if (!newMember.isOnline()) 
-				throw new TownyException(Translatable.of("msg_offline_no_join", newMember.getName()));
+				throw new TownyException(Translatable.of("msg_player_is_not_online", newMember.getName()));
 
 			// only add players with the right permissions.
 			if (!newMember.hasPermissionNode(PermissionNodes.TOWNY_TOWN_RESIDENT.getNode()))
