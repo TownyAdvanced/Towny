@@ -903,5 +903,15 @@
         "key": "add_pale_oak_to_farm_plot"
       }
     ]
+  },
+  {
+    "version": "0.101.1.6",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.potion_types",
+        "value": ",WIND_CHARGED,WEAVING,INFESTED"
+      }
+    ]
   }
 ]
