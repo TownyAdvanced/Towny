@@ -910,7 +910,7 @@
       {
         "type": "APPEND",
         "path": "protection.potion_types",
-        "value": ",WIND_CHARGED,WEAVING,INFESTED"
+        "value": ",WIND_CHARGED,WEAVING,INFESTED,OOZING"
       }
     ]
   }
