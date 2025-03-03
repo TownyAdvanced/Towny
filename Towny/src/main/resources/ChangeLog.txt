@@ -10273,3 +10273,5 @@ v0.92.0.11:
   - Fix conquered towns not losing their conquered status when their nation is removed.
   - Fix Towns reporting an incorrect Town level number.
   - Fix rare instance of a plugin breaking the PlayerFishEvent.
+0.101.1.6:
+  - Fix which type of cauldron is tested for in CauldronLevelChangeEvents, allowing for the creation of brewery plots.
