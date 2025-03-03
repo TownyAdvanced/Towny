@@ -764,7 +764,6 @@ msg_err_not_percentage: '&cPercentages must be below 100.'
 msg_err_no_economy: '&cEconomy has not been turned on.'
 msg_err_not_block_type: '&cThat is not a valid plot type!'
 msg_not_allowed_join: '&c%s is not permitted to join a town.'
-msg_offline_no_join: '&c%s is offline but using permissions so can''t join a town.'
 msg_err_cannot_perform_action: '&cCannot perform this action in the %s.'
 msg_npc_flag: '&bNPC flag is now %s for %s.'
 
