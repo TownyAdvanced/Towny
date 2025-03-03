@@ -10275,3 +10275,5 @@ v0.92.0.11:
   - Fix rare instance of a plugin breaking the PlayerFishEvent.
 0.101.1.6:
   - Fix which type of cauldron is tested for in CauldronLevelChangeEvents, allowing for the creation of brewery plots.
+  - Add 1.21 potion types as detrimental, courtesy of Warrior with PR #7778.
+  - Automatic Config Edit: ",WIND_CHARGED,WEAVING,INFESTED,OOZING" will be added to the protection.potion_types in the config.yml.
