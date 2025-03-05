@@ -97,6 +97,13 @@ public class MathUtil {
 		return output;
 	}
 
+	public static double getPositiveDoubleOrThrow(String input) throws TownyException {
+		double i = getDoubleOrThrow(input);
+		if (i < 0)
+			throw new TownyException(Translatable.of("msg_err_negative"));
+		return i;
+	}
+
 	public static int getPositiveIntOrThrow(String input) throws TownyException {
 		int i = getIntOrThrow(input);
 		if (i < 0)

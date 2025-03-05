@@ -4246,7 +4246,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (args.length == 0)
 			throw new TownyException(Translatable.of("msg_error_must_be_num"));
 
-		double forSalePrice = Math.min(MathUtil.getDoubleOrThrow(args[0]), TownySettings.maxBuyTownPrice());
+		double forSalePrice = Math.min(MathUtil.getPositiveDoubleOrThrow(args[0]), TownySettings.maxBuyTownPrice());
 		Town town = getTownFromPlayerOrThrow(player);
 
 		Confirmation
