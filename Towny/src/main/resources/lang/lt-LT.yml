@@ -330,6 +330,9 @@ ta_reload_help_2: "Perkrauna kalbų failus."
 ta_reload_help_3: "Pekrauna Towny leidimus."
 ta_reload_help_4: "Perkrauna visus Towny komponentus."
 ta_eco_resetbanks_help: "Atstato miestų ir valstybių bankų balansus į nurodytą kiekį arba 0."
+ta_eco_convert_modern_help: "Konvertuoja Jūsų Towny sąskaitas į mūsų moderniąją įvairovę, galinčią naudoti Vault OfflinePlayer."
+ta_eco_convert_help: "Konvertuoti Jūsų Towny sąskaitas į nurodytą ekonomikos įskiepį, naudinga perkeliant duomenis tarp ekonomikos įskiepių."
+ta_eco_info_help: "Duoda informacijos apie ekonomikos sąskaitas šiame serveryje."
 ta_depositall_help_0: "Įnešti nurodytą sumą į visus miestų ir valstybių bankus."
 ta_info_help_0: "Peržiūrėti nurodytos valstybės ekonominę informaciją."
 ta_info_help_1: "Peržiūrėti nurodyto gyventojo ekonominę informaciją."
@@ -346,6 +349,7 @@ plot_help_7: "Prideda žaidėjui numatytųjų leidimų nepaisymus."
 plot_help_8: "Atveria leidimų rengyklės grafinę naudotojo sąsają."
 plot_help_9: "Prideda žaidėją į sklypo patikimų žmonių sąrašą."
 plot_help_10: "Pašalina žaidėją iš sklypo patikimų žmonių sąrašo."
+plot_district_help_0: "Pvz.: /plot district new PrabangusSklypai"
 plot_district_help_1: "Pašalina sklypą iš nurodyto rajono."
 plot_district_help_2: "Visiškai panaikina rajoną."
 plot_district_help_3: "Pervardina rajoną, kuriame stovite."
@@ -404,6 +408,7 @@ msg_couldnt_pay_plot_taxes: '&b%s negalėjo sumokėti mokesčių ir prarado skly
 msg_you_couldnt_pay_plot_tax: '&bJūs neįstengėte sumokėti %s sklypo mokesčio ir praradote nuosavybės teises į %s sklypą.'
 msg_you_couldnt_pay_town_tax: '&bJūs neįstengėte sumokėti %s miesto mokesčio ir buvote pašalintas iš %s.'
 msg_you_paid_town_tax: '&bJūs sumokėjote savo miestui %s mokestį.'
+msg_you_paid_plottax_to_town: '&bJūs sumokėjote %s sklypų mokesčių %s miestui.'
 msg_bankrupt_town: ' neturėjo pakankamai lėšų išlikti miestu.'
 msg_bankrupt_nation: ' neturėjo pakankamai lėšų valstybingumui išlaikyti.'
 msg_nation_not_peaceful: '&bValstybė neturėjo pakankamai lėšų išlaikyti savo taikios būsenos.'
@@ -658,6 +663,7 @@ msg_you_have_been_given_rank: 'Jums suteikta %s pareigybė %s.'
 msg_you_have_given_rank: 'Jūs suteikėte %s pareigybę %s %s.'
 msg_resident_not_your_town: 'Tas gyventojas nepriklauso Jūsų miestui!'
 msg_resident_already_has_rank: '%s jau turi %s pareigybę.'
+msg_town_or_nation_level_not_high_enough_for_this_rank: "Jūsų %s lygis nėra pakankamai aukštas, kad galėtumėte priskirti %s pareigybę. Jūsų %s lygis: %s/%s reikalingo."
 msg_you_have_had_rank_taken: 'Jums buvo atimta %s pareigybė %s.'
 msg_you_have_taken_rank_from: 'Jūs atėmėte %s pareigybę %s iš %s.'
 msg_resident_doesnt_have_rank: '%s neturi %s pareigybės.'
@@ -705,6 +711,7 @@ msg_you_have_undeclared_an_outlaw: '%s nebėra nepageidaujamas mieste pavadinimu
 msg_err_player_not_an_outlaw: 'Tas žaidėjas nebuvo paskelbtas nepageidaujamu.'
 msg_err_outlaw_in_open_town: 'Jūs negalite prisijungti prie atviro miesto, kuris Jus yra paskelbęs nepageidaujamu.'
 msg_you_are_an_outlaw_in_this_town: '&4Būkite atsargus, %s laiko Jus nepageidaujamu, todėl žūtis šiame mieste galėtų reikšti kalėjimą.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Nepageidaujami asmenys yra kalinami %s valandoms.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'Jūsų užstatas kainuotų %s.'
 msg_err_town_not_close_enough_to_nation: '%s pagrindinis miesto blokas yra nepakankamai arti Jūsų sostinės pagrindinio sklypo, kad galėtų prisijungti prie Jūsų valstybės.'
 msg_nation_town_moved_their_homeblock_too_far: '%s pagrindinis miesto blokas buvo perkeltas pernelyg toli nuo Jūsų valstybės sostinės pagrindinio sklypo ir buvo išmestas iš Jūsų valstybės.'
@@ -950,6 +957,7 @@ msg_err_public_nation_spawn_forbidden: '&cKelionės į viešas valstybių atsira
 msg_err_public_nation_spawn_forbidden_war: '&cKelionės į viešas valstybių atsiradimo vietas yra įmanomos tik karo metu.'
 msg_err_public_nation_spawn_forbidden_peace: '&cKelionės į viešas valstybių atsiradimo vietas yra draudžiamos karo metu.'
 msg_spawn_cost_set_to: '&b%s nustatė /%s atsiradimo vietos naudojimo mokestį į %s'
+msg_spawn_fail_safe_teleport: '&cTeleportacija nepavyko, vieta nėra saugi, paprašykite savo miesto mero, kad teleportacijos vieta būtų pakeista.'
 msg_err_cannot_set_spawn_cost_more_than: '&cJūs negalite nustatyti atsiradimo vietos mokesčio aukštesnio kaip %s'
 msg_err_ally_isnt_public: '&cJūsų sąjungininkas %s nėra įjungęs viešos atsiradimo vietos. Teleportacija atmesta.'
 msg_nation_changed_public: '&cValstybės viešumo būsena dabar yra %s.'
@@ -1162,6 +1170,11 @@ msg_click_spawn: '&aSpustelėkite norėdami nusiteleportuoti į: &e%s'
 msg_spawn_cost: '&aTeleportacijos kaina = &e%s'
 #Added in 0.78
 msg_reload_error: 'Įvyko klaida perkraunant Towny.'
+msg_reloaded_config: '&2Konfigūracija sėkmingai perkrauta.'
+msg_reloaded_perms: '&2Leidimai sėkmingai perkrauti.'
+msg_reloaded_db: '&2Duomenų bazė sėkmingai perkrauta'
+msg_reloaded_lang: '&2Kalbos failas sėkmingai perkrautas'
+msg_reset_config: '&2Konfigūracija buvo atstatyta'
 msg_err_teleport_cancelled: 'Dėl pajudėjimo buvo atšaukta Jūsų teleportacija.'
 #Added in 0.79
 msg_cache_block_error_plot_friends: 'draugai'
@@ -1174,6 +1187,8 @@ msg_err_unable_to_add_more_residents_without_nation: 'Jūsų miestas negali pakv
 msg_the_following_towns_were_deleted_for_having_0_claims: 'Šie miestai buvo panaikinti, nes neturėjo žemių: %s'
 msg_spawn_warn: 'Pasinaudojimas atsiradimo vieta kainuoja %s. Ar norite tęsti? Patarimas: pridėkite -ignore norėdami praleisti šiuos patvirtinimus.'
 msg_confirm_purchase: 'Šis veiksmas kainuos %s. Ar norite tęsti?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Šie miestai bus išmesti iš %s valstybės, nes jie nėra pakankamai arti naujosios sostinės. Ar norite tęsti?'
+msg_ta_deposit_all_success: 'Sėkmingai įnešta %s į visų valstybių ir miestų bankus.'
 bonus_townblocks: 'papildomi miesto blokai'
 #Added in 0.80
 nomad_sing: 'Bastūnas'
@@ -1249,6 +1264,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&cJūsų miestas bus griuvės
 msg_time_remaining_before_full_removal: 'Iki visiško ištrinimo liko: %d valandos.'
 msg_time_until_reclaim_available: 'Iki galimo atgavimo liko: %d valandos.'
 msg_reclaim_available: 'Galimas atsiėmimas.'
+msg_ruined_town_being_deleted: "%s buvo sugriuvęs %s valandas ir yra naikinamas."
 #Added in 0.93
 msg_changed_peaceful: '&cMiesto neutralumas/taikingumas dabar yra %s.'
 msg_err_town_unclaim_canceled: '&cAtsisakymas atšauktas. Jūs negalite atsisakyti šių žemių dabar.'
@@ -1321,9 +1337,15 @@ msg_town_merge_request_sent: '&bSusijungimo prašymas buvo nusiųstas %s merui.'
 msg_town_merge_request_received: '&b%s meras %s paprašė susijungti su Jūsų miestu. Šis veiksmas perkels visus miesto blokus, gyventojus ir visus pinigus iš miesto banko į %s.'
 msg_town_merge_request_denied: '&cSusijungimo prašymas atmestas.'
 msg_town_merge_other_offline: '&c%s meras %s šiuo metu yra neprisijungęs. Susijungimas nepavyko.'
+msg_town_merge_err_too_many_residents: '&cSusijungimas nepavyko: naujas gyventojų skaičius viršytų limitą (%d)'
+msg_town_merge_err_too_many_townblocks: '&cSusijungimas nepavyko: naujasis miesto dydis viršytų limitą (%d)'
+msg_town_merge_err_not_enough_money: '&cSusijungimas nepavyko: neužteko pinigų. (%s/%s)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cSusijungimas nepavyko: per daug nupirktų miesto blokų (%d)'
 msg_town_merge_warning: '&cĮspėjimas: Jei bus sutikta, susijungimas su %s kainuos %s.'
+msg_town_merge_debt_warning: '&cĮspėjimas: %s yra įsiskolinęs, Jūs turėsite sumokėti jų skolą, jei bus sutikta.'
 msg_town_merge_failed: '&cSusijungimas nepavyko.'
 msg_town_merge_cancelled: '&cSusijungimas atšauktas.'
+msg_town_merge_success: '&bMiestas %s, vadovaujamas %s, sėkmingai susijungė su %s.'
 #Reasons for withdrawing/depositing for the bankhistory book.
 msg_town_merge_cost_withdraw: 'Miestų susijungimas kainuoja'
 msg_town_merge_transaction_reason: 'Miestų susijungimas'
@@ -1339,6 +1361,7 @@ msg_err_nation_already_enemies_with_2: '&c%s jau yra %s priešė.'
 msg_ta_allies_enemies_updated: '&b%s atnaujinti sąjungininkai/priešai.'
 #Added in 0.102
 towny_map_detailed_information: '&2Spustelėkite norėdami pamatyti detalesnę sklypo informaciją.'
+msg_err_nation_capital_too_many_residents: '&cDabartinė sostinė turi per daug gyventojų, kad ją pakeistų %s.'
 msg_deleting_nation_will_result_in_losing_residents: '&cĮspėjimas: Jūsų valstybės panaikinimas reikš, jog Jūsų miestas yra viršys gyventojų skaičiaus limitą (%d), todėl bus pašalinti %d gyventojai.'
 #Added in 0.103
 msg_command_blocked_inside_towns: '&cJūs negalite naudoti šios komandos būdami miestuose.'
@@ -1376,10 +1399,13 @@ msg_town_not_peaceful: '&bMiestas neturėjo pakankamai lėšų, kad išliktų ta
 msg_town_already_peaceful: '&bMiestas jau yra taikus.'
 msg_town_already_not_peaceful: '&bMiestas jau yra netaikus.'
 msg_town_paid_for_neutral_status: '&bJūsų miestas sumokėjo %s, kad išlaikytų taikią būseną.'
+msg_nation_paid_for_neutral_status: '&bJūsų valstybė sumokėjo %s, kad išlaikytų savo taikų statusą.'
+your_town_has_been_invited_to_join_nation: 'Jūsų miestas buvo pakviestas prisijungti prie valstybės: %s'
 msg_err_days_must_be_greater_than_0: 'Dienų skaičius turi būti didesnis už nulį.'
 #Added in 0.110
 msg_safe_mode: "[Klaida] Užrakinta saugiajame režime!"
 msg_safe_mode_player: 'Praneškite administratoriui, kad šis patikrintų serverio konsolę.'
+msg_safe_mode_admin: 'Patikrinkite serverio konsolę, kad sužinotumėte daugiau.'
 plotgroup_plu: 'Sklypų grupės'
 map_hover_plot_group: 'Sklypų grupė: '
 map_hover_plot_group_size: ' Dydis: '
