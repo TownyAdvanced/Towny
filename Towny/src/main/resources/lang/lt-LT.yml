@@ -1423,6 +1423,7 @@ msg_click_purchase: 'Spustelėkite, kad nusipirktumėte'
 status_trustedlist: 'Patikimas'
 msg_click_to_edit: '&6Spustelėkite norėdami redaguoti.'
 permission_gui_header: 'Towny leidimų GUI'
+msg_cache_block_err: '&cJums neleidžiama čia %s.'
 msg_err_plot_belongs_to_group: '&cSklypas priklauso grupei, naudokite %s.'
 plotgroup_sing: 'Sklypų grupė'
 #Added in 0.114
@@ -1431,6 +1432,9 @@ msg_err_expected_command_format: 'Klaidinga sintaksė, tikėtasi: %s'
 help_ta_perms_listgroups: 'Išvardyti grupes.'
 #Added in 0.115
 msg_comptype_founded: 'Įkūrimo data'
+err_invalid_yaml: 'Krovimo klaida: Nepavyko užkrauti failo %s (ar jis praeina yaml analizatorių?).'
+#Added in 0.116
+msg_town_map_color_changed: '&bMiesto spalva žemėlapyje pakeista į %s.'
 #Added in 0.118
 status_title_nopvp: '&a(Be PVP)'
 status_home_element: ' &7[Namai: %s]'
@@ -1444,6 +1448,7 @@ status_jailed: 'Įkalintas:'
 status_bad_yes: '&cTAIP'
 status_good_no: '&aNE'
 status_resident_tax_title: '%s mokestis'
+msg_setup_success: 'Sėkmingai pakeistos konfigūracijas vertės į Jūsų naująsias vertes.'
 #Player was invulnerable after respawning and has lost their invulnerability.
 msg_you_have_lost_your_respawn_protection: 'Jūs praradote savo prisikėlimo apsaugą.'
 #Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
@@ -1515,8 +1520,43 @@ msg_baltop_book_format: '%s. %s | %s'
 msg_confirmation_timed_out: 'Patvirtinimo laikas baigėsi.'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: 'Jūsų sklype yra pašalietis, todėl Jūs negalite pakeisti PVP būsenos!'
+#Added in 0.136
+msg_view_on_web: '&7Spustelėkite, kad peržiūrėtumėte žiniatinklyje.'
+#Added in 0.137
+#Shown globally when a town merges with another town.
+town1_has_merged_with_town2: '&6Miestas %s sutiko susijungti su dominuojančiuoju miestu %s.'
 #Shown in the town and nation status screens to inform about neutrality costs.
 status_neutrality_cost: 'Neutralumo kaina:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'Jeigu Jūs už šiuos miesto blokus susimokėjote tikrais pinigais, prašome suprasti: serveris, kuriame žaidžiate, pažeidžia Minecraft EULA ir Towny licensiją.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'Towny komanda niekada nenumatė, jog miesto blokai būtų įsigyjami už tikrus pinigus.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'Jeigu Jūs vis dėlto sumokėjote pinigų, turėtumėte svarstyti žaisti kitame Towny serveryje, kuris paiso Towny komandos norų.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'Jūs buvote pakviestas prisijungti prie %s&9 (Valstybė: %s&9)'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'Jūsų miestas sumokėjo %s, kad atsisakytų šių žemių.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'Šių žemių atsisakymas kainuos %s, ar norite tęsti?'
+#Added in 0.140
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'Jūs turite palaukti %s sekundes, kad galėtumėte vėl pervadinti savo miestą.'
+#Added in 0.143
+#Message shown when a console sender uses a command meant for in game.
+msg_err_command_not_for_console_use: 'Ši komanda negali būti naudojama iš konsolės.'
+#Added in 0.145
+#Message shown when a conquered town tries to leave their nation.
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Jūs negalite palikti savo valstybės, Jūsų miestas yra užkariautas.'
+msg_err_console_only: 'Ši komanda gali būti naudojama tik konsolėje.'
+msg_err_player_only: 'Tik žaidėjai gali naudoti šią komandą.'
+#Added in 0.149
+#Message shown when a player logs in and their town is bankrupt.
+msg_your_town_is_bankrupt: 'Jūsų miestas bankrutavo, įneškite pinigų į savo banką naudodami /town deposit {amount}.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Jūs negalite naudoti šios komandos, nes jau esate miesto narys. Norėdami tęsti turite panaudoti ''/t leave''.'
 #Used in the town's status screen to display plots
 status_plot_string: 'Sklypai'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1577,11 +1617,16 @@ msg_comptype_upkeep: 'Išlaikymas'
 #Added in 0.156
 msg_spawn_cost_free: 'Nemokama'
 msg_town_has_no_jailslots: 'Miesto kalėjimas yra užpildytas.'
+msg_you_have_been_jailed_your_bail_is_x: 'Jūs buvote įkalintas, Jūsų užstatas yra %s.'
 msg_you_were_released_as_town_ran_out_of_slots: 'Jūsų kalintojai Jus paleidžia, kad padarytų daugiau vietos.'
 #Part of the /town plots output.
 msg_town_plots_title: ' Miesto sklypai'
 #Part of the /town plots output.
 msg_town_plots_town_size: '<dark_green>Miesto dydis: <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>[Nusipirkta: %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[Papildomi: %s]'
 #Shown to a player when Towny does not know of them.
 msg_you_are_unknown: "Jūs nesate žinomas Towny."
 #Generic Resident/Town/Nation/Thing is not known to Towny.
@@ -1600,8 +1645,14 @@ title_nation_sanctioned_towns: 'Sankcionuoti miestai'
 status_nation_sanctioned_towns: "Sankcionuoti miestai"
 msg_err_name_validation_is_empty: "Jūs negalite duoti tuščio pavadinimo."
 teleport_warmup_title_dont_move: "&6Nejudėkite!"
+msg_town_cede_plot_confirmation_give_plot: "Ar Jūs tikrai norite atiduoti %s šį sklypą?"
+msg_town_cede_plot_denied: "%s atmetė Jūsų pasiūlymą."
+msg_town_cede_plot_unable_to_accept: "%s negalėjo priimti Jūsų pasiūlymo."
 msg_err_you_already_own_this_plot: "Jums jau priklauso šis sklypas."
 map_hover_district: 'Rajonas: '
+msg_admin_eco_convert_success: "Ekonomikos konvertavimas sėkmingas"
+msg_err_mode_does_not_exist: "Režimas %s neatpažintas."
+msg_err_not_allowed_to_switch: "Jūs negalite čia perjungti."
 chunknotification_plot_claim_help_message: " Naudokite '/plot claim', kad įsigytumėte šį sklypą."
 titlemsg_pay_your_bail_title: "Sumokėkite savo užstatą: %s"
 titlemsg_pay_your_bail_subtitle: "/res jail paybail"
