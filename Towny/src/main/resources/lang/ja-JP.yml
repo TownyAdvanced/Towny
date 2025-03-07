@@ -493,7 +493,6 @@ msg_err_not_percentage: '&cパーセンテージは100未満でなければな�
 msg_err_no_economy: '&c経済が有効になっていません。'
 msg_err_not_block_type: '&c有効なプロットタイプではありません。'
 msg_not_allowed_join: '&c%s は、町への参加が許可されていません。'
-msg_offline_no_join: '&c%s はオフラインですが、アクセス権限を使用しているため、町に参加できません。'
 msg_err_cannot_perform_action: '&c %s ではこの操作を実行できません。'
 msg_npc_flag: '&bNPCフラグは現在 %s の %s です。'
 msg_warning_delete: '&4*** 警告, %s は次の日に資金を失うことになります ***'
