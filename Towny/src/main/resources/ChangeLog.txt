@@ -10278,3 +10278,4 @@ v0.92.0.11:
   - Add 1.21 potion types as detrimental, courtesy of Warrior with PR #7778.
   - Automatic Config Edit: ",WIND_CHARGED,WEAVING,INFESTED,OOZING" will be added to the protection.potion_types in the config.yml.
   - Fix TownRuinUtil trying to pay town bank balances to their nation when economy is not enabled.
+  - Fix neutrality costs not being applied to towns who have an upkeep cost of 0.

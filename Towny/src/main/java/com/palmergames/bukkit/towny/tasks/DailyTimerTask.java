@@ -669,6 +669,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				continue;
 
 			processTownUpkeep(town);
+			processTownNeutralCosts(town);
 		}
 
 		String msg1 = "msg_bankrupt_town2";
@@ -702,21 +703,24 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else if (upkeep < 0) {
 			payTownNegativeUpkeep(upkeep, town);
 		}
+	}
+
+	private void processTownNeutralCosts(Town town) {
+		if (!town.isNeutral())
+			return;
+
+		double neutralityCost = TownySettings.getTownNeutralityCost(town);
+		if (neutralityCost <= 0)
+			return;
 
 		// Charge towns for keeping a peaceful status.
-		if (town.isNeutral()) {
-			double neutralityCost = TownySettings.getTownNeutralityCost(town);
-			if (neutralityCost > 0) {
-				if ((town.isBankrupt() && !TownySettings.canBankruptTownsPayForNeutrality())
-				|| !town.getAccount().withdraw(neutralityCost, "Town Peace Upkeep")) {
-					town.setNeutral(false);
-					town.save();
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));
-				} else {
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", prettyMoney(neutralityCost)));
-				}
-				
-			}
+		if ((town.isBankrupt() && !TownySettings.canBankruptTownsPayForNeutrality())
+		|| !town.getAccount().withdraw(neutralityCost, "Town Peace Upkeep")) {
+			town.setNeutral(false);
+			town.save();
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));
+		} else {
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", prettyMoney(neutralityCost)));
 		}
 	}
 
@@ -822,6 +826,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				continue;
 
 			processNationUpkeep(nation);
+			processNationNeutralCosts(nation);
 		}
 
 		if (removedNations != null && !removedNations.isEmpty()) {
@@ -853,19 +858,23 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else if (upkeep < 0) {
 			nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");
 		}
+	}
+
+	private void processNationNeutralCosts(Nation nation) {
+		if (!nation.isNeutral())
+			return;
+
+		double neutralityCost = TownySettings.getNationNeutralityCost(nation);
+		if (neutralityCost <= 0)
+			return;
 
 		// Charge nations for keeping a peaceful status.
-		if (nation.isNeutral()) {
-			double neutralityCost = TownySettings.getNationNeutralityCost(nation);
-			if (neutralityCost > 0) {
-				if (!nation.getAccount().withdraw(neutralityCost, "Nation Peace Upkeep")) {
-					nation.setNeutral(false);
-					nation.save();
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_not_peaceful"));
-				} else {
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", prettyMoney(neutralityCost)));
-				}
-			}
+		if (!nation.getAccount().withdraw(neutralityCost, "Nation Peace Upkeep")) {
+			nation.setNeutral(false);
+			nation.save();
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_not_peaceful"));
+		} else {
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", prettyMoney(neutralityCost)));
 		}
 	}
 
