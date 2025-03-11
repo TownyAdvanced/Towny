@@ -307,6 +307,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 		.build();
 
 	/**
+	 * List of Carpets.
+	 */
+	public static final ItemLists CARPETS = newBuilder().endsWith("_CARPET").build();
+
+	/**
 	 * List of Plants.
 	 */
 	public static final ItemLists PLANTS = newBuilder()
@@ -351,6 +356,7 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.includeList(DOORS) ////if open they are basically air
 			.includeList(TORCHES)
 			.includeList(BANNERS)
+			.includeList(CARPETS)
 			.includeList(PLANTS).build();
 	
 	public static final ItemLists FALLING_BLOCKS = newBuilder()

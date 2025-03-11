@@ -10280,3 +10280,4 @@ v0.92.0.11:
   - Fix TownRuinUtil trying to pay town bank balances to their nation when economy is not enabled.
   - Fix neutrality costs not being applied to towns who have an upkeep cost of 0.
   - Add SHORT_GRASS to the list of plants, fixing an issue with safe teleports.
+  - Add CARPETS to the item lists, fixing an issue with safe teleports.
