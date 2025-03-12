@@ -513,13 +513,12 @@ public class SpawnUtil {
 			temp = temp.add(0,1,0);
 		}
 		
-		// 0 1 -1 2 -2 ...
-		for (int i = 0; Math.abs(i) < range - 2; i = next(i) ) {
-			// value 	 = bottom block
+		// 1 -1 2 -2 ...
+		for (int y = 0, steps = 1; steps <= 40; y = next(y), steps++) {
+			// value     = bottom block
 			// value + 1 = middle block
 			// value + 2 = top block
-			int value = i + range;
-			
+			int value = y + range;
 			if(!isSolidMap.get(value) || isLiquidMap.get(value)) {
 				continue;
 			}
@@ -532,7 +531,7 @@ public class SpawnUtil {
 				continue;
 			}
 			
-			return location.clone().add(0, value + 1, 0);
+			return location.clone().add(0, y + 1, 0);
 		}
 		
 		TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_fail_safe_teleport"));
