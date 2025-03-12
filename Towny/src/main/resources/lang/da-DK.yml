@@ -293,7 +293,6 @@ msg_err_not_percentage: '&cProcenter skal være under 100.'
 msg_err_no_economy: '&cØkonomi er ikke slået til endnu.'
 msg_err_not_block_type: '&cDette er ikke en gyldig grundtype!'
 msg_not_allowed_join: '&c%s er ikke tilladt at tilslutte sig en by.'
-msg_offline_no_join: '&c%s er offline men bruger tilladelser så kan ikke tilslutte sig en by.'
 msg_err_cannot_perform_action: '&cDenne handling kan ikke udføres i %s.'
 msg_npc_flag: '&bNPC-flag er nu %s for %s.'
 #Added in 0.30
