@@ -256,6 +256,15 @@ townyadmin_town_help_6: "Fait apparaître dans l'avant-poste d'une ville."
 townyadmin_town_help_7: "Utilisez la commande de rang d'une ville."
 townyadmin_town_help_8: "Utilisez la commande de set d'une ville."
 townyadmin_town_help_9: "Utilise une activation possible des paramètres des villes."
+townyadmin_nation_help_1: "Affiche l'écran de statut de la nation"
+townyadmin_nation_help_2: "ajouter des villes à la nation"
+townyadmin_nation_help_3: "Retirer des villes à la nation"
+townyadmin_nation_help_4: "renommer la nation"
+townyadmin_nation_help_5: "supprimer une ville"
+townyadmin_nation_help_11: "déposer de l'argent dans la banque de la nation"
+townyadmin_nation_help_12: "prendre de l'argent dans la banque de la nation"
+townyadmin_database_help_1: "forcer le chargement de la base de données"
+ta_plot_help_0: "Claim un terrain pour un joueur."
 msg_block_claim: 'Annexe cette parcelle de ville'
 msg_plot_nfs: 'Enlève une parcelle en vente'
 msg_nfs_abr: '&e''fs'' et ''nfs'' sont des abréviations autorisées pour ''forsale'' et ''notforsale''.'
