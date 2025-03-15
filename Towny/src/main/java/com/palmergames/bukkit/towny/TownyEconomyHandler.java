@@ -165,16 +165,14 @@ public class TownyEconomyHandler {
 		return false;
 	}
 
-	private static Function<Plugin, Boolean> vaultVersionFun = (vault) -> vault.getDescription().getVersion().startsWith("1");
-
 	private static boolean vaultUnlockedPresent() {
 		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
-		return vault != null && vault.isEnabled() && !vaultVersionFun.apply(vault);
+		return vault != null && vault.isEnabled() && JavaUtil.classExists("net.milkbowl.vault2.economy.Economy");
 	}
 
 	private static boolean vaultPresent() {
 		Plugin vault = plugin.getServer().getPluginManager().getPlugin("Vault");
-		return vault != null && vault.isEnabled() && vaultVersionFun.apply(vault);
+		return vault != null && vault.isEnabled() && JavaUtil.classExists("net.milkbowl.vault.economy.Economy");
 	}
 
 	/**
