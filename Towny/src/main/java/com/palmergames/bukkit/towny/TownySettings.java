@@ -2247,12 +2247,15 @@ public class TownySettings {
 
 		// outposts can have an added cost to the town's upkeep.
 		double outpostCost = getPerOutpostUpkeepCost() * town.getMaxOutpostSpawn();
-		double baseUpkeep = getTownUpkeep() + outpostCost;
+		// outposts having a cost will mess up the per-plot-upkeep feature, so add that on later.
+		double baseUpkeep = getTownUpkeep() + (isUpkeepByPlot() ? 0 : outpostCost);
 		// Amount is calculated using the above multipliers.
 		double amount = ((baseUpkeep * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
 
 		// When per-plot-upkeep is in use, there can be min/max amounts.
 		if (isUpkeepByPlot()) {
+			// Tack on the outpost cost here when isUpkeepByPlot is used.
+			amount += outpostCost;
 			if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
 				amount = Math.max(amount, TownySettings.getPlotBasedUpkeepMinimumAmount());
 			if (TownySettings.getPlotBasedUpkeepMaximumAmount() > 0.0) 
