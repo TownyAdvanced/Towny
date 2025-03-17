@@ -177,8 +177,16 @@ res_toggle_help_7: "Arazinizin duvarlarını görmeyi ayarlayın."
 res_toggle_help_8: "Yürüdüğünüz yeri talep etme özelliğini değiştirin."
 res_toggle_help_9: "Toggle the ability to see the map when you change plots."
 res_toggle_help_10: "Tüm Ayarlamaları kaldır."
+res_toggle_help_10.5: "Remove all modes and re-applies your defaults."
+res_toggle_help_11: "Spy on chat channels."
+res_toggle_help_12: "Toggle the ability to add plots to a plotgroup you have started."
+res_toggle_help_13: "Toggle the ability to see title messages when you change plots."
+res_toggle_help_14: "Toggle the ability to unclaim where you walk."
+res_toggle_help_15: "Toggle the ability to use the infotool to learn proper block/entity names."
+res_toggle_help_16: "Toggle the ability to deactivate your admin priviledges."
 res_jail_help_0: "Hapisden çıkabilmek için kefaleti öder."
 res_set_help_0: "Şehir sakinlerinin Hakkında kısmını ayarla."
+res_set_help_1: "Set your resident's default plot permissions."
 mode_1: 'Her kasaba bloğu arasındaki haritayı göster'
 mode_2: 'Yürürken iddia etmeye çalış'
 mode_3: 'Yürürken hak talebini reddetmeye çalış'
@@ -211,6 +219,7 @@ world_toggle_help_1: "Towny'yi bu dünya için aç yada kapa."
 world_toggle_help_2: "Dünyada savaşlar olup olamayacağını ayarla."
 world_toggle_help_3: "PVP yada ForcePVP açmak yada kapatmak için kullanılır."
 world_toggle_help_5: "Patlamaları aç yada kapat."
+world_toggle_help_7: "Toggle on/off the various mobs spawning settings in this world."
 townyadmin_help_1: 'Bu kasaba bloğunun hak talebini kaldır'
 townyadmin_help_2: 'Çevrenizdeki hak talebinden vazgeçmeye çalışın.'
 admin_panel_1: "Yardım için /ta set ? komutunu kullanın"
@@ -268,6 +277,7 @@ ta_reload_help_0: "Kayıtları yeniden yükle."
 ta_reload_help_1: "configi yeniden yükle."
 ta_reload_help_2: "Dil dosyalarını yeniden yükle."
 ta_reload_help_3: "Towny izinleri yeniden yükle."
+ta_eco_convert_help: "Converts your Towny accounts to the target economy implementation, useful for transferring data between economy plugins."
 plot_help_1: "Arsanın sahibini kaldır."
 plot_help_5: "Yardım için /plot group komutunu kullan."
 plot_group_help_0: "Ör: /plot group new ExpensivePlots"
@@ -1864,3 +1874,5 @@ msg_new_resident_spawn_to_town_prompt: "Katıldığın kasabada doğmak ister mi
 msg_recieved_refund_for_deleted_object: "Silinen kasabanızın veya ülkenizin banka bakiyesi ( %s ) hesabınıza aktarıldı."
 msg_err_you_already_own_this_plot: "Bu arsaya zaten sahipsin."
 msg_err_you_cannot_delete_this_nation: "Bu ulusu silemezsiniz."
+msg_townblock_transferred_from_x_to_x_district: 'Townblock transferred from %s to %s district.'
+msg_district_already_exists_did_you_want_to_transfer: 'This townblock is already a part of the %s district. Are you certain you want to transfer it to the %s district.'
