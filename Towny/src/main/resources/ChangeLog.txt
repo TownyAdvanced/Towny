@@ -10282,3 +10282,8 @@ v0.92.0.11:
   - Add SHORT_GRASS to the list of plants, fixing an issue with safe teleports.
   - Add CARPETS to the item lists, fixing an issue with safe teleports.
   - Fix safe teleport system not looking downwards and sending players up 20 blocks higher than it should.
+0.101.1.7:
+  - Don't log for cancelled pre claim events, courtesy of Warrior with PR #7793.
+    - Closes #7792.
+  - Fix the per_outpost_cost causing very large amount of upkeep on servers with town_plotbased_upkeep set to true.
+    - per_outpost_cost is now added to the upkeep after the upkeep has had all of its multipliers take effect.

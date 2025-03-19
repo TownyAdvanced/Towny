@@ -31,7 +31,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
 /**
  * Economy handler to interface with Register or Vault directly.
