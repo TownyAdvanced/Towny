@@ -1,15 +1,17 @@
 ---
-unclaimed_plot_name: 'Unowned'
-unclaimed_zone_name: 'Wilderness'
+unclaimed_plot_name: 'ที่ดินที่ยังไม่มีเจ้าของ'
+unclaimed_zone_name: 'เขตนอกเมือง'
 ############################################################
 #+------------------------------------------------------+ #
 #|help messages                                         | #
 #+------------------------------------------------------+ #
 ############################################################
-help_0: 'General Towny Help'
-help_1: 'Try the following commands to learn more about towny.'
-help_2: 'Town Chat'
-help_3: 'Nation Chat'
+help_0: 'คำสั้งช่วยเหลือ Towny ทั่วไป'
+help_1: 'ลองใช้คำสั่งดังต่อไปนี้เพื่อศึกษาเพิ่มเติมเกี่ยวกับ Towny'
+help_2: 'แชตของเมือง'
+help_3: 'แชตของประเทศ'
+help_5: 'คำสั้งช่วยเหลือเกี่ยวกับเมือง'
+help_6: 'คำสั่งช่วยเหลือเกี่ยวกับประเทศ'
 town_help_1: 'สถานะ town ของคุณ'
 town_help_2: '[mayor]'
 town_help_3: 'สถานะเมืองที่เลือก'
@@ -20,6 +22,7 @@ town_help_7: 'town ใหม่กับเป้าหมายของ Mayor'
 town_help_8: 'รายการคำสั่งของเจ้าเมือง'
 town_help_9: 'วันที่'
 town_help_10: 'รายชื่อผู้อยู่อาศัยที่กำลังออนไลน์ใน town'
+town_help_29: "ใช้คำสั้ง /t claim ? เพื่อดูรายละเอียดเพิ่มเติม"
 mayor_help_3: 'Claim พื้นที่ไม่ติดเมือง'
 mayor_help_4: 'Claim รอบตัวคุณในรัศมี X'
 mayor_help_5: 'Claim ในรัศมีสูงสุด'
