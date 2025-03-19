@@ -2553,8 +2553,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// If the town doesn't cost money to create, just make the Town.
 		if (noCharge || !TownyEconomyHandler.isActive()) {
 			BukkitTools.ifCancelledThenThrow(new PreNewTownEvent(player, name, spawnLocation, 0));
-			newTown(world, name, resident, key, spawnLocation, player);
-			TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
+			try {
+				newTown(world, name, resident, key, spawnLocation, player);
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(name)));
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				if (!(e instanceof CancelledEventException)) {
+					plugin.getLogger().log(Level.WARNING, "An exception occurred while creating a new town", e);
+				}
+			}
 			return;
 		}
 
@@ -2576,7 +2583,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-				plugin.getLogger().log(Level.WARNING, "An exception occurred while creating a new town", e);
+				if (!(e instanceof CancelledEventException)) {
+					plugin.getLogger().log(Level.WARNING, "An exception occurred while creating a new town", e);
+				}
 			}
 		})
 		.setTitle(Translatable.of("msg_confirm_purchase", prettyMoney(cost)))
@@ -2606,11 +2615,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (BukkitTools.isEventCancelled(preClaimEvent)) {
 			TownyUniverse.getInstance().removeTownBlock(townBlock);
 			TownyUniverse.getInstance().unregisterTown(town);
-			town = null;
-			townBlock = null;
 			if (TownyEconomyHandler.isActive() && cost > 0)
 				resident.getAccount().deposit(cost, "Cancelled town creation refund.");
-			throw new TownyException(preClaimEvent.getCancelMessage());
+			
+			throw new CancelledEventException(preClaimEvent);
 		}
 
 		town.setRegistered(System.currentTimeMillis());
