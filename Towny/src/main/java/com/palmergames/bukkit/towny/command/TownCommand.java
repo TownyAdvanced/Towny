@@ -2567,8 +2567,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!resident.getAccount().canPayFromHoldings(cost))
 			throw new TownyException(Translatable.of("msg_no_funds_new_town2", (resident.getName().equals(player.getName()) ? Translatable.of("msg_you") : resident.getName()), cost));
 
-		// Send a confirmation before taking their money and throwing the PreNewTownEvent.
 		final String finalName = name;
+		if (!TownySettings.isRequireConfirmToCreateTown()){
+			try {
+				// Make town.
+				newTown(world, finalName, resident, key, spawnLocation, player, cost);
+				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				plugin.getLogger().log(Level.WARNING, "An exception occurred while creating a new town", e);
+			}
+			return;
+		}
+		
+		// Send a confirmation before taking their money and throwing the PreNewTownEvent.
 		Confirmation.runOnAccept(() -> {
 			try {
 				// Make town.

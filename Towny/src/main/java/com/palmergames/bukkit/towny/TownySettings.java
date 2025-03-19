@@ -3182,6 +3182,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
 	}
 	
+	public static boolean isRequireConfirmToCreateTown(){
+		return getBoolean(ConfigNodes.GTOWN_REQUIRE_CONFIRM_TO_CREATE);
+	}
+	
 	/**
 	 * @deprecated since 0.100.0.9, use {@link #getNationProximityToCapital()} instead.
 	 * @return getNationProximityToCapital()

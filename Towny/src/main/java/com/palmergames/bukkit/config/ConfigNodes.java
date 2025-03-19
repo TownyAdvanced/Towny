@@ -664,6 +664,12 @@ public enum ConfigNodes {
 			"# The required number of residents in a town to join a nation",
 			"# If the number is 0, towns will not require a certain amount of residents to join a nation"
 	),
+	GTOWN_REQUIRE_CONFIRM_TO_CREATE(
+		"global_town_settings.require_confirm_to_create",
+		"true",
+		"",
+		"#You will need to write the /confirm command to create a town"
+	),
 	GTOWN_SETTINGS_REQUIRED_NUMBER_RESIDENTS_CREATE_NATION(
 			"global_town_settings.required_number_residents_create_nation",
 			"0",
