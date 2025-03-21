@@ -178,6 +178,7 @@ townyadmin_help_1: '이 마을블록 점유 해제'
 townyadmin_help_2: '주변에 있는 마을블록 점유 해제'
 admin_panel_2: '타우니 리로드'
 admin_panel_3: '새로운 하루단위 타이머'
+plot_help_10: "마을의 신뢰할 수 있는 플레이어 목록에서 해당 플레이어 제거합니다."
 msg_block_claim: '이 마을블록 점유'
 msg_plot_nfs: '토지 판매 철회'
 msg_nfs_abr: '&e팜 과 안팜 을 판매 와 판매취소 대신 사용할 수 있습니다.'
