@@ -39,7 +39,7 @@ public class TitleNotification {
 	}
 
 	public void setTitleNotification(String titleNotification) {
-		this.titleNotification = titleNotification;
+		this.titleNotification = Colors.translateColorCodes(titleNotification);
 	}
 
 	public String getSubtitleNotification() {
@@ -47,7 +47,7 @@ public class TitleNotification {
 	}
 
 	public void setSubtitleNotification(String subtitleNotification) {
-		this.subtitleNotification = subtitleNotification;
+		this.subtitleNotification = Colors.translateColorCodes(subtitleNotification);
 	}
 
 	private void makeTitles() {
@@ -58,8 +58,8 @@ public class TitleNotification {
 	}
 
 	private void makeTownTitles() {
-		String title = Colors.translateColorCodes(TownySettings.getNotificationTitlesTownTitle());
-		String subtitle = Colors.translateColorCodes(TownySettings.getNotificationTitlesTownSubtitle());
+		String title = TownySettings.getNotificationTitlesTownTitle();
+		String subtitle = TownySettings.getNotificationTitlesTownSubtitle();
 		
 		HashMap<String, Object> placeholders = new HashMap<>();
 		placeholders.put("{townname}", StringMgmt.remUnderscore(TownySettings.isNotificationsTownNamesVerbose() ? town.getFormattedName() : town.getName()));
@@ -84,8 +84,8 @@ public class TitleNotification {
 
 	private void makeWildernessTitles() {
 		String wildernessName = worldCoord.getTownyWorld().getFormattedUnclaimedZoneName();
-		String title = Colors.translateColorCodes(TownySettings.getNotificationTitlesWildTitle());
-		String subtitle = Colors.translateColorCodes(TownySettings.getNotificationTitlesWildSubtitle());
+		String title = TownySettings.getNotificationTitlesWildTitle();
+		String subtitle = TownySettings.getNotificationTitlesWildSubtitle();
 		if (title.contains("{wilderness}")) {
 			title = title.replace("{wilderness}", wildernessName);
 		}
