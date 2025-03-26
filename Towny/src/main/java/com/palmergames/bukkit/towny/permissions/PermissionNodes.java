@@ -159,7 +159,7 @@ public enum PermissionNodes {
 			TOWNY_COMMAND_TOWN_SET_TAG("towny.command.town.set.tag"),
 			TOWNY_COMMAND_TOWN_SET_JAIL("towny.command.town.set.jail"),
 			TOWNY_COMMAND_TOWN_SET_TITLE("towny.command.town.set.title"),
-			TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR("towny.command.town.set.title.colour"),
+			TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR("towny.command.town.set.title.colours"),
 			TOWNY_COMMAND_TOWN_SET_SURNAME("towny.command.town.set.surname"),
 			TOWNY_COMMAND_TOWN_SET_TAXPERCENTCAP("towny.command.town.set.taxpercentcap"),
 		

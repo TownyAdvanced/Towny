@@ -497,6 +497,7 @@ permissions:
             towny.command.town.set.embassytax: true
             towny.command.town.set.taxpercentcap: true
             towny.command.town.set.title: true
+            towny.command.town.set.title.colours: false
             towny.command.town.set.surname: true
 
     towny.command.town.set.title.colours:
