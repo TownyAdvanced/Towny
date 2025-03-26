@@ -10288,3 +10288,5 @@ v0.92.0.11:
   - Fix the per_outpost_cost causing very large amount of upkeep on servers with town_plotbased_upkeep set to true.
     - per_outpost_cost is now added to the upkeep after the upkeep has had all of its multipliers take effect.
   - Fix the does_adding_colour_codes_require_permission_node config setting not working properly.
+  - Fix border titles not parsing their colour codes.
+    - Closes #7797.
