@@ -10290,3 +10290,5 @@ v0.92.0.11:
   - Fix the does_adding_colour_codes_require_permission_node config setting not working properly.
   - Fix border titles not parsing their colour codes.
     - Closes #7797.
+0.101.1.8:
+  - Cause kicking or outlawing residents from your town to also remove any trusted status they have in your town and your town's plots.

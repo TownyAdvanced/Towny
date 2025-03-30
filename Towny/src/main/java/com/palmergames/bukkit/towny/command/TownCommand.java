@@ -970,6 +970,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Call cancellable event.
 		BukkitTools.ifCancelledThenThrow(new TownOutlawAddEvent(sender, target, town));
 
+		// Remove any trust they have in the town or town's plots.
+		target.removeTrustInTown(town);
+
 		// Kick outlaws from town if they are residents.
 		if (town.hasResident(target)) {
 			target.removeTown();
@@ -2961,6 +2964,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_you_cannot_kick_this_resident", resToKick));
 
 			BukkitTools.ifCancelledThenThrow(new TownKickEvent(resToKick, sender));
+
+			// Remove any trust they have in the town or town's plots.
+			resToKick.removeTrustInTown(town);
 
 			// Finally kick the resident.
 			resToKick.removeTown();

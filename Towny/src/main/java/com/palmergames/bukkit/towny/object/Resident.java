@@ -1100,4 +1100,17 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			TownyEconomyHandler.economyExecutor().execute(() -> setOwing(getTaxOwing(false)));
 		}
 	}
+
+	public void removeTrustInTown(Town town) {
+		if (town.hasTrustedResident(this)) {
+			town.removeTrustedResident(this);
+			town.save();
+		}
+		town.getTownBlocks().stream()
+			.filter(tb -> tb.hasTrustedResident(this))
+			.forEach(tb -> {
+				tb.removeTrustedResident(this);
+				tb.save();
+			});
+	}
 }
