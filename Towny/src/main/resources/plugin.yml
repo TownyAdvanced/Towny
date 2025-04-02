@@ -113,9 +113,21 @@ permissions:
         children:
             towny.town.spawn.outpost: true
 
+    towny.town.spawn.nation:
+        description: User is permitted to use /town spawn to towns in the nation.
+        default: false
+        children:
+            towny.town.spawn.nation.bypass_public: false
+
     towny.town.spawn.nation.bypass_public:
         description: User is permitted to use /town spawn when they are a member of the same nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.
         default: false
+
+    towny.town.spawn.ally:
+        description: User is permitted to use /town spawn to towns their nation is allied with.
+        default: false
+        children:
+            towny.town.spawn.ally.bypass_public: false
 
     towny.town.spawn.ally.bypass_public:
         description: User is permitted to use /town spawn when they are a member of an allied nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.

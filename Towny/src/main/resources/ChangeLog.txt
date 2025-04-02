@@ -10292,3 +10292,4 @@ v0.92.0.11:
     - Closes #7797.
 0.101.1.8:
   - Cause kicking or outlawing residents from your town to also remove any trusted status they have in your town and your town's plots.
+  - Fix an issue with spawn nodes missing a child node that should have been denied.
