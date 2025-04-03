@@ -63,6 +63,11 @@ town_list_help_0: "Göstərilən səhifəyə baxın."
 town_list_help_1: "Göstərilən səhifə ilə şəhərləri sakinlərin sayına görə siyahıya salın."
 town_list_help_2: "Göstərilən səhifə ilə açıq olan şəhərləri sadalayın."
 town_list_help_3: "Göstərilən səhifə ilə bank balansından istifadə edərək şəhərlərin siyahısı."
+town_list_help_4: "Göstərilən səhifə ilə şəhərləri əlifba sırası ilə sadalayın."
+town_list_help_5: "Göstərilən səhifə ilə şəhərləri sakinlərin sayına görə siyahıya salın."
+town_list_help_6: "Göstərilən səhifə ilə şəhərləri sakinlərin sayına görə siyahıya salın."
+town_set_help_0: "Şəhərin lövhəsini təyin edir."
+town_set_help_1: "Şəhərinizin ev blokunu dayandığınız yerə təyin edin."
 mayor_help_3: 'Şəhərə bağlı olmayan iddia sahəsi'
 mayor_help_4: 'Ətrafınızdakı radiusun x olduğunu iddia edin'
 mayor_help_5: 'Maksimum radius iddia'
