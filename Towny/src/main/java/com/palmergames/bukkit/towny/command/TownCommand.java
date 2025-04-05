@@ -260,7 +260,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> townConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
-		"list"
+		"list",
+		"reslist"
 	);
 	
 	static final List<String> townAddRemoveTabCompletes = Arrays.asList(
@@ -4035,6 +4036,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		} else if (args.length == 2){
 			town = getTownOrThrow(args[1]);
 		}
+
+		if (town == null)
+			throw new TownyException(Translatable.of("msg_specify_name"));
 		
 		TownyMessaging.sendMessage(sender, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(sender)));
 		TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
