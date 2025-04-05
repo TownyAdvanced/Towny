@@ -561,9 +561,10 @@ public enum HelpMenu {
 	TOWN_HELP_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("town", Translatable.of("town_help_1"))
+			return new MenuBuilder("town")
 				.add("[town]", Translatable.of("town_help_3"))
-				.add("list", Translatable.of("town_help_26"));
+				.add("list", Translatable.of("town_help_26"))
+				.add("reslist [town]", Translatable.of("town_help_13"));
 		}
 	},
 	
