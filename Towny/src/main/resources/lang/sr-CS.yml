@@ -13,6 +13,19 @@ help_3: 'Nacionalno Ćaskanje'
 help_4: 'stanovnička naredba Pomoć'
 help_5: 'gradska naredba Pomoć'
 help_6: 'Nacionalna naredba Pomoć'
+help_7: 'parcelska naredba Pomoć'
+help_8: 'Towny naredba Pomoć'
+help_9: 'Townyadmin naredba Pomoć'
+towny_help_0: "Opšta Towny Pomoć"
+towny_help_1: "Prikazuje mapu obližnjih blokova grada"
+towny_help_2: "Prikaži cene korišćene sa Ekonomijom"
+towny_help_3: "Prikaži rekorde"
+towny_help_4: "Prikaži vreme do novog dana"
+towny_help_5: "Prikazuje statistiku"
+towny_help_6: "Prikazuje verziju Towny-a"
+towny_top_help_0: "Navedi vrhunske stanovnike na osnovu potkomande"
+towny_top_help_1: "Navedi vrhunske zemljovlasnike na osnovu podkomande"
+towny_top_help_2: "Navedi najbogatije na osnovu podkomande"
 town_help_1: 'Status Vašeg grada'
 town_help_2: '[gradonačelnik]'
 town_help_3: 'Status odabranog grada'
@@ -23,6 +36,66 @@ town_help_7: 'Novi grad sa navedenim gradonačelnikom.'
 town_help_8: 'Navedite komande za gradonačelnike.'
 town_help_9: 'Danas je taj dan!'
 town_help_10: 'Navedite sve online stanovnike u gradu'
+town_help_13: "Vidi spisak stanovnika u ovom gradu"
+town_help_14: "Vidi spisak staleža u ovom gradu"
+town_help_15: "Vidi spisak odmetnika u ovom gradu"
+town_help_16: "Vidi spisak grupa parcela u ovom gradu"
+town_help_17: "Vidi spisak tipova parcela u ovom gradu"
+town_help_18: "Kaži neku poruku članovima grada"
+town_help_19: "Stavi svoj grad na prodaju, u stanju da bude kupljen od strane drugih igrača"
+town_help_20: "Stavi svoj grad van prometa"
+town_help_21: "Kupi dati grad, pod uslovom da je na prodaju"
+town_help_22: "Položi novac u banku svog grada"
+town_help_23: "Korišćeno da se izmene gradski staleži tvog stanovnika"
+town_help_24: "Korišćeno da se izbriše tvoj grad"
+town_help_25: "Korišćeno da se izmene odmetnici tvog grada"
+town_help_26: "Navedi sve gradove, vidi /t list ? za pomoć"
+town_help_27: "Napusti grad čiji si član"
+town_help_28: "Podigni novac iz banke svog grada"
+town_help_29: "Iskoristi /t claim ? za pomoć."
+town_help_30: "Korišćeno da se otuđi zemlja iz tvog grada"
+town_help_31: "Dodaj ili ukloni stanovnike"
+town_help_32: "Iskoristi /t set ? za pomoć."
+town_help_33: "Iskoristi /t buy ? za pomoć."
+town_help_34: "Iskoristi /t toggle ? za pomoć."
+town_help_35: "Iskoristi /t rank ? za pomoć."
+town_list_help_0: "Pregledaj odabranu stranu."
+town_list_help_1: "Navedi gradove po broju stanovnika, odabranom stranom."
+town_list_help_2: "Navedi gradove koji su otvoreni, odabranom stranom."
+town_list_help_3: "Navedi gradove koristeći stanje na računu u banci, odabranom stranom."
+town_list_help_4: "Navedi gradove po abecednom redu, odabranom stranom."
+town_list_help_5: "Navedi gradove po prisvojenoj zemlji, odabranom stranom."
+town_list_help_6: "Navedi gradove po broju online igrača, odabranom stranom."
+town_set_help_0: "Postavi tablu svog grada."
+town_set_help_1: "Postavi domni blok svoj grada gde stojiš"
+town_set_help_2: "Stavlja tačku stvaranja u tvom domnom bloku ili tački stvaranja ispostave kada stojiš u ispostavi"
+town_set_help_3: "Vidi /town set perm ? za pomoć."
+town_set_help_4: "Odredi visinu poreza svog grada."
+town_set_help_5: "Odredi specijalne sume za poreze po parceli."
+town_set_help_6: "Odredi podrazumevane cene za kupovinu parcela."
+town_set_help_7: "Odredi cenu upotrebe /t spawn."
+town_set_help_8: "Odredi ime svog grada."
+town_set_help_9: "Odredi oznaku svog grada."
+town_set_help_10: "Odredi zvanje ili prezime svog stanovnika."
+town_set_help_11: "Odredi maksimalnu svotu novca koja se može uzeti stanovniku kroz neki procentualni porez."
+town_jail_help_0: "Navedi zatvore grada."
+town_jail_help_1: "Zatvori stanovnika u primarni zatvor."
+town_jail_help_2: "Zatvori stanovnika u primarni zatvor, na određene sate."
+town_jail_help_3: "Zatvori stanovnika u primarni zatvor, na određene sate, i to u određeni zatvor."
+town_jail_help_4: "Zatvori stanovnika u primarni zatvor, na određene sate, i to u određeni zatvor i ćeliju."
+town_jail_help_5: "Zatvori stanovnika u primarni zatvor, na određene sate, uz datu visinu kaucije."
+town_jail_help_6: "Zatvori stanovnika u primarni zatvor, na određene sate, uz datu visinu kaucije, i to u određeni zatvor."
+town_jail_help_7: "Zatvori stanovnika u primarni zatvor, na određene sate, uz datu visinu kaucije, i to u određeni zatvor i ćeliju."
+town_jail_help_8: "Oslobađa stanovnika robije."
+town_purge_help: "Čisti stanovnike koji se nisu ulogovali u datoj količini dana."
+town_trust_help_0: "Dodaje stanovnika kao onog od poverenja u gradu."
+town_trust_help_1: "Uklanja stanovnika kao onog od poverenja u gradu."
+town_trust_help_2: "Navodi stanovnike od poverenja grada."
+town_towntrust_help_0: "Dodaje grad kao grad od poverenja u gradu."
+town_towntrust_help_1: "Uklanja grad iz liste gradova od poverenja u okviru ovog grada."
+town_towntrust_help_2: "Izlistava gradove od poverenja određenog grada."
+town_buy_help: "Kupuje bonus townblock-ove kako bi se povećao claim limit grada."
+town_cede_help: "Nudi parcelu na kojoj stojiš datom gradu da ga preuzme."
 mayor_help_3: 'Claim-ujte oblast koja nije vezana za grad'
 mayor_help_4: 'Claim-ujte oko Vas do poluprečnika X'
 mayor_help_5: 'Claim-ujte do maksimalnog poluprečnika'
@@ -38,13 +111,65 @@ nation_help_6: 'Osnujte novu naciju'
 nation_help_7: 'Lista komandi vodje nacije'
 nation_help_8: 'Osnujte novu naciju'
 nation_help_9: 'Navedite sve online stanovnike nacije'
+nation_help_11: "Navodi gradove u naciji."
+nation_help_12: "Navodi nacije saveznike ove nacije."
+nation_help_13: "Navodi nacije neprijatelje ove nacije."
+nation_help_14: "Koristi se za pridruživanje otvorenim nacijama."
+nation_help_15: "Polaže novac u banku ove nacije."
+nation_help_16: "Koristi se da obrišeš svoju naciju."
+nation_help_17: "Koristi se povišavenje ili snižavanje staleža stanovnicima."
+nation_help_18: "Vidi /n rank ? za pomoć."
+nation_list_help_0: "Pregledaj odabranu stranu."
+nation_list_help_1: "Navedi nacije po broju stanovnika, odabranom stranom."
+nation_list_help_2: "Navedi nacije po broju gradova, odabranom stranom."
+nation_list_help_3: "Navedi nacije koje su otvorene, odabranom stranom."
+nation_list_help_4: "Navedi nacije koristeći stanje na računu u banci, odabranom stranom."
+nation_list_help_5: "Navedi nacije po abecednom redu, odabranom stranom."
+nation_list_help_6: "Navedi nacije po prisvojenoj zemlji, odabranom stranom."
+nation_list_help_7: "Navedi nacije po broju online igrača, odabranom stranom."
+nation_set_help_0: "Promeni vođu ove nacije."
+nation_set_help_1: "Promeni glavni grad ove nacije."
+nation_set_help_2: "Odredi visinu poreza koju će gradovi plaćati."
+nation_set_help_3: "Odredi visinu poreza koju će osvojeni gradovi plaćati."
+nation_set_help_4: "Odredi ime ove nacije."
+nation_set_help_5: "Odredi zvanje ili prezime jednog od svojih stanovnika."
+nation_set_help_6: "Postavi oznaku nacije."
+nation_set_help_7: "Postavi poruku u nacionalnom odboru."
+nation_set_help_8: "Postavi spawn point nacije."
+nation_set_help_9: "Postavi cenu korišćenja /n spawn komande."
+nation_set_help_10: "Podesi mapcolor koji se koristi u Mapping pluginima."
+nation_toggle_help_0: "Uključuje/isključuje miran status nacije."
+nation_toggle_help_1: "Uključuje/isključuje javni status, dozvoljavajući stanovnicima da koriste /n spawn."
+nation_toggle_help_2: "Uključuje/isključuje otvoreni status status, dozvoljavajući gradovima da se pridruže bez poziva."
+nation_toggle_help_3: "Uključuje/isključuje procenat poreza, primoravajući gradove da plaćaju procenat umesto fiksne stope."
+nation_sanction_help_1: "Dodaje grad na listu sankcionisanih gradova."
+nation_sanction_help_2: "Uklanja grad iz liste sankcionisanih gradova."
+nation_sanction_help_3: "Izlistava sankcionisane gradove tvoje nacije."
+nation_sanction_help_4: "Izlistava sankcionisane gradove date nacije."
 king_help_1: 'Pomoc vodji nacije'
 king_help_2: 'Postavite svoj savez.'
 king_help_3: 'Postavite svoje protivnike.'
+king_help_4: "Podigni novac iz tvoje nacionalne banke."
+king_help_5: "Dodaje ili uklanja gradove iz tvoje nacije."
+king_help_6: "Iskoristi /n set ? za pomoć."
+king_help_7: "Iskoristi /n toggle ? za pomoć."
+king_help_8: "Koristi se da pripoji drugu naciju tvojoj naciji."
+king_help_9: "Koristi se za slanje poruke svima u tvojoj naciji."
 res_1: 'Vaš status'
 res_2: '[stanovnik]'
 res_3: 'Status odabranog igrača'
 res_4: 'Izlistajte sve aktivne članove'
+res_9: "Koliko poreza ćeš platiti dnevno."
+res_10: "Vidi /res jail ? za pomoć."
+res_11: "Vidi /res toggle ? za pomoć."
+res_12: "Vidi /res set ? za pomoć."
+res_toggle_help_0: "Postavi PvP status svog plota."
+res_toggle_help_1: "Uključi/isključi vatru na svom plotu."
+res_toggle_help_2: "Uključi/isključi mobove na svom plotu."
+res_toggle_help_3: "Uključi/isključi eskplozije na svom plotu."
+res_toggle_help_10: "Ukloni sve režime."
+res_toggle_help_10.5: "Uklanja sve režime i ponovno ti postavlja podrazumevane vrednosti."
+res_toggle_help_11: "Špijuniraj čet kanale."
 mode_1: 'Prikaz mape između svakog gradskog bloka'
 mode_2: 'Pokušajte da claim-ujete hodajući'
 mode_3: 'Pokušajte da unclaim-ujete hodajući'
@@ -69,10 +194,75 @@ world_help_2: '[svet]'
 world_help_3: 'Status odabranog sveta'
 world_help_4: 'Nabrojte sve svetove'
 world_help_5: 'Ponovno generišite ovaj chunk'
+world_toggle_help_2: "Uključi/isključi mogućnost za ratovanje u ovom svetu."
+world_toggle_help_3: "Uključi/isključi prinudni PvP u ovom svetu."
+world_toggle_help_4: "Uključi/isključi friendly fire u ovom svetu."
+world_toggle_help_5: "Uključi/isključi eksplozije ili prinudne eksplozije u ovom svetu."
+world_toggle_help_6: "Uključi/isključi požare u ovom svetu."
+world_toggle_help_7: "Uključi/isključi razna podešavanja za spawn-ovanje mobova u ovom svetu."
+world_toggle_help_8: "Uključi/isključi revert-on-unclaim u ovom svetu."
+world_toggle_help_9: "Uključi/isključi explosions-are-reverted u ovom svetu."
 townyadmin_help_1: 'Unclaim-ujte ovaj gradski blok'
 townyadmin_help_2: 'Pokušajte unclaim-ovati oko sebe.'
+admin_panel_1: "Vidi /ta set ? za pomoć"
 admin_panel_2: 'ponovno pokrenite Towny'
 admin_panel_3: 'Pokrenite "new day" kod'
+admin_panel_4: "Unclaim-uj prostor oko sebe"
+admin_panel_5: "Vidi /ta plot ? za pomoć"
+admin_panel_6: "Daj pozitivnu ili negativnu količinu townblokova igraču ili gradu"
+admin_panel_7: "Vidi /ta toggle ? za pomoć"
+admin_panel_8: "Komande za kontrolisanje ovih objekata"
+admin_panel_9: "Teleportuj se na odabrani plot"
+admin_panel_10: "Proveri je l' igrač ima permisiju"
+admin_panel_11: "Resetuj config"
+admin_panel_12: "Napravi bekap svojih Towny podataka"
+admin_panel_14: "Prisilno sačuvaj ili učitaj svoju bazu podataka"
+admin_panel_15: "Pokreni \"new hour\" kôd"
+admin_panel_16: "Izbaci stare stanovnike"
+townyadmin_town_help_0: "Kreiraj grad s datim imenom i gradonačelnikom."
+townyadmin_town_help_1: "Prikaži ekran sa statusima grada."
+townyadmin_town_help_2: "Dodaj ili ukloni stanovnike iz grada."
+townyadmin_town_help_3: "Preimenuj grad."
+townyadmin_town_help_4: "Obriši grad."
+townyadmin_town_help_5: "Stvori se u gradu."
+townyadmin_town_help_6: "Stvori se u ispostavi grada."
+townyadmin_town_help_7: "Koristi rank komandu grada."
+townyadmin_town_help_8: "Koristi set komandu grada."
+townyadmin_town_help_9: "Koristi toggle komandu grada."
+townyadmin_town_help_10: "Izmeni metadata nekog grada."
+townyadmin_town_help_11: "Spoji drugi grad sa prvim."
+townyadmin_town_help_12: "Spoji drugi grad sa prvim, ignorišući sva pravila."
+townyadmin_town_help_13: "Stavi novac u gradsku banku."
+townyadmin_town_help_14: "Uzmi novac iz gradske banke."
+townyadmin_nation_help_4: "Preimenuj naciju."
+townyadmin_nation_help_5: "Obriši grad."
+ta_set_help_4: "Postavi zvanje stanovniku."
+ta_set_help_5: "Postavi prezime stanovniku."
+ta_set_help_7: "Postavi ime osnivača grada."
+ta_townmeta_help_1: "Vidi meta podatke sačuvane za grad koji odabereš."
+ta_reload_help_2: "Ponovno učitava fajlove za jezik."
+ta_reload_help_3: "Ponovno učitava Towny permisije."
+ta_reload_help_4: "Ponovno učitava sve komponente Towny-ja."
+plot_district_help_2: "Potpuno briše distrikt."
+plot_district_help_3: "Preimenuje distrikt u kome stojiš."
+plot_group_help_0: "Npr: /plot group new SkupiPlotovi"
+plot_group_help_1: "Uklanja plot iz odabrane grupe."
+plot_group_help_2: "Potpuno briše grupu plotova."
+plot_group_help_3: "Preimenuje grupu u kojoj stojiš."
+plot_group_help_4: "Npr: /plot group set perm resident on."
+plot_group_help_5: "Npr: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Npr: /plot group forsale 50"
+plot_group_help_7: "Npr: /plot group notforsale"
+plot_group_help_8: "Dodaje ili uklanja poverenje u stanovnika."
+plot_group_help_9: "Dodaje stanovnika kao onog od poverenja u grupi plotova."
+plot_group_help_10: "Uklanja stanovnika kao onog od poverenja u grupi plotova."
+plot_group_help_11: "Otvara GUI sa permisijama za plot."
+plot_group_help_12: "Dodaje igrača u GUI sa permisijama za plot."
+plot_group_help_13: "Uklanja igrača iz GUI-a sa permisijama za plot."
+plot_toggle_help_0: "Uključuje/isključuje PvP u plotu."
+plot_toggle_help_1: "Uključuje/isključuje eksplozije u plotu."
+plot_toggle_help_2: "Uključuje/isključuje vatru u plotu."
+plot_toggle_help_3: "Uključuje/isključuje mobove u plotu."
 msg_block_claim: 'Claim-ujte ovaj gradski blok'
 msg_plot_nfs: 'Izbacite ovaj plot iz prodaje'
 msg_nfs_abr: '&e"fs" i "nfs" su prihvaćene skraćenice za "forsale" - "na prodaju" i "notforsale" - "nije na prodaju".'
@@ -86,9 +276,12 @@ msg_buy: '&bKupili ste %d %s za %s.'
 msg_buy_resident_plot: '&b%s je kupio/la plot igrača %s za %s!'
 msg_couldnt_pay_taxes: '&b%s je izbačen/a iz %s zbog nemogućnosti da plati poreze.'
 msg_couldnt_pay_plot_taxes: '&b%s je izgubio/la vlasništvo nad plotom zbog nemogućnosti da plati poreze.'
+msg_you_paid_town_tax: '&bPlatio/la si gradsku taksu u iznosu od %s.'
+msg_you_paid_plottax_to_town: '&bPlatio/la si plot takse u iznosu od %s gradu %s.'
 msg_bankrupt_town: ' nije mogao priuštiti da ostane grad.'
 msg_bankrupt_nation: ' nije mogla priuštiti da ostane nacija.'
 msg_nation_not_peaceful: '&bNacija nije mogla da priušti svoje stanje mira.'
+msg_nation_cant_peaceful: '&bNacija nije mogla da priušti da postane mirna nacija. Moraš da si u mogućnosti da dnevno plaćaš %.'
 msg_peaceful_disabled: '&bNacijski mir je onemogućen na globalnom nivou.'
 msg_you_paid: '&bPlatili ste %s za postavljanje statusa mira.'
 msg_nation_set_peace: '&bStanje nacije uspešno promenjeno.'
@@ -150,11 +343,13 @@ msg_admin_unclaim_area: '&cOblast %s prisilno unclaim-ovana'
 msg_abandoned_area_1: '&bVaš grad je napustio oblast'
 msg_no_money_purchase_plot: '&cNemate dovoljno novca da kupite ovaj plot.'
 msg_town_no_money_purchase_plot: '&cGrad nema dovoljno novca da otkupi ovaj plot.'
+msg_no_funds_new_town: '&c%s ne može da priušti da podigne novi grad ovde.'
 msg_no_funds_claim: '&cGrad ne može priuštiti da claim-uje %s gradskih blokova što košta %s. Dodajte još novca u gradsku banku.'
 msg_no_funds_to_buy: '&cGrad ne može priuštiti da kupi %s %s što košta %s. Dodajte još novca u gradsku banku.'
 msg_annexed_area: '&2Pripojena oblast %s'
 msg_max_plot_own: '&cNe možete posedovati više od %s plotova.'
 msg_max_outposts_own: '&cNe možete posedovati više od %s periferija.'
+msg_no_funds_new_nation: '&cGrad ne može da priušti da osnuje novu naciju.'
 msg_already_claimed: '&cOva oblast je već claim-ovana od strane: %s'
 msg_already_claimed_1: '&cOva oblast (%s) već nekom pripada.'
 msg_already_claimed_2: '&cOva oblast je već claim-ovana.'
@@ -172,6 +367,7 @@ msg_peasant_right: '&bSeljanin nema pravo da natera svoje vođe na presto.'
 msg_cost_spawn: '&bNaplaćeno Vam je %s za teleportaciju do spawn-a grada.'
 msg_cost_spawn_refund: '&bDobili ste povraćaj novca za korišćenje spawn-a grada.'
 msg_town_spawn_warmup: '&bČekanje na teleportaciju...'
+msg_town_rename_disabled: '&bPreimenovanje gradova isključeno'
 msg_town_set_name: '&b%s je preimenovao/la grad u %s.'
 msg_nation_set_name: '&b%s je preimenovao/la naciju u %s.'
 msg_changed_pvp: '&c%s PvP je %s.'
@@ -188,6 +384,7 @@ msg_world_pvp: '&cOvaj svet je isključivo PvP.'
 msg_world_mobs: '&cNa ovom svetu je stvaranje mobova prisilno uključeno.'
 msg_world_expl: '&cNa ovom svetu su Eksplozije prisilno uključene.'
 msg_world_fire: '&cNa ovom svetu je širenje Vatre prisilno uključeno.'
+msg_town_mobs: '&cU ovom gradu je stvaranje čudovišta prisilno uključeno.'
 msg_plot_pvp: '&cPvP se ne može uključiti/isključiti u Plotu Arene.'
 msg_reloaded: '&2Towny podešavanja ponovo učitana.'
 msg_undo_complete: '&2Poništavanje gotovo.'
@@ -216,7 +413,9 @@ msg_set_wild_regen: '&bUspešno promenjena %s-ova divlja regeneracija na ''%s'''
 msg_set_use_towny_on: '&bOvaj svet sada koristi towny pravila.'
 msg_set_use_towny_off: '&cOvaj svet je uskraćen svih towny interakcija.'
 msg_error_must_be_int: '&bKoličina mora biti ceo broj.'
+msg_error_input_must_be_int: '&c%s mora biti intedžer'
 msg_error_must_be_num: '&bKoličina mora biti broj.'
+msg_error_input_must_be_num: '&c%s mora biti broj'
 msg_must_specify_amnt: '&bMorate navesti količinu. Pr: %s 54'
 msg_town_set_tax: '&b%s je postavio/la dnevni stanovnički porez na %s'
 msg_town_set_plottax: '&b%s je postavio/la dnevni porez plotova na %s'
@@ -270,6 +469,8 @@ msg_err_not_in_town_claim: '&cMorate pripadati nekom gradu kako biste claim-oval
 msg_err_must_belong_town: '&cMorate pripadati nekom gradu.'
 msg_err_dont_belong_town: '&cNe pripadate nijednom gradu.'
 msg_err_dont_belong_nation: '&bNe pripadate nijednoj naciji.'
+msg_err_already_belong_nation: '&bVeć pripadaš naciji.'
+msg_err_town_already_belong_nation: '&b%s već pripada naciji: %s.'
 msg_err_not_same_nation: '&b%s ne pripada Vašoj naciji.'
 msg_err_rect_auto: '&cSamo gradovi i stanovnici mogu da koriste ''auto''.'
 msg_err_invalid_radius: '&cNevažeći poluprečnik. Koristite celi broj ili ''auto''.'
@@ -573,6 +774,8 @@ status_res_taxexempt: 'Staff se izuzima od plaćanja gradskih poreza.'
 status_res_tax: 'Gradski Porez:'
 status_res_plottax: 'Ukupni Porezi Plota:'
 status_res_totaltax: 'Ukupni Porezi za platiti:'
+status_townblock_plottax: 'Porez na plot: '
+status_townblock_untaxed: 'Neoporezovani'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Ne možete koristiti banku nacije van prestonice nacije.'
 msg_err_unable_to_use_bank_outside_your_town: 'Ne možete koristiti banku grada van Vašeg grada.'
@@ -1332,4 +1535,44 @@ did_you_want_to_toggle_unlimited_claims: 'Nemate dovoljno gradskih blokova da cl
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ne možete napustiti naciju, Vaš grad je osvojen.'
 msg_err_console_only: 'Ovu komandu može koristiti samo konzola.'
 msg_err_player_only: 'Ovu komandu može koristiti samo igrač.'
+#Seen in /towny map hud:
+msg_perm_hud_plot_name: 'Plot: '
+#Seen in /towny map hud:
+msg_perm_hud_plotgroup_name: 'Grupa plotova: '
+#Seen in /towny map hud:
+msg_map_hud_district: 'Distrikt: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'Na prodaju: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'Ne'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Da'
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'Gradu %s postavljen nivo grada na %s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'Gradu %s vraćen nivo grada na prirodni. Trenutni nivo grada je %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'Grad %s ne može kupovati townblokove zbog pravila u configu.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s je poslat u %s u ćeliju broj%s na %s sati od strane %s.'
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "Treba ti %s da bi platio/la."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Količina mora biti veća od nule."
+#The format used for the /t say and /n say commands.
+town_say_format: "%s kaže: %s"
+msg_unnamed: "Bezimeni"
+msg_err_nation_cannot_sanction_own_town: "Ne možeš da sankcionišeš grad koji je deo tvoje nacije."
+msg_err_nation_town_isnt_sanctioned: "Tvoja nacija ne sankcioniše taj grad."
+msg_err_nation_town_already_sanctioned: "Tvoja nacija već sankcioniše taj grad."
+msg_err_nation_town_sanctioned: "Tvoja nacija sada sankcioniše %s, neće više moći da se pridruže tvojoj naciji."
+msg_err_nation_town_unsanctioned: "Tvoja nacija više ne sankcioniše %s."
+msg_err_nation_has_no_sanctioned_towns: "Nacija nema sankcionisane gradove."
+title_nation_sanctioned_towns: 'Sankcionisani gradovi'
+teleport_warmup_title_dont_move: "&6Ne pomeraj se!"
+msg_err_town_no_longer_owns_this_plot: "%s više ne poseduje ovaj plot."
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s ne može da ustupi svoj homeblock."
+msg_town_cede_plot_confirmation_give_plot: "Da li si siguran/na da želiš da ustupiš ovaj plot gradu %s?"
+msg_town_cede_plot_confirmation_accept_plot: "%s želi da ustupi townblock u %s tvom gradu, da li prihvataš?"
+msg_town_cede_plot_denied: "%s odbija tvoju ponudu."
+msg_town_cede_plot_unable_to_accept: "%s nije uspeo da ti prihvati ponudu."
