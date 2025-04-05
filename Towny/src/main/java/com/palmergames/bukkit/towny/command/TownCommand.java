@@ -260,7 +260,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static final List<String> townConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
-		"list"
+		"list",
+		"reslist"
 	);
 	
 	static final List<String> townAddRemoveTabCompletes = Arrays.asList(
