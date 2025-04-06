@@ -299,13 +299,50 @@ ta_resident_help_0: "Preimenuj stanovnika."
 ta_resident_help_1: "Dodaj ili ukloni prijatelja."
 ta_resident_help_2: "Navedi ili očisti spisak prijatelja."
 ta_resident_help_3: "Obriši jednog stanovnika iz baze podataka."
+ta_resident_help_4: "Uklanja liniju o igraču."
+ta_toggle_help_0: "Uključi/Isključi mogućnost korišćenja Divljine u svim svetovima."
+ta_toggle_help_1: "Uključi/Isključi regeneracione atribute u svim svetovima."
+ta_toggle_help_2: "Uključi/Isključi razvijački mod, prikazuje dodatne zapisničke poruke igraču određenom u konfiguraciji."
+ta_toggle_help_3: "Uključi/isključi dibag modus, koji prikazuje dodatne poruke u zapisniku."
+ta_toggle_help_4: "Uključi/isključi mogućnost gradova i nacija da uklanjaju novac iz svojih banaka."
+ta_toggle_help_5: "Učini igrača NPC-jem ili ne-NPC-jem."
+ta_set_help_0: "Odredi datog igrača za gradonačelnika."
+ta_set_help_1: "Odredi gradu novog NPC gradonačelnika, oni ne plaćaju održanje."
+ta_set_help_2: "Odredi glavni grad jedne nacije."
+ta_set_help_3: "Odredi veličinu nacionalne zone jedne nacije."
 ta_set_help_4: "Postavi zvanje stanovniku."
 ta_set_help_5: "Postavi prezime stanovniku."
+ta_set_help_6: "Odredi jednu parcelu drugom gradu."
 ta_set_help_7: "Postavi ime osnivača grada."
+ta_set_help_8: "Upotrebi veličinu 0 da ukloniš nacionalne zone koje se preklapaju."
+ta_purge_help_0: "Čisti stanovnike koji se nisu prijavili duže od datih dana, opciono odredi bezgradni da ukloniš samo bezgradne igrače, ili odredi ime nekog grada da očistiš stanovnike samo jednog grada."
 ta_townmeta_help_1: "Vidi meta podatke sačuvane za grad koji odabereš."
+ta_townmeta_help_2: "Odredi ključ i vrednost meta podataka grada."
+ta_townmeta_help_3: "Dodaj ili ukloni meta podatke po ključu iz ovog grada."
+ta_residentmeta_help_1: "Vidi meta podatke sačuvane za stanovnika kog odabereš."
+ta_residentmeta_help_2: "Odredi ključ i vrednost meta podataka stanovnika."
+ta_residentmeta_help_3: "Dodaj ili ukloni meta podatke po ključu iz ovog stanovnika."
+ta_nationmeta_help_1: "Vidi meta podatke sačuvane za naciju koju odabereš."
+ta_nationmeta_help_2: "Odredi ključ i vrednost meta podataka nacije."
+ta_nationmeta_help_3: "Dodaj ili ukloni meta podatke po ključu iz ove nacije."
+ta_reload_help_0: "Ponovo učitava bazu podataka."
+ta_reload_help_1: "Ponovo učitava konfiguraciju."
 ta_reload_help_2: "Ponovno učitava fajlove za jezik."
 ta_reload_help_3: "Ponovno učitava Towny permisije."
 ta_reload_help_4: "Ponovno učitava sve komponente Towny-ja."
+ta_eco_resetbanks_help: "Resetuje gradske i nacionalne banke na datu sumu ili 0."
+ta_eco_convert_modern_help: "Prebacuje tvoje Towny naloge u naš savremen varijetet, u stanju da koristi Vault-ov OflajnIgrač."
+ta_eco_convert_help: "Prebacuje tvoje Towny naloge na ciljnu implementaciju ekonomije, korisnu za transferovanje podataka između priključaka za ekonomiju."
+ta_eco_info_help: "Daje informacije o ekonomskim nalozima na ovom serveru."
+ta_depositall_help_0: "Položi datu sumu u sve gradske i nacionalne banke."
+ta_info_help_0: "Pregledaj ekonomske informacije za datu naciju."
+ta_info_help_1: "Pregledaj ekonomske informacije za datog stanovnika."
+ta_info_help_2: "Pregledaj ekonomske informacije za ovaj nalog na towny serveru."
+ta_info_help_3: "Pregledaj ekonomske informacije za dati grad."
+plot_help_0: "Uključuje HUD za informacije o parceli."
+plot_help_1: "Uklanja vlasnika ovo parcele."
+plot_help_2: "Uklanja spisak blokova sa ove parcele."
+plot_help_3: "Vidi /plot set ? za pomoć."
 plot_help_4: "Vidi /plot toggle ? za pomoć."
 plot_help_5: "Vidi /plot group ? za pomoć."
 plot_help_6: "Uklanja preklopljene dozvole za nekog igrača."
@@ -1648,6 +1685,12 @@ did_you_want_to_toggle_unlimited_claims: 'Nemate dovoljno gradskih blokova da cl
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Ne možete napustiti naciju, Vaš grad je osvojen.'
 msg_err_console_only: 'Ovu komandu može koristiti samo konzola.'
 msg_err_player_only: 'Ovu komandu može koristiti samo igrač.'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'
+#Usage:
+msg_usage: 'Upotreba: %s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: 'Nema strana za prikazati!'
 #Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Plot: '
 #Seen in /towny map hud:
