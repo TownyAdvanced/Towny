@@ -373,7 +373,7 @@ public class TownyPlayerListener implements Listener {
 
 				/*
 				 * Test stripping logs, scraping copper blocks, dye-able signs,
-				 * glass bottles, flint&steel on TNT and shears on beehomes,
+				 * flint&steel on TNT and shears on pumpkins,
 				 * catches hoes taking dirt from Rooted Dirt blocks,
 				 * prevents players from using brushes on brush-able blocks (suspicious sand, suspicious gravel)
 				 * 
@@ -382,7 +382,7 @@ public class TownyPlayerListener implements Listener {
 				if ((ItemLists.AXES.contains(item) && (ItemLists.UNSTRIPPED_WOOD.contains(clickedMat) || ItemLists.WAXED_BLOCKS.contains(clickedMat) || ItemLists.WEATHERABLE_BLOCKS.contains(clickedMat))) ||
 					(ItemLists.DYES.contains(item) && ItemLists.SIGNS.contains(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
-					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE || clickedMat == Material.PUMPKIN)) ||
+					(item == Material.SHEARS && clickedMat == Material.PUMPKIN) ||
 					clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) ||
 					ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH) { 
 
@@ -426,9 +426,12 @@ public class TownyPlayerListener implements Listener {
 				}
 
 				/*
-				 * Prevents players using wax on signs
+				 * Prevents players using wax on signs, harvesting honey/honeycomb
 				 */
-				if (item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock)) {
+				if (
+					(item == Material.HONEYCOMB && ItemLists.SIGNS.contains(clickedMat) && !isSignWaxed(clickedBlock)) ||
+					((item == Material.GLASS_BOTTLE || item == Material.SHEARS) && (clickedMat == Material.BEE_NEST || clickedMat == Material.BEEHIVE))
+					) {
 					if (!TownyActionEventExecutor.canItemuse(player, clickedBlock.getLocation(), clickedMat)) {
 						event.setCancelled(true);
 						return;
