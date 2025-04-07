@@ -35,26 +35,26 @@ town_help_6: 'Novi grad sa Vama kao gradonačelnikom.'
 town_help_7: 'Novi grad sa ciljnim gradonačelnikom.'
 town_help_8: 'Navedite komande za gradonačelnike.'
 town_help_9: 'Danas je taj dan!'
-town_help_10: 'Navedite sve online stanovnike u gradu'
+town_help_10: 'Navedi sve online stanovnike u gradu'
 town_help_13: "Vidi spisak stanovnika u ovom gradu."
 town_help_14: "Vidi spisak staleža u ovom gradu."
 town_help_15: "Vidi spisak odmetnika u ovom gradu."
 town_help_16: "Vidi spisak grupa parcela u ovom gradu."
-town_help_17: "Vidi spisak tipova parcela u ovom gradu"
-town_help_18: "Kaži neku poruku članovima grada"
-town_help_19: "Stavi svoj grad na prodaju, u stanju da bude kupljen od strane drugih igrača"
-town_help_20: "Stavi svoj grad van prometa"
-town_help_21: "Kupi dati grad, pod uslovom da je na prodaju"
-town_help_22: "Položi novac u banku svog grada"
-town_help_23: "Korišćeno da se izmene gradski staleži tvog stanovnika"
-town_help_24: "Korišćeno da se izbriše tvoj grad"
-town_help_25: "Korišćeno da se izmene odmetnici tvog grada"
-town_help_26: "Navedi sve gradove, vidi /t list ? za pomoć"
+town_help_17: "Vidi spisak tipova parcela u ovom gradu."
+town_help_18: "Poruči nešto članovima grada."
+town_help_19: "Stavi svoj grad na prodaju, u stanju da bude kupljen od strane drugih igrača."
+town_help_20: "Stavi svoj grad van prometa."
+town_help_21: "Kupi dati grad, pod uslovom da je na prodaju."
+town_help_22: "Položi novac u banku svog grada."
+town_help_23: "Korišćeno da se izmene gradski staleži tvog stanovnika."
+town_help_24: "Korišćeno da se izbriše tvoj grad."
+town_help_25: "Korišćeno da se izmene odmetnici tvog grada."
+town_help_26: "Navedi sve gradove, vidi /t list ? za pomoć."
 town_help_27: "Napusti grad čiji si član"
-town_help_28: "Podigni novac iz banke svog grada"
+town_help_28: "Podigni novac iz banke svog grada."
 town_help_29: "Iskoristi /t claim ? za pomoć."
-town_help_30: "Korišćeno da se otuđi zemlja iz tvog grada"
-town_help_31: "Dodaj ili ukloni stanovnike"
+town_help_30: "Korišćeno da se otuđi zemlja od tvog grada."
+town_help_31: "Dodaj ili ukloni stanovnike."
 town_help_32: "Iskoristi /t set ? za pomoć."
 town_help_33: "Iskoristi /t buy ? za pomoć."
 town_help_34: "Iskoristi /t toggle ? za pomoć."
@@ -66,9 +66,9 @@ town_list_help_3: "Navedi gradove koristeći stanje na računu u banci, odabrano
 town_list_help_4: "Navedi gradove po abecednom redu, odabranom stranom."
 town_list_help_5: "Navedi gradove po prisvojenoj zemlji, odabranom stranom."
 town_list_help_6: "Navedi gradove po broju online igrača, odabranom stranom."
-town_set_help_0: "Postavi tablu svog grada."
-town_set_help_1: "Postavi domni blok svoj grada gde stojiš"
-town_set_help_2: "Stavlja tačku stvaranja u tvom domnom bloku ili tački stvaranja ispostave kada stojiš u ispostavi"
+town_set_help_0: "Postavi odbor svog grada."
+town_set_help_1: "Odredi domni blok svoj grada gde stojiš."
+town_set_help_2: "Određuje tačku stvaranja u tvom domnom bloku ili tački stvaranja ispostave kada stojiš u ispostavi."
 town_set_help_3: "Vidi /town set perm ? za pomoć."
 town_set_help_4: "Odredi visinu poreza svog grada."
 town_set_help_5: "Odredi specijalne sume za poreze po parceli."
@@ -391,7 +391,7 @@ plot_jailcell_help_0: "Dodaje ZatvorskuĆeliju gde stojiš."
 plot_jailcell_help_1: "Uklanja ZatvorskuĆeliju gde stojiš."
 msg_block_claim: 'Claim-ujte ovaj gradski blok'
 msg_block_claim_radius: 'Prisvoji neki poluprečnik parcela koji te okružuju.'
-msg_plot_nfs: 'Izbacite ovaj plot iz prodaje'
+msg_plot_nfs: 'Povuci parcelu sa prodaje'
 msg_plot_nfs_radius: 'Sruši neki poluprečnik parcela na prodaju.'
 msg_nfs_abr: '&e"fs" i "nfs" su prihvaćene skraćenice za "forsale" - "na prodaju" i "notforsale" - "nije na prodaju".'
 msg_plot_fs: 'Stavite ovu oblast na aukciju.'
@@ -431,12 +431,12 @@ msg_friend_remove: '&b%s Vas je uklonio/la sa spiska prijatelja.'
 msg_left_town: '&b%s je napustio/la grad'
 msg_you_left: '&bNapustili ste %s.'
 msg_not_mayor: '&bNiste gradonačelnik.'
-msg_not_king: '&bNiste vodja nacije.'
+msg_not_king: '&bNisi vodja nacije.'
 msg_not_mayor_ass: '&bNiste gradonačelnik niti asistent.'
-msg_not_king_ass: '&bNiste vodja nacije ili asistent.'
-msg_own_nation_disallow: '&bNe možete to uraditi sopstvenoj naciji.'
-msg_no_perms_claim: '&bNemate dozvolu da širite svoj grad.'
-msg_outpost_disable: '&bKampovi nedostupni.'
+msg_not_king_ass: '&bNisivodja nacije niti saradnik.'
+msg_own_nation_disallow: '&bNe možeš to uraditi sopstvenoj naciji.'
+msg_no_perms_claim: '&bNemaš dozvolu da širiš svoj grad.'
+msg_outpost_disable: '&bIspostave nisu dostupne.'
 msg_kicked_by: '&bIzbačeni ste iz grada od strane %s.'
 msg_kicked: '&b%s je izbacio/la %s iz grada.'
 msg_nation_kicked_by: '&bVaš grad je izbačen iz nacije od strane %s.'
@@ -461,8 +461,8 @@ msg_removed_ally: '&b%s je obustavio/la udruženje sa Vašom nacijom.'
 msg_added_enemy: '&b%s je razvio/la mržnju prema Vašoj naciji.'
 msg_removed_enemy: '&b%s je postao/la miroljubiv/a prema Vašoj naciji.'
 msg_unable_ally_enemy: '&cNije moguće sklopiti savez sa %s jer smo im protivnici.'
-msg_deny_ally: '&b%s je odbio/la Vaš zahtev za savezništvo.'
-msg_accept_ally: '&bNacija %s je prihvatila Vaš zahtev za savetništvo.'
+msg_deny_ally: '&b%s je odbio/la tvoj zahtev za savezništvo.'
+msg_accept_ally: '&bNacija %s je prihvatila tvoj zahtev za savetništvo.'
 msg_ally_req_sent: '&bZahtev za savezništvo je poslat naciji %s.'
 msg_ally_request: '&bNacija %s bi da sklopi savez.'
 msg_unable_ally_offline: "&cNije moguće zatražiti savezništvo jer je gradonačelnik odabrane nacije offline."
@@ -473,7 +473,7 @@ msg_not_claimable: '&cOvaj svet se ne može claim-ovati.'
 msg_abandoned_area: '&bOblast %s napuštena'
 msg_admin_unclaim_area: '&cOblast %s prisilno unclaim-ovana'
 msg_abandoned_area_1: '&bVaš grad je napustio oblast'
-msg_no_money_purchase_plot: '&cNemate dovoljno novca da kupite ovaj plot.'
+msg_no_money_purchase_plot: '&cNemaš dovoljno novca da kupiš ovu parcelu.'
 msg_town_no_money_purchase_plot: '&cGrad nema dovoljno novca da otkupi ovaj plot.'
 msg_no_funds_new_town: '&c%s ne može da priušti da podigne novi grad ovde.'
 msg_no_funds_claim: '&cGrad ne može priuštiti da claim-uje %s gradskih blokova što košta %s. Dodajte još novca u gradsku banku.'
@@ -491,7 +491,7 @@ msg_not_claimed: '&bOva oblast (%s) nije claim-ovana.'
 msg_not_claimed_1: '&bOva oblast nije claim-ovana.'
 msg_not_own_area: '&cNe posedujete odabranu oblast.'
 msg_not_own_place: '&bNiko ne poseduje ovo mesto.'
-msg_area_not_own: '&cOva oblast ne pripada Vama.'
+msg_area_not_own: '&cOva oblast ne pripada tebi.'
 msg_area_not_recog: '&cTowny ne prepoznaje ovu oblast.'
 msg_specify_name: '&bNavedite ime grada'
 msg_specify_nation_name: '&bNavedite ime nacije'
@@ -521,7 +521,7 @@ msg_plot_pvp: '&cPvP se ne može uključiti/isključiti u Plotu Arene.'
 msg_plot_regen_wrong_size: '&cRegeneracija se može izvesti isključivo kad je podrazumevana veličina parcele (16) upotrebljena.'
 msg_reloaded: '&2Towny podešavanja ponovo učitana.'
 msg_undo_complete: '&2Poništavanje gotovo.'
-msg_give_total: '&bDali ste %s bonus. (Ukupno: %s)'
+msg_give_total: '&bDao si bonus od %s. (Ukupno: %s)'
 mag_backup_success: '&2Pravljenje rezervne kopije uspešno.'
 msg_xx_withdrew_xx: '&b%s podigao/la %s iz %s banke.'
 msg_xx_deposited_xx: '&b%s uplatio/la %s u %s banku.'
@@ -536,8 +536,8 @@ msg_set_surname: '&b%s je dobio/la prezime ''%s&b''.'
 msg_clear_title_surname: '&b%s je očišćeno za ''%s''.'
 msg_clear_plot_material: '&bPlot očišćen od sledećih tipova blokova: %s.'
 msg_set_perms: '&bDozvole uspešno promenjene na:'
-msg_set_claim: '&bUspešno promenjena mogućnost claim-ovanja %s na %s'
-msg_set_perms_reset: '&bUspešno resetovane dozvole na svim %s plotovima.'
+msg_set_claim: '&bUspešno promenjena mogućnost prisvajanja %s na %s'
+msg_set_perms_reset: '&bUspešno resetovane dozvole na svih %s parcelama.'
 msg_usedefault: '&bOvaj svet (%s) sada koristi globalne podrazumevane postavke.'
 msg_set_wild_perms: '&bUspešno promenjene %s wild dozvole %s'
 msg_set_wild_ignore: '&bUspešno promenjeni %s-ove divlji blokovi zanemarivanja na %s'
@@ -546,7 +546,7 @@ msg_set_wild_regen: '&bUspešno promenjena %s-ova divlja regeneracija na ''%s'''
 msg_set_use_towny_on: '&bOvaj svet sada koristi towny pravila.'
 msg_set_use_towny_off: '&cOvaj svet je uskraćen svih towny interakcija.'
 msg_error_must_be_int: '&bKoličina mora biti ceo broj.'
-msg_error_input_must_be_int: '&c%s mora biti intedžer'
+msg_error_input_must_be_int: '&c%s mora biti ceo broj'
 msg_error_must_be_num: '&bKoličina mora biti broj.'
 msg_error_input_must_be_num: '&c%s mora biti broj'
 msg_must_specify_amnt: '&bMorate navesti količinu. Pr: %s 54'
@@ -560,30 +560,30 @@ msg_set_nation_tag: '&b%s je postavio/la [%s] za oznaku nacije'
 msg_set_town_tag: '&b%s je postavio/la [%s] za oznaku grada'
 msg_reset_nation_tag: '&b%s je očistio/la oznaku nacije.'
 msg_reset_town_tag: '&b%s je očistio/la oznaku grada.'
-msg_mayor_abandon: '&bNapustili biste svoje ljude? Izaberite drugog gradonačelnika sa ''/town set mayor'' ako ste sigurni.'
-msg_new_day_tax: '&bNovi dan je stigao! Porezi i kirija su sakupljeni'
+msg_mayor_abandon: '&bNapusto/la bi svoje ljude? Izaberi drugog gradonačelnika sa ''/town set mayor'' ako si siguran.'
+msg_new_day_tax: '&bSvanuo je novi dan! Porezi i kirija su sakupljeni'
 msg_new_day: '&bSvanuo je novi dan!'
-msg_new_king: '&b%s je sada vodja nacije %s!'
-msg_err_new_king_notmayor: '&cNovi vodja nacije nije major.'
-msg_err_king_not_in_nation: '&cNovi vodja nacije ne pripada ovoj naciji.'
-msg_err_fight_like_king: '&cMir nije opcija! Bori se kao vodja!'
+msg_new_king: '&b%s je sada vođa nacije %s!'
+msg_err_new_king_notmayor: '&cNovi vođa nacije nije gradonačelnik.'
+msg_err_king_not_in_nation: '&cNovi vođa nacije ne pripada ovoj naciji.'
+msg_err_fight_like_king: '&cMir nije opcija! Bori se kao vođa!'
 msg_no_access_nation_bank: '&cNemate pristup banci nacije.'
 msg_err_no_money: '&cNema dovoljno novca u banci.'
 msg_new_mayor: '&b%s je sada gradonačelnik!'
-msg_new_nation: '&b%s je osnovao novu naciju zvanu %s'
-msg_new_town: '&b%s je osnovao novi grad zvani %s'
-msg_plot_for_sale: '&b%s je stavio plot (%s) na prodaju!'
-msg_plot_for_sale_amount: '&b%s je stavio plac (%s) na prodaju za %s!'
-msg_plot_set_type: '&bTip plota postavljen na %s'
-msg_cache_block_error: '&cNiste se registrovali Towny-jem. Probajte ponovno prijavljivanje.'
-msg_cache_block_error_wild: '&cNemate dozvolu za %s u divljini.'
+msg_new_nation: '&b%s je osnovao/la novu naciju zvanu %s'
+msg_new_town: '&b%s je osnovao/la novi grad zvani %s'
+msg_plot_for_sale: '&b%s je stavio/la parcelu (%s) na prodaju!'
+msg_plot_for_sale_amount: '&b%s je stavio parcelu (%s) na prodaju za %s!'
+msg_plot_set_type: '&bTip parcele postavljen na %s'
+msg_cache_block_error: '&cNisi se registrovao Towny-jem. Probaj da se prijaviš ponovo.'
+msg_cache_block_error_wild: '&cNemaš dozvolu da %s u divljini.'
 msg_cache_block_error_plot: '&cVlasnik ne dopušta da %s %s ovde.'
-msg_cache_block_error_town_resident: '&cStanovnici ne smeju da %s ovde.'
+msg_cache_block_error_town_resident: '&cStanovnicima nije dozvoljeno da %s ovde.'
 msg_cache_block_error_town_allies: '&cSaveznici ne smeju da %s.'
 msg_cache_block_error_town_outsider: '&cNestanovnici ne smeju da %s.'
-msg_err_cant_afford_tp_town: '&cNe možete priuštiti da se teleportujete na %s.'
+msg_err_cant_afford_tp_town: '&cNe možeš priuštiti da se teleportuješ na %s.'
 msg_err_not_public: '&cTaj grad nije javan.'
-msg_err_not_open: '&cVrata grada %s nisu za svakoga otvorena. Zamolite gradonačelnika ili saradnika da biste se priključili.'
+msg_err_not_open: '&cVrata grada %s nisu za svakoga otvorena. Zamoli gradonačelnika ili saradnika da se priključiš.'
 msg_err_town_spawn_forbidden: '&cPutovanje do gradskog spawn-a je zabranjeno.'
 msg_err_town_spawn_nation_forbidden: '&cPutovanje do spawn-ova drugih gradova vaše nacije je zabranjeno.'
 msg_err_town_spawn_ally_forbidden: '&cPutovanje do spawn-ova gradova saveznika vaše nacije je zabranjeno.'
@@ -1886,10 +1886,85 @@ msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <y
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
 #Message giving confirmation warning for trusttown
 confirmation_msg_trusttown_consequences: 'O tvom davanju svih dozvola na parceli celom jednom gradu je. To znači da da će gradonačelnik grada biti u mogućnosti da odlučuje ko dobija dozvolu da gradi i lomi u tvom gradu, tako što dodaje stanovnike. Ako je ovaj grad otvoren, onda se svako može pridružiti i steći pun pristup tvom gradu. Da li si siguran/na da želiš da veruješ svim stanovnicina (uključujući buduće stanovnike) iz ovog grada?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'Ne možeš izvršiti tu naredbu zato što je tvoj grad u ratu.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'U ovom gradskom bloku je nestanovnik, ne možeš da otuđiš ovaj gradski blok!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Ne možeš stvoriti novi grad, %s sekunde/i ostaje do ponovne mogućnosti stvaranja grada.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Ne možeš prisvojiti ovaj gradski blok: %s, %s sekunde/i ostaje do ponovne mogućnosti stvaranja grada.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'Gradu %s beše postavljen osnivač na %s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'Gradu %s beše postavka dozvoljenosti ratovanja podešena na %s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Da li si siguran/na da želiš da otuđiš svu svoju zemlju? (Tvoj domni blok neće biti otuđen.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "Otuđio/la si sve sem svog domnog bloka. Da bi otuđio/la svoj domni blok, prvo moraš da odrediš novi domni blok koristeći \"/t set homeblock\"."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Da li si siguran/na da želiš da prebaciš vlasništvo nad nacijom igraču %s? Ova radnja je nepovratna!"
+msg_warn_town_already_capital: "<red>Grad %s je već glavni grad ove nacije."
+msg_min_adjacent_blocks: 'Potrebno je da imaš najmanje %s susedna gradska bloka/susednih gradskih blokova. Imaš samo %s.'
+msg_min_adjacent_district_blocks: 'Potrebno je da imaš najmanje %s susedne parcele distrikta/susednih parcela distrikta.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', recimo da tražiš /plot evict umesto toga?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "Ne znaju te u Towny-ju."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "Igrača %s ne znaju u Towny-ju."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s nije stanovnik koji je prepoznat."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s nije grad koji je prepoznat."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s nije nacija koja je prepoznata."
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%s ne pripada ni jednom gradu."
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%s ne pripada ni jednoj naciji."
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "Ovaj gradski blok nema podatke o datumu prisvajanja."
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "Treba ti %s da bi platio/la."
 #Shown when someone tries to deposit/withdraw 0 amounts.
 msg_err_amount_must_be_greater_than_zero: "Količina mora biti veća od nule."
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "Preuzimanje prisvojenog nije omogućeno na ovom serveru."
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "Ovaj Gradski Blok ne može biti preuzet, grad kome pripada nije prisvojen preko."
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "Ne možeš izvršiti ovo prisvajanje; zato što bi to učinilo ovaj Gradski Blok tvojim domnim blokom, što nije dozvoljeno."
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "Drugi priključak je zaustavio tvoje preuzimanje ove zemlje."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "Sad ćeš da preuzmeš posed od igrača %s po ceni od: %s. Da li si želeo/la da nastaviš?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "Upozorenje: Maltene si iskoristio/la svoje raspoložive gradske blokove za prisvajanje. Ako izgubiš nekog stanovnika, rizikuješ da tvom gradu drugi gradovi budu u mogućnosti ukrasti gradske blokove."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "Upozorenje: tvoj grad je prisvojen preko. Dok imaš previše prisvojenih gradskih blokova, biće moguće za druge gradove da preuzmu parcele tvog grada, razmisli o otuđivanju malo zemlje."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[Preuzimanje Parcele Raspoloživo]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "Ne možeš preuzeti ovu parcelu, jer bi to podelilo ovaj grad na dva segmenta. Bićeš u mogućnosti da prisvojiš preko iz drugog smera."
+#Message shown when an admin tries to toggle conquered off of a town that is not conquered.
+msg_err_that_town_is_not_conquered: "%s je već nepokoren."
+#Message shown when a town has its conquered status removed by an admin.
+msg_conquered_status_removed: "%s-u beše uklonjen status pokorenosti."
+msg_setup_command_folia: "/ta install naredba trenutno ne radi na Folia-i stoga što razgovorni API ne radi, referiši na vodič za instalaciju umesto toga."
+msg_perm_gui_folia: "Ovo dugme trenutno ne radi na Folia-i stoga što razgovorni API ne radi, iskoristi /plot perm add <name> naredbu umesto toga."
+msg_folia_scoreboard: "Menjanje panela trenutno nije podržano na Folia-i."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "Ne možeš da otuđiš ovaj gradski blok zato što gradski blok na %s,%s ne bi imao dovoljno susednih poseda (potrebno je %s.)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>Tvoja nacija je sakupila %s poreza od svojih gradova."
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>Tvoja nacija je platila %s poreza svojim gradovima."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>Tvoj grad je sakupilo %s poreza od svojih stanovnika."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>Tvoj grad je platio %s poreza svojim stanovnicima."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>Tvoj grad je sakupilo %s poreza od svojih parcelskih poreza."
 #Message shown when a town pays taxes to its plottaxes.
 msg_tax_paid_to_residents_for_plots: "<aqua>Tvoj grad je platio %s poreza zemljovlasnicima putem parcelskih poreza."
 #Message shown when a nation collects taxes from its towns that are conquered.
@@ -1958,6 +2033,15 @@ msg_all_of_your_towns_sent_invites_have_been_cancelled: "Svi poslati pozivi tvog
 msg_err_name_validation_invalid_characters: "%s sadrži znakove koji nisu dozvoljeni u Towny regex postavkama."
 msg_err_name_validation_begins_with_eco_prefix: "%s počinje slovima korišćenim u atributima za ekonomiju, ne možeš koristiti ovo ime."
 msg_err_name_validation_name_already_in_use: "%s je ime koje je već u upotrebi."
+msg_err_name_validation_title_too_long: "%s je predugo za korišćenje kao zvanje ili prezime."
+msg_err_name_validation_name_too_long: "%s je predugo za korišćenje kao ime."
+msg_err_name_validation_is_empty: "Ne možeš dostaviti prazno ime."
+msg_err_name_validation_is_not_permitted: "%s je nedopušteno."
+msg_err_name_validation_is_all_underscores: "%s je celo od donjih crta."
+msg_err_name_validation_too_many_capitals: "%s sadrži %s velika/velikih slova što nisu dozvoljena, koristi manje od %s."
+msg_err_name_validation_contains_harmful_characters: "%s sadrži simbole koji mogu biti štetni."
+msg_err_name_validation_contains_numbers: "%s sadrži brojeve koji nisu dozvoljeni u imenima."
+msg_err_name_validation_used_in_command_structure: "%s je korišćeno u strukturi naredbi, ne možeš koristiti ovo ime."
 msg_town_being_deleted_because_no_residents: "%s se briše jer je izgubio svog poslednjeg stanovnika."
 outlawed_in: "Odmetnut/ta u"
 msg_warning_town_deposit_hint: "Da položiš novac u svoj gradsku banku iskoristi /town deposit [količina]."
