@@ -10295,3 +10295,4 @@ v0.92.0.11:
   - Fix an issue with spawn nodes missing a child node that should have been denied.
   - Set using bottles and shears on honey-producing blocks to use an ItemUse test instead of a destroy test.
     - Closes #7804.
+  - Fix renaming plotgroups and districts allowing names which are too long.

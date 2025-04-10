@@ -1467,7 +1467,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_rename_district_name_required"));
 
 		District district = catchMissingDistrict(townBlock);
-		String newName= split[1];
+		String newName = split[1];
+		NameValidation.checkAndFilterDistrictNameOrThrow(newName);
 		String oldName = district.getName();
 		// Change name;
 		TownyUniverse.getInstance().getDataSource().renameDistrict(district, newName);
@@ -1734,7 +1735,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
 
 		PlotGroup group = catchMissingPlotGroup(townBlock);
-		String newName= split[1];
+		String newName = split[1];
+		NameValidation.checkAndFilterPlotGroupNameOrThrow(newName);
 		String oldName = group.getName();
 		// Change name;
 		TownyUniverse.getInstance().getDataSource().renameGroup(group, newName);
