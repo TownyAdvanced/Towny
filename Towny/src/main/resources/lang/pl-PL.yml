@@ -145,7 +145,7 @@ nation_toggle_help_2: "Przełącza status otwarty, pozwalając miastom dołączy
 nation_toggle_help_3: "Przełącza obowiązywanie podatku procentowego. Miasta będą płaciły procent od posiadanych pieniędzy, zamiast stałej stawki."
 nation_sanction_help_1: "Dodaje miasto na listę Sankcjonowanych Miast."
 nation_sanction_help_2: "Usuwa miasto z listy Sankcjonowanych Miast."
-nation_sanction_help_3: "Wyświetla listę Sankcjonowanych Miast Twojego Państwa."
+nation_sanction_help_3: "Wyświetla listę Sankcjonowanych Miast Twojego Miasta."
 king_help_1: 'Pomoc Lidera Nacji'
 king_help_2: 'Wyznacz swoich sojuszników.'
 king_help_3: 'Wyznacz swoich wrogów.'
