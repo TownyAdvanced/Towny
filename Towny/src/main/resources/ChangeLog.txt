@@ -10296,3 +10296,4 @@ v0.92.0.11:
   - Set using bottles and shears on honey-producing blocks to use an ItemUse test instead of a destroy test.
     - Closes #7804.
   - Fix renaming plotgroups and districts allowing names which are too long.
+  - Fix other plugins from using CombatUtil#preventFriendlyFire in non-Towny worlds.

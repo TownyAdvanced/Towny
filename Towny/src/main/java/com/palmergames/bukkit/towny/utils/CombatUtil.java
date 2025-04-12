@@ -379,6 +379,8 @@ public class CombatUtil {
 	 * @return true if we should cancel damage.
 	 */
 	public static boolean preventFriendlyFire(Player attacker, Player defender, TownyWorld world) {
+		if (!world.isUsingTowny())
+			return false;
 
 		/*
 		 * Don't block potion use (self damaging) on ourselves.
