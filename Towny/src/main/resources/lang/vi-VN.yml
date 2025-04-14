@@ -269,6 +269,7 @@ townyadmin_town_toggle_help_2: "Bật/tắt chế độ Công khai cho town, cho
 townyadmin_town_toggle_help_3: "Bật/tắt chế độ cho phép gây nổ trong town."
 townyadmin_town_toggle_help_4: "Bật/tắt khả năng tạo lửa và để lửa lan trong town."
 townyadmin_town_toggle_help_5: "Bật/tắt việc xuất hiện các loại quái vật trong town."
+townyadmin_town_toggle_help_6: "Chuyển đổi thiết lập thuế của thị trấn."
 townyadmin_town_toggle_help_7: "Bật/tắt chế độ Mở cho town, cho phép mọi người vào town mà không cần phải được mời."
 townyadmin_nation_help_0: "Tạo một quốc gia mới với tên và town thủ đô đã cho."
 townyadmin_nation_help_1: "Xem trang thông tin của quốc gia."
@@ -377,6 +378,7 @@ plot_group_toggle_help_1: "Chuyển đổi vụ nổ trong các nhóm ô đất.
 plot_group_toggle_help_2: "Chuyển đổi lửa cháy lan trong các nhóm ô đất."
 plot_group_toggle_help_3: "Chuyển đổi quái vật trong các nhóm ô đất."
 plot_group_toggle_help_4: "Chuyển đổi các trạng thái thuế của các nhóm ô đất."
+plot_set_help_0: "Ví dụ: Inn, Wilds, Farm, Embassy, etc."
 plot_set_help_1: "Đặt các ô đất đi đến một đồn điền."
 plot_set_help_1.5: "Thiết lập số ngày tối thiểu mà người chơi là thành viên thị trấn để mua lô đất."
 plot_set_help_1.6: "Thiết lập số ngày tối đa mà người chơi là thành viên thị trấn để mua lô đất."
@@ -513,6 +515,54 @@ msg_toggle_open_on_warning: 'Cảnh báo: Townperms phải được tắt nếu 
 msg_changed_world_setting: '&c%s cho %s là: %s.'
 msg_world_pvp: '&cThế giới này chỉ dành cho PvP.'
 msg_world_mobs: '&cQuái vật bắt buộc spawn ở thế giới này.'
+msg_world_expl: '&cNhững vụ nổ là bắt buộc trong thế giới này.'
+msg_world_fire: '&cCháy lan là bắt buộc trong thế giới này.'
+msg_town_mobs: '&cThị trấn này bắt buộc quái phải xuất hiện.'
+msg_plot_pvp: '&cPVP không thể được bật trong ô đất này.'
+msg_plot_regen_wrong_size: '&cChỉ có thể thực hiện tái tạo khi sử dụng kích thước mặc định (16).'
+msg_reloaded: '&2Thị trấn đã tải lại.'
+msg_undo_complete: '&2Hoàn tác thành công.'
+msg_give_total: '&bLấy %s Thưởng thêm. (Tổng: %s)'
+mag_backup_success: '&2Khôi phục hoàn tất.'
+msg_xx_withdrew_xx: '&b%s Đã rút %s Từ %s Ngân hàng.'
+msg_xx_deposited_xx: '&b%s Nạp %s vào %s ngân hàng.'
+msg_insuf_funds: '&cBạn không có nhiều như vậy.'
+msg_err_withdraw_disabled: 'Rút tiền từ ngân hàng này bị vô hiệu hóa!'
+msg_err_deposit_capped: 'Không thể nạp tiền. Ngân hàng này được giới hạn tại %s.'
+msg_set_town_home: '&bĐã thay đổi thành công homeblock của thị trấn thành %s'
+msg_set_town_spawn: '&bĐã thay đổi thành công nơi xuất hiện của thị trấn.'
+msg_set_outpost_spawn: '&bĐã thay đổi thành công địa điểm xuất hiện của tiền đồn (outpost''s).'
+msg_set_title: '&b%s được cấp danh hiệu ''%s&b''.'
+msg_set_surname: '&b%s được cấp họ là ''%s&b''.'
+msg_clear_title_surname: '&b%s cho ''%s'' đã được xóa.'
+msg_clear_plot_material: '&bÔ đất đã được xóa các loại khối sau: %s.'
+msg_set_perms: '&bĐã thay đổi quyền thành công:'
+msg_set_claim: '&bĐã thay đổi thành công khả năng yêu cầu của %s thành %s'
+msg_set_perms_reset: '&bĐặt lại quyền thành công trên tất cả các ô đất %s.'
+msg_usedefault: '&bThế giới này (%s) hiện đang sử dụng cài đặt mặc định toàn cầu.'
+msg_set_wild_perms: '&bĐã thay đổi thành công quyền tự do của %s thành %s'
+msg_set_wild_ignore: '&bĐã thay đổi thành công các khối bỏ qua tự nhiên của %s thành %s'
+msg_set_wild_name: '&bĐã thay đổi thành công tên tự nhiên của %s thành %s'
+msg_set_wild_regen: '&bĐã thay đổi thành công khả năng hồi phục hoang dã của %s thành ''%s'''
+msg_set_use_towny_on: '&bThế giới này hiện tuân theo những quy tắc của thị trấn.'
+msg_set_use_towny_off: '&cThế giới này không có bất kỳ sự tương tác nào giữa thị trấn.'
+msg_error_must_be_int: '&bSố tiền phải là số nguyên.'
+msg_error_input_must_be_int: '&c%s phải là số nguyên'
+msg_error_must_be_num: '&bSố tiền phải là một con số.'
+msg_error_input_must_be_num: '&c%s phải là một số'
+msg_must_specify_amnt: '&bPhải chỉ rõ số lượng. Ví dụ: %s 54'
+msg_town_set_tax: '&b%s đã đặt thuế cư trú hàng ngày ở mức %s'
+msg_town_set_plottax: '&b%s đã đặt mức thuế hàng ngày cho các lô đất là %s'
+msg_town_set_plotprice: '&b%s đã đặt giá của các lô đất ở mức %s'
+msg_town_set_alttax: '&b%s đã đặt mức thuế hàng ngày của %s lô đất ở mức %s'
+msg_town_set_altprice: '&b%s đã đặt giá của %s lô đất ở mức %s'
+msg_town_set_nation_tax: '&b%s đã đặt thuế quốc gia ở mức %s'
+msg_set_nation_tag: '&b%s đã đặt thẻ quốc gia thành [%s]'
+msg_set_town_tag: '&b%s đã đặt thẻ thị trấn thành [%s]'
+msg_reset_nation_tag: '&b%s đã xóa thẻ quốc gia.'
+msg_reset_town_tag: '&b%s đã xóa thẻ thị trấn.'
+msg_mayor_abandon: '&bBạn sẽ bỏ rơi người dân của mình? Hãy chọn một thị trưởng khác với ''/town set mayor'' nếu bạn chắc chắn.'
+msg_new_day_tax: '&bMột ngày mới đã đến! Thuế và tiền thuê nhà đã được thu'
 msg_new_day: '&bMội ngày mới là đây!'
 msg_new_king: '&b%s hiện là người lãnh đạo quốc gia của %s!'
 msg_err_new_king_notmayor: '&cLãnh đạo quốc gia mới không phải là thị trưởng.'

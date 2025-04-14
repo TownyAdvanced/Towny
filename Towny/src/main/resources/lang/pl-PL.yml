@@ -95,6 +95,7 @@ town_trust_help_2: "Lista zaufanch mieszkańców w mieście."
 town_towntrust_help_0: "Dodaje miasto do grona zaufanych twojego miata."
 town_towntrust_help_1: "Usuwa miasto z grona zaufanych twojego miasta."
 town_towntrust_help_2: "Lista zaufanych miast podanego miasta."
+town_buy_help: "Kup bonusowe bloki miasta, aby zwiększyć limit roszczeń miasta."
 town_cede_help: "Oferuje działkę, na którą stoisz do przejęcia przez dane miasto."
 mayor_help_3: 'Pozyskaj teren nieprzylegajacy do miasta'
 mayor_help_4: 'Pozyskaj dookoła w promieniu X'
@@ -142,6 +143,9 @@ nation_toggle_help_0: "Przełącza stan pokojowy nacji."
 nation_toggle_help_1: "Przełącza status publiczny, pozwalając graczom spoza nacji użyć /n spawn."
 nation_toggle_help_2: "Przełącza status otwarty, pozwalając miastom dołączyć bez zaproszenia."
 nation_toggle_help_3: "Przełącza obowiązywanie podatku procentowego. Miasta będą płaciły procent od posiadanych pieniędzy, zamiast stałej stawki."
+nation_sanction_help_1: "Dodaje miasto na listę Sankcjonowanych Miast."
+nation_sanction_help_2: "Usuwa miasto z listy Sankcjonowanych Miast."
+nation_sanction_help_3: "Wyświetla listę Sankcjonowanych Miast Twojego Miasta."
 king_help_1: 'Pomoc Lidera Nacji'
 king_help_2: 'Wyznacz swoich sojuszników.'
 king_help_3: 'Wyznacz swoich wrogów.'
