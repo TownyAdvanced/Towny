@@ -10297,3 +10297,7 @@ v0.92.0.11:
     - Closes #7804.
   - Fix renaming plotgroups and districts allowing names which are too long.
   - Fix other plugins from using CombatUtil#preventFriendlyFire in non-Towny worlds.
+  - Call ascii map static initializer before initial config load, courtesy of Warrior with PR #7808.
+    - Closes #7801.
+  - Update console town help, courtesy of SulkyWhale with PR #7803.
+  - Fix error when /t reslist is run from console without a town argument, courtesy of SulkyWhale with PR #7802.
