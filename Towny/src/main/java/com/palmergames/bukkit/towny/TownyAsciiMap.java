@@ -59,6 +59,9 @@ public class TownyAsciiMap {
 			halfLineWidth = lineWidth / 2;
 		});
 	}
+
+	// Run static initializer above pre initial config load.
+	public static void initialize() {}
 	
 	public static Component[] generateHelp(Player player) {
 		final Translator translator = Translator.locale(player);
