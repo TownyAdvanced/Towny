@@ -132,6 +132,7 @@ public class Towny extends JavaPlugin {
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 		SpawnUtil.initialize(this);
+		TownyAsciiMap.initialize();
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
