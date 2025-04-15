@@ -90,7 +90,8 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"pvp",
 		"fire",
 		"mobs",
-		"explosion"
+		"explosion",
+		"snow"
 	);
 
 	private static final List<String> residentToggleModeTabCompletes = ResidentModeHandler.getValidModeNames();
@@ -434,6 +435,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		} else if (newSplit[0].equalsIgnoreCase("mobs")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_MOBS.getNode());
 			perm.mobs = choice.orElse(!perm.mobs);
+		} else if (newSplit[0].equalsIgnoreCase("snow")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_SNOW.getNode());
+			perm.snow = choice.orElse(!perm.snow);
 		} else if (newSplit[0].equalsIgnoreCase("bordertitles")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES.getNode());
 			ResidentUtil.toggleResidentBorderTitles(resident, choice);
@@ -461,8 +465,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private void notifyPerms(Player player, TownyPermission perm) {
 
 		TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
-
+		TownyMessaging.sendMessage(player, 
+			Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
+				Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") +
+				Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") +
+				Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") +
+				Colors.Green + "  Snowfall: " + ((perm.snow) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
 	}
 	
 	public void listResidents(CommandSender sender) throws TownyException {
