@@ -10301,3 +10301,5 @@ v0.92.0.11:
     - Closes #7801.
   - Update console town help, courtesy of SulkyWhale with PR #7803.
   - Fix error when /t reslist is run from console without a town argument, courtesy of SulkyWhale with PR #7802.
+0.101.1.9:
+  - Hotfix for startup error present in 0.101.1.8.

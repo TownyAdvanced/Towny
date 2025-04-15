@@ -40,7 +40,7 @@ public class TownyAsciiMap {
 	private static final int MAP_WIDTH_UPPER_BOUNDS = 27;
 	private static final int MAP_HEIGHT_UPPER_BOUNDS = 18;
 	private static final int MAP_LOWER_BOUNDS = 7;
-	public static int lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
+	public static int lineWidth = sanitizeLineWidth(Integer.valueOf(ConfigNodes.ASCII_MAP_WIDTH.getDefault()));
 	public static int halfLineWidth = lineWidth / 2;
 	public static String defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
 	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
