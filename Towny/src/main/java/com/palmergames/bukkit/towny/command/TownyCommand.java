@@ -445,6 +445,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(translator.of("towny_prices_claiming_townblock", prettyMoney(town.getTownBlockCost()) +  
 					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : translator.of("towny_prices_claiming_townblock_increase", new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)))));
 			output.add(translator.of("towny_prices_claiming_outposts", prettyMoney(TownySettings.getOutpostCost())));
+			if (TownySettings.getPerOutpostUpkeepCost() > 0)
+				output.add(translator.of("towny_prices_outposts_upkeept", prettyMoney(TownySettings.getPerOutpostUpkeepCost())));
 		}
 		if (town == null)
 			output.add(translator.of("towny_prices_upkeep", prettyMoney(TownySettings.getTownUpkeep()), prettyMoney(TownySettings.getNationUpkeep())));
