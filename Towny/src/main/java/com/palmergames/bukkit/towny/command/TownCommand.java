@@ -4141,6 +4141,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town.hasTrustedResident(resident))
 			throw new TownyException(Translatable.of("msg_already_trusted", resident.getName(), Translatable.of("town_sing")));
 
+		if (town.hasOutlaw(resident))
+			throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_outlaw"));
+
+		if (resident.hasNation() && town.hasNation() && town.getNationOrNull().hasEnemy(resident.getNationOrNull()))
+			throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_enemy"));
+
 		BukkitTools.ifCancelledThenThrow(new TownTrustAddEvent(sender, resident, town));
 
 		town.addTrustedResident(resident);
@@ -4203,6 +4209,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private static void parseTownTrustTownAddCommand(CommandSender sender, Town town, Town trustTown) throws TownyException {
 		if (town.hasTrustedTown(trustTown))
 			throw new TownyException(Translatable.of("msg_already_trusted", trustTown.getName(), Translatable.of("town_sing")));
+
+		if (trustTown.getResidents().stream().filter(res -> town.hasOutlaw(res)).findAny().isPresent())
+			throw new TownyException(Translatable.of("msg_err_you_cannot_add_towntrust_on_outlaw"));
+
+		if (trustTown.hasNation() && town.hasNation() && town.getNationOrNull().hasEnemy(trustTown.getNationOrNull()))
+			throw new TownyException(Translatable.of("msg_err_you_cannot_add_towntrust_on_enemy"));
 
 		if (town == trustTown)
 			throw new TownyException(Translatable.of("msg_cannot_trust_your_own_town"));
