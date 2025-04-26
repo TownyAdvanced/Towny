@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
+import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
@@ -25,6 +26,7 @@ import com.palmergames.bukkit.towny.event.nation.NationLevelIncreaseEvent;
 import com.palmergames.bukkit.towny.event.nation.NationPreTownLeaveEvent;
 import com.palmergames.bukkit.towny.event.town.TownLevelDecreaseEvent;
 import com.palmergames.bukkit.towny.event.town.TownLevelIncreaseEvent;
+import com.palmergames.bukkit.towny.event.town.TownOutlawAddEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimCmdEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -55,6 +57,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -437,5 +441,69 @@ public class TownyCustomListener implements Listener {
 		.stream()
 		.filter(Resident::isOnline)
 		.forEach(r -> TownyPerms.assignPermissions(r, r.getPlayer()));
+	}
+
+	@EventHandler
+	public void onNationAddEnemy(NationAddEnemyEvent event) {
+		Nation targetNation = event.getEnemy();
+		Nation targettingNation = event.getNation();
+		for (Town nationTown : targettingNation.getTowns()) {
+			boolean save = false;
+			for (Town town : new ArrayList<>(nationTown.getTrustedTowns())) {
+				save = false;
+				if (town.hasNation() && town.getNationOrNull().equals(targetNation)) {
+					nationTown.removeTrustedTown(town);
+					save = true;
+				}
+				if (save)
+					town.save();
+			}
+			for (Resident resident : new ArrayList<>(nationTown.getTrustedResidents())) {
+				save = false;
+				if (resident.hasNation() && resident.getNationOrNull().equals(targetNation)) {
+					nationTown.removeTrustedResident(resident);
+					save = true;
+				}
+				if (save)
+					resident.save();
+			}
+			for (TownBlock tb : nationTown.getTownBlocks()) {
+				if (tb.getTrustedResidents().isEmpty())
+					continue;
+				save = false;
+				for (Resident resident : new ArrayList<>(tb.getTrustedResidents())) {
+					if (resident.hasNation() && resident.getNationOrNull().equals(targetNation)) {
+						tb.removeTrustedResident(resident);
+						save = true;
+					}
+				}
+				if (save)
+					tb.save();
+			}
+		}
+	}
+
+	@EventHandler
+	public void onTownAddOutlaw(TownOutlawAddEvent event) {
+		Resident outlaw = event.getOutlawedResident();
+		Town town = event.getTown();
+		for (Town trustedTown : new ArrayList<>(town.getTrustedTowns())) {
+			if (trustedTown.hasResident(outlaw)) {
+				town.removeTrustedTown(trustedTown);
+				town.save();
+			}
+		}
+
+		if (town.hasTrustedResident(outlaw)) {
+			town.removeTrustedResident(outlaw);
+			town.save();
+		}
+
+		for (TownBlock tb : town.getTownBlocks()) {
+			if (tb.hasTrustedResident(outlaw)) {
+				tb.removeTrustedResident(outlaw);
+				tb.save();
+			}
+		}
 	}
 }
