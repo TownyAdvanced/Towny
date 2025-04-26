@@ -10306,3 +10306,6 @@ v0.92.0.11:
 0.101.1.10:
   - Add per-day, per-outpost upkeep cost to /towny prices when per_outpost_cost is above 0 in the config.
     - Closes #7816.  
+  - Cause outlawing and enemying to remove trust status in town, plot and trusted town lists.
+    - Also prevents trust being given to outlaws, enemies in plots, towns and trusted town lists.
+    - Clsoes #7818.
