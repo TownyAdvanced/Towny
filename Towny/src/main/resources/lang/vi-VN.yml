@@ -1303,6 +1303,7 @@ towny_prices_overclaimed_upkeep: '&e[Bảo trì quá mức] &2Thị trấn: &a%s
 towny_prices_claiming_townblock: '&e[Đang yêu cầu] &2Mảnh đất: &a%s'
 towny_prices_claiming_townblock_increase: ' &8| &2Tăng cho mỗi Mảnh đất: &a+%s'
 towny_prices_claiming_outposts: '&e[Yêu cầu] &2Tiền đồn: &a%s'
+towny_prices_outposts_upkeept: '&7Các tiền đồn có thêm chi phí bảo trì mỗi ngày, mỗi tiền đồn: &a%s'
 towny_prices_upkeep_based_on: '&7Việc duy trì thị trấn dựa trên &a%s'
 towny_prices_upkeep_num_plots: 'số lượng lô đất.'
 towny_prices_upkeep_town_level: 'cấp thị trấn (số cư dân)'
@@ -2105,3 +2106,7 @@ chunknotification_plot_claim_help_message: " Sử dụng '/plot claim' để mua
 titlemsg_pay_your_bail_title: "Nộp tiền bảo lãnh: %s"
 titlemsg_pay_your_bail_subtitle: "/res jail paybail"
 msg_not_for_sale: "Không bán."
+msg_err_you_cannot_add_trust_on_outlaw: "Bạn không thể tin tưởng một người chơi bị coi là phạm pháp ở thị trấn của bạn."
+msg_err_you_cannot_add_trust_on_enemy: "Bạn không thể tin tưởng một người chơi đến từ quốc gia thù địch."
+msg_err_you_cannot_add_towntrust_on_outlaw: "Bạn không thể tin tưởng một thị trấn có cư dân bị thị trấn của bạn coi là bất hợp pháp."
+msg_err_you_cannot_add_towntrust_on_enemy: "Bạn không thể tin tưởng một thị trấn nằm trong quốc gia thù địch."
