@@ -906,7 +906,7 @@ public class Town extends Government implements TownBlockOwner {
 				townBlock.setOutpost(false);
 				townBlock.save();
 			}
-			if (townBlock.isJail()) {
+			if (townBlock.isJail() && townBlock.getJail() != null) {
 				removeJail(townBlock.getJail());
 			}
 			

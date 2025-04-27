@@ -10309,3 +10309,4 @@ v0.92.0.11:
   - Cause outlawing and enemying to remove trust status in town, plot and trusted town lists.
     - Also prevents trust being given to outlaws, enemies in plots, towns and trusted town lists.
     - Clsoes #7818.
+  - Prevent NPE thrown by jail plots which have a null jail, during townblock removal.
