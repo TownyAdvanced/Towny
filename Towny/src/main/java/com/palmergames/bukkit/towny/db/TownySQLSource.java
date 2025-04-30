@@ -1846,7 +1846,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 					
 					if (town == null) {
 						TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + line
-							+ " , deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + ","
+							+ ", deleting " + townBlock.getWorld().getName() + "," + townBlock.getX() + ","
 							+ townBlock.getZ());
 						universe.removeTownBlock(townBlock);
 						deleteTownBlock(townBlock);
