@@ -56,6 +56,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1054,12 +1055,15 @@ public class Town extends Government implements TownBlockOwner {
 	public List<String> getOutpostNames() {
 		List<String> outpostNames = new ArrayList<>();
 		int i = 0;
-		for (Location loc : getAllOutpostSpawns()) {
+		
+		final Iterator<Position> outpostSpawnIterator = this.outpostSpawns.iterator();
+		while (outpostSpawnIterator.hasNext()) {
 			i++;
-			TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(loc);
+			final Position pos = outpostSpawnIterator.next();
+			TownBlock tboutpost = TownyAPI.getInstance().getTownBlock(pos.worldCoord());
 
 			if (tboutpost == null) {
-				removeOutpostSpawn(loc);
+				outpostSpawnIterator.remove();
 				save();
 				continue;
 			}
