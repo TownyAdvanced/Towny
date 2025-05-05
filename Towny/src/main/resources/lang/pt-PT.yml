@@ -14,6 +14,9 @@ help_3: 'Chat do país'
 help_4: 'Comandos de ajuda do residente.'
 help_5: 'Comandos de ajuda da cidade.'
 help_6: 'Comandos de ajuda da nação.'
+help_7: 'Plot Comando Ajuda'
+help_8: "Towny comando ajuda\n"
+help_9: "Townyadmin comando ajuda\n"
 town_help_1: 'Estado da tua cidade'
 town_help_2: '[presidente]'
 town_help_3: 'Estado da cidade selecionada'
