@@ -364,6 +364,7 @@ ta_eco_convert_modern_help: "将你的城镇账户转换为更新的存储种类
 ta_depositall_help_0: "将特定数额存入所有城镇和国家银行"
 ta_info_help_0: "查看指定国家的经济信息。"
 ta_info_help_1: "查看指定居民的经济信息。"
+ta_info_help_2: "查看 towny 服务器帐户的生态信息。"
 ta_info_help_3: "查看指定城镇的经济信息。"
 plot_help_0: "打开区块信息HUD"
 plot_help_1: "移除区块的拥有者"
@@ -434,6 +435,8 @@ msg_couldnt_pay_taxes: '&b%s 因为交不起税而被踢出了 %s.'
 msg_couldnt_pay_plot_taxes: '&b%s 交不起税而失去了他的土地所有权.'
 msg_you_couldnt_pay_plot_tax: '&b你无法支付 %s 的地块税所以失去了对%s地块的所有权。'
 msg_you_couldnt_pay_town_tax: '&b你无法支付 %s 的市政税，所以已经从 %s 中移除。'
+msg_you_paid_town_tax: '&b你向你的城镇支付了 %s的税款。'
+msg_you_paid_plottax_to_town: '&b你向 %s支付了总计 %s 的地皮税。'
 msg_bankrupt_town: ' 银行资金不足以维持城镇的日常开销.'
 msg_bankrupt_nation: ' 银行资金不足以维持国家的日常开销.'
 msg_nation_not_peaceful: '&b国家的和平已被打破.'
@@ -1078,8 +1081,8 @@ msg_err_player_too_far_from_town_spawn: '&c%s 离你的城镇太远了，收不�
 #Added in 0.58:
 msg_resident_bail_amount: '居民保释金: '
 msg_mayor_bail_amount: '城主保释金: '
-msg_king_bail_amount: '国家领导保释金： '
-msg_has_paid_bail: '%s缴纳了保释金并被释放了。'
+msg_king_bail_amount: '国家领导赎金： '
+msg_has_paid_bail: '%s缴纳了赎金并被释放了。'
 msg_err_unable_to_pay_bail: '无法支付保释金.'
 msg_err_bail_not_enabled: '保释金功能未开启.'
 msg_you_have_been_freed_from_jail: '你被释放了.'
@@ -1749,7 +1752,7 @@ did_you_want_to_toggle_unlimited_claims: '你没有足够的圈地额度，你�
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: '你不能离开你的国家，你的城镇已被占领'
 msg_err_console_only: '此指令只能在控制台使用。'
-msg_err_player_only: '此指令只能玩家使用。'
+msg_err_player_only: '此指令仅供玩家使用。'
 #Added in 0.146
 #Message shown when a resident toggles bordertitles with /res toggle bordertitles
 msg_border_titles_toggled: '跨越边界时标题信息显示的是 %s'
@@ -2113,6 +2116,12 @@ msg_your_town_has_pending_nation_invites: "您的城镇收到了加入国家的�
 msg_you_have_pending_town_invites: "你收到了其他城市的邀请。 使用 '/invite list' 查看您收到的邀请，或使用 '/invite all' 拒绝所有邀请。"
 msg_admin_eco_convert_online_players_warning: "<red>警告：建议在服务器上没有玩家时进行转换。"
 msg_admin_eco_convert_x_accounts_found: "已发现%s个账户待转换。转换即将开始。"
+msg_err_mode_does_not_exist: "无法识别模式 %s。"
 msg_err_not_allowed_to_switch: "你不能在这里交互。"
 chunknotification_plot_claim_help_message: " 使用‘/plot claim'命令以购买这块领地"
+titlemsg_pay_your_bail_title: "支付您的赎金: %s"
 titlemsg_pay_your_bail_subtitle: "/res jail paybail"
+msg_not_for_sale: "不可出售。"
+msg_err_you_cannot_add_trust_on_outlaw: "你不能信任一个在你的城镇被放逐的玩家。"
+msg_err_you_cannot_add_trust_on_enemy: "你不能信任一个属于敌国的玩家。"
+msg_err_you_cannot_add_towntrust_on_enemy: "你不能信任一个属于敌国的城镇。"
