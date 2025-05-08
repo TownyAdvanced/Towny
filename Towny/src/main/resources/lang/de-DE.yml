@@ -86,7 +86,14 @@ town_jail_help_1: "Inhaftiere einen Bewohner im Hauptgefängnis."
 town_jail_help_2: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, ins Primärgefängnis."
 town_jail_help_3: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis."
 town_jail_help_4: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis und Zelle."
+town_jail_help_5: "Inhaftiere einen Bewohner im primären Gefängnis, für die spezifizierten Stunden, mit der angegebenen Kaution."
+town_jail_help_6: "Inhaftiere einen Bewohner im angegebenen Gefängnis, für die spezifizierten Stunden, mit der angegebenen Kaution."
+town_jail_help_7: "Inhaftiere einen Bewohner im primären Gefängnis, in der spezifizierten Zelle, für die spezifizierten Stunden, mit der angegebenen Kaution."
 town_jail_help_8: "Entlasse einen Bewohner aus dem Gefängnis."
+town_purge_help: "Wirft Bewohner, welche sich für die angegebene Zeit nicht eingeloggt haben aus der Stadt."
+town_trust_help_0: "Fügt einen Bewohner als vertrauenswürdig in der Stadt hinzu."
+town_trust_help_1: "Entfernt einen Bewohner als vertrauenswürdig in der Stadt."
+town_trust_help_2: "Listet die vertrauten Bewohner der Stadt auf."
 mayor_help_3: 'Anspruchsbereich grenzt nicht an die Stadt.'
 mayor_help_4: 'Beanspruche Land um dich herum in einem Radius von X'
 mayor_help_5: 'Beanspruche Land mit dem maximalen Radius'
