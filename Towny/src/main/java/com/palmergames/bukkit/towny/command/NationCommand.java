@@ -1344,6 +1344,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				// Actually remove the nation off the Town.
 				town.removeNation();
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_nation_kicked_by", sender.getName()));
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_you_kicked", town.getName()));
 			}
 
 		for (Town town : remove)
