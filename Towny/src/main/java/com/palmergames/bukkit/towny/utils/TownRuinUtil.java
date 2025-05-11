@@ -303,6 +303,8 @@ public class TownRuinUtil {
 			return 0L;
 
 		int numTownBlocks = town.getNumTownBlocks();
+		if (numTownBlocks == 0)
+			return 0L;
 		int townBlocksPerHour = numTownBlocks / hoursLeft;
 		double end = numTownBlocks > hoursTotal
 			? townBlocksPerHour * timeSinceRuining       // We will be opening perms on 1 or more townblocks every hour.

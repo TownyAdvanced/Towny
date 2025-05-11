@@ -10313,3 +10313,4 @@ v0.92.0.11:
   - Correctly remove bad outpost spawns in getOutpostNames, courtesy of Warrior with PR #7820.
 0.101.1.11:
   - Fixed missing feedback message when an admin kicks a town from a nation. 
+  - Fix TownRuinUtil choking on 0-townblock towns when determining plot permission changes.
