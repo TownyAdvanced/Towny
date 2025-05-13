@@ -302,6 +302,9 @@ public class TownRuinUtil {
 		if (hoursLeft >= hoursTotal)
 			return 0L;
 
+		if (hoursLeft == 0)
+			return town.getNumTownBlocks();
+
 		int numTownBlocks = town.getNumTownBlocks();
 		if (numTownBlocks == 0)
 			return 0L;
