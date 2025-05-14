@@ -13,7 +13,7 @@ help_0: 'Allgemeine Towny Hilfe'
 help_1: 'Verwende folgende Befehle, um mehr über Towny zu erfahren.'
 help_2: 'Stadtchat'
 help_3: 'Nationschat'
-help_4: 'Resident-Befehls-Liste.'
+help_4: 'Bewohner-Befehls-Liste.'
 help_5: 'Stadt-Befehls-Liste.'
 help_6: 'Stadt-Befehls-Liste.'
 help_7: 'Plot-Befehls-Liste.'
@@ -86,7 +86,19 @@ town_jail_help_1: "Inhaftiere einen Bewohner im Hauptgefängnis."
 town_jail_help_2: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, ins Primärgefängnis."
 town_jail_help_3: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis."
 town_jail_help_4: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis und Zelle."
+town_jail_help_5: "Inhaftiere einen Bewohner im primären Gefängnis, für die spezifizierten Stunden, mit der angegebenen Kaution."
+town_jail_help_6: "Inhaftiere einen Bewohner im angegebenen Gefängnis, für die spezifizierten Stunden, mit der angegebenen Kaution."
+town_jail_help_7: "Inhaftiere einen Bewohner im primären Gefängnis, in der spezifizierten Zelle, für die spezifizierten Stunden, mit der angegebenen Kaution."
 town_jail_help_8: "Entlasse einen Bewohner aus dem Gefängnis."
+town_purge_help: "Wirft Bewohner, welche sich für die angegebene Zeit nicht eingeloggt haben aus der Stadt."
+town_trust_help_0: "Fügt einen Bewohner als vertrauenswürdig in der Stadt hinzu."
+town_trust_help_1: "Entfernt einen Bewohner als vertrauenswürdig in der Stadt."
+town_trust_help_2: "Listet die vertrauten Bewohner der Stadt auf."
+town_towntrust_help_0: "Fügt eine Stadt als vertrauenswürdig in der Stadt hinzu."
+town_towntrust_help_1: "Entfernt eine Stadt als vertrauenswürdig in der Stadt."
+town_towntrust_help_2: "Listet die vertrauten Städte einer Stadt."
+town_buy_help: "Kauft Bonusblöcke, um die maximalen Claims der Stadt zu erhöhen."
+town_cede_help: "Bietet das Grundstück, auf dem du stehst, an um von der angegebenen Stadt übernommen zu werden."
 mayor_help_3: 'Anspruchsbereich grenzt nicht an die Stadt.'
 mayor_help_4: 'Beanspruche Land um dich herum in einem Radius von X'
 mayor_help_5: 'Beanspruche Land mit dem maximalen Radius'
@@ -102,9 +114,47 @@ nation_help_6: 'Gründe eine neue Nation.'
 nation_help_7: 'List the nation leader commands'
 nation_help_8: 'Gründe eine neue Nation.'
 nation_help_9: 'Listet alle Bürger der Nation auf, die Online sind.'
+nation_help_11: "Listet die Städte in der Nation auf."
+nation_help_12: "Listet die verbündeten Nationen der Nation auf."
+nation_help_13: "Listet die gegnerischen Nationen der Nation auf."
+nation_help_14: "Wird verwendet, um offenen Nationen beizutreten."
+nation_help_15: "Legt Geld in die Nationalbank ein."
+nation_help_16: "Wird benutzt, um die Nation aufzulösen."
+nation_help_17: "Wird verwendet, um Ränge von Bewohnern hinzuzufügen oder zu entfernen."
+nation_help_18: "Benutze /n rank für Hilfe."
+nation_list_help_0: "Zeigt die angegebene Seite an."
+nation_list_help_1: "Listet die Nationen nach der Anzahl der Bewohner mit der angegebenen Seite auf."
+nation_list_help_2: "Listet die Nationen nach der Anzahl der Städte mit der angegebenen Seite auf."
+nation_list_help_3: "Listet die geöffneten Nationen mit der angegebenen Seite auf."
+nation_list_help_4: "Listet die Nationen mit dem höchsten Nationalbankguthaben auf."
+nation_list_help_5: "Listet Nationen in alphabetischer Reihenfolge mit der angegebenen Seite auf."
+nation_list_help_6: "Listet Nationen nach beanspruchtem Land mit der angegebenen Seite auf."
+nation_list_help_7: "Listet die Nationen, mit den meisten Bewohnern online mit der angegebenen Seite auf."
+nation_set_help_0: "Ändert den Führer der Nation."
+nation_set_help_1: "Ändere die Hauptstadt der Nation."
+nation_set_help_2: "Lege die Höhe der Steuer fest, diese Städte zahlen sollen."
+nation_set_help_3: "Lege die Höhe der Steuer fest, diese eroberte Städte zahlen sollen."
+nation_set_help_4: "Lege den Namen der Nation fest."
+nation_set_help_5: "Lege den Titel oder den Nachnamen eines Bewohners fest."
+nation_set_help_6: "Setze den Kennnamen der Nation."
+nation_set_help_7: "Lege die Nation-Board-Nachricht fest."
+nation_set_help_8: "Setze den Nations-Spawnpunkt."
+nation_set_help_9: "Lege die Kosten für /n spawn fest."
+nation_set_help_10: "Lege die Kartenfarbe fest, die in Karten Plugins verwendet wird."
+nation_toggle_help_0: "Schaltet den friedlichen Status der Nation um."
+nation_toggle_help_1: "Schaltet den öffentlichen Status um, der Nicht-Bewohnern erlaubt /n spawn zu verwenden."
+nation_toggle_help_2: "Schaltet den offenen Status um, sodass Städte ohne Einladung beitreten können."
+nation_toggle_help_3: "Schalte die Steuern um, sodass die Städte einen Prozentsatz statt einem festen Steuersatz zahlen."
+nation_sanction_help_1: "Fügt eine Stadt der Liste aller sanktionierten Städte hinzu."
+nation_sanction_help_2: "Entfernt eine Stadt von der Liste der sanktionierten Städte."
+nation_sanction_help_3: "Listet die sanktionierten Städte deiner Nation auf."
+nation_sanction_help_4: "Listet die sanktionierten Städte der angegebenen Nation auf."
 king_help_1: 'Nation Führer Hilfe'
 king_help_2: 'Verbündete festlegen'
 king_help_3: 'Feinde festlegen'
+king_help_4: "Hebe Geld von der Nationalbank ab."
+king_help_5: "Füge Städte deiner Nation hinzu oder entferne sie wieder."
+king_help_6: "Benutze /n set für Hilfe."
 res_1: 'Dein Status'
 res_2: '[Bürger]'
 res_3: 'Status der Zielperson'
