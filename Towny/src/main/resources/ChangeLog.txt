@@ -10314,3 +10314,4 @@ v0.92.0.11:
 0.101.1.11:
   - Fixed missing feedback message when an admin kicks a town from a nation. 
   - Fix TownRuinUtil choking on 0-townblock towns when determining plot permission changes.
+  - Prevent silverfish from infesting blocks inside towns, courtesy of Warrior with PR #7827.
