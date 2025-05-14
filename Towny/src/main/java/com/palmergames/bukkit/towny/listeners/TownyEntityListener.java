@@ -479,6 +479,7 @@ public class TownyEntityListener implements Listener {
 	 *  Water being used to put out campfires.
 	 *  Boats breaking lilypads.
 	 *  Crop Trampling.
+	 *  Silverfish infesting blocks inside towns.
 	 * 
 	 * Because we use ignoreCancelled = true we dont need to worry about setting the
 	 * cancelled state to false overriding other plugins.
@@ -543,6 +544,8 @@ public class TownyEntityListener implements Listener {
 				event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), block));
 			else if (potion.getShooter() instanceof Player player)
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
+		} else if (entityType == EntityType.SILVERFISH && ItemLists.INFESTED_BLOCKS.contains(event.getTo()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation())) {
+			event.setCancelled(true);
 		}
 	}
 

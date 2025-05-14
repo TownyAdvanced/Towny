@@ -382,6 +382,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.includeList(WOOD_DOORS)
 			.build();
 
+	public static final ItemLists INFESTED_BLOCKS = newBuilder().startsWith("INFESTED_").build();
+
 	/**
 	 * Config-useable material groups.
 	 */
