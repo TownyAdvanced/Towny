@@ -51,7 +51,7 @@ public class TownyBlockListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 
 		if (plugin.isError()) {
@@ -64,10 +64,13 @@ public class TownyBlockListener implements Listener {
 			return;
 
 		//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
-		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
+		if (TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()))
+			return;
+
+		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 
 		if (plugin.isError()) {
@@ -150,7 +153,7 @@ public class TownyBlockListener implements Listener {
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBurn(BlockBurnEvent event) {
 
 		if (plugin.isError()) {
@@ -161,10 +164,13 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		event.setCancelled(!TownyActionEventExecutor.canBurn(event.getBlock()));
+		if (TownyActionEventExecutor.canBurn(event.getBlock()))
+			return;
+
+		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockIgnite(BlockIgniteEvent event) {
 
 		if (plugin.isError()) {
@@ -175,10 +181,13 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		event.setCancelled(!TownyActionEventExecutor.canBurn(event.getBlock()));
+		if (TownyActionEventExecutor.canBurn(event.getBlock()))
+			return;
+
+		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 
 		if (plugin.isError()) {
@@ -197,13 +206,15 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (!canBlockMove(block, block.getRelative(event.getDirection()), false))
+				if (!canBlockMove(block, block.getRelative(event.getDirection()), false)) {
 					event.setCancelled(true);
+					break;
+				}
 			}
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 
 		if (plugin.isError()) {
@@ -225,8 +236,10 @@ public class TownyBlockListener implements Listener {
 		if (!blocks.isEmpty()) {
 			//check each block to see if it's going to pass a plot boundary
 			for (Block block : blocks) {
-				if (!canBlockMove(block, block.getRelative(event.getDirection()), allowWild))
+				if (!canBlockMove(block, block.getRelative(event.getDirection()), allowWild)) {
 					event.setCancelled(true);
+					break;
+				}
 			}
 		}
 	}
@@ -263,7 +276,7 @@ public class TownyBlockListener implements Listener {
 		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCreateExplosion(BlockExplodeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -322,14 +335,17 @@ public class TownyBlockListener implements Listener {
 		// Snowmen making snow will also throw this event. 
 		if (event.getEntity() instanceof Player player) {
 			//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
-			event.setCancelled(!TownyActionEventExecutor.canBuild(player, event.getBlock().getLocation(), event.getBlock().getType()));
+			if (TownyActionEventExecutor.canBuild(player, event.getBlock().getLocation(), event.getBlock().getType()))
+				return;
+
+			event.setCancelled(true);
 		}
 	}
 	
 	/*
 	* Prevents water or lava from going into other people's plots.
 	*/
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFromToEvent(BlockFromToEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -350,7 +366,7 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockDispense(BlockDispenseEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -378,7 +394,7 @@ public class TownyBlockListener implements Listener {
 	/*
 	 * Used to prevent bonemeal and moss growing into areas it shouldn't.
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFertilize(BlockFertilizeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -390,13 +406,13 @@ public class TownyBlockListener implements Listener {
 		
 		List<BlockState> allowed = BorderUtil.allowedBlocks(event.getBlocks(), event.getBlock(), event.getPlayer());
 		event.getBlocks().clear();
-        event.getBlocks().addAll(allowed);
+		event.getBlocks().addAll(allowed);
 	}
 
 	/*
 	 * Used to prevent Sculk Spread.
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onSculkSpread(BlockSpreadEvent event) {
 		String sourceName = event.getSource().getType().getKey().getKey();
 		if (!sourceName.startsWith("sculk"))
@@ -410,14 +426,18 @@ public class TownyBlockListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getBlock().getWorld()))
 			return;
 
-		if (sourceName.equalsIgnoreCase("sculk_catalyst")) {
-			// Check if the sculk is passing across a border with differing owners, allowing
-			// sculk to spread from a town into the wilderness.
-			event.setCancelled(!canBlockMove(event.getSource(), event.getBlock(), true));
-		}
+		if (!sourceName.equalsIgnoreCase("sculk_catalyst"))
+			return;
+
+		// Check if the sculk is passing across a border with differing owners, allowing
+		// sculk to spread from a town into the wilderness.
+		if (canBlockMove(event.getSource(), event.getBlock(), true))
+			return;
+
+		event.setCancelled(true);
 	}
 	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player))
 			return;
