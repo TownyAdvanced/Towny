@@ -163,9 +163,12 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	}
 
 	private String getOfflinePlayerPlaceholder(OfflinePlayer player, String identifier) {
-		if (player == null) {
+		if (player == null && !identifier.startsWith("top_")) {
 			return "";
 		}
+		
+		if (identifier.startsWith("top_"))
+			return getLeaderBoardPlaceholder(identifier);
 		
 		/*
 		 * This is a location-based placeholder request, use the onPlaceholderRequest to fulfill it.
@@ -178,9 +181,6 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		
 		if (resident == null)
 			return "";
-
-		if (identifier.startsWith("top_"))
-			return getLeaderBoardPlaceholder(identifier);
 
 		String town = "";
 		String nation = "";
