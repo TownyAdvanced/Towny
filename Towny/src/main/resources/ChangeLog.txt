@@ -10318,3 +10318,4 @@ v0.92.0.11:
 0.101.1.12:
   - Allow townyadvanced_top PAPI placeholders to be handled using a null player.
     - Closes #7830.
+  - Fix incorrect message seen in the /plot set HelpMenu.

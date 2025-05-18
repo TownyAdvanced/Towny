@@ -921,8 +921,7 @@ public enum HelpMenu {
 				.add("perm reset", Translatable.of("plot_set_help_7"))
 				.add("Eg: /plot set perm ally off")
 				.add("Eg: /plot set perm friend build on")
-				.add(Translation.of("plot_perms", "'friend'", "'resident'"))
-				.add(Translatable.of("plot_perms_1"));
+				.add(Translation.of("plot_perms", "'friend'", "'resident'"));
 		}
 	},
 
