@@ -681,7 +681,7 @@ public enum ConfigNodes {
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"",
-			"# List of animals which can be killed on farm plots by town residents."
+			"# List of animals which can be killed on farm plots by players who have been given destroy plot permissions to destroy."
 	),
 	GTOWN_MAX_RESIDENTS_PER_TOWN(
 			"global_town_settings.max_residents_per_town",
