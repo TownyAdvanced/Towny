@@ -118,8 +118,9 @@ public class AddonCommand extends Command {
 	private record LegacyTabCompleter(AddonCommand command) implements TabCompleter {
 		@Override
 		public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-			return command().tabCompletions.get(args.length - 2) == null ? Collections.emptyList()
-					: command().tabCompletions.get(args.length - 2);
+			int precedingArgs = command().getCommandType().getTabCompletionPrecedingArgNumber();
+			return command().tabCompletions.get(args.length - precedingArgs) == null ? Collections.emptyList()
+					: command().tabCompletions.get(args.length - precedingArgs);
 		}
 	}
 }
