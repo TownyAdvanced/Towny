@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TownyCommandAddonAPI {
     private static final Map<CommandType, Map<String, AddonCommand>> addedCommands = new HashMap<>();
-    private static int args;
 
     public enum CommandType {
         RESIDENT(1),
@@ -48,6 +47,8 @@ public class TownyCommandAddonAPI {
         TOWNYWORLD(1),
         TOWNYWORLD_SET(2),
         TOWNYWORLD_TOGGLE(2);
+
+		private int args;
 
 		CommandType(int i) {
 			args = i;
