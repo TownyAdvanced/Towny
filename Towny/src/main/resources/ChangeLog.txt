@@ -10319,3 +10319,5 @@ v0.92.0.11:
   - Allow townyadvanced_top PAPI placeholders to be handled using a null player.
     - Closes #7830.
   - Fix incorrect message seen in the /plot set HelpMenu.
+  - Fix SQL database not correctly loading existing TownyWorld's settings, courtesy of jb0s with PR #7833. (First-Time Contributor!)
+    - Fixes the issue where some worlds always take on the default new world settings.
