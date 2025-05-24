@@ -570,7 +570,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		try (Connection connection = getConnection();
 			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "WORLDS")) {
+			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "WORLDS")) {
 			
 			while (rs.next()) {
 				final String name = rs.getString("name");
