@@ -20,43 +20,33 @@ public class TownyCommandAddonAPI {
     private static final Map<CommandType, Map<String, AddonCommand>> addedCommands = new HashMap<>();
 
     public enum CommandType {
-        RESIDENT(1),
-        RESIDENT_SET(2),
-        RESIDENT_TOGGLE(2),
-        NATION(1),
-        NATION_LIST_BY(3),
-        NATION_SET(2),
-        NATION_TOGGLE(2),
-        TOWN(1),
-		TOWN_BUY(2),
-		TOWN_LIST_BY(3),
-        TOWN_SET(2),
-        TOWN_TOGGLE(2),
-        PLOT(1),
-        PLOT_SET(2),
-        PLOT_TOGGLE(2),
-        TOWNY(1),
-        TOWNYADMIN(1),
+        RESIDENT,
+        RESIDENT_SET,
+        RESIDENT_TOGGLE,
+        NATION,
+        NATION_LIST_BY,
+        NATION_SET,
+        NATION_TOGGLE,
+        TOWN,
+		TOWN_BUY,
+		TOWN_LIST_BY,
+        TOWN_SET,
+        TOWN_TOGGLE,
+        PLOT,
+        PLOT_SET,
+        PLOT_TOGGLE,
+        TOWNY,
+        TOWNYADMIN,
         /** This CommandType will always execute using a CommandExecutor with the Town name prepended to the String[] args to which this command should apply. */
-        TOWNYADMIN_TOWN(3),
+        TOWNYADMIN_TOWN,
         /** This CommandType will always execute using a CommandExecutor with the Nation name prepended to the String[] args to which this command should apply. */
-        TOWNYADMIN_NATION(3),
-        TOWNYADMIN_SET(1),
-        TOWNYADMIN_TOGGLE(1),
-		TOWNYADMIN_RELOAD(1),
-        TOWNYWORLD(1),
-        TOWNYWORLD_SET(2),
-        TOWNYWORLD_TOGGLE(2);
-
-		private int args;
-
-		CommandType(int i) {
-			args = i;
-		}
-
-		public int getTabCompletionPrecedingArgNumber() {
-			return args;
-		}
+        TOWNYADMIN_NATION,
+        TOWNYADMIN_SET,
+        TOWNYADMIN_TOGGLE,
+		TOWNYADMIN_RELOAD,
+        TOWNYWORLD,
+        TOWNYWORLD_SET,
+        TOWNYWORLD_TOGGLE
     }
 
     public static boolean addSubCommand(@NotNull CommandType commandType, @NotNull String subCommandName, @NotNull CommandExecutor commandExecutor) {
