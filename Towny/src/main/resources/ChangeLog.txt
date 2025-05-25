@@ -10323,3 +10323,5 @@ v0.92.0.11:
     - Fixes the issue where some worlds always take on the default new world settings.
 0.101.1.13:
   - Fix extra space added to the "(PVP)" slug seen when entering the wilderness.
+  - Fixes the tabcompleter for TownyAddonCommands.
+    - Closes #7834.
