@@ -218,7 +218,7 @@ public class ChunkNotification {
 
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorld().isPVP() && testWorldPVP()) ? " " + Translatable.of("status_title_pvp").forLocale(resident) : ""));
+				return String.format(areaWildernessPvPNotificationFormat, (to.getTownyWorld().isPVP() && testWorldPVP()) ? Translatable.of("status_title_pvp").forLocale(resident) : "");
 		}
 		return null;
 	}
@@ -244,7 +244,7 @@ public class ChunkNotification {
 	public String getTownPVPNotification(Resident resident) {
 
 		if (!toWild && ((fromWild) || (toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp))) {
-			return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Translatable.of("status_title_pvp").forLocale(resident) : Translatable.of("status_title_nopvp").forLocale(resident)));
+			return String.format(areaTownPvPNotificationFormat, !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Translatable.of("status_title_pvp").forLocale(resident) : Translatable.of("status_title_nopvp").forLocale(resident));
 		}
 		return null;
 	}

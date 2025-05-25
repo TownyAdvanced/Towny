@@ -10321,3 +10321,5 @@ v0.92.0.11:
   - Fix incorrect message seen in the /plot set HelpMenu.
   - Fix SQL database not correctly loading existing TownyWorld's settings, courtesy of jb0s with PR #7833. (First-Time Contributor!)
     - Fixes the issue where some worlds always take on the default new world settings.
+0.101.1.13:
+  - Fix extra space added to the "(PVP)" slug seen when entering the wilderness.
