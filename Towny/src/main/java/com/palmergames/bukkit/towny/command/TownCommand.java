@@ -1598,7 +1598,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			// Set the jail cell if the argument is given.
 			if (split.length == 4 + offset) {
 				cell = MathUtil.getPositiveIntOrThrow(split[3 + offset]);
-				if (!jail.hasJailCell(cell))
+				if (!jail.hasJailCell(Math.max(0, cell - 1)))
 					throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
 			}
 		}

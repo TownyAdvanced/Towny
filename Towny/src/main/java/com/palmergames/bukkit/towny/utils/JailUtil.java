@@ -73,7 +73,7 @@ public class JailUtil {
 		String senderName = jailer instanceof Player ? (jailer).getName() : "Admin";
 
 		// Fire cancellable event.
-		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, cell, hours, bail, reason);
+		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, Math.max(0, cell - 1), hours, bail, reason);
 		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendErrorMsg(jailer, event.getCancelMessage());
 			return;
