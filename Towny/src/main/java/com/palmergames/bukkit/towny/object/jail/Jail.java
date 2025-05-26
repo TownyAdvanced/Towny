@@ -102,13 +102,12 @@ public class Jail implements Savable {
 		TownyUniverse.getInstance().addSpawnPoint(new SpawnPoint(position, SpawnPointType.JAIL_SPAWN));
 	}
 	
-	public void removeJailCell(Location loc) {
-		removeJailCell(SpawnPointLocation.parseSpawnPointLocation(loc));
-	}
-	
 	public void removeJailCell(SpawnPointLocation pos) {
 		TownyUniverse.getInstance().removeSpawnPoint(pos);
-		jailCellMap.remove(pos);
+		Position removed = jailCellMap.remove(pos);
+		if (removed != null) {
+			jailCells.remove(removed);
+		}
 	}
 	
 	public void removeAllCells() {
