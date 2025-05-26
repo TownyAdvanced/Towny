@@ -1538,6 +1538,18 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				world.setForceFire(result);
 			} catch (Exception ignored) {
 			}
+			
+			result = rs.getBoolean("snowfall");
+			try {
+				world.setSnow(result);
+			} catch (Exception ignored) {
+			}
+			
+			result = rs.getBoolean("forcesnowfall");
+			try {
+				world.setForceSnow(result);
+			} catch (Exception ignored) {
+			}
 
 			result = rs.getBoolean("explosions");
 			try {
@@ -2555,6 +2567,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			// has firespread enabled
 			nat_hm.put("firespread", world.isFire());
 			nat_hm.put("forcefirespread", world.isForceFire());
+			// has snowfall enabled
+			nat_hm.put("snowfall", world.isSnow());
+			nat_hm.put("forcesnowfall", world.isForceSnow());
 			// has explosions enabled
 			nat_hm.put("explosions", world.isExpl());
 			nat_hm.put("forceexplosions", world.isForceExpl());
