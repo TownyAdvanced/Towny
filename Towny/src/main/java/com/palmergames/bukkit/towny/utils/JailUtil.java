@@ -73,7 +73,7 @@ public class JailUtil {
 		String senderName = jailer instanceof Player ? (jailer).getName() : "Admin";
 
 		// Fire cancellable event.
-		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, Math.max(0, cell - 1), hours, bail, reason);
+		ResidentPreJailEvent event = new ResidentPreJailEvent(resident, jail, cell, hours, bail, reason);
 		if (BukkitTools.isEventCancelled(event)) {
 			TownyMessaging.sendErrorMsg(jailer, event.getCancelMessage());
 			return;
@@ -105,13 +105,13 @@ public class JailUtil {
 		String jailName = jail.hasName() ? jail.getName() : Translatable.of("jail_sing").toString();
 		// Send feedback message to arresting town
 		if (TownySettings.isAllowingBail() && bail > 0 && TownyEconomyHandler.isActive())
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail", resident.getName(), jailName, cell, hours, bail, senderName));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail", resident.getName(), jailName, cell + 1, hours, bail, senderName));
 		else
-			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x", resident.getName(), jailName, cell, hours, senderName));
+			TownyMessaging.sendPrefixedTownMessage(jail.getTown(), Translatable.of("msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x", resident.getName(), jailName, cell + 1, hours, senderName));
 
 		// Set the jail, cells, hours, bail, and add resident to the Universe's jailed resident map.
 		resident.setJail(jail);
-		resident.setJailCell(Math.max(0, cell - 1));
+		resident.setJailCell(cell);
 		resident.setJailHours(hours);
 		resident.setJailBailCost(bail);
 		resident.save();
