@@ -160,6 +160,14 @@ res_1: 'Tvůj stav'
 res_2: '[obyvatel]'
 res_3: 'Stav cílového hráče'
 res_4: 'Zobrazí všechny aktivní hráče'
+res_9: "Jak velké daně budeš platit každý den."
+res_10: "Podívej se na /res jail ? pro nápovědu."
+res_11: "Podívej se na /res toggle ? pro nápovědu."
+res_12: "Podívej se na /res set ? pro nápovědu."
+res_13: "Spawn do tvého města, nebo postele."
+res_toggle_help_0: "Přepni status pvp pro tvé pozemky."
+res_toggle_help_1: "Přepni status ohně pro tvé pozemky."
+res_toggle_help_2: "Přepni status mobů pro tvé pozemky."
 mode_1: 'Zobraz mapu mezi každou parcelou'
 mode_2: 'Pokus se automaticky zabírat při chůzi'
 mode_3: 'Pokus se automaticky vzdávat parcel při chůzi'
@@ -187,6 +195,7 @@ townyadmin_help_1: 'Vzdej se této parcely'
 townyadmin_help_2: 'Pokus se vzdát se parcel kolem sebe.'
 admin_panel_2: 'znovu načíst Towny'
 admin_panel_3: 'Spusť kód pro nový den'
+ta_reload_help_2: "Reloadne jazykové soubory."
 msg_block_claim: 'Zaber tuto parcelu'
 msg_plot_nfs: 'Ukonči prodej parcely'
 msg_nfs_abr: '&''fs'' a ''nfs'' jsou zkratky pro ''forsale'' a ''notforsale''.'
@@ -813,7 +822,7 @@ msg_spawn_cost: '&aCena za teleport: &e%s'
 msg_reloaded_config: '&2Konfigurace úspěšně znovu načtena.'
 msg_reloaded_perms: '&2Permisse úspěšně znovu načteny.'
 msg_reloaded_db: '&2Databáze úspěšně znovu načtena'
-msg_reloaded_lang: '&2Jazykový soubor úspěšně znovu načten'
+msg_reloaded_lang: '&aJazykový soubor úspěšně znovu načten'
 msg_reset_config: '&2Konfigurace byla obnovena'
 msg_err_teleport_cancelled: 'Teleport zrušen kvůli tvému pohybu.'
 #Added in 0.79
