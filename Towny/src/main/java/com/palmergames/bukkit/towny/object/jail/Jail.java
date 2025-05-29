@@ -124,6 +124,8 @@ public class Jail implements Savable {
 	}
 	
 	public boolean hasJailCell(int index) {
+		if (index < 0)
+			return false;
 		return jailCellMap.size() - 1 >= index;
 	}
 	
