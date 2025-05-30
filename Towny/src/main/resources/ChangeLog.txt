@@ -10325,3 +10325,5 @@ v0.92.0.11:
   - Fix extra space added to the "(PVP)" slug seen when entering the wilderness.
   - Fixes the tabcompleter for TownyAddonCommands.
     - Closes #7834.
+  - Fix splash potion not applying to mobs, courtesy of SulkyWhale with PR #7839.
+    - Closes #7838.
