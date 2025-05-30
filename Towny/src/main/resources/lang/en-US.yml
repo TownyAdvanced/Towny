@@ -2637,5 +2637,3 @@ msg_err_you_cannot_add_trust_on_enemy: "You cannot trust a player who is part of
 msg_err_you_cannot_add_towntrust_on_outlaw: "You cannot trust a town who has residents which are outlawed by your town."
 
 msg_err_you_cannot_add_towntrust_on_enemy: "You cannot trust a town who is part of an enemy nation."
-
-msg_err_that_jail_cell_does_not_exists: "This cell doesn't exist."
