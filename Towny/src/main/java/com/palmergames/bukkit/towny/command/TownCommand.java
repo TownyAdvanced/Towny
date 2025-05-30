@@ -1559,7 +1559,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Set default values.
 		int hours = 2; // default set to two in relation to https://github.com/TownyAdvanced/Towny/issues/6029
 		int jailNum = 1;
-		int cell = 1;
+		int cell = 0;
 		Jail jail = town.getPrimaryJail();
 		double bail = bailEnabled ? TownySettings.getBailAmount() : 0.0;
 		double initialJailFee = TownyEconomyHandler.isActive() && TownySettings.initialJailFee() > 0 ? TownySettings.initialJailFee() : 0;
@@ -1597,7 +1597,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			// Set the jail cell if the argument is given.
 			if (split.length == 4 + offset) {
-				cell = MathUtil.getPositiveIntOrThrow(split[3 + offset]);
+				// Parse user jailcell to index.
+				cell = MathUtil.getPositiveIntOrThrow(split[3 + offset]) - 1;
+				if (cell < 0)
+					throw new TownyException(Translatable.of("msg_err_that_jail_cell_does_not_exists"));
+
 				if (!jail.hasJailCell(cell))
 					throw new TownyException(Translatable.of("msg_err_that_jail_plot_does_not_have_that_many_cells"));
 			}
