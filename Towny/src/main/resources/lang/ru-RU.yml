@@ -475,6 +475,7 @@ msg_nation_kicked_by: '&bВаш город был выгнан из нации %
 msg_town_left_nation: '&bВаш город покинул нацию %s.'
 msg_nation_town_left: '&bГород %s покинул вашу нацию.'
 msg_nation_kicked: '&b%s изгнал %s из нации.'
+msg_nation_you_kicked: 'Вы были исключены из нации.'
 msg_raised_ass: '&b%s повысил %s до ассистента %s.'
 msg_lowered_to_res_by: '&bВы были понижены до обычного горожанина %s.'
 msg_lowered_to_res: '&b%s понизил %s до обычного гражданина.'
