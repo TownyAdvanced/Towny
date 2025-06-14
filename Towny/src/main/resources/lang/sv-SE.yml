@@ -325,7 +325,6 @@ msg_err_not_enough_residents_join_nation: '&bStaden %s har inte tillräckligt me
 msg_not_enough_residents_no_longer_capital: '&bNationens gamla huvudstad har inte längre tillräckligt med invånare. Nationens nya huvudstad är %s.'
 msg_town_not_enough_residents_left_nation: '&bStaden %s har inte längre tillräckligt med invånare för att vara medlem i en nation och har tagits bort från nationen.'
 msg_nation_disbanded_town_not_enough_residents: '&bStaden %s har inte längre tillräckligt med invånare för att försörja nationen och har tvingat nationen att stängas.'
-msg_not_enough_residents_refunded: '&bDu har återbetalats $%s för att din nation upplöses på grund av att de inte har tillräckligt med invånare.'
 msg_not_enough_residents_capital: '&bStaden %s har inte tillräckligt med invånare för att vara huvudstaden i nationen.'
 list_page: '&bSida %s av %s'
 list_err_not_enough_pages: '&cEndast %s sidor tillgängliga.'

@@ -335,7 +335,6 @@ msg_err_not_enough_residents_join_nation: '&bDe stad %s heeft niet genoeg inwone
 msg_not_enough_residents_no_longer_capital: '&bDe oude hoofdstad van de natie heeft niet meer genoeg inwoners om de hoofdstad van de natie te zijn. De nieuwe hoofdstad van de natie is %s.'
 msg_town_not_enough_residents_left_nation: '&bDe stad %s heeft niet meer genoeg inwoners om lid te zijn van een natie en is verwijderd uit de natie.'
 msg_nation_disbanded_town_not_enough_residents: '&bDe stad %s heeft niet langer genoeg inwoners om de natie te besturen en heeft de natie gedwongen tot ontbinding.'
-msg_not_enough_residents_refunded: '&bJe bent $%s terugbetaald voor je natie die wordt ontbonden omdat je niet genoeg inwoners hebt.'
 msg_not_enough_residents_capital: '&bDe stad %s heeft niet genoeg inwoners om de hoofdstad van de natie te zijn.'
 list_page: '&bPagina %s van %s'
 list_err_not_enough_pages: '&cAlleen %s pagina''s beschikbaar'

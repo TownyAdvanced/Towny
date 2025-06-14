@@ -669,7 +669,6 @@ msg_err_not_enough_residents_join_nation: '&b市鎮%s沒有足夠的人口數所
 msg_not_enough_residents_no_longer_capital: '&b城邦舊都人口數不足所以不再是首都 新的首都將在%s '
 msg_town_not_enough_residents_left_nation: '&b市鎮%s沒有足夠的人口數來成為城邦的一員，並被趕出了城邦 '
 msg_nation_disbanded_town_not_enough_residents: '&b市鎮%s沒有足夠的人口數來形成城邦以至於城邦滅亡 '
-msg_not_enough_residents_refunded: '&b你的城邦由於人口數不足而滅亡了，因這個你獲得了 $%s '
 msg_not_enough_residents_capital: '&b市鎮%s沒有足夠的居民來作為首都 '
 list_page: '&b當前頁數%s，總頁數%s'
 list_err_not_enough_pages: '&c只有%s頁可用'

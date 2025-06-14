@@ -650,7 +650,6 @@ msg_err_not_enough_residents_join_nation: '&cVaš grad %s nema dovoljno stanovni
 msg_not_enough_residents_no_longer_capital: '&bStari glavni grad nacije više nema dovoljno stanovnika da bude glavni grad nacije. Novi glavni grad nacije je %s.'
 msg_town_not_enough_residents_left_nation: '&bGrad %s više nema dovoljno stanovnika da bude član nacije i uklonjen je iz nje.'
 msg_nation_disbanded_town_not_enough_residents: '&bGrad %s više nema dovoljno stanovnika da upravlja nacijom i zato se nacija raspala.'
-msg_not_enough_residents_refunded: '&bPovraćeno Vam je $%s zbog raspada Vaše nacije jer nema dovoljno stanovnika.'
 msg_not_enough_residents_capital: '&bGrad %s nema dovoljno stanovnika da bude glavni grad nacije.'
 list_page: '&bStrana %s od %s'
 list_err_not_enough_pages: '&cSamo %s strana je dostupno'

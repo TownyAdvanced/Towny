@@ -122,13 +122,52 @@ nation_help_17: "Slouží k přidání nebo odebrání hodností z rezidentů."
 nation_help_18: "Pokud si nevíte rady, nápovědu města získáte pomocí /t rank"
 nation_list_help_0: "Zobrazit vybranou stránku."
 nation_list_help_1: "Seznam měst podle počtu obyvatel se zadanou stránkou."
+nation_list_help_2: "Seznam měst podle počtu obyvatel se zadanou stránkou."
+nation_list_help_3: "Seznam států, které jsou veřejné."
+nation_list_help_4: "Seznam států, které využívají bankovní zůstatek."
+nation_list_help_5: "Seznam států seřazený dle abeceny."
+nation_list_help_6: "Seznam států dle zabraného území."
+nation_list_help_7: "Seznam států dle počtu online."
+nation_set_help_0: "Změnit leadera státu."
+nation_set_help_1: "Změnit hlavní město státu."
+nation_set_help_2: "Nastavit jaké daně budou města platit."
+nation_set_help_3: "Nastavit výši daně, kterou zaplatí dobytá města."
+nation_set_help_4: "Nastav jméno státu."
+nation_set_help_5: "Nastavit titul, nebo příjmení obyvatele."
+nation_set_help_6: "Nastavit tag státu."
+nation_set_help_7: "Nastavte zprávu národní rady."
+nation_set_help_8: "Nastavit spawn point státu."
+nation_set_help_9: "Nastavení ceny použití /n spawn."
+nation_set_help_10: "Nastavit barvu použitou na mapě."
+nation_toggle_help_0: "Přepínání mírového stavu národa."
+nation_toggle_help_1: "Přepínání veřejného statusu, povoluje hráčům, kteří nejsou občané použivat /n spawn."
+nation_toggle_help_2: "Přepíná veřejný status, povoluje městům se připojit bez pozvánky."
+nation_toggle_help_3: "Přepíná procenta daní. Místo dané částky platí města procentuální část."
+nation_sanction_help_1: "Přídá město do seznamu měst se sankcemi."
+nation_sanction_help_2: "Odebere město ze seznamu měst se sankcemi."
+nation_sanction_help_3: "Seznam měst se sankcemi v tvém státu."
+nation_sanction_help_4: "Seznam měst se sakcemi v přiděleném státu."
 king_help_1: 'Nápověda vůdce státu'
 king_help_2: 'Nastavení svých spojenců.'
 king_help_3: 'Nastavení svých nepřátel.'
+king_help_4: "Vybrat peníze z banky tvého státu."
+king_help_5: "Přidá/odebere města z tvého státu."
+king_help_6: "Použij /n set ? pro nápovědu."
+king_help_7: "Použij /n toggle ? pro nápovědu."
+king_help_8: "Slouží k přidání/absorbci jiného státu do toho tvého."
+king_help_9: "Používá se k posílaní zpráv všem v tvém státu."
 res_1: 'Tvůj stav'
 res_2: '[obyvatel]'
 res_3: 'Stav cílového hráče'
 res_4: 'Zobrazí všechny aktivní hráče'
+res_9: "Jak velké daně budeš platit každý den."
+res_10: "Podívej se na /res jail ? pro nápovědu."
+res_11: "Podívej se na /res toggle ? pro nápovědu."
+res_12: "Podívej se na /res set ? pro nápovědu."
+res_13: "Spawn do tvého města, nebo postele."
+res_toggle_help_0: "Přepni status pvp pro tvé pozemky."
+res_toggle_help_1: "Přepni status ohně pro tvé pozemky."
+res_toggle_help_2: "Přepni status mobů pro tvé pozemky."
 mode_1: 'Zobraz mapu mezi každou parcelou'
 mode_2: 'Pokus se automaticky zabírat při chůzi'
 mode_3: 'Pokus se automaticky vzdávat parcel při chůzi'
@@ -156,6 +195,7 @@ townyadmin_help_1: 'Vzdej se této parcely'
 townyadmin_help_2: 'Pokus se vzdát se parcel kolem sebe.'
 admin_panel_2: 'znovu načíst Towny'
 admin_panel_3: 'Spusť kód pro nový den'
+ta_reload_help_2: "Reloadne jazykové soubory."
 msg_block_claim: 'Zaber tuto parcelu'
 msg_plot_nfs: 'Ukonči prodej parcely'
 msg_nfs_abr: '&''fs'' a ''nfs'' jsou zkratky pro ''forsale'' a ''notforsale''.'
@@ -402,7 +442,6 @@ msg_err_not_enough_residents_join_nation: '&bMěsto %s nemá dostatek obyvatel p
 msg_not_enough_residents_no_longer_capital: '&bStaré hlavní město již nemá dostatek obyvatel k tomu, aby bylo hlavním městem. Nové hlavní město národa je %s.'
 msg_town_not_enough_residents_left_nation: '&bMěsto %s již nemá dostatek obyvatel k tomu, aby bylo členem frakce, a bylo z ní odebráno.'
 msg_nation_disbanded_town_not_enough_residents: '&bThe town %s již nemá dostatek obyvatel, aby mohl řídit frakci, a donutil frakci k rozpadu.'
-msg_not_enough_residents_refunded: '&bDostal jsi%s za to, že byla rozpuštěna vaše frakce, protože nemáte dostatek členů.'
 msg_not_enough_residents_capital: 'Město %s nemá dostatek obyvatel, aby bylo hlavním městem frakce.'
 list_page: 'Strana %s z %s'
 list_err_not_enough_pages: '&cPouze %s stránek k dispozici'
@@ -782,7 +821,7 @@ msg_spawn_cost: '&aCena za teleport: &e%s'
 msg_reloaded_config: '&2Konfigurace úspěšně znovu načtena.'
 msg_reloaded_perms: '&2Permisse úspěšně znovu načteny.'
 msg_reloaded_db: '&2Databáze úspěšně znovu načtena'
-msg_reloaded_lang: '&2Jazykový soubor úspěšně znovu načten'
+msg_reloaded_lang: '&aJazykový soubor úspěšně znovu načten'
 msg_reset_config: '&2Konfigurace byla obnovena'
 msg_err_teleport_cancelled: 'Teleport zrušen kvůli tvému pohybu.'
 #Added in 0.79

@@ -54,7 +54,7 @@ town_help_26: "すべての町の一覧を表示するには、/t list ? を参�
 town_help_27: "自分が所属している町を抜ける"
 town_help_28: "町の銀行からお金を引き出します。"
 town_help_29: "/t claim ? を使用して、ヘルプを参照してください。"
-town_help_30: "あなたの町から土地を放棄するのに使われます"
+town_help_30: "町から土地の所有権を解除するために使用されます。"
 town_help_31: "住所を追加または削除します。"
 town_help_32: "/t set ? を使用して、ヘルプを参照してください。"
 town_help_33: "/t buy ? を使用して、ヘルプを参照してください。"
@@ -504,7 +504,6 @@ msg_err_not_enough_residents_join_nation: '&bこの町の %s には十分な住�
 msg_not_enough_residents_no_longer_capital: '&b国の古い首都は、もはや国の首都になるのに十分な住民がいません。新しい国の首都は %s です。'
 msg_town_not_enough_residents_left_nation: '&bこの町の %s は国のメンバーになるための十分な住民を持っておらず、国から追放されました。'
 msg_nation_disbanded_town_not_enough_residents: '&b町 %s には十分な住民がいなくなり、強制的に解散させられました。'
-msg_not_enough_residents_refunded: '&bあなたは十分な住民がいないため、解散され、%s ドルを返金されました。'
 msg_not_enough_residents_capital: '&bこの町の %s には十分な住民がいません。'
 list_page: '&bページ %s / %s'
 list_err_not_enough_pages: '&c利用可能なページ数は %s ページのみです'

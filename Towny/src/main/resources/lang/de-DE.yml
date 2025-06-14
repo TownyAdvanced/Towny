@@ -436,7 +436,6 @@ msg_err_not_enough_residents_join_nation: '&bDie Stadt %s nicht genügend Einwoh
 msg_not_enough_residents_no_longer_capital: '&bDie alte Hauptstadt der Nation hat nicht mehr genug Einwohner, um die Hauptstadt der Nation zu sein. Die neue Hauptstadt ist %s.'
 msg_town_not_enough_residents_left_nation: '&bDie Stadt %s hat nicht mehr genug Einwohner, um ein Mitglied der Nation zu sein. Die Stadt wird deshalb aus der Nation geworfen.'
 msg_nation_disbanded_town_not_enough_residents: '&bDie Stadt %s hat nicht mehr genug Einwohner, um eine Nation zu leiten. Die Nation wird desshalb aufgelöst.'
-msg_not_enough_residents_refunded: '&bDu hast &f%s$&b von deiner Nation erstatten bekommen, da sie wegen zu weniger Bürger aufgelöst wurde.'
 msg_not_enough_residents_capital: '&bDie Stadt %s hat nicht genug Bürger um die Hauptstadt der Nation zu sein.'
 list_page: '&bSeite %s von %s'
 list_err_not_enough_pages: '&cNur %s Seiten verfügbar'
