@@ -442,7 +442,6 @@ msg_err_not_enough_residents_join_nation: '&bMěsto %s nemá dostatek obyvatel p
 msg_not_enough_residents_no_longer_capital: '&bStaré hlavní město již nemá dostatek obyvatel k tomu, aby bylo hlavním městem. Nové hlavní město národa je %s.'
 msg_town_not_enough_residents_left_nation: '&bMěsto %s již nemá dostatek obyvatel k tomu, aby bylo členem frakce, a bylo z ní odebráno.'
 msg_nation_disbanded_town_not_enough_residents: '&bThe town %s již nemá dostatek obyvatel, aby mohl řídit frakci, a donutil frakci k rozpadu.'
-msg_not_enough_residents_refunded: '&bDostal jsi%s za to, že byla rozpuštěna vaše frakce, protože nemáte dostatek členů.'
 msg_not_enough_residents_capital: 'Město %s nemá dostatek obyvatel, aby bylo hlavním městem frakce.'
 list_page: 'Strana %s z %s'
 list_err_not_enough_pages: '&cPouze %s stránek k dispozici'
