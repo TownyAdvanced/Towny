@@ -318,7 +318,6 @@ msg_err_not_enough_residents_join_nation: '&bKota %s tidak memiliki penduduk yan
 msg_not_enough_residents_no_longer_capital: '&bIbu kota negara yang lama tidak memiliki cukup penduduk. Ibu kota yang baru diganti menjadi %s.'
 msg_town_not_enough_residents_left_nation: '&bkota %s tidak memiliki cukup penduduk dan telah dikeluarkan dari negara.'
 msg_nation_disbanded_town_not_enough_residents: '&bKota %s tidak memiliki cukup penduduk dan negara telah dibubarkan secara paksa.'
-msg_not_enough_residents_refunded: '&bDana telah dikembalikan sebesar $%s dikarenakan pembubaran negara yang disebabkan tidak cukupnya penduduk.'
 msg_not_enough_residents_capital: '&bKota %s tidak memiliki cukup penduduk untuk menjadi ibukota.'
 list_page: '&bHalaman %s dari %s'
 list_err_not_enough_pages: '&cHanya terdapat %s halaman yang tersedia'
