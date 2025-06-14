@@ -2980,6 +2980,18 @@ public class TownySettings {
 		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND) : ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND.getDefault();
 	}
 
+	public static String getConfirmationCommandFormat() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_FORMAT) : ConfigNodes.INVITE_SYSTEM_CONFIRMATION_FORMAT.getDefault();
+	}
+
+	public static String getConfirmationCommandYesColour() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_YES_COLOUR) : ConfigNodes.INVITE_SYSTEM_CONFIRMATION_YES_COLOUR.getDefault();
+	}
+
+	public static String getConfirmationCommandNoColour() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_NO_COLOUR) : ConfigNodes.INVITE_SYSTEM_CONFIRMATION_NO_COLOUR.getDefault();
+	}
+
 	public static boolean getOutsidersPreventPVPToggle() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}

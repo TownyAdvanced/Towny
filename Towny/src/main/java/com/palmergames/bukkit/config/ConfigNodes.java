@@ -2338,6 +2338,24 @@ public enum ConfigNodes {
 			"",
 			"# Command used to cancel some towny actions/tasks",
 			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_CONFIRMATION_FORMAT(
+			"invite_system.confirmation_format",
+			"[/%s]",
+			"",
+			"# The format applied to the clickable confirmations.",
+			"#e.g [/accept] would appear as default."),
+	INVITE_SYSTEM_CONFIRMATION_YES_COLOUR(
+			"invite_system.confirmation_yes_colour",
+			"<green>",
+			"",
+			"# The colour used to show the accept and confirm commands.",
+			"# Allowed colours: <black>,<dark_blue>,<dark_green>,<dark_aqua>,<dark_red>,<dark_purple>,<gold>,<gray>,<dark_gray>,<blue>,<green>,<aqua>,<red>,<light_purple>,<yellow>,<white>"),
+	INVITE_SYSTEM_CONFIRMATION_NO_COLOUR(
+			"invite_system.confirmation_no_colour",
+			"<red>",
+			"",
+			"# The colour used to show the deny and cancel commands.",
+			"# Allowed colours: <black>,<dark_blue>,<dark_green>,<dark_aqua>,<dark_red>,<dark_purple>,<gold>,<gray>,<dark_gray>,<blue>,<green>,<aqua>,<red>,<light_purple>,<yellow>,<white>"),
 	INVITE_SYSTEM_CONFIRMATION_TIMEOUT(
 			"invite_system.confirmation_timeout",
 			"20",

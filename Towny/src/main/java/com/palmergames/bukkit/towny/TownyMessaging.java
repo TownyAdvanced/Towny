@@ -458,15 +458,22 @@ public class TownyMessaging {
 	 */
 	public static void sendInvitationMessage(CommandSender player, String firstline, String confirmline, String cancelline) {
 		final Translator translator = Translator.locale(player);
+		NamedTextColor acceptColour = Colors.toNamedTextColor(TownySettings.getConfirmationCommandYesColour()) != null
+				? Colors.toNamedTextColor(TownySettings.getConfirmationCommandYesColour())
+				: NamedTextColor.GREEN;
+		NamedTextColor denyColour = Colors.toNamedTextColor(TownySettings.getConfirmationCommandNoColour()) != null
+				? Colors.toNamedTextColor(TownySettings.getConfirmationCommandNoColour())
+				: NamedTextColor.RED;
+
 		// Create confirm button based on given params.
-		TextComponent confirmComponent = Component.text("[/" + confirmline + "]")
-			.color(NamedTextColor.GREEN)
+		TextComponent confirmComponent = Component.text(String.format(TownySettings.getConfirmationCommandFormat(), confirmline))
+			.color(acceptColour)
 			.hoverEvent(HoverEvent.showText(translator.component("msg_confirmation_spigot_click_accept", confirmline, "/" + confirmline)))
 			.clickEvent(ClickEvent.runCommand("/towny:" + confirmline));
 
 		// Create cancel button based on given params.
-		TextComponent cancelComponent = Component.text("[/" + cancelline + "]")
-			.color(NamedTextColor.RED)
+		TextComponent cancelComponent = Component.text(String.format(TownySettings.getConfirmationCommandFormat(), cancelline))
+			.color(denyColour)
 			.hoverEvent(HoverEvent.showText(translator.component("msg_confirmation_spigot_click_cancel", cancelline, "/" + cancelline)))
 			.clickEvent(ClickEvent.runCommand("/towny:" + cancelline));
 		
@@ -483,14 +490,20 @@ public class TownyMessaging {
 		final Translator translator = Translator.locale(sender);
 		Component firstLineComponent = translator.component("confirmation_prefix").append(confirmation.getTitle().locale(sender).component());
 		Component lastLineComponent = translator.component("this_message_will_expire2", confirmation.getDuration());
+		NamedTextColor acceptColour = Colors.toNamedTextColor(TownySettings.getConfirmationCommandYesColour()) != null
+				? Colors.toNamedTextColor(TownySettings.getConfirmationCommandYesColour())
+				: NamedTextColor.GREEN;
+		NamedTextColor denyColour = Colors.toNamedTextColor(TownySettings.getConfirmationCommandNoColour()) != null
+				? Colors.toNamedTextColor(TownySettings.getConfirmationCommandNoColour())
+				: NamedTextColor.RED;
 
 		// Create confirm button based on given params.
-		Component confirmComponent = Component.text("[/" + confirmation.getConfirmCommand() + "]", NamedTextColor.GREEN)
+		Component confirmComponent = Component.text(String.format(TownySettings.getConfirmationCommandFormat(), confirmation.getConfirmCommand()), acceptColour)
 			.hoverEvent(HoverEvent.showText(translator.component("msg_confirmation_spigot_click_accept", confirmation.getConfirmCommand(), "/" + confirmation.getConfirmCommand())))
 			.clickEvent(ClickEvent.runCommand("/" + confirmation.getPluginPrefix() + ":" + confirmation.getConfirmCommand()));
 
 		// Create cancel button based on given params.
-		Component cancelComponent = Component.text("[/" + confirmation.getCancelCommand() + "]", NamedTextColor.RED)
+		Component cancelComponent = Component.text(String.format(TownySettings.getConfirmationCommandFormat(), confirmation.getCancelCommand()), denyColour)
 			.hoverEvent(HoverEvent.showText(translator.component("msg_confirmation_spigot_click_cancel", confirmation.getCancelCommand(), "/" + confirmation.getCancelCommand())))
 			.clickEvent(ClickEvent.runCommand("/" + confirmation.getPluginPrefix() + ":" + confirmation.getCancelCommand()));
 		

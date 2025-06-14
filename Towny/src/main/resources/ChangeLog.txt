@@ -10327,3 +10327,17 @@ v0.92.0.11:
     - Closes #7834.
   - Fix splash potion not applying to mobs, courtesy of SulkyWhale with PR #7839.
     - Closes #7838.
+  - Allow the confirmation and invitation messages' colouring and formatting to be configurable.
+    - Closes #7849.
+  - New Config Option: invite_system.confirmation_format
+    - Default: [/%s]
+    - The format applied to the clickable confirmations.
+    - e.g [/accept] would appear as default.
+  - New Config Option: invite_system.confirmation_yes_colour
+    - Default: <green>
+    - The colour used to show the accept and confirm commands.
+    - Allowed colours: <black>,<dark_blue>,<dark_green>,<dark_aqua>,<dark_red>,<dark_purple>,<gold>,<gray>,<dark_gray>,<blue>,<green>,<aqua>,<red>,<light_purple>,<yellow>,<white>
+  - New Config Option: invite_system.confirmation_no_colour
+    - Default: <red>
+    - The colour used to show the deny and cancel commands.
+    - Allowed colours: <black>,<dark_blue>,<dark_green>,<dark_aqua>,<dark_red>,<dark_purple>,<gold>,<gray>,<dark_gray>,<blue>,<green>,<aqua>,<red>,<light_purple>,<yellow>,<white>"
