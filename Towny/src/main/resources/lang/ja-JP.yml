@@ -504,7 +504,6 @@ msg_err_not_enough_residents_join_nation: '&bこの町の %s には十分な住�
 msg_not_enough_residents_no_longer_capital: '&b国の古い首都は、もはや国の首都になるのに十分な住民がいません。新しい国の首都は %s です。'
 msg_town_not_enough_residents_left_nation: '&bこの町の %s は国のメンバーになるための十分な住民を持っておらず、国から追放されました。'
 msg_nation_disbanded_town_not_enough_residents: '&b町 %s には十分な住民がいなくなり、強制的に解散させられました。'
-msg_not_enough_residents_refunded: '&bあなたは十分な住民がいないため、解散され、%s ドルを返金されました。'
 msg_not_enough_residents_capital: '&bこの町の %s には十分な住民がいません。'
 list_page: '&bページ %s / %s'
 list_err_not_enough_pages: '&c利用可能なページ数は %s ページのみです'
