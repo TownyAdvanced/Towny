@@ -780,7 +780,7 @@ msg_err_not_enough_residents_join_nation: '&bThe town %s does not have enough re
 msg_not_enough_residents_no_longer_capital: '&bThe nation''s old capital no longer has enough residents to be the capital of the nation. The new capital of the nation is %s.'
 msg_town_not_enough_residents_left_nation: '&bThe town %s no longer has enough residents to be a member of a nation, and has been removed from the nation.'
 msg_nation_disbanded_town_not_enough_residents: '&bThe town %s no longer has enough residents to run the nation and has forced the nation to disband.'
-msg_not_enough_residents_refunded: '&bYou have been refunded $%s for your nation being disbanded due to not having enough residents.'
+msg_not_enough_residents_refunded: '&bYou have been refunded %s for your nation being disbanded due to not having enough residents.'
 msg_not_enough_residents_capital: '&bThe town %s does not have enough residents to be the capital of the nation.'
 
 list_page: '&bPage %s of %s'
