@@ -582,7 +582,6 @@ msg_err_not_enough_residents_join_nation: '&b%s kasabasında bir ulusa katılmay
 msg_not_enough_residents_no_longer_capital: '&bUlusun eski başkentinde artık ulusun başkenti olmaya yetecek kadar üye yok. Ulusun yeni başkenti %s.'
 msg_town_not_enough_residents_left_nation: '&b%s kasabasının artık bir ulusa üye olacak kadar sakini yok ve ülkeden çıkarıldı.'
 msg_nation_disbanded_town_not_enough_residents: '&b%s kasabasının artık ulusu yönetecek kadar sakini yok ve ülkeyi dağılmaya zorladı.'
-msg_not_enough_residents_refunded: '&bYeterli sayıda ikametgahınız olmadığı için ülkenizin dağılması için %s geri ödeme aldınız.'
 msg_not_enough_residents_capital: '&b%s kasabasında ulusun başkenti olmaya yetecek kadar sakin yok.'
 list_page: '&bSayfa %s/%s'
 list_err_not_enough_pages: '&cYalnızca %s sayfa mevcut'
