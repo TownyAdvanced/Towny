@@ -650,7 +650,6 @@ msg_err_not_enough_residents_join_nation: '&bA(z) %s városnak nincs elég lakó
 msg_not_enough_residents_no_longer_capital: '&bA nemzet régi fővárosa már nincs elég lakóval ahhoz, hogy a nemzet fővárosa legyen. Az új főváros: %s.'
 msg_town_not_enough_residents_left_nation: '&bA(z) %s város már nincs elég lakóval ahhoz, hogy nemzeti tag maradjon, ezért eltávolították a nemzetből.'
 msg_nation_disbanded_town_not_enough_residents: '&bA(z) %s város már nincs elég lakóval ahhoz, hogy működtesse a nemzetet, ezért a nemzet feloszlott.'
-msg_not_enough_residents_refunded: '&bVisszakaptál $%s-t, mivel a nemzetet feloszlatták a nem elegendő lakószám miatt.'
 msg_not_enough_residents_capital: '&bA(z) %s városnak nincs elég lakója ahhoz, hogy a nemzet fővárosa legyen.'
 list_page: '&b%s. oldal a(z) %s-ból/ből'
 list_err_not_enough_pages: '&cCsak %s oldal érhető el.'
