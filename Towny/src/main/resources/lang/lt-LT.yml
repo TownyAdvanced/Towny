@@ -650,7 +650,6 @@ msg_err_not_enough_residents_join_nation: '&bMieste pavadinimu %s nėra pakankam
 msg_not_enough_residents_no_longer_capital: '&bSenoji valstybės sostinė nebeturi pakankamai gyventojų, kad galėtų būti valstybės sostine. Naujoji valstybės sostinė yra %s.'
 msg_town_not_enough_residents_left_nation: '&bMieste pavadinimu %s nebėra pakankamai gyventojų, kad būtų priklausytų valstybei, todėl buvo iš jos pašalintas.'
 msg_nation_disbanded_town_not_enough_residents: '&bMieste pavadinimu %s nebepakanka gyventojų, kad galėtų valdyti valstybę, todėl ji buvo panaikinta.'
-msg_not_enough_residents_refunded: '&bJums buvo grąžinta $%s, nes Jūsų valstybė buvo išformuota, nes neturėjo pakankamai gyventojų.'
 msg_not_enough_residents_capital: '&bMieste pavadinimu %s nėra pakankamai gyventojų, kad būtų valstybės sostinė.'
 list_page: '&b%s puslapis iš %s'
 list_err_not_enough_pages: '&cGalimi tik %s puslapiai'
