@@ -616,7 +616,6 @@ msg_err_not_enough_residents_join_nation: '&bMiasto %s nie ma wystarczającej li
 msg_not_enough_residents_no_longer_capital: '&bStara stolica nacji miała zbyt mało mieszkańców. Nową stolicą staje się %s.'
 msg_town_not_enough_residents_left_nation: '&bMiasto %s już nie ma wystarczającej liczby mieszkańców, aby należeć do swojej nacji, więc zostało z niej wyrzucone.'
 msg_nation_disbanded_town_not_enough_residents: '&bMiasto %s nie ma już wystarczającej liczby mieszkańców, aby tworzyć nację, przez co nacja musiała zostać rozwiązana.'
-msg_not_enough_residents_refunded: '&bZwrócono ci kwotę $%s za rozwiązanie twojej nacji z powodu zbyt małej ilości mieszkańców.'
 msg_not_enough_residents_capital: '&bMiasto %s nie ma wystarczającej liczby mieszkańców, aby być stolicą nacji.'
 list_page: '&bStrona %s z %s'
 list_err_not_enough_pages: '&cDostępnych jest tylko %s stron'
