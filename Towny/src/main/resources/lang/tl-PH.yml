@@ -311,7 +311,6 @@ msg_err_not_enough_residents_join_nation: '&cAng bayan na %s ay walang sapat na 
 msg_not_enough_residents_no_longer_capital: '&bAng nasyon na lumang kapitolyo ay wala nang kakayahan at sapat na mga residente para maging kapital nang nasyon. Ang bagong kapital na nasyon ay %s.'
 msg_town_not_enough_residents_left_nation: '&bAng bayan na %s ay wala nang sapat na mga residente para maging myembro nang isang nasyon, at ito ay natanggal na sa nasyon.'
 msg_nation_disbanded_town_not_enough_residents: '&bAng bayan na %s ay wala nang sapat na mga residente upang patakbuhin ang nasyon at ito ay pinilit na buwagin.'
-msg_not_enough_residents_refunded: '&bIkaw ay na-refund nang $%s sa iyong nasyon dahil sa pagka-buwag nito dahil sa walang sapat na mga residente.'
 msg_not_enough_residents_capital: '&bAng bayan na %s ay walang sapat na mga residente para maging kapitolyo nang nasyon.'
 list_page: '&bPahina %s ng %s'
 list_err_not_enough_pages: '&cMga %s pahinang magagamit'
