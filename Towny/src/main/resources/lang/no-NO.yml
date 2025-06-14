@@ -319,7 +319,6 @@ msg_err_not_enough_residents_join_nation: '&bByen %s har ikke nok innbyggere til
 msg_not_enough_residents_no_longer_capital: '&bNasjonens hovedstad hadde ikke nok innbyggere til å være hovedstad av nasjonen. Den nye hovedstaden er %s.'
 msg_town_not_enough_residents_left_nation: '&bByen %s har ikke nok innbyggere for å være i en nasjon, og har blitt fjernet fra nasjonen.'
 msg_nation_disbanded_town_not_enough_residents: '&bByen %s har ikke nok innbyggere og nasjonen ble tvunget til å legge ned nasjonen.'
-msg_not_enough_residents_refunded: '&bDu har blitt refundert $%s for at din nasjon ble lagt ned grunnet manglende innbyggere.'
 msg_not_enough_residents_capital: '&bByen %s har ikke nok innbyggere til å være hovedstad.'
 list_page: '&bSide %s av %s'
 list_err_not_enough_pages: '&cBare %s sider tilgjengelig'
