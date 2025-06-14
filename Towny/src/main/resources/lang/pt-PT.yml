@@ -320,7 +320,6 @@ msg_err_not_enough_residents_join_nation: '&bA cidade %s não tem habitantes suf
 msg_not_enough_residents_no_longer_capital: '&bA antiga capital da nação já não tem habitantes suficientes para ser a capital. A nova capital da nação é %s.'
 msg_town_not_enough_residents_left_nation: '&bA cidade %s já não tem habitantes suficientes para pertencer à nação e foi removida da nação.'
 msg_nation_disbanded_town_not_enough_residents: '&bA cidade %s já não tem habitantes suficientes para gerir a nação e a nação foi forçada a desfazer-se.'
-msg_not_enough_residents_refunded: '&bVocê foi reembolsado $%s por a sua nação ter sido desfeita devido à falta de habitantes.'
 msg_not_enough_residents_capital: '&bA cidade %s não tem habitantes suficientes para ser a capital da nação.'
 list_page: '&bPágina %s de %s'
 list_err_not_enough_pages: '&cApenas %s páginas disponíveis'
