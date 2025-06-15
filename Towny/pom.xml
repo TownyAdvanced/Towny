@@ -85,7 +85,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.1-R0.1-SNAPSHOT</version>
+            <version>1.21.5-R0.1-SNAPSHOT</version>
             <scope>test</scope>
             <exclusions>
               <exclusion>
@@ -177,17 +177,17 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.4</version>
+            <version>4.4.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.19.0</version>
+            <version>4.21.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.19.0</version>
+            <version>4.21.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -390,6 +390,10 @@
                             <relocation>
                                 <pattern>net.kyori.adventure</pattern>
                                 <shadedPattern>com.palmergames.adventure</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>net.kyori.option</pattern>
+                                <shadedPattern>com.palmergames.option</shadedPattern>
                             </relocation>
                             <relocation>
                                 <pattern>org.bstats</pattern>

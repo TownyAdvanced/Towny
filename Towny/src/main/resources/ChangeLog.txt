@@ -10344,3 +10344,5 @@ v0.92.0.11:
   - Fix hardcoded $ currency symbol in message, courtesy of Warrior with PR #7843.
 0.101.1.14:
   - Fix Towny using VaultUnlockedEconomyProvider when someone is using VaultUnlocked.jar and a legacy Vault economy plugin.
+  - Fix messages missing their Hovers and non-functional Clickables.
+    - Closes #7852
