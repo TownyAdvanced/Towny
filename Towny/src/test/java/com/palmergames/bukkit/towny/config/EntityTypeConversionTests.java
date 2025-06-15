@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.config;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import org.junit.jupiter.api.BeforeAll;

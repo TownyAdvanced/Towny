@@ -10346,3 +10346,4 @@ v0.92.0.11:
   - Fix Towny using VaultUnlockedEconomyProvider when someone is using VaultUnlocked.jar and a legacy Vault economy plugin.
   - Fix messages missing their Hovers and non-functional Clickables.
     - Closes #7852
+  - Update MockBukkit to 4.50.0.

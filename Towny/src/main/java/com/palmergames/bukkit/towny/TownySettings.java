@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.MapUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.ItemLists;
@@ -535,7 +536,7 @@ public class TownySettings {
 				case "thrown_exp_bottle" -> "experience_bottle";
 				case "ender_signal" -> "eye_of_ender";
 				case "mushroom_cow" -> "mooshroom";
-				case "splash_potion" -> "potion";
+				case "splash_potion" -> MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21_5) ? "splash_potion" : "potion";
 				case "leash_hitch" -> "leash_knot";
 				case "lightning" -> "lightning_bolt";
 				case "dropped_item" -> "item";
@@ -548,6 +549,8 @@ public class TownySettings {
 			
 			if (type != null)
 				entities.add(type);
+			else
+				System.out.println("Unmatched entity: " + entityName);
 		}
 
 		return entities;
