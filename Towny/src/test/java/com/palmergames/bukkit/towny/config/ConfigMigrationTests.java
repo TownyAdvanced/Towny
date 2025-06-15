@@ -25,7 +25,7 @@ public class ConfigMigrationTests {
 	
 	@Test
 	void testEntityClassMigration() {
-		TownySettings.getConfig().set(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST.getRoot(), "Creeper,EnderCrystal,EnderDragon,Fireball,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull");
+		TownySettings.getConfig().set(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST.getRoot(), "Creeper,EnderCrystal,EnderDragon,SmallFireball,Fireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull");
 		
 		Consumer<CommentedConfiguration> migration = runnableMigrations.getByName("convert_entity_class_names");
 		assertNotNull(migration);
