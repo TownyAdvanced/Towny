@@ -1,6 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

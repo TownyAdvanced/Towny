@@ -1,7 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import com.google.common.collect.Iterables;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.util.Pair;
