@@ -138,9 +138,11 @@ public class TownyEconomyHandler {
 	 */
 	public static boolean setupEconomy() {
 
-		if (vaultUnlockedPresent())
+		if (vaultUnlockedPresent()) {
 			provider = new VaultUnlockedEconomyProvider();
-		else if (vaultPresent())
+			if (provider.mainAdapter() == null) // We have VaultUnlocked.jar in use with a legacy Vault economy plugin.
+				provider = new VaultEconomyProvider();
+		} else if (vaultPresent())
 			provider = new VaultEconomyProvider();
 		else if (plugin.getServer().getPluginManager().isPluginEnabled("Reserve"))
 			provider = new ReserveEconomyProvider((Reserve) plugin.getServer().getPluginManager().getPlugin("Reserve"));
