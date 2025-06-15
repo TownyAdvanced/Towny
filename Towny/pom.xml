@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.101.1.14</version>
+    <version>0.101.1.13</version>
 
     <licenses>
         <license>
@@ -177,7 +177,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.4.0</version>
+            <version>4.3.4</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>

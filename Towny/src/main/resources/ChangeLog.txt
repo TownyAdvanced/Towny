@@ -10342,5 +10342,3 @@ v0.92.0.11:
     - The colour used to show the deny and cancel commands.
     - Allowed colours: <black>,<dark_blue>,<dark_green>,<dark_aqua>,<dark_red>,<dark_purple>,<gold>,<gray>,<dark_gray>,<blue>,<green>,<aqua>,<red>,<light_purple>,<yellow>,<white>"
   - Fix hardcoded $ currency symbol in message, courtesy of Warrior with PR #7843.
-0.101.1.14:
-  - Update adventure-platform-bukkit to 4.4.0.
