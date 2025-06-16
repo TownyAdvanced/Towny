@@ -377,10 +377,24 @@ plot_group_toggle_help_1: "Abilita/Disabilita le esplosioni nel gruppo di plot."
 plot_group_toggle_help_2: "Abilita/Disabilita il fuoco nel gruppo di plot."
 plot_group_toggle_help_3: "Abilita/Disabilita i mob nel gruppo di plot."
 plot_group_toggle_help_4: "Abilita/Disabilita lo status di tassato del gruppo di plot."
+plot_set_help_0: "Es: Locanda, Terra selvaggia, Fattoria, Ambasciata etc."
+plot_set_help_1: "Imposta un plot come avamposto."
+plot_set_help_1.5: "Imposta il numero minimo di giorni per i quali un giocatore debba essere membro della città per acquistare un plot."
+plot_set_help_1.6: "Imposta il numero massimo di giorni per i quali un giocatore debba essere membro della città per acquistare un plot."
+plot_set_help_2: "Rimuove una tipologia di plot."
+plot_set_help_3: "Nomina un plot."
+plot_set_help_4: "Abilita/Disabilita tutti i permessi."
+plot_set_help_5: "Imposta i permessi di un livello o tipo su on oppure off."
+plot_set_help_6: "Imposta i permessi di un livello e tipo su on oppure off."
+plot_set_help_7: "Imposta i permessi a un residente o a una città che possiede i plot."
+plot_jailcell_help_0: "Aggiunge una cella nel luogo in cui ti trovi."
+plot_jailcell_help_1: "Rimuove una cella nel luogo in cui ti trovi."
 msg_block_claim: 'Claima questo lotto di città'
+msg_block_claim_radius: 'Claima un raggio di plot che ti circondano.'
 msg_plot_nfs: 'Togli un lotto dalla vendita'
 msg_nfs_abr: '&e''fs'' e ''nfs'' sono abbreviazioni accettate per ''forsale'' e ''notforsale''.'
 msg_plot_fs: 'Metti questa zona in vendita.'
+msg_plot_fs_radius: 'Metti in vendita un raggio di plot.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -388,6 +402,7 @@ msg_plot_fs: 'Metti questa zona in vendita.'
 ############################################################
 msg_buy: '&bComprato %d %s per %s.'
 msg_buy_resident_plot: '&b%s ha comprato il lotto di %s per %s!'
+msg_buy_resident_plot_group: '&b%s ha acquistato il gruppo di plot di %s per %s!'
 msg_couldnt_pay_taxes: '&b%s non poteva pagare le tasse ed è stato cacciato da %s.'
 msg_couldnt_pay_plot_taxes: '&b%s non poteva pagare le tasse e ha perso la proprietà di un lotto.'
 msg_bankrupt_town: ' non poteva permettersi di rimanere una città.'
