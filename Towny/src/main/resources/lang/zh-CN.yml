@@ -49,7 +49,7 @@ towny_help_0: "Towny的基本帮助"
 towny_help_1: "显示附近城镇区块的地图"
 towny_help_2: "显示经济使用的价格"
 towny_help_3: "显示得分"
-towny_help_4: "显示时间直到明天"
+towny_help_4: "显示距离新的一天开始的时间"
 towny_help_5: "显示统计信息"
 towny_help_6: "显示Towny的版本"
 towny_top_help_0: "基于子命令列出顶级居民。"
@@ -73,7 +73,7 @@ town_help_17: "参见该镇的地皮类型清单。"
 town_help_18: "向该镇成员发送一条消息"
 town_help_19: "将您的城镇设置为“出售”，可供其他玩家购买。"
 town_help_20: "将您的城镇设置为“不出售”。"
-town_help_21: "购买给定的城镇（只要它是出售的）。"
+town_help_21: "购买指定的城镇（只要它是正在出售中的）。"
 town_help_22: "向您的城镇银行存钱。"
 town_help_23: "用来修改您城镇居民的头衔。"
 town_help_24: "用来删除您的城镇。"
@@ -338,11 +338,11 @@ ta_set_help_0: "设置指定玩家为城镇市长"
 ta_set_help_1: "设置一个NPC为市长，他们无需维护费"
 ta_set_help_2: "设置一个国家的首都"
 ta_set_help_3: "设置一个国家的国家区域大小"
-ta_set_help_4: "为居民设置一个称号"
+ta_set_help_4: "为居民设置一个头衔。"
 ta_set_help_5: "为居民设置一个后缀"
 ta_set_help_6: "将区块设置到另一个城镇"
 ta_set_help_7: "设置城镇的创建者名称"
-ta_set_help_8: "使用大小0来移除覆盖的民族区域"
+ta_set_help_8: "将大小设置为0来移除已覆盖的国域"
 ta_purge_help_0: "清除超过指定天数未登录的居民，可以选择将无城镇设置为仅删除无城镇玩家，或者指定城镇名称以仅清除一个城镇的居民"
 ta_townmeta_help_1: "查看您指定的城镇中存储的元数据"
 ta_townmeta_help_2: "设置城镇元数据密钥和值"
@@ -358,7 +358,7 @@ ta_reload_help_1: "重载配置。"
 ta_reload_help_2: "重新加载语言文件"
 ta_reload_help_3: "重新加载城镇权限"
 ta_reload_help_4: "重新加载城镇的所有组件"
-ta_eco_resetbanks_help: "将城镇和国家银行重置为给定金额或0。"
+ta_eco_resetbanks_help: "将城镇和国家银行重置为制定金额或归零。"
 ta_eco_convert_modern_help: "将你的城镇账户转换为更新的存储种类，使之在玩家离线状态下可供支持Vault的插件查看。"
 ta_eco_convert_help: "将您的城镇账户转换为目标经济实现，有助于在经济插件之间传输数据。"
 ta_eco_info_help: "提供服务器上的经济帐户信息。"
@@ -680,6 +680,7 @@ msg_err_not_enough_residents_join_nation: '&b城镇 %s 没有足够的居民数�
 msg_not_enough_residents_no_longer_capital: '&b国家旧都居民数不足所以不再是首都.新的首都将在 %s.'
 msg_town_not_enough_residents_left_nation: '&b城镇%s被赶出了国家，因为它不再有足够的居民来成为国家的一员。'
 msg_nation_disbanded_town_not_enough_residents: '&b城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
+msg_not_enough_residents_refunded: '&b你的国家由于居民数不足而灭亡了，因此你获得了 $%s 。'
 msg_not_enough_residents_capital: '&b城镇 %s 没有足够的居民来作为首都.'
 list_page: '&b当前页数 %s ,总页数 %s'
 list_err_not_enough_pages: '&c只有 %s 页可用'
@@ -1173,7 +1174,7 @@ msg_plot_was_removed_from_group_x: '土地 &9(%s,%s) &2被移出了 %s 土地组
 msg_plot_renamed_from_x_to_y: '土地 %s 已重命名为 %s.'
 msg_err_plot_group_specify_price: '请设置价格, 指令示例: /plot group fs [价格]'
 msg_player_put_group_up_for_sale_amount: '%s 将土地组 %s 以 %s 的价格出售!'
-msg_player_put_group_up_for_sale: '%s 正在出售区块组 %s!'
+msg_player_put_group_up_for_sale: '%s 正在出售土地组 %s!'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
@@ -1222,7 +1223,7 @@ msg_err_unable_to_add_more_residents_without_nation: '在加入其他国家或�
 msg_the_following_towns_were_deleted_for_having_0_claims: '城镇%s已被删除，因为这些城镇没有声明任何土地。'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: '因为离新的首都不够近，所以城镇 %s 将从您的国家中移除。您确定要继续吗?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '这些城镇将因离新首都过远而脱离你的国家：%s。您确定要继续吗？'
 msg_ta_deposit_all_success: '已成功将%s存入所有国家和城镇的银行。'
 bonus_townblocks: '奖励城镇区块'
 #Added in 0.80
@@ -1518,7 +1519,7 @@ msg_err_plot_belongs_to_group: '&c这片土地属于一个土地组，请使用%
 plotgroup_sing: '土地组'
 msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
 msg_err_ally_limit_reached_cannot_accept: '国家%s的盟友数量已经达到了上限，无法接受新的邀请。'
-msg_err_ally_limit_reached_cannot_send: '这个国家的盟友已达到上限，因此无法邀请%s成为你的盟友。'
+msg_err_ally_limit_reached_cannot_send: '你的国家的盟友数量已达到上限，因此无法邀请%s成为你的盟友。'
 msg_err_ally_limit_reached_cannot_send_targetNation: '国家%s的盟友已达到上限，因此无法邀请%s成为你的盟友。'
 #Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
@@ -1633,9 +1634,9 @@ msg_process_town_unclaim: '城镇取消圈地中......'
 #Shown when there is nothing to unclaim.
 msg_err_nothing_to_unclaim: '没有可以取消圈地的地方。'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: '权限为真。'
+msg_perm_true: '权限为开启。'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: '权限为假。'
+msg_err_perm_false: '权限为关闭。'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
 status_towny_map_town_line: '&2城镇：&a%s &7| &2地主：&a%s'
