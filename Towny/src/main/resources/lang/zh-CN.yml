@@ -70,7 +70,7 @@ town_help_14: "参见该镇的头衔清单。"
 town_help_15: "参见该镇被放逐者名单。"
 town_help_16: "参见该镇地皮组的清单。"
 town_help_17: "参见该镇的地皮类型清单。"
-town_help_18: "向该镇成员发送一条消息"
+town_help_18: "向该镇成员发送一条消息。"
 town_help_19: "将您的城镇设置为“出售”，可供其他玩家购买。"
 town_help_20: "将您的城镇设置为“不出售”。"
 town_help_21: "购买指定的城镇（只要它是正在出售中的）。"
@@ -171,11 +171,11 @@ nation_toggle_help_0: "切换国家的和平状态"
 nation_toggle_help_1: "切换国家“公开”的状态，允许不是居民的玩家使用/n spawn。"
 nation_toggle_help_2: "切换国家“开放”的状态，允许没有被邀请的城市加入。"
 nation_toggle_help_3: "切换税率，让城镇支付一定百分比而不是固定税率"
-nation_sanction_help_1: "添加一个城镇到受制裁城镇"
-nation_sanction_help_2: "从受制裁城镇中移除一个城镇"
-nation_sanction_help_3: "列出你国家所制裁的城镇"
-nation_sanction_help_4: "列出某个国家制裁城镇列表"
-king_help_1: '国家领导者帮助'
+nation_sanction_help_1: "添加一个城镇到受制裁城镇列表。"
+nation_sanction_help_2: "从受制裁城镇列表中移除一个城镇。"
+nation_sanction_help_3: "列出你国家所制裁的城镇。"
+nation_sanction_help_4: "列出某个国家所制裁城镇列表。"
+king_help_1: '国家领导人帮助'
 king_help_2: '设置你的盟国.'
 king_help_3: '设置你的敌国.'
 king_help_4: "从您的国家银行取钱。"
@@ -229,7 +229,7 @@ admin_sing: '管理员'
 town_sing: '城镇'
 nation_sing: '国家'
 nation_plu: '国家'
-king_sing: '领导者'
+king_sing: '领袖人'
 town_plu: '城镇'
 world_plu: '世界'
 world_sing: '世界'
@@ -416,7 +416,7 @@ plot_set_help_5: "开启/关闭 一些级别或类型的权限。"
 plot_set_help_6: "开启/关闭 一个级别或类型的权限。"
 plot_set_help_7: "为拥有这个区块的居民或城镇设置权限。"
 plot_jailcell_help_0: "将你目前站的区块设置为监狱区块。"
-plot_jailcell_help_1: "将你目前站的区块取消设置为监狱区块。"
+plot_jailcell_help_1: "将你目前所站的监狱区块移除。"
 msg_block_claim: '声明这个城镇区块'
 msg_block_claim_radius: '声明在你周围一定半径的区块。'
 msg_plot_nfs: '关闭这块土地的出售状态'
@@ -951,7 +951,7 @@ status_res_taxexempt: '管理者免交市政税。'
 status_res_tax: '市政税：'
 status_res_plottax: '总计地税：'
 status_res_totaltax: '需要缴纳税费：'
-status_townblock_plottax: '区块税: '
+status_townblock_plottax: '地皮税: '
 status_townblock_untaxed: '免税'
 status_townblock_max_and_minjoindays: '购买地皮需要 %s 和 %s 天的城镇成员资格。'
 status_townblock_minjoindays: '购买地皮需要超过 %s 天的城镇成员资格。'
@@ -1223,7 +1223,7 @@ msg_err_unable_to_add_more_residents_without_nation: '在加入其他国家或�
 msg_the_following_towns_were_deleted_for_having_0_claims: '城镇%s已被删除，因为这些城镇没有声明任何土地。'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: '这些城镇将因离新首都过远而脱离你的国家：%s。您确定要继续吗？'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '这些城镇将因距离新首都过远而脱离你的国家：%s。您确定要继续吗？'
 msg_ta_deposit_all_success: '已成功将%s存入所有国家和城镇的银行。'
 bonus_townblocks: '奖励城镇区块'
 #Added in 0.80
@@ -1246,7 +1246,7 @@ msg_err_plot_belongs_to_group_toggle: '这片土地属于一个组，请使用/p
 msg_set_perms_reset_single: '&b成功地重置了这片土地的权限设置。'
 #Added in 0.86
 status_bank_bankrupt: '（破产）'
-msg_warning_bankrupt: '&4*** 警告，由于%s的资金不足，其将在下一天破产！ ***'
+msg_warning_bankrupt: '&4*** 警告，由于%s的资金不足，这个城镇将在下一天破产！ ***'
 msg_town_bankrupt_by_upkeep: '&b城镇%s因为不能维持日常开支而破产了。'
 msg_town_bankrupt_by_upkeep_multiple: '&b以下城镇因无力维持开支而破产： '
 msg_town_bankrupt_by_nation_tax: '&b城镇%s因无力付清%s税而破产了。'
