@@ -10347,3 +10347,6 @@ v0.92.0.11:
   - Fix messages missing their Hovers and non-functional Clickables.
     - Closes #7852
   - Update MockBukkit to 4.50.0.
+0.101.1.15:
+  - Add TownCalculateMaxTownBlocksEvent, courtesy of Warrior with PR #7857.
+    - Adds an event that is fired when the max town size is calculated, allowing plugins to change/override it in a more dynamic manner.
