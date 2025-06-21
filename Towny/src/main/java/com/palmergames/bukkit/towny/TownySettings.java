@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownCalculateMaxTownBlocksEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -1279,7 +1280,10 @@ public class TownySettings {
 		if (ratio != 0 && ratioSizeLimit > 0)
 			n = Math.min(ratioSizeLimit, n);
 
-		return n;
+		TownCalculateMaxTownBlocksEvent event = new TownCalculateMaxTownBlocksEvent(town, n);
+		BukkitTools.fireEvent(event);
+
+		return event.getTownBlockCount();
 	}
 
 	public static int getMaxTownBlocks(Town town, int residents) {
@@ -1292,7 +1296,11 @@ public class TownySettings {
 			amount += residents * ratio;
 
 		amount += getNationBonusBlocks(town);
-		return amount;
+
+		TownCalculateMaxTownBlocksEvent event = new TownCalculateMaxTownBlocksEvent(town, amount);
+		BukkitTools.fireEvent(event);
+
+		return event.getTownBlockCount();
 	}
 	
 	public static int getMaxOutposts(Town town, int residents) {
