@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownBlockType;
+import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.util.BiomeUtil;
@@ -334,12 +335,18 @@ public class AreaSelectionUtil {
 
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
-			if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
+			if (worldCoordNotTooCloseToOtherTowns(town, worldCoord)) {
 				out.add(worldCoord);
 			} else {
 				TownyMessaging.sendDebugMsg("AreaSelectionUtil:filterInvalidProximity - Coord: " + worldCoord + " too close to another town." );
 			}
 		return out;
+	}
+
+	private static boolean worldCoordNotTooCloseToOtherTowns(Town town, WorldCoord worldCoord) {
+		TownyWorld townyWorld = worldCoord.getTownyWorld();
+		return townyWorld != null 
+				&& townyWorld.worldCoordNotTooCloseToOtherTowns(worldCoord, town);
 	}
 	
 	/**
