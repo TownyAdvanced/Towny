@@ -225,10 +225,13 @@ townyadmin_town_help_13: "Vložit peníze do banky města."
 townyadmin_town_help_14: "Vybrat peníze z banky města."
 townyadmin_town_help_15: "Otevřít knihu historie banky města."
 townyadmin_town_toggle_help_0: "Nastavit si PVP."
+townyadmin_nation_help_5: "Odstranit město."
+ta_resident_help_1: "Přidat nebo odebrat přítele."
 ta_reload_help_2: "Reloadne jazykové soubory."
 plot_toggle_help_0: "Zapne PVP na pozemku."
 plot_toggle_help_1: "Zapne výbuchy na pozemku."
 plot_toggle_help_2: "Zapne hoření na pozemku."
+plot_set_help_3: "Pojmenuje pozemek."
 msg_block_claim: 'Zaber tuto parcelu'
 msg_plot_nfs: 'Ukonči prodej parcely'
 msg_nfs_abr: '&''fs'' a ''nfs'' jsou zkratky pro ''forsale'' a ''notforsale''.'
