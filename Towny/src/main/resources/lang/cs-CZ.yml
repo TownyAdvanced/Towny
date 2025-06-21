@@ -173,8 +173,20 @@ res_toggle_help_4: "Nastav si schopnost vidět hranice tvého pozemku."
 res_toggle_help_5: "Nastav si viditelnost konstantních hranic pozemku."
 res_toggle_help_6: "Nastav si schopnost vidět hranice měst."
 res_toggle_help_7: "Nastav si viditelnost upozornění z pozemku."
+res_toggle_help_8: "Nastav si možnost zabírání při chůzi."
+res_toggle_help_9: "Nastav si viditelnost změn tvých pozemků na mapě."
 res_toggle_help_10: "Odstranit všechny režimy."
 res_toggle_help_10.5: "Odstranit všechny režimy a znovu nastavit základní možnosti."
+res_toggle_help_11: "Sleduj komunikační kanály."
+res_toggle_help_12: "Nastav si přidávání pozemků do skupiny, kterou jsi začal."
+res_toggle_help_13: "Nastav si viditelnost titulků při změně pozemků."
+res_toggle_help_14: "Nastav si schopnost odebírat pozemky při chůzi."
+res_toggle_help_15: "Nastav si užívání informačního nástroje pro správné názvy bloků/entit."
+res_toggle_help_16: "Nastav si deaktivování svých privátních administrátorů."
+res_jail_help_0: "Splácí kauci, aby ses dostal z vězení."
+res_set_help_0: "Nastav si biografii svých obyvatel"
+res_set_help_1: "Nastav základní práva svým obyvatelům."
+res_set_help_2: "Nastav režimy svým obyvatelům."
 mode_1: 'Zobraz mapu mezi každou parcelou'
 mode_2: 'Pokus se automaticky zabírat při chůzi'
 mode_3: 'Pokus se automaticky vzdávat parcel při chůzi'
@@ -198,10 +210,15 @@ world_help_2: '[svět]'
 world_help_3: 'Stav uvedeného světa'
 world_help_4: 'Zobrazí všechny světy'
 world_help_5: 'Obnovit tento chunk'
+world_help_6: 'Napiš /tw toggle ? pro nápovědu'
+world_help_7: 'Napiš /tw set ? pro nápovědu'
+world_toggle_help_0: "Nastav on/off jestli mohou města zabírat území v tomto světě."
+world_toggle_help_1: "Nastav on/off jestli jsou v tomto světě povolena města."
 townyadmin_help_1: 'Vzdej se této parcely'
 townyadmin_help_2: 'Pokus se vzdát se parcel kolem sebe.'
 admin_panel_2: 'znovu načíst Towny'
 admin_panel_3: 'Spusť kód pro nový den'
+townyadmin_town_help_1: "Prohlídni si status města."
 townyadmin_town_help_3: "Přejmenovat město."
 townyadmin_town_help_4: "Odstranit město."
 townyadmin_town_help_13: "Vložit peníze do banky města."
@@ -209,6 +226,9 @@ townyadmin_town_help_14: "Vybrat peníze z banky města."
 townyadmin_town_help_15: "Otevřít knihu historie banky města."
 townyadmin_town_toggle_help_0: "Nastavit si PVP."
 ta_reload_help_2: "Reloadne jazykové soubory."
+plot_toggle_help_0: "Zapne PVP na pozemku."
+plot_toggle_help_1: "Zapne výbuchy na pozemku."
+plot_toggle_help_2: "Zapne hoření na pozemku."
 msg_block_claim: 'Zaber tuto parcelu'
 msg_plot_nfs: 'Ukonči prodej parcely'
 msg_nfs_abr: '&''fs'' a ''nfs'' jsou zkratky pro ''forsale'' a ''notforsale''.'
@@ -954,3 +974,24 @@ status_resident_tax_title: 'Daň od %s'
 status_capital: 'Hlavní město:'
 msg_err_console_only: 'Tento příkaz lze použít pouze přímo z ovládacího panelu.'
 msg_err_player_only: 'Tento příkaz může použít pouze hráč.'
+#Used in the town's status screen to display plots
+status_plot_string: 'Pozemky'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'
+#Usage:
+msg_usage: 'Použití: %s'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'město'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'Na prodej: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'Ne'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Ano'
+msg_town_notforsale: "%s již není na prodej."
+msg_town_buytown_not_forsale: "Uvedené město není na prodej."
+msg_warning_town_deposit_hint: "Pro vložení peněz do vaší banky města použij /town deposit [počet]."
+teleport_warmup_title_dont_move: "&6Nehýbej se!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7sekund zbývá do teleportu."
+msg_err_town_no_longer_owns_this_plot: "%s už tento pozemek nevlastní."
+chunknotification_plot_claim_help_message: " Použij '/plot claim' pro zakoupení pozemku."
