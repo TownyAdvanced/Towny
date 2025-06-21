@@ -54,6 +54,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"friendlyfire",
 		"fire",
 		"forcefire",
+		"snow",
+		"forcesnow",
 		"townmobs",
 		"worldmobs",
 		"wildernessmobs",
@@ -227,6 +229,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		case "forceexplosion" -> toggleForceExplosion(sender, world, choice);
 		case "fire" -> toggleFire(sender, world, choice);
 		case "forcefire" -> toggleForceFire(sender, world, choice);
+		case "snow" -> toggleSnow(sender, world, choice);
+		case "forcesnow" -> toggleForceSnow(sender, world, choice);
 		case "townmobs" -> toggleTownMobs(sender, world, choice);
 		case "worldmobs" -> toggleWorldMobs(sender, world, choice);
 		case "wildernessmobs" -> toggleWildernessMobs(sender, world, choice);
@@ -316,6 +320,18 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCEFIRE.getNode());
 		world.setForceFire(choice.orElse(!world.isForceFire()));
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town Fire Spread", world.getName(), formatBool(world.isForceFire(), "forced", "adjustable")));
+	}
+	
+	private void toggleSnow(CommandSender sender, TownyWorld world, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_SNOW.getNode());
+		world.setSnow(choice.orElse(!world.isSnow()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Snowfall", world.getName(), formatBool(world.isSnow())));
+	}
+
+	private void toggleForceSnow(CommandSender sender, TownyWorld world, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_FORCESNOW.getNode());
+		world.setForceSnow(choice.orElse(!world.isForceSnow()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Force town Snowfall", world.getName(), formatBool(world.isForceSnow(), "forced", "adjustable")));
 	}
 
 	private void toggleTownMobs(CommandSender sender, TownyWorld world, Optional<Boolean> choice) throws NoPermissionException {

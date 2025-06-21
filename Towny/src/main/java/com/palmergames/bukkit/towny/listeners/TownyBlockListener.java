@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -31,6 +32,7 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFertilizeEvent;
+import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -324,6 +326,26 @@ public class TownyBlockListener implements Listener {
 			//Cancel based on whether this is allowed using the PlayerCache and then a cancellable event.
 			event.setCancelled(!TownyActionEventExecutor.canBuild(player, event.getBlock().getLocation(), event.getBlock().getType()));
 		}
+	}
+
+	@EventHandler(ignoreCancelled = true)
+	public void onSnowForm(BlockFormEvent event) {
+		BlockState bs = event.getNewState();
+
+		if (!bs.getType().equals(Material.SNOW)) return;
+		
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(bs.getWorld());
+		if (world == null || !world.isUsingTowny()) return;
+
+		if (world.isForceSnow()) return;
+
+		Town town = TownyAPI.getInstance().getTown(bs.getLocation());
+		if (town == null) return;
+		
+		TownBlock tb = TownyAPI.getInstance().getTownBlock(bs.getLocation());
+		if (town.isSnow() && tb.getPermissions().snow) return;
+
+		event.setCancelled(true);
 	}
 	
 	/*
