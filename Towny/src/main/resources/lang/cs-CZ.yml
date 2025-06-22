@@ -845,6 +845,7 @@ msg_err_resident_doesnt_belong_to_any_town: 'Hráč nepatří do žádného měs
 #Added in 0.63
 msg_plot_set_to_nfs: 'Parcela již není na prodej.'
 msg_the_wilderness: 'Divočina'
+msg_enemy_areas: 'Nepřátelské oblasti'
 msg_neutral_towns: 'Neutrální města'
 #Added in 0.64
 msg_err_no_nation_with_that_name: 'Nenalezen žádný národ s názvem %s'
