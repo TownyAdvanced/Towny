@@ -393,6 +393,7 @@ plot_jailcell_help_1: "Rimuove una cella nel luogo in cui ti trovi."
 msg_block_claim: 'Claima questo lotto di città'
 msg_block_claim_radius: 'Claima un raggio di plot che ti circondano.'
 msg_plot_nfs: 'Togli un lotto dalla vendita'
+msg_plot_nfs_radius: 'dsa'
 msg_nfs_abr: '&e''fs'' e ''nfs'' sono abbreviazioni accettate per ''forsale'' e ''notforsale''.'
 msg_plot_fs: 'Metti questa zona in vendita.'
 msg_plot_fs_radius: 'Metti in vendita un raggio di plot.'
