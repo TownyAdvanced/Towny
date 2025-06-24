@@ -328,9 +328,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		
 		Action action = event.getAction();
-		if(action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR && action != Action.PHYSICAL) {
-			if (action != Action.LEFT_CLICK_BLOCK || !event.hasItem() ||
-				!event.hasBlock() || !TownySettings.isSwitchMaterial(event.getItem().getType(), event.getClickedBlock().getLocation()))
+		if(actionIsNotRightClickOrPhysical(action) && actionIsNotLeftClickThatCountsAsSwitch(event, action)) {
 			return;
 		}
 		
@@ -488,6 +486,29 @@ public class TownyPlayerListener implements Listener {
 					!TownyActionEventExecutor.canDestroy(player, clickedBlock.getLocation(), clickedMat))
 				event.setCancelled(true);
 		}
+	}
+
+	/**
+	 * Is the action one that involves left-clicking on a Switch block? This is
+	 * useful for protecting (usually) modded blocks that can be used via left
+	 * clicks.
+	 * 
+	 * @param event  PlayerInteractEvent causing a switch test.
+	 * @param action Action that has to be LEFT_CLICK_BLOCK for this to count.
+	 * @return true if the player is left clicking a block that is technically a
+	 *         switch_id in Towny.
+	 */
+	private boolean actionIsNotLeftClickThatCountsAsSwitch(PlayerInteractEvent event, Action action) {
+		return action != Action.LEFT_CLICK_BLOCK || !event.hasBlock() || !TownySettings.isSwitchMaterial(event.getClickedBlock().getType(), event.getClickedBlock().getLocation());
+	}
+
+	/**
+	 * Is the action something we don't want to worry about when we're dealing with something like honey comb and a sign, or candles and cake when testing PlayerInteractEvents.
+	 * @param action Action that player is making for this to matter.
+	 * @return true if the action is a right click or physical Action.
+	 */
+	private boolean actionIsNotRightClickOrPhysical(Action action) {
+		return action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR && action != Action.PHYSICAL;
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
