@@ -337,12 +337,6 @@ msg_block_claim: 'Bu kasaba bloğunu sahiplen'
 msg_plot_nfs: 'Satılık arsayı yıkın'
 msg_nfs_abr: '&e'' fs '' ve '' nfs '', '' satış öncesi '' ve '' satış dışı '' kısaltmaları olarak kabul edilir.'
 msg_plot_fs: 'Bu alanı açık arttırmaya çıkarın.'
-############################################################
-#+------------------------------------------------------+ #
-#|   Messages                                           | #
-#+------------------------------------------------------+ #
-############################################################
-msg_buy: '&b%s için %d %s satın aldı.'
 msg_buy_resident_plot: '&b%s, %s için %s arsasını satın aldı!'
 msg_couldnt_pay_taxes: '&b%s vergi ödeyemedi ve %s tarafından atıldı.'
 msg_couldnt_pay_plot_taxes: '&b%s vergi ödeyemedi ve bir arsasını kaybetti.'
