@@ -226,7 +226,11 @@ townyadmin_town_help_14: "Vybrat peníze z banky města."
 townyadmin_town_help_15: "Otevřít knihu historie banky města."
 townyadmin_town_toggle_help_0: "Nastavit si PVP."
 townyadmin_nation_help_5: "Odstranit město."
+ta_plot_help_0: "Vem pozemek pro hráče."
+ta_resident_help_0: "Přejmenovat obyvatele."
 ta_resident_help_1: "Přidat nebo odebrat přítele."
+ta_resident_help_3: "Smaž obyvatele z databáze."
+ta_set_help_0: "Udělej daného hráče starostou."
 ta_reload_help_0: "Obnoví databázi."
 ta_reload_help_1: "Obnoví Konfiguraci."
 ta_reload_help_2: "Reloadne jazykové soubory."
@@ -825,6 +829,7 @@ msg_bankrupt_nation2: '&b%s si nemohl dovolit zůstat národem.'
 status_embassy_town: 'Ambasády v'
 #Added in 0.52:
 msg_error_nation_has_no_allies: 'Národ nemá žádné spojence.'
+msg_error_nation_has_no_enemies: 'Stát nemá žádné nepřátele.'
 msg_error_ta_plot_claim: 'Chybí jméno hráče, např.: /ta plot claim [jméno hráče]'
 msg_error_no_player_with_that_name: 'Nebyl nalezen žádný hráč se jménem %s'
 #Added in 0.57:
