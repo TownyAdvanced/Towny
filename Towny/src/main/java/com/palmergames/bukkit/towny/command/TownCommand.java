@@ -1606,11 +1606,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Can the Town jail this resident?
 		testTownCanJailResidentOrThrow(town, initialJailFee, jailedResident);
 
-		// Is this resident in a jailable world?
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(jailedResident.getPlayer().getWorld());
-		if (!world.isJailingEnabled())
-			throw new TownyException(Translatable.of("msg_err_x_in_unjailable_world", jailedResident));
-
 		// Jail the resident, when enabled it will apply the bail.
 		JailUtil.jailResidentWithBail(jailedResident, jail, cell, hours, bail, JailReason.MAYOR, sender);
 
@@ -1713,6 +1708,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Make sure the town can afford to jail. 
 		if (initialJailFee > 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
 			throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
+
+		// Is this resident in a jailable world?
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(jailedResident.getPlayer().getWorld());
+		if (!world.isJailingEnabled())
+			throw new TownyException(Translatable.of("msg_err_x_in_unjailable_world", jailedResident));
 
 		// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
 		if (TownySettings.getMaxJailedPlayerCount() > 0 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount()) {
