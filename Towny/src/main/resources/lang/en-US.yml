@@ -302,6 +302,7 @@ world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world.
 world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
 world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
 world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 
 
 townyadmin_help_1: 'Unclaim this town block'
