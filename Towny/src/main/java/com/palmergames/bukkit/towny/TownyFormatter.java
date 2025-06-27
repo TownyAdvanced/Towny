@@ -578,8 +578,9 @@ public class TownyFormatter {
 				    colourKeyValue(translator.of("status_world_wildernessmobs"), (world.hasWildernessMobs() ? translator.of("status_on") : translator.of("status_off"))));
 			// ForceTownMobs: ON
 			screen.addComponentOf("townmobs", colourKeyValue(translator.of("status_world_forcetownmobs"), (world.isForceTownMobs() ? translator.of("status_forced") : translator.of("status_adjustable"))));
-			// Unclaim Revert: ON
-			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))); 
+			// Unclaim Revert: ON | Jailing: ON
+			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") + 
+					colourKeyValue(translator.of("status_world_jailing"), (world.isJailingEnabled() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
 			// Entity Explosion Revert: ON | Block Explosion Revert: ON
 			screen.addComponentOf("explosion_reverts", colourKeyValue(translator.of("status_world_explrevert_entity"), (world.isUsingPlotManagementWildEntityRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") +
 					colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
