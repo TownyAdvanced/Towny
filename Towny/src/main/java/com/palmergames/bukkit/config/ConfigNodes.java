@@ -484,6 +484,12 @@ public enum ConfigNodes {
 			"# This list is useful if you have a death chest plugin which could put a player's inventory inside chest",
 			"# that is inside of a regenerating creeper explosion pit. For Example: By putting CHEST here you can ",
 			"# prevent the chest from being overwritten by the dirt block that used to be there."),
+	NWS_PLOT_MANAGEMENT_JAILING_ENABLE(
+		"new_world_settings.plot_management.jailing_enabled",
+		"true",
+		"",
+		"# This section is applied to new worlds as default settings when new worlds are detected.",
+		"# Whether to allow players in this world to be jailed or not"),
 
 	GTOWN_SETTINGS(
 			"global_town_settings",
