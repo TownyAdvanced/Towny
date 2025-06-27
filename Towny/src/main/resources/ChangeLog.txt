@@ -10350,3 +10350,4 @@ v0.92.0.11:
 0.101.1.15:
   - Add TownCalculateMaxTownBlocksEvent, courtesy of Warrior with PR #7857.
     - Adds an event that is fired when the max town size is calculated, allowing plugins to change/override it in a more dynamic manner.
+  - Fix throwing TownCalculateMaxTownBlocksEvent async.

@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.event.town;
 
 import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.object.Town;
+
+import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.ApiStatus;
@@ -18,6 +20,7 @@ public class TownCalculateMaxTownBlocksEvent extends Event {
 
 	@ApiStatus.Internal
 	public TownCalculateMaxTownBlocksEvent(final Town town, final int townBlockCount) {
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.townBlockCount = townBlockCount;
 	}
