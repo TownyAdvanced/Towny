@@ -1606,6 +1606,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Can the Town jail this resident?
 		testTownCanJailResidentOrThrow(town, initialJailFee, jailedResident);
 
+		// Is this resident in a jailable world?
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(jailedResident.getPlayer().getWorld());
+		if (!world.isJailingEnabled())
+			throw new TownyException(Translatable.of("msg_err_x_in_unjailable_world", jailedResident));
+
 		// Jail the resident, when enabled it will apply the bail.
 		JailUtil.jailResidentWithBail(jailedResident, jail, cell, hours, bail, JailReason.MAYOR, sender);
 
