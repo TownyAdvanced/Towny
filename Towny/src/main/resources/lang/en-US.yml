@@ -2640,5 +2640,4 @@ msg_err_you_cannot_add_towntrust_on_outlaw: "You cannot trust a town who has res
 
 msg_err_you_cannot_add_towntrust_on_enemy: "You cannot trust a town who is part of an enemy nation."
 
-# added in 0.157
-status_world_jailing: "Jailing:"
+status_world_jailing: "Jailing: "
