@@ -2446,8 +2446,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("usingPlotManagementWildRegenDelay=" + world.getPlotManagementWildRevertDelay());
 
 		
-
-		
 		// Using Towny
 		list.add("");
 		list.add("# This setting is used to enable or disable Towny in this world.");
