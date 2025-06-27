@@ -77,7 +77,7 @@ public class TownyWorld extends TownyObject {
 	private boolean isExplosion = TownySettings.isExplosions();
 	private boolean isForceExpl = TownySettings.isForcingExplosions();
 	private boolean isEndermanProtect = TownySettings.getEndermanProtect();
-	private boolean isJailing = TownySettings.isJailingEnabled();
+	private boolean isJailing = TownySettings.isWorldJailingEnabled();
 
 	
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
@@ -399,7 +399,7 @@ public class TownyWorld extends TownyObject {
 		wildRevertMaterialsToNotOverwrite = null;
 		// Entities protected from explosions
 		entityExplosionProtection = null;
-		setJailing(TownySettings.isJailingEnabled());
+		setJailing(TownySettings.isWorldJailingEnabled());
 	}
 
 	public void setUsingPlotManagementDelete(boolean using) {
