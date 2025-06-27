@@ -2639,3 +2639,6 @@ msg_err_you_cannot_add_trust_on_enemy: "You cannot trust a player who is part of
 msg_err_you_cannot_add_towntrust_on_outlaw: "You cannot trust a town who has residents which are outlawed by your town."
 
 msg_err_you_cannot_add_towntrust_on_enemy: "You cannot trust a town who is part of an enemy nation."
+
+# added in 0.157
+status_world_jailing: "Jailing"
