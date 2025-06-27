@@ -1788,6 +1788,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception ignored) {
 			}
 
+			result = rs.getBoolean("jailing");
+			try {
+				world.setJailing(result);
+			} catch (Exception ignored) {
+			}
+			
 			try {
 				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
@@ -2640,6 +2646,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			// War allowed in this world.
 			nat_hm.put("warAllowed", world.isWarAllowed());
+
+			nat_hm.put("jailing", world.isJailingEnabled());
 
 			if (world.hasMeta())
 				nat_hm.put("metadata", serializeMetadata(world));
