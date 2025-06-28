@@ -391,7 +391,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	private void toggleJailing(CommandSender sender, TownyWorld world, Optional<Boolean> choice) throws NoPermissionException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_JAILING.getNode());
-		world.setJailing(choice.orElse(!world.isJailingEnabled()));
+		world.setJailingEnabled(choice.orElse(!world.isJailingEnabled()));
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Jailing", world.getName(), formatBool(world.isJailingEnabled())));
 	}
 
