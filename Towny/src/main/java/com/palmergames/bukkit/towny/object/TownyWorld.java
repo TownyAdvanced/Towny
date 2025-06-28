@@ -399,7 +399,7 @@ public class TownyWorld extends TownyObject {
 		wildRevertMaterialsToNotOverwrite = null;
 		// Entities protected from explosions
 		entityExplosionProtection = null;
-		setJailing(TownySettings.isWorldJailingEnabled());
+		setJailingEnabled(TownySettings.isWorldJailingEnabled());
 	}
 
 	public void setUsingPlotManagementDelete(boolean using) {
@@ -1038,7 +1038,7 @@ public class TownyWorld extends TownyObject {
 		return isFriendlyFire;
 	}
 
-	public void setJailing(boolean parseBoolean) {
+	public void setJailingEnabled(boolean parseBoolean) {
 		isJailing = parseBoolean;
 		
 	}
