@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -154,7 +155,7 @@ public final class TownBlockTypeHandler {
 	
 	private static Set<Material> loadMaterialList(String listName, String materialList, String typeName) {
 		if (!materialList.isEmpty()) {
-			Set<Material> set = new HashSet<>();
+			Set<Material> set = new LinkedHashSet<>();
 			for (String materialName : materialList.split(",")) {
 				if (ItemLists.GROUPS.contains(materialName)) {
 					set.addAll(ItemLists.getGrouping(materialName));

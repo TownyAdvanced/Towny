@@ -51,6 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -103,8 +104,8 @@ public class TownySettings {
 	private static final SortedMap<Integer, TownLevel> configTownLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	private static final SortedMap<Integer, NationLevel> configNationLevel = Collections.synchronizedSortedMap(new TreeMap<>(Collections.reverseOrder()));
 	
-	private static final Set<Material> itemUseMaterials = new HashSet<>();
-	private static final Set<Material> switchUseMaterials = new HashSet<>();
+	private static final Set<Material> itemUseMaterials = new LinkedHashSet<>();
+	private static final Set<Material> switchUseMaterials = new LinkedHashSet<>();
 	private static final List<Class<?>> protectedMobs = new ArrayList<>();
 	
 	private static final Map<NamespacedKey, Consumer<CommentedConfiguration>> CONFIG_RELOAD_LISTENERS = new HashMap<>();
