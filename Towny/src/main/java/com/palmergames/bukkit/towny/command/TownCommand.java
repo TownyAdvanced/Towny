@@ -1711,7 +1711,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Is this resident in a jailable world?
 		TownyWorld world = TownyAPI.getInstance().getTownyWorld(jailedResident.getPlayer().getWorld());
-		if (!world.isJailingEnabled())
+		if (world != null && !world.isJailingEnabled())
 			throw new TownyException(Translatable.of("msg_err_x_in_unjailable_world", jailedResident));
 
 		// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
