@@ -1790,7 +1790,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			result = rs.getBoolean("jailing");
 			try {
-				world.setJailing(result);
+				world.setJailingEnabled(result);
 			} catch (Exception ignored) {
 			}
 			
