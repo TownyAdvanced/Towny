@@ -1607,7 +1607,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("jailing");
 				if (line != null)
 					try {
-						world.setJailing(Boolean.parseBoolean(line));
+						world.setJailingEnabled(Boolean.parseBoolean(line));
 					} catch (Exception ignored) {
 					}
 
