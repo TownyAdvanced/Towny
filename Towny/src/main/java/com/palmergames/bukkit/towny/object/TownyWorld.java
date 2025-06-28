@@ -1040,7 +1040,6 @@ public class TownyWorld extends TownyObject {
 
 	public void setJailingEnabled(boolean parseBoolean) {
 		isJailing = parseBoolean;
-		
 	}
 	
 	public boolean isJailingEnabled( ) {
