@@ -10353,3 +10353,7 @@ v0.92.0.11:
   - Fix throwing TownCalculateMaxTownBlocksEvent async.
   - Fix resident purge messaging saying it is deleting a resident when its really just trying to remove the resident's town.
   - Fix inaccurate removal message when inactive residents are only losing their town, also suppress resident-deleted-messages when more than 50 residents are removed at once.
+  - Fix selection gui item ordering being wack, courtesy of Warrior with PR #7866.
+    - /towny switches, /towny itemuse, /towny allowedblocks should maintain a sane ordering.
+  - Fix tasks/timers not being shut down before datasource, courtesy of Warrior with PR #7865.
+  - Re-add switch tests on left click for specified switch items.
