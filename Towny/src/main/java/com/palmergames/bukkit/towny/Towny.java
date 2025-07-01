@@ -412,6 +412,13 @@ public class Towny extends JavaPlugin {
 	public void onDisable() {
 
 		Bukkit.getLogger().info("==============================================================");
+
+		// Turn off timers.		
+		toggleTimersOff();
+
+		TownyRegenAPI.cancelProtectionRegenTasks();
+		ChunkNotificationUtil.cancelChunkNotificationTasks();
+
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		if (townyUniverse.getDataSource() != null && !isError(TownyInitException.TownyError.DATABASE)) {
 			townyUniverse.getDataSource().saveQueues();
@@ -421,12 +428,6 @@ public class Towny extends JavaPlugin {
 			plugin.getLogger().info("Finishing File IO Tasks...");
 			townyUniverse.getDataSource().finishTasks();
 		}
-
-		// Turn off timers.		
-		toggleTimersOff();
-
-		TownyRegenAPI.cancelProtectionRegenTasks();
-		ChunkNotificationUtil.cancelChunkNotificationTasks();
 
 		playerCache.clear();
 
