@@ -1722,6 +1722,8 @@ your_town_has_been_invited_to_join_nation: 'Your town has been invited to join t
 msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
 msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
 msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
+msg_purge_complete_x_removed_from_towns: '&bPurge complete, %s inactive residents removed from towns.'
+msg_purge_reached_50_residents: '&bPurge has reached 50, further resident deletions will not be logged to reduce spam.'
 msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
 msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
