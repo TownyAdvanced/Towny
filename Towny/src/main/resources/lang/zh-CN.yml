@@ -49,7 +49,7 @@ towny_help_0: "Towny的基本帮助"
 towny_help_1: "显示附近城镇区块的地图"
 towny_help_2: "显示经济使用的价格"
 towny_help_3: "显示得分"
-towny_help_4: "显示时间直到明天"
+towny_help_4: "显示距离新的一天开始的时间"
 towny_help_5: "显示统计信息"
 towny_help_6: "显示Towny的版本"
 towny_top_help_0: "基于子命令列出顶级居民。"
@@ -70,10 +70,10 @@ town_help_14: "参见该镇的头衔清单。"
 town_help_15: "参见该镇被放逐者名单。"
 town_help_16: "参见该镇地皮组的清单。"
 town_help_17: "参见该镇的地皮类型清单。"
-town_help_18: "向该镇成员发送一条消息"
+town_help_18: "向该镇成员发送一条消息。"
 town_help_19: "将您的城镇设置为“出售”，可供其他玩家购买。"
 town_help_20: "将您的城镇设置为“不出售”。"
-town_help_21: "购买给定的城镇（只要它是出售的）。"
+town_help_21: "购买指定的城镇（只要它是正在出售中的）。"
 town_help_22: "向您的城镇银行存钱。"
 town_help_23: "用来修改您城镇居民的头衔。"
 town_help_24: "用来删除您的城镇。"
@@ -104,7 +104,7 @@ town_set_help_5: "设置每个区块的特殊税收"
 town_set_help_6: "设置购买地皮的默认价格。"
 town_set_help_7: "设置使用/t spawn的费用。"
 town_set_help_8: "设置你城镇的名称。"
-town_set_help_9: "设置你城镇的简称。"
+town_set_help_9: "设置你的城镇的简称。"
 town_set_help_10: "设置一个居民的头衔或后缀。"
 town_set_help_11: "设置可以税收的最高金额"
 town_jail_help_0: "列出城镇的监狱。"
@@ -171,11 +171,11 @@ nation_toggle_help_0: "切换国家的和平状态"
 nation_toggle_help_1: "切换国家“公开”的状态，允许不是居民的玩家使用/n spawn。"
 nation_toggle_help_2: "切换国家“开放”的状态，允许没有被邀请的城市加入。"
 nation_toggle_help_3: "切换税率，让城镇支付一定百分比而不是固定税率"
-nation_sanction_help_1: "添加一个城镇到受制裁城镇"
-nation_sanction_help_2: "从受制裁城镇中移除一个城镇"
-nation_sanction_help_3: "列出你国家所制裁的城镇"
-nation_sanction_help_4: "列出某个国家制裁城镇列表"
-king_help_1: '国家领导者帮助'
+nation_sanction_help_1: "添加一个城镇到受制裁城镇列表。"
+nation_sanction_help_2: "从受制裁城镇列表中移除一个城镇。"
+nation_sanction_help_3: "列出你国家所制裁的城镇。"
+nation_sanction_help_4: "列出某个国家所制裁城镇列表。"
+king_help_1: '国家领导人帮助'
 king_help_2: '设置你的盟国.'
 king_help_3: '设置你的敌国.'
 king_help_4: "从您的国家银行取钱。"
@@ -229,7 +229,7 @@ admin_sing: '管理员'
 town_sing: '城镇'
 nation_sing: '国家'
 nation_plu: '国家'
-king_sing: '领导者'
+king_sing: '领袖人'
 town_plu: '城镇'
 world_plu: '世界'
 world_sing: '世界'
@@ -291,7 +291,7 @@ townyadmin_town_help_16: "改变一个城镇的被放逐者"
 townyadmin_town_help_17: "让城镇离开自己的国家"
 townyadmin_town_help_18: "解除一个城镇的征服状态"
 townyadmin_town_toggle_help_0: "切换城镇PVP状态"
-townyadmin_town_toggle_help_1: "切换城镇的部队PVP，防止市长关闭PVP"
+townyadmin_town_toggle_help_1: "切换城镇的强制PVP，以防止市长关闭PVP。"
 townyadmin_town_toggle_help_2: "切换城镇的公共状态，允许非居民向城镇传送"
 townyadmin_town_toggle_help_3: "切换城镇的爆炸设置"
 townyadmin_town_toggle_help_4: "切换城镇的火焰蔓延设置"
@@ -338,11 +338,11 @@ ta_set_help_0: "设置指定玩家为城镇市长"
 ta_set_help_1: "设置一个NPC为市长，他们无需维护费"
 ta_set_help_2: "设置一个国家的首都"
 ta_set_help_3: "设置一个国家的国家区域大小"
-ta_set_help_4: "为居民设置一个称号"
+ta_set_help_4: "为居民设置一个头衔。"
 ta_set_help_5: "为居民设置一个后缀"
 ta_set_help_6: "将区块设置到另一个城镇"
 ta_set_help_7: "设置城镇的创建者名称"
-ta_set_help_8: "使用大小0来移除覆盖的民族区域"
+ta_set_help_8: "将大小设置为0来移除已覆盖的国域"
 ta_purge_help_0: "清除超过指定天数未登录的居民，可以选择将无城镇设置为仅删除无城镇玩家，或者指定城镇名称以仅清除一个城镇的居民"
 ta_townmeta_help_1: "查看您指定的城镇中存储的元数据"
 ta_townmeta_help_2: "设置城镇元数据密钥和值"
@@ -358,7 +358,7 @@ ta_reload_help_1: "重载配置。"
 ta_reload_help_2: "重新加载语言文件"
 ta_reload_help_3: "重新加载城镇权限"
 ta_reload_help_4: "重新加载城镇的所有组件"
-ta_eco_resetbanks_help: "将城镇和国家银行重置为给定金额或0。"
+ta_eco_resetbanks_help: "将城镇和国家银行重置为制定金额或归零。"
 ta_eco_convert_modern_help: "将你的城镇账户转换为更新的存储种类，使之在玩家离线状态下可供支持Vault的插件查看。"
 ta_eco_convert_help: "将您的城镇账户转换为目标经济实现，有助于在经济插件之间传输数据。"
 ta_eco_info_help: "提供服务器上的经济帐户信息。"
@@ -406,7 +406,7 @@ plot_group_toggle_help_2: "切换你所在的区块组的火焰蔓延"
 plot_group_toggle_help_3: "切换你所在的区块组的怪物生成"
 plot_group_toggle_help_4: "切换你所在的区块组的收税状态"
 plot_set_help_0: "例如：Inn, Wilds, Farm, Embassy等。"
-plot_set_help_1: "设置一个区块为哨站"
+plot_set_help_1: "设置一个区块为前哨。"
 plot_set_help_1.5: "设置玩家在成为城镇成员多少天以后可以购买地皮。"
 plot_set_help_1.6: "设置玩家在成为城镇成员多少天以内可以购买地皮。"
 plot_set_help_2: "删除一个区块类型"
@@ -416,7 +416,7 @@ plot_set_help_5: "开启/关闭 一些级别或类型的权限。"
 plot_set_help_6: "开启/关闭 一个级别或类型的权限。"
 plot_set_help_7: "为拥有这个区块的居民或城镇设置权限。"
 plot_jailcell_help_0: "将你目前站的区块设置为监狱区块。"
-plot_jailcell_help_1: "将你目前站的区块取消设置为监狱区块。"
+plot_jailcell_help_1: "将你目前所站的监狱区块移除。"
 msg_block_claim: '声明这个城镇区块'
 msg_block_claim_radius: '声明在你周围一定半径的区块。'
 msg_plot_nfs: '关闭这块土地的出售状态'
@@ -680,6 +680,7 @@ msg_err_not_enough_residents_join_nation: '&b城镇 %s 没有足够的居民数�
 msg_not_enough_residents_no_longer_capital: '&b国家旧都居民数不足所以不再是首都.新的首都将在 %s.'
 msg_town_not_enough_residents_left_nation: '&b城镇%s被赶出了国家，因为它不再有足够的居民来成为国家的一员。'
 msg_nation_disbanded_town_not_enough_residents: '&b城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
+msg_not_enough_residents_refunded: '&b你的国家由于居民数不足而灭亡了，因此你获得了 $%s 。'
 msg_not_enough_residents_capital: '&b城镇 %s 没有足够的居民来作为首都.'
 list_page: '&b当前页数 %s ,总页数 %s'
 list_err_not_enough_pages: '&c只有 %s 页可用'
@@ -783,7 +784,7 @@ town_invite_help_3: '列出你发送的所有邀请'
 town_invite_help_4: '列出你收到的所有邀请'
 town_invite_help_5: '接受加入国家的邀请'
 town_invite_help_6: '拒绝加入来自国家的邀请'
-town_invite_help_7: '取消所有你的城镇所发出的邀请。'
+town_invite_help_7: '取消所有你的城镇所发出的邀请'
 nation_invite_help_1: '邀请一个城镇加入你的国家'
 nation_invite_help_2: '撤消发送给城镇的邀请'
 nation_invite_help_3: '列出发送给城镇的所有邀请'
@@ -912,7 +913,7 @@ status_nation_ranks: '国家头衔：'
 jailed_in_town: ' 于城镇%s中'
 status_friends: '好友'
 rank_list_title: '%s的头衔列表'
-rank_list_mayor: '城主：'
+rank_list_mayor: '市长：'
 status_title_capital: '&b(首都)'
 status_title_pvp: ' &4(PvP)'
 status_title_open: ' &b(开放)'
@@ -950,7 +951,7 @@ status_res_taxexempt: '管理者免交市政税。'
 status_res_tax: '市政税：'
 status_res_plottax: '总计地税：'
 status_res_totaltax: '需要缴纳税费：'
-status_townblock_plottax: '区块税: '
+status_townblock_plottax: '地皮税: '
 status_townblock_untaxed: '免税'
 status_townblock_max_and_minjoindays: '购买地皮需要 %s 和 %s 天的城镇成员资格。'
 status_townblock_minjoindays: '购买地皮需要超过 %s 天的城镇成员资格。'
@@ -1173,7 +1174,7 @@ msg_plot_was_removed_from_group_x: '土地 &9(%s,%s) &2被移出了 %s 土地组
 msg_plot_renamed_from_x_to_y: '土地 %s 已重命名为 %s.'
 msg_err_plot_group_specify_price: '请设置价格, 指令示例: /plot group fs [价格]'
 msg_player_put_group_up_for_sale_amount: '%s 将土地组 %s 以 %s 的价格出售!'
-msg_player_put_group_up_for_sale: '%s 正在出售区块组 %s!'
+msg_player_put_group_up_for_sale: '%s 正在出售土地组 %s!'
 msg_err_could_not_set_group_type: '无法设置土地组类型 - '
 msg_set_group_type_to_x: '已将土地组类型更改为 %s'
 msg_player_successfully_bought_group_x: '%s 成功购买了土地组 %s'
@@ -1222,7 +1223,7 @@ msg_err_unable_to_add_more_residents_without_nation: '在加入其他国家或�
 msg_the_following_towns_were_deleted_for_having_0_claims: '城镇%s已被删除，因为这些城镇没有声明任何土地。'
 msg_spawn_warn: '传送价格为%s. 你确认继续传送? 提示: 加上 -ignore 跳过确认传送.'
 msg_confirm_purchase: '这样做将消耗%s. 你确认?'
-msg_warn_the_following_towns_will_be_removed_from_your_nation: '因为离新的首都不够近，所以城镇 %s 将从您的国家中移除。您确定要继续吗?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '这些城镇将因距离新首都过远而脱离你的国家：%s。您确定要继续吗？'
 msg_ta_deposit_all_success: '已成功将%s存入所有国家和城镇的银行。'
 bonus_townblocks: '奖励城镇区块'
 #Added in 0.80
@@ -1245,7 +1246,7 @@ msg_err_plot_belongs_to_group_toggle: '这片土地属于一个组，请使用/p
 msg_set_perms_reset_single: '&b成功地重置了这片土地的权限设置。'
 #Added in 0.86
 status_bank_bankrupt: '（破产）'
-msg_warning_bankrupt: '&4*** 警告，由于%s的资金不足，其将在下一天破产！ ***'
+msg_warning_bankrupt: '&4*** 警告，由于%s的资金不足，这个城镇将在下一天破产！ ***'
 msg_town_bankrupt_by_upkeep: '&b城镇%s因为不能维持日常开支而破产了。'
 msg_town_bankrupt_by_upkeep_multiple: '&b以下城镇因无力维持开支而破产： '
 msg_town_bankrupt_by_nation_tax: '&b城镇%s因无力付清%s税而破产了。'
@@ -1275,7 +1276,7 @@ msg_nation_already_not_peaceful: '&c国家已不再和平。'
 #Added in 0.89
 status_world_friendlyfire: '友伤：'
 status_world_wildernessmobs: '荒地生成生物：'
-msg_outlaw_kick_cooldown: '&c你在城镇%s中被列为被放逐者。你还有%s来离开城镇，否则将传送回出生点。'
+msg_outlaw_kick_cooldown: '&c你在城镇%s中被列为被放逐者。你还有%s来离开该城镇，否则你将被传送回出生点。'
 msg_outlaw_kicked: '&4你不被城镇%s所欢迎，因此你被传送走了。'
 msg_outlaw_town_notify: '&c被放逐者%s进入了你的城镇。'
 msg_your_town_payed_upkeep_with_debt: '&c你的城镇连带债务支付了%s的日常开支。'
@@ -1438,8 +1439,8 @@ msg_run_to_the_wilderness_or_wait_for_a_jailbreak: '逃至野地或等待劫狱�
 msg_err_player_is_not_jailed: '此玩家未被监禁。'
 msg_you_have_paid_bail: '你已支付保释金。'
 msg_you_have_been_freed_via_jailbreak: '监狱发生了劫狱事件，你自由了！'
-msg_you_have_served_your_sentence_and_are_free: '你已服完刑并被释放。'
-msg_x_has_served_their_sentence_and_is_free: '%s已服完刑并被释放。'
+msg_you_have_served_your_sentence_and_are_free: '你已刑满释放。'
+msg_x_has_served_their_sentence_and_is_free: '%s已刑满释放。'
 msg_you've_been_jailed_for_x_hours: '你已被监禁了%s小时。'
 msg_you_are_being_sent_to_jail: '你将被送入监狱。'
 msg_err_you_cannot_remove_the_last_cell: '在添加另一个牢房之前，您不能移除此监狱中的最后一个牢房。'
@@ -1518,7 +1519,7 @@ msg_err_plot_belongs_to_group: '&c这片土地属于一个土地组，请使用%
 plotgroup_sing: '土地组'
 msg_err_ally_limit_reached: '你的盟友太多了，因此你无法接受新的邀请。'
 msg_err_ally_limit_reached_cannot_accept: '国家%s的盟友数量已经达到了上限，无法接受新的邀请。'
-msg_err_ally_limit_reached_cannot_send: '这个国家的盟友已达到上限，因此无法邀请%s成为你的盟友。'
+msg_err_ally_limit_reached_cannot_send: '你的国家的盟友数量已达到上限，因此无法邀请%s成为你的盟友。'
 msg_err_ally_limit_reached_cannot_send_targetNation: '国家%s的盟友已达到上限，因此无法邀请%s成为你的盟友。'
 #Added in 0.114
 msg_err_group_not_found: '组%s未找到。'
@@ -1633,9 +1634,9 @@ msg_process_town_unclaim: '城镇取消圈地中......'
 #Shown when there is nothing to unclaim.
 msg_err_nothing_to_unclaim: '没有可以取消圈地的地方。'
 #Given as feedback when /ta checkperm is used.
-msg_perm_true: '权限为真。'
+msg_perm_true: '权限为开启。'
 #Given as feedback when /ta checkperm is used.
-msg_err_perm_false: '权限为假。'
+msg_err_perm_false: '权限为关闭。'
 #Shown at the bottom of the /towny map
 #First variable is townname or None, 2nd variable is plot owner's name or None.
 status_towny_map_town_line: '&2城镇：&a%s &7| &2地主：&a%s'
