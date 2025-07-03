@@ -311,7 +311,7 @@ public class TownyFormatter {
 		else
 			screen.addComponentOf("townblocks", colourKeyValue(translator.of("status_town_size"), translator.of("status_fractions", town.getTownBlocks().size(), town.getMaxTownBlocksAsAString())));
 
-		if (town.isPublic()) {
+		if (town.isPublic() || TownySettings.isWebMapLinkShownForNonPublicTowns()) {
 			Component homeComponent = TownyComponents.miniMessage(translator.of("status_home_element", TownySettings.getTownDisplaysXYZ()
 						? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town"))
 						: (town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
