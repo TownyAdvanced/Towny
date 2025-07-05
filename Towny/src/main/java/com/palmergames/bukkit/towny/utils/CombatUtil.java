@@ -500,15 +500,27 @@ public class CombatUtil {
 			return true;
 		if (a.hasAlly(b))
 			return true;
-		if (isSameNation(a, b) && TownySettings.areConqueredTownsConsideredAllied())
-			return true;
-		if (isSameNation(a, b) && !TownySettings.areConqueredTownsConsideredAllied() && ((a.isConquered() && !b.isConquered()) || (!a.isConquered() && b.isConquered()))) {
-			TownyMessaging.sendDebugMsg(String.format("The isAlly test between %s and %s was overridden because one of the two towns is conquered by the other.", a.getName(), b.getName()));
-			return false;
-		}
+		if (isSameNation(a, b))
+			if (conqueredTownsArentConsideredAllies(a, b)) {
+				TownyMessaging.sendDebugMsg(String.format("The isAlly test between %s and %s was overridden because one of the two towns is conquered by the other.", a.getName(), b.getName()));
+				return false;
+			} else
+				return true;
+
 		if (a.hasNation() && b.hasNation() && a.getNationOrNull().hasAlly(b.getNationOrNull()))
 			return true;
 		return false;
+	}
+
+	/**
+	 * Towny can be configured to not consider conquered towns proper nation members.
+	 * 
+	 * @param a Town one.
+	 * @param b Town two.
+	 * @return true when we are configured to not considers conquered towns allies, and one of the towns is conquered by the other.
+	 */
+	private static boolean conqueredTownsArentConsideredAllies(Town a, Town b) {
+		return !TownySettings.areConqueredTownsConsideredAllied() && ((a.isConquered() && !b.isConquered()) || (!a.isConquered() && b.isConquered()));
 	}
 
 	/**

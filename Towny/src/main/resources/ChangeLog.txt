@@ -10357,3 +10357,5 @@ v0.92.0.11:
     - /towny switches, /towny itemuse, /towny allowedblocks should maintain a sane ordering.
   - Fix tasks/timers not being shut down before datasource, courtesy of Warrior with PR #7865.
   - Re-add switch tests on left click for specified switch items.
+0.101.1.16:
+  - Fix nation plot perms not being given out for un-conquered towns when are_conquered_towns_given_nation_plot_perms is set to true.
