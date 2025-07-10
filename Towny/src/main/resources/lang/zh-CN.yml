@@ -1460,6 +1460,8 @@ your_town_has_been_invited_to_join_nation: '你的城镇被邀请加入国家：
 msg_err_no_one_to_purge: '&b没有不活跃成员可清理。'
 msg_purging_will_remove_the_following_residents: '&b请确定你要清理以下居民：%s'
 msg_purge_complete_x_removed: '&b清理完毕，已移除%s名居民。'
+msg_purge_complete_x_removed_from_towns: '&b清理完成，已从城镇中移除 %s 名不活跃的居民。'
+msg_purge_reached_50_residents: '&b已清理50次，为减少刷屏，后续居民清理记录将不再显示。'
 msg_err_days_must_be_greater_than_0: '天数必须大于0。'
 msg_err_outlawed_players_no_teleport: '&4你被你所在的城镇列为被放逐者了！你现在不能传送了。'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4你不能在把你列为被放逐者的城镇里使用此命令。'

@@ -1187,3 +1187,5 @@ msg_perm_hud_resident: '주민'
 msg_perm_hud_nation: '국가'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: '외부인'
+chunknotification_plot_claim_help_message: " '/plot claim' 명령어로 이 땅을 점유하세요."
+titlemsg_pay_your_bail_title: "당신의 보석금을 지불하세요: %s"
