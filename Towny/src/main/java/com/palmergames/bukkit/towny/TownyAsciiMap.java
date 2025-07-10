@@ -295,7 +295,7 @@ public class TownyAsciiMap {
 		}
 		
 		for (Component component : map)
-			Towny.getAdventure().player(player).sendMessage(component);
+			player.sendMessage(component);
 
 		TownBlock townblock = pos.getTownBlockOrNull();
 		TownyMessaging.sendMsg(player, translator.of("status_towny_map_town_line", 

@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.utils.TownRuinUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
@@ -106,18 +105,16 @@ public class OnPlayerLogin implements Runnable {
 		plugin.getScheduler().runLater(player, () -> ResidentModeHandler.applyDefaultModes(resident, false), 1);
 
 		if (TownyUpdateChecker.shouldShowNotification() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
-			Audience audience = Towny.getAdventure().player(player);
 			ClickEvent clickEvent = ClickEvent.openUrl(TownyUpdateChecker.getUpdateURL());
 
-			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).locale(player).component().clickEvent(clickEvent));
-			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download")).locale(player).component().clickEvent(clickEvent));
+			player.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_new_update_available", TownyUpdateChecker.getNewVersion(), Towny.getPlugin().getVersion())).locale(player).component().clickEvent(clickEvent));
+			player.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_download")).locale(player).component().clickEvent(clickEvent));
 		}
 
 		if (TownyEconomyHandler.isActive() && TownyEconomyHandler.getProvider().isLegacy() && player.hasPermission(PermissionNodes.TOWNY_ADMIN_UPDATEALERTS.getNode())) {
-			Audience audience = Towny.getAdventure().player(player);
 			ClickEvent clickEvent = ClickEvent.runCommand("/townyadmin eco convert modern");
-			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_legacy_economy_detected")).locale(player).component().clickEvent(clickEvent));
-			audience.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_convert_to_modern_economy")).locale(player).component().clickEvent(clickEvent));
+			player.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_legacy_economy_detected")).locale(player).component().clickEvent(clickEvent));
+			player.sendMessage(Translatable.of("default_towny_prefix").append(Translatable.of("msg_click_to_convert_to_modern_economy")).locale(player).component().clickEvent(clickEvent));
 		}
 	}
 

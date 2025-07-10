@@ -22,7 +22,6 @@ import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.util.ItemLists;
-import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -166,7 +165,7 @@ public class SpawnUtil {
 			return;
 
 		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
-		PaperLib.getBedSpawnLocationAsync(outlawedPlayer, true).thenAccept(bed -> {
+		BukkitTools.getRespawnLocation(outlawedPlayer).thenAccept(bed -> {
 			Location spawnLocation = town.getWorld().getSpawnLocation();
 			if (!TownySettings.getOutlawTeleportWorld().equals(""))
 				spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
@@ -440,7 +439,7 @@ public class SpawnUtil {
 		return switch (spawnType) {
 			case RESIDENT:
 				if (TownySettings.getBedUse()) {
-					yield PaperLib.getBedSpawnLocationAsync(player, true).thenApply(bedLoc -> {
+					yield BukkitTools.getRespawnLocation(player).thenApply(bedLoc -> {
 						if (bedLoc != null)
 							return bedLoc;
 						else if (town != null && town.hasSpawn())
@@ -466,7 +465,7 @@ public class SpawnUtil {
 		if (!TownySettings.isSafeTeleportUsed())
 			return CompletableFuture.completedFuture(location);
 		
-		return PaperLib.getChunkAtAsync(location).thenApply(chunk -> getSafeLocation(location, player));
+		return location.getWorld().getChunkAtAsync(location).thenApply(chunk -> getSafeLocation(location, player));
 	}
 
 	/**
@@ -801,7 +800,7 @@ public class SpawnUtil {
 			// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
 			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
 
-			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
+			player.teleportAsync(spawnLoc, TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
 				if (successfulTeleport)
 					BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost));
 			});
@@ -866,7 +865,7 @@ public class SpawnUtil {
 			loc = town.getSpawnOrNull();
 
 		Location finalLoc = loc;
-		return PaperLib.getBedSpawnLocationAsync(resident.getPlayer(), true).thenApply(bed -> bed == null ? finalLoc : bed);
+		return BukkitTools.getRespawnLocation(resident.getPlayer()).thenApply(bed -> bed == null ? finalLoc : bed);
 	}
 	
 	/**
@@ -882,7 +881,7 @@ public class SpawnUtil {
 		if (player == null)
 			return;
 		
-		plugin.getScheduler().runLater(player, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
+		plugin.getScheduler().runLater(player, () -> resident.getPlayer().teleportAsync(loc, TeleportCause.PLUGIN),
 			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L);
 	}
 
