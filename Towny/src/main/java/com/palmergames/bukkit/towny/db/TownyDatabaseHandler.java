@@ -628,7 +628,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
 				if (TownyEconomyHandler.canRenameAccounts()) {
-					TownyEconomyHandler.rename(town, TownySettings.getTownAccountPrefix() + newName);
+					TownyEconomyHandler.rename(town, TownySettings.getTownAccountPrefix() + filteredName);
 				} else {
 					try {
 						townBalance = town.getAccount().getHoldingBalance();
@@ -736,7 +736,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
 				if (TownyEconomyHandler.canRenameAccounts()) {
-					TownyEconomyHandler.rename(nation, TownySettings.getNationAccountPrefix() + newName);
+					TownyEconomyHandler.rename(nation, TownySettings.getNationAccountPrefix() + filteredName);
 				} else {
 					try {
 						nationBalance = nation.getAccount().getHoldingBalance();
