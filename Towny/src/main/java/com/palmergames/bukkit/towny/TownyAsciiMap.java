@@ -49,19 +49,22 @@ public class TownyAsciiMap {
 	public static String wildernessSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS.getDefault();
 	
 	static {
-		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> {
-			defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
-			forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
-			homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
-			outpostSymbol = parseSymbol(TownySettings.outpostMapSymbol());
-			wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
-			lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
-			halfLineWidth = lineWidth / 2;
-		});
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> readSymbolsFromConfig());
 	}
 
-	// Run static initializer above pre initial config load.
-	public static void initialize() {}
+	public static void initialize() {
+		readSymbolsFromConfig();
+	}
+
+	private static void readSymbolsFromConfig() {
+		defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
+		forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
+		homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
+		outpostSymbol = parseSymbol(TownySettings.outpostMapSymbol());
+		wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
+		lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
+		halfLineWidth = lineWidth / 2;
+	}
 	
 	public static Component[] generateHelp(Player player) {
 		final Translator translator = Translator.locale(player);

@@ -132,7 +132,6 @@ public class Towny extends JavaPlugin {
 		TownyPerms.initialize(this);
 		InviteHandler.initialize(this);
 		SpawnUtil.initialize(this);
-		TownyAsciiMap.initialize();
 
 		try {
 			// Load the foundation of Towny, containing config, locales, database.
@@ -198,6 +197,8 @@ public class Towny extends JavaPlugin {
 		Bukkit.getLogger().info("=============================================================");
 
 		if (!isError()) {
+			TownyAsciiMap.initialize();
+
 			// Re login anyone online. (In case of plugin reloading)
 			for (Player player : BukkitTools.getOnlinePlayers())
 				if (player != null) {
