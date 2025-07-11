@@ -157,6 +157,12 @@
             <groupId>solar.squares</groupId>
             <artifactId>pixel-width-core</artifactId>
             <version>1.1.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
