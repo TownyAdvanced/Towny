@@ -10363,3 +10363,5 @@ v0.92.0.11:
 0.101.1.17:
   - Read Ascii map symbols from the config on first load.
     - Closes #7875.
+0.101.2.0:
+  - Bump version for release.
