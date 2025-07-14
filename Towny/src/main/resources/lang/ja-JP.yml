@@ -69,7 +69,7 @@ town_list_help_5: "指定されたページに所有地順で町の一覧を表�
 town_list_help_6: "指定されたページにオンラインの住民数順で町の一覧を表示します。"
 town_set_help_0: "町の掲示板を設定"
 town_set_help_1: "あなたの町のホームブロックを現在地に設定"
-town_set_help_2: "ホームブロックまたはアウトポスト内のスポーン地点を設定"
+town_set_help_2: "ホームブロックまたはアウトポスト内のスポーン地点を設定。"
 town_set_help_3: "詳細は「/town set perm ?」を見てください。"
 town_set_help_4: "町の税金額を設定"
 town_set_help_5: "プロットごとの特別な税金額を設定"
