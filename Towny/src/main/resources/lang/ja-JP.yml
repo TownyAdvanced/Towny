@@ -232,6 +232,7 @@ admin_panel_2: 'Townyを再読み込みする'
 admin_panel_3: '新しい日付コードを実行する'
 admin_panel_4: "周囲の領域を放棄する"
 admin_panel_5: "/ta plot ? を使用してヘルプを参照します。"
+admin_panel_6: "プレイヤーに土地を付与する/減らす"
 admin_panel_7: "詳細は/ta toggle ?で見れます。"
 admin_panel_11: "設定をリセットする"
 admin_panel_12: "Townyのデータをバックアップする"
@@ -408,7 +409,7 @@ msg_changed_public: '&c町の公開ステータスは現在 %s です。'
 msg_changed_expl: '&c%sでの爆発は現在%sです。'
 msg_changed_fire: '&c%sでの炎の延焼は現在%sです。'
 msg_changed_mobs: '&c %s 内のモンスタースポーンは %s になりました'
-msg_the_plot_group: 'プロット'
+msg_the_plot_group: '土地グループ'
 msg_changed_taxpercent: '&c税率は現在 %s です'
 msg_changed_open: '&c 招待なしの参加が %s'
 msg_toggle_open_on_warning: '警告： 町を一般に公開するのであれば、町の権限は切っておくべきです。 「/town set perm reset」を入力した後に「/town set perms off」と入力してください'
@@ -987,7 +988,7 @@ msg_player_successfully_bought_group_x: '%sがプロットグループ%sを購�
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'プロットグループを刑務所タイプに設定することはできません。'
 #Added in 0.70
-msg_err_plot_group_name_required: 'プロットグループ名を指定してください。(/plot group add {name})'
+msg_err_plot_group_name_required: '土地グループ名を「/plot group add {name}」指定してください。'
 msg_confirmation_spigot_click_accept: '%sをクリックするか%sと入力してください。'
 msg_confirmation_spigot_click_cancel: '%sをクリックするか%sと入力してください。'
 msg_you_cannot_kick_yourself: '自分をキックすることはできません。'
