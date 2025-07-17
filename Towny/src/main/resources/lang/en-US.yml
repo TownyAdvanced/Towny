@@ -519,7 +519,7 @@ msg_you_paid_plottax_to_town: '&bYou paid plot taxes totalling %s to the town of
 msg_bankrupt_town: ' couldn''t afford to remain a town.'
 msg_bankrupt_nation: ' couldn''t afford to remain a nation.'
 msg_nation_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
-msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
+msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay %s daily.'
 msg_peaceful_disabled: '&bNation peace is disabled globally.'
 msg_you_paid: '&bYou paid %s to set peaceful status.'
 msg_nation_set_peace: '&bSuccessfully changed nation''s state.'
