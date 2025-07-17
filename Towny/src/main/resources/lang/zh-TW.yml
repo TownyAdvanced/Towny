@@ -431,7 +431,6 @@ msg_you_couldnt_pay_town_tax: '&b你無法支付 %s 的城鎮稅，已被從 %s 
 msg_bankrupt_town: ' 銀行資金不足以維持市鎮的日常開銷 '
 msg_bankrupt_nation: ' 銀行資金不足以維持城邦的日常開銷 '
 msg_nation_not_peaceful: '&b城邦無法維持和平狀態 '
-msg_nation_cant_peaceful: '&b國家無法承受成為一個和平的國家。您必須能夠支付 % d aily。'
 msg_peaceful_disabled: '&b所有城邦的和平都已被打破 '
 msg_you_paid: '&b你花費了%s來保持戰時和平 '
 msg_nation_set_peace: '&b成功改變城邦狀態 '
