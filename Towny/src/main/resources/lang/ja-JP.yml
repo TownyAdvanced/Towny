@@ -9,11 +9,11 @@ unclaimed_zone_name: '荒野'
 ############################################################
 help_0: 'Townyヘルプ'
 help_1: 'Townyについてもっと知るには、次のコマンドを試してみてください。'
-help_2: 'タウンチャット'
-help_3: '国家チャット'
-help_4: '住人コマンドのヘルプ'
-help_5: '町のコマンドのヘルプ'
-help_6: '国家コマンドのヘルプ'
+help_2: '町チャット'
+help_3: '国チャット'
+help_4: '住民コマンドのヘルプ'
+help_5: '町コマンドのヘルプ'
+help_6: '国コマンドのヘルプ'
 help_7: '土地コマンドのヘルプ'
 help_8: 'Townyコマンドのヘルプ'
 help_9: 'Towny管理者コマンドのヘルプ'
@@ -21,41 +21,41 @@ towny_help_0: "一般的なTownyのヘルプ"
 towny_help_1: "近くの町の地図を表示します。"
 towny_help_2: "エコノミーで使用されている価格を表示します。"
 towny_help_3: "ハイスコアを表示"
-towny_help_4: "次の日までの時間を表示"
+towny_help_4: "新日までの時間を表示"
 towny_help_5: "統計情報を表示"
 towny_help_6: "Townyのバージョンを表示"
-towny_top_help_0: "サブコマンドに基づいてトップの住民一覧を表示します。"
-towny_top_help_1: "サブコマンドに基づいてトップの土地所有者の一覧を表示します。"
-towny_top_help_2: "サブコマンドに基づいて一番お金を持っている人の一覧を表示します。"
+towny_top_help_0: "サブコマンドに基づいて上位の住民一覧を表示します。"
+towny_top_help_1: "サブコマンドに基づいて上位の土地所有者の一覧を表示します。"
+towny_top_help_2: "サブコマンドに基づいて裕福なプレイヤーの一覧を表示します。"
 town_help_1: '町の状態'
 town_help_2: '[市長]'
-town_help_3: '指定した町の状態を表示'
-town_help_4: '今いる町のステータスへのショートカット。'
+town_help_3: '選択した町の状態'
+town_help_4: '今いる町の状態へのショートカット。'
 town_help_5: '町のスポーン地点にテレポートします。'
-town_help_6: 'あなたが市長である新しい町'
-town_help_7: '目標とした市長がいる新しい町'
-town_help_8: '市長のためコマンドリスト'
+town_help_6: 'あなたが市長となる新しい町。'
+town_help_7: '市長を設定した新しい町。'
+town_help_8: '市長のためコマンドリスト。'
 town_help_9: '当日です！'
 town_help_10: '町のオンライン住民の一覧を表示'
-town_help_13: "町の住民一覧を表示"
-town_help_14: "町のランクのリストを表示"
-town_help_15: "町の無法者のリストを表示"
-town_help_16: "町の土地グループの一覧を表示"
-town_help_17: "町のプロットタイプの一覧を表示"
-town_help_18: "町の人たちにメッセージを伝える"
-town_help_19: "町を他のプレイヤーが買えるように売りに出す"
-town_help_20: "町を売りに出さない"
-town_help_21: "売りに出されている町を購入する"
-town_help_22: "町の銀行にお金を預ける"
-town_help_23: "住民の町のランクを変更するために使用します。"
-town_help_24: "町を削除するために使用します。"
-town_help_25: "町の無法者を変更するために使用されます。"
-town_help_26: "すべての町の一覧を表示するには、/t list ? を参照してください。"
+town_help_13: "町の住民一覧を表示。"
+town_help_14: "町のランク一覧を表示。"
+town_help_15: "町の無法者一覧を表示。"
+town_help_16: "町の土地グループの一覧を表示。"
+town_help_17: "町の土地タイプの一覧を表示。"
+town_help_18: "町の住民にメッセージを伝える。"
+town_help_19: "町を他のプレイヤーが買えるよう販売する。"
+town_help_20: "町を否販売に設定する。"
+town_help_21: "販売している町を購入する。"
+town_help_22: "町の金庫に資金を入金する。"
+town_help_23: "住民の町でのランクを変更するために使用する。"
+town_help_24: "町を削除するために使用する。"
+town_help_25: "町の無法者を変更するために使用する。"
+town_help_26: "全ての町の一覧を表示するには、/t list ? を参照してください。"
 town_help_27: "自分が所属している町を抜ける"
-town_help_28: "町の銀行からお金を引き出します。"
-town_help_29: "/t claim ? を使用して、ヘルプを参照してください。"
-town_help_30: "町から土地の所有権を解除するために使用されます。"
-town_help_31: "住所を追加または削除します。"
+town_help_28: "町の金庫から資金を引き出す。"
+town_help_29: "/t claim ? で拡張関連のヘルプを参照する。"
+town_help_30: "町の土地から撤退(所有権の解除)をするために使用する。"
+town_help_31: "住民を追加/削除する。"
 town_help_32: "/t set ? を使用して、ヘルプを参照してください。"
 town_help_33: "/t buy ? を使用して、ヘルプを参照してください。"
 town_help_34: "/t toggle ? を使用して、ヘルプを参照してください。"
@@ -67,28 +67,28 @@ town_list_help_3: "指定されたページに銀行残高順に町の一覧を�
 town_list_help_4: "指定されたページにアルファベット順で町の一覧を表示します。"
 town_list_help_5: "指定されたページに所有地順で町の一覧を表示します。"
 town_list_help_6: "指定されたページにオンラインの住民数順で町の一覧を表示します。"
-town_set_help_0: "町の掲示板を設定"
+town_set_help_0: "掲示板を設定する。"
 town_set_help_1: "あなたの町のホームブロックを現在地に設定"
 town_set_help_2: "ホームブロックまたはアウトポスト内のスポーン地点を設定。"
 town_set_help_3: "詳細は「/town set perm ?」を見てください。"
-town_set_help_4: "町の税金額を設定"
-town_set_help_5: "プロットごとの特別な税金額を設定"
-town_set_help_6: "プロットを購入する際のデフォルトの価格を設定"
-town_set_help_7: "/t spawn を使用するコストを設定"
-town_set_help_8: "町の名前を設定"
-town_set_help_9: "町のタグを設定"
-town_set_help_10: "住民の氏名またはタイトルを設定"
-town_set_help_11: "住民からの税率の最大額を設定"
-town_jail_help_0: "町の刑務所の一覧を表示"
-town_jail_help_1: "主刑務所に住民を投獄する"
+town_set_help_4: "町の税金額を設定する。"
+town_set_help_5: "土地ごとの特別な地税を設定する。"
+town_set_help_6: "土地を購入する際のデフォルトの価格を設定する。"
+town_set_help_7: "/t spawn を使用するコストを設定する。"
+town_set_help_8: "町の名前を設定する。"
+town_set_help_9: "町のタグを設定する。"
+town_set_help_10: "住民の称号や姓を設定する。"
+town_set_help_11: "住民からの税率の最大額を設定する。"
+town_jail_help_0: "町の刑務所の一覧を表示する。"
+town_jail_help_1: "牢獄に住民を投獄する。"
 town_jail_help_2: "指定された時間の間、主刑務所に住民を投獄します"
 town_jail_help_3: "特定の時間の間、住民を主刑務所の特定の刑務所に投獄します"
 town_jail_help_4: "特定の時間の間、住民を主刑務所の特定の刑務所の特定の独房に投獄します"
 town_jail_help_5: "定められた寄託の金額で住民を特定の時間の間主刑務所に投獄します"
 town_jail_help_6: "定められた寄託の金額で住民を特定の時間の間主刑務所の特定の刑務所に投獄します"
 town_jail_help_7: "定められた寄託の金額で住民を特定の時間の間主刑務所の特定の刑務所の特定の独房に投獄します"
-town_jail_help_8: "住人を釈放する"
-town_purge_help: "一定日数ログインしていない住人を排除します"
+town_jail_help_8: "住民を釈放する。"
+town_purge_help: "一定日数ログインしていない住民を粛清する。"
 town_trust_help_0: "住民を町の信頼できる人物として追加します。"
 town_trust_help_1: "住民を町の信頼できる人物として削除します。"
 town_trust_help_2: "町の信頼できる住民の一覧を表示"
@@ -97,28 +97,28 @@ town_towntrust_help_1: "町を信頼できる町として削除します。"
 town_towntrust_help_2: "町の信頼できる町の一覧を表示"
 town_buy_help: "追加のタウンブロックを購入して町で所有できる土地の上限をあげます"
 town_cede_help: "立っている土地を指定された町に提供する"
-mayor_help_3: '町でないエリアの領有を主張する'
+mayor_help_3: '町に接続していない土地に拡張する。　'
 mayor_help_4: 'あなたの周囲Xブロック分（円又は四角）のエリアの領有を主張する'
 mayor_help_5: '自動で最大半径のエリアの領有を主張する'
-mayor_help_6: '町の一区画分のエリアの領有を解除する'
-mayor_help_7: 'あなたの周りのエリアの領有を解除することを試みる'
-mayor_help_8: '全ての町のエリアの領有を解除することを試みる'
+mayor_help_6: '土地から撤退する'
+mayor_help_7: 'あなたの周りの土地から撤退する'
+mayor_help_8: '町の全ての土地から撤退する'
 nation_help_1: 'あなたの国のステータス'
 nation_help_2: '[国]'
 nation_help_3: '指定した国の状態を表示'
 nation_help_4: '国の一覧を表示'
-nation_help_5: '所属している国から脱退する'
-nation_help_6: '新しい国を作成する'
-nation_help_7: '国のリーダーコマンドを一覧表示する'
-nation_help_8: '新しい国を作成する'
+nation_help_5: '国から脱退する'
+nation_help_6: '新国家を作成する'
+nation_help_7: '国のリーダー用のコマンドを表示する'
+nation_help_8: '新国家を作成する'
 nation_help_9: 'オンラインの国民の一覧を表示する'
-nation_help_11: "国の町の一覧を表示"
+nation_help_11: "国内の町の一覧を表示"
 nation_help_12: "国の同盟国の一覧を表示"
 nation_help_13: "国の敵国の一覧を表示"
 nation_help_14: "公開されている国に参加するために使用します。"
 nation_help_15: "国の銀行にお金を預けます。"
 nation_help_16: "国を削除するために使用されます。"
-nation_help_17: "住民のランクを追加または削除するために使用されます。"
+nation_help_17: "住民のランクを追加/削除するために使用されます。"
 nation_help_18: "ヘルプについては /n rank ? を参照してください。"
 nation_list_help_0: "指定されたページを表示します。"
 nation_list_help_1: "指定されたページで、住民数順に国の一覧を表示"
@@ -129,28 +129,28 @@ nation_list_help_5: "指定されたページを使用して、アルファベ�
 nation_list_help_6: "指定されたページで、所有地順に国の一覧を表示"
 nation_list_help_7: "指定されたページで、オンライン住民数で国の一覧を表示"
 nation_set_help_0: "国のリーダーを変える。"
-nation_set_help_1: "国の首都を変更"
-nation_set_help_2: "町が支払う税額を設定します。"
-nation_set_help_3: "征服した町が支払う税額を設定します。"
-nation_set_help_4: "国名を設定します。"
-nation_set_help_5: "住民の 1 人の肩書または姓を設定します。"
-nation_set_help_6: "国のタグを設定します。"
-nation_set_help_7: "国の掲示板のメッセージを設定します。"
-nation_set_help_8: "国のスポーン地点を設定します。"
-nation_set_help_9: "/n spawn を使用するコストを設定します。"
-nation_set_help_10: "マッピングプラグインで使用されるマップカラーを設定します。"
-nation_toggle_help_0: "国の平和状態を切り替えます。"
-nation_toggle_help_1: "公開状態を切り替え、居住者でない人が /n spawnを使用できるようにします。"
+nation_set_help_1: "国の首都を変更する。"
+nation_set_help_2: "町が国に支払う税額を設定する。"
+nation_set_help_3: "征服した町が国に支払う税額を設定する。"
+nation_set_help_4: "国名を設定する。"
+nation_set_help_5: "住民の称号や姓を設定する。"
+nation_set_help_6: "国のタグを設定する。"
+nation_set_help_7: "国の掲示板のメッセージを設定する。"
+nation_set_help_8: "国のスポーン地点を設定する。"
+nation_set_help_9: "/n spawn を使用するコストを設定する。"
+nation_set_help_10: "マッピングプラグインで使用されるマップカラーを設定する。"
+nation_toggle_help_0: "国の平和状態を切り替える。"
+nation_toggle_help_1: "公開状態を切り替え、居住者でない人が /n spawnを使用できるようにする。"
 nation_toggle_help_2: "オープンステータスを切り替え、招待なしで参加できるようにする。"
 nation_toggle_help_3: "税率を切り替えて、町の税金を固定金額ではなく税率で支払うようにします。"
-nation_sanction_help_1: "制裁町のリストに町を追加する。"
-nation_sanction_help_2: "制裁町のリストから町を削除する"
+nation_sanction_help_1: "制裁リストに町を追加する。"
+nation_sanction_help_2: "制裁リストから町を削除する。"
 nation_sanction_help_3: "国の制裁町の一覧を表示"
-nation_sanction_help_4: "指定された国の制裁町の一覧を表示"
-king_help_1: '国家リーダーヘルプ'
-king_help_2: '同盟を設定'
-king_help_3: '敵を設定'
-king_help_4: "国の銀行からお金を引き出します。"
+nation_sanction_help_4: "指定された国の制裁町の一覧を表示する。"
+king_help_1: '国家リーダー用のヘルプ'
+king_help_2: '同盟を設定する。'
+king_help_3: '敵を設定する。'
+king_help_4: "国庫から資金を引き出す。"
 king_help_5: "国から町を追加または削除します。"
 king_help_6: "/n set ? を使用してヘルプを参照します。"
 king_help_7: "/n toggle ? を使用してヘルプを参照します。"
@@ -159,56 +159,56 @@ king_help_9: "自国の全員にメッセージを送る時に使います。"
 res_1: 'あなたのステータス'
 res_2: '[住民]'
 res_3: '指定したプレイヤーのステータス'
-res_4: 'すべてのオンラインプレイヤーの一覧を表示します'
-res_9: "あなたの1日当たりの納税額"
-res_10: "/res jail ? を使用してヘルプを参照します。"
-res_11: "/res toggle ? を使用してヘルプを参照します。"
-res_12: "/res set ? を使用してヘルプを参照します。"
-res_13: "あなたの町やベッドにスポーンします。"
-res_toggle_help_0: "区画のPvPステータスを切り替える。"
-res_toggle_help_1: "区画の火災状態を切り替える。"
-res_toggle_help_2: "区画のモブのステータスを切り替える。"
-res_toggle_help_3: "区画の爆発ステータスを切り替える。"
-res_toggle_help_4: "区画の境界線を表示するかどうかを切り替えます。"
-res_toggle_help_5: "常に区画の境界線を表示するかどうかを切り替えます。"
-res_toggle_help_6: "町のボーダーの表示を切り替え"
-res_toggle_help_7: "区画の通知の表示を切り替え"
-res_toggle_help_8: "歩いた土地を所有する状態を切り替え"
-res_toggle_help_9: "区画を変更した際に地図を表示する状態を切り替え"
-res_toggle_help_10: "すべてのモードを削除"
-res_toggle_help_10.5: "全てのモードを取り除き、デフォルト状態を再付与します。"
-res_toggle_help_11: "チャットチャンネルをスパイする"
-res_toggle_help_12: "開始したプロットグループにプロットを追加する機能を切り替える"
-res_toggle_help_13: "区画を変更した際にタイトルメッセージを表示する機能を切り替え"
-res_toggle_help_14: "歩いた土地を放棄する状態を切り替え"
-res_toggle_help_15: "インフォツールを使用して、適切なブロック/エンティティの名前を知る機能を切り替え"
-res_toggle_help_16: "管理者権限を無効にする機能を切り替え"
-res_jail_help_0: "刑務所から出るために寄託を支払う"
-res_set_help_0: "住民の情報を設定"
-res_set_help_1: "住民のデフォルトの土地権限を設定"
-res_set_help_2: "住民のモードを設定"
+res_4: '全てのオンラインプレイヤーの一覧を表示する'
+res_9: "あなたの毎日の納税額。"
+res_10: "/res jail ? を使用してヘルプを参照する。"
+res_11: "/res toggle ? を使用してヘルプを参照する。"
+res_12: "/res set ? を使用してヘルプを参照する。"
+res_13: "あなたの町やベッドにスポーンする。"
+res_toggle_help_0: "土地のPvP状態を切り替える。"
+res_toggle_help_1: "土地の火災状態を切り替える。"
+res_toggle_help_2: "土地のモブ状態を切り替える。"
+res_toggle_help_3: "土地の爆発状態を切り替える。"
+res_toggle_help_4: "土地の境界線を表示するかどうかを切り替える。"
+res_toggle_help_5: "常に区画の境界線を表示するかどうかを切り替える。"
+res_toggle_help_6: "町の境界の表示を切り替える。"
+res_toggle_help_7: "土地の通知の表示を切り替える。"
+res_toggle_help_8: "歩いた土地を確保する状態を切り替える。"
+res_toggle_help_9: "土地を変更した際に地図を表示する状態を切り替える。"
+res_toggle_help_10: "すべてのモードを削除する。"
+res_toggle_help_10.5: "全てのモードを取り除き、デフォルト状態を再付与する。"
+res_toggle_help_11: "チャットチャンネルにスパイする。"
+res_toggle_help_12: "開始した土地グループに土地を追加する機能を切り替える。"
+res_toggle_help_13: "土地を変更した際にタイトルメッセージを表示する機能を切り替える。"
+res_toggle_help_14: "歩いた土地を放棄する状態を切り替える。"
+res_toggle_help_15: "インフォツールを使用して、適切なブロック/エンティティの名前を知る機能を切り替える。"
+res_toggle_help_16: "管理者権限を無効にする機能を切り替える。"
+res_jail_help_0: "刑務所から出るために保釈金を支払う。"
+res_set_help_0: "住民の情報を設定する"
+res_set_help_1: "住民のデフォルトの土地権限を設定する。"
+res_set_help_2: "住民のモードを設定する。"
 mode_1: '各タウンブロック間の地図を表示する'
-mode_2: '歩いた土地を所有しようと試みる'
-mode_3: '歩いた場所を放棄しようと試みる'
-mode_4: 'デフォルトのチャットを町のチャットに切り替える'
-mode_5: 'デフォルトのチャットを国のチャットに切り替える'
-mode_6: '%s を敵国の境界に置いて、戦争地帯を作成する'
-plot_perms: 'プロットの権限において、%s を%sの代わりに使用する'
-res_list: '住民 '
+mode_2: '歩いた土地を所有する'
+mode_3: '歩いた場所から撤退する'
+mode_4: 'デフォルトのチャットを町のチャットに切り替える。'
+mode_5: 'デフォルトのチャットを国のチャットに切り替える。'
+mode_6: '%s を敵国の境界に置くことで戦争地帯を作成する。'
+plot_perms: '土地権限において、%s を%sの代わりに使用する。'
+res_list: '住民達'
 res_sing: '住民'
 mayor_sing: '町長'
 admin_sing: '管理者'
 town_sing: '町'
 nation_sing: '国'
-nation_plu: '国'
+nation_plu: '国々'
 king_sing: 'リーダー'
 town_plu: '町'
 world_plu: 'ワールド'
 world_sing: 'ワールド'
-world_help_1: '現在のワールドの状況'
+world_help_1: '現在のワールド状況'
 world_help_2: '[ワールド]'
 world_help_3: '対象のワールドのステータス'
-world_help_4: 'すべてのワールド一覧'
+world_help_4: '全てのワールド一覧'
 world_help_5: 'このチャンクを再生成する'
 world_help_6: '/tw toggle ? を使用してヘルプを参照します。'
 world_help_7: '/tw set ? を使用してヘルプを参照します。'
@@ -225,8 +225,8 @@ world_toggle_help_8: "このワールドの元に戻す、アンクレーム機�
 world_toggle_help_9: "このワールドの爆発が元に戻された機能のオン/オフを切り替えます。"
 world_toggle_help_10: "このワールドのplot-clear-deletes-blocksコマンドをオン/オフにします。"
 world_toggle_help_11: "Plot-unclaiming-deletes-blocks機能のオン/オフを切り替えます。"
-townyadmin_help_1: 'このタウンブロックを手放す'
-townyadmin_help_2: '周りにあるチャンクを手放す'
+townyadmin_help_1: 'この土地を放棄する。'
+townyadmin_help_2: '周りにあるチャンクを放棄する。'
 admin_panel_1: "/ta set ? を使用してヘルプを参照します。"
 admin_panel_2: 'Townyを再読み込みする'
 admin_panel_3: '新しい日付コードを実行する'
@@ -234,54 +234,138 @@ admin_panel_4: "周囲の領域を放棄する"
 admin_panel_5: "/ta plot ? を使用してヘルプを参照します。"
 admin_panel_6: "プレイヤーに土地を付与する/減らす"
 admin_panel_7: "詳細は/ta toggle ?で見れます。"
+admin_panel_8: "これらのオブジェクトを制御するコマンド"
+admin_panel_9: "指定された土地にテレポートする"
+admin_panel_10: "プレイヤーに権限ノードがあるかどうかを確認する"
 admin_panel_11: "設定をリセットする"
 admin_panel_12: "Townyのデータをバックアップする"
+admin_panel_13: "mysql dbをflatfileにダンプする"
+admin_panel_14: "データベースに強制的にセーブ/ロードする"
+admin_panel_15: "newhourコードを実行する"
 admin_panel_16: "古い住民を削除する"
-townyadmin_town_help_1: "町の状態を画面に表示する"
-townyadmin_town_help_2: "町の住民を追加または削除する"
-townyadmin_town_help_3: "町の名前を変更する"
+townyadmin_town_help_0: "指定された市長と町名で町を作る。"
+townyadmin_town_help_1: "町の状態を表示する。"
+townyadmin_town_help_2: "町の住民を追加/削除する。"
+townyadmin_town_help_3: "町の名前を変更する。"
 townyadmin_town_help_4: "町を削除します。"
 townyadmin_town_help_5: "町でスポーンします。"
 townyadmin_town_help_6: "町の前哨基地にスポーンする"
+townyadmin_town_help_7: "町のランクコマンドを使用する。"
+townyadmin_town_help_8: "国のset権限を利用する。"
 townyadmin_town_help_9: "町のtoggle(On/Off)権限を利用する。"
+townyadmin_town_help_10: "町のメタデータを変更する。"
+townyadmin_town_help_11: "最初の町に２番目の町を統合する。"
+townyadmin_town_help_12: "ルールを全て無視し、最初の町に２番目の町を統合する。"
+townyadmin_town_help_13: "町の金庫に資金を入れる。"
+townyadmin_town_help_14: "町の金庫から資金を引き出す。"
+townyadmin_town_help_15: "町の金庫明細を表示する。"
+townyadmin_town_help_16: "町の無法者リストを変更する。"
+townyadmin_town_help_17: "町を国から追い出す。"
+townyadmin_town_help_18: "町の征服状態を解除する。"
 townyadmin_town_toggle_help_0: "町のPVPを切り替える"
+townyadmin_town_toggle_help_1: "町のForcePVPをオンにし、市長がPVPをオフすることを防ぐ。"
+townyadmin_town_toggle_help_2: "町の公共状態をオンにし、市民以外でもテレポートできるようにする。"
+townyadmin_town_toggle_help_3: "町の爆発設定を切り替える。"
 townyadmin_town_toggle_help_4: "町の火の設定を切り替える"
 townyadmin_town_toggle_help_5: "町のモブの設定を切り替える"
 townyadmin_town_toggle_help_6: "町の税率の設定を切り替える"
 townyadmin_town_toggle_help_7: "町の設定をオープンに切り替えることで、招待なしで町に参加できるようになります。"
+townyadmin_nation_help_0: "指定された国王と国名で国を作る。"
 townyadmin_nation_help_1: "国の状態を画面に表示する"
 townyadmin_nation_help_2: "国に町を追加する"
 townyadmin_nation_help_3: "国から町を削除する"
 townyadmin_nation_help_4: "国名を変更する"
 townyadmin_nation_help_5: "町を削除する。"
+townyadmin_nation_help_6: "町の距離を再確認し、首都から遠すぎないことを確認する。"
+townyadmin_nation_help_7: "最初の国に２番目の国を統合する。"
+townyadmin_nation_help_8: "ルールを全て無視し、最初の国に２番目の国を統合する。"
 townyadmin_nation_help_9: "国のtoggle(On/Off)権限を利用する。"
 townyadmin_nation_help_10: "国のset権限を利用する。"
 townyadmin_nation_help_11: "国庫に資金を入れる。"
 townyadmin_nation_help_12: "国家から資金を引き抜く。"
-townyadmin_nationrank_help_0: "国民のランクを"
+townyadmin_nation_help_13: "国の金庫明細を表示する。"
+townyadmin_nation_help_14: "町を国の中に入れる。"
+townyadmin_nation_help_15: "国のランクコマンドを利用する。"
+townyadmin_nationrank_help_0: "国のランクを住人に与える。"
+townyadmin_nationrank_help_1: "国のランクを住民から剥がす。"
+townyadmin_database_help_0: "データベースを強制的に保存します。"
+townyadmin_database_help_1: "データベースを強制的に読み込みます。"
+townyadmin_database_help_2: "全ての住民から称号や姓を取り除く。"
 ta_plot_help_0: "プレイヤーのために土地を取得する。"
 ta_plot_help_1: "プロットに保存されているメタデータを表示します。"
+ta_plot_help_2: "土地メタデータのキーと値を設定します。"
+ta_plot_help_3: "メタデータのキーを追加/削除する。"
 ta_resident_help_0: "居住者の名前を変更する"
-ta_resident_help_1: "フレンドの追加または削除"
+ta_resident_help_1: "フレンドを追加/削除する。"
+ta_resident_help_2: "フレンド一覧を表示/消去する。"
+ta_resident_help_3: "データベースから住民を削除する。"
+ta_resident_help_4: "Removes a players about line."
+ta_toggle_help_0: "全てのワールドで荒野を使用する機能をオン/オフにする。"
+ta_toggle_help_1: "全てのワールドで再生機能をオン/オフにする。"
+ta_toggle_help_2: "開発者モードをオン/オフにし、設定に指定されたプレイヤーのログに追加のメッセージを表示する。"
+ta_toggle_help_3: "開発者モードをオン/オフにし、ログに追加のメッセージを表示する。"
+ta_toggle_help_4: "町や国が金庫から資金を引き出す能力をオン/オフにする。"
 ta_toggle_help_5: "プレイヤーをNPCにする/しない。"
 ta_set_help_0: "町の市長を指定したプレイヤーに設定する。"
 ta_set_help_1: "町の市長をNPCに設定する。NPCは維持費を払わない。"
 ta_set_help_2: "国の首都を設定します。"
+ta_set_help_3: "国の国家ゾーンを設定する。"
 ta_set_help_4: "住民の称号を設定する。"
 ta_set_help_5: "住民の名字を設定する。"
+ta_set_help_6: "土地を別の町に与える。"
 ta_set_help_7: "町の創設者の名前を設定する。"
-ta_purge_help_0: "サーバーに指定した時間よりも入らない住民を粛清する場合や、場合によっては町に入っていないプレイヤーのみを粛清するようにする。または特定の町の住人の身を粛清するようにする。"
+ta_set_help_8: "国家ゾーンの大きさを０にすることで国家ゾーンの無効にする。"
+ta_purge_help_0: "サーバーに指定した時間よりも入らない住民を粛清する場合や、場合によっては町に入っていないプレイヤーのみを粛清するようにする。または特定の町の住民の身を粛清するようにする。"
+ta_townmeta_help_1: "指定した町のメタデータを表示する。"
+ta_townmeta_help_2: "町のメタデータのキーと値を設定します。"
+ta_townmeta_help_3: "町からキーでメタデータを追加/削除します。"
+ta_residentmeta_help_1: "指定した住民のメタデータを表示する。"
+ta_residentmeta_help_2: "住民のメタデータのキーと値を設定します。"
+ta_residentmeta_help_3: "住民からキーでメタデータを追加/削除します。"
+ta_nationmeta_help_1: "指定した国のメタデータを表示する。"
+ta_nationmeta_help_2: "国のメタデータのキーと値を設定します。"
+ta_nationmeta_help_3: "国からキーでメタデータを追加/削除します。"
 ta_reload_help_0: "データベースを再読み込み"
 ta_reload_help_1: "設定を再読み込み"
 ta_reload_help_2: "言語ファイルを再読み込み"
 ta_reload_help_3: "Townyの権限を再読み込み"
+ta_reload_help_4: "Townyの全ての構成要素を再読み込みする。"
+ta_eco_resetbanks_help: "国や町の金庫を指定した数値か０にリセットする。"
+ta_eco_convert_modern_help: "TownyのアカウントをVaultのOfflinePlayerが使える新バージョンに変換する。"
+ta_eco_convert_help: "Townyのアカウントをtarget economy implementationに変換する。これによって経済プラグインの間での互換性を確保しやすくなる。"
+ta_eco_info_help: "サーバー上の経済アカウントに関する情報を出す。"
+ta_depositall_help_0: "国や町の金庫に指定した資金を入金する。"
+ta_info_help_0: "指定した国のeco情報を表示する。"
+ta_info_help_1: "指定した住民のeco情報を表示する。"
+ta_info_help_2: "Townyサーバーのアカウントのeco情報を表示する。"
+ta_info_help_3: "指定した町のeco情報を表示する。"
+plot_help_0: "土地情報HUDを表示する。"
 plot_help_1: "土地の所有状態を消去します。"
+plot_help_2: "一覧にしたブロックを土地から削除する。"
 plot_help_3: "詳細は/plot set ?を見てください。"
 plot_help_4: "詳細は/plot toggle ?を見てください。"
 plot_help_5: "詳細は/plot group ?を見てください。"
+plot_help_6: "プレイヤーからオーバーライド権限を取り除く。"
+plot_help_7: "プレイヤーの基本オーバーライド権限を追加する。"
 plot_help_8: "権限編集のGUIを開く。"
 plot_help_9: "この土地にて住民にトラストを付ける。"
 plot_help_10: "この土地にて住民にトラストを外す。"
+plot_district_help_0: "例: /plot district new ExpensivePlots"
+plot_district_help_1: "土地を指定された区から取り除く。"
+plot_district_help_2: "区を削除する。"
+plot_district_help_3: "今立っている区を改名する。"
+plot_group_help_0: "例: /plot group new ExpensivePlots"
+plot_group_help_1: "土地を指定した土地グループから取り除く。"
+plot_group_help_2: "土地グループを削除する。"
+plot_group_help_3: "今立っている土地グループを改名する。"
+plot_group_help_4: "例: /plot group set perm resident on"
+plot_group_help_5: "例: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "例: /plot group forsale 50"
+plot_group_help_7: "例: /plot group notforsale"
+plot_group_help_8: "住民にトラストを取り除く、または与える。"
+plot_group_help_9: "住民に土地グループでのトラストを付ける。"
+plot_group_help_10: "住民から土地グループでのトラストを外す。"
+plot_group_help_11: "土地権限GUIを開く。"
 plot_group_help_12: "プレイヤーを土地権限GUIに追加します。"
 plot_group_help_13: "プレイヤーを土地権限GUIから削除します。"
 plot_toggle_help_0: "この土地でPvPできるか切り替える。"
@@ -292,16 +376,26 @@ plot_group_toggle_help_0: "この土地グループでPvPできるか切り替�
 plot_group_toggle_help_1: "この土地グループで爆発を切り替える。"
 plot_group_toggle_help_2: "この土地グループで火を利用できるか切り替える。"
 plot_group_toggle_help_3: "この土地グループでモブ発生を切り替える。"
+plot_group_toggle_help_4: "土地グループの納税ステータスを変更する。"
 plot_set_help_0: "例: 宿、野原、田畑、エンバシーなど。"
 plot_set_help_1: "土地をアウトポストにする。"
+plot_set_help_1.5: "町に入ってから住民が土地を買えるまでの最小日数を設定する。"
+plot_set_help_1.6: "町に入ってから住民が土地を買えるまでの最大日数を設定する。"
 plot_set_help_2: "プロットタイプを削除する"
 plot_set_help_3: "土地に名前を付けます。"
 plot_set_help_4: "全権限を切り替えます。"
+plot_set_help_5: "レベルやタイプの権限をオン/オフに設定する"
+plot_set_help_6: "レベルとタイプの権限をオン/オフに設定する"
 plot_set_help_7: "住民や権限を"
+plot_jailcell_help_0: "立っている所に牢獄を設定する。"
+plot_jailcell_help_1: "立っている所の牢獄を削除する。"
 msg_block_claim: 'このタウンブロックを獲得する'
+msg_block_claim_radius: 'あなたの周りの半径にある土地に拡張する。'
 msg_plot_nfs: 'このエリアを売りに出す'
+msg_plot_nfs_radius: 'あなたの周りの半径にある土地を販売することを取りやめる。'
 msg_nfs_abr: '&e「forsale」（売り出し中）および「notforsale」（非売品）の省略形として「fs」および「nfs」が認められています。'
 msg_plot_fs: 'このエリアをオークションに出す'
+msg_plot_fs_radius: 'あなたの周りの半径にある土地を販売する。'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -309,12 +403,17 @@ msg_plot_fs: 'このエリアをオークションに出す'
 ############################################################
 msg_buy: '&b%d %s を %s で購入しました'
 msg_buy_resident_plot: '&b%s が %s のプロットを %s で購入しました！'
+msg_buy_resident_plot_group: '&b%sは%sの土地グループを%sで買い取りました！'
 msg_couldnt_pay_taxes: '&b%s は税金を払うことができなかったため、 %s からキックされました'
 msg_couldnt_pay_plot_taxes: '&s%s は税金を払うことができなかったため、プロットの所有権を失いました'
 msg_you_couldnt_pay_plot_tax: '&bあなたは地税 %s を払うことができず、%sでの権限を失いました。'
+msg_you_couldnt_pay_town_tax: '&bあなたは町の税金%sを払えず、%sから追い出されました。'
+msg_you_paid_town_tax: '&bあなたは町の税金%sを払いました。'
+msg_you_paid_plottax_to_town: '&bあなたは合計%sの地税を%sに払いました。'
 msg_bankrupt_town: ' は町に留まるためのお金を支払えませんでした'
 msg_bankrupt_nation: ' は国に留まるためのお金を支払えませんでした'
 msg_nation_not_peaceful: '&b 国は平和状態を維持するためのお金を支払えませんでした'
+msg_nation_cant_peaceful: '&b国は平和状態になることができません。国は毎日%s払える必要があります。'
 msg_peaceful_disabled: '&b国の平和状態が全体解除されました'
 msg_you_paid: '&bあなたは平和状態を設定するために %s を支払いました。'
 msg_nation_set_peace: '&b国の状態を変更することに成功しました'
@@ -420,6 +519,7 @@ msg_world_expl: '&cこのワールドは爆発が強制されます'
 msg_world_fire: '&cこのワールドは火の広がりが強制されます'
 msg_town_mobs: '&cこのワールドはモンスターのスポーンが強制されます'
 msg_plot_pvp: '&cアリーナプロットではPvPの設定を切り替えることはできません'
+msg_plot_regen_wrong_size: '&cRegenはdefault plot size (16)が使用されたときのみ使用できます。'
 msg_reloaded: '&2Townyの設定がリロードされました'
 msg_undo_complete: '&2Undoに成功しました'
 msg_give_total: '&b%s ボーナスを付与しました（合計： %s）'
@@ -503,6 +603,8 @@ msg_err_not_in_town_claim: '&c土地を請求するためには、町に所属�
 msg_err_must_belong_town: '&cあなたは町に所属している必要があります。'
 msg_err_dont_belong_town: '&cあなたは町に所属していません。'
 msg_err_dont_belong_nation: '&bあなたは国に属していません。'
+msg_err_already_belong_nation: '&bあなたは既に国に属しています。'
+msg_err_town_already_belong_nation: '&b%sは既に%sという国に属しています。'
 msg_err_not_same_nation: '&b%s はあなたの国に属していません。'
 msg_err_rect_auto: '&cautoは町や住民のみ利用できます。'
 msg_err_invalid_radius: '&cは無効な半径です。整数または ''auto'' を使用してください。'
@@ -530,6 +632,7 @@ msg_err_input_too_long: '&c入力が長すぎます'
 msg_err_invalid_choice: '&c無効な選択です。'
 msg_err_invalid_sub: '&c無効なサブコマンドです。'
 msg_err_command_disable: '&c権限がありません。'
+msg_err_you_dont_have_permission_to_use_colours: "称号や姓にカラーコードを使う権限がありません。"
 msg_err_universe_limit: '&cこれ以上町を保持できません。'
 msg_err_too_many_npc: '&c登録されているNPCが多すぎます。'
 msg_err_negative_money: '&cマイナス量を取引できません'
@@ -549,6 +652,7 @@ msg_err_not_enough_residents_join_nation: '&bこの町の %s には十分な住�
 msg_not_enough_residents_no_longer_capital: '&b国の古い首都は、もはや国の首都になるのに十分な住民がいません。新しい国の首都は %s です。'
 msg_town_not_enough_residents_left_nation: '&bこの町の %s は国のメンバーになるための十分な住民を持っておらず、国から追放されました。'
 msg_nation_disbanded_town_not_enough_residents: '&b町 %s には十分な住民がいなくなり、強制的に解散させられました。'
+msg_not_enough_residents_refunded: '&bあなたの国が人口不足で解散したため、%s返金されました。'
 msg_not_enough_residents_capital: '&bこの町の %s には十分な住民がいません。'
 list_page: '&bページ %s / %s'
 list_err_not_enough_pages: '&c利用可能なページ数は %s ページのみです'
@@ -561,6 +665,7 @@ msg_you_have_been_given_rank: 'あなたは %s の %sランクを与えられま
 msg_you_have_given_rank: '%s に %s ランクの %sを与えました。'
 msg_resident_not_your_town: 'あの住民は町のメンバーではありません！'
 msg_resident_already_has_rank: '%sはすでに%sランクを持っています。'
+msg_town_or_nation_level_not_high_enough_for_this_rank: "あなたの%sレベルは%sランクを与えるには低すぎます！%sのレベル: %s/%s必要。"
 msg_you_have_had_rank_taken: '%s ランクの %s から降格しました。'
 msg_you_have_taken_rank_from: '%s から %s ランクの %s を削除しました。'
 msg_resident_doesnt_have_rank: '%sは%sランクを持っていません。'
@@ -575,7 +680,7 @@ msg_set_jail_spawn: '刑務所のスポーン地点を設定しました。'
 msg_killed_attempting_to_escape_jail: '&4%sは刑務所から脱走しようとして殺害されました。'
 msg_err_jailed_players_no_teleport: '&4投獄されたプレイヤーはテレポートすることができません。'
 msg_player_escaped_jail_into_wilderness: '&4%sは%sに逃げ込んで脱獄しました。'
-msg_err_invalid_string_board_not_set: '無効な文字列です。'
+msg_err_invalid_string_board_not_set: '無効な文字列です。掲示板は設定されませんでした。'
 msg_plot_name_removed: '土地の名前の削除しました。'
 msg_plot_name_set_to: '土地の名前を[&s] に設定しました。'
 msg_plot_price_too_expensive: '土地の価格が高すぎます。'
@@ -608,6 +713,8 @@ msg_you_have_undeclared_an_outlaw: '%s はもう %s での無法者ではあり�
 msg_err_player_not_an_outlaw: 'そのプレーヤーは無法者としてリストされていませんでした。'
 msg_err_outlaw_in_open_town: 'あなたは無法者とみなされたオープンな町に入ることはできません。'
 msg_you_are_an_outlaw_in_this_town: '&4 %s はあなたを無法者と見なし、ここで死ぬことは投獄を意味する可能性があります。'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4無法者は%s時間の間投獄されます。'
+msg_you_are_an_outlaw_in_this_town_bail_amount: '保釈には%sかかります。'
 msg_err_town_not_close_enough_to_nation: '%sのホームブロックは、あなたの国に参加するためのあなたの首都のホームブロックに近くありません。'
 msg_nation_town_moved_their_homeblock_too_far: '%sのホームブロックは、あなたの国の首都から遠すぎるため、あなたの国から削除されました。'
 #Added in 0.33
@@ -649,6 +756,7 @@ town_invite_help_3: '送信された招待を全て表示'
 town_invite_help_4: '送られてきた全ての招待を表示する'
 town_invite_help_5: '国からの参加リクエストを承認する'
 town_invite_help_6: '国からの参加リクエストを拒否する'
+town_invite_help_7: '町の送った全ての招待を取り消す。'
 nation_invite_help_1: '指定した町を自分の国に招待する'
 nation_invite_help_2: '町に送信された招待を削除する'
 nation_invite_help_3: '町に送られた招待を全て表示する'
@@ -676,6 +784,7 @@ msg_err_nation_sent_too_many_requests: '&b送信した招待が多すぎます�
 msg_err_nation_has_too_many_requests: '&b%sは招待が多すぎるため、しばらくしてから再度、送信してください。'
 player_received_invites: '&b%a/%mの招待を受け取りました。'
 town_revoke_invite: '&b%sは、あなたの招待を削除しました。'
+town_revoke_invite_successful: '&b%sに送った町の招待を取り消しました。'
 town_received_invites: '&b%a/%mの招待を受け取りました。'
 town_sent_invites: '&b%a/%mの招待を受け取りました。'
 nation_revoke_invite: '&b%sは、あなたの招待を削除しました。'
@@ -694,13 +803,16 @@ town_deleted_by_admin: '&b%sが削除されました。'
 nation_deleted_by_admin: '&b%sが削除されました。'
 are_you_sure_you_want_to_continue: '本当に続行しますか？'
 you_have_been_invited_to_join: '招待されています。 '
-you_have_been_requested_to_ally: '同盟国からリクエストが来ました。'
+you_have_been_requested_to_ally: '同盟するよう要求されました。 '
 this_message_will_expire: '20秒後に自動で削除されます。'
 player_sing: 'プレイヤー'
 nation_zone_this_area_under_protection_of: '%sのこの部分は%sの保護下にあります。'
+nation_zone_conquered_status_denies_use: "あなたの町の占領状態では国家ゾーンを利用することができません。"
+nation_zone_conquered_status_denies_use_2: "占領された町の国家ゾーンを利用することができません。"
+nation_spawn_not_allowed_for_conquered_towns: "あなたの町の占領状態では国へテレポートすることはできません。"
 #Added in 0.42
 you_have_been_invited_to_join2: '%sに招待されています。'
-you_have_been_requested_to_ally2: '%sから同盟国のリクエストが来ました。'
+you_have_been_requested_to_ally2: '%sから同盟国要求が来ました。'
 #Added in 0.43
 town_help_11: '新しい町を作成します。スペースではなく、''_'' を使用します。'
 changed_plot_town: '&bプロットの町を%sに変更しました。'
@@ -713,16 +825,21 @@ tc_err_invalid_command: '無効なコマンドです。'
 tc_settings_reloaded: '[TownChat] 設定を再読み込みしました。'
 tc_err_unrecognized_command_format: 'エラー: 無効なコマンド形式です'
 tc_channel_list_status: '(ステータス)'
+tc_channel_list_in: '参加'
+tc_channel_list_out: '退出'
 tc_err_you_dont_have_perm_mute_list: '権限がありません。'
 tc_err_you_dont_have_unmute_perm: '権限がありません。'
 tc_err_no_channel_called_channel: '%sというチャンネルはありません。'
 tc_err_no_muted_players_in_channel_players: 'ミュートされているプレイヤーはいません。'
+tc_players_muted_in_channel: '[TownyChat] &f%n &2人を &f%s&2: &f%s でミュートしました。'
 tc_err_no_online_players_with_name: '%sはオンラインではありません。'
 tc_err_you_dont_have_mute_perms: '権限がありません。'
 tc_err_you_cant_mute_admin: '管理者をミュートにすることはできません。'
 tc_err_you_cant_mute_chat_mod: 'モデレーターをミュートにすることはできません。'
 tc_player_already_muted_in_channel: '[TownyChat] %sはすでにミュートにされています。'
+tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2は &f%sでミュートされています。'
 tc_player_is_not_muted_in_channel: '[TownyChat] %sはミュートではありません。'
+tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2は &f%sでのミュートが解除されました。'
 tc_err_you_are_currently_muted_in_channel: '&f%s&cでミュートされています!'
 tc_err_you_cannot_leave_channel: '%sから退出することはできません。'
 tc_you_already_left_channel: '[TownyChat] 既に%sに参加しています。'
@@ -772,7 +889,7 @@ rank_list_mayor: '村長:'
 status_title_capital: '&b(首都)'
 status_title_pvp: '&4(PvP)'
 status_title_open: '&b(オープン)'
-status_town_board: '一言掲示板:'
+status_town_board: '掲示板:'
 status_founded: '設立:'
 status_founded_by: '創設者:'
 status_town_size: '町の大きさ:'
@@ -808,6 +925,9 @@ status_res_plottax: '地税合計:'
 status_res_totaltax: '支払う税金の合計:'
 status_townblock_plottax: '地税: '
 status_townblock_untaxed: '非課税'
+status_townblock_max_and_minjoindays: '町に参加してから土地を購入するまでには%sから%sまでの日数が必要です。'
+status_townblock_minjoindays: '町に参加してから土地を購入するまでには最低%s日が必要です。'
+status_townblock_maxjoindays: '町に参加してから%s日以上になると土地が購入できません。'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '首都以外で国の銀行を使用することはできません。'
 msg_err_unable_to_use_bank_outside_your_town: '町の外で町の銀行を使用することはできません。'
@@ -831,6 +951,7 @@ msg_err_nation_not_public: '&cこの国は公開されていません。'
 msg_nation_toggle_public: '&a 国を公開しました。'
 status_yes: '&aはい'
 status_no: '&cいいえ'
+msg_err_unable_to_use_bank_outside_bank_plot: '金庫やホーム以外でこのコマンドを利用することはできません。金庫を利用できる土地を作成するには「/plot set bank」を入力してください。'
 msg_err_nation_spawn_forbidden: '&c国へのスポーンは禁止されています。'
 msg_err_nation_spawn_forbidden_war: '&c国へのスポーンは戦争中のみ許可されています。'
 msg_err_nation_spawn_forbidden_peace: '&c国へのスポーンは戦争中は禁止されています。'
@@ -840,40 +961,43 @@ msg_err_nation_spawn_nation_forbidden_peace: '&c同盟国へのスポーンは�
 msg_err_public_nation_spawn_forbidden: '&cパブリックな他の国へのスポーンは禁止されています。'
 msg_err_public_nation_spawn_forbidden_war: '&cパブリックな他の国へのスポーンは戦争中にのみ許可されています。'
 msg_err_public_nation_spawn_forbidden_peace: '&cパブリックな他の国へのスポーンは戦争中は禁止されています。'
-msg_spawn_cost_set_to: '&b%sが''/%s spawn''を使用する価格を%sに設定しました。'
+msg_spawn_cost_set_to: '&b%sが「/%s spawn」を使用する価格を%sに設定しました'
+msg_spawn_fail_safe_teleport: '&cテレポートが失敗しました。この土地は安全ではないため、市長に町のテレポート位置を変更するよう依頼してください。'
 msg_err_cannot_set_spawn_cost_more_than: '&cスポーンの費用を%sより高く設定することはできません。'
-msg_err_ally_isnt_public: '&cあなたの同盟者 %s は公開スポーンを有効にしていません。テレポートは拒否されました。'
-msg_nation_changed_public: '&c国のステータスが%sになりました。'
+msg_err_ally_isnt_public: '&cあなたの同盟国 %s は公開スポーンを有効にしていません。テレポートは拒否されました。'
+msg_nation_changed_public: '&c国の状態が%sになりました。'
 #Added in 0.47:
-status_plot_type: '土地のタイプ:'
-msg_no_self_jailing: '自分自身を収監することはできません。'
+status_plot_type: '土地タイプ:'
+msg_no_self_jailing: '自分自身を投獄することはできません。'
 online2: ' &a(オンライン)'
 build: '建築'
 destroy: '破壊'
 switch: 'スイッチ'
-item_use: 'アイテムの使用'
-owner_status: 'オーナー'
+item_use: 'アイテム使用'
+owner_status: '所有者'
 towny_map_header: '町の地図 '
 towny_map_unclaimed: '未拡張地'
-towny_map_claimed: '拡張地'
+towny_map_claimed: '領地'
 towny_map_forsale: '販売中'
 towny_map_yourtown: 'あなたの町'
 towny_map_yourplot: 'あなたの土地'
 towny_map_ally: '同盟国'
-towny_map_enemy: '敵'
+towny_map_enemy: '敵国'
 enabled: '有効'
 disabled: '無効'
 forced: '強制'
 adjustable: '調整可能'
 #Added in 0.48:
-msg_no_funds_new_town2: '&cお金が足りません。新しく町を作るには%s必要です。'
-msg_no_funds_new_nation2: '&cこの町には、新しく国を作るためのお金がありません。国を作るたの費用は%sです。'
+msg_no_funds_new_town2: '&c%sには資金が足りません。新しく町を作るには%s必要です。'
+msg_no_funds_new_nation2: '&cこの町には新しく国を作るための資金がありません。国を作るための費用は%sです。'
 msg_no_funds_claim2: '&cこの町には、チャンクを購入するお金がありません。/t deposit %sを使用して銀行に%s追加してください。%s'
 msg_err_cant_afford_blocks2: '&cこの町は %s のタウンブロックを購入する余裕がありません。銀行に /t deposit %s を使って %s を追加してください。'
 msg_err_not_enough_variables: '&c変数が足りません: '
-msg_err_nation_over_town_limit: 'あなたの国の町の数が、上限に達しました。%s'
+nation_rechecked_by_admin: '&b%sの町の距離を再確認しました'
+msg_err_nation_over_town_limit: '&c国に入れれる町の数の上限(%s)に達しました。'
 #Added in 0.49
 msg_process_claim: 'プロットの請求を処理しています...'
+msg_process_unclaim: '土地からの撤退を処理中...'
 msg_total_townblocks: 'タウンブロックの合計: '
 #Added in 0.50
 friend_list: 'フレンドリスト'
@@ -888,15 +1012,21 @@ town_name: '町の名前'
 nation_name: '国の名前'
 refund_message: '&aタウンブロック%sの権利を放棄したため、%sが返金されました。'
 msg_bankrupt_town_multiple: '&b以下の町は維持することができなかったので、消滅しました: '
+msg_bankrupt_nation_multiple: '&b以下の国が維持費を払うことができず消滅しました。 '
 msg_couldnt_pay_tax: '&b%sは税金を払うことができなかったため、%sからキックされました。'
+msg_couldnt_pay_nation_tax_multiple: '&b以下の町が維持費を払うことができず消滅しました。 '
+msg_couldnt_pay_town_tax_multiple: '&b以下の住民が維持費を払うことができず追放されました。 '
 msg_couldnt_pay_plot_taxes_multiple: '&b以下の住民は、プロットの一部またはすべてのプロットに対して税金を支払う余裕がありませんでした: '
+msg_bankrupt_town2: '&b%sは町であることができなくなりました。'
 msg_bankrupt_nation2: '&b%sは国家として存続する余裕がなくなりました。'
 status_embassy_town: '大使館'
 #Added in 0.51:
 msg_error_invalid_comparator_nation: '&b無効なコンパレータです。%sを試してください。'
 msg_error_invalid_comparator_town: '&bコンパレータが無効です。%sを試してください。'
 msg_err_merging_for_kings_only: '&b合併は国家のリーダーのみが行うことができます。'
+msg_err_king_of_that_nation_is_not_online: '&b%sのリーダーの%sが不在であるため合併に失敗しました。'
 nation1_has_merged_with_nation2: '&6%sは%sと合併することに同意しました。'
+msg_would_you_merge_your_nation_into_other_nation: '&6あなたの国である%sを%sに合併することに賛成していますか？実行することによってすべての町と国庫の資金を%sに委譲します。'
 no_open_towns: '町がありません。'
 #Added in 0.52:
 msg_error_nation_has_no_allies: '同盟国がいません'
@@ -904,8 +1034,12 @@ msg_error_nation_has_no_enemies: '敵対している国はありません。'
 msg_error_ta_plot_claim: 'プレイヤーが見つかりません。'
 msg_error_no_player_with_that_name: '%sという名前のプレイヤーは存在しません。'
 msg_admin_has_given_you_a_plot: '管理者があなたのプロットを請求しました。 %s'
+msg_town_forcemobs_setting_set_to: '%sはモブの設定を強制的に%sにさせられました。'
+msg_town_forcepvp_setting_set_to: '%sはPvPの設定を強制的に%sにさせられました。'
+msg_town_forcedisabledpvp_setting_set_to: '%sはadmindisabledpvpの設定を強制的に%sにさせられました。'
 msg_nation_changed_open: '&c国のステータスが%sになりました。'
 msg_err_already_in_a_nation: 'あなたの町はすでに他の国に所属しています。'
+msg_err_nation_not_open: '&c%sは誰でも参加できる状態ではありません。国のリーダーや副官に参加を要請する必要があります。'
 msg_err_nation_homeblock_in_another_world: 'あなたの町のホームブロックは国のホームブロックと同じワールドにありません。'
 status_bank_town_penalty_upkeep: 'オバクレ維持費:'
 #Added in 0.53:
@@ -927,47 +1061,63 @@ msg_king_bail_amount: '国長保釈金: '
 msg_has_paid_bail: '%sは保釈金を払って、釈放されました。'
 msg_err_unable_to_pay_bail: '保釈金を払うことができません。'
 msg_err_bail_not_enabled: '釈放することができません。'
-msg_you_have_been_freed_from_jail: 'あなたは刑務所から解放されました。'
-msg_player_has_been_freed_from_jail_number: '%sは牢屋%sから釈放されました。'
-msg_player_has_been_sent_to_jail_number: '%sは牢屋%sに投獄されました。'
+msg_you_have_been_freed_from_jail: 'あなたは自由の身です。'
+msg_player_has_been_freed_from_jail_number: '%sは牢獄%sから釈放されました。'
+msg_player_has_been_sent_to_jail_number: '%sは牢獄%sに投獄されました。'
 msg_player_is_not_online: '%sはオンラインではありません。'
 msg_mysql_dump_success: 'MySQLのダンプが完了しました。'
 msg_err_mysql_not_being_used: 'MySQLの保存と読み込みが設定されていません。'
 msg_save_success: 'データベースが保存されました。'
 msg_load_success: 'データベースの読み込みが完了しました。'
-msg_err_cannot_afford_to_set_outpost: 'この町には、この町を前哨基地にするのに十分は資金がありません。'
-msg_too_close2: 'この場所は%sに近すぎます。'
-homeblock: 'ホームブロック'
-townblock: 'タウンブロック'
-outpost: '前哨基地'
-msg_err_not_same_town: '&b%sあなたは、町に所属していません。'
+msg_err_cannot_afford_to_set_outpost: 'この町には、アウトポストを作成するのに十分な資金がありません。'
+msg_too_close2: 'この場所はほかの町の%sに近すぎます。'
+homeblock: '本拠地'
+townblock: '土地/タウンブロック'
+outpost: 'アウトポスト'
+msg_err_not_same_town: '&b%sはあなたの町に所属していません。'
 #Added in 0.59:
-msg_modes_set: 'モードの設定: '
-msg_err_this_plot_doesnt_have_any_associated_metadata: 'このプロットに関連するメタデータはありません。'
+msg_modes_set: 'モード設定: '
+msg_err_this_plot_doesnt_have_any_associated_metadata: 'この土地には関連付けられたメタデータがありません。'
 msg_err_the_metadata_for_key_is_not_registered: '%sのメタデータは登録されていません。'
-msg_err_key_x_already_exists: '%sはすでに存在します。'
-msg_custom_data_was_successfully_added_to_townblock: 'タウンブロックにカスタムデータが追加されました。'
+msg_key_x_was_successfully_updated_to_x: 'キー%sは無事%sにアップデートされました。'
+msg_err_key_x_is_not_part_of_this_plot: 'キー%sはこの土地の一部ではありません。可能であれば追加してください。'
+msg_err_key_x_already_exists: 'キー%sはすでに存在します。'
+msg_custom_data_was_successfully_added_to_townblock: 'カスタムデータは無事タウンブロックに付与されました！'
 msg_data_successfully_deleted: 'データの削除に成功しました。'
 msg_err_key_cannot_be_deleted: 'キーが存在しません。'
-msg_err_this_town_doesnt_have_any_associated_metadata: 'この町に関連するメタデータはありません。'
-msg_custom_data_was_successfully_added_to_town: '町にカスタムデータが追加されました。'
+msg_err_this_town_doesnt_have_any_associated_metadata: 'この町には関連付けられたメタデータがありません。'
+msg_err_key_x_is_not_part_of_this_town: 'キー%sはこの町の一部ではありません。可能であれば追加してください。'
+msg_custom_data_was_successfully_added_to_town: 'カスタムデータは無事町に付与されました！'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'この住民には関連付けられたメタデータがありません。'
+msg_err_key_x_is_not_part_of_this_resident: 'キー%sはこの住民の一部ではありません。可能であれば追加してください。'
+msg_custom_data_was_successfully_added_to_resident: 'カスタムデータは無事住民に付与されました！'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'この国には関連付けられたメタデータがありません。'
+msg_err_key_x_is_not_part_of_this_nation: 'キー%sはこの国の一部ではありません。可能であれば追加してください。'
+msg_custom_data_was_successfully_added_to_nation: 'カスタムデータは無事国に付与されました！'
 msg_error_too_many_pages: 'ページが多すぎます。'
 msg_err_location_is_not_within_a_town: 'その場所は町の中にありません。'
-msg_err_location_is_not_within_a_jail_plot: 'この場所は牢屋の中ではありません。'
-msg_err_town_has_no_jail_spawns_set: 'この町の牢屋はスポーン地点が設定されていません。'
-msg_err_town_has_no_outpost_spawns_set: 'この町には前哨基地が設定されていません。'
+msg_err_location_is_not_within_a_jail_plot: 'この場所は牢獄の中ではありません。'
+msg_err_town_has_no_jail_spawns_set: 'この町の牢獄スポーンが設定されていません。'
+msg_err_town_has_no_outpost_spawns_set: 'この町にはアウトポストが設定されていません。'
+msg_err_location_is_not_within_an_outpost_plot: 'アウトポストの土地に属していません。'
 msg_err_town_has_not_set_a_spawn_location: '町のスポーン地点が設定されていません。'
+msg_err_town_has_no_claim_over_this_town_block: '町はこの土地を保有することができません。'
 msg_err_town_doesnt_belong_to_any_nation: 'この町は国に所属していません。'
 msg_err_mayor_doesnt_belong_to_town: '市長は町に所属していません。'
 msg_err_tag_too_long: 'タグが長すぎます。'
 msg_err_nation_has_not_set_a_spawn_location: '国のスポーン地点が設定されていません。'
 msg_err_resident_doesnt_belong_to_any_town: 'このプレイヤーは町に所属していません。'
+msg_err_could_not_set_default_modes_for: 'これらのデフォルトの状態を設定できませんでした: '
 #Added in 0.60
 msg_set_war_allowed_on: 'このワールドでは戦争が許可されています。'
 msg_set_war_allowed_off: 'このワールドでは戦争は許可されていません。'
+#Added in 0.61
+#Added in 0.62
+msg_err_cannot_toggle_pvp_x_seconds_remaining: 'PvPを切り替えることはできません。%s秒待ってください。'
 msg_err_cannot_spawn_x_seconds_remaining: 'あと%s秒間、スポーンすることはできません。'
 #Added in 0.63
 msg_plot_set_to_nfs: 'この土地は販売されていません。'
+msg_err_x_spawn_disallowed_from_x: '&c%sテレポートは%sからは許可されていません。'
 msg_the_wilderness: '荒野'
 msg_enemy_areas: '敵のエリア'
 msg_neutral_towns: '中立の町'
@@ -976,15 +1126,32 @@ msg_err_no_nation_with_that_name: '%sという国はありません。'
 msg_err_cannot_unclaim_homeblock: 'ホームブロックを解除することはできません。 /town set homeblock を使用してホームブロックを移動してください。'
 #Added in 0.65
 msg_err_rename_cancelled: '他のプラグインの影響で名前の変更がキャンセルされました。'
+#Added in 0.66
+#Added in 0.67
+msg_conquered: '&4(占領中)'
+#Added in 0.68
+msg_plot_group_claim_confirmation: 'この土地は%s個の土地とグループになっています。この土地の購入を確定すると全て購入することとなります。'
+msg_plot_group_unclaim_confirmation: 'この土地は%s個の土地とグループになっています。この土地からの撤退を確定すると全てから撤退することとなります。'
+msg_plot_group_toggle_confirmation: 'この土地は%s個の土地とグループになっています。この土地の領有を切り替えることを確定すると全て領有を切り替えることとなります。'
+msg_plot_group_set_perm_confirmation: 'この土地は%s個の土地とグループになっています。この土地のperm lineを設定すると全てperm lineを設定することとなります。'
+msg_plot_evict_group: 'あなたは土地グループの所有者であった%sを退去させました。'
+msg_err_plot_belongs_to_group_plot_fs: '%sはグループに所属しています。「/plot group グループ名 fs 値段」を使用してください'
+msg_err_plot_belongs_to_group_set: '土地はグループに所属しています。「/plot group set」を使用してください。'
 msg_plot_group_set_for_sale: 'グループ%sは売りに出されました!'
+msg_err_plot_already_belongs_to_a_group: 'この土地は既にグループ「%s」が保有しています。このグループからこの土地を削除してから他に追加してください。'
 msg_err_you_must_specify_a_group_name: 'グループ名を指定してください。'
 msg_plot_was_put_into_group_x: 'プロット&9(%s,%s)&2はグループ%sに追加されました。'
 msg_err_plot_not_associated_with_a_group: 'このプロットは、グループと関連付けられていません。'
+msg_plot_was_removed_from_group_x: '土地 &9(%s、%s) &2はグループ%sから除かれました。'
 msg_plot_renamed_from_x_to_y: '土地 %s を %s に改名しました。'
 msg_err_plot_group_specify_price: '価格を設定してください。例: /plot group fs [値段]'
+msg_player_put_group_up_for_sale_amount: '%sは土地グループ%sを%sで販売しました。'
+msg_player_put_group_up_for_sale: '%sは土地グループ%sを販売しました！'
 msg_err_could_not_set_group_type: 'グループの種類を設定できませんでした - '
 msg_set_group_type_to_x: 'プロットグループにタイプを%sに変更されました。'
 msg_player_successfully_bought_group_x: '%sがプロットグループ%sを購入しました。'
+status_plot_group_name_and_size: '土地は土地グループ「%s」に所属しています。グループには%s個の土地があります。'
+msg_player_made_group_not_for_sale: '%sは土地グループ%sを%sで非売にしました。'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'プロットグループを刑務所タイプに設定することはできません。'
 #Added in 0.70
@@ -993,6 +1160,11 @@ msg_confirmation_spigot_click_accept: '%sをクリックするか%sと入力し�
 msg_confirmation_spigot_click_cancel: '%sをクリックするか%sと入力してください。'
 msg_you_cannot_kick_yourself: '自分をキックすることはできません。'
 msg_you_cannot_kick_this_resident: '%sをキックすることはできません。'
+#Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: '土地%sは土地グループに所属しています。「/plot group fs 値段」を使用してください。'
+msg_err_plot_belongs_to_group_plot_nfs: '土地%sは土地グループに所属しています。「/plot group nfs」を使用してください。'
+#Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: '管理者の%s設定のため、PVPを%sにすることはできません。'
 #Added in 0.73
 msg_err_you_aren't currently jailed: 'あなたは、投獄されていません。'
 #Added in 0.74
@@ -1019,8 +1191,11 @@ msg_cache_block_error_plot_outsiders: '部外者逹'
 msg_cache_block_error_plot_town_members: '町のメンバー'
 msg_err_invalid_nation_map_color: '&c地図の色が不明です。許可された色は%sです。'
 msg_nation_map_color_changed: '&b国の地図の色が%sに変更されました。'
+msg_err_unable_to_add_more_residents_without_nation: 'あなたの町は国に入るか作らずには%s人以上の住民を参加させることはできません。'
 msg_the_following_towns_were_deleted_for_having_0_claims: '以下の町は請求が0だったため削除されました: %s'
+msg_spawn_warn: 'ここにテレポートするには%sがかかります。(このメッセージを消すにはコマンドの後ろに「 -ignore」を付けてください。)'
 msg_confirm_purchase: 'これを実行すると%sかかります。実行しますか?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: '首都との距離が遠すぎるため%sは国から抜けることとなります。続行しますか？'
 msg_ta_deposit_all_success: 'すべての国と町の銀行に%sを振り込みました。'
 bonus_townblocks: 'ボーナスタウンブロック'
 #Added in 0.80
@@ -1049,22 +1224,48 @@ msg_town_bankrupt_by_upkeep_multiple: '&b以下の町は維持費が支払えず
 msg_town_bankrupt_by_nation_tax: '&b%s は %s に納税できず、破産しました。'
 msg_town_bankrupt_by_nation_tax_multiple: '&b以下の町は国に納税できず破産しました: '
 msg_town_debts_cleared: '%s は債務を解消しました。破産状態ではありません。'
+msg_err_bankrupt_town_cannot_claim: '破産した町のために土地を購入することはできません。'
+msg_err_bankrupt_town_cannot_build: '破産した町で建築することはできません。'
+msg_err_bankrupt_town_cannot_toggle_open: '破産した町の解放状態を切り替えることはできません。'
 msg_err_bankrupt_town_cannot_invite: '破綻した町にプレイヤーを招待することはできません。'
 msg_payed_nation_tax: '&bあなたの町は%sの税金を支払いました。'
 msg_your_town_couldnt_pay_the_nation_tax_of: '&bあなたの町は税金%sを支払うことができなかったので、国からキックされました。'
 msg_your_town_payed_upkeep: '&bあなたの町は維持費として%sを支払いました。'
 msg_your_nation_payed_upkeep: '&bあなたの国は維持費として%sを支払いました。'
+msg_your_town_couldnt_pay_upkeep: '&bあなたの町は維持費%sを払えず消滅しました。'
+msg_your_nation_couldnt_pay_upkeep: '&bあなたの国は維持費%sを払えず消滅しました。'
+#Added in 0.87
+msg_town_reached_debtcap_and_is_disbanded: '&b%sは維持費を払えず、負債上限に達したため消滅しました。'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&b以下の町は維持費を払えず、負債上限に達したため消滅しました。'
+msg_unable_to_deposit_x: '町の金庫に %s を入金できません。'
+msg_unable_to_withdraw_x: '町の金庫から %s を引き出せません。'
 status_debtcap: '債務上限:'
+status_world_explrevert_entity: 'エンティティ爆発の取り消し: '
+status_world_explrevert_block: 'ブロック爆発の取り消し: '
+#Added in 0.88
+msg_nation_already_peaceful: '&c国は既に平和状態です。'
+msg_nation_already_not_peaceful: '&c国は既に平和状態ではありません。'
 #Added in 0.89
 status_world_friendlyfire: 'フレンドリーファイア:'
 status_world_wildernessmobs: '荒野でのモブ: '
+msg_outlaw_kick_cooldown: '&cあなたは%sでは無法者として設定されています。%sまでに町から出ない場合はあなたのスポーン地点にテレポートされます！'
+msg_outlaw_kicked: '&4あなたは%sでは歓迎されず、テレポートされました。'
+msg_outlaw_town_notify: '&c無法者である%sがあなたの領内に侵入しました。'
+msg_your_town_payed_upkeep_with_debt: 'あなたの町は維持費%sを負債で払いました。'
+msg_payed_nation_tax_with_debt: 'あなたの町は国税%sを負債で払いました。'
+#Added in 0.90
+status_plot_clear_deletion: 'PlotClearBlockDelete:'
 msg_err_plot_clear_disabled_in_this_world: '権限がありません。'
 #Added in 0.91
 msg_universe_attribution: '作者: '
+msg_universe_contributors: ' あなたのような協力者のおかげです。 '
 townblock_plu: 'タウンブロック'
+#Added in 0.92
+#Town Ruins
+msg_newhour_success: '新日コマンドは実行されました'
 town_help_12: '崩壊状態の町を再取得することが可能です。'
 msg_warning_town_ruined_if_deleted: "警告: 町を削除した場合には%d時間の間は崩壊状態となり、この時間を達した際に町が削除されます。また崩壊状態の町は全権限がONであるため破壊されることもあります。"
-msg_warning_town_ruined_if_deleted2: "この町は%d時間後、町の住人が「/t reclaim」と打つことで再取得することが可能です。"
+msg_warning_town_ruined_if_deleted2: "この町は%d時間後、町の住民が「/t reclaim」と打つことで再取得することが可能です。"
 msg_err_cannot_reclaim_town_unless_ruined: '&cこの町は崩壊状態ではないため再取得することはできません。'
 msg_err_cannot_reclaim_town_yet: '&cあなたは%d時間の間、町を再取得することができません。'
 msg_town_reclaimed: '&b%sは%sのタグをリセットしました。'
@@ -1096,46 +1297,102 @@ msg_days: ' 日'
 msg_comptype_public: '公開ステータス'
 towny_prices_title: '価格'
 towny_prices_town_nation: '&e[New] &2町: &a%s &8| &2国: &a%s'
+towny_prices_reclaim: '&e[再取得] &2町: &a%s'
+towny_prices_upkeep: '&e[維持費] &2町: &a%s &8| &2国: &a%s'
+towny_prices_overclaimed_upkeep: '&e[オバクレ維持費] &2町: &a%s'
+towny_prices_claiming_townblock: '&e[拡張費] &2土地: &a%s'
+towny_prices_claiming_townblock_increase: ' &8| &拡張ごとの追加費用: &a+%s'
+towny_prices_claiming_outposts: '&e[作成費] &2アウトポスト: &a%s'
+towny_prices_outposts_upkeept: '&7アウトポストには毎日、各アウトポストごとの維持費&a%sがあります。'
+towny_prices_upkeep_based_on: '&7町の維持費は&a %s &7に基づいています'
 towny_prices_upkeep_num_plots: 'プロット数'
+towny_prices_upkeep_town_level: '町のレベル (人口)'
+towny_prices_overclaimed_based_on: '&8オバクレ維持費は&a%s %s &8に基づいています。'
+towny_prices_overclaimed_num_plots: 'オバクレされた土地数*'
+towny_prices_overclaimed_flat_cost: '定価'
 towny_prices_townname: '&c 町: &b%s'
+towny_prices_price_plot: '&c    [値段] &2土地: &a%s &8| &2アウトポスト: &a%s'
 towny_prices_price_shop: '&c            &2ショップ: &a%s &8| &2エンバシー: &a%s'
+towny_prices_taxes_plot: '&c    [税]    &2住民: &a%s &8| &2土地: &a%s'
 towny_prices_taxes_shop: '&c            &2ショップ: &a%s &8| &2エンバシー: &a%s'
+towny_prices_town_neutral_tax: '&c            &2平和状態: &a%s'
+towny_prices_plots: '&c    [土地設定]'
 towny_prices_type_single: '            &2%s: &a%s'
 towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&c国: &6%s'
+towny_prices_nation_tax: '&c    [税] &2町: &a%s &8| &2平和状態: &a%s'
+#Added in 0.96
+msg_town_destroyed_by_nation_tax: '&b占領された町%sは国税を払えず崩壊しました。'
+msg_town_destroyed_by_nation_tax_multiple: '&b以下の占領された町が国税を払えず崩壊しました。'
+msg_your_town_was_exempt_from_the_nation_tax: '&bあなたの町は国税を免税されました。'
 #Added in 0.97
 #The Build = ---- Destroy = ---- seen in the status screen.
 status_perm_line_format: '&a%s=&7'
+msg_comptype_ruined: '崩壊状態'
+msg_comptype_bankrupt: '破産状態'
+msg_ruined: '&c(崩壊状態)'
+msg_bankrupt: '&c(破産状態)'
+#Added in 0.98
+msg_del_town2: '&b町「%s」は削除されました！'
+msg_ruin_town: '&b町「%s」は崩壊しました！'
 gui_title_select_plot_type: 'プロットタイプを選択してください。'
 gui_title_no_restrictions: 'このプロットタイプには制限がありません。'
 gui_title_towny_allowedblocks: '%s 許可されたブロック一覧'
 gui_title_towny_wildsblocks: 'TownyのWildBlocksリスト'
+gui_title_towny_itemuse: 'TownyのItemUse一覧'
+gui_title_towny_switch: 'TownyのSwitch一覧'
+gui_title_towny_plotclear: 'TownyのPlot Clear Delete一覧'
+flatfile_dbg_district_file_missing_town_delete: '区画ファイルが町にないため%sは削除されます。'
+flatfile_dbg_missing_file_delete_district_entry: 'ファイルがありません: %s [districtuuid].data のエントリを削除しています。'
+flatfile_err_exception_reading_district_file_at_line: '区画ファイルの読み込み中に%s行目でエラーが発生しました。'
+flatfile_dbg_loading_district_list: '区画ファイルの読み込み中...'
+msg_ta_removed_all_titles_and_surnames_removed: '全ての住民から称号と姓を削除しました。'
 msg_err_homeblock_already_set_here: 'この場所は、すでにホームブロックに指定されています。'
 #Added in 0.100
 msg_town_merge_err_mayor_only: '&c権限がありません。'
+msg_town_merge_err_not_close: '&c%sはあなたの町から遠すぎます！あなたのホームブロックから%dタウンブロック以内になければいけません！'
+msg_town_merge_request_sent: '&b合併要求を%sの市長に送りました。'
+msg_town_merge_request_received: '&b%sの市長である%sはあなたの町と融合することを要求しました。これによってすべての土地、住民と金庫の資金を%sに委譲します。'
+msg_town_merge_request_denied: '&c合併要求が拒否されました。'
+msg_town_merge_other_offline: '&c%sの市長である%sが不在であるため合併に失敗しました。'
+msg_town_merge_err_too_many_residents: '&c新規住民の数が上限(%d)を超えたため合併に失敗しました。'
+msg_town_merge_err_too_many_townblocks: '&c町の大きさが上限(%d)を超えたため合併に失敗しました。'
+msg_town_merge_err_too_many_outposts: '&cアウトポスト数が上限(%d)を超えたため合併に失敗しました。'
+msg_town_merge_err_not_enough_money: '&c資金不足(%s/%s)であるため合併に失敗しました。'
+msg_town_merge_err_too_many_purchased_townblocks: '&c購入した土地数が多すぎる(%d)であるため合併に失敗しました。'
+msg_town_merge_warning: '&c警告: 合併を承諾した場合%sとの合併には%sがかかる。'
+msg_town_merge_debt_warning: '&c警告: 合併を承諾した場合%sの持つ負債を請け負う必要性がある。'
+msg_town_merge_cost_breakdown: '&b費用明細: 基本費用: %s, 土地費用: %s, 破産費用: %s, BonusBlock費用: %s'
 msg_town_merge_failed: '合併に失敗しました。'
 msg_town_merge_cancelled: '合併がキャンセルされました。'
 msg_town_merge_success: '&b 町%s(所有者:%s)は町%sに無事合併されました。'
 #Reasons for withdrawing/depositing for the bankhistory book.
 msg_town_merge_cost_withdraw: '町の合併コスト'
 msg_town_merge_transaction_reason: '町の合併'
+towny_prices_town_merge: '&e[合併] &2基本費用: &a%s &8| &2土地毎: &a%s'
 #Added in 0.101
 msg_err_nation_not_allied_with: '&cあなたの国は%sと同盟を結んでいません。'
 msg_err_nation_not_enemies_with: '&cあなたの国は%sと敵対していません。'
 msg_err_nation_already_enemies_with: '&cあなたの国は既に%sと敵対しています。'
-msg_err_ally_already_requested: '&c既に%sに同盟のリクエストを送信しています。'
+msg_err_ally_already_requested: '&c既に%sに同盟要求を送信しています。'
 msg_err_nation_not_allied_with_2: '&c%sは%sと同盟ではありません。'
 msg_err_nation_not_enemies_with_2: '&c%sは%sと敵対していません。'
 msg_err_nation_already_allied_with_2: '&c%sは%sと同盟ではありません。'
 msg_err_nation_already_enemies_with_2: '&c%sは%sと既に敵対しています。'
 msg_ta_allies_enemies_updated: '&b同盟/敵対は %sのために更新されました。'
+#Added in 0.102
+towny_map_detailed_information: '&2クリックすると土地の詳細が表示されます。'
 msg_err_nation_capital_too_many_residents: '&c首都の住民数が多すぎるため、 %sに置き換えられません。'
+msg_deleting_nation_will_result_in_losing_residents: '&c警告: 国を消すことによってあなたの町は人口上限を%d人超えることとなるため、%dが町から追い出されます。'
+#Added in 0.103
+msg_command_blocked_inside_towns: '&cそのコマンドを町の中で使用することはできません。'
 msg_command_limited: 'このコマンドは自分のプロット内でのみ使用できます。'
 #Added in 0.104
 #Don't add a space to the end please
 msg_plot_perm_claimed_at: '拡張日:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: '荒野が%sになりました。'
+msg_regenerations_use_x_in_all_worlds: '再生はすべてのワールドで%sとなっています。'
 #Added in 0.106
 msg_command_outsider_blocked: '%sに住んでいないため、そのコマンドを実行することはできません。'
 #Added in 0.107
@@ -1145,6 +1402,9 @@ msg_err_no_cell_found_at_this_location: 'この場所に牢屋はありません
 msg_jail_cell_set: '牢屋のセルを設定しました。'
 msg_jail_cell_removed: '牢屋のセルを削除しました。'
 msg_err_resident_is_already_jailed: '%sは既に収監されています'
+msg_err_the_town_does_not_have_that_many_jails: '町にはそれほどの牢獄がありません。'
+msg_err_that_jail_plot_does_not_have_that_many_cells: '牢獄にはそれほどの監房がありません。'
+msg_primary_jail_set_for_town: 'あなたの町の主要な牢獄が設定されました。'
 msg_x_has_been_freed_from_x: '%sは%sという牢獄から釈放されました。'
 msg_you_have_been_jailed: 'あなたは投獄されました。'
 msg_run_to_the_wilderness_or_wait_for_a_jailbreak: '荒野に逃げるか脱獄を待ってください。'
@@ -1155,6 +1415,7 @@ msg_you_have_served_your_sentence_and_are_free: 'あなたの刑期が終わり�
 msg_x_has_served_their_sentence_and_is_free: '%sは牢獄での刑期を終え自由の身となりました。'
 msg_you've_been_jailed_for_x_hours: 'あなたは%s時間投獄されています。'
 msg_you_are_being_sent_to_jail: 'あなたは牢屋に投獄されました。'
+msg_err_you_cannot_remove_the_last_cell: '牢獄の最後の監房を取り除くことは、新たな官房を作らない限りできません。'
 msg_do_not_log_out_while_waiting_to_be_teleported: '牢屋にテレポートする前にログアウトしないでください。'
 jail_plu: '監獄'
 jail_sing: '監獄'
@@ -1181,10 +1442,18 @@ msg_safe_mode: "[Error] セーフモードでロックされました!"
 msg_safe_mode_base: '[Error] Townyはエラーのためセーフモードでロックされています。 '
 msg_safe_mode_player: 'サーバーのコンソールを確認してください。'
 msg_safe_mode_admin: '詳細はサーバーのコンソールを確認してください。'
+msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'アウトポストはあなたの町のホームブロックがあるワールドでしか作れません。'
+msg_err_not_close_enough_to_your_town_nearest_plot: 'アウトポストを作成することができません。あなたは最も近いタウンブロックから%s離れています。許可されている最大距離は%sタウンブロックです。'
 msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'あなたは町のホームブロックを最近移動させたため、%s待ってください。'
 msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'あなたは町のホームブロックを移動させることはできません。限界は%sです。ここは現在%s離れています。'
 msg_err_usingtowny_disabled: 'この世界はTowny関連の全ての機能が無効となっています。まず「/townyworld toggle usingtowny」と打ってください。'
+#Added in 0.111
+msg_plot_group_already_exists_did_you_want_to_transfer: 'この土地は既に「%s」土地グループの一角です。本当に%s土地グループに移しますか？'
+msg_townblock_transferred_from_x_to_x_group: '土地が「%s」から「%s」に移されました。'
+msg_plotgroup_deleted: '土地グループ「%s」は削除されました。'
+msg_plotgroup_empty_deleted: '土地グループ「%s」は所属している土地がないため削除されました。'
 plotgroup_plu: 'プロットグループ'
+msg_err_this_town_has_no_plot_groups: '指定した町には土地グループがありません。'
 msg_err_this_plot_is_already_part_of_the_plot_group_x: 'このタウンブロックは既にプロットグループの一部です: %s'
 map_hover_plot_group: 'プロットグループ: '
 map_hover_plot_group_size: ' サイズ: '
@@ -1198,16 +1467,34 @@ msg_click_to_download: '&bクリックしてダウンロード'
 msg_latest_version: '&2Townyバージョン：&a%s &2| 最新バージョン：&a%s'
 msg_up_to_date: '&a最新バージョンです。'
 msg_click_purchase: 'クリックして購入'
+msg_you_must_join_this_town_to_claim_this_plot: 'あなたがこの土地を取得するには町「%s」に参加する必要があります。町に参加して土地の取得を続けますか？'
 msg_legacy_economy_detected: "&bあなたのTownyの経済システムは現在レガシーに設定してあります。Townyの経済システムをモダンにアップデートすることによって最新の経済プラグインとの互換性が向上します。"
 msg_click_to_convert_to_modern_economy: "&bここをクリックしてTownyの経済システムをレガシーからモダンに変更できます。"
 #Added in 0.113
 status_trustedlist: 'トラスト'
 msg_click_to_edit: '&6クリックして編集'
 permission_gui_header: 'Towny権限GUI'
+msg_last_edited: '&7&o最終変更は%sで%sによって行われました。'
+#Last %s is either town or townblock
+msg_trusted_added: '&b%sを%sのトラストに追加しました。'
+msg_already_trusted: '&b%sは既にこの%sのトラストに追加されています。'
+msg_cannot_trust_your_own_town: '&b自分自身の町をトラストにすることはできません。'
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%sはあなたを%s : %s にてトラストを付与しました。'
+msg_not_trusted: '&b%sは%sにてトラストを付与されていません。'
+msg_trusted_removed: '&b%sを%sのトラストから外しました。'
+msg_trusted_removed_2: '&b%sはあなたを%s : %s にてトラストから外しました。'
+msg_overrides_removed: '&b%sの権限上書きを取り消しました'
+msg_overrides_added: '&b%sのデフォルトの権限上書きを設定しました。'
+msg_no_overrides_set: '&b%sには%sのための上書き権限を設定されていません。'
+msg_overrides_already_set: '&b%sには既に%sのための上書き権限を設定されています。'
 msg_cache_block_err: '&cここで%sをすることはできません。'
 msg_err_plot_belongs_to_group: '&cプロットはグループに属しています。%sを使用してください。'
 plotgroup_sing: '土地グループ'
 msg_err_ally_limit_reached: 'あなたの国はこれ以上同盟国を増やすことはできません。'
+msg_err_ally_limit_reached_cannot_accept: '%sは同盟上限に達したため、これ以上同盟国を増やすことはできません。'
+msg_err_ally_limit_reached_cannot_send: 'あなたの国は同盟上限に達したため、%sを同盟に招待することはできません。'
+msg_err_ally_limit_reached_cannot_send_targetNation: '%sは同盟上限に達したため、%sを同盟に招待することはできません。'
 #Added in 0.114
 msg_err_group_not_found: 'グループ%sが見つかりません。'
 msg_err_expected_command_format: '無効な構文です。%s'
@@ -1228,6 +1515,7 @@ help_ta_perms_groupremovepermnode: 'グループからノードを削除'
 help_ta_perms_townrankadd: 'townyperms ファイルにtownrankを追加します。'
 help_ta_perms_townrankremove: 'townyperms ファイルにtownrankを追加します。'
 help_ta_perms_nationrankadd: 'townyperms ファイルにtownrankを追加します。'
+help_ta_perms_nationrankremove: 'townypermsファイルからnationrankを取り除きます。'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'このプレイヤーはこの国に所属していません。'
 #Added in 0.115
 msg_comptype_founded: '設立日'
@@ -1235,8 +1523,15 @@ msg_err_must_be_greater_than_or_equal_to: '金額は%s以上でなければい�
 err_invalid_yaml: '読み込みエラー: ファイル%sの読み込みに失敗しました。'
 #Added in 0.116
 msg_town_map_color_changed: '&b町のマップの色が%sに変更されました。'
+#Added in 0.117
+msg_err_this_townblock_doesnt_match_the_groups_type: 'この土地は%sではないため、グループに追加することができません。'
 #Added in 0.118
 status_title_nopvp: '&a(PVP禁止)'
+#Added in 0.119
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'この住民を無法者としている場所にいるためこの住民を投獄することはできません。'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'この住民を敵としている場所にいるためこの住民を投獄することはできません。'
+#Added in 0.120
+msg_resident_prompt: 'プレイヤーの名前をチャットに入力するか、「q」で終了してください。３０秒後に自動でタイムアウトします。'
 msg_prompt_cancel: 'プロンプトがキャンセルされたか、タイムアウトしました。'
 status_home_element: ' &7[Home: %s]'
 status_about: "詳細:"
@@ -1253,9 +1548,29 @@ help_menu_command: '<blue>'
 help_menu_subcommand: '<aqua>'
 help_menu_explanation: '<gray>'
 help_menu_requirement: '<red>'
+#Added in 0.122
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: '国の首都に十分近くないため、合併が完了すると以下の町は削除されます。 %s'
+#Added in 0.123
+msg_err_invalid_townyworld: "「%s」は正当なTownyワールドではありません。"
 msg_err_enter_world_name_first: '最初にワールドの名前の入力してください。'
+msg_wilderness_use_set_to: '&bWilderness Useは %s で %s に設定されました。'
+#Added in 0.124
+msg_err_invalid_response: '無効な応答です！「q」を押して出るか前の質問に戻ってください。'
+msg_setup_full_guide_link: '&b完全なインストールガイドのリンクを得るにはここを押してください。'
 msg_setup_wildernessuse: '荒野を有効にしますか？有効にした場合プレイヤーが荒野で破壊/建築できるようになります。'
+msg_setup_revertunclaim: '土地からの撤退の際に土地のリセットを行いますか？これにより撤退した土地はゆっくり元の状態に戻るようになります。'
+msg_setup_town_block_ratio: '土地拡張限界をどこに設定しますか？デフォルトは一人につき８です。より高い数値に設定すれば町は一人につきより多くの土地に拡張できるようになります。これを０にした場合は「town_levels」の数値を使用するようになります。'
+msg_setup_town_cost: '町を作るための値段を設定してください。デフォルトは250です。'
+msg_setup_nation_cost: '国を作るための値段を設定してください。デフォルトは1000です。'
+msg_setup_townblock_cost: '土地を拡張するための値段を設定してください。デフォルトは25です。デフォルトの設定では土地の大きさはチャンクと同じです。'
 msg_setup_success: '設定値を新しい値に変更しました。'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%sは最近スポーンしたため危害を加えられません。'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_respawn_protection: 'リスポーン保護を失いました。'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'リスポーン保護中ではアイテムを拾うことはできません。'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: '首都:'
@@ -1265,6 +1580,10 @@ status_joined_town: '参加した町:'
 status_joined_nation: '参加した国:'
 #Shown in status screen elements where a value is not known.
 status_unknown: '不明'
+#Feedback given for the /ta set nationzoneoverride [townname] [size] command.
+msg_nationzone_override_set_to: '%sは国家ゾーンを%sに設定しました。'
+#Feedback given for the /ta set nationzoneoverride [townname] 0 command.
+msg_nationzone_override_removed: '%sは国家ゾーンを削除しました。'
 #Added in 0.127
 #Used in status screen:
 status_nation_zone_size: '国の大きさ:'
@@ -1278,6 +1597,10 @@ msg_resident_unjailed: '%sは釈放されました。'
 msg_admin_toggle_devmode: '開発モード: %s'
 #Shown when an admin uses /ta toggle debug.
 msg_admin_toggle_debugmode: 'デバックモード: %s'
+#Shown when an admin uses /ta toggle townwithdraw
+msg_admin_toggle_townwithdraw: '町からの引き出し: %s'
+#Shown when an admin uses /ta toggle nationwithdraw
+msg_admin_toggle_nationwithdraw: '国からの引き出し: %s'
 #Shown when claiming a town block for the town.
 msg_process_town_claim: '拡張処理中...'
 #Shown when unclaiming a town block for the town.
@@ -1301,9 +1624,17 @@ msg_scanning_for_old_residents: '古い住民をスキャン中...'
 msg_deleting_resident: '住民%sを削除中。'
 #Shown during resident purge
 msg_purge_complete: '粛清完了、%sを削除しました。'
+#Message to the Town, shown when a town is given bonus blocks.
+msg_you_have_been_given_bonus_blocks: 'あなたに追加で%s個の土地を与えられました。'
+#Message shown when a town cannot purchase any more bonus blocks.
+msg_err_you_cannot_purchase_any_more_bonus_blocks: '上限に達したため、追加の土地を購入することができません。'
 #Added in 0.128
 #Message shown to a capital city which is being denied the ability to toggle peaceful on.
 msg_err_capital_cannot_be_peaceful: '首都は平和状態を切り替えれません。'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: '町を囲っている国家ゾーンは%sです。'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'あなたの町には切り替える国家ゾーンがありません！'
 #Added in 0.129
 #Shown in /towny prices, describing what controls nation upkeep.
 towny_prices_nation_upkeep_based_on: '&7国の維持費は &athe %sに基づいています。'
@@ -1321,7 +1652,13 @@ msg_jailed_war: '捕虜。'
 #Jail handbook messages
 msg_jailed_handbook_1: 'あなたは投獄されました。理由: %s'
 #Jail handbook messages
+msg_jailed_handbook_2: "え、今からでもどうにかできる方法があるんですか！？\nそうですよ？刑期中に役に立つ知恵を与えましょう..."
+#Jail handbook messages
+msg_jailed_handbook_3: 'あなたは%s時間の間投獄されました。刑期を終えれば自由の身です。'
+#Jail handbook messages
 msg_jailed_handbook_4_can: '/town leaveで町から抜けることで牢屋から出ることができます。'
+#Jail handbook messages
+msg_jailed_handbook_4_cant: '投獄されている間は町を抜けて脱獄することはできません。'
 #Jail handbook messages
 msg_jailed_handbook_bail_1: '「/res jail paybail」で保釈金を支払うことで釈放されます。'
 #Jail handbook messages
@@ -1380,6 +1717,8 @@ confirmation_unclaiming_costs: 'この土地から撤退するには%sを払う�
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '町を改名するには %s秒待つ必要があります。'
+#Added in 1.141
+msg_newday_already_running: '新日タスクが既に実行中です。'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: '中立性を切り替えることはできません。%s秒残っています。'
@@ -1389,10 +1728,21 @@ msg_err_command_not_for_console_use: 'このコマンドはコンソールから
 #Added in 0.144
 #Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
 msg_town_unlimitedclaims_setting_set_to: '町%sは無限拡張設定を%sにしました。'
+#Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
+did_you_want_to_toggle_unlimited_claims: '拡張するのに十分な土地がありません。 %sを無制限拡張に切り替えますか？'
+#Added in 0.145
+#Message shown when a conquered town tries to leave their nation.
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: '占領中であるため国を抜けることができません。'
 msg_err_console_only: 'このコマンドはコンソールでのみ使用できます。'
+msg_err_player_only: 'このコマンドはプレイヤーにのみ使えます。'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: '境を超えた際に表示されるメッセージは「%s」です。'
 #Added in 0.147
 #Message shown confirming that an admin wants to reset their Towny config
 this_will_reset_your_config: 'このコマンドを実行すると、config.ymlがデフォルトにリセットされます。続行しますか?'
+#Message shown when an admin is setting a new king or capital and would override the config by doing so
+msg_warn_overriding_server_config: 'これを行うとサーバー設定にある住民設定を上書きします。続行しますか？'
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: '無効なアウトポストスポーン%dを削除しました。'
@@ -1402,6 +1752,18 @@ msg_your_town_is_bankrupt: '資金が足りません。/town deposit {amount}で
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'あなたはすでに町に参加しているため、このコマンドを使用することができません。 続行したい場合は、''/t leave'' を使用する必要があります。'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'あなたを無法者としている町。'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: '(資金が足りる中での)RTPが可能な、土地の販売しているオープンまたは公開されている町を見つけることができませんでした。'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&bあなたは%sを払うことによって販売されているランダムな町の土地にテレポートされました。'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'あなたは今から町に参加させてくれる%sの販売中の土地にテレポートします。到着した際には「/plot claim」で土地を購入できます。'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "%sにはあなたの購入できる土地が存在しています。今すぐ購入できる土地にテレポートしますか？"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "あなたが購入できる土地にテレポートしました。「/plot claim」で土地を購入できます。"
 #Used in the town's status screen to display plots
 status_plot_string: 'プロット'
 #Displays a plot type and the amount of townblocks of that type in the town
@@ -1410,6 +1772,14 @@ status_plot_hover: '%s:'
 msg_usage: '使用状況: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: '表示するページがありません！'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: 'その国はあなたと関係がありません。'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: 'その町はあなたと関係がありません。'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'この場所にはすでに牢獄があります。'
 #Title line of the /plot perm hud.
 msg_perm_hud_title: '土地権限'
 #Seen in /plot perm hud:
@@ -1459,11 +1829,49 @@ msg_perm_hud_yes: 'はい'
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
 msg_town_level_overridden_with: '%sは町のレベルを%sに設定しました。'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'この町は手動で設定したタウンレベルが解除されており、現在のレベルは%sです。'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: '町%sはコンフィグ設定上、土地を購入できません。'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: '町%sは購入した土地を取り除かれました。'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: '町%sは購入した%sこの土地を入手しました。合計で%s個の購入した土地があります。'
 #Added in 0.154
 msg_comptype_upkeep: '維持費'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: '%sの維持費は%sに設定されています。'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'あなたの町は上限の%d個の%sに達しました。'
 #Added in 0.156
 msg_spawn_cost_free: '無料'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'この土地は既に%sタイプです。'
+msg_town_board_reset: '&b掲示板のリセットをする。'
 msg_town_has_no_jailslots: '町の刑務所はいっぱいです。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s は牢獄 %s、監獄番号#%sに%s時間の間捕らえられました。保釈金は%sで%sによるものです。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s は牢獄 %s、監獄番号#%sに%s時間の間%sの元で捕らえられました。'
+msg_you_have_been_jailed_your_bail_is_x: 'あなたは投獄されました。保釈金は%sです。'
+msg_err_higher_than_max_allowed_bail_x: 'あなたの保釈金は上限の%s以上に設定されました。'
+msg_err_higher_than_max_allowed_hours_x: 'あなたの刑期は上限の%s以上に設定されました。'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: '%sを投獄するには、町の金庫に投獄費%sが足りません。'
+msg_you_were_released_as_town_ran_out_of_slots: 'あなたを投獄した者は土地を再活用するためにあなたを開放しました。'
+msg_x_has_been_released_as_jail_slots_ran_out: '%sは新たな囚人を収容するために釈放されました。'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'あなたを投獄した者たちは捕えておく資金がなくなったため、あなたを釈放しました。'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%sは町の資金が足りないため釈放されました。'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%sが囚人%sの維持のために金庫から引き出されました。'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%sが%sを捕えたため引き出されました。'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: '本当に全ての国や町の金庫を%sにリセットしますか？'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&c国に入れれる町の数の上限(%s)に達しました。そのため%sを追加することはできません。'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&c国ごとの住民数の%s人に抵触するため、この国には参加することができません。'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&c国に参加できる町の上限の%sに抵触するため、この国には参加することができません。'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: '本当にこの世界の全ての設定をコンフィグに設定してあるものに置き換えますか？'
 #Part of the /town plots output.
 msg_town_plots_title: ' 町の土地'
 #Part of the /town plots output.
@@ -1484,14 +1892,227 @@ msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>日別収益'
 msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'あなたは町全体に完全な土地権限を与えようとしています。 つまり町の市長は住民を追加することで、誰が町の建設と破壊の権限を得るか決めることができます。 この町がオープンであれば、誰でも参加してあなたの町への全権限を得ることができます。 あなたはこの町の全ての住民(将来の住民を含む) を信頼したいですか？'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'あなたの町は戦争中であるためこのコマンドを使えません。'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'この土地には外国人がいるため、土地から撤退することができません！'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'あなたは新しい街を立てれません。まだ%s秒のクールダウンが残っています。'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'この土地「%s」を確保することはできません。%s秒のクールダウンが残っています。'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: '「%s」の設立者を%sと設定しました。'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: '%sの戦争許可設定は%sに設定されています。'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: '本当にホームブロック以外の土地から撤退しますか？'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "ホームブロック以外の土地から完全に撤退しました。今のホームブロックからも撤退するには新しいホームブロックを「/t set homeblock」で設定する必要があります。"
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>本当に国の所有権を%sに譲渡しますか？この操作は取り消せません！"
+msg_warn_town_already_capital: "<red>%sは既に国の首都です。"
+msg_min_adjacent_blocks: '隣接する８つの土地のうち%sつ以上と隣接している必要があります。現在%sつしか触れていません。'
+msg_min_adjacent_district_blocks: '隣接する区画が最低%sつ必要です。'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', もしかすると、/plot evict をお探しですか？'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "あなたはTownyには知られていない。"
 #Generic Resident/Town/Nation/Thing is not known to Towny.
 msg_townyobject_unknown: "%s はTownyには知られていない。"
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%sは認識された住人ではない。"
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%sは認識された町ではない。"
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%sは認識された国ではない。"
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%sは町には属していない。"
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%sは国には属していない。"
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "この土地には拡張された日時が記録されていない。"
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "支払うには %s が必要です。"
 #Shown when someone tries to deposit/withdraw 0 amounts.
 msg_err_amount_must_be_greater_than_zero: "0より大きい金額にしてください。"
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "オーバークレイム(オバクレ)はこのサーバーでは有効になっていない。"
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "土地の属する町はオバクレ可能ではないため、この土地を乗っ取ることができない。"
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "ここを乗っ取った場合この土地がホームブロックになるためここに拡張することはできない。"
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "他のプラグインがこの土地の乗っ取りを防いだ。"
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "あなたは%sの土地を%sで乗っ取ります。続行しますか？"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "警告: あなたは町の拡張上限にほぼ達しています。住民を失った際には町の領土がオバクレされる危険にあります！"
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "警告: あなたの町はオーバークレイム(オバクレ)されています。あなたは拡張上限を超えて領土を持っているため、他の町に領土を乗っ取られています。一部の領土を放棄することを推薦します。"
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: "<red>[領土の乗っ取りが可能]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "ここをオバクレした場合、相手の町が二分されてしまうためこの土地を取ることができません。別の場所を取りましょう。"
+#Message shown when an admin tries to toggle conquered off of a town that is not conquered.
+msg_err_that_town_is_not_conquered: "%sは占領されていません。"
+#Message shown when a town has its conquered status removed by an admin.
+msg_conquered_status_removed: "%sは占領状態を解除されました。"
+msg_setup_command_folia: "/ta install コマンドは変換APIが機能していないためFoliaでは機能しません。下記のインストールガイドを見てください。"
+msg_perm_gui_folia: "このボタンは変換APIが機能していないためFoliaでは機能しません。「/plot perm add 名前」を代わりに利用してください。"
+msg_folia_scoreboard: "スコアボードの変更はFoliaでは現在サポートされていません。"
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "土地%sからの撤退はできません。なぜなら%sには十分な隣接する土地(%sが必要)がないからです。"
 #Message shown when a nation collects taxes from its towns.
 msg_tax_collected_from_towns: "<aqua>あなたの国は、所属する町から%s の税金を受け取りました。"
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>あなたの国は%sを税として支払いました。"
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>あなたの町は住民から%sを税金として回収しました。"
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>あなたの町は税金として%sを住民に支払いました。"
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>あなたの町は土地から%sを地税として回収しました。"
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>あなたの町は税金として土地の所有者に%sを支払いました。"
+#Message shown when a nation collects taxes from its towns that are conquered.
+msg_tax_collected_from_conquered_towns: "<aqua>あなたの町は占領した町から追加で%sを税金として回収しました。"
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>あなたの町は国の占領税から免除されました。"
+msg_nation_set_conquered_tax__amount_set: "%sは占領税を%sに設定しました。"
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "占領税を%s以上にすることはできません。"
+msg_err_your_town_is_not_old_enough_to_overclaim: "あなたの町はオバクレをするには新しすぎます。%s待ってください。"
+msg_err_your_cannot_overclaim_for_another: "新たなオバクレは%s待たなければできません。"
+#Generic error message for when a world isn't loaded
+msg_err_world_not_loaded: "<red>ワールドが読み込まれていません。"
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cこの土地の納税ステータスは%sに設定されています。'
+msg_changed_plotgroup_taxed: '&cこの土地グループの納税ステータスは%sに設定されています。'
+status_forsale: "&a(販売中：%s)"
+msg_town_forsale: "%sは%sで販売されました！"
+msg_town_notforsale: "%sは販売されていません。"
+msg_town_sell_confirmation: "この操作により%sであなたの町が販売されます。続行しますか？"
+msg_town_buytown_already_mayor: "あなたは既に%sの市長です。"
+msg_town_buytown_confirmation: "町「%s」を%sで買うことによってあなたが今入っている町から脱却することとなります。続行しますか？"
+msg_town_buytown_not_forsale: "指定した町は販売していません。"
+msg_town_buytown_ruined: "崩壊した町は買い取ることができません。"
+msg_resident_about_reset: "&b住民情報をリセット。"
+msg_err_invalid_string_about_not_set: "無効な文字列、住民情報が設定されませんでした。"
+msg_set_about: "%sの情報は%sに設定されました。"
+msg_clear_about: "%sの情報は消去されました。"
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: '%sはvisibleontoplist設定を%sにしています。'
+#Message shown when an admin overrides a town founding date via townyadmin.
+townyadmin_town_set_help_0: "町の設立日を設定する。"
+townyadmin_nation_set_help_0: "国の設立日を設定する。"
+msg_town_registered_set: "町の設立日「%s」を「%s」に設定しました。"
+msg_nation_registered_set: "国の設立日「%s」を「%s」に設定しました。"
+msg_err_time_cannot_be_in_the_future: "指定した時間は未来にはできません。"
+#The format used for the /t say and /n say commands.
+town_say_format: "%sは『%s』と宣言した。"
+msg_err_floodfill_not_in_wild: "確保された土地でfloodfillを使うことはできません。"
+msg_err_floodfill_out_of_bounds: "領土の形が完全に閉じられていないとfloodfillは使えません。"
+msg_err_floodfill_cannot_contain_towns: "floodfillの範囲内に他の町は含めてはいけません。"
+#Message shown when a resident is an NPC and is not allowed to do something.
+msg_err_resident_is_npc: "NPC住民に行えません。"
+#Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "この住民は土地を保有していません。"
+msg_unnamed: "無名"
+msg_err_nation_cannot_sanction_own_town: "国の一部である町を制裁することはできません。"
+msg_err_nation_town_isnt_sanctioned: "あなたの国は制裁を行っていません。"
+msg_err_nation_town_already_sanctioned: "あなたの国は既に制裁を行っています。"
+msg_err_nation_town_sanctioned: "あなたの国は%sに制裁を行いました。彼らは町に参加することができません。"
+msg_err_nation_town_unsanctioned: "あなたの国はもう%sを制裁していません。"
+msg_err_nation_has_no_sanctioned_towns: "国には制裁している町がありません。"
+title_nation_sanctioned_towns: '制裁している国'
+msg_err_cannot_add_sanctioned_town: "あなたの国は%sを制裁しているため、参加させることができません。"
+msg_err_cannot_join_nation_sanctioned_town: "あなたの町は%sによって制裁を受けているため、参加することができません。"
+msg_err_no_nation_cannot_do: "国の指定が判別できないため、この行動を実行することはできません。"
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "あなたの町は%sによって制裁を受けているため、ここにテレポートできません。"
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "この不必要なバイオームが多すぎるため、座標(%s)を確保できません。"
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "海バイオームが多すぎるため、座標(%s)を確保できません。"
+msg_err_cannot_begin_town_in_this_biome: "このバイオームで町を作ることはできません。"
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "この町は敵国に属していないため、オバクレすることができません。"
+msg_err_unable_to_command_outside_of_town: 'そのコマンドは町の外では使えません。'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'そのコマンドは銀行の外では使えません。'
+msg_err_you_cannot_outlaw_your_mayor: "あなたはあなたの町の市長を無法者にすることはできません！（嘘だろ！？）"
+msg_err_you_cannot_outlaw_because_of_rank: "%sは町内でのランクのため無法者にできません。"
+status_nation_sanctioned_towns: "制裁している町"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "あなたの町の送った全ての招待が取り消されました。"
+msg_err_name_validation_invalid_characters: "%sにはTownyのregex設定に許可されていない文字が含まれています。"
+msg_err_name_validation_begins_with_eco_prefix: "%sは経済機能で利用されている文字が含まれるため、名前を利用することができません。"
+msg_err_name_validation_name_already_in_use: "%sは既に使用されている名前です。"
+msg_err_name_validation_title_too_long: "%sは称号や姓に使うには長すぎます。"
+msg_err_name_validation_name_too_long: "%sは名前として使うには長すぎます。"
+msg_err_name_validation_is_empty: "空の名前を利用することはできません。"
+msg_err_name_validation_is_not_permitted: "%sは許可されていません。"
+msg_err_name_validation_is_all_underscores: "%sは全てアンダーバーです。"
+msg_err_name_validation_too_many_capitals: "%sには%sつの大文字が含まれます。%sつ以下を利用してください。"
+msg_err_name_validation_contains_harmful_characters: "%sには有害な記号が含まれています。"
+msg_err_name_validation_contains_numbers: "%sは名前に許可されていない数字が含まれています。"
+msg_err_name_validation_used_in_command_structure: "%sはコマンド構造内に使用されているため利用できません。"
+msg_town_being_deleted_because_no_residents: "%sは最後の住民を失ったため削除されます。"
+outlawed_in: "無法者としている町"
 msg_warning_town_deposit_hint: "町に資金を投入するには「/t deposit 数値」を打つ必要があります。"
-msg_warning_nation_deposit_hint: "国庫に金を入れるには「/t deposit 数値」を行う必要があります。"
+msg_warning_nation_deposit_hint: "国庫に金を入れるには「/n deposit 数値」を行う必要があります。"
+teleport_warmup_title_dont_move: "&6動かないで！"
+teleport_warmup_subtitle_seconds_remaining: "テレポートするまで&c%s &7秒です。"
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "あなたの町は崩壊状態にあるため、%sつの土地の権限が変更され保護が消滅しました。"
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "%sは崩壊状態にあるため、%sつの土地の権限が変更され保護が消滅しました。%s"
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "あなたの町にあなたの土地を譲ることはできません。"
+msg_err_town_cede_you_cannot_cede_your_homeblock: "あなたの町にあなたのホームブロックを譲ることができません。"
+msg_err_town_cede_the_mayor_is_not_online: "%sの市長である%sはオンラインでないため、土地を受け入れることができません。"
+msg_err_town_no_longer_owns_this_plot: "%sはこの土地を保有していません"
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%sは自身のif homeblock を譲ることはできません。"
+msg_town_cede_plot_confirmation_give_plot: "本当に%sにこの土地を渡しますか？"
+msg_town_cede_plot_confirmation_accept_plot: "%sは%sにある土地をあなたに渡そうとしています。承認しますか？"
+msg_town_cede_plot_accepted: "%sはあなたの土地の引き渡しを承諾しました。"
+msg_town_cede_plot_denied: "%sはあなたの土地の引き渡しを拒否しました。"
+msg_town_cede_plot_unable_to_accept: "%sはあなたの土地の引き渡しを受け入れることができませんでした。"
+msg_town_cede_plot_you_have_accepted: "あなたは%sにある土地の支配権を得ました。"
+msg_err_cannot_claim_plot_join_date_too_low: "あなたは%s日以上市民でない限りこの土地を購入できません。"
+msg_err_cannot_claim_plot_join_date_too_high: "この土地を"
+msg_townblock_min_join_days_removed: "この土地は最小参加日数の条件を削除してあります。"
+msg_townblock_max_join_days_removed: "この土地は最大参加日数の条件を削除してあります。"
+msg_townblock_min_join_days_set_to: "この土地は最小参加日数の条件を%sに設定してあります。この町に指定された日数以上の間参加している住民が「/plot claim」を利用できます。"
+msg_townblock_max_join_days_set_to: "この土地は最大参加日数の条件を%sに設定してあります。この町に指定された日数以下の間参加している住民が「/plot claim」を利用できます。"
+msg_new_resident_spawn_to_town_prompt: "今参加した町にテレポートしたいですか？"
+msg_recieved_refund_for_deleted_object: "あなたはあなたの削除された国/町の金庫の資金の合計である%sを受け取りました。"
+msg_err_you_already_own_this_plot: "既にこの土地を保有しています。"
+msg_err_you_cannot_delete_this_nation: "あなたが国を削除することが防がれました。"
+status_district_name_and_size: '土地は区画「%s」に所属しています。区画には%s個の土地があります。'
+msg_err_district_name_required: '区画の名前を「/plot district add 名前」のように指定してください'
+msg_err_rename_district_name_required: '区画の名前を「/plot district rename 名前」のように指定してください'
+msg_district_renamed_from_x_to_y: '区画「%s」の名前は「%s」に改名されました。'
+msg_err_plot_not_associated_with_a_district: 'この土地は区画と関連付けられていません。'
+msg_plot_was_removed_from_district_x: '土地 <blue>(%s,%s) <dark_green>は区画「%s」から取り除かれました。'
+msg_district_empty_deleted: '区画「%s」は所属している土地がないため削除されました。'
+msg_district_deleted: '区画「%s」は削除されました。'
+msg_err_this_plot_is_already_part_of_the_district_x: 'このタウンブロックは既に区画の一部です: %s.'
+msg_townblock_transferred_from_x_to_x_district: '土地が区画「%s」から区画「%s」に移されました。'
+msg_district_already_exists_did_you_want_to_transfer: 'この土地は既に区画「%s」の一角です。本当に区画「%s」に移しますか？'
+msg_plot_was_put_into_district_x: '土地 <blue>(%s,%s) <dark_green>は区画「%s」に追加されました。'
+msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "区画の一部が切り離されるため、この土地を区画「%s」から削除できません。"
+map_hover_district: '区画: '
+msg_err_you_cannot_join_town_you_have_not_played_long_enough: "あなたはまだサーバーに入ってから十分な時間が過ぎていません。町に入れるまで%s待ってください。"
+msg_your_nation_has_pending_ally_invites: "あなたの国に１つまたは複数の同盟申請が来ています。「/n ally received」で確認しましょう。"
+msg_your_town_has_pending_nation_invites: "あなたの町に１つまたは複数の国から招待が来ています。「/t invite received」で確認しましょう。"
+msg_you_have_pending_town_invites: "あなたに１つまたは複数の町から招待が来ています。「/t invite list」で確認できます。また「/invite deny all」で全ての招待を拒否できます。"
+msg_admin_eco_convert_no_providers: "<red>利用可能な経済プロバイダがありません"
+msg_admin_eco_convert_no_provider_specified: "<red>経済プロバイダが指定されていません"
+msg_admin_eco_convert_no_target_specified: "<red>経済が指定されていません"
+msg_admin_eco_convert_target_not_found: "<red> 「%s」という名前の経済変換がありません。利用可能な変換： [%s]"
+msg_admin_eco_convert_already_modern: "<red>モダンに変換できません。プロバイダは既にモダンモードになっています"
+msg_admin_eco_convert_online_players_warning: "<red>警告: サーバーにプレイヤーがいない状態で移行することをお勧めします。"
+msg_admin_eco_convert_x_accounts_found: "変換可能な%s人のアカウントが見つかりました。変換を開始します。"
+msg_admin_eco_convert_conversion_progress: "アカウント変換が遂行中です。%sが完了しました..."
+msg_admin_eco_convert_success: "経済変換に成功しました。"
+msg_err_mode_does_not_exist: "モード「%s」は認識されていません。"
 msg_err_not_allowed_to_switch: "ここでスイッチ権限を行使することはできません。"
+chunknotification_plot_claim_help_message: " 「/plot claim」で土地を確保できます。"
+titlemsg_pay_your_bail_title: "保釈金を払う: %s"
+titlemsg_pay_your_bail_subtitle: "/res jail paybail"
+msg_not_for_sale: "否販売"
+msg_err_you_cannot_add_trust_on_outlaw: "あなたの町で無法者に指定されているプレイヤーを信用してはならない。"
+msg_err_you_cannot_add_trust_on_enemy: "敵国のプレイヤーを信用してはならない。"
+msg_err_you_cannot_add_towntrust_on_outlaw: "無法者に指定されているプレイヤーの参加している町を信用してはならない。"
+msg_err_you_cannot_add_towntrust_on_enemy: "敵国に参加している町を信用してはならない。"
