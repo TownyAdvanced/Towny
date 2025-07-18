@@ -1709,6 +1709,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (initialJailFee > 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
 			throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
 
+		// Is this resident in a jailable world?
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(jailedResident.getPlayer().getWorld());
+		if (world != null && !world.isJailingEnabled())
+			throw new TownyException(Translatable.of("msg_err_x_in_unjailable_world", jailedResident));
+
 		// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
 		if (TownySettings.getMaxJailedPlayerCount() > 0 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount()) {
 			if (TownySettings.getMaxJailedNewJailBehavior() == 0)
