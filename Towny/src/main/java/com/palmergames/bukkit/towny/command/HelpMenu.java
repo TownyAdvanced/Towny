@@ -294,8 +294,10 @@ public enum HelpMenu {
 				.add("group [group] removeperm [node]", Translatable.of("help_ta_perms_groupremovepermnode"))
 				.add("townrank addrank [rank]", Translatable.of("help_ta_perms_townrankadd"))
 				.add("townrank removerank [rank]", Translatable.of("help_ta_perms_townrankremove"))
+				.add("townrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_townrankrename"))
 				.add("nationrank addrank [rank]", Translatable.of("help_ta_perms_nationrankadd"))
-				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"));
+				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"))
+				.add("nationrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_nationrankrename"));
 		}
 	},
 	

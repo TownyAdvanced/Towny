@@ -1803,6 +1803,7 @@ msg_err_there_is_already_a_town_or_nationrank_called_x: 'There is already a %s n
 msg_err_there_is_no_town_or_nationrank_called_x: 'There is no %s named %s.'
 msg_successfully_add_rank_to_the_town_or_nation_rank: 'Successfully added %s to the %s.'
 msg_successfully_removed_rank_from_the_town_or_nation_rank: 'Successfully removed %s from the %s.'
+msg_successfully_renamed_rank_for_the_town_or_nation_rank: 'Successfully renamed %s to %s in the %s.'
 msg_err_group_has_no_nodes: 'The group %s has no permission nodes assigned.'
 msg_title_group_permissions: '%s Permissions'
 help_ta_perms_listgroups: 'List groups.'
@@ -1811,8 +1812,10 @@ help_ta_perms_groupaddpermnode: 'Add a node to a group.'
 help_ta_perms_groupremovepermnode: 'Remove a node from a group.'
 help_ta_perms_townrankadd: 'Adds a townrank to the townyperms file.'
 help_ta_perms_townrankremove: 'Removes a townrank from the townyperms file.'
+help_ta_perms_townrankrename: 'Renames a townrank in the townyperms file'
 help_ta_perms_nationrankadd: 'Adds a nationrank to the townyperms file.'
 help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
+help_ta_perms_nationrankrename: 'Renames a nationrank in the townyperms file'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'
 
 #Added in 0.115
