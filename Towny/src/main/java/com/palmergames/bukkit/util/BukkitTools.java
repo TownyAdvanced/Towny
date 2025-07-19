@@ -34,8 +34,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -345,19 +344,21 @@ public class BukkitTools {
 		return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
 	}
 
+	/**
+	 * @deprecated Use {@link Server#getCommandMap()} instead.
+	 */
+	@Deprecated
 	public static @NotNull CommandMap getCommandMap() throws ReflectiveOperationException {
-		try {
-			// https://jd.papermc.io/paper/1.20/org/bukkit/Server.html#getCommandMap()
-			final Method commandMapGetter = getServer().getClass().getMethod("getCommandMap");
-
-			return (CommandMap) commandMapGetter.invoke(getServer());
-		} catch (ReflectiveOperationException e) {
-			// Fallback to attempting to get the field directly when not on paper
-			final Field bukkitCommandMap = getServer().getClass().getDeclaredField("commandMap");
-
-			bukkitCommandMap.setAccessible(true);
-			return (CommandMap) bukkitCommandMap.get(getServer());
+		return getServer().getCommandMap();
+	}
+	
+	public static CompletableFuture<Location> getRespawnLocation(final Player player) {
+		final Location potentialLocation = player.getRespawnLocation(false);
+		if (potentialLocation == null) {
+			return CompletableFuture.completedFuture(null);
 		}
+
+		return potentialLocation.getWorld().getChunkAtAsync(potentialLocation).thenApply(chunk -> player.getRespawnLocation(true));
 	}
 	
 	@ApiStatus.Internal
