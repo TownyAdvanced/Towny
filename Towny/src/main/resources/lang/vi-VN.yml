@@ -413,7 +413,6 @@ msg_you_paid_plottax_to_town: '&bBạn đã trả tổng số tiền thuế đ�
 msg_bankrupt_town: ' không đủ khả năng để duy trì một thị trấn.'
 msg_bankrupt_nation: ' không đủ khả năng để duy trì một quốc gia.'
 msg_nation_not_peaceful: '&bQuốc gia không thể có được trạng thái yên bình.'
-msg_nation_cant_peaceful: '&bQuốc gia không đủ khả năng để trở thành một quốc gia tốt đẹp. Bạn phải có khả năng trả % hàng ngày.'
 msg_peaceful_disabled: '&bChế độ yên bình bị vô hiệu hóa trên toàn cầu.'
 msg_you_paid: '&bBạn đã thanh toán %s để đặt trạng thái yên bình.'
 msg_nation_set_peace: '&bĐã thay đổi thành công trạng thái của quốc gia.'
