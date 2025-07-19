@@ -823,7 +823,14 @@ public class Towny extends JavaPlugin {
 		
 		metrics.addCustomChart(new SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
 		
-		metrics.addCustomChart(new SimplePie("server_type", () -> ServerBuildInfo.buildInfo().brandName()));
+		// Determine the server name/brand, i.e. "Paper"
+		String serverBrand = getServer().getName();
+		try {
+			serverBrand = ServerBuildInfo.buildInfo().brandName();
+		} catch (NoClassDefFoundError ignored) {}
+
+		final String finalBrand = serverBrand;
+		metrics.addCustomChart(new SimplePie("server_type", () -> finalBrand));
 
 		metrics.addCustomChart(new SimplePie("nation_zones_enabled", () -> TownySettings.getNationZonesEnabled() ? "true" : "false"));
 		
