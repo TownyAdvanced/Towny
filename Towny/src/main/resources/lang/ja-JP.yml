@@ -18,9 +18,9 @@ help_7: '土地コマンドのヘルプ'
 help_8: 'Townyコマンドのヘルプ'
 help_9: 'Towny管理者コマンドのヘルプ'
 towny_help_0: "Townyの汎用ヘルプ"
-towny_help_1: "近くの町の地図を表示します。"
-towny_help_2: "エコノミーで使用されている価格を表示します。"
-towny_help_3: "ハイスコアを表示"
+towny_help_1: "あなたの周辺の土地情報を表示します"
+towny_help_2: "エコノミーで使用されている価格を表示する"
+towny_help_3: "ハイスコアを表示する"
 towny_help_4: "新日までの時間を表示"
 towny_help_5: "統計情報を表示"
 towny_help_6: "Townyのバージョンを表示"
@@ -51,25 +51,25 @@ town_help_23: "住民の町でのランクを変更するために使用する�
 town_help_24: "町を削除するために使用する。"
 town_help_25: "町の無法者を変更するために使用する。"
 town_help_26: "全ての町の一覧を表示するには、/t list ? を参照してください。"
-town_help_27: "自分が所属している町を抜ける"
+town_help_27: "自分が所属している町を抜ける。"
 town_help_28: "町の金庫から資金を引き出す。"
-town_help_29: "/t claim ? で拡張関連のヘルプを参照する。"
+town_help_29: "/t claim ? で拡張関連のヘルプを表示する。"
 town_help_30: "町の土地から撤退(所有権の解除)をするために使用する。"
 town_help_31: "住民を追加/削除する。"
-town_help_32: "/t set ? を使用して、ヘルプを参照してください。"
-town_help_33: "/t buy ? を使用して、ヘルプを参照してください。"
-town_help_34: "/t toggle ? を使用して、ヘルプを参照してください。"
-town_help_35: "/t rank ? を使用して、ヘルプを参照してください。"
+town_help_32: "/t set ? を使用して、ヘルプを表示する。"
+town_help_33: "/t buy ? を使用して、ヘルプを表示する。"
+town_help_34: "/t toggle ? を使用して、ヘルプを表示する。"
+town_help_35: "/t rank ? を使用して、ヘルプを表示する。"
 town_list_help_0: "指定されたページを表示"
-town_list_help_1: "指定されたページに住民の数順に町を表示"
-town_list_help_2: "指定されたページに公開している町の一覧を表示します。"
-town_list_help_3: "指定されたページに銀行残高順に町の一覧を表示します。"
-town_list_help_4: "指定されたページにアルファベット順で町の一覧を表示します。"
-town_list_help_5: "指定されたページに所有地順で町の一覧を表示します。"
-town_list_help_6: "指定されたページにオンラインの住民数順で町の一覧を表示します。"
-town_set_help_0: "掲示板を設定する。"
-town_set_help_1: "あなたの町のホームブロックを現在地に設定"
-town_set_help_2: "ホームブロックまたはアウトポスト内のスポーン地点を設定。"
+town_list_help_1: "指定されたページに住民の数順に町を表示する。"
+town_list_help_2: "指定されたページに公開している町の一覧を表示する。"
+town_list_help_3: "指定されたページに銀行残高順に町の一覧を表示する。"
+town_list_help_4: "指定されたページにアルファベット順で町の一覧を表示する。"
+town_list_help_5: "指定されたページに所有地順で町の一覧を表示する。"
+town_list_help_6: "指定されたページにオンラインの住民数順で町の一覧を表示する。"
+town_set_help_0: "町の掲示板を設定する。"
+town_set_help_1: "あなたの町の本拠地を現在地に設定する。"
+town_set_help_2: "本拠地またはアウトポスト内のスポーン地点を現在地に設定する。"
 town_set_help_3: "詳細は「/town set perm ?」を見てください。"
 town_set_help_4: "町の税金額を設定する。"
 town_set_help_5: "土地ごとの特別な地税を設定する。"
@@ -81,17 +81,17 @@ town_set_help_10: "住民の称号や姓を設定する。"
 town_set_help_11: "住民からの税率の最大額を設定する。"
 town_jail_help_0: "町の刑務所の一覧を表示する。"
 town_jail_help_1: "牢獄に住民を投獄する。"
-town_jail_help_2: "指定された時間の間、主刑務所に住民を投獄します"
-town_jail_help_3: "特定の時間の間、住民を主刑務所の特定の刑務所に投獄します"
-town_jail_help_4: "特定の時間の間、住民を主刑務所の特定の刑務所の特定の独房に投獄します"
-town_jail_help_5: "定められた寄託の金額で住民を特定の時間の間主刑務所に投獄します"
-town_jail_help_6: "定められた寄託の金額で住民を特定の時間の間主刑務所の特定の刑務所に投獄します"
-town_jail_help_7: "定められた寄託の金額で住民を特定の時間の間主刑務所の特定の刑務所の特定の独房に投獄します"
+town_jail_help_2: "指定した時間の間、主要な牢獄に住民を投獄する。"
+town_jail_help_3: "指定した期間と刑務所に、住民を投獄する。"
+town_jail_help_4: "指定した期間/牢獄/牢屋に、住民を投獄する。"
+town_jail_help_5: "指定した期間と保釈金で、住民を主要な牢獄に投獄する。"
+town_jail_help_6: "指定した期間と保釈金で、住民を指定した牢獄に投獄する。"
+town_jail_help_7: "指定した期間と保釈金の元、住民を投獄する。"
 town_jail_help_8: "住民を釈放する。"
 town_purge_help: "一定日数ログインしていない住民を粛清する。"
-town_trust_help_0: "住民を町の信頼できる人物として追加します。"
-town_trust_help_1: "住民を町の信頼できる人物として削除します。"
-town_trust_help_2: "町の信頼できる住民の一覧を表示"
+town_trust_help_0: "町の住民にトラストを付与します。"
+town_trust_help_1: "町の住民にトラストをはく奪します。"
+town_trust_help_2: "トラストを持っている住民の一覧。"
 town_towntrust_help_0: "町を信頼できる町として追加します。"
 town_towntrust_help_1: "町を信頼できる町として削除します。"
 town_towntrust_help_2: "町の信頼できる町の一覧を表示"
@@ -722,7 +722,7 @@ msg_err_invalid_radius_number: '&c半径が無効です。%s以下を使用し�
 #Added in 0.34
 msg_err_max_residents_per_town_reached: '&c住民の数が最大数 (%s) に達しています。'
 #Added in 0.35
-msg_err_resident_doesnt_meet_invite_cooldown: '&cプレイヤー %s ははまだサーバーに入ってから時間が経っていません。町に招待するのはしばらくお待ちください。'
+msg_err_resident_doesnt_meet_invite_cooldown: '&cプレイヤー %s はまだサーバーに入ってから時間が経っていません。町に招待するのはしばらくお待ちください。'
 msg_cant_toggle_pvp_outsider_in_town: 'あなたの町には部外者がいます。pvpのステータスは変更できません！'
 msg_err_unclaim_not_outpost: 'このプロットはアウトポストではありません！'
 outpost_plu: '前哨基地'
@@ -771,12 +771,12 @@ msg_player_denied_all_invites: "すべての招待が拒否されました。"
 msg_err_player_no_invites: '&c招待がありません。'
 msg_err_player_has_multiple_invites: '&c複数の招待がある場合は、指定してください。'
 msg_err_player_has_too_many_invites: '%sは招待が多すぎるため、しばらくしてから再度、送信してください。'
-msg_err_player_already_invited: '&bあなたはすでに%sに招待を送信しています。'
+msg_err_player_already_invited: '&bあなたはすでに町「%s」に招待を送信しています！'
 msg_err_town_no_invites: '&b招待がありません。'
 msg_err_town_specify_invite: '&c招待を指定してください。'
 msg_err_town_has_too_many_invites: '&b%sは招待が多すぎるため、しばらくしてから再度、送信してください。'
 msg_err_town_sent_too_many_invites: '&b送信した招待が多すぎます。送信する前にいくつかの招待を削除してください。'
-msg_err_town_already_invited: '&bあなたはすでに%sに招待を送信しています。'
+msg_err_town_already_invited: '&bあなたはすでに国家「%s」に招待を送信しています！'
 msg_err_nation_specify_invite: '&cリクエストを指定してください。'
 msg_err_nation_no_requests: '&b同盟国からの要請はありません。'
 msg_err_nation_sent_too_many_invites: '&b送信した招待が多すぎます。送信する前にいくつかの招待を削除してください。'
@@ -795,14 +795,14 @@ nation_received_requests: '&国は%a/%m 同盟のリクエストを受けてい�
 nation_sent_invites: '&b%a/%mの招待を受け取りました。'
 nation_sent_ally_requests: '&b%a/%mの招待を受け取りました。'
 no_confirmations_open: '&c確認するものがありません！'
-successful_cancel: '&cキャンセルされました。'
+successful_cancel: '&c行動がキャンセルされました。'
 successful_deny: '&b招待は拒否されました。'
 successful_deny_request: '&bリクエストは拒否されました。'
 msg_ally_removed_successfully: '&bとの同盟の削除に成功しました。'
 town_deleted_by_admin: '&b%sが削除されました。'
 nation_deleted_by_admin: '&b%sが削除されました。'
 are_you_sure_you_want_to_continue: '本当に続行しますか？'
-you_have_been_invited_to_join: '招待されています。 '
+you_have_been_invited_to_join: '町に招待されました： '
 you_have_been_requested_to_ally: '同盟するよう要求されました。 '
 this_message_will_expire: '20秒後に自動で削除されます。'
 player_sing: 'プレイヤー'
@@ -1125,7 +1125,7 @@ msg_neutral_towns: '中立の町'
 msg_err_no_nation_with_that_name: '%sという国はありません。'
 msg_err_cannot_unclaim_homeblock: 'ホームブロックを解除することはできません。 /town set homeblock を使用してホームブロックを移動してください。'
 #Added in 0.65
-msg_err_rename_cancelled: '他のプラグインの影響で名前の変更がキャンセルされました。'
+msg_err_rename_cancelled: '他のプラグインの影響で改名がキャンセルされました。'
 #Added in 0.66
 #Added in 0.67
 msg_conquered: '&4(占領中)'
@@ -1397,7 +1397,7 @@ msg_regenerations_use_x_in_all_worlds: '再生はすべてのワールドで%s�
 msg_command_outsider_blocked: '%sに住んでいないため、そのコマンドを実行することはできません。'
 #Added in 0.107
 msg_jailed_for_x_hours: ' %s時間'
-msg_err_this_jail_has_no_cells: 'この牢屋には独房がありません。'
+msg_err_this_jail_has_no_cells: 'この牢獄には牢屋がありません。'
 msg_err_no_cell_found_at_this_location: 'この場所に牢屋はありません。'
 msg_jail_cell_set: '牢屋のセルを設定しました。'
 msg_jail_cell_removed: '牢屋のセルを削除しました。'
@@ -1850,7 +1850,7 @@ msg_spawn_cost_free: '無料'
 msg_plot_already_of_type: 'この土地は既に%sタイプです。'
 msg_town_board_reset: '&b掲示板のリセットをする。'
 msg_town_has_no_jailslots: '町の刑務所はいっぱいです。'
-msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s は牢獄 %s、監獄番号#%sに%s時間の間捕らえられました。保釈金は%sで%sによるものです。'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s は牢獄 %s、牢屋番号#%sに%s時間の間捕らえられました。保釈金は%sで%sによるものです。'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s は牢獄 %s、監獄番号#%sに%s時間の間%sの元で捕らえられました。'
 msg_you_have_been_jailed_your_bail_is_x: 'あなたは投獄されました。保釈金は%sです。'
 msg_err_higher_than_max_allowed_bail_x: 'あなたの保釈金は上限の%s以上に設定されました。'
