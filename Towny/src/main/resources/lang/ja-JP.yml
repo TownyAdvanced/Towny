@@ -17,7 +17,7 @@ help_6: '国コマンドのヘルプ'
 help_7: '土地コマンドのヘルプ'
 help_8: 'Townyコマンドのヘルプ'
 help_9: 'Towny管理者コマンドのヘルプ'
-towny_help_0: "一般的なTownyのヘルプ"
+towny_help_0: "Townyの汎用ヘルプ"
 towny_help_1: "近くの町の地図を表示します。"
 towny_help_2: "エコノミーで使用されている価格を表示します。"
 towny_help_3: "ハイスコアを表示"
