@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
 import com.destroystokyo.paper.event.block.BeaconEffectEvent;
-import com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
