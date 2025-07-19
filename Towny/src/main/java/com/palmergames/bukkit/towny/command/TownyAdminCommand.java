@@ -875,6 +875,9 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	
 	private void parseAdminTownyPermsRenameRank(CommandSender sender, String rankType, String oldRank, String newRank) throws TownyException {
 
+		if (!TownyPerms.mapHasGroup(oldRank))
+			throw new TownyException(Translatable.of("msg_err_there_is_no_town_or_nationrank_called_x", rankType, oldRank));
+		
 		parseAdminTownypermsAddRank(sender, rankType, newRank, false);
 		
 		// rankType will equal "townrank" or "nationrank"
