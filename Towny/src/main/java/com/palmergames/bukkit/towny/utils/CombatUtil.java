@@ -35,12 +35,8 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 /**
@@ -88,7 +84,7 @@ public class CombatUtil {
 					return true;
 			}
 		} else if (attacker instanceof LightningStrike lightning) {
-			final Entity causingEntity = getLightningCausingEntity(lightning);
+			final Entity causingEntity = lightning.getCausingEntity();
 			if (causingEntity != null)
 				directSource = causingEntity;
 		}
@@ -723,31 +719,6 @@ public class CombatUtil {
 
 	private static boolean isNotNPC(Entity entity) {
 		return !PluginIntegrations.getInstance().isNPC(entity);
-	}
-	
-	private static final @Nullable MethodHandle GET_LIGHTNING_CAUSING_ENTITY;
-	
-	static {
-		MethodHandle temp = null;
-		try {
-			// https://jd.papermc.io/paper/1.20/org/bukkit/entity/LightningStrike.html#getCausingEntity()
-			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(LightningStrike.class.getMethod("getCausingEntity"));
-		} catch (Throwable ignored) {}
-		
-		GET_LIGHTNING_CAUSING_ENTITY = temp;
-	}
-	
-	@ApiStatus.Internal
-	public static @Nullable Entity getLightningCausingEntity(@NotNull LightningStrike lightning) {
-		if (GET_LIGHTNING_CAUSING_ENTITY == null)
-			return null;
-		
-		try {
-			return (Entity) GET_LIGHTNING_CAUSING_ENTITY.invokeExact(lightning);
-		} catch (Throwable thr) {
-			return null;
-		}
 	}
 
 	private static boolean isTownyAdminBypassingPVP(Player attackingPlayer) {

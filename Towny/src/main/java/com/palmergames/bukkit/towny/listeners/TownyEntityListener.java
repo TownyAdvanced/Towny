@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.listeners;
 
+import com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.palmergames.bukkit.towny.Towny;
@@ -251,20 +252,15 @@ public class TownyEntityListener implements Listener {
 
 	/**
 	 * Removes dragon fireball AreaEffectClouds when they would spawn somewhere with PVP disabled.
-	 * 
-	 * @param event AreaEffectCloudApplyEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onDragonFireBallCloudDamage(AreaEffectCloudApplyEvent event) {
+	public void onDragonFireBallCloudDamage(EnderDragonFireballHitEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
 		
-		if (TownyPaperEvents.DRAGON_FIREBALL_GET_EFFECT_CLOUD != null || !(event.getEntity().getSource() instanceof DragonFireball))
-			return;
-
-		if (discardAreaEffectCloud(event.getEntity())) {
+		if (discardAreaEffectCloud(event.getAreaEffectCloud())) {
 			event.setCancelled(true);
 			event.getEntity().remove();
 		}
@@ -693,7 +689,7 @@ public class TownyEntityListener implements Listener {
 			}
 		} else if (combuster instanceof LightningStrike lightning) {
 			// Protect entities from being lit on fire by player caused lightning
-			if (CombatUtil.getLightningCausingEntity(lightning) instanceof Player player && CombatUtil.preventDamageCall(player, defender, DamageCause.LIGHTNING))
+			if (lightning.getCausingEntity() instanceof Player player && CombatUtil.preventDamageCall(player, defender, DamageCause.LIGHTNING))
 				event.setCancelled(true);
 		}
 	}
