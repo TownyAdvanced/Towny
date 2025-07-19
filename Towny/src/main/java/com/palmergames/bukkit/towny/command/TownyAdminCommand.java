@@ -812,7 +812,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminTownypermsRankCommand(CommandSender sender, String[] args) throws TownyException {
-		//ta townyperms townrank|nationrank addrank|removerank RANKNAME
+		//ta townyperms townrank|nationrank addrank|removerank|renamerank RANKNAME
 		//              ^ args[0]
 		if (args.length == 0 || args[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
@@ -824,7 +824,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			|| (!args[1].equalsIgnoreCase("addrank") && !args[1].equalsIgnoreCase("removerank") && !args[1].equalsIgnoreCase("renamerank"))
 			|| ((args[1].equalsIgnoreCase("addrank") || args[1].equalsIgnoreCase("removerank")) && args.length != 3)
 			|| (args[1].equalsIgnoreCase("renamerank") && args.length != 4))
-			throw new TownyException(Translatable.of("msg_err_expected_command_format", "/ta townyperms townrank|nationrank addrank|removerank [rank]"));
+			throw new TownyException(Translatable.of("msg_err_expected_command_format", "/ta townyperms townrank|nationrank addrank|removerank|renamerank [rank]"));
 
 		if (args[1].equalsIgnoreCase("addrank"))
 			parseAdminTownypermsAddRank(sender, args[0], args[2], true);
