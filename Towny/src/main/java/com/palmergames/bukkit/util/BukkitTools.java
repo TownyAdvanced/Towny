@@ -32,8 +32,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,7 +54,6 @@ public class BukkitTools {
 
 	@SuppressWarnings("unused")
 	private static Towny plugin = null;
-	private static final MethodHandle GET_OFFLINE_PLAYER_CACHED;
 	
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
@@ -240,14 +237,7 @@ public class BukkitTools {
 	
 	@Nullable
 	public static OfflinePlayer getOfflinePlayerIfCached(@NotNull String name) {
-		if (GET_OFFLINE_PLAYER_CACHED == null)
-			return null;
-		
-		try {
-			return (OfflinePlayer) GET_OFFLINE_PLAYER_CACHED.invokeExact(getServer(), name);
-		} catch (Throwable thr) {
-			return null;
-		}
+		return getServer().getOfflinePlayerIfCached(name);
 	}
 	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
@@ -369,15 +359,5 @@ public class BukkitTools {
 			set.add(keyAsString(keyed.getKey()));
 		
 		return set;
-	}
-	
-	static {
-		MethodHandle temp = null;
-		try {
-			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(Server.class.getMethod("getOfflinePlayerIfCached", String.class));
-		} catch (ReflectiveOperationException ignored) {}
-		
-		GET_OFFLINE_PLAYER_CACHED = temp;
 	}
 }
