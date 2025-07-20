@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
-* fires when town pay positive/negative upkeep charge
+* fires when nation pay positive/negative upkeep charge
 * */
 public class NationUpkeepCharge extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
