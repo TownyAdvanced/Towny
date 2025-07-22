@@ -218,6 +218,7 @@ townyadmin_help_1: 'Vzdej se této parcely'
 townyadmin_help_2: 'Pokus se vzdát se parcel kolem sebe.'
 admin_panel_2: 'znovu načíst Towny'
 admin_panel_3: 'Spusť kód pro nový den'
+admin_panel_11: "Resetovat vaše nastavení"
 townyadmin_town_help_1: "Prohlídni si status města."
 townyadmin_town_help_3: "Přejmenovat město."
 townyadmin_town_help_4: "Odstranit město."
