@@ -10365,3 +10365,5 @@ v0.92.0.11:
     - Closes #7875.
 0.101.2.0:
   - Bump version for release.
+0.101.2.1:
+  - Send the eco prefix with rename calls to VaultUnlocked, courtesy of creatorfromhell with PR #7878.
