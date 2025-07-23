@@ -80,15 +80,7 @@ public class TownPreUnclaimEvent extends CancellableTownyEvent {
 		 * @see #isUpkeep() 
 		 */
 		DELETE;
-		
-		public boolean isCommand() {
-			return this == COMMAND;
-		}
 
-		public boolean isDeleted() {
-			return this == DELETE;
-		}
-		
 		@ApiStatus.Internal
 		public boolean ignoresPreEvent() {
 			return this == DELETE;
