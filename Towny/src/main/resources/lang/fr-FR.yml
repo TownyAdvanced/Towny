@@ -1873,7 +1873,22 @@ msg_perm_gui_folia: "Ce bouton ne marche actuellement pas sur Folia a cause du d
 #Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>Le monde n'est pas chargé."
 status_forsale: "&a(En vente: %s)"
+msg_town_forsale: "%s a été mis en vente sur %s."
 msg_town_notforsale: "%s n'est plus à vendre."
+msg_town_buytown_already_mayor: "Vous êtes déjà le maire de %s."
+msg_town_buytown_not_forsale: "La ville n'est pas en vente."
+teleport_warmup_title_dont_move: "&6Ne bougez plus!"
+msg_town_cede_plot_confirmation_give_plot: "Êtes-vous sûr de vouloir donner à %s cette parcelle?"
+msg_town_cede_plot_denied: "%s a refusé votre offre."
+msg_town_cede_plot_unable_to_accept: "%s n'a pas pu accepter votre offre."
+msg_err_you_already_own_this_plot: "Vous possédez déjà cette parcelle."
+msg_err_you_cannot_delete_this_nation: "Vous avez été empêché de supprimer cette nation."
+msg_district_renamed_from_x_to_y: 'Le district %s a été renommé en %s.'
+msg_err_plot_not_associated_with_a_district: 'Cette parcelle n''est pas associée à un district.'
+msg_plot_was_removed_from_district_x: 'La parcelle <blue>(%s,%s) <dark_green>a été supprimé du district %s.'
+msg_district_deleted: 'Le district %s a été supprimé.'
+map_hover_district: 'District:'
+msg_err_you_cannot_join_town_you_have_not_played_long_enough: "Vous n'avez pas été suffisamment longtemps sur le serveur, vous devez attendre une autre %s avant de pouvoir rejoindre une ville."
 msg_admin_eco_convert_success: "Conversion réussie de l'économie"
 msg_err_mode_does_not_exist: "Le mode %s n'est pas reconnue."
 msg_err_not_allowed_to_switch: "Vous n'avez pas le droit de commuter ici."
