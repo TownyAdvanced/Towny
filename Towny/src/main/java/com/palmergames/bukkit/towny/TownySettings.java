@@ -3932,5 +3932,9 @@ public class TownySettings {
 	public static double maxBuyTownPrice() {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
 	}
+
+	public static boolean isWorldJailingEnabled() {
+		return getBoolean(ConfigNodes.NWS_JAILING_ENABLE);
+	}
 }
 
