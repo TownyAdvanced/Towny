@@ -735,6 +735,8 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.eco.depositall: true
+            towny.command.townyadmin.eco.depositalltowns: true
+            towny.command.townyadmin.eco.depositallnations: true
             towny.command.townyadmin.eco.resetbanks: true
             towny.command.townyadmin.eco.convert: true
             towny.command.townyadmin.eco.info: true

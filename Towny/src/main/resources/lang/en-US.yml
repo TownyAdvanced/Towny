@@ -430,6 +430,8 @@ ta_eco_convert_modern_help: "Converts your Towny accounts into our modern variet
 ta_eco_convert_help: "Converts your Towny accounts to the target economy implementation, useful for transferring data between economy plugins."
 ta_eco_info_help: "Gives information about economy accounts on the server."
 ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
+ta_depositall_help_1: "Deposit the given amount into all town banks."
+ta_depositall_help_2: "Deposit the given amount into all nation banks."
 
 ta_info_help_0: "View eco info for the given nation."
 ta_info_help_1: "View eco info for the given resident."
@@ -1401,6 +1403,8 @@ msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these co
 msg_confirm_purchase: 'Doing this will cost %s. Continue?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
 msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and towns'' banks.'
+msg_ta_deposit_all_towns_success: 'Successfully deposited %s to all towns'' banks.'
+msg_ta_deposit_all_nations_success: 'Successfully deposited %s to all nations'' banks.'
 bonus_townblocks: 'bonus townblocks'
 
 # Added in 0.80

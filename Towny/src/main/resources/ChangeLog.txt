@@ -10367,3 +10367,11 @@ v0.92.0.11:
   - Bump version for release.
 0.101.2.1:
   - Send the eco prefix with rename calls to VaultUnlocked, courtesy of creatorfromhell with PR #7878.
+  - New Command: /ta eco depositalltowns [amount]
+    - Deposits money to all towns.
+  - New Command: /ta eco depositallnations [amount]
+    - Deposits money to all nations.
+  - New Permission Node: towny.command.townyadmin.eco.depositalltowns
+    - Child Node of towny.command.townyadmin.eco.*.
+  - New Permission Node: towny.command.townyadmin.eco.depositallnations
+    - Child Node of towny.command.townyadmin.eco.*.
