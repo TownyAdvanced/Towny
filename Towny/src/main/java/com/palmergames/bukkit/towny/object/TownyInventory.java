@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.key.Key;
@@ -31,7 +30,7 @@ public class TownyInventory implements InventoryHolder {
 	}
 	
 	public void playClickSound(Player player) {
-		Towny.getAdventure().player(player).playSound(clickSound);
+		player.playSound(clickSound);
 	}
 	
 	public void tryPaginate(ItemStack clickedItem, Player player, Resident resident, InventoryView inventoryView) {
