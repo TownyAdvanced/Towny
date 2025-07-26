@@ -437,7 +437,6 @@ msg_you_couldnt_pay_town_tax: '&bNo pudiste pagar el impuesto de la ciudad de %s
 msg_bankrupt_town: ' no tuvo el dinero para seguir siendo una ciudad.'
 msg_bankrupt_nation: ' no tuvo el dinero para seguir siendo una nación.'
 msg_nation_not_peaceful: '&bLa nación no tuvo el dinero para mantenerse como pacífica.'
-msg_nation_cant_peaceful: '&bLa nación no tuvo el dinero para convertirse en pacífica. Debes poder pagar % a diario.'
 msg_peaceful_disabled: '&bLa paz entre naciones está desactivada globalmente.'
 msg_you_paid: '&bPagaste %s para establecer el estado de pacífico.'
 msg_nation_set_peace: '&bSe cambió el estado de la nación.'
