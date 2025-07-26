@@ -1059,6 +1059,7 @@ public class TownyFormatter {
 			webUrl = TownySettings.getWebMapUrl()
 				.replaceAll("\\{world}", getWorldSlugForMapURL(spawnLocation.getSpawnOrNull().getWorld()))
 				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
+				.replaceAll("\\{y}", "" + spawnLocation.getSpawnOrNull().getBlockZ()) // Enough people use {y} that we had to do something about it.
 				.replaceAll("\\{z}", "" + spawnLocation.getSpawnOrNull().getBlockZ());
 
 		return webUrl;

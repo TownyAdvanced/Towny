@@ -10375,3 +10375,4 @@ v0.92.0.11:
     - Child Node of towny.command.townyadmin.eco.*.
   - New Permission Node: towny.command.townyadmin.eco.depositallnations
     - Child Node of towny.command.townyadmin.eco.*.
+  - Idiot-proof the webmap URL.
