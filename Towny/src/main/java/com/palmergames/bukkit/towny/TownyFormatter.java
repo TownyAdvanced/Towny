@@ -1059,7 +1059,10 @@ public class TownyFormatter {
 			webUrl = TownySettings.getWebMapUrl()
 				.replaceAll("\\{world}", getWorldSlugForMapURL(spawnLocation.getSpawnOrNull().getWorld()))
 				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
-				.replaceAll("\\{y}", "" + spawnLocation.getSpawnOrNull().getBlockZ()) // Enough people use {y} that we had to do something about it.
+				.replaceAll("\\{y}", "" + (TownySettings.getWebMapUrl().contains("\\{z}")
+					? spawnLocation.getSpawnOrNull().getBlockY()
+					: spawnLocation.getSpawnOrNull().getBlockZ())) // Enough people use {y} that we had to do something about it.
+				//TODO: Make up a regex that cleans out any invalid placeholders.
 				.replaceAll("\\{z}", "" + spawnLocation.getSpawnOrNull().getBlockZ());
 
 		return webUrl;
