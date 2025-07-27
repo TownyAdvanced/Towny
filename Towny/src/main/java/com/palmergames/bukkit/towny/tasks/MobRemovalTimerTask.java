@@ -207,8 +207,15 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		final Set<EntityType> types = new HashSet<>();
 
 		for (final EntityType entityType : Registry.ENTITY_TYPE) {
-			if (entityType.getEntityClass() != null && EntityTypeUtil.isInstanceOfAny(classes, entityType.getEntityClass())) {
-				types.add(entityType);
+			if (entityType.getEntityClass() == null) {
+				continue;
+			}
+			
+			for (final Class<?> clazz : classes) {
+				if (clazz.isAssignableFrom(entityType.getEntityClass())) {
+					types.add(entityType);
+					break;
+				}
 			}
 		}
 
