@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.google.common.collect.Lists;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -1943,7 +1942,7 @@ public class Town extends Government implements TownBlockOwner {
 	
 	@Override
 	public @NotNull Iterable<? extends Audience> audiences() {
-		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());
+		return TownyAPI.getInstance().getOnlinePlayers(this);
 	}
 
 	@ApiStatus.Internal
