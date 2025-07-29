@@ -92,7 +92,6 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.metadata.MetadataValue;
 
 import java.lang.invoke.MethodHandle;
 import java.util.Arrays;
@@ -184,8 +183,12 @@ public class TownyPlayerListener implements Listener {
 		
 		if (resident != null) {
 			// Don't set last online if the player was vanished.
-			if (!event.getPlayer().getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean))
+			if (!BukkitTools.hasVanishedMeta(event.getPlayer()))
 				resident.setLastOnline(System.currentTimeMillis());
+
+			resident.setGUIPageNum(0);
+			resident.setGUIPages(null);
+
 			resident.clearModes(false);
 			resident.save();
 
