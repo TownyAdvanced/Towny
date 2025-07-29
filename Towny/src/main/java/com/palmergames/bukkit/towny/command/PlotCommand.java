@@ -129,6 +129,23 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		"rename",
 		"trust"
 	);
+
+	private static final List<String> plotGroupToggleTabCompletes = Arrays.asList(
+		"add",
+		"new",
+		"create",
+		"delete",
+		"fs",
+		"forsale",
+		"nfs",
+		"notforsale",
+		"perm",
+		"remove",
+		"rename",
+		"set",
+		"toggle",
+		"trust"
+	);
 	
 	private static final List<String> districtTabCompletes = Arrays.asList(
 		"add",
@@ -288,6 +305,9 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(Arrays.asList("add", "remove", "gui"), args[2]);
 							if (args.length == 4)
 								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+						case "toggle":
+							if (args.length == 3)
+								return NameUtil.filterByStart(plotGroupToggleTabCompletes, args[2]);
 						default:
 							return Collections.emptyList();
 					}
