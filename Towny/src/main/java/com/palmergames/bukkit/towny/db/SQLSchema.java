@@ -326,6 +326,7 @@ public class SQLSchema {
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
 		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
 		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`jailing` bool NOT NULL DEFAULT '1'");
 		return columns;
 	}
 

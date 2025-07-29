@@ -341,6 +341,12 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# Do new worlds disable creatures trampling crops, by default?"),
+	NWS_JAILING_ENABLE(
+			"new_world_settings.jailing_enabled",
+			"true",
+			"",
+			"# This section is applied to new worlds as default settings when new worlds are detected.",
+			"# Whether to allow players in this world to be jailed or not"),
 	NWS_PLOT_MANAGEMENT_HEADER(
 			"new_world_settings.plot_management",
 			"",

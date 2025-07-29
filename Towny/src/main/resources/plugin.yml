@@ -902,6 +902,7 @@ permissions:
             towny.command.townyworld.toggle.forcefire: true
             towny.command.townyworld.toggle.forcepvp: true
             towny.command.townyworld.toggle.friendlyfire: true
+            towny.command.townyworld.toggle.jailing: true
             towny.command.townyworld.toggle.plotcleardelete: true
             towny.command.townyworld.toggle.pvp: true
             towny.command.townyworld.toggle.revertunclaim: true

@@ -1604,6 +1604,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 
+				line = keys.get("jailing");
+				if (line != null)
+					try {
+						world.setJailingEnabled(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					MetadataLoader.getInstance().deserializeMetadata(world, line.trim());
@@ -2450,6 +2457,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# This setting is used to enable or disable Event war in this world.");
 		list.add("warAllowed=" + world.isWarAllowed());
 
+		// jailing
+		list.add("jailing=" + world.isJailingEnabled());		
+		
 		// Metadata
 		list.add("");
 		list.add("metadata=" + serializeMetadata(world));

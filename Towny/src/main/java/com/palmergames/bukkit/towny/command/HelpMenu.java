@@ -526,7 +526,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 
@@ -545,7 +546,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 	

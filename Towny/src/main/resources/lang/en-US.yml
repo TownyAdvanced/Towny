@@ -302,6 +302,7 @@ world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world.
 world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
 world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
 world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 
 
 townyadmin_help_1: 'Unclaim this town block'
@@ -2249,6 +2250,7 @@ msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released a
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
 msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
 msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_err_x_in_unjailable_world: '%s is in a world that they cannot be jailed from.'
 
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
@@ -2646,3 +2648,5 @@ msg_err_you_cannot_add_trust_on_enemy: "You cannot trust a player who is part of
 msg_err_you_cannot_add_towntrust_on_outlaw: "You cannot trust a town who has residents which are outlawed by your town."
 
 msg_err_you_cannot_add_towntrust_on_enemy: "You cannot trust a town who is part of an enemy nation."
+
+status_world_jailing: "Jailing: "

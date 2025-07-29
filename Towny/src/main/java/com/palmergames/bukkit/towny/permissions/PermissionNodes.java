@@ -450,6 +450,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMBLOCKDELETE("towny.command.townyworld.toggle.unclaimblockdelete"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_UNCLAIMENTITYDELETE("towny.command.townyworld.toggle.unclaimentitydelete"),
 		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_WILDERNESSUSE("towny.command.townyworld.toggle.wildernessuse"),
+		TOWNY_COMMAND_TOWNYWORLD_TOGGLE_JAILING("towny.command.townyworld.toggle.jailing"),
 
 	/*
 	 * Towns Spawning Nodes.
