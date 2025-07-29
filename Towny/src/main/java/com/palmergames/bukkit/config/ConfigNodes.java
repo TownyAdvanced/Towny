@@ -1621,6 +1621,13 @@ public enum ConfigNodes {
 		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name.",
 		"# This should be enabled if you use SquareMap."
 	),
+
+	PLUGIN_WEB_MAP_SHOW_LINK_FOR_NONPUBLIC_TOWNS(
+		"plugin.interfacing.web_map.non_public_towns_show_map_link",
+		"false",
+		"",
+		"# If enabled, non-public towns will show a link to their map location in the town status screen."
+	),
 	
 	PLUGIN_WEB_MAP_URL(
 			"plugin.interfacing.web_map.url",
