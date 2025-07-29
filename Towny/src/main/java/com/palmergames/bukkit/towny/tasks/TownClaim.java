@@ -7,6 +7,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Town;
@@ -303,7 +304,8 @@ public class TownClaim implements Runnable {
 	 * @param townBlock TownBlock to remove from the database.
 	 */
 	private void unclaimTownBlock(TownBlock townBlock) {
-		plugin.getScheduler().runLater(() -> TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock), 1);
+		TownPreUnclaimEvent.Cause cause = forced ? TownPreUnclaimEvent.Cause.ADMIN_COMMAND : TownPreUnclaimEvent.Cause.COMMAND;
+		plugin.getScheduler().runLater(() -> TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, cause), 1);
 	}
 
 	private void refundForUnclaim(double unclaimRefund, int numUnclaimed) {
