@@ -414,7 +414,6 @@ msg_you_paid_plottax_to_town: '&bHai pagato un totale di %s in tasse sui plot al
 msg_bankrupt_town: ' non poteva permettersi di rimanere una città.'
 msg_bankrupt_nation: ' non poteva permettersi di rimanere una nazione.'
 msg_nation_not_peaceful: '&bLa nazione non poteva permettersi il suo stato pacifico.'
-msg_nation_cant_peaceful: '&bLa nazione non ha potuto permettersi di diventare pacifica. Devi essere in grado di pagare % quotidianamente.'
 msg_peaceful_disabled: '&bLa pace tra le nazioni è disabilitata globalmente.'
 msg_you_paid: '&bHai pagato %s per impostare uno stato pacifico.'
 msg_nation_set_peace: '&bStato della nazione cambiato con successo.'
