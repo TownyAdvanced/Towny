@@ -10376,3 +10376,26 @@ v0.92.0.11:
   - New Permission Node: towny.command.townyadmin.eco.depositallnations
     - Child Node of towny.command.townyadmin.eco.*.
   - Idiot-proof the webmap URL.
+  - Clear resident gui pages on logout, courtesy of Warrior with PR #7896.
+  - Allow the TownPreUnclaimEvent to no longer be fired when a town is being deleted, allowing Districts to get properly deleted when their town will no longer exist.
+    - Closes #7889.
+  - Precompute mob removal classes to entity types, courtesy of Warrior with PR #7894.
+  - Add renaming Towny ranks, courtesy of SulkyWhale with PR #7884.
+  - New Command: /ta townyperms townrank renamerank [oldrankname] [newrankname]
+    - Renames a town rank to a new name.
+  - New Command: /ta townyperms nationrank renamerank [oldrankname] [newrankname]
+    - Renames a nation rank to a new name.
+  - Always read global.yml for overrides, courtesy of Warrior with PR #7877.
+  - Config option for non-public towns to show map link, courtesy of GoodrichDev with PR #7873.
+    - Allows non-public towns to display a clickable map link in the town status screens, making it easier for players and admins to locate towns on the web map, even if the towns are private.
+    - Closes #7872.
+  - New Config Option: plugin.interfacing.web_map.non_public_towns_show_map_link
+    - Default: false
+    - When true, non-public towns will show a link to their map location in the town status screen.
+  - Add world toggle for jailing, courtesy of squeaky2137 with PR #7863.
+    - Closes #7817.
+  - New Command: /tw toggle jailing
+  - New Permission Node: towny.command.townyworld.toggle.jailing
+  - New Config Option: new_world_settings.plot_management.jailing_enabled
+    - Default: true
+    - Sets the default setting for newly detected worlds.
