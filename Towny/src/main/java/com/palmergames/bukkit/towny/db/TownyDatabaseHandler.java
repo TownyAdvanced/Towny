@@ -345,7 +345,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock, TownPreUnclaimEvent.Cause cause ) {
+	public void removeTownBlock(TownBlock townBlock, TownPreUnclaimEvent.Cause cause) {
 		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			// Log as error because TownBlocks *must* have a town.

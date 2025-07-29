@@ -70,20 +70,26 @@ public class TownPreUnclaimEvent extends CancellableTownyEvent {
 	}
 
 	public enum Cause {
+		/**
+		 * The townblock is being unclaimed for an unknown reason.
+		 */
 		UNKNOWN,
 		/**
-		 * The townblock is being unclaimed for an unknown reason
+		 * The townblock is being unclaimed because of a command.
 		 */
 		COMMAND,
 		/**
+		 * The townblock is being unclaimed because of a command run by an admin.
+		 */
+		ADMIN_COMMAND,
+		/**
 		 * The townblock's town is being deleted.
-		 * @see #isUpkeep() 
 		 */
 		DELETE;
 
 		@ApiStatus.Internal
 		public boolean ignoresPreEvent() {
-			return this == DELETE;
+			return this == DELETE || this == ADMIN_COMMAND;
 		}
 	}
 }

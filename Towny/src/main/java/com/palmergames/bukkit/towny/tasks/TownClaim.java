@@ -304,7 +304,8 @@ public class TownClaim implements Runnable {
 	 * @param townBlock TownBlock to remove from the database.
 	 */
 	private void unclaimTownBlock(TownBlock townBlock) {
-		plugin.getScheduler().runLater(() -> TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, TownPreUnclaimEvent.Cause.COMMAND), 1);
+		TownPreUnclaimEvent.Cause cause = forced ? TownPreUnclaimEvent.Cause.ADMIN_COMMAND : TownPreUnclaimEvent.Cause.COMMAND;
+		plugin.getScheduler().runLater(() -> TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, cause), 1);
 	}
 
 	private void refundForUnclaim(double unclaimRefund, int numUnclaimed) {

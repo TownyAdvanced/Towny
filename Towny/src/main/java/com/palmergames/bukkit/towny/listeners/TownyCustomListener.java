@@ -237,7 +237,7 @@ public class TownyCustomListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onTownUnclaimDistrict(TownPreUnclaimEvent event) {
 		TownBlock townBlock = event.getTownBlock();
-		if (!townBlock.hasDistrict() || event.getCause().ignoresPreEvent())
+		if (!townBlock.hasDistrict())
 			return;
 
 		try {
