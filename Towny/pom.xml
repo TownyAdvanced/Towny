@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.101.2.0</version>
+    <version>0.101.2.1</version>
 
     <licenses>
         <license>
