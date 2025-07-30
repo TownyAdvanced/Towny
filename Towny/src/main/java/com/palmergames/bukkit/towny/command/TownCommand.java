@@ -742,6 +742,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private void townEnemyList(Player player, String[] split) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_ENEMYLIST.getNode());
 		Town town = split.length == 1 ? getTownFromPlayerOrThrow(player) : getTownOrThrow(split[1]);
+
 		if (town.getEnemies().isEmpty())
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_town_has_no_enemies")); 
 		else {
@@ -753,6 +754,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	private void townAllyList(Player player, String[] split) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_ALLYLIST.getNode());
 		Town town = split.length == 1 ? getTownFromPlayerOrThrow(player) : getTownOrThrow(split[1]);
+
 		if (town.getAllies().isEmpty())
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_error_town_has_no_allies")); 
 		else {
