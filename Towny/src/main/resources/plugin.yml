@@ -411,6 +411,7 @@ permissions:
             towny.command.town.unjail: true
             towny.command.town.trust: true
             towny.command.town.trusttown: true
+            towny.command.town.allylist: true
 
     towny.command.town.list:
         description: Users are able to use the default method of sorting the town list.

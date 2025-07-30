@@ -30,6 +30,7 @@ nomad:
     - towny.command.resident.set.about
     - towny.command.resident.jail
     - towny.command.resident.outlawlist
+    - towny.command.town.allylist
 
 towns:
     default:
