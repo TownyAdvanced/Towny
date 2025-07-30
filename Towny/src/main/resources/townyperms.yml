@@ -31,6 +31,7 @@ nomad:
     - towny.command.resident.jail
     - towny.command.resident.outlawlist
     - towny.command.town.allylist
+    - towny.command.town.enemylist
 
 towns:
     default:
