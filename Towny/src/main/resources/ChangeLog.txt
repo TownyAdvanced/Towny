@@ -10399,3 +10399,5 @@ v0.92.0.11:
   - New Config Option: new_world_settings.plot_management.jailing_enabled
     - Default: true
     - Sets the default setting for newly detected worlds.
+0.101.2.2:
+  - Fix Overclaimed Upkeep Penalty not being charged to towns which don't pay any upkeep.
