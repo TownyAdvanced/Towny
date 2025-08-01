@@ -8,14 +8,14 @@ import org.jetbrains.annotations.NotNull;
 
 /**
 * fires when town pay positive/negative upkeep charge
-* */
-public class TownUpkeepCharge extends Event {
+*/
+public class TownUpkeepCostPaidEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Town town;
 	private final double upkeep;
 	private final double upkeepPentlty;
 
-	public TownUpkeepCharge(Town town, double upkeep, double upkeepPentlty) {
+	public TownUpkeepCostPaidEvent(Town town, double upkeep, double upkeepPentlty) {
 		super(!Bukkit.getServer().isPrimaryThread()); // Check if event is async
 		this.town = town;
 		this.upkeep = upkeep;
@@ -24,18 +24,18 @@ public class TownUpkeepCharge extends Event {
 	
 	/**
 	* @return The town for which pay positive/negative upkeep charge 
-	* */
+	*/
 	@NotNull
 	public Town getTown() { return town; }
 
 	/**
 	* @return upkeep charge for this town, may be positive or negative
-	* */
+	*/
 	public double getUpkeep() { return upkeep; }
 	
 	/**
 	* @return upkeepPenalty for this town, may be 0 or above
-	* */
+	*/
 	public double getUpkeepPentlty() { return upkeepPentlty; }
 
 	public static HandlerList getHandlerList() {

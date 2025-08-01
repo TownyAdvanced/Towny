@@ -1,34 +1,34 @@
-package com.palmergames.bukkit.towny.event.nation;
+package com.palmergames.bukkit.towny.event.town;
 
-import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
-* fires when nation pay neutral charge
-* */
-public class NationNeutralCostCharge extends Event {
+* fires when town pay neutral charge
+*/
+public class TownNeutralCostPaidEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
-	private final Nation nation;
+	private final Town town;
 	private final double neutralityCost;
 	
-	public NationNeutralCostCharge(Nation nation, double neutralityCost) {
+	public TownNeutralCostPaidEvent(Town town, double neutralityCost) {
 		super(!Bukkit.getServer().isPrimaryThread()); // Check if event is async
-		this.nation = nation;
+		this.town = town;
 		this.neutralityCost = neutralityCost;
 	}
 
 	/**
-	 * @return The nation for which pay neutral charge
-	 * */
+	 * @return The town for which pay neutral charge
+	 */
 	@NotNull
-	public Nation getNation() { return nation; }
+	public Town getTown() { return town; }
 
 	/**
-	 * @return neutral charge for this nation, only positive value, above 0
-	 * */
+	 * @return neutral charge for this town, only positive value, above 0
+	 */
 	public double getNeutralityCost() { return neutralityCost; }
 
 	public static HandlerList getHandlerList() {
