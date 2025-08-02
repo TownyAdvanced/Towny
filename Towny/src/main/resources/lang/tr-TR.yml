@@ -226,6 +226,7 @@ world_toggle_help_8: "Bu dünyada, talep geri alındığında geri alma özelli�
 world_toggle_help_9: "Patlamaları aç yada kapat."
 world_toggle_help_10: "Bu dünyada plot-clear-deletes-blocks komutunu açıp kapatın."
 world_toggle_help_11: "Bu dünyada plot-unclaiming-deletes-blocks özelliğini açın/kapatın."
+world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 townyadmin_help_1: 'Bu kasaba bloğunun hak talebini kaldır'
 townyadmin_help_2: 'Çevrenizdeki hak talebinden vazgeçmeye çalışın.'
 admin_panel_1: "Yardım için /ta set ? komutunu kullanın"
