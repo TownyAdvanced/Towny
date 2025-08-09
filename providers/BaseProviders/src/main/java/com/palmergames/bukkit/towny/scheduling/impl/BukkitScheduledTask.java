@@ -1,13 +1,15 @@
 package com.palmergames.bukkit.towny.scheduling.impl;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public class BukkitScheduledTask implements ScheduledTask {
-	private final BukkitTask task;
+	private BukkitTask task;
 	private final boolean repeating;
 	
 	public BukkitScheduledTask(final BukkitTask task) {
@@ -18,6 +20,12 @@ public class BukkitScheduledTask implements ScheduledTask {
 	public BukkitScheduledTask(final BukkitTask task, final boolean repeating) {
 		this.task = task;
 		this.repeating = repeating;
+	}
+
+	@ApiStatus.Internal
+	public void setTask(final BukkitTask task) {
+		Preconditions.checkState(this.task == null, "Task is already set");
+		this.task = task;
 	}
 
 	@Override
