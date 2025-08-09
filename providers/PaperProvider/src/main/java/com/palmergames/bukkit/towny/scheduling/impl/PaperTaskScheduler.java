@@ -6,7 +6,6 @@ import org.bukkit.plugin.Plugin;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 @DefaultQualifier(NotNull.class)
@@ -27,10 +26,10 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 	
 	@Override
 	public ScheduledTask run(final Consumer<ScheduledTask> task) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(globalRegionScheduler.run(plugin, t -> task.accept(taskRef.get()))));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(globalRegionScheduler.run(plugin, t -> task.accept(ret)));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
@@ -38,17 +37,17 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 		if (delay == 0)
 			return run(task);
 		
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(globalRegionScheduler.runDelayed(plugin, t -> task.accept(taskRef.get()), delay)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(globalRegionScheduler.runDelayed(plugin, t -> task.accept(ret), delay));
 
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runRepeating(final Consumer<ScheduledTask> task, long delay, long period) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(globalRegionScheduler.runAtFixedRate(plugin, t -> task.accept(taskRef.get()), delay, period)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(globalRegionScheduler.runAtFixedRate(plugin, t -> task.accept(ret), delay, period));
 
-		return taskRef.get();
+		return ret;
 	}
 }
