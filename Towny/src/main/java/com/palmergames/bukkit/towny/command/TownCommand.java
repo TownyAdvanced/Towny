@@ -4314,11 +4314,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public static void setTownForSale(Town town, double price, boolean admin) {
-		if (town != null) {
-			town.setForSale(true);
-			town.setForSalePrice(price);
-			town.save();
-		}
+		setTownForSale(town, price, admin, System.currentTimeMillis());
 	}
 
 	public static void setTownNotForSale(Town town, boolean admin) {
