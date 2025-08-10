@@ -4286,7 +4286,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Confirmation
 			.runOnAccept(() -> {
-				setTownForSale(town, forSalePrice, false);
+				setTownForSale(town, forSalePrice, false, System.currentTimeMillis());
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), prettyMoney(forSalePrice)));
 			})
 			.setTitle(Translatable.of("msg_town_sell_confirmation", prettyMoney(forSalePrice)))
@@ -4302,6 +4302,15 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		setTownNotForSale(town, false);
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
+	}
+
+	public static void setTownForSale(Town town, double price, boolean admin, long time) {
+		if (town != null) {
+			town.setForSale(true);
+			town.setForSalePrice(price);
+			town.setForSaleTime(time);
+			town.save();
+		}
 	}
 
 	public static void setTownForSale(Town town, double price, boolean admin) {
