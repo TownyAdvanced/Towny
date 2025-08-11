@@ -679,6 +679,7 @@ permissions:
             towny.command.resident.toggle.pvp: true
             towny.command.resident.toggle.bedspawn: true
             towny.command.resident.toggle.bordertitles: true
+            towny.command.resident.toggle.ignoreinvites: true
             towny.command.resident.toggle.ignoreotherchannels: true
             towny.command.resident.toggle.ignoreplots: true
             towny.command.resident.toggle.infotool: true
