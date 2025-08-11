@@ -3149,7 +3149,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_error_must_be_num"));
 
 		double forSalePrice = MathUtil.getDoubleOrThrow(arg[0]);
-		TownCommand.setTownForSale(town, forSalePrice,true, System.currentTimeMillis());
+		TownCommand.setTownForSale(town, forSalePrice, true, System.currentTimeMillis());
+
 
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_forsale", town.getName(), TownyEconomyHandler.getFormattedBalance(forSalePrice)));
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), TownyEconomyHandler.getFormattedBalance(forSalePrice)));
