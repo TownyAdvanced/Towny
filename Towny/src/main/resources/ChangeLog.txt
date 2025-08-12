@@ -10401,3 +10401,19 @@ v0.92.0.11:
     - Sets the default setting for newly detected worlds.
 0.101.2.2:
   - Fix Overclaimed Upkeep Penalty not being charged to towns which don't pay any upkeep.
+  - Add permission validation for town allylist & enemylist commands, courtesy of Lemar98 with PR #7899.
+  - New permission nodes:
+    - towny.command.town.allylist
+    - towny.command.town.enemylist
+    - Add these to the nomad section of the townyperms.yml file if you would like.
+  - Add tab completions for /plot group toggle, courtesy of SulkyWhale with PR #7897.
+  - Log removed blocks with coreprotect, courtesy of Warrior with PR #7898.
+  - New Command: /res toggle ignoresinvites.
+    - Allows players to automatically ignore town invites, useful for server staff.
+  - New permission node: towny.command.resident.toggle.ignoreinvites
+    - Child node of towny.command.resident.toggle.*, no changes to townyperms.yml required.
+  - New Command /t list by forsale
+    - Lists towns with a preference for towns which are currently forsale using /t forsale.
+    - Closes #7910.
+  - New Permission Node: towny.command.town.list.forsale
+    - Child node of towny.command.town.list.*, no changes to townyperms.yml required.
