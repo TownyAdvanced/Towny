@@ -106,6 +106,7 @@ public enum PermissionNodes {
 		    TOWNY_COMMAND_TOWN_LIST_PUBLIC("towny.command.town.list.public"),
 		    TOWNY_COMMAND_TOWN_LIST_BALANCE("towny.command.town.list.balance"),
 		    TOWNY_COMMAND_TOWN_LIST_NAME("towny.command.town.list.name"),
+		    TOWNY_COMMAND_TOWN_LIST_FORSALE("towny.command.town.list.forsale"),
 		    TOWNY_COMMAND_TOWN_LIST_FOUNDED("towny.command.town.list.founded"),
 		    TOWNY_COMMAND_TOWN_LIST_TOWNBLOCKS("towny.command.town.list.townblocks"),
 		    TOWNY_COMMAND_TOWN_LIST_ONLINE("towny.command.town.list.online"),

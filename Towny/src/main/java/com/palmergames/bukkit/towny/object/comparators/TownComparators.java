@@ -8,6 +8,21 @@ import com.palmergames.bukkit.towny.object.Town;
  * A list of static comparators used for organizing lists of {@link Town}'s
  */
 public class TownComparators {
+	public static final Comparator<Town> BY_FORSALE = (t1, t2) -> {
+
+		// Both are for sale, fallback to population comparison.
+		if (t1.isForSale() && t2.isForSale()) {
+			return t2.getResidents().size() - t1.getResidents().size();
+		}
+
+		// Less than.
+		if (t2.isForSale()) {
+			return 1;
+		} else {
+			// Greater than.
+			return -1;
+		}
+	};
 	public static final Comparator<Town> BY_RUINED = (t1, t2) -> {
 
 		// Both are ruined, fallback to population comparison.

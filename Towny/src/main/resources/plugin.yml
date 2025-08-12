@@ -429,6 +429,7 @@ permissions:
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true
             towny.command.town.list.online: true
+            towny.command.town.list.forsale: true
             towny.command.town.list.founded: true
             towny.command.town.list.ruined: true
             towny.command.town.list.bankrupt: true
