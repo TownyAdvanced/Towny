@@ -2829,6 +2829,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townAddResidents(CommandSender sender, Town town, List<Resident> invited) throws TownyException {
 		List<String> invitedResidents = invited.stream()
+				.filter(res -> !res.hasMode("ignoreinvites"))
 				.filter(res -> inviteResidentToTownOrThrow(sender, res, town))
 				.map(Resident::getName)
 				.collect(Collectors.toList());

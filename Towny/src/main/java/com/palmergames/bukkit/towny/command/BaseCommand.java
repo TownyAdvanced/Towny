@@ -244,7 +244,8 @@ public class BaseCommand implements TabCompleter{
 	}
 	
 	/**
-	 * Returns a list of residents which are online and have no town, and can be seen by the sender.
+	 * Returns a list of residents which are online, and have no town, are not
+	 * ignoring invites, and can be seen by the sender.
 	 * 
 	 * @param arg the string to check if the resident's name starts with.
 	 * @return the residents names or an empty list.
@@ -253,6 +254,7 @@ public class BaseCommand implements TabCompleter{
 		if (!(sender instanceof Player player))
 			return getResidentsWithoutTownStartingWith(arg);
 		List<String> residents = getOnlinePlayersWithoutTown().stream()
+			.filter(r -> !r.hasMode("ignoreinvites"))
 			.map(Resident::getPlayer)
 			.filter(p -> p != null && BukkitTools.playerCanSeePlayer(player, p))
 			.map(Player::getName)
