@@ -235,6 +235,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"residents",
 		"balance",
 		"bankrupt",
+		"forsale",
 		"founded",
 		"name",		
 		"online",

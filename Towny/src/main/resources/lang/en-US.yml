@@ -1558,6 +1558,7 @@ msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the n
 # The Build = ---- Destroy = ---- seen in the status screen.
 status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Ruined Status'
+msg_comptype_forsale: 'ForSale Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
 msg_bankrupt: '&c(Bankrupt)'
