@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -215,20 +216,32 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	 */
 	public static final ItemLists BUCKETS = newBuilder().endsWith("BUCKET").build();
 	
-	/**
-	 * List of Copper Blocks.
-	 */
-	public static final ItemLists COPPER_BLOCKS = newBuilder().add("COPPER_BLOCK","COPPER_ORE","DEEPSLATE_COPPER_ORE","CUT_COPPER","CUT_COPPER_SLAB","CUT_COPPER_STAIRS","EXPOSED_COPPER","EXPOSED_CUT_COPPER","EXPOSED_CUT_COPPER_SLAB","EXPOSED_CUT_COPPER_STAIRS","OXIDIZED_COPPER","OXIDIZED_CUT_COPPER","OXIDIZED_CUT_COPPER_SLAB","OXIDIZED_CUT_COPPER_STAIRS","RAW_COPPER_BLOCK","WAXED_COPPER_BLOCK","WAXED_CUT_COPPER","WAXED_CUT_COPPER_SLAB","WAXED_CUT_COPPER_STAIRS","WAXED_EXPOSED_CUT_COPPER_SLAB","WAXED_EXPOSED_COPPER","WAXED_EXPOSED_CUT_COPPER","WAXED_OXIDIZED_COPPER","WAXED_OXIDIZED_CUT_COPPER","WAXED_OXIDIZED_CUT_COPPER_SLAB","WAXED_WEATHERED_COPPER","WAXED_WEATHERED_CUT_COPPER","WEATHERED_COPPER","WEATHERED_CUT_COPPER","CUT_COPPER_STAIRS","EXPOSED_CUT_COPPER_STAIRS","OXIDIZED_CUT_COPPER_STAIRS","WAXED_EXPOSED_CUT_COPPER_STAIRS","WAXED_OXIDIZED_CUT_COPPER_STAIRS","WAXED_WEATHERED_CUT_COPPER_STAIRS","WAXED_WEATHERED_CUT_COPPER_SLAB","WEATHERED_CUT_COPPER_STAIRS").build();
-	
 	/** 
 	 * List of Weatherable Blocks.
 	 */
-	public static final ItemLists WEATHERABLE_BLOCKS = newBuilder().add("COPPER_BLOCK","EXPOSED_COPPER","OXIDIZED_COPPER","WEATHERED_COPPER","CUT_COPPER","EXPOSED_CUT_COPPER","OXIDIZED_CUT_COPPER","WEATHERED_CUT_COPPER","CUT_COPPER_SLAB","EXPOSED_CUT_COPPER_SLAB","OXIDIZED_CUT_COPPER_SLAB","WEATHERED_CUT_COPPER_SLAB","CUT_COPPER_STAIRS","EXPOSED_CUT_COPPER_STAIRS","OXIDIZED_CUT_COPPER_STAIRS","WEATHERED_CUT_COPPER_STAIRS").build();
+	public static final ItemLists WEATHERABLE_BLOCKS = newBuilder().add("COPPER_BLOCK","CUT_COPPER","CUT_COPPER_SLAB","CUT_COPPER_STAIRS", "COPPER_TRAPDOOR")
+		.add("COPPER_CHEST", "COPPER_GOLEM_STATUE", "COPPER_BARS", "COPPER_CHAIN", "COPPER_LANTERN", "LIGHTNING_ROD")
+		// Include the 3 other variants copper blocks have
+		.startsWith("EXPOSED_")
+		.startsWith("OXIDIZED_")
+		.startsWith("WEATHERED_")
+		.build();
 	
 	/** 
 	 * List of Scrapable Blocks (They can lose their wax.)
 	 */
-	public static final ItemLists WAXED_BLOCKS = newBuilder().add("WAXED_COPPER_BLOCK","WAXED_EXPOSED_COPPER","WAXED_WEATHERED_COPPER","WAXED_OXIDIZED_COPPER","WAXED_CUT_COPPER","WAXED_EXPOSED_CUT_COPPER","WAXED_WEATHERED_CUT_COPPER","WAXED_OXIDIZED_CUT_COPPER","WAXED_CUT_COPPER_SLAB","WAXED_EXPOSED_CUT_COPPER_SLAB","WAXED_WEATHERED_CUT_COPPER_SLAB","WAXED_OXIDIZED_CUT_COPPER_SLAB","WAXED_CUT_COPPER_STAIRS","WAXED_EXPOSED_CUT_COPPER_STAIRS","WAXED_WEATHERED_CUT_COPPER_STAIRS","WAXED_OXIDIZED_CUT_COPPER_STAIRS").build();
+	public static final ItemLists WAXED_BLOCKS = newBuilder().startsWith("WAXED_").build();
+
+	/**
+	 * List of Copper Blocks.
+	 */
+	public static final ItemLists COPPER_BLOCKS = concat(WEATHERABLE_BLOCKS, WAXED_BLOCKS);
+
+	/**
+	 * Copper chests - used so that not every version has to be specified in the switches config.
+	 */
+	public static final ItemLists COPPER_CHEST = newBuilder().add("COPPER_CHEST", "EXPOSED_COPPER_CHEST", "OXIDIZED_COPPER_CHEST", "WEATHERED_COPPER_CHEST").build();
+	public static final ItemLists COPPER_GOLEM_STATUE = newBuilder().add("COPPER_GOLEM_STATUE", "EXPOSED_COPPER_GOLEM_STATUE", "OXIDIZED_COPPER_GOLEM_STATUE", "WEATHERED_COPPER_GOLEM_STATUE").build();
 
 	/** 
 	 * List of Candles
@@ -384,6 +397,10 @@ public class ItemLists extends AbstractRegistryList<Material> {
 
 	public static final ItemLists INFESTED_BLOCKS = newBuilder().startsWith("INFESTED_").build();
 
+	public static final ItemLists CHESTS = newBuilder().endsWith("CHEST").build();
+
+	public static final ItemLists SHELVES = newBuilder().endsWith("SHELF").build();
+
 	/**
 	 * Config-useable material groups.
 	 */
@@ -410,5 +427,15 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	
 	public static Builder<Material, ItemLists> newBuilder() {
 		return new Builder<>(Registry.MATERIAL, Material.class, ItemLists::new).notStartsWith("LEGACY_");
+	}
+	
+	private static ItemLists concat(ItemLists first, ItemLists... others) {
+		final Set<Material> values = new HashSet<>(first.tagged);
+
+		for (final ItemLists other : others) {
+			values.addAll(other.tagged);
+		}
+
+		return new ItemLists(values);
 	}
 }
