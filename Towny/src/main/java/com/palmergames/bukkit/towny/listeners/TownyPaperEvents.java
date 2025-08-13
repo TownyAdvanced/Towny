@@ -273,6 +273,11 @@ public class TownyPaperEvents implements Listener {
 			final TownyWorld world = TownyAPI.getInstance().getTownyWorld(entity.getWorld());
 
 			plugin.getScheduler().runRepeating(entity, task -> {
+				if (!entity.isValid()) {
+					task.cancel();
+					return;
+				}
+
 				if (MobRemovalTimerTask.isRemovingEntities(world)) {
 					MobRemovalTimerTask.checkEntity(plugin, world, entity);
 				}
