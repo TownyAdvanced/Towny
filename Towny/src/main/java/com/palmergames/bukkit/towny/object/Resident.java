@@ -979,7 +979,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public Audience audience() {
 		Player player = getPlayer();
-		return player == null ? Audience.empty() : Towny.getAdventure().player(player);
+		return player == null ? Audience.empty() : player;
 	}
 	
 	public boolean isSeeingBorderTitles() {
