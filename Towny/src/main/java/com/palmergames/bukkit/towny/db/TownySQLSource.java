@@ -1013,6 +1013,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("forSalePrice");
 			if (line != null)
 				town.setForSalePrice(Double.parseDouble(line));
+			town.setForSaleTime(rs.getLong("forSaleTime"));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
@@ -2399,6 +2400,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("movedHomeBlockAt", town.getMovedHomeBlockAt());
 			twn_hm.put("forSale", town.isForSale());
 			twn_hm.put("forSalePrice", town.getForSalePrice());
+			twn_hm.put("forSaleTime", town.getForSaleTime());
 			if (town.hasMeta())
 				twn_hm.put("metadata", serializeMetadata(town));
 			else
