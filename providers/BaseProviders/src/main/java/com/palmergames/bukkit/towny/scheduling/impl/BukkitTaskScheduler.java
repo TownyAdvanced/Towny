@@ -11,7 +11,6 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 @DefaultQualifier(NotNull.class)
@@ -45,49 +44,49 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask run(Consumer<ScheduledTask> task) {
-		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new BukkitScheduledTask(this.scheduler.runTask(this.plugin, () -> task.accept(taskRef.get()))));
+		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
+		ret.setTask(this.scheduler.runTask(this.plugin, () -> task.accept(ret)));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runLater(Consumer<ScheduledTask> task, long delay) {
-		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new BukkitScheduledTask(this.scheduler.runTaskLater(this.plugin, () -> task.accept(taskRef.get()), delay)));
+		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
+		ret.setTask(this.scheduler.runTaskLater(this.plugin, () -> task.accept(ret), delay));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runRepeating(Consumer<ScheduledTask> task, long delay, long period) {
-		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new BukkitScheduledTask(this.scheduler.runTaskTimer(this.plugin, () -> task.accept(taskRef.get()), delay, period), true));
+		final BukkitScheduledTask ret = new BukkitScheduledTask(null, true);
+		ret.setTask(this.scheduler.runTaskTimer(this.plugin, () -> task.accept(ret), delay, period));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runAsync(Consumer<ScheduledTask> task) {
-		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new BukkitScheduledTask(this.scheduler.runTaskAsynchronously(this.plugin, () -> task.accept(taskRef.get()))));
+		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
+		ret.setTask(this.scheduler.runTaskAsynchronously(this.plugin, () -> task.accept(ret)));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runAsyncLater(Consumer<ScheduledTask> task, long delay, TimeUnit timeUnit) {
-		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new BukkitScheduledTask(this.scheduler.runTaskLaterAsynchronously(this.plugin, () -> task.accept(taskRef.get()), timeUnit.toMillis(delay) / 50)));
+		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
+		ret.setTask(this.scheduler.runTaskLaterAsynchronously(this.plugin, () -> task.accept(ret), timeUnit.toMillis(delay) / 50));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runAsyncRepeating(Consumer<ScheduledTask> task, long delay, long period, TimeUnit timeUnit) {
-		AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new BukkitScheduledTask(this.scheduler.runTaskTimerAsynchronously(this.plugin, () -> task.accept(taskRef.get()), timeUnit.toMillis(delay) / 50, timeUnit.toMillis(period) / 50), true));
+		final BukkitScheduledTask ret = new BukkitScheduledTask(null, true);
+		ret.setTask(this.scheduler.runTaskTimerAsynchronously(this.plugin, () -> task.accept(ret), timeUnit.toMillis(delay) / 50, timeUnit.toMillis(period) / 50));
 		
-		return taskRef.get();
+		return ret;
 	}
 }

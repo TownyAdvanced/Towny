@@ -13,7 +13,6 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 @DefaultQualifier(NotNull.class)
@@ -55,18 +54,18 @@ public class FoliaTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask run(final Entity entity, final Consumer<ScheduledTask> task) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(entity.getScheduler().run(this.plugin, t -> task.accept(taskRef.get()), null)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(entity.getScheduler().run(this.plugin, t -> task.accept(ret), null));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask run(final Location location, final Consumer<ScheduledTask> task) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(regionScheduler.run(this.plugin, location, t -> task.accept(taskRef.get()))));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(regionScheduler.run(this.plugin, location, t -> task.accept(ret)));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
@@ -82,10 +81,10 @@ public class FoliaTaskScheduler implements TaskScheduler {
 		if (delay == 0)
 			return run(entity, task);
 
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(entity.getScheduler().runDelayed(this.plugin, t -> task.accept(taskRef.get()), null, delay)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(entity.getScheduler().runDelayed(this.plugin, t -> task.accept(ret), null, delay));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
@@ -93,10 +92,10 @@ public class FoliaTaskScheduler implements TaskScheduler {
 		if (delay == 0)
 			return run(location, task);
 		
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(regionScheduler.runDelayed(this.plugin, location, t -> task.accept(taskRef.get()), delay)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(regionScheduler.runDelayed(this.plugin, location, t -> task.accept(ret), delay));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
@@ -106,26 +105,26 @@ public class FoliaTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask runRepeating(final Entity entity, final Consumer<ScheduledTask> task, final long delay, final long period) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(entity.getScheduler().runAtFixedRate(this.plugin, t -> task.accept(taskRef.get()), null, delay, period)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(entity.getScheduler().runAtFixedRate(this.plugin, t -> task.accept(ret), null, delay, period));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runRepeating(final Location location, final Consumer<ScheduledTask> task, final long delay, final long period) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(regionScheduler.runAtFixedRate(this.plugin, location, t -> task.accept(taskRef.get()), delay, period)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(regionScheduler.runAtFixedRate(this.plugin, location, t -> task.accept(ret), delay, period));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runAsync(final Consumer<ScheduledTask> task) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(this.asyncScheduler.runNow(this.plugin, t -> task.accept(taskRef.get()))));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(this.asyncScheduler.runNow(this.plugin, t -> task.accept(ret)));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
@@ -133,42 +132,42 @@ public class FoliaTaskScheduler implements TaskScheduler {
 		if (delay == 0)
 			return runAsync(task);
 
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(this.asyncScheduler.runDelayed(this.plugin, t -> task.accept(taskRef.get()), delay, timeUnit)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(this.asyncScheduler.runDelayed(this.plugin, t -> task.accept(ret), delay, timeUnit));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runAsyncRepeating(final Consumer<ScheduledTask> task, final long delay, final long period, TimeUnit timeUnit) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(this.asyncScheduler.runAtFixedRate(this.plugin, t -> task.accept(taskRef.get()), delay, period, timeUnit)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(this.asyncScheduler.runAtFixedRate(this.plugin, t -> task.accept(ret), delay, period, timeUnit));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runGlobal(final Consumer<ScheduledTask> task) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(this.globalRegionScheduler.run(this.plugin, t -> task.accept(taskRef.get()))));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(this.globalRegionScheduler.run(this.plugin, t -> task.accept(ret)));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runGlobalLater(final Consumer<ScheduledTask> task, final long delay) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(this.globalRegionScheduler.runDelayed(this.plugin, t -> task.accept(taskRef.get()), delay)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(this.globalRegionScheduler.runDelayed(this.plugin, t -> task.accept(ret), delay));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runGlobalRepeating(final Consumer<ScheduledTask> task, final long delay, final long period) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(this.globalRegionScheduler.runAtFixedRate(this.plugin, t -> task.accept(taskRef.get()), delay, period)));
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(this.globalRegionScheduler.runAtFixedRate(this.plugin, t -> task.accept(ret), delay, period));
 
-		return taskRef.get();
+		return ret;
 	}
 
 	/**
