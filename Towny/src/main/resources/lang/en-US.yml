@@ -2651,3 +2651,6 @@ msg_err_you_cannot_add_towntrust_on_outlaw: "You cannot trust a town who has res
 msg_err_you_cannot_add_towntrust_on_enemy: "You cannot trust a town who is part of an enemy nation."
 
 status_world_jailing: "Jailing: "
+
+msg_version_build_info: "<dark_green>Build Information: <green>%s</green> on branch <green>%s<green>."
+msg_version_build_info_failed: "<red>Could not retrieve build information for this version."
