@@ -286,10 +286,11 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 
 							final String viewCommitUrl = repositoryUrl + "/commit/" + buildInfo.commit();
 
-							final Component buildInfoMessage = Translatable.of("default_towny_prefix").append(Translatable.of("msg_version_build_info", buildInfo.commitShort(), buildInfo.branch()))
-								.component(Translation.getLocale(sender))
-								.clickEvent(viewCommitUrl.startsWith("http") ? ClickEvent.openUrl(viewCommitUrl) : null)
-								.hoverEvent(HoverEvent.showText(Component.text(buildInfo.message(), NamedTextColor.GREEN)));
+							final Component buildInfoMessage = Translatable.of("default_towny_prefix").append(
+								Translatable.of("msg_version_build_info", buildInfo.commitShort(), buildInfo.branch()).component(Translation.getLocale(sender))
+									.clickEvent(viewCommitUrl.startsWith("http") ? ClickEvent.openUrl(viewCommitUrl) : null)
+									.hoverEvent(HoverEvent.showText(Component.text(buildInfo.message(), NamedTextColor.GREEN)))
+							).component(Translation.getLocale(sender));
 
 							Towny.getAdventure().sender(sender).sendMessage(buildInfoMessage);
 						} catch (IOException e) {
