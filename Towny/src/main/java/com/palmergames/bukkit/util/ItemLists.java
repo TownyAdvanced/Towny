@@ -220,7 +220,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	 * List of Weatherable Blocks.
 	 */
 	public static final ItemLists WEATHERABLE_BLOCKS = newBuilder().add("COPPER_BLOCK","CUT_COPPER","CUT_COPPER_SLAB","CUT_COPPER_STAIRS", "COPPER_TRAPDOOR")
-		.add("COPPER_CHEST", "COPPER_GOLEM_STATUE", "COPPER_BARS", "COPPER_CHAIN", "COPPER_LANTERN", "LIGHTNING_ROD")
+		.add("COPPER_CHEST", "COPPER_GOLEM_STATUE", "COPPER_BARS", "COPPER_CHAIN", "COPPER_LANTERN")
+		.conditionally(() -> CURRENT_VERSION.isNewerThanOrEquals(MINECRAFT_1_21_9), builder -> builder.add("LIGHTNING_ROD")) // lightning rods became weatherable/waxable
 		// Include the 3 other variants copper blocks have
 		.startsWith("EXPOSED_")
 		.startsWith("OXIDIZED_")
