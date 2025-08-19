@@ -24,12 +24,17 @@ public class NationNeutralCostPaidEvent extends Event {
 	 * @return The nation for which pay neutral charge
 	 */
 	@NotNull
-	public Nation getNation() { return nation; }
+	public Nation getNation() 
+	{
+		return nation; 
+	}
 
 	/**
 	 * @return neutral charge for this nation, only positive value, above 0
 	 */
-	public double getNeutralityCost() { return neutralityCost; }
+	public double getNeutralityCost() { 
+		return neutralityCost; 
+	}
 
 	public static HandlerList getHandlerList() {
 		return HANDLER_LIST;

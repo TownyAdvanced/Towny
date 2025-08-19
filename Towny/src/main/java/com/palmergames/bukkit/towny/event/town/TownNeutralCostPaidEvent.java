@@ -24,12 +24,17 @@ public class TownNeutralCostPaidEvent extends Event {
 	 * @return The town for which pay neutral charge
 	 */
 	@NotNull
-	public Town getTown() { return town; }
+	public Town getTown() {
+		return town; 
+	}
 
 	/**
 	 * @return neutral charge for this town, only positive value, above 0
 	 */
-	public double getNeutralityCost() { return neutralityCost; }
+	public double getNeutralityCost() 
+	{ 
+		return neutralityCost; 
+	}
 
 	public static HandlerList getHandlerList() {
 		return HANDLER_LIST;

@@ -24,12 +24,17 @@ public class NationUpkeepCostPaidEvent extends Event {
 	 * @return The nation for which pay positive/negative upkeep charge
 	 */
 	@NotNull
-	public Nation getNation() { return nation; }
+	public Nation getNation() 
+	{ 
+		return nation; 
+	}
 
 	/**
 	 * @return upkeep charge for this nation, may be positive or negative
 	 */
-	public double getUpkeep() { return upkeep; }
+	public double getUpkeep() {
+		return upkeep; 
+	}
 
 	public static HandlerList getHandlerList() {
 		return HANDLER_LIST;

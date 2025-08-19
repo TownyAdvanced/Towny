@@ -26,17 +26,26 @@ public class TownUpkeepCostPaidEvent extends Event {
 	* @return The town for which pay positive/negative upkeep charge 
 	*/
 	@NotNull
-	public Town getTown() { return town; }
+	public Town getTown() 
+	{ 
+		return town; 
+	}
 
 	/**
 	* @return upkeep charge for this town, may be positive or negative
 	*/
-	public double getUpkeep() { return upkeep; }
+	public double getUpkeep() 
+	{ 
+		return upkeep; 
+	}
 	
 	/**
 	* @return upkeepPenalty for this town, may be 0 or above
 	*/
-	public double getUpkeepPentlty() { return upkeepPentlty; }
+	public double getUpkeepPentlty() 
+	{ 
+		return upkeepPentlty; 
+	}
 
 	public static HandlerList getHandlerList() {
 		return HANDLER_LIST;
