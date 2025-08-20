@@ -363,6 +363,8 @@ ta_eco_convert_modern_help: "将你的城镇账户转换为更新的存储种类
 ta_eco_convert_help: "将您的城镇账户转换为目标经济实现，有助于在经济插件之间传输数据。"
 ta_eco_info_help: "提供服务器上的经济帐户信息。"
 ta_depositall_help_0: "将特定数额存入所有城镇和国家银行"
+ta_depositall_help_1: "向所有城镇的银行存入指定金额。"
+ta_depositall_help_2: "向所有国家的银行存入指定金额。"
 ta_info_help_0: "查看指定国家的经济信息。"
 ta_info_help_1: "查看指定居民的经济信息。"
 ta_info_help_2: "查看 towny 服务器帐户的生态信息。"
