@@ -1013,7 +1013,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("forSalePrice");
 			if (line != null)
 				town.setForSalePrice(Double.parseDouble(line));
-			town.setForSaleTime(rs.getLong("forSaleTime"));
+
+			line = rs.getString("forSaleTime");
+			if (line != null)
+				town.setForSaleTime(Long.parseLong(line));
 
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
