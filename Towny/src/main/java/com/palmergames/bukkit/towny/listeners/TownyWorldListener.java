@@ -25,6 +25,7 @@ import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 
 public class TownyWorldListener implements Listener {
 	
@@ -39,6 +40,16 @@ public class TownyWorldListener implements Listener {
 	public void onWorldLoad(WorldLoadEvent event) {
 
 		newWorld(event.getWorld());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onWorldUnload(WorldUnloadEvent event) {
+		if (event.isCancelled())
+			return;
+		TownyWorld world = TownyUniverse.getInstance().getWorld(event.getWorld().getName());
+		if (world == null)
+			return;
+		TownyUniverse.getInstance().unregisterTownyWorld(world);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)

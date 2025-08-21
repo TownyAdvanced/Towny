@@ -769,6 +769,11 @@ public class TownyUniverse {
 		worlds.putIfAbsent(world.getName().toLowerCase(Locale.ROOT), world);
 	}
 
+	public void unregisterTownyWorld(@NotNull TownyWorld world) {
+		Preconditions.checkNotNull(world, "World cannot be null!");
+		worldUUIDMap.remove(world.getUUID(), world);
+		worlds.remove(world.getName());
+	}
 	public Map<UUID, TownyWorld> getWorldIDMap() {
 		return worldUUIDMap;
 	}
@@ -1141,4 +1146,5 @@ public class TownyUniverse {
 	public Map<String,String> getReplacementNameMap() {
 		return replacementNamesMap;
 	}
+
 }
