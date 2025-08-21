@@ -345,7 +345,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock, TownPreUnclaimEvent.Cause cause) {
+	public boolean removeTownBlock(TownBlock townBlock, TownPreUnclaimEvent.Cause cause) {
 		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			// Log as error because TownBlocks *must* have a town.
@@ -357,7 +357,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				// Log as Warn because the event has been processed
 				if (!event.getCancelMessage().isEmpty())
 					plugin.getLogger().warning(event.getCancelMessage());
-				return;
+				return false;
 			}
 		}
 		
@@ -382,6 +382,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 		// Raise an event to signal the unclaim
 		BukkitTools.fireEvent(new TownUnclaimEvent(town, townBlock.getWorldCoord(), false));
+
+		return true;
 	}
 
 	@Override
