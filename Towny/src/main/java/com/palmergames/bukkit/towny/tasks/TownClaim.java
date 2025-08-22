@@ -308,7 +308,7 @@ public class TownClaim implements Runnable {
 	/**
 	 * @param townBlock TownBlock to remove from the database.
 	 */
-	private boolean unclaimTownBlock(TownBlock townBlock) {
+	private boolean unclaimTownBlock(TownBlock townBlock) throws TownyException {
 		TownPreUnclaimEvent.Cause cause = forced ? TownPreUnclaimEvent.Cause.ADMIN_COMMAND : TownPreUnclaimEvent.Cause.COMMAND;
 		return TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, cause);
 	}

@@ -340,12 +340,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) {
+	public void removeTownBlock(TownBlock townBlock) throws TownyException {
 		removeTownBlock(townBlock, TownPreUnclaimEvent.Cause.UNKNOWN);
 	}
 
 	@Override
-	public boolean removeTownBlock(TownBlock townBlock, TownPreUnclaimEvent.Cause cause) {
+	public boolean removeTownBlock(TownBlock townBlock, TownPreUnclaimEvent.Cause cause) throws TownyException {
 		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			// Log as error because TownBlocks *must* have a town.
@@ -390,7 +390,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removeTownBlocks(Town town) {
 
 		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
-			removeTownBlock(townBlock, TownPreUnclaimEvent.Cause.DELETE);
+			try {
+				removeTownBlock(townBlock, TownPreUnclaimEvent.Cause.DELETE);
+			} catch (TownyException ignored) {}
 	}
 
 	@Override
