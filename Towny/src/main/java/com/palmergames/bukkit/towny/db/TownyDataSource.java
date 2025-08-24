@@ -336,7 +336,7 @@ public abstract class TownyDataSource {
 
 	abstract public void removeTownBlock(TownBlock townBlock) throws TownyException;
 
-	abstract public boolean removeTownBlock(TownBlock townBlock, Cause cause) throws TownyException;
+	abstract public void removeTownBlock(TownBlock townBlock, Cause cause) throws TownyException;
 
 	abstract public void removeTownBlocks(Town town);
 

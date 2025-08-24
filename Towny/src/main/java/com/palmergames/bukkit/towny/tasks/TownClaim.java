@@ -269,26 +269,25 @@ public class TownClaim implements Runnable {
 		if (!forced && town != null && !worldCoord.hasTown(town))
 			throw new TownyException(Translatable.of("msg_area_not_own"));
 
-		// Unclaim event comes later in removeTownBlock().
-		if (unclaimTownBlock(worldCoord.getTownBlockOrNull())) {
+		// Unclaim event fired from here and can throw TownyException.
+		unclaimTownBlock(worldCoord.getTownBlockOrNull());
 
-			// Handle refund-for-unclaiming rules.
-			double unclaimRefund = TownySettings.getClaimRefundPrice();
-			if (TownyEconomyHandler.isActive() && unclaimRefund != 0.0) {
-				// The runningRefund is used because this will consolidate the refund into one
-				// transaction when there are multiple plots being unclaimed, easing strain on
-				// the economy plugin and making the bankhistory book cleaner.
-				runningRefund = runningRefund + unclaimRefund;
+		// Unclaim should be successful, allowing for a potential refund.
+		double unclaimRefund = TownySettings.getClaimRefundPrice();
+		if (TownyEconomyHandler.isActive() && unclaimRefund != 0.0) {
+			// The runningRefund is used because this will consolidate the refund into one
+			// transaction when there are multiple plots being unclaimed, easing strain on
+			// the economy plugin and making the bankhistory book cleaner.
+			runningRefund = runningRefund + unclaimRefund;
 
-				// If the unclaim refund is negative (costing the town money,) make sure that
-				// the Town can pay for the new runningCost total amount. 
-				// All of this was already determined in the TownCommand class but a player
-				// might be trying something tricky before accepting the confirmation.
-				if (unclaimRefund < 0 && town != null && !town.getAccount().canPayFromHoldings(Math.abs(runningRefund))) {
-					runningRefund = runningRefund - unclaimRefund;
-					insufficientFunds = insufficientFunds + Math.abs(unclaimRefund);
-					throw new TownyException(""); // This empty-messaged TownyException means that the player will not see a Error message every time they cannot pay.
-				}
+			// If the unclaim refund is negative (costing the town money,) make sure that
+			// the Town can pay for the new runningCost total amount. 
+			// All of this was already determined in the TownCommand class but a player
+			// might be trying something tricky before accepting the confirmation.
+			if (unclaimRefund < 0 && town != null && !town.getAccount().canPayFromHoldings(Math.abs(runningRefund))) {
+				runningRefund = runningRefund - unclaimRefund;
+				insufficientFunds = insufficientFunds + Math.abs(unclaimRefund);
+				throw new TownyException(""); // This empty-messaged TownyException means that the player will not see a Error message every time they cannot pay.
 			}
 		}
 	}
@@ -308,9 +307,9 @@ public class TownClaim implements Runnable {
 	/**
 	 * @param townBlock TownBlock to remove from the database.
 	 */
-	private boolean unclaimTownBlock(TownBlock townBlock) throws TownyException {
+	private void unclaimTownBlock(TownBlock townBlock) throws TownyException {
 		TownPreUnclaimEvent.Cause cause = forced ? TownPreUnclaimEvent.Cause.ADMIN_COMMAND : TownPreUnclaimEvent.Cause.COMMAND;
-		return TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, cause);
+		TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, cause);
 	}
 
 	private void refundForUnclaim(double unclaimRefund, int numUnclaimed) {
