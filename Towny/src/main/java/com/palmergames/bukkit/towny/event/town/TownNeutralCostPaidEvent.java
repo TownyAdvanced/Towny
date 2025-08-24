@@ -8,7 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Fired when town has paid neutrality costs.
+ * Fired when a town has paid neutrality costs.
  */
 public class TownNeutralCostPaidEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
