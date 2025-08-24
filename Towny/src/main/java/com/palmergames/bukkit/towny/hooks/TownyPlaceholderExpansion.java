@@ -263,6 +263,18 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 					tag = StringMgmt.remUnderscore(String.format(TownySettings.getPAPIFormattingTown(), resident.getTownOrNull().getName()));
 			}
 			return tag;
+		case "town_tag_unformatted": // %townyadvanced_town_tag_unformatted%
+			if (resident.hasTown())
+				tag = resident.getTownOrNull().getTag();
+			return tag;
+		case "town_tag_override_unformatted": // %townyadvanced_town_tag_override_unformatted%
+			if (resident.hasTown()) {
+				if (resident.getTownOrNull().hasTag())
+					tag = resident.getTownOrNull().getTag();
+				else
+					tag = StringMgmt.remUnderscore(resident.getTownOrNull().getName());
+			}
+			return tag;
 		case "nation_tag": // %townyadvanced_nation_tag%
 			if (resident.hasNation())
 				tag = String.format(TownySettings.getPAPIFormattingNation(), resident.getNationOrNull().getTag());
@@ -275,6 +287,18 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				else
 					tag = StringMgmt.remUnderscore(String.format(TownySettings.getPAPIFormattingNation(),
 							resident.getNationOrNull().getName()));
+			}
+			return tag;
+		case "nation_tag_unformatted": // %townyadvanced_nation_tag_unformatted%
+			if (resident.hasNation())
+				tag = resident.getNationOrNull().getTag();
+			return tag;
+		case "nation_tag_override_unformatted": // %townyadvanced_nation_tag_override_unformatted%
+			if (resident.hasNation()) {
+				if (resident.getNationOrNull().hasTag())
+					tag = resident.getNationOrNull().getTag();
+				else
+					tag = StringMgmt.remUnderscore(resident.getNationOrNull().getName());
 			}
 			return tag;
 		case "towny_tag": // %townyadvanced_towny_tag%
