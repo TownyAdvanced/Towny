@@ -149,20 +149,18 @@ public class TownClaim implements Runnable {
 
 		// Send confirmation message before unclaiming everything, processing potential refund for unclaim.
 		Confirmation.runOnAccept(() -> {
-			if (TownyEconomyHandler.isActive() && TownySettings.getClaimRefundPrice() != 0.0) {
-				int unclaimSize = town.getTownBlocks().size() - 1;
-				double totalRefund = TownySettings.getClaimRefundPrice() * unclaimSize;
-
-				TownyEconomyHandler.economyExecutor().execute(() -> {
-					if (totalRefund < 0.0 && !town.getAccount().canPayFromHoldings(Math.abs(totalRefund))) { // Town Cannot afford the negative refund (cost) to unclaim all.
-						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_your_town_cannot_afford_unclaim", TownyEconomyHandler.getFormattedBalance(totalRefund)));
-						return;
-					}
-					if (totalRefund != 0.0) // There is a refund of some type occuring.
-						refundForUnclaim(totalRefund, unclaimSize);
-				});
+			try {
+				townUnclaimAll(town);
+			} catch (TownyException e) {
+				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+				return;
 			}
-			townUnclaimAll(town);
+
+			// Handle refund-for-unclaiming rules, the townUnclaimAll will throw an
+			// exception if the Town is not able to afford its refund costs.
+			if (TownyEconomyHandler.isActive() && runningRefund != 0.0)
+				TownyEconomyHandler.economyExecutor().execute(() -> refundForUnclaim(runningRefund, town.getTownBlocks().size() - 1));
+
 			successfulRun = true;
 			TownyMessaging.sendMsg(player, Translatable.of("msg_you_have_unclaimed_everything_but_your_homeblock"));
 		})
@@ -271,7 +269,10 @@ public class TownClaim implements Runnable {
 		if (!forced && town != null && !worldCoord.hasTown(town))
 			throw new TownyException(Translatable.of("msg_area_not_own"));
 
-		// Handle refund-for-unclaiming rules.
+		// Unclaim event fired from here and can throw TownyException.
+		unclaimTownBlock(worldCoord.getTownBlockOrNull());
+
+		// Unclaim should be successful, allowing for a potential refund.
 		double unclaimRefund = TownySettings.getClaimRefundPrice();
 		if (TownyEconomyHandler.isActive() && unclaimRefund != 0.0) {
 			// The runningRefund is used because this will consolidate the refund into one
@@ -289,23 +290,26 @@ public class TownClaim implements Runnable {
 				throw new TownyException(""); // This empty-messaged TownyException means that the player will not see a Error message every time they cannot pay.
 			}
 		}
-
-		unclaimTownBlock(worldCoord.getTownBlockOrNull()); // Unclaim event comes later in removeTownBlock().
 	}
 
-	private void townUnclaimAll(final Town town) {
-		new ArrayList<>(town.getTownBlocks()).stream()
-			.filter(tb -> town.hasHomeBlock() && !tb.equals(town.getHomeBlockOrNull())) // Prevent removing the homeblock
-			.forEach(tb -> unclaimTownBlock(tb)); // Unclaim event comes later in removeTownBlock().
+	private void townUnclaimAll(final Town town) throws TownyException {
+		for (TownBlock tb : new ArrayList<>(town.getTownBlocks())) {
+			if (town.hasHomeBlock() && tb.equals(town.getHomeBlockOrNull()))
+				continue;
+			try {
+				townUnclaim(tb.getWorldCoord());
+			} catch (TownyException e) {
+				throw new TownyException(e.getMessage(player));
+			}
+		}
 	}
 
 	/**
-	 * Unclaims a single TownBlock in a task delayed by a tick.
 	 * @param townBlock TownBlock to remove from the database.
 	 */
-	private void unclaimTownBlock(TownBlock townBlock) {
+	private void unclaimTownBlock(TownBlock townBlock) throws TownyException {
 		TownPreUnclaimEvent.Cause cause = forced ? TownPreUnclaimEvent.Cause.ADMIN_COMMAND : TownPreUnclaimEvent.Cause.COMMAND;
-		plugin.getScheduler().runLater(() -> TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, cause), 1);
+		TownyUniverse.getInstance().getDataSource().removeTownBlock(townBlock, cause);
 	}
 
 	private void refundForUnclaim(double unclaimRefund, int numUnclaimed) {
