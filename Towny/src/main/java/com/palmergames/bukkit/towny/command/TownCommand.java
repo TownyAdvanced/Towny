@@ -4394,4 +4394,3 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		.sendTo(player);
 	}
 }
-
