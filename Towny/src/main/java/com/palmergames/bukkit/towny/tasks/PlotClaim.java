@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -154,14 +155,18 @@ public class PlotClaim implements Runnable {
 	}
 
 	private void residentClaim(List<WorldCoord> selection) {
-		for (WorldCoord worldCoord : selection) {
+		Iterator<WorldCoord> it = selection.iterator();
+
+		while (it.hasNext()) {
+			WorldCoord worldCoord = it.next();
 			try {
 				if (!residentClaim(worldCoord))
-					this.selection.remove(worldCoord);
+					it.remove(); // безопасное удаление
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
 		}
+
 		finishWithMessage();
 	}
 
@@ -206,16 +211,16 @@ public class PlotClaim implements Runnable {
 		if (owner != null && price > 0)
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_buy_resident_plot", resident.getName(), owner.getName(), townBlock.getPlotPrice()));
 
-		claimTownBlockForResident(townBlock);
-		return true;
+		return claimTownBlockForResident(townBlock);
 	}
 
-	private void claimTownBlockForResident(TownBlock townBlock) {
-		townBlock.setResident(resident);
+	private boolean claimTownBlockForResident(TownBlock townBlock) {
+		if(!townBlock.setResident(resident)) return false;
 		townBlock.setPlotPrice(-1);
 		townBlock.setType(townBlock.getType()); // Causes the plot perms to mirror the new owner's.
 		townBlock.save();
 		plugin.updateCache(townBlock.getWorldCoord());
+		return true;
 	}
 
 	private void residentUnclaimAll() {
@@ -223,13 +228,15 @@ public class PlotClaim implements Runnable {
 	}
 
 	private void residentUnclaim(List<WorldCoord> selection) {
-		for (WorldCoord coord : selection) {
+		Iterator<WorldCoord> it = selection.iterator();
+		while (it.hasNext()) {
+			WorldCoord coord = it.next();
 			if (!TownyAPI.getInstance().isTownyWorld(coord.getBukkitWorld()))
 				continue;
 
 			if(!residentUnclaim(coord)) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_own_place"));
-				this.selection.remove(coord);
+				it.remove();
 			}
 		}
 
@@ -241,7 +248,7 @@ public class PlotClaim implements Runnable {
 			return false;
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
-		townBlock.removeResident();
+		if(!townBlock.removeResident()) return false;
 		townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotTypePrice(townBlock.getType()));
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
@@ -269,7 +276,7 @@ public class PlotClaim implements Runnable {
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
 		townBlock.setPlotPrice(-1);
-		townBlock.setResident(resident);
+		if(!townBlock.setResident(resident)) return false;
 		townBlock.setType(townBlock.getType());
 		townBlock.save();
 		plugin.updateCache(worldCoord);
@@ -281,7 +288,7 @@ public class PlotClaim implements Runnable {
 		if (player == null) 
 			return;
 		if (claim) {
-			if ((selection != null) && (selection.size() > 0)) {
+			if ((selection != null) && (!selection.isEmpty())) {
 				TownyMessaging.sendMsg(player, Translatable.of("msg_claimed").append(" ")
 						.append(selection.size() > 5 ? Translatable.of("msg_total_townblocks").forLocale(player) + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 			} else {
