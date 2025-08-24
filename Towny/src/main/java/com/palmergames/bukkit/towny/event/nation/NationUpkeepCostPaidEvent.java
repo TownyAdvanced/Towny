@@ -4,33 +4,34 @@ import com.palmergames.bukkit.towny.object.Nation;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * fires when nation pay positive/negative upkeep charge
+ * Fired when a nation has paid upkeep costs.
  */
 public class NationUpkeepCostPaidEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Nation nation;
 	private final double upkeep;
 
+	@ApiStatus.Internal
 	public NationUpkeepCostPaidEvent(Nation nation, double upkeep) {
-		super(!Bukkit.getServer().isPrimaryThread()); // Check if event is async
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.nation = nation;
 		this.upkeep = upkeep;
 	}
 
 	/**
-	 * @return The nation for which pay positive/negative upkeep charge
+	 * {@return the nation which is paying the upkeep cost}
 	 */
 	@NotNull
-	public Nation getNation() 
-	{ 
+	public Nation getNation() { 
 		return nation; 
 	}
 
 	/**
-	 * @return upkeep charge for this nation, may be positive or negative
+	 * {@return the upkeep cost for this nation, may be positive or negative}
 	 */
 	public double getUpkeep() {
 		return upkeep; 

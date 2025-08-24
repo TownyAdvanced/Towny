@@ -4,47 +4,46 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
-* fires when town pay positive/negative upkeep charge
-*/
+ * Fired when a nation has paid upkeep costs.
+ */
 public class TownUpkeepCostPaidEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Town town;
 	private final double upkeep;
-	private final double upkeepPentlty;
+	private final double upkeepPenalty;
 
-	public TownUpkeepCostPaidEvent(Town town, double upkeep, double upkeepPentlty) {
+	@ApiStatus.Internal
+	public TownUpkeepCostPaidEvent(Town town, double upkeep, double upkeepPenalty) {
 		super(!Bukkit.getServer().isPrimaryThread()); // Check if event is async
 		this.town = town;
 		this.upkeep = upkeep;
-		this.upkeepPentlty = upkeepPentlty;
+		this.upkeepPenalty = upkeepPenalty;
 	}
 	
 	/**
-	* @return The town for which pay positive/negative upkeep charge 
-	*/
+	 * {@return The town which is paying the upkeep cost}
+	 */
 	@NotNull
-	public Town getTown() 
-	{ 
+	public Town getTown() { 
 		return town; 
 	}
 
 	/**
-	* @return upkeep charge for this town, may be positive or negative
-	*/
-	public double getUpkeep() 
-	{ 
+	 * {@return the upkeep cost for this nation, may be positive or negative}
+	 */
+	public double getUpkeep() { 
 		return upkeep; 
 	}
 	
 	/**
-	* @return upkeepPenalty for this town, may be 0 or above
-	*/
-	public double getUpkeepPentlty() 
-	{ 
-		return upkeepPentlty; 
+	 * {@return the upkeep penalty that was charged for this town, may be 0 or above}
+	 */
+	public double getUpkeepPenalty() { 
+		return upkeepPenalty; 
 	}
 
 	public static HandlerList getHandlerList() {

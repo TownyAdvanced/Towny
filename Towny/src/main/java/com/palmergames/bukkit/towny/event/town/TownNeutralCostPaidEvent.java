@@ -4,24 +4,26 @@ import com.palmergames.bukkit.towny.object.Town;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
-* fires when town pay neutral charge
-*/
+ * Fired when town has paid neutrality costs.
+ */
 public class TownNeutralCostPaidEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Town town;
 	private final double neutralityCost;
-	
+
+	@ApiStatus.Internal
 	public TownNeutralCostPaidEvent(Town town, double neutralityCost) {
-		super(!Bukkit.getServer().isPrimaryThread()); // Check if event is async
+		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.neutralityCost = neutralityCost;
 	}
 
 	/**
-	 * @return The town for which pay neutral charge
+	 * {@return the town which is paying neutrality costs}
 	 */
 	@NotNull
 	public Town getTown() {
@@ -29,10 +31,9 @@ public class TownNeutralCostPaidEvent extends Event {
 	}
 
 	/**
-	 * @return neutral charge for this town, only positive value, above 0
+	 * {@return the neutrality cost for this town, which is always positive}
 	 */
-	public double getNeutralityCost() 
-	{ 
+	public double getNeutralityCost() { 
 		return neutralityCost; 
 	}
 
