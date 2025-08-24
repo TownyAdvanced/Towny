@@ -355,8 +355,10 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock, cause);
 			if (BukkitTools.isEventCancelled(event)) {
 				// Log as Warn because the event has been processed
-				if (!event.getCancelMessage().isEmpty())
+				if (!event.getCancelMessage().isEmpty()) {
 					plugin.getLogger().warning(event.getCancelMessage());
+					throw new TownyException(event.getCancelMessage());
+				}
 				return false;
 			}
 		}
