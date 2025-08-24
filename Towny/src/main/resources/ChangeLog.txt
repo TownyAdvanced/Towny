@@ -10417,3 +10417,18 @@ v0.92.0.11:
     - Closes #7910.
   - New Permission Node: towny.command.town.list.forsale
     - Child node of towny.command.town.list.*, no changes to townyperms.yml required.
+0.101.2.3:
+  - Suppress outlaw warning for spectators, courtesy of Warrior with PR #7919.
+    - Closes #7918.
+  - Add PAPI Placeholders for unformatted tags for town and nation along with any overrides, courtesy of OoLunar with PR #7917.
+  - New PAPI Placeholders:
+    - %townyadvanced_town_tag_unformatted% - The town tag without any formatting from the Towny config.yml.
+    - %townyadvanced_town_tag_override_unformatted% - The town tag (or town name if no tag is set,) without any formatting from the Towny config.yml.
+    - %townyadvanced_nation_tag_unformatted% - The nation tag without any formatting from the Towny config.yml.
+    - %townyadvanced_nation_tag_override_unformatted% - The nation tag (or nation name if no tag is set,) without any formatting from the Towny config.yml.
+  - Add build information to the version command, courtesy of Warrior with PR #7914.
+  - Add support for new 1.21.9 blocks, courtesy of Warrior with PR #7913.
+    - Adds support for copper golems being protected from waxing/scraping.
+    - Adds support for new chests and shelves being treated as switches.
+  - Automatic Config Edit:
+    - ",COPPER_CHEST,COPPER_GOLEM_STATUE,SHELVES" will be added to the config.yml's switch_ids.
