@@ -10432,3 +10432,15 @@ v0.92.0.11:
     - Adds support for new chests and shelves being treated as switches.
   - Automatic Config Edit:
     - ",COPPER_CHEST,COPPER_GOLEM_STATUE,SHELVES" will be added to the config.yml's switch_ids.
+  - Add town & nation upkeep & neutrality payment events, courtesy of Alienn-Know & Warrior with PR #7888.
+  - New API Events:
+    - NationNeutralCostPaidEvent
+    - NationUpkeepCostPaidEvent
+    - TownNeutralCostPaidEvent
+    - TownUpkeepCostPaidEvent
+  - Add Town forSaleTime for use in API, courtesy of GoodrichDev #7908.
+    - Closes #7907.
+  - Replace AtomicReference usages in the task scheduler, courtesy of Warrior with PR #7906.
+    - Closes #7903.
+  - Fix districts becoming un-unclaimable.
+    - Closes #7921.
