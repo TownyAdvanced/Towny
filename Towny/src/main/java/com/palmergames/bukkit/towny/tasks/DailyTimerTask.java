@@ -9,9 +9,13 @@ import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.event.NewDayEvent;
 import com.palmergames.bukkit.towny.event.PreNewDayEvent;
+import com.palmergames.bukkit.towny.event.nation.NationNeutralCostPaidEvent;
+import com.palmergames.bukkit.towny.event.nation.NationUpkeepCostPaidEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.NewDayTaxAndUpkeepPreCollectionEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.PreTownPaysNationTaxEvent;
 import com.palmergames.bukkit.towny.event.time.dailytaxes.TownPaysNationConqueredTaxEvent;
+import com.palmergames.bukkit.towny.event.town.TownNeutralCostPaidEvent;
+import com.palmergames.bukkit.towny.event.town.TownUpkeepCostPaidEvent;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -703,6 +707,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else if (upkeep < 0) {
 			payTownNegativeUpkeep(upkeep, town);
 		}
+		BukkitTools.fireEvent(new TownUpkeepCostPaidEvent(town, upkeep, upkeepPenalty));
 	}
 
 	private void processTownNeutralCosts(Town town) {
@@ -721,6 +726,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));
 		} else {
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", prettyMoney(neutralityCost)));
+			BukkitTools.fireEvent(new TownNeutralCostPaidEvent(town, neutralityCost));
 		}
 	}
 
@@ -858,6 +864,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else if (upkeep < 0) {
 			nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");
 		}
+		BukkitTools.fireEvent(new NationUpkeepCostPaidEvent(nation, upkeep));
 	}
 
 	private void processNationNeutralCosts(Nation nation) {
@@ -875,6 +882,7 @@ public class DailyTimerTask extends TownyTimerTask {
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_not_peaceful"));
 		} else {
 			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", prettyMoney(neutralityCost)));
+			BukkitTools.fireEvent(new NationNeutralCostPaidEvent(nation, neutralityCost));
 		}
 	}
 
