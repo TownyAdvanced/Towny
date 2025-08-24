@@ -2150,3 +2150,4 @@ msg_err_you_cannot_add_trust_on_outlaw: "Вы не можете доверять
 msg_err_you_cannot_add_trust_on_enemy: "Вы не можете доверять игроку, который находится во вражеской нации."
 msg_err_you_cannot_add_towntrust_on_outlaw: "Вы не можете доверять городу, у которого есть жители объявленные в вашем городе как преступники."
 msg_err_you_cannot_add_towntrust_on_enemy: "Вы не можете доверять городу, который находится во вражеской нации."
+status_world_jailing: "Тюрьмы: "
