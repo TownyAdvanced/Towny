@@ -116,6 +116,7 @@ public class Town extends Government implements TownBlockOwner {
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
 	private long ruinedTime;
+	private long forSaleTime;
 	private long joinedNationAt;
 	private long movedHomeBlockAt;
 	private Jail primaryJail;
@@ -1114,6 +1115,14 @@ public class Town extends Government implements TownBlockOwner {
 	 */
 	public final double getForSalePrice() {
 		return forSalePrice;
+	}
+
+	public void setForSaleTime(long time) {
+		this.forSaleTime = time;
+	}
+	
+	public long getForSaleTime() {
+		return forSaleTime;
 	}
 
 	public void setPlotPrice(double plotPrice) {

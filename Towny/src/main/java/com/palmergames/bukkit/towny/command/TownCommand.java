@@ -4308,12 +4308,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
 	}
 
-	public static void setTownForSale(Town town, double price, boolean admin) {
+	public static void setTownForSale(Town town, double price, boolean admin, long time) {
 		if (town != null) {
 			town.setForSale(true);
 			town.setForSalePrice(price);
+			town.setForSaleTime(time);
 			town.save();
 		}
+	}
+
+	public static void setTownForSale(Town town, double price, boolean admin) {
+		setTownForSale(town, price, admin, System.currentTimeMillis());
 	}
 
 	public static void setTownNotForSale(Town town, boolean admin) {

@@ -846,6 +846,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setForSalePrice(Double.parseDouble(line));
 					} catch (Exception ignored) {
 					}
+				line = keys.get("forSaleTime");
+				if (line != null)
+					try {
+						town.setForSaleTime(Long.parseLong(line));
+					} catch (Exception ee) {
+						town.setForSaleTime(0);
+					}
 				line = keys.get("conquered");
 				if (line != null)
 					try {
@@ -2146,6 +2153,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("forSale=" + town.isForSale());
 		// Town sale price
 		list.add("forSalePrice=" + town.getForSalePrice());
+		list.add("forSaleTime=" + town.getForSaleTime());
         
         // Home Block
 		if (town.hasHomeBlock())

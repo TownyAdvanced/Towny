@@ -256,6 +256,7 @@ public class SQLSchema {
 		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
 		columns.add("`forSale` bool NOT NULL DEFAULT '0'");
 		columns.add("`forSalePrice` float NOT NULL");
+		columns.add("`forSaleTime` BIGINT DEFAULT '0'");
 		columns.add("`visibleOnTopLists` bool NOT NULL DEFAULT '1'");
 		
 		return columns;
