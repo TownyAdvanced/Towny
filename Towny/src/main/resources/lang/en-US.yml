@@ -759,6 +759,8 @@ msg_err_input_too_long: '&cInput is too long.'
 msg_err_invalid_choice: '&cInvalid choice'
 msg_err_invalid_sub: '&cInvalid sub command.'
 msg_err_command_disable: '&cYou don''t have enough permissions for that command.'
+msg_err_plot_preclaim_disable: "&cYou cannot claim the plot %s right now."
+msg_err_plot_preunclaim_disable: "&cResident cannot unclaim the plot %s right now."
 msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
 msg_err_universe_limit: '&cThe universe cannot hold any more towns.'
 msg_err_too_many_npc: '&cToo many npc''s registered.'
