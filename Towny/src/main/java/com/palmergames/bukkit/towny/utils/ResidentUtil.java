@@ -21,6 +21,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -304,8 +305,11 @@ public class ResidentUtil {
 		
 		boolean hasBypassNode = outlaw.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()) && !outlaw.hasMode("adminbypass");
 		
+		final Player outlawPlayer = outlaw.getPlayer();
+		final boolean isSpectator = outlawPlayer != null && outlawPlayer.getGameMode() == GameMode.SPECTATOR;
+
 		// Admins are omitted so towns won't be informed an admin might be spying on them.
-		if (TownySettings.doTownsGetWarnedOnOutlaw() && !hasBypassNode && !CooldownTimerTask.hasCooldown(outlaw.getName(), CooldownType.OUTLAW_WARNING)) {
+		if (!isSpectator && TownySettings.doTownsGetWarnedOnOutlaw() && !hasBypassNode && !CooldownTimerTask.hasCooldown(outlaw.getName(), CooldownType.OUTLAW_WARNING)) {
 			if (TownySettings.getOutlawWarningMessageCooldown() > 0)
 				CooldownTimerTask.addCooldownTimer(outlaw.getName(), CooldownType.OUTLAW_WARNING);
 			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_outlaw_town_notify", outlaw.getFormattedName()));
