@@ -119,7 +119,7 @@ public class ChunkNotificationUtil {
 	private static void removePlayerBossBar(Player player) {
 		final BossBar bar = playerBossBarMap.remove(player.getUniqueId());
 		if (bar != null)
-			Towny.getAdventure().player(player).hideBossBar(bar);
+			player.hideBossBar(bar);
 	}
 	
 	public static void cancelPlayerTasks(@NotNull Player player) {
