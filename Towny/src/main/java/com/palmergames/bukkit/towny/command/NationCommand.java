@@ -2240,11 +2240,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	private static void changeNationOwnership(CommandSender sender, final Nation nation, Town newCapital, boolean admin) throws TownyException {
 
 		Nation newCapitalNation = newCapital.getNationOrNull();
-		if (newCapitalNation == null)
+		if (newCapitalNation == null) {
 			if (admin)
 				newCapital.setNation(nation);
 			else 
 				throw new TownyException(Translatable.of("msg_err_not_same_nation", nation));
+		}
 
 		if (!nation.equals(newCapitalNation))
 			throw new TownyException(Translatable.of("msg_err_not_same_nation", nation));
