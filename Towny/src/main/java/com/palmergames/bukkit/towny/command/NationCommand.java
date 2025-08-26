@@ -2234,6 +2234,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		final Town newCapital = getTownOrThrow(split[1]);
+		Nation newCapitalNation = getNationFromTownOrThrow(newCapital);
+		if (!nation.equals(newCapitalNation))
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", nation));
 		changeNationOwnership(sender, nation, newCapital, admin);
 	}
 	
