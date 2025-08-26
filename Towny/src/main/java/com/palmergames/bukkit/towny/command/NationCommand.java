@@ -2242,7 +2242,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		Nation newCapitalNation = newCapital.getNationOrNull();
 		if (newCapitalNation == null)
 			if (admin)
-				nation.addTown(newCapital);
+				newCapital.setNation(nation);
 			else 
 				throw new TownyException(Translatable.of("msg_err_not_same_nation", nation));
 
