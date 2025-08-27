@@ -138,7 +138,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "plotlist":
 					if (args.length == 2)
@@ -189,13 +189,19 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						case 2:
 							return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
 						case 3:
-							if (args[1].equalsIgnoreCase("remove")) {
-								Resident res = TownyUniverse.getInstance().getResident(((Player) sender).getUniqueId());
-								if (res != null)
-									return NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
-							} else {
-								return getTownyStartingWith(args[2], "r");
-							}
+							return switch (args[1].toLowerCase(Locale.ROOT)) {
+								case "remove" -> {
+									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+									if (res != null) {
+										yield NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
+									}
+
+									yield Collections.emptyList();
+								}
+								case "add" -> getTownyStartingWith(args[2], "r");
+								case "list" -> NameUtil.filterByStart(List.of("online"), args[2]);
+								default -> Collections.emptyList();
+							};
 						default:
 							return Collections.emptyList();
 					}
@@ -581,12 +587,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (!admin)
 			resident = getResidentOrThrow(player);
 
-		String[] names = StringMgmt.remFirstArg(split);
+		String[] args = StringMgmt.remFirstArg(split);
 		switch(split[0].toLowerCase(Locale.ROOT)) {
-		case "add" -> residentFriendAdd(player, resident, filterResidentList(player, names));
-		case "remove" -> residentFriendRemove(player, resident, filterResidentList(player, names));
-		case "list" -> residentFriendList(player, resident);
-		case "clearlist", "clear" -> residentFriendRemove(player, resident, resident.getFriends());
+			case "add" -> residentFriendAdd(player, resident, filterResidentList(player, args));
+			case "remove" -> residentFriendRemove(player, resident, filterResidentList(player, args));
+			case "list" -> residentFriendList(player, resident, args.length > 0 && args[0].equalsIgnoreCase("online"));
+			case "clearlist", "clear" -> residentFriendRemove(player, resident, resident.getFriends());
 		}
 	}
 
@@ -602,12 +608,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		return residents;
 	}
 
-	private static void residentFriendList(Player player, Resident resident) {
+	private static void residentFriendList(Player player, Resident resident, boolean requireOnline) {
 		
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("friend_list").forLocale(player)));
 		List<String> formatedList = resident.getFriends().stream()
-				.map(friend -> getColour(friend) + friend.getName() + Colors.White)
-				.collect(Collectors.toList());
+			.filter(friend -> !requireOnline || (friend.getPlayer() != null && player.canSee(friend.getPlayer())))
+			.map(friend -> getColour(friend) + friend.getName() + Colors.White)
+			.collect(Collectors.toList());
 		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));
 	}
 
