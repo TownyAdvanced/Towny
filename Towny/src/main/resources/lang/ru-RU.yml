@@ -663,8 +663,6 @@ msg_err_input_too_long: '&cСлишком длинно.'
 msg_err_invalid_choice: '&cНеверный выбор'
 msg_err_invalid_sub: '&cНеверная подкоманда.'
 msg_err_command_disable: '&cУ вас недостаточно прав для этой команды.'
-msg_err_plot_preclaim_disable: "&cВы не можете сейчас занять участок %s."
-msg_err_plot_preunclaim_disable: "&cРезидент не может сейчас освободить участок %s."
 msg_err_you_dont_have_permission_to_use_colours: "У вас нет прав для использования цветовых кодов в 'title' и 'surname'."
 msg_err_universe_limit: '&cМаксимальный предел городов достигнут.'
 msg_err_too_many_npc: '&cСлишком много NPC зарегистрировано.'

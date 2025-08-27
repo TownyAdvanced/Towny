@@ -155,13 +155,13 @@ public class PlotClaim implements Runnable {
 	}
 
 	private void residentClaim(List<WorldCoord> selection) {
-		Iterator<WorldCoord> it = selection.iterator();
-
-		while (it.hasNext()) {
-			WorldCoord worldCoord = it.next();
+		for (int i = 0; i < selection.size(); i++) {
+			WorldCoord worldCoord = selection.get(i);
 			try {
-				if (!residentClaim(worldCoord))
-					it.remove(); // безопасное удаление
+				if (!residentClaim(worldCoord)) {
+					selection.remove(i);
+					i--;
+				}
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
@@ -215,7 +215,8 @@ public class PlotClaim implements Runnable {
 	}
 
 	private boolean claimTownBlockForResident(TownBlock townBlock) {
-		if(!townBlock.setResident(resident)) return false;
+		if(!townBlock.setResident(resident)) 
+			return false;
 		townBlock.setPlotPrice(-1);
 		townBlock.setType(townBlock.getType()); // Causes the plot perms to mirror the new owner's.
 		townBlock.save();
@@ -228,15 +229,15 @@ public class PlotClaim implements Runnable {
 	}
 
 	private void residentUnclaim(List<WorldCoord> selection) {
-		Iterator<WorldCoord> it = selection.iterator();
-		while (it.hasNext()) {
-			WorldCoord coord = it.next();
+		for (int i = 0; i < selection.size(); i++) {
+			WorldCoord coord = selection.get(i);
 			if (!TownyAPI.getInstance().isTownyWorld(coord.getBukkitWorld()))
 				continue;
 
-			if(!residentUnclaim(coord)) {
+			if (!residentUnclaim(coord)) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_not_own_place"));
-				it.remove();
+				selection.remove(i);
+				i--;
 			}
 		}
 
@@ -248,7 +249,8 @@ public class PlotClaim implements Runnable {
 			return false;
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
-		if(!townBlock.removeResident()) return false;
+		if(!townBlock.removeResident())
+			return false;
 		townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotTypePrice(townBlock.getType()));
 		// Set the plot permissions to mirror the towns.
 		townBlock.setType(townBlock.getType());
@@ -276,7 +278,8 @@ public class PlotClaim implements Runnable {
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
 		townBlock.setPlotPrice(-1);
-		if(!townBlock.setResident(resident)) return false;
+		if(!townBlock.setResident(resident))
+			return false;
 		townBlock.setType(townBlock.getType());
 		townBlock.save();
 		plugin.updateCache(worldCoord);
