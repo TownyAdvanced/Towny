@@ -33,17 +33,23 @@ public class LuckPermsSource extends TownyPermissionSource {
 
 	@Override
 	public String getPrefixSuffix(Resident resident, String node) {
-		Player player = BukkitTools.getPlayerExact(resident.getName());
-		if (player == null) {
+		final User user = this.lookupUser(resident.getName(), resident.getUUID());
+		if (user == null) {
 			return "";
+		}
+
+		QueryOptions queryOptions = luckPerms.getContextManager().getStaticQueryOptions();
+
+		final Player player = resident.getPlayer();
+		if (player != null) {
+			queryOptions = luckPerms.getContextManager().getQueryOptions(player);
 		}
 
 		// Fetch primary group
 		final Group primaryGroup = luckPerms.getGroupManager().getGroup(getPlayerGroup(player));
-		final User user = adapter.getUser(player);
 
 		final CachedMetaData groupMetadata = primaryGroup == null ? null : primaryGroup.getCachedData().getMetaData();
-		final CachedMetaData playerMetadata = user.getCachedData().getMetaData(luckPerms.getContextManager().getQueryOptions(player));
+		final CachedMetaData playerMetadata = user.getCachedData().getMetaData(queryOptions);
 
 		String groupPrefixSuffix = "";
 		String playerPrefixSuffix = "";
@@ -84,7 +90,7 @@ public class LuckPermsSource extends TownyPermissionSource {
 
 	@Override
 	public int getGroupPermissionIntNode(String playerName, String node) {
-		final User user = lookupUser(playerName);
+		final User user = lookupUser(playerName, null);
 		if (user == null) {
 			return -1;
 		}
@@ -123,7 +129,7 @@ public class LuckPermsSource extends TownyPermissionSource {
 			user = adapter.getUser(player);
 			queryOptions = luckPerms.getContextManager().getQueryOptions(player);
 		} else {
-			user = lookupUser(playerName);
+			user = lookupUser(playerName, null);
 		}
 
 		if (user == null) {
@@ -144,7 +150,7 @@ public class LuckPermsSource extends TownyPermissionSource {
 	}
 
 	@Nullable
-	private User lookupUser(final String playerName) {
+	private User lookupUser(final String playerName, @Nullable UUID uuid) {
 		if (playerName == null) {
 			return null;
 		}
@@ -154,7 +160,10 @@ public class LuckPermsSource extends TownyPermissionSource {
 			return adapter.getUser(player);
 		}
 
-		final UUID uuid = luckPerms.getUserManager().lookupUniqueId(playerName).join();
+		if (uuid == null) {
+			uuid = luckPerms.getUserManager().lookupUniqueId(playerName).join();
+		}
+
 		if (uuid == null) {
 			return null;
 		}
