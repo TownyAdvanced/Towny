@@ -269,7 +269,7 @@ public abstract class TownyPermissionSource {
 	 * @return true if the player has this permission node or a parent wildcard
 	 *         node.
 	 */
-	private TriState strictHas(Permissible permissible, String node) {
+	protected TriState strictHas(Permissible permissible, String node) {
 
 		/*
 		 * Node has been set or negated so return the actual value
