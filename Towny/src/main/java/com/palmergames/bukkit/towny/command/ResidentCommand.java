@@ -612,7 +612,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("friend_list").forLocale(player)));
 		List<String> formatedList = resident.getFriends().stream()
-			.filter(friend -> !requireOnline || friend.isOnline())
+			.filter(friend -> !requireOnline || (friend.getPlayer() != null && player.canSee(friend.getPlayer())))
 			.map(friend -> getColour(friend) + friend.getName() + Colors.White)
 			.collect(Collectors.toList());
 		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));
