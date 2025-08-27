@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.permissions.LuckPermsSource;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
@@ -198,8 +199,14 @@ public class PluginIntegrations {
 		// TownyPerms is always present.
 		String output = "  Permissions: TownyPerms, ";
 
+		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("LuckPerms");
+		if (test != null) {
+			TownyUniverse.getInstance().setPermissionSource(new LuckPermsSource(towny));
+			return output + String.format("%s v%s", "LuckPerms", test.getDescription().getVersion());
+		}
+
 		// Test for GroupManager being present.
-		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
+		test = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null && JavaUtil.classExists("org.anjocaido.groupmanager.GroupManager")) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(towny, test));
 			return output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
