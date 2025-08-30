@@ -166,7 +166,6 @@ public class PlotClaim implements Runnable {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
 		}
-
 		finishWithMessage();
 	}
 
@@ -249,7 +248,7 @@ public class PlotClaim implements Runnable {
 			return false;
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
-		if(!townBlock.removeResident())
+		if (!townBlock.removeResident())
 			return false;
 		townBlock.setPlotPrice(townBlock.getTownOrNull().getPlotTypePrice(townBlock.getType()));
 		// Set the plot permissions to mirror the towns.
@@ -278,7 +277,7 @@ public class PlotClaim implements Runnable {
 
 		TownBlock townBlock = worldCoord.getTownBlockOrNull();
 		townBlock.setPlotPrice(-1);
-		if(!townBlock.setResident(resident))
+		if (!townBlock.setResident(resident))
 			return false;
 		townBlock.setType(townBlock.getType());
 		townBlock.save();
@@ -291,7 +290,7 @@ public class PlotClaim implements Runnable {
 		if (player == null) 
 			return;
 		if (claim) {
-			if ((selection != null) && (!selection.isEmpty())) {
+			if ((selection != null) && (selection.size() > 0)) {
 				TownyMessaging.sendMsg(player, Translatable.of("msg_claimed").append(" ")
 						.append(selection.size() > 5 ? Translatable.of("msg_total_townblocks").forLocale(player) + selection.size() : Arrays.toString(selection.toArray(new WorldCoord[0]))));
 			} else {
