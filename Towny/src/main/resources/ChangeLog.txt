@@ -10444,3 +10444,15 @@ v0.92.0.11:
     - Closes #7903.
   - Fix districts becoming un-unclaimable.
     - Closes #7921.
+0.101.2.4:
+  - Use a property for junit versions, courtesy of Warrior with PR #7926.
+  - Fix plotpreclaim cancel message, courtesy of ZapolyarnyDev with PR #7924.
+    - Closes #7868.
+  - Fix /ta nation NAME set capital command not making sure the town in question is part of a nation or in the nation at all.
+  - Add /res friend list online subcommand, courtesy of Warrior with PR #7928.
+  - New Command: /res friend list online
+    - Shows you a list of online friends.
+  - Fix language dash -> underscore normalization NPE, courtesy of Warrior with PR #7929.
+  - Merge the build and test actions back into one, courtesy of Warrior with PR #7930.
+  - Add LuckPerms permissions source, courtesy of Warrior with PR #7933.
+  - Add new constructor for ListDataField, courtesy of SulkyWhale with PR #7937.
