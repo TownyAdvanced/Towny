@@ -214,7 +214,8 @@ public class PlotClaim implements Runnable {
 	}
 
 	private boolean claimTownBlockForResident(TownBlock townBlock) {
-		if(!townBlock.setResident(resident)) 
+		if (!townBlock.setResident(resident)) 
+
 			return false;
 		townBlock.setPlotPrice(-1);
 		townBlock.setType(townBlock.getType()); // Causes the plot perms to mirror the new owner's.
