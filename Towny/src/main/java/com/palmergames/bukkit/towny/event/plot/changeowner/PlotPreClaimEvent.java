@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.event.plot.changeowner;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
+import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.event.Cancellable;
 
 public class PlotPreClaimEvent extends PlotChangeOwnerEvent implements Cancellable {
@@ -10,6 +11,7 @@ public class PlotPreClaimEvent extends PlotChangeOwnerEvent implements Cancellab
 	
 	public PlotPreClaimEvent(Resident oldResident, Resident newResident, TownBlock townBlock) {
 		super(oldResident, newResident, townBlock);
+		cancelMessage = Translation.of("msg_err_plot_preclaim_disable", townBlock.toString());
 	}
 
 	@Override
