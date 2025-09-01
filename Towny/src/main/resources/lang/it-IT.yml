@@ -226,6 +226,7 @@ world_toggle_help_8: "Attiva/disattiva la funzione revert-on-unclaim in questo m
 world_toggle_help_9: "Attiva/disattiva le funzioni di explosions-are-reverted in questo mondo."
 world_toggle_help_10: "Attiva/disattiva il comando plot-clear-deletes-blocks in questo mondo."
 world_toggle_help_11: "Attiva/disattiva la funzione di plot-unclaiming-deletes-blocks in questo mondo."
+world_toggle_help_12: "Attiva/disattiva se l'imprigionamento è abilitato in questo mondo."
 townyadmin_help_1: 'Unclaima questo lotto di città'
 townyadmin_help_2: 'Tenta di unclaimare lotti intorno a te.'
 admin_panel_1: "Consulta /ta set ? per aiuto"
@@ -336,6 +337,8 @@ ta_eco_convert_modern_help: "Converte gli acconti del tuo Towny nella nostra var
 ta_eco_convert_help: "Converte gli acconti del tuo Towny nella specifica implementazione dell'economia, utile a trasferire dati tra plugin di economia."
 ta_eco_info_help: "Fornisce informazioni riguardo agli acconti economici nel server."
 ta_depositall_help_0: "Deposita la somma specificata in tutte le banche cittadine e nazionali."
+ta_depositall_help_1: "Deposita l'importo indicato in tutte le banche della città."
+ta_depositall_help_2: "Deposita l'importo indicato in tutte le banche nazionali."
 ta_info_help_0: "Consulta le informazioni economiche della nazione specifica."
 ta_info_help_1: "Consulta le informazioni economiche del residente specifico."
 ta_info_help_2: "Consulta le informazioni economiche dell'acconto del server towny."
@@ -414,6 +417,7 @@ msg_you_paid_plottax_to_town: '&bHai pagato un totale di %s in tasse sui plot al
 msg_bankrupt_town: ' non poteva permettersi di rimanere una città.'
 msg_bankrupt_nation: ' non poteva permettersi di rimanere una nazione.'
 msg_nation_not_peaceful: '&bLa nazione non poteva permettersi il suo stato pacifico.'
+msg_nation_cant_peaceful: '&bLa nazione non poteva permettersi di diventare una nazione pacifica. Devi essere in grado di pagare %s ogni giorno.'
 msg_peaceful_disabled: '&bLa pace tra le nazioni è disabilitata globalmente.'
 msg_you_paid: '&bHai pagato %s per impostare uno stato pacifico.'
 msg_nation_set_peace: '&bStato della nazione cambiato con successo.'
@@ -632,6 +636,8 @@ msg_err_input_too_long: '&cIl dato è troppo lungo.'
 msg_err_invalid_choice: '&cScelta non valida'
 msg_err_invalid_sub: '&cSottocomando non valido.'
 msg_err_command_disable: '&cNon hai abbastanza permessi per quel comando.'
+msg_err_plot_preclaim_disable: "Non puoi rivendicare il terreno %s in questo momento."
+msg_err_plot_preunclaim_disable: "Il Residente non può annullare il lotto %s in questo momento."
 msg_err_you_dont_have_permission_to_use_colours: "Non hai il permesso di utilizzare i codici colore nei titoli e nei cognomi."
 msg_err_universe_limit: '&cIl mondo non può avere altre città.'
 msg_err_too_many_npc: '&cTroppi NPC registrati.'
@@ -1197,6 +1203,8 @@ msg_spawn_warn: 'Lo spawn costa %s. Continuare? Suggerimento: aggiungi -ignore p
 msg_confirm_purchase: 'Fare questo costerà %s. Continuare?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Poiché non saranno abbastanza vicini alla nuova capitale, le seguenti città saranno rimosse dalla tua nazione: %s. Volete continuare?'
 msg_ta_deposit_all_success: 'Hai depositato con successo %s presso le banche di tutte le nazioni e le città.'
+msg_ta_deposit_all_towns_success: 'Deposito riuscito di %s presso tutte le banche delle città.'
+msg_ta_deposit_all_nations_success: 'Deposito riuscito di %s presso le banche di tutte le nazioni.'
 bonus_townblocks: 'bonus Blocchi Città'
 #Added in 0.80
 nomad_sing: 'Nomade'
@@ -1329,6 +1337,7 @@ msg_your_town_was_exempt_from_the_nation_tax: '&bLa tua città era esente dalla 
 #The Build = ---- Destroy = ---- seen in the status screen.
 status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Stato Rovinato'
+msg_comptype_forsale: 'Stato di vendita'
 msg_comptype_bankrupt: 'Stato Bancarotta'
 msg_ruined: '&c(rovinato)'
 msg_bankrupt: '&c(Bancarotta)'
@@ -1432,6 +1441,7 @@ your_town_has_been_invited_to_join_nation: 'La tua città è stata invitata a un
 msg_err_no_one_to_purge: '&bNon ci sono membri inattivi da eliminare.'
 msg_purging_will_remove_the_following_residents: '&bSi prega di confermare che si desidera Cacciare i seguenti residenti: %s'
 msg_purge_complete_x_removed: '&bEliminazione completata, %s residenti rimossi.'
+msg_purge_complete_x_removed_from_towns: 'Pulizia completata, residenti inattivi %s rimossi dalle città.'
 msg_err_days_must_be_greater_than_0: 'I giorni devono essere maggiori di zero.'
 msg_err_outlawed_players_no_teleport: '&4Sei fuori legge nella città in cui sei e non puoi teletrasportarti!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Non puoi usare quel comando mentre sei fuori legge in una città.'
