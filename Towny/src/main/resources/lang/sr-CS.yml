@@ -224,6 +224,7 @@ world_toggle_help_8: "Uključi/isključi revert-on-unclaim u ovom svetu."
 world_toggle_help_9: "Uključi/isključi explosions-are-reverted u ovom svetu."
 world_toggle_help_10: "Preinači komandu koja uslovljava brisanje blokova zajedno sa parcelom."
 world_toggle_help_11: "Preinači atribut koji uslovljava brisanje blokova usled otuđivanja parcele."
+world_toggle_help_12: "Omogući/onemogući da se bude u zatvoru u ovom svetu."
 townyadmin_help_1: 'Unclaim-ujte ovaj gradski blok'
 townyadmin_help_2: 'Pokušaj unclaim-ovati oko sebe.'
 admin_panel_1: "Vidi /ta set ? za pomoć"
@@ -334,6 +335,8 @@ ta_eco_convert_modern_help: "Prebacuje tvoje Towny naloge u naš savremen varije
 ta_eco_convert_help: "Prebacuje tvoje Towny naloge na ciljnu implementaciju ekonomije, korisnu za transferovanje podataka između priključaka za ekonomiju."
 ta_eco_info_help: "Daje informacije o ekonomskim nalozima na ovom serveru."
 ta_depositall_help_0: "Položi datu sumu u sve gradske i nacionalne banke."
+ta_depositall_help_1: "Položi datu sumu u sve gradske banke."
+ta_depositall_help_2: "Položi datu sumu u sve nacionalne banke."
 ta_info_help_0: "Pregledaj ekonomske informacije za datu naciju."
 ta_info_help_1: "Pregledaj ekonomske informacije za datog stanovnika."
 ta_info_help_2: "Pregledaj ekonomske informacije za ovaj nalog na towny serveru."
@@ -412,6 +415,7 @@ msg_you_paid_plottax_to_town: '&bPlatio/la si plot takse u iznosu od %s gradu %s
 msg_bankrupt_town: ' nije mogao priuštiti da ostane grad.'
 msg_bankrupt_nation: ' nije mogla priuštiti da ostane nacija.'
 msg_nation_not_peaceful: '&bNacija nije mogla da priušti svoje stanje mira.'
+msg_nation_cant_peaceful: '&bNacija nije mogla da priušti da postane mirna nacija. Moraš da si u mogućnosti da dnevno plaćaš %s.'
 msg_peaceful_disabled: '&bNacijski mir je onemogućen na globalnom nivou.'
 msg_you_paid: '&bPlatili ste %s za postavljanje statusa mira.'
 msg_nation_set_peace: '&bStanje nacije uspešno promenjeno.'
@@ -441,6 +445,7 @@ msg_nation_kicked_by: '&bVaš grad je izbačen iz nacije od strane %s.'
 msg_town_left_nation: '&bVaš grad je napustio naciju %s.'
 msg_nation_town_left: '&bGrad %s je napustio Vašu naciju.'
 msg_nation_kicked: '&b%s je izbacio/la igrača %s iz nacije.'
+msg_nation_you_kicked: 'Izbacio/la si igrača %s iz nacije.'
 msg_raised_ass: '&b%s je uzdigao/la igrača %s u %s saradnike.'
 msg_lowered_to_res_by: '&bČin Vam je smanjen u običnog stanovnika od strane %s.'
 msg_lowered_to_res: '&b%s je smanjio/la čin igrača %s u običnog stanovnika.'
@@ -629,6 +634,8 @@ msg_err_input_too_long: '&cUnos je predugačak.'
 msg_err_invalid_choice: '&cNevažeći izbor'
 msg_err_invalid_sub: '&cNevažeća potkomanda.'
 msg_err_command_disable: '&cNemate dozvole potrebne za tu komandu.'
+msg_err_plot_preclaim_disable: "&cTrenuto ne možeš prisvojiti parcelu %s."
+msg_err_plot_preunclaim_disable: "&cStanovnik se trenutno ne može odreći parcele %s."
 msg_err_you_dont_have_permission_to_use_colours: "Nemaš dopuštenje da koristiš kodove boja u zvanjima i prezimenima."
 msg_err_universe_limit: '&cNema uopšte mesta za još gradova.'
 msg_err_too_many_npc: '&cPreviše registrovanih npc-eva.'
@@ -649,6 +656,7 @@ msg_err_not_enough_residents_join_nation: '&cVaš grad %s nema dovoljno stanovni
 msg_not_enough_residents_no_longer_capital: '&bStari glavni grad nacije više nema dovoljno stanovnika da bude glavni grad nacije. Novi glavni grad nacije je %s.'
 msg_town_not_enough_residents_left_nation: '&bGrad %s više nema dovoljno stanovnika da bude član nacije i uklonjen je iz nje.'
 msg_nation_disbanded_town_not_enough_residents: '&bGrad %s više nema dovoljno stanovnika da upravlja nacijom i zato se nacija raspala.'
+msg_not_enough_residents_refunded: '&bPovraćeno ti je %s zbog rasturanja vaše nacije usled nedovoljno stanovnika.'
 msg_not_enough_residents_capital: '&bGrad %s nema dovoljno stanovnika da bude glavni grad nacije.'
 list_page: '&bStrana %s od %s'
 list_err_not_enough_pages: '&cSamo %s strana je dostupno'
@@ -1193,6 +1201,8 @@ msg_spawn_warn: 'Stvaranje košta %s. Nastavi? Predlog: dodaj -ignore da presko�
 msg_confirm_purchase: 'Činjenje ovoga će koštati %s. Nastavi?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Zbog tog što neće biti dovoljno blizu novog glavnog grada, sledeći gradovi će biti uklonjeni iz tvoje nacije: %s. Da li želiš da nastaviš?'
 msg_ta_deposit_all_success: 'Uspešno uplaćeno %s bankama svih nacija i gradova.'
+msg_ta_deposit_all_towns_success: 'Uspešno uplaćeno %s bankama svih gradova.'
+msg_ta_deposit_all_nations_success: 'Uspešno uplaćeno %s bankama svih nacija.'
 bonus_townblocks: 'bonus gradskih blokova'
 #Added in 0.80
 nomad_sing: 'Nomad'
