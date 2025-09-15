@@ -274,12 +274,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				plugin.getLogger().log(Level.WARNING, "Resident " + name + " has an invalid name", e);
 				return false;
 			} catch (AlreadyRegisteredException e) {
-				if (uuid != null) {
-					final Resident otherResident = universe.getResident(uuid);
-					if (otherResident != null && !otherResident.getName().equals(name)) {
-						// UUID is already registered
-						super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
-					}
+				final Resident otherResident = universe.getResident(uuid);
+				if (otherResident != null && !otherResident.getName().equals(name)) {
+					// UUID is already registered
+					super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
 				}
 			}			
 		}

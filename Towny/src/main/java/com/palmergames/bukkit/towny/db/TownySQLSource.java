@@ -517,12 +517,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				try {
 					newResident(name, uuid);
 				} catch (AlreadyRegisteredException e) {
-					if (uuid != null) {
-						final Resident otherResident = universe.getResident(uuid);
-						if (otherResident != null && !otherResident.getName().equals(name)) {
-							// UUID is already registered
-							super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
-						}
+					final Resident otherResident = universe.getResident(uuid);
+					if (otherResident != null && !otherResident.getName().equals(name)) {
+						// UUID is already registered
+						super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
 					}
 				}
 			}
