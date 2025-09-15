@@ -19,12 +19,14 @@ import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.event.PreDeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.object.District;
+import com.palmergames.bukkit.towny.object.Identifiable;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -54,7 +56,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
+import com.palmergames.util.Pair;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -96,6 +101,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	final String backupFolderPath;
 	protected final Queue<Runnable> queryQueue = new ConcurrentLinkedQueue<>();
 	private final ScheduledTask task;
+	protected List<Pair<String, String>> pendingDuplicateResidents = new ArrayList<>();
 	
 	protected TownyDatabaseHandler(Towny plugin, TownyUniverse universe) {
 		super(plugin, universe);
@@ -182,6 +188,53 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
             }
             default -> false;
         };
+	}
+
+	@Override
+	public void postLoad() {
+		deleteDuplicateResidents();
+	}
+
+	private void deleteDuplicateResidents() {
+		for (final Pair<String, String> residentPair : this.pendingDuplicateResidents) {
+			Resident firstRes = universe.getResident(residentPair.left());
+			Resident secondRes = universe.getResident(residentPair.right());
+
+			// Check if both uuids are actually equal
+			if (firstRes == null || secondRes == null || firstRes.getUUID() == null || !firstRes.getUUID().equals(secondRes.getUUID())) {
+				continue;
+			}
+
+			if (firstRes.getLastOnline() > secondRes.getLastOnline()) {
+				// firstRes was online most recently, so delete secondRes
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", secondRes.getName(), firstRes.getName()));
+				try {
+					universe.unregisterResident(secondRes);
+				} catch (NotRegisteredException ignored) {}
+				// Check if the older resident is a part of a town
+				Town olderResTown = secondRes.getTownOrNull();
+				if (olderResTown != null) {
+					try {
+						// Resident#removeTown saves the resident, so we can't use it.
+						olderResTown.removeResident(secondRes);
+					} catch (EmptyTownException e) {
+						try {
+							universe.unregisterTown(olderResTown);
+						} catch (NotRegisteredException ignored) {}
+						deleteTown(olderResTown);
+					}
+				}
+				deleteResident(secondRes);
+			} else {
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", firstRes.getName(), secondRes.getName()));
+				try {
+					universe.unregisterResident(firstRes);
+				} catch (NotRegisteredException ignored) {}
+				deleteResident(firstRes);
+			}
+		}
+
+		this.pendingDuplicateResidents.clear();
 	}
 
 	/*
@@ -1249,8 +1302,18 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_town_merge_success", mergeFrom.getName(), mayorName, mergeInto.getName()));
 	}
 	
-	public List<UUID> toUUIDList(Collection<Resident> residents) {
-		return residents.stream().filter(Resident::hasUUID).map(Resident::getUUID).collect(Collectors.toList());
+	protected List<UUID> toUUIDList(Collection<? extends Identifiable> objects) {
+		final List<UUID> list = new ArrayList<>();
+
+		for (final Identifiable object : objects) {
+			final UUID uuid = object.getUUID();
+
+			if (uuid != null) {
+				list.add(uuid);
+			}
+		}
+
+		return list;
 	}
 	
 	public UUID[] toUUIDArray(String[] uuidArray) {
@@ -1300,5 +1363,56 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (i > 100000)
 				throw new TownyException("Too many replacement names.");
 		} while (true);
+	}
+
+	/**
+	 * Attempts to parse the given UUID string into a UUID, or generates a new one if it was invalid.
+	 * <p>
+	 * Intended for Towny objects such as towns/nations, not players. Use {@link #parsePlayerUUID(String, String)} for those.
+	 *
+	 * @param uuidString The uuid string as retrieved from the database, or {@code null}.
+	 * @param describedAs The type and name of the Towny object, such as {@code "town '" + townName + "'"}
+	 * @return The parsed uuid, or a brand new uuid.
+	 */
+	protected UUID parseUUIDOrNew(@Nullable String uuidString, String describedAs) {
+		if (uuidString != null) {
+			try {
+				return UUID.fromString(uuidString);
+			} catch (IllegalArgumentException ignored) {}
+		}
+
+		plugin.getLogger().warning(describedAs + " did not have a uuid or had an invalid one (got '" + uuidString + "'), generating a new one.");
+		return UUID.randomUUID();
+	}
+
+	/**
+	 * Attempts to parse the given player UUID string into a UUID.
+	 *
+	 * @param playerUUID The player's uuid as retrieved from the database, or {@code null}.
+	 * @param playerName The player's name.
+	 * @return The player's uuid, or {@code null} if it was unable to be parsed/found.
+	 */
+	protected @Nullable UUID parsePlayerUUID(@Nullable String playerUUID, String playerName) {
+		if (playerUUID != null) {
+			try {
+				return UUID.fromString(playerUUID);
+			} catch (IllegalArgumentException ignored) {}
+		}
+
+		if (!Bukkit.getServer().getOnlineMode()) {
+			return BukkitTools.getOfflinePlayerUUID(playerName);
+		}
+
+		final OfflinePlayer cached = BukkitTools.getOfflinePlayerIfCached(playerName);
+		if (cached != null) {
+			return cached.getUniqueId();
+		}
+
+		if (!playerName.startsWith(TownySettings.getNPCPrefix())) {
+			// FIXME: NPCs should have a uuid
+			plugin.getLogger().warning("Could not find the uuid for player '" + playerName + "', got '" + playerUUID + "' as the uuid.");
+		}
+
+		return null;
 	}
 }

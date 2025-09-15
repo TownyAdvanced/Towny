@@ -242,7 +242,11 @@ public class BukkitTools {
 	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
 
-		return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
+		return Bukkit.getOfflinePlayer(getOfflinePlayerUUID(name));
+	}
+	
+	public static UUID getOfflinePlayerUUID(String name) {
+		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
 	}
 	
 	public static String convertCoordtoXYZ(Location loc) {
