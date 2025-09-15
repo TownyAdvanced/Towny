@@ -261,6 +261,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			
 			String uuidString = loadUUIDFromFile(resident);
 			final @Nullable UUID uuid = super.parsePlayerUUID(uuidString, name);
+
+			if (uuid == null) {
+				plugin.getLogger().warning("Resident '" + name + "' does not have a valid uuid and cannot be loaded.");
+				continue;
+			}
 				
 			try {
 				newResident(name, uuid);

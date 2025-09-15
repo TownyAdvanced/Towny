@@ -508,6 +508,11 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			while (rs.next()) {
 				final String name = rs.getString("name");
 				final UUID uuid = super.parsePlayerUUID(rs.getString("uuid"), name);
+				
+				if (uuid == null) {
+					plugin.getLogger().warning("Resident '" + name + "' does not have a valid uuid and cannot be loaded.");
+					continue;
+				}
 
 				try {
 					newResident(name, uuid);

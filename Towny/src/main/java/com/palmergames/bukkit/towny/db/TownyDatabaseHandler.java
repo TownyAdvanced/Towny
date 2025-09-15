@@ -1414,8 +1414,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2);
 		}
 
-		plugin.getLogger().warning("Could not find the uuid for player '" + playerName + "', got '" + playerUUID + "' as the uuid.");
-
 		return null;
 	}
 }
