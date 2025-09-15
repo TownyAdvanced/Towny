@@ -56,6 +56,7 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.FileMgmt;
 
+import com.palmergames.util.JavaUtil;
 import com.palmergames.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -1408,10 +1409,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return cached.getUniqueId();
 		}
 
-		if (!playerName.startsWith(TownySettings.getNPCPrefix())) {
-			// FIXME: NPCs should have a uuid
-			plugin.getLogger().warning("Could not find the uuid for player '" + playerName + "', got '" + playerUUID + "' as the uuid.");
+		if (playerName.startsWith(TownySettings.getNPCPrefix())) {
+			// Create a random uuid and set the version byte to 2 for NPCs
+			return JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2);
 		}
+
+		plugin.getLogger().warning("Could not find the uuid for player '" + playerName + "', got '" + playerUUID + "' as the uuid.");
 
 		return null;
 	}
