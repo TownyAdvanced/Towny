@@ -48,6 +48,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1739,7 +1740,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean removeAllAllies() {
-		for (Town ally : new ArrayList<>(getAllies())) {
+		for (Town ally : getAllies()) {
 			removeAlly(ally);
 			ally.removeAlly(this);
 		}
@@ -1772,7 +1773,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean removeAllTrustedTowns() {
-		for (Town trusted : new ArrayList<>(getTrustedTowns())) {
+		for (Town trusted : getTrustedTowns()) {
 			removeTrustedTown(trusted);
 		}
 		return getTrustedTowns().isEmpty();
@@ -1812,7 +1813,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean removeAllEnemies() {
-		for (Town enemy : new ArrayList<>(getEnemies())) {
+		for (Town enemy : getEnemies()) {
 			removeEnemy(enemy);
 			enemy.removeEnemy(this);
 		}
@@ -1823,16 +1824,16 @@ public class Town extends Government implements TownBlockOwner {
 		return enemies.containsKey(town.getUUID());
 	}
 
-	public List<Town> getEnemies() {
-		return Collections.unmodifiableList(enemies.values().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<Town> getEnemies() {
+		return List.copyOf(enemies.values());
 	}
 
-	public List<Town> getAllies() {
-		return Collections.unmodifiableList(allies.values().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<Town> getAllies() {
+		return List.copyOf(allies.values());
 	}
 
-	public List<Town> getTrustedTowns() {
-		return Collections.unmodifiableList(trustedTowns.values().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<Town> getTrustedTowns() {
+		return List.copyOf(trustedTowns.values());
 	}
 	
 	public List<Town> getMutualAllies() {
@@ -1844,17 +1845,18 @@ public class Town extends Government implements TownBlockOwner {
 		return result;
 	}
 
-	public List<UUID> getAlliesUUIDs() {
-		return Collections.unmodifiableList(allies.keySet().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<UUID> getAlliesUUIDs() {
+		return List.copyOf(allies.keySet());
 	}
 
-	public List<UUID> getEnemiesUUIDs() {
-		return Collections.unmodifiableList(enemies.keySet().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<UUID> getEnemiesUUIDs() {
+		return List.copyOf(enemies.keySet());
 	}
 	
-	public List<UUID> getTrustedTownsUUIDS() {
-		return Collections.unmodifiableList(trustedTowns.keySet().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<UUID> getTrustedTownsUUIDS() {
+		return List.copyOf(trustedTowns.keySet());
 	}
+
 	public boolean isNationZoneEnabled() {
 		return nationZoneEnabled;
 	}
