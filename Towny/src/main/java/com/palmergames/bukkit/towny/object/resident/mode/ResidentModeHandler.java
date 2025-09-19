@@ -144,7 +144,7 @@ public class ResidentModeHandler {
 			}
 	
 		if (notify && !getModes(resident).isEmpty())
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ",")));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ", ")));
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class ResidentModeHandler {
 		mode.toggle(resident);
 
 		if (notify)
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ",")));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ", ")));
 	}
 
 	/**
