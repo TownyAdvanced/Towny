@@ -292,7 +292,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 									.hoverEvent(HoverEvent.showText(Component.text(buildInfo.message(), NamedTextColor.GREEN)))
 							).component(Translation.getLocale(sender));
 
-							Towny.getAdventure().sender(sender).sendMessage(buildInfoMessage);
+							sender.sendMessage(buildInfoMessage);
 						} catch (IOException e) {
 							plugin.getLogger().log(Level.WARNING, "Could not retrieve build information", e);
 							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_version_build_info_failed"));
