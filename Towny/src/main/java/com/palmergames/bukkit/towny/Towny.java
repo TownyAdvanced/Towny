@@ -62,6 +62,7 @@ import com.palmergames.util.JavaUtil;
 
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
 import io.papermc.paper.ServerBuildInfo;
+import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -117,6 +118,12 @@ public class Towny extends JavaPlugin {
 	public void onEnable() {
 
 		Bukkit.getLogger().info("====================      Towny      ========================");
+
+		if (!isFolia || !JavaUtil.classExists("io.papermc.paper.configuration.Configuration")) {
+			getLogger().severe("Towny 0.101.2.5 and up no longer supports Spigot/CraftBukkit, and now requires Paper to run. See https://papermc.io for more information about Paper.");
+			this.getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
 
 		townyUniverse = TownyUniverse.getInstance();
 		
@@ -199,7 +206,7 @@ public class Towny extends JavaPlugin {
 
 					// Test and kick any players with invalid names.
 					if (player.getName().contains(" ")) {
-						player.kickPlayer("Invalid name!");
+						player.kick(Component.text("[Towny] Invalid name!"));
 						return;
 					}
 
