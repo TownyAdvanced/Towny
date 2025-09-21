@@ -91,7 +91,6 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.metadata.MetadataValue;
 
 import java.lang.invoke.MethodHandle;
 import java.util.Arrays;
@@ -183,8 +182,12 @@ public class TownyPlayerListener implements Listener {
 		
 		if (resident != null) {
 			// Don't set last online if the player was vanished.
-			if (!event.getPlayer().getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean))
+			if (!BukkitTools.hasVanishedMeta(event.getPlayer()))
 				resident.setLastOnline(System.currentTimeMillis());
+
+			resident.setGUIPageNum(0);
+			resident.setGUIPages(null);
+
 			resident.clearModes(false);
 			resident.save();
 
@@ -676,7 +679,7 @@ public class TownyPlayerListener implements Listener {
 			ActionType actionType = ActionType.DESTROY;
 			EntityType entityType = event.getRightClicked().getType();
 			
-			Material item = player.getInventory().getItem(EquipmentSlot.HAND).getType();
+			Material item = player.getInventory().getItemInMainHand().getType();
 
 			/*
 			 * The following will get us a Material substituted in for an Entity so that we can run permission tests.
@@ -686,13 +689,17 @@ public class TownyPlayerListener implements Listener {
 				actionType = ActionType.SWITCH;
 			} else if (EntityLists.DYEABLE.contains(entityType) && ItemLists.DYES.contains(item))
 				mat = item;
-			else if (item != null && item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType)) {
+			else if (item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType)) {
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 				actionType = ActionType.ITEM_USE;
-			} else if (item != null && item == Material.COOKIE && EntityType.PARROT.equals(entityType))
+			} else if (item == Material.COOKIE && EntityType.PARROT.equals(entityType)) {
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
-			else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType))
+			} else if ((ItemLists.AXES.contains(item) || item == Material.HONEYCOMB) && entityType.getKey().getKey().equals("copper_golem")) {
 				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+				actionType = ActionType.ITEM_USE;
+			} else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType)) {
+				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+			}
 
 			/*
 			 * A material has been substitued correctly in place of one of the above EntityTypes.

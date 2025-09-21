@@ -412,7 +412,6 @@ msg_you_paid_plottax_to_town: '&bJūs sumokėjote %s sklypų mokesčių %s miest
 msg_bankrupt_town: ' neturėjo pakankamai lėšų išlikti miestu.'
 msg_bankrupt_nation: ' neturėjo pakankamai lėšų valstybingumui išlaikyti.'
 msg_nation_not_peaceful: '&bValstybė neturėjo pakankamai lėšų išlaikyti savo taikios būsenos.'
-msg_nation_cant_peaceful: '&bValstybė neturi pakankamai lėšų, kad galėtų tapti taiki. Jūs privalote turėti pakankamai pinigų, kad galėtumėte kasdien mokėti %.'
 msg_peaceful_disabled: '&bValstybės taika yra išjungta visame pasaulyje.'
 msg_you_paid: '&bSumokėjote %s, kad taptumėte taikūs.'
 msg_nation_set_peace: '&bSėkmingai pakeista valstybės taikos būsena.'

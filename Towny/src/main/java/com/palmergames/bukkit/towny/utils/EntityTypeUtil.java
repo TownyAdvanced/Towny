@@ -104,6 +104,13 @@ public class EntityTypeUtil {
 		Material lookup = ENTITY_TYPE_MATERIAL_MAP.get(entityType);
 		if (lookup != null)
 			return lookup;
+
+		// Attempt to find the spawn egg
+		final NamespacedKey spawnEggKey = NamespacedKey.fromString(entityType.getKey() + "_spawn_egg");
+		final Material spawnEgg = spawnEggKey != null ? Registry.MATERIAL.get(spawnEggKey) : null;
+		if (spawnEgg != null) {
+			return spawnEgg;
+		}
 		
 		// Attempt to lookup a material with the same name, if it doesn't exist it's null.
 		return Registry.MATERIAL.get(entityType.getKey());

@@ -1,4 +1,4 @@
-name: Compile
+name: Compile & Test
 on:
     push:
         branches-ignore: [l10n_master]
@@ -18,7 +18,7 @@ jobs:
                   java-package: jdk
                   cache: 'maven'
             - name: Compile with Maven
-              run: mvn package
+              run: mvn package -P test
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
               with:

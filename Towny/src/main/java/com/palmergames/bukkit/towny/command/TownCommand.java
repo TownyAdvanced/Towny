@@ -235,6 +235,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"residents",
 		"balance",
 		"bankrupt",
+		"forsale",
 		"founded",
 		"name",		
 		"online",
@@ -740,6 +741,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void townEnemyList(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_ENEMYLIST.getNode());
 		Town town = split.length == 1 ? getTownFromPlayerOrThrow(player) : getTownOrThrow(split[1]);
 
 		if (town.getEnemies().isEmpty())
@@ -751,6 +753,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void townAllyList(Player player, String[] split) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_ALLYLIST.getNode());
 		Town town = split.length == 1 ? getTownFromPlayerOrThrow(player) : getTownOrThrow(split[1]);
 
 		if (town.getAllies().isEmpty())
@@ -1708,6 +1711,11 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		// Make sure the town can afford to jail. 
 		if (initialJailFee > 0 && !town.getAccount().canPayFromHoldings(initialJailFee))
 			throw new TownyException(Translatable.of("msg_not_enough_money_in_bank_to_jail_x_fee_is_x", jailedResident, initialJailFee));
+
+		// Is this resident in a jailable world?
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(jailedResident.getPlayer().getWorld());
+		if (world != null && !world.isJailingEnabled())
+			throw new TownyException(Translatable.of("msg_err_x_in_unjailable_world", jailedResident));
 
 		// Check if Town has reached max potential jailed and react according to maxJailedNewJailBehavior in config
 		if (TownySettings.getMaxJailedPlayerCount() > 0 && town.getJailedPlayerCount() >= TownySettings.getMaxJailedPlayerCount()) {
@@ -2822,6 +2830,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townAddResidents(CommandSender sender, Town town, List<Resident> invited) throws TownyException {
 		List<String> invitedResidents = invited.stream()
+				.filter(res -> !res.hasMode("ignoreinvites"))
 				.filter(res -> inviteResidentToTownOrThrow(sender, res, town))
 				.map(Resident::getName)
 				.collect(Collectors.toList());
@@ -4299,12 +4308,17 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_notforsale", town.getName()));
 	}
 
-	public static void setTownForSale(Town town, double price, boolean admin) {
+	public static void setTownForSale(Town town, double price, boolean admin, long time) {
 		if (town != null) {
 			town.setForSale(true);
 			town.setForSalePrice(price);
+			town.setForSaleTime(time);
 			town.save();
 		}
+	}
+
+	public static void setTownForSale(Town town, double price, boolean admin) {
+		setTownForSale(town, price, admin, System.currentTimeMillis());
 	}
 
 	public static void setTownNotForSale(Town town, boolean admin) {

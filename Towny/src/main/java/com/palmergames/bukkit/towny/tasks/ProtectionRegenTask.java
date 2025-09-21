@@ -73,14 +73,21 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			return;
 		
 		Block block = state.getBlock();
+
+		final boolean logWithCoreProtect = TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect");
+
+		if (logWithCoreProtect && !block.getType().isAir()) {
+			CoreProtect.getInstance().getAPI().logRemoval("#towny", block.getLocation(), block.getType(), block.getBlockData());
+		}
 		
 		// Replace physical block.
 		BlockData blockData = state.getBlockData().clone();
 		block.setType(state.getType(), false);
 		block.setBlockData(blockData);
 		
-		if (TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect"))
+		if (logWithCoreProtect && !state.getType().isAir()) {
 			CoreProtect.getInstance().getAPI().logPlacement("#towny", state.getLocation(), state.getType(), blockData);
+		}
 		
 		// If the state is a creature spawner, then replace properly.
 		if (state instanceof CreatureSpawner) {

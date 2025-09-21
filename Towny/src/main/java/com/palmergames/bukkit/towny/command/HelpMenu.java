@@ -294,8 +294,10 @@ public enum HelpMenu {
 				.add("group [group] removeperm [node]", Translatable.of("help_ta_perms_groupremovepermnode"))
 				.add("townrank addrank [rank]", Translatable.of("help_ta_perms_townrankadd"))
 				.add("townrank removerank [rank]", Translatable.of("help_ta_perms_townrankremove"))
+				.add("townrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_townrankrename"))
 				.add("nationrank addrank [rank]", Translatable.of("help_ta_perms_nationrankadd"))
-				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"));
+				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"))
+				.add("nationrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_nationrankrename"));
 		}
 	},
 	
@@ -424,6 +426,8 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin eco")
 				.add("resetbanks {amount}", Translatable.of("ta_eco_resetbanks_help"))
 				.add("depositall [amount]", Translatable.of("ta_depositall_help_0"))
+				.add("depositalltowns [amount]", Translatable.of("ta_depositall_help_1"))
+				.add("depositallnations [amount]", Translatable.of("ta_depositall_help_2"))
 				.add("convert modern", Translatable.of("ta_eco_convert_modern_help"))
 				.add("convert [economy]", Translatable.of("ta_eco_convert_help"))
 				.add("info ?", Translatable.of("ta_eco_info_help"));
@@ -435,6 +439,22 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin eco depositall")
 				.add("[amount]", Translatable.of("ta_depositall_help_0"));
+		}
+	},
+
+	TA_DEPOSITALLTOWNS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco depositalltowns")
+				.add("[amount]", Translatable.of("ta_depositall_help_1"));
+		}
+	},
+
+	TA_DEPOSITALLNATIONS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco depositallnations")
+				.add("[amount]", Translatable.of("ta_depositall_help_2"));
 		}
 	},
 
@@ -506,7 +526,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 
@@ -525,7 +546,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 	

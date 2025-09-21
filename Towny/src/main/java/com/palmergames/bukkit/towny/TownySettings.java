@@ -3747,7 +3747,11 @@ public class TownySettings {
 	public static boolean isUsingWebMapStatusScreens() {
 		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_USING_STATUSSCREEN);
 	}
-	
+
+	public static boolean isWebMapLinkShownForNonPublicTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_SHOW_LINK_FOR_NONPUBLIC_TOWNS);
+	}
+
 	public static boolean isUsingWorldKeyForWorldName() {
 		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_WORLD_NAME_USES_KEY);
 	}
@@ -3931,6 +3935,10 @@ public class TownySettings {
 
 	public static double maxBuyTownPrice() {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
+	}
+
+	public static boolean isWorldJailingEnabled() {
+		return getBoolean(ConfigNodes.NWS_JAILING_ENABLE);
 	}
 }
 

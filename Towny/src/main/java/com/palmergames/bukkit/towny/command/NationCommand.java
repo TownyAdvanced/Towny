@@ -2237,24 +2237,30 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		changeNationOwnership(sender, nation, newCapital, admin);
 	}
 	
-	private static void changeNationOwnership(CommandSender sender, final Nation nation, Town newCapital, boolean admin) {
-		final Town existingCapital = nation.getCapital();
-		if (existingCapital != null && existingCapital.getUUID().equals(newCapital.getUUID())) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_warn_town_already_capital", newCapital.getName()));
-			return;
+	private static void changeNationOwnership(CommandSender sender, final Nation nation, Town newCapital, boolean admin) throws TownyException {
+
+		Nation newCapitalNation = newCapital.getNationOrNull();
+		if (newCapitalNation == null) {
+			if (admin)
+				newCapital.setNation(nation);
+			else 
+				throw new TownyException(Translatable.of("msg_err_not_same_nation", nation));
 		}
 
+		if (!nation.equals(newCapitalNation))
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", nation));
+
+		final Town existingCapital = nation.getCapital();
+		if (existingCapital != null && existingCapital.getUUID().equals(newCapital.getUUID()))
+			throw new TownyException(Translatable.of("msg_warn_town_already_capital", newCapital.getName()));
+
 		boolean capitalNotEnoughResidents = !newCapital.hasEnoughResidentsToBeANationCapital();
-		if (capitalNotEnoughResidents && !admin) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
-			return;
-		}
+		if (capitalNotEnoughResidents && !admin)
+			throw new TownyException(Translatable.of("msg_not_enough_residents_capital", newCapital.getName()));
 		
 		boolean capitalTooManyResidents = !existingCapital.isAllowedThisAmountOfResidents(existingCapital.getNumResidents(), false); 
-		if (capitalTooManyResidents && !admin) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
-			return;
-		}
+		if (capitalTooManyResidents && !admin)
+			throw new TownyException(Translatable.of("msg_err_nation_capital_too_many_residents", newCapital.getName()));
 		
 		Runnable processCommand = () -> {
 			Resident oldKing = nation.getKing();

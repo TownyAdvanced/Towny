@@ -218,6 +218,7 @@ townyadmin_help_1: 'Vzdej se této parcely'
 townyadmin_help_2: 'Pokus se vzdát se parcel kolem sebe.'
 admin_panel_2: 'znovu načíst Towny'
 admin_panel_3: 'Spusť kód pro nový den'
+admin_panel_11: "Resetovat vaše nastavení"
 townyadmin_town_help_1: "Prohlídni si status města."
 townyadmin_town_help_3: "Přejmenovat město."
 townyadmin_town_help_4: "Odstranit město."
@@ -225,7 +226,11 @@ townyadmin_town_help_13: "Vložit peníze do banky města."
 townyadmin_town_help_14: "Vybrat peníze z banky města."
 townyadmin_town_help_15: "Otevřít knihu historie banky města."
 townyadmin_town_toggle_help_0: "Nastavit si PVP."
+townyadmin_nation_help_4: "Přejmenovat stát."
 townyadmin_nation_help_5: "Odstranit město."
+townyadmin_nation_help_11: "Vložit peníze do národní banky."
+townyadmin_nation_help_12: "Vybrat peníze z národní banky."
+townyadmin_nation_help_13: "Otevřít knihu historie národní banky."
 ta_plot_help_0: "Vem pozemek pro hráče."
 ta_resident_help_0: "Přejmenovat obyvatele."
 ta_resident_help_1: "Přidat nebo odebrat přítele."

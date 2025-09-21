@@ -10360,3 +10360,99 @@ v0.92.0.11:
 0.101.1.16:
   - Fix nation plot perms not being given out for un-conquered towns when are_conquered_towns_given_nation_plot_perms is set to true.
   - Update Adventure for 1.21.6 & 1.21.7 support, courtesy of Warrior with PR #7876.
+0.101.1.17:
+  - Read Ascii map symbols from the config on first load.
+    - Closes #7875.
+0.101.2.0:
+  - Bump version for release.
+0.101.2.1:
+  - Send the eco prefix with rename calls to VaultUnlocked, courtesy of creatorfromhell with PR #7878.
+  - New Command: /ta eco depositalltowns [amount]
+    - Deposits money to all towns.
+  - New Command: /ta eco depositallnations [amount]
+    - Deposits money to all nations.
+  - New Permission Node: towny.command.townyadmin.eco.depositalltowns
+    - Child Node of towny.command.townyadmin.eco.*.
+  - New Permission Node: towny.command.townyadmin.eco.depositallnations
+    - Child Node of towny.command.townyadmin.eco.*.
+  - Idiot-proof the webmap URL.
+  - Clear resident gui pages on logout, courtesy of Warrior with PR #7896.
+  - Allow the TownPreUnclaimEvent to no longer be fired when a town is being deleted, allowing Districts to get properly deleted when their town will no longer exist.
+    - Closes #7889.
+  - Precompute mob removal classes to entity types, courtesy of Warrior with PR #7894.
+  - Add renaming Towny ranks, courtesy of SulkyWhale with PR #7884.
+  - New Command: /ta townyperms townrank renamerank [oldrankname] [newrankname]
+    - Renames a town rank to a new name.
+  - New Command: /ta townyperms nationrank renamerank [oldrankname] [newrankname]
+    - Renames a nation rank to a new name.
+  - Always read global.yml for overrides, courtesy of Warrior with PR #7877.
+  - Config option for non-public towns to show map link, courtesy of GoodrichDev with PR #7873.
+    - Allows non-public towns to display a clickable map link in the town status screens, making it easier for players and admins to locate towns on the web map, even if the towns are private.
+    - Closes #7872.
+  - New Config Option: plugin.interfacing.web_map.non_public_towns_show_map_link
+    - Default: false
+    - When true, non-public towns will show a link to their map location in the town status screen.
+  - Add world toggle for jailing, courtesy of squeaky2137 with PR #7863.
+    - Closes #7817.
+  - New Command: /tw toggle jailing
+  - New Permission Node: towny.command.townyworld.toggle.jailing
+  - New Config Option: new_world_settings.plot_management.jailing_enabled
+    - Default: true
+    - Sets the default setting for newly detected worlds.
+0.101.2.2:
+  - Fix Overclaimed Upkeep Penalty not being charged to towns which don't pay any upkeep.
+  - Add permission validation for town allylist & enemylist commands, courtesy of Lemar98 with PR #7899.
+  - New permission nodes:
+    - towny.command.town.allylist
+    - towny.command.town.enemylist
+    - Add these to the nomad section of the townyperms.yml file if you would like.
+  - Add tab completions for /plot group toggle, courtesy of SulkyWhale with PR #7897.
+  - Log removed blocks with coreprotect, courtesy of Warrior with PR #7898.
+  - New Command: /res toggle ignoresinvites.
+    - Allows players to automatically ignore town invites, useful for server staff.
+  - New permission node: towny.command.resident.toggle.ignoreinvites
+    - Child node of towny.command.resident.toggle.*, no changes to townyperms.yml required.
+  - New Command /t list by forsale
+    - Lists towns with a preference for towns which are currently forsale using /t forsale.
+    - Closes #7910.
+  - New Permission Node: towny.command.town.list.forsale
+    - Child node of towny.command.town.list.*, no changes to townyperms.yml required.
+0.101.2.3:
+  - Suppress outlaw warning for spectators, courtesy of Warrior with PR #7919.
+    - Closes #7918.
+  - Add PAPI Placeholders for unformatted tags for town and nation along with any overrides, courtesy of OoLunar with PR #7917.
+  - New PAPI Placeholders:
+    - %townyadvanced_town_tag_unformatted% - The town tag without any formatting from the Towny config.yml.
+    - %townyadvanced_town_tag_override_unformatted% - The town tag (or town name if no tag is set,) without any formatting from the Towny config.yml.
+    - %townyadvanced_nation_tag_unformatted% - The nation tag without any formatting from the Towny config.yml.
+    - %townyadvanced_nation_tag_override_unformatted% - The nation tag (or nation name if no tag is set,) without any formatting from the Towny config.yml.
+  - Add build information to the version command, courtesy of Warrior with PR #7914.
+  - Add support for new 1.21.9 blocks, courtesy of Warrior with PR #7913.
+    - Adds support for copper golems being protected from waxing/scraping.
+    - Adds support for new chests and shelves being treated as switches.
+  - Automatic Config Edit:
+    - ",COPPER_CHEST,COPPER_GOLEM_STATUE,SHELVES" will be added to the config.yml's switch_ids.
+  - Add town & nation upkeep & neutrality payment events, courtesy of Alienn-Know & Warrior with PR #7888.
+  - New API Events:
+    - NationNeutralCostPaidEvent
+    - NationUpkeepCostPaidEvent
+    - TownNeutralCostPaidEvent
+    - TownUpkeepCostPaidEvent
+  - Add Town forSaleTime for use in API, courtesy of GoodrichDev #7908.
+    - Closes #7907.
+  - Replace AtomicReference usages in the task scheduler, courtesy of Warrior with PR #7906.
+    - Closes #7903.
+  - Fix districts becoming un-unclaimable.
+    - Closes #7921.
+0.101.2.4:
+  - Use a property for junit versions, courtesy of Warrior with PR #7926.
+  - Fix plotpreclaim cancel message, courtesy of ZapolyarnyDev with PR #7924.
+    - Closes #7868.
+  - Fix /ta nation NAME set capital command not making sure the town in question is part of a nation or in the nation at all.
+  - Add /res friend list online subcommand, courtesy of Warrior with PR #7928.
+  - New Command: /res friend list online
+    - Shows you a list of online friends.
+  - Fix language dash -> underscore normalization NPE, courtesy of Warrior with PR #7929.
+  - Merge the build and test actions back into one, courtesy of Warrior with PR #7930.
+  - Add LuckPerms permissions source, courtesy of Warrior with PR #7933.
+  - Add new constructor for ListDataField, courtesy of SulkyWhale with PR #7937.

@@ -411,6 +411,8 @@ permissions:
             towny.command.town.unjail: true
             towny.command.town.trust: true
             towny.command.town.trusttown: true
+            towny.command.town.allylist: true
+            towny.command.town.enemylist: true
 
     towny.command.town.list:
         description: Users are able to use the default method of sorting the town list.
@@ -429,6 +431,7 @@ permissions:
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true
             towny.command.town.list.online: true
+            towny.command.town.list.forsale: true
             towny.command.town.list.founded: true
             towny.command.town.list.ruined: true
             towny.command.town.list.bankrupt: true
@@ -679,6 +682,7 @@ permissions:
             towny.command.resident.toggle.pvp: true
             towny.command.resident.toggle.bedspawn: true
             towny.command.resident.toggle.bordertitles: true
+            towny.command.resident.toggle.ignoreinvites: true
             towny.command.resident.toggle.ignoreotherchannels: true
             towny.command.resident.toggle.ignoreplots: true
             towny.command.resident.toggle.infotool: true
@@ -735,6 +739,8 @@ permissions:
         default: false
         children:
             towny.command.townyadmin.eco.depositall: true
+            towny.command.townyadmin.eco.depositalltowns: true
+            towny.command.townyadmin.eco.depositallnations: true
             towny.command.townyadmin.eco.resetbanks: true
             towny.command.townyadmin.eco.convert: true
             towny.command.townyadmin.eco.info: true
@@ -900,6 +906,7 @@ permissions:
             towny.command.townyworld.toggle.forcefire: true
             towny.command.townyworld.toggle.forcepvp: true
             towny.command.townyworld.toggle.friendlyfire: true
+            towny.command.townyworld.toggle.jailing: true
             towny.command.townyworld.toggle.plotcleardelete: true
             towny.command.townyworld.toggle.pvp: true
             towny.command.townyworld.toggle.revertunclaim: true

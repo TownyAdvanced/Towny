@@ -13,10 +13,12 @@ import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.huds.HUDManager;
+import com.palmergames.bukkit.towny.object.BuildInfo;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -35,12 +37,17 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +55,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
@@ -267,6 +275,28 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
 					} else {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_towny_version", plugin.getVersion()));
+						
+						try {
+							final BuildInfo buildInfo = BuildInfo.retrieveBuildInfo(plugin);
+							
+							String repositoryUrl = buildInfo.repositoryUrl();
+							if (repositoryUrl.endsWith(".git")) {
+								repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - ".git".length());
+							}
+
+							final String viewCommitUrl = repositoryUrl + "/commit/" + buildInfo.commit();
+
+							final Component buildInfoMessage = Translatable.of("default_towny_prefix").append(
+								Translatable.of("msg_version_build_info", buildInfo.commitShort(), buildInfo.branch()).component(Translation.getLocale(sender))
+									.clickEvent(viewCommitUrl.startsWith("http") ? ClickEvent.openUrl(viewCommitUrl) : null)
+									.hoverEvent(HoverEvent.showText(Component.text(buildInfo.message(), NamedTextColor.GREEN)))
+							).component(Translation.getLocale(sender));
+
+							sender.sendMessage(buildInfoMessage);
+						} catch (IOException e) {
+							plugin.getLogger().log(Level.WARNING, "Could not retrieve build information", e);
+							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_version_build_info_failed"));
+						}
 
 						if (TownyUpdateChecker.hasCheckedSuccessfully())
 							TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));

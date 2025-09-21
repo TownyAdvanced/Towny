@@ -1014,6 +1014,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null)
 				town.setForSalePrice(Double.parseDouble(line));
 
+			line = rs.getString("forSaleTime");
+			if (line != null)
+				town.setForSaleTime(Long.parseLong(line));
+
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
 			town.setNationZoneEnabled(rs.getBoolean("nationZoneEnabled"));
@@ -1788,6 +1792,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			} catch (Exception ignored) {
 			}
 
+			result = rs.getBoolean("jailing");
+			try {
+				world.setJailingEnabled(result);
+			} catch (Exception ignored) {
+			}
+			
 			try {
 				line = rs.getString("metadata");
 				if (line != null && !line.isEmpty()) {
@@ -2393,6 +2403,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("movedHomeBlockAt", town.getMovedHomeBlockAt());
 			twn_hm.put("forSale", town.isForSale());
 			twn_hm.put("forSalePrice", town.getForSalePrice());
+			twn_hm.put("forSaleTime", town.getForSaleTime());
 			if (town.hasMeta())
 				twn_hm.put("metadata", serializeMetadata(town));
 			else
@@ -2640,6 +2651,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			// War allowed in this world.
 			nat_hm.put("warAllowed", world.isWarAllowed());
+
+			nat_hm.put("jailing", world.isJailingEnabled());
 
 			if (world.hasMeta())
 				nat_hm.put("metadata", serializeMetadata(world));

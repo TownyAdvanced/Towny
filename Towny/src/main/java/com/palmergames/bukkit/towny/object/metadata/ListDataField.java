@@ -12,6 +12,10 @@ public class ListDataField extends CustomDataField<List<CustomDataField<?>>> {
 	public ListDataField(String key, List<CustomDataField<?>> value, String label) {
 		super(key, value, label);
 	}
+
+	public ListDataField(String key, List<CustomDataField<?>> value) {
+		super(key, value);
+	}
 	
 	public ListDataField(String key) {
 		super(key, new ArrayList<>());

@@ -311,7 +311,7 @@ public class TownyFormatter {
 		else
 			screen.addComponentOf("townblocks", colourKeyValue(translator.of("status_town_size"), translator.of("status_fractions", town.getTownBlocks().size(), town.getMaxTownBlocksAsAString())));
 
-		if (town.isPublic()) {
+		if (town.isPublic() || TownySettings.isWebMapLinkShownForNonPublicTowns()) {
 			Component homeComponent = TownyComponents.miniMessage(translator.of("status_home_element", TownySettings.getTownDisplaysXYZ()
 						? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town"))
 						: (town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
@@ -578,8 +578,9 @@ public class TownyFormatter {
 				    colourKeyValue(translator.of("status_world_wildernessmobs"), (world.hasWildernessMobs() ? translator.of("status_on") : translator.of("status_off"))));
 			// ForceTownMobs: ON
 			screen.addComponentOf("townmobs", colourKeyValue(translator.of("status_world_forcetownmobs"), (world.isForceTownMobs() ? translator.of("status_forced") : translator.of("status_adjustable"))));
-			// Unclaim Revert: ON
-			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))); 
+			// Unclaim Revert: ON | Jailing: ON
+			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") + 
+					colourKeyValue(translator.of("status_world_jailing"), (world.isJailingEnabled() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
 			// Entity Explosion Revert: ON | Block Explosion Revert: ON
 			screen.addComponentOf("explosion_reverts", colourKeyValue(translator.of("status_world_explrevert_entity"), (world.isUsingPlotManagementWildEntityRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") +
 					colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
@@ -1059,6 +1060,10 @@ public class TownyFormatter {
 			webUrl = TownySettings.getWebMapUrl()
 				.replaceAll("\\{world}", getWorldSlugForMapURL(spawnLocation.getSpawnOrNull().getWorld()))
 				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
+				.replaceAll("\\{y}", "" + (TownySettings.getWebMapUrl().contains("\\{z}")
+					? spawnLocation.getSpawnOrNull().getBlockY()
+					: spawnLocation.getSpawnOrNull().getBlockZ())) // Enough people use {y} that we had to do something about it.
+				//TODO: Make up a regex that cleans out any invalid placeholders.
 				.replaceAll("\\{z}", "" + spawnLocation.getSpawnOrNull().getBlockZ());
 
 		return webUrl;

@@ -341,6 +341,12 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# Do new worlds disable creatures trampling crops, by default?"),
+	NWS_JAILING_ENABLE(
+			"new_world_settings.jailing_enabled",
+			"true",
+			"",
+			"# This section is applied to new worlds as default settings when new worlds are detected.",
+			"# Whether to allow players in this world to be jailed or not"),
 	NWS_PLOT_MANAGEMENT_HEADER(
 			"new_world_settings.plot_management",
 			"",
@@ -1621,6 +1627,13 @@ public enum ConfigNodes {
 		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name.",
 		"# This should be enabled if you use SquareMap."
 	),
+
+	PLUGIN_WEB_MAP_SHOW_LINK_FOR_NONPUBLIC_TOWNS(
+		"plugin.interfacing.web_map.non_public_towns_show_map_link",
+		"false",
+		"",
+		"# If enabled, non-public towns will show a link to their map location in the town status screen."
+	),
 	
 	PLUGIN_WEB_MAP_URL(
 			"plugin.interfacing.web_map.url",
@@ -1901,7 +1914,7 @@ public enum ConfigNodes {
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER",
+			"CHESTS,SHULKER_BOXES,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER,SHELVES,COPPER_GOLEM_STATUE",
 			"",
 			"# Blocks that are protected via town/plot flags.",
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",

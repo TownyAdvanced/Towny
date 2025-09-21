@@ -412,7 +412,6 @@ msg_you_paid_plottax_to_town: '&bPlatio/la si plot takse u iznosu od %s gradu %s
 msg_bankrupt_town: ' nije mogao priuštiti da ostane grad.'
 msg_bankrupt_nation: ' nije mogla priuštiti da ostane nacija.'
 msg_nation_not_peaceful: '&bNacija nije mogla da priušti svoje stanje mira.'
-msg_nation_cant_peaceful: '&bNacija nije mogla da priušti da postane mirna nacija. Moraš da si u mogućnosti da dnevno plaćaš %.'
 msg_peaceful_disabled: '&bNacijski mir je onemogućen na globalnom nivou.'
 msg_you_paid: '&bPlatili ste %s za postavljanje statusa mira.'
 msg_nation_set_peace: '&bStanje nacije uspešno promenjeno.'

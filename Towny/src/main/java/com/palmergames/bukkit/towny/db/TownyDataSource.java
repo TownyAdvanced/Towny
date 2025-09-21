@@ -5,9 +5,11 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
+import com.palmergames.bukkit.towny.event.town.TownPreUnclaimEvent.Cause;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.District;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -332,7 +334,9 @@ public abstract class TownyDataSource {
 
 	abstract public void removeResident(Resident resident);
 
-	abstract public void removeTownBlock(TownBlock townBlock);
+	abstract public void removeTownBlock(TownBlock townBlock) throws TownyException;
+
+	abstract public void removeTownBlock(TownBlock townBlock, Cause cause) throws TownyException;
 
 	abstract public void removeTownBlocks(Town town);
 

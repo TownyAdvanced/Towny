@@ -9,6 +9,7 @@ public enum ComparatorType {
 	BALANCE("msg_comptype_balance", GovernmentComparators.BY_BANK_BALANCE, "by balance"),
 	ONLINE("msg_comptype_online", GovernmentComparators.BY_NUM_ONLINE, "by online"),
 	TOWNS("msg_comptype_towns", NationComparators.BY_NUM_TOWNS, "by towns"),
+	FORSALE("msg_comptype_forsale", TownComparators.BY_FORSALE, "by forsale"),
 	FOUNDED("msg_comptype_founded", GovernmentComparators.BY_FOUNDED, "by founded"),
 	NAME("msg_comptype_name", GovernmentComparators.BY_NAME, "by name"),
 	OPEN("msg_comptype_open", GovernmentComparators.BY_OPEN, "by open"),

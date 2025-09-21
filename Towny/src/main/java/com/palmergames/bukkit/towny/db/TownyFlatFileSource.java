@@ -846,6 +846,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						town.setForSalePrice(Double.parseDouble(line));
 					} catch (Exception ignored) {
 					}
+				line = keys.get("forSaleTime");
+				if (line != null)
+					try {
+						town.setForSaleTime(Long.parseLong(line));
+					} catch (Exception ee) {
+						town.setForSaleTime(0);
+					}
 				line = keys.get("conquered");
 				if (line != null)
 					try {
@@ -1604,6 +1611,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					} catch (Exception ignored) {
 					}
 
+				line = keys.get("jailing");
+				if (line != null)
+					try {
+						world.setJailingEnabled(Boolean.parseBoolean(line));
+					} catch (Exception ignored) {
+					}
+
 				line = keys.get("metadata");
 				if (line != null && !line.isEmpty())
 					MetadataLoader.getInstance().deserializeMetadata(world, line.trim());
@@ -2139,6 +2153,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("forSale=" + town.isForSale());
 		// Town sale price
 		list.add("forSalePrice=" + town.getForSalePrice());
+		list.add("forSaleTime=" + town.getForSaleTime());
         
         // Home Block
 		if (town.hasHomeBlock())
@@ -2450,6 +2465,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("# This setting is used to enable or disable Event war in this world.");
 		list.add("warAllowed=" + world.isWarAllowed());
 
+		// jailing
+		list.add("jailing=" + world.isJailingEnabled());		
+		
 		// Metadata
 		list.add("");
 		list.add("metadata=" + serializeMetadata(world));

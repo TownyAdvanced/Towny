@@ -340,20 +340,20 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 
 	@Override
-	public void removeTownBlock(TownBlock townBlock) {
+	public void removeTownBlock(TownBlock townBlock) throws TownyException {
+		removeTownBlock(townBlock, TownPreUnclaimEvent.Cause.UNKNOWN);
+	}
+
+	@Override
+	public void removeTownBlock(TownBlock townBlock, TownPreUnclaimEvent.Cause cause) throws TownyException {
 		Town town = townBlock.getTownOrNull();
 		if (town == null)
 			// Log as error because TownBlocks *must* have a town.
 			plugin.getLogger().severe(String.format("The TownBlock at (%s, %d, %d) is not registered to a town.", townBlock.getWorld().getName(), townBlock.getX(), townBlock.getZ()));
 
-		TownPreUnclaimEvent event = new TownPreUnclaimEvent(town, townBlock);
-		if (BukkitTools.isEventCancelled(event)) {
-			// Log as Warn because the event has been processed
-			if (!event.getCancelMessage().isEmpty())
-				plugin.getLogger().warning(event.getCancelMessage());
-			return;
-		}
-		
+		if (!cause.ignoresPreEvent())
+			BukkitTools.ifCancelledThenThrow(new TownPreUnclaimEvent(town, townBlock, cause));
+
 		if (townBlock.isJail() && townBlock.getJail() != null)
 			removeJail(townBlock.getJail());
 
@@ -381,7 +381,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	public void removeTownBlocks(Town town) {
 
 		for (TownBlock townBlock : new ArrayList<>(town.getTownBlocks()))
-			removeTownBlock(townBlock);
+			try {
+				removeTownBlock(townBlock, TownPreUnclaimEvent.Cause.DELETE);
+			} catch (TownyException ignored) {}
 	}
 
 	@Override
@@ -628,7 +630,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
 				if (TownyEconomyHandler.canRenameAccounts()) {
-					TownyEconomyHandler.rename(town, newName);
+					TownyEconomyHandler.rename(town, TownySettings.getTownAccountPrefix() + filteredName);
 				} else {
 					try {
 						townBalance = town.getAccount().getHoldingBalance();
@@ -736,7 +738,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Clear accounts
 			if (TownyEconomyHandler.isActive())
 				if (TownyEconomyHandler.canRenameAccounts()) {
-					TownyEconomyHandler.rename(nation, newName);
+					TownyEconomyHandler.rename(nation, TownySettings.getNationAccountPrefix() + filteredName);
 				} else {
 					try {
 						nationBalance = nation.getAccount().getHoldingBalance();

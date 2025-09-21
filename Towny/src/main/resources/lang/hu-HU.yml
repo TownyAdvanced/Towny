@@ -412,7 +412,6 @@ msg_you_paid_plottax_to_town: '&bKifizetted a telekadót összesen %s a(z) %s v�
 msg_bankrupt_town: '&b%s nem tudta fenntartani a várost.'
 msg_bankrupt_nation: '&b%s nem tudta fenntartani a nemzetet.'
 msg_nation_not_peaceful: '&bA nemzet nem tudta fenntartani a békés állapotát.'
-msg_nation_cant_peaceful: '&bA nemzet nem tudta békés állapotúvá válni. Naponta %s szükséges ehhez.'
 msg_peaceful_disabled: '&bA nemzeti béke globálisan le van tiltva.'
 msg_you_paid: '&bKifizetted a %s összeget a békés státusz beállításához.'
 msg_nation_set_peace: '&bSikeresen megváltoztattad a nemzet állapotát.'
