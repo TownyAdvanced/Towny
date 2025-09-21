@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
 import com.palmergames.util.Pair;
-import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -210,8 +209,6 @@ public class WorldCoord extends Coord {
 	/**
 	 * Loads the chunks represented by a WorldCoord. Creates a PluginChunkTicket so
 	 * that the WorldCoord will remain loaded, even when no players are present.
-	 * <p>
-	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void loadChunks() {
 		Towny plugin = Towny.getPlugin();
@@ -228,8 +225,6 @@ public class WorldCoord extends Coord {
 	/**
 	 * Unloads the chunks presented by a WorldCoord. Removes a PluginChunkTicket so
 	 * that the WorldCoord will no longer remain loaded.
-	 * <p> 
-	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void unloadChunks() {
 		Towny plugin = Towny.getPlugin();
@@ -260,11 +255,11 @@ public class WorldCoord extends Coord {
 			final Set<CompletableFuture<Chunk>> chunkFutures = new HashSet<>();
 			
 			for (final Pair<Integer, Integer> chunkPos : getChunkPositions())
-				chunkFutures.add(PaperLib.getChunkAtAsync(world, chunkPos.left(), chunkPos.right()));
+				chunkFutures.add(world.getChunkAtAsync(chunkPos.left(), chunkPos.right()));
 			
 			return Collections.unmodifiableSet(chunkFutures);
 		} else {
-			return Collections.singleton(PaperLib.getChunkAtAsync(getCorner()));
+			return Collections.singleton(world.getChunkAtAsync(getCorner()));
 		}
 	}
 	

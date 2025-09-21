@@ -43,10 +43,6 @@
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
@@ -63,14 +59,6 @@
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-            <id>sonatype-oss-snapshots</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
             <id>playpro-repo</id>
             <url>https://maven.playpro.com</url>
         </repository>
@@ -79,46 +67,14 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
-        <!-- temporary snapshot builds for adventure -->
-        <repository>
-            <id>warrior-temp</id>
-            <url>https://repo.warriorrr.dev/tmp-adventure</url>
-        </repository>
     </repositories>
 
     <dependencies>
-        <!-- Here to satisfy MockBukkit testing. -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.5-R0.1-SNAPSHOT</version>
-            <scope>test</scope>
-            <exclusions>
-              <exclusion>
-                <groupId>net.kyori</groupId>
-                <artifactId>adventure-api</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>net.kyori</groupId>
-                <artifactId>adventure-text-serializer-gson</artifactId>
-              </exclusion>
-              <exclusion>
-                <groupId>net.kyori</groupId>
-                <artifactId>adventure-text-serializer-legacy</artifactId>
-              </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.21.3-R0.1-SNAPSHOT</version>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.8</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -168,6 +124,12 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.6</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-platform-bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
         <dependency>
@@ -179,21 +141,6 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.4.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.22.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.22.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -211,6 +158,12 @@
             <groupId>solar.squares</groupId>
             <artifactId>pixel-width-core</artifactId>
             <version>1.1.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
@@ -266,7 +219,7 @@
         <dependency>
             <groupId>org.mockbukkit.mockbukkit</groupId>
             <artifactId>mockbukkit-v1.21</artifactId>
-            <version>4.50.0</version>
+            <version>4.64.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -288,7 +241,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.13.0</version>
+                    <version>3.14.0</version>
                     <configuration>
                         <release>${java.version}</release>
                     </configuration>
@@ -382,24 +335,12 @@
                         </artifactSet>
                         <relocations>
                             <relocation>
-                                <pattern>io.papermc.lib</pattern>
-                                <shadedPattern>com.palmergames.paperlib</shadedPattern>
-                            </relocation>
-                            <relocation>
                                 <pattern>com.zaxxer.hikari</pattern>
                                 <shadedPattern>com.palmergames.hikaricp</shadedPattern>
                             </relocation>
                             <relocation>
                                 <pattern>org.apache.commons.compress</pattern>
                                 <shadedPattern>com.palmergames.compress</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.adventure</pattern>
-                                <shadedPattern>com.palmergames.adventure</shadedPattern>
-                            </relocation>
-                            <relocation>
-                                <pattern>net.kyori.option</pattern>
-                                <shadedPattern>com.palmergames.option</shadedPattern>
                             </relocation>
                             <relocation>
                                 <pattern>org.bstats</pattern>

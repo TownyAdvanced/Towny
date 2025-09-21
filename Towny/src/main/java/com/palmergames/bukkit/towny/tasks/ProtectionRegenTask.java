@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
-import io.papermc.lib.PaperLib;
 import net.coreprotect.CoreProtect;
 
 import org.bukkit.Material;
@@ -62,10 +61,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		if (PaperLib.isPaper())
-			PaperLib.getChunkAtAsync(this.state.getLocation()).thenRun(() -> plugin.getScheduler().run(this.state.getLocation(), this::replaceProtections));
-		else
-			replaceProtections();
+		this.state.getWorld().getChunkAtAsync(this.state.getLocation()).thenRun(() -> plugin.getScheduler().run(this.state.getLocation(), this::replaceProtections));
 		
 		TownyRegenAPI.removeProtectionRegenTask(this);
 	}

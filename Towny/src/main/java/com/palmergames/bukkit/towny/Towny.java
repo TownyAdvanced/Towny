@@ -61,8 +61,8 @@ import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
 
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
-import io.papermc.lib.PaperLib;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import io.papermc.paper.ServerBuildInfo;
+import net.kyori.adventure.text.Component;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -106,8 +106,6 @@ public class Towny extends JavaPlugin {
 	private final boolean isFolia = JavaUtil.classExists("io.papermc.paper.threadedregions.RegionizedServer");
 	private final TaskScheduler scheduler;
 
-	private static BukkitAudiences adventure;
-
 	private final Map<UUID, PlayerCache> playerCache = Collections.synchronizedMap(new HashMap<>());
 	private final Set<TownyInitException.TownyError> errors = new HashSet<>();
 	
@@ -120,6 +118,12 @@ public class Towny extends JavaPlugin {
 	public void onEnable() {
 
 		Bukkit.getLogger().info("====================      Towny      ========================");
+
+		if (!isFolia || !JavaUtil.classExists("io.papermc.paper.configuration.Configuration")) {
+			getLogger().severe("Towny 0.101.2.5 and up no longer supports Spigot/CraftBukkit, and now requires Paper to run. See https://papermc.io for more information about Paper.");
+			this.getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
 
 		townyUniverse = TownyUniverse.getInstance();
 		
@@ -151,8 +155,6 @@ public class Towny extends JavaPlugin {
 		
 		// NOTE: Runs regardless if Towny errors out!
 		// Important for safe mode.
-
-		adventure = BukkitAudiences.create(this);
 
 		// Check for plugins that we use or we develop, 
 		// print helpful information to startup log.
@@ -205,7 +207,7 @@ public class Towny extends JavaPlugin {
 
 					// Test and kick any players with invalid names.
 					if (player.getName().contains(" ")) {
-						player.kickPlayer("Invalid name!");
+						player.kick(Component.text("[Towny] Invalid name!"));
 						return;
 					}
 
@@ -435,11 +437,6 @@ public class Towny extends JavaPlugin {
 		plugin.getLogger().info("Finishing Universe Tasks...");
 		townyUniverse.finishTasks();
 
-		if (adventure != null) {
-			adventure.close();
-			adventure = null;
-		}
-		
 		PluginIntegrations.getInstance().disable3rdPartyPluginIntegrations();
 
 		this.townyUniverse = null;
@@ -799,11 +796,6 @@ public class Towny extends JavaPlugin {
 		return plugin;
 	}
 
-	public static BukkitAudiences getAdventure() {
-		return adventure;
-	}
-
-	// https://www.spigotmc.org/threads/small-easy-register-command-without-plugin-yml.38036/
 	private void registerSpecialCommands() {
 		List<Command> commands = new ArrayList<>(4);
 		commands.add(new AcceptCommand(this, TownySettings.getAcceptCommand()));
@@ -811,11 +803,7 @@ public class Towny extends JavaPlugin {
 		commands.add(new ConfirmCommand(this, TownySettings.getConfirmCommand()));
 		commands.add(new CancelCommand(this, TownySettings.getCancelCommand()));
 
-		try {
-			BukkitTools.getCommandMap().registerAll("towny", commands);
-		} catch (ReflectiveOperationException e) {
-			throw new TownyInitException("An issue has occurred while registering custom commands.", TownyInitException.TownyError.OTHER, e);
-		}
+		getServer().getCommandMap().registerAll("towny", commands);
 	}
 	
 	private void registerCommands() {
@@ -843,18 +831,14 @@ public class Towny extends JavaPlugin {
 		
 		metrics.addCustomChart(new SimplePie("language", () -> TownySettings.getString(ConfigNodes.LANGUAGE)));
 		
-		metrics.addCustomChart(new SimplePie("server_type", () -> {
-			if (isFolia)
-				return "Folia";
-			else if (PaperLib.isPaper())
-				return "Paper";
-			else if (PaperLib.isSpigot())
-				return "Spigot";
-			else if (getServer().getName().equalsIgnoreCase("craftbukkit"))
-				return "CraftBukkit";
-			
-			return "Unknown";
-		}));
+		// Determine the server name/brand, i.e. "Paper"
+		String serverBrand = getServer().getName();
+		try {
+			serverBrand = ServerBuildInfo.buildInfo().brandName();
+		} catch (NoClassDefFoundError ignored) {}
+
+		final String finalBrand = serverBrand;
+		metrics.addCustomChart(new SimplePie("server_type", () -> finalBrand));
 
 		metrics.addCustomChart(new SimplePie("nation_zones_enabled", () -> TownySettings.getNationZonesEnabled() ? "true" : "false"));
 		

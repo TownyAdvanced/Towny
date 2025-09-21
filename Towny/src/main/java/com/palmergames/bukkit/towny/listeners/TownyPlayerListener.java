@@ -47,7 +47,6 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.JavaUtil;
-import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -1432,7 +1431,7 @@ public class TownyPlayerListener implements Listener {
 				&& event.getClickedBlock() != null) {
 					Player player = event.getPlayer();
 					Block block = event.getClickedBlock();
-					final BlockState state = PaperLib.getBlockState(block, false).getState();
+					final BlockState state = block.getState(false);
 					final BlockData data = state.getBlockData();
 					
 					if (ItemLists.SIGNS.contains(block.getType()) && data instanceof Rotatable rotatable) {
@@ -1534,7 +1533,7 @@ public class TownyPlayerListener implements Listener {
 	}
 	
 	private boolean isSignWaxed(Block block) {
-		if (MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(PaperLib.getBlockState(block, false).getState() instanceof Sign sign))
+		if (MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_20) || !(block.getState(false) instanceof Sign sign))
 			return false;
 		
 		try {

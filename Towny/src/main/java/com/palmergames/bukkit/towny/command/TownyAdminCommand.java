@@ -73,7 +73,6 @@ import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
-import io.papermc.lib.PaperLib;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
@@ -1143,10 +1142,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_error_input_must_be_int", "x and z"));
 		}
 		
-		PaperLib.getChunkAtAsync(world, x, z).thenAccept(chunk -> {
+		world.getChunkAtAsync(x, z).thenAccept(chunk -> {
 			int y = world.getHighestBlockYAt(x, z) + 1;
 			
-			plugin.getScheduler().run(player, () -> PaperLib.teleportAsync(player, new Location(world, x, y, z)));
+			plugin.getScheduler().run(player, () -> player.teleportAsync(new Location(world, x, y, z)));
 		});
 	}
 
@@ -3121,7 +3120,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (plugin.isFolia())
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_setup_command_folia"));
 		
-		Towny.getAdventure().sender(sender).sendMessage(Component.text(Translatable.of("msg_setup_full_guide_link").forLocale(sender)).clickEvent(ClickEvent.openUrl("https://github.com/TownyAdvanced/Towny/wiki/Installation")));
+		sender.sendMessage(Component.text(Translatable.of("msg_setup_full_guide_link").forLocale(sender)).clickEvent(ClickEvent.openUrl("https://github.com/TownyAdvanced/Towny/wiki/Installation")));
 		
 		if (plugin.isFolia())
 			return;
