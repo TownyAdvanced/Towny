@@ -1400,6 +1400,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			} catch (IllegalArgumentException ignored) {}
 		}
 
+		if (playerName.startsWith(TownySettings.getNPCPrefix())) {
+			// Create a random uuid and set the version byte to 2 for NPCs
+			return JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2);
+		}
+
 		if (!Bukkit.getServer().getOnlineMode()) {
 			return BukkitTools.getOfflinePlayerUUID(playerName);
 		}
@@ -1409,11 +1414,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			return cached.getUniqueId();
 		}
 
-		if (playerName.startsWith(TownySettings.getNPCPrefix())) {
-			// Create a random uuid and set the version byte to 2 for NPCs
-			return JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2);
-		}
-
-		return null;
+		plugin.getLogger().warning("Could not find a previous UUID for player '" + playerName + "', looking it up using the Mojang API...");
+		return plugin.getServer().getPlayerUniqueId(playerName);
 	}
 }
