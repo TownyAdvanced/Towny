@@ -71,6 +71,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityExhaustionEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -925,6 +926,21 @@ public class TownyPlayerListener implements Listener {
 			}
 		}	
 	}
+	
+	@EventHandler
+	public void onEntityExhaustion(EntityExhaustionEvent event) {
+		// Stop player exhaustion if criteria is met to prevent saturation loss
+		Player player = (Player) event.getEntity();
+		Town playersTown = TownyAPI.getInstance().getTown(player);
+		TownBlock tbAtPlayer = TownyAPI.getInstance().getTownBlock(player);
+		if (tbAtPlayer == null)
+			return;
+		Town townAtPlayer = tbAtPlayer.getTownOrNull();
+		if (!TownySettings.preventSaturationLoss() && townAtPlayer != null && !townAtPlayer.hasActiveWar() && CombatUtil.isAlly(townAtPlayer, playersTown) && !tbAtPlayer.getType().equals(TownBlockType.ARENA)) {
+			return;
+		}
+		event.setCancelled(true);
+	} 
 
 	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent
