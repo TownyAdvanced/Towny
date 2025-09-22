@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -26,7 +25,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -45,9 +43,6 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:mob-removal-task"), config -> populateFields());
 	}
 	
-	// https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getEntitySpawnReason()
-	private static final MethodHandle GET_SPAWN_REASON = JavaUtil.getMethodHandle(Entity.class, "getEntitySpawnReason");
-
 	public MobRemovalTimerTask(Towny plugin) {
 		super(plugin);
 
@@ -74,16 +69,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		if (spawnReason != null && ignoredSpawnReasons.contains(spawnReason.name()))
 			return true;
 
-		if (GET_SPAWN_REASON == null || ignoredSpawnReasons.isEmpty())
-			return false;
-
-		try {
-			final Enum<?> reason = (Enum<?>) GET_SPAWN_REASON.invoke(entity);
-
-			return ignoredSpawnReasons.contains(reason.name());
-		} catch (Throwable throwable) {
-			return false;
-		}
+		return ignoredSpawnReasons.contains(entity.getEntitySpawnReason().name());
 	}
 
 	@Override
