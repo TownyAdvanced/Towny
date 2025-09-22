@@ -119,7 +119,7 @@ public class Towny extends JavaPlugin {
 
 		Bukkit.getLogger().info("====================      Towny      ========================");
 
-		if (!isFolia || !JavaUtil.classExists("io.papermc.paper.configuration.Configuration")) {
+		if (!isFolia && !JavaUtil.classExists("io.papermc.paper.configuration.Configuration")) {
 			getLogger().severe("Towny 0.101.2.5 and up no longer supports Spigot/CraftBukkit, and now requires Paper to run. See https://papermc.io for more information about Paper.");
 			this.getServer().getPluginManager().disablePlugin(this);
 			return;
