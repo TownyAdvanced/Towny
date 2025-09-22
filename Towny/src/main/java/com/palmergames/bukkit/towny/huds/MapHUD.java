@@ -17,6 +17,7 @@ import com.palmergames.bukkit.util.Colors;
 
 import java.util.Map;
 
+import io.papermc.paper.scoreboard.numbers.NumberFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -57,6 +58,10 @@ public class MapHUD {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective objective = BukkitTools.objective(board, HUD_OBJECTIVE, "maphud");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+		try {
+			objective.numberFormat(NumberFormat.blank());
+		} catch (NoSuchMethodError | NoClassDefFoundError ignored) {}
 		
 		// We have a number of lines below the map, this is how many.
 		int nonMapLines = Math.max(4, MAX_NON_MAP_LINES);

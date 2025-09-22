@@ -14,6 +14,9 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import io.papermc.paper.scoreboard.numbers.NumberFormat;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -63,7 +66,7 @@ public class PermHUD {
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
 		Translator translator = Translator.locale(p);
-		String build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn, title;
+		String build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn;
 		Scoreboard board = p.getScoreboard();
 		// Due to tick delay (probably not confirmed), a HUD can actually be removed from the player.
 		// Causing board to return null, and since we don't create a new board, a NullPointerException occurs.
@@ -89,7 +92,7 @@ public class PermHUD {
 		boolean plotGroup = townBlock.hasPlotObjectGroup();
 
 		// Displays the name of the owner, and if the owner is a resident the town name as well.
-		title = GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 
+		Component title = Component.text(owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""), NamedTextColor.GOLD); 
 
 		// Plot Type
 		type = townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName();
@@ -112,7 +115,7 @@ public class PermHUD {
 
 
 		// Set the values to our Scoreboard's teams.
-		board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(title));
+		board.getObjective(HUD_OBJECTIVE).displayName(title);
 		board.getTeam(TEAM_PLOT_TYPE).setSuffix(type);
 		board.getTeam(TEAM_PLOT_COST).setSuffix(forSale);
 
@@ -196,7 +199,6 @@ public class PermHUD {
 	}
 
 	private static void initializeScoreboard(Translator translator, Scoreboard board) {
-		String PERM_HUD_TITLE = GOLD + "";
 		String keyPlotType_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_type");
 		String forSale_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_for_sale") + GRAY;
 
@@ -219,9 +221,13 @@ public class PermHUD {
 		String keyAlly_entry = DARK_GREEN + "" + BOLD + "a" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_ally") +
 				DARK_GREEN + " " + BOLD + "o" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_outsider");
 
-		Objective obj = BukkitTools.objective(board, HUD_OBJECTIVE, PERM_HUD_TITLE);
+		Objective obj = BukkitTools.objective(board, HUD_OBJECTIVE, "");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.setDisplayName(PERM_HUD_TITLE);
+
+		try {
+			obj.numberFormat(NumberFormat.blank());
+		} catch (NoSuchMethodError | NoClassDefFoundError ignored) {}
+
 		//register teams
 		Team keyPlotType = board.registerNewTeam(TEAM_PLOT_TYPE);
 		Team forSaleTitle = board.registerNewTeam(TEAM_PLOT_COST);
