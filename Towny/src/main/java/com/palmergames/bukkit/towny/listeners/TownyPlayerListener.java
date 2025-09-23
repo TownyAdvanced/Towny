@@ -930,13 +930,15 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler
 	public void onEntityExhaustion(EntityExhaustionEvent event) {
 		// Stop player exhaustion if criteria is met to prevent saturation loss
+		if (!TownySettings.preventSaturationLoss())
+			return;
 		Player player = (Player) event.getEntity();
 		Town playersTown = TownyAPI.getInstance().getTown(player);
 		TownBlock tbAtPlayer = TownyAPI.getInstance().getTownBlock(player);
 		if (tbAtPlayer == null)
 			return;
 		Town townAtPlayer = tbAtPlayer.getTownOrNull();
-		if (!TownySettings.preventSaturationLoss() && townAtPlayer != null && !townAtPlayer.hasActiveWar() && CombatUtil.isAlly(townAtPlayer, playersTown) && !tbAtPlayer.getType().equals(TownBlockType.ARENA)) {
+		if (townAtPlayer != null && !townAtPlayer.hasActiveWar() && CombatUtil.isAlly(townAtPlayer, playersTown) && !tbAtPlayer.getType().equals(TownBlockType.ARENA)) {
 			return;
 		}
 		event.setCancelled(true);
