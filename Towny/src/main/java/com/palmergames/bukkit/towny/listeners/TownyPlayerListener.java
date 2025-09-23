@@ -118,6 +118,7 @@ public class TownyPlayerListener implements Listener {
 	
 	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+	private boolean isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
 	
 	// https://jd.papermc.io/paper/1.20/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
 	private static final MethodHandle GET_RESPAWN_FLAGS = JavaUtil.getMethodHandle(PlayerRespawnEvent.class, "getRespawnFlags");
@@ -130,6 +131,9 @@ public class TownyPlayerListener implements Listener {
 		TownySettings.addReloadListener(NamespacedKey.fromString("teleport-warmups", plugin), () -> {
 			this.teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 			this.isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+		});
+		TownySettings.addReloadListener(NamespacedKey.fromString("saturation", plugin), () -> {
+			this.isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
 		});
 	}
 
@@ -930,18 +934,21 @@ public class TownyPlayerListener implements Listener {
 	@EventHandler
 	public void onEntityExhaustion(EntityExhaustionEvent event) {
 		// Stop player exhaustion if criteria is met to prevent saturation loss
-		if (!TownySettings.preventSaturationLoss())
+		if (!this.isPreventingSaturationLoss)
 			return;
-		Player player = (Player) event.getEntity();
-		Town playersTown = TownyAPI.getInstance().getTown(player);
+		if (!(event.getEntity() instanceof Player player))
+			return;
+		if (!TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+			return;
 		TownBlock tbAtPlayer = TownyAPI.getInstance().getTownBlock(player);
 		if (tbAtPlayer == null)
 			return;
 		Town townAtPlayer = tbAtPlayer.getTownOrNull();
-		if (townAtPlayer != null && !townAtPlayer.hasActiveWar() && CombatUtil.isAlly(townAtPlayer, playersTown) && !tbAtPlayer.getType().equals(TownBlockType.ARENA)) {
+		Town playersTown = TownyAPI.getInstance().getTown(player);
+		if (playersTown == null)
 			return;
-		}
-		event.setCancelled(true);
+		if (townAtPlayer != null && !townAtPlayer.hasActiveWar() && CombatUtil.isAlly(townAtPlayer, playersTown) && !tbAtPlayer.getType().equals(TownBlockType.ARENA))
+			event.setCancelled(true);
 	} 
 
 	/*
