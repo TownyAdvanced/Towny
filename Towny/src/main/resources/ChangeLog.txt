@@ -10456,3 +10456,13 @@ v0.92.0.11:
   - Merge the build and test actions back into one, courtesy of Warrior with PR #7930.
   - Add LuckPerms permissions source, courtesy of Warrior with PR #7933.
   - Add new constructor for ListDataField, courtesy of SulkyWhale with PR #7937.
+0.101.2.5:
+  - Target Paper instead of spigot, courtesy of Warrior with PR #7885.
+    - Towny will not require Paper or one of its derivatives.
+    - Towny will not start if your server uses Spigot or Craftbukkit.
+    - Some plugins will not work until they are updated to no longer use the now-removed `com.palmergames.adventure` package.
+      - Before you update Towny look at whether you use TownyResources, TownyFlight, other Towny add-on plugins, Sponsor plugins created by LlmDl.
+      - If you are using these plugins do not update your Towny to 0.101.2.5 immediately.
+  - Fix the paper startup check, courtesy of Warrior with PR #7954.
+  - Hide scores in scoreboard huds, courtesy of Warrior with PR #7886.
+  - Replace MethodHandles with method calls where possible, courtesy of Warrior with PR #7887.
