@@ -1,29 +1,24 @@
 package com.palmergames.bukkit.util;
 
-import java.lang.invoke.MethodHandle;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import com.palmergames.bukkit.towny.Towny;
-import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.RegionAccessor;
 import org.bukkit.World;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.block.Biome;
 
-@SuppressWarnings("deprecation") // UnsafeValues are "deprecated"
 public class BiomeUtil {
 
 	private static final Set<NamespacedKey> UNWANTED_BIOME_KEYS = new HashSet<>();
 
 	private static final Predicate<NamespacedKey> IS_OCEAN = (biome) -> biome.getKey().contains("ocean");
 	private static final Predicate<NamespacedKey> IS_UNWANTED_BIOME = UNWANTED_BIOME_KEYS::contains;
-	
-	private static final MethodHandle GET_BIOME_KEY = JavaUtil.getMethodHandle(Bukkit.getUnsafe().getClass(), "getBiomeKey", RegionAccessor.class, int.class, int.class, int.class);
 	
 	static {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:unwanted_chunks"), () -> {
@@ -67,18 +62,13 @@ public class BiomeUtil {
 		return (double) badBiomeBlocks / total;
 	}
 	
+	@SuppressWarnings({"deprecation", "removal"})
 	public static NamespacedKey getBiomeKey(final World world, final int x, final int y, final int z) {
-		if (GET_BIOME_KEY == null)
-			return getBiomeKeyOld(world, x, y, z);
-		
-		try {
-			return (NamespacedKey) GET_BIOME_KEY.invoke(Bukkit.getUnsafe(), world, x, y, z);
-		} catch (Throwable throwable) {
-			return getBiomeKeyOld(world, x, y, z);
+		if (Biome.class.isEnum()) {
+			// pre 1.21
+			return Bukkit.getUnsafe().getBiomeKey(world, x, y, z);
 		}
-	}
-	
-	private static NamespacedKey getBiomeKeyOld(final World world, final int x, final int y, final int z) {
+
 		return world.getBiome(x, y, z).getKey();
 	}
 }

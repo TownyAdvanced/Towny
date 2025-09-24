@@ -46,7 +46,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
-import com.palmergames.util.JavaUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -92,9 +91,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.lang.invoke.MethodHandle;
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * Handle events for all Player related events
@@ -116,9 +113,6 @@ public class TownyPlayerListener implements Listener {
 	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
 	
-	// https://jd.papermc.io/paper/1.20/org/bukkit/event/player/PlayerRespawnEvent.html#getRespawnFlags()
-	private static final MethodHandle GET_RESPAWN_FLAGS = JavaUtil.getMethodHandle(PlayerRespawnEvent.class, "getRespawnFlags");
-
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
 		loadBlockedCommandLists();
@@ -204,7 +198,7 @@ public class TownyPlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		if (plugin.isError() || isEndPortalRespawn(event) || !TownySettings.isTownRespawning()) {
+		if (plugin.isError() || event.getRespawnReason() == PlayerRespawnEvent.RespawnReason.END_PORTAL || !TownySettings.isTownRespawning()) {
 			return;
 		}
 
@@ -239,29 +233,6 @@ public class TownyPlayerListener implements Listener {
 		long protectionTime = TownySettings.getSpawnProtectionDuration();
 		if (protectionTime > 0L && resident != null)
 			resident.addRespawnProtection(protectionTime);
-	}
-	
-	private boolean isEndPortalRespawn(PlayerRespawnEvent event) {
-		try {
-			final Collection<Enum<?>> respawnFlags = (Collection<Enum<?>>) GET_RESPAWN_FLAGS.invoke(event);
-			
-			for (final Enum<?> flag : respawnFlags) {
-				if ("END_PORTAL".equals(flag.name()))
-					return true;
-			}
-			
-			return false;
-		} catch (Throwable e) {
-			// Spigot
-			final Player player = event.getPlayer();
-			
-			if (player.getWorld().getEnvironment() != Environment.THE_END)
-				return false;
-			
-			// Can cause a sync chunk load
-			// Check if legs or head is inside an end portal block
-			return player.getLocation().getBlock().getType() == Material.END_PORTAL || player.getEyeLocation().getBlock().getType() == Material.END_PORTAL;
-		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
