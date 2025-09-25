@@ -1,35 +1,5 @@
 package com.palmergames.bukkit.towny.utils;
 
-import java.util.BitSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
-import com.palmergames.bukkit.towny.event.NationSpawnEvent;
-import com.palmergames.bukkit.towny.event.SpawnEvent;
-import com.palmergames.bukkit.towny.event.TownSpawnEvent;
-import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
-import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
-import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
-import com.palmergames.bukkit.towny.object.SpawnInformation;
-import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.WorldCoord;
-import com.palmergames.bukkit.towny.object.economy.Account;
-import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
-import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
-import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
-
-import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
-import com.palmergames.bukkit.util.ItemLists;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
@@ -38,18 +8,46 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyTimerHandler;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
+import com.palmergames.bukkit.towny.event.NationSpawnEvent;
+import com.palmergames.bukkit.towny.event.SpawnEvent;
+import com.palmergames.bukkit.towny.event.TownSpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.ResidentSpawnEvent;
+import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
+import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.SpawnInformation;
 import com.palmergames.bukkit.towny.object.SpawnType;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyObject;
+import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
+import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
+import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
+import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.util.ItemLists;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.BitSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class SpawnUtil {
 
@@ -485,6 +483,11 @@ public class SpawnUtil {
 			return location;
 		}
 
+		if(TownySettings.isStrictSafeTeleportUsed()) {
+			TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_cancel_safe_teleport"));
+			return null;
+		}
+		
 		final int range = 22;
 
 		BitSet isLiquidMap = new BitSet(range * 2);
