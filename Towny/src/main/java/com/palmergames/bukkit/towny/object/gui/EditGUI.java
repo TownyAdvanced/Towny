@@ -7,6 +7,8 @@ import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil.SetPermissionType;
 
+import net.kyori.adventure.text.Component;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +20,7 @@ public class EditGUI extends PermissionGUI {
 	private final Resident editor;
 	private final Resident selectedResident;
 
-	public EditGUI(Resident res, Inventory inv, String name, TownBlock townBlock, Resident selectedResident) {
+	public EditGUI(Resident res, Inventory inv, Component name, TownBlock townBlock, Resident selectedResident) {
 		super(res, inv, name, townBlock, true);
 		this.editor = res;
 		this.selectedResident = selectedResident;

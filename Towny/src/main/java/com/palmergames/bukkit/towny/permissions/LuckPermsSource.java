@@ -2,7 +2,6 @@ package com.palmergames.bukkit.towny.permissions;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.util.TriState;
 import net.luckperms.api.LuckPerms;

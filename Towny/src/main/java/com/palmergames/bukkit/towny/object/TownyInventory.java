@@ -4,6 +4,8 @@ import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -18,7 +20,7 @@ public class TownyInventory implements InventoryHolder {
 
 	private final Inventory inv;
 	
-	public TownyInventory(Resident res, Inventory inv, String name) {
+	public TownyInventory(Resident res, Inventory inv, Component name) {
 		this.inv = Bukkit.createInventory(this, 54, name);
 		this.inv.setContents(inv.getContents());
 		res.getPlayer().openInventory(this.inv);
@@ -45,7 +47,7 @@ public class TownyInventory implements InventoryHolder {
 				} else {
 					// Next page exists, flip the page
 					resident.setGUIPageNum(++currentPage);
-					new TownyInventory(resident, resident.getGUIPage(), inventoryView.getTitle());
+					new TownyInventory(resident, resident.getGUIPage(), inventoryView.title());
 					playClickSound(player);
 				}
 				// if the pressed item was a previous page button
@@ -54,7 +56,7 @@ public class TownyInventory implements InventoryHolder {
 				if (resident.getGUIPageNum() > 0) {
 					// Flip to previous page
 					resident.setGUIPageNum(--currentPage);
-					new TownyInventory(resident, resident.getGUIPage(), inventoryView.getTitle());
+					new TownyInventory(resident, resident.getGUIPage(), inventoryView.title());
 					playClickSound(player);
 				} else if (resident.getGUIPageNum() == 0 && resident.getGUISelectionType() != null) {
 					// No page to go back from: go back to the SelectionGUI for the SelectionType

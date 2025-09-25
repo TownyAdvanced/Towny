@@ -360,7 +360,7 @@ public class TownyEntityListener implements Listener {
 	}
 
 	private boolean entityIsExemptByName(LivingEntity livingEntity) {
-		return TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.getCustomName() != null 
+		return TownySettings.isSkippingRemovalOfNamedMobs() && livingEntity.customName() != null 
 				&& !PluginIntegrations.getInstance().checkHostileEliteMobs(livingEntity);
 	}
 

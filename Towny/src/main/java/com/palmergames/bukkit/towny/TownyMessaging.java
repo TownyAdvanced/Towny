@@ -25,7 +25,6 @@ import com.palmergames.util.StringMgmt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -40,6 +39,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -404,7 +404,11 @@ public class TownyMessaging {
 	 * @param duration How long the title is shown for in ticks. 
 	 */
 	public static void sendTitle(Player player, String title, String subtitle, int duration) {
-		player.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, 10, duration, 10);
+		player.showTitle(Title.title(
+				title.isEmpty() ? Component.empty() : Component.text(title),
+				subtitle.isEmpty() ? Component.empty() : Component.text(subtitle),
+				10, duration, 10));
+
 	}
 
 	/**
@@ -668,15 +672,15 @@ public class TownyMessaging {
 		} else {
 			jailsFormatted = new TextComponent[10];
 		}
-		String headerMsg = ChatColor.GOLD + "# " +
-							ChatColor.DARK_GRAY + "- "+
-							ChatColor.GREEN + "Jail Name " +
-							ChatColor.DARK_GRAY + "- "+
-							ChatColor.BLUE + "Coord " +
-							ChatColor.DARK_GRAY + "- " +
-							ChatColor.YELLOW + "Cell Count " +
-							ChatColor.DARK_GRAY + "- " +
-							ChatColor.RED + "Primary Jail";
+		String headerMsg = NamedTextColor.GOLD + "# " +
+							NamedTextColor.DARK_GRAY + "- "+
+							NamedTextColor.GREEN + "Jail Name " +
+							NamedTextColor.DARK_GRAY + "- "+
+							NamedTextColor.BLUE + "Coord " +
+							NamedTextColor.DARK_GRAY + "- " +
+							NamedTextColor.YELLOW + "Cell Count " +
+							NamedTextColor.DARK_GRAY + "- " +
+							NamedTextColor.RED + "Primary Jail";
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Jail jail = jails.get(i);
 
@@ -721,13 +725,13 @@ public class TownyMessaging {
 			groupsFormatted = new TextComponent[10];
 		}
 		
-		String headerMsg = ChatColor.GOLD + "# " +
-				ChatColor.DARK_GRAY + "- "+
-				ChatColor.GREEN + "Group Name " +
-				ChatColor.DARK_GRAY + "- " +
-				ChatColor.YELLOW + "Plot Size " +
-				ChatColor.DARK_GRAY + "- " +
-				ChatColor.BLUE + "For Sale";
+		String headerMsg = NamedTextColor.GOLD + "# " +
+				NamedTextColor.DARK_GRAY + "- "+
+				NamedTextColor.GREEN + "Group Name " +
+				NamedTextColor.DARK_GRAY + "- " +
+				NamedTextColor.YELLOW + "Plot Size " +
+				NamedTextColor.DARK_GRAY + "- " +
+				NamedTextColor.BLUE + "For Sale";
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			PlotGroup group = groups.get(i);
 			TextComponent name = Component.text(group.getFormattedName(), NamedTextColor.GREEN);
@@ -764,15 +768,15 @@ public class TownyMessaging {
 				? new Component[plotCount % 10]
 				: new Component[10];
 
-		String headerMsg = ChatColor.GOLD + "# " + 
-				ChatColor.DARK_GRAY + "-    " +
-				ChatColor.GREEN + "Coord " +
-				ChatColor.DARK_GRAY + "    -    " +
-				ChatColor.AQUA + "Town" +
-				ChatColor.DARK_GRAY + "    -    " +
-				ChatColor.GREEN + "Type" +
-				ChatColor.DARK_GRAY + "    -    " +
-				ChatColor.YELLOW + "Name";
+		String headerMsg = NamedTextColor.GOLD + "# " + 
+				NamedTextColor.DARK_GRAY + "-    " +
+				NamedTextColor.GREEN + "Coord " +
+				NamedTextColor.DARK_GRAY + "    -    " +
+				NamedTextColor.AQUA + "Town" +
+				NamedTextColor.DARK_GRAY + "    -    " +
+				NamedTextColor.GREEN + "Type" +
+				NamedTextColor.DARK_GRAY + "    -    " +
+				NamedTextColor.YELLOW + "Name";
 
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			TownBlock tb = townblocks.get(i);
