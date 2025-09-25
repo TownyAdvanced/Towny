@@ -99,7 +99,7 @@ import java.util.logging.Level;
  */
 public class Towny extends JavaPlugin {
 	private static Towny plugin;
-	private final String version = this.getDescription().getVersion();
+	private final String version = this.getPluginMeta().getVersion();
 
 	private TownyUniverse townyUniverse;
 
