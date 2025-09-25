@@ -152,7 +152,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 				return;
 			}
 
-			if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.getCustomName() != null)
+			if (TownySettings.isSkippingRemovalOfNamedMobs() && entity.customName() != null)
 				return;
 
 			// Don't remove if the entity's spawn reason is considered ignored by the config
