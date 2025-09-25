@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.db;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
@@ -47,10 +48,12 @@ public abstract class TownyDataSource {
 	final Lock lock = new ReentrantLock();
 	protected final Towny plugin;
 	protected final TownyUniverse universe;
+	protected final TownyAPI api;
 
 	TownyDataSource(Towny plugin, TownyUniverse universe) {
 		this.plugin = plugin;
 		this.universe = universe;
+		this.api = TownyAPI.getInstance();
 	}
 
 	public abstract boolean backup() throws IOException;

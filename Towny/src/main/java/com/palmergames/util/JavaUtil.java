@@ -146,4 +146,17 @@ public class JavaUtil {
 
 		return new UUID(mostSig, leastSig);
 	}
+
+	@Nullable
+	public static UUID parseUUIDOrNull(final String uuid) {
+		if (uuid == null) {
+			return null;
+		}
+
+		try {
+			return UUID.fromString(uuid);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+	}
 }
