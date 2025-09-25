@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -77,8 +78,11 @@ public class ComparatorCaches {
 	@SuppressWarnings("unchecked")
 	private static List<Pair<UUID, Component>> gatherTownLines(ComparatorType compType) {
 		List<Pair<UUID, Component>> output = new ArrayList<>();
-		List<Town> towns = TownyUniverse.getInstance().getTowns().stream().filter(Town::isVisibleOnTopLists).collect(Collectors.toList());
-		towns.sort((Comparator<? super Town>) compType.getComparator());
+		List<Town> towns = TownyUniverse.getInstance().getTowns().stream()
+			.filter(Town::isVisibleOnTopLists)
+			.filter((Predicate<? super Town>) compType.getPredicate())
+			.sorted((Comparator<? super Town>) compType.getComparator())
+			.toList();
 
 		boolean spawningFullyDisabled = !TownySettings.isConfigAllowingTownSpawn() && !TownySettings.isConfigAllowingPublicTownSpawnTravel()
 				&& !TownySettings.isConfigAllowingTownSpawnNationTravel() && !TownySettings.isConfigAllowingTownSpawnNationAllyTravel();
@@ -146,10 +150,12 @@ public class ComparatorCaches {
 	@SuppressWarnings("unchecked")
 	private static List<Pair<UUID, Component>> gatherNationLines(ComparatorType compType) {
 		List<Pair<UUID, Component>> output = new ArrayList<>();
-		List<Nation> nations = new ArrayList<>(TownyUniverse.getInstance().getNations());
 
-		//Sort nations
-		nations.sort((Comparator<? super Nation>) compType.getComparator());
+		List<Nation> nations = TownyUniverse.getInstance().getNations().stream()
+			.filter((Predicate<? super Nation>) compType.getPredicate())
+			.sorted((Comparator<? super Nation>) compType.getComparator())
+			.collect(Collectors.toCollection(ArrayList::new)); // Mutable list because of the event
+
 		DisplayedNationsListSortEvent nationListSortEvent = new DisplayedNationsListSortEvent(nations, compType);
 		BukkitTools.fireEvent(nationListSortEvent);
 		nations = nationListSortEvent.getNations();

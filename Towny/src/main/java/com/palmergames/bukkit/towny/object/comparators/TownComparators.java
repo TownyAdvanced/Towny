@@ -9,7 +9,7 @@ import com.palmergames.bukkit.towny.object.Town;
  * A list of static comparators used for organizing lists of {@link Town}'s
  */
 public class TownComparators {
-	public static final Comparator<Town> BY_FORSALE = (t1, t2) -> doCompare(t1, t2, Town::isForSale);
+	public static final Comparator<Town> BY_FORSALE = Comparator.comparingDouble(Town::getForSalePrice);
 	public static final Comparator<Town> BY_RUINED = (t1, t2) -> doCompare(t1, t2, Town::isRuined);
 	public static final Comparator<Town> BY_BANKRUPT = (t1, t2) -> doCompare(t1, t2, Town::isBankrupt);
 

@@ -75,7 +75,9 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MathUtil;
+import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -812,12 +814,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 2 && !console)
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode());
 		
-		List<Nation> nationsToSort = new ArrayList<>(TownyUniverse.getInstance().getNations());
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;
 		ComparatorType type = ComparatorType.RESIDENTS;
-		int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) { // Is a case of someone using /n list by {comparator}
 				if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_LIST_BY, split[i+1])) {
@@ -861,18 +861,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 
-	    if (page > total) {
-	        TownyMessaging.sendErrorMsg(sender, Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
-	        return;
-	    }
-
 	    final ComparatorType finalType = type;
 	    final int pageNumber = page;
-		try {
-			plugin.getScheduler().runAsync(() -> TownyMessaging.sendNationList(sender, ComparatorCaches.getNationListCache(finalType), finalType, pageNumber, total));
-		} catch (RuntimeException e) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_comparator_failed"));
-		}
+		plugin.getScheduler().runAsync(() -> {
+			final List<Pair<UUID, Component>> list = ComparatorCaches.getNationListCache(finalType);
+			int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
+
+			if (pageNumber > total) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+				return;
+			}
+
+			TownyMessaging.sendNationList(sender, list, finalType, pageNumber, total);
+		});
 
 	}
 

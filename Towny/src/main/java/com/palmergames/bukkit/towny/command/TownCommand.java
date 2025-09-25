@@ -1149,12 +1149,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 2 && !console)
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_LIST_RESIDENTS.getNode());
 		
-		List<Town> townsToSort = new ArrayList<>(TownyUniverse.getInstance().getTowns());
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;
 		ComparatorType type = ComparatorType.RESIDENTS;
-		int total = (int) Math.ceil(((double) townsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) { // Is a case of someone using /n list by {comparator}
 				if (TownyCommandAddonAPI.hasCommand(CommandType.TOWN_LIST_BY, split[i+1])) {
@@ -1196,22 +1194,33 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				pageSet = true;
 			}
 		}
-
-		if (page > total) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("list_err_not_enough_pages", total));
-			return;
-		}
 		
 		final int pageNumber = page;
-		final int totalNumber = total; 
 		final ComparatorType finalType = type;
 		try {
 			if (!TownySettings.isTownListRandom()) {
-				plugin.getScheduler().runAsync(() -> TownyMessaging.sendTownList(sender, ComparatorCaches.getTownListCache(finalType), finalType, pageNumber, totalNumber));
+				plugin.getScheduler().runAsync(() -> {
+					List<Pair<UUID, Component>> list = ComparatorCaches.getTownListCache(finalType);
+					int totalPages = (int) Math.ceil(((double) list.size()) / ((double) 10));
+
+					if (pageNumber > totalPages) {
+						TownyMessaging.sendErrorMsg(sender, Translatable.of("list_err_not_enough_pages", totalPages));
+						return;
+					}
+
+					TownyMessaging.sendTownList(sender, list, finalType, pageNumber, totalPages);
+				});
 			} else { 
 				// Make a randomly sorted output.
 				List<Pair<UUID, Component>> output = new ArrayList<>();
 				List<Town> towns = new ArrayList<>(TownyUniverse.getInstance().getTowns());
+
+				int totalPages = (int) Math.ceil(((double) towns.size()) / ((double) 10));
+				if (page > totalPages) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("list_err_not_enough_pages", totalPages));
+					return;
+				}
+
 				Collections.shuffle(towns);
 
 				boolean spawningFullyDisabled = !TownySettings.isConfigAllowingTownSpawn() && !TownySettings.isConfigAllowingPublicTownSpawnTravel()
@@ -1234,7 +1243,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					}
 					output.add(Pair.pair(town.getUUID(), townName));
 				}
-				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalNumber);
+				TownyMessaging.sendTownList(sender, output, finalType, pageNumber, totalPages);
 			}
 		} catch (RuntimeException e) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_comparator_failed"));
