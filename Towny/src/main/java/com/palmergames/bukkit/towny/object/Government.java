@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -35,7 +36,7 @@ import java.util.UUID;
  */
 public abstract class Government extends TownyObject implements BankEconomyHandler, ResidentList, Inviteable, Identifiable, SpawnLocation, SpawnPosition, ForwardingAudience {
 	
-	protected UUID uuid;
+	protected final UUID uuid;
 	protected BankAccount account;
 	protected Position spawn;
 	protected String tag = "";
@@ -52,8 +53,19 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	private boolean hasActiveWar = false;
 	
-	protected Government(String name) {
+	protected Government(String name, UUID uuid) {
 		super(name);
+		this.uuid = uuid;
+	}
+	
+	@Deprecated
+	protected Government(String name) {
+		this(name, UUID.randomUUID());
+	}
+
+	@Override
+	public int hashCode() {
+		return this.uuid.hashCode();
 	}
 
 	@Override
@@ -310,9 +322,12 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		return uuid;
 	}
 
+	/**
+	 * @deprecated Changing UUIDs of Government objects is no longer supported.
+	 */
+	@Deprecated
 	@Override
 	public void setUUID(UUID uuid) {
-		this.uuid = uuid;
 	}
 	
 	public String getMapColorHexCode() {

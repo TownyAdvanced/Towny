@@ -51,13 +51,18 @@ public class Nation extends Government {
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
 	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
 
-	public Nation(String name) {
-		super(name);
+	public Nation(String name, UUID uuid) {
+		super(name, uuid);
 		
 		// Set defaults
 		setTaxes(TownySettings.getNationDefaultTax());
 		setBoard(TownySettings.getNationDefaultBoard());
 		setOpen(TownySettings.getNationDefaultOpen());
+	}
+
+	@Deprecated
+	public Nation(String name) {
+		this(name, UUID.randomUUID());
 	}
 
 	@Override
@@ -66,12 +71,7 @@ public class Nation extends Government {
 			return true;
 		if (!(other instanceof Nation otherNation))
 			return false;
-		return this.getName().equals(otherNation.getName()); // TODO: Change this to UUID when the UUID database is in use.
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.getUUID().equals(otherNation.getUUID());
 	}
 
 	public void addAlly(Nation nation) {

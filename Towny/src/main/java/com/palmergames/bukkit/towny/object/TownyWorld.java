@@ -33,7 +33,7 @@ import java.util.UUID;
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
 
-	private final HashMap<String, Town> towns = new HashMap<>();
+	private final HashMap<UUID, Town> towns = new HashMap<>();
 
 	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
 	private Set<EntityType> unclaimDeleteEntityTypes = null;
@@ -127,9 +127,9 @@ public class TownyWorld extends TownyObject {
 		return world;
 	}
 	
+	@Deprecated
 	public HashMap<String, Town> getTowns() {
-
-		return towns;
+		return new HashMap<>();
 	}
 
 	public boolean hasTowns() {
@@ -138,19 +138,17 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public boolean hasTown(String name) {
+		final Town town = TownyUniverse.getInstance().getTown(name);
 
-		return towns.containsKey(name);
+		return town != null && towns.containsKey(town.getUUID());
 	}
 
 	public boolean hasTown(Town town) {
-
-		return hasTown(town.getName());
+		return this.towns.containsKey(town.getUUID());
 	}
 
 	public void addTown(Town town) {
-
-		if (!hasTown(town))
-			towns.put(town.getName(), town);
+		towns.put(town.getUUID(), town);
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
