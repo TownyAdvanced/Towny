@@ -523,9 +523,9 @@ public class TownyUniverse {
     	return townsTrie;
 	}
 
-	// Internal use only.
-	public void newTownInternal(String name) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
-    	newTown(name, false);
+	@ApiStatus.Internal
+	public void newTownInternal(String name, UUID uuid) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
+    	newTown(name, uuid);
 	}
 
 	/**
@@ -538,13 +538,13 @@ public class TownyUniverse {
 	public void newTown(@NotNull String name) throws AlreadyRegisteredException, InvalidNameException {
 		Preconditions.checkNotNull(name, "Name cannot be null!");
 		
-		newTown(name, true);
+		newTown(name, UUID.randomUUID());
 	}
 
-	private void newTown(String name, boolean assignUUID) throws AlreadyRegisteredException, InvalidNameException {
+	private void newTown(String name, UUID uuid) throws AlreadyRegisteredException, InvalidNameException {
 		String filteredName = NameValidation.checkAndFilterTownNameOrThrow(name);
 
-		Town town = new Town(filteredName, assignUUID ? UUID.randomUUID() : null);
+		Town town = new Town(filteredName, uuid);
 		registerTown(town);
 	}
 	
