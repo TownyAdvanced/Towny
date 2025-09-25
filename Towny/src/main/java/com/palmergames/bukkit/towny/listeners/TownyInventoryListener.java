@@ -11,6 +11,12 @@ import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,12 +28,15 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.Colors;
+
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Set;
 
 public class TownyInventoryListener implements Listener {
 	
+	private static final Component SAVE = Component.text("Save", Style.style().color(TextColor.color(NamedTextColor.GREEN.asHSV())).decorate(TextDecoration.BOLD).build());
+	private static final Component BACK = Component.text("Back", Style.style().color(TextColor.color(NamedTextColor.RED.asHSV())).decorate(TextDecoration.BOLD).build());
 	private final Towny plugin;
 	private final Sound clickSound = Sound.sound(Key.key(Key.MINECRAFT_NAMESPACE, "block.stone_button.click_on"), Sound.Source.PLAYER, 1.0f, 1.0f);
 
@@ -60,16 +69,16 @@ public class TownyInventoryListener implements Listener {
 			
 			Material type = event.getCurrentItem().getType();
 			if (type == Material.LIME_WOOL) {
-				if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
+				if (meta.displayName().equals(PermissionGUIUtil.SAVE)) {
 					editGUI.saveChanges();
 				} else {
 					meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
 					event.getCurrentItem().setType(Material.RED_WOOL);
 				}
 			} else if (type == Material.RED_WOOL) {
-				if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
+				if (meta.displayName().equals(PermissionGUIUtil.BACK)) {
 					editGUI.exitScreen();
-				} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
+				} else if (meta.displayName().equals(PermissionGUIUtil.DELETE)) {
 					editGUI.deleteResident();
 				} else {
 					meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));

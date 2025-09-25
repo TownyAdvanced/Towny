@@ -208,12 +208,12 @@ public class ResidentUtil {
 		pages.add(page);
 		resident.setGUIPages(pages);
 		resident.setGUIPageNum(0);
-		new TownyInventory(resident, pages.get(0), name);
+		new TownyInventory(resident, pages.get(0), Component.text(name));
 	}
 
 	// This creates a blank page with the next and prev buttons
 	public static Inventory getBlankPage(String name) {
-		Inventory page = Bukkit.createInventory(null, 54, name);
+		Inventory page = Bukkit.createInventory(null, 54, Component.text(name));
 
 		ItemStack nextpage = new ItemStack(Material.ARROW);
 		ItemMeta meta = nextpage.getItemMeta();

@@ -4,6 +4,9 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.Colors;
+
+import net.kyori.adventure.text.Component;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -13,7 +16,7 @@ public class PermissionGUI extends TownyInventory {
 	private final TownBlock townBlock;
 	private final boolean canEdit;
 	
-	public PermissionGUI(Resident res, Inventory inv, String name, TownBlock townBlock, boolean canEdit) {
+	public PermissionGUI(Resident res, Inventory inv, Component name, TownBlock townBlock, boolean canEdit) {
 		super(res, inv, name);
 		this.townBlock = townBlock;
 		this.canEdit = canEdit;
@@ -37,7 +40,7 @@ public class PermissionGUI extends TownyInventory {
 				if (resident.getGUIPageNum() <= resident.getGUIPages().size() - 1) {
 					// Next page exists, flip the page
 					resident.setGUIPageNum(++currentPage);
-					new PermissionGUI(resident, resident.getGUIPage(), inventoryView.getTitle(), townBlock, canEdit);
+					new PermissionGUI(resident, resident.getGUIPage(), inventoryView.title(), townBlock, canEdit);
 					playClickSound(player);
 				}
 				// if the pressed item was a previous page button
@@ -46,7 +49,7 @@ public class PermissionGUI extends TownyInventory {
 				if (resident.getGUIPageNum() > 0) {
 					// Flip to previous page
 					resident.setGUIPageNum(--currentPage);
-					new PermissionGUI(resident, resident.getGUIPage(), inventoryView.getTitle(), townBlock, canEdit);
+					new PermissionGUI(resident, resident.getGUIPage(), inventoryView.title(), townBlock, canEdit);
 					playClickSound(player);
 				}
 			}
