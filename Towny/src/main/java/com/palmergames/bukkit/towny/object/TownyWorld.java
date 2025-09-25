@@ -19,6 +19,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -127,9 +128,16 @@ public class TownyWorld extends TownyObject {
 		return world;
 	}
 	
-	@Deprecated
+	/**
+	 * @deprecated use {@link #getTownsInWorld()} instead.
+	 */
+	@Deprecated(since = "0.101.2.5")
 	public HashMap<String, Town> getTowns() {
 		return new HashMap<>();
+	}
+
+	public @Unmodifiable Collection<Town> getTownsInWorld() {
+		return Set.copyOf(this.towns.values());
 	}
 
 	public boolean hasTowns() {
@@ -802,7 +810,7 @@ public class TownyWorld extends TownyObject {
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
 		
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null) {
@@ -846,7 +854,7 @@ public class TownyWorld extends TownyObject {
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			if (homeTown != null)
 				// If the townblock either: the town is the same as homeTown OR 
 				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
@@ -913,7 +921,7 @@ public class TownyWorld extends TownyObject {
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
@@ -947,7 +955,7 @@ public class TownyWorld extends TownyObject {
 		double minSqr = -1;
 		TownBlock tb = null;
 		
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			if (!town.hasNation())
 				continue;
 			for (TownBlock b : town.getTownBlocks()) {

@@ -33,7 +33,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,6 +50,7 @@ public class Nation extends Government {
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
 	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
 
+	@ApiStatus.Internal
 	public Nation(String name, UUID uuid) {
 		super(name, uuid);
 		
@@ -60,7 +60,7 @@ public class Nation extends Government {
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
-	@Deprecated
+	@Deprecated(since = "0.101.2.5")
 	public Nation(String name) {
 		this(name, UUID.randomUUID());
 	}

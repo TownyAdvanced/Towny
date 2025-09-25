@@ -87,13 +87,14 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private String districtName = null;
 	protected CachedTaxOwing cachedTaxOwing = null;
 
+	@ApiStatus.Internal
 	public Resident(String name, UUID uuid) {
 		super(name);
 		this.uuid = uuid;
 		permissions.loadDefault(this);
 	}
 
-	@Deprecated
+	@Deprecated(since = "0.101.2.5")
 	public Resident(String name) {
 		this(name, UUID.randomUUID());
 	}
@@ -140,7 +141,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	/**
 	 * @deprecated Changing UUIDs of Resident objects is no longer supported.
 	 */
-	@Deprecated
+	@Deprecated(since = "0.101.2.5")
 	@Override
 	public void setUUID(UUID uuid) {
 	}

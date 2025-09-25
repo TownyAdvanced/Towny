@@ -18,6 +18,7 @@ import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
@@ -53,12 +54,13 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	private final AccountAuditor accountAuditor = new GovernmentAccountAuditor();
 	private boolean hasActiveWar = false;
 	
+	@ApiStatus.Internal
 	protected Government(String name, UUID uuid) {
 		super(name);
 		this.uuid = uuid;
 	}
 	
-	@Deprecated
+	@Deprecated(since = "0.101.2.5")
 	protected Government(String name) {
 		this(name, UUID.randomUUID());
 	}
@@ -325,7 +327,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	/**
 	 * @deprecated Changing UUIDs of Government objects is no longer supported.
 	 */
-	@Deprecated
+	@Deprecated(since = "0.101.2.5")
 	@Override
 	public void setUUID(UUID uuid) {
 	}
