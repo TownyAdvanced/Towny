@@ -703,6 +703,12 @@ public enum ConfigNodes {
 			"# Requires max_residents_capital_override to be above 0.",
 			"# Uses the greater of max_residents_capital_override and max_residents_per_town."
 	),
+	GTOWN_SETTINGS_TOWN_LEVEL_IS_DETERMINED_BY_TOWNBLOCK_COUNT(
+			"global_town_settings.town_level_is_determined_by_townblock_count_instead_of_resident_count",
+			"false",
+			"",
+			"# When set to true, the town's TownLevel is determined by the number of townblocks the town owns, instead of the number of residents.",
+			"# This setting will have no effect when town_block_ratio is set to 0."),
 	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
 			"global_town_settings.display_board_onlogin",
 			"true",
