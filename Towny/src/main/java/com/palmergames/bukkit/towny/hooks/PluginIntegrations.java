@@ -68,7 +68,7 @@ public class PluginIntegrations {
 	private void formatForUniverseCommand(List<String> out, String pluginName) {
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
 		if (plugin != null)
-			out.add(Colors.Yellow + pluginName + " " + Colors.Green + plugin.getDescription().getVersion());
+			out.add(Colors.Yellow + pluginName + " " + Colors.Green + plugin.getPluginMeta().getVersion());
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class PluginIntegrations {
 
 		//Add warning about outdated PowerRanks.
 		if (isPluginPresent("PowerRanks")) {
-			Version version = Version.fromString(Bukkit.getPluginManager().getPlugin("PowerRanks").getDescription().getVersion());
+			Version version = Version.fromString(Bukkit.getPluginManager().getPlugin("PowerRanks").getPluginMeta().getVersion());
 			if (version.isOlderThan(POWERRANKS_FIXED_VERSION))
 				warnings.put("Your outdated PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
 					+ " Update your PowerRanks to version 1.10.8 or newer!", Level.WARNING);
@@ -192,7 +192,7 @@ public class PluginIntegrations {
 	private void formatForStartup(List<String> out, String pluginName) {
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
 		if (plugin != null)
-			out.add(pluginName + " v" + plugin.getDescription().getVersion());
+			out.add(pluginName + " v" + plugin.getPluginMeta().getVersion());
 	}
 
 	public String registerPermissionsProviders(Towny towny) {
@@ -202,14 +202,14 @@ public class PluginIntegrations {
 		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("LuckPerms");
 		if (test != null) {
 			TownyUniverse.getInstance().setPermissionSource(new LuckPermsSource(towny));
-			return output + String.format("%s v%s", "LuckPerms", test.getDescription().getVersion());
+			return output + String.format("%s v%s", "LuckPerms", test.getPluginMeta().getVersion());
 		}
 
 		// Test for GroupManager being present.
 		test = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null && JavaUtil.classExists("org.anjocaido.groupmanager.GroupManager")) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(towny, test));
-			return output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
+			return output += String.format("%s v%s", "GroupManager", test.getPluginMeta().getVersion());
 		}
 
 		// Else test for vault being present.
@@ -226,12 +226,12 @@ public class PluginIntegrations {
 				TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(towny, chatProvider.getProvider()));
 				
 				if (permissionProvider != null) {
-					output += permissionProvider.getPlugin().getName() + " v" + permissionProvider.getPlugin().getDescription().getVersion() + " via Vault";
+					output += permissionProvider.getPlugin().getName() + " v" + permissionProvider.getPlugin().getPluginMeta().getVersion() + " via Vault";
 				} else {
-					output += String.format("Vault v%s", test.getDescription().getVersion());
+					output += String.format("Vault v%s", test.getPluginMeta().getVersion());
 				}
 				
-				output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion());
+				output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getPluginMeta().getVersion());
 				return output;
 			}
 
@@ -258,7 +258,7 @@ public class PluginIntegrations {
 				field.setAccessible(true);
 				
 				if (field.get(chatProvider.getProvider()) == null) {
-					Towny.getPlugin().getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion()));
+					Towny.getPlugin().getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getPluginMeta().getVersion()));
 					Towny.getPlugin().getLogger().warning(String.format("Class '%s' has a null Permission field, which is not supported.", chatProvider.getProvider().getClass().getName()));
 					
 					if (!iterator.hasNext())

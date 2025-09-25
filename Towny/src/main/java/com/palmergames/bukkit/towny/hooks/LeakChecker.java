@@ -39,7 +39,7 @@ public class LeakChecker {
 	private static void checkPlugin(List<String> leaks, List<Version> versionList, String name) {
 		PluginManager pm = Bukkit.getPluginManager();
 		Plugin plugin = pm.getPlugin(name);
-		if (plugin == null || !versionList.contains(Version.fromString(plugin.getDescription().getVersion())))
+		if (plugin == null || !versionList.contains(Version.fromString(plugin.getPluginMeta().getVersion())))
 			return;
 		Towny.getPlugin().getScheduler().runLater(() -> pm.disablePlugin(plugin), 10L);
 		leaks.add(name);

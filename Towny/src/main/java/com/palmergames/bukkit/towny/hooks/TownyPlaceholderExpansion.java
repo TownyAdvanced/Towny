@@ -89,7 +89,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	 */
 	@Override
 	public String getAuthor() {
-		return plugin.getDescription().getAuthors().toString();
+		return plugin.getPluginMeta().getAuthors().toString();
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	 */
 	@Override
 	public String getVersion() {
-		return plugin.getDescription().getVersion();
+		return plugin.getPluginMeta().getVersion();
 	}
 	
 	@Override
