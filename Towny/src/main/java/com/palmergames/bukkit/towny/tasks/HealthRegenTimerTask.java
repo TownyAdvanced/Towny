@@ -78,10 +78,6 @@ public class HealthRegenTimerTask extends TownyTimerTask {
 	}
 
 	private void evaluateHealth(Player player) {
-		// When enabled, keep saturation above zero while in town, preventing food level loss.
-		if (TownySettings.preventSaturationLoss() && player.getSaturation() != 1F)
-			player.setSaturation(1F);
-
 		// Heal 1 HP while in town.
 		final double currentHP = player.getHealth();
 		final double futureHP = currentHP + 1;

@@ -69,6 +69,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityExhaustionEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -112,6 +113,7 @@ public class TownyPlayerListener implements Listener {
 	
 	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+	private boolean isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
 	
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
@@ -121,6 +123,9 @@ public class TownyPlayerListener implements Listener {
 		TownySettings.addReloadListener(NamespacedKey.fromString("teleport-warmups", plugin), () -> {
 			this.teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 			this.isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+		});
+		TownySettings.addReloadListener(NamespacedKey.fromString("saturation", plugin), () -> {
+			this.isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
 		});
 	}
 
@@ -902,6 +907,26 @@ public class TownyPlayerListener implements Listener {
 			}
 		}	
 	}
+	
+	@EventHandler
+	public void onEntityExhaustion(EntityExhaustionEvent event) {
+		// Stop player exhaustion if criteria is met to prevent saturation loss
+		if (!this.isPreventingSaturationLoss)
+			return;
+		if (!(event.getEntity() instanceof Player player))
+			return;
+		if (!TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+			return;
+		TownBlock tbAtPlayer = TownyAPI.getInstance().getTownBlock(player);
+		if (tbAtPlayer == null)
+			return;
+		Town townAtPlayer = tbAtPlayer.getTownOrNull();
+		Town playersTown = TownyAPI.getInstance().getTown(player);
+		if (playersTown == null)
+			return;
+		if (townAtPlayer != null && !townAtPlayer.hasActiveWar() && CombatUtil.isAlly(townAtPlayer, playersTown) && !tbAtPlayer.getType().equals(TownBlockType.ARENA))
+			event.setCancelled(true);
+	} 
 
 	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent
