@@ -124,7 +124,7 @@ public class SQLSchema {
 	 * Generic create table statement for the Name keyed TownyDBTableTypes
 	 */
 	private static String fetchCreateNamedStatement(TownyDBTableType tableType) {
-		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL,PRIMARY KEY (`name`))";
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL COLLATE utf8mb4_bin, PRIMARY KEY (`name`))";
 	}
 
 	/*
@@ -199,7 +199,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("groupName", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("groupPrice", "float DEFAULT NULL"));
 		columns.add(new ColumnData("town", "VARCHAR(32) NOT NULL"));
-		columns.add(new ColumnData("metadata", "text DEFAULT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		return columns;
 	}
 
@@ -228,7 +228,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("surname", "mediumtext"));
 		columns.add(new ColumnData("protectionStatus", "mediumtext"));
 		columns.add(new ColumnData("friends", "mediumtext"));
-		columns.add(new ColumnData("metadata", "text DEFAULT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("uuid", "VARCHAR(36) NOT NULL"));
 		columns.add(new ColumnData("about", "mediumtext DEFAULT NULL"));
 		return columns;
@@ -275,7 +275,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("registered", "BIGINT DEFAULT NULL"));
 		columns.add(new ColumnData("spawnCost", "float NOT NULL"));
 		columns.add(new ColumnData("mapColorHexCode", "mediumtext DEFAULT NULL"));
-		columns.add(new ColumnData("metadata", "text DEFAULT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("conqueredDays", "mediumint"));
 		columns.add(new ColumnData("conquered", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("ruined", "bool NOT NULL DEFAULT '0'"));
@@ -319,7 +319,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("nationSpawn", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("isPublic", "bool NOT NULL DEFAULT '1'"));
 		columns.add(new ColumnData("isOpen", "bool NOT NULL DEFAULT '1'"));
-		columns.add(new ColumnData("metadata", "text DEFAULT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("conqueredTax", "float NOT NULL"));
 		columns.add(new ColumnData("sanctionedTowns", "mediumtext DEFAULT NULL"));
 		return columns;
@@ -365,7 +365,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("plotManagementWildRegenBlocks", "mediumtext NOT NULL"));		
 		columns.add(new ColumnData("usingTowny", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("warAllowed", "bool NOT NULL DEFAULT '0'"));
-		columns.add(new ColumnData("metadata", "text DEFAULT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("jailing", "bool NOT NULL DEFAULT '1'"));
 		return columns;
 	}
@@ -383,7 +383,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("permissions", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("locked", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("changed", "bool NOT NULL DEFAULT '0'"));
-		columns.add(new ColumnData("metadata", "text DEFAULT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("groupID", "VARCHAR(36) DEFAULT NULL"));
 		columns.add(new ColumnData("districtID", "VARCHAR(36) DEFAULT NULL"));
 		columns.add(new ColumnData("claimedAt", "BIGINT NOT NULL"));
