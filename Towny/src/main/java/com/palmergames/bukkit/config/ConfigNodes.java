@@ -1335,6 +1335,12 @@ public enum ConfigNodes {
 		"# If enabled tries to find a safe location when teleporting to a town spawn/nation spawn/outpost",
 		"# can be used to prevent players from making kill boxes at those locations."
 	),
+	SPAWNING_STRICT_SAFE_TELEPORT(
+		"spawning.strict_safe_teleport",
+		"false",
+		"",
+		"# If enabled, teleportation will be canceled if the location is not safe."
+	),
 	SPAWNING_COST_SPAWN_WARNINGS(
 			"spawning.spawn_cost_warnings",
 			"true",
