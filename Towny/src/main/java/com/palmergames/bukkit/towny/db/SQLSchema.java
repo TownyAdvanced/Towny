@@ -268,7 +268,6 @@ public class SQLSchema {
 		columns.add(new ColumnData("homeblock", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("spawn", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("outpostSpawns", "mediumtext DEFAULT NULL"));
-		columns.add(new ColumnData("jailSpawns", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("outlaws", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("uuid", "VARCHAR(36) DEFAULT NULL"));
 		columns.add(new ColumnData("registered", "BIGINT DEFAULT NULL"));
