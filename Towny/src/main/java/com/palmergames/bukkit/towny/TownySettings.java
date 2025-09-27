@@ -4,7 +4,9 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
+import com.palmergames.bukkit.towny.event.NationNeutralityCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
+import com.palmergames.bukkit.towny.event.TownNeutralityCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownCalculateMaxTownBlocksEvent;
@@ -1769,7 +1771,9 @@ public class TownySettings {
 
 	public static double getNationNeutralityCost(Nation nation) {
 		double cost = nation.getNationLevel().peacefulCostMultiplier() * getNationNeutralityCost();
-		return isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
+		NationNeutralityCostCalculationEvent event = new NationNeutralityCostCalculationEvent(nation, cost);
+		BukkitTools.fireEvent(event);
+		return isNationNeutralityCostMultipliedByNationTownAmount() ? event.getNeutralityCost() * nation.getTowns().size() : event.getNeutralityCost();
 	}
 
 	public static double getNationNeutralityCost() {
@@ -1783,7 +1787,9 @@ public class TownySettings {
 
 	public static double getTownNeutralityCost(Town town) {
 		double cost = town.getTownLevel().peacefulCostMultiplier() * getTownNeutralityCost();
-		return isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
+		TownNeutralityCostCalculationEvent event = new TownNeutralityCostCalculationEvent(town, cost);
+		BukkitTools.fireEvent(event);
+		return isTownNeutralityCostMultipliedByTownClaimsSize() ? event.getNeutralityCost() * town.getTownBlocks().size() : event.getNeutralityCost();
 	}
 
 	public static double getTownNeutralityCost() {
