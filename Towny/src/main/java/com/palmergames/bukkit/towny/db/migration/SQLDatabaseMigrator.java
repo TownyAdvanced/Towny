@@ -106,7 +106,7 @@ public class SQLDatabaseMigrator {
 						if (commentContent.startsWith("fail-off")) {
 							allowFailure = true;
 						} else if (commentContent.startsWith("fail-on")) {
-							allowFailure = true;
+							allowFailure = false;
 						}
 
 						command = command.replace(match, "");
