@@ -399,10 +399,8 @@ public class SQLSchema {
 		String update;
 
 		try (Statement s = cntx.createStatement()) {
-			DatabaseMetaData md = cntx.getMetaData();
-			ResultSet rs = md.getColumns(null, null, table, column);
-			if (!rs.next())
-				return;
+			// No need to check if the column exists, just try to drop it.
+			// If it doesn't exist, we get error 1091, which we ignore.
 
 			update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + table + "` DROP COLUMN `" + column + "`";
 
@@ -411,7 +409,7 @@ public class SQLSchema {
 			TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
 
 		} catch (SQLException ee) {
-			if (ee.getErrorCode() != MYSQL_DUPLICATE_COLUMN_ERR)
+			if (ee.getErrorCode() != MYSQL_DUPLICATE_COLUMN_ERR && ee.getErrorCode() != 1091)
 				TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
 		}
 	}
