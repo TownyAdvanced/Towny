@@ -1077,7 +1077,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			}
 			// Load legacy jail spawns into new Jail objects.
-			line = rs.getString("jailSpawns");
+			try {
+				line = rs.getString("jailSpawns");
+			} catch (SQLException e) {
+				// The jailSpawns column no longer exists
+				line = null;
+			}
 			if (line != null) {
 				String[] jails = line.split(";");
 				for (String spawn : jails) {

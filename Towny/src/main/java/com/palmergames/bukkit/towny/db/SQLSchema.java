@@ -5,9 +5,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -230,7 +228,6 @@ public class SQLSchema {
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
 		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
-		columns.add("`jailSpawns` mediumtext DEFAULT NULL");
 		columns.add("`outlaws` mediumtext DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");
