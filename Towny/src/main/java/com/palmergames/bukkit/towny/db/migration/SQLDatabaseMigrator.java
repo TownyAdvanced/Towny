@@ -25,6 +25,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @ApiStatus.Internal
@@ -81,20 +83,52 @@ public class SQLDatabaseMigrator {
 			
 			// Replace placeholders/comments
 			fileContents = fileContents
-				.replaceAll("\\$PREFIX(_|)", SQLSchema.TABLE_PREFIX)
-				.replaceAll("(?m)--.*$", "");
+				.replaceAll("\\$PREFIX(_|)", SQLSchema.TABLE_PREFIX);
+			
+			final Pattern singleLineCommentPattern = Pattern.compile("--.*$", Pattern.MULTILINE);
 
 			TownyMessaging.sendDebugMsg("Database: Executing migration file " + migrationFile);
 
 			try (Connection connection = sqlSource.getConnection(); Statement statement = connection.createStatement()) {
+				boolean allowFailure = false;
+
 				for (String command : fileContents.split(";")) {
 					command = command.trim();
 					if (command.isEmpty()) {
 						continue;
 					}
 
+					final Matcher commentMatcher = singleLineCommentPattern.matcher(command);
+					while (commentMatcher.find()) {
+						final String match = commentMatcher.group();
+
+						final String commentContent = match.substring("--".length()).trim();
+						if (commentContent.startsWith("fail-off")) {
+							allowFailure = true;
+						} else if (commentContent.startsWith("fail-on")) {
+							allowFailure = true;
+						}
+
+						command = command.replace(match, "");
+					}
+
+					// Trim & check again after removing comments
+					command = command.trim();
+					if (command.isEmpty()) {
+						continue;
+					}
+
 					TownyMessaging.sendDebugMsg("Executing " + command);
-					statement.execute(command);
+					try {
+						statement.execute(command);
+					} catch (SQLException e) {
+						if (!allowFailure) {
+							plugin.getSLF4JLogger().error("An exception occurred while executing SQL query '{}' during database migration {}", command, migrationFile, e);
+							return;
+						}
+
+						TownyMessaging.sendDebugMsg(command + " failed with an exception, but it was allowed.");
+					}
 				}
 			} catch (SQLException e) {
 				plugin.getSLF4JLogger().error("An exception occurred while executing database migration {}", migrationFile, e);
