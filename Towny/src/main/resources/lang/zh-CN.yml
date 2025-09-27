@@ -682,7 +682,6 @@ msg_err_not_enough_residents_join_nation: '&b城镇 %s 没有足够的居民数�
 msg_not_enough_residents_no_longer_capital: '&b国家旧都居民数不足所以不再是首都.新的首都将在 %s.'
 msg_town_not_enough_residents_left_nation: '&b城镇%s被赶出了国家，因为它不再有足够的居民来成为国家的一员。'
 msg_nation_disbanded_town_not_enough_residents: '&b城镇 %s 没有足够的居民数来形成国家以至于国家灭亡.'
-msg_not_enough_residents_refunded: '&b你的国家由于居民数不足而灭亡了，因此你获得了 $%s 。'
 msg_not_enough_residents_capital: '&b城镇 %s 没有足够的居民来作为首都.'
 list_page: '&b当前页数 %s ,总页数 %s'
 list_err_not_enough_pages: '&c只有 %s 页可用'
