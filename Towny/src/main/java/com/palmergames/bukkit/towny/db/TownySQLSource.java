@@ -412,25 +412,28 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	}
 	
 	public enum TownyDBTableType {
-		JAIL("JAILS", "SELECT uuid FROM ", "uuid"),
-		PLOTGROUP("PLOTGROUPS", "SELECT groupID FROM ", "groupID"),
-		DISTRICT("DISTRICTS", "SELECT uuid FROM ", "uuid"),
-		RESIDENT("RESIDENTS", "SELECT name FROM ", "name"),
-		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", "", "uuid"),
-		TOWN("TOWNS", "SELECT name FROM ", "name"),
-		NATION("NATIONS", "SELECT name FROM ", "name"),
-		WORLD("WORLDS", "SELECT name FROM ", "name"),
-		TOWNBLOCK("TOWNBLOCKS", "SELECT world,x,z FROM ", "name"),
-		COOLDOWN("COOLDOWNS", "SELECT * FROM ", "key");
+		JAIL("JAILS", 1, "SELECT uuid FROM ", "uuid"),
+		PLOTGROUP("PLOTGROUPS", 1, "SELECT groupID FROM ", "groupID"),
+		DISTRICT("DISTRICTS", 1, "SELECT uuid FROM ", "uuid"),
+		RESIDENT("RESIDENTS", 1, "SELECT name FROM ", "name"),
+		HIBERNATED_RESIDENT("HIBERNATEDRESIDENTS", 1, "", "uuid"),
+		TOWN("TOWNS", 1, "SELECT name FROM ", "name"),
+		NATION("NATIONS", 1, "SELECT name FROM ", "name"),
+		WORLD("WORLDS", 1, "SELECT name FROM ", "name"),
+		TOWNBLOCK("TOWNBLOCKS", 1, "SELECT world,x,z FROM ", "name"),
+		COOLDOWN("COOLDOWNS", 1, "SELECT * FROM ", "key"),
+		VERSIONING("VERSIONING", 1, "SELECT * FROM ", "name");
 		
 		private final String tableName;
+		private final int latestVersion;
 		@SuppressWarnings("unused")
 		private String queryString;
 		@SuppressWarnings("unused")
 		private String primaryKey;
 
-		TownyDBTableType(String tableName, String queryString, String primaryKey) {
+		TownyDBTableType(String tableName, int latestVersion, String queryString, String primaryKey) {
 			this.tableName = tableName;
+			this.latestVersion = latestVersion;
 			this.queryString = queryString;
 			this.primaryKey = primaryKey;
 		}
@@ -438,6 +441,8 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 		public String tableName() {
 			return tableName;
 		}
+
+		public int latestVersion() { return latestVersion; }
 		
 		public String primaryKey() {
 			return primaryKey;

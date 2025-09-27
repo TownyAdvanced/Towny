@@ -3,16 +3,18 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author ElgarL
@@ -29,45 +31,60 @@ public class SQLSchema {
 	 * @param cntx    a database connection
 	 */
 	public static void initTables(Connection cntx) {
+		// Ensure the Versioning table exists, so versions of other tables can be checked.
+		initTable(cntx, TownyDBTableType.VERSIONING, null);
+		// Load the current versions of each table.
+		Map<TownyDBTableType, Integer> versions = loadTableVersions(cntx);
 
-		initTable(cntx, TownyDBTableType.WORLD);
-		updateTable(cntx, TownyDBTableType.WORLD, getWorldColumns());
+		initTable(cntx, TownyDBTableType.WORLD, versions.get(TownyDBTableType.WORLD));
+		updateTable(cntx, TownyDBTableType.WORLD, getWorldColumns(), versions.get(TownyDBTableType.WORLD));
 
-		initTable(cntx, TownyDBTableType.NATION);
-		updateTable(cntx, TownyDBTableType.NATION, getNationColumns());
+		initTable(cntx, TownyDBTableType.NATION, versions.get(TownyDBTableType.NATION));
+		updateTable(cntx, TownyDBTableType.NATION, getNationColumns(), versions.get(TownyDBTableType.NATION));
 
-		initTable(cntx, TownyDBTableType.TOWN);
-		updateTable(cntx, TownyDBTableType.TOWN, getTownColumns());
+		initTable(cntx, TownyDBTableType.TOWN, versions.get(TownyDBTableType.TOWN));
+		updateTable(cntx, TownyDBTableType.TOWN, getTownColumns(), versions.get(TownyDBTableType.TOWN));
 
-		initTable(cntx, TownyDBTableType.RESIDENT);
-		updateTable(cntx, TownyDBTableType.RESIDENT, getResidentColumns());
+		initTable(cntx, TownyDBTableType.RESIDENT, versions.get(TownyDBTableType.RESIDENT));
+		updateTable(cntx, TownyDBTableType.RESIDENT, getResidentColumns(), versions.get(TownyDBTableType.RESIDENT));
 
-		initTable(cntx, TownyDBTableType.TOWNBLOCK);
-		updateTable(cntx, TownyDBTableType.TOWNBLOCK, getTownBlockColumns());
+		initTable(cntx, TownyDBTableType.TOWNBLOCK, versions.get(TownyDBTableType.TOWNBLOCK));
+		updateTable(cntx, TownyDBTableType.TOWNBLOCK, getTownBlockColumns(), versions.get(TownyDBTableType.TOWNBLOCK));
 
-		initTable(cntx, TownyDBTableType.PLOTGROUP);
-		updateTable(cntx, TownyDBTableType.PLOTGROUP, getPlotGroupColumns());
+		initTable(cntx, TownyDBTableType.PLOTGROUP, versions.get(TownyDBTableType.PLOTGROUP));
+		updateTable(cntx, TownyDBTableType.PLOTGROUP, getPlotGroupColumns(), versions.get(TownyDBTableType.PLOTGROUP));
 
-		initTable(cntx, TownyDBTableType.DISTRICT);
-		updateTable(cntx, TownyDBTableType.DISTRICT, getDistrictColumns());
+		initTable(cntx, TownyDBTableType.DISTRICT, versions.get(TownyDBTableType.DISTRICT));
+		updateTable(cntx, TownyDBTableType.DISTRICT, getDistrictColumns(), versions.get(TownyDBTableType.DISTRICT));
 
-		initTable(cntx, TownyDBTableType.JAIL);
-		updateTable(cntx, TownyDBTableType.JAIL, getJailsColumns());
+		initTable(cntx, TownyDBTableType.JAIL, versions.get(TownyDBTableType.JAIL));
+		updateTable(cntx, TownyDBTableType.JAIL, getJailsColumns(), versions.get(TownyDBTableType.JAIL));
 
-		initTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT);
-		updateTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, getHibernatedResidentsColumns());
-		
-		initTable(cntx, TownyDBTableType.COOLDOWN);
-		updateTable(cntx, TownyDBTableType.COOLDOWN, getCooldownColumns());
+		initTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, versions.get(TownyDBTableType.HIBERNATED_RESIDENT));
+		updateTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, getHibernatedResidentsColumns(), versions.get(TownyDBTableType.HIBERNATED_RESIDENT));
+
+		initTable(cntx, TownyDBTableType.COOLDOWN, versions.get(TownyDBTableType.COOLDOWN));
+		updateTable(cntx, TownyDBTableType.COOLDOWN, getCooldownColumns(), versions.get(TownyDBTableType.COOLDOWN));
 	}
 
-	/*
+	/**
 	 * Check that the tables are created.
+	 *
+	 * @param cntx a database connection
+	 * @param tableType the table to initialize
+	 * @param latestVersion the latest version of the table, or null if it does not
 	 */
-	private static void initTable(Connection cntx, TownyDBTableType tableType) {
+	private static void initTable(Connection cntx, TownyDBTableType tableType, Integer latestVersion) {
+		if (latestVersion != null) {
+			// Assume table exists if it has a version
+			return;
+		}
+		long startTime = System.currentTimeMillis();
+
 		try (Statement s = cntx.createStatement()) {
 			s.executeUpdate(fetchTableSchema(tableType));
-			TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is ok!");
+			long time = System.currentTimeMillis() - startTime;
+			TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is ok! Took " + time + "ms");
 		} catch (SQLException ee) {
 			TownyMessaging.sendErrorMsg("Error Creating table " + tableType.tableName() + " : " + ee.getMessage());
 		}
@@ -85,8 +102,48 @@ public class SQLSchema {
 			case COOLDOWN -> fetchCreateCooldownsStatement(tableType);
 			case WORLD -> fetchCreateWorldStatemnt(tableType);
 			case HIBERNATED_RESIDENT -> fetchCreateUUIDStatement(tableType);
+			case VERSIONING -> fetchVersioningStatement(tableType);
 			default -> fetchCreateNamedStatement(tableType);
 		};
+	}
+
+	private static void updateOrInsertTableVersion(Connection cntx, TownyDBTableType tableType, int version) {
+		try (PreparedStatement ps = cntx.prepareStatement("REPLACE INTO `" + SQLDB_NAME + "`.`" + TABLE_PREFIX + TownyDBTableType.VERSIONING.tableName() + "` (name, version) VALUES (?, ?)")) {
+			ps.setString(1, tableType.name());
+			ps.setInt(2, version);
+			ps.executeUpdate();
+		} catch (SQLException ee) {
+			TownyMessaging.sendErrorMsg("Error updating table " + tableType.tableName() + " versioning:" + ee.getMessage());
+		}
+	}
+
+	private static Map<TownyDBTableType, Integer> loadTableVersions(Connection cntx) {
+		TownyMessaging.sendDebugMsg("Loading Table Versions");
+		Map<TownyDBTableType, Integer> tableVersions = new HashMap<>();
+		try {
+			Statement s = cntx.createStatement();
+			ResultSet rs = s.executeQuery("SELECT name, version FROM " + TABLE_PREFIX + TownyDBTableType.VERSIONING);
+
+			while (rs.next()) {
+				try {
+					TownyDBTableType name = TownyDBTableType.valueOf(rs.getString("name"));
+					int version = rs.getInt("version");
+					tableVersions.put(name, version);
+				} catch (IllegalArgumentException e) {
+					TownyMessaging.sendErrorMsg("Unknown table version entry: " + rs.getString("name"));
+				}
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("SQL Error loading towns: " + e.getMessage());
+		}
+		return tableVersions;
+	}
+
+	/*
+	 * Create table statement for the Towny Table Versioning.
+	 */
+	private static String fetchVersioningStatement(TownyDBTableType tableType) {
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL,`version` VARCHAR(8) DEFAULT NULL,PRIMARY KEY (`name`))";
 	}
 
 	/*
@@ -131,233 +188,248 @@ public class SQLSchema {
 	/*
 	 * Update a table in the database to make sure that each column is present. 
 	 */
-	private static void updateTable(Connection cntx, TownyDBTableType tableType, List<String> columns) {
+	private static void updateTable(Connection cntx, TownyDBTableType tableType, List<ImmutablePair<Integer, String>> columns, Integer latestVersion) {
+		long startTime = System.currentTimeMillis();
+
 		String update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + TABLE_PREFIX + tableType.tableName() + "` ADD COLUMN ";
-		for (String column : columns) {
-			try (PreparedStatement ps = cntx.prepareStatement(update + column)) {
+		for (ImmutablePair<Integer, String> column : columns.stream().filter(col -> latestVersion == null || col.getLeft() > latestVersion).toList()) {
+			try (PreparedStatement ps = cntx.prepareStatement(update + column.getRight())) {
 				ps.executeUpdate();
 			} catch (SQLException ee) {
 				if (ee.getErrorCode() != MYSQL_DUPLICATE_COLUMN_ERR)
 					TownyMessaging.sendErrorMsg("Error updating table " + tableType.tableName() + ":" + ee.getMessage());
 			}
 		}
-		TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is updated!");
+		if (latestVersion == null || latestVersion < tableType.latestVersion()) {
+			updateOrInsertTableVersion(cntx, tableType, tableType.latestVersion());
+		}
+		long time = System.currentTimeMillis() - startTime;
+		TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is updated! Took " + time + "ms");
 	}
 
 	/*
 	 * Columns of each Object type follow:
 	 */
-	
-	private static List<String> getJailsColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`townBlock` mediumtext NOT NULL");
-		columns.add("`spawns`  mediumtext DEFAULT NULL");
+
+	private static List<ImmutablePair<Integer, String>> getJailsColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`townBlock` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`spawns`  mediumtext DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getPlotGroupColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`groupName` mediumtext NOT NULL");
-		columns.add("`groupPrice` float DEFAULT NULL");
-		columns.add("`town` VARCHAR(32) NOT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
+	private static List<ImmutablePair<Integer, String>> getPlotGroupColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`groupName` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`groupPrice` float DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`town` VARCHAR(32) NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`metadata` text DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getDistrictColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`districtName` mediumtext NOT NULL");
-		columns.add("`town` VARCHAR(36) NOT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
+	private static List<ImmutablePair<Integer, String>> getDistrictColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`districtName` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`town` VARCHAR(36) NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`metadata` text DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getResidentColumns(){
-		List<String> columns = new ArrayList<>();
-		columns.add("`town` mediumtext");
-		columns.add("`town-ranks` mediumtext");
-		columns.add("`nation-ranks` mediumtext");
-		columns.add("`lastOnline` BIGINT NOT NULL");
-		columns.add("`registered` BIGINT NOT NULL");
-		columns.add("`joinedTownAt` BIGINT NOT NULL");
-		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
-		columns.add("`jailUUID` VARCHAR(36) DEFAULT NULL");
-		columns.add("`jailCell` mediumint");
-		columns.add("`jailHours` mediumint");
-		columns.add("`jailBail` float DEFAULT NULL");
-		columns.add("`title` mediumtext");
-		columns.add("`surname` mediumtext");
-		columns.add("`protectionStatus` mediumtext");
-		columns.add("`friends` mediumtext");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`uuid` VARCHAR(36) NOT NULL");
-		columns.add("`about` mediumtext DEFAULT NULL");
+	private static List<ImmutablePair<Integer, String>> getResidentColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`town` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`town-ranks` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`nation-ranks` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`lastOnline` BIGINT NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`registered` BIGINT NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`joinedTownAt` BIGINT NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`isNPC` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`jailUUID` VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`jailCell` mediumint"));
+		columns.add(new ImmutablePair<>(1, "`jailHours` mediumint"));
+		columns.add(new ImmutablePair<>(1, "`jailBail` float DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`title` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`surname` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`protectionStatus` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`friends` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`metadata` text DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`uuid` VARCHAR(36) NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`about` mediumtext DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getHibernatedResidentsColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`registered` BIGINT DEFAULT NULL");
+	private static List<ImmutablePair<Integer, String>> getHibernatedResidentsColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`registered` BIGINT DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getTownColumns() {
-	List<String> columns = new ArrayList<>();
-		columns.add("`mayor` mediumtext");
-		columns.add("`nation` mediumtext");
-		columns.add("`townBoard` mediumtext DEFAULT NULL");
-		columns.add("`tag` mediumtext DEFAULT NULL");
-		columns.add("`founder` mediumtext DEFAULT NULL");
-		columns.add("`protectionStatus` mediumtext DEFAULT NULL");
-		columns.add("`bonus` int(11) DEFAULT 0");
-		columns.add("`purchased` int(11)  DEFAULT 0");
-		columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
-		columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
-		columns.add("`taxes` float DEFAULT 0");
-		columns.add("`hasUpkeep` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotPrice` float DEFAULT NULL");
-		columns.add("`plotTax` float DEFAULT NULL");
-		columns.add("`commercialPlotPrice` float DEFAULT NULL");
-		columns.add("`commercialPlotTax` float NOT NULL");
-		columns.add("`embassyPlotPrice` float NOT NULL");
-		columns.add("`embassyPlotTax` float NOT NULL");
-		columns.add("`open` bool NOT NULL DEFAULT '0'");
-		columns.add("`public` bool NOT NULL DEFAULT '0'");
-		columns.add("`adminEnabledMobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`allowedToWar` bool NOT NULL DEFAULT '1'");
-		columns.add("`homeblock` mediumtext NOT NULL");
-		columns.add("`spawn` mediumtext NOT NULL");
-		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
-		columns.add("`outlaws` mediumtext DEFAULT NULL");
-		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
-		columns.add("`registered` BIGINT DEFAULT NULL");
-		columns.add("`spawnCost` float NOT NULL");
-		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`conqueredDays` mediumint");
-		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
-		columns.add("`ruined` bool NOT NULL DEFAULT '0'");
-		columns.add("`ruinedTime` BIGINT DEFAULT '0'");
-		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
-		columns.add("`debtBalance` float NOT NULL");
-		columns.add("`joinedNationAt` BIGINT NOT NULL");
-		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
-		columns.add("`movedHomeBlockAt` BIGINT NOT NULL");
-		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
-		columns.add("`trustedTowns` mediumtext NOT NULL");
-		columns.add("`nationZoneOverride` int(11) DEFAULT 0");
-		columns.add("`nationZoneEnabled` bool NOT NULL DEFAULT '1'");
-		columns.add("`allies` mediumtext NOT NULL");
-		columns.add("`enemies` mediumtext NOT NULL");
-		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
-		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
-		columns.add("`forSale` bool NOT NULL DEFAULT '0'");
-		columns.add("`forSalePrice` float NOT NULL");
-		columns.add("`forSaleTime` BIGINT DEFAULT '0'");
-		columns.add("`visibleOnTopLists` bool NOT NULL DEFAULT '1'");
-		
+	private static List<ImmutablePair<Integer, String>> getTownColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`mayor` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`nation` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`townBoard` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`tag` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`founder` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`protectionStatus` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`bonus` int(11) DEFAULT 0"));
+		columns.add(new ImmutablePair<>(1, "`purchased` int(11)  DEFAULT 0"));
+		columns.add(new ImmutablePair<>(1, "`taxpercent` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`maxPercentTaxAmount` float DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`taxes` float DEFAULT 0"));
+		columns.add(new ImmutablePair<>(1, "`hasUpkeep` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`plotPrice` float DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`plotTax` float DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`commercialPlotPrice` float DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`commercialPlotTax` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`embassyPlotPrice` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`embassyPlotTax` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`open` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`public` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`adminEnabledMobs` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`admindisabledpvp` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`adminenabledpvp` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`allowedToWar` bool NOT NULL DEFAULT '1'"));
+		columns.add(new ImmutablePair<>(1, "`homeblock` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`spawn` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`outpostSpawns` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`outlaws` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`uuid` VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`registered` BIGINT DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`spawnCost` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`mapColorHexCode` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`metadata` text DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`conqueredDays` mediumint"));
+		columns.add(new ImmutablePair<>(1, "`conquered` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`ruined` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`ruinedTime` BIGINT DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`neutral` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`debtBalance` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`joinedNationAt` BIGINT NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`primaryJail` VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`movedHomeBlockAt` BIGINT NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`trustedResidents` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`trustedTowns` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`nationZoneOverride` int(11) DEFAULT 0"));
+		columns.add(new ImmutablePair<>(1, "`nationZoneEnabled` bool NOT NULL DEFAULT '1'"));
+		columns.add(new ImmutablePair<>(1, "`allies` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`enemies` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`manualTownLevel` BIGINT DEFAULT '-1'"));
+		columns.add(new ImmutablePair<>(1, "`forSale` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`forSalePrice` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`forSaleTime` BIGINT DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`visibleOnTopLists` bool NOT NULL DEFAULT '1'"));
 		return columns;
 	}
 
-	private static List<String> getNationColumns(){
-		List<String> columns = new ArrayList<>();
-		columns.add("`capital` mediumtext NOT NULL");
-		columns.add("`tag` mediumtext NOT NULL");
-		columns.add("`allies` mediumtext NOT NULL");
-		columns.add("`enemies` mediumtext NOT NULL");
-		columns.add("`taxes` float NOT NULL");
-		columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
-		columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
-		columns.add("`spawnCost` float NOT NULL");
-		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
-		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
-		columns.add("`registered` BIGINT DEFAULT NULL");
-		columns.add("`nationBoard` mediumtext DEFAULT NULL");
-		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
-		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
-		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
-		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`conqueredTax` float NOT NULL");
-		columns.add("`sanctionedTowns` mediumtext DEFAULT NULL");
+	private static List<ImmutablePair<Integer, String>> getNationColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`capital` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`tag` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`allies` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`enemies` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`taxes` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`taxpercent` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`maxPercentTaxAmount` float DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`spawnCost` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`neutral` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`uuid` VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`registered` BIGINT DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`nationBoard` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`mapColorHexCode` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`nationSpawn` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`isPublic` bool NOT NULL DEFAULT '1'"));
+		columns.add(new ImmutablePair<>(1, "`isOpen` bool NOT NULL DEFAULT '1'"));
+		columns.add(new ImmutablePair<>(1, "`metadata` text DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`conqueredTax` float NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`sanctionedTowns` mediumtext DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getWorldColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
-		columns.add("`claimable` bool NOT NULL DEFAULT '0'");
-		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`forcetownmobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`friendlyFire` bool NOT NULL DEFAULT '0'");
-		columns.add("`worldmobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`wildernessmobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`firespread` bool NOT NULL DEFAULT '0'");
-		columns.add("`forcefirespread` bool NOT NULL DEFAULT '0'");
-		columns.add("`explosions` bool NOT NULL DEFAULT '0'");
-		columns.add("`forceexplosions` bool NOT NULL DEFAULT '0'");
-		columns.add("`endermanprotect` bool NOT NULL DEFAULT '0'");
-		columns.add("`disablecreaturetrample` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneName` mediumtext NOT NULL");
-		columns.add("`unclaimedZoneIgnoreIds` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementDeleteIds` mediumtext NOT NULL");
-		columns.add("`isDeletingEntitiesOnUnclaim` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimDeleteEntityTypes` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementMayorDelete` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementIgnoreIds` mediumtext NOT NULL");
-		columns.add("`revertOnUnclaimWhitelistMaterials` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
-		columns.add("`plotManagementWildRegenBlockWhitelist` mediumtext NOT NULL");
-		columns.add("`wildRegenBlocksToNotOverwrite` mediumtext NOT NULL");
-		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
-		columns.add("`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
-		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
-		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`jailing` bool NOT NULL DEFAULT '1'");
+	private static List<ImmutablePair<Integer, String>> getWorldColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`uuid` VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`claimable` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`pvp` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`forcepvp` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`forcetownmobs` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`friendlyFire` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`worldmobs` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`wildernessmobs` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`firespread` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`forcefirespread` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`explosions` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`forceexplosions` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`endermanprotect` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`disablecreaturetrample` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`unclaimedZoneName` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`unclaimedZoneIgnoreIds` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`plotManagementDeleteIds` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`isDeletingEntitiesOnUnclaim` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`unclaimDeleteEntityTypes` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`plotManagementMayorDelete` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`plotManagementIgnoreIds` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`revertOnUnclaimWhitelistMaterials` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`plotManagementWildRegenEntities` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`plotManagementWildRegenBlockWhitelist` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`wildRegenBlocksToNotOverwrite` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`plotManagementWildRegenSpeed` long NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`plotManagementWildRegenBlocks` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`usingTowny` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`warAllowed` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`metadata` text DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`jailing` bool NOT NULL DEFAULT '1'"));
 		return columns;
 	}
 
-	private static List<String> getTownBlockColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`name` mediumtext");
-		columns.add("`price` float DEFAULT '-1'");
-		columns.add("`taxed` bool NOT NULL DEFAULT '1'");
-		columns.add("`town` mediumtext");
-		columns.add("`resident` mediumtext");
-		columns.add("`type` TINYINT NOT  NULL DEFAULT '0'");
-		columns.add("`typeName` mediumtext");
-		columns.add("`outpost` bool NOT NULL DEFAULT '0'");
-		columns.add("`permissions` mediumtext NOT NULL");
-		columns.add("`locked` bool NOT NULL DEFAULT '0'");
-		columns.add("`changed` bool NOT NULL DEFAULT '0'");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
-		columns.add("`districtID` VARCHAR(36) DEFAULT NULL");
-		columns.add("`claimedAt` BIGINT NOT NULL");
-		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
-		columns.add("`customPermissionData` mediumtext DEFAULT NULL");
-		columns.add("`minTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
-		columns.add("`maxTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
+	private static List<ImmutablePair<Integer, String>> getTownBlockColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`name` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`price` float DEFAULT '-1'"));
+		columns.add(new ImmutablePair<>(1, "`taxed` bool NOT NULL DEFAULT '1'"));
+		columns.add(new ImmutablePair<>(1, "`town` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`resident` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`type` TINYINT NOT  NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`typeName` mediumtext"));
+		columns.add(new ImmutablePair<>(1, "`outpost` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`permissions` mediumtext NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`locked` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`changed` bool NOT NULL DEFAULT '0'"));
+		columns.add(new ImmutablePair<>(1, "`metadata` text DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`groupID` VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`districtID` VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`claimedAt` BIGINT NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`trustedResidents` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`customPermissionData` mediumtext DEFAULT NULL"));
+		columns.add(new ImmutablePair<>(1, "`minTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'"));
+		columns.add(new ImmutablePair<>(1, "`maxTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'"));
 		return columns;
 	}
-	
-	private static List<String> getCooldownColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`key` varchar(200) NOT NULL");
-		columns.add("`expiry` BIGINT NOT NULL");
+
+	private static List<ImmutablePair<Integer, String>> getCooldownColumns() {
+		// Version, Column Definition. Version is incremented when a column is added and ensure TownyDBTableType.latestVersion() is updated.
+		final List<ImmutablePair<Integer, String>> columns = new ArrayList<>();
+		columns.add(new ImmutablePair<>(1, "`key` varchar(200) NOT NULL"));
+		columns.add(new ImmutablePair<>(1, "`expiry` BIGINT NOT NULL"));
 		return columns;
 	}
 
