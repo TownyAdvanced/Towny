@@ -401,13 +401,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean cleanup() {
-
-		try (Connection connection = getConnection()) {
-			SQLSchema.cleanup(connection);
-		} catch (SQLException e) {
-			plugin.getLogger().log(Level.WARNING, "An exception occurred when cleaning up SQL schema.", e);
-		}
-
+		// This was previously used to clean up columns that were no longer used, but that is handled by a one-time migration instead.
 		return true;
 	}
 	
