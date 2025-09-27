@@ -230,7 +230,6 @@ public class SQLSchema {
 		columns.add("`homeblock` mediumtext NOT NULL");
 		columns.add("`spawn` mediumtext NOT NULL");
 		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
-		columns.add("`jailSpawns` mediumtext DEFAULT NULL");
 		columns.add("`outlaws` mediumtext DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
 		columns.add("`registered` BIGINT DEFAULT NULL");

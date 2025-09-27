@@ -1083,29 +1083,35 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			}
 			// Load legacy jail spawns into new Jail objects.
-			line = rs.getString("jailSpawns");
-			if (line != null) {
-				String[] jails = line.split(";");
-				for (String spawn : jails) {
-					search = (line.contains("#")) ? "#" : ",";
-					tokens = spawn.split(search);
-					if (tokens.length >= 4)
-						try {
-							Position pos = Position.deserialize(tokens);
-
-							TownBlock tb = universe.getTownBlock(pos.worldCoord());
-							if (tb == null)
-								continue;
-							
-							Jail jail = new Jail(UUID.randomUUID(), town, tb, Collections.singleton(pos));
-							universe.registerJail(jail);
-							town.addJail(jail);
-							tb.setJail(jail);
-							jail.save();
-						} catch (IllegalArgumentException e) {
-							plugin.getLogger().warning("Failed to load a legacy jail spawn location for town " + town.getName() + ": " + e.getMessage());
-						}
+			try {
+				line = rs.getString("jailSpawns");
+				if (line != null) {
+					String[] jails = line.split(";");
+					for (String spawn : jails) {
+						search = (line.contains("#")) ? "#" : ",";
+						tokens = spawn.split(search);
+						if (tokens.length >= 4)
+							try {
+								Position pos = Position.deserialize(tokens);
+	
+								TownBlock tb = universe.getTownBlock(pos.worldCoord());
+								if (tb == null)
+									continue;
+								
+								Jail jail = new Jail(UUID.randomUUID(), town, tb, Collections.singleton(pos));
+								universe.registerJail(jail);
+								town.addJail(jail);
+								tb.setJail(jail);
+								jail.save();
+							} catch (IllegalArgumentException e) {
+								plugin.getLogger().warning("Failed to load a legacy jail spawn location for town " + town.getName() + ": " + e.getMessage());
+							}
+					}
 				}
+			} catch (SQLException e) {
+				// Ignore error if the column doesn't exist.
+				if (!e.getMessage().equals("Column 'jailSpawns' not found."))
+					throw e;
 			}
 			line = rs.getString("outlaws");
 			if (line != null) {
