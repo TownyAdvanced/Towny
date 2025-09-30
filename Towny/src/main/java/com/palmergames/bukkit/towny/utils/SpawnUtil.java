@@ -910,4 +910,3 @@ public class SpawnUtil {
 		Towny.getPlugin().getScheduler().runAsyncLater(() -> wc.unloadChunks(), 20L);
 	}
 }
-
