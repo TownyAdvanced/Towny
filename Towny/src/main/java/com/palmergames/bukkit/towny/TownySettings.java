@@ -3763,7 +3763,10 @@ public class TownySettings {
 	public static boolean isSafeTeleportUsed() { 
 		return getBoolean(ConfigNodes.SPAWNING_SAFE_TELEPORT);
 	}
-	public static boolean isStrictSafeTeleportUsed() { return getBoolean(ConfigNodes.SPAWNING_STRICT_SAFE_TELEPORT);}
+	
+	public static boolean isStrictSafeTeleportUsed() { 
+		return getBoolean(ConfigNodes.SPAWNING_STRICT_SAFE_TELEPORT);
+	}
 	
 	public static Map<Integer, TownLevel> getConfigTownLevel() {
 		return configTownLevel;
@@ -3942,4 +3945,3 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_JAILING_ENABLE);
 	}
 }
-
