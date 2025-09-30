@@ -483,7 +483,7 @@ public class SpawnUtil {
 			return location;
 		}
 
-		if(TownySettings.isStrictSafeTeleportUsed()) {
+		if (TownySettings.isStrictSafeTeleportUsed()) {
 			TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_cancel_safe_teleport"));
 			return null;
 		}
@@ -910,3 +910,4 @@ public class SpawnUtil {
 		Towny.getPlugin().getScheduler().runAsyncLater(() -> wc.unloadChunks(), 20L);
 	}
 }
+
