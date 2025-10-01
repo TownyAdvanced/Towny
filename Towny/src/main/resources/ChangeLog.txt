@@ -10466,3 +10466,4 @@ v0.92.0.11:
   - Fix the paper startup check, courtesy of Warrior with PR #7954.
   - Hide scores in scoreboard huds, courtesy of Warrior with PR #7886.
   - Replace MethodHandles with method calls where possible, courtesy of Warrior with PR #7887.
+  - Fix offline player reflection for 1.21.9, courtesy of Warrior with PR #7973.
