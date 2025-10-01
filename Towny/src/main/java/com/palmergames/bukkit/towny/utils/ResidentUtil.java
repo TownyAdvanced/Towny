@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
+import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -232,21 +233,20 @@ public class ResidentUtil {
 	
 	
 	public static Resident createAndGetNPCResident() {
-		Resident npc = null;
 		try {
 			String name = nextNpcName();
-			final UUID npcUUID = UUID.randomUUID();
-			TownyUniverse.getInstance().getDataSource().newResident(name, npcUUID);
-			npc = TownyUniverse.getInstance().getResident(npcUUID);
+			final UUID npcUUID = JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2);
+			Resident npc = TownyUniverse.getInstance().getDataSource().newResident(name, npcUUID);
 			npc.setRegistered(System.currentTimeMillis());
 			npc.setLastOnline(0);
 			npc.setNPC(true);
 			npc.save();
+
+			return npc;
 		} catch (TownyException e) {
 			Towny.getPlugin().getLogger().log(Level.WARNING, "exception occurred while creating new npc resident", e);
+			return null;
 		}
-		
-		return npc;
 	}
 	
 	public static String nextNpcName() throws TownyException {
