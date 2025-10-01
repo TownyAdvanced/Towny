@@ -10467,3 +10467,15 @@ v0.92.0.11:
   - Hide scores in scoreboard huds, courtesy of Warrior with PR #7886.
   - Replace MethodHandles with method calls where possible, courtesy of Warrior with PR #7887.
   - Fix offline player reflection for 1.21.9, courtesy of Warrior with PR #7973.
+  - Replace trivial streams in Town & mark as unmodifiable, courtesy of Warrior with PR #7946.
+  - Stop using Properties to load object files, preserve raw metadata for #7925, courtesy of GoodrichDev with PR #7935.
+    - Closes #7925.
+  - Add option to make a town's town_level determined by their townblock count, instead of resident count.
+    - Closes #7947.
+  - New Config Option: global_town_settings.town_level_is_determined_by_townblock_count_instead_of_resident_count
+    - Default: false
+    - When set to true, the town's TownLevel is determined by the number of townblocks the town owns, instead of the number of residents.
+    - This setting will have no effect when town_block_ratio is set to 0.
+  - Sort /t list by forsale by for sale price, courtesy of Warrior with PR #7951.
+  - Fix formatting for listing resident modes, courtesy of SulkyWhale with PR #7952.
+  - Improve method for preventing saturation loss in towns, courtesy of SulkyWhale with PR #7958.
