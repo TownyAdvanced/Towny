@@ -400,6 +400,10 @@ public class TownySettings {
 		return configTownLevel.size();
 	}
 
+	public static boolean isTownLevelDeterminedByTownBlockCount() {
+		return getTownBlockRatio() != 0 && getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_LEVEL_IS_DETERMINED_BY_TOWNBLOCK_COUNT);
+	}
+
 	public static NationLevel getNationLevel(int levelNumber) {
 		return configNationLevel.get(levelNumber);
 	}
