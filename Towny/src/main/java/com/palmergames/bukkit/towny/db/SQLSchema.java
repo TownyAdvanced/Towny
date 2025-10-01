@@ -93,7 +93,7 @@ public class SQLSchema {
 	 * Generic create table statement for the Name keyed TownyDBTableTypes
 	 */
 	private static String fetchCreateNamedStatement(TownyDBTableType tableType) {
-		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL,PRIMARY KEY (`name`))";
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL COLLATE `utf8mb4_bin`,PRIMARY KEY (`name`))";
 	}
 
 	/*
@@ -160,7 +160,7 @@ public class SQLSchema {
 		columns.add("`groupName` mediumtext NOT NULL");
 		columns.add("`groupPrice` float DEFAULT NULL");
 		columns.add("`town` VARCHAR(32) NOT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`metadata` mediumtext DEFAULT NULL");
 		return columns;
 	}
 
@@ -168,7 +168,7 @@ public class SQLSchema {
 		List<String> columns = new ArrayList<>();
 		columns.add("`districtName` mediumtext NOT NULL");
 		columns.add("`town` VARCHAR(36) NOT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`metadata` mediumtext DEFAULT NULL");
 		return columns;
 	}
 
@@ -189,7 +189,7 @@ public class SQLSchema {
 		columns.add("`surname` mediumtext");
 		columns.add("`protectionStatus` mediumtext");
 		columns.add("`friends` mediumtext");
-		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`metadata` mediumtext DEFAULT NULL");
 		columns.add("`uuid` VARCHAR(36) NOT NULL");
 		columns.add("`about` mediumtext DEFAULT NULL");
 		return columns;
@@ -236,7 +236,7 @@ public class SQLSchema {
 		columns.add("`registered` BIGINT DEFAULT NULL");
 		columns.add("`spawnCost` float NOT NULL");
 		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`metadata` mediumtext DEFAULT NULL");
 		columns.add("`conqueredDays` mediumint");
 		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
 		columns.add("`ruined` bool NOT NULL DEFAULT '0'");
@@ -280,7 +280,7 @@ public class SQLSchema {
 		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
 		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
 		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
-		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`metadata` mediumtext DEFAULT NULL");
 		columns.add("`conqueredTax` float NOT NULL");
 		columns.add("`sanctionedTowns` mediumtext DEFAULT NULL");
 		return columns;
@@ -326,7 +326,7 @@ public class SQLSchema {
 		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
 		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
 		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
-		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`metadata` mediumtext DEFAULT NULL");
 		columns.add("`jailing` bool NOT NULL DEFAULT '1'");
 		return columns;
 	}
@@ -344,7 +344,7 @@ public class SQLSchema {
 		columns.add("`permissions` mediumtext NOT NULL");
 		columns.add("`locked` bool NOT NULL DEFAULT '0'");
 		columns.add("`changed` bool NOT NULL DEFAULT '0'");
-		columns.add("`metadata` text DEFAULT NULL");
+		columns.add("`metadata` mediumtext DEFAULT NULL");
 		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`districtID` VARCHAR(36) DEFAULT NULL");
 		columns.add("`claimedAt` BIGINT NOT NULL");
