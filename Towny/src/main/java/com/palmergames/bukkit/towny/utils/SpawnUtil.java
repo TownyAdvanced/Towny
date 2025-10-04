@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnUtil {
-	
+
 	private static Towny plugin;
 
 	public static void initialize(Towny plugin) {
@@ -912,5 +912,4 @@ public class SpawnUtil {
 		Towny.getPlugin().getScheduler().runAsyncLater(() -> wc.unloadChunks(), 20L);
 	}
 }
-
 
