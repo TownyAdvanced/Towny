@@ -3945,3 +3945,4 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.NWS_JAILING_ENABLE);
 	}
 }
+
