@@ -228,7 +228,7 @@ public final class Translation {
 	}
 	
 	public static Locale getLocale(CommandSender sender) {
-		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale(), false) : defaultLocale;
+		return sender instanceof Player player ? player.locale() : defaultLocale;
 	}
 	
 	// Named differently than getLocale on purpose
