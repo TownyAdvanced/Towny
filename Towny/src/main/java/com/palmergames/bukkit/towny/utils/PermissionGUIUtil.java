@@ -18,40 +18,58 @@ import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class PermissionGUIUtil {
+	public static final @NotNull NamespacedKey EDIT_GUI_SAVE_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_edit_gui_save"));
+	public static final @NotNull NamespacedKey EDIT_GUI_BACK_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_edit_gui_back"));
+	public static final @NotNull NamespacedKey EDIT_GUI_DELETE_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_edit_gui_delete"));
+
+	public static final @NotNull NamespacedKey GUI_ADD_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_gui_add"));
+
 	private static final SetPermissionType[] defaultTypes = new SetPermissionType[]{SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET};
 	private static final int[] woolSlots = new int[]{21, 23, 30, 32};
 	
 	public enum SetPermissionType {
-		UNSET(Colors.Gray, Material.GRAY_WOOL),
-		SET(Colors.Green, Material.LIME_WOOL),
-		NEGATED(Colors.Red, Material.RED_WOOL);
+		UNSET(NamedTextColor.DARK_GRAY, Material.GRAY_WOOL),
+		SET(NamedTextColor.DARK_GREEN, Material.LIME_WOOL),
+		NEGATED(NamedTextColor.DARK_RED, Material.RED_WOOL);
 		
-		private String color;
-		private Material woolColour;
+		private final NamedTextColor color;
+		private final Material woolColour;
 		
-		SetPermissionType(String color, Material woolColour) {
+		SetPermissionType(NamedTextColor color, Material woolColour) {
 			this.color = color;
 			this.woolColour = woolColour;
 		}
 
+		@Deprecated(since = "0.101.2.5")
 		public String getColor() {
-			return color;
+			return Colors.getLegacyFromNamedTextColor(this.color);
+		}
+
+		public TextColor color() {
+			return this.color;
 		}
 
 		public Material getWoolColour() {
@@ -60,6 +78,11 @@ public class PermissionGUIUtil {
 	}
 	
 	public static void openPermissionGUI(@NotNull Resident resident, @NotNull TownBlock townBlock) {
+		final Player player = resident.getPlayer();
+		if (player == null) {
+			return;
+		}
+
 		boolean canEdit = true;
 		try {
 			TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
@@ -79,20 +102,27 @@ public class PermissionGUIUtil {
 			else
 				meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.getKey().getUUID()));
 			
-			meta.setDisplayName(Colors.Gold + entry.getKey().getName());
+			meta.displayName(Component.text(entry.getKey().getName(), NamedTextColor.GOLD));
 
-			List<String> lore = new ArrayList<>();
-			lore.add(entry.getValue().getPermissionTypes()[ActionType.BUILD.getIndex()].getColor() + "Build" + Colors.Gray + "  | " + entry.getValue().getPermissionTypes()[ActionType.DESTROY.getIndex()].getColor() + "Destroy");
-			lore.add(entry.getValue().getPermissionTypes()[ActionType.SWITCH.getIndex()].getColor() + "Switch" + Colors.Gray + " | " + entry.getValue().getPermissionTypes()[ActionType.ITEM_USE.getIndex()].getColor() + "Item");
+			List<Component> lore = new ArrayList<>();
 
-			if (canEdit) {
-				if (entry.getValue().getLastChangedAt() > 0 && !entry.getValue().getLastChangedBy().equals(""))
-					lore.add(Translatable.of("msg_last_edited", TownyFormatter.lastOnlineFormat.format(entry.getValue().getLastChangedAt()), entry.getValue().getLastChangedBy()).forLocale(resident));
-					
-				lore.add(Translatable.of("msg_click_to_edit").forLocale(resident));
+			final List<Component> actionTypeComponents = new ArrayList<>();
+			for (final ActionType actionType : ActionType.values()) {
+				actionTypeComponents.add(Component.text(actionType.getCommonName(), entry.getValue().getPermissionTypes()[actionType.getIndex()].color()));
 			}
 
-			meta.setLore(lore);
+			final Component splitter = Component.text(" | ", NamedTextColor.DARK_GRAY);
+			lore.add(actionTypeComponents.get(0).append(splitter).append(actionTypeComponents.get(1)));
+			lore.add(actionTypeComponents.get(2).append(splitter).append(actionTypeComponents.get(3)));
+
+			if (canEdit) {
+				if (entry.getValue().getLastChangedAt() > 0 && !entry.getValue().getLastChangedBy().isEmpty())
+					lore.add(Translatable.of("msg_last_edited", TownyFormatter.lastOnlineFormat.format(entry.getValue().getLastChangedAt()), entry.getValue().getLastChangedBy()).component(player.locale()));
+					
+				lore.add(Translatable.of("msg_click_to_edit").component(player.locale()));
+			}
+
+			meta.lore(lore);
 			skull.setItemMeta(meta);
 			
 			if (page.firstEmpty() == 46) {
@@ -105,9 +135,10 @@ public class PermissionGUIUtil {
 		
 		if (canEdit) {
 			ItemStack addButton = new ItemStack(Material.NAME_TAG);
-			ItemMeta addButtonMeta = addButton.getItemMeta();
-			addButtonMeta.setDisplayName(Colors.Gold + "Add Player");
-			addButton.setItemMeta(addButtonMeta);
+			addButton.editMeta(meta -> {
+				meta.displayName(Component.text("Add Player", NamedTextColor.GOLD));
+				meta.getPersistentDataContainer().set(GUI_ADD_KEY, PersistentDataType.BOOLEAN, true);
+			});
 
 			page.setItem(46, addButton);
 		}
@@ -117,16 +148,20 @@ public class PermissionGUIUtil {
 		pages.add(page);
 		resident.setGUIPages(pages);
 		resident.setGUIPageNum(0);
-		new PermissionGUI(resident, pages.get(0), Translatable.of("permission_gui_header").forLocale(resident), townBlock, canEdit);
+		new PermissionGUI(resident, pages.get(0), Translatable.of("permission_gui_header").component(player.locale()), townBlock, canEdit);
 	}
 	
 	public static void openPermissionEditorGUI(@NotNull Resident resident, @NotNull TownBlock townBlock, @NotNull ItemStack clickedItem) {
-		Inventory inventory = Bukkit.createInventory(null, 54, Translatable.of("permission_gui_header").forLocale(resident));
+		final Player player = resident.getPlayer();
+		if (player == null) {
+			return;
+		}
 		
-		SkullMeta meta = (SkullMeta) clickedItem.getItemMeta();
-		Resident skullOwner = TownyAPI.getInstance().getResident(Colors.strip(meta.getDisplayName()));
+		Inventory inventory = Bukkit.createInventory(null, 54, Translatable.of("permission_gui_header").component(player.locale()));
 		
-		clickedItem.setItemMeta(meta);
+		SkullMeta skullMeta = (SkullMeta) clickedItem.getItemMeta();
+		Resident skullOwner = TownyAPI.getInstance().getResident(Colors.strip(skullMeta.getDisplayName()));
+		
 		inventory.setItem(4, clickedItem);
 		
 		SetPermissionType[] setPermissionTypes = townBlock.getPermissionOverrides().get(skullOwner).getPermissionTypes();
@@ -140,24 +175,28 @@ public class PermissionGUIUtil {
 		}
 		
 		ItemStack saveButton = new ItemStack(Material.LIME_WOOL);
-		ItemMeta saveButtonMeta = saveButton.getItemMeta();
-		saveButtonMeta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + "Save");
-		saveButton.setItemMeta(saveButtonMeta);
+		saveButton.editMeta(meta -> {
+			meta.displayName(Component.text("Save", NamedTextColor.GREEN, TextDecoration.BOLD));
+			meta.getPersistentDataContainer().set(EDIT_GUI_SAVE_KEY, PersistentDataType.BOOLEAN, true);
+		});
 		
 		ItemStack backButton = new ItemStack(Material.RED_WOOL);
-		ItemMeta backButtonMeta = saveButton.getItemMeta();
-		backButtonMeta.setDisplayName(Colors.Red + ChatColor.BOLD + "Back");
-		backButton.setItemMeta(backButtonMeta);
+		backButton.editMeta(meta -> {
+			meta.displayName(Component.text("Back", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+			meta.getPersistentDataContainer().set(EDIT_GUI_BACK_KEY, PersistentDataType.BOOLEAN, true);
+		});
 		
 		ItemStack deleteButton = new ItemStack(Material.RED_WOOL);
-		backButtonMeta.setDisplayName(Colors.Red + ChatColor.BOLD + "Delete");
-		deleteButton.setItemMeta(backButtonMeta);
+		deleteButton.editMeta(meta -> {
+			meta.displayName(Component.text("Delete", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+			meta.getPersistentDataContainer().set(EDIT_GUI_DELETE_KEY, PersistentDataType.BOOLEAN, true);
+		});
 		
 		inventory.setItem(48, saveButton);
 		inventory.setItem(50, backButton);
 		inventory.setItem(53, deleteButton);
 		
-		new EditGUI(resident, inventory, Translatable.of("permission_gui_header").forLocale(resident), townBlock, skullOwner);
+		new EditGUI(resident, inventory, Translatable.of("permission_gui_header").component(player.locale()), townBlock, skullOwner);
 	}
 
 	public static SetPermissionType[] getDefaultTypes() {
