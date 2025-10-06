@@ -9,10 +9,14 @@ import com.palmergames.bukkit.towny.object.gui.PermissionGUI;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,8 +26,11 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.util.Colors;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class TownyInventoryListener implements Listener {
@@ -58,30 +65,38 @@ public class TownyInventoryListener implements Listener {
 			if (meta == null)
 				return;
 			
+			final Component customName = meta.displayName(); // TODO: after 1.21.4 becomes the minimum version, replace with customName
+			final String plainCustomName = customName != null ? TownyComponents.plain(customName) : event.getCurrentItem().getType().getKey().asMinimalString();
+			
 			Material type = event.getCurrentItem().getType();
 			if (type == Material.LIME_WOOL) {
-				if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
+				if (meta.getPersistentDataContainer().has(PermissionGUIUtil.EDIT_GUI_SAVE_KEY)) {
 					editGUI.saveChanges();
 				} else {
-					meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-					event.getCurrentItem().setType(Material.RED_WOOL);
+					final ItemStack newItem = new ItemStack(Material.RED_WOOL);
+					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.RED, TextDecoration.BOLD)));
+
+					event.setCurrentItem(newItem);
 				}
 			} else if (type == Material.RED_WOOL) {
-				if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
+				if (meta.getPersistentDataContainer().has(PermissionGUIUtil.EDIT_GUI_BACK_KEY)) {
 					editGUI.exitScreen();
-				} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
+				} else if (meta.getPersistentDataContainer().has(PermissionGUIUtil.EDIT_GUI_DELETE_KEY)) {
 					editGUI.deleteResident();
 				} else {
-					meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-					event.getCurrentItem().setType(Material.GRAY_WOOL);
+					final ItemStack newItem = new ItemStack(Material.GRAY_WOOL);
+					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GRAY, TextDecoration.BOLD)));
+
+					event.setCurrentItem(newItem);
 				}
 			} else if (type == Material.GRAY_WOOL) {
-				meta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-				event.getCurrentItem().setType(Material.LIME_WOOL);
+				final ItemStack newItem = new ItemStack(Material.LIME_WOOL);
+				newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GREEN, TextDecoration.BOLD)));
+
+				event.setCurrentItem(newItem);
 			} else 
 				return;
 			
-			event.getCurrentItem().setItemMeta(meta);			
 			editGUI.playClickSound(player);
 
 		} else if (event.getInventory().getHolder() instanceof PermissionGUI permissionGUI) {
