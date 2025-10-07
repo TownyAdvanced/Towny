@@ -800,9 +800,10 @@ public class SpawnUtil {
 			// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
 			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
 
+			final Location prior = player.getLocation();
 			player.teleportAsync(spawnLoc, TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
 				if (successfulTeleport)
-					BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost));
+					BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost, prior));
 			});
 
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
