@@ -1771,9 +1771,10 @@ public class TownySettings {
 
 	public static double getNationNeutralityCost(Nation nation) {
 		double cost = nation.getNationLevel().peacefulCostMultiplier() * getNationNeutralityCost();
-		NationNeutralityCostCalculationEvent event = new NationNeutralityCostCalculationEvent(nation, cost);
+		double nationMultiplierCost = isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
+		NationNeutralityCostCalculationEvent event = new NationNeutralityCostCalculationEvent(nation, nationMultiplierCost);
 		BukkitTools.fireEvent(event);
-		return isNationNeutralityCostMultipliedByNationTownAmount() ? event.getNeutralityCost() * nation.getTowns().size() : event.getNeutralityCost();
+		return event.getNeutralityCost();
 	}
 
 	public static double getNationNeutralityCost() {
@@ -1787,9 +1788,10 @@ public class TownySettings {
 
 	public static double getTownNeutralityCost(Town town) {
 		double cost = town.getTownLevel().peacefulCostMultiplier() * getTownNeutralityCost();
-		TownNeutralityCostCalculationEvent event = new TownNeutralityCostCalculationEvent(town, cost);
+		double townMultiplierCost = isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
+		TownNeutralityCostCalculationEvent event = new TownNeutralityCostCalculationEvent(town, townMultiplierCost);
 		BukkitTools.fireEvent(event);
-		return isTownNeutralityCostMultipliedByTownClaimsSize() ? event.getNeutralityCost() * town.getTownBlocks().size() : event.getNeutralityCost();
+		return event.getNeutralityCost();
 	}
 
 	public static double getTownNeutralityCost() {
