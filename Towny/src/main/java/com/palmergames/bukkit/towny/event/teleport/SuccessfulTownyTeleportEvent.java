@@ -51,7 +51,9 @@ public class SuccessfulTownyTeleportEvent extends Event {
 	/**
 	 * @return The location the player was at prior to being teleported.
 	 */
-	public Location getPriorLocation() { return priorLocation; }
+	public Location getPriorLocation() {
+		return priorLocation;
+	}
 
 	/**
 	 * @return The price that the player paid to teleport.
