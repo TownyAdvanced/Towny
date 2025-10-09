@@ -16,14 +16,13 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
-import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -39,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.UUID;
 
 public class PermissionGUIUtil {
 	public static final @NotNull NamespacedKey EDIT_GUI_SAVE_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_edit_gui_save"));
@@ -46,6 +46,7 @@ public class PermissionGUIUtil {
 	public static final @NotNull NamespacedKey EDIT_GUI_DELETE_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_edit_gui_delete"));
 
 	public static final @NotNull NamespacedKey GUI_ADD_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_gui_add"));
+	private static final @NotNull NamespacedKey GUI_PLAYER_UUID_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:permission_gui_player_uuid"));
 
 	private static final SetPermissionType[] defaultTypes = new SetPermissionType[]{SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET, SetPermissionType.UNSET};
 	private static final int[] woolSlots = new int[]{21, 23, 30, 32};
@@ -97,18 +98,15 @@ public class PermissionGUIUtil {
 			ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
 			SkullMeta meta = (SkullMeta) skull.getItemMeta();
 			
-			if (!entry.getKey().hasUUID())
-				meta.setOwningPlayer(BukkitTools.getOfflinePlayer(entry.getKey().getName())); 
-			else
-				meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.getKey().getUUID()));
-			
-			meta.displayName(Component.text(entry.getKey().getName(), NamedTextColor.GOLD));
+			meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.getKey().getUUID()));
+			meta.getPersistentDataContainer().set(GUI_PLAYER_UUID_KEY, PersistentDataType.STRING, entry.getKey().getUUID().toString());
+			meta.displayName(Component.text(entry.getKey().getName(), NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
 
 			List<Component> lore = new ArrayList<>();
 
 			final List<Component> actionTypeComponents = new ArrayList<>();
 			for (final ActionType actionType : ActionType.values()) {
-				actionTypeComponents.add(Component.text(actionType.getCommonName(), entry.getValue().getPermissionTypes()[actionType.getIndex()].color()));
+				actionTypeComponents.add(Component.text(actionType.getCommonName(), entry.getValue().getPermissionTypes()[actionType.getIndex()].color()).decoration(TextDecoration.ITALIC, false));
 			}
 
 			final Component splitter = Component.text(" | ", NamedTextColor.DARK_GRAY);
@@ -136,7 +134,7 @@ public class PermissionGUIUtil {
 		if (canEdit) {
 			ItemStack addButton = new ItemStack(Material.NAME_TAG);
 			addButton.editMeta(meta -> {
-				meta.displayName(Component.text("Add Player", NamedTextColor.GOLD));
+				meta.displayName(Component.text("Add Player", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
 				meta.getPersistentDataContainer().set(GUI_ADD_KEY, PersistentDataType.BOOLEAN, true);
 			});
 
@@ -153,22 +151,33 @@ public class PermissionGUIUtil {
 	
 	public static void openPermissionEditorGUI(@NotNull Resident resident, @NotNull TownBlock townBlock, @NotNull ItemStack clickedItem) {
 		final Player player = resident.getPlayer();
-		if (player == null) {
+		if (player == null || !clickedItem.hasItemMeta()) {
 			return;
 		}
 		
 		Inventory inventory = Bukkit.createInventory(null, 54, Translatable.of("permission_gui_header").component(player.locale()));
-		
-		SkullMeta skullMeta = (SkullMeta) clickedItem.getItemMeta();
-		Resident skullOwner = TownyAPI.getInstance().getResident(Colors.strip(skullMeta.getDisplayName()));
-		
+
+		final String uuidString = clickedItem.getItemMeta().getPersistentDataContainer().get(GUI_PLAYER_UUID_KEY, PersistentDataType.STRING);
+		if (uuidString == null) {
+			return;
+		}
+
+		Resident skullOwner = null;
+		try {
+			skullOwner = TownyAPI.getInstance().getResident(UUID.fromString(uuidString));
+		} catch (IllegalArgumentException ignored) {}
+
+		if (skullOwner == null) {
+			return;
+		}
+
 		inventory.setItem(4, clickedItem);
 		
 		SetPermissionType[] setPermissionTypes = townBlock.getPermissionOverrides().get(skullOwner).getPermissionTypes();
 		for (ActionType actionType : ActionType.values()) {
 			ItemStack wool = new ItemStack(setPermissionTypes[actionType.getIndex()].getWoolColour());
 			ItemMeta woolMeta = wool.getItemMeta();
-			woolMeta.setDisplayName(setPermissionTypes[actionType.getIndex()].getColor() + ChatColor.BOLD + actionType.getCommonName());
+			woolMeta.displayName(Component.text(actionType.getCommonName(), setPermissionTypes[actionType.getIndex()].color()).decoration(TextDecoration.ITALIC, false));
 			
 			wool.setItemMeta(woolMeta);
 			inventory.setItem(woolSlots[actionType.getIndex()], wool);
@@ -176,19 +185,19 @@ public class PermissionGUIUtil {
 		
 		ItemStack saveButton = new ItemStack(Material.LIME_WOOL);
 		saveButton.editMeta(meta -> {
-			meta.displayName(Component.text("Save", NamedTextColor.GREEN, TextDecoration.BOLD));
+			meta.displayName(Component.text("Save", NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
 			meta.getPersistentDataContainer().set(EDIT_GUI_SAVE_KEY, PersistentDataType.BOOLEAN, true);
 		});
 		
 		ItemStack backButton = new ItemStack(Material.RED_WOOL);
 		backButton.editMeta(meta -> {
-			meta.displayName(Component.text("Back", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+			meta.displayName(Component.text("Back", NamedTextColor.DARK_RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
 			meta.getPersistentDataContainer().set(EDIT_GUI_BACK_KEY, PersistentDataType.BOOLEAN, true);
 		});
 		
 		ItemStack deleteButton = new ItemStack(Material.RED_WOOL);
 		deleteButton.editMeta(meta -> {
-			meta.displayName(Component.text("Delete", NamedTextColor.DARK_RED, TextDecoration.BOLD));
+			meta.displayName(Component.text("Delete", NamedTextColor.DARK_RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
 			meta.getPersistentDataContainer().set(EDIT_GUI_DELETE_KEY, PersistentDataType.BOOLEAN, true);
 		});
 		
@@ -212,13 +221,17 @@ public class PermissionGUIUtil {
 		BookMeta meta = (BookMeta) book.getItemMeta();
 
 		List<String> pages = new ArrayList<>();
-		pages.add("    §lPlot Perm GUI§r\n\nUsing the GUI, you can give or remove permissions from individual players in your plots.\n\n§l  Getting Started§r\n\nTo start, you will need to add players to the GUI. You can do this using /plot perm add.");
-		pages.add("After a player has been added, you can now start editing their permissions.\n\n§l    Permissions§r\n\nAfter you've clicked on a player head, you will be able to edit their permissions.§a Green§0 means that this player has this permission.");
-		pages.add("§cRed§0 means that this player does not have this permission.\n\n§7Gray§0 means that normal plot permissions apply.\n\nWhen starting out, all permissions will be gray. Note that denying permissions will not work for plot owners or mayors.");
+		pages.add("    <bold>Plot Perm GUI</bold>\n\nUsing the GUI, you can give or remove permissions from individual players in your plots.\n\n<bold>  Getting Started</bold>\n\nTo start, you will need to add players to the GUI. You can do this using /plot perm add.");
+		pages.add("After a player has been added, you can now start editing their permissions.\n\n<bold>    Permissions</bold>\n\nAfter you've clicked on a player head, you will be able to edit their permissions. <green>Green</green> means that this player has this permission.");
+		pages.add("<red>Red</red> means that this player does not have this permission.\n\n<gray>Gray</gray> means that normal plot permissions apply.\n\nWhen starting out, all permissions will be gray. Note that denying permissions will not work for plot owners or mayors.");
 
 		meta.setTitle("GUI Tutorial");
 		meta.setGeneration(BookMeta.Generation.ORIGINAL);
-		meta.setPages(pages);
+
+		for (final String page : pages) {
+			meta.addPages(MiniMessage.miniMessage().deserialize(page));
+		}
+
 		meta.setAuthor("Warriorrr");
 
 		book.setItemMeta(meta);

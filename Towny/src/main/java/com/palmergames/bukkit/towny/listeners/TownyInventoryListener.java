@@ -16,7 +16,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,12 +24,10 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.util.Colors;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Objects;
 import java.util.Set;
 
 public class TownyInventoryListener implements Listener {
@@ -74,7 +71,7 @@ public class TownyInventoryListener implements Listener {
 					editGUI.saveChanges();
 				} else {
 					final ItemStack newItem = new ItemStack(Material.RED_WOOL);
-					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.RED, TextDecoration.BOLD)));
+					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
 
 					event.setCurrentItem(newItem);
 				}
@@ -85,13 +82,13 @@ public class TownyInventoryListener implements Listener {
 					editGUI.deleteResident();
 				} else {
 					final ItemStack newItem = new ItemStack(Material.GRAY_WOOL);
-					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GRAY, TextDecoration.BOLD)));
+					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GRAY, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
 
 					event.setCurrentItem(newItem);
 				}
 			} else if (type == Material.GRAY_WOOL) {
 				final ItemStack newItem = new ItemStack(Material.LIME_WOOL);
-				newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GREEN, TextDecoration.BOLD)));
+				newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
 
 				event.setCurrentItem(newItem);
 			} else 
@@ -117,7 +114,16 @@ public class TownyInventoryListener implements Listener {
 				permissionGUI.tryPaginate(event.getCurrentItem(), player, resident, event.getView());
 			}
 		} else if (event.getInventory().getHolder() instanceof SelectionGUI selectionGUI) {
-			TownBlockType type = TownBlockTypeHandler.getType(Colors.strip(event.getCurrentItem().getItemMeta().getDisplayName()));
+			ItemMeta meta = event.getCurrentItem().getItemMeta();
+			if (meta == null)
+				return;
+
+			final String townBlockTypeName = meta.getPersistentDataContainer().get(ResidentUtil.SELECTION_GUI_TOWNBLOCK_TYPE_KEY, PersistentDataType.STRING);
+			if (townBlockTypeName == null) {
+				return;
+			}
+
+			TownBlockType type = TownBlockTypeHandler.getType(townBlockTypeName);
 			if (type == null) {
 				// The player has clicked the back/next button or an empty spot..
 				selectionGUI.playClickSound(player);
