@@ -990,6 +990,10 @@ msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'אתה לא 
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'אתה לא יכול לכלוא את התושב שלך מפני שהוא במיקום שבוא הוא נחשב כאויב.'
 msg_wilderness_use_set_to: '&bהשימוש בשטח הפראי הוגדר ל-%s ב-%s.'
 msg_setup_wildernessuse: 'האם ברצונך להפעיל שימוש בשטח הפראי? פעולה זו תאפשר לשחקנים להרוס ולבנות בשטח הפראי.'
+#Jail handbook messages
+msg_jailed_handbook_5: 'אם תתעקש ותתאמץ לברוח, כשתגיע לשטח הפראי תזכה גם בחופש שלך.'
+#Jail handbook messages
+msg_jailed_handbook_6: 'אבל אל תמות לפני שתגיע לשטח הפראי, אחרת תמצא את עצמך שוב בכלא.'
 #Used in the town's status screen to display plots
 status_plot_string: 'חלקות'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: 'השחקן %1$s נשלח ל - %2$s לתא מספר %3$s למשך %4$s שעות על ידי %5$s.'
