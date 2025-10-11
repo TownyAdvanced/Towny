@@ -363,6 +363,7 @@ plot_group_help_3: "משנה את שם הקבוצה שבה אתה עומד."
 plot_group_help_4: "לדוגמה: /plot group set perm resident on."
 plot_group_help_5: "לדוגמה: /plot group toggle [pvp|fire|mobs]"
 plot_group_help_6: "לדוגמה: /plot group forsale 50"
+plot_toggle_help_0: "מדליק/מכבה Pvp בחלקה."
 msg_block_claim: 'תבע בעלות על חלקה זאת'
 msg_plot_nfs: 'בטל את המכירה של של חלקה'
 msg_nfs_abr: '&e.בהתאמה "forsale"-ו "notforsale" הם ראשי התיבות של "fs"-ו "nfs" הקיצורים'
@@ -509,6 +510,7 @@ you_have_been_invited_to_join: 'הוזמנת להצטרף ל'
 you_have_been_invited_to_join2: 'הוזמנת להצטרף ל"%s"'
 tc_you_are_now_talking_in_channel: '[TownyChat] אתה עכשיו מדבר ב - &f%s'
 tc_err_you_are_already_talking_in_default_channel_help: 'אתה כבר מדבר בערוץ ברירת המחדל. בשביל להחליף לאחד אחר השתמש בפקודה של ערוץ זה.'
+msg_admin_set_plot_help_2: 'כאשר נמצאים בשטח הפראי.'
 status_off: '&aכבוי'
 status_off_bad: '&4כבוי'
 status_nation_king: 'מנהיג:'
@@ -636,7 +638,7 @@ msg_err_cannot_spawn_x_seconds_remaining: 'אתה לא יכול לעשות ספ�
 #Added in 0.63
 msg_plot_set_to_nfs: 'מכירת החלקה בוטלה.'
 msg_err_x_spawn_disallowed_from_x: '&c%s ספאון אינו מותר מ - %s.'
-msg_the_wilderness: 'השממה'
+msg_the_wilderness: 'שטח הפרא'
 msg_enemy_areas: 'איזור אויב'
 msg_neutral_towns: 'ערים ניטרליות'
 #Added in 0.64
@@ -753,6 +755,7 @@ msg_unable_to_withdraw_x: 'אי אפשר למשוך %s מבנק העיר הזא�
 #Added in 0.88
 msg_nation_already_peaceful: '&cהאומה כבר שוחרת שלום.'
 msg_nation_already_not_peaceful: '&cהאומה כבר לא שוחרת שלום.'
+status_world_wildernessmobs: 'מובים בשטח פרא:'
 msg_outlaw_kick_cooldown: '&cאתה נחשב לפורע חוק בעיר %s. יש לך עוד %s לעזוב את העיר, אחרת תשוגר בחזרה לנקודת הספאון שלך.'
 msg_outlaw_kicked: '&4אתה לא רצוי ב-%s. שוגרת הרחק משם.'
 msg_outlaw_town_notify: '&cפורע חוק, %s, נכנס לתחום העיר שלך.'
@@ -869,7 +872,7 @@ msg_deleting_nation_will_result_in_losing_residents: '&cאזהרה: מחיקת �
 msg_command_blocked_inside_towns: '&cאתה לא יכול להשתמש בפקודה זאת בתוך ערים.'
 msg_command_limited: 'אתה יכול להשתמש בפקודה זאת רק בחלקות שלך.'
 #Added in 0.105
-msg_wilderness_use_x_in_all_worlds: 'שימוש בשממה מוגדר כ%s בכל העולמות.'
+msg_wilderness_use_x_in_all_worlds: 'השימוש בשטח הפראי הוגדר ל-%s בכל העולמות.'
 msg_regenerations_use_x_in_all_worlds: 'מצב התחדשות הינו %s בכל העולמות.'
 #Added in 0.106
 msg_command_outsider_blocked: 'אתה לא יכול להשתמש בפקודה זאת בגלל שאתה לא גר ב - %s.'
@@ -985,6 +988,8 @@ status_title_nopvp: '&a(ללא PVP)'
 #Added in 0.119
 msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'אתה לא יכול לכלוא את התושב שלך מפני שהוא במיקום שבוא הוא נחשב כפורע חוק.'
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'אתה לא יכול לכלוא את התושב שלך מפני שהוא במיקום שבוא הוא נחשב כאויב.'
+msg_wilderness_use_set_to: '&bהשימוש בשטח הפראי הוגדר ל-%s ב-%s.'
+msg_setup_wildernessuse: 'האם ברצונך להפעיל שימוש בשטח הפראי? פעולה זו תאפשר לשחקנים להרוס ולבנות בשטח הפראי.'
 #Used in the town's status screen to display plots
 status_plot_string: 'חלקות'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: 'השחקן %1$s נשלח ל - %2$s לתא מספר %3$s למשך %4$s שעות על ידי %5$s.'
