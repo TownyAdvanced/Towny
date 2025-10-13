@@ -397,9 +397,11 @@ public class TownyFormatter {
 		if (!fields.isEmpty())
 			screen.addComponentOf("extraFields", getExtraFieldsComponent(fields));
 			
-		BukkitTools.fireEvent(new TownStatusScreenEvent(screen, town));
+		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, town); 
+
+		BukkitTools.fireEvent(event);
 		
-		return screen;
+		return event.getStatusScreen();
 	}
 
 	/**
