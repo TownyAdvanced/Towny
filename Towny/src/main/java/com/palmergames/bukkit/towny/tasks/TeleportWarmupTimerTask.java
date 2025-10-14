@@ -69,9 +69,10 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
 				SpawnUtil.addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
 
+				final Location prior = player.getLocation();
 				player.teleportAsync(request.destinationLocation(), TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
 					if (successfulTeleport)
-						BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost()));
+						BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost(), prior));
 				});
 
 				if (request.cooldown() > 0)
