@@ -3768,6 +3768,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.SPAWNING_SAFE_TELEPORT);
 	}
 	
+	public static boolean isStrictSafeTeleportUsed() { 
+		return getBoolean(ConfigNodes.SPAWNING_STRICT_SAFE_TELEPORT);
+	}
+	
 	public static Map<Integer, TownLevel> getConfigTownLevel() {
 		return configTownLevel;
 	}
