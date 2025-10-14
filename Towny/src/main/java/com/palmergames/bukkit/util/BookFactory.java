@@ -3,6 +3,9 @@ package com.palmergames.bukkit.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -25,13 +28,14 @@ public class BookFactory {
 	 */
 	public static ItemStack makeBook(String title, String author, String rawText) {
 		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-		BookMeta meta = (BookMeta) book.getItemMeta();
-		meta.setTitle(title);
-		meta.setAuthor(author);
-		List<String> pages = getPages(rawText);
-		for (String page : pages)
-			meta.addPage(page);
-		book.setItemMeta(meta);
+		book.editMeta(BookMeta.class, meta -> {
+			meta.setTitle(title);
+			meta.setAuthor(author);
+
+			List<Component> pages = getPages(rawText);
+			for (Component page : pages)
+				meta.addPages(page);
+		});
 		return book;
 	}
 	
@@ -46,12 +50,14 @@ public class BookFactory {
 	public static ItemStack makeBook(String title, String author, List<String> pages) {
 		
 		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
-		BookMeta meta = (BookMeta) book.getItemMeta();
-		meta.setTitle(title);
-		meta.setAuthor(author);
-		for (String page : pages)
-			meta.addPage(page);
-		book.setItemMeta(meta);
+		book.editMeta(BookMeta.class, meta -> {
+			meta.setTitle(title);
+			meta.setAuthor(author);
+
+			for (String page : pages)
+				meta.addPages(TownyComponents.miniMessage(page));
+		});
+
 		return book;
 	}
 
@@ -64,46 +70,46 @@ public class BookFactory {
 	 * @param rawText The raw text
 	 * @return lines as a List of Strings.
 	 */
-	private static List<String> getLines(String rawText) {
+	private static List<Component> getLines(String rawText) {
 		// An arraylist to store all of the individual lines which are made to fit a
 		// book's line width.
-		List<String> lines = new ArrayList<>();
+		List<Component> lines = new ArrayList<>();
 
 		try {
 			// Each 'section' is separated by a line break (\n)
 			for (String section : rawText.split("\n")) {
 				// If the section is blank, that means we had a double line break there
-				if (section.equals(""))
-					lines.add("\n");
+				if (section.isEmpty())
+					lines.add(Component.newline());
 				// We have an actual section with some content
 				else {
 					// Iterate through all the words of the section
 					String[] words = Colors.strip(section).split(" ");
-					String line = "";
+					Component line = Component.empty();
 					for (int index = 0; index < words.length; index++) {
-						String word = words[index];
+						Component word = Component.text(words[index]);
 						// New lines get the first word added. If the word is
 						// too long it will be added to lines on the next loop.
-						if (line.isEmpty()) {
+						if (line.equals(Component.empty())) {
 							line = word;
 							continue;
 						}
 
 						// Current line + word is too long to be one line
-						if (FontUtil.measureWidth(line + " " + word) > MAX_LINE_WIDTH) {
+						if (FontUtil.measureWidth(line.appendSpace().append(word)) > MAX_LINE_WIDTH) {
 							// Add our current line
-							lines.add(line + "\n");
+							lines.add(line.appendNewline());
 							// Set our next line to start off with this word
 							line = word;
 							continue;
 						}
 						// Add the current word to our current line
-						line += " " + word;
+						line = line.appendSpace().append(word);
 					}
 					// Make sure we add the line if it was the last word and
 					// wasn't too long for the line to start a new one
-					if (!line.equals("")) {
-						lines.add(line + "\n");
+					if (!line.equals(Component.empty())) {
+						lines.add(line.appendNewline());
 					}
 				}
 			}
@@ -120,22 +126,25 @@ public class BookFactory {
 	 * @param rawText
 	 * @return pages as a List of Strings.
 	 */
-	private static List<String> getPages(String rawText) {
+	private static List<Component> getPages(String rawText) {
 		// Adding an empty line to take the place of the lines[0] which we will be skipping later on.
 		rawText = "\n" + rawText; 
-		List<String> pages = new ArrayList<String>();
-		List<String> lines = getLines(rawText);
-		String pageText = "";
+		List<Component> pages = new ArrayList<>();
+		List<Component> lines = getLines(rawText);
+		TextComponent.Builder pageText = Component.text();
 		for (int i = 1; i < lines.size(); i++) {
-			pageText += lines.get(i);
+			pageText.append(lines.get(i));
 			// Dump every 14 lines into the pages Array (a MC book page can hold 14 lines.)
 			if (i != 1 && i % 14 == 0) {
-				pages.add(pageText);
-				pageText = "";
+				pages.add(pageText.build());
+				pageText = Component.text();
 			}
 		}
-		if (!pageText.isEmpty())
-			pages.add(pageText);
+
+		final Component finalPage = pageText.build();
+		if (!finalPage.equals(Component.empty()))
+			pages.add(finalPage);
+
 		return pages;
 	}
 }
