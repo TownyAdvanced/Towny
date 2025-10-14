@@ -11,7 +11,7 @@ import java.util.Locale;
 public enum DatabaseConfig {
 	DATABASE(
 			"database", "", ""),
-	DATEBASE_VERSION("database.version", "1", "",
+	DATEBASE_VERSION("database.version", "2", "",
 			"# The Database version number. Do not change."),
 	DATABASE_LOAD("database.database_load", "flatfile", "",
 			"# Valid load and save types are: flatfile and mysql."),
@@ -134,9 +134,13 @@ public enum DatabaseConfig {
 		newDatabaseConfig = null;
 	}
 	
-	public static void setDatabaseVersion(String version) {
+	public static void setDatabaseVersion(int version) {
 		databaseConfig.set("database.version", version);
 		databaseConfig.save();
+	}
+	
+	public static int getLatestDatabaseVersion() {
+		return Integer.parseInt(DatabaseConfig.DATEBASE_VERSION.getDefault());
 	}
 	
 	public static String getString(DatabaseConfig node) {
