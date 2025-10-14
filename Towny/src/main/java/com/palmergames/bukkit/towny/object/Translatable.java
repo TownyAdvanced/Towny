@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -146,7 +147,7 @@ public class Translatable {
 	}
 	
 	public Component component() {
-		return TownyComponents.miniMessage(translate());
+		return TownyComponents.miniMessage(translate()).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE); // Because of item lore/names
 	}
 	
 	public String forLocale(Resident resident) {

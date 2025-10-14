@@ -2,6 +2,7 @@ package com.palmergames.bukkit.towny.object.gui;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
+import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -10,7 +11,7 @@ import org.bukkit.inventory.Inventory;
 public class SelectionGUI extends TownyInventory {
 	private final SelectionType type;	
 	
-	public SelectionGUI(Resident res, Inventory inv, String name, SelectionType type) {
+	public SelectionGUI(Resident res, Inventory inv, Component name, SelectionType type) {
 		super(res, inv, name);
 		this.type = type;
 	}
