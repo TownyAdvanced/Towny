@@ -225,6 +225,7 @@ world_toggle_help_8: "Bật/tắt tính năng hoàn nguyên khi không xác nh�
 world_toggle_help_9: "Bật/tắt các tính năng hoàn nguyên về vụ nổ trong thế giới này."
 world_toggle_help_10: "Bật/tắt lệnh cốt truyện rõ ràng-xóa-khối trong thế giới này."
 world_toggle_help_11: "Bật/tắt tính năng không xác nhận cốt truyện-xóa-khối trong thế giới này."
+world_toggle_help_12: "Bật/tắt nếu tính năng bắn thân thiện được bật trong thế giới này."
 townyadmin_help_1: 'Hủy xác nhận quyền sở hữu mảnh đất này'
 townyadmin_help_2: 'Huỷ sở hữu đất xung quanh bạn.'
 admin_panel_1: ""
@@ -335,6 +336,8 @@ ta_eco_convert_modern_help: "Chuyển đổi tài khoản Towny của bạn vớ
 ta_eco_convert_help: "Chuyển đổi tài khoản Towny của bạn sang triển khai tiền tệ mục tiêu, hữu ích cho việc truyền dữ liệu giữa các plugin tiền tệ khác."
 ta_eco_info_help: "Lấy thông tin về các tài khoản tiền tệ trên máy chủ."
 ta_depositall_help_0: "Gửi tiền vào tất cả các ngân hàng thành phố và quốc gia."
+ta_depositall_help_1: "Gửi tiền vào tất cả các ngân hàng thành phố và quốc gia."
+ta_depositall_help_2: "Gửi tiền vào tất cả các ngân hàng thành phố và quốc gia."
 ta_info_help_0: "Xem thông tin tiền gửi cho các quốc gia."
 ta_info_help_1: "Xem thông tin tiền gửi cho các cư dân."
 ta_info_help_2: "Xem thông tin tiền gửi cho các tài khoản towny trong máy chủ."
@@ -442,6 +445,7 @@ msg_nation_kicked_by: '&bThị trấn của bạn đã bị đuổi khỏi quố
 msg_town_left_nation: '&bThị trấn của bạn đã rời quốc gia %s.'
 msg_nation_town_left: '&bThị trấn %s đã rời khỏi quốc gia của bạn.'
 msg_nation_kicked: '&b%s đã đuổi %s khỏi quốc gia.'
+msg_nation_you_kicked: '&b%s đã đuổi %s khỏi quốc gia.'
 msg_raised_ass: '&b%s đã thăng chức %s lên phụ tá %s.'
 msg_lowered_to_res_by: '&bBạn đã bị cắt chức thành dân thường bởi %s.'
 msg_lowered_to_res: '&b%s đã cắt chức %s thành dân thường.'
@@ -650,6 +654,7 @@ msg_err_not_enough_residents_join_nation: '&bThị trấn %s không có đủ c�
 msg_not_enough_residents_no_longer_capital: '&bThủ đô cũ của quốc gia không còn đủ cư dân để trở thành thủ đô của quốc gia. Thủ đô mới của quốc gia là %s.'
 msg_town_not_enough_residents_left_nation: '&bThị trấn %s không còn đủ cư dân để trở thành thành viên của một quốc gia và đã bị xóa khỏi quốc gia đó.'
 msg_nation_disbanded_town_not_enough_residents: 'Thị trấn %s không còn đủ cư dân để điều hành đất nước và đã buộc đất nước phải giải tán.'
+msg_not_enough_residents_refunded: '&bBạn đã được hoàn lại $%s vì quốc gia của bạn bị giải thể do không đủ cư dân.'
 msg_not_enough_residents_capital: 'Thị trấn %s không có đủ cư dân để trở thành thủ đô của quốc gia.'
 list_page: '&bTrang %s của %s'
 list_err_not_enough_pages: '&cChỉ có %s trang có sẵn'
@@ -1194,6 +1199,7 @@ msg_spawn_warn: 'Chi phí dịch chuyển là %s. Tiếp tục? Gợi ý: thêm 
 msg_confirm_purchase: 'Thực hiện thao tác này sẽ tốn %s. Tiếp tục?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Vì chúng không đủ gần thủ đô mới nên các thị trấn sau sẽ bị xóa khỏi quốc gia của bạn: %s. Bạn có muốn tiếp tục không?'
 msg_ta_deposit_all_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia và thị trấn.'
+msg_ta_deposit_all_towns_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia và thị trấn.'
 bonus_townblocks: '+ Mảnh đất'
 #Added in 0.80
 nomad_sing: 'Dân du mục'
