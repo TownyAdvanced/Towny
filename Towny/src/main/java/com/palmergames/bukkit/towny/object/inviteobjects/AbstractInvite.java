@@ -70,6 +70,6 @@ abstract class AbstractInvite<S extends InviteSender, R extends InviteReceiver> 
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getDirectSender(), getReceiver(), getSender());
+		return Objects.hash(getSenderUUID(), getReceiver(), getSender());
 	}
 }
