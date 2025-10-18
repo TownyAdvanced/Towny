@@ -36,6 +36,7 @@ import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.JavaUtil;
 import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
@@ -530,7 +531,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("friends");
 				if (line != null) {
-					List<Resident> friends = TownyAPI.getInstance().getResidents(line.split(","));
+					final String[] split = line.split(",");
+					final UUID[] friendUUIDs = toUUIDArray(split);
+
+					List<Resident> friends = friendUUIDs.length > 0 ? api.getResidents(friendUUIDs) : api.getResidents(split);
 					for (Resident friend : friends) {
 						resident.addFriend(friend);
 					}
@@ -547,7 +551,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("town");
 				if (line != null) {
 					Town town = null;
-					if (universe.hasTown(line)) {
+					
+					final UUID townUUID = JavaUtil.parseUUIDOrNull(line);
+
+					if (townUUID != null && universe.hasTown(townUUID)) {
+						town = universe.getTown(townUUID);
+					} else if (universe.hasTown(line)) {
 						town = universe.getTown(line);
 					} else if (universe.getReplacementNameMap().containsKey(line)) {
 						town = universe.getTown(universe.getReplacementNameMap().get(line));
@@ -609,9 +618,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileTown);
 
 				line = keys.get("mayor");
-				if (line != null)
+				if (line != null) {
 					try {
-						Resident res = universe.getResident(line);
+						final UUID mayorUUID = JavaUtil.parseUUIDOrNull(line);
+						Resident res = mayorUUID != null ? universe.getResident(mayorUUID) : universe.getResident(line);
 						if (res == null)
 							throw new TownyException();
 						
@@ -624,24 +634,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 						return true;						
 					}
+				}
 
 				line = keys.get("outlaws");
 				if (line != null) {
 					tokens = line.split(",");
-					for (String token : tokens) {
-						if (!token.isEmpty()) {
-							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_town_fetch_outlaw", token));
-							Resident outlaw = universe.getResident(token);
-							if (outlaw != null) {
-								try { 
-									town.addOutlaw(outlaw);
-								} catch (AlreadyRegisteredException ex) {
-									TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_outlaw_of_town_duplicate", town.getName(), token));
-								}
-							}
-							else {
-								TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_outlaw_of_town_not_exist", town.getName(), token));
-							}
+					final UUID[] outlawUUIDs = toUUIDArray(tokens);
+					final List<Resident> outlaws = outlawUUIDs.length > 0 ? api.getResidents(outlawUUIDs) : api.getResidents(tokens);
+
+					for (Resident outlaw : outlaws) {
+						TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_town_fetch_outlaw", outlaw.getName()));
+
+						try {
+							town.addOutlaw(outlaw);
+						} catch (AlreadyRegisteredException ex) {
+							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_reading_outlaw_of_town_duplicate", town.getName(), outlaw.getName()));
 						}
 					}
 				}
@@ -950,8 +957,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("nation");
 				if (line != null && !line.isEmpty()) {
+					line = line.trim();
+					final UUID nationUUID = JavaUtil.parseUUIDOrNull(line);
+					
 					Nation nation = null;
-					if (universe.hasNation(line))
+					if (nationUUID != null && universe.hasNation(nationUUID)) {
+						nation = universe.getNation(nationUUID);
+					} else if (universe.hasNation(line))
 						nation = universe.getNation(line);
 					else if (universe.getReplacementNameMap().containsKey(line))
 						nation = universe.getNation(universe.getReplacementNameMap().get(line));
@@ -1077,7 +1089,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("capital");
 				String cantLoadCapital = Translation.of("flatfile_err_nation_could_not_load_capital_disband", nation.getName());
 				if (line != null) {
-					Town town = universe.getTown(line);
+					final UUID capitalUUID = JavaUtil.parseUUIDOrNull(line);
+
+					Town town = capitalUUID != null ? universe.getTown(capitalUUID) : universe.getTown(line);
 					if (town != null) {
 						try {
 							nation.forceSetCapital(town);
@@ -1128,7 +1142,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("allies");
 				if (line != null) {
-					List<Nation> allies = TownyAPI.getInstance().getNations(line.split(","));
+					final String[] split = line.split(",");
+					final UUID[] allyUUIDs = toUUIDArray(split);
+
+					List<Nation> allies = allyUUIDs.length > 0 ? api.getNations(allyUUIDs) : api.getNations(split);
 					for (Nation ally : allies) {
 						nation.addAlly(ally);
 					}
@@ -1136,7 +1153,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("enemies");
 				if (line != null) {
-					List<Nation> enemies = TownyAPI.getInstance().getNations(line.split(","));
+					final String[] split = line.split(",");
+					final UUID[] enemyUUIDs = toUUIDArray(split);
+
+					List<Nation> enemies = enemyUUIDs.length > 0 ? api.getNations(enemyUUIDs) : api.getNations(split);
 					for (Nation enemy : enemies) {
 						nation.addEnemy(enemy);
 					}
@@ -1602,7 +1622,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				
 				line = keys.get("town");
 				if (line != null && !line.isEmpty()) {
-					Town town = universe.getTown(line.trim());
+					line = line.trim();
+					final UUID townUUID = JavaUtil.parseUUIDOrNull(line);
+
+					Town town = townUUID != null ? universe.getTown(townUUID) : universe.getTown(line);
 					if (town != null) {
 						group.setTown(town);
 					} else {
@@ -1701,17 +1724,24 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 					line = keys.get("town");
 					if (line != null) {
+						line = line.trim();
+
 						if (line.isEmpty()) {
 							TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_townblock_file_missing_town_delete", path));
 							universe.removeTownBlock(townBlock);
 							deleteTownBlock(townBlock);
 							continue;
 						}
+
+						final UUID townUUID = JavaUtil.parseUUIDOrNull(line);
+
 						Town town = null;
-						if (universe.hasTown(line.trim()))
-							town = universe.getTown(line.trim());
-						else if (universe.getReplacementNameMap().containsKey(line.trim())) {
-							town = universe.getTown(universe.getReplacementNameMap().get(line.trim()));
+						if (townUUID != null && universe.hasTown(townUUID)) {
+							town = universe.getTown(townUUID);
+						} else if (universe.hasTown(line))
+							town = universe.getTown(line);
+						else if (universe.getReplacementNameMap().containsKey(line)) {
+							town = universe.getTown(universe.getReplacementNameMap().get(line));
 							toSave.add(townBlock);
 						}
 						
@@ -1747,7 +1777,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					
 					line = keys.get("resident");
 					if (line != null && !line.isEmpty()) {
-						Resident res = universe.getResident(line.trim());
+						line = line.trim();
+
+						final UUID residentUUID = JavaUtil.parseUUIDOrNull(line);
+						Resident res = residentUUID != null ? universe.getResident(residentUUID) : universe.getResident(line);
 						if (res != null) {
 							townBlock.setResident(res, false);
 						}
@@ -1995,13 +2028,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("about=" + resident.getAbout());
 
 		if (resident.hasTown()) {
-			list.add("town=" + resident.getTownOrNull().getName());
+			list.add("town=" + resident.getTownOrNull().getUUID());
 			list.add("town-ranks=" + StringMgmt.join(resident.getTownRanksForSaving(), ","));
 			list.add("nation-ranks=" + StringMgmt.join(resident.getNationRanksForSaving(), ","));
 		}
 
 		// Friends
-		list.add("friends=" + StringMgmt.join(resident.getFriends(), ","));
+		list.add("friends=" + StringMgmt.join(toUUIDList(resident.getFriends()), ","));
 		list.add("");
 
 		// Plot Protection
@@ -2040,11 +2073,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Name
 		list.add("name=" + town.getName());
 		// Mayor
-		if (town.hasMayor())
-			list.add("mayor=" + town.getMayor().getName());
+		final Resident mayor = town.getMayor();
+		if (mayor != null) {
+			list.add("mayor=" + mayor.getUUID());
+			list.add("mayorName=" + mayor.getName());
+			list.add(newLine);
+		}
+		
 		// Nation
-		if (town.hasNation())
-			list.add("nation=" + town.getNationOrNull().getName());
+		final Nation nation = town.getNationOrNull();
+		if (nation != null) {
+			list.add("nation=" + nation.getUUID());
+			list.add("nationName=" + nation.getName());
+			list.add(newLine);
+		}
 
 		list.add(newLine);
 		// Town Board
@@ -2129,7 +2171,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add(outpostArray.toString());
 
 		// Outlaws
-		list.add("outlaws=" + StringMgmt.join(town.getOutlaws(), ","));
+		list.add("outlaws=" + StringMgmt.join(toUUIDList(town.getOutlaws()), ","));
 
 		// Metadata
 		list.add("metadata=" + serializeMetadata(town));
@@ -2175,7 +2217,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		try {
 			list.add("groupName=" + group.getName());
 			list.add("groupPrice=" + group.getPrice());
-			list.add("town=" + group.getTown().getName());
+			list.add("town=" + group.getTown().getUUID());
 			list.add("metadata=" + serializeMetadata(group));
 		} catch (Exception e) {
 			plugin.getLogger().log(Level.WARNING, "An exception occurred while saving plot group " + Optional.ofNullable(group).map(g -> g.getUUID().toString()).orElse("null") + ": ", e);
@@ -2216,8 +2258,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			list.add("uuid=" + UUID.randomUUID());
 		}
 
-		if (nation.hasCapital())
-			list.add("capital=" + nation.getCapital().getName());
+		if (nation.hasCapital()) {
+			list.add("capital=" + nation.getCapital().getUUID());
+			list.add("capitalName=" + nation.getCapital().getName());
+		}
 
 		list.add("nationBoard=" + nation.getBoard());
 
@@ -2226,9 +2270,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (nation.hasTag())
 			list.add("tag=" + nation.getTag());
 
-		list.add("allies=" + StringMgmt.join(nation.getAllies(), ","));
+		list.add("allies=" + StringMgmt.join(toUUIDList(nation.getAllies()), ","));
 
-		list.add("enemies=" + StringMgmt.join(nation.getEnemies(), ","));
+		list.add("enemies=" + StringMgmt.join(toUUIDList(nation.getEnemies()), ","));
 
         // Taxpercent
 		list.add("taxpercent=" + nation.isTaxPercentage());
@@ -2455,11 +2499,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// taxed
 		list.add("taxed=" + townBlock.isTaxed());
 
-		list.add("town=" + townBlock.getTownOrNull().getName());
+		list.add("town=" + townBlock.getTownOrNull().getUUID());
 
 		// resident
 		if (townBlock.hasResident())
-			list.add("resident=" + townBlock.getResidentOrNull().getName());
+			list.add("resident=" + townBlock.getResidentOrNull().getUUID());
 
 		// type
 		list.add("type=" + townBlock.getTypeName());
