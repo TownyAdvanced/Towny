@@ -1861,11 +1861,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				line = rs.getString("resident");
-				if (line != null && !line.isEmpty()) {
-					line = line.trim();
-					
+				if (line != null && !(line = line.trim()).isEmpty()) {
 					final UUID residentUUID = JavaUtil.parseUUIDOrNull(line);
-					Resident res = residentUUID != null ? universe.getResident(residentUUID) : universe.getResident(line.trim());
+					Resident res = residentUUID != null ? universe.getResident(residentUUID) : universe.getResident(line);
 					if (res != null) {
 						townBlock.setResident(res, false);
 					} else {
