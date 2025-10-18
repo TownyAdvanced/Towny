@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.db;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -78,12 +79,10 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -244,11 +243,19 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	
 	@Override
 	public @NotNull Resident newResident(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		return newResident(name, null);
+		final UUID uuid = this.parsePlayerUUID(null, name);
+		if (uuid == null) {
+			throw new NotRegisteredException("Could not find a uuid for player name '" + name + "'.");
+		}
+
+		return newResident(name, uuid);
 	}
 
 	@Override
 	public @NotNull Resident newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
+		Preconditions.checkArgument(name != null, "name may not be null");
+		Preconditions.checkArgument(uuid != null, "uuid may not be null");
+
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterPlayerName(name);
@@ -259,10 +266,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (universe.hasResident(name))
 			throw new AlreadyRegisteredException("A resident with the name " + filteredName + " is already in use.");
 		
-		Resident resident = new Resident(filteredName);
-		
-		if (uuid != null)
-			resident.setUUID(uuid);
+		Resident resident = new Resident(filteredName, uuid);
 		
 		universe.registerResident(resident);
 		return resident;
@@ -270,11 +274,11 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 
 	@Override
 	public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException {
-		newNation(name, null);
+		newNation(name, UUID.randomUUID());
 	}
 
 	@Override
-	public void newNation(String name, @Nullable UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
+	public void newNation(String name, @NotNull UUID uuid) throws AlreadyRegisteredException, NotRegisteredException {
 		String filteredName;
 		try {
 			filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
@@ -285,10 +289,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		if (universe.hasNation(filteredName))
 			throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
 
-		Nation nation = new Nation(filteredName);
-		
-		if (uuid != null)
-			nation.setUUID(uuid);
+		Nation nation = new Nation(filteredName, uuid);
 		
 		universe.registerNation(nation);
 	}
@@ -674,15 +675,12 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (universe.hasTown(filteredName))
 				throw new AlreadyRegisteredException("The town " + filteredName + " is already in use.");
 
-			List<Resident> toSave = new ArrayList<>(town.getResidents());
-			boolean isCapital = false;
-			Nation nation = null;
 			double townBalance = 0.0;
 			oldName = town.getName();
 
 			// Save the towns bank balance to set in the new account.
 			// Clear accounts
-			if (TownyEconomyHandler.isActive())
+			if (TownyEconomyHandler.isActive()) {
 				if (TownyEconomyHandler.canRenameAccounts()) {
 					TownyEconomyHandler.rename(town, TownySettings.getTownAccountPrefix() + filteredName);
 				} else {
@@ -693,20 +691,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 						TownyMessaging.sendErrorMsg("The bank balance for the town " + oldName + " could not be received from the economy plugin and will not be able to be converted.");
 					}
 				}
-				
-			UUID oldUUID = town.getUUID();
-			long oldregistration = town.getRegistered();
-
-			// Store the nation in case we have to update the capitol
-			if (town.hasNation()) {
-				nation = town.getNationOrNull();
-				isCapital = town.isCapital();
 			}
-
-			TownyWorld world = town.getHomeblockWorld(); // TODO: This was added because renaming was throwing an NRE
-			if (world.hasTown(town))                     // At some point worlds storing Towns will have to be re-evaluated.
-				world.removeTown(town);                  // Worlds holding Towns is only useful when it comes to checking 
-			                                             // distances between townblocks.
 
 			/*                         
 			 * Tidy up old files.
@@ -723,41 +708,14 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			universe.unregisterTown(town);
 			town.setName(filteredName);
 			universe.registerTown(town);
-			world.addTown(town);
 
-			// If this was a nation capitol
-			if (isCapital) {
-				nation.setCapital(town);
-			}
-			town.setUUID(oldUUID);
-			town.setRegistered(oldregistration);
 			if (TownyEconomyHandler.isActive()) {
 				town.getAccount().setName(TownySettings.getTownAccountPrefix() + town.getName());
 				if (!TownyEconomyHandler.canRenameAccounts())
 					town.getAccount().setBalance(townBalance, "Rename Town - Transfer to new account");
 			}
 
-			for (Resident resident : toSave) {
-				saveResident(resident);
-			}
-
-			// Update all townBlocks with the new name
-
-			town.saveTownBlocks();
-			
-			if (town.hasPlotGroups())
-				for (PlotGroup pg : town.getPlotGroups()) {
-					pg.setTown(town);
-					savePlotGroup(pg);
-				}
-
 			saveTown(town);
-			saveWorld(town.getHomeblockWorld());
-
-			if (nation != null) {
-				saveNation(nation);
-			}
-
 		} finally {
 			lock.unlock();
 		}
@@ -785,7 +743,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (universe.hasNation(filteredName))
 				throw new AlreadyRegisteredException("The nation " + filteredName + " is already in use.");
 
-			List<Town> toSave = new ArrayList<>(nation.getTowns());
 			double nationBalance = 0.0;
 
 			// Save the nations bank balance to set in the new account.
@@ -820,29 +777,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 					nation.getAccount().setBalance(nationBalance, "Rename Nation - Transfer to new account");
 			}
 
-			for (Town town : toSave) {
-				saveTown(town);
-			}
-
 			saveNation(nation);
-
-			//search and update all ally/enemy lists
-			Nation oldNation = new Nation(oldName);
-			List<Nation> toSaveNations = new ArrayList<>();
-			universe.getNations().stream()
-				.filter(n -> n.hasAlly(oldNation) || n.hasEnemy(oldNation))
-				.forEach(n -> {
-					if (n.hasAlly(oldNation)) {
-						n.removeAlly(oldNation);
-						n.addAlly(nation);
-					} else {
-						n.removeEnemy(oldNation);
-						n.addEnemy(nation);
-					}
-					toSaveNations.add(n);
-				});
-			toSaveNations.forEach(Nation::save);
-
 		} finally {
 			lock.unlock();
 		}
@@ -886,6 +821,9 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			// Change account name over.
 			if (TownyEconomyHandler.isActive() && resident.getAccountOrNull() != null)
 				resident.getAccount().setName(newName);
+
+			// Tidy up old files
+			deleteResident(resident);
 			
 			// Remove the resident from the universe name storage.
 			universe.unregisterResident(resident);
@@ -901,57 +839,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			
 			// Save resident with new name.
 			saveResident(resident);
-
-			// Save townblocks resident owned personally with new name.
-			for(TownBlock tb: resident.getTownBlocks()){
-				saveTownBlock(tb);				
-			}
-			
-			// Save the town if the player was the mayor.
-			if (resident.isMayor())
-				saveTown(resident.getTown());
-			
-			// Make an oldResident with the previous name for use in searching friends/outlawlists/deleting the old resident file.
-			Resident oldResident = new Resident(oldName);
-			oldResident.setUUID(resident.getUUID());
-			
-			// Search and update all friends lists
-			Set<Resident> residentsToSave = new HashSet<>();
-			for (Resident toCheck : new ArrayList<>(universe.getResidents())){
-				if (toCheck.hasFriend(oldResident)) {
-					toCheck.removeFriend(oldResident);
-					toCheck.addFriend(resident);
-					residentsToSave.add(toCheck);
-				}
-			}
-			residentsToSave.forEach(Resident::save);
-
-			// Search and update all town outlaw, trustedresidents lists.
-			Set<Town> townsToSave = new HashSet<>();
-			for (Town toCheckTown : new ArrayList<>(universe.getTowns())) {
-				if (toCheckTown.hasOutlaw(oldResident)) {
-					toCheckTown.removeOutlaw(oldResident);
-					toCheckTown.addOutlaw(resident);
-					townsToSave.add(toCheckTown);
-				}
-				if (toCheckTown.hasTrustedResident(oldResident)) {
-					toCheckTown.removeTrustedResident(oldResident);
-					toCheckTown.addTrustedResident(resident);
-					townsToSave.add(toCheckTown);
-				}
-			}
-			townsToSave.forEach(Town::save);
-
-			new ArrayList<>(universe.getTownBlocks().values()).stream()
-				.filter(tb -> tb.hasTrustedResident(oldResident))
-				.forEach(tb -> {
-					tb.removeTrustedResident(oldResident);
-					tb.addTrustedResident(resident);
-				});
-
-			//delete the old resident and tidy up files
-			deleteResident(oldResident);
-
 		} finally {
 			lock.unlock();			
 		}
