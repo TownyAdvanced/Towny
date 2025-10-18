@@ -363,11 +363,41 @@ plot_group_help_3: "משנה את שם הקבוצה שבה אתה עומד."
 plot_group_help_4: "לדוגמה: /plot group set perm resident on."
 plot_group_help_5: "לדוגמה: /plot group toggle [pvp|fire|mobs]"
 plot_group_help_6: "לדוגמה: /plot group forsale 50"
+plot_group_help_7: "דוגמה: /plot group notforsale"
+plot_group_help_8: "מוסיף או מסיר תושב מרשימת הנבטחים."
+plot_group_help_9: "מוסיף תושב כנבטח בקבוצת החלקות."
+plot_group_help_10: "מסיר תושב נבטח מקבוצת החלקות."
+plot_group_help_11: "פותח את ממשק ההרשאות של החלקה."
+plot_group_help_12: "מוסיף שחקן לממשק ההרשאות של החלקה."
+plot_group_help_13: "מסיר שחקן מממשק ההרשאות של החלקה."
 plot_toggle_help_0: "מדליק/מכבה Pvp בחלקה."
+plot_toggle_help_1: "מדליק/מכבה פיצוצים בחלקה."
+plot_toggle_help_2: "מדליק/מכבה אש בחלקה."
+plot_toggle_help_3: "מדליק/מכבה מובים בחלקה."
+plot_group_toggle_help_0: "מפעיל/מכבה את ה-pvp בקבוצת החלקה."
+plot_group_toggle_help_1: "מפעיל/מכבה פיצוצים בקבוצת החלקה."
+plot_group_toggle_help_2: "מפעיל/מכבה אש בקבוצת החלקה."
+plot_group_toggle_help_3: "מפעיל/מכבה מובים בקבוצת החלקה."
+plot_group_toggle_help_4: "משנה את מצב המיסוי של קבוצת החלקה."
+plot_set_help_0: "לדוגמה: פונדק, שטח פרא, חווה, שגרירות וכו'."
+plot_set_help_1: "קובע חלקה למבצר."
+plot_set_help_1.5: "קובע את מספר הימים המינימלי שבו שחקן חייב להיות חבר בעיירה כדי לרכוש את החלקה."
+plot_set_help_1.6: "קובע את מספר הימים המרבי שבו שחקן חייב להיות חבר בעיירה כדי לרכוש את החלקה."
+plot_set_help_2: "מסיר סוג חלקה."
+plot_set_help_3: "מעניק שם לחלקה"
+plot_set_help_4: "הפעל/כבה את כל ההרשאות."
+plot_set_help_5: "קובע את ההרשאות של רמה או סוג כפעילות או כלא פעילות."
+plot_set_help_6: "קובע את ההרשאה של רמה וסוג כפעילה או כלא פעילה."
+plot_set_help_7: "קובע את ההרשאות לתושב או לעיירה שבבעלותם החלקות."
+plot_jailcell_help_0: "מוסיף תא כלא במקום שבו אתה עומד."
+plot_jailcell_help_1: "מסיר את תא הכלא שבו אתה נמצא."
 msg_block_claim: 'תבע בעלות על חלקה זאת'
+msg_block_claim_radius: 'תבעו רדיוס של חלקות סביבכם.'
 msg_plot_nfs: 'בטל את המכירה של של חלקה'
+msg_plot_nfs_radius: 'רשום את רדיוס החלקות המוצעים למכירה'
 msg_nfs_abr: '&e.בהתאמה "forsale"-ו "notforsale" הם ראשי התיבות של "fs"-ו "nfs" הקיצורים'
 msg_plot_fs: 'שים את איזור זה למכירה פומבית.'
+msg_plot_fs_radius: 'הציבו רדיוס של חלקות למכירה.'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -375,11 +405,17 @@ msg_plot_fs: 'שים את איזור זה למכירה פומבית.'
 ############################################################
 msg_buy: '&b.סך הכל (%2$s) בעבור (%d%1$s) קנה את '
 msg_buy_resident_plot: '&b!סך הכל (%3$s) בעבור (%2$s) קנה את החלקה של (%1$s) השחקן'
+msg_buy_resident_plot_group: '&b%s קנה את קבוצת החלקות של %s עבור %s!'
 msg_couldnt_pay_taxes: '&b.%s-לא עמד בתשלום מיסים וגורש מ s%'
 msg_couldnt_pay_plot_taxes: '&b%s לא עמד בתשלום מיסים ואיבד בעלות על חלקה.'
+msg_you_couldnt_pay_plot_tax: '&bלא הצלחת לשלם את מס החלקה של %s ואיבדת את הבעלות על החלקה ב%s.'
+msg_you_couldnt_pay_town_tax: '&bלא הצלחת לשלם את מס העיר של %s והוסרת מ%s.'
+msg_you_paid_town_tax: '&bשילמת לעירייתך מס בגובה %s.'
+msg_you_paid_plottax_to_town: '&bשילמת מסים על חלקה בסך %s לעיריית %s.'
 msg_bankrupt_town: ' לא יכלה להרשות לעצמה להישאר עיר.'
 msg_bankrupt_nation: ' לא יכלה להרשות לעצמה להישאר אומה.'
 msg_nation_not_peaceful: '&bהאומה לא יכלה להרשות לעצמה לשמור על מצב שוחר שלום.'
+msg_nation_cant_peaceful: '&האומה לא יכלה להרשות לעצמה להפוך למדינה שלווה. עליך להיות מסוגל לשלם %s מדי יום.'
 msg_peaceful_disabled: '&bשלום של אומות מושבת באופן גלובלי.'
 msg_you_paid: '&bבשביל לקבוע את הסטטוס שלכם כשוחר שלום %s שילמתם'
 msg_nation_set_peace: '&bמצב האומה שונה בהצלחה.'
@@ -397,7 +433,9 @@ msg_friend_remove: '&b%s הסיר אותך מרשימת החברים שלו.'
 msg_left_town: '&b%s עזב את העיר'
 msg_you_left: '&bעזבת את %s.'
 msg_not_mayor: '&bאתה לא ראש העיר.'
+msg_not_king: '&bאתה לא מנהיג האומה.'
 msg_not_mayor_ass: '&bאתה לא ראש העיר או סגן.'
+msg_not_king_ass: '&bאתה לא מנהיג האומה או עוזר.'
 msg_own_nation_disallow: '&bאתה לא יכול לעשות את זה לאומה של עצמך.'
 msg_no_perms_claim: '&bאין לך הרשאה להרחיב את העיר שלך.'
 msg_outpost_disable: '&bמוצבי חוץ אינם אפשריים.'
@@ -407,6 +445,7 @@ msg_nation_kicked_by: '&bהעיר שלך גורשה מהאומה על ידי %s.
 msg_town_left_nation: '&bהעיר שלך עזבה את האומה %s.'
 msg_nation_town_left: '&bהעיר %s עזבה את האומה שלך.'
 msg_nation_kicked: '&b%s העיף את %s מהאומה.'
+msg_nation_you_kicked: '&bאתה סילקת את %s מהמדינה.'
 msg_raised_ass: '&b%s העלה את %s בדרגה לסגן ב%s.'
 msg_lowered_to_res_by: '&bהורדת בדרגה לתושב רגיל על ידי %s.'
 msg_lowered_to_res: '&b%s הוריד בדרגה את %s לתושב רגיל.'
@@ -445,6 +484,7 @@ msg_no_funds_to_buy: '&cלעיר אין מספיק כסף בשביל לקנות 
 msg_annexed_area: '&2שטח מסופח %s'
 msg_max_plot_own: '&cאתה לא יכול להיות בעלים של יותר מ - %s חלקות.'
 msg_max_outposts_own: '&cאתה לא יכול להיות בעלים של יותר מ - %sמוצבי-חוץ.'
+msg_no_funds_new_nation: '&cהעיר לא יכולה להרשות לעצמה להקים אומה חדשה.'
 msg_already_claimed: 'c&איזור זה כבר נלקח על ידי: %s'
 msg_already_claimed_1: '&cאיזור זה (%s) כבר שייך למישהו.'
 msg_already_claimed_2: '&cלאיזור זה כבר יש בעלים.'
@@ -459,14 +499,69 @@ msg_area_not_recog: 'c&איזור זה לא מזוהה.'
 msg_specify_name: '&bאנא ציין שם עיר'
 msg_specify_nation_name: 'b&פרט את שם המדינה'
 msg_peasant_right: 'b&לאיכר אין את הרשות לגרום למנהיגים שלו להיכנס לכיסא המלכות.'
+msg_cost_spawn: '&bנדרשתם לשלם %s כדי להתנייד לעיירה.'
+msg_cost_spawn_refund: '&bהחיוב בגין השימוש בספאון עיר הוחזר לך.'
 msg_town_spawn_warmup: '&bמחכה להשתגר...'
+msg_town_rename_disabled: '&bשינוי שם העיר מושבת'
+msg_town_set_name: '&b%s שינה את שם העיר ל%s.'
+msg_nation_set_name: '&b%s שינה את שם המדינה ל-%s.'
+msg_changed_pvp: '&c%s PVP היה %s.'
+msg_changed_expl: '&fפיצוצים ב#35DAFD%s &fהם כעת #35DAFD%s.'
+msg_changed_fire: '&fהתפשטות האש ב#35DAFD%s &fהיא כעת &#35DAFD%s.'
 msg_world_mobs: '&cבעולם זה היווצרות מפלצות הינה כפויה למצב פועל.'
+msg_reloaded: '&aההגדרות של טאוני נטענו מחדש.'
+msg_undo_complete: '&aביצוע הביטול הושלם.'
+msg_give_total: '&bנתן ל-%s בונוס. (סה"כ: %s)'
+mag_backup_success: '&2גיבוי הצליח.'
+msg_xx_withdrew_xx: '&b%s משך %s מבנק ה%s.'
+msg_xx_deposited_xx: '&b%s הפקיד %s בבנק ה%s.'
+msg_insuf_funds: '&cאין לך מספיק.'
 msg_err_withdraw_disabled: 'משיכת כסף מבנק זה הינה מושבתת!'
+msg_err_deposit_capped: 'לא ניתן להפקיד כסף. הבנק הזה מוגבל ל-%s.'
+msg_set_town_home: '&bשינוי בלוק הבית של העיר ל%s בוצע בהצלחה'
+msg_set_town_spawn: '&bשינוי נקודת הספאון של העיר בוצע בהצלחה.'
+msg_set_outpost_spawn: '&bשינוי נקודת הספאון של המצודה בוצע בהצלחה.'
 msg_set_title: '&b%s קיבל דרגה של ''%s&b''.'
+msg_set_surname: '&b%s קיבל את שם המשפחה ''%s&b''.'
+msg_clear_title_surname: '&bה%s עבור ''%s'' נוקה.'
+msg_clear_plot_material: '&bהחלקה נוקתה מסוגי הבלוקים הבאים: %s.'
+msg_set_perms: '&bשינוי ההרשאות בוצע בהצלחה ל:'
+msg_set_claim: '&bשינוי הזכאות של %s לתבוע בוצע בהצלחה ל%s'
+msg_set_perms_reset: '&bאיפוס ההרשאות בכל החלקות של %s בוצע בהצלחה.'
+msg_usedefault: '&bהעולם הזה (%s) משתמש כעת בהגדרות ברירת המחדל הגלובליות.'
+msg_set_wild_perms: '&bשינוי ההרשאות בשטח הפרא של %s בוצע בהצלחה ל%s'
+msg_set_wild_ignore: '&bהשינוי של בלוקי ההתעלמות הכלליים של %s ל-%s בוצע בהצלחה'
+msg_set_wild_name: '&bשם הפרא של %s שונה בהצלחה ל-%s'
+msg_set_wild_regen: '&bהצלחה בשינוי התחדשות הפרא של %s ל''%s'''
+msg_set_use_towny_on: '&b העולם הזה פועל כעת לפי כללי טאוני.'
 msg_set_use_towny_off: 'העולם הזה פטור מכל אינטראקציה עם Towny.'
+msg_error_must_be_int: '&bהסכום חייב להיות מספר שלם.'
+msg_error_input_must_be_int: '&c%s חייב להיות מספר שלם'
+msg_error_must_be_num: '&bהסכום חייב להיות מספר.'
+msg_error_input_must_be_num: '&c%s חייב להיות מספר'
+msg_must_specify_amnt: '&bיש לציין סכום. לדוגמה: %s 54'
+msg_town_set_tax: '&b%s קבע את מס התושב היומי ל%s'
+msg_town_set_plottax: '&b%s קבע את המס היומי על חלקות אדמה ל%s'
+msg_town_set_plotprice: '&b%s קבע את מחיר החלקות ב-%s'
+msg_town_set_alttax: '&b%s קבע את המס היומי של %s חלקות ב-%s'
+msg_town_set_altprice: '&b%s קבע את מחיר החלקות %s ל-%s'
+msg_town_set_nation_tax: '&b%s קבע את מס האומה על %s'
+msg_set_nation_tag: '&b%s קבע את תג האומה ל- [%s]'
+msg_set_town_tag: '&b%s הגדיר את התג של העיר ל-[%s]'
+msg_reset_nation_tag: '&b%s ניקה את תג האומה.'
+msg_reset_town_tag: '&b%s ניקה את תג העיר.'
 msg_mayor_abandon: '&bאתה תנטוש את אנשיך? בחר ראש עיר חדש עם הפקודה "/town set mayor" אם אתה בטוח.'
+msg_new_day_tax: '&bיום חדש הגיע! המיסים והשכירות נגבו.'
+msg_new_day: '&bיום חדש הגיע!'
+msg_new_king: '&b%s הוא כעת מנהיג האומה של %s!'
+msg_err_new_king_notmayor: '&cמנהיג האומה החדשה אינו ראש עיר.'
+msg_err_king_not_in_nation: '&cמנהיג האומה החדש אינו שייך לאומה זו.'
+msg_err_fight_like_king: 'שלום אינו אופציה! הילחם כמו מנהיג!'
 msg_no_access_nation_bank: '&cאין לך גישה לבנק האומה שלך.'
+msg_err_no_money: '&cאין מספיק כסף בבנק.'
 msg_new_mayor: '&b%s הינו ראש העיר החדש!'
+msg_new_nation: '&b%s יצר אומה חדשה בשם %s'
+msg_new_town: '&b%s יצר עיר חדשה בשם %s'
 msg_err_not_open: '&cהעיר %s אינה פתוחה לכולם. בקש מראש העיר או סגן להצטרף.'
 msg_err_cant_afford_tp: '&bאין לך מספיק כסף בשביל להשתגר לספאון העיר שלך.'
 msg_err_not_block_type: '&cזה לא סוג חלקה חוקי!'
@@ -828,7 +923,7 @@ msg_bankrupt: '&c(פושט רגל)'
 #Added in 0.98
 msg_del_town2: '&bהעיר %s העיר!'
 msg_ruin_town: '&bנפלה %s העיר!'
-gui_title_towny_wildsblocks: 'רשימת Towny של חלקות שממה'
+gui_title_towny_wildsblocks: 'רשימת טאוני של חלקות שטח פרא'
 gui_title_towny_itemuse: 'רשימת Towny של שימוש בחפצים'
 gui_title_towny_switch: 'רשימת Towny של שימוש במתגים'
 msg_ta_removed_all_titles_and_surnames_removed: 'התארים והשמות השניים של כל התושבים נמחקו.'
@@ -872,7 +967,7 @@ msg_deleting_nation_will_result_in_losing_residents: '&cאזהרה: מחיקת �
 msg_command_blocked_inside_towns: '&cאתה לא יכול להשתמש בפקודה זאת בתוך ערים.'
 msg_command_limited: 'אתה יכול להשתמש בפקודה זאת רק בחלקות שלך.'
 #Added in 0.105
-msg_wilderness_use_x_in_all_worlds: 'השימוש בשטח הפראי הוגדר ל-%s בכל העולמות.'
+msg_wilderness_use_x_in_all_worlds: 'השימוש בשטח הפרא הוגדר ל-%s בכל העולמות.'
 msg_regenerations_use_x_in_all_worlds: 'מצב התחדשות הינו %s בכל העולמות.'
 #Added in 0.106
 msg_command_outsider_blocked: 'אתה לא יכול להשתמש בפקודה זאת בגלל שאתה לא גר ב - %s.'
@@ -886,7 +981,7 @@ msg_err_that_jail_plot_does_not_have_that_many_cells: 'לחלקת הכלא הז�
 msg_primary_jail_set_for_town: 'בית הכלא הראשי של העיר שלך נקבע.'
 msg_x_has_been_freed_from_x: '%1$s שוחרר מכלא %2$s'
 msg_you_have_been_jailed: 'אתה נכלאת.'
-msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'רוץ לשממה או תחכה לפריצה לכלא.'
+msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'רוץ לשטח הפרא או חכה לפריצה לכלא.'
 msg_err_player_is_not_jailed: 'שחקן זה אינו בכלא.'
 msg_you_have_paid_bail: 'שילמת ערבות.'
 msg_you_have_been_freed_via_jailbreak: 'הייתה פריצה לכלא, אתה חופשי!'
