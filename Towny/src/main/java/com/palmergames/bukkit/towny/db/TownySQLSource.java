@@ -1861,15 +1861,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				line = rs.getString("resident");
-				if (line != null && !line.isEmpty()) {
-					Resident res = universe.getResident(line.trim());
-					if (res != null)
+				if (line != null && !(line = line.trim()).isEmpty()) {
+					final UUID residentUUID = JavaUtil.parseUUIDOrNull(line);
+					Resident res = residentUUID != null ? universe.getResident(residentUUID) : universe.getResident(line);
+					if (res != null) {
 						townBlock.setResident(res, false);
-					else {
-						TownyMessaging.sendErrorMsg(String.format(
-							"Error fetching resident '%s' for townblock '%s'!",
-							line.trim(), townBlock.toString()
-						));
+					} else {
+						TownyMessaging.sendErrorMsg(String.format("Error fetching resident '%s' for townblock '%s'!", line, townBlock.toString()));
 					}
 				}
 
