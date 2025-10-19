@@ -357,8 +357,8 @@ ta_reload_help_0: "重载数据库。"
 ta_reload_help_1: "重载配置。"
 ta_reload_help_2: "重新加载语言文件"
 ta_reload_help_3: "重新加载城镇权限"
-ta_reload_help_4: "重新加载城镇的所有组件"
-ta_eco_resetbanks_help: "将城镇和国家银行重置为制定金额或归零。"
+ta_reload_help_4: "重新加载Towny的所有组件。"
+ta_eco_resetbanks_help: "将城镇和国家银行重置为指定金额或归零。"
 ta_eco_convert_modern_help: "将你的城镇账户转换为更新的存储种类，使之在玩家离线状态下可供支持Vault的插件查看。"
 ta_eco_convert_help: "将您的城镇账户转换为目标经济实现，有助于在经济插件之间传输数据。"
 ta_eco_info_help: "提供服务器上的经济帐户信息。"
@@ -473,7 +473,7 @@ msg_nation_kicked_by: '&b你的城镇被 %s 踢出了国家.'
 msg_town_left_nation: '&b你的城镇脱离了 %s.'
 msg_nation_town_left: '&b城镇 %s 离开了你的国家.'
 msg_nation_kicked: '&b%s 把 %s 从这个国家踢出.'
-msg_nation_you_kicked: '&b您把&s从国家中移除'
+msg_nation_you_kicked: '&b您把%s踢出了国家。'
 msg_raised_ass: '&b%s 把 %s 提升为 %s 助手.'
 msg_lowered_to_res_by: '&b你被 %s 降职了.'
 msg_lowered_to_res: '&b%2$s被%1$s炒了鱿鱼。'
@@ -1534,8 +1534,8 @@ msg_err_group_already_has_node: '组%s已经有%s的权限节点了。'
 msg_err_group_doesnt_have_node: '组%s没有%s的权限节点。'
 msg_successfully_added_node_to_group: '成功将%s添加进%s中。'
 msg_successfully_removed_node_from_group: '成功从%s中移除%s。'
-msg_err_there_is_already_a_town_or_nationrank_called_x: '已经有一个名为%s的%s了。'
-msg_err_there_is_no_town_or_nationrank_called_x: '没有一个%s的名字为%s。'
+msg_err_there_is_already_a_town_or_nationrank_called_x: '已经有一个名为%2$s的%1$s了。'
+msg_err_there_is_no_town_or_nationrank_called_x: '没有名为%2$s的%1$s。'
 msg_successfully_add_rank_to_the_town_or_nation_rank: '成功将%s添加进%s中。'
 msg_successfully_removed_rank_from_the_town_or_nation_rank: '成功将%s从%s中移除。'
 msg_successfully_renamed_rank_for_the_town_or_nation_rank: '成功在%3$s中将%1$s重命名为%2$s。'
