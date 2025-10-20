@@ -485,6 +485,11 @@ public class SpawnUtil {
 			return location;
 		}
 
+		if (TownySettings.isStrictSafeTeleportUsed()) {
+			TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_cancel_safe_teleport"));
+			return null;
+		}
+		
 		final int range = 22;
 
 		BitSet isLiquidMap = new BitSet(range * 2);
