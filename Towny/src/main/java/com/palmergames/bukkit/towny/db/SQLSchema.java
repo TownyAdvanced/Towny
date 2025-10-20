@@ -6,7 +6,6 @@ import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +24,7 @@ import java.util.Set;
 public class SQLSchema {
 
 	private static final String SQLDB_NAME = TownySettings.getSQLDBName();
-	private static final String TABLE_PREFIX = TownySettings.getSQLTablePrefix().toUpperCase(Locale.ROOT);
+	public static final String TABLE_PREFIX = TownySettings.getSQLTablePrefix().toUpperCase(Locale.ROOT);
 	private static final int MYSQL_DUPLICATE_COLUMN_ERR = 1060;
 
 	/**
@@ -198,7 +197,7 @@ public class SQLSchema {
 		List<ColumnData> columns = new ArrayList<>();
 		columns.add(new ColumnData("groupName", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("groupPrice", "float DEFAULT NULL"));
-		columns.add(new ColumnData("town", "VARCHAR(32) NOT NULL"));
+		columns.add(new ColumnData("town", "VARCHAR(36) NOT NULL"));
 		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		return columns;
 	}
@@ -269,7 +268,6 @@ public class SQLSchema {
 		columns.add(new ColumnData("homeblock", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("spawn", "mediumtext NOT NULL"));
 		columns.add(new ColumnData("outpostSpawns", "mediumtext DEFAULT NULL"));
-		columns.add(new ColumnData("jailSpawns", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("outlaws", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("uuid", "VARCHAR(36) DEFAULT NULL"));
 		columns.add(new ColumnData("registered", "BIGINT DEFAULT NULL"));
@@ -399,66 +397,6 @@ public class SQLSchema {
 		columns.add(new ColumnData("key", "varchar(200) NOT NULL"));
 		columns.add(new ColumnData("expiry", "BIGINT NOT NULL"));
 		return columns;
-	}
-
-	/**
-	 * Call after loading to remove any old database elements we no longer need.
-	 *
-	 * @param connection A connection to the database.
-	 */
-	public static void cleanup(Connection connection) {
-
-		List<ColumnUpdate> cleanups = new ArrayList<>();
-		cleanups.add(ColumnUpdate.update("TOWNS", "residents"));
-		cleanups.add(ColumnUpdate.update("NATIONS", "assistants"));
-		cleanups.add(ColumnUpdate.update("NATIONS", "towns"));
-		cleanups.add(ColumnUpdate.update("WORLDS", "towns"));
-		cleanups.add(ColumnUpdate.update("WORLDS", "plotManagementRevertSpeed"));
-		cleanups.add(ColumnUpdate.update("PLOTGROUPS", "claimedAt"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "isJailed"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailSpawn"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailDays"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailTown"));
-		cleanups.add(ColumnUpdate.update("TOWNS", "jailSpawns"));
-		cleanups.add(ColumnUpdate.update("WORLDS", "disableplayertrample"));
-		cleanups.add(ColumnUpdate.update("TOWNS", "assistants"));
-
-		for (ColumnUpdate update : cleanups)
-			dropColumn(connection, update.table(), update.column());
-	}
-
-	/**
-	 * Drops the given column from the given table, if the column is present.
-	 * 
-	 * @param cntx    database connection.
-	 * @param table   table name.
-	 * @param column  column to drop from the given table.
-	 */
-	private static void dropColumn(Connection cntx, String table, String column) {
-		String update;
-
-		try (Statement s = cntx.createStatement()) {
-			DatabaseMetaData md = cntx.getMetaData();
-			ResultSet rs = md.getColumns(null, null, table, column);
-			if (!rs.next())
-				return;
-
-			update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + table + "` DROP COLUMN `" + column + "`";
-
-			s.executeUpdate(update);
-
-			TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
-
-		} catch (SQLException ee) {
-			if (ee.getErrorCode() != MYSQL_DUPLICATE_COLUMN_ERR)
-				TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
-		}
-	}
-
-	private record ColumnUpdate(String table, String column) {
-		private static ColumnUpdate update(String table, String column) {
-			return new ColumnUpdate(SQLSchema.TABLE_PREFIX + table, column);
-		}
 	}
 
 	private record ColumnData(String name, String dataType) {

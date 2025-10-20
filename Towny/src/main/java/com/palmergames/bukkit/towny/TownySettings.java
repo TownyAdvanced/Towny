@@ -1205,11 +1205,11 @@ public class TownySettings {
 	}
 	
 	
-	public static String getDatabaseVersion() {
-		return DatabaseConfig.getString(DatabaseConfig.DATEBASE_VERSION);
+	public static int getDatabaseVersion() {
+		return DatabaseConfig.getInt(DatabaseConfig.DATEBASE_VERSION);
 	}
 	
-	public static void setDatabaseVersion(String version) {
+	public static void setDatabaseVersion(int version) {
 		DatabaseConfig.setDatabaseVersion(version);
 	}
 

@@ -401,13 +401,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean cleanup() {
-
-		try (Connection connection = getConnection()) {
-			SQLSchema.cleanup(connection);
-		} catch (SQLException e) {
-			plugin.getLogger().log(Level.WARNING, "An exception occurred when cleaning up SQL schema.", e);
-		}
-
+		// This was previously used to clean up columns that were no longer used, but that is handled by a one-time migration instead.
 		return true;
 	}
 	
@@ -1083,7 +1077,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			}
 			// Load legacy jail spawns into new Jail objects.
-			line = rs.getString("jailSpawns");
+			try {
+				line = rs.getString("jailSpawns");
+			} catch (SQLException e) {
+				// The jailSpawns column no longer exists
+				line = null;
+			}
 			if (line != null) {
 				String[] jails = line.split(";");
 				for (String spawn : jails) {

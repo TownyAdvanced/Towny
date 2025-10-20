@@ -172,8 +172,6 @@ public class Towny extends JavaPlugin {
 
 				// Save database.
 				townyUniverse.getDataSource().saveAll();
-				// cleanup() updates SQL schema for any changes.
-				townyUniverse.getDataSource().cleanup();
 			}
 
 			if (!TownySettings.getLastRunVersion().equals(getVersion()))
