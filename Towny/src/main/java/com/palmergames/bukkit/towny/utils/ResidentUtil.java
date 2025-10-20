@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -20,15 +21,17 @@ import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -43,13 +46,15 @@ import com.palmergames.bukkit.towny.object.ResidentList;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.MaterialUtil;
 import com.palmergames.util.TimeMgmt;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public class ResidentUtil {
+	public static final @NotNull NamespacedKey SELECTION_GUI_TOWNBLOCK_TYPE_KEY = Objects.requireNonNull(NamespacedKey.fromString("towny:selection_gui_townblock_type"));
 	
 	private static BooleanDataField borderMeta = new BooleanDataField("bordertitles");
 	
@@ -159,16 +164,22 @@ public class ResidentUtil {
 	}
 	
 	public static void openSelectionGUI(Resident resident, SelectionGUI.SelectionType selectionType) {
-		String inventoryName = Translatable.of("gui_title_select_plot_type").forLocale(resident);
+		final Player player = resident.getPlayer();
+		if (player == null) {
+			return;
+		}
+
+		Component inventoryName = Translatable.of("gui_title_select_plot_type").component(player.locale());
 		Inventory page = getBlankPage(inventoryName);
 		ArrayList<Inventory> pages = new ArrayList<>();
 		
 		for (TownBlockType townBlockType : TownBlockTypeHandler.getTypes().values()) {
 			ItemStack item = new ItemStack(Material.GRASS_BLOCK);
 			
-			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(Colors.Gold + townBlockType.getFormattedName());
-			item.setItemMeta(meta);
+			item.editMeta(meta -> {
+				meta.displayName(Component.text(townBlockType.getFormattedName(), NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
+				meta.getPersistentDataContainer().set(SELECTION_GUI_TOWNBLOCK_TYPE_KEY, PersistentDataType.STRING, townBlockType.getName());
+			});
 
 			if (page.firstEmpty() == 46) {
 				pages.add(page);
@@ -208,22 +219,28 @@ public class ResidentUtil {
 		pages.add(page);
 		resident.setGUIPages(pages);
 		resident.setGUIPageNum(0);
-		new TownyInventory(resident, pages.get(0), name);
+		new TownyInventory(resident, pages.get(0), TownyComponents.miniMessage(name));
+	}
+
+	public static Inventory getBlankPage(String name) {
+		return getBlankPage(TownyComponents.miniMessage(name));
 	}
 
 	// This creates a blank page with the next and prev buttons
-	public static Inventory getBlankPage(String name) {
+	public static Inventory getBlankPage(Component name) {
 		Inventory page = Bukkit.createInventory(null, 54, name);
 
 		ItemStack nextpage = new ItemStack(Material.ARROW);
-		ItemMeta meta = nextpage.getItemMeta();
-		meta.setDisplayName(Colors.Gold + "Next");
-		nextpage.setItemMeta(meta);
+		nextpage.editMeta(meta -> {
+			meta.displayName(Component.text("Next", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
+			meta.getPersistentDataContainer().set(TownyInventory.NEXT_BUTTON_KEY, PersistentDataType.BOOLEAN, true);
+		});
 
 		ItemStack prevpage = new ItemStack(Material.ARROW);
-		meta = prevpage.getItemMeta();
-		meta.setDisplayName(Colors.Gold + "Back");
-		prevpage.setItemMeta(meta);
+		prevpage.editMeta(meta -> {
+			meta.displayName(Component.text("Back", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
+			meta.getPersistentDataContainer().set(TownyInventory.BACK_BUTTON_KEY, PersistentDataType.BOOLEAN, true);
+		});
 
 		page.setItem(53, nextpage);
 		page.setItem(45, prevpage);

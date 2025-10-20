@@ -12,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.LinearComponents;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -180,7 +181,7 @@ public class Translatable {
 	}
 	
 	public Component component() {
-		final Component translated = TownyComponents.miniMessage(translateBase()).append(this.appendedAsComponent());		
+		final Component translated = TownyComponents.miniMessage(translateBase()).append(this.appendedAsComponent()).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE); // Because of item lore/names;
 
 		if (this.stripColors) {
 			return Component.text(PlainTextComponentSerializer.plainText().serialize(translated));
