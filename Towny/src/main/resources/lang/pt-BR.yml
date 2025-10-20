@@ -227,6 +227,7 @@ world_toggle_help_8: "Ative/desative o recurso reverter ao cancelar reivindicaç
 world_toggle_help_9: "Ative/desative os recursos de explosões revertidas neste mundo."
 world_toggle_help_10: "Ative/desative o comando plot-clear-deletes-blocks neste mundo."
 world_toggle_help_11: "Ative/desative o recurso plot-unclaiming-delete-blocks neste mundo."
+world_toggle_help_12: "Ative/desative Caso ser preso estiver habilitado neste mundo."
 townyadmin_help_1: 'Abandonar este terreno da cidade'
 townyadmin_help_2: 'Tentar abandonar terreno ao seu redor.'
 admin_panel_1: "Use /ta set para obter ajuda"
@@ -337,6 +338,8 @@ ta_eco_convert_modern_help: "Converte as suas contas do Towny em nossa variedade
 ta_eco_convert_help: "Converte as suas contas da Towny para a implementação de economia alvo, útil para transferir dados entre plugins de economia."
 ta_eco_info_help: "Mostra informações sobre contas econômicas no servidor."
 ta_depositall_help_0: "Deposite a quantia determinada em todos os bancos da cidade e nação."
+ta_depositall_help_1: "Deposite a quantia determinada em todos os bancos da cidade."
+ta_depositall_help_2: "Deposite o valor determinado nos bancos de todas as nações."
 ta_info_help_0: "Veja informações ecológicas para a nação fornecida."
 ta_info_help_1: "Exibir informações ecológicas para o residente informado."
 ta_info_help_2: "Veja informações ecológicas para a conta Towny do servidor."
@@ -415,6 +418,7 @@ msg_you_paid_plottax_to_town: '&bVocê pagou impostos do plot no total de %s à 
 msg_bankrupt_town: ' não tinha dinheiro suficiente para manter uma cidade.'
 msg_bankrupt_nation: ' não tinha dinheiro suficiente para manter uma nação.'
 msg_nation_not_peaceful: '&bA nação não tinha dinheiro suficiente para manter-se pacífica.'
+msg_nation_cant_peaceful: '&bNation não conseguiu se tornar uma nação pacífica. Você deve pagar %s diariamente.'
 msg_peaceful_disabled: '&bA paz das nações está desativada globalmente.'
 msg_you_paid: '&bVocê pagou %s para tornar a nação pacífica.'
 msg_nation_set_peace: '&bEstado da nação alterado com sucesso.'
@@ -444,6 +448,7 @@ msg_nation_kicked_by: '&bA sua cidade foi expulsa da nação por %s.'
 msg_town_left_nation: '&bA sua cidade abandonou a nação de %s.'
 msg_nation_town_left: '&bA cidade de %s saiu da sua nação.'
 msg_nation_kicked: '&b%s expulsou %s da cidade.'
+msg_nation_you_kicked: '&bYou expulsou %s da nação.'
 msg_raised_ass: '&b%s promoveu %s a %s assistentes.'
 msg_lowered_to_res_by: '&bVocê foi rebaixado a um habitante comum por %s.'
 msg_lowered_to_res: '&b%s rebaixou %s a habitante comum.'
@@ -632,6 +637,8 @@ msg_err_input_too_long: '&cA entrada é demasiado longa.'
 msg_err_invalid_choice: '&cEscolha inválida'
 msg_err_invalid_sub: '&cSub-comando inválido.'
 msg_err_command_disable: '&cVocê não tem permissões suficientes para executar esse comando.'
+msg_err_plot_preclaim_disable: "&cYou não pode reivindicar o terreno %s agora."
+msg_err_plot_preunclaim_disable: "&cResident não pode cancelar a reivindicação do terreno %s agora."
 msg_err_you_dont_have_permission_to_use_colours: "Você não tem permissão para usar os códigos de cores nos títulos e sobrenomes."
 msg_err_universe_limit: '&cO universo não consegue aguentar tantas cidades.'
 msg_err_too_many_npc: '&cHá demasiados NPCs registrados.'
@@ -652,6 +659,7 @@ msg_err_not_enough_residents_join_nation: '&bA cidade %s não tem habitantes suf
 msg_not_enough_residents_no_longer_capital: '&bA antiga capital da nação já não tem habitantes suficientes para ser a capital. A nova capital da nação é %s.'
 msg_town_not_enough_residents_left_nation: '&bA cidade %s já não tem habitantes suficientes para pertencer à nação e foi removida à força da nação.'
 msg_nation_disbanded_town_not_enough_residents: '&bA cidade %s já não tem habitantes suficientes para gerir a nação e a nação foi forçada a se desfazer.'
+msg_not_enough_residents_refunded: '&bYou foi reembolsado %s pela sua nação ter sido dissolvida por não ter um número suficiente de residentes.'
 msg_not_enough_residents_capital: '&bA cidade %s não tem habitantes suficientes para ser a capital da nação.'
 list_page: '&bPágina %s de %s'
 list_err_not_enough_pages: '&cApenas %s páginas disponíveis'
@@ -1196,6 +1204,8 @@ msg_spawn_warn: 'Custo de spawn %s. Continuar? Dica: acidione -ignore para pular
 msg_confirm_purchase: 'Fazer isso lhe custará %s. Continuar?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Como eles não estarão perto o suficiente da nova capital, as seguintes cidades serão removidas da sua nação: %s. Você deseja continuar?'
 msg_ta_deposit_all_success: 'Depositado %s para o banco de todas as nações e cidades com sucesso.'
+msg_ta_deposit_all_towns_success: 'Depositou com sucesso %s para os bancos de todas as cidades.'
+msg_ta_deposit_all_nations_success: 'Depositou com sucesso %s para os bancos de todas as nações.'
 bonus_townblocks: 'blocos de cidade bônus'
 #Added in 0.80
 nomad_sing: 'Nômade'
@@ -1302,6 +1312,7 @@ towny_prices_overclaimed_upkeep: '&e[Manutenção Reclamada] &2Cidade: &a%s'
 towny_prices_claiming_townblock: '&e[Claiming] &2Cidade: &a%s'
 towny_prices_claiming_townblock_increase: ' &8| &2Aumento por chunk da cidade: &a+%s'
 towny_prices_claiming_outposts: '&e[Claiming] &2Cidade: &a%s'
+towny_prices_outposts_upkeept: '&7Outposts têm um custo de manutenção diário por posto avançado de: &a%s'
 towny_prices_upkeep_based_on: '&7A manutenção da cidade é baseada no &a%s'
 towny_prices_upkeep_num_plots: 'número de terrenos.'
 towny_prices_upkeep_town_level: 'nível da cidade (Número de residentes)'
@@ -1327,6 +1338,7 @@ msg_your_town_was_exempt_from_the_nation_tax: '&bSua cidade foi isenta de impost
 #The Build = ---- Destroy = ---- seen in the status screen.
 status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Status Arruinado'
+msg_comptype_forsale: 'Status à venda'
 msg_comptype_bankrupt: 'Situação de falência'
 msg_ruined: '&c(Ruínas)'
 msg_bankrupt: '&c(Falência)'
@@ -1430,6 +1442,8 @@ your_town_has_been_invited_to_join_nation: 'Sua cidade foi convidada a participa
 msg_err_no_one_to_purge: '&bNão há membros inativos para limpar.'
 msg_purging_will_remove_the_following_residents: '&bPor favor, confirme que você deseja limpar os seguintes residentes: %s'
 msg_purge_complete_x_removed: '&bLimpa concluída, %s residentes removidos.'
+msg_purge_complete_x_removed_from_towns: '&bPurge completo, %s residentes inativos foram removidos das cidades.'
+msg_purge_reached_50_residents: '&bPurge alcançou 50, outras exclusões de residentes não serão registradas para reduzir o spam.'
 msg_err_days_must_be_greater_than_0: 'Dias devem ser maiores que zero.'
 msg_err_outlawed_players_no_teleport: '&4Você está banido da cidade em que está atualmente e não pode se teletransportar!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Você não pode usar esse comando enquanto estiver em uma cidade em que esteja banido.'
@@ -1502,6 +1516,7 @@ msg_err_there_is_already_a_town_or_nationrank_called_x: 'Já existe uma %s chama
 msg_err_there_is_no_town_or_nationrank_called_x: 'Não existe nenhuma %s chamada %s.'
 msg_successfully_add_rank_to_the_town_or_nation_rank: '%s adicionada com sucesso à %s.'
 msg_successfully_removed_rank_from_the_town_or_nation_rank: '%s removida com sucesso à %s.'
+msg_successfully_renamed_rank_for_the_town_or_nation_rank: 'Renomeou com sucesso %s para %s no %s.'
 msg_err_group_has_no_nodes: 'O grupo %s não tem nenhum nó de permissão atribuído.'
 msg_title_group_permissions: '%s permissões'
 help_ta_perms_listgroups: 'Listar grupos.'
@@ -1510,8 +1525,10 @@ help_ta_perms_groupaddpermnode: 'Adicionar um nó a um grupo.'
 help_ta_perms_groupremovepermnode: 'Remover um nó de um grupo.'
 help_ta_perms_townrankadd: 'Adiciona um rank de cidade ao arquivo townyperms.'
 help_ta_perms_townrankremove: 'Remove um rank de cidade ao arquivo townyperms.'
+help_ta_perms_townrankrename: 'Renomeou a classificação de uma cidade nos arquivos townyperms'
 help_ta_perms_nationrankadd: 'Adiciona um rank de nação ao arquivo townyperms.'
 help_ta_perms_nationrankremove: 'Remove um rank de nação ao arquivo townyperms.'
+help_ta_perms_nationrankrename: 'Renomeou a classificação de uma nação nos arquivos townyperms'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'Esse habitante não pertence a essa cidade.'
 #Added in 0.115
 msg_comptype_founded: 'Data da Fundação'
@@ -1854,6 +1871,7 @@ msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Você foi libertado porq
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s foi liberado devido a falta de fundos no Banco Municipal.'
 msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s retirado do banco da Cidade para pagar a manutenção do prisioneiro %s.'
 msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s foi retirado do banco do município para pagar pela prisão de %s.'
+msg_err_x_in_unjailable_world: '%s em um mundo onde eles não podem ser presos.'
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Tem certeza de que deseja redefinir todos os bancos da cidade e nação para %s?'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
@@ -1999,3 +2017,36 @@ townyadmin_nation_set_help_0: "Define a data de fundação de uma cidade."
 msg_town_registered_set: "Data de fundação da cidade: '%s' definido para: '%s'."
 msg_nation_registered_set: "Data de fundação da nação: '%s' definido para: '%s'."
 msg_err_time_cannot_be_in_the_future: "O tempo especificado não pode ser no futuro."
+#The format used for the /t say and /n say commands.
+town_say_format: "%s diz: %s"
+msg_err_floodfill_not_in_wild: "Você não pode preencher uma área reivindicada."
+msg_err_floodfill_out_of_bounds: "A forma da área reivindicada deve ser fechada para poder ser preenchida."
+msg_err_floodfill_cannot_contain_towns: "A seleção de preenchimento não pode conter outras cidades."
+#Message shown when a resident is an NPC and is not allowed to do something.
+msg_err_resident_is_npc: "Você não pode fazer isso com um NPC residente."
+#Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "O residente não possui terras."
+msg_unnamed: "Sem nome"
+msg_err_nation_cannot_sanction_own_town: "Você não pode sancionar uma cidade que é parte de sua nação."
+msg_err_nation_town_isnt_sanctioned: "Sua nação não está sancionando esta cidade."
+msg_err_nation_town_already_sanctioned: "Sua nação já sanciona esta cidade."
+msg_err_nation_town_sanctioned: "Sua nação agora sanciona %s, eles não terão permissão para se unir à sua nação."
+msg_err_nation_town_unsanctioned: "Sua nação não está mais sancionando %s."
+msg_err_nation_has_no_sanctioned_towns: "A nação não tem cidades sancionadas."
+title_nation_sanctioned_towns: 'Cidades sancionadas'
+msg_err_cannot_add_sanctioned_town: "Sua nação não pode adicionar %s, sua nação os sancionou."
+msg_err_cannot_join_nation_sanctioned_town: "Sua cidade não pode se juntar à %s, essa nação sancionou sua cidade."
+msg_err_no_nation_cannot_do: "Você não pode realizar essa ação porque nenhuma nação pôde ser selecionada."
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "Sua cidade está sancionada por %s, você não pode nascer neste local."
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "As coordenadas a seguir não podem ser reivindicadas porque elas possuem muito terreno indesejado: %s."
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "As coordenadas a seguir não podem ser reivindicadas porque elas possuem muito bioma de oceano: %s."
+msg_err_cannot_begin_town_in_this_biome: "Você não pode iniciar uma cidade neste bioma."
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "Você não pode reivindicar esta cidade porque a sua nação não considera a nação dela como inimiga."
+msg_err_unable_to_command_outside_of_town: 'Você não pode usar este comando fora da sua cidade.'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'Você não pode usar este comando fora de um terreno de banco.'
+status_nation_sanctioned_towns: "Cidades sancionadas"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "Todos os convites enviados pelas suas cidades foram cancelados."
+msg_err_name_validation_invalid_characters: "%s contém características que não são permitidas nas configurações de regex do Towny."
+msg_err_name_validation_begins_with_eco_prefix: "%s começa com letras usadas nas funcionalidades da economia, você não pode usar esse nome."
+msg_err_name_validation_name_already_in_use: "%s é um nome que já está em uso."
+msg_err_name_validation_title_too_long: "%s é muito grande para usar como um título ou como sobrenome."
