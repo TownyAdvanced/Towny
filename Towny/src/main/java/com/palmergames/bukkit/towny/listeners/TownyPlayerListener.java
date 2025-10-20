@@ -362,7 +362,7 @@ public class TownyPlayerListener implements Listener {
 					(ItemLists.DYES.contains(item) && ItemLists.SIGNS.contains(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					(item == Material.SHEARS && clickedMat == Material.PUMPKIN) ||
-					clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) ||
+					clickedMat == Material.ROOTED_DIRT && ItemLists.HOES.contains(item) ||
 					ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH) { 
 
 					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat)) {
@@ -444,7 +444,7 @@ public class TownyPlayerListener implements Listener {
 				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
 				ItemLists.CANDLES.contains(clickedMat) ||
-				clickedMat.getKey().equals(NamespacedKey.minecraft("turtle_egg")) ||
+				clickedMat == Material.TURTLE_EGG ||
 				clickedMat.getKey().equals(NamespacedKey.minecraft("chiseled_bookshelf")) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK){
