@@ -11,6 +11,7 @@ com.palmergames.bukkit.towny.confirmations
 com.palmergames.bukkit.towny.confirmations.event
 com.palmergames.bukkit.towny.conversation
 com.palmergames.bukkit.towny.db
+com.palmergames.bukkit.towny.db.migration
 com.palmergames.bukkit.towny.event
 com.palmergames.bukkit.towny.event.actions
 com.palmergames.bukkit.towny.event.asciimap
