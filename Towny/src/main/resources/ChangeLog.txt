@@ -10498,3 +10498,4 @@ v0.92.0.11:
   - Revert change to potion protection handling, courtesy of Warrior with PR #7990.
   - Improve lingering potion protection, courtesy of Warrior with PR #7991.
   - Replace pre 1.19 entity/block keys with constants, courtesy of Warrior with PR #7992.
+  - Update inventory system to use components & PDC, courtesy of Warrior with PR #7982.
