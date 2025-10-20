@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
@@ -273,6 +274,12 @@ public class TownyEntityListener implements Listener {
 
 		if (!hasDetrimentalEffects(effects))
 			return;
+
+		// Prevent players from potentially damaging entities by logging out to null out the projectile source.
+		if (effectCloud.getSource() == null && effectCloud.getOwnerUniqueId() != null && TownyUniverse.getInstance().hasResident(effectCloud.getOwnerUniqueId())) {
+			event.setCancelled(true);
+			return;
+		}
 		
 		event.getAffectedEntities().removeIf(defender ->
 			CombatUtil.preventDamageCall(effectCloud, defender, DamageCause.MAGIC));
