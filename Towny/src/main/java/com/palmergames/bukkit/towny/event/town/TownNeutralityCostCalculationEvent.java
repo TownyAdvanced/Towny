@@ -8,22 +8,24 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Fired when a town has paid neutrality costs.
+ * Fired when calculating a town's neutrality cost.
  */
-public class TownNeutralCostPaidEvent extends Event {
+public class TownNeutralityCostCalculationEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Town town;
-	private final double neutralityCost;
+	private double neutralityCost;
 
 	@ApiStatus.Internal
-	public TownNeutralCostPaidEvent(Town town, double neutralityCost) {
+	public TownNeutralityCostCalculationEvent(Town town, double neutralityCost) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.town = town;
 		this.neutralityCost = neutralityCost;
 	}
 
 	/**
-	 * {@return the town which is paying neutrality costs}
+	 * Gets the town paying the neutrality cost.
+	 * 
+	 * @return the town which is paying neutrality costs
 	 */
 	@NotNull
 	public Town getTown() {
@@ -31,10 +33,21 @@ public class TownNeutralCostPaidEvent extends Event {
 	}
 
 	/**
-	 * {@return the neutrality cost for this town, which is always positive}
+	 * Gets the cost for neutrality of the town.
+	 * 
+	 * @return the neutrality cost for the town
 	 */
 	public double getNeutralityCost() { 
 		return neutralityCost; 
+	}
+
+	/**
+	 * Sets the cost for neutrality of the town.
+	 * 
+	 * @param neutralityCost the value to set the neutrality cost to
+	 */
+	public void setNeutralityCost(double neutralityCost) {
+		this.neutralityCost = neutralityCost;
 	}
 
 	public static HandlerList getHandlerList() {

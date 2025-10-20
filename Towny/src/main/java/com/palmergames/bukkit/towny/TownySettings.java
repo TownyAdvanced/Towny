@@ -4,7 +4,9 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationNeutralityCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownNeutralityCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
 import com.palmergames.bukkit.towny.event.town.TownCalculateMaxTownBlocksEvent;
@@ -1773,7 +1775,10 @@ public class TownySettings {
 
 	public static double getNationNeutralityCost(Nation nation) {
 		double cost = nation.getNationLevel().peacefulCostMultiplier() * getNationNeutralityCost();
-		return isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
+		double nationMultiplierCost = isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
+		NationNeutralityCostCalculationEvent event = new NationNeutralityCostCalculationEvent(nation, nationMultiplierCost);
+		BukkitTools.fireEvent(event);
+		return event.getNeutralityCost();
 	}
 
 	public static double getNationNeutralityCost() {
@@ -1787,7 +1792,10 @@ public class TownySettings {
 
 	public static double getTownNeutralityCost(Town town) {
 		double cost = town.getTownLevel().peacefulCostMultiplier() * getTownNeutralityCost();
-		return isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
+		double townMultiplierCost = isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
+		TownNeutralityCostCalculationEvent event = new TownNeutralityCostCalculationEvent(town, townMultiplierCost);
+		BukkitTools.fireEvent(event);
+		return event.getNeutralityCost();
 	}
 
 	public static double getTownNeutralityCost() {
