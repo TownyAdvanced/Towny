@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
@@ -28,6 +29,11 @@ public class TownyInventory implements InventoryHolder {
 		this.inv = Bukkit.createInventory(this, 54, name);
 		this.inv.setContents(inv.getContents());
 		res.getPlayer().openInventory(this.inv);
+	}
+
+	@Deprecated(since = "0.101.2.6")
+	public TownyInventory(Resident res, Inventory inv, String name) {
+		this(res, inv, TownyComponents.miniMessage(name));
 	}
 
 	@Override
