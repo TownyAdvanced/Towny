@@ -27,6 +27,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
@@ -289,7 +290,7 @@ public class CombatUtil {
 					}
 				}
 				
-				if (attackingEntity.getType().getKey().equals(NamespacedKey.minecraft("axolotl")) && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
+				if (attackingEntity.getType() == EntityType.AXOLOTL && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
 					return true;
 				}
 			}

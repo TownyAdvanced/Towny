@@ -181,7 +181,7 @@ public class TownyEntityListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onAxolotlTarget(EntityTargetLivingEntityEvent event) {
 		if (event.getEntity() instanceof Mob attacker &&
-			attacker.getType().getKey().equals(NamespacedKey.minecraft("axolotl")) &&
+			attacker.getType() == EntityType.AXOLOTL &&
 			event.getTarget() instanceof Mob defender &&
 			CombatUtil.preventDamageCall(attacker, defender, DamageCause.ENTITY_ATTACK)) {
 			attacker.setMemory(MemoryKey.HAS_HUNTING_COOLDOWN, true);
