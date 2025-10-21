@@ -335,9 +335,9 @@ ta_eco_resetbanks_help: "Thiết lập lại ngân hàng thành phố và quốc
 ta_eco_convert_modern_help: "Chuyển đổi tài khoản Towny của bạn với phiên bản mới của chúng tôi, có thể sử dụng OfflinePlayer của Vault."
 ta_eco_convert_help: "Chuyển đổi tài khoản Towny của bạn sang triển khai tiền tệ mục tiêu, hữu ích cho việc truyền dữ liệu giữa các plugin tiền tệ khác."
 ta_eco_info_help: "Lấy thông tin về các tài khoản tiền tệ trên máy chủ."
-ta_depositall_help_0: "Gửi tiền vào tất cả các ngân hàng thành phố và quốc gia."
-ta_depositall_help_1: "Gửi tiền vào tất cả các ngân hàng thành phố và quốc gia."
-ta_depositall_help_2: "Gửi tiền vào tất cả các ngân hàng thành phố và quốc gia."
+ta_depositall_help_0: "Gửi tiền vào tất cả các ngân hàng thành phố & quốc gia."
+ta_depositall_help_1: "Gửi tiền vào tất cả các ngân hàng thành phố & quốc gia."
+ta_depositall_help_2: "Gửi tiền vào tất cả các ngân hàng thành phố & quốc gia."
 ta_info_help_0: "Xem thông tin tiền gửi cho các quốc gia."
 ta_info_help_1: "Xem thông tin tiền gửi cho các cư dân."
 ta_info_help_2: "Xem thông tin tiền gửi cho các tài khoản towny trong máy chủ."
@@ -416,6 +416,7 @@ msg_you_paid_plottax_to_town: '&bBạn đã trả tổng số tiền thuế đ�
 msg_bankrupt_town: ' không đủ khả năng để duy trì một thị trấn.'
 msg_bankrupt_nation: ' không đủ khả năng để duy trì một quốc gia.'
 msg_nation_not_peaceful: '&bQuốc gia không thể có được trạng thái yên bình.'
+msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay %s daily.'
 msg_peaceful_disabled: '&bChế độ yên bình bị vô hiệu hóa trên toàn cầu.'
 msg_you_paid: '&bBạn đã thanh toán %s để đặt trạng thái yên bình.'
 msg_nation_set_peace: '&bĐã thay đổi thành công trạng thái của quốc gia.'
@@ -1198,12 +1199,12 @@ msg_the_following_towns_were_deleted_for_having_0_claims: 'Các thị trấn sau
 msg_spawn_warn: 'Chi phí dịch chuyển là %s. Tiếp tục? Gợi ý: thêm -ignore để bỏ qua các xác nhận này.'
 msg_confirm_purchase: 'Thực hiện thao tác này sẽ tốn %s. Tiếp tục?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Vì chúng không đủ gần thủ đô mới nên các thị trấn sau sẽ bị xóa khỏi quốc gia của bạn: %s. Bạn có muốn tiếp tục không?'
-msg_ta_deposit_all_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia và thị trấn.'
-msg_ta_deposit_all_towns_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia và thị trấn.'
+msg_ta_deposit_all_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia & thị trấn.'
+msg_ta_deposit_all_towns_success: 'Đã gửi thành công %s vào ngân hàng của tất cả các quốc gia & thị trấn.'
 bonus_townblocks: '+ Mảnh đất'
 #Added in 0.80
 nomad_sing: 'Dân du mục'
-msg_new_town_advice: 'Xin chúc mừng vì đã tạo thị trấn của bạn! Thị trấn của bạn sẽ phải trả phí duy trì hàng ngày hiện có giá trị là %s. Bạn có thể gửi tiền vào ngân hàng của thị trấn bằng cách sử dụng ''/t deposit 5000''. Nếu không có tiền để trả phí duy trì, thị trấn của bạn sẽ bị xóa. Bạn có thể xem chi phí của mình bất cứ lúc nào bằng cách sử dụng /towny prices. Phí duy trì hàng ngày tiếp theo được tính bằng %s.'
+msg_new_town_advice: 'Xin chúc mừng vì đã tạo thị trấn của bạn! Thị trấn của bạn sẽ phải trả phí duy trì hàng ngày hiện có giá trị là %s. Bạn có thể gửi tiền vào ngân hàng của thị trấn bằng cách sử dụng ''/t deposit 5000''. Nếu không có tiền để trả phí duy trì, thị trấn của bạn sẽ bị xóa. Bạn có thể xem chi phí của mình bất cứ lúc nào bằng cách sử dụng /t prices. Phí duy trì hàng ngày tiếp theo được tính bằng %s.'
 #Added in 0.81
 msg_err_teleport_cancelled_damage: 'Dính sát thương nên đã hủy bỏ dịch chuyển tức thời của bạn.'
 #Added in 0.82
@@ -1746,7 +1747,7 @@ msg_warn_overriding_server_config: 'Bằng cách này, bạn đang ghi đè gi�
 msg_removed_x_invalid_outpost_spawns: 'Đã xóa %d điểm xuất hiện tiền đồn không hợp lệ.'
 #Added in 0.149
 #Message shown when a player logs in and their town is bankrupt.
-msg_your_town_is_bankrupt: 'Thị trấn của bạn bị phá sản, hãy nạp tiền vào ngân hàng bằng cách sử dụng /town deposit {amount}.'
+msg_your_town_is_bankrupt: 'Thị trấn của bạn bị phá sản, hãy nạp tiền vào ngân hàng bằng cách sử dụng /t deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Bạn không thể sử dụng lệnh này vì bạn đã là thành viên của thị trấn. Nếu bạn muốn tiếp tục, bạn sẽ phải sử dụng ''/t leave''.'
@@ -1933,7 +1934,7 @@ msg_err_townblock_has_no_claimedat_data: "Mảnh đất này không có dữ li�
 #Shown when someone cannot afford something, to tell them what it costs.
 msg_err_you_need_x_to_pay: "Bạn cần %s để thanh toán."
 #Shown when someone tries to deposit/withdraw 0 amounts.
-msg_err_amount_must_be_greater_than_zero: "Số tiền phải lớn hơn 0."
+msg_err_amount_must_be_greater_than_zero: "Số tiền phải > 0."
 #Message shown when taking over claims is disabled on a server.
 msg_err_taking_over_claims_is_not_enabled: "Tính năng tiếp nhận khiếu nại không được bật trên máy chủ này."
 #Messages shown when taking over a claim is not allowed because the town is not overclaimed.
@@ -2050,8 +2051,8 @@ msg_err_name_validation_contains_numbers: "%s chứa các số không được p
 msg_err_name_validation_used_in_command_structure: "%s được sử dụng trong cấu trúc lệnh, bạn không thể sử dụng tên này."
 msg_town_being_deleted_because_no_residents: "%s đang bị xóa vì nó mất đi cư dân cuối cùng."
 outlawed_in: "Bị cấm trong"
-msg_warning_town_deposit_hint: "Để gửi tiền vào ngân hàng thị trấn của bạn, hãy sử dụng /tiền deposit [số tiền]."
-msg_warning_nation_deposit_hint: "Để gửi tiền vào ngân hàng quốc gia của bạn, hãy sử dụng /tiền deposit [số tiền]."
+msg_warning_town_deposit_hint: "Để gửi tiền vào ngân hàng thị trấn của bạn, hãy sử dụng /t deposit [số tiền]."
+msg_warning_nation_deposit_hint: "Để gửi tiền vào ngân hàng quốc gia của bạn, hãy sử dụng /t deposit [số tiền]."
 teleport_warmup_title_dont_move: "&6Đừng di chuyển!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s Còn &7giây nữa là đến khi dịch chuyển tức thời."
 msg_ruined_town_plot_permissions_allowed_on_x_plots: "Vì thị trấn của bạn đang trong tình trạng đổ nát nên ranh giới cấp phép của %s lô đất đã thay đổi và không còn khả năng bảo vệ nữa."
