@@ -23,6 +23,10 @@ public class TownyComponents {
 	public static Component miniMessage(@NotNull String string) {
 		return MiniMessage.miniMessage().deserialize(Colors.translateLegacyCharacters(Colors.translateLegacyHex(string)));
 	}
+
+	public static String toMiniMessage(@NotNull Component component) {
+		return MiniMessage.miniMessage().serialize(component);
+	}
 	
 	public static String plain(@NotNull Component component) {
 		return PlainTextComponentSerializer.plainText().serialize(component);
