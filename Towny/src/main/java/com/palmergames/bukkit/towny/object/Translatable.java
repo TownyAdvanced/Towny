@@ -84,7 +84,7 @@ public class Translatable {
 		return converted.toString();
 	}
 
-	public Component appendedAsComponent() {
+	protected Component appendedAsComponent() {
 		if (this.appended.isEmpty()) {
 			return Component.empty();
 		}
@@ -255,7 +255,14 @@ public class Translatable {
 				return super.component();
 			}
 
-			return this.component;
+			// Partial copy of super.component() so that we don't have to do a full round trip through minimessage
+			final Component full = this.component.append(super.appendedAsComponent()).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
+
+			if (this.stripColors()) {
+				return Component.text(PlainTextComponentSerializer.plainText().serialize(full));
+			} else {
+				return full;
+			}
 		}
 	}
 }
