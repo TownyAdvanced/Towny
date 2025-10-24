@@ -13,7 +13,7 @@ help_3: 'צ''אט האומה'
 help_4: 'עזרה לפקודות תושב.'
 help_5: 'עזרה לפקודות עיירה.'
 help_6: 'עזרה לפקודות אומה.'
-help_7: 'עזרה לפקודות מגרש.'
+help_7: 'עזרה לפקודות חלקות.'
 help_8: 'עזרה לפקודות Towny.'
 help_9: 'עזרה לפקודות TownyAdmin.'
 towny_help_0: "עזרה כללית ל־Towny"
@@ -95,7 +95,7 @@ town_towntrust_help_0: "מוסיף עיירה כאדם נבטח בעיירה."
 town_towntrust_help_1: "מסיר עיירה מרשימת העיירות הנבטחות בעיירה."
 town_towntrust_help_2: "מציג את רשימת העיירות הנבטחות בעיירה."
 town_buy_help: "רוכש יחידות שטח נוספות להגדלת גבול התביעות של העיירה."
-town_cede_help: "מציע את המגרש שבו אתה עומד להילקח על ידי העיירה הנתונה."
+town_cede_help: "מציע את החלקה שבה אתה עומד להילקח על ידי העיירה הנתונה."
 mayor_help_3: 'תבע בעלות של שטח שלא מחובר לעיר'
 mayor_help_4: 'מסביבך X תבע בעלות ברדיוס של'
 mayor_help_5: 'תבע בעלות עד הרדיוס המקסימלי'
@@ -223,7 +223,7 @@ world_toggle_help_7: "מפעיל או מכבה את ההגדרות השונות 
 world_toggle_help_8: "מפעיל או מכבה את האפשרות של החזרת השטח למצב הקודם בעת ביטול תביעה בעולם זה."
 world_toggle_help_9: "מפעיל או מכבה את האפשרות שבה פיצוצים מוחזרים למצב הקודם בעולם זה."
 world_toggle_help_10: "מפעיל או מכבה את הפקודה שמנקה את יחידות השטח ומוחקת בלוקים בעולם זה."
-world_toggle_help_11: "מפעיל או מכבה את האפשרות שבה ביטול תביעה של מגרש מוחק בלוקים בעולם זה."
+world_toggle_help_11: "מפעיל או מכבה את האפשרות שבה ביטול תביעה של חלקה מוחק בלוקים בעולם זה."
 world_toggle_help_12: "מפעיל או מכבה אם הכליאה אפשרית בעולם זה."
 townyadmin_help_1: 'בטל בעלות על חלקה זאת'
 townyadmin_help_2: 'נסה לבטל בעלות מסביב לך.'
@@ -235,7 +235,7 @@ admin_panel_5: "ראה /ta plot ? לקבלת עזרה"
 admin_panel_6: "נותן או מסיר כמות מסוימת של יחידות שטח לשחקן או עיירה"
 admin_panel_7: "עשה /ta toggle ? לקבלת עזרה"
 admin_panel_8: "פקודות לשליטה באובייקטים אלה"
-admin_panel_9: "מבצע טלפורט למגרש המבוקש"
+admin_panel_9: "מבצע טלפורט לחלקה המבוקשת"
 admin_panel_10: "בודק אם לשחקן יש צומת הרשאה"
 admin_panel_11: "מאפס את ההגדרות שלך"
 admin_panel_12: "יוצר גיבוי של נתוני Towny שלך"
@@ -341,7 +341,7 @@ ta_info_help_0: "צפה במידע כלכלי של האומה הנתונה."
 ta_info_help_1: "צפה במידע כלכלי של התושב הנתון."
 ta_info_help_2: "צפה במידע כלכלי של חשבון השרת ב־Towny."
 ta_info_help_3: "צפה במידע כלכלי של העיירה הנתונה."
-plot_help_0: "מפעיל את ממשק ה־HUD למידע על המגרש."
+plot_help_0: "מפעיל את ממשק ה־HUD למידע על החלקה."
 plot_help_1: "מסיר את הבעלים של השטח."
 plot_help_2: "מוחק רשימת בלוקים מהשטח."
 plot_help_3: "עשה /plot set ? לקבלת עזרה."
@@ -350,15 +350,15 @@ plot_help_5: "עשה /plot group ? לקבלת עזרה."
 plot_help_6: "מסיר הרשאות מיוחדות עבור שחקן."
 plot_help_7: "מוסיף הרשאות ברירת מחדל לשחקן."
 plot_help_8: "פותח את ממשק העריכה של ההרשאות."
-plot_help_9: "מוסיף תושב כאדם נבטח במגרש."
-plot_help_10: "מסיר תושב מתפקיד אדם נבטח במגרש."
+plot_help_9: "מוסיף תושב כאדם נבטח בחלקה."
+plot_help_10: "מסיר תושב מתפקיד אדם נבטח בחלקה."
 plot_district_help_0: "לדוגמה: /plot district new ExpensivePlots"
-plot_district_help_1: "מסיר מגרש מהמחוז המצוין."
+plot_district_help_1: "מסיר חלקה מהמחוז המצוין."
 plot_district_help_2: "מוחק את המחוז לחלוטין."
 plot_district_help_3: "משנה את שם המחוז שבו אתה עומד."
 plot_group_help_0: "לדוגמה: /plot group new ExpensivePlots"
-plot_group_help_1: "מסיר מגרש מהקבוצה המצוין."
-plot_group_help_2: "מוחק את קבוצת המגרשים לחלוטין."
+plot_group_help_1: "מסיר חלקה מהקבוצה המצוין."
+plot_group_help_2: "מוחק את קבוצת החלקות לחלוטין."
 plot_group_help_3: "משנה את שם הקבוצה שבה אתה עומד."
 plot_group_help_4: "לדוגמה: /plot group set perm resident on."
 plot_group_help_5: "לדוגמה: /plot group toggle [pvp|fire|mobs]"
@@ -613,6 +613,34 @@ msg_err_invalid_radius: '&cרדיוס לא חוקי. השתמש במספר של�
 msg_err_not_configured: '&cהעיר היא לא מוגדרת על ידי עיר.'
 msg_err_updating_item_perms: '&cשגיאה עדכן הרשאות השימוש בפריט.'
 msg_err_updating_switch_perms: '&cשגיאה בעדכון מטמון ההרשאות של המתג.'
+msg_err_updating_destroy_perms: '&cשגיאה בעדכון מטמון הרשאות ההשמדה.'
+msg_err_updating_build_perms: '&cשגיאה בעדכון מטמון הרשאות הבנייה.'
+msg_err_admin_only: '&cרק מנהל יכול להשתמש בפקודה זו.'
+msg_err_admin_only_delete: '&cרק מנהל יכול למחוק נתונים של דיירים אחרים.'
+msg_err_admin_only_delete_town: '&cרק מנהל יכול למחוק לעיר אחרת את הנתונים.'
+msg_err_admin_only_delete_nation: '&cרק מנהל יכול למחוק נתונים של מדינה אחרת.'
+msg_err_online_or_npc: '&c%s הוא מחובר או לא קרוב.'
+msg_err_not_registered: '&cאתה לא רשום'
+msg_err_not_registered_1: '&c%s הוא לא רשום'
+msg_err_invalid_name: '&c%sזה שם לא חוקי.'
+msg_err_already_res: '&c%s אתה כבר שייך לעיר.'
+msg_err_already_in_town: '&c%s כבר חלק מ %s.'
+msg_err_already_nation: '&cהעיר הנבחרת שייכת למדינה.'
+msg_err_invalid_property: '&cלא תקין ''%s'' שטח.'
+msg_err_not_supported: '&cאתה לא אמור.'
+msg_err_invalid_input: '&cקלט לא תקין. השתמש ב %s'
+msg_err_negative: '&cקלט לא יכול להיות שלילי.'
+msg_err_input_too_long: '&cקלט ארוך מידי.'
+msg_err_invalid_choice: '&cבחירה לא חוקית'
+msg_err_invalid_sub: '&cתרגום פקודה לא חוקי.'
+msg_err_command_disable: '&cאין לך מספיק גישות לפקודה זו.'
+msg_err_plot_preclaim_disable: "&cאתה לא יכול לכבוש את הקרקע %s עכשיו."
+msg_err_plot_preunclaim_disable: "&cהדייר לא יכול לשחרר את המרגש %sכרגע."
+msg_err_you_dont_have_permission_to_use_colours: "אין לך הרשאה להשתמש בקודי צבע בכותרות ובשמות משפחה."
+msg_err_universe_limit: '&cהיקום לא יכול להכיל עוד ערים.'
+msg_err_too_many_npc: '&cיותר מידי בוטים רשומים.'
+msg_err_negative_money: '&cאתה לא יכול שיהיה לך סכום שלילי.'
+msg_err_not_percentage: '&cאחוז צריך להיות מתחת ל 100.'
 msg_err_not_block_type: '&cזה לא סוג חלקה חוקי!'
 msg_town_not_enough_residents_left_nation: '&bלעיר %s כבר ללא מספיק תושבים בשביל להיות חלק מאומה, ולכן נמחקה מן האומה.'
 msg_town_has_no_jails: 'העיר לא קבעה שום כלא.'
@@ -1182,3 +1210,8 @@ msg_err_you_cannot_add_towntrust_on_enemy: "אינך יכול לתת אמון ב
 status_world_jailing: "כולא "
 msg_version_build_info: "<dark_green>מידע בנייה: <green>%s</green> על ענף <green>%s<green>."
 msg_version_build_info_failed: "<red>לא ניתן לאחזר מידע בנייה עבור גרסה זו."
+time-x-days-ago: "לפני %d ימים"
+time-a-year-ago: "לפני שנה"
+time-x-years-ago: "לפני %d שנים"
+#Shown instead of status_lastonline if the player is currently online
+status_onlinesince: "נראה לאחרונה:"
