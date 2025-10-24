@@ -44,6 +44,10 @@ public class Translatable {
 	public static Translatable literal(String text) {
 		return new LiteralTranslatable(text);
 	}
+
+	public static Translatable literal(ComponentLike component) {
+		return new LiteralTranslatable(component.asComponent());
+	}
 	
 	public String key() {
 		return key;
@@ -157,7 +161,7 @@ public class Translatable {
 	/*
 	 * Translates the key and the args in the current locale.
 	 */
-	private String translateBase() {
+	protected String translateBase() {
 		translateArgs(this.locale);
 		
 		String translated;
@@ -229,18 +233,29 @@ public class Translatable {
 	}
 	
 	private static final class LiteralTranslatable extends Translatable {
+		private Component component = null;
 
 		private LiteralTranslatable(String key) {
 			super(key);
 		}
 
-		private LiteralTranslatable(String key, Object... args) {
-			super(key, args);
+		private LiteralTranslatable(Component component) {
+			super(TownyComponents.toMiniMessage(component));
+			this.component = component;
 		}
 		
 		@Override
-		public String translate() {
-			return stripColors() ? Colors.strip(key() + appended()) : key() + appended();
+		public String translateBase() {
+			return key();
+		}
+
+		@Override
+		public Component component() {
+			if (this.component == null) {
+				return super.component();
+			}
+
+			return this.component;
 		}
 	}
 }
