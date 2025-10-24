@@ -2108,6 +2108,7 @@ msg_your_nation_has_pending_ally_invites: "Sua nação tem convites para se alia
 msg_your_town_has_pending_nation_invites: "Sua cidade tem convites para se unir a uma ou mais nações. Use '/t invite received' para ver seus convites."
 msg_you_have_pending_town_invites: "Você tem convites para se juntar a uma ou mais cidades. Use '/invite list' para ver seus convites, ou use '/invite deny all' para recusar todos esses convites."
 msg_admin_eco_convert_no_providers: "<red> Não há provedores de economia disponíveis"
+msg_admin_eco_convert_no_provider_specified: "<red> Nenhum sistema econômico definido"
 msg_admin_eco_convert_no_target_specified: "<red> Economia alvo não definida"
 msg_admin_eco_convert_target_not_found: "<red> Nenhum adaptador de economia foi encontrado pelo nome '%s', adaptadores disponíveis: [%s]"
 msg_admin_eco_convert_already_modern: "<red> não pode converter para moderno; o provedor já está no modo moderno"
