@@ -2430,6 +2430,11 @@ public class TownySettings {
 		return getString(ConfigNodes.NATION_DEF_BOARD);
 	}
 
+	public static boolean getNationDefaultNeutral() {
+
+		return getBoolean(ConfigNodes.NATION_DEF_NEUTRAL);
+	}
+	
 	public static double getNationDefaultTax() {
 
 		return getDouble(ConfigNodes.NATION_DEF_TAXES_TAX);
