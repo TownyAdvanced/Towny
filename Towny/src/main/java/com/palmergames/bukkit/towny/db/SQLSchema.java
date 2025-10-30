@@ -295,7 +295,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("forSalePrice", "float NOT NULL"));
 		columns.add(new ColumnData("forSaleTime", "BIGINT DEFAULT '0'"));
 		columns.add(new ColumnData("visibleOnTopLists", "bool NOT NULL DEFAULT '1'"));
-		
+		columns.add(new ColumnData("hasActiveWar", "bool NOT NULL DEFAULT '0'"));
 		return columns;
 	}
 
@@ -320,6 +320,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("conqueredTax", "float NOT NULL"));
 		columns.add(new ColumnData("sanctionedTowns", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("hasActiveWar", "bool NOT NULL DEFAULT '0'"));
 		return columns;
 	}
 
