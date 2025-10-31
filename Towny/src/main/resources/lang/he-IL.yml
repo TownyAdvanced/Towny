@@ -675,6 +675,7 @@ msg_you_have_taken_rank_from: 'אתה הוסרת מ %s דרגה של %s מ%s.'
 msg_resident_doesnt_have_rank: '%s לא מחזיק בזה %s דרגה.'
 msg_town_has_no_jails: 'העיר לא קבעה שום כלא.'
 msg_no_permission_to_jail_your_residents: 'אין לך הרשאה לכלוא את התושבים שלך.'
+msg_resident_not_part_of_any_town: 'השחקן הזה לא חלק משום עיר.'
 msg_player_not_jailed_in_your_town: 'שחקן זה לא לא נמצא בכלא בעיר שלך.'
 msg_cannot_spawn_while_jailed: 'אי אפשר לעשות ספאון כאשר אתה בכלא.'
 msg_cannot_abandon_town_while_jailed: 'אתה לא יכול לנטוש את העיר שלך בזמן שאתה בכלא.'
@@ -703,6 +704,7 @@ msg_err_ender_pearls_disabled: '&4שימוש באנדר פרל הינו מכוב
 msg_err_no_sleep_in_enemy_inn: '&4אתה לא יכול לישון בטריטוריה של אויבים.'
 msg_err_cant_use_bed: '&4אתה לא הבעלים של האדמה שעליה נמצא המיטה הזו, וזה אינו מגרש של פונדק.'
 msg_town_plots_revenue_disclaimer: '&aההכנסות המוצגות הן הערכה, והאם בעל המגרש יכול לשלם הוא גורם משפיע.'
+msg_town_set_perm_syntax_error: 'צירוף המילים שגוי לפקודה זו. עיין ב־‎''/town set perm ?''‎ כדי לראות את התחביר הנכון של הפקודה.'
 msg_plot_set_perm_syntax_error: 'צירוף המילים שגוי לפקודה זו. עיין ב־‎''/plot set perm ?''‎ כדי לראות את התחביר הנכון של הפקודה.'
 #Added in 0.32
 msg_err_townadmintownrank_wrong_town: 'התושב הזה לא שייך לעיר הזו.'
@@ -717,10 +719,16 @@ msg_err_outlaw_in_open_town: 'אתה לא יכול להצטרף לעיר פתו�
 msg_you_are_an_outlaw_in_this_town: '&4היזהר, %s מחשיבים אותך כפורע חוק, מוות פה יכול להוביל לכלא.'
 msg_you_are_an_outlaw_in_this_town_jail_time: '&4פורעי חוק נכלאים למשך %s שעות.'
 msg_you_are_an_outlaw_in_this_town_bail_amount: 'הערבות שלך תעלה %s.'
+msg_err_town_not_close_enough_to_nation: 'הבלוק הביתי של %s אינו קרוב מספיק לבלוק הביתי של עיר הבירה שלך כדי להצטרף לאומה שלך.'
 msg_nation_town_moved_their_homeblock_too_far: 'הבלוק הביתי של %s הועבר רחוק מדי מבלוק הביתי של עיר הבירה של האומה שלך, ולכן הוסר מהאומה שלך.'
+#Added in 0.33
+msg_err_invalid_radius_number: "&cערך הרדיוס שגוי. השתמש ב־%s או פחות.\n"
+#Added in 0.34
+msg_err_max_residents_per_town_reached: '&cכבר הושג מספר התושבים המרבי (%s).'
 #Added in 0.35
 msg_err_resident_doesnt_meet_invite_cooldown: '&cהשחקן %s לא היה בשרת מספיק זמן בשביל להיות מוזמן לעיר, אנא חכה.'
 msg_cant_toggle_pvp_outsider_in_town: 'יש חוץ־תושב בעיר שלך, אינך יכול לשנות את מצב ה־PvP שלך!'
+msg_err_unclaim_not_outpost: 'לא ניתן לשחרר את הבעלות, המגרש הזה אינו מוצב כתחנת חוץ!'
 outpost_plu: 'תחנות חוץ'
 #Added in 0.36
 msg_err_not_enough_residents: 'אין מספיק תושבים בעיר הזו כדי לבצע זאת.'
@@ -800,6 +808,7 @@ nation_deleted_by_admin: '&bהאומה %s נמחקה בהצלחה'
 are_you_sure_you_want_to_continue: 'אתה בטוח שאתה רוצה להמשיך?'
 you_have_been_invited_to_join: 'הוזמנת להצטרף ל'
 you_have_been_requested_to_ally: 'כבר בקשת לכונן ברית עם '
+this_message_will_expire: 'זה יפוג אוטומטית תוך 20 שניות'
 player_sing: 'שחקן'
 nation_zone_this_area_under_protection_of: 'חלק זה של %s נמצא תחת הגנת %s'
 nation_zone_conquered_status_denies_use: "הסטטוס הכבוש של העיר שלך מונע ממך להשתמש באזור האומה הזה."
@@ -812,6 +821,14 @@ you_have_been_requested_to_ally2: 'בקשת ליצור ברית עם %s נשלח
 town_help_11: 'צור עיר חדשה. השתמש ב-''_'' במקום רווחים.'
 changed_plot_town: '&bשינית בהצלחה את העיר של החלקה ל-%s!'
 not_standing_in_plot: 'אתה לא עומד בתוך חלקה חוקית!'
+msg_err_homeblock_has_not_been_set: 'בלוק הבית לא הוגדר, השתמש ב־''/town set homeblock'' קודם.'
+msg_err_spawn_not_within_homeblock: 'נקודת ההופעה לא נמצאת בתוך בלוק הבית, השתמש ב־''/town set homeblock'' קודם.'
+#Added in 0.44
+#TownyChat language strings
+tc_err_invalid_command: 'שגיאה: פקודה לא חוקית!'
+tc_settings_reloaded: '[TownyChat] ההגדרות נטענו מחדש!'
+tc_err_unrecognized_command_format: 'שגיאה: פורמט הפקודה לא מזוהה!'
+tc_channel_list_status: '(סטטוס)'
 tc_channel_list_in: 'בפנים'
 tc_channel_list_out: 'בחוץ'
 tc_err_you_dont_have_perm_mute_list: 'אין לך הרשאות לצפות ברשימת השתקות'
@@ -823,6 +840,7 @@ tc_err_no_online_players_with_name: 'אין שחקנים מקוונים בשם &
 tc_err_you_dont_have_mute_perms: 'אין לך הרשאות להשמדה'
 tc_err_you_cant_mute_admin: 'אי אפשר להשתיק מנהל Towny.'
 tc_err_you_cant_mute_chat_mod: 'אי אפשר להשתיק ממונה צ''אט.'
+tc_player_already_muted_in_channel: '[TownyChat] השחקן כבר מושתק ב‑&f%s'
 tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2מושתק כעת ב‑&f%s'
 tc_player_is_not_muted_in_channel: '[TownyChat] השחקן לא מושתק ב‑&f%s'
 tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2בוטל ההשתקה שלו כעת ב‑&f%s'
@@ -832,6 +850,7 @@ tc_you_already_left_channel: '[TownyChat] כבר עזבת את &f%s'
 tc_you_left_channel: '[TownyChat] עזבת את &f%s'
 tc_you_are_now_talking_in_channel: '[TownyChat] אתה עכשיו מדבר ב - &f%s'
 tc_err_you_cannot_join_channel: 'אי אפשר להצטרף ל־&f%s'
+tc_you_are_already_in_channel: '[TownyChat] אתה כבר ב־&f%s'
 tc_you_joined_channel: '[TownyChat] הצטרפת ל־&f%s'
 tc_err_you_are_already_talking_in_default_channel_help: 'אתה כבר מדבר בערוץ ברירת המחדל. בשביל להחליף לאחד אחר השתמש בפקודה של ערוץ זה.'
 tc_err_unable_to_talk_essentials_mute: 'לא ניתן לדבר… אתה כרגע מושתק!'
@@ -872,15 +891,64 @@ status_friends: 'חברים'
 rank_list_title: '%sרישמת דרגות'
 rank_list_mayor: 'ראש העיר:'
 status_title_capital: '&b(עיר בירה)'
+status_title_pvp: '&4(קרבות)'
+status_title_open: '&b(פתוח)'
+status_town_board: 'לוח:'
+status_founded: 'הומצא:'
+status_founded_by: 'הומצא על ידי:'
+status_town_size: 'גודל עיר:'
+status_town_size_bought: 'נקנה:'
+status_town_size_bonus: 'בונוס:'
+status_town_size_nationbonus: 'בונוס מדיני:'
+status_town_outposts: 'מחסומים:'
+status_bank_town2: 'תחזוקה יומית:'
+status_bank_town3: 'מיסים:'
+status_town_nation: 'מדינה:'
+status_town_reslist_overlength: 'ועוד...'
 status_nation_king: 'מנהיג:'
+status_nation_tax: 'מיסי מדינה:'
+status_nation_conquered_tax: 'מס כיבוש:'
+status_nation_towns: 'ערים'
+status_nation_allies: 'בעלי ברית'
+status_nation_enemies: 'אויבים'
+status_nation_enemied_by: 'מדינות ששוקלים להיות אויבים עם המדינה שלך'
+status_world_claimable: '&aניתן לכבישה'
+status_world_noclaims: '&cלא ניתן לכבישה'
+status_world_forcepvp: 'קרבות מאולצים:'
+status_world_fire: 'איש:'
+status_world_forcefire: 'אש מאולצת:'
+status_world_forceexplosion: 'פיצוץ מאולץ:'
+status_world_worldmobs: 'מפלצות העולם:'
+status_world_forcetownmobs: 'הפעלת מפלצות עיר בכפייה:'
+status_world_unclaimrevert: 'ביטול כבישה:'
+status_world_explrevert: 'שחזור פיצוצים:'
+status_world_ignoredblocks: 'בלוקים שהוזנחו:'
+status_res_taxexempt: 'צוות פטור מתשלום מיסי עיר.'
+status_res_tax: 'מס עיר:'
+status_res_plottax: 'סך מיסי המגרשים:'
+status_res_totaltax: 'סך כל המס לתשלום:'
+status_townblock_plottax: 'מס מגרש '
+status_townblock_untaxed: 'ללא מס'
+status_townblock_max_and_minjoindays: 'דרושה חברות בעיר בין %s ל-%s ימים לרכישת מגרש.'
+status_townblock_minjoindays: 'דרושה חברות בעיר של יותר מ-%s ימים לרכישת מגרש.'
+status_townblock_maxjoindays: 'דרושה חברות בעיר של פחות מ-%s ימים לרכישת מגרש.'
+#Added in 0.45
+msg_err_unable_to_use_bank_outside_nation_capital: 'אינך יכול להשתמש בבנק המדינה שלך מחוץ לבירת המדינה.'
+msg_err_unable_to_use_bank_outside_your_town: 'אתה לא יכול להשתמש בבנק של עירך מחוץ לעיר.'
 msg_time_until_a_new_day: 'זמן עד התחלת יום חדש: '
 msg_hours: ' שעות'
 msg_minutes: ' דקות'
 msg_seconds: ' שניות'
+msg_err_invalid_string_nationboard_not_set: 'מחרוזת לא חוקית, לוח האומה לא הוגדר.'
 msg_plot_evict: 'החלקה פונתה בהצלחה.'
+msg_no_one_to_evict: 'אין אף אחד לגרש מהחלקה הזו.'
 #Added in 0.46
 nation_help_10: 'השתגר לספאון האומה.'
 msg_nation_spawn_warmup: '&bמחכה להשתגר...'
+msg_set_nation_spawn: '&bשינית בהצלחה את נקודת ההופעה של האומה.'
+msg_err_cant_afford_tp_nation: '&cאין לך מספיק כסף כדי להשתגר ל-%s.'
+msg_err_nationspawn_has_not_been_set: '&cנקודת ההופעה של האומה לא הוגדרה.'
+msg_err_spawn_not_within_nationtowns: '&cנקודת ההופעה של האומה חייבת להיות בעיר שהיא חלק מהאומה.'
 msg_err_spawn_not_within_capital: '&cנקודת ההופעה של האומה חייבת להיות בעיר הבירה.'
 msg_err_nation_spawn_war: '&cנקודות הופעה של אומה אינן מותרות בזמן מלחמה.'
 msg_err_nation_not_public: '&cהאומה הזו אינה ציבורית.'
@@ -899,6 +967,7 @@ msg_err_public_nation_spawn_forbidden_war: '&cנסיעה לנקודת ההופע
 msg_err_public_nation_spawn_forbidden_peace: '&cהשתגרות לאומות אחרות הינה אסורה במהלך מלחמה.'
 msg_spawn_cost_set_to: '&b%s קבע את המחיר לשימוש ב-/ %s spawn ל-%s'
 msg_spawn_fail_safe_teleport: '&cהטלפורט נכשל, המיקום אינו בטוח. בקש מראש העיר של עיירתך לשנות את מיקום הטלפורט.'
+msg_err_cannot_set_spawn_cost_more_than: '&cאי אפשר לקבוע את עלות ההופעה גבוהה מ-%s'
 msg_err_ally_isnt_public: '&cלבעל הברית שלך, %s, אין ספאון פומבי פתוח. ההשתגרות נדחתה.'
 msg_nation_changed_public: '&cהסטטוס הציבורי של האומה הוא כעת %s.'
 #Added in 0.47:
@@ -950,6 +1019,7 @@ msg_bankrupt_town_multiple: '&bהערים הבאות לא עמדו בעלויו�
 msg_bankrupt_nation_multiple: '&bהאומות הבאות לא עמדו בעלויות התחזוקה ופורקו: '
 msg_couldnt_pay_tax: '&b%s לא עמד בתשלום מיסים וגורש מה - %s.'
 msg_couldnt_pay_nation_tax_multiple: '&bהערים הבאות לא יכלו לשלם את מס האומה ועזבו את האומה '
+msg_couldnt_pay_town_tax_multiple: '&bהתושבים הבאים לא יכלו לשלם את מס העיר וגירשו אותם '
 msg_couldnt_pay_plot_taxes_multiple: '&bהתושבים הבאים לא יכלו לשלם את מס המגרש על חלק או כל המגרשים שלהם '
 msg_bankrupt_town2: '&b%s לא יכלה להרשות לעצמה להישאר עיר.'
 msg_bankrupt_nation2: '&b%s האומה התרוששה ולא יכלה להרשות לעצמה להמשיך להתקיים.'
@@ -969,6 +1039,7 @@ msg_error_ta_plot_claim: 'שם השחקן חסר, לדוגמה: /ta plot claim �
 msg_error_no_player_with_that_name: 'לא נמצא אף שחקן עם השם %s'
 msg_admin_has_given_you_a_plot: 'מנהל נתן לך בעלות על חלקה ב: %s'
 msg_town_forcemobs_setting_set_to: 'לעיר %s הוגדרה הגדרת המפלים בכפייה ל-%s'
+msg_town_forcepvp_setting_set_to: 'לעיר %s הוגדרה הגדרת PvP בכפייה ל-%s'
 msg_town_forcedisabledpvp_setting_set_to: 'לעיר %s הוגדרה הגדרת AdminDisabledPvP בכפייה ל-%s'
 msg_nation_changed_open: '&cסטטוס הפתיחות של האומה הוא כעת %s.'
 msg_err_already_in_a_nation: 'העיר שלך כבר שייכת לאומה.'
@@ -1022,6 +1093,11 @@ msg_err_this_town_doesnt_have_any_associated_metadata: 'לעיר זו אין מ�
 msg_err_key_x_is_not_part_of_this_town: 'המפתח %s אינו חלק של עיר זאת, אם אפשרי בבקשה הוסף אותו.'
 msg_custom_data_was_successfully_added_to_town: 'מידע מותאם אישית הוסף בהצלחה לעיר!'
 msg_err_this_resident_doesnt_have_any_associated_metadata: 'לתושב זה אין מטה-דטה משויכת.'
+msg_err_key_x_is_not_part_of_this_resident: 'המפתח %s אינו שייך לתושב זה, אם אפשר, אנא הוסף אותו.'
+msg_custom_data_was_successfully_added_to_resident: 'הנתונים המותאמים אישית נוספו בהצלחה לתושב!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'לאומה זו אין מטא-נתונים מקושרים.'
+msg_err_key_x_is_not_part_of_this_nation: 'המפתח %s אינו שייך לאומה זו, אם אפשר, אנא הוסף אותו.'
+msg_custom_data_was_successfully_added_to_nation: 'הנתונים המותאמים אישית נוספו בהצלחה לאומה!'
 msg_error_too_many_pages: 'יותר מדי עמודים.'
 msg_err_location_is_not_within_a_town: 'המיקום אינו בתוך עיר.'
 msg_err_location_is_not_within_a_jail_plot: 'המיקום אינו בתוך חלקה של כלא.'
@@ -1073,9 +1149,12 @@ msg_err_plot_not_associated_with_a_group: 'חלקה זאת אינה שייכת �
 msg_plot_was_removed_from_group_x: 'חלקה &9(%s,%s) &2הוסרה מהקבוצה%s'
 msg_plot_renamed_from_x_to_y: 'שם החלקה %s שונה ל - %s.'
 msg_err_plot_group_specify_price: 'בבקשה ציין את המחיר באמצעות הפקודה, "/plot group fs [price]" בשביל למכור את כל הקבוצה'
+msg_player_put_group_up_for_sale_amount: '%s הציב את הקבוצה %s למכירה ב-%s!'
+msg_player_put_group_up_for_sale: '%s הציב את הקבוצה %s למכירה!'
 msg_err_could_not_set_group_type: 'לא ניתן להגדיר את סוג הקבוצה כ - '
 msg_set_group_type_to_x: 'סוג קבוצת החלקות שונה לסוג %s'
 msg_player_successfully_bought_group_x: '%s קנה את קבוצת החלקות %s בהצלחה'
+status_plot_group_name_and_size: 'החלקה היא חלק מהקבוצה: %s. לקבוצה יש סך הכל %s חלקות.'
 msg_player_made_group_not_for_sale: '%s ביטל את המכירה של הקבוצה %s עכשיו.'
 #Added in 0.69
 msg_err_cannot_set_group_to_jail: 'אי אפשר לקבוע קבוצת חלקות בתור כלא.'
@@ -1120,7 +1199,10 @@ msg_err_unable_to_add_more_residents_without_nation: 'העיר שלך לא יכ�
 msg_the_following_towns_were_deleted_for_having_0_claims: 'הערים הבאות נמחקו מפני שהיו להן 0 חלקות: %s'
 msg_spawn_warn: 'מחיר היווצרות: %s. המשך? רמז: הוסף "-ignore" בשביל לדלג על אישורים אילו.'
 msg_confirm_purchase: 'לעשות זאת יעלה %s. המשך?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'מכיוון שהן לא יהיו מספיק קרובות לבירה החדשה, הערים הבאות יוסרו מהאומה שלך: %s. האם ברצונך להמשיך?'
 msg_ta_deposit_all_success: '%s הופקדו בהצלחה לכל בנקי הערים והאומות.'
+msg_ta_deposit_all_towns_success: 'הפקדת בהצלחה %s לכל הבנקים של הערים.'
+msg_ta_deposit_all_nations_success: 'הפקדת בהצלחה %s לכל הבנקים של האומות.'
 bonus_townblocks: 'בונוס חלקות'
 #Added in 0.80
 nomad_sing: 'נווד'
@@ -1130,6 +1212,7 @@ msg_err_teleport_cancelled_damage: 'לקיחת נזק ביטלה את ההשתג
 #Added in 0.82
 invitation_prefix: "&8[&7הזמנה&8] &9"
 confirmation_prefix: "&8[&7אישור&8] &9"
+this_message_will_expire2: '&9זה יפוג אוטומטית תוך %s שניות'
 msg_hover_next_page: 'עמוד הבא'
 msg_hover_previous_page: 'עמוד קודם'
 #Added in 0.83
@@ -1139,6 +1222,8 @@ msg_town_set_tax_max_percent_amount: "%s הגדיר את מקסימום מס ה�
 msg_err_plot_belongs_to_group_toggle: 'החלקה שייך לקבוצה, השתמש ב - "/plot group toggle" בשביל קבוצת חלקות'
 #Added in 0.85
 msg_set_perms_reset_single: '&bהרשאות חלקה זאת אופסו בהצלחה.'
+#Added in 0.86
+status_bank_bankrupt: '(נשדד)'
 msg_warning_bankrupt: '&4*** אזהרה, %s תפשוט רגל מחר עקב חוסר בכסף!!! ***'
 msg_town_bankrupt_by_upkeep: '&b%s לא עמדה בעלויות התחזוקה ופשטה רגל.'
 msg_town_bankrupt_by_upkeep_multiple: '&bהערים הבאות לא עמדו בעלויות התחזוקה ופשטו רגל: '
@@ -1160,15 +1245,22 @@ msg_town_reached_debtcap_and_is_disbanded: '&b%s לא יכלה לשלם את ע�
 msg_town_reached_debtcap_and_is_disbanded_multiple: '&bהערים הבאות לא יכלו לשלם את עלויות התחזוקה, הגיעו לתקרת החוב שלהן, ופורקו: '
 msg_unable_to_deposit_x: 'אי אפשר להפקיד %s לבנק העיר הזאת.'
 msg_unable_to_withdraw_x: 'אי אפשר למשוך %s מבנק העיר הזאת.'
+status_debtcap: 'מגבלת חוב:'
+status_world_explrevert_entity: 'ביטול פיצוץ ישויות:'
+status_world_explrevert_block: 'ביטול פיצוץ בלוקים:'
 #Added in 0.88
 msg_nation_already_peaceful: '&cהאומה כבר שוחרת שלום.'
 msg_nation_already_not_peaceful: '&cהאומה כבר לא שוחרת שלום.'
+#Added in 0.89
+status_world_friendlyfire: 'ירי ידידותי:'
 status_world_wildernessmobs: 'מובים בשטח פרא:'
 msg_outlaw_kick_cooldown: '&cאתה נחשב לפורע חוק בעיר %s. יש לך עוד %s לעזוב את העיר, אחרת תשוגר בחזרה לנקודת הספאון שלך.'
 msg_outlaw_kicked: '&4אתה לא רצוי ב-%s. שוגרת הרחק משם.'
 msg_outlaw_town_notify: '&cפורע חוק, %s, נכנס לתחום העיר שלך.'
 msg_your_town_payed_upkeep_with_debt: '&cהעיר שלך שילמה את עלויות התחזוקה היומיות בסך של %s באמצעות חוב.'
 msg_payed_nation_tax_with_debt: '&cהעיר שלך שילמה את מס האומה בסך של %s באמצעות חוב.'
+#Added in 0.90
+status_plot_clear_deletion: 'מחיקת בלוקים בחלקה:'
 msg_err_plot_clear_disabled_in_this_world: 'הפקודה "/plot clear" הינה מושבתת בעולם זה.'
 #Added in 0.91
 msg_universe_attribution: 'מחברים: '
@@ -1185,6 +1277,10 @@ msg_err_cannot_reclaim_town_yet: '&cאתה לא יכול לתבוע בעלות �
 msg_town_reclaimed: '&b%s תבע בעלות מחדש על העיר %s.'
 msg_err_cannot_use_command_because_town_ruined: "&cאתה לא יכול להשתמש בפקודה זאת בגלל שהעיר שלך מוחרבת. בשביל להמשיך בפקודות בצורה רגילה, תתבע בעלות מחדש על העיר שלך באמצעות \"/town relclaim\", או תשתמש בפקודה \"/town leave\" ותעזוב את העיר."
 msg_warning_your_town_is_ruined_for_x_more_hours: '&cהעיר שלך תהיה במצב מוחרב לעוד %d שעות, השתמש בפקודה "/town reclaim" בשביל להציל אותה ולהפוך לראש העיר החדש.'
+msg_time_remaining_before_full_removal: 'הזמן שנותר לפני הסרה מלאה: %d שעות.'
+msg_time_until_reclaim_available: 'הזמן שנותר עד שהחזרה תהיה זמינה: %d שעות.'
+msg_reclaim_available: 'החזרה זמינה.'
+msg_ruined_town_being_deleted: "%s נהרס למשך %s שעות ומוחק כעת."
 #Added in 0.93
 msg_changed_peaceful: '&cמצב הניטרליות/שחירת שלום עכשיו %s.'
 msg_err_town_unclaim_canceled: '&cביטול הבעלות בוטל. אתה לא יכול לבטל את הבעלות על איזור זה כרגע.'
@@ -1197,6 +1293,7 @@ msg_comptype_towns: 'מספר ערים'
 msg_comptype_name: 'סדר אלפביתי'
 msg_comptype_open: 'סטטוס פתוח'
 msg_status_npc: '&c%s אינו שחקן אמתי ומוגבל ל Towny בלבד.'
+npc_created: 'נוצר:'
 msg_no_funds_claim_plot: '&cאין לך מספיק כסף בשביל לקנות את חלקה זאתי, אשר עולה %s.'
 msg_no_funds_claim_plot_group: '&cאין לך מספיק כסף לקנות חלקות ה - %s אשר עולים %s.'
 status_town_title_peaceful: '&b(שוחר שלום)'
@@ -1212,6 +1309,7 @@ towny_prices_overclaimed_upkeep: '&e[תחזוקה החוצה את רף הבעל�
 towny_prices_claiming_townblock: '&e[תובע בעלות] &2חלקות: &a%s'
 towny_prices_claiming_townblock_increase: ' &8| &2גדילת מחיר כל חלקה: &a+%s'
 towny_prices_claiming_outposts: '&e[תובע בעלות] &2מוצבי-חוץ: &a%s'
+towny_prices_outposts_upkeept: '&7מוצבים כוללים עלות תחזוקה נוספת לכל יום, לכל מוצב: &a%s'
 towny_prices_upkeep_based_on: '&7תחזוקת העיר מבוססת על &aה - %s'
 towny_prices_upkeep_num_plots: 'מספר החלקות.'
 towny_prices_upkeep_town_level: 'רמת העיר (מספר התושבים)'
@@ -1223,22 +1321,38 @@ towny_prices_price_plot: '&c    [מחיר] &2חלקה: &a%s &8| &2מוצב-חו�
 towny_prices_price_shop: '&c            &2חנות: &a%s &8| &2שגרירות: &a%s'
 towny_prices_taxes_plot: '&c    [מיסים]    &2תושב: &a%s &8| &2חלקה: &a%s'
 towny_prices_taxes_shop: '&c            &2חנות: &a%s &8| &2שגרירות: &a%s'
+towny_prices_town_neutral_tax: '&c            &2שלום: &a%s'
+towny_prices_plots: '&c    [הגדרת מגרשים]'
+towny_prices_type_single: '            &2%s: &a%s'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
 towny_prices_nationname: '&cאומה: &6%s'
 towny_prices_nation_tax: '&c    [מיסים] &2עיר: &a%s &8| &2שלום: &a%s'
 #Added in 0.96
 msg_town_destroyed_by_nation_tax: '&bהעיר הכבושה %s לא יכלה לשלם את מס האומה ונפלה.'
 msg_town_destroyed_by_nation_tax_multiple: '&bהערים הבאות לא יכלו לשלם את מס האומה ונפלו: '
 msg_your_town_was_exempt_from_the_nation_tax: 'העיר שלחה הייתה פטורה מתשלום מיסים לאומה.'
+#Added in 0.97
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'סטטוס מוחרב'
+msg_comptype_forsale: 'סטטוס למכירה'
 msg_comptype_bankrupt: 'סטטוס פשיטת רגל'
 msg_ruined: '&c(מוחרב)'
 msg_bankrupt: '&c(פושט רגל)'
 #Added in 0.98
 msg_del_town2: '&bהעיר %s נמחקה!'
 msg_ruin_town: '&bנפלה %s העיר!'
+gui_title_select_plot_type: 'בחר סוג מגרש'
+gui_title_no_restrictions: 'אין הגבלות לסוג המגרש הזה.'
+gui_title_towny_allowedblocks: '%s רשימת הבלוקים המותרים'
 gui_title_towny_wildsblocks: 'רשימת טאוני של חלקות שטח פרא'
 gui_title_towny_itemuse: 'רשימת Towny של שימוש בחפצים'
 gui_title_towny_switch: 'רשימת Towny של שימוש במתגים'
+gui_title_towny_plotclear: 'רשימת מחיקה לניקוי מגרשי Towny'
+flatfile_dbg_district_file_missing_town_delete: 'קובץ האזור חסר עיר, מוחק את %s'
+flatfile_dbg_missing_file_delete_district_entry: 'קובץ חסר: %s, מוחק רשומה ב-[districtuuid].data'
+flatfile_err_exception_reading_district_file_at_line: 'שגיאת טעינה: חריגה בעת קריאת קובץ האזור %s בשורה: %s'
+flatfile_dbg_loading_district_list: 'טוען רשימת מחוזות...'
 msg_ta_removed_all_titles_and_surnames_removed: 'התארים והשמות השניים של כל התושבים נמחקו.'
 msg_err_homeblock_already_set_here: 'מיקום זה הוא כבר מרכז העיר שלך.'
 #Added in 0.100
@@ -1255,6 +1369,7 @@ msg_town_merge_err_not_enough_money: '&cהאיחוד נכשל: אין מספיק
 msg_town_merge_err_too_many_purchased_townblocks: '&cהאיחוד נכשל: קנייה מרובה מדי של חלקות (%d)'
 msg_town_merge_warning: '&cאזהרה: אם יאושר, האיחוד עם %s יעלה %s.'
 msg_town_merge_debt_warning: '&cאזהרה: %s נמצאת כרגע בחוב, אתה תצטרך לשלם את החוב אם תאשר.'
+msg_town_merge_cost_breakdown: '&bפירוט עלויות: עלות בסיסית: %s, עלות חלקת עיירה: %s, עלות פשיטת רגל: %s, עלות BonusBlock: %s'
 msg_town_merge_failed: '&cהאיחוד בוטל.'
 msg_town_merge_cancelled: '&cהאיחוד בוטל.'
 msg_town_merge_success: '&bהעיר %s, השייכת ל - %s, אוחדה בהצלחה לעיר %s.'
@@ -1279,11 +1394,16 @@ msg_deleting_nation_will_result_in_losing_residents: '&cאזהרה: מחיקת �
 #Added in 0.103
 msg_command_blocked_inside_towns: '&cאתה לא יכול להשתמש בפקודה זאת בתוך ערים.'
 msg_command_limited: 'אתה יכול להשתמש בפקודה זאת רק בחלקות שלך.'
+#Added in 0.104
+#Don't add a space to the end please
+msg_plot_perm_claimed_at: 'נדרש ב:'
 #Added in 0.105
 msg_wilderness_use_x_in_all_worlds: 'השימוש בשטח הפרא הוגדר ל-%s בכל העולמות.'
 msg_regenerations_use_x_in_all_worlds: 'מצב התחדשות הינו %s בכל העולמות.'
 #Added in 0.106
 msg_command_outsider_blocked: 'אתה לא יכול להשתמש בפקודה זאת בגלל שאתה לא גר ב - %s.'
+#Added in 0.107
+msg_jailed_for_x_hours: ' בשביל %s שעות.'
 msg_err_this_jail_has_no_cells: 'לכלא זה אין תאים.'
 msg_err_no_cell_found_at_this_location: 'לא נמצא תא בית כלא במיקום זה.'
 msg_jail_cell_set: 'תא כלא נקבע.'
@@ -1307,8 +1427,11 @@ msg_do_not_log_out_while_waiting_to_be_teleported: 'אל תנתק לפני שה�
 jail_plu: 'בתי כלא'
 jail_sing: 'כלא'
 msg_resident_has_not_played_long_enough_to_be_jailed: '%s לא שיחק מספיק זמן בשביל שיישלח לכלא, חכה עוד %s'
+#Added in 0.108
+msg_town_not_peaceful: '&bהעיר לא יכלה להרשות לעצמה את מצב השלום שלה.'
 msg_town_already_peaceful: '&cהעיר כבר שוחרת שלום.'
 msg_town_already_not_peaceful: '&bהעיר הייתה לא שוחרת שלום עוד לפני כן.'
+msg_town_cant_peaceful: '&bהעיר לא יכלה להרשות לעצמה להפוך לעיר שלום. עליך להיות מסוגל לשלם %s ליום.'
 msg_town_paid_for_neutral_status: '&bהעיר שלך שילמה %s בשביל לשמור על הסטטוס שוחר השלום שלה.'
 msg_nation_paid_for_neutral_status: '&bהאומה שלך שילמה %s בשביל לשמור על הסטטוס שוחר השלום שלה.'
 your_town_has_been_invited_to_join_nation: 'העיר שלך הוזמנה להצטרף לאומה: %s'
@@ -1316,9 +1439,13 @@ your_town_has_been_invited_to_join_nation: 'העיר שלך הוזמנה להצ�
 msg_err_no_one_to_purge: '&bאין שחקנים לא פעילים לטהר.'
 msg_purging_will_remove_the_following_residents: '&bבבקשה אשר שאתה רוצה לטהר את התושבים הבאים: %s'
 msg_purge_complete_x_removed: '&bהטיהור הושלם, %s תושבים נמחקו.'
+msg_purge_complete_x_removed_from_towns: '&bניקוי הושלם, %s תושבים לא פעילים הוסרו מהערים.'
+msg_purge_reached_50_residents: '&bהניקוי הגיע ל-50, מחיקות נוספות של תושבים לא יירשמו כדי להפחית ספאם.'
 msg_err_days_must_be_greater_than_0: 'כמות הימים צריכה להיות יותר מ-0.'
 msg_err_outlawed_players_no_teleport: '&4אתה נחשב פורע חוק בעיר שבא אתה כרגע ולכן לא יכול להשתגר!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4אתה לא יכול להשתמש בפקודה זאת בזמן שאתה בתוך עיר שבה אתה נחשב פורע חוק.'
+#Added in 0.110
+msg_safe_mode: "[שגיאה] נעול במצב בטוח!"
 msg_safe_mode_base: '[שגיאה] Towny נעול במצב "Safe Mode" עקב תקלה! '
 msg_safe_mode_player: 'תאמר למנהל לבדוק את הקונסול של השרת.'
 msg_safe_mode_admin: 'אנא עיין בקונסולה של השרת למידע נוסף.'
@@ -1348,6 +1475,7 @@ msg_latest_version: '&2גרסת Towny: &a%s &2| הגרסה החדשה ביותר
 msg_up_to_date: '&aאתה מעודכן.'
 msg_click_purchase: 'לחץ בשביל לרכוש'
 msg_you_must_join_this_town_to_claim_this_plot: 'אתה חייב להצטרף לעיר - %s בשביל לקבל בעלות על חלקה זאת. האם תרצה להצטרף לעיר ולקבל את החלקה?'
+msg_legacy_economy_detected: "&bמימוש הכלכלה של Towny שלך מוגדר כ-Legacy, מומלץ לתת ל-Towny לעדכן את עצמו למימוש Modern. זה ישפר תאימות עם יותר תוספי כלכלה."
 msg_click_to_convert_to_modern_economy: "&bלחץ כאן כדי להמיר את יישום הכלכלה של Towny מישן למודרני."
 #Added in 0.113
 status_trustedlist: 'מוסמך'
@@ -1357,6 +1485,7 @@ msg_last_edited: '&7&oשונה לאחרונה ב- %s על ידי %s.'
 #Last %s is either town or townblock
 msg_trusted_added: '&bהוסיף את %s כמהימן ב%s זאת.'
 msg_already_trusted: '&b%s כבר נחשב כאמין ב - %s.'
+msg_cannot_trust_your_own_town: '&bאי אפשר לסמוך על העיר שלך.'
 #Last %s is the town name or worldcoord.
 msg_trusted_added_2: '&b%s כבר בטח בך ב - %s: %s.'
 msg_not_trusted: '&b%s אינו מהימן ב- %s.'
@@ -1413,10 +1542,12 @@ msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'אתה לא 
 msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'אתה לא יכול לכלוא את התושב שלך מפני שהוא במיקום שבוא הוא נחשב כאויב.'
 #Added in 0.120
 msg_resident_prompt: 'הקלד את שם השחקן בצ’אט, או q כדי לצאת. פעולה זו תסתיים אוטומטית תוך 30 שניות.'
+msg_prompt_cancel: 'הבקשה בוטלה או פגה הזמן.'
 status_home_element: ' &7[בית: %s]'
 status_about: "על:"
 status_registered: 'רשום:'
 status_lastonline: 'נראה לאחרונה:'
+status_fractions: '%s/%s'
 status_rank_list: 'רשימת דרגות'
 status_hover_click_for_more: 'לחץ למידע נוסף.'
 status_jailed: 'כלוא:'
@@ -1427,6 +1558,7 @@ status_resident_tax_title: '%s''מיסים'
 msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'מכיוון שלא יהיו קרובות מספיק לבירת האומה שלך, הערים הבאות יוסרו אם המיזוג יושלם: %s.'
 #Added in 0.123
 msg_err_invalid_townyworld: "'%s' אינו עולם Towny תקף."
+msg_err_enter_world_name_first: 'תקליד את השם של העולם הראשון בבקשה.'
 msg_wilderness_use_set_to: '&bהשימוש בשטח הפראי הוגדר ל-%s ב-%s.'
 #Added in 0.124
 msg_err_invalid_response: 'תגובה לא תקפה! הקלד q כדי לצאת או back כדי לחזור לשאלה הקודמת.'
@@ -1434,7 +1566,9 @@ msg_setup_full_guide_link: '&bלקישור למדריך ההתקנה המלא, �
 msg_setup_wildernessuse: 'האם ברצונך להפעיל שימוש בשטח הפראי? פעולה זו תאפשר לשחקנים להרוס ולבנות בשטח הפראי.'
 msg_setup_revertunclaim: 'האם ברצונך להשתמש ב־revert בעת ביטול טענת קרקע? פעולה זו תגרום ל־townblocks להתחדש בהדרגה כאשר הם מבוטלים.'
 msg_setup_town_block_ratio: 'באיזה יחס של בלוקים לעיר תרצה להגדיר? ברירת המחדל היא 8 בלוקים לעיר לכל תושב. כמות גבוהה יותר תאפשר לערים לתבוע יותר עבור כל תושב. הגדרת הערך ל־0 תגרום לשימוש בערכים מה־town_levels.'
+msg_setup_town_cost: "כמה יעלה ליצור עיר חדשה? ברירת המחדל היא 250.\n"
 msg_setup_nation_cost: 'כמה יעלה ליצור אומה חדשה? ברירת המחדל היא 1000.'
+msg_setup_townblock_cost: 'כמה יעלה לתבוע townblock? ברירת המחדל היא 25. גודלו של townblock זהה לגודל של chunk (בהגדרות ברירת המחדל)'
 msg_setup_success: 'הערכים בקובץ ההגדרות שונו בהצלחה לערכים החדשים שלך.'
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
@@ -1448,6 +1582,8 @@ msg_err_cannot_pickup_respawn_protection: 'אי אפשר לאסוף פריטים
 status_capital: 'בירה:'
 #Used in the resident screen's town hover, to denote when a player joined a town.
 status_joined_town: 'הצטרף לעיר:'
+#Used in the town screen's nation hover, to denote when a town joined a nation.
+status_joined_nation: 'הצטרף למדינה:'
 #Shown in status screen elements where a value is not known.
 status_unknown: 'לא ידוע'
 #Feedback given for the /ta set nationzoneoverride [townname] [size] command.
@@ -1459,10 +1595,103 @@ msg_nationzone_override_removed: 'ל־%s הוסר ה־override של אזור ה�
 status_nation_zone_size: 'גודל אזור האומה:'
 #Shown when a player adds people to their friends list.
 msg_res_friend_added_to_list: '%s נוסף לרשימת החברים שלך.'
+#Shown when a player removes people from their friends list.
+msg_res_friend_removed_from_list: 'הוסר %s מרשימת החברים שלך.'
+#Generic resident freed from jail message.
+msg_resident_unjailed: '%s שוחרר מהכלא.'
+#Shown when an admin uses /ta toggle devmode.
+msg_admin_toggle_devmode: 'מצב מפתח: %s'
+#Shown when an admin uses /ta toggle debug.
+msg_admin_toggle_debugmode: 'מצב דיבוג: %s'
+#Shown when an admin uses /ta toggle townwithdraw
+msg_admin_toggle_townwithdraw: 'משיכות מהעיר: %s'
+#Shown when an admin uses /ta toggle nationwithdraw
+msg_admin_toggle_nationwithdraw: 'משיכות מהאומה: %s'
+#Shown when claiming a town block for the town.
+msg_process_town_claim: 'מעבד תביעה על עיר...'
+#Shown when unclaiming a town block for the town.
+msg_process_town_unclaim: 'מעבד ביטול תביעה על עיר...'
+#Shown when there is nothing to unclaim.
+msg_err_nothing_to_unclaim: 'אין מה לכבוש!'
+#Given as feedback when /ta checkperm is used.
+msg_perm_true: 'הרשאה: אמת.'
+#Given as feedback when /ta checkperm is used.
+msg_err_perm_false: 'הרשאה: שלילי.'
+#Shown at the bottom of the /towny map
+#First variable is townname or None, 2nd variable is plot owner's name or None.
+status_towny_map_town_line: '&2עיר: &a%s &7| &2בעלים: &a%s'
+#Shown on /towny version
+msg_towny_version: '&2Towny גירסת: &a%s'
+#Shown to admins and ops when a player has been blocked from logging into the server.
+msg_admin_blocked_login: '&2שחקן המשתמש בכתובת ה-IP &c%s &2ניסה להתחבר עם שם חשבון %s שעשוי לפגוע בכלכלת השרת שלך, אך Towny מנע זאת. שקול לחסום את כתובת ה-IP הזו!'
+#Shown during resident purge
+msg_scanning_for_old_residents: 'סורק אחר תושבים ישנים...'
+#Shown during resident purge
+msg_deleting_resident: 'מוחק תושב: %s.'
+#Shown during resident purge
+msg_purge_complete: 'Deleting resident: %s.'
+#Message to the Town, shown when a town is given bonus blocks.
+msg_you_have_been_given_bonus_blocks: 'ניתנו לך %s חלקות עיירה בונוס.'
+#Message shown when a town cannot purchase any more bonus blocks.
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'העיר שלך אינה יכולה לרכוש עוד חלקות בונוס. הושג המספר המרבי.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'ערי בירה לא יכולות לשנות את מצב השלום.'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'אזור האומה שסביב העיר עכשיו %s'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'לעיר שלך אין אזור אומה לשינוי!'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7תחזוקת האומה מבוססת על &a%s'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'מספר של ערים.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'רמת האומה (מספר תושבים)'
+#Added in 0.130
+#Jail causes
+msg_jailed_mayor: 'נכלא על ידי ראש העיר.'
+#Jail causes
+msg_jailed_outlaw: 'נהרג כפושע.'
+#Jail causes
+msg_jailed_war: 'אסיר מלחמה.'
+#Jail handbook messages
+msg_jailed_handbook_1: 'נראה שנכלאת, מסיבה: %s'
+#Jail handbook messages
+msg_jailed_handbook_2: 'זה חבל, נכון? ובכן, מה אפשר לעשות בעניין? הנה כמה טיפים שימושיים עבורך בזמן שאתה משרת את עונשך.'
+#Jail handbook messages
+msg_jailed_handbook_3: 'נכלאת למשך %s שעות. ביצוע העונש ישחרר אותך.'
+#Jail handbook messages
+msg_jailed_handbook_4_can: 'אתה יכול לברוח מהכלא על ידי עזיבת העיר שלך באמצעות ''/town leave''.'
+#Jail handbook messages
+msg_jailed_handbook_4_cant: 'בזמן שאתה בכלא, לא תוכל לעזוב את העיר כדי לברוח.'
+#Jail handbook messages
+msg_jailed_handbook_bail_1: 'אתה יכול להשתחרר מהכלא על ידי תשלום בערבות באמצעות ''/res jail paybail''.'
+#Jail handbook messages
+msg_jailed_handbook_bail_2: 'הערבות תעלה %s.'
 #Jail handbook messages
 msg_jailed_handbook_5: 'אם תתעקש ותתאמץ לברוח, כשתגיע לשטח הפראי תזכה גם בחופש שלך.'
 #Jail handbook messages
 msg_jailed_handbook_6: 'אבל אל תמות לפני שתגיע לשטח הפראי, אחרת תמצא את עצמך שוב בכלא.'
+#Jail handbook messages
+msg_jailed_teleport: 'למזלך, ניתן להשתמש ב-Ender Pearls ו-Chorus Fruit כדי לעזור לך לברוח, עכשיו רק נשאר להשיג כמה.'
+#Jail handbook messages
+msg_jailed_war_prisoner: 'כאשר אתה אסיר מלחמה, תשוחרר אם תושבי ארצך יצליחו להפחית את נקודות החיים של חלקת הכלא ל-0, או אם העיר שבה נכלאת תוסר מהמלחמה.'
+#Jail handbook title
+msg_jailed_title: 'אז אתה נכלאת:('
+#Jail handbook author
+msg_jailed_author: 'כלא Towny.'
+#Added in 0.130
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'לעיר אין אויבים.'
+#Message shown when there are no enemies to list in /town enemylist.
+msg_error_town_has_no_enemies: 'לעיר אין אויבים לרשום.'
+#Added in 0.132
+#Message shown in the lines of the baltop books
+msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'אישור פג תוקף.'
 #Added in 0.134
 tc_player_channel_sound_muted: 'הצליל של הערוץ הושתק'
 tc_player_channel_sound_unmuted: 'הצליל של הערוץ בוטל השתקתו'
@@ -1502,6 +1731,11 @@ msg_err_cannot_toggle_neutral_x_seconds_remaining: 'You cannot toggle neutrality
 #Added in 0.143
 #Message shown when a console sender uses a command meant for in game.
 msg_err_command_not_for_console_use: 'לא ניתן להשתמש בפקודה זו מהקונסולה.'
+#Added in 0.144
+#Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
+msg_town_unlimitedclaims_setting_set_to: 'לעיר %s הוגדרה האפשרות unlimitedclaims ל־%s'
+#Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
+did_you_want_to_toggle_unlimited_claims: 'אין לך מספיק townblocks לתביעה, האם ברצונך להפעיל תביעות בלתי מוגבלות עבור העיר %s'
 #Added in 0.145
 #Message shown when a conquered town tries to leave their nation.
 msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'אינך יכול לעזוב את האומה שלך, עירך נכבשה.'
@@ -1518,11 +1752,16 @@ msg_warn_overriding_server_config: 'על ידי פעולה זו אתה עוקף 
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: 'הוסרו %d הופעות מחוץ־למחנה לא חוקיות.'
+#Added in 0.149
+#Message shown when a player logs in and their town is bankrupt.
+msg_your_town_is_bankrupt: 'לעיר שלך אין כסף, הוסף כסף לבנק שלך באמצעות /town deposit {amount}.'
 #Added in 0.150
 #Message shown when a player cannot do something because they have a town.
 msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'אין באפשרותך להשתמש בפקודה זו, מכיוון שאתה כבר חבר בעיר. אם ברצונך להמשיך, עליך להשתמש ב‑''/t leave''.'
 #Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
 msg_a_town_you_are_outlawed_in: 'עיר שבה אתה מחוץ לחוק.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'לא נמצאו ערים פתוחות וציבוריות עם מגרשים למכירה (שאשר תוכל להרשות לעצמך) עבור Rtp.'
 #Message showing payment for RTP.
 msg_cost_spawn_rtp: '&bחויבת ב־%s כדי לבצע טלפורט למגרש עיר אקראי למכירה.'
 #Message shown to a player when they use the town rtp command.
@@ -1535,6 +1774,8 @@ townyrtp.you_have_arrived: "הועברת למגרש שניתן לרכוש. הש�
 status_plot_string: 'חלקות'
 #Displays a plot type and the amount of townblocks of that type in the town
 status_plot_hover: '%s:'
+#Usage:
+msg_usage: 'שימוש: %s'
 #Shown in teh bank history books when there are no pages to display
 msg_err_no_pages_to_display: 'אין דפים להצגה!'
 #Added in 0.151
@@ -1545,15 +1786,280 @@ msg_err_town_unaffiliated: 'האומה הזו אינה קשורה אליך.'
 #Added in 0.152
 #Message shown when a player tries to add a jail cell location where one already exists.
 msg_err_this_location_already_has_a_jailcell: 'מיקום זה כבר מכיל תא כלא.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'הרשאות מגרש'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'בניות '
 #Seen in /plot perm hud:
 msg_perm_hud_destroy: 'להרוס '
 #Seen in /plot perm hud:
 msg_perm_hud_switch: 'להחליף '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'פריט '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'סוג '
+#Seen in /plot perm hud:
+msg_perm_hud_pvp: 'קרבות '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'פיצוצים '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'התפשטות אש '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'הופעת יצורים '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'מפתח'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'חבר'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'עיר'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'בעל ברית'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'תושב'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'מדינה'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'תושב חוץ'
+#Seen in /towny map hud:
+msg_perm_hud_plot_name: 'מגרש '
+#Seen in /towny map hud:
+msg_perm_hud_plotgroup_name: 'מגרש קבוצתי '
+#Seen in /towny map hud:
+msg_map_hud_district: 'מורחק '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'למכירה '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'לא'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'כן'
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'לעיר %s הוגדר רמת העיר ל-%s.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'להעיר %s בוטלה הגדרת רמת העיר ידנית. רמת העיר הנוכחית היא %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'לעיר %s אין אפשרות לרכוש בלוקי עיר בהתאם לחוקי ההגדרות.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: 'לבלוקי העיר שנרכשו של העיר %s הוסרו.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: 'לעיר %s ניתן %s בלוקי עיר שנרכשו, כעת יש לה %s בלוקי עיר שנרכשו.'
+#Added in 0.154
+msg_comptype_upkeep: 'תחזוקה'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'לעיר %s הוגדרה הגדרת התחזוקה ל-%s.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'העיר שלך הגיעה למגבלת %d מגרשי %s.'
+#Added in 0.156
+msg_spawn_cost_free: 'חינם'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'מגרש זה כבר מסוג %s.'
+msg_town_board_reset: '&bלוח העיר אופס.'
+msg_town_has_no_jailslots: 'הכלא של העיר מלא.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s נשלח ל-%s לתא מספר %s למשך %s שעות עם ערבות של %s על ידי %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: 'השחקן %1$s נשלח ל - %2$s לתא מספר %3$s למשך %4$s שעות על ידי %5$s.'
+msg_you_have_been_jailed_your_bail_is_x: 'אתה נכלאת, הערבות שלך הוא %s.'
+msg_err_higher_than_max_allowed_bail_x: 'הערבות שהגדרת הייתה גבוהה מהמקסימום, שהוא %s.'
+msg_err_higher_than_max_allowed_hours_x: 'שעות המאסר שהגדרת היו גבוהות מהמקסימום, שהוא %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'אין מספיק כסף בבנק העיר כדי לכלוא את %s, הדמיי מאסר הם %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'הכולאים שלך החליטו לשחרר אותך כדי לפנות מקום.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s שוחרר כדי לפנות מקום לאסיר אחר.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'שוחררת מכיוון ששובייך כבר לא יכולים להרשות לעצמם להחזיק אותך במאסר.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s שוחרר בגלל חוסר כספים בבנק העיר.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s נמשך מבנק העיר כדי לשלם עבור תחזוקה של האסיר %s.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s נמשך מבנק העיר כדי לשלם על הכליאה של %s.'
+msg_err_x_in_unjailable_world: '%s נמצא בעולם שבו לא ניתן לכלוא אותו.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'אתה בטוח שברצונך לאפס את כל בנקי הערים והאומות ל-%s?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&cהאומה שלך הגיעה למספר המקסימלי של תושבים מותר לאומה, %s, ולא יכולה להוסיף %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&cלא ניתן להצטרף לאומה זו כיוון שזה יעלה על מגבלת התושבים לאומה של %s.'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&cלא ניתן להצטרף לאומה זו, היא הגיעה למספר המקסימלי של ערים מותר לאומה: %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'אתה בטוח שברצונך לאפס את כל ההגדרות של עולם זה לאלה שמוגדרות בקובץ התצורה?'
+#Part of the /town plots output.
+msg_town_plots_title: ' חלקות עיר'
+#Part of the /town plots output.
+msg_town_plots_town_size: '<dark_green>גודל עיר: <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>[נקנה: %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[בונוס: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_nationbonus: ' <aqua>[בונוס מדיני: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_owned_land: '<dark_green>אדמת עיר בבעלות: <green>%s'
+#Part of the /town plots output.
+msg_town_plots_type_header: '<dark_green>Type: <green>השחקן-בבעלות <gray>/ <aqua>למכירה <gray>/ <yellow>Total'
+#Part of the /town plots output.
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>הכנסה יומית'
+#Part of the /town plots output.
+msg_town_plots_type_line: '<dark_green>%s: <green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
+#Part of the /town plots output.
+msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'אתה עומד להעניק הרשאות מלאות על חלקה לעיר שלמה. משמעות הדבר היא שראש העיר יוכל להחליט למי יש הרשאה לבנות ולהרוס בעיר שלך, על ידי הוספת תושבים. אם העיר פתוחה, כל אחד יוכל להצטרף ולקבל גישה מלאה לעיר שלך. האם אתה בטוח שברצונך להעניק אמון לכל תושבי העיר (כולל תושבים עתידיים)?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'אי אפשר להריץ את הפקודה הזו כי העיר שלך במלחמה.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'יש חיצוני בחלקת העיר הזו, אין באפשרותך לבטל את התביעה על חלקה זו!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'לא ניתן ליצור עיר חדשה, נותרו %s שניות להמתנה.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'לא ניתן לתבוע את חלקת העיר הזו: %s, נותרו %s שניות להמתנה.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'לכפר %s נקבע המייסד ל-%s.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'לעיר %s הוגדרה אפשרות המלחמה ל-%s.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'אתה בטוח שברצונך לבטל את התביעה על כל האדמה שלך? (חלקת הבית שלך לא תבוטל.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "ביטלת את התביעה על כל האדמות שלך פרט לחלקת הבית. כדי לבטל את חלקת הבית עליך קודם להגדיר חלקת בית חדשה באמצעות '/ set homeblock'."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>אתה בטוח שברצונך להעביר את הבעלות על האומה ל-%s? פעולה זו בלתי הפיכה!"
+msg_warn_town_already_capital: "<אדום>העיר %s כבר היא עיר הבירה של האומה."
+msg_min_adjacent_blocks: 'נדרש שיהיו לך לפחות %s חלקות עיר סמוכות. קיימות רק %s.'
+msg_min_adjacent_district_blocks: 'נדרש שיהיו לך לפחות %s חלקות מחוז סמוכות.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: 'אולי חיפשת את הפקודה /plot evict במקום זאת?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "Towny לא מזהה אותך."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "%s לא מוכר ל-Towny."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s אינו תושב מוכר."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s אינה עיר מוכרת."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s המדינה אינה מוכרת."
 #Shown when a resident doesn't belong to a town.
 msg_err_townyobject_x_has_no_town: "לא משתייך לאף עיר %s"
 #Shown when a town doesn't belong to a nation.
 msg_err_townyobject_x_has_no_nation: "לא משתייך לאף אומה %s"
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "לחלקת העיר הזו אין נתונים על מועד התביעה."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "אתה צריך %s לשלם."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "הסכום חייב להיות גדול מאפס."
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "רכישת תביעות אינה פעילה בשרת זה."
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "לא ניתן להשתלט על בלוק העיר הזה, העיר שאליה הוא שייך אינה נתפסת יתר על המידה."
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "אינך יכול לתבוע את הבלוק הזה, משום שזה יהפוך אותו לבלוק הבית שלך — דבר שאינו מותר."
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "תוסף אחר עצר את השתלטותך על השטח הזה."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "אתה עומד להשתלט על תביעה השייכת ל-%s בעלות של %s. האם ברצונך להמשיך?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "אזהרה: כמעט ניצלת את כל בלוקי העיר הזמינים שלך לתביעות. אם תאבד תושב, עירך תהיה בסיכון להשתלטות על בלוקי העיר שלה על ידי ערים אחרות."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "אזהרה: עירך נתפסת יתר על המידה. בעוד שיש לך יותר מדי בלוקי עיר בתביעה, ערים אחרות יוכלו להשתלט על חלקים מעירך. שקול לשחרר חלק מהקרקע."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[תביעה להשתלטות זמינה]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "אינך יכול להשתלט על המגרש הזה, משום שעשיית זאת תחלק את העיר לשני חלקים. תצטרך לתבוע מכיוון אחר."
+#Message shown when an admin tries to toggle conquered off of a town that is not conquered.
+msg_err_that_town_is_not_conquered: "%s כבר לא נכבש."
+#Message shown when a town has its conquered status removed by an admin.
+msg_conquered_status_removed: "הסטטוס של %s ככובש הוסר."
+msg_setup_command_folia: "פקודת /ta install אינה פועלת כרגע על Folia עקב אי-פעילות ממשק ה-API של שיחות, יש לעיין במדריך ההתקנה למטה במקום זאת."
+msg_perm_gui_folia: "כפתור זה אינו פעיל כרגע על Folia עקב אי-פעילות ממשק ה-API של שיחות, השתמש בפקודה /plot perm add <name> במקום זאת."
+msg_folia_scoreboard: "שינוי לוחות תוצאות אינו נתמך כרגע על Folia."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "אינך יכול לשחרר את בלוק העיר הזה מכיוון שלבלוק העיר ב-%s,%s לא יהיו מספיק תביעות סמוכות (נדרשות %s)"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>המדינה שלך גבתה %s במיסים מעריה."
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>המדינה שלך שילמה %s במיסים לעריה."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>העיר שלך גבתה %s במיסים מתושביה."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>העיר שלך שילמה %s במיסים לתושביה."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>העיר שלך גבתה %s במיסים ממגרשיה."
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>העיר שלך שילמה %s במיסים לבעלי הקרקעות דרך מיסי המגרשים."
+#Message shown when a nation collects taxes from its towns that are conquered.
+msg_tax_collected_from_conquered_towns: "<aqua>המדינה שלך גבתה %s במיסים נוספים מהערים שנכבשו."
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>העיר שלך פטורה ממס הכיבוש של המדינה."
+msg_nation_set_conquered_tax__amount_set: "%s הגדיר את סכום מס הכיבוש ל-%s."
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "אינך יכול להגדיר את מס הכיבוש מעל %s."
+msg_err_your_town_is_not_old_enough_to_overclaim: "העיר שלך אינה ישנה מספיק להשתלטות יתר, עליך לחכות עוד %s."
+msg_err_your_cannot_overclaim_for_another: "אינך יכול לבצע השתלטות נוספת למשך %s."
+#Generic error message for when a world isn't loaded
+msg_err_world_not_loaded: "<red>העולם אינו טעון."
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cסטטוס המס של מגרש זה הוגדר ל-%s.'
+msg_changed_plotgroup_taxed: '&cסטטוס המס של קבוצת מגרשים זו הוגדר ל-%s.'
+status_forsale: "&a(למכירה: %s)"
+msg_town_forsale: "%s הוגדר למכירה במחיר %s."
+msg_town_notforsale: "%s כבר לא למכירה."
+msg_town_sell_confirmation: "זה יעמיד את עירך למכירה במחיר %s. האם אתה בטוח שברצונך להמשיך?"
+msg_town_buytown_already_mayor: "אתה כבר ראש העיר של %s."
+msg_town_buytown_confirmation: "רכישת %s תעלה %s ותוציא אותך מכל עיר שבה אתה שייך כרגע. האם אתה בטוח שברצונך להמשיך?"
+msg_town_buytown_not_forsale: "העיר שצוינה אינה למכירה."
+msg_town_buytown_ruined: "אי אפשר לקנות ערים הרוסות."
+msg_resident_about_reset: "&bאיפוס תושב."
+msg_err_invalid_string_about_not_set: "מחרוזת לא תקפה, פרטי התושב לא הוגדרו."
+msg_set_about: "הפרטים של %s הוגדרו ל-%s."
+msg_clear_about: "הפרטים של %s נמחקו."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'לעיר %s הוגדרה הגדרת "נראות ברשימות העליונות" ל-%s.'
+#Message shown when an admin overrides a town founding date via townyadmin.
+townyadmin_town_set_help_0: "מגדיר את תאריך הייסוד של עיר."
+townyadmin_nation_set_help_0: "מגדיר את תאריך הייסוד של מדינה."
+msg_town_registered_set: "תאריך הייסוד של העיר '%s' הוגדר ל-'%s'."
+msg_nation_registered_set: "תאריך הייסוד של המדינה '%s' הוגדר ל-'%s'."
+msg_err_time_cannot_be_in_the_future: "הזמן שצוין לא יכול להיות בעתיד."
+#The format used for the /t say and /n say commands.
+town_say_format: "%s אומר %s"
+msg_err_floodfill_not_in_wild: "אינך יכול להשתמש בפקודת floodfill בזמן שאתה עומד באזור שכבר תובענה."
+msg_err_floodfill_out_of_bounds: "צורת התביעה חייבת להיות סגורה לחלוטין כדי להשתמש ב-floodfill."
+msg_err_floodfill_cannot_contain_towns: "הבחירה ל-floodfill לא יכולה לכלול ערים אחרות."
+#Message shown when a resident is an NPC and is not allowed to do something.
+msg_err_resident_is_npc: "אינך יכול לבצע זאת על תושב NPC."
+#Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "לתושב אין קרקע בבעלותו האישית."
+msg_unnamed: "ללא שם"
+msg_err_nation_cannot_sanction_own_town: "אינך יכול להטיל עיצומים על עיר שהיא חלק מהמדינה שלך."
+msg_err_nation_town_isnt_sanctioned: "המדינה שלך אינה מטילה עיצומים על העיר הזו."
+msg_err_nation_town_already_sanctioned: "המדינה שלך כבר מטילה עיצומים על העיר הזו."
+msg_err_nation_town_sanctioned: "המדינה שלך הטילה עיצומים על %s, הם לא יורשו להצטרף למדינה שלך."
+msg_err_nation_town_unsanctioned: "המדינה שלך הפסיקה להטיל עיצומים על %s."
+msg_err_nation_has_no_sanctioned_towns: "למדינה אין ערים עם עיצומים."
+title_nation_sanctioned_towns: 'עצומי הערים'
+msg_err_cannot_add_sanctioned_town: "המדינה שלך אינה יכולה להוסיף את %s, המדינה שלך הטילה עליהם עיצומים."
+msg_err_cannot_join_nation_sanctioned_town: "העיר שלך אינה יכולה להצטרף ל-%s, המדינה הטילה עיצומים על עירך."
+msg_err_no_nation_cannot_do: "אינך יכול לבצע פעולה זו משום שלא ניתן היה לזהות מדינה."
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "העיר שלך מושתתת על ידי %s, אינך יכול להופיע שם."
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "לא ניתן לתבוע את הקואורדינטה/ות הבאות משום שהן מכילות יותר מדי ביום בלתי רצוי: %s."
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "לא ניתן לתבוע את הקואורדינטה/ות הבאות משום שהן מכילות יותר מדי ביומה של אוקיינוס: %s."
+msg_err_cannot_begin_town_in_this_biome: "אתה לא יכול להתחיל עיר בביום הזה."
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "אינך יכול להשתלט על עיר זו משום שהמדינה שלך אינה מחשיבה את המדינה שלהם כאויב."
+msg_err_unable_to_command_outside_of_town: 'אתה לא יכול להשתמש בפקודה הזו מחוץ לעיר שלך.'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'אינך יכול להשתמש בפקודה הזו מחוץ לבלוק בנק.'
+msg_err_you_cannot_outlaw_your_mayor: "אינך יכול להוציא את ראש העיר של עירך מחוץ לחוק."
+msg_err_you_cannot_outlaw_because_of_rank: "אינך יכול להוציא את %s מחוץ לחוק בגלל דרגת העיר שהם מחזיקים."
+status_nation_sanctioned_towns: "ערים עם עיצומים"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "כל ההזמנות ששלחת מהעיר שלך בוטלו."
+msg_err_name_validation_invalid_characters: "%s מכיל תווים שאינם מותרים בהגדרות ה-regex של Towny."
+msg_err_name_validation_begins_with_eco_prefix: "%s מתחיל באותיות שמשמשות בתכונות הכלכלה, אינך יכול להשתמש בשם זה."
+msg_err_name_validation_name_already_in_use: "%s הוא שם שכבר נמצא בשימוש."
+msg_err_name_validation_title_too_long: "%s ארוך מדי לשימוש כתואר או כשם משפחה."
+msg_err_name_validation_name_too_long: "%s ארוך מדי לשימוש כשם."
+msg_err_name_validation_is_empty: "אתה לא יכול לתת שם ריק."
+msg_err_name_validation_is_not_permitted: "%s זה לא מאושר."
+msg_err_name_validation_is_all_underscores: "%s מורכב כולו מקווים תחתונים."
+msg_err_name_validation_too_many_capitals: "%s מכיל %s אותיות ראשיות שלא מותרות, השתמש בפחות מ-%s."
+msg_err_name_validation_contains_harmful_characters: "%s מכיל סימנים שעלולים להיות מזיקים."
+msg_err_name_validation_contains_numbers: "%s מכיל מספרים שאינם מותריים בשמות."
+msg_err_name_validation_used_in_command_structure: "%s משמש במבנה הפקודות, אינך יכול להשתמש בשם זה."
+msg_town_being_deleted_because_no_residents: "%s נמחק משום שאיבד את התושב האחרון שלו."
+outlawed_in: "מחוץ לחוק ב-"
+msg_warning_town_deposit_hint: "כדי להפקיד כסף בבנק העיר שלך השתמש ב-/town deposit [amount]."
 msg_warning_nation_deposit_hint: "כדי להפקיד כסף בבנק של האומה שלך השתמש ב־/nation deposit [amount]."
 teleport_warmup_title_dont_move: "&6אל תזוז!"
 teleport_warmup_subtitle_seconds_remaining: "&c%s &7שניות נותרו עד הטלפורט."
@@ -1579,6 +2085,31 @@ msg_townblock_max_join_days_set_to: "ל־TownBlock הזה הוגדרה דריש�
 msg_new_resident_spawn_to_town_prompt: "האם ברצונך להזדמן בעיירה שאליה הצטרפת זה עתה?"
 msg_recieved_refund_for_deleted_object: "קיבלת את יתרת הבנק של העיירה או האומה שנמחקה שלך, בסכום של %s."
 msg_err_you_already_own_this_plot: "אתה כבר הבעלים של השטח הזה."
+msg_err_you_cannot_delete_this_nation: "מנעו ממך למחוק את המדינה הזו."
+status_district_name_and_size: 'בלוק העיר הוא חלק מאזור: %s. לאזור יש %s בלוקי עיר בסך הכל.'
+msg_err_district_name_required: 'חייב לציין שם אזור, למשל: /plot district add {name}'
+msg_err_rename_district_name_required: 'חייב לציין שם אזור, למשל: /plot district rename {name}'
+msg_district_renamed_from_x_to_y: 'האזור %s שונה שמו ל-%s.'
+msg_err_plot_not_associated_with_a_district: 'מגרש זה אינו משויך לאזור.'
+msg_plot_was_removed_from_district_x: 'המגרש <blue>(%s,%s) <dark_green> הוסר מהאזור %s.'
+msg_district_empty_deleted: 'לאזור %s לא היו בלוקי עיר והוא נמחק.'
+msg_district_deleted: 'האזור %s נמחק.'
+msg_err_this_plot_is_already_part_of_the_district_x: 'This townblock is already part of the district: %s.'
+msg_townblock_transferred_from_x_to_x_district: 'בלוק העיר הועבר מהאזור %s לאזור %s.'
+msg_district_already_exists_did_you_want_to_transfer: 'בלוק העיר הזה כבר חלק מהאזור %s. האם אתה בטוח שברצונך להעבירו לאזור %s.'
+msg_plot_was_put_into_district_x: 'המגרש <blue>(%s,%s) <dark_green> הוכנס לאזור %s.'
+msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "אינך יכול להסיר את בלוק העיר הזה מהאזור %s, משום שחלק מהאזור ינותק מהשאר."
+map_hover_district: 'אזור '
+msg_err_you_cannot_join_town_you_have_not_played_long_enough: "אתה לא היית על השרת מספיק זמן, עליך לחכות עוד %s לפני שתוכל להצטרף לעיר."
+msg_your_nation_has_pending_ally_invites: "המדינה שלך קיבלה הזמנות להפוך לבעלת ברית עם מדינות אחרות. השתמש ב-' /n ally received' כדי לראות את ההזמנות שלך."
+msg_your_town_has_pending_nation_invites: "לעיר שלך יש הזמנות להצטרף למדינה או יותר. השתמש ב-' /t invite received' כדי לראות את ההזמנות שלך."
+msg_you_have_pending_town_invites: "יש לך הזמנות להצטרף לעיר או יותר. השתמש ב-' /invite list' כדי לראות את ההזמנות שלך, או ב-' /invite deny all' כדי לדחות את כל ההזמנות."
+msg_admin_eco_convert_no_providers: "<red>אין ספקי כלכלה זמינים"
+msg_admin_eco_convert_no_provider_specified: "<red>לא צויין ספק כלכלה"
+msg_admin_eco_convert_no_target_specified: "<red>לא צויינה כלכלה יעד"
+msg_admin_eco_convert_target_not_found: "<red>לא נמצא מתאם כלכלה בשם '%s', מתאמים זמינים: [%s]"
+msg_admin_eco_convert_already_modern: "<red>לא ניתן להמיר למודרני; הספק כבר במצב מודרני"
+msg_admin_eco_convert_online_players_warning: "<red>אזהרה: מומלץ לבצע את ההמרה כאשר אין שחקנים על השרת."
 msg_admin_eco_convert_x_accounts_found: "נמצאו %s חשבונות להמרה. מתחילה ההמרה כעת."
 msg_admin_eco_convert_conversion_progress: "המרת חשבונות מתבצעת, %s הושלמו..."
 msg_admin_eco_convert_success: "המרת הכלכלה הושלמה בהצלחה"
@@ -1595,6 +2126,13 @@ msg_err_you_cannot_add_towntrust_on_enemy: "אינך יכול לתת אמון ב
 status_world_jailing: "כולא "
 msg_version_build_info: "<dark_green>מידע בנייה: <green>%s</green> על ענף <green>%s<green>."
 msg_version_build_info_failed: "<red>לא ניתן לאחזר מידע בנייה עבור גרסה זו."
+time-future: "בעתיד"
+time-just-now: "רק עכשיו"
+time-a-minute-ago: "לפני דקה"
+time-x-minutes-ago: "לפני %d דקות"
+time-an-hour-ago: "לפני שעה"
+time-x-hours-ago: "לפני %d שעות"
+time-yesterday: "אתמול"
 time-x-days-ago: "לפני %d ימים"
 time-a-year-ago: "לפני שנה"
 time-x-years-ago: "לפני %d שנים"
