@@ -357,7 +357,7 @@ plot_district_help_1: "מסיר חלקה מהמחוז המצוין."
 plot_district_help_2: "מוחק את המחוז לחלוטין."
 plot_district_help_3: "משנה את שם המחוז שבו אתה עומד."
 plot_group_help_0: "לדוגמה: /plot group new ExpensivePlots"
-plot_group_help_1: "מסיר חלקה מהקבוצה המצוין."
+plot_group_help_1: "מסיר חלקה מהקבוצה המצוינת."
 plot_group_help_2: "מוחק את קבוצת החלקות לחלוטין."
 plot_group_help_3: "משנה את שם הקבוצה שבה אתה עומד."
 plot_group_help_4: "לדוגמה: /plot group set perm resident on."
@@ -454,10 +454,10 @@ msg_invited_join_town: '&b%s הזמין את %s לעיר.'
 msg_invited_join_nation: '&b%s הזמין את %s לאומה.'
 msg_deny_invite: '&b%s דחה את ההזמנה שלך.'
 msg_invited: '&bהוזמנת להצטרף ל-%s.'
-msg_town_online: 'אונליין בעיר'
-msg_nation_online: 'אונליין באומה'
+msg_town_online: 'מחוברים בעיר'
+msg_nation_online: 'מחוברים באומה'
 msg_allied_nations: '&b%s נמצאת בברית עם האומות %s.'
-msg_enemy_nations: '&b%s פיתחה איבה כלפי האומות %s.'
+msg_enemy_nations: '&b%s פיתחה שנאה כלפי האומות %s.'
 msg_enemy_to_neutral: '&b%s שינתה את המדיניות שלה כלפי %s לניטרלית.'
 msg_added_ally: '&b%s נכנסה לברית עם האומה שלך.'
 msg_removed_ally: '&b%s ביטלה את הברית עם האומה שלך.'
@@ -507,10 +507,10 @@ msg_town_set_name: '&b%s שינה את שם העיר ל%s.'
 msg_nation_set_name: '&b%s שינה את שם המדינה ל-%s.'
 msg_changed_pvp: '&c%s PVP היה %s.'
 msg_changed_public: '&cהסטטוס הציבורי של העיר הוא כעת %s.'
-msg_changed_expl: '&fפיצוצים ב#35DAFD%s &fהם כעת #35DAFD%s.'
-msg_changed_fire: '&fהתפשטות האש ב#35DAFD%s &fהיא כעת &#35DAFD%s.'
+msg_changed_expl: '&cפיצוצים ב%s הם כעת %s.'
+msg_changed_fire: '&cהתפשטות האש ב%s היא כעת %s.'
 msg_changed_mobs: '&cמפלצות ב%s כעת %s.'
-msg_the_plot_group: 'קבוצת החלקות'
+msg_the_plot_group: 'קבוצת החלקה'
 msg_changed_taxpercent: '&cמיסים מבוססי אחוזים הם כעת %s.'
 msg_changed_open: '&cהצטרפות ללא הזמנה היא כעת %s.'
 msg_toggle_open_on_warning: 'אזהרה: יש לכבות את Townperms אם העיר מוגדרת כפתוחה. הקלד ''/town set perm off'' ואחריו ''/town set perm reset''.'
