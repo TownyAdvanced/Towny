@@ -1465,6 +1465,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN);
 	}
 	
+	public static int getMaxBoardLength() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_BOARD_LENGTH);
+	}
+
 	public static boolean nationCapitalsCantBeNeutral() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_CANNOT_BE_NEUTRAL);
 	}

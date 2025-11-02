@@ -153,6 +153,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"conqueredtax",
 		"taxpercentcap"
 	);
+
+	private static final List<String> nationSetBoardTabCompletes = Arrays.asList(
+		"none",
+		"reset"
+	);
 	
 	private static final List<String> nationListTabCompletes = Arrays.asList(
 		"residents",
@@ -395,6 +400,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "mapcolor":
 					if (args.length == 3)
 						return NameUtil.filterByStart(TownySettings.getNationColorsMap().keySet().stream().collect(Collectors.toList()), args[2]);
+					break;
+				case "board":
+					if (args.length == 3)
+						return NameUtil.filterByStart(nationSetBoardTabCompletes, args[2]);
 					break;
 				default:
 					return Collections.emptyList();
@@ -1983,7 +1992,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "board":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_BOARD.getNode());
-			nationSetBoard(sender, nation, split);
+			nationSetBoard(sender, nation, StringMgmt.join(StringMgmt.remFirstArg(split), " "));
 			break;
 		case "mapcolor":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_MAPCOLOR.getNode());
@@ -2030,27 +2039,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_map_color_changed", color));
 	}
 
-	private static void nationSetBoard(CommandSender sender, Nation nation, String[] split) {
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set board " + Translatable.of("town_help_9").forLocale(sender));
-			return;
-		} else {
-			String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+	private static void nationSetBoard(CommandSender sender, Nation nation, String board) throws TownyException{
+		if (board.isEmpty())
+			throw new TownyException("Eg: /nation set board " + Translatable.of("town_help_9").forLocale(sender));
 
-			if (!line.equals("none")) {
-				if (!NameValidation.isValidBoardString(line)) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_nationboard_not_set"));
-					return;
-				}
-				// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
-				if (line.length() > 159)
-					line = line.substring(0, 159);
-			} else 
-				line = "";
-			
-			nation.setBoard(line);
-			TownyMessaging.sendNationBoard(sender, nation);
+		if (board.equalsIgnoreCase("reset")) {
+			board = TownySettings.getNationDefaultBoard();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_board_reset"));
+		} else if (board.equals("none")) {
+			board = "";
+		} else {
+			if (!NameValidation.isValidBoardString(board)) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_nationboard_not_set"));
+				return;
+			}
+
+			if (board.length() > TownySettings.getMaxBoardLength())
+				board = board.substring(0, TownySettings.getMaxBoardLength());
 		}
+
+		nation.setBoard(board);
+		TownyMessaging.sendNationBoard(sender, nation);
 	}
 
 	private static void nationSetSurname(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {
