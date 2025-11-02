@@ -1941,10 +1941,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			// TODO: Put in a configurable limit.
-//			// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
-//			if (board.length() > 159)
-//				board = board.substring(0, 159);
+			if (board.length() > TownySettings.getMaxBoardLength())
+				board = board.substring(0, TownySettings.getMaxBoardLength());
 		}
 		
 		town.setBoard(board);

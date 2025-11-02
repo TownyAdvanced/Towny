@@ -715,6 +715,12 @@ public enum ConfigNodes {
 			"",
 			"# If Towny should show players the townboard when they login"
 	),
+	GTOWN_SETTINGS_MAX_BOARD_LENGTH(
+			"global_town_settings.max_board_length",
+			"170",
+			"",
+			"# The maximum number of characters that the town (and nation,) board messages can be."
+	),
 	GTOWN_SETTINGS_OUTSIDERS_PREVENT_UNCLAIM_TOWNBLOCK(
 			"global_town_settings.outsiders_prevent_unclaim_townblock",
 			"false",
