@@ -187,6 +187,12 @@ public enum ConfigNodes {
             "false",
 			"",
             "# If set to true, any newly made nation will have open status and any town may join without an invite."),
+	NATION_DEF_NEUTRAL(
+		"nation.default_neutral",
+		"true",
+
+		"",
+		"# Default neutral status of the nation (are new nations neutral by default?)"),
 	NATION_DEF_BOARD("nation.default_board", 
 			"/nation set board [msg]",
 			"",
