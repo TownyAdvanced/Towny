@@ -1215,6 +1215,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null && !line.isEmpty())
 				town.setVisibleOnTopLists(rs.getBoolean("visibleOnTopLists"));
 
+			line = rs.getString("hasActiveWar");
+			if (line != null && !line.isEmpty())
+				town.setActiveWar(rs.getBoolean("hasActiveWar"));
+
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Town " + name + " sql Error - " + e.getMessage());
@@ -1400,6 +1404,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null) {
 				nation.loadSanctionedTowns(line.split("#"));
 			}
+
+			line = rs.getString("hasActiveWar");
+			if (line != null && !line.isEmpty())
+				nation.setActiveWar(rs.getBoolean("hasActiveWar"));
 
 			return true;
 		} catch (SQLException e) {
@@ -2445,6 +2453,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("allies", StringMgmt.join(town.getAlliesUUIDs(), "#"));
 			
 			twn_hm.put("enemies", StringMgmt.join(town.getEnemiesUUIDs(), "#"));
+			twn_hm.put("hasActiveWar", town.hasActiveWar());
 			
 			updateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
@@ -2529,6 +2538,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			nat_hm.put("conqueredTax", nation.getConqueredTax());
 			nat_hm.put("sanctionedTowns", StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
+			nat_hm.put("hasActiveWar", nation.hasActiveWar());
 			updateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
 		} catch (Exception e) {
