@@ -55,7 +55,6 @@ import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
-import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.FileMgmt;
 import com.palmergames.util.JavaUtil;
@@ -63,6 +62,7 @@ import com.palmergames.util.JavaUtil;
 import com.palmergames.bukkit.towny.scheduling.impl.FoliaTaskScheduler;
 import io.papermc.paper.ServerBuildInfo;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -514,20 +514,19 @@ public class Towny extends JavaPlugin {
 			}
 			
 			plugin.getLogger().info("------------------------------------");
-			plugin.getLogger().info("ChangeLog since v" + lastVersion + ":");
+			plugin.getLogger().info("Changelog since v" + lastVersion + ":");
 			
 			for (String line : result.lines()) {
-				if (line.trim().replaceAll("\t", "").isEmpty())
+				if (line.trim().isEmpty())
 					continue;
 				
-				// We sadly don't have a logger capable of logging components, so we have to resort to sending it to the console logger for it to be coloured.
-				Bukkit.getConsoleSender().sendMessage(line.trim().startsWith("-") ? line : Colors.Yellow + line);
+				getComponentLogger().info(Component.text(line, line.trim().startsWith("-") ? null : NamedTextColor.YELLOW));
 			}
 			
 			if (result.limitReached()) {
 				plugin.getLogger().info("<snip>");
 				plugin.getLogger().info("Changelog continues for another " + (result.totalSize() - (result.nextVersionIndex() + 99)) + " lines.");
-				plugin.getLogger().info("To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt#L" + (result.nextVersionIndex() + 1));
+				plugin.getLogger().info("To read the full changelog since " + lastVersion + ", go to https://github.com/TownyAdvanced/Towny/blob/master/Towny/src/main/resources/ChangeLog.txt#L" + result.nextVersionIndex());
 			}
 			
 			plugin.getLogger().info("------------------------------------");
