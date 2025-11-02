@@ -250,6 +250,7 @@ public class TownyEntityListener implements Listener {
 	 * 
 	 *  @param event - LingeringPotionSplashEvent
 	 */
+	@SuppressWarnings("removal")
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onLingeringPotionApplyEvent(AreaEffectCloudApplyEvent event) {
 		
@@ -264,8 +265,16 @@ public class TownyEntityListener implements Listener {
 		final AreaEffectCloud effectCloud = event.getEntity();
 		final List<PotionEffect> effects = new ArrayList<>();
 		
-		if (effectCloud.getBasePotionType() != null) {
-			effects.addAll(effectCloud.getBasePotionType().getPotionEffects());
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20_2)) {
+			// exists in 1.20.2 and up
+			if (effectCloud.getBasePotionType() != null) {
+				effects.addAll(effectCloud.getBasePotionType().getPotionEffects());
+			}
+		} else {
+			// deprecated method
+			if (effectCloud.getBasePotionData() != null) {
+				effects.addAll(effectCloud.getBasePotionData().getType().getPotionEffects());
+			}
 		}
 
 		if (effectCloud.hasCustomEffects()) {
