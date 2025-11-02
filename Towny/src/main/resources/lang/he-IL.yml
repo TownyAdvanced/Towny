@@ -1855,6 +1855,7 @@ msg_spawn_cost_free: 'חינם'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'מגרש זה כבר מסוג %s.'
 msg_town_board_reset: '&bלוח העיר אופס.'
+msg_nation_board_reset: '&bלוח האומה אופס.'
 msg_town_has_no_jailslots: 'הכלא של העיר מלא.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s נשלח ל-%s לתא מספר %s למשך %s שעות עם ערבות של %s על ידי %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: 'השחקן %1$s נשלח ל - %2$s לתא מספר %3$s למשך %4$s שעות על ידי %5$s.'
