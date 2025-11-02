@@ -10517,3 +10517,8 @@ v0.92.0.11:
   - New Config Option: global_town_settings.max_board_length
     - Default: 170
     - The maximum number of characters that the town (and nation,) board messages can be.
+  - Add unformatted upkeep PAPI placeholders.
+    - Closes #7943.
+  - New PAPI Placeholders:
+    - %townyadvanced_daily_town_upkeep_unformatted% - An unformatted town upkeep amount.
+    - %townyadvanced_daily_nation_upkeep_unformatted% - An unformatted nation upkeep amount.
