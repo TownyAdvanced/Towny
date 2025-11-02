@@ -10499,3 +10499,21 @@ v0.92.0.11:
   - Improve lingering potion protection, courtesy of Warrior with PR #7991.
   - Replace pre 1.19 entity/block keys with constants, courtesy of Warrior with PR #7992.
   - Update inventory system to use components & PDC, courtesy of Warrior with PR #7982.
+0.101.2.7:
+  - Fix the changelog reader thinking the limit has been reached, courtesy of Warrior with PR #7994.
+  - Fix getting lingering potion effects on legacy versions, courtesy of Warrior with PR #7997.
+    - Closes #7996.
+  - Fix getting respawn location <1.21.5, courtesy of Warrior with PR #7998.
+    - Closes #7995.
+  - Fix literal translatables attempting to translate, courtesy of Warrior with PR #7999.
+  - Add setting for default peaceful nation to create, courtesy of RyanoDino with PR #8000.
+    - Closes #7970.
+  - New Config Option: nation.default_neutral
+    - Default: true
+    - Default neutral status of the nation (are new nations neutral by default?)
+  - Add saving of hasActiveWar for towns and nations, courtesy of SulkyWhale with PR #8002.
+  - Fix mountable entities having their saddles sheared, copper golems having their items dropped.
+  - Add ability to set max town and nation board lengths.
+  - New Config Option: global_town_settings.max_board_length
+    - Default: 170
+    - The maximum number of characters that the town (and nation,) board messages can be.
