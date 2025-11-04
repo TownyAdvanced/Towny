@@ -10522,3 +10522,6 @@ v0.92.0.11:
   - New PAPI Placeholders:
     - %townyadvanced_daily_town_upkeep_unformatted% - An unformatted town upkeep amount.
     - %townyadvanced_daily_nation_upkeep_unformatted% - An unformatted nation upkeep amount.
+0.101.2.8:
+  - Fix unneeded msg_invalid_name exception message from /n ally.
+    - Closes #8006.

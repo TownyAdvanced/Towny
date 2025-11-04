@@ -1714,8 +1714,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (targetNations.size() > 0) {
 			TownyUniverse.getInstance().getDataSource().saveNations();
 			plugin.resetCache();
-		} else {
-			throw new TownyException(Translatable.of("msg_invalid_name"));
 		}
 	}
 
