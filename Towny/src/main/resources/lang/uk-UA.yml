@@ -2131,5 +2131,8 @@ msg_err_you_cannot_add_towntrust_on_enemy: "Ви не можете довіря�
 status_world_jailing: "Ув'язнення: "
 msg_version_build_info: "<dark_green>Інформація про збірку: <green>%s</green> на гілці <green>%s<green>."
 msg_version_build_info_failed: "<red>Не вдалося отримати інформацію про збірку для цієї версії."
+time-future: "у майбутньому"
+time-just-now: "щойно"
+time-a-minute-ago: "хвилину тому"
 #Shown instead of status_lastonline if the player is currently online
 status_onlinesince: "Онлайн з часу:"
