@@ -2103,3 +2103,7 @@ msg_err_you_cannot_join_town_you_have_not_played_long_enough: "您在伺服器�
 msg_your_nation_has_pending_ally_invites: "您的國家/地區已收到邀請，成為一個或多個國家的盟友。使用 '/n ally received' 查看您的邀請。"
 msg_your_town_has_pending_nation_invites: "您的城鎮有加入一個或多個國家的邀請。使用 '/t invite received' 來查看您的邀請。"
 msg_you_have_pending_town_invites: "您有加入一個或多個城鎮的邀請。使用 '/invite list' 查看您的邀請，或使用 '/invite deny all' 拒絕所有這些邀請。"
+msg_err_you_cannot_add_trust_on_outlaw: "You cannot trust a player who is outlawed in your town.\n你不能信任被城鎮放逐的玩家。"
+msg_err_you_cannot_add_towntrust_on_outlaw: "你不能信任收留被你的城鎮放逐的玩家的城鎮。"
+msg_err_you_cannot_add_towntrust_on_enemy: "你不能信任屬於敵國的城鎮。"
+status_world_jailing: "入監 "
