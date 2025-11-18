@@ -2151,3 +2151,6 @@ msg_err_you_cannot_add_trust_on_outlaw: "你不能信任一个在你的城镇被
 msg_err_you_cannot_add_trust_on_enemy: "你不能信任一个属于敌国的玩家。"
 msg_err_you_cannot_add_towntrust_on_outlaw: "你不能信任一个有你们镇上被禁止的居民的城镇"
 msg_err_you_cannot_add_towntrust_on_enemy: "你不能信任一个属于敌国的城镇。"
+time-just-now: "刚刚"
+time-a-minute-ago: "1 分钟前"
+time-x-minutes-ago: "%d 分钟前"
