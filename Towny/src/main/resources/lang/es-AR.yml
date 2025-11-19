@@ -240,7 +240,7 @@ admin_panel_9: "Teletransportar a la parcela especificada"
 admin_panel_10: "Comprueba si el jugador tiene un nodo de permiso"
 admin_panel_11: "Restablecer tu configuración"
 admin_panel_12: "Hacer una copia de seguridad de los datos de tu ciudad"
-admin_panel_13: "Volcar tu db de ql a flatfile"
+admin_panel_13: "Volcar la base de datos MySQL a archivo"
 admin_panel_14: "Forzar guardar o cargar su base de datos"
 admin_panel_15: "Ejecutar el código newhour"
 admin_panel_16: "Purgar antiguos residentes"
@@ -557,7 +557,7 @@ msg_new_day: '&b¡Un nuevo día ha llegado!'
 msg_new_king: '&b%s es ahora el líder de %s!'
 msg_err_new_king_notmayor: '&cEl nuevo líder nacional no es un alcalde.'
 msg_err_king_not_in_nation: '&cEl nuevo líder de la nación no pertenece a esta nación.'
-msg_err_fight_like_king: '&c¡La paz nunca fue una opción! ¡Lucha como un rey!'
+msg_err_fight_like_king: '&c¡La paz nunca fue una opción! ¡Lucha como un líder!'
 msg_no_access_nation_bank: '&cNo tienes acceso al banco de la nación.'
 msg_err_no_money: '&cNo hay suficiente dinero en el banco.'
 msg_new_mayor: '&b¡%s es el nuevo alcalde de la ciudad!'
