@@ -10525,3 +10525,7 @@ v0.92.0.11:
 0.101.2.8:
   - Fix unneeded msg_invalid_name exception message from /n ally.
     - Closes #8006.
+0.102.0.0:
+  - Bump version for release.
+0.102.0.1:
+  - Add new shear-to-remove-saddle mobs to entity list, courtesy of Warrior with PR #8018.
