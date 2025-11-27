@@ -21,7 +21,7 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists VEHICLES = newBuilder().startsWith("minecart").endsWith("minecart").endsWith("boat").endsWith("raft").build();
 	
-	public static final EntityLists MOUNTABLE = newBuilder().add("horse", "strider", "pig", "donkey", "mule", "trader_llama", "camel", "llama", "happy_ghast").build();
+	public static final EntityLists MOUNTABLE = newBuilder().add("horse", "zombie_horse", "skeleton_horse", "strider", "pig", "donkey", "mule", "trader_llama", "camel", "camel_husk", "llama", "happy_ghast").build();
 	
 	public static final EntityLists MILKABLE = newBuilder().add("cow", "mooshroom", "goat").build();
 	
