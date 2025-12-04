@@ -191,8 +191,12 @@ public abstract class TownyPermissionSource {
 	public boolean isTownyAdmin(@NotNull Permissible permissible) {
 		final TriState has = strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
 
+		boolean usingAdminBypass = permissible instanceof Player player && Towny.getPlugin().hasPlayerMode(player, "adminbypass");
+		if (permissible.isOp() && !usingAdminBypass)
+			return true;
+
 		// Explicitly set to false or using the admin bypass mode
-		if (has == TriState.FALSE || (permissible instanceof Player player && Towny.getPlugin().hasPlayerMode(player, "adminbypass")))
+		if (has == TriState.FALSE || usingAdminBypass)
 			return false;
 
 		return has == TriState.TRUE || permissible.isOp();

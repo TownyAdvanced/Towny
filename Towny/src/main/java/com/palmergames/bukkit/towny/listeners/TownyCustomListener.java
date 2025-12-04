@@ -20,6 +20,7 @@ import com.palmergames.bukkit.towny.event.TownBlockPermissionChangeEvent;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.TownPreAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
+import com.palmergames.bukkit.towny.event.TownSpawnEvent;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.nation.NationLevelDecreaseEvent;
 import com.palmergames.bukkit.towny.event.nation.NationLevelIncreaseEvent;
@@ -201,6 +202,23 @@ public class TownyCustomListener implements Listener {
 			return;
 		event.setCancelled(true);
 		event.setCancelMessage(Translatable.of("msg_error_cannot_town_spawn_youre_an_outlaw_in_town", town.getName()).forLocale(event.getPlayer()));
+	}
+
+	/**
+	 * Used to display a message to the mayor and assistants of a town, alerting
+	 * them to someone spawning at their town when money is earned by the town.
+	 * 
+	 * @param event TownSpawnEvent thrown when someone spawns to town.
+	 */
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerSpawnToTown(TownSpawnEvent event) {
+		if (!TownySettings.isTownSpawnPaidToTown() || event.getCost() <= 0)
+			return;
+		event.getToTown().getResidents().stream()
+			.filter(r -> r.isOnline() && (r.isMayor() || TownyPerms.hasAssistantTownRank(r)))
+			.map(Resident::getPlayer)
+			.forEach(p -> TownyMessaging.sendMsg(p,
+				Translatable.of("msg_a_player_spawned_to_your_town_earning_you_x", event.getPlayer().getName(), TownyEconomyHandler.getFormattedBalance(event.getCost()))));
 	}
 
 	/**

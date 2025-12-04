@@ -835,8 +835,21 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				return townblock != null ? townblock.getTownOrNull().getBoard() : "";
 			case "player_location_nation_board": // %townyadvanced_player_location_nation_board%
 				return townblock != null ? (townblock.getTownOrNull().hasNation() ? townblock.getTownOrNull().getNationOrNull().getBoard() : "") : "";
-            case "player_town_is_trusted": // %townyadvanced_player_town_is_trusted%
-                return townblock != null ? String.valueOf(townblock.getTownOrNull().hasTrustedResident(resident)) : "";
+			case "player_location_in_homeblock": // %townyadvanced_player_location_in_homeblock%
+				return townblock != null && townblock.isHomeBlock() ? "TRUE" : "FALSE";
+			case "player_location_in_homeblock_owntown": // %townyadvanced_player_location_in_homeblock_owntown%
+				return townblock != null && townblock.isHomeBlock() && townblock.getTownOrNull().hasResident(resident) ? "TRUE" : "FALSE";
+			case "player_location_in_homeblock_ownnation": // %townyadvanced_player_location_in_homeblock_ownnation%
+				return townblock != null && townblock.isHomeBlock() && resident.hasNation() && townblock.getTownOrNull().hasNation()
+						&& townblock.getTownOrNull().getNationOrNull().hasTown(resident.getTownOrNull()) ? "TRUE" : "FALSE";
+			case "player_location_in_homeblock_enemy": // %townyadvanced_player_location_in_homeblock_enemy%
+				return townblock != null && townblock.isHomeBlock() && resident.hasTown()
+						&& CombatUtil.isEnemy(townblock.getTownOrNull(), resident.getTownOrNull()) ? "TRUE" : "FALSE";
+			case "player_location_in_homeblock_ally": // %townyadvanced_player_location_in_homeblock_ally%
+				return townblock != null && townblock.isHomeBlock() && resident.hasTown()
+						&& CombatUtil.isAlly(townblock.getTownOrNull(), resident.getTownOrNull()) ? "TRUE" : "FALSE";
+			case "player_town_is_trusted": // %townyadvanced_player_town_is_trusted%
+				return townblock != null ? String.valueOf(townblock.getTownOrNull().hasTrustedResident(resident)) : "";
 			case "number_of_towns_in_world": // %townyadvanced_number_of_towns_in_world%
 				return String.valueOf(TownyUniverse.getInstance().getTowns().stream()
 						.filter(t -> t.getHomeblockWorld().equals(townblock.getWorld()))
