@@ -52,7 +52,7 @@ help_8: 'Ayuda del comando towny.'
 help_9: 'Ayuda del comando townyadmin.'
 towny_help_0: "Ayuda general de Towny"
 towny_help_1: "Muestra un mapa de los terrenos cercanos"
-towny_help_2: "Mostrar los precios utilizados con Economía"
+towny_help_2: "Mostrar los precios utilizados con la economía"
 towny_help_3: "Mostrar puntajes altos"
 towny_help_4: "Mostrar el tiempo hasta un nuevo día"
 towny_help_5: "Mostrar estadísticas"
