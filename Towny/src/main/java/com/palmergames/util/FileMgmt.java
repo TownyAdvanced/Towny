@@ -9,6 +9,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -406,13 +407,16 @@ public final class FileMgmt {
 		try {
 			readLock.lock();
 			HashMap<String, String> keys = new HashMap<>();
-			try (FileInputStream fis = new FileInputStream(file);
-				 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
-				Properties properties = new Properties();
-				properties.load(isr);
-				for (String key : properties.stringPropertyNames()) {
-					String value = properties.getProperty(key);
-					keys.put(key, String.valueOf(value));
+			try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+				String line;
+				while ((line = br.readLine()) != null) {
+					if (line.isEmpty() || line.startsWith("#")) continue;
+					int eq = line.indexOf('=');
+					if (eq < 0) continue;
+					String key = line.substring(0, eq).trim();
+					String value = line.substring(eq + 1);
+					keys.put(key, value);
 				}
 			} catch (IOException e) {
 				Towny.getPlugin().getLogger().log(Level.WARNING, "An exception occurred while reading file " + file.getName(), e);

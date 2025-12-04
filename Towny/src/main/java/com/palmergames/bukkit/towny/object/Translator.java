@@ -38,4 +38,8 @@ public class Translator {
 	public Component component(String key, Object... args) {
 		return Translatable.of(key, args).locale(this.locale).component();
 	}
+	
+	public Locale locale() {
+		return this.locale;
+	}
 }

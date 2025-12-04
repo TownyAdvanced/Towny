@@ -1506,6 +1506,7 @@ msg_err_there_is_already_a_town_or_nationrank_called_x: '%sという名前の%s�
 msg_err_there_is_no_town_or_nationrank_called_x: '%sという名前の%sは存在しません。'
 msg_successfully_add_rank_to_the_town_or_nation_rank: '%sを%sに追加しました。'
 msg_successfully_removed_rank_from_the_town_or_nation_rank: '%sから%sを削除しました'
+msg_successfully_renamed_rank_for_the_town_or_nation_rank: '%s内で%sを%sと名づけることに成功しました。'
 msg_err_group_has_no_nodes: 'グループ%sには権限ノードが割り当てられていません。'
 msg_title_group_permissions: '%s 権限'
 help_ta_perms_listgroups: 'グループ一覧'

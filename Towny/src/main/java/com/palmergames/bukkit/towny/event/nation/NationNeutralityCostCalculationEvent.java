@@ -8,22 +8,24 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Fired when a nation has paid the neutrality cost.
+ * Fired when calculating a nation's neutrality cost.
  */
-public class NationNeutralCostPaidEvent extends Event {
+public class NationNeutralityCostCalculationEvent extends Event {
 	private static final HandlerList HANDLER_LIST = new HandlerList();
 	private final Nation nation;
-	private final double neutralityCost;
+	private double neutralityCost;
 
 	@ApiStatus.Internal
-	public NationNeutralCostPaidEvent(Nation nation, double neutralityCost) {
+	public NationNeutralityCostCalculationEvent(Nation nation, double neutralityCost) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.nation = nation;
 		this.neutralityCost = neutralityCost;
 	}
 
 	/**
-	 * {@return the nation which is paying neutrality costs}
+	 * Gets the nation paying the neutrality cost.
+	 * 
+	 * @return the nation which is paying neutrality costs
 	 */
 	@NotNull
 	public Nation getNation() {
@@ -31,10 +33,21 @@ public class NationNeutralCostPaidEvent extends Event {
 	}
 
 	/**
-	 * {@return the neutrality cost for this nation, which is always positive}
+	 * Gets the cost for neutrality of the nation.
+	 * 
+	 * @return the neutrality cost for the nation
 	 */
 	public double getNeutralityCost() { 
 		return neutralityCost; 
+	}
+
+	/**
+	 * Sets the cost for neutrality of the nation.
+	 * 
+	 * @param neutralityCost the value to set the neutrality cost to
+	 */
+	public void setNeutralityCost(double neutralityCost) {
+		this.neutralityCost = neutralityCost;
 	}
 
 	public static HandlerList getHandlerList() {

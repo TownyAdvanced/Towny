@@ -187,6 +187,12 @@ public enum ConfigNodes {
             "false",
 			"",
             "# If set to true, any newly made nation will have open status and any town may join without an invite."),
+	NATION_DEF_NEUTRAL(
+		"nation.default_neutral",
+		"true",
+
+		"",
+		"# Default neutral status of the nation (are new nations neutral by default?)"),
 	NATION_DEF_BOARD("nation.default_board", 
 			"/nation set board [msg]",
 			"",
@@ -703,11 +709,23 @@ public enum ConfigNodes {
 			"# Requires max_residents_capital_override to be above 0.",
 			"# Uses the greater of max_residents_capital_override and max_residents_per_town."
 	),
+	GTOWN_SETTINGS_TOWN_LEVEL_IS_DETERMINED_BY_TOWNBLOCK_COUNT(
+			"global_town_settings.town_level_is_determined_by_townblock_count_instead_of_resident_count",
+			"false",
+			"",
+			"# When set to true, the town's TownLevel is determined by the number of townblocks the town owns, instead of the number of residents.",
+			"# This setting will have no effect when town_block_ratio is set to 0."),
 	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
 			"global_town_settings.display_board_onlogin",
 			"true",
 			"",
 			"# If Towny should show players the townboard when they login"
+	),
+	GTOWN_SETTINGS_MAX_BOARD_LENGTH(
+			"global_town_settings.max_board_length",
+			"170",
+			"",
+			"# The maximum number of characters that the town (and nation,) board messages can be."
 	),
 	GTOWN_SETTINGS_OUTSIDERS_PREVENT_UNCLAIM_TOWNBLOCK(
 			"global_town_settings.outsiders_prevent_unclaim_townblock",
@@ -1334,6 +1352,12 @@ public enum ConfigNodes {
 		"",
 		"# If enabled tries to find a safe location when teleporting to a town spawn/nation spawn/outpost",
 		"# can be used to prevent players from making kill boxes at those locations."
+	),
+	SPAWNING_STRICT_SAFE_TELEPORT(
+		"spawning.strict_safe_teleport",
+		"false",
+		"",
+		"# If enabled, teleportation will be canceled if the location is not safe."
 	),
 	SPAWNING_COST_SPAWN_WARNINGS(
 			"spawning.spawn_cost_warnings",
@@ -2017,12 +2041,13 @@ public enum ConfigNodes {
 			"# This would include withers damaging protected mobs, and can be quite harmful."),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
-			"BLINDNESS,CONFUSION,HARM,HUNGER,POISON,SLOW,SLOW_DIGGING,WEAKNESS,WITHER,WIND_CHARGED,WEAVING,INFESTED,OOZING",
+			"BLINDNESS,NAUSEA,INSTANT_DAMAGE,HUNGER,POISON,SLOWNESS,MINING_FATIGUE,WEAKNESS,WITHER,WIND_CHARGED,WEAVING,INFESTED,OOZING",
 			"",
-			"# permitted Potion Types https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionType.html",
-			"# ABSORPTION, BLINDNESS, CONFUSION, DAMAGE_RESISTANCE, FAST_DIGGING, FIRE_RESISTANCE, HARM, HEAL, HEALTH_BOOST, HUNGER, ",
-			"# INCREASE_DAMAGE, INVISIBILITY, JUMP, NIGHT_VISION, POISON, REGENERATION, SATURATION, SLOW, SLOW_DIGGING, ",
-			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER, WIND_CHARGED, WEAVING, INFESTED, OOZING.",
+			"# Permitted Potion Types: https://jd.papermc.io/paper/org/bukkit/potion/PotionEffectType.html",
+			"# ABSORPTION, BAD_OMEN, BLINDNESS, CONDUIT_POWER, DARKNESS, DOLPHINS_GRACE, FIRE_RESISTANCE, GLOWING, HASTE, HEALTH_BOOST, HERO_OF_THE_VILLAGE,",
+			"# HUNGER, INFESTED, INSTANT_DAMAGE, INSTANT_HEALTH, INVISIBILITY, JUMP_BOOST, LEVITATION, LUCK, MINING_FATIGUE, NAUSEA, NIGHT_VISION, OOZING,",
+			"# POISON, RAID_OMEN, REGENERATION, RESISTANCE, SATURATION, SLOW_FALLING, SLOWNESS, SPEED, STRENGTH, TRIAL_OMEN, UNLUCK, WATER_BREATHING,",
+			"# WEAKNESS, WEAVING, WIND_CHARGED, WITHER.",
 			"",
 			"# When preventing PVP prevent the use of these potions."),
 	PROT_FROST_WALKER(

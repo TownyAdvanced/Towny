@@ -21,7 +21,7 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists VEHICLES = newBuilder().startsWith("minecart").endsWith("minecart").endsWith("boat").endsWith("raft").build();
 	
-	public static final EntityLists MOUNTABLE = newBuilder().add("horse", "strider", "pig", "donkey", "mule", "trader_llama", "camel").build();
+	public static final EntityLists MOUNTABLE = newBuilder().add("horse", "zombie_horse", "skeleton_horse", "strider", "pig", "donkey", "mule", "trader_llama", "camel", "camel_husk", "llama", "happy_ghast", "nautilus", "zombie_nautilus").build();
 	
 	public static final EntityLists MILKABLE = newBuilder().add("cow", "mooshroom", "goat").build();
 	
@@ -29,7 +29,7 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	
 	public static final EntityLists SWITCH_PROTECTED = newBuilder().add("chest_minecart", "furnace_minecart", "hopper_minecart", "chest_boat").build();
 	
-	public static final EntityLists RIGHT_CLICK_PROTECTED = newBuilder().add("tropical_fish", "salmon", "cod", "item_frame", "glow_item_frame", "painting", "leash_knot", "command_block_minecart", "tnt_minecart", "spawner_minecart", "tadpole", "axolotl").build();
+	public static final EntityLists RIGHT_CLICK_PROTECTED = newBuilder().add("tropical_fish", "salmon", "cod", "item_frame", "glow_item_frame", "painting", "leash_knot", "command_block_minecart", "tnt_minecart", "spawner_minecart", "tadpole", "axolotl", "copper_golem").build();
 	
 	public static final EntityLists DESTROY_PROTECTED = newBuilder().add("item_frame", "glow_item_frame", "painting", "armor_stand", "end_crystal", "minecart", "chest_minecart", "command_block_minecart", "hopper_minecart").build();
 	

@@ -69,6 +69,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityExhaustionEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
@@ -112,6 +113,7 @@ public class TownyPlayerListener implements Listener {
 	
 	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+	private boolean isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
 	
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
@@ -121,6 +123,9 @@ public class TownyPlayerListener implements Listener {
 		TownySettings.addReloadListener(NamespacedKey.fromString("teleport-warmups", plugin), () -> {
 			this.teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 			this.isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
+		});
+		TownySettings.addReloadListener(NamespacedKey.fromString("saturation", plugin), () -> {
+			this.isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
 		});
 	}
 
@@ -357,7 +362,7 @@ public class TownyPlayerListener implements Listener {
 					(ItemLists.DYES.contains(item) && ItemLists.SIGNS.contains(clickedMat)) ||
 					(item == Material.FLINT_AND_STEEL && clickedMat == Material.TNT) ||
 					(item == Material.SHEARS && clickedMat == Material.PUMPKIN) ||
-					clickedMat.getKey().equals(NamespacedKey.minecraft("rooted_dirt")) && ItemLists.HOES.contains(item) ||
+					clickedMat == Material.ROOTED_DIRT && ItemLists.HOES.contains(item) ||
 					ItemLists.BRUSHABLE_BLOCKS.contains(clickedMat) && item == Material.BRUSH) { 
 
 					if (!TownyActionEventExecutor.canDestroy(player, loc, clickedMat)) {
@@ -439,7 +444,7 @@ public class TownyPlayerListener implements Listener {
 				ItemLists.HARVESTABLE_BERRIES.contains(clickedMat) ||
 				ItemLists.REDSTONE_INTERACTABLES.contains(clickedMat) ||
 				ItemLists.CANDLES.contains(clickedMat) ||
-				clickedMat.getKey().equals(NamespacedKey.minecraft("turtle_egg")) ||
+				clickedMat == Material.TURTLE_EGG ||
 				clickedMat.getKey().equals(NamespacedKey.minecraft("chiseled_bookshelf")) ||
 				clickedMat == Material.BEACON || clickedMat == Material.DRAGON_EGG || 
 				clickedMat == Material.COMMAND_BLOCK){
@@ -644,86 +649,87 @@ public class TownyPlayerListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld()))
 			return;
 		
-		if (event.getRightClicked() != null) {
-			Player player = event.getPlayer();
-			Material mat = null;
-			ActionType actionType = ActionType.DESTROY;
-			EntityType entityType = event.getRightClicked().getType();
-			
-			Material item = player.getInventory().getItemInMainHand().getType();
+		if (event.getRightClicked() == null)
+			return;
 
-			/*
-			 * The following will get us a Material substituted in for an Entity so that we can run permission tests.
-			 */
-			if (EntityLists.SWITCH_PROTECTED.contains(entityType)) {
-				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
-				actionType = ActionType.SWITCH;
-			} else if (EntityLists.DYEABLE.contains(entityType) && ItemLists.DYES.contains(item))
-				mat = item;
-			else if (item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType)) {
-				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
-				actionType = ActionType.ITEM_USE;
-			} else if (item == Material.COOKIE && EntityType.PARROT.equals(entityType)) {
-				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
-			} else if ((ItemLists.AXES.contains(item) || item == Material.HONEYCOMB) && entityType.getKey().getKey().equals("copper_golem")) {
-				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
-				actionType = ActionType.ITEM_USE;
-			} else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType)) {
-				mat = EntityTypeUtil.parseEntityToMaterial(entityType);
-			}
+		Player player = event.getPlayer();
+		Material mat = null;
+		ActionType actionType = ActionType.DESTROY;
+		EntityType entityType = event.getRightClicked().getType();
 
-			/*
-			 * A material has been substitued correctly in place of one of the above EntityTypes.
-			 * 
-			 * We will decide how to react based on either of the following tests.
-			 */
-			if (mat != null) {
-				// Material has been supplied in place of an entity, run Destroy Tests.
-				if (actionType == ActionType.DESTROY) {
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), mat));
-					return;
-				}
-				// Material has been supplied in place of an entity, run Switch Tests.
-				if (TownySettings.isSwitchMaterial(mat, event.getRightClicked().getLocation()) && actionType == ActionType.SWITCH) {
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getRightClicked().getLocation(), mat));
-					return;
-				} 
-			}
-			
-			/*
-			 * Handle things which need an item in hand.
-			 */
-			if (item != null) {
+		Material item = player.getInventory().getItemInMainHand().getType();
 
-				/*
-				 * Sheep can be sheared, protect them if they aren't in the wilderness.
-				 */
-				if (event.getRightClicked().getType().equals(EntityType.SHEEP) && item == Material.SHEARS && !TownyAPI.getInstance().isWilderness(event.getRightClicked().getLocation())) {
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
-					return;
-				}
-				
-				/*
-				 * Nametags can be used on things.
-				 */
-				if (item == Material.NAME_TAG) {
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
-					return;
-				}
-				
-				/*
-				 * Item_use protection.
-				 */
-				if (TownySettings.isItemUseMaterial(item, event.getRightClicked().getLocation())) {
-					//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-					event.setCancelled(!TownyActionEventExecutor.canItemuse(player, event.getRightClicked().getLocation(), item));
-					return;
-				}
+		/*
+		 * The following will get us a Material substituted in for an Entity so that we can run permission tests.
+		 */
+		if (EntityLists.SWITCH_PROTECTED.contains(entityType)) {
+			mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+			actionType = ActionType.SWITCH;
+		} else if (EntityLists.DYEABLE.contains(entityType) && ItemLists.DYES.contains(item))
+			mat = item;
+		else if (item == Material.BUCKET && EntityLists.MILKABLE.contains(entityType)) {
+			mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+			actionType = ActionType.ITEM_USE;
+		} else if (item == Material.COOKIE && EntityType.PARROT.equals(entityType)) {
+			mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+		} else if ((ItemLists.AXES.contains(item) || item == Material.HONEYCOMB) && entityType.getKey().getKey().equals("copper_golem")) {
+			mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+			actionType = ActionType.ITEM_USE;
+		} else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType)) {
+			mat = EntityTypeUtil.parseEntityToMaterial(entityType);
+		}
+
+		/*
+		 * A material has been substitued correctly in place of one of the above EntityTypes.
+		 * 
+		 * We will decide how to react based on either of the following tests.
+		 */
+		if (mat != null) {
+			// Material has been supplied in place of an entity, run Destroy Tests.
+			if (actionType == ActionType.DESTROY) {
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), mat));
+				return;
 			}
+			// Material has been supplied in place of an entity, run Switch Tests.
+			if (TownySettings.isSwitchMaterial(mat, event.getRightClicked().getLocation()) && actionType == ActionType.SWITCH) {
+				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+				event.setCancelled(!TownyActionEventExecutor.canSwitch(player, event.getRightClicked().getLocation(), mat));
+				return;
+			} 
+		}
+		
+		/*
+		 * Handle things which need an item in hand.
+		 */
+		if (item == null)
+			return;
+
+		/*
+		 * Sheep and mountable entities can be sheared, protect them if they aren't in the wilderness.
+		 */
+		if (item == Material.SHEARS && !TownyAPI.getInstance().isWilderness(event.getRightClicked().getLocation()) && (event.getRightClicked().getType().equals(EntityType.SHEEP) || EntityLists.MOUNTABLE.contains(entityType))) {
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
+			return;
+		}
+
+		/*
+		 * Nametags can be used on things.
+		 */
+		if (item == Material.NAME_TAG) {
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
+			return;
+		}
+
+		/*
+		 * Item_use protection.
+		 */
+		if (TownySettings.isItemUseMaterial(item, event.getRightClicked().getLocation())) {
+			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
+			event.setCancelled(!TownyActionEventExecutor.canItemuse(player, event.getRightClicked().getLocation(), item));
+			return;
 		}
 	}
 
@@ -902,6 +908,26 @@ public class TownyPlayerListener implements Listener {
 			}
 		}	
 	}
+	
+	@EventHandler
+	public void onEntityExhaustion(EntityExhaustionEvent event) {
+		// Stop player exhaustion if criteria is met to prevent saturation loss
+		if (!this.isPreventingSaturationLoss)
+			return;
+		if (!(event.getEntity() instanceof Player player))
+			return;
+		if (!TownyAPI.getInstance().isTownyWorld(player.getWorld()))
+			return;
+		TownBlock tbAtPlayer = TownyAPI.getInstance().getTownBlock(player);
+		if (tbAtPlayer == null)
+			return;
+		Town townAtPlayer = tbAtPlayer.getTownOrNull();
+		Town playersTown = TownyAPI.getInstance().getTown(player);
+		if (playersTown == null)
+			return;
+		if (townAtPlayer != null && !townAtPlayer.hasActiveWar() && CombatUtil.isAlly(townAtPlayer, playersTown) && !tbAtPlayer.getType().equals(TownBlockType.ARENA))
+			event.setCancelled(true);
+	} 
 
 	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent

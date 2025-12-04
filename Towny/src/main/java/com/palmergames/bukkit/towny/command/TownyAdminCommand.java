@@ -400,6 +400,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 				}
 				break;
 			case "checkperm":
+				if (!TownyUniverse.getInstance().getPermissionSource().testPermission(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_CHECKPERM.getNode())) {
+					return List.of();
+				}
+
 				if (args.length == 2)
 					return NameUtil.filterByStart(BukkitTools.getVisibleOnlinePlayers(sender)
 						.stream()

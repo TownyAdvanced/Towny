@@ -635,6 +635,8 @@ msg_err_input_too_long: '&cЗанадто довго.'
 msg_err_invalid_choice: '&cНевірний вибір'
 msg_err_invalid_sub: '&cНевірна підкоманда.'
 msg_err_command_disable: '&cУ вас недостатньо прав для цієї команди.'
+msg_err_plot_preclaim_disable: "&cВи не можете претендувати на ділянку %s зараз."
+msg_err_plot_preunclaim_disable: "&cРезидент не може відмовитися від права власності на ділянку %s наразі."
 msg_err_you_dont_have_permission_to_use_colours: "Ви не маєте дозволу використовувати кольорові коди в назвах та прізвищах."
 msg_err_universe_limit: '&cМаксимальна межа міст досягнута.'
 msg_err_too_many_npc: '&cЗанадто багато NPC зареєстровано.'
@@ -2127,3 +2129,5 @@ msg_err_you_cannot_add_trust_on_enemy: "Ви не можете довіряти 
 msg_err_you_cannot_add_towntrust_on_outlaw: "Не можна довіряти місту, у якого є жителі, які заборонені вашим містом."
 msg_err_you_cannot_add_towntrust_on_enemy: "Ви не можете довіряти містові, яке є частиною ворожої нації."
 status_world_jailing: "Ув'язнення: "
+msg_version_build_info: "<dark_green>Інформація про збірку: <green>%s</green> на гілці <green>%s<green>."
+msg_version_build_info_failed: "<red>Не вдалося отримати інформацію про збірку для цієї версії."

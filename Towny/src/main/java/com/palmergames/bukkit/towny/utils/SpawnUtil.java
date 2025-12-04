@@ -485,6 +485,11 @@ public class SpawnUtil {
 			return location;
 		}
 
+		if (TownySettings.isStrictSafeTeleportUsed()) {
+			TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_cancel_safe_teleport"));
+			return null;
+		}
+		
 		final int range = 22;
 
 		BitSet isLiquidMap = new BitSet(range * 2);
@@ -800,9 +805,10 @@ public class SpawnUtil {
 			// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
 			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
 
+			final Location prior = player.getLocation();
 			player.teleportAsync(spawnLoc, TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
 				if (successfulTeleport)
-					BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost));
+					BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost, prior));
 			});
 
 			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))

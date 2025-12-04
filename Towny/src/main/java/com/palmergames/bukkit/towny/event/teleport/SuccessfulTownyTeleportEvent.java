@@ -19,13 +19,15 @@ public class SuccessfulTownyTeleportEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private final Resident resident;
 	private final Location teleportLocation;
+	private final Location priorLocation;
 	private final double teleportCost;
 
-	public SuccessfulTownyTeleportEvent(Resident resident, Location loc, double cost) {
+	public SuccessfulTownyTeleportEvent(Resident resident, Location loc, double cost, Location priorLocation) {
 		super(!Bukkit.isPrimaryThread());
 		this.resident = resident;
 		this.teleportLocation = loc;
 		this.teleportCost = cost;
+		this.priorLocation = priorLocation;
 	}
 
 	@NotNull
@@ -44,6 +46,13 @@ public class SuccessfulTownyTeleportEvent extends Event {
 
 	public Location getTeleportLocation() {
 		return teleportLocation;
+	}
+	
+	/**
+	 * @return The location the player was at prior to being teleported.
+	 */
+	public Location getPriorLocation() {
+		return priorLocation;
 	}
 
 	/**

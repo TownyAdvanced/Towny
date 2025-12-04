@@ -517,6 +517,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				cost = TownySettings.getTownUpkeepCost(resident.getTownOrNull());
 			}
 			return getMoney(cost);
+		case "daily_town_upkeep_unformatted": // %townyadvanced_daily_town_upkeep_unformatted%
+			if (resident.hasTown()) {
+				cost = TownySettings.getTownUpkeepCost(resident.getTownOrNull());
+			}
+			return String.valueOf(cost);
 		case "daily_town_per_plot_upkeep": // %townyadvanced_daily_town_per_plot_upkeep%
 			return getMoney(TownySettings.getTownUpkeep());
 		case "daily_town_overclaimed_per_plot_upkeep_penalty": // %townyadvanced_daily_town_overclaimed_per_plot_upkeep_penalty%
@@ -536,6 +541,11 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 				cost = TownySettings.getNationUpkeepCost(resident.getNationOrNull());
 			}
 			return getMoney(cost);
+		case "daily_nation_upkeep_unformatted": // %townyadvanced_daily_nation_upkeep_unformatted%
+			if (resident.hasNation()) {
+				cost = TownySettings.getNationUpkeepCost(resident.getNationOrNull());
+			}
+			return String.valueOf(cost);
 		case "daily_nation_per_town_upkeep": // %townyadvanced_daily_nation_per_town_upkeep%
 			return String.valueOf(TownySettings.getNationUpkeep());
 		case "daily_nation_upkeep_reduction_from_nation_level": // %townyadvanced_daily_nation_upkeep_reduction_from_nation_level%

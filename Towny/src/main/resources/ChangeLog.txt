@@ -10458,7 +10458,7 @@ v0.92.0.11:
   - Add new constructor for ListDataField, courtesy of SulkyWhale with PR #7937.
 0.101.2.5:
   - Target Paper instead of spigot, courtesy of Warrior with PR #7885.
-    - Towny will not require Paper or one of its derivatives.
+    - Towny will now require Paper or one of its derivatives.
     - Towny will not start if your server uses Spigot or Craftbukkit.
     - Some plugins will not work until they are updated to no longer use the now-removed `com.palmergames.adventure` package.
       - Before you update Towny look at whether you use TownyResources, TownyFlight, other Towny add-on plugins, Sponsor plugins created by LlmDl.
@@ -10466,3 +10466,66 @@ v0.92.0.11:
   - Fix the paper startup check, courtesy of Warrior with PR #7954.
   - Hide scores in scoreboard huds, courtesy of Warrior with PR #7886.
   - Replace MethodHandles with method calls where possible, courtesy of Warrior with PR #7887.
+  - Fix offline player reflection for 1.21.9, courtesy of Warrior with PR #7973.
+  - Replace trivial streams in Town & mark as unmodifiable, courtesy of Warrior with PR #7946.
+  - Stop using Properties to load object files, preserve raw metadata for #7925, courtesy of GoodrichDev with PR #7935.
+    - Closes #7925.
+  - Add option to make a town's town_level determined by their townblock count, instead of resident count.
+    - Closes #7947.
+  - New Config Option: global_town_settings.town_level_is_determined_by_townblock_count_instead_of_resident_count
+    - Default: false
+    - When set to true, the town's TownLevel is determined by the number of townblocks the town owns, instead of the number of residents.
+    - This setting will have no effect when town_block_ratio is set to 0.
+  - Sort /t list by forsale by for sale price, courtesy of Warrior with PR #7951.
+  - Fix formatting for listing resident modes, courtesy of SulkyWhale with PR #7952.
+  - Improve method for preventing saturation loss in towns, courtesy of SulkyWhale with PR #7958.
+0.101.2.6:
+  - Improve SQL db startup speed by querying existing tables, courtesy of Warrior with PR #7972.
+  - Use mediumtext datatype for metadata in mysql, courtesy of Warrior with PR #7967.
+  - Add an sql database migrator, courtesy of Warrior with PR #7968.
+  - Add option to make safe teleport stop spawning when no safe position is found, courtesy of RyanoDino with PR #7964.
+  - Remove duplicate events and update existing events to allow value changes via the API, courtesy of SulkyWhale with PR #7966.
+  - Removed API Events:
+    - NationUpkeepCostPaidEvent, listen for the NationNeutralityCostCalculationEvent on Monitory priority instead.
+    - TownUpkeepCostPaidEvent, listen for the TownNeutralityCostCalculationEvent on Monitory priority instead.
+  - Update BookFactory to use components, courtesy of Warrior with PR #7980.
+  - Deprecate legacy color constants in our Colors class, courtesy of Warrior with PR #7981.
+  - Allow getting TownyException error message as component, courtesy of Warrior with PR #7983.
+  - Add prior location to SuccessfulTownyTeleportEvent, courtesy of flyncodes with PR #7984.
+  - Format resident last online with relative time, courtesy of Warrior with PR #7986.
+  - Testperm for checkperm, courtesy of Warrior with PR #7987.
+  - Delete received nation ally requests if sender deletes itself, courtesy of Warrior with PR #7988.
+  - Revert change to potion protection handling, courtesy of Warrior with PR #7990.
+  - Improve lingering potion protection, courtesy of Warrior with PR #7991.
+  - Replace pre 1.19 entity/block keys with constants, courtesy of Warrior with PR #7992.
+  - Update inventory system to use components & PDC, courtesy of Warrior with PR #7982.
+0.101.2.7:
+  - Fix the changelog reader thinking the limit has been reached, courtesy of Warrior with PR #7994.
+  - Fix getting lingering potion effects on legacy versions, courtesy of Warrior with PR #7997.
+    - Closes #7996.
+  - Fix getting respawn location <1.21.5, courtesy of Warrior with PR #7998.
+    - Closes #7995.
+  - Fix literal translatables attempting to translate, courtesy of Warrior with PR #7999.
+  - Add setting for default peaceful nation to create, courtesy of RyanoDino with PR #8000.
+    - Closes #7970.
+  - New Config Option: nation.default_neutral
+    - Default: true
+    - Default neutral status of the nation (are new nations neutral by default?)
+  - Add saving of hasActiveWar for towns and nations, courtesy of SulkyWhale with PR #8002.
+  - Fix mountable entities having their saddles sheared, copper golems having their items dropped.
+  - Add ability to set max town and nation board lengths.
+  - New Config Option: global_town_settings.max_board_length
+    - Default: 170
+    - The maximum number of characters that the town (and nation,) board messages can be.
+  - Add unformatted upkeep PAPI placeholders.
+    - Closes #7943.
+  - New PAPI Placeholders:
+    - %townyadvanced_daily_town_upkeep_unformatted% - An unformatted town upkeep amount.
+    - %townyadvanced_daily_nation_upkeep_unformatted% - An unformatted nation upkeep amount.
+0.101.2.8:
+  - Fix unneeded msg_invalid_name exception message from /n ally.
+    - Closes #8006.
+0.102.0.0:
+  - Bump version for release.
+0.102.0.1:
+  - Add new shear-to-remove-saddle mobs to entity list, courtesy of Warrior with PR #8018.

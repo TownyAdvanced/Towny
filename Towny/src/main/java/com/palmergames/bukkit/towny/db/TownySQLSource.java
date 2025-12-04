@@ -402,13 +402,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean cleanup() {
-
-		try (Connection connection = getConnection()) {
-			SQLSchema.cleanup(connection);
-		} catch (SQLException e) {
-			plugin.getLogger().log(Level.WARNING, "An exception occurred when cleaning up SQL schema.", e);
-		}
-
+		// This was previously used to clean up columns that were no longer used, but that is handled by a one-time migration instead.
 		return true;
 	}
 	
@@ -1067,7 +1061,12 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			}
 			// Load legacy jail spawns into new Jail objects.
-			line = rs.getString("jailSpawns");
+			try {
+				line = rs.getString("jailSpawns");
+			} catch (SQLException e) {
+				// The jailSpawns column no longer exists
+				line = null;
+			}
 			if (line != null) {
 				String[] jails = line.split(";");
 				for (String spawn : jails) {
@@ -1192,6 +1191,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			line = rs.getString("visibleOnTopLists");
 			if (line != null && !line.isEmpty())
 				town.setVisibleOnTopLists(rs.getBoolean("visibleOnTopLists"));
+
+			line = rs.getString("hasActiveWar");
+			if (line != null && !line.isEmpty())
+				town.setActiveWar(rs.getBoolean("hasActiveWar"));
 
 			return true;
 		} catch (SQLException e) {
@@ -1372,6 +1375,10 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null) {
 				nation.loadSanctionedTowns(line.split("#"));
 			}
+
+			line = rs.getString("hasActiveWar");
+			if (line != null && !line.isEmpty())
+				nation.setActiveWar(rs.getBoolean("hasActiveWar"));
 
 			return true;
 		} catch (SQLException e) {
@@ -2415,6 +2422,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("allies", StringMgmt.join(town.getAlliesUUIDs(), "#"));
 			
 			twn_hm.put("enemies", StringMgmt.join(town.getEnemiesUUIDs(), "#"));
+			twn_hm.put("hasActiveWar", town.hasActiveWar());
 			
 			updateDB("TOWNS", twn_hm, Collections.singletonList("name"));
 			return true;
@@ -2499,6 +2507,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			nat_hm.put("conqueredTax", nation.getConqueredTax());
 			nat_hm.put("sanctionedTowns", StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
+			nat_hm.put("hasActiveWar", nation.hasActiveWar());
 			updateDB("NATIONS", nat_hm, Collections.singletonList("name"));
 
 		} catch (Exception e) {
