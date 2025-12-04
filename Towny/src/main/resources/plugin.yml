@@ -54,7 +54,7 @@ commands:
 permissions:
     towny.admin:
         description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
-        default: false
+        default: op
         children:
             towny.command.townyadmin.*: true
             towny.command.townyworld.*: true

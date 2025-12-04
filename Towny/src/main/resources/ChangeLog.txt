@@ -10529,3 +10529,19 @@ v0.92.0.11:
   - Bump version for release.
 0.102.0.1:
   - Add new shear-to-remove-saddle mobs to entity list, courtesy of Warrior with PR #8018.
+  - Fix admin permissions on LuckPerms-using servers where OPs do not receieve towny.admin.
+    - OPs will now be given the towny.admin permission node by default.
+    - Closes #8017.
+  - New PAPI Placeholders:
+    - %townyadvanced_player_location_in_homeblock% - Returns a string TRUE or FALSE if the player is in a homeblock.
+    - %townyadvanced_player_location_in_homeblock_owntown% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to their town.
+    - %townyadvanced_player_location_in_homeblock_ownnation% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town in the player's nation.
+    - %townyadvanced_player_location_in_homeblock_enemy% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is enemied with the player's town.
+    - %townyadvanced_player_location_in_homeblock_ally% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is allied with the player's town.
+    - Closes #8020.
+  - Add new message shown to mayor and assistants when someone spawns to their town and it has resulted in the town earning the money.
+    - Closes #7953.
+  - New Config Option: global_town_settings.rank_names_to_be_treated_as_assistants
+    - Default: assistant
+    - The ranks to be given special priviledges, for instance when messages would be shown to only VIP town members.
+    - All ranks should be as defined in `townyperms.yml`.
