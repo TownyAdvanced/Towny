@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.db.migration.SQLDatabaseMigrator;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -200,6 +201,10 @@ public class TownyUniverse {
 
         // Throw Event.
         BukkitTools.fireEvent(new TownyLoadedDatabaseEvent());
+
+		// The migrator does nothing on flatfile except for bumping the database version
+		final SQLDatabaseMigrator migrator = new SQLDatabaseMigrator(towny);
+		migrator.migrateIfNeeded();
         
         // Congratulations the Database loaded.
        	return true;

@@ -567,6 +567,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		ResidentModeHandler.resetModes(this, notify);
 	}
 	
+	/**
+	 * Get the {@link Player} of the Resident when the Resident is Online.
+	 * @return the resident's Player when the player is online.
+	 */
 	@Nullable
 	public Player getPlayer() {
 		return BukkitTools.getPlayerExact(getName());

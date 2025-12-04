@@ -1059,6 +1059,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						.collect(Collectors.toList());
 					town.loadEnemies(TownyAPI.getInstance().getTowns(uuids));
 				}
+
+				line = keys.get("hasActiveWar");
+				if (line != null)
+					town.setActiveWar(Boolean.parseBoolean(line));
 				
 			} catch (Exception e) {
 				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_town_file_at_line", town.getName(), line, town.getName()), e);
@@ -1240,6 +1244,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null) {
 					nation.loadSanctionedTowns(line.split("#"));
 				}
+
+				line = keys.get("hasActiveWar");
+				if (line != null)
+					nation.setActiveWar(Boolean.parseBoolean(line));
 
 			} catch (Exception e) {
 				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()), e);
@@ -2199,6 +2207,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("nationZoneEnabled=" + town.isNationZoneEnabled());
 		list.add("allies=" + StringMgmt.join(town.getAlliesUUIDs(), ","));
 		list.add("enemies=" + StringMgmt.join(town.getEnemiesUUIDs(), ","));
+		list.add("hasActiveWar=" + town.hasActiveWar());
 		
 		/*
 		 *  Make sure we only save in async
@@ -2304,6 +2313,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		// SanctionedTowns
 		list.add("sanctionedTowns=" + StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
+		// Active War
+		list.add("hasActiveWar=" + nation.hasActiveWar());
 		/*
 		 *  Make sure we only save in async
 		 */

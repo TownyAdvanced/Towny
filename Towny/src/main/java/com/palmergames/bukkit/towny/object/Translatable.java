@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Locale;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.LinearComponents;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +43,10 @@ public class Translatable {
 	
 	public static Translatable literal(String text) {
 		return new LiteralTranslatable(text);
+	}
+
+	public static Translatable literal(ComponentLike component) {
+		return new LiteralTranslatable(component.asComponent());
 	}
 	
 	public String key() {
@@ -74,6 +82,30 @@ public class Translatable {
 		}
 
 		return converted.toString();
+	}
+
+	protected Component appendedAsComponent() {
+		if (this.appended.isEmpty()) {
+			return Component.empty();
+		}
+
+		final List<Component> components = new ArrayList<>();
+
+		for (Object object : this.appended) {
+			if (object instanceof String string) {
+				components.add(TownyComponents.miniMessage(string));
+			} else if (object instanceof Translatable translatable) {
+				components.add(translatable.locale(this.locale).component());
+			} else if (object instanceof ComponentLike component) {
+				components.add(component.asComponent());
+			}
+		}
+
+		if (components.isEmpty()) {
+			return Component.empty();
+		} else {
+			return LinearComponents.linear(components.toArray(new Component[]{}));
+		}
 	}
 	
 	public Translatable key(String key) {
@@ -126,7 +158,10 @@ public class Translatable {
 		return translate();
 	}
 	
-	public String translate() {
+	/*
+	 * Translates the key and the args in the current locale.
+	 */
+	protected String translateBase() {
 		translateArgs(this.locale);
 		
 		String translated;
@@ -135,7 +170,11 @@ public class Translatable {
 		else 
 			translated = locale == null ? Translation.of(key, args) : Translation.of(key, locale, args);
 		
-		translated += appended();
+		return translated;
+	}
+
+	public String translate() {
+		String translated = this.translateBase() + appended();
 		
 		return stripColors ? Colors.strip(translated) : translated;
 	}
@@ -146,7 +185,13 @@ public class Translatable {
 	}
 	
 	public Component component() {
-		return TownyComponents.miniMessage(translate());
+		final Component translated = TownyComponents.miniMessage(translateBase()).append(this.appendedAsComponent()).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE); // Because of item lore/names;
+
+		if (this.stripColors) {
+			return Component.text(PlainTextComponentSerializer.plainText().serialize(translated));
+		} else {
+			return translated;
+		}
 	}
 	
 	public String forLocale(Resident resident) {
@@ -188,18 +233,36 @@ public class Translatable {
 	}
 	
 	private static final class LiteralTranslatable extends Translatable {
+		private Component component = null;
 
 		private LiteralTranslatable(String key) {
 			super(key);
 		}
 
-		private LiteralTranslatable(String key, Object... args) {
-			super(key, args);
+		private LiteralTranslatable(Component component) {
+			super(TownyComponents.toMiniMessage(component));
+			this.component = component;
 		}
 		
 		@Override
-		public String translate() {
-			return stripColors() ? Colors.strip(key() + appended()) : key() + appended();
+		public String translateBase() {
+			return key();
+		}
+
+		@Override
+		public Component component() {
+			if (this.component == null) {
+				return super.component();
+			}
+
+			// Partial copy of super.component() so that we don't have to do a full round trip through minimessage
+			final Component full = this.component.append(super.appendedAsComponent()).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
+
+			if (this.stripColors()) {
+				return Component.text(PlainTextComponentSerializer.plainText().serialize(full));
+			} else {
+				return full;
+			}
 		}
 	}
 }

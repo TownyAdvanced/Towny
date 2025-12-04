@@ -2,6 +2,8 @@ package com.palmergames.bukkit.towny.exceptions;
 
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
 public class TownyException extends Exception {
@@ -41,5 +43,13 @@ public class TownyException extends Exception {
 			return ((Translatable) message).translate(Translation.getLocale(sender));
 		else
 			return (String) message;
+	}
+	
+	public Component errorMessage(CommandSender sender) {
+		if (message instanceof Translatable translatable) {
+			return translatable.component(Translation.getLocale(sender));
+		} else {
+			return TownyComponents.miniMessage((String) message);
+		}
 	}
 }

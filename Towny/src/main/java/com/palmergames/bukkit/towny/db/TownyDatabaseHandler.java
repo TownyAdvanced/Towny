@@ -571,6 +571,8 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		// Search and remove any sent ally invites sent by this nation.
 		for (Invite invite : new ArrayList<>(nation.getSentAllyInvites())) {
 			nation.deleteSentAllyInvite(invite);
+			invite.getReceiver().deleteReceivedInvite(invite);
+
 			InviteHandler.removeInvite(invite);
 		}
 		
