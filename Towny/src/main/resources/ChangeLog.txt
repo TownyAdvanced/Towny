@@ -10532,3 +10532,10 @@ v0.92.0.11:
   - Fix admin permissions on LuckPerms-using servers where OPs do not receieve towny.admin.
     - OPs will now be given the towny.admin permission node by default.
     - Closes #8017.
+  - New PAPI Placeholders:
+    - %townyadvanced_player_location_in_homeblock% - Returns a string TRUE or FALSE if the player is in a homeblock.
+    - %townyadvanced_player_location_in_homeblock_owntown% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to their town.
+    - %townyadvanced_player_location_in_homeblock_ownnation% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town in the player's nation.
+    - %townyadvanced_player_location_in_homeblock_enemy% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is enemied with the player's town.
+    - %townyadvanced_player_location_in_homeblock_ally% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is allied with the player's town.
+    - Closes #8020.
