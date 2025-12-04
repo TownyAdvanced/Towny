@@ -773,9 +773,9 @@ public class SpawnUtil {
 	 */
 	private static SpawnEvent getSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc, SpawnInformation spawnInfo) {
 		return switch(spawnType) {
-		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
-		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
-		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
 		};
 	}
 

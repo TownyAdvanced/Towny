@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.permissions;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -525,6 +526,22 @@ public class TownyPerms {
 
 	public static boolean hasConqueredNodes() {
 		return !getList("conquered").isEmpty() || !getList("unconquered").isEmpty();
+	}
+
+	/*
+	 * Assistant rank check
+	 */
+
+	/**
+	 * Does this resident have a town rank which is considered an assistant rank, ie
+	 * assistant, co-mayor, as definded in the config?
+	 * 
+	 * @param resident Resident to test.
+	 * @return true if the resident has any town rank which is considered an
+	 *         assistant rank.
+	 */
+	public static boolean hasAssistantTownRank(Resident resident) {
+		return TownySettings.getAssistantRankNameList().stream().anyMatch(rank -> resident.hasTownRank(rank));
 	}
 
 	/*

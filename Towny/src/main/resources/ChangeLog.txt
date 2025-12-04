@@ -10539,3 +10539,9 @@ v0.92.0.11:
     - %townyadvanced_player_location_in_homeblock_enemy% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is enemied with the player's town.
     - %townyadvanced_player_location_in_homeblock_ally% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is allied with the player's town.
     - Closes #8020.
+  - Add new message shown to mayor and assistants when someone spawns to their town and it has resulted in the town earning the money.
+    - Closes #7953.
+  - New Config Option: global_town_settings.rank_names_to_be_treated_as_assistants
+    - Default: assistant
+    - The ranks to be given special priviledges, for instance when messages would be shown to only VIP town members.
+    - All ranks should be as defined in `townyperms.yml`.

@@ -2671,3 +2671,5 @@ time-x-years-ago: "%d years ago"
 
 # Shown instead of status_lastonline if the player is currently online
 status_onlinesince: "Online Since:"
+
+msg_a_player_spawned_to_your_town_earning_you_x: "The player %s has spawned at your town, earning you %s."

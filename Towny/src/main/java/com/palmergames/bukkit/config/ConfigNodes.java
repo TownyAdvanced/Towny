@@ -842,6 +842,13 @@ public enum ConfigNodes {
 			"# All ranks should be as defined in `townyperms.yml`.",
 			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
 	),
+	GTOWN_NAMES_OF_ASSISTANT_RANKS(
+			"global_town_settings.rank_names_to_be_treated_as_assistants",
+			"assistant",
+			"",
+			"# The ranks to be given special priviledges, for instance when messages would be shown to only VIP town members.",
+			"# All ranks should be as defined in `townyperms.yml`."
+	),
 	GTOWN_SETTINGS_PREVENT_FLUID_GRIEFING(
 			"global_town_settings.prevent_fluid_griefing",
 			"true",
