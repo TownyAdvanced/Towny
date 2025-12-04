@@ -2239,6 +2239,7 @@ msg_spawn_cost_free: 'Free'
 msg_plot_already_of_type: 'This plot is already a %s type.'
 
 msg_town_board_reset: '&bTown board reset.'
+msg_nation_board_reset: '&bNation board reset.'
 
 msg_town_has_no_jailslots: 'The town jail is full.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
@@ -2656,3 +2657,17 @@ status_world_jailing: "Jailing: "
 
 msg_version_build_info: "<dark_green>Build Information: <green>%s</green> on branch <green>%s<green>."
 msg_version_build_info_failed: "<red>Could not retrieve build information for this version."
+
+time-future: "in the future"
+time-just-now: "just now"
+time-a-minute-ago: "a minute ago"
+time-x-minutes-ago: "%d minutes ago"
+time-an-hour-ago: "an hour ago"
+time-x-hours-ago: "%d hours ago"
+time-yesterday: "yesterday"
+time-x-days-ago: "%d days ago"
+time-a-year-ago: "a year ago"
+time-x-years-ago: "%d years ago"
+
+# Shown instead of status_lastonline if the player is currently online
+status_onlinesince: "Online Since:"

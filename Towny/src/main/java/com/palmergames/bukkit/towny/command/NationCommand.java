@@ -75,7 +75,9 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.NameValidation;
 import com.palmergames.util.MathUtil;
+import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -150,6 +152,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"mapcolor",
 		"conqueredtax",
 		"taxpercentcap"
+	);
+
+	private static final List<String> nationSetBoardTabCompletes = Arrays.asList(
+		"none",
+		"reset"
 	);
 	
 	private static final List<String> nationListTabCompletes = Arrays.asList(
@@ -393,6 +400,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				case "mapcolor":
 					if (args.length == 3)
 						return NameUtil.filterByStart(TownySettings.getNationColorsMap().keySet().stream().collect(Collectors.toList()), args[2]);
+					break;
+				case "board":
+					if (args.length == 3)
+						return NameUtil.filterByStart(nationSetBoardTabCompletes, args[2]);
 					break;
 				default:
 					return Collections.emptyList();
@@ -812,12 +823,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (split.length < 2 && !console)
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_LIST_RESIDENTS.getNode());
 		
-		List<Nation> nationsToSort = new ArrayList<>(TownyUniverse.getInstance().getNations());
 		int page = 1;
 		boolean pageSet = false;
 		boolean comparatorSet = false;
 		ComparatorType type = ComparatorType.RESIDENTS;
-		int total = (int) Math.ceil(((double) nationsToSort.size()) / ((double) 10));
 		for (int i = 1; i < split.length; i++) {
 			if (split[i].equalsIgnoreCase("by")) { // Is a case of someone using /n list by {comparator}
 				if (TownyCommandAddonAPI.hasCommand(CommandType.NATION_LIST_BY, split[i+1])) {
@@ -861,18 +870,19 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			}
 		}
 
-	    if (page > total) {
-	        TownyMessaging.sendErrorMsg(sender, Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
-	        return;
-	    }
-
 	    final ComparatorType finalType = type;
 	    final int pageNumber = page;
-		try {
-			plugin.getScheduler().runAsync(() -> TownyMessaging.sendNationList(sender, ComparatorCaches.getNationListCache(finalType), finalType, pageNumber, total));
-		} catch (RuntimeException e) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_error_comparator_failed"));
-		}
+		plugin.getScheduler().runAsync(() -> {
+			final List<Pair<UUID, Component>> list = ComparatorCaches.getNationListCache(finalType);
+			int total = (int) Math.ceil(((double) list.size()) / ((double) 10));
+
+			if (pageNumber > total) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+				return;
+			}
+
+			TownyMessaging.sendNationList(sender, list, finalType, pageNumber, total);
+		});
 
 	}
 
@@ -1704,8 +1714,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (targetNations.size() > 0) {
 			TownyUniverse.getInstance().getDataSource().saveNations();
 			plugin.resetCache();
-		} else {
-			throw new TownyException(Translatable.of("msg_invalid_name"));
 		}
 	}
 
@@ -1982,7 +1990,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			break;
 		case "board":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_BOARD.getNode());
-			nationSetBoard(sender, nation, split);
+			nationSetBoard(sender, nation, StringMgmt.join(StringMgmt.remFirstArg(split), " "));
 			break;
 		case "mapcolor":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_MAPCOLOR.getNode());
@@ -2029,27 +2037,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_map_color_changed", color));
 	}
 
-	private static void nationSetBoard(CommandSender sender, Nation nation, String[] split) {
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set board " + Translatable.of("town_help_9").forLocale(sender));
-			return;
-		} else {
-			String line = StringMgmt.join(StringMgmt.remFirstArg(split), " ");
+	private static void nationSetBoard(CommandSender sender, Nation nation, String board) throws TownyException{
+		if (board.isEmpty())
+			throw new TownyException("Eg: /nation set board " + Translatable.of("town_help_9").forLocale(sender));
 
-			if (!line.equals("none")) {
-				if (!NameValidation.isValidBoardString(line)) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_nationboard_not_set"));
-					return;
-				}
-				// TownyFormatter shouldn't be given any string longer than 159, or it has trouble splitting lines.
-				if (line.length() > 159)
-					line = line.substring(0, 159);
-			} else 
-				line = "";
-			
-			nation.setBoard(line);
-			TownyMessaging.sendNationBoard(sender, nation);
+		if (board.equalsIgnoreCase("reset")) {
+			board = TownySettings.getNationDefaultBoard();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_board_reset"));
+		} else if (board.equals("none")) {
+			board = "";
+		} else {
+			if (!NameValidation.isValidBoardString(board)) {
+				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_invalid_string_nationboard_not_set"));
+				return;
+			}
+
+			if (board.length() > TownySettings.getMaxBoardLength())
+				board = board.substring(0, TownySettings.getMaxBoardLength());
 		}
+
+		nation.setBoard(board);
+		TownyMessaging.sendNationBoard(sender, nation);
 	}
 
 	private static void nationSetSurname(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {

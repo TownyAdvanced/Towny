@@ -3,16 +3,20 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.db.TownySQLSource.TownyDBTableType;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author ElgarL
@@ -20,7 +24,7 @@ import java.util.Locale;
 public class SQLSchema {
 
 	private static final String SQLDB_NAME = TownySettings.getSQLDBName();
-	private static final String TABLE_PREFIX = TownySettings.getSQLTablePrefix().toUpperCase(Locale.ROOT);
+	public static final String TABLE_PREFIX = TownySettings.getSQLTablePrefix().toUpperCase(Locale.ROOT);
 	private static final int MYSQL_DUPLICATE_COLUMN_ERR = 1060;
 
 	/**
@@ -29,48 +33,74 @@ public class SQLSchema {
 	 * @param cntx    a database connection
 	 */
 	public static void initTables(Connection cntx) {
+		final Map<String, Set<String>> existingTableColumns = loadExistingTables(cntx);
 
-		initTable(cntx, TownyDBTableType.WORLD);
-		updateTable(cntx, TownyDBTableType.WORLD, getWorldColumns());
+		initTable(cntx, TownyDBTableType.WORLD, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.WORLD, getWorldColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.NATION);
-		updateTable(cntx, TownyDBTableType.NATION, getNationColumns());
+		initTable(cntx, TownyDBTableType.NATION, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.NATION, getNationColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.TOWN);
-		updateTable(cntx, TownyDBTableType.TOWN, getTownColumns());
+		initTable(cntx, TownyDBTableType.TOWN, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.TOWN, getTownColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.RESIDENT);
-		updateTable(cntx, TownyDBTableType.RESIDENT, getResidentColumns());
+		initTable(cntx, TownyDBTableType.RESIDENT, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.RESIDENT, getResidentColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.TOWNBLOCK);
-		updateTable(cntx, TownyDBTableType.TOWNBLOCK, getTownBlockColumns());
+		initTable(cntx, TownyDBTableType.TOWNBLOCK, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.TOWNBLOCK, getTownBlockColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.PLOTGROUP);
-		updateTable(cntx, TownyDBTableType.PLOTGROUP, getPlotGroupColumns());
+		initTable(cntx, TownyDBTableType.PLOTGROUP, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.PLOTGROUP, getPlotGroupColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.DISTRICT);
-		updateTable(cntx, TownyDBTableType.DISTRICT, getDistrictColumns());
+		initTable(cntx, TownyDBTableType.DISTRICT, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.DISTRICT, getDistrictColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.JAIL);
-		updateTable(cntx, TownyDBTableType.JAIL, getJailsColumns());
+		initTable(cntx, TownyDBTableType.JAIL, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.JAIL, getJailsColumns(), existingTableColumns);
 
-		initTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT);
-		updateTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, getHibernatedResidentsColumns());
+		initTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.HIBERNATED_RESIDENT, getHibernatedResidentsColumns(), existingTableColumns);
 		
-		initTable(cntx, TownyDBTableType.COOLDOWN);
-		updateTable(cntx, TownyDBTableType.COOLDOWN, getCooldownColumns());
+		initTable(cntx, TownyDBTableType.COOLDOWN, existingTableColumns);
+		updateTable(cntx, TownyDBTableType.COOLDOWN, getCooldownColumns(), existingTableColumns);
 	}
 
 	/*
 	 * Check that the tables are created.
 	 */
-	private static void initTable(Connection cntx, TownyDBTableType tableType) {
+	private static void initTable(Connection cntx, TownyDBTableType tableType, Map<String, Set<String>> existingTableColumns) {
+		if (existingTableColumns.containsKey((TABLE_PREFIX + tableType.tableName()).toLowerCase(Locale.ROOT))) {
+			TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " already exists!");
+			return;
+		}
+
 		try (Statement s = cntx.createStatement()) {
 			s.executeUpdate(fetchTableSchema(tableType));
 			TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is ok!");
 		} catch (SQLException ee) {
 			TownyMessaging.sendErrorMsg("Error Creating table " + tableType.tableName() + " : " + ee.getMessage());
 		}
+	}
+
+	/**
+	 * Queries all existing columns and their tables.
+	 */
+	private static Map<String, Set<String>> loadExistingTables(final Connection connection) {
+		final Map<String, Set<String>> existingTableColumns = new HashMap<>();
+
+		try (ResultSet rs = connection.getMetaData().getColumns(SQLDB_NAME, null, null, null)) {
+			while (rs.next()) {
+				final String tableName = rs.getString("TABLE_NAME").toLowerCase(Locale.ROOT);
+				final String columnName = rs.getString("COLUMN_NAME"); // not necessary to toLowerCase this
+
+				existingTableColumns.computeIfAbsent(tableName, k -> new HashSet<>()).add(columnName);
+			}
+		} catch (SQLException e) {
+			TownyMessaging.sendErrorMsg("Error retrieving existing tables and columns: " + e.getMessage());
+		}
+
+		return existingTableColumns;
 	}
 
 	/*
@@ -93,7 +123,7 @@ public class SQLSchema {
 	 * Generic create table statement for the Name keyed TownyDBTableTypes
 	 */
 	private static String fetchCreateNamedStatement(TownyDBTableType tableType) {
-		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL,PRIMARY KEY (`name`))";
+		return "CREATE TABLE IF NOT EXISTS " + TABLE_PREFIX + tableType.tableName() + " (`name` VARCHAR(32) NOT NULL COLLATE utf8mb4_bin, PRIMARY KEY (`name`))";
 	}
 
 	/*
@@ -131,294 +161,249 @@ public class SQLSchema {
 	/*
 	 * Update a table in the database to make sure that each column is present. 
 	 */
-	private static void updateTable(Connection cntx, TownyDBTableType tableType, List<String> columns) {
+	private static void updateTable(Connection cntx, TownyDBTableType tableType, List<ColumnData> columns, Map<String, Set<String>> existingTableColumns) {
 		String update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + TABLE_PREFIX + tableType.tableName() + "` ADD COLUMN ";
-		for (String column : columns) {
+		final Set<String> existingColumns = existingTableColumns.getOrDefault((TABLE_PREFIX + tableType.tableName()).toLowerCase(Locale.ROOT), Set.of());
+
+		int addedColumns = 0;
+		for (final ColumnData column : columns) {
+			if (existingColumns.contains(column.name)) {
+				continue;
+			}
+
 			try (PreparedStatement ps = cntx.prepareStatement(update + column)) {
 				ps.executeUpdate();
+				addedColumns++;
 			} catch (SQLException ee) {
 				if (ee.getErrorCode() != MYSQL_DUPLICATE_COLUMN_ERR)
 					TownyMessaging.sendErrorMsg("Error updating table " + tableType.tableName() + ":" + ee.getMessage());
 			}
 		}
-		TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is updated!");
+		TownyMessaging.sendDebugMsg("Table " + tableType.tableName() + " is updated! Created " + addedColumns + " missing column" + (addedColumns == 1 ? "" : "s") + ".");
 	}
 
 	/*
 	 * Columns of each Object type follow:
 	 */
 	
-	private static List<String> getJailsColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`townBlock` mediumtext NOT NULL");
-		columns.add("`spawns`  mediumtext DEFAULT NULL");
+	private static List<ColumnData> getJailsColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("townBlock", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("spawns", "mediumtext DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getPlotGroupColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`groupName` mediumtext NOT NULL");
-		columns.add("`groupPrice` float DEFAULT NULL");
-		columns.add("`town` VARCHAR(32) NOT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
+	private static List<ColumnData> getPlotGroupColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("groupName", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("groupPrice", "float DEFAULT NULL"));
+		columns.add(new ColumnData("town", "VARCHAR(36) NOT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getDistrictColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`districtName` mediumtext NOT NULL");
-		columns.add("`town` VARCHAR(36) NOT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
+	private static List<ColumnData> getDistrictColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("districtName", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("town", "VARCHAR(36) NOT NULL"));
+		columns.add(new ColumnData("metadata", "text DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getResidentColumns(){
-		List<String> columns = new ArrayList<>();
-		columns.add("`town` mediumtext");
-		columns.add("`town-ranks` mediumtext");
-		columns.add("`nation-ranks` mediumtext");
-		columns.add("`lastOnline` BIGINT NOT NULL");
-		columns.add("`registered` BIGINT NOT NULL");
-		columns.add("`joinedTownAt` BIGINT NOT NULL");
-		columns.add("`isNPC` bool NOT NULL DEFAULT '0'");
-		columns.add("`jailUUID` VARCHAR(36) DEFAULT NULL");
-		columns.add("`jailCell` mediumint");
-		columns.add("`jailHours` mediumint");
-		columns.add("`jailBail` float DEFAULT NULL");
-		columns.add("`title` mediumtext");
-		columns.add("`surname` mediumtext");
-		columns.add("`protectionStatus` mediumtext");
-		columns.add("`friends` mediumtext");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`uuid` VARCHAR(36) NOT NULL");
-		columns.add("`about` mediumtext DEFAULT NULL");
+	private static List<ColumnData> getResidentColumns(){
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("town", "mediumtext"));
+		columns.add(new ColumnData("town-ranks", "mediumtext"));
+		columns.add(new ColumnData("nation-ranks", "mediumtext"));
+		columns.add(new ColumnData("lastOnline", "BIGINT NOT NULL"));
+		columns.add(new ColumnData("registered", "BIGINT NOT NULL"));
+		columns.add(new ColumnData("joinedTownAt", "BIGINT NOT NULL"));
+		columns.add(new ColumnData("isNPC", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("jailUUID", "VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ColumnData("jailCell", "mediumint"));
+		columns.add(new ColumnData("jailHours", "mediumint"));
+		columns.add(new ColumnData("jailBail", "float DEFAULT NULL"));
+		columns.add(new ColumnData("title", "mediumtext"));
+		columns.add(new ColumnData("surname", "mediumtext"));
+		columns.add(new ColumnData("protectionStatus", "mediumtext"));
+		columns.add(new ColumnData("friends", "mediumtext"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("uuid", "VARCHAR(36) NOT NULL"));
+		columns.add(new ColumnData("about", "mediumtext DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getHibernatedResidentsColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`registered` BIGINT DEFAULT NULL");
+	private static List<ColumnData> getHibernatedResidentsColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("registered", "BIGINT DEFAULT NULL"));
 		return columns;
 	}
 
-	private static List<String> getTownColumns() {
-	List<String> columns = new ArrayList<>();
-		columns.add("`mayor` mediumtext");
-		columns.add("`nation` mediumtext");
-		columns.add("`townBoard` mediumtext DEFAULT NULL");
-		columns.add("`tag` mediumtext DEFAULT NULL");
-		columns.add("`founder` mediumtext DEFAULT NULL");
-		columns.add("`protectionStatus` mediumtext DEFAULT NULL");
-		columns.add("`bonus` int(11) DEFAULT 0");
-		columns.add("`purchased` int(11)  DEFAULT 0");
-		columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
-		columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
-		columns.add("`taxes` float DEFAULT 0");
-		columns.add("`hasUpkeep` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotPrice` float DEFAULT NULL");
-		columns.add("`plotTax` float DEFAULT NULL");
-		columns.add("`commercialPlotPrice` float DEFAULT NULL");
-		columns.add("`commercialPlotTax` float NOT NULL");
-		columns.add("`embassyPlotPrice` float NOT NULL");
-		columns.add("`embassyPlotTax` float NOT NULL");
-		columns.add("`open` bool NOT NULL DEFAULT '0'");
-		columns.add("`public` bool NOT NULL DEFAULT '0'");
-		columns.add("`adminEnabledMobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`admindisabledpvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`adminenabledpvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`allowedToWar` bool NOT NULL DEFAULT '1'");
-		columns.add("`homeblock` mediumtext NOT NULL");
-		columns.add("`spawn` mediumtext NOT NULL");
-		columns.add("`outpostSpawns` mediumtext DEFAULT NULL");
-		columns.add("`jailSpawns` mediumtext DEFAULT NULL");
-		columns.add("`outlaws` mediumtext DEFAULT NULL");
-		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
-		columns.add("`registered` BIGINT DEFAULT NULL");
-		columns.add("`spawnCost` float NOT NULL");
-		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`conqueredDays` mediumint");
-		columns.add("`conquered` bool NOT NULL DEFAULT '0'");
-		columns.add("`ruined` bool NOT NULL DEFAULT '0'");
-		columns.add("`ruinedTime` BIGINT DEFAULT '0'");
-		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
-		columns.add("`debtBalance` float NOT NULL");
-		columns.add("`joinedNationAt` BIGINT NOT NULL");
-		columns.add("`primaryJail` VARCHAR(36) DEFAULT NULL");
-		columns.add("`movedHomeBlockAt` BIGINT NOT NULL");
-		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
-		columns.add("`trustedTowns` mediumtext NOT NULL");
-		columns.add("`nationZoneOverride` int(11) DEFAULT 0");
-		columns.add("`nationZoneEnabled` bool NOT NULL DEFAULT '1'");
-		columns.add("`allies` mediumtext NOT NULL");
-		columns.add("`enemies` mediumtext NOT NULL");
-		columns.add("`hasUnlimitedClaims` bool NOT NULL DEFAULT '0'");
-		columns.add("`manualTownLevel` BIGINT DEFAULT '-1'");
-		columns.add("`forSale` bool NOT NULL DEFAULT '0'");
-		columns.add("`forSalePrice` float NOT NULL");
-		columns.add("`forSaleTime` BIGINT DEFAULT '0'");
-		columns.add("`visibleOnTopLists` bool NOT NULL DEFAULT '1'");
-		
+	private static List<ColumnData> getTownColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("mayor", "mediumtext"));
+		columns.add(new ColumnData("nation", "mediumtext"));
+		columns.add(new ColumnData("townBoard", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("tag", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("founder", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("protectionStatus", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("bonus", "int(11) DEFAULT 0"));
+		columns.add(new ColumnData("purchased", "int(11)  DEFAULT 0"));
+		columns.add(new ColumnData("taxpercent", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("maxPercentTaxAmount", "float DEFAULT NULL"));
+		columns.add(new ColumnData("taxes", "float DEFAULT 0"));
+		columns.add(new ColumnData("hasUpkeep", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("plotPrice", "float DEFAULT NULL"));
+		columns.add(new ColumnData("plotTax", "float DEFAULT NULL"));
+		columns.add(new ColumnData("commercialPlotPrice", "float DEFAULT NULL"));
+		columns.add(new ColumnData("commercialPlotTax", "float NOT NULL"));
+		columns.add(new ColumnData("embassyPlotPrice", "float NOT NULL"));
+		columns.add(new ColumnData("embassyPlotTax", "float NOT NULL"));
+		columns.add(new ColumnData("open", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("public", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("adminEnabledMobs", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("admindisabledpvp", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("adminenabledpvp", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("allowedToWar", "bool NOT NULL DEFAULT '1'"));
+		columns.add(new ColumnData("homeblock", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("spawn", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("outpostSpawns", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("outlaws", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("uuid", "VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ColumnData("registered", "BIGINT DEFAULT NULL"));
+		columns.add(new ColumnData("spawnCost", "float NOT NULL"));
+		columns.add(new ColumnData("mapColorHexCode", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("conqueredDays", "mediumint"));
+		columns.add(new ColumnData("conquered", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("ruined", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("ruinedTime", "BIGINT DEFAULT '0'"));
+		columns.add(new ColumnData("neutral", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("debtBalance", "float NOT NULL"));
+		columns.add(new ColumnData("joinedNationAt", "BIGINT NOT NULL"));
+		columns.add(new ColumnData("primaryJail", "VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ColumnData("movedHomeBlockAt", "BIGINT NOT NULL"));
+		columns.add(new ColumnData("trustedResidents", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("trustedTowns", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("nationZoneOverride", "int(11) DEFAULT 0"));
+		columns.add(new ColumnData("nationZoneEnabled", "bool NOT NULL DEFAULT '1'"));
+		columns.add(new ColumnData("allies", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("enemies", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("hasUnlimitedClaims", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("manualTownLevel", "BIGINT DEFAULT '-1'"));
+		columns.add(new ColumnData("forSale", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("forSalePrice", "float NOT NULL"));
+		columns.add(new ColumnData("forSaleTime", "BIGINT DEFAULT '0'"));
+		columns.add(new ColumnData("visibleOnTopLists", "bool NOT NULL DEFAULT '1'"));
+		columns.add(new ColumnData("hasActiveWar", "bool NOT NULL DEFAULT '0'"));
 		return columns;
 	}
 
-	private static List<String> getNationColumns(){
-		List<String> columns = new ArrayList<>();
-		columns.add("`capital` mediumtext NOT NULL");
-		columns.add("`tag` mediumtext NOT NULL");
-		columns.add("`allies` mediumtext NOT NULL");
-		columns.add("`enemies` mediumtext NOT NULL");
-		columns.add("`taxes` float NOT NULL");
-		columns.add("`taxpercent` bool NOT NULL DEFAULT '0'");
-		columns.add("`maxPercentTaxAmount` float DEFAULT NULL");
-		columns.add("`spawnCost` float NOT NULL");
-		columns.add("`neutral` bool NOT NULL DEFAULT '0'");
-		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
-		columns.add("`registered` BIGINT DEFAULT NULL");
-		columns.add("`nationBoard` mediumtext DEFAULT NULL");
-		columns.add("`mapColorHexCode` mediumtext DEFAULT NULL");
-		columns.add("`nationSpawn` mediumtext DEFAULT NULL");
-		columns.add("`isPublic` bool NOT NULL DEFAULT '1'");
-		columns.add("`isOpen` bool NOT NULL DEFAULT '1'");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`conqueredTax` float NOT NULL");
-		columns.add("`sanctionedTowns` mediumtext DEFAULT NULL");
+	private static List<ColumnData> getNationColumns(){
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("capital", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("tag", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("allies", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("enemies", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("taxes", "float NOT NULL"));
+		columns.add(new ColumnData("taxpercent", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("maxPercentTaxAmount", "float DEFAULT NULL"));
+		columns.add(new ColumnData("spawnCost", "float NOT NULL"));
+		columns.add(new ColumnData("neutral", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("uuid", "VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ColumnData("registered", "BIGINT DEFAULT NULL"));
+		columns.add(new ColumnData("nationBoard", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("mapColorHexCode", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("nationSpawn", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("isPublic", "bool NOT NULL DEFAULT '1'"));
+		columns.add(new ColumnData("isOpen", "bool NOT NULL DEFAULT '1'"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("conqueredTax", "float NOT NULL"));
+		columns.add(new ColumnData("sanctionedTowns", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("hasActiveWar", "bool NOT NULL DEFAULT '0'"));
 		return columns;
 	}
 
-	private static List<String> getWorldColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`uuid` VARCHAR(36) DEFAULT NULL");
-		columns.add("`claimable` bool NOT NULL DEFAULT '0'");
-		columns.add("`pvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`forcepvp` bool NOT NULL DEFAULT '0'");
-		columns.add("`forcetownmobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`friendlyFire` bool NOT NULL DEFAULT '0'");
-		columns.add("`worldmobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`wildernessmobs` bool NOT NULL DEFAULT '0'");
-		columns.add("`firespread` bool NOT NULL DEFAULT '0'");
-		columns.add("`forcefirespread` bool NOT NULL DEFAULT '0'");
-		columns.add("`explosions` bool NOT NULL DEFAULT '0'");
-		columns.add("`forceexplosions` bool NOT NULL DEFAULT '0'");
-		columns.add("`endermanprotect` bool NOT NULL DEFAULT '0'");
-		columns.add("`disablecreaturetrample` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneBuild` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneDestroy` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneSwitch` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneItemUse` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimedZoneName` mediumtext NOT NULL");
-		columns.add("`unclaimedZoneIgnoreIds` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementDelete` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementDeleteIds` mediumtext NOT NULL");
-		columns.add("`isDeletingEntitiesOnUnclaim` bool NOT NULL DEFAULT '0'");
-		columns.add("`unclaimDeleteEntityTypes` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementMayorDelete` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementMayorDelete` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementRevert` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementIgnoreIds` mediumtext NOT NULL");
-		columns.add("`revertOnUnclaimWhitelistMaterials` mediumtext NOT NULL");
-		columns.add("`usingPlotManagementWildRegen` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementWildRegenEntities` mediumtext NOT NULL");
-		columns.add("`plotManagementWildRegenBlockWhitelist` mediumtext NOT NULL");
-		columns.add("`wildRegenBlocksToNotOverwrite` mediumtext NOT NULL");
-		columns.add("`plotManagementWildRegenSpeed` long NOT NULL");
-		columns.add("`usingPlotManagementWildRegenBlocks` bool NOT NULL DEFAULT '0'");
-		columns.add("`plotManagementWildRegenBlocks` mediumtext NOT NULL");		
-		columns.add("`usingTowny` bool NOT NULL DEFAULT '0'");
-		columns.add("`warAllowed` bool NOT NULL DEFAULT '0'");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`jailing` bool NOT NULL DEFAULT '1'");
+	private static List<ColumnData> getWorldColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("uuid", "VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ColumnData("claimable", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("pvp", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("forcepvp", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("forcetownmobs", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("friendlyFire", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("worldmobs", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("wildernessmobs", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("firespread", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("forcefirespread", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("explosions", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("forceexplosions", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("endermanprotect", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("disablecreaturetrample", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("unclaimedZoneBuild", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("unclaimedZoneDestroy", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("unclaimedZoneSwitch", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("unclaimedZoneItemUse", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("unclaimedZoneName", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("unclaimedZoneIgnoreIds", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("usingPlotManagementDelete", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("plotManagementDeleteIds", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("isDeletingEntitiesOnUnclaim", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("unclaimDeleteEntityTypes", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("usingPlotManagementMayorDelete", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("plotManagementMayorDelete", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("usingPlotManagementRevert", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("plotManagementIgnoreIds", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("revertOnUnclaimWhitelistMaterials", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("usingPlotManagementWildRegen", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("plotManagementWildRegenEntities", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("plotManagementWildRegenBlockWhitelist", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("wildRegenBlocksToNotOverwrite", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("plotManagementWildRegenSpeed", "long NOT NULL"));
+		columns.add(new ColumnData("usingPlotManagementWildRegenBlocks", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("plotManagementWildRegenBlocks", "mediumtext NOT NULL"));		
+		columns.add(new ColumnData("usingTowny", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("warAllowed", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("jailing", "bool NOT NULL DEFAULT '1'"));
 		return columns;
 	}
 
-	private static List<String> getTownBlockColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`name` mediumtext");
-		columns.add("`price` float DEFAULT '-1'");
-		columns.add("`taxed` bool NOT NULL DEFAULT '1'");
-		columns.add("`town` mediumtext");
-		columns.add("`resident` mediumtext");
-		columns.add("`type` TINYINT NOT  NULL DEFAULT '0'");
-		columns.add("`typeName` mediumtext");
-		columns.add("`outpost` bool NOT NULL DEFAULT '0'");
-		columns.add("`permissions` mediumtext NOT NULL");
-		columns.add("`locked` bool NOT NULL DEFAULT '0'");
-		columns.add("`changed` bool NOT NULL DEFAULT '0'");
-		columns.add("`metadata` text DEFAULT NULL");
-		columns.add("`groupID` VARCHAR(36) DEFAULT NULL");
-		columns.add("`districtID` VARCHAR(36) DEFAULT NULL");
-		columns.add("`claimedAt` BIGINT NOT NULL");
-		columns.add("`trustedResidents` mediumtext DEFAULT NULL");
-		columns.add("`customPermissionData` mediumtext DEFAULT NULL");
-		columns.add("`minTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
-		columns.add("`maxTownMembershipDays` SMALLINT NOT NULL DEFAULT '-1'");
+	private static List<ColumnData> getTownBlockColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("name", "mediumtext"));
+		columns.add(new ColumnData("price", "float DEFAULT '-1'"));
+		columns.add(new ColumnData("taxed", "bool NOT NULL DEFAULT '1'"));
+		columns.add(new ColumnData("town", "mediumtext"));
+		columns.add(new ColumnData("resident", "mediumtext"));
+		columns.add(new ColumnData("type", "TINYINT NOT  NULL DEFAULT '0'"));
+		columns.add(new ColumnData("typeName", "mediumtext"));
+		columns.add(new ColumnData("outpost", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("permissions", "mediumtext NOT NULL"));
+		columns.add(new ColumnData("locked", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("changed", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("groupID", "VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ColumnData("districtID", "VARCHAR(36) DEFAULT NULL"));
+		columns.add(new ColumnData("claimedAt", "BIGINT NOT NULL"));
+		columns.add(new ColumnData("trustedResidents", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("customPermissionData", "mediumtext DEFAULT NULL"));
+		columns.add(new ColumnData("minTownMembershipDays", "SMALLINT NOT NULL DEFAULT '-1'"));
+		columns.add(new ColumnData("maxTownMembershipDays", "SMALLINT NOT NULL DEFAULT '-1'"));
 		return columns;
 	}
 	
-	private static List<String> getCooldownColumns() {
-		List<String> columns = new ArrayList<>();
-		columns.add("`key` varchar(200) NOT NULL");
-		columns.add("`expiry` BIGINT NOT NULL");
+	private static List<ColumnData> getCooldownColumns() {
+		List<ColumnData> columns = new ArrayList<>();
+		columns.add(new ColumnData("key", "varchar(200) NOT NULL"));
+		columns.add(new ColumnData("expiry", "BIGINT NOT NULL"));
 		return columns;
 	}
 
-	/**
-	 * Call after loading to remove any old database elements we no longer need.
-	 *
-	 * @param connection A connection to the database.
-	 */
-	public static void cleanup(Connection connection) {
-
-		List<ColumnUpdate> cleanups = new ArrayList<>();
-		cleanups.add(ColumnUpdate.update("TOWNS", "residents"));
-		cleanups.add(ColumnUpdate.update("NATIONS", "assistants"));
-		cleanups.add(ColumnUpdate.update("NATIONS", "towns"));
-		cleanups.add(ColumnUpdate.update("WORLDS", "towns"));
-		cleanups.add(ColumnUpdate.update("WORLDS", "plotManagementRevertSpeed"));
-		cleanups.add(ColumnUpdate.update("PLOTGROUPS", "claimedAt"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "isJailed"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailSpawn"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailDays"));
-		cleanups.add(ColumnUpdate.update("RESIDENTS", "JailTown"));
-		cleanups.add(ColumnUpdate.update("TOWNS", "jailSpawns"));
-		cleanups.add(ColumnUpdate.update("WORLDS", "disableplayertrample"));
-		cleanups.add(ColumnUpdate.update("TOWNS", "assistants"));
-
-		for (ColumnUpdate update : cleanups)
-			dropColumn(connection, update.table(), update.column());
-	}
-
-	/**
-	 * Drops the given column from the given table, if the column is present.
-	 * 
-	 * @param cntx    database connection.
-	 * @param table   table name.
-	 * @param column  column to drop from the given table.
-	 */
-	private static void dropColumn(Connection cntx, String table, String column) {
-		String update;
-
-		try (Statement s = cntx.createStatement()) {
-			DatabaseMetaData md = cntx.getMetaData();
-			ResultSet rs = md.getColumns(null, null, table, column);
-			if (!rs.next())
-				return;
-
-			update = "ALTER TABLE `" + SQLDB_NAME + "`.`" + table + "` DROP COLUMN `" + column + "`";
-
-			s.executeUpdate(update);
-
-			TownyMessaging.sendDebugMsg("Table " + table + " has dropped the " + column + " column.");
-
-		} catch (SQLException ee) {
-			if (ee.getErrorCode() != MYSQL_DUPLICATE_COLUMN_ERR)
-				TownyMessaging.sendErrorMsg("Error updating table " + table + ":" + ee.getMessage());
-		}
-	}
-
-	private record ColumnUpdate(String table, String column) {
-		private static ColumnUpdate update(String table, String column) {
-			return new ColumnUpdate(SQLSchema.TABLE_PREFIX + table, column);
+	private record ColumnData(String name, String dataType) {
+		@Override
+		public @NotNull String toString() {
+			return "`" + this.name + "` " + this.dataType;
 		}
 	}
 }
