@@ -52,8 +52,8 @@ towny_help_3: "显示得分"
 towny_help_4: "显示距离新的一天开始的时间"
 towny_help_5: "显示统计信息"
 towny_help_6: "显示Towny的版本"
-towny_top_help_0: "基于子命令列出顶级居民。"
-towny_top_help_1: "根据子命令列出顶级的土地所有者。"
+towny_top_help_0: "依据子命令列出居民数最高的城镇。"
+towny_top_help_1: "依据子命令列出拥有土地数最多的居民。"
 towny_top_help_2: "基于子命令列出最富有的列表。"
 town_help_1: '你的城镇的状态'
 town_help_2: '[城主]'
