@@ -3502,6 +3502,10 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.GTOWN_ORDER_OF_MAYORAL_SUCCESSION);
 	}
 
+	public static List<String> getAssistantRankNameList() {
+		return getStrArr(ConfigNodes.GTOWN_NAMES_OF_ASSISTANT_RANKS);
+	}
+
 	public static boolean isWarAllowed() {
 		return getBoolean(ConfigNodes.NWS_WAR_ALLOWED);
 	}
