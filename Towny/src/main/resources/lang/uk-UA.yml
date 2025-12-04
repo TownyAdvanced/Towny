@@ -1860,6 +1860,7 @@ msg_spawn_cost_free: 'Безкоштовно'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Ця ділянка уже належить до типу %s.'
 msg_town_board_reset: 'Оголошення для жителів вашого міста стерті.'
+msg_nation_board_reset: '&bСкидання налаштувань національної ради.'
 msg_town_has_no_jailslots: 'Міська в''язниця переповнена.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s Відправлено до %s у камеру номер %s на %s годинах із заставою %s від %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s посадив у в''язницю %s в %s у камері №%s на %s годин.'
@@ -2131,3 +2132,15 @@ msg_err_you_cannot_add_towntrust_on_enemy: "Ви не можете довіря�
 status_world_jailing: "Ув'язнення: "
 msg_version_build_info: "<dark_green>Інформація про збірку: <green>%s</green> на гілці <green>%s<green>."
 msg_version_build_info_failed: "<red>Не вдалося отримати інформацію про збірку для цієї версії."
+time-future: "у майбутньому"
+time-just-now: "щойно"
+time-a-minute-ago: "хвилину тому"
+time-x-minutes-ago: "%d хвилин тому"
+time-an-hour-ago: "годину тому"
+time-x-hours-ago: "%d годин тому"
+time-yesterday: "вчора"
+time-x-days-ago: "%d днів тому"
+time-a-year-ago: "рік тому"
+time-x-years-ago: "%d років тому"
+#Shown instead of status_lastonline if the player is currently online
+status_onlinesince: "Онлайн з часу:"

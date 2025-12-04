@@ -51,7 +51,7 @@ help_8: 'Помощь по командам Towny.'
 help_9: 'Помощь по командам Towny для админов.'
 towny_help_0: "Общая помощь по Towny"
 towny_help_1: "Показывает карту близлежащих участков"
-towny_help_2: "Показать цены, используемые в экономике"
+towny_help_2: "Display the prices used with Economy"
 towny_help_3: "Показывает топ"
 towny_help_4: "Показывает время до начала нового дня"
 towny_help_5: "Отображает статистику"
