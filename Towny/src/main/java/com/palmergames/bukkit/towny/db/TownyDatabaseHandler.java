@@ -695,13 +695,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 				}
 			}
 
-			/*                         
-			 * Tidy up old files.
-			 * Has to be done here else the town no longer exists
-			 * and the file move command may fail.
-			 */
-			deleteTown(town);
-
 			/*
 			 * Remove the old town from the townsMap
 			 * and rename to the new name
@@ -760,9 +753,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 						TownyMessaging.sendErrorMsg("The bank balance for the nation " + nation.getName() + ", could not be received from the economy plugin and will not be able to be converted.");
 					}
 				}
-
-			//Tidy up old files
-			deleteNation(nation);
 
 			/*
 			 * Remove the old nation from the nationsMap
@@ -824,9 +814,6 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 			if (TownyEconomyHandler.isActive() && resident.getAccountOrNull() != null)
 				resident.getAccount().setName(newName);
 
-			// Tidy up old files
-			deleteResident(resident);
-			
 			// Remove the resident from the universe name storage.
 			universe.unregisterResident(resident);
 			//rename the resident
