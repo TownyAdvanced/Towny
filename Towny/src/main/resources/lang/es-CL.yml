@@ -258,6 +258,7 @@ world_toggle_help_8: "Activar o desactivar la función revertir-al-abandonar en 
 world_toggle_help_9: "Activar o desactivar la función revertir-explosiones en este mundo."
 world_toggle_help_10: "Activar o desactivar la función plot-clear-elimina-los-bloques en este mundo."
 world_toggle_help_11: "Activar o desactivar la función abandonar-elimina-los-bloques en este mundo."
+world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 townyadmin_help_1: 'Abandonar este terreno de la ciudad'
 townyadmin_help_2: 'Intentar abandonar alrededor de ti.'
 admin_panel_1: "Use /ta set ? para obtener ayuda"

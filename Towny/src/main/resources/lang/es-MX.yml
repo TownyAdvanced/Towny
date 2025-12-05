@@ -226,6 +226,7 @@ world_toggle_help_8: "Activar/desactivar la función de revertir a petición en 
 world_toggle_help_9: "Activar/desactivar las características revertidas de las explosiones en este mundo."
 world_toggle_help_10: "Activar/desactivar el comando plot-clear-deletes-blocks en este mundo."
 world_toggle_help_11: "Activar/desactivar la característica de bloques de grafico sin reclamar-eliminar-borrar en este mundo."
+world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 townyadmin_help_1: 'Abandonar este terreno de la ciudad'
 townyadmin_help_2: 'Intentar abandonar alrededor de ti.'
 admin_panel_1: "Usa /res set ? para obtener ayuda"
@@ -240,7 +241,6 @@ admin_panel_9: "Teletransportar a la parcela especificada"
 admin_panel_10: "Comprueba si el jugador tiene un nodo de permiso"
 admin_panel_11: "Restablecer tu configuración"
 admin_panel_12: "Hacer una copia de seguridad de los datos de tu ciudad"
-admin_panel_13: "Volcar tu db de ql a flatfile"
 admin_panel_14: "Forzar guardar o cargar su base de datos"
 admin_panel_15: "Ejecutar el código newhour"
 admin_panel_16: "Purgar antiguos residentes"
