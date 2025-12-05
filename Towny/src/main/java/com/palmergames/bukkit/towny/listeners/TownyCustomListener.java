@@ -11,6 +11,7 @@ import com.palmergames.bukkit.towny.command.TownyCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.BedExplodeEvent;
 import com.palmergames.bukkit.towny.event.ChunkNotificationEvent;
+import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.NationAddEnemyEvent;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
@@ -144,6 +145,29 @@ public class TownyCustomListener implements Listener {
 		// links to the commands page on the wiki.
 	}
 	
+	/**
+	 * Handles recently-created towns getting a refund when they are deleted.
+	 * 
+	 * @param event DeleteTownEvent to listen to.
+	 */
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onTownDeleted(DeleteTownEvent event) {
+		if (!TownySettings.refundDeletedNewTowns() || event.getMayor() == null || !event.getCause().equals(DeleteTownEvent.Cause.COMMAND))
+			return;
+
+		int maxTownblocks = TownySettings.refundDeletedNewTownsMaxTownBlocks();
+		int maxHours = TownySettings.refundDeletedNewTownsMaxHours();
+		double newTownPrice = TownySettings.getNewTownPrice();
+
+		if (event.getNumTownBlocks() > maxTownblocks || newTownPrice <= 0
+			|| System.currentTimeMillis() - event.getTownCreated() > TimeMgmt.ONE_HOUR_IN_MILLIS * maxHours)
+			return;
+
+		Resident mayor = event.getMayor();
+		mayor.getAccount().deposit(newTownPrice, "Town deletion refund.");
+		TownyMessaging.sendMsg(mayor, Translatable.of("msg_you_have_been_refunded_your_town_cost", TownyEconomyHandler.getFormattedBalance(newTownPrice), maxHours, maxTownblocks));
+	}
+
 	/**
 	 * Runs when a bed or respawn anchor explodes that we can track them in the BlockExplodeEvent,
 	 * which always returns AIR for that event's getBlock().

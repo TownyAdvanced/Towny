@@ -1401,6 +1401,18 @@ public class TownySettings {
 		return StringMgmt.containsIgnoreCase(getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS), name);
 	}
 
+	public static boolean refundDeletedNewTowns() {
+		return getBoolean(ConfigNodes.ECO_REFUND_ALLOW_REFUND_ON_DELETION);
+	}
+
+	public static int refundDeletedNewTownsMaxHours() {
+		return getInt(ConfigNodes.ECO_REFUND_MAX_TOWN_AGE_IN_HOURS);
+	}
+
+	public static int refundDeletedNewTownsMaxTownBlocks() {
+		return getInt(ConfigNodes.ECO_REFUND_MAX_CLAIMS);
+	}
+
 	public static double getNewTownPrice() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NEW_TOWN);

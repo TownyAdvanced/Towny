@@ -20,11 +20,13 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 	private final Resident mayor;
 	private final Cause cause;
 	private final CommandSender sender;
+	private final int numTownBlocks;
     
-    public DeleteTownEvent(@NotNull Town town, @Nullable Resident mayor, @NotNull Cause cause, @Nullable CommandSender sender) {
+    public DeleteTownEvent(@NotNull Town town, @Nullable Resident mayor, @NotNull int numTownBlocks, @NotNull Cause cause, @Nullable CommandSender sender) {
     	super(town.getName(), town.getUUID(), town.getRegistered());
 		this.mayor = mayor;
 		this.cause = cause;
+		this.numTownBlocks = numTownBlocks;
 		this.sender = sender;
     }
 
@@ -71,6 +73,11 @@ public class DeleteTownEvent extends TownyObjDeleteEvent  {
 	@NotNull
 	public Cause getCause() {
 		return cause;
+	}
+
+	@NotNull
+	public int getNumTownBlocks() {
+		return numTownBlocks;
 	}
 
 	/**
