@@ -10545,3 +10545,6 @@ v0.92.0.11:
     - Default: assistant
     - The ranks to be given special priviledges, for instance when messages would be shown to only VIP town members.
     - All ranks should be as defined in `townyperms.yml`.
+0.102.0.2:
+  - Fix town bank accounts being removed before the feature isDeletedObjectBalancePaidToOwner can finish logging into the bank history book.
+    - Closes #8031.
