@@ -35,6 +35,7 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -496,12 +497,26 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		try (Connection connection = getConnection();
 			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "RESIDENTS")) {
+			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "RESIDENTS")) {
 			
 			while (rs.next()) {
+				final String name = rs.getString("name");
+				final UUID uuid = super.parsePlayerUUID(rs.getString("uuid"), name);
+				
+				if (uuid == null) {
+					plugin.getLogger().warning("Resident '" + name + "' does not have a valid uuid and cannot be loaded.");
+					continue;
+				}
+
 				try {
-					newResident(rs.getString("name"));
-				} catch (AlreadyRegisteredException ignored) {}
+					newResident(name, uuid);
+				} catch (AlreadyRegisteredException e) {
+					final Resident otherResident = universe.getResident(uuid);
+					if (otherResident != null && !otherResident.getName().equals(name)) {
+						// UUID is already registered
+						super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
+					}
+				}
 			}
 			return true;
 		} catch (Exception e) {
@@ -516,11 +531,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		try (Connection connection = getConnection();
 			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "TOWNS")) {
+			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "TOWNS")) {
 
 			while (rs.next()) {
+				final String name = rs.getString("name");
+
 				try {
-					universe.newTownInternal(rs.getString("name"));
+					universe.newTownInternal(name, super.parseUUIDOrNew(rs.getString("uuid"), "town '" + name + "'"));
 				} catch (AlreadyRegisteredException ignored) {}
 			}
 			return true;
@@ -538,11 +555,13 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 		try (Connection connection = getConnection();
 			 Statement s = connection.createStatement();
-			 ResultSet rs = s.executeQuery("SELECT name FROM " + tb_prefix + "NATIONS")) {
+			 ResultSet rs = s.executeQuery("SELECT name, uuid FROM " + tb_prefix + "NATIONS")) {
 			
 			while (rs.next()) {
+				final String name = rs.getString("name");
+
 				try {
-					newNation(rs.getString("name"));
+					newNation(name, super.parseUUIDOrNew(rs.getString("uuid"), "nation '" + name + "'"));
 				} catch (AlreadyRegisteredException ignored) {}
 			}
 			return true;
@@ -716,41 +735,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	private boolean loadResident(Resident resident, ResultSet rs) {
 		try {
 			String search;
-
-			try {
-				if (rs.getString("uuid") != null && !rs.getString("uuid").isEmpty()) {
-					
-					UUID uuid = UUID.fromString(rs.getString("uuid"));
-					if (universe.hasResident(uuid)) {
-						Resident olderRes = universe.getResident(uuid);
-						if (resident.getLastOnline() > olderRes.getLastOnline()) {
-							TownyMessaging.sendDebugMsg("Deleting : " + olderRes.getName() + " which is a dupe of " + resident.getName());
-							try {
-								universe.unregisterResident(olderRes);
-							} catch (NotRegisteredException ignored) {}
-							// Check if the older resident is a part of a town
-							if (olderRes.hasTown()) {
-								try {
-									// Resident#removeTown saves the resident, so we can't use it.
-									olderRes.getTown().removeResident(olderRes);
-								} catch (NotRegisteredException ignored) {}
-							}
-							deleteResident(olderRes);					
-						} else {
-							TownyMessaging.sendDebugMsg("Deleting resident : " + resident.getName() + " which is a dupe of " + olderRes.getName());
-							try {
-								universe.unregisterResident(resident);
-							} catch (NotRegisteredException ignored) {}
-							deleteResident(resident);
-							return true;
-						}
-					}	
-					resident.setUUID(uuid);
-					universe.registerResidentUUID(resident);
-				}
-			} catch (SQLException e) {
-				plugin.getLogger().log(Level.WARNING, "Could not get uuid column on the residents table", e);
-			}
 
 			try {
 				resident.setLastOnline(rs.getLong("lastOnline"));
@@ -1122,13 +1106,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 			}
 
-			try {
-				town.setUUID(UUID.fromString(rs.getString("uuid")));
-			} catch (IllegalArgumentException | NullPointerException ee) {
-				town.setUUID(UUID.randomUUID());
-			}
-			universe.registerTownUUID(town);
-
 			int conqueredDays = rs.getInt("conqueredDays");
 			town.setConqueredDays(conqueredDays);
 
@@ -1340,12 +1317,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 
 			nation.setSpawnCost(rs.getFloat("spawnCost"));
 			nation.setNeutral(rs.getBoolean("neutral"));
-			try {
-				nation.setUUID(UUID.fromString(rs.getString("uuid")));
-			} catch (IllegalArgumentException | NullPointerException ee) {
-				nation.setUUID(UUID.randomUUID());
-			}
-			universe.registerNationUUID(nation);
 
 			line = rs.getString("nationSpawn");
 			if (line != null) {
@@ -1412,8 +1383,6 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
-		} catch (TownyException ex) {
-			plugin.getLogger().log(Level.WARNING, "SQL: Load Nation " + name + " unknown Error - ", ex);
 		}
 
 		return false;
