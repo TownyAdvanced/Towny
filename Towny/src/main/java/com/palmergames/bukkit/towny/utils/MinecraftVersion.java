@@ -21,6 +21,6 @@ public class MinecraftVersion {
 	public static final Version MINECRAFT_1_21_5 = Version.fromString("1.21.5");
 	public static final Version MINECRAFT_1_21_9 = Version.fromString("1.21.9");
 	
-	public static final Version CURRENT_VERSION = Version.fromString(Bukkit.getBukkitVersion());
+	public static final Version CURRENT_VERSION = Version.fromString(Bukkit.getMinecraftVersion());
 	public static final Version OLDEST_VERSION_SUPPORTED = MINECRAFT_1_19_1;
 }
