@@ -95,7 +95,7 @@ town_list_help_3: "在指定的页面，按照银行存款数列出城镇。"
 town_list_help_4: "在指定的页面，按照字母顺序列出城镇。"
 town_list_help_5: "在指定的页面，按照已声明的土地数量列出城镇。"
 town_list_help_6: "在指定的页面，按照在线玩家数量列出城镇。"
-town_set_help_0: "设置你城镇的公告。"
+town_set_help_0: "设置你的城镇的公告。"
 town_set_help_1: "将城镇的Home区块设置到你所站立的地方。"
 town_set_help_2: "在Home区块中设置传送点，或者你站在前哨里，设置前哨的传送点。"
 town_set_help_3: "查看/town set perm ?以获得帮助。"
@@ -229,7 +229,7 @@ admin_sing: '管理员'
 town_sing: '城镇'
 nation_sing: '国家'
 nation_plu: '国家'
-king_sing: '领袖人'
+king_sing: '领袖'
 town_plu: '城镇'
 world_plu: '世界'
 world_sing: '世界'
@@ -342,7 +342,7 @@ ta_set_help_4: "为居民设置一个头衔。"
 ta_set_help_5: "为居民设置一个后缀"
 ta_set_help_6: "将区块设置到另一个城镇"
 ta_set_help_7: "设置城镇的创建者名称"
-ta_set_help_8: "将大小设置为0来移除已覆盖的国域"
+ta_set_help_8: "将大小设置为0来移除已覆盖的国域。"
 ta_purge_help_0: "清除超过指定天数未登录的居民，可以选择将无城镇设置为仅删除无城镇玩家，或者指定城镇名称以仅清除一个城镇的居民"
 ta_townmeta_help_1: "查看您指定的城镇中存储的元数据"
 ta_townmeta_help_2: "设置城镇元数据密钥和值"
