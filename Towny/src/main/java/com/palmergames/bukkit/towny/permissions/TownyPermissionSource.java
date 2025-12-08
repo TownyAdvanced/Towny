@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.bukkit.Material;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -189,17 +190,22 @@ public abstract class TownyPermissionSource {
 	 * @return true if the permissible is null or op or has the towny.admin node.
 	 */
 	public boolean isTownyAdmin(@NotNull Permissible permissible) {
+		if (permissible instanceof ConsoleCommandSender)
+			return true;
+
 		final TriState has = strictHas(permissible, PermissionNodes.TOWNY_ADMIN.getNode());
 
 		boolean usingAdminBypass = permissible instanceof Player player && Towny.getPlugin().hasPlayerMode(player, "adminbypass");
+		boolean nodeSetTrue = has == TriState.TRUE;
 		if (permissible.isOp() && !usingAdminBypass)
 			return true;
 
-		// Explicitly set to false or using the admin bypass mode
-		if (has == TriState.FALSE || usingAdminBypass)
+
+		// Explicitly set to false or unset, or using the admin bypass mode
+		if (!nodeSetTrue || usingAdminBypass)
 			return false;
 
-		return has == TriState.TRUE || permissible.isOp();
+		return nodeSetTrue || permissible.isOp();
 	}
 
 	/**
@@ -278,8 +284,10 @@ public abstract class TownyPermissionSource {
 		/*
 		 * Node has been set or negated so return the actual value
 		 */
-		if (permissible.isPermissionSet(node))
+		if (permissible.isPermissionSet(node)) {
+			System.out.println("TownyPermissionSource : strictHas " + node + " has been set.");
 			return TriState.byBoolean(permissible.hasPermission(node));
+		}
 
 		/*
 		 * Check for a parent with a wildcard
