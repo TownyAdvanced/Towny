@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -401,6 +402,16 @@ public class TownyPerms {
 	public static @UnmodifiableView List<String> getTownRanks() {
 		return townRankView;
 	}
+	
+	@ApiStatus.Internal
+	public static void createTownRank(String rank) {
+		if (townRanks.contains(rank)) {
+			return;
+		}
+
+		townRanks.add(rank);
+		perms.createSection("towns.ranks." + rank);
+	}
 
 	public static List<String> getTownRanks(Town town) {
 		if (!ranksWithTownLevelRequirementPresent())
@@ -443,6 +454,17 @@ public class TownyPerms {
 		return getList("towns.ranks." + rank);
 	}
 
+	@ApiStatus.Internal
+	public static void setTownRankPermissions(String rank, List<String> permissions) {
+		perms.set("towns.ranks." + rank, permissions);
+		
+		if (permissions == null) {
+			townRanks.remove(rank);
+		} else if (!townRanks.contains(rank)) {
+			townRanks.add(rank);
+		}
+	}
+
 	/*
 	 * Nation permission section
 	 */
@@ -454,6 +476,16 @@ public class TownyPerms {
 	 */
 	public static @UnmodifiableView List<String> getNationRanks() {
 		return nationRankView;
+	}
+
+	@ApiStatus.Internal
+	public static void createNationRank(String rank) {
+		if (nationRanks.contains(rank)) {
+			return;
+		}
+
+		nationRanks.add(rank);
+		perms.createSection("nations.ranks." + rank);
 	}
 
 	public static List<String> getNationRanks(Nation nation) {
@@ -495,6 +527,17 @@ public class TownyPerms {
 	public static List<String> getNationRankPermissions(String rank) {
 
 		return getList("nations.ranks." + rank);//.toLowerCase());
+	}
+
+	@ApiStatus.Internal
+	public static void setNationRankPermissions(String rank, List<String> permissions) {
+		perms.set("nations.ranks." + rank, permissions);
+
+		if (permissions == null) {
+			nationRanks.remove(rank);
+		} else if (!nationRanks.contains(rank)) {
+			nationRanks.add(rank);
+		}
 	}
 	
 	/**
@@ -907,6 +950,7 @@ public class TownyPerms {
 		perms.addComment("peaceful", "", "# Nodes that are given to players who are in a peaceful/neutral town or nation.");
 	}
 
+	@ApiStatus.Internal
 	public static CommentedConfiguration getTownyPermsFile() {
 		return perms;
 	}
