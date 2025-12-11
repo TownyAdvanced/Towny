@@ -187,6 +187,41 @@ public class BorderUtil {
 		
 	}
 
+	/**
+	 * Decides whether a copper golem can move an item from one block to another.
+	 * 
+	 * @param block   Block (Copper Chest) where the item originated from.
+	 * @param blockTo Block (Normal Chest) where the item is moving to.
+	 * @return true if the blocks are considered same-owner.
+	 */	
+	public static boolean allowedCopperGolemMove(Block block, Block blockTo) {
+
+		WorldCoord from = WorldCoord.parseWorldCoord(block);
+		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);
+		if (from.equals(to))
+			return true;
+
+		// One side is wilderness and the other is not.
+		if (from.hasTownBlock() != to.hasTownBlock())
+			return false;
+
+		TownBlock currentTownBlock = from.getTownBlockOrNull();
+		TownBlock destinationTownBlock = to.getTownBlockOrNull();
+
+		// One is player owned and the other isn't.
+		if (currentTownBlock.hasResident() != destinationTownBlock.hasResident())
+			return false;
+
+		// Both townblocks are owned by the same resident.
+		if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() 
+			&& currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
+			return true;
+
+		// Both townblocks are owned by the same town.
+		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() 
+			&& !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
+	}
+
 	private static final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
 	@ApiStatus.Internal

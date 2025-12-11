@@ -25,6 +25,9 @@ import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 
 import com.palmergames.util.JavaUtil;
+
+import io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -32,6 +35,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.CopperGolem;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EnderPearl;
@@ -74,9 +78,12 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -86,6 +93,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 
@@ -996,5 +1004,42 @@ public class TownyEntityListener implements Listener {
 
                 return legacyName != null && detrimentalPotions.contains(legacyName);
             });
+	}
+
+	private static final @NotNull NamespacedKey GOLEM_CHEST_X = Objects.requireNonNull(NamespacedKey.fromString("towny:golemchestx"));
+	private static final @NotNull NamespacedKey GOLEM_CHEST_Z = Objects.requireNonNull(NamespacedKey.fromString("towny:golemchestz"));
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onGolemMoveItem(ItemTransportingEntityValidateTargetEvent event) {
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || !(event.getEntity() instanceof CopperGolem golem))
+			return;
+
+		// The golem is attempting to remove an item from a copper chest.
+		if (event.getBlock().getType().name().endsWith("COPPER_CHEST")) {
+			setGolemLastChestLocation(golem, event.getBlock().getX(), event.getBlock().getZ());
+			return;
+		}
+
+		Location golemChestLoc = getLastUsedChestLocation(golem);
+		if (golemChestLoc == null || BorderUtil.allowedCopperGolemMove(golemChestLoc.getBlock(), event.getBlock()))
+			return;
+
+		event.setAllowed(false);
+	}
+
+	private void setGolemLastChestLocation(CopperGolem golem, int x, int z) {
+		PersistentDataContainer pdc = golem.getPersistentDataContainer();
+		if (!pdc.has(GOLEM_CHEST_X) || pdc.get(GOLEM_CHEST_X, PersistentDataType.INTEGER) != x)
+			pdc.set(GOLEM_CHEST_X, PersistentDataType.INTEGER, x);
+		if (!pdc.has(GOLEM_CHEST_Z) || pdc.get(GOLEM_CHEST_Z, PersistentDataType.INTEGER) != z)
+			pdc.set(GOLEM_CHEST_Z, PersistentDataType.INTEGER, z);
+	}
+
+	private Location getLastUsedChestLocation(CopperGolem golem) {
+		PersistentDataContainer pdc = golem.getPersistentDataContainer();
+		if (!pdc.has(GOLEM_CHEST_X) || !pdc.has(GOLEM_CHEST_Z))
+			return null;
+
+		return new Location(golem.getWorld(), Double.valueOf(pdc.get(GOLEM_CHEST_X, PersistentDataType.INTEGER)), 0.0, Double.valueOf(pdc.get(GOLEM_CHEST_Z, PersistentDataType.INTEGER)));
 	}
 }
