@@ -284,10 +284,8 @@ public abstract class TownyPermissionSource {
 		/*
 		 * Node has been set or negated so return the actual value
 		 */
-		if (permissible.isPermissionSet(node)) {
-			System.out.println("TownyPermissionSource : strictHas " + node + " has been set.");
+		if (permissible.isPermissionSet(node))
 			return TriState.byBoolean(permissible.hasPermission(node));
-		}
 
 		/*
 		 * Check for a parent with a wildcard
