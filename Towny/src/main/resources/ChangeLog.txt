@@ -10548,3 +10548,4 @@ v0.92.0.11:
 0.102.0.2:
   - Fix town bank accounts being removed before the feature isDeletedObjectBalancePaidToOwner can finish logging into the bank history book.
     - Closes #8031.
+  - Fix the message shown to mayors and assistants when someone spawns to their town showing prior to the teleport warmup time, resulting in unneeded messages.
