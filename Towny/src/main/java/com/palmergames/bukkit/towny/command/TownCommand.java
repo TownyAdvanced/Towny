@@ -1131,48 +1131,65 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (world == null || !world.isUsingTowny())
 			throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 		
-		List<Town> towns = new ArrayList<>();
-		for (Town town : TownyUniverse.getInstance().getTowns()) {
-			if (!town.hasWorld() || !town.getWorld().equals(world))
-				continue;
-			
-			Location spawn = town.getSpawnOrNull();
-			if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
-				continue;
-			
-			towns.add(town);
-		}
-		
-		if (towns.isEmpty())
-			throw new TownyException(Translatable.of("msg_no_towns_nearby"));
-		
-		towns.sort(Comparator.comparingDouble(town -> {
-			Location spawn = town.getSpawnOrNull();
-			return spawn != null ? spawn.distance(loc) : Double.MAX_VALUE;
-		}));
-		
-		Translator translator = Translator.locale(player);
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("msg_nearby_towns")));
-		
-		int count = 0;
-		for (Town town : towns) {
-			if (count >= 10)
-				break;
-			
-			Location spawn = town.getSpawnOrNull();
-			if (spawn == null)
-				continue;
-			
-			double dist = spawn.distance(loc);
-			String msg = translator.of("msg_nearby_town_format", town.getName(), String.format("%.1f", dist));
-			
-			if (town.hasNation()) {
-				msg += translator.of("msg_nearby_town_nation", town.getNationOrNull().getName());
+		plugin.getScheduler().runAsync(() -> {
+			List<Town> towns = new ArrayList<>();
+			for (Town town : TownyUniverse.getInstance().getTowns()) {
+				if (!town.hasWorld() || !town.getWorld().equals(world))
+					continue;
+				
+				Location spawn = town.getSpawnOrNull();
+				if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
+					continue;
+				
+				towns.add(town);
 			}
 			
-			TownyMessaging.sendMessage(player, msg);
-			count++;
-		}
+			if (towns.isEmpty()) {
+				plugin.getScheduler().run(() -> {
+					try {
+						throw new TownyException(Translatable.of("msg_no_towns_nearby"));
+					} catch (TownyException e) {
+						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
+					}
+				});
+				return;
+			}
+			
+			towns.sort(Comparator.comparingDouble(town -> {
+				Location spawn = town.getSpawnOrNull();
+				return spawn != null ? spawn.distance(loc) : Double.MAX_VALUE;
+			}));
+			
+			Translator translator = Translator.locale(player);
+			List<String> messages = new ArrayList<>();
+			messages.add(ChatTools.formatTitle(translator.of("msg_nearby_towns")));
+			
+			int count = 0;
+			for (Town town : towns) {
+				if (count >= 10)
+					break;
+				
+				Location spawn = town.getSpawnOrNull();
+				if (spawn == null)
+					continue;
+				
+				double dist = spawn.distance(loc);
+				String msg = translator.of("msg_nearby_town_format", town.getName(), String.format("%.1f", dist));
+				
+				if (town.hasNation()) {
+					msg += translator.of("msg_nearby_town_nation", town.getNationOrNull().getName());
+				}
+				
+				messages.add(msg);
+				count++;
+			}
+			
+			plugin.getScheduler().run(() -> {
+				for (String msg : messages) {
+					TownyMessaging.sendMessage(player, msg);
+				}
+			});
+		});
 	}
 
 	/**
