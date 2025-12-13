@@ -2708,6 +2708,26 @@ public enum ConfigNodes {
 			"# Warning: do not set this higher than the cost to claim a townblock.",
 			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.",
 			"# Optionally, set this to a negative amount if you want towns to pay money to unclaim their land."),
+
+	ECO_REFUND_DELETED_NEW_TOWNS("economy.refund_deleted_new_towns","","",""),
+	ECO_REFUND_ALLOW_REFUND_ON_DELETION(
+			"economy.refund_deleted_new_towns.allow_refund_on_deletion",
+			"false",
+			"",
+			"# Will towns that are recently created allow for a refund when the town is deleted by using the /t delete command?",
+			"# This allows a player who has founded their town in the wrong place to delete their town and move it.",
+			"# Towns must be less than the age specified below and have a configuable number of townblocks."),
+	ECO_REFUND_MAX_TOWN_AGE_IN_HOURS(
+			"economy.refund_deleted_new_towns.max_town_age_in_hours",
+			"1",
+			"",
+			"# How many hours old is a town allowed to be in order to get the refund when being deleted."),
+	ECO_REFUND_MAX_CLAIMS(
+			"economy.refund_deleted_new_towns.max_townblocks",
+			"8",
+			"",
+			"# How many townblocks is a town allowed to have in order to qualify for the refund."),
+	
 	ECO_PRICE_TAKEOVERCLAIM("economy.takeoverclaim","","",""),
 	ECO_PRICE_TAKEOVERCLAIM_PRICE(
 			"economy.takeoverclaim.price",
