@@ -100,6 +100,7 @@ public enum PermissionNodes {
 	TOWNY_COMMAND_TOWN("towny.command.town.*"),
 		TOWNY_COMMAND_TOWN_OTHERTOWN("towny.command.town.othertown"),
 		TOWNY_COMMAND_TOWN_HERE("towny.command.town.here"),
+		TOWNY_COMMAND_TOWN_NEARBY("towny.command.town.nearby"),
 		TOWNY_COMMAND_TOWN_LIST("towny.command.town.list.*"),
 		    TOWNY_COMMAND_TOWN_LIST_RESIDENTS("towny.command.town.list.residents"),
 		    TOWNY_COMMAND_TOWN_LIST_OPEN("towny.command.town.list.open"),

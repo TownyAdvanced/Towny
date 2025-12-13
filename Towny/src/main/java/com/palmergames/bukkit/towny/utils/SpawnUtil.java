@@ -118,7 +118,7 @@ public class SpawnUtil {
 
 	private static SpawnInformation getSpawnInformation(Player player, boolean noCmdArgs, String notAffordMSG, boolean outpost, SpawnType spawnType, Resident resident, Town town, Nation nation) {
 		// Is this an admin spawning?
-		final boolean isTownyAdmin = isTownyAdmin(player);
+		final boolean isTownyAdmin = isTownyAdmin(player, resident);
 
 		SpawnInformation spawnInformation = new SpawnInformation();
 		try {
@@ -226,8 +226,8 @@ public class SpawnUtil {
 	 * @param player Player to test permissions for.
 	 * @return true if this player has towny.admin or towny.admin.spawn in their permission nodes.
 	 */
-	private static boolean isTownyAdmin(Player player) {
-		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN);
+	private static boolean isTownyAdmin(Player player, Resident resident) {
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (!resident.hasMode("adminbypass") && hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN));
 	}
 	
 	/**
