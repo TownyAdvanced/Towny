@@ -1135,16 +1135,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		plugin.getScheduler().runAsync(() -> {
 			Map<Town, Double> townDistances = new HashMap<>();
-			for (Town town : TownyUniverse.getInstance().getTowns()) {
-				if (!town.hasWorld() || !town.getWorld().equals(world))
-					continue;
-				
+			for (Town town : world.getTowns().values()) {
 				Location spawn = town.getSpawnOrNull();
 				if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
 					continue;
 				
-				double dist = spawn.distance(loc);
-				townDistances.put(town, dist);
+				double distSquared = spawn.distanceSquared(loc);
+				townDistances.put(town, distSquared);
 			}
 			
 			if (townDistances.isEmpty()) {
@@ -1152,27 +1149,23 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				return;
 			}
 			
-			List<Town> towns = new ArrayList<>(townDistances.keySet());
-			towns.sort(Comparator.comparingDouble(townDistances::get));
-			
 			Translator translator = Translator.locale(player);
 			TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("msg_nearby_towns")));
 			
-			int count = 0;
-			for (Town town : towns) {
-				if (count >= 10)
-					break;
-				
-				double dist = townDistances.get(town);
-				String msg = translator.of("msg_nearby_town_format", town.getName(), String.format("%.1f", dist));
-				
-				if (town.hasNation()) {
-					msg += translator.of("msg_nearby_town_nation", town.getNationOrNull().getName());
-				}
-				
-				TownyMessaging.sendMessage(player, msg);
-				count++;
-			}
+			townDistances.entrySet().stream()
+				.sorted(Comparator.comparingDouble(Map.Entry::getValue))
+				.limit(10)
+				.forEach(entry -> {
+					Town town = entry.getKey();
+					double dist = Math.sqrt(entry.getValue());
+					String msg = translator.of("msg_nearby_town_format", town.getName(), String.format("%.1f", dist));
+					
+					if (town.hasNation()) {
+						msg += translator.of("msg_nearby_town_nation", town.getNationOrNull().getName());
+					}
+					
+					TownyMessaging.sendMessage(player, msg);
+				});
 		});
 	}
 
