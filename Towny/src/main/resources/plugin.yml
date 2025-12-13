@@ -382,6 +382,7 @@ permissions:
             towny.command.town.forsale: true
             towny.command.town.notforsale: true
             towny.command.town.here: true
+            towny.command.town.nearby: true
             towny.command.town.invite.*: true
             towny.command.town.jail: true
             towny.command.town.jail.list: true
