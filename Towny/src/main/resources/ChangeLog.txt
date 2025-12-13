@@ -10549,3 +10549,25 @@ v0.92.0.11:
   - Fix town bank accounts being removed before the feature isDeletedObjectBalancePaidToOwner can finish logging into the bank history book.
     - Closes #8031.
   - Fix the message shown to mayors and assistants when someone spawns to their town showing prior to the teleport warmup time, resulting in unneeded messages.
+  - Add option to refund towns upon deletion.
+    - Adds a configurable system based on town age and size limits, to refund recently-made, "small" towns their full cost.
+    - Closes #7974.
+  - New Config Option: economy.refund_deleted_new_towns.allow_refund_on_deletion
+    - Default: false
+    - Will towns that are recently created allow for a refund when the town is deleted by using the /t delete command?
+    - This allows a player who has founded their town in the wrong place to delete their town and move it.
+    - Towns must be less than the age specified below and have a configuable number of townblocks.
+  - New Config Option: economy.refund_deleted_new_towns.max_town_age_in_hours
+    - Default: 1
+    - How many hours old is a town allowed to be in order to get the refund when being deleted.
+  - New Config Option: economy.refund_deleted_new_towns.max_townblocks
+    - Default: 8
+    - How many townblocks is a town allowed to have in order to qualify for the refund.
+  - Fix exception when attempting to query NPC perms through LuckPerms, courtesy of Warrior with PR #8033.
+  - Future proof minecraft version parsing, courtesy of Warrior with PR #8034.
+  - Fix 2 points where permission node tests bypass the adminbypass mode.
+  - Add /town nearby command, courtesy of Nrleryx with PR #8040. (First-Time Contributor!)
+  - New Permission Node: towny.command.town.nearby
+    - Will be automatically added to your nomads in the townyperms.yml.
+  - New Command: /town nearby
+    - Shows a player up to 10 towns that are nearest to the player in the order of closest to furthest.
