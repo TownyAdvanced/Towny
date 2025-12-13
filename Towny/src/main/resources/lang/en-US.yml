@@ -2675,6 +2675,8 @@ status_onlinesince: "Online Since:"
 
 msg_a_player_spawned_to_your_town_earning_you_x: "The player %s has spawned at your town, earning you %s."
 
+msg_you_have_been_refunded_your_town_cost: "You have been refunded %s because your town was less than %s hour(s) old and did not claim more than %s townblocks."
+
 msg_nearby_towns: 'Nearby Towns'
 msg_no_towns_nearby: 'No towns found nearby.'
 msg_nearby_town_format: '<green>%s <white>(%s blocks)'
