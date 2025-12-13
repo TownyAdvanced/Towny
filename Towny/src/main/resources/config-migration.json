@@ -921,6 +921,11 @@
         "type": "APPEND",
         "path": "protection.switch_ids",
         "value": ",COPPER_CHEST,COPPER_GOLEM_STATUE,SHELVES"
+      },
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.town.nearby"
       }
     ]
   }

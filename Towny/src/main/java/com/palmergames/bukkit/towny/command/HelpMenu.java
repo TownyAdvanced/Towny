@@ -556,9 +556,10 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("town", Translatable.of("town_help_1"))
 				.add("[town]", Translatable.of("town_help_3"))
-				.add("new [name]", Translatable.of("town_help_11"))
+				.add("new [name]", Translatable.of("town_help_12"))
 				.add("here", Translatable.of("town_help_4"))
 				.add("list", Translatable.of("town_help_26"))
+				.add("nearby", Translatable.of("town_help_11"))
 				.add("online", Translatable.of("town_help_10"))
 				.add("leave", Translatable.of("town_help_27"))
 				.add("reclaim", Translatable.of("town_help_12"))

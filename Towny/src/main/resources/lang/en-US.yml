@@ -91,6 +91,7 @@ town_help_8: 'List commands for mayors.'
 town_help_9: 'Today''s the day!'
 town_help_10: 'List all online residents in town'
 town_help_11: 'List nearby towns sorted by distance.'
+town_help_12: 'New town with you as mayor.'
 town_help_13: "See a list of residents in the town."
 town_help_14: "See a list of ranks in the town."
 town_help_15: "See a list of outlaws in the town."
@@ -565,6 +566,8 @@ msg_invited: '&bYou''ve been invited to join the %s.'
 msg_town_online: 'Online in Town'
 msg_nearby_towns: 'Nearby Towns'
 msg_no_towns_nearby: 'No towns found nearby.'
+msg_nearby_town_format: '&a%s &f(%s blocks)'
+msg_nearby_town_nation: ' &b[%s]'
 msg_nation_online: 'Online in Nation'
 
 msg_allied_nations: '&b%s allied with the nations %s.'

@@ -175,7 +175,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"fs",
 		"here",
 		"invite",
-		"nearby",
 		"jail",
 		"join",
 		"kick",
@@ -183,6 +182,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"list",
 		"mayor",
 		"merge",
+		"nearby",
 		"new",
 		"nfs",
 		"notforsale",
@@ -667,7 +667,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "forsale", "fs"-> parseTownForSaleCommand(player, subArg);
 		case "here" -> parseTownHereCommand(player);
 		case "invite", "invites"-> parseInviteCommand(player, subArg);
-		case "nearby" -> parseTownNearbyCommand(player);
 		case "jail"-> parseJailCommand(player, null, subArg, false);
 		case "join"-> parseTownJoin(player, subArg);
 		case "kick"-> townKick(player, subArg);
@@ -675,6 +674,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "list" -> listTowns(player, split);
 		case "mayor" -> parseTownyMayorCommand(player);
 		case "merge"-> parseTownMergeCommand(player, subArg);
+		case "nearby" -> parseTownNearbyCommand(player);
 		case "new", "create"-> parseTownNewCommand(player, split);
 		case "notforsale", "nfs"-> parseTownNotForSaleCommand(player);
 		case "online"-> parseTownOnlineCommand(player, subArg);
@@ -1123,50 +1123,55 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		townStatusScreen(player, town);
 	}
 
-	private void parseTownNearbyCommand(final Player player) throws TownyException {
+	private void parseTownNearbyCommand(Player player) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_NEARBY.getNode());
-		Location playerLoc = player.getLocation();
-		TownyWorld world = TownyAPI.getInstance().getTownyWorld(playerLoc.getWorld().getName());
+		Location loc = player.getLocation();
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
 		
 		if (world == null || !world.isUsingTowny())
 			throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 		
-		List<Town> nearbyTowns = TownyUniverse.getInstance().getTowns().stream()
-			.filter(town -> town.getWorld().equals(world))
-			.filter(town -> {
-				Location spawnLoc = town.getSpawnOrNull();
-				return spawnLoc != null && spawnLoc.getWorld().equals(playerLoc.getWorld());
-			})
-			.sorted(Comparator.comparingDouble(town -> {
-				Location spawnLoc = town.getSpawnOrNull();
-				return spawnLoc != null ? spawnLoc.distance(playerLoc) : Double.MAX_VALUE;
-			}))
-			.limit(10)
-			.collect(Collectors.toList());
-		
-		if (nearbyTowns.isEmpty()) {
-			Translator translator = Translator.locale(player);
-			TownyMessaging.sendMessage(player, Colors.Red + translator.of("msg_no_towns_nearby"));
-			return;
+		List<Town> towns = new ArrayList<>();
+		for (Town town : TownyUniverse.getInstance().getTowns()) {
+			if (!town.hasWorld() || !town.getWorld().equals(world))
+				continue;
+			
+			Location spawn = town.getSpawnOrNull();
+			if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
+				continue;
+			
+			towns.add(town);
 		}
+		
+		if (towns.isEmpty())
+			throw new TownyException(Translatable.of("msg_no_towns_nearby"));
+		
+		towns.sort(Comparator.comparingDouble(town -> {
+			Location spawn = town.getSpawnOrNull();
+			return spawn != null ? spawn.distance(loc) : Double.MAX_VALUE;
+		}));
 		
 		Translator translator = Translator.locale(player);
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("msg_nearby_towns")));
 		
-		for (Town town : nearbyTowns) {
-			Location spawnLoc = town.getSpawnOrNull();
-			if (spawnLoc == null)
+		int count = 0;
+		for (Town town : towns) {
+			if (count >= 10)
+				break;
+			
+			Location spawn = town.getSpawnOrNull();
+			if (spawn == null)
 				continue;
 			
-			double distance = spawnLoc.distance(playerLoc);
-			String distanceStr = String.format("%.1f", distance);
-			String townInfo = Colors.Green + town.getName() + Colors.White + " (" + distanceStr + " blocks)";
+			double dist = spawn.distance(loc);
+			String msg = translator.of("msg_nearby_town_format", town.getName(), String.format("%.1f", dist));
 			
 			if (town.hasNation()) {
-				townInfo += Colors.LightBlue + " [" + town.getNationOrNull().getName() + "]";
+				msg += translator.of("msg_nearby_town_nation", town.getNationOrNull().getName());
 			}
 			
-			TownyMessaging.sendMessage(player, townInfo);
+			TownyMessaging.sendMessage(player, msg);
+			count++;
 		}
 	}
 
