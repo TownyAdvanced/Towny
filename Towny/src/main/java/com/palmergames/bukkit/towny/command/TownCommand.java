@@ -141,8 +141,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -1132,7 +1134,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
 		
 		plugin.getScheduler().runAsync(() -> {
-			List<Town> towns = new ArrayList<>();
+			Map<Town, Double> townDistances = new HashMap<>();
 			for (Town town : TownyUniverse.getInstance().getTowns()) {
 				if (!town.hasWorld() || !town.getWorld().equals(world))
 					continue;
@@ -1141,54 +1143,36 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
 					continue;
 				
-				towns.add(town);
+				double dist = spawn.distance(loc);
+				townDistances.put(town, dist);
 			}
 			
-			if (towns.isEmpty()) {
-				plugin.getScheduler().run(() -> {
-					try {
-						throw new TownyException(Translatable.of("msg_no_towns_nearby"));
-					} catch (TownyException e) {
-						TownyMessaging.sendErrorMsg(player, e.getMessage(player));
-					}
-				});
+			if (townDistances.isEmpty()) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_towns_nearby"));
 				return;
 			}
 			
-			towns.sort(Comparator.comparingDouble(town -> {
-				Location spawn = town.getSpawnOrNull();
-				return spawn != null ? spawn.distance(loc) : Double.MAX_VALUE;
-			}));
+			List<Town> towns = new ArrayList<>(townDistances.keySet());
+			towns.sort(Comparator.comparingDouble(townDistances::get));
 			
 			Translator translator = Translator.locale(player);
-			List<String> messages = new ArrayList<>();
-			messages.add(ChatTools.formatTitle(translator.of("msg_nearby_towns")));
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("msg_nearby_towns")));
 			
 			int count = 0;
 			for (Town town : towns) {
 				if (count >= 10)
 					break;
 				
-				Location spawn = town.getSpawnOrNull();
-				if (spawn == null)
-					continue;
-				
-				double dist = spawn.distance(loc);
+				double dist = townDistances.get(town);
 				String msg = translator.of("msg_nearby_town_format", town.getName(), String.format("%.1f", dist));
 				
 				if (town.hasNation()) {
 					msg += translator.of("msg_nearby_town_nation", town.getNationOrNull().getName());
 				}
 				
-				messages.add(msg);
+				TownyMessaging.sendMessage(player, msg);
 				count++;
 			}
-			
-			plugin.getScheduler().run(() -> {
-				for (String msg : messages) {
-					TownyMessaging.sendMessage(player, msg);
-				}
-			});
 		});
 	}
 
