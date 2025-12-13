@@ -8,6 +8,7 @@ nomad:
     - towny.command.towny.war
     - towny.command.town.online
     - towny.command.town.here
+    - towny.command.town.nearby
     - towny.command.town.new
     - towny.command.town.join
     - towny.command.town.list.*

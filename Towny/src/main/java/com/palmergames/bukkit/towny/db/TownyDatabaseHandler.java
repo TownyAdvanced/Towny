@@ -467,6 +467,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		
 		Resident mayor = town.getMayor();
 		TownyWorld townyWorld = town.getHomeblockWorld();
+		int numTownBlocks = town.getNumTownBlocks();
 		
 		// Remove the Town's spawn particle.
 		if (town.hasSpawn()) {
@@ -515,7 +516,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 		plugin.resetCache();
 		deleteTown(town);
 		
-		BukkitTools.fireEvent(new DeleteTownEvent(town, mayor, cause, sender));
+		BukkitTools.fireEvent(new DeleteTownEvent(town, mayor, numTownBlocks, cause, sender));
 		
 		TownyMessaging.sendGlobalMessage(Translatable.of("msg_del_town2", town.getName()));
 		return true;

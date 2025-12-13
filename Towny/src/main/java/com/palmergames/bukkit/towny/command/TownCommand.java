@@ -141,8 +141,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -182,6 +184,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		"list",
 		"mayor",
 		"merge",
+		"nearby",
 		"new",
 		"nfs",
 		"notforsale",
@@ -673,6 +676,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		case "list" -> listTowns(player, split);
 		case "mayor" -> parseTownyMayorCommand(player);
 		case "merge"-> parseTownMergeCommand(player, subArg);
+		case "nearby" -> parseTownNearbyCommand(player);
 		case "new", "create"-> parseTownNewCommand(player, split);
 		case "notforsale", "nfs"-> parseTownNotForSaleCommand(player);
 		case "online"-> parseTownOnlineCommand(player, subArg);
@@ -1119,6 +1123,50 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (town == null)
 			throw new TownyException(Translatable.of("msg_not_claimed", Coord.parseCoord(player.getLocation())));
 		townStatusScreen(player, town);
+	}
+
+	private void parseTownNearbyCommand(Player player) throws TownyException {
+		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWN_NEARBY.getNode());
+		Location loc = player.getLocation();
+		TownyWorld world = TownyAPI.getInstance().getTownyWorld(loc.getWorld().getName());
+		
+		if (world == null || !world.isUsingTowny())
+			throw new TownyException(Translatable.of("msg_err_usingtowny_disabled"));
+		
+		plugin.getScheduler().runAsync(() -> {
+			Map<Town, Double> townDistances = new HashMap<>();
+			for (Town town : world.getTowns().values()) {
+				Location spawn = town.getSpawnOrNull();
+				if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
+					continue;
+				
+				double distSquared = spawn.distanceSquared(loc);
+				townDistances.put(town, distSquared);
+			}
+			
+			if (townDistances.isEmpty()) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_no_towns_nearby"));
+				return;
+			}
+			
+			Translator translator = Translator.locale(player);
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("msg_nearby_towns")));
+			
+			townDistances.entrySet().stream()
+				.sorted(Comparator.comparingDouble(Map.Entry::getValue))
+				.limit(10)
+				.forEach(entry -> {
+					Town town = entry.getKey();
+					double dist = Math.sqrt(entry.getValue());
+					String msg = translator.of("msg_nearby_town_format", town.getName(), String.format("%.1f", dist));
+					
+					if (town.hasNation()) {
+						msg += translator.of("msg_nearby_town_nation", town.getNationOrNull().getName());
+					}
+					
+					TownyMessaging.sendMessage(player, msg);
+				});
+		});
 	}
 
 	/**

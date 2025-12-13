@@ -113,6 +113,7 @@ town_help_32: "Use /t set ? for help."
 town_help_33: "Use /t buy ? for help."
 town_help_34: "Use /t toggle ? for help."
 town_help_35: "Use /t rank ? for help."
+town_help_36: 'List nearby towns sorted by distance.'
 
 town_list_help_0: "View the specified page."
 town_list_help_1: "List towns by resident-count, with the specified page."
@@ -2673,3 +2674,10 @@ time-x-years-ago: "%d years ago"
 status_onlinesince: "Online Since:"
 
 msg_a_player_spawned_to_your_town_earning_you_x: "The player %s has spawned at your town, earning you %s."
+
+msg_you_have_been_refunded_your_town_cost: "You have been refunded %s because your town was less than %s hour(s) old and did not claim more than %s townblocks."
+
+msg_nearby_towns: 'Nearby Towns'
+msg_no_towns_nearby: 'No towns found nearby.'
+msg_nearby_town_format: '<green>%s <white>(%s blocks)'
+msg_nearby_town_nation: ' <aqua>[%s]'

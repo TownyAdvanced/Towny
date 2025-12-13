@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -146,7 +147,7 @@ public class BankAccount extends Account {
 			}
 		}
 
-		super.removeAccount();
+		Towny.getPlugin().getScheduler().runLater(() -> super.removeAccount(), 10L);
 	}
 
 	@Nullable

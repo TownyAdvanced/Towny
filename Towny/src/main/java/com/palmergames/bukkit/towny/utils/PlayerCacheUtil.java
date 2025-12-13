@@ -366,7 +366,7 @@ public class PlayerCacheUtil {
 		/*
 		 * Check all-towns overrides before testing any plot permissions.
 		 */
-		if (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))
+		if (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action) && !res.hasMode("adminbypass"))
 			return true;
 		
 		/*
