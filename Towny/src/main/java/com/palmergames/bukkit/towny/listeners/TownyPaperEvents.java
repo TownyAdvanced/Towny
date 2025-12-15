@@ -98,8 +98,7 @@ public class TownyPaperEvents implements Listener {
 			registerEvent(ADD_TO_WORLD_EVENT, this::entityAddToWorldListener, EventPriority.MONITOR, false /* n/a */);
 		}
 		
-		if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(Version.fromString("1.21.10")))
-			registerEvent(COPPER_GOLEM_MOVES_ITEM_EVENT, this::onGolemMoveItem, EventPriority.NORMAL, true);
+		registerEvent(COPPER_GOLEM_MOVES_ITEM_EVENT, this::onGolemMoveItem, EventPriority.NORMAL, true);
 	}
 	
 	@SuppressWarnings("unchecked")
