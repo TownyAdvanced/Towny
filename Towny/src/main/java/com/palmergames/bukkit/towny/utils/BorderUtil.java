@@ -21,6 +21,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -194,12 +195,12 @@ public class BorderUtil {
 	 * @param blockTo Block (Normal Chest) where the item is moving to.
 	 * @return true if the blocks are considered same-owner.
 	 */	
-	public static boolean allowedCopperGolemMove(Block block, Block blockTo) {
+	public static boolean allowedCopperGolemMove(Location blockLoc, Location blockToLoc) {
 
-		WorldCoord from = WorldCoord.parseWorldCoord(block);
-		WorldCoord to = WorldCoord.parseWorldCoord(blockTo);
-		if (from.equals(to))
+		if(!WorldCoord.cellChanged(blockLoc, blockToLoc))
 			return true;
+		WorldCoord from = WorldCoord.parseWorldCoord(blockLoc);
+		WorldCoord to = WorldCoord.parseWorldCoord(blockToLoc);
 
 		// One side is wilderness and the other is not.
 		if (from.hasTownBlock() != to.hasTownBlock())
