@@ -10571,3 +10571,5 @@ v0.92.0.11:
     - Will be automatically added to your nomads in the townyperms.yml.
   - New Command: /town nearby
     - Shows a player up to 10 towns that are nearest to the player in the order of closest to furthest.
+0.102.0.3:
+  - Add test preventing copper golems moving items beyond same-owner plots.
