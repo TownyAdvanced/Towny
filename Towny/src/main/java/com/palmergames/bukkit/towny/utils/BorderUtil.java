@@ -21,6 +21,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -185,6 +186,41 @@ public class BorderUtil {
 		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() 
 			&& !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 		
+	}
+
+	/**
+	 * Decides whether a copper golem can move an item from one block to another.
+	 * 
+	 * @param block   Block (Copper Chest) where the item originated from.
+	 * @param blockTo Block (Normal Chest) where the item is moving to.
+	 * @return true if the blocks are considered same-owner.
+	 */	
+	public static boolean allowedCopperGolemMove(Location blockLoc, Location blockToLoc) {
+
+		if(!WorldCoord.cellChanged(blockLoc, blockToLoc))
+			return true;
+		WorldCoord from = WorldCoord.parseWorldCoord(blockLoc);
+		WorldCoord to = WorldCoord.parseWorldCoord(blockToLoc);
+
+		// One side is wilderness and the other is not.
+		if (from.hasTownBlock() != to.hasTownBlock())
+			return false;
+
+		TownBlock currentTownBlock = from.getTownBlockOrNull();
+		TownBlock destinationTownBlock = to.getTownBlockOrNull();
+
+		// One is player owned and the other isn't.
+		if (currentTownBlock.hasResident() != destinationTownBlock.hasResident())
+			return false;
+
+		// Both townblocks are owned by the same resident.
+		if (currentTownBlock.hasResident() && destinationTownBlock.hasResident() 
+			&& currentTownBlock.getResidentOrNull() == destinationTownBlock.getResidentOrNull())
+			return true;
+
+		// Both townblocks are owned by the same town.
+		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() 
+			&& !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 	}
 
 	private static final int[][] DIRECTIONS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
