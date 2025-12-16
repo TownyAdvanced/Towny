@@ -10573,3 +10573,4 @@ v0.92.0.11:
     - Shows a player up to 10 towns that are nearest to the player in the order of closest to furthest.
 0.102.0.3:
   - Add test preventing copper golems moving items beyond same-owner plots.
+  - Fix towns having a spawn point in a non-existent world preventing the town being deleted.

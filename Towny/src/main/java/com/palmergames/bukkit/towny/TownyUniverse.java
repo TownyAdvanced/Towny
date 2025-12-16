@@ -1089,7 +1089,13 @@ public class TownyUniverse {
 	}
 
 	public void removeSpawnPoint(Location loc) {
-		removeSpawnPoint(SpawnPointLocation.parseSpawnPointLocation(loc));
+		SpawnPointLocation spawnPointLocation;
+		try {
+			spawnPointLocation = SpawnPointLocation.parseSpawnPointLocation(loc);
+		} catch (IllegalArgumentException ignored) {
+			return;
+		}
+		removeSpawnPoint(spawnPointLocation);
 	}
 	
 	public void removeSpawnPoint(SpawnPointLocation point) {
