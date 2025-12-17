@@ -94,7 +94,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	}
 	
 	public void setResident(Resident resident) {
-		if (hasResident())
+		if (!hasResident())
 			this.resident = resident;
 	}
 
