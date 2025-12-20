@@ -10574,3 +10574,5 @@ v0.92.0.11:
 0.102.0.3:
   - Add test preventing copper golems moving items beyond same-owner plots.
   - Fix towns having a spawn point in a non-existent world preventing the town being deleted.
+  - Add protection for the waxed copper golem statues into the switch category when COPPER_GOLEM_STATUE is a switch_id.
+  - Add waxed versions of copper chests into the COPPER_CHEST category.
