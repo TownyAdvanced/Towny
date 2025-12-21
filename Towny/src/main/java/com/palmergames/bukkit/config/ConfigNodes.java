@@ -2836,6 +2836,11 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.",
 			"# This will only succeed if the town or nation has a mayor or leader."),
+	ECO_BANK_HIDE_ZERO_OR_LESS_BANK_ACCOUNTS_ON_LISTS(
+			"economy.banks.hide_zero_or_under_banks_on_list_outputs",
+			"false",
+			"",
+			"# When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists."),
 
 	ECO_CLOSED_ECONOMY("economy.closed_economy", "", ""),
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(

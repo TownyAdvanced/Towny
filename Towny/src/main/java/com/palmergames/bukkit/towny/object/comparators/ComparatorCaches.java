@@ -86,6 +86,7 @@ public class ComparatorCaches {
 
 		boolean spawningFullyDisabled = !TownySettings.isConfigAllowingTownSpawn() && !TownySettings.isConfigAllowingPublicTownSpawnTravel()
 				&& !TownySettings.isConfigAllowingTownSpawnNationTravel() && !TownySettings.isConfigAllowingTownSpawnNationAllyTravel();
+		boolean ignorePoorBanks = TownySettings.areZeroOrLowerBankAccountsHiddenOnLists();
 
 		for (Town town : towns) {
 			Component townName = Component.text(StringMgmt.remUnderscore(town.getName()), NamedTextColor.AQUA);
@@ -93,6 +94,8 @@ public class ComparatorCaches {
 			String slug = "";
 			switch (compType) {
 			case BALANCE:
+				if (ignorePoorBanks && town.getAccount().getCachedBalance() <= 0)
+					continue;
 				slug = "(" + TownyEconomyHandler.getFormattedBalance(town.getAccount().getCachedBalance()) + ")";
 				break;
 			case TOWNBLOCKS:

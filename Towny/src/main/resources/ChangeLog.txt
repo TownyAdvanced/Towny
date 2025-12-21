@@ -10576,3 +10576,7 @@ v0.92.0.11:
   - Fix towns having a spawn point in a non-existent world preventing the town being deleted.
   - Add protection for the waxed copper golem statues into the switch category when COPPER_GOLEM_STATUE is a switch_id.
   - Add waxed versions of copper chests into the COPPER_CHEST category.
+  - Added option to hide nations and towns from the list pages when their banks are less than or equal to zero.
+  - New Config Option: economy.banks.hide_zero_or_under_banks_on_list_outputs
+    - Default: false
+    - When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists.
