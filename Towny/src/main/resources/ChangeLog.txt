@@ -10580,3 +10580,4 @@ v0.92.0.11:
   - New Config Option: economy.banks.hide_zero_or_under_banks_on_list_outputs
     - Default: false
     - When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists.
+  - Fix admins with the adminbypass mode active not receiving teleport warmups and cooldowns.
