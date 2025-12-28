@@ -64,18 +64,61 @@ public class TownyPermission {
 			return super.toString().toLowerCase(Locale.ROOT);
 		}
 	}
+
+	/**
+	 * Default permissions with everything off/false.
+	 */
+	private static final boolean[][] DEFAULT_EMPTY_PERMS;
+
+	/**
+	 * Default permissions for residents, everything off except for residents.
+	 */
+	private static final boolean[][] DEFAULT_RESIDENT_PERMS;
+
+	static {
+		DEFAULT_EMPTY_PERMS = new boolean[PermLevel.values.length][ActionType.values.length];
+		for (boolean[] permLevel : DEFAULT_EMPTY_PERMS) {
+			Arrays.fill(permLevel, false);
+		}
+
+		DEFAULT_RESIDENT_PERMS = new boolean[PermLevel.values.length][ActionType.values.length];
+		for (int i = 0; i < DEFAULT_RESIDENT_PERMS.length; i++) {
+			Arrays.fill(DEFAULT_RESIDENT_PERMS[i], i == PermLevel.RESIDENT.index);
+		}
+	}
 	
 	// Towny permissions are split into Action Type and Permission Level
 	// So they can inherently be represented by a 2d array
-	protected boolean[][] perms;
+	protected boolean[][] perms = DEFAULT_EMPTY_PERMS;
 	
 	public boolean pvp, fire, explosion, mobs;
 
-	public TownyPermission() {
+	/**
+	 * Ensures that {@link #perms} is a uniquely instantiated array that is safe to write to.
+	 */
+	private void ensureInitialized() {
+		if (this.perms != DEFAULT_EMPTY_PERMS && this.perms != DEFAULT_RESIDENT_PERMS) {
+			return;
+		}
+
+		final boolean[][] current = this.perms;
+
 		// Fill the perms array
 		perms = new boolean[PermLevel.values.length][ActionType.values.length];
-		
-		reset();
+		for (int i = 0; i < perms.length; i++) {
+			System.arraycopy(current[i], 0, perms[i], 0, ActionType.values.length);
+		}
+	}
+
+	/**
+	 * Attempts to compact the {@link #perms} array by comparing it against the cached shared array instances.
+	 */
+	private void compactIfPossible() {
+		if (Arrays.deepEquals(this.perms, DEFAULT_RESIDENT_PERMS)) {
+			this.perms = DEFAULT_RESIDENT_PERMS;
+		} else if (Arrays.deepEquals(this.perms, DEFAULT_EMPTY_PERMS)) {
+			this.perms = DEFAULT_EMPTY_PERMS;
+		}
 	}
 
 	public void reset() {
@@ -87,6 +130,8 @@ public class TownyPermission {
 	}
 	
 	public void change(TownyPermissionChange.Action permChange, boolean toValue, Object... args) {
+		ensureInitialized();
+
 		// Sorted by most common to least common
 		if (permChange == TownyPermissionChange.Action.SINGLE_PERM && args.length == 2) {
 			perms[((PermLevel) args[0]).getIndex()][((ActionType) args[1]).getIndex()] = toValue;
@@ -109,6 +154,7 @@ public class TownyPermission {
 	}
 	
 	public void setAllNonEnvironmental(boolean b) {
+		ensureInitialized();
 		for (boolean[] permLevel : perms) {
 			Arrays.fill(permLevel, b);
 		}
@@ -129,6 +175,7 @@ public class TownyPermission {
 
 	// TODO Restructure how perms are saved
 	public void set(String s, boolean b) {
+		ensureInitialized();
 		
 		switch (s.toLowerCase(Locale.ROOT)) {
 			case "denyall":
@@ -204,6 +251,8 @@ public class TownyPermission {
 		String[] tokens = s.split(",");
 		for (String token : tokens)
 			set(token, true);
+
+		compactIfPossible();
 	}
 
 	@Override
@@ -285,6 +334,7 @@ public class TownyPermission {
 	}
 
 	public void loadDefault(TownBlockOwner owner) {
+		ensureInitialized();
 		
 		for (PermLevel permLevel : PermLevel.values) {
 			for (ActionType actionType : ActionType.values) {
@@ -304,6 +354,7 @@ public class TownyPermission {
 			mobs = owner.getPermissions().mobs;
 		}
 
+		compactIfPossible();
 	}
 
 	@Override
