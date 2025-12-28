@@ -48,8 +48,8 @@ public class TownBlock extends TownyObject {
 	private District district;
 	private long claimedAt;
 	private Jail jail;
-	private Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
-	private Set<Resident> trustedResidents = new HashSet<>();
+	private @Nullable Map<Resident, PermissionData> permissionOverrides = null;
+	private @Nullable Set<Resident> trustedResidents = null;
 
 	//Plot level permissions
 	protected TownyPermission permissions = new TownyPermission();
@@ -83,7 +83,7 @@ public class TownBlock extends TownyObject {
 			if (updateClaimedAt)
 				setClaimedAt(System.currentTimeMillis());
 			
-			permissionOverrides.clear();
+			permissionOverrides = null;
 			minTownMembershipDays = -1;
 			maxTownMembershipDays = -1;
 		} catch (AlreadyRegisteredException | NullPointerException ignored) {}
@@ -188,7 +188,7 @@ public class TownBlock extends TownyObject {
 		if (unclaim && callEvent)
 			BukkitTools.fireEvent(new PlotUnclaimEvent(this.resident, resident, this));
 		
-		permissionOverrides.clear();
+		permissionOverrides = null;
 		
 		return true;
 	}
@@ -571,8 +571,25 @@ public class TownBlock extends TownyObject {
 	public void setClaimedAt(long claimedAt) {
 		this.claimedAt = claimedAt;
 	}
+	
+	public boolean hasPermissionOverrides() {
+		return this.permissionOverrides != null && !this.permissionOverrides.isEmpty();
+	}
+
+	@Nullable
+	public PermissionData getPermissionOverride(final Resident resident) {
+		if (this.permissionOverrides == null || resident == null) {
+			return null;
+		}
+
+		return this.permissionOverrides.get(resident);
+	}
 
 	public Map<Resident, PermissionData> getPermissionOverrides() {
+		if (this.permissionOverrides == null) {
+			this.permissionOverrides = new HashMap<>();
+		}
+
 		return permissionOverrides;
 	}
 
@@ -580,20 +597,31 @@ public class TownBlock extends TownyObject {
 		residents.forEach(this::addTrustedResident);
 	}
 
-	public Set<Resident> getTrustedResidents() {
+	/**
+	 * {@return whether this TownBlock has any trusted residents}
+	 */
+	public boolean hasTrustedResidents() {
+		return this.trustedResidents != null && !this.trustedResidents.isEmpty();
+	}
+
+	public @NotNull Set<Resident> getTrustedResidents() {
+		if (this.trustedResidents == null) {
+			this.trustedResidents = new HashSet<>();
+		}
+
 		return trustedResidents;
 	}
 	
 	public boolean hasTrustedResident(Resident resident) {
-		return trustedResidents.contains(resident);
+		return this.trustedResidents != null && this.trustedResidents.contains(resident);
 	}
 	
 	public void addTrustedResident(Resident resident) {
-		trustedResidents.add(resident);
+		getTrustedResidents().add(resident);
 	}
 	
 	public void removeTrustedResident(Resident resident) {
-		trustedResidents.remove(resident);
+		getTrustedResidents().remove(resident);
 	}
 	
 	public boolean hasResident(Resident resident) {
@@ -603,12 +631,12 @@ public class TownBlock extends TownyObject {
 		return resident.equals(this.resident);
 	}
 
-	public void setTrustedResidents(Set<Resident> trustedResidents) {
-		this.trustedResidents = new HashSet<>(trustedResidents);
+	public void setTrustedResidents(@Nullable Set<Resident> trustedResidents) {
+		this.trustedResidents = trustedResidents == null || trustedResidents.isEmpty() ? null : new HashSet<>(trustedResidents);
 	}
 
-	public void setPermissionOverrides(Map<Resident, PermissionData> permissionOverrides) {
-		this.permissionOverrides = new HashMap<>(permissionOverrides);
+	public void setPermissionOverrides(@Nullable Map<Resident, PermissionData> permissionOverrides) {
+		this.permissionOverrides = permissionOverrides == null || permissionOverrides.isEmpty() ? null : new HashMap<>(permissionOverrides);
 	}
 
 	/**

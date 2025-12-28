@@ -517,7 +517,7 @@ public class TownyCustomListener implements Listener {
 					resident.save();
 			}
 			for (TownBlock tb : nationTown.getTownBlocks()) {
-				if (tb.getTrustedResidents().isEmpty())
+				if (!tb.hasTrustedResidents())
 					continue;
 				save = false;
 				for (Resident resident : new ArrayList<>(tb.getTrustedResidents())) {

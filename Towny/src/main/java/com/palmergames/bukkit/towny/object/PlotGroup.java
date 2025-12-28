@@ -233,7 +233,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 		permissionOverrides.remove(resident);
 			
 		for (TownBlock townBlock : townBlocks) {
-			if (townBlock.getPermissionOverrides().containsKey(resident)) {
+			if (townBlock.getPermissionOverride(resident) != null) {
 				townBlock.getPermissionOverrides().remove(resident);
 				townBlock.save();
 			}
