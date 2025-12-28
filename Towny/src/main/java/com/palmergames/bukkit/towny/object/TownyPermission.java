@@ -72,7 +72,7 @@ public class TownyPermission {
 			return super.toString().toLowerCase(Locale.ROOT);
 		}
 	}
-
+	
 	// Towny permissions are split into Action Type and Permission Level
 	// So they can inherently be represented by a 2d array (or a short, for as long as there are only 4 of both)
 	protected short perms;
