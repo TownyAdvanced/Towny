@@ -2788,6 +2788,16 @@ public enum ConfigNodes {
 			"",
 			"# Maximum amount of money allowed in town bank",
 			"# Use 0 for no limit"),
+	ECO_BANK_CAP_PLOT_BASED(
+			"economy.banks.town_bank_cap_is_plotbased",
+			"false",
+			"",
+			"# When true the bank cap is plot-based. The number of townblocks/plots a town has claimed will be multiplied by the above town_bank_cap value."),
+	ECO_BANK_CAP_PLOT_BASED_USES_TOWN_LEVEL_MODIFIER(
+			"economy.banks.plotbased_bank_cap_uses_town_level_modifier",
+			"false",
+			"",
+			"# When true the plot-based bank cap will also be multiplied by the town_levels' bank cap modifiers."),
 	ECO_BANK_TOWN_ALLOW_WITHDRAWALS(
 			"economy.banks.town_allow_withdrawals",
 			"true",
