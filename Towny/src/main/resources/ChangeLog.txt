@@ -10597,3 +10597,4 @@ v0.92.0.11:
   - Bit pack perms in TownyPermission objects, courtesy of Warrior with PR #8048.
   - Remove world references stored inside WorldCoord, courtesy of Warrior with PR #8050.
   - Fix message when attempting to overclaim your own town, courtesy of Warrior with PR #8051.
+  - Reduce allocations done by Resident hasRank methods, courtesy of Warrior with PR #8037.
