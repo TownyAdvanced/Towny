@@ -1904,18 +1904,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 					line = keys.get("trustedResidents");
-					if (line != null && !line.isEmpty() && !townBlock.hasTrustedResidents()) {
+					if (line != null && !line.isEmpty()) {
 						for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))))
 							townBlock.addTrustedResident(resident);
 						
-						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.hasTrustedResidents())
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.hasTrustedResidents()) {
 							townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
+						}
 					}
 					
 					line = keys.get("customPermissionData");
-					if (line != null && !line.isEmpty() && !townBlock.hasPermissionOverrides()) {
-						@SuppressWarnings("unchecked")
-						Map<String, String> map = new Gson().fromJson(line, Map.class);
+					if (line != null && !line.isEmpty()) {
+						Map<String, String> map = new Gson().fromJson(line, new TypeToken<Map<String, String>>(){}.getType());
 						
 						for (Map.Entry<String, String> entry : map.entrySet()) {
 							Resident resident;
@@ -1931,8 +1931,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
 						}
 						
-						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.hasPermissionOverrides())
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.hasPermissionOverrides()) {
 							townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
+						}
 					}
 
 				} catch (Exception e) {
