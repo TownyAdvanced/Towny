@@ -2793,6 +2793,12 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true the bank cap is plot-based. The number of townblocks/plots a town has claimed will be multiplied by the above town_bank_cap value."),
+	ECO_BANK_CAP_PLOT_BASED_MIN_AMOUNT(
+			"economy.banks.plotbased_town_bank_cap_minimum",
+			"0.0",
+			"",
+			"# The smallest cap that banks can have while using the plotbased bank cap.",
+			"# If this value is larger than the naturally-derived townblocks * town_bank_cap equation, this minimum will be used instead."),
 	ECO_BANK_CAP_PLOT_BASED_USES_TOWN_LEVEL_MODIFIER(
 			"economy.banks.plotbased_bank_cap_uses_town_level_modifier",
 			"false",

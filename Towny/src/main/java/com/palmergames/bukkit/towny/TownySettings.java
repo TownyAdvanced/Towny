@@ -3164,7 +3164,7 @@ public class TownySettings {
 			return town.getTownLevel().bankCapModifier * cap;
 
 		double multiplier = isPlotBasedTownBankCapUsingTownLevelModifier() ? town.getTownLevel().bankCapModifier : 1;
-		return cap * town.getNumTownBlocks() * multiplier;
+		return Math.max(cap * town.getNumTownBlocks() * multiplier, getPlotBasedTownBankCapMinimumAmount());
 	}
 
 	public static double getTownBankCap() {
@@ -3174,6 +3174,10 @@ public class TownySettings {
 
 	public static boolean isTownBankCapPlotBased() {
 		return getBoolean(ConfigNodes.ECO_BANK_CAP_PLOT_BASED);
+	}
+
+	public static double getPlotBasedTownBankCapMinimumAmount() {
+		return getDouble(ConfigNodes.ECO_BANK_CAP_PLOT_BASED_MIN_AMOUNT);
 	}
 
 	public static boolean isPlotBasedTownBankCapUsingTownLevelModifier() {
