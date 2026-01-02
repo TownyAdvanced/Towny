@@ -3740,7 +3740,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Make sure the town doesn't already own this land.
 		if (overclaimedTown.equals(town))
-			throw new TownyException(Translatable.of("msg_already_claimed_1"));
+			throw new TownyException(Translatable.of("msg_already_claimed", town.getName()));
 
 		// Make sure this is in a town which is overclaimed, allowing for stealing land.
 		if (!wc.canBeStolen())
