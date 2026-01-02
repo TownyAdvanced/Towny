@@ -73,6 +73,7 @@ public class Town extends Government implements TownBlockOwner {
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private final List<Resident> residents = new ArrayList<>();
+	private final List<Resident> residentsView = Collections.unmodifiableList(residents);
 	private final List<Resident> outlaws = new ArrayList<>();
 	private Map<UUID, Town> allies = new LinkedHashMap<>();
 	private Map<UUID, Town> enemies = new LinkedHashMap<>();
@@ -360,7 +361,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (!residentsSorted)
 			sortResidents();
 		
-		return Collections.unmodifiableList(residents);
+		return residentsView;
 	}
 
 	public List<Resident> getRank(String rank) {
