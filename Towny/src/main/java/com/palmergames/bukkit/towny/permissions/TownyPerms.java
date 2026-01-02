@@ -11,7 +11,6 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -29,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -68,10 +66,10 @@ public class TownyPerms {
 	private static boolean ranksWithTownLevelRequirementPresent = false;
 	private static boolean ranksWithNationLevelRequirementPresent = false;
 
-	private static List<String> townRanks = new ArrayList<>();
+	private static final List<String> townRanks = new ArrayList<>();
 	private static final List<String> townRankView = Collections.unmodifiableList(townRanks);
 
-	private static List<String> nationRanks = new ArrayList<>();
+	private static final List<String> nationRanks = new ArrayList<>();
 	private static final List<String> nationRankView = Collections.unmodifiableList(nationRanks);
 	
 	public static void initialize(Towny plugin) {
@@ -111,8 +109,11 @@ public class TownyPerms {
 		buildComments();
 		perms.save();
 
-		townRanks = new ArrayList<>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
-		nationRanks = new ArrayList<>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
+		townRanks.clear();
+		townRanks.addAll(perms.getConfigurationSection("towns.ranks").getKeys(false));
+
+		nationRanks.clear();
+		nationRanks.addAll(perms.getConfigurationSection("nations.ranks").getKeys(false));
 
 		/*
 		 * Only do this once as we are really only interested in Towny perms.
