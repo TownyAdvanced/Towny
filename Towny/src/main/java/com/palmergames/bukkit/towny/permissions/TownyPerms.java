@@ -16,10 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -67,12 +64,6 @@ public class TownyPerms {
 	private static final String RANK_NATION_LEVEL_REQUIREMENT_PREFIX = "towny.nation_level_requirement.";
 	private static boolean ranksWithTownLevelRequirementPresent = false;
 	private static boolean ranksWithNationLevelRequirementPresent = false;
-
-	private static List<String> townRanks = new ArrayList<>();
-	private static final List<String> townRankView = Collections.unmodifiableList(townRanks);
-
-	private static List<String> nationRanks = new ArrayList<>();
-	private static final List<String> nationRankView = Collections.unmodifiableList(nationRanks);
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -110,9 +101,6 @@ public class TownyPerms {
 		checkForVitalGroups();
 		buildComments();
 		perms.save();
-
-		townRanks = new ArrayList<>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
-		nationRanks = new ArrayList<>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
 
 		/*
 		 * Only do this once as we are really only interested in Towny perms.
@@ -399,18 +387,9 @@ public class TownyPerms {
 	 * 
 	 * @return a list of rank names.
 	 */
-	public static @UnmodifiableView List<String> getTownRanks() {
-		return townRankView;
-	}
-	
-	@ApiStatus.Internal
-	public static void createTownRank(String rank) {
-		if (townRanks.contains(rank)) {
-			return;
-		}
+	public static List<String> getTownRanks() {
 
-		townRanks.add(rank);
-		perms.createSection("towns.ranks." + rank);
+		return new ArrayList<String>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
 	}
 
 	public static List<String> getTownRanks(Town town) {
@@ -454,17 +433,6 @@ public class TownyPerms {
 		return getList("towns.ranks." + rank);
 	}
 
-	@ApiStatus.Internal
-	public static void setTownRankPermissions(String rank, List<String> permissions) {
-		perms.set("towns.ranks." + rank, permissions);
-		
-		if (permissions == null) {
-			townRanks.remove(rank);
-		} else if (!townRanks.contains(rank)) {
-			townRanks.add(rank);
-		}
-	}
-
 	/*
 	 * Nation permission section
 	 */
@@ -474,18 +442,9 @@ public class TownyPerms {
 	 * 
 	 * @return a list of rank names.
 	 */
-	public static @UnmodifiableView List<String> getNationRanks() {
-		return nationRankView;
-	}
+	public static List<String> getNationRanks() {
 
-	@ApiStatus.Internal
-	public static void createNationRank(String rank) {
-		if (nationRanks.contains(rank)) {
-			return;
-		}
-
-		nationRanks.add(rank);
-		perms.createSection("nations.ranks." + rank);
+		return new ArrayList<String>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
 	}
 
 	public static List<String> getNationRanks(Nation nation) {
@@ -527,17 +486,6 @@ public class TownyPerms {
 	public static List<String> getNationRankPermissions(String rank) {
 
 		return getList("nations.ranks." + rank);//.toLowerCase());
-	}
-
-	@ApiStatus.Internal
-	public static void setNationRankPermissions(String rank, List<String> permissions) {
-		perms.set("nations.ranks." + rank, permissions);
-
-		if (permissions == null) {
-			nationRanks.remove(rank);
-		} else if (!nationRanks.contains(rank)) {
-			nationRanks.add(rank);
-		}
 	}
 	
 	/**
@@ -950,7 +898,6 @@ public class TownyPerms {
 		perms.addComment("peaceful", "", "# Nodes that are given to players who are in a peaceful/neutral town or nation.");
 	}
 
-	@ApiStatus.Internal
 	public static CommentedConfiguration getTownyPermsFile() {
 		return perms;
 	}
