@@ -171,9 +171,14 @@ public class PermissionGUIUtil {
 			return;
 		}
 
+		final PermissionData override = townBlock.getPermissionOverride(skullOwner);
+		if (override == null) {
+			return;
+		}
+
 		inventory.setItem(4, clickedItem);
 		
-		SetPermissionType[] setPermissionTypes = townBlock.getPermissionOverrides().get(skullOwner).getPermissionTypes();
+		SetPermissionType[] setPermissionTypes = override.getPermissionTypes();
 		for (ActionType actionType : ActionType.values()) {
 			ItemStack wool = new ItemStack(setPermissionTypes[actionType.getIndex()].getWoolColour());
 			ItemMeta woolMeta = wool.getItemMeta();
@@ -262,7 +267,7 @@ public class PermissionGUIUtil {
 
 				group.putPermissionOverride(resident, new PermissionData(PermissionGUIUtil.getDefaultTypes(), player.getName()));
 			} else {
-				if (startingTownBlock.getPermissionOverrides().containsKey(resident)) {
+				if (startingTownBlock.getPermissionOverride(resident) != null) {
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_overrides_already_set", resident.getName(), Translatable.of("townblock")));
 					return;
 				}

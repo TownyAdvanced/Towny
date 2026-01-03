@@ -312,7 +312,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 3) {
 						if ("remove".equalsIgnoreCase(args[1])) {
 							final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
-							if (townBlock != null) {
+							if (townBlock != null && townBlock.hasTrustedResidents()) {
 								return townBlock.getTrustedResidents().stream().map(Resident::getName).toList();
 							}
 						} else {
@@ -2314,7 +2314,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("remove")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_REMOVE.getNode());
 
-			if (!townBlock.getPermissionOverrides().containsKey(resident))
+			if (townBlock.getPermissionOverride(resident) == null)
 				throw new TownyException(Translatable.of("msg_no_overrides_set", resident.getName(), Translatable.of("townblock")));
 
 			townBlock.getPermissionOverrides().remove(resident);
