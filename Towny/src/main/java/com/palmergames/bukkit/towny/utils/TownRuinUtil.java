@@ -118,7 +118,7 @@ public class TownRuinUtil {
 				townBlock.removeResident();               // Removes any personal ownership.
 			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
 			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
-			townBlock.clearPlotGroup();                   // Removes plotgroup if it were present.
+			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
 			townBlock.getPermissionOverrides().clear();   // Removes all permission overrides from the plot.
 			townBlock.getTrustedResidents().clear();      // Removes all trusted residents.
 			townBlock.save();

@@ -3419,8 +3419,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (tb.isHomeBlock())
 					throw new TownyException(Translatable.of("msg_err_town_cede_town_cannot_cede_their_homeblock", townLosingPlot));
 
-				tb.removePlotGroup(playerGivingPlot);
-
 				tb.setTown(townGainingPlot);
 				tb.save();
 
