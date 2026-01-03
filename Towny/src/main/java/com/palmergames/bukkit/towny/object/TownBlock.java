@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -587,7 +587,7 @@ public class TownBlock extends TownyObject {
 
 	public Map<Resident, PermissionData> getPermissionOverrides() {
 		if (this.permissionOverrides == null) {
-			this.permissionOverrides = new HashMap<>();
+			this.permissionOverrides = new LinkedHashMap<>();
 		}
 
 		return permissionOverrides;
@@ -606,7 +606,7 @@ public class TownBlock extends TownyObject {
 
 	public @NotNull Set<Resident> getTrustedResidents() {
 		if (this.trustedResidents == null) {
-			this.trustedResidents = new HashSet<>();
+			this.trustedResidents = new LinkedHashSet<>();
 		}
 
 		return trustedResidents;
@@ -632,11 +632,11 @@ public class TownBlock extends TownyObject {
 	}
 
 	public void setTrustedResidents(@Nullable Set<Resident> trustedResidents) {
-		this.trustedResidents = trustedResidents == null || trustedResidents.isEmpty() ? null : new HashSet<>(trustedResidents);
+		this.trustedResidents = trustedResidents == null || trustedResidents.isEmpty() ? null : new LinkedHashSet<>(trustedResidents);
 	}
 
 	public void setPermissionOverrides(@Nullable Map<Resident, PermissionData> permissionOverrides) {
-		this.permissionOverrides = permissionOverrides == null || permissionOverrides.isEmpty() ? null : new HashMap<>(permissionOverrides);
+		this.permissionOverrides = permissionOverrides == null || permissionOverrides.isEmpty() ? null : new LinkedHashMap<>(permissionOverrides);
 	}
 
 	/**
