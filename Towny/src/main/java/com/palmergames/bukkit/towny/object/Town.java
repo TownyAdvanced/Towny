@@ -13,6 +13,7 @@ import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
+import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownCalculateTownLevelNumberEvent;
@@ -903,6 +904,21 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeTownBlock(TownBlock townBlock) {
 
 		if (hasTownBlock(townBlock)) {
+			// Remove the plot group for this town block.
+			final PlotGroup plotGroup = townBlock.getPlotObjectGroup();
+			if (plotGroup != null) {
+				plotGroup.removeTownBlock(townBlock);
+
+				if (!plotGroup.hasTownBlocks()) {
+					new PlotGroupDeletedEvent(plotGroup, null, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
+					removePlotGroup(plotGroup);
+
+					TownyUniverse.getInstance().getDataSource().removePlotGroup(plotGroup);
+				}
+
+				townBlock.removePlotObjectGroup();
+			}
+
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
 				removeOutpostSpawn(townBlock.getCoord());

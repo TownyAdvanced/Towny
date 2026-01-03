@@ -125,10 +125,12 @@ public class TownRuinUtil {
 		}
 		
 		// Unregister the now empty plotgroups.
-		if (town.getPlotGroups() != null)
-			for (PlotGroup group : new ArrayList<>(town.getPlotGroups()))
-				if (!BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED)))
-					TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+		if (town.getPlotGroups() != null) {
+			for (PlotGroup group : new ArrayList<>(town.getPlotGroups())) {
+				new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED).callEvent();
+				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+			}
+		}
 		
 		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
 		if (TownySettings.getMaxResidentsPerTown() > 0)
