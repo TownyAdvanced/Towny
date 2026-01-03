@@ -927,16 +927,16 @@ public class Town extends Government implements TownBlockOwner {
 			if (townBlock.isJail() && townBlock.getJail() != null) {
 				removeJail(townBlock.getJail());
 			}
-
+			
 			// Clear the towns home-block if this is it.
 			try {
 				if (getHomeBlock() == townBlock) {
 					setHomeBlock(null);
 				}
 			} catch (TownyException ignored) {}
-
-
-
+			
+			
+			
 			Nation testNation = getNationOrNull();
 			try {
 				if (hasNation() && testNation != null && testNation.hasSpawn()
