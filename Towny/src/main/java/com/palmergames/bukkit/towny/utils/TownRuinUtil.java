@@ -118,17 +118,19 @@ public class TownRuinUtil {
 				townBlock.removeResident();               // Removes any personal ownership.
 			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
 			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
-			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
+			townBlock.clearPlotGroup();                   // Removes plotgroup if it were present.
 			townBlock.getPermissionOverrides().clear();   // Removes all permission overrides from the plot.
 			townBlock.getTrustedResidents().clear();      // Removes all trusted residents.
 			townBlock.save();
 		}
 		
 		// Unregister the now empty plotgroups.
-		if (town.getPlotGroups() != null)
-			for (PlotGroup group : new ArrayList<>(town.getPlotGroups()))
-				if (!BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED)))
-					TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+		if (town.getPlotGroups() != null) {
+			for (PlotGroup group : new ArrayList<>(town.getPlotGroups())) {
+				new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED).callEvent();
+				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+			}
+		}
 		
 		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
 		if (TownySettings.getMaxResidentsPerTown() > 0)

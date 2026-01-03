@@ -1039,16 +1039,8 @@ public class TownyUniverse {
 	public void removeTownBlock(TownBlock townBlock) {
 		
 		if (removeTownBlock(townBlock.getWorldCoord())) {
-			if (townBlock.hasPlotObjectGroup()) {
-				PlotGroup group = townBlock.getPlotObjectGroup();
-				if (group.getTownBlocks().size() == 1) {
-					townBlock.getTownOrNull().removePlotGroup(townBlock.getPlotObjectGroup());
-					getDataSource().removePlotGroup(group);
-				} else {
-					group.removeTownBlock(townBlock);
-					group.save();
-				}
-			}
+			townBlock.removePlotGroup();
+
 			if (townBlock.hasResident())
 				townBlock.getResidentOrNull().removeTownBlock(townBlock);
 			if (townBlock.hasTown())

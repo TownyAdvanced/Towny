@@ -1714,21 +1714,13 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 
 		PlotGroup group = catchMissingPlotGroup(townBlock);
 		String name = group.getName();
-		// Remove the plot from the group.
-		group.removeTownBlock(townBlock);
 
 		// Detach group from townblock.
-		townBlock.removePlotObjectGroup();
+		townBlock.removePlotGroup(player);
 
 		// Save
 		townBlock.save();
 		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
-		
-		if (group.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
-			town.removePlotGroup(group);
-			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
-			TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_empty_deleted", name));
-		}
 	}
 
 	public void parsePlotGroupRename(String[] split, TownBlock townBlock, Player player) throws TownyException, AlreadyRegisteredException {

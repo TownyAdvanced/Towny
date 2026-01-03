@@ -3419,16 +3419,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (tb.isHomeBlock())
 					throw new TownyException(Translatable.of("msg_err_town_cede_town_cannot_cede_their_homeblock", townLosingPlot));
 
-				if (tb.hasPlotObjectGroup()) {
-					PlotGroup group = tb.getPlotObjectGroup();
-					if (group.getTownBlocks().size() == 1) {
-						townLosingPlot.removePlotGroup(tb.getPlotObjectGroup());
-						TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
-					} else {
-						group.removeTownBlock(tb);
-						group.save();
-					}
-				}
+				tb.removePlotGroup(playerGivingPlot);
+
 				tb.setTown(townGainingPlot);
 				tb.save();
 
@@ -3788,17 +3780,6 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		if(BukkitTools.isEventCancelled(new TownPreClaimEvent(town, wc.getTownBlockOrNull(), player, false, false, true)))
 			throw new TownyException(Translatable.of("msg_err_another_plugin_cancelled_takeover"));
-
-		TownBlock tb = wc.getTownBlockOrNull();
-		if (tb.hasPlotObjectGroup()) {
-			PlotGroup group = tb.getPlotObjectGroup();
-			if (group.getTownBlocks().size() == 1) {
-				overclaimedTown.removePlotGroup(tb.getPlotObjectGroup());
-			} else {
-				group.removeTownBlock(tb);
-				group.save();
-			}
-		}
 
 		double cost = TownySettings.getTakeoverClaimPrice();
 		String costSlug = !TownyEconomyHandler.isActive() || cost <= 0 ? Translatable.of("msg_spawn_cost_free").forLocale(player) : prettyMoney(cost);

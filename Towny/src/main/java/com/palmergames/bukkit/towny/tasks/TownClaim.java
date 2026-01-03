@@ -222,6 +222,8 @@ public class TownClaim implements Runnable {
 			
 			if (TownySettings.getOverclaimingCommandCooldownInSeconds() > 0)
 				CooldownTimerTask.addCooldownTimer(town.getUUID().toString(), "overclaimingcooldown", TownySettings.getOverclaimingCommandCooldownInSeconds());
+
+			townBlock.removePlotGroup(player);
 		}
 
 		townBlock.setTown(town);

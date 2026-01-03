@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.event.plot.changeowner.PlotClaimEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreClaimEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotUnclaimEvent;
+import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -20,6 +21,7 @@ import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.TimeTools;
 
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -522,11 +524,46 @@ public class TownBlock extends TownyObject {
 		return plotGroup;
 	}
 	
+	/**
+	 * @deprecated Use {@link #clearPlotGroup()} instead.
+	 */
+	@Deprecated(since = "0.102.0.3", forRemoval = true)
 	public void removePlotObjectGroup() {
 		this.plotGroup = null;
 	}
 
-	public void setPlotObjectGroup(PlotGroup group) {
+	/**
+	 * Clears the plot group from this town block without any extra checks.
+	 */
+	public void clearPlotGroup() {
+		this.plotGroup = null;
+	}
+
+	public void removePlotGroup() {
+		this.removePlotGroup(null);
+	}
+
+	/**
+	 * @param causingPlayer The player that directly or indirectly this town block to be removed from the plot group.
+	 */
+	public void removePlotGroup(final @Nullable Player causingPlayer) {
+		if (this.plotGroup == null) {
+			return;
+		}
+
+		this.plotGroup.removeTownBlock(this);
+		if (!this.plotGroup.hasTownBlocks()) {
+			if (causingPlayer != null) {
+				new PlotGroupDeletedEvent(this.plotGroup, causingPlayer, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
+				TownyMessaging.sendMsg(causingPlayer, Translatable.of("msg_plotgroup_empty_deleted", this.plotGroup.getName()));
+			}
+
+			this.plotGroup.getTown().removePlotGroup(this.plotGroup);
+			TownyUniverse.getInstance().getDataSource().removePlotGroup(this.plotGroup);
+		}
+	}
+
+	public void setPlotObjectGroup(@NotNull PlotGroup group) {
 		this.plotGroup = group;
 
 		try {
