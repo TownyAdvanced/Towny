@@ -901,58 +901,59 @@ public class Town extends Government implements TownBlockOwner {
 
 	@Override
 	public void removeTownBlock(TownBlock townBlock) {
-		if (!hasTownBlock(townBlock)) {
-			return;
-		}
 
-		// Remove the plot group for this town block.
-		final PlotGroup plotGroup = townBlock.getPlotObjectGroup();
-		if (plotGroup != null) {
-			plotGroup.removeTownBlock(townBlock);
+		if (hasTownBlock(townBlock)) {
+			// Remove the plot group for this town block.
+			final PlotGroup plotGroup = townBlock.getPlotObjectGroup();
+			if (plotGroup != null) {
+				plotGroup.removeTownBlock(townBlock);
 
-			if (!plotGroup.hasTownBlocks()) {
-				new PlotGroupDeletedEvent(plotGroup, null, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
-				removePlotGroup(plotGroup);
+				if (!plotGroup.hasTownBlocks()) {
+					new PlotGroupDeletedEvent(plotGroup, null, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
+					removePlotGroup(plotGroup);
 
-				TownyUniverse.getInstance().getDataSource().removePlotGroup(plotGroup);
+					TownyUniverse.getInstance().getDataSource().removePlotGroup(plotGroup);
+				}
+
+				townBlock.removePlotObjectGroup();
 			}
 
-			townBlock.removePlotObjectGroup();
-		}
-
-		// Remove the spawn point for this outpost.
-		if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
-			removeOutpostSpawn(townBlock.getCoord());
-			townBlock.setOutpost(false);
-			townBlock.save();
-		}
-		if (townBlock.isJail() && townBlock.getJail() != null) {
-			removeJail(townBlock.getJail());
-		}
-
-		// Clear the towns home-block if this is it.
-		try {
-			if (getHomeBlock() == townBlock) {
-				setHomeBlock(null);
+			// Remove the spawn point for this outpost.
+			if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
+				removeOutpostSpawn(townBlock.getCoord());
+				townBlock.setOutpost(false);
+				townBlock.save();
 			}
-		} catch (TownyException ignored) {}
+			if (townBlock.isJail() && townBlock.getJail() != null) {
+				removeJail(townBlock.getJail());
+			}
 
-		Nation testNation = getNationOrNull();
-		try {
-			if (hasNation() && testNation != null && testNation.hasSpawn()
-				&& townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(testNation.getSpawn())))
-				testNation.setSpawn(null);
-		} catch (TownyException ignored) {
-			// Cannot getSpawn, but that's alright!
+			// Clear the towns home-block if this is it.
+			try {
+				if (getHomeBlock() == townBlock) {
+					setHomeBlock(null);
+				}
+			} catch (TownyException ignored) {}
+
+
+
+			Nation testNation = getNationOrNull();
+			try {
+				if (hasNation() && testNation != null && testNation.hasSpawn()
+					&& townBlock.getWorldCoord().equals(WorldCoord.parseWorldCoord(testNation.getSpawn())))
+					testNation.setSpawn(null);
+			} catch (TownyException ignored) {
+				// Cannot getSpawn, but that's alright!
+			}
+
+			townBlocks.remove(townBlock.getWorldCoord());
+			getTownBlockTypeCache().removeTownBlockOfType(townBlock.getType());
+			if (townBlock.isForSale())
+				getTownBlockTypeCache().removeTownBlockOfTypeForSale(townBlock.getType());
+			if (townBlock.hasResident())
+				getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(townBlock.getType());
+			this.save();
 		}
-
-		townBlocks.remove(townBlock.getWorldCoord());
-		getTownBlockTypeCache().removeTownBlockOfType(townBlock.getType());
-		if (townBlock.isForSale())
-			getTownBlockTypeCache().removeTownBlockOfTypeForSale(townBlock.getType());
-		if (townBlock.hasResident())
-			getTownBlockTypeCache().removeTownBlockOfTypeResidentOwned(townBlock.getType());
-		this.save();
 	}
 
 	@Override

@@ -1723,7 +1723,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// Save
 		townBlock.save();
 		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
-
+		
 		if (group.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
 			town.removePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
