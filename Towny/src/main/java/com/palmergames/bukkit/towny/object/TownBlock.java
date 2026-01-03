@@ -561,6 +561,8 @@ public class TownBlock extends TownyObject {
 			this.plotGroup.getTown().removePlotGroup(this.plotGroup);
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(this.plotGroup);
 		}
+
+		this.plotGroup = null;
 	}
 
 	public void setPlotObjectGroup(@NotNull PlotGroup group) {
