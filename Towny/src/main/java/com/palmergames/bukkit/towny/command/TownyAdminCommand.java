@@ -759,7 +759,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
 			return;
 		}
-		if (!TownyPerms.getGroupList().contains(args[0].toLowerCase(Locale.ROOT)))
+		if (!TownyPerms.getGroupList().contains(args[0]))
 			throw new TownyException(Translatable.of("msg_err_group_not_found", args[0]));
 
 		String group = args[0];
