@@ -1636,13 +1636,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town.save();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_allowedtowar_setting_set_to", town.getName(), town.isAllowedToWar()));
 		} else if (split[0].equalsIgnoreCase("conquered")) {
-			if (split.length != 2 && !town.isConquered())
-				throw new TownyException(Translatable.of("msg_err_that_town_is_not_conquered", town.getName()));
 			if (split.length < 2)
 				throw new TownyException(Translatable.of("msg_err_must_specify_on_or_off"));
 
 			boolean on = split[1].equalsIgnoreCase("on");
 			if (!on) {
+				if (!town.isConquered())
+					throw new TownyException(Translatable.of("msg_err_that_town_is_not_conquered", town.getName()));
 				town.setConquered(false);
 				town.setConqueredDays(0);
 				town.save();
@@ -1656,8 +1656,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town.setConquered(true);
 			town.setConqueredDays(days);
 			town.save();
-			TownyMessaging.sendMsg(sender, Translatable.of(days > 0 ? "msg_conquered_status_granted" : "msg_conquered_status_granted_unlimited", town.getName()));
-			return;
+			TownyMessaging.sendMsg(sender, days > -1 ? Translatable.of("msg_conquered_status_granted", town.getName(), days) : Translatable.of("msg_conquered_status_granted_unlimited", town.getName()));
 		} else if (split[0].equalsIgnoreCase("visibleontoplists")) {
 
 			town.setVisibleOnTopLists(choice.orElse(!town.isVisibleOnTopLists()));
