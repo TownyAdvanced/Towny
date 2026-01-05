@@ -85,6 +85,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.codehaus.plexus.util.cli.Arg;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -483,6 +484,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(adminTownToggleTabCompletes, args[3]);
 							else if (args.length == 5 && !args[3].equalsIgnoreCase("jail"))
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
+							else if (args.length == 6 && args[3].equalsIgnoreCase("conquered") && args[4].equalsIgnoreCase("on"))
+								return Arrays.asList("[days]", "unlimited");
 						case "outlaw":
 							switch (args.length) {
 							case 4:
@@ -1633,13 +1636,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town.save();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_allowedtowar_setting_set_to", town.getName(), town.isAllowedToWar()));
 		} else if (split[0].equalsIgnoreCase("conquered")) {
-			if (!town.isConquered())
+			if (split.length != 2 && !town.isConquered())
 				throw new TownyException(Translatable.of("msg_err_that_town_is_not_conquered", town.getName()));
+			if (split.length < 2)
+				throw new TownyException(Translatable.of("msg_err_must_specify_on_or_off"));
 
-			town.setConquered(false);
-			town.setConqueredDays(0);
+			boolean on = split[1].equalsIgnoreCase("on");
+			if (!on) {
+				town.setConquered(false);
+				town.setConqueredDays(0);
+				town.save();
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_conquered_status_removed", town.getName()));
+				return;
+			}
+
+			if (split.length < 3)
+				throw new TownyException(Translatable.of("msg_err_must_specify_days_to_be_conquered"));
+			int days = split[2].equalsIgnoreCase("unlimited") || split[2].equalsIgnoreCase("-1") ? -1 : MathUtil.getPositiveIntOrThrow(split[2]);
+			town.setConquered(true);
+			town.setConqueredDays(days);
 			town.save();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_conquered_status_removed", town.getName()));
+			TownyMessaging.sendMsg(sender, Translatable.of(days > 0 ? "msg_conquered_status_granted" : "msg_conquered_status_granted_unlimited", town.getName()));
+			return;
 		} else if (split[0].equalsIgnoreCase("visibleontoplists")) {
 
 			town.setVisibleOnTopLists(choice.orElse(!town.isVisibleOnTopLists()));
