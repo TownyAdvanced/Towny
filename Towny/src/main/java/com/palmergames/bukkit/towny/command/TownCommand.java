@@ -2646,8 +2646,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		final String finalName = name;
 		Confirmation.runOnAccept(() -> {
 			try {
-				if (!TownyAPI.getInstance().isWilderness(spawnLocation))
-					throw new TownyException(Translatable.of("msg_already_claimed_1", key));
+				if (!TownyAPI.getInstance().isWilderness(spawnLocation)) {
+					resident.getAccount().deposit(cost, "New town creation cancelled");
+					throw new TownyException(Translatable.of("msg_already_claimed_1", key));	
+				}
 				// Make town.
 				newTown(world, finalName, resident, key, spawnLocation, player, cost);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
