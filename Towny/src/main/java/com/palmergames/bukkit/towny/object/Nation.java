@@ -61,7 +61,7 @@ public class Nation extends Government {
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	public Nation(String name) {
 		this(name, UUID.randomUUID());
 	}

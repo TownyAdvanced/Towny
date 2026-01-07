@@ -94,7 +94,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		permissions.loadDefault(this);
 	}
 
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	public Resident(String name) {
 		this(name, UUID.randomUUID());
 	}
@@ -141,7 +141,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	/**
 	 * @deprecated Changing UUIDs of Resident objects is no longer supported.
 	 */
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	@Override
 	public void setUUID(UUID uuid) {
 	}

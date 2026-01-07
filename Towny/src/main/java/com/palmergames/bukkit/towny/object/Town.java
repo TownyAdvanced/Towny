@@ -136,7 +136,7 @@ public class Town extends Government implements TownBlockOwner {
 		setPublic(TownySettings.getTownDefaultPublic());
 	}
 	
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	public Town(String name) {
 		this(name, UUID.randomUUID());
 	}

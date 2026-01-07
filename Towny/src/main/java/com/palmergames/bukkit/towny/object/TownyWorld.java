@@ -133,7 +133,7 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * @deprecated use {@link #getTownsInWorld()} instead.
 	 */
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	public HashMap<String, Town> getTowns() {
 		return this.towns.values().stream().collect(Collectors.toMap(TownyObject::getName, UnaryOperator.identity(), (existingTown, newTown) -> newTown, HashMap::new));
 	}

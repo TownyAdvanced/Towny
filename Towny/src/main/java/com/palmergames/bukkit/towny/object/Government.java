@@ -60,7 +60,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 		this.uuid = uuid;
 	}
 	
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	protected Government(String name) {
 		this(name, UUID.randomUUID());
 	}
@@ -327,7 +327,7 @@ public abstract class Government extends TownyObject implements BankEconomyHandl
 	/**
 	 * @deprecated Changing UUIDs of Government objects is no longer supported.
 	 */
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	@Override
 	public void setUUID(UUID uuid) {
 	}
