@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -30,7 +31,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -58,9 +58,10 @@ public abstract class Account implements Nameable, Identifiable {
 	private OfflinePlayer cachedOfflinePlayer;
 	
 	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
+		Preconditions.checkArgument(name != null && uuid != null, "name and uuid may not be null for an account, got name = %s and uuid = %s", name, uuid);
+		Preconditions.checkArgument(owner != null, "account owner may not be null");
+
 		this.economyHandler = owner;
-		this.name = Objects.requireNonNull(name, "name");
-		this.uuid = Objects.requireNonNull(uuid, "uuid");
 		this.worldSupplier = worldSupplier;
 		
 		// ALL account transactions will route auditing data through this
