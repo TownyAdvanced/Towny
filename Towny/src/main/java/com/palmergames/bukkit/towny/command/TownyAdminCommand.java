@@ -85,7 +85,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.codehaus.plexus.util.cli.Arg;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
