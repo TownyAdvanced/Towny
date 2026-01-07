@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
@@ -133,7 +135,7 @@ public class TownyWorld extends TownyObject {
 	 */
 	@Deprecated(since = "0.101.2.5")
 	public HashMap<String, Town> getTowns() {
-		return new HashMap<>();
+		return this.towns.values().stream().collect(Collectors.toMap(TownyObject::getName, UnaryOperator.identity(), (existingTown, newTown) -> newTown, HashMap::new));
 	}
 
 	public @Unmodifiable Collection<Town> getTownsInWorld() {
