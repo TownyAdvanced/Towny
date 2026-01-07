@@ -123,8 +123,9 @@ public class Town extends Government implements TownBlockOwner {
 	private int manualTownLevel = -1;
 	private boolean visibleOnTopLists = true;
 
-	public Town(String name) {
-		super(name);
+	@ApiStatus.Internal
+	public Town(String name, UUID uuid) {
+		super(name, uuid);
 		permissions.loadDefault(this);
 		
 		// Set defaults.
@@ -135,9 +136,9 @@ public class Town extends Government implements TownBlockOwner {
 		setPublic(TownySettings.getTownDefaultPublic());
 	}
 	
-	public Town(String name, UUID uuid) {
-		this(name);
-		setUUID(uuid);
+	@Deprecated(since = "0.102.0.4")
+	public Town(String name) {
+		this(name, UUID.randomUUID());
 	}
 
 	@Override
@@ -146,12 +147,7 @@ public class Town extends Government implements TownBlockOwner {
 			return true;
 		if (!(other instanceof Town otherTown))
 			return false;
-		return this.getName().equals(otherTown.getName()); // TODO: Change this to UUID when the UUID database is in use.
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.getUUID().equals(otherTown.getUUID());
 	}
 
 	@Override
