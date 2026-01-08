@@ -39,7 +39,10 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.Title.Times;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -394,8 +397,6 @@ public class TownyMessaging {
 	/**
 	 * Send the player a Title message for a specified number of ticks.
 	 * <p>
-	 * As of MC 1.18 a null title will mean the message is never sent, so we are
-	 * changing empty Strings to " ".
 	 * 
 	 * @param player   Player being send the Title message.
 	 * @param title    String title message.
@@ -403,7 +404,10 @@ public class TownyMessaging {
 	 * @param duration How long the title is shown for in ticks. 
 	 */
 	public static void sendTitle(Player player, String title, String subtitle, int duration) {
-		player.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, 10, duration, 10);
+		player.showTitle(Title.title(title.isEmpty() ? Component.empty() : Component.text(subtitle),
+				subtitle.isEmpty() ? Component.empty() : Component.text(subtitle),
+				// TODO: (1.21.9+) Replace Times.times(Component, Component, Times) with less verbose Title constructor when 1.21.8 support is dropped.
+				Times.times(Duration.ofMillis(50 * 10), Duration.ofMillis(50 * duration), Duration.ofMillis(50 * 10)))); // 10 ticks, duration * ticks, 10 ticks
 	}
 
 	/**
