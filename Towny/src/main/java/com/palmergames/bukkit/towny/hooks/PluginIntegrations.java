@@ -335,21 +335,6 @@ public class PluginIntegrations {
 	 */
 
 	/**
-	 * Check if the entity is a Citizens NPC.
-	 * 
-	 * Catches the NoClassDefFoundError thrown when Citizens is present 
-	 * but failed to start up correctly.
-	 * 
-	 * @param entity Entity to check.
-	 * @return true if the entity is an NPC.
-	 * @deprecated Deprecated as of 0.100.1.10, please use {@link #isNPC(Entity)} instead.
-	 */
-	@Deprecated
-	public boolean checkCitizens(Entity entity) {
-		return entity != null && isNPC(entity);
-	}
-
-	/**
 	 * @param entity Entity to check.
 	 * @return true if the entity is a plugin-created NPC.
 	 */
