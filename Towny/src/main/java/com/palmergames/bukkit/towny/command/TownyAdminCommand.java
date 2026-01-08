@@ -483,6 +483,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(adminTownToggleTabCompletes, args[3]);
 							else if (args.length == 5 && !args[3].equalsIgnoreCase("jail"))
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
+							else if (args.length == 6 && args[3].equalsIgnoreCase("conquered") && args[4].equalsIgnoreCase("on"))
+								return Arrays.asList("[days]", "unlimited");
 						case "outlaw":
 							switch (args.length) {
 							case 4:
@@ -1633,13 +1635,27 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town.save();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_allowedtowar_setting_set_to", town.getName(), town.isAllowedToWar()));
 		} else if (split[0].equalsIgnoreCase("conquered")) {
-			if (!town.isConquered())
-				throw new TownyException(Translatable.of("msg_err_that_town_is_not_conquered", town.getName()));
+			if (split.length < 2)
+				throw new TownyException(Translatable.of("msg_err_must_specify_on_or_off"));
 
-			town.setConquered(false);
-			town.setConqueredDays(0);
+			boolean on = split[1].equalsIgnoreCase("on");
+			if (!on) {
+				if (!town.isConquered())
+					throw new TownyException(Translatable.of("msg_err_that_town_is_not_conquered", town.getName()));
+				town.setConquered(false);
+				town.setConqueredDays(0);
+				town.save();
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_conquered_status_removed", town.getName()));
+				return;
+			}
+
+			if (split.length < 3)
+				throw new TownyException(Translatable.of("msg_err_must_specify_days_to_be_conquered"));
+			int days = split[2].equalsIgnoreCase("unlimited") || split[2].equalsIgnoreCase("-1") ? -1 : MathUtil.getPositiveIntOrThrow(split[2]);
+			town.setConquered(true);
+			town.setConqueredDays(days);
 			town.save();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_conquered_status_removed", town.getName()));
+			TownyMessaging.sendMsg(sender, days > -1 ? Translatable.of("msg_conquered_status_granted", town.getName(), days) : Translatable.of("msg_conquered_status_granted_unlimited", town.getName()));
 		} else if (split[0].equalsIgnoreCase("visibleontoplists")) {
 
 			town.setVisibleOnTopLists(choice.orElse(!town.isVisibleOnTopLists()));
