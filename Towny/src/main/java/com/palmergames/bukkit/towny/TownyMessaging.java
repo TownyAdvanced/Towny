@@ -404,12 +404,28 @@ public class TownyMessaging {
 	 * @param duration How long the title is shown for in ticks. 
 	 */
 	public static void sendTitle(Player player, String title, String subtitle, int duration) {
+		sendTitle(player, title, subtitle, 10, duration, 10);
+	}
+
+	/**
+	 * Send the player a Title message for a specified number of ticks.
+	 * <p>
+	 * 
+	 * @param player   Player being send the Title message.
+	 * @param title    String title message.
+	 * @param subtitle String subtitle message.
+	 * @param fadein   Integer ticks to use for fade in.
+	 * @param duration How long the title is shown for in ticks.
+	 * @param fadeout  Integer ticks to use for fade out.
+	 */
+	public static void sendTitle(Player player, String title, String subtitle, int fadein, int duration, int fadeout) {
 		player.showTitle(Title.title(title.isEmpty() ? Component.empty() : Component.text(subtitle),
 				subtitle.isEmpty() ? Component.empty() : Component.text(subtitle),
 				// TODO: (1.21.9+) Replace Times.times(Component, Component, Times) with less verbose Title constructor when 1.21.8 support is dropped.
-				Times.times(Duration.ofMillis(50 * 10), Duration.ofMillis(50 * duration), Duration.ofMillis(50 * 10)))); // 10 ticks, duration * ticks, 10 ticks
+				Times.times(Duration.ofMillis(50 * fadein), Duration.ofMillis(50 * duration), Duration.ofMillis(50 * fadein))));
 	}
 
+	
 	/**
 	 * Send the player a Title message with default duration (70 ticks.)
 	 * 
