@@ -68,7 +68,7 @@ public class PluginIntegrations {
 	private void formatForUniverseCommand(List<String> out, String pluginName) {
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
 		if (plugin != null)
-			out.add(Colors.Yellow + pluginName + " " + Colors.Green + plugin.getDescription().getVersion());
+			out.add(Colors.YELLOW + pluginName + " " + Colors.DARK_GREEN + plugin.getDescription().getVersion());
 	}
 
 	/**
