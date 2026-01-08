@@ -10598,3 +10598,15 @@ v0.92.0.11:
   - Remove world references stored inside WorldCoord, courtesy of Warrior with PR #8050.
   - Fix message when attempting to overclaim your own town, courtesy of Warrior with PR #8051.
   - Reduce allocations done by Resident hasRank methods, courtesy of Warrior with PR #8037.
+  - Bump com.zaxxer:HikariCP from 6.2.1 to 7.0.2.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.2 to 3.5.4.
+  - Bump org.apache.maven.plugins:maven-jar-plugin from 3.4.2 to 3.5.0.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.13.0 to 3.14.1.
+  - Bump org.apache.logging.log4j:log4j-core from 2.24.3 to 2.25.3.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.6.0 to 3.6.1.
+  - Lazily initialize maps used by TownBlock, courtesy of Warrior with PR #8049.
+  - Fix occasions where plot groups exist in townblocks being removed.
+  - Fix the townyperms group command not working with capitalized groups, courtesy of Warrior with PR #8055.
+  - Add support for enabling conquering on a town via townyadmin command.
+  - Check the chunk is still wilderness after confirmation in /town new, courtesy of Veyronity with PR #8059. (First-Time Contributor!)
+  - Add null checks to the task schedulers, courtesy of Warrior with PR #8060.
