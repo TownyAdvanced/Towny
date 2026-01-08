@@ -191,8 +191,8 @@ public class BorderUtil {
 	/**
 	 * Decides whether a copper golem can move an item from one block to another.
 	 * 
-	 * @param block   Block (Copper Chest) where the item originated from.
-	 * @param blockTo Block (Normal Chest) where the item is moving to.
+	 * @param blockLoc   Location (of the Copper Chest) where the item originated from.
+	 * @param blockToLoc Location (of the Normal Chest) where the item is moving to.
 	 * @return true if the blocks are considered same-owner.
 	 */	
 	public static boolean allowedCopperGolemMove(Location blockLoc, Location blockToLoc) {
