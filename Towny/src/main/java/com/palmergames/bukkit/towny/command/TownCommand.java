@@ -3068,10 +3068,12 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Resident resident = getResidentOrThrow(player);
 		if (resident.hasTown())
 			throw new TownyException(Translatable.of("msg_err_already_res2", "You"));
-
+		if (args.length < 1)
+			throw new TownyException(Translatable.of("msg_usage", "/t join [name]"));
+		
 		Town town = getTownOrThrow(args[0]);
 
-		// Check if town is town is free to join.
+		// Check if town is free to join.
 		if (!town.isOpen())
 			throw new TownyException(Translatable.of("msg_err_not_open", town.getFormattedName()));
 
