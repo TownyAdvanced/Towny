@@ -849,7 +849,8 @@ public class TownyPerms {
 	}
 	
 	public static List<String> getPermsOfGroup(String group) {
-		return mapHasGroup(group) ? (groupPermsMap.get(group) != null ? groupPermsMap.get(group): new ArrayList<String>()): new ArrayList<String>(); 
+		final List<String> perms = groupPermsMap.get(group);
+		return perms != null ? perms : new ArrayList<>();
 	}
 	
 	private static void buildGroupPermsMap() {
