@@ -1544,7 +1544,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			Confirmation.runOnAccept( ()-> {
 				PlotGroup oldGroup = townBlock.getPlotObjectGroup();
 				oldGroup.removeTownBlock(townBlock);
-				if (oldGroup.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(oldGroup, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+				if (oldGroup.getTownBlocks().isEmpty()) {
+					new PlotGroupDeletedEvent(oldGroup, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
 					String oldName = oldGroup.getName();
 					town.removePlotGroup(oldGroup);
 					TownyUniverse.getInstance().getDataSource().removePlotGroup(oldGroup);
@@ -1724,7 +1725,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.save();
 		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
 		
-		if (group.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+		if (group.getTownBlocks().isEmpty()) {
+			new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
 			town.removePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_empty_deleted", name));
