@@ -312,7 +312,7 @@ public class TownyCustomListener implements Listener {
 		if (!TownySettings.isOverClaimingAllowingStolenLand())
 			return;
 		if (event.getTown().availableTownBlocks() <= TownySettings.getTownBlockRatio())
-			TownyMessaging.sendMsg(event.getResident(), Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_you_are_almost_out_of_townblocks")));
+			TownyMessaging.sendMsg(event.getResident(), Translatable.literal(Colors.DARK_RED).append(Translatable.of("msg_warning_you_are_almost_out_of_townblocks")));
 	}
 	
 	/**
@@ -339,7 +339,7 @@ public class TownyCustomListener implements Listener {
 		if (!TownySettings.isOverClaimingAllowingStolenLand())
 			return;
 		if (town.isOverClaimed())
-			TownyMessaging.sendPrefixedTownMessage(town, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.literal(Colors.DARK_RED).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
 	}
 
 	/**

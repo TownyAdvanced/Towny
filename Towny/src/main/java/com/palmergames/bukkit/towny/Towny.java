@@ -71,6 +71,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -99,7 +100,7 @@ import java.util.logging.Level;
  */
 public class Towny extends JavaPlugin {
 	private static Towny plugin;
-	private final String version = this.getDescription().getVersion();
+	private final String version = Version.fromPlugin((Plugin) this).toString();
 
 	private TownyUniverse townyUniverse;
 
