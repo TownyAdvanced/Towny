@@ -81,7 +81,7 @@ public class OnPlayerLogin implements Runnable {
 
 			// Send a message warning of being overclaimed while the takeoverclaims feature is enabled.
 			if (TownySettings.isOverClaimingAllowingStolenLand() && town.isOverClaimed())
-				TownyMessaging.sendMsg(resident, Translatable.literal(Colors.Red).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
+				TownyMessaging.sendMsg(resident, Translatable.literal(Colors.DARK_RED).append(Translatable.of("msg_warning_your_town_is_overclaimed")));
 
 			// Send a message warning of ruined status and time until deletion.
 			if (town.isRuined())
