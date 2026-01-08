@@ -10593,7 +10593,7 @@ v0.92.0.11:
     - Default: 0.0
     - The smallest cap that banks can have while using the plotbased bank cap.
     - If this value is larger than the naturally-derived townblocks * town_bank_cap equation, this minimum will be used instead.
-  - Fix a logic error in the PlotGroup#setResident function, courtesy of Remasuri with PR #8043.
+  - Fix a logic error in the PlotGroup#setResident function, courtesy of Remasuri with PR #8043. (First-Time Contributor!)
   - Bit pack perms in TownyPermission objects, courtesy of Warrior with PR #8048.
   - Remove world references stored inside WorldCoord, courtesy of Warrior with PR #8050.
   - Fix message when attempting to overclaim your own town, courtesy of Warrior with PR #8051.
