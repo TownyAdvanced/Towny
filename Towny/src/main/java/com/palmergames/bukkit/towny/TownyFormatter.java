@@ -589,16 +589,16 @@ public class TownyFormatter {
 			screen.addComponentOf("explosion_reverts", colourKeyValue(translator.of("status_world_explrevert_entity"), (world.isUsingPlotManagementWildEntityRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") +
 					colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
 			// Plot Clear Block Delete: ON (see /towny plotclearblocks) | OFF
-			screen.addComponentOf("plot_clear", colourKeyValue(translator.of("status_plot_clear_deletion"), (world.isUsingPlotManagementMayorDelete() ? translator.of("status_on") + Colors.LightGreen +" (see /towny plotclearblocks)" : translator.of("status_off")))); 
+			screen.addComponentOf("plot_clear", colourKeyValue(translator.of("status_plot_clear_deletion"), (world.isUsingPlotManagementMayorDelete() ? translator.of("status_on") + Colors.GREEN +" (see /towny plotclearblocks)" : translator.of("status_off")))); 
 			// Wilderness:
 			//     Build, Destroy, Switch, ItemUse
 			//     Ignored Blocks: see /towny wildsblocks
 			screen.addComponentOf("wilderness", colourKey(world.getFormattedUnclaimedZoneName() + ": \n"));
-			screen.addComponentOf("perms1", "    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + translator.of("build") + Colors.Gray + ", " + 
-													(world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + translator.of("destroy") + Colors.Gray + ", " + 
-													(world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + translator.of("switch") + Colors.Gray + ", " + 
-													(world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + translator.of("item_use"));
-			screen.addComponentOf("perms2", "    " + colourKey(translator.of("status_world_ignoredblocks") + Colors.LightGreen + " see /towny wildsblocks"));
+			screen.addComponentOf("perms1", "    " + (world.getUnclaimedZoneBuild() ? Colors.GREEN : Colors.RED) + translator.of("build") + Colors.DARK_GRAY + ", " + 
+													(world.getUnclaimedZoneDestroy() ? Colors.GREEN : Colors.RED) + translator.of("destroy") + Colors.DARK_GRAY + ", " + 
+													(world.getUnclaimedZoneSwitch() ? Colors.GREEN : Colors.RED) + translator.of("switch") + Colors.DARK_GRAY + ", " + 
+													(world.getUnclaimedZoneItemUse() ? Colors.GREEN : Colors.RED) + translator.of("item_use"));
+			screen.addComponentOf("perms2", "    " + colourKey(translator.of("status_world_ignoredblocks") + Colors.GREEN + " see /towny wildsblocks"));
 
 			// Add any metadata which opt to be visible.
 			List<Component> fields = getExtraFields(world);
