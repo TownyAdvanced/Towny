@@ -2681,3 +2681,8 @@ msg_nearby_towns: 'Nearby Towns'
 msg_no_towns_nearby: 'No towns found nearby.'
 msg_nearby_town_format: '<green>%s <white>(%s blocks)'
 msg_nearby_town_nation: ' <aqua>[%s]'
+
+msg_err_must_specify_days_to_be_conquered: "You must specify a number of days to be conquered for, ie: 1 or more, or -1 or unlimited for an indefinite conquering."
+msg_conquered_status_granted: "You have set %s to have the conquered status for %s days."
+msg_conquered_status_granted_unlimited: "You have set %s to have the conquered status for an indefinite amount of days."
+msg_err_must_specify_on_or_off: "You must specify on or off."
