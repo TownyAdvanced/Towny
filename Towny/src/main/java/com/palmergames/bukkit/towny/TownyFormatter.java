@@ -118,7 +118,7 @@ public class TownyFormatter {
 		if (townBlock.hasPlotObjectGroup())
 			screen.addComponentOf("plotgroup", colourKey(translator.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size())));
 		
-		if (townBlock.getTrustedResidents().size() > 0)
+		if (townBlock.hasTrustedResidents())
 			screen.addComponentOf("trusted", getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
 
 		if (TownyEconomyHandler.isActive())

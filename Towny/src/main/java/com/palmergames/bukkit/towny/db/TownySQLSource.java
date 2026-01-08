@@ -1990,17 +1990,18 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 				}
 
 				line = rs.getString("trustedResidents");
-				if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
+				if (line != null && !line.isEmpty()) {
 					String search = (line.contains("#")) ? "#" : ",";
 					for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(search))))
 						townBlock.addTrustedResident(resident);
 
-					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
+					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.hasTrustedResidents()) {
 						townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
+					}
 				}
 				
 				line = rs.getString("customPermissionData");
-				if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
+				if (line != null && !line.isEmpty()) {
 					Map<String, String> map = new Gson().fromJson(line, new TypeToken<Map<String, String>>(){}.getType());
 
 					for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -2017,8 +2018,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 						townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
 					}
 
-					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.getPermissionOverrides().size() > 0)
+					if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.hasPermissionOverrides()) {
 						townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
+					}
 				}
 			}
 
@@ -2713,14 +2715,22 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				tb_hm.put("metadata", "");
 			
-			tb_hm.put("trustedResidents", StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), "#"));
-
-			Map<String, String> stringMap = new HashMap<>();
-			for (Map.Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet()) {
-				stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
+			if (townBlock.hasTrustedResidents()) {
+				tb_hm.put("trustedResidents", StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), "#"));
+			} else {
+				tb_hm.put("trustedResidents", "");
 			}
-			
-			tb_hm.put("customPermissionData", new Gson().toJson(stringMap));
+
+			if (townBlock.hasPermissionOverrides()) {
+				Map<String, String> stringMap = new HashMap<>();
+				for (Map.Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet()) {
+					stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
+				}
+
+				tb_hm.put("customPermissionData", new Gson().toJson(stringMap));
+			} else {
+				tb_hm.put("customPermissionData", "");
+			}
 
 			updateDB("TOWNBLOCKS", tb_hm, Arrays.asList("world", "x", "z"));
 
