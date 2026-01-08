@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.scheduling.impl;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import com.palmergames.bukkit.towny.scheduling.TaskScheduler;
 import org.bukkit.Bukkit;
@@ -44,6 +45,8 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask run(Consumer<ScheduledTask> task) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
 		ret.setTask(this.scheduler.runTask(this.plugin, () -> task.accept(ret)));
 		
@@ -52,6 +55,8 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask runLater(Consumer<ScheduledTask> task, long delay) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
 		ret.setTask(this.scheduler.runTaskLater(this.plugin, () -> task.accept(ret), delay));
 		
@@ -60,6 +65,8 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask runRepeating(Consumer<ScheduledTask> task, long delay, long period) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final BukkitScheduledTask ret = new BukkitScheduledTask(null, true);
 		ret.setTask(this.scheduler.runTaskTimer(this.plugin, () -> task.accept(ret), delay, period));
 		
@@ -68,6 +75,8 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask runAsync(Consumer<ScheduledTask> task) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
 		ret.setTask(this.scheduler.runTaskAsynchronously(this.plugin, () -> task.accept(ret)));
 		
@@ -76,6 +85,8 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask runAsyncLater(Consumer<ScheduledTask> task, long delay, TimeUnit timeUnit) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final BukkitScheduledTask ret = new BukkitScheduledTask(null);
 		ret.setTask(this.scheduler.runTaskLaterAsynchronously(this.plugin, () -> task.accept(ret), timeUnit.toMillis(delay) / 50));
 		
@@ -84,6 +95,8 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
 	@Override
 	public ScheduledTask runAsyncRepeating(Consumer<ScheduledTask> task, long delay, long period, TimeUnit timeUnit) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final BukkitScheduledTask ret = new BukkitScheduledTask(null, true);
 		ret.setTask(this.scheduler.runTaskTimerAsynchronously(this.plugin, () -> task.accept(ret), timeUnit.toMillis(delay) / 50, timeUnit.toMillis(period) / 50));
 		
