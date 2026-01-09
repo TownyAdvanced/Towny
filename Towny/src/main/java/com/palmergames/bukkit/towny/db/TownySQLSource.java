@@ -999,19 +999,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			town.setAllowedToWar(rs.getBoolean("allowedToWar"));
 			town.setJoinedNationAt(rs.getLong("joinedNationAt"));
 			town.setMovedHomeBlockAt(rs.getLong("movedHomeBlockAt"));
-			
-			line = rs.getString("forSale");
-			if (line != null)
-				town.setForSale(Boolean.getBoolean(line));
-			
-			line = rs.getString("forSalePrice");
-			if (line != null)
-				town.setForSalePrice(Double.parseDouble(line));
-
-			line = rs.getString("forSaleTime");
-			if (line != null)
-				town.setForSaleTime(Long.parseLong(line));
-
+			town.setForSale(rs.getBoolean("forSale"));
+			town.setForSalePrice(rs.getDouble("forSalePrice"));
+			town.setForSaleTime(rs.getLong("forSaleTime"));
 			town.setPurchasedBlocks(rs.getInt("purchased"));
 			town.setNationZoneOverride(rs.getInt("nationZoneOverride"));
 			town.setNationZoneEnabled(rs.getBoolean("nationZoneEnabled"));
