@@ -14,7 +14,6 @@ import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.DeleteNationEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
-import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
@@ -37,9 +36,12 @@ import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.Pair;
 import com.palmergames.util.StringMgmt;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,6 +64,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	private final String newLine = System.lineSeparator();
@@ -255,15 +258,27 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				deleteFile(resident.getAbsolutePath());
 				continue;
 			}
+			
+			String uuidString = loadUUIDFromFile(resident);
+			final @Nullable UUID uuid = super.parsePlayerUUID(uuidString, name);
+
+			if (uuid == null) {
+				plugin.getLogger().warning("Resident '" + name + "' does not have a valid uuid and cannot be loaded.");
+				continue;
+			}
 				
 			try {
-				newResident(name);
+				newResident(name, uuid);
 			} catch (NotRegisteredException e) {
 				// Thrown if the resident name does not pass the filters.
 				plugin.getLogger().log(Level.WARNING, "Resident " + name + " has an invalid name", e);
 				return false;
-			} catch (AlreadyRegisteredException ignored) {
-				// Should not be possible in flatfile.
+			} catch (AlreadyRegisteredException e) {
+				final Resident otherResident = universe.getResident(uuid);
+				if (otherResident != null && !otherResident.getName().equals(name)) {
+					// UUID is already registered
+					super.pendingDuplicateResidents.add(Pair.pair(name, otherResident.getName()));
+				}
 			}			
 		}
 
@@ -281,7 +296,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> towns = receiveListFromLegacyFile("towns.txt");
 		File[] townFiles = receiveObjectFiles("towns", ".txt");
 
-		List<File> rejectedTowns = new ArrayList<>();
+		record RejectedTown(String name, UUID uuid, File file) {}
+
+		List<RejectedTown> rejectedTowns = new ArrayList<>();
 		
 		for (File town : townFiles) {
 			String name = town.getName().replace(".txt", "");
@@ -293,11 +310,13 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				continue;
 			}
 			
+			final UUID uuid = super.parseUUIDOrNew(this.loadUUIDFromFile(town), "town '" + name + "'");
+			
 			try {
-				universe.newTownInternal(name);
+				universe.newTownInternal(name, uuid);
 			} catch (AlreadyRegisteredException | InvalidNameException e) {
 				// Thrown if the town name does not pass the filters.
-				rejectedTowns.add(town);
+				rejectedTowns.add(new RejectedTown(name, uuid, town));
 			}
 		}
 		
@@ -306,20 +325,21 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			deleteFile(dataFolderPath + File.separator + "towns.txt");
 
 		// Handle rejected town names after all the rest are loaded.
-		for (File town : rejectedTowns) {
-			String name = town.getName().replace(".txt", "");
+		for (RejectedTown town : rejectedTowns) {
+			String name = town.name;
 			String newName = generateReplacementName(true);
 			universe.getReplacementNameMap().put(name, newName);
 			TownyMessaging.sendErrorMsg(String.format("The town %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
 			try {
-				universe.newTownInternal(newName);
+				universe.newTownInternal(newName, town.uuid);
 			} catch (AlreadyRegisteredException | InvalidNameException e1) {
 				// We really hope this doesn't fail again.
 				plugin.getLogger().log(Level.WARNING, "exception occurred while registering town '" + newName + "' internally", e1);
 				return false;
 			}
-			File newFile = new File(town.getParent(), newName + ".txt");
-			town.renameTo(newFile);
+			
+			File newFile = new File(town.file.getParent(), newName + ".txt");
+			town.file.renameTo(newFile);
 		}
 
 		return true;
@@ -346,7 +366,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			}
 		
 			try {
-				newNation(name);
+				newNation(name, super.parseUUIDOrNew(loadUUIDFromFile(nation), "nation '" + name + "'"));
 			} catch (AlreadyRegisteredException | NotRegisteredException e) {
 				// Thrown if the town name does not pass the filters.
 				rejectedNations.add(nation);
@@ -396,7 +416,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			// Attempt to get the uuid from the world file
 			UUID uuid = null;
 			try {
-				uuid = UUID.fromString(FileMgmt.loadFileIntoHashMap(worldFile).getOrDefault("uuid", ""));
+				uuid = UUID.fromString(Optional.ofNullable(this.loadUUIDFromFile(worldFile)).orElse(""));
 			} catch (IllegalArgumentException ignored) {}
 
 			if (uuid != null) {
@@ -475,44 +495,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				line = keys.get("lastOnline");
 				if (line != null)
 					resident.setLastOnline(Long.parseLong(line));
-				
-				line = keys.get("uuid");
-				if (line != null) {
-					UUID uuid = UUID.fromString(line);
-					if (universe.hasResident(uuid)) {
-						Resident olderRes = universe.getResident(uuid);
-						if (resident.getLastOnline() > olderRes.getLastOnline()) {
-							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", olderRes.getName(), resident.getName()));
-							try {
-								universe.unregisterResident(olderRes);
-							} catch (NotRegisteredException ignored) {}
-							// Check if the older resident is a part of a town
-							Town olderResTown = olderRes.getTownOrNull();
-							if (olderResTown != null) {
-								try {
-									// Resident#removeTown saves the resident, so we can't use it.
-									olderResTown.removeResident(olderRes);
-								} catch (EmptyTownException e) {
-									try {
-										universe.unregisterTown(olderResTown);
-									} catch (NotRegisteredException ignored) {}
-									deleteTown(olderResTown);
-								}
-							}
-							deleteResident(olderRes);					
-						} else {
-							TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_deleting_duplicate", resident.getName(), olderRes.getName()));
-							try {
-								universe.unregisterResident(resident);
-							} catch (NotRegisteredException ignored) {}
-							deleteResident(resident);
-							save = false;
-							return true;
-						}
-					}
-					resident.setUUID(uuid);
-					universe.registerResidentUUID(resident);
-				}
 				
 				line = keys.get("about");
 				if (line != null)
@@ -949,18 +931,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 				}
 				
-				line = keys.get("uuid");
-				if (line != null) {
-					UUID townUUID = null;
-					try {
-						townUUID = UUID.fromString(line);
-					} catch (IllegalArgumentException ee) {
-						townUUID = UUID.randomUUID();
-					}
-					
-					town.setUUID(townUUID);
-					universe.registerTownUUID(town);
-				}
 				line = keys.get("registered");
 				if (line != null) {
 					try {
@@ -1188,15 +1158,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					nation.setNeutral(Boolean.parseBoolean(line));
 				
-				line = keys.get("uuid");
-				if (line != null) {
-					try {
-						nation.setUUID(UUID.fromString(line));
-					} catch (IllegalArgumentException ee) {
-						nation.setUUID(UUID.randomUUID());
-					}
-					universe.registerNationUUID(nation);
-				}
 				line = keys.get("registered");
 				if (line != null) {
 					try {
@@ -1296,15 +1257,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_world", world.getName()));
 			try {
 				HashMap<String, String> keys = FileMgmt.loadFileIntoHashMap(fileWorld);
-				
-				line = keys.get("uuid");
-				if (line != null && !line.isEmpty()) {
-					try {
-						world.setUUID(UUID.fromString(line));
-					} catch (IllegalArgumentException ignored) {
-						// Invalid UUID
-					}
-				}
 				
 				line = keys.get("claimable");
 				if (line != null)
@@ -2088,6 +2040,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<String> list = new ArrayList<>();
 
+		if (town.hasValidUUID()){
+			list.add("uuid=" + town.getUUID());
+		} else {
+			list.add("uuid=" + UUID.randomUUID());
+		}
+
 		// Name
 		list.add("name=" + town.getName());
 		// Mayor
@@ -2150,11 +2108,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		// Conquered towns setting + date
 		list.add("conquered=" + town.isConquered());
 		list.add("conqueredDays=" + town.getConqueredDays());
-		if (town.hasValidUUID()){
-			list.add("uuid=" + town.getUUID());
-		} else {
-			list.add("uuid=" + UUID.randomUUID());
-		}
         list.add("registered=" + town.getRegistered());
 		list.add("joinedNationAt=" + town.getJoinedNationAt());
 		list.add("movedHomeBlockAt=" + town.getMovedHomeBlockAt());
@@ -2267,6 +2220,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<String> list = new ArrayList<>();
 
+		if (nation.hasValidUUID()){
+			list.add("uuid=" + nation.getUUID());
+		} else {
+			list.add("uuid=" + UUID.randomUUID());
+		}
+
 		if (nation.hasCapital())
 			list.add("capital=" + nation.getCapital().getName());
 
@@ -2291,11 +2250,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("spawnCost=" + nation.getSpawnCost());
 		// Peaceful
 		list.add("neutral=" + nation.isNeutral());
-		if (nation.hasValidUUID()){
-			list.add("uuid=" + nation.getUUID());
-		} else {
-			list.add("uuid=" + UUID.randomUUID());
-		}
+
         list.add("registered=" + nation.getRegistered());
         
         // Spawn
@@ -2330,11 +2285,11 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveWorld(TownyWorld world) {
 
 		List<String> list = new ArrayList<>();
-		
-		list.add("name=" + world.getName());
-		
+
 		if (world.getUUID() != null)
 			list.add("uuid=" + world.getUUID());
+		
+		list.add("name=" + world.getName());
 
 		// PvP
 		list.add("pvp=" + world.isPVP());
@@ -2727,5 +2682,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		});
 		
 		return true;
+	}
+
+	private String loadUUIDFromFile(File file) {
+		try (final Stream<String> lines = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
+			return lines.filter(line -> line.startsWith("uuid="))
+				.findFirst()
+				.map(uuidLine -> uuidLine.substring("uuid=".length()).trim())
+				.orElse(null);
+		} catch (IOException e) {
+			plugin.getLogger().log(Level.SEVERE, "An IO exception occurred while attempting to read uuid from file " + file.getName(), e);
+			return null;
+		}
 	}
 }
