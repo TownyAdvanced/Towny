@@ -2327,7 +2327,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			else
 				res_hm.put("metadata", "");
 
-			updateDB("RESIDENTS", res_hm, Collections.singletonList("name"));
+			updateDB("RESIDENTS", res_hm, Collections.singletonList("uuid"));
 			return true;
 
 		} catch (Exception e) {
@@ -2443,7 +2443,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			twn_hm.put("enemies", StringMgmt.join(town.getEnemiesUUIDs(), "#"));
 			twn_hm.put("hasActiveWar", town.hasActiveWar());
 			
-			updateDB("TOWNS", twn_hm, Collections.singletonList("name"));
+			updateDB("TOWNS", twn_hm, Collections.singletonList("uuid"));
 			return true;
 
 		} catch (Exception e) {
@@ -2527,7 +2527,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("conqueredTax", nation.getConqueredTax());
 			nat_hm.put("sanctionedTowns", StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
 			nat_hm.put("hasActiveWar", nation.hasActiveWar());
-			updateDB("NATIONS", nat_hm, Collections.singletonList("name"));
+			updateDB("NATIONS", nat_hm, Collections.singletonList("uuid"));
 
 		} catch (Exception e) {
 			plugin.getLogger().log(Level.WARNING, "SQL: Save Nation unknown error", e);

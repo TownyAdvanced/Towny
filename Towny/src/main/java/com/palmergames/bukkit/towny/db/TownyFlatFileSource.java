@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.District;
+import com.palmergames.bukkit.towny.object.NameAndId;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlotGroup;
@@ -52,6 +53,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +70,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class TownyFlatFileSource extends TownyDatabaseHandler {
+	private static final int UUID_LENGTH = 36;
 	private final String newLine = System.lineSeparator();
 	
 	public TownyFlatFileSource(Towny plugin, TownyUniverse universe) {
@@ -112,7 +115,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public String getResidentFilename(Resident resident) {
 
-		return dataFolderPath + File.separator + "residents" + File.separator + resident.getName() + ".txt";
+		return dataFolderPath + File.separator + "residents" + File.separator + resident.getUUID() + ".txt";
 	}
 	
 	public String getHibernatedResidentFilename(UUID uuid) {
@@ -122,12 +125,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	public String getTownFilename(Town town) {
 
-		return dataFolderPath + File.separator + "towns" + File.separator + town.getName() + ".txt";
+		return dataFolderPath + File.separator + "towns" + File.separator + town.getUUID() + ".txt";
 	}
 
 	public String getNationFilename(Nation nation) {
 
-		return dataFolderPath + File.separator + "nations" + File.separator + nation.getName() + ".txt";
+		return dataFolderPath + File.separator + "nations" + File.separator + nation.getUUID() + ".txt";
 	}
 
 	public String getWorldFilename(TownyWorld world) {
@@ -250,22 +253,43 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> residents = receiveListFromLegacyFile("residents.txt");
 		File[] residentFiles = receiveObjectFiles("residents", ".txt");
 
-		for (File resident : residentFiles) {
-			String name = resident.getName().replace(".txt", "");
+		for (File residentFile : residentFiles) {
+			String fileName = residentFile.getName().replace(".txt", "");
 
 			// Don't load resident files if they weren't in the residents.txt file.
-			if (!residents.isEmpty() && !residents.contains(name)) {
-				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_resident_not_found", resident.getName()));
-				deleteFile(resident.getAbsolutePath());
+			if (!residents.isEmpty() && !residents.contains(fileName)) {
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_resident_not_found", residentFile.getName()));
+				deleteFile(residentFile.getAbsolutePath());
 				continue;
 			}
 			
-			String uuidString = loadUUIDFromFile(resident);
-			final @Nullable UUID uuid = super.parsePlayerUUID(uuidString, name);
+			String name;
+			String uuidString;
+
+			if (fileName.length() == UUID_LENGTH) {
+				name = loadKeyFromFile(residentFile, "name");
+				uuidString = fileName;
+			} else {
+				uuidString = this.loadKeyFromFile(residentFile, "uuid");
+				name = fileName;
+			}
+
+			final @Nullable UUID uuid = super.parsePlayerUUID(uuidString, fileName);
 
 			if (uuid == null) {
 				plugin.getLogger().warning("Resident '" + name + "' does not have a valid uuid and cannot be loaded.");
 				continue;
+			}
+			
+			if (fileName.length() != UUID_LENGTH) {
+				final Path residentFilePath = residentFile.toPath();
+
+				try {
+					Files.move(residentFilePath, residentFilePath.resolveSibling(uuid + ".txt"), StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					plugin.getSLF4JLogger().warn("Failed to rename name-based resident file '{}' to uuid variant", fileName, e);
+					return false;
+				}
 			}
 				
 			try {
@@ -301,23 +325,34 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<RejectedTown> rejectedTowns = new ArrayList<>();
 		
-		for (File town : townFiles) {
-			String name = town.getName().replace(".txt", "");
+		for (File townFile : townFiles) {
+			String fileName = townFile.getName().replace(".txt", "");
 
 			// Don't load town files if they weren't in the towns.txt file.
-			if (!towns.isEmpty() && !towns.contains(name)) {
-				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_town_not_found", town.getName()));
-				deleteFile(town.getAbsolutePath());
+			if (!towns.isEmpty() && !towns.contains(fileName)) {
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_town_not_found", townFile.getName()));
+				deleteFile(townFile.getAbsolutePath());
 				continue;
 			}
 			
-			final UUID uuid = super.parseUUIDOrNew(this.loadUUIDFromFile(town), "town '" + name + "'");
+			final NameAndId nameAndId = this.loadNameAndUUIDFromFile(townFile, fileName, "town");
+			
+			if (fileName.length() != UUID_LENGTH) {
+				final Path townFilePath = townFile.toPath();
+
+				try {
+					Files.move(townFilePath, townFilePath.resolveSibling(nameAndId.uuid() + ".txt"), StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					plugin.getSLF4JLogger().warn("Failed to rename name-based town file '{}' to uuid variant", fileName, e);
+					return false;
+				}
+			}
 			
 			try {
-				universe.newTownInternal(name, uuid);
+				universe.newTownInternal(nameAndId.name(), nameAndId.uuid());
 			} catch (AlreadyRegisteredException | InvalidNameException e) {
 				// Thrown if the town name does not pass the filters.
-				rejectedTowns.add(new RejectedTown(name, uuid, town));
+				rejectedTowns.add(new RejectedTown(nameAndId.name(), nameAndId.uuid(), townFile));
 			}
 		}
 		
@@ -330,12 +365,12 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			String name = town.name;
 			String newName = generateReplacementName(true);
 			universe.getReplacementNameMap().put(name, newName);
-			TownyMessaging.sendErrorMsg(String.format("The town %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
+			TownyMessaging.sendErrorMsg(String.format("The town %s (%s) tried to load an invalid name, attempting to rename it to %s.", name, town.uuid, newName));
 			try {
 				universe.newTownInternal(newName, town.uuid);
 			} catch (AlreadyRegisteredException | InvalidNameException e1) {
 				// We really hope this doesn't fail again.
-				plugin.getLogger().log(Level.WARNING, "exception occurred while registering town '" + newName + "' internally", e1);
+				plugin.getSLF4JLogger().warn("exception occurred while registering town '{}' ({}) internally", newName, town.uuid, e1);
 				return false;
 			}
 			
@@ -356,21 +391,34 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<File> rejectedNations = new ArrayList<>();
 		
-		for (File nation : nationFiles) {
-			String name = nation.getName().replace(".txt", "");
+		for (File nationFile : nationFiles) {
+			String fileName = nationFile.getName().replace(".txt", "");
 
 			// Don't load nation files if they weren't in the nations.txt file.
-			if (!nations.isEmpty() && !nations.contains(name)) {
-				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_nation_not_found", nation.getName()));
-				deleteFile(nation.getAbsolutePath());
+			if (!nations.isEmpty() && !nations.contains(fileName)) {
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_removing_nation_not_found", nationFile.getName()));
+				deleteFile(nationFile.getAbsolutePath());
 				continue;
+			}
+			
+			final NameAndId nameAndId = this.loadNameAndUUIDFromFile(nationFile, fileName, "nation");
+
+			if (fileName.length() != UUID_LENGTH) {
+				final Path nationFilePath = nationFile.toPath();
+
+				try {
+					Files.move(nationFilePath, nationFilePath.resolveSibling(nameAndId.uuid() + ".txt"), StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					plugin.getSLF4JLogger().warn("Failed to rename name-based nation file '{}' to uuid variant", fileName, e);
+					return false;
+				}
 			}
 		
 			try {
-				newNation(name, super.parseUUIDOrNew(loadUUIDFromFile(nation), "nation '" + name + "'"));
+				newNation(nameAndId.name(), nameAndId.uuid());
 			} catch (AlreadyRegisteredException | NotRegisteredException e) {
 				// Thrown if the town name does not pass the filters.
-				rejectedNations.add(nation);
+				rejectedNations.add(nationFile);
 			}
 		}
 		
@@ -417,7 +465,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			// Attempt to get the uuid from the world file
 			UUID uuid = null;
 			try {
-				uuid = UUID.fromString(Optional.ofNullable(this.loadUUIDFromFile(worldFile)).orElse(""));
+				uuid = UUID.fromString(Optional.ofNullable(this.loadKeyFromFile(worldFile, "uuid")).orElse(""));
 			} catch (IllegalArgumentException ignored) {}
 
 			if (uuid != null) {
@@ -2004,9 +2052,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<String> list = new ArrayList<>();
 
-		if (resident.hasUUID()) {
-			list.add("uuid=" + resident.getUUID());
-		}
+		list.add("name=" + resident.getName());
+		list.add("uuid=" + resident.getUUID());
+
 		// Last Online
 		list.add("lastOnline=" + resident.getLastOnline());
 		// Registered
@@ -2073,20 +2121,20 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 		List<String> list = new ArrayList<>();
 
+		// Name
+		list.add("name=" + town.getName());
+
 		if (town.hasValidUUID()){
 			list.add("uuid=" + town.getUUID());
 		} else {
 			list.add("uuid=" + UUID.randomUUID());
 		}
 
-		// Name
-		list.add("name=" + town.getName());
 		// Mayor
 		final Resident mayor = town.getMayor();
 		if (mayor != null) {
 			list.add("mayor=" + mayor.getUUID());
 			list.add("mayorName=" + mayor.getName());
-			list.add(newLine);
 		}
 		
 		// Nation
@@ -2094,7 +2142,6 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		if (nation != null) {
 			list.add("nation=" + nation.getUUID());
 			list.add("nationName=" + nation.getName());
-			list.add(newLine);
 		}
 
 		list.add(newLine);
@@ -2261,6 +2308,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 	public boolean saveNation(Nation nation) {
 
 		List<String> list = new ArrayList<>();
+
+		list.add("name=" + nation.getName());
 
 		if (nation.hasValidUUID()){
 			list.add("uuid=" + nation.getUUID());
@@ -2728,15 +2777,35 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		return true;
 	}
 
-	private String loadUUIDFromFile(File file) {
+	private String loadKeyFromFile(File file, String key) {
+		final String searchingForLine = key + "=";
+		
 		try (final Stream<String> lines = Files.lines(file.toPath(), StandardCharsets.UTF_8)) {
-			return lines.filter(line -> line.startsWith("uuid="))
+			return lines.filter(line -> line.startsWith(searchingForLine))
 				.findFirst()
-				.map(uuidLine -> uuidLine.substring("uuid=".length()).trim())
+				.map(uuidLine -> uuidLine.substring(searchingForLine.length()).trim())
 				.orElse(null);
 		} catch (IOException e) {
-			plugin.getLogger().log(Level.SEVERE, "An IO exception occurred while attempting to read uuid from file " + file.getName(), e);
+			plugin.getSLF4JLogger().error("An IO exception occurred while attempting to read key '{}' from file {}", key, file.getName(), e);
 			return null;
 		}
+	}
+	
+	private NameAndId loadNameAndUUIDFromFile(File file, String fileName, String describedAs) {
+		String possibleUUID;
+		String name;
+
+		if (fileName.length() == UUID_LENGTH) {
+			// new behavior, file name is a UUID
+			possibleUUID = fileName;
+			name = loadKeyFromFile(file, "name");
+		} else {
+			// old file, file name is already a name
+			possibleUUID = loadKeyFromFile(file, "uuid");
+			name = fileName;
+		}
+
+		final UUID uuid = super.parseUUIDOrNew(possibleUUID, describedAs + " '" + name + "'");
+		return new NameAndId(name, uuid);
 	}
 }
