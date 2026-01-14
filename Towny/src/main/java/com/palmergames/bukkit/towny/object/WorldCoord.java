@@ -19,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,16 +32,10 @@ import java.util.concurrent.CompletableFuture;
 public class WorldCoord extends Coord {
 
 	private final String worldName;
-	private UUID worldUUID;
-	private Reference<World> worldRef = new WeakReference<>(null);
 
 	public WorldCoord(String worldName, int x, int z) {
 		super(x, z);
 		this.worldName = worldName;
-		
-		World world = Bukkit.getServer().getWorld(worldName);
-		if (world != null)
-			this.worldUUID = world.getUID();
 	}
 
 	public WorldCoord(String worldName, Coord coord) {
@@ -53,7 +45,6 @@ public class WorldCoord extends Coord {
 	public WorldCoord(String worldName, UUID worldUUID, int x, int z) {
 		super(x, z);
 		this.worldName = worldName;
-		this.worldUUID = worldUUID;
 	}
 
 	public WorldCoord(String worldName, UUID worldUUID, Coord coord) {
@@ -63,7 +54,6 @@ public class WorldCoord extends Coord {
 	public WorldCoord(@NotNull World world, int x, int z) {
 		super(x, z);
 		this.worldName = world.getName();
-		this.worldUUID = world.getUID();
 	}
 
 	public WorldCoord(@NotNull World world, Coord coord) {
@@ -73,8 +63,6 @@ public class WorldCoord extends Coord {
 	public WorldCoord(WorldCoord worldCoord) {
 		super(worldCoord);
 		this.worldName = worldCoord.getWorldName();
-		this.worldUUID = worldCoord.worldUUID;
-		this.worldRef = new WeakReference<>(worldCoord.worldRef.get());
 	}
 
 	public String getWorldName() {
@@ -106,7 +94,7 @@ public class WorldCoord extends Coord {
 	}
 
 	public WorldCoord add(int xOffset, int zOffset) {
-		return new WorldCoord(getWorldName(), worldUUID, getX() + xOffset, getZ() + zOffset);
+		return new WorldCoord(getWorldName(), getX() + xOffset, getZ() + zOffset);
 	}
 
 	@Override
@@ -147,16 +135,7 @@ public class WorldCoord extends Coord {
 	 */
 	@Nullable
 	public World getBukkitWorld() {
-		World world = worldRef.get();
-		if (world == null) {
-			world = Bukkit.getServer().getWorld(this.worldName);
-			worldRef = new WeakReference<>(world);
-			
-			if (this.worldUUID == null && world != null)
-				this.worldUUID = world.getUID();
-		}
-		
-		return world;
+		return Bukkit.getServer().getWorld(this.worldName);
 	}
 
 	/**

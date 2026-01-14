@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.102.0.2</version>
+    <version>0.102.0.3</version>
 
     <licenses>
         <license>
@@ -73,13 +73,13 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.8-R0.1-SNAPSHOT</version>
+            <version>1.21.10-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>6.2.1</version>
+            <version>7.0.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -116,7 +116,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.24.3</version>
+            <version>2.25.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -219,7 +219,7 @@
         <dependency>
             <groupId>org.mockbukkit.mockbukkit</groupId>
             <artifactId>mockbukkit-v1.21</artifactId>
-            <version>4.64.0</version>
+            <version>4.98.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -241,7 +241,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.0</version>
+                    <version>3.14.1</version>
                     <configuration>
                         <release>${java.version}</release>
                     </configuration>
@@ -322,7 +322,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.6.0</version>
+                    <version>3.6.1</version>
                     <configuration>
                         <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                         <artifactSet>
@@ -394,7 +394,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.5.2</version>
+                    <version>3.5.4</version>
                     <configuration>
                         <skipTests>${skipTests}</skipTests>
                     </configuration>
@@ -402,7 +402,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.4.2</version>
+                    <version>3.5.0</version>
                     <configuration>
                         <archive>
                             <manifestEntries>

@@ -132,7 +132,7 @@ public class SpawnUtil {
 			spawnInformation.nationSpawnLevel = getNationSpawnLevel(player, noCmdArgs, spawnType, resident, nation, isTownyAdmin);
 
 			// Get any applicable cooldown.
-			spawnInformation.cooldown = getCooldown(player, spawnInformation);
+			spawnInformation.cooldown = getCooldown(player, resident.hasMode("adminbypass"), spawnInformation);
 
 			// Prevent spawn travel while in the config's disallowed zones.
 			// Throws a TownyException if the player is disallowed.
@@ -414,12 +414,14 @@ public class SpawnUtil {
 	 * Get the cooldown time on a player using a spawn command.
 	 * 
 	 * @param player           Player doing the spawning action.
+	 * @param hasAdminBypass   True if the player has the adminbypass mode enabled.
 	 * @param spawnInformation SpawnInformation containing the useful TownSpawnLevel
 	 *                         or NationSpawnLevel.
 	 * @return number of seconds a player must wait until they can spawn again.
 	 */
-	private static int getCooldown(Player player, SpawnInformation spawnInformation) {
-		return player.hasPermission(PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()) ? 0 : spawnInformation.townSpawnLevel != null ? spawnInformation.townSpawnLevel.getCooldown() : spawnInformation.nationSpawnLevel.getCooldown();
+	private static int getCooldown(Player player, boolean hasAdminBypass, SpawnInformation spawnInformation) {
+		return hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN) && !hasAdminBypass ? 0
+			: spawnInformation.townSpawnLevel != null ? spawnInformation.townSpawnLevel.getCooldown() : spawnInformation.nationSpawnLevel.getCooldown();
 	}
 	
 	/**
@@ -793,7 +795,8 @@ public class SpawnUtil {
 		if (resident == null)
 			return;
 
-		if (TownyTimerHandler.isTeleportWarmupRunning() && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP)) {
+		boolean isUsingAdminBypass = resident.hasMode("adminbypass");
+		if (TownyTimerHandler.isTeleportWarmupRunning() && (!hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP) || isUsingAdminBypass)) {
 			// Use teleport warmup
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
 			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown, refundAccount, cost);
@@ -811,7 +814,7 @@ public class SpawnUtil {
 					BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost, prior));
 			});
 
-			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
+			if (cooldown > 0 && (!hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN) || isUsingAdminBypass))
 				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
 	}

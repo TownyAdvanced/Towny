@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.scheduling.impl;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -16,7 +17,7 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 
 	@Override
 	public boolean isGlobalThread() {
-		// isGlobalThread does not exist on paper, match the bukkit task scheduler's behaviour.
+		// isGlobalThread exists on paper since 1.21.3, but is implemented the exact same way as this method.
 		return Bukkit.getServer().isPrimaryThread();
 	}
 	
@@ -26,6 +27,8 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 	
 	@Override
 	public ScheduledTask run(final Consumer<ScheduledTask> task) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
 		ret.setTask(globalRegionScheduler.run(plugin, t -> task.accept(ret)));
 		
@@ -34,8 +37,11 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 
 	@Override
 	public ScheduledTask runLater(final Consumer<ScheduledTask> task, long delay) {
-		if (delay == 0)
+		Preconditions.checkArgument(task != null, "task may not be null");
+
+		if (delay == 0) {
 			return run(task);
+		}
 		
 		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
 		ret.setTask(globalRegionScheduler.runDelayed(plugin, t -> task.accept(ret), delay));
@@ -45,6 +51,8 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 
 	@Override
 	public ScheduledTask runRepeating(final Consumer<ScheduledTask> task, long delay, long period) {
+		Preconditions.checkArgument(task != null, "task may not be null");
+
 		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
 		ret.setTask(globalRegionScheduler.runAtFixedRate(plugin, t -> task.accept(ret), delay, period));
 
