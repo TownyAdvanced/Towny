@@ -66,6 +66,7 @@ import org.bukkit.block.data.type.RespawnAnchor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -74,6 +75,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityExhaustionEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -93,6 +95,7 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Arrays;
 
@@ -613,6 +616,38 @@ public class TownyPlayerListener implements Listener {
 			&& block.getBlockData() instanceof RespawnAnchor anchor 
 			&& anchor.getCharges() > 0 
 			&& (event.getItem() == null || (event.getItem().getType() != Material.GLOWSTONE || anchor.getCharges() >= anchor.getMaximumCharges()));
+	}
+
+	/*
+	 * Handles projectiles which are considered for Itemuse, in order to catch them
+	 * when they are used on AIR which do not register PlayerInteractEvents.
+	 */
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerSpawnItemuseProjectile(ProjectileLaunchEvent event) {
+
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
+			return;
+
+		Projectile projectile = event.getEntity();
+		ProjectileSource source = projectile.getShooter();
+		if (!(source instanceof Player player))
+			return;
+
+		Material item = EntityTypeUtil.parseEntityToMaterial(event.getEntityType());
+		Location loc = player.getLocation();
+		if (item == null || !TownySettings.isItemUseMaterial(item, loc))
+			return;
+
+		/*
+		 * Test item_use. 
+		 */
+		if (!TownyActionEventExecutor.canItemuse(player, loc, item))
+			event.setCancelled(true);
 	}
 
 	/*

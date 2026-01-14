@@ -55,6 +55,8 @@ public class EntityTypeUtil {
 		register(map, "cow", "cow_spawn_egg");
 		register(map, "goat", "goat_spawn_egg");
 		register(map, "mooshroom", "mooshroom_spawn_egg");
+		register(map, "ender_pearl", "ender_pearl");
+		register(map, "wind_charge", "wind_charge");
 		
 		TownyMessaging.sendDebugMsg("[EntityTypeUtil] Attempted: " + attempted + " | Registered: " + map.size());
 
