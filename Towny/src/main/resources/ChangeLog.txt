@@ -10610,3 +10610,38 @@ v0.92.0.11:
   - Add support for enabling conquering on a town via townyadmin command.
   - Check the chunk is still wilderness after confirmation in /town new, courtesy of Veyronity with PR #8059. (First-Time Contributor!)
   - Add null checks to the task schedulers, courtesy of Warrior with PR #8060.
+0.102.0.4:
+  - UUID Database Update!
+    - READ CAREFULLY, THIS UPDATE HAS CHANGES THAT CANNOT BE REVERSED EASILY.
+    - Since Minecraft added UUIDs to players there has always been the idea of changing Towny over to using UUIDs as the main key in our database,
+      but due to database instability this was not something that was considered a smart change. Database stability was majorly improved years ago
+      however and starting in 2022 and 2023 I (LlmDl,) had pull requests on deck exploring/planning what a UUID-based database would look like for
+      Towny. In the middle-to-late 2025 Warrior decided to revive the UUID database concept, breaking things into bite-sized pull requests that
+      made the concept easier to review and merge. Those pull requests are as follows:
+      - Load UUIDs for residents, towns & nations early, courtesy of Warrior with PR #7945.
+      - Replace references to names with UUIDs in the database, courtesy of Warrior with PR #7962.
+      - Clean up town/nation/resident renaming logic, courtesy of Warrior with PR #7963.
+      - Use UUIDs for town/nation/resident file names in flatfile, courtesy of Warrior with PR #8023.
+      Thanks to Warrior's efforts the UUID database has become a reality!
+    - What this means for Towny server admins:
+      - The database no longer saves using resident, town and nation names. Instead you will see UUID-named .txt files in the resident, town and
+        nation folders, and UUIDs in the lists of friends, enemies and allies.
+      - Once you updated to this version your database will be converted and there is no going back. Towny will create backups of your pre-UUID
+        database if you have backups enabled in the Towny config.yml and you are using Towny in flatfile!
+      - If your Towny database is stored in MYSQL you need to make your own backup! Towny doesn't back up MYSQL databases!
+    - Benefits:
+      - Your Towny database just got more error-proof.
+      - Renaming of residents, towns, nations should no longer be prone to edge-case scenarios that could cause issues.
+      - Server hosts which don't allow some unicode characters in the server file system's filenames will no longer fail to save/load towns and
+        nations with special (usually accented,) characters.
+      - If you change hosts and your future-host does not allow the above unicode characters to be used in the filesystem, your server will not
+        immediately fail to load!
+      - The main issue with Towny databases over the last few years was typically towns/nations being named with characters that server hosting
+        would not allow in the filesystem, this database update will make this issue non-existant, which is why the benefits of this update
+        outweigh the cons.
+    - Cons:
+      - The database's residents/towns/nations are no longer saved with their names. This makes editing your database manually trickier.
+        - To help this out the residents' files will now contain their town's last-known name, the towns' files will contain their nation's and
+          mayor's last-known name. All residents, towns and nations files will contain their last-known name in their files.
+    - Ultimately, the benefits have outweighed the cons, stability has been good for Towny databases for 5+ years, and it is time to make this
+      change in order to reduce the complexity of the codebase and to improve how Towny runs on varied server hosts.
