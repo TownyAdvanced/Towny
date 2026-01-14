@@ -50,14 +50,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
-	private UUID uuid = null;
+	private final UUID uuid;
 	private Town town = null;
 	private long lastOnline;
 	private long registered;
@@ -88,9 +87,16 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private String districtName = null;
 	protected CachedTaxOwing cachedTaxOwing = null;
 
-	public Resident(String name) {
+	@ApiStatus.Internal
+	public Resident(String name, UUID uuid) {
 		super(name);
+		this.uuid = uuid;
 		permissions.loadDefault(this);
+	}
+
+	@Deprecated(since = "0.102.0.4")
+	public Resident(String name) {
+		this(name, UUID.randomUUID());
 	}
 
 	@Override
@@ -99,12 +105,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return true;
 		if (!(other instanceof Resident otherResident))
 			return false;
-		return this.getName().equals(otherResident.getName()); // TODO: Change this to UUID when the UUID database is in use.
+		return this.getUUID().equals(otherResident.getUUID());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.uuid.hashCode();
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -132,9 +138,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return uuid;		
 	}
 	
+	/**
+	 * @deprecated Changing UUIDs of Resident objects is no longer supported.
+	 */
+	@Deprecated(since = "0.102.0.4")
 	@Override
 	public void setUUID(UUID uuid) {
-		this.uuid = uuid;
 	}
 	
 	public boolean hasUUID() {

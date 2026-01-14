@@ -1135,7 +1135,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		plugin.getScheduler().runAsync(() -> {
 			Map<Town, Double> townDistances = new HashMap<>();
-			for (Town town : world.getTowns().values()) {
+			for (Town town : world.getTownsInWorld()) {
 				Location spawn = town.getSpawnOrNull();
 				if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
 					continue;

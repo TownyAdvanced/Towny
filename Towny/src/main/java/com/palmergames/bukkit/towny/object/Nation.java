@@ -33,7 +33,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,8 +50,9 @@ public class Nation extends Government {
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
 	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
 
-	public Nation(String name) {
-		super(name);
+	@ApiStatus.Internal
+	public Nation(String name, UUID uuid) {
+		super(name, uuid);
 		
 		// Set defaults
 		setTaxes(TownySettings.getNationDefaultTax());
@@ -61,18 +61,18 @@ public class Nation extends Government {
 		setOpen(TownySettings.getNationDefaultOpen());
 	}
 
+	@Deprecated(since = "0.102.0.4")
+	public Nation(String name) {
+		this(name, UUID.randomUUID());
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		if (other == this)
 			return true;
 		if (!(other instanceof Nation otherNation))
 			return false;
-		return this.getName().equals(otherNation.getName()); // TODO: Change this to UUID when the UUID database is in use.
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.getUUID().equals(otherNation.getUUID());
 	}
 
 	public void addAlly(Nation nation) {

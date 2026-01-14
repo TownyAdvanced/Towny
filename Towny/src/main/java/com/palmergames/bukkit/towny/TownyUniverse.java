@@ -30,6 +30,7 @@ import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.JavaUtil;
 import com.palmergames.util.Trie;
 
 import org.bukkit.Location;
@@ -350,7 +351,7 @@ public class TownyUniverse {
 		Resident res = residentNameMap.get(filteredName);
 
 		if (res == null && TownySettings.isFakeResident(residentName)) {
-			Resident npc = new Resident(residentName);
+			Resident npc = new Resident(residentName, JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2));
 			npc.setNPC(true);
 			return npc;
 		}
@@ -547,6 +548,7 @@ public class TownyUniverse {
 	}
 
 	private void newTown(String name, UUID uuid) throws AlreadyRegisteredException, InvalidNameException {
+		Preconditions.checkArgument(uuid != null, "uuid may not be null");
 		String filteredName = NameValidation.checkAndFilterTownNameOrThrow(name);
 
 		Town town = new Town(filteredName, uuid);
