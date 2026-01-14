@@ -194,7 +194,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
 		for (TownyWorld world : TownyUniverse.getInstance().getTownyWorlds()) {
 			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
-			formattedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
+			formattedList.add(Colors.AQUA + world.getName() + Colors.DARK_AQUA + " [" + numPlayers + "]" + Colors.WHITE);
 		}
 
 		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));

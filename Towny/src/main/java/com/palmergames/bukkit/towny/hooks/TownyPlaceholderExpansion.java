@@ -6,7 +6,7 @@ import com.palmergames.bukkit.towny.object.comparators.ComparatorCaches;
 import com.palmergames.bukkit.towny.object.comparators.ComparatorType;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
-
+import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.Pair;
 import com.palmergames.util.TimeMgmt;
 import net.kyori.adventure.text.Component;
@@ -89,7 +89,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	 */
 	@Override
 	public String getAuthor() {
-		return plugin.getDescription().getAuthors().toString();
+		return "TownyAdvanced Team and Contributors";
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 	 */
 	@Override
 	public String getVersion() {
-		return plugin.getDescription().getVersion();
+		return Version.fromPlugin(plugin).toString();
 	}
 	
 	@Override

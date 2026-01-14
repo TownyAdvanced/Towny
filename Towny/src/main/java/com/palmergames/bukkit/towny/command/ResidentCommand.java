@@ -467,7 +467,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private void notifyPerms(Player player, TownyPermission perm) {
 
 		TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		TownyMessaging.sendMessage(player, Colors.DARK_GREEN + "PvP: " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Explosions: " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Firespread: " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Mob Spawns: " + ((perm.mobs) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF"));
 
 	}
 	
@@ -480,10 +480,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		for (Player player : BukkitTools.getVisibleOnlinePlayers(sender)) {
 			Resident resident = TownyAPI.getInstance().getResident(player);
 			if (resident == null) {
-				formattedList.add(Colors.White + player.getName() + Colors.White);
+				formattedList.add(Colors.WHITE + player.getName() + Colors.WHITE);
 				continue;
 			}
-			formattedList.add(getColour(resident) + resident.getName() + Colors.White);
+			formattedList.add(getColour(resident) + resident.getName() + Colors.WHITE);
 		}
 		
 		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
@@ -613,13 +613,13 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("friend_list").forLocale(player)));
 		List<String> formatedList = resident.getFriends().stream()
 			.filter(friend -> !requireOnline || (friend.getPlayer() != null && player.canSee(friend.getPlayer())))
-			.map(friend -> getColour(friend) + friend.getName() + Colors.White)
+			.map(friend -> getColour(friend) + friend.getName() + Colors.WHITE)
 			.collect(Collectors.toList());
 		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));
 	}
 
 	private static String getColour(Resident resident) {
-		return resident.isMayor() ? resident.isKing() ? Colors.Gold : Colors.LightBlue : Colors.White;
+		return resident.isMayor() ? resident.isKing() ? Colors.GOLD : Colors.AQUA : Colors.WHITE;
 	}
 
 	public static void residentFriendAdd(Player player, Resident resident, List<Resident> friending) {

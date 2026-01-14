@@ -241,8 +241,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	/**
 	 * Copper chests - used so that not every version has to be specified in the switches config.
 	 */
-	public static final ItemLists COPPER_CHEST = newBuilder().add("COPPER_CHEST", "EXPOSED_COPPER_CHEST", "OXIDIZED_COPPER_CHEST", "WEATHERED_COPPER_CHEST").build();
-	public static final ItemLists COPPER_GOLEM_STATUE = newBuilder().add("COPPER_GOLEM_STATUE", "EXPOSED_COPPER_GOLEM_STATUE", "OXIDIZED_COPPER_GOLEM_STATUE", "WEATHERED_COPPER_GOLEM_STATUE").build();
+	public static final ItemLists COPPER_CHEST = newBuilder().endsWith("COPPER_CHEST").build();
+	public static final ItemLists COPPER_GOLEM_STATUE = newBuilder().endsWith("COPPER_GOLEM_STATUE").build();
 
 	/** 
 	 * List of Candles

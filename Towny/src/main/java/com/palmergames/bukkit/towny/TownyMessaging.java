@@ -25,7 +25,6 @@ import com.palmergames.util.StringMgmt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -40,7 +39,10 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.Title.Times;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -90,17 +92,17 @@ public class TownyMessaging {
 			return;
 
 		if (sender instanceof CommandSender toSend) {
-			sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(sender instanceof ConsoleCommandSender).append(Colors.Red + msg).forLocale(toSend));
+			sendMessage(toSend, Translatable.of("default_towny_prefix").stripColors(sender instanceof ConsoleCommandSender).append(Colors.DARK_RED + msg).forLocale(toSend));
 		} else if (sender instanceof TownyObject townySender) {
 			if (townySender instanceof Resident resident) {
 				// Resident
-				sendMessage(resident, Translation.of("default_towny_prefix") + Colors.Red + msg);
+				sendMessage(resident, Translation.of("default_towny_prefix") + Colors.DARK_RED + msg);
 			} else if (townySender instanceof Town town) {
 				// Town
-				sendPrefixedTownMessage(town, Colors.Red + msg);
+				sendPrefixedTownMessage(town, Colors.DARK_RED + msg);
 			} else if (townySender instanceof Nation nation) {
 				// Nation
-				sendPrefixedNationMessage(nation, Colors.Red + msg);
+				sendPrefixedNationMessage(nation, Colors.DARK_RED + msg);
 			}
 		} else {
 			sendErrorMsg(String.format("Unsupported TownyMessaging#sendErrorMsg sender class type: %s", sender.getClass().getName()));
@@ -135,11 +137,11 @@ public class TownyMessaging {
 			return;
 		
 		if (sender instanceof Player p) {
-			sendMessage(p, Translatable.of("default_towny_prefix").forLocale(p) + Colors.LightGreen + msg);
+			sendMessage(p, Translatable.of("default_towny_prefix").forLocale(p) + Colors.GREEN + msg);
 		} else if (sender instanceof ConsoleCommandSender) {
 			sendMessage(sender, Translatable.of("default_towny_prefix").stripColors(true).defaultLocale() + Colors.strip(msg));
 		} else {
-			sendMessage(sender, Translatable.of("default_towny_prefix").forLocale(sender) + Colors.LightGreen + msg);
+			sendMessage(sender, Translatable.of("default_towny_prefix").forLocale(sender) + Colors.GREEN + msg);
 		}
 		
 		sendDevMsg(msg);
@@ -155,7 +157,7 @@ public class TownyMessaging {
 		if (TownySettings.isDevMode()) {
 			Player townyDev = BukkitTools.getPlayerExact(TownySettings.getDevName());
 			if (townyDev != null)
-				sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.Red + msg);
+				sendMessage(townyDev, Translatable.of("default_towny_prefix").forLocale(townyDev) + " DevMode: " + Colors.DARK_RED + msg);
 		}
 	}
 
@@ -395,8 +397,6 @@ public class TownyMessaging {
 	/**
 	 * Send the player a Title message for a specified number of ticks.
 	 * <p>
-	 * As of MC 1.18 a null title will mean the message is never sent, so we are
-	 * changing empty Strings to " ".
 	 * 
 	 * @param player   Player being send the Title message.
 	 * @param title    String title message.
@@ -404,9 +404,28 @@ public class TownyMessaging {
 	 * @param duration How long the title is shown for in ticks. 
 	 */
 	public static void sendTitle(Player player, String title, String subtitle, int duration) {
-		player.sendTitle(title.isEmpty() ? " " : title, subtitle.isEmpty() ? " " : subtitle, 10, duration, 10);
+		sendTitle(player, title, subtitle, 10, duration, 10);
 	}
 
+	/**
+	 * Send the player a Title message for a specified number of ticks.
+	 * <p>
+	 * 
+	 * @param player   Player being send the Title message.
+	 * @param title    String title message.
+	 * @param subtitle String subtitle message.
+	 * @param fadein   Integer ticks to use for fade in.
+	 * @param duration How long the title is shown for in ticks.
+	 * @param fadeout  Integer ticks to use for fade out.
+	 */
+	public static void sendTitle(Player player, String title, String subtitle, int fadein, int duration, int fadeout) {
+		player.showTitle(Title.title(title.isEmpty() ? Component.empty() : Component.text(subtitle),
+				subtitle.isEmpty() ? Component.empty() : Component.text(subtitle),
+				// TODO: (1.21.9+) Replace Times.times(Component, Component, Times) with less verbose Title constructor when 1.21.8 support is dropped.
+				Times.times(Duration.ofMillis(50 * fadein), Duration.ofMillis(50 * duration), Duration.ofMillis(50 * fadein))));
+	}
+
+	
 	/**
 	 * Send the player a Title message with default duration (70 ticks.)
 	 * 
@@ -537,7 +556,7 @@ public class TownyMessaging {
 		
 		Audience audience = sender;
 		sendMessage(sender, ChatTools.formatTitle(translator.of("town_plu")));
-		sendMessage(sender, Colors.Blue + translator.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.Gray + " - " + Colors.LightBlue + translator.of(compType.getName())));
+		sendMessage(sender, Colors.DARK_AQUA + translator.of("town_name") + (TownySettings.isTownListRandom() ? "" : Colors.DARK_GRAY + " - " + Colors.DARK_AQUA + translator.of(compType.getName())));
 		for (Component textComponent : townsformatted)
 			audience.sendMessage(textComponent);
 		
@@ -586,7 +605,7 @@ public class TownyMessaging {
 		}
 
 		sendMessage(sender, ChatTools.formatTitle(translator.of("nation_plu")));
-		sendMessage(sender, Colors.Blue + translator.of("nation_name") + Colors.Gray + " - " + Colors.LightBlue + translator.of(compType.getName()));
+		sendMessage(sender, Colors.DARK_AQUA + translator.of("nation_name") + Colors.DARK_GRAY + " - " + Colors.DARK_AQUA + translator.of(compType.getName()));
 		Audience audience = sender;
 		for (Component textComponent : nationsformatted) {
 			audience.sendMessage(textComponent);
@@ -668,15 +687,15 @@ public class TownyMessaging {
 		} else {
 			jailsFormatted = new TextComponent[10];
 		}
-		String headerMsg = ChatColor.GOLD + "# " +
-							ChatColor.DARK_GRAY + "- "+
-							ChatColor.GREEN + "Jail Name " +
-							ChatColor.DARK_GRAY + "- "+
-							ChatColor.BLUE + "Coord " +
-							ChatColor.DARK_GRAY + "- " +
-							ChatColor.YELLOW + "Cell Count " +
-							ChatColor.DARK_GRAY + "- " +
-							ChatColor.RED + "Primary Jail";
+		String headerMsg = Colors.GOLD + "# " +
+							Colors.DARK_GRAY + "- "+
+							Colors.GREEN + "Jail Name " +
+							Colors.DARK_GRAY + "- "+
+							Colors.BLUE + "Coord " +
+							Colors.DARK_GRAY + "- " +
+							Colors.YELLOW + "Cell Count " +
+							Colors.DARK_GRAY + "- " +
+							Colors.DARK_RED + "Primary Jail";
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			Jail jail = jails.get(i);
 
@@ -721,13 +740,13 @@ public class TownyMessaging {
 			groupsFormatted = new TextComponent[10];
 		}
 		
-		String headerMsg = ChatColor.GOLD + "# " +
-				ChatColor.DARK_GRAY + "- "+
-				ChatColor.GREEN + "Group Name " +
-				ChatColor.DARK_GRAY + "- " +
-				ChatColor.YELLOW + "Plot Size " +
-				ChatColor.DARK_GRAY + "- " +
-				ChatColor.BLUE + "For Sale";
+		String headerMsg = Colors.GOLD + "# " +
+				Colors.DARK_GRAY + "- "+
+				Colors.GREEN + "Group Name " +
+				Colors.DARK_GRAY + "- " +
+				Colors.YELLOW + "Plot Size " +
+				Colors.DARK_GRAY + "- " +
+				Colors.BLUE + "For Sale";
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			PlotGroup group = groups.get(i);
 			TextComponent name = Component.text(group.getFormattedName(), NamedTextColor.GREEN);
@@ -764,15 +783,15 @@ public class TownyMessaging {
 				? new Component[plotCount % 10]
 				: new Component[10];
 
-		String headerMsg = ChatColor.GOLD + "# " + 
-				ChatColor.DARK_GRAY + "-    " +
-				ChatColor.GREEN + "Coord " +
-				ChatColor.DARK_GRAY + "    -    " +
-				ChatColor.AQUA + "Town" +
-				ChatColor.DARK_GRAY + "    -    " +
-				ChatColor.GREEN + "Type" +
-				ChatColor.DARK_GRAY + "    -    " +
-				ChatColor.YELLOW + "Name";
+		String headerMsg = Colors.GOLD + "# " + 
+				Colors.DARK_GRAY + "-    " +
+				Colors.GREEN + "Coord " +
+				Colors.DARK_GRAY + "    -    " +
+				Colors.AQUA + "Town" +
+				Colors.DARK_GRAY + "    -    " +
+				Colors.GREEN + "Type" +
+				Colors.DARK_GRAY + "    -    " +
+				Colors.YELLOW + "Name";
 
 		for (int i = (page - 1) * 10; i < iMax; i++) {
 			TownBlock tb = townblocks.get(i);

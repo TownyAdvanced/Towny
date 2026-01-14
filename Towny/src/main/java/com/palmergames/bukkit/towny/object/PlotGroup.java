@@ -5,8 +5,8 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +24,8 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	private double price = -1;
 	private Town town;
 	private TownyPermission permissions;
-	private Set<Resident> trustedResidents = new HashSet<>();
-	private Map<Resident, PermissionData> permissionOverrides = new HashMap<>();
+	private Set<Resident> trustedResidents = new LinkedHashSet<>();
+	private Map<Resident, PermissionData> permissionOverrides = new LinkedHashMap<>();
 
 	/**
 	 * @param id   A unique identifier for the group id.
@@ -94,8 +94,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	}
 	
 	public void setResident(Resident resident) {
-		if (hasResident())
-			this.resident = resident;
+		this.resident = resident;
 	}
 
 	@Nullable
@@ -173,7 +172,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	}
 
 	public void setTrustedResidents(Set<Resident> trustedResidents) {
-		this.trustedResidents = new HashSet<>(trustedResidents);
+		this.trustedResidents = new LinkedHashSet<>(trustedResidents);
 	}
 
 	public Set<Resident> getTrustedResidents() {
@@ -181,7 +180,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	}
 	
 	public void setPermissionOverrides(Map<Resident, PermissionData> permissionOverrides) {
-		this.permissionOverrides = new HashMap<>(permissionOverrides);
+		this.permissionOverrides = new LinkedHashMap<>(permissionOverrides);
 	}
 
 	public Map<Resident, PermissionData> getPermissionOverrides() {
@@ -233,7 +232,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 		permissionOverrides.remove(resident);
 			
 		for (TownBlock townBlock : townBlocks) {
-			if (townBlock.getPermissionOverrides().containsKey(resident)) {
+			if (townBlock.getPermissionOverride(resident) != null) {
 				townBlock.getPermissionOverrides().remove(resident);
 				townBlock.save();
 			}
