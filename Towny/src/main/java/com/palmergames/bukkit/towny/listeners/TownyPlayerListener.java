@@ -47,8 +47,10 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -165,7 +167,7 @@ public class TownyPlayerListener implements Listener {
 			String msg = player.isOp() || player.hasPermission("towny.admin") 
 				? "Check the server's console for more information."
 				: "Tell an admin to check the server's console.";
-			player.sendMessage(ChatColor.RED + "[Towny] [Error] Towny is locked in Safe Mode due to an error! " + msg);
+			player.sendMessage(Component.text("[Towny] [Error] Towny is locked in Safe Mode due to an error! " + msg, NamedTextColor.RED));
 		}
 	}
 

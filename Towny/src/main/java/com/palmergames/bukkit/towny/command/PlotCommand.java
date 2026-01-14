@@ -312,7 +312,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 3) {
 						if ("remove".equalsIgnoreCase(args[1])) {
 							final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
-							if (townBlock != null) {
+							if (townBlock != null && townBlock.hasTrustedResidents()) {
 								return townBlock.getTrustedResidents().stream().map(Resident::getName).toList();
 							}
 						} else {
@@ -1060,11 +1060,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+												   Colors.DARK_GREEN + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+												   Colors.DARK_GREEN + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+												   Colors.DARK_GREEN + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF"));
 			}
 
 
@@ -1544,7 +1544,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			Confirmation.runOnAccept( ()-> {
 				PlotGroup oldGroup = townBlock.getPlotObjectGroup();
 				oldGroup.removeTownBlock(townBlock);
-				if (oldGroup.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(oldGroup, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+				if (oldGroup.getTownBlocks().isEmpty()) {
+					new PlotGroupDeletedEvent(oldGroup, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
 					String oldName = oldGroup.getName();
 					town.removePlotGroup(oldGroup);
 					TownyUniverse.getInstance().getDataSource().removePlotGroup(oldGroup);
@@ -1724,7 +1725,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.save();
 		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
 		
-		if (group.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+		if (group.getTownBlocks().isEmpty()) {
+			new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
 			town.removePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_empty_deleted", name));
@@ -1829,11 +1831,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				Translator translator = Translator.locale(player);
 				TownyPermission perm = plotGroup.getPermissions();
 				TownyMessaging.sendMessage(player, translator.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Colors.Green + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-				TownyMessaging.sendMessage(player, Colors.Green + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + 
-													Colors.Green + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + 
-													Colors.Green + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) +  
-													Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + 
+													Colors.DARK_GREEN + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + 
+													Colors.DARK_GREEN + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) +  
+													Colors.DARK_GREEN + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")));
 			}
 		};
 
@@ -2314,7 +2316,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("remove")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_REMOVE.getNode());
 
-			if (!townBlock.getPermissionOverrides().containsKey(resident))
+			if (townBlock.getPermissionOverride(resident) == null)
 				throw new TownyException(Translatable.of("msg_no_overrides_set", resident.getName(), Translatable.of("townblock")));
 
 			townBlock.getPermissionOverrides().remove(resident);

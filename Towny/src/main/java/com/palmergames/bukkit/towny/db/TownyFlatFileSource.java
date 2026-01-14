@@ -1937,18 +1937,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 					}
 
 					line = keys.get("trustedResidents");
-					if (line != null && !line.isEmpty() && townBlock.getTrustedResidents().isEmpty()) {
+					if (line != null && !line.isEmpty()) {
 						for (Resident resident : TownyAPI.getInstance().getResidents(toUUIDArray(line.split(","))))
 							townBlock.addTrustedResident(resident);
 						
-						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.getTrustedResidents().size() > 0)
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getTrustedResidents().isEmpty() && townBlock.hasTrustedResidents()) {
 							townBlock.getPlotObjectGroup().setTrustedResidents(townBlock.getTrustedResidents());
+						}
 					}
 					
 					line = keys.get("customPermissionData");
-					if (line != null && !line.isEmpty() && townBlock.getPermissionOverrides().isEmpty()) {
-						@SuppressWarnings("unchecked")
-						Map<String, String> map = new Gson().fromJson(line, Map.class);
+					if (line != null && !line.isEmpty()) {
+						Map<String, String> map = new Gson().fromJson(line, new TypeToken<Map<String, String>>(){}.getType());
 						
 						for (Map.Entry<String, String> entry : map.entrySet()) {
 							Resident resident;
@@ -1964,8 +1964,9 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 							townBlock.getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
 						}
 						
-						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.getPermissionOverrides().size() > 0)
+						if (townBlock.hasPlotObjectGroup() && townBlock.getPlotObjectGroup().getPermissionOverrides().isEmpty() && townBlock.hasPermissionOverrides()) {
 							townBlock.getPlotObjectGroup().setPermissionOverrides(townBlock.getPermissionOverrides());
+						}
 					}
 
 				} catch (Exception e) {
@@ -2609,14 +2610,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		
 		list.add("districtID=" + districtID);
 
-		list.add("trustedResidents=" + StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), ","));
-		
-		Map<String, String> stringMap = new HashMap<>();
-		for (Map.Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet()) {
-			stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
+		if (townBlock.hasTrustedResidents()) {
+			list.add("trustedResidents=" + StringMgmt.join(toUUIDList(townBlock.getTrustedResidents()), ","));
 		}
 		
-		list.add("customPermissionData=" + new Gson().toJson(stringMap));
+		if (townBlock.hasPermissionOverrides()) {
+			Map<String, String> stringMap = new HashMap<>();
+			for (Map.Entry<Resident, PermissionData> entry : townBlock.getPermissionOverrides().entrySet()) {
+				stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
+			}
+
+			list.add("customPermissionData=" + new Gson().toJson(stringMap));
+		}
 		
 		/*
 		 *  Make sure we only save in async

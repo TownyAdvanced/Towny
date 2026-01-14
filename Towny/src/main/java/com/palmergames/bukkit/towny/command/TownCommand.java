@@ -1112,7 +1112,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		List<Resident> onlineResidents = ResidentUtil.getOnlineResidentsViewable(player, town);
 		String output = onlineResidents.size() > 0
 			? TownyFormatter.getFormattedOnlineResidents(translator.of("msg_town_online"), town, player)
-			: Colors.White + "0 " + translator.of("res_list") + " " + (translator.of("msg_town_online") + ": " + town);
+			: Colors.WHITE + "0 " + translator.of("res_list") + " " + (translator.of("msg_town_online") + ": " + town);
 		TownyMessaging.sendMessage(player, output);
 	}
 
@@ -1135,7 +1135,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		
 		plugin.getScheduler().runAsync(() -> {
 			Map<Town, Double> townDistances = new HashMap<>();
-			for (Town town : world.getTowns().values()) {
+			for (Town town : world.getTownsInWorld()) {
 				Location spawn = town.getSpawnOrNull();
 				if (spawn == null || !spawn.getWorld().equals(loc.getWorld()))
 					continue;
@@ -2487,10 +2487,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException("Config.yml has bonus blocks disabled at town_level section: townBlockBuyBonusLimit: 0");
 		
 		if (split.length < 2) {
-			String line = Colors.Yellow + "[Purchased Bonus] " + Colors.Green + "Cost: " + Colors.LightGreen + "%s" + Colors.Gray + " | " + Colors.Green + "Max: " + Colors.LightGreen + "%d";
+			String line = Colors.YELLOW + "[Purchased Bonus] " + Colors.DARK_GREEN + "Cost: " + Colors.DARK_GREEN + "%s" + Colors.DARK_GRAY + " | " + Colors.DARK_GREEN + "Max: " + Colors.DARK_GREEN + "%d";
 			TownyMessaging.sendMessage(sender, String.format(line, prettyMoney(town.getBonusBlockCost()), TownySettings.getMaxPurchasedBlocks(town)));
 			if (TownySettings.getPurchasedBonusBlocksIncreaseValue() != 1.0)
-				TownyMessaging.sendMessage(sender, Colors.Green + "Cost Increase per TownBlock: " + Colors.LightGreen + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
+				TownyMessaging.sendMessage(sender, Colors.DARK_GREEN + "Cost Increase per TownBlock: " + Colors.DARK_GREEN + "+" +  new DecimalFormat("##.##%").format(TownySettings.getPurchasedBonusBlocksIncreaseValue()-1));
 			return;
 		}
 				
@@ -2646,6 +2646,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		final String finalName = name;
 		Confirmation.runOnAccept(() -> {
 			try {
+				if (!TownyAPI.getInstance().isWilderness(spawnLocation)) {
+					resident.getAccount().deposit(cost, "New town creation cancelled");
+					throw new TownyException(Translatable.of("msg_already_claimed_1", key));	
+				}
 				// Make town.
 				newTown(world, finalName, resident, key, spawnLocation, player, cost);
 				TownyMessaging.sendGlobalMessage(Translatable.of("msg_new_town", player.getName(), StringMgmt.remUnderscore(finalName)));
@@ -3313,13 +3317,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Translator translator = Translator.locale(sender);
 		TownyMessaging.sendMsg(sender, translator.of("msg_set_perms"));
-		TownyMessaging.sendMessage(sender, (Colors.Green + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
+		TownyMessaging.sendMessage(sender, (Colors.DARK_GREEN + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r"))));
 		String on = translator.of("status_on");
 		String off = translator.of("status_off");
-		TownyMessaging.sendMessage(sender, Colors.Green + translator.of("status_pvp") + " " + (perm.pvp ? on : off) + " " +
-										   Colors.Green + translator.of("explosions") + " " + (perm.explosion ? on : off) + " " +
-										   Colors.Green + translator.of("firespread") + " " + (perm.fire ? on : off) + " " +
-										   Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? on : off));
+		TownyMessaging.sendMessage(sender, Colors.DARK_GREEN + translator.of("status_pvp") + " " + (perm.pvp ? on : off) + " " +
+										   Colors.DARK_GREEN + translator.of("explosions") + " " + (perm.explosion ? on : off) + " " +
+										   Colors.DARK_GREEN + translator.of("firespread") + " " + (perm.fire ? on : off) + " " +
+										   Colors.DARK_GREEN + translator.of("mobspawns") + " " + (perm.mobs ? on : off));
 
 		// Reset all caches as this can affect everyone.
 		plugin.resetCache();
@@ -3740,7 +3744,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Make sure the town doesn't already own this land.
 		if (overclaimedTown.equals(town))
-			throw new TownyException(Translatable.of("msg_already_claimed_1"));
+			throw new TownyException(Translatable.of("msg_already_claimed", town.getName()));
 
 		// Make sure this is in a town which is overclaimed, allowing for stealing land.
 		if (!wc.canBeStolen())

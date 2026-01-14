@@ -10571,3 +10571,42 @@ v0.92.0.11:
     - Will be automatically added to your nomads in the townyperms.yml.
   - New Command: /town nearby
     - Shows a player up to 10 towns that are nearest to the player in the order of closest to furthest.
+0.102.0.3:
+  - Add test preventing copper golems moving items beyond same-owner plots.
+  - Fix towns having a spawn point in a non-existent world preventing the town being deleted.
+  - Add protection for the waxed copper golem statues into the switch category when COPPER_GOLEM_STATUE is a switch_id.
+  - Add waxed versions of copper chests into the COPPER_CHEST category.
+  - Added option to hide nations and towns from the list pages when their banks are less than or equal to zero.
+  - New Config Option: economy.banks.hide_zero_or_under_banks_on_list_outputs
+    - Default: false
+    - When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists.
+  - Fix admins with the adminbypass mode active not receiving teleport warmups and cooldowns.
+  - Add the option to make the town bank cap plot-based.
+    - Closes #8045.
+  - New Config Option: economy.banks.town_bank_cap_is_plotbased
+    - Default: false
+    - When true the bank cap is plot-based. The number of townblocks/plots a town has claimed will be multiplied by the above town_bank_cap value.
+  - New Config Option: economy.banks.plotbased_bank_cap_uses_town_level_modifier
+    - Default: false
+    - When true the plot-based bank cap will also be multiplied by the town_levels' bank cap modifiers.
+  - New Config Option: economy.banks.plotbased_town_bank_cap_minimum
+    - Default: 0.0
+    - The smallest cap that banks can have while using the plotbased bank cap.
+    - If this value is larger than the naturally-derived townblocks * town_bank_cap equation, this minimum will be used instead.
+  - Fix a logic error in the PlotGroup#setResident function, courtesy of Remasuri with PR #8043. (First-Time Contributor!)
+  - Bit pack perms in TownyPermission objects, courtesy of Warrior with PR #8048.
+  - Remove world references stored inside WorldCoord, courtesy of Warrior with PR #8050.
+  - Fix message when attempting to overclaim your own town, courtesy of Warrior with PR #8051.
+  - Reduce allocations done by Resident hasRank methods, courtesy of Warrior with PR #8037.
+  - Bump com.zaxxer:HikariCP from 6.2.1 to 7.0.2.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.2 to 3.5.4.
+  - Bump org.apache.maven.plugins:maven-jar-plugin from 3.4.2 to 3.5.0.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.13.0 to 3.14.1.
+  - Bump org.apache.logging.log4j:log4j-core from 2.24.3 to 2.25.3.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.6.0 to 3.6.1.
+  - Lazily initialize maps used by TownBlock, courtesy of Warrior with PR #8049.
+  - Fix occasions where plot groups exist in townblocks being removed.
+  - Fix the townyperms group command not working with capitalized groups, courtesy of Warrior with PR #8055.
+  - Add support for enabling conquering on a town via townyadmin command.
+  - Check the chunk is still wilderness after confirmation in /town new, courtesy of Veyronity with PR #8059. (First-Time Contributor!)
+  - Add null checks to the task schedulers, courtesy of Warrior with PR #8060.

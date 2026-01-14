@@ -2788,6 +2788,22 @@ public enum ConfigNodes {
 			"",
 			"# Maximum amount of money allowed in town bank",
 			"# Use 0 for no limit"),
+	ECO_BANK_CAP_PLOT_BASED(
+			"economy.banks.town_bank_cap_is_plotbased",
+			"false",
+			"",
+			"# When true the bank cap is plot-based. The number of townblocks/plots a town has claimed will be multiplied by the above town_bank_cap value."),
+	ECO_BANK_CAP_PLOT_BASED_MIN_AMOUNT(
+			"economy.banks.plotbased_town_bank_cap_minimum",
+			"0.0",
+			"",
+			"# The smallest cap that banks can have while using the plotbased bank cap.",
+			"# If this value is larger than the naturally-derived townblocks * town_bank_cap equation, this minimum will be used instead."),
+	ECO_BANK_CAP_PLOT_BASED_USES_TOWN_LEVEL_MODIFIER(
+			"economy.banks.plotbased_bank_cap_uses_town_level_modifier",
+			"false",
+			"",
+			"# When true the plot-based bank cap will also be multiplied by the town_levels' bank cap modifiers."),
 	ECO_BANK_TOWN_ALLOW_WITHDRAWALS(
 			"economy.banks.town_allow_withdrawals",
 			"true",
@@ -2836,6 +2852,11 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.",
 			"# This will only succeed if the town or nation has a mayor or leader."),
+	ECO_BANK_HIDE_ZERO_OR_LESS_BANK_ACCOUNTS_ON_LISTS(
+			"economy.banks.hide_zero_or_under_banks_on_list_outputs",
+			"false",
+			"",
+			"# When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists."),
 
 	ECO_CLOSED_ECONOMY("economy.closed_economy", "", ""),
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(

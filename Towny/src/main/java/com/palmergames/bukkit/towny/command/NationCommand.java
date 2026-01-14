@@ -714,7 +714,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (onlineResidents.size() > 0 ) {
 				TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOnlineResidents(Translatable.of("msg_nation_online").forLocale(player), nation, player));
 			} else {
-				TownyMessaging.sendMessage(player, Colors.White +  "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_nation_online").forLocale(player) + ": " + nation));
+				TownyMessaging.sendMessage(player, Colors.WHITE +  "0 " + Translatable.of("res_list").forLocale(player) + " " + (Translatable.of("msg_nation_online").forLocale(player) + ": " + nation));
 			}
 		} else {
 			Nation nation = getNationFromPlayerOrThrow(player);
@@ -2483,7 +2483,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		nation.setNeutral(peacefulState);
 
 		// Send message feedback to the whole nation.
-		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful").append(nation.isNeutral() ? Colors.Green : Colors.Red + " not").append(" peaceful."));
+		TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_peaceful").append(nation.isNeutral() ? Colors.DARK_GREEN : Colors.DARK_RED + " not").append(" peaceful."));
 		
 		// Add a cooldown to Public toggling.
 		if (TownySettings.getPeacefulCoolDownTime() > 0 && !admin && !TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender))

@@ -360,7 +360,7 @@ public abstract class TownyDataSource {
 	/**
 	 * @deprecated Use {@link #newResident(String, UUID)} instead.
 	 */
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	abstract public @NotNull Resident newResident(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public @NotNull Resident newResident(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;
@@ -368,7 +368,7 @@ public abstract class TownyDataSource {
 	/**
 	 * @deprecated Use {@link #newNation(String, UUID)} instead.
 	 */
-	@Deprecated(since = "0.101.2.5")
+	@Deprecated(since = "0.102.0.4")
 	abstract public void newNation(String name) throws AlreadyRegisteredException, NotRegisteredException;
 
 	abstract public void newNation(String name, UUID uuid) throws AlreadyRegisteredException, NotRegisteredException;

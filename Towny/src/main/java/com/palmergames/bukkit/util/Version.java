@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.util;
 
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -35,6 +36,29 @@ public class Version implements Comparable<Version> {
 			throw new IllegalArgumentException("Version can not be null");
 		}
 
+		Matcher matcher = VERSION_PATTERN.matcher(version);
+		if(!matcher.find()) {
+			throw new IllegalArgumentException("Invalid version format: " + version);
+		}
+		
+		return new Version(matcher.group(0));
+	}
+
+	/**
+	 * Constructs a Version object from the given plugin.
+	 * 
+	 * <p>This method will truncate any extraneous characters found
+	 * after it matches the first qualified version string.</p>
+	 * 
+	 * @param plugin A Plugin which will supply a version
+	 * @return A new Version instance from the given plugin.
+	 */
+	public static Version fromPlugin(Plugin plugin) {
+		if(plugin == null) {
+			throw new IllegalArgumentException("Plugin can not be null");
+		}
+		@SuppressWarnings("deprecation") // TODO: Clean up when this is changed for good by Paper.
+		String version = plugin.getDescription().getVersion();
 		Matcher matcher = VERSION_PATTERN.matcher(version);
 		if(!matcher.find()) {
 			throw new IllegalArgumentException("Invalid version format: " + version);

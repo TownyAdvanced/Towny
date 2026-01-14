@@ -12,13 +12,19 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.util.ItemLists;
 import com.palmergames.util.JavaUtil;
 import com.palmergames.util.TimeTools;
+
+import io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.CopperGolem;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -32,10 +38,14 @@ import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -50,14 +60,14 @@ public class TownyPaperEvents implements Listener {
 
 	private static final String PLAYER_ELYTRA_BOOST_EVENT = "com.destroystokyo.paper.event.player.PlayerElytraBoostEvent";
 
-	private static final String DRAGON_FIREBALL_HIT_EVENT = "com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent";
-
 	private static final String BEACON_EFFECT_EVENT = "com.destroystokyo.paper.event.block.BeaconEffectEvent";
 
 	public static final MethodHandle SIGN_OPEN_GET_CAUSE = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getCause");
 	private static final MethodHandle SIGN_OPEN_GET_SIGN = JavaUtil.getMethodHandle(USED_SIGN_OPEN_EVENT, "getSign");
 
 	public static final String ADD_TO_WORLD_EVENT = "com.destroystokyo.paper.event.entity.EntityAddToWorldEvent";
+
+	public static final String COPPER_GOLEM_MOVES_ITEM_EVENT = "io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent";
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -82,6 +92,8 @@ public class TownyPaperEvents implements Listener {
 		if (this.plugin.isFolia()) {
 			registerEvent(ADD_TO_WORLD_EVENT, this::entityAddToWorldListener, EventPriority.MONITOR, false /* n/a */);
 		}
+		
+		registerEvent(COPPER_GOLEM_MOVES_ITEM_EVENT, this::onGolemMoveItem, EventPriority.NORMAL, true);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -215,5 +227,40 @@ public class TownyPaperEvents implements Listener {
 				}
 			}, 1L, TimeTools.convertToTicks(TownySettings.getMobRemovalSpeed()));
 		};
+	}
+
+	private static final @NotNull NamespacedKey GOLEM_CHEST_X = Objects.requireNonNull(NamespacedKey.fromString("towny:golemchestx"));
+	private static final @NotNull NamespacedKey GOLEM_CHEST_Z = Objects.requireNonNull(NamespacedKey.fromString("towny:golemchestz"));
+	public Consumer<ItemTransportingEntityValidateTargetEvent> onGolemMoveItem() {
+		return event -> {
+			if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || !(event.getEntity() instanceof CopperGolem golem))
+				return;
+
+			// The golem is attempting to remove an item from a copper chest.
+			if (ItemLists.COPPER_CHEST.contains(event.getBlock().getType())) {
+				setGolemLastChestLocation(golem, event.getBlock().getX(), event.getBlock().getZ());
+				return;
+			}
+
+			Location golemChestLoc = getLastUsedChestLocation(golem);
+			if (golemChestLoc == null || BorderUtil.allowedCopperGolemMove(golemChestLoc, event.getBlock().getLocation()))
+				return;
+
+			event.setAllowed(false);
+		};
+	}
+
+	private void setGolemLastChestLocation(CopperGolem golem, int x, int z) {
+		PersistentDataContainer pdc = golem.getPersistentDataContainer();
+		pdc.set(GOLEM_CHEST_X, PersistentDataType.INTEGER, x);
+		pdc.set(GOLEM_CHEST_Z, PersistentDataType.INTEGER, z);
+	}
+
+	private Location getLastUsedChestLocation(CopperGolem golem) {
+		PersistentDataContainer pdc = golem.getPersistentDataContainer();
+		if (!pdc.has(GOLEM_CHEST_X) || !pdc.has(GOLEM_CHEST_Z))
+			return null;
+
+		return new Location(golem.getWorld(), Double.valueOf(pdc.get(GOLEM_CHEST_X, PersistentDataType.INTEGER)), 0.0, Double.valueOf(pdc.get(GOLEM_CHEST_Z, PersistentDataType.INTEGER)));
 	}
 }

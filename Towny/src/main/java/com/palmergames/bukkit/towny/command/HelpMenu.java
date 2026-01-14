@@ -849,9 +849,9 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident jail")
 				.add("", "/resident jail", "paybail", Translatable.of("res_jail_help_0"))
-				.add(Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmount())
-				.add(Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountMayor())
-				.add(Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountKing());
+				.add(Colors.AQUA + Translation.of("msg_resident_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmount())
+				.add(Colors.AQUA + Translation.of("msg_mayor_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmountMayor())
+				.add(Colors.AQUA + Translation.of("msg_king_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmountKing());
 		}
 	},
 

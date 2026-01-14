@@ -483,6 +483,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(adminTownToggleTabCompletes, args[3]);
 							else if (args.length == 5 && !args[3].equalsIgnoreCase("jail"))
 								return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[4]);
+							else if (args.length == 6 && args[3].equalsIgnoreCase("conquered") && args[4].equalsIgnoreCase("on"))
+								return Arrays.asList("[days]", "unlimited");
 						case "outlaw":
 							switch (args.length) {
 							case 4:
@@ -759,7 +761,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.TA_TOWNYPERMS.send(sender);
 			return;
 		}
-		if (!TownyPerms.getGroupList().contains(args[0].toLowerCase(Locale.ROOT)))
+		if (!TownyPerms.getGroupList().contains(args[0]))
 			throw new TownyException(Translatable.of("msg_err_group_not_found", args[0]));
 
 		String group = args[0];
@@ -848,13 +850,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (rankType.equalsIgnoreCase("townrank")) {
 			if (TownyPerms.getTownRanks().contains(rank))
 				throw new TownyException(Translatable.of("msg_err_there_is_already_a_town_or_nationrank_called_x", rankType, rank));
-			TownyPerms.getTownyPermsFile().createSection("towns.ranks." + rank);
-			
-		// Adding to nation ranks.
+
+			TownyPerms.createTownRank(rank);		
 		} else {
+			// Adding to nation ranks.
 			if (TownyPerms.getNationRanks().contains(rank))
 				throw new TownyException(Translatable.of("msg_err_there_is_already_a_town_or_nationrank_called_x", rankType, rank));
-			TownyPerms.getTownyPermsFile().createSection("nations.ranks." + rank);
+
+			TownyPerms.createNationRank(rank);
 		}
 		if (notify)
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_successfully_add_rank_to_the_town_or_nation_rank", rank, rankType));
@@ -866,13 +869,13 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		if (rankType.equalsIgnoreCase("townrank")) {
 			if (!TownyPerms.getTownRanks().contains(rank))
 				throw new TownyException(Translatable.of("msg_err_there_is_no_town_or_nationrank_called_x", rankType, rank));
-			TownyPerms.getTownyPermsFile().set("towns.ranks." + rank, null);
+			TownyPerms.setTownRankPermissions(rank, null);
 			
 		// Removing from nation ranks.
 		} else {
 			if (!TownyPerms.getNationRanks().contains(rank))
 				throw new TownyException(Translatable.of("msg_err_there_is_no_town_or_nationrank_called_x", rankType, rank));
-			TownyPerms.getTownyPermsFile().set("nations.ranks." + rank, null);
+			TownyPerms.setNationRankPermissions(rank, null);
 		}
 		if (notify)
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_successfully_removed_rank_from_the_town_or_nation_rank", rank, rankType));
@@ -902,7 +905,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			List<String> oldRankPerms = TownyPerms.getPermsOfGroup("towns.ranks." + oldRank);
 			List<String> newRankPerms = TownyPerms.getPermsOfGroup("towns.ranks." + newRank);
 			newRankPerms.addAll(oldRankPerms);
-			TownyPerms.getTownyPermsFile().set("towns.ranks." + newRank, newRankPerms);
+			TownyPerms.setTownRankPermissions(newRank, newRankPerms);
 			
 		// Renaming nation rank.
 		} else {
@@ -920,7 +923,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			List<String> oldRankPerms = TownyPerms.getPermsOfGroup("nations.ranks." + oldRank);
 			List<String> newRankPerms = TownyPerms.getPermsOfGroup("nations.ranks." + newRank);
 			newRankPerms.addAll(oldRankPerms);
-			TownyPerms.getTownyPermsFile().set("nations.ranks." + newRank, newRankPerms);
+			TownyPerms.setNationRankPermissions(newRank, newRankPerms);
 		}
 		parseAdminTownypermsRemoveRank(sender, rankType, oldRank, false);
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_successfully_renamed_rank_for_the_town_or_nation_rank", oldRank, newRank, rankType));
@@ -1632,13 +1635,27 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			town.save();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_allowedtowar_setting_set_to", town.getName(), town.isAllowedToWar()));
 		} else if (split[0].equalsIgnoreCase("conquered")) {
-			if (!town.isConquered())
-				throw new TownyException(Translatable.of("msg_err_that_town_is_not_conquered", town.getName()));
+			if (split.length < 2)
+				throw new TownyException(Translatable.of("msg_err_must_specify_on_or_off"));
 
-			town.setConquered(false);
-			town.setConqueredDays(0);
+			boolean on = split[1].equalsIgnoreCase("on");
+			if (!on) {
+				if (!town.isConquered())
+					throw new TownyException(Translatable.of("msg_err_that_town_is_not_conquered", town.getName()));
+				town.setConquered(false);
+				town.setConqueredDays(0);
+				town.save();
+				TownyMessaging.sendMsg(sender, Translatable.of("msg_conquered_status_removed", town.getName()));
+				return;
+			}
+
+			if (split.length < 3)
+				throw new TownyException(Translatable.of("msg_err_must_specify_days_to_be_conquered"));
+			int days = split[2].equalsIgnoreCase("unlimited") || split[2].equalsIgnoreCase("-1") ? -1 : MathUtil.getPositiveIntOrThrow(split[2]);
+			town.setConquered(true);
+			town.setConqueredDays(days);
 			town.save();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_conquered_status_removed", town.getName()));
+			TownyMessaging.sendMsg(sender, days > -1 ? Translatable.of("msg_conquered_status_granted", town.getName(), days) : Translatable.of("msg_conquered_status_granted_unlimited", town.getName()));
 		} else if (split[0].equalsIgnoreCase("visibleontoplists")) {
 
 			town.setVisibleOnTopLists(choice.orElse(!town.isVisibleOnTopLists()));
@@ -2525,23 +2542,23 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void adminToggleDevMode(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE.getNode());
 		TownySettings.setDevMode(choice.orElse(!TownySettings.isDevMode()));
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Translatable.literal(Colors.Green).append(Translatable.of("enabled")) : Translatable.literal(Colors.Red).append(Translatable.of("disabled")))));	}
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_devmode", (TownySettings.isDevMode() ? Translatable.literal(Colors.DARK_GREEN).append(Translatable.of("enabled")) : Translatable.literal(Colors.DARK_RED).append(Translatable.of("disabled")))));	}
 
 	private void adminToggleDebug(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEBUG.getNode());
 		TownySettings.setDebug(choice.orElse(!TownySettings.getDebug()));
 		TownyLogger.refreshDebugLogger();
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Translatable.literal(Colors.Green).append(Translatable.of("enabled")) : Translatable.literal(Colors.Red).append(Translatable.of("disabled")))));	}
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_debugmode", (TownySettings.getDebug() ? Translatable.literal(Colors.DARK_GREEN).append(Translatable.of("enabled")) : Translatable.literal(Colors.DARK_RED).append(Translatable.of("disabled")))));	}
 
 	private void adminToggleTownWithDraw(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_TOWNWITHDRAW.getNode());
 		TownySettings.SetTownBankAllowWithdrawls(choice.orElse(!TownySettings.getTownBankAllowWithdrawls()));
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_townwithdraw", (TownySettings.getTownBankAllowWithdrawls() ? Translatable.literal(Colors.Green).append(Translatable.of("enabled")) : Translatable.literal(Colors.Red).append(Translatable.of("disabled")))));	}
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_townwithdraw", (TownySettings.getTownBankAllowWithdrawls() ? Translatable.literal(Colors.DARK_GREEN).append(Translatable.of("enabled")) : Translatable.literal(Colors.DARK_RED).append(Translatable.of("disabled")))));	}
 
 	private void adminToggleNationWithdraw(CommandSender sender, Optional<Boolean> choice) throws NoPermissionException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NATIONWITHDRAW.getNode());
 		TownySettings.SetNationBankAllowWithdrawls(choice.orElse(!TownySettings.getNationBankAllowWithdrawls()));
-		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_nationwithdraw", (TownySettings.getNationBankAllowWithdrawls() ? Translatable.literal(Colors.Green).append(Translatable.of("enabled")) : Translatable.literal(Colors.Red).append(Translatable.of("disabled")))));	}
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_admin_toggle_nationwithdraw", (TownySettings.getNationBankAllowWithdrawls() ? Translatable.literal(Colors.DARK_GREEN).append(Translatable.of("enabled")) : Translatable.literal(Colors.DARK_RED).append(Translatable.of("disabled")))));	}
 
 	private void parseAdminToggleNPC(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE_NPC.getNode());
