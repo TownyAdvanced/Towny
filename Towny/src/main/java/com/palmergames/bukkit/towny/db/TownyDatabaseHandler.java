@@ -1321,15 +1321,15 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 	}
 	
 	public UUID[] toUUIDArray(String[] uuidArray) {
-		UUID[] uuids = new UUID[uuidArray.length];
+		final List<UUID> uuids = new ArrayList<>();
 		
-		for (int i = 0; i < uuidArray.length; i++) {
+		for (final String uuid : uuidArray) {
 			try {
-				uuids[i] = UUID.fromString(uuidArray[i]);
+				uuids.add(UUID.fromString(uuid));
 			} catch (IllegalArgumentException ignored) {}
 		}
 		
-		return uuids;
+		return uuids.toArray(new UUID[0]);
 	}
 
 	/**
