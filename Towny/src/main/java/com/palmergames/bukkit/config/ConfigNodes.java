@@ -3426,6 +3426,12 @@ public enum ConfigNodes {
 			"# If a Town has less claims than max_duration hours, those claims' permissions are opened up much more slowly with hours passing between",
 			"# plots opening up, ie: 36 claims and 72 max hours = 1 claim every 2 hours.",
 			"# This system is meant to give players across many time zones the chance to loot a town when it falls into ruin."),
+	
+	TOWN_RUINING_EMPTY_TOWNS_BECOME_RUINS(
+			"town_ruining.empty_towns_become_ruins",
+			"false",
+			"",
+			"# When enabled, when the last resident is removed from a town and it becomes empty (such as when inactive resident deletion is enabled), the town will turn into a ruin instead of being immediately removed."),
 
 
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",
