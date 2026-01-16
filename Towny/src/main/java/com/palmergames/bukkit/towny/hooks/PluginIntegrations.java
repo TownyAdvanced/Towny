@@ -191,8 +191,9 @@ public class PluginIntegrations {
 
 	private void formatForStartup(List<String> out, String pluginName) {
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-		if (plugin != null)
-			out.add(pluginName + " v" +  Version.fromPlugin(plugin));
+		if (plugin != null) {
+			out.add(pluginName + " v" +  plugin.getPluginMeta().getVersion());
+		}
 	}
 
 	public String registerPermissionsProviders(Towny towny) {
