@@ -67,8 +67,9 @@ public class PluginIntegrations {
 
 	private void formatForUniverseCommand(List<String> out, String pluginName) {
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-		if (plugin != null)
-			out.add(Colors.YELLOW + pluginName + " " + Colors.DARK_GREEN + Version.fromPlugin(plugin).toString());
+		if (plugin != null) {
+			out.add(Colors.YELLOW + pluginName + " " + Colors.DARK_GREEN + plugin.getPluginMeta().getVersion());
+		}
 	}
 
 	/**
@@ -203,14 +204,14 @@ public class PluginIntegrations {
 		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("LuckPerms");
 		if (test != null) {
 			TownyUniverse.getInstance().setPermissionSource(new LuckPermsSource(towny));
-			return output + String.format("%s v%s", "LuckPerms", Version.fromPlugin(test));
+			return output + String.format("%s v%s", "LuckPerms", test.getPluginMeta().getVersion());
 		}
 
 		// Test for GroupManager being present.
 		test = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null && JavaUtil.classExists("org.anjocaido.groupmanager.GroupManager")) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(towny, test));
-			return output += String.format("%s v%s", "GroupManager", Version.fromPlugin(test));
+			return output + String.format("%s v%s", "GroupManager", test.getPluginMeta().getVersion());
 		}
 
 		// Else test for vault being present.
@@ -227,12 +228,12 @@ public class PluginIntegrations {
 				TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(towny, chatProvider.getProvider()));
 				
 				if (permissionProvider != null) {
-					output += permissionProvider.getPlugin().getName() + " v" + Version.fromPlugin(permissionProvider.getPlugin()) + " via Vault";
+					output += permissionProvider.getPlugin().getName() + " v" + permissionProvider.getPlugin().getPluginMeta().getVersion() + " via Vault";
 				} else {
-					output += String.format("Vault v%s",  Version.fromPlugin(test));
+					output += String.format("Vault v%s", test.getPluginMeta().getVersion());
 				}
 				
-				output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), Version.fromPlugin(chatProvider.getPlugin()));
+				output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getPluginMeta().getVersion());
 				return output;
 			}
 
@@ -259,7 +260,7 @@ public class PluginIntegrations {
 				field.setAccessible(true);
 				
 				if (field.get(chatProvider.getProvider()) == null) {
-					Towny.getPlugin().getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), Version.fromPlugin(chatProvider.getPlugin())));
+					Towny.getPlugin().getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getPluginMeta().getVersion()));
 					Towny.getPlugin().getLogger().warning(String.format("Class '%s' has a null Permission field, which is not supported.", chatProvider.getProvider().getClass().getName()));
 					
 					if (!iterator.hasNext())
