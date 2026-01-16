@@ -10525,3 +10525,5 @@ v0.92.0.11:
 0.101.2.8:
   - Fix unneeded msg_invalid_name exception message from /n ally.
     - Closes #8006.
+0.101.2.9:
+  - Fix unneeded msg_invalid_name exception message from /n enemy.

@@ -1918,8 +1918,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyUniverse.getInstance().getDataSource().saveNations();
 
 			plugin.resetCache();
-		} else
-			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_invalid_name"));
+		}
 	}
 
 	public static void nationSet(CommandSender sender, String[] split, boolean admin, Nation nation) throws TownyException {
