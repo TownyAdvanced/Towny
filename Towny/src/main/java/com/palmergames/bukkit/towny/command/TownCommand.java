@@ -1005,9 +1005,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	private static void handleOnlineNewlyMintedOutlaw(Town town, Resident target) {
 		String uuid = target.getUUID().toString();
-		if (!CooldownTimerTask.hasCooldown(uuid, CooldownType.OUTLAW_NOTIFY)) {
+		if (!CooldownTimerTask.hasCooldown(uuid, CooldownType.RESIDENT_OUTLAWED)) {
 			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_declared_outlaw", town.getName()));
-			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.OUTLAW_NOTIFY);
+			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.RESIDENT_OUTLAWED);
 		}
 		Player player = target.getPlayer();
 		Location loc = player.getLocation();
@@ -1041,8 +1041,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		town.save();
 
 		// Send feedback messages.
-		if (target.isOnline())
-			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_undeclared_outlaw", town.getName()));
+		if (target.isOnline()) {
+			String uuid = target.getUUID().toString();
+			if (!CooldownTimerTask.hasCooldown(uuid, CooldownType.RESIDENT_UNOUTLAWED)) {
+				TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_undeclared_outlaw", town.getName()));
+				CooldownTimerTask.addCooldownTimer(uuid, CooldownType.RESIDENT_UNOUTLAWED);
+			}
+		}
 		TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
 		if (admin)
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_you_have_undeclared_an_outlaw", target.getName(), town.getName()));
