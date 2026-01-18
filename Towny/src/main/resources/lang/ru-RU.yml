@@ -667,6 +667,8 @@ msg_err_input_too_long: '&cСлишком длинно.'
 msg_err_invalid_choice: '&cНеверный выбор'
 msg_err_invalid_sub: '&cНеверная подкоманда.'
 msg_err_command_disable: '&cУ вас недостаточно прав для этой команды.'
+msg_err_plot_preclaim_disable: "&cВы не можете получить диаграмму %s прямо сейчас."
+msg_err_plot_preunclaim_disable: "&cЖитель не может снять заговор %s прямо сейчас."
 msg_err_you_dont_have_permission_to_use_colours: "У вас нет прав для использования цветовых кодов в 'title' и 'surname'."
 msg_err_universe_limit: '&cМаксимальный предел городов достигнут.'
 msg_err_too_many_npc: '&cСлишком много NPC зарегистрировано.'
@@ -1895,6 +1897,7 @@ msg_spawn_cost_free: 'Бесплатно'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: 'Этот участок уже %s вида.'
 msg_town_board_reset: '&bДоска объявлений города очищена.'
+msg_nation_board_reset: '&bДоска объявлений города очищена.'
 msg_town_has_no_jailslots: 'Городская тюрьма переполнена.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s был заключен в %s в камеру №%s на %s часов с залогом в %s игроком %s.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%5$s отправил %1$s в %2$s в камеру №%3$s на %4$s часов.'
@@ -2165,3 +2168,5 @@ msg_err_you_cannot_add_towntrust_on_outlaw: "Вы не можете доверя
 msg_err_you_cannot_add_towntrust_on_enemy: "Вы не можете доверять городу, который находится во вражеской нации."
 status_world_jailing: "Тюрьмы: "
 msg_version_build_info: "<dark_green>Build Information: <green>%s</green> on branch <green>%s<green>."
+msg_version_build_info_failed: "<red>Не удалось получить информацию о сборке для этой версии."
+time-future: "в будущем"
