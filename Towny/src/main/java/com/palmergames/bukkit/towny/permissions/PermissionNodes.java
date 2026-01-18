@@ -542,6 +542,7 @@ public enum PermissionNodes {
 	TOWNY_DEFAULT_MODES("towny_default_modes"),
 	TOWNY_MAX_PLOTS("towny_maxplots"),
 	TOWNY_EXTRA_PLOTS("towny_extraplots"),
+	TOWNY_TELEPORT_WARMUP_SECONDS("towny_teleport_warmup_seconds"),
 	TOWNY_MAX_OUTPOSTS("towny_maxoutposts");
 
 	private String value;
