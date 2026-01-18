@@ -54,13 +54,13 @@ public class Version implements Comparable<Version> {
 	 * @return A new Version instance from the given plugin.
 	 */
 	public static Version fromPlugin(Plugin plugin) {
-		if(plugin == null) {
+		if (plugin == null) {
 			throw new IllegalArgumentException("Plugin can not be null");
 		}
-		@SuppressWarnings("deprecation") // TODO: Clean up when this is changed for good by Paper.
-		String version = plugin.getDescription().getVersion();
+
+		String version = plugin.getPluginMeta().getVersion();
 		Matcher matcher = VERSION_PATTERN.matcher(version);
-		if(!matcher.find()) {
+		if (!matcher.find()) {
 			throw new IllegalArgumentException("Invalid version format: " + version);
 		}
 		
