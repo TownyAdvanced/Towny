@@ -2528,7 +2528,7 @@ public enum ConfigNodes {
 			"",
 			"# How long does a resident have to wait to join a town, after joining the server.",
 			"# Set to 0m to disable. 1m = 1 minute, 1h = 1 hour, 1d = 1 day."),
-	GTOWN_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME(
+	RES_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME(
 		"resident_settings.warn_player_on_outlaw_message_cooldown_in_seconds",
 		"30",
 		"",

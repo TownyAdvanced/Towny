@@ -3996,7 +3996,7 @@ public class TownySettings {
 	}
 	
 	public static int getResidentOutlawWarningMessageCooldown() {
-		return getInt(ConfigNodes.GTOWN_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME);
+		return getInt(ConfigNodes.RES_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME);
 	}
 
 	public static double maxBuyTownPrice() {
