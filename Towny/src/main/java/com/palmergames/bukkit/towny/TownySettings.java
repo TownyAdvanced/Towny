@@ -4002,5 +4002,9 @@ public class TownySettings {
 	public static boolean isWorldJailingEnabled() {
 		return getBoolean(ConfigNodes.NWS_JAILING_ENABLE);
 	}
+
+	public static boolean areEmptyTownsBecomingRuins() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_EMPTY_TOWNS_BECOME_RUINS);
+	}
 }
 
