@@ -10675,3 +10675,5 @@ v0.92.0.11:
   - New Config Option: resident_settings.warn_player_on_outlaw_message_cooldown_in_seconds
     - Default: 30
     - How many seconds in between warning messages, to prevent spam.
+0.102.0.6:
+  - Fix titles messages showing their subtitle in the title position.

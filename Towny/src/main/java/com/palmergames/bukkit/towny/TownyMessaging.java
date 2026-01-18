@@ -419,7 +419,7 @@ public class TownyMessaging {
 	 * @param fadeout  Integer ticks to use for fade out.
 	 */
 	public static void sendTitle(Player player, String title, String subtitle, int fadein, int duration, int fadeout) {
-		player.showTitle(Title.title(title.isEmpty() ? Component.empty() : Component.text(subtitle),
+		player.showTitle(Title.title(title.isEmpty() ? Component.empty() : Component.text(title),
 				subtitle.isEmpty() ? Component.empty() : Component.text(subtitle),
 				// TODO: (1.21.9+) Replace Times.times(Component, Component, Times) with less verbose Title constructor when 1.21.8 support is dropped.
 				Times.times(Duration.ofMillis(50 * fadein), Duration.ofMillis(50 * duration), Duration.ofMillis(50 * fadein))));
