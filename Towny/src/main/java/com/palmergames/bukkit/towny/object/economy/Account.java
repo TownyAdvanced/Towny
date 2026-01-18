@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -86,9 +87,10 @@ public abstract class Account implements Nameable, Identifiable {
 	 */
 	@Deprecated
 	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
+		Preconditions.checkArgument(name != null && uuid != null, "name and uuid may not be null for an account, got name = %s and uuid = %s", name, uuid);
+		Preconditions.checkArgument(owner != null, "account owner may not be null");
+
 		this.economyHandler = owner;
-		this.name = name;
-		this.uuid = uuid;
 		this.worldSupplier = worldSupplier;
 		this.playerAccount = false;
 		
