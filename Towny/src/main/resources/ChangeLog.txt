@@ -10645,3 +10645,33 @@ v0.92.0.11:
           mayor's last-known name. All residents, towns and nations files will contain their last-known name in their files.
     - Ultimately, the benefits have outweighed the cons, stability has been good for Towny databases for 5+ years, and it is time to make this
       change in order to reduce the complexity of the codebase and to improve how Towny runs on varied server hosts.
+0.102.0.5:
+  - This version includes Major Changes to the database structure which took place in 0.102.0.4!
+    - Read about it here: https://github.com/TownyAdvanced/Towny/releases/tag/0.102.0.4
+    - The Changelog for 0.102.0.5 follows:
+  - Enforce notnull for economy account name/uuid fields, courtesy of Warrior with PR #7705.
+  - Fix IndexOutOfBounds exception in /t join, courtesy of Veyronity with PR #8062.
+  - Fix SQL loading of forSale, forSalePrice, and forSaleTime, courtesy of Groovymeister with PR #8063. (First-Time Contributor!)
+  - Add info/meta node for overriding teleport warmup.
+    - Closes #7950.
+  - New Permission Node: towny_teleport_warmup_seconds.N
+    - An info/option node (see https://github.com/TownyAdvanced/Towny/wiki/Towny-Permission-Nodes#infooptionmeta-nodes) that overrides a player's warmup time.
+    - Replace N with the seconds to use for a warmup time.
+    - When not set, the standard warmup time from the Towny config.yml is used.
+  - Bump junit.version from 5.13.4 to 6.0.2.
+  - Bump net.luckperms:api from 5.4 to 5.5.
+  - Bump org.apache.maven.plugins:maven-source-plugin from 3.3.1 to 3.4.0.
+  - Bump net.milkbowl.vault:VaultUnlockedAPI from 2.9 to 2.15.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.11.2 to 3.12.0.
+  - Fix itemuse list not being used against projectiles which are fired into the air.
+  - Allow empty towns to turn into ruins, courtesy of Warrior with PR #8071.
+  - New config option: town_ruining.empty_towns_become_ruins
+    - Default: false
+    - When enabled, when the last resident is removed from a town and it becomes empty (such as when inactive resident deletion is enabled),
+      the town will turn into a ruin instead of being immediately removed.
+  - Fix IllegalArgumentException when a plugin we integrate with has a bad version, courtesy of Warrior with PR #8072.
+  - Fix unneeded msg_invalid_name exception message from /n enemy, courtesy of pernio with PR #8073. (First-Time Contributor!)
+  - Add a cooldown to prevent towns spamming residents by outlawing and unoutlawing them, courtesy of Veyronity with PR #8074.
+  - New Config Option: resident_settings.warn_player_on_outlaw_message_cooldown_in_seconds
+    - Default: 30
+    - How many seconds in between warning messages, to prevent spam.
