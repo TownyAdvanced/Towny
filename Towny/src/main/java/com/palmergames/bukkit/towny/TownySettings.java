@@ -3994,6 +3994,10 @@ public class TownySettings {
 	public static long getResidentMinTimeToJoinTown() {
 		return TimeTools.getMillis(getString(ConfigNodes.RES_SETTING_MIN_TIME_TO_JOIN_TOWN));
 	}
+	
+	public static int getResidentOutlawWarningMessageCooldown() {
+		return getInt(ConfigNodes.RES_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME);
+	}
 
 	public static double maxBuyTownPrice() {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
