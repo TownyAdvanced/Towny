@@ -1004,7 +1004,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void handleOnlineNewlyMintedOutlaw(Town town, Resident target) {
-		String uuid = target.getUUID().toString();
+		String uuid = target.getUUID().toString() + "+" + town.getUUID().toString();
 		if (!CooldownTimerTask.hasCooldown(uuid, CooldownType.RESIDENT_OUTLAWED)) {
 			TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_declared_outlaw", town.getName()));
 			CooldownTimerTask.addCooldownTimer(uuid, CooldownType.RESIDENT_OUTLAWED);
@@ -1042,7 +1042,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		// Send feedback messages.
 		if (target.isOnline()) {
-			String uuid = target.getUUID().toString();
+			String uuid = target.getUUID().toString() + "+" + town.getUUID().toString();
 			if (!CooldownTimerTask.hasCooldown(uuid, CooldownType.RESIDENT_UNOUTLAWED)) {
 				TownyMessaging.sendMsg(target, Translatable.of("msg_you_have_been_undeclared_outlaw", town.getName()));
 				CooldownTimerTask.addCooldownTimer(uuid, CooldownType.RESIDENT_UNOUTLAWED);
