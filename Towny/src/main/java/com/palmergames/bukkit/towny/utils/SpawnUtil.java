@@ -1,9 +1,11 @@
 package com.palmergames.bukkit.towny.utils;
 
+import java.util.BitSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+
 import com.palmergames.bukkit.towny.event.NationSpawnEvent;
 import com.palmergames.bukkit.towny.event.SpawnEvent;
 import com.palmergames.bukkit.towny.event.TownSpawnEvent;
@@ -12,14 +14,19 @@ import com.palmergames.bukkit.towny.event.teleport.SuccessfulTownyTeleportEvent;
 import com.palmergames.bukkit.towny.event.teleport.UnjailedResidentTeleportEvent;
 import com.palmergames.bukkit.towny.object.SpawnInformation;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.object.economy.TownyServerAccount;
 import com.palmergames.bukkit.towny.object.spawnlevel.NationSpawnLevel;
 import com.palmergames.bukkit.towny.object.spawnlevel.TownSpawnLevel;
 
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
-import io.papermc.lib.PaperLib;
+import com.palmergames.bukkit.util.ItemLists;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -41,6 +48,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.util.BukkitTools;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnUtil {
@@ -100,7 +108,7 @@ public class SpawnUtil {
 			if (spawnInfo.travelCost > 0) {
 				// Get paymentMsg for the money.csv and the Account being paid.
 				final String paymentMsg = getPaymentMsg(spawnInfo.townSpawnLevel, spawnInfo.nationSpawnLevel, spawnType);
-				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : Account.SERVER_ACCOUNT;
+				final Account payee = TownySettings.isTownSpawnPaidToTown() ? getPayee(town, nation, spawnType) : TownyServerAccount.ACCOUNT;
 				initiateCostedSpawn(player, resident, spawnLoc, spawnInfo.travelCost, payee, paymentMsg, ignoreWarn, spawnInfo.cooldown);
 				// No Cost so skip confirmation system.
 			} else
@@ -110,7 +118,7 @@ public class SpawnUtil {
 
 	private static SpawnInformation getSpawnInformation(Player player, boolean noCmdArgs, String notAffordMSG, boolean outpost, SpawnType spawnType, Resident resident, Town town, Nation nation) {
 		// Is this an admin spawning?
-		final boolean isTownyAdmin = isTownyAdmin(player);
+		final boolean isTownyAdmin = isTownyAdmin(player, resident);
 
 		SpawnInformation spawnInformation = new SpawnInformation();
 		try {
@@ -124,7 +132,7 @@ public class SpawnUtil {
 			spawnInformation.nationSpawnLevel = getNationSpawnLevel(player, noCmdArgs, spawnType, resident, nation, isTownyAdmin);
 
 			// Get any applicable cooldown.
-			spawnInformation.cooldown = getCooldown(player, spawnInformation);
+			spawnInformation.cooldown = getCooldown(player, resident.hasMode("adminbypass"), spawnInformation);
 
 			// Prevent spawn travel while in the config's disallowed zones.
 			// Throws a TownyException if the player is disallowed.
@@ -157,7 +165,7 @@ public class SpawnUtil {
 			return;
 
 		// sets tp location to their bedspawn only if it isn't in the town they're being teleported from.
-		PaperLib.getBedSpawnLocationAsync(outlawedPlayer, true).thenAccept(bed -> {
+		BukkitTools.getRespawnLocation(outlawedPlayer).thenAccept(bed -> {
 			Location spawnLocation = town.getWorld().getSpawnLocation();
 			if (!TownySettings.getOutlawTeleportWorld().equals(""))
 				spawnLocation = Objects.requireNonNull(Bukkit.getWorld(TownySettings.getOutlawTeleportWorld())).getSpawnLocation();
@@ -218,8 +226,8 @@ public class SpawnUtil {
 	 * @param player Player to test permissions for.
 	 * @return true if this player has towny.admin or towny.admin.spawn in their permission nodes.
 	 */
-	private static boolean isTownyAdmin(Player player) {
-		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN);
+	private static boolean isTownyAdmin(Player player, Resident resident) {
+		return TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player) || (!resident.hasMode("adminbypass") && hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN));
 	}
 	
 	/**
@@ -406,12 +414,14 @@ public class SpawnUtil {
 	 * Get the cooldown time on a player using a spawn command.
 	 * 
 	 * @param player           Player doing the spawning action.
+	 * @param hasAdminBypass   True if the player has the adminbypass mode enabled.
 	 * @param spawnInformation SpawnInformation containing the useful TownSpawnLevel
 	 *                         or NationSpawnLevel.
 	 * @return number of seconds a player must wait until they can spawn again.
 	 */
-	private static int getCooldown(Player player, SpawnInformation spawnInformation) {
-		return player.hasPermission(PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN.getNode()) ? 0 : spawnInformation.townSpawnLevel != null ? spawnInformation.townSpawnLevel.getCooldown() : spawnInformation.nationSpawnLevel.getCooldown();
+	private static int getCooldown(Player player, boolean hasAdminBypass, SpawnInformation spawnInformation) {
+		return hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN) && !hasAdminBypass ? 0
+			: spawnInformation.townSpawnLevel != null ? spawnInformation.townSpawnLevel.getCooldown() : spawnInformation.nationSpawnLevel.getCooldown();
 	}
 	
 	/**
@@ -431,7 +441,7 @@ public class SpawnUtil {
 		return switch (spawnType) {
 			case RESIDENT:
 				if (TownySettings.getBedUse()) {
-					yield PaperLib.getBedSpawnLocationAsync(player, true).thenApply(bedLoc -> {
+					yield BukkitTools.getRespawnLocation(player).thenApply(bedLoc -> {
 						if (bedLoc != null)
 							return bedLoc;
 						else if (town != null && town.hasSpawn())
@@ -440,57 +450,180 @@ public class SpawnUtil {
 							return player.getWorld().getSpawnLocation();
 					});
 				} else if (town != null && town.hasSpawn())
-					yield CompletableFuture.completedFuture(town.getSpawnOrNull());
+					yield adaptSpawnLocation(town.getSpawn(), player);
 				else
 					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
 			case TOWN:
 				if (outpost)
-					yield CompletableFuture.completedFuture(getOutpostSpawnLocation(town, split));
+					yield adaptSpawnLocation(getOutpostSpawnLocation(player, town, split), player);
 				else
-					yield CompletableFuture.completedFuture(town.getSpawn());
+					yield adaptSpawnLocation(town.getSpawn(), player);
 			case NATION:
-				yield CompletableFuture.completedFuture(nation.getSpawn());
+				yield adaptSpawnLocation(nation.getSpawn(), player);
 		};
+	}
+	
+	private static CompletableFuture<Location> adaptSpawnLocation(final @NotNull Location location, final @NotNull Player player) {
+		if (!TownySettings.isSafeTeleportUsed())
+			return CompletableFuture.completedFuture(location);
+		
+		return location.getWorld().getChunkAtAsync(location).thenApply(chunk -> getSafeLocation(location, player));
+	}
+
+	/**
+	 * Tries to find a safe location nearby to teleport the player to
+	 * if safety teleport is enabled, otherwise does nothing.
+	 * 
+	 * @param location Starting location
+	 * @return A safe location nearby, same location if already safe
+	 */
+	private static Location getSafeLocation(Location location, Player p) {
+		//if safety teleport isn't enabled do anything
+		if (!TownySettings.isSafeTeleportUsed()) {
+			return location;
+		}
+		
+		if (isSafeLocation(location)) {
+			return location;
+		}
+
+		if (TownySettings.isStrictSafeTeleportUsed()) {
+			TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_cancel_safe_teleport"));
+			return null;
+		}
+		
+		final int range = 22;
+
+		BitSet isLiquidMap = new BitSet(range * 2);
+		BitSet isSolidMap = new BitSet(range * 2);
+		
+		// look for 20 blocks up and down for a safe location, 
+		// if you can't find it fail the teleport
+		// maybe add a translation key and add the player 
+		// as a parameter to print him an error message
+		
+		Location temp = location.clone().subtract(0, range, 0);
+		
+		//build the linked lists
+		for(int i = 0; i < range * 2; i++) {
+			Material type = temp.getBlock().getType();
+			
+			if (ItemLists.LIQUID_BLOCKS.contains(type)) {
+				isLiquidMap.set(i);
+			}
+			
+			if (!ItemLists.NOT_SOLID_BLOCKS.contains(type)) {
+				isSolidMap.set(i);
+			}
+			
+			temp = temp.add(0,1,0);
+		}
+		
+		// 1 -1 2 -2 ...
+		for (int y = 0, steps = 1; steps <= 40; y = next(y), steps++) {
+			// value     = bottom block
+			// value + 1 = middle block
+			// value + 2 = top block
+			int value = y + range;
+			if(!isSolidMap.get(value) || isLiquidMap.get(value)) {
+				continue;
+			}
+			
+			if (isSolidMap.get(value+1) || isLiquidMap.get(value+1)) {
+				continue;
+			}
+			
+			if (isSolidMap.get(value+2) || isLiquidMap.get(value+2)) {
+				continue;
+			}
+			
+			return location.clone().add(0, y + 1, 0);
+		}
+		
+		TownyMessaging.sendErrorMsg(p, Translatable.of("msg_spawn_fail_safe_teleport"));
+		return null;
+	}
+	
+	private static int next(int i) {
+		if (i <= 0) {
+			i = -i;
+			i++;
+		} else {
+			i = -i;
+		}
+		return i;
+	}
+
+	private static boolean isSafeLocation(Location location) {
+		World world = location.getWorld();
+		if (world == null) return false;
+
+		// Check if location is in a block
+		Block block = world.getBlockAt(location);
+		Material type = block.getType();
+		
+		if (!ItemLists.NOT_SOLID_BLOCKS.contains(type) || ItemLists.LIQUID_BLOCKS.contains(type)) {
+			return false;
+		}
+
+		// Check if block below is lava or water or nothing
+		Block belowBlock = world.getBlockAt(location.clone().subtract(0, 1, 0));
+		Material belowType = belowBlock.getType();
+		if (ItemLists.NOT_SOLID_BLOCKS.contains(belowType) || ItemLists.LIQUID_BLOCKS.contains(type)) {
+			return false;
+		}
+
+		// Check if the location is directly above a solid block
+		Block aboveBlock = world.getBlockAt(location.clone().add(0, 1, 0));
+		Material aboveType = aboveBlock.getType();
+		if (!ItemLists.NOT_SOLID_BLOCKS.contains(aboveType) || ItemLists.LIQUID_BLOCKS.contains(aboveType)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
 	 * Complicated code that parses the given split to a named, numbered or
 	 * unnumbered outpost.
 	 * 
+	 * @param player The Player doing the teleport.
 	 * @param town  Town which is being spawned to.
 	 * @param split String[] arguments to parse the outpost location from.
 	 * @return Location of the town's outpost spawn.
 	 * @throws TownyException thrown when there are no outposts, or the outpost
 	 *                        limit was capped.
 	 */
-	private static Location getOutpostSpawnLocation(Town town, String[] split) throws TownyException {
+	private static Location getOutpostSpawnLocation(Player player, Town town, String[] split) throws TownyException {
 		if (!town.hasOutpostSpawn())
 			throw new TownyException(Translatable.of("msg_err_outpost_spawn"));
 
-		// No arguments, send them to the first outpost.
-		if (split.length == 0)
-			return town.getOutpostSpawn(1);
-
 		Integer index = null;
-		String userInput = split[split.length - 1];
-		try {
-			if (!userInput.contains("name:")) {
-				index = Integer.parseInt(userInput);
-			} else { // So now it say's name:123
-				index = getOutpostIndexFromName(town, index, userInput.replace("name:", "").replace("_", " "));
-			}
-		} catch (NumberFormatException e) {
-			// invalid entry so assume the first outpost, also note: We DO NOT HAVE a number
-			// now, which means: if you type abc, you get brought to that outpost.
-			// Let's consider the fact however: an outpost name begins with "123" and there
-			// are 123 Outposts. Then we put the prefix name:123 and that solves that.
-			index = getOutpostIndexFromName(town, index, userInput.replace("_", " "));
-		} catch (ArrayIndexOutOfBoundsException i) {
-			// Number not present so assume the first outpost.
+		// No arguments or negative number, send them to the first outpost.
+		if (split.length <= 0)
 			index = 1;
+		else {
+			String userInput = split[split.length - 1];
+			try {
+				if (!userInput.contains("name:")) {
+					index = Integer.parseInt(userInput);
+				} else { // So now it say's name:123
+					index = getOutpostIndexFromName(town, index, userInput.replace("name:", "").replace("_", " "));
+				}
+			} catch (NumberFormatException e) {
+				// invalid entry so assume the first outpost, also note: We DO NOT HAVE a number
+				// now, which means: if you type abc, you get brought to that outpost.
+				// Let's consider the fact however: an outpost name begins with "123" and there
+				// are 123 Outposts. Then we put the prefix name:123 and that solves that.
+				index = getOutpostIndexFromName(town, index, userInput.replace("_", " "));
+			} catch (ArrayIndexOutOfBoundsException i) {
+				// Number not present so assume the first outpost.
+				index = 1;
+			}
 		}
 
-		if (TownySettings.isOutpostLimitStoppingTeleports() 
+		if (!TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(player)
+			&& TownySettings.isOutpostLimitStoppingTeleports() 
 			&& TownySettings.isOutpostsLimitedByLevels()
 			&& town.isOverOutpostLimit() 
 			&& Math.max(1, index) > town.getOutpostLimit()) {
@@ -614,7 +747,7 @@ public class SpawnUtil {
 	 */
 	private static Account getPayee(Town town, Nation nation, SpawnType spawnType) {
 		return switch(spawnType) {
-		case RESIDENT -> town == null ? Account.SERVER_ACCOUNT : town.getAccount(); 
+		case RESIDENT -> town == null ? TownyServerAccount.ACCOUNT : town.getAccount(); 
 		case TOWN -> town.getAccount();
 		case NATION -> nation.getAccount();
 		};
@@ -642,9 +775,9 @@ public class SpawnUtil {
 	 */
 	private static SpawnEvent getSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc, SpawnInformation spawnInfo) {
 		return switch(spawnType) {
-		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
-		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
-		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
 		};
 	}
 
@@ -662,17 +795,29 @@ public class SpawnUtil {
 		if (resident == null)
 			return;
 
-		if (TownyTimerHandler.isTeleportWarmupRunning() && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP)) {
+		boolean isUsingAdminBypass = resident.hasMode("adminbypass");
+		if (TownyTimerHandler.isTeleportWarmupRunning() && (!hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOWARMUP) || isUsingAdminBypass)) {
 			// Use teleport warmup
-			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", TownySettings.getTeleportWarmupTime()));
+			int warmupTime = TownyUniverse.getInstance().getPermissionSource().getGroupPermissionIntNode(player.getName(), PermissionNodes.TOWNY_TELEPORT_WARMUP_SECONDS.getNode());
+			if (warmupTime == -1)
+				warmupTime = TownySettings.getTeleportWarmupTime();
+			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", warmupTime));
 			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown, refundAccount, cost);
 		} else {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)
 				player.getVehicle().eject();
-			PaperLib.teleportAsync(player, spawnLoc, TeleportCause.COMMAND);
-			BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost));
-			if (cooldown > 0 && !hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN))
+
+			// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
+			addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
+
+			final Location prior = player.getLocation();
+			player.teleportAsync(spawnLoc, TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
+				if (successfulTeleport)
+					BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, spawnLoc, cost, prior));
+			});
+
+			if (cooldown > 0 && (!hasPerm(player, PermissionNodes.TOWNY_SPAWN_ADMIN_NOCOOLDOWN) || isUsingAdminBypass))
 				CooldownTimerTask.addCooldownTimer(player.getName(), "teleport", cooldown);
 		}
 	}
@@ -732,7 +877,7 @@ public class SpawnUtil {
 			loc = town.getSpawnOrNull();
 
 		Location finalLoc = loc;
-		return PaperLib.getBedSpawnLocationAsync(resident.getPlayer(), true).thenApply(bed -> bed == null ? finalLoc : bed);
+		return BukkitTools.getRespawnLocation(resident.getPlayer()).thenApply(bed -> bed == null ? finalLoc : bed);
 	}
 	
 	/**
@@ -748,7 +893,7 @@ public class SpawnUtil {
 		if (player == null)
 			return;
 		
-		plugin.getScheduler().runLater(player, () -> PaperLib.teleportAsync(resident.getPlayer(), loc, TeleportCause.PLUGIN),
+		plugin.getScheduler().runLater(player, () -> resident.getPlayer().teleportAsync(loc, TeleportCause.PLUGIN),
 			ignoreWarmup ? 0 : TownySettings.getTeleportWarmupTime() * 20L);
 	}
 
@@ -759,5 +904,18 @@ public class SpawnUtil {
 	
 	private static boolean hasPerm(Player player, PermissionNodes node) {
 		return TownyUniverse.getInstance().getPermissionSource().testPermission(player, node.getNode());
+	}
+
+	/**
+	 * On some servers, when the player is teleported the chunk they left will
+	 * unload before the server ticks, causing any pets they have following them to
+	 * be abandoned. This method will cause a chunk to remain loaded long enough for
+	 * the pets to be teleported to the player naturally.
+	 * 
+	 * @param wc WorldCoord from which the player is leaving.
+	 */
+	public static void addAndRemoveChunkTicket(WorldCoord wc) {
+		wc.loadChunks();
+		Towny.getPlugin().getScheduler().runAsyncLater(() -> wc.unloadChunks(), 20L);
 	}
 }

@@ -54,7 +54,7 @@ commands:
 permissions:
     towny.admin:
         description: User is able to use /townyadmin, as well as the ability to build/destroy anywhere. User is also able to make towns or nations when set to admin only.
-        default: false
+        default: op
         children:
             towny.command.townyadmin.*: true
             towny.command.townyworld.*: true
@@ -113,9 +113,21 @@ permissions:
         children:
             towny.town.spawn.outpost: true
 
+    towny.town.spawn.nation:
+        description: User is permitted to use /town spawn to towns in the nation.
+        default: false
+        children:
+            towny.town.spawn.nation.bypass_public: false
+
     towny.town.spawn.nation.bypass_public:
         description: User is permitted to use /town spawn when they are a member of the same nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.
         default: false
+
+    towny.town.spawn.ally:
+        description: User is permitted to use /town spawn to towns their nation is allied with.
+        default: false
+        children:
+            towny.town.spawn.ally.bypass_public: false
 
     towny.town.spawn.ally.bypass_public:
         description: User is permitted to use /town spawn when they are a member of an allied nation and even if the town isn't public while is_nation_ally_spawning_requiring_public_status is true.
@@ -370,6 +382,7 @@ permissions:
             towny.command.town.forsale: true
             towny.command.town.notforsale: true
             towny.command.town.here: true
+            towny.command.town.nearby: true
             towny.command.town.invite.*: true
             towny.command.town.jail: true
             towny.command.town.jail.list: true
@@ -399,6 +412,8 @@ permissions:
             towny.command.town.unjail: true
             towny.command.town.trust: true
             towny.command.town.trusttown: true
+            towny.command.town.allylist: true
+            towny.command.town.enemylist: true
 
     towny.command.town.list:
         description: Users are able to use the default method of sorting the town list.
@@ -417,6 +432,7 @@ permissions:
             towny.command.town.list.name: true
             towny.command.town.list.townblocks: true
             towny.command.town.list.online: true
+            towny.command.town.list.forsale: true
             towny.command.town.list.founded: true
             towny.command.town.list.ruined: true
             towny.command.town.list.bankrupt: true
@@ -497,6 +513,7 @@ permissions:
             towny.command.town.set.embassytax: true
             towny.command.town.set.taxpercentcap: true
             towny.command.town.set.title: true
+            towny.command.town.set.title.colours: false
             towny.command.town.set.surname: true
 
     towny.command.town.set.title.colours:
@@ -652,6 +669,7 @@ permissions:
         default: false
         children:
             towny.command.resident.set.mode: true
+            towny.command.resident.set.mode.clear: true
             towny.command.resident.set.perm: true
             towny.command.resident.set.about: true
 
@@ -661,14 +679,22 @@ permissions:
         children:
             towny.command.resident.toggle.explosion: true
             towny.command.resident.toggle.fire: true
-            towny.command.resident.toggle.map: true
             towny.command.resident.toggle.mobs: true
-            towny.command.resident.toggle.plotborder: true
             towny.command.resident.toggle.pvp: true
-            towny.command.resident.toggle.townclaim: true
-            towny.command.resident.toggle.constantplotborder: true
-            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.bedspawn: true
             towny.command.resident.toggle.bordertitles: true
+            towny.command.resident.toggle.ignoreinvites: true
+            towny.command.resident.toggle.ignoreotherchannels: true
+            towny.command.resident.toggle.ignoreplots: true
+            towny.command.resident.toggle.infotool: true
+            towny.command.resident.toggle.map: true
+            towny.command.resident.toggle.plotgroup: true
+            towny.command.resident.toggle.district: true
+            towny.command.resident.toggle.constantplotborder: true
+            towny.command.resident.toggle.plotborder: true
+            towny.command.resident.toggle.townborder: true
+            towny.command.resident.toggle.townclaim: true
+            towny.command.resident.toggle.townunclaim: true
 
     # TownyAdmin command permissions
     towny.command.townyadmin.*:
@@ -696,8 +722,7 @@ permissions:
             towny.command.townyadmin.plot.*: true
             towny.command.townyadmin.tpplot: true
             towny.command.townyadmin.resident.*: true
-            towny.command.townyadmin.depositall: true
-            towny.command.townyadmin.resetbanks: true
+            towny.command.townyadmin.eco.*: true
             towny.command.townyadmin.install: true
 
     towny.command.townyadmin.resident.*:
@@ -709,6 +734,17 @@ permissions:
             towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.resident.friend: true
             towny.command.townyadmin.resident.unjail: true
+
+    towny.command.townyadmin.eco.*:
+        description: User can access the admin eco commands.
+        default: false
+        children:
+            towny.command.townyadmin.eco.depositall: true
+            towny.command.townyadmin.eco.depositalltowns: true
+            towny.command.townyadmin.eco.depositallnations: true
+            towny.command.townyadmin.eco.resetbanks: true
+            towny.command.townyadmin.eco.convert: true
+            towny.command.townyadmin.eco.info: true
 
     towny.command.townyadmin.town.spawn.*:
         description: User can access town spawns
@@ -871,6 +907,7 @@ permissions:
             towny.command.townyworld.toggle.forcefire: true
             towny.command.townyworld.toggle.forcepvp: true
             towny.command.townyworld.toggle.friendlyfire: true
+            towny.command.townyworld.toggle.jailing: true
             towny.command.townyworld.toggle.plotcleardelete: true
             towny.command.townyworld.toggle.pvp: true
             towny.command.townyworld.toggle.revertunclaim: true

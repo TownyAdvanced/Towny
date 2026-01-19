@@ -26,6 +26,8 @@ import com.palmergames.util.StringMgmt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 
@@ -39,6 +41,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private final List<String> bankruptedTowns = new ArrayList<>();
 	private final List<String> removedTowns = new ArrayList<>();
 	private final List<String> removedNations = new ArrayList<>();
+	private final Map<Resident, Map<Town, Double>> residentPlotTaxMap = new ConcurrentHashMap<>();
 
 	public DailyTimerTask(Towny plugin) {
 
@@ -61,6 +64,7 @@ public class DailyTimerTask extends TownyTimerTask {
 		bankruptedTowns.clear();
 		removedTowns.clear();
 		removedNations.clear();
+		residentPlotTaxMap.clear();
 
 		BukkitTools.fireEvent(new PreNewDayEvent()); // Pre-New Day Event
 		
@@ -388,6 +392,9 @@ public class DailyTimerTask extends TownyTimerTask {
 
 			collectTownTaxes(town);
 		}
+
+		if (!residentPlotTaxMap.isEmpty())
+			messageResidentsAboutPlotTaxesPaid();
 	}
 
 	/**
@@ -485,6 +492,8 @@ public class DailyTimerTask extends TownyTimerTask {
 				return true;
 			
 			resident.getAccount().payTo(tax, town, String.format("Town Tax (Percentage) paid by %s.", resident.getName()));
+			if (resident.isOnline())
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_you_paid_town_tax", prettyMoney(tax)));
 			taxCollected += tax;
 			return true;
 		}
@@ -500,6 +509,8 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		if (resident.getAccount().canPayFromHoldings(tax)) {
 			resident.getAccount().payTo(tax, town, String.format("Town tax (FlatRate) paid by %s.", resident.getName()));
+			if (resident.isOnline())
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_you_paid_town_tax", prettyMoney(tax)));
 			taxCollected += tax;
 			return true;
 		}
@@ -579,6 +590,10 @@ public class DailyTimerTask extends TownyTimerTask {
 	private boolean collectPlotTaxFromResident(double tax, Resident resident, Town town, TownBlock townBlock) {
 		if (resident.getAccount().canPayFromHoldings(tax)) {
 			resident.getAccount().payTo(tax, town, String.format("Plot Tax (%s) paid by %s", townBlock.getTypeName(), resident.getName()));
+			
+			if (resident.isOnline())
+				addPaymentToPlotTaxMap(resident, town, tax);
+
 			taxCollected += tax;
 			return true;
 		}
@@ -598,6 +613,34 @@ public class DailyTimerTask extends TownyTimerTask {
 
 		townBlock.save();
 		return false;
+	}
+
+	private void addPaymentToPlotTaxMap(Resident resident, Town town, double tax) {
+		if (!residentPlotTaxMap.containsKey(resident)) {
+			Map<Town, Double> townMap = new ConcurrentHashMap<>();
+			townMap.put(town, tax);
+			residentPlotTaxMap.put(resident, townMap);
+			return;
+		}
+
+		Map<Town, Double> townMap = residentPlotTaxMap.get(resident);
+		double amount = townMap.containsKey(town) ? townMap.get(town) + tax : tax;
+		townMap.put(town, amount);
+		residentPlotTaxMap.put(resident, townMap);
+	}
+
+	private void messageResidentsAboutPlotTaxesPaid() {
+		for (Resident resident : residentPlotTaxMap.keySet()) {
+			if (!resident.isOnline())
+				continue;
+			Map<Town, Double> townMap = residentPlotTaxMap.get(resident);
+			if (townMap.isEmpty())
+				continue;
+			for (Town townKey : townMap.keySet()) {
+				double tax = townMap.get(townKey);
+				TownyMessaging.sendMsg(resident, Translatable.of("msg_you_paid_plottax_to_town", prettyMoney(tax), townKey));
+			}
+		}
 	}
 
 	private void payPlotTaxToResidents(double tax, Resident resident, Town town, String typeName) {
@@ -626,6 +669,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				continue;
 
 			processTownUpkeep(town);
+			processTownNeutralCosts(town);
 		}
 
 		String msg1 = "msg_bankrupt_town2";
@@ -651,7 +695,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private void processTownUpkeep(Town town) {
 		double upkeep = TownySettings.getTownUpkeepCost(town);
 		double upkeepPenalty = TownySettings.getTownPenaltyUpkeepCost(town);
-		if (upkeepPenalty > 0 && upkeep > 0)
+		if (upkeepPenalty > 0)
 			upkeep = upkeep + upkeepPenalty;
 	
 		if (upkeep > 0) {
@@ -659,21 +703,24 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else if (upkeep < 0) {
 			payTownNegativeUpkeep(upkeep, town);
 		}
+	}
+
+	private void processTownNeutralCosts(Town town) {
+		if (!town.isNeutral())
+			return;
+
+		double neutralityCost = TownySettings.getTownNeutralityCost(town);
+		if (neutralityCost <= 0)
+			return;
 
 		// Charge towns for keeping a peaceful status.
-		if (town.isNeutral()) {
-			double neutralityCost = TownySettings.getTownNeutralityCost(town);
-			if (neutralityCost > 0) {
-				if ((town.isBankrupt() && !TownySettings.canBankruptTownsPayForNeutrality())
-				|| !town.getAccount().withdraw(neutralityCost, "Town Peace Upkeep")) {
-					town.setNeutral(false);
-					town.save();
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));
-				} else {
-					TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", prettyMoney(neutralityCost)));
-				}
-				
-			}
+		if ((town.isBankrupt() && !TownySettings.canBankruptTownsPayForNeutrality())
+		|| !town.getAccount().withdraw(neutralityCost, "Town Peace Upkeep")) {
+			town.setNeutral(false);
+			town.save();
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_not_peaceful"));
+		} else {
+			TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_paid_for_neutral_status", prettyMoney(neutralityCost)));
 		}
 	}
 
@@ -779,6 +826,7 @@ public class DailyTimerTask extends TownyTimerTask {
 				continue;
 
 			processNationUpkeep(nation);
+			processNationNeutralCosts(nation);
 		}
 
 		if (removedNations != null && !removedNations.isEmpty()) {
@@ -810,19 +858,23 @@ public class DailyTimerTask extends TownyTimerTask {
 		} else if (upkeep < 0) {
 			nation.getAccount().withdraw(upkeep, "Negative Nation Upkeep");
 		}
+	}
+
+	private void processNationNeutralCosts(Nation nation) {
+		if (!nation.isNeutral())
+			return;
+
+		double neutralityCost = TownySettings.getNationNeutralityCost(nation);
+		if (neutralityCost <= 0)
+			return;
 
 		// Charge nations for keeping a peaceful status.
-		if (nation.isNeutral()) {
-			double neutralityCost = TownySettings.getNationNeutralityCost(nation);
-			if (neutralityCost > 0) {
-				if (!nation.getAccount().withdraw(neutralityCost, "Nation Peace Upkeep")) {
-					nation.setNeutral(false);
-					nation.save();
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_not_peaceful"));
-				} else {
-					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", prettyMoney(neutralityCost)));
-				}
-			}
+		if (!nation.getAccount().withdraw(neutralityCost, "Nation Peace Upkeep")) {
+			nation.setNeutral(false);
+			nation.save();
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_not_peaceful"));
+		} else {
+			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_nation_paid_for_neutral_status", prettyMoney(neutralityCost)));
 		}
 	}
 

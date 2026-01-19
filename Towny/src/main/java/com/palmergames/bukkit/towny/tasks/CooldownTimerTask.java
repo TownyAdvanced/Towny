@@ -19,7 +19,9 @@ public class CooldownTimerTask extends TownyTimerTask {
 		TOWN_RENAME(60),
 		TOWN_DELETE(TownySettings.getTownDeleteCoolDownTime()),
 		TOWNBLOCK_UNCLAIM(TownySettings.getTownUnclaimCoolDownTime()),
-		OUTLAW_WARNING(TownySettings.getOutlawWarningMessageCooldown());
+		OUTLAW_WARNING(TownySettings.getOutlawWarningMessageCooldown()),
+		RESIDENT_OUTLAWED(TownySettings.getResidentOutlawWarningMessageCooldown()),
+		RESIDENT_UNOUTLAWED(TownySettings.getResidentOutlawWarningMessageCooldown());
 		
 		private final int seconds;
 		

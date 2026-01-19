@@ -164,7 +164,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			// We cut the first argument out of it so /invite deny args[1]
 			// SO now args[0] is always the Town, we should check if the argument length is >= 1
 			if (args[0].equalsIgnoreCase("all")) {
-				denyAllInvites(invites);
+				denyAllInvites(new ArrayList<>(invites));
 				TownyMessaging.sendMsg(resident, Translatable.of("msg_player_denied_all_invites"));
 				return;
 			}
@@ -298,7 +298,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 			// If it's from the sender, do it differently
 			String output;
 			if (fromSender) {
-				output = Colors.Blue + invite.getReceiver().getName() + Colors.Gray + " - " + Colors.Green + name;
+				output = Colors.DARK_AQUA + invite.getReceiver().getName() + Colors.DARK_GRAY + " - " + Colors.DARK_GREEN + name;
 				if (invite.getSender() instanceof Town) { // If it's sent by a town to a resident
 					object = Translatable.of("player_sing");
 				}
@@ -311,7 +311,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 					}
 				}
 			} else { // So it's not from the sender, then it's from the receiver so
-				output = Colors.Blue + invite.getSender().getName() + Colors.Gray + " - " + Colors.Green + name;
+				output = Colors.DARK_AQUA + invite.getSender().getName() + Colors.DARK_GRAY + " - " + Colors.DARK_GREEN + name;
 				if (invite.getReceiver() instanceof Resident) {
 					object = Translatable.of("town_sing");
 				}
@@ -323,7 +323,7 @@ public class InviteCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		TownyMessaging.sendMessage(player, ChatTools.formatList(Translatable.of("invite_plu").forLocale(player),
-				Colors.Blue + object.forLocale(player) + Colors.Gray + " - " + Colors.LightBlue + Translatable.of("invite_sent_by").forLocale(player),
+				Colors.DARK_AQUA + object.forLocale(player) + Colors.DARK_GRAY + " - " + Colors.AQUA + Translatable.of("invite_sent_by").forLocale(player),
 				invitesFormatted, Translatable.of("LIST_PAGE", page, total).forLocale(player)
 		));
 	}

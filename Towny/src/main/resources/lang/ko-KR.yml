@@ -39,7 +39,7 @@ help_0: '타우니 도움말'
 help_1: '다음 명령어를 사용해보며 타우니에 대해 배워보세요.'
 help_2: '도시 내 채팅'
 help_3: '국가 내 채팅'
-help_4: ''
+help_4: '거주자 명령어 도움말.'
 help_5: '타운 명령어 도움말입니다.'
 help_6: '국가 명령어 도움말입니다.'
 help_7: '도면 명령어 도움말입니다.'
@@ -67,9 +67,64 @@ town_help_9: '오늘이 그 날입니다!'
 town_help_10: '접속 중인 시민 목록'
 town_help_13: "마을의 주민 목록 보기"
 town_help_14: "마을의 순위 목록 보기"
+town_help_15: "마을의 수배자 목록 보기"
+town_help_16: "마을 내 구역 그룹 목록을 확인하세요."
+town_help_17: "마을 내 다양한 구역 유형을 확인하세요."
+town_help_18: "마을 주민에게 메세지 보내기"
+town_help_19: "다른 플레이어가 구매할 수 있도록 마을을 판매 가능 상태로 설정해주세요."
+town_help_20: "마을을 판매 불가 상태로 설정하세요."
+town_help_21: "해당 마을이 판매 중이라면 구매할 수 있습니다."
+town_help_22: "마을 은행에 돈을 예치하세요."
+town_help_23: "주민의 마을 내 직급을 수정하는 데 사용됩니다."
+town_help_24: "마을을 삭제하는 데 사용됩니다."
+town_help_25: "마을의 추방자를 관리하는 데 사용됩니다."
+town_help_26: "모든 마을 목록을 표시합니다. 도움말은 /t list ?를 참고하세요."
+town_help_27: "가입된 마을에서 탈퇴합니다."
+town_help_28: "마을 은행에서 돈을 인출하세요."
+town_help_29: "도움말은 /t claim ? 명령어를 참고하세요."
+town_help_30: "마을에서 토지를 해제하는 데 사용됩니다."
+town_help_31: "플레이어를 추가하거나 제거합니다."
+town_help_32: "도움말은 /t set ? 명령어를 참고하세요."
+town_help_33: "도움말은 /t buy ? 명령어를 참고하세요."
+town_help_34: "도움말은 /t toggle ? 명령어를 참고하세요."
+town_help_35: "도움말은 /t rank ? 명령어를 참고하세요."
+town_list_help_0: "지정된 페이지를 확인합니다."
+town_list_help_1: "플레이어 수 기준으로 마을 목록을 표시합니다(지정된 페이지)."
+town_list_help_2: "가입 가능한 마을 목록을 표시합니다 (지정된 페이지)."
+town_list_help_3: "은행 잔고 기준으로 마을 목록을 표시합니다 (지정된 페이지)."
+town_list_help_4: "마을 목록을 알파벳순으로 표시합니다 (지정된 페이지)."
+town_list_help_5: "소유한 토지 면적 기준으로 마을 목록을 표시합니다 (지정된 페이지)."
+town_list_help_6: "현재 온라인 인원수 기준으로 마을 목록을 표시합니다 (지정된 페이지)."
+town_set_help_0: "마을 공지판을 설정합니다."
+town_set_help_1: "현재 위치를 마을의 중심 블록으로 설정합니다."
+town_set_help_2: "현재 위치를 마을 중심 블록의 스폰 지점으로, 외곽 지역에서는 외곽 스폰 지점으로 설정합니다."
+town_set_help_3: "도움말은 /town set perm ? 명령어를 참고하세요."
+town_set_help_4: "마을의 세금 금액을 설정합니다."
+town_set_help_5: "각 구역별 특별 세금을 설정합니다."
+town_set_help_6: "구역 구매 시 기본 가격을 설정합니다."
 town_set_help_7: "/t spawn을 사용하기 위한 비용을 설정"
 town_set_help_8: "나의 마을 이름 설정"
 town_set_help_9: "나의 마을 태그 설정"
+town_set_help_10: "플레이의 칭호 또는 성을 설정합니다."
+town_set_help_11: "플레이어로부터 부과할 수 있는 세금 최대치를 설정합니다 (백분율 기준)."
+town_jail_help_0: "마을의 감옥 목록을 표시합니다."
+town_jail_help_1: "플레이어를 주요 감옥에 수감합니다."
+town_jail_help_2: "지정된 시간 동안 플레이어 주요 감옥에 수감합니다."
+town_jail_help_3: "지정된 감옥에서 지정된 시간 동안 플레이어를 수감합니다."
+town_jail_help_4: "지정된 감옥과 감방에서 지정된 시간 동안 플레이어 수감합니다."
+town_jail_help_5: "지정된 보석금과 함께, 지정된 시간 동안 플레이어를 주요 감옥에 수감합니다."
+town_jail_help_6: "지정된 보석금과 감옥에서 플레이어를 수감합니다 (지정된 시간 동안)."
+town_jail_help_7: "지정된 보석금과 함께 지정된 감옥 및 감방에서 플레이어를 수감합니다 (지정된 시간 동안)."
+town_jail_help_8: "플레이어를 석방합니다."
+town_purge_help: "지정된 일 수 동안 접속하지 않은 플레이어를 제거합니다."
+town_trust_help_0: "마을에서 플레이어 신뢰할 수 있는 주민으로 설정합니다."
+town_trust_help_1: "마을의 신뢰할 수 있는 플레이어 목록에서 해당 플레이어  제거합니다."
+town_trust_help_2: "마을 내 신뢰할 수 있는 플레이 목록을 표시합니다."
+town_towntrust_help_0: "다른 마을을 신뢰할 수 있는 마을로 설정합니다."
+town_towntrust_help_1: "신뢰할 수 있는 마을 목록에서 해당 마을을 제거합니다."
+town_towntrust_help_2: "신뢰할 수 있는 마을 목록을 표시합니다."
+town_buy_help: "마을의 소유지 한도를 늘리기 위해 추가 마을 블록을 구매합니다."
+town_cede_help: "현재 위치한 구역을 지정된 마을이 인수할 수 있도록 제안합니다."
 mayor_help_3: '도시에 인접하지 않는 토지 구매'
 mayor_help_4: '반지름이 X인 땅을 원형으로 구매'
 mayor_help_5: '최대 반지름 내의 토지 구매'
@@ -85,6 +140,9 @@ nation_help_6: '새로운 국가 세우기'
 nation_help_7: '국가 리더의 명령어를 나열'
 nation_help_8: '새로운 국가 세우기'
 nation_help_9: '접속중인 국가원 목록'
+nation_help_11: "국가에 속한 마을 목록."
+nation_help_12: "국가의 동맹국 목록."
+nation_help_13: "국가에 대한 적대국들의 목록."
 king_help_1: '국가 리더 도움말'
 king_help_2: '동맹국 설정'
 king_help_3: '적국 설정'
@@ -99,7 +157,6 @@ mode_4: '마을 채팅'
 mode_5: '국가 채팅'
 mode_6: '%s을(를) 국경에 두어 분쟁 지역으로 만들 수 있음'
 plot_perms: '%s을(를) %s 대신 사용해 토지 권한을 설정해주세요.'
-plot_perms_1: '주민의 토지 권한은 외부인 권한을 사용하지 않습니다.'
 res_list: '시만 목록'
 res_sing: '시민'
 mayor_sing: '촌장'
@@ -120,6 +177,7 @@ townyadmin_help_1: '이 마을블록 점유 해제'
 townyadmin_help_2: '주변에 있는 마을블록 점유 해제'
 admin_panel_2: '타우니 리로드'
 admin_panel_3: '새로운 하루단위 타이머'
+plot_help_10: "마을의 신뢰할 수 있는 플레이어 목록에서 해당 플레이어 제거합니다."
 msg_block_claim: '이 마을블록 점유'
 msg_plot_nfs: '토지 판매 철회'
 msg_nfs_abr: '&e팜 과 안팜 을 판매 와 판매취소 대신 사용할 수 있습니다.'
@@ -133,9 +191,6 @@ msg_buy: '&b%d %s를 %s에 구매하였습니다.'
 msg_buy_resident_plot: '&b%s는 %ss 만큼의 %s 땅을 구매하였습니다.'
 msg_couldnt_pay_taxes: '&b%s님은 세금을 미납하여 %s에서 추방되었습니다.'
 msg_couldnt_pay_plot_taxes: '&b%s님은 세금을 미납하여 땅의 소유권을 잃었습니다.'
-msg_payed_town_tax: '&b지불한 마을 세금: '
-msg_payed_plot_cost: '&b %s을 %s 만큼의 %s의 땅을 위해 지불하였습니다'
-msg_payed_resident_tax: '&b지불한 주민 세금: '
 msg_bankrupt_town: ' 마을을 유지할 형편이 되지 않습니다.'
 msg_bankrupt_nation: ' 국가를 유지할 형편이 되지 않습니다.'
 msg_nation_not_peaceful: '&b국가가 평화로운 상태를 유지할 형편이 되지 않습니다.'
@@ -361,7 +416,6 @@ msg_err_not_percentage: '&c백분율로 입력되어야 합니다.'
 msg_err_no_economy: '&cEconomy 플러그인이 실행되지 않았습니다.'
 msg_err_not_block_type: '&c해당되는 토지 유형이 없습니다!'
 msg_not_allowed_join: '&c%s님이 마을에 가입하는 것이 허용되지 않았습니다.'
-msg_offline_no_join: '&c%s님은 오프라인 상태여서 마을에 가입할 수 없습니다.'
 msg_err_cannot_perform_action: '&이 %s 작업을 수행 할 수 없습니다.'
 msg_npc_flag: 'NPC &b의 설정이 이제 %s 에서 %s 로 변경됩니다.'
 msg_warning_delete: '&4[&c경고&4] &c%s의 자금이 부족해 새 날이 오면 삭제됩니다'
@@ -374,7 +428,6 @@ msg_err_not_enough_residents_join_nation: '&b마을 %s은(는) 국가에 가입�
 msg_not_enough_residents_no_longer_capital: '&b국가의 오래된 수도가 더 이상 국가의 수도가 될 만큼 충분한 주민을 가지고 있지 않습니다. 국가의 새 수도는 %s입니다.'
 msg_town_not_enough_residents_left_nation: '&b마을 %s은(는) 더 이상 국가의 구성원이 될 만큼 충분한 주민을 가지고 있지 않습니다. 마을 &s은(는) 국가에서 추방되었습니다.'
 msg_nation_disbanded_town_not_enough_residents: '&b마을 %s은(는) 더 이상 국가를 운영할 수 있을 만큼 충분한 주민을 가지고 있지 않습니다. 국가가 강제로 해체되었습니다.'
-msg_not_enough_residents_refunded: '&b주민이 충분하지 않아 해산되는 국가에 대해 %s 만큼을 환불받았습니다.'
 msg_not_enough_residents_capital: '&b마을 %s에는 국가의 수도가 될 만큼의 충분한 주민이 없습니다.'
 list_page: '&3페이지 &b%s / %s'
 list_err_not_enough_pages: '&c%s 페이지가 유효합니다.'
@@ -573,10 +626,13 @@ msg_err_over_outposts_limit: '귀하는 전초기지로 이동할 수 없습니�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '무법자:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: '무법자:'
 online: '&a(접속중)'
-registered_last_online: '&2최초 접속일: &a%s &8| &2최근 접속일: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: '권한:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2최초 접속일: &a%s &8| &2최근 접속일: &a%s'
+#Used on /plot perm, /res
+status_perm: '권한:'
 status_on: '&4켜짐'
 status_off: '&a꺼짐'
 status_on_good: '&a켜짐'
@@ -1101,9 +1157,11 @@ status_trustedlist: '신뢰됨'
 msg_click_to_edit: '&6클릭하여 수정'
 permission_gui_header: '타우니 권한 GUI'
 msg_last_edited: '&7&o마지막 수정: %s, 수정자: %s'
-msg_trusted_added: '&b%s을(를) %s에 신뢰하는 것으로 추가함.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b%s을(를) %s에 신뢰하는 것으로 추가함.'
 msg_already_trusted: '&b%s이(가) %s에서 이미 신뢰 되어있음.'
-msg_trusted_added_2: '&b%s이(가) %s에 당신을 신뢰 했습니다: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s이(가) %s에 당신을 신뢰 했습니다: %s.'
 msg_not_trusted: '&b%s이(가) %s에 신뢰 되어있지 않음.'
 msg_trusted_removed: '&b%s을(를) %s의 신뢰에서 삭제함.'
 msg_trusted_removed_2: '&b%s이(가) 당신을 %s의 신뢰에서 삭제함: %s.'
@@ -1129,3 +1187,5 @@ msg_perm_hud_resident: '주민'
 msg_perm_hud_nation: '국가'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: '외부인'
+chunknotification_plot_claim_help_message: " '/plot claim' 명령어로 이 땅을 점유하세요."
+titlemsg_pay_your_bail_title: "당신의 보석금을 지불하세요: %s"

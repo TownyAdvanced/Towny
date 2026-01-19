@@ -10,6 +10,22 @@ help_0: 'Ümumi Towny Köməkçisi'
 help_1: 'Towny haqqında daha çox məlumat öyrənmək üçün aşağıdakı əmrləri yoxlayın.'
 help_2: 'Şəhər Söhbəti'
 help_3: 'Millət Söhbəti'
+help_4: 'Towny əmrlər köməyi.'
+help_5: 'Town əmrlər köməyi.'
+help_6: 'Millət əmrlər köməyi.'
+help_7: 'Ərazi əmrlər köməyi.'
+help_8: 'Towny əmrlər köməyi.'
+help_9: 'Towny Admin əmrlər köməyi.'
+towny_help_0: "Əsas Towny Yardımı"
+towny_help_1: "Yaxınlıqdakı şəhər bloklarının xəritəsini göstərir"
+towny_help_2: "Ekonomiya ilə istifadə olunan qiymətləri göstərir"
+towny_help_3: "Yüksək balları göstərir"
+towny_help_4: "Yeni günə qədər vaxtı göstərir"
+towny_help_5: "Statistikanı göstərir"
+towny_help_6: "Towny versiyasını göstərir"
+towny_top_help_0: "Alt əmr əsasında ən yaxşı sakinlərin siyahısı."
+towny_top_help_1: "Alt əmr əsasında ən yaxşı torpaq sahiblərin siyahısı."
+towny_top_help_2: "Alt əmr əsasında ən zənginləri siyahısı."
 town_help_1: 'Şəhərinizin Vəziyəti'
 town_help_2: '[İcra Başcısı]'
 town_help_3: 'Seçilən şəhərlərin vəziyəti'
@@ -20,6 +36,38 @@ town_help_7: 'Məqsəd Bələddiyə qurucusu olaraq yeni şəhər.'
 town_help_8: 'Bələddiyə qurucusu üçün əmrlərin siyahısı.'
 town_help_9: 'Bu gün həmin gündür!'
 town_help_10: 'Şəhərinizdəki bütün aktiv sakinlərin siyahısı'
+town_help_13: "Şəhərdəki sakinlərin siyahısına baxın."
+town_help_14: "Şəhərdəki rütbələrin siyahısına baxın."
+town_help_15: "Şəhərdəki qanunsuzların siyahısına baxın."
+town_help_16: "Şəhərdəki sahə qruplarının siyahısına baxın."
+town_help_17: "Şəhərdəki sahə növlərinin siyahısına baxın."
+town_help_18: "Şəhər üzvlərinə bir mesaj deyin."
+town_help_19: "Şəhərinizi satışa qoyun, digər oyunçular tərəfindən alına bilər."
+town_help_20: "Şəhərinizi satış üçün təyin edin."
+town_help_21: "Verilən şəhəri, satışda olduğu müddətcə alın."
+town_help_22: "Pulunuzu şəhərinizin bankına qoyun."
+town_help_23: "Sakinlərin şəhər sıralarını dəyişdirmək üçün istifadə olunur."
+town_help_24: "Şəhərinizi silmək üçün istifadə olunur."
+town_help_25: "Şəhərinizin qanunsuzlarını dəyişdirmək üçün istifadə olunur."
+town_help_26: "Bütün şəhərlərin siyahısı, kömək üçün: /t list ?"
+town_help_27: "Üzv olduğunuz şəhəri tərk edin."
+town_help_28: "Şəhərinizin bankından pul çıxarın."
+town_help_29: "Kömək üçün /t claim ? yazın."
+town_help_30: "Şəhərinizdəki ərazi claimi silmək üçün istifadə olunur."
+town_help_31: "Sakinləri əlavə edin və ya silin."
+town_help_32: "Kömək üçün /t set ? yazın."
+town_help_33: "Kömək üçün /t buy ? yazın."
+town_help_34: "Kömək üçün /t toggle ? yazın."
+town_help_35: "Kömək üçün /t rank ? yazın."
+town_list_help_0: "Göstərilən səhifəyə baxın."
+town_list_help_1: "Göstərilən səhifə ilə şəhərləri sakinlərin sayına görə siyahıya salın."
+town_list_help_2: "Göstərilən səhifə ilə açıq olan şəhərləri sadalayın."
+town_list_help_3: "Göstərilən səhifə ilə bank balansından istifadə edərək şəhərlərin siyahısı."
+town_list_help_4: "Göstərilən səhifə ilə şəhərləri əlifba sırası ilə sadalayın."
+town_list_help_5: "Göstərilən səhifə ilə şəhərləri sakinlərin sayına görə siyahıya salın."
+town_list_help_6: "Göstərilən səhifə ilə şəhərləri sakinlərin sayına görə siyahıya salın."
+town_set_help_0: "Şəhərin lövhəsini təyin edir."
+town_set_help_1: "Şəhərinizin ev blokunu dayandığınız yerə təyin edin."
 mayor_help_3: 'Şəhərə bağlı olmayan iddia sahəsi'
 mayor_help_4: 'Ətrafınızdakı radiusun x olduğunu iddia edin'
 mayor_help_5: 'Maksimum radius iddia'
@@ -49,7 +97,6 @@ mode_4: 'Şəhər kanalı üçün default chat'
 mode_5: 'Milli kanal üçün default chat'
 mode_6: 'Müharibə zonaları yaratmaq üçün düşmən sərhədlərində %S yerləşdirə bilərsiniz.'
 plot_perms: 'Tikinti icazələri üçün %s əvəzinə %s istifadə edin.'
-plot_perms_1: 'Rezident sahələr kənar şəxslərin icazələrindən istifadə etmir.'
 res_list: 'Sakinlər'
 res_sing: 'Sakin'
 mayor_sing: 'Bələdiyyə Başçısı'
@@ -83,9 +130,6 @@ msg_buy: '&b%s üçün %d %s alıb.'
 msg_buy_resident_plot: '&b%s, %s üçün %s sahəsini alıb!'
 msg_couldnt_pay_taxes: '&b%s vergi ödəyə bilmədi və %s tərəfindən qovuldu.'
 msg_couldnt_pay_plot_taxes: '&b%s vergi ödəyə bilmədi və bir sahəsini itirdi.'
-msg_payed_town_tax: '&bÖdənilmiş şəhər vergisi '
-msg_payed_plot_cost: '&b%s içindəki %s parsellər üçün %s ödəndi'
-msg_payed_resident_tax: '&bÖdənilmiş şəhər vergisi '
 msg_bankrupt_town: ' şəhər olaraq qalmağı özümə rəva bilmirdim.'
 msg_bankrupt_nation: ' şəhər olaraq qalmağı özümə rəva bilməzdim.'
 msg_nation_not_peaceful: '&bMillət dinc dövləti özünə rəva biləməz.'

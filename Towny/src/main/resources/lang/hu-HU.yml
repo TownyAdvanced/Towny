@@ -1,0 +1,2088 @@
+---
+unclaimed_plot_name: 'Szabad'
+unclaimed_zone_name: 'Vadon'
+############################################################
+#+------------------------------------------------------+ #
+#|help messages                                         | #
+#+------------------------------------------------------+ #
+############################################################
+help_0: 'Alap Towny Súgó'
+help_1: 'Próbáld a következő parancsokat, hogy többet megtudj a towny-ról.'
+help_2: 'Városi Chat'
+help_3: 'Nemzeti Chat'
+help_4: 'Lakossági parancsok.'
+help_5: 'Városi parancsok.'
+help_6: 'Nemzeti parancsok.'
+help_7: 'Területi parancsok.'
+help_8: 'Towny parancsok.'
+help_9: 'Towny Admin parancsok.'
+towny_help_0: "Általános segítség a Towny kezeléséhez"
+towny_help_1: "Megjeleníti a közeli várostömbök térképét"
+towny_help_2: "Megjeleníti az árakat az Economyban használva"
+towny_help_3: "Megjeleníti a toplistát"
+towny_help_4: "Megjeleníti az időt a következő napig"
+towny_help_5: "Megjeleníti a statisztikát"
+towny_help_6: "Megjeleníti a Towny verziószámát"
+towny_top_help_0: "A lakosok listázása a megadott parancs alapján."
+towny_top_help_1: "Listázd a legtöbb területtel rendelkezőket a megadott parancs alapján."
+towny_top_help_2: "Listázd a leggazdagabbakat a megadott parancs alapján."
+town_help_1: 'A városod státusza'
+town_help_2: '[polgármester]'
+town_help_3: 'Kiválasztott város státusza'
+town_help_4: 'Gyorselérés a helyszíned városának státuszához.'
+town_help_5: 'Teleportálás a város spawn pontjára.'
+town_help_6: 'Új város, úgy, hogy Te vagy a polgármester.'
+town_help_7: 'Új város megadott polgármesterrel.'
+town_help_8: 'Parancsok listázása polgármesterek számára.'
+town_help_9: 'Ma van a nap!'
+town_help_10: 'Minden online lakos listázása a városban'
+town_help_13: "A város lakosainak listája."
+town_help_14: "A város rangjainak listája."
+town_help_15: "A városban lévő törvényszegők listája."
+town_help_16: "A városban lévő telek csoportok listája."
+town_help_17: "A városban lévő telektípusok listája."
+town_help_18: "Üzenet küldése a város tagjainak."
+town_help_19: "Állítsd be a városodat eladásra, más játékosok vásárolhatják."
+town_help_20: "Állítsd be a városodat nem eladásra."
+town_help_21: "Vásárold meg a megadott várost, ha eladásra van."
+town_help_22: "Pénz letétbe helyezése a város bankjába."
+town_help_23: "A lakosok városi rangjainak módosításához használd."
+town_help_24: "A városod törléséhez használd."
+town_help_25: "A városod törvényszegőinek módosításához használd."
+town_help_26: "Minden város listázása, segítségért használd a /t list ? parancsot."
+town_help_27: "Hagyd el a várost, amelynek tagja vagy."
+town_help_28: "Pénz felvétele a város bankjából."
+town_help_29: "Használd a /t claim ? parancsot segítségért."
+town_help_30: "Használd a /t unclaim ? parancsot a terület eltávolításához."
+town_help_31: "Lakosok hozzáadása vagy eltávolítása."
+town_help_32: "Használd a /t set ? parancsot segítségért."
+town_help_33: "Használd a /t buy ? parancsot segítségért."
+town_help_34: "Használd a /t toggle ? parancsot segítségért."
+town_help_35: "Használd a /t rank ? parancsot segítségért."
+town_list_help_0: "A megadott oldal megtekintése."
+town_list_help_1: "Listázd a városokat a lakószám alapján, a megadott oldalon."
+town_list_help_2: "Listázd a nyitott városokat, a megadott oldalon."
+town_list_help_3: "Listázd a városokat a banki egyenlegük alapján, a megadott oldalon."
+town_list_help_4: "Listázd a városokat ABC sorrendben, a megadott oldalon."
+town_list_help_5: "Listázd a városokat a kibérelt területük alapján, a megadott oldalon."
+town_list_help_6: "Listázd a városokat az online játékosok száma alapján, a megadott oldalon."
+town_set_help_0: "Beállítja a városod tábláját."
+town_set_help_1: "Beállítja a városod homeblockját arra a helyre, ahol állsz."
+town_set_help_2: "Beállítja a spawn pontot a homeblockban vagy egy előőrs spawn pontját, ha előőrsön állsz."
+town_set_help_3: "Lásd a /town set perm ? parancsot segítséghez."
+town_set_help_4: "Beállítja a városod adó mértékét."
+town_set_help_5: "Beállítja a telekhez tartozó adókat."
+town_set_help_6: "Beállítja a telek vásárlásának alapárát."
+town_set_help_7: "Beállítja a /t spawn használatának költségét."
+town_set_help_8: "Beállítja a városod nevét."
+town_set_help_9: "Beállítja a városod jelét."
+town_set_help_10: "Beállítja a lakosod címét vagy vezetéknevét."
+town_set_help_11: "Beállítja a maximális összeget, amit a százalékos adó levonhat a lakostól."
+town_jail_help_0: "Listázza a város börtöneit."
+town_jail_help_1: "Börtönbe zár egy lakost az alap börtönbe."
+town_jail_help_2: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra."
+town_jail_help_3: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe."
+town_jail_help_4: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába."
+town_jail_help_5: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába, az adott óvadékkal."
+town_jail_help_6: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába, az adott óvadékkal."
+town_jail_help_7: "Börtönbe zár egy lakost az alap börtönbe, a megadott órákra, a megadott börtönbe és cellába, az adott óvadékkal."
+town_jail_help_8: "Felszabadítja a lakost a börtönből."
+town_purge_help: "Törli azokat a lakosokat, akik a megadott napok óta nem jelentkeztek be."
+town_trust_help_0: "Hozzáad egy lakost a város megbecsült lakosai közé."
+town_trust_help_1: "Eltávolít egy lakost a város megbecsült lakosai közül."
+town_trust_help_2: "Listázza a város megbecsült lakosait."
+town_towntrust_help_0: "Hozzáad egy várost a megbecsült városok közé."
+town_towntrust_help_1: "Eltávolít egy várost a megbecsült városok közül."
+town_towntrust_help_2: "Listázza a város megbecsült városait."
+town_buy_help: "Vásárol bonusz városblokkokat a város területének bővítéséhez."
+town_cede_help: "Felajánlja azt a telket, ahol állsz, hogy egy másik város vegye át."
+mayor_help_3: 'Terület igénylése, amely nincs csatlakoztatva a városhoz'
+mayor_help_4: 'Igényelj területet körülötted, X sugarú körben'
+mayor_help_5: 'Igényelj területet a maximális sugáron'
+mayor_help_6: 'Mentesítsd ezt a városi blokkot'
+mayor_help_7: 'Próbálj meg körülötted területet mentesíteni.'
+mayor_help_8: 'Próbálj meg minden városi blokkot mentesíteni.'
+nation_help_1: 'A nemzeted státusza'
+nation_help_2: '[nemzet]'
+nation_help_3: 'Célzott nemzet státusza'
+nation_help_4: 'Listázza az összes nemzetet'
+nation_help_5: 'Hagyja el a nemzetét'
+nation_help_6: 'Új nemzet létrehozása'
+nation_help_7: 'Listázza a nemzet vezetői parancsait'
+nation_help_8: 'Új nemzet létrehozása'
+nation_help_9: 'Listázza az összes online lakost a nemzetben'
+nation_help_11: "Listázza a városokat a nemzetben."
+nation_help_12: "Listázza a nemzet szövetséges városait."
+nation_help_13: "Listázza a nemzet ellenséges városait."
+nation_help_14: "Használja, hogy csatlakozzon a nyitott nemzetekhez."
+nation_help_15: "Pénzt helyez el a nemzet bankjában."
+nation_help_16: "Használja a nemzet törléséhez."
+nation_help_17: "Használja, hogy rangokat adjon hozzá vagy vegyen el lakosoktól."
+nation_help_18: "Lásd a /n rank ? parancsot segítséghez."
+nation_list_help_0: "A megadott oldal megtekintése."
+nation_list_help_1: "A nemzetek listázása a lakosok száma alapján, a megadott oldalon."
+nation_list_help_2: "A nemzetek listázása a városok száma alapján, a megadott oldalon."
+nation_list_help_3: "A nyitott nemzetek listázása, a megadott oldalon."
+nation_list_help_4: "A bankegyenleggel rendelkező nemzetek listázása, a megadott oldalon."
+nation_list_help_5: "A nemzetek listázása ábécés sorrendben, a megadott oldalon."
+nation_list_help_6: "A nemzetek listázása az elfoglalt terület alapján, a megadott oldalon."
+nation_list_help_7: "A nemzetek listázása az online játékosok száma alapján, a megadott oldalon."
+nation_set_help_0: "A nemzet vezetőjének megváltoztatása."
+nation_set_help_1: "A nemzet fővárosának megváltoztatása."
+nation_set_help_2: "A városok által fizetendő adó mértékének beállítása."
+nation_set_help_3: "A meghódított városok adójának beállítása."
+nation_set_help_4: "A nemzet nevének beállítása."
+nation_set_help_5: "Egy lakos címének vagy vezetéknevének beállítása."
+nation_set_help_6: "A nemzet címkéjének beállítása."
+nation_set_help_7: "A nemzet üzenőfal üzenetének beállítása."
+nation_set_help_8: "A nemzet spawn pontjának beállítása."
+nation_set_help_9: "A /n spawn használatának költségének beállítása."
+nation_set_help_10: "A térképen használt szín beállítása a térképező pluginokhoz."
+nation_toggle_help_0: "A nemzet békés státuszának váltogatása."
+nation_toggle_help_1: "A nyilvános státusz váltogatása, lehetővé téve, hogy a nem lakosok használhassák a /n spawn parancsot."
+nation_toggle_help_2: "A nyitott státusz váltogatása, lehetővé téve, hogy a városok meghívás nélkül csatlakozhassanak."
+nation_toggle_help_3: "Az adó százalékos beállítása, lehetővé téve, hogy a városok fix összeg helyett százalékban fizessenek."
+nation_sanction_help_1: "Egy város hozzáadása a szankcionált városok listájához."
+nation_sanction_help_2: "Egy város eltávolítása a szankcionált városok listájából."
+nation_sanction_help_3: "A nemzet szankcionált városainak listázása."
+nation_sanction_help_4: "A megadott nemzet szankcionált városainak listázása."
+king_help_1: 'Nemzeti vezetői segítség'
+king_help_2: 'Szövetség beállítása.'
+king_help_3: 'Ellenségek beállítása.'
+king_help_4: "Pénz kivonása a nemzet bankjából."
+king_help_5: "Városok hozzáadása vagy eltávolítása a nemzetből."
+king_help_6: "Használj /n set ?-et a segítséghez."
+king_help_7: "Használj /n toggle ?-et a segítséghez."
+king_help_8: "Használható egy másik nemzet beszívására a nemzetedbe."
+king_help_9: "Használható üzenet küldésére a nemzeted összes tagjának."
+res_1: 'A te státuszod'
+res_2: '[lakó]'
+res_3: 'Célpont játékos státusza'
+res_4: 'Listázd az összes aktív játékost'
+res_9: "Mennyi adót kell fizetned naponta."
+res_10: "Nézd meg a /res jail ? parancsot a segítséghez."
+res_11: "Nézd meg a /res toggle ? parancsot a segítséghez."
+res_12: "Nézd meg a /res set ? parancsot a segítséghez."
+res_13: "Spawnozz a városodba vagy az ágyadhoz."
+res_toggle_help_0: "Kapcsold be vagy ki a telkek PvP státuszát."
+res_toggle_help_1: "Kapcsold be vagy ki a telkek tűz státuszát."
+res_toggle_help_2: "Kapcsold be vagy ki a telkek mobok státuszát."
+res_toggle_help_3: "Kapcsold be vagy ki a telkek robbanás státuszát."
+res_toggle_help_4: "Kapcsold be vagy ki a telkek határainak megjelenítését."
+res_toggle_help_5: "Kapcsold be vagy ki a folyamatos telkehatarok megjelenítését."
+res_toggle_help_6: "Kapcsold be vagy ki a városok határainak megjelenítését."
+res_toggle_help_7: "Kapcsold be vagy ki a telkek értesítéseinek megjelenítését."
+res_toggle_help_8: "Kapcsold be vagy ki a telkek igénylésének képességét, ahol jársz."
+res_toggle_help_9: "Kapcsold be vagy ki a térkép megjelenítését, amikor telket váltasz."
+res_toggle_help_10: "Távolítsd el az összes módot."
+res_toggle_help_10.5: "Távolítsd el az összes módot és alkalmazd újra az alapértelmezett beállításaidat."
+res_toggle_help_11: "Kémkedj a chat csatornákon."
+res_toggle_help_12: "Kapcsold be vagy ki a telkek hozzáadásának képességét a saját telkek csoportjához."
+res_toggle_help_13: "Kapcsold be vagy ki a címüzenetek megjelenítését, amikor telket váltasz."
+res_toggle_help_14: "Kapcsold be vagy ki a telkek eltávolításának képességét, ahol jársz."
+res_toggle_help_15: "Kapcsold be vagy ki az infotool használatát a helyes blokk/entitásnevek megismerésére."
+res_toggle_help_16: "Kapcsold be vagy ki az adminisztrátori jogosultságaid deaktiválását."
+res_jail_help_0: "Fizess a váltságdíjat a börtönből való szabadulásért."
+res_set_help_0: "Állítsd be a lakóid bemutatkozó/bio szövegét."
+res_set_help_1: "Állítsd be a lakóid alapértelmezett telekengedélyeit."
+res_set_help_2: "Állítsd be a lakóid módjait."
+mode_1: 'Mutasd a térképet minden egyes városblokknál.'
+mode_2: 'Próbálj meg telket igényelni, miközben sétálsz.'
+mode_3: 'Próbálj meg telket eltávolítani, miközben sétálsz.'
+mode_4: 'Alapértelmezett csevegés a városi csatornára.'
+mode_5: 'Alapértelmezett csevegés a nemzeti csatornára.'
+mode_6: 'Lehetőséged van %s-t elhelyezni az ellenséges határokon háborús zónák létrehozásához.'
+plot_perms: 'Használj %s-t %s helyett a telekengedélyekhez.'
+res_list: 'Lakók'
+res_sing: 'Lakó'
+mayor_sing: 'Polgármester'
+admin_sing: 'Admin'
+town_sing: 'Város'
+nation_sing: 'Nemzet'
+nation_plu: 'Nemzetek'
+king_sing: 'Vezető'
+town_plu: 'Városok'
+world_plu: 'Világok'
+world_sing: 'Világ'
+world_help_1: 'A jelenlegi világ státusza'
+world_help_2: '[világ]'
+world_help_3: 'A célzott világ státusza'
+world_help_4: 'Listázd az összes világot'
+world_help_5: 'Regeneráld ezt a chunkot'
+world_help_6: 'Nézd meg a /tw toggle ? parancsot a segítséghez'
+world_help_7: 'Nézd meg a /tw set ? parancsot a segítséghez'
+world_set_help_0: "Állítsd be a világ vadon neveit."
+world_toggle_help_0: "Kapcsold be vagy ki, hogy a városok igényelhetnek-e földet ebben a világban."
+world_toggle_help_1: "Kapcsold be vagy ki, hogy a Towny engedélyezve van-e ebben a világban."
+world_toggle_help_2: "Kapcsold be vagy ki, hogy háborúk történhetnek-e ebben a világban."
+world_toggle_help_3: "Kapcsold be vagy ki, hogy pvp vagy forcepvp engedélyezve van-e ebben a világban."
+world_toggle_help_4: "Kapcsold be vagy ki, hogy a barátságos tűz engedélyezve van-e ebben a világban."
+world_toggle_help_5: "Kapcsold be vagy ki, hogy robbanások engedélyezve vagy kényszerítve vannak-e ebben a világban."
+world_toggle_help_6: "Kapcsold be vagy ki, hogy tűz engedélyezve vagy kényszerítve van-e ebben a világban."
+world_toggle_help_7: "Kapcsold be vagy ki, hogy a különböző mobok spawnolása engedélyezve van-e ebben a világban."
+world_toggle_help_8: "Kapcsold be vagy ki a visszavonás-az-eltávolítás-jellemzőt ebben a világban."
+world_toggle_help_9: "Kapcsold be vagy ki a robbanások-visszavonása-jellemzőt ebben a világban."
+world_toggle_help_10: "Kapcsold be vagy ki a telek-törlés-blokkokat parancsot ebben a világban."
+world_toggle_help_11: "Kapcsold be vagy ki a telek-eltávolítás-blokkokat jellemzőt ebben a világban."
+townyadmin_help_1: 'Telek eltávolítása a város blokkjából'
+townyadmin_help_2: 'Próbálj meg eltávolítani egy területet körülötted.'
+admin_panel_1: "Nézd meg a /ta set ? parancsot a segítséghez"
+admin_panel_2: 'Töltsd újra a Towny-t'
+admin_panel_3: 'Futtasd az új nap kódját'
+admin_panel_4: "Eltávolítsd a körülötted lévő területet"
+admin_panel_5: "Nézd meg a /ta plot ? parancsot a segítséghez"
+admin_panel_6: "Adj pozitív vagy negatív számú városblokkokat egy játékosnak vagy városnak"
+admin_panel_7: "Nézd meg a /ta toggle ? parancsot a segítséghez"
+admin_panel_8: "Parancsok ezen objektumok vezérlésére"
+admin_panel_9: "Teleportálj a megadott telekre"
+admin_panel_10: "Ellenőrizd, hogy a játékosnak van-e jogosultsági csomópontja"
+admin_panel_11: "Állítsd vissza a konfigurációdat"
+admin_panel_12: "Készíts biztonsági másolatot a Towny adataidról"
+admin_panel_13: "Dumpold az mysql adatbázisodat flatfile-ra"
+admin_panel_14: "Kényszerítsd az adatbázis mentését vagy betöltését"
+admin_panel_15: "Futtasd az új óra kódját"
+admin_panel_16: "Tisztítsd meg a régi lakókat"
+townyadmin_town_help_0: "Hozz létre egy várost a megadott névvel és polgármesterrel."
+townyadmin_town_help_1: "Mutasd meg a város státusz képernyőjét."
+townyadmin_town_help_2: "Adj hozzá vagy távolíts el lakókat egy városból."
+townyadmin_town_help_3: "Nevezd át a várost."
+townyadmin_town_help_4: "Töröld a várost."
+townyadmin_town_help_5: "Spawnolj egy városba."
+townyadmin_town_help_6: "Spawnolj egy város külterületére."
+townyadmin_town_help_7: "Használj egy város rang parancsát."
+townyadmin_town_help_8: "Használj egy város beállító parancsát."
+townyadmin_town_help_9: "Használj egy város kapcsoló parancsát."
+townyadmin_town_help_10: "Módosítsd egy város metaadatait."
+townyadmin_town_help_11: "Olvaszd össze a második várost az elsőbe."
+townyadmin_town_help_12: "Olvaszd össze a második várost az elsőbe, figyelmen kívül hagyva minden szabályt."
+townyadmin_town_help_13: "Tegyél pénzt a város bankjába."
+townyadmin_town_help_14: "Vedd ki a pénzt a város bankjából."
+townyadmin_town_help_15: "Nyisd meg a város banktörténeti könyvét."
+townyadmin_town_help_16: "Módosítsd a város kívülállóit."
+townyadmin_town_help_17: "Hagyd el a város nemzetét."
+townyadmin_town_help_18: "Távolítsd el a város meghódított státuszát."
+townyadmin_town_toggle_help_0: "Kapcsold ki/be a város védelmét, hogy a város területére mások ne tudjanak belépni."
+townyadmin_town_toggle_help_1: "Kapcsold ki/be a város nyilvános státuszát, hogy a nem lakók települhessenek ott."
+townyadmin_town_toggle_help_2: "Kapcsold ki/be a város nyilvános státuszát, lehetővé téve a nem lakóknak, hogy oda teleportáljanak."
+townyadmin_town_toggle_help_3: "Kapcsold ki/be a város robbanási beállítását."
+townyadmin_town_toggle_help_4: "Kapcsold ki/be a város tűz beállítását."
+townyadmin_town_toggle_help_5: "Kapcsold ki/be a város szörnyek beállítását."
+townyadmin_town_toggle_help_6: "Kapcsold ki/be a város adókulcs beállítását."
+townyadmin_town_toggle_help_7: "Kapcsold ki/be a város nyitottságát, hogy bárki csatlakozhasson meghívó nélkül."
+townyadmin_nation_help_0: "Hozz létre egy nemzetet a megadott névvel és fővárossal."
+townyadmin_nation_help_1: "Mutasd a nemzet státusz képernyőt."
+townyadmin_nation_help_2: "Towns hozzáadása a nemzethez."
+townyadmin_nation_help_3: "Towns eltávolítása a nemzetből."
+townyadmin_nation_help_4: "Név módosítása a nemzethez."
+townyadmin_nation_help_5: "Város törlése."
+townyadmin_nation_help_6: "Frissítsd a nemzet városait, hogy ellenőrizd, hogy elég közel vannak-e a fővároshoz."
+townyadmin_nation_help_7: "Két nemzet egyesítése."
+townyadmin_nation_help_8: "Két nemzet egyesítése, figyelmen kívül hagyva a szabályokat."
+townyadmin_nation_help_9: "Használj egy nemzet kapcsoló parancsot."
+townyadmin_nation_help_10: "Használj egy nemzet beállító parancsot."
+townyadmin_nation_help_11: "Tedd a pénzt a nemzet bankjába."
+townyadmin_nation_help_12: "Vedd el a pénzt a nemzet bankjából."
+townyadmin_nation_help_13: "Nyisd meg a nemzet banktörténeti könyvét."
+townyadmin_nation_help_14: "Helyezd el a várost a nemzetben."
+townyadmin_nation_help_15: "Használj a nemzet rang parancsot."
+townyadmin_nationrank_help_0: "Hozzáad egy rangot a lakosnak."
+townyadmin_nationrank_help_1: "Eltávolít egy rangot a lakostól."
+townyadmin_database_help_0: "Kényszerített adatbázis mentés."
+townyadmin_database_help_1: "Kényszerített adatbázis betöltés."
+townyadmin_database_help_2: "Eltávolítja az összes címet és vezetéknevet minden lakostól."
+ta_plot_help_0: "Hozzáad egy telket egy játékos számára."
+ta_plot_help_1: "Nézd meg a telken tárolt metainformációkat, ahol állsz."
+ta_plot_help_2: "Állítsd be a telek metaadat kulcsát és értékét."
+ta_plot_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján."
+ta_resident_help_0: "Átnevez egy lakost."
+ta_resident_help_1: "Barát hozzáadása vagy eltávolítása."
+ta_resident_help_2: "Barát lista megjelenítése vagy törlése."
+ta_resident_help_3: "Egy lakos törlése az adatbázisból."
+ta_resident_help_4: "Eltávolítja egy játékos 'about' sorát."
+ta_toggle_help_0: "Kapcsold ki/be a vadon használatának lehetőségét minden világban."
+ta_toggle_help_1: "Kapcsold ki/be a regenerációs funkciókat minden világban."
+ta_toggle_help_2: "Kapcsold ki/be a fejlesztői módot, amely extra naplóüzeneteket mutat a konfigurációban megadott játékosnak."
+ta_toggle_help_3: "Kapcsold ki/be a hibakereső módot, amely extra naplóüzeneteket mutat."
+ta_toggle_help_4: "Kapcsold ki/be a városok vagy nemzetek pénz eltávolításának lehetőségét a bankjaikból."
+ta_toggle_help_5: "Játékos NPC-vé alakítása vagy vissza."
+ta_set_help_0: "Állítsd be a város polgármesterét a megadott játékosra."
+ta_set_help_1: "Állítsd be a város új NPC polgármesterét, akik nem fizetnek fenntartási díjat."
+ta_set_help_2: "Állítsd be egy nemzet fővárosát."
+ta_set_help_3: "Állítsd be egy nemzet zóna méretét."
+ta_set_help_4: "Állítsd be egy lakos címét."
+ta_set_help_5: "Állítsd be egy lakos vezetéknevét."
+ta_set_help_6: "Állítsd át a telek tulajdonosát egy másik városra."
+ta_set_help_7: "Állítsd be a város alapító nevét."
+ta_set_help_8: "Használj 0-t a nemzetzóna felülbírálásának eltávolításához."
+ta_purge_help_0: "Törölj minden lakost, akik hosszabb ideje nem jelentkeztek be, beállítható 'townless' a város nélküli játékosok eltávolításához, vagy megadhatsz városnevet csak egy város lakóinak törlésére."
+ta_townmeta_help_1: "Nézd meg a tárolt metainformációkat a megadott városban."
+ta_townmeta_help_2: "Állítsd be a város metaadat kulcsát és értékét."
+ta_townmeta_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján a városban."
+ta_residentmeta_help_1: "Nézd meg a tárolt metainformációkat a megadott lakosban."
+ta_residentmeta_help_2: "Állítsd be a lakos metaadat kulcsát és értékét."
+ta_residentmeta_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján a lakosnál."
+ta_nationmeta_help_1: "Nézd meg a tárolt metainformációkat a megadott nemzetben."
+ta_nationmeta_help_2: "Állítsd be a nemzet metaadat kulcsát és értékét."
+ta_nationmeta_help_3: "Adj hozzá vagy távolíts el metaadatot kulcs alapján a nemzetnél."
+ta_reload_help_0: "Adatbázis újratöltése."
+ta_reload_help_1: "Konfiguráció újratöltése."
+ta_reload_help_2: "Nyelvi fájlok újratöltése."
+ta_reload_help_3: "Towny jogosultságok újratöltése."
+ta_reload_help_4: "Towny összes komponensének újratöltése."
+ta_eco_resetbanks_help: "Visszaállítja a városok és nemzetek bankjait a megadott összegre vagy 0-ra."
+ta_eco_convert_modern_help: "Átalakítja a Towny számlákat modern változatra, amelyek képesek Vault OfflinePlayer-t használni."
+ta_eco_convert_help: "Átalakítja a Towny számlákat a célnak megfelelő gazdasági implementációra, hasznos gazdasági pluginok közötti adatátvitelhez."
+ta_eco_info_help: "Információkat ad a gazdasági számlákról a szerveren."
+ta_depositall_help_0: "Tedd be a megadott összeget az összes város és nemzet bankjába."
+ta_info_help_0: "Nézd meg a gazdasági információkat a megadott nemzethez."
+ta_info_help_1: "Nézd meg a gazdasági információkat a megadott lakoshoz."
+ta_info_help_2: "Nézd meg a gazdasági információkat a Towny szerverhez."
+ta_info_help_3: "Megjeleníti a megadott város gazdasági (eco) információit."
+plot_help_0: "Bekapcsolja a telek információs HUD-ját."
+plot_help_1: "Eltávolítja a telek tulajdonosát."
+plot_help_2: "Törli a telkek listáját."
+plot_help_3: "Lásd a /plot set ? parancsot a segítséghez."
+plot_help_4: "Lásd a /plot toggle ? parancsot a segítséghez."
+plot_help_5: "Lásd a /plot group ? parancsot a segítséghez."
+plot_help_6: "Eltávolítja a játékos engedély-átírásait."
+plot_help_7: "Alapértelmezett engedély-átírásokat ad hozzá egy játékoshoz."
+plot_help_8: "Megnyitja az engedélyek szerkesztő GUI-ját."
+plot_help_9: "Hozzáad egy lakót a telek megbízható listájához."
+plot_help_10: "Eltávolítja a lakót a telek megbízható listájából."
+plot_district_help_0: "Pl.: /plot district new ExpensivePlots"
+plot_district_help_1: "Eltávolít egy telket a megadott kerületből."
+plot_district_help_2: "Teljesen törli egy kerületet."
+plot_district_help_3: "Átnevezi a kerületet, amelyben állsz."
+plot_group_help_0: "Pl.: /plot group new ExpensivePlots"
+plot_group_help_1: "Eltávolít egy telket a megadott csoportból."
+plot_group_help_2: "Teljesen törli egy telek csoportot."
+plot_group_help_3: "Átnevezi a csoportot, amelyben állsz."
+plot_group_help_4: "Pl.: /plot group set perm resident on."
+plot_group_help_5: "Pl.: /plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "Pl.: /plot group forsale 50"
+plot_group_help_7: "Pl.: /plot group notforsale"
+plot_group_help_8: "Hozzáad vagy eltávolít egy lakót a megbízható listából."
+plot_group_help_9: "Hozzáad egy lakót a telek csoport megbízható listájához."
+plot_group_help_10: "Eltávolít egy lakót a telek csoport megbízható listájából."
+plot_group_help_11: "Megnyitja a telek engedély GUI-ját."
+plot_group_help_12: "Hozzáad egy játékost a telek engedély GUI-jához."
+plot_group_help_13: "Eltávolít egy játékost a telek engedély GUI-jából."
+plot_toggle_help_0: "Kapcsolja a PvP-t a telekhez."
+plot_toggle_help_1: "Kapcsolja a robbanásokat a telekhez."
+plot_toggle_help_2: "Kapcsolja a tüzet a telekhez."
+plot_toggle_help_3: "Kapcsolja a szörnyeket a telekhez."
+plot_group_toggle_help_0: "Kapcsolja a PvP-t a telek csoporthoz."
+plot_group_toggle_help_1: "Kapcsolja a robbanásokat a telek csoporthoz."
+plot_group_toggle_help_2: "Kapcsolja a tüzet a telek csoporthoz."
+plot_group_toggle_help_3: "Kapcsolja a szörnyeket a telek csoporthoz."
+plot_group_toggle_help_4: "Kapcsolja a telek csoport adózott státuszát."
+plot_set_help_0: "Pl.: Inn, Wilds, Farm, Embassy, stb."
+plot_set_help_1: "Beállítja a telket előőrsnek."
+plot_set_help_1.5: "Beállítja a minimális napok számát, amit egy játékosnak a város tagjának kell lennie a telek megvásárlásához."
+plot_set_help_1.6: "Beállítja a maximális napok számát, amit egy játékosnak a város tagjának kell lennie a telek megvásárlásához."
+plot_set_help_2: "Eltávolít egy telek típust."
+plot_set_help_3: "Elnevezi a telket."
+plot_set_help_4: "Minden engedély kapcsolása."
+plot_set_help_5: "Beállítja az engedélyeket egy szinthez vagy típushoz, hogy be vagy ki legyenek kapcsolva."
+plot_set_help_6: "Beállítja az engedélyeket egy szinthez és típushoz, hogy be vagy ki legyenek kapcsolva."
+plot_set_help_7: "Beállítja az engedélyeket a telek tulajdonosa vagy a város számára."
+plot_jailcell_help_0: "Hozzáad egy börtön cellát ott, ahol állsz."
+plot_jailcell_help_1: "Eltávolít egy börtön cellát ott, ahol állsz."
+msg_block_claim: 'Foglalja el ezt a városi blokkot'
+msg_block_claim_radius: 'Foglalja el a körülette lévő telkek körzetét.'
+msg_plot_nfs: 'Vegye le a telket eladásról'
+msg_plot_nfs_radius: 'Vegye le a körülette lévő telkeket eladásról'
+msg_nfs_abr: '&e''fs'' és ''nfs'' elfogadott rövidítések a ''forsale'' és ''notforsale'' kifejezésekre.'
+msg_plot_fs: 'Helyezze aukcióra ezt a területet.'
+msg_plot_fs_radius: 'Tegye eladásra a körülette lévő telkek körzetét.'
+############################################################
+#+------------------------------------------------------+ #
+#|   Messages                                           | #
+#+------------------------------------------------------+ #
+############################################################
+msg_buy: '&bVásároltál %d %s-t %s-ért.'
+msg_buy_resident_plot: '&b%s megvásárolta %s telekét %s-ért!'
+msg_buy_resident_plot_group: '&b%s megvásárolta %s telekcsoportját %s-ért!'
+msg_couldnt_pay_taxes: '&b%s nem tudta kifizetni az adót, és ki lett dobva a %s-ból.'
+msg_couldnt_pay_plot_taxes: '&b%s nem tudta kifizetni a telekadót és elveszítette a telek tulajdonjogát.'
+msg_you_couldnt_pay_plot_tax: '&bNem tudtad kifizetni a telekadót %s értékben és elveszítetted a tulajdonjogot a %s-nél lévő telek felett.'
+msg_you_couldnt_pay_town_tax: '&bNem tudtad kifizetni a városi adót %s értékben, és eltávolítottak a %s-ból.'
+msg_you_paid_town_tax: '&bKifizetted a város adóját %s értékben.'
+msg_you_paid_plottax_to_town: '&bKifizetted a telekadót összesen %s a(z) %s városnak.'
+msg_bankrupt_town: '&b%s nem tudta fenntartani a várost.'
+msg_bankrupt_nation: '&b%s nem tudta fenntartani a nemzetet.'
+msg_nation_not_peaceful: '&bA nemzet nem tudta fenntartani a békés állapotát.'
+msg_peaceful_disabled: '&bA nemzeti béke globálisan le van tiltva.'
+msg_you_paid: '&bKifizetted a %s összeget a békés státusz beállításához.'
+msg_nation_set_peace: '&bSikeresen megváltoztattad a nemzet állapotát.'
+msg_nation_allow_peaceful: '&bA nemzet engedélyei a békés állapot fenntartásához mostantól: %s'
+msg_mobremoval_world: '&bA világ mob spawn-jait blokkolja: %s'
+msg_mobremoval_town: '&bA város mob spawn-jait blokkolja: %s'
+msg_nation_peaceful: '&bA nemzeted most már békés.'
+msg_tax_exempt: '&bA városi alkalmazottak mentesülnek az adó alól.'
+msg_del_nation: '&bA %s nemzet feloszlott!'
+msg_del_resident: '&b%s elvesztette az összes Towny adatát!'
+msg_join_nation: '&bA(z) %s város csatlakozott a nemzethez!'
+msg_join_town: '&b%s csatlakozott a városhoz!'
+msg_friend_add: '&b%s barátnak jelölt meg.'
+msg_friend_remove: '&b%s eltávolított téged a barátai közül.'
+msg_left_town: '&b%s elhagyta a várost.'
+msg_you_left: '&bTe elhagytad a %s várost.'
+msg_not_mayor: '&bNem te vagy a polgármester.'
+msg_not_king: '&bNem te vagy a nemzet vezetője.'
+msg_not_mayor_ass: '&bNem te vagy a polgármester vagy segéd.'
+msg_not_king_ass: '&bNem te vagy a nemzet vezetője vagy segéd.'
+msg_own_nation_disallow: '&bNem csinálhatsz ilyet a saját nemzeteddel.'
+msg_no_perms_claim: '&bNincs jogod területet igényelni.'
+msg_outpost_disable: '&bA kihelyezett posztok nem elérhetők.'
+msg_kicked_by: '&bKi lettél rúgva a városból %s által.'
+msg_kicked: '&b%s kirúgta %s-t a városból.'
+msg_nation_kicked_by: '&bA városodat kiűzte %s a nemzetből.'
+msg_town_left_nation: '&bA városod elhagyta a %s nemzetet.'
+msg_nation_town_left: '&bA %s város elhagyta a nemzeted.'
+msg_nation_kicked: '&b%s kirúgta %s-t a nemzetből.'
+msg_raised_ass: '&b%s felemelte %s-t %s segéddé.'
+msg_lowered_to_res_by: '&bTe lettél visszahelyezve alapvető lakóként %s által.'
+msg_lowered_to_res: '&b%s visszahelyezte %s-t alapvető lakóvá.'
+msg_invalid_name: '&bEgyik név sem volt érvényes.'
+msg_invited_join_town: '&b%s meghívta %s-t a városba.'
+msg_invited_join_nation: '&b%s meghívta %s-t a nemzetbe.'
+msg_deny_invite: '&b%s visszautasította a meghívásodat.'
+msg_invited: '&bMeghívtak a %s városba.'
+msg_town_online: 'Online a városban'
+msg_nation_online: 'Online a nemzetben'
+msg_allied_nations: '&b%s szövetséget kötött a következő nemzetekkel: %s.'
+msg_enemy_nations: '&b%s ellenségeskedik a következő nemzetekkel: %s.'
+msg_enemy_to_neutral: '&b%s békés állapotba helyezte %s-t.'
+msg_added_ally: '&b%s szövetséget kötött a te nemzeteddel.'
+msg_removed_ally: '&b%s megszüntette a szövetséget a te nemzeteddel.'
+msg_added_enemy: '&b%s ellenségeskedni kezdett a te nemzeteddel.'
+msg_removed_enemy: '&b%s békés állapotba helyezkedett a te nemzeteddel.'
+msg_unable_ally_enemy: '&cNem lehet szövetséget kötni %s-szel, mert ellenségek vagyunk.'
+msg_deny_ally: '&b%s visszautasította a szövetségre tett ajánlatodat.'
+msg_accept_ally: '&bA %s nemzet elfogadta a szövetségre tett ajánlatodat.'
+msg_ally_req_sent: '&bA szövetségi kérvény el lett küldve a %s nemzetnek.'
+msg_ally_request: '&bA %s szövetséget szeretne kötni.'
+msg_unable_ally_offline: "&cNem lehet szövetséget kérni, mert a célország vezetője offline."
+msg_unable_ally_npc: "&cNem lehet szövetséget kérni, mert a célország vezetője NPC."
+msg_claimed: '&2Sikeresen igényelted'
+msg_unclaimed: '&2Sikeresen feloldottad az igénylést'
+msg_not_claimable: '&cEz a világ nem igényelhető.'
+msg_abandoned_area: '&bElhagyott terület: %s'
+msg_admin_unclaim_area: '&cErőszakkal feloldottuk a terület igénylését: %s'
+msg_abandoned_area_1: '&bA városod elhagyta a területet.'
+msg_no_money_purchase_plot: '&cNincs elég pénzed ahhoz, hogy megvásárold ezt a telket.'
+msg_town_no_money_purchase_plot: '&cA város nem rendelkezik elegendő pénzzel a telek visszavásárlásához.'
+msg_no_funds_new_town: '&c%s nem tudja megfizetni az új város létrehozását.'
+msg_no_funds_claim: '&cA város nem tudja megfizetni %s városi blokk igénylését, ami %s-ba kerül. Adj hozzá több pénzt a város pénztárába.'
+msg_no_funds_to_buy: '&cA város nem tudja megfizetni a %s %s megvásárlásának költségét, ami %s. Adj hozzá több pénzt a város pénztárába.'
+msg_annexed_area: '&2Befoglalt terület: %s'
+msg_max_plot_own: '&cNem birtokolhatsz több mint %s telket.'
+msg_max_outposts_own: '&cNem birtokolhatsz több mint %s előőrsöt.'
+msg_no_funds_new_nation: '&cA város nem tudja megfizetni egy új nemzet alapítását.'
+msg_already_claimed: '&cEz a terület már el van foglalva: %s'
+msg_already_claimed_1: '&cEz a terület (%s) már valakié.'
+msg_already_claimed_2: '&cEz a terület már el van foglalva.'
+msg_too_close: '&cEz a terület túl közel van egy másik városhoz.'
+msg_too_far: '&cEz a terület túl messze van a többi várostól.'
+msg_not_claimed: '&bEz a terület (%s) még nincs elfoglalva.'
+msg_not_claimed_1: '&bEz a terület nincs elfoglalva.'
+msg_not_own_area: '&cNem a tiéd a kijelölt terület.'
+msg_not_own_place: '&bEz a hely nincs senki tulajdonában.'
+msg_area_not_own: '&cEz a terület nem a tiéd.'
+msg_area_not_recog: '&cEz a terület nincs felismerve a Towny által.'
+msg_specify_name: '&bAdd meg a város nevét'
+msg_specify_nation_name: '&bAdd meg a nemzet nevét'
+msg_peasant_right: '&bA parasztnak nincs joga arra, hogy rákényszerítse vezetőit a trónra.'
+msg_cost_spawn: '&b%s összeget fizettél a város spawn-jába teleportálásért.'
+msg_cost_spawn_refund: '&bVisszakaptad a városi spawn használati díját.'
+msg_town_spawn_warmup: '&bTeleportálásra várakozás...'
+msg_town_rename_disabled: '&bA város átnevezése letiltva.'
+msg_town_set_name: '&b%s átnevezte a várost %s-re.'
+msg_nation_set_name: '&b%s átnevezte a nemzetet %s-ra.'
+msg_changed_pvp: '&c%s PVP módja %s lett.'
+msg_changed_public: '&cA város nyilvános státusza most %s.'
+msg_changed_expl: '&cA robbanások %s-ban most %s.'
+msg_changed_fire: '&cA tűz terjedése %s-ban most %s.'
+msg_changed_mobs: '&cA szörnyek spawndolása %s-ban most %s.'
+msg_the_plot_group: 'A terület csoport'
+msg_changed_taxpercent: '&cA százalékos alapú adók most %s.'
+msg_changed_open: '&cA meghívó nélküli csatlakozás most %s.'
+msg_toggle_open_on_warning: 'Figyelmeztetés: A város engedélyeit ki kell kapcsolni, ha nyitott a város. Használd a " /town set perm off" parancsot, majd a " /town set perm reset"-et.'
+msg_changed_world_setting: '&c%s a következő beállítással rendelkezik: %s.'
+msg_world_pvp: '&cEz a világ csak PVP.'
+msg_world_mobs: '&cEz a világban kötelezőek a szörnyek spawndolásai.'
+msg_world_expl: '&cEz a világban kötelezőek a robbanások.'
+msg_world_fire: '&cEz a világban kötelező a tűz terjedése.'
+msg_town_mobs: '&cEbben a városban kötelezőek a szörnyek spawndolásai.'
+msg_plot_pvp: '&cPVP nem kapcsolható ki egy Aréna területen.'
+msg_plot_regen_wrong_size: '&cA regenerálás csak akkor hajtható végre, ha az alapértelmezett területméretet (16) használják.'
+msg_reloaded: '&2A Towny beállításai újratöltődtek.'
+msg_undo_complete: '&2A visszavonás befejeződött.'
+msg_give_total: '&b%s bónuszt kaptál. (Összesen: %s)'
+mag_backup_success: '&2A biztonsági mentés sikeres.'
+msg_xx_withdrew_xx: '&b%s %s összeget vett fel a %s bankból.'
+msg_xx_deposited_xx: '&b%s %s összeget helyezett el a %s bankban.'
+msg_insuf_funds: '&cNincs ennyi pénzed.'
+msg_err_withdraw_disabled: 'A banki pénzfelvétel letiltva!'
+msg_err_deposit_capped: 'Nem lehet pénzt elhelyezni. A bank elérte a maximális összeget: %s.'
+msg_set_town_home: '&bSikeresen megváltoztattad a város otthoni blokkját %s-ra.'
+msg_set_town_spawn: '&bSikeresen megváltoztattad a város spawn-ját.'
+msg_set_outpost_spawn: '&bSikeresen megváltoztattad az előretolt poszt spawn-ját.'
+msg_set_title: '&b%s kapta meg a ''%s&b'' címet.'
+msg_set_surname: '&b%s kapta meg a ''%s&b'' vezetéknevet.'
+msg_clear_title_surname: '&bA %s eltávolítva a ''%s'' címről.'
+msg_clear_plot_material: '&bA terület törlésre került a következő blokk típusokkal: %s.'
+msg_set_perms: '&bSikeresen megváltoztattad az engedélyeket:'
+msg_set_claim: '&bSikeresen megváltoztattad %s birtoklását %s-ra.'
+msg_set_perms_reset: '&bSikeresen visszaállítottad az összes %s terület engedélyeit.'
+msg_usedefault: '&bEz a világ (%s) mostantól a globális alapértelmezett beállításokat használja.'
+msg_set_wild_perms: '&bSikeresen megváltoztattad %s vad engedélyeit %s-ra.'
+msg_set_wild_ignore: '&bSikeresen megváltoztattad %s vad figyelmen kívül hagyott blokkjait %s-ra.'
+msg_set_wild_name: '&bSikeresen megváltoztattad %s vad nevét %s-ra.'
+msg_set_wild_regen: '&bSikeresen megváltoztattad %s vad regenerálódását ''%s''-ra.'
+msg_set_use_towny_on: '&bEz a világ mostantól Towny szabályokat követ.'
+msg_set_use_towny_off: '&cEz a világ mentes minden Towny interakciótól.'
+msg_error_must_be_int: '&bAz összegnek egész számnak kell lennie.'
+msg_error_input_must_be_int: '&c%s egész számnak kell lennie'
+msg_error_must_be_num: '&bAz összegnek számnak kell lennie.'
+msg_error_input_must_be_num: '&c%s számnak kell lennie'
+msg_must_specify_amnt: '&bMeg kell adni az összeget. Például: %s 54'
+msg_town_set_tax: '&b%s beállította a napi lakos adót %s-ra.'
+msg_town_set_plottax: '&b%s beállította a napi telek adót %s-ra.'
+msg_town_set_plotprice: '&b%s beállította a telek árát %s-ra.'
+msg_town_set_alttax: '&b%s beállította a %s telkek napi adóját %s-ra.'
+msg_town_set_altprice: '&b%s beállította a %s telkek árát %s-ra.'
+msg_town_set_nation_tax: '&b%s beállította a nemzeti adót %s-ra.'
+msg_set_nation_tag: '&b%s beállította a nemzet címkét [%s]-re.'
+msg_set_town_tag: '&b%s beállította a város címkét [%s]-re.'
+msg_reset_nation_tag: '&b%s törölte a nemzet címkét.'
+msg_reset_town_tag: '&b%s törölte a város címkét.'
+msg_mayor_abandon: '&bEl akarod hagyni a népedet? Ha biztos vagy benne, válassz másik polgármestert a ''/town set mayor'' paranccsal.'
+msg_new_day_tax: '&bÚj nap van! Az adók és bérleti díjak beszedésre kerültek.'
+msg_new_day: '&bÚj nap van!'
+msg_new_king: '&b%s mostantól a %s nemzet vezetője!'
+msg_err_new_king_notmayor: '&cAz új nemzetvezető nem polgármester.'
+msg_err_king_not_in_nation: '&cAz új nemzetvezető nem tartozik ehhez a nemzethez.'
+msg_err_fight_like_king: '&cA béke nem opció! Harcolj, mint egy vezető!'
+msg_no_access_nation_bank: '&cNincs hozzáférésed a nemzet bankjához.'
+msg_err_no_money: '&cNincs elég pénz a bankban.'
+msg_new_mayor: '&b%s mostantól a polgármester!'
+msg_new_nation: '&b%s új nemzetet alapított, melynek neve: %s'
+msg_new_town: '&b%s új várost alapított, melynek neve: %s'
+msg_plot_for_sale: '&b%s eladóvá tette a telek (%s)!'
+msg_plot_for_sale_amount: '&b%s eladóvá tette a telek (%s) %s összegért!'
+msg_plot_set_type: '&bA telek típusa beállítva: %s'
+msg_cache_block_error: '&cNem vagy regisztrálva a Towny rendszerében. Próbálj meg újra bejelentkezni.'
+msg_cache_block_error_wild: '&cNem engedélyezett a wild területen való %s.'
+msg_cache_block_error_plot: '&cA tulajdonos nem engedélyezi, hogy itt %s végezz.'
+msg_cache_block_error_town_resident: '&cA város lakói nem végezhetnek itt %s műveletet.'
+msg_cache_block_error_town_allies: '&cSzövetségesek nem végezhetnek itt %s műveletet.'
+msg_cache_block_error_town_outsider: '&cKívülállók nem végezhetnek itt %s műveletet.'
+msg_err_cant_afford_tp_town: '&cNem engedheted meg magadnak, hogy teleportálj a %s városba.'
+msg_err_not_public: '&cEz a város nem nyilvános.'
+msg_err_not_open: '&cA(z) %s város nem nyitott mindenki előtt. Kérd meg a polgármestert vagy egy asszisztenst, hogy csatlakozz.'
+msg_err_town_spawn_forbidden: '&cA városi spawn használata tilos.'
+msg_err_town_spawn_nation_forbidden: '&cA városi spawn használata más városokba a nemzeteden belül tilos.'
+msg_err_town_spawn_ally_forbidden: '&cA városi spawn használata a szövetséges városokba tilos.'
+msg_err_public_spawn_forbidden: '&cA nyilvános spawn használata más városokba tilos.'
+msg_err_public_spawn_enemy: '&cA nyilvános spawn használata ellenséges városokba tilos.'
+msg_err_town_spawn_disallowed_from: '&cA városi spawn használata nem engedélyezett innen: %s.'
+msg_err_outpost_spawn: '&cNincs kijelölt előőrs spawn erre a városra.'
+msg_err_cant_afford_tp: '&bNem engedheted meg magadnak, hogy teleportálj a városod spawn pontjára.'
+msg_err_plot_nfs: '&cEz a telek nem eladó.'
+msg_err_not_part_town: '&cA kiválasztott terület nem része a városodnak.'
+msg_err_not_attached_edge: '&cA kiválasztott terület nincs csatlakoztatva az élehez.'
+msg_err_empty_area_selection: '&cA kiválasztott terület nem tartalmaz érvényes telkeket.'
+msg_err_not_enough_blocks: '&cNincs elég szabad városi blokk a kiválasztott területhez.'
+msg_err_cant_afford_blocks: '&cA város nem engedheti meg magának, hogy elvegye a(z) %s telekblokkot %s összegért.'
+msg_err_not_in_town_claim: '&cVárosban kell lenned ahhoz, hogy telkeket igényelj.'
+msg_err_must_belong_town: '&cVároshoz kell tartoznod.'
+msg_err_dont_belong_town: '&cNem tartozol városhoz.'
+msg_err_dont_belong_nation: '&bNem tartozol nemzethez.'
+msg_err_already_belong_nation: '&bMár tartozol egy nemzethez.'
+msg_err_town_already_belong_nation: '&b%s már egy nemzethez tartozik: %s.'
+msg_err_not_same_nation: '&b%s nem tartozik a te nemzetedhez.'
+msg_err_rect_auto: '&cCsak városok és lakosok használhatják az auto parancsot.'
+msg_err_invalid_radius: '&cÉrvénytelen sugár. Használj egész számot vagy "auto"-t.'
+msg_err_not_configured: '&cEz a világ nincs konfigurálva a Towny által.'
+msg_err_updating_item_perms: '&cHiba a tárgyhasználati jogosultságok frissítése közben.'
+msg_err_updating_switch_perms: '&cHiba a kapcsoló jogosultságok frissítése közben.'
+msg_err_updating_destroy_perms: '&cHiba a pusztítási jogosultságok frissítése közben.'
+msg_err_updating_build_perms: '&cHiba az építési jogosultságok frissítése közben.'
+msg_err_admin_only: '&cCsak adminisztrátor használhatja ezt a parancsot.'
+msg_err_admin_only_delete: '&cCsak adminisztrátor törölheti más lakosok adatát.'
+msg_err_admin_only_delete_town: '&cCsak adminisztrátor törölheti más városok adatát.'
+msg_err_admin_only_delete_nation: '&cCsak adminisztrátor törölheti más nemzetek adatát.'
+msg_err_online_or_npc: '&c%s online vagy NPC.'
+msg_err_not_registered: '&cNem vagy regisztrálva.'
+msg_err_not_registered_1: '&c%s nincs regisztrálva.'
+msg_err_invalid_name: '&c%s érvénytelen név.'
+msg_err_already_res: '&c%s már tartozik egy városhoz.'
+msg_err_already_in_town: '&c%s már a(z) %s város része.'
+msg_err_already_nation: '&cA célváros már tartozik egy nemzethez.'
+msg_err_invalid_property: '&cÉrvénytelen "%s" tulajdonság.'
+msg_err_not_supported: '&cMég nem támogatott.'
+msg_err_invalid_input: '&cÉrvénytelen bemenet. Használj %s'
+msg_err_negative: '&cA bemenet nem lehet negatív.'
+msg_err_input_too_long: '&cA bemenet túl hosszú.'
+msg_err_invalid_choice: '&cÉrvénytelen választás.'
+msg_err_invalid_sub: '&cÉrvénytelen alparancs.'
+msg_err_command_disable: '&cNincs elég jogosultságod ehhez a parancshoz.'
+msg_err_you_dont_have_permission_to_use_colours: "Nincs jogosultságod színkódok használatára a címekben és vezetéknevekben."
+msg_err_universe_limit: '&cAz univerzum nem képes több várost tartani.'
+msg_err_too_many_npc: '&cTúl sok NPC van regisztrálva.'
+msg_err_negative_money: '&cNem lehet negatív pénzed.'
+msg_err_not_percentage: '&cA százalékok nem haladhatják meg a 100%-ot.'
+msg_err_no_economy: '&cA gazdaság nincs bekapcsolva.'
+msg_err_not_block_type: '&cEz nem érvényes telektípus!'
+msg_not_allowed_join: '&c%s nem csatlakozhat a városhoz.'
+msg_err_cannot_perform_action: '&cNem hajtható végre ez a művelet a %s területen.'
+msg_npc_flag: '&bNPC zászló mostantól %s a %s számára.'
+msg_warning_delete: '&4*** FIGYELEM, %s TÖRÖLVE LESZ A KÖVETKEZŐ ÚJ NAP ALKALMÁVAL A PÉNZHIÁNY MIATT ***'
+#these messages are only used if town/nation creation is set to admins only
+msg_admin_only_create_nation: '&cCsak az adminok hozhatnak létre nemzeteket.'
+msg_admin_only_create_town: '&cCsak az adminok hozhatnak létre városokat.'
+#Required residents to be part of a nation
+msg_err_not_enough_residents_new_nation: '&cA városodnak nincs elég lakója ahhoz, hogy nemzetet hozzon létre.'
+msg_err_not_enough_residents_join_nation: '&bA(z) %s városnak nincs elég lakója ahhoz, hogy csatlakozzon egy nemzethez.'
+msg_not_enough_residents_no_longer_capital: '&bA nemzet régi fővárosa már nincs elég lakóval ahhoz, hogy a nemzet fővárosa legyen. Az új főváros: %s.'
+msg_town_not_enough_residents_left_nation: '&bA(z) %s város már nincs elég lakóval ahhoz, hogy nemzeti tag maradjon, ezért eltávolították a nemzetből.'
+msg_nation_disbanded_town_not_enough_residents: '&bA(z) %s város már nincs elég lakóval ahhoz, hogy működtesse a nemzetet, ezért a nemzet feloszlott.'
+msg_not_enough_residents_capital: '&bA(z) %s városnak nincs elég lakója ahhoz, hogy a nemzet fővárosa legyen.'
+list_page: '&b%s. oldal a(z) %s-ból/ből'
+list_err_not_enough_pages: '&cCsak %s oldal érhető el.'
+#Added in 0.30
+#Added in 0.31
+msg_err_tax_minimum_not_met: 'Nem állíthatod a város adóját %s alá.'
+msg_unknown_rank_available_ranks: 'Ismeretlen rang: %s. Elfogadható rangok: %s.'
+msg_no_permission_to_give_rank: 'Nincs engedélyed, hogy rangot adj.'
+msg_you_have_been_given_rank: 'Megkaptad a(z) %s rangot %s-tól/től.'
+msg_you_have_given_rank: 'Te adtad meg a(z) %s rangot %s-nak/nek.'
+msg_resident_not_your_town: 'Ez a lakó nem tagja a városodnak!'
+msg_resident_already_has_rank: '%s már rendelkezik ezzel a %s ranggal.'
+msg_you_have_had_rank_taken: 'Lemondtak rólad a(z) %s rangról %s-nál/nél.'
+msg_you_have_taken_rank_from: 'Elvetted a(z) %s rangot %s-tól/től.'
+msg_resident_doesnt_have_rank: '%s nem rendelkezik ezzel a %s ranggal.'
+msg_town_has_no_jails: 'A városnak nincsenek börtönei.'
+msg_no_permission_to_jail_your_residents: 'Nincs engedélyed a lakóid bebörtönzésére.'
+msg_resident_not_part_of_any_town: 'Ez a játékos nem tagja egy városnak sem.'
+msg_player_not_jailed_in_your_town: 'Ez a játékos nincs bebörtönözve a városodban.'
+msg_cannot_spawn_while_jailed: 'Nem spawnolhatsz, miközben bebörtönözve vagy.'
+msg_cannot_abandon_town_while_jailed: 'Nem hagyhatod el a városodat, miközben bebörtönözve vagy.'
+msg_player_escaped_jail_by_leaving_town: '%s megszökött a börtönből azzal, hogy nomáddá vált.'
+msg_set_jail_spawn: 'Sikeresen beállítottad a börtön spawn-t.'
+msg_killed_attempting_to_escape_jail: '&4%s megölték, miközben megpróbált megszökni a börtönből.'
+msg_err_jailed_players_no_teleport: '&4A bebörtönzött játékosokat nem lehet teleportálni!'
+msg_player_escaped_jail_into_wilderness: '&4%s megszökött a börtönből, és a %s területére szaladt.'
+msg_err_invalid_string_board_not_set: 'Érvénytelen karakter, a Város Tábla nincs beállítva.'
+msg_plot_name_removed: 'A telek neve eltávolítva.'
+msg_plot_name_set_to: 'A telek neve [%s]-re lett beállítva.'
+msg_plot_price_too_expensive: 'A telek ára túl drága.'
+msg_you_robbed_player: 'Te kiraboltad %s-tól/től %s-t.'
+msg_player_robbed_you: '%s kirabolt téged %s-t.'
+msg_you_lost_money: 'Elvesztettél %s-t a halálod miatt.'
+msg_player_couldnt_pay_player_town_bank_paying_instead: '%s pénztárcája nem fedezte %s-t. %s a városi bankból került levonásra.'
+msg_err_could_not_take_deathfunds: 'Nem sikerült levenni a haláldíjat.'
+msg_you_lost_money_dying: 'Elvesztettél %s-t.'
+msg_your_town_lost_money_dying: 'A városod %s-t veszített el.'
+msg_your_nation_lost_money_dying: 'A nemzeted %s-t veszített el.'
+msg_err_couldnt_take_deathfunds: 'Nem sikerült levenni a haláldíjat.'
+msg_err_couldnt_take_town_deathfunds: 'Nem sikerült levenni a város haláldíját.'
+msg_err_couldnt_take_nation_deathfunds: 'Nem sikerült levenni a nemzet haláldíját.'
+msg_you_gained_money_for_killing: 'Nyertél %s-t %s megöléséért.'
+msg_err_ender_pearls_disabled: '&4Ender Gyöngyök ki vannak kapcsolva!'
+msg_err_no_sleep_in_enemy_inn: '&4Nem aludhatsz ellenséges fogadóban.'
+msg_err_cant_use_bed: '&4Nem te birtoklod az ágyat, és nem is fogadó telek.'
+msg_town_plots_revenue_disclaimer: '&aA bevétel csak becslés, és az is befolyásolhatja, hogy a telek tulajdonosa képes-e kifizetni.'
+msg_town_set_perm_syntax_error: 'Érvénytelen szó kombináció ehhez a parancshoz. A helyes parancsokért lásd: ''/town set perm ?''.'
+msg_plot_set_perm_syntax_error: 'Érvénytelen szó kombináció ehhez a parancshoz. A helyes parancsokért lásd: ''/plot set perm ?''.'
+#Added in 0.32
+msg_err_townadmintownrank_wrong_town: 'Ez a lakó nem tartozik ahhoz a városhoz.'
+msg_err_resident_already_an_outlaw: 'Ez a játékos már kívülálló a városod számára.'
+msg_err_not_outlaw_in_your_town: 'Nem jelölheted ki a városod tagját kívülállónak.'
+msg_you_have_been_declared_outlaw: 'Kívülállónak nyilvánítottak a(z) %s városban. Ne hagyd, hogy ott elkapjanak!'
+msg_you_have_declared_an_outlaw: '%s kívülállóvá lett nyilvánítva a(z) %s városban.'
+msg_you_have_been_undeclared_outlaw: 'Már nem vagy kívülálló a(z) %s városban.'
+msg_you_have_undeclared_an_outlaw: '%s már nem kívülálló a(z) %s városban.'
+msg_err_player_not_an_outlaw: 'Ez a játékos nincs nyilvántartva kívülállóként.'
+msg_err_outlaw_in_open_town: 'Nem csatlakozhatsz egy olyan nyitott városhoz, amely kívülállónak tekint.'
+msg_you_are_an_outlaw_in_this_town: '&4Vigyázz, %s kívülállónak tekint, itt meghalni börtönt jelenthet.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4A kívülállókat %s órára börtönbe zárják.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'A váltságdíjad %s lesz.'
+msg_err_town_not_close_enough_to_nation: '%s hazai blokkja nincs elég közel a fővárosod hazai blokkjához, hogy csatlakozzon a nemzetedhez.'
+msg_nation_town_moved_their_homeblock_too_far: '%s hazai blokkja túl messze került a nemzeted fővárosától, és eltávolították a nemzetedből.'
+#Added in 0.33
+msg_err_invalid_radius_number: '&cÉrvénytelen sugárérték. Használj %s-t vagy kevesebbet.'
+#Added in 0.34
+msg_err_max_residents_per_town_reached: '&cElérted a maximum lakosságszámot (%s) ebben a városban.'
+#Added in 0.35
+msg_err_resident_doesnt_meet_invite_cooldown: '&cA játékos %s még nem volt elég ideig a szerveren, hogy meghívást kapjon egy városba, kérjük, várj.'
+msg_cant_toggle_pvp_outsider_in_town: 'Van egy idegen a városodban, nem változtathatod meg a PvP státuszt!'
+msg_err_unclaim_not_outpost: 'Nem lehet feloldani a foglalást, ez a parcell nem egy előőrs!'
+outpost_plu: 'Előőrsök'
+#Added in 0.36
+msg_err_not_enough_residents: 'Nincs elég lakos ebben a városban ahhoz, hogy ezt megtehesd.'
+#Added in 0.37
+msg_err_friendly_fire_disable: 'A baráti tűz le van tiltva!'
+#Added in 0.38
+msg_claim_error: '&cEgy másik plugin megakadályozta a (%s)/(%s) városblokkok igénylését, nem lehetett befejezni a műveletet.'
+#Added in 0.39
+msg_err_town_spawn_forbidden_war: '&cA város spawn utazása csak háború idején engedélyezett.'
+msg_err_town_spawn_forbidden_peace: '&cA város spawn utazása háború idején tiltott.'
+msg_err_town_spawn_nation_forbidden_war: '&cA nemzeted más városaiba való utazás csak háború idején engedélyezett.'
+msg_err_town_spawn_nation_forbidden_peace: '&cA nemzeted más városaiba való utazás háború idején tiltott.'
+msg_err_town_spawn_ally_forbidden_war: '&cA nemzeted szövetséges városaiba való utazás csak háború idején engedélyezett.'
+msg_err_town_spawn_ally_forbidden_false: '&cA nemzeted szövetséges városaiba való utazás háború idején tiltott.'
+msg_err_public_spawn_forbidden_war: '&cA más városokba való nyilvános utazás csak háború idején engedélyezett.'
+msg_err_public_spawn_forbidden_peace: '&cA más városokba való nyilvános utazás háború idején tiltott.'
+#Added in 0.40
+mayor_help_9: 'Próbálj meg egy előőrsöt visszafoglalni'
+#Added in 0.41 (Invite-Update)
+invite_plu: 'Meghívások'
+invite_sent_by: 'Meghívó küldője'
+invite_help_1: 'Fogadj el egy meghívást, hogy csatlakozz egy városhoz'
+invite_help_2: 'Utastítsd el egy meghívást, hogy csatlakozz egy városhoz'
+invite_help_4: 'Utastítsd el az összes meghívást, hogy csatlakozz egy városhoz'
+invite_help_3: 'Listázd az összes meghívásodat'
+town_invite_help_1: 'Hívj meg egy játékost a városodba'
+town_invite_help_2: 'Vond vissza egy játékosnak küldött meghívást'
+town_invite_help_3: 'Listázd az összes elküldött meghívásodat'
+town_invite_help_4: 'Listázd az összes meghívást, amit kaptál'
+town_invite_help_5: 'Fogadj el egy kérelmet, hogy csatlakozz egy nemzethez'
+town_invite_help_6: 'Utastíts el egy kérelmet, hogy csatlakozz egy nemzethez'
+town_invite_help_7: 'Távolítsd el az összes meghívást, amit a városod elküldött'
+nation_invite_help_1: 'Hívj meg egy várost a nemzetedbe'
+nation_invite_help_2: 'Vond vissza egy városnak küldött meghívást'
+nation_invite_help_3: 'Listázd az összes városnak küldött meghívást'
+nation_ally_help_1: 'Próbálj meg egy szövetségest szerezni a nemzetednek'
+nation_ally_help_2: 'Próbálj meg eltávolítani egy szövetségest a nemzetedből'
+nation_ally_help_3: 'Listázd az összes szövetséges kérést, amit küldtél'
+nation_ally_help_4: 'Listázd az összes szövetséges kérést, amit kaptál'
+nation_ally_help_5: 'Fogadj el egy kérelmet, hogy szövetséges legyen egy nemzettel'
+nation_ally_help_6: 'Utastíts el egy kérelmet, hogy szövetséges legyen egy nemzettel'
+nation_ally_help_7: 'Vond vissza egy szövetséges kérelmét'
+msg_player_denied_all_invites: "Az összes kapott meghívásod el lett utasítva."
+msg_err_player_no_invites: '&cNincsenek meghívásaid!'
+msg_err_player_has_multiple_invites: '&cTöbb meghívásod is van, kérlek, pontosítsd!'
+msg_err_player_has_too_many_invites: '%s túl sok meghívása van, kérd meg őket, hogy utasítsanak el néhányat, mielőtt újra meghívnád őket.'
+msg_err_player_already_invited: '&bMár meghívtad %s-t a városodba!'
+msg_err_town_no_invites: '&bA városnak nincsenek meghívásai!'
+msg_err_town_specify_invite: '&cKérlek, pontosítsd a meghívást!'
+msg_err_town_has_too_many_invites: '&bA(z) %s városnak túl sok meghívása van, kérd meg őket, hogy utasítsanak el néhányat, mielőtt újra meghívnád őket.'
+msg_err_town_sent_too_many_invites: '&bA város túl sok meghívást küldött, vonj vissza néhányat, mielőtt újra próbálkozol!'
+msg_err_town_already_invited: '&bMár meghívtad %s-t a nemzetedbe!'
+msg_err_nation_specify_invite: '&cKérlek, pontosítsd a kérelmet!'
+msg_err_nation_no_requests: '&bA nemzetnek nincsenek szövetséges kérelmei!'
+msg_err_nation_sent_too_many_invites: '&bA nemzet túl sok meghívást küldött, vonj vissza néhányat, mielőtt újra próbálkozol!'
+msg_err_nation_sent_too_many_requests: '&bA nemzet túl sok kérelmet küldött, vonj vissza néhányat, mielőtt újra próbálkozol!'
+msg_err_nation_has_too_many_requests: '&bA(z) %s nemzetnek túl sok kérelme van, kérd meg őket, hogy utasítsanak el néhányat, mielőtt újra kérelmet küldesz.'
+player_received_invites: '&b%a/%m meghívást kaptál.'
+town_revoke_invite: '&bA(z) %s város visszavonta a meghívásodat, hogy csatlakozz hozzájuk.'
+town_revoke_invite_successful: '&bSikeresen visszavontál egy meghívást, hogy csatlakozz a városodhoz, amit %s-nak küldtél.'
+town_received_invites: '&bA város %a/%m meghívást kapott.'
+town_sent_invites: '&bA város %a/%m meghívást küldött.'
+nation_revoke_invite: '&bA(z) %s nemzet visszavonta a meghívásodat, hogy csatlakozz hozzájuk.'
+nation_revoke_invite_successful: '&bSikeresen visszavontál egy meghívást, hogy csatlakozz a nemzetedhez.'
+nation_revoke_ally: '&bA(z) %s nemzet visszavonta a szövetséges kérelmét.'
+nation_revoke_ally_successful: '&bSikeresen visszavontál egy szövetséges kérelmet.'
+nation_received_requests: '&bA nemzet %a/%m szövetséges kérelmet kapott.'
+nation_sent_invites: '&bA nemzet %a/%m meghívást küldött.'
+nation_sent_ally_requests: '&bA nemzet %a/%m szövetséges kérelmet küldött.'
+no_confirmations_open: '&cNincs semmi, amit meg kellene erősítened!'
+successful_cancel: '&cA művelet megszakítva!'
+successful_deny: '&bA meghívás sikeresen elutasítva.'
+successful_deny_request: '&bA szövetséges kérés sikeresen elutasítva.'
+msg_ally_removed_successfully: '&bA szövetséges sikeresen eltávolítva.'
+town_deleted_by_admin: '&bA(z) %s város sikeresen törölve'
+nation_deleted_by_admin: '&bA(z) %s nemzet sikeresen törölve'
+are_you_sure_you_want_to_continue: 'Biztosan folytatni akarod?'
+you_have_been_invited_to_join: 'Meghívást kaptál, hogy csatlakozz '
+you_have_been_requested_to_ally: 'Kérést kaptál, hogy szövetséges legyél '
+this_message_will_expire: 'Ez az üzenet 20 másodpercen belül lejár'
+player_sing: 'Játékos'
+nation_zone_this_area_under_protection_of: 'A(z) %s ezen része %s védelme alatt áll'
+nation_zone_conquered_status_denies_use: "A városod meghódított státusza megakadályozza, hogy használd ezt a nemzeti zónát."
+nation_zone_conquered_status_denies_use_2: "Nem tudod használni ennek a meghódított városnak a nemzeti zónáját."
+nation_spawn_not_allowed_for_conquered_towns: "A városod meghódított státusza megakadályozza, hogy a nemzet spawn pontjára teleportálj."
+#Added in 0.42
+you_have_been_invited_to_join2: 'Meghívást kaptál, hogy csatlakozz %s-hoz'
+you_have_been_requested_to_ally2: 'Kérést kaptál, hogy szövetséges legyél %s-al'
+#Added in 0.43
+town_help_11: 'Hozz létre egy új várost. Használj ''_'' karaktereket szóközök helyett.'
+changed_plot_town: '&bSikeresen megváltoztattad a parcella városát %s-ra!'
+not_standing_in_plot: 'Nem állsz érvényes parcellán!'
+msg_err_homeblock_has_not_been_set: 'A Kezdő Blokk nincs beállítva, használd a ''/town set homeblock'' parancsot először.'
+msg_err_spawn_not_within_homeblock: 'A Spawn nincs a Kezdő Blokkon belül, használd a ''/town set homeblock'' parancsot először.'
+#Added in 0.44
+#TownyChat language strings
+tc_err_invalid_command: 'Hiba: Érvénytelen parancs!'
+tc_settings_reloaded: '[TownyChat] Beállítások újratöltve!'
+tc_err_unrecognized_command_format: 'Hiba: Nem felismerhető parancsformátum!'
+tc_channel_list_status: '(Státusz)'
+tc_channel_list_in: 'Be'
+tc_channel_list_out: 'Ki'
+tc_err_you_dont_have_perm_mute_list: 'Nincs jogosultságod a némítási lista megtekintéséhez'
+tc_err_you_dont_have_unmute_perm: 'Nincs jogosultságod a némítás feloldásához'
+tc_err_no_channel_called_channel: 'Nincs olyan csatorna, amelynek neve &f%s'
+tc_err_no_muted_players_in_channel_players: 'Nincsenek némítva lévő játékosok a &f%s csatornában'
+tc_players_muted_in_channel: '[TownyChat] &f%n &2némítva lévő játékosok a &f%s&2 csatornában: &f%s'
+tc_err_no_online_players_with_name: 'Nincs online játékos a &f%s névvel'
+tc_err_you_dont_have_mute_perms: 'Nincs némítási jogosultságod'
+tc_err_you_cant_mute_admin: 'Nem némíthatod a Towny adminisztrátort.'
+tc_err_you_cant_mute_chat_mod: 'Nem némíthatod a csevegés moderátorát.'
+tc_player_already_muted_in_channel: '[TownyChat] A játékos már némítva van a &f%s csatornában'
+tc_player_is_now_muted_in_channel: '[TownyChat] &f%s &2most némítva van a &f%s csatornában'
+tc_player_is_not_muted_in_channel: '[TownyChat] A játékos nincs némítva a &f%s csatornában'
+tc_player_is_now_unmuted_in_channel: '[TownyChat] &f%s &2most fel van oldva a némítás a &f%s csatornában'
+tc_err_you_are_currently_muted_in_channel: 'Jelenleg némítva vagy a &f%s&c csatornában!'
+tc_err_you_cannot_leave_channel: 'Nem hagyhatod el a &f%s csatornát'
+tc_you_already_left_channel: '[TownyChat] Már elhagytad a &f%s csatornát'
+tc_you_left_channel: '[TownyChat] Elhagytad a &f%s csatornát'
+tc_you_are_now_talking_in_channel: '[TownyChat] Most a &f%s csatornában beszélsz'
+tc_err_you_cannot_join_channel: 'Nem csatlakozhatsz a &f%s csatornához'
+tc_you_are_already_in_channel: '[TownyChat] Már a &f%s csatornában vagy'
+tc_you_joined_channel: '[TownyChat] Csatlakoztál a &f%s csatornához'
+tc_err_you_are_already_talking_in_default_channel_help: 'Már a alapértelmezett csatornában beszélsz. A csatorna váltásához használd annak a csatornának a parancsát.'
+tc_err_unable_to_talk_essentials_mute: 'Nem tudsz beszélni... Jelenleg némítva vagy!'
+tc_err_unable_to_talk_you_are_spamming: 'Nem tudsz beszélni... Spamelsz!'
+msg_admin_set_plot_help_1: 'Ha egy városban vagy.'
+msg_admin_set_plot_help_2: 'Ha a vadonban vagy.'
+msg_err_not_enough_outposts_free_to_claim: 'Nincs elég szabad előőrs, hogy elfoglald %s/%s'
+msg_err_over_outposts_limit: 'Nem tudsz teleportálni az előőrsödre, túllépted a limitet %s/%s'
+#Status Screen elements (/res, /town, /nation, /tw, /plot perm)
+#These are translated because we may (or may not) be handling longer words in a smart way.
+#If you are a translator feel free to skip over this section, as it may or may not appear very nice
+#in game. It would be best to see what the changes look like in game before you PR it to github.
+#Used on /t outlawlist
+outlaws: 'Kívülállók:'
+online: '&a(Elérhető)'
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Regisztrálva: &a%s &8| &2Utoljára online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Jogosultság:'
+status_on: '&4BE'
+status_off: '&aKI'
+status_on_good: '&aBE'
+status_off_bad: '&4KI'
+status_forced: '&cKényszerítve'
+status_adjustable: '&aÁllítható'
+explosions: 'Robbanások:'
+firespread: 'Tűzterjedés:'
+mobspawns: 'Mobok Megjelenése:'
+owner_of_x_plots: '%s parcellák tulajdonosa.'
+status_town: 'Város:'
+status_no_town: 'Nincs'
+status_town_ranks: 'Városi Rangok:'
+status_nation_ranks: 'Nemzeti Rangok:'
+jailed_in_town: ' a városban: %s'
+status_friends: 'Barátok'
+rank_list_title: '%s Rang Lista'
+rank_list_mayor: 'Polgármester:'
+status_title_capital: '&b(Főváros)'
+status_title_open: '&b(Nyitott)'
+status_town_board: 'Hirdetőtábla:'
+status_founded: 'Alapítva:'
+status_founded_by: 'Alapította:'
+status_town_size: 'Város Mérete:'
+status_town_size_bought: 'Vásárolt:'
+status_town_size_bonus: 'Bónusz:'
+status_town_size_nationbonus: 'Nemzeti Bónusz:'
+status_town_outposts: 'Előőrsök:'
+status_bank_town2: 'Napi fenntartás:'
+status_bank_town3: 'Adó:'
+status_town_nation: 'Nemzet:'
+status_town_reslist_overlength: 'és több...'
+status_nation_king: 'Vezető:'
+status_nation_tax: 'Nemzeti Adó:'
+status_nation_conquered_tax: 'Hódított Adó:'
+status_nation_towns: 'Városok'
+status_nation_allies: 'Szövetségesek'
+status_nation_enemies: 'Ellenségek'
+status_nation_enemied_by: 'Nemzetek, amelyek ellenségnek tekintik a nemzetedet'
+status_world_claimable: '&aIgényelhető'
+status_world_noclaims: '&cNincsenek Igénylések'
+status_world_forcepvp: 'Kényszerített PVP:'
+status_world_fire: 'Tűz:'
+status_world_forcefire: 'Kényszerített Tűz:'
+status_world_forceexplosion: 'Kényszerített Robbanás:'
+status_world_worldmobs: 'Világ Mobok:'
+status_world_forcetownmobs: 'Kényszerített Városi Mobok:'
+status_world_unclaimrevert: 'Igényfeloldás Visszaállítás:'
+status_world_explrevert: 'Robbanás Visszaállítás:'
+status_world_ignoredblocks: 'Figyelmen Kívüli Blokkok:'
+status_res_taxexempt: 'A személyzet mentesül a városi adók fizetése alól.'
+status_res_tax: 'Városi Adó:'
+status_res_plottax: 'Összes Parcella Adó:'
+status_res_totaltax: 'Fizetendő Összes Adó:'
+status_townblock_plottax: 'Parcella Adó:'
+status_townblock_untaxed: 'Adómentes'
+status_townblock_max_and_minjoindays: 'A parcellavásárláshoz városi tagság szükséges %s és %s nap között.'
+status_townblock_minjoindays: 'A parcellavásárláshoz több mint %s napos városi tagság szükséges.'
+status_townblock_maxjoindays: 'A parcellavásárláshoz kevesebb mint %s napos városi tagság szükséges.'
+#Added in 0.45
+msg_err_unable_to_use_bank_outside_nation_capital: 'Nem használhatod a nemzeti bankot a nemzet fővárosán kívül.'
+msg_err_unable_to_use_bank_outside_your_town: 'Nem használhatod a városod bankját a városodon kívül.'
+msg_time_until_a_new_day: 'Idő az Új Napig: '
+msg_hours: ' óra'
+msg_minutes: ' perc'
+msg_seconds: ' másodperc'
+msg_err_invalid_string_nationboard_not_set: 'Érvénytelen sztring, a Nemzeti Hirdetőtábla nincs beállítva.'
+msg_plot_evict: 'A parcella sikeresen kiürítve.'
+msg_no_one_to_evict: 'Nincs kit kilakoltatni ebből a parcellából.'
+#Added in 0.46
+nation_help_10: 'Teleportálj a nemzet spawn pontjára.'
+msg_nation_spawn_warmup: '&bVárakozás a teleportálásra...'
+msg_set_nation_spawn: '&bA nemzet spawn pontja sikeresen megváltoztatva.'
+msg_err_cant_afford_tp_nation: '&cNem engedheted meg magadnak, hogy teleportálj %s-hoz.'
+msg_err_nationspawn_has_not_been_set: '&cA nemzet spawn pontja nincs beállítva.'
+msg_err_spawn_not_within_nationtowns: '&cA nemzet spawn pontjának egy nemzethez tartozó városban kell lennie.'
+msg_err_spawn_not_within_capital: '&cA nemzet spawn pontjának a fővárosban kell lennie.'
+msg_err_nation_spawn_war: '&cA nemzet spawn pontjai háború idején nem engedélyezettek.'
+msg_err_nation_not_public: '&cEz a nemzet nem nyilvános.'
+msg_nation_toggle_public: '&aA nemzet nyilvános beállítása sikeresen megváltoztatva.'
+status_yes: '&aIGEN'
+status_no: '&cNEM'
+msg_err_unable_to_use_bank_outside_bank_plot: 'Nem használhatod ezt a parancsot bank vagy otthon parcellán kívül. A bank parcellákat a /plot set bank paranccsal lehet létrehozni.'
+msg_err_nation_spawn_forbidden: '&cA nemzet spawn pontjára való utazás tiltott.'
+msg_err_nation_spawn_forbidden_war: '&cA nemzet spawn pontjára való utazás csak háború idején engedélyezett.'
+msg_err_nation_spawn_forbidden_peace: '&cA nemzet spawn pontjára való utazás háború idején tiltott.'
+msg_err_nation_spawn_ally_forbidden: '&cA szövetséges nemzetek spawn pontjára való utazás tiltott.'
+msg_err_nation_spawn_nation_forbidden_war: '&cA más szövetséges nemzetek spawn pontjára való utazás csak háború idején engedélyezett.'
+msg_err_nation_spawn_nation_forbidden_peace: '&cA más szövetséges nemzetek spawn pontjára való utazás háború idején tiltott.'
+msg_err_public_nation_spawn_forbidden: '&cA nyilvános spawn pontokra való utazás tiltott.'
+msg_err_public_nation_spawn_forbidden_war: '&cA nyilvános spawn pontokra való utazás csak háború idején engedélyezett.'
+msg_err_public_nation_spawn_forbidden_peace: '&cA nyilvános spawn pontokra való utazás háború idején tiltott.'
+msg_spawn_cost_set_to: '&b%s beállította a /%s spawn használati díját %s-ra'
+msg_spawn_fail_safe_teleport: '&cA teleportálás sikertelen, a helyszín nem biztonságos, kérd meg a városod polgármesterét, hogy változtassa meg a teleportálási helyet.'
+msg_err_cannot_set_spawn_cost_more_than: '&cNem állíthatod be a spawn költséget magasabbra, mint %s'
+msg_err_ally_isnt_public: '&cA szövetségesed, %s, nem engedélyezte a nyilvános spawn pontokat. Teleportálás megtagadva.'
+msg_nation_changed_public: '&cA nemzet nyilvános státusza most %s.'
+#Added in 0.47:
+status_plot_type: 'Parcella Típusa:'
+msg_no_self_jailing: 'Nem zárhatod be magadat.'
+online2: ' &a(Elérhető)'
+build: 'Építés'
+destroy: 'Rombolás'
+switch: 'Kapcsolás'
+item_use: 'Tárgyhasználat'
+owner_status: 'Tulajdonos'
+towny_map_header: 'Towny Térkép '
+towny_map_unclaimed: 'Nem igényelt'
+towny_map_claimed: 'Igényelt'
+towny_map_forsale: 'Eladó'
+towny_map_yourtown: 'A Te Városod'
+towny_map_yourplot: 'A Te Parcellád'
+towny_map_ally: 'Szövetséges'
+towny_map_enemy: 'Ellenség'
+enabled: 'Engedélyezve'
+disabled: 'Letiltva'
+forced: 'Kényszerítve'
+adjustable: 'Állítható'
+#Added in 0.48:
+msg_no_funds_new_town2: '&c%s nem engedheti meg magának, hogy itt új várost alapítson, mivel ez %s-ba kerül.'
+msg_no_funds_new_nation2: '&cA város nem engedheti meg magának, hogy új nemzetet alapítson, mivel ez %s-ba kerül.'
+msg_no_funds_claim2: '&cA város nem engedheti meg magának, hogy %s városblokkokat igényeljen, amelyek költsége %s. Adj %s a városi bankhoz a /t deposit %s parancs használatával'
+msg_err_cant_afford_blocks2: '&cA város nem engedheti meg magának, hogy %s városblokkokat igényeljen, amelyek költsége %s. Adj %s a városi bankhoz a /t deposit %s parancs használatával'
+msg_err_not_enough_variables: '&cNem elég változó: '
+nation_rechecked_by_admin: '&bA(z) %s nemzet városi távolságai sikeresen újraellenőrizve.'
+msg_err_nation_over_town_limit: '&cA nemzeted elérte a maximálisan megengedett városok számát a nemzetenként: %s.'
+#Added in 0.49
+msg_process_claim: 'Parcella igénylés feldolgozása...'
+msg_process_unclaim: 'Parcella igénylés feloldásának feldolgozása...'
+msg_total_townblocks: 'Összes VárosBlokkok: '
+#Added in 0.50
+friend_list: 'Barátok Listája'
+not_registered: 'Nincs regisztrálva.'
+msg_error_missing_comparator: '&bMeg kell adni, hogy mi alapján rendezzen.'
+msg_error_invalid_comparator: '&bÉrvénytelen rendező.'
+msg_error_multiple_comparators: '&bTúl sok rendező. Csak egyet adj meg.'
+msg_error_comparator_failed: '&bA rendező sikertelen. Próbálj meg egy másikat.'
+number_of_residents: '(Lakosok Száma)'
+number_of_towns: '(Városok Száma)'
+town_name: 'Város Neve'
+nation_name: 'Nemzet Neve'
+refund_message: '&aVisszatérítve %s az %s városblokkok feloldásáért.'
+msg_bankrupt_town_multiple: '&bAz alábbi városok nem tudták megfizetni a fenntartási költségeiket, és feloszlatták őket: '
+msg_bankrupt_nation_multiple: '&bAz alábbi nemzetek nem tudták megfizetni a fenntartási költségeiket, és feloszlatták őket: '
+msg_couldnt_pay_tax: '&b%s nem tudott adót fizetni, és ki lett rúgva a %s-ból.'
+msg_couldnt_pay_nation_tax_multiple: '&bAz alábbi városok nem tudták megfizetni a nemzeti adót, és elhagyták a nemzetet: '
+msg_couldnt_pay_town_tax_multiple: '&bAz alábbi lakosok nem tudták megfizetni a városi adót, és száműzve lettek: '
+msg_couldnt_pay_plot_taxes_multiple: '&bAz alábbi lakosok nem tudták megfizetni a parcella adót néhány vagy az összes parcellájukon: '
+msg_bankrupt_town2: '&b%s nem engedheti meg magának, hogy továbbra is város maradjon.'
+msg_bankrupt_nation2: '&b%s nem engedheti meg magának, hogy továbbra is nemzet maradjon.'
+status_embassy_town: 'Nagykövetségek itt'
+#Added in 0.51:
+msg_error_invalid_comparator_nation: '&bÉrvénytelen rendező. Próbálja meg ezt: %s.'
+msg_error_invalid_comparator_town: '&bÉrvénytelen rendező. Próbálja meg ezt: %s.'
+msg_err_merging_for_kings_only: '&bAz egyesítést csak egy Nemzeti Vezető végezheti el.'
+msg_err_king_of_that_nation_is_not_online: '&bA(z) %s nemzet vezetője, %s, nincs online. Egyesítés sikertelen.'
+nation1_has_merged_with_nation2: '&6A(z) %s nemzet beleegyezett az egyesítésbe a domináns %s nemzettel.'
+msg_would_you_merge_your_nation_into_other_nation: '&6Beleegyezel abba, hogy feloszlatod a %s nemzetet, és egyesíted a %s nemzettel? Ez áthelyezi az összes várost és nemzeti bankpénzt %s-hoz.'
+no_open_towns: 'Nincs nyitott város listázva.'
+#Added in 0.52:
+msg_error_nation_has_no_allies: 'A nemzetnek nincs szövetségese, akit listázni lehetne.'
+msg_error_nation_has_no_enemies: 'A nemzetnek nincs ellensége, akit listázni lehetne.'
+msg_error_ta_plot_claim: 'Hiányzó játékosnév, pl.: /ta plot claim PlayerNameHere'
+msg_error_no_player_with_that_name: 'Nincs játékos ezzel a névvel: %s'
+msg_admin_has_given_you_a_plot: 'Egy admin egy parcellát foglalt neked: %s'
+msg_town_forcemobs_setting_set_to: 'A(z) %s város mob beállítása kényszerítve lett %s-ra'
+msg_town_forcepvp_setting_set_to: 'A(z) %s város pvp beállítása kényszerítve lett %s-ra'
+msg_town_forcedisabledpvp_setting_set_to: 'A(z) %s város adminisztrátori tiltott pvp beállítása kényszerítve lett %s-ra'
+msg_nation_changed_open: '&cA nemzet nyitott státusza most %s.'
+msg_err_already_in_a_nation: 'A városod már egy nemzetben van.'
+msg_err_nation_not_open: '&cA %s nemzet nem nyitotta meg kapuit mindenki előtt. Kérd meg a nemzet vezetőjét vagy egy asszisztensét, hogy csatlakozhass.'
+msg_err_nation_homeblock_in_another_world: '&cA városod kezdőblokkja nem ugyanabban a világban van, mint a nemzet fővárosának kezdőblokkja.'
+status_bank_town_penalty_upkeep: 'Túligényelt fenntartás:'
+#Added in 0.53:
+msg_error_cannot_town_spawn_youre_an_outlaw_in_town: 'Nem teleportálhatsz %s-hoz, ott kívülállónak vagy jelölve.'
+#Added in 0.55:
+msg_you_cannot_use_that_command_while_jailed: '&4Nem használhatod ezt a parancsot, amíg börtönben vagy.'
+#Added in 0.56:
+msg_cache_block_error_town_nation: '&cA nemzeti tagok nem engedélyezettek %s-ra.'
+#Added in 0.57:
+msg_err_already_res2: '&c%s már egy városhoz tartozik.'
+msg_err_cannot_afford_plot_set_type_cost: '&cNem engedheted meg magadnak, hogy beállítsd a parcell msg_plot_set_cost: ''&bA parcellatípus %s típusra állításáért %s díjat számoltunk fel.'
+msg_plot_set_cost: '&b%s-t számoltunk fel a parcellatípus %s típusra állításáért'
+msg_err_townspawn_has_not_been_set: '&cA városi spawn nincs beállítva.'
+msg_err_player_too_far_from_town_spawn: '&c%s túl messze van a városod spawn pontjától, hogy meghívót kapjon a városba. Maximális távolság: %s blokkok.'
+#Added in 0.58:
+msg_resident_bail_amount: 'A lakos óvadékának költsége: '
+msg_mayor_bail_amount: 'A polgármester óvadékának költsége: '
+msg_king_bail_amount: 'A nemzeti vezető óvadékának költsége: '
+msg_has_paid_bail: '%s kifizette az óvadékot és szabad.'
+msg_err_unable_to_pay_bail: 'Nem tudja kifizetni az óvadékot.'
+msg_err_bail_not_enabled: 'Az óvadék nincs engedélyezve.'
+msg_you_have_been_freed_from_jail: 'Kiszabadultál a börtönből.'
+msg_player_has_been_freed_from_jail_number: '%s kiszabadult a(z) %s számú börtönből.'
+msg_player_has_been_sent_to_jail_number: '%s a(z) %s számú börtönbe lett küldve.'
+msg_player_is_not_online: '%s nincs online.'
+msg_mysql_dump_success: 'MySQL adatbázis mentése befejeződött.'
+msg_err_mysql_not_being_used: 'A konfigurációd nincs beállítva, hogy MySQL-t mentse és töltsön be.'
+msg_save_success: 'Az adatbázis mentve.'
+msg_load_success: 'Az adatbázis betöltve.'
+msg_err_cannot_afford_to_set_outpost: 'A városodnak nincs elég pénze, hogy ezt a városblokkot előőrsnek állítsa be.'
+msg_too_close2: 'Ez a terület túl közel van egy másik város %s-hoz.'
+homeblock: 'kezdőblokk'
+townblock: 'városblokk'
+outpost: 'előőrs'
+msg_err_not_same_town: '&b%s nem tartozik a városodhoz.'
+#Added in 0.59:
+msg_modes_set: 'Módok beállítva: '
+msg_err_this_plot_doesnt_have_any_associated_metadata: 'Ez a parcella nem rendelkezik kapcsolódó metaadatokkal.'
+msg_err_the_metadata_for_key_is_not_registered: 'A(z) ''%s'' kulcs metaadata nincs regisztrálva!'
+msg_key_x_was_successfully_updated_to_x: 'A(z) %s kulcs sikeresen frissítve %s-ra.'
+msg_err_key_x_is_not_part_of_this_plot: 'A(z) %s kulcs nem része ennek a parcellának, ha lehetséges, kérjük, add hozzá.'
+msg_err_key_x_already_exists: 'A(z) %s kulcs már létezik!'
+msg_custom_data_was_successfully_added_to_townblock: 'A testreszabott adat sikeresen hozzáadva a városblokkhoz!'
+msg_data_successfully_deleted: 'Az adat sikeresen törölve!'
+msg_err_key_cannot_be_deleted: 'A kulcs nem törölhető, mert nem létezik!'
+msg_err_this_town_doesnt_have_any_associated_metadata: 'Ennek a városnak nincs kapcsolódó metaadata.'
+msg_err_key_x_is_not_part_of_this_town: 'A(z) %s kulcs nem része ennek a városnak, ha lehetséges, kérjük, add hozzá.'
+msg_custom_data_was_successfully_added_to_town: 'A testreszabott adat sikeresen hozzáadva a városhoz!'
+msg_err_this_resident_doesnt_have_any_associated_metadata: 'Ennek a lakosnak nincs kapcsolódó metaadata.'
+msg_err_key_x_is_not_part_of_this_resident: 'A(z) %s kulcs nem része ennek a lakosnak, ha lehetséges, kérjük, add hozzá.'
+msg_custom_data_was_successfully_added_to_resident: 'A testreszabott adat sikeresen hozzáadva a lakoshoz!'
+msg_err_this_nation_doesnt_have_any_associated_metadata: 'Ennek a nemzetnek nincs kapcsolódó metaadata.'
+msg_err_key_x_is_not_part_of_this_nation: 'A(z) %s kulcs nem része ennek a nemzetnek, ha lehetséges, kérjük, add hozzá.'
+msg_custom_data_was_successfully_added_to_nation: 'A testreszabott adat sikeresen hozzáadva a nemzethez!'
+msg_error_too_many_pages: 'Túl sok oldal.'
+msg_err_location_is_not_within_a_town: 'A hely nem egy városon belül található.'
+msg_err_location_is_not_within_a_jail_plot: 'A hely nem egy börtön parcellán belül található.'
+msg_err_town_has_no_jail_spawns_set: 'A városnak nincs beállított börtön spawnéja.'
+msg_err_town_has_no_outpost_spawns_set: 'A városnak nincs beállított előőrs spawnéja.'
+msg_err_location_is_not_within_an_outpost_plot: 'A hely nem egy előőrs parcellán belül található.'
+msg_err_town_has_not_set_a_spawn_location: 'A város nem állított be spawn helyet.'
+msg_err_town_has_no_claim_over_this_town_block: 'A városnak nincs igénye erre a városblokkra.'
+msg_err_town_doesnt_belong_to_any_nation: 'A város nem tartozik semmilyen nemzethez.'
+msg_err_mayor_doesnt_belong_to_town: 'A polgármester nem tartozik a városhoz.'
+msg_err_tag_too_long: 'Túl hosszú címke.'
+msg_err_nation_has_not_set_a_spawn_location: 'A nemzet nem állított be spawn helyet.'
+msg_err_resident_doesnt_belong_to_any_town: 'A lakos nem tartozik semmilyen városhoz.'
+msg_err_could_not_set_default_modes_for: 'Nem sikerült beállítani az alapértelmezett módokat a(z) '
+#Added in 0.60
+msg_set_war_allowed_on: 'A háború ebben a világban engedélyezett lesz.'
+msg_set_war_allowed_off: 'A háború nem fogja érinteni ezt a világot.'
+#Added in 0.61
+#Added in 0.62
+msg_err_cannot_toggle_pvp_x_seconds_remaining: 'Nem tudod átkapcsolni a PVP-t, %s másodperc van hátra.'
+msg_err_cannot_spawn_x_seconds_remaining: 'Nem tudsz spawnolni még %s másodpercig.'
+#Added in 0.63
+msg_plot_set_to_nfs: 'A parcella már nem eladó.'
+msg_err_x_spawn_disallowed_from_x: '&c%s spawn nem engedélyezett %s helyről.'
+msg_the_wilderness: 'a Vadon'
+msg_enemy_areas: 'Ellenséges területek'
+msg_neutral_towns: 'Semleges városok'
+#Added in 0.64
+msg_err_no_nation_with_that_name: 'Nem található nemzet a(z) %s névvel'
+msg_err_cannot_unclaim_homeblock: 'Nem tudod visszavonni a kezdőblokk igénylését, használd a ''/town set homeblock'' parancsot a kezdőblokk áthelyezéséhez.'
+#Added in 0.65
+msg_err_rename_cancelled: 'Az átnevezést egy másik plugin megszakította.'
+#Added in 0.66
+#Added in 0.67
+msg_conquered: '&4(Meghódítva)'
+#Added in 0.68
+msg_plot_group_claim_confirmation: 'Ez a parcella egy %s parcellás csoport része, a igénylés megerősítésével mindegyiket megvásárolod.'
+msg_plot_group_unclaim_confirmation: 'Ez a parcella egy %s parcellás csoport része, a visszaigénylés megerősítésével mindegyiket feloldod.'
+msg_plot_group_toggle_confirmation: 'Ez a parcella egy %s parcellás csoport része, a tulajdonság átkapcsolásának megerősítésével mindegyiken átkapcsolod a tulajdonságot.'
+msg_plot_group_set_perm_confirmation: 'Ez a parcella egy %s parcellás csoport része, a jogosultsági sor beállításának megerősítésével mindegyiken beállítod a jogosultsági sort.'
+msg_plot_evict_group: 'Sikeresen kilakoltattad a játékost ebből a csoportosított parcellából, %s.'
+msg_err_plot_belongs_to_group_plot_fs: 'Parcella: %s egy csoporthoz tartozik, használd a /plot group [csoport neve] fs [összeg]'
+msg_err_plot_belongs_to_group_set: 'A parcella egy csoporthoz tartozik, használd a /plot group set'
+msg_plot_group_set_for_sale: 'A(z) %s csoport eladásra került!'
+msg_err_plot_already_belongs_to_a_group: 'Ez a parcella már egy csoporthoz tartozik: %s, kérlek távolítsd el a városblokkot ebből a csoportból, mielőtt egy másikhoz adnád.'
+msg_err_you_must_specify_a_group_name: 'Meg kell adnod egy parcella csoport nevet.'
+msg_plot_was_put_into_group_x: 'Parcella &9(%s,%s) &2belekerült a(z) %s csoportba'
+msg_err_plot_not_associated_with_a_group: 'Ez a parcella nincs társítva egy csoporthoz sem.'
+msg_plot_was_removed_from_group_x: 'Parcella &9(%s,%s) &2kikerült a(z) %s csoportból'
+msg_plot_renamed_from_x_to_y: 'A parcella nevét %s-ról %s-ra változtatták.'
+msg_err_plot_group_specify_price: 'Kérlek, add meg az árat, pl: /plot group fs [ár]'
+msg_player_put_group_up_for_sale_amount: '%s eladásra kínálta a(z) %s csoportot %s-ért!'
+msg_player_put_group_up_for_sale: '%s eladásra kínálta a(z) %s csoportot!'
+msg_err_could_not_set_group_type: 'Nem sikerült beállítani a csoport típusát - '
+msg_set_group_type_to_x: 'A parcella csoport típusát %s-ra változtatták'
+msg_player_successfully_bought_group_x: '%s sikeresen megvásárolta a(z) %s parcella csoportot'
+status_plot_group_name_and_size: 'A városblokk a(z) %s csoport része. A csoport összesen %s városblokkot tartalmaz.'
+msg_player_made_group_not_for_sale: '%s a(z) %s csoportot nem eladóvá tette.'
+#Added in 0.69
+msg_err_cannot_set_group_to_jail: 'A parcellacsoportok nem állíthatók be börtöntípusnak.'
+#Added in 0.70
+msg_err_plot_group_name_required: 'Meg kell adni a parcellacsoport nevét, pl: /plot group add {name}'
+msg_confirmation_spigot_click_accept: 'Kattints %s-ra vagy gépeld be %s'
+msg_confirmation_spigot_click_cancel: 'Kattints %s-ra vagy gépeld be %s'
+msg_you_cannot_kick_yourself: 'Nem rúghatod ki magadat.'
+msg_you_cannot_kick_this_resident: 'Nem rúghatod ki %s-t, mert polgármester vagy asszisztens.'
+#Added in 0.71
+msg_err_plot_belongs_to_group_plot_fs2: 'Parcella: %s egy csoporthoz tartozik, használd a /plot group fs [összeg]'
+msg_err_plot_belongs_to_group_plot_nfs: 'Parcella: %s egy csoporthoz tartozik, használd a /plot group nfs'
+#Added in 0.72
+msg_err_admin_controlled_pvp_prevents_you_from_changing_pvp: 'Az admin által vezérelt %s beállítás megakadályozza a PvP átkapcsolását %s-ra.'
+#Added in 0.73
+msg_err_you_aren't currently jailed: 'Jelenleg nem vagy börtönben.'
+#Added in 0.74
+msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Nem hozhatod létre ennek a portálnak a másik oldalát ezen a helyen.'
+#Added in 0.75
+msg_already_ally: 'A nemzeted már szövetségben áll %s-nal.'
+#Added in 0.76
+msg_you: 'Te'
+#Added in 0.77
+msg_click_spawn: '&aKattints a spawnoláshoz: &e%s'
+msg_spawn_cost: '&aSpawn Költség = &e%s'
+#Added in 0.78
+msg_reload_error: 'Hiba történt a Towny újratöltésekor.'
+msg_reloaded_config: '&2Konfiguráció sikeresen újratöltve.'
+msg_reloaded_perms: '&2Engedélyek sikeresen újratöltve.'
+msg_reloaded_db: '&2Adatbázis sikeresen újratöltve'
+msg_reloaded_lang: '&2Nyelvi fájl sikeresen újratöltve'
+msg_reset_config: '&2Konfiguráció alaphelyzetbe állítva'
+msg_err_teleport_cancelled: 'A mozgás megszakította a teleportálást.'
+#Added in 0.79
+msg_cache_block_error_plot_friends: 'barátok'
+msg_cache_block_error_plot_allies: 'szövetségesek'
+msg_cache_block_error_plot_outsiders: 'kívülállók'
+msg_cache_block_error_plot_town_members: 'városi tagok'
+msg_err_invalid_nation_map_color: '&cIsmeretlen térképszín. Engedélyezett színek: %s.'
+msg_nation_map_color_changed: '&bA nemzeti térkép színe megváltozott %s-ra.'
+msg_err_unable_to_add_more_residents_without_nation: 'A városod nem hívhat meg több mint %s lakosokat, anélkül hogy csatlakozna vagy létrehozna egy nemzetet.'
+msg_the_following_towns_were_deleted_for_having_0_claims: 'A következő városokat törölték, mert 0 igényük volt: %s'
+msg_spawn_warn: 'A spawnolás költsége %s. Folytatod? Tipp: használd a -ignore parancsot, hogy kihagyd ezeket a megerősítéseket.'
+msg_confirm_purchase: 'Ennek a költsége %s lesz. Folytatod?'
+msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Mivel nem lesznek elég közel az új fővároshoz, a következő városok eltávolításra kerülnek a nemzetedből: %s. Folytatni szeretnéd?'
+msg_ta_deposit_all_success: 'Sikeresen letétbe helyeztél %s összeget minden nemzeti és városi bankba.'
+bonus_townblocks: 'bónusz városblokkok'
+#Added in 0.80
+nomad_sing: 'Nomád'
+msg_new_town_advice: 'Gratulálunk az új városod létrehozásához! A városod napi fenntartási díjat fog fizetni, amely jelenleg %s. Pénzt helyezhetsz el a város bankjában a ''/t deposit #'' parancs segítségével. Ha nincs pénzed a fenntartás kifizetésére, a városod törlésre kerül. Bármikor megtekintheted a költségeidet a /towny prices parancs használatával. A következő napi fenntartás %s múlva kerül levonásra.'
+#Added in 0.81
+msg_err_teleport_cancelled_damage: 'A sérülés megszakította a teleportálást.'
+#Added in 0.82
+invitation_prefix: "&8[&7Meghívás&8] &9"
+confirmation_prefix: "&8[&7Megerősítés&8] &9"
+this_message_will_expire2: '&9Ez az üzenet %s másodperc múlva lejár'
+msg_hover_next_page: 'Következő oldal'
+msg_hover_previous_page: 'Előző oldal'
+#Added in 0.83
+msg_max_tax_amount_only_for_percent: "A maximális adó összege csak százalékban megadott adók esetén állítható be."
+msg_town_set_tax_max_percent_amount: "%s beállította a maximális adó százalékos összegét %s-ra."
+#Added in 0.84
+msg_err_plot_belongs_to_group_toggle: 'A parcella egy csoporthoz tartozik, használd a /plot group toggle'
+#Added in 0.85
+msg_set_perms_reset_single: '&bA jogosultságokat sikeresen alaphelyzetbe állították ezen a parcellán.'
+#Added in 0.86
+status_bank_bankrupt: '(CSŐDBEN)'
+msg_warning_bankrupt: '&4*** FIGYELEM, %s CSŐDBE MEGY A KÖVETKEZŐ ÚJ NAPON A PÉNZHIÁNY MIATT ***'
+msg_town_bankrupt_by_upkeep: '&b%s nem tudta kifizetni a fenntartási költségeit, és csődbe ment.'
+msg_town_bankrupt_by_upkeep_multiple: '&bA következő városok nem tudták kifizetni a fenntartási költségeiket, és csődbe mentek: '
+msg_town_bankrupt_by_nation_tax: '&b%s nem tudta kifizetni a %s adót, és csődbe ment.'
+msg_town_bankrupt_by_nation_tax_multiple: '&bA következő városok nem tudták kifizetni a nemzeti adót, és csődbe mentek: '
+msg_town_debts_cleared: '%s minden adósságát rendezte, és már nem csődben van.'
+msg_err_bankrupt_town_cannot_claim: 'Nem engedélyezett parcellák igénylése egy csődben lévő város számára.'
+msg_err_bankrupt_town_cannot_build: 'Nem engedélyezett építés egy csődben lévő városban.'
+msg_err_bankrupt_town_cannot_toggle_open: 'Nem engedélyezett a nyitva állapot átkapcsolása egy csődben lévő városban.'
+msg_err_bankrupt_town_cannot_invite: 'Nem engedélyezett játékosok meghívása egy csődben lévő városba.'
+msg_payed_nation_tax: '&bA városod kifizette a %s nemzeti adót.'
+msg_your_town_couldnt_pay_the_nation_tax_of: '&bA városod nem tudta kifizetni a %s nemzeti adót, és kizárták a nemzetből.'
+msg_your_town_payed_upkeep: '&bA városod kifizette a napi fenntartási díjat %s.'
+msg_your_nation_payed_upkeep: '&bA nemzeted kifizette a napi fenntartási díjat %s.'
+msg_your_town_couldnt_pay_upkeep: '&bA városod nem tudta kifizetni a napi fenntartási díjat %s, és feloszlott.'
+msg_your_nation_couldnt_pay_upkeep: '&bA nemzeted nem tudta kifizetni a napi fenntartási díjat %s, és feloszlott.'
+#Added in 0.87
+msg_town_reached_debtcap_and_is_disbanded: '&b%s nem tudta kifizetni a fenntartási költségeit, elérte az adósságplafont, és feloszlott.'
+msg_town_reached_debtcap_and_is_disbanded_multiple: '&bA következő városok nem tudták kifizetni a fenntartási költségeiket, elérték az adósságplafont, és feloszlottak: '
+msg_unable_to_deposit_x: 'Nem sikerült letétbe helyezni %s összeget abba a város bankjába.'
+msg_unable_to_withdraw_x: 'Nem sikerült kivenni %s összeget abból a város bankjából.'
+status_debtcap: 'Adósságplafon:'
+status_world_explrevert_entity: 'Entitás Robbanás Visszaállítás:'
+status_world_explrevert_block: 'Blokk Robbanás Visszaállítás:'
+#Added in 0.88
+msg_nation_already_peaceful: '&cA nemzet már békés.'
+msg_nation_already_not_peaceful: '&cA nemzet már nem békés.'
+#Added in 0.89
+status_world_friendlyfire: 'Baráti Tűz:'
+status_world_wildernessmobs: 'Vadon Mobok:'
+msg_outlaw_kick_cooldown: '&cTe kívülállónak számítasz %s-ban. %s időd maradt, hogy elhagyd a várost, különben vissza leszel teleportálva a spawn pontodra.'
+msg_outlaw_kicked: '&4Nem vagy szívesen látott %s-ban. Teleportálva lettél.'
+msg_outlaw_town_notify: '&cEgy kívülálló, %s, belépett a város területére.'
+msg_your_town_payed_upkeep_with_debt: '&cA városod az adóssággal fizette ki a napi fenntartási díjat %s.'
+msg_payed_nation_tax_with_debt: '&cA városod az adóssággal fizette ki a nemzeti adót %s.'
+#Added in 0.90
+status_plot_clear_deletion: 'ParcellaTörlés:'
+msg_err_plot_clear_disabled_in_this_world: 'A /plot clear parancs ebben a világban le van tiltva.'
+#Added in 0.91
+msg_universe_attribution: 'Szerzők: '
+msg_universe_contributors: ' És közreműködők, mint te. '
+townblock_plu: 'Városblokkok'
+#Added in 0.92
+#Town Ruins
+msg_newhour_success: 'A newhour parancs sikeresen végrehajtva'
+town_help_12: 'Állítsd helyre a városodat egy romos állapotból.'
+msg_warning_town_ruined_if_deleted: "FIGYELEM!!!: Ha törlöd a városodat, az romos állapotba kerül %d órára. Ezután teljes törlésre kerül. A romos állapotban minden jogosultság engedélyezett, és a várost megrongálhatják."
+msg_warning_town_ruined_if_deleted2: "A várost bármelyik városlakó visszaállíthatja a ''/t reclaim'' parancs használatával %d óra múlva."
+msg_err_cannot_reclaim_town_unless_ruined: '&cNem állíthatod vissza a városodat, mert nem romos.'
+msg_err_cannot_reclaim_town_yet: '&cNem állíthatod vissza a városodat még %d óráig.'
+msg_town_reclaimed: '&b%s visszaállította a(z) %s várost.'
+msg_err_cannot_use_command_because_town_ruined: "&cNem használhatod ezt a parancsot, mert a városod romos állapotban van. Az alapértelmezett parancsok használatához állítsd vissza a várost a ''/town reclaim'' parancs használatával, vagy hagyd el a várost a ''/town leave'' parancs használatával."
+msg_warning_your_town_is_ruined_for_x_more_hours: '&cA városod még %d óráig romos állapotban van. Használd a ''/town reclaim'' parancsot a város megmentéséhez és válj polgármesterré.'
+msg_time_remaining_before_full_removal: 'Hátralévő idő a teljes törlés előtt: %d óra.'
+msg_time_until_reclaim_available: 'Hátralévő idő a visszaállításig: %d óra.'
+msg_reclaim_available: 'Visszaállítás elérhető.'
+msg_ruined_town_being_deleted: "%s %s órán keresztül romos volt, és törlésre kerül."
+#Added in 0.93
+msg_changed_peaceful: '&cA város semlegessége/békessége most %s.'
+msg_err_town_unclaim_canceled: '&cA visszaigénylés megszakítva. Nem tudod visszaigényelni ezt a területet ebben az időben.'
+#Added in 0.94
+msg_comptype_residents: 'Lakosok száma'
+msg_comptype_townblocks: 'Igényelt városblokkok száma'
+msg_comptype_balance: 'Bankszámla egyenleg'
+msg_comptype_online: 'Online játékosok'
+msg_comptype_towns: 'Városok száma'
+msg_comptype_name: 'Ábécé sorrend'
+msg_comptype_open: 'Nyitott állapot'
+msg_status_npc: '&c%s nem valódi játékos, és csak a Towny-hoz korlátozódik.'
+npc_created: 'Létrehozva:'
+msg_no_funds_claim_plot: '&cNem engedheted meg magadnak, hogy igényeld a parcellát, amelynek költsége %s.'
+msg_no_funds_claim_plot_group: '&cNem engedheted meg magadnak, hogy igényeld a %s parcellákat, amelyek költsége %s.'
+status_town_title_peaceful: '&b(Békés)'
+#Added in 0.95
+status_public: '&b(Nyilvános)'
+msg_days: ' napok'
+msg_comptype_public: 'Nyilvános Státusz'
+towny_prices_title: 'Árak'
+towny_prices_town_nation: '&e[Új] &2Város: &a%s &8| &2Nemzet: &a%s'
+towny_prices_reclaim: '&e[Visszaállítás] &2Város: &a%s'
+towny_prices_upkeep: '&e[Fenntartás] &2Város: &a%s &8| &2Nemzet: &a%s'
+towny_prices_overclaimed_upkeep: '&e[Túligényelt Fenntartás] &2Város: &a%s'
+towny_prices_claiming_townblock: '&e[Igénylés] &2VárosBlokk: &a%s'
+towny_prices_claiming_townblock_increase: ' &8| &2Növekedés parcellánként: &a+%s'
+towny_prices_claiming_outposts: '&e[Igénylés] &2Előőrsök: &a%s'
+towny_prices_upkeep_based_on: '&7A város fenntartása &a%s alapján történik'
+towny_prices_upkeep_num_plots: 'a parcellák száma.'
+towny_prices_upkeep_town_level: 'város szintje (lakosok száma.)'
+towny_prices_overclaimed_based_on: '&8A túligényelt fenntartás &a%s %s alapján történik'
+towny_prices_overclaimed_num_plots: 'a túligényelt parcellák száma *'
+towny_prices_overclaimed_flat_cost: 'egy fix költség'
+towny_prices_townname: '&cVáros: &b%s'
+towny_prices_price_plot: '&c    [Ár] &2Parcella: &a%s &8| &2Előőrs: &a%s'
+towny_prices_price_shop: '&c            &2Bolt: &a%s &8| &2Nagykövetség: &a%s'
+towny_prices_taxes_plot: '&c    [Adók]    &2Lakos: &a%s &8| &2Parcella: &a%s'
+towny_prices_taxes_shop: '&c            &2Bolt: &a%s &8| &2Nagykövetség: &a%s'
+towny_prices_town_neutral_tax: '&c            &2Béke: &a%s'
+towny_prices_plots: '&c    [Parcellák Beállítása]'
+towny_prices_type_double: '            &2%s: &a%s &8| &2%s: &a%s'
+towny_prices_nationname: '&cNemzet: &6%s'
+towny_prices_nation_tax: '&c    [Adók] &2Város: &a%s &8| &2Béke: &a%s'
+#Added in 0.96
+msg_town_destroyed_by_nation_tax: '&bA meghódított %s város nem tudta kifizetni a nemzeti adót, és elesett.'
+msg_town_destroyed_by_nation_tax_multiple: '&bA következő meghódított városok nem tudták kifizetni a nemzeti adót, és elestek: '
+msg_your_town_was_exempt_from_the_nation_tax: '&bA városod mentesült a nemzeti adó alól.'
+#Added in 0.97
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
+msg_comptype_ruined: 'Rombos Állapot'
+msg_comptype_bankrupt: 'Csőd Állapot'
+msg_ruined: '&c(Rombos)'
+msg_bankrupt: '&c(Csőd)'
+#Added in 0.98
+msg_del_town2: '&bA %s város törölve lett!'
+msg_ruin_town: '&bA %s város romos állapotba került!'
+gui_title_select_plot_type: 'Parcella Típus Kiválasztása'
+gui_title_no_restrictions: 'Nincs korlátozás erre a parcellatípusra.'
+gui_title_towny_allowedblocks: '%s Engedélyezett Blokkok Listája'
+gui_title_towny_wildsblocks: 'Towny Vadblokkok Listája'
+gui_title_towny_itemuse: 'Towny Tárgyhasználat Listája'
+gui_title_towny_switch: 'Towny Kapcsoló Listája'
+gui_title_towny_plotclear: 'Towny Parcella Törlés Lista'
+flatfile_dbg_district_file_missing_town_delete: 'Körzet fájl hiányzik Város, törlés %s'
+flatfile_dbg_missing_file_delete_district_entry: 'Hiányzó fájl: %s törlés bejegyzés a [districtuuid].data'
+flatfile_err_exception_reading_district_file_at_line: 'Betöltési Hiba: Kivétel a körzet fájl olvasása közben %s a sorban: %s'
+flatfile_dbg_loading_district_list: 'Körzet lista betöltése...'
+msg_ta_removed_all_titles_and_surnames_removed: 'Minden lakos címét és vezetéknevét eltávolították.'
+msg_err_homeblock_already_set_here: 'Ez a hely már a városod kezdőblokkja.'
+#Added in 0.100
+msg_town_merge_err_mayor_only: '&cCsak a polgármester végezhet egyesítést.'
+msg_town_merge_err_not_close: '&cA(z) %s város túl messze van a városodtól. A kezdőblokkjának %d városblokkon belül kell lennie a kezdőblokktól.'
+msg_town_merge_request_sent: '&bEgyesítési kérelem elküldve a(z) %s polgármesterének.'
+msg_town_merge_request_received: '&bA(z) %s polgármestere, %s, egyesítést kért a városoddal. Ez az összes városblokkot, lakost és városi bankpénzt átviszi a(z) %s-hoz.'
+msg_town_merge_request_denied: '&cAz egyesítési kérelem elutasítva.'
+msg_town_merge_other_offline: '&cA(z) %s polgármestere, %s, jelenleg offline. Az egyesítés sikertelen.'
+msg_town_merge_err_too_many_residents: '&cAz egyesítés sikertelen: Az új lakosok száma meghaladja a határt (%d)'
+msg_town_merge_err_too_many_townblocks: '&cAz egyesítés sikertelen: Az új városméret meghaladja a határt (%d)'
+msg_town_merge_err_too_many_outposts: '&cAz egyesítés sikertelen: Az új előőrsök száma meghaladja a határt (%d)'
+msg_town_merge_err_not_enough_money: '&cAz egyesítés sikertelen: Nincs elég pénz. (%s/%s)'
+msg_town_merge_err_too_many_purchased_townblocks: '&cAz egyesítés sikertelen: Túl sok vásárolt városblokk (%d)'
+msg_town_merge_warning: '&cFigyelem: Ha elfogadod, az egyesítés a(z) %s-vel %s-ba fog kerülni.'
+msg_town_merge_debt_warning: '&cFigyelem: %s jelenleg adósságban van, ki kell fizetned az adósságukat, ha elfogadod.'
+msg_town_merge_cost_breakdown: '&bKöltség részletezés: Alapköltség: %s, Városblokk költség: %s, Csőd költség: %s, BónuszBlokk költség: %s'
+msg_town_merge_failed: '&cAz egyesítés sikertelen.'
+msg_town_merge_cancelled: '&cAz egyesítés törölve.'
+msg_town_merge_success: '&bA(z) %s város, amelyet %s birtokol, sikeresen egyesült a(z) %s várossal.'
+#Reasons for withdrawing/depositing for the bankhistory book.
+msg_town_merge_cost_withdraw: 'Város Egyesítési Költségek'
+msg_town_merge_transaction_reason: 'Város Egyesítés'
+towny_prices_town_merge: '&e[Egyesítés] &2Alapköltség: &a%s &8| &2Parcellánként: &a%s'
+#Added in 0.101
+msg_err_nation_not_allied_with: '&cA nemzeted nincs szövetségben %s-al.'
+msg_err_nation_not_enemies_with: '&cA nemzeted nem ellenséges %s-al.'
+msg_err_nation_already_enemies_with: '&cA nemzeted már ellenséges %s-al.'
+msg_err_ally_already_requested: '&cMár kértél szövetséget %s-al.'
+msg_err_nation_not_allied_with_2: '&c%s nincs szövetségben %s-al.'
+msg_err_nation_not_enemies_with_2: '&c%s nem ellenséges %s-al.'
+msg_err_nation_already_allied_with_2: '&c%s már szövetséges %s-al.'
+msg_err_nation_already_enemies_with_2: '&c%s már ellenséges %s-al.'
+msg_ta_allies_enemies_updated: '&bSzövetségesek/Ellenségek frissítve %s-hoz.'
+#Added in 0.102
+towny_map_detailed_information: '&2Kattints a részletes parcella információk megtekintéséhez.'
+msg_err_nation_capital_too_many_residents: '&cA jelenlegi fővárosban túl sok lakos van ahhoz, hogy %s váltsa fel.'
+msg_deleting_nation_will_result_in_losing_residents: '&cFigyelem: A nemzet törlése azt jelenti, hogy a városod túl sok lakosnak ad otthont (%d), ami %d lakos eltávolítását eredményezi.'
+#Added in 0.103
+msg_command_blocked_inside_towns: '&cNem használhatod ezt a parancsot városokban.'
+msg_command_limited: 'Csak a saját parcelláidban használhatod ezt a parancsot.'
+#Added in 0.104
+#Don't add a space to the end please
+msg_plot_perm_claimed_at: 'Igényelt ekkor:'
+#Added in 0.105
+msg_wilderness_use_x_in_all_worlds: 'A Vadon használata %s lett minden világban.'
+msg_regenerations_use_x_in_all_worlds: 'A Regenerációk %s lettek minden világban.'
+#Added in 0.106
+msg_command_outsider_blocked: 'Nem futtathatod ezt a parancsot, mert nem élsz %s-ban.'
+#Added in 0.107
+msg_jailed_for_x_hours: ' %s órára.'
+msg_err_this_jail_has_no_cells: 'Ez a börtön nem rendelkezik cellákkal.'
+msg_err_no_cell_found_at_this_location: 'Nem található börtöncella ezen a helyen.'
+msg_jail_cell_set: 'Börtöncella beállítva.'
+msg_jail_cell_removed: 'Börtöncella eltávolítva.'
+msg_err_resident_is_already_jailed: '%s már börtönben van'
+msg_err_the_town_does_not_have_that_many_jails: 'A városnak nincs annyi börtöne.'
+msg_err_that_jail_plot_does_not_have_that_many_cells: 'Az a börtön parcella nem rendelkezik annyi cellával.'
+msg_primary_jail_set_for_town: 'A városod elsődleges börtönét beállították.'
+msg_x_has_been_freed_from_x: '%s kiszabadult a(z) %s börtönből'
+msg_you_have_been_jailed: 'Börtönbe kerültél.'
+msg_run_to_the_wilderness_or_wait_for_a_jailbreak: 'Fuss a vadonba, vagy várj egy szökésre.'
+msg_err_player_is_not_jailed: 'Az a játékos nincs börtönben.'
+msg_you_have_paid_bail: 'Kifizetted az óvadékot.'
+msg_you_have_been_freed_via_jailbreak: 'Volt egy szökés, szabad vagy!'
+msg_you_have_served_your_sentence_and_are_free: 'Letöltötted a börtönbüntetésedet és szabad vagy.'
+msg_x_has_served_their_sentence_and_is_free: '%s letöltötte börtönbüntetését és szabad.'
+msg_you've_been_jailed_for_x_hours: 'Börtönbe kerültél %s órára.'
+msg_you_are_being_sent_to_jail: 'Börtönbe küldenek.'
+msg_err_you_cannot_remove_the_last_cell: 'Nem távolíthatod el az utolsó börtöncellát ebben a börtönben, amíg újabb cellát nem adsz hozzá.'
+msg_do_not_log_out_while_waiting_to_be_teleported: 'Ne jelentkezz ki, mielőtt börtönbe teleportálnának, végzetes lenne.'
+jail_plu: 'Börtönök'
+jail_sing: 'Börtön'
+msg_resident_has_not_played_long_enough_to_be_jailed: '%s nem játszott elég ideig, hogy börtönbe kerüljön, várj még %s'
+#Added in 0.108
+msg_town_not_peaceful: '&bA város nem engedhette meg magának a békés állapotát.'
+msg_town_already_peaceful: '&bA város már békés.'
+msg_town_already_not_peaceful: '&bA város már nem békés.'
+msg_town_cant_peaceful: '&bA város nem engedhette meg magának, hogy békés várossá váljon. Naponta %s-t kell tudnia fizetni.'
+msg_town_paid_for_neutral_status: '&bA városod %s-t fizetett, hogy megtartsa a békés állapotát.'
+msg_nation_paid_for_neutral_status: '&bA nemzeted %s-t fizetett, hogy megtartsa a békés állapotát.'
+your_town_has_been_invited_to_join_nation: 'A városodat meghívták, hogy csatlakozzon a nemzethez: %s'
+#Added in 0.109
+msg_err_no_one_to_purge: '&bNincsenek inaktív tagok, akiket törölni lehetne.'
+msg_purging_will_remove_the_following_residents: '&bKérjük, erősítsd meg, hogy törölni kívánod a következő lakosokat: %s'
+msg_purge_complete_x_removed: '&bA tisztítás befejeződött, %s lakos törölve.'
+msg_err_days_must_be_greater_than_0: 'A napoknak nagyobbnak kell lenniük nullánál.'
+msg_err_outlawed_players_no_teleport: '&4Kívülállóként tartózkodsz abban a városban, amelyben jelenleg tartózkodsz, és nem tudsz teleportálni!'
+msg_err_you_cannot_use_command_while_in_outlaw_town: '&4Nem használhatod ezt a parancsot, amíg egy városban tartózkodsz, ahol kívülálló vagy.'
+#Added in 0.110
+msg_safe_mode: "[Hiba] Biztonságos módban van zárolva!"
+msg_safe_mode_base: '[Hiba] A Towny biztonságos módban van zárolva egy hiba miatt! '
+msg_safe_mode_player: 'Mondd meg egy adminnak, hogy ellenőrizze a szerver konzolját.'
+msg_safe_mode_admin: 'Ellenőrizd a szerver konzolját további információkért.'
+msg_err_you_can_only_claim_outposts_in_your_homeblocks_world: 'Csak az otthoni blokkod világában igényelhetsz előőrsöket.'
+msg_err_not_close_enough_to_your_town_nearest_plot: 'Nem lehet előőrsöt igényelni, %s városblokkokra vagy a legközelebbi igényelt parcellától. Maximális megengedett távolság: %s városblokkok.'
+msg_err_you_have_moved_your_homeblock_too_recently_wait_x: 'Túl frissen mozgattad a kezdőblokkodat! Várj még %s.'
+msg_err_you_cannot_move_your_homeblock_this_far_limit_is_x_you_are_x: 'Nem mozgathatod a kezdőblokkodat ilyen messzire, a határ %s, ez a hely %s városblokkokra van.'
+msg_err_usingtowny_disabled: 'Ez a világ mentes minden Towny interakciótól. Használd a /townyworld toggle usingtowny parancsot először.'
+#Added in 0.111
+msg_plot_group_already_exists_did_you_want_to_transfer: 'Ez a városblokk már része a(z) %s parcellacsoportnak. Biztosan át szeretnéd helyezni a(z) %s parcellacsoportba?'
+msg_townblock_transferred_from_x_to_x_group: 'A városblokk áthelyezve a(z) %s parcellacsoportból a(z) %s parcellacsoportba.'
+msg_plotgroup_deleted: 'A(z) %s parcellacsoport törölve lett.'
+msg_plotgroup_empty_deleted: 'A(z) %s parcellacsoport nem rendelkezett városblokkokkal, és törölve lett.'
+plotgroup_plu: 'Parcellacsoportok'
+msg_err_this_town_has_no_plot_groups: 'A megadott városnak nincsenek parcellacsoportjai.'
+msg_err_this_plot_is_already_part_of_the_plot_group_x: 'Ez a városblokk már része a(z) %s parcellacsoportnak.'
+map_hover_plot_group: 'Parcellacsoport: '
+map_hover_plot_group_size: ' Méret: '
+map_hover_plots: '%s parcellák'
+#Added in 0.112
+msg_checking_for_updates: 'Frissítések keresése...'
+msg_no_new_updates: 'Nincsenek új frissítések.'
+msg_new_update_available: '&bÚj frissítés elérhető: %s | Jelenlegi verzió: %s'
+msg_download_here: 'Töltsd le itt: %s'
+msg_click_to_download: '&bKattints ide a letöltéshez.'
+msg_latest_version: '&2Towny verzió: &a%s &2| Legújabb verzió: &a%s'
+msg_up_to_date: '&aFrissített állapotban vagy.'
+msg_click_purchase: 'Kattints a vásárláshoz'
+msg_you_must_join_this_town_to_claim_this_plot: 'Csatlakoznod kell ehhez a városhoz: %s, hogy igényelhesd ezt a parcellát. Csatlakozni szeretnél a városhoz és folytatni az igénylést?'
+msg_legacy_economy_detected: "&bA Towny gazdasági implementációja Legacy-ra van állítva, ajánlott, hogy hagyd, hogy a Towny frissítse magát a Modern implementációra. Ez javítja a kompatibilitást több gazdasági pluginnal."
+msg_click_to_convert_to_modern_economy: "&bKattints ide a Towny gazdasági implementációjának Legacy-ról Modern-re való átalakításához."
+#Added in 0.113
+status_trustedlist: 'Megbízható'
+msg_click_to_edit: '&6Kattints a szerkesztéshez.'
+permission_gui_header: 'Towny Jogosultság GUI'
+msg_last_edited: '&7&oUtolsó módosítás ekkor: %s %s által.'
+#Last %s is either town or townblock
+msg_trusted_added: '&b%s hozzáadva mint megbízható ebben a %s.'
+msg_already_trusted: '&b%s már megbízható ebben a %s.'
+msg_cannot_trust_your_own_town: '&bNem bízhatsz meg a saját városodban.'
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s megbízhatóvá tett téged egy %s: %s.'
+msg_not_trusted: '&b%s nem megbízható ebben a %s.'
+msg_trusted_removed: '&b%s eltávolítva mint megbízható ebben a %s.'
+msg_trusted_removed_2: '&b%s eltávolított téged mint megbízható egy %s: %s.'
+msg_overrides_removed: '&bA jogosultsági felülírások eltávolítva %s számára.'
+msg_overrides_added: '&bAlapértelmezett jogosultsági felülírások hozzáadva %s számára.'
+msg_no_overrides_set: '&b%s nem rendelkezik felülírásokkal ehhez a %s.'
+msg_overrides_already_set: '&b%s már rendelkezik felülírásokkal ehhez a %s.'
+msg_cache_block_err: '&cNem vagy jogosult %s itt.'
+msg_err_plot_belongs_to_group: '&cA parcella egy csoporthoz tartozik, használd a %s.'
+plotgroup_sing: 'Parcellacsoport'
+msg_err_ally_limit_reached: 'A nemzeted elérte a szövetségesek limitjét, nem tudja elfogadni.'
+msg_err_ally_limit_reached_cannot_accept: 'A(z) %s nemzet elérte a szövetségesek limitjét, nem tudja elfogadni.'
+msg_err_ally_limit_reached_cannot_send: 'A nemzeted elérte a szövetségesek limitjét, nem tudja meghívni %s-t, hogy szövetségesed legyen.'
+msg_err_ally_limit_reached_cannot_send_targetNation: 'A(z) %s nemzet elérte a szövetségesek limitjét, nem tudja meghívni %s-t, hogy szövetségesed legyen.'
+#Added in 0.114
+msg_err_group_not_found: 'A(z) %s csoport nem található.'
+msg_err_expected_command_format: 'Helytelen szintaxis, várható: %s'
+msg_err_group_already_has_node: 'A(z) %s csoport már rendelkezik a %s csomóponttal.'
+msg_err_group_doesnt_have_node: 'A(z) %s csoport nem rendelkezik a %s csomóponttal.'
+msg_successfully_added_node_to_group: 'Sikeresen hozzáadva %s a(z) %s-hoz.'
+msg_successfully_removed_node_from_group: 'Sikeresen eltávolítva %s a(z) %s-ból.'
+msg_err_there_is_already_a_town_or_nationrank_called_x: 'Már létezik egy %s nevű %s.'
+msg_err_there_is_no_town_or_nationrank_called_x: 'Nincs ilyen nevű %s, hogy %s.'
+msg_successfully_add_rank_to_the_town_or_nation_rank: 'Sikeresen hozzáadva %s a(z) %s-hoz.'
+msg_successfully_removed_rank_from_the_town_or_nation_rank: 'Sikeresen eltávolítva %s a(z) %s-ból.'
+msg_err_group_has_no_nodes: 'A(z) %s csoport nem rendelkezik jogosultsági csomópontokkal.'
+msg_title_group_permissions: '%s Jogosultságok'
+help_ta_perms_listgroups: 'Csoportok listázása.'
+help_ta_perms_group: 'Jelenítse meg a csoportban lévő jogosultsági csomópontokat.'
+help_ta_perms_groupaddpermnode: 'Csomópont hozzáadása egy csoporthoz.'
+help_ta_perms_groupremovepermnode: 'Csomópont eltávolítása egy csoportból.'
+help_ta_perms_townrankadd: 'Városi rang hozzáadása a townyperms fájlhoz.'
+help_ta_perms_townrankremove: 'Városi rang eltávolítása a townyperms fájlból.'
+help_ta_perms_nationrankadd: 'Nemzeti rang hozzáadása a townyperms fájlhoz.'
+help_ta_perms_nationrankremove: 'Nemzeti rang eltávolítása a townyperms fájlból.'
+msg_err_that_resident_doesnt_belong_to_that_nation: 'Az a lakos nem tartozik ahhoz a nemzethez.'
+#Added in 0.115
+msg_comptype_founded: 'Alapítás Dátuma'
+msg_err_must_be_greater_than_or_equal_to: 'Az összeg nagyobbnak kell lennie vagy egyenlőnek kell lennie %s-el'
+err_invalid_yaml: 'Betöltési hiba: Nem sikerült betölteni a fájlt %s (átmegy egy yaml elemzőn?).'
+#Added in 0.116
+msg_town_map_color_changed: '&bA városi térkép színe megváltozott %s-ra.'
+#Added in 0.117
+msg_err_this_townblock_doesnt_match_the_groups_type: 'Ez a városblokk nem adható hozzá a csoporthoz, mert nem %s típusú.'
+#Added in 0.118
+status_title_nopvp: '&a(Nincs PVP)'
+#Added in 0.119
+msg_err_resident_cannot_be_jailed_because_they_are_outlawed_there: 'Nem teheted börtönbe a lakost, mert egy helyen van, ahol kívülálló.'
+msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: 'Nem teheted börtönbe a lakost, mert egy helyen van, ahol ellenségnek tekintik.'
+#Added in 0.120
+msg_resident_prompt: 'Írd be a játékos nevét a csevegésben, vagy q a kilépéshez. Ez automatikusan lejár 30 másodperc múlva.'
+msg_prompt_cancel: 'A prompt törölve vagy lejárt.'
+status_home_element: ' &7[Otthon: %s]'
+status_about: "Ról:"
+status_registered: 'Regisztrált:'
+status_lastonline: 'Utoljára Online:'
+status_fractions: '%s/%s'
+status_rank_list: 'Rang Lista'
+status_hover_click_for_more: 'Kattints további információkért.'
+status_jailed: 'Börtönben:'
+status_bad_yes: '&cIGEN'
+status_good_no: '&aNEM'
+status_resident_tax_title: '%s Adója'
+#Added in 0.122
+msg_warn_the_following_towns_will_be_removed_from_the_merged_nation: 'Mivel nem lesznek elég közel a nemzet fővárosához, a következő városok eltávolításra kerülnek, ha az egyesítés megtörténik: %s.'
+#Added in 0.123
+msg_err_invalid_townyworld: "'%s' nem érvényes Towny világ."
+msg_err_enter_world_name_first: 'Kérlek, először add meg a világ nevét.'
+msg_wilderness_use_set_to: '&bA vadon használata beállítva: %s a %s világban.'
+#Added in 0.124
+msg_err_invalid_response: 'Érvénytelen válasz! Írd be q-t a kilépéshez vagy back-et a visszalépéshez.'
+msg_setup_full_guide_link: '&bA teljes telepítési útmutatóért kattints ide.'
+msg_setup_wildernessuse: 'Szeretnéd engedélyezni a vadon használatát? Ez lehetővé teszi a játékosoknak, hogy építsenek vagy törjenek a vadonban.'
+msg_setup_revertunclaim: 'Szeretnéd használni a visszaállítást az elhagyott területeken? Ez lassan regenerálja a városblokkokat, amikor elhagyják őket.'
+msg_setup_town_block_ratio: 'Mekkora legyen a városblokkok aránya? Az alapértelmezett 8 városblokk lakosonként. Nagyobb értékekkel a városok többet foglalhatnak le lakosonként. 0-ra állítva az értékeket a városszintek határozzák meg.'
+msg_setup_town_cost: 'Mennyibe kerüljön egy új város létrehozása? Az alapértelmezett 250.'
+msg_setup_nation_cost: 'Mennyibe kerüljön egy új nemzet létrehozása? Az alapértelmezett 1000.'
+msg_setup_townblock_cost: 'Mennyibe kerüljön egy városblokk foglalása? Az alapértelmezett 25. Egy városblokk megegyezik egy chunk méretével (alapbeállítások szerint).'
+msg_setup_success: 'A konfigurációs értékek sikeresen módosítva lettek az új értékekre.'
+#Added in 0.125
+#Player has recently died and respawned and is invulnerable.
+msg_err_player_cannot_be_harmed: '%s nemrég született újjá, és nem sebezhető.'
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_respawn_protection: 'Elvesztetted az újjászületési védelmedet.'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: 'Nem vehetsz fel tárgyakat, amíg újjászületési védelem alatt állsz.'
+#Added in 0.126
+#Used in the nation screen:
+status_capital: 'Főváros:'
+#Used in the resident screen's town hover, to denote when a player joined a town.
+status_joined_town: 'Csatlakozott a városhoz:'
+#Used in the town screen's nation hover, to denote when a town joined a nation.
+status_joined_nation: 'Csatlakozott a nemzethez:'
+#Shown in status screen elements where a value is not known.
+status_unknown: 'ismeretlen'
+#Feedback given for the /ta set nationzoneoverride [townname] [size] command.
+msg_nationzone_override_set_to: '%s nemzetzónája beállítva: %s.'
+#Feedback given for the /ta set nationzoneoverride [townname] 0 command.
+msg_nationzone_override_removed: '%s nemzetzóna felülírása törölve lett.'
+#Added in 0.127
+#Used in status screen:
+status_nation_zone_size: 'Nemzetzóna mérete:'
+#Shown when a player adds people to their friends list.
+msg_res_friend_added_to_list: '%s hozzáadva a barátlistádhoz.'
+#Shown when a player removes people from their friends list.
+msg_res_friend_removed_from_list: '%s eltávolítva a barátlistádról.'
+#Generic resident freed from jail message.
+msg_resident_unjailed: '%s kiszabadult a börtönből.'
+#Shown when an admin uses /ta toggle devmode.
+msg_admin_toggle_devmode: 'Fejlesztői mód: %s'
+#Shown when an admin uses /ta toggle debug.
+msg_admin_toggle_debugmode: 'Hibakeresési mód: %s'
+#Shown when an admin uses /ta toggle townwithdraw
+msg_admin_toggle_townwithdraw: 'Városi pénzkivétel: %s'
+#Shown when an admin uses /ta toggle nationwithdraw
+msg_admin_toggle_nationwithdraw: 'Nemzeti pénzkivétel: %s'
+#Shown when claiming a town block for the town.
+msg_process_town_claim: 'Városblokk lefoglalása folyamatban...'
+#Shown when unclaiming a town block for the town.
+msg_process_town_unclaim: 'Városblokk elhagyása folyamatban...'
+#Shown when there is nothing to unclaim.
+msg_err_nothing_to_unclaim: 'Nincs mit elhagyni!'
+#Given as feedback when /ta checkperm is used.
+msg_perm_true: 'Jogosultság: Igen.'
+#Given as feedback when /ta checkperm is used.
+msg_err_perm_false: 'Jogosultság: Nem.'
+#Shown at the bottom of the /towny map
+#First variable is townname or None, 2nd variable is plot owner's name or None.
+status_towny_map_town_line: '&2Város: &a%s &7| &2Tulajdonos: &a%s'
+#Shown on /towny version
+msg_towny_version: '&2Towny verzió: &a%s'
+#Shown to admins and ops when a player has been blocked from logging into the server.
+msg_admin_blocked_login: '&2Egy játékos az &c%s &2IP-címről próbált bejelentkezni %s fiókkal, ami kárt okozhat a szerver gazdaságában, de a Towny megakadályozta. Fontold meg az IP-cím kitiltását!'
+#Shown during resident purge
+msg_scanning_for_old_residents: 'Régi lakosok keresése folyamatban...'
+#Shown during resident purge
+msg_deleting_resident: 'Lakos törlése: %s.'
+#Shown during resident purge
+msg_purge_complete: 'Lakostörlés kész: %s törölve.'
+#Message to the Town, shown when a town is given bonus blocks.
+msg_you_have_been_given_bonus_blocks: '%s bónusz városblokkot kaptál.'
+#Message shown when a town cannot purchase any more bonus blocks.
+msg_err_you_cannot_purchase_any_more_bonus_blocks: 'A városod nem vásárolhat több bónusz városblokkot. Elérted a maximális mennyiséget.'
+#Added in 0.128
+#Message shown to a capital city which is being denied the ability to toggle peaceful on.
+msg_err_capital_cannot_be_peaceful: 'A fővárosok nem kapcsolhatják békés státuszra magukat.'
+#Message shown as feedback for /t toggle nationzone command.
+msg_changed_nationzone: 'A várost körülvevő nemzetzóna mostantól %s.'
+#Error message shown when a town tries to toggle their nationzone which doesn't exist.
+msg_err_your_town_has_no_nationzone_to_toggle: 'A városodnak nincs nemzetzónája, amit ki- vagy bekapcsolhatnál!'
+#Added in 0.129
+#Shown in /towny prices, describing what controls nation upkeep.
+towny_prices_nation_upkeep_based_on: '&7A nemzet fenntartási költsége a &a%s alapján számítódik.'
+#Shown in /towny prices, describing what controls nation upkeep when it is per town.
+towny_prices_upkeep_num_towns: 'városok száma.'
+#Shown in /towny prices, describing that controls nation upkeep when it is per resident.
+towny_prices_upkeep_nation_level: 'nemzeti szint (lakosok száma).'
+#Added in 0.130
+#Jail causes
+msg_jailed_mayor: 'A polgármester börtönözte be.'
+#Jail causes
+msg_jailed_outlaw: 'Törvényen kívüliként ölve.'
+#Jail causes
+msg_jailed_war: 'Hadifogoly.'
+#Jail handbook messages
+msg_jailed_handbook_1: 'Úgy tűnik, börtönbe kerültél, az ok: %s'
+#Jail handbook messages
+msg_jailed_handbook_2: 'Ez bizony pech. De mit tehetsz ez ellen? Íme néhány hasznos tipp, amíg letöltöd a büntetésed.'
+#Jail handbook messages
+msg_jailed_handbook_3: 'Börtönbe kerültél %s órára. Ha letöltöd a büntetésed, szabad leszel.'
+#Jail handbook messages
+msg_jailed_handbook_4_can: 'Elhagyhatod a városodat a börtönből való szökés érdekében a ''/town leave'' paranccsal.'
+#Jail handbook messages
+msg_jailed_handbook_4_cant: 'Amíg börtönben vagy, nem hagyhatod el a városodat a szökés érdekében.'
+#Jail handbook messages
+msg_jailed_handbook_bail_1: 'Kifizetheted az óvadékot a börtönből való szabaduláshoz a ''/res jail paybail'' paranccsal.'
+#Jail handbook messages
+msg_jailed_handbook_bail_2: 'Az óvadék összege: %s.'
+#Jail handbook messages
+msg_jailed_handbook_5: 'Ha úgy döntesz, hogy megpróbálsz szökni, a vadonba érve szabaddá válhatsz.'
+#Jail handbook messages
+msg_jailed_handbook_6: 'De vigyázz, ha meghalsz, mielőtt eléred a vadont, visszakerülsz a börtönbe.'
+#Jail handbook messages
+msg_jailed_teleport: 'Szerencsére endergyöngyöt és chorus gyümölcsöt használhatsz a szökéshez, csak szerezned kell belőlük.'
+#Jail handbook messages
+msg_jailed_war_prisoner: 'Hadifogolyként szabadulhatsz, ha honfitársaid lecsökkentik a börtön telek életerejét nullára, vagy ha a várost, ahol börtönben vagy, eltávolítják a háborúból.'
+#Jail handbook title
+msg_jailed_title: 'Börtönbe kerültél :('
+#Jail handbook author
+msg_jailed_author: 'Towny BörtönVezető.'
+#Added in 0.130
+#Message shown when there are no allies to list in /town allylist.
+msg_error_town_has_no_allies: 'A városnak nincs felsorolható szövetségese.'
+#Message shown when there are no enemies to list in /town enemylist.
+msg_error_town_has_no_enemies: 'A városnak nincs felsorolható ellensége.'
+#Added in 0.132
+#Message shown in the lines of the baltop books
+msg_baltop_book_format: '%s. %s | %s'
+#Added in 0.133
+#Message shown when a confirmation times out.
+msg_confirmation_timed_out: 'A megerősítés időtúllépett.'
+#Added in 0.134
+tc_player_channel_sound_muted: 'A csatornahang némítva lett.'
+tc_player_channel_sound_unmuted: 'A csatornahang vissza lett kapcsolva.'
+#Added in 0.135
+msg_cant_toggle_pvp_outsider_in_plot: 'Egy idegen van a telkeden, nem tudod megváltoztatni a PvP státuszt!'
+#Added in 0.136
+msg_view_on_web: '&7Kattints, hogy megtekintsd a weben.'
+#Added in 0.137
+#Shown globally when a town merges with another town.
+town1_has_merged_with_town2: '&6A(z) %s város egyesült a(z) %s várossal.'
+#Shown in the town and nation status screens to inform about neutrality costs.
+status_neutrality_cost: 'Semlegesség költsége:'
+#Added in 0.138
+#Line 1 of the givebonus warning.
+msg_ptw_warning_1: 'Ha valódi pénzt fizettél ezekért a várostelkekért, vedd figyelembe: a szerver, amin játszol, megsérti a Minecraft EULA-t és a Towny licenszt.'
+#Line 2 of the givebonus warning.
+msg_ptw_warning_2: 'A Towny csapat soha nem szándékozta, hogy várostelkek valódi pénzért megvásárolhatók legyenek.'
+#Line 3 of the givebonus warning.
+msg_ptw_warning_3: 'Ha valódi pénzt fizettél, érdemes egy olyan Towny szerveren játszani, amely tiszteletben tartja a Towny csapat kívánságait.'
+#Message shown when a town invites a player to join, and that town has a nation.
+you_have_been_invited_to_join3: 'Meghívást kaptál a(z) %s&9 városhoz csatlakozásra (Nemzet: %s&9).'
+#Added in 0.139
+#Message shown when a town cannot afford to unclaim their land because the refund price is negative and charges them money.
+msg_err_your_town_cannot_afford_unclaim: 'A városod nem engedheti meg magának a terület felszabadításának költségét. Szükséges összeg: %s.'
+#Message shown when a town pays to unclaim their land because the refund is a negative amount.
+msg_your_town_paid_x_to_unclaim: 'A városod %s összeget fizetett a terület felszabadításáért.'
+#Confirmation message shown when a player will unclaim land that costs money.
+confirmation_unclaiming_costs: 'A terület felszabadítása %s-ba fog kerülni. Biztosan folytatni szeretnéd?'
+#Added in 0.140
+#Message shown when a player tries to rename their town too quickly.
+msg_you_must_wait_x_seconds_before_renaming_your_town: 'Várnod kell még %s másodpercet, mielőtt újra átnevezheted a városod.'
+#Added in 1.141
+msg_newday_already_running: 'Egy új nap feladat már fut jelenleg.'
+#Added in 0.142
+#Message shown when a player is toggling neutrality too fast.
+msg_err_cannot_toggle_neutral_x_seconds_remaining: 'Nem kapcsolhatod ki/be a semlegességet, még %s másodperc hátravan.'
+#Added in 0.143
+#Message shown when a console sender uses a command meant for in game.
+msg_err_command_not_for_console_use: 'Ez a parancs nem használható konzolból.'
+#Added in 0.144
+#Message shown when an admin uses /ta town NAME toggle unlimitedclaims.
+msg_town_unlimitedclaims_setting_set_to: 'A(z) %s város korlátlan területfoglalási beállítása %s értékre lett állítva.'
+#Message shown when an admin uses up their claims and is asked if they want to turn on unlimited claiming.
+did_you_want_to_toggle_unlimited_claims: 'Nincs elég városblokkod a foglaláshoz. Bekapcsolnád a korlátlan foglalást a(z) %s város számára?'
+#Added in 0.145
+#Message shown when a conquered town tries to leave their nation.
+msg_err_your_conquered_town_cannot_leave_the_nation_yet: 'Nem hagyhatod el a nemzeted, mert a városod leigázott.'
+msg_err_console_only: 'Ezt a parancsot csak konzolból lehet használni.'
+msg_err_player_only: 'Ezt a parancsot csak játékos használhatja.'
+#Added in 0.146
+#Message shown when a resident toggles bordertitles with /res toggle bordertitles
+msg_border_titles_toggled: 'A határátlépési üzenetek megjelenítése: %s.'
+#Added in 0.147
+#Message shown confirming that an admin wants to reset their Towny config
+this_will_reset_your_config: 'Ennek a parancsnak a futtatása visszaállítja a config.yml-t az alapértelmezett fájlra. Folytatni szeretnéd?'
+#Message shown when an admin is setting a new king or capital and would override the config by doing so
+msg_warn_overriding_server_config: 'Ezzel a konfigurációs korlátozások felülírásra kerülnek. Folytatod így is?'
+#Added in 0.148
+#Message shown when invalid outpost spawns are removed using the /ta commands.
+msg_removed_x_invalid_outpost_spawns: 'Eltávolítva %d érvénytelen előőrs hely.'
+#Added in 0.149
+#Message shown when a player logs in and their town is bankrupt.
+msg_your_town_is_bankrupt: 'A városod csődben van. Adj pénzt a bankjához a /town deposit {amount} paranccsal.'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: 'Nem használhatod ezt a parancsot, mert már tagja vagy egy városnak. Ha folytatni akarod, használd a ''/t leave'' parancsot.'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: 'Egy város, ahol száműzött vagy.'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: 'Nem található olyan nyilvános város eladó telkekkel (amelyeket megengedhetsz magadnak), ahová teleportálhatnál.'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&b%s összeget vontunk le a véletlenszerű városi telekhez való teleportálásért, amely eladó.'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: 'Hamarosan teleportálva leszel egy telekre %s városban, amely elérhetővé teszi a csatlakozást. Használd a ''/plot claim'' parancsot, hogy lefoglald a telket érkezés után.'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "A(z) %s városnak vannak eladó telkei. Szeretnél teleportálni egy megvásárolható telekre most?"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "Teleportálva lettél egy megvásárolható telekre. Használd a '/plot claim' parancsot, ha le szeretnéd foglalni."
+#Used in the town's status screen to display plots
+status_plot_string: 'Telkek'
+#Usage:
+msg_usage: 'Használat: %s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: 'Nincsenek megjeleníthető oldalak!'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: 'Ez a nemzet nincs kapcsolatban veled.'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: 'Ez a város nincs kapcsolatban veled.'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: 'Ezen a helyen már van egy börtöncella.'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: 'Telek Jogosultságok'
+#Seen in /plot perm hud:
+msg_perm_hud_build: 'Építés: '
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: 'Rombolás: '
+#Seen in /plot perm hud:
+msg_perm_hud_switch: 'Kapcsolás: '
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: 'Tárgyhasználat: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: 'Típus: '
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: 'Robbanások: '
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: 'Tűzterjedés: '
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: 'Mobok Spawnolása: '
+#Seen in /plot perm hud:
+msg_perm_hud_key: 'Kulcs'
+#Seen in /plot perm hud:
+msg_perm_hud_friend: 'barát'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'város'
+#Seen in /plot perm hud:
+msg_perm_hud_ally: 'szövetséges'
+#Seen in /plot perm hud:
+msg_perm_hud_resident: 'lakos'
+#Seen in /plot perm hud:
+msg_perm_hud_nation: 'nemzet'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: 'kívülálló'
+#Seen in /towny map hud:
+msg_perm_hud_plot_name: 'Telek: '
+#Seen in /towny map hud:
+msg_perm_hud_plotgroup_name: 'Telekcsoport: '
+#Seen in /towny map hud:
+msg_map_hud_district: 'Körzet: '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'Eladó: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'Nem'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Igen'
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: 'A(z) %s város szintje %s értékre lett állítva.'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: 'A(z) %s város kézzel beállított szintje eltávolítva. Jelenlegi szint: %s.'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: 'A(z) %s város nem vásárolhat telektömböket a konfigurációs szabályok alapján.'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: 'A(z) %s város megvásárolt telektömbjei eltávolítva.'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: 'A(z) %s város kapott %s vásárolt telektömböt, jelenleg %s vásárolt telektömbbel rendelkezik.'
+#Added in 0.154
+msg_comptype_upkeep: 'Fenntartás'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: 'A(z) %s város fenntartási beállítása %s értékre lett állítva.'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: 'A város elérte a(z) %d %s típusú telek határát.'
+#Added in 0.156
+msg_spawn_cost_free: 'Ingyenes'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: 'Ez a telek már %s típusú.'
+msg_town_board_reset: '&bA városi üzenőfal alaphelyzetbe állítva.'
+msg_town_has_no_jailslots: 'A városi börtön megtelt.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s börtönbe került a(z) %s cellába %s órára %s óvadékkal, amit %s szabott ki.'
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s börtönbe került a(z) %s cellába %s órára, amit %s szabott ki.'
+msg_you_have_been_jailed_your_bail_is_x: 'Börtönbe kerültél, óvadékod: %s.'
+msg_err_higher_than_max_allowed_bail_x: 'Az óvadék magasabb, mint az engedélyezett maximum: %s.'
+msg_err_higher_than_max_allowed_hours_x: 'Az órák száma meghaladja az engedélyezett maximumot: %s.'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: 'Nincs elég pénz a város bankjában %s bebörtönzésére. Díj: %s.'
+msg_you_were_released_as_town_ran_out_of_slots: 'A börtönőrök elengedtek, hogy helyet csináljanak.'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s szabadon lett engedve, hogy helyet csináljanak egy másik rabnak.'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'Szabadon engedtek, mivel a fogvatartóid nem tudják tovább finanszírozni a börtönben tartásodat.'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '%s szabadon engedték, mivel a városi bankban nincs elegendő pénz.'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s kivonva a városi bankból a(z) %s fogvatartásának fenntartási költségeire.'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s kivonva a városi bankból a(z) %s bebörtönzésének költségeire.'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: 'Biztos vagy benne, hogy minden városi és nemzeti bankot vissza szeretnél állítani erre az összegre: %s?'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: 'Nem adhatod hozzá %s várost, mert a nemzeted elérte a maximális lakoslimitet, ami %s.'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: 'Nem csatlakozhatsz ehhez a nemzethez, mert a lakosok száma túllépné a limitet: %s.'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: 'Nem csatlakozhatsz ehhez a nemzethez, mert elérte a maximális városszámot: %s.'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: 'Biztosan vissza szeretnéd állítani ennek a világnak a beállításait az alapértelmezettekre?'
+#Part of the /town plots output.
+msg_town_plots_title: 'Városi Telkek'
+#Part of the /town plots output.
+msg_town_plots_town_size: '<dark_green>Város Mérete: <green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: ' <aqua>[Megvásárolt: %s/%s]'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: ' <aqua>[Bónusz: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_nationbonus: ' <aqua>[Nemzetbónusz: %s]'
+#Part of the /town plots output.
+msg_town_plots_town_owned_land: '<dark_green>Város által birtokolt terület: <green>%s'
+#Part of the /town plots output.
+msg_town_plots_type_header: '<dark_green>Típus: <green>Játékos-birtok <gray>/ <aqua>Eladó <gray>/ <yellow>Összes'
+#Part of the /town plots output.
+msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>Napi bevétel'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: 'Arra készülsz, hogy teljes telekengedélyt adj egy egész városnak. Ez azt jelenti, hogy a polgármester dönthet arról, ki kap engedélyt építésre és bontásra a városodban azáltal, hogy lakosokat ad hozzá. Ha a város nyitott, bárki csatlakozhat, és teljes hozzáférést szerezhet a városodhoz. Biztos vagy benne, hogy meg akarod bízni ennek a városnak minden lakosát (beleértve a jövőbeli lakosokat is)?'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: 'Nem futtathatod ezt a parancsot, mert a városod háborúban áll.'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: 'Van egy idegen ebben a városrészben, nem szabadíthatod fel ezt a városrészt!'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: 'Nem hozhatsz létre új várost, %s másodperc van még hátra a várakozási időből.'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: 'Nem foglalhatod el ezt a városrészt: %s, %s másodperc van még hátra a várakozási időből.'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: 'A(z) %s város alapítója %s lett.'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: 'A(z) %s város háborúra való jogosultsága %s lett beállítva.'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: 'Biztosan fel akarod szabadítani az összes földedet? (Az otthonblokkod nem lesz felszabadítva.)'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "Mindent felszabadítottál, kivéve az otthonblokkodat. Az otthonblokk felszabadításához először új otthonblokkot kell beállítanod a \"/t set homeblock\" paranccsal."
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Biztos vagy benne, hogy át akarod adni a nemzet vezetését %s részére? Ez a művelet visszafordíthatatlan!"
+msg_warn_town_already_capital: "<red>A(z) %s város már a nemzet fővárosa."
+msg_min_adjacent_blocks: 'Legalább %s szomszédos városblokkra van szükséged. Jelenleg csak %s van.'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: ', talán inkább a /plot evict parancsra van szükséged?'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "A Towny nem ismer téged."
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "%s nem ismert a Towny számára."
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s nem ismert lakos."
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s nem ismert város."
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s nem ismert nemzet."
+#Shown when a resident doesn't belong to a town.
+msg_err_townyobject_x_has_no_town: "%s nem tartozik egyetlen városhoz sem."
+#Shown when a town doesn't belong to a nation.
+msg_err_townyobject_x_has_no_nation: "%s nem tartozik egyetlen nemzethez sem."
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "Ennek a városrésznek nincs adat arról, mikor foglalták el."
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "Szükséged van %s-ra a fizetéshez."
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "Az összegnek nagyobbnak kell lennie nullánál."
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "A területek átvétele nem engedélyezett ezen a szerveren."
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "Ez a városrész nem vehető át, a hozzá tartozó város nincs túlfoglalva."
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "Nem állíthatod be ezt a városrészt otthonblokkodként, mert ez nem megengedett."
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "Egy másik plugin megakadályozta a terület átvételét."
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "Arra készülsz, hogy átvedd a(z) %s által birtokolt területet %s költségen. Folytatod?"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "Figyelem: Majdnem elfogyott az elérhető városblokkok száma. Ha elveszít egy lakost, a városod sebezhetővé válik a területek ellopásával szemben más városok által."
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "Figyelem: A városod túlfoglalt. Amíg túl sok városblokkot foglalsz el, más városok átvehetik a területeidet. Fontold meg néhány terület felszabadítását."
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: " <red>[Átvétel lehetséges]"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "Nem veheted át ezt a területet, mert ezzel kettévágnád a várost. Egy másik irányból kell túlfoglalnod."
+#Message shown when an admin tries to toggle conquered off of a town that is not conquered.
+msg_err_that_town_is_not_conquered: "%s már nincs meghódítva."
+#Message shown when a town has its conquered status removed by an admin.
+msg_conquered_status_removed: "%s elvesztette a meghódított státuszát."
+msg_setup_command_folia: "A /ta install parancs jelenleg nem működik Folia rendszeren a beszélgetési API hiánya miatt, kérlek nézd meg az alábbi telepítési útmutatót."
+msg_perm_gui_folia: "Ez a gomb jelenleg nem működik Folia rendszeren a beszélgetési API hiánya miatt, használd a /plot perm add <név> parancsot helyette."
+msg_folia_scoreboard: "Ponttáblák módosítása jelenleg nem támogatott Folia rendszeren."
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "Nem szabadíthatod fel ezt a városrészt, mert a(z) %s,%s városrész nem rendelkezne elég szomszédos foglalással (%s szükséges)."
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>A nemzeted %s adót szedett be a városaitól."
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>A nemzeted %s adót fizetett a városainak."
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>A városod %s adót szedett be a lakosaitól."
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>A városod %s adót fizetett a lakosainak."
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>A városod %s adót szedett be a telkek adójából."
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>A városod %s adót fizetett a telektulajdonosoknak telekadóként."
+#Message shown when a nation collects taxes from its towns that are conquered.
+msg_tax_collected_from_conquered_towns: "<aqua>A nemzeted %s extra adót gyűjtött be a meghódított városaitól."
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>A városod mentesült a nemzet meghódított adójától."
+msg_nation_set_conquered_tax__amount_set: "%s beállította a meghódított adó összegét: %s."
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "Nem állíthatod a meghódított adót %s fölé."
+msg_err_your_town_is_not_old_enough_to_overclaim: "A városod nem elég régi ahhoz, hogy túllépje a területet, még %s-t kell várnod."
+msg_err_your_cannot_overclaim_for_another: "Nem tudsz más várostól területet túllépni még %s ideig."
+#Generic error message for when a world isn't loaded
+msg_err_world_not_loaded: "<red>A világ nincs betöltve."
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&cEz a telek adózott státusza be lett állítva erre: %s.'
+msg_changed_plotgroup_taxed: '&cEz a telekcsoportra vonatkozó adózott státusz be lett állítva erre: %s.'
+status_forsale: "&a(Eladó: %s)"
+msg_town_forsale: "%s eladásra került %s áron."
+msg_town_notforsale: "%s már nem eladó."
+msg_town_sell_confirmation: "Ez a várost eladóvá teszi %s összegért. Biztosan folytatni akarod?"
+msg_town_buytown_already_mayor: "Már te vagy %s polgármestere."
+msg_town_buytown_confirmation: "A(z) %s megvásárlása %s-ba kerül, és eltávolít téged minden olyan városból, amelyhez tartozhatsz. Biztosan folytatni akarod?"
+msg_town_buytown_not_forsale: "A megadott város nem eladó."
+msg_town_buytown_ruined: "A romokban lévő városokat nem lehet megvásárolni."
+msg_resident_about_reset: "&bA lakó bemutatkozása vissza lett állítva."
+msg_err_invalid_string_about_not_set: "Érvénytelen szöveg, a lakó bemutatkozása nincs beállítva."
+msg_set_about: "%s bemutatkozása be lett állítva erre: %s."
+msg_clear_about: "%s bemutatkozása törölve lett."
+#Message shown when toggling town visibleontoplists setting
+msg_town_visibleontoplist_setting_set_to: 'A város (%s) láthatósága a listák tetején beállítva: %s.'
+#Message shown when an admin overrides a town founding date via townyadmin.
+townyadmin_town_set_help_0: "Beállítja a város alapítási dátumát."
+townyadmin_nation_set_help_0: "Beállítja a nemzet alapítási dátumát."
+msg_town_registered_set: "A város alapítási dátuma: '%s' beállítva: '%s'."
+msg_nation_registered_set: "A nemzet alapítási dátuma: '%s' beállítva: '%s'."
+msg_err_time_cannot_be_in_the_future: "A megadott időpont nem lehet a jövőben."
+#The format used for the /t say and /n say commands.
+town_say_format: "%s mondja: %s"
+msg_err_floodfill_not_in_wild: "Nem használhatod a floodfill-t, ha egy birtokolt területen állsz."
+msg_err_floodfill_out_of_bounds: "A birtok formája teljesen zártnak kell lennie a floodfill használatához."
+msg_err_floodfill_cannot_contain_towns: "A floodfill kijelölésének nem szabad más városokat tartalmaznia."
+#Message shown when a resident is an NPC and is not allowed to do something.
+msg_err_resident_is_npc: "Nem hajthatod végre ezt egy NPC lakoson."
+#Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "A lakosnak nincs személyesen birtokolt területe."
+msg_unnamed: "Névtelen"
+msg_err_nation_cannot_sanction_own_town: "Nem szankcionálhatod a nemzetedhez tartozó várost."
+msg_err_nation_town_isnt_sanctioned: "A nemzeted nem szankcionálja ezt a várost."
+msg_err_nation_town_already_sanctioned: "A nemzeted már szankcionálja ezt a várost."
+msg_err_nation_town_sanctioned: "A nemzeted mostantól szankcionálja %s várost, nem csatlakozhatnak a nemzetedhez."
+msg_err_nation_town_unsanctioned: "A nemzeted már nem szankcionálja %s várost."
+msg_err_nation_has_no_sanctioned_towns: "A nemzetnek nincsenek szankcionált városai."
+title_nation_sanctioned_towns: 'Szankcionált Városok'
+msg_err_cannot_add_sanctioned_town: "A nemzeted nem adhatja hozzá %s várost, mert szankcionálták őket."
+msg_err_cannot_join_nation_sanctioned_town: "A városod nem csatlakozhat %s nemzethez, mert ez a nemzet szankcionálta a városodat."
+msg_err_no_nation_cannot_do: "Nem hajthatod végre ezt a műveletet, mert nem sikerült meghatározni egy nemzetet sem."
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "A városodat szankcionálta %s, ezért nem jelenhetsz meg ott."
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "A következő koordinátákat nem lehet lefoglalni, mert túl sok nemkívánatos biomot tartalmaznak: %s."
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "A következő koordinátákat nem lehet lefoglalni, mert túl sok óceáni biomot tartalmaznak: %s."
+msg_err_cannot_begin_town_in_this_biome: "Nem hozhatsz létre várost ebben a biomban."
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "Nem foglalhatod el ezt a várost, mert a nemzeted nem tekinti az ő nemzetüket ellenségnek."
+msg_err_unable_to_command_outside_of_town: 'Nem használhatod ezt a parancsot a városodon kívül.'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: 'Nem használhatod ezt a parancsot bankterületen kívül.'
+msg_err_you_cannot_outlaw_your_mayor: "Nem teheted törvényen kívülivé a városod polgármesterét."
+msg_err_you_cannot_outlaw_because_of_rank: "Nem teheted törvényen kívülivé %s személyt, mert egy városi ranggal rendelkezik."
+status_nation_sanctioned_towns: "Szankcionált Városok"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "A városod által küldött összes meghívás törölve lett."
+msg_err_name_validation_invalid_characters: "%s olyan karaktereket tartalmaz, amelyek nem engedélyezettek a Towny regex-ben."
+msg_err_name_validation_begins_with_eco_prefix: "%s olyan betűkkel kezdődik, amelyeket a gazdasági funkciókban használnak, ezért nem használhatod ezt a nevet."
+msg_err_name_validation_name_already_in_use: "%s egy már használatban lévő név."
+msg_err_name_validation_title_too_long: "%s túl hosszú ahhoz, hogy címként vagy vezetéknévként használják."
+msg_err_name_validation_name_too_long: "%s túl hosszú ahhoz, hogy névként használják."
+msg_err_name_validation_is_empty: "Nem adhatsz meg üres nevet."
+msg_err_name_validation_is_not_permitted: "%s nem engedélyezett."
+msg_err_name_validation_is_all_underscores: "%s teljes egészében aláhúzásokból áll."
+msg_err_name_validation_too_many_capitals: "%s tartalmaz %s nagybetűt, ami nem megengedett, használj kevesebb mint %s-et."
+msg_err_name_validation_contains_harmful_characters: "%s olyan szimbólumokat tartalmaz, amelyek ártalmasak lehetnek."
+msg_err_name_validation_contains_numbers: "%s számokat tartalmaz, ami nem engedélyezett a nevekben."
+msg_err_name_validation_used_in_command_structure: "%s a parancsstruktúrában használatos, ezért nem használhatod ezt a nevet."
+msg_town_being_deleted_because_no_residents: "%s törlésre kerül, mert elveszítette az utolsó lakosát."
+outlawed_in: "Kitiltott helyek"
+msg_warning_town_deposit_hint: "Pénz befizetéséhez a város bankjába használd a /town deposit [összeg] parancsot."
+msg_warning_nation_deposit_hint: "Pénz befizetéséhez a nemzet bankjába használd a /nation deposit [összeg] parancsot."
+teleport_warmup_title_dont_move: "&6Ne mozdulj!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7másodperc maradt a teleportálásig."
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "Mivel a városod tönkrement státuszban van, %s telek(ek) jogosultsági sorai megváltoztak, hogy ne biztosítsanak védelmet."
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "Tönkrement státuszuk miatt %s esetében %s telek(ek) jogosultsági sorai megváltoztak, hogy ne biztosítsanak védelmet: %s."
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "Nem adhatod át egy telkedet a saját városodnak."
+msg_err_town_cede_you_cannot_cede_your_homeblock: "Nem adhatod át a városod főblokkját."
+msg_err_town_cede_the_mayor_is_not_online: "%s polgármestere, %s nincs online, hogy elfogadja a telekedet."
+msg_err_town_no_longer_owns_this_plot: "%s már nem birtokolja ezt a telket."
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s nem adhatja át a főblokkját."
+msg_town_cede_plot_confirmation_give_plot: "Biztos vagy benne, hogy át akarod adni ezt a telket %s számára?"
+msg_town_cede_plot_confirmation_accept_plot: "%s szeretné átadni a telket ezen a helyen: %s."
+msg_town_cede_plot_accepted: "%s elfogadta a telek átadását."
+msg_town_cede_plot_denied: "%s visszautasította az ajánlatodat."
+msg_town_cede_plot_unable_to_accept: "%s nem tudta elfogadni az ajánlatodat."
+msg_town_cede_plot_you_have_accepted: "Átvetted az irányítást a telek felett: %s."
+msg_err_cannot_claim_plot_join_date_too_low: "Nem igényelheted ezt a telket, amíg nem vagy a város lakója legalább %s napja."
+msg_err_cannot_claim_plot_join_date_too_high: "Nem igényelheted ezt a telket, ez csak olyan lakóknak elérhető, akik kevesebb mint %s napja tagjai a városnak."
+msg_townblock_min_join_days_removed: "A telek minimális csatlakozási napkövetelménye eltávolítva."
+msg_townblock_max_join_days_removed: "A telek maximális csatlakozási napkövetelménye eltávolítva."
+msg_townblock_min_join_days_set_to: "A telek minimális csatlakozási napkövetelménye %s napra állítva. Csak azok a játékosok igényelhetik, akik ennél régebben csatlakoztak."
+msg_townblock_max_join_days_set_to: "A telek maximális csatlakozási napkövetelménye %s napra állítva. Csak azok a játékosok igényelhetik, akik ennél rövidebb ideje csatlakoztak."
+msg_new_resident_spawn_to_town_prompt: "Szeretnél a városba teleportálni, amelyhez épp csatlakoztál?"
+msg_recieved_refund_for_deleted_object: "Visszakaptad a törölt városod vagy nemzeted bankszámla egyenlegét, összesen: %s."
+msg_err_you_already_own_this_plot: "Már a tulajdonodban van ez a telek."
+msg_err_you_cannot_delete_this_nation: "Nem törölheted ezt a nemzetet."
+status_district_name_and_size: 'A telek része a(z) %s kerületnek. A kerület összesen %s telket tartalmaz.'
+msg_err_district_name_required: 'Meg kell adnod egy kerület nevet, pl. /plot district add {név}'
+msg_err_rename_district_name_required: 'Meg kell adnod egy új kerület nevet, pl. /plot district rename {név}'
+msg_district_renamed_from_x_to_y: 'A(z) %s kerület neve át lett nevezve erre: %s.'
+msg_err_plot_not_associated_with_a_district: 'Ez a telek nem tartozik egy kerülethez sem.'
+msg_plot_was_removed_from_district_x: 'A telek <blue>(%s,%s) <dark_green>el lett távolítva a(z) %s kerületből.'
+msg_district_empty_deleted: 'A(z) %s kerület üres volt, ezért törölve lett.'
+msg_district_deleted: 'A(z) %s kerület törölve lett.'
+msg_err_this_plot_is_already_part_of_the_district_x: 'Ez a telek már része a(z) %s kerületnek.'
+msg_townblock_transferred_from_x_to_x_district: 'A telek áthelyezve a(z) %s kerületből a(z) %s kerületbe.'
+msg_district_already_exists_did_you_want_to_transfer: 'Ez a városblokk már része a(z) %s körzetnek. Biztosan át szeretnéd helyezni a(z) %s körzetbe?'
+msg_plot_was_put_into_district_x: 'A telek <blue>(%s,%s) <dark_green>kerületbe helyezve: %s.'
+msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "Nem távolíthatod el ezt a telket a(z) %s kerületből, mert a kerület egyik része leválna a többitől."
+map_hover_district: 'Kerület: '
+msg_err_you_cannot_join_town_you_have_not_played_long_enough: "Nem töltöttél elég időt a szerveren, még %s-t kell várnod, mielőtt csatlakozhatsz egy városhoz."
+msg_your_nation_has_pending_ally_invites: "A nemzetednek meghívásai vannak szövetségre egy vagy több nemzettel. Használd a '/n ally received' parancsot a meghívások megtekintéséhez."
+msg_your_town_has_pending_nation_invites: "A városodnak meghívásai vannak, hogy csatlakozzon egy vagy több nemzethez. Használd a '/t invite received' parancsot a meghívások megtekintéséhez."
+msg_you_have_pending_town_invites: "Meghívásaid vannak egy vagy több városhoz való csatlakozásra. Használd a '/invite list' parancsot a meghívások megtekintéséhez, vagy a '/invite deny all' parancsot az összes meghívás elutasításához."
+msg_admin_eco_convert_no_providers: "<red>Nincs elérhető gazdasági szolgáltató."
+msg_admin_eco_convert_no_provider_specified: "<red>Nincs megadva gazdasági szolgáltató."
+msg_admin_eco_convert_no_target_specified: "<red>Nincs megadva célgazdaság."
+msg_admin_eco_convert_target_not_found: "<red>Nincs olyan gazdasági adapter, amelynek neve '%s'. Elérhető adapterek: [%s]"
+msg_admin_eco_convert_already_modern: "<red>Nem lehet modernné alakítani; a szolgáltató már modern módban van."
+msg_admin_eco_convert_online_players_warning: "<red>Figyelem: Javasolt az átalakítás végrehajtása, amikor nincsenek játékosok a szerveren."
+msg_admin_eco_convert_x_accounts_found: "%s fiók található átalakításra. Az átalakítás most kezdődik."
+msg_admin_eco_convert_conversion_progress: "Fiókok átalakítása folyamatban, %s kész..."
+msg_admin_eco_convert_success: "A gazdasági átalakítás sikeres volt."
+msg_err_mode_does_not_exist: "A(z) %s mód nem ismert."
+msg_err_not_allowed_to_switch: "Itt nem válthatsz módot."
+chunknotification_plot_claim_help_message: " Használd a '/plot claim' parancsot a parcella megvásárlásához."
+titlemsg_pay_your_bail_title: "Fizesd ki az óvadékodat: %s"
+titlemsg_pay_your_bail_subtitle: "/res jail paybail"

@@ -69,6 +69,7 @@ public class MathUtil {
 	}
 	
 	public static int getIntOrThrow(String input) throws TownyException {
+		input = parseAbbreviations(input);
 		int i;
 		try {
 			i = Integer.parseInt(input);
@@ -78,6 +79,31 @@ public class MathUtil {
 		return i;
 	}
 	
+	private static String parseAbbreviations(String input) {
+		if (input.endsWith("k") || input.endsWith("K"))
+			return parseNumbers(input) + "000";
+		if (input.endsWith("m") || input.endsWith("M"))
+			return parseNumbers(input) + "000000";
+		if (input.endsWith("b") || input.endsWith("B"))
+			return parseNumbers(input) + "000000000";
+		return input;
+	}
+
+	private static String parseNumbers(String input) {
+		String output = "";
+		for (int i = 0; i < input.length(); i++)
+			if (Character.isDigit(input.charAt(i)))
+				output += input.charAt(i);
+		return output;
+	}
+
+	public static double getPositiveDoubleOrThrow(String input) throws TownyException {
+		double i = getDoubleOrThrow(input);
+		if (i < 0)
+			throw new TownyException(Translatable.of("msg_err_negative"));
+		return i;
+	}
+
 	public static int getPositiveIntOrThrow(String input) throws TownyException {
 		int i = getIntOrThrow(input);
 		if (i < 0)

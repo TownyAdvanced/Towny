@@ -189,6 +189,12 @@ public enum ConfigNodes {
             "false",
 			"",
             "# If set to true, any newly made nation will have open status and any town may join without an invite."),
+	NATION_DEF_NEUTRAL(
+		"nation.default_neutral",
+		"true",
+
+		"",
+		"# Default neutral status of the nation (are new nations neutral by default?)"),
 	NATION_DEF_BOARD("nation.default_board", 
 			"/nation set board [msg]",
 			"",
@@ -343,6 +349,12 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# Do new worlds disable creatures trampling crops, by default?"),
+	NWS_JAILING_ENABLE(
+			"new_world_settings.jailing_enabled",
+			"true",
+			"",
+			"# This section is applied to new worlds as default settings when new worlds are detected.",
+			"# Whether to allow players in this world to be jailed or not"),
 	NWS_PLOT_MANAGEMENT_HEADER(
 			"new_world_settings.plot_management",
 			"",
@@ -525,6 +537,20 @@ public enum ConfigNodes {
 			"",
 			"# When true players cannot become hungrier when in their own or an allied town."),
 
+	GTOWN_SETTINGS_BEACONS_ROOT(
+			"global_town_settings.beacons","","",
+			"# These beacons settings will only work on Paper or Paper-derived servers. They will not have any effect on Spigot servers."),
+	GTOWN_SETTINGS_BEACONS_FOR_ALLIES_ONLY(
+			"global_town_settings.beacons.beacons_for_allies_only",
+			"false",
+			"",
+			"# When true, a beacon placed in a town will only affect the allies of the town. This includes residents, nation residents and allied nation residents."),
+	GTOWN_SETTINGS_BEACONS_EXCLUDE_CONQUERED_TOWNS(
+			"global_town_settings.beacons.exclude_conquered_towns",
+			"false",
+			"",
+			"# When true, conquered towns are not considered allies."),
+
 	GTOWN_SETTINGS_PVP_COOLDOWN_TIMER(
 			"global_town_settings.pvp_cooldown_time",
 			"30",
@@ -565,6 +591,16 @@ public enum ConfigNodes {
 			"",
 			"# Enables the [~Home] TownName - PlotOwner - PlotName message line..",
 			"# If false players will not be shown any notifications when they move in and out of towns, between plots."),
+	GTOWN_SETTING_FORCE_PVP_ON_OUTLAWS(
+			"global_town_settings.force_pvp_on_outlaws",
+			"false",
+			"",
+			"# While true, outlaws can always be harmed in towns they are outlawed in."),
+	GTOWN_SETTING_ALLOW_OUTLAWS_TO_ALWAYS_PVP(
+			"global_town_settings.allows_outlaws_to_always_pvp",
+			"false",
+			"",
+			"# While true, outlaws can always harm players in towns they are outlawed in, despite the town pvp setting."),
 	GTOWN_SETTINGS_ALLOW_OUTLAWS_TO_ENTER_TOWN(
 			"global_town_settings.allow_outlaws_to_enter_town",
 			"true",
@@ -659,7 +695,7 @@ public enum ConfigNodes {
 			"global_town_settings.farm_animals",
 			"PIG,COW,CHICKEN,SHEEP,MOOSHROOM",
 			"",
-			"# List of animals which can be killed on farm plots by town residents."
+			"# List of animals which can be killed on farm plots by players who have been given destroy plot permissions to destroy."
 	),
 	GTOWN_MAX_RESIDENTS_PER_TOWN(
 			"global_town_settings.max_residents_per_town",
@@ -675,11 +711,23 @@ public enum ConfigNodes {
 			"# Requires max_residents_capital_override to be above 0.",
 			"# Uses the greater of max_residents_capital_override and max_residents_per_town."
 	),
+	GTOWN_SETTINGS_TOWN_LEVEL_IS_DETERMINED_BY_TOWNBLOCK_COUNT(
+			"global_town_settings.town_level_is_determined_by_townblock_count_instead_of_resident_count",
+			"false",
+			"",
+			"# When set to true, the town's TownLevel is determined by the number of townblocks the town owns, instead of the number of residents.",
+			"# This setting will have no effect when town_block_ratio is set to 0."),
 	GTOWN_SETTINGS_DISPLAY_TOWNBOARD_ONLOGIN(
 			"global_town_settings.display_board_onlogin",
 			"true",
 			"",
 			"# If Towny should show players the townboard when they login"
+	),
+	GTOWN_SETTINGS_MAX_BOARD_LENGTH(
+			"global_town_settings.max_board_length",
+			"170",
+			"",
+			"# The maximum number of characters that the town (and nation,) board messages can be."
 	),
 	GTOWN_SETTINGS_OUTSIDERS_PREVENT_UNCLAIM_TOWNBLOCK(
 			"global_town_settings.outsiders_prevent_unclaim_townblock",
@@ -750,6 +798,12 @@ public enum ConfigNodes {
 			"# If People should keep their experience on death in an arena townblock.",
 			"# Is not guaranteed to work with other keep experience plugins!"
 	),
+	GTOWN_SETTINGS_PREVENT_ITEM_DEGRADE_IN_ARENAS(
+			"global_town_settings.prevent_item_degrading_in_arenas",
+			"false",
+			"",
+			"# While true, weapons and armour items worn by players in Arena plots will not lose durability."),
+
 	GTOWN_SETTINGS_MAX_BUYTOWN_PRICE(
 			"global_town_settings.max_buytown_price",
 			"999999999",
@@ -789,6 +843,13 @@ public enum ConfigNodes {
 			"# The ranks to be given preference when assigning a new mayor, listed in order of descending preference.",
 			"# All ranks should be as defined in `townyperms.yml`.",
 			"# For example, to give a `visemayor` preference over an `assistant`, change this parameter to `visemayor,assistant`."
+	),
+	GTOWN_NAMES_OF_ASSISTANT_RANKS(
+			"global_town_settings.rank_names_to_be_treated_as_assistants",
+			"assistant",
+			"",
+			"# The ranks to be given special priviledges, for instance when messages would be shown to only VIP town members.",
+			"# All ranks should be as defined in `townyperms.yml`."
 	),
 	GTOWN_SETTINGS_PREVENT_FLUID_GRIEFING(
 			"global_town_settings.prevent_fluid_griefing",
@@ -985,6 +1046,21 @@ public enum ConfigNodes {
 			"-1",
 			"",
 			"# The maximum amount of allies that a nation can have, set to -1 to have no limit."),
+	GNATION_SETTINGS_ARE_CONQUERED_TOWNS_CONSIDERED_ALLIES(
+			"global_nation_settings.are_conquered_towns_considered_allies",
+			"true",
+			"",
+			"# While true, conquered towns will be considered a member of good standing in the nation.",
+			"# When set to false CombatUtil#isAlly() tests will treat conquered towns and their nations as not allied.",
+			"# Setting this to false could result in strange unforseen behaviour."),
+	GNATION_SETTINGS_ARE_CONQUERED_TOWNS_GIVEN_NATION_PLOT_PERMS(
+			"global_nation_settings.are_conquered_towns_given_nation_plot_perms",
+			"true",
+			"",
+			"# While true, conquered towns will be considered a member of good standing in the nation, and will be",
+			"# treated as normal nation members when plot perms are calculated.",
+			"# When set to false plot permission tests will treat conquered towns' residents as not members of their nations,",
+			"# preventing them from using their host nation's plots while the nation's towns have nation plot perms enabled."),
 	GNATION_SETTINGS_PROXIMITY_ROOT(
 			"global_nation_settings.proximity", "", ""),
 	GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL(
@@ -1279,6 +1355,19 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	SPAWNING_SAFE_TELEPORT(
+		"spawning.safe_teleport",
+		"false",
+		"",
+		"# If enabled tries to find a safe location when teleporting to a town spawn/nation spawn/outpost",
+		"# can be used to prevent players from making kill boxes at those locations."
+	),
+	SPAWNING_STRICT_SAFE_TELEPORT(
+		"spawning.strict_safe_teleport",
+		"false",
+		"",
+		"# If enabled, teleportation will be canceled if the location is not safe."
+	),
 	SPAWNING_COST_SPAWN_WARNINGS(
 			"spawning.spawn_cost_warnings",
 			"true",
@@ -1361,7 +1450,7 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When set to true, a player that is trusted by a town is allowed to spawn to the town as if they were a resident.",
-			"# Allows allows the residents of entire an town when that town is trusted by the town."),
+			"# Allows the residents of entire an town when that town is trusted by the town."),
 	SPAWNING_IS_NEW_RESIDENT_PROMPTED_TO_SPAWN(
 			"spawning.town_spawn.are_new_residents_prompted_to_town_spawn",
 			"false",
@@ -1571,13 +1660,20 @@ public enum ConfigNodes {
 		"# If enabled, the world name placeholder will be replaced with the world key instead of the Bukkit name.",
 		"# This should be enabled if you use SquareMap."
 	),
+
+	PLUGIN_WEB_MAP_SHOW_LINK_FOR_NONPUBLIC_TOWNS(
+		"plugin.interfacing.web_map.non_public_towns_show_map_link",
+		"false",
+		"",
+		"# If enabled, non-public towns will show a link to their map location in the town status screen."
+	),
 	
 	PLUGIN_WEB_MAP_URL(
 			"plugin.interfacing.web_map.url",
 			"https://example.com/map/?worldname={world}&mapname=flat&zoom=5&x={x}&y=64&z={z}",
 			"",
 			"# The url that players will be prompted to open when clicking on a coordinate in a status screen.",
-			"# Valid placeholders are {world}, {x}, and {y}, for the world name, x, and y coordinates respectively."
+			"# Valid placeholders are {world}, {x}, and {z}, for the world name, x, and z coordinates respectively."
 	),
 
 	PLUGIN_DAY_HEADER("plugin.day_timer", "", ""),
@@ -1812,11 +1908,33 @@ public enum ConfigNodes {
 			"",
 			"",
 			"",
-			"############################################################",
-			"# +------------------------------------------------------+ #",
-			"# |             block/item/mob protection                | #",
-			"# +------------------------------------------------------+ #",
-			"############################################################",
+			"###########################################################################",
+			"# +---------------------------------------------------------------------+ #",
+			"# |                      block/item/mob protection                      | #",
+			"# |                                                                     | #",
+			"# | This section has settings for what is considered a item_use item    | #",
+			"# | and switch blocks, as well as settings related to mobs and their    | #",
+			"# | interactions.                                                       | #",
+			"# | In the item_use and switch ids sections you are able to use the     | #",
+			"# | Bukkit Material names which are listed at this webpage:             | #",
+			"# | https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html   | #",
+			"# |                                                                     | #",
+			"# | You are also able to use groups that are made in Towny. Group names | #",
+			"# | include:                                                            | #",
+			"# | AXES, SWORDS, BOWS, WEAPONS, ARMOURS, DYES, REDSTONE_INTERACTABLES, | #",
+			"# | POTTED_PLANTS, FLOWERS, ORES, SAPLINGS, PLANTABLES, CROPS, TREES,   | #",
+			"# | LEAVES, BEDS, SIGNS, TORCHES, SKULLS, BOATS, MINECARTS, WOOD_DOORS, | #",
+			"# | DOORS, FENCE_GATES, TRAPDOORS, SHULKER_BOXES, BUTTONS, BUCKETS,     | #",
+			"# | PRESSURE_PLATES, NON_WOODEN_PRESSURE_PLATES, COPPER_BLOCKS,         | #",
+			"# | WEATHERABLE_BLOCKS, PROJECTILE_TRIGGERED_REDSTONE, WAXED_BLOCKS,    | #",
+			"# | CANDLES, ITEM_FRAMES, HANGING_ENTITIES, CAMPFIRES, BOOK_CONTAINERS, | #",
+			"# | PLACEABLE_BOOKS, HARVESTABLE_BERRIES, MINECART_KILLERS, AIR_TYPES,  | #",
+			"# | UNSTRIPPED_WOOD, CAULDRONS, FILLED_CAULDRONS, PLANTS, LIQUID_BLOCKS,| #",
+			"# | CAULDRON_FILLABLE, HOES, BANNERS, BRUSHABLE_BLOCKS, CORAL_FANS,     | #",
+			"# | PROJECTILE_BREAKABLE_BLOCKS, NOT_SOLID_BLOCKS, FALLING_BLOCKS,      | #",
+			"# | EXPLODABLE_ATTACHABLES                                              | #",
+			"# +---------------------------------------------------------------------+ #",
+			"###########################################################################",
 			""),
 	PROT_ITEM_USE_MAT(
 			"protection.item_use_ids",
@@ -1829,7 +1947,7 @@ public enum ConfigNodes {
 			"# A full list of proper names can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html "),
 	PROT_SWITCH_MAT(
 			"protection.switch_ids",
-			"CHEST,SHULKER_BOXES,TRAPPED_CHEST,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER",
+			"CHESTS,SHULKER_BOXES,FURNACE,BLAST_FURNACE,DISPENSER,HOPPER,DROPPER,JUKEBOX,SMOKER,COMPOSTER,BELL,BARREL,BREWING_STAND,LEVER,NON_WOODEN_PRESSURE_PLATES,BUTTONS,WOOD_DOORS,FENCE_GATES,TRAPDOORS,MINECARTS,LODESTONE,RESPAWN_ANCHOR,TARGET,OAK_CHEST_BOAT,DECORATED_POT,CRAFTER,SHELVES,COPPER_GOLEM_STATUE",
 			"",
 			"# Blocks that are protected via town/plot flags.",
 			"# These are blocks in the world that will be protected by a town/resident/plot's switch setting.",
@@ -1868,10 +1986,10 @@ public enum ConfigNodes {
 			"# Prevent the spawning of villager babies in towns."),
 	PROT_MOB_REMOVE_IGNORED_SPAWN_CAUSES(
 			"protection.town_mob_removal_ignored_spawn_causes",
-			"",
+			"TRIAL_SPAWNER",
 			"",
 			"# A comma seperated list of spawn causes, if an entity has a spawn cause that is in this list they will not be removed by town mob removal.",
-			"# For the list of valid spawn causes, see https://jd.papermc.io/paper/1.20/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html",
+			"# For the list of valid spawn causes, see https://jd.papermc.io/paper/1.21.4/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html",
 			"# Due to technical reasons, this setting only works on Paper servers."),
 
 	PROT_MOB_DISABLE_TRIGGER_PRESSURE_PLATE_STONE(
@@ -1932,12 +2050,13 @@ public enum ConfigNodes {
 			"# This would include withers damaging protected mobs, and can be quite harmful."),
 	PROT_POTION_TYPES(
 			"protection.potion_types",
-			"BLINDNESS,CONFUSION,HARM,HUNGER,POISON,SLOW,SLOW_DIGGING,WEAKNESS,WITHER",
+			"BLINDNESS,NAUSEA,INSTANT_DAMAGE,HUNGER,POISON,SLOWNESS,MINING_FATIGUE,WEAKNESS,WITHER,WIND_CHARGED,WEAVING,INFESTED,OOZING",
 			"",
-			"# permitted Potion Types https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionType.html",
-			"# ABSORPTION, BLINDNESS, CONFUSION, DAMAGE_RESISTANCE, FAST_DIGGING, FIRE_RESISTANCE, HARM, HEAL, HEALTH_BOOST, HUNGER, ",
-			"# INCREASE_DAMAGE, INVISIBILITY, JUMP, NIGHT_VISION, POISON, REGENERATION, SATURATION, SLOW , SLOW_DIGGING, ",
-			"# SPEED, WATER_BREATHING, WEAKNESS, WITHER.",
+			"# Permitted Potion Types: https://jd.papermc.io/paper/org/bukkit/potion/PotionEffectType.html",
+			"# ABSORPTION, BAD_OMEN, BLINDNESS, CONDUIT_POWER, DARKNESS, DOLPHINS_GRACE, FIRE_RESISTANCE, GLOWING, HASTE, HEALTH_BOOST, HERO_OF_THE_VILLAGE,",
+			"# HUNGER, INFESTED, INSTANT_DAMAGE, INSTANT_HEALTH, INVISIBILITY, JUMP_BOOST, LEVITATION, LUCK, MINING_FATIGUE, NAUSEA, NIGHT_VISION, OOZING,",
+			"# POISON, RAID_OMEN, REGENERATION, RESISTANCE, SATURATION, SLOW_FALLING, SLOWNESS, SPEED, STRENGTH, TRIAL_OMEN, UNLUCK, WATER_BREATHING,",
+			"# WEAKNESS, WEAVING, WIND_CHARGED, WITHER.",
 			"",
 			"# When preventing PVP prevent the use of these potions."),
 	PROT_FROST_WALKER(
@@ -2266,6 +2385,24 @@ public enum ConfigNodes {
 			"",
 			"# Command used to cancel some towny actions/tasks",
 			"#e.g Purging database or removing a large amount of townblocks"),
+	INVITE_SYSTEM_CONFIRMATION_FORMAT(
+			"invite_system.confirmation_format",
+			"[/%s]",
+			"",
+			"# The format applied to the clickable confirmations.",
+			"#e.g [/accept] would appear as default."),
+	INVITE_SYSTEM_CONFIRMATION_YES_COLOUR(
+			"invite_system.confirmation_yes_colour",
+			"<green>",
+			"",
+			"# The colour used to show the accept and confirm commands.",
+			"# Allowed colours: <black>,<dark_blue>,<dark_green>,<dark_aqua>,<dark_red>,<dark_purple>,<gold>,<gray>,<dark_gray>,<blue>,<green>,<aqua>,<red>,<light_purple>,<yellow>,<white>"),
+	INVITE_SYSTEM_CONFIRMATION_NO_COLOUR(
+			"invite_system.confirmation_no_colour",
+			"<red>",
+			"",
+			"# The colour used to show the deny and cancel commands.",
+			"# Allowed colours: <black>,<dark_blue>,<dark_green>,<dark_aqua>,<dark_red>,<dark_purple>,<gold>,<gray>,<dark_gray>,<blue>,<green>,<aqua>,<red>,<light_purple>,<yellow>,<white>"),
 	INVITE_SYSTEM_CONFIRMATION_TIMEOUT(
 			"invite_system.confirmation_timeout",
 			"20",
@@ -2393,6 +2530,12 @@ public enum ConfigNodes {
 			"",
 			"# How long does a resident have to wait to join a town, after joining the server.",
 			"# Set to 0m to disable. 1m = 1 minute, 1h = 1 hour, 1d = 1 day."),
+	RES_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME(
+		"resident_settings.warn_player_on_outlaw_message_cooldown_in_seconds",
+		"30",
+		"",
+		"# How many seconds in between warning messages, to prevent spam."
+	),
 	ECO(
 			"economy",
 			"",
@@ -2559,7 +2702,7 @@ public enum ConfigNodes {
 			"economy.new_expand.price_claim_townblock_increase",
 			"1.0",
 			"",
-			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to every bonus claim block cost."),
+			"# How much every additionally claimed townblock increases in cost. Set to 1 to deactivate this. 1.3 means +30% to the cost of every townblock claimed."),
 	ECO_MAX_PRICE_CLAIM_TOWNBLOCK(
 			"economy.new_expand.max_price_claim_townblock",
 			"-1.0", 
@@ -2573,6 +2716,26 @@ public enum ConfigNodes {
 			"# Warning: do not set this higher than the cost to claim a townblock.",
 			"# It is advised that you do not set this to the same price as claiming either, otherwise towns will get around using outposts to claim far away.",
 			"# Optionally, set this to a negative amount if you want towns to pay money to unclaim their land."),
+
+	ECO_REFUND_DELETED_NEW_TOWNS("economy.refund_deleted_new_towns","","",""),
+	ECO_REFUND_ALLOW_REFUND_ON_DELETION(
+			"economy.refund_deleted_new_towns.allow_refund_on_deletion",
+			"false",
+			"",
+			"# Will towns that are recently created allow for a refund when the town is deleted by using the /t delete command?",
+			"# This allows a player who has founded their town in the wrong place to delete their town and move it.",
+			"# Towns must be less than the age specified below and have a configuable number of townblocks."),
+	ECO_REFUND_MAX_TOWN_AGE_IN_HOURS(
+			"economy.refund_deleted_new_towns.max_town_age_in_hours",
+			"1",
+			"",
+			"# How many hours old is a town allowed to be in order to get the refund when being deleted."),
+	ECO_REFUND_MAX_CLAIMS(
+			"economy.refund_deleted_new_towns.max_townblocks",
+			"8",
+			"",
+			"# How many townblocks is a town allowed to have in order to qualify for the refund."),
+	
 	ECO_PRICE_TAKEOVERCLAIM("economy.takeoverclaim","","",""),
 	ECO_PRICE_TAKEOVERCLAIM_PRICE(
 			"economy.takeoverclaim.price",
@@ -2593,7 +2756,7 @@ public enum ConfigNodes {
 			"economy.new_expand.price_purchased_bonus_townblock_max_price",
 			"-1.0",
 			"",
-			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maxium."),
+			"# The maximum price that bonus townblocks can cost to purchase. Set to -1.0 to deactivate this maximum."),
 
 	ECO_DEATH("economy.death", "", ""),
 	ECO_PRICE_DEATH_TYPE("economy.death.price_death_type", 
@@ -2633,6 +2796,22 @@ public enum ConfigNodes {
 			"",
 			"# Maximum amount of money allowed in town bank",
 			"# Use 0 for no limit"),
+	ECO_BANK_CAP_PLOT_BASED(
+			"economy.banks.town_bank_cap_is_plotbased",
+			"false",
+			"",
+			"# When true the bank cap is plot-based. The number of townblocks/plots a town has claimed will be multiplied by the above town_bank_cap value."),
+	ECO_BANK_CAP_PLOT_BASED_MIN_AMOUNT(
+			"economy.banks.plotbased_town_bank_cap_minimum",
+			"0.0",
+			"",
+			"# The smallest cap that banks can have while using the plotbased bank cap.",
+			"# If this value is larger than the naturally-derived townblocks * town_bank_cap equation, this minimum will be used instead."),
+	ECO_BANK_CAP_PLOT_BASED_USES_TOWN_LEVEL_MODIFIER(
+			"economy.banks.plotbased_bank_cap_uses_town_level_modifier",
+			"false",
+			"",
+			"# When true the plot-based bank cap will also be multiplied by the town_levels' bank cap modifiers."),
 	ECO_BANK_TOWN_ALLOW_WITHDRAWALS(
 			"economy.banks.town_allow_withdrawals",
 			"true",
@@ -2681,6 +2860,11 @@ public enum ConfigNodes {
 			"",
 			"# When set to true, a town or nation which is deleted will attempt to pay the balance bank balance to the mayor or leader.",
 			"# This will only succeed if the town or nation has a mayor or leader."),
+	ECO_BANK_HIDE_ZERO_OR_LESS_BANK_ACCOUNTS_ON_LISTS(
+			"economy.banks.hide_zero_or_under_banks_on_list_outputs",
+			"false",
+			"",
+			"# When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists."),
 
 	ECO_CLOSED_ECONOMY("economy.closed_economy", "", ""),
 	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT(
@@ -2688,6 +2872,10 @@ public enum ConfigNodes {
 			"towny-server",
 			"",
 			"# The name of the account that all money that normally disappears goes into."),
+	ECO_CLOSED_ECONOMY_SERVER_ACCOUNT_UUID("economy.closed_economy.server_account_uuid",
+		"a73f39b0-1b7c-2930-b4a3-ce101812d926",
+		"",
+		"# The UUID of the account that all money that normally disappears goes into."),
 	ECO_CLOSED_ECONOMY_ENABLED(
 			"economy.closed_economy.enabled",
 			"false",
@@ -2819,6 +3007,13 @@ public enum ConfigNodes {
 			"",
 			"# Uses total number of plots that the town is overclaimed by, to determine the price_town_overclaimed_upkeep_penalty cost.",
 			"# If set to true the penalty is calculated (# of plots overclaimed X price_town_overclaimed_upkeep_penalty)."),
+	ECO_PRICE_TOWN_OUTPOST_UPKEEP_COST(
+			"economy.daily_taxes.per_outpost_cost",
+			"0.0",
+			"",
+			"# An optional price that a town must pay for each outpost they own.",
+			"# This number is added to the town upkeep before other upkeep modifiers are applied to the Town's upkeep costs.",
+			"# Note: when town_plotbased_upkeep is true, this cost is added after all other upkeep modifiers are applied."),
 	ECO_TAXES_ALLOW_PLOT_PAYMENTS(
 			"economy.daily_taxes.use_plot_payments",
 			"false",
@@ -2938,6 +3133,22 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# Does a conquered town which cannot pay the nation tax get deleted?"),
+
+	ECO_ADVANCED_ROOT("economy.advanced","",""),
+	ECO_ADVANCED_MODERN(
+			"economy.advanced.modern",
+			"true",
+			"",
+			"# When enabled, Towny will use UUIDs when communicating with your economy plugin.",
+			"# Most users will never have to touch this, but for existing servers this option will automatically be set to false.",
+			"# If this option is disabled and you wish to avoid losing data, use the `/townyadmin eco convert modern` command to convert."),
+	
+	ECO_ADVANCED_NPC_UUID_VERSION(
+			"economy.advanced.npc_uuid_version",
+			"-1",
+			"",
+			"# The UUID version to use for non-player accounts. This is used so that economy plugins can more easily differentiate between player and NPC accounts.",
+			"# The default is -1, which disables modifying npc uuids."),
 
 	BANKHISTORY(
 		"bank_history",
@@ -3129,7 +3340,12 @@ public enum ConfigNodes {
 			"",
 			"# Most types of unjailing result in a player being teleported when they are freed.",
 			"# Setting this to false will prevent that teleporting, resulting in the player not being teleported when they are freed."),
-	
+	JAIL_SHOW_BAIL_TITLE(
+			"jail.show_bail_command_in_title_message",
+			"false",
+			"",
+			"# When enabled, player that can pay their bail will see a title message telling them how to pay their bail."),
+
 	BANK(
 			"bank",
 			"",
@@ -3218,6 +3434,12 @@ public enum ConfigNodes {
 			"# If a Town has less claims than max_duration hours, those claims' permissions are opened up much more slowly with hours passing between",
 			"# plots opening up, ie: 36 claims and 72 max hours = 1 claim every 2 hours.",
 			"# This system is meant to give players across many time zones the chance to loot a town when it falls into ruin."),
+	
+	TOWN_RUINING_EMPTY_TOWNS_BECOME_RUINS(
+			"town_ruining.empty_towns_become_ruins",
+			"false",
+			"",
+			"# When enabled, when the last resident is removed from a town and it becomes empty (such as when inactive resident deletion is enabled), the town will turn into a ruin instead of being immediately removed."),
 
 
 	ASCII_MAP_SYMBOLS("ascii_map_symbols", "", "", "",

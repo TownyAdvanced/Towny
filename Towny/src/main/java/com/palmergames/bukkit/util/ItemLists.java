@@ -52,6 +52,39 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists AXES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("axes")).endsWith("_AXE").build();
 
 	/**
+	 * List of Sword items.
+	 */
+	public static final ItemLists SWORDS = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("swords")).endsWith("_SWORD").build();
+
+	/**
+	 * List of Bow items.
+	 */
+	public static final ItemLists BOWS = newBuilder().add("BOW","CROSSBOW").build();
+
+	/**
+	 * List of Weapon items.
+	 */
+	public static final ItemLists WEAPONS = newBuilder()
+			.includeList(AXES)
+			.includeList(SWORDS)
+			.includeList(BOWS)
+			.build();
+
+	/**
+	 * List of Armour items.
+	 */
+	public static final ItemLists ARMOURS = newBuilder()
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("chest_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("head_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("foot_armor"))
+			.withTag(Tag.REGISTRY_ITEMS, minecraft("leg_armor"))
+			.endsWith("_CHESTPLATE")
+			.endsWith("_HELMET")
+			.endsWith("_LEGGINGS")
+			.endsWith("_BOOTS")
+			.build();
+	
+	/**
 	 * List of Dye items.
 	 */
 	public static final ItemLists DYES = newBuilder().endsWith("_DYE").endsWith("INK_SAC").build();
@@ -186,20 +219,33 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	 */
 	public static final ItemLists BUCKETS = newBuilder().endsWith("BUCKET").build();
 	
-	/**
-	 * List of Copper Blocks.
-	 */
-	public static final ItemLists COPPER_BLOCKS = newBuilder().add("COPPER_BLOCK","COPPER_ORE","DEEPSLATE_COPPER_ORE","CUT_COPPER","CUT_COPPER_SLAB","CUT_COPPER_STAIRS","EXPOSED_COPPER","EXPOSED_CUT_COPPER","EXPOSED_CUT_COPPER_SLAB","EXPOSED_CUT_COPPER_STAIRS","OXIDIZED_COPPER","OXIDIZED_CUT_COPPER","OXIDIZED_CUT_COPPER_SLAB","OXIDIZED_CUT_COPPER_STAIRS","RAW_COPPER_BLOCK","WAXED_COPPER_BLOCK","WAXED_CUT_COPPER","WAXED_CUT_COPPER_SLAB","WAXED_CUT_COPPER_STAIRS","WAXED_EXPOSED_CUT_COPPER_SLAB","WAXED_EXPOSED_COPPER","WAXED_EXPOSED_CUT_COPPER","WAXED_OXIDIZED_COPPER","WAXED_OXIDIZED_CUT_COPPER","WAXED_OXIDIZED_CUT_COPPER_SLAB","WAXED_WEATHERED_COPPER","WAXED_WEATHERED_CUT_COPPER","WEATHERED_COPPER","WEATHERED_CUT_COPPER","CUT_COPPER_STAIRS","EXPOSED_CUT_COPPER_STAIRS","OXIDIZED_CUT_COPPER_STAIRS","WAXED_EXPOSED_CUT_COPPER_STAIRS","WAXED_OXIDIZED_CUT_COPPER_STAIRS","WAXED_WEATHERED_CUT_COPPER_STAIRS","WAXED_WEATHERED_CUT_COPPER_SLAB","WEATHERED_CUT_COPPER_STAIRS").build();
-	
 	/** 
 	 * List of Weatherable Blocks.
 	 */
-	public static final ItemLists WEATHERABLE_BLOCKS = newBuilder().add("COPPER_BLOCK","EXPOSED_COPPER","OXIDIZED_COPPER","WEATHERED_COPPER","CUT_COPPER","EXPOSED_CUT_COPPER","OXIDIZED_CUT_COPPER","WEATHERED_CUT_COPPER","CUT_COPPER_SLAB","EXPOSED_CUT_COPPER_SLAB","OXIDIZED_CUT_COPPER_SLAB","WEATHERED_CUT_COPPER_SLAB","CUT_COPPER_STAIRS","EXPOSED_CUT_COPPER_STAIRS","OXIDIZED_CUT_COPPER_STAIRS","WEATHERED_CUT_COPPER_STAIRS").build();
+	public static final ItemLists WEATHERABLE_BLOCKS = newBuilder().add("COPPER_BLOCK","CUT_COPPER","CUT_COPPER_SLAB","CUT_COPPER_STAIRS", "COPPER_TRAPDOOR")
+		.add("COPPER_CHEST", "COPPER_GOLEM_STATUE", "COPPER_BARS", "COPPER_CHAIN", "COPPER_LANTERN")
+		.conditionally(() -> CURRENT_VERSION.isNewerThanOrEquals(MINECRAFT_1_21_9), builder -> builder.add("LIGHTNING_ROD")) // lightning rods became weatherable/waxable
+		// Include the 3 other variants copper blocks have
+		.startsWith("EXPOSED_")
+		.startsWith("OXIDIZED_")
+		.startsWith("WEATHERED_")
+		.build();
 	
 	/** 
 	 * List of Scrapable Blocks (They can lose their wax.)
 	 */
-	public static final ItemLists WAXED_BLOCKS = newBuilder().add("WAXED_COPPER_BLOCK","WAXED_EXPOSED_COPPER","WAXED_WEATHERED_COPPER","WAXED_OXIDIZED_COPPER","WAXED_CUT_COPPER","WAXED_EXPOSED_CUT_COPPER","WAXED_WEATHERED_CUT_COPPER","WAXED_OXIDIZED_CUT_COPPER","WAXED_CUT_COPPER_SLAB","WAXED_EXPOSED_CUT_COPPER_SLAB","WAXED_WEATHERED_CUT_COPPER_SLAB","WAXED_OXIDIZED_CUT_COPPER_SLAB","WAXED_CUT_COPPER_STAIRS","WAXED_EXPOSED_CUT_COPPER_STAIRS","WAXED_WEATHERED_CUT_COPPER_STAIRS","WAXED_OXIDIZED_CUT_COPPER_STAIRS").build();
+	public static final ItemLists WAXED_BLOCKS = newBuilder().startsWith("WAXED_").build();
+
+	/**
+	 * List of Copper Blocks.
+	 */
+	public static final ItemLists COPPER_BLOCKS = concat(WEATHERABLE_BLOCKS, WAXED_BLOCKS);
+
+	/**
+	 * Copper chests - used so that not every version has to be specified in the switches config.
+	 */
+	public static final ItemLists COPPER_CHEST = newBuilder().endsWith("COPPER_CHEST").build();
+	public static final ItemLists COPPER_GOLEM_STATUE = newBuilder().endsWith("COPPER_GOLEM_STATUE").build();
 
 	/** 
 	 * List of Candles
@@ -261,6 +307,11 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists CAULDRON_FILLABLE = newBuilder().add("WATER_BUCKET", "LAVA_BUCKET", "POWDER_SNOW_BUCKET").build();
 
 	/**
+	 * List of liquid blocks
+	 */
+	public static final ItemLists LIQUID_BLOCKS = newBuilder().add("WATER", "LAVA", "BUBBLE_COLUMN").build();
+	
+	/**
 	 * List of hoes
 	 */
 	public static final ItemLists HOES = newBuilder().withTag(Tag.REGISTRY_ITEMS, minecraft("hoes")).endsWith("_hoe").build();
@@ -273,14 +324,58 @@ public class ItemLists extends AbstractRegistryList<Material> {
 		.build();
 
 	/**
+	 * List of Carpets.
+	 */
+	public static final ItemLists CARPETS = newBuilder().endsWith("_CARPET").build();
+
+	/**
 	 * List of Plants.
 	 */
 	public static final ItemLists PLANTS = newBuilder()
 			.includeList(FLOWERS)
 			.includeList(CROPS)
 			.includeList(PLANTABLES)
-			.add("TALL_GRASS","LARGE_FERN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF").build();
+			.add("SHORT_GRASS","TALL_GRASS","LARGE_FERN","VINE","TWISTING_VINES_PLANT","WEEPING_VINES_PLANT","NETHER_WART_BLOCK","CRIMSON_ROOTS","WARPED_ROOTS","NETHER_SPROUTS","BIG_DRIPLEAF","SMALL_DRIPLEAF").build();
 
+	/**
+	 * Minecraft uses 3 types of air
+	 */
+	public static final ItemLists AIR_TYPES = newBuilder()
+		.add("AIR")
+		.add("CAVE_AIR")
+		.add("VOID_AIR").build();
+
+	/**
+	 * List of all the banners
+	 */
+	public static final ItemLists BANNERS = newBuilder().endsWith("_BANNER").build();
+
+	/**
+	 * List of wall coral fans, players can fall through these
+	 */
+	public static final ItemLists CORAL_FANS = newBuilder()
+		.endsWith("_WALL_FAN")
+		.build();
+		
+	/**
+	 * List of solid blocks
+	 */
+	public static final ItemLists NOT_SOLID_BLOCKS = newBuilder()
+			.add("TRIPWIRE", "TRIPWIRE_HOOK")
+			.add("REDSTONE_WIRE","COMPARATOR","REPEATER","LEVER")
+			.includeList(CORAL_FANS)
+			.includeList(AIR_TYPES)
+			.includeList(SIGNS)
+			.includeList(BUTTONS)
+			.includeList(PRESSURE_PLATES)
+			.includeList(FENCE_GATES) //if open they are basically air
+			.includeList(TRAPDOORS) //if open they are basically air
+			.includeList(DOORS) ////if open they are basically air
+			.includeList(TORCHES)
+			.includeList(BANNERS)
+			.includeList(CARPETS)
+			.includeList(PLANTS).build();
+	
 	public static final ItemLists FALLING_BLOCKS = newBuilder()
 			.add("SAND", "RED_SAND", "GRAVEL", "SUSPICIOUS_SAND", "SUSPICIOUS_GRAVEL")
 			.endsWith("_CONCRETE_POWDER")
@@ -303,6 +398,12 @@ public class ItemLists extends AbstractRegistryList<Material> {
 			.includeList(PRESSURE_PLATES)
 			.includeList(WOOD_DOORS)
 			.build();
+
+	public static final ItemLists INFESTED_BLOCKS = newBuilder().startsWith("INFESTED_").build();
+
+	public static final ItemLists CHESTS = newBuilder().endsWith("CHEST").build();
+
+	public static final ItemLists SHELVES = newBuilder().endsWith("SHELF").build();
 
 	/**
 	 * Config-useable material groups.
@@ -356,5 +457,15 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	
 	public static Builder<Material, ItemLists> newBuilder() {
 		return new Builder<>(Registry.MATERIAL, Material.class, ItemLists::new);
+	}
+	
+	private static ItemLists concat(ItemLists first, ItemLists... others) {
+		final Set<Material> values = new HashSet<>(first.tagged);
+
+		for (final ItemLists other : others) {
+			values.addAll(other.tagged);
+		}
+
+		return new ItemLists(values);
 	}
 }

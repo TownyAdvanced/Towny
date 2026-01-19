@@ -98,6 +98,7 @@ town_towntrust_help_0: "Ajoute une ville de confiance dans la ville."
 town_towntrust_help_1: "Retire une ville de confiance de la ville."
 town_towntrust_help_2: "Liste les villes de confiance d'une ville."
 town_buy_help: "Achètes des blocs de ville bonus pour augmenter la limite de revendication de la ville."
+town_cede_help: "Offre la parcelle dans laquelle vous êtes debout pour être pris en charge par la ville donnée."
 mayor_help_3: 'Parcelle non attachée à la ville'
 mayor_help_4: 'Annexe autour de vous dans un rayon de X'
 mayor_help_5: 'Annexe au rayon maximal'
@@ -136,10 +137,14 @@ nation_set_help_3: "Définis le montant de taxe qu'une ville conquise va payer."
 nation_set_help_4: "Définissez le nom de la nation."
 nation_set_help_5: "Défini le titre ou le surnom d'un de vos résidents."
 nation_set_help_6: "Définissez le tag de la nation."
+nation_set_help_7: "Définit le message du tableau de la nation."
 nation_set_help_8: "Définissez le point d'apparition de la nation."
+nation_set_help_9: "Défini le coût pour utiliser /t spawn."
+nation_set_help_10: "Définissez la couleur de la carte utilisée dans les plugins de mappage."
 nation_toggle_help_0: "Active/désactive le statut pacifique de la nation."
 nation_toggle_help_1: "Active/désactive le statut public, permettant aux non-résidents d'utiliser /n spawn."
 nation_toggle_help_2: "Active/désactive le statut ouvert, permettant aux villes de rejoindre sans invitation."
+nation_toggle_help_3: "Active/désactive le pourcentage de taxe, ce qui fait que les villes paient un pourcentage au lieu d'un taux fixe."
 nation_sanction_help_1: "Ajoute une ville à la liste des villes sanctionnées."
 nation_sanction_help_2: "Supprime une ville de la liste des villes sanctionnées."
 nation_sanction_help_3: "Liste les villes sanctionnées par votre nation."
@@ -149,10 +154,41 @@ king_help_2: 'Gérer vos alliances.'
 king_help_3: 'Gérer vos ennemis.'
 king_help_4: "Retirez de l'argent de votre banque nationale."
 king_help_5: "Ajouter ou supprimer des villes de votre nation."
+king_help_6: "."
+king_help_7: "Utiliser /t toggle ? pour de l'aide."
+king_help_8: "Utilisé pour absorber une autre nation dans votre nation."
+king_help_9: "Utilisé pour envoyer un message à tout le monde dans votre nation."
 res_1: 'Votre statut'
 res_2: '[Résident]'
 res_3: 'Statut du joueur cible'
 res_4: 'Liste tout les joueurs actifs'
+res_9: "Combien de taxes vous payerez par jour."
+res_10: "Voir /n rank ? pour de l'aide."
+res_11: "Voir /n rank ? pour de l'aide."
+res_12: "Voir /n rank ? pour de l'aide."
+res_13: "Apparaît dans ta ville ou dans ton lit."
+res_toggle_help_0: "Définit le status du Joueur contre Joueur dans ton terrain."
+res_toggle_help_1: "Définit le status du Feu dans ton terrain."
+res_toggle_help_2: "Définit le status de l'apparition des monstres dans ton terrain."
+res_toggle_help_3: "Définit le status des explosions dans ton terrain."
+res_toggle_help_4: "Définit la possibilité de voir les bordures de ton terrain."
+res_toggle_help_5: "Définit la possibilité de voir les bordures constantes de ton terrain."
+res_toggle_help_6: "Définit la possibilité de voir les bordures de la ville."
+res_toggle_help_7: "Définit la possibilité de voir les notifications de terrain."
+res_toggle_help_8: "Définit la possibilité de revendiquer le terrain où tu marches."
+res_toggle_help_9: "Définit la possibilité de voir la carte quand tu changes de terrains."
+res_toggle_help_10: "Supprimer tous les modes."
+res_toggle_help_10.5: "Supprime tous les modes et réapplique le mode par défaut."
+res_toggle_help_11: "Espionner sur les canaux du chat."
+res_toggle_help_12: "Définit la possibilité d'ajouter des terrains dans un groupe de terrains que tu as commencé."
+res_toggle_help_13: "Définit la possibilité de voir les messages-titres quand tu changes de terrain."
+res_toggle_help_14: "Définit la possibilité de ne plus revendiquer le terrain quand tu marches."
+res_toggle_help_15: "Définit la possibilité d'utiliser l'outil d'info pour apprendre les blocs et les entités autorisées."
+res_toggle_help_16: "Définit la possibilité de désactiver tes privilèges administrateur."
+res_jail_help_0: "Paye le coût d'incarcération pour sortir de prison."
+res_set_help_0: "Définit la Bio/A Propos des résidents."
+res_set_help_1: "Définit les permissions par défaut des résidents."
+res_set_help_2: "Définit les modes des résidents."
 mode_1: 'Afficher la carte entre chaque parcelles de ville'
 mode_2: 'Essaye d''annexer lorsque vous marchez'
 mode_3: 'Essaye de déxannexer lorsque vous marchez'
@@ -160,7 +196,6 @@ mode_4: 'Le tchat par défaut est celui de la ville'
 mode_5: 'Le tchat par défaut est celui de la nation'
 mode_6: 'Il est possible de poser %s dans les frontières ennemies pour créer une zone de guerre.'
 plot_perms: 'Utilisez %s plutôt que %s pour les permissions de parcelles.'
-plot_perms_1: 'Les parcelles des résidents n''utilisent pas les permissions d''étrangers.'
 res_list: 'Résidents'
 res_sing: 'Résident'
 mayor_sing: 'Maire'
@@ -177,10 +212,160 @@ world_help_2: '[World]'
 world_help_3: 'Statut du monde cible'
 world_help_4: 'Liste tout les mondes'
 world_help_5: 'Régénérez cette parcelle'
+world_help_6: 'Voir /tw toggle ? pour obtenir de l''aide'
+world_help_7: 'Voir /tw set ? pour obtenir de l''aide'
+world_set_help_0: "Définit le nom de la faune sauvage du monde."
+world_toggle_help_0: "Active On/Off si les villes peuvent revendiquer des terrains dans ce monde."
+world_toggle_help_1: "Active On/Off si Towny est activé dans ce monde."
+world_toggle_help_2: "Active On/Off si des guerres peuvent se déclencher dans ce monde."
+world_toggle_help_3: "Active On/Off si le JcJ ou le JcJ forcé est actif dans ce monde."
+world_toggle_help_4: "Active On/Off si le tir allié est autorisé dans ce monde."
+world_toggle_help_5: "Active On/Off si les explosions sont activés dans ce monde."
+world_toggle_help_6: "Active On/Off si le feu est activé ou forcé dans ce monde."
+world_toggle_help_7: "Active On/Off si les monstres apparaissent ou pas dans ce monde."
+world_toggle_help_8: "Active On/Off si la nouveauté revenir-en-cas-de-non-réclamation est active dans ce monde."
+world_toggle_help_9: "Active On/Off si la nouveauté explosions-modifiées est active dans ce monde."
+world_toggle_help_10: "Active On/Off si la commande plot-clear-deletes-blocks est active dans ce monde."
+world_toggle_help_11: "Active On/Off si la nouveauté plot-unclaiming-deletes-blocks est active dans ce monde."
 townyadmin_help_1: 'Désannexe cette parcelle de ville'
 townyadmin_help_2: 'Tente de désannexer autour de vous.'
+admin_panel_1: "Voir /ta set ? pour obtenir de l'aide"
 admin_panel_2: 'Rafraîchit Towny'
 admin_panel_3: 'Exécute le code du nouveau jour'
+admin_panel_4: "Libérez l'espace qui vous entoure"
+admin_panel_5: "Voir /ta plot ? pour obtenir de l'aide."
+admin_panel_6: "Donner un nombre positif ou négatif de blocs de ville à un joueur ou une ville"
+admin_panel_7: "Voir /ta toggle ? pour obtenir de l'aide"
+admin_panel_8: "Commandes pour contrôler ces objets"
+admin_panel_9: "Téléporte à un terrain spécifique"
+admin_panel_10: "Voir si le joueur a la ou les permissions"
+admin_panel_11: "Réinitialise votre configuration"
+admin_panel_12: "Fais une sauvegarde de vos données Towny"
+admin_panel_13: "Vide ta base de données MySQL en fichier standard"
+admin_panel_14: "Sauvegarde de force ou charge ta base de données"
+admin_panel_15: "Lance le nouveau code horaire"
+admin_panel_16: "Purge les ancients résidents"
+townyadmin_town_help_0: "Crée une ville avec le nom donné et le maire attribué."
+townyadmin_town_help_1: "Afficher l'écran d'état de la ville."
+townyadmin_town_help_2: "Ajouter ou supprimer des résidents d'une ville."
+townyadmin_town_help_3: "Renommer une ville."
+townyadmin_town_help_4: "Supprimer une ville."
+townyadmin_town_help_5: "Fait apparaître dans une ville."
+townyadmin_town_help_6: "Fait apparaître dans l'avant-poste d'une ville."
+townyadmin_town_help_7: "Utilisez la commande de rang d'une ville."
+townyadmin_town_help_8: "Utilisez la commande de set d'une ville."
+townyadmin_town_help_9: "Utilise une activation possible des paramètres des villes."
+townyadmin_town_help_10: "Modifier les métadonnées d'une ville."
+townyadmin_town_help_11: "Fusionner la 2ème ville dans la première ville."
+townyadmin_town_help_12: "Fusionner la 2ème ville dans la première ville, en ignorant toutes les règles."
+townyadmin_town_help_13: "Mettre de l'argent dans la banque de la ville."
+townyadmin_town_help_14: "Prendre de l'argent dans la banque de la ville."
+townyadmin_town_help_15: "Ouvrir le livre de comptes de la ville."
+townyadmin_town_help_16: "Modifier les métadonnées d'une ville."
+townyadmin_town_help_17: "Faire quitter la ville de leur nation."
+townyadmin_town_help_18: "Supprimer le statut de \"ville conquise\" d'une ville."
+townyadmin_town_toggle_help_0: "Activer/désactiver le JcJ/PvP de la ville."
+townyadmin_town_toggle_help_1: "Activer/désactiver le JcJ/PvP imposé de la Ville, empêchant les maires de désactiver le JcJ/PvP."
+townyadmin_town_toggle_help_2: "Activer/désactiver le statut public de la Ville, autorisant les non-résidents à s'y téléporter."
+townyadmin_town_toggle_help_3: "Activer/Désactiver les explosions sur le territoire de la Ville."
+townyadmin_town_toggle_help_4: "Activer/Désactiver le feu sur le territoire de la Ville."
+townyadmin_town_toggle_help_5: "Activer/Désactiver les créatures sur le territoire de la Ville."
+townyadmin_town_toggle_help_6: "Activer/Désactiver les pourcentages de taxes pour la Ville."
+townyadmin_town_toggle_help_7: "Ouvrir la Ville au public, permettant aux non-résidents de rejoindre la Ville sans invitation."
+townyadmin_nation_help_0: "Créer une Nation avec le nom et la capitale."
+townyadmin_nation_help_1: "Affiche l'écran de statut de la nation"
+townyadmin_nation_help_2: "ajouter des villes à la nation"
+townyadmin_nation_help_3: "Retirer des villes à la nation"
+townyadmin_nation_help_4: "renommer la nation"
+townyadmin_nation_help_5: "supprimer une ville"
+townyadmin_nation_help_6: "Revérifier les villes du pays pour s'assurer qu'elles soient suffisamment proches de la capitale."
+townyadmin_nation_help_7: "Fusionner la 2ème ville dans la première ville."
+townyadmin_nation_help_8: "Fusionner la 2ème ville dans la première ville, en ignorant toutes les règles."
+townyadmin_nation_help_9: "Utilise une activation possible des paramètres des villes."
+townyadmin_nation_help_10: "Utilisez la commande de set d'une ville."
+townyadmin_nation_help_11: "déposer de l'argent dans la banque de la nation"
+townyadmin_nation_help_12: "prendre de l'argent dans la banque de la nation"
+townyadmin_nation_help_13: "Ouvrir le livre de comptes de la ville."
+townyadmin_nation_help_14: "Placer la Ville dans la Nation."
+townyadmin_nation_help_15: "Utilisez la commande de rang d'une ville."
+townyadmin_nationrank_help_0: "Ajoute un rang de nation au résident."
+townyadmin_nationrank_help_1: "Enlève un rang de nation du résident."
+townyadmin_database_help_0: "Forcer la sauvegarde de la base de données."
+townyadmin_database_help_1: "forcer le chargement de la base de données"
+townyadmin_database_help_2: "Supprime tous les titres et noms de famille de chaque résident."
+ta_plot_help_0: "Claim un terrain pour un joueur."
+ta_plot_help_1: "Voir les métadonnées stockées dans l'emplacement dans lequel vous vous trouvez."
+ta_plot_help_2: "Définir la clé et la valeur des métadonnées de l'emplacement."
+ta_plot_help_3: "Ajouter ou enlever une métadonnée via la clé."
+ta_resident_help_0: "Renommer un résident."
+ta_resident_help_1: "Ajouter ou enlever un ami."
+ta_resident_help_2: "Lister ou effacer la liste d'amis."
+ta_resident_help_3: "Supprimer un résident de la base de données."
+ta_resident_help_4: "Retire la ligne \"A propos\" d'un joueur."
+ta_toggle_help_0: "Activer/Désactiver la possibilité d'utiliser d'utiliser la wilderness dans toutes les dimensions."
+ta_toggle_help_1: "Activer/Désactiver la régénération dans toutes les dimensions."
+ta_toggle_help_2: "Activer/Désactiver le mode développeur qui affiche des logs additionnels pour le jour spécifié dans la configuration."
+ta_toggle_help_3: "Activer/Désactiver le mode de débogage qui affiche des messages supplémentaires dans les logs."
+ta_toggle_help_4: "Activer/Désactiver la capacité pour les villes ou les nations de retirer de l'argent à leurs banques."
+ta_toggle_help_5: "Faire d'un joueur un PNJ ou non."
+ta_set_help_0: "Attribuer le rôle de maire de la ville au joueur donné."
+ta_set_help_1: "Nommer un nouveau PNJ maire dans une ville (ne paie pas l'entretien)."
+ta_set_help_2: "Définir la capitale d'une nation."
+ta_set_help_3: "Définir la taille de la zone de la nation."
+ta_set_help_4: "Définir le titre d'un résident."
+ta_set_help_5: "Définir le nom de famille d'un résident."
+ta_set_help_6: "Définir une parcelle à une autre ville."
+ta_set_help_7: "Définir le nom du fondateur d'une ville."
+ta_set_help_8: "Utilisez \"taille 0\" (\"size 0\") pour retirer la dérogation nation zone."
+ta_purge_help_0: "Exile les résidents qui ne se sont pas connectés pendant plus de X jour(s) donné(s), facultativement sélectionnez \"townless\" pour retirer seulement les sans-abris ou spécifiez le nom d'une ville pour exiler seulement les résidents d'une ville."
+ta_townmeta_help_1: "Voir les métadonnées stockées dans la ville que vous spécifiez."
+ta_townmeta_help_2: "Définir la clé et la valeur des métadonnées de la ville."
+ta_townmeta_help_3: "Ajoute ou retire une métadonnée pour une clé donnée de la ville."
+ta_residentmeta_help_1: "Accède aux métadonnées enregistrées sur l'habitant spécifié."
+ta_residentmeta_help_2: "Définir la clé et la valeur des métadonnées d'un habitant."
+ta_residentmeta_help_3: "Ajouter ou retirer une métadonnée pour une clé donnée d'un habitant."
+ta_nationmeta_help_1: "Accéder aux métadonnées enregistrées du pays spécifié."
+ta_nationmeta_help_2: "Définir la clé et la valeur des métadonnées d'un pays."
+ta_nationmeta_help_3: "Ajouter ou retirer une métadonnée pour une clé donnée d'un pays."
+ta_reload_help_0: "Recharge la base de données."
+ta_reload_help_1: "Recharge les configurations."
+ta_reload_help_2: "Recharge les fichiers langages."
+ta_reload_help_3: "Recharge les permissions du plugin Towny."
+ta_reload_help_4: "Recharge tous les composants du plugin Towny."
+ta_eco_resetbanks_help: "Réinitialise à 0 ou à une valeur donnée la banque d'un pays ou d'une ville."
+ta_eco_convert_modern_help: "Convertit votre compte \"Towny\" dans la version moderne, capable d'utiliser \"Vault's OfflinePlayer\"."
+ta_eco_convert_help: "Convertit votre compte \"Towny\" à l'économie cible d'implémentation, utile pour transférer des données entre les plugins d'économie."
+ta_eco_info_help: "Donne des informations sur les comptes économiques du serveur."
+ta_depositall_help_0: "Déposer le montant donné dans toutes les banques des villes et du pays."
+ta_info_help_0: "Voir les informations économiques pour un pays spécifié."
+ta_info_help_1: "Voir les informations économiques pour un habitant spécifié."
+ta_info_help_2: "Voir les informations économiques pour le compte \"Towny\" du serveur."
+ta_info_help_3: "Voir les informations économiques pour une ville spécifiée."
+plot_help_0: "Active l'interface information parcelle."
+plot_help_1: "Retire le propriétaire de la parcelle."
+plot_help_2: "Supprime une liste de blocs de la parcelle."
+plot_help_3: "Voyez \"/plot set ?\" pour plus d'informations."
+plot_help_4: "Voyez \"/plot toggle ?\" pour plus d'informations."
+plot_help_5: "Voyez \"/plot group ?\" pour plus d'informations."
+plot_help_6: "Retire la dérogation de permissions pour un joueur."
+plot_help_7: "Ajoute une dérogation de permissions par défaut pour un joueur."
+plot_help_8: "Ouvre l'interface d'édition des permissions."
+plot_help_9: "Ajoute un habitant en tant que \"Digne de confiance\" dans la parcelle."
+plot_help_10: "Retire un habitant en tant que \"Digne de confiance\" dans la parcelle."
+plot_district_help_0: "Par exemple: \"/plot district new ExpensivePlots\""
+plot_district_help_1: "Retire une parcelle du district spécifié."
+plot_district_help_2: "Supprime un district complètement."
+plot_district_help_3: "Renomme le district dans lequel vous vous trouvez."
+plot_group_help_0: "Par exemple : \"/plot group new ExpensivePlots\""
+plot_group_help_1: "Retire une parcelle du groupe spécifié."
+plot_group_help_2: "Supprime un groupe de parcelles définitivement."
+plot_group_help_3: "Renomme le groupe dans lequel vous vous trouvez."
+plot_group_help_4: "Par exemple : \"/plot group set perm resident on\"."
+plot_group_help_5: "Par exemple : \"/plot group toggle [pvp|fire|mobs]\""
+plot_group_help_6: "Par exemple : \"/plot group forsale 50\""
+plot_group_help_7: "Par exemple : \"/plot group notforsale\""
+plot_group_help_8: "Ajoute ou retire un habitant en tant que digne de confiance."
+plot_group_help_9: "Ajoute un habitant en tant que \"Digne de confiance\" dans le groupe de parcelle."
 msg_block_claim: 'Annexe cette parcelle de ville'
 msg_plot_nfs: 'Enlève une parcelle en vente'
 msg_nfs_abr: '&e''fs'' et ''nfs'' sont des abréviations autorisées pour ''forsale'' et ''notforsale''.'
@@ -194,9 +379,6 @@ msg_buy: '&bAchète %d %s pour %s.'
 msg_buy_resident_plot: '&b%s Achète la parcelle de %s pour %s !'
 msg_couldnt_pay_taxes: '&b%s ne pouvait pas payer les impôts et a été exclu de la %s.'
 msg_couldnt_pay_plot_taxes: '&b%s ne pouvait pas payer les impôts et a perdu la propriété d''une parcelle.'
-msg_payed_town_tax: '&ba payé les impôts de la ville de '
-msg_payed_plot_cost: '&ba payé %s pour %s parcelles dans %s'
-msg_payed_resident_tax: '&ba payé l''impôt résidentiel de '
 msg_bankrupt_town: ' n’avait pas les moyens de rester une ville.'
 msg_bankrupt_nation: ' n’avait pas les moyens de rester une nation.'
 msg_nation_not_peaceful: '&bLa nation n’avait pas les moyens de garder son état pacifique.'
@@ -422,7 +604,6 @@ msg_err_not_percentage: '&cLe poucentage doit être en dessous de 100.'
 msg_err_no_economy: '&cL''économie n''a pas été activé.'
 msg_err_not_block_type: '&cCe n''est pas un type de parcelle valable !'
 msg_not_allowed_join: '&c%s n''est pas autorisé à rejoindre une ville.'
-msg_offline_no_join: '&c%s est hors ligne mais n''est quand même pas autorisé à rejoindre une ville.'
 msg_err_cannot_perform_action: '&cNe peut pas effectuer cette action dans le %s.'
 msg_npc_flag: '&bLe drapeau du PNJ est désormais %s pour %s.'
 msg_warning_delete: '&4*** ATTENTION, %s VA ÊTRE SUPPRIMÉ AU PROCHAIN JOUR À CAUSE D''UN MANQUE DE FONDS ***'
@@ -435,7 +616,6 @@ msg_err_not_enough_residents_join_nation: '&bLa ville %s n''a pas assez de rési
 msg_not_enough_residents_no_longer_capital: '&bLa vieille capitale de la nation n''a plus assez de résidents pour être la capitale de la nation. La nouvelle capitale de la nation est %s.'
 msg_town_not_enough_residents_left_nation: '&bLa ville %s n''a plus assez de résidents pour être membre d''une nation, et a été retiré de la nation.'
 msg_nation_disbanded_town_not_enough_residents: '&bLa ville %s n''a plus assez de résidents pour diriger la nation et la nation est forcée à être dissoute.'
-msg_not_enough_residents_refunded: '&bVous avez été remboursé %s car votre nation a été dissoute dû au manque de résidents.'
 msg_not_enough_residents_capital: '&bLa ville %s n''a pas assez de résidents pour être la capitale de la nation.'
 list_page: '&bPage %s sur %s'
 list_err_not_enough_pages: '&cSeulement %s pages valides'
@@ -634,10 +814,13 @@ msg_err_over_outposts_limit: 'Vous ne pouvez pas vous téléporter vers votre av
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Hors-la-loi :' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Hors-la-loi :'
 online: '&a(En ligne)'
-registered_last_online: '&2Enregistré: &a%s &8| &2Dernière connexion: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Permission :' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Enregistré: &a%s &8| &2Dernière connexion: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Permission :'
 status_on: '&4ACTIF'
 status_off: '&aDésactivé'
 status_on_good: '&aActif'
@@ -1081,7 +1264,8 @@ msg_town_destroyed_by_nation_tax: '&bLa ville conquise %s n''a pas pu payer la t
 msg_town_destroyed_by_nation_tax_multiple: '&bLes villes conquises suivantes ne pouvaient pas payer la taxe nationale et sont tombées: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bVotre ville était dispensée de la taxe nationale.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Statut en Ruine'
 msg_comptype_bankrupt: 'Statut en Banqueroute'
 msg_ruined: '&c(Ruiné)'
@@ -1219,9 +1403,11 @@ status_trustedlist: 'De confiance'
 msg_click_to_edit: 'Cliquez pour modifier.'
 permission_gui_header: 'Interface de permission de la ville'
 msg_last_edited: '&7&oDernière modification à %s par %s.'
-msg_trusted_added: '&b %s a été ajouté comme fiable dans cette %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b %s a été ajouté comme fiable dans cette %s.'
 msg_already_trusted: '&b%s est déjà de confiance dans ce %s.'
-msg_trusted_added_2: '&b%s vous a fait confiance dans %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s vous a fait confiance dans %s: %s.'
 msg_not_trusted: '&b%s n''est pas encore de confiance dans ce %s.'
 msg_trusted_removed: '&b %s n’est plus de confiance dans ce %s.'
 msg_trusted_removed_2: '&b%s vous a retiré dans ce %s: %s.'
@@ -1549,7 +1735,7 @@ msg_perm_hud_resident: 'résident'
 msg_perm_hud_nation: 'pays'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'étrangers'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Parcelles: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.
@@ -1684,3 +1870,32 @@ msg_err_that_town_is_not_conquered: "%s n'est pas déjà conquis."
 msg_conquered_status_removed: "%s a perdu son status de conquis."
 msg_setup_command_folia: "La commande /ta install ne marche actuellement pas sur Folia à cause du dysfonctionnement de l'API de conversation, référez-vous au guide ci-dessous à la place."
 msg_perm_gui_folia: "Ce bouton ne marche actuellement pas sur Folia a cause du dysfonctionnement de l'API de conversation, utilisez la commande /plot perm add <nom> à la place."
+#Generic error message for when a world isn't loaded
+msg_err_world_not_loaded: "<red>Le monde n'est pas chargé."
+status_forsale: "&a(En vente: %s)"
+msg_town_forsale: "%s a été mis en vente sur %s."
+msg_town_notforsale: "%s n'est plus à vendre."
+msg_town_buytown_already_mayor: "Vous êtes déjà le maire de %s."
+msg_town_buytown_not_forsale: "La ville n'est pas en vente."
+teleport_warmup_title_dont_move: "&6Ne bougez plus!"
+msg_town_cede_plot_confirmation_give_plot: "Êtes-vous sûr de vouloir donner à %s cette parcelle?"
+msg_town_cede_plot_denied: "%s a refusé votre offre."
+msg_town_cede_plot_unable_to_accept: "%s n'a pas pu accepter votre offre."
+msg_err_you_already_own_this_plot: "Vous possédez déjà cette parcelle."
+msg_err_you_cannot_delete_this_nation: "Vous avez été empêché de supprimer cette nation."
+msg_district_renamed_from_x_to_y: 'Le district %s a été renommé en %s.'
+msg_err_plot_not_associated_with_a_district: 'Cette parcelle n''est pas associée à un district.'
+msg_plot_was_removed_from_district_x: 'La parcelle <blue>(%s,%s) <dark_green>a été supprimé du district %s.'
+msg_district_deleted: 'Le district %s a été supprimé.'
+map_hover_district: 'District:'
+msg_err_you_cannot_join_town_you_have_not_played_long_enough: "Vous n'avez pas été suffisamment longtemps sur le serveur, vous devez attendre une autre %s avant de pouvoir rejoindre une ville."
+msg_admin_eco_convert_success: "Conversion réussie de l'économie"
+msg_err_mode_does_not_exist: "Le mode %s n'est pas reconnue."
+msg_err_not_allowed_to_switch: "Vous n'avez pas le droit de commuter ici."
+chunknotification_plot_claim_help_message: " Utilise '/plot claim' pour acheter cet emplacement."
+titlemsg_pay_your_bail_title: "Paie ta caution : %s"
+titlemsg_pay_your_bail_subtitle: "/res jail paybail"
+msg_not_for_sale: "Pas à vendre."
+msg_err_you_cannot_add_trust_on_outlaw: "Vous ne pouvez pas faire confiance à un joueur qui est hors la loi dans votre ville."
+msg_err_you_cannot_add_trust_on_enemy: "Vous ne pouvez pas faire confiance à un joueur qui fait partie d'une nation ennemie."
+msg_err_you_cannot_add_towntrust_on_outlaw: "Vous ne pouvez pas faire confiance à une ville où des résidents sont hors la loi dans votre ville."

@@ -10,7 +10,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyCommandAddonAPI.CommandType;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
-import com.palmergames.bukkit.towny.exceptions.NoPermissionException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.SpawnType;
@@ -19,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.jail.UnJailReason;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
@@ -68,42 +68,6 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"list"
 	);
 
-	private static final List<String> residentToggleTabCompletes = Arrays.asList(
-		"pvp",
-		"fire",
-		"mobs",
-		"explosion",
-		"adminbypass",
-		"plotborder",
-		"constantplotborder",
-		"townborder",
-		"ignoreplots",
-		"ignoreotherchannels",
-		"bordertitles",
-		"townclaim",
-		"townunclaim",
-		"plotgroup",
-		"map",
-		"spy",
-		"reset",
-		"clear",
-		"infotool"
-	);
-	
-	private static final List<String> residentModeTabCompletes = Arrays.asList(
-		"map",
-		"townclaim",
-		"townunclaim",
-		"plotborder",
-		"constantplotborder",
-		"townborder",
-		"ignoreplots",
-		"ignoreotherchannels",
-		"reset",
-		"clear",
-		"infotool"
-	);
-	
 	private static final List<String> residentConsoleTabCompletes = Arrays.asList(
 		"?",
 		"help",
@@ -128,14 +92,17 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		"mobs",
 		"explosion"
 	);
-	
-	private static final List<String> residentToggleModes = new ArrayList<>(residentToggleTabCompletes).stream()
-		.filter(str -> !residentToggleChoices.contains(str))
-		.collect(Collectors.toList());
 
-	private static final List<String> residentToggleModesUnionToggles = Stream.concat(
-		new ArrayList<>(residentToggleModes).stream(),
-		BaseCommand.setOnOffCompletes.stream()
+	private static final List<String> residentToggleModeTabCompletes = ResidentModeHandler.getValidModeNames();
+
+	private static final List<String> residentSetModeTabCompletesWithClearAndReset = Stream.concat(
+		Arrays.asList("reset", "clear").stream(),
+		new ArrayList<>(residentToggleModeTabCompletes).stream()
+	).collect(Collectors.toList());
+
+	private static final List<String> residentCompleteToggleChoices = Stream.concat(
+		new ArrayList<>(residentToggleChoices).stream(),
+		new ArrayList<>(residentToggleModeTabCompletes).stream()
 	).collect(Collectors.toList());
 
 	public ResidentCommand(Towny instance) {
@@ -171,7 +138,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "plotlist":
 					if (args.length == 2)
@@ -190,16 +157,9 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					break;
 				case "toggle":
 					if (args.length == 2) {
-						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentToggleTabCompletes), args[1]);
+						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.RESIDENT_TOGGLE, residentCompleteToggleChoices), args[1]);
 					} else if (args.length == 3 && residentToggleChoices.contains(args[1].toLowerCase(Locale.ROOT))) {
 						return NameUtil.filterByStart(BaseCommand.setOnOffCompletes, args[2]);
-					} else if (args.length >= 3) {
-						String prevArg = args[args.length - 2].toLowerCase(Locale.ROOT);
-						if (residentToggleModes.contains(prevArg)) {
-							return NameUtil.filterByStart(residentToggleModesUnionToggles, args[args.length - 1]);
-						} else if (BaseCommand.setOnOffCompletes.contains(prevArg)) {
-							return NameUtil.filterByStart(residentToggleModes, args[args.length - 1]);
-						}
 					}
 					break;
 				case "set":
@@ -211,7 +171,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 						switch (args[1].toLowerCase(Locale.ROOT)) {
 							case "mode":
-								return NameUtil.filterByStart(residentModeTabCompletes, args[args.length - 1]);
+								if (args.length == 3)
+									return NameUtil.filterByStart(residentSetModeTabCompletesWithClearAndReset, args[2]);
+								else
+									return NameUtil.filterByStart(residentToggleModeTabCompletes, args[args.length - 1]);
 							case "perm":
 								return permTabComplete(StringMgmt.remArgs(args, 2));
 							case "about":
@@ -226,13 +189,19 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						case 2:
 							return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
 						case 3:
-							if (args[1].equalsIgnoreCase("remove")) {
-								Resident res = TownyUniverse.getInstance().getResident(((Player) sender).getUniqueId());
-								if (res != null)
-									return NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
-							} else {
-								return getTownyStartingWith(args[2], "r");
-							}
+							return switch (args[1].toLowerCase(Locale.ROOT)) {
+								case "remove" -> {
+									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+									if (res != null) {
+										yield NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
+									}
+
+									yield Collections.emptyList();
+								}
+								case "add" -> getTownyStartingWith(args[2], "r");
+								case "list" -> NameUtil.filterByStart(List.of("online"), args[2]);
+								default -> Collections.emptyList();
+							};
 						default:
 							return Collections.emptyList();
 					}
@@ -429,8 +398,14 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Check if we're reseting before trying for nodes.
-		if (newSplit[0].equalsIgnoreCase("reset") || newSplit[0].equalsIgnoreCase("clear")) {
-			plugin.removePlayerMode(player);
+		if (newSplit[0].equalsIgnoreCase("clear")) {
+			checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE_CLEAR.getNode());
+			ResidentModeHandler.clearModes(resident, false);
+			return;
+		}
+
+		if (newSplit[0].equalsIgnoreCase("reset")) {
+			ResidentModeHandler.resetModes(resident, false);
 			return;
 		}
 		TownyPermission perm = resident.getPermissions();
@@ -440,14 +415,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			choice = BaseCommand.parseToggleChoice(newSplit[1]);
 		}
 
-		// Special case chat spy
-		if (StringMgmt.containsIgnoreCase(Arrays.asList(newSplit), "spy")) {
-			checkPermOrThrow(player, PermissionNodes.TOWNY_CHAT_SPY.getNode());
-
-			resident.toggleMode(newSplit, true);
-			return;
-			
-		} else if (newSplit[0].equalsIgnoreCase("pvp")) {
+		if (newSplit[0].equalsIgnoreCase("pvp")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_PVP.getNode());
 			
 			Town town = resident.getTownOrNull();
@@ -480,8 +448,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			TownyCommandAddonAPI.getAddonCommand(CommandType.RESIDENT_TOGGLE, newSplit[0]).execute(player, "resident", newSplit);
 			return;
 		} else {
-
-			resident.toggleMode(newSplit, true);
+			ResidentModeHandler.toggleMode(resident, newSplit[0].toLowerCase(Locale.ROOT), true);
 			return;
 
 		}
@@ -500,7 +467,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private void notifyPerms(Player player, TownyPermission perm) {
 
 		TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		TownyMessaging.sendMessage(player, Colors.DARK_GREEN + "PvP: " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Explosions: " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Firespread: " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Mob Spawns: " + ((perm.mobs) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF"));
 
 	}
 	
@@ -513,10 +480,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		for (Player player : BukkitTools.getVisibleOnlinePlayers(sender)) {
 			Resident resident = TownyAPI.getInstance().getResident(player);
 			if (resident == null) {
-				formattedList.add(Colors.White + player.getName() + Colors.White);
+				formattedList.add(Colors.WHITE + player.getName() + Colors.WHITE);
 				continue;
 			}
-			formattedList.add(getColour(resident) + resident.getName() + Colors.White);
+			formattedList.add(getColour(resident) + resident.getName() + Colors.WHITE);
 		}
 		
 		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
@@ -544,7 +511,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_PERM.getNode());
 			TownCommand.setTownBlockPermissions(player, resident, resident.getPermissions(), StringMgmt.remFirstArg(split), true);
 		}
-		case "mode" -> setMode(player, StringMgmt.remFirstArg(split));
+		case "mode" -> setMode(resident, StringMgmt.remFirstArg(split));
 		case "about" -> setAbout(player, String.join(" ", StringMgmt.remFirstArg(split)), resident);
 		default -> {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.RESIDENT_SET, split[0])) {
@@ -558,31 +525,26 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		resident.save();
 	}
 
-	private void setMode(Player player, String[] split) throws NoPermissionException {
-		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE.getNode());
-
+	private void setMode(Resident resident, String[] split) throws TownyException {
 		if (split.length == 0) {
-			HelpMenu.RESIDENT_SET_MODE.send(player);
+			HelpMenu.RESIDENT_SET_MODE.send(resident.getPlayer());
 			return;
 		}
 
 		if (split[0].equalsIgnoreCase("clear")) {
-			plugin.removePlayerModes(player);
+			checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_MODE_CLEAR.getNode());
+			ResidentModeHandler.clearModes(resident, true);
 			return;
 		}
 
 		if (split[0].equalsIgnoreCase("reset")) {
-			plugin.removePlayerMode(player);
+			ResidentModeHandler.resetModes(resident, true);
 			return;
 		}
 
-		List<String> list = Arrays.asList(split);
-		if (list.contains("spy"))
-			checkPermOrThrow(player, PermissionNodes.TOWNY_CHAT_SPY.getNode());
-
-		plugin.setPlayerMode(player, split, true);
+		ResidentModeHandler.toggleModes(resident, split, true, false);
 	}
-	
+
 	private void setAbout(Player player, String about, Resident resident) throws TownyException {
 		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SET_ABOUT.getNode());
 
@@ -625,12 +587,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (!admin)
 			resident = getResidentOrThrow(player);
 
-		String[] names = StringMgmt.remFirstArg(split);
+		String[] args = StringMgmt.remFirstArg(split);
 		switch(split[0].toLowerCase(Locale.ROOT)) {
-		case "add" -> residentFriendAdd(player, resident, filterResidentList(player, names));
-		case "remove" -> residentFriendRemove(player, resident, filterResidentList(player, names));
-		case "list" -> residentFriendList(player, resident);
-		case "clearlist", "clear" -> residentFriendRemove(player, resident, resident.getFriends());
+			case "add" -> residentFriendAdd(player, resident, filterResidentList(player, args));
+			case "remove" -> residentFriendRemove(player, resident, filterResidentList(player, args));
+			case "list" -> residentFriendList(player, resident, args.length > 0 && args[0].equalsIgnoreCase("online"));
+			case "clearlist", "clear" -> residentFriendRemove(player, resident, resident.getFriends());
 		}
 	}
 
@@ -646,17 +608,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		return residents;
 	}
 
-	private static void residentFriendList(Player player, Resident resident) {
+	private static void residentFriendList(Player player, Resident resident, boolean requireOnline) {
 		
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("friend_list").forLocale(player)));
 		List<String> formatedList = resident.getFriends().stream()
-				.map(friend -> getColour(friend) + friend.getName() + Colors.White)
-				.collect(Collectors.toList());
+			.filter(friend -> !requireOnline || (friend.getPlayer() != null && player.canSee(friend.getPlayer())))
+			.map(friend -> getColour(friend) + friend.getName() + Colors.WHITE)
+			.collect(Collectors.toList());
 		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));
 	}
 
 	private static String getColour(Resident resident) {
-		return resident.isMayor() ? resident.isKing() ? Colors.Gold : Colors.LightBlue : Colors.White;
+		return resident.isMayor() ? resident.isKing() ? Colors.GOLD : Colors.AQUA : Colors.WHITE;
 	}
 
 	public static void residentFriendAdd(Player player, Resident resident, List<Resident> friending) {

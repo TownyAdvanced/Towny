@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.object.notification;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -11,6 +10,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
 public class TitleNotification {
@@ -39,7 +39,7 @@ public class TitleNotification {
 	}
 
 	public void setTitleNotification(String titleNotification) {
-		this.titleNotification = titleNotification;
+		this.titleNotification = Colors.translateColorCodes(titleNotification);
 	}
 
 	public String getSubtitleNotification() {
@@ -47,7 +47,7 @@ public class TitleNotification {
 	}
 
 	public void setSubtitleNotification(String subtitleNotification) {
-		this.subtitleNotification = subtitleNotification;
+		this.subtitleNotification = Colors.translateColorCodes(subtitleNotification);
 	}
 
 	private void makeTitles() {
@@ -58,8 +58,8 @@ public class TitleNotification {
 	}
 
 	private void makeTownTitles() {
-		String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownTitle());
-		String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesTownSubtitle());
+		String title = TownySettings.getNotificationTitlesTownTitle();
+		String subtitle = TownySettings.getNotificationTitlesTownSubtitle();
 		
 		HashMap<String, Object> placeholders = new HashMap<>();
 		placeholders.put("{townname}", StringMgmt.remUnderscore(TownySettings.isNotificationsTownNamesVerbose() ? town.getFormattedName() : town.getName()));
@@ -84,8 +84,8 @@ public class TitleNotification {
 
 	private void makeWildernessTitles() {
 		String wildernessName = worldCoord.getTownyWorld().getFormattedUnclaimedZoneName();
-		String title = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildTitle());
-		String subtitle = ChatColor.translateAlternateColorCodes('&', TownySettings.getNotificationTitlesWildSubtitle());
+		String title = TownySettings.getNotificationTitlesWildTitle();
+		String subtitle = TownySettings.getNotificationTitlesWildSubtitle();
 		if (title.contains("{wilderness}")) {
 			title = title.replace("{wilderness}", wildernessName);
 		}

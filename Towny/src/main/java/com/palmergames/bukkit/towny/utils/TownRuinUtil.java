@@ -81,9 +81,11 @@ public class TownRuinUtil {
 		//Remove town from nation, otherwise after we change the mayor to NPC and if the nation falls, the npc would receive nation refund.
 		final Nation nation = town.getNationOrNull();
 		if (nation != null) {
-			double bankBalance = town.getAccount().getHoldingBalance();
-			if (TownySettings.areRuinedTownsBanksPaidToNation() && bankBalance > 0)
-				town.getAccount().payTo(bankBalance, nation, String.format("Ruined Town (%s) Paid Remaining Bank To Nation", town.getName()));
+			if (TownyEconomyHandler.isActive() && TownySettings.areRuinedTownsBanksPaidToNation()) {
+				double bankBalance = town.getAccount().getHoldingBalance();
+				if (bankBalance > 0)
+					town.getAccount().payTo(bankBalance, nation, String.format("Ruined Town (%s) Paid Remaining Bank To Nation", town.getName()));
+			}
 			town.removeNation();
 		}
 
@@ -117,16 +119,18 @@ public class TownRuinUtil {
 			townBlock.setType(TownBlockType.RESIDENTIAL); // Sets the townblock's perm line to the Town's perm line set above.
 			townBlock.setPlotPrice(-1);                   // Makes the plot not for sale.
 			townBlock.removePlotObjectGroup();            // Removes plotgroup if it were present.
-			townBlock.getPermissionOverrides().clear();   // Removes all permission overrides from the plot.
-			townBlock.getTrustedResidents().clear();      // Removes all trusted residents.
+			townBlock.setPermissionOverrides(null);       // Removes all permission overrides from the plot.
+			townBlock.setTrustedResidents(null);          // Removes all trusted residents.
 			townBlock.save();
 		}
 		
 		// Unregister the now empty plotgroups.
-		if (town.getPlotGroups() != null)
-			for (PlotGroup group : new ArrayList<>(town.getPlotGroups()))
-				if (!BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED)))
-					TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+		if (town.getPlotGroups() != null) {
+			for (PlotGroup group : new ArrayList<>(town.getPlotGroups())) {
+				new PlotGroupDeletedEvent(group, null, PlotGroupDeletedEvent.Cause.TOWN_DELETED).callEvent();
+				TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
+			}
+		}
 		
 		// Check if Town has more residents than it should be allowed (if it were the capital of a nation.)
 		if (TownySettings.getMaxResidentsPerTown() > 0)
@@ -300,7 +304,12 @@ public class TownRuinUtil {
 		if (hoursLeft >= hoursTotal)
 			return 0L;
 
+		if (hoursLeft == 0)
+			return town.getNumTownBlocks();
+
 		int numTownBlocks = town.getNumTownBlocks();
+		if (numTownBlocks == 0)
+			return 0L;
 		int townBlocksPerHour = numTownBlocks / hoursLeft;
 		double end = numTownBlocks > hoursTotal
 			? townBlocksPerHour * timeSinceRuining       // We will be opening perms on 1 or more townblocks every hour.

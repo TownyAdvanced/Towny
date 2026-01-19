@@ -1,12 +1,12 @@
 package com.palmergames.bukkit.towny.scheduling.impl;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 @DefaultQualifier(NotNull.class)
@@ -17,7 +17,7 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 
 	@Override
 	public boolean isGlobalThread() {
-		// isGlobalThread does not exist on paper, match the bukkit task scheduler's behaviour.
+		// isGlobalThread exists on paper since 1.21.3, but is implemented the exact same way as this method.
 		return Bukkit.getServer().isPrimaryThread();
 	}
 	
@@ -27,28 +27,35 @@ public class PaperTaskScheduler extends FoliaTaskScheduler {
 	
 	@Override
 	public ScheduledTask run(final Consumer<ScheduledTask> task) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(globalRegionScheduler.run(plugin, t -> task.accept(taskRef.get()))));
+		Preconditions.checkArgument(task != null, "task may not be null");
+
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(globalRegionScheduler.run(plugin, t -> task.accept(ret)));
 		
-		return taskRef.get();
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runLater(final Consumer<ScheduledTask> task, long delay) {
-		if (delay == 0)
-			return run(task);
-		
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(globalRegionScheduler.runDelayed(plugin, t -> task.accept(taskRef.get()), delay)));
+		Preconditions.checkArgument(task != null, "task may not be null");
 
-		return taskRef.get();
+		if (delay == 0) {
+			return run(task);
+		}
+		
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(globalRegionScheduler.runDelayed(plugin, t -> task.accept(ret), delay));
+
+		return ret;
 	}
 
 	@Override
 	public ScheduledTask runRepeating(final Consumer<ScheduledTask> task, long delay, long period) {
-		final AtomicReference<ScheduledTask> taskRef = new AtomicReference<>();
-		taskRef.set(new FoliaScheduledTask(globalRegionScheduler.runAtFixedRate(plugin, t -> task.accept(taskRef.get()), delay, period)));
+		Preconditions.checkArgument(task != null, "task may not be null");
 
-		return taskRef.get();
+		final FoliaScheduledTask ret = new FoliaScheduledTask(null);
+		ret.setTask(globalRegionScheduler.runAtFixedRate(plugin, t -> task.accept(ret), delay, period));
+
+		return ret;
 	}
 }

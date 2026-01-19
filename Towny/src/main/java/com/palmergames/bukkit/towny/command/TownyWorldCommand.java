@@ -64,7 +64,8 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		"unclaimblockdelete",
 		"unclaimentitydelete",
 		"plotcleardelete",
-		"wildernessuse"
+		"wildernessuse",
+		"jailing"
 	);
 	
 	private static final List<String> townySetTabCompletes = Arrays.asList(
@@ -193,7 +194,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		HashMap<String, Integer> playersPerWorld = BukkitTools.getPlayersPerWorld();
 		for (TownyWorld world : TownyUniverse.getInstance().getTownyWorlds()) {
 			int numPlayers = playersPerWorld.getOrDefault(world.getName(), 0);
-			formattedList.add(Colors.LightBlue + world.getName() + Colors.Blue + " [" + numPlayers + "]" + Colors.White);
+			formattedList.add(Colors.AQUA + world.getName() + Colors.DARK_AQUA + " [" + numPlayers + "]" + Colors.WHITE);
 		}
 
 		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
@@ -237,6 +238,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		case "unclaimblockdelete" -> toggleUnclaimBlockDelete(sender, world, choice);
 		case "unclaimentitydelete" -> toggleUnclaimEntityDelete(sender, world, choice);
 		case "wildernessuse" -> toggleWildernessUse(sender, world, split);
+		case "jailing" -> toggleJailing(sender, world, choice);
 		default -> {
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYWORLD_TOGGLE, split[0])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYWORLD_TOGGLE, split[0]).execute(sender, "townyworld", split);
@@ -387,6 +389,12 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_wilderness_use_set_to", toggle, world.getName()));
 	}
 
+	private void toggleJailing(CommandSender sender, TownyWorld world, Optional<Boolean> choice) throws NoPermissionException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_TOGGLE_JAILING.getNode());
+		world.setJailingEnabled(choice.orElse(!world.isJailingEnabled()));
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_changed_world_setting", "Jailing", world.getName(), formatBool(world.isJailingEnabled())));
+	}
+
 	public void worldSet(CommandSender sender, TownyWorld world, String[] split) throws NoPermissionException {
 
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYWORLD_SET.getNode());
@@ -422,6 +430,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 	private void setUseDefaults(CommandSender sender, TownyWorld world) {
 		Confirmation.runOnAccept(() -> {
 			world.setUsingDefault();
+			world.save();
 			plugin.resetCache();
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", world.getName()));
 		})
@@ -431,22 +440,21 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 	private void setWildPerm(CommandSender sender, TownyWorld world, String[] split) {
 		if (split.length < 2) {
-			// set default wildperm settings (/tw set wildperm)
-			world.setUsingDefault();
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_usedefault", world.getName()));
-		} else
-			try {
-				List<String> perms = Arrays.asList(String.join(",", StringMgmt.remFirstArg(split)).toLowerCase(Locale.ROOT).split(","));
-				world.setUnclaimedZoneBuild(perms.contains("build"));
-				world.setUnclaimedZoneDestroy(perms.contains("destroy"));
-				world.setUnclaimedZoneSwitch(perms.contains("switch"));
-				world.setUnclaimedZoneItemUse(perms.contains("itemuse") || perms.contains("item_use"));
+			TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
+			return;
+		}
+		try {
+			List<String> perms = Arrays.asList(String.join(",", StringMgmt.remFirstArg(split)).toLowerCase(Locale.ROOT).split(","));
+			world.setUnclaimedZoneBuild(perms.contains("build"));
+			world.setUnclaimedZoneDestroy(perms.contains("destroy"));
+			world.setUnclaimedZoneSwitch(perms.contains("switch"));
+			world.setUnclaimedZoneItemUse(perms.contains("itemuse") || perms.contains("item_use"));
 
-				plugin.resetCache();
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_perms", world.getName(), perms.toString()));
-			} catch (Exception e) {
-				TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
-			}
+			plugin.resetCache();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_wild_perms", world.getName(), perms.toString()));
+		} catch (Exception e) {
+			TownyMessaging.sendErrorMsg(sender, "Eg: /townyworld set wildperm build destroy <world>");
+		}
 	}
 
 	private void setWildIgnore(CommandSender sender, TownyWorld world, String[] split) {

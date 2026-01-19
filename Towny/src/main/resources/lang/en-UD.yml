@@ -191,7 +191,6 @@ mode_4: 'ꞁǝuuɐɥɔ uʍoʇ oʇ ʇɐɥɔ ʇꞁnɐɟǝᗡ'
 mode_5: 'ꞁǝuuɐɥɔ uoᴉʇɐu oʇ ʇɐɥɔ ʇꞁnɐɟǝᗡ'
 mode_6: '˙sǝuozɹɐʍ ǝʞɐɯ oʇ sɹǝpɹoq ʎɯǝuǝ uᴉ %s ǝɔɐꞁd uɐƆ'
 plot_perms: '˙suoᴉssᴉɯɹǝd ʇoꞁd ɹoɟ %s ɟo pɐǝʇsuᴉ %s ǝs∩'
-plot_perms_1: '˙suoᴉssᴉɯɹǝd ɹǝpᴉsʇno ɟo ǝsn ǝʞɐɯ ʇ,uop sʇoꞁd ʇuǝpᴉsǝᴚ'
 res_list: 'sʇuǝpᴉsǝᴚ'
 res_sing: 'ʇuǝpᴉsǝᴚ'
 mayor_sing: 'ɹoʎɐW'
@@ -496,5 +495,6 @@ msg_err_over_outposts_limit: '%s/%s ʇᴉɯᴉꞁ ɹnoʎ ɹǝʌo ǝɹɐ noʎ ''�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: ':sʍɐꞁʇnO' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: ':sʍɐꞁʇnO'
 online: '&a(ǝuᴉꞁuO)'

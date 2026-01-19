@@ -875,5 +875,63 @@
         "value": "0"
       }
     ]
+  },
+  {
+    "version": "0.100.4.6",
+    "changes": [
+      {
+        "type": "RUNNABLE",
+        "key": "disable_modern_eco"
+      }
+    ]
+  },
+  {
+    "version": "0.101.0.5",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.town_mob_removal_ignored_spawn_causes",
+        "value": ",TRIAL_SPAWNER"
+      }
+    ]
+  },
+  {
+    "version": "0.101.1.2",
+    "changes": [
+      {
+        "type": "RUNNABLE",
+        "key": "add_pale_oak_to_farm_plot"
+      }
+    ]
+  },
+  {
+    "version": "0.101.1.6",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.potion_types",
+        "value": ",WIND_CHARGED,WEAVING,INFESTED,OOZING"
+      }
+    ]
+  },
+  {
+    "version": "0.101.2.3",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.switch_ids",
+        "value": ",COPPER_CHEST,COPPER_GOLEM_STATUE,SHELVES"
+      }
+    ]
+  },
+  {
+    "version": "0.102.0.2",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.town.nearby"
+      }
+    ]
   }
 ]

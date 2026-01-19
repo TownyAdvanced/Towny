@@ -24,9 +24,10 @@ import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
@@ -35,12 +36,8 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 /**
@@ -77,18 +74,22 @@ public class CombatUtil {
 		/*
 		 * Find the shooter if this is a projectile.
 		 */
+		ProjectileSource projectileSource = null;
 		if (attacker instanceof Projectile projectile) {
+			projectileSource = projectile.getShooter();
+		} else if (attacker instanceof AreaEffectCloud effectCloud) {
+			projectileSource = effectCloud.getSource();
+		}
 			
-			final ProjectileSource source = projectile.getShooter();
-			
-			if (source instanceof Entity entity)
+		if (projectileSource != null) {
+			if (projectileSource instanceof Entity entity)
 				directSource = entity;
-			else if (source instanceof BlockProjectileSource blockProjectileSource) {
+			else if (projectileSource instanceof BlockProjectileSource blockProjectileSource) {
 				if (CombatUtil.preventDispenserDamage(blockProjectileSource.getBlock(), defender, cause))
 					return true;
 			}
 		} else if (attacker instanceof LightningStrike lightning) {
-			final Entity causingEntity = getLightningCausingEntity(lightning);
+			final Entity causingEntity = lightning.getCausingEntity();
 			if (causingEntity != null)
 				directSource = causingEntity;
 		}
@@ -147,7 +148,7 @@ public class CombatUtil {
 				 * Both townblocks are not Arena plot and Player is not considered an Admin by Towny.
 				 * Arena plots never prevent pvp, admins can some times bypass pvp settings.
 				 */
-				if (!isArenaPlot(attackerTB, defenderTB) && !isTownyAdminBypassingPVP(attackingPlayer)) {
+				if (!isArenaPlot(attackerTB, defenderTB) && !isOutlawInTown(defenderTB, attackingPlayer, defendingPlayer) && !isTownyAdminBypassingPVP(attackingPlayer)) {
 					/*
 					 * Check if we are preventing friendly fire between allies
 					 * Check the attackers TownBlock for its PvP status, else the world.
@@ -293,7 +294,7 @@ public class CombatUtil {
 					}
 				}
 				
-				if (attackingEntity.getType().getKey().equals(NamespacedKey.minecraft("axolotl")) && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
+				if (attackingEntity.getType() == EntityType.AXOLOTL && EntityTypeUtil.isInstanceOfAny(TownySettings.getProtectedEntityTypes(), defendingEntity)) {
 					return true;
 				}
 			}
@@ -379,6 +380,8 @@ public class CombatUtil {
 	 * @return true if we should cancel damage.
 	 */
 	public static boolean preventFriendlyFire(Player attacker, Player defender, TownyWorld world) {
+		if (!world.isUsingTowny())
+			return false;
 
 		/*
 		 * Don't block potion use (self damaging) on ourselves.
@@ -429,6 +432,28 @@ public class CombatUtil {
 	}
 
 	/**
+	 * Return true if the outlaw system allows for outlaws to harm/be harmed.
+	 * 
+	 * @param defenderTB TownBlock where the defendingPlayer is harmed.
+	 * @param attackingPlayer Player harming the defendingPlayer.
+	 * @param defendingPlayer Player getting harmed.
+	 * @return true if one of the players is an outlaw in a situation where that matters.
+	 */
+	private static boolean isOutlawInTown(TownBlock defenderTB, Player attackingPlayer, Player defendingPlayer) {
+		if (defenderTB == null)
+			return false;
+		
+		Town town = defenderTB.getTownOrNull();
+		if (town == null)
+			return false;
+		if (TownySettings.forcePVPForTownOutlaws() && town.hasOutlaw(defendingPlayer.getName()))
+			return true;
+		if (TownySettings.outlawsAlwaysAllowedToPVP() && town.hasOutlaw(attackingPlayer.getName()))
+			return true;
+		return false;
+	}
+	
+	/**
 	 * Is the defending resident an ally of the attacking resident?
 	 * 
 	 * @param attackingResident - Attacking Resident (String)
@@ -477,10 +502,26 @@ public class CombatUtil {
 		if (a.hasAlly(b))
 			return true;
 		if (isSameNation(a, b))
-			return true;
+			if (conqueredTownsArentConsideredAllies(a, b)) {
+				TownyMessaging.sendDebugMsg(String.format("The isAlly test between %s and %s was overridden because one of the two towns is conquered by the other.", a.getName(), b.getName()));
+				return false;
+			} else
+				return true;
+
 		if (a.hasNation() && b.hasNation() && a.getNationOrNull().hasAlly(b.getNationOrNull()))
 			return true;
 		return false;
+	}
+
+	/**
+	 * Towny can be configured to not consider conquered towns proper nation members.
+	 * 
+	 * @param a Town one.
+	 * @param b Town two.
+	 * @return true when we are configured to not considers conquered towns allies, and one of the towns is conquered by the other.
+	 */
+	private static boolean conqueredTownsArentConsideredAllies(Town a, Town b) {
+		return !TownySettings.areConqueredTownsConsideredAllied() && ((a.isConquered() && !b.isConquered()) || (!a.isConquered() && b.isConquered()));
 	}
 
 	/**
@@ -683,31 +724,6 @@ public class CombatUtil {
 
 	private static boolean isNotNPC(Entity entity) {
 		return !PluginIntegrations.getInstance().isNPC(entity);
-	}
-	
-	private static final @Nullable MethodHandle GET_LIGHTNING_CAUSING_ENTITY;
-	
-	static {
-		MethodHandle temp = null;
-		try {
-			// https://jd.papermc.io/paper/1.20/org/bukkit/entity/LightningStrike.html#getCausingEntity()
-			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(LightningStrike.class.getMethod("getCausingEntity"));
-		} catch (Throwable ignored) {}
-		
-		GET_LIGHTNING_CAUSING_ENTITY = temp;
-	}
-	
-	@ApiStatus.Internal
-	public static @Nullable Entity getLightningCausingEntity(@NotNull LightningStrike lightning) {
-		if (GET_LIGHTNING_CAUSING_ENTITY == null)
-			return null;
-		
-		try {
-			return (Entity) GET_LIGHTNING_CAUSING_ENTITY.invokeExact(lightning);
-		} catch (Throwable thr) {
-			return null;
-		}
 	}
 
 	private static boolean isTownyAdminBypassingPVP(Player attackingPlayer) {

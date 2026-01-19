@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -34,7 +33,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -52,13 +50,20 @@ public class Nation extends Government {
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
 	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
 
-	public Nation(String name) {
-		super(name);
+	@ApiStatus.Internal
+	public Nation(String name, UUID uuid) {
+		super(name, uuid);
 		
 		// Set defaults
 		setTaxes(TownySettings.getNationDefaultTax());
 		setBoard(TownySettings.getNationDefaultBoard());
+		setNeutral(TownySettings.getNationDefaultNeutral());
 		setOpen(TownySettings.getNationDefaultOpen());
+	}
+
+	@Deprecated(since = "0.102.0.4")
+	public Nation(String name) {
+		this(name, UUID.randomUUID());
 	}
 
 	@Override
@@ -67,12 +72,7 @@ public class Nation extends Government {
 			return true;
 		if (!(other instanceof Nation otherNation))
 			return false;
-		return this.getName().equals(otherNation.getName()); // TODO: Change this to UUID when the UUID database is in use.
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.getUUID().equals(otherNation.getUUID());
 	}
 
 	public void addAlly(Nation nation) {
@@ -203,18 +203,18 @@ public class Nation extends Government {
 	}
 	
 	public void setCapital(Town capital) {
+		final Town oldCapital = this.capital;
 
 		TownyMessaging.sendDebugMsg("Nation " + this.getName() + " has set a capital city of " + capital.getName());
 		this.capital = capital;
 		
 		if (this.spawn != null && TownySettings.isNationSpawnOnlyAllowedInCapital() && !capital.isInsideTown(this.spawn))
 			this.spawn = capital.spawnPosition();
+		
+		if (oldCapital != null && oldCapital.getMayor() != null)
+			TownyPerms.assignPermissions(oldCapital.getMayor(), null);
 
-		try {
-			TownyPerms.assignPermissions(capital.getMayor(), null);
-		} catch (Exception e) {
-			// Dummy catch to prevent errors on startup when setting nation.
-		}
+		TownyPerms.assignPermissions(capital.getMayor(), null);
 
 		// Save the capital city. A town that becomes a capital might have its
 		// peaceful/neutral status overridden and require saving.
@@ -657,11 +657,11 @@ public class Nation extends Government {
 
 	@Override
 	public @NotNull Iterable<? extends Audience> audiences() {
-		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());
+		return TownyAPI.getInstance().getOnlinePlayers(this);
 	}
 
 	public double getConqueredTax() {
-		return conqueredTax;
+		return Math.min(conqueredTax, TownySettings.getMaxNationConqueredTaxAmount());
 	}
 
 	public void setConqueredTax(double conqueredTax) {
@@ -672,45 +672,6 @@ public class Nation extends Government {
 	@Override
 	public boolean exists() {
 		return TownyUniverse.getInstance().hasNation(getName());
-	}
-
-	/**
-	 * @deprecated since 0.99.6.2, use {@link #getLevelNumber()} instead.
-	 * Get the Nation's current Nation Level.
-	 * <p>
-	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.	 
-	 * </p>
-	 * @return Nation Level (int) for current population or amount of towns.
-	 */
-	@Deprecated
-	public int getLevel() {
-		return getLevelNumber();
-	}
-
-	/**
-	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelMax()} instead.
-	 * Get the maximum level a Nation may achieve.
-	 * @return Size of TownySettings' configNationLevel SortedMap.
-	 */
-	@Deprecated
-	public int getMaxLevel() {
-		return TownySettings.getConfigNationLevel().size();
-	}
-
-	/**
-	 * @deprecated since 0.99.6.2 use {@link TownySettings#getNationLevelFromGivenInt(int)} instead.
-	 * Get the Nation's Level for a supposed population size.
-	 * <p>
-	 *     Note that Nation Levels are not hard-coded. They can be defined by the server administrator,
-	 *     and may be different from the default configuration.	 
-	 * </p>
-	 * @param populationSize Number of residents in the Nation, theoretical or real.
-	 * @return Nation Level (int) for the supplied populationSize.
-	 */
-	@Deprecated
-	public int getLevel(int populationSize) {
-		return TownySettings.getNationLevelFromGivenInt(populationSize);
 	}
 
 	public void playerBroadCastMessageToNation(Player player, String message) {

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -29,9 +30,7 @@ public class TownyLoginListener implements Listener {
 	public void onPlayerLogin(AsyncPlayerPreLoginEvent event) {
 
 		final String logInName = event.getName();
-		boolean disallowed = isServerAccount(logInName) || isGovernmentAccount(logInName);
-
-		disallowed |= logInName.toLowerCase(Locale.ROOT).startsWith(TownySettings.getNPCPrefix().toLowerCase(Locale.ROOT));
+		boolean disallowed = isServerAccount(logInName) || isGovernmentAccount(logInName) || isPossibleNPCName(logInName);
 
 		if (!disallowed)
 			return;
@@ -55,6 +54,20 @@ public class TownyLoginListener implements Listener {
 
 	private boolean isNationBank(String logInName) {
 		return isDisallowedName(logInName, TownySettings.getNationAccountPrefix());
+	}
+
+	static boolean isPossibleNPCName(String loginName) {
+		final String npcPrefix = TownySettings.getNPCPrefix();
+		if (!loginName.toLowerCase(Locale.ROOT).startsWith(npcPrefix.toLowerCase(Locale.ROOT)))
+			return false;
+
+		final String sub = loginName.substring(npcPrefix.length());
+		if (sub.isEmpty())
+			return false;
+
+		// A npc name can only consist of npc prefix + digits
+		final Pattern onlyDigits = Pattern.compile("^\\d+$");
+		return onlyDigits.matcher(sub).find();
 	}
 
 	private boolean isDisallowedName(String logInName, String disallowedName) {

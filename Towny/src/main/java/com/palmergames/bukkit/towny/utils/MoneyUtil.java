@@ -3,20 +3,17 @@ package com.palmergames.bukkit.towny.utils;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translator;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyFormatter;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
-import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.economy.NationPreTransactionEvent;
 import com.palmergames.bukkit.towny.event.economy.NationTransactionEvent;
 import com.palmergames.bukkit.towny.event.economy.TownPreTransactionEvent;
@@ -225,32 +222,6 @@ public class MoneyUtil {
 	
 	private static boolean isNotInOwnTown(Town town, Location loc) {
 		return TownyAPI.getInstance().isWilderness(loc) || !town.equals(TownyAPI.getInstance().getTown(loc));
-	}
-	
-	/**
-	 * For a short time Towny stored debt accounts in the server's economy plugin.
-	 * This practice had to end, being replaced with the debtBalance which is stored
-	 * in the Town object.
-	 */
-	public static void checkLegacyDebtAccounts() {
-		File f = new File(TownyUniverse.getInstance().getRootFolder(), "debtAccountsConverted.txt");
-		if (!f.exists())
-			Towny.getPlugin().getScheduler().runAsyncLater(() -> TownyEconomyHandler.economyExecutor().execute(MoneyUtil::convertLegacyDebtAccounts), 600L);
-	}
-	
-	/**
-	 * Will attempt to set a town's debtBalance if their old DebtAccount is above 0 and exists.
-	 */
-	private static void convertLegacyDebtAccounts() {
-		for (Town town : TownyUniverse.getInstance().getTowns()) {
-			final String name = "[DEBT]-" + town.getName();
-			if (TownyEconomyHandler.hasAccount(name)) {
-				town.setDebtBalance(TownyEconomyHandler.getBalance(name, town.getAccount().getBukkitWorld()));
-				town.save();
-				TownyEconomyHandler.setBalance(name, 0.0, town.getAccount().getBukkitWorld());
-			}
-		}
-		Towny.getPlugin().saveResource("debtAccountsConverted.txt", false);
 	}
 	
 	public static double getMoneyAboveZeroOrThrow(String input) throws TownyException {

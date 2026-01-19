@@ -13,10 +13,12 @@ import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.huds.HUDManager;
+import com.palmergames.bukkit.towny.object.BuildInfo;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.comparators.GovernmentComparators;
 import com.palmergames.bukkit.towny.object.Nation;
@@ -27,6 +29,7 @@ import com.palmergames.bukkit.towny.object.TownBlockOwner;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
@@ -34,12 +37,17 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeMgmt;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +55,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class TownyCommand extends BaseCommand implements CommandExecutor {
@@ -266,6 +275,28 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_latest_version", plugin.getVersion(), TownyUpdateChecker.getNewVersion()));
 					} else {
 						TownyMessaging.sendMsg(sender, Translatable.of("msg_towny_version", plugin.getVersion()));
+						
+						try {
+							final BuildInfo buildInfo = BuildInfo.retrieveBuildInfo(plugin);
+							
+							String repositoryUrl = buildInfo.repositoryUrl();
+							if (repositoryUrl.endsWith(".git")) {
+								repositoryUrl = repositoryUrl.substring(0, repositoryUrl.length() - ".git".length());
+							}
+
+							final String viewCommitUrl = repositoryUrl + "/commit/" + buildInfo.commit();
+
+							final Component buildInfoMessage = Translatable.of("default_towny_prefix").append(
+								Translatable.of("msg_version_build_info", buildInfo.commitShort(), buildInfo.branch()).component(Translation.getLocale(sender))
+									.clickEvent(viewCommitUrl.startsWith("http") ? ClickEvent.openUrl(viewCommitUrl) : null)
+									.hoverEvent(HoverEvent.showText(Component.text(buildInfo.message(), NamedTextColor.GREEN)))
+							).component(Translation.getLocale(sender));
+
+							sender.sendMessage(buildInfoMessage);
+						} catch (IOException e) {
+							plugin.getLogger().log(Level.WARNING, "Could not retrieve build information", e);
+							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_version_build_info_failed"));
+						}
 
 						if (TownyUpdateChecker.hasCheckedSuccessfully())
 							TownyMessaging.sendMsg(sender, Translatable.of("msg_up_to_date"));
@@ -274,10 +305,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 				}
 				case "spy": {
 					catchConsole(sender);
-					checkPermOrThrow(sender, PermissionNodes.TOWNY_CHAT_SPY.getNode());
-
-					Resident resident = getResidentOrThrow(player);
-					resident.toggleMode(split, true);
+					ResidentModeHandler.toggleMode(getResidentOrThrow(player), "spy", true);
 					break;
 				}
 				default: {
@@ -372,20 +400,20 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		String heart5 = "\u00A70--\u00A74##\u00A7c###\u00A74##\u00A70--   ";
 		String heart6 = "\u00A70----\u00A74#\u00A7c#\u00A74#\u00A70----   ";
 		String heart7 = "\u00A70-----\u00A74#\u00A70-----   ";
-		String splitter = Colors.Gray + " | ";
+		String splitter = Colors.DARK_GRAY + " | ";
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		List<String> output = new ArrayList<>();
 		output.add(""); // Intentionally left blank
-		output.add(heart1 + Colors.Gold + "[" + Colors.Yellow + "Towny " + Colors.Green + plugin.getVersion() + Colors.Gold + "]");
-		output.add(heart2 + Colors.Blue + translator.of("msg_universe_attribution") + Colors.LightBlue + "LlmDl, Warrior, ElgarL, Chris H (Shade)");
-		output.add(heart3 + Colors.LightBlue + translator.of("msg_universe_contributors") + Colors.Rose + translator.of("msg_universe_heart"));
+		output.add(heart1 + Colors.GOLD + "[" + Colors.YELLOW + "Towny " + Colors.DARK_GREEN + plugin.getVersion() + Colors.GOLD + "]");
+		output.add(heart2 + Colors.DARK_AQUA + translator.of("msg_universe_attribution") + Colors.AQUA + "LlmDl, Warrior, ElgarL, Chris H (Shade)");
+		output.add(heart3 + Colors.AQUA + translator.of("msg_universe_contributors") + Colors.RED + translator.of("msg_universe_heart"));
 		output.add(heart4);
-		output.add(heart5 + Colors.Blue + translator.of("res_list")+ ": " + Colors.LightBlue + townyUniverse.getNumResidents() + splitter
-				+ Colors.Blue + translator.of("town_plu") + ": " + Colors.LightBlue + townyUniverse.getTowns().size() + splitter
-				+ Colors.Blue + translator.of("nation_plu") + ": " + Colors.LightBlue + townyUniverse.getNumNations());
-		output.add(heart6 + Colors.Blue + translator.of("world_plu") + ": " + Colors.LightBlue + townyUniverse.getTownyWorlds().size() + splitter
-				+ Colors.Blue + translator.of("townblock_plu") + ": " + Colors.LightBlue + townyUniverse.getTownBlocks().size());
-		output.add(heart7 + Colors.LightGreen + "https://TownyAdvanced.github.io/");
+		output.add(heart5 + Colors.DARK_AQUA + translator.of("res_list")+ ": " + Colors.AQUA + townyUniverse.getNumResidents() + splitter
+				+ Colors.DARK_AQUA + translator.of("town_plu") + ": " + Colors.AQUA + townyUniverse.getTowns().size() + splitter
+				+ Colors.DARK_AQUA + translator.of("nation_plu") + ": " + Colors.AQUA + townyUniverse.getNumNations());
+		output.add(heart6 + Colors.DARK_AQUA + translator.of("world_plu") + ": " + Colors.AQUA + townyUniverse.getTownyWorlds().size() + splitter
+				+ Colors.DARK_AQUA + translator.of("townblock_plu") + ": " + Colors.AQUA + townyUniverse.getTownBlocks().size());
+		output.add(heart7 + Colors.GREEN + "https://TownyAdvanced.github.io/");
 		output.add(""); // Intentionally left blank
 
 		// Other TownyAdvanced plugins to report versions
@@ -393,7 +421,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 		List<String> pluginList = PluginIntegrations.getInstance().getTownyPluginsForUniverseCommand();
 		townyPlugins = String.join(" ", pluginList);
 		if (pluginList.size() > 0)
-			output.add(Colors.Gold + "[" + townyPlugins + Colors.Gold + "]");
+			output.add(Colors.GOLD + "[" + townyPlugins + Colors.GOLD + "]");
 
 		return output;
 	}
@@ -447,6 +475,8 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(translator.of("towny_prices_claiming_townblock", prettyMoney(town.getTownBlockCost()) +  
 					(Double.valueOf(TownySettings.getClaimPriceIncreaseValue()).equals(1.0) ? "" : translator.of("towny_prices_claiming_townblock_increase", new DecimalFormat("##.##%").format(TownySettings.getClaimPriceIncreaseValue()-1)))));
 			output.add(translator.of("towny_prices_claiming_outposts", prettyMoney(TownySettings.getOutpostCost())));
+			if (TownySettings.getPerOutpostUpkeepCost() > 0)
+				output.add(translator.of("towny_prices_outposts_upkeept", prettyMoney(TownySettings.getPerOutpostUpkeepCost())));
 		}
 		if (town == null)
 			output.add(translator.of("towny_prices_upkeep", prettyMoney(TownySettings.getTownUpkeep()), prettyMoney(TownySettings.getNationUpkeep())));
@@ -497,7 +527,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && index > maxListing) {
 				break;
 			}
-			output.add(String.format(Colors.LightGray + "%-20s " + Colors.Gold + "|" + Colors.Blue + " %s", gov.getFormattedName(), prettyMoney(gov.getAccount().getCachedBalance())));
+			output.add(String.format(Colors.GRAY + "%-20s " + Colors.GOLD + "|" + Colors.DARK_AQUA + " %s", gov.getFormattedName(), prettyMoney(gov.getAccount().getCachedBalance())));
 		}
 		return output;
 	}
@@ -515,7 +545,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", ((TownyObject) residentList).getFormattedName(), residentList.getResidents().size()));
+			output.add(String.format(Colors.DARK_AQUA + "%30s " + Colors.GOLD + "|" + Colors.GRAY + " %10d", ((TownyObject) residentList).getFormattedName(), residentList.getResidents().size()));
 		}
 
 		return output;
@@ -534,7 +564,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (maxListing != -1 && n > maxListing)
 				break;
 
-			output.add(String.format(Colors.Blue + "%30s " + Colors.Gold + "|" + Colors.LightGray + " %10d", owner.getFormattedName(), owner.getTownBlocks().size()));
+			output.add(String.format(Colors.DARK_AQUA + "%30s " + Colors.GOLD + "|" + Colors.GRAY + " %10d", owner.getFormattedName(), owner.getTownBlocks().size()));
 		}
 
 		return output;

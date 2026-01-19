@@ -11,6 +11,22 @@ help_0: 'Ajutor General Towny'
 help_1: 'Încearcă următoarele comenzi pentru a învăța mai multe despre Towny.'
 help_2: 'Chat Oraş'
 help_3: 'Chat Națiune'
+help_4: 'Instrucțiuni de folosire pentru comanda /resident.'
+help_5: 'Instrucțiuni de folosire pentru comanda /town.'
+help_6: 'Instrucțiuni de folosire pentru comanda /nation.'
+help_7: 'Instrucțiuni de folosire pentru comanda /plot.'
+help_8: 'Instrucțiuni de folosire pentru comanda /help.'
+help_9: 'Instrucțiuni de folosire pentru comanda /townyadmin (/ta).'
+towny_help_0: "Instrucțiuni generale pentru Towny"
+towny_help_1: "Afișează o harta in care sunt reprezentate statusurile teritoriului din apropiere. (dacă aparține sau nu vreunui oraș)"
+towny_help_2: "Afișează o lista cu prețurile obiectelor asociate cu Towny (națiuni, orașe, etc"
+towny_help_3: "Afișează lista celor mai bune scoruri"
+towny_help_4: "Afișează cât timp mai este până începe o nouă zi"
+towny_help_5: "Afișează statisticile"
+towny_help_6: "Afișează versiunea curentă a Towny"
+towny_top_help_0: "Afișează orașele și țările cu cea mai mare populație."
+towny_top_help_1: "Afișează topul de proprietari de teren."
+towny_top_help_2: "Afișează o listă cu cei mai bogați."
 town_help_1: 'Starea oraşului tău'
 town_help_2: '[primar]'
 town_help_3: 'Starea orașului selectat'
@@ -21,6 +37,59 @@ town_help_7: 'Oraş nou cu primar țintă.'
 town_help_8: 'Lista comenziilor pentru primari.'
 town_help_9: 'Astăzi este ziua!'
 town_help_10: 'Listați toți rezidenții online din oraș'
+town_help_13: "Vezi lista rezidenților orașului."
+town_help_14: "Vezi o listă cu demnitarii orașului."
+town_help_15: "Vezi o listă cu persoanele aflate în exil."
+town_help_16: "Vezi o listă cu grupurile de parcele de teren aflate în oraș."
+town_help_17: "Vezi o lisă cu toate tipurile de parcele de teren din oraș."
+town_help_18: "Spune un mesaj membrilor orașului."
+town_help_19: "Puneți orașul la vânzare, astfel încât alți jucători să-l poată cumpăra."
+town_help_20: "Scoateți orașul de la vânzare."
+town_help_21: "Cumpără orașul, atât timp cât este de vânzare."
+town_help_22: "Depozită bani în banca orașului tău."
+town_help_23: "Utilizată pentru a modifica funcția rezidentului orașului tău."
+town_help_24: "Utilizat pentru a-ți șterge orașul."
+town_help_25: "Utilizat pentru a modifica lista persoanelor exilate din oraș."
+town_help_26: "Afișați o listă cu toate orașele, folosiți comanda /t list pentru mai multe informații."
+town_help_27: "Părăsiți orașul din care faceți parte la momentul actual."
+town_help_28: "Retrageți numerar din banca orașului."
+town_help_29: "Utilizati /t claim pentru ajutor."
+town_help_30: "Folosit pentru a renunța la teritoriu."
+town_help_31: "Adăugați sau eliminați rezidenții."
+town_help_32: "Utilizași /t set ? pentru ajutor."
+town_help_33: "Utilizați /t buy pentru ajutor."
+town_help_34: "Utilizati /t toggle pentru ajutor."
+town_help_35: "Foloseste /t rank pentru ajutor."
+town_list_help_0: "Vezi pagina specificată."
+town_list_help_1: "Listează orașele în funcție de numărul de locuitori."
+town_list_help_2: "Listați orașele care sunt deschise."
+town_list_help_3: "Listeaza orasele folosind soldul bancar."
+town_list_help_4: "Listaţi oraşele în ordine alfabetică."
+town_list_help_5: "Listeaza orasele dupa teren revendicat."
+town_list_help_6: "Listați orașele după număr jucatorilor online."
+town_set_help_0: "Setează placa orașului."
+town_set_help_1: "Setează casa orașului tău în locul în care te afli."
+town_set_help_2: "Setează punctul de spawn în homeblock sau un avanpost atunci când stai într-un avanpost."
+town_set_help_3: "Vedeți /town set perm  pentru ajutor."
+town_set_help_4: "Setează valoarea impozitului orașului tău."
+town_set_help_5: "Setați sumele speciale pentru taxele pe parcelă."
+town_set_help_6: "Stabiliți prețurile implicite pentru cumpărarea de parcele."
+town_set_help_7: "Setați costul de utilizat /t spawn."
+town_set_help_8: "Setează numele orașului."
+town_set_help_9: "Setează eticheta orașului."
+town_set_help_10: "Setaţi titlul sau numele de familie al rezidentilor dvs."
+town_set_help_11: "Setați suma maximă de bani pe care o taxă procentuală o poate lua de la un rezident."
+town_jail_help_0: "Listează închisorile oraşului."
+town_jail_help_1: "Închisoare un rezident în închisoarea primară."
+town_jail_help_2: "Închisoarea un rezident în închisoarea primară, timp de câteva ore."
+town_jail_help_3: "Închisoarea un rezident în închisoarea primară, pentru orele specificate, în închisoarea specificată."
+town_jail_help_4: "Închisoarea un rezident în închisoarea primară, pentru orele specificate, în închisoarea şi celula specificate."
+town_jail_help_5: "Închisoarea un rezident în închisoarea primară, pentru orele specificate, cu suma acordată pentru cauțiune."
+town_jail_help_6: "Închisoarea un rezident în închisoarea primară, pentru orele specificate, cu o sumă dată de închisoare în închisoarea specificată."
+town_jail_help_7: "Închisoarea un rezident în închisoarea primară, pentru orele specificate, cu o sumă dată cu închisoarea, în închisoarea şi celula specificate."
+town_jail_help_8: "Scoate rezidentul din inchisoare."
+town_purge_help: "Iarta locuitorilor care nu s-au logat pentru o perioadă de zile."
+town_trust_help_0: "Adaugă un rezident ca fiind de încredere în oraș."
 mayor_help_3: 'Zonă de cucerire neataşată oraşului'
 mayor_help_4: 'Cucereşte în jurul tău într-o rază de X'
 mayor_help_5: 'Cucereşte la rază maximă'
@@ -50,7 +119,6 @@ mode_4: 'Chat de bază canal oraş'
 mode_5: 'Chat de bază canal națiune'
 mode_6: 'Poate plasa %s in granițele inamicilor pentru a creea zone de război.'
 plot_perms: 'Foloseşte %s in loc de %s pentru permisiuni plot.'
-plot_perms_1: 'Ploturile rezidenților nu fac folos de permisiunile străinilor.'
 res_list: 'Rezidenții'
 res_sing: 'Rezident'
 mayor_sing: 'Primar'
@@ -84,9 +152,6 @@ msg_buy: '&bA cumpărat %d %s pentru %s.'
 msg_buy_resident_plot: '&b%s a cumpărat plotul lui %s pentru %s!'
 msg_couldnt_pay_taxes: '&b%s nu a putut să-şi plătească taxele şi a fost dat afară din %s.'
 msg_couldnt_pay_plot_taxes: '&b%s nu a putut să-şi plătească taxele şi a pierdut stăpânirea asupra unui plot.'
-msg_payed_town_tax: '&bA plătit taxa oraşului de '
-msg_payed_plot_cost: '&bA plătit %s pentru %s ploturi în %s'
-msg_payed_resident_tax: '%bA plătit taxa rezidenților de '
 msg_bankrupt_town: ' nu şi-a putut permite să ramână un oraş.'
 msg_bankrupt_nation: ' nu şi-a putut permite să rămână o națiune.'
 msg_nation_not_peaceful: '&bNațiune nu a putut să-şi permită starea paşnică.'

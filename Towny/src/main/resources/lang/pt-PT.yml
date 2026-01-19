@@ -14,6 +14,9 @@ help_3: 'Chat do país'
 help_4: 'Comandos de ajuda do residente.'
 help_5: 'Comandos de ajuda da cidade.'
 help_6: 'Comandos de ajuda da nação.'
+help_7: 'Plot Comando Ajuda'
+help_8: "Towny comando ajuda\n"
+help_9: "Townyadmin comando ajuda\n"
 town_help_1: 'Estado da tua cidade'
 town_help_2: '[presidente]'
 town_help_3: 'Estado da cidade selecionada'
@@ -61,7 +64,6 @@ mode_4: 'Chat da cidade definido como predefinido'
 mode_5: 'Chat da nação definido como predefinido'
 mode_6: 'Podes colocar %s nas fronteiras inimigas para criar zonas de guerra.'
 plot_perms: 'Usa %s em vez %s para as permissões do terreno.'
-plot_perms_1: 'Os terrenos dos habitantes não podem usar permissões de estrangeiros.'
 res_list: 'Habitantes'
 res_sing: 'Habitante'
 mayor_sing: 'Presidente'
@@ -95,9 +97,6 @@ msg_buy: '&bComprou %d %s por %s.'
 msg_buy_resident_plot: '&b%s comprou o terreno de %s por %s!'
 msg_couldnt_pay_taxes: '&b%s não conseguiu pagar os impostos e foi expulso de %s.'
 msg_couldnt_pay_plot_taxes: '&b%s não conseguiu pagar os impostos e perdeu a posse de um terreno.'
-msg_payed_town_tax: '&bPagaste os impostos da cidade de '
-msg_payed_plot_cost: '&bPagaste %s por %s terrenos em %s'
-msg_payed_resident_tax: '&bPagaste o imposto de habitante de '
 msg_bankrupt_town: ' não tinha dinheiro suficiente para se manter uma cidade.'
 msg_bankrupt_nation: ' não tinha dinheiro suficiente para se manter uma nação.'
 msg_nation_not_peaceful: '&bA nação não tinha dinheiro suficiente para se manter pacífica.'
@@ -309,7 +308,6 @@ msg_err_not_percentage: '&cAs percentagens devem ser inferiores a 100.'
 msg_err_no_economy: '&cA economia não está ativada.'
 msg_err_not_block_type: '&cIsso não é um tipo de terreno válido!'
 msg_not_allowed_join: '&c%s não tem permissão para se juntar a uma cidade.'
-msg_offline_no_join: '&c%s está offline mas usando permissões, então não consegue entrar numa cidade.'
 msg_err_cannot_perform_action: '&cNão foi possível executar essa ação no %s.'
 msg_npc_flag: '&bA bandeira do NPC agora está %s para %s.'
 msg_warning_delete: '&4*** AVISO, %s VAI SER APAGADO NO PRÓXIMO DIA DEVIDO À FALTA DE FUNDOS ***'
@@ -322,7 +320,6 @@ msg_err_not_enough_residents_join_nation: '&bA cidade %s não tem habitantes suf
 msg_not_enough_residents_no_longer_capital: '&bA antiga capital da nação já não tem habitantes suficientes para ser a capital. A nova capital da nação é %s.'
 msg_town_not_enough_residents_left_nation: '&bA cidade %s já não tem habitantes suficientes para pertencer à nação e foi removida da nação.'
 msg_nation_disbanded_town_not_enough_residents: '&bA cidade %s já não tem habitantes suficientes para gerir a nação e a nação foi forçada a desfazer-se.'
-msg_not_enough_residents_refunded: '&bVocê foi reembolsado $%s por a sua nação ter sido desfeita devido à falta de habitantes.'
 msg_not_enough_residents_capital: '&bA cidade %s não tem habitantes suficientes para ser a capital da nação.'
 list_page: '&bPágina %s de %s'
 list_err_not_enough_pages: '&cApenas %s páginas disponíveis'
@@ -519,10 +516,13 @@ msg_err_over_outposts_limit: 'Não te podes teletransportar para o teu posto ava
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Exilados:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Exilados:'
 online: '&a(Online)'
-registered_last_online: '&2Registado a &a%s &8| &2Online pela última vez a &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Permissão:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registado a &a%s &8| &2Online pela última vez a &a%s'
+#Used on /plot perm, /res
+status_perm: 'Permissão:'
 status_on: '&4ATIVADO'
 status_off: '&aDESATIVADO'
 status_on_good: '&aATIVADO'
@@ -1083,9 +1083,11 @@ status_trustedlist: 'Confiado'
 msg_click_to_edit: '&6Clica para editar.'
 permission_gui_header: 'Interface de Permissões do Towny'
 msg_last_edited: '&7&oÚltima alteração em %s por %s.'
-msg_trusted_added: '&bAdicionado %s como confiável neste %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bAdicionado %s como confiável neste %s.'
 msg_already_trusted: '&b%s já é confiável nisso %s.'
-msg_trusted_added_2: '&b%s confiou em você em um %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s confiou em você em um %s: %s.'
 msg_not_trusted: '&b%s não é confiável nisso %s.'
 msg_trusted_removed: '&bRemovido %s como confiavel neste %s.'
 msg_trusted_removed_2: '&b%s removeu você como confiável em um %s: %s.'

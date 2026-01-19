@@ -95,6 +95,8 @@ town_trust_help_2: "Lista zaufanch mieszkańców w mieście."
 town_towntrust_help_0: "Dodaje miasto do grona zaufanych twojego miata."
 town_towntrust_help_1: "Usuwa miasto z grona zaufanych twojego miasta."
 town_towntrust_help_2: "Lista zaufanych miast podanego miasta."
+town_buy_help: "Kup bonusowe bloki miasta, aby zwiększyć limit roszczeń miasta."
+town_cede_help: "Oferuje działkę, na którą stoisz do przejęcia przez dane miasto."
 mayor_help_3: 'Pozyskaj teren nieprzylegajacy do miasta'
 mayor_help_4: 'Pozyskaj dookoła w promieniu X'
 mayor_help_5: 'Pozyskuje wszystko w maksymalnym promieniu'
@@ -117,7 +119,7 @@ nation_help_14: "Dołączenie do otwartej nacji."
 nation_help_15: "Przelewa pieniądze do banku nacji."
 nation_help_16: "Usuwa twoją nację."
 nation_help_17: "Dodaje lub usuwa rangi mieszkańcom."
-nation_help_18: "Użyj \"/n rank ?\", by uzyskać pomoc."
+nation_help_18: "Użyj \"/n rank ?\", by uzyskać pomoc.."
 nation_list_help_0: "Wyświetla podaną stronę."
 nation_list_help_1: "Lista nacji sortowana według liczby mieszkańców, otwarta na podanej stronie."
 nation_list_help_2: "Lista nacji sortowana według liczb miast, otwarta na podanej stronie."
@@ -141,6 +143,10 @@ nation_toggle_help_0: "Przełącza stan pokojowy nacji."
 nation_toggle_help_1: "Przełącza status publiczny, pozwalając graczom spoza nacji użyć /n spawn."
 nation_toggle_help_2: "Przełącza status otwarty, pozwalając miastom dołączyć bez zaproszenia."
 nation_toggle_help_3: "Przełącza obowiązywanie podatku procentowego. Miasta będą płaciły procent od posiadanych pieniędzy, zamiast stałej stawki."
+nation_sanction_help_1: "Dodaje miasto na listę Sankcjonowanych Miast."
+nation_sanction_help_2: "Usuwa miasto z listy Sankcjonowanych Miast."
+nation_sanction_help_3: "Wyświetla listę Sankcjonowanych Miast Twojego Miasta."
+nation_sanction_help_4: "Wymienia sankcjonowane miasta danego narodu."
 king_help_1: 'Pomoc Lidera Nacji'
 king_help_2: 'Wyznacz swoich sojuszników.'
 king_help_3: 'Wyznacz swoich wrogów.'
@@ -170,6 +176,7 @@ res_toggle_help_7: "Przełącza zdolność widzenia powiadomień o działce, na 
 res_toggle_help_8: "Przełącza zdolność pozyskiwania terenów, po których chodzisz."
 res_toggle_help_9: "Przełącza zdolność widzenia mapy podczas wchodzenia na działki."
 res_toggle_help_10: "Wyłącza wszystkie tryby."
+res_toggle_help_10.5: "Usuń wszystkie tryby i ponownie zastosuj ustawienia domyślne."
 res_toggle_help_11: "Szpiegowanie na kanałach czatu."
 res_toggle_help_12: "Przełącza zdolność dodawania działek do grupy, którą utworzyłeś."
 res_toggle_help_13: "Przełącza zdolność widzenia tytułów podczas wchodzenia na działki."
@@ -187,7 +194,6 @@ mode_4: 'Domyślne pisanie na kanale miasta'
 mode_5: 'Domyślne pisanie na kanale nacji'
 mode_6: 'Może postawić %s we wrogim terytorium, aby oznaczyć strefy wojenne.'
 plot_perms: 'Użyj %s zamiast %s do ustawiania uprawnień działki.'
-plot_perms_1: 'Działki mieszkańców nie korzystają z uprawnień Obcych.'
 res_list: 'Mieszkańcy'
 res_sing: 'Mieszkaniec'
 mayor_sing: 'Burmistrz'
@@ -219,6 +225,7 @@ world_toggle_help_8: "Włącza/Wyłącza przywracanie do stanu naturalnego po po
 world_toggle_help_9: "Włącza/Wyłącza naprawianie zniszczeń po eksplozji na tym świecie."
 world_toggle_help_10: "Włącza/Wyłącza usuwanie bloków po wyczyszczeniu działki na tym świecie."
 world_toggle_help_11: "Włącza/Wyłącza usuwanie bloków po porzuceniu działki na tym świecie."
+world_toggle_help_12: "Włącz/wyłącz, jeśli w tym świecie jest włączona opcja uwięzienia."
 townyadmin_help_1: 'Porzuca ten Blok Miasta'
 townyadmin_help_2: 'Próba porzucenia ziemii w twoim otoczeniu.'
 admin_panel_1: "Użyj \"/ta set ?\", by uzyskać pomoc"
@@ -293,6 +300,7 @@ ta_resident_help_0: "Zmienia nazwę mieszkańca."
 ta_resident_help_1: "Dodaje lub usuwa znajomego."
 ta_resident_help_2: "Wyświetla listę znajomych lub ją czyści."
 ta_resident_help_3: "Usuwa gracza z bazy danch."
+ta_resident_help_4: "Usuwa linię informacyjną o graczu."
 ta_toggle_help_0: "Włącza/Wyłącza zdolność naruszania Dziczy we wszystkich światach."
 ta_toggle_help_1: "Włącza/Wyłącza regenerację terenu we wszystkich światach."
 ta_toggle_help_2: "Włącza/Wyłącza devmode, pokazuje dodatkowe informacje graczowi podanemu w config'u."
@@ -309,13 +317,31 @@ ta_set_help_6: "Przypisuje działkę innemu miastu."
 ta_set_help_7: "Ustaw nazwę założyciela miasta."
 ta_set_help_8: "Użyj 0 dla rozmiaru, aby usunąć nadpisane Strefy Nacji."
 ta_purge_help_0: "Usuwa mieszkańców, którzy nie logowali się ponad podaną liczbę dni, opcjonalnie z parametrem \"townless\" wyłącza graczy należących do miast, a z nazwą miasta w parametrze, usuwa jedynie dane nieaktywnych mieszkańców konkretnego miasta."
+ta_townmeta_help_1: "Wyświetl metadane przechowywane dla wybranego miasta."
 ta_townmeta_help_2: "Ustaw klucz i wartość metadanych miasta."
+ta_townmeta_help_3: "Dodaj lub usuń metadane według klucza z miasta."
+ta_residentmeta_help_1: "Wyświetl metadane przechowywane na wskazanym rezydencie."
+ta_residentmeta_help_2: "Ustaw klucz i wartość metadanych rezydenta."
+ta_residentmeta_help_3: "Dodaj lub usuń metadane według klucza z rezydenta."
+ta_nationmeta_help_1: "Wyświetl metadane przechowywane dla wybranego kraju."
+ta_nationmeta_help_2: "Ustaw klucz i wartość metadanych kraju."
+ta_nationmeta_help_3: "Dodaj lub usuń metadane według klucza z kraju."
 ta_reload_help_0: "Przeładowuje bazę danych."
 ta_reload_help_1: "Przeładowuje config."
 ta_reload_help_2: "Przeładowuje pliki językowe."
 ta_reload_help_3: "Przeładowuje permisje Towny."
 ta_reload_help_4: "Przeładowuje wszystkie komponenty Towny."
+ta_eco_resetbanks_help: "Resetuje banki miast i krajów do podanej kwoty lub do 0."
+ta_eco_convert_modern_help: "Konwertuje Twoje konta Towny na naszą nowoczesną wersję, umożliwiającą korzystanie z funkcji OfflinePlayer wtyczki Vault."
+ta_eco_convert_help: "Konwertuje konta Towny na docelową implementację ekonomiczną, przydatną do przenoszenia danych między wtyczkami ekonomicznymi."
+ta_eco_info_help: "Podaje informacje o kontach ekonomicznych na serwerze."
 ta_depositall_help_0: "Wpłaca podaną kwotę do banków wszystkich miast i nacji."
+ta_depositall_help_1: "Wpłać podaną kwotę we wszystkich bankach w mieście."
+ta_depositall_help_2: "Wpłać podaną kwotę we wszystkich bankach krajowych."
+ta_info_help_0: "Wyświetl informacje ekonomiczne dla danego kraju."
+ta_info_help_1: "Wyświetl informacje ekonomiczne dotyczące danego mieszkańca."
+ta_info_help_2: "Wyświetl informacje ekonomiczne dotyczące konta serwera towny."
+ta_info_help_3: "Wyświetl informacje ekonomiczne dotyczące danego miasta."
 plot_help_0: "Włącza HUD z informacjami o działce."
 plot_help_1: "Wysiedla działkę."
 plot_help_2: "Usuwa bloki z listy z działki."
@@ -327,6 +353,10 @@ plot_help_7: "Dodaje nadpisywanie uprawnień graczowi."
 plot_help_8: "Otwiera okienko edytora uprawnień."
 plot_help_9: "Dodaje gracza do grona zaufanych na działce."
 plot_help_10: "Usuwa mieszkańca z grona zaufanych działki."
+plot_district_help_0: "Przykład: /plot district new ExpensivePlots"
+plot_district_help_1: "Usuwa działkę z określonej dzielnicy."
+plot_district_help_2: "Całkowicie usuwa dzielnicę."
+plot_district_help_3: "Zmienia nazwę dzielnicy, w której się znajdujesz."
 plot_group_help_0: "Np.: \"/plot group new EkskluzywneDziałki\""
 plot_group_help_1: "Usuwa działkę z wybranej grupy działek."
 plot_group_help_2: "Całkowicie usuwa grupę działek."
@@ -349,8 +379,11 @@ plot_group_toggle_help_0: "Przełącza PVP w grupie działek."
 plot_group_toggle_help_1: "Przełącza eksplozje w grupie działek."
 plot_group_toggle_help_2: "Przełącza Podpalanie w grupie działek."
 plot_group_toggle_help_3: "Przełącza moby w grupie działek."
+plot_group_toggle_help_4: "Przełącza status opodatkowania grupy działek."
 plot_set_help_0: "Np.: Gospoda, Dzicz, Plener, Ambasada itd."
 plot_set_help_1: "Ustawia działkę na Placówkę."
+plot_set_help_1.5: "Ustawia minimalną liczbę dni, przez które gracz musi być członkiem miasta, aby móc kupić działkę."
+plot_set_help_1.6: "Ustawia maksymalną liczbę dni, przez które gracz musi być członkiem miasta, aby móc kupić działkę."
 plot_set_help_2: "Przywraca domyślny rodzaj działki."
 plot_set_help_3: "Ustawia nazwę działki."
 plot_set_help_4: "Przełącza wszystkie uprawnienia."
@@ -373,14 +406,17 @@ msg_plot_fs_radius: 'Wystawia podany promień działek na sprzedaż.'
 ############################################################
 msg_buy: '&bKupiono %s (%d szt.) za %s.'
 msg_buy_resident_plot: '&b%s kupił działkę od %s za %s!'
+msg_buy_resident_plot_group: '&b%s kupił grupę działek %s za %s!'
 msg_couldnt_pay_taxes: '&bMieszkaniec %s nie mógł zapłacić podatków i został wyrzucony z %s.'
 msg_couldnt_pay_plot_taxes: '&b%s nie mógł zapłacić podatków i został wysiedlony ze swojej działki.'
-msg_payed_town_tax: '&bZapłacono podatki miejskie: '
-msg_payed_plot_cost: '&bZapłacono %s za %s działek w %s'
-msg_payed_resident_tax: '&bZapłacono podatek mieszkańca w wysokości '
+msg_you_couldnt_pay_plot_tax: '&bNie udało Ci się uiścić podatku od działki w wysokości %s i utraciłeś prawo własności do działki w %s.'
+msg_you_couldnt_pay_town_tax: '&bNie udało Ci się uiścić podatku miejskiego w wysokości %s i zostałeś usunięty z %s.'
+msg_you_paid_town_tax: '&bZapłaciłeś swojemu miastu podatek w wysokości %s.'
+msg_you_paid_plottax_to_town: '&bZapłaciłeś podatki od działki w wysokości %s na rzecz miasta %s.'
 msg_bankrupt_town: ' nie było stać na dalsze bycie miastem.'
 msg_bankrupt_nation: ' nie stać na opłacenie podatków, aby pozostać nacją.'
 msg_nation_not_peaceful: '&bNacji nie było stać na stan pokojowy.'
+msg_nation_cant_peaceful: '&bNaród nie mógł sobie pozwolić na to, aby stać się pokojowym narodem. Musisz być w stanie płacić %s dziennie.'
 msg_peaceful_disabled: '&bPokojowość nacji jest odgórnie zabroniona.'
 msg_you_paid: '&bZapłaciłeś %s, aby zmienić status neutralności.'
 msg_nation_set_peace: '&bZmieniono stosunek nacji.'
@@ -410,6 +446,7 @@ msg_nation_kicked_by: '&bTwoje miasto zostało wyrzucone z nacji przez %s.'
 msg_town_left_nation: '&bTwoje miasto opuściło nację %s.'
 msg_nation_town_left: '&bMiasto %s opuściło twoją nację.'
 msg_nation_kicked: '&b%s wyrzucił miasto %s z nacji.'
+msg_nation_you_kicked: '&bWyrzuciłeś %s z kraju.'
 msg_raised_ass: '&b%s awansował %s na Asystenta%s.'
 msg_lowered_to_res_by: '&bZostałeś zdegradowany do zwykłego mieszkańca przez %s.'
 msg_lowered_to_res: '&b%s zdegradował %s do rangi zwykłego mieszkańca.'
@@ -569,6 +606,8 @@ msg_err_not_in_town_claim: '&cMusisz należeć do miasta, aby móc pozyskiwać d
 msg_err_must_belong_town: '&cMusisz należeć do miasta.'
 msg_err_dont_belong_town: '&cNie należysz do żadnego miasta.'
 msg_err_dont_belong_nation: '&bNie należysz do nacji.'
+msg_err_already_belong_nation: '&bJuż należysz do narodu.'
+msg_err_town_already_belong_nation: '&b%s już należy do narodu: %s.'
 msg_err_not_same_nation: '&b%s nie należy do twojej nacji.'
 msg_err_rect_auto: '&cTylko miasta i mieszkańcy mogą z tego skorzystać.'
 msg_err_invalid_radius: '&cNieprawidłowy promień. Użyj liczby całkowitej lub trybu "auto".'
@@ -596,6 +635,7 @@ msg_err_input_too_long: '&cWprowadzone dane są za długie.'
 msg_err_invalid_choice: '&cNieprawidłowy wybór'
 msg_err_invalid_sub: '&cNieprawidłowe polecenie podrzędne.'
 msg_err_command_disable: '&cNie masz wymaganych uprawnień, aby użyć tego polecenia.'
+msg_err_you_dont_have_permission_to_use_colours: "Nie masz uprawnień do używania kodów kolorów w tytułach i nazwiskach."
 msg_err_universe_limit: '&cŚwiat nie może mieć więcej miast.'
 msg_err_too_many_npc: '&cZbyt wiele zarejestrowanych NPC.'
 msg_err_negative_money: '&cNie możesz mieć ujemnego stanu konta.'
@@ -603,7 +643,6 @@ msg_err_not_percentage: '&cProcent musi być mniej niż 100.'
 msg_err_no_economy: '&cEkonomia nie została włączona.'
 msg_err_not_block_type: '&cNiewłaściwy rodzaj działki!'
 msg_not_allowed_join: '&c%s nie jest uprawniony do dołączenia się do miasta.'
-msg_offline_no_join: '&c%s jest offline, lecz posiada uprawnienia, nie może jednak dołączyć do miasta.'
 msg_err_cannot_perform_action: '&cNie można wykonać tej czynności w %s.'
 msg_npc_flag: '&bFlaga NPC jest teraz %s dla %s.'
 msg_warning_delete: '&4*** UWAGA, %s ZOSTANIE USUNIĘTE NASTĘPNEGO DNIA ZE WZGLĘDU NA BRAK FUNDUSZY ***'
@@ -616,7 +655,7 @@ msg_err_not_enough_residents_join_nation: '&bMiasto %s nie ma wystarczającej li
 msg_not_enough_residents_no_longer_capital: '&bStara stolica nacji miała zbyt mało mieszkańców. Nową stolicą staje się %s.'
 msg_town_not_enough_residents_left_nation: '&bMiasto %s już nie ma wystarczającej liczby mieszkańców, aby należeć do swojej nacji, więc zostało z niej wyrzucone.'
 msg_nation_disbanded_town_not_enough_residents: '&bMiasto %s nie ma już wystarczającej liczby mieszkańców, aby tworzyć nację, przez co nacja musiała zostać rozwiązana.'
-msg_not_enough_residents_refunded: '&bZwrócono ci kwotę $%s za rozwiązanie twojej nacji z powodu zbyt małej ilości mieszkańców.'
+msg_not_enough_residents_refunded: '&bOtrzymałeś zwrot %s za rozwiązanie swojego narodu z powodu niewystarczającej liczby mieszkańców.'
 msg_not_enough_residents_capital: '&bMiasto %s nie ma wystarczającej liczby mieszkańców, aby być stolicą nacji.'
 list_page: '&bStrona %s z %s'
 list_err_not_enough_pages: '&cDostępnych jest tylko %s stron'
@@ -629,6 +668,7 @@ msg_you_have_been_given_rank: 'Przyznano ci rangę regionu %s o nazwie %s.'
 msg_you_have_given_rank: 'Przyznałeś rangę %2$s regionu %1$s mieszkańcowi %3$s.'
 msg_resident_not_your_town: 'Ten gracz nie należy do miasta!'
 msg_resident_already_has_rank: '%s już ma tę rangę w regionie %s.'
+msg_town_or_nation_level_not_high_enough_for_this_rank: "Twój poziom %s nie jest wystarczająco wysoki, aby przypisać rangę %s. Twój poziom %s/%s wymagany."
 msg_you_have_had_rank_taken: 'Zostałeś zdegradowany z %s w %s.'
 msg_you_have_taken_rank_from: 'Usunąłeś rangę %2$s regionu %1$s mieszkańcowi %3$s.'
 msg_resident_doesnt_have_rank: '%s nie posiada tej rangi w regionie %s.'
@@ -676,6 +716,8 @@ msg_you_have_undeclared_an_outlaw: '%s nie jest już wygnańcem w %s.'
 msg_err_player_not_an_outlaw: 'Ten gracz nie był uznany jako wygnaniec.'
 msg_err_outlaw_in_open_town: 'Nie możesz dołączyć do otwartego miasta, które uznało cię za wygnańca.'
 msg_you_are_an_outlaw_in_this_town: '&4Bądź ostrożny. Miasto %s wygnało cię, śmierć tutaj może oznaczać więzienie.'
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4Banici są więzieni przez %s godzin.'
+msg_you_are_an_outlaw_in_this_town_bail_amount: 'Kaucja wyniesie %s.'
 msg_err_town_not_close_enough_to_nation: 'Blok Macierzysty %s jest za daleko od Bloku Macierzystego stolicy nacji, więc miasto nie może dołączyć do twojej nacji.'
 msg_nation_town_moved_their_homeblock_too_far: 'Blok Macierzysty miasta %s został przesunięty zbyt daleko od stolicy twojej nacji, więc miasto zostało usunięte z nacji.'
 #Added in 0.33
@@ -717,6 +759,7 @@ town_invite_help_3: 'Lista wysłanych przez ciebie zaproszeń'
 town_invite_help_4: 'Lista wszystkich zaproszeń, które otrzymałeś'
 town_invite_help_5: 'Zaakceptuj prośbę o dołączenie do nacji'
 town_invite_help_6: 'Odrzuć prośbę dołączenia do nacji'
+town_invite_help_7: 'Usuń wszystkie zaproszenia wysłane przez Twoje miasto.'
 nation_invite_help_1: 'Zaproś miasto do swojej nacji'
 nation_invite_help_2: 'Anuluj zaproszenie, ktore wysłałeś do miasta'
 nation_invite_help_3: 'Lista wszystkich zaproszeń wysłanych do miast'
@@ -744,6 +787,7 @@ msg_err_nation_sent_too_many_requests: '&bNacja wysłała zbyt dużo zaproszeń,
 msg_err_nation_has_too_many_requests: '&bNacja %s ma zbyt dużo zaproszeń. Poproś ją o odrzucenie paru.'
 player_received_invites: '&bOtrzymałeś %a/%m zaproszeń.'
 town_revoke_invite: '&bMiasto %s odrzuciło twoją prośbę o dołączenie.'
+town_revoke_invite_successful: '&bPomyślnie cofnąłeś zaproszenie do dołączenia do Twojego miasta wysłane do %s.'
 town_received_invites: '&bMiasto otrzymało %a/%m zaproszeń.'
 town_sent_invites: '&bMiasto wysłało %a/%m zaproszeń.'
 nation_revoke_invite: '&bNacja %s odrzuciła Twoje propozycję dołączenie do nich.'
@@ -766,6 +810,9 @@ you_have_been_requested_to_ally: 'Zostałeş poproszony, aby wejść w sojusz '
 this_message_will_expire: 'Wygaśnie samo za 20 sekund.'
 player_sing: 'Gracz'
 nation_zone_this_area_under_protection_of: 'Ta część %s jest pod ochroną %s'
+nation_zone_conquered_status_denies_use: "Status podbitej miejscowości uniemożliwia korzystanie z tej strefy narodowej."
+nation_zone_conquered_status_denies_use_2: "Nie możesz korzystać ze strefy narodowej tego podbitego miasta."
+nation_spawn_not_allowed_for_conquered_towns: "Status podbicia twojego miasta uniemożliwia ci pojawienie się w punkcie odrodzenia twojej nacji."
 #Added in 0.42
 you_have_been_invited_to_join2: 'Dostałeś zaproszenie do dołączenia do %s'
 you_have_been_requested_to_ally2: 'Dostałeś propozycję sojuszu z %s'
@@ -815,10 +862,13 @@ msg_err_over_outposts_limit: 'Nie możesz teleportować się do swojej Placówki
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Wygnańcy:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Wygnańcy:'
 online: '&a(Online)'
-registered_last_online: '&2Zarejestrowany: &a%s &8| &2Ostatno Aktywny: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Uprawnienia:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Zarejestrowany: &a%s &8| &2Ostatno Aktywny: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Uprawnienia:'
 status_on: '&4TAK'
 status_off: '&aNIE'
 status_on_good: '&aTAK'
@@ -878,6 +928,9 @@ status_res_plottax: 'Suma Podatków Od Działki:'
 status_res_totaltax: 'Suma Podatków do zapłaty:'
 status_townblock_plottax: 'Podatek od Działek: '
 status_townblock_untaxed: 'Nieopodatkowany'
+status_townblock_max_and_minjoindays: 'Członkostwo w mieście wymagane do zakupu działki wynosi od %s do %s dni.'
+status_townblock_minjoindays: 'Członkostwo w mieście wymagane przez ponad %s dni w celu zakupu działki.'
+status_townblock_maxjoindays: 'Członkostwo w mieście krótsze niż %s dni wymagane do zakupu działki.'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: 'Nie możesz dokonywać operacji na koncie bankowym nacji, kiedy nie przebywasz w stolicy nacji.'
 msg_err_unable_to_use_bank_outside_your_town: 'Nie możesz operować kontem bankowym miasta, kiedy nie przebywasz w mieście.'
@@ -901,6 +954,7 @@ msg_err_nation_not_public: '&cNacja nie jest publiczna.'
 msg_nation_toggle_public: '&aZmieniono publiczny status nacji.'
 status_yes: '&aTAK'
 status_no: '&cNIE'
+msg_err_unable_to_use_bank_outside_bank_plot: 'You cannot use that command outside of a bank or home plot. Bank plots are created using /plot set bank.'
 msg_err_nation_spawn_forbidden: '&cSpawn do nacji jest zabroniony.'
 msg_err_nation_spawn_forbidden_war: '&cTeleportacja na spawn nacji jest dozwolona tylko podczas wojny.'
 msg_err_nation_spawn_forbidden_peace: '&cSpawn w nacji jest niedozwolony podczas wojny.'
@@ -1267,7 +1321,8 @@ msg_town_destroyed_by_nation_tax: '&bPodbitego miasta %s nie było stać na poda
 msg_town_destroyed_by_nation_tax_multiple: '&bNastępujących podbitych miast nie było stać na podatek na nację i upadły: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bTwoje miasto zostało zwolnione z podatku dla nacji.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Status Ruiny'
 msg_comptype_bankrupt: 'Stan Bankructwa'
 msg_ruined: '&c(Zrujnowane)'
@@ -1407,9 +1462,11 @@ status_trustedlist: 'Zaufani'
 msg_click_to_edit: '&6Kliknij, aby edytować.'
 permission_gui_header: 'Okienko Zarzadzania Uprawnieniami Towny'
 msg_last_edited: '&7&oOstatniej zmiany dokonano %s przez %s.'
-msg_trusted_added: '&bDodano %s do grona zaufanych w regionie %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bDodano %s do grona zaufanych w regionie %s.'
 msg_already_trusted: '&b%s już należy do grona zaufanych w regionie %s.'
-msg_trusted_added_2: '&b%s dodał cię do grona zaufanych w regionie %s %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s dodał cię do grona zaufanych w regionie %s %s.'
 msg_not_trusted: '&b%s nie należy do grona zaufanych w regionie %s.'
 msg_trusted_removed: '&bUsunięto %s z grona zaufanych w regionie %s.'
 msg_trusted_removed_2: '&b%s usunął cię z grona zaufanych regionu %s %s.'
@@ -1738,7 +1795,7 @@ msg_perm_hud_resident: 'mieszkaniec'
 msg_perm_hud_nation: 'nacja'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'obcy'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Działka: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

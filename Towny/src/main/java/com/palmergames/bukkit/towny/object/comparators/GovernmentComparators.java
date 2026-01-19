@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.object.TownyObject;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.function.Function;
 /**
  * A list of static comparators used for organizing lists of {@link Government}'s
  */
@@ -20,36 +21,8 @@ public class GovernmentComparators {
 	public static final Comparator<Government> BY_NUM_ONLINE = Collections.reverseOrder(Comparator.comparingInt(town -> TownyAPI.getInstance().getOnlinePlayers(town).size()));
 	public static final Comparator<Government> BY_TOWNBLOCKS_CLAIMED = (g1, g2) -> Double.compare(g2.getTownBlocks().size(), g1.getTownBlocks().size());
 	public static final Comparator<Government> BY_FOUNDED = Comparator.comparingLong(Government::getRegistered);
-	public static final Comparator<Government> BY_OPEN = (t1, t2) -> {
-
-		// Both are open, fallback to population comparison.
-		if (t1.isOpen() && t2.isOpen()) {
-			return t2.getResidents().size() - t1.getResidents().size();
-		}
-
-		// Less than.
-		if (t2.isOpen()) {
-			return 1;
-		} else {
-			// Greater than.
-			return -1;
-		}
-	};
-	public static final Comparator<Government> BY_PUBLIC = (t1, t2) -> {
-
-		// Both are open, fallback to population comparison.
-		if (t1.isPublic() && t2.isPublic()) {
-			return t2.getResidents().size() - t1.getResidents().size();
-		}
-
-		// Less than.
-		if (t2.isPublic()) {
-			return 1;
-		} else {
-			// Greater than.
-			return -1;
-		}
-	};
+	public static final Comparator<Government> BY_OPEN = (t1, t2) -> doCompare(t1, t2, Government::isOpen);
+	public static final Comparator<Government> BY_PUBLIC = (t1, t2) -> doCompare(t1, t2, Government::isPublic);
 	public static final Comparator<Government> BY_UPKEEP = (t1, t2) -> {
 		if (!TownySettings.isTaxingDaily())
 			return 0;
@@ -69,4 +42,14 @@ public class GovernmentComparators {
 		
 		return Double.compare(upkeep1, upkeep2);
 	};
+
+	private static int doCompare(Government t1, Government t2, Function<Government, Boolean> func) {
+		if (func.apply(t1) && func.apply(t2))
+			return t2.getResidents().size() - t1.getResidents().size();
+
+		if (func.apply(t2)) // Less than.
+			return 1;
+		else // Greater than.
+			return -1;
+	}
 }

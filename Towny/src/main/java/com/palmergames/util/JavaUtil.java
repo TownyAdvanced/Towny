@@ -1,5 +1,6 @@
 package com.palmergames.util;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,11 +13,13 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -119,6 +122,40 @@ public class JavaUtil {
 			field.setAccessible(true);
 			return MethodHandles.publicLookup().unreflectGetter(field);
 		} catch (ReflectiveOperationException e) {
+			return null;
+		}
+	}
+
+	@NotNull
+	@Contract(pure = true)
+	public static UUID changeUUIDVersion(final @NotNull UUID uuid, final int version) {
+		if (uuid.version() == version)
+			return uuid;
+
+		final ByteBuffer buffer = ByteBuffer.wrap(new byte[16]);
+		buffer.putLong(uuid.getMostSignificantBits());
+		buffer.putLong(uuid.getLeastSignificantBits());
+
+		final byte[] bytes = buffer.array();
+
+		bytes[6] = (byte) (version << 4);
+
+		final ByteBuffer rewrapped = ByteBuffer.wrap(bytes);
+		final long mostSig = rewrapped.getLong();
+		final long leastSig = rewrapped.getLong();
+
+		return new UUID(mostSig, leastSig);
+	}
+
+	@Nullable
+	public static UUID parseUUIDOrNull(final String uuid) {
+		if (uuid == null) {
+			return null;
+		}
+
+		try {
+			return UUID.fromString(uuid);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}

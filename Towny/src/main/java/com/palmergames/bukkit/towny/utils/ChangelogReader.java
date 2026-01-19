@@ -32,6 +32,7 @@ public class ChangelogReader {
 	public ChangelogResult read() throws IOException {
 		List<String> out = new ArrayList<>();
 		int linesRead = 0;
+		boolean limitReached = false;
 		int nextVersionIndex = 0;
 		
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.changelogStream, StandardCharsets.UTF_8))) {
@@ -45,21 +46,25 @@ public class ChangelogReader {
 				if (!lastVersionFound && line.startsWith(this.lastVersion)) {
 					lastVersionFound = true;
 					continue;
-				} else if (lastVersionFound && !nextVersionFound && !line.startsWith("-")) {
+				} else if (lastVersionFound && !nextVersionFound && !line.trim().startsWith("-")) {
 					nextVersionFound = true;
 					nextVersionIndex = linesRead;
-					continue;
 				}
 				
-				if (nextVersionFound && (limit < 0 || out.size() < limit))
-					out.add(line);
+				if (nextVersionFound) {
+					if (limit < 0 || out.size() < limit) {
+						out.add(line);
+					} else {
+						limitReached = true;
+					}
+				}
 			}
 			
 			if (!lastVersionFound)
 				return new ChangelogResult(Collections.emptyList(), false, false, -1, linesRead);
 		}
 		
-		return new ChangelogResult(out, true, limit >= 0 && linesRead >= limit, nextVersionIndex, linesRead);
+		return new ChangelogResult(out, true, limitReached, nextVersionIndex, linesRead);
 	}
 	
 	public static ChangelogReader reader(@NotNull String lastVersion, @NotNull InputStream changelogStream) {

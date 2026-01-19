@@ -1,6 +1,0 @@
-If this file doesn't exist (you delete it),
-Towny will automatically attempt to convert
-old debt accounts used in Towny 0.96.3.0 to
-0.96.5.0. 
-
-99% of servers can leave this file alone.

@@ -4,9 +4,12 @@ import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.db.DatabaseConfig;
 import com.palmergames.bukkit.towny.event.NationBonusCalculationEvent;
+import com.palmergames.bukkit.towny.event.nation.NationNeutralityCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.NationUpkeepCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownNeutralityCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownUpkeepPenalityCalculationEvent;
+import com.palmergames.bukkit.towny.event.town.TownCalculateMaxTownBlocksEvent;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.AbstractRegistryList;
@@ -23,6 +26,7 @@ import com.palmergames.bukkit.towny.object.spawnlevel.SpawnLevel;
 import com.palmergames.bukkit.towny.permissions.PermissionNodes;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.towny.utils.MapUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.EntityLists;
@@ -328,20 +332,11 @@ public class TownySettings {
 	}
 
 	public static TownLevel getTownLevel(Town town) {
-		return getTownLevel(town.getLevelNumber());
-	}
-
-	/**
-	 * @deprecated since 0.99.6.3 use {@link #getTownLevelWithModifier(int, Town)}
-	 *             instead.
-	 * @param town      Town to test with.
-	 * @param residents an int representing what modifies a townlevel, typically the
-	 *                  number of residents in the town.
-	 * @return the TownLevel given the number of residents.
-	 */
-	@Deprecated
-	public static TownLevel getTownLevel(Town town, int residents) {
-		return getTownLevelWithModifier(residents, town);
+		// In order to look up the town level we always have to reference a number of
+		// residents (the key by which TownLevels are mapped,) even when dealing with
+		// manually-set TownLevels.
+		int numResidents = getResidentCountForTownLevel(town.getLevelNumber());
+		return getTownLevel(numResidents);
 	}
 
 	public static TownLevel getTownLevelWithModifier(int modifier, Town town) {
@@ -352,7 +347,7 @@ public class TownySettings {
 	 * Get the town level for a given population size.
 	 * <p>
 	 *     Great for debugging, or just to see what the town level is for a given amount of residents. 
-	 *     But for most cases you'll want to use {@link Town#getLevel()}, which uses the town's current population.
+	 *     But for most cases you'll want to use {@link Town#getTownLevel()}, which uses the town's current population.
 	 *     <br />
 	 *     Note that Town Levels are not hard-coded. They can be defined by the server administrator,
 	 *     and may be different from the default configuration.
@@ -373,11 +368,11 @@ public class TownySettings {
 	}
 
 	/**
-	 * Gets the TownLevel for manually-set towns, returning the key in the SortedMap which corresponds with the position of the key in the SortedMap's keySet.
+	 * Gets the number of residents required to look up the TownLevel in the SortedMap.
 	 * @param level The number used to get the key from the keySet array. 
 	 * @return the number of residents which will get us the correct TownLevel in the TownLevel SortedMap.
 	 */
-	public static int getTownLevelWhichIsManuallySet(int level) {
+	public static int getResidentCountForTownLevel(int level) {
 		
 		Integer[] keys = configTownLevel.keySet().toArray(new Integer[] {});
 		// keys is always ordered from biggest to lowest (despite what the javadocs say
@@ -388,8 +383,34 @@ public class TownySettings {
 		return keys[level];
 	}
 
+	/**
+	 * Gets the number of the TownLevel for towns, returning the position in the
+	 * SortedMap which corresponds with the given number of residents.
+	 * 
+	 * @param residents The number used to get the key from the keySet array.
+	 * @param town The town being checked, in case it is ruined.
+	 * @return the number of the TownLevel.
+	 */
+	public static int getTownLevelWhichIsNotManuallySet(int residents, Town town) {
+		if (town.isRuined())
+			return 0;
+
+		int i = TownySettings.getTownLevelMax() - 1; // Remove one in order to get the index of an array.
+		for (int level : configTownLevel.keySet()) {
+			if (residents >= level)
+				return i;
+
+			i--;
+		}
+		return 0;
+	}
+	
 	public static int getTownLevelMax() {
 		return configTownLevel.size();
+	}
+
+	public static boolean isTownLevelDeterminedByTownBlockCount() {
+		return getTownBlockRatio() != 0 && getBoolean(ConfigNodes.GTOWN_SETTINGS_TOWN_LEVEL_IS_DETERMINED_BY_TOWNBLOCK_COUNT);
 	}
 
 	public static NationLevel getNationLevel(int levelNumber) {
@@ -400,19 +421,6 @@ public class TownySettings {
 		return getNationLevel(nation.getLevelNumber());
 	}
 
-	/**
-	 * @deprecated since 0.99.6.2 use {@link #getNationLevelWithModifier(int)} instead.
-	 * @param nation    Nation to test with, unused.
-	 * @param residents an int representing what modifies a nationlevel.
-	 *                  {@link #isNationLevelDeterminedByTownCount()} decides
-	 *                  whether it is residents or towns.
-	 * @return the NationLevel given the number of residents/towns.
-	 */
-	@Deprecated
-	public static NationLevel getNationLevel(Nation nation, int residents) {
-		return getNationLevelWithModifier(residents);
-	}
-	
 	public static NationLevel getNationLevelWithModifier(int modifier) {
 		return getNationLevel(getNationLevelFromGivenInt(modifier));
 	}
@@ -536,7 +544,7 @@ public class TownySettings {
 				case "thrown_exp_bottle" -> "experience_bottle";
 				case "ender_signal" -> "eye_of_ender";
 				case "mushroom_cow" -> "mooshroom";
-				case "splash_potion" -> "potion";
+				case "splash_potion" -> MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21_5) ? "splash_potion" : "potion";
 				case "leash_hitch" -> "leash_knot";
 				case "lightning" -> "lightning_bolt";
 				case "dropped_item" -> "item";
@@ -549,6 +557,8 @@ public class TownySettings {
 			
 			if (type != null)
 				entities.add(type);
+			else
+				System.out.println("Unmatched entity: " + entityName);
 		}
 
 		return entities;
@@ -911,6 +921,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 0);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 10);
@@ -927,6 +938,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 1);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 20);
@@ -943,6 +955,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 1);
 			level.put("nationBonusOutpostLimit", 2);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 30);
@@ -959,6 +972,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 3);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 40);
@@ -975,6 +989,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 2);
 			level.put("nationBonusOutpostLimit", 4);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			level.put("numResidents", 60);
@@ -991,6 +1006,7 @@ public class TownySettings {
 			level.put("bankCapModifier", 1.0);
 			level.put("nationZonesSize", 3);
 			level.put("nationBonusOutpostLimit", 5);
+			level.put("nationCapitalBonusOutpostLimit", 0);
 			levels.add(new HashMap<>(level));
 			level.clear();
 			newConfig.set(ConfigNodes.LEVELS_NATION_LEVEL.getRoot(), levels);
@@ -1299,11 +1315,11 @@ public class TownySettings {
 	}
 	
 	
-	public static String getDatabaseVersion() {
-		return DatabaseConfig.getString(DatabaseConfig.DATEBASE_VERSION);
+	public static int getDatabaseVersion() {
+		return DatabaseConfig.getInt(DatabaseConfig.DATEBASE_VERSION);
 	}
 	
-	public static void setDatabaseVersion(String version) {
+	public static void setDatabaseVersion(int version) {
 		DatabaseConfig.setDatabaseVersion(version);
 	}
 
@@ -1381,7 +1397,10 @@ public class TownySettings {
 		if (ratio != 0 && ratioSizeLimit > 0)
 			n = Math.min(ratioSizeLimit, n);
 
-		return n;
+		TownCalculateMaxTownBlocksEvent event = new TownCalculateMaxTownBlocksEvent(town, n);
+		BukkitTools.fireEvent(event);
+
+		return event.getTownBlockCount();
 	}
 
 	public static int getMaxTownBlocks(Town town, int residents) {
@@ -1394,7 +1413,11 @@ public class TownySettings {
 			amount += residents * ratio;
 
 		amount += getNationBonusBlocks(town);
-		return amount;
+
+		TownCalculateMaxTownBlocksEvent event = new TownCalculateMaxTownBlocksEvent(town, amount);
+		BukkitTools.fireEvent(event);
+
+		return event.getTownBlockCount();
 	}
 	
 	public static int getMaxOutposts(Town town, int residents) {
@@ -1488,6 +1511,18 @@ public class TownySettings {
 		return StringMgmt.containsIgnoreCase(getStrArr(ConfigNodes.PLUGIN_MODS_FAKE_RESIDENTS), name);
 	}
 
+	public static boolean refundDeletedNewTowns() {
+		return getBoolean(ConfigNodes.ECO_REFUND_ALLOW_REFUND_ON_DELETION);
+	}
+
+	public static int refundDeletedNewTownsMaxHours() {
+		return getInt(ConfigNodes.ECO_REFUND_MAX_TOWN_AGE_IN_HOURS);
+	}
+
+	public static int refundDeletedNewTownsMaxTownBlocks() {
+		return getInt(ConfigNodes.ECO_REFUND_MAX_CLAIMS);
+	}
+
 	public static double getNewTownPrice() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NEW_TOWN);
@@ -1552,6 +1587,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_DISPLAY_NATIONBOARD_ONLOGIN);
 	}
 	
+	public static int getMaxBoardLength() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MAX_BOARD_LENGTH);
+	}
+
 	public static boolean nationCapitalsCantBeNeutral() {
 		return getBoolean(ConfigNodes.GNATION_SETTINGS_CAPITAL_CANNOT_BE_NEUTRAL);
 	}
@@ -1674,6 +1713,14 @@ public class TownySettings {
 
 	public static boolean preventSaturationLoss() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REGEN_PREVENT_SATURATION_LOSS);
+	}
+
+	public static boolean beaconsForTownMembersOnly() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_BEACONS_FOR_ALLIES_ONLY);
+	}
+
+	public static boolean beaconsExcludeConqueredTowns() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_BEACONS_EXCLUDE_CONQUERED_TOWNS);
 	}
 
 	public static boolean getTownDefaultPublic() {
@@ -1854,7 +1901,10 @@ public class TownySettings {
 
 	public static double getNationNeutralityCost(Nation nation) {
 		double cost = nation.getNationLevel().peacefulCostMultiplier() * getNationNeutralityCost();
-		return isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
+		double nationMultiplierCost = isNationNeutralityCostMultipliedByNationTownAmount() ? cost * nation.getTowns().size() : cost;
+		NationNeutralityCostCalculationEvent event = new NationNeutralityCostCalculationEvent(nation, nationMultiplierCost);
+		BukkitTools.fireEvent(event);
+		return event.getNeutralityCost();
 	}
 
 	public static double getNationNeutralityCost() {
@@ -1868,7 +1918,10 @@ public class TownySettings {
 
 	public static double getTownNeutralityCost(Town town) {
 		double cost = town.getTownLevel().peacefulCostMultiplier() * getTownNeutralityCost();
-		return isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
+		double townMultiplierCost = isTownNeutralityCostMultipliedByTownClaimsSize() ? cost * town.getTownBlocks().size() : cost;
+		TownNeutralityCostCalculationEvent event = new TownNeutralityCostCalculationEvent(town, townMultiplierCost);
+		BukkitTools.fireEvent(event);
+		return event.getNeutralityCost();
 	}
 
 	public static double getTownNeutralityCost() {
@@ -2050,23 +2103,39 @@ public class TownySettings {
 	}
 
 	public static SpawnLevel isAllowingTownSpawn() {
-
 		return getSpawnLevel(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN);
 	}
 
 	public static SpawnLevel isAllowingPublicTownSpawnTravel() {
-
 		return getSpawnLevel(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
 
-	public static boolean isConfigAllowingPublicTownSpawnTravel() {
+	public static boolean isConfigAllowingTownSpawn() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN);
+	}
 
+	public static boolean isConfigAllowingPublicTownSpawnTravel() {
 		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL);
 	}
-	
-	public static boolean isConfigAllowingPublicNationSpawnTravel() {
 
+	public static boolean isConfigAllowingTownSpawnNationTravel() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL_NATION);
+	}
+
+	public static boolean isConfigAllowingTownSpawnNationAllyTravel() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL_ALLY);
+	}
+
+	public static boolean isConfigAllowingNationSpawn() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN);
+	}
+
+	public static boolean isConfigAllowingPublicNationSpawnTravel() {
 		return getBoolean(ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN_TRAVEL);
+	}
+
+	public static boolean isConfigAllowingNationSpawnAllyTravel() {
+		return getBoolean(ConfigNodes.SPAWNING_ALLOW_NATION_SPAWN_TRAVEL_ALLY);
 	}
 
 	public static List<String> getDisallowedTownSpawnZones() {
@@ -2185,6 +2254,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_BANK_IS_DELETED_OBJECT_BALANCE_PAID_TO_OWNER);
 	}
 
+	public static boolean areZeroOrLowerBankAccountsHiddenOnLists() {
+		return getBoolean(ConfigNodes.ECO_BANK_HIDE_ZERO_OR_LESS_BANK_ACCOUNTS_ON_LISTS);
+	}
+
 	public static boolean isEcoClosedEconomyEnabled() {
 		
 		return getBoolean(ConfigNodes.ECO_CLOSED_ECONOMY_ENABLED);
@@ -2283,6 +2356,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.JAIL_UNJAIL_TELEPORT);
 	}
 
+	public static boolean showBailTitle() {
+		return getBoolean(ConfigNodes.JAIL_SHOW_BAIL_TITLE);
+	}
+
 	public static boolean isDevMode() {
 
 		return getBoolean(ConfigNodes.PLUGIN_DEV_MODE_ENABLE);
@@ -2315,13 +2392,24 @@ public class TownySettings {
 		double townMultiplier = isUpkeepByPlot() ? town.getTownBlocks().size() : town.getTownLevel().upkeepModifier();
 		// If the town has a nation we will be altering thing with the nation's TownUpkeepModifier, or 1.0 if no nation.
 		double nationMultiplier = town.hasNation() ? town.getNationOrNull().getNationLevel().nationTownUpkeepModifier() : 1.0;
+		// Nation's multiplier should only affect plot-based-upkeep if the config is set for it.
+		if (isUpkeepByPlot() && !isTownLevelModifiersAffectingPlotBasedUpkeep())
+			nationMultiplier = 1.0;
+
 		// There's the chance that even with per-plot-upkeep, the townLevel upkeep modifier is still used, or 1.0 if not. 
 		double townLevelPlotModifier = isUpkeepByPlot() && isTownLevelModifiersAffectingPlotBasedUpkeep() ? town.getTownLevel().upkeepModifier() : 1.0;
+
+		// outposts can have an added cost to the town's upkeep.
+		double outpostCost = getPerOutpostUpkeepCost() * town.getMaxOutpostSpawn();
+		// outposts having a cost will mess up the per-plot-upkeep feature, so add that on later.
+		double baseUpkeep = getTownUpkeep() + (isUpkeepByPlot() ? 0 : outpostCost);
 		// Amount is calculated using the above multipliers.
-		double amount = ((getTownUpkeep() * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
+		double amount = ((baseUpkeep * townMultiplier) * townLevelPlotModifier) * nationMultiplier;
 
 		// When per-plot-upkeep is in use, there can be min/max amounts.
 		if (isUpkeepByPlot()) {
+			// Tack on the outpost cost here when isUpkeepByPlot is used.
+			amount += outpostCost;
 			if (TownySettings.getPlotBasedUpkeepMinimumAmount() > 0.0)
 				amount = Math.max(amount, TownySettings.getPlotBasedUpkeepMinimumAmount());
 			if (TownySettings.getPlotBasedUpkeepMaximumAmount() > 0.0) 
@@ -2405,6 +2493,10 @@ public class TownySettings {
     	return getBoolean(ConfigNodes.ECO_PRICE_TOWN_OVERCLAIMED_UPKEEP_PENALTY_PLOTBASED);
     }
 
+	public static double getPerOutpostUpkeepCost() {
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_OUTPOST_UPKEEP_COST);
+	}
+
 	public static double getNationUpkeep() {
 
 		return getDouble(ConfigNodes.ECO_PRICE_NATION_UPKEEP);
@@ -2468,6 +2560,11 @@ public class TownySettings {
 		return getString(ConfigNodes.NATION_DEF_BOARD);
 	}
 
+	public static boolean getNationDefaultNeutral() {
+
+		return getBoolean(ConfigNodes.NATION_DEF_NEUTRAL);
+	}
+	
 	public static double getNationDefaultTax() {
 
 		return getDouble(ConfigNodes.NATION_DEF_TAXES_TAX);
@@ -3042,6 +3139,18 @@ public class TownySettings {
 		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND) : ConfigNodes.INVITE_SYSTEM_CANCEL_COMMAND.getDefault();
 	}
 
+	public static String getConfirmationCommandFormat() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_FORMAT) : ConfigNodes.INVITE_SYSTEM_CONFIRMATION_FORMAT.getDefault();
+	}
+
+	public static String getConfirmationCommandYesColour() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_YES_COLOUR) : ConfigNodes.INVITE_SYSTEM_CONFIRMATION_YES_COLOUR.getDefault();
+	}
+
+	public static String getConfirmationCommandNoColour() {
+		return config != null ? getString(ConfigNodes.INVITE_SYSTEM_CONFIRMATION_NO_COLOUR) : ConfigNodes.INVITE_SYSTEM_CONFIRMATION_NO_COLOUR.getDefault();
+	}
+
 	public static boolean getOutsidersPreventPVPToggle() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_OUTSIDERS_PREVENT_PVP_TOGGLE);
 	}
@@ -3160,12 +3269,29 @@ public class TownySettings {
 	}
 
 	public static double getTownBankCap(Town town) {
-		return town.getTownLevel().bankCapModifier * getTownBankCap(); 
+		double cap = getTownBankCap();
+		if (!isTownBankCapPlotBased())
+			return town.getTownLevel().bankCapModifier * cap;
+
+		double multiplier = isPlotBasedTownBankCapUsingTownLevelModifier() ? town.getTownLevel().bankCapModifier : 1;
+		return Math.max(cap * town.getNumTownBlocks() * multiplier, getPlotBasedTownBankCapMinimumAmount());
 	}
 
 	public static double getTownBankCap() {
 
 		return getDouble(ConfigNodes.ECO_BANK_CAP_TOWN);
+	}
+
+	public static boolean isTownBankCapPlotBased() {
+		return getBoolean(ConfigNodes.ECO_BANK_CAP_PLOT_BASED);
+	}
+
+	public static double getPlotBasedTownBankCapMinimumAmount() {
+		return getDouble(ConfigNodes.ECO_BANK_CAP_PLOT_BASED_MIN_AMOUNT);
+	}
+
+	public static boolean isPlotBasedTownBankCapUsingTownLevelModifier() {
+		return getBoolean(ConfigNodes.ECO_BANK_CAP_PLOT_BASED_USES_TOWN_LEVEL_MODIFIER);
 	}
 
 	public static int getTownMinDeposit() {
@@ -3288,6 +3414,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_EXPERIENCE_ON_DEATH_IN_ARENA);
 	}
 	
+	public static boolean arenaPlotPreventArmourDegrade() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_PREVENT_ITEM_DEGRADE_IN_ARENAS);
+	}
+
 	public static boolean getKeepInventoryInArenas() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_KEEP_INVENTORY_ON_DEATH_IN_ARENA);
 	}
@@ -3515,6 +3645,10 @@ public class TownySettings {
 		return getStrArr(ConfigNodes.GTOWN_ORDER_OF_MAYORAL_SUCCESSION);
 	}
 
+	public static List<String> getAssistantRankNameList() {
+		return getStrArr(ConfigNodes.GTOWN_NAMES_OF_ASSISTANT_RANKS);
+	}
+
 	public static boolean isWarAllowed() {
 		return getBoolean(ConfigNodes.NWS_WAR_ALLOWED);
 	}
@@ -3601,6 +3735,14 @@ public class TownySettings {
 
 	public static boolean doBankruptTownsPayNationTax() {
 		return getBoolean(ConfigNodes.ECO_BANKRUPTCY_DO_BANKRUPT_TOWNS_PAY_NATION_TAX);
+	}
+
+	public static boolean forcePVPForTownOutlaws() {
+		return getBoolean(ConfigNodes.GTOWN_SETTING_FORCE_PVP_ON_OUTLAWS);
+	}
+
+	public static boolean outlawsAlwaysAllowedToPVP() {
+		return getBoolean(ConfigNodes.GTOWN_SETTING_ALLOW_OUTLAWS_TO_ALWAYS_PVP);
 	}
 
 	public static boolean canOutlawsEnterTowns() {
@@ -3714,6 +3856,14 @@ public class TownySettings {
 		return getInt(ConfigNodes.GNATION_SETTINGS_MAX_ALLIES);
 	}
 	
+	public static boolean areConqueredTownsConsideredAllied() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ARE_CONQUERED_TOWNS_CONSIDERED_ALLIES);
+	}
+
+	public static boolean areConqueredTownsGivenNationPlotPerms() {
+		return getBoolean(ConfigNodes.GNATION_SETTINGS_ARE_CONQUERED_TOWNS_GIVEN_NATION_PLOT_PERMS);
+	}
+	
 	public static String getBankHistoryBookFormat() {
 		return getString(ConfigNodes.BANKHISTORY_BOOK);
 	}
@@ -3765,13 +3915,25 @@ public class TownySettings {
 	public static boolean isUsingWebMapStatusScreens() {
 		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_USING_STATUSSCREEN);
 	}
-	
+
+	public static boolean isWebMapLinkShownForNonPublicTowns() {
+		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_SHOW_LINK_FOR_NONPUBLIC_TOWNS);
+	}
+
 	public static boolean isUsingWorldKeyForWorldName() {
 		return getBoolean(ConfigNodes.PLUGIN_WEB_MAP_WORLD_NAME_USES_KEY);
 	}
 	
 	public static String getWebMapUrl() {
 		return getString(ConfigNodes.PLUGIN_WEB_MAP_URL);
+	}
+	
+	public static boolean isSafeTeleportUsed() { 
+		return getBoolean(ConfigNodes.SPAWNING_SAFE_TELEPORT);
+	}
+	
+	public static boolean isStrictSafeTeleportUsed() { 
+		return getBoolean(ConfigNodes.SPAWNING_STRICT_SAFE_TELEPORT);
 	}
 	
 	public static Map<Integer, TownLevel> getConfigTownLevel() {
@@ -3942,9 +4104,21 @@ public class TownySettings {
 	public static long getResidentMinTimeToJoinTown() {
 		return TimeTools.getMillis(getString(ConfigNodes.RES_SETTING_MIN_TIME_TO_JOIN_TOWN));
 	}
+	
+	public static int getResidentOutlawWarningMessageCooldown() {
+		return getInt(ConfigNodes.RES_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME);
+	}
 
 	public static double maxBuyTownPrice() {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
+	}
+
+	public static boolean isWorldJailingEnabled() {
+		return getBoolean(ConfigNodes.NWS_JAILING_ENABLE);
+	}
+
+	public static boolean areEmptyTownsBecomingRuins() {
+		return getBoolean(ConfigNodes.TOWN_RUINING_EMPTY_TOWNS_BECOME_RUINS);
 	}
 }
 

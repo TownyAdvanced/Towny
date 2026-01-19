@@ -2,44 +2,40 @@ package com.palmergames.bukkit.towny.object.economy;
 
 import java.util.UUID;
 
-import org.bukkit.World;
-
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.object.EconomyHandler;
 import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.object.TownyWorld;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * For internal use only.
  */
-public class TownyServerAccount extends Account implements TownyServerAccountEconomyHandler {
-	
-	private final static UUID uuid = UUID.fromString("a73f39b0-1b7c-4930-b4a3-ce101812d926");
-	private final static String name = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
+@ApiStatus.Internal
+public final class TownyServerAccount extends Account {
 
-	public TownyServerAccount() {
-		super(null, name);
-	}
+	private static final UUID uuid = UUID.fromString(TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT_UUID));
+	private static final String name = TownySettings.getString(ConfigNodes.ECO_CLOSED_ECONOMY_SERVER_ACCOUNT);
+	private static final ThreadLocal<TownyWorld> worldLocal = ThreadLocal.withInitial(() -> TownyUniverse.getInstance().getTownyWorlds().get(0));
+	public static final TownyServerAccount ACCOUNT = new TownyServerAccount();
 
-	public TownyServerAccount(TownyServerAccountEconomyHandler economyHandler) {
-		super(economyHandler, name);
-	}
-
-	public static UUID getUUID() {
-		return uuid;
+	private TownyServerAccount() {
+		super(new EconomyHandlerHolder(), name, uuid, worldLocal::get, false);
 	}
 
 	@Override
 	protected synchronized boolean addMoney(double amount) {
-		return TownyEconomyHandler.add(this, amount, world);
+		return addToServer(null, amount, this.getWorld());
 	}
 
 	@Override
 	protected synchronized boolean subtractMoney(double amount) {
-		return TownyEconomyHandler.subtract(this, amount, world);
+		return subtractFromServer(null, amount, this.getWorld());
 	}
-
 
 	/**
 	 * Adds money to the server account (used for towny closed economy.)
@@ -49,13 +45,18 @@ public class TownyServerAccount extends Account implements TownyServerAccountEco
 	 * @param world The world of the deposit.
 	 * @return A boolean indicating success.
 	 */
-	@Override
-	public boolean addToServer(Account account, double amount, World world) {
-		boolean success = TownyEconomyHandler.add(this, amount, world);
-		if (success)
-			BukkitTools.fireEvent(Transaction.add(amount).paidBy(account).paidToServer().asTownyTransactionEvent());
+	public static boolean addToServer(Account account, double amount, TownyWorld world) {
+		worldLocal.set(world);
+		
+		try {
+			boolean success = TownyEconomyHandler.add(ACCOUNT, amount);
+			if (success)
+				BukkitTools.fireEvent(Transaction.add(amount).paidBy(account).paidToServer().asTownyTransactionEvent());
 
-		return success;
+			return success;
+		} finally {
+			worldLocal.remove();
+		}
 	}
 
 	/**
@@ -65,18 +66,29 @@ public class TownyServerAccount extends Account implements TownyServerAccountEco
 	 * @param world The world of the withdraw.
 	 * @return A boolean indicating success.
 	 */
-	@Override
-	public boolean subtractFromServer(Account account, double amount, World world) {
-		boolean success = TownyEconomyHandler.subtract(this, amount, world);
-		if (success)
-			BukkitTools.fireEvent(Transaction.subtract(amount).paidByServer().paidTo(account).asTownyTransactionEvent());
+	public static boolean subtractFromServer(Account account, double amount, TownyWorld world) {
+		worldLocal.set(world);
+		
+		try {
+			boolean success = TownyEconomyHandler.subtract(ACCOUNT, amount);
+			if (success)
+				BukkitTools.fireEvent(Transaction.subtract(amount).paidByServer().paidTo(account).asTownyTransactionEvent());
 
-		return success;
+			return success;
+		} finally {
+			worldLocal.remove();
+		}
 	}
+	
+	private static final class EconomyHandlerHolder implements EconomyHandler {
+		@Override
+		public Account getAccount() {
+			return ACCOUNT;
+		}
 
-	@Override
-	public Account getAccount() {
-		return this;
+		@Override
+		public String getName() {
+			return name;
+		}
 	}
-
 }

@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.player.PlayerCacheGetTownBlockStatusEvent;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.object.Nation;
+import com.palmergames.bukkit.towny.object.PermissionData;
 import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.PlayerCache.TownBlockStatus;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -236,7 +237,7 @@ public class PlayerCacheUtil {
 			return TownBlockStatus.TOWN_RESIDENT;
 		
 		// Nation group.
-		if (CombatUtil.isSameNation(town, resident.getTownOrNull()))
+		if (TownySettings.areConqueredTownsGivenNationPlotPerms() && CombatUtil.isSameNation(town, resident.getTownOrNull()))
 			return TownBlockStatus.TOWN_NATION;
 		
 		// Ally group.
@@ -366,7 +367,7 @@ public class PlayerCacheUtil {
 		/*
 		 * Check all-towns overrides before testing any plot permissions.
 		 */
-		if (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action))
+		if (townyUniverse.getPermissionSource().hasAllTownOverride(player, material, action) && !res.hasMode("adminbypass"))
 			return true;
 		
 		/*
@@ -384,8 +385,9 @@ public class PlayerCacheUtil {
 		/*
 		 * Player has a permission override set.
 		 */
-		if (townBlock.getPermissionOverrides().containsKey(res) && townBlock.getPermissionOverrides().get(res).getPermissionTypes()[action.getIndex()] != SetPermissionType.UNSET) {
-			SetPermissionType type = townBlock.getPermissionOverrides().get(res).getPermissionTypes()[action.getIndex()];
+		final PermissionData override = townBlock.getPermissionOverride(res);
+		if (override != null && override.getPermissionTypes()[action.getIndex()] != SetPermissionType.UNSET) {
+			SetPermissionType type = override.getPermissionTypes()[action.getIndex()];
 			if (type == SetPermissionType.NEGATED)
 				cacheBlockErrMsg(player, Translatable.of("msg_cache_block_err", Translatable.of(action.toString())).forLocale(player));
 			

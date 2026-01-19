@@ -26,22 +26,22 @@ public class ChunkNotification {
 	// Example:
 	// ~ Wak Town - Lord Jebus - [Home] [For Sale: 50 Beli] [Shop]
 
-	public static String notificationFormat = Colors.Gold + " ~ %s";
-	public static String notificationSplitter = Colors.LightGray + " - ";
-	public static String areaWildernessNotificationFormat = Colors.Green + "%s";
-	public static String areaWildernessPvPNotificationFormat = Colors.Green + "%s";
-	public static String areaTownNotificationFormat = Colors.Green + "%s";
-	public static String areaTownPvPNotificationFormat = Colors.Green + "%s";
-	public static String ownerNotificationFormat = Colors.LightGreen + "%s";
-	public static String noOwnerNotificationFormat = Colors.LightGreen + "%s";
+	public static String notificationFormat = Colors.GOLD + " ~ %s";
+	public static String notificationSplitter = Colors.GRAY + " - ";
+	public static String areaWildernessNotificationFormat = Colors.DARK_GREEN + "%s";
+	public static String areaWildernessPvPNotificationFormat = Colors.DARK_GREEN + "%s";
+	public static String areaTownNotificationFormat = Colors.DARK_GREEN + "%s";
+	public static String areaTownPvPNotificationFormat = Colors.DARK_GREEN + "%s";
+	public static String ownerNotificationFormat = Colors.GREEN + "%s";
+	public static String noOwnerNotificationFormat = Colors.GREEN + "%s";
 	public static String plotNotificationSplitter = " ";
 	public static String plotNotificationFormat = "%s";
-	public static String homeBlockNotification = Colors.LightBlue + "[Home]";
-	public static String outpostBlockNotification = Colors.LightBlue + "[Outpost]";
-	public static String forSaleNotificationFormat = Colors.Yellow + "[For Sale by %s: %s]";
-	public static String notForSaleNotificationFormat = Colors.Yellow + "[Not For Sale]";
-	public static String plotTypeNotificationFormat = Colors.Gold + "[%s]";	
-	public static String groupNotificationFormat = Colors.White + "[%s]";
+	public static String homeBlockNotification = Colors.BLUE + "[Home]";
+	public static String outpostBlockNotification = Colors.BLUE + "[Outpost]";
+	public static String forSaleNotificationFormat = Colors.YELLOW + "[For Sale by %s: %s]";
+	public static String notForSaleNotificationFormat = Colors.YELLOW + "[Not For Sale]";
+	public static String plotTypeNotificationFormat = Colors.GOLD + "[%s]";	
+	public static String groupNotificationFormat = Colors.WHITE + "[%s]";
 	public static String districtNotificationFormat = Colors.DARK_GREEN + "[%s]";
 
 	/**
@@ -78,6 +78,7 @@ public class ChunkNotification {
 	TownBlockType fromPlotType = null, toPlotType = null;
 	PlotGroup fromPlotGroup = null, toPlotGroup = null;
 	District fromDistrict = null, toDistrict = null;
+	Resident viewerResident = null;
 
 	public ChunkNotification(WorldCoord from, WorldCoord to) {
 
@@ -130,6 +131,7 @@ public class ChunkNotification {
 
 		if (notificationFormat.length() == 0)
 			return null;
+		viewerResident = resident;
 		List<String> outputContent = getNotificationContent(resident);
 		if (outputContent.size() == 0)
 			return null;
@@ -216,7 +218,7 @@ public class ChunkNotification {
 
 		if (fromWild ^ toWild || !fromWild && !toWild && fromTown != null && toTown != null && fromTown != toTown) {
 			if (toWild)
-				return String.format(areaWildernessPvPNotificationFormat, ((to.getTownyWorld().isPVP() && testWorldPVP()) ? " " + Translatable.of("status_title_pvp").forLocale(resident) : ""));
+				return String.format(areaWildernessPvPNotificationFormat, (to.getTownyWorld().isPVP() && testWorldPVP()) ? Translatable.of("status_title_pvp").forLocale(resident) : "");
 		}
 		return null;
 	}
@@ -242,7 +244,7 @@ public class ChunkNotification {
 	public String getTownPVPNotification(Resident resident) {
 
 		if (!toWild && ((fromWild) || (toTownBlock.getPermissions().pvp != fromTownBlock.getPermissions().pvp))) {
-			return String.format(areaTownPvPNotificationFormat, ( !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Translatable.of("status_title_pvp").forLocale(resident) : Translatable.of("status_title_nopvp").forLocale(resident)));
+			return String.format(areaTownPvPNotificationFormat, !CombatUtil.preventPvP(to.getTownyWorld(), toTownBlock) ? Translatable.of("status_title_pvp").forLocale(resident) : Translatable.of("status_title_nopvp").forLocale(resident));
 		}
 		return null;
 	}
@@ -312,15 +314,22 @@ public class ChunkNotification {
 
 		// Were heading to a plot group do some things differently
 		if (toForSale && toPlotGroupBlock && (fromPlotGroup != toPlotGroup))
-			return String.format(forSaleNotificationFormat, getOwner(), getCost(toTownBlock.getPlotObjectGroup().getPrice()));
+			return getCostNotification(toTownBlock.getPlotObjectGroup().getPrice());
 		
 		if (toForSale && !toPlotGroupBlock)
-			return String.format(forSaleNotificationFormat, getOwner(), getCost(toTownBlock.getPlotPrice()));
+			return getCostNotification(toTownBlock.getPlotPrice());
 		
 		if (!toForSale && fromForSale && !toWild)
 			return notForSaleNotificationFormat;
 		
 		return null;
+	}
+
+	private String getCostNotification(double price) {
+		String forSaleSlug = String.format(forSaleNotificationFormat, getOwner(), getCost(price));
+		if (viewerResident.getTownBlocks().isEmpty())
+			forSaleSlug += Translatable.of("chunknotification_plot_claim_help_message").forLocale(viewerResident);
+		return forSaleSlug;
 	}
 
 	private String getOwner() {

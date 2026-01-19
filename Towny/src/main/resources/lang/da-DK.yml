@@ -48,7 +48,6 @@ mode_4: 'Sæt din standardchat til bykanalen'
 mode_5: 'Sæt din standardchat til nationskanalen'
 mode_6: 'Kan placere %s i fjendens grænseblokke for at lave krigszoner.'
 plot_perms: 'Brug %s i stedet for %s for at vise grundtilladelser.'
-plot_perms_1: 'Indbyggergrunde gør ikke brug af udenforstående tilladelser.'
 res_list: 'Indbyggere'
 res_sing: 'Indbygger'
 mayor_sing: 'Borgmester'
@@ -80,9 +79,6 @@ msg_buy: '&bKøbte %d %s for %s.'
 msg_buy_resident_plot: '&b%s købte %s''s grund for %s!'
 msg_couldnt_pay_taxes: '&b%s kunne ikke betale skat og blev smidt ud af %s.'
 msg_couldnt_pay_plot_taxes: '&b%s kunne ikke betale skat og mistede ejerskab af en grund.'
-msg_payed_town_tax: '&bBetalte byskat på '
-msg_payed_plot_cost: '&bBetalte %s for %s grunde i %s'
-msg_payed_resident_tax: '&bBetalte indbygger skat på '
 msg_bankrupt_town: ' er gået bankerot som by.'
 msg_bankrupt_nation: ' er gået bankerot som nation.'
 msg_nation_not_peaceful: '&bNation havde ikke råd til dens fredelige tilstand.'
@@ -296,7 +292,6 @@ msg_err_not_percentage: '&cProcenter skal være under 100.'
 msg_err_no_economy: '&cØkonomi er ikke slået til endnu.'
 msg_err_not_block_type: '&cDette er ikke en gyldig grundtype!'
 msg_not_allowed_join: '&c%s er ikke tilladt at tilslutte sig en by.'
-msg_offline_no_join: '&c%s er offline men bruger tilladelser så kan ikke tilslutte sig en by.'
 msg_err_cannot_perform_action: '&cDenne handling kan ikke udføres i %s.'
 msg_npc_flag: '&bNPC-flag er nu %s for %s.'
 #Added in 0.30
@@ -486,7 +481,8 @@ msg_admin_set_plot_help_1: 'Når i en by.'
 msg_admin_set_plot_help_2: 'Når i ødemarken.'
 msg_err_not_enough_outposts_free_to_claim: 'Ikke nok forposter tilgængelige til at gøre krav på %s/%s'
 msg_err_over_outposts_limit: 'Du kan ikke teleportere til din forpost. Du er over din grænse %s/%s'
-registered_last_online: '&2Registreret: &a%s &8| &2Sidst online: &a%s' #Used in mayor hover text in /town status screen.
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registreret: &a%s &8| &2Sidst online: &a%s'
 status_on: '&4TIL'
 status_off: '&aFRA'
 status_on_good: '&aTIL'
@@ -971,9 +967,11 @@ msg_click_purchase: 'Klik for at købe'
 msg_you_must_join_this_town_to_claim_this_plot: 'Du skal tilslutte dig denne by: %s, for at gøre krav på denne grund. Vil du være med i byen og fortsætte med at gøre krav?'
 msg_click_to_edit: '&6Klik for at redigere.'
 msg_last_edited: '&7&oSidst ændret ved %s af %s.'
-msg_trusted_added: '&bTilføjede %s som betroet i denne %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bTilføjede %s som betroet i denne %s.'
 msg_already_trusted: '&b%s har allerede tillid til denne %s.'
-msg_trusted_added_2: '&b%s har stolet på dig i en %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s har stolet på dig i en %s: %s.'
 msg_not_trusted: '&b%s har ikke tillid til denne %s.'
 msg_trusted_removed: '&bFjernede %s som betroet i denne %s.'
 msg_trusted_removed_2: '&b%s har fjernet dig som betroet i en %s: %s.'
@@ -1066,7 +1064,7 @@ msg_perm_hud_ally: 'allieret'
 msg_perm_hud_resident: 'beboer'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'Uvedkommende'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Grund: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

@@ -132,6 +132,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	private static final List<String> districtTabCompletes = Arrays.asList(
 		"add",
+		"new",
+		"create",
 		"delete",
 		"remove",
 		"rename"
@@ -212,7 +214,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "set":
 					if (args.length == 2) {
@@ -244,6 +246,10 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 2)
 						return NameUtil.filterByStart(plotRectCircleCompletes, args[1]);
 					break;
+				case "evict":
+					if (args.length == 2)
+						return NameUtil.filterByStart(Collections.singletonList("forsale"), args[1]);
+					break;
 				case "forsale":
 				case "fs":
 					switch (args.length) {
@@ -270,6 +276,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 						case "set":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("perm", "maxjoindays", "minjoindays"), args[2]);
+							if (args.length > 3 && args[2].equalsIgnoreCase("perm"))
+								return permTabComplete(StringMgmt.remArgs(args, 3));
 						case "trust":
 							if (args.length == 3)
 								return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[2]);
@@ -280,8 +288,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(Arrays.asList("add", "remove", "gui"), args[2]);
 							if (args.length == 4)
 								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
+						case "toggle":
+							if (args.length == 3)
+								return NameUtil.filterByStart(plotToggleTabCompletes, args[2]);
 						default:
-							return permTabComplete(StringMgmt.remFirstArg(args));
+							return Collections.emptyList();
 					}
 
 				case "jailcell":
@@ -298,8 +309,16 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "trust":
 					if (args.length == 2)
 						return NameUtil.filterByStart(Arrays.asList("add", "remove"), args[1]);
-					if (args.length == 3)
-						return getTownyStartingWith(args[2], "r");
+					if (args.length == 3) {
+						if ("remove".equalsIgnoreCase(args[1])) {
+							final TownBlock townBlock = WorldCoord.parseWorldCoord(player).getTownBlockOrNull();
+							if (townBlock != null && townBlock.hasTrustedResidents()) {
+								return townBlock.getTrustedResidents().stream().map(Resident::getName).toList();
+							}
+						} else {
+							return getTownyStartingWith(args[2], "r");
+						}
+					}
 				default:
 					if (args.length == 1)
 						return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT, plotTabCompletes), args[0]);
@@ -331,7 +350,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		switch(split[0].toLowerCase(Locale.ROOT)) {
 		case "claim" -> parsePlotClaim(player, StringMgmt.remFirstArg(split), resident, townBlock);
 		case "clear" -> parsePlotClear(resident, townBlock);
-		case "evict" -> parsePlotEvict(resident, townBlock);
+		case "evict" -> parsePlotEvict(resident, townBlock, StringMgmt.remFirstArg(split));
 		case "fs", "forsale" -> parsePlotForSale(player, StringMgmt.remFirstArg(split), resident, townBlock);
 		case "group" -> parsePlotGroup(StringMgmt.remFirstArg(split), resident, townBlock, player);
 		case "district" -> parseDistrict(StringMgmt.remFirstArg(split), resident, townBlock, player);
@@ -455,7 +474,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		BukkitTools.fireEvent(new PlotClearEvent(townBlock));
 	}
 
-	public void parsePlotEvict(Resident resident, TownBlock townBlock) throws TownyException {
+	public void parsePlotEvict(Resident resident, TownBlock townBlock, String[] split) throws TownyException {
 		checkPermOrThrow(resident.getPlayer(), PermissionNodes.TOWNY_COMMAND_PLOT_EVICT.getNode());
 
 		if (!townBlock.hasResident())
@@ -464,6 +483,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		// If this fails it will trigger a TownyException.
 		TownyAPI.getInstance().testPlotOwnerOrThrow(resident, townBlock);
 
+		boolean resell = split.length > 0 && split[0].equalsIgnoreCase("forsale");
+
 		if (townBlock.hasPlotObjectGroup()) {
 			townBlock.getPlotObjectGroup().getTownBlocks().stream().forEach(TownBlock::evictOwnerFromTownBlock);
 			TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_evict_group", townBlock.getPlotObjectGroup().getName()));
@@ -471,7 +492,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		// Evict and save the townblock.
-		townBlock.evictOwnerFromTownBlock();
+		townBlock.evictOwnerFromTownBlock(resell);
 		TownyMessaging.sendMsg(resident, Translatable.of("msg_plot_evict"));
 	}
 
@@ -1039,11 +1060,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			townBlock.save();
 			if (!townBlock.hasPlotObjectGroup()) {
 				TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-				TownyMessaging.sendMessage(player, Colors.Green + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + 
-												   Colors.Green + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + Translatable.of("status_perm").forLocale(player) + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + Translatable.of("status_pvp").forLocale(player) + " " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+												   Colors.DARK_GREEN + Translatable.of("explosions").forLocale(player) + " " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+												   Colors.DARK_GREEN + Translatable.of("firespread").forLocale(player) + " " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + 
+												   Colors.DARK_GREEN + Translatable.of("mobspawns").forLocale(player) + " " + ((perm.mobs) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF"));
 			}
 
 
@@ -1357,7 +1378,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 				}
 			})
-			.setTitle(Translatable.of("msg_district_already_exists_did_you_want_to_transfer", townBlock.getDistrict().getName(), split[1]))
+			.setTitle(Translatable.of("msg_district_already_exists_did_you_want_to_transfer", townBlock.getDistrict().getName(), name))
 			.sendTo(player);
 		} else {
 			// Create a brand new district.
@@ -1449,7 +1470,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_rename_district_name_required"));
 
 		District district = catchMissingDistrict(townBlock);
-		String newName= split[1];
+		String newName = split[1];
+		NameValidation.checkAndFilterDistrictNameOrThrow(newName);
 		String oldName = district.getName();
 		// Change name;
 		TownyUniverse.getInstance().getDataSource().renameDistrict(district, newName);
@@ -1522,7 +1544,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			Confirmation.runOnAccept( ()-> {
 				PlotGroup oldGroup = townBlock.getPlotObjectGroup();
 				oldGroup.removeTownBlock(townBlock);
-				if (oldGroup.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(oldGroup, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+				if (oldGroup.getTownBlocks().isEmpty()) {
+					new PlotGroupDeletedEvent(oldGroup, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
 					String oldName = oldGroup.getName();
 					town.removePlotGroup(oldGroup);
 					TownyUniverse.getInstance().getDataSource().removePlotGroup(oldGroup);
@@ -1702,7 +1725,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		townBlock.save();
 		TownyMessaging.sendMsg(player, Translatable.of("msg_plot_was_removed_from_group_x", townBlock.getX(), townBlock.getZ(), name));
 		
-		if (group.getTownBlocks().isEmpty() && !BukkitTools.isEventCancelled(new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS))) {
+		if (group.getTownBlocks().isEmpty()) {
+			new PlotGroupDeletedEvent(group, player, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
 			town.removePlotGroup(group);
 			TownyUniverse.getInstance().getDataSource().removePlotGroup(group);
 			TownyMessaging.sendMsg(player, Translatable.of("msg_plotgroup_empty_deleted", name));
@@ -1716,7 +1740,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			throw new TownyException(Translatable.of("msg_err_plot_group_name_required"));
 
 		PlotGroup group = catchMissingPlotGroup(townBlock);
-		String newName= split[1];
+		String newName = split[1];
+		NameValidation.checkAndFilterPlotGroupNameOrThrow(newName);
 		String oldName = group.getName();
 		// Change name;
 		TownyUniverse.getInstance().getDataSource().renameGroup(group, newName);
@@ -1806,11 +1831,11 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				Translator translator = Translator.locale(player);
 				TownyPermission perm = plotGroup.getPermissions();
 				TownyMessaging.sendMessage(player, translator.of("msg_set_perms"));
-				TownyMessaging.sendMessage(player, Colors.Green + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
-				TownyMessaging.sendMessage(player, Colors.Green + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + 
-													Colors.Green + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + 
-													Colors.Green + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) +  
-													Colors.Green + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + translator.of("status_perm") + " " + ((townBlockOwner instanceof Resident) ? perm.getColourString().replace("n", "t") : perm.getColourString().replace("f", "r")));
+				TownyMessaging.sendMessage(player, Colors.DARK_GREEN + translator.of("status_pvp") + " " + (perm.pvp ? translator.of("status_on") : translator.of("status_off")) + 
+													Colors.DARK_GREEN + translator.of("explosions") + " " + (perm.explosion ? translator.of("status_on") : translator.of("status_off")) + 
+													Colors.DARK_GREEN + translator.of("firespread") + " " + (perm.fire ? translator.of("status_on") : translator.of("status_off")) +  
+													Colors.DARK_GREEN + translator.of("mobspawns") + " " + (perm.mobs ? translator.of("status_on") : translator.of("status_off")));
 			}
 		};
 
@@ -2032,6 +2057,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 				case "taxed":
 					 tryToggleTownBlockTaxed(player, groupBlock, split, choice);
 					 endingMessage = Translatable.of("msg_changed_plotgroup_taxed", groupBlock.isTaxed() ? Translatable.of("enabled") : Translatable.of("disabled"));
+					 break;
 				default:
 					TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_invalid_property", "plot"));
 					return;
@@ -2073,6 +2099,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (split[1].equalsIgnoreCase("add")) {
 			if (group.hasTrustedResident(trustedResident))
 				throw new TownyException(Translatable.of("msg_already_trusted", trustedResident.getName(), Translatable.of("plotgroup_sing")));
+
+			if (townBlock.getTownOrNull().hasOutlaw(trustedResident))
+				throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_outlaw"));
+
+			if (trustedResident.hasNation() && townBlock.getTownOrNull().hasNation() && townBlock.getTownOrNull().getNationOrNull().hasEnemy(trustedResident.getNationOrNull()))
+				throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_enemy"));
 
 			BukkitTools.ifCancelledThenThrow(new PlotTrustAddEvent(new ArrayList<>(group.getTownBlocks()), trustedResident, player));
 
@@ -2128,6 +2160,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("add")) {
 			if (townBlock.hasTrustedResident(resident))
 				throw new TownyException(Translatable.of("msg_already_trusted", resident.getName(), Translatable.of("townblock")));
+
+			if (townBlock.getTownOrNull().hasOutlaw(resident))
+				throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_outlaw"));
+
+			if (resident.hasNation() && townBlock.getTownOrNull().hasNation() && townBlock.getTownOrNull().getNationOrNull().hasEnemy(resident.getNationOrNull()))
+				throw new TownyException(Translatable.of("msg_err_you_cannot_add_trust_on_enemy"));
 
 			BukkitTools.ifCancelledThenThrow(new PlotTrustAddEvent(townBlock, resident, player));
 
@@ -2278,7 +2316,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("remove")) {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_PLOT_PERM_REMOVE.getNode());
 
-			if (!townBlock.getPermissionOverrides().containsKey(resident))
+			if (townBlock.getPermissionOverride(resident) == null)
 				throw new TownyException(Translatable.of("msg_no_overrides_set", resident.getName(), Translatable.of("townblock")));
 
 			townBlock.getPermissionOverrides().remove(resident);

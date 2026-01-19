@@ -55,6 +55,8 @@ public class EntityTypeUtil {
 		register(map, "cow", "cow_spawn_egg");
 		register(map, "goat", "goat_spawn_egg");
 		register(map, "mooshroom", "mooshroom_spawn_egg");
+		register(map, "ender_pearl", "ender_pearl");
+		register(map, "wind_charge", "wind_charge");
 		
 		TownyMessaging.sendDebugMsg("[EntityTypeUtil] Attempted: " + attempted + " | Registered: " + map.size());
 
@@ -104,6 +106,13 @@ public class EntityTypeUtil {
 		Material lookup = ENTITY_TYPE_MATERIAL_MAP.get(entityType);
 		if (lookup != null)
 			return lookup;
+
+		// Attempt to find the spawn egg
+		final NamespacedKey spawnEggKey = NamespacedKey.fromString(entityType.getKey() + "_spawn_egg");
+		final Material spawnEgg = spawnEggKey != null ? Registry.MATERIAL.get(spawnEggKey) : null;
+		if (spawnEgg != null) {
+			return spawnEgg;
+		}
 		
 		// Attempt to lookup a material with the same name, if it doesn't exist it's null.
 		return Registry.MATERIAL.get(entityType.getKey());

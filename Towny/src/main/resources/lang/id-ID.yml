@@ -50,7 +50,6 @@ mode_4: 'Chat antar kota'
 mode_5: 'Chat antar negara'
 mode_6: 'Kamu dapat meletakan %s di townblock musuh untuk menjadikan area pertempuran.'
 plot_perms: 'Gunakan %s selain %s untuk perizinan lahan.'
-plot_perms_1: 'Lahan penduduk tidak mengizinkan orang asing.'
 res_list: 'Penduduk'
 res_sing: 'Penduduk'
 mayor_sing: 'Walikota'
@@ -84,9 +83,6 @@ msg_buy: '&bMembeli %d %s seharga %s.'
 msg_buy_resident_plot: '&b%s membeli %s lahan seharga %s!'
 msg_couldnt_pay_taxes: '&b%s tidak mampu membayar pajak, dan dikeluarkan dari %s.'
 msg_couldnt_pay_plot_taxes: '&b%s tidak mampu membayar pajak, dan kepemilikan lahan di hapus.'
-msg_payed_town_tax: '&bMembayar pajak kota '
-msg_payed_plot_cost: '&bTelah membayar %s seharga %s di lahan %s'
-msg_payed_resident_tax: '&bMembayar pajak penduduk '
 msg_bankrupt_town: ' Kota ini sudah bangkrut.'
 msg_bankrupt_nation: ' Negara ini sudah bangkrut.'
 msg_nation_not_peaceful: '&bNegara tidak mampu membuat keadaan yang damai.'
@@ -310,7 +306,6 @@ msg_err_not_percentage: '&cHarus dibawah 100 persen.'
 msg_err_no_economy: '&cEkonomi belum dihidupkan.'
 msg_err_not_block_type: '&cTipe lahan tersebut tidak valid!'
 msg_not_allowed_join: '&c%s tidak diizinkan bergabung ke kota.'
-msg_offline_no_join: '&c%s sedang tidak aktif, tidak dapat bergabung untuk sekarang.'
 msg_err_cannot_perform_action: '&cTidak bisa melakukan ini di %s.'
 msg_npc_flag: '&bNPC flag sekarang adalah %s untuk %s.'
 msg_warning_delete: '&4*** PERINGATAN, %s AKAN DI HAPUS DI HARI BERIKUTNYA KARENA KRISIS KEUANGAN ***'
@@ -323,7 +318,6 @@ msg_err_not_enough_residents_join_nation: '&bKota %s tidak memiliki penduduk yan
 msg_not_enough_residents_no_longer_capital: '&bIbu kota negara yang lama tidak memiliki cukup penduduk. Ibu kota yang baru diganti menjadi %s.'
 msg_town_not_enough_residents_left_nation: '&bkota %s tidak memiliki cukup penduduk dan telah dikeluarkan dari negara.'
 msg_nation_disbanded_town_not_enough_residents: '&bKota %s tidak memiliki cukup penduduk dan negara telah dibubarkan secara paksa.'
-msg_not_enough_residents_refunded: '&bDana telah dikembalikan sebesar $%s dikarenakan pembubaran negara yang disebabkan tidak cukupnya penduduk.'
 msg_not_enough_residents_capital: '&bKota %s tidak memiliki cukup penduduk untuk menjadi ibukota.'
 list_page: '&bHalaman %s dari %s'
 list_err_not_enough_pages: '&cHanya terdapat %s halaman yang tersedia'
@@ -520,10 +514,13 @@ msg_err_over_outposts_limit: 'Tidak bisa teleportasi ke outpost, kamu sudah mela
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Penjahat:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Penjahat:'
 online: '&a(Sedang aktif)'
-registered_last_online: '&2Terdaftar: &a%s &8| &2Terakhir online:&a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Permanen:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Terdaftar: &a%s &8| &2Terakhir online:&a%s'
+#Used on /plot perm, /res
+status_perm: 'Permanen:'
 status_on: '&4NYALA'
 status_off: '&aMATI'
 status_on_good: '&aNYALA'
@@ -962,7 +959,8 @@ msg_town_destroyed_by_nation_tax: '&bKota yang ditaklukkan %s tidak dapat membay
 msg_town_destroyed_by_nation_tax_multiple: '&bKota-kota berikut yang tidak mampu membayar pajak negara: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bKota mu telah dibebaskan dari pajak negara.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Status Kehancuran'
 msg_comptype_bankrupt: 'Status Kepailitan'
 msg_ruined: '&c(Hancur)'
@@ -1100,9 +1098,11 @@ status_trustedlist: 'Terpercaya'
 msg_click_to_edit: '&6Klik untuk mengubah.'
 permission_gui_header: 'GUI Izin Towny'
 msg_last_edited: '&7&oPerubahan terakhir pada %s oleh %s.'
-msg_trusted_added: '&bMenambahkan %s sebagai player tepercaya untuk mengakses %s ini.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bMenambahkan %s sebagai player tepercaya untuk mengakses %s ini.'
 msg_already_trusted: '&b%s sudah dipercaya di tempat %s ini.'
-msg_trusted_added_2: '&b%s mempercayai Anda di %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s mempercayai Anda di %s: %s.'
 msg_not_trusted: '&b%s tidak dipercaya di %s ini.'
 msg_trusted_removed: '&bMenghapus %s sebagai player terpercaya di %s ini.'
 msg_trusted_removed_2: '&b%s telah menghapus Anda sebagai player terpercaya di %s: %s.'
@@ -1422,7 +1422,7 @@ msg_perm_hud_resident: 'penduduk'
 msg_perm_hud_nation: 'negara'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'orang luar'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Lahan: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

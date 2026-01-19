@@ -32,7 +32,7 @@ public class DrawSmokeTaskFactory {
 	public static Consumer<Location> showToPlayer(@NotNull Player player, @NotNull Color particleColor) {
 		final Particle.DustOptions dustOptions = new Particle.DustOptions(particleColor, 2);
 		
-		return location -> player.spawnParticle(Particle.REDSTONE, location.add(0.5, 1.5, 0.5), 5, dustOptions);
+		return location -> player.spawnParticle(BukkitParticle.getBorderParticle(), location.add(0.5, 1.5, 0.5), 5, dustOptions);
 	}
 
 	public static Color getAffiliationColor(Resident resident, WorldCoord coord) {

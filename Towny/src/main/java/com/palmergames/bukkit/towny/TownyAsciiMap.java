@@ -40,7 +40,7 @@ public class TownyAsciiMap {
 	private static final int MAP_WIDTH_UPPER_BOUNDS = 27;
 	private static final int MAP_HEIGHT_UPPER_BOUNDS = 18;
 	private static final int MAP_LOWER_BOUNDS = 7;
-	public static int lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
+	public static int lineWidth = sanitizeLineWidth(Integer.valueOf(ConfigNodes.ASCII_MAP_WIDTH.getDefault()));
 	public static int halfLineWidth = lineWidth / 2;
 	public static String defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
 	public static String forSaleSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_FORSALE.getDefault();
@@ -49,15 +49,21 @@ public class TownyAsciiMap {
 	public static String wildernessSymbol = ConfigNodes.ASCII_MAP_SYMBOLS_WILDERNESS.getDefault();
 	
 	static {
-		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> {
-			defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
-			forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
-			homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
-			outpostSymbol = parseSymbol(TownySettings.outpostMapSymbol());
-			wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
-			lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
-			halfLineWidth = lineWidth / 2;
-		});
+		TownySettings.addReloadListener(NamespacedKey.fromString("towny:ascii-map-symbols"), config -> readSymbolsFromConfig());
+	}
+
+	public static void initialize() {
+		readSymbolsFromConfig();
+	}
+
+	private static void readSymbolsFromConfig() {
+		defaultSymbol = TownBlockType.RESIDENTIAL.getAsciiMapKey();
+		forSaleSymbol = parseSymbol(TownySettings.forSaleMapSymbol());
+		homeSymbol = parseSymbol(TownySettings.homeBlockMapSymbol());
+		outpostSymbol = parseSymbol(TownySettings.outpostMapSymbol());
+		wildernessSymbol = parseSymbol(TownySettings.wildernessMapSymbol());
+		lineWidth = sanitizeLineWidth(TownySettings.asciiMapWidth());
+		halfLineWidth = lineWidth / 2;
 	}
 	
 	public static Component[] generateHelp(Player player) {
@@ -273,7 +279,7 @@ public class TownyAsciiMap {
 		Component[] compass = generateCompass(player);
 
 		// Output
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("towny_map_header") + Colors.White + "(" + pos + ")"));
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("towny_map_header") + Colors.WHITE + "(" + pos + ")"));
 		Component[] map = new Component[lineHeight];
 		Component[] help = generateHelp(player);
 		
@@ -292,7 +298,7 @@ public class TownyAsciiMap {
 		}
 		
 		for (Component component : map)
-			Towny.getAdventure().player(player).sendMessage(component);
+			player.sendMessage(component);
 
 		TownBlock townblock = pos.getTownBlockOrNull();
 		TownyMessaging.sendMsg(player, translator.of("status_towny_map_town_line", 

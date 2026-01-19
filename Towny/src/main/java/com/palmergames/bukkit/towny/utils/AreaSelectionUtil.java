@@ -435,7 +435,6 @@ public class AreaSelectionUtil {
 	 * @param group The plot group to filter against.
 	 * @param selection The selection of townblocks.
 	 * @return A List of {@link WorldCoord} that contains the coordinates of townblocks part of the specified group.
-	 * @author Suneet Tipirneni (Siris)
 	 */
 	public static List<WorldCoord> filterPlotsByGroup(PlotGroup group, List<WorldCoord> selection) {
 		

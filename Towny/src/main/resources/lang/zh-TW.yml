@@ -68,7 +68,7 @@ town_help_10: '列出目前在線上的市民'
 town_help_13: "列出市鎮內的市民清單"
 town_help_14: "列出市鎮內的排行榜"
 town_help_15: "列出市鎮內的囚犯名單"
-town_help_16: "列出市鎮內的地段叢集名單"
+town_help_16: "列出市鎮內的地段群組名單"
 town_help_17: "列出市鎮內的地段型態名單"
 town_help_18: "向市鎮內的成員們傳送訊息"
 town_help_19: "將你的市鎮設定為出售狀態，以供其他玩家購買"
@@ -96,12 +96,35 @@ town_list_help_4: "以字首順序列出市鎮，並呈現特定頁面"
 town_list_help_5: "以土地範圍列出市鎮，並呈現特定頁面"
 town_list_help_6: "以上線人數列出市鎮，並呈現特定頁面"
 town_set_help_0: "設定市鎮計分板"
+town_set_help_1: "將城鎮的 homeblock 設置為您站立的位置。"
+town_set_help_2: "設置你的 homeblock 中的生成點，或者設置 Outpost 中站立時的生成點。"
 town_set_help_3: "使用 /town set perm ? 取得說明"
 town_set_help_4: "設定市鎮稅額"
 town_set_help_5: "設定單一地段稅額"
 town_set_help_6: "設定地段的預設售價"
 town_set_help_7: "設定使用 /t spawn 時所需成本"
 town_set_help_8: "設定市鎮名字"
+town_set_help_9: "設置城鎮的標籤。"
+town_set_help_10: "設置居民的頭銜或姓氏。"
+town_set_help_11: "設置百分比稅可以從居民那裡收取的最高金額。"
+town_jail_help_0: "列出該鎮的監獄。"
+town_jail_help_1: "將一名居民囚禁在主監獄中。"
+town_jail_help_2: "將居民監禁在主監獄中，持續指定的時間。"
+town_jail_help_3: "在指定的監獄中，將主監獄的居民監禁指定的時間。"
+town_jail_help_4: "將居民關押在主監獄中，在指定的監獄和牢房中，持續指定的時間。"
+town_jail_help_5: "將一名居民監禁在主監獄中，在規定的時間內，並支付給定的保釋金。"
+town_jail_help_6: "將一名居民在指定的監獄中，以給定的保釋金，在指定的時間內被監禁。"
+town_jail_help_7: "在指定的監獄和牢房中，以給定的保釋金，在主要監獄中監禁一名居民，持續指定的時間。"
+town_jail_help_8: "解獄居民。"
+town_purge_help: "清除在給定天數內未登錄的居民。"
+town_trust_help_0: "將居民添加為鎮中的 Trusted （受信任）。"
+town_trust_help_1: "將鎮上的居民刪除為 Trusted （受信任）。"
+town_trust_help_2: "列出城鎮的 Trusted residents （受信任的居民）。"
+town_towntrust_help_0: "在城鎮中將城鎮添加為 Trusted （受信任） 城鎮。"
+town_towntrust_help_1: "將城鎮從城鎮中移除為 Trusted （受信任）。"
+town_towntrust_help_2: "列出城鎮的 Trusted towns。"
+town_buy_help: "購買額外的城鎮街區以增加城鎮的索賠限制。"
+town_cede_help: "提供您所代表的地塊，以便由給定的城鎮接管。"
 mayor_help_3: '你所選擇的地段不在市鎮旁'
 mayor_help_4: '取得周遭X格內的地段'
 mayor_help_5: '取得最大半徑內的地段'
@@ -117,13 +140,81 @@ nation_help_6: '建立新的城邦'
 nation_help_7: '元首指令列表'
 nation_help_8: '建立新的城邦'
 nation_help_9: '列出所有在線的國民'
+nation_help_11: "列出全國的城鎮。"
+nation_help_12: "列出該國的盟國。"
+nation_help_13: "列出 country 的 enemied countries。"
+nation_help_14: "用於加入開放國家。"
+nation_help_15: "將錢存入國家銀行。"
+nation_help_16: "用於刪除您的國家。"
+nation_help_17: "添加或刪除居民的等級。"
+nation_help_18: "請參閱 /n rank ？尋求説明。"
+nation_list_help_0: "查看指定頁面。"
+nation_list_help_1: "按居民計數列出國家/地區，並包含指定的頁面。"
+nation_list_help_2: "按城鎮計數列出國家，並帶有指定的頁面。"
+nation_list_help_3: "列出已打開的國家/地區，並帶有指定的頁面。"
+nation_list_help_4: "使用銀行餘額列出國家/地區，並顯示指定頁面。"
+nation_list_help_5: "按字母順序列出國家/地區，並帶有指定的頁面。"
+nation_list_help_6: "按聲稱的土地列出國家/地區，並帶有指定的頁面。"
+nation_list_help_7: "使用指定頁面在線按數位列出國家。"
+nation_set_help_0: "更換國家的領導人。"
+nation_set_help_1: "改變國家的首都。"
+nation_set_help_2: "設置城鎮將支付的稅額。"
+nation_set_help_3: "設置被征服的城鎮將支付的稅額。"
+nation_set_help_4: "設置國家/地區的名稱。"
+nation_set_help_5: "設置您的一位居民的頭銜或姓氏。"
+nation_set_help_6: "設置 nation 標籤。"
+nation_set_help_7: "設置國家板消息。"
+nation_set_help_8: "設置國家生成點。"
+nation_set_help_9: "設置使用 /n spawn 的開銷。"
+nation_set_help_10: "設置 Mapping 外掛程式中使用的 mapcolor。"
+nation_toggle_help_0: "切換國家的和平狀態。"
+nation_toggle_help_1: "切換公共狀態，允許非居民使用 /n spawn。"
+nation_toggle_help_2: "切換開放狀態，允許城鎮在沒有邀請的情況下加入。"
+nation_toggle_help_3: "切換 taxpercent，使城鎮支付百分比而不是固定稅率。"
+nation_sanction_help_1: "將一個城鎮添加到 SanctionedTown 清單中。"
+nation_sanction_help_2: "從 SanctionedTown 清單中刪除一個城鎮。"
+nation_sanction_help_3: "列出您所在國家/地區的受制裁城鎮。"
+nation_sanction_help_4: "列出給定國家/地區的 Sanctioned Towns。"
 king_help_1: '元首幫助'
 king_help_2: '設定你的盟邦 '
 king_help_3: '設定你的敵國 '
+king_help_4: "從您的國家銀行取款。"
+king_help_5: "在您的國家/地區添加或刪除城鎮。"
+king_help_6: "使用 /n set ？尋求説明。"
+king_help_7: "使用 /n toggle ？尋求説明。"
+king_help_8: "用於將另一個國家吸收到你的國家。"
+king_help_9: "用於向您所在國家/地區的每個人發送消息。"
 res_1: '你的狀態'
 res_2: '[resident]'
 res_3: '目標玩家狀態'
 res_4: '列出所有活躍玩家'
+res_9: "您每天需要支付多少稅款。"
+res_10: "參見 /res jail ？尋求説明。"
+res_11: "請參閱 /res toggle ？尋求説明。"
+res_12: "請參閱 /res set ？尋求説明。"
+res_13: "重生到你的城鎮或床。"
+res_toggle_help_0: "切換地塊的 pvp 狀態。"
+res_toggle_help_1: "切換繪圖的觸發狀態。"
+res_toggle_help_2: "切換你的地塊的生物狀態。"
+res_toggle_help_3: "切換 Plot 的爆炸狀態。"
+res_toggle_help_4: "切換查看繪圖邊界的功能。"
+res_toggle_help_5: "切換查看恆定繪圖邊界的功能。"
+res_toggle_help_6: "切換查看城鎮邊界的功能。"
+res_toggle_help_7: "切換查看繪圖通知的功能。"
+res_toggle_help_8: "切換 Claim where you walk 的能力。"
+res_toggle_help_9: "切換在更改繪圖時查看地圖的功能。"
+res_toggle_help_10: "刪除所有模式。"
+res_toggle_help_10.5: "刪除所有模式並重新應用預設值。"
+res_toggle_help_11: "監視聊天頻道。"
+res_toggle_help_12: "切換將繪圖添加到已啟動的繪圖組的功能。"
+res_toggle_help_13: "切換在更改繪圖時查看標題消息的功能。"
+res_toggle_help_14: "切換取消認領您行走位置的能力。"
+res_toggle_help_15: "切換使用 infotool 來學習正確的方塊/實體名稱的能力。"
+res_toggle_help_16: "切換停用管理員許可權的功能。"
+res_jail_help_0: "支付保釋金以出獄。"
+res_set_help_0: "設置居民的 About/Bio"
+res_set_help_1: "設置居民的預設列印許可權。"
+res_set_help_2: "設置居民的模式。"
 mode_1: '顯示市鎮地圖'
 mode_2: '當你移動到該地段時自動取得地段'
 mode_3: '當你移動到該地段時自動註銷地段'
@@ -131,7 +222,6 @@ mode_4: '進入市鎮預設聊天室'
 mode_5: '進入預設城邦聊天室'
 mode_6: '可以在敵國邊界用%s來形成戰場 '
 plot_perms: '用%s而不是%s來設定權限 '
-plot_perms_1: '預設外人沒有居民的權限 '
 res_list: '居民'
 res_sing: '居民'
 mayor_sing: '市長'
@@ -148,14 +238,195 @@ world_help_2: '[world]'
 world_help_3: '目標世界狀態'
 world_help_4: '列出所有世界'
 world_help_5: '重新生成這個chunk'
+world_help_6: '請參閱 /tw toggle ？尋求説明'
+world_help_7: '請參閱 /tw set ？尋求説明'
+world_set_help_0: "設置世界的wilderness名稱。"
+world_toggle_help_0: "如果城鎮可以在這個世界中宣稱擁有土地，請打開/關閉。"
+world_toggle_help_1: "如果在此世界中啟用了 Towny，則打開/關閉。"
+world_toggle_help_2: "如果這個世界上可能發生戰爭，請打開/關閉。"
+world_toggle_help_3: "如果在此世界中啟用了 pvp 或 forcepvp，則打開/關閉。"
+world_toggle_help_4: "如果此世界中啟用了friendlyfire，則打開/關閉。"
+world_toggle_help_5: "如果在此世界中啟用或強制爆炸，則打開/關閉。"
+world_toggle_help_6: "如果在此世界中啟用或強制開火，則打開/關閉。"
+world_toggle_help_7: "打開/關閉此世界中的各種生物生成設置。"
+world_toggle_help_8: "打開/關閉這個世界中的 revert-on-unclaim 功能。"
+world_toggle_help_9: "打開/關閉此世界中的 explosions-reverted 功能。"
+world_toggle_help_10: "在這個世界中打開/關閉 plot-clear-deletes-blocks 命令。"
+world_toggle_help_11: "在這個世界上打開/關閉 plot-unclaiming-deletes-blocks 功能。"
+world_toggle_help_12: "如果此世界中啟用了入監，則打開/關閉。"
 townyadmin_help_1: '註銷這個城區'
 townyadmin_help_2: '嘗試註銷你附近的城區 '
+admin_panel_1: "參見 /ta set ？尋求説明"
 admin_panel_2: '重新載入Towny'
 admin_panel_3: '執行天數更新程式碼'
+admin_panel_4: "取消認領您周圍的空間"
+admin_panel_5: "參見 /ta 圖 ？尋求説明"
+admin_panel_6: "為玩家或城鎮提供正數或負數的城鎮街區"
+admin_panel_7: "請參閱 /ta toggle ？尋求説明"
+admin_panel_8: "用於控制這些物件的命令"
+admin_panel_9: "傳送到指定劇情"
+admin_panel_10: "檢查播放機是否有許可權節點"
+admin_panel_11: "重置配置"
+admin_panel_12: "備份您的 Towny 數據"
+admin_panel_13: "將 mysql 資料庫轉儲到 flatfile"
+admin_panel_14: "強制保存或載入資料庫"
+admin_panel_15: "運行 newhour 代碼"
+admin_panel_16: "清除老居民"
+townyadmin_town_help_0: "創建一個具有 given name 和 mayor 的城鎮。"
+townyadmin_town_help_1: "顯示城鎮狀態螢幕。"
+townyadmin_town_help_2: "在城鎮中添加或刪除居民。"
+townyadmin_town_help_3: "重新命名城鎮。"
+townyadmin_town_help_4: "刪除城鎮。"
+townyadmin_town_help_5: "在城鎮生成。"
+townyadmin_town_help_6: "在城鎮的前哨站重生。"
+townyadmin_town_help_7: "使用城鎮的 rank 命令。"
+townyadmin_town_help_8: "使用城鎮的 set 命令。"
+townyadmin_town_help_9: "使用城鎮的 toggle 命令。"
+townyadmin_town_help_10: "更改城鎮的元數據。"
+townyadmin_town_help_11: "將第2個城鎮合併到第1個城鎮。"
+townyadmin_town_help_12: "將第2個城鎮合併到第1個城鎮中，無視任何規則。"
+townyadmin_town_help_13: "把錢存入鎮上的銀行。"
+townyadmin_town_help_14: "從鎮上的銀行拿錢。"
+townyadmin_town_help_15: "打開該鎮的銀行歷史書。"
+townyadmin_town_help_16: "改變一個城鎮的亡命之徒。"
+townyadmin_town_help_17: "讓小鎮離開他們的國家。"
+townyadmin_town_help_18: "拿掉城鎮的 conquered 狀態。"
+townyadmin_town_toggle_help_0: "切換城鎮的PVP。"
+townyadmin_town_toggle_help_1: "切換城鎮的 ForcePVP，防止市長關閉 PVP。"
+townyadmin_town_toggle_help_2: "切換城鎮的公共狀態，允許非居民傳送到那裡。"
+townyadmin_town_toggle_help_3: "切換 Town 的 Explosion 設置。"
+townyadmin_town_toggle_help_4: "切換 Town's Fire 設置。"
+townyadmin_town_toggle_help_5: "切換 Town 的 Mob 設置。"
+townyadmin_town_toggle_help_6: "切換 Town 的 Taxpercent 設置。"
+townyadmin_town_toggle_help_7: "切換城鎮的 Open 設置，允許人們在沒有邀請的情況下加入城鎮。"
+townyadmin_nation_help_0: "創建一個具有名字和首都的國家。"
+townyadmin_nation_help_1: "顯示國家/地區狀態螢幕。"
+townyadmin_nation_help_2: "添加 country 中的城鎮。"
+townyadmin_nation_help_3: "從國家中刪除城鎮。"
+townyadmin_nation_help_4: "重新命名一個國家。"
+townyadmin_nation_help_5: "刪除城鎮。"
+townyadmin_nation_help_6: "重新檢查該國的城鎮，以確保它們離首都足夠近。"
+townyadmin_nation_help_7: "將第 2 個國家合併為第 1 個國家。"
+townyadmin_nation_help_8: "將第 2 個國家合併到第 1 個國家，無視任何規則。"
+townyadmin_nation_help_9: "使用一個國家的 toggle 命令。"
+townyadmin_nation_help_10: "使用 nation 的 set 命令。"
+townyadmin_nation_help_11: "把錢存入國家銀行。"
+townyadmin_nation_help_12: "從國家銀行拿錢。"
+townyadmin_nation_help_13: "打開該國的銀行歷史書。"
+townyadmin_nation_help_14: "將城鎮放入國家。"
+townyadmin_nation_help_15: "使用 nation's rank 命令。"
+townyadmin_nationrank_help_0: "為居民添加國家等級。"
+townyadmin_nationrank_help_1: "從居民中移除國家等級。"
+townyadmin_database_help_0: "Force 保存資料庫。"
+townyadmin_database_help_1: "強制載入資料庫。"
+townyadmin_database_help_2: "刪除每個居民的所有頭銜和姓氏。"
+ta_plot_help_0: "為玩家領取地塊。"
+ta_plot_help_1: "查看存儲在您所站的圖中的元數據。"
+ta_plot_help_2: "設置 plot 元數據 key 和 value。"
+ta_plot_help_3: "按鍵添加或刪除元數據。"
+ta_resident_help_0: "重新命名居民。"
+ta_resident_help_1: "添加或刪除好友。"
+ta_resident_help_2: "列出或清除好友清單。"
+ta_resident_help_3: "從資料庫中刪除居民。"
+ta_resident_help_4: "刪除 players about 行。"
+ta_toggle_help_0: "打開/關閉在所有世界中使用Wilderness的能力。"
+ta_toggle_help_1: "打開/關閉所有世界中的再生功能。"
+ta_toggle_help_2: "打開/關閉 devmode，向配置中指定的玩家顯示額外的日誌記錄消息。"
+ta_toggle_help_3: "打開/關閉調試模式，在日誌中顯示額外的消息。"
+ta_toggle_help_4: "打開/關閉城鎮或國家從銀行取款的功能。"
+ta_toggle_help_5: "讓玩家成為 NPC 還是不。"
+ta_set_help_0: "為給定的玩家設置城鎮市長。"
+ta_set_help_1: "設置一個有新 NPC 市長的城鎮，他們不需要支付維護費。"
+ta_set_help_2: "設置一個國家的首都。"
+ta_set_help_3: "設置國家/地區的 nationzone 大小。"
+ta_set_help_4: "設置居民的標題。"
+ta_set_help_5: "設置居民的姓氏。"
+ta_set_help_6: "將地塊設置為其他城鎮。"
+ta_set_help_7: "設置城鎮的創始人名稱。"
+ta_set_help_8: "使用大小 0 可刪除 nationzone 覆蓋。"
+ta_purge_help_0: "清除超過給定天數未登錄的居民，可以選擇將 townless 設置為僅刪除 townless 玩家，或指定 townname 以僅清除一個城鎮的居民。"
+ta_townmeta_help_1: "查看存儲在您指定的城鎮上的元數據。"
+ta_townmeta_help_2: "設置 town metadata key 和 value。"
+ta_townmeta_help_3: "按鍵從城鎮中添加或刪除元數據。"
+ta_residentmeta_help_1: "查看存儲在您指定的駐留上的元數據。"
+ta_residentmeta_help_2: "設置常駐元數據鍵和值。"
+ta_residentmeta_help_3: "按鍵從駐留器中添加或刪除元數據。"
+ta_nationmeta_help_1: "查看存儲在您指定國家/地區的元數據。"
+ta_nationmeta_help_2: "設置 nation 元數據鍵和值。"
+ta_nationmeta_help_3: "按國家/地區鍵添加或刪除元數據。"
+ta_reload_help_0: "重新載入資料庫。"
+ta_reload_help_1: "重新載入配置。"
+ta_reload_help_2: "重新載入語言檔。"
+ta_reload_help_3: "重新載入Towny許可權。"
+ta_reload_help_4: "重新載入 Towny 的所有元件。"
+ta_eco_resetbanks_help: "重新設定城鎮與中央銀行機構為指定數量或為 0。"
+ta_eco_convert_modern_help: "匯入你的 Towny 帳號至當前版本，得使用 Vault 的 OfflinePlayer。"
+ta_eco_convert_help: "匯入你的 Towny 帳號至目標經濟設置，利於經濟插件間的資料轉移。"
+ta_eco_info_help: "給予伺服器你的經濟帳號資訊。"
+ta_depositall_help_0: "將給定的金額存入所有城鎮和國家銀行。"
+ta_depositall_help_1: "存儲一定金額至所有城鎮銀行。"
+ta_depositall_help_2: "存儲一定金額至所有中央銀行。"
+ta_info_help_0: "閱覽特定國家的環境資訊。"
+ta_info_help_1: "閱覽特定住民的環境資訊。"
+ta_info_help_2: "閱覽 Towny 伺服器帳號的環境資訊。"
+ta_info_help_3: "閱覽特定城鎮的環境資訊。"
+plot_help_0: "打開列印資訊 HUD。"
+plot_help_1: "刪除列印的所有者。"
+plot_help_2: "從繪圖中刪除區組清單。"
+plot_help_3: "參見 /plot set ？尋求説明。"
+plot_help_4: "請參閱 /plot toggle ？尋求説明。"
+plot_help_5: "參見 /plot group ？尋求説明。"
+plot_help_6: "刪除玩家的許可權覆蓋。"
+plot_help_7: "為玩家添加預設許可權覆蓋。"
+plot_help_8: "打開許可權編輯器 gui。"
+plot_help_9: "在繪圖中將居民添加為 Trusted （受信任）。"
+plot_help_10: "在繪圖中將居民刪除為 Trusted （受信任）。"
+plot_district_help_0: "例如：/plot district new ExpensivePlots"
+plot_district_help_1: "從指定選取區中刪除地塊。"
+plot_district_help_2: "完全刪除學區。"
+plot_district_help_3: "重新命名您所在的選取區。"
+plot_group_help_0: "例如： /plot group new ExpensivePlots"
+plot_group_help_1: "從指定組中刪除繪圖。"
+plot_group_help_2: "完全刪除繪圖組。"
+plot_group_help_3: "重新命名您所在的組。"
+plot_group_help_4: "例如：/plot group set perm resident on。"
+plot_group_help_5: "例如：/plot group toggle [pvp|fire|mobs]"
+plot_group_help_6: "例如：/plot group forsale 50"
+plot_group_help_7: "例如：/plot group notforsale"
+plot_group_help_8: "將居民添加或刪除為受信任。"
+plot_group_help_9: "在繪圖組中將居民添加為 Trusted （受信任）。"
+plot_group_help_10: "將 Resident （居民） 從 Trusted （信任） 中刪除。"
+plot_group_help_11: "打開繪圖perm GUI。"
+plot_group_help_12: "將玩家添加到繪圖 perm GUI。"
+plot_group_help_13: "將玩家移至繪圖 perm GUI。"
+plot_toggle_help_0: "在情節中切換 pvp。"
+plot_toggle_help_1: "在情節中切換爆炸。"
+plot_toggle_help_2: "在情節中切換 fire。"
+plot_toggle_help_3: "在情節中切換生物。"
+plot_group_toggle_help_0: "在情節組中切換 pvp。"
+plot_group_toggle_help_1: "在繪圖組中切換爆炸。"
+plot_group_toggle_help_2: "在繪圖組中切換 fire。"
+plot_group_toggle_help_3: "切換 plot 組中的生物。"
+plot_group_toggle_help_4: "切換繪圖組的納稅狀態。"
+plot_set_help_0: "例如：旅館、荒野、農場、大使館等。"
+plot_set_help_1: "將繪圖設置為 Outpost。"
+plot_set_help_1.5: "設置玩家必須是城鎮成員才能購買地塊的最短天數。"
+plot_set_help_1.6: "設置玩家必須是城鎮成員才能購買地塊的最大天數。"
+plot_set_help_2: "刪除繪圖類型。"
+plot_set_help_3: "命名圖。"
+plot_set_help_4: "切換所有許可權。"
+plot_set_help_5: "將級別或類型的許可權設置為 on 或 off。"
+plot_set_help_6: "將級別和類型的許可權設置為 on 或 off。"
+plot_set_help_7: "將許可權設置為擁有地塊的居民或城鎮。"
+plot_jailcell_help_0: "在您站立的位置添加 JailCell。"
+plot_jailcell_help_1: "刪除您所在的 JailCell。"
 msg_block_claim: '取得這個城區'
+msg_block_claim_radius: '佔領你周圍的地塊半徑。'
 msg_plot_nfs: '取消出售這個地段'
+msg_plot_nfs_radius: '拆除半徑內的待售地塊'
 msg_nfs_abr: '&efs 和 nfs 分別是forsale（出售）和notforsale（不供出售）的縮寫 '
 msg_plot_fs: '出售這個地段 '
+msg_plot_fs_radius: '放置一個半徑的地塊出售。'
 ############################################################
 #+------------------------------------------------------+ #
 #|   Messages                                           | #
@@ -163,14 +434,17 @@ msg_plot_fs: '出售這個地段 '
 ############################################################
 msg_buy: '&b用%s購買了%d%s '
 msg_buy_resident_plot: '&b%s花費了%s購買了%s地段！'
+msg_buy_resident_plot_group: '&b%s %s 年買了 %s 的 plotgroup！'
 msg_couldnt_pay_taxes: '&b%s因為交不起稅而被%s放逐 '
 msg_couldnt_pay_plot_taxes: '&b%s因為交不起稅而失去了他的地段所有權 '
-msg_payed_town_tax: '&b繳納市鎮地方稅 '
-msg_payed_plot_cost: '&b繳納%s作為%s在%s的地段稅'
-msg_payed_resident_tax: '&b繳納個人所得稅 '
+msg_you_couldnt_pay_plot_tax: '&b你付不起%s的地塊稅，%s就失去了地塊的擁有權。'
+msg_you_couldnt_pay_town_tax: '&b你無法支付 %s 的城鎮稅，已被從 %s 中除名。'
+msg_you_paid_town_tax: '&b你已繳稅給你的城鎮 %s 。'
+msg_you_paid_plottax_to_town: '&b你已繳稅 %s 元給 %s 城鎮。'
 msg_bankrupt_town: ' 銀行資金不足以維持市鎮的日常開銷 '
 msg_bankrupt_nation: ' 銀行資金不足以維持城邦的日常開銷 '
 msg_nation_not_peaceful: '&b城邦無法維持和平狀態 '
+msg_nation_cant_peaceful: '&b國家無法負擔和平。你必須每天支付 %s 元。'
 msg_peaceful_disabled: '&b所有城邦的和平都已被打破 '
 msg_you_paid: '&b你花費了%s來保持戰時和平 '
 msg_nation_set_peace: '&b成功改變城邦狀態 '
@@ -200,6 +474,7 @@ msg_nation_kicked_by: '&b你的市鎮被%s國割讓了 '
 msg_town_left_nation: '&b你的市鎮脫離了%s國 '
 msg_nation_town_left: '&b市鎮%s退出了你的城邦 '
 msg_nation_kicked: '&b%s把%s從這個城邦放逐 '
+msg_nation_you_kicked: '&b你已將 %s 從此國家放逐。'
 msg_raised_ass: '&b%s把%s提升為%s行政官員 '
 msg_lowered_to_res_by: '&b你被%s降職了 '
 msg_lowered_to_res: '&b%s開除了%s '
@@ -273,6 +548,7 @@ msg_world_pvp: '&c這個世界強制開啟PVP '
 msg_world_mobs: '&c這個世界強制開啟怪物生成 '
 msg_world_expl: '&c這個世界強制開啟爆炸破壞 '
 msg_world_fire: '&c這個世界強制開啟火勢蔓延 '
+msg_town_mobs: '&c這個城鎮強制生成怪物。'
 msg_plot_pvp: '&c不能在一個競技場中開啟或關閉PVP '
 msg_plot_regen_wrong_size: '&c回溯只支援預設的地段大小（16） '
 msg_reloaded: '&2市鎮設定已重新載入 '
@@ -320,12 +596,16 @@ msg_mayor_abandon: '&b你真的要放棄你的人民嗎? 如果你真的想這�
 msg_new_day_tax: '&b美好的一天又開始了！稅收已繳納'
 msg_new_day: '&b美好的一天又開始了！'
 msg_new_king: '&b%s現已成為%s的元首 '
+msg_err_new_king_notmayor: '&c新國家領導人不是市長。'
+msg_err_king_not_in_nation: '&c新國家領導人不屬於這個國家。'
+msg_err_fight_like_king: '&c和平不是一種選擇！像領導者一樣戰鬥！'
 msg_no_access_nation_bank: '&c你沒有使用城邦銀行的權限 '
 msg_err_no_money: '&c銀行裡沒有足夠的錢 '
 msg_new_mayor: '&b%s成為了新的市長！'
 msg_new_nation: '&b%s建立了一個名為%s的城邦'
 msg_new_town: '&b%s建立了一個名為%s的市鎮'
 msg_plot_for_sale: '&b%s將（%s）地段開始出售！'
+msg_plot_for_sale_amount: '&b%s 將地塊 （%s） %s出售！'
 msg_plot_set_type: '&b設定地段類型為%s'
 msg_cache_block_error: '&c市鎮沒有你的註冊紀錄 請嘗試重新註冊 '
 msg_cache_block_error_wild: '&c你不能在荒野中%s '
@@ -354,6 +634,8 @@ msg_err_not_in_town_claim: '&你必須加入市鎮才能取得這個地段 '
 msg_err_must_belong_town: '&c你必須是一個市鎮居民 '
 msg_err_dont_belong_town: '&c你不屬於一個市鎮 '
 msg_err_dont_belong_nation: '&b你不屬於一個城邦的臣民 '
+msg_err_already_belong_nation: '&b你已經屬於一個國家了。'
+msg_err_town_already_belong_nation: '&b%s 已經屬於一個國家：%s。'
 msg_err_not_same_nation: '&b%s不屬於你的城邦 '
 msg_err_rect_auto: '&c只有市鎮及其居民才能使用 auto '
 msg_err_invalid_radius: '&c無效半徑  輸入整數或 auto '
@@ -381,6 +663,9 @@ msg_err_input_too_long: '&c你輸入的內容太長了 '
 msg_err_invalid_choice: '&c無效的選擇'
 msg_err_invalid_sub: '&c無效的子指令 '
 msg_err_command_disable: '&c你沒有足夠的權限使用這個指令 '
+msg_err_plot_preclaim_disable: "&c你目前不能擁有 %s 區塊。"
+msg_err_plot_preunclaim_disable: "&c住民目前不能拋棄 %s 區塊。"
+msg_err_you_dont_have_permission_to_use_colours: "您無權在標題和姓氏中使用顏色代碼。"
 msg_err_universe_limit: '&c這個世界不能再有更多的市鎮了 '
 msg_err_too_many_npc: '&cNPC太多了 '
 msg_err_negative_money: '&c你不能擁有負數的錢 '
@@ -388,7 +673,6 @@ msg_err_not_percentage: '&c稅率必須小於100 '
 msg_err_no_economy: '&c無經濟插件支援 '
 msg_err_not_block_type: '&c這不是一個有效的地段類型！'
 msg_not_allowed_join: '&c%s不允許加入市鎮 '
-msg_offline_no_join: '&c%s不在線所以無法加入市鎮 '
 msg_err_cannot_perform_action: '&c你無法在%s執行這個操作 '
 msg_npc_flag: '&bNPC flag 現在%sfor%s '
 msg_warning_delete: '&4*** 警告，由於資金不足，%s這個市鎮將在明天倒閉！***'
@@ -401,7 +685,7 @@ msg_err_not_enough_residents_join_nation: '&b市鎮%s沒有足夠的人口數所
 msg_not_enough_residents_no_longer_capital: '&b城邦舊都人口數不足所以不再是首都 新的首都將在%s '
 msg_town_not_enough_residents_left_nation: '&b市鎮%s沒有足夠的人口數來成為城邦的一員，並被趕出了城邦 '
 msg_nation_disbanded_town_not_enough_residents: '&b市鎮%s沒有足夠的人口數來形成城邦以至於城邦滅亡 '
-msg_not_enough_residents_refunded: '&b你的城邦由於人口數不足而滅亡了，因這個你獲得了 $%s '
+msg_not_enough_residents_refunded: '&b你的國家由於人口數不足而滅亡了，因此你獲得 %s 元。'
 msg_not_enough_residents_capital: '&b市鎮%s沒有足夠的居民來作為首都 '
 list_page: '&b當前頁數%s，總頁數%s'
 list_err_not_enough_pages: '&c只有%s頁可用'
@@ -414,6 +698,7 @@ msg_you_have_been_given_rank: '你被授予了%s的頭銜 '
 msg_you_have_given_rank: '你授予了%s頭銜%s給%s '
 msg_resident_not_your_town: '那個居民不是你的市鎮的人！'
 msg_resident_already_has_rank: '%s已經擁有%s這個頭銜了 '
+msg_town_or_nation_level_not_high_enough_for_this_rank: "你的 %s 等級尚不能進入 %s 排名。你的 %s 等級： 尚需 %s/%s 。"
 msg_you_have_had_rank_taken: '你失去了%s頭銜 '
 msg_you_have_taken_rank_from: '你移除了%s頭銜%s從%s '
 msg_resident_doesnt_have_rank: '%s沒有%s這個頭銜 '
@@ -461,6 +746,8 @@ msg_you_have_undeclared_an_outlaw: '%s不再是%s的放逐者 '
 msg_err_player_not_an_outlaw: '那個玩家不再被視為放逐者 '
 msg_err_outlaw_in_open_town: '你無法加入一個已經把你視為放逐者的公開市鎮 '
 msg_you_are_an_outlaw_in_this_town: '&4小心，%s放逐了你，死在這你將會被監禁 '
+msg_you_are_an_outlaw_in_this_town_jail_time: '&4不法之徒被判入獄 %s 小時。'
+msg_you_are_an_outlaw_in_this_town_bail_amount: '你的保釋金將花費 %s。'
 msg_err_town_not_close_enough_to_nation: '%ss 的市鎮中心離你的首都中心太遠了所以不能加入你的城邦 '
 msg_nation_town_moved_their_homeblock_too_far: '由於%ss 的市鎮中心離你的首都中心太遠了所以已不再屬於這個城邦 '
 #Added in 0.33
@@ -494,6 +781,7 @@ invite_plu: '邀請'
 invite_sent_by: '邀請來自：'
 invite_help_1: '接受邀請並加入市鎮'
 invite_help_2: '拒絕加入市鎮的邀請'
+invite_help_4: '拒絕所有加入城鎮的邀請'
 invite_help_3: '列出你的所有邀請'
 town_invite_help_1: '邀請玩家到加入到你的市鎮'
 town_invite_help_2: '撤消發送給玩家的邀請'
@@ -501,6 +789,7 @@ town_invite_help_3: '列出你發送的所有邀請'
 town_invite_help_4: '列出你收到的所有邀請'
 town_invite_help_5: '接受加入城邦的邀請'
 town_invite_help_6: '拒絕加入來自城邦的邀請'
+town_invite_help_7: '刪除您的城鎮已發送的所有邀請'
 nation_invite_help_1: '邀請一個市鎮加入你的城邦'
 nation_invite_help_2: '撤消發送給市鎮的邀請'
 nation_invite_help_3: '列出發送給市鎮的所有邀請'
@@ -511,6 +800,7 @@ nation_ally_help_4: '列出你收到的所有盟國請求'
 nation_ally_help_5: '接受與盟國結盟的請求'
 nation_ally_help_6: '拒絕成為盟國的請求'
 nation_ally_help_7: '撤銷結盟請求'
+msg_player_denied_all_invites: "您收到的所有邀請均已被拒絕。"
 msg_err_player_no_invites: '&c你沒有任何邀請！'
 msg_err_player_has_multiple_invites: '&c你有多個邀請，請註明！'
 msg_err_player_has_too_many_invites: '%s有太多邀請，請他拒絕一些邀請，然後再進行邀請 '
@@ -527,6 +817,7 @@ msg_err_nation_sent_too_many_requests: '&b城邦已經發出了太多的要求�
 msg_err_nation_has_too_many_requests: '&b城邦%s有太多的邀請，需要他們拒絕一些請求，然後再進行邀請 '
 player_received_invites: '&b你已經收到%a/%m 邀請 '
 town_revoke_invite: '&b市鎮%s，撤銷了你的加入邀請 '
+town_revoke_invite_successful: '&b你已成功撤銷發送給%s的加入城鎮的邀請。'
 town_received_invites: '&b市鎮已收到%a/%m 邀請 '
 town_sent_invites: '&b市鎮已發送%a/%m 邀請 '
 nation_revoke_invite: '&b城邦%s，撤銷了你的邀請以加入 '
@@ -549,6 +840,9 @@ you_have_been_requested_to_ally: '你被要求結盟 '
 this_message_will_expire: '這將在 20 秒內自動過期'
 player_sing: '玩家'
 nation_zone_this_area_under_protection_of: '%s已受%s保護'
+nation_zone_conquered_status_denies_use: "您的城鎮被征服狀態會阻止您使用此國家區域。"
+nation_zone_conquered_status_denies_use_2: "您無法使用這個被征服的城鎮的國家區。"
+nation_spawn_not_allowed_for_conquered_towns: "您城鎮的征服狀態會阻止您重生到您所在國家的重生點。"
 #Added in 0.42
 you_have_been_invited_to_join2: '你被邀請加入%s'
 you_have_been_requested_to_ally2: '你被要求和%s結盟'
@@ -598,10 +892,13 @@ msg_err_over_outposts_limit: '你無法傳送到市鎮崗哨，已經超過你�
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: '放逐者：' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: '放逐者：'
 online: '&a（在線）'
-registered_last_online: '&2註冊時間：&a%s&8|&2最後在線：&a%s' #Used in mayor hover text in /town status screen.
-status_perm: '權限：' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2註冊時間：&a%s&8|&2最後在線：&a%s'
+#Used on /plot perm, /res
+status_perm: '權限：'
 status_on: '&4開'
 status_off: '&a關'
 status_on_good: '&a開'
@@ -622,10 +919,12 @@ jailed_in_town: ' 市鎮中：%s'
 status_friends: '好友'
 rank_list_title: '%s排名列表'
 rank_list_mayor: '市長：'
+status_title_capital: '&b（資本）'
 status_title_pvp: '&4（PvP）'
 status_title_open: '&b（開放）'
 status_town_board: '看板：'
 status_founded: '已找到：'
+status_founded_by: '創立者：'
 status_town_size: '市鎮大小：'
 status_town_size_bought: '以購買：'
 status_town_size_bonus: '額外獎勵：'
@@ -635,10 +934,13 @@ status_bank_town2: '每日維護：'
 status_bank_town3: '稅收：'
 status_town_nation: '城邦：'
 status_town_reslist_overlength: '和更多   '
+status_nation_king: '領導：'
 status_nation_tax: '城邦稅收：'
+status_nation_conquered_tax: '征服稅：'
 status_nation_towns: '市鎮'
 status_nation_allies: '盟邦'
 status_nation_enemies: '敵人'
+status_nation_enemied_by: '將貴國視為敵人的國家'
 status_world_claimable: '&a可取得的'
 status_world_noclaims: '&c不可取得'
 status_world_forcepvp: '強制PVP：'
@@ -654,6 +956,11 @@ status_res_taxexempt: '管理者不需要繳稅 '
 status_res_tax: '市鎮稅收：'
 status_res_plottax: '地段稅收加總：'
 status_res_totaltax: '需要負擔的總稅額：'
+status_townblock_plottax: '地塊稅：'
+status_townblock_untaxed: '未徵稅'
+status_townblock_max_and_minjoindays: '購買地塊需要 %s 到 %s 天的城鎮會員資格。'
+status_townblock_minjoindays: '購買地塊需要超過 %s 天的城鎮會員資格。'
+status_townblock_maxjoindays: '購買地塊需要不到 %s 天的城鎮會員資格。'
 #Added in 0.45
 msg_err_unable_to_use_bank_outside_nation_capital: '你不能在國外使用城邦銀行 '
 msg_err_unable_to_use_bank_outside_your_town: '你不能在市鎮外使用市鎮銀行 '
@@ -677,6 +984,7 @@ msg_err_nation_not_public: '&c這個城邦不是公開的 '
 msg_nation_toggle_public: '&a成功開放城邦 '
 status_yes: '&a是'
 status_no: '&c否'
+msg_err_unable_to_use_bank_outside_bank_plot: '您不能在 bank 或 home 地塊之外使用該命令。Bank 繪圖是使用 /plot set bank 創建的。'
 msg_err_nation_spawn_forbidden: '&c城邦傳送已關閉 '
 msg_err_nation_spawn_forbidden_war: '&c城邦傳送點只在戰爭時期開放 '
 msg_err_nation_spawn_forbidden_peace: '&c戰爭期間禁止城邦傳送 '
@@ -687,6 +995,7 @@ msg_err_public_nation_spawn_forbidden: '&c禁止傳送到開放的城邦 '
 msg_err_public_nation_spawn_forbidden_war: '&c只有在戰爭期間才能禁止傳送到開放的城邦 '
 msg_err_public_nation_spawn_forbidden_peace: '&c在戰爭期間禁止傳送到開放的城邦 '
 msg_spawn_cost_set_to: '&b%s設定了使用價格 /%sspawn to%s'
+msg_spawn_fail_safe_teleport: '&c傳送失敗，位置不安全，請向你的城鎮市長更改傳送位置。'
 msg_err_cannot_set_spawn_cost_more_than: '&c你不能將生產成本高於%s'
 msg_err_ally_isnt_public: '&c你的盟國，%s，沒有啟用公共傳送點  傳送已被取消 '
 msg_nation_changed_public: '&c城邦公開狀態變更為%s '
@@ -744,6 +1053,11 @@ msg_couldnt_pay_plot_taxes_multiple: '&b以下居民因支付不起地段稅而�
 msg_bankrupt_town2: '&b%s市鎮因資金不足而倒閉 '
 msg_bankrupt_nation2: '&b%s因國庫已空而滅亡 '
 status_embassy_town: '大使館位於'
+#Added in 0.51:
+msg_error_invalid_comparator_nation: '&b無效的比較器。試試%s。'
+msg_error_invalid_comparator_town: '&b無效的比較器。試試%s。'
+msg_err_merging_for_kings_only: '&b合併只能由國家領袖完成。'
+msg_err_king_of_that_nation_is_not_online: '&b%s %s 的國家領導人不在線。合併失敗。'
 nation1_has_merged_with_nation2: '&6城邦%st同意與%s合併 '
 msg_would_you_merge_your_nation_into_other_nation: '&6你想要將你的城邦%s併入%s嗎? 這會將市鎮和城邦銀行內的錢存入%s '
 no_open_towns: '列表中沒有開放的市鎮'
@@ -753,9 +1067,12 @@ msg_error_nation_has_no_enemies: '沒有可以成為敵國的城邦 '
 msg_error_ta_plot_claim: '缺少玩家名，範例：/ta plot claim 玩家名'
 msg_error_no_player_with_that_name: '找不到%s這名玩家'
 msg_admin_has_given_you_a_plot: '管理員為你取得了一方塊地段：%s'
+msg_town_forcemobs_setting_set_to: '該鎮%s的mobs設置被迫%s'
 msg_town_forcepvp_setting_set_to: '市鎮%s的強制PVP設定為%s'
+msg_town_forcedisabledpvp_setting_set_to: '該鎮%s的 admindisabledpvp 設置已強制%s'
 msg_nation_changed_open: '&c城邦的公開狀態為%s '
 msg_err_already_in_a_nation: '你的市鎮已經加入了一個城邦 '
+msg_err_nation_not_open: '&c這個國家%s沒有向所有人敞開大門。請國家領導人或助手加入。'
 msg_err_nation_homeblock_in_another_world: '&c你的市鎮之家與國都不在同一個世界 '
 status_bank_town_penalty_upkeep: '超額維護'
 #Added in 0.53:
@@ -773,6 +1090,7 @@ msg_err_player_too_far_from_town_spawn: '&c%s離你的市鎮太遠了，收不�
 #Added in 0.58:
 msg_resident_bail_amount: '居民保釋金：'
 msg_mayor_bail_amount: '市長保釋金：'
+msg_king_bail_amount: '國家領袖保釋費用：'
 msg_has_paid_bail: '%s支付保釋金而得到自由'
 msg_err_unable_to_pay_bail: '無法支付保釋金 '
 msg_err_bail_not_enabled: '保釋金功能未開啟 '
@@ -803,6 +1121,12 @@ msg_err_key_cannot_be_deleted: '無法移除不存在的Key！'
 msg_err_this_town_doesnt_have_any_associated_metadata: '這個市鎮沒有相關的元資料 '
 msg_err_key_x_is_not_part_of_this_town: 'Key%s不是這個市鎮的一部分 '
 msg_custom_data_was_successfully_added_to_town: '成功加入自定義資料到市鎮內！'
+msg_err_this_resident_doesnt_have_any_associated_metadata: '此居民沒有任何關聯的元數據。'
+msg_err_key_x_is_not_part_of_this_resident: 'Key %s 不屬於此居民，如果可能，請添加它。'
+msg_custom_data_was_successfully_added_to_resident: '自定義數據已成功添加到 resident！'
+msg_err_this_nation_doesnt_have_any_associated_metadata: '這個國家/地區沒有任何關聯的元數據。'
+msg_err_key_x_is_not_part_of_this_nation: 'Key %s 不屬於這個國家，如果可能的話，請添加它。'
+msg_custom_data_was_successfully_added_to_nation: '自訂數據已成功添加到 nation！'
 msg_error_too_many_pages: '頁數過多 '
 msg_err_location_is_not_within_a_town: '該地點不在市鎮內 '
 msg_err_location_is_not_within_a_jail_plot: '該地點不在監獄內 '
@@ -854,6 +1178,8 @@ msg_err_plot_not_associated_with_a_group: '這個地段不屬於任何一個地�
 msg_plot_was_removed_from_group_x: '地段&9（%s，%s）&2被移出了%s地段叢集'
 msg_plot_renamed_from_x_to_y: '地段%s已重命名為%s '
 msg_err_plot_group_specify_price: '請設定價格，指令範例：/plot group fs [價格]'
+msg_player_put_group_up_for_sale_amount: '%s Group %s %s出售！'
+msg_player_put_group_up_for_sale: '%s Group %s 出售！'
 msg_err_could_not_set_group_type: '無法設定地段叢集類型 - '
 msg_set_group_type_to_x: '已將地段叢集類型更改為%s'
 msg_player_successfully_bought_group_x: '%s成功購買了地段叢集%s'
@@ -904,6 +1230,8 @@ msg_spawn_warn: '生成成本為%s 是否繼續？提示：加入 -ignore 跳過
 msg_confirm_purchase: '這樣做將花費%s 是否繼續？'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: '由於下列市鎮離首都過於遙遠，它們將會從你的城邦移除：%s，是否繼續？'
 msg_ta_deposit_all_success: '已成功將%s存入所有城邦''和市鎮''的銀行 '
+msg_ta_deposit_all_towns_success: '已成功存儲 %s 元至所有城鎮銀行。'
+msg_ta_deposit_all_nations_success: '已成功存儲 %s 至所有國家銀行。'
 bonus_townblocks: '獎勵市鎮街區'
 #Added in 0.80
 nomad_sing: '遊牧民族'
@@ -981,6 +1309,7 @@ msg_warning_your_town_is_ruined_for_x_more_hours: '&c你的市鎮在一個毀滅
 msg_time_remaining_before_full_removal: '距離完全清除前還剩%d小時 '
 msg_time_until_reclaim_available: '距離可重新取得還須%d小時 '
 msg_reclaim_available: '可以重新取得了 '
+msg_ruined_town_being_deleted: "%s 已損壞 %s 小時，正在被刪除。"
 #Added in 0.93
 msg_changed_peaceful: '&c現在市鎮中立/和平%s '
 msg_err_town_unclaim_canceled: '&c取消收復 此時收復此地段失敗 '
@@ -1009,6 +1338,7 @@ towny_prices_overclaimed_upkeep: '&e[Overclaimed Upkeep]&2市鎮：&a%s'
 towny_prices_claiming_townblock: '&e[Claiming]&2城區：&a%s'
 towny_prices_claiming_townblock_increase: '&8|&2城區增加：&a+%s'
 towny_prices_claiming_outposts: '&e[Claiming]&2崗哨：&a%s'
+towny_prices_outposts_upkeept: '&每一哨所都有維護成本：&a%s 元 / 日'
 towny_prices_upkeep_based_on: '&7市鎮維護是基於&a%s'
 towny_prices_upkeep_num_plots: '地段數量 '
 towny_prices_upkeep_town_level: '市鎮等級（人口數 ）'
@@ -1031,8 +1361,10 @@ msg_town_destroyed_by_nation_tax: '&b被征服的市鎮%s無法繳納國稅，�
 msg_town_destroyed_by_nation_tax_multiple: '&b以下被征服的市鎮無法負擔國稅，已經淪陷：'
 msg_your_town_was_exempt_from_the_nation_tax: '&b你的市鎮不須繳稅 '
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: '毀壞狀態'
+msg_comptype_forsale: '出售狀態'
 msg_comptype_bankrupt: '破產狀態'
 msg_ruined: '&c（破產）'
 msg_bankrupt: '&c（破產）'
@@ -1046,6 +1378,10 @@ gui_title_towny_wildsblocks: '荒野列表'
 gui_title_towny_itemuse: '物品列表'
 gui_title_towny_switch: '切換列表'
 gui_title_towny_plotclear: '地段清除列表'
+flatfile_dbg_district_file_missing_town_delete: 'District 檔案缺失 Town， 刪除 %s'
+flatfile_dbg_missing_file_delete_district_entry: '缺少檔：%s刪除 [districtuuid].data 中的條目'
+flatfile_err_exception_reading_district_file_at_line: '載入錯誤：在行 %s 讀取 District 檔時出現異常%s'
+flatfile_dbg_loading_district_list: '載入地區清單...'
 msg_ta_removed_all_titles_and_surnames_removed: '所有居民的身分與名稱已被移除 '
 msg_err_homeblock_already_set_here: '此地已經是你的市鎮主區'
 #Added in 0.100
@@ -1062,6 +1398,7 @@ msg_town_merge_err_not_enough_money: '&c合併失敗：餘額不足 （%s/%s）'
 msg_town_merge_err_too_many_purchased_townblocks: '&c合併失敗：過多已購買的城區（%d）'
 msg_town_merge_warning: '&c警告：如果接受，與%s合併將花費%s '
 msg_town_merge_debt_warning: '&c警告：%s目前有債務在身，你若接受，你將必須連同債務一起付清 '
+msg_town_merge_cost_breakdown: '&b費用明細：基礎費用：%s，城鎮街區費用：%s，破產費用：%s，額外街區費用：%s'
 msg_town_merge_failed: '&c合併失敗 '
 msg_town_merge_cancelled: '&c合併已取消 '
 msg_town_merge_success: '&b%s鎮（原本屬於%s）已成功合併到%s鎮 '
@@ -1123,6 +1460,7 @@ msg_resident_has_not_played_long_enough_to_be_jailed: '%s還沒嚴重到需要�
 msg_town_not_peaceful: '&b市鎮無法維持其和平狀態 '
 msg_town_already_peaceful: '&市鎮目前處於和平狀態 '
 msg_town_already_not_peaceful: '&市鎮目前處於非和平狀態 '
+msg_town_cant_peaceful: '&b小鎮無法成為一個和平的小鎮。您需要能夠每天支付 %s。'
 msg_town_paid_for_neutral_status: '&b你的市鎮花費%s以維持其和平狀態 '
 msg_nation_paid_for_neutral_status: '&b你的城邦花費%s以維持其和平狀態 '
 your_town_has_been_invited_to_join_nation: '你的市鎮受邀加入此城邦：%s'
@@ -1130,6 +1468,8 @@ your_town_has_been_invited_to_join_nation: '你的市鎮受邀加入此城邦：
 msg_err_no_one_to_purge: '&b目前沒有活躍玩家可進行清理 '
 msg_purging_will_remove_the_following_residents: '&b請確認是否對以下居民進行清理：%s'
 msg_purge_complete_x_removed: '&b清理完成，%s個居民已移除 '
+msg_purge_complete_x_removed_from_towns: '&b大清洗完畢，%s 閒置住民已從城鎮移除。'
+msg_purge_reached_50_residents: '&b大清洗已達 50 人，為減少郵件數量，以後住民刪除將不會記錄。'
 msg_err_days_must_be_greater_than_0: '天數必須大於0 '
 msg_err_outlawed_players_no_teleport: '&4由於你是放逐者，你目前無法進行傳送！'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4由於你是放逐者，你目前無法執行此指令 '
@@ -1164,14 +1504,19 @@ msg_latest_version: '&2Towny版本：&a%s&2| 最新版本：&a%s'
 msg_up_to_date: '&a你使用的是最新版本 '
 msg_click_purchase: '點擊以購買'
 msg_you_must_join_this_town_to_claim_this_plot: '你必須先加入市鎮：%s，才能取得這個地段，是否加入此市鎮並繼續取得？'
+msg_legacy_economy_detected: "&b你的 Towny 經濟設置目前在傳說時代。建議你讓 Towny 自動更新，你才可以使用現代設置。如此經濟插件將更為相容。"
+msg_click_to_convert_to_modern_economy: "&b點擊此處將你的 Towny 經濟設置從傳說時代匯入現代。"
 #Added in 0.113
 status_trustedlist: '受信任的'
 msg_click_to_edit: '&6點擊以編輯'
 permission_gui_header: 'Towny權限管理介面'
 msg_last_edited: '&7&o上次修改於%s，編輯者：%s '
-msg_trusted_added: '&b新增了對%s的信任於%s ' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&b新增了對%s的信任於%s '
 msg_already_trusted: '&b%s已於%s被信任 '
-msg_trusted_added_2: '&b%s已經於%s信任了你：%s ' #Last %s is the town name or worldcoord.
+msg_cannot_trust_your_own_town: '&b你不能相信你自己的城鎮。'
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s已經於%s信任了你：%s '
 msg_not_trusted: '&b%s並未於%s被信任 '
 msg_trusted_removed: '&b移除了對%s的信任於%s '
 msg_trusted_removed_2: '&b%s已經於%s移除對你的信任：%s '
@@ -1183,6 +1528,9 @@ msg_cache_block_err: '&c你不得在此%s '
 msg_err_plot_belongs_to_group: '&c此地段屬於一個叢集，使用%s '
 plotgroup_sing: '地段叢集'
 msg_err_ally_limit_reached: '你的城邦達到了盟邦配額限制，無法接受要求 '
+msg_err_ally_limit_reached_cannot_accept: '%s國已經達到了他們的盟友極限，無法接受。'
+msg_err_ally_limit_reached_cannot_send: '你的國家已達到盟友上限，無法邀請%s成為你的盟友。'
+msg_err_ally_limit_reached_cannot_send_targetNation: '%s國已達到他們的盟友上限，無法邀請%s成為你的盟友。'
 #Added in 0.114
 msg_err_group_not_found: '找不到叢集%s '
 msg_err_expected_command_format: '錯誤的語句，預期狀況：%s'
@@ -1194,6 +1542,7 @@ msg_err_there_is_already_a_town_or_nationrank_called_x: '已經有個%s名為%s 
 msg_err_there_is_no_town_or_nationrank_called_x: '沒有任何的%s名為%s '
 msg_successfully_add_rank_to_the_town_or_nation_rank: '已成功新增%s至%s '
 msg_successfully_removed_rank_from_the_town_or_nation_rank: '已成功移除%s從%s '
+msg_successfully_renamed_rank_for_the_town_or_nation_rank: '已成功在 %s 將 %s 改名成 %s。'
 msg_err_group_has_no_nodes: '叢集%s沒有分配權限節點 '
 msg_title_group_permissions: '%s權限'
 help_ta_perms_listgroups: '列表叢集 '
@@ -1202,8 +1551,10 @@ help_ta_perms_groupaddpermnode: '在叢集中新增節點 '
 help_ta_perms_groupremovepermnode: '從叢集中移除節點 '
 help_ta_perms_townrankadd: '在Towny權限檔案中新增市鎮排名 '
 help_ta_perms_townrankremove: '從Towny權限檔案中移除市鎮排名 '
+help_ta_perms_townrankrename: '從 Towny 權限檔案中將城鎮排名改名'
 help_ta_perms_nationrankadd: '在Towny權限檔案中新增城邦排名 '
 help_ta_perms_nationrankremove: '從Towny權限檔案中移除城邦排名 '
+help_ta_perms_nationrankrename: '從 Towny 權限檔案中將國家排名改名'
 msg_err_that_resident_doesnt_belong_to_that_nation: '此居民不屬於這個城邦 '
 #Added in 0.115
 msg_comptype_founded: '搜尋日期'
@@ -1222,6 +1573,7 @@ msg_err_resident_cannot_be_jailed_because_they_are_enemied_there: '你不能囚�
 msg_resident_prompt: '在聊天欄中輸入玩家名稱，或輸入q退出 30秒內不輸入將自動取消 '
 msg_prompt_cancel: '請求已取消或超時 '
 status_home_element: ' &7[Home：%s]'
+status_about: "關於:"
 status_registered: '已註冊：'
 status_lastonline: '最近上線：'
 status_fractions: '%s/%s'
@@ -1254,6 +1606,10 @@ msg_setup_success: '配置修改成功 '
 #Added in 0.125
 #Player has recently died and respawned and is invulnerable.
 msg_err_player_cannot_be_harmed: '%s處在重生保護中，不受傷害 '
+#Player was invulnerable after respawning and has lost their invulnerability.
+msg_you_have_lost_your_respawn_protection: '您已失去重生保護。'
+#Message shown to a player when they are denied the ability to pick up items because they are under respawn protection.
+msg_err_cannot_pickup_respawn_protection: '在重生保護下無法撿起物品。'
 #Added in 0.126
 #Used in the nation screen:
 status_capital: '首都：'
@@ -1374,6 +1730,8 @@ tc_player_channel_sound_muted: '頻道已靜音'
 tc_player_channel_sound_unmuted: '頻道已解除靜音'
 #Added in 0.135
 msg_cant_toggle_pvp_outsider_in_plot: '有外來者在你的地段上，你不能切換PVP狀態！'
+#Added in 0.136
+msg_view_on_web: '&7點擊網頁查看。'
 #Added in 0.137
 #Shown globally when a town merges with another town.
 town1_has_merged_with_town2: '&6市鎮%st同意與%s合併 '
@@ -1398,6 +1756,8 @@ confirmation_unclaiming_costs: '註銷土地將花費%s，是否繼續？'
 #Added in 0.140
 #Message shown when a player tries to rename their town too quickly.
 msg_you_must_wait_x_seconds_before_renaming_your_town: '你必須再等待%s秒才能重新命名你的市鎮 '
+#Added in 1.141
+msg_newday_already_running: '新的一天任務當前已在運行。'
 #Added in 0.142
 #Message shown when a player is toggling neutrality too fast.
 msg_err_cannot_toggle_neutral_x_seconds_remaining: '你必須等待%s秒後才再次調整中立性 '
@@ -1425,8 +1785,62 @@ msg_warn_overriding_server_config: '由此將會複寫伺服器配置中的居�
 #Added in 0.148
 #Message shown when invalid outpost spawns are removed using the /ta commands.
 msg_removed_x_invalid_outpost_spawns: '已移除%d個無效的崗哨 '
+#Added in 0.149
+#Message shown when a player logs in and their town is bankrupt.
+msg_your_town_is_bankrupt: '您的城鎮破產了，請使用 /town 存款{amount}向您的銀行充值。'
+#Added in 0.150
+#Message shown when a player cannot do something because they have a town.
+msg_err_you_cannot_use_this_command_because_you_are_already_a_member_of_a_town: '您無法使用此命令，因為您已經是城鎮的成員。如果你想繼續，你必須使用 ''/t leave''。'
+#Message shown when a player tries to spawn while in an town they are outlawed in, when outlaw TPing is a disallowed zone.
+msg_a_town_you_are_outlawed_in: '一個你是亡命之徒的小鎮。'
+#Message shown when TownyRTP could not find any towns to teleport to.
+msg_err_could_not_find_any_towns_to_rtp: '找不到任何開放的公共城鎮，有地塊出售（你能負擔得起），可以 rtp 到。'
+#Message showing payment for RTP.
+msg_cost_spawn_rtp: '&b你被收取了%s傳送到一個隨機出售的城鎮地塊的費用。'
+#Message shown to a player when they use the town rtp command.
+msg_you_are_about_to_be_teleported_to_a_plot: '你即將被傳送到一個 %s 年出售的地塊，該地塊將允許你加入。使用 ''/plot claim'' 在您到達時領取您的地塊。'
+#Shown in TownyRTP when a player joins a town and is prompted to be TPd to some land to buy.
+townyrtp.the_town_has_plots_to_buy_would_you_like_to_tp: "%s鎮有你可以購買的地塊，你想被傳送到你現在可以購買的地塊嗎？"
+#Shown when you arrive at your destination after opting in to be teleported to a plot to buy.
+townyrtp.you_have_arrived: "你已被傳送到一個可以購買的地塊。如果您想領取該地塊，請使用 '/plot claim'。"
+#Used in the town's status screen to display plots
+status_plot_string: '情節'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'
+#Usage:
+msg_usage: '用法：%s'
+#Shown in teh bank history books when there are no pages to display
+msg_err_no_pages_to_display: '沒有頁面可顯示！'
+#Added in 0.151
+#Message shown to players trying to spawn to a non-allied/non-member nation when public spawning is not allowed at all.
+msg_err_nation_unaffiliated: '那個國家不隸屬於你。'
+#Message shown to players trying to spawn to a non-nation/non-member town when public spawning is not allowed at all.
+msg_err_town_unaffiliated: '那個城鎮不隸屬於你。'
+#Added in 0.152
+#Message shown when a player tries to add a jail cell location where one already exists.
+msg_err_this_location_already_has_a_jailcell: '這個位置已經有一個牢房。'
+#Title line of the /plot perm hud.
+msg_perm_hud_title: '列印燙髮'
+#Seen in /plot perm hud:
+msg_perm_hud_build: '建：'
+#Seen in /plot perm hud:
+msg_perm_hud_destroy: '摧毀：'
+#Seen in /plot perm hud:
+msg_perm_hud_switch: '當您重新啟動應用程式或切換帳戶時，Swiftgram 將開啟上次使用的對話盒。'
+#Seen in /plot perm hud:
+msg_perm_hud_item_use: '專案：'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_type: '類型: '
 #Seen in /plot perm hud:
 msg_perm_hud_pvp: 'PVP：'
+#Seen in /plot perm hud:
+msg_perm_hud_explosions: '爆炸：'
+#Seen in /plot perm hud:
+msg_perm_hud_firespread: '火蔓：'
+#Seen in /plot perm hud:
+msg_perm_hud_mobspawns: '生物生成：'
+#Seen in /plot perm hud:
+msg_perm_hud_key: '密鑰'
 #Seen in /plot perm hud:
 msg_perm_hud_friend: '朋友'
 #Seen in /plot perm hud:
@@ -1437,10 +1851,76 @@ msg_perm_hud_ally: '盟友'
 msg_perm_hud_resident: '居民'
 #Seen in /plot perm hud:
 msg_perm_hud_nation: '城邦'
+#Seen in /plot perm hud:
+msg_perm_hud_outsider: '局外人'
+#Seen in /towny map hud:
+msg_perm_hud_plot_name: '情節：'
+#Seen in /towny map hud:
+msg_perm_hud_plotgroup_name: '繪圖組：'
+#Seen in /towny map hud:
+msg_map_hud_district: '區： '
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: '待售：'
+#Seen in /plot perm hud:
+msg_perm_hud_no: '否'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: '是'
+#Added in 0.153
+#Message shown confirming /ta town NAME settownlevel # command.
+msg_town_level_overridden_with: '該鎮%s已將其鎮級別設置為 %s。'
+#Message shown when unsetting a manual town level.
+msg_town_level_unset: '城鎮%s已取消其手動設置的城鎮級別。目前的鎮級是 %s。'
+#Message show when a town is unable to have purchased townblocks, when /ta town NAME giveboughtblocks is used.
+msg_err_town_not_allowed_purchased_blocks: '城鎮%s無法根據配置規則購買城鎮街區。'
+#Message shown when unsetting all purchased townblocks from a town.
+msg_purchased_blocks_unset: '該鎮%s已將其購買的城鎮街區移除。'
+#Message shown when /ta town name giveboughtblocks # is used.
+msg_purchased_blocks_changed: '該鎮%s已經獲得了%s購買的城鎮街區，他們目前已經%s購買了城鎮街區。'
+#Added in 0.154
+msg_comptype_upkeep: '保養'
+#Added in 0.155
+#Message shown when toggling town upkeep admin setting
+msg_town_upkeep_setting_set_to: '該鎮%s已將其維護設置設置為 %s。'
+#Shown when a player tries to set a plot type but their town has reached the limit, first number is the limit and the string is the type name.
+msg_town_plot_type_limit_reached: '您的城鎮已達到%d %s地塊的限制。'
+#Added in 0.156
+msg_spawn_cost_free: '免費'
+#Message shown when someone tries to set a plot's type to one already set.
+msg_plot_already_of_type: '這個情節已經是 %s 類型了。'
+msg_town_board_reset: '&b鎮板重置。'
+msg_nation_board_reset: '&b國家版面重置。'
 msg_town_has_no_jailslots: '市鎮監獄已經滿員 '
+msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s已被送往 %s 號牢房 %s %s 小時，%s %s保釋金。'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%s已發送%s至號碼%s花了%s小時，由%s發送 '
+msg_you_have_been_jailed_your_bail_is_x: '你被關進了監獄，你的保釋金%s了。'
+msg_err_higher_than_max_allowed_bail_x: '您的定額保釋金高於最高保釋金，即 %s。'
+msg_err_higher_than_max_allowed_hours_x: '您設定的小時數高於最大值，即 %s。'
+msg_not_enough_money_in_bank_to_jail_x_fee_is_x: '鎮銀行不夠坐%s，費用%s。'
+msg_you_were_released_as_town_ran_out_of_slots: '你的獄卒讓你自由騰出空間。'
+msg_x_has_been_released_as_jail_slots_ran_out: '%s已被釋放，以便為另一名囚犯騰出空間。'
+msg_you_were_released_as_town_ran_out_of_upkeep_funds: '你已經被釋放了，因為你的獄卒再也負擔不起把你關押起來了。'
+msg_x_has_been_released_ran_out_of_upkeep_funds: '由於 Town 銀行缺乏資金，%s 已被釋放。'
+msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s從鎮銀行提款，以支付囚犯%s的維護費。'
+msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s從鎮銀行提款以支付 %s 的監禁費用。'
+msg_err_x_in_unjailable_world: '%s 在不得入監的世界。'
+#Message shown in the confirmation for /ta resetbanks {amount}.
+confirmation_are_you_sure_you_want_to_reset_all_banks: '您確定要將所有城鎮和國家銀行重置為 %s 嗎？'
+#Message shown when a nation cannot add a town because of the max-residents-limit.
+msg_err_cannot_add_nation_over_resident_limit: '&c您所在的國家/地區已達到每個國家/地區允許的最大居民人數 （%s，並且無法添加%s。'
+#Message shown to a town when they cannot join a nation because of the max-residents-limit.
+msg_err_cannot_join_nation_over_resident_limit: '&c你不能加入這個國家，因為它會超過每個國家居民的 %s 的限制。'
+#Message shown to a town because the nation has hit their max-towns-limit.
+msg_err_cannot_join_nation_over_town_limit: '&c你不能加入這個國家，它已經達到了每個國家允許的最大城鎮數：%s。'
+#Message shown confirming /tw set usedefaults
+confirmation_are_you_sure_you_want_to_reset_this_worlds_settings: '您確定要將這個世界的所有設置重置為配置中設置的設置嗎？'
+#Part of the /town plots output.
+msg_town_plots_title: '城鎮地塊'
 #Part of the /town plots output.
 msg_town_plots_town_size: '<dark_green>市鎮大小：<green>%s/%s'
+#Part of the /town plots output.
+msg_town_plots_town_bought: '<aqua>[買入： %s/%s]</aqua>'
+#Part of the /town plots output.
+msg_town_plots_town_bonus: '<aqua>[獎金： %s]</aqua>'
 #Part of the /town plots output.
 msg_town_plots_town_nationbonus: ' <aqua>[城邦加成：%s]'
 #Part of the /town plots output.
@@ -1453,10 +1933,103 @@ msg_town_plots_type_header_revenue: ' <gray>/ <dark_green>每日收入'
 msg_town_plots_type_line: '<dark_green>%s：<green>%s <gray>/ <aqua>%s <gray>/ <yellow>%s'
 #Part of the /town plots output.
 msg_town_plots_type_line_revenue: ' <gray>/ <dark_green>%s'
+#Message giving confirmation warning for trusttown
+confirmation_msg_trusttown_consequences: '您將要為整個城鎮授予完全地塊許可權。這意味著該鎮的市長將能夠通過添加居民來決定誰有權在您的城鎮中建造和破壞。如果此城鎮是開放的，則任何人都可以加入並獲得對您所在城鎮的完全訪問許可權。您確定要信任這個鎮上的所有居民（包括未來的居民）嗎？'
+#Message shown when a player uses a command that is blocked because their location has an active war.
+msg_command_war_blocked: '你不能運行那個命令，因為你的城鎮正在交戰。'
+#Message shown when a player tries to unclaim land but cannot because an outsider is there (and the config doesn't allow this.)
+msg_cant_unclaim_outsider_in_town: '這個鎮區有個外人，你不能取消這個鎮區！'
+#Message shown when a player is making a town too soon after deleting one.
+msg_err_cannot_create_new_town_x_seconds_remaining: '您無法創建新城鎮，冷卻時間剩餘 %s 秒。'
+#Message shown when a player is claiming land too soon after unclaiming it.
+msg_err_cannot_claim_townblock_x_seconds_remaining: '你不能領取這個城鎮封鎖：%s，冷卻時間還剩 %s 秒。'
+#Messages shown when an admin uses /ta set founder {townname} {foundername}
+msg_founder_set: '%s鎮的創始人已經準備好%s。'
+#Message shown when toggling town allowed to war admin setting
+msg_town_allowedtowar_setting_set_to: '該鎮%s已將允許戰爭的設定設置為 %s。'
+#Message shown to confirm that a player wants to unclaim all of their land, besides the homeblock, seen with /t unclaim all.
+confirmation_did_you_want_to_unclaim_all: '您確定要取消認領所有土地嗎？（您的 Homeblock 不會無人認領。'
+#Message shown after a player unclaims all their land.
+msg_you_have_unclaimed_everything_but_your_homeblock: "除了 homeblock 之外，您已取消認領所有內容。要取消認領 homeblock，您必須先使用 '/t set homeblock' 設置一個新的 homeblock。"
+msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>您確定要將國家所有權轉讓給 %s？此操作是不可逆的！</red>"
+msg_warn_town_already_capital: "<red>該 %s 鎮已經是國家的首都。</red>"
+msg_min_adjacent_blocks: '您需要至少有 %s 個相鄰的城鎮街區。只有 %s。'
+msg_min_adjacent_district_blocks: '你至少必須有 %s 個鄰近區塊。'
+#Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
+msg_plot_claim_consider_evict_instead: '，也許您正在尋找 /plot evict ？'
+#Shown to a player when Towny does not know of them.
+msg_you_are_unknown: "Towny 不認識你。"
+#Generic Resident/Town/Nation/Thing is not known to Towny.
+msg_townyobject_unknown: "Towny 不知道%s。"
+#Shown when a resident is unknown to Towny.
+msg_err_resident_unknown: "%s 不是被認可的居民。"
+#Shown when a town is unknown to Towny.
+msg_err_town_unknown: "%s不是一個被認可的小鎮。"
+#Shown when a nation is unknown to Towny.
+msg_err_nation_unknown: "%s不是一個被承認的國家。"
 #Shown when a resident doesn't belong to a town.
 msg_err_townyobject_x_has_no_town: "%s 不屬於任何一個市鎮 "
 #Shown when a town doesn't belong to a nation.
 msg_err_townyobject_x_has_no_nation: "%s 不屬於任何一個城邦 "
+#Shown to admins when they use /plot claimedat on a plot which has no registration date.
+msg_err_townblock_has_no_claimedat_data: "這個城鎮街區沒有關於何時被認領的數據。"
+#Shown when someone cannot afford something, to tell them what it costs.
+msg_err_you_need_x_to_pay: "您需要%s付款。"
+#Shown when someone tries to deposit/withdraw 0 amounts.
+msg_err_amount_must_be_greater_than_zero: "amount 必須大於零。"
+#Message shown when taking over claims is disabled on a server.
+msg_err_taking_over_claims_is_not_enabled: "此伺服器上未啟用接管聲明。"
+#Messages shown when taking over a claim is not allowed because the town is not overclaimed.
+msg_err_this_townblock_cannot_be_taken_over: "這個 TownBlock 不能被接管，它所屬的城鎮並沒有被過度宣告。"
+#Message shown when taking over a claim would also set the homeblock because the town has no claims.
+msg_err_you_cannot_make_this_your_homeblock: "您不能提出此索賠，因為它會使這個 TownBlock 成為您的主場，這是不允許的。"
+#Message shown when taking over a claim is stopped by another plugin.
+msg_err_another_plugin_cancelled_takeover: "另一個外掛程式阻止了你對這片土地的接管。"
+#Confirmation shown when taking over a claim.
+confirmation_you_are_about_to_take_over_a_claim: "您即將接管屬於 %s 的索賠，費用為： %s. 您要繼續嗎？"
+#Warning message shown when a town is beginning to claim close to their limit, and the takeoverclaim feature is active.
+msg_warning_you_are_almost_out_of_townblocks: "警告：您幾乎已經用完了可用於領取的城鎮街區。如果您失去了一名居民，您將面臨您的城鎮街區被其他城鎮竊取的風險。"
+#Warning message shown on login when a town is overclaimed and at risk of falling victim to the takeoverclaim feature.
+msg_warning_your_town_is_overclaimed: "警告：您的城鎮被過度徵用。雖然您聲稱擁有太多的城鎮街區，但其他城鎮有可能接管您城鎮的地塊，請考慮取消索取一些土地。"
+#Chunk Notification slug, shown when entering a plot that can be stolen.
+chunk_notification_takeover_available: "<red>[TakeoverClaim 可用]</red>"
+#Message shown when a takeover claim would cut a town into two sections.
+msg_err_you_cannot_over_claim_would_cut_into_two: "你不能接管這個地塊，因為這樣做會把小鎮分成兩個部分。您將不得不從不同的方向過度索賠。"
+#Message shown when an admin tries to toggle conquered off of a town that is not conquered.
+msg_err_that_town_is_not_conquered: "%s已經沒有被征服。"
+#Message shown when a town has its conquered status removed by an admin.
+msg_conquered_status_removed: "%s 的征服地位已被取消。"
+msg_setup_command_folia: "由於對話 API 無法正常工作，/ta install 命令當前在 Folia 上不起作用，請參閱下面的安裝指南。"
+msg_perm_gui_folia: "由於對話 API 不起作用，此按鈕目前在 Folia 上不起作用，請改用 /plot perm add <name> 命令。</name>"
+msg_folia_scoreboard: "Folia 目前不支援更改記分板。"
+#Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
+msg_err_cannot_unclaim_not_enough_adjacent_claims: "您無法取消聲明此 townblock，因為位於 %s，%s 的 townblock 將沒有足夠的相鄰聲明（%s 個是必需的）。"
+#Message shown when a nation collects taxes from its towns.
+msg_tax_collected_from_towns: "<aqua>你的國家從它的城鎮徵稅 %s 。</aqua>"
+#Message shown when a nation pays taxes to its towns.
+msg_tax_paid_to_towns: "<aqua>你的國家向它的城鎮繳納 %s 了稅款。</aqua>"
+#Message shown when a town collects taxes from its residents.
+msg_tax_collected_from_residents: "<aqua>您的城鎮向其居民徵稅 %s 。</aqua>"
+#Message shown when a town pays taxes to its residents.
+msg_tax_paid_to_residents: "<aqua>您的城鎮向其居民繳納 %s 了稅款。</aqua>"
+#Message shown when a town collects taxes from its plottaxes.
+msg_tax_collected_from_plots: "<aqua>您的城鎮從其地塊的稅收中收取 %s 稅款。</aqua>"
+#Message shown when a town pays taxes to its plottaxes.
+msg_tax_paid_to_residents_for_plots: "<aqua>您的城鎮通過地塊稅向土地擁有者繳納 %s 稅款。</aqua>"
+#Message shown when a nation collects taxes from its towns that are conquered.
+msg_tax_collected_from_conquered_towns: "<aqua>你的國家從其被征服的城鎮中收取 %s 額外的稅款。</aqua>"
+msg_your_town_was_exempt_from_the_nation_conquered_tax: "<aqua>您的城鎮免征國家征服稅。</aqua>"
+msg_nation_set_conquered_tax__amount_set: "%s 已將征服的稅額設置為 %s。"
+msg_err_cannot_set_nation_conquere_tax_amount_higher_than: "您不能將征服稅設置為高於 %s。"
+msg_err_your_town_is_not_old_enough_to_overclaim: "你的城鎮還不夠古老，不能誇大其詞，你必須再等一%s。"
+msg_err_your_cannot_overclaim_for_another: "您不能再次超額申請另一個%s。"
+#Generic error message for when a world isn't loaded
+msg_err_world_not_loaded: "<red>世界未載入。</red>"
+#Message shown when a mayor toggles a plots taxed status.
+msg_changed_plot_taxed: '&c此地塊的納稅狀態已設置為 %s。'
+msg_changed_plotgroup_taxed: '&c此繪圖組的納稅狀態已設置為 %s。'
+status_forsale: "&a（出售 ： %s）"
+msg_town_forsale: "%s 已定於 %s 出售。"
 msg_town_notforsale: "%s不再處於出售狀態"
 msg_town_sell_confirmation: "你的市鎮即將以%s的價格進行出售，是否繼續？"
 msg_town_buytown_already_mayor: "你已經是%s的市長了"
@@ -1479,4 +2052,123 @@ msg_err_time_cannot_be_in_the_future: "設定的時間不可以是未來的"
 town_say_format: "%s說：%s"
 msg_err_floodfill_not_in_wild: "你不能在已被認領的地區內使用填充選取"
 msg_err_floodfill_out_of_bounds: "認領選取區必須為封閉型狀"
+msg_err_floodfill_cannot_contain_towns: "洪水填充選擇不得包含其他城鎮。"
+#Message shown when a resident is an NPC and is not allowed to do something.
+msg_err_resident_is_npc: "您不能對 NPC 居民執行此操作。"
+#Message shown when a resident doesn't own any land and the /res plotlist command is used.
+msg_err_resident_doesnt_own_any_land: "居民個人不擁有任何土地。"
 msg_unnamed: "未命名"
+msg_err_nation_cannot_sanction_own_town: "你不能制裁一個屬於你國家一部分的城鎮。"
+msg_err_nation_town_isnt_sanctioned: "你的國家沒有制裁那個城鎮。"
+msg_err_nation_town_already_sanctioned: "你的國家已經制裁了那個城鎮。"
+msg_err_nation_town_sanctioned: "你的國家現在已經制裁了%s，他們將不被允許加入你的國家。"
+msg_err_nation_town_unsanctioned: "您的國家不再制裁%s。"
+msg_err_nation_has_no_sanctioned_towns: "該國沒有受制裁的城鎮。"
+title_nation_sanctioned_towns: '受制裁的城鎮'
+msg_err_cannot_add_sanctioned_town: "你的國家不能增加%s，你的國家已經制裁了他們。"
+msg_err_cannot_join_nation_sanctioned_town: "你的城鎮不能加入%s，這個國家已經制裁了你的城鎮。"
+msg_err_no_nation_cannot_do: "您無法執行此操作，因為無法確定任何國家。"
+msg_err_cannot_nation_spawn_your_town_is_sanctioned: "你的城鎮被%s制裁，你不能在那裡重生。"
+msg_err_cannot_claim_the_following_worldcoords_because_of_unwanted_biome: "以下座標不能被認領，因為它們包含太多不需要的生物群系：%s。"
+msg_err_cannot_claim_the_following_worldcoords_because_of_ocean_biome: "以下座標無法認領，因為它們包含太多的海洋生物群系：%s。"
+msg_err_cannot_begin_town_in_this_biome: "你不能在這個生物群系中建立城鎮。"
+msg_err_cannot_overclaim_this_town_because_they_arent_your_enemy: "你不能誇大這個城鎮，因為你的國家不認為他們的國家是敵人。"
+msg_err_unable_to_command_outside_of_town: '您不能在城鎮之外使用該命令。'
+msg_err_unable_to_use_bank_outside_bank_plot_no_homeblock: '您不能在 Bank 繪圖之外使用該命令。'
+msg_err_you_cannot_outlaw_your_mayor: "你不能取締你鎮的市長。"
+msg_err_you_cannot_outlaw_because_of_rank: "你不能因為他們擁有的城鎮等級就取締%s。"
+status_nation_sanctioned_towns: "受制裁的城鎮"
+msg_all_of_your_towns_sent_invites_have_been_cancelled: "您所在城鎮的所有已發送邀請都已被取消。"
+msg_err_name_validation_invalid_characters: "%s 包含Towny正則表達式設置中不允許的字元。"
+msg_err_name_validation_begins_with_eco_prefix: "%s以經濟功能中使用的字母開頭，則不能使用此名稱。"
+msg_err_name_validation_name_already_in_use: "%s 是已在使用的名稱。"
+msg_err_name_validation_title_too_long: "%s太長，無法用作頭銜或姓氏。"
+msg_err_name_validation_name_too_long: "%s 太長，無法用作名稱。"
+msg_err_name_validation_is_empty: "您不能提供空名稱。"
+msg_err_name_validation_is_not_permitted: "不允許%s。"
+msg_err_name_validation_is_all_underscores: "%s完全是下劃線。"
+msg_err_name_validation_too_many_capitals: "%s包含不允許%s大寫字母，使用少於 %s。"
+msg_err_name_validation_contains_harmful_characters: "%s 包含可能有害的符號。"
+msg_err_name_validation_contains_numbers: "%s 包含名稱中不允許的數位。"
+msg_err_name_validation_used_in_command_structure: "%s 在命令結構中使用，則不能使用此名稱。"
+msg_town_being_deleted_because_no_residents: "%s 正在被刪除，因為它失去了最後一位居民。"
+outlawed_in: "在"
+msg_warning_town_deposit_hint: "要將錢存入您的城鎮銀行，請使用 /town deposit [amount]。"
+msg_warning_nation_deposit_hint: "要將錢存入您的國家銀行，請使用 /nation deposit [amount]。"
+teleport_warmup_title_dont_move: "&6別動！"
+teleport_warmup_subtitle_seconds_remaining: "&c%s 距離傳送還剩 7 秒。"
+msg_ruined_town_plot_permissions_allowed_on_x_plots: "由於您的城鎮處於廢墟狀態，因此%s地塊許可權行已更改為不提供任何保護。"
+console_msg_ruined_town_plot_permissions_allowed_on_x_plots: "由於它們已損壞，%s 已更改%s 個繪圖許可權行，以提供不提供任何保護：%s。"
+msg_err_town_cede_you_cannot_cede_a_plot_to_your_own_town: "你不能把一塊地讓給自己的城鎮。"
+msg_err_town_cede_you_cannot_cede_your_homeblock: "你不能放棄你城鎮的家園。"
+msg_err_town_cede_the_mayor_is_not_online: "%s市長，%s不在線接受您的地塊。"
+msg_err_town_no_longer_owns_this_plot: "%s不再擁有此地塊。"
+msg_err_town_cede_town_cannot_cede_their_homeblock: "%s不能放棄他們的 if homeblock。"
+msg_town_cede_plot_confirmation_give_plot: "你確定要給%s這個情節嗎？"
+msg_town_cede_plot_confirmation_accept_plot: "%s想將 %s 的城鎮街區讓給貴鎮，您會接受嗎？"
+msg_town_cede_plot_accepted: "%s已經接受了你的地塊的讓出。"
+msg_town_cede_plot_denied: "%s 拒絕了您的提議。"
+msg_town_cede_plot_unable_to_accept: "%s 無法接受您的提議。"
+msg_town_cede_plot_you_have_accepted: "您已在 %s 獲得了對情節的控制權。"
+msg_err_cannot_claim_plot_join_date_too_low: "在您成為城鎮居民 %s 天之前，您不能領取此地塊。"
+msg_err_cannot_claim_plot_join_date_too_high: "您不能索取此地塊，它適用於成為城鎮成員不到 %s 天的居民。"
+msg_townblock_min_join_days_removed: "此 TownBlock 已刪除其 min-join-days 要求。"
+msg_townblock_max_join_days_removed: "此 TownBlock 已刪除其 max-join-days 要求。"
+msg_townblock_min_join_days_set_to: "此 TownBlock 的 min-join-days 要求已設置為 %s。只有加入時間超過該天數的玩家才能使用 /plot 領取。"
+msg_townblock_max_join_days_set_to: "此 TownBlock 的 max-join-days 要求已設置為 %s。只有加入時間少於該天數的玩家才能使用 /plot 領取。"
+msg_new_resident_spawn_to_town_prompt: "你想重生到你剛剛加入的城鎮嗎？"
+msg_recieved_refund_for_deleted_object: "您已收到已刪除城鎮或國家的銀行餘額，即 %s 的總和。"
+msg_err_you_already_own_this_plot: "您已經擁有此地塊。"
+msg_err_you_cannot_delete_this_nation: "你被阻止刪除這個國家。"
+status_district_name_and_size: 'Townblock 是 District： %s. District 共有 %s 個 Townblocks。'
+msg_err_district_name_required: '您必須指定地區名稱，即 /plot district add {name}'
+msg_err_rename_district_name_required: '您必須指定地區名稱，即 /plot district rename {name}'
+msg_district_renamed_from_x_to_y: '%s 區已重命名為 %s。'
+msg_err_plot_not_associated_with_a_district: '此地塊與選區無關。'
+msg_plot_was_removed_from_district_x: '地塊 <blue>（%s，%s） <dark_green>已從區 %s中刪除。</dark_green></blue>'
+msg_district_empty_deleted: '該區%s沒有城鎮街區，已被刪除。'
+msg_district_deleted: '學區%s已被刪除。'
+msg_err_this_plot_is_already_part_of_the_district_x: '這個城鎮街區已經是 %s 區的一部分。'
+msg_townblock_transferred_from_x_to_x_district: 'Townblock 從 %s 轉移到 %s 區。'
+msg_district_already_exists_did_you_want_to_transfer: '這個城鎮街區已經是 %s 區的一部分。您確定要將其轉移到 %s 區嗎。'
+msg_plot_was_put_into_district_x: '地塊 <blue>（%s，%s） <dark_green>被放入 區 %s。</dark_green></blue>'
+msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "您不能從 District %s 中刪除此 Townblock，因為 District 的一部分將與其他部分分離。"
+map_hover_district: '區：'
+msg_err_you_cannot_join_town_you_have_not_played_long_enough: "您在伺服器上停留的時間不夠長，您必須再等待 %s 才能加入城鎮。"
+msg_your_nation_has_pending_ally_invites: "您的國家/地區已收到邀請，成為一個或多個國家的盟友。使用 '/n ally received' 查看您的邀請。"
+msg_your_town_has_pending_nation_invites: "您的城鎮有加入一個或多個國家的邀請。使用 '/t invite received' 來查看您的邀請。"
+msg_you_have_pending_town_invites: "您有加入一個或多個城鎮的邀請。使用 '/invite list' 查看您的邀請，或使用 '/invite deny all' 拒絕所有這些邀請。"
+msg_admin_eco_convert_no_providers: "<red>無經濟供給者"
+msg_admin_eco_convert_no_provider_specified: "<red>未選擇經濟供給者"
+msg_admin_eco_convert_no_target_specified: "<red>未選擇目標經濟"
+msg_admin_eco_convert_target_not_found: "<red>經濟裝置名「%s」未找到，可行之裝置為： [%s]"
+msg_admin_eco_convert_already_modern: "<red>無法匯入現代；供給者已在現代模式"
+msg_admin_eco_convert_online_players_warning: "<red>警告：建議在伺服器無玩家時，再進行匯入。"
+msg_admin_eco_convert_x_accounts_found: "已發現 %s 帳號可以匯入。現在開始進行匯入程序。"
+msg_admin_eco_convert_conversion_progress: "帳號匯入中，已完成 %s……"
+msg_admin_eco_convert_success: "經濟匯入成功"
+msg_err_mode_does_not_exist: "%s 模式無法辨識。"
+msg_err_not_allowed_to_switch: "你不得在此轉換。"
+chunknotification_plot_claim_help_message: " 使用「/區塊收益」購買此區塊。"
+titlemsg_pay_your_bail_title: "付帳單： %s"
+titlemsg_pay_your_bail_subtitle: "/res 保釋金"
+msg_not_for_sale: "非賣品。"
+msg_err_you_cannot_add_trust_on_outlaw: "You cannot trust a player who is outlawed in your town.\n你不能信任被城鎮放逐的玩家。"
+msg_err_you_cannot_add_trust_on_enemy: "你不能信任屬於敵國的玩家。"
+msg_err_you_cannot_add_towntrust_on_outlaw: "你不能信任收留被你的城鎮放逐的玩家的城鎮。"
+msg_err_you_cannot_add_towntrust_on_enemy: "你不能信任屬於敵國的城鎮。"
+status_world_jailing: "入監 "
+msg_version_build_info: "<dark_green>建築資訊: <green>%s</green>分部 <green>%s<green>。"
+msg_version_build_info_failed: "<red>此版本無法取得該建築資訊。"
+time-future: "在未來"
+time-just-now: "剛剛"
+time-a-minute-ago: "1分鐘前"
+time-x-minutes-ago: "%d分鐘前"
+time-an-hour-ago: "1小時前"
+time-x-hours-ago: "%d小時前"
+time-yesterday: "昨天"
+time-x-days-ago: "%d天前"
+time-a-year-ago: "一年前"
+time-x-years-ago: "%d年前"
+#Shown instead of status_lastonline if the player is currently online
+status_onlinesince: "上線時間："

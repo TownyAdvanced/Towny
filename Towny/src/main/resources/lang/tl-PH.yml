@@ -49,7 +49,6 @@ mode_4: 'Orihinal na chat sa channel ng iyong bayan'
 mode_5: 'Orihinal na chat sa channel ng iyong nasyon'
 mode_6: 'Pwede mo mai-lagay ang %s sa hangganan nang iyong kalaban para makipag-gera.'
 plot_perms: 'Gamitin ang %s kesa sa %s para sa pahintulot sa iyong plot.'
-plot_perms_1: 'Plot nang residente ay hindi makakagamit nang pahintulot sa tagalabas.'
 res_list: 'Mga Residente'
 res_sing: 'Residente'
 mayor_sing: 'Alkalde'
@@ -83,9 +82,6 @@ msg_buy: '&bBinili %d %s para sa %s.'
 msg_buy_resident_plot: '&b%s ay binili ang plot ni%s para sa %s!'
 msg_couldnt_pay_taxes: 'Si &b%s ay hindi nakapag-bayad nang buwis at ito ay natanggal sa %s.'
 msg_couldnt_pay_plot_taxes: 'Si &b%s ay hindi makapag-bayad nang buwis at nawala nito ang pag-mamay ari sa lupa.'
-msg_payed_town_tax: '&bBinayaran ang buwis ng '
-msg_payed_plot_cost: '&bNagbayad %s sa %s mga balakas sa %s'
-msg_payed_resident_tax: '&bNagbayad nang residenteng buwis ng '
 msg_bankrupt_town: ' hindi ma-aaring makaya ang pananatili nang bayan.'
 msg_bankrupt_nation: ' hindi ma-aaring makaya ang pananatili nang nasyon.'
 msg_nation_not_peaceful: '&bAng nasyon ay hindi makaya ang pananatili nang mapayapang estado.'
@@ -303,7 +299,6 @@ msg_err_not_percentage: '&cMga bahagdaan dapat ay nasa-baba nang 100.'
 msg_err_no_economy: '&cEkonomiya ay hindi pa nabubuksan.'
 msg_err_not_block_type: '&cIyon ay hindi balido na lote nang lupa!'
 msg_not_allowed_join: '&c%s ay hindi pinahihintulutan na sumali sa bayan.'
-msg_offline_no_join: '&c%say offline pero pag-gamit nang mga permiso kaya hindi pwede sumali sa bayan.'
 msg_err_cannot_perform_action: '&cHindi ma-aaaring ganapin ang aksyon na ito sa %s.'
 msg_npc_flag: '&bAng flag ng Npc ngayon ay %s para sa %s.'
 msg_warning_delete: '&4*** BABALA, %s AY MABUBURA SA BAGONG ARAW DAHIL SA KAKULANGAN NA PERA **'
@@ -316,7 +311,6 @@ msg_err_not_enough_residents_join_nation: '&cAng bayan na %s ay walang sapat na 
 msg_not_enough_residents_no_longer_capital: '&bAng nasyon na lumang kapitolyo ay wala nang kakayahan at sapat na mga residente para maging kapital nang nasyon. Ang bagong kapital na nasyon ay %s.'
 msg_town_not_enough_residents_left_nation: '&bAng bayan na %s ay wala nang sapat na mga residente para maging myembro nang isang nasyon, at ito ay natanggal na sa nasyon.'
 msg_nation_disbanded_town_not_enough_residents: '&bAng bayan na %s ay wala nang sapat na mga residente upang patakbuhin ang nasyon at ito ay pinilit na buwagin.'
-msg_not_enough_residents_refunded: '&bIkaw ay na-refund nang $%s sa iyong nasyon dahil sa pagka-buwag nito dahil sa walang sapat na mga residente.'
 msg_not_enough_residents_capital: '&bAng bayan na %s ay walang sapat na mga residente para maging kapitolyo nang nasyon.'
 list_page: '&bPahina %s ng %s'
 list_err_not_enough_pages: '&cMga %s pahinang magagamit'
@@ -513,10 +507,13 @@ msg_err_over_outposts_limit: 'Hindi ka maaaring mag-teleport sa iyong outpost, l
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Mga Outlaws:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Mga Outlaws:'
 online: '&a(Online)'
-registered_last_online: '&2Nakarehistro: &a%s &8| &2Huling Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Perm:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Nakarehistro: &a%s &8| &2Huling Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Perm:'
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'

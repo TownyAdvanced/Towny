@@ -2,17 +2,16 @@ package com.palmergames.bukkit.towny.object;
 
 import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.command.BaseCommand;
 import com.palmergames.bukkit.towny.confirmations.Confirmation;
 import com.palmergames.bukkit.towny.event.DeleteTownEvent;
 import com.palmergames.bukkit.towny.event.TownAddResidentEvent;
 import com.palmergames.bukkit.towny.event.TownRemoveResidentEvent;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
-import com.palmergames.bukkit.towny.event.resident.ResidentToggleModeEvent;
 import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
@@ -27,9 +26,9 @@ import com.palmergames.bukkit.towny.object.gui.SelectionGUI.SelectionType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
-import com.palmergames.bukkit.towny.tasks.SetDefaultModes;
 import com.palmergames.bukkit.towny.tasks.TeleportWarmupTimerTask;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.MetaDataUtil;
@@ -40,28 +39,24 @@ import com.palmergames.util.StringMgmt;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
 	private List<Resident> friends = new ArrayList<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
-	private UUID uuid = null;
+	private final UUID uuid;
 	private Town town = null;
 	private long lastOnline;
 	private long registered;
@@ -70,7 +65,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private String title = "";
 	private String surname = "";
 	private String about = TownySettings.getDefaultResidentAbout();
-	private final List<String> modes = new ArrayList<>();
 	private transient Confirmation confirmation;
 	private final transient List<Invite> receivedInvites = new ArrayList<>();
 	private transient EconomyAccount account;
@@ -93,9 +87,16 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	private String districtName = null;
 	protected CachedTaxOwing cachedTaxOwing = null;
 
-	public Resident(String name) {
+	@ApiStatus.Internal
+	public Resident(String name, UUID uuid) {
 		super(name);
+		this.uuid = uuid;
 		permissions.loadDefault(this);
+	}
+
+	@Deprecated(since = "0.102.0.4")
+	public Resident(String name) {
+		this(name, UUID.randomUUID());
 	}
 
 	@Override
@@ -104,12 +105,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			return true;
 		if (!(other instanceof Resident otherResident))
 			return false;
-		return this.getName().equals(otherResident.getName()); // TODO: Change this to UUID when the UUID database is in use.
+		return this.getUUID().equals(otherResident.getUUID());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.uuid.hashCode();
 	}
 
 	public void setLastOnline(long lastOnline) {
@@ -137,9 +138,12 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return uuid;		
 	}
 	
+	/**
+	 * @deprecated Changing UUIDs of Resident objects is no longer supported.
+	 */
+	@Deprecated(since = "0.102.0.4")
 	@Override
 	public void setUUID(UUID uuid) {
-		this.uuid = uuid;
 	}
 	
 	public boolean hasUUID() {
@@ -349,7 +353,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		} catch (EmptyTownException e) {
 			if (!townDeleted) {
 				TownyMessaging.sendMsg(Translatable.of("msg_town_being_deleted_because_no_residents", town.getName()));
-				TownyUniverse.getInstance().getDataSource().removeTown(town, DeleteTownEvent.Cause.NO_RESIDENTS, null, false);
+				TownyUniverse.getInstance().getDataSource().removeTown(town, DeleteTownEvent.Cause.NO_RESIDENTS, null, TownySettings.getTownRuinsEnabled() && TownySettings.areEmptyTownsBecomingRuins());
 			}
 		}
 
@@ -432,23 +436,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return out;
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, clearing teleport requests is no longer needed.
-	 * Use {@link com.palmergames.bukkit.towny.TownyAPI#abortTeleportRequest(Resident)} to abort an active teleport request.
-	 */
-	@Deprecated
-	public void clearTeleportRequest() {
-
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportRequestTime() {
-
-	}
-
 	@ApiStatus.Obsolete
 	public long getTeleportRequestTime() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
@@ -456,27 +443,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return request == null ? -1 : request.requestTime();
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportDestination(Location spawnLoc) {
-
-	}
-
 	@ApiStatus.Obsolete
 	public Location getTeleportDestination() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
 
 		return request == null ? null : request.destinationLocation();
-	}
-
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportCooldown(int cooldown) {
-
 	}
 
 	@ApiStatus.Obsolete
@@ -493,29 +464,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		return TeleportWarmupTimerTask.hasTeleportRequest(this);
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportCost(double cost) {
-
-	}
-
 	@ApiStatus.Obsolete
 	public double getTeleportCost() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
 
 		return request == null ? 0 : request.teleportCost();
 	}
-	
-	/**
-	 * @deprecated Deprecated as of 0.99.0.10, teleport request related values are no longer modifiable once the teleport has been requested.
-	 */
-	@Deprecated
-	public void setTeleportAccount(Account payee) {
 
-	}
-	
 	@ApiStatus.Obsolete
 	public Account getTeleportAccount() {
 		TeleportRequest request = TeleportWarmupTimerTask.getTeleportRequest(this);
@@ -566,69 +521,32 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 	
 	public List<String> getModes() {
-		return Collections.unmodifiableList(modes);
+		return ResidentModeHandler.getResidentModesNames(this);
 	}
 	
 	public boolean hasMode(String mode) {
-		return this.modes.contains(mode.toLowerCase(Locale.ROOT));
+		return getModes().contains(mode.toLowerCase(Locale.ROOT));
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean, boolean)} instead.
+	 * 
+	 * @param newModes
+	 * @param notify
+	 */
+	@Deprecated
 	public void toggleMode(String[] newModes, boolean notify) {
-
-		/*
-		 * Toggle any modes passed to us on/off.
-		 */
-		for (int i = 0; i < newModes.length; i++) {
-			String mode = newModes[i].toLowerCase(Locale.ROOT);
-			
-			Optional<Boolean> choice = Optional.empty();
-			if (i + 1 < newModes.length) {
-				String bool = newModes[i + 1].toLowerCase(Locale.ROOT);
-				if (BaseCommand.setOnOffCompletes.contains(bool)) {
-					choice = Optional.of(bool.equalsIgnoreCase("on"));
-					i++;
-				}
-			}
-			
-			boolean modeEnabled = this.modes.contains(mode);
-			
-			ResidentToggleModeEvent event = new ResidentToggleModeEvent(this, mode);
-			if (BukkitTools.isEventCancelled(event)) {
-				TownyMessaging.sendErrorMsg(this, event.getCancelMessage());				
-				continue;
-			}
-			
-			if (choice.orElse(!modeEnabled)) {
-				if (!modeEnabled) {
-					this.modes.add(mode);
-				}
-			} else {
-				this.modes.remove(mode);
-			}
-		}
-		
-		/*
-		 *  If we have toggled all modes off we need to set their defaults.
-		 */
-		if (this.modes.isEmpty()) {
-
-			clearModes();
-			return;
-		}
-
-		if (notify)
-			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
+		ResidentModeHandler.toggleModes(this, newModes, notify, false);
 	}
-	
+
+	/**
+	 * @deprecated since 0.100.4.6. Use {@link ResidentModeHandler#toggleModes(Resident, String[], boolean, boolean)} instead.
+	 * @param modes
+	 * @param notify
+	 */
+	@Deprecated
 	public void setModes(String[] modes, boolean notify) {
-
-		this.modes.clear();
-		this.toggleMode(modes, false);
-
-		if (notify)
-			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
-
-
+		ResidentModeHandler.toggleModes(this, modes, notify, false);
 	}
 
 	public void clearModes() {
@@ -636,12 +554,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public void clearModes(boolean notify) {
-
-		this.modes.clear();
-		if (notify)
-			TownyMessaging.sendMsg(this, (Translatable.of("msg_modes_set")));
-
-		Towny.getPlugin().getScheduler().runAsyncLater(new SetDefaultModes(this.getName(), notify), 1);
+		ResidentModeHandler.clearModes(this, notify);
 	}
 
 	/**
@@ -651,14 +564,13 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	 * @param notify - If notifications should be sent
 	 */
 	public void resetModes(String[] modes, boolean notify) {
-
-		if (modes.length > 0)
-			this.toggleMode(modes, false);
-
-		if (notify)
-			TownyMessaging.sendMsg(this, Translatable.of("msg_modes_set").append(StringMgmt.join(getModes(), ",")));
+		ResidentModeHandler.resetModes(this, notify);
 	}
 	
+	/**
+	 * Get the {@link Player} of the Resident when the Resident is Online.
+	 * @return the resident's Player when the player is online.
+	 */
 	@Nullable
 	public Player getPlayer() {
 		return BukkitTools.getPlayerExact(getName());
@@ -694,9 +606,27 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public List<String> getTownRanks() {
+		if (TownyPerms.ranksWithTownLevelRequirementPresent() && !townRanks.isEmpty() && hasTown()) {
+			ArrayList<String> out = new ArrayList<>();
+			int townLevel = getTownOrNull().getLevelNumber();
+			for (String rank : new ArrayList<>(townRanks)) {
+				int requiredTownLevelForRank = TownyPerms.getRankTownLevelReq(rank);
+				if (requiredTownLevelForRank == 0 || townLevel >= requiredTownLevelForRank)
+					out.add(rank);
+			}
+			// Return out modified list of ranks, so that the player will not lose ranks
+			// they've been assigned when their town goes down in a level temporarily. This
+			// ensures they save and load their proper list of ranks.
+			return Collections.unmodifiableList(out);
+		}
 		return Collections.unmodifiableList(townRanks);
 	}
-	
+
+	@ApiStatus.Internal
+	public List<String> getTownRanksForSaving() {
+		return Collections.unmodifiableList(townRanks);
+	}
+
 	public boolean removeTownRank(String rank) {
 
 		if (hasTownRank(rank)) {
@@ -747,6 +677,24 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	}
 
 	public List<String> getNationRanks() {
+		if (TownyPerms.ranksWithNationLevelRequirementPresent() && !nationRanks.isEmpty() && hasNation()) {
+			ArrayList<String> out = new ArrayList<>();
+			int nationLevel = getNationOrNull().getLevelNumber();
+			for (String rank : new ArrayList<>(nationRanks)) {
+				int requiredNationLevelForRank = TownyPerms.getRankTownLevelReq(rank);
+				if (requiredNationLevelForRank == 0 || nationLevel >= requiredNationLevelForRank)
+					out.add(rank);
+			}
+			// Return out modified list of ranks, so that the player will not lose ranks
+			// they've been assigned when their nation goes down in a level temporarily. This
+			// ensures they save and load their proper list of ranks.
+			return Collections.unmodifiableList(out);
+		}
+		return Collections.unmodifiableList(nationRanks);
+	}
+
+	@ApiStatus.Internal
+	public List<String> getNationRanksForSaving() {
 		return Collections.unmodifiableList(nationRanks);
 	}
 
@@ -808,18 +756,19 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public Account getAccount() {
 		if (account == null) {
-
 			String accountName = StringMgmt.trimMaxLength(getName(), 32);
-			World world;
 
-			Player player = getPlayer();
-			if (player != null) {
-				world = player.getWorld();
-			} else {
-				world = BukkitTools.getWorlds().get(0);
-			}
+			UUID uuid = this.uuid;
+			if (this.isNPC())
+				uuid = TownyEconomyHandler.modifyNPCUUID(uuid);
 
-			account = new EconomyAccount(this, accountName, world);
+			account = new EconomyAccount(this, accountName, uuid, () -> {
+				final Player player = getPlayer();
+				if (player != null)
+					return TownyAPI.getInstance().getTownyWorld(player.getWorld());
+				else
+					return TownyUniverse.getInstance().getTownyWorlds().get(0);
+			});
 		}
 		
 		return account;
@@ -1043,7 +992,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public Audience audience() {
 		Player player = getPlayer();
-		return player == null ? Audience.empty() : Towny.getAdventure().player(player);
+		return player == null ? Audience.empty() : player;
 	}
 	
 	public boolean isSeeingBorderTitles() {
@@ -1163,5 +1112,18 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			time = System.currentTimeMillis();
 			TownyEconomyHandler.economyExecutor().execute(() -> setOwing(getTaxOwing(false)));
 		}
+	}
+
+	public void removeTrustInTown(Town town) {
+		if (town.hasTrustedResident(this)) {
+			town.removeTrustedResident(this);
+			town.save();
+		}
+		town.getTownBlocks().stream()
+			.filter(tb -> tb.hasTrustedResident(this))
+			.forEach(tb -> {
+				tb.removeTrustedResident(this);
+				tb.save();
+			});
 	}
 }

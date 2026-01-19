@@ -14,6 +14,9 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
+import io.papermc.paper.scoreboard.numbers.NumberFormat;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -38,8 +41,6 @@ public class PermHUD {
 	/* Scoreboards use Teams here is our team names.*/
 	private static final String HUD_OBJECTIVE = "PERM_HUD_OBJ";
 	private static final String TEAM_PERMS_TITLE = "permsTitle";
-	private static final String TEAM_DISTRICT_NAME = "districtName";
-	private static final String TEAM_PLOT_NAME = "plot_name";
 	private static final String TEAM_PLOT_COST = "plot_cost";
 	private static final String TEAM_BUILD = "build";
 	private static final String TEAM_DESTROY = "destroy";
@@ -60,12 +61,12 @@ public class PermHUD {
 	}
 
 	public static String permHudTestKey() {
-		return TEAM_PLOT_NAME;
+		return TEAM_BUILD;
 	}
 
 	public static void updatePerms(Player p, WorldCoord worldCoord) {
 		Translator translator = Translator.locale(p);
-		String districtName, plotName, build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn, title;
+		String build, destroy, switching, item, type, pvp, explosions, firespread, mobspawn;
 		Scoreboard board = p.getScoreboard();
 		// Due to tick delay (probably not confirmed), a HUD can actually be removed from the player.
 		// Causing board to return null, and since we don't create a new board, a NullPointerException occurs.
@@ -91,19 +92,10 @@ public class PermHUD {
 		boolean plotGroup = townBlock.hasPlotObjectGroup();
 
 		// Displays the name of the owner, and if the owner is a resident the town name as well.
-		title = GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""); 
+		Component title = Component.text(owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : ""), NamedTextColor.GOLD); 
 
-		// District name
-		districtName = townBlock.hasDistrict() ? townBlock.getDistrict().getFormattedName() : "";
-		
 		// Plot Type
 		type = townBlock.getType().equals(TownBlockType.RESIDENTIAL) ? " " : townBlock.getType().getName();
-
-		// Plot or PlotGroup Name.
-		plotName = plotGroup && !townBlock.getPlotObjectGroup().getName().isEmpty()
-				? townBlock.getPlotObjectGroup().getName()
-				: !townBlock.getName().isEmpty() ? townBlock.getName() : "";
-		plotName = plotName.isEmpty() ? " " : HUDManager.check(DARK_GREEN + translator.of(plotGroup ? "msg_perm_hud_plotgroup_name" : "msg_perm_hud_plot_name") + WHITE + plotName);
 
 		// Plot Price or "No"
 		String forSale = getPlotPrice(translator, townBlock, plotGroup);
@@ -123,9 +115,7 @@ public class PermHUD {
 
 
 		// Set the values to our Scoreboard's teams.
-		board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(title));
-		board.getTeam(TEAM_DISTRICT_NAME).setSuffix(districtName);
-		board.getTeam(TEAM_PLOT_NAME).setSuffix(plotName);
+		board.getObjective(HUD_OBJECTIVE).displayName(title);
 		board.getTeam(TEAM_PLOT_TYPE).setSuffix(type);
 		board.getTeam(TEAM_PLOT_COST).setSuffix(forSale);
 
@@ -169,8 +159,6 @@ public class PermHUD {
 		Scoreboard board = p.getScoreboard();
 		try {
 			board.getObjective(HUD_OBJECTIVE).setDisplayName(HUDManager.check(getFormattedWildernessName(p.getWorld())));
-			board.getTeam(TEAM_DISTRICT_NAME).setSuffix(" ");
-			board.getTeam(TEAM_PLOT_NAME).setSuffix(" ");
 			board.getTeam(TEAM_PLOT_TYPE).setSuffix(" ");
 			board.getTeam(TEAM_PLOT_COST).setSuffix(" ");
 
@@ -211,9 +199,6 @@ public class PermHUD {
 	}
 
 	private static void initializeScoreboard(Translator translator, Scoreboard board) {
-		String PERM_HUD_TITLE = GOLD + "";
-		String districtName_entry = "";
-		String plotName_entry = "";
 		String keyPlotType_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_type");
 		String forSale_entry = DARK_GREEN + translator.of("msg_perm_hud_plot_for_sale") + GRAY;
 
@@ -236,12 +221,14 @@ public class PermHUD {
 		String keyAlly_entry = DARK_GREEN + "" + BOLD + "a" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_ally") +
 				DARK_GREEN + " " + BOLD + "o" + WHITE + " - " + GRAY + translator.of("msg_perm_hud_outsider");
 
-		Objective obj = BukkitTools.objective(board, HUD_OBJECTIVE, PERM_HUD_TITLE);
+		Objective obj = BukkitTools.objective(board, HUD_OBJECTIVE, "");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.setDisplayName(PERM_HUD_TITLE);
+
+		try {
+			obj.numberFormat(NumberFormat.blank());
+		} catch (NoSuchMethodError | NoClassDefFoundError ignored) {}
+
 		//register teams
-		Team districtName = board.registerNewTeam(TEAM_DISTRICT_NAME);
-		Team plotName = board.registerNewTeam(TEAM_PLOT_NAME);
 		Team keyPlotType = board.registerNewTeam(TEAM_PLOT_TYPE);
 		Team forSaleTitle = board.registerNewTeam(TEAM_PLOT_COST);
 
@@ -262,8 +249,6 @@ public class PermHUD {
 		Team keyAlly = board.registerNewTeam(TEAM_ALLY);
 
 		//add each team as an entry (this sets the prefix to each line of the HUD.)
-		districtName.addEntry(districtName_entry);
-		plotName.addEntry(plotName_entry);
 		keyPlotType.addEntry(keyPlotType_entry);
 		forSaleTitle.addEntry(forSale_entry);
 
@@ -283,24 +268,23 @@ public class PermHUD {
 		keyFriend.addEntry(keyNation_entry);
 		keyAlly.addEntry(keyAlly_entry);
 
+		int score = HUDManager.MAX_SCOREBOARD_HEIGHT;
 		//set scores for positioning
-		obj.getScore(districtName_entry).setScore(17);
-		obj.getScore(plotName_entry).setScore(16);
-		obj.getScore(keyPlotType_entry).setScore(15);
-		obj.getScore(forSale_entry).setScore(14);
-		obj.getScore(permsTitle_entry).setScore(13);
-		obj.getScore(build_entry).setScore(12);
-		obj.getScore(destroy_entry).setScore(11);
-		obj.getScore(switching_entry).setScore(10);
-		obj.getScore(item_entry).setScore(9);
-		obj.getScore(pvp_entry).setScore(8);
-		obj.getScore(explosions_entry).setScore(7);
-		obj.getScore(firespread_entry).setScore(6);
-		obj.getScore(mobspawn_entry).setScore(5);
-		obj.getScore(keyTitle_entry).setScore(4);
-		obj.getScore(keyResident_entry).setScore(3);
-		obj.getScore(keyNation_entry).setScore(2);
-		obj.getScore(keyAlly_entry).setScore(1);
+		obj.getScore(keyPlotType_entry).setScore(score--);
+		obj.getScore(forSale_entry).setScore(score--);
+		obj.getScore(permsTitle_entry).setScore(score--);
+		obj.getScore(build_entry).setScore(score--);
+		obj.getScore(destroy_entry).setScore(score--);
+		obj.getScore(switching_entry).setScore(score--);
+		obj.getScore(item_entry).setScore(score--);
+		obj.getScore(pvp_entry).setScore(score--);
+		obj.getScore(explosions_entry).setScore(score--);
+		obj.getScore(firespread_entry).setScore(score--);
+		obj.getScore(mobspawn_entry).setScore(score--);
+		obj.getScore(keyTitle_entry).setScore(score--);
+		obj.getScore(keyResident_entry).setScore(score--);
+		obj.getScore(keyNation_entry).setScore(score--);
+		obj.getScore(keyAlly_entry).setScore(score--);
 	}
 
 	private static String prettyMoney(double price) {

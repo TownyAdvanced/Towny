@@ -432,7 +432,10 @@ public class TownyBlockListener implements Listener {
 
 		switch (event.getReason()) {
 			case BOTTLE_EMPTY, BUCKET_EMPTY -> event.setCancelled(!TownyActionEventExecutor.canBuild(player, event.getBlock()));
-			case BUCKET_FILL, BOTTLE_FILL, ARMOR_WASH, SHULKER_WASH, BANNER_WASH -> event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock()));
+			case BUCKET_FILL, BOTTLE_FILL, ARMOR_WASH, SHULKER_WASH, BANNER_WASH ->
+				// Technically the event.getBlock() is WATER_CAULDRON but this doesn't exist as an item that can be
+				// loaded for a townblock type's allowedBlocks, which will replace it with a normal CAULDRON.
+				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getBlock().getLocation(), Material.CAULDRON));
 			case EXTINGUISH -> {
 				if (!TownyActionEventExecutor.canDestroy(player, event.getBlock())) {
 					event.setCancelled(true);

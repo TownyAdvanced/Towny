@@ -1,4 +1,4 @@
-name: Compile
+name: Compile & Test
 on:
     push:
         branches-ignore: [l10n_master]
@@ -7,7 +7,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                java: ['17']
+                java: ['21']
         steps:
             - uses: actions/checkout@v3
             - name: Set up Java
@@ -18,9 +18,9 @@ jobs:
                   java-package: jdk
                   cache: 'maven'
             - name: Compile with Maven
-              run: mvn package
+              run: mvn package -P test
             - name: Upload Artifact
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: Towny
                   path: Towny/target/towny-*.jar

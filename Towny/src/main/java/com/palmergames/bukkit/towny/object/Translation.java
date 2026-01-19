@@ -228,7 +228,7 @@ public final class Translation {
 	}
 	
 	public static Locale getLocale(CommandSender sender) {
-		return sender instanceof Player ? Translation.toLocale(((Player) sender).getLocale(), false) : defaultLocale;
+		return sender instanceof Player player ? player.locale() : defaultLocale;
 	}
 	
 	// Named differently than getLocale on purpose
@@ -244,8 +244,9 @@ public final class Translation {
 		if (addedTranslations != null && !addedTranslations.isEmpty()) {
 			for (String language : addedTranslations.keySet())
 				if (addedTranslations.get(language) != null && !addedTranslations.get(language).isEmpty()) {
-					language = language.replaceAll("-", "_");
 					Map<String, String> newTranslations = addedTranslations.get(language);
+
+					language = language.replaceAll("-", "_");
 					translations.computeIfAbsent(language, k -> new HashMap<>());
 					for (Map.Entry<String, String> entry : newTranslations.entrySet())
 						translations.get(language).put(entry.getKey().toLowerCase(Locale.ROOT), entry.getValue());

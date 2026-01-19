@@ -13,7 +13,7 @@ help_0: 'Allgemeine Towny Hilfe'
 help_1: 'Verwende folgende Befehle, um mehr über Towny zu erfahren.'
 help_2: 'Stadtchat'
 help_3: 'Nationschat'
-help_4: 'Resident-Befehls-Liste.'
+help_4: 'Bewohner-Befehls-Liste.'
 help_5: 'Stadt-Befehls-Liste.'
 help_6: 'Stadt-Befehls-Liste.'
 help_7: 'Plot-Befehls-Liste.'
@@ -83,6 +83,22 @@ town_set_help_10: "Legen Sie den Titel oder den Nachnamen Ihres Bewohners fest."
 town_set_help_11: "Legen Sie den maximalen Geldbetrag fest, den eine prozentuale Steuer von einem Residenten abnehmen kann."
 town_jail_help_0: "Liste der Gefängnisse der Stadt."
 town_jail_help_1: "Inhaftiere einen Bewohner im Hauptgefängnis."
+town_jail_help_2: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, ins Primärgefängnis."
+town_jail_help_3: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis."
+town_jail_help_4: "Inhaftiere einen Bewohner, für eine bestimmte Zeit, in einem bestimmten Gefängnis und Zelle."
+town_jail_help_5: "Inhaftiere einen Bewohner im primären Gefängnis, für die spezifizierten Stunden, mit der angegebenen Kaution."
+town_jail_help_6: "Inhaftiere einen Bewohner im angegebenen Gefängnis, für die spezifizierten Stunden, mit der angegebenen Kaution."
+town_jail_help_7: "Inhaftiere einen Bewohner im primären Gefängnis, in der spezifizierten Zelle, für die spezifizierten Stunden, mit der angegebenen Kaution."
+town_jail_help_8: "Entlasse einen Bewohner aus dem Gefängnis."
+town_purge_help: "Wirft Bewohner, welche sich für die angegebene Zeit nicht eingeloggt haben aus der Stadt."
+town_trust_help_0: "Fügt einen Bewohner als vertrauenswürdig in der Stadt hinzu."
+town_trust_help_1: "Entfernt einen Bewohner als vertrauenswürdig in der Stadt."
+town_trust_help_2: "Listet die vertrauten Bewohner der Stadt auf."
+town_towntrust_help_0: "Fügt eine Stadt als vertrauenswürdig in der Stadt hinzu."
+town_towntrust_help_1: "Entfernt eine Stadt als vertrauenswürdig in der Stadt."
+town_towntrust_help_2: "Listet die vertrauten Städte einer Stadt."
+town_buy_help: "Kauft Bonusblöcke, um die maximalen Claims der Stadt zu erhöhen."
+town_cede_help: "Bietet das Grundstück, auf dem du stehst, an um von der angegebenen Stadt übernommen zu werden."
 mayor_help_3: 'Anspruchsbereich grenzt nicht an die Stadt.'
 mayor_help_4: 'Beanspruche Land um dich herum in einem Radius von X'
 mayor_help_5: 'Beanspruche Land mit dem maximalen Radius'
@@ -98,9 +114,47 @@ nation_help_6: 'Gründe eine neue Nation.'
 nation_help_7: 'List the nation leader commands'
 nation_help_8: 'Gründe eine neue Nation.'
 nation_help_9: 'Listet alle Bürger der Nation auf, die Online sind.'
+nation_help_11: "Listet die Städte in der Nation auf."
+nation_help_12: "Listet die verbündeten Nationen der Nation auf."
+nation_help_13: "Listet die gegnerischen Nationen der Nation auf."
+nation_help_14: "Wird verwendet, um offenen Nationen beizutreten."
+nation_help_15: "Legt Geld in die Nationalbank ein."
+nation_help_16: "Wird benutzt, um die Nation aufzulösen."
+nation_help_17: "Wird verwendet, um Ränge von Bewohnern hinzuzufügen oder zu entfernen."
+nation_help_18: "Benutze /n rank für Hilfe."
+nation_list_help_0: "Zeigt die angegebene Seite an."
+nation_list_help_1: "Listet die Nationen nach der Anzahl der Bewohner mit der angegebenen Seite auf."
+nation_list_help_2: "Listet die Nationen nach der Anzahl der Städte mit der angegebenen Seite auf."
+nation_list_help_3: "Listet die geöffneten Nationen mit der angegebenen Seite auf."
+nation_list_help_4: "Listet die Nationen mit dem höchsten Nationalbankguthaben auf."
+nation_list_help_5: "Listet Nationen in alphabetischer Reihenfolge mit der angegebenen Seite auf."
+nation_list_help_6: "Listet Nationen nach beanspruchtem Land mit der angegebenen Seite auf."
+nation_list_help_7: "Listet die Nationen, mit den meisten Bewohnern online mit der angegebenen Seite auf."
+nation_set_help_0: "Ändert den Führer der Nation."
+nation_set_help_1: "Ändere die Hauptstadt der Nation."
+nation_set_help_2: "Lege die Höhe der Steuer fest, diese Städte zahlen sollen."
+nation_set_help_3: "Lege die Höhe der Steuer fest, diese eroberte Städte zahlen sollen."
+nation_set_help_4: "Lege den Namen der Nation fest."
+nation_set_help_5: "Lege den Titel oder den Nachnamen eines Bewohners fest."
+nation_set_help_6: "Setze den Kennnamen der Nation."
+nation_set_help_7: "Lege die Nation-Board-Nachricht fest."
+nation_set_help_8: "Setze den Nations-Spawnpunkt."
+nation_set_help_9: "Lege die Kosten für /n spawn fest."
+nation_set_help_10: "Lege die Kartenfarbe fest, die in Karten Plugins verwendet wird."
+nation_toggle_help_0: "Schaltet den friedlichen Status der Nation um."
+nation_toggle_help_1: "Schaltet den öffentlichen Status um, der Nicht-Bewohnern erlaubt /n spawn zu verwenden."
+nation_toggle_help_2: "Schaltet den offenen Status um, sodass Städte ohne Einladung beitreten können."
+nation_toggle_help_3: "Schalte die Steuern um, sodass die Städte einen Prozentsatz statt einem festen Steuersatz zahlen."
+nation_sanction_help_1: "Fügt eine Stadt der Liste aller sanktionierten Städte hinzu."
+nation_sanction_help_2: "Entfernt eine Stadt von der Liste der sanktionierten Städte."
+nation_sanction_help_3: "Listet die sanktionierten Städte deiner Nation auf."
+nation_sanction_help_4: "Listet die sanktionierten Städte der angegebenen Nation auf."
 king_help_1: 'Nation Führer Hilfe'
 king_help_2: 'Verbündete festlegen'
 king_help_3: 'Feinde festlegen'
+king_help_4: "Hebe Geld von der Nationalbank ab."
+king_help_5: "Füge Städte deiner Nation hinzu oder entferne sie wieder."
+king_help_6: "Benutze /n set für Hilfe."
 res_1: 'Dein Status'
 res_2: '[Bürger]'
 res_3: 'Status der Zielperson'
@@ -112,7 +166,6 @@ mode_4: 'Generalchat zu Stadtchat'
 mode_5: 'Generalchat zu Nationschat'
 mode_6: 'Du kannst in feindlichen Blöcke %s plazieren, um ein Kriegsgebiet zu erstellen.'
 plot_perms: 'Benutze %s statt %s für die Grundstücksberechtigungen.'
-plot_perms_1: 'Die Bürgergrundstücke können nicht von Aussenstehenden, ohne die benötigten Berechtigungen, benutzt werden.'
 res_list: 'Bürger'
 res_sing: 'Bürger'
 mayor_sing: 'Bürgermeister'
@@ -146,9 +199,6 @@ msg_buy: '&bKaufte %d %s für %s.'
 msg_buy_resident_plot: '&b%s kaufte %s'' Grundstück für %s!'
 msg_couldnt_pay_taxes: '&b%s konnte die Steuern nicht bezahlen und wurde deshalb aus %s rausgeschmissen.'
 msg_couldnt_pay_plot_taxes: '&b%s konnte die Steuern für die Plots nicht bezahlen und verliert den Anspruch auf ein Grundstück.'
-msg_payed_town_tax: '&bSteuern wurden bezahlt an '
-msg_payed_plot_cost: '&b %s bezahlte %s für Grundstücke in %s'
-msg_payed_resident_tax: '&b bezahlte die Bürgersteuer für '
 msg_bankrupt_town: ' konnte es sich nicht mehr leisten, weiterhin eine Stadt zu sein.'
 msg_bankrupt_nation: ' konnte es sich nicht mehr leisten, weiterhin eine Nation zu sein.'
 msg_nation_not_peaceful: 'Die &bNation kann es sich nicht mehr leisten, Neutal zu sein.'
@@ -374,7 +424,6 @@ msg_err_not_percentage: '&cProzentangaben müssen unter 100 sein.'
 msg_err_no_economy: '&cDas Wirtschaftsystem ist nicht aktiv.'
 msg_err_not_block_type: '&cDas ist kein gültiger Grundstückstyp!'
 msg_not_allowed_join: '&c%s ist es nicht erlaubt einer Stadt beizutreten.'
-msg_offline_no_join: '&c%s ist offline oder hat keine Rechte einer Stadt beizutreten.'
 msg_err_cannot_perform_action: '&cDu kannst diese Aktion in der %s nicht ausführen.'
 msg_npc_flag: '&bNPC Status ist nun %s für %s.'
 msg_warning_delete: '&4*** &c&lACHTUNG!&4 DIE STADT &e%s&4 WIRD AM NÄCHSTEN TAG GELÖSCHT, DA DIE STEUERN NICHT BEZAHLT WERDEN KÖNNEN ***'
@@ -387,7 +436,6 @@ msg_err_not_enough_residents_join_nation: '&bDie Stadt %s nicht genügend Einwoh
 msg_not_enough_residents_no_longer_capital: '&bDie alte Hauptstadt der Nation hat nicht mehr genug Einwohner, um die Hauptstadt der Nation zu sein. Die neue Hauptstadt ist %s.'
 msg_town_not_enough_residents_left_nation: '&bDie Stadt %s hat nicht mehr genug Einwohner, um ein Mitglied der Nation zu sein. Die Stadt wird deshalb aus der Nation geworfen.'
 msg_nation_disbanded_town_not_enough_residents: '&bDie Stadt %s hat nicht mehr genug Einwohner, um eine Nation zu leiten. Die Nation wird desshalb aufgelöst.'
-msg_not_enough_residents_refunded: '&bDu hast &f%s$&b von deiner Nation erstatten bekommen, da sie wegen zu weniger Bürger aufgelöst wurde.'
 msg_not_enough_residents_capital: '&bDie Stadt %s hat nicht genug Bürger um die Hauptstadt der Nation zu sein.'
 list_page: '&bSeite %s von %s'
 list_err_not_enough_pages: '&cNur %s Seiten verfügbar'
@@ -586,10 +634,13 @@ msg_err_over_outposts_limit: 'Du kannst dich nicht zu deinem Außenposten telepo
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Banditen' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Banditen'
 online: '&a (Online)'
-registered_last_online: '&2Registriert: &a%s &8| &2Zuletzt Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Rechte:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registriert: &a%s &8| &2Zuletzt Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Rechte:'
 status_on: '&4ON'
 status_off: '&aOFF'
 status_on_good: '&aON'
@@ -1032,7 +1083,8 @@ msg_town_destroyed_by_nation_tax: '&bDie eroberte Stadt %s konnte die Landessteu
 msg_town_destroyed_by_nation_tax_multiple: '&bDie folgenden eroberten Städte konnten sich die Nationalsteuer nicht leisten und sind gefallen: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bDeine Stadt wurde von der Nationalsteuer befreit.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Ruinierter-Status'
 msg_comptype_bankrupt: 'Bankrott-Status'
 msg_ruined: '&c(Ruiniert)'
@@ -1170,9 +1222,11 @@ status_trustedlist: 'Vertraut'
 msg_click_to_edit: '&6Hier klicken, um zu bearbeiten.'
 permission_gui_header: 'Towny Berechtigungen GUI'
 msg_last_edited: '&7&oZuletzt um %s von %s geändert.'
-msg_trusted_added: '&bFügte %s als vertrauenswürdig in diesem %s hinzu.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bFügte %s als vertrauenswürdig in diesem %s hinzu.'
 msg_already_trusted: '&b%s wird bereits in diesem %s vertraut.'
-msg_trusted_added_2: '&b%s hat dir vertraut, in einem %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s hat dir vertraut, in einem %s: %s.'
 msg_not_trusted: '&b%s wird diesem %s nicht vertraut.'
 msg_trusted_removed: '&bEntfernte %s als vertrauenswürdig in diesem %s.'
 msg_trusted_removed_2: '&b%s hat dich als vertrauenswürdig in einem %s: %s entfernt.'
@@ -1500,7 +1554,7 @@ msg_perm_hud_resident: 'bürger'
 msg_perm_hud_nation: 'nation'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'außenseiter'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Grundstück: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

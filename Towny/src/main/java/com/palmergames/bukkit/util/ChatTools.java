@@ -155,7 +155,6 @@ public class ChatTools {
 	 * @param list    - Any list that is in an order of ranking.
 	 * @param page    - Already formatted TownySettings.getListPageMsg(page,total) handler.
 	 * @return - Fully formatted output which should be sent to the player.
-	 * @author - Articdive
 	 */
 	public static String[] formatList(String title, String subject, List<String> list, String page) {
 		List<String> output = new ArrayList<>();

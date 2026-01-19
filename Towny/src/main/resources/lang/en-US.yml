@@ -113,6 +113,7 @@ town_help_32: "Use /t set ? for help."
 town_help_33: "Use /t buy ? for help."
 town_help_34: "Use /t toggle ? for help."
 town_help_35: "Use /t rank ? for help."
+town_help_36: 'List nearby towns sorted by distance.'
 
 town_list_help_0: "View the specified page."
 town_list_help_1: "List towns by resident-count, with the specified page."
@@ -267,7 +268,6 @@ mode_5: 'Default chat to nation channel'
 mode_6: 'Can place %s in enemy borders to make warzones.'
 
 plot_perms: 'Use %s instead of %s for plot permissions.'
-plot_perms_1: 'Resident plots don''t make use of outsider permissions.'
 
 res_list: 'Residents'
 res_sing: 'Resident'
@@ -303,6 +303,7 @@ world_toggle_help_8: "Toggle on/off the revert-on-unclaim feature in this world.
 world_toggle_help_9: "Toggle on/off the explosions-are-reverted features in this world."
 world_toggle_help_10: "Toggle on/off the plot-clear-deletes-blocks command in this world."
 world_toggle_help_11: "Toggle on/off the plot-unclaiming-deletes-blocks feature in this world."
+world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 
 
 townyadmin_help_1: 'Unclaim this town block'
@@ -426,7 +427,18 @@ ta_reload_help_2: "Reloads language files."
 ta_reload_help_3: "Reloads Towny permissions."
 ta_reload_help_4: "Reloads all components of Towny."
 
+ta_eco_resetbanks_help: "Resets town and nation banks to the given amount or 0."
+ta_eco_convert_modern_help: "Converts your Towny accounts into our modern variety, able to use Vault's OfflinePlayer."
+ta_eco_convert_help: "Converts your Towny accounts to the target economy implementation, useful for transferring data between economy plugins."
+ta_eco_info_help: "Gives information about economy accounts on the server."
 ta_depositall_help_0: "Deposit the given amount into all town and nation banks."
+ta_depositall_help_1: "Deposit the given amount into all town banks."
+ta_depositall_help_2: "Deposit the given amount into all nation banks."
+
+ta_info_help_0: "View eco info for the given nation."
+ta_info_help_1: "View eco info for the given resident."
+ta_info_help_2: "View eco info for the towny server account."
+ta_info_help_3: "View eco info for the given town."
 
 plot_help_0: "Turns on the plot info HUD."
 plot_help_1: "Removes the owner of the plot."
@@ -506,13 +518,12 @@ msg_couldnt_pay_taxes: '&b%s couldn''t pay taxes and was kicked from the %s.'
 msg_couldnt_pay_plot_taxes: '&b%s couldn''t pay taxes and lost ownership of a plot.'
 msg_you_couldnt_pay_plot_tax: '&bYou couldn''t pay the plot tax of %s and lost ownership of the plot at %s.'
 msg_you_couldnt_pay_town_tax: '&bYou couldn''t pay the town tax of %s and have been removed from %s.'
-msg_payed_town_tax: '&bPayed town tax of '
-msg_payed_plot_cost: '&bPayed %s for %s plots in %s'
-msg_payed_resident_tax: '&bPayed resident tax of '
+msg_you_paid_town_tax: '&bYou paid your town a tax of %s.'
+msg_you_paid_plottax_to_town: '&bYou paid plot taxes totalling %s to the town of %s.'
 msg_bankrupt_town: ' couldn''t afford to remain a town.'
 msg_bankrupt_nation: ' couldn''t afford to remain a nation.'
 msg_nation_not_peaceful: '&bNation couldn''t afford it''s peaceful state.'
-msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay % daily.'
+msg_nation_cant_peaceful: '&bNation couldn''t afford to become a peaceful nation. You must be able to pay %s daily.'
 msg_peaceful_disabled: '&bNation peace is disabled globally.'
 msg_you_paid: '&bYou paid %s to set peaceful status.'
 msg_nation_set_peace: '&bSuccessfully changed nation''s state.'
@@ -542,6 +553,7 @@ msg_nation_kicked_by: '&bYour town was kicked from the nation by %s.'
 msg_town_left_nation: '&bYour town left the nation of %s.'
 msg_nation_town_left: '&bThe town of %s left your nation.'
 msg_nation_kicked: '&b%s kicked %s from the nation.'
+msg_nation_you_kicked: '&bYou kicked %s from the nation.'
 msg_raised_ass: '&b%s raised %s to %s assistants.'
 msg_lowered_to_res_by: '&bYou were demoted to a regular resident by %s.'
 msg_lowered_to_res: '&b%s demoted %s to regular resident.'
@@ -748,6 +760,8 @@ msg_err_input_too_long: '&cInput is too long.'
 msg_err_invalid_choice: '&cInvalid choice'
 msg_err_invalid_sub: '&cInvalid sub command.'
 msg_err_command_disable: '&cYou don''t have enough permissions for that command.'
+msg_err_plot_preclaim_disable: "&cYou cannot claim the plot %s right now."
+msg_err_plot_preunclaim_disable: "&cResident cannot unclaim the plot %s right now."
 msg_err_you_dont_have_permission_to_use_colours: "You do not have permission to use colour codes in titles and surnames."
 msg_err_universe_limit: '&cThe universe cannot hold any more towns.'
 msg_err_too_many_npc: '&cToo many npc''s registered.'
@@ -756,7 +770,6 @@ msg_err_not_percentage: '&cPercentages must be below 100.'
 msg_err_no_economy: '&cEconomy has not been turned on.'
 msg_err_not_block_type: '&cThat is not a valid plot type!'
 msg_not_allowed_join: '&c%s is not permitted to join a town.'
-msg_offline_no_join: '&c%s is offline but using permissions so can''t join a town.'
 msg_err_cannot_perform_action: '&cCannot perform this action in the %s.'
 msg_npc_flag: '&bNPC flag is now %s for %s.'
 
@@ -773,7 +786,7 @@ msg_err_not_enough_residents_join_nation: '&bThe town %s does not have enough re
 msg_not_enough_residents_no_longer_capital: '&bThe nation''s old capital no longer has enough residents to be the capital of the nation. The new capital of the nation is %s.'
 msg_town_not_enough_residents_left_nation: '&bThe town %s no longer has enough residents to be a member of a nation, and has been removed from the nation.'
 msg_nation_disbanded_town_not_enough_residents: '&bThe town %s no longer has enough residents to run the nation and has forced the nation to disband.'
-msg_not_enough_residents_refunded: '&bYou have been refunded $%s for your nation being disbanded due to not having enough residents.'
+msg_not_enough_residents_refunded: '&bYou have been refunded %s for your nation being disbanded due to not having enough residents.'
 msg_not_enough_residents_capital: '&bThe town %s does not have enough residents to be the capital of the nation.'
 
 list_page: '&bPage %s of %s'
@@ -790,6 +803,7 @@ msg_you_have_been_given_rank: 'You have been granted the %s rank of %s.'
 msg_you_have_given_rank: 'You have granted the %s rank of %s to %s.'
 msg_resident_not_your_town: 'That resident isn''t a member of a town!'
 msg_resident_already_has_rank: '%s already holds this %s rank.'
+msg_town_or_nation_level_not_high_enough_for_this_rank: "Your %s level is not high enough to assign the %s rank. Your %s's Level: %s/%s required."
 msg_you_have_had_rank_taken: 'You have been demoted from the %s rank of %s.'
 msg_you_have_taken_rank_from: 'You have removed the %s rank of %s from %s.'
 msg_resident_doesnt_have_rank: '%s doesn''t hold this %s rank.'
@@ -1114,6 +1128,7 @@ msg_err_public_nation_spawn_forbidden: '&cPublic spawn travel to other nations i
 msg_err_public_nation_spawn_forbidden_war: '&cPublic spawn travel to other nations is only allowed during war.'
 msg_err_public_nation_spawn_forbidden_peace: '&cPublic spawn travel to other nations is forbidden during war.'
 msg_spawn_cost_set_to: '&b%s has set the price of using /%s spawn to %s'
+msg_spawn_fail_safe_teleport: '&cTeleportation failed, the location is not safe, ask the mayor of your town to change the teleport location.'
 msg_err_cannot_set_spawn_cost_more_than: '&cYou cannot set the spawn cost higher than %s'
 msg_err_ally_isnt_public: '&cYour ally, %s, does not have public spawning enabled. Teleport denied.'
 msg_nation_changed_public: '&cThe Nation''s public status is now %s.'
@@ -1392,6 +1407,8 @@ msg_spawn_warn: 'Spawning costs %s. Continue? Hint: add -ignore to skip these co
 msg_confirm_purchase: 'Doing this will cost %s. Continue?'
 msg_warn_the_following_towns_will_be_removed_from_your_nation: 'Because they will not be close enough to the new capital, the following towns will be removed from your nation: %s. Do you wish to continue?'
 msg_ta_deposit_all_success: 'Successfully deposited %s to all nations'' and towns'' banks.'
+msg_ta_deposit_all_towns_success: 'Successfully deposited %s to all towns'' banks.'
+msg_ta_deposit_all_nations_success: 'Successfully deposited %s to all nations'' banks.'
 bonus_townblocks: 'bonus townblocks'
 
 # Added in 0.80
@@ -1516,6 +1533,7 @@ towny_prices_overclaimed_upkeep: '&e[Overclaimed Upkeep] &2Town: &a%s'
 towny_prices_claiming_townblock: '&e[Claiming] &2TownBlock: &a%s'
 towny_prices_claiming_townblock_increase: ' &8| &2Increase per TownBlock: &a+%s'
 towny_prices_claiming_outposts: '&e[Claiming] &2Outposts: &a%s'
+towny_prices_outposts_upkeept: '&7Outposts have an additional per-day, per-outpost upkeep cost: &a%s'
 towny_prices_upkeep_based_on: '&7Town upkeep is based on &athe %s'
 towny_prices_upkeep_num_plots: 'number of plots.'
 towny_prices_upkeep_town_level: 'town level (num residents.)'
@@ -1543,6 +1561,7 @@ msg_your_town_was_exempt_from_the_nation_tax: '&bYour town was exempt from the n
 # The Build = ---- Destroy = ---- seen in the status screen.
 status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Ruined Status'
+msg_comptype_forsale: 'ForSale Status'
 msg_comptype_bankrupt: 'Bankrupt Status'
 msg_ruined: '&c(Ruined)'
 msg_bankrupt: '&c(Bankrupt)'
@@ -1712,6 +1731,8 @@ your_town_has_been_invited_to_join_nation: 'Your town has been invited to join t
 msg_err_no_one_to_purge: '&bThere are no inactive members to purge.'
 msg_purging_will_remove_the_following_residents: '&bPlease confirm you want to purge the following residents: %s'
 msg_purge_complete_x_removed: '&bPurge complete, %s residents removed.'
+msg_purge_complete_x_removed_from_towns: '&bPurge complete, %s inactive residents removed from towns.'
+msg_purge_reached_50_residents: '&bPurge has reached 50, further resident deletions will not be logged to reduce spam.'
 msg_err_days_must_be_greater_than_0: 'Days must be greater than zero.'
 msg_err_outlawed_players_no_teleport: '&4You are outlawed in the town you are currently in and cannot teleport!'
 msg_err_you_cannot_use_command_while_in_outlaw_town: '&4You cannot use that command while in a town you are outlawed in.'
@@ -1750,6 +1771,10 @@ msg_up_to_date: '&aYou are up to date.'
 msg_click_purchase: 'Click to purchase'
 msg_you_must_join_this_town_to_claim_this_plot: 'You must join this town: %s, in order to claim this plot. Would you like to join the town and continue claiming?'
 
+msg_legacy_economy_detected: "&bYour Towny's economy implementation is set to Legacy, it is recommended that you let Towny update itself to using the Modern implementation. This will improve compatibility with more Economy plugins."
+msg_click_to_convert_to_modern_economy: "&bClick here to convert your Towny's economy implementation from legacy to modern."
+
+
 #Added in 0.113
 status_trustedlist: 'Trusted'
 msg_click_to_edit: '&6Click to edit.'
@@ -1787,6 +1812,7 @@ msg_err_there_is_already_a_town_or_nationrank_called_x: 'There is already a %s n
 msg_err_there_is_no_town_or_nationrank_called_x: 'There is no %s named %s.'
 msg_successfully_add_rank_to_the_town_or_nation_rank: 'Successfully added %s to the %s.'
 msg_successfully_removed_rank_from_the_town_or_nation_rank: 'Successfully removed %s from the %s.'
+msg_successfully_renamed_rank_for_the_town_or_nation_rank: 'Successfully renamed %s to %s in the %s.'
 msg_err_group_has_no_nodes: 'The group %s has no permission nodes assigned.'
 msg_title_group_permissions: '%s Permissions'
 help_ta_perms_listgroups: 'List groups.'
@@ -1795,8 +1821,10 @@ help_ta_perms_groupaddpermnode: 'Add a node to a group.'
 help_ta_perms_groupremovepermnode: 'Remove a node from a group.'
 help_ta_perms_townrankadd: 'Adds a townrank to the townyperms file.'
 help_ta_perms_townrankremove: 'Removes a townrank from the townyperms file.'
+help_ta_perms_townrankrename: 'Renames a townrank in the townyperms file'
 help_ta_perms_nationrankadd: 'Adds a nationrank to the townyperms file.'
 help_ta_perms_nationrankremove: 'Removes a nationrank from the townyperms file.'
+help_ta_perms_nationrankrename: 'Renames a nationrank in the townyperms file'
 msg_err_that_resident_doesnt_belong_to_that_nation: 'That resident doesn''t belong to that nation.'
 
 #Added in 0.115
@@ -2170,10 +2198,12 @@ msg_perm_hud_resident: 'resident'
 msg_perm_hud_nation: 'nation'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'outsider'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Plot: '
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plotgroup_name: 'Plot Group: '
+#Seen in /towny map hud:
+msg_map_hud_district: 'District: '
 #Seen in /plot perm hud:
 msg_perm_hud_plot_for_sale: 'For Sale: '
 #Seen in /plot perm hud:
@@ -2210,6 +2240,7 @@ msg_spawn_cost_free: 'Free'
 msg_plot_already_of_type: 'This plot is already a %s type.'
 
 msg_town_board_reset: '&bTown board reset.'
+msg_nation_board_reset: '&bNation board reset.'
 
 msg_town_has_no_jailslots: 'The town jail is full.'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%s has been sent to %s into cell number %s for %s hours with a bail of %s by %s.'
@@ -2224,6 +2255,7 @@ msg_you_were_released_as_town_ran_out_of_upkeep_funds: 'You have been released a
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s has been released due to a lack of funds in the Town bank.'
 msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '%s withdrawn from Town bank to pay for upkeep for prisoner %s.'
 msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '%s withdrawn from Town bank to pay for jailing of %s.'
+msg_err_x_in_unjailable_world: '%s is in a world that they cannot be jailed from.'
 
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: 'Are you sure you want to reset all town and nation banks to %s?'
@@ -2289,6 +2321,8 @@ msg_you_have_unclaimed_everything_but_your_homeblock: "You have unclaimed everyt
 msg_warn_are_you_sure_you_want_to_transfer_nation_ownership: "<red>Are you sure you want to transfer nation ownership to %s? This action is irreversible!"
 msg_warn_town_already_capital: "<red>The town of %s is already the nation capital."
 msg_min_adjacent_blocks: 'You are required to have at least %s adjacent town blocks. There is only %s.'
+
+msg_min_adjacent_district_blocks: 'You are required to have at least %s adjacent district plots.'
 
 # Shown when a player with /plot evict permissions uses /plot claim on an owned but not for sale plot, please preserve comma space at the start when translating.
 msg_plot_claim_consider_evict_instead: ', perhaps you are looking for /plot evict instead?'
@@ -2584,3 +2618,71 @@ msg_err_cannot_remove_from_district_not_enough_adjacent_claims: "You cannot remo
 map_hover_district: 'District: '
 
 msg_err_you_cannot_join_town_you_have_not_played_long_enough: "You have not been on the server long enough, you must wait another %s before you can join a town."
+
+msg_your_nation_has_pending_ally_invites: "Your nation has invitations become an ally with one or more nations. Use '/n ally received' to view your invitations."
+
+msg_your_town_has_pending_nation_invites: "Your town has invitations to join one or more nations. Use '/t invite received' to view your invitations."
+
+msg_you_have_pending_town_invites: "You have invitations to join one or more towns. Use '/invite list' to view your invitations, or use '/invite deny all' to decline all of these invites."
+
+msg_admin_eco_convert_no_providers: "<red>No economy providers available"
+msg_admin_eco_convert_no_provider_specified: "<red>No economy provider specified"
+msg_admin_eco_convert_no_target_specified: "<red>No target economy specified"
+msg_admin_eco_convert_target_not_found: "<red>No economy adapter found by name '%s', available adapters: [%s]"
+msg_admin_eco_convert_already_modern: "<red>Cannot convert to modern; provider is already in modern mode"
+msg_admin_eco_convert_online_players_warning: "<red>Warning: It is recommended to convert while there are no players on the server."
+msg_admin_eco_convert_x_accounts_found: "Found %s accounts to convert. Beginning conversion now."
+msg_admin_eco_convert_conversion_progress: "Account conversion in progress, %s complete..."
+msg_admin_eco_convert_success: "Economy conversion successful"
+
+msg_err_mode_does_not_exist: "The mode %s is not recognized."
+
+msg_err_not_allowed_to_switch: "You aren't allowed to Switch here."
+
+chunknotification_plot_claim_help_message: " Use '/plot claim' to buy this plot."
+
+titlemsg_pay_your_bail_title: "Pay your bail: %s"
+titlemsg_pay_your_bail_subtitle: "/res jail paybail"
+
+msg_not_for_sale: "Not for sale."
+
+msg_err_you_cannot_add_trust_on_outlaw: "You cannot trust a player who is outlawed in your town."
+
+msg_err_you_cannot_add_trust_on_enemy: "You cannot trust a player who is part of an enemy nation."
+
+msg_err_you_cannot_add_towntrust_on_outlaw: "You cannot trust a town who has residents which are outlawed by your town."
+
+msg_err_you_cannot_add_towntrust_on_enemy: "You cannot trust a town who is part of an enemy nation."
+
+status_world_jailing: "Jailing: "
+
+msg_version_build_info: "<dark_green>Build Information: <green>%s</green> on branch <green>%s<green>."
+msg_version_build_info_failed: "<red>Could not retrieve build information for this version."
+
+time-future: "in the future"
+time-just-now: "just now"
+time-a-minute-ago: "a minute ago"
+time-x-minutes-ago: "%d minutes ago"
+time-an-hour-ago: "an hour ago"
+time-x-hours-ago: "%d hours ago"
+time-yesterday: "yesterday"
+time-x-days-ago: "%d days ago"
+time-a-year-ago: "a year ago"
+time-x-years-ago: "%d years ago"
+
+# Shown instead of status_lastonline if the player is currently online
+status_onlinesince: "Online Since:"
+
+msg_a_player_spawned_to_your_town_earning_you_x: "The player %s has spawned at your town, earning you %s."
+
+msg_you_have_been_refunded_your_town_cost: "You have been refunded %s because your town was less than %s hour(s) old and did not claim more than %s townblocks."
+
+msg_nearby_towns: 'Nearby Towns'
+msg_no_towns_nearby: 'No towns found nearby.'
+msg_nearby_town_format: '<green>%s <white>(%s blocks)'
+msg_nearby_town_nation: ' <aqua>[%s]'
+
+msg_err_must_specify_days_to_be_conquered: "You must specify a number of days to be conquered for, ie: 1 or more, or -1 or unlimited for an indefinite conquering."
+msg_conquered_status_granted: "You have set %s to have the conquered status for %s days."
+msg_conquered_status_granted_unlimited: "You have set %s to have the conquered status for an indefinite amount of days."
+msg_err_must_specify_on_or_off: "You must specify on or off."

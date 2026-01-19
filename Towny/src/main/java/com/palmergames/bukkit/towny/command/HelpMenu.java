@@ -294,8 +294,10 @@ public enum HelpMenu {
 				.add("group [group] removeperm [node]", Translatable.of("help_ta_perms_groupremovepermnode"))
 				.add("townrank addrank [rank]", Translatable.of("help_ta_perms_townrankadd"))
 				.add("townrank removerank [rank]", Translatable.of("help_ta_perms_townrankremove"))
+				.add("townrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_townrankrename"))
 				.add("nationrank addrank [rank]", Translatable.of("help_ta_perms_nationrankadd"))
-				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"));
+				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"))
+				.add("nationrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_nationrankrename"));
 		}
 	},
 	
@@ -417,15 +419,56 @@ public enum HelpMenu {
 				.add("all", Translatable.of("ta_reload_help_4"));
 		}
 	},
-	
+
+	TA_ECO {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco")
+				.add("resetbanks {amount}", Translatable.of("ta_eco_resetbanks_help"))
+				.add("depositall [amount]", Translatable.of("ta_depositall_help_0"))
+				.add("depositalltowns [amount]", Translatable.of("ta_depositall_help_1"))
+				.add("depositallnations [amount]", Translatable.of("ta_depositall_help_2"))
+				.add("convert modern", Translatable.of("ta_eco_convert_modern_help"))
+				.add("convert [economy]", Translatable.of("ta_eco_convert_help"))
+				.add("info ?", Translatable.of("ta_eco_info_help"));
+		}
+	},
+
 	TA_DEPOSITALL {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("townyadmin depositall")
+			return new MenuBuilder("townyadmin eco depositall")
 				.add("[amount]", Translatable.of("ta_depositall_help_0"));
 		}
 	},
-	
+
+	TA_DEPOSITALLTOWNS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco depositalltowns")
+				.add("[amount]", Translatable.of("ta_depositall_help_1"));
+		}
+	},
+
+	TA_DEPOSITALLNATIONS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco depositallnations")
+				.add("[amount]", Translatable.of("ta_depositall_help_2"));
+		}
+	},
+
+	TA_ECO_INFO {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco info")
+				.add("nation [nationname]", Translatable.of("ta_info_help_0"))
+				.add("resident [residentname]", Translatable.of("ta_info_help_1"))
+				.add("serveraccount", Translatable.of("ta_info_help_2"))
+				.add("town [townname]", Translatable.of("ta_info_help_3"));
+		}
+	},
+
 	TOWNYWORLD_HELP {
 		@Override
 		protected MenuBuilder load(MenuBuilder builder) {
@@ -483,7 +526,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 
@@ -502,7 +546,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 	
@@ -514,6 +559,7 @@ public enum HelpMenu {
 				.add("new [name]", Translatable.of("town_help_11"))
 				.add("here", Translatable.of("town_help_4"))
 				.add("list", Translatable.of("town_help_26"))
+				.add("nearby", Translatable.of("town_help_36"))
 				.add("online", Translatable.of("town_help_10"))
 				.add("leave", Translatable.of("town_help_27"))
 				.add("reclaim", Translatable.of("town_help_12"))
@@ -538,9 +584,10 @@ public enum HelpMenu {
 	TOWN_HELP_CONSOLE {
 		@Override
 		protected MenuBuilder load() {
-			return new MenuBuilder("town", Translatable.of("town_help_1"))
+			return new MenuBuilder("town")
 				.add("[town]", Translatable.of("town_help_3"))
-				.add("list", Translatable.of("town_help_26"));
+				.add("list", Translatable.of("town_help_26"))
+				.add("reslist [town]", Translatable.of("town_help_13"));
 		}
 	},
 	
@@ -802,9 +849,9 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident jail")
 				.add("", "/resident jail", "paybail", Translatable.of("res_jail_help_0"))
-				.add(Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmount())
-				.add(Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountMayor())
-				.add(Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountKing());
+				.add(Colors.AQUA + Translation.of("msg_resident_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmount())
+				.add(Colors.AQUA + Translation.of("msg_mayor_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmountMayor())
+				.add(Colors.AQUA + Translation.of("msg_king_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmountKing());
 		}
 	},
 
@@ -897,8 +944,7 @@ public enum HelpMenu {
 				.add("perm reset", Translatable.of("plot_set_help_7"))
 				.add("Eg: /plot set perm ally off")
 				.add("Eg: /plot set perm friend build on")
-				.add(Translation.of("plot_perms", "'friend'", "'resident'"))
-				.add(Translatable.of("plot_perms_1"));
+				.add(Translation.of("plot_perms", "'friend'", "'resident'"));
 		}
 	},
 

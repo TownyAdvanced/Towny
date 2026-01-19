@@ -1,17 +1,17 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.mobs.MobSpawnRemovalEvent;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
-import com.palmergames.bukkit.towny.object.Coord;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
@@ -19,6 +19,7 @@ import com.palmergames.bukkit.towny.tasks.MobRemovalTimerTask;
 import com.palmergames.bukkit.towny.utils.BorderUtil;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.bukkit.util.ItemLists;
@@ -33,7 +34,6 @@ import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Creeper;
-import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -50,6 +50,7 @@ import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Trident;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.Villager;
+import org.bukkit.entity.WindCharge;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -66,7 +67,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
-import org.bukkit.event.entity.LingeringPotionSplashEvent;
 import org.bukkit.event.entity.PigZapEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -77,13 +77,15 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.BlockProjectileSource;
 import org.bukkit.projectiles.ProjectileSource;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * 
@@ -176,7 +178,7 @@ public class TownyEntityListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onAxolotlTarget(EntityTargetLivingEntityEvent event) {
 		if (event.getEntity() instanceof Mob attacker &&
-			attacker.getType().getKey().equals(NamespacedKey.minecraft("axolotl")) &&
+			attacker.getType() == EntityType.AXOLOTL &&
 			event.getTarget() instanceof Mob defender &&
 			CombatUtil.preventDamageCall(attacker, defender, DamageCause.ENTITY_ATTACK)) {
 			attacker.setMemory(MemoryKey.HAS_HUNTING_COOLDOWN, true);
@@ -242,35 +244,15 @@ public class TownyEntityListener implements Listener {
 		default -> false;
 		};
 	}
-
-	/**
-	 * Removes dragon fireball AreaEffectClouds when they would spawn somewhere with PVP disabled.
-	 * 
-	 * @param event AreaEffectCloudApplyEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onDragonFireBallCloudDamage(AreaEffectCloudApplyEvent event) {
-		if (plugin.isError()) {
-			event.setCancelled(true);
-			return;
-		}
-		
-		if (TownyPaperEvents.DRAGON_FIREBALL_GET_EFFECT_CLOUD != null || !(event.getEntity().getSource() instanceof DragonFireball))
-			return;
-
-		if (discardAreaEffectCloud(event.getEntity())) {
-			event.setCancelled(true);
-			event.getEntity().remove();
-		}
-	}
 	
 	/**
 	 * Prevent lingering potion damage on players in non PVP areas
 	 * 
 	 *  @param event - LingeringPotionSplashEvent
 	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onLingeringPotionSplashEvent(LingeringPotionSplashEvent event) {
+	@SuppressWarnings("removal")
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onLingeringPotionApplyEvent(AreaEffectCloudApplyEvent event) {
 		
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -280,13 +262,36 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		ThrownPotion potion = event.getEntity();
-
-		if (!hasDetrimentalEffects(potion.getEffects()))
-			return;
+		final AreaEffectCloud effectCloud = event.getEntity();
+		final List<PotionEffect> effects = new ArrayList<>();
 		
-		if (discardAreaEffectCloud(event.getAreaEffectCloud()))
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_20_2)) {
+			// exists in 1.20.2 and up
+			if (effectCloud.getBasePotionType() != null) {
+				effects.addAll(effectCloud.getBasePotionType().getPotionEffects());
+			}
+		} else {
+			// deprecated method
+			if (effectCloud.getBasePotionData() != null) {
+				effects.addAll(effectCloud.getBasePotionData().getType().getPotionEffects());
+			}
+		}
+
+		if (effectCloud.hasCustomEffects()) {
+			effects.addAll(effectCloud.getCustomEffects());
+		}
+
+		if (!hasDetrimentalEffects(effects))
+			return;
+
+		// Prevent players from potentially damaging entities by logging out to null out the projectile source.
+		if (effectCloud.getSource() == null && effectCloud.getOwnerUniqueId() != null && TownyUniverse.getInstance().hasResident(effectCloud.getOwnerUniqueId())) {
 			event.setCancelled(true);
+			return;
+		}
+		
+		event.getAffectedEntities().removeIf(defender ->
+			CombatUtil.preventDamageCall(effectCloud, defender, DamageCause.MAGIC));
 	}	
 	
 	/**
@@ -305,11 +310,13 @@ public class TownyEntityListener implements Listener {
 		if (!TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()))
 			return;
 		
-		if (!hasDetrimentalEffects(event.getPotion().getEffects()))
+		ThrownPotion potion = event.getPotion();
+		
+		if (!hasDetrimentalEffects(potion.getEffects()))
 			return;
 		
-		for (LivingEntity defender : event.getAffectedEntities()) {
-			if (CombatUtil.preventDamageCall(event.getPotion(), defender, DamageCause.MAGIC)) {
+		for (final LivingEntity defender : event.getAffectedEntities()) {
+			if (CombatUtil.preventDamageCall(potion, defender, DamageCause.MAGIC)) {
 				event.setIntensity(defender, -1.0);
 			}
 		}
@@ -473,6 +480,7 @@ public class TownyEntityListener implements Listener {
 	 *  Water being used to put out campfires.
 	 *  Boats breaking lilypads.
 	 *  Crop Trampling.
+	 *  Silverfish infesting blocks inside towns.
 	 * 
 	 * Because we use ignoreCancelled = true we dont need to worry about setting the
 	 * cancelled state to false overriding other plugins.
@@ -537,6 +545,8 @@ public class TownyEntityListener implements Listener {
 				event.setCancelled(!BorderUtil.allowedMove(bps.getBlock(), block));
 			else if (potion.getShooter() instanceof Player player)
 				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, block));
+		} else if (entityType == EntityType.SILVERFISH && ItemLists.INFESTED_BLOCKS.contains(event.getTo()) && !TownyAPI.getInstance().isWilderness(event.getBlock().getLocation())) {
+			event.setCancelled(true);
 		}
 	}
 
@@ -561,7 +571,10 @@ public class TownyEntityListener implements Listener {
 		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
 		if (townyWorld == null || !townyWorld.isUsingTowny())
 			return;
-		
+
+		if (isWindCharge(event))
+			return;
+
 		List<Block> blocks = TownyActionEventExecutor.filterExplodableBlocks(event.blockList(), null, event.getEntity(), event);
 		event.blockList().clear();
 		event.blockList().addAll(blocks);
@@ -586,6 +599,53 @@ public class TownyEntityListener implements Listener {
 				TownyRegenAPI.beginProtectionRegenTask(block, count, townyWorld, event);
 			}
 		}
+	}
+
+	/**
+	 * Protects against players using Wind Charges to open doors and use switches.
+	 * 
+	 * @param event - EntityExplodeEvent
+	 */
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onWindChargeExplode(EntityExplodeEvent event) {
+		if (plugin.isError()) {
+			event.setCancelled(true);
+			return;
+		}
+
+		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(event.getEntity().getWorld());
+		if (townyWorld == null || !townyWorld.isUsingTowny())
+			return;
+
+		if (!isWindCharge(event))
+			return;
+
+		Player player = getWindChargePlayerOrNull(event);
+		if (player == null)
+			return;
+
+		List<Block> deniedBlocks = new ArrayList<>();
+		for (Block block : event.blockList())
+			if (TownySettings.isSwitchMaterial(block.getType(), block.getLocation()) && !TownyActionEventExecutor.canSwitch(player, block.getLocation(), block.getType(), true))
+				deniedBlocks.add(block);
+
+		if (deniedBlocks.isEmpty())
+			return;
+
+		event.blockList().removeAll(deniedBlocks);
+		TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_not_allowed_to_switch"));
+	}
+	
+	private boolean isWindCharge(EntityExplodeEvent event) {
+		return MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21)
+				&& event.getEntity() instanceof WindCharge charge;
+	}
+
+	@Nullable
+	private Player getWindChargePlayerOrNull(EntityExplodeEvent event) {
+		if (event.getEntity() instanceof WindCharge charge && charge.getShooter() instanceof Player player)
+			return player;
+		return null;
 	}
 
 	/**
@@ -635,7 +695,7 @@ public class TownyEntityListener implements Listener {
 			}
 		} else if (combuster instanceof LightningStrike lightning) {
 			// Protect entities from being lit on fire by player caused lightning
-			if (CombatUtil.getLightningCausingEntity(lightning) instanceof Player player && CombatUtil.preventDamageCall(player, defender, DamageCause.LIGHTNING))
+			if (lightning.getCausingEntity() instanceof Player player && CombatUtil.preventDamageCall(player, defender, DamageCause.LIGHTNING))
 				event.setCancelled(true);
 		}
 	}
@@ -799,14 +859,14 @@ public class TownyEntityListener implements Listener {
 		/*
 		 * Bypass any occasion where there is no block being hit and the shooter isn't a player.
 		 */
-		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player))
+		if (plugin.isError() || !TownyAPI.getInstance().isTownyWorld(event.getEntity().getWorld()) || event.getHitBlock() == null || !(event.getEntity().getShooter() instanceof Player player))
 			return;
 		
 		Block block = event.getHitBlock().getRelative(event.getHitBlockFace());
 		Material material = block.getType();
 		if (ItemLists.PROJECTILE_TRIGGERED_REDSTONE.contains(material) && TownySettings.isSwitchMaterial(material, block.getLocation())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canSwitch((Player) event.getEntity().getShooter(), block.getLocation(), material)) {
+			if (!TownyActionEventExecutor.canSwitch(player, block.getLocation(), material)) {
 				/*
 				 * Since we are unable to cancel a ProjectileHitEvent on buttons & 
 				 * pressure plates even using MC 1.17 we must set the block to air
@@ -903,16 +963,16 @@ public class TownyEntityListener implements Listener {
 		return !TownyActionEventExecutor.canExplosionDamageEntities(entity.getLocation(), entity, cause);
 	}
 
-	private static final BiMap<String, String> POTION_LEGACY_NAMES = JavaUtil.make(HashBiMap.create(), map -> {
-		map.put("slow", "slowness");
-		map.put("fast_digging", "haste");
-		map.put("slow_digging", "mining_fatigue");
-		map.put("increase_damage", "strength");
-		map.put("heal", "instant_health");
-		map.put("harm", "instant_damage");
-		map.put("jump", "jump_boost");
-		map.put("confusion", "nausea");
-		map.put("damage_resistance", "resistance");
+	private static final Map<String, String> POTION_LEGACY_NAMES = JavaUtil.make(new HashMap<>(), map -> {
+		map.put("slowness", "slow");
+		map.put("haste", "fast_digging");
+		map.put("mining_fatigue", "slow_digging");
+		map.put("strength", "increase_damage");
+		map.put("instant_health", "heal");
+		map.put("instant_damage", "harm");
+		map.put("jump_boost", "jump");
+		map.put("nausea", "confusion");
+		map.put("resistance", "damage_resistance");
 	});
 
 	private boolean hasDetrimentalEffects(Collection<PotionEffect> effects) {
@@ -932,34 +992,9 @@ public class TownyEntityListener implements Listener {
 					return true;
 
 				// Account for PotionEffect#getType possibly returning the new name post enum removal.
-				final String legacyName = POTION_LEGACY_NAMES.inverse().get(name);
+				final String legacyName = POTION_LEGACY_NAMES.get(name);
 
                 return legacyName != null && detrimentalPotions.contains(legacyName);
             });
-	}
-	
-	@ApiStatus.Internal
-	public static boolean discardAreaEffectCloud(@NotNull AreaEffectCloud effectCloud) {
-		final TownyWorld townyWorld = TownyAPI.getInstance().getTownyWorld(effectCloud.getWorld());
-		final Location loc = effectCloud.getLocation();
-		final int radius = (int) Math.ceil(effectCloud.getRadius());
-		WorldCoord lastChecked = null;
-		
-		for (int x = loc.getBlockX() - radius; x < loc.getBlockX() + radius; x++ ) {
-			for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++ ) {
-				if (lastChecked != null && lastChecked.getX() == Coord.toCell(x) && lastChecked.getZ() == Coord.toCell(z))
-					continue;
-				
-				final WorldCoord current = WorldCoord.parseWorldCoord(effectCloud.getWorld().getName(), x, z);
-				final TownBlock townBlock = current.getTownBlockOrNull();
-				
-				if (townyWorld != null && CombatUtil.preventPvP(townyWorld, townBlock))
-					return true;
-				
-				lastChecked = current;
-			}
-		}
-		
-		return false;
 	}
 }

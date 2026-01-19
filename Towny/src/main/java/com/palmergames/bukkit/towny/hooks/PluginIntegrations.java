@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.permissions.LuckPermsSource;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
@@ -26,7 +27,6 @@ import com.palmergames.bukkit.towny.chat.TNCRegister;
 import com.palmergames.bukkit.towny.permissions.BukkitPermSource;
 import com.palmergames.bukkit.towny.permissions.GroupManagerSource;
 import com.palmergames.bukkit.towny.permissions.VaultPermSource;
-import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
 import com.palmergames.util.JavaUtil;
@@ -67,8 +67,9 @@ public class PluginIntegrations {
 
 	private void formatForUniverseCommand(List<String> out, String pluginName) {
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-		if (plugin != null)
-			out.add(Colors.Yellow + pluginName + " " + Colors.Green + plugin.getDescription().getVersion());
+		if (plugin != null) {
+			out.add(Colors.YELLOW + pluginName + " " + Colors.DARK_GREEN + plugin.getPluginMeta().getVersion());
+		}
 	}
 
 	/**
@@ -110,10 +111,7 @@ public class PluginIntegrations {
 
 		// Check if the economy is enabled in the config and attempt to set it up.
 		if (configSetForEconomy && TownyEconomyHandler.setupEconomy()) {
-			ecowarn = TownyEconomyHandler.isEssentials()
-					? "EssentialsX Economy has been known to reset town and nation bank accounts on rare occasions."
-					: "";
-			MoneyUtil.checkLegacyDebtAccounts();
+			ecowarn = ""; // Used to be useful, hopefully we don't need to use it again.
 		}
 
 		if (TownyEconomyHandler.isActive())
@@ -164,7 +162,7 @@ public class PluginIntegrations {
 
 		//Add warning about outdated PowerRanks.
 		if (isPluginPresent("PowerRanks")) {
-			Version version = Version.fromString(Bukkit.getPluginManager().getPlugin("PowerRanks").getDescription().getVersion());
+			Version version = Version.fromPlugin(Bukkit.getPluginManager().getPlugin("PowerRanks"));
 			if (version.isOlderThan(POWERRANKS_FIXED_VERSION))
 				warnings.put("Your outdated PowerRanks is incompatible with Towny. PowerRanks will override Towny's ability to give permissions via the townyperms.yml file."
 					+ " Update your PowerRanks to version 1.10.8 or newer!", Level.WARNING);
@@ -194,19 +192,26 @@ public class PluginIntegrations {
 
 	private void formatForStartup(List<String> out, String pluginName) {
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(pluginName);
-		if (plugin != null)
-			out.add(pluginName + " v" + plugin.getDescription().getVersion());
+		if (plugin != null) {
+			out.add(pluginName + " v" +  plugin.getPluginMeta().getVersion());
+		}
 	}
 
 	public String registerPermissionsProviders(Towny towny) {
 		// TownyPerms is always present.
 		String output = "  Permissions: TownyPerms, ";
 
+		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("LuckPerms");
+		if (test != null) {
+			TownyUniverse.getInstance().setPermissionSource(new LuckPermsSource(towny));
+			return output + String.format("%s v%s", "LuckPerms", test.getPluginMeta().getVersion());
+		}
+
 		// Test for GroupManager being present.
-		Plugin test = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
+		test = Bukkit.getServer().getPluginManager().getPlugin("GroupManager");
 		if (test != null && JavaUtil.classExists("org.anjocaido.groupmanager.GroupManager")) {
 			TownyUniverse.getInstance().setPermissionSource(new GroupManagerSource(towny, test));
-			return output += String.format("%s v%s", "GroupManager", test.getDescription().getVersion());
+			return output + String.format("%s v%s", "GroupManager", test.getPluginMeta().getVersion());
 		}
 
 		// Else test for vault being present.
@@ -223,12 +228,12 @@ public class PluginIntegrations {
 				TownyUniverse.getInstance().setPermissionSource(new VaultPermSource(towny, chatProvider.getProvider()));
 				
 				if (permissionProvider != null) {
-					output += permissionProvider.getPlugin().getName() + " v" + permissionProvider.getPlugin().getDescription().getVersion() + " via Vault";
+					output += permissionProvider.getPlugin().getName() + " v" + permissionProvider.getPlugin().getPluginMeta().getVersion() + " via Vault";
 				} else {
-					output += String.format("Vault v%s", test.getDescription().getVersion());
+					output += String.format("Vault v%s", test.getPluginMeta().getVersion());
 				}
 				
-				output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion());
+				output += String.format("\n  Chat: %s v%s via Vault", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getPluginMeta().getVersion());
 				return output;
 			}
 
@@ -255,7 +260,7 @@ public class PluginIntegrations {
 				field.setAccessible(true);
 				
 				if (field.get(chatProvider.getProvider()) == null) {
-					Towny.getPlugin().getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getDescription().getVersion()));
+					Towny.getPlugin().getLogger().warning(String.format("WARNING: Plugin %s v%s has an improper Chat implementation, please inform the authors about the following:", chatProvider.getPlugin().getName(), chatProvider.getPlugin().getPluginMeta().getVersion()));
 					Towny.getPlugin().getLogger().warning(String.format("Class '%s' has a null Permission field, which is not supported.", chatProvider.getProvider().getClass().getName()));
 					
 					if (!iterator.hasNext())
@@ -330,21 +335,6 @@ public class PluginIntegrations {
 	/*
 	 * Citizens2 integration methods.
 	 */
-
-	/**
-	 * Check if the entity is a Citizens NPC.
-	 * 
-	 * Catches the NoClassDefFoundError thrown when Citizens is present 
-	 * but failed to start up correctly.
-	 * 
-	 * @param entity Entity to check.
-	 * @return true if the entity is an NPC.
-	 * @deprecated Deprecated as of 0.100.1.10, please use {@link #isNPC(Entity)} instead.
-	 */
-	@Deprecated
-	public boolean checkCitizens(Entity entity) {
-		return entity != null && isNPC(entity);
-	}
 
 	/**
 	 * @param entity Entity to check.

@@ -13,10 +13,10 @@ import com.palmergames.bukkit.towny.object.TeleportWarmupParticle;
 import com.palmergames.bukkit.towny.object.TeleportRequest;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.object.economy.Account;
+import com.palmergames.bukkit.towny.utils.SpawnUtil;
 import com.palmergames.bukkit.util.BukkitTools;
-
-import io.papermc.lib.PaperLib;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -65,10 +65,15 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 				// Only teleport & add cooldown if player is valid
 				if (player == null)
 					continue;
-				
-				PaperLib.teleportAsync(player, request.destinationLocation(), TeleportCause.COMMAND);
-				
-				BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost()));
+
+				// Teleporting a player can cause the chunk to unload too fast, abandoning pets.
+				SpawnUtil.addAndRemoveChunkTicket(WorldCoord.parseWorldCoord(player.getLocation()));
+
+				final Location prior = player.getLocation();
+				player.teleportAsync(request.destinationLocation(), TeleportCause.COMMAND).thenAccept(successfulTeleport -> {
+					if (successfulTeleport)
+						BukkitTools.fireEvent(new SuccessfulTownyTeleportEvent(resident, request.destinationLocation(), request.teleportCost(), prior));
+				});
 
 				if (request.cooldown() > 0)
 					CooldownTimerTask.addCooldownTimer(resident.getName(), "teleport", request.cooldown());
@@ -81,13 +86,13 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			if (TownySettings.isTeleportWarmupUsingTitleMessage() && millis >= 1000) {
 				String title = TownySettings.isMovementCancellingSpawnWarmup() ? Translatable.of("teleport_warmup_title_dont_move").forLocale(resident) : "";
 				String subtitle = Translatable.of("teleport_warmup_subtitle_seconds_remaining", seconds).forLocale(resident);
-				resident.getPlayer().sendTitle(title, subtitle, 0, 25, (seconds == 1 ? 15 : 0));
+				TownyMessaging.sendTitle(resident.getPlayer(), title, subtitle, 0, 25, (seconds == 1 ? 15 : 0));
 			}
 			// Send a particle that drops from above the player to their feet over the course of the warmup.
 			if (TownySettings.isTeleportWarmupShowingParticleEffect()) {
 				double progress = (double) (teleportWarmupTime - seconds) / teleportWarmupTime;
-				double offset = 2.0 + (progress * -2.0);
-				new TeleportWarmupParticle(resident.getPlayer().getLocation().add(0.0, offset, 0.0));
+				double yOffset = 2.0 + (progress * -2.0);
+				TeleportWarmupParticle.drawParticles(resident.getPlayer(), yOffset);
 			}
 		}
 	}
@@ -125,7 +130,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	 * @param reason   The CancelledSpawnReason this player has had their teleport request cancel.
 	 * @return Whether the resident had an active teleport request.
 	 */
-	@Contract("null -> false")
+	@Contract("null, _ -> false")
 	public static boolean abortTeleportRequest(@Nullable Resident resident, CancelledTeleportReason reason) {
 		if (resident == null)
 			return false;

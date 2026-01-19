@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 
 import com.palmergames.util.Pair;
-import io.papermc.lib.PaperLib;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -20,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,16 +32,10 @@ import java.util.concurrent.CompletableFuture;
 public class WorldCoord extends Coord {
 
 	private final String worldName;
-	private UUID worldUUID;
-	private Reference<World> worldRef = new WeakReference<>(null);
 
 	public WorldCoord(String worldName, int x, int z) {
 		super(x, z);
 		this.worldName = worldName;
-		
-		World world = Bukkit.getServer().getWorld(worldName);
-		if (world != null)
-			this.worldUUID = world.getUID();
 	}
 
 	public WorldCoord(String worldName, Coord coord) {
@@ -54,7 +45,6 @@ public class WorldCoord extends Coord {
 	public WorldCoord(String worldName, UUID worldUUID, int x, int z) {
 		super(x, z);
 		this.worldName = worldName;
-		this.worldUUID = worldUUID;
 	}
 
 	public WorldCoord(String worldName, UUID worldUUID, Coord coord) {
@@ -64,7 +54,6 @@ public class WorldCoord extends Coord {
 	public WorldCoord(@NotNull World world, int x, int z) {
 		super(x, z);
 		this.worldName = world.getName();
-		this.worldUUID = world.getUID();
 	}
 
 	public WorldCoord(@NotNull World world, Coord coord) {
@@ -74,8 +63,6 @@ public class WorldCoord extends Coord {
 	public WorldCoord(WorldCoord worldCoord) {
 		super(worldCoord);
 		this.worldName = worldCoord.getWorldName();
-		this.worldUUID = worldCoord.worldUUID;
-		this.worldRef = new WeakReference<>(worldCoord.worldRef.get());
 	}
 
 	public String getWorldName() {
@@ -107,7 +94,7 @@ public class WorldCoord extends Coord {
 	}
 
 	public WorldCoord add(int xOffset, int zOffset) {
-		return new WorldCoord(getWorldName(), worldUUID, getX() + xOffset, getZ() + zOffset);
+		return new WorldCoord(getWorldName(), getX() + xOffset, getZ() + zOffset);
 	}
 
 	@Override
@@ -148,16 +135,7 @@ public class WorldCoord extends Coord {
 	 */
 	@Nullable
 	public World getBukkitWorld() {
-		World world = worldRef.get();
-		if (world == null) {
-			world = Bukkit.getServer().getWorld(this.worldName);
-			worldRef = new WeakReference<>(world);
-			
-			if (this.worldUUID == null && world != null)
-				this.worldUUID = world.getUID();
-		}
-		
-		return world;
+		return Bukkit.getServer().getWorld(this.worldName);
 	}
 
 	/**
@@ -210,8 +188,6 @@ public class WorldCoord extends Coord {
 	/**
 	 * Loads the chunks represented by a WorldCoord. Creates a PluginChunkTicket so
 	 * that the WorldCoord will remain loaded, even when no players are present.
-	 * <p>
-	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void loadChunks() {
 		Towny plugin = Towny.getPlugin();
@@ -228,8 +204,6 @@ public class WorldCoord extends Coord {
 	/**
 	 * Unloads the chunks presented by a WorldCoord. Removes a PluginChunkTicket so
 	 * that the WorldCoord will no longer remain loaded.
-	 * <p> 
-	 * Uses PaperLib's getChunkAtAsync when Paper is present.
 	 */
 	public void unloadChunks() {
 		Towny plugin = Towny.getPlugin();
@@ -260,11 +234,11 @@ public class WorldCoord extends Coord {
 			final Set<CompletableFuture<Chunk>> chunkFutures = new HashSet<>();
 			
 			for (final Pair<Integer, Integer> chunkPos : getChunkPositions())
-				chunkFutures.add(PaperLib.getChunkAtAsync(world, chunkPos.left(), chunkPos.right()));
+				chunkFutures.add(world.getChunkAtAsync(chunkPos.left(), chunkPos.right()));
 			
 			return Collections.unmodifiableSet(chunkFutures);
 		} else {
-			return Collections.singleton(PaperLib.getChunkAtAsync(getCorner()));
+			return Collections.singleton(world.getChunkAtAsync(getCorner()));
 		}
 	}
 	
@@ -313,7 +287,7 @@ public class WorldCoord extends Coord {
 	 * @return Return a Bukkit bounding box containg the space of the WorldCoord.
 	 */
 	public BoundingBox getBoundingBox() {
-		return BoundingBox.of(getLowerMostCornerLocation(), getUpperMostCornerLocation());
+		return BoundingBox.of(getLowerMostCornerLocation().getBlock(), getUpperMostCornerLocation().getBlock());
 	}
 	
 	/**

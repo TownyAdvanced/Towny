@@ -49,6 +49,54 @@ town_help_21: "Koupit dané město, pokud je na prodej."
 town_help_22: "Vložte peníze do banky ve vašem městě."
 town_help_23: "Slouží k úpravě městských hodností rezidentů."
 town_help_24: "Slouží k odstranění vašeho města."
+town_help_25: "Slouží k úpravě krajů ve městě."
+town_help_26: "Seznam všech měst, viz /t list ? pro pomoc."
+town_help_27: "Opustit město, které jste členem."
+town_help_28: "Vyberte si peníze z městské banky."
+town_help_29: "Nápovědu získáte pomocí /t claim ?"
+town_help_30: "Používá se k vyřazení pozemku z tvého města."
+town_help_31: "Přidat nebo odebrat rezidenty."
+town_help_32: "Pro pomoc použijte /t set ?"
+town_help_33: "Pro pomoc použijte /t buy ?"
+town_help_34: "Nápovědu získáte pomocí příkazu /t toggle ?"
+town_help_35: "Nápovědu získáte pomocí /t rank ?"
+town_list_help_0: "Zobrazit vybranou stránku."
+town_list_help_1: "Seznam měst podle počtu obyvatel se zadanou stránkou."
+town_list_help_2: "Seznam otevřených měst se zadanou stránkou."
+town_list_help_3: "Seznam měst s bankovním zůstatkem, se zadanou stránkou."
+town_list_help_4: "Seznam měst v abecedním pořadí se zadanou stránkou."
+town_list_help_5: "Seznam měst podle nárokovaných pozemků s uvedenou stránkou."
+town_list_help_6: "Seznam měst podle hráčů online se zadanou stránkou."
+town_set_help_0: "Nastavte tabuli svého města."
+town_set_help_1: "Nastaví homeblock města na místo, kde právě stojíte."
+town_set_help_2: "Nastaví bod spawnu ve vašem domovském bloku nebo bod spawnu na základně, když stojíte na základně."
+town_set_help_3: "Nápovědu naleznete v části /town set perm ?"
+town_set_help_4: "Nastavte výši daně ve městě."
+town_set_help_5: "Nastavte zvláštní částky pro daně na pozemek."
+town_set_help_6: "Nastavení výchozích cen pro nákup pozemků."
+town_set_help_7: "Nastavení nákladů na použití /t spawn."
+town_set_help_8: "Nastavte název města."
+town_set_help_9: "Nastavte značku města."
+town_set_help_10: "Nastavte předponu svého rezidenta."
+town_set_help_11: "Nastavení maximální částky, kterou může procentní daň od obyvatele vybrat."
+town_jail_help_0: "Seznam městských věznic."
+town_jail_help_1: "Uvěznění rezidenta v hlavním vězení."
+town_jail_help_2: "Uvěznění rezidenta v hlavním vězení na stanovené hodiny."
+town_jail_help_3: "Uvěznění rezidenta v hlavním vězení, na určené hodiny, v určeném vězení."
+town_jail_help_4: "Uvěznění rezidenta v hlavním vězení, na určené hodiny, v určeném vězení."
+town_jail_help_5: "Uvěznění rezidenta v hlavním vězení, na určené hodiny, v určeném vězení."
+town_jail_help_6: "Uvěznění rezidenta v primárním vězení, na stanovené hodiny s danou částkou kauce, v určeném vězení."
+town_jail_help_7: "Žaloba rezidenta v primárním vězení, po stanovenou dobu s danou částkou kauce, v určeném vězení a buňce."
+town_jail_help_8: "Propustí vězně"
+town_purge_help: "Vymaže rezidenty, kteří se nepřihlásili za daný počet dní."
+town_trust_help_0: "Přidá rezidenta jako důvěryhodného ve městě."
+town_trust_help_1: "Odstraní obyvatele města jako důvěryhodný."
+town_trust_help_2: "Seznam důvěryhodných obyvatel města."
+town_towntrust_help_0: "Přidá město jako důvěryhodné ve městě."
+town_towntrust_help_1: "Odebere město jako důvěryhodné ve městě."
+town_towntrust_help_2: "Zobrazí důvěryhodná města."
+town_buy_help: "Koupí bonusové městské bloky ke zvýšení meze nároků."
+town_cede_help: "Nabízí pozemek, v němž jste, aby ho převzalo vámi dané město."
 mayor_help_3: 'Zaber území nepřipojené k tvému městu'
 mayor_help_4: 'Zaber území kolem sebe do vzdálenosti X'
 mayor_help_5: 'Zaber území do maximální vzdálenosti'
@@ -64,13 +112,81 @@ nation_help_6: 'Vytvořit nový národ'
 nation_help_7: 'Seznam příkazů vůdce frakce'
 nation_help_8: 'Vytvoří nový národ'
 nation_help_9: 'Zobrazí všechny onlien hráče v národu'
+nation_help_11: "Seznam měst v zemi."
+nation_help_12: "Seznam spojenců národa."
+nation_help_13: "Seznam nepřátelských států národa."
+nation_help_14: "Slouží k připojení se k veřejným národům."
+nation_help_15: "Vloží peníze do národní banky."
+nation_help_16: "Slouží k odstranění vašeho města."
+nation_help_17: "Slouží k přidání nebo odebrání hodností z rezidentů."
+nation_help_18: "Pokud si nevíte rady, nápovědu města získáte pomocí /t rank"
+nation_list_help_0: "Zobrazit vybranou stránku."
+nation_list_help_1: "Seznam měst podle počtu obyvatel se zadanou stránkou."
+nation_list_help_2: "Seznam měst podle počtu obyvatel se zadanou stránkou."
+nation_list_help_3: "Seznam států, které jsou veřejné."
+nation_list_help_4: "Seznam států, které využívají bankovní zůstatek."
+nation_list_help_5: "Seznam států seřazený dle abeceny."
+nation_list_help_6: "Seznam států dle zabraného území."
+nation_list_help_7: "Seznam států dle počtu online."
+nation_set_help_0: "Změnit leadera státu."
+nation_set_help_1: "Změnit hlavní město státu."
+nation_set_help_2: "Nastavit jaké daně budou města platit."
+nation_set_help_3: "Nastavit výši daně, kterou zaplatí dobytá města."
+nation_set_help_4: "Nastav jméno státu."
+nation_set_help_5: "Nastavit titul, nebo příjmení obyvatele."
+nation_set_help_6: "Nastavit tag státu."
+nation_set_help_7: "Nastavte zprávu národní rady."
+nation_set_help_8: "Nastavit spawn point státu."
+nation_set_help_9: "Nastavení ceny použití /n spawn."
+nation_set_help_10: "Nastavit barvu použitou na mapě."
+nation_toggle_help_0: "Přepínání mírového stavu národa."
+nation_toggle_help_1: "Přepínání veřejného statusu, povoluje hráčům, kteří nejsou občané použivat /n spawn."
+nation_toggle_help_2: "Přepíná veřejný status, povoluje městům se připojit bez pozvánky."
+nation_toggle_help_3: "Přepíná procenta daní. Místo dané částky platí města procentuální část."
+nation_sanction_help_1: "Přídá město do seznamu měst se sankcemi."
+nation_sanction_help_2: "Odebere město ze seznamu měst se sankcemi."
+nation_sanction_help_3: "Seznam měst se sankcemi v tvém státu."
+nation_sanction_help_4: "Seznam měst se sakcemi v přiděleném státu."
 king_help_1: 'Nápověda vůdce státu'
 king_help_2: 'Nastavení svých spojenců.'
 king_help_3: 'Nastavení svých nepřátel.'
+king_help_4: "Vybrat peníze z banky tvého státu."
+king_help_5: "Přidá/odebere města z tvého státu."
+king_help_6: "Použij /n set ? pro nápovědu."
+king_help_7: "Použij /n toggle ? pro nápovědu."
+king_help_8: "Slouží k přidání/absorbci jiného státu do toho tvého."
+king_help_9: "Používá se k posílaní zpráv všem v tvém státu."
 res_1: 'Tvůj stav'
 res_2: '[obyvatel]'
 res_3: 'Stav cílového hráče'
 res_4: 'Zobrazí všechny aktivní hráče'
+res_9: "Jak velké daně budeš platit každý den."
+res_10: "Podívej se na /res jail ? pro nápovědu."
+res_11: "Podívej se na /res toggle ? pro nápovědu."
+res_12: "Podívej se na /res set ? pro nápovědu."
+res_13: "Spawn do tvého města, nebo postele."
+res_toggle_help_0: "Přepni status pvp pro tvé pozemky."
+res_toggle_help_1: "Přepni status ohně pro tvé pozemky."
+res_toggle_help_2: "Přepni status mobů pro tvé pozemky."
+res_toggle_help_3: "Nastav si výbuchy na tvém pozemku."
+res_toggle_help_4: "Nastav si schopnost vidět hranice tvého pozemku."
+res_toggle_help_5: "Nastav si viditelnost konstantních hranic pozemku."
+res_toggle_help_6: "Nastav si schopnost vidět hranice měst."
+res_toggle_help_7: "Nastav si viditelnost upozornění z pozemku."
+res_toggle_help_8: "Nastav si možnost zabírání při chůzi."
+res_toggle_help_9: "Nastav si viditelnost změn tvých pozemků na mapě."
+res_toggle_help_10: "Odstranit všechny režimy."
+res_toggle_help_10.5: "Odstranit všechny režimy a znovu nastavit základní možnosti."
+res_toggle_help_11: "Sleduj komunikační kanály."
+res_toggle_help_12: "Nastav si přidávání pozemků do skupiny, kterou jsi začal."
+res_toggle_help_13: "Nastav si viditelnost titulků při změně pozemků."
+res_toggle_help_14: "Nastav si schopnost odebírat pozemky při chůzi."
+res_toggle_help_15: "Nastav si užívání informačního nástroje pro správné názvy bloků/entit."
+res_toggle_help_16: "Nastav si deaktivování svých privátních administrátorů."
+res_jail_help_0: "Splácí kauci, aby ses dostal z vězení."
+res_set_help_0: "Nastav si biografii svých obyvatel"
+res_set_help_1: "Nastav základní práva svým obyvatelům."
+res_set_help_2: "Nastav režimy svým obyvatelům."
 mode_1: 'Zobraz mapu mezi každou parcelou'
 mode_2: 'Pokus se automaticky zabírat při chůzi'
 mode_3: 'Pokus se automaticky vzdávat parcel při chůzi'
@@ -78,7 +194,6 @@ mode_4: 'Nastav městský kanál jako výchozí'
 mode_5: 'Nastav národní kanál jako výchozí'
 mode_6: 'Můžeš umístit %s od nepřátelských hranic k vytvoření válečných zón.'
 plot_perms: 'Pro oprávnění parcely použijte %s místo %s.'
-plot_perms_1: 'Měšťanské parcely nevyužívají oprávnění pro cizince.'
 res_list: 'Obyvatelé'
 res_sing: 'Obyvatel'
 mayor_sing: 'Starosta'
@@ -95,10 +210,41 @@ world_help_2: '[svět]'
 world_help_3: 'Stav uvedeného světa'
 world_help_4: 'Zobrazí všechny světy'
 world_help_5: 'Obnovit tento chunk'
+world_help_6: 'Napiš /tw toggle ? pro nápovědu'
+world_help_7: 'Napiš /tw set ? pro nápovědu'
+world_toggle_help_0: "Nastav on/off jestli mohou města zabírat území v tomto světě."
+world_toggle_help_1: "Nastav on/off jestli jsou v tomto světě povolena města."
 townyadmin_help_1: 'Vzdej se této parcely'
 townyadmin_help_2: 'Pokus se vzdát se parcel kolem sebe.'
 admin_panel_2: 'znovu načíst Towny'
 admin_panel_3: 'Spusť kód pro nový den'
+admin_panel_11: "Resetovat vaše nastavení"
+townyadmin_town_help_1: "Prohlídni si status města."
+townyadmin_town_help_3: "Přejmenovat město."
+townyadmin_town_help_4: "Odstranit město."
+townyadmin_town_help_13: "Vložit peníze do banky města."
+townyadmin_town_help_14: "Vybrat peníze z banky města."
+townyadmin_town_help_15: "Otevřít knihu historie banky města."
+townyadmin_town_toggle_help_0: "Nastavit si PVP."
+townyadmin_nation_help_4: "Přejmenovat stát."
+townyadmin_nation_help_5: "Odstranit město."
+townyadmin_nation_help_11: "Vložit peníze do národní banky."
+townyadmin_nation_help_12: "Vybrat peníze z národní banky."
+townyadmin_nation_help_13: "Otevřít knihu historie národní banky."
+ta_plot_help_0: "Vem pozemek pro hráče."
+ta_resident_help_0: "Přejmenovat obyvatele."
+ta_resident_help_1: "Přidat nebo odebrat přítele."
+ta_resident_help_3: "Smaž obyvatele z databáze."
+ta_set_help_0: "Udělej daného hráče starostou."
+ta_reload_help_0: "Obnoví databázi."
+ta_reload_help_1: "Obnoví Konfiguraci."
+ta_reload_help_2: "Reloadne jazykové soubory."
+ta_eco_resetbanks_help: "Resetuje městské a národní banky na danou částku nebo 0."
+ta_depositall_help_0: "Vložte danou částku do všech městských a národních bank."
+plot_toggle_help_0: "Zapne PVP na pozemku."
+plot_toggle_help_1: "Zapne výbuchy na pozemku."
+plot_toggle_help_2: "Zapne hoření na pozemku."
+plot_set_help_3: "Pojmenuje pozemek."
 msg_block_claim: 'Zaber tuto parcelu'
 msg_plot_nfs: 'Ukonči prodej parcely'
 msg_nfs_abr: '&''fs'' a ''nfs'' jsou zkratky pro ''forsale'' a ''notforsale''.'
@@ -112,9 +258,6 @@ msg_buy: '&bZakoupeno %d %s za %s.'
 msg_buy_resident_plot: '&b%s koupil od %s parcelu za %s!'
 msg_couldnt_pay_taxes: '&b%s neměl/a na zaplacení daní a není už součástí sídla %s.'
 msg_couldnt_pay_plot_taxes: '&b%s neměl/a na zaplacení daní a již nevlastní parcelu.'
-msg_payed_town_tax: '&bZaplacena městká daň '
-msg_payed_plot_cost: '&bZaplaceno %s za %s parcel v sídle %s'
-msg_payed_resident_tax: '&bZaplacena obyvatelská daň '
 msg_bankrupt_town: ' si nemohl/a dovolit zůstat městem.'
 msg_bankrupt_nation: ' si nemohl/a dovolit zůstat národem.'
 msg_nation_not_peaceful: '&bNárod si nemohl dovolit mír.'
@@ -336,7 +479,6 @@ msg_err_not_percentage: '&cProcenta musí být nižší než 100.'
 msg_err_no_economy: '&cNení zapnutá ekonomika.'
 msg_err_not_block_type: '&cTo není platný typ pozemku!'
 msg_not_allowed_join: '&c%s nemá povoleno připojit se k městu.'
-msg_offline_no_join: '&c%s je offline ale pouýívá oprávění, takže se nemůže připojit k městu.'
 msg_err_cannot_perform_action: '&cNelze provést akci v %s.'
 msg_npc_flag: '&bVlajka NPC je nyní %s pro %s.'
 msg_warning_delete: '&4*** VAROVÁNÍ, %s BUDE ZÍTRA ODSTRANĚN Z DŮVODU NEDOSTATKU FINANCÍ ***'
@@ -349,7 +491,6 @@ msg_err_not_enough_residents_join_nation: '&bMěsto %s nemá dostatek obyvatel p
 msg_not_enough_residents_no_longer_capital: '&bStaré hlavní město již nemá dostatek obyvatel k tomu, aby bylo hlavním městem. Nové hlavní město národa je %s.'
 msg_town_not_enough_residents_left_nation: '&bMěsto %s již nemá dostatek obyvatel k tomu, aby bylo členem frakce, a bylo z ní odebráno.'
 msg_nation_disbanded_town_not_enough_residents: '&bThe town %s již nemá dostatek obyvatel, aby mohl řídit frakci, a donutil frakci k rozpadu.'
-msg_not_enough_residents_refunded: '&bDostal jsi%s za to, že byla rozpuštěna vaše frakce, protože nemáte dostatek členů.'
 msg_not_enough_residents_capital: 'Město %s nemá dostatek obyvatel, aby bylo hlavním městem frakce.'
 list_page: 'Strana %s z %s'
 list_err_not_enough_pages: '&cPouze %s stránek k dispozici'
@@ -548,10 +689,13 @@ msg_err_over_outposts_limit: 'Nemůžete se teleportovat k vaší základnu, jst
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Psanci:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Psanci:'
 online: '&a(Online)'
-registered_last_online: '&2Registrován: &a%s &8| &2Naposledy online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Práva:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registrován: &a%s &8| &2Naposledy online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Práva:'
 status_on: '&4ZAP'
 status_off: '&aVYP'
 status_on_good: '&aZAP'
@@ -690,6 +834,9 @@ msg_bankrupt_nation2: '&b%s si nemohl dovolit zůstat národem.'
 status_embassy_town: 'Ambasády v'
 #Added in 0.52:
 msg_error_nation_has_no_allies: 'Národ nemá žádné spojence.'
+msg_error_nation_has_no_enemies: 'Stát nemá žádné nepřátele.'
+msg_error_ta_plot_claim: 'Chybí jméno hráče, např.: /ta plot claim [jméno hráče]'
+msg_error_no_player_with_that_name: 'Nebyl nalezen žádný hráč se jménem %s'
 #Added in 0.57:
 msg_err_already_res2: '&c%s již patří do města.'
 msg_err_unable_to_pay_bail: 'Nemůžeš si dovolit kauci.'
@@ -708,6 +855,7 @@ msg_err_resident_doesnt_belong_to_any_town: 'Hráč nepatří do žádného měs
 #Added in 0.63
 msg_plot_set_to_nfs: 'Parcela již není na prodej.'
 msg_the_wilderness: 'Divočina'
+msg_enemy_areas: 'Nepřátelské oblasti'
 msg_neutral_towns: 'Neutrální města'
 #Added in 0.64
 msg_err_no_nation_with_that_name: 'Nenalezen žádný národ s názvem %s'
@@ -726,7 +874,7 @@ msg_spawn_cost: '&aCena za teleport: &e%s'
 msg_reloaded_config: '&2Konfigurace úspěšně znovu načtena.'
 msg_reloaded_perms: '&2Permisse úspěšně znovu načteny.'
 msg_reloaded_db: '&2Databáze úspěšně znovu načtena'
-msg_reloaded_lang: '&2Jazykový soubor úspěšně znovu načten'
+msg_reloaded_lang: '&aJazykový soubor úspěšně znovu načten'
 msg_reset_config: '&2Konfigurace byla obnovena'
 msg_err_teleport_cancelled: 'Teleport zrušen kvůli tvému pohybu.'
 #Added in 0.79
@@ -846,3 +994,24 @@ status_resident_tax_title: 'Daň od %s'
 status_capital: 'Hlavní město:'
 msg_err_console_only: 'Tento příkaz lze použít pouze přímo z ovládacího panelu.'
 msg_err_player_only: 'Tento příkaz může použít pouze hráč.'
+#Used in the town's status screen to display plots
+status_plot_string: 'Pozemky'
+#Displays a plot type and the amount of townblocks of that type in the town
+status_plot_hover: '%s:'
+#Usage:
+msg_usage: 'Použití: %s'
+#Seen in /plot perm hud:
+msg_perm_hud_town: 'město'
+#Seen in /plot perm hud:
+msg_perm_hud_plot_for_sale: 'Na prodej: '
+#Seen in /plot perm hud:
+msg_perm_hud_no: 'Ne'
+#Seen in /plot perm hud:
+msg_perm_hud_yes: 'Ano'
+msg_town_notforsale: "%s již není na prodej."
+msg_town_buytown_not_forsale: "Uvedené město není na prodej."
+msg_warning_town_deposit_hint: "Pro vložení peněz do vaší banky města použij /town deposit [počet]."
+teleport_warmup_title_dont_move: "&6Nehýbej se!"
+teleport_warmup_subtitle_seconds_remaining: "&c%s &7sekund zbývá do teleportu."
+msg_err_town_no_longer_owns_this_plot: "%s už tento pozemek nevlastní."
+chunknotification_plot_claim_help_message: " Použij '/plot claim' pro zakoupení pozemku."

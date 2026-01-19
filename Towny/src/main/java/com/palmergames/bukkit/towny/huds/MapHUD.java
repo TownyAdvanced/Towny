@@ -17,6 +17,7 @@ import com.palmergames.bukkit.util.Colors;
 
 import java.util.Map;
 
+import io.papermc.paper.scoreboard.numbers.NumberFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -30,19 +31,25 @@ public class MapHUD {
 	/* Scoreboards use old-timey colours. */
 	private static final ChatColor WHITE = ChatColor.WHITE;
 	private static final ChatColor GOLD = ChatColor.GOLD;
+	private static final ChatColor YELLOW = ChatColor.YELLOW;
+	private static final ChatColor LIGHT_PURPLE = ChatColor.LIGHT_PURPLE;
+	private static final ChatColor RED = ChatColor.RED;
 	private static final ChatColor GREEN = ChatColor.GREEN;
 	private static final ChatColor DARK_GREEN = ChatColor.DARK_GREEN;
 
 	/* Scoreboards use Teams here is our team names.*/
 	private static final String HUD_OBJECTIVE = "MAP_HUD_OBJ";
 	private static final String TEAM_MAP_PREFIX = "mapTeam";
-	private static final String TEAM_OWNER = "ownerTeam";
 	private static final String TEAM_TOWN = "townTeam";
+	private static final String TEAM_OWNER = "ownerTeam";
+	private static final String TEAM_DISTRICT = "districtTeam";
+	private static final String TEAM_PLOTNAME = "plotnameTeam";
 
-	private static int lineWidth = 19, lineHeight = 10;
-	private static int halfLineWidth = lineWidth/2;
-	private static int halfLineHeight = lineHeight/2;
-
+	private static final int mapLineWidth = 19, mapLineHeight = 10;
+	private static final int halfMapLineWidth = mapLineWidth/2;
+	private static final int halfMapLineHeight = mapLineHeight/2;
+	private static final int MAX_NON_MAP_LINES = HUDManager.MAX_SCOREBOARD_HEIGHT - mapLineHeight;
+	
 	public static String mapHudTestKey() {
 		return "mapTeam1";
 	}
@@ -51,24 +58,40 @@ public class MapHUD {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective objective = BukkitTools.objective(board, HUD_OBJECTIVE, "maphud");
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+		try {
+			objective.numberFormat(NumberFormat.blank());
+		} catch (NoSuchMethodError | NoClassDefFoundError ignored) {}
 		
-		int score = lineHeight + 2;
+		// We have a number of lines below the map, this is how many.
+		int nonMapLines = Math.max(4, MAX_NON_MAP_LINES);
+		int score = mapLineHeight + nonMapLines;
 		ChatColor[] colors = ChatColor.values();
-		for (int i = 0; i < lineHeight; i++) {
+		for (int i = 0; i < mapLineHeight; i++) {
 			board.registerNewTeam(TEAM_MAP_PREFIX + i).addEntry(colors[i].toString());
 			objective.getScore(colors[i].toString()).setScore(score);
 			score--;
 		}
 		
 		String townEntry = DARK_GREEN + Translatable.of("town_sing").forLocale(player) + ": ";
-		String ownerEntry = DARK_GREEN + Translatable.of("owner_status").forLocale(player) + ": ";
-		
+		// A blank entry has to have a unique, invisible character. The TEAM_MAP_PREFIX teams have taken colors 0-9.
+		String ownerEntry = YELLOW.toString();
+		String districtEntry = LIGHT_PURPLE.toString();
+		String plotnameEntry = RED.toString();
+
+		score = nonMapLines;
 		board.registerNewTeam(TEAM_TOWN).addEntry(townEntry);
-		objective.getScore(townEntry).setScore(2);
-		
+		objective.getScore(townEntry).setScore(score--);
+
 		board.registerNewTeam(TEAM_OWNER).addEntry(ownerEntry);
-		objective.getScore(ownerEntry).setScore(1);
-		
+		objective.getScore(ownerEntry).setScore(score--);
+
+		board.registerNewTeam(TEAM_DISTRICT).addEntry(districtEntry);
+		objective.getScore(districtEntry).setScore(score--);
+
+		board.registerNewTeam(TEAM_PLOTNAME).addEntry(plotnameEntry);
+		objective.getScore(plotnameEntry).setScore(score--);
+
 		player.setScoreboard(board);
 		updateMap(player);
 	}
@@ -94,7 +117,7 @@ public class MapHUD {
 		board.getObjective(HUD_OBJECTIVE).setDisplayName(boardTitle);
 
 		// Populate our map into an array.
-		String[][] map = new String[lineWidth][lineHeight];
+		String[][] map = new String[mapLineWidth][mapLineHeight];
 		fillMapArray(wcX, wcZ, TownyAPI.getInstance().getResident(player.getName()), player.getWorld(), map);
 
 		// Write out the map to the board.
@@ -102,14 +125,48 @@ public class MapHUD {
 
 		TownBlock tb = wc.getTownBlockOrNull();
 		board.getTeam(TEAM_TOWN).setSuffix(GREEN + (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
-		board.getTeam(TEAM_OWNER).setSuffix(GREEN + (tb != null && tb.hasResident() ? tb.getResidentOrNull().getName() : Translatable.of("status_no_town").forLocale(player)));
+		board.getTeam(TEAM_OWNER).setSuffix(getOwnerName(tb, player));
+		board.getTeam(TEAM_DISTRICT).setSuffix(getDistrictName(tb, player));
+		board.getTeam(TEAM_PLOTNAME).setSuffix(getPlotName(tb, player));
+	}
+
+	private static String getOwnerName(TownBlock tb, Player player) {
+		String name = "";
+		if (tb == null)
+			return name;
+		name = !tb.hasResident() ? "" : tb.getResidentOrNull().getName();
+		String prefix = Translatable.of("owner_status").forLocale(player);
+		return HUDManager.check(DARK_GREEN + prefix + ": " + GREEN + name);
+	}
+
+	private static String getDistrictName(TownBlock tb, Player player) {
+		String name = "";
+		if (tb == null)
+			return name;
+		name = !tb.hasDistrict() ? "" : tb.getDistrict().getFormattedName();
+		String prefix = Translatable.of("msg_map_hud_district").forLocale(player);
+		return HUDManager.check(DARK_GREEN + prefix + GREEN + name);
+	}
+
+	private static String getPlotName(TownBlock tb, Player player) {
+		String name = "";
+		if (tb == null)
+			return name;
+		if (tb.hasPlotObjectGroup() && !tb.getPlotObjectGroup().getName().isEmpty())
+			name = tb.getPlotObjectGroup().getFormattedName();
+		if (!tb.hasPlotObjectGroup() && !tb.getName().isEmpty())
+			name = tb.getFormattedName();
+
+		String slug = tb.hasPlotObjectGroup() ? "msg_perm_hud_plotgroup_name" : "msg_perm_hud_plot_name";
+		String prefix = Translatable.of(slug).forLocale(player);
+		return HUDManager.check(DARK_GREEN + prefix + GREEN + name);
 	}
 
 	private static void fillMapArray(int wcX, int wcZ, Resident resident, World bukkitWorld, String[][] map) {
 		int x, y = 0;
-		for (int tby = wcX + (lineWidth - halfLineWidth - 1); tby >= wcX - halfLineWidth; tby--) {
+		for (int tby = wcX + (mapLineWidth - halfMapLineWidth - 1); tby >= wcX - halfMapLineWidth; tby--) {
 			x = 0;
-			for (int tbx = wcZ - halfLineHeight; tbx <= wcZ + (lineHeight - halfLineHeight - 1); tbx++) {
+			for (int tbx = wcZ - halfMapLineHeight; tbx <= wcZ + (mapLineHeight - halfMapLineHeight - 1); tbx++) {
 				final WorldCoord worldCoord = new WorldCoord(bukkitWorld, tby, tbx);
 				if (worldCoord.hasTownBlock())
 					mapTownBlock(resident, map, x, y, worldCoord.getTownBlockOrNull());
@@ -180,7 +237,7 @@ public class MapHUD {
 	}
 
 	private static boolean playerLocatedAtThisCoord(int x, int y) {
-		return x == halfLineHeight && y == halfLineWidth;
+		return x == halfMapLineHeight && y == halfMapLineWidth;
 	}
 
 	private static boolean isForSale(final TownBlock townBlock) {
@@ -224,9 +281,9 @@ public class MapHUD {
 	}
 
 	private static void writeMapToBoard(Scoreboard board, String[][] map) {
-		for (int my = 0; my < lineHeight; my++) {
+		for (int my = 0; my < mapLineHeight; my++) {
 			String line = "";
-			for (int mx = lineWidth - 1; mx >= 0; mx--)
+			for (int mx = mapLineWidth - 1; mx >= 0; mx--)
 				line += map[mx][my];
 
 			board.getTeam(TEAM_MAP_PREFIX + my).setSuffix(line);

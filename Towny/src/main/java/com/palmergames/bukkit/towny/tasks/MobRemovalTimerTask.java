@@ -11,12 +11,13 @@ import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.BukkitTools;
 
-import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
@@ -24,8 +25,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -33,9 +32,9 @@ import java.util.Set;
 
 public class MobRemovalTimerTask extends TownyTimerTask {
 
-	public static List<Class<?>> classesOfWorldMobsToRemove = new ArrayList<>();
-	public static List<Class<?>> classesOfWildernessMobsToRemove = new ArrayList<>();
-	public static List<Class<?>> classesOfTownMobsToRemove = new ArrayList<>();
+	public static Set<EntityType> typesOfWorldMobsToRemove = new HashSet<>();
+	public static Set<EntityType> typesOfWildernessMobsToRemove = new HashSet<>();
+	public static Set<EntityType> typesOfTownMobsToRemove = new HashSet<>();
 	private static final Set<String> ignoredSpawnReasons = new HashSet<>();
 	private static boolean isRemovingKillerBunny;
 	
@@ -44,9 +43,6 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:mob-removal-task"), config -> populateFields());
 	}
 	
-	// https://jd.papermc.io/paper/1.20/org/bukkit/entity/Entity.html#getEntitySpawnReason()
-	private static final MethodHandle GET_SPAWN_REASON = JavaUtil.getMethodHandle(Entity.class, "getEntitySpawnReason");
-
 	public MobRemovalTimerTask(Towny plugin) {
 		super(plugin);
 
@@ -54,15 +50,15 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	}
 
 	public static boolean isRemovingWorldEntity(LivingEntity livingEntity) {
-		return EntityTypeUtil.isInstanceOfAny(classesOfWorldMobsToRemove, livingEntity);
+		return typesOfWorldMobsToRemove.contains(livingEntity.getType());
 	}
 	
 	public static boolean isRemovingWildernessEntity(LivingEntity livingEntity) {
-		return  EntityTypeUtil.isInstanceOfAny(classesOfWildernessMobsToRemove, livingEntity);
+		return typesOfWildernessMobsToRemove.contains(livingEntity.getType());
 	}
 
 	public static boolean isRemovingTownEntity(LivingEntity livingEntity) {
-		return EntityTypeUtil.isInstanceOfAny(classesOfTownMobsToRemove, livingEntity);
+		return typesOfTownMobsToRemove.contains(livingEntity.getType());
 	}
 	
 	public static boolean isSpawnReasonIgnored(@NotNull Entity entity) {
@@ -73,16 +69,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 		if (spawnReason != null && ignoredSpawnReasons.contains(spawnReason.name()))
 			return true;
 
-		if (GET_SPAWN_REASON == null || ignoredSpawnReasons.isEmpty())
-			return false;
-
-		try {
-			final Enum<?> reason = (Enum<?>) GET_SPAWN_REASON.invoke(entity);
-
-			return ignoredSpawnReasons.contains(reason.name());
-		} catch (Throwable throwable) {
-			return false;
-		}
+		return ignoredSpawnReasons.contains(entity.getEntitySpawnReason().name());
 	}
 
 	@Override
@@ -192,13 +179,32 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	}
 	
 	private static void populateFields() {
-		classesOfWorldMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: ");
-		classesOfWildernessMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWildernessMobRemovalEntities(),"WildernessMob: ");
-		classesOfTownMobsToRemove = EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: ");
+		typesOfWorldMobsToRemove = entityClassesToTypes(EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWorldMobRemovalEntities(), "WorldMob: "));
+		typesOfWildernessMobsToRemove = entityClassesToTypes(EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getWildernessMobRemovalEntities(),"WildernessMob: "));
+		typesOfTownMobsToRemove = entityClassesToTypes(EntityTypeUtil.parseLivingEntityClassNames(TownySettings.getTownMobRemovalEntities(), "TownMob: "));
 		isRemovingKillerBunny = TownySettings.isRemovingKillerBunny();
 		
 		ignoredSpawnReasons.clear();
 		for (final String cause : TownySettings.getStrArr(ConfigNodes.PROT_MOB_REMOVE_IGNORED_SPAWN_CAUSES))
 			ignoredSpawnReasons.add(cause.toUpperCase(Locale.ROOT));
+	}
+	
+	private static Set<EntityType> entityClassesToTypes(List<Class<?>> classes) {
+		final Set<EntityType> types = new HashSet<>();
+
+		for (final EntityType entityType : Registry.ENTITY_TYPE) {
+			if (entityType.getEntityClass() == null) {
+				continue;
+			}
+			
+			for (final Class<?> clazz : classes) {
+				if (clazz.isAssignableFrom(entityType.getEntityClass())) {
+					types.add(entityType);
+					break;
+				}
+			}
+		}
+
+		return types;
 	}
 }

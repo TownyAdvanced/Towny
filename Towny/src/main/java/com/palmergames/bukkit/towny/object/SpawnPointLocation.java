@@ -16,14 +16,6 @@ public class SpawnPointLocation extends Position {
 		super(position.world(), position.blockX(), position.blockY(), position.blockZ(), 0F, 0F);
 	}
 
-	/**
-	 * @deprecated Deprecated as of 0.99.5.9, please use {@link #world()} instead.
-	 */
-	@Deprecated
-	public String getWorld() {
-		return world().getName();
-	}
-
 	public int getX() {
 		return blockX();
 	}

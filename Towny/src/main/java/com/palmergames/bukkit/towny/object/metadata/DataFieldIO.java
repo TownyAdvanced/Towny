@@ -59,9 +59,7 @@ public class DataFieldIO {
 	
 	private static JsonArray convertToArray(String metadata) throws IOException {
 		try {
-			// TODO: Replace this when support for MC 1.16.* is dropped.
-			@SuppressWarnings("deprecation")
-			JsonElement element = new JsonParser().parse(metadata);
+			JsonElement element = JsonParser.parseString(metadata);
 
 			if (!element.isJsonArray())
 				throw new IOException("Metadata cannot be read as a JSON Array!");
@@ -81,7 +79,7 @@ public class DataFieldIO {
 				continue;
 			
 			JsonArray cdfArray = element.getAsJsonArray();
-			if (cdfArray.size() < 2)
+			if (cdfArray.size() < 3)
 				continue;
 			
 			RawDataField rdf = deserializeCDFToRaw(cdfArray);

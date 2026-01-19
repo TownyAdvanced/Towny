@@ -61,19 +61,23 @@ public class ResidentPurge implements Runnable {
 			if (!resident.isNPC() && (System.currentTimeMillis() - resident.getLastOnline() > (this.deleteTime)) && !BukkitTools.isOnline(resident.getName())) {
 				if (townless && resident.hasTown())
 					continue;
-				
-				count++;
-				
-				message(Translatable.of("msg_deleting_resident", resident.getName()));
-				
-				if (removeTown)
+
+				if (removeTown && resident.hasTown()) {
 					resident.removeTown();
-				else
-					townyUniverse.getDataSource().removeResident(resident);
+					count++;
+					continue;
+				}
+
+				count++;
+				townyUniverse.getDataSource().removeResident(resident);
+				if (count < 50)
+					message(Translatable.of("msg_deleting_resident", resident.getName()));
+				if (count == 50)
+					message(Translatable.of("msg_purge_reached_50_residents"));
 			}
 		}
 
-		message(Translatable.of("msg_purge_complete", count));
+		message(Translatable.of(townless ? "msg_purge_complete_x_removed_from_towns" : "msg_purge_complete", count));
 
 	}
 

@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.permissions;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.Colors;
 
@@ -175,17 +176,7 @@ public class GroupManagerSource extends TownyPermissionSource {
 				return;
 			}
 
-			Resident resident = TownyUniverse.getInstance().getResident(event.getUserName());
-			if (resident != null) {
-				Player player = BukkitTools.getPlayerExact(resident.getName());
-
-				if (player != null) {
-					//setup default modes for this player.
-					String[] modes = getPlayerPermissionStringNode(player.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-					plugin.setPlayerMode(player, modes, false);
-					plugin.resetCache(player);
-				}
-			}
+			updateDefaultResidentModes(event.getUserName());
 		}
 
 		@EventHandler(priority = EventPriority.HIGH)
@@ -196,17 +187,9 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 					Group group = event.getGroup();
 					// Update all players who are in this group.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-						if (toUpdate != null) {
-							if (group.toString().equals(getPlayerGroup(toUpdate))) {
-								//setup default modes
-								String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-								plugin.setPlayerMode(toUpdate, modes, false);
-								plugin.resetCache(toUpdate);
-							}
-						}
-					}
-
+					for (Player player : BukkitTools.getOnlinePlayers())
+						if (player != null && group.toString().equals(getPlayerGroup(player)))
+							updateDefaultResidentModes(player.getName());
 				}
 			} catch (IllegalArgumentException e) {
 				// Not tracking this event type
@@ -219,15 +202,9 @@ public class GroupManagerSource extends TownyPermissionSource {
 			try {
 				if (PermissionEventEnums.GMSystem_Action.valueOf(event.getAction().name()) != null) {
 					// Update all players.
-					for (Player toUpdate : BukkitTools.getOnlinePlayers()) {
-						if (toUpdate != null) {
-							//setup default modes
-							String[] modes = getPlayerPermissionStringNode(toUpdate.getName(), PermissionNodes.TOWNY_DEFAULT_MODES.getNode()).split(",");
-							plugin.setPlayerMode(toUpdate, modes, false);
-							plugin.resetCache(toUpdate);
-						}
-					}
-
+					for (Player player : BukkitTools.getOnlinePlayers())
+						if (player != null)
+							updateDefaultResidentModes(player.getName());
 				}
 			} catch (IllegalArgumentException e) {
 				// Not tracking this event type
@@ -235,6 +212,13 @@ public class GroupManagerSource extends TownyPermissionSource {
 
 		}
 
+		private void updateDefaultResidentModes(String name) {
+			Resident resident = TownyUniverse.getInstance().getResident(name);
+			if (resident == null || !resident.isOnline())
+				return;
+			ResidentModeHandler.applyDefaultModes(resident, false);
+			plugin.resetCache(resident.getPlayer());
+		}
 	}
 	
 	protected class PermissionEventEnums {

@@ -20,6 +20,8 @@ public class HUDManager implements Listener{
 
 	static List<Player> permUsers;
 	static List<Player> mapUsers;
+	/** Scoreboards cannot show more than 15 lines. **/
+	static final int MAX_SCOREBOARD_HEIGHT = 15;
 
 	public HUDManager (Towny plugin) {
 		permUsers = new ArrayList<>();

@@ -13,7 +13,7 @@ jobs:
               uses: actions/setup-java@v3
               with:
                   distribution: 'temurin'
-                  java-version: '17'
+                  java-version: '21'
                   java-package: jdk
                   settings-path: ${{ github.workspace }} # location for the settings.xml file
             - name: Deploy to GitHub Package Registry

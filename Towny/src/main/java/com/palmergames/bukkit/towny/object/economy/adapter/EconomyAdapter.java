@@ -1,72 +1,80 @@
 package com.palmergames.bukkit.towny.object.economy.adapter;
 
-import org.bukkit.World;
+import com.palmergames.bukkit.towny.object.economy.Account;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * An adapter that is used to adapt multiple
  * economy implementations.
  */
+@ApiStatus.Internal
 public interface EconomyAdapter {
+	String name();
+	
 	/**
 	 * Attempts to add money to an account.
 	 * 
-	 * @param accountName The name of the account.
+	 * @param account The account.
 	 * @param amount The amount to add.
-	 * @param world The world this account is in.
 	 * @return A boolean indicating success.
 	 */
-	boolean add(String accountName, double amount, World world);
+	boolean add(Account account, double amount);
 
 	/**
 	 * Attempts to subtract money from an account.
 	 *
-	 * @param accountName The name of the account.
+	 * @param account The account.
 	 * @param amount The amount to add.
-	 * @param world The world this account is in.
 	 * @return A boolean indicating success.
 	 */
-	boolean subtract(String accountName, double amount, World world);
+	boolean subtract(Account account, double amount);
 
 	/**
 	 * Checks whether the given account exists.
 	 * 
-	 * @param accountName The name of the account.
+	 * @param account The account.
 	 * @return A boolean indicating success.
 	 */
-	boolean hasAccount(String accountName);
+	boolean hasAccount(Account account);
 
 	/**
 	 * Gets the balance of the account.
 	 * 
-	 * @param accountName The name of the account.
-	 * @param world The world this account is in.
+	 * @param account The account.
 	 * @return A boolean indicating success.
 	 */
-	double getBalance(String accountName, World world);
+	double getBalance(Account account);
 
 	/**
 	 * Attempts to create an account.
 	 * 
-	 * @param accountName The name of the new account.
+	 * @param account The name of the new account.
 	 */
-	void newAccount(String accountName);
+	void newAccount(Account account);
 
 	/**
 	 * Removes an account.
 	 * 
-	 * @param accountName The name of the account to remove.
+	 * @param account The name of the account to remove.
 	 */
-	void deleteAccount(String accountName);
+	void deleteAccount(Account account);
+
+	/**
+	 * Renames an account.
+	 * 
+	 * @param account the Account to rename.
+	 * @param newName the name to give the Account.
+	 */
+	boolean renameAccount(Account account, String newName);
 
 	/**
 	 * Sets the balance of the account.
 	 * 
-	 * @param accountName The name of the account.
+	 * @param account The account.
 	 * @param amount The amount to add.
-	 * @param world The world this account is in.
 	 * @return A boolean indicating success.
 	 */
-	boolean setBalance(String accountName, double amount, World world);
+	boolean setBalance(Account account, double amount);
 
 	/**
 	 * Get's the proper formatting for a given balance.

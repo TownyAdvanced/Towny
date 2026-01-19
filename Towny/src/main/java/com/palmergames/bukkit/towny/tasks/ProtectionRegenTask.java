@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
 import com.palmergames.bukkit.towny.regen.block.BlockLocation;
 
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
-import io.papermc.lib.PaperLib;
 import net.coreprotect.CoreProtect;
 
 import org.bukkit.Material;
@@ -62,10 +61,7 @@ public class ProtectionRegenTask extends TownyTimerTask {
 	@Override
 	public void run() {
 
-		if (PaperLib.isPaper())
-			PaperLib.getChunkAtAsync(this.state.getLocation()).thenRun(() -> plugin.getScheduler().run(this.state.getLocation(), this::replaceProtections));
-		else
-			replaceProtections();
+		this.state.getWorld().getChunkAtAsync(this.state.getLocation()).thenRun(() -> plugin.getScheduler().run(this.state.getLocation(), this::replaceProtections));
 		
 		TownyRegenAPI.removeProtectionRegenTask(this);
 	}
@@ -77,14 +73,21 @@ public class ProtectionRegenTask extends TownyTimerTask {
 			return;
 		
 		Block block = state.getBlock();
+
+		final boolean logWithCoreProtect = TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect");
+
+		if (logWithCoreProtect && !block.getType().isAir()) {
+			CoreProtect.getInstance().getAPI().logRemoval("#towny", block.getLocation(), block.getType(), block.getBlockData());
+		}
 		
 		// Replace physical block.
 		BlockData blockData = state.getBlockData().clone();
 		block.setType(state.getType(), false);
 		block.setBlockData(blockData);
 		
-		if (TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect"))
+		if (logWithCoreProtect && !state.getType().isAir()) {
 			CoreProtect.getInstance().getAPI().logPlacement("#towny", state.getLocation(), state.getType(), blockData);
+		}
 		
 		// If the state is a creature spawner, then replace properly.
 		if (state instanceof CreatureSpawner) {
@@ -156,25 +159,6 @@ public class ProtectionRegenTask extends TownyTimerTask {
 		return state;
 	}
 
-	/**
-	 * @return the taskId
-	 * @deprecated Deprecated as of 0.99.0.6, use {@link #getTask()} instead.
-	 */
-	@Deprecated
-	public int getTaskId() {
-
-		return -1;
-	}
-
-	/**
-	 * @param taskId the taskId to set
-	 * @deprecated Deprecated as of 0.99.0.6, use {@link #setTask(ScheduledTask)} instead. 
-	 */
-	@Deprecated
-	public void setTaskId(int taskId) {
-		
-	}
-	
 	public ScheduledTask getTask() {
 		return this.task;
 	}

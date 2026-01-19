@@ -12,6 +12,8 @@ help_0: 'Generell Towny Hjelp'
 help_1: 'Prøv følgende kommandoer for å lære mer om towny.'
 help_2: 'By Chat'
 help_3: 'Nasjon Chat'
+help_4: 'Hjelpekommando for innbyggere.'
+help_5: 'Hjelpekommando for by.'
 town_help_1: 'Byens status'
 town_help_2: '[borgermester]'
 town_help_3: 'Velg byens status'
@@ -51,7 +53,6 @@ mode_4: 'Standard bychat'
 mode_5: 'Standard nasjonschat'
 mode_6: 'Kan plassere %s i fiendtlige grenser for å lage krigsområder.'
 plot_perms: 'Bruk %s istedenfor %s for tillatelser i tomter.'
-plot_perms_1: 'Bosatte tomter bruker ikke utenforstående tillatelser.'
 res_list: 'Innbyggere'
 res_sing: 'Innbygger'
 mayor_sing: 'Borgermester'
@@ -85,9 +86,6 @@ msg_buy: '&bKjøpt %d %s for %s.'
 msg_buy_resident_plot: '&b%s Kjøpt %s''s tomt for %s!'
 msg_couldnt_pay_taxes: '&b%s Kunne ikke betale skatt og ble fjernet fra %s.'
 msg_couldnt_pay_plot_taxes: '&b%s Kunne ikke betale skatt og mistet eierskapet av en tomt.'
-msg_payed_town_tax: '&bBetalte ned skatten '
-msg_payed_plot_cost: '&bBetalte %s for %s tomt i %s'
-msg_payed_resident_tax: '&bBetalte innbygger skatt '
 msg_bankrupt_town: ' Hadde ikke råd til å bli gjenværende som by.'
 msg_bankrupt_nation: ' Hadde ikke råd til å bli gjenværende som nasjon.'
 msg_nation_not_peaceful: '&bNasjonen hadde ikke råd til dens fredfulle status.'
@@ -309,7 +307,6 @@ msg_err_not_percentage: '&cProsentandel må være under 100.'
 msg_err_no_economy: '&cØkonomi har ikke blitt aktivert.'
 msg_err_not_block_type: '&cDet er ikke en gyldig tomte type!'
 msg_not_allowed_join: '&c%s har ikke lov til å bli med i en by.'
-msg_offline_no_join: '&c%s er ikke pålogget men bruker tilganger som ikke kan bli med i en by.'
 msg_err_cannot_perform_action: '&cKan ikke fullføre denne handlingen i %s.'
 msg_npc_flag: '&bNPC flagg er nå %s for %s.'
 msg_warning_delete: '&4*** ADVARSEL, %s VIL BLI SLETTET NESTE DAG PÅ GRUNN AV MANGEL PÅ PENGER ***'
@@ -322,7 +319,6 @@ msg_err_not_enough_residents_join_nation: '&bByen %s har ikke nok innbyggere til
 msg_not_enough_residents_no_longer_capital: '&bNasjonens hovedstad hadde ikke nok innbyggere til å være hovedstad av nasjonen. Den nye hovedstaden er %s.'
 msg_town_not_enough_residents_left_nation: '&bByen %s har ikke nok innbyggere for å være i en nasjon, og har blitt fjernet fra nasjonen.'
 msg_nation_disbanded_town_not_enough_residents: '&bByen %s har ikke nok innbyggere og nasjonen ble tvunget til å legge ned nasjonen.'
-msg_not_enough_residents_refunded: '&bDu har blitt refundert $%s for at din nasjon ble lagt ned grunnet manglende innbyggere.'
 msg_not_enough_residents_capital: '&bByen %s har ikke nok innbyggere til å være hovedstad.'
 list_page: '&bSide %s av %s'
 list_err_not_enough_pages: '&cBare %s sider tilgjengelig'
@@ -519,10 +515,13 @@ msg_err_over_outposts_limit: 'Du kan ikke teleportere til utposten din, du er ov
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Lovløse:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Lovløse:'
 online: '&a(Pålogget)'
-registered_last_online: '&2Registrert: &a%s &8 | &2Sist pålogget: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Tilgang:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registrert: &a%s &8 | &2Sist pålogget: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Tilgang:'
 status_on: '&4PÅ'
 status_off: '&aAV'
 status_on_good: '&aPÅ'
@@ -957,7 +956,8 @@ msg_town_destroyed_by_nation_tax: '&bDen erobrede byen %s kunne ikke betale nasj
 msg_town_destroyed_by_nation_tax_multiple: '&bFølgende erobrede byer kunne ikke betale nasjonsskatten og har dermed falt: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bDin by var fritatt fra nasjonsskatt.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Ruinert status'
 msg_comptype_bankrupt: 'Konkurs status'
 msg_ruined: '&c(Ruinert)'
@@ -1095,9 +1095,11 @@ status_trustedlist: 'Betrodd'
 msg_click_to_edit: '&6Klikk for å endre.'
 permission_gui_header: 'Towny tillatelse GUI'
 msg_last_edited: '&7&oSist endret %s av %s.'
-msg_trusted_added: '&bLa til %s som betrodd i denne %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bLa til %s som betrodd i denne %s.'
 msg_already_trusted: '&b%s er allerede betrodd i denne %s.'
-msg_trusted_added_2: '&b%s har betrodd deg i en %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s har betrodd deg i en %s: %s.'
 msg_not_trusted: '&b%s er ikke betrodd i denne %s.'
 msg_trusted_removed: '&b%s er fjernet som betrodd i denne %s.'
 msg_trusted_removed_2: '&b%s har fjernet deg som betrodd i en %s: %s.'
@@ -1410,7 +1412,7 @@ msg_perm_hud_resident: 'innbygger'
 msg_perm_hud_nation: 'nasjon'
 #Seen in /plot perm hud:
 msg_perm_hud_outsider: 'utsider'
-#Seen in /plot perm hud:
+#Seen in /towny map hud:
 msg_perm_hud_plot_name: 'Tomt: '
 #Added in 0.153
 #Message shown confirming /ta town NAME settownlevel # command.

@@ -21,6 +21,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,11 +30,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 public class TownyWorld extends TownyObject {
 	private UUID uuid;
 
-	private final HashMap<String, Town> towns = new HashMap<>();
+	private final HashMap<UUID, Town> towns = new HashMap<>();
 
 	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
 	private CompactableCollection<EntityType> unclaimDeleteEntityTypes = null;
@@ -77,6 +80,8 @@ public class TownyWorld extends TownyObject {
 	private boolean isExplosion = TownySettings.isExplosions();
 	private boolean isForceExpl = TownySettings.isForcingExplosions();
 	private boolean isEndermanProtect = TownySettings.getEndermanProtect();
+	private boolean isJailing = TownySettings.isWorldJailingEnabled();
+
 	
 	private boolean isDisableCreatureTrample = TownySettings.isCreatureTramplingCropsDisabled();
 	
@@ -125,9 +130,16 @@ public class TownyWorld extends TownyObject {
 		return world;
 	}
 	
+	/**
+	 * @deprecated use {@link #getTownsInWorld()} instead.
+	 */
+	@Deprecated(since = "0.102.0.4")
 	public HashMap<String, Town> getTowns() {
+		return this.towns.values().stream().collect(Collectors.toMap(TownyObject::getName, UnaryOperator.identity(), (existingTown, newTown) -> newTown, HashMap::new));
+	}
 
-		return towns;
+	public @Unmodifiable Collection<Town> getTownsInWorld() {
+		return Set.copyOf(this.towns.values());
 	}
 
 	public boolean hasTowns() {
@@ -136,19 +148,17 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public boolean hasTown(String name) {
+		final Town town = TownyUniverse.getInstance().getTown(name);
 
-		return towns.containsKey(name);
+		return town != null && towns.containsKey(town.getUUID());
 	}
 
 	public boolean hasTown(Town town) {
-
-		return hasTown(town.getName());
+		return this.towns.containsKey(town.getUUID());
 	}
 
 	public void addTown(Town town) {
-
-		if (!hasTown(town))
-			towns.put(town.getName(), town);
+		towns.put(town.getUUID(), town);
 	}
 
 	public TownBlock getTownBlock(Coord coord) throws NotRegisteredException {
@@ -397,6 +407,7 @@ public class TownyWorld extends TownyObject {
 		wildRevertMaterialsToNotOverwrite = null;
 		// Entities protected from explosions
 		entityExplosionProtection = null;
+		setJailingEnabled(TownySettings.isWorldJailingEnabled());
 	}
 
 	public void setUsingPlotManagementDelete(boolean using) {
@@ -679,16 +690,6 @@ public class TownyWorld extends TownyObject {
 		return wildRevertMaterialsToNotOverwrite.contains(mat);
 	}
 
-	/**
-	 * @deprecated in lieu of {@link #isExplodedBlockAllowedToRevert(Material)} in 0.99.1.5.
-	 * @param mat Material that is being checked
-	 * @return true if the block should be reverted after blocking up.
-	 */
-	@Deprecated
-	public boolean isBlockAllowedToRevert(Material mat) {
-		return isExplodedBlockAllowedToRevert(mat);
-	}
-
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
 		blockExplosionProtection = CompactableCollection.materials(mats);
 	}
@@ -839,38 +840,11 @@ public class TownyWorld extends TownyObject {
 	/**
 	 * Checks the distance from the closest homeblock.
 	 * 
-	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord)} instead.
-	 * 
-	 * @param key - Coord to check from.
-	 * @return the distance to nearest towns homeblock.
-	 */
-	@Deprecated
-	public int getMinDistanceFromOtherTowns(Coord key) {
-		return getMinDistanceFromOtherTownsHomeBlocks(key);
-	}
-
-	/**
-	 * Checks the distance from the closest homeblock.
-	 * 
 	 * @param key - Coord to check from.
 	 * @return the distance to nearest towns homeblock.
 	 */
 	public int getMinDistanceFromOtherTownsHomeBlocks(Coord key) {
 		return getMinDistanceFromOtherTownsHomeBlocks(key, null);
-	}
-
-	/**
-	 * Checks the distance from a another town's homeblock.
-	 * 
-	 * @deprecated since 0.99.0.2 use {@link #getMinDistanceFromOtherTownsHomeBlocks(Coord, Town)} instead.
-	 * 
-	 * @param key - Coord to check from.
-	 * @param homeTown Players town
-	 * @return the closest distance to another towns homeblock.
-	 */
-	@Deprecated
-	public int getMinDistanceFromOtherTowns(Coord key, Town homeTown) {
-		return getMinDistanceFromOtherTownsHomeBlocks(key, homeTown);
 	}
 
 	/**
@@ -888,7 +862,7 @@ public class TownyWorld extends TownyObject {
 		final int keyX = key.getX();
 		final int keyZ = key.getZ();
 		
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			try {
 				Coord townCoord = town.getHomeBlock().getCoord();
 				if (homeTown != null) {
@@ -932,7 +906,7 @@ public class TownyWorld extends TownyObject {
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			if (homeTown != null)
 				// If the townblock either: the town is the same as homeTown OR 
 				// both towns are in the same nation (and this is set to ignore distance in the config,) skip over the proximity filter.
@@ -999,7 +973,7 @@ public class TownyWorld extends TownyObject {
 		final int keyZ = key.getZ();
 		
 		double minSqr = -1;
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			if (!town.hasNation()) continue;
 			for (TownBlock b : town.getTownBlocks()) {
 				if (!b.getWorld().equals(this)) continue;
@@ -1033,7 +1007,7 @@ public class TownyWorld extends TownyObject {
 		double minSqr = -1;
 		TownBlock tb = null;
 		
-		for (Town town : getTowns().values()) {
+		for (Town town : getTownsInWorld()) {
 			if (!town.hasNation())
 				continue;
 			for (TownBlock b : town.getTownBlocks()) {
@@ -1120,6 +1094,14 @@ public class TownyWorld extends TownyObject {
 	
 	public boolean isFriendlyFireEnabled( ) {
 		return isFriendlyFire;
+	}
+
+	public void setJailingEnabled(boolean parseBoolean) {
+		isJailing = parseBoolean;
+	}
+	
+	public boolean isJailingEnabled( ) {
+		return isJailing;
 	}
 
 	@Override

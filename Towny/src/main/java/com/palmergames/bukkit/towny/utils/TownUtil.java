@@ -66,7 +66,7 @@ public class TownUtil {
 
 			if (TownyEconomyHandler.isActive() && TownySettings.isRefundNationDisbandLowResidents()) {
 				town.getAccount().deposit(TownySettings.getNewNationPrice(), "nation refund");
-				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_not_enough_residents_refunded", TownySettings.getNewNationPrice()));
+				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_not_enough_residents_refunded", TownyEconomyHandler.getFormattedBalance(TownySettings.getNewNationPrice())));
 			}
 		} 
 	}

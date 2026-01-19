@@ -11,6 +11,22 @@ help_0: 'Algemene Towny Help'
 help_1: 'Probeer de volgende commando''s om meer te leren over Towny.'
 help_2: 'Stad Chat'
 help_3: 'Natie Chat'
+help_4: 'Inwoner commando hulp.'
+help_5: 'Dorp commando hulp.'
+help_6: 'Natie commando hulp.'
+help_7: 'Plot commando hulp.'
+help_8: 'Towny commando hulp.'
+help_9: 'Townyadmin commando hulp.'
+towny_help_0: "Algemene hulp voor Towny"
+towny_help_1: "Geeft een kaart weer van de dichtstbijzijnde steden."
+towny_help_2: "Weergeeft de prijzen die gebruikt worden met de economie"
+towny_help_3: "Hoogtepunten weergeven"
+towny_help_4: "Weergeef tijd tot een nieuwe dag."
+towny_help_5: "Weergeeft statistieken"
+towny_help_6: "Weergeeft de versie van Towny"
+towny_top_help_0: "Lijst van top inwoners gebaseerd op subcommando."
+towny_top_help_1: "Lijst van top land-eigenaren gebaseerd op basis van subcommando."
+towny_top_help_2: "Lijst van rijkste gebaseerd van subcommando."
 town_help_1: 'De status van je stad'
 town_help_2: '[burgemeester]'
 town_help_3: 'Status van geselecteerde stad'
@@ -21,6 +37,8 @@ town_help_7: 'Nieuwe stad met doelburgemeester.'
 town_help_8: 'Toon commando''s voor burgemeesters.'
 town_help_9: 'Vandaag de dag!'
 town_help_10: 'Toon alle online inwoners in de stad'
+town_help_13: "Bekijk een lijst van inwoners in het dorp."
+town_help_14: "Bekijk een lijst van gelederen in het dorp."
 mayor_help_3: 'Claim gebied niet gekoppeld aan stad'
 mayor_help_4: 'Claim om je heen in een radius van X'
 mayor_help_5: 'Claim in de maximale radius'
@@ -50,7 +68,6 @@ mode_4: 'Standaard chat naar het stad kanaal'
 mode_5: 'Standaard chat naar het natie kanaal'
 mode_6: 'Kan %s in grenzen van de vijand plaatsen om warzones te maken.'
 plot_perms: 'Gebruik %s in plaats van %s voor plot permissies.'
-plot_perms_1: 'Inwoner plots maken geen gebruik van outsider permissies.'
 res_list: 'Inwoners'
 res_sing: 'Inwoner'
 mayor_sing: 'Burgemeester'
@@ -84,9 +101,6 @@ msg_buy: '&bHeeft %d %s voor %s gekocht.'
 msg_buy_resident_plot: '&b%s heeft %s''s plot gekocht voor %s!'
 msg_couldnt_pay_taxes: '&b%s kon geen belastingen betalen en werd uit de %s gezet.'
 msg_couldnt_pay_plot_taxes: '&b%s kon geen belastingen betalen en heeft het eigendom van een plot verloren.'
-msg_payed_town_tax: '&bBetaalde stad belasting van '
-msg_payed_plot_cost: '&bBetaalde %s voor %s plots in %s'
-msg_payed_resident_tax: '&bBetaalde inwoners belasting van '
 msg_bankrupt_town: ' kon het niet betalen een stad te blijven.'
 msg_bankrupt_nation: ' kon het niet betalen een natie te blijven.'
 msg_nation_not_peaceful: '&bNatie kon zijn vreedzame staat niet betalen.'
@@ -309,7 +323,6 @@ msg_err_not_percentage: '&cPercentages moeten minder dan 100 zijn.'
 msg_err_no_economy: '&cEconomie is niet ingeschakeld.'
 msg_err_not_block_type: '&cDat is geen geldig plot type!'
 msg_not_allowed_join: '&c%s is niet toegestaan lid te worden van een stad.'
-msg_offline_no_join: '&c%s is offline maar het gebruik van permissies kan daarom geen lid worden van een stad.'
 msg_err_cannot_perform_action: '&cKan deze actie niet uitvoeren in de %s.'
 msg_npc_flag: '&bNPC flag is nu %s voor %s.'
 msg_warning_delete: '&4*** WAARSCHUWING, %s ZAL WORDEN VERWIJDERD TIJDENS VOLGENDE NIEUWE DAG DOOR GEBREK AAN GELD ***'
@@ -322,7 +335,6 @@ msg_err_not_enough_residents_join_nation: '&bDe stad %s heeft niet genoeg inwone
 msg_not_enough_residents_no_longer_capital: '&bDe oude hoofdstad van de natie heeft niet meer genoeg inwoners om de hoofdstad van de natie te zijn. De nieuwe hoofdstad van de natie is %s.'
 msg_town_not_enough_residents_left_nation: '&bDe stad %s heeft niet meer genoeg inwoners om lid te zijn van een natie en is verwijderd uit de natie.'
 msg_nation_disbanded_town_not_enough_residents: '&bDe stad %s heeft niet langer genoeg inwoners om de natie te besturen en heeft de natie gedwongen tot ontbinding.'
-msg_not_enough_residents_refunded: '&bJe bent $%s terugbetaald voor je natie die wordt ontbonden omdat je niet genoeg inwoners hebt.'
 msg_not_enough_residents_capital: '&bDe stad %s heeft niet genoeg inwoners om de hoofdstad van de natie te zijn.'
 list_page: '&bPagina %s van %s'
 list_err_not_enough_pages: '&cAlleen %s pagina''s beschikbaar'
@@ -485,10 +497,13 @@ msg_err_not_enough_outposts_free_to_claim: 'Niet genoeg outposts beschikbaar om 
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Outlaws:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Outlaws:'
 online: '&a(Online)'
-registered_last_online: '&2Geregistreerd: &a%s &8| &2Laatst Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Perm:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Geregistreerd: &a%s &8| &2Laatst Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Perm:'
 status_on: '&4AAN'
 status_off: '&aUIT'
 status_on_good: '&aAAN'
@@ -699,7 +714,8 @@ towny_prices_upkeep_num_plots: 'aantal plots.'
 towny_prices_upkeep_town_level: 'stad niveau (aantal bewoners)'
 towny_prices_overclaimed_flat_cost: 'een vlakke prijs van'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Geruïneerde Status'
 msg_ruined: '&c(Ruïne)'
 msg_bankrupt: '&c(Failliet)'
@@ -829,9 +845,11 @@ status_trustedlist: 'Vertrouwd'
 msg_click_to_edit: 'Klik om te bewerken.'
 permission_gui_header: 'Towny Permissie GUI'
 msg_last_edited: '&7&oLaatst gewijzigd op %s door %s.'
-msg_trusted_added: '&bToegevoegd %s als vertrouwd in deze %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bToegevoegd %s als vertrouwd in deze %s.'
 msg_already_trusted: '&b%s is al vertrouwd in deze %s.'
-msg_trusted_added_2: '&b%s heeft je vertrouwd in een %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s heeft je vertrouwd in een %s: %s.'
 msg_not_trusted: '&b%s is niet vertrouwd in deze %s.'
 msg_trusted_removed: '&bVerwijderd %s als vertrouwd in deze %s.'
 msg_trusted_removed_2: '&b%s heeft je verwijderd als vertrouwd in een %s: %s.'

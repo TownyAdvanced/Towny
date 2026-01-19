@@ -11,6 +11,15 @@ help_0: 'Allmän hjälp för Towny'
 help_1: 'Testa några av följande kommandon för att lära dig mer om Towny.'
 help_2: 'Stadschatt'
 help_3: 'Nationschatt'
+help_4: 'Invånare kommando hjälp.'
+help_5: 'Stad kommando hjälp.'
+help_6: 'Land kommando hjälp.'
+help_7: 'Tomt kommando hjälp.'
+help_8: 'Tony kommando hjälp.'
+help_9: 'Townyadmin kommando hjälp.'
+towny_help_0: "Allmän hjälp för Towny"
+towny_help_1: "Visar en karta över närliggande townblockar"
+towny_help_2: "Visar priserna använd genom Ekonomi"
 town_help_1: 'Skriver ut information om din stad i chatten.'
 town_help_2: '[borgmästare]'
 town_help_3: 'Information om den staden.'
@@ -50,7 +59,6 @@ mode_4: 'Ställ in att skriva i stadschatten.'
 mode_5: 'Ställ in att skriva i nationschatten.'
 mode_6: 'Kan placera %s hos fienders gränser för att skapa en krigszon.'
 plot_perms: 'Använd %s istället för %s till markbehörighet.'
-plot_perms_1: 'Invånares mark använder inte behörigheten ''utomstående''.'
 res_list: 'Invånare'
 res_sing: 'Invånare'
 mayor_sing: 'Borgmästare'
@@ -84,9 +92,6 @@ msg_buy: '&bKöpte %d %s till priset %s.'
 msg_buy_resident_plot: '&b%s köpte %s mark till priset %s!'
 msg_couldnt_pay_taxes: '&b%s kunde inte betala skatten och blev utslängd från %s.'
 msg_couldnt_pay_plot_taxes: '&b%s kunde inte betala skatten och förlorade sin mark.'
-msg_payed_town_tax: '&bBetalade statsskatten '
-msg_payed_plot_cost: '&bBetalade %s för %s mark i %s'
-msg_payed_resident_tax: '&bBetalade invånarskatten '
 msg_bankrupt_town: ' hade inte råd att fortsätta som stad.'
 msg_bankrupt_nation: ' hade inte råd att fortsätta som nation.'
 msg_nation_not_peaceful: '&bNationen hade inte råd att fortsätta vara fredliga.'
@@ -308,7 +313,6 @@ msg_err_not_percentage: '&cProcentandelen måste vara under 100.'
 msg_err_no_economy: '&cEkonomi har inte aktiverats.'
 msg_err_not_block_type: '&cDet är inte en giltig marktyp!'
 msg_not_allowed_join: '&c%s får inte gå med i en stad.'
-msg_offline_no_join: '&c%s är offline och kan inte gå med i en stad.'
 msg_err_cannot_perform_action: '&cDet går inte att utföra den här åtgärden i %s.'
 msg_npc_flag: '&bNPC flaggan är nu %s för %s.'
 msg_warning_delete: '&4*** VARNING, %s KOMMER RADERAS NÄSTA DAG PGA. BRISTEN AV PENGAR ***'
@@ -321,7 +325,6 @@ msg_err_not_enough_residents_join_nation: '&bStaden %s har inte tillräckligt me
 msg_not_enough_residents_no_longer_capital: '&bNationens gamla huvudstad har inte längre tillräckligt med invånare. Nationens nya huvudstad är %s.'
 msg_town_not_enough_residents_left_nation: '&bStaden %s har inte längre tillräckligt med invånare för att vara medlem i en nation och har tagits bort från nationen.'
 msg_nation_disbanded_town_not_enough_residents: '&bStaden %s har inte längre tillräckligt med invånare för att försörja nationen och har tvingat nationen att stängas.'
-msg_not_enough_residents_refunded: '&bDu har återbetalats $%s för att din nation upplöses på grund av att de inte har tillräckligt med invånare.'
 msg_not_enough_residents_capital: '&bStaden %s har inte tillräckligt med invånare för att vara huvudstaden i nationen.'
 list_page: '&bSida %s av %s'
 list_err_not_enough_pages: '&cEndast %s sidor tillgängliga.'
@@ -518,10 +521,13 @@ msg_err_over_outposts_limit: 'Du kan inte teleportera till dina kolonier, du har
 #These are translated because we may (or may not) be handling longer words in a smart way.
 #If you are a translator feel free to skip over this section, as it may or may not appear very nice
 #in game. It would be best to see what the changes look like in game before you PR it to github.
-outlaws: 'Laglösa:' #Used on /t outlawlist
+#Used on /t outlawlist
+outlaws: 'Laglösa:'
 online: '&a(Inloggad)'
-registered_last_online: '&2Registerad: &a%s &8| &2Senast Online: &a%s' #Used in mayor hover text in /town status screen.
-status_perm: 'Behörighet:' #Used on /plot perm, /res
+#Used in mayor hover text in /town status screen.
+registered_last_online: '&2Registerad: &a%s &8| &2Senast Online: &a%s'
+#Used on /plot perm, /res
+status_perm: 'Behörighet:'
 status_on: '&4PÅ'
 status_off: '&aAV'
 status_on_good: '&aPÅ'
@@ -957,7 +963,8 @@ msg_town_destroyed_by_nation_tax: '&bDen erövrade staden %s kunde inte betala n
 msg_town_destroyed_by_nation_tax_multiple: '&bFöljande erövrade städer hade inte råd med nationskatten och har fallit: '
 msg_your_town_was_exempt_from_the_nation_tax: '&bYour stad var undantagen från nationsskatten.'
 #Added in 0.97
-status_perm_line_format: '&a%s=&7' #The Build = ---- Destroy = ---- seen in the status screen.
+#The Build = ---- Destroy = ---- seen in the status screen.
+status_perm_line_format: '&a%s=&7'
 msg_comptype_ruined: 'Förstörd status'
 msg_comptype_bankrupt: 'Bankrutt Status'
 msg_ruined: '&c(Förstörd)'
@@ -1096,9 +1103,11 @@ status_trustedlist: 'Betrodd'
 msg_click_to_edit: '&6Klicka för att ändra.'
 permission_gui_header: 'Towny Behörighets-GUI'
 msg_last_edited: '&7&oSenast ändrad vid %s av %s.'
-msg_trusted_added: '&bLade till %s som betrodd i denna %s.' #Last %s is either town or townblock
+#Last %s is either town or townblock
+msg_trusted_added: '&bLade till %s som betrodd i denna %s.'
 msg_already_trusted: '&b%s är redan betrodd i denna %s.'
-msg_trusted_added_2: '&b%s har betrott dig med en %s: %s.' #Last %s is the town name or worldcoord.
+#Last %s is the town name or worldcoord.
+msg_trusted_added_2: '&b%s har betrott dig med en %s: %s.'
 msg_not_trusted: '&b%s är inte betrodd i denna %s.'
 msg_trusted_removed: '&bTog bort %s som betrodd i denna %s.'
 msg_trusted_removed_2: '&b%s har tagit bort dig som betrodd i en %s: %s.'

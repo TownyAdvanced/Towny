@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.towny.db.TownyDataSource;
 import com.palmergames.bukkit.towny.db.TownyFlatFileSource;
 import com.palmergames.bukkit.towny.db.TownySQLSource;
+import com.palmergames.bukkit.towny.db.migration.SQLDatabaseMigrator;
 import com.palmergames.bukkit.towny.event.TownyLoadedDatabaseEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
@@ -29,6 +30,7 @@ import com.palmergames.bukkit.towny.tasks.BackupTask;
 import com.palmergames.bukkit.towny.tasks.CleanupTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.NameValidation;
+import com.palmergames.util.JavaUtil;
 import com.palmergames.util.Trie;
 
 import org.bukkit.Location;
@@ -199,6 +201,10 @@ public class TownyUniverse {
 
         // Throw Event.
         BukkitTools.fireEvent(new TownyLoadedDatabaseEvent());
+
+		// The migrator does nothing on flatfile except for bumping the database version
+		final SQLDatabaseMigrator migrator = new SQLDatabaseMigrator(towny);
+		migrator.migrateIfNeeded();
         
         // Congratulations the Database loaded.
        	return true;
@@ -345,7 +351,7 @@ public class TownyUniverse {
 		Resident res = residentNameMap.get(filteredName);
 
 		if (res == null && TownySettings.isFakeResident(residentName)) {
-			Resident npc = new Resident(residentName);
+			Resident npc = new Resident(residentName, JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2));
 			npc.setNPC(true);
 			return npc;
 		}
@@ -523,9 +529,9 @@ public class TownyUniverse {
     	return townsTrie;
 	}
 
-	// Internal use only.
-	public void newTownInternal(String name) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
-    	newTown(name, false);
+	@ApiStatus.Internal
+	public void newTownInternal(String name, UUID uuid) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
+    	newTown(name, uuid);
 	}
 
 	/**
@@ -538,13 +544,14 @@ public class TownyUniverse {
 	public void newTown(@NotNull String name) throws AlreadyRegisteredException, InvalidNameException {
 		Preconditions.checkNotNull(name, "Name cannot be null!");
 		
-		newTown(name, true);
+		newTown(name, UUID.randomUUID());
 	}
 
-	private void newTown(String name, boolean assignUUID) throws AlreadyRegisteredException, InvalidNameException {
+	private void newTown(String name, UUID uuid) throws AlreadyRegisteredException, InvalidNameException {
+		Preconditions.checkArgument(uuid != null, "uuid may not be null");
 		String filteredName = NameValidation.checkAndFilterTownNameOrThrow(name);
 
-		Town town = new Town(filteredName, assignUUID ? UUID.randomUUID() : null);
+		Town town = new Town(filteredName, uuid);
 		registerTown(town);
 	}
 	
@@ -1084,7 +1091,13 @@ public class TownyUniverse {
 	}
 
 	public void removeSpawnPoint(Location loc) {
-		removeSpawnPoint(SpawnPointLocation.parseSpawnPointLocation(loc));
+		SpawnPointLocation spawnPointLocation;
+		try {
+			spawnPointLocation = SpawnPointLocation.parseSpawnPointLocation(loc);
+		} catch (IllegalArgumentException ignored) {
+			return;
+		}
+		removeSpawnPoint(spawnPointLocation);
 	}
 	
 	public void removeSpawnPoint(SpawnPointLocation point) {
