@@ -219,7 +219,7 @@
         <dependency>
             <groupId>org.mockbukkit.mockbukkit</groupId>
             <artifactId>mockbukkit-v1.21</artifactId>
-            <version>4.98.0</version>
+            <version>4.100.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
