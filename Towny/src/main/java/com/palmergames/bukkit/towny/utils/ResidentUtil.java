@@ -253,7 +253,8 @@ public class ResidentUtil {
 		try {
 			String name = nextNpcName();
 			final UUID npcUUID = JavaUtil.changeUUIDVersion(UUID.randomUUID(), 2);
-			Resident npc = TownyUniverse.getInstance().getDataSource().newResident(name, npcUUID);
+			TownyUniverse.getInstance().newResident(npcUUID, name);
+			Resident npc = TownyUniverse.getInstance().getResident(npcUUID);
 			npc.setRegistered(System.currentTimeMillis());
 			npc.setLastOnline(0);
 			npc.setNPC(true);

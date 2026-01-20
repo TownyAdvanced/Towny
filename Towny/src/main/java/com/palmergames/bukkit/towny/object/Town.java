@@ -1,6 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.google.common.collect.Lists;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -30,17 +31,22 @@ import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.CombatUtil;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.TownUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.StringMgmt;
+
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -62,11 +68,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class Town extends Government implements TownBlockOwner {
@@ -1651,6 +1657,224 @@ public class Town extends Government implements TownBlockOwner {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTown(this);
+	}
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> twn_hm = new HashMap<>();
+			twn_hm.put("name", getName());
+			twn_hm.put("outlaws", StringMgmt.join(getOutlaws(), "#"));
+			twn_hm.put("mayor", hasMayor() ? getMayor().getUUID() : "");
+			twn_hm.put("nation", hasNation() ? getNation().getUUID() : "");
+			twn_hm.put("assistants", StringMgmt.join(getRank("assistant"), "#"));
+			twn_hm.put("townBoard", getBoard());
+			twn_hm.put("founder", getFounder());
+			twn_hm.put("tag", getTag());
+			twn_hm.put("protectionStatus", getPermissions().toString().replaceAll(",", "#"));
+			twn_hm.put("bonus", getBonusBlocks());
+			twn_hm.put("manualTownLevel", getManualTownLevel());
+			twn_hm.put("purchased", getPurchasedBlocks());
+			twn_hm.put("nationZoneOverride", getNationZoneOverride());
+			twn_hm.put("nationZoneEnabled", isNationZoneEnabled());
+			twn_hm.put("commercialPlotPrice", getCommercialPlotPrice());
+			twn_hm.put("commercialPlotTax", getCommercialPlotTax());
+			twn_hm.put("embassyPlotPrice", getEmbassyPlotPrice());
+			twn_hm.put("embassyPlotTax", getEmbassyPlotTax());
+			twn_hm.put("spawnCost", getSpawnCost());
+			twn_hm.put("plotPrice", getPlotPrice());
+			twn_hm.put("plotTax", getPlotTax());
+			twn_hm.put("taxes", getTaxes());
+			twn_hm.put("hasUpkeep", hasUpkeep());
+			twn_hm.put("hasUnlimitedClaims", hasUnlimitedClaims());
+			twn_hm.put("visibleOnTopLists", isVisibleOnTopLists());
+			twn_hm.put("taxpercent", isTaxPercentage());
+			twn_hm.put("maxPercentTaxAmount", getMaxPercentTaxAmount());
+			twn_hm.put("forSale", isForSale());
+			twn_hm.put("forSalePrice", getForSalePrice());
+			twn_hm.put("forSaleTime", getForSaleTime());
+			twn_hm.put("open", isOpen());
+			twn_hm.put("public", isPublic());
+			twn_hm.put("conquered", isConquered());
+			twn_hm.put("conqueredDays", getConqueredDays());
+			twn_hm.put("allowedToWar", isAllowedToWar());
+			twn_hm.put("hasActiveWar", hasActiveWar());
+			twn_hm.put("adminDisabledPvP", isAdminDisabledPVP());
+			twn_hm.put("adminEnabledPvP", isAdminEnabledPVP());
+			twn_hm.put("adminEnabledMobs", isAdminEnabledMobs());
+			twn_hm.put("joinedNationAt", getJoinedNationAt());
+			twn_hm.put("mapColorHexCode", getMapColorHexCode());
+			twn_hm.put("movedHomeBlockAt", getMovedHomeBlockAt());
+			twn_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+			twn_hm.put("homeblock", hasHomeBlock() ? getTownBlockForSaving(getHomeBlock()) : "");
+			twn_hm.put("spawn", hasSpawn() ? parseLocationForSaving(getSpawn()) : "");
+			StringBuilder outpostArray = new StringBuilder();
+			if (hasOutpostSpawn())
+				for (Location spawn : new ArrayList<>(getAllOutpostSpawns()))
+					outpostArray.append(parseLocationForSaving(spawn)).append(";");
+			twn_hm.put("outpostSpawns", outpostArray.toString());
+			twn_hm.put("registered", getRegistered());
+			twn_hm.put("ruined", isRuined());
+			twn_hm.put("ruinedTime", getRuinedTime());
+			twn_hm.put("neutral", isNeutral());
+			twn_hm.put("debtBalance", getDebtBalance());
+			if (getPrimaryJail() != null)
+				twn_hm.put("primaryJail", getPrimaryJail().getUUID());
+			twn_hm.put("trustedResidents", StringMgmt.join(toUUIDList(getTrustedResidents()), "#"));
+			twn_hm.put("trustedTowns", StringMgmt.join(getTrustedTownsUUIDS(), "#"));
+			twn_hm.put("allies", StringMgmt.join(getAlliesUUIDs(), "#"));
+			twn_hm.put("enemies", StringMgmt.join(getEnemiesUUIDs(), "#"));
+			return twn_hm;
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for town " + getName() + " (" + getUUID() + ").");
+		}
+	}
+
+	public boolean load(Map<String, String> dataAsMap) {
+		String line = "";
+		TownyUniverse universe = TownyUniverse.getInstance();
+		try {
+			line = dataAsMap.get("mayor");
+			if (line != null) {
+				try {
+					Resident res = universe.getResident(UUID.fromString(line));
+					if (res == null)
+						throw new TownyException();
+					forceSetMayor(res);
+				} catch (TownyException e1) {
+					if (getResidents().isEmpty())
+						universe.getDataSource().deleteTown(this);
+					else 
+						findNewMayor();
+
+					return true;
+				}
+			}
+
+			setName(dataAsMap.getOrDefault("name", ""));
+			setRegistered(getOrDefault(dataAsMap, "registered", 0l));
+			setRuined(getOrDefault(dataAsMap, "ruined", false));
+			setRuinedTime(getOrDefault(dataAsMap, "ruinedTime", 0l));
+			setNeutral(getOrDefault(dataAsMap, "neutral", TownySettings.getTownDefaultNeutral()));
+			setOpen(getOrDefault(dataAsMap, "open", TownySettings.getTownDefaultOpen()));
+			setPublic(getOrDefault(dataAsMap, "public", TownySettings.getTownDefaultPublic()));
+			setConquered(getOrDefault(dataAsMap, "conquered", false));
+			setConqueredDays(getOrDefault(dataAsMap, "conqueredDays", 0));
+			setAllowedToWar(getOrDefault(dataAsMap, "allowedToWar", TownySettings.getTownDefaultAllowedToWar()));
+			setDebtBalance(getOrDefault(dataAsMap, "debtBalance", 0.0));
+			setNationZoneOverride(getOrDefault(dataAsMap, "nationZoneOverride", 0));
+			setNationZoneEnabled(getOrDefault(dataAsMap, "nationZoneEnabled", false));
+			setBoard(dataAsMap.getOrDefault("townBoard", TownySettings.getTownDefaultBoard()));
+			setTag(dataAsMap.getOrDefault("tag", ""));
+			setBonusBlocks(getOrDefault(dataAsMap, "bonusBlocks", 0));
+			setPurchasedBlocks(getOrDefault(dataAsMap, "purchasedBlocks", 0));
+			setHasUpkeep(getOrDefault(dataAsMap, "hasUpkeep", true));
+			setHasUnlimitedClaims(getOrDefault(dataAsMap, "hasUnlimitedClaims", false));
+			setVisibleOnTopLists(getOrDefault(dataAsMap, "visibleOnTopLists", true));
+			setTaxes(getOrDefault(dataAsMap, "taxes", TownySettings.getTownDefaultTax()));
+			setTaxPercentage(getOrDefault(dataAsMap, "taxpercent", TownySettings.getTownDefaultTaxPercentage()));
+			setPlotPrice(getOrDefault(dataAsMap, "plotPrice", 0.0));
+			setPlotTax(getOrDefault(dataAsMap, "plotTax", TownySettings.getTownDefaultPlotTax()));
+			setCommercialPlotTax(getOrDefault(dataAsMap, "commercialPlotTax", TownySettings.getTownDefaultShopTax()));
+			setCommercialPlotPrice(getOrDefault(dataAsMap, "commercialPlotPrice", 0.0));
+			setEmbassyPlotTax(getOrDefault(dataAsMap, "embassyPlotTax", TownySettings.getTownDefaultEmbassyTax()));
+			setEmbassyPlotPrice(getOrDefault(dataAsMap, "embassyPlotPrice", 0.0));
+			setMaxPercentTaxAmount(getOrDefault(dataAsMap, "maxPercentTaxAmount", TownySettings.getMaxTownTaxPercentAmount()));
+			setSpawnCost(getOrDefault(dataAsMap, "spawnCost", TownySettings.getSpawnTravelCost()));
+			setMapColorHexCode(dataAsMap.getOrDefault("mapColorHexCode", MapUtil.generateRandomTownColourAsHexCode()));
+			setAdminDisabledPVP(getOrDefault(dataAsMap, "adminDisabledPvP", false));
+			setAdminEnabledPVP(getOrDefault(dataAsMap, "adminEnabledPvP", false));
+			setAdminEnabledMobs(getOrDefault(dataAsMap, "adminEnabledMobs", false));
+			setAllowedToWar(getOrDefault(dataAsMap, "allowedToWar", TownySettings.getTownDefaultAllowedToWar()));
+			setAllowedToWar(getOrDefault(dataAsMap, "hasActiveWar", false));
+			setManualTownLevel(getOrDefault(dataAsMap, "manualTownLevel", -1));
+			setPermissions(dataAsMap.getOrDefault("protectionStatus", ""));
+			setJoinedNationAt(getOrDefault(dataAsMap, "joinedNationAt", 0l));
+			setMovedHomeBlockAt(getOrDefault(dataAsMap, "movedHomeBlockAt", 0l));
+			setForSale(getOrDefault(dataAsMap, "forSale", false));
+			setForSalePrice(getOrDefault(dataAsMap, "forSalePrice", 0.0));
+			setForSaleTime(getOrDefault(dataAsMap, "forSaleTime", 0l));
+			line = dataAsMap.get("founder");
+			if (hasData(line))
+				setFounder(line);
+
+			line = dataAsMap.get("homeBlock");
+			if (line != null) {
+				try {
+					setHomeBlock(parseTownBlockFromDB(line));
+				} catch (NumberFormatException e) {
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_location", getName()));
+				} catch (NotRegisteredException e) {
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_homeblock_load_invalid_townblock", getName()));
+				}
+			}
+
+			line = dataAsMap.get("spawn");
+			if (hasData(line)) {
+				Location loc = parseSpawnLocationFromDB(line);
+				if (loc != null)
+					setSpawn(loc);
+			}
+
+			// Load outpost spawns
+			line = dataAsMap.get("outpostspawns");
+			if (hasData(line)) {
+				String[] outposts = line.split(";");
+				for (String spawn : outposts) {
+					Location loc = parseSpawnLocationFromDB(spawn);
+					if (loc != null)
+						forceAddOutpostSpawn(Position.ofLocation(loc));
+				}
+			}
+
+			line = dataAsMap.get("metadata");
+			if (hasData(line))
+				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+			
+			line = dataAsMap.get("nation");
+			if (hasData(line)) {
+				Nation nation = universe.getNation(UUID.fromString(line));
+				if (nation != null)
+					setNation(nation, false);
+			}
+
+			line = dataAsMap.get("primaryJail");
+			if (hasData(line)) {
+				UUID jailUUID = UUID.fromString(line);
+				if (universe.hasJail(jailUUID))
+					setPrimaryJail(universe.getJail(jailUUID));
+			}
+
+			line = dataAsMap.get("trustedResidents");
+			if (hasData(line))
+				getResidentsFromDB(line).stream().forEach(res -> addTrustedResident(res));
+			line = dataAsMap.get("trustedTowns");
+			if (hasData(line))
+				getTownsFromDB(line).stream().forEach(this::addTrustedTown);
+
+			line = dataAsMap.get("allies");
+			if (hasData(line))
+				loadAllies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(getSplitter(line)))));
+
+			line = dataAsMap.get("enemies");
+			if (hasData(line))
+				loadEnemies(TownyAPI.getInstance().getTowns(toUUIDArray(line.split(getSplitter(line)))));
+
+			line = dataAsMap.get("outlaws");
+			if (hasData(line))
+				loadOutlaws(getResidentsFromDB(line));
+
+			try {
+				universe.registerTown(this);
+			} catch (AlreadyRegisteredException ignored) {}
+			if (exists())
+				save();
+
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_town_file_at_line", getName(), line, getUUID().toString()), e);
+			return false;
+		}
+		return true;
 	}
 
 	public void saveTownBlocks() {

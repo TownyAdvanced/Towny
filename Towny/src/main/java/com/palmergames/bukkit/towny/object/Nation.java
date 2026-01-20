@@ -1,39 +1,54 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySettings.NationLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.event.DeleteNationEvent.Cause;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.event.nation.NationCalculateNationLevelNumberEvent;
+import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
 import com.palmergames.bukkit.towny.invites.exceptions.TooManyInvitesException;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
+import com.palmergames.bukkit.towny.utils.MapUtil;
 import com.palmergames.bukkit.towny.utils.NationUtil;
 import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.StringMgmt;
+
 import net.kyori.adventure.audience.Audience;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Nation extends Government {
@@ -42,8 +57,8 @@ public class Nation extends Government {
 
 	private final List<Town> towns = new ArrayList<>();
 	private final List<Town> sanctionedTowns = new ArrayList<>();
-	private List<Nation> allies = new ArrayList<>();
-	private List<Nation> enemies = new ArrayList<>();
+	private final Map<UUID, Nation> allies = new LinkedHashMap<>();
+	private final Map<UUID, Nation> enemies = new LinkedHashMap<>();
 	private Town capital;
 	private final List<Invite> sentAllyInvites = new ArrayList<>();
 	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
@@ -285,24 +300,44 @@ public class Nation extends Government {
 		return this.getResidents().stream().filter(assistant -> assistant.hasNationRank("assistant")).collect(Collectors.toList());
 	}
 
-	public void setEnemies(List<Nation> enemies) {
+	public void loadEnemies(List<Nation> nations) {
+		for (Nation nation : nations)
+			enemies.put(nation.getUUID(), nation);
+	}
 
-		this.enemies = enemies;
+	public List<UUID> getEnemiesUUIDs() {
+		//noinspection Java9CollectionFactory
+		return Collections.unmodifiableList(new ArrayList<>(enemies.keySet()));
+	}
+
+	public void setEnemies(List<Nation> enemies) {
+		this.enemies.clear();
+		loadEnemies(enemies);
 	}
 
 	public List<Nation> getEnemies() {
+		//noinspection Java9CollectionFactory
+		return Collections.unmodifiableList(new ArrayList<>(enemies.values()));
+	}
 
-		return enemies;
+	public void loadAllies(List<Nation> nations) {
+		for (Nation nation : nations)
+			allies.put(nation.getUUID(), nation);
+	}
+
+	@Unmodifiable
+	public List<UUID> getAlliesUUIDs() {
+		return Collections.unmodifiableList(new ArrayList<>(allies.keySet()));
 	}
 
 	public void setAllies(List<Nation> allies) {
-
-		this.allies = allies;
+		this.allies.clear();
+		loadAllies(allies);
 	}
 
 	public List<Nation> getAllies() {
-
-		return allies;
+		//noinspection Java9CollectionFactory
+		return Collections.unmodifiableList(new ArrayList<>(allies.values()));
 	}
 
 	public boolean hasReachedMaximumAllies() {
@@ -607,14 +642,126 @@ public class Nation extends Government {
 	 * @return true if it is allied, false otherwise.
 	 */
 	public boolean isAlliedWith(Nation nation) {
-		return allies.contains(nation);
+		return allies.containsKey(nation.getUUID());
 	}
 	
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveNation(this);
 	}
-	
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> nat_hm = new HashMap<>();
+			nat_hm.put("name", getName());
+			nat_hm.put("capital", hasCapital() ? getCapital().getUUID() : "");
+			nat_hm.put("nationBoard", getBoard());
+			nat_hm.put("mapColorHexCode", getMapColorHexCode());
+			nat_hm.put("tag", hasTag() ? getTag() : "");
+			nat_hm.put("allies", StringMgmt.join(getAlliesUUIDs(), "#"));
+			nat_hm.put("enemies", StringMgmt.join(getEnemiesUUIDs(), "#"));
+			nat_hm.put("taxes", getTaxes());
+			nat_hm.put("taxpercent", isTaxPercentage());
+			nat_hm.put("maxPercentTaxAmount", getMaxPercentTaxAmount());
+			nat_hm.put("conqueredTax", getConqueredTax());
+			nat_hm.put("spawnCost", getSpawnCost());
+			nat_hm.put("neutral", isNeutral());
+			nat_hm.put("nationSpawn", hasSpawn() ? parseLocationForSaving(getSpawn()) : "");
+			nat_hm.put("registered", getRegistered());
+			nat_hm.put("isPublic", isPublic());
+			nat_hm.put("isOpen", isOpen());
+			nat_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+			return nat_hm;
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for nation " + getName() + " (" + getUUID() + ")" + ".");
+		}
+	}
+
+	public boolean load(Map<String, String> dataAsMap) {
+		String line = "";
+		TownyUniverse universe = TownyUniverse.getInstance();
+		Logger logger = Towny.getPlugin().getLogger();
+		try {
+			setName(dataAsMap.getOrDefault("name", ""));
+			line = dataAsMap.get("capital");
+			String cantLoadCapital = Translation.of("flatfile_err_nation_could_not_load_capital_disband", getName());
+			if (line != null) {
+				Town town = universe.getTown(UUID.fromString(line));
+				if (town != null) {
+					try {
+						forceSetCapital(town);
+					} catch (EmptyNationException e1) {
+						logger.warning(cantLoadCapital);
+						TownyUniverse.getInstance().getDataSource().removeNation(this, Cause.NO_TOWNS);
+						return true;
+					}
+				}
+				else {
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_cannot_set_capital_try_next", getName(), line));
+					if (!findNewCapital()) {
+						logger.warning(cantLoadCapital);
+						TownyUniverse.getInstance().getDataSource().removeNation(this, Cause.NO_TOWNS);
+						return true;
+					}
+				}
+			} else {
+				TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_undefined_capital_select_new", getName()));
+				if (!findNewCapital()) {
+					logger.warning(cantLoadCapital);
+					TownyUniverse.getInstance().getDataSource().removeNation(this, Cause.NO_TOWNS);
+					return true;
+				}
+			}
+			setTaxPercentage(getOrDefault(dataAsMap, "taxpercent", TownySettings.getNationDefaultTaxPercentage()));
+			setMaxPercentTaxAmount(getOrDefault(dataAsMap, "maxPercentTaxAmount", TownySettings.getMaxNationTaxPercentAmount()));
+			setTaxes(getOrDefault(dataAsMap, "taxes", 0.0));
+			setConqueredTax(getOrDefault(dataAsMap, "conqueredTax", TownySettings.getDefaultNationConqueredTaxAmount()));
+			setSpawnCost(getOrDefault(dataAsMap, "spawnCost", TownySettings.getSpawnTravelCost()));
+			setNeutral(getOrDefault(dataAsMap, "neutral", false));
+			setRegistered(getOrDefault(dataAsMap, "registered", 0l));
+			setPublic(getOrDefault(dataAsMap, "isPublic", false));
+			setOpen(getOrDefault(dataAsMap, "isOpen", TownySettings.getNationDefaultOpen()));
+			setBoard(dataAsMap.getOrDefault("nationBoard", TownySettings.getNationDefaultBoard()));
+			setMapColorHexCode(dataAsMap.getOrDefault("mapColorHexCode", MapUtil.generateRandomNationColourAsHexCode()));
+			setTag(dataAsMap.getOrDefault("tag", ""));
+
+			line = dataAsMap.get("allies");
+			if (hasData(line))
+				loadAllies(getNationsFromDB(line));
+
+			line = dataAsMap.get("enemies");
+			if (hasData(line))
+				loadEnemies(getNationsFromDB(line));
+
+			line = dataAsMap.get("sanctionedTowns");
+			if (hasData(line))
+				loadSanctionedTowns(getTownsFromDB(line));
+
+			line = dataAsMap.get("nationSpawn");
+			if (hasData(line)) {
+				Location loc = parseSpawnLocationFromDB(line);
+				if (loc != null)
+					setSpawn(loc);
+			}
+
+			line = dataAsMap.get("metadata");
+			if (hasData(line))
+				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+
+			try {
+				universe.registerNation(this);
+			} catch (AlreadyRegisteredException ignored) {}
+			if (exists())
+				save();
+
+		} catch (Exception e) {
+			logger.log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", getName(), line, getUUID().toString()), e);
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public int getNationZoneSize() {
 		if (!TownySettings.getNationZonesEnabled())
@@ -700,16 +847,8 @@ public class Nation extends Government {
 		return sanctionedTowns.stream().map(t -> t.getUUID().toString()).collect(Collectors.toList());
 	}
 
-	public void loadSanctionedTowns(String[] tokens) {
-		for (String stringUUID : tokens) {
-			try {
-				Town town = TownyAPI.getInstance().getTown(UUID.fromString(stringUUID));
-				if (town != null)
-					sanctionedTowns.add(town);
-			} catch (IllegalArgumentException ignored) {
-				continue;
-			}
-		}
+	public void loadSanctionedTowns(@Nullable List<Town> towns) {
+		towns.forEach(t -> addSanctionedTown(t));
 	}
 
 

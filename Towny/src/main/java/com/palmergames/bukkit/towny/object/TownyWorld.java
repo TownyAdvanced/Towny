@@ -1,11 +1,14 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.util.MathUtil;
 
 import com.palmergames.util.StringMgmt;
@@ -31,6 +34,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class TownyWorld extends TownyObject {
@@ -1057,6 +1061,153 @@ public class TownyWorld extends TownyObject {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveWorld(this);
+	}
+
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> world_hm = new HashMap<>();
+			world_hm.put("name", getName());
+			world_hm.put("usingTowny", isUsingTowny());
+			world_hm.put("warAllowed", isWarAllowed());
+			world_hm.put("pvp", isPVP());
+			world_hm.put("forcepvp", isForcePVP());
+			world_hm.put("friendlyFire", isFriendlyFireEnabled());
+			world_hm.put("claimable", isClaimable());
+			world_hm.put("worldmobs", hasWorldMobs());
+			world_hm.put("wildernessmobs", hasWildernessMobs());
+			world_hm.put("forcetownmobs", isForceTownMobs());
+			world_hm.put("firespread", isFire());
+			world_hm.put("forcefirespread", isForceFire());
+			world_hm.put("explosions", isExpl());
+			world_hm.put("forceexplosions", isForceExpl());
+			world_hm.put("endermanprotect", isEndermanProtect());
+			world_hm.put("disablecreaturetrample", isDisableCreatureTrample());
+
+			world_hm.put("unclaimedZoneBuild", getUnclaimedZoneBuild());
+			world_hm.put("unclaimedZoneDestroy", getUnclaimedZoneDestroy());
+			world_hm.put("unclaimedZoneSwitch", getUnclaimedZoneSwitch());
+			world_hm.put("unclaimedZoneItemUse", getUnclaimedZoneItemUse());
+			if (getUnclaimedZoneName() != null)
+				world_hm.put("unclaimedZoneName", getUnclaimedZoneName());
+
+			// Unclaimed Zone Ignore Ids
+			if (getUnclaimedZoneIgnoreMaterials() != null)
+				world_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(getUnclaimedZoneIgnoreMaterials(), "#"));
+
+			// Deleting EntityTypes from Townblocks on Unclaim.
+			world_hm.put("isDeletingEntitiesOnUnclaim", isDeletingEntitiesOnUnclaim());
+			if (getUnclaimDeleteEntityTypes() != null)
+				world_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(getUnclaimDeleteEntityTypes(), "#"));
+
+			// Using PlotManagement Delete
+			world_hm.put("usingPlotManagementDelete", isUsingPlotManagementDelete());
+			// Plot Management Delete Ids
+			if (getPlotManagementDeleteIds() != null)
+				world_hm.put("plotManagementDeleteIds", StringMgmt.join(getPlotManagementDeleteIds(), "#"));
+
+			// Using PlotManagement Mayor Delete
+			world_hm.put("usingPlotManagementMayorDelete", isUsingPlotManagementMayorDelete());
+			// Plot Management Mayor Delete
+			if (getPlotManagementMayorDelete() != null)
+				world_hm.put("plotManagementMayorDelete", StringMgmt.join(getPlotManagementMayorDelete(), "#"));
+
+			// Using PlotManagement Revert
+			world_hm.put("usingPlotManagementRevert", isUsingPlotManagementRevert());
+
+			// Plot Management Ignore Ids
+			if (getPlotManagementIgnoreIds() != null)
+				world_hm.put("plotManagementIgnoreIds", StringMgmt.join(getPlotManagementIgnoreIds(), "#"));
+
+			world_hm.put("revertOnUnclaimWhitelistMaterials", StringMgmt.join(getRevertOnUnclaimWhitelistMaterials(), "#"));
+			world_hm.put("wildRegenBlocksToNotOverwrite", StringMgmt.join(getWildRevertMaterialsToNotOverwrite(), "#"));
+			
+			// Using PlotManagement Wild Regen
+			world_hm.put("usingPlotManagementWildRegen", isUsingPlotManagementWildEntityRevert());
+
+			// Wilderness Explosion Protection entities
+			if (getPlotManagementWildRevertEntities() != null)
+				world_hm.put("PlotManagementWildRegenEntities", StringMgmt.join(getPlotManagementWildRevertEntities(), "#"));
+
+			// Wilderness Explosion Protection Block Whitelist
+			if (getPlotManagementWildRevertBlockWhitelist() != null)
+				world_hm.put("PlotManagementWildRegenBlockWhitelist", StringMgmt.join(getPlotManagementWildRevertBlockWhitelist(), "#"));
+
+			// Using PlotManagement Wild Regen Delay
+			world_hm.put("plotManagementWildRegenSpeed", getPlotManagementWildRevertDelay());
+			
+			// Using PlotManagement Wild Block Regen
+			world_hm.put("usingPlotManagementWildRegenBlocks", isUsingPlotManagementWildBlockRevert());
+
+			// Wilderness Explosion Protection blocks
+			if (getPlotManagementWildRevertBlocks() != null)
+				world_hm.put("PlotManagementWildRegenBlocks", StringMgmt.join(getPlotManagementWildRevertBlocks(), "#"));
+
+			world_hm.put("jailing", isJailingEnabled());
+			world_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+
+			return world_hm;
+
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for world " + getName() + " (" + getUUID() + ").");
+		}
+	}
+
+	public boolean load(Map<String, String> worldAsMap) {
+		String line = "";
+		try {
+			setName(worldAsMap.getOrDefault("name", ""));
+			setClaimable(getOrDefault(worldAsMap,"claimable", true));
+			setUsingTowny(getOrDefault(worldAsMap, "usingTowny", TownySettings.isUsingTowny()));
+			setWarAllowed(getOrDefault(worldAsMap, "warAllowed", TownySettings.isWarAllowed()));
+			setPVP(getOrDefault(worldAsMap, "pvp", TownySettings.isPvP()));
+			setForcePVP(getOrDefault(worldAsMap, "forcepvp", TownySettings.isForcingPvP()));
+			setFriendlyFire(getOrDefault(worldAsMap, "friendlyFire", TownySettings.isFriendlyFireEnabled()));
+			setForceTownMobs(getOrDefault(worldAsMap, "forcetownmobs", TownySettings.isForcingMonsters()));
+			setWildernessMobs(getOrDefault(worldAsMap, "wildernessmobs", TownySettings.isWildernessMonstersOn()));
+			setWorldMobs(getOrDefault(worldAsMap, "worldmobs", TownySettings.isWorldMonstersOn()));
+			setFire(getOrDefault(worldAsMap, "firespread", TownySettings.isFire()));
+			setForceFire(getOrDefault(worldAsMap, "forcefirespread", TownySettings.isForcingFire()));
+			setExpl(getOrDefault(worldAsMap, "explosions", TownySettings.isExplosions()));
+			setForceExpl(getOrDefault(worldAsMap, "forceexplosions", TownySettings.isForcingExplosions()));
+			setEndermanProtect(getOrDefault(worldAsMap, "endermanprotect", TownySettings.getEndermanProtect()));
+			setDisableCreatureTrample(getOrDefault(worldAsMap, "disablecreaturetrample", TownySettings.isCreatureTramplingCropsDisabled()));
+			setUnclaimedZoneBuild(getOrDefault(worldAsMap, "unclaimedZoneBuild", TownySettings.getUnclaimedZoneBuildRights()));
+			setUnclaimedZoneDestroy(getOrDefault(worldAsMap, "unclaimedZoneDestroy", TownySettings.getUnclaimedZoneDestroyRights()));
+			setUnclaimedZoneSwitch(getOrDefault(worldAsMap, "unclaimedZoneSwitch", TownySettings.getUnclaimedZoneSwitchRights()));
+			setUnclaimedZoneItemUse(getOrDefault(worldAsMap, "unclaimedZoneItemUse", TownySettings.getUnclaimedZoneItemUseRights()));
+			setUnclaimedZoneName(worldAsMap.getOrDefault("unclaimedZoneName", TownySettings.getUnclaimedZoneName()));
+			setUnclaimedZoneIgnore(toList(worldAsMap.get("unclaimedZoneIgnoreIds")));
+			setPlotManagementDeleteIds(toList(worldAsMap.get("plotManagementDeleteIds")));
+			setUsingPlotManagementDelete(getOrDefault(worldAsMap, "usingPlotManagementDelete", TownySettings.isUsingPlotManagementDelete()));
+			setDeletingEntitiesOnUnclaim(getOrDefault(worldAsMap, "isDeletingEntitiesOnUnclaim", TownySettings.isDeletingEntitiesOnUnclaim()));
+			setUnclaimDeleteEntityTypes(toList(worldAsMap.get("unclaimDeleteEntityTypes")));
+			setPlotManagementMayorDelete(toList(worldAsMap.get("plotManagementMayorDelete")));
+			setUsingPlotManagementMayorDelete(getOrDefault(worldAsMap, "usingPlotManagementMayorDelete", TownySettings.isUsingPlotManagementMayorDelete()));
+			setRevertOnUnclaimWhitelistMaterials(toList(worldAsMap.get("revertOnUnclaimWhitelistMaterials")));
+			setWildRevertMaterialsToNotOverwrite(toList(worldAsMap.get("wildRegenBlocksToNotOverwrite")));
+			setPlotManagementIgnoreIds(toList(worldAsMap.get("plotManagementIgnoreIds")));
+			setUsingPlotManagementRevert(getOrDefault(worldAsMap, "usingPlotManagementRevert", TownySettings.isUsingPlotManagementRevert()));
+			setPlotManagementWildRevertEntities(toList(worldAsMap.get("PlotManagementWildRegenEntities")));
+			setUsingPlotManagementWildEntityRevert(getOrDefault(worldAsMap, "usingPlotManagementWildRegen", TownySettings.isUsingPlotManagementWildEntityRegen()));
+			setPlotManagementWildRevertBlockWhitelist(toList(worldAsMap.get("PlotManagementWildRegenBlockWhitelist")));
+			setPlotManagementWildRevertMaterials(toList(worldAsMap.get("PlotManagementWildRegenBlocks")));
+			setUsingPlotManagementWildBlockRevert(getOrDefault(worldAsMap, "usingPlotManagementWildRegenBlocks", TownySettings.isUsingPlotManagementWildBlockRegen()));
+			setPlotManagementWildRevertDelay(getOrDefault(worldAsMap, "usingPlotManagementWildRegenDelay", TownySettings.getPlotManagementWildRegenDelay()));
+			setJailingEnabled(getOrDefault(worldAsMap, "jailing", TownySettings.isWorldJailingEnabled()));
+			line = worldAsMap.get("metadata");
+			if (hasData(line))
+				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+
+			TownyUniverse.getInstance().registerTownyWorld(this);
+			if (exists())
+				save();
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, Translation.of("flatfile_err_exception_reading_world_file_at_line", getName(), line, getUUID().toString()), e);
+			return false;
+		}
+		return true;
 	}
 
 	@ApiStatus.Internal

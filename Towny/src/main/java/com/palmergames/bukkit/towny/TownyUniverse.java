@@ -36,6 +36,7 @@ import com.palmergames.util.Trie;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -393,18 +394,32 @@ public class TownyUniverse {
 	public Optional<Resident> getResidentOpt(@NotNull UUID residentUUID) {
 		return Optional.ofNullable(getResident(residentUUID));
 	}
-	
-	// Internal Use Only
-	public void registerResidentUUID(@NotNull Resident resident) throws AlreadyRegisteredException {
+
+	public void newResident(@NotNull UUID residentUUID, String residentName) throws AlreadyRegisteredException, InvalidNameException {
+		Preconditions.checkNotNull(residentUUID, "UUID cannot be null!");
+		Preconditions.checkNotNull(residentName, "Name cannot be null!");
+		Resident resident = new Resident(NameValidation.checkAndFilterPlayerName(residentName), residentUUID);
+		registerResident(resident);
+	}
+
+	/**
+	 * Registers a Resident with only a UUID present as data.
+	 * Meant only to be used by Towny in the loading process.
+	 * @param residentName String name of the Resident.
+	 * @param residentUUID UUID to put onto the Resident.
+	 */
+	@Internal
+	public void newResidentInternal(@NotNull String residentName, @NotNull UUID residentUUID) {
+		Resident resident = new Resident(residentName, residentUUID);
+		registerResidentUUID(resident);
+	}
+
+	@Internal
+	public void registerResidentUUID(@NotNull Resident resident) {
 		Preconditions.checkNotNull(resident, "Resident cannot be null!");
-		
-		if (resident.getUUID() != null) {
-			if (residentUUIDMap.putIfAbsent(resident.getUUID(), resident) != null) {
-				throw new AlreadyRegisteredException(
-					String.format("UUID '%s' was already registered for resident '%s'!", resident.getUUID().toString(), resident.getName())
-				);
-			}
-		}
+
+		if (resident.getUUID() != null)
+			residentUUIDMap.putIfAbsent(resident.getUUID(), resident);
 	}
 
 	/**
@@ -452,9 +467,28 @@ public class TownyUniverse {
 		}
 	}
 
-    @Unmodifiable
+	/**
+	 * Unregister a resident from the internal structures.
+	 * This does not modify the resident internally, nor performs any database operations using the resident.
+	 * 
+	 * @param uuid UUID of resident to unregister
+	 */
+	public void unregisterResident(@NotNull UUID uuid) {
+		Preconditions.checkNotNull(uuid, "UUID cannot be null!");
+		Resident resident = residentUUIDMap.get(uuid);
+		Preconditions.checkNotNull(uuid, "Resident cannot be null!");
+		residentNameMap.remove(resident.getName().toLowerCase());
+		residentsTrie.removeKey(resident.getName());
+		residentUUIDMap.remove(resident.getUUID());
+	}
+
+	@Unmodifiable
     public Collection<Resident> getResidents() {
 		return Collections.unmodifiableCollection(residentNameMap.values());
+	}
+
+	public Set<UUID> getResidentUUIDs() {
+		return residentUUIDMap.keySet();
 	}
 
 	/**
@@ -525,13 +559,18 @@ public class TownyUniverse {
     	return Collections.unmodifiableCollection(townNameMap.values());
 	}
 
+	public Set<UUID> getTownUUIDs() {
+		return townUUIDMap.keySet();
+	}
+
     public Trie getTownsTrie() {
     	return townsTrie;
 	}
 
 	@ApiStatus.Internal
-	public void newTownInternal(String name, UUID uuid) throws AlreadyRegisteredException, com.palmergames.bukkit.towny.exceptions.InvalidNameException {
-    	newTown(name, uuid);
+	public void newTownInternal(String name, UUID uuid) {
+		Town town = new Town(name, uuid);
+		registerTownUUID(town);
 	}
 
 	/**
@@ -554,17 +593,16 @@ public class TownyUniverse {
 		Town town = new Town(filteredName, uuid);
 		registerTown(town);
 	}
-	
-	// This is used internally since UUIDs are assigned after town objects are created.
-	public void registerTownUUID(@NotNull Town town) throws AlreadyRegisteredException {
+
+	@ApiStatus.Internal
+	public void registerTownUUID(@NotNull Town town) {
 		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
 		if (town.getUUID() != null) {
 			
-			if (townUUIDMap.containsKey(town.getUUID())) {
-				throw new AlreadyRegisteredException("UUID of town " + town.getName() + " was already registered!");
-			}
-			
+			if (townUUIDMap.containsKey(town.getUUID()))
+				return;
+
 			townUUIDMap.put(town.getUUID(), town);
 		}
 	}
@@ -578,6 +616,8 @@ public class TownyUniverse {
 	 * @throws AlreadyRegisteredException Town is already in the universe maps.
 	 */
 	public void registerTown(@NotNull Town town) throws AlreadyRegisteredException {
+		
+		
 		Preconditions.checkNotNull(town, "Town cannot be null!");
 		
 		if (townNameMap.putIfAbsent(town.getName().toLowerCase(Locale.ROOT), town) != null) {
@@ -610,6 +650,22 @@ public class TownyUniverse {
 				throw new NotRegisteredException(String.format("The town with the UUID '%s' is not registered!", town.getUUID().toString()));
 			}
 		}
+	}
+
+	/**
+	 * Used to unregister a town from the TownyUniverse internal maps.
+	 * 
+	 * This does not delete a town, nor perform any actions that affect the town internally.
+	 * 
+	 * @param uuid UUID of Town to unregister
+	 */
+	public void unregisterTown(@NotNull UUID uuid) {
+		Preconditions.checkNotNull(uuid, "UUID cannot be null!");
+		Town town = townUUIDMap.get(uuid);
+		Preconditions.checkNotNull(town, "Town cannot be null!");
+		townNameMap.remove(town.getName().toLowerCase());
+		townsTrie.removeKey(town.getName());
+		townUUIDMap.remove(town.getUUID());
 	}
 
 	// =========== Nation Methods ===========
@@ -690,20 +746,48 @@ public class TownyUniverse {
 	public Collection<Nation> getNations() {
 		return Collections.unmodifiableCollection(nationNameMap.values());
 	}
-	
+
+	public Set<UUID> getNationUUIDs() {
+		return nationUUIDMap.keySet();
+	}
+
 	public int getNumNations() {
 		return nationNameMap.size();
 	}
 
-	// This is used internally since UUIDs are assigned after nation objects are created.
-	public void registerNationUUID(@NotNull Nation nation) throws AlreadyRegisteredException {
+	/**
+	 * Registers a Nation with only a UUID present as data. Meant only to be used by
+	 * Towny in the loading process.
+	 * 
+	 * @param nationName String name of the nation
+	 * @param nationUUID UUID to put onto the Nation.
+	 */
+	@ApiStatus.Internal
+	public void newNationInternal(@NotNull String nationName, @NotNull UUID nationUUID) {
+		Nation nation = new Nation(nationName, nationUUID);
+		registerNationUUID(nation);
+	}
+
+	public void newNation(@NotNull String name) throws InvalidNameException, AlreadyRegisteredException {
+		Preconditions.checkNotNull(name, "Name cannot be null!");
+
+		newNation(name, true);
+	}
+
+	private void newNation(@NotNull String name, boolean assignUUID) throws InvalidNameException, AlreadyRegisteredException {
+		String filteredName = NameValidation.checkAndFilterNationNameOrThrow(name);
+		Nation nation = new Nation(filteredName, assignUUID ? UUID.randomUUID() : null);
+		registerNation(nation);
+	}
+
+	@ApiStatus.Internal
+	public void registerNationUUID(@NotNull Nation nation) {
 		Preconditions.checkNotNull(nation, "Nation cannot be null!");
 
 		if (nation.getUUID() != null) {
 
-			if (nationUUIDMap.containsKey(nation.getUUID())) {
-				throw new AlreadyRegisteredException("UUID of nation " + nation.getName() + " was already registered!");
-			}
+			if (nationUUIDMap.containsKey(nation.getUUID()))
+				return;
 
 			nationUUIDMap.put(nation.getUUID(), nation);
 		}
@@ -752,12 +836,51 @@ public class TownyUniverse {
 		}
 	}
 
+	/**
+	 * Used to unregister a nation from the TownyUniverse internal maps.
+	 *
+	 * This does not delete a nation, nor perform any actions that affect the nation internally.
+	 *
+	 * @param uuid UUID of Nation to unregister
+	 */
+	public void unregisterNation(@NotNull UUID uuid) {
+		Preconditions.checkNotNull(uuid, "UUID cannot be null!");
+		Nation nation = nationUUIDMap.get(uuid);
+		Preconditions.checkNotNull(nation, "Nation cannot be null!");
+		nationNameMap.remove(nation.getName().toLowerCase());
+		nationsTrie.removeKey(nation.getName());
+		nationUUIDMap.remove(nation.getUUID());
+	}
+
 	public Trie getNationsTrie() {
 		return nationsTrie;
 	}
 	
 	// =========== World Methods ===========
 
+	/**
+	 * Registers a TownyWorld with only a UUID present as data.
+	 * Meant only to be used by Towny in the loading process.
+	 * @param worldName String name to put onto the TownyWorld.
+	 * @param worldUUID UUID to put onto the TownyWorld.
+	 */
+	@ApiStatus.Internal
+	public void newWorldInternal(@NotNull String worldName, @NotNull UUID worldUUID) {
+		TownyWorld world = new TownyWorld(worldName, worldUUID);
+		registerTownyWorldUUID(world);
+	}
+
+	public void registerTownyWorldUUID(TownyWorld world) {
+		Preconditions.checkNotNull(world, "TownyWorld cannot be null!");
+
+		if (world.getUUID() != null) {
+
+			if (worldUUIDMap.containsKey(world.getUUID()))
+				return;
+
+			worldUUIDMap.put(world.getUUID(), world);
+		}
+	}
 	/**
 	 * Causes a new TownyWorld object to be made in the Universe, from a Bukkit World.
 	 */
@@ -1111,8 +1234,12 @@ public class TownyUniverse {
 	public List<Jail> getJails() {
 		return new ArrayList<>(getJailUUIDMap().values());
 	}
-	
-    public Map<UUID, Jail> getJailUUIDMap() {
+
+	public Set<UUID> getJailUUIDs() {
+		return jailUUIDMap.keySet();
+	}
+
+	public Map<UUID, Jail> getJailUUIDMap() {
     	return jailUUIDMap;
     }
     
@@ -1135,15 +1262,19 @@ public class TownyUniverse {
     public void unregisterJail(Jail jail) {
     	jailUUIDMap.remove(jail.getUUID());
     }
-    
+
+    public void unregisterJail(UUID uuid) {
+    	jailUUIDMap.remove(uuid);
+    }
+
     /**
      * Used in loading only.
      * 
      * @param uuid UUID of the given jail, taken from the Jail filename.
      */
-    public void newJailInternal(String uuid) {
+    public void newJailInternal(UUID uuid) {
     	// Remaining fields are set later on in the loading process.
-    	Jail jail = new Jail(UUID.fromString(uuid), null, null, new ArrayList<Position>());
+    	Jail jail = new Jail(uuid, null, null, new ArrayList<Position>());
     	registerJail(jail);
     }
 

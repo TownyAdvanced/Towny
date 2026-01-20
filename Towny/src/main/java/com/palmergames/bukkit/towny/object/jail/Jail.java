@@ -3,6 +3,7 @@ package com.palmergames.bukkit.towny.object.jail;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -10,19 +11,24 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
-import com.palmergames.bukkit.towny.object.Position;
 import org.bukkit.Location;
 
+import com.palmergames.bukkit.towny.object.Loadable;
+import com.palmergames.bukkit.towny.object.Position;
 import com.palmergames.bukkit.towny.object.Savable;
 import com.palmergames.bukkit.towny.object.SpawnPoint;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.SpawnPointLocation;
 import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
+
 import org.jetbrains.annotations.ApiStatus;
 
-public class Jail implements Savable {
+public class Jail extends Loadable implements Savable {
 
 	private UUID uuid;
 	private Town town;
@@ -131,6 +137,61 @@ public class Jail implements Savable {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveJail(this);
+	}
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> jail_hm = new HashMap<>();
+			jail_hm.put("uuid", getUUID());
+			jail_hm.put("townBlock", getTownBlockForSaving(getTownBlock()));
+			
+			StringBuilder jailCellArray = new StringBuilder();
+			if (hasCells())
+				for (Location cell : new ArrayList<>(getJailCellLocations()))
+					jailCellArray.append(parseLocationForSaving(cell)).append(";");
+
+			jail_hm.put("spawns", jailCellArray);
+			
+			return jail_hm;
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for jail " + getName() + " (" + getUUID() + ").");
+		}
+	}
+
+	public boolean load(Map<String, String> jailAsMap) {
+		String line = "";
+		line = jailAsMap.get("townblock");
+		if (line != null) {
+			try {
+				TownBlock tb = parseTownBlockFromDB(line);
+				setTownBlock(tb);
+				setTown(tb.getTownOrNull());
+				tb.setJail(this);
+				tb.getTown().addJail(this);
+			} catch (NumberFormatException | NotRegisteredException e) {
+				TownyMessaging.sendErrorMsg("Jail " + getUUID() + " tried to load invalid townblock " + line + " deleting ");
+				TownyUniverse.getInstance().getDataSource().removeJail(this);
+				TownyUniverse.getInstance().getDataSource().deleteJail(this);
+				return true;
+			}
+		}
+		line = jailAsMap.get("spawns");
+		if (line != null) {
+			String[] jails = line.split(";");
+			for (String spawn : jails) {
+				Location loc = parseSpawnLocationFromDB(spawn);
+				if (loc != null)
+					addJailCell(loc);
+			}
+			if (getJailCellLocations().isEmpty()) {
+				TownyMessaging.sendErrorMsg("Jail " + getUUID() + " loaded with zero spawns " + line + " deleting ");
+				TownyUniverse.getInstance().getDataSource().removeJail(this);
+				TownyUniverse.getInstance().getDataSource().deleteJail(this);
+				return true;
+			}
+		}
+		return true;
 	}
 
 	public boolean hasCells() {
