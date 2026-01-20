@@ -802,7 +802,8 @@ public class SpawnUtil {
 			if (warmupTime == -1)
 				warmupTime = TownySettings.getTeleportWarmupTime();
 			TownyMessaging.sendMsg(player, Translatable.of("msg_town_spawn_warmup", warmupTime));
-			TeleportWarmupTimerTask.requestTeleport(resident, spawnLoc, cooldown, refundAccount, cost);
+			long teleportTime = System.currentTimeMillis() + (warmupTime * 1000);
+			TeleportWarmupTimerTask.requestTeleport(resident, teleportTime, spawnLoc, cooldown, refundAccount, cost);
 		} else {
 			// Don't use teleport warmup
 			if (player.getVehicle() != null)

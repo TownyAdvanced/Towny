@@ -10,29 +10,35 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TeleportRequest {
 	private final long requestTime;
+	private final long teleportTime;
 	private final Location destination;
 	private final int cooldown;
 	private final double teleportCost;
 	private final Account account;
 	
-	private TeleportRequest(long requestTime, @NotNull Location destination, int cooldown, double teleportCost, @Nullable Account account) {
+	private TeleportRequest(long requestTime, long teleportTime, @NotNull Location destination, int cooldown, double teleportCost, @Nullable Account account) {
 		this.requestTime = requestTime;
+		this.teleportTime = teleportTime;
 		this.destination = destination;
 		this.cooldown = cooldown;
 		this.teleportCost = teleportCost;
 		this.account = account;
 	}
 	
-	public static TeleportRequest teleportRequest(long requestTime, @NotNull Location destination, int cooldown) {
-		return teleportRequest(requestTime, destination, cooldown, 0, null);
+	public static TeleportRequest teleportRequest(long requestTime, long teleportTime, @NotNull Location destination, int cooldown) {
+		return teleportRequest(requestTime, teleportTime, destination, cooldown, 0, null);
 	}
 	
-	public static TeleportRequest teleportRequest(long requestTime, @NotNull Location destination, int cooldown, double teleportCost, @Nullable Account account) {
-		return new TeleportRequest(requestTime, destination, cooldown, teleportCost, account);
+	public static TeleportRequest teleportRequest(long requestTime, long teleportTime, @NotNull Location destination, int cooldown, double teleportCost, @Nullable Account account) {
+		return new TeleportRequest(requestTime, teleportTime, destination, cooldown, teleportCost, account);
 	}
 	
 	public long requestTime() {
 		return this.requestTime;
+	}
+	
+	public long teleportTime() {
+		return this.teleportTime;
 	}
 	
 	@NotNull

@@ -10677,3 +10677,4 @@ v0.92.0.11:
     - How many seconds in between warning messages, to prevent spam.
 0.102.0.6:
   - Fix titles messages showing their subtitle in the title position.
+  - Fix towny_teleport_warmup_seconds permission node not working.

@@ -56,7 +56,7 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 			Map.Entry<Resident, TeleportRequest> next = iterator.next();
 			final Resident resident = next.getKey();
 			final TeleportRequest request = next.getValue();
-			long teleportTime = request.requestTime() + (teleportWarmupTime * 1000L);
+			long teleportTime = request.teleportTime();
 
 			if (currentTime > teleportTime) {
 				iterator.remove();
@@ -102,15 +102,15 @@ public class TeleportWarmupTimerTask extends TownyTimerTask {
 	}
 
 	public static void requestTeleport(Resident resident, Location spawnLoc, int cooldown) {
-		requestTeleport(resident, spawnLoc, cooldown, null, 0);
+		requestTeleport(resident, ((long) System.currentTimeMillis() + (TownySettings.getTeleportWarmupTime() * 1000)), spawnLoc, cooldown, null, 0);
 	}
 
 	/**
 	 * This does not refund any other teleport requests that might be active for the resident, use
 	 * {@link #abortTeleportRequest(Resident)} first if you want them to be refunded.
 	 */
-	public static void requestTeleport(@NotNull Resident resident, @NotNull Location destination, int cooldown, @Nullable Account teleportAccount, double teleportCost) {
-		TeleportRequest request = TeleportRequest.teleportRequest(System.currentTimeMillis(), destination, cooldown, teleportCost, teleportAccount);
+	public static void requestTeleport(@NotNull Resident resident, long teleportTime, @NotNull Location destination, int cooldown, @Nullable Account teleportAccount, double teleportCost) {
+		TeleportRequest request = TeleportRequest.teleportRequest(System.currentTimeMillis(), teleportTime, destination, cooldown, teleportCost, teleportAccount);
 		TELEPORT_QUEUE.put(resident, request);
 	}
 	
