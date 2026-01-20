@@ -9,6 +9,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.TownyUpdateChecker;
 import com.palmergames.bukkit.towny.event.resident.NewResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -166,7 +167,7 @@ public class OnPlayerLogin implements Runnable {
 
 	private Resident createNewResident(Resident resident) {
 		try {
-			resident = universe.getDataSource().newResident(player.getName(), player.getUniqueId());
+			universe.newResident(player.getUniqueId(), player.getName());
 			resident.setRegistered(System.currentTimeMillis());
 
 			final Resident finalResident = resident;
@@ -183,8 +184,9 @@ public class OnPlayerLogin implements Runnable {
 			resident.save();
 			plugin.getScheduler().run(player, () -> BukkitTools.fireEvent(new NewResidentEvent(finalResident)));
 
-		} catch (NotRegisteredException e) {
+		} catch (InvalidNameException e) {
 			plugin.getLogger().log(Level.WARNING, "Could not register resident '" + player.getName() + "' (" + player.getUniqueId() + ") due to an error, Towny features might be limited for this player until it is resolved", e);
+			TownyMessaging.sendErrorMsg(player, e.getMessage() + " You have not been registered correctly with Towny!");
 		} catch (AlreadyRegisteredException ignored) {}
 
 		return resident;
@@ -214,11 +216,7 @@ public class OnPlayerLogin implements Runnable {
 
 			if (!resident.hasUUID()) {
 				resident.setUUID(player.getUniqueId());
-				try {
-					TownyUniverse.getInstance().registerResidentUUID(resident);
-				} catch (AlreadyRegisteredException e) {
-					plugin.getLogger().log(Level.WARNING, "uuid for resident " + resident.getName() + " was already registered! (" + player.getUniqueId() + ")", e);
-				}
+				TownyUniverse.getInstance().registerResidentUUID(resident);
 			}
 			resident.save();
 		}, 5);

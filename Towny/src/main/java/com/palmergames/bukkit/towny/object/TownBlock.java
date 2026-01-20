@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.google.gson.Gson;
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -11,13 +13,16 @@ import com.palmergames.bukkit.towny.event.plot.changeowner.PlotPreUnclaimEvent;
 import com.palmergames.bukkit.towny.event.plot.changeowner.PlotUnclaimEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.CooldownTimerTask.CooldownType;
 import com.palmergames.bukkit.towny.utils.JailUtil;
 import com.palmergames.bukkit.util.BukkitTools;
+import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -25,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,6 +38,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class TownBlock extends TownyObject {
 
@@ -562,6 +570,160 @@ public class TownBlock extends TownyObject {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveTownBlock(this);
+	}
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> tb_hm = new HashMap<>();
+			tb_hm.put("world", getWorld().getUUID());
+			tb_hm.put("x", getX());
+			tb_hm.put("z", getZ());
+			tb_hm.put("name", getName());
+			tb_hm.put("taxed", isTaxed());
+			tb_hm.put("price", getPlotPrice());
+			tb_hm.put("town", getTown().getUUID());
+			tb_hm.put("resident", (hasResident()) ? getResidentOrNull().getUUID() : "");
+			tb_hm.put("typeName", getTypeName());
+			tb_hm.put("outpost", isOutpost());
+			tb_hm.put("permissions", isChanged() ? getPermissions().toString().replaceAll(",", "#") : "");
+			tb_hm.put("changed", isChanged());
+			tb_hm.put("minTownMembershipDays", getMinTownMembershipDays());
+			tb_hm.put("maxTownMembershipDays", getMaxTownMembershipDays());
+			tb_hm.put("claimedAt", getClaimedAt());
+			tb_hm.put("groupID", hasPlotObjectGroup() ? getPlotObjectGroup().getUUID().toString() : "");
+			tb_hm.put("districtID", hasDistrict() ? getDistrict().getUUID().toString() : "");
+			tb_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+			tb_hm.put("trustedResidents", StringMgmt.join(toUUIDList(getTrustedResidents()), "#"));
+
+			Map<String, String> stringMap = new HashMap<>();
+			for (Map.Entry<Resident, PermissionData> entry : getPermissionOverrides().entrySet())
+				stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
+			tb_hm.put("customPermissionData", new Gson().toJson(stringMap));
+
+			return tb_hm;
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for townblock " + getName() + " (" + toString() + ").");
+		}
+	}
+
+	public boolean load(Map<String, String> townBlockAsMap) {
+		String line = "";
+		boolean save = false;
+		TownyUniverse universe = TownyUniverse.getInstance();
+		try {
+			Town town = universe.getTown(UUID.fromString(townBlockAsMap.get("town")));
+			if (town == null) {
+				TownyMessaging.sendErrorMsg("TownBlock file contains unregistered Town: " + townBlockAsMap.get("town")
+				+ ", deleting " + getWorld().getName() + "," + getX() + ","
+				+ getZ());
+				universe.removeTownBlock(this);
+				universe.getDataSource().deleteTownBlock(this);
+				return true;
+			}
+			setTown(town, false);
+			try {
+				town.addTownBlock(this);
+				TownyWorld townyWorld = getWorld();
+				if (townyWorld != null && !townyWorld.hasTown(town))
+					townyWorld.addTown(town);
+			} catch (AlreadyRegisteredException ignored) {}
+
+			line = townBlockAsMap.get("resident");
+			if (hasData(line)) {
+				Resident resident = universe.getResident(UUID.fromString(line));
+				if (resident != null)
+					setResident(resident, false);
+				else {
+					TownyMessaging.sendErrorMsg(String.format(
+					"Error fetching resident '%s' for townblock '%s'!",
+					line.trim(), toString()));
+					setResident(null);
+					save = true;
+				}
+			}
+
+			setName(townBlockAsMap.getOrDefault("name", ""));
+			setType(TownBlockTypeHandler.getTypeInternal(townBlockAsMap.getOrDefault("typeName", "default")));
+			setOutpost(getOrDefault(townBlockAsMap, "outpost", false));
+
+			line = townBlockAsMap.get("price");
+			if (hasData(line))
+				setPlotPrice(Float.parseFloat(line.trim()));
+			line = townBlockAsMap.get("taxed");
+			if (hasData(line))
+				setTaxed(Boolean.valueOf(line));
+			line = townBlockAsMap.get("permissions");
+			if (hasData(line))
+				setPermissions(line.trim().replaceAll("#", ","));
+			line = townBlockAsMap.get("changed");
+			if (hasData(line))
+				setChanged(getOrDefault(townBlockAsMap, line, false));
+			line = townBlockAsMap.get("claimedAt");
+			if (hasData(line))
+				setClaimedAt(getOrDefault(townBlockAsMap, "claimedAt", 0l));
+			line = townBlockAsMap.get("minTownMembershipDays");
+			if (hasData(line))
+				setMinTownMembershipDays(Integer.valueOf(line));
+			line = townBlockAsMap.get("maxTownMembershipDays");
+			if (hasData(line))
+				setMaxTownMembershipDays(Integer.valueOf(line));
+			
+			line = townBlockAsMap.get("metadata");
+			if (hasData(line))
+				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+
+			line = townBlockAsMap.get("groupID");
+			if (hasData(line))
+				try {
+					PlotGroup group = universe.getGroup(UUID.fromString(line.trim()));
+					if (group != null) {
+						setPlotObjectGroup(group);
+						if (group.getPermissions() == null && getPermissions() != null)
+							group.setPermissions(getPermissions());
+						if (hasResident())
+							group.setResident(getResidentOrNull());
+					}
+				} catch (Exception ignored) {}
+
+			line = townBlockAsMap.get("districtID");
+			if (hasData(line))
+				try {
+					District district = universe.getDistrict(UUID.fromString(line.trim()));
+					if (district != null) {
+						setDistrict(district);
+					} else {
+						removeDistrict();
+					}
+				} catch (Exception ignored) {}
+
+			line = townBlockAsMap.get("trustedResidents");
+			if (hasData(line) && getTrustedResidents().isEmpty()) {
+				addTrustedResidents(TownyAPI.getInstance().getResidents(toUUIDArray(line.split(getSplitter(line)))));
+				if (hasPlotObjectGroup() && getPlotObjectGroup().getTrustedResidents().isEmpty() && getTrustedResidents().size() > 0)
+					getPlotObjectGroup().setTrustedResidents(getTrustedResidents());
+			}
+
+			line = townBlockAsMap.get("customPermissionData");
+			if (hasData(line) && getPermissionOverrides().isEmpty()) {
+				Map<String, String> map = new Gson().fromJson(line, Map.class);
+
+				for (Map.Entry<String, String> entry : map.entrySet()) {
+					Resident resident = universe.getResident(UUID.fromString(entry.getKey()));
+					if (resident != null)
+						getPermissionOverrides().put(resident, new PermissionData(entry.getValue()));
+				}
+
+				if (hasPlotObjectGroup() && getPlotObjectGroup().getPermissionOverrides().isEmpty() && getPermissionOverrides().size() > 0)
+					getPlotObjectGroup().setPermissionOverrides(getPermissionOverrides());
+			}
+			if (save && exists())
+				save();
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, Translation.of("flatfile_err_exception_reading_townblock_file_at_line", toString(), line), e);
+			return false;
+		}
+		return true;
 	}
 
 	public long getClaimedAt() {
