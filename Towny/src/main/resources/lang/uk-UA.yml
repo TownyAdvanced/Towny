@@ -2151,3 +2151,6 @@ msg_nearby_towns: 'Найближчі Міста'
 msg_no_towns_nearby: 'Не знайдено міст поблизу.'
 msg_nearby_town_format: '<green>%s <white>(%s блоків)'
 msg_nearby_town_nation: ' <aqua>[%s]'
+msg_err_must_specify_days_to_be_conquered: "Ви повинні вказати декілька днів для завойовування, тобто 1 або -1 або нескінченний результат."
+msg_conquered_status_granted: "Ви встановили %s статус захоплених на %s днів."
+msg_conquered_status_granted_unlimited: "Ви встановили %s статус захоплених на невизначену кількість днів."
