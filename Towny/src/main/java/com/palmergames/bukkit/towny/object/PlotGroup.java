@@ -189,7 +189,7 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 			return pltgrp_hm;
 
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for plot group " + getName() + " (" + getUUID() + ").");
+			throw new ObjectSaveException("An exception occurred when constructing data for plot group " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
 		}
 	}
 

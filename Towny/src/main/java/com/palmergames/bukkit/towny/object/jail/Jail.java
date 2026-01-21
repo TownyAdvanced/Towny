@@ -155,7 +155,7 @@ public class Jail extends Loadable implements Savable {
 			
 			return jail_hm;
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for jail " + getName() + " (" + getUUID() + ").");
+			throw new ObjectSaveException("An exception occurred when constructing data for jail " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
 		}
 	}
 

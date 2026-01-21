@@ -958,7 +958,7 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			res_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
 			return res_hm;
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for resident " + getName() + " (" + getUUID() + ").");
+			throw new ObjectSaveException("An exception occurred when constructing data for resident " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
 		}
 	}
 

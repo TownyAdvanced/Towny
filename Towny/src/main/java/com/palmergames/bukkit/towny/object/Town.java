@@ -1726,7 +1726,7 @@ public class Town extends Government implements TownBlockOwner {
 			twn_hm.put("enemies", StringMgmt.join(getEnemiesUUIDs(), "#"));
 			return twn_hm;
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for town " + getName() + " (" + getUUID() + ").");
+			throw new ObjectSaveException("An exception occurred when constructing data for town " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
 		}
 	}
 

@@ -674,7 +674,7 @@ public class Nation extends Government {
 			nat_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
 			return nat_hm;
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for nation " + getName() + " (" + getUUID() + ")" + ".");
+			throw new ObjectSaveException("An exception occurred when constructing data for nation " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
 		}
 	}
 
