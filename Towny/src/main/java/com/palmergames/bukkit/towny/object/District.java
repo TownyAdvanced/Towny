@@ -149,7 +149,7 @@ public class District extends ObjectGroup implements Nameable, Savable {
 			return district_hm;
 
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for plot group " + getName() + " (" + getUUID() + ").");
+			throw new ObjectSaveException("An exception occurred when constructing data for plot group " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
 		}
 	}
 

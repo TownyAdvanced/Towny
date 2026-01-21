@@ -1150,7 +1150,7 @@ public class TownyWorld extends TownyObject {
 			return world_hm;
 
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for world " + getName() + " (" + getUUID() + ").");
+			throw new ObjectSaveException("An exception occurred when constructing data for world " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
 		}
 	}
 

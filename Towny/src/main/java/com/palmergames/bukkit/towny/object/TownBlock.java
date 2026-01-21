@@ -603,7 +603,7 @@ public class TownBlock extends TownyObject {
 
 			return tb_hm;
 		} catch (Exception e) {
-			throw new ObjectSaveException("An exception occurred when constructing data for townblock " + getName() + " (" + toString() + ").");
+			throw new ObjectSaveException("An exception occurred when constructing data for townblock " + getName() + " (" + toString() + "), caused by: " + e.getMessage());
 		}
 	}
 
