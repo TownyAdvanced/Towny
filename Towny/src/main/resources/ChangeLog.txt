@@ -10678,3 +10678,5 @@ v0.92.0.11:
 0.102.0.6:
   - Fix titles messages showing their subtitle in the title position.
   - Fix towny_teleport_warmup_seconds permission node not working.
+  - Fix copper golem test that caused Could not pass event ItemTransportingEntityValidateTargetEvent spam.
+    - Closes #8085.

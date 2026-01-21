@@ -206,6 +206,9 @@ public class BorderUtil {
 		if (from.hasTownBlock() != to.hasTownBlock())
 			return false;
 
+		if (from.isWilderness() && to.isWilderness())
+			return true;
+
 		TownBlock currentTownBlock = from.getTownBlockOrNull();
 		TownBlock destinationTownBlock = to.getTownBlockOrNull();
 
