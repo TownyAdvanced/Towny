@@ -9,8 +9,6 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
-import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
-import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.ObjectCouldNotBeLoadedException;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
 import com.palmergames.bukkit.towny.object.District;
@@ -506,17 +504,14 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 	@Override
 	public boolean loadResidentList() {
 		return loadResultSetListOfType(TownyDBTableType.RESIDENT, nameAndId -> {
-			try {
-				universe.newResident(nameAndId.uuid(), nameAndId.name());
-			} catch (AlreadyRegisteredException e) {
+			if (!universe.hasResident(nameAndId.uuid()))
+				universe.newResidentInternal(nameAndId.name(), nameAndId.uuid());
+			else {
 				final Resident otherResident = universe.getResident(nameAndId.uuid());
 				if (otherResident != null && !otherResident.getName().equals(nameAndId.name())) {
 					// UUID is already registered
 					super.pendingDuplicateResidents.add(Pair.pair(nameAndId.name(), otherResident.getName()));
 				}
-			} catch (InvalidNameException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		});
 	}

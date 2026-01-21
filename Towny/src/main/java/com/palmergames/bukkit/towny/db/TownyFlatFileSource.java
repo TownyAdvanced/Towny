@@ -25,6 +25,8 @@ import com.palmergames.bukkit.towny.tasks.CooldownTimerTask;
 import com.palmergames.bukkit.towny.tasks.DeleteFileTask;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.FileMgmt;
+import com.palmergames.util.Pair;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import java.io.File;
@@ -210,7 +212,17 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 
 	@Override
 	public boolean loadResidentList() {
-		return loadFlatFileListOfType(TownyDBFileType.RESIDENT, nameAndId -> universe.newResidentInternal(nameAndId.name(), nameAndId.uuid()));
+		return loadFlatFileListOfType(TownyDBFileType.RESIDENT, nameAndId -> {
+			if (!universe.hasResident(nameAndId.uuid()))
+				universe.newResidentInternal(nameAndId.name(), nameAndId.uuid());
+			else {
+				final Resident otherResident = universe.getResident(nameAndId.uuid());
+				if (otherResident != null && !otherResident.getName().equals(nameAndId.name())) {
+					// UUID is already registered
+					super.pendingDuplicateResidents.add(Pair.pair(nameAndId.name(), otherResident.getName()));
+				}
+			}
+		});
 	}
 
 	@Override
