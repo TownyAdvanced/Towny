@@ -180,7 +180,6 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
 		try {
 			Map<String, Object> pltgrp_hm = new HashMap<>();
-			pltgrp_hm.put("groupID", getUUID());
 			pltgrp_hm.put("groupName", getName());
 			pltgrp_hm.put("groupPrice", getPrice());
 			pltgrp_hm.put("town", getTown().getUUID());

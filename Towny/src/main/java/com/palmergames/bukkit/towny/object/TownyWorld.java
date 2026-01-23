@@ -1069,22 +1069,19 @@ public class TownyWorld extends TownyObject {
 		try {
 			Map<String, Object> world_hm = new HashMap<>();
 			world_hm.put("name", getName());
-			world_hm.put("usingTowny", isUsingTowny());
-			world_hm.put("warAllowed", isWarAllowed());
+			world_hm.put("claimable", isClaimable());
 			world_hm.put("pvp", isPVP());
 			world_hm.put("forcepvp", isForcePVP());
+			world_hm.put("forcetownmobs", isForceTownMobs());
 			world_hm.put("friendlyFire", isFriendlyFireEnabled());
-			world_hm.put("claimable", isClaimable());
 			world_hm.put("worldmobs", hasWorldMobs());
 			world_hm.put("wildernessmobs", hasWildernessMobs());
-			world_hm.put("forcetownmobs", isForceTownMobs());
 			world_hm.put("firespread", isFire());
 			world_hm.put("forcefirespread", isForceFire());
 			world_hm.put("explosions", isExpl());
 			world_hm.put("forceexplosions", isForceExpl());
 			world_hm.put("endermanprotect", isEndermanProtect());
 			world_hm.put("disablecreaturetrample", isDisableCreatureTrample());
-
 			world_hm.put("unclaimedZoneBuild", getUnclaimedZoneBuild());
 			world_hm.put("unclaimedZoneDestroy", getUnclaimedZoneDestroy());
 			world_hm.put("unclaimedZoneSwitch", getUnclaimedZoneSwitch());
@@ -1096,16 +1093,17 @@ public class TownyWorld extends TownyObject {
 			if (getUnclaimedZoneIgnoreMaterials() != null)
 				world_hm.put("unclaimedZoneIgnoreIds", StringMgmt.join(getUnclaimedZoneIgnoreMaterials(), "#"));
 
-			// Deleting EntityTypes from Townblocks on Unclaim.
-			world_hm.put("isDeletingEntitiesOnUnclaim", isDeletingEntitiesOnUnclaim());
-			if (getUnclaimDeleteEntityTypes() != null)
-				world_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(getUnclaimDeleteEntityTypes(), "#"));
-
 			// Using PlotManagement Delete
 			world_hm.put("usingPlotManagementDelete", isUsingPlotManagementDelete());
 			// Plot Management Delete Ids
 			if (getPlotManagementDeleteIds() != null)
 				world_hm.put("plotManagementDeleteIds", StringMgmt.join(getPlotManagementDeleteIds(), "#"));
+
+			// Deleting EntityTypes from Townblocks on Unclaim.
+			world_hm.put("isDeletingEntitiesOnUnclaim", isDeletingEntitiesOnUnclaim());
+			if (getUnclaimDeleteEntityTypes() != null)
+				world_hm.put("unclaimDeleteEntityTypes", StringMgmt.join(getUnclaimDeleteEntityTypes(), "#"));
+
 
 			// Using PlotManagement Mayor Delete
 			world_hm.put("usingPlotManagementMayorDelete", isUsingPlotManagementMayorDelete());
@@ -1121,7 +1119,6 @@ public class TownyWorld extends TownyObject {
 				world_hm.put("plotManagementIgnoreIds", StringMgmt.join(getPlotManagementIgnoreIds(), "#"));
 
 			world_hm.put("revertOnUnclaimWhitelistMaterials", StringMgmt.join(getRevertOnUnclaimWhitelistMaterials(), "#"));
-			world_hm.put("wildRegenBlocksToNotOverwrite", StringMgmt.join(getWildRevertMaterialsToNotOverwrite(), "#"));
 			
 			// Using PlotManagement Wild Regen
 			world_hm.put("usingPlotManagementWildRegen", isUsingPlotManagementWildEntityRevert());
@@ -1134,6 +1131,8 @@ public class TownyWorld extends TownyObject {
 			if (getPlotManagementWildRevertBlockWhitelist() != null)
 				world_hm.put("PlotManagementWildRegenBlockWhitelist", StringMgmt.join(getPlotManagementWildRevertBlockWhitelist(), "#"));
 
+			world_hm.put("wildRegenBlocksToNotOverwrite", StringMgmt.join(getWildRevertMaterialsToNotOverwrite(), "#"));
+
 			// Using PlotManagement Wild Regen Delay
 			world_hm.put("plotManagementWildRegenSpeed", getPlotManagementWildRevertDelay());
 			
@@ -1144,6 +1143,8 @@ public class TownyWorld extends TownyObject {
 			if (getPlotManagementWildRevertBlocks() != null)
 				world_hm.put("PlotManagementWildRegenBlocks", StringMgmt.join(getPlotManagementWildRevertBlocks(), "#"));
 
+			world_hm.put("usingTowny", isUsingTowny());
+			world_hm.put("warAllowed", isWarAllowed());
 			world_hm.put("jailing", isJailingEnabled());
 			world_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
 
@@ -1157,16 +1158,13 @@ public class TownyWorld extends TownyObject {
 	public boolean load(Map<String, String> worldAsMap) {
 		String line = "";
 		try {
-			setName(worldAsMap.getOrDefault("name", ""));
 			setClaimable(getOrDefault(worldAsMap,"claimable", true));
-			setUsingTowny(getOrDefault(worldAsMap, "usingTowny", TownySettings.isUsingTowny()));
-			setWarAllowed(getOrDefault(worldAsMap, "warAllowed", TownySettings.isWarAllowed()));
 			setPVP(getOrDefault(worldAsMap, "pvp", TownySettings.isPvP()));
 			setForcePVP(getOrDefault(worldAsMap, "forcepvp", TownySettings.isForcingPvP()));
-			setFriendlyFire(getOrDefault(worldAsMap, "friendlyFire", TownySettings.isFriendlyFireEnabled()));
 			setForceTownMobs(getOrDefault(worldAsMap, "forcetownmobs", TownySettings.isForcingMonsters()));
-			setWildernessMobs(getOrDefault(worldAsMap, "wildernessmobs", TownySettings.isWildernessMonstersOn()));
+			setFriendlyFire(getOrDefault(worldAsMap, "friendlyFire", TownySettings.isFriendlyFireEnabled()));
 			setWorldMobs(getOrDefault(worldAsMap, "worldmobs", TownySettings.isWorldMonstersOn()));
+			setWildernessMobs(getOrDefault(worldAsMap, "wildernessmobs", TownySettings.isWildernessMonstersOn()));
 			setFire(getOrDefault(worldAsMap, "firespread", TownySettings.isFire()));
 			setForceFire(getOrDefault(worldAsMap, "forcefirespread", TownySettings.isForcingFire()));
 			setExpl(getOrDefault(worldAsMap, "explosions", TownySettings.isExplosions()));
@@ -1179,26 +1177,28 @@ public class TownyWorld extends TownyObject {
 			setUnclaimedZoneItemUse(getOrDefault(worldAsMap, "unclaimedZoneItemUse", TownySettings.getUnclaimedZoneItemUseRights()));
 			setUnclaimedZoneName(worldAsMap.getOrDefault("unclaimedZoneName", TownySettings.getUnclaimedZoneName()));
 			setUnclaimedZoneIgnore(toList(worldAsMap.get("unclaimedZoneIgnoreIds")));
-			setPlotManagementDeleteIds(toList(worldAsMap.get("plotManagementDeleteIds")));
 			setUsingPlotManagementDelete(getOrDefault(worldAsMap, "usingPlotManagementDelete", TownySettings.isUsingPlotManagementDelete()));
+			setPlotManagementDeleteIds(toList(worldAsMap.get("plotManagementDeleteIds")));
 			setDeletingEntitiesOnUnclaim(getOrDefault(worldAsMap, "isDeletingEntitiesOnUnclaim", TownySettings.isDeletingEntitiesOnUnclaim()));
 			setUnclaimDeleteEntityTypes(toList(worldAsMap.get("unclaimDeleteEntityTypes")));
-			setPlotManagementMayorDelete(toList(worldAsMap.get("plotManagementMayorDelete")));
 			setUsingPlotManagementMayorDelete(getOrDefault(worldAsMap, "usingPlotManagementMayorDelete", TownySettings.isUsingPlotManagementMayorDelete()));
-			setRevertOnUnclaimWhitelistMaterials(toList(worldAsMap.get("revertOnUnclaimWhitelistMaterials")));
-			setWildRevertMaterialsToNotOverwrite(toList(worldAsMap.get("wildRegenBlocksToNotOverwrite")));
-			setPlotManagementIgnoreIds(toList(worldAsMap.get("plotManagementIgnoreIds")));
+			setPlotManagementMayorDelete(toList(worldAsMap.get("plotManagementMayorDelete")));
 			setUsingPlotManagementRevert(getOrDefault(worldAsMap, "usingPlotManagementRevert", TownySettings.isUsingPlotManagementRevert()));
-			setPlotManagementWildRevertEntities(toList(worldAsMap.get("PlotManagementWildRegenEntities")));
+			setPlotManagementIgnoreIds(toList(worldAsMap.get("plotManagementIgnoreIds")));
+			setRevertOnUnclaimWhitelistMaterials(toList(worldAsMap.get("revertOnUnclaimWhitelistMaterials")));
 			setUsingPlotManagementWildEntityRevert(getOrDefault(worldAsMap, "usingPlotManagementWildRegen", TownySettings.isUsingPlotManagementWildEntityRegen()));
+			setPlotManagementWildRevertEntities(toList(worldAsMap.get("PlotManagementWildRegenEntities")));
 			setPlotManagementWildRevertBlockWhitelist(toList(worldAsMap.get("PlotManagementWildRegenBlockWhitelist")));
-			setPlotManagementWildRevertMaterials(toList(worldAsMap.get("PlotManagementWildRegenBlocks")));
+			setWildRevertMaterialsToNotOverwrite(toList(worldAsMap.get("wildRegenBlocksToNotOverwrite")));
+			setPlotManagementWildRevertDelay(getOrDefault(worldAsMap, "plotManagementWildRegenSpeed", TownySettings.getPlotManagementWildRegenDelay()));
 			setUsingPlotManagementWildBlockRevert(getOrDefault(worldAsMap, "usingPlotManagementWildRegenBlocks", TownySettings.isUsingPlotManagementWildBlockRegen()));
-			setPlotManagementWildRevertDelay(getOrDefault(worldAsMap, "usingPlotManagementWildRegenDelay", TownySettings.getPlotManagementWildRegenDelay()));
-			setJailingEnabled(getOrDefault(worldAsMap, "jailing", TownySettings.isWorldJailingEnabled()));
+			setPlotManagementWildRevertMaterials(toList(worldAsMap.get("PlotManagementWildRegenBlocks")));
+			setUsingTowny(getOrDefault(worldAsMap, "usingTowny", TownySettings.isUsingTowny()));
+			setWarAllowed(getOrDefault(worldAsMap, "warAllowed", TownySettings.isWarAllowed()));
 			line = worldAsMap.get("metadata");
 			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+			setJailingEnabled(getOrDefault(worldAsMap, "jailing", TownySettings.isWorldJailingEnabled()));
 
 			TownyUniverse.getInstance().registerTownyWorld(this);
 			if (exists())

@@ -40,6 +40,8 @@ import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -939,22 +941,23 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		try {
 			Map<String, Object> res_hm = new HashMap<>();
 			res_hm.put("name", getName());
+			res_hm.put("town", hasTown() ? getTown().getUUID() : "");
+			res_hm.put("townName", hasTown() ? getTown().getName() : "");
+			res_hm.put("town-ranks", hasTown() ? StringMgmt.join(getTownRanks(), "#") : "");
+			res_hm.put("nation-ranks", hasTown() ? StringMgmt.join(getNationRanks(), "#") : "");
 			res_hm.put("lastOnline", getLastOnline());
 			res_hm.put("registered", getRegistered());
 			res_hm.put("joinedTownAt", getJoinedTownAt());
 			res_hm.put("isNPC", isNPC());
-			res_hm.put("about", getAbout());
 			res_hm.put("jailUUID", isJailed() ? getJail().getUUID() : "");
 			res_hm.put("jailCell", getJailCell());
 			res_hm.put("jailHours", getJailHours());
 			res_hm.put("jailBail", getJailBailCost());
 			res_hm.put("title", getTitle());
 			res_hm.put("surname", getSurname());
-			res_hm.put("town", hasTown() ? getTown().getUUID() : "");
-			res_hm.put("town-ranks", hasTown() ? StringMgmt.join(getTownRanks(), "#") : "");
-			res_hm.put("nation-ranks", hasTown() ? StringMgmt.join(getNationRanks(), "#") : "");
-			res_hm.put("friends", StringMgmt.join(getFriendsUUIDs(), "#"));
 			res_hm.put("protectionStatus", getPermissions().toString().replaceAll(",", "#"));
+			res_hm.put("friends", StringMgmt.join(getFriendsUUIDs(), "#"));
+			res_hm.put("about", getAbout());
 			res_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
 			return res_hm;
 		} catch (Exception e) {
@@ -967,18 +970,51 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		TownyUniverse universe = TownyUniverse.getInstance();
 
 		try {
-			// Name
-			setName(dataAsMap.getOrDefault("name", "UnknownName"));
-			// Registered Date
-			setRegistered(getOrDefault(dataAsMap, "registered", 0l));
+			line = dataAsMap.get("town");
+			if (hasData(line)) {
+				Town town = universe.getTown(UUID.fromString(line));
+				if (town == null)
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", getName(), line));
+				
+				if (town != null) {
+					setTown(town, false);
+					
+					line = dataAsMap.get("title");
+					if (hasData(line))
+						setTitle(line);
+					
+					line = dataAsMap.get("surname");
+					if (hasData(line))
+						setSurname(line);
+					
+					try {
+						line = dataAsMap.get("town-ranks");
+						if (hasData(line))
+							setTownRanks(Arrays.asList(line.split(getSplitter(line))));
+					} catch (Exception e) {}
+					
+					try {
+						line = dataAsMap.get("nation-ranks");
+						if (hasData(line))
+							setNationRanks(Arrays.asList(line.split(getSplitter(line))));
+					} catch (Exception e) {}
+					
+					line = dataAsMap.get("joinedTownAt");
+					if (hasData(line)) {
+						setJoinedTownAt(Long.valueOf(line));
+					}
+				}
+			}
 			// Last Online Date
 			setLastOnline(getOrDefault(dataAsMap, "lastOnline", 0l));
+			// Registered Date
+			setRegistered(getOrDefault(dataAsMap, "registered", 0l));
 			// isNPC
 			setNPC(getOrDefault(dataAsMap, "isNPC", false));
 			// about
 			setAbout(dataAsMap.getOrDefault("about", ""));
 			// jail
-			line = dataAsMap.get("jail");
+			line = dataAsMap.get("jailUUID");
 			if (hasData(line) && universe.hasJail(UUID.fromString(line)))
 				setJail(universe.getJail(UUID.fromString(line)));
 			if (isJailed()) {
@@ -1004,41 +1040,6 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 			if (hasData(line))
 				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
 
-			line = dataAsMap.get("town");
-			if (hasData(line)) {
-				Town town = universe.getTown(UUID.fromString(line));
-				if (town == null)
-					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", getName(), line));
-
-				if (town != null) {
-					setTown(town, false);
-
-					line = dataAsMap.get("title");
-					if (hasData(line))
-						setTitle(line);
-
-					line = dataAsMap.get("surname");
-					if (hasData(line))
-						setSurname(line);
-
-					try {
-						line = dataAsMap.get("town-ranks");
-						if (hasData(line))
-							setTownRanks(Arrays.asList(line.split(getSplitter(line))));
-					} catch (Exception e) {}
-	
-					try {
-						line = dataAsMap.get("nation-ranks");
-						if (hasData(line))
-							setNationRanks(Arrays.asList(line.split(getSplitter(line))));
-					} catch (Exception e) {}
-	
-					line = dataAsMap.get("joinedTownAt");
-					if (hasData(line)) {
-						setJoinedTownAt(Long.valueOf(line));
-					}
-				}
-			}
 
 			try {
 				universe.registerResident(this);

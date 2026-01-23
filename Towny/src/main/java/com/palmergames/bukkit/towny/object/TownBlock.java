@@ -580,26 +580,28 @@ public class TownBlock extends TownyObject {
 			tb_hm.put("x", getX());
 			tb_hm.put("z", getZ());
 			tb_hm.put("name", getName());
-			tb_hm.put("taxed", isTaxed());
 			tb_hm.put("price", getPlotPrice());
+			tb_hm.put("taxed", isTaxed());
 			tb_hm.put("town", getTown().getUUID());
+			tb_hm.put("townName", getTown().getName());
 			tb_hm.put("resident", (hasResident()) ? getResidentOrNull().getUUID() : "");
+			tb_hm.put("residentName", (hasResident()) ? getResidentOrNull().getName() : "");
 			tb_hm.put("typeName", getTypeName());
 			tb_hm.put("outpost", isOutpost());
 			tb_hm.put("permissions", isChanged() ? getPermissions().toString().replaceAll(",", "#") : "");
 			tb_hm.put("changed", isChanged());
-			tb_hm.put("minTownMembershipDays", getMinTownMembershipDays());
-			tb_hm.put("maxTownMembershipDays", getMaxTownMembershipDays());
-			tb_hm.put("claimedAt", getClaimedAt());
+			tb_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
 			tb_hm.put("groupID", hasPlotObjectGroup() ? getPlotObjectGroup().getUUID().toString() : "");
 			tb_hm.put("districtID", hasDistrict() ? getDistrict().getUUID().toString() : "");
-			tb_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+			tb_hm.put("claimedAt", getClaimedAt());
 			tb_hm.put("trustedResidents", StringMgmt.join(toUUIDList(getTrustedResidents()), "#"));
-
 			Map<String, String> stringMap = new HashMap<>();
 			for (Map.Entry<Resident, PermissionData> entry : getPermissionOverrides().entrySet())
 				stringMap.put(entry.getKey().getUUID().toString(), entry.getValue().toString());
 			tb_hm.put("customPermissionData", new Gson().toJson(stringMap));
+			tb_hm.put("minTownMembershipDays", getMinTownMembershipDays());
+			tb_hm.put("maxTownMembershipDays", getMaxTownMembershipDays());
+
 
 			return tb_hm;
 		} catch (Exception e) {

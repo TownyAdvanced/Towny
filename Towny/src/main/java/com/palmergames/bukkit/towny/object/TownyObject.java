@@ -263,5 +263,4 @@ public abstract class TownyObject extends Loadable implements Nameable, Savable 
 	 */
 	@ApiStatus.Internal
 	public abstract boolean exists();
-
 }
