@@ -141,7 +141,6 @@ public class District extends ObjectGroup implements Nameable, Savable {
 	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
 		try {
 			Map<String, Object> district_hm = new HashMap<>();
-			district_hm.put("uuid", getUUID());
 			district_hm.put("districtName", getName());
 			district_hm.put("town", getTown().getUUID());
 			district_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");

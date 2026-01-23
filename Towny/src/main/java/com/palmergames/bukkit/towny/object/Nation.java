@@ -656,21 +656,24 @@ public class Nation extends Government {
 			Map<String, Object> nat_hm = new HashMap<>();
 			nat_hm.put("name", getName());
 			nat_hm.put("capital", hasCapital() ? getCapital().getUUID() : "");
-			nat_hm.put("nationBoard", getBoard());
-			nat_hm.put("mapColorHexCode", getMapColorHexCode());
+			nat_hm.put("capitalName", hasCapital() ? getCapital().getName() : "");
 			nat_hm.put("tag", hasTag() ? getTag() : "");
 			nat_hm.put("allies", StringMgmt.join(getAlliesUUIDs(), "#"));
 			nat_hm.put("enemies", StringMgmt.join(getEnemiesUUIDs(), "#"));
 			nat_hm.put("taxes", getTaxes());
 			nat_hm.put("taxpercent", isTaxPercentage());
 			nat_hm.put("maxPercentTaxAmount", getMaxPercentTaxAmount());
-			nat_hm.put("conqueredTax", getConqueredTax());
 			nat_hm.put("spawnCost", getSpawnCost());
 			nat_hm.put("neutral", isNeutral());
-			nat_hm.put("nationSpawn", hasSpawn() ? parseLocationForSaving(getSpawn()) : "");
 			nat_hm.put("registered", getRegistered());
+			nat_hm.put("nationBoard", getBoard());
+			nat_hm.put("mapColorHexCode", getMapColorHexCode());
+			nat_hm.put("nationSpawn", hasSpawn() ? parseLocationForSaving(getSpawn()) : "");
 			nat_hm.put("isPublic", isPublic());
 			nat_hm.put("isOpen", isOpen());
+			nat_hm.put("conqueredTax", getConqueredTax());
+			nat_hm.put("sanctionedTowns", StringMgmt.join(getSanctionedTownsForSaving(), "#"));
+			nat_hm.put("hasActiveWar", hasActiveWar());
 			nat_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
 			return nat_hm;
 		} catch (Exception e) {
@@ -683,7 +686,6 @@ public class Nation extends Government {
 		TownyUniverse universe = TownyUniverse.getInstance();
 		Logger logger = Towny.getPlugin().getLogger();
 		try {
-			setName(dataAsMap.getOrDefault("name", ""));
 			line = dataAsMap.get("capital");
 			String cantLoadCapital = Translation.of("flatfile_err_nation_could_not_load_capital_disband", getName());
 			if (line != null) {
@@ -713,9 +715,17 @@ public class Nation extends Government {
 					return true;
 				}
 			}
+			setTag(dataAsMap.getOrDefault("tag", ""));
+			line = dataAsMap.get("allies");
+			if (hasData(line))
+				loadAllies(getNationsFromDB(line));
+			
+			line = dataAsMap.get("enemies");
+			if (hasData(line))
+				loadEnemies(getNationsFromDB(line));
+			setTaxes(getOrDefault(dataAsMap, "taxes", 0.0));
 			setTaxPercentage(getOrDefault(dataAsMap, "taxpercent", TownySettings.getNationDefaultTaxPercentage()));
 			setMaxPercentTaxAmount(getOrDefault(dataAsMap, "maxPercentTaxAmount", TownySettings.getMaxNationTaxPercentAmount()));
-			setTaxes(getOrDefault(dataAsMap, "taxes", 0.0));
 			setConqueredTax(getOrDefault(dataAsMap, "conqueredTax", TownySettings.getDefaultNationConqueredTaxAmount()));
 			setSpawnCost(getOrDefault(dataAsMap, "spawnCost", TownySettings.getSpawnTravelCost()));
 			setNeutral(getOrDefault(dataAsMap, "neutral", false));
@@ -724,15 +734,7 @@ public class Nation extends Government {
 			setOpen(getOrDefault(dataAsMap, "isOpen", TownySettings.getNationDefaultOpen()));
 			setBoard(dataAsMap.getOrDefault("nationBoard", TownySettings.getNationDefaultBoard()));
 			setMapColorHexCode(dataAsMap.getOrDefault("mapColorHexCode", MapUtil.generateRandomNationColourAsHexCode()));
-			setTag(dataAsMap.getOrDefault("tag", ""));
-
-			line = dataAsMap.get("allies");
-			if (hasData(line))
-				loadAllies(getNationsFromDB(line));
-
-			line = dataAsMap.get("enemies");
-			if (hasData(line))
-				loadEnemies(getNationsFromDB(line));
+			setActiveWar(getOrDefault(dataAsMap, "hasActiveWar", false));
 
 			line = dataAsMap.get("sanctionedTowns");
 			if (hasData(line))

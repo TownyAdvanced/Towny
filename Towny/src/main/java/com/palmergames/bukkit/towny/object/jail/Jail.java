@@ -143,16 +143,15 @@ public class Jail extends Loadable implements Savable {
 	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
 		try {
 			Map<String, Object> jail_hm = new HashMap<>();
-			jail_hm.put("uuid", getUUID());
 			jail_hm.put("townBlock", getTownBlockForSaving(getTownBlock()));
-			
+
 			StringBuilder jailCellArray = new StringBuilder();
 			if (hasCells())
 				for (Location cell : new ArrayList<>(getJailCellLocations()))
 					jailCellArray.append(parseLocationForSaving(cell)).append(";");
 
 			jail_hm.put("spawns", jailCellArray);
-			
+
 			return jail_hm;
 		} catch (Exception e) {
 			throw new ObjectSaveException("An exception occurred when constructing data for jail " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
