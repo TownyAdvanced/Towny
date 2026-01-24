@@ -62,6 +62,7 @@ town_help_32: "Benutze /t set für Hilfe."
 town_help_33: "Benutze /t buy für Hilfe."
 town_help_34: "Benutze /t toggle für Hilfe."
 town_help_35: "Benutze /t rank für Hilfe."
+town_help_36: 'Listet die nahegelegenen Städte nach Entfernung sortiert auf.'
 town_list_help_0: "Zeigt die angegebene Seite an."
 town_list_help_1: "Listet die Städte nach der Anzahl der Bewohner mit der angegebenen Seite auf."
 town_list_help_2: "Listet die geöffneten Städte mit der angegebenen Seite auf."
@@ -155,10 +156,24 @@ king_help_3: 'Feinde festlegen'
 king_help_4: "Hebe Geld von der Nationalbank ab."
 king_help_5: "Füge Städte deiner Nation hinzu oder entferne sie wieder."
 king_help_6: "Benutze /n set für Hilfe."
+king_help_7: "Benutze /n toggle ? für Hilfe."
+king_help_8: "Wird verwendet, um eine andere Nation in die eigene Nation einzugliedern."
+king_help_9: "Wird verwendet, um allen Mitgliedern deiner Nation eine Nachricht zu senden."
 res_1: 'Dein Status'
 res_2: '[Bürger]'
 res_3: 'Status der Zielperson'
 res_4: 'Listet alle aktiven Spieler auf'
+res_9: "Wie viel Steuern du pro Tag zahlst."
+res_10: "Siehe /res jail ?, um Hilfe zu erhalten."
+res_11: "Siehe /res toggle ?, um Hilfe zu erhalten."
+res_12: "Siehe /res set ?, um Hilfe zu erhalten."
+res_13: "Teleportiert dich zu deiner Stadt oder deinem Bett."
+res_toggle_help_0: "Schaltet den PvP-Status deiner Grundstücke um."
+res_toggle_help_1: "Schaltet den Feuerstatus deiner Grundstücke um."
+res_toggle_help_2: "Schaltet den Mob-Status deiner Grundstücke um."
+res_toggle_help_3: "Schaltet den Explosionsstatus deiner Grundstücke um."
+res_toggle_help_4: "Schaltet die Anzeige der Grundstücksgrenzen um."
+res_toggle_help_5: "Schaltet die Anzeige permanenter Grundstücksgrenzen um."
 mode_1: 'Zeigt die Karte zwischen jeden Stadt-Block'
 mode_2: 'Es wird versucht, die Blöcke, in denen du rein läufst, zu beanspruchen.'
 mode_3: 'Es wird versucht, die Blöcke, in denen du rein läufst, freizugeben.'
@@ -1597,3 +1612,5 @@ msg_setup_command_folia: "Das /ta Installations-Kommando funktioniert derzeit ni
 msg_perm_gui_folia: "Dieser Button funktioniert derzeit nicht bei Folia, da die Konversations-API nicht funktioniert, verwenden Sie stattdessen den Befehl /plot perm add <name>."
 #Message shown when a player cannot unclaim land because at least one plot wouldn't have enough adjacent claims.
 msg_err_cannot_unclaim_not_enough_adjacent_claims: "Sie können den Anspruch auf diesen Stadtblock nicht aufheben, da der Stadtblock bei %s,%s nicht genügend angrenzende Ansprüche hätte (%s sind erforderlich)"
+#The format used for the /t say and /n say commands.
+town_say_format: "%s sagt: %s"
