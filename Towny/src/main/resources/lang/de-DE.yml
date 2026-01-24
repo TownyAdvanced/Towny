@@ -201,6 +201,7 @@ townyadmin_help_1: 'Diesen Stadtblock freigeben'
 townyadmin_help_2: 'Versuche die Blöcke um dich herum freizugeben.'
 admin_panel_2: 'Towny neuladen'
 admin_panel_3: 'Neuen Tagescode festlegen'
+townyadmin_town_help_4: "Löschen einer Stadt."
 msg_block_claim: 'Diesen Stadtblock beanspruchen'
 msg_plot_nfs: 'Grundstück zum Verkauf anbieten'
 msg_nfs_abr: '&e''fs'' und ''nfs'' sind erlaubte Kürzel für ''Zu verkaufen'' und ''Nicht zu verkaufen''.'
