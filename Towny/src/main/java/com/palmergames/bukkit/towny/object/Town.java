@@ -840,6 +840,7 @@ public class Town extends Government implements TownBlockOwner {
 				continue;
 
 			TownMayorChosenBySuccessionEvent tmcbse = new TownMayorChosenBySuccessionEvent(mayor, newMayor, potentialResidents);
+			tmcbse.callEvent();
 			setMayor(tmcbse.getNewMayor());
 			return true;
 		}
