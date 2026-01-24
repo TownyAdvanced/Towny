@@ -10680,3 +10680,8 @@ v0.92.0.11:
   - Fix towny_teleport_warmup_seconds permission node not working.
   - Fix copper golem test that caused Could not pass event ItemTransportingEntityValidateTargetEvent spam.
     - Closes #8085.
+  - Bump net.coreprotect:coreprotect from 22.4 to 23.1.
+  - Bump me.clip:placeholderapi from 2.11.6 to 2.11.7.
+  - Bump org.apache.commons:commons-compress from 1.26.2 to 1.28.0.
+  - Fix the mayor succession event not being fired, courtesy of Warrior with PR #8086.
+  - Skip proximity checks when minimum plot distance is set to 0, courtesy of MakcNmk with PR #8087. (First-Time Contributor!)
