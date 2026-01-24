@@ -332,6 +332,9 @@ public class AreaSelectionUtil {
 	 */
 	public static List<WorldCoord> filterInvalidProximityTownBlocks(List<WorldCoord> selection, Town town) {
 
+		// We don't need to check for distance if min_plot_distance_from_town_plot is set to 0.
+		if (TownySettings.getMinDistanceFromTownPlotblocks() <= 0) return selection;
+		
 		List<WorldCoord> out = new ArrayList<>();
 		for (WorldCoord worldCoord : selection)
 			if (worldCoord.getTownyWorld().getMinDistanceFromOtherTownsPlots(worldCoord, town) >= TownySettings.getMinDistanceFromTownPlotblocks()) {
