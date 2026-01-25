@@ -201,7 +201,19 @@ townyadmin_help_1: 'Diesen Stadtblock freigeben'
 townyadmin_help_2: 'Versuche die Blöcke um dich herum freizugeben.'
 admin_panel_2: 'Towny neuladen'
 admin_panel_3: 'Neuen Tagescode festlegen'
+admin_panel_9: "Teleportiert zum angegebenen Grundstück"
+admin_panel_11: "Konfiguration zurücksetzen"
+admin_panel_12: "Erstellt eine Sicherung deiner Towny Daten"
+townyadmin_town_help_3: "Stadt umbenennen."
 townyadmin_town_help_4: "Löschen einer Stadt."
+townyadmin_town_help_10: "Ändert die Metadaten einer Stadt."
+townyadmin_town_help_11: "Vereint die zweite Stadt mit der ersten."
+townyadmin_town_help_12: "Vereint die zweite Stadt mit der ersten; ignoriert dabei alle Regeln."
+townyadmin_town_help_13: "Fügt der Stadtkasse Geld hinzu."
+townyadmin_town_help_14: "Entnimmt Geld aus der Stadtkasse."
+townyadmin_town_help_15: "Öffnet die Zahlungshistorie der Stadtkasse."
+townyadmin_town_help_16: "Ändert den Status der Gesetzlosen einer Stadt."
+ta_plot_help_0: "Beanspruchung eines Grundstücks für einen Spieler."
 msg_block_claim: 'Diesen Stadtblock beanspruchen'
 msg_plot_nfs: 'Grundstück zum Verkauf anbieten'
 msg_nfs_abr: '&e''fs'' und ''nfs'' sind erlaubte Kürzel für ''Zu verkaufen'' und ''Nicht zu verkaufen''.'
