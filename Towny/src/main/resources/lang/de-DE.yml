@@ -174,6 +174,8 @@ res_toggle_help_2: "Schaltet den Mob-Status deiner Grundstücke um."
 res_toggle_help_3: "Schaltet den Explosionsstatus deiner Grundstücke um."
 res_toggle_help_4: "Schaltet die Anzeige der Grundstücksgrenzen um."
 res_toggle_help_5: "Schaltet die Anzeige permanenter Grundstücksgrenzen um."
+res_toggle_help_6: "Schaltet die Sichtbarkeit der Stadtgrenzen um."
+res_toggle_help_7: "Schaltet die Grundstücksbenachrichtigungen ein oder aus."
 mode_1: 'Zeigt die Karte zwischen jeden Stadt-Block'
 mode_2: 'Es wird versucht, die Blöcke, in denen du rein läufst, zu beanspruchen.'
 mode_3: 'Es wird versucht, die Blöcke, in denen du rein läufst, freizugeben.'
