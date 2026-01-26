@@ -199,6 +199,8 @@ world_help_2: '[Welt]'
 world_help_3: 'Status der Zielwelt'
 world_help_4: 'Liste aller Welten'
 world_help_5: 'Diesen Block regenerieren'
+world_toggle_help_0: "Schaltet um, ob Städte Land in dieser Welt beanspruchen können."
+world_toggle_help_1: "Schaltet um, ob Towny  in dieser Welt erlaubt ist."
 townyadmin_help_1: 'Diesen Stadtblock freigeben'
 townyadmin_help_2: 'Versuche die Blöcke um dich herum freizugeben.'
 admin_panel_2: 'Towny neuladen'
