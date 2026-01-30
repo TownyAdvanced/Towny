@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.util.StringMgmt;
 
 import java.util.Arrays;
@@ -175,18 +176,32 @@ public class NameValidation {
 	}
 
 	/**
-	 * Check and perform regex on Titles and Surnames given to residents.
-	 * 
+	 * Check and perform regex on Titles and Surnames given to residents. Ignores minimessage tags when validating string length.
+	 *
 	 * @param words an Array of strings that make up the title or surname.
 	 * @return String of the valid name result.
 	 * @throws InvalidNameException if the title or surname is invalid.
-	 */	
+	 */
 	public static String checkAndFilterTitlesSurnameOrThrow(String[] words) throws InvalidNameException {
+		return checkAndFilterTitlesSurnameOrThrow(words, false);
+	}
+	
+	/**
+	 * Check and perform regex on Titles and Surnames given to residents.
+	 * 
+	 * @param words an Array of strings that make up the title or surname.
+	 * @param countColors whether to count minimessage tags in the string length
+	 * @return String of the valid name result.
+	 * @throws InvalidNameException if the title or surname is invalid.
+	 */	
+	public static String checkAndFilterTitlesSurnameOrThrow(String[] words, boolean countColors) throws InvalidNameException {
 		String title = StringMgmt.join(NameValidation.filterNameArray(words));
 
 		testForConfigBlacklistedName(title);
+		
+		int textLength = countColors ? title.length() : TownyComponents.plain(TownyComponents.miniMessage(title)).length();
 
-		if (title.length() > TownySettings.getMaxTitleLength())
+		if (textLength > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
 
 		return title;
