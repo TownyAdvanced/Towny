@@ -204,7 +204,7 @@ public class NameValidation {
 		if (textLength > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
 
-		return title;
+		return TownyComponents.stripClickTags(title);
 	}
 
 	/**
