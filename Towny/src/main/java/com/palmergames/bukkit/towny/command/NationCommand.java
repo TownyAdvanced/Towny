@@ -2060,10 +2060,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private static void nationSetSurname(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {
-		// Give the resident a title
-		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set surname bilbo the dwarf ");
-		else
+		// Give the resident a surname
+		if (split.length > 1)
 			resident = getResidentOrThrow(split[1]);
 
 		if (!nation.hasResident(resident)) {
@@ -2089,15 +2087,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			if (admin)
 				TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
 		}
-
-
 	}
 
 	private static void nationSetTitle(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {
 		// Give the resident a title
-		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set title bilbo Jester ");
-		else
+		if (split.length > 1)
 			resident = getResidentOrThrow(split[1]);
 		
 		if (!nation.hasResident(resident)) {
