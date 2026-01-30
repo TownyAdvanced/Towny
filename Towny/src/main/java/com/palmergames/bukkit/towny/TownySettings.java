@@ -503,7 +503,7 @@ public class TownySettings {
 	}
 
 	public static int getNationLevelMax() {
-		return configNationLevel.size();
+		return configNationLevel.size() - 1;
 	}
 
 	public static boolean isNationLevelDeterminedByTownCount() {
