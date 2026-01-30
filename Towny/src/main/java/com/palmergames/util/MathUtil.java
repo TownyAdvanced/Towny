@@ -110,4 +110,13 @@ public class MathUtil {
 			throw new TownyException(Translatable.of("msg_err_negative"));
 		return i;
 	}
+	
+	public static int clamp(int value, int min, int max) {
+		// replace me with Math.clamp after java 21 becomes the minimum version
+		if (min > max) {
+			throw new IllegalArgumentException(min + " > " + max);
+		}
+
+		return Math.min(max, Math.max(value, min));
+	}
 }
