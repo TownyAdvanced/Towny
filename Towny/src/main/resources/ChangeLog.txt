@@ -10685,3 +10685,6 @@ v0.92.0.11:
   - Bump org.apache.commons:commons-compress from 1.26.2 to 1.28.0.
   - Fix the mayor succession event not being fired, courtesy of Warrior with PR #8086.
   - Skip proximity checks when minimum plot distance is set to 0, courtesy of MakcNmk with PR #8087. (First-Time Contributor!)
+0.102.0.7:
+  - Add new CHESTS_WITHOUT_ENDERCHEST group, usable in the config switch_ids list, includes all chests but the enderchest.
+    - Closes #8095. 
