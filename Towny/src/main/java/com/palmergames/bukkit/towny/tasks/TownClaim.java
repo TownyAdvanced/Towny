@@ -14,6 +14,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownBlockType;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.regen.PlotBlockData;
 import com.palmergames.bukkit.towny.regen.TownyRegenAPI;
@@ -201,7 +202,8 @@ public class TownClaim implements Runnable {
 			if (TownySettings.getOverclaimingCommandCooldownInSeconds() > 0 &&
 				CooldownTimerTask.hasCooldown(town.getUUID().toString(), "overclaimingcooldown")) {
 				long req = CooldownTimerTask.getCooldownRemaining(town.getUUID().toString(), "overclaimingcooldown") * 1000;
-				throw new TownyException(Translatable.of("msg_err_your_cannot_overclaim_for_another", TimeMgmt.getFormattedTimeValue(req)));
+				String timeRemaining = player != null ? TimeMgmt.getFormattedTimeValue(req, Translation.getLocale(player)) : TimeMgmt.getFormattedTimeValue(req);
+				throw new TownyException(Translatable.of("msg_err_your_cannot_overclaim_for_another", timeRemaining));
 			}
 
 			Town oldTown = worldCoord.getTownOrNull();

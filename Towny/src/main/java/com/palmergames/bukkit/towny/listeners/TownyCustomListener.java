@@ -379,7 +379,7 @@ public class TownyCustomListener implements Listener {
 		if (timePlayed >= minTime)
 			return;
 
-		String timeRemaining = TimeMgmt.getFormattedTimeValue(minTime - timePlayed);
+		String timeRemaining = TimeMgmt.getFormattedTimeValue(minTime - timePlayed, Translation.getLocale(resident));
 		event.setCancelled(true);
 		event.setCancelMessage(Translatable.of("msg_err_you_cannot_join_town_you_have_not_played_long_enough", timeRemaining).forLocale(resident));
 	}

@@ -1634,7 +1634,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		double initialJailFee = TownyEconomyHandler.isActive() && TownySettings.initialJailFee() > 0 ? TownySettings.initialJailFee() : 0;
 
 		// Vet the potential resident to be jailed, throws an exception with error message if they cannot be jailed.
-		Resident jailedResident = getResidentAllowedToBeJailedOrThrow(town, split);
+		Resident jailedResident = getResidentAllowedToBeJailedOrThrow(town, split, Translation.getLocale(sender));
 
 		// Players used to be able to get places faster by using jailing exploits. 
 		checkTeleportExploitsOrThrow(sender, admin, jailedResident);
@@ -1689,7 +1689,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static Resident getResidentAllowedToBeJailedOrThrow(Town town, String[] split) throws TownyException {
+	private static Resident getResidentAllowedToBeJailedOrThrow(Town town, String[] split, Locale locale) throws TownyException {
 		Resident jailedResident = getResidentOrThrow(split[0]);
 
 		// You can only jail your members of your own town.
@@ -1704,7 +1704,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.newPlayerJailImmunity() > 0) {
 			long time = (jailedResident.getRegistered() + TownySettings.newPlayerJailImmunity()) - System.currentTimeMillis();
 			if (time > 0)
-				throw new TownyException(Translatable.of("msg_resident_has_not_played_long_enough_to_be_jailed", jailedResident.getName(), TimeMgmt.getFormattedTimeValue(time)));
+				throw new TownyException(Translatable.of("msg_resident_has_not_played_long_enough_to_be_jailed", jailedResident.getName(), TimeMgmt.getFormattedTimeValue(time, locale)));
 		}
 
 		if (!jailedResident.isOnline())
@@ -2299,7 +2299,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			&& town.getMovedHomeBlockAt() > 0
 			&& TimeTools.getHours(System.currentTimeMillis() - town.getMovedHomeBlockAt()) < TownySettings.getHomeBlockMovementCooldownHours()) {
 			long timeRemaining = ((town.getMovedHomeBlockAt() + TimeTools.getMillis(TownySettings.getHomeBlockMovementCooldownHours() + "h")) - System.currentTimeMillis());
-			throw new TownyException(Translatable.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining)));
+			throw new TownyException(Translatable.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining, Translation.getLocale(sender))));
 		}
 		
 		if (town.hasHomeBlock() && town.getHomeBlock().getWorldCoord().equals(townBlock.getWorldCoord()))
@@ -3740,7 +3740,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (ageRequirement > 0L) {
 			long ageNeeded = System.currentTimeMillis() - ageRequirement;
 			if (ageNeeded < town.getRegistered())
-				throw new TownyException(Translatable.of("msg_err_your_town_is_not_old_enough_to_overclaim", TimeMgmt.getFormattedTimeValue(town.getRegistered() - ageNeeded)));
+				throw new TownyException(Translatable.of("msg_err_your_town_is_not_old_enough_to_overclaim", TimeMgmt.getFormattedTimeValue(town.getRegistered() - ageNeeded, Translation.getLocale(player))));
 		}
 
 		// Make sure this wouldn't end up becoming a homeblock.

@@ -10687,4 +10687,5 @@ v0.92.0.11:
   - Skip proximity checks when minimum plot distance is set to 0, courtesy of MakcNmk with PR #8087. (First-Time Contributor!)
 0.102.0.7:
   - Add new CHESTS_WITHOUT_ENDERCHEST group, usable in the config switch_ids list, includes all chests but the enderchest.
-    - Closes #8095. 
+    - Closes #8095.
+  - Add getFormattedTimeValue that accepts a player locale.

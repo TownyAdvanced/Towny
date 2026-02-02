@@ -71,6 +71,10 @@ public class TimeMgmt {
 	}
 
 	public static String getFormattedTimeValue(double timeMillis) {
+		return getFormattedTimeValue(timeMillis, Translation.getDefaultLocale());
+	}
+
+	public static String getFormattedTimeValue(double timeMillis, Locale locale) {
         String timeUnit;
         double timeUtilCompletion;
 
@@ -80,22 +84,22 @@ public class TimeMgmt {
 
             if (timeMillis / ONE_DAY_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = Translation.of("msg_days");
+				timeUnit = Translatable.of("msg_days").translate(locale);
                 timeUtilCompletion = timeMillis / ONE_DAY_IN_MILLIS;
 
             } else if (timeMillis / ONE_HOUR_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = Translation.of("msg_hours");
+				timeUnit = Translatable.of("msg_hours").translate(locale);
                 timeUtilCompletion = timeMillis / ONE_HOUR_IN_MILLIS;
 
             } else if (timeMillis / ONE_MINUTE_IN_MILLIS > 1) {
                 numberFormat.setMaximumFractionDigits(1);
-                timeUnit = Translation.of("msg_minutes");
+				timeUnit = Translatable.of("msg_minutes").translate(locale);
                 timeUtilCompletion = timeMillis / ONE_MINUTE_IN_MILLIS;
 
             } else {
                 numberFormat.setMaximumFractionDigits(0);
-                timeUnit = Translation.of("msg_seconds");
+				timeUnit = Translatable.of("msg_seconds").translate(locale);
                 timeUtilCompletion = timeMillis / ONE_SECOND_IN_MILLIS;
             }
 
@@ -103,7 +107,7 @@ public class TimeMgmt {
             return numberFormat.format(timeRoundedUp) + timeUnit;
 
         } else {
-            return "0" + Translation.of("msg_seconds");
+			return "0" + Translatable.of("msg_seconds").translate(locale);
         }
     }
 
