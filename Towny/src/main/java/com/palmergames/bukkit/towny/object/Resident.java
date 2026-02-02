@@ -799,9 +799,10 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		Component postfix = hasSurname() ? TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(" " + getSurname()))
 			: TownyComponents.miniMessage(getNamePostfix());
 
-		// TODO: event
+		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
+		event.callEvent();
 
-		return prefix.append(Component.text(getName())).append(postfix);
+		return event.prefix().append(Component.text(getName())).append(event.postfix());
 	}
 
 	/**
