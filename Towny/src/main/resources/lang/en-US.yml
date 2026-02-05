@@ -229,6 +229,7 @@ res_1: 'Your status'
 res_2: '[resident]'
 res_3: 'Target player''s status'
 res_4: 'List all active players'
+res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
