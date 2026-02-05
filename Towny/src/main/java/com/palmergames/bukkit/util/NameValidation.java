@@ -190,7 +190,7 @@ public class NameValidation {
 	 * Check and perform regex on Titles and Surnames given to residents.
 	 * 
 	 * @param words an Array of strings that make up the title or surname.
-	 * @param countColors whether to count minimessage tags in the string length
+	 * @param countColors whether to count color tags in the string length
 	 * @return String of the valid name result.
 	 * @throws InvalidNameException if the title or surname is invalid.
 	 */	
@@ -199,7 +199,7 @@ public class NameValidation {
 
 		testForConfigBlacklistedName(title);
 		
-		int textLength = countColors ? title.length() : TownyComponents.plain(TownyComponents.miniMessage(title)).length();
+		int textLength = countColors ? title.length() : Colors.strip(title).length();
 
 		if (textLength > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
