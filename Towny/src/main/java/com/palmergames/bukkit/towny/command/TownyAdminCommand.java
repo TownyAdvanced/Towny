@@ -1703,8 +1703,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 		// Handle applying a manual override.
 		int level = MathUtil.getPositiveIntOrThrow(split[0]);
-		if (level > TownySettings.getTownLevelMax() - 1)
-			level = TownySettings.getTownLevelMax() - 1;
+		level = Math.min(level, TownySettings.getTownLevelMax());
 		town.setManualTownLevel(level);
 		town.save();
 		TownyMessaging.sendMsg(sender, Translatable.of("msg_town_level_overridden_with", town, level));

@@ -1930,14 +1930,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return Current TownLevel number.
 	 */
 	public int getLevelNumber() {
-		int modifier = TownySettings.isTownLevelDeterminedByTownBlockCount() ? getNumTownBlocks() : getNumResidents();
-		int townLevelNumber = getManualTownLevel() > -1
-				? Math.min(getManualTownLevel(), TownySettings.getTownLevelMax())
-				: TownySettings.getTownLevelWhichIsNotManuallySet(modifier, this);
-
-		TownCalculateTownLevelNumberEvent tctle = new TownCalculateTownLevelNumberEvent(this, townLevelNumber);
-		BukkitTools.fireEvent(tctle);
-		return tctle.getTownLevelNumber();
+		return TownySettings.getTownLevelNumber(this);
 	}
 
 	/**
