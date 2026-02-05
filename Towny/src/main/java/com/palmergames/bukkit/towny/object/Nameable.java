@@ -1,5 +1,8 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.utils.TownyComponents;
+import net.kyori.adventure.text.Component;
+
 /**
  * A simple interface to show that a class can be named, agnostic
  * if its a {@link TownyObject} or not.
@@ -21,4 +24,7 @@ public interface Nameable {
 		return getName().replace('_', ' ');
 	}
 	
+	default Component formattedName() {
+		return TownyComponents.miniMessage(getFormattedName());
+	}
 }

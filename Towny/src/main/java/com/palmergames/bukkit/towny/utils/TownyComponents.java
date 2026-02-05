@@ -19,6 +19,21 @@ import java.util.List;
 public class TownyComponents {
 	// A minimessage instance with no tags
 	private static final MiniMessage EMPTY = MiniMessage.builder().tags(TagResolver.empty()).build();
+
+	/**
+	 * A minimessage instance with tags that are deemed safe for players to be able to use.
+	 * Commented out resolvers are not available yet in the minimum supported version but otherwise fine.
+	 */
+	public static final MiniMessage USER_SAFE = MiniMessage.builder()
+		.tags(TagResolver.builder()
+			.resolver(StandardTags.color())
+			// .resolvers(StandardTags.shadowColor())
+			.resolvers(StandardTags.decorations())
+			.resolvers(StandardTags.gradient())
+			// .resolvers(StandardTags.pride())
+			.resolvers(StandardTags.rainbow())
+			.build())
+		.build();
 	
 	public static Component miniMessage(@NotNull String string) {
 		return MiniMessage.miniMessage().deserialize(Colors.translateLegacyCharacters(Colors.translateLegacyHex(string)));
