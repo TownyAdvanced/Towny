@@ -2339,16 +2339,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void adminSetSurname(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME.getNode());
 		
-		Resident resident = null;
 		// Give the resident a surname
 		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set surname bilbo Jester");
-			return;
-		} else
-			resident = getResidentOrThrow(split[1]);
+			throw new TownyException("Eg: /townyadmin set surname bilbo Jester");
+		}
+		Resident resident = getResidentOrThrow(split[1]);
 
 		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
-		resident.setSurname(surname + " ");
+		resident.setSurname(surname);
 		resident.save();
 
 		if (resident.hasSurname()) {
@@ -2363,16 +2361,14 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	private void adminSetTitle(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_TITLE.getNode());
 		
-		Resident resident = null;
 		// Give the resident a title
 		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set title bilbo Jester");
-			return;
-		} else
-			resident = getResidentOrThrow(split[1]);
+			throw new TownyException("Eg: /townyadmin set title bilbo Jester");
+		}
+		Resident resident = getResidentOrThrow(split[1]);
 
 		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
-		resident.setTitle(title + " ");
+		resident.setTitle(title);
 		resident.save();
 
 		if (resident.hasTitle()) {
