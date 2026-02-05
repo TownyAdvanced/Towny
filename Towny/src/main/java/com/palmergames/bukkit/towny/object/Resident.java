@@ -16,6 +16,7 @@ import com.palmergames.bukkit.towny.event.town.TownPreRemoveResidentEvent;
 import com.palmergames.bukkit.towny.exceptions.AlreadyRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.EmptyTownException;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
@@ -26,6 +27,7 @@ import com.palmergames.bukkit.towny.object.gui.SelectionGUI.SelectionType;
 import com.palmergames.bukkit.towny.object.jail.Jail;
 import com.palmergames.bukkit.towny.object.metadata.BooleanDataField;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import com.palmergames.bukkit.towny.object.resident.mode.ResidentModeHandler;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.scheduling.ScheduledTask;
@@ -38,6 +40,8 @@ import com.palmergames.util.StringMgmt;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -48,13 +52,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class Resident extends TownyObject implements InviteReceiver, EconomyHandler, TownBlockOwner, Identifiable, ForwardingAudience.Single {
-	private List<Resident> friends = new ArrayList<>();
+	private final Map<UUID, Resident> friends = new LinkedHashMap<>();
 	// private List<Object[][][]> regenUndo = new ArrayList<>(); // Feature is disabled as of MC 1.13, maybe it'll come back.
 	private final UUID uuid;
 	private Town town = null;
@@ -370,24 +378,36 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		Towny.getPlugin().resetCache();
 	}
 
-	public void setFriends(List<Resident> newFriends) {
+	/**
+	 * Only to be used when loading the database.
+	 * @param residents List&lt;Resident&gt; which will be loaded in as friends.
+	 */
+	public void loadFriends(List<Resident> residents) {
+		for (Resident resident : residents)
+			friends.put(resident.getUUID(), resident);
+	}
 
-		friends = newFriends;
+	public List<UUID> getFriendsUUIDs() {
+		//noinspection Java9CollectionFactory
+		return Collections.unmodifiableList(new ArrayList<>(friends.keySet()));
+	}
+
+	public void setFriends(List<Resident> newFriends) {
+		this.friends.clear();
+		loadFriends(newFriends);
 	}
 
 	public List<Resident> getFriends() {
-		return Collections.unmodifiableList(friends);
+		return Collections.unmodifiableList(new ArrayList<>(friends.values()));
 	}
 
 	public void removeFriend(Resident resident) {
-
-		if (hasFriend(resident))
-			friends.remove(resident);
+		friends.remove(resident.getUUID());
 	}
 
 	public boolean hasFriend(Resident resident) {
 
-		return friends.contains(resident);
+		return friends.containsKey(resident.getUUID());
 	}
 
 	public void addFriend(Resident resident){
@@ -395,11 +415,11 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 		if (hasFriend(resident) || this.equals(resident) || resident.isNPC())
 			return;
 
-		friends.add(resident);
+		friends.put(resident.getUUID(), resident);
 	}
 
 	public void removeAllFriends() {
-		// Wipe the array.
+		// Wipe the map.
 		friends.clear();
 	}
 
@@ -914,6 +934,123 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveResident(this);
+	}
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> res_hm = new HashMap<>();
+			res_hm.put("name", getName());
+			res_hm.put("town", hasTown() ? getTown().getUUID() : "");
+			res_hm.put("townName", hasTown() ? getTown().getName() : "");
+			res_hm.put("town-ranks", hasTown() ? StringMgmt.join(getTownRanks(), "#") : "");
+			res_hm.put("nation-ranks", hasTown() ? StringMgmt.join(getNationRanks(), "#") : "");
+			res_hm.put("lastOnline", getLastOnline());
+			res_hm.put("registered", getRegistered());
+			res_hm.put("joinedTownAt", getJoinedTownAt());
+			res_hm.put("isNPC", isNPC());
+			res_hm.put("jailUUID", isJailed() ? getJail().getUUID() : "");
+			res_hm.put("jailCell", getJailCell());
+			res_hm.put("jailHours", getJailHours());
+			res_hm.put("jailBail", getJailBailCost());
+			res_hm.put("title", getTitle());
+			res_hm.put("surname", getSurname());
+			res_hm.put("protectionStatus", getPermissions().toString().replaceAll(",", "#"));
+			res_hm.put("friends", StringMgmt.join(getFriendsUUIDs(), "#"));
+			res_hm.put("about", getAbout());
+			res_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+			return res_hm;
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for resident " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
+		}
+	}
+
+	public boolean load(Map<String, String> dataAsMap) {
+		String line = "";
+		TownyUniverse universe = TownyUniverse.getInstance();
+
+		try {
+			line = dataAsMap.get("town");
+			if (hasData(line)) {
+				Town town = universe.getTown(UUID.fromString(line));
+				if (town == null)
+					TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_resident_tried_load_invalid_town", getName(), line));
+				
+				if (town != null) {
+					setTown(town, false);
+					
+					line = dataAsMap.get("title");
+					if (hasData(line))
+						setTitle(line);
+					
+					line = dataAsMap.get("surname");
+					if (hasData(line))
+						setSurname(line);
+					
+					try {
+						line = dataAsMap.get("town-ranks");
+						if (hasData(line))
+							setTownRanks(Arrays.asList(line.split(getSplitter(line))));
+					} catch (Exception e) {}
+					
+					try {
+						line = dataAsMap.get("nation-ranks");
+						if (hasData(line))
+							setNationRanks(Arrays.asList(line.split(getSplitter(line))));
+					} catch (Exception e) {}
+					
+					line = dataAsMap.get("joinedTownAt");
+					if (hasData(line)) {
+						setJoinedTownAt(Long.valueOf(line));
+					}
+				}
+			}
+			// Last Online Date
+			setLastOnline(getOrDefault(dataAsMap, "lastOnline", 0l));
+			// Registered Date
+			setRegistered(getOrDefault(dataAsMap, "registered", 0l));
+			// isNPC
+			setNPC(getOrDefault(dataAsMap, "isNPC", false));
+			// about
+			setAbout(dataAsMap.getOrDefault("about", ""));
+			// jail
+			line = dataAsMap.get("jailUUID");
+			if (hasData(line) && universe.hasJail(UUID.fromString(line)))
+				setJail(universe.getJail(UUID.fromString(line)));
+			if (isJailed()) {
+				line = dataAsMap.get("jailCell");
+				if (hasData(line))
+					setJailCell(Integer.parseInt(line));
+
+				line = dataAsMap.get("jailHours");
+				if (hasData(line))
+					setJailHours(Integer.parseInt(line));
+
+				line = dataAsMap.get("jailBail");
+				if (hasData(line))
+					setJailBailCost(Double.parseDouble(line));
+			}
+			line = dataAsMap.get("friends");
+			if (hasData(line))
+				loadFriends(getResidentsFromDB(line));
+
+			setPermissions(dataAsMap.getOrDefault("protectionStatus", ""));
+
+			line = dataAsMap.get("metadata");
+			if (hasData(line))
+				MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+
+
+			try {
+				universe.registerResident(this);
+			} catch (AlreadyRegisteredException ignored) {}
+			if (exists())
+				save();
+			return true;
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_resident_at_line", getName(), line, getUUID()), e);
+			return false;
+		}
 	}
 
 	/**

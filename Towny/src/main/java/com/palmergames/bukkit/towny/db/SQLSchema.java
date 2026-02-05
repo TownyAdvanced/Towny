@@ -376,11 +376,11 @@ public class SQLSchema {
 		columns.add(new ColumnData("taxed", "bool NOT NULL DEFAULT '1'"));
 		columns.add(new ColumnData("town", "mediumtext"));
 		columns.add(new ColumnData("resident", "mediumtext"));
-		columns.add(new ColumnData("type", "TINYINT NOT  NULL DEFAULT '0'"));
+		columns.add(new ColumnData("type", "TINYINT NOT  NULL DEFAULT '0'")); // TODO: Check if this is still used. 
 		columns.add(new ColumnData("typeName", "mediumtext"));
 		columns.add(new ColumnData("outpost", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("permissions", "mediumtext NOT NULL"));
-		columns.add(new ColumnData("locked", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("locked", "bool NOT NULL DEFAULT '0'")); // TODO: Check if this is still used.
 		columns.add(new ColumnData("changed", "bool NOT NULL DEFAULT '0'"));
 		columns.add(new ColumnData("metadata", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("groupID", "VARCHAR(36) DEFAULT NULL"));

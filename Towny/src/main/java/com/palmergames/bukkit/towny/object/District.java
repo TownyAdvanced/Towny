@@ -1,13 +1,19 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * @author LlmDl
@@ -129,5 +135,52 @@ public class District extends ObjectGroup implements Nameable, Savable {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().saveDistrict(this);
+	}
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> district_hm = new HashMap<>();
+			district_hm.put("districtName", getName());
+			district_hm.put("town", getTown().getUUID());
+			district_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+
+			return district_hm;
+
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for plot group " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
+		}
+	}
+
+	public boolean load(Map<String, String> districtAsMap) {
+		String line = "";
+		try {
+			line = districtAsMap.get("town");
+			if (hasData(line)) {
+				Town town = TownyUniverse.getInstance().getTown(UUID.fromString(line));
+				if (town != null) {
+					setTown(town);
+					setName(districtAsMap.getOrDefault("districtName", ""));
+					line = districtAsMap.get("metadata");
+					if (hasData(line))
+						MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+				} else {
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_district_file_missing_town_delete", getUUID()));
+					TownyUniverse.getInstance().getDataSource().deleteDistrict(this); 
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_district_entry", getUUID()));
+					return true;
+				}
+			} else {
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
+				TownyUniverse.getInstance().getDataSource().deleteDistrict(this);
+				return true;
+			}
+			if (exists())
+				save();
+			return true;
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, Translation.of("flatfile_err_exception_reading_district_file_at_line", getUUID(), line), e);
+			return false;
+		}
 	}
 }
