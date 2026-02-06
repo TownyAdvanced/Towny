@@ -22,6 +22,7 @@ town_help_7: 'Kota baru dengan pemain yang ditunjuk sebagai walikota.'
 town_help_8: 'Daftar perintah untuk walikota.'
 town_help_9: 'Todays the day!'
 town_help_10: 'Daftar penduduk yang sedang aktif'
+town_help_19: "Tetapkan kotamu untuk dijual, dapat dibeli oleh pemain lain."
 mayor_help_3: 'Wilayah yang ingin di ambil tidak berdekatan dengan kota'
 mayor_help_4: 'Ambil wilayah di sekitar mu sampai radius X'
 mayor_help_5: 'Ambil wilayah sampai radius maksimal'
