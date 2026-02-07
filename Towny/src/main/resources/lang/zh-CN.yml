@@ -88,6 +88,7 @@ town_help_32: "使用指令/t set ?以获得帮助。"
 town_help_33: "使用指令/t buy ?以获得帮助。"
 town_help_34: "使用指令/t toggle ?以获得帮助。"
 town_help_35: "使用指令/t rank ?以获得帮助。"
+town_help_36: '按距离排列附近城镇。'
 town_list_help_0: "查看指定的页面。"
 town_list_help_1: "在指定的页面，按照居民的数量列出城镇。"
 town_list_help_2: "在指定的页面，列出开放的城镇。"
