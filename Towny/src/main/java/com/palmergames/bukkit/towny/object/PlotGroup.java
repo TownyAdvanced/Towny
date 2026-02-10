@@ -1,16 +1,21 @@
 package com.palmergames.bukkit.towny.object;
 
+import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownyUniverse;
+import com.palmergames.bukkit.towny.exceptions.ObjectSaveException;
+import com.palmergames.bukkit.towny.object.metadata.MetadataLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -169,6 +174,55 @@ public class PlotGroup extends ObjectGroup implements TownBlockOwner, Savable {
 	@Override
 	public void save() {
 		TownyUniverse.getInstance().getDataSource().savePlotGroup(this);
+	}
+
+	@Override
+	public Map<String, Object> getObjectDataMap() throws ObjectSaveException {
+		try {
+			Map<String, Object> pltgrp_hm = new HashMap<>();
+			pltgrp_hm.put("groupName", getName());
+			pltgrp_hm.put("groupPrice", getPrice());
+			pltgrp_hm.put("town", getTown().getUUID());
+			pltgrp_hm.put("metadata", hasMeta() ? serializeMetadata(this) : "");
+
+			return pltgrp_hm;
+
+		} catch (Exception e) {
+			throw new ObjectSaveException("An exception occurred when constructing data for plot group " + getName() + " (" + getUUID() + "), caused by: " + e.getMessage());
+		}
+	}
+
+	public boolean load(Map<String, String> groupAsMap) {
+		String line = "";
+		try {
+			line = groupAsMap.get("town");
+			if (hasData(line)) {
+				Town town = TownyUniverse.getInstance().getTown(UUID.fromString(line));
+				if (town != null) {
+					setTown(town);
+					setName(groupAsMap.getOrDefault("groupName", ""));
+					setPrice(getOrDefault(groupAsMap, "groupPrice", -1.0));
+					line = groupAsMap.get("metadata");
+					if (hasData(line))
+						MetadataLoader.getInstance().deserializeMetadata(this, line.trim());
+				} else {
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_group_file_missing_town_delete", getUUID()));
+					TownyUniverse.getInstance().getDataSource().deletePlotGroup(this); 
+					TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_missing_file_delete_group_entry", getUUID()));
+					return true;
+				}
+			} else {
+				TownyMessaging.sendErrorMsg(Translation.of("flatfile_err_could_not_add_to_town"));
+				TownyUniverse.getInstance().getDataSource().deletePlotGroup(this);
+				return true;
+			}
+			if (exists())
+				save();
+			return true;
+		} catch (Exception e) {
+			Towny.getPlugin().getLogger().log(Level.WARNING, Translation.of("flatfile_err_exception_reading_group_file_at_line", getUUID(), line), e);
+			return false;
+		}
 	}
 
 	public void setTrustedResidents(Set<Resident> trustedResidents) {

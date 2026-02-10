@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class TownyObject implements Nameable, Savable {
+public abstract class TownyObject extends Loadable implements Nameable, Savable {
 	private String name;
 	
 	private Map<String, CustomDataField<?>> metadata = null;

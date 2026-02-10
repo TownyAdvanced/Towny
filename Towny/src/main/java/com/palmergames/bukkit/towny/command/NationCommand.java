@@ -963,9 +963,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	public static Nation newNation(String name, Town town) throws TownyException {
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 		
-		UUID nationUUID = UUID.randomUUID();
-		townyUniverse.getDataSource().newNation(name, nationUUID);
-		Nation nation = townyUniverse.getNation(nationUUID);
+		townyUniverse.newNation(name);
+		Nation nation = townyUniverse.getNation(name);
 		
 		// Should never happen.
 		if (nation == null) {
