@@ -1289,14 +1289,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (town.isOpen())
 						townName = townName.append(Component.space()).append(Translatable.of("status_title_open").locale(sender).component());
-					
+
+					townName = townName.clickEvent(ClickEvent.runCommand("/towny:town " + town));
+					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_town_info").locale(sender).component()));
+
 					if (!spawningFullyDisabled) {
 						Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
 						if (TownyEconomyHandler.isActive())
 							spawnCost = Translatable.of("msg_spawn_cost", prettyMoney(town.getSpawnCost()));
 
-						townName = townName.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
-						townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
+						Component spawnComponent = Translatable.of("msg_click_spawn_brief").locale(sender).component();
+						spawnComponent = spawnComponent.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+						spawnComponent = spawnComponent.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
+
+						townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(spawnComponent);
 					}
 					output.add(Pair.pair(town.getUUID(), townName));
 				}

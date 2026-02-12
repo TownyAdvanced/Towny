@@ -130,13 +130,19 @@ public class ComparatorCaches {
 			if (town.isOpen())
 				townName = townName.append(Component.space()).append(Translatable.of("status_title_open").component());
 
+			townName = townName.clickEvent(ClickEvent.runCommand("/towny:town " + town));
+			townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_town_info").component()));
+
 			if (!spawningFullyDisabled) {
 				Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
 				if (TownyEconomyHandler.isActive())
 					spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
 
-				townName = townName.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
-				townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).component()));
+				Component spawnComponent = Translatable.of("msg_click_spawn_brief").component();
+				spawnComponent = spawnComponent.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+				spawnComponent = spawnComponent.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).component()));
+
+				townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(spawnComponent);
 			}
 			output.add(Pair.pair(town.getUUID(), townName));
 		}
@@ -212,13 +218,19 @@ public class ComparatorCaches {
 			if (nation.isOpen())
 				nationName = nationName.append(Component.space()).append(Translatable.of("status_title_open").component());
 
+			nationName = nationName.clickEvent(ClickEvent.runCommand("/towny:nation " + nation));
+			nationName = nationName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_nation_info").component()));
+
 			if (!spawningFullyDisabled) {
 				Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
 				if (TownyEconomyHandler.isActive())
 					spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(nation.getSpawnCost()));
 
-				nationName = nationName.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
-				nationName = nationName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", nation).append("\n").append(spawnCost).component()));
+				Component spawnComponent = Translatable.of("msg_click_spawn_brief").component();
+				spawnComponent = spawnComponent.clickEvent(ClickEvent.runCommand("/towny:nation spawn " + nation + " -ignore"));
+				spawnComponent = spawnComponent.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", nation).append("\n").append(spawnCost).component()));
+
+				nationName = nationName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(spawnComponent);
 			}
 			output.add(Pair.pair(nation.getUUID(), nationName));
 		}
