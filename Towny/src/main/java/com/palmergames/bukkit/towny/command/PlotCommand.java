@@ -290,7 +290,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 								return NameUtil.filterByStart(getTownyStartingWith(args[3], "r"), args[3]);
 						case "toggle":
 							if (args.length == 3)
-								return NameUtil.filterByStart(plotToggleTabCompletes, args[2]);
+								return NameUtil.filterByStart(TownyCommandAddonAPI.getTabCompletes(CommandType.PLOT_GROUP_TOGGLE, plotToggleTabCompletes), args[2]);
 						default:
 							return Collections.emptyList();
 					}
@@ -2005,6 +2005,12 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 			HelpMenu.PLOT_GROUP_TOGGLE.send(player);
 			return;
 		}
+
+		if (TownyCommandAddonAPI.hasCommand(CommandType.PLOT_GROUP_TOGGLE, split[0])) {
+			TownyCommandAddonAPI.getAddonCommand(CommandType.PLOT_GROUP_TOGGLE, split[0]).execute(player, split);
+			return;
+		}
+		
 		// We need to keep an ending string to show the message only after the transaction is over,
 		// to prevent chat log spam.
 		Translatable endingMessage = null;
