@@ -10,6 +10,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,16 +23,14 @@ public class TownyComponents {
 
 	/**
 	 * A minimessage instance with tags that are deemed safe for players to be able to use.
-	 * Commented out resolvers are not available yet in the minimum supported version but otherwise fine.
 	 */
 	public static final MiniMessage USER_SAFE = MiniMessage.builder()
 		.tags(TagResolver.builder()
 			.resolver(StandardTags.color())
-			// .resolvers(StandardTags.shadowColor())
 			.resolvers(StandardTags.decorations())
 			.resolvers(StandardTags.gradient())
-			// .resolvers(StandardTags.pride())
 			.resolvers(StandardTags.rainbow())
+			.resolvers(getRecentlyAddedTagResolvers())
 			.build())
 		.build();
 	
@@ -99,5 +98,20 @@ public class TownyComponents {
 		}
 		
 		return full;
+	}
+
+	// Uses reflection to retrieve standard tag resolvers that aren't present in the current minimum supported version.
+	private static List<TagResolver> getRecentlyAddedTagResolvers() {
+		final List<TagResolver> resolvers = new ArrayList<>();
+		addTagResolver("shadowColor", resolvers);
+		addTagResolver("pride", resolvers);
+
+		return resolvers;
+	}
+
+	private static void addTagResolver(final String name, final List<TagResolver> resolvers) {
+		try {
+			resolvers.add((TagResolver) StandardTags.class.getMethod(name).invoke(null));
+		} catch (ReflectiveOperationException ignored) {}
 	}
 }
