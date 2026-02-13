@@ -793,16 +793,18 @@ public class Resident extends TownyObject implements InviteReceiver, EconomyHand
 
 	@Override
 	public Component formattedName() {
-		Component prefix = hasTitle() ? TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(getTitle() + " "))
+		Component prefix = hasTitle() ? TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(getTitle()))
 			: TownyComponents.miniMessage(getNamePrefix());
 
-		Component postfix = hasSurname() ? TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(" " + getSurname()))
+		Component postfix = hasSurname() ? TownyComponents.USER_SAFE.deserialize(Colors.translateLegacyCharacters(getSurname()))
 			: TownyComponents.miniMessage(getNamePostfix());
 
 		TownyObjectFormattedNameEvent event = new TownyObjectFormattedNameEvent(this, prefix, postfix);
 		event.callEvent();
 
-		return event.prefix().append(Component.text(getName())).append(event.postfix());
+		return event.prefix().append(TownyComponents.plain(event.prefix()).isEmpty() ? Component.empty() : Component.space())
+			.append(Component.text(getName()))
+			.append((TownyComponents.plain(event.postfix()).isEmpty() ? Component.empty() : Component.space()).append(event.postfix()));
 	}
 
 	/**
