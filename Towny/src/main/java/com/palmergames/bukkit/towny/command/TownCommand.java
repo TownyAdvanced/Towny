@@ -2010,8 +2010,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townSetTitle(@NotNull CommandSender sender, @NotNull String[] split, boolean admin) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE.getNode());
-		// Give the resident a title
-		if (split.length == 0)
+
+		if (split.length == 0) // We did not receive a split that contains a resident name.
 			throw new TownyException("Eg: /town set title bilbo Jester");
 
 		Resident resident = getResidentOrThrow(split[0]);
@@ -2020,7 +2020,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 
-		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
 
 		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(title))
 			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR.getNode(),
@@ -2031,7 +2031,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Translatable message = resident.hasTitle()
 			? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
-			: Translatable.of("msg_clear_title_surname", "Title", resident.getName());
+			: Translatable.of("msg_clear_title_surname", "title", resident.getName());
 
 		TownyMessaging.sendPrefixedTownMessage(resident, message);
 
@@ -2041,9 +2041,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townSetSurname(CommandSender sender, String[] split, boolean admin) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode());
-		// Give the resident a surname
-		if (split.length == 0)
-			throw new TownyException("Eg: /town set surname bilbo the dwarf ");
+
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /town set surname bilbo the hobbit");
 
 		Resident resident = getResidentOrThrow(split[0]);
 		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
@@ -2051,7 +2051,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 
-		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
 
 		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(surname))
 			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR.getNode(),
@@ -2062,7 +2062,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Translatable message = resident.hasSurname()
 			? Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname()))
-			: Translatable.of("msg_clear_title_surname", "Surname", resident.getName());
+			: Translatable.of("msg_clear_title_surname", "surname", resident.getName());
 
 		TownyMessaging.sendPrefixedTownMessage(resident, message);
 

@@ -1980,12 +1980,10 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			nationSetTag(sender, nation, split, admin);
 			break;
 		case "title":
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TITLE.getNode());
-			nationSetTitle(sender, nation, resident, split, admin);
+			nationSetTitle(sender, nation, StringMgmt.remFirstArg(split), admin);
 			break;
 		case "surname":
-			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_SURNAME.getNode());
-			nationSetSurname(sender, nation, resident, split, admin);
+			nationSetSurname(sender, nation, StringMgmt.remFirstArg(split), admin);
 			break;
 		case "board":
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_BOARD.getNode());
@@ -2059,19 +2057,18 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		TownyMessaging.sendNationBoard(sender, nation);
 	}
 
-	private static void nationSetSurname(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {
-		// Give the resident a title
-		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set surname bilbo the dwarf ");
-		else
-			resident = getResidentOrThrow(split[1]);
+	private static void nationSetSurname(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_SURNAME.getNode());
 
-		if (!nation.hasResident(resident)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_same_nation", resident.getName()));
-			return;
-		}
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /nation set surname bilbo the hobbit");
 
-		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
+		Resident resident = getResidentOrThrow(split[0]);
+
+		if (!nation.hasResident(resident))
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", resident.getName()));
+
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
 
 		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(surname))
 			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TITLE_COLOUR.getNode(),
@@ -2080,32 +2077,27 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		resident.setSurname(surname);
 		resident.save();
 
-		if (resident.hasSurname()) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-			if (admin)
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-		} else {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-			if (admin)
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-		}
+		Translatable message = resident.hasSurname()
+				? Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname()))
+				: Translatable.of("msg_clear_title_surname", "surname", resident.getName());
 
-
+		TownyMessaging.sendPrefixedNationMessage(nation, message);
+		if (admin)
+			TownyMessaging.sendMsg(sender, message);
 	}
 
-	private static void nationSetTitle(CommandSender sender, Nation nation, Resident resident, String[] split, boolean admin) throws TownyException {
-		// Give the resident a title
-		if (split.length < 2)
-			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set title bilbo Jester ");
-		else
-			resident = getResidentOrThrow(split[1]);
-		
-		if (!nation.hasResident(resident)) {
-			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_same_nation", resident.getName()));
-			return;
-		}
+	private static void nationSetTitle(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TITLE.getNode());
 
-		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /nation set title bilbo Jester");
+
+		Resident resident = getResidentOrThrow(split[0]);
+
+		if (!nation.hasResident(resident))
+			Translatable.of("msg_err_not_same_nation", resident.getName());
+
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
 
 		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(title))
 			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_NATION_SET_TITLE_COLOUR.getNode(),
@@ -2114,15 +2106,13 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		resident.setTitle(title);
 		resident.save();
 
-		if (resident.hasTitle()) {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-			if (admin)
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-		} else {
-			TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-			if (admin)
-				TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-		}
+		Translatable message = resident.hasTitle()
+				? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
+				: Translatable.of("msg_clear_title_surname", "title", resident.getName());
+
+		TownyMessaging.sendPrefixedNationMessage(nation, message);
+		if (admin)
+			TownyMessaging.sendMsg(sender, message);
 	}
 
 	private static void nationSetTag(CommandSender sender, Nation nation, String[] split, boolean admin) throws TownyException {

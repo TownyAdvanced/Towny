@@ -1977,7 +1977,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 	private void parseAdminNationSet(CommandSender sender, Nation nation, String[] split) throws TownyException {
 		if (split.length == 0 || split[0].equals("?")) {
-			// Empty Case: /townyadmin town [town] set
+			// Empty Case: /townyadmin nation [nation] set
 			HelpMenu.TA_NATION_SET.send(sender);
 		} else if (split[0].equalsIgnoreCase("foundingdate")) {
 			parseAdminNationSetFoundingDate(sender, nation, split);
@@ -2171,10 +2171,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			adminSetAbout(sender, split);
 			break;
 		case "surname":
-			adminSetSurname(sender, split);
+			adminSetSurname(sender, StringMgmt.remFirstArg(split));
 			break;
 		case "title":
-			adminSetTitle(sender, split);
+			adminSetTitle(sender, StringMgmt.remFirstArg(split));
 			break;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_SET, split[0])) {
@@ -2338,50 +2338,42 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 
 	private void adminSetSurname(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_SURNAME.getNode());
-		
-		Resident resident = null;
-		// Give the resident a surname
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set surname bilbo Jester");
-			return;
-		} else
-			resident = getResidentOrThrow(split[1]);
 
-		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
-		resident.setSurname(surname + " ");
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /townyadmin set surname bilbo the hobbit");
+
+		Resident resident = getResidentOrThrow(split[0]);
+
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
+		resident.setSurname(surname);
 		resident.save();
 
-		if (resident.hasSurname()) {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname())));
-		} else {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Surname", resident.getName()));
-		}
+		Translatable message = resident.hasSurname()
+				? Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname()))
+				: Translatable.of("msg_clear_title_surname", "surname", resident.getName());
+
+		TownyMessaging.sendMsg(sender, message);
+		TownyMessaging.sendMsg(resident, message);
 	}
 
 	private void adminSetTitle(CommandSender sender, String[] split) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_SET_TITLE.getNode());
-		
-		Resident resident = null;
-		// Give the resident a title
-		if (split.length < 2) {
-			TownyMessaging.sendErrorMsg(sender, "Eg: /townyadmin set title bilbo Jester");
-			return;
-		} else
-			resident = getResidentOrThrow(split[1]);
 
-		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 2));
-		resident.setTitle(title + " ");
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /townyadmin set title bilbo Jester");
+
+		Resident resident = getResidentOrThrow(split[0]);
+
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
+		resident.setTitle(title);
 		resident.save();
 
-		if (resident.hasTitle()) {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle())));
-		} else {
-			TownyMessaging.sendMsg(sender, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_clear_title_surname", "Title", resident.getName()));
-		}
+		Translatable message = resident.hasTitle()
+				? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
+				: Translatable.of("msg_clear_title_surname", "title", resident.getName());
+
+		TownyMessaging.sendMsg(sender, message);
+		TownyMessaging.sendMsg(resident, message);
 	}
 
 	public void reloadLangs(CommandSender sender) {
