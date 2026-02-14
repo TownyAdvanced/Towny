@@ -1203,7 +1203,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '你不能�
 msg_already_ally: '你的国家已与%s结盟.'
 #Added in 0.76
 msg_you: '你'
-#Added in 0.77
 msg_click_spawn: '&a点击传送到:&e%s'
 msg_spawn_cost: '&a传送价格=&e%s'
 #Added in 0.78
