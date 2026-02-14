@@ -156,7 +156,7 @@ public class TownyFormatter {
 		final boolean onlineAndVisible = playerIsOnlineAndVisible(resident.getName(), sender);
 
 		// ___[ King Harlus ]___
-		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (onlineAndVisible ? translator.of("online2") : "")));
+		screen.addComponentOf("title", ChatTools.formatTitle(resident.formattedName().append(onlineAndVisible ? translator.component("online2") : Component.empty())));
 
 		// About: Just a humble farmer
 		if (!resident.getAbout().isEmpty())
