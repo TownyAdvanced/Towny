@@ -1112,7 +1112,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Vous n''ê
 msg_already_ally: 'Votre nation est déjà alliée à %s.'
 #Added in 0.76
 msg_you: 'Vous'
-#Added in 0.77
 msg_click_spawn: '&aCliquer pour être téléporté à: &e%s'
 msg_spawn_cost: '&aCoût de téléportation: &e%s'
 #Added in 0.78
