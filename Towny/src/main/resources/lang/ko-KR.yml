@@ -933,7 +933,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '이 위치
 msg_already_ally: '국가는 이미 %s와 동맹 상태입니다.'
 #Added in 0.76
 msg_you: '나'
-#Added in 0.77
 msg_click_spawn: '&a클릭하여 다음 마을로 이동합니다: &e%s'
 msg_spawn_cost: '&a마을 이동 비용 = &e%s'
 #Added in 0.78
