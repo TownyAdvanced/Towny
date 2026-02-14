@@ -964,7 +964,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Dir ist es
 msg_already_ally: 'Deine Nation ist bereits mit %s verbündet.'
 #Added in 0.76
 msg_you: 'Du'
-#Added in 0.77
 msg_click_spawn: '&aKlicke um bei &e%s &a zu spawnen'
 msg_spawn_cost: '&aSpawn-Kosten = &e%s'
 #Added in 0.78
