@@ -1087,7 +1087,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Bu konumda
 msg_already_ally: 'Ulusun zaten %s ile müttefik.'
 #Added in 0.76
 msg_you: 'Sen'
-#Added in 0.77
 msg_click_spawn: '&aDoğmak için tıklayın: &e%s'
 msg_spawn_cost: '&aDoğma Maliyeti = &e%s'
 #Added in 0.78
