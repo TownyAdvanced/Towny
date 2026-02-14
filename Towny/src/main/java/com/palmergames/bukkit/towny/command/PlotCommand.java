@@ -755,7 +755,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		Coord key = Coord.parseCoord(player.getLocation());
 
 		// Throws a TownyException with message if outpost should not be set.
-		OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin(), true);
+		OutpostUtil.OutpostTests(town, resident, townyWorld, key, resident.isAdmin());
 
 		if (TownySettings.getOutpostCost() > 0) {
 			// Create a confirmation for setting outpost.

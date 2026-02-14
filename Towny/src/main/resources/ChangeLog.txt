@@ -10699,3 +10699,7 @@ v0.92.0.11:
   - Add PLOT_GROUP_TOGGLE to TownyCommandAddonAPI, courtesy of Veyronity with PR #8107.
   - Bump me.clip:placeholderapi from 2.11.7 to 2.12.2.
   - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0.
+0.102.0.8:
+  - Fix outposts not following the min_distances_ignored_for_towns_in_same_nation and min_distances_ignored_for_towns_in_allied_nation 
+    when min_distance_for_outpost_from_plot is tested while creating an outpost using /t claim outpost.
+    - Closes #7829. 

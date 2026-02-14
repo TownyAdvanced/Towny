@@ -3515,7 +3515,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			Resident resident = getResidentOrThrow(player);
 			// Run various tests required by configuration/permissions through Util.
-			OutpostUtil.OutpostTests(town, resident, world, playerWorldCoord, resident.isAdmin(), false);
+			OutpostUtil.OutpostTests(town, resident, world, playerWorldCoord, resident.isAdmin());
 
 			if (playerWorldCoord.hasTownBlock())
 				throw new TownyException(Translatable.of("msg_already_claimed", playerWorldCoord.getTownOrNull()));
