@@ -1180,7 +1180,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Não tens 
 msg_already_ally: 'A tua nação já é aliada com %s.'
 #Added in 0.76
 msg_you: 'Tu'
-#Added in 0.77
 msg_click_spawn: '&aClique para te teletransportares para: &e%s'
 msg_spawn_cost: '&aPreço de Teletransporte = &e%s'
 #Added in 0.78
