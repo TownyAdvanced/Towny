@@ -648,11 +648,7 @@ public class Nation extends Government {
 	 * @return Nation Level (int) for current population or amount of towns.
 	 */
 	public int getLevelNumber() {
-		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? getNumTowns() : getNumResidents();
-		int nationLevelNumber = TownySettings.getNationLevelFromGivenInt(modifier);
-		NationCalculateNationLevelNumberEvent ncnle = new NationCalculateNationLevelNumberEvent(this, nationLevelNumber);
-		BukkitTools.fireEvent(ncnle);
-		return ncnle.getNationLevelNumber();
+		return TownySettings.getNationLevelNumber(this);
 	}
 
 	@Override
