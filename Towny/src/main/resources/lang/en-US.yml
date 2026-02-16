@@ -229,6 +229,7 @@ res_1: 'Your status'
 res_2: '[resident]'
 res_3: 'Target player''s status'
 res_4: 'List all active players'
+res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -1382,7 +1383,10 @@ msg_already_ally: 'Your nation is already allied with %s.'
 msg_you: 'You'
 
 # Added in 0.77
+msg_click_town_info: '<green>Click to view the town status screen.'
+msg_click_nation_info: '<green>Click to view the nation status screen.'
 msg_click_spawn: '&aClick to spawn to: &e%s'
+msg_click_spawn_brief: '<green>[Spawn]'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
 
 # Added in 0.78
