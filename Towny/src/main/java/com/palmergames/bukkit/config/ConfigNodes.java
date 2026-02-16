@@ -1,5 +1,7 @@
 package com.palmergames.bukkit.config;
 
+import java.util.HashMap;
+
 public enum ConfigNodes {
 	VERSION_HEADER("version", "", ""),
 	VERSION(
@@ -3486,16 +3488,48 @@ public enum ConfigNodes {
 			"27",
 			"",
 			"# The width of the map shown in /towny map and /res toggle map.",
-			"# Minimum 7, maximum 27, only odd numbers are accepted.");
+			"# Minimum 7, maximum 27, only odd numbers are accepted."),
+	CUSTOM_LISTS("custom_lists", "", "",
+		"# This section of the config allows you to specify custom lists of blocks or entities, that can then be used elsewhere in the config.",
+		"# A custom syntax is used to specify whether to include or exclude certain patterns from the resulting set.",
+		"#",
+		"# Format:",
+		"# *string: Includes all elements that end with 'string'",
+		"# string*: Includes all elements that start with 'string'",
+		"# !*string: Excludes all elements that don't end with 'string'",
+		"# !string*: Excludes all elements that don't start with 'string'",
+		"# #tag: Includes all elements that are contained in the given tag, valid tags can be found here: https://github.com/misode/mcmeta/tree/data/data/minecraft/tags in the blocks or entity_type folders.",
+		"# !#tag: Excludes all elements that are contained in the given tag",
+		"# +string: Includes the element with name 'string'",
+		"# -string: Excludes the element with name 'string'",
+		"# ~string: Includes all elements that contain 'string' in the name",
+		"# !~string: Excludes all elements that contain 'string' in the name",
+		"# c:class: Includes all elements that are instances of the given class"),
+	CUSTOM_LISTS_ITEM_LISTS("custom_lists.item_lists",
+		new HashMap<>(),
+		"",
+		"# Define your custom item lists here.",
+		"# Example:",
+		"#",
+		"# item_lists:",
+		"#   chests: '~chest'"),
+	CUSTOM_LISTS_ENTITY_LISTS("custom_lists.entity_lists",
+		new HashMap<>(),
+		"",
+		"# Define your custom entity lists here.",
+		"# Example:",
+		"#",
+		"# entity_lists:",
+		"#   animals: 'c:Animals'");
 	
-	private final String Root;
-	private final String Default;
-	private String[] comments;
+	private final String root;
+	private final Object defaultValue;
+	private final String[] comments;
 
-	ConfigNodes(String root, String def, String... comments) {
+	ConfigNodes(String root, Object def, String... comments) {
 
-		this.Root = root;
-		this.Default = def;
+		this.root = root;
+		this.defaultValue = def;
 		this.comments = comments;
 	}
 
@@ -3506,7 +3540,7 @@ public enum ConfigNodes {
 	 */
 	public String getRoot() {
 
-		return Root;
+		return root;
 	}
 
 	/**
@@ -3516,7 +3550,16 @@ public enum ConfigNodes {
 	 */
 	public String getDefault() {
 
-		return Default;
+		return defaultValue.toString();
+	}
+
+	/**
+	 * Retrieves the default value for a config path
+	 *
+	 * @return The default value for a config path
+	 */
+	public Object defaultValue() {
+		return this.defaultValue;
 	}
 
 	/**
