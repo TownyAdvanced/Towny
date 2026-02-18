@@ -193,7 +193,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		"merge",
 		"transfer",
 		"forcemerge",
-		"recheck"
+		"recheck",
+		"setnationlevel"
 	);
 	private static final List<String> adminNationSetTabCompletes = Stream.concat(NationCommand.nationSetTabCompletes.stream(),
 		Stream.of("foundingdate")).collect(Collectors.toList());
@@ -586,6 +587,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 										.filter(t -> !nation.hasTown(t))
 										.map(Town::getName)
 										.collect(Collectors.toList()), args[4]);
+							break;
+						case "setnationlevel":
+							if (args.length == 4)
+								return NameUtil.filterByStart(StringMgmt.addToList(numbers, "unset"), args[3]);
 							break;
 						case "enemy":
 						case "ally":
@@ -1917,6 +1922,10 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY.getNode());
 			parseAdminNationEnemyCommand(sender, StringMgmt.remArgs(split, 2), nation);
 			break;
+		case "setnationlevel":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION_SETNATIONLEVEL.getNode());
+			setNationLevel(sender, nation, StringMgmt.remArgs(split, 2));
+			break;
 		default:
 			if (TownyCommandAddonAPI.hasCommand(CommandType.TOWNYADMIN_NATION, split[1])) {
 				TownyCommandAddonAPI.getAddonCommand(CommandType.TOWNYADMIN_NATION, split[1]).execute(sender, split, nation);
@@ -1924,6 +1933,28 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			HelpMenu.TA_NATION.send(sender);
 		}
+	}
+
+	private void setNationLevel(CommandSender sender, Nation nation, String[] split) throws TownyException {
+		// The number is missing.
+		if (split.length == 0)
+			throw new TownyException("Eg: /townyadmin nation [nationname] setnationlevel 2");
+
+		// Handle un-setting the manual override.
+		if (split[0].equalsIgnoreCase("unset")) {
+			nation.setManualNationLevel(-1);
+			nation.save();
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_level_unset", nation, nation.getLevelNumber()));
+			return;
+		}
+
+		// Handle applying a manual override.
+		int level = MathUtil.getPositiveIntOrThrow(split[0]);
+		if (level > TownySettings.getNationLevelMax() - 1)
+			level = TownySettings.getNationLevelMax() - 1;
+		nation.setManualNationLevel(level);
+		nation.save();
+		TownyMessaging.sendMsg(sender, Translatable.of("msg_nation_level_overridden_with", nation, level));
 	}
 
 	private void parseAdminNewNationCommand(CommandSender sender, String[] split) throws TownyException {
