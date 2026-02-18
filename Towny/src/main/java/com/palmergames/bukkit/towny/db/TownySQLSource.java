@@ -1385,6 +1385,9 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			if (line != null && !line.isEmpty())
 				nation.setActiveWar(rs.getBoolean("hasActiveWar"));
 
+
+			nation.setManualNationLevel(rs.getInt("manualNationLevel"));
+			
 			return true;
 		} catch (SQLException e) {
 			TownyMessaging.sendErrorMsg("SQL: Load Nation " + name + " SQL Error - " + e.getMessage());
@@ -2497,6 +2500,7 @@ public final class TownySQLSource extends TownyDatabaseHandler {
 			nat_hm.put("maxPercentTaxAmount", nation.getMaxPercentTaxAmount());
 			nat_hm.put("spawnCost", nation.getSpawnCost());
 			nat_hm.put("neutral", nation.isNeutral());
+			nat_hm.put("manualNationLevel", nation.getManualNationLevel());
 			
 			final Position spawnPos = nation.spawnPosition();
 			nat_hm.put("nationSpawn", spawnPos != null ? String.join("#", spawnPos.serialize()) : "");

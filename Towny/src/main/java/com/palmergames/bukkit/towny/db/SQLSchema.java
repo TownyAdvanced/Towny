@@ -321,6 +321,7 @@ public class SQLSchema {
 		columns.add(new ColumnData("conqueredTax", "float NOT NULL"));
 		columns.add(new ColumnData("sanctionedTowns", "mediumtext DEFAULT NULL"));
 		columns.add(new ColumnData("hasActiveWar", "bool NOT NULL DEFAULT '0'"));
+		columns.add(new ColumnData("manualNationLevel", "BIGINT DEFAULT '-1'"));
 		return columns;
 	}
 
