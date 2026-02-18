@@ -1166,7 +1166,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Jums negal
 msg_already_ally: 'Jūsų valstybė jau yra %s sąjungininkė.'
 #Added in 0.76
 msg_you: 'Jūs'
-#Added in 0.77
 msg_click_spawn: '&aSpustelėkite norėdami nusiteleportuoti į: &e%s'
 msg_spawn_cost: '&aTeleportacijos kaina = &e%s'
 #Added in 0.78

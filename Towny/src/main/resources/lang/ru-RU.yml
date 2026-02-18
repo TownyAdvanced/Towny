@@ -1211,7 +1211,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Вам н�
 msg_already_ally: 'Ваша нация уже в союзе с %s.'
 #Added in 0.76
 msg_you: 'Вы'
-#Added in 0.77
 msg_click_spawn: '&aНажмите для спавна к: &e%s'
 msg_spawn_cost: '&aЦена Спавна = &e%s'
 #Added in 0.78

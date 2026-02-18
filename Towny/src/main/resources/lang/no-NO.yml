@@ -805,7 +805,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Du har ikk
 msg_already_ally: 'Nasjonen din er allerede alliert med %s.'
 #Added in 0.76
 msg_you: 'Du'
-#Added in 0.77
 msg_click_spawn: '&aKlikk for å spawne til: &e%s'
 msg_spawn_cost: '&aSpawnpris = &e%s'
 #Added in 0.78

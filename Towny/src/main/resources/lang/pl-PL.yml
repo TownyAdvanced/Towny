@@ -1179,7 +1179,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'W tym miej
 msg_already_ally: 'Twoja nacja jest już sprzymierzona z %s.'
 #Added in 0.76
 msg_you: 'cię'
-#Added in 0.77
 msg_click_spawn: '&aKliknij, aby pojawić się w: &e%s'
 msg_spawn_cost: '&aKoszt Spawnu = &e%s'
 #Added in 0.78

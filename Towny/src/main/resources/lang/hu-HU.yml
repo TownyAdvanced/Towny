@@ -1165,7 +1165,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Nem hozhat
 msg_already_ally: 'A nemzeted már szövetségben áll %s-nal.'
 #Added in 0.76
 msg_you: 'Te'
-#Added in 0.77
 msg_click_spawn: '&aKattints a spawnoláshoz: &e%s'
 msg_spawn_cost: '&aSpawn Költség = &e%s'
 #Added in 0.78
