@@ -222,6 +222,11 @@
             <version>4.98.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>fastboard</artifactId>
+            <version>2.1.5</version>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>
@@ -349,6 +354,10 @@
                             <relocation>
                                 <pattern>solar.squares.pixelwidth</pattern>
                                 <shadedPattern>com.palmergames.bukkit.towny.libs.pixelwidth</shadedPattern>
+                            </relocation>
+                            <relocation>
+                                <pattern>fr.mrmicky.fastboard</pattern>
+                                <shadedPattern>com.palmergames.fastboard</shadedPattern>
                             </relocation>
                         </relocations>
                         <filters>
