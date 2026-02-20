@@ -27,10 +27,18 @@ import org.bukkit.entity.Player;
 
 public class MapHUD implements HUDImplementer {
 
-	final HUD hud;
+	private static final String DARK_GRAY = Colors.DARK_GRAY;
+	private static final String DARK_GREEN = Colors.DARK_GREEN;
+	private static final String DARK_RED = Colors.DARK_RED;
+	private static final String GOLD = Colors.GOLD;
+	private static final String GREEN = Colors.GREEN;
+	private static final String WHITE = Colors.WHITE;
+	private static final String YELLOW = Colors.YELLOW;
 	private static final int mapLineWidth = 19, mapLineHeight = 10;
 	private static final int halfMapLineWidth = mapLineWidth/2;
 	private static final int halfMapLineHeight = mapLineHeight/2;
+
+	final HUD hud;
 
 	public MapHUD(HUD hud) {
 		this.hud = hud;
@@ -57,7 +65,7 @@ public class MapHUD implements HUDImplementer {
 		int wcZ = wc.getZ();
 		// Set the board title.
 		UUID uuid = player.getUniqueId();
-		hud.setTitle(uuid, TownyComponents.miniMessage(String.format("%sTowny Map %s(%s, %s)", Colors.GOLD, Colors.WHITE, wcX, wcZ)));
+		hud.setTitle(uuid, TownyComponents.miniMessage(String.format("%sTowny Map %s(%s, %s)", GOLD, WHITE, wcX, wcZ)));
 
 		// Populate our map into an array.
 		String[][] map = new String[mapLineWidth][mapLineHeight];
@@ -73,7 +81,7 @@ public class MapHUD implements HUDImplementer {
 		}
 
 		TownBlock tb = wc.getTownBlockOrNull();
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("town_sing") + ": "
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("town_sing") + ": "
 					+ (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : translator.of("status_no_town"))));
 		if (tb != null) {
 			sbComponents.add(getOwnerName(tb, translator));
@@ -86,13 +94,13 @@ public class MapHUD implements HUDImplementer {
 	private static Component getOwnerName(TownBlock tb, Translator translator) {
 		String name = !tb.hasResident() ? "" : tb.getResidentOrNull().getName();
 		String prefix = translator.of("owner_status");
-		return TownyComponents.miniMessage(HUDManager.check(Colors.DARK_GREEN + prefix + ": " + Colors.GREEN + name));
+		return TownyComponents.miniMessage(HUDManager.check(DARK_GREEN + prefix + ": " + GREEN + name));
 	}
 
 	private static Component getDistrictName(TownBlock tb, Translator translator) {
 		String name = !tb.hasDistrict() ? "" : tb.getDistrict().getFormattedName();
 		String prefix = translator.of("msg_map_hud_district");
-		return TownyComponents.miniMessage(HUDManager.check(Colors.DARK_GREEN + prefix + Colors.GREEN + name));
+		return TownyComponents.miniMessage(HUDManager.check(DARK_GREEN + prefix + GREEN + name));
 	}
 
 	private static Component getPlotName(TownBlock tb, Translator translator) {
@@ -104,7 +112,7 @@ public class MapHUD implements HUDImplementer {
 			name = tb.getFormattedName();
 
 		String prefix = translator.of(hasPlotGroup ? "msg_perm_hud_plotgroup_name" : "msg_perm_hud_plot_name");
-		return TownyComponents.miniMessage(HUDManager.check(Colors.DARK_GREEN + prefix + Colors.GREEN + name));
+		return TownyComponents.miniMessage(HUDManager.check(DARK_GREEN + prefix + GREEN + name));
 	}
 
 	private static void fillMapArray(int wcX, int wcZ, Resident resident, World bukkitWorld, String[][] map) {
@@ -141,10 +149,10 @@ public class MapHUD implements HUDImplementer {
 	private static String getTownBlockColour(Resident resident, int x, int y, final TownBlock townBlock) {
 		if (playerLocatedAtThisCoord(x, y))
 			// This is the player's location, colour it special.
-			return Colors.GOLD;
+			return GOLD;
 		else if (townBlock.hasResident(resident))
 			// Resident's own plot
-			return Colors.YELLOW;
+			return YELLOW;
 		else if (townBlock.getData().hasColour())
 			// Set the colour of the townblocktype if it has one.
 			return "<" + townBlock.getData().getColour() + ">";
@@ -153,32 +161,32 @@ public class MapHUD implements HUDImplementer {
 			return getTownBlockColour(resident, townBlock.getTownOrNull());
 		else
 			// Default fallback.
-			return Colors.WHITE;
+			return WHITE;
 	}
 
 	private static String getTownBlockColour(Resident resident, Town townAtTownBlock) {
 		// The player is a part of this town.
 		if (townAtTownBlock.hasResident(resident))
-			return Colors.GREEN;
+			return GREEN;
 
 		if (!resident.hasNation())
-			return Colors.WHITE;
+			return WHITE;
 
 		Nation resNation = resident.getNationOrNull();
 		// Another town in the player's nation.
 		if (resNation.hasTown(townAtTownBlock))
-			return Colors.DARK_GREEN;
+			return DARK_GREEN;
 
 		if (!townAtTownBlock.hasNation())
-			return Colors.WHITE;
+			return WHITE;
 
 		Nation townBlockNation = townAtTownBlock.getNationOrNull();
 		if (resNation.hasAlly(townBlockNation))
-			return Colors.DARK_GREEN;
+			return DARK_GREEN;
 		else if (resNation.hasEnemy(townBlockNation))
-			return Colors.DARK_RED;
+			return DARK_RED;
 		else 
-			return Colors.WHITE;
+			return WHITE;
 	}
 
 	private static boolean playerLocatedAtThisCoord(int x, int y) {
@@ -192,7 +200,7 @@ public class MapHUD implements HUDImplementer {
 
 	private static void mapWilderness(String[][] map, int x, int y, final WorldCoord worldCoord) {
 		// Colour gold if this is the player loc, otherwise normal gray.
-		map[y][x] = playerLocatedAtThisCoord(x, y) ?  Colors.GOLD : Colors.DARK_GRAY;
+		map[y][x] = playerLocatedAtThisCoord(x, y) ?  GOLD : DARK_GRAY;
 
 		String symbol;
 		// Cached TownyMapData is present and not old.
@@ -224,15 +232,5 @@ public class MapHUD implements HUDImplementer {
 	private static Map<WorldCoord, TownyMapData> getWildernessMapDataMap() {
 		return TownyUniverse.getInstance().getWildernessMapDataMap();
 	}
-//
-//	private static void writeMapToBoard(Scoreboard board, String[][] map) {
-//		for (int my = 0; my < mapLineHeight; my++) {
-//			String line = "";
-//			for (int mx = mapLineWidth - 1; mx >= 0; mx--)
-//				line += map[mx][my];
-//
-//			board.getTeam(TEAM_MAP_PREFIX + my).setSuffix(line);
-//		}
-//	}
-	
+
 }

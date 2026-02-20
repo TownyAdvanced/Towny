@@ -25,6 +25,17 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class PermHUD implements HUDImplementer {
+
+	private static final String BOLD = Colors.BOLD;
+	private static final String DARK_GREEN = Colors.DARK_GREEN;
+	private static final String DARK_RED = Colors.DARK_RED;
+	private static final String GOLD = Colors.GOLD;
+	private static final String GRAY = Colors.GRAY;
+	private static final String RESET = Colors.RESET;
+	private static final String UNDERLINED = Colors.UNDERLINED;
+	private static final String WHITE = Colors.WHITE;
+	private static final String YELLOW = Colors.YELLOW;
+
 	final HUD hud;
 
 	public PermHUD(HUD hud) {
@@ -66,19 +77,19 @@ public class PermHUD implements HUDImplementer {
 		Component mobspawn = getTranslatedOnOrOff(world.hasWildernessMobs(), translator);
 
 		LinkedList<Component> sbComponents = new LinkedList<>();
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("unclaimed_zone_name")));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("unclaimed_zone_name")));
 		sbComponents.add(Component.empty());
-		sbComponents.add(TownyComponents.miniMessage(Colors.YELLOW + Colors.UNDERLINED + translator.of("msg_perm_hud_title") + Colors.RESET));
+		sbComponents.add(TownyComponents.miniMessage(YELLOW + UNDERLINED + translator.of("msg_perm_hud_title") + RESET));
 
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_build") + " ").append(build));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_destroy") + " ").append(destroy));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_switch") + " ").append(switching));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_item_use") + " ").append(item));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_build") + " ").append(build));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_destroy") + " ").append(destroy));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_switch") + " ").append(switching));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_item_use") + " ").append(item));
 
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ").append(pvp));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ").append(explosions));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ").append(firespread));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ").append(mobspawn));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ").append(pvp));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ").append(explosions));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ").append(firespread));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ").append(mobspawn));
 
 		UUID uuid = p.getUniqueId();
 		hud.setTitle(uuid, TownyComponents.miniMessage(HUDManager.check(getFormattedWildernessName(p.getWorld()))));
@@ -104,30 +115,30 @@ public class PermHUD implements HUDImplementer {
 		Component mobspawn = getTranslatedOnOrOff(world.isForceTownMobs() || tp.mobs || townBlock.getTownOrNull().isAdminEnabledMobs(), translator);
 
 		LinkedList<Component> sbComponents = new LinkedList<>();
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_plot_type") + type));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_plot_for_sale") + Colors.GRAY).append(forSale));
-		sbComponents.add(TownyComponents.miniMessage(Colors.YELLOW + Colors.UNDERLINED + translator.of("msg_perm_hud_title") + Colors.RESET));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_plot_type") + type));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_plot_for_sale")).append(forSale));
+		sbComponents.add(TownyComponents.miniMessage(YELLOW + UNDERLINED + translator.of("msg_perm_hud_title") + RESET));
 
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_build") + Colors.GRAY).append(build));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_destroy") + Colors.GRAY).append(destroy));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_switch") + Colors.GRAY).append(switching));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_item_use") + Colors.GRAY).append(item));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_build")).append(build));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_destroy")).append(destroy));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_switch")).append(switching));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_item_use")).append(item));
 
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ").append(pvp));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ").append(explosions));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ").append(firespread));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ").append(mobspawn));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ").append(pvp));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ").append(explosions));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ").append(firespread));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ").append(mobspawn));
 
-		sbComponents.add(TownyComponents.miniMessage(Colors.YELLOW + Colors.UNDERLINED  + translator.of("msg_perm_hud_key")));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + Colors.BOLD + "f " + Colors.WHITE + " - " + Colors.GRAY + translator.of("msg_perm_hud_friend") + " "
-													+Colors.DARK_GREEN + Colors.BOLD + "r " + Colors.WHITE + " - " + Colors.GRAY + translator.of("msg_perm_hud_resident")));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + Colors.BOLD + "t " + Colors.WHITE + " - " + Colors.GRAY + translator.of("msg_perm_hud_town") + " "
-											 		+Colors.DARK_GREEN + Colors.BOLD + "n " + Colors.WHITE + " - " + Colors.GRAY + translator.of("msg_perm_hud_nation")));
-		sbComponents.add(TownyComponents.miniMessage(Colors.DARK_GREEN + Colors.BOLD + "a " + Colors.WHITE + " - " + Colors.GRAY + translator.of("msg_perm_hud_ally") + " "
-											 		+Colors.DARK_GREEN + Colors.BOLD + "o " + Colors.WHITE + " - " + Colors.GRAY + translator.of("msg_perm_hud_outsider")));
+		sbComponents.add(TownyComponents.miniMessage(YELLOW + UNDERLINED  + translator.of("msg_perm_hud_key")));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + BOLD + "f " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_friend") + " "
+													+DARK_GREEN + BOLD + "r " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_resident")));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + BOLD + "t " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_town") + " "
+											 		+DARK_GREEN + BOLD + "n " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_nation")));
+		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + BOLD + "a " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_ally") + " "
+											 		+DARK_GREEN + BOLD + "o " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_outsider")));
 
 		UUID uuid = p.getUniqueId();
-		hud.setTitle(uuid, TownyComponents.miniMessage(Colors.GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : "")));
+		hud.setTitle(uuid, TownyComponents.miniMessage(GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : "")));
 		hud.setLines(uuid, sbComponents);
 	}
 
@@ -142,13 +153,13 @@ public class PermHUD implements HUDImplementer {
 			forSale = (plotGroup && townBlock.getPlotObjectGroup().getPrice() > -1) || (!plotGroup && townBlock.isForSale())
 					? translator.of("msg_perm_hud_yes") : forSale;
 		}
-		return TownyComponents.miniMessage(forSale);
+		return TownyComponents.miniMessage(GRAY + forSale);
 	}
 
 	private static Component getPermLine(TownyPermission tp, ActionType actionType, boolean residentOwned) {
 		String v = residentOwned ? "f" : "r";
 		String u = residentOwned ? "t" : "n";
-		return TownyComponents.miniMessage((tp.getResidentPerm(actionType) ? v : "-") + (tp.getNationPerm(actionType) ? u : "-") +
+		return TownyComponents.miniMessage(GRAY + (tp.getResidentPerm(actionType) ? v : "-") + (tp.getNationPerm(actionType) ? u : "-") +
 				(tp.getAllyPerm(actionType) ? "a" : "-") + (tp.getOutsiderPerm(actionType) ? "o" : "-"));
 	}
 
@@ -157,7 +168,7 @@ public class PermHUD implements HUDImplementer {
 	}
 
 	private static String getFormattedWildernessName(World w) {
-		StringBuilder wildernessName = new StringBuilder().append(Colors.DARK_RED).append(Colors.BOLD);
+		StringBuilder wildernessName = new StringBuilder().append(DARK_RED).append(BOLD);
 		if (TownyAPI.getInstance().isTownyWorld(w)) 
 			wildernessName.append(TownyAPI.getInstance().getTownyWorld(w).getFormattedUnclaimedZoneName());
 		else 
