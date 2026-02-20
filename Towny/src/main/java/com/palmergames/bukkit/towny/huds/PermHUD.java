@@ -21,6 +21,7 @@ import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
 import java.util.LinkedList;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -35,6 +36,8 @@ public class PermHUD implements HUDImplementer {
 	private static final String UNDERLINED = Colors.UNDERLINED;
 	private static final String WHITE = Colors.WHITE;
 	private static final String YELLOW = Colors.YELLOW;
+
+	private final static BiFunction<Boolean, Translator, Component> translateOnOff = (test, translator) -> miniMessage(test ? translator.of("status_on") : translator.of("status_off"));
 
 	final HUD hud;
 
@@ -67,29 +70,29 @@ public class PermHUD implements HUDImplementer {
 
 	private static void sendWildernessHUD(Player p, TownyWorld world, Translator translator, ServerHUD hud) {
 
-		Component build = getTranslatedOnOrOff(world.getUnclaimedZoneBuild(), translator);
-		Component destroy = getTranslatedOnOrOff(world.getUnclaimedZoneDestroy(), translator);
-		Component switching = getTranslatedOnOrOff(world.getUnclaimedZoneSwitch(), translator);
-		Component item = getTranslatedOnOrOff(world.getUnclaimedZoneItemUse(), translator);
-		Component pvp = getTranslatedOnOrOff(world.isPVP(), translator);
-		Component explosions = getTranslatedOnOrOff(world.isExpl(), translator);
-		Component firespread = getTranslatedOnOrOff(world.isFire(), translator);
-		Component mobspawn = getTranslatedOnOrOff(world.hasWildernessMobs(), translator);
+		Component build = translateOnOff.apply(world.getUnclaimedZoneBuild(), translator);
+		Component destroy = translateOnOff.apply(world.getUnclaimedZoneDestroy(), translator);
+		Component switching = translateOnOff.apply(world.getUnclaimedZoneSwitch(), translator);
+		Component item = translateOnOff.apply(world.getUnclaimedZoneItemUse(), translator);
+		Component pvp = translateOnOff.apply(world.isPVP(), translator);
+		Component explosions = translateOnOff.apply(world.isExpl(), translator);
+		Component firespread = translateOnOff.apply(world.isFire(), translator);
+		Component mobspawn = translateOnOff.apply(world.hasWildernessMobs(), translator);
 
 		LinkedList<Component> sbComponents = new LinkedList<>();
 		sbComponents.add(miniMessage(DARK_GREEN + translator.of("unclaimed_zone_name")));
 		sbComponents.add(Component.empty());
 		sbComponents.add(miniMessage(YELLOW + UNDERLINED + translator.of("msg_perm_hud_title") + RESET));
 
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_build") + " ").append(build));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_destroy") + " ").append(destroy));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_switch") + " ").append(switching));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_item_use") + " ").append(item));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_build")).append(build));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_destroy")).append(destroy));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_switch")).append(switching));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_item_use")).append(item));
 
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ").append(pvp));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ").append(explosions));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ").append(firespread));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ").append(mobspawn));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_pvp")).append(pvp));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_explosions")).append(explosions));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_firespread")).append(firespread));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_mobspawns")).append(mobspawn));
 
 		UUID uuid = p.getUniqueId();
 		hud.setTitle(uuid, miniMessage(HUDManager.check(getFormattedWildernessName(p.getWorld()))));
@@ -109,10 +112,10 @@ public class PermHUD implements HUDImplementer {
 		Component switching = getPermLine(tp, ActionType.SWITCH, residentOwned);
 		Component item = getPermLine(tp, ActionType.ITEM_USE, residentOwned);
 		TownyWorld world = townBlock.getWorld();
-		Component pvp = getTranslatedOnOrOff(!CombatUtil.preventPvP(world, townBlock), translator);
-		Component explosions = getTranslatedOnOrOff(world.isForceExpl() || tp.explosion, translator);
-		Component firespread = getTranslatedOnOrOff(world.isForceFire() || tp.fire, translator);
-		Component mobspawn = getTranslatedOnOrOff(world.isForceTownMobs() || tp.mobs || townBlock.getTownOrNull().isAdminEnabledMobs(), translator);
+		Component pvp = translateOnOff.apply(!CombatUtil.preventPvP(world, townBlock), translator);
+		Component explosions = translateOnOff.apply(world.isForceExpl() || tp.explosion, translator);
+		Component firespread = translateOnOff.apply(world.isForceFire() || tp.fire, translator);
+		Component mobspawn = translateOnOff.apply(world.isForceTownMobs() || tp.mobs || townBlock.getTownOrNull().isAdminEnabledMobs(), translator);
 
 		LinkedList<Component> sbComponents = new LinkedList<>();
 		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_plot_type") + type));
@@ -124,18 +127,15 @@ public class PermHUD implements HUDImplementer {
 		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_switch")).append(switching));
 		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_item_use")).append(item));
 
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_pvp") + " ").append(pvp));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_explosions") + " ").append(explosions));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_firespread") + " ").append(firespread));
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ").append(mobspawn));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_pvp")).append(pvp));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_explosions")).append(explosions));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_firespread")).append(firespread));
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_mobspawns")).append(mobspawn));
 
 		sbComponents.add(miniMessage(YELLOW + UNDERLINED  + translator.of("msg_perm_hud_key")));
-		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "f" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_friend") + " "
-									+DARK_GREEN + BOLD + "r" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_resident")));
-		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "t" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_town") + " "
-									+DARK_GREEN + BOLD + "n" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_nation")));
-		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "a" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_ally") + " "
-									+DARK_GREEN + BOLD + "o" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_outsider")));
+		sbComponents.add(formatKey("f", translator.of("msg_perm_hud_friend"), "r", translator.of("msg_perm_hud_resident")));
+		sbComponents.add(formatKey("t", translator.of("msg_perm_hud_town"), "n", translator.of("msg_perm_hud_nation")));
+		sbComponents.add(formatKey("a", translator.of("msg_perm_hud_ally"), "o", translator.of("msg_perm_hud_outsider")));
 
 		UUID uuid = p.getUniqueId();
 		hud.setTitle(uuid, miniMessage(GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : "")));
@@ -163,8 +163,8 @@ public class PermHUD implements HUDImplementer {
 				(tp.getAllyPerm(actionType) ? "a" : "-") + (tp.getOutsiderPerm(actionType) ? "o" : "-"));
 	}
 
-	private static Component getTranslatedOnOrOff(boolean test, Translator translator) {
-		return miniMessage(test ? translator.of("status_on") : translator.of("status_off"));
+	private static Component formatKey(String symbol, String explanation, String symbol2, String explanation2) {
+		return miniMessage(DARK_GREEN + BOLD + symbol + RESET + WHITE + " - " + GRAY + explanation + " " + DARK_GREEN + BOLD + symbol2 + RESET + WHITE + " - " + GRAY + explanation2);
 	}
 
 	private static String getFormattedWildernessName(World w) {
