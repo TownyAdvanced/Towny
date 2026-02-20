@@ -21,9 +21,6 @@ import com.palmergames.bukkit.util.Colors;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -35,8 +32,8 @@ public class MapHUD implements HUDImplementer {
 	private static final int halfMapLineWidth = mapLineWidth/2;
 	private static final int halfMapLineHeight = mapLineHeight/2;
 
-	public MapHUD(String name, String objectiveName, Consumer<Player> playerConsumer, BiConsumer<Player, Object> playerWithObjectConsumer) {
-		this.hud = new HUD(name, objectiveName, playerConsumer, playerWithObjectConsumer);
+	public MapHUD(HUD hud) {
+		this.hud = hud;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.TownBlockSettingsChangedEvent;
 import com.palmergames.bukkit.towny.huds.providers.FoliaHUD;
+import com.palmergames.bukkit.towny.huds.providers.HUD;
 import com.palmergames.bukkit.towny.huds.providers.PaperHUD;
 import com.palmergames.bukkit.towny.huds.providers.ServerHUD;
 import com.palmergames.bukkit.towny.object.WorldCoord;
@@ -31,10 +32,12 @@ public class HUDManager implements Listener {
 	public HUDManager(Towny plugin) {
 		boolean isFolia = Towny.getPlugin().isFolia();
 
-		PermHUD permHud = new PermHUD("permHUD", PERM_HUD_OBJECTIVE_NAME, (p) -> PermHUD.updatePerms(p), (p, wc) -> PermHUD.updatePerms(p, (WorldCoord) wc));
+		HUD permHUD = new HUD("permHUD", PERM_HUD_OBJECTIVE_NAME, (p) -> PermHUD.updatePerms(p), (p, wc) -> PermHUD.updatePerms(p, (WorldCoord) wc));
+		PermHUD permHud = new PermHUD(permHUD);
 		huds.put("permHUD", isFolia ? new FoliaHUD(permHud) : new PaperHUD(permHud));
 
-		MapHUD mapHud = new MapHUD("mapHUD", MAP_HUD_OBJECTIVE_NAME, (p) -> MapHUD.updateMap(p), (p, wc) -> MapHUD.updateMap(p, (WorldCoord) wc));
+		HUD mapHUD = new HUD("mapHUD", MAP_HUD_OBJECTIVE_NAME, (p) -> MapHUD.updateMap(p), (p, wc) -> MapHUD.updateMap(p, (WorldCoord) wc));
+		MapHUD mapHud = new MapHUD(mapHUD);
 		huds.put("mapHUD", isFolia ? new FoliaHUD(mapHud) : new PaperHUD(mapHud));
 	}
 

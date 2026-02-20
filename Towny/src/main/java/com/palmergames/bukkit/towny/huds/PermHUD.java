@@ -21,17 +21,14 @@ import com.palmergames.bukkit.util.Colors;
 import net.kyori.adventure.text.Component;
 import java.util.LinkedList;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class PermHUD implements HUDImplementer {
 	final HUD hud;
 
-	public PermHUD(String name, String objectiveName, Consumer<Player> playerConsumer, BiConsumer<Player, Object> playerWithObjectConsumer) {
-		this.hud = new HUD(name, objectiveName, playerConsumer, playerWithObjectConsumer);
+	public PermHUD(HUD hud) {
+		this.hud = hud;
 	}
 
 	@Override

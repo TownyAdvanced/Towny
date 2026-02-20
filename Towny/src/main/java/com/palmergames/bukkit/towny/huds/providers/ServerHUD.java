@@ -3,8 +3,11 @@ package com.palmergames.bukkit.towny.huds.providers;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
+
+import com.palmergames.bukkit.util.BukkitTools;
 
 import net.kyori.adventure.text.Component;
 
@@ -14,13 +17,23 @@ public abstract interface ServerHUD {
 
 	boolean toggleOn(Player player);
 	
-	boolean hasPlayer(Player player);
+	public default boolean hasPlayer(Player player) {
+		return getPlayerUUIDs().contains(player.getUniqueId());
+	}
 
-	boolean addPlayer(Player player);
+	public default boolean addPlayer(Player player) {
+		return getPlayerUUIDs().add(player.getUniqueId());
+	}
 
-	boolean removePlayer(Player player);
+	public default boolean removePlayer(Player player) {
+		return getPlayerUUIDs().remove(player.getUniqueId());
+	}
 
-	Set<Player> getPlayers();
+	public Set<UUID> getPlayerUUIDs();
+
+	public default Set<Player> getPlayers() {
+		return getPlayerUUIDs().stream().map(uuid -> BukkitTools.getPlayer(uuid)).collect(Collectors.toSet());
+	}
 
 	boolean isActive(Player player);
 

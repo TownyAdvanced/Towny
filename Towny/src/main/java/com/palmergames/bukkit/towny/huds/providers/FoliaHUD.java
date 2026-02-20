@@ -19,13 +19,13 @@ import net.kyori.adventure.text.Component;
 
 public class FoliaHUD implements ServerHUD {
 
-	final String objectiveName;
 	final String displayName;
+	final String objectiveName;
 	final Consumer<Player> playerConsumer;
 	final BiConsumer<Player, Object> playerWithObjectConsumer;
 
 	Map<UUID, FastBoard> boardMap = new HashMap<>();
-	Set<Player> players = new HashSet<>();
+	Set<UUID> playerUUIDs = new HashSet<>();
 
 
 	public FoliaHUD(HUDImplementer implementer) {
@@ -36,20 +36,8 @@ public class FoliaHUD implements ServerHUD {
 		this.playerWithObjectConsumer = hud.playerWithObjectConsumer;
 	}
 
-	public boolean hasPlayer(Player player) {
-		return getPlayers().contains(player);
-	}
-
-	public boolean addPlayer(Player player) {
-		return players.add(player);
-	}
-
-	public boolean removePlayer(Player player) {
-		return players.remove(player);
-	}
-
-	public Set<Player> getPlayers() {
-		return players;
+	public Set<UUID> getPlayerUUIDs() {
+		return playerUUIDs;
 	}
 
 	@Override
@@ -57,7 +45,7 @@ public class FoliaHUD implements ServerHUD {
 		FastBoard board = boardMap.remove(player.getUniqueId());
 		if (board != null)
 			board.delete();
-
+		removePlayer(player);
 		return true;
 	}
 
@@ -65,6 +53,7 @@ public class FoliaHUD implements ServerHUD {
 	public boolean toggleOn(Player player) {
 		FastBoard board = new FastBoard(player);
 		boardMap.put(player.getUniqueId(), board);
+		addPlayer(player);
 		updateHUD(player);
 		return true;
 	}

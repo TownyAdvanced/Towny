@@ -32,7 +32,7 @@ public class PaperHUD implements ServerHUD {
 	final BiConsumer<Player, Object> playerWithObjectConsumer;
 
 	Map<UUID, Scoreboard> boardMap = new HashMap<>();
-	Set<Player> players = new HashSet<>();
+	Set<UUID> playerUUIDs = new HashSet<>();
 
 	public PaperHUD(HUDImplementer implementer) {
 		HUD hud = implementer.getHUD();
@@ -42,30 +42,8 @@ public class PaperHUD implements ServerHUD {
 		this.playerWithObjectConsumer = hud.playerWithObjectConsumer;
 	}
 
-	public boolean hasPlayer(Player player) {
-		return getPlayers().contains(player);
-	}
-
-	public boolean addPlayer(Player player) {
-		return players.add(player);
-	}
-
-	public boolean removePlayer(Player player) {
-		boardMap.remove(player.getUniqueId());
-		return players.remove(player);
-	}
-
-	public Set<Player> getPlayers() {
-		return players;
-	}
-
-	@Nullable
-	private Objective getObjective(UUID uuuid) {
-		Scoreboard board = boardMap.get(uuuid);
-		if (board == null)
-			return null;
-		Objective objective = board.getObjective(objectiveName);
-		return objective;
+	public Set<UUID> getPlayerUUIDs() {
+		return playerUUIDs;
 	}
 
 	@Override
@@ -132,5 +110,14 @@ public class PaperHUD implements ServerHUD {
 	@Override
 	public void updateHUD(Player player) {
 		playerConsumer.accept(player);
+	}
+
+	@Nullable
+	private Objective getObjective(UUID uuuid) {
+		Scoreboard board = boardMap.get(uuuid);
+		if (board == null)
+			return null;
+		Objective objective = board.getObjective(objectiveName);
+		return objective;
 	}
 }
