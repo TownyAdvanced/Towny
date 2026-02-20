@@ -81,7 +81,7 @@ public class MapHUD implements HUDImplementer {
 		}
 
 		TownBlock tb = wc.getTownBlockOrNull();
-		sbComponents.add(miniMessage(DARK_GREEN + translator.of("town_sing") + ": "
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("town_sing") + ": " + GREEN
 					+ (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : translator.of("status_no_town"))));
 		if (tb != null) {
 			sbComponents.add(getOwnerName(tb, translator));
