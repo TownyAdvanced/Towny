@@ -130,12 +130,12 @@ public class PermHUD implements HUDImplementer {
 		sbComponents.add(miniMessage(DARK_GREEN + translator.of("msg_perm_hud_mobspawns") + " ").append(mobspawn));
 
 		sbComponents.add(miniMessage(YELLOW + UNDERLINED  + translator.of("msg_perm_hud_key")));
-		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "f " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_friend") + " "
-													+DARK_GREEN + BOLD + "r " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_resident")));
-		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "t " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_town") + " "
-											 		+DARK_GREEN + BOLD + "n " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_nation")));
-		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "a " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_ally") + " "
-											 		+DARK_GREEN + BOLD + "o " + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_outsider")));
+		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "f" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_friend") + " "
+									+DARK_GREEN + BOLD + "r" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_resident")));
+		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "t" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_town") + " "
+									+DARK_GREEN + BOLD + "n" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_nation")));
+		sbComponents.add(miniMessage(DARK_GREEN + BOLD + "a" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_ally") + " "
+									+DARK_GREEN + BOLD + "o" + RESET + WHITE + " - " + GRAY + translator.of("msg_perm_hud_outsider")));
 
 		UUID uuid = p.getUniqueId();
 		hud.setTitle(uuid, miniMessage(GOLD + owner.getName() + (townBlock.hasResident() ? " (" + townBlock.getTownOrNull().getName() + ")" : "")));
