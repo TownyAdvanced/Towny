@@ -52,7 +52,7 @@ public class MapHUD implements HUDImplementer {
 	public static void updateMap(Player player) {
 		updateMap(player, WorldCoord.parseWorldCoord(player));
 	}
-	
+
 	public static void updateMap(Player player, WorldCoord wc) {
 		Translator translator = Translator.locale(player);
 		ServerHUD hud = HUDManager.getHUD("mapHUD");
@@ -65,7 +65,7 @@ public class MapHUD implements HUDImplementer {
 		int wcZ = wc.getZ();
 		// Set the board title.
 		UUID uuid = player.getUniqueId();
-		hud.setTitle(uuid, TownyComponents.miniMessage(String.format("%sTowny Map %s(%s, %s)", GOLD, WHITE, wcX, wcZ)));
+		hud.setTitle(uuid, miniMessage(String.format("%sTowny Map %s(%s, %s)", GOLD, WHITE, wcX, wcZ)));
 
 		// Populate our map into an array.
 		String[][] map = new String[mapLineWidth][mapLineHeight];
@@ -77,11 +77,11 @@ public class MapHUD implements HUDImplementer {
 			for (int mx = mapLineWidth - 1; mx >= 0; mx--)
 				line += map[mx][my];
 
-			sbComponents.add(TownyComponents.miniMessage(line));
+			sbComponents.add(miniMessage(line));
 		}
 
 		TownBlock tb = wc.getTownBlockOrNull();
-		sbComponents.add(TownyComponents.miniMessage(DARK_GREEN + translator.of("town_sing") + ": "
+		sbComponents.add(miniMessage(DARK_GREEN + translator.of("town_sing") + ": "
 					+ (tb != null && tb.hasTown() ? tb.getTownOrNull().getName() : translator.of("status_no_town"))));
 		if (tb != null) {
 			sbComponents.add(getOwnerName(tb, translator));
@@ -94,13 +94,13 @@ public class MapHUD implements HUDImplementer {
 	private static Component getOwnerName(TownBlock tb, Translator translator) {
 		String name = !tb.hasResident() ? "" : tb.getResidentOrNull().getName();
 		String prefix = translator.of("owner_status");
-		return TownyComponents.miniMessage(HUDManager.check(DARK_GREEN + prefix + ": " + GREEN + name));
+		return miniMessage(HUDManager.check(DARK_GREEN + prefix + ": " + GREEN + name));
 	}
 
 	private static Component getDistrictName(TownBlock tb, Translator translator) {
 		String name = !tb.hasDistrict() ? "" : tb.getDistrict().getFormattedName();
 		String prefix = translator.of("msg_map_hud_district");
-		return TownyComponents.miniMessage(HUDManager.check(DARK_GREEN + prefix + GREEN + name));
+		return miniMessage(HUDManager.check(DARK_GREEN + prefix + GREEN + name));
 	}
 
 	private static Component getPlotName(TownBlock tb, Translator translator) {
@@ -112,7 +112,7 @@ public class MapHUD implements HUDImplementer {
 			name = tb.getFormattedName();
 
 		String prefix = translator.of(hasPlotGroup ? "msg_perm_hud_plotgroup_name" : "msg_perm_hud_plot_name");
-		return TownyComponents.miniMessage(HUDManager.check(DARK_GREEN + prefix + GREEN + name));
+		return miniMessage(HUDManager.check(DARK_GREEN + prefix + GREEN + name));
 	}
 
 	private static void fillMapArray(int wcX, int wcZ, Resident resident, World bukkitWorld, String[][] map) {
@@ -233,4 +233,7 @@ public class MapHUD implements HUDImplementer {
 		return TownyUniverse.getInstance().getWildernessMapDataMap();
 	}
 
+	private static Component miniMessage(String string) {
+		return TownyComponents.miniMessage(string);
+	}
 }
