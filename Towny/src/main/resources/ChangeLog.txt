@@ -10703,3 +10703,4 @@ v0.92.0.11:
   - Fix outposts not following the min_distances_ignored_for_towns_in_same_nation and min_distances_ignored_for_towns_in_allied_nation 
     when min_distance_for_outpost_from_plot is tested while creating an outpost using /t claim outpost.
     - Closes #7829. 
+  - Fix plot command being blocked in ruined Towns for players who are not town members.

@@ -344,7 +344,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		if (townBlock == null && !plotCommandAllowedInWilderness(split[0]))
 			throw new TownyException(Translatable.of("msg_not_claimed_1"));
 
-		if (townBlock != null && townBlock.getTownOrNull().isRuined())
+		if (townBlock != null && townBlock.getTownOrNull().isRuined() && townBlock.getTownOrNull().hasResident(player))
 			throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
 
 		switch(split[0].toLowerCase(Locale.ROOT)) {
