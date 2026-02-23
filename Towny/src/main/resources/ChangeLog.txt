@@ -10704,3 +10704,6 @@ v0.92.0.11:
     when min_distance_for_outpost_from_plot is tested while creating an outpost using /t claim outpost.
     - Closes #7829. 
   - Fix plot command being blocked in ruined Towns for players who are not town members.
+  - New PAPI Placeholder: %townyadvanced_town_outposts_claimed%
+    - Displays how many outposts a town has, when the player has a town.
+    - Closes #8114.
