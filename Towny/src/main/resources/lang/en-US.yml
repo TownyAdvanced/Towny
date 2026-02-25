@@ -390,6 +390,7 @@ ta_resident_help_1: "Add or remove a friend."
 ta_resident_help_2: "List or clear the friend list."
 ta_resident_help_3: "Delete a resident from the database."
 ta_resident_help_4: "Removes a players about line."
+ta_resident_help_5: "Set a resident's last online or registered timestamp."
 
 ta_toggle_help_0: "Turn on/off the ability to use the Wilderness in all worlds."
 ta_toggle_help_1: "Turn on/off the regeneration features in all worlds."
@@ -2454,6 +2455,8 @@ townyadmin_town_set_help_0: "Sets the founding date of a town."
 townyadmin_nation_set_help_0: "Sets the founding date of a nation."
 msg_town_registered_set: "Founding date of town: '%s' set to: '%s'."
 msg_nation_registered_set: "Founding date of nation: '%s' set to: '%s'."
+msg_resident_registered_set: "Registered date of resident: '%s' set to: '%s'."
+msg_resident_lastonline_set: "Last online date of resident: '%s' set to: '%s'."
 msg_err_time_cannot_be_in_the_future: "Specified time cannot be in the future."
 
 # The format used for the /t say and /n say commands.
