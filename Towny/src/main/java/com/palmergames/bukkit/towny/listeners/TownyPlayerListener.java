@@ -715,6 +715,7 @@ public class TownyPlayerListener implements Listener {
 			mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 			actionType = ActionType.ITEM_USE;
 		} else if (EntityLists.RIGHT_CLICK_PROTECTED.contains(entityType)) {
+			plugin.getLogger().info("PlayerInteractEntityEvent - " + entityType.name() + " found in RIGHT_CLICK_PROTECTED.");
 			mat = EntityTypeUtil.parseEntityToMaterial(entityType);
 		}
 
@@ -727,7 +728,9 @@ public class TownyPlayerListener implements Listener {
 			// Material has been supplied in place of an entity, run Destroy Tests.
 			if (actionType == ActionType.DESTROY) {
 				//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-				event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), mat));
+				boolean outcome = !TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), mat);
+				event.setCancelled(outcome);
+				plugin.getLogger().info("PlayerInteractEntityEvent - mat notnull and actiontype = destroy, outcome chosen: " + String.valueOf(outcome));
 				return;
 			}
 			// Material has been supplied in place of an entity, run Switch Tests.
@@ -738,6 +741,7 @@ public class TownyPlayerListener implements Listener {
 			} 
 		}
 		
+		plugin.getLogger().info("PlayerInteractEntityEvent - mat was null");
 		/*
 		 * Handle things which need an item in hand.
 		 */
