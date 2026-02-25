@@ -693,6 +693,8 @@ public class TownyPlayerListener implements Listener {
 		Material mat = null;
 		ActionType actionType = ActionType.DESTROY;
 		EntityType entityType = event.getRightClicked().getType();
+		
+		plugin.getLogger().info("PlayerInteractEntityEvent - Entity Type: " + entityType.name());
 
 		Material item = player.getInventory().getItemInMainHand().getType();
 
