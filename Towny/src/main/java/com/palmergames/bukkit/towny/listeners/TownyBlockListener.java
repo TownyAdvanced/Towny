@@ -329,7 +329,7 @@ public class TownyBlockListener implements Listener {
 	/*
 	* Prevents water or lava from going into other people's plots.
 	*/
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFromToEvent(BlockFromToEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -350,7 +350,7 @@ public class TownyBlockListener implements Listener {
 			event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockDispense(BlockDispenseEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -378,7 +378,7 @@ public class TownyBlockListener implements Listener {
 	/*
 	 * Used to prevent bonemeal and moss growing into areas it shouldn't.
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFertilize(BlockFertilizeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
@@ -396,7 +396,7 @@ public class TownyBlockListener implements Listener {
 	/*
 	 * Used to prevent Sculk Spread.
 	 */
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onSculkSpread(BlockSpreadEvent event) {
 		String sourceName = event.getSource().getType().getKey().getKey();
 		if (!sourceName.startsWith("sculk"))
@@ -417,7 +417,7 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
 		if (!(event.getEntity() instanceof Player player))
 			return;
