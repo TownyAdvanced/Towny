@@ -3,6 +3,10 @@ package com.palmergames.bukkit.towny.listeners;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.bukkit.util.EntityLists;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -17,8 +21,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
+import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.ItemStack;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
@@ -178,6 +182,48 @@ public class TownyVehicleListener implements Listener {
 				return;
 
 			BukkitTools.fireEvent(new PlayerChangePlotEvent(player, playerCoord, vehicleCoord, new PlayerMoveEvent(player, player.getLocation(), event.getVehicle().getLocation())));
+		}
+	}
+
+	/**
+	 * Handles vehicles with passengers not throwing PlayerMoveEvents for the
+	 * passenger(s), resulting in PlayerChangePlotEvents not being thrown.
+	 * <p>
+	 * For now Paper does not throw this event for camels and ghasts but we'll
+	 * future-proof ourselves in case they do.
+	 * </p>
+	 * 
+	 * @param event VehicleMoveEvent.
+	 */
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onVehicleMovementWithPassenger(VehicleMoveEvent event) {
+		if (!TownyAPI.getInstance().isTownyWorld(event.getVehicle().getWorld()))
+			return;
+
+		if (EntityLists.MULTISEAT_MOUNTABLES.contains(event.getVehicle().getType())) {
+			List<Entity> passengers = new ArrayList<>(event.getVehicle().getPassengers());
+			// Vehicles can be empty and a driver exiting the vehicle makes a passenger into the driver.
+			if (passengers.size() < 2)
+				return;
+			Location from = event.getFrom();
+			Location to = event.getTo();
+			WorldCoord fromCoord = WorldCoord.parseWorldCoord(from);
+			WorldCoord toCoord = WorldCoord.parseWorldCoord(to);
+			if (toCoord.equals(fromCoord))
+				return;
+
+			// Driver always throws a PlayerMoveEvent.
+			passengers.remove(0);
+
+			int i = 1;
+			// HappyGhasts can have more than one passenger & a driver will have a PlayerMoveEvent.
+			for (Entity rider : passengers) {
+				// Boat passengers may not be human.
+				if (!(rider instanceof Player player))
+					continue;
+
+				BukkitTools.fireEvent(new PlayerChangePlotEvent(player, fromCoord, toCoord, new PlayerMoveEvent(player, from, to)));
+			}
 		}
 	}
 }
