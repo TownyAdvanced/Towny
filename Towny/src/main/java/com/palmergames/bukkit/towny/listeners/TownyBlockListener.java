@@ -51,7 +51,7 @@ public class TownyBlockListener implements Listener {
 		plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 
 		if (plugin.isError()) {
@@ -67,7 +67,7 @@ public class TownyBlockListener implements Listener {
 		event.setCancelled(!TownyActionEventExecutor.canDestroy(event.getPlayer(), block.getLocation(), block.getType()));
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 
 		if (plugin.isError()) {
@@ -150,7 +150,7 @@ public class TownyBlockListener implements Listener {
 	}
 
 	// prevent blocks igniting if within a protected town area when fire spread is set to off.
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockBurn(BlockBurnEvent event) {
 
 		if (plugin.isError()) {
@@ -178,7 +178,7 @@ public class TownyBlockListener implements Listener {
 		event.setCancelled(!TownyActionEventExecutor.canBurn(event.getBlock()));
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 
 		if (plugin.isError()) {
@@ -203,7 +203,7 @@ public class TownyBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 
 		if (plugin.isError()) {
@@ -263,7 +263,7 @@ public class TownyBlockListener implements Listener {
 		return currentTownBlock.getTownOrNull() == destinationTownBlock.getTownOrNull() && !currentTownBlock.hasResident() && !destinationTownBlock.hasResident();
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onCreateExplosion(BlockExplodeEvent event) {
 		if (plugin.isError()) {
 			event.setCancelled(true);
