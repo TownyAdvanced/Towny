@@ -14,10 +14,10 @@ help_2: 'Kasaba Sohbeti'
 help_3: 'Ulus Sohbeti'
 help_4: 'Oyuncu komut listesi.'
 help_5: 'Towny komut listesi'
-help_6: 'Towny komut listesi.'
-help_7: 'Towny komut listesi.'
-help_8: 'Townyadmin komut listesi.'
-help_9: 'Towny admin komut listesi.'
+help_6: 'Ulus komutları.'
+help_7: 'Arsa komut listesi.'
+help_8: 'Towny komut listesi.'
+help_9: 'Townyadmin komut listesi.'
 towny_help_0: "Genel Towny Yardımı"
 towny_help_1: "Yakındaki kasaba arazilerinin bir haritasını görüntüler"
 towny_help_2: "Ekonomi tarafından kullanılan fiyatları görüntüler"
@@ -52,7 +52,7 @@ town_help_23: "Oyuncuların şehir üzerindeki yetkilerini ayarla."
 town_help_24: "Kasabanızı silmek için kullanılır."
 town_help_25: "Kasabadan yasaklananları ayarlar."
 town_help_26: "Tüm kasabaları listele. Yardım için /t list komutunu kullan."
-town_help_27: "Üyesi olduğun şehri terket."
+town_help_27: "Üyesi olduğun kasabadan ayrıl."
 town_help_28: "Şehrin bankasından para çek"
 town_help_29: "Yardım için /t buy ? kullanın."
 town_help_30: "Kasabanızdan toprak çıkarmak için kullanılır."
@@ -61,6 +61,7 @@ town_help_32: "Yardım için /t set ? kullanın."
 town_help_33: "Yardım için /t buy ? kullanın."
 town_help_34: "Yardım için /t toggle ? kullanın."
 town_help_35: "Yardım için /t rank kullanın."
+town_help_36: 'Yakındaki kasabaları mesafeye göre sırala.'
 town_list_help_0: "Belirtilen sayfayı gör."
 town_list_help_1: "Kasabaları üye sayısına göre listelenmiş sayfada göster."
 town_list_help_2: "Açık kasabaları listelenmiş sayfada göster."
