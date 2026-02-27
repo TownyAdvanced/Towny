@@ -96,8 +96,11 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Handle events for all Player related events
@@ -975,10 +978,46 @@ public class TownyPlayerListener implements Listener {
 		if (cache != null)
 			cache.resetAndUpdate(to);
 
+		if (player.isInsideVehicle())
+			handleAnimalVehiclesWorkaround(player, player.getVehicle() , from, to, moveEvent);
 		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to, moveEvent);
 		BukkitTools.fireEvent(event);
 	}
 	
+	/**
+	 * Paper doesn't throw PlayerMoveEvents for players riding in animals like
+	 * HappyGhasts or Camels. Those animals don't throw VehicleMoveEvents and when
+	 * ridden they stop throwing EntityMoveEvents. The driver is the only one who
+	 * will have a PlayerMoveEvent thrown which is why we're doing this here.
+	 * 
+	 * @param player    Player driving the Vehicle.
+	 * @param vehicle   Vehicle being driven.
+	 * @param from      WorldCoord the players are leaving.
+	 * @param to        WorldCoord the players are entering.
+	 * @param moveEvent PlayerMoveEvent of the driving player.
+	 */
+	private void handleAnimalVehiclesWorkaround(Player player, @Nullable Entity vehicle, WorldCoord from, WorldCoord to, PlayerMoveEvent moveEvent) {
+		if (!EntityLists.MULTISEAT_ANIMAL_MOUNTS.contains(vehicle))
+			return;
+
+		if (vehicle.getPassengers().size() < 2)
+			return;
+
+		List<Entity> passengers = new ArrayList<>(vehicle.getPassengers());
+		passengers.remove(0);
+
+		for (Entity entity : passengers) {
+			if (!(entity instanceof Player rider))
+				continue;
+
+			final PlayerCache cache = plugin.getCacheOrNull(rider.getUniqueId());
+			if (cache != null)
+				cache.resetAndUpdate(to);
+			PlayerChangePlotEvent event = new PlayerChangePlotEvent(rider, from, to, moveEvent);
+			BukkitTools.fireEvent(event);
+		}
+	}
+
 	/*
 	* PlayerChangePlotEvent that can fire the PlayerLeaveTownEvent and PlayerEnterTownEvent
 	*/
