@@ -663,6 +663,7 @@ msg_err_input_too_long: '&c你输入的内容太长了.'
 msg_err_invalid_choice: '&c无效的选择'
 msg_err_invalid_sub: '&c无效的子命令.'
 msg_err_command_disable: '&c你没有足够的权限使用这个指令.'
+msg_err_plot_preclaim_disable: "&c你现在不能声明地皮 %s。"
 msg_err_you_dont_have_permission_to_use_colours: "您没有权限在头衔和姓氏中使用彩色代码。"
 msg_err_universe_limit: '&c这个世界不能再有更多的城镇了.'
 msg_err_too_many_npc: '&c已注册的NPC太多了.'
@@ -1883,7 +1884,8 @@ msg_town_plot_type_limit_reached: '您的城镇的%d%s地皮已到达上限。'
 msg_spawn_cost_free: '免费'
 #Message shown when someone tries to set a plot's type to one already set.
 msg_plot_already_of_type: '此地皮已经是%s类型。'
-msg_town_board_reset: '&b城镇面板已被重置。'
+msg_town_board_reset: '&b城镇公告栏已被重置。'
+msg_nation_board_reset: '&b国家公告栏已被重置。'
 msg_town_has_no_jailslots: '城镇监狱已经满员。'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x_for_x_bail: '%1$s被%6$s送进%2$s的%3$s号牢房%4$s小时，保释额为%5$s。'
 msg_player_has_been_sent_to_jail_into_cell_number_x_for_x_hours_by_x: '%1$s被%5$s送进%2$s的%3$s号牢房%4$s小时。'
@@ -1897,6 +1899,7 @@ msg_you_were_released_as_town_ran_out_of_upkeep_funds: '你已经被释放，因
 msg_x_has_been_released_ran_out_of_upkeep_funds: '%s 因为城镇银行缺乏资金而被释放。'
 msg_x_has_been_withdrawn_for_upkeep_of_prisoner_x: '城镇银行支出了 %s 以支付囚犯%s的维护费。'
 msg_x_has_been_withdrawn_for_jailing_of_prisoner_x: '城镇银行支出了 %s 以支付监禁%s的花费。'
+msg_err_x_in_unjailable_world: '%s 处于一个不可被监禁的世界中。'
 #Message shown in the confirmation for /ta resetbanks {amount}.
 confirmation_are_you_sure_you_want_to_reset_all_banks: '您确定要将所有城镇和国家的银行重置为 %s 吗？'
 #Message shown when a nation cannot add a town because of the max-residents-limit.
@@ -2151,6 +2154,7 @@ msg_err_you_cannot_add_trust_on_outlaw: "你不能信任一个在你的城镇被
 msg_err_you_cannot_add_trust_on_enemy: "你不能信任一个属于敌国的玩家。"
 msg_err_you_cannot_add_towntrust_on_outlaw: "你不能信任一个有你们镇上被禁止的居民的城镇"
 msg_err_you_cannot_add_towntrust_on_enemy: "你不能信任一个属于敌国的城镇。"
+status_world_jailing: "处于监禁中的人员: "
 msg_version_build_info_failed: "<red>无法获取此版本的构建信息。"
 time-future: "以后"
 time-just-now: "刚刚"
@@ -2164,3 +2168,10 @@ time-a-year-ago: "1 年前"
 time-x-years-ago: "%d 年前"
 #Shown instead of status_lastonline if the player is currently online
 status_onlinesince: "上线时间："
+msg_nearby_towns: '附近的城镇'
+msg_no_towns_nearby: '未发现附近的城镇。'
+msg_nearby_town_format: '<green>%s <white>(%s格)'
+msg_nearby_town_nation: ' <aqua>[%s]'
+msg_conquered_status_granted: "您已设置 %s 的征服状态为 %s 天。"
+msg_conquered_status_granted_unlimited: "您已设置 %s 的征服状态为无限期。"
+msg_err_must_specify_on_or_off: "您必须指定开启或关闭。"
