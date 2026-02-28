@@ -380,6 +380,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_NATION_BANKHISTORY("towny.command.townyadmin.nation.bankhistory"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ENEMY("towny.command.townyadmin.nation.enemy"),
 		TOWNY_COMMAND_TOWNYADMIN_NATION_ALLY("towny.command.townyadmin.nation.ally"),
+		TOWNY_COMMAND_TOWNYADMIN_NATION_SETNATIONLEVEL("towny.command.townyadmin.nation.setnationlevel"),
 	
 	TOWNY_COMMAND_TOWNYADMIN_TOGGLE("towny.command.townyadmin.toggle.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOGGLE_DEVMODE("towny.command.townyadmin.toggle.devmode"),

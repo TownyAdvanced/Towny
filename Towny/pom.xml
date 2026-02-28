@@ -32,7 +32,7 @@
     <properties>
         <project.bukkitAPIVersion>1.19</project.bukkitAPIVersion>
         <skipTests>true</skipTests>
-        <junit.version>6.0.2</junit.version>
+        <junit.version>6.0.3</junit.version>
     </properties>
 
     <scm>
@@ -222,6 +222,11 @@
             <version>4.98.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>fastboard</artifactId>
+            <version>2.1.5</version>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>
@@ -350,6 +355,10 @@
                                 <pattern>solar.squares.pixelwidth</pattern>
                                 <shadedPattern>com.palmergames.bukkit.towny.libs.pixelwidth</shadedPattern>
                             </relocation>
+                            <relocation>
+                                <pattern>fr.mrmicky.fastboard</pattern>
+                                <shadedPattern>com.palmergames.fastboard</shadedPattern>
+                            </relocation>
                         </relocations>
                         <filters>
                             <filter>
@@ -394,7 +403,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.5.4</version>
+                    <version>3.5.5</version>
                     <configuration>
                         <skipTests>${skipTests}</skipTests>
                     </configuration>
