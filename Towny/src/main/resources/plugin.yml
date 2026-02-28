@@ -827,6 +827,7 @@ permissions:
             towny.command.townyadmin.nation.toggle: true
             towny.command.townyadmin.nation.transfer: true
             towny.command.townyadmin.nation.withdraw: true
+            towny.command.townyadmin.nation.setnationlevel: true
 
     towny.command.townyadmin.nation.set.*:
         description: User can access the admin nation set commands.

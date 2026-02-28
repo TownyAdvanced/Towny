@@ -1297,6 +1297,10 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				if (line != null)
 					nation.setActiveWar(Boolean.parseBoolean(line));
 
+				line = keys.get("manualNationLevel");
+				if (line != null)
+					nation.setManualNationLevel(Integer.parseInt(line));
+
 			} catch (Exception e) {
 				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()), e);
 				return false;
@@ -2365,6 +2369,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		list.add("sanctionedTowns=" + StringMgmt.join(nation.getSanctionedTownsForSaving(), "#"));
 		// Active War
 		list.add("hasActiveWar=" + nation.hasActiveWar());
+
+		list.add("manualNationLevel=" + nation.getManualNationLevel());
 		/*
 		 *  Make sure we only save in async
 		 */
