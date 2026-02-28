@@ -1173,7 +1173,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'この場�
 msg_already_ally: 'あなたの国は既に%sと同盟を結んでいます。'
 #Added in 0.76
 msg_you: 'あなた'
-#Added in 0.77
 msg_click_spawn: '&aクリックしてスポーンする: &e%s'
 msg_spawn_cost: '&aスポーンコスト = &e%s'
 #Added in 0.78

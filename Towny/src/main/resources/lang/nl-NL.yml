@@ -653,7 +653,6 @@ msg_confirmation_spigot_click_cancel: 'Klik %s of typ %s'
 msg_already_ally: 'Jouw natie is al bondgenoten met %s.'
 #Added in 0.76
 msg_you: 'Jij'
-#Added in 0.77
 msg_click_spawn: '&aClick om te spawnen naar: &e%s'
 msg_spawn_cost: '&aSpawn Kosten = &e%s'
 #Added in 0.78

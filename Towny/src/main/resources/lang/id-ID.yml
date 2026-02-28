@@ -810,7 +810,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Kamu tidak
 msg_already_ally: 'Negara mu sudah bersekutu dengan negara %s.'
 #Added in 0.76
 msg_you: 'Kamu'
-#Added in 0.77
 msg_click_spawn: '&aKlik untuk teleport: &e%s'
 msg_spawn_cost: '&aBiaya teleport = &e%s'
 #Added in 0.78
