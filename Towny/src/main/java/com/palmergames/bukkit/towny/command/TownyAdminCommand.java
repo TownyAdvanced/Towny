@@ -1043,7 +1043,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	private void parseAdminPlotCommand(Player player, String[] split) throws TownyException {
-		checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_PLOT.getNode());
 
 		if (split.length < 1 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_PLOT.send(player);
@@ -1221,7 +1220,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminResidentCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT.getNode());
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
 			HelpMenu.TA_RESIDENT.send(sender);
 			return;
@@ -1302,7 +1300,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminTownCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -1461,6 +1458,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			TownCommand.parseTownOutlawCommand(sender, StringMgmt.remArgs(split, 2), true, town);
 			break;
 		case "leavenation":
+			checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOWN_LEAVENATION.getNode());
 			if (!town.hasNation())
 				throw new TownyException(Translatable.of("That town does not belong to a nation."));
 
@@ -1776,7 +1774,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseAdminNationCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_NATION.getNode());
 		TownyUniverse townyUniverse = TownyUniverse.getInstance();
 
 		if (split.length == 0 || split[0].equalsIgnoreCase("?")) {
@@ -2516,7 +2513,6 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	public void parseToggleCommand(CommandSender sender, String[] split) throws TownyException {
-		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_TOGGLE.getNode());
 
 		Optional<Boolean> choice = Optional.empty();
 		if (split.length == 2) {

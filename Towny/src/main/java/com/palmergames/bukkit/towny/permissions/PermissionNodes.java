@@ -351,6 +351,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_OUTLAW("towny.command.townyadmin.town.outlaw"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_OUTPOST("towny.command.townyadmin.town.outpost"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_RANK("towny.command.townyadmin.town.rank"),
+		TOWNY_COMMAND_TOWNYADMIN_TOWN_LEAVENATION("towny.command.townyadmin.town.leavenation"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_META("towny.command.townyadmin.town.meta"),
 	    TOWNY_COMMAND_TOWNYADMIN_TOWN_BANKHISTORY("towny.command.townyadmin.town.bankhistory"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_TRUST("towny.command.townyadmin.town.trust"),

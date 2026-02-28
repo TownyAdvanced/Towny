@@ -10719,3 +10719,11 @@ v0.92.0.11:
   - Add Interaction entity to right click protected list.
     - Closes #8121.
   - Lower listener priorities for block events, courtesy of Warrior with PR #8123.
+0.102.0.9:
+  - Remove some townyadmincommand permission tests in favour of subcommand permission tests, allowing for more fine-grained permission node configurations.
+    - towny.command.townyadmin.town.* 
+    - towny.command.townyadmin.nation.*
+    - towny.command.townyadmin.resident.*
+    - towny.command.townyadmin.toggle.*
+    - towny.command.townyadmin.plot.*
+    - The subcommands of these commands now rely soley on their own permission node, and do not require the parent permission node.
