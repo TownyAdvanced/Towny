@@ -2690,6 +2690,3 @@ msg_err_must_specify_days_to_be_conquered: "You must specify a number of days to
 msg_conquered_status_granted: "You have set %s to have the conquered status for %s days."
 msg_conquered_status_granted_unlimited: "You have set %s to have the conquered status for an indefinite amount of days."
 msg_err_must_specify_on_or_off: "You must specify on or off."
-    
-msg_nation_level_overridden_with: 'The nation %s has had their nationlevel set to %s.'
-msg_nation_level_unset: 'The nation %s has had their manually-set nationlevel unset. Current nationlevel is %s.'
