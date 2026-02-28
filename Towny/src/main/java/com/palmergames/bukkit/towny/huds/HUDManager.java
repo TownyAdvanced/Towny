@@ -81,7 +81,8 @@ public class HUDManager implements Listener {
 
 	/**
 	 * Called from the /towny map hud command.
-	 * @param p Player who is toggling their map hud.
+	 * 
+	 * @param player Player who is toggling their map hud.
 	 */
 	public static void toggleMapHud(Player player) {
 		toggleHUD(player, "mapHUD");
