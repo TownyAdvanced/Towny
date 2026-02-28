@@ -10707,3 +10707,15 @@ v0.92.0.11:
   - New PAPI Placeholder: %townyadvanced_town_outposts_claimed%
     - Displays how many outposts a town has, when the player has a town.
     - Closes #8114.
+  - Bump junit.version from 6.0.2 to 6.0.3.
+  - Add setting manual NationLevels onto Nations, courtesy of confusedalex with PR #8112. (First-Time Contributor!)
+  - New Command: /ta nation NATIONNAME setnationlevel #|clear.
+  - New Permission Node: towny.command.townyadmin.nation.setnationlevel
+    - Child node of towny.command.townyadmin.nation.* and towny.admin.
+  - Add Scoreboard/HUD support for Folia, convert Scoreboards to Adventure.
+  - Ignore colors in length validation, strip unwanted minimessage tags, courtesy of Veyronity with PR #8116.
+  - Bump org.jetbrains:annotations from 26.0.2 to 26.1.0.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.4 to 3.5.5.
+  - Add Interaction entity to right click protected list.
+    - Closes #8121.
+  - Lower listener priorities for block events, courtesy of Warrior with PR #8123.
