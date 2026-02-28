@@ -780,6 +780,7 @@ permissions:
             towny.command.townyadmin.town.giveboughtblocks: true
             towny.command.townyadmin.town.invite: true
             towny.command.townyadmin.town.kick: true
+            towny.command.townyadmin.town.leavenation: true
             towny.command.townyadmin.town.merge: true
             towny.command.townyadmin.town.meta: true
             towny.command.townyadmin.town.new: true
