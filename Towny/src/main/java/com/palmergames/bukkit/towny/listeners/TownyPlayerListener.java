@@ -63,6 +63,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.RespawnAnchor;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -119,6 +120,8 @@ public class TownyPlayerListener implements Listener {
 	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
 	private boolean isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
+
+	private static final NamespacedKey GOLDEN_DANDELION_KEY = NamespacedKey.minecraft("golden_dandelion");
 	
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
@@ -672,6 +675,7 @@ public class TownyPlayerListener implements Listener {
 	* Handles right clicking of entities: Item Frames, Paintings, Minecarts.
 	* Entities right clicked with an item, tests the item for ItemUse.
 	* Sheeps and wolves from being dyed.
+	* Golden dandelions being used on baby animals.
 	* 
 	* Treats entities as their Materials in order to run permission tests.
 	*/
@@ -736,11 +740,7 @@ public class TownyPlayerListener implements Listener {
 			} 
 		}
 		
-		/*
-		 * Handle things which need an item in hand.
-		 */
-		if (item == null)
-			return;
+		// Handle things which need an item in hand.
 
 		/*
 		 * Sheep and mountable entities can be sheared, protect them if they aren't in the wilderness.
@@ -757,6 +757,11 @@ public class TownyPlayerListener implements Listener {
 		if (item == Material.NAME_TAG) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			event.setCancelled(!TownyActionEventExecutor.canDestroy(player, event.getRightClicked().getLocation(), item));
+			return;
+		}
+
+		if (item.getKey().equals(GOLDEN_DANDELION_KEY) && event.getRightClicked() instanceof Ageable ageable && !ageable.isAdult() && !TownyActionEventExecutor.canDestroy(player, ageable.getLocation(), item)) {
+			event.setCancelled(true);
 			return;
 		}
 
