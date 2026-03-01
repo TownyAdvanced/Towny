@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.towny.event.NationRangeAllowTownEvent;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -292,9 +294,15 @@ public class ProximityUtil {
 		}
 
 		List<Town> townsClosestToFarthest = sortTownsClosestToFarthest(nation);
+		NationRangeAllowTownEvent nrate = new NationRangeAllowTownEvent(nation, town);
 		if (isTownTooFarFromNation(town, capital, townsClosestToFarthest)) {
+			nrate.setCancelled(true);
+			nrate.callEvent();
+			if (!nrate.isCancelled())
+				return; // Another plugin has allowed the join
 			throw new TownyException(Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 		}
+		BukkitTools.ifCancelledThenThrow(nrate);
 	}
 
 	private static List<Town> sortTownsClosestToFarthest(Nation nation) {
