@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.palmergames.bukkit.towny.event.NationRangeAllowTownEvent;
+import com.palmergames.bukkit.util.BukkitTools;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -292,9 +294,15 @@ public class ProximityUtil {
 		}
 
 		List<Town> townsClosestToFarthest = sortTownsClosestToFarthest(nation);
+		NationRangeAllowTownEvent nrate = new NationRangeAllowTownEvent(nation, town);
 		if (isTownTooFarFromNation(town, capital, townsClosestToFarthest)) {
+			nrate.setCancelled(true);
+			nrate.callEvent();
+			if (!nrate.isCancelled())
+				return; // Another plugin has allowed the join
 			throw new TownyException(Translatable.of("msg_err_town_not_close_enough_to_nation", town.getName()));
 		}
+		BukkitTools.ifCancelledThenThrow(nrate);
 	}
 
 	private static List<Town> sortTownsClosestToFarthest(Nation nation) {
@@ -328,7 +336,6 @@ public class ProximityUtil {
 		if (capitalHomeBlock == null)
 			return removedTowns;
 
-		final WorldCoord capitalCoord = capitalHomeBlock.getWorldCoord();
 		List<Town> townsToCheck = sortTownsClosestToFarthest(nation);
 		List<Town> localTownsToKeep = new ArrayList<>();
 		townsToCheck.remove(capital);
@@ -337,7 +344,7 @@ public class ProximityUtil {
 		// We want to parse over the towns to check until we're no longer getting an above 0 amount of towns being removed.
 		while (townsToCheck.size() > 0) {
 			// Get a list of towns which are OK based on their range to the capital OR if they're close enough to a town in range.
-			List<Town> recentValidTowns = getListOfInRangeTownsFromList(townsToCheck, localTownsToKeep, capital, capitalCoord);
+			List<Town> recentValidTowns = getListOfInRangeTownsFromList(townsToCheck, localTownsToKeep, capital, nation);
 
 			// Stop the loop if we haven't gotten any valid towns this pass.
 			if (recentValidTowns.size() == 0)
@@ -354,7 +361,7 @@ public class ProximityUtil {
 		return nation.getTowns().stream().filter(t -> !localTownsToKeep.contains(t)).collect(Collectors.toList());
 	}
 
-	private static List<Town> getListOfInRangeTownsFromList(List<Town> townsToCheck, List<Town> validTowns, Town capital, WorldCoord capitalCoord) {
+	private static List<Town> getListOfInRangeTownsFromList(List<Town> townsToCheck, List<Town> validTowns, Town capital, Nation nation) {
 		List<Town> allowedTowns = new ArrayList<>();
 		for (Town town : townsToCheck) {
 			// Town is the capital we're measuring against.
@@ -362,8 +369,15 @@ public class ProximityUtil {
 				continue;
 			// Check that the town missing is not missing a homeblock, and that the
 			// homeblocks are in the same world, and the distance between.
-			if (isTownCloseEnoughToNation(town, capital, townsToCheck, validTowns))
+			if (isTownCloseEnoughToNation(town, capital, townsToCheck, validTowns)) {
 				allowedTowns.add(town);
+			} else {
+				NationRangeAllowTownEvent nrate = new NationRangeAllowTownEvent(nation, town);
+				nrate.setCancelled(true);
+				nrate.callEvent();
+				if (!nrate.isCancelled()) // Another plugin has un-canceled the event
+					allowedTowns.add(town);
+			}
 		}		
 		return allowedTowns;
 	}
