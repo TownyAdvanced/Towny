@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.util.StringMgmt;
 
 import java.util.Arrays;
@@ -186,10 +187,12 @@ public class NameValidation {
 
 		testForConfigBlacklistedName(title);
 
-		if (title.length() > TownySettings.getMaxTitleLength())
+		int textLength = TownyComponents.USER_SAFE.stripTags(Colors.translateLegacyCharacters(title)).length();
+
+		if (textLength > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
 
-		return title;
+		return TownyComponents.USER_SAFE.stripTags(title);
 	}
 
 	/**

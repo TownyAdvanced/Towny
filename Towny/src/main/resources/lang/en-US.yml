@@ -229,6 +229,7 @@ res_1: 'Your status'
 res_2: '[resident]'
 res_3: 'Target player''s status'
 res_4: 'List all active players'
+res_8: 'Just a humble farmer'
 res_9: "How much tax you will pay per day."
 res_10: "See /res jail ? for help."
 res_11: "See /res toggle ? for help."
@@ -1382,7 +1383,10 @@ msg_already_ally: 'Your nation is already allied with %s.'
 msg_you: 'You'
 
 # Added in 0.77
+msg_click_town_info: '<green>Click to view the town status screen.'
+msg_click_nation_info: '<green>Click to view the nation status screen.'
 msg_click_spawn: '&aClick to spawn to: &e%s'
+msg_click_spawn_brief: '<green>[Spawn]'
 msg_spawn_cost: '&aSpawn Cost = &e%s'
 
 # Added in 0.78
@@ -2686,3 +2690,6 @@ msg_err_must_specify_days_to_be_conquered: "You must specify a number of days to
 msg_conquered_status_granted: "You have set %s to have the conquered status for %s days."
 msg_conquered_status_granted_unlimited: "You have set %s to have the conquered status for an indefinite amount of days."
 msg_err_must_specify_on_or_off: "You must specify on or off."
+    
+msg_nation_level_overridden_with: 'The nation %s has had their nationlevel set to %s.'
+msg_nation_level_unset: 'The nation %s has had their manually-set nationlevel unset. Current nationlevel is %s.'

@@ -10685,3 +10685,45 @@ v0.92.0.11:
   - Bump org.apache.commons:commons-compress from 1.26.2 to 1.28.0.
   - Fix the mayor succession event not being fired, courtesy of Warrior with PR #8086.
   - Skip proximity checks when minimum plot distance is set to 0, courtesy of MakcNmk with PR #8087. (First-Time Contributor!)
+0.102.0.7:
+  - Add new CHESTS_WITHOUT_ENDERCHEST group, usable in the config switch_ids list, includes all chests but the enderchest.
+    - Closes #8095.
+  - Add getFormattedTimeValue that accepts a player locale.
+  - Fix adminbypass mode not applying to nationzones.
+  - Fix title and surname settings issues.
+  - Restrict usable minimessage tags in titles/surnames, courtesy of Warrior with PR #8096.
+  - Re-add removed res_8 lang string, courtesy of Warrior with PR #8097.
+  - Add new hovers to town and nation lists.
+    - Separate spawn and town/nation status screen hovers/clickables are now available.
+    - Closes #8100.
+  - Add PLOT_GROUP_TOGGLE to TownyCommandAddonAPI, courtesy of Veyronity with PR #8107.
+  - Bump me.clip:placeholderapi from 2.11.7 to 2.12.2.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0.
+0.102.0.8:
+  - Fix outposts not following the min_distances_ignored_for_towns_in_same_nation and min_distances_ignored_for_towns_in_allied_nation 
+    when min_distance_for_outpost_from_plot is tested while creating an outpost using /t claim outpost.
+    - Closes #7829. 
+  - Fix plot command being blocked in ruined Towns for players who are not town members.
+  - New PAPI Placeholder: %townyadvanced_town_outposts_claimed%
+    - Displays how many outposts a town has, when the player has a town.
+    - Closes #8114.
+  - Bump junit.version from 6.0.2 to 6.0.3.
+  - Add setting manual NationLevels onto Nations, courtesy of confusedalex with PR #8112. (First-Time Contributor!)
+  - New Command: /ta nation NATIONNAME setnationlevel #|clear.
+  - New Permission Node: towny.command.townyadmin.nation.setnationlevel
+    - Child node of towny.command.townyadmin.nation.* and towny.admin.
+  - Add Scoreboard/HUD support for Folia, convert Scoreboards to Adventure.
+  - Ignore colors in length validation, strip unwanted minimessage tags, courtesy of Veyronity with PR #8116.
+  - Bump org.jetbrains:annotations from 26.0.2 to 26.1.0.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.4 to 3.5.5.
+  - Add Interaction entity to right click protected list.
+    - Closes #8121.
+  - Lower listener priorities for block events, courtesy of Warrior with PR #8123.
+0.102.0.9:
+  - Remove some townyadmincommand permission tests in favour of subcommand permission tests, allowing for more fine-grained permission node configurations.
+    - towny.command.townyadmin.town.* 
+    - towny.command.townyadmin.nation.*
+    - towny.command.townyadmin.resident.*
+    - towny.command.townyadmin.toggle.*
+    - towny.command.townyadmin.plot.*
+    - The subcommands of these commands now rely soley on their own permission node, and do not require the parent permission node.

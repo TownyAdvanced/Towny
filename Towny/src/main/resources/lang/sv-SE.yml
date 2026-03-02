@@ -811,7 +811,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Du får in
 msg_already_ally: 'Din nation är redan allierad med %s.'
 #Added in 0.76
 msg_you: 'Du'
-#Added in 0.77
 msg_click_spawn: '&aKlicka för att spawna vid: &e%s'
 msg_spawn_cost: '&aSpawnkostnad = &e%s'
 #Added in 0.78

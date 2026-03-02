@@ -1206,7 +1206,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '不允許�
 msg_already_ally: '你的城邦已經與%s建立了盟邦 '
 #Added in 0.76
 msg_you: '你'
-#Added in 0.77
 msg_click_spawn: '&a點擊以傳送至：&e%s'
 msg_spawn_cost: '&a傳送花費 =&e%s'
 #Added in 0.78

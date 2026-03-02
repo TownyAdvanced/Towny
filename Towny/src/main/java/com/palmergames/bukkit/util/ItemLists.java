@@ -399,6 +399,8 @@ public class ItemLists extends AbstractRegistryList<Material> {
 	public static final ItemLists INFESTED_BLOCKS = newBuilder().startsWith("INFESTED_").build();
 
 	public static final ItemLists CHESTS = newBuilder().endsWith("CHEST").build();
+	
+	public static final ItemLists CHESTS_WITHOUT_ENDERCHEST = newBuilder().endsWith("CHEST").notStartsWith("ENDER_").build();
 
 	public static final ItemLists SHELVES = newBuilder().endsWith("SHELF").build();
 

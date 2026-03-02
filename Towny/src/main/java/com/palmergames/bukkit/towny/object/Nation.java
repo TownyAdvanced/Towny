@@ -49,6 +49,7 @@ public class Nation extends Government {
 	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
 	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
+	private int manualNationLevel = -1;
 
 	@ApiStatus.Internal
 	public Nation(String name, UUID uuid) {
@@ -709,4 +710,11 @@ public class Nation extends Government {
 	}
 
 
+	public int getManualNationLevel() {
+		return manualNationLevel;
+	}
+
+	public void setManualNationLevel(int manualNationLevel) {
+		this.manualNationLevel = manualNationLevel;
+	}
 }

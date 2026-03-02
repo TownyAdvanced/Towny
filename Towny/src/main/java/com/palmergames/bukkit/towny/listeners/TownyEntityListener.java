@@ -751,6 +751,7 @@ public class TownyEntityListener implements Listener {
 
 	private boolean itemFrameBrokenByBoatExploit(Entity hanging) {
 		// This workaround prevent boats from destroying item_frames, detailed in https://hub.spigotmc.org/jira/browse/SPIGOT-3999.
+		// TODO: This was potentially fixed by Mojang in Minecraft 1.21.11+.
 		if (EntityLists.ITEM_FRAMES.contains(hanging)) {
 			Block block = hanging.getLocation().add(hanging.getFacing().getOppositeFace().getDirection()).getBlock();
 			if (block.isLiquid() || block.isEmpty())

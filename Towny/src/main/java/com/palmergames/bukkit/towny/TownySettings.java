@@ -461,7 +461,9 @@ public class TownySettings {
 	}
 
 	public static int getNationLevelNumber(final Nation nation, int modifier) {
-		int level = getNationLevelFromGivenInt(modifier);
+		int level = nation.getManualNationLevel() > -1
+			? Math.min(nation.getManualNationLevel(), TownySettings.getNationLevelMax())
+			: getNationLevelFromGivenInt(modifier);
 
 		NationCalculateNationLevelNumberEvent event = new NationCalculateNationLevelNumberEvent(nation, level, modifier);
 		event.callEvent();

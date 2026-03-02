@@ -1289,14 +1289,20 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 					if (town.isOpen())
 						townName = townName.append(Component.space()).append(Translatable.of("status_title_open").locale(sender).component());
-					
+
+					townName = townName.clickEvent(ClickEvent.runCommand("/towny:town " + town));
+					townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_town_info").locale(sender).component()));
+
 					if (!spawningFullyDisabled) {
 						Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
 						if (TownyEconomyHandler.isActive())
 							spawnCost = Translatable.of("msg_spawn_cost", prettyMoney(town.getSpawnCost()));
 
-						townName = townName.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
-						townName = townName.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
+						Component spawnComponent = Translatable.of("msg_click_spawn_brief").locale(sender).component();
+						spawnComponent = spawnComponent.clickEvent(ClickEvent.runCommand("/towny:town spawn " + town + " -ignore"));
+						spawnComponent = spawnComponent.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", town).append("\n").append(spawnCost).locale(sender).component()));
+
+						townName = townName.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(spawnComponent);
 					}
 					output.add(Pair.pair(town.getUUID(), townName));
 				}
@@ -1634,7 +1640,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		double initialJailFee = TownyEconomyHandler.isActive() && TownySettings.initialJailFee() > 0 ? TownySettings.initialJailFee() : 0;
 
 		// Vet the potential resident to be jailed, throws an exception with error message if they cannot be jailed.
-		Resident jailedResident = getResidentAllowedToBeJailedOrThrow(town, split);
+		Resident jailedResident = getResidentAllowedToBeJailedOrThrow(town, split, Translation.getLocale(sender));
 
 		// Players used to be able to get places faster by using jailing exploits. 
 		checkTeleportExploitsOrThrow(sender, admin, jailedResident);
@@ -1689,7 +1695,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 	}
 
-	private static Resident getResidentAllowedToBeJailedOrThrow(Town town, String[] split) throws TownyException {
+	private static Resident getResidentAllowedToBeJailedOrThrow(Town town, String[] split, Locale locale) throws TownyException {
 		Resident jailedResident = getResidentOrThrow(split[0]);
 
 		// You can only jail your members of your own town.
@@ -1704,7 +1710,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (TownySettings.newPlayerJailImmunity() > 0) {
 			long time = (jailedResident.getRegistered() + TownySettings.newPlayerJailImmunity()) - System.currentTimeMillis();
 			if (time > 0)
-				throw new TownyException(Translatable.of("msg_resident_has_not_played_long_enough_to_be_jailed", jailedResident.getName(), TimeMgmt.getFormattedTimeValue(time)));
+				throw new TownyException(Translatable.of("msg_resident_has_not_played_long_enough_to_be_jailed", jailedResident.getName(), TimeMgmt.getFormattedTimeValue(time, locale)));
 		}
 
 		if (!jailedResident.isOnline())
@@ -2010,8 +2016,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townSetTitle(@NotNull CommandSender sender, @NotNull String[] split, boolean admin) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE.getNode());
-		// Give the resident a title
-		if (split.length == 0)
+
+		if (split.length == 0) // We did not receive a split that contains a resident name.
 			throw new TownyException("Eg: /town set title bilbo Jester");
 
 		Resident resident = getResidentOrThrow(split[0]);
@@ -2020,7 +2026,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 
-		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
+		String title = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
 
 		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(title))
 			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR.getNode(),
@@ -2031,7 +2037,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Translatable message = resident.hasTitle()
 			? Translatable.of("msg_set_title", resident.getName(), Colors.translateColorCodes(resident.getTitle()))
-			: Translatable.of("msg_clear_title_surname", "Title", resident.getName());
+			: Translatable.of("msg_clear_title_surname", "title", resident.getName());
 
 		TownyMessaging.sendPrefixedTownMessage(resident, message);
 
@@ -2041,9 +2047,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 	public static void townSetSurname(CommandSender sender, String[] split, boolean admin) throws TownyException {
 		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_SURNAME.getNode());
-		// Give the resident a surname
-		if (split.length == 0)
-			throw new TownyException("Eg: /town set surname bilbo the dwarf ");
+
+		if (split.length == 0) // We did not receive a split that contains a resident name.
+			throw new TownyException("Eg: /town set surname bilbo the hobbit");
 
 		Resident resident = getResidentOrThrow(split[0]);
 		final boolean sameTown = sender instanceof Player player && CombatUtil.isSameTown(getResidentOrThrow(player), resident);
@@ -2051,7 +2057,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (!admin && !sameTown)
 			throw new TownyException(Translatable.of("msg_err_not_same_town", resident.getName()));
 
-		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remArgs(split, 1));
+		String surname = NameValidation.checkAndFilterTitlesSurnameOrThrow(StringMgmt.remFirstArg(split));
 
 		if (TownySettings.doesSenderRequirePermissionNodeToAddColourToTitleOrSurname() && Colors.containsColourCode(surname))
 			checkPermOrThrowWithMessage(sender, PermissionNodes.TOWNY_COMMAND_TOWN_SET_TITLE_COLOUR.getNode(),
@@ -2062,7 +2068,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		Translatable message = resident.hasSurname()
 			? Translatable.of("msg_set_surname", resident.getName(), Colors.translateColorCodes(resident.getSurname()))
-			: Translatable.of("msg_clear_title_surname", "Surname", resident.getName());
+			: Translatable.of("msg_clear_title_surname", "surname", resident.getName());
 
 		TownyMessaging.sendPrefixedTownMessage(resident, message);
 
@@ -2299,7 +2305,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			&& town.getMovedHomeBlockAt() > 0
 			&& TimeTools.getHours(System.currentTimeMillis() - town.getMovedHomeBlockAt()) < TownySettings.getHomeBlockMovementCooldownHours()) {
 			long timeRemaining = ((town.getMovedHomeBlockAt() + TimeTools.getMillis(TownySettings.getHomeBlockMovementCooldownHours() + "h")) - System.currentTimeMillis());
-			throw new TownyException(Translatable.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining)));
+			throw new TownyException(Translatable.of("msg_err_you_have_moved_your_homeblock_too_recently_wait_x", TimeMgmt.getFormattedTimeValue(timeRemaining, Translation.getLocale(sender))));
 		}
 		
 		if (town.hasHomeBlock() && town.getHomeBlock().getWorldCoord().equals(townBlock.getWorldCoord()))
@@ -3509,7 +3515,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 			Resident resident = getResidentOrThrow(player);
 			// Run various tests required by configuration/permissions through Util.
-			OutpostUtil.OutpostTests(town, resident, world, playerWorldCoord, resident.isAdmin(), false);
+			OutpostUtil.OutpostTests(town, resident, world, playerWorldCoord, resident.isAdmin());
 
 			if (playerWorldCoord.hasTownBlock())
 				throw new TownyException(Translatable.of("msg_already_claimed", playerWorldCoord.getTownOrNull()));
@@ -3740,7 +3746,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (ageRequirement > 0L) {
 			long ageNeeded = System.currentTimeMillis() - ageRequirement;
 			if (ageNeeded < town.getRegistered())
-				throw new TownyException(Translatable.of("msg_err_your_town_is_not_old_enough_to_overclaim", TimeMgmt.getFormattedTimeValue(town.getRegistered() - ageNeeded)));
+				throw new TownyException(Translatable.of("msg_err_your_town_is_not_old_enough_to_overclaim", TimeMgmt.getFormattedTimeValue(town.getRegistered() - ageNeeded, Translation.getLocale(player))));
 		}
 
 		// Make sure this wouldn't end up becoming a homeblock.

@@ -88,6 +88,7 @@ town_help_32: "도움말은 /t set ? 명령어를 참고하세요."
 town_help_33: "도움말은 /t buy ? 명령어를 참고하세요."
 town_help_34: "도움말은 /t toggle ? 명령어를 참고하세요."
 town_help_35: "도움말은 /t rank ? 명령어를 참고하세요."
+town_help_36: '근처 마을들을 거리 순으로 정렬해 보여줍니다.'
 town_list_help_0: "지정된 페이지를 확인합니다."
 town_list_help_1: "플레이어 수 기준으로 마을 목록을 표시합니다(지정된 페이지)."
 town_list_help_2: "가입 가능한 마을 목록을 표시합니다 (지정된 페이지)."
@@ -143,6 +144,13 @@ nation_help_9: '접속중인 국가원 목록'
 nation_help_11: "국가에 속한 마을 목록."
 nation_help_12: "국가의 동맹국 목록."
 nation_help_13: "국가에 대한 적대국들의 목록."
+nation_help_14: "공개 국가에 가입합니다."
+nation_help_15: "국가 은행에 돈을 예금합니다."
+nation_help_16: "국가를 삭제합니다."
+nation_help_17: "주민의 랭크를 추가하거나 제거합니다."
+nation_help_18: "도움말은 /n rank ? 명령어를 참고하세요."
+nation_list_help_0: "지정된 페이지를 확인합니다."
+nation_list_help_1: "플레이어 수 기준으로 국가 목록을 표시합니다(지정된 페이지)."
 king_help_1: '국가 리더 도움말'
 king_help_2: '동맹국 설정'
 king_help_3: '적국 설정'
@@ -925,7 +933,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: '이 위치
 msg_already_ally: '국가는 이미 %s와 동맹 상태입니다.'
 #Added in 0.76
 msg_you: '나'
-#Added in 0.77
 msg_click_spawn: '&a클릭하여 다음 마을로 이동합니다: &e%s'
 msg_spawn_cost: '&a마을 이동 비용 = &e%s'
 #Added in 0.78

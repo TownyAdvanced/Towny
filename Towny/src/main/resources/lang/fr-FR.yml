@@ -379,6 +379,7 @@ msg_buy: '&bAchète %d %s pour %s.'
 msg_buy_resident_plot: '&b%s Achète la parcelle de %s pour %s !'
 msg_couldnt_pay_taxes: '&b%s ne pouvait pas payer les impôts et a été exclu de la %s.'
 msg_couldnt_pay_plot_taxes: '&b%s ne pouvait pas payer les impôts et a perdu la propriété d''une parcelle.'
+msg_you_paid_town_tax: '&bVous avez payé à votre ville une taxe de %s.'
 msg_bankrupt_town: ' n’avait pas les moyens de rester une ville.'
 msg_bankrupt_nation: ' n’avait pas les moyens de rester une nation.'
 msg_nation_not_peaceful: '&bLa nation n’avait pas les moyens de garder son état pacifique.'
@@ -1112,7 +1113,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Vous n''ê
 msg_already_ally: 'Votre nation est déjà alliée à %s.'
 #Added in 0.76
 msg_you: 'Vous'
-#Added in 0.77
 msg_click_spawn: '&aCliquer pour être téléporté à: &e%s'
 msg_spawn_cost: '&aCoût de téléportation: &e%s'
 #Added in 0.78

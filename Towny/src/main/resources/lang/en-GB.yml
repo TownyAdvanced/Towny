@@ -36,6 +36,7 @@ nation_help_6: 'Create a new nation'
 nation_help_7: 'List the nation leader commands'
 nation_help_8: 'Create a new nation'
 nation_help_9: 'List all online residents in nation'
+nation_set_help_10: "Set the mapcolour used in Mapping plugins."
 king_help_1: 'Nation Leader Help'
 king_help_2: 'Set your alliance.'
 king_help_3: 'Set your enemies.'
@@ -151,3 +152,4 @@ msg_err_invalid_nation_map_color: '&cUnknown map colour. Allowed colours are %s.
 msg_nation_map_color_changed: '&bThe nation map colour was changed to %s.'
 #Added in 0.116
 msg_town_map_color_changed: '&bThe town map colour was changed to %s.'
+msg_err_mode_does_not_exist: "The mode %s is not recognised."

@@ -396,7 +396,6 @@ public class TownyMessaging {
 
 	/**
 	 * Send the player a Title message for a specified number of ticks.
-	 * <p>
 	 * 
 	 * @param player   Player being send the Title message.
 	 * @param title    String title message.
@@ -409,7 +408,6 @@ public class TownyMessaging {
 
 	/**
 	 * Send the player a Title message for a specified number of ticks.
-	 * <p>
 	 * 
 	 * @param player   Player being send the Title message.
 	 * @param title    String title message.
