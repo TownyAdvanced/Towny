@@ -1294,6 +1294,16 @@ public class TownySettings {
 
 		if (ratio == 0)
 			n += town.getTownLevel().townBlockLimit();
+		else if (isDeletingOldResidents() && isDeletingOldResidentsRemovingTownOnly() && isDeletingOldResidentsRemovingClaimCountOnly() && !isDeleteTownlessOnly()) {
+			int residents = 0;
+			long now = System.currentTimeMillis();
+			long deleteTime = getDeleteTime() * 1000;
+			for (Resident resident : town.getResidents()) {
+				if (resident.isNPC() || BukkitTools.isOnline(resident.getName()) || now - resident.getLastOnline() <= deleteTime)
+					residents++;
+			}
+			n += residents * ratio;
+		}
 		else
 			n += town.getNumResidents() * ratio;
 
@@ -3989,6 +3999,10 @@ public class TownySettings {
 	
 	public static boolean isDeletingOldResidentsRemovingTownOnly() {
 		return getBoolean(ConfigNodes.RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_TOWN_ONLY);
+	}
+	
+	public static boolean isDeletingOldResidentsRemovingClaimCountOnly() {
+		return getBoolean(ConfigNodes.RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_CLAIM_COUNT_ONLY);
 	}
 	
 	public static boolean disableMySQLBackupWarning() {

@@ -2508,6 +2508,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true players will be removed from their town and become a nomad instead of being fully deleted."),
+	RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_CLAIM_COUNT_ONLY(
+			"resident_settings.delete_old_residents.only_remove_claim_count",
+			"false",
+			"",
+			"# When true (and only_remove_town is true) residents are kept and only stop counting toward town claim limits after deleted_after_time."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",
