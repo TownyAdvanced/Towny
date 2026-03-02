@@ -327,6 +327,7 @@ public enum PermissionNodes {
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_META("towny.command.townyadmin.resident.meta"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_UNJAIL("towny.command.townyadmin.resident.unjail"),
 		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_DELETE("towny.command.townyadmin.resident.delete"),
+		TOWNY_COMMAND_TOWNYADMIN_RESIDENT_SET("towny.command.townyadmin.resident.set"),
 		
 	TOWNY_COMMAND_TOWNYADMIN_TOWN("towny.command.townyadmin.town.*"),
 		TOWNY_COMMAND_TOWNYADMIN_TOWN_INVITE("towny.command.townyadmin.town.invite"),
