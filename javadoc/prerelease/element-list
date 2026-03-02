@@ -40,6 +40,7 @@ com.palmergames.bukkit.towny.exceptions
 com.palmergames.bukkit.towny.exceptions.initialization
 com.palmergames.bukkit.towny.hooks
 com.palmergames.bukkit.towny.huds
+com.palmergames.bukkit.towny.huds.providers
 com.palmergames.bukkit.towny.invites
 com.palmergames.bukkit.towny.invites.exceptions
 com.palmergames.bukkit.towny.listeners
