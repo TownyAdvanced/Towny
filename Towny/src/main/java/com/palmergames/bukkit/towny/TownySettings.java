@@ -430,9 +430,12 @@ public class TownySettings {
 	 */
 	@ApiStatus.Internal
 	public static int getNationLevelFromGivenInt(int threshold) {
-		for (Integer level : configNationLevel.keySet())
+		int i = TownySettings.getNationLevelMax() - 1;
+		for (Integer level : configNationLevel.keySet()) {
 			if (threshold >= level)
-				return level;
+				return i;
+			i--;
+		}
 		return 0;
 	}
 
