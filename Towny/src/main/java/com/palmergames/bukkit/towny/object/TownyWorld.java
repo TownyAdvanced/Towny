@@ -4,6 +4,7 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.AbstractRegistryList.CompactableCollection;
 import com.palmergames.bukkit.towny.object.TownyPermission.ActionType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.util.MathUtil;
@@ -16,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,11 +26,9 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -39,28 +39,28 @@ public class TownyWorld extends TownyObject {
 	private final HashMap<UUID, Town> towns = new HashMap<>();
 
 	private boolean isDeletingEntitiesOnUnclaim = TownySettings.isDeletingEntitiesOnUnclaim();
-	private Set<EntityType> unclaimDeleteEntityTypes = null;
+	private CompactableCollection<EntityType> unclaimDeleteEntityTypes = null;
 	
 	private boolean isUsingPlotManagementDelete = TownySettings.isUsingPlotManagementDelete();
-	private Set<Material> plotManagementDeleteIds = null;
+	private CompactableCollection<Material> plotManagementDeleteIds = null;
 	
 	private boolean isUsingPlotManagementMayorDelete = TownySettings.isUsingPlotManagementMayorDelete();
-	private Set<Material> plotManagementMayorDelete = null;
+	private CompactableCollection<Material> plotManagementMayorDelete = null;
 	
 	private boolean isUsingPlotManagementRevert = TownySettings.isUsingPlotManagementRevert();
-	private Set<Material> plotManagementIgnoreIds = null;
-	private Set<Material> revertOnUnclaimWhitelistMaterials = null;
+	private CompactableCollection<Material> plotManagementIgnoreIds = null;
+	private CompactableCollection<Material> revertOnUnclaimWhitelistMaterials = null;
 
 	private boolean isUsingPlotManagementWildEntityRevert = TownySettings.isUsingPlotManagementWildEntityRegen();	
 	private long plotManagementWildRevertDelay = TownySettings.getPlotManagementWildRegenDelay();
-	private Set<EntityType> entityExplosionProtection = null;
-	private Set<Material> plotManagementWildRevertBlockWhitelist = null;
-	private Set<Material> wildRevertMaterialsToNotOverwrite = null;
+	private CompactableCollection<EntityType> entityExplosionProtection = null;
+	private CompactableCollection<Material> plotManagementWildRevertBlockWhitelist = null;
+	private CompactableCollection<Material> wildRevertMaterialsToNotOverwrite = null;
 	
 	private boolean isUsingPlotManagementWildBlockRevert = TownySettings.isUsingPlotManagementWildBlockRegen();
-	private Set<Material> blockExplosionProtection = null;
+	private CompactableCollection<Material> blockExplosionProtection = null;
 	
-	private Set<Material> unclaimedZoneIgnoreBlockMaterials = null;
+	private CompactableCollection<Material> unclaimedZoneIgnoreBlockMaterials = null;
 	private Boolean unclaimedZoneBuild = null, unclaimedZoneDestroy = null,
 			unclaimedZoneSwitch = null, unclaimedZoneItemUse = null;
 
@@ -428,15 +428,21 @@ public class TownyWorld extends TownyObject {
 		return isDeletingEntitiesOnUnclaim;
 	}
 
+	@NotNull
 	public Collection<EntityType> getUnclaimDeleteEntityTypes() {
 		if (unclaimDeleteEntityTypes == null)
 			setUnclaimDeleteEntityTypes(TownySettings.getUnclaimDeleteEntityTypes());
 
 		return unclaimDeleteEntityTypes;
 	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getUnclaimDeleteEntityTypeNames() {
+		return this.unclaimDeleteEntityTypes != null ? this.unclaimDeleteEntityTypes.getNames() : null;
+	}
 
 	public void setUnclaimDeleteEntityTypes(List<String> entityTypes) {
-		this.unclaimDeleteEntityTypes = TownySettings.toEntityTypeSet(entityTypes);
+		this.unclaimDeleteEntityTypes = CompactableCollection.entityTypes(entityTypes);
 	}
 
 	public void setUsingPlotManagementMayorDelete(boolean using) {
@@ -459,12 +465,17 @@ public class TownyWorld extends TownyObject {
 		return isUsingPlotManagementRevert;
 	}
 
+	@NotNull
 	public Collection<Material> getPlotManagementDeleteIds() {
-
 		if (plotManagementDeleteIds == null)
 			return TownySettings.getPlotManagementDeleteIds();
 		else
 			return plotManagementDeleteIds;
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getPlotManagementDeleteNames() {
+		return this.plotManagementDeleteIds != null ? this.plotManagementDeleteIds.getNames() : null;
 	}
 
 	public boolean isPlotManagementDeleteIds(Material material) {
@@ -473,15 +484,20 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementDeleteIds(List<String> plotManagementDeleteIds) {
-		this.plotManagementDeleteIds = new HashSet<>(TownySettings.toMaterialSet(plotManagementDeleteIds));
+		this.plotManagementDeleteIds = CompactableCollection.materials(plotManagementDeleteIds);
 	}
 
+	@NotNull
 	public Collection<Material> getPlotManagementMayorDelete() {
-
 		if (plotManagementMayorDelete == null)
 			return TownySettings.getPlotManagementMayorDelete();
 		else
 			return plotManagementMayorDelete;
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getPlotManagementMayorDeleteNames() {
+		return this.plotManagementMayorDelete != null ? this.plotManagementMayorDelete.getNames() : null;
 	}
 
 	public boolean isPlotManagementMayorDelete(Material material) {
@@ -490,7 +506,7 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementMayorDelete(List<String> plotManagementMayorDelete) {
-		this.plotManagementMayorDelete = new HashSet<>(TownySettings.toMaterialSet(plotManagementMayorDelete));
+		this.plotManagementMayorDelete = CompactableCollection.materials(plotManagementMayorDelete);
 	}
 
 	public boolean isUnclaimedBlockAllowedToRevert(Material mat) {
@@ -501,12 +517,17 @@ public class TownyWorld extends TownyObject {
 		return !isPlotManagementIgnoreIds(mat);
 	}
 	
+	@NotNull
 	public Collection<Material> getPlotManagementIgnoreIds() {
-		
 		if (plotManagementIgnoreIds == null)
 			return TownySettings.getPlotManagementIgnoreIds();
 		else
 			return plotManagementIgnoreIds;
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getPlotManagementIgnoreNames() {
+		return this.plotManagementIgnoreIds != null ? this.plotManagementIgnoreIds.getNames() : null;
 	}
 
 	public boolean isPlotManagementIgnoreIds(Material mat) {
@@ -514,18 +535,24 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementIgnoreIds(List<String> plotManagementIgnoreIds) {
-		this.plotManagementIgnoreIds = new HashSet<>(TownySettings.toMaterialSet(plotManagementIgnoreIds));
+		this.plotManagementIgnoreIds = CompactableCollection.materials(plotManagementIgnoreIds);
 	}
 
+	@NotNull
 	public Collection<Material> getRevertOnUnclaimWhitelistMaterials() {
 		if (revertOnUnclaimWhitelistMaterials == null)
 			return TownySettings.getRevertOnUnclaimWhitelistMaterials();
 		else 
 			return revertOnUnclaimWhitelistMaterials;
 	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getRevertOnUnclaimWhitelistMaterialNames() {
+		return this.revertOnUnclaimWhitelistMaterials != null ? this.revertOnUnclaimWhitelistMaterials.getNames() : null;
+	}
 
 	public void setRevertOnUnclaimWhitelistMaterials(List<String> revertOnUnclaimWhitelistMaterials) {
-		this.revertOnUnclaimWhitelistMaterials = new HashSet<>(TownySettings.toMaterialSet(revertOnUnclaimWhitelistMaterials));
+		this.revertOnUnclaimWhitelistMaterials = CompactableCollection.materials(revertOnUnclaimWhitelistMaterials);
 	}
 
 	public boolean isRevertOnUnclaimWhitelistMaterial(Material mat) {
@@ -583,16 +610,20 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertEntities(List<String> entities) {
-		entityExplosionProtection = new HashSet<>();
-		entityExplosionProtection.addAll(TownySettings.toEntityTypeSet(entities));
+		this.entityExplosionProtection = CompactableCollection.entityTypes(entities);
 	}
 
+	@NotNull
 	public Collection<EntityType> getPlotManagementWildRevertEntities() {
-
 		if (entityExplosionProtection == null)
 			setPlotManagementWildRevertEntities(TownySettings.getWildExplosionProtectionEntities());
 
 		return entityExplosionProtection;
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getPlotManagementWildRevertEntityNames() {
+		return this.entityExplosionProtection != null ? this.entityExplosionProtection.getNames() : null;
 	}
 
 	public boolean isProtectingExplosionEntity(Entity entity) {
@@ -605,16 +636,20 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertBlockWhitelist(List<String> mats) {
-		plotManagementWildRevertBlockWhitelist = new HashSet<>();
-		plotManagementWildRevertBlockWhitelist.addAll(TownySettings.toMaterialSet(mats));
+		plotManagementWildRevertBlockWhitelist = CompactableCollection.materials(mats);
 	}
 
+	@NotNull
 	public Collection<Material> getPlotManagementWildRevertBlockWhitelist() {
-
 		if (plotManagementWildRevertBlockWhitelist == null)
 			setPlotManagementWildRevertBlockWhitelist(TownySettings.getWildExplosionRevertBlockWhitelist());
 
 		return plotManagementWildRevertBlockWhitelist;
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getPlotManagementWildRevertBlockWhitelistNames() {
+		return this.plotManagementWildRevertBlockWhitelist != null ? this.plotManagementWildRevertBlockWhitelist.getNames() : null;
 	}
 
 	public boolean isPlotManagementWildRevertWhitelistedBlock(Material mat) {
@@ -633,14 +668,19 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setWildRevertMaterialsToNotOverwrite(List<String> mats) {
-		wildRevertMaterialsToNotOverwrite = new HashSet<>();
-		wildRevertMaterialsToNotOverwrite.addAll(TownySettings.toMaterialSet(mats));
+		wildRevertMaterialsToNotOverwrite = CompactableCollection.materials(mats);
 	}
 
+	@NotNull
 	public Collection<Material> getWildRevertMaterialsToNotOverwrite() {
 		if (wildRevertMaterialsToNotOverwrite == null)
 			setWildRevertMaterialsToNotOverwrite(TownySettings.getWildExplosionRevertMaterialsToNotOverwrite());
 		return wildRevertMaterialsToNotOverwrite;
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getWildRevertMaterialsToNotOverwriteNames() {
+		return this.wildRevertMaterialsToNotOverwrite != null ? this.wildRevertMaterialsToNotOverwrite.getNames() : null; 
 	}
 
 	public boolean isMaterialNotAllowedToBeOverwrittenByWildRevert(Material mat) {
@@ -651,15 +691,20 @@ public class TownyWorld extends TownyObject {
 	}
 
 	public void setPlotManagementWildRevertMaterials(List<String> mats) {
-		blockExplosionProtection = new HashSet<>(TownySettings.toMaterialSet(mats));
+		blockExplosionProtection = CompactableCollection.materials(mats);
 	}
 
+	@NotNull
 	public Collection<Material> getPlotManagementWildRevertBlocks() {
-
 		if (blockExplosionProtection == null)
 			setPlotManagementWildRevertMaterials(TownySettings.getWildExplosionProtectionBlocks());
 
 		return blockExplosionProtection;
+	}
+	
+	@ApiStatus.Internal
+	public @Nullable Collection<String> getPlotManagementWildRevertBlockNames() {
+		return this.blockExplosionProtection != null ? this.blockExplosionProtection.getNames() : null;
 	}
 
 	public boolean isProtectingExplosionBlock(Material material) {
@@ -673,17 +718,22 @@ public class TownyWorld extends TownyObject {
 
 	public void setUnclaimedZoneIgnore(List<String> unclaimedZoneIgnoreIds) {
 		if (unclaimedZoneIgnoreIds == null)
-			this.unclaimedZoneIgnoreBlockMaterials = new HashSet<>(TownySettings.getUnclaimedZoneIgnoreMaterials());
+			this.unclaimedZoneIgnoreBlockMaterials = CompactableCollection.materials(TownySettings.getUnclaimedZoneIgnoreMaterials());
 		else
-			this.unclaimedZoneIgnoreBlockMaterials = new HashSet<>(TownySettings.toMaterialSet(unclaimedZoneIgnoreIds));
+			this.unclaimedZoneIgnoreBlockMaterials = CompactableCollection.materials(unclaimedZoneIgnoreIds);
 	}
 	
 	public Collection<Material> getUnclaimedZoneIgnoreMaterials() {
 
 		if (unclaimedZoneIgnoreBlockMaterials == null)
-			return TownySettings.getUnclaimedZoneIgnoreMaterials();
+			return TownySettings.toMaterialSet(TownySettings.getUnclaimedZoneIgnoreMaterials());
 		else
 			return unclaimedZoneIgnoreBlockMaterials;
+	}
+	
+	@ApiStatus.Internal // Intended for saving to database
+	public @Nullable Collection<String> getUnclaimedZoneIgnoreMaterialNames() {
+		return this.unclaimedZoneIgnoreBlockMaterials != null ? this.unclaimedZoneIgnoreBlockMaterials.getNames() : null;
 	}
 
 	public boolean isUnclaimedZoneIgnoreMaterial(Material mat) {
