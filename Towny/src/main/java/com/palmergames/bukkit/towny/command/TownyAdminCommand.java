@@ -1980,7 +1980,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		Town town = getTownOrThrow(townName[0]);
 		if (town.hasNation()) {
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_already_nation"));
-			TownyMessaging.sendMessage(sender, "Suggestion: /townyadmin town " + town + "leavenation, or /ta nation " + nation + " transfer " + town);
+			TownyMessaging.sendErrorMsg(sender, "Suggestion: /townyadmin town " + town + " leavenation, or /ta nation " + nation + " transfer " + town);
 			return;
 		}
 		town.setNation(nation);
