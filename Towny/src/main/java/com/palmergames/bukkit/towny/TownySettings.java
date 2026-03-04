@@ -3688,6 +3688,10 @@ public class TownySettings {
 	public static List<String> getOutlawBlacklistedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_OUTLAW_BLACKLISTED_COMMANDS);
 	}
+	
+	public static boolean areEnemiesOutlaws() {
+		return getBoolean(ConfigNodes.GTOWN_SETTINGS_CONSIDER_ENEMIES_OUTLAWS);
+	}
 
 	public static List<String> getWarBlacklistedCommands() {
 		return getStrArr(ConfigNodes.GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS);
