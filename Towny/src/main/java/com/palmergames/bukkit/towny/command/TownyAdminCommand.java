@@ -229,11 +229,18 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 	);
 	
 	private static final List<String> adminResidentTabCompletes = Arrays.asList(
+		"about",
 		"rename",
 		"friend",
 		"meta",
 		"unjail",
-		"delete"
+		"delete",
+		"set"
+	);
+
+	private static final List<String> adminResidentSetTabCompletes = Arrays.asList(
+		"lastonline",
+		"registered"
 	);
 	
 	private static final List<String> adminResidentFriendTabCompletes = Arrays.asList(
@@ -430,6 +437,8 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 					case 4:
 						if (args[2].equalsIgnoreCase("about"))
 							return Collections.singletonList("clear");
+						if (args[2].equalsIgnoreCase("set"))
+							return NameUtil.filterByStart(adminResidentSetTabCompletes, args[3]);
 						if (args[2].equalsIgnoreCase("friend"))
 							return NameUtil.filterByStart(adminResidentFriendTabCompletes, args[3]);
 						if (args[2].equalsIgnoreCase("meta"))
@@ -1238,8 +1247,43 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 		case "unjail" -> residentUnjail(sender, resident);
 		case "delete" -> residentDelete(sender, resident);
 		case "about" -> residentAbout(sender, split, resident); 
+		case "set" -> residentSet(sender, split, resident);
 		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[1]));
 		}
+	}
+
+	private void residentSet(CommandSender sender, String[] split, Resident resident) throws TownyException {
+		checkPermOrThrow(sender, PermissionNodes.TOWNY_COMMAND_TOWNYADMIN_RESIDENT_SET.getNode());
+		if (split.length != 4)
+			throw new TownyException("Eg: /townyadmin resident [resident] set [lastonline/registered] [timestamp]");
+
+		long timestamp = parseVerifiedResidentTimestamp(split[3]);
+		switch (split[2].toLowerCase(Locale.ROOT)) {
+		case "lastonline" -> {
+			resident.setLastOnline(timestamp);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_resident_lastonline_set", resident.getName(), TownyFormatter.registeredFormat.format(resident.getLastOnline())));
+		}
+		case "registered" -> {
+			resident.setRegistered(timestamp);
+			TownyMessaging.sendMsg(sender, Translatable.of("msg_resident_registered_set", resident.getName(), TownyFormatter.registeredFormat.format(resident.getRegistered())));
+		}
+		default -> throw new TownyException(Translatable.of("msg_err_invalid_property", split[2]));
+		}
+		resident.save();
+	}
+
+	private static long parseVerifiedResidentTimestamp(String input) throws TownyException {
+		long timestamp;
+		try {
+			timestamp = Long.parseLong(input);
+		} catch (NumberFormatException e) {
+			throw new TownyException(Translatable.of("msg_error_must_be_int"));
+		}
+		if (timestamp <= 0)
+			throw new TownyException(Translatable.of("msg_err_amount_must_be_greater_than_zero"));
+		if (timestamp > System.currentTimeMillis())
+			throw new TownyException(Translatable.of("msg_err_time_cannot_be_in_the_future"));
+		return timestamp;
 	}
 
 	private void residentAbout(CommandSender sender, String[] split, Resident resident) throws TownyException {
