@@ -461,7 +461,6 @@ public class NameValidation {
 	 */
 	static boolean isBannedName(String name) {
 		Map<TownyCommandAddonAPI.CommandType, Map<String, AddonCommand>> addons = TownyCommandAddonAPI.getAddedCommands();
-		bannedNames.addAll(addons.getOrDefault(TownyCommandAddonAPI.CommandType.RESIDENT, Map.of()).keySet());
 		bannedNames.addAll(addons.getOrDefault(TownyCommandAddonAPI.CommandType.TOWN, Map.of()).keySet());
 		bannedNames.addAll(addons.getOrDefault(TownyCommandAddonAPI.CommandType.NATION, Map.of()).keySet());
 		
