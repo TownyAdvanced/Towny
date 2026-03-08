@@ -945,7 +945,7 @@ public enum ConfigNodes {
 			"# When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms."),
 	GTOWN_SETTINGS_MERGE_COOLDOWN_TIMER(
 		"global_town_settings.merge_request_cooldown_time",
-		"0",
+		"60",
 		"",
 		"# Number of seconds that must pass before a town can send a merge request to the same target."),
 
@@ -1103,7 +1103,7 @@ public enum ConfigNodes {
 		"# Disabling this option does not affect already created nations."),
 	GNATION_SETTINGS_MERGE_COOLDOWN_TIMER(
 		"global_nation_settings.merge_request_cooldown_time",
-		"0",
+		"60",
 		"",
 		"# Number of seconds that must pass before a nation can send a merge request to the same target."),
 

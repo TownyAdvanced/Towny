@@ -3852,11 +3852,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 
 		vetTownsForMergeAndThrow(remainingTown, succumbingTown);
 
-		String cooldownId = remainingTown.getUUID().toString() + "+" + succumbingTown.getUUID().toString();
-		if (CooldownTimerTask.hasCooldown(cooldownId, CooldownType.TOWN_MERGE)) {
-			throw new TownyException(Translatable.of("msg_err_cannot_merge_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(cooldownId, CooldownType.TOWN_MERGE), succumbingTown.getName()));
+		if (TownySettings.getTownMergeRequestCooldown() > 0) {
+			String cooldownId = remainingTown.getUUID().toString() + "+" + succumbingTown.getUUID().toString();
+			if (CooldownTimerTask.hasCooldown(cooldownId, CooldownType.TOWN_MERGE)) {
+				throw new TownyException(Translatable.of("msg_err_cannot_merge_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(cooldownId, CooldownType.TOWN_MERGE), succumbingTown.getName()));
+			}
+			CooldownTimerTask.addCooldownTimer(cooldownId, CooldownType.TOWN_MERGE);
 		}
-		CooldownTimerTask.addCooldownTimer(cooldownId, CooldownType.TOWN_MERGE);
 		
 		// An array that keeps Merge costs separate, so the individual prices can be used later on in messaging.
 		final double[] mergeCost = getMergeCosts(remainingTown, succumbingTown, admin);
