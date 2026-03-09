@@ -10731,3 +10731,30 @@ v0.92.0.11:
 0.102.0.10:
   - Fix HUDManager not accepting added HUDs.
   - Fix empty nations saving themselves instead of getting deleted.
+  - Add only_remove_claim_count for inactive resident claim limits, courtesy of GoodrichDev with PR #8119.
+    - When delete_old_residents.enable, only_remove_town, and only_remove_claim_count are all true (and delete_only_townless is false),
+      residents who are offline longer than deleted_after_time no longer count toward ratio-based max town blocks.
+    - Resident data is kept: purge skips removing town/deleting residents in this mode.
+  - New Config Option: resident_settings.delete_old_residents.only_remove_claim_count
+    - Default: false
+    - When true (and only_remove_town is true) residents are kept and only stop counting toward town claim limits after deleted_after_time.
+  - Add /ta resident set for lastonline/registered with timestamp validation, courtesy of GoodrichDev with PR #8120.
+  - New Command: /ta resident <resident> set registered <timestamp>
+    - Sets the resident registered time with the timestamp being a long.
+  - New Command: /ta resident <resident> set lastonline <timestamp>
+    - Sets the resident lastonline time with the timestamp being a long.
+  - Bump org.bstats:bstats-bukkit from 3.1.0 to 3.2.1.
+  - Add option to consider nation enemies as town outlaws, courtesy of Captain-S0L0 with PR #8132. (First-Time Contributor!)
+  - New Config Option: global_town_settings.consider_enemies_outlaws
+    - Default: false
+    - If set to true, when a town is in a nation any player in another nation that the town's nation considers enemies will be considered an outlaw in that town.
+  - Improve NameValidation checks for banned names, courtesy of Veyronity with PR #8133.
+    - Prevents Towns and Nations being named with subcommands of /town and /nation.
+    - Replaced hard coded list with auto-populating list, which now also includes TownyCommandAddonAPI subcommands.
+  - Add cooldown on how often towns & nations can request a merge with the same target, courtesy of Veyronity with PR #8134.
+  - New Config Option: global_town_settings.merge_request_cooldown_time
+    - Default: 60
+    - Number of seconds that must pass before a town can send a merge request to the same target.
+  - New Config Option: global_nation_settings.merge_request_cooldown_time
+    - Default: 60
+    - Number of seconds that must pass before a nation can send a merge request to the same target.
