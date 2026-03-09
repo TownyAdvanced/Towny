@@ -157,7 +157,7 @@ public final class TownBlockTypeHandler {
 		if (!materialList.isEmpty()) {
 			Set<Material> set = new LinkedHashSet<>();
 			for (String materialName : materialList.split(",")) {
-				if (ItemLists.GROUPS.contains(materialName)) {
+				if (ItemLists.hasGroup(materialName)) {
 					set.addAll(ItemLists.getGrouping(materialName));
 					continue;
 				}
