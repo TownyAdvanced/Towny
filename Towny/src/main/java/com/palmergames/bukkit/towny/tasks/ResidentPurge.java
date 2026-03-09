@@ -62,6 +62,9 @@ public class ResidentPurge implements Runnable {
 				if (townless && resident.hasTown())
 					continue;
 
+				if (removeTown && TownySettings.isDeletingOldResidentsRemovingClaimCountOnly())
+					continue;
+
 				if (removeTown && resident.hasTown()) {
 					resident.removeTown();
 					count++;
