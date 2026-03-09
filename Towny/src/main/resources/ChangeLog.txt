@@ -10728,3 +10728,6 @@ v0.92.0.11:
     - towny.command.townyadmin.plot.*
     - The subcommands of these commands now rely soley on their own permission node, and do not require the parent permission node.
   - Fix nation-level-getting broken in 0.102.0.8.
+0.102.0.10:
+  - Fix HUDManager not accepting added HUDs.
+  - Fix empty nations saving themselves instead of getting deleted.

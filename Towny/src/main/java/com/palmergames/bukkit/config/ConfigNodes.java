@@ -3067,7 +3067,7 @@ public enum ConfigNodes {
 			"economy.bankruptcy.debt_cap.maximum",
 			"0.0",
 			"",
-			"# When set to greater than 0.0, this will be used to determine every town''s maximum debt,",
+			"# When set to greater than 0.0, this will be used to determine every town's maximum debt,",
 			"# overriding the above calculation if the calculation would be larger than the set maximum."),
 	ECO_BANKRUPTCY_DEBT_CAP_OVERRIDE(
 			"economy.bankruptcy.debt_cap.override",

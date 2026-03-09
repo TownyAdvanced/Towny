@@ -47,7 +47,7 @@ public class HUDManager implements Listener {
 	}
 
 	public static void addHUD(String name, ServerHUD hud) {
-		huds.put(name, null);
+		huds.put(name, hud);
 	}
 
 	public static void removeHUD(String name) {

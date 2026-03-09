@@ -1132,6 +1132,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		String[] tokens;
 		String path = getNationFilename(nation);
 		File fileNation = new File(path);
+		boolean save = false;
 		
 		if (fileNation.exists() && fileNation.isFile()) {
 			TownyMessaging.sendDebugMsg(Translation.of("flatfile_dbg_loading_nation", nation.getName()));
@@ -1169,6 +1170,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 						return true;
 					}
 				}
+				
+				save = true;
 				line = keys.get("nationBoard");
 				if (line != null)
 					try {
@@ -1305,7 +1308,8 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				plugin.getLogger().log(Level.WARNING, Translation.of("flatfile_err_reading_nation_file_at_line", nation.getName(), line, nation.getName()), e);
 				return false;
 			} finally {
-				saveNation(nation);
+				if (save)
+					saveNation(nation);
 			}
 			return true;
 		} else {
