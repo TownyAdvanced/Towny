@@ -367,17 +367,13 @@ public class ProximityUtil {
 			// Town is the capital we're measuring against.
 			if (town.equals(capital))
 				continue;
+			NationRangeAllowTownEvent nrate = new NationRangeAllowTownEvent(nation, town);
 			// Check that the town missing is not missing a homeblock, and that the
 			// homeblocks are in the same world, and the distance between.
-			if (isTownCloseEnoughToNation(town, capital, townsToCheck, validTowns)) {
+			nrate.setCancelled(!isTownCloseEnoughToNation(town, capital, townsToCheck, validTowns));
+			nrate.callEvent();
+			if (!nrate.isCancelled())
 				allowedTowns.add(town);
-			} else {
-				NationRangeAllowTownEvent nrate = new NationRangeAllowTownEvent(nation, town);
-				nrate.setCancelled(true);
-				nrate.callEvent();
-				if (!nrate.isCancelled()) // Another plugin has un-canceled the event
-					allowedTowns.add(town);
-			}
 		}		
 		return allowedTowns;
 	}
