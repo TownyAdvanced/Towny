@@ -657,6 +657,13 @@ public enum ConfigNodes {
 			"somecommandhere,othercommandhere",
 			"",
 			"# Commands an outlawed player cannot use while in the town they are outlawed in."),
+	GTOWN_SETTINGS_CONSIDER_ENEMIES_OUTLAWS(
+		"global_town_settings.consider_enemies_outlaws",
+		"false",
+		"",
+		"# If set to true, when a town is in a nation any player in another nation that",
+		"# the town's nation considers enemies will be considered an outlaw in that town."
+	),
 	GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS(
 			"global_town_settings.war_blacklisted_commands",
 			"somecommandhere,othercommandhere",
