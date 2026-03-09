@@ -4036,6 +4036,14 @@ public class TownySettings {
 		return getInt(ConfigNodes.RES_SETTINGS_WARN_PLAYER_ON_OUTLAW_MESSAGE_COOLDOWN_TIME);
 	}
 
+	public static int getTownMergeRequestCooldown() {
+		return getInt(ConfigNodes.GTOWN_SETTINGS_MERGE_COOLDOWN_TIMER);
+	}
+
+	public static int getNationMergeRequestCooldown() {
+		return getInt(ConfigNodes.GNATION_SETTINGS_MERGE_COOLDOWN_TIMER);
+	}
+
 	public static double maxBuyTownPrice() {
 		return getDouble(ConfigNodes.GTOWN_SETTINGS_MAX_BUYTOWN_PRICE);
 	}
