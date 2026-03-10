@@ -1151,7 +1151,8 @@ public class TownyUniverse {
 		return wildernessMapDataMap;
 	}
 	
-	public Map<String,String> getReplacementNameMap() {
+	@ApiStatus.Internal
+	public Map<String, String> getReplacementNameMap() {
 		return replacementNamesMap;
 	}
 }
