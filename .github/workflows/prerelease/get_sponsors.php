@@ -8,7 +8,7 @@ libxml_use_internal_errors( true);
 $doc = new DOMDocument;
 $doc->loadHTML( $html);
 $xpath = new DOMXpath( $doc);
-$node = $xpath->query( '//h4[@class="mb-3"]')->item( 0);
+$node = $xpath->query( '//div[@class="d-flex mb-1 mr-1"]')->item( 0);
 //echo $node->textContent; // This will print **GET THIS TEXT**
 $totalSponsors = $node->textContent;
 $res = preg_replace("/[^0-9]/", "", $totalSponsors );

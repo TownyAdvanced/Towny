@@ -321,9 +321,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> towns = receiveListFromLegacyFile("towns.txt");
 		File[] townFiles = receiveObjectFiles("towns", ".txt");
 
-		record RejectedTown(String name, UUID uuid, File file) {}
-
-		List<RejectedTown> rejectedTowns = new ArrayList<>();
+		List<NameAndId> rejectedTowns = new ArrayList<>();
 		
 		for (File townFile : townFiles) {
 			String fileName = townFile.getName().replace(".txt", "");
@@ -352,7 +350,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				universe.newTownInternal(nameAndId.name(), nameAndId.uuid());
 			} catch (AlreadyRegisteredException | InvalidNameException e) {
 				// Thrown if the town name does not pass the filters.
-				rejectedTowns.add(new RejectedTown(nameAndId.name(), nameAndId.uuid(), townFile));
+				rejectedTowns.add(nameAndId);
 			}
 		}
 		
@@ -361,21 +359,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			deleteFile(dataFolderPath + File.separator + "towns.txt");
 
 		// Handle rejected town names after all the rest are loaded.
-		for (RejectedTown town : rejectedTowns) {
-			String name = town.name;
+		for (NameAndId town : rejectedTowns) {
+			String name = town.name();
 			String newName = generateReplacementName(true);
 			universe.getReplacementNameMap().put(name, newName);
-			TownyMessaging.sendErrorMsg(String.format("The town %s (%s) tried to load an invalid name, attempting to rename it to %s.", name, town.uuid, newName));
+			TownyMessaging.sendErrorMsg(String.format("The town %s (%s) tried to load an invalid name, attempting to rename it to %s.", name, town.uuid(), newName));
 			try {
-				universe.newTownInternal(newName, town.uuid);
+				universe.newTownInternal(newName, town.uuid());
 			} catch (AlreadyRegisteredException | InvalidNameException e1) {
 				// We really hope this doesn't fail again.
-				plugin.getSLF4JLogger().warn("exception occurred while registering town '{}' ({}) internally", newName, town.uuid, e1);
+				plugin.getSLF4JLogger().warn("exception occurred while registering town '{}' ({}) internally", newName, town.uuid(), e1);
 				return false;
 			}
-			
-			File newFile = new File(town.file.getParent(), newName + ".txt");
-			town.file.renameTo(newFile);
 		}
 
 		return true;
@@ -389,7 +384,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 		List<String> nations = receiveListFromLegacyFile("nations.txt");
 		File[] nationFiles = receiveObjectFiles("nations", ".txt");
 
-		List<File> rejectedNations = new ArrayList<>();
+		List<NameAndId> rejectedNations = new ArrayList<>();
 		
 		for (File nationFile : nationFiles) {
 			String fileName = nationFile.getName().replace(".txt", "");
@@ -418,7 +413,7 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 				newNation(nameAndId.name(), nameAndId.uuid());
 			} catch (AlreadyRegisteredException | NotRegisteredException e) {
 				// Thrown if the town name does not pass the filters.
-				rejectedNations.add(nationFile);
+				rejectedNations.add(nameAndId);
 			}
 		}
 		
@@ -427,20 +422,18 @@ public final class TownyFlatFileSource extends TownyDatabaseHandler {
 			deleteFile(dataFolderPath + File.separator + "nations.txt");
 			
 		// Handle rejected nation names after all the rest are loaded.
-		for (File nation : rejectedNations) {
-			String name = nation.getName().replace(".txt", "");
+		for (NameAndId nation : rejectedNations) {
+			String name = nation.name();
 			String newName = generateReplacementName(false);
 			universe.getReplacementNameMap().put(name, newName);
-			TownyMessaging.sendErrorMsg(String.format("The nation %s tried to load an invalid name, attempting to rename it to %s.", name, newName));
+			TownyMessaging.sendErrorMsg(String.format("The nation %s (%s) tried to load an invalid name, attempting to rename it to %s.", name, nation.uuid(), newName));
 			try {
-				newNation(newName);
+				newNation(newName, nation.uuid());
 			} catch (AlreadyRegisteredException | NotRegisteredException e1) {
 				// we really hope this doesn't fail a second time.
 				plugin.getLogger().log(Level.WARNING, "exception occurred while registering nation '" + newName + "' internally", e1);
 				return false;
 			}
-			File newFile = new File(nation.getParent(), newName + ".txt");
-			nation.renameTo(newFile);
 		}
 		return true;
 

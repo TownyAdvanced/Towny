@@ -10758,3 +10758,6 @@ v0.92.0.11:
   - New Config Option: global_nation_settings.merge_request_cooldown_time
     - Default: 60
     - Number of seconds that must pass before a nation can send a merge request to the same target.
+0.102.0.11:
+  - Prevent renaming town/nation files when name is invalid, courtesy of Warrior with PR #8137.
+    - Flatfile databases which loaded towns/nations with invalid names could result in a town/nation file being created with a name instead of a UUID.
