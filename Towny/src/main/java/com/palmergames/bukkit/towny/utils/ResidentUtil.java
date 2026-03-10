@@ -353,12 +353,12 @@ public class ResidentUtil {
 			if (TownySettings.getOutlawTeleportWarmup() > 0) {
 				TownyMessaging.sendMsg(outlaw, Translatable.of("msg_outlaw_kick_cooldown", town, TimeMgmt.formatCountdownTime(TownySettings.getOutlawTeleportWarmup())));
 			}
-			
-			Towny.getPlugin().getScheduler().runLater(() -> {
-				Player player = outlaw.getPlayer();
-				if (player == null)
-					return;
-				
+
+			Player player = outlaw.getPlayer();
+			if (player == null)
+				return;
+
+			Towny.getPlugin().getScheduler().runLater(player, () -> {
 				final Town currTown = TownyAPI.getInstance().getTown(player.getLocation());
 				if (currTown == null || currTown != town)
 					return;
