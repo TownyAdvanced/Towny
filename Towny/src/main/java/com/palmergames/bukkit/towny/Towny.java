@@ -22,6 +22,7 @@ import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.huds.HUDManager;
 import com.palmergames.bukkit.towny.invites.InviteHandler;
+import com.palmergames.bukkit.towny.listeners.TownyCanvasEvents;
 import com.palmergames.bukkit.towny.listeners.TownyPaperEvents;
 import com.palmergames.bukkit.towny.listeners.TownyBlockListener;
 import com.palmergames.bukkit.towny.listeners.TownyCustomListener;
@@ -494,12 +495,14 @@ public class Towny extends JavaPlugin {
 		
 
 		// Always register these events.
-		pluginManager.registerEvents(new TownyPlayerListener(this), this);
+		TownyPlayerListener townyPlayerListener = new TownyPlayerListener(this);
+		pluginManager.registerEvents(townyPlayerListener, this);
 		pluginManager.registerEvents(new TownyBlockListener(this), this);
 		pluginManager.registerEvents(new TownyEntityListener(this), this);
 		pluginManager.registerEvents(new TownyInventoryListener(this), this);
 
 		new TownyPaperEvents(this).register();
+		new TownyCanvasEvents(this, townyPlayerListener).register();
 	}
 
 	private void printChangelogToConsole() {
