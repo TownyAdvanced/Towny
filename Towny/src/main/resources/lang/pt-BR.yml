@@ -62,6 +62,7 @@ town_help_32: "Use /t set ? para obter ajuda."
 town_help_33: "Use /t buy ? para obter ajuda."
 town_help_34: "Use /t toggle ? para obter ajuda."
 town_help_35: "Use /t rank ? para obter ajuda."
+town_help_36: 'Lista cidades próximas classificadas por distância.'
 town_list_help_0: "Visualiza a página especificada."
 town_list_help_1: "Lista cidades por número de residentes, com a página especificada."
 town_list_help_2: "Lista as cidades que estão abertas, a partir da página especificada."
@@ -1180,6 +1181,8 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Não tens 
 msg_already_ally: 'A tua nação já é aliada com %s.'
 #Added in 0.76
 msg_you: 'Tu'
+#Added in 0.77
+msg_click_town_info: '<green>'
 msg_click_spawn: '&aClique para te teletransportares para: &e%s'
 msg_spawn_cost: '&aPreço de Teletransporte = &e%s'
 #Added in 0.78
