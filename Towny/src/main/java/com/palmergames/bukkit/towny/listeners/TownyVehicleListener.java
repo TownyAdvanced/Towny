@@ -28,6 +28,7 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.event.PlayerChangePlotEvent;
 import com.palmergames.bukkit.towny.event.executors.TownyActionEventExecutor;
+import com.palmergames.bukkit.towny.object.PlayerCache;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
 import com.palmergames.bukkit.util.ItemLists;
@@ -190,8 +191,7 @@ public class TownyVehicleListener implements Listener {
 	 * passenger(s), resulting in PlayerChangePlotEvents not being thrown.
 	 * <p>
 	 * For now Paper does not throw this event for camels and ghasts but we'll
-	 * future-proof ourselves in case they do.
-	 * </p>
+	 * future-proof ourselves in case they do add support later on.</p>
 	 * 
 	 * @param event VehicleMoveEvent.
 	 */
@@ -215,12 +215,15 @@ public class TownyVehicleListener implements Listener {
 			// Driver always throws a PlayerMoveEvent.
 			passengers.remove(0);
 
-			int i = 1;
 			// HappyGhasts can have more than one passenger & a driver will have a PlayerMoveEvent.
 			for (Entity rider : passengers) {
 				// Boat passengers may not be human.
 				if (!(rider instanceof Player player))
 					continue;
+
+				final PlayerCache cache = plugin.getCacheOrNull(rider.getUniqueId());
+				if (cache != null)
+					cache.resetAndUpdate(toCoord)
 
 				BukkitTools.fireEvent(new PlayerChangePlotEvent(player, fromCoord, toCoord, new PlayerMoveEvent(player, from, to)));
 			}
