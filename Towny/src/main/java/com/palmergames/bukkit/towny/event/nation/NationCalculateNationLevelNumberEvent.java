@@ -35,7 +35,11 @@ public class NationCalculateNationLevelNumberEvent extends Event {
 		return nation;
 	}
 
-	@Deprecated
+	/**
+	 * Use {@link #setNationLevelNumber(int)} instead.
+	 * @param value number that would be the nation's NationLevel.
+	 */
+	@Deprecated(since = "0.102.0.12")
 	public void setNationlevelNumber(int value) {
 		this.nationLevelNumber = value;
 	}

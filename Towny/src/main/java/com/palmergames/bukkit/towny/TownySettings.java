@@ -352,7 +352,7 @@ public class TownySettings {
 	/**
 	 * @deprecated Use {@link #getTownLevel(Town, int)} instead.
 	 */
-	@Deprecated(since = "SINCEREPLACEME")
+	@Deprecated(since = "0.102.0.12")
 	public static TownLevel getTownLevel(int numResidents) {
 		return configTownLevel.floorEntry(Math.max(numResidents, 0)).getValue();
 	}
@@ -360,7 +360,7 @@ public class TownySettings {
 	/**
 	 * @deprecated Use {@link #getTownLevel(Town, int)} instead.
 	 */
-	@Deprecated(since = "SINCEREPLACEME")
+	@Deprecated(since = "0.102.0.12")
 	public static TownLevel getTownLevelWithModifier(int modifier, Town town) {
 		return getTownLevel(town, modifier);
 	}
@@ -400,7 +400,7 @@ public class TownySettings {
 	 * @return the number of residents which will get us the correct TownLevel in the TownLevel SortedMap.
 	 * @deprecated Use {@link #getTownLevel(Town, int)} and {@link TownLevel#modifier()} if you really need to
 	 */
-	@Deprecated(since = "SINCEREPLACEME")
+	@Deprecated(since = "0.102.0.12")
 	public static int getResidentCountForTownLevel(int level) {
 		return townLevelList.get(MathUtil.clamp(level, 0, townLevelList.size() - 1)).modifier;
 	}
@@ -431,7 +431,7 @@ public class TownySettings {
 	/**
 	 * @deprecated Use {@link #getNationLevel(Nation, int)} instead.
 	 */
-	@Deprecated(since = "SINCEREPLACEME")
+	@Deprecated(since = "0.102.0.12")
 	public static NationLevel getNationLevel(int modifier) {
 		return configNationLevel.floorEntry(Math.max(modifier, 0)).getValue();
 	}
@@ -473,7 +473,7 @@ public class TownySettings {
 	/**
 	 * @deprecated Use {@link #getNationLevel(Nation, int)} instead.
 	 */
-	@Deprecated(since = "SINCEREPLACEME")
+	@Deprecated(since = "0.102.0.12")
 	public static NationLevel getNationLevelWithModifier(int modifier) {
 		return getNationLevel(getNationLevelFromGivenInt(modifier));
 	}
