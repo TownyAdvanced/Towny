@@ -6,7 +6,6 @@ env:
   SUPPORTED: " for MC 1.19.* & 1.20.* & 1.21.*"
 jobs:
   prepare_prerelease_body:
-    needs: checkout_and_compile
     runs-on: ubuntu-latest
     name: Prepare Prerelease Body
     steps:
@@ -31,6 +30,7 @@ jobs:
           name: prerelease.txt
           path: ./staging/
   checkout_and_compile:
+    needs: prepare_prerelease_body
     runs-on: ubuntu-latest
     strategy:
       matrix:
