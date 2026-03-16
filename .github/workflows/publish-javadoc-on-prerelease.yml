@@ -5,6 +5,7 @@ on:
     workflows: ["Deploy Pre-release"]
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   publish:
