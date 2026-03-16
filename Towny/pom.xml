@@ -275,6 +275,7 @@
                         <source>${java.version}</source>
                         <doclint>all,-missing</doclint>
                         <doctitle>Towny - ${project.version}</doctitle>
+                        <notimestamp>true</notimestamp>
                         <groups>
                             <group>
                                 <title>Events</title>
