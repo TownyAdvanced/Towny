@@ -326,11 +326,12 @@ public class TownyCustomListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onTownLosesResident(TownRemoveResidentEvent event) {
 		Town town = event.getTown();
-		if (town.getLevelNumber() < TownySettings.getTownLevelFromGivenInt(town.getNumResidents() + 1, town)) {
+		if (town.getManualTownLevel() > -1 && town.getLevelNumber() < TownySettings.getTownLevelNumber(town, town.getNumResidents() + 1)) {
 			BukkitTools.fireEvent(new TownLevelDecreaseEvent(town));
 		}
-		if (town.hasNation()) {
-			Nation nation = town.getNationOrNull();
+
+		final Nation nation = town.getNationOrNull();
+		if (nation != null) {
 			if (nation.getLevelNumber() < TownySettings.getNationLevelFromGivenInt(nation.getNumResidents() + 1)) {
 				BukkitTools.fireEvent(new NationLevelDecreaseEvent(nation));
 			}	
@@ -388,12 +389,13 @@ public class TownyCustomListener implements Listener {
 	public void onResidentJoinTown(TownAddResidentEvent event) {
 		Town town = event.getTown();
 
-		if (town.getLevelNumber() > TownySettings.getTownLevelFromGivenInt(town.getNumResidents() - 1, town)) {
+		if (town.getManualTownLevel() > -1 && town.getLevelNumber() > TownySettings.getTownLevelNumber(town, town.getNumResidents() - 1)) {
 			BukkitTools.fireEvent(new TownLevelIncreaseEvent(town));
 		}
-		if (town.hasNation()) {
-			Nation nation = town.getNationOrNull();
-			if (nation.getLevelNumber() > TownySettings.getNationLevelFromGivenInt(nation.getNumResidents() - 1)) {
+
+		final Nation nation = town.getNationOrNull();
+		if (nation != null) {
+			if (nation.getLevelNumber() > TownySettings.getNationLevelNumber(nation, nation.getNumResidents() - 1)) {
 				BukkitTools.fireEvent(new NationLevelIncreaseEvent(nation));
 			}	
 		}
