@@ -657,6 +657,13 @@ public enum ConfigNodes {
 			"somecommandhere,othercommandhere",
 			"",
 			"# Commands an outlawed player cannot use while in the town they are outlawed in."),
+	GTOWN_SETTINGS_CONSIDER_ENEMIES_OUTLAWS(
+		"global_town_settings.consider_enemies_outlaws",
+		"false",
+		"",
+		"# If set to true, when a town is in a nation any player in another nation that",
+		"# the town's nation considers enemies will be considered an outlaw in that town."
+	),
 	GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS(
 			"global_town_settings.war_blacklisted_commands",
 			"somecommandhere,othercommandhere",
@@ -943,6 +950,11 @@ public enum ConfigNodes {
 			"",
 			"# When true any trusted players will get permissions in town owned land, and the personally-owned land in that town.",
 			"# When false, trusted players get permissions only in the town owned land, leaving player-owned plots to their normal plot perms."),
+	GTOWN_SETTINGS_MERGE_COOLDOWN_TIMER(
+		"global_town_settings.merge_request_cooldown_time",
+		"60",
+		"",
+		"# Number of seconds that must pass before a town can send a merge request to the same target."),
 
 
 	GNATION_SETTINGS(
@@ -1096,6 +1108,11 @@ public enum ConfigNodes {
 		"",
 		"# When disabled, nations will not be able to be created with or renamed to a name that contains numbers.",
 		"# Disabling this option does not affect already created nations."),
+	GNATION_SETTINGS_MERGE_COOLDOWN_TIMER(
+		"global_nation_settings.merge_request_cooldown_time",
+		"60",
+		"",
+		"# Number of seconds that must pass before a nation can send a merge request to the same target."),
 
 
 	CLAIMING(
@@ -2508,6 +2525,11 @@ public enum ConfigNodes {
 			"false",
 			"",
 			"# When true players will be removed from their town and become a nomad instead of being fully deleted."),
+	RES_SETTINGS_DELETE_OLD_RESIDENTS_REMOVE_CLAIM_COUNT_ONLY(
+			"resident_settings.delete_old_residents.only_remove_claim_count",
+			"false",
+			"",
+			"# When true (and only_remove_town is true) residents are kept and only stop counting toward town claim limits after deleted_after_time."),
 	RES_SETTING_DEFAULT_TOWN_NAME(
 			"resident_settings.default_town_name",
 			"",
@@ -3067,7 +3089,7 @@ public enum ConfigNodes {
 			"economy.bankruptcy.debt_cap.maximum",
 			"0.0",
 			"",
-			"# When set to greater than 0.0, this will be used to determine every town''s maximum debt,",
+			"# When set to greater than 0.0, this will be used to determine every town's maximum debt,",
 			"# overriding the above calculation if the calculation would be larger than the set maximum."),
 	ECO_BANKRUPTCY_DEBT_CAP_OVERRIDE(
 			"economy.bankruptcy.debt_cap.override",

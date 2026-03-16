@@ -1015,6 +1015,14 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		if (!king.isOnline()) {
 			throw new TownyException(Translatable.of("msg_err_king_of_that_nation_is_not_online", name, king.getName()));
 		}
+		
+		if (TownySettings.getNationMergeRequestCooldown() > 0) {
+			String cooldownId = remainingNation.getUUID().toString() + "+" + nation.getUUID().toString();
+			if (CooldownTimerTask.hasCooldown(cooldownId, CooldownType.NATION_MERGE)) {
+				throw new TownyException(Translatable.of("msg_err_cannot_merge_x_seconds_remaining", CooldownTimerTask.getCooldownRemaining(cooldownId, CooldownType.NATION_MERGE), nation.getName()));
+			}
+			CooldownTimerTask.addCooldownTimer(cooldownId, CooldownType.NATION_MERGE);
+		}
 
 		TownyMessaging.sendMsg(king, Translatable.of("msg_would_you_merge_your_nation_into_other_nation", nation, remainingNation, remainingNation));
 		if (TownySettings.getNationProximityToCapital() > 0) {

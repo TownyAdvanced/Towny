@@ -145,7 +145,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Test and kick any players with invalid names.
 		if (player.getName().contains(" ")) {
-			player.kickPlayer("Invalid name!");
+			player.kick(Component.text("Invalid name!"));
 			return;
 		}
 
@@ -815,6 +815,10 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 
+	//TODO: Remove when we support 1.21.5 and upwards.
+	@SuppressWarnings("removal")
+	private TeleportCause chorusFruitTeleport = MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_21_5) ? TeleportCause.CHORUS_FRUIT : TeleportCause.CONSUMABLE_EFFECT;
+
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		// Let's ignore Citizens NPCs. This must come before the safemode check, as Citizens stores their NPCs
@@ -847,7 +851,7 @@ public class TownyPlayerListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			if (!TownySettings.JailAllowsTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT)) {
+			if (!TownySettings.JailAllowsTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == chorusFruitTeleport)) {
 				TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
 				return;
@@ -865,7 +869,7 @@ public class TownyPlayerListener implements Listener {
 						event.setCancelled(true);
 						return;
 					}
-					if (!TownySettings.canOutlawsUseTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT)) {
+					if (!TownySettings.canOutlawsUseTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == chorusFruitTeleport)) {
 						TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_outlawed_players_no_teleport"));
 						event.setCancelled(true);
 						return;
@@ -875,7 +879,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		// Test to see if CHORUS_FRUIT is in the item_use list.
-		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo())) {
+		if (event.getCause() == chorusFruitTeleport && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT)) {
 				event.setCancelled(true);

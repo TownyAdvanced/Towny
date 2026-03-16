@@ -734,6 +734,7 @@ permissions:
             towny.command.townyadmin.resident.delete: true
             towny.command.townyadmin.resident.friend: true
             towny.command.townyadmin.resident.unjail: true
+            towny.command.townyadmin.resident.set: true
 
     towny.command.townyadmin.eco.*:
         description: User can access the admin eco commands.
