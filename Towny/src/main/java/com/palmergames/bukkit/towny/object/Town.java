@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
-import com.palmergames.bukkit.towny.event.town.TownCalculateTownLevelNumberEvent;
 import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownIsTownOverClaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;

@@ -1345,29 +1345,8 @@ public class TownySettings {
 		return getMaxTownBlocks(town, getTownLevelModifier(town));
 	}
 
-		int ratio = getTownBlockRatio();
-		int n = town.getBonusBlocks() + town.getPurchasedBlocks();
-
-		if (ratio == 0)
-			n += town.getTownLevel().townBlockLimit();
-		else if (isDeletingOldResidents() && isDeletingOldResidentsRemovingTownOnly() && isDeletingOldResidentsRemovingClaimCountOnly() && !isDeleteTownlessOnly()) {
-			int residents = 0;
-			long now = System.currentTimeMillis();
-			long deleteTime = getDeleteTime() * 1000;
-			for (Resident resident : town.getResidents()) {
-				if (resident.isNPC() || BukkitTools.isOnline(resident.getName()) || now - resident.getLastOnline() <= deleteTime)
-					residents++;
-			}
-			n += residents * ratio;
-		}
-		else
-			n += town.getNumResidents() * ratio;
-
-		n += getNationBonusBlocks(town);
-		
-		int ratioSizeLimit = getInt(ConfigNodes.CLAIMING_TOWN_BLOCK_LIMIT);
-		if (ratio != 0 && ratioSizeLimit > 0)
-			n = Math.min(ratioSizeLimit, n);
+	public static int getMaxTownBlocks(Town town, int levelModifier) {
+		final Nation nation = town.getNationOrNull();
 
 		return getMaxTownBlocks(town, town.getNumResidents(), levelModifier, nation == null ? 0 : getNationLevelModifier(nation), 0);
 	}
@@ -1399,7 +1378,7 @@ public class TownySettings {
 				if (resident.isNPC() || BukkitTools.isOnline(resident.getName()) || now - resident.getLastOnline() <= deleteTime)
 					residents++;
 			}
-			n += residents * ratio;
+			amount += residents * ratio;
 		}
 		else
 			amount += numResidents * ratio;
