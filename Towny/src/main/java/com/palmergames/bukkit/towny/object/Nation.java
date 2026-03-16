@@ -668,6 +668,7 @@ public class Nation extends Government {
 			nat_hm.put("registered", getRegistered());
 			nat_hm.put("nationBoard", getBoard());
 			nat_hm.put("mapColorHexCode", getMapColorHexCode());
+			nat_hm.put("manualNationLevel", getManualNationLevel());
 			nat_hm.put("nationSpawn", hasSpawn() ? parseLocationForSaving(getSpawn()) : "");
 			nat_hm.put("isPublic", isPublic());
 			nat_hm.put("isOpen", isOpen());
@@ -735,6 +736,7 @@ public class Nation extends Government {
 			setBoard(dataAsMap.getOrDefault("nationBoard", TownySettings.getNationDefaultBoard()));
 			setMapColorHexCode(dataAsMap.getOrDefault("mapColorHexCode", MapUtil.generateRandomNationColourAsHexCode()));
 			setActiveWar(getOrDefault(dataAsMap, "hasActiveWar", false));
+			setManualNationLevel(getOrDefault(dataAsMap, "manualNationLevel", -1));
 
 			line = dataAsMap.get("sanctionedTowns");
 			if (hasData(line))
