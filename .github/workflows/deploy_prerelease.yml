@@ -5,12 +5,13 @@ env:
   CURR_VER: 0.0.0.0
   SUPPORTED: " for MC 1.19.* & 1.20.* & 1.21.*"
 jobs:
-  checkout_and_compile:
+  build_towny_and_publish_prerelease:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         java: ['21']
-    name: Checkout and Compile Towny
+    name: Build Towny and Publish Pre-Release
     steps:
       - name: checkout repo content
         uses: actions/checkout@v3 # checkout the repository content to github runner.
@@ -25,11 +26,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn -B clean package -DskipTests=false
-  prepare_prerelease_body:
-    needs: checkout_and_compile
-    runs-on: ubuntu-latest
-    name: Prepare Prerelease Body
-    steps:
+
       - name: setup python
         uses: actions/setup-python@v3
         with:
@@ -40,20 +37,14 @@ jobs:
         run: mkdir staging && cp sponsors.txt staging
       - name: execute sponsortable.py
         run: python ./.github/workflows/prerelease/sponsortable.py
-      - name: execute preRelease.py
+      - name: execute prerelease.py
         id: prerelease_py
         run: python ./.github/workflows/prerelease/prerelease.py
-  publish_prerelease:
-    needs: [checkout_and_compile, prepare_prerelease_body]
-    runs-on: ubuntu-latest
-    name: Publish Prerelease
-    steps:
       - name: create pre-release
         uses: softprops/action-gh-release@v1
         with:
           body_path: ./staging/prerelease.txt
           prerelease: true
-          draft: true
           token: ${{ github.token }}
           tag_name: ${{ env.CURR_VER }}
           name: ${{ env.CURR_VER }}${{ env.SUPPORTED }}
