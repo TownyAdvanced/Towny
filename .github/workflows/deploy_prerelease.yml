@@ -5,26 +5,6 @@ env:
   CURR_VER: 0.0.0.0
   SUPPORTED: " for MC 1.19.* & 1.20.* & 1.21.*"
 jobs:
-  checkout_and_compile:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: ['21']
-    name: Checkout and Compile Towny
-    steps:
-      - name: checkout repo content
-        uses: actions/checkout@v3 # checkout the repository content to github runner.
-      - name: set up eclipse temurin
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: ${{ matrix.java }}
-          java-package: jdk
-          cache: 'maven'
-      - name: compile towny with maven
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B clean package -DskipTests=false
   prepare_prerelease_body:
     needs: checkout_and_compile
     runs-on: ubuntu-latest
@@ -45,21 +25,61 @@ jobs:
       - name: execute preRelease.py
         id: prerelease_py
         run: python ./.github/workflows/prerelease/prerelease.py
+      - name: save txt
+        uses: actions/upload-artifact@v4
+        with:
+          name: prerelease.txt
+          path: ./staging/
+  checkout_and_compile:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['21']
+    name: Checkout and Compile Towny
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner.
+      - name: set up eclipse temurin
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          java-package: jdk
+          cache: 'maven'
+      - name: compile towny with maven
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn -B clean package -DskipTests=false
+      - name: save jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: towny-${{ env.CURR_VER }}.jar
+          path: ./Towny/target/
   publish_prerelease:
     needs: [checkout_and_compile, prepare_prerelease_body]
     runs-on: ubuntu-latest
     name: Publish Prerelease
     steps:
+      - name: load towny jar
+        uses: actions/download-artifact@v4
+        with:
+          name: towny-${{ env.CURR_VER }}.jar
+          path: ./
+      - name: load prerelease.txt
+        uses: actions/download-artifact@v4
+        with:
+          name: prerelease.txt
+          path: ./
       - name: create pre-release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: ./staging/prerelease.txt
+          body_path: ./prerelease.txt
           prerelease: true
           draft: true
           token: ${{ github.token }}
           tag_name: ${{ env.CURR_VER }}
           name: ${{ env.CURR_VER }}${{ env.SUPPORTED }}
           files: |
-            ./Towny/target/towny-${{ env.CURR_VER }}.jar
+            ./towny-${{ env.CURR_VER }}.jar
         env:
           GITHUB_REPOSITORY: my_gh_org/my_gh_repo
