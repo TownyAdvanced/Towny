@@ -45,7 +45,6 @@ jobs:
         with:
           body_path: ./staging/prerelease.txt
           prerelease: true
-          draft: true
           token: ${{ github.token }}
           tag_name: ${{ env.CURR_VER }}
           name: ${{ env.CURR_VER }}${{ env.SUPPORTED }}
