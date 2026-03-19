@@ -1898,6 +1898,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				throw new TownyException(Translatable.of("msg_town_or_nation_level_not_high_enough_for_this_rank", townWord, rank, townWord, levelNumber, rankLevelReq));
 		}
 
+		if (!TownyPerms.governmentIsAllowedToAssignRank(rank, target.getTownOrNull())) {
+			Town town = target.getTownOrNull();
+			int uses = TownyPerms.numberOfTimesRankIsUsedByGovernment(rank, town);
+			int limit = TownyPerms.governmentRankLimit(rank, town);
+			throw new TownyException(Translatable.of("msg_rank_can_only_be_assigned_x_times", rank, target.getName(), limit, townWord, uses));
+		}
+
 		BukkitTools.ifCancelledThenThrow(new TownAddResidentRankEvent(target, rank, target.getTownOrNull()));
 
 		target.addTownRank(rank);
