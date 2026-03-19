@@ -60,8 +60,8 @@ public class TownyPerms {
 	private static Towny plugin;
 	private static final List<String> vitalGroups = Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks");
 	private static final HashMap<UUID, String> residentPrefixMap = new HashMap<>();
-	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
 	private static final String RANKLIMIT = "towny.ranklimit.";
+	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
 	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
 	private static final String RANK_TOWN_LEVEL_REQUIREMENT_PREFIX = "towny.town_level_requirement.";
 	private static final String RANK_NATION_LEVEL_REQUIREMENT_PREFIX = "towny.nation_level_requirement.";
@@ -600,52 +600,6 @@ public class TownyPerms {
 	}
 
 	/*
-	 * Resident Primary Rank / Rank Prefix 
-	 */
-
-	public static String getResidentPrimaryRankPrefix(Resident resident) {
-		return residentPrefixMap.getOrDefault(resident.getUUID(), setResidentPrimaryRankPrefix(resident));
-	}
-
-	private static String setResidentPrimaryRankPrefix(Resident resident) {
-		String prefix = getPrimaryRankPrefix(resident);
-		residentPrefixMap.put(resident.getUUID(), prefix);
-		return prefix;
-	}
-
-
-	private static String getPrimaryRankPrefix(Resident resident) {
-		String prefix = getHighestPriorityRankPrefix(resident);
-		return prefix == null ? "" : prefix;
-	}
-
-	@Nullable
-	private static String getHighestPriorityRankPrefix(Resident resident) {
-		if (resident.hasNation() && !resident.getNationRanks().isEmpty()) {
-			String rank = getHighestPriorityRank(resident, resident.getNationRanks(), r -> getNationRankPermissions(r));
-			String prefix = getPrefixFromRank(getNationRankPermissions(rank));
-			if (prefix != null)
-				return prefix;
-		}
-
-		if (resident.hasTown() && !resident.getTownRanks().isEmpty()) {
-			String rank = getHighestPriorityRank(resident, resident.getTownRanks(), r -> getTownRankPermissions(r));
-			String prefix = getPrefixFromRank(getTownRankPermissions(rank));
-			if (prefix != null)
-				return prefix;
-		}
-
-		return null;
-	}
-
-	private static String getPrefixFromRank(List<String> nodes) {
-		for (String node : nodes)
-			if (node.startsWith(RANKPREFIX_PREFIX))
-				return node.substring(RANKPREFIX_PREFIX.length());
-		return null;
-	}
-
-	/*
 	 * Rank Limits
 	 */
 
@@ -694,6 +648,52 @@ public class TownyPerms {
 			}
 		}
 		return -1;
+	}
+
+	/*
+	 * Resident Primary Rank / Rank Prefix 
+	 */
+
+	public static String getResidentPrimaryRankPrefix(Resident resident) {
+		return residentPrefixMap.getOrDefault(resident.getUUID(), setResidentPrimaryRankPrefix(resident));
+	}
+
+	private static String setResidentPrimaryRankPrefix(Resident resident) {
+		String prefix = getPrimaryRankPrefix(resident);
+		residentPrefixMap.put(resident.getUUID(), prefix);
+		return prefix;
+	}
+
+
+	private static String getPrimaryRankPrefix(Resident resident) {
+		String prefix = getHighestPriorityRankPrefix(resident);
+		return prefix == null ? "" : prefix;
+	}
+
+	@Nullable
+	private static String getHighestPriorityRankPrefix(Resident resident) {
+		if (resident.hasNation() && !resident.getNationRanks().isEmpty()) {
+			String rank = getHighestPriorityRank(resident, resident.getNationRanks(), r -> getNationRankPermissions(r));
+			String prefix = getPrefixFromRank(getNationRankPermissions(rank));
+			if (prefix != null)
+				return prefix;
+		}
+
+		if (resident.hasTown() && !resident.getTownRanks().isEmpty()) {
+			String rank = getHighestPriorityRank(resident, resident.getTownRanks(), r -> getTownRankPermissions(r));
+			String prefix = getPrefixFromRank(getTownRankPermissions(rank));
+			if (prefix != null)
+				return prefix;
+		}
+
+		return null;
+	}
+
+	private static String getPrefixFromRank(List<String> nodes) {
+		for (String node : nodes)
+			if (node.startsWith(RANKPREFIX_PREFIX))
+				return node.substring(RANKPREFIX_PREFIX.length());
+		return null;
 	}
 
 	/*
