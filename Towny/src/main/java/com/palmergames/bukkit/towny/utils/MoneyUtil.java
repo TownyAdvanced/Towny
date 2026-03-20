@@ -199,7 +199,15 @@ public class MoneyUtil {
 			minAmount = nation ? TownySettings.getNationMinDeposit() : TownySettings.getTownMinDeposit();
 		if (amount < minAmount)
 			throw new TownyException(Translatable.of("msg_err_must_be_greater_than_or_equal_to", formatMoney(minAmount)));
-			
+
+		int maxAmount = 0;
+		if (withdraw)
+			maxAmount = nation ? TownySettings.getNationMaxWithdraw() : TownySettings.getTownMaxWithdraw();
+		else
+			maxAmount = nation ? TownySettings.getNationMaxDeposit() : TownySettings.getTownMaxDeposit();
+		if (maxAmount > -1 && amount > maxAmount)
+			throw new TownyException(Translatable.of("msg_err_must_be_less_than_or_equal_to", formatMoney(maxAmount)));
+
 	}
 
 	private static void testBankPlotRules(Town town, Location loc) throws TownyException {

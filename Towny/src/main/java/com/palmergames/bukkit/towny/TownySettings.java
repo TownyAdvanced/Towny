@@ -3294,6 +3294,16 @@ public class TownySettings {
 		return getInt(ConfigNodes.ECO_MIN_WITHDRAW_TOWN);
 	}
 
+	public static int getTownMaxDeposit() {
+
+		return getInt(ConfigNodes.ECO_MAX_DEPOSIT_TOWN);
+	}
+
+	public static int getTownMaxWithdraw() {
+
+		return getInt(ConfigNodes.ECO_MAX_WITHDRAW_TOWN);
+	}
+
 	public static double getNationBankCap(Nation nation) {
 		return nation.getNationLevel().bankCapModifier * getNationBankCap();
 	}
@@ -3327,7 +3337,17 @@ public class TownySettings {
 
 		return getInt(ConfigNodes.ECO_MIN_WITHDRAW_NATION);
 	}
-	
+
+	public static int getNationMaxDeposit() {
+
+		return getInt(ConfigNodes.ECO_MAX_DEPOSIT_NATION);
+	}
+
+	public static int getNationMaxWithdraw() {
+
+		return getInt(ConfigNodes.ECO_MAX_WITHDRAW_NATION);
+	}
+
 	public static boolean isBankActionDisallowedOutsideTown() {
 		
 		return getBoolean(ConfigNodes.ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN);
