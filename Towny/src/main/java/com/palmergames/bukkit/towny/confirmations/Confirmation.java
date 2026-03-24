@@ -22,6 +22,7 @@ public class Confirmation {
 	private final boolean isAsync;
 	private String pluginPrefix;
 	private final CancellableTownyEvent event;
+	private final boolean serious;
 
 	/**
 	 * Creates a new {@link ConfirmationBuilder} with the supplied accept handler.
@@ -65,6 +66,7 @@ public class Confirmation {
 		this.cancelCommand = builder.cancelCommand;
 		this.pluginPrefix = builder.pluginPrefix;
 		this.event = builder.event;
+		this.serious = builder.serious;
 	}
 	
 	/**
@@ -143,5 +145,9 @@ public class Confirmation {
 	 */
 	public boolean isAsync() {
 		return isAsync;
+	}
+
+	public boolean isSerious() {
+		return serious;
 	}
 }
