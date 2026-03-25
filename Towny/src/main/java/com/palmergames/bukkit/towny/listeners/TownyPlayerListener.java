@@ -68,6 +68,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -83,6 +84,7 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -776,6 +778,10 @@ public class TownyPlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent event) {
+		if (ignoreEvent(event)) {
+			return;
+		}
+
 		final Player player = event.getPlayer();
 		final ItemStack item = player.getInventory().getItem(event.getHand());
 
@@ -1590,5 +1596,17 @@ public class TownyPlayerListener implements Listener {
 			// Method does not exist in this version
 			return false;
 		}
+	}
+	
+	private boolean ignoreEvent(final PlayerEvent event) {
+		if (plugin.isError()) {
+			if (event instanceof Cancellable cancellable) {
+				cancellable.setCancelled(true); // Always cancel events while we're in safe mode.
+			}
+
+			return true;
+		}
+
+		return !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld());
 	}
 }
