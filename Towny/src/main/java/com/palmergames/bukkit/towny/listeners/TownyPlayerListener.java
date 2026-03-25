@@ -85,6 +85,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
@@ -96,6 +97,7 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Arrays;
@@ -675,7 +677,6 @@ public class TownyPlayerListener implements Listener {
 	* Handles right clicking of entities: Item Frames, Paintings, Minecarts.
 	* Entities right clicked with an item, tests the item for ItemUse.
 	* Sheeps and wolves from being dyed.
-	* Golden dandelions being used on baby animals.
 	* 
 	* Treats entities as their Materials in order to run permission tests.
 	*/
@@ -760,11 +761,6 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		if (item.getKey().equals(GOLDEN_DANDELION_KEY) && event.getRightClicked() instanceof Ageable ageable && !ageable.isAdult() && !TownyActionEventExecutor.canDestroy(player, ageable.getLocation(), item)) {
-			event.setCancelled(true);
-			return;
-		}
-
 		/*
 		 * Item_use protection.
 		 */
@@ -772,6 +768,19 @@ public class TownyPlayerListener implements Listener {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			event.setCancelled(!TownyActionEventExecutor.canItemuse(player, event.getRightClicked().getLocation(), item));
 			return;
+		}
+	}
+
+	/**
+	 * Protects against golden dandelions being used on baby animals.
+	 */
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent event) {
+		final Player player = event.getPlayer();
+		final ItemStack item = player.getInventory().getItem(event.getHand());
+
+		if (item.getType().getKey().equals(GOLDEN_DANDELION_KEY) && event.getRightClicked() instanceof Ageable ageable && !ageable.isAdult() && !TownyActionEventExecutor.canDestroy(player, ageable.getLocation(), item.getType())) {
+			event.setCancelled(true);
 		}
 	}
 
