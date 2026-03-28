@@ -2175,3 +2175,4 @@ msg_nearby_town_nation: ' <aqua>[%s]'
 msg_conquered_status_granted: "您已设置 %s 的征服状态为 %s 天。"
 msg_conquered_status_granted_unlimited: "您已设置 %s 的征服状态为无限期。"
 msg_err_must_specify_on_or_off: "您必须指定开启或关闭。"
+msg_nation_level_overridden_with: '国家 %s 已将其国家级别设置为 %s。'
