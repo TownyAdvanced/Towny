@@ -19,14 +19,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.lang.invoke.MethodHandle;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-public class TownyCanvasEvents implements ForkedServerListener {
+public class TownyCanvasEvents implements SoftwareDependentListener {
 
     private static final String ASYNC_TELEPORT_EVENT = "io.canvasmc.canvas.event.EntityTeleportAsyncEvent";
 
@@ -80,16 +79,10 @@ public class TownyCanvasEvents implements ForkedServerListener {
                 if (resident == null)
                     return;
 
-                PlayerMoveEvent moveEvent = new PlayerMoveEvent(player, from, to);
-                moveEvent.callEvent();
-
                 boolean isAdmin = !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
                 if (isAdmin) {
                     // Admins don't get restricted further but they do need to fire the PlayerChangePlotEvent.
-                    townyPlayerListener.onPlayerMove(moveEvent);
-                    if (moveEvent.isCancelled()) {
-                        ((Cancellable) event).setCancelled(true);
-                    }
+                    townyPlayerListener.handleCellChange(player, from, to, (Cancellable) event);
                     return;
                 }
 
@@ -150,10 +143,7 @@ public class TownyCanvasEvents implements ForkedServerListener {
                     resident.removeRespawnProtection();
 
                 // Send the event to the onPlayerMove so Towny can fire the PlayerChangePlotEvent.
-                townyPlayerListener.onPlayerMove(moveEvent);
-                if (moveEvent.isCancelled()) {
-                    ((Cancellable) event).setCancelled(true);
-                }
+                townyPlayerListener.handleCellChange(player, from, to, (Cancellable) event);
             });
         };
     }

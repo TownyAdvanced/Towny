@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 @ApiStatus.Internal
-public class TownyPaperEvents implements ForkedServerListener {
+public class TownyPaperEvents implements SoftwareDependentListener {
 	private final Towny plugin;
 	
 	private static final String SIGN_OPEN_EVENT = "io.papermc.paper.event.player.PlayerOpenSignEvent";

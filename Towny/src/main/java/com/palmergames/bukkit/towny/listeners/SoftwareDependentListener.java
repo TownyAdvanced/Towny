@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public interface ForkedServerListener extends Listener {
+public interface SoftwareDependentListener extends Listener {
 
     void register();
 

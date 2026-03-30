@@ -67,6 +67,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -775,16 +776,16 @@ public class TownyPlayerListener implements Listener {
 		// Let's ignore Citizens NPCs
 		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
-		
+
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
 		}
 
-		Player player = event.getPlayer();
-		Location to = event.getTo();
-		Location from = event.getFrom();
+		handleCellChange(event.getPlayer(), event.getFrom(), event.getTo(), event);
+	}
 
+	public void handleCellChange(Player player, Location from, Location to, Cancellable event) {
 		/*
 		 * Abort if we haven't really moved, or if the event.getTo() is null (which is allowed...)
 		 */
@@ -795,14 +796,14 @@ public class TownyPlayerListener implements Listener {
 
 		if (this.teleportWarmupTime > 0 && this.isMovementCancellingWarmup) {
 			final Resident resident = TownyAPI.getInstance().getResident(player);
-			
+
 			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident, CancelledTeleportReason.MOVEMENT))
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
 		}
 
 		if (WorldCoord.cellChanged(from, to)) {
 
-			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());				
+			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());
 			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld());
 			if (fromWorld == null || toWorld == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("not_registered"));
@@ -810,7 +811,7 @@ public class TownyPlayerListener implements Listener {
 			}
 			WorldCoord fromCoord = WorldCoord.parseWorldCoord(from);
 			WorldCoord toCoord = WorldCoord.parseWorldCoord(to);
-			
+
 			onPlayerMoveChunk(player, fromCoord, toCoord, event);
 		}
 	}
@@ -847,7 +848,7 @@ public class TownyPlayerListener implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-			if (!TownySettings.JailAllowsTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT)) {
+			if (!TownySettings.JailAllowsTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CONSUMABLE_EFFECT)) {
 				TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
 				return;
@@ -865,7 +866,7 @@ public class TownyPlayerListener implements Listener {
 						event.setCancelled(true);
 						return;
 					}
-					if (!TownySettings.canOutlawsUseTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CHORUS_FRUIT)) {
+					if (!TownySettings.canOutlawsUseTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CONSUMABLE_EFFECT)) {
 						TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_outlawed_players_no_teleport"));
 						event.setCancelled(true);
 						return;
@@ -875,7 +876,7 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		// Test to see if CHORUS_FRUIT is in the item_use list.
-		if (event.getCause() == TeleportCause.CHORUS_FRUIT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo())) {
+		if (event.getCause() == TeleportCause.CONSUMABLE_EFFECT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo())) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT)) {
 				event.setCancelled(true);
@@ -969,14 +970,18 @@ public class TownyPlayerListener implements Listener {
 	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent
 	*/
-	private void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, PlayerMoveEvent moveEvent) {
+	private void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Cancellable moveEvent) {
 
 		final PlayerCache cache = plugin.getCacheOrNull(player.getUniqueId());
 		if (cache != null)
 			cache.resetAndUpdate(to);
 
-		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to, moveEvent);
+		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to);
 		BukkitTools.fireEvent(event);
+
+		if (event.isCancelled()) {
+			moveEvent.setCancelled(true);
+		}
 	}
 	
 	/*

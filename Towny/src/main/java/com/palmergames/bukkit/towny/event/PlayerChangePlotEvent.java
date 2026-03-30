@@ -8,6 +8,7 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -16,48 +17,43 @@ import org.bukkit.event.player.PlayerMoveEvent;
  * Author: Chris H (Zren / Shade)
  * Date: 4/15/12
  */
-public class PlayerChangePlotEvent extends Event {
+public class PlayerChangePlotEvent extends Event implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
 	
 	private final Player player;
 	private final WorldCoord from;
 	private final WorldCoord to;
-	private final PlayerMoveEvent moveEvent;
+	private boolean cancelled;
 	private boolean showPlotNotifications;
 	
 	@Override
     public HandlerList getHandlers() {
-    	
         return handlers;
     }
     
     public static HandlerList getHandlerList() {
-
 		return handlers;
 	}
 	
-	public PlayerChangePlotEvent(Player player, WorldCoord from, WorldCoord to, PlayerMoveEvent moveEvent) {
+	public PlayerChangePlotEvent(Player player, WorldCoord from, WorldCoord to) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.from = from;
 		this.to = to;
-		this.moveEvent = moveEvent;
 		this.showPlotNotifications = TownySettings.getShowTownNotifications() && TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_RECEIVES_PLOT_NOTIFICATIONS.getNode());
 	}
 
 	public WorldCoord getFrom() {
-
 		return from;
 	}
 
+	@Deprecated(forRemoval = true)
 	public PlayerMoveEvent getMoveEvent() {
-		
-		return moveEvent;
+		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent. Please use #setCancelled to cancel this event instead.");
 	}
 	
 	public WorldCoord getTo() {
-
 		return to;
 	}
 	
@@ -85,5 +81,15 @@ public class PlayerChangePlotEvent extends Event {
 	 */
 	public void setShowingPlotNotifications(boolean showPlotNotifications) {
 		this.showPlotNotifications = showPlotNotifications;
+	}
+
+	@Override
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
 	}
 }
