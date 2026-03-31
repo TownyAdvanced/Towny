@@ -45,8 +45,12 @@ public class PlayerChangePlotEvent extends Event {
 		return from;
 	}
 
-	@Deprecated(forRemoval = true)
-	public org.bukkit.event.player.PlayerMoveEvent getMoveEvent() {
+	/**
+	 * @deprecated This event no longer includes the delegate PlayerMoveEvent. Use {@link #getFrom()} and {@link #getTo()} instead.
+	 * @throws UnsupportedOperationException always, do not call.
+	 */
+	@Deprecated(since = "0.102.0.12", forRemoval = true)
+	public org.bukkit.event.player.PlayerMoveEvent getMoveEvent() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 	
