@@ -8,23 +8,20 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
  * Author: Chris H (Zren / Shade)
  * Date: 4/15/12
  */
-public class PlayerChangePlotEvent extends Event implements Cancellable {
+public class PlayerChangePlotEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	
 	private final Player player;
 	private final WorldCoord from;
 	private final WorldCoord to;
-	private boolean cancelled;
 	private boolean showPlotNotifications;
 	
 	@Override
@@ -49,8 +46,8 @@ public class PlayerChangePlotEvent extends Event implements Cancellable {
 	}
 
 	@Deprecated(forRemoval = true)
-	public PlayerMoveEvent getMoveEvent() {
-		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent. Please use #setCancelled to cancel this event instead.");
+	public org.bukkit.event.player.PlayerMoveEvent getMoveEvent() {
+		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 	
 	public WorldCoord getTo() {
@@ -83,13 +80,4 @@ public class PlayerChangePlotEvent extends Event implements Cancellable {
 		this.showPlotNotifications = showPlotNotifications;
 	}
 
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
 }

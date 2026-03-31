@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -18,7 +17,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 public class PlayerEntersIntoDistrictEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private final District enteredDistrict;
-	private final PlayerMoveEvent pme;
 	private final WorldCoord from;
 	private final WorldCoord to;
 	private final Player player;
@@ -32,12 +30,11 @@ public class PlayerEntersIntoDistrictEvent extends Event {
 		return handlers;
 	}
 
-	public PlayerEntersIntoDistrictEvent(Player player, WorldCoord to, WorldCoord from, District enteredDistrict, PlayerMoveEvent pme) {
+	public PlayerEntersIntoDistrictEvent(Player player, WorldCoord to, WorldCoord from, District enteredDistrict) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.enteredDistrict = enteredDistrict;
 		this.player = player;
 		this.from = from;
-		this.pme = pme;
 		this.to = to;
 	}
 
@@ -48,10 +45,6 @@ public class PlayerEntersIntoDistrictEvent extends Event {
 	@Nullable
 	public Resident getResident() {
 		return TownyAPI.getInstance().getResident(player);
-	}
-
-	public PlayerMoveEvent getPlayerMoveEvent() {
-		return pme;
 	}
 
 	public District getEnteredDistrict() {

@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -16,7 +15,6 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 
 	private final Town leftTown;
-	private final PlayerMoveEvent pme;
 	private final WorldCoord from;
 	private final Player player;
 	private final WorldCoord to;
@@ -30,12 +28,11 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 		return handlers;
 	}
 
-	public PlayerExitsFromTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town leftTown, PlayerMoveEvent pme) {
+	public PlayerExitsFromTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town leftTown) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.leftTown = leftTown;
 		this.player = player;
 		this.from = from;
-		this.pme = pme;
 		this.to = to;
 	}
 
@@ -46,10 +43,6 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 	@Nullable
 	public Resident getResident() {
 		return TownyAPI.getInstance().getResident(player);
-	}
-
-	public PlayerMoveEvent getPlayerMoveEvent() {
-		return pme;
 	}
 
 	public Town getLeftTown() {
