@@ -487,7 +487,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			output.add(translator.of("towny_prices_price_shop", prettyMoney(town.getCommercialPlotPrice()), prettyMoney(town.getEmbassyPlotPrice())));
 
 			output.add(translator.of("towny_prices_taxes_plot", (town.isTaxPercentage()
-					? town.getTaxes() + "%" + translator.of("msg_towny_prices_percentage_capped_at", prettyMoney(TownySettings.getMaxTownTaxPercentAmount()))
+					? town.getTaxes() + "%" + translator.of("msg_towny_prices_percentage_capped_at", prettyMoney(town.getMaxPercentTaxAmount()))
 					: prettyMoney(town.getTaxes())), prettyMoney(town.getPlotTax())));
 			output.add(translator.of("towny_prices_taxes_shop", prettyMoney(town.getCommercialPlotTax()), prettyMoney(town.getEmbassyPlotTax())));
 			output.add(translator.of("towny_prices_town_neutral_tax", prettyMoney(TownySettings.getTownNeutralityCost(town))));
@@ -510,7 +510,7 @@ public class TownyCommand extends BaseCommand implements CommandExecutor {
 			if (nation != null) {
 				output.add(translator.of("towny_prices_nationname", nation.getFormattedName()));
 				output.add(translator.of("towny_prices_nation_tax", (nation.isTaxPercentage()
-						? nation.getTaxes() + "%" + translator.of("msg_towny_prices_percentage_capped_at", prettyMoney(TownySettings.getMaxNationTaxPercentAmount()))
+						? nation.getTaxes() + "%" + translator.of("msg_towny_prices_percentage_capped_at", prettyMoney(nation.getMaxPercentTaxAmount()))
 						: prettyMoney(nation.getTaxes())), prettyMoney(TownySettings.getNationNeutralityCost(nation))));
 			}
 		}
