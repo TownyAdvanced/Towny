@@ -97,8 +97,11 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.projectiles.ProjectileSource;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Handle events for all Player related events
@@ -146,7 +149,7 @@ public class TownyPlayerListener implements Listener {
 
 		// Test and kick any players with invalid names.
 		if (player.getName().contains(" ")) {
-			player.kickPlayer("Invalid name!");
+			player.kick(Component.text("Invalid name!"));
 			return;
 		}
 
@@ -776,7 +779,7 @@ public class TownyPlayerListener implements Listener {
 		// Let's ignore Citizens NPCs
 		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
-
+		
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -785,6 +788,23 @@ public class TownyPlayerListener implements Listener {
 		handleCellChange(event.getPlayer(), event.getFrom(), event.getTo(), event);
 	}
 
+	//TODO: Remove when we support 1.21.5 and upwards.
+	@SuppressWarnings("removal")
+	private TeleportCause chorusFruitTeleport = MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_21_5) ? TeleportCause.CHORUS_FRUIT : TeleportCause.CONSUMABLE_EFFECT;
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		Player player = event.getPlayer();
+		handleTeleportCellChange(player, event.getCause(), event.getFrom(), event.getTo(), event);
+	}
+
+	/**
+	 * Calls the proper events to handle a player changing townblocks.
+	 * @param player The player who is moving.
+	 * @param from The location the player is moving from.
+	 * @param to The location the player is moving to.
+	 * @param event The cancellable event that triggered this cell change. This will usually be a PlayerMoveEvent, but it could be a PlayerTeleportEvent if the teleport caused a cell change.
+	 */
 	public void handleCellChange(Player player, Location from, Location to, Cancellable event) {
 		/*
 		 * Abort if we haven't really moved, or if the event.getTo() is null (which is allowed...)
@@ -796,14 +816,14 @@ public class TownyPlayerListener implements Listener {
 
 		if (this.teleportWarmupTime > 0 && this.isMovementCancellingWarmup) {
 			final Resident resident = TownyAPI.getInstance().getResident(player);
-
+			
 			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident, CancelledTeleportReason.MOVEMENT))
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
 		}
 
 		if (WorldCoord.cellChanged(from, to)) {
 
-			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());
+			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());				
 			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld());
 			if (fromWorld == null || toWorld == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("not_registered"));
@@ -811,17 +831,25 @@ public class TownyPlayerListener implements Listener {
 			}
 			WorldCoord fromCoord = WorldCoord.parseWorldCoord(from);
 			WorldCoord toCoord = WorldCoord.parseWorldCoord(to);
-
+			
 			onPlayerMoveChunk(player, fromCoord, toCoord, event);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerTeleport(PlayerTeleportEvent event) {
+	/**
+	 * Handles a player moving from one TownBlock to another, including firing the PlayerChangePlotEvent and handling plot notifications.
+	 * This should only be called from teleportation events.
+	 * @param player The player who is moving.
+	 * @param cause The teleport cause.
+	 * @param from The location the player is moving from.
+	 * @param to The location the player is moving to.
+	 * @param event The cancellable event that triggered this cell change. This will usually be a PlayerMoveEvent, but it could be a PlayerTeleportEvent if the teleport caused a cell change.
+	 */
+	public void handleTeleportCellChange(Player player, TeleportCause cause, Location from, Location to, Cancellable event) {
 		// Let's ignore Citizens NPCs. This must come before the safemode check, as Citizens stores their NPCs
 		// at the world spawn until a player loads a chunk, to which the NPC is then teleported. Towny would
 		// prevent them teleporting, leaving them at spawn even after Safe Mode is cleaned up.
-		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
+		if (PluginIntegrations.getInstance().isNPC(player))
 			return;
 
 		if (plugin.isError()) {
@@ -829,7 +857,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		Player player = event.getPlayer();
+
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident == null)
 			return;
@@ -837,19 +865,19 @@ public class TownyPlayerListener implements Listener {
 		boolean isAdmin = !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
 		if (isAdmin) {
 			// Admins don't get restricted further but they do need to fire the PlayerChangePlotEvent.
-			onPlayerMove(event);
+			handleCellChange(player, from, to, event);
 			return;
 		}
 
 		// Cancel teleport if Jailed by Towny.
 		if (resident.isJailed()) {
-			if (event.getCause() == TeleportCause.COMMAND) {
-				TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_jailed_players_no_teleport"));
+			if (cause == TeleportCause.COMMAND) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
 				return;
 			}
-			if (!TownySettings.JailAllowsTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CONSUMABLE_EFFECT)) {
-				TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_jailed_players_no_teleport"));
+			if (!TownySettings.JailAllowsTeleportItems() && (cause == TeleportCause.ENDER_PEARL || cause == chorusFruitTeleport)) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_jailed_players_no_teleport"));
 				event.setCancelled(true);
 				return;
 			}
@@ -857,17 +885,17 @@ public class TownyPlayerListener implements Listener {
 
 		// Cancel teleport if resident is outlawed in Town.
 		if (!TownySettings.canOutlawsTeleportOutOfTowns()) {
-			TownBlock tb = TownyAPI.getInstance().getTownBlock(event.getFrom());
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(from);
 			if (tb != null && tb.hasTown()) {
 				Town town = tb.getTownOrNull();
 				if (town != null && town.hasOutlaw(resident)) {
-					if (event.getCause() == TeleportCause.COMMAND) {
-						TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_outlawed_players_no_teleport"));
+					if (cause == TeleportCause.COMMAND) {
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_outlawed_players_no_teleport"));
 						event.setCancelled(true);
 						return;
 					}
-					if (!TownySettings.canOutlawsUseTeleportItems() && (event.getCause() == TeleportCause.ENDER_PEARL || event.getCause() == TeleportCause.CONSUMABLE_EFFECT)) {
-						TownyMessaging.sendErrorMsg(event.getPlayer(), Translatable.of("msg_err_outlawed_players_no_teleport"));
+					if (!TownySettings.canOutlawsUseTeleportItems() && (cause == TeleportCause.ENDER_PEARL || cause == chorusFruitTeleport)) {
+						TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_outlawed_players_no_teleport"));
 						event.setCancelled(true);
 						return;
 					}
@@ -876,18 +904,18 @@ public class TownyPlayerListener implements Listener {
 		}
 
 		// Test to see if CHORUS_FRUIT is in the item_use list.
-		if (event.getCause() == TeleportCause.CONSUMABLE_EFFECT && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, event.getTo())) {
+		if (cause == chorusFruitTeleport && TownySettings.isItemUseMaterial(Material.CHORUS_FRUIT, to)) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.CHORUS_FRUIT)) {
+			if (!TownyActionEventExecutor.canItemuse(player, to, Material.CHORUS_FRUIT)) {
 				event.setCancelled(true);
 				return;
 			}
 		}
 
 		// Test to see if Ender pearls is in the item_use list.
-		if (event.getCause() == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL, event.getTo())) {
+		if (cause == TeleportCause.ENDER_PEARL && TownySettings.isItemUseMaterial(Material.ENDER_PEARL, to)) {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
-			if (!TownyActionEventExecutor.canItemuse(event.getPlayer(), event.getTo(), Material.ENDER_PEARL)) {
+			if (!TownyActionEventExecutor.canItemuse(player, to, Material.ENDER_PEARL)) {
 				event.setCancelled(true);
 				return;
 			}
@@ -898,7 +926,7 @@ public class TownyPlayerListener implements Listener {
 			resident.removeRespawnProtection();
 
 		// Send the event to the onPlayerMove so Towny can fire the PlayerChangePlotEvent.
-		onPlayerMove(event);
+		handleCellChange(player, from, to, event);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -976,7 +1004,12 @@ public class TownyPlayerListener implements Listener {
 		if (cache != null)
 			cache.resetAndUpdate(to);
 
-		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to);
+		// Paper doesn't currently throw PlayerMoveEvents for passengers in vehicles who aren't the driver.
+		// This workaround ensures that any passengers that are players will cause PlayerChangePlotEvents.
+		if (player.isInsideVehicle())
+			handleAnimalVehiclesWorkaround(player, player.getVehicle() , from, to, moveEvent);
+
+		PlayerChangePlotEvent event = new PlayerChangePlotEvent(player, from, to, moveEvent);
 		BukkitTools.fireEvent(event);
 
 		if (event.isCancelled()) {
@@ -984,6 +1017,35 @@ public class TownyPlayerListener implements Listener {
 		}
 	}
 	
+	/**
+	 * Paper doesn't throw PlayerMoveEvents for players riding in animals like
+	 * HappyGhasts or Camels. Those animals don't throw VehicleMoveEvents and when
+	 * ridden they stop throwing EntityMoveEvents. The driver is the only one who
+	 * will have a PlayerMoveEvent thrown which is why we're doing this here.
+	 *
+	 * @param player    Player driving the Vehicle.
+	 * @param vehicle   Vehicle being driven.
+	 * @param from      WorldCoord the players are leaving.
+	 * @param to        WorldCoord the players are entering.
+	 * @param moveEvent PlayerMoveEvent of the driving player.
+	 */
+	private void handleAnimalVehiclesWorkaround(Player player, @Nullable Entity vehicle, WorldCoord from, WorldCoord to, PlayerMoveEvent moveEvent) {
+		if (!EntityLists.MULTISEAT_ANIMAL_MOUNTS.contains(vehicle))
+			return;
+
+		if (vehicle.getPassengers().size() < 2)
+			return;
+
+		List<Entity> passengers = new ArrayList<>(vehicle.getPassengers());
+		// Remove the driver, they throw their own PlayerMoveEvents.
+		passengers.remove(0);
+
+		for (Entity entity : passengers) {
+			if (entity instanceof Player rider)
+				BukkitTools.fireEvent(new PlayerChangePlotEvent(rider, from, to, moveEvent));
+		}
+	}
+
 	/*
 	* PlayerChangePlotEvent that can fire the PlayerLeaveTownEvent and PlayerEnterTownEvent
 	*/
