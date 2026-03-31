@@ -1,0 +1,22 @@
+name: Publish Javadoc on Prerelease
+
+on:
+  workflow_run:
+    workflows: ["Deploy Pre-release"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy JavaDoc 🚀
+        uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          javadoc-branch: javadoc
+          java-version: 21
+          target-folder: javadoc/prerelease
+          javadoc-source-folder: target/reports/apidocs
+          project: maven

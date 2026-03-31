@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
 import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
-import com.palmergames.bukkit.towny.event.town.TownCalculateTownLevelNumberEvent;
 import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownIsTownOverClaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
@@ -1945,14 +1944,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return Current TownLevel number.
 	 */
 	public int getLevelNumber() {
-		int modifier = TownySettings.isTownLevelDeterminedByTownBlockCount() ? getNumTownBlocks() : getNumResidents();
-		int townLevelNumber = getManualTownLevel() > -1
-				? Math.min(getManualTownLevel(), TownySettings.getTownLevelMax())
-				: TownySettings.getTownLevelWhichIsNotManuallySet(modifier, this);
-
-		TownCalculateTownLevelNumberEvent tctle = new TownCalculateTownLevelNumberEvent(this, townLevelNumber);
-		BukkitTools.fireEvent(tctle);
-		return tctle.getTownLevelNumber();
+		return TownySettings.getTownLevelNumber(this);
 	}
 
 	/**

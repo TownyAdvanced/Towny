@@ -5,6 +5,8 @@ import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Translatable;
 
+import net.kyori.adventure.text.Component;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
@@ -35,7 +37,7 @@ public class TownyLoginListener implements Listener {
 		if (!disallowed)
 			return;
 
-		event.disallow(Result.KICK_OTHER, "Towny is preventing you from logging in using this account name.");
+		event.disallow(Result.KICK_OTHER, Component.text("Towny is preventing you from logging in using this account name."));
 		TownyMessaging.sendMsgToOnlineAdmins(Translatable.of("msg_admin_blocked_login", 
 				event.getAddress().toString().substring(1), logInName));
 	}

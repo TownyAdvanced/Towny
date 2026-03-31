@@ -10761,3 +10761,17 @@ v0.92.0.11:
 0.102.0.11:
   - Prevent renaming town/nation files when name is invalid, courtesy of Warrior with PR #8137.
     - Flatfile databases which loaded towns/nations with invalid names could result in a town/nation file being created with a name instead of a UUID.
+0.102.0.12:
+  - Fix a bunch of nation and town level weirdness, courtesy of Warrior with PR #8091.
+    - Fixed getTownLevelMax always being 1 too high
+    - Fixed TownLevelDecrease/IncreaseEvent firing for towns that have a manually set town level.
+    - Fixed the code around the Town/NationLevelDecrease/IncreaseEvent bypassing the level calculate events, possibly causing them to be wrongly fired when a plugin is calculating its own levels with the level calculate events.
+    - Town merge:
+      - Fixed the town's resident amount being used instead of the nation's resident amount for max outpost calculations.
+      - Fixed max purchased blocks not using the number of townblocks to calculate the town level when configured to do so.
+      - Fixed the purchased and bonus blocks of the succumbing town not being limited by the town block limit option when the town_block_ratio is in use.
+    - Fixed nation level methods wrongly using the modifier and level interchangeably (i.e. getNationLevelFromGivenInt was returning the floored modifier rather than the actual level).
+  - Fix not throwing PlayerChangePlotEvents for passengers.
+  - Add NationRangeAllowTownEvent, courtesy of Veyronity with PR #8128.
+    - An event thrown when a town is assessed during the nation proximity tests, allowing plugins to modify nation proximity rules on a per-town basis.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.6.1 to 3.6.2.

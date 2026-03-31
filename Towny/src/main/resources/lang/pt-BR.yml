@@ -62,6 +62,7 @@ town_help_32: "Use /t set ? para obter ajuda."
 town_help_33: "Use /t buy ? para obter ajuda."
 town_help_34: "Use /t toggle ? para obter ajuda."
 town_help_35: "Use /t rank ? para obter ajuda."
+town_help_36: 'Lista cidades próximas classificadas por distância.'
 town_list_help_0: "Visualiza a página especificada."
 town_list_help_1: "Lista cidades por número de residentes, com a página especificada."
 town_list_help_2: "Lista as cidades que estão abertas, a partir da página especificada."

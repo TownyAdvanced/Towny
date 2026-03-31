@@ -5,12 +5,13 @@ env:
   CURR_VER: 0.0.0.0
   SUPPORTED: " for MC 1.19.* & 1.20.* & 1.21.*"
 jobs:
-  deploy_prerelease:
+  build_towny_and_publish_prerelease:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         java: ['21']
-    name: Deploying Towny Prerelease
+    name: Build Towny and Publish Pre-Release
     steps:
       - name: checkout repo content
         uses: actions/checkout@v3 # checkout the repository content to github runner.
@@ -25,21 +26,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn -B clean package -DskipTests=false
-      - name: setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: get sponsors.txt using PHP
-        run: php ./.github/workflows/prerelease/get_sponsors.php
-      - name: create staging dir
-        run: mkdir staging && cp sponsors.txt staging
+
       - name: setup python
         uses: actions/setup-python@v3
         with:
           python-version: 3.8 #install the python needed
+      - name: create sponsors.txt
+        run: python ./.github/workflows/prerelease/get_sponsors.py
+      - name: create staging dir
+        run: mkdir staging && cp sponsors.txt staging
       - name: execute sponsortable.py
         run: python ./.github/workflows/prerelease/sponsortable.py
-      - name: execute preRelease.py
+      - name: execute prerelease.py
         id: prerelease_py
         run: python ./.github/workflows/prerelease/prerelease.py
       - name: create pre-release
@@ -54,24 +52,3 @@ jobs:
             ./Towny/target/towny-${{ env.CURR_VER }}.jar
         env:
           GITHUB_REPOSITORY: my_gh_org/my_gh_repo
-      - name: prepare maven settings.xml
-        uses: s4u/maven-settings-action@v2.8.0
-        with:
-          githubServer: false
-          servers: |
-            [{
-              "id": "nexus",
-              "username": "${{ secrets.GLAREREPO_USERNAME }}",
-              "password": "${{ secrets.GLAREREPO_PASSWORD }}"
-            }]
-      - name: deploy to glaremaster repo
-        run: mvn deploy
-      - name: deploy javadoc to github pages
-        uses: MathieuSoysal/Javadoc-publisher.yml@v2.5.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          javadoc-branch: javadoc
-          java-version: 21
-          target-folder: javadoc/prerelease
-          javadoc-source-folder: target/reports/apidocs
-          project: maven

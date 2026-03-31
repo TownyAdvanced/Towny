@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySettings.NationLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
-import com.palmergames.bukkit.towny.event.nation.NationCalculateNationLevelNumberEvent;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -649,14 +648,7 @@ public class Nation extends Government {
 	 * @return Nation Level (int) for current population or amount of towns.
 	 */
 	public int getLevelNumber() {
-		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? getNumTowns() : getNumResidents();
-		int nationLevelNumber = getManualNationLevel() > -1
-			? Math.min(getManualNationLevel(), TownySettings.getNationLevelMax())
-			: TownySettings.getNationLevelFromGivenInt(modifier);
-		
-		NationCalculateNationLevelNumberEvent ncnle = new NationCalculateNationLevelNumberEvent(this, nationLevelNumber);
-		BukkitTools.fireEvent(ncnle);
-		return ncnle.getNationLevelNumber();
+		return TownySettings.getNationLevelNumber(this);
 	}
 
 	@Override

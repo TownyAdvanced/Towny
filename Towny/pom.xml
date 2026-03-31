@@ -13,7 +13,7 @@
 
     <artifactId>towny</artifactId>
     <packaging>jar</packaging>
-    <version>0.102.0.11</version>
+    <version>0.102.0.12</version>
 
     <licenses>
         <license>
@@ -275,6 +275,7 @@
                         <source>${java.version}</source>
                         <doclint>all,-missing</doclint>
                         <doctitle>Towny - ${project.version}</doctitle>
+                        <notimestamp>true</notimestamp>
                         <groups>
                             <group>
                                 <title>Events</title>
@@ -327,7 +328,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>3.6.2</version>
                     <configuration>
                         <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                         <artifactSet>
