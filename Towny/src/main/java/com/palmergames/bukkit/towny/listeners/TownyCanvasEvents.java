@@ -51,9 +51,7 @@ public class TownyCanvasEvents implements SoftwareDependentListener {
                 return;
             }
 
-            plugin.getScheduler().run(player, () -> {
-                townyPlayerListener.handleTeleportCellChange(player, cause, from, to, (Cancellable) event);
-            });
+            townyPlayerListener.handleTeleportCellChange(player, cause, from, to, (Cancellable) event);
         };
     }
 }
