@@ -2699,3 +2699,5 @@ msg_nation_level_overridden_with: 'The nation %s has had their nationlevel set t
 msg_nation_level_unset: 'The nation %s has had their manually-set nationlevel unset. Current nationlevel is %s.'
 
 msg_err_cannot_merge_x_seconds_remaining: 'You must wait %s seconds before asking %s to merge again.'
+
+msg_towny_prices_percentage_capped_at: ", up to %s"
