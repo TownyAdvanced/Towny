@@ -10775,3 +10775,25 @@ v0.92.0.11:
   - Add NationRangeAllowTownEvent, courtesy of Veyronity with PR #8128.
     - An event thrown when a town is assessed during the nation proximity tests, allowing plugins to modify nation proximity rules on a per-town basis.
   - Bump org.apache.maven.plugins:maven-shade-plugin from 3.6.1 to 3.6.2.
+0.102.0.13:
+  - Add protection for golden dandelion usage, courtesy of Warrior with PR #8129.
+  - Fix maxJailedUnjail method when town has no jailed residents, courtesy of Dionert with PR #8141. (First-Time Contributor!)
+  - Add maximum deposit and withdraw settings for towns and nations.
+    - Closes #8046.
+  - New Config Option: economy.banks.town_max_deposit
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to deposit in town bank at a time.
+  - New Config Option: economy.banks.town_max_withdraw
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to withdraw from town bank at a time.
+  - New Config Option: economy.banks.nation_max_deposit
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to deposit in nation bank at a time.
+  - New Config Option: economy.banks.nation_max_withdraw
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to withdraw from nation bank at a time.
+  - Send dangerous action confirmation messages in red instead of gray, courtesy of Veyronity with PR #8145.
+  - Remove enderchests from default switch_ids config, courtesy of Warrior with PR #8147.
+  - Fix /towny prices missing the max tax percent caps when a town or nation has taxpercent in use.
+  - Bump org.apache.logging.log4j:log4j-core from 2.25.3 to 2.25.4.
+  - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 9.0.2 to 9.1.0.
