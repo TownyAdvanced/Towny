@@ -223,5 +223,4 @@ public class TownyVehicleListener implements Listener {
 				BukkitTools.fireEvent(new PlayerChangePlotEvent(player, fromCoord, toCoord));
 		}
 	}
-
 }

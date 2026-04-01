@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
  * Author: Chris H (Zren / Shade)
@@ -26,10 +27,12 @@ public class PlayerChangePlotEvent extends Event {
 	
 	@Override
     public HandlerList getHandlers() {
+
         return handlers;
     }
     
     public static HandlerList getHandlerList() {
+
 		return handlers;
 	}
 	
@@ -42,6 +45,7 @@ public class PlayerChangePlotEvent extends Event {
 	}
 
 	public WorldCoord getFrom() {
+
 		return from;
 	}
 
@@ -49,8 +53,8 @@ public class PlayerChangePlotEvent extends Event {
 	 * @deprecated This event no longer includes the delegate PlayerMoveEvent. Use {@link #getFrom()} and {@link #getTo()} instead.
 	 * @throws UnsupportedOperationException always, do not call.
 	 */
-	@Deprecated(since = "0.102.0.12", forRemoval = true)
-	public org.bukkit.event.player.PlayerMoveEvent getMoveEvent() throws UnsupportedOperationException {
+	@Deprecated(since = "0.102.0.13", forRemoval = true)
+	public PlayerMoveEvent getMoveEvent() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 	
@@ -83,5 +87,4 @@ public class PlayerChangePlotEvent extends Event {
 	public void setShowingPlotNotifications(boolean showPlotNotifications) {
 		this.showPlotNotifications = showPlotNotifications;
 	}
-
 }

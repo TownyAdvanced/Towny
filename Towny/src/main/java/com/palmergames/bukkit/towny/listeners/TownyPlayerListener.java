@@ -779,7 +779,7 @@ public class TownyPlayerListener implements Listener {
 		// Let's ignore Citizens NPCs
 		if (PluginIntegrations.getInstance().isNPC(event.getPlayer()))
 			return;
-
+		
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -816,14 +816,14 @@ public class TownyPlayerListener implements Listener {
 
 		if (this.teleportWarmupTime > 0 && this.isMovementCancellingWarmup) {
 			final Resident resident = TownyAPI.getInstance().getResident(player);
-
+			
 			if (resident != null && resident.hasRequestedTeleport() && !resident.isAdmin() && TeleportWarmupTimerTask.abortTeleportRequest(resident, CancelledTeleportReason.MOVEMENT))
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_teleport_cancelled"));
 		}
 
 		if (WorldCoord.cellChanged(from, to)) {
 
-			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());
+			TownyWorld fromWorld = TownyAPI.getInstance().getTownyWorld(from.getWorld());				
 			TownyWorld toWorld = TownyAPI.getInstance().getTownyWorld(to.getWorld());
 			if (fromWorld == null || toWorld == null) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("not_registered"));
@@ -831,7 +831,7 @@ public class TownyPlayerListener implements Listener {
 			}
 			WorldCoord fromCoord = WorldCoord.parseWorldCoord(from);
 			WorldCoord toCoord = WorldCoord.parseWorldCoord(to);
-
+			
 			onPlayerMoveChunk(player, fromCoord, toCoord, event);
 		}
 	}
@@ -856,7 +856,6 @@ public class TownyPlayerListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-
 
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 		if (resident == null)

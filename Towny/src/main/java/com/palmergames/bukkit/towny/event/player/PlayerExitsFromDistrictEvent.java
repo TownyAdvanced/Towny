@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.Nullable;
 
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -43,6 +44,15 @@ public class PlayerExitsFromDistrictEvent extends Event {
 	@Nullable
 	public Resident getResident() {
 		return TownyAPI.getInstance().getResident(player);
+	}
+
+	/**
+	 * @deprecated This event no longer includes the delegate PlayerMoveEvent. Use {@link #getFrom()} and {@link #getTo()} instead.
+	 * @throws UnsupportedOperationException always, do not call.
+	 */
+	@Deprecated(since = "0.102.0.13", forRemoval = true)
+	public PlayerMoveEvent getPlayerMoveEvent() throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 
 	public District getLeftDistrict() {
