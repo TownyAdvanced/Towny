@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import com.palmergames.bukkit.towny.object.Position;
 import org.bukkit.Location;
@@ -316,12 +315,15 @@ public class JailUtil {
 	
 	public static void maxJailedUnjail(Town town) {
 		// Grab jailedResidents list from town
-		Stream<Resident> jailedResidents = town.getJailedResidents().stream();
+		List<Resident> jailedResidents = town.getJailedResidents();
+		// Nothing to do if there are no jailed residents
+		if (jailedResidents.isEmpty())
+			return;
 		Resident unjailedresident = TownySettings.getMaxJailedNewJailBehavior() == 1
 				// Setting 1 gets the jailed player with lowest JailHours
-				? jailedResidents.min(Comparator.comparingInt(Resident::getJailHours)).get()
+				? jailedResidents.stream().min(Comparator.comparingInt(Resident::getJailHours)).get()
 				// Setting 2 gets the jailed player with lowest set Bail
-				: jailedResidents.min(Comparator.comparingDouble(Resident::getJailBailCost)).get();
+				: jailedResidents.stream().min(Comparator.comparingDouble(Resident::getJailBailCost)).get();
 		unJailResident(unjailedresident, UnJailReason.OUT_OF_SPACE);
 	}
 }
