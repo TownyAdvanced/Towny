@@ -63,10 +63,12 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.RespawnAnchor;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -82,8 +84,10 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
@@ -95,6 +99,7 @@ import org.bukkit.event.player.PlayerTakeLecternBookEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,6 +127,8 @@ public class TownyPlayerListener implements Listener {
 	private int teleportWarmupTime = TownySettings.getTeleportWarmupTime();
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
 	private boolean isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
+
+	private static final NamespacedKey GOLDEN_DANDELION_KEY = NamespacedKey.minecraft("golden_dandelion");
 	
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
@@ -739,11 +746,7 @@ public class TownyPlayerListener implements Listener {
 			} 
 		}
 		
-		/*
-		 * Handle things which need an item in hand.
-		 */
-		if (item == null)
-			return;
+		// Handle things which need an item in hand.
 
 		/*
 		 * Sheep and mountable entities can be sheared, protect them if they aren't in the wilderness.
@@ -770,6 +773,23 @@ public class TownyPlayerListener implements Listener {
 			//Make decision on whether this is allowed using the PlayerCache and then a cancellable event.
 			event.setCancelled(!TownyActionEventExecutor.canItemuse(player, event.getRightClicked().getLocation(), item));
 			return;
+		}
+	}
+
+	/**
+	 * Protects against golden dandelions being used on baby animals.
+	 */
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerInteractAtEntity(final PlayerInteractAtEntityEvent event) {
+		if (ignoreEvent(event)) {
+			return;
+		}
+
+		final Player player = event.getPlayer();
+		final ItemStack item = player.getInventory().getItem(event.getHand());
+
+		if (item.getType().getKey().equals(GOLDEN_DANDELION_KEY) && event.getRightClicked() instanceof Ageable ageable && !ageable.isAdult() && !TownyActionEventExecutor.canDestroy(player, ageable.getLocation(), item.getType())) {
+			event.setCancelled(true);
 		}
 	}
 
@@ -1617,5 +1637,17 @@ public class TownyPlayerListener implements Listener {
 			// Method does not exist in this version
 			return false;
 		}
+	}
+	
+	private boolean ignoreEvent(final PlayerEvent event) {
+		if (plugin.isError()) {
+			if (event instanceof Cancellable cancellable) {
+				cancellable.setCancelled(true); // Always cancel events while we're in safe mode.
+			}
+
+			return true;
+		}
+
+		return !TownyAPI.getInstance().isTownyWorld(event.getPlayer().getWorld());
 	}
 }
