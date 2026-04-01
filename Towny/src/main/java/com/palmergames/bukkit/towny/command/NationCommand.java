@@ -1045,6 +1045,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendMsg(nation.getKing(), Translatable.of("msg_town_merge_cancelled"));
 		})
 		.setCancellableEvent(new NationPreMergeEvent(nation, remainingNation))
+		.serious()
 		.sendTo(BukkitTools.getPlayerExact(king.getName()));
 	}
 	

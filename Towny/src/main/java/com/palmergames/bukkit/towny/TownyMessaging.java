@@ -505,7 +505,11 @@ public class TownyMessaging {
 	 */
 	public static void sendConfirmationMessage(CommandSender sender, Confirmation confirmation) {
 		final Translator translator = Translator.locale(sender);
-		Component firstLineComponent = translator.component("confirmation_prefix").append(confirmation.getTitle().locale(sender).component());
+		Component title = confirmation.getTitle().locale(sender).component();
+		if (confirmation.isSerious()) {
+			title = title.color(NamedTextColor.RED);
+		}
+		Component firstLineComponent = translator.component("confirmation_prefix").append(title);
 		Component lastLineComponent = translator.component("this_message_will_expire2", confirmation.getDuration());
 		NamedTextColor acceptColour = Colors.toNamedTextColor(TownySettings.getConfirmationCommandYesColour()) != null
 				? Colors.toNamedTextColor(TownySettings.getConfirmationCommandYesColour())

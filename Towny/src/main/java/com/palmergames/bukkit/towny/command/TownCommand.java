@@ -4024,7 +4024,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}).runOnCancel(() -> {
 			TownyMessaging.sendMsg(sender, Translatable.of("msg_town_merge_request_denied"));
 			TownyMessaging.sendMsg(succumbingTown.getMayor(), Translatable.of("msg_town_merge_cancelled"));
-		}).sendTo(BukkitTools.getPlayerExact(succumbingTown.getMayor().getName()));
+		}).serious().sendTo(BukkitTools.getPlayerExact(succumbingTown.getMayor().getName()));
 	}
 
 	public static boolean isEdgeBlock(TownBlockOwner owner, List<WorldCoord> worldCoords) {
@@ -4399,6 +4399,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				TownyMessaging.sendPrefixedTownMessage(town, Translatable.of("msg_town_forsale", town.getName(), prettyMoney(forSalePrice)));
 			})
 			.setTitle(Translatable.of("msg_town_sell_confirmation", prettyMoney(forSalePrice)))
+			.serious()
 			.sendTo(player);
 	}
 
