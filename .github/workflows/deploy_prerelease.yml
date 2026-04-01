@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 env:
   CURR_VER: 0.0.0.0
-  SUPPORTED: " for MC 1.19.* & 1.20.* & 1.21.*"
+  SUPPORTED: " for MC 1.19.* & 1.20.* & 1.21.* & 26.1.*"
 jobs:
   build_towny_and_publish_prerelease:
     runs-on: ubuntu-latest
