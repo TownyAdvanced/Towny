@@ -2848,6 +2848,16 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# Minimum amount of money players are allowed to withdraw from town bank at a time."),
+	ECO_MAX_DEPOSIT_TOWN(
+			"economy.banks.town_max_deposit",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to deposit in town bank at a time."),
+	ECO_MAX_WITHDRAW_TOWN(
+			"economy.banks.town_max_withdraw",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to withdraw from town bank at a time."),
 	ECO_BANK_CAP_NATION(
 			"economy.banks.nation_bank_cap",
 			"0.0",
@@ -2869,6 +2879,16 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# Minimum amount of money players are allowed to withdraw from nation bank at a time."),
+	ECO_MAX_DEPOSIT_NATION(
+			"economy.banks.nation_max_deposit",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to deposit in nation bank at a time."),
+	ECO_MAX_WITHDRAW_NATION(
+			"economy.banks.nation_max_withdraw",
+			"-1",
+			"",
+			"# When greater than -1, the maximum amount of money players are allowed to withdraw from nation bank at a time."),
 	ECO_BANK_DISALLOW_BANK_ACTIONS_OUTSIDE_TOWN(
 			"economy.banks.disallow_bank_actions_outside_town",
 			"false",
