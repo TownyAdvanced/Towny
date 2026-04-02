@@ -466,23 +466,4 @@ public class NameValidation {
 		
 		return bannedNames.contains(name.toLowerCase(Locale.ROOT));
 	}
-
-	/**
-	 * Check and perform getNameCheckRegex on any town/nation names
-	 * 
-	 * @param name - Town/Nation name {@link String}
-	 * @return result of getNameCheckRegex
-	 * @throws InvalidNameException if the name parsed is blacklisted
-	 * @deprecated 0.100.1.10 use any of the other checkAndFilter methods found in this class.
-	 */
-	@Deprecated
-	public static String checkAndFilterName(String name) throws InvalidNameException {
-
-		String out = filterName(name);
-		testForEmptyName(out);
-		testAllUnderscores(out);
-		testForImproperNameAndThrow(out);
-
-		return out;
-	}
 }
