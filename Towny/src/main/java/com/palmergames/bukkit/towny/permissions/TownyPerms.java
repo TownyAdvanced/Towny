@@ -604,21 +604,17 @@ public class TownyPerms {
 	 */
 
 	public static boolean governmentIsAllowedToAssignRank(String rank, Government gov) {
-		if (rankIsNotLimitedByNumberOfAssignments(rank, gov))
-			return true;
-		int uses = numberOfTimesRankIsUsedByGovernment(rank, gov);
 		int limit = governmentRankLimit(rank, gov);
+		if (limit == -1) {
+			return true;
+		}
+
+		int uses = numberOfTimesRankIsUsedByGovernment(rank, gov);
 		return uses < limit;
 	}
 
 	public static boolean rankIsNotLimitedByNumberOfAssignments(String rank, Government gov) {
-		if (gov instanceof Town && getTownRanks().contains(rank)) {
-			return getRankLimit(getTownRankPermissions(rank)) == -1;
-		}
-		if (gov instanceof Nation && getNationRanks().contains(rank)) {
-			return getRankLimit(getNationRankPermissions(rank)) == -1;
-		}
-		return false;
+		return governmentRankLimit(rank, gov) == -1;
 	}
 
 	public static int numberOfTimesRankIsUsedByGovernment(String rank, Government gov ) {
