@@ -642,7 +642,7 @@ public class TownyPerms {
 	}
 
 	private static int getRankLimit(List<String> nodes) {
-		for (String node: nodes) {
+		for (String node : nodes) {
 			if (node.startsWith(RANKLIMIT)) {
 				return getIntFromNode(node, RANKLIMIT.length());
 			}
