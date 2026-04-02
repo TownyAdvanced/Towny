@@ -1233,19 +1233,6 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 	}
 
 	/**
-	 * Final stage of adding towns to a nation.
-	 * 
-	 * @deprecated since 0.100.1.2 use {@link #nationAdd(Nation, Town)} instead.
-	 * @param nation Nation being added to.
-	 * @param towns  List of Town(s) being added to Nation.
-	 */
-	@Deprecated
-	public static void nationAdd(Nation nation, List<Town> towns) {
-		for (Town town : towns)
-			nationAdd(nation, town);
-	}
-
-	/**
 	 * Final stage of adding a town to a nation, via joining or via accepting an
 	 * invite. We re-test the rules for joining a nation in case the town or
 	 * nation's situation has changed since being sent the invite/join confirmation.

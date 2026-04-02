@@ -16,7 +16,6 @@ import com.palmergames.bukkit.towny.object.SpawnPoint.SpawnPointType;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import com.palmergames.bukkit.towny.utils.NationUtil;
-import com.palmergames.bukkit.towny.utils.ProximityUtil;
 import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.bukkit.util.BukkitTools;
 import net.kyori.adventure.audience.Audience;
@@ -410,32 +409,6 @@ public class Nation extends Government {
 		removeAllTowns();
 		capital = null;
 	}
-
-	/**
-	 * Method for rechecking town distances to a new nation capital/moved 
-	 * nation capital homeblock. Results in towns whose homeblocks are no 
-	 * longer close enough to the capital homeblock being removed from 
-	 * the nation.
-	 * 
-	 * @deprecated since 0.100.0.9 use {@link ProximityUtil#removeOutOfRangeTowns(Nation)} instead.
-	 */
-	@Deprecated
-	public void removeOutOfRangeTowns() {
-		ProximityUtil.removeOutOfRangeTowns(this);
-	}
-	
-	/**
-	 * A method which returns a list of Towns too far from the given capital town.
-	 * 
-	 * @deprecated since 0.100.0.9 use {@link ProximityUtil#gatherOutOfRangeTowns(Nation)} instead.
-	 * @param towns - The list of towns to check.
-	 * @param capital - The Town from which to check the distance.
-	 * @return removedTowns - A list of Towns which would be removed by removeOutOfRangeTowns().
-	 */
-	@Deprecated
-	public List<Town> gatherOutOfRangeTowns(List<Town> towns, Town capital) {
-		return ProximityUtil.gatherOutOfRangeTowns(this);
-	}	
 
 	public void setKing(Resident king) throws TownyException {
 

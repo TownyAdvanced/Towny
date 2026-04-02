@@ -341,7 +341,7 @@ public class BukkitTools {
 	/**
 	 * @deprecated Use {@link Server#getCommandMap()} instead.
 	 */
-	@Deprecated
+	@Deprecated(since = "0.102.0.4")
 	public static @NotNull CommandMap getCommandMap() throws ReflectiveOperationException {
 		return getServer().getCommandMap();
 	}
