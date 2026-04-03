@@ -785,17 +785,7 @@ public class TownyPlayerListener implements Listener {
 			return;
 		}
 
-		handleCellChange(event.getPlayer(), event.getFrom(), event.getTo(), event);
-	}
-
-	//TODO: Remove when we support 1.21.5 and upwards.
-	@SuppressWarnings("removal")
-	private TeleportCause chorusFruitTeleport = MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_21_5) ? TeleportCause.CHORUS_FRUIT : TeleportCause.CONSUMABLE_EFFECT;
-
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		Player player = event.getPlayer();
-		handleTeleportCellChange(player, event.getCause(), event.getFrom(), event.getTo(), event);
+		handleCellChange(event.getPlayer(), event.getFrom(), event.getTo());
 	}
 
 	/**
@@ -803,9 +793,8 @@ public class TownyPlayerListener implements Listener {
 	 * @param player The player who is moving.
 	 * @param from The location the player is moving from.
 	 * @param to The location the player is moving to.
-	 * @param event The cancellable event that triggered this cell change. This will usually be a PlayerMoveEvent, but it could be a PlayerTeleportEvent if the teleport caused a cell change.
 	 */
-	public void handleCellChange(Player player, Location from, Location to, Cancellable event) {
+	public void handleCellChange(Player player, Location from, Location to) {
 		/*
 		 * Abort if we haven't really moved, or if the event.getTo() is null (which is allowed...)
 		 */
@@ -832,8 +821,18 @@ public class TownyPlayerListener implements Listener {
 			WorldCoord fromCoord = WorldCoord.parseWorldCoord(from);
 			WorldCoord toCoord = WorldCoord.parseWorldCoord(to);
 			
-			onPlayerMoveChunk(player, fromCoord, toCoord, event);
+			onPlayerMoveChunk(player, fromCoord, toCoord);
 		}
+	}
+
+	//TODO: Remove when we support 1.21.5 and upwards.
+	@SuppressWarnings("removal")
+	private TeleportCause chorusFruitTeleport = MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_21_5) ? TeleportCause.CHORUS_FRUIT : TeleportCause.CONSUMABLE_EFFECT;
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		Player player = event.getPlayer();
+		handleTeleportCellChange(player, event.getCause(), event.getFrom(), event.getTo(), event);
 	}
 
 	/**
@@ -864,7 +863,7 @@ public class TownyPlayerListener implements Listener {
 		boolean isAdmin = !Towny.getPlugin().hasPlayerMode(player, "adminbypass") && (resident.isAdmin() || resident.hasPermissionNode(PermissionNodes.TOWNY_ADMIN_OUTLAW_TELEPORT_BYPASS.getNode()));
 		if (isAdmin) {
 			// Admins don't get restricted further but they do need to fire the PlayerChangePlotEvent.
-			handleCellChange(player, from, to, event);
+			handleCellChange(player, from, to);
 			return;
 		}
 
@@ -925,7 +924,7 @@ public class TownyPlayerListener implements Listener {
 			resident.removeRespawnProtection();
 
 		// Send the event to the onPlayerMove so Towny can fire the PlayerChangePlotEvent.
-		handleCellChange(player, from, to, event);
+		handleCellChange(player, from, to);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -997,7 +996,7 @@ public class TownyPlayerListener implements Listener {
 	/*
 	* PlayerMoveEvent that can fire the PlayerChangePlotEvent
 	*/
-	private void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to, Cancellable moveEvent) {
+	private void onPlayerMoveChunk(Player player, WorldCoord from, WorldCoord to) {
 
 		final PlayerCache cache = plugin.getCacheOrNull(player.getUniqueId());
 		if (cache != null)

@@ -53,12 +53,13 @@ public class PlayerChangePlotEvent extends Event {
 	 * @deprecated This event no longer includes the delegate PlayerMoveEvent. Use {@link #getFrom()} and {@link #getTo()} instead.
 	 * @throws UnsupportedOperationException always, do not call.
 	 */
-	@Deprecated(since = "0.102.0.13", forRemoval = true)
+	@Deprecated(since = "0.102.0.14", forRemoval = true)
 	public PlayerMoveEvent getMoveEvent() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 	
 	public WorldCoord getTo() {
+
 		return to;
 	}
 	
