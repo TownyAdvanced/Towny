@@ -1015,7 +1015,7 @@ public class TownyPlayerListener implements Listener {
 	 * HappyGhasts or Camels. Those animals don't throw VehicleMoveEvents and when
 	 * ridden they stop throwing EntityMoveEvents. The driver is the only one who
 	 * will have a PlayerMoveEvent thrown which is why we're doing this here.
-	 *
+	 * 
 	 * @param vehicle   Vehicle being driven.
 	 * @param from      WorldCoord the players are leaving.
 	 * @param to        WorldCoord the players are entering.
