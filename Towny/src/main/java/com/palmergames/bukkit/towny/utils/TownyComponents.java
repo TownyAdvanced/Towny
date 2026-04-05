@@ -33,6 +33,13 @@ public class TownyComponents {
 			.resolvers(getRecentlyAddedTagResolvers())
 			.build())
 		.build();
+
+	public static final MiniMessage STRIP_UNSAFE = MiniMessage.builder()
+			.tags(TagResolver.builder()
+					.resolvers(StandardTags.clickEvent())
+					.resolvers(StandardTags.hoverEvent())
+					.build())
+			.build();
 	
 	public static Component miniMessage(@NotNull String string) {
 		return MiniMessage.miniMessage().deserialize(Colors.translateLegacyCharacters(Colors.translateLegacyHex(string)));
