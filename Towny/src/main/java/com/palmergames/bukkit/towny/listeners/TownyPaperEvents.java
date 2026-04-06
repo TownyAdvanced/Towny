@@ -18,6 +18,7 @@ import com.palmergames.util.TimeTools;
 
 import io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent;
 
+import io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -68,6 +69,7 @@ public class TownyPaperEvents implements Listener {
 	public static final String ADD_TO_WORLD_EVENT = "com.destroystokyo.paper.event.entity.EntityAddToWorldEvent";
 
 	public static final String COPPER_GOLEM_MOVES_ITEM_EVENT = "io.papermc.paper.event.entity.ItemTransportingEntityValidateTargetEvent";
+	public static final String PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT = "io.papermc.paper.event.player.PlayerToggleEntityAgeLockEvent";
 	
 	public TownyPaperEvents(Towny plugin) {
 		this.plugin = plugin;
@@ -94,6 +96,8 @@ public class TownyPaperEvents implements Listener {
 		}
 		
 		registerEvent(COPPER_GOLEM_MOVES_ITEM_EVENT, this::onGolemMoveItem, EventPriority.NORMAL, true);
+
+		registerEvent(PLAYER_TOGGLE_ENTITY_AGE_LOCK_EVENT, this::playerToggleEntityAgeLockListener, EventPriority.LOW, true);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -247,6 +251,19 @@ public class TownyPaperEvents implements Listener {
 				return;
 
 			event.setAllowed(false);
+		};
+	}
+
+	public Consumer<PlayerEvent> playerToggleEntityAgeLockListener() {
+		return e -> {
+			if (TownyPlayerListener.ignoreEvent(e)) {
+				return;
+			}
+
+			final PlayerToggleEntityAgeLockEvent event = (PlayerToggleEntityAgeLockEvent) e;
+			if (!TownyActionEventExecutor.canDestroy(event.getPlayer(), event.getEntity().getLocation(), event.getItem().getType())) {
+				event.setCancelled(true);
+			}
 		};
 	}
 
