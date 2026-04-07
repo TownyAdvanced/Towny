@@ -8,6 +8,8 @@ import java.util.Map;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.EntityLists;
 import com.palmergames.util.JavaUtil;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -165,7 +167,7 @@ public class EntityTypeUtil {
 	
 	private static void register(Map<EntityType, Material> map, String name, String mat) {
 		attempted++;
-		EntityType type = Registry.ENTITY_TYPE.get(NamespacedKey.minecraft(name));
+		EntityType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE).get(NamespacedKey.minecraft(name));
 		Material material = Registry.MATERIAL.get(NamespacedKey.minecraft(mat));
 
 		if (type == null || material == null) {

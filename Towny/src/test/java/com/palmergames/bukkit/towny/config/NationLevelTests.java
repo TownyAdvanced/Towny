@@ -5,7 +5,6 @@ import com.palmergames.bukkit.towny.object.Nation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockbukkit.mockbukkit.MockBukkit;
 
 import java.util.Map;
 import java.util.UUID;
@@ -17,7 +16,6 @@ public class NationLevelTests {
 
 	@BeforeAll
 	static void init() {
-		MockBukkit.getOrCreateMock();
 		TownySettings.loadDefaultConfig();
 	}
 

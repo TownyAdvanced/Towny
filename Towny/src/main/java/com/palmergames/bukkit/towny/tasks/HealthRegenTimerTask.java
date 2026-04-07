@@ -6,8 +6,9 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -26,7 +27,7 @@ import java.util.Objects;
 public class HealthRegenTimerTask extends TownyTimerTask {
 	
 	private static final boolean ATTRIBUTE_PREFIX = MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_21_2); // Attributes had a prefix before 1.21.2
-	private static final Attribute MAX_HEALTH = Objects.requireNonNull(Registry.ATTRIBUTE.get(NamespacedKey.minecraft((ATTRIBUTE_PREFIX ? "generic." : "") + "max_health")), "max health attribute");
+	private static final Attribute MAX_HEALTH = Objects.requireNonNull(RegistryAccess.registryAccess().getRegistry(RegistryKey.ATTRIBUTE).get(NamespacedKey.minecraft((ATTRIBUTE_PREFIX ? "generic." : "") + "max_health")), "max health attribute");
 
 	static {
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:health-regen-task"), () -> TownyTimerHandler.toggleHealthRegen(TownySettings.hasHealthRegen()));

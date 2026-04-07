@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoginListenerTests {
 	@BeforeAll
 	public static void init() {
-		MockBukkit.getOrCreateMock();
 		TownySettings.loadDefaultConfig();
 	}
 	

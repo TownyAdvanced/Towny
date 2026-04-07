@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
-import org.mockbukkit.mockbukkit.MockBukkit;
 
 import java.util.Map;
 import java.util.UUID;
@@ -19,7 +18,6 @@ public class TownLevelTests {
 	
 	@BeforeAll
 	static void init() {
-		MockBukkit.getOrCreateMock();
 		TownySettings.loadDefaultConfig();
 	}
 	

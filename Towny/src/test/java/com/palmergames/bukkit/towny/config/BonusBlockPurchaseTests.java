@@ -1,24 +1,24 @@
 package com.palmergames.bukkit.towny.config;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 import com.palmergames.bukkit.towny.utils.MoneyUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(TownyConfigExtension.class)
 public class BonusBlockPurchaseTests {
 	
 	static Town town;
 	
 	@BeforeAll
 	static void init() {
-		MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
 		town = new Town("test");
 		
 		// No limit on bought townblocks

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
 
 public class PopulationTests {
 
@@ -18,7 +17,6 @@ public class PopulationTests {
 
 	@BeforeAll
 	static void init() {
-		MockBukkit.getOrCreateMock();
 		TownySettings.loadDefaultConfig();
 		nation = new Nation("testNation");
 		town = new Town("testTown");
