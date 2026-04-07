@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownySettings;
 
+import java.util.UUID;
+
 
 public class PopulationTests {
 
@@ -17,14 +19,13 @@ public class PopulationTests {
 
 	@BeforeAll
 	static void init() {
-		TownySettings.loadDefaultConfig();
-		nation = new Nation("testNation");
-		town = new Town("testTown");
-		Resident res1 = new Resident("leonardo");
-		Resident res2 = new Resident("donatello");
-		Resident res3 = new Resident("raphael");
-		Resident res4 = new Resident("michelangelo");
-		Resident res5 = new Resident("splinter");
+		nation = new Nation("testNation", UUID.randomUUID());
+		town = new Town("testTown", UUID.randomUUID());
+		Resident res1 = new Resident("leonardo", UUID.randomUUID());
+		Resident res2 = new Resident("donatello", UUID.randomUUID());
+		Resident res3 = new Resident("raphael", UUID.randomUUID());
+		Resident res4 = new Resident("michelangelo", UUID.randomUUID());
+		Resident res5 = new Resident("splinter", UUID.randomUUID());
 		town.addResident(res1);
 		town.addResident(res2);
 		town.addResident(res3);
