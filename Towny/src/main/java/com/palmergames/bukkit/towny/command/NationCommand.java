@@ -2180,8 +2180,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			TownyMessaging.sendErrorMsg(sender, "Eg: /nation set spawncost 70");
 		else {
 			double amount = MoneyUtil.getMoneyAboveZeroOrThrow(split[1]);
-			if (TownySettings.getSpawnTravelCost() < amount)
-				throw new TownyException(Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
+			if (TownySettings.getMaximumSpawnTravelCost() < amount)
+				throw new TownyException(Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getMaximumSpawnTravelCost()));
 
 			nation.setSpawnCost(amount);
 			String name = sender instanceof Player ? sender.getName() : "Console"; 
