@@ -21,6 +21,8 @@ import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
@@ -37,6 +39,19 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings("UnstableApiUsage")
 public class BukkitMockExtension implements BeforeAllCallback, AfterAllCallback {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BukkitMockExtension.class);
+
+	private static RegistryAccess REGISTRY_ACCESS_MOCK = null;
+	private static final MethodHandle BUKKIT_SERVER_HANDLE;
+	
+	static {
+		MethodHandle temp = null;
+		
+		try {
+			temp = MethodHandles.privateLookupIn(Bukkit.class, MethodHandles.lookup()).findStaticSetter(Bukkit.class, "server", Server.class);
+		} catch (Throwable ignored) {}
+		BUKKIT_SERVER_HANDLE = temp;
+	}
+
 	private final Set<ScopedMock> openMocks = new HashSet<>();
 
 	public void initializeBaseMocks() {
@@ -46,10 +61,17 @@ public class BukkitMockExtension implements BeforeAllCallback, AfterAllCallback 
 
 	@SuppressWarnings("removal")
 	private void mockRegistries() {
-		final RegistryAccess registryAccessMock = mock(RegistryAccess.class);
+		RegistryAccess registryAccessMock = REGISTRY_ACCESS_MOCK != null ? REGISTRY_ACCESS_MOCK : mock(RegistryAccess.class);
 
 		final MockedStatic<RegistryAccess> staticRegistryMock = mockStatic(RegistryAccess.class);
 		staticRegistryMock.when(RegistryAccess::registryAccess).thenReturn(registryAccessMock);
+		openMocks.add(staticRegistryMock);
+
+		if (REGISTRY_ACCESS_MOCK != null) {
+			return;
+		}
+
+		REGISTRY_ACCESS_MOCK = registryAccessMock;
 
 		when(registryAccessMock.getRegistry(any(RegistryKey.class))).thenAnswer((Answer<Registry<?>>) invocation -> {
 			final Registry<?> mock = mock();
@@ -59,8 +81,6 @@ public class BukkitMockExtension implements BeforeAllCallback, AfterAllCallback 
 		when(registryAccessMock.getRegistry(any(Class.class))).thenAnswer((Answer<Registry<?>>) invocation -> mock());
 
 		mockRegistry(RegistryKey.ENTITY_TYPE, EntityType.class, retrieveFakeRegistryKeys(RegistryKey.ENTITY_TYPE, EntityType.class), registryAccessMock);
-
-		openMocks.add(staticRegistryMock);
 	}
 
 	private void mockServer() {
@@ -78,10 +98,8 @@ public class BukkitMockExtension implements BeforeAllCallback, AfterAllCallback 
 		openMocks.add(mockedStatic);
 
 		try {
-			final Field serverField = Bukkit.class.getDeclaredField("server");
-			serverField.setAccessible(true);
-			serverField.set(null, serverMock);
-		} catch (ReflectiveOperationException e) {
+			BUKKIT_SERVER_HANDLE.invokeExact(serverMock);
+		} catch (Throwable e) {
 			LOGGER.error("Failed to update server field", e);
 		}
 	}
@@ -157,6 +175,12 @@ public class BukkitMockExtension implements BeforeAllCallback, AfterAllCallback 
 	public void afterAll(ExtensionContext context) {
 		openMocks.forEach(ScopedMock::closeOnDemand);
 		openMocks.clear();
+
+		try {
+			BUKKIT_SERVER_HANDLE.invokeExact((Server) null);
+		} catch (Throwable e) {
+			LOGGER.error("Failed to clear server field", e);
+		}
 	}
 
 	@Override

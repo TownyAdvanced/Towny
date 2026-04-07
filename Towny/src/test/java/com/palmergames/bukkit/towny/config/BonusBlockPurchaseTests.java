@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(TownyConfigExtension.class)
@@ -19,7 +21,7 @@ public class BonusBlockPurchaseTests {
 	
 	@BeforeAll
 	static void init() {
-		town = new Town("test");
+		town = new Town("test", UUID.randomUUID());
 		
 		// No limit on bought townblocks
 		TownySettings.getConfig().set(ConfigNodes.CLAIMING_MAX_PURCHASED_BLOCKS.getRoot(), Integer.MAX_VALUE);
