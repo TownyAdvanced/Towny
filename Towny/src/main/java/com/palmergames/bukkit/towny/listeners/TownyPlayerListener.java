@@ -126,8 +126,6 @@ public class TownyPlayerListener implements Listener {
 	private boolean isMovementCancellingWarmup = TownySettings.isMovementCancellingSpawnWarmup();
 	private boolean isPreventingSaturationLoss = TownySettings.preventSaturationLoss();
 
-	private static final NamespacedKey GOLDEN_DANDELION_KEY = NamespacedKey.minecraft("golden_dandelion");
-	
 	public TownyPlayerListener(Towny plugin) {
 		this.plugin = plugin;
 		loadBlockedCommandLists();
