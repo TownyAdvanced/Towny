@@ -2,24 +2,19 @@ package com.palmergames.bukkit.towny.config;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Nation;
-import org.junit.jupiter.api.BeforeAll;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockbukkit.mockbukkit.MockBukkit;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(TownyConfigExtension.class)
 public class NationLevelTests {
 	private Nation testNation;
-
-	@BeforeAll
-	static void init() {
-		MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
-	}
 
 	@BeforeEach
 	void setup() {

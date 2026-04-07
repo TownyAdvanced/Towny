@@ -14,7 +14,6 @@ import com.palmergames.bukkit.util.BukkitTools;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -192,7 +191,7 @@ public class MobRemovalTimerTask extends TownyTimerTask {
 	private static Set<EntityType> entityClassesToTypes(List<Class<?>> classes) {
 		final Set<EntityType> types = new HashSet<>();
 
-		for (final EntityType entityType : Registry.ENTITY_TYPE) {
+		for (final EntityType entityType : BukkitTools.entityTypeRegistry()) {
 			if (entityType.getEntityClass() == null) {
 				continue;
 			}

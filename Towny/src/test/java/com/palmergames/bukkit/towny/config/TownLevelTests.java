@@ -2,26 +2,21 @@ package com.palmergames.bukkit.towny.config;
 
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
-import org.junit.jupiter.api.BeforeAll;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
-import org.mockbukkit.mockbukkit.MockBukkit;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(TownyConfigExtension.class)
 public class TownLevelTests {
 	private Town testTown;
-	
-	@BeforeAll
-	static void init() {
-		MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
-	}
 	
 	@BeforeEach
 	void setup() {

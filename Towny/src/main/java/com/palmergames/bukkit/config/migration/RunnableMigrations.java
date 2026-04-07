@@ -7,7 +7,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.StringMgmt;
 
-import org.bukkit.Registry;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,7 +82,7 @@ public class RunnableMigrations {
 				continue;
 			}
 
-			for (EntityType type : Registry.ENTITY_TYPE) {
+			for (EntityType type : BukkitTools.entityTypeRegistry()) {
 				if (type.getEntityClass() != null && type.getEntityClass().getSimpleName().equalsIgnoreCase(entity)) {
 					iterator.set(BukkitTools.keyAsString(type.getKey()));
 					break;
