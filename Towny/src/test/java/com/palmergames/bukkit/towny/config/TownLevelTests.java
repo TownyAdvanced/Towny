@@ -3,7 +3,6 @@ package com.palmergames.bukkit.towny.config;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.test.TownyConfigExtension;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -18,11 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(TownyConfigExtension.class)
 public class TownLevelTests {
 	private Town testTown;
-	
-	@BeforeAll
-	static void init() {
-		TownySettings.loadDefaultConfig();
-	}
 	
 	@BeforeEach
 	void setup() {

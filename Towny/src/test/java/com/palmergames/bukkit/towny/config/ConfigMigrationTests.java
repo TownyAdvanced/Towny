@@ -5,7 +5,6 @@ import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.config.migration.RunnableMigrations;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.test.TownyConfigExtension;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -18,11 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConfigMigrationTests {
 	
 	static RunnableMigrations runnableMigrations = new RunnableMigrations();
-	
-	@BeforeAll
-	static void init() {
-		TownySettings.loadDefaultConfig();
-	}
 	
 	@Test
 	void testEntityClassMigration() {
