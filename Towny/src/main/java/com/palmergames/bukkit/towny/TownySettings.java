@@ -37,8 +37,6 @@ import com.palmergames.util.MathUtil;
 import com.palmergames.util.StringMgmt;
 import com.palmergames.util.TimeTools;
 
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -602,7 +600,7 @@ public class TownySettings {
 		final Set<EntityType> entities = new HashSet<>();
 		
 		for (final String entityName : entityList) {
-			final EntityType type = BukkitTools.matchRegistry(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE), switch (entityName.toLowerCase(Locale.ROOT)) {
+			final EntityType type = BukkitTools.matchRegistry(BukkitTools.entityTypeRegistry(), switch (entityName.toLowerCase(Locale.ROOT)) {
 				// This is needed because some of the entity type fields don't/didn't match the actual key.
 				//<editor-fold desc="Lots of switch cases">
 				case "primed_tnt" -> "tnt";

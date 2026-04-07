@@ -1,8 +1,6 @@
 package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.object.AbstractRegistryList;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -13,7 +11,7 @@ import java.util.Collection;
 public class EntityLists extends AbstractRegistryList<EntityType> {
 
 	public EntityLists(Collection<EntityType> collection) {
-		super(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE), collection);
+		super(BukkitTools.entityTypeRegistry(), collection);
 	}
 	
 	public boolean contains(@NotNull Entity entity) {
@@ -53,6 +51,6 @@ public class EntityLists extends AbstractRegistryList<EntityType> {
 	public static final EntityLists ANIMALS = newBuilder().filter(type -> type.getEntityClass() != null && Animals.class.isAssignableFrom(type.getEntityClass())).build();
 	
 	public static Builder<EntityType, EntityLists> newBuilder() {
-		return new Builder<>(RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE), EntityType.class, EntityLists::new).filter(type -> type != EntityType.UNKNOWN);
+		return new Builder<>(BukkitTools.entityTypeRegistry(), EntityType.class, EntityLists::new).filter(type -> type != EntityType.UNKNOWN);
 	}
 }
