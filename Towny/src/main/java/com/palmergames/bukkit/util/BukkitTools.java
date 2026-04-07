@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
@@ -19,6 +21,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -377,5 +380,14 @@ public class BukkitTools {
 			set.add(keyAsString(keyed.getKey()));
 		
 		return set;
+	}
+	
+	@ApiStatus.Internal
+	public static Registry<EntityType> entityTypeRegistry() {
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThan(MinecraftVersion.MINECRAFT_1_20_5)) {
+			return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE);
+		} else {
+			return Registry.ENTITY_TYPE;
+		}
 	}
 }
