@@ -295,7 +295,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.11.2</version>
+                    <version>3.12.0</version>
                     <executions>
                         <execution>
                             <id>install</id>
@@ -309,6 +309,12 @@
                             <phase>deploy</phase>
                             <goals>
                                 <goal>jar</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>generate-docs</id>
+                            <goals>
+                                <goal>javadoc</goal>
                             </goals>
                         </execution>
                     </executions>
