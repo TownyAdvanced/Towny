@@ -90,6 +90,11 @@ public class SpawnUtil {
 			notAffordMSG, outpost, spawnType, resident, town, nation);
 
 		getSpawnLoc(player, town, nation, spawnType, outpost, split).thenAccept(spawnLoc -> {
+			if (TownySettings.isSpawnCommandsRequireSameWorld() && !spawnLoc.getWorld().getName().equalsIgnoreCase(player.getWorld().getName())) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_world_not_same_cant_teleport"));
+				return;
+			}
+
 			if (!spawnLoc.isWorldLoaded()) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_world_not_loaded"));
 				return;

@@ -2430,6 +2430,9 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 # Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
 
+# Message shown when denying a cross world teleport
+msg_err_world_not_same_cant_teleport: "<red>You cannot teleport to a different world using this command."
+
 # Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
 msg_changed_plotgroup_taxed: '&cThis plotgroup has had its taxed status set to %s.'
