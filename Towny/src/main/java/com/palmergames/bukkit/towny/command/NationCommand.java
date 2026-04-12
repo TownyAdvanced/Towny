@@ -260,7 +260,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 3 && args[1].equalsIgnoreCase("list"))
 						return getTownyStartingWith(args[2], "n");
 					break;
-				case "add":
+				case "add","invite":
 					return getTownyStartingWith(args[args.length - 1], "t");
 				case "kick":
 					if (res.hasNation())
