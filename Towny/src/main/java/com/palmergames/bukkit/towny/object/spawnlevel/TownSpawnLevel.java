@@ -36,7 +36,7 @@ public enum TownSpawnLevel {
 			PermissionNodes.TOWNY_SPAWN_NATION.getNode(),
 			ConfigNodes.SPAWNING_TOWN_SPAWN_NATION_MEMBER_COOLDOWN_TIMER),
 	NATION_RESIDENT_OUTPOST(
-			ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN,
+			ConfigNodes.SPAWNING_ALLOW_NATION_OUTPOST_TRAVEL,
 			"msg_err_town_spawn_forbidden",
 			"msg_err_town_spawn_forbidden_war",
 			"msg_err_town_spawn_forbidden_peace",

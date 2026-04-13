@@ -129,7 +129,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"enemylist",
 		"ally",
 		"spawn",
-		"outpost",
+		"townoutposts",
 		"sanctiontown",
 		"king",
 		"leader",
@@ -247,7 +247,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return Collections.singletonList("-ignore");
 					}
 					break;
-				case "outpost":
+				case "townoutposts":
 					if (nation == null)
 						break;
 					if (args.length == 2) {
@@ -546,8 +546,8 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			boolean ignoreWarning = (split.length > 1 && split[1].equals("-ignore")) || (split.length > 2 && split[2].equals("-ignore"));
 			nationSpawn(player, StringMgmt.remFirstArg(split), ignoreWarning);
 			break;
-		case "outpost":
-			nationOutpost(player, StringMgmt.remFirstArg(split));
+		case "townoutposts":
+			nationTownOutposts(player, StringMgmt.remFirstArg(split));
 			break;
 		case "deposit":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode());
@@ -2598,7 +2598,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, ignoreWarning, SpawnType.NATION);
 	}
 
-	public static void nationOutpost(Player player, String[] split) throws TownyException {
+	public static void nationTownOutposts(Player player, String[] split) throws TownyException {
 		Nation nation = getNationFromPlayerOrThrow(player);
 
 		if (split.length == 1 && split[0].equalsIgnoreCase("listall")) {
@@ -2621,7 +2621,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (split.length < 2)
-			throw new TownyException("Eg: /nation outpost [townname] [outpost]");
+			throw new TownyException("Eg: /nation townoutposts [townname] [outpost]");
 
 		Town town = getTownOrThrow(split[0]);
 		if (!nation.hasTown(town))

@@ -183,6 +183,7 @@ nation_help_15: "Deposits money into the nation bank."
 nation_help_16: "Used to delete your nation."
 nation_help_17: "Used to add or remove ranks from residents."
 nation_help_18: "See /n rank ? for help."
+nation_help_19: "Used to teleport to the outposts owned by your nation's towns."
 
 nation_list_help_0: "View the specified page."
 nation_list_help_1: "List nations by resident-count, with the specified page."

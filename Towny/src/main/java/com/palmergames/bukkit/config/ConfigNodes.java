@@ -1503,7 +1503,7 @@ public enum ConfigNodes {
 			"spawning.town_spawn.spawning_cooldowns.outpost_cooldown_time",
 			"30",
 			"",
-			"# Number of seconds that must pass before a player can use /t outpost."),
+			"# Number of seconds that must pass before a player can use /t outpost or /n townoutposts {townname} {outpost}."),
 	SPAWNING_TOWN_SPAWN_NATION_MEMBER_COOLDOWN_TIMER(
 			"spawning.town_spawn.spawning_cooldowns.nation_member_town_spawn_cooldown_time",
 			"30",
@@ -1531,6 +1531,14 @@ public enum ConfigNodes {
 			"true",
 			"",
 			"# Allow the use of /nation spawn",
+			"# Valid values are: true, false, war, peace",
+			"# When war or peace is set, it is only possible to teleport to the nation,",
+			"# when there is a war or peace."),
+	SPAWNING_ALLOW_NATION_OUTPOST_TRAVEL(
+			"spawning.nation_spawn.allow_nation_outpost_travel",
+			"true",
+			"",
+			"# Allow regular residents to use /nation outpost [town] [outpost] (TP to other towns' outposts if they are public).",
 			"# Valid values are: true, false, war, peace",
 			"# When war or peace is set, it is only possible to teleport to the nation,",
 			"# when there is a war or peace."),
