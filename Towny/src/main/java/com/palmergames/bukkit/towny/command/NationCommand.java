@@ -129,6 +129,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"enemylist",
 		"ally",
 		"spawn",
+		"outpost",
 		"sanctiontown",
 		"king",
 		"leader",
@@ -244,6 +245,23 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					}
 					if (args.length == 3) {
 						return Collections.singletonList("-ignore");
+					}
+					break;
+				case "outpost":
+					if (nation == null)
+						break;
+					if (args.length == 2) {
+						List<String> names = NameUtil.filterByStart(NameUtil.getNames(res.getNationOrNull().getTowns()), args[args.length - 1]);
+						names.add("listall");
+						return names;
+					}
+					if (args.length == 3) {
+						Town town = TownyUniverse.getInstance().getTown(args[1]);
+						if (town == null)
+							return Collections.emptyList();
+						List<String> outpostNames = town.getOutpostNames();
+						outpostNames.add("list");
+						return NameUtil.filterByStart(outpostNames, args[2]);
 					}
 					break;
 				case "sanctiontown":
@@ -527,6 +545,9 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			/* Permission test is internal*/
 			boolean ignoreWarning = (split.length > 1 && split[1].equals("-ignore")) || (split.length > 2 && split[2].equals("-ignore"));
 			nationSpawn(player, StringMgmt.remFirstArg(split), ignoreWarning);
+			break;
+		case "outpost":
+			nationOutpost(player, StringMgmt.remFirstArg(split));
 			break;
 		case "deposit":
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_DEPOSIT.getNode());
@@ -2574,7 +2595,64 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		String notAffordMSG = split.length == 0 ? 
 			Translatable.of("msg_err_cant_afford_tp").forLocale(player) : 
 			Translatable.of("msg_err_cant_afford_tp_nation", nation.getName()).forLocale(player);
-		SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, false, ignoreWarning, SpawnType.NATION);
+		SpawnUtil.sendToTownySpawn(player, split, nation, notAffordMSG, ignoreWarning, SpawnType.NATION);
+	}
+
+	public static void nationOutpost(Player player, String[] split) throws TownyException {
+		Nation nation = getNationFromPlayerOrThrow(player);
+
+		if (split.length == 1 && split[0].equalsIgnoreCase("listall")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_OUTPOST_LISTALL.getNode());
+			List<Location> allOutposts = new ArrayList<>();
+			for (Town town : nation.getTowns())
+				allOutposts.addAll(town.getAllOutpostSpawns());
+
+			int page = 1;
+			int total = (int) Math.ceil(((double) allOutposts.size()) / ((double) 10));
+			if (split.length == 3) {
+				page = MathUtil.getPositiveIntOrThrow(split[2]);
+				if (page == 0)
+					throw new TownyException(Translatable.of("msg_error_must_be_int"));
+			}
+			if (page > total)
+				throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+			TownyMessaging.sendNationAllTownsOutpostList(player, nation, page, total);
+			return;
+		}
+
+		if (split.length < 2)
+			throw new TownyException("Eg: /nation outpost [townname] [outpost]");
+
+		Town town = getTownOrThrow(split[0]);
+		if (!nation.hasTown(town))
+			throw new TownyException(Translatable.of("msg_err_not_same_nation", town.getName()));
+		if (town.isRuined())
+			throw new TownyException(Translatable.of("msg_err_cannot_use_command_because_town_ruined"));
+		if (TownySettings.isConqueredTownsDeniedNationSpawn()) {
+			Town playerTown = TownyAPI.getInstance().getTown(player);
+			if (playerTown.isConquered())
+				throw new TownyException(Translatable.of("nation_outpost_not_allowed_for_conquered_towns"));
+		}
+
+		if (split[1].equalsIgnoreCase("list")) {
+			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_NATION_OUTPOST_LIST.getNode());
+
+			List<Location> outposts = town.getAllOutpostSpawns();
+			int page = 1;
+			int total = (int) Math.ceil(((double) outposts.size()) / ((double) 10));
+			if (split.length == 3) {
+				page = MathUtil.getPositiveIntOrThrow(split[2]);
+				if (page == 0)
+					throw new TownyException(Translatable.of("msg_error_must_be_int"));
+			}
+			if (page > total)
+				throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
+
+			TownyMessaging.sendNationOutpostList(player, town, page, total);
+			return;
+		}
+
+		SpawnUtil.sendToTownySpawn(player, StringMgmt.remFirstArg(split), town, Translatable.of("msg_err_cant_afford_tp").forLocale(player), false, SpawnType.OUTPOST);
 	}
 
 	private static void nationTransaction(Player player, String[] args, boolean withdraw) {

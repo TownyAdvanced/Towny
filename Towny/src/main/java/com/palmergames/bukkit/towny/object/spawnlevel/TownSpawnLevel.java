@@ -35,6 +35,14 @@ public enum TownSpawnLevel {
 			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_NATION,
 			PermissionNodes.TOWNY_SPAWN_NATION.getNode(),
 			ConfigNodes.SPAWNING_TOWN_SPAWN_NATION_MEMBER_COOLDOWN_TIMER),
+	NATION_RESIDENT_OUTPOST(
+			ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN,
+			"msg_err_town_spawn_forbidden",
+			"msg_err_town_spawn_forbidden_war",
+			"msg_err_town_spawn_forbidden_peace",
+			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL,
+			PermissionNodes.TOWNY_SPAWN_NATION_OUTPOST.getNode(),
+			ConfigNodes.SPAWNING_TOWN_SPAWN_OUTPOST_COOLDOWN_TIMER),
 	NATION_ALLY(
 			ConfigNodes.SPAWNING_ALLOW_TOWN_SPAWN_TRAVEL_ALLY,
 			"msg_err_town_spawn_ally_forbidden",

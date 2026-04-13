@@ -66,20 +66,19 @@ public class SpawnUtil {
 	 * @param split        Remaining command arguments, used primarily for outposts.
 	 * @param townyObject  Either a town or nation depending on source command.
 	 * @param notAffordMSG Message shown when a player cannot afford their teleport.
-	 * @param outpost      Whether this is an outpost or not.
 	 * @param ignoreWarn   Whether to show confirmation for payment or just pay
 	 *                     without confirmation.
-	 * @param spawnType    SpawnType.RESIDENT/TOWN/NATION
+	 * @param spawnType    SpawnType.RESIDENT/TOWN/NATION/OUTPOST
 	 * @throws TownyException Thrown if any of the vital conditions are not met.
 	 */
-	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
+	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
 
 		Resident resident = TownyAPI.getInstance().getResidentOrThrow(player);
 
 		// Set up town and nation variables.
 		final Town town = switch (spawnType) {
 			case RESIDENT -> resident.getTownOrNull();
-			case TOWN -> (Town) townyObject;
+			case OUTPOST,TOWN -> (Town) townyObject;
 			default -> null;
 		};
 
@@ -87,19 +86,20 @@ public class SpawnUtil {
 
 		//Get spawn information object. This allows us to pass data into the lambda below
 		final SpawnInformation spawnInfo = getSpawnInformation(player, split.length == 0,
-			notAffordMSG, outpost, spawnType, resident, town, nation);
+			notAffordMSG, spawnType.equals(SpawnType.OUTPOST), spawnType, resident, town, nation);
 
-		getSpawnLoc(player, town, nation, spawnType, outpost, split).thenAccept(spawnLoc -> {
+
+		getSpawnLoc(player, town, nation, spawnType, split).thenAccept(spawnLoc -> {
+			if (!spawnLoc.isWorldLoaded()) {
+				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_world_not_loaded"));
+				return;
+			}
+
 			if (TownySettings.isSpawnCommandsRequireSameWorld() && !spawnLoc.getWorld().getName().equalsIgnoreCase(player.getWorld().getName())) {
 				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_world_not_same_cant_teleport"));
 				return;
 			}
 
-			if (!spawnLoc.isWorldLoaded()) {
-				TownyMessaging.sendErrorMsg(player, Translatable.of("msg_err_world_not_loaded"));
-				return;
-			}
-			
 			// Fire a cancellable event right before a player would actually pay.
 			// Throws a TownyException if the event is cancelled.
 			try {
@@ -119,6 +119,26 @@ public class SpawnUtil {
 			} else
 				initiateSpawn(player, spawnLoc, spawnInfo.cooldown, 0, null);
 		});
+	}
+
+	/**
+	 * Central method used for /res, /t, /n, /ta spawn commands.
+	 * 
+	 * @deprecated since 0.102.0.14, use {@link #sendToTownySpawn(Player, String[], TownyObject, String, boolean, SpawnType)} instead.
+	 * 
+	 * @param player       Player using spawn command.
+	 * @param split        Remaining command arguments, used primarily for outposts.
+	 * @param townyObject  Either a town or nation depending on source command.
+	 * @param notAffordMSG Message shown when a player cannot afford their teleport.
+	 * @param outpost      Whether this is an outpost or not.
+	 * @param ignoreWarn   Whether to show confirmation for payment or just pay
+	 *                     without confirmation.
+	 * @param spawnType    SpawnType.RESIDENT/TOWN/NATION
+	 * @throws TownyException Thrown if any of the vital conditions are not met.
+	 */
+	@Deprecated(since = "0.102.0.14")
+	public static void sendToTownySpawn(Player player, String[] split, TownyObject townyObject, String notAffordMSG, boolean outpost, boolean ignoreWarn, SpawnType spawnType) throws TownyException {
+		sendToTownySpawn(player, split, townyObject, notAffordMSG, ignoreWarn, spawnType);
 	}
 
 	private static SpawnInformation getSpawnInformation(Player player, boolean noCmdArgs, String notAffordMSG, boolean outpost, SpawnType spawnType, Resident resident, Town town, Nation nation) {
@@ -266,7 +286,7 @@ public class SpawnUtil {
 	private static TownSpawnLevel getTownSpawnLevel(Player player, boolean noCmdArgs, SpawnType spawnType, Resident resident, Town town, boolean outpost, boolean isTownyAdmin) throws TownyException {
 		return switch (spawnType) {
 			case RESIDENT -> isTownyAdmin ? TownSpawnLevel.ADMIN : TownSpawnLevel.TOWN_RESIDENT;
-			case TOWN -> isTownyAdmin ? TownSpawnLevel.ADMIN : getTownSpawnLevel(player, resident, town, outpost, noCmdArgs);
+			case OUTPOST,TOWN -> isTownyAdmin ? TownSpawnLevel.ADMIN : getTownSpawnLevel(player, resident, town, outpost, noCmdArgs);
 			default -> null;
 		};
 	}
@@ -442,7 +462,7 @@ public class SpawnUtil {
 	 * @throws TownyException thrown when the eventual spawn location is invalid or
 	 *                        the player is outlawed at that location.
 	 */
-	private static CompletableFuture<Location> getSpawnLoc(Player player, Town town, Nation nation, SpawnType spawnType, boolean outpost, String[] split) throws TownyException {
+	private static CompletableFuture<Location> getSpawnLoc(Player player, Town town, Nation nation, SpawnType spawnType, String[] split) throws TownyException {
 		return switch (spawnType) {
 			case RESIDENT:
 				if (TownySettings.getBedUse()) {
@@ -458,11 +478,10 @@ public class SpawnUtil {
 					yield adaptSpawnLocation(town.getSpawn(), player);
 				else
 					yield CompletableFuture.completedFuture(player.getWorld().getSpawnLocation());
+			case OUTPOST:
+				yield adaptSpawnLocation(getOutpostSpawnLocation(player, town, split), player);
 			case TOWN:
-				if (outpost)
-					yield adaptSpawnLocation(getOutpostSpawnLocation(player, town, split), player);
-				else
-					yield adaptSpawnLocation(town.getSpawn(), player);
+				yield adaptSpawnLocation(town.getSpawn(), player);
 			case NATION:
 				yield adaptSpawnLocation(nation.getSpawn(), player);
 		};
@@ -712,7 +731,7 @@ public class SpawnUtil {
 
 		return switch(spawnType) {
 		case RESIDENT -> town == null ? 0.0 : Math.min(townSpawnLevel.getCost(town), townSpawnLevel.getCost());
-		case TOWN -> Math.min(townSpawnLevel.getCost(town), townSpawnLevel.getCost());
+		case OUTPOST,TOWN -> Math.min(townSpawnLevel.getCost(town), townSpawnLevel.getCost());
 		case NATION -> Math.min(nationSpawnLevel.getCost(nation), nationSpawnLevel.getCost());
 		};
 		
@@ -737,7 +756,7 @@ public class SpawnUtil {
 	private static String getPaymentMsg(TownSpawnLevel townSpawnLevel, NationSpawnLevel nationSpawnLevel, SpawnType spawnType) {
 		return switch(spawnType) {
 		case RESIDENT -> String.format(spawnType.getTypeName() + " (%s)", townSpawnLevel);
-		case TOWN -> String.format(spawnType.getTypeName() + " (%s)", townSpawnLevel);
+		case OUTPOST,TOWN -> String.format(spawnType.getTypeName() + " (%s)", townSpawnLevel);
 		case NATION -> String.format(spawnType.getTypeName() + " (%s)", nationSpawnLevel);
 		};
 	}
@@ -753,7 +772,7 @@ public class SpawnUtil {
 	private static Account getPayee(Town town, Nation nation, SpawnType spawnType) {
 		return switch(spawnType) {
 		case RESIDENT -> town == null ? TownyServerAccount.ACCOUNT : town.getAccount(); 
-		case TOWN -> town.getAccount();
+		case OUTPOST,TOWN -> town.getAccount();
 		case NATION -> nation.getAccount();
 		};
 	}
@@ -781,7 +800,7 @@ public class SpawnUtil {
 	private static SpawnEvent getSpawnEvent(Player player, SpawnType spawnType, Location spawnLoc, SpawnInformation spawnInfo) {
 		return switch(spawnType) {
 		case RESIDENT -> new ResidentSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
-		case TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
+		case OUTPOST,TOWN -> new TownSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
 		case NATION -> new NationSpawnEvent(player, player.getLocation(), spawnLoc, spawnInfo.travelCost, spawnInfo.eventCancelled, spawnInfo.eventCancellationMessage);
 		};
 	}

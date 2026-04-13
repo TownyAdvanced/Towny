@@ -256,7 +256,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		case "friend" -> residentFriend(player, StringMgmt.remFirstArg(split), false, null);
 		case "spawn" -> {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode());
-			SpawnUtil.sendToTownySpawn(player, split, getResidentOrThrow(player), Translatable.of("msg_err_cant_afford_tp").forLocale(player), false, false, SpawnType.RESIDENT);
+			SpawnUtil.sendToTownySpawn(player, split, getResidentOrThrow(player), Translatable.of("msg_err_cant_afford_tp").forLocale(player), false, SpawnType.RESIDENT);
 		}
 		default -> {
 			if (tryResidentAddonCommand(player, split))
