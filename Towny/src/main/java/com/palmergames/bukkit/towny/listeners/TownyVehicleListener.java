@@ -17,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -182,7 +181,7 @@ public class TownyVehicleListener implements Listener {
 			if (vehicleCoord.equals(playerCoord))
 				return;
 
-			BukkitTools.fireEvent(new PlayerChangePlotEvent(player, playerCoord, vehicleCoord, new PlayerMoveEvent(player, player.getLocation(), event.getVehicle().getLocation())));
+			BukkitTools.fireEvent(new PlayerChangePlotEvent(player, playerCoord, vehicleCoord));
 		}
 	}
 
@@ -221,7 +220,7 @@ public class TownyVehicleListener implements Listener {
 		// HappyGhasts can have more than one passenger & a driver will have a PlayerMoveEvent.
 		for (Entity rider : passengers) {
 			if (rider instanceof Player player)
-				BukkitTools.fireEvent(new PlayerChangePlotEvent(player, fromCoord, toCoord, new PlayerMoveEvent(player, from, to)));
+				BukkitTools.fireEvent(new PlayerChangePlotEvent(player, fromCoord, toCoord));
 		}
 	}
 }

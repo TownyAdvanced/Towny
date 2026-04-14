@@ -18,7 +18,6 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 public class PlayerEntersIntoTownBorderEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private final Town enteredTown;
-	private final PlayerMoveEvent pme;
 	private final WorldCoord from;
 	private final WorldCoord to;
 	private final Player player;
@@ -32,12 +31,11 @@ public class PlayerEntersIntoTownBorderEvent extends Event {
 		return handlers;
 	}
 
-	public PlayerEntersIntoTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town enteredTown, PlayerMoveEvent pme) {
+	public PlayerEntersIntoTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town enteredTown) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.enteredTown = enteredTown;
 		this.player = player;
 		this.from = from;
-		this.pme = pme;
 		this.to = to;
 	}
 
@@ -50,8 +48,13 @@ public class PlayerEntersIntoTownBorderEvent extends Event {
 		return TownyAPI.getInstance().getResident(player);
 	}
 
-	public PlayerMoveEvent getPlayerMoveEvent() {
-		return pme;
+	/**
+	 * @deprecated This event no longer includes the delegate PlayerMoveEvent. Use {@link #getFrom()} and {@link #getTo()} instead.
+	 * @throws UnsupportedOperationException always, do not call.
+	 */
+	@Deprecated(since = "0.102.0.14", forRemoval = true)
+	public PlayerMoveEvent getPlayerMoveEvent() throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 
 	public Town getEnteredTown() {
