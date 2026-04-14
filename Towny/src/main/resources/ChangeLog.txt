@@ -10815,3 +10815,25 @@ v0.92.0.11:
     - When true, using /res, /t, /n spawn or /t outpost will fail when those spawn points are not in the same world as the player.
     - Use this feature to require players use special portals to travel between your server's worlds.
   - Use dedicated age lock event instead of interact listener, courtesy of Warrior with PR #8158.
+  - Add ability for nation members to teleport to outposts belonging to the nation's towns.
+    - Closes #5098.
+    - Closes #1728.
+  - New Commands:
+    - /n townoutposts listall - list a nation's towns' outposts, with clickable teleportation.
+    - /n townoutposts [townname] list - lists a town's outposts, with clickable teleportation.
+    - /n townoutposts [townname] [outpost] - teleports to a town's outpost.
+  - New Permission Nodes:
+    - towny.town.spawn.nation.outpost
+      - Allows the use of /n townoutposts [townname] [outpost]
+      - child node of towny.town.spawn.nation, no changes to townyperms.yml required.
+    - towny.command.nation.outpost.listall
+      - Allows the use of /n townoutposts listall
+      - child node of towny.command.nation.*, no changes to townyperms.yml required.
+    - towny.command.nation.outpost.list
+      - Allows the use of /n townoutposts [townname] list
+      - child node of towny.command.nation.*, no changes to townyperms.yml required.
+  - New Config Option: spawning.nation_spawn.allow_nation_outpost_travel
+    - Default: true
+    - Allow regular residents to use /nation outpost [town] [outpost] (TP to other towns' outposts if they are public).
+    - Valid values are: true, false, war, peace.
+    - When war or peace is set, it is only possible to teleport to the nation, when there is a war or peace.
