@@ -2871,7 +2871,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			notAffordMSG = Translatable.of("msg_err_cant_afford_tp_town", town.getName()).forLocale(player);
 		}
 			
-		SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, outpost, ignoreWarning, SpawnType.TOWN);
+		SpawnUtil.sendToTownySpawn(player, split, town, notAffordMSG, ignoreWarning, outpost ? SpawnType.OUTPOST : SpawnType.TOWN);
 
 	}
 
@@ -4124,7 +4124,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				if (page > total)
 					throw new TownyException(Translatable.of("LIST_ERR_NOT_ENOUGH_PAGES", total));
 
-				TownyMessaging.sendOutpostList(player, town, page, total);
+				TownyMessaging.sendTownOutpostList(player, town, page, total);
 			} else {
 				boolean ignoreWarning = args.length == 1 && args[0].equals("-ignore");
 				townSpawn(player, args, true, ignoreWarning);

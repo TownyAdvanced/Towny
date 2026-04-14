@@ -618,7 +618,19 @@ public class TownyMessaging {
 		audience.sendMessage(pageFooter);
 	}
 
-	public static void sendOutpostList(Player player, Town town, int page, int total) {
+	public static void sendTownOutpostList(Player player, Town town, int page, int total) {
+		sendOutpostList(player, town, page, total, "/towny:town outpost ");
+	}
+
+	public static void sendNationOutpostList(Player player, Town town, int page, int total) {
+		sendOutpostList(player, town, page, total, "/towny:nation outpost " + town.getName() + " ");
+	}
+
+	public static void sendNationAllTownsOutpostList(Player player, Nation nation, int page, int total) {
+		sendOutpostList(player, nation, page, total, "/towny:nation outpost ");
+	}
+
+	public static void sendOutpostList(Player player, Town town, int page, int total, String clickCommand) {
 		Translator translator = Translator.locale(player);
 		int outpostsCount = town.getAllOutpostSpawns().size();
 		int iMax = Math.min(page * 10, outpostsCount);
@@ -640,7 +652,7 @@ public class TownyMessaging {
 			String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
 			TextComponent dash = Component.text(" - ", NamedTextColor.DARK_GRAY);		
 			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD)
-				.clickEvent(ClickEvent.runCommand("/towny:town outpost " + (i + 1)))
+				.clickEvent(ClickEvent.runCommand(clickCommand + (i + 1)))
 				.append(dash);
 
 			TextComponent outpostName = Component.text(name, NamedTextColor.GREEN);
@@ -666,10 +678,69 @@ public class TownyMessaging {
 		}
 		
 		// Page navigation
-		Component pageFooter = getPageNavigationFooter("towny:town outpost list", page, "", total, translator);
+		Component pageFooter = getPageNavigationFooter(clickCommand + "list", page, "", total, translator);
 		player.sendMessage(pageFooter);
 	}
-	
+
+	public static void sendOutpostList(Player player, Nation nation, int page, int total, String clickCommand) {
+		Translator translator = Translator.locale(player);
+		List<Location> allOutposts = new ArrayList<>();
+		for (Town town : nation.getTowns())
+			allOutposts.addAll(town.getAllOutpostSpawns());
+
+		int outpostsCount = allOutposts.size();
+		int iMax = Math.min(page * 10, outpostsCount);
+		List<Location> outposts = allOutposts;
+		
+		TextComponent[] outpostsFormatted;
+		
+		if ((page * 10) > outpostsCount) {
+			outpostsFormatted = new TextComponent[outpostsCount % 10];
+		} else {
+			outpostsFormatted = new TextComponent[10];
+		}
+		
+		for (int i = (page - 1) * 10; i < iMax; i++) {
+			Location outpost = outposts.get(i);
+			TownBlock tb = TownyAPI.getInstance().getTownBlock(outpost);
+			if (tb == null)
+				continue;
+
+			Town town = tb.getTownOrNull();
+			String name = !tb.hasPlotObjectGroup() ? tb.getName() : tb.getPlotObjectGroup().getName();
+			TextComponent dash = Component.text(" - ", NamedTextColor.DARK_GRAY);		
+			TextComponent line = Component.text(Integer.toString(i + 1), NamedTextColor.GOLD)
+				.clickEvent(ClickEvent.runCommand(clickCommand + town.getName() + " " + (i + 1)))
+				.append(dash);
+
+			TextComponent outpostName = Component.text(name, NamedTextColor.GREEN);
+			TextComponent townName = Component.text(town.getName(), NamedTextColor.AQUA);
+			TextComponent worldName = Component.text(Optional.ofNullable(outpost.getWorld()).map(w -> w.getName()).orElse("null"), NamedTextColor.BLUE);
+			TextComponent coords = Component.text("(" + outpost.getBlockX() + "," + outpost.getBlockZ()+ ")", NamedTextColor.BLUE);
+
+			if (!name.equalsIgnoreCase("")) {
+				line = line.append(outpostName).append(dash);
+			}
+			line = line.append(townName).append(dash).append(worldName).append(dash).append(coords);
+
+			Translatable spawnCost = Translatable.of("msg_spawn_cost_free");
+			if (TownyEconomyHandler.isActive())
+				spawnCost = Translatable.of("msg_spawn_cost", TownyEconomyHandler.getFormattedBalance(town.getSpawnCost()));
+
+			line = line.hoverEvent(HoverEvent.showText(Translatable.of("msg_click_spawn", name.equalsIgnoreCase("") ? "outpost" : name).append("\n").append(spawnCost).locale(player).component()));
+			outpostsFormatted[i % 10] = line;
+		}
+		
+		sendMessage(player, ChatTools.formatTitle(translator.of("outpost_plu")));
+		for (TextComponent textComponent : outpostsFormatted) {
+			player.sendMessage(textComponent);
+		}
+
+		// Page navigation
+		Component pageFooter = getPageNavigationFooter("towny:nation outpost listall", page, "", total, translator);
+		player.sendMessage(pageFooter);
+	}
+
 	@SuppressWarnings("unused")
 	private static void sendJailList$$bridge$$public(Player player, Town town, int page, int total) {
 		sendJailList(player, town, page, total);

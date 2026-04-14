@@ -415,7 +415,7 @@ public class TownyCustomListener implements Listener {
 		if (cost > 0) {
 			// The costed spawn will have its own Confirmation.
 			try {
-				SpawnUtil.sendToTownySpawn(player, new String[0], town, notAffordMsg, false, false, SpawnType.TOWN);
+				SpawnUtil.sendToTownySpawn(player, new String[0], town, notAffordMsg, false, SpawnType.TOWN);
 			} catch (TownyException e) {
 				TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 			}
@@ -423,7 +423,7 @@ public class TownyCustomListener implements Listener {
 			// No cost, so lets offer the new resident a choice.
 			Confirmation.runOnAccept(() -> {
 				try {
-					SpawnUtil.sendToTownySpawn(player, new String[0], town, notAffordMsg, false, false, SpawnType.TOWN);
+					SpawnUtil.sendToTownySpawn(player, new String[0], town, notAffordMsg, false, SpawnType.TOWN);
 				} catch (TownyException e) {
 					TownyMessaging.sendErrorMsg(player, e.getMessage(player));
 				}
