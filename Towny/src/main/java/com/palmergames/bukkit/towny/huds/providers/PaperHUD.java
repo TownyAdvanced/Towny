@@ -91,11 +91,15 @@ public class PaperHUD implements ServerHUD {
 		if (objective == null)
 			return;
 
-		while (lines.size() < 15)
-			lines.add(Component.empty()); // Pad the List until is is the max height for a scoreboard.
+		// PaperHUD requires a bit of work to remove previous larger scoreboards to be blanked out.
+		int existingScoreboardSize = objective.getScoreboard().getEntries().size();
+		if (existingScoreboardSize > 0 && lines.size() < existingScoreboardSize) {
+			for (int i = existingScoreboardSize - 1; i >= 0 ; i--)
+				objective.getScoreboard().resetScores(String.valueOf(i));
+		}
 
 		Collections.reverse(lines);
-		for (int i = 14; i >= 0 ; i--) {
+		for (int i = lines.size() - 1; i >= 0 ; i--) {
 			String teamName = String.valueOf(i);
 			objective.getScore(teamName).setScore(i);
 			objective.getScore(teamName).customName(lines.get(i));
