@@ -10797,3 +10797,5 @@ v0.92.0.11:
   - Fix /towny prices missing the max tax percent caps when a town or nation has taxpercent in use.
   - Bump org.apache.logging.log4j:log4j-core from 2.25.3 to 2.25.4.
   - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 9.0.2 to 9.1.0.
+0.102.0.14:
+  - Use mockito for unit testing, courtesy of Warrior with PR #8159.

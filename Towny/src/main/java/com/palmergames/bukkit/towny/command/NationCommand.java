@@ -260,7 +260,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					if (args.length == 3 && args[1].equalsIgnoreCase("list"))
 						return getTownyStartingWith(args[2], "n");
 					break;
-				case "add":
+				case "add","invite":
 					return getTownyStartingWith(args[args.length - 1], "t");
 				case "kick":
 					if (res.hasNation())
@@ -760,6 +760,12 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 				int levelNumber = target.getNationOrNull().getLevelNumber();
 				if (rankLevelReq > levelNumber)
 					throw new TownyException(Translatable.of("msg_town_or_nation_level_not_high_enough_for_this_rank", nationWord, rank, nationWord, levelNumber, rankLevelReq));
+			}
+
+			if (!TownyPerms.governmentIsAllowedToAssignRank(rank, nation)) {
+				int uses = TownyPerms.numberOfTimesRankIsUsedByGovernment(rank, nation);
+				int limit = TownyPerms.governmentRankLimit(rank, nation);
+				throw new TownyException(Translatable.of("msg_rank_can_only_be_assigned_x_times", rank, target.getName(), limit, nationWord, uses));
 			}
 
 			BukkitTools.ifCancelledThenThrow(new NationRankAddEvent(nation, rank, target));

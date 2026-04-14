@@ -16,7 +16,6 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 
 	private final Town leftTown;
-	private final PlayerMoveEvent pme;
 	private final WorldCoord from;
 	private final Player player;
 	private final WorldCoord to;
@@ -30,12 +29,11 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 		return handlers;
 	}
 
-	public PlayerExitsFromTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town leftTown, PlayerMoveEvent pme) {
+	public PlayerExitsFromTownBorderEvent(Player player, WorldCoord to, WorldCoord from, Town leftTown) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.leftTown = leftTown;
 		this.player = player;
 		this.from = from;
-		this.pme = pme;
 		this.to = to;
 	}
 
@@ -48,8 +46,13 @@ public class PlayerExitsFromTownBorderEvent extends Event {
 		return TownyAPI.getInstance().getResident(player);
 	}
 
-	public PlayerMoveEvent getPlayerMoveEvent() {
-		return pme;
+	/**
+	 * @deprecated This event no longer includes the delegate PlayerMoveEvent. Use {@link #getFrom()} and {@link #getTo()} instead.
+	 * @throws UnsupportedOperationException always, do not call.
+	 */
+	@Deprecated(since = "0.102.0.14", forRemoval = true)
+	public PlayerMoveEvent getPlayerMoveEvent() throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 
 	public Town getLeftTown() {

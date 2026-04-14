@@ -78,9 +78,6 @@ public class FoliaHUD implements ServerHUD {
 		if (board == null)
 			return;
 
-		while (lines.size() < 15)
-			lines.add(Component.empty()); // Pad the List until is is the max height for a scoreboard.
-
 		board.updateLines(lines);
 	}
 

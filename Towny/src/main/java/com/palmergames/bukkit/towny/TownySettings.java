@@ -628,7 +628,7 @@ public class TownySettings {
 			if (type != null)
 				entities.add(type);
 			else
-				System.out.println("Unmatched entity: " + entityName);
+				Towny.getPlugin().getLogger().warning(() -> String.format("Could not find entity type for %s", entityName));
 		}
 
 		return entities;

@@ -23,12 +23,11 @@ public class PlayerChangePlotEvent extends Event {
 	private final Player player;
 	private final WorldCoord from;
 	private final WorldCoord to;
-	private final PlayerMoveEvent moveEvent;
 	private boolean showPlotNotifications;
 	
 	@Override
     public HandlerList getHandlers() {
-    	
+
         return handlers;
     }
     
@@ -37,12 +36,11 @@ public class PlayerChangePlotEvent extends Event {
 		return handlers;
 	}
 	
-	public PlayerChangePlotEvent(Player player, WorldCoord from, WorldCoord to, PlayerMoveEvent moveEvent) {
+	public PlayerChangePlotEvent(Player player, WorldCoord from, WorldCoord to) {
 		super(!Bukkit.getServer().isPrimaryThread());
 		this.player = player;
 		this.from = from;
 		this.to = to;
-		this.moveEvent = moveEvent;
 		this.showPlotNotifications = TownySettings.getShowTownNotifications() && TownyUniverse.getInstance().getPermissionSource().testPermission(player, PermissionNodes.TOWNY_RECEIVES_PLOT_NOTIFICATIONS.getNode());
 	}
 
@@ -51,9 +49,13 @@ public class PlayerChangePlotEvent extends Event {
 		return from;
 	}
 
-	public PlayerMoveEvent getMoveEvent() {
-		
-		return moveEvent;
+	/**
+	 * @deprecated This event no longer includes the delegate PlayerMoveEvent. Use {@link #getFrom()} and {@link #getTo()} instead.
+	 * @throws UnsupportedOperationException always, do not call.
+	 */
+	@Deprecated(since = "0.102.0.14", forRemoval = true)
+	public PlayerMoveEvent getMoveEvent() throws UnsupportedOperationException {
+		throw new UnsupportedOperationException("This event no longer includes the delegate PlayerMoveEvent.");
 	}
 	
 	public WorldCoord getTo() {
