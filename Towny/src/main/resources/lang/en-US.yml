@@ -183,6 +183,7 @@ nation_help_15: "Deposits money into the nation bank."
 nation_help_16: "Used to delete your nation."
 nation_help_17: "Used to add or remove ranks from residents."
 nation_help_18: "See /n rank ? for help."
+nation_help_19: "Used to teleport to the outposts owned by your nation's towns."
 
 nation_list_help_0: "View the specified page."
 nation_list_help_1: "List nations by resident-count, with the specified page."
@@ -806,6 +807,7 @@ msg_you_have_given_rank: 'You have granted the %s rank of %s to %s.'
 msg_resident_not_your_town: 'That resident isn''t a member of a town!'
 msg_resident_already_has_rank: '%s already holds this %s rank.'
 msg_town_or_nation_level_not_high_enough_for_this_rank: "Your %s level is not high enough to assign the %s rank. Your %s's Level: %s/%s required."
+msg_rank_can_only_be_assigned_x_times: "You cannot assign the rank of %s to %s because it can only be assigned %s times, your %s has used it %s times."
 msg_you_have_had_rank_taken: 'You have been demoted from the %s rank of %s.'
 msg_you_have_taken_rank_from: 'You have removed the %s rank of %s from %s.'
 msg_resident_doesnt_have_rank: '%s doesn''t hold this %s rank.'
@@ -967,6 +969,7 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 nation_zone_conquered_status_denies_use: "Your town's conquered status prevents you from using this nation zone."
 nation_zone_conquered_status_denies_use_2: "Your are unable to use this conquered town's nation zone."
 nation_spawn_not_allowed_for_conquered_towns: "Your town's conquered status prevents you from spawning to your nation's spawn point."
+nation_outpost_not_allowed_for_conquered_towns: "Your town's conquered status prevents you from teleporting to your nation's outposts."
 
 # Added in 0.42
 you_have_been_invited_to_join2: 'You have been invited to join %s'
@@ -2429,6 +2432,9 @@ msg_err_your_cannot_overclaim_for_another: "You cannot overclaim again for anoth
 
 # Generic error message for when a world isn't loaded
 msg_err_world_not_loaded: "<red>World is not loaded."
+
+# Message shown when denying a cross world teleport
+msg_err_world_not_same_cant_teleport: "<red>You cannot teleport to a different world using this command."
 
 # Message shown when a mayor toggles a plots taxed status.
 msg_changed_plot_taxed: '&cThis plot has had its taxed status set to %s.'
