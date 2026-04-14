@@ -2140,6 +2140,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.SPAWNING_COST_SPAWN_WARNINGS);
 	}
 
+	public static boolean isSpawnCommandsRequireSameWorld() {
+		return getBoolean(ConfigNodes.SPAWNING_REQUIRE_SPAWN_POINT_SAME_WORLD);
+	}
+
 	public static boolean isTaxingDaily() {
 
 		return getBoolean(ConfigNodes.ECO_DAILY_TAXES_ENABLED);

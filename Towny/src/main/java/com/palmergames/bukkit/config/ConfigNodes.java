@@ -1370,6 +1370,13 @@ public enum ConfigNodes {
 			"# +------------------------------------------------------+ #",
 			"############################################################",
 			""),
+	SPAWNING_REQUIRE_SPAWN_POINT_SAME_WORLD(
+		"spawning.require_spawn_destination_same_world",
+		"false",
+		"",
+		"# When true, using /res, /t, /n spawn or /t outpost will fail when those spawn points are not in the same world as the player.",
+		"# Use this feature to require players use special portals to travel between your server's worlds."
+	),
 	SPAWNING_SAFE_TELEPORT(
 		"spawning.safe_teleport",
 		"false",
