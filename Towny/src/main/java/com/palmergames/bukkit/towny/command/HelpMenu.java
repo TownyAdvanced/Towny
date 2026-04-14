@@ -971,6 +971,7 @@ public enum HelpMenu {
 				.add("enemylist (nation)", Translatable.of("nation_help_13"))
 				.add("online", Translatable.of("nation_help_9"))
 				.add("spawn", Translatable.of("nation_help_10"))
+				.add("townoutposts", Translatable.of("nation_help_19"))
 				.add("join (nation)", Translatable.of("nation_help_14"))
 				.add("rank", Translatable.of("nation_help_18"))
 				.add("delete", Translatable.of("nation_help_16"))

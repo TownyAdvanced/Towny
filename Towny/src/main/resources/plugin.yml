@@ -117,6 +117,7 @@ permissions:
         description: User is permitted to use /town spawn to towns in the nation.
         default: false
         children:
+            towny.town.spawn.nation.outpost: true
             towny.town.spawn.nation.bypass_public: false
 
     towny.town.spawn.nation.bypass_public:
@@ -220,6 +221,8 @@ permissions:
             towny.command.nation.new: true
             towny.command.nation.online: true
             towny.command.nation.othernation: true
+            towny.command.nation.outpost.listall: true
+            towny.command.nation.outpost.list: true
             towny.command.nation.withdraw: true
             towny.command.nation.rank.*: true
             towny.command.nation.sanctiontown: true
@@ -240,6 +243,8 @@ permissions:
         children:
             towny.command.nation.ally: true
             towny.command.nation.invite: true
+            towny.command.nation.outpost.listall: true
+            towny.command.nation.outpost.list: true
             towny.command.nation.rank: true
             towny.command.nation.set: true
             towny.command.nation.toggle: true

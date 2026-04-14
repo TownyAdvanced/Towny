@@ -183,6 +183,7 @@ nation_help_15: "Deposits money into the nation bank."
 nation_help_16: "Used to delete your nation."
 nation_help_17: "Used to add or remove ranks from residents."
 nation_help_18: "See /n rank ? for help."
+nation_help_19: "Used to teleport to the outposts owned by your nation's towns."
 
 nation_list_help_0: "View the specified page."
 nation_list_help_1: "List nations by resident-count, with the specified page."
@@ -968,6 +969,7 @@ nation_zone_this_area_under_protection_of: 'This part of the %s is under the pro
 nation_zone_conquered_status_denies_use: "Your town's conquered status prevents you from using this nation zone."
 nation_zone_conquered_status_denies_use_2: "Your are unable to use this conquered town's nation zone."
 nation_spawn_not_allowed_for_conquered_towns: "Your town's conquered status prevents you from spawning to your nation's spawn point."
+nation_outpost_not_allowed_for_conquered_towns: "Your town's conquered status prevents you from teleporting to your nation's outposts."
 
 # Added in 0.42
 you_have_been_invited_to_join2: 'You have been invited to join %s'
