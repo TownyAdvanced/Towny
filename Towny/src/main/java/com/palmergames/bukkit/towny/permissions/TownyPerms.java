@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -59,6 +60,7 @@ public class TownyPerms {
 	private static Towny plugin;
 	private static final List<String> vitalGroups = Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks");
 	private static final HashMap<UUID, String> residentPrefixMap = new HashMap<>();
+	private static final String RANKLIMIT = "towny.ranklimit.";
 	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
 	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
 	private static final String RANK_TOWN_LEVEL_REQUIREMENT_PREFIX = "towny.town_level_requirement.";
@@ -598,6 +600,53 @@ public class TownyPerms {
 	}
 
 	/*
+	 * Rank Limits
+	 */
+
+	public static boolean governmentIsAllowedToAssignRank(String rank, Government gov) {
+		int limit = governmentRankLimit(rank, gov);
+		if (limit == -1) {
+			return true;
+		}
+
+		int uses = numberOfTimesRankIsUsedByGovernment(rank, gov);
+		return uses < limit;
+	}
+
+	public static boolean rankIsNotLimitedByNumberOfAssignments(String rank, Government gov) {
+		return governmentRankLimit(rank, gov) == -1;
+	}
+
+	public static int numberOfTimesRankIsUsedByGovernment(String rank, Government gov ) {
+		if (gov instanceof Town town && getTownRanks().contains(rank)) {
+			return (int) town.getResidents().stream().filter(res -> res.hasTownRank(rank)).count();
+		}
+		if (gov instanceof Nation nation && getNationRanks().contains(rank)) {
+			return (int) nation.getResidents().stream().filter(res -> res.hasNationRank(rank)).count();
+		}
+		return 0;
+	}
+
+	public static int governmentRankLimit(String rank, Government gov) {
+		if (gov instanceof Town && getTownRanks().contains(rank)) {
+			return getRankLimit(getTownRankPermissions(rank));
+		}
+		if (gov instanceof Nation && getNationRanks().contains(rank)) {
+			return getRankLimit(getNationRankPermissions(rank));
+		}
+		return -1;
+	}
+
+	private static int getRankLimit(List<String> nodes) {
+		for (String node : nodes) {
+			if (node.startsWith(RANKLIMIT)) {
+				return getIntFromNode(node, RANKLIMIT.length());
+			}
+		}
+		return -1;
+	}
+
+	/*
 	 * Resident Primary Rank / Rank Prefix 
 	 */
 
@@ -643,6 +692,10 @@ public class TownyPerms {
 		return null;
 	}
 
+	/*
+	 * Rank Priorities
+	 */
+
 	public static String getHighestPriorityRank(Resident resident, List<String> ranks, Function<String, List<String>> rankFunction) {
 		Map<String, Integer> rankPriorityMap = new HashMap<>(); 
 		for (String rank : ranks)
@@ -654,7 +707,7 @@ public class TownyPerms {
 		int topValue = 0;
 		for (String node : nodes) {
 			if (node.startsWith(RANKPRIORITY_PREFIX)) {
-				int priorityValue = getNodePriority(node, RANKPRIORITY_PREFIX.length());
+				int priorityValue = getIntFromNode(node, RANKPRIORITY_PREFIX.length());
 				if (topValue >= priorityValue)
 					continue;
 				topValue = priorityValue;
@@ -663,7 +716,7 @@ public class TownyPerms {
 		return topValue;
 	}
 
-	private static int getNodePriority(String node, int length) {
+	private static int getIntFromNode(String node, int length) {
 		try {
 			return Integer.parseInt(node.substring(length));
 		} catch (NumberFormatException ignored) {
@@ -684,14 +737,14 @@ public class TownyPerms {
 	public static int getRankTownLevelReq(String rank) {
 		for (String node : getTownRankPermissions(rank))
 			if (node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX))
-				return getNodePriority(node, RANK_TOWN_LEVEL_REQUIREMENT_PREFIX.length());
+				return getIntFromNode(node, RANK_TOWN_LEVEL_REQUIREMENT_PREFIX.length());
 		return 0;
 	}
 
 	public static int getRankNationLevelReq(String rank) {
 		for (String node : getNationRankPermissions(rank))
 			if (node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX))
-				return getNodePriority(node, RANK_NATION_LEVEL_REQUIREMENT_PREFIX.length());
+				return getIntFromNode(node, RANK_NATION_LEVEL_REQUIREMENT_PREFIX.length());
 		return 0;
 	}
 
@@ -896,6 +949,14 @@ public class TownyPerms {
 				"# Ex:                                                                                       #",
 				"#    - towny.rankpriority.100                                                               #",
 				"#    - towny.rankprefix.&a<&2Sheriff&a>                                                     #",
+				"#                                                                                           #",
+				"# The towns.ranks and nations.ranks sections support adding limits to how many times a town #",
+				"# or nation can assign each rank to their residents. This is done using the                 #",
+				"# towny.ranklimit.# node. When added to a rank, with a number replacing pound/hashtag       #",
+				"# symbol, that rank will only be able to be assigned that number of times. In the below     #",
+				"# example the rank will only be able to be used by a town twice.                            #",
+				"# Ex:                                                                                       #",
+				"#    - towny.ranklimit.2                                                                    #",
 				"#                                                                                           #",
 				"# The towns.ranks and nations.ranks sections support requiring their town or nation to have #",
 				"# a minimum town_level or nation_level. This means that you can lock ranks behind a town or #",
