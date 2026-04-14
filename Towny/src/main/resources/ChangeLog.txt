@@ -10799,3 +10799,19 @@ v0.92.0.11:
   - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 9.0.2 to 9.1.0.
 0.102.0.14:
   - Use mockito for unit testing, courtesy of Warrior with PR #8159.
+  - Fix Outlaw teleportation on Folia / Add support for Canvas outlaw teleportation, courtesy of Jsinco #8138. (First-Time Contributor!)
+  - Add optional limits to town and nation ranks uses.
+    - New towny.ranklimit.# node which can be added to town and nation ranks to limit how many times a town or nation can use the rank.
+    - Closes #8035.
+  - Fix added padding of scoreboards.
+  - Simplify explosion revert BlockState handling, courtesy of Warrior with PR #8153.
+  - NameValidation: Strip dangerous tags, not the allowed ones, courtesy of Veyronity with PR #8156.
+  - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 9.1.0 to 10.0.0.
+  - Bump javadoc plugin and fix javadoc goal not applying formatting, courtesy of SulkyWhale with PR #8161.
+  - Adds option to deny cross world teleportation.
+    - Closes #8162.
+  - New Config Option: spawning.require_spawn_destination_same_world
+    - Default: false
+    - When true, using /res, /t, /n spawn or /t outpost will fail when those spawn points are not in the same world as the player.
+    - Use this feature to require players use special portals to travel between your server's worlds.
+  - Use dedicated age lock event instead of interact listener, courtesy of Warrior with PR #8158.
