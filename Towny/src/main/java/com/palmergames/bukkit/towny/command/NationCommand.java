@@ -2312,6 +2312,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
 							return;
 						}
+						double cost = nationKingChangeEvent.getCost();
+						if (cost > 0 && !nationKingChangeEvent.getNation().getAccount().withdraw(cost, "Capital change")) {
+							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(cost)));
+							return;
+						}
 						
 						nation.setCapital(newCapital);
 						ProximityUtil.removeOutOfRangeTowns(nation);
@@ -2335,6 +2340,11 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			Confirmation.runOnAccept(() -> {
 				if (BukkitTools.isEventCancelled(nationKingChangeEvent) && !admin) {
 					TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
+					return;
+				}
+				double cost = nationKingChangeEvent.getCost();
+				if (cost > 0 && !nationKingChangeEvent.getNation().getAccount().withdraw(cost, "Capital change")) {
+					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(cost)));
 					return;
 				}
 				

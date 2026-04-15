@@ -2625,6 +2625,12 @@ public enum ConfigNodes {
 			"0",
 			"",
 			"# The cost of renaming a nation."),
+	ECO_NATION_CAPITAL_CHANGE_COST(
+			"economy.nation_capital_change_cost",
+			"0",
+			"",
+			"# The cost of a nation changing its capital"
+			),
 	ECO_TOWN_MAPCOLOUR_COST(
 			"economy.town_set_mapcolour_cost",
 			"0",
