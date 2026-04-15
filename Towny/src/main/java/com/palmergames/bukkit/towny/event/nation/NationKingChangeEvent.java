@@ -22,7 +22,7 @@ public class NationKingChangeEvent extends CancellableTownyEvent {
     public NationKingChangeEvent(Resident oldKing, Resident newKing) {
         this.oldKing = oldKing;
         this.newKing = newKing;
-        this.cost = TownySettings.getNationCapitalChangeCost();
+        this.cost = isCapitalChange() ? TownySettings.getNationCapitalChangeCost() : 0;
         this.setCancelMessage(Translation.of("msg_err_command_disable"));
     }
 

@@ -2312,21 +2312,26 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 							TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
 							return;
 						}
+						Runnable execute = () -> {
+							nation.setCapital(newCapital);
+							ProximityUtil.removeOutOfRangeTowns(nation);
+							plugin.resetCache();
+							TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+
+							if (admin)
+								TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+
+							nation.save();
+						};
 						double cost = nationKingChangeEvent.getCost();
-						if (cost > 0 && !nationKingChangeEvent.getNation().getAccount().withdraw(cost, "Capital change")) {
-							TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(cost)));
-							return;
+						if (cost > 0) {
+							Confirmation.runOnAccept(execute)
+									.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+									.setCost(new ConfirmationTransaction(() -> cost, nation, "Capital change"))
+									.sendTo(sender);
+						} else {
+							execute.run();
 						}
-						
-						nation.setCapital(newCapital);
-						ProximityUtil.removeOutOfRangeTowns(nation);
-						plugin.resetCache();
-						TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-						
-						if (admin)
-							TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-						
-						nation.save();
 					})
 					.setTitle(Translatable.of("msg_warn_the_following_towns_will_be_removed_from_your_nation", StringMgmt.join(removedTowns, ", ")))
 					.sendTo(sender);
@@ -2342,20 +2347,25 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					TownyMessaging.sendErrorMsg(sender, nationKingChangeEvent.getCancelMessage());
 					return;
 				}
+				Runnable execute = () -> {
+					nation.setCapital(newCapital);
+					plugin.resetCache();
+					TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+
+					if (admin)
+						TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
+
+					nation.save();
+				};
 				double cost = nationKingChangeEvent.getCost();
-				if (cost > 0 && !nationKingChangeEvent.getNation().getAccount().withdraw(cost, "Capital change")) {
-					TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_no_money", TownyEconomyHandler.getFormattedBalance(cost)));
-					return;
+				if (cost > 0) {
+					Confirmation.runOnAccept(execute)
+							.setTitle(Translatable.of("msg_confirm_purchase", TownyEconomyHandler.getFormattedBalance(cost)))
+							.setCost(new ConfirmationTransaction(() -> cost, nation, "Capital change"))
+							.sendTo(sender);
+				} else {
+					execute.run();
 				}
-				
-				nation.setCapital(newCapital);
-				plugin.resetCache();
-				TownyMessaging.sendPrefixedNationMessage(nation, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-
-				if (admin)
-					TownyMessaging.sendMsg(sender, Translatable.of("msg_new_king", newCapital.getMayor().getName(), nation.getName()));
-
-				nation.save();
 			})
 			.setTitle(Translatable.of("msg_warn_are_you_sure_you_want_to_transfer_nation_ownership", newCapital.getMayor().getName()))
 			.sendTo(sender);
