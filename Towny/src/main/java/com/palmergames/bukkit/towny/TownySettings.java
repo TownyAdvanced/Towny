@@ -2228,6 +2228,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.ECO_PRICE_DEATH_PVP_ONLY);
 		
 	}
+
+	public static boolean isDeathPricePaidToKiller() {	
+		return getBoolean(ConfigNodes.ECO_PRICE_DEATH_PAY_KILLER_ON_PVP);
+	}
 	
 	public static double getDeathPrice() {
 
