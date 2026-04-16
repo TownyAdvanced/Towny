@@ -2170,3 +2170,6 @@ msg_conquered_status_granted: "Hai impostato %s per avere lo status di \"conquis
 msg_conquered_status_granted_unlimited: "Hai impostato %s per avere lo status di \"conquistato\" per un periodo indeterminato di giorni."
 msg_err_must_specify_on_or_off: "È necessario specificare se attivo o disattivo."
 msg_nation_level_overridden_with: 'Il livello della nazione %s è stato impostato su %s.'
+msg_nation_level_unset: "È stato rimosso il livello nazionale, dapprima impostato manualmente, della nazione %s. Il suo livello attuale \nè %s."
+msg_err_cannot_merge_x_seconds_remaining: 'È necessario attendere %s secondi prima di chiedere a %s di unirsi di nuovo.'
+msg_towny_prices_percentage_capped_at: ", fino a %s"
