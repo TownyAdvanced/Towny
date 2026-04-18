@@ -107,7 +107,7 @@ public class ProximityUtil {
 		if (!outpost && minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
 			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
 			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, townBlockToClaim);
-			// The number of adjacement TBs is not enough and there is not a nearby outpost.
+			// The number of adjacent TBs is not enough and there is not a nearby outpost.
 			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, townBlockToClaim) == 0)
 				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
 		}
@@ -181,7 +181,7 @@ public class ProximityUtil {
 				if (wc.isWilderness() || !wc.hasTown(town))
 					continue;
 				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
-				// The number of adjacement TBs is not enough and there is not a nearby outpost.
+				// The number of adjacent TBs is not enough and there is not a nearby outpost.
 				if (numAdjacent - 1 < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
 					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
 			}
