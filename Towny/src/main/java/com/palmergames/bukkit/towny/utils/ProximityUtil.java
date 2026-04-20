@@ -174,6 +174,10 @@ public class ProximityUtil {
 	}
 	
 	public static void testAdjacentUnclaimsRulesOrThrow(WorldCoord townBlockToUnclaim, Town town, int minAdjacentBlocks) throws TownyException {
+		// When there is an adjacent outpost we let them unclaim.
+		if (numAdjacentOutposts(town, townBlockToUnclaim) > 0)
+			return;
+
 		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
 		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
 			WorldCoord firstWorldCoord = townBlockToUnclaim;
@@ -181,8 +185,8 @@ public class ProximityUtil {
 				if (wc.isWilderness() || !wc.hasTown(town))
 					continue;
 				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
-				// The number of adjacent TBs is not enough and there is not a nearby outpost.
-				if (numAdjacent - 1 < minAdjacentBlocks && numAdjacentOutposts(town, wc) == 0)
+				// The number of adjacent TBs is not enough.
+				if (numAdjacent - 1 < minAdjacentBlocks)
 					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
 			}
 		}
