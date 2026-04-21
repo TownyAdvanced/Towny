@@ -108,7 +108,7 @@ public class ProximityUtil {
 			// Only consider the first worldCoord, larger selection-claims will automatically "bubble" anyways.
 			int numAdjacent = numAdjacentTownOwnedTownBlocks(town, townBlockToClaim);
 			// The number of adjacent TBs is not enough and there is not a nearby outpost.
-			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, townBlockToClaim) == 0)
+			if (numAdjacent < minAdjacentBlocks && numAdjacentOutposts(town, townBlockToClaim, true) == 0)
 				throw new TownyException(Translatable.of("msg_min_adjacent_blocks", minAdjacentBlocks, numAdjacent));
 		}
 	}
@@ -126,8 +126,14 @@ public class ProximityUtil {
 			.count();
 	}
 
-	private static int numAdjacentOutposts(Town town, WorldCoord worldCoord) {
-		return (int) worldCoord.getCardinallyAdjacentWorldCoords(true).stream()
+	private static int numAdjacentTownOwnedTownBlocksIgnoring(Town town, WorldCoord worldCoord, WorldCoord ignoredWorldCoord, boolean useCardinal) {
+		return (int) worldCoord.getCardinallyAdjacentWorldCoords(useCardinal).stream()
+			.filter(wc -> wc.hasTown(town) && !wc.equals(ignoredWorldCoord))
+			.count();
+	}
+
+	private static int numAdjacentOutposts(Town town, WorldCoord worldCoord, boolean useCardinal) {
+		return (int) worldCoord.getCardinallyAdjacentWorldCoords(useCardinal).stream()
 			.filter(wc -> wc.hasTown(town))
 			.map(WorldCoord::getTownBlockOrNull)
 			.filter(Objects::nonNull)
@@ -174,20 +180,30 @@ public class ProximityUtil {
 	}
 	
 	public static void testAdjacentUnclaimsRulesOrThrow(WorldCoord townBlockToUnclaim, Town town, int minAdjacentBlocks) throws TownyException {
-		// When there is an adjacent outpost we let them unclaim.
-		if (numAdjacentOutposts(town, townBlockToUnclaim) > 0)
-			return;
-
 		// Prevent unclaiming land that would reduce the number of adjacent claims of neighbouring plots below the threshold.
 		if (minAdjacentBlocks > 0 && townHasClaimedEnoughLandToBeRestrictedByAdjacentClaims(town, minAdjacentBlocks)) {
+
+			// Outposts cannot be unclaimed when there are any connected townblocks.
+			if (townBlockToUnclaim.getTownBlockOrNull().isOutpost() && numAdjacentTownOwnedTownBlocks(town, townBlockToUnclaim) > 0)
+				throw new TownyException(Translatable.of("msg_err_cannot_unclaim_outpost_with_adjacent_claims"));
+
 			WorldCoord firstWorldCoord = townBlockToUnclaim;
 			for (WorldCoord wc : firstWorldCoord.getCardinallyAdjacentWorldCoords(true)) {
-				if (wc.isWilderness() || !wc.hasTown(town))
+				if (wc.isWilderness() || !wc.hasTown(town) || wc.getTownBlockOrNull().isOutpost())
 					continue;
-				int numAdjacent = numAdjacentTownOwnedTownBlocks(town, wc);
+
+				// The wc could become an island when tested in the NESW directions. This var used to prevent unclaiming the centre of an + shape of claims.
+				int numAdjacentNonCardinal = numAdjacentTownOwnedTownBlocksIgnoring(town, wc, townBlockToUnclaim, false);
+
+				int numAdjacent = numAdjacentTownOwnedTownBlocksIgnoring(town, wc, townBlockToUnclaim, true);
+
+				// Handle the scenario where the townblock being unclaimed is the last townblock beside an outpost.
+				if (numAdjacent == 1 && numAdjacentOutposts(town, wc, false) == 1)
+					continue;
+
 				// The number of adjacent TBs is not enough.
-				if (numAdjacent - 1 < minAdjacentBlocks)
-					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), numAdjacent));
+				if (numAdjacentNonCardinal == 0 || numAdjacent < minAdjacentBlocks)
+					throw new TownyException(Translatable.of("msg_err_cannot_unclaim_not_enough_adjacent_claims", wc.getX(), wc.getZ(), minAdjacentBlocks));
 			}
 		}
 	}
