@@ -763,6 +763,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		String value = switch(identifier) {
 		case "town_balance" -> getMoney(town.getAccount().getCachedBalance()); // %townyadvanced_top_town_balance_n%
 		case "town_residents" -> String.valueOf(town.getNumResidents());       // %townyadvanced_top_town_residents_n%
+		case "town_residents_and_open" -> String.valueOf(town.getNumResidents());       // %townyadvanced_top_town_residents_and_open_n%
 		case "town_land" -> String.valueOf(town.getNumTownBlocks());           // %townyadvanced_top_town_land_n%
 		default -> "";
 		};
@@ -775,6 +776,7 @@ public class TownyPlaceholderExpansion extends PlaceholderExpansion implements R
 		ComparatorType type = switch (identifier) {
 		case "town_balance" -> ComparatorType.BALANCE;     // %townyadvanced_top_town_balance_n%
 		case "town_residents" -> ComparatorType.RESIDENTS; // %townyadvanced_top_town_residents_n%
+		case "town_residents_and_open" -> ComparatorType.OPEN; // %townyadvanced_top_town_residents_and_open_n%
 		case "town_land" -> ComparatorType.TOWNBLOCKS;     // %townyadvanced_top_town_land_n%
 		default -> null;
 		};

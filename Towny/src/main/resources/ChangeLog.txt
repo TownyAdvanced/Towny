@@ -10837,3 +10837,5 @@ v0.92.0.11:
     - Allow regular residents to use /nation outpost [town] [outpost] (TP to other towns' outposts if they are public).
     - Valid values are: true, false, war, peace.
     - When war or peace is set, it is only possible to teleport to the nation, when there is a war or peace.
+0.102.0.15:
+  - New PlaceholderAPI placeholder: %townyadvanced_top_town_residents_and_open_n% - (Replace n with a number) Displays the nth Town that is open, arranged by the number of residents.
