@@ -286,9 +286,16 @@ public class TownyFormatter {
 		StatusScreen screen = new StatusScreen(sender);
 		TownyWorld world = town.getHomeblockWorld();
 
-		// ___[ Raccoon City ]___
-		screen.addComponentOf("title", ChatTools.formatTitle(town));
-		
+		// ___[ Raccoon City ]___ (With hover for admins.)
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender)) {
+			Component adminComp = Component.text("Name: " + town.getName()).appendNewline()
+									.append(Component.text("UUID: " + town.getUUID())).appendNewline()
+									.append(Component.text("TownLevel: " + town.getLevelNumber()
+										+ (town.getManualTownLevel() > -1 ? " (Manually Set)" : "")));
+			screen.addComponentOf("title", ChatTools.formatTitle(town), HoverEvent.showText(adminComp));
+		} else
+			screen.addComponentOf("title", ChatTools.formatTitle(town));
+
 		// (PvP) (Open) (Peaceful)
 		List<String> sub = getTownSubtitle(town, world, translator);
 		if (!sub.isEmpty())
@@ -418,8 +425,16 @@ public class TownyFormatter {
 		StatusScreen screen = new StatusScreen(sender);
 		final Translator translator = Translator.locale(sender);
 
-		// ___[ Azur Empire (Open)]___
-		screen.addComponentOf("nation_title", ChatTools.formatTitle(nation));
+		// ___[ Azur Empire (Open)]___ (With hover for admins.)
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender)) {
+			Component adminComp = Component.text("Name: " + nation.getName()).appendNewline()
+									.append(Component.text("UUID: " + nation.getUUID())).appendNewline()
+									.append(Component.text("NationLevel: " + nation.getLevelNumber()
+										+ (nation.getManualNationLevel() > -1 ? " (Manually Set)" : "")));
+			screen.addComponentOf("nation_title", ChatTools.formatTitle(nation), HoverEvent.showText(adminComp));
+		} else
+			screen.addComponentOf("nation_title", ChatTools.formatTitle(nation));
+
 		List<String> sub = getNationSubtitle(nation, translator);
 		if (!sub.isEmpty())
 			screen.addComponentOf("subtitle", ChatTools.formatSubTitle(StringMgmt.join(sub, " ")));
