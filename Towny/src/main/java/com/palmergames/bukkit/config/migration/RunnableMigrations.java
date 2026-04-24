@@ -84,7 +84,7 @@ public class RunnableMigrations {
 
 			for (EntityType type : BukkitTools.entityTypeRegistry()) {
 				if (type.getEntityClass() != null && type.getEntityClass().getSimpleName().equalsIgnoreCase(entity)) {
-					iterator.set(BukkitTools.keyAsString(type.getKey()).toLowerCase());
+					iterator.set(BukkitTools.keyAsString(type.getKey()));
 					break;
 				}
 			}
