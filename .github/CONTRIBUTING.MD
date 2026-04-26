@@ -1,8 +1,9 @@
 # Contributing to Towny
 Thanks for deciding to contribute to Towny! We really appreciate contributions, but to keep everything running smoothly and get contributions merged in a timely manner, we need to enforce some guidelines. :shipit:
 
-Contributions are welcome via GitHub Pull Requests.
-You must fork this repository and then open it via your IDE.   
+Contributions made by humans are welcome via GitHub Pull Requests.
+You must fork this repository and then open it via your IDE.
+When making a pull request, please do not make your modifications to the master branch, please create a new branch.
 You can always ask for help on your contribution in the [Towny Discord](https://discord.gg/gnpVs5m).    
 
 ## Before contributing
