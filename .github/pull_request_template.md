@@ -13,7 +13,13 @@ ____
 
 
 ____
+
+#### Attestations
+
 - [ ] I have tested this pull request for defects on a server. 
 <!--- Place x between [ ] if you have tested this code on a server. --->
+
+- [ ] I declare that I have used an AI toolset to code this pull request, or that I am not human.
+<!--- Place x between [ ] if you have used tools to help you create this pull request, or if you are not human at all. --->
 
 By making this pull request, I represent that I have the right to waive copyright and related rights to my contribution, and agree that all copyright and related rights in my contributions are waived, and I acknowledge that the TownyAdvanced organization has the copyright to use and modify my contribution under the Towny [License](https://github.com/LlmDl/Towny/blob/master/LICENSE.md) for perpetuity.
