@@ -56,11 +56,11 @@ public class PlotGroupDeletedEvent extends CancellableTownyEvent {
 		 */
 		DELETED,
 		/**
-		 * The plot group was deleted because all of its townblocks were removed.
+		 * The plot group was deleted because all of its townblocks were removed. Not cancellable.
 		 */
 		NO_TOWNBLOCKS,
 		/**
-		 * The plot group was deleted because the town it was in being deleted/ruined.
+		 * The plot group was deleted because the town it was in being deleted/ruined. Not cancellable.
 		 */
 		TOWN_DELETED,
 	}

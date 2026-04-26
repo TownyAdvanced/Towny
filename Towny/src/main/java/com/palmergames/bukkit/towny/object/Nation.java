@@ -1,6 +1,5 @@
 package com.palmergames.bukkit.towny.object;
 
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -8,7 +7,6 @@ import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.TownySettings.NationLevel;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
-import com.palmergames.bukkit.towny.event.nation.NationCalculateNationLevelNumberEvent;
 import com.palmergames.bukkit.towny.exceptions.EmptyNationException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
 import com.palmergames.bukkit.towny.invites.Invite;
@@ -34,7 +32,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,14 +48,22 @@ public class Nation extends Government {
 	private boolean isTaxPercentage = TownySettings.getNationDefaultTaxPercentage();
 	private double maxPercentTaxAmount = TownySettings.getMaxNationTaxPercentAmount();
 	private double conqueredTax = TownySettings.getDefaultNationConqueredTaxAmount();
+	private int manualNationLevel = -1;
 
-	public Nation(String name) {
-		super(name);
+	@ApiStatus.Internal
+	public Nation(String name, UUID uuid) {
+		super(name, uuid);
 		
 		// Set defaults
 		setTaxes(TownySettings.getNationDefaultTax());
 		setBoard(TownySettings.getNationDefaultBoard());
+		setNeutral(TownySettings.getNationDefaultNeutral());
 		setOpen(TownySettings.getNationDefaultOpen());
+	}
+
+	@Deprecated(since = "0.102.0.4")
+	public Nation(String name) {
+		this(name, UUID.randomUUID());
 	}
 
 	@Override
@@ -67,12 +72,7 @@ public class Nation extends Government {
 			return true;
 		if (!(other instanceof Nation otherNation))
 			return false;
-		return this.getName().equals(otherNation.getName()); // TODO: Change this to UUID when the UUID database is in use.
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.getUUID().equals(otherNation.getUUID());
 	}
 
 	public void addAlly(Nation nation) {
@@ -648,16 +648,12 @@ public class Nation extends Government {
 	 * @return Nation Level (int) for current population or amount of towns.
 	 */
 	public int getLevelNumber() {
-		int modifier = TownySettings.isNationLevelDeterminedByTownCount() ? getNumTowns() : getNumResidents();
-		int nationLevelNumber = TownySettings.getNationLevelFromGivenInt(modifier);
-		NationCalculateNationLevelNumberEvent ncnle = new NationCalculateNationLevelNumberEvent(this, nationLevelNumber);
-		BukkitTools.fireEvent(ncnle);
-		return ncnle.getNationLevelNumber();
+		return TownySettings.getNationLevelNumber(this);
 	}
 
 	@Override
 	public @NotNull Iterable<? extends Audience> audiences() {
-		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());
+		return TownyAPI.getInstance().getOnlinePlayers(this);
 	}
 
 	public double getConqueredTax() {
@@ -713,4 +709,11 @@ public class Nation extends Government {
 	}
 
 
+	public int getManualNationLevel() {
+		return manualNationLevel;
+	}
+
+	public void setManualNationLevel(int manualNationLevel) {
+		this.manualNationLevel = manualNationLevel;
+	}
 }

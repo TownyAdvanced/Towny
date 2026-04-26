@@ -6,6 +6,7 @@ public enum SpawnType {
 
 	RESIDENT(Translatable.of("res_sing")),
 	TOWN(Translatable.of("town_sing")),
+	OUTPOST(Translatable.of("outpost")),
 	NATION(Translatable.of("nation_sing"));
 
 	private final Translatable typeName;

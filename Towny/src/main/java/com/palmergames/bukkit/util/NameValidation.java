@@ -1,19 +1,24 @@
 package com.palmergames.bukkit.util;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.TownyCommandAddonAPI;
 import com.palmergames.bukkit.towny.TownySettings;
+import com.palmergames.bukkit.towny.command.NationCommand;
+import com.palmergames.bukkit.towny.command.TownCommand;
 import com.palmergames.bukkit.towny.exceptions.InvalidNameException;
 import com.palmergames.bukkit.towny.exceptions.TownyException;
+import com.palmergames.bukkit.towny.object.AddonCommand;
 import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.Translatable;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import com.palmergames.util.StringMgmt;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -28,17 +33,13 @@ public class NameValidation {
 
 	private static Pattern namePattern = null;
 	private static Pattern stringPattern = null;
-	private static final Collection<String> bannedNames;
+	private static final Set<String> bannedNames = new HashSet<>();
 	private static final Pattern numberPattern = Pattern.compile("\\d");
 	
 	static {
-		bannedNames = new HashSet<>(
-			Arrays.asList("here","leave","list","online","new","plots","add","kick","claim","unclaim","withdraw","delete",
-					"outlawlist","deposit","outlaw","outpost","ranklist","rank","reclaim","reslist","say","set","toggle","join",
-					"invite","buy","mayor","bankhistory","enemy","ally","townlist","allylist","enemylist","king","merge","jail",
-					"plotgrouplist","trust","purge","leader","baltop","all","help", "spawn", "takeoverclaim", "ban", "unjail",
-					"trusttown","forsale","fs","notforsale","nfs","buytown","sanctiontown","create","cede"));
-
+		bannedNames.addAll(TownCommand.townTabCompletes);
+		bannedNames.addAll(NationCommand.nationTabCompletes);
+		
 		TownySettings.addReloadListener(NamespacedKey.fromString("towny:regex-patterns"), () -> {
 			namePattern = null;
 			stringPattern = null;
@@ -186,7 +187,9 @@ public class NameValidation {
 
 		testForConfigBlacklistedName(title);
 
-		if (title.length() > TownySettings.getMaxTitleLength())
+		int textLength = TownyComponents.USER_SAFE.stripTags(Colors.translateLegacyCharacters(title)).length();
+
+		if (textLength > TownySettings.getMaxTitleLength())
 			throw new InvalidNameException(Translatable.of("msg_err_name_validation_title_too_long", title));
 
 		return title;
@@ -457,6 +460,10 @@ public class NameValidation {
 	 * @return true if this is a banned name.
 	 */
 	static boolean isBannedName(String name) {
+		Map<TownyCommandAddonAPI.CommandType, Map<String, AddonCommand>> addons = TownyCommandAddonAPI.getAddedCommands();
+		bannedNames.addAll(addons.getOrDefault(TownyCommandAddonAPI.CommandType.TOWN, Map.of()).keySet());
+		bannedNames.addAll(addons.getOrDefault(TownyCommandAddonAPI.CommandType.NATION, Map.of()).keySet());
+		
 		return bannedNames.contains(name.toLowerCase(Locale.ROOT));
 	}
 

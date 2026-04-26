@@ -79,7 +79,7 @@ public class DataFieldIO {
 				continue;
 			
 			JsonArray cdfArray = element.getAsJsonArray();
-			if (cdfArray.size() < 2)
+			if (cdfArray.size() < 3)
 				continue;
 			
 			RawDataField rdf = deserializeCDFToRaw(cdfArray);

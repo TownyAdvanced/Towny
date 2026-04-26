@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.google.common.collect.Lists;
-import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.TownyMessaging;
@@ -14,9 +13,9 @@ import com.palmergames.bukkit.towny.event.NationRemoveTownEvent;
 import com.palmergames.bukkit.towny.event.BonusBlockPurchaseCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownBlockClaimCostCalculationEvent;
 import com.palmergames.bukkit.towny.event.TownyObjectFormattedNameEvent;
+import com.palmergames.bukkit.towny.event.plot.group.PlotGroupDeletedEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddAlliedTownEvent;
 import com.palmergames.bukkit.towny.event.town.TownAddEnemiedTownEvent;
-import com.palmergames.bukkit.towny.event.town.TownCalculateTownLevelNumberEvent;
 import com.palmergames.bukkit.towny.event.town.TownConqueredEvent;
 import com.palmergames.bukkit.towny.event.town.TownIsTownOverClaimedEvent;
 import com.palmergames.bukkit.towny.event.town.TownMapColourLocalCalculationEvent;
@@ -48,6 +47,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +61,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,6 +72,7 @@ public class Town extends Government implements TownBlockOwner {
 	private static final String ECONOMY_ACCOUNT_PREFIX = TownySettings.getTownAccountPrefix();
 
 	private final List<Resident> residents = new ArrayList<>();
+	private final List<Resident> residentsView = Collections.unmodifiableList(residents);
 	private final List<Resident> outlaws = new ArrayList<>();
 	private Map<UUID, Town> allies = new LinkedHashMap<>();
 	private Map<UUID, Town> enemies = new LinkedHashMap<>();
@@ -116,14 +116,16 @@ public class Town extends Government implements TownBlockOwner {
 	private final TownyPermission permissions = new TownyPermission();
 	private boolean ruined = false;
 	private long ruinedTime;
+	private long forSaleTime;
 	private long joinedNationAt;
 	private long movedHomeBlockAt;
 	private Jail primaryJail;
 	private int manualTownLevel = -1;
 	private boolean visibleOnTopLists = true;
 
-	public Town(String name) {
-		super(name);
+	@ApiStatus.Internal
+	public Town(String name, UUID uuid) {
+		super(name, uuid);
 		permissions.loadDefault(this);
 		
 		// Set defaults.
@@ -134,9 +136,9 @@ public class Town extends Government implements TownBlockOwner {
 		setPublic(TownySettings.getTownDefaultPublic());
 	}
 	
-	public Town(String name, UUID uuid) {
-		this(name);
-		setUUID(uuid);
+	@Deprecated(since = "0.102.0.4")
+	public Town(String name) {
+		this(name, UUID.randomUUID());
 	}
 
 	@Override
@@ -145,12 +147,7 @@ public class Town extends Government implements TownBlockOwner {
 			return true;
 		if (!(other instanceof Town otherTown))
 			return false;
-		return this.getName().equals(otherTown.getName()); // TODO: Change this to UUID when the UUID database is in use.
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getUUID(), getName());
+		return this.getUUID().equals(otherTown.getUUID());
 	}
 
 	@Override
@@ -359,7 +356,7 @@ public class Town extends Government implements TownBlockOwner {
 		if (!residentsSorted)
 			sortResidents();
 		
-		return Collections.unmodifiableList(residents);
+		return residentsView;
 	}
 
 	public List<Resident> getRank(String rank) {
@@ -842,6 +839,7 @@ public class Town extends Government implements TownBlockOwner {
 				continue;
 
 			TownMayorChosenBySuccessionEvent tmcbse = new TownMayorChosenBySuccessionEvent(mayor, newMayor, potentialResidents);
+			tmcbse.callEvent();
 			setMayor(tmcbse.getNewMayor());
 			return true;
 		}
@@ -901,6 +899,21 @@ public class Town extends Government implements TownBlockOwner {
 	public void removeTownBlock(TownBlock townBlock) {
 
 		if (hasTownBlock(townBlock)) {
+			// Remove the plot group for this town block.
+			final PlotGroup plotGroup = townBlock.getPlotObjectGroup();
+			if (plotGroup != null) {
+				plotGroup.removeTownBlock(townBlock);
+
+				if (!plotGroup.hasTownBlocks()) {
+					new PlotGroupDeletedEvent(plotGroup, null, PlotGroupDeletedEvent.Cause.NO_TOWNBLOCKS).callEvent();
+					removePlotGroup(plotGroup);
+
+					TownyUniverse.getInstance().getDataSource().removePlotGroup(plotGroup);
+				}
+
+				townBlock.removePlotObjectGroup();
+			}
+
 			// Remove the spawn point for this outpost.
 			if (townBlock.isOutpost() || isAnOutpost(townBlock.getCoord())) {
 				removeOutpostSpawn(townBlock.getCoord());
@@ -1116,6 +1129,14 @@ public class Town extends Government implements TownBlockOwner {
 		return forSalePrice;
 	}
 
+	public void setForSaleTime(long time) {
+		this.forSaleTime = time;
+	}
+	
+	public long getForSaleTime() {
+		return forSaleTime;
+	}
+
 	public void setPlotPrice(double plotPrice) {
 		if (plotPrice < 0)
 			plotPrice = -1;
@@ -1234,11 +1255,26 @@ public class Town extends Government implements TownBlockOwner {
 	}
 	
 	public boolean hasOutlaw (String name) {
+		if (TownySettings.areEnemiesOutlaws() && nation != null) {
+			for (Nation enemyNation : nation.getEnemies()) {
+				if (enemyNation.getResidents().stream().anyMatch(enemy -> enemy.getName().equalsIgnoreCase(name))) {
+					return true;
+				}
+			}
+		}
+		
 		return outlaws.stream().anyMatch(outlaw -> outlaw.getName().equalsIgnoreCase(name));
 	}
 	
 	public boolean hasOutlaw(Resident outlaw) {
-
+		if (TownySettings.areEnemiesOutlaws() && nation != null) {
+			for (Nation enemyNation : nation.getEnemies()) {
+				if (enemyNation.getResidents().contains(outlaw)) {
+					return true;
+				}
+			}
+		}
+		
 		return outlaws.contains(outlaw);
 	}
 	
@@ -1730,7 +1766,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean removeAllAllies() {
-		for (Town ally : new ArrayList<>(getAllies())) {
+		for (Town ally : getAllies()) {
 			removeAlly(ally);
 			ally.removeAlly(this);
 		}
@@ -1763,7 +1799,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean removeAllTrustedTowns() {
-		for (Town trusted : new ArrayList<>(getTrustedTowns())) {
+		for (Town trusted : getTrustedTowns()) {
 			removeTrustedTown(trusted);
 		}
 		return getTrustedTowns().isEmpty();
@@ -1803,7 +1839,7 @@ public class Town extends Government implements TownBlockOwner {
 	}
 
 	public boolean removeAllEnemies() {
-		for (Town enemy : new ArrayList<>(getEnemies())) {
+		for (Town enemy : getEnemies()) {
 			removeEnemy(enemy);
 			enemy.removeEnemy(this);
 		}
@@ -1814,16 +1850,16 @@ public class Town extends Government implements TownBlockOwner {
 		return enemies.containsKey(town.getUUID());
 	}
 
-	public List<Town> getEnemies() {
-		return Collections.unmodifiableList(enemies.values().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<Town> getEnemies() {
+		return List.copyOf(enemies.values());
 	}
 
-	public List<Town> getAllies() {
-		return Collections.unmodifiableList(allies.values().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<Town> getAllies() {
+		return List.copyOf(allies.values());
 	}
 
-	public List<Town> getTrustedTowns() {
-		return Collections.unmodifiableList(trustedTowns.values().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<Town> getTrustedTowns() {
+		return List.copyOf(trustedTowns.values());
 	}
 	
 	public List<Town> getMutualAllies() {
@@ -1835,17 +1871,18 @@ public class Town extends Government implements TownBlockOwner {
 		return result;
 	}
 
-	public List<UUID> getAlliesUUIDs() {
-		return Collections.unmodifiableList(allies.keySet().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<UUID> getAlliesUUIDs() {
+		return List.copyOf(allies.keySet());
 	}
 
-	public List<UUID> getEnemiesUUIDs() {
-		return Collections.unmodifiableList(enemies.keySet().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<UUID> getEnemiesUUIDs() {
+		return List.copyOf(enemies.keySet());
 	}
 	
-	public List<UUID> getTrustedTownsUUIDS() {
-		return Collections.unmodifiableList(trustedTowns.keySet().stream().collect(Collectors.toList()));
+	public @Unmodifiable List<UUID> getTrustedTownsUUIDS() {
+		return List.copyOf(trustedTowns.keySet());
 	}
+
 	public boolean isNationZoneEnabled() {
 		return nationZoneEnabled;
 	}
@@ -1907,13 +1944,7 @@ public class Town extends Government implements TownBlockOwner {
 	 * @return Current TownLevel number.
 	 */
 	public int getLevelNumber() {
-		int townLevelNumber = getManualTownLevel() > -1
-				? Math.min(getManualTownLevel(), TownySettings.getTownLevelMax())
-				: TownySettings.getTownLevelWhichIsNotManuallySet(getNumResidents(), this);
-
-		TownCalculateTownLevelNumberEvent tctle = new TownCalculateTownLevelNumberEvent(this, townLevelNumber);
-		BukkitTools.fireEvent(tctle);
-		return tctle.getTownLevelNumber();
+		return TownySettings.getTownLevelNumber(this);
 	}
 
 	/**
@@ -1943,7 +1974,7 @@ public class Town extends Government implements TownBlockOwner {
 	
 	@Override
 	public @NotNull Iterable<? extends Audience> audiences() {
-		return TownyAPI.getInstance().getOnlinePlayers(this).stream().map(player -> Towny.getAdventure().player(player)).collect(Collectors.toSet());
+		return TownyAPI.getInstance().getOnlinePlayers(this);
 	}
 
 	@ApiStatus.Internal

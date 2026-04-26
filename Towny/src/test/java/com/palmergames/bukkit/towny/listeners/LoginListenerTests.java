@@ -1,20 +1,15 @@
 package com.palmergames.bukkit.towny.listeners;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
-import org.junit.jupiter.api.BeforeAll;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.palmergames.bukkit.towny.listeners.TownyLoginListener.isPossibleNPCName;
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(TownyConfigExtension.class)
 public class LoginListenerTests {
-	@BeforeAll
-	public static void init() {
-		MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
-	}
-	
 	@Test
 	void testNpcPrefix() {
 		final String npcPrefix = TownySettings.getNPCPrefix();

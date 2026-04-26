@@ -155,18 +155,33 @@ public class PlotBlockData {
 				continue;
 			}
 
+			final boolean logWithCoreProtect = TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect");
+
 			// Catch this being a ignored material or a whitelisted material that isn't allowed to be reverted, setting it to air.
 			if (!this.townBlock.getWorld().isUnclaimedBlockAllowedToRevert(mat)) {
-				block.setType(Material.AIR);
+
+				// Change the block to air if it isn't already
+				if (!blockMat.isAir()) {
+					block.setType(Material.AIR);
+					
+					if (logWithCoreProtect) {
+						CoreProtect.getInstance().getAPI().logRemoval("#towny", block.getLocation(), blockMat, block.getBlockData());
+					}
+				}
 				return true;
+			}
+
+			if (logWithCoreProtect && !blockMat.isAir()) {
+				CoreProtect.getInstance().getAPI().logRemoval("#towny", block.getLocation(), blockMat, block.getBlockData());
 			}
 
 			// Actually set the block back to what we have in the snapshot.
 			block.setType(mat, false);
 			block.setBlockData(storedData.getBlockData());
 			
-			if (TownySettings.coreProtectSupport() && PluginIntegrations.getInstance().isPluginEnabled("CoreProtect"))
+			if (logWithCoreProtect && !mat.isAir()) {
 				CoreProtect.getInstance().getAPI().logPlacement("#towny", block.getLocation(), mat, storedData.getBlockData());
+			}
 			
 			return true;
 		}

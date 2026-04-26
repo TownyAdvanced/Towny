@@ -1,5 +1,6 @@
 package com.palmergames.bukkit.towny.object.economy;
 
+import com.google.common.base.Preconditions;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
@@ -12,6 +13,7 @@ import com.palmergames.bukkit.towny.object.Identifiable;
 import com.palmergames.bukkit.towny.object.Nameable;
 import com.palmergames.bukkit.towny.object.economy.transaction.Transaction;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
 import org.bukkit.Bukkit;
@@ -85,9 +87,10 @@ public abstract class Account implements Nameable, Identifiable {
 	 */
 	@Deprecated
 	public Account(final EconomyHandler owner, final @NotNull String name, final @NotNull UUID uuid, final @Nullable Supplier<TownyWorld> worldSupplier) {
+		Preconditions.checkArgument(name != null && uuid != null, "name and uuid may not be null for an account, got name = %s and uuid = %s", name, uuid);
+		Preconditions.checkArgument(owner != null, "account owner may not be null");
+
 		this.economyHandler = owner;
-		this.name = name;
-		this.uuid = uuid;
 		this.worldSupplier = worldSupplier;
 		this.playerAccount = false;
 		
@@ -472,9 +475,13 @@ public abstract class Account implements Nameable, Identifiable {
 		return cachedBalance.getBalance();
 	}
 
-	private static final MethodHandle GAMEPROFILE_CONSTRUCTOR = JavaUtil.make(() -> {
+	private static final MethodHandle NAME_AND_ID_CONSTRUCTOR = JavaUtil.make(() -> {
 		try {
-			return MethodHandles.publicLookup().findConstructor(Class.forName("com.mojang.authlib.GameProfile"), MethodType.methodType(void.class, UUID.class, String.class));
+			final Class<?> clazz = MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21_9)
+				? Class.forName("net.minecraft.server.players.NameAndId")
+				: Class.forName("com.mojang.authlib.GameProfile");
+			
+			return MethodHandles.publicLookup().findConstructor(clazz, MethodType.methodType(void.class, UUID.class, String.class));
 		} catch (Throwable throwable) {
 			Towny.getPlugin().getLogger().log(Level.WARNING, "Could not find game profile constructor", throwable);
 			return null;
@@ -485,7 +492,12 @@ public abstract class Account implements Nameable, Identifiable {
 		try {
 			final String cbPackagePath = Bukkit.getServer().getClass().getPackage().getName();
 			Class<?> offlinePlayer = Class.forName(cbPackagePath + ".CraftOfflinePlayer");
-			Constructor<?> constructor = offlinePlayer.getDeclaredConstructor(Class.forName(cbPackagePath + ".CraftServer"), Class.forName("com.mojang.authlib.GameProfile"));
+			
+			Class<?> nameAndIdClass = MinecraftVersion.CURRENT_VERSION.isNewerThanOrEquals(MinecraftVersion.MINECRAFT_1_21_9)
+				? Class.forName("net.minecraft.server.players.NameAndId")
+				: Class.forName("com.mojang.authlib.GameProfile");
+			
+			Constructor<?> constructor = offlinePlayer.getDeclaredConstructor(Class.forName(cbPackagePath + ".CraftServer"), nameAndIdClass);
 			constructor.setAccessible(true);
 			
 			return MethodHandles.lookup().unreflectConstructor(constructor);
@@ -508,7 +520,7 @@ public abstract class Account implements Nameable, Identifiable {
 			return this.cachedOfflinePlayer;
 
 		try {
-			final Object gameProfile = GAMEPROFILE_CONSTRUCTOR.invoke(this.uuid, this.name);
+			final Object gameProfile = NAME_AND_ID_CONSTRUCTOR.invoke(this.uuid, this.name);
 
 			return (this.cachedOfflinePlayer = (OfflinePlayer) OFFLINEPLAYER_CONSTRUCTOR.invoke(Bukkit.getServer(), gameProfile));
 		} catch (Throwable throwable) {

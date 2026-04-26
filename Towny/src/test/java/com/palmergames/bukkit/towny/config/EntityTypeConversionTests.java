@@ -1,10 +1,10 @@
 package com.palmergames.bukkit.towny.config;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.TownyWorld;
-import org.junit.jupiter.api.BeforeAll;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,13 +12,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(TownyConfigExtension.class)
 public class EntityTypeConversionTests {
-	
-	@BeforeAll
-	static void init() {
-		MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
-	}
 	
 	@Test
 	void testRenamedFieldsConversions() {

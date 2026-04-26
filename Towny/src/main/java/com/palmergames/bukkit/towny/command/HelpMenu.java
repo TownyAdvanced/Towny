@@ -255,6 +255,7 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin resident")
 				.add("[resident]", Translatable.of("res_3"))
 				.add("[resident] about clear", Translatable.of("ta_resident_help_4"))
+				.add("[resident] set [lastonline/registered] [timestamp]", Translatable.of("ta_resident_help_5"))
 				.add("[resident] rename [newname]", Translatable.of("ta_resident_help_0"))
 				.add("[resident] friend... [add|remove] [resident]", Translatable.of("ta_resident_help_1"))
 				.add("[resident] friend... [list|clear]", Translatable.of("ta_resident_help_2"))
@@ -294,8 +295,10 @@ public enum HelpMenu {
 				.add("group [group] removeperm [node]", Translatable.of("help_ta_perms_groupremovepermnode"))
 				.add("townrank addrank [rank]", Translatable.of("help_ta_perms_townrankadd"))
 				.add("townrank removerank [rank]", Translatable.of("help_ta_perms_townrankremove"))
+				.add("townrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_townrankrename"))
 				.add("nationrank addrank [rank]", Translatable.of("help_ta_perms_nationrankadd"))
-				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"));
+				.add("nationrank removerank [rank]", Translatable.of("help_ta_perms_nationrankremove"))
+				.add("nationrank renamerank [oldrank] [newrank]", Translatable.of("help_ta_perms_nationrankrename"));
 		}
 	},
 	
@@ -424,6 +427,8 @@ public enum HelpMenu {
 			return new MenuBuilder("townyadmin eco")
 				.add("resetbanks {amount}", Translatable.of("ta_eco_resetbanks_help"))
 				.add("depositall [amount]", Translatable.of("ta_depositall_help_0"))
+				.add("depositalltowns [amount]", Translatable.of("ta_depositall_help_1"))
+				.add("depositallnations [amount]", Translatable.of("ta_depositall_help_2"))
 				.add("convert modern", Translatable.of("ta_eco_convert_modern_help"))
 				.add("convert [economy]", Translatable.of("ta_eco_convert_help"))
 				.add("info ?", Translatable.of("ta_eco_info_help"));
@@ -435,6 +440,22 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("townyadmin eco depositall")
 				.add("[amount]", Translatable.of("ta_depositall_help_0"));
+		}
+	},
+
+	TA_DEPOSITALLTOWNS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco depositalltowns")
+				.add("[amount]", Translatable.of("ta_depositall_help_1"));
+		}
+	},
+
+	TA_DEPOSITALLNATIONS {
+		@Override
+		protected MenuBuilder load() {
+			return new MenuBuilder("townyadmin eco depositallnations")
+				.add("[amount]", Translatable.of("ta_depositall_help_2"));
 		}
 	},
 
@@ -506,7 +527,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 
@@ -525,7 +547,8 @@ public enum HelpMenu {
 				.add("revertunclaim", Translatable.of("world_toggle_help_8"))
 				.add("revertentityexpl/revertblockexpl", Translatable.of("world_toggle_help_9"))
 				.add("plotcleardelete", Translatable.of("world_toggle_help_10"))
-				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"));
+				.add("unclaimblockdelete", Translatable.of("world_toggle_help_11"))
+				.add("jailing", Translatable.of("world_toggle_help_12"));
 		}
 	},
 	
@@ -537,6 +560,7 @@ public enum HelpMenu {
 				.add("new [name]", Translatable.of("town_help_11"))
 				.add("here", Translatable.of("town_help_4"))
 				.add("list", Translatable.of("town_help_26"))
+				.add("nearby", Translatable.of("town_help_36"))
 				.add("online", Translatable.of("town_help_10"))
 				.add("leave", Translatable.of("town_help_27"))
 				.add("reclaim", Translatable.of("town_help_12"))
@@ -826,9 +850,9 @@ public enum HelpMenu {
 		protected MenuBuilder load() {
 			return new MenuBuilder("resident jail")
 				.add("", "/resident jail", "paybail", Translatable.of("res_jail_help_0"))
-				.add(Colors.LightBlue + Translation.of("msg_resident_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmount())
-				.add(Colors.LightBlue + Translation.of("msg_mayor_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountMayor())
-				.add(Colors.LightBlue + Translation.of("msg_king_bail_amount") + Colors.Green + "$" + TownySettings.getBailAmountKing());
+				.add(Colors.AQUA + Translation.of("msg_resident_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmount())
+				.add(Colors.AQUA + Translation.of("msg_mayor_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmountMayor())
+				.add(Colors.AQUA + Translation.of("msg_king_bail_amount") + Colors.DARK_GREEN + "$" + TownySettings.getBailAmountKing());
 		}
 	},
 
@@ -947,6 +971,7 @@ public enum HelpMenu {
 				.add("enemylist (nation)", Translatable.of("nation_help_13"))
 				.add("online", Translatable.of("nation_help_9"))
 				.add("spawn", Translatable.of("nation_help_10"))
+				.add("townoutposts", Translatable.of("nation_help_19"))
 				.add("join (nation)", Translatable.of("nation_help_14"))
 				.add("rank", Translatable.of("nation_help_18"))
 				.add("delete", Translatable.of("nation_help_16"))

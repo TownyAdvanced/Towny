@@ -26,22 +26,22 @@ public class Colors {
 	/*
 	 * Legacy colors
 	 */
-	public static final String Black = "§0";       // black
-	public static final String Navy = "§1";        // dark_blue
-	public static final String Green = "§2";       // dark_green
-	public static final String Blue = "§3";        // dark_aqua
-	public static final String Red = "§4";         // dark_red
-	public static final String Purple = "§5";      // dark_purple
-	public static final String Gold = "§6";        // gold
-	public static final String LightGray = "§7";   // gray
-	public static final String Gray = "§8";        // dark_gray
-	public static final String DarkPurple = "§9";  // blue
-	public static final String LightGreen = "§a";  // green
-	public static final String LightBlue = "§b";   // aqua
-	public static final String Rose = "§c";        // red
-	public static final String LightPurple = "§d"; // light_purple
-	public static final String Yellow = "§e";      // yellow
-	public static final String White = "§f";       // white
+	public static final @Deprecated(since = "0.101.2.6") String Black = "§0";       // black
+	public static final @Deprecated(since = "0.101.2.6") String Navy = "§1";        // dark_blue
+	public static final @Deprecated(since = "0.101.2.6") String Green = "§2";       // dark_green
+	public static final @Deprecated(since = "0.101.2.6") String Blue = "§3";        // dark_aqua
+	public static final @Deprecated(since = "0.101.2.6") String Red = "§4";         // dark_red
+	public static final @Deprecated(since = "0.101.2.6") String Purple = "§5";      // dark_purple
+	public static final @Deprecated(since = "0.101.2.6") String Gold = "§6";        // gold
+	public static final @Deprecated(since = "0.101.2.6") String LightGray = "§7";   // gray
+	public static final @Deprecated(since = "0.101.2.6") String Gray = "§8";        // dark_gray
+	public static final @Deprecated(since = "0.101.2.6") String DarkPurple = "§9";  // blue
+	public static final @Deprecated(since = "0.101.2.6") String LightGreen = "§a";  // green
+	public static final @Deprecated(since = "0.101.2.6") String LightBlue = "§b";   // aqua
+	public static final @Deprecated(since = "0.101.2.6") String Rose = "§c";        // red
+	public static final @Deprecated(since = "0.101.2.6") String LightPurple = "§d"; // light_purple
+	public static final @Deprecated(since = "0.101.2.6") String Yellow = "§e";      // yellow
+	public static final @Deprecated(since = "0.101.2.6") String White = "§f";       // white
 
 	/*
 	 * Minimessage colors 

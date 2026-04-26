@@ -2,13 +2,14 @@ name: Publish to Glare Repo
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy Pre-release"]
+    types:
+      - completed
 
 jobs:
   deploy_to_glare_repo:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: ['21']
     name: mvn deploy @ glare repo
     steps:
       - name: checkout repo content
@@ -17,10 +18,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: ${{ matrix.java }}
+          java-version: '25'
           java-package: jdk
           cache: 'maven'
-      - name: maven-settings-action
+      - name: prepare maven settings.xml
         uses: s4u/maven-settings-action@v2.8.0
         with:
           githubServer: false
@@ -30,5 +31,5 @@ jobs:
               "username": "${{ secrets.GLAREREPO_USERNAME }}",
               "password": "${{ secrets.GLAREREPO_PASSWORD }}"
             }]
-
-      - run: mvn deploy
+      - name: deploy to glaremaster
+        run: mvn deploy

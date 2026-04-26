@@ -18,6 +18,7 @@ import com.palmergames.bukkit.towny.object.TownBlockTypeCache;
 import com.palmergames.bukkit.towny.object.TownBlockTypeHandler;
 import com.palmergames.bukkit.towny.object.TownyObject;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
@@ -35,6 +36,7 @@ import com.palmergames.bukkit.util.ChatTools;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.StringMgmt;
 
+import com.palmergames.util.TimeTools;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -116,7 +118,7 @@ public class TownyFormatter {
 		if (townBlock.hasPlotObjectGroup())
 			screen.addComponentOf("plotgroup", colourKey(translator.of("status_plot_group_name_and_size", townBlock.getPlotObjectGroup().getName(), townBlock.getPlotObjectGroup().getTownBlocks().size())));
 		
-		if (townBlock.getTrustedResidents().size() > 0)
+		if (townBlock.hasTrustedResidents())
 			screen.addComponentOf("trusted", getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(townBlock.getTrustedResidents())));
 
 		if (TownyEconomyHandler.isActive())
@@ -150,9 +152,11 @@ public class TownyFormatter {
 
 		StatusScreen screen = new StatusScreen(sender);
 		final Translator translator = Translator.locale(sender);
+		
+		final boolean onlineAndVisible = playerIsOnlineAndVisible(resident.getName(), sender);
 
 		// ___[ King Harlus ]___
-		screen.addComponentOf("title", ChatTools.formatTitle(resident.getFormattedName() + (playerIsOnlineAndVisible(resident.getName(), sender) ? translator.of("online2") : "")));
+		screen.addComponentOf("title", ChatTools.formatTitle(resident.formattedName().append(onlineAndVisible ? translator.component("online2") : Component.empty())));
 
 		// About: Just a humble farmer
 		if (!resident.getAbout().isEmpty())
@@ -163,7 +167,7 @@ public class TownyFormatter {
 		// Registered: Sept 3 2009 | Last Online: March 7 2009
 		screen.addComponentOf("registered", getResidentRegisteredLine(resident, translator));
 		if (!resident.isNPC())
-			screen.addComponentOf("lastonline", getResidentLastOnline(resident, translator));
+			screen.addComponentOf("lastonline", getResidentLastOnline(resident, onlineAndVisible, translator));
 		
 		// Town: Camelot
 		String townLine = colourKeyValue(translator.of("status_town"), (!resident.hasTown() ? translator.of("status_no_town") : resident.getTownOrNull().getFormattedName() + formatPopulationBrackets(resident.getTownOrNull().getResidents().size()) ));
@@ -282,9 +286,16 @@ public class TownyFormatter {
 		StatusScreen screen = new StatusScreen(sender);
 		TownyWorld world = town.getHomeblockWorld();
 
-		// ___[ Raccoon City ]___
-		screen.addComponentOf("title", ChatTools.formatTitle(town));
-		
+		// ___[ Raccoon City ]___ (With hover for admins.)
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender)) {
+			Component adminComp = Component.text("Name: " + town.getName()).appendNewline()
+									.append(Component.text("UUID: " + town.getUUID())).appendNewline()
+									.append(Component.text("TownLevel: " + town.getLevelNumber()
+										+ (town.getManualTownLevel() > -1 ? " (Manually Set)" : "")));
+			screen.addComponentOf("title", ChatTools.formatTitle(town), HoverEvent.showText(adminComp));
+		} else
+			screen.addComponentOf("title", ChatTools.formatTitle(town));
+
 		// (PvP) (Open) (Peaceful)
 		List<String> sub = getTownSubtitle(town, world, translator);
 		if (!sub.isEmpty())
@@ -311,7 +322,7 @@ public class TownyFormatter {
 		else
 			screen.addComponentOf("townblocks", colourKeyValue(translator.of("status_town_size"), translator.of("status_fractions", town.getTownBlocks().size(), town.getMaxTownBlocksAsAString())));
 
-		if (town.isPublic()) {
+		if (town.isPublic() || TownySettings.isWebMapLinkShownForNonPublicTowns()) {
 			Component homeComponent = TownyComponents.miniMessage(translator.of("status_home_element", TownySettings.getTownDisplaysXYZ()
 						? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town"))
 						: (town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town"))
@@ -414,8 +425,16 @@ public class TownyFormatter {
 		StatusScreen screen = new StatusScreen(sender);
 		final Translator translator = Translator.locale(sender);
 
-		// ___[ Azur Empire (Open)]___
-		screen.addComponentOf("nation_title", ChatTools.formatTitle(nation));
+		// ___[ Azur Empire (Open)]___ (With hover for admins.)
+		if (TownyUniverse.getInstance().getPermissionSource().isTownyAdmin(sender)) {
+			Component adminComp = Component.text("Name: " + nation.getName()).appendNewline()
+									.append(Component.text("UUID: " + nation.getUUID())).appendNewline()
+									.append(Component.text("NationLevel: " + nation.getLevelNumber()
+										+ (nation.getManualNationLevel() > -1 ? " (Manually Set)" : "")));
+			screen.addComponentOf("nation_title", ChatTools.formatTitle(nation), HoverEvent.showText(adminComp));
+		} else
+			screen.addComponentOf("nation_title", ChatTools.formatTitle(nation));
+
 		List<String> sub = getNationSubtitle(nation, translator);
 		if (!sub.isEmpty())
 			screen.addComponentOf("subtitle", ChatTools.formatSubTitle(StringMgmt.join(sub, " ")));
@@ -578,22 +597,23 @@ public class TownyFormatter {
 				    colourKeyValue(translator.of("status_world_wildernessmobs"), (world.hasWildernessMobs() ? translator.of("status_on") : translator.of("status_off"))));
 			// ForceTownMobs: ON
 			screen.addComponentOf("townmobs", colourKeyValue(translator.of("status_world_forcetownmobs"), (world.isForceTownMobs() ? translator.of("status_forced") : translator.of("status_adjustable"))));
-			// Unclaim Revert: ON
-			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad")))); 
+			// Unclaim Revert: ON | Jailing: ON
+			screen.addComponentOf("unclaim_revert", colourKeyValue("\n" + translator.of("status_world_unclaimrevert"), (world.isUsingPlotManagementRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") + 
+					colourKeyValue(translator.of("status_world_jailing"), (world.isJailingEnabled() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
 			// Entity Explosion Revert: ON | Block Explosion Revert: ON
 			screen.addComponentOf("explosion_reverts", colourKeyValue(translator.of("status_world_explrevert_entity"), (world.isUsingPlotManagementWildEntityRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))) + translator.of("status_splitter") +
 					colourKeyValue(translator.of("status_world_explrevert_block"), (world.isUsingPlotManagementWildBlockRevert() ? translator.of("status_on_good") : translator.of("status_off_bad"))));
 			// Plot Clear Block Delete: ON (see /towny plotclearblocks) | OFF
-			screen.addComponentOf("plot_clear", colourKeyValue(translator.of("status_plot_clear_deletion"), (world.isUsingPlotManagementMayorDelete() ? translator.of("status_on") + Colors.LightGreen +" (see /towny plotclearblocks)" : translator.of("status_off")))); 
+			screen.addComponentOf("plot_clear", colourKeyValue(translator.of("status_plot_clear_deletion"), (world.isUsingPlotManagementMayorDelete() ? translator.of("status_on") + Colors.GREEN +" (see /towny plotclearblocks)" : translator.of("status_off")))); 
 			// Wilderness:
 			//     Build, Destroy, Switch, ItemUse
 			//     Ignored Blocks: see /towny wildsblocks
 			screen.addComponentOf("wilderness", colourKey(world.getFormattedUnclaimedZoneName() + ": \n"));
-			screen.addComponentOf("perms1", "    " + (world.getUnclaimedZoneBuild() ? Colors.LightGreen : Colors.Rose) + translator.of("build") + Colors.Gray + ", " + 
-													(world.getUnclaimedZoneDestroy() ? Colors.LightGreen : Colors.Rose) + translator.of("destroy") + Colors.Gray + ", " + 
-													(world.getUnclaimedZoneSwitch() ? Colors.LightGreen : Colors.Rose) + translator.of("switch") + Colors.Gray + ", " + 
-													(world.getUnclaimedZoneItemUse() ? Colors.LightGreen : Colors.Rose) + translator.of("item_use"));
-			screen.addComponentOf("perms2", "    " + colourKey(translator.of("status_world_ignoredblocks") + Colors.LightGreen + " see /towny wildsblocks"));
+			screen.addComponentOf("perms1", "    " + (world.getUnclaimedZoneBuild() ? Colors.GREEN : Colors.RED) + translator.of("build") + Colors.DARK_GRAY + ", " + 
+													(world.getUnclaimedZoneDestroy() ? Colors.GREEN : Colors.RED) + translator.of("destroy") + Colors.DARK_GRAY + ", " + 
+													(world.getUnclaimedZoneSwitch() ? Colors.GREEN : Colors.RED) + translator.of("switch") + Colors.DARK_GRAY + ", " + 
+													(world.getUnclaimedZoneItemUse() ? Colors.GREEN : Colors.RED) + translator.of("item_use"));
+			screen.addComponentOf("perms2", "    " + colourKey(translator.of("status_world_ignoredblocks") + Colors.GREEN + " see /towny wildsblocks"));
 
 			// Add any metadata which opt to be visible.
 			List<Component> fields = getExtraFields(world);
@@ -613,10 +633,18 @@ public class TownyFormatter {
 		return String.format(keyValueFormat, Translation.of("status_format_key_value_key"), key, Translation.of("status_format_key_value_value"), value); 
 	}
 	
+	public static Component colourKeyValue(Component key, Component value) {
+		return Translatable.of("status_format_key_value_key").append(key).append(" ").append(Translatable.of("status_format_key_value_value").append(value)).component();
+	}
+
 	public static String colourKey(String key) {
 		return String.format(keyFormat, Translation.of("status_format_key_value_key"), key); 
 	}
 	
+	public static String colourValue(String value) {
+		return Translation.of("status_format_key_value_value") + value;
+	}
+
 	public static String colourKeyImportant(String key) {
 		return String.format(keyFormat, Translation.of("status_format_key_important"), key);
 	}
@@ -650,11 +678,16 @@ public class TownyFormatter {
 	/**
 	 * Gets the last online line for the Resident StatusScreen.
 	 * @param resident Resident who's status we are getting.
+	 * @param onlineAndVisible Whether the resident is currently visible as being online.  
 	 * @param translator Translator used for lang choice.
-	 * @return String with last online times formatted for use in the StatusScreen. 
+	 * @return Component with last online times formatted for use in the StatusScreen. 
 	 */
-	private static String getResidentLastOnline(Resident resident, Translator translator) {
-		return (sameYear(resident) ? colourKeyValue(translator.of("status_lastonline"), lastOnlineFormat.format(resident.getLastOnline())) : colourKeyValue(translator.of("status_lastonline"), lastOnlineFormatIncludeYear.format(resident.getLastOnline())));
+	private static Component getResidentLastOnline(Resident resident, boolean onlineAndVisible, Translator translator) {
+		final String hoverText = colourValue(sameYear(resident) ? lastOnlineFormat.format(resident.getLastOnline()) : lastOnlineFormatIncludeYear.format(resident.getLastOnline()));
+
+		return colourKeyValue(translator.component(onlineAndVisible ? "status_onlinesince" : "status_lastonline"), TimeTools.formatRelativeTime(resident.getLastOnline()).component(translator.locale())
+			.hoverEvent(HoverEvent.showText(TownyComponents.miniMessage(hoverText)))
+			.clickEvent(ClickEvent.openUrl("https://time.is/" + resident.getLastOnline())));
 	}
 	
 	private static String getResidentJoinedTownDate(Resident resident, Translator translator) {
@@ -1059,6 +1092,10 @@ public class TownyFormatter {
 			webUrl = TownySettings.getWebMapUrl()
 				.replaceAll("\\{world}", getWorldSlugForMapURL(spawnLocation.getSpawnOrNull().getWorld()))
 				.replaceAll("\\{x}", "" + spawnLocation.getSpawnOrNull().getBlockX())
+				.replaceAll("\\{y}", "" + (TownySettings.getWebMapUrl().contains("\\{z}")
+					? spawnLocation.getSpawnOrNull().getBlockY()
+					: spawnLocation.getSpawnOrNull().getBlockZ())) // Enough people use {y} that we had to do something about it.
+				//TODO: Make up a regex that cleans out any invalid placeholders.
 				.replaceAll("\\{z}", "" + spawnLocation.getSpawnOrNull().getBlockZ());
 
 		return webUrl;

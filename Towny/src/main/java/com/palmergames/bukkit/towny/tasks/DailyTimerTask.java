@@ -695,7 +695,7 @@ public class DailyTimerTask extends TownyTimerTask {
 	private void processTownUpkeep(Town town) {
 		double upkeep = TownySettings.getTownUpkeepCost(town);
 		double upkeepPenalty = TownySettings.getTownPenaltyUpkeepCost(town);
-		if (upkeepPenalty > 0 && upkeep > 0)
+		if (upkeepPenalty > 0)
 			upkeep = upkeep + upkeepPenalty;
 	
 		if (upkeep > 0) {

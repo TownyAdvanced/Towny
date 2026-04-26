@@ -45,7 +45,7 @@ public class IntegerDataField extends CustomDataField<Integer> {
 	@Override
 	public String displayFormattedValue() {
 		int val = getValue();
-		return (val <= 0 ? Colors.Red : Colors.LightGreen) + val;
+		return (val <= 0 ? Colors.DARK_RED : Colors.GREEN) + val;
 	}
 
 	@Override

@@ -16,6 +16,7 @@ public abstract class SpawnEvent extends CancellableTownyEvent {
 	private final Location from;
 	private final Location to;
 	private final Player player;
+	private final double cost;
 
 	/**
 	 * Creates a Spawn event.
@@ -23,11 +24,13 @@ public abstract class SpawnEvent extends CancellableTownyEvent {
 	 * @param player The player spawning.
 	 * @param from The from location.
 	 * @param to The to location.
+	 * @param cost The amount paid to teleport.
 	 */
-	public SpawnEvent(Player player, Location from, Location to) {
+	public SpawnEvent(Player player, Location from, Location to, double cost) {
 		this.player = player;
 		this.to = to;
 		this.from = from;
+		this.cost = cost;
 	}
 
 	/**
@@ -55,6 +58,15 @@ public abstract class SpawnEvent extends CancellableTownyEvent {
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * Gets the cost that the player has paid to teleport.
+	 * 
+	 * @return the cost as a double.
+	 */
+	public double getCost() {
+		return cost;
 	}
 
 	public static HandlerList getHandlerList() {

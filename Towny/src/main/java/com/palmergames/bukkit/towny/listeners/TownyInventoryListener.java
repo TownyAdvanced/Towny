@@ -9,10 +9,12 @@ import com.palmergames.bukkit.towny.object.gui.PermissionGUI;
 import com.palmergames.bukkit.towny.object.gui.SelectionGUI;
 import com.palmergames.bukkit.towny.utils.PermissionGUIUtil;
 import com.palmergames.bukkit.towny.utils.ResidentUtil;
-import io.papermc.lib.PaperLib;
+import com.palmergames.bukkit.towny.utils.TownyComponents;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,8 +24,9 @@ import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownyInventory;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.util.Colors;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Set;
 
@@ -38,7 +41,7 @@ public class TownyInventoryListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
-		if (!(PaperLib.getHolder(event.getInventory(), false).getHolder() instanceof TownyInventory townyInventory) || (event.getCurrentItem() == null && event.getHotbarButton() == -1))
+		if (!(event.getInventory().getHolder(false) instanceof TownyInventory townyInventory) || (event.getCurrentItem() == null && event.getHotbarButton() == -1))
 			return;
 
 		event.setCancelled(true);
@@ -50,7 +53,7 @@ public class TownyInventoryListener implements Listener {
 		Player player = (Player) event.getWhoClicked();
 		Resident resident = TownyUniverse.getInstance().getResident(player.getUniqueId());
 
-		if (resident == null || (event.getClickedInventory() != null && !(PaperLib.getHolder(event.getClickedInventory(), false).getHolder() instanceof TownyInventory)))
+		if (resident == null || (event.getClickedInventory() != null && !(event.getClickedInventory().getHolder(false) instanceof TownyInventory)))
 			return;
 
 		if (event.getInventory().getHolder() instanceof EditGUI editGUI) {
@@ -59,36 +62,44 @@ public class TownyInventoryListener implements Listener {
 			if (meta == null)
 				return;
 			
+			final Component customName = meta.displayName(); // TODO: after 1.21.4 becomes the minimum version, replace with customName
+			final String plainCustomName = customName != null ? TownyComponents.plain(customName) : event.getCurrentItem().getType().getKey().asMinimalString();
+			
 			Material type = event.getCurrentItem().getType();
 			if (type == Material.LIME_WOOL) {
-				if (meta.getDisplayName().equals(Colors.LightGreen + ChatColor.BOLD + "Save")) {
+				if (meta.getPersistentDataContainer().has(PermissionGUIUtil.EDIT_GUI_SAVE_KEY)) {
 					editGUI.saveChanges();
 				} else {
-					meta.setDisplayName(Colors.Red + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-					event.getCurrentItem().setType(Material.RED_WOOL);
+					final ItemStack newItem = new ItemStack(Material.RED_WOOL);
+					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.RED, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
+
+					event.setCurrentItem(newItem);
 				}
 			} else if (type == Material.RED_WOOL) {
-				if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Back")) {
+				if (meta.getPersistentDataContainer().has(PermissionGUIUtil.EDIT_GUI_BACK_KEY)) {
 					editGUI.exitScreen();
-				} else if (meta.getDisplayName().equals(Colors.Red + ChatColor.BOLD + "Delete")) {
+				} else if (meta.getPersistentDataContainer().has(PermissionGUIUtil.EDIT_GUI_DELETE_KEY)) {
 					editGUI.deleteResident();
 				} else {
-					meta.setDisplayName(Colors.Gray + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-					event.getCurrentItem().setType(Material.GRAY_WOOL);
+					final ItemStack newItem = new ItemStack(Material.GRAY_WOOL);
+					newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GRAY, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
+
+					event.setCurrentItem(newItem);
 				}
 			} else if (type == Material.GRAY_WOOL) {
-				meta.setDisplayName(Colors.LightGreen + ChatColor.BOLD + Colors.strip(meta.getDisplayName()));
-				event.getCurrentItem().setType(Material.LIME_WOOL);
+				final ItemStack newItem = new ItemStack(Material.LIME_WOOL);
+				newItem.editMeta(newMeta -> newMeta.displayName(Component.text(plainCustomName, NamedTextColor.GREEN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false)));
+
+				event.setCurrentItem(newItem);
 			} else 
 				return;
 			
-			event.getCurrentItem().setItemMeta(meta);			
 			editGUI.playClickSound(player);
 
 		} else if (event.getInventory().getHolder() instanceof PermissionGUI permissionGUI) {
 			if (event.getCurrentItem().getType() == Material.PLAYER_HEAD && permissionGUI.canEdit()) {
 				PermissionGUIUtil.openPermissionEditorGUI(resident, permissionGUI.getTownBlock(), event.getCurrentItem());
-				Towny.getAdventure().player(player).playSound(clickSound);
+				player.playSound(clickSound);
 			} else if (event.getCurrentItem().getType() == Material.WRITTEN_BOOK) {
 				player.openBook(PermissionGUIUtil.createTutorialBook());
 			} else if (event.getCurrentItem().getType() == Material.NAME_TAG) {
@@ -103,7 +114,16 @@ public class TownyInventoryListener implements Listener {
 				permissionGUI.tryPaginate(event.getCurrentItem(), player, resident, event.getView());
 			}
 		} else if (event.getInventory().getHolder() instanceof SelectionGUI selectionGUI) {
-			TownBlockType type = TownBlockTypeHandler.getType(Colors.strip(event.getCurrentItem().getItemMeta().getDisplayName()));
+			ItemMeta meta = event.getCurrentItem().getItemMeta();
+			if (meta == null)
+				return;
+
+			final String townBlockTypeName = meta.getPersistentDataContainer().get(ResidentUtil.SELECTION_GUI_TOWNBLOCK_TYPE_KEY, PersistentDataType.STRING);
+			if (townBlockTypeName == null) {
+				return;
+			}
+
+			TownBlockType type = TownBlockTypeHandler.getType(townBlockTypeName);
 			if (type == null) {
 				// The player has clicked the back/next button or an empty spot..
 				selectionGUI.playClickSound(player);

@@ -913,5 +913,25 @@
         "value": ",WIND_CHARGED,WEAVING,INFESTED,OOZING"
       }
     ]
+  },
+  {
+    "version": "0.101.2.3",
+    "changes": [
+      {
+        "type": "APPEND",
+        "path": "protection.switch_ids",
+        "value": ",COPPER_CHEST,COPPER_GOLEM_STATUE,SHELVES"
+      }
+    ]
+  },
+  {
+    "version": "0.102.0.2",
+    "changes": [
+      {
+        "type": "TOWNYPERMS_ADD",
+        "path": "nomad",
+        "value": "towny.command.town.nearby"
+      }
+    ]
   }
 ]

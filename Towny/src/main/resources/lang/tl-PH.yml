@@ -738,7 +738,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'Hindi ka p
 msg_already_ally: 'Ang iyong bansa ay kaalyado na ng %s.'
 #Added in 0.76
 msg_you: 'Ikaw'
-#Added in 0.77
 msg_click_spawn: '&aMag-click upang mag-spawn sa: &e%s'
 msg_spawn_cost: '&aGastos para mag-spawn = &e%s'
 #Added in 0.78

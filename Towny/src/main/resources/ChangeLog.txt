@@ -10365,3 +10365,479 @@ v0.92.0.11:
     - Closes #7875.
 0.101.2.0:
   - Bump version for release.
+0.101.2.1:
+  - Send the eco prefix with rename calls to VaultUnlocked, courtesy of creatorfromhell with PR #7878.
+  - New Command: /ta eco depositalltowns [amount]
+    - Deposits money to all towns.
+  - New Command: /ta eco depositallnations [amount]
+    - Deposits money to all nations.
+  - New Permission Node: towny.command.townyadmin.eco.depositalltowns
+    - Child Node of towny.command.townyadmin.eco.*.
+  - New Permission Node: towny.command.townyadmin.eco.depositallnations
+    - Child Node of towny.command.townyadmin.eco.*.
+  - Idiot-proof the webmap URL.
+  - Clear resident gui pages on logout, courtesy of Warrior with PR #7896.
+  - Allow the TownPreUnclaimEvent to no longer be fired when a town is being deleted, allowing Districts to get properly deleted when their town will no longer exist.
+    - Closes #7889.
+  - Precompute mob removal classes to entity types, courtesy of Warrior with PR #7894.
+  - Add renaming Towny ranks, courtesy of SulkyWhale with PR #7884.
+  - New Command: /ta townyperms townrank renamerank [oldrankname] [newrankname]
+    - Renames a town rank to a new name.
+  - New Command: /ta townyperms nationrank renamerank [oldrankname] [newrankname]
+    - Renames a nation rank to a new name.
+  - Always read global.yml for overrides, courtesy of Warrior with PR #7877.
+  - Config option for non-public towns to show map link, courtesy of GoodrichDev with PR #7873.
+    - Allows non-public towns to display a clickable map link in the town status screens, making it easier for players and admins to locate towns on the web map, even if the towns are private.
+    - Closes #7872.
+  - New Config Option: plugin.interfacing.web_map.non_public_towns_show_map_link
+    - Default: false
+    - When true, non-public towns will show a link to their map location in the town status screen.
+  - Add world toggle for jailing, courtesy of squeaky2137 with PR #7863.
+    - Closes #7817.
+  - New Command: /tw toggle jailing
+  - New Permission Node: towny.command.townyworld.toggle.jailing
+  - New Config Option: new_world_settings.plot_management.jailing_enabled
+    - Default: true
+    - Sets the default setting for newly detected worlds.
+0.101.2.2:
+  - Fix Overclaimed Upkeep Penalty not being charged to towns which don't pay any upkeep.
+  - Add permission validation for town allylist & enemylist commands, courtesy of Lemar98 with PR #7899.
+  - New permission nodes:
+    - towny.command.town.allylist
+    - towny.command.town.enemylist
+    - Add these to the nomad section of the townyperms.yml file if you would like.
+  - Add tab completions for /plot group toggle, courtesy of SulkyWhale with PR #7897.
+  - Log removed blocks with coreprotect, courtesy of Warrior with PR #7898.
+  - New Command: /res toggle ignoresinvites.
+    - Allows players to automatically ignore town invites, useful for server staff.
+  - New permission node: towny.command.resident.toggle.ignoreinvites
+    - Child node of towny.command.resident.toggle.*, no changes to townyperms.yml required.
+  - New Command /t list by forsale
+    - Lists towns with a preference for towns which are currently forsale using /t forsale.
+    - Closes #7910.
+  - New Permission Node: towny.command.town.list.forsale
+    - Child node of towny.command.town.list.*, no changes to townyperms.yml required.
+0.101.2.3:
+  - Suppress outlaw warning for spectators, courtesy of Warrior with PR #7919.
+    - Closes #7918.
+  - Add PAPI Placeholders for unformatted tags for town and nation along with any overrides, courtesy of OoLunar with PR #7917.
+  - New PAPI Placeholders:
+    - %townyadvanced_town_tag_unformatted% - The town tag without any formatting from the Towny config.yml.
+    - %townyadvanced_town_tag_override_unformatted% - The town tag (or town name if no tag is set,) without any formatting from the Towny config.yml.
+    - %townyadvanced_nation_tag_unformatted% - The nation tag without any formatting from the Towny config.yml.
+    - %townyadvanced_nation_tag_override_unformatted% - The nation tag (or nation name if no tag is set,) without any formatting from the Towny config.yml.
+  - Add build information to the version command, courtesy of Warrior with PR #7914.
+  - Add support for new 1.21.9 blocks, courtesy of Warrior with PR #7913.
+    - Adds support for copper golems being protected from waxing/scraping.
+    - Adds support for new chests and shelves being treated as switches.
+  - Automatic Config Edit:
+    - ",COPPER_CHEST,COPPER_GOLEM_STATUE,SHELVES" will be added to the config.yml's switch_ids.
+  - Add town & nation upkeep & neutrality payment events, courtesy of Alienn-Know & Warrior with PR #7888.
+  - New API Events:
+    - NationNeutralCostPaidEvent
+    - NationUpkeepCostPaidEvent
+    - TownNeutralCostPaidEvent
+    - TownUpkeepCostPaidEvent
+  - Add Town forSaleTime for use in API, courtesy of GoodrichDev #7908.
+    - Closes #7907.
+  - Replace AtomicReference usages in the task scheduler, courtesy of Warrior with PR #7906.
+    - Closes #7903.
+  - Fix districts becoming un-unclaimable.
+    - Closes #7921.
+0.101.2.4:
+  - Use a property for junit versions, courtesy of Warrior with PR #7926.
+  - Fix plotpreclaim cancel message, courtesy of ZapolyarnyDev with PR #7924.
+    - Closes #7868.
+  - Fix /ta nation NAME set capital command not making sure the town in question is part of a nation or in the nation at all.
+  - Add /res friend list online subcommand, courtesy of Warrior with PR #7928.
+  - New Command: /res friend list online
+    - Shows you a list of online friends.
+  - Fix language dash -> underscore normalization NPE, courtesy of Warrior with PR #7929.
+  - Merge the build and test actions back into one, courtesy of Warrior with PR #7930.
+  - Add LuckPerms permissions source, courtesy of Warrior with PR #7933.
+  - Add new constructor for ListDataField, courtesy of SulkyWhale with PR #7937.
+0.101.2.5:
+  - Target Paper instead of spigot, courtesy of Warrior with PR #7885.
+    - Towny will now require Paper or one of its derivatives.
+    - Towny will not start if your server uses Spigot or Craftbukkit.
+    - Some plugins will not work until they are updated to no longer use the now-removed `com.palmergames.adventure` package.
+      - Before you update Towny look at whether you use TownyResources, TownyFlight, other Towny add-on plugins, Sponsor plugins created by LlmDl.
+      - If you are using these plugins do not update your Towny to 0.101.2.5 immediately.
+  - Fix the paper startup check, courtesy of Warrior with PR #7954.
+  - Hide scores in scoreboard huds, courtesy of Warrior with PR #7886.
+  - Replace MethodHandles with method calls where possible, courtesy of Warrior with PR #7887.
+  - Fix offline player reflection for 1.21.9, courtesy of Warrior with PR #7973.
+  - Replace trivial streams in Town & mark as unmodifiable, courtesy of Warrior with PR #7946.
+  - Stop using Properties to load object files, preserve raw metadata for #7925, courtesy of GoodrichDev with PR #7935.
+    - Closes #7925.
+  - Add option to make a town's town_level determined by their townblock count, instead of resident count.
+    - Closes #7947.
+  - New Config Option: global_town_settings.town_level_is_determined_by_townblock_count_instead_of_resident_count
+    - Default: false
+    - When set to true, the town's TownLevel is determined by the number of townblocks the town owns, instead of the number of residents.
+    - This setting will have no effect when town_block_ratio is set to 0.
+  - Sort /t list by forsale by for sale price, courtesy of Warrior with PR #7951.
+  - Fix formatting for listing resident modes, courtesy of SulkyWhale with PR #7952.
+  - Improve method for preventing saturation loss in towns, courtesy of SulkyWhale with PR #7958.
+0.101.2.6:
+  - Improve SQL db startup speed by querying existing tables, courtesy of Warrior with PR #7972.
+  - Use mediumtext datatype for metadata in mysql, courtesy of Warrior with PR #7967.
+  - Add an sql database migrator, courtesy of Warrior with PR #7968.
+  - Add option to make safe teleport stop spawning when no safe position is found, courtesy of RyanoDino with PR #7964.
+  - Remove duplicate events and update existing events to allow value changes via the API, courtesy of SulkyWhale with PR #7966.
+  - Removed API Events:
+    - NationUpkeepCostPaidEvent, listen for the NationNeutralityCostCalculationEvent on Monitory priority instead.
+    - TownUpkeepCostPaidEvent, listen for the TownNeutralityCostCalculationEvent on Monitory priority instead.
+  - Update BookFactory to use components, courtesy of Warrior with PR #7980.
+  - Deprecate legacy color constants in our Colors class, courtesy of Warrior with PR #7981.
+  - Allow getting TownyException error message as component, courtesy of Warrior with PR #7983.
+  - Add prior location to SuccessfulTownyTeleportEvent, courtesy of flyncodes with PR #7984.
+  - Format resident last online with relative time, courtesy of Warrior with PR #7986.
+  - Testperm for checkperm, courtesy of Warrior with PR #7987.
+  - Delete received nation ally requests if sender deletes itself, courtesy of Warrior with PR #7988.
+  - Revert change to potion protection handling, courtesy of Warrior with PR #7990.
+  - Improve lingering potion protection, courtesy of Warrior with PR #7991.
+  - Replace pre 1.19 entity/block keys with constants, courtesy of Warrior with PR #7992.
+  - Update inventory system to use components & PDC, courtesy of Warrior with PR #7982.
+0.101.2.7:
+  - Fix the changelog reader thinking the limit has been reached, courtesy of Warrior with PR #7994.
+  - Fix getting lingering potion effects on legacy versions, courtesy of Warrior with PR #7997.
+    - Closes #7996.
+  - Fix getting respawn location <1.21.5, courtesy of Warrior with PR #7998.
+    - Closes #7995.
+  - Fix literal translatables attempting to translate, courtesy of Warrior with PR #7999.
+  - Add setting for default peaceful nation to create, courtesy of RyanoDino with PR #8000.
+    - Closes #7970.
+  - New Config Option: nation.default_neutral
+    - Default: true
+    - Default neutral status of the nation (are new nations neutral by default?)
+  - Add saving of hasActiveWar for towns and nations, courtesy of SulkyWhale with PR #8002.
+  - Fix mountable entities having their saddles sheared, copper golems having their items dropped.
+  - Add ability to set max town and nation board lengths.
+  - New Config Option: global_town_settings.max_board_length
+    - Default: 170
+    - The maximum number of characters that the town (and nation,) board messages can be.
+  - Add unformatted upkeep PAPI placeholders.
+    - Closes #7943.
+  - New PAPI Placeholders:
+    - %townyadvanced_daily_town_upkeep_unformatted% - An unformatted town upkeep amount.
+    - %townyadvanced_daily_nation_upkeep_unformatted% - An unformatted nation upkeep amount.
+0.101.2.8:
+  - Fix unneeded msg_invalid_name exception message from /n ally.
+    - Closes #8006.
+0.102.0.0:
+  - Bump version for release.
+0.102.0.1:
+  - Add new shear-to-remove-saddle mobs to entity list, courtesy of Warrior with PR #8018.
+  - Fix admin permissions on LuckPerms-using servers where OPs do not receieve towny.admin.
+    - OPs will now be given the towny.admin permission node by default.
+    - Closes #8017.
+  - New PAPI Placeholders:
+    - %townyadvanced_player_location_in_homeblock% - Returns a string TRUE or FALSE if the player is in a homeblock.
+    - %townyadvanced_player_location_in_homeblock_owntown% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to their town.
+    - %townyadvanced_player_location_in_homeblock_ownnation% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town in the player's nation.
+    - %townyadvanced_player_location_in_homeblock_enemy% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is enemied with the player's town.
+    - %townyadvanced_player_location_in_homeblock_ally% - Returns a string TRUE or FALSE if the player is in a homeblock belonging to a town that is allied with the player's town.
+    - Closes #8020.
+  - Add new message shown to mayor and assistants when someone spawns to their town and it has resulted in the town earning the money.
+    - Closes #7953.
+  - New Config Option: global_town_settings.rank_names_to_be_treated_as_assistants
+    - Default: assistant
+    - The ranks to be given special priviledges, for instance when messages would be shown to only VIP town members.
+    - All ranks should be as defined in `townyperms.yml`.
+0.102.0.2:
+  - Fix town bank accounts being removed before the feature isDeletedObjectBalancePaidToOwner can finish logging into the bank history book.
+    - Closes #8031.
+  - Fix the message shown to mayors and assistants when someone spawns to their town showing prior to the teleport warmup time, resulting in unneeded messages.
+  - Add option to refund towns upon deletion.
+    - Adds a configurable system based on town age and size limits, to refund recently-made, "small" towns their full cost.
+    - Closes #7974.
+  - New Config Option: economy.refund_deleted_new_towns.allow_refund_on_deletion
+    - Default: false
+    - Will towns that are recently created allow for a refund when the town is deleted by using the /t delete command?
+    - This allows a player who has founded their town in the wrong place to delete their town and move it.
+    - Towns must be less than the age specified below and have a configuable number of townblocks.
+  - New Config Option: economy.refund_deleted_new_towns.max_town_age_in_hours
+    - Default: 1
+    - How many hours old is a town allowed to be in order to get the refund when being deleted.
+  - New Config Option: economy.refund_deleted_new_towns.max_townblocks
+    - Default: 8
+    - How many townblocks is a town allowed to have in order to qualify for the refund.
+  - Fix exception when attempting to query NPC perms through LuckPerms, courtesy of Warrior with PR #8033.
+  - Future proof minecraft version parsing, courtesy of Warrior with PR #8034.
+  - Fix 2 points where permission node tests bypass the adminbypass mode.
+  - Add /town nearby command, courtesy of Nrleryx with PR #8040. (First-Time Contributor!)
+  - New Permission Node: towny.command.town.nearby
+    - Will be automatically added to your nomads in the townyperms.yml.
+  - New Command: /town nearby
+    - Shows a player up to 10 towns that are nearest to the player in the order of closest to furthest.
+0.102.0.3:
+  - Add test preventing copper golems moving items beyond same-owner plots.
+  - Fix towns having a spawn point in a non-existent world preventing the town being deleted.
+  - Add protection for the waxed copper golem statues into the switch category when COPPER_GOLEM_STATUE is a switch_id.
+  - Add waxed versions of copper chests into the COPPER_CHEST category.
+  - Added option to hide nations and towns from the list pages when their banks are less than or equal to zero.
+  - New Config Option: economy.banks.hide_zero_or_under_banks_on_list_outputs
+    - Default: false
+    - When true town and nations with a bank balance of less than or equal to zero will not appear on the town and nation lists.
+  - Fix admins with the adminbypass mode active not receiving teleport warmups and cooldowns.
+  - Add the option to make the town bank cap plot-based.
+    - Closes #8045.
+  - New Config Option: economy.banks.town_bank_cap_is_plotbased
+    - Default: false
+    - When true the bank cap is plot-based. The number of townblocks/plots a town has claimed will be multiplied by the above town_bank_cap value.
+  - New Config Option: economy.banks.plotbased_bank_cap_uses_town_level_modifier
+    - Default: false
+    - When true the plot-based bank cap will also be multiplied by the town_levels' bank cap modifiers.
+  - New Config Option: economy.banks.plotbased_town_bank_cap_minimum
+    - Default: 0.0
+    - The smallest cap that banks can have while using the plotbased bank cap.
+    - If this value is larger than the naturally-derived townblocks * town_bank_cap equation, this minimum will be used instead.
+  - Fix a logic error in the PlotGroup#setResident function, courtesy of Remasuri with PR #8043. (First-Time Contributor!)
+  - Bit pack perms in TownyPermission objects, courtesy of Warrior with PR #8048.
+  - Remove world references stored inside WorldCoord, courtesy of Warrior with PR #8050.
+  - Fix message when attempting to overclaim your own town, courtesy of Warrior with PR #8051.
+  - Reduce allocations done by Resident hasRank methods, courtesy of Warrior with PR #8037.
+  - Bump com.zaxxer:HikariCP from 6.2.1 to 7.0.2.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.2 to 3.5.4.
+  - Bump org.apache.maven.plugins:maven-jar-plugin from 3.4.2 to 3.5.0.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.13.0 to 3.14.1.
+  - Bump org.apache.logging.log4j:log4j-core from 2.24.3 to 2.25.3.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.6.0 to 3.6.1.
+  - Lazily initialize maps used by TownBlock, courtesy of Warrior with PR #8049.
+  - Fix occasions where plot groups exist in townblocks being removed.
+  - Fix the townyperms group command not working with capitalized groups, courtesy of Warrior with PR #8055.
+  - Add support for enabling conquering on a town via townyadmin command.
+  - Check the chunk is still wilderness after confirmation in /town new, courtesy of Veyronity with PR #8059. (First-Time Contributor!)
+  - Add null checks to the task schedulers, courtesy of Warrior with PR #8060.
+0.102.0.4:
+  - UUID Database Update!
+    - READ CAREFULLY, THIS UPDATE HAS CHANGES THAT CANNOT BE REVERSED EASILY.
+    - Since Minecraft added UUIDs to players there has always been the idea of changing Towny over to using UUIDs as the main key in our database,
+      but due to database instability this was not something that was considered a smart change. Database stability was majorly improved years ago
+      however and starting in 2022 and 2023 I (LlmDl,) had pull requests on deck exploring/planning what a UUID-based database would look like for
+      Towny. In the middle-to-late 2025 Warrior decided to revive the UUID database concept, breaking things into bite-sized pull requests that
+      made the concept easier to review and merge. Those pull requests are as follows:
+      - Load UUIDs for residents, towns & nations early, courtesy of Warrior with PR #7945.
+      - Replace references to names with UUIDs in the database, courtesy of Warrior with PR #7962.
+      - Clean up town/nation/resident renaming logic, courtesy of Warrior with PR #7963.
+      - Use UUIDs for town/nation/resident file names in flatfile, courtesy of Warrior with PR #8023.
+      Thanks to Warrior's efforts the UUID database has become a reality!
+    - What this means for Towny server admins:
+      - The database no longer saves using resident, town and nation names. Instead you will see UUID-named .txt files in the resident, town and
+        nation folders, and UUIDs in the lists of friends, enemies and allies.
+      - Once you updated to this version your database will be converted and there is no going back. Towny will create backups of your pre-UUID
+        database if you have backups enabled in the Towny config.yml and you are using Towny in flatfile!
+      - If your Towny database is stored in MYSQL you need to make your own backup! Towny doesn't back up MYSQL databases!
+    - Benefits:
+      - Your Towny database just got more error-proof.
+      - Renaming of residents, towns, nations should no longer be prone to edge-case scenarios that could cause issues.
+      - Server hosts which don't allow some unicode characters in the server file system's filenames will no longer fail to save/load towns and
+        nations with special (usually accented,) characters.
+      - If you change hosts and your future-host does not allow the above unicode characters to be used in the filesystem, your server will not
+        immediately fail to load!
+      - The main issue with Towny databases over the last few years was typically towns/nations being named with characters that server hosting
+        would not allow in the filesystem, this database update will make this issue non-existant, which is why the benefits of this update
+        outweigh the cons.
+    - Cons:
+      - The database's residents/towns/nations are no longer saved with their names. This makes editing your database manually trickier.
+        - To help this out the residents' files will now contain their town's last-known name, the towns' files will contain their nation's and
+          mayor's last-known name. All residents, towns and nations files will contain their last-known name in their files.
+    - Ultimately, the benefits have outweighed the cons, stability has been good for Towny databases for 5+ years, and it is time to make this
+      change in order to reduce the complexity of the codebase and to improve how Towny runs on varied server hosts.
+0.102.0.5:
+  - This version includes Major Changes to the database structure which took place in 0.102.0.4!
+    - Read about it here: https://github.com/TownyAdvanced/Towny/releases/tag/0.102.0.4
+    - The Changelog for 0.102.0.5 follows:
+  - Enforce notnull for economy account name/uuid fields, courtesy of Warrior with PR #7705.
+  - Fix IndexOutOfBounds exception in /t join, courtesy of Veyronity with PR #8062.
+  - Fix SQL loading of forSale, forSalePrice, and forSaleTime, courtesy of Groovymeister with PR #8063. (First-Time Contributor!)
+  - Add info/meta node for overriding teleport warmup.
+    - Closes #7950.
+  - New Permission Node: towny_teleport_warmup_seconds.N
+    - An info/option node (see https://github.com/TownyAdvanced/Towny/wiki/Towny-Permission-Nodes#infooptionmeta-nodes) that overrides a player's warmup time.
+    - Replace N with the seconds to use for a warmup time.
+    - When not set, the standard warmup time from the Towny config.yml is used.
+  - Bump junit.version from 5.13.4 to 6.0.2.
+  - Bump net.luckperms:api from 5.4 to 5.5.
+  - Bump org.apache.maven.plugins:maven-source-plugin from 3.3.1 to 3.4.0.
+  - Bump net.milkbowl.vault:VaultUnlockedAPI from 2.9 to 2.15.
+  - Bump org.apache.maven.plugins:maven-javadoc-plugin from 3.11.2 to 3.12.0.
+  - Fix itemuse list not being used against projectiles which are fired into the air.
+  - Allow empty towns to turn into ruins, courtesy of Warrior with PR #8071.
+  - New config option: town_ruining.empty_towns_become_ruins
+    - Default: false
+    - When enabled, when the last resident is removed from a town and it becomes empty (such as when inactive resident deletion is enabled),
+      the town will turn into a ruin instead of being immediately removed.
+  - Fix IllegalArgumentException when a plugin we integrate with has a bad version, courtesy of Warrior with PR #8072.
+  - Fix unneeded msg_invalid_name exception message from /n enemy, courtesy of pernio with PR #8073. (First-Time Contributor!)
+  - Add a cooldown to prevent towns spamming residents by outlawing and unoutlawing them, courtesy of Veyronity with PR #8074.
+  - New Config Option: resident_settings.warn_player_on_outlaw_message_cooldown_in_seconds
+    - Default: 30
+    - How many seconds in between warning messages, to prevent spam.
+0.102.0.6:
+  - Fix titles messages showing their subtitle in the title position.
+  - Fix towny_teleport_warmup_seconds permission node not working.
+  - Fix copper golem test that caused Could not pass event ItemTransportingEntityValidateTargetEvent spam.
+    - Closes #8085.
+  - Bump net.coreprotect:coreprotect from 22.4 to 23.1.
+  - Bump me.clip:placeholderapi from 2.11.6 to 2.11.7.
+  - Bump org.apache.commons:commons-compress from 1.26.2 to 1.28.0.
+  - Fix the mayor succession event not being fired, courtesy of Warrior with PR #8086.
+  - Skip proximity checks when minimum plot distance is set to 0, courtesy of MakcNmk with PR #8087. (First-Time Contributor!)
+0.102.0.7:
+  - Add new CHESTS_WITHOUT_ENDERCHEST group, usable in the config switch_ids list, includes all chests but the enderchest.
+    - Closes #8095.
+  - Add getFormattedTimeValue that accepts a player locale.
+  - Fix adminbypass mode not applying to nationzones.
+  - Fix title and surname settings issues.
+  - Restrict usable minimessage tags in titles/surnames, courtesy of Warrior with PR #8096.
+  - Re-add removed res_8 lang string, courtesy of Warrior with PR #8097.
+  - Add new hovers to town and nation lists.
+    - Separate spawn and town/nation status screen hovers/clickables are now available.
+    - Closes #8100.
+  - Add PLOT_GROUP_TOGGLE to TownyCommandAddonAPI, courtesy of Veyronity with PR #8107.
+  - Bump me.clip:placeholderapi from 2.11.7 to 2.12.2.
+  - Bump org.apache.maven.plugins:maven-compiler-plugin from 3.14.1 to 3.15.0.
+0.102.0.8:
+  - Fix outposts not following the min_distances_ignored_for_towns_in_same_nation and min_distances_ignored_for_towns_in_allied_nation 
+    when min_distance_for_outpost_from_plot is tested while creating an outpost using /t claim outpost.
+    - Closes #7829. 
+  - Fix plot command being blocked in ruined Towns for players who are not town members.
+  - New PAPI Placeholder: %townyadvanced_town_outposts_claimed%
+    - Displays how many outposts a town has, when the player has a town.
+    - Closes #8114.
+  - Bump junit.version from 6.0.2 to 6.0.3.
+  - Add setting manual NationLevels onto Nations, courtesy of confusedalex with PR #8112. (First-Time Contributor!)
+  - New Command: /ta nation NATIONNAME setnationlevel #|clear.
+  - New Permission Node: towny.command.townyadmin.nation.setnationlevel
+    - Child node of towny.command.townyadmin.nation.* and towny.admin.
+  - Add Scoreboard/HUD support for Folia, convert Scoreboards to Adventure.
+  - Ignore colors in length validation, strip unwanted minimessage tags, courtesy of Veyronity with PR #8116.
+  - Bump org.jetbrains:annotations from 26.0.2 to 26.1.0.
+  - Bump org.apache.maven.plugins:maven-surefire-plugin from 3.5.4 to 3.5.5.
+  - Add Interaction entity to right click protected list.
+    - Closes #8121.
+  - Lower listener priorities for block events, courtesy of Warrior with PR #8123.
+0.102.0.9:
+  - Remove some townyadmincommand permission tests in favour of subcommand permission tests, allowing for more fine-grained permission node configurations.
+    - towny.command.townyadmin.town.* 
+    - towny.command.townyadmin.nation.*
+    - towny.command.townyadmin.resident.*
+    - towny.command.townyadmin.toggle.*
+    - towny.command.townyadmin.plot.*
+    - The subcommands of these commands now rely soley on their own permission node, and do not require the parent permission node.
+  - Fix nation-level-getting broken in 0.102.0.8.
+0.102.0.10:
+  - Fix HUDManager not accepting added HUDs.
+  - Fix empty nations saving themselves instead of getting deleted.
+  - Add only_remove_claim_count for inactive resident claim limits, courtesy of GoodrichDev with PR #8119.
+    - When delete_old_residents.enable, only_remove_town, and only_remove_claim_count are all true (and delete_only_townless is false),
+      residents who are offline longer than deleted_after_time no longer count toward ratio-based max town blocks.
+    - Resident data is kept: purge skips removing town/deleting residents in this mode.
+  - New Config Option: resident_settings.delete_old_residents.only_remove_claim_count
+    - Default: false
+    - When true (and only_remove_town is true) residents are kept and only stop counting toward town claim limits after deleted_after_time.
+  - Add /ta resident set for lastonline/registered with timestamp validation, courtesy of GoodrichDev with PR #8120.
+  - New Command: /ta resident <resident> set registered <timestamp>
+    - Sets the resident registered time with the timestamp being a long.
+  - New Command: /ta resident <resident> set lastonline <timestamp>
+    - Sets the resident lastonline time with the timestamp being a long.
+  - Bump org.bstats:bstats-bukkit from 3.1.0 to 3.2.1.
+  - Add option to consider nation enemies as town outlaws, courtesy of Captain-S0L0 with PR #8132. (First-Time Contributor!)
+  - New Config Option: global_town_settings.consider_enemies_outlaws
+    - Default: false
+    - If set to true, when a town is in a nation any player in another nation that the town's nation considers enemies will be considered an outlaw in that town.
+  - Improve NameValidation checks for banned names, courtesy of Veyronity with PR #8133.
+    - Prevents Towns and Nations being named with subcommands of /town and /nation.
+    - Replaced hard coded list with auto-populating list, which now also includes TownyCommandAddonAPI subcommands.
+  - Add cooldown on how often towns & nations can request a merge with the same target, courtesy of Veyronity with PR #8134.
+  - New Config Option: global_town_settings.merge_request_cooldown_time
+    - Default: 60
+    - Number of seconds that must pass before a town can send a merge request to the same target.
+  - New Config Option: global_nation_settings.merge_request_cooldown_time
+    - Default: 60
+    - Number of seconds that must pass before a nation can send a merge request to the same target.
+0.102.0.11:
+  - Prevent renaming town/nation files when name is invalid, courtesy of Warrior with PR #8137.
+    - Flatfile databases which loaded towns/nations with invalid names could result in a town/nation file being created with a name instead of a UUID.
+0.102.0.12:
+  - Fix a bunch of nation and town level weirdness, courtesy of Warrior with PR #8091.
+    - Fixed getTownLevelMax always being 1 too high
+    - Fixed TownLevelDecrease/IncreaseEvent firing for towns that have a manually set town level.
+    - Fixed the code around the Town/NationLevelDecrease/IncreaseEvent bypassing the level calculate events, possibly causing them to be wrongly fired when a plugin is calculating its own levels with the level calculate events.
+    - Town merge:
+      - Fixed the town's resident amount being used instead of the nation's resident amount for max outpost calculations.
+      - Fixed max purchased blocks not using the number of townblocks to calculate the town level when configured to do so.
+      - Fixed the purchased and bonus blocks of the succumbing town not being limited by the town block limit option when the town_block_ratio is in use.
+    - Fixed nation level methods wrongly using the modifier and level interchangeably (i.e. getNationLevelFromGivenInt was returning the floored modifier rather than the actual level).
+  - Fix not throwing PlayerChangePlotEvents for passengers.
+  - Add NationRangeAllowTownEvent, courtesy of Veyronity with PR #8128.
+    - An event thrown when a town is assessed during the nation proximity tests, allowing plugins to modify nation proximity rules on a per-town basis.
+  - Bump org.apache.maven.plugins:maven-shade-plugin from 3.6.1 to 3.6.2.
+0.102.0.13:
+  - Add protection for golden dandelion usage, courtesy of Warrior with PR #8129.
+  - Fix maxJailedUnjail method when town has no jailed residents, courtesy of Dionert with PR #8141. (First-Time Contributor!)
+  - Add maximum deposit and withdraw settings for towns and nations.
+    - Closes #8046.
+  - New Config Option: economy.banks.town_max_deposit
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to deposit in town bank at a time.
+  - New Config Option: economy.banks.town_max_withdraw
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to withdraw from town bank at a time.
+  - New Config Option: economy.banks.nation_max_deposit
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to deposit in nation bank at a time.
+  - New Config Option: economy.banks.nation_max_withdraw
+    - Default: -1
+    - When greater than -1, the maximum amount of money players are allowed to withdraw from nation bank at a time.
+  - Send dangerous action confirmation messages in red instead of gray, courtesy of Veyronity with PR #8145.
+  - Remove enderchests from default switch_ids config, courtesy of Warrior with PR #8147.
+  - Fix /towny prices missing the max tax percent caps when a town or nation has taxpercent in use.
+  - Bump org.apache.logging.log4j:log4j-core from 2.25.3 to 2.25.4.
+  - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 9.0.2 to 9.1.0.
+0.102.0.14:
+  - Use mockito for unit testing, courtesy of Warrior with PR #8159.
+  - Fix Outlaw teleportation on Folia / Add support for Canvas outlaw teleportation, courtesy of Jsinco #8138. (First-Time Contributor!)
+  - Add optional limits to town and nation ranks uses.
+    - New towny.ranklimit.# node which can be added to town and nation ranks to limit how many times a town or nation can use the rank.
+    - Closes #8035.
+  - Fix added padding of scoreboards.
+  - Simplify explosion revert BlockState handling, courtesy of Warrior with PR #8153.
+  - NameValidation: Strip dangerous tags, not the allowed ones, courtesy of Veyronity with PR #8156.
+  - Bump io.github.git-commit-id:git-commit-id-maven-plugin from 9.1.0 to 10.0.0.
+  - Bump javadoc plugin and fix javadoc goal not applying formatting, courtesy of SulkyWhale with PR #8161.
+  - Adds option to deny cross world teleportation.
+    - Closes #8162.
+  - New Config Option: spawning.require_spawn_destination_same_world
+    - Default: false
+    - When true, using /res, /t, /n spawn or /t outpost will fail when those spawn points are not in the same world as the player.
+    - Use this feature to require players use special portals to travel between your server's worlds.
+  - Use dedicated age lock event instead of interact listener, courtesy of Warrior with PR #8158.
+  - Add ability for nation members to teleport to outposts belonging to the nation's towns.
+    - Closes #5098.
+    - Closes #1728.
+  - New Commands:
+    - /n townoutposts listall - list a nation's towns' outposts, with clickable teleportation.
+    - /n townoutposts [townname] list - lists a town's outposts, with clickable teleportation.
+    - /n townoutposts [townname] [outpost] - teleports to a town's outpost.
+  - New Permission Nodes:
+    - towny.town.spawn.nation.outpost
+      - Allows the use of /n townoutposts [townname] [outpost]
+      - child node of towny.town.spawn.nation, no changes to townyperms.yml required.
+    - towny.command.nation.outpost.listall
+      - Allows the use of /n townoutposts listall
+      - child node of towny.command.nation.*, no changes to townyperms.yml required.
+    - towny.command.nation.outpost.list
+      - Allows the use of /n townoutposts [townname] list
+      - child node of towny.command.nation.*, no changes to townyperms.yml required.
+  - New Config Option: spawning.nation_spawn.allow_nation_outpost_travel
+    - Default: true
+    - Allow regular residents to use /nation outpost [town] [outpost] (TP to other towns' outposts if they are public).
+    - Valid values are: true, false, war, peace.
+    - When war or peace is set, it is only possible to teleport to the nation, when there is a war or peace.
+0.102.0.15:
+  - New PlaceholderAPI placeholder: %townyadvanced_top_town_residents_and_open_n% - (Replace n with a number) Displays the nth Town that is open, arranged by the number of residents.
+  - Add hover to town and nation status screen title bars for admins.
+    - Displays name, uuid and town/nation level information.

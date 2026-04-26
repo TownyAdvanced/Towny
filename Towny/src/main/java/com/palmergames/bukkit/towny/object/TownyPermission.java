@@ -1,7 +1,6 @@
 package com.palmergames.bukkit.towny.object;
 
 import com.palmergames.bukkit.towny.TownySettings;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -18,10 +17,17 @@ public class TownyPermission {
 		
 		private final int index;
 		private final String commonName;
+		private final int mask;
 
 		ActionType(int index, String commonName) {
 			this.index = index;
 			this.commonName = commonName;
+
+			int mask = 0;
+			for (int i = 0; i < 4; i++) {
+				mask |= 1 << (i * 4 + index);
+			}
+			this.mask = mask;
 		}
 		
 		public int getIndex() {
@@ -45,10 +51,12 @@ public class TownyPermission {
 		
 		private final int index;
 		private final char shortVal;
+		private final int mask;
 		
 		PermLevel(int index, char shortVal) {
 			this.index = index;
 			this.shortVal = shortVal;
+			this.mask = 0b1111 << (index * 4);
 		}
 		
 		public int getIndex() {
@@ -66,17 +74,10 @@ public class TownyPermission {
 	}
 	
 	// Towny permissions are split into Action Type and Permission Level
-	// So they can inherently be represented by a 2d array
-	protected boolean[][] perms;
+	// So they can inherently be represented by a 2d array (or a short, for as long as there are only 4 of both)
+	protected short perms;
 	
 	public boolean pvp, fire, explosion, mobs;
-
-	public TownyPermission() {
-		// Fill the perms array
-		perms = new boolean[PermLevel.values.length][ActionType.values.length];
-		
-		reset();
-	}
 
 	public void reset() {
 		setAll(false);
@@ -89,15 +90,13 @@ public class TownyPermission {
 	public void change(TownyPermissionChange.Action permChange, boolean toValue, Object... args) {
 		// Sorted by most common to least common
 		if (permChange == TownyPermissionChange.Action.SINGLE_PERM && args.length == 2) {
-			perms[((PermLevel) args[0]).getIndex()][((ActionType) args[1]).getIndex()] = toValue;
+			set((PermLevel) args[0], (ActionType) args[1], toValue);
 		}
 		else if (permChange == TownyPermissionChange.Action.PERM_LEVEL && args.length == 1) {
-			Arrays.fill(perms[((PermLevel) args[0]).getIndex()], toValue);
+			setPermLevel((PermLevel) args[0], toValue);
 		}
 		else if (permChange == TownyPermissionChange.Action.ACTION_TYPE && args.length == 1) {
-			for (PermLevel permLevel : PermLevel.values) {
-				perms[permLevel.getIndex()][((ActionType) args[0]).getIndex()] = toValue;
-			}
+			setActionType((ActionType) args[0], toValue);
 		}
 		else if (permChange == TownyPermissionChange.Action.ALL_PERMS) {
 			setAllNonEnvironmental(toValue);
@@ -109,13 +108,11 @@ public class TownyPermission {
 	}
 	
 	public void setAllNonEnvironmental(boolean b) {
-		for (boolean[] permLevel : perms) {
-			Arrays.fill(permLevel, b);
-		}
+		perms = (short) (b ? -1 : 0);
 	}
 
 	public boolean equalsNonEnvironmental(TownyPermission other) {
-		return Arrays.deepEquals(perms, other.perms);
+		return perms == other.perms;
 	}
 
 	public void setAll(boolean b) {
@@ -129,58 +126,57 @@ public class TownyPermission {
 
 	// TODO Restructure how perms are saved
 	public void set(String s, boolean b) {
-		
 		switch (s.toLowerCase(Locale.ROOT)) {
 			case "denyall":
 				reset();
 				break;
 			case "residentbuild":
-				perms[PermLevel.RESIDENT.getIndex()][ActionType.BUILD.getIndex()] = b;
+				set(PermLevel.RESIDENT, ActionType.BUILD, b);
 				break;
 			case "residentdestroy":
-				perms[PermLevel.RESIDENT.getIndex()][ActionType.DESTROY.getIndex()] = b;
+				set(PermLevel.RESIDENT, ActionType.DESTROY, b);
 				break;
 			case "residentswitch":
-				perms[PermLevel.RESIDENT.getIndex()][ActionType.SWITCH.getIndex()] = b;
+				set(PermLevel.RESIDENT, ActionType.SWITCH, b);
 				break;
 			case "residentitemuse":
-				perms[PermLevel.RESIDENT.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
+				set(PermLevel.RESIDENT, ActionType.ITEM_USE, b);
 				break;
 			case "outsiderbuild":
-				perms[PermLevel.OUTSIDER.getIndex()][ActionType.BUILD.getIndex()] = b;
+				set(PermLevel.OUTSIDER, ActionType.BUILD, b);
 				break;
 			case "outsiderdestroy":
-				perms[PermLevel.OUTSIDER.getIndex()][ActionType.DESTROY.getIndex()] = b;
+				set(PermLevel.OUTSIDER, ActionType.DESTROY, b);
 				break;
 			case "outsiderswitch":
-				perms[PermLevel.OUTSIDER.getIndex()][ActionType.SWITCH.getIndex()] = b;
+				set(PermLevel.OUTSIDER, ActionType.SWITCH, b);
 				break;
 			case "outsideritemuse":
-				perms[PermLevel.OUTSIDER.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
+				set(PermLevel.OUTSIDER, ActionType.ITEM_USE, b);
 				break;
 			case "nationbuild":
-				perms[PermLevel.NATION.getIndex()][ActionType.BUILD.getIndex()] = b;
+				set(PermLevel.NATION, ActionType.BUILD, b);
 				break;
 			case "nationdestroy":
-				perms[PermLevel.NATION.getIndex()][ActionType.DESTROY.getIndex()] = b;
+				set(PermLevel.NATION, ActionType.DESTROY, b);
 				break;
 			case "nationswitch":
-				perms[PermLevel.NATION.getIndex()][ActionType.SWITCH.getIndex()] = b;
+				set(PermLevel.NATION, ActionType.SWITCH, b);
 				break;
 			case "nationitemuse":
-				perms[PermLevel.NATION.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
+				set(PermLevel.NATION, ActionType.ITEM_USE, b);
 				break;
 			case "allybuild":
-				perms[PermLevel.ALLY.getIndex()][ActionType.BUILD.getIndex()] = b;
+				set(PermLevel.ALLY, ActionType.BUILD, b);
 				break;
 			case "allydestroy":
-				perms[PermLevel.ALLY.getIndex()][ActionType.DESTROY.getIndex()] = b;
+				set(PermLevel.ALLY, ActionType.DESTROY, b);
 				break;
 			case "allyswitch":
-				perms[PermLevel.ALLY.getIndex()][ActionType.SWITCH.getIndex()] = b;
+				set(PermLevel.ALLY, ActionType.SWITCH, b);
 				break;
 			case "allyitemuse":
-				perms[PermLevel.ALLY.getIndex()][ActionType.ITEM_USE.getIndex()] = b;
+				set(PermLevel.ALLY, ActionType.ITEM_USE, b);
 				break;
 			case "pvp":
 				pvp = b;
@@ -215,7 +211,7 @@ public class TownyPermission {
 			String permLevelName = permLevel.name().toLowerCase(Locale.ROOT);
 			
 			for (ActionType actionType : ActionType.values) {
-				if (perms[permLevel.getIndex()][actionType.getIndex()]) {
+				if (getPerm(permLevel, actionType)) {
 
 					if (output.length() != 0) {
 						output.append(',');
@@ -242,7 +238,34 @@ public class TownyPermission {
 	}
 	
 	public boolean getPerm(PermLevel permLevel, ActionType type) {
-		return perms[permLevel.getIndex()][type.getIndex()];
+		int index = (permLevel.index * 4 + type.index);
+		return (perms & (1 << index)) != 0;
+	}
+
+	public void set(PermLevel permLevel, ActionType type, boolean value) {
+		int index = (permLevel.index * 4 + type.index);
+
+		if (value) {
+			perms |= (short) (1 << index);
+		} else {
+			perms &= (short) ~(1 << index);
+		}
+	}
+
+	public void setPermLevel(PermLevel permLevel, boolean value) {
+		if (value) {
+			perms |= (short) permLevel.mask;
+		} else {
+			perms &= (short) ~permLevel.mask;
+		}
+	}
+
+	public void setActionType(ActionType type, boolean value) {
+		if (value) {
+			perms |= (short) type.mask;
+		} else {
+			perms &= (short) ~type.mask;
+		}
 	}
 
 	// Legacy Compatibility
@@ -270,7 +293,7 @@ public class TownyPermission {
 		StringBuilder output = new StringBuilder(Translation.of("status_perm_line_format", typeCommonName));
 		
 		for (PermLevel permLevel : PermLevel.values) {
-			if (perms[permLevel.getIndex()][type.getIndex()]) {
+			if (getPerm(permLevel, type)) {
 				output.append(permLevel.getShortChar());
 			} else {
 				output.append('-');
@@ -288,7 +311,7 @@ public class TownyPermission {
 		
 		for (PermLevel permLevel : PermLevel.values) {
 			for (ActionType actionType : ActionType.values) {
-				perms[permLevel.getIndex()][actionType.getIndex()] = TownySettings.getDefaultPermission(owner, permLevel, actionType);
+				set(permLevel, actionType, TownySettings.getDefaultPermission(owner, permLevel, actionType));
 			}
 		}
 
@@ -308,11 +331,7 @@ public class TownyPermission {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Arrays.deepHashCode(perms);
-		result = prime * result + Objects.hash(explosion, fire, mobs, pvp);
-		return result;
+		return Objects.hash(perms, explosion, fire, mobs, pvp);
 	}
 
 	@Override
@@ -324,7 +343,6 @@ public class TownyPermission {
 		if (getClass() != obj.getClass())
 			return false;
 		TownyPermission other = (TownyPermission) obj;
-		return explosion == other.explosion && fire == other.fire && mobs == other.mobs
-				&& Arrays.deepEquals(perms, other.perms) && pvp == other.pvp;
+		return explosion == other.explosion && fire == other.fire && mobs == other.mobs && perms == other.perms && pvp == other.pvp;
 	}
 }

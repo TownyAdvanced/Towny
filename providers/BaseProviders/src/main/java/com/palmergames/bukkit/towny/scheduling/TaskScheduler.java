@@ -1,9 +1,9 @@
 package com.palmergames.bukkit.towny.scheduling;
 
+import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.checkerframework.framework.qual.DefaultQualifier;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
@@ -55,17 +55,14 @@ public interface TaskScheduler {
 	
 	ScheduledTask runAsyncRepeating(Consumer<ScheduledTask> task, long delay, long period, TimeUnit timeUnit);
 	
-	@ApiStatus.Experimental
 	default ScheduledTask runGlobal(final Consumer<ScheduledTask> task) {
 		return run(task);
 	}
 	
-	@ApiStatus.Experimental
 	default ScheduledTask runGlobalLater(final Consumer<ScheduledTask> task, final long delay) {
 		return runLater(task, delay);
 	}
 	
-	@ApiStatus.Experimental
 	default ScheduledTask runGlobalRepeating(final Consumer<ScheduledTask> task, final long delay, final long period) {
 		return runRepeating(task, delay, period);
 	}
@@ -75,50 +72,62 @@ public interface TaskScheduler {
 	 */
 	
 	default ScheduledTask run(Runnable runnable) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return run(task -> runnable.run());
 	}
 
 	default ScheduledTask run(Entity entity, Runnable runnable) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return run(entity, task -> runnable.run());
 	}
 
 	default ScheduledTask run(Location location, Runnable runnable) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return run(location, task -> runnable.run());
 	}
 	
 	default ScheduledTask runLater(Runnable runnable, long delay) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runLater(task -> runnable.run(), delay);
 	}
 	
 	default ScheduledTask runLater(Entity entity, Runnable runnable, long delay) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runLater(entity, task -> runnable.run(), delay);
 	}
 	
 	default ScheduledTask runLater(Location location, Runnable runnable, long delay) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runLater(location, task -> runnable.run(), delay);
 	}
 	
 	default ScheduledTask runRepeating(Runnable runnable, long delay, long period) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runRepeating(task -> runnable.run(), delay, period);
 	}
 	
 	default ScheduledTask runRepeating(Entity entity, Runnable runnable, long delay, long period) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runRepeating(entity, task -> runnable.run(), delay, period);
 	}
 	
 	default ScheduledTask runRepeating(Location location, Runnable runnable, long delay, long period) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runRepeating(location, task -> runnable.run(), delay, period);
 	}
 	
 	default ScheduledTask runAsync(Runnable runnable) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runAsync(task -> runnable.run());
 	}
 	
 	default ScheduledTask runAsyncLater(Runnable runnable, long delay) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runAsyncLater(task -> runnable.run(), delay * 50, TimeUnit.MILLISECONDS);
 	}
 	
 	default ScheduledTask runAsyncRepeating(Runnable runnable, long delay, long period) {
+		Preconditions.checkArgument(runnable != null, "runnable may not be null");
 		return runAsyncRepeating(task -> runnable.run(), delay * 50, period * 50, TimeUnit.MILLISECONDS);
 	}
 }

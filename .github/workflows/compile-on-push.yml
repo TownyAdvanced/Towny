@@ -1,24 +1,21 @@
-name: Compile
+name: Compile & Test
 on:
     push:
         branches-ignore: [l10n_master]
 jobs:
     build:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                java: ['21']
         steps:
             - uses: actions/checkout@v3
             - name: Set up Java
               uses: actions/setup-java@v3
               with:
                   distribution: 'temurin'
-                  java-version: ${{ matrix.java }}
+                  java-version: '25'
                   java-package: jdk
                   cache: 'maven'
             - name: Compile with Maven
-              run: mvn package
+              run: mvn package -P test
             - name: Upload Artifact
               uses: actions/upload-artifact@v4
               with:

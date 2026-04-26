@@ -3,20 +3,23 @@ package com.palmergames.bukkit.towny.permissions;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.exceptions.initialization.TownyInitException;
+import com.palmergames.bukkit.towny.object.Government;
 import com.palmergames.bukkit.towny.object.Nation;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyWorld;
 import com.palmergames.bukkit.util.BukkitTools;
 import com.palmergames.util.JavaUtil;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,12 +60,19 @@ public class TownyPerms {
 	private static Towny plugin;
 	private static final List<String> vitalGroups = Arrays.asList("nomad","towns.default","towns.mayor","towns.ranks","nations.default","nations.king","nations.ranks");
 	private static final HashMap<UUID, String> residentPrefixMap = new HashMap<>();
+	private static final String RANKLIMIT = "towny.ranklimit.";
 	private static final String RANKPRIORITY_PREFIX = "towny.rankpriority.";
 	private static final String RANKPREFIX_PREFIX = "towny.rankprefix.";
 	private static final String RANK_TOWN_LEVEL_REQUIREMENT_PREFIX = "towny.town_level_requirement.";
 	private static final String RANK_NATION_LEVEL_REQUIREMENT_PREFIX = "towny.nation_level_requirement.";
 	private static boolean ranksWithTownLevelRequirementPresent = false;
 	private static boolean ranksWithNationLevelRequirementPresent = false;
+
+	private static final List<String> townRanks = new ArrayList<>();
+	private static final List<String> townRankView = Collections.unmodifiableList(townRanks);
+
+	private static final List<String> nationRanks = new ArrayList<>();
+	private static final List<String> nationRankView = Collections.unmodifiableList(nationRanks);
 	
 	public static void initialize(Towny plugin) {
 		TownyPerms.plugin = plugin;
@@ -100,6 +110,12 @@ public class TownyPerms {
 		checkForVitalGroups();
 		buildComments();
 		perms.save();
+
+		townRanks.clear();
+		townRanks.addAll(perms.getConfigurationSection("towns.ranks").getKeys(false));
+
+		nationRanks.clear();
+		nationRanks.addAll(perms.getConfigurationSection("nations.ranks").getKeys(false));
 
 		/*
 		 * Only do this once as we are really only interested in Towny perms.
@@ -386,9 +402,18 @@ public class TownyPerms {
 	 * 
 	 * @return a list of rank names.
 	 */
-	public static List<String> getTownRanks() {
+	public static @UnmodifiableView List<String> getTownRanks() {
+		return townRankView;
+	}
+	
+	@ApiStatus.Internal
+	public static void createTownRank(String rank) {
+		if (townRanks.contains(rank)) {
+			return;
+		}
 
-		return new ArrayList<String>(((MemorySection) perms.get("towns.ranks")).getKeys(false));
+		townRanks.add(rank);
+		perms.createSection("towns.ranks." + rank);
 	}
 
 	public static List<String> getTownRanks(Town town) {
@@ -432,6 +457,17 @@ public class TownyPerms {
 		return getList("towns.ranks." + rank);
 	}
 
+	@ApiStatus.Internal
+	public static void setTownRankPermissions(String rank, List<String> permissions) {
+		perms.set("towns.ranks." + rank, permissions);
+		
+		if (permissions == null) {
+			townRanks.remove(rank);
+		} else if (!townRanks.contains(rank)) {
+			townRanks.add(rank);
+		}
+	}
+
 	/*
 	 * Nation permission section
 	 */
@@ -441,9 +477,18 @@ public class TownyPerms {
 	 * 
 	 * @return a list of rank names.
 	 */
-	public static List<String> getNationRanks() {
+	public static @UnmodifiableView List<String> getNationRanks() {
+		return nationRankView;
+	}
 
-		return new ArrayList<String>(((MemorySection) perms.get("nations.ranks")).getKeys(false));
+	@ApiStatus.Internal
+	public static void createNationRank(String rank) {
+		if (nationRanks.contains(rank)) {
+			return;
+		}
+
+		nationRanks.add(rank);
+		perms.createSection("nations.ranks." + rank);
 	}
 
 	public static List<String> getNationRanks(Nation nation) {
@@ -486,6 +531,17 @@ public class TownyPerms {
 
 		return getList("nations.ranks." + rank);//.toLowerCase());
 	}
+
+	@ApiStatus.Internal
+	public static void setNationRankPermissions(String rank, List<String> permissions) {
+		perms.set("nations.ranks." + rank, permissions);
+
+		if (permissions == null) {
+			nationRanks.remove(rank);
+		} else if (!nationRanks.contains(rank)) {
+			nationRanks.add(rank);
+		}
+	}
 	
 	/**
 	 * Used to match a given rank to a case-sensitive Nation Rank.
@@ -525,6 +581,69 @@ public class TownyPerms {
 
 	public static boolean hasConqueredNodes() {
 		return !getList("conquered").isEmpty() || !getList("unconquered").isEmpty();
+	}
+
+	/*
+	 * Assistant rank check
+	 */
+
+	/**
+	 * Does this resident have a town rank which is considered an assistant rank, ie
+	 * assistant, co-mayor, as definded in the config?
+	 * 
+	 * @param resident Resident to test.
+	 * @return true if the resident has any town rank which is considered an
+	 *         assistant rank.
+	 */
+	public static boolean hasAssistantTownRank(Resident resident) {
+		return TownySettings.getAssistantRankNameList().stream().anyMatch(rank -> resident.hasTownRank(rank));
+	}
+
+	/*
+	 * Rank Limits
+	 */
+
+	public static boolean governmentIsAllowedToAssignRank(String rank, Government gov) {
+		int limit = governmentRankLimit(rank, gov);
+		if (limit == -1) {
+			return true;
+		}
+
+		int uses = numberOfTimesRankIsUsedByGovernment(rank, gov);
+		return uses < limit;
+	}
+
+	public static boolean rankIsNotLimitedByNumberOfAssignments(String rank, Government gov) {
+		return governmentRankLimit(rank, gov) == -1;
+	}
+
+	public static int numberOfTimesRankIsUsedByGovernment(String rank, Government gov ) {
+		if (gov instanceof Town town && getTownRanks().contains(rank)) {
+			return (int) town.getResidents().stream().filter(res -> res.hasTownRank(rank)).count();
+		}
+		if (gov instanceof Nation nation && getNationRanks().contains(rank)) {
+			return (int) nation.getResidents().stream().filter(res -> res.hasNationRank(rank)).count();
+		}
+		return 0;
+	}
+
+	public static int governmentRankLimit(String rank, Government gov) {
+		if (gov instanceof Town && getTownRanks().contains(rank)) {
+			return getRankLimit(getTownRankPermissions(rank));
+		}
+		if (gov instanceof Nation && getNationRanks().contains(rank)) {
+			return getRankLimit(getNationRankPermissions(rank));
+		}
+		return -1;
+	}
+
+	private static int getRankLimit(List<String> nodes) {
+		for (String node : nodes) {
+			if (node.startsWith(RANKLIMIT)) {
+				return getIntFromNode(node, RANKLIMIT.length());
+			}
+		}
+		return -1;
 	}
 
 	/*
@@ -573,6 +692,10 @@ public class TownyPerms {
 		return null;
 	}
 
+	/*
+	 * Rank Priorities
+	 */
+
 	public static String getHighestPriorityRank(Resident resident, List<String> ranks, Function<String, List<String>> rankFunction) {
 		Map<String, Integer> rankPriorityMap = new HashMap<>(); 
 		for (String rank : ranks)
@@ -584,7 +707,7 @@ public class TownyPerms {
 		int topValue = 0;
 		for (String node : nodes) {
 			if (node.startsWith(RANKPRIORITY_PREFIX)) {
-				int priorityValue = getNodePriority(node, RANKPRIORITY_PREFIX.length());
+				int priorityValue = getIntFromNode(node, RANKPRIORITY_PREFIX.length());
 				if (topValue >= priorityValue)
 					continue;
 				topValue = priorityValue;
@@ -593,7 +716,7 @@ public class TownyPerms {
 		return topValue;
 	}
 
-	private static int getNodePriority(String node, int length) {
+	private static int getIntFromNode(String node, int length) {
 		try {
 			return Integer.parseInt(node.substring(length));
 		} catch (NumberFormatException ignored) {
@@ -614,14 +737,14 @@ public class TownyPerms {
 	public static int getRankTownLevelReq(String rank) {
 		for (String node : getTownRankPermissions(rank))
 			if (node.startsWith(RANK_TOWN_LEVEL_REQUIREMENT_PREFIX))
-				return getNodePriority(node, RANK_TOWN_LEVEL_REQUIREMENT_PREFIX.length());
+				return getIntFromNode(node, RANK_TOWN_LEVEL_REQUIREMENT_PREFIX.length());
 		return 0;
 	}
 
 	public static int getRankNationLevelReq(String rank) {
 		for (String node : getNationRankPermissions(rank))
 			if (node.startsWith(RANK_NATION_LEVEL_REQUIREMENT_PREFIX))
-				return getNodePriority(node, RANK_NATION_LEVEL_REQUIREMENT_PREFIX.length());
+				return getIntFromNode(node, RANK_NATION_LEVEL_REQUIREMENT_PREFIX.length());
 		return 0;
 	}
 
@@ -779,7 +902,8 @@ public class TownyPerms {
 	}
 	
 	public static List<String> getPermsOfGroup(String group) {
-		return mapHasGroup(group) ? (groupPermsMap.get(group) != null ? groupPermsMap.get(group): new ArrayList<String>()): new ArrayList<String>(); 
+		final List<String> perms = groupPermsMap.get(group);
+		return perms != null ? perms : new ArrayList<>();
 	}
 	
 	private static void buildGroupPermsMap() {
@@ -825,6 +949,14 @@ public class TownyPerms {
 				"# Ex:                                                                                       #",
 				"#    - towny.rankpriority.100                                                               #",
 				"#    - towny.rankprefix.&a<&2Sheriff&a>                                                     #",
+				"#                                                                                           #",
+				"# The towns.ranks and nations.ranks sections support adding limits to how many times a town #",
+				"# or nation can assign each rank to their residents. This is done using the                 #",
+				"# towny.ranklimit.# node. When added to a rank, with a number replacing pound/hashtag       #",
+				"# symbol, that rank will only be able to be assigned that number of times. In the below     #",
+				"# example the rank will only be able to be used by a town twice.                            #",
+				"# Ex:                                                                                       #",
+				"#    - towny.ranklimit.2                                                                    #",
 				"#                                                                                           #",
 				"# The towns.ranks and nations.ranks sections support requiring their town or nation to have #",
 				"# a minimum town_level or nation_level. This means that you can lock ranks behind a town or #",
@@ -881,6 +1013,7 @@ public class TownyPerms {
 		perms.addComment("peaceful", "", "# Nodes that are given to players who are in a peaceful/neutral town or nation.");
 	}
 
+	@ApiStatus.Internal
 	public static CommentedConfiguration getTownyPermsFile() {
 		return perms;
 	}

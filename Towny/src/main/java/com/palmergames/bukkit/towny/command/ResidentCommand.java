@@ -138,7 +138,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		if (sender instanceof Player) {
+		if (sender instanceof Player player) {
 			switch (args[0].toLowerCase(Locale.ROOT)) {
 				case "plotlist":
 					if (args.length == 2)
@@ -189,13 +189,19 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 						case 2:
 							return NameUtil.filterByStart(residentFriendTabCompletes, args[1]);
 						case 3:
-							if (args[1].equalsIgnoreCase("remove")) {
-								Resident res = TownyUniverse.getInstance().getResident(((Player) sender).getUniqueId());
-								if (res != null)
-									return NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
-							} else {
-								return getTownyStartingWith(args[2], "r");
-							}
+							return switch (args[1].toLowerCase(Locale.ROOT)) {
+								case "remove" -> {
+									Resident res = TownyUniverse.getInstance().getResident(player.getUniqueId());
+									if (res != null) {
+										yield NameUtil.filterByStart(NameUtil.getNames(res.getFriends()), args[2]);
+									}
+
+									yield Collections.emptyList();
+								}
+								case "add" -> getTownyStartingWith(args[2], "r");
+								case "list" -> NameUtil.filterByStart(List.of("online"), args[2]);
+								default -> Collections.emptyList();
+							};
 						default:
 							return Collections.emptyList();
 					}
@@ -250,7 +256,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		case "friend" -> residentFriend(player, StringMgmt.remFirstArg(split), false, null);
 		case "spawn" -> {
 			checkPermOrThrow(player, PermissionNodes.TOWNY_COMMAND_RESIDENT_SPAWN.getNode());
-			SpawnUtil.sendToTownySpawn(player, split, getResidentOrThrow(player), Translatable.of("msg_err_cant_afford_tp").forLocale(player), false, false, SpawnType.RESIDENT);
+			SpawnUtil.sendToTownySpawn(player, split, getResidentOrThrow(player), Translatable.of("msg_err_cant_afford_tp").forLocale(player), false, SpawnType.RESIDENT);
 		}
 		default -> {
 			if (tryResidentAddonCommand(player, split))
@@ -461,7 +467,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 	private void notifyPerms(Player player, TownyPermission perm) {
 
 		TownyMessaging.sendMsg(player, Translatable.of("msg_set_perms"));
-		TownyMessaging.sendMessage(player, Colors.Green + "PvP: " + ((perm.pvp) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Explosions: " + ((perm.explosion) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Firespread: " + ((perm.fire) ? Colors.Red + "ON" : Colors.LightGreen + "OFF") + Colors.Green + "  Mob Spawns: " + ((perm.mobs) ? Colors.Red + "ON" : Colors.LightGreen + "OFF"));
+		TownyMessaging.sendMessage(player, Colors.DARK_GREEN + "PvP: " + ((perm.pvp) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Explosions: " + ((perm.explosion) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Firespread: " + ((perm.fire) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF") + Colors.DARK_GREEN + "  Mob Spawns: " + ((perm.mobs) ? Colors.DARK_RED + "ON" : Colors.GREEN + "OFF"));
 
 	}
 	
@@ -474,10 +480,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		for (Player player : BukkitTools.getVisibleOnlinePlayers(sender)) {
 			Resident resident = TownyAPI.getInstance().getResident(player);
 			if (resident == null) {
-				formattedList.add(Colors.White + player.getName() + Colors.White);
+				formattedList.add(Colors.WHITE + player.getName() + Colors.WHITE);
 				continue;
 			}
-			formattedList.add(getColour(resident) + resident.getName() + Colors.White);
+			formattedList.add(getColour(resident) + resident.getName() + Colors.WHITE);
 		}
 		
 		TownyMessaging.sendMessage(sender, ChatTools.list(formattedList));
@@ -581,12 +587,12 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		if (!admin)
 			resident = getResidentOrThrow(player);
 
-		String[] names = StringMgmt.remFirstArg(split);
+		String[] args = StringMgmt.remFirstArg(split);
 		switch(split[0].toLowerCase(Locale.ROOT)) {
-		case "add" -> residentFriendAdd(player, resident, filterResidentList(player, names));
-		case "remove" -> residentFriendRemove(player, resident, filterResidentList(player, names));
-		case "list" -> residentFriendList(player, resident);
-		case "clearlist", "clear" -> residentFriendRemove(player, resident, resident.getFriends());
+			case "add" -> residentFriendAdd(player, resident, filterResidentList(player, args));
+			case "remove" -> residentFriendRemove(player, resident, filterResidentList(player, args));
+			case "list" -> residentFriendList(player, resident, args.length > 0 && args[0].equalsIgnoreCase("online"));
+			case "clearlist", "clear" -> residentFriendRemove(player, resident, resident.getFriends());
 		}
 	}
 
@@ -602,17 +608,18 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 		return residents;
 	}
 
-	private static void residentFriendList(Player player, Resident resident) {
+	private static void residentFriendList(Player player, Resident resident, boolean requireOnline) {
 		
 		TownyMessaging.sendMessage(player, ChatTools.formatTitle(Translatable.of("friend_list").forLocale(player)));
 		List<String> formatedList = resident.getFriends().stream()
-				.map(friend -> getColour(friend) + friend.getName() + Colors.White)
-				.collect(Collectors.toList());
+			.filter(friend -> !requireOnline || (friend.getPlayer() != null && player.canSee(friend.getPlayer())))
+			.map(friend -> getColour(friend) + friend.getName() + Colors.WHITE)
+			.collect(Collectors.toList());
 		TownyMessaging.sendMessage(player, ChatTools.list(formatedList));
 	}
 
 	private static String getColour(Resident resident) {
-		return resident.isMayor() ? resident.isKing() ? Colors.Gold : Colors.LightBlue : Colors.White;
+		return resident.isMayor() ? resident.isKing() ? Colors.GOLD : Colors.AQUA : Colors.WHITE;
 	}
 
 	public static void residentFriendAdd(Player player, Resident resident, List<Resident> friending) {

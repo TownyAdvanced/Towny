@@ -8,6 +8,8 @@ import com.palmergames.bukkit.towny.exceptions.CancelledEventException;
 import com.palmergames.bukkit.towny.hooks.PluginIntegrations;
 import com.palmergames.bukkit.towny.utils.MinecraftVersion;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Location;
@@ -19,6 +21,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -32,10 +35,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -57,7 +57,6 @@ public class BukkitTools {
 
 	@SuppressWarnings("unused")
 	private static Towny plugin = null;
-	private static final MethodHandle GET_OFFLINE_PLAYER_CACHED;
 	
 	public static void initialize(Towny plugin) {
 		BukkitTools.plugin = plugin;
@@ -241,19 +240,16 @@ public class BukkitTools {
 	
 	@Nullable
 	public static OfflinePlayer getOfflinePlayerIfCached(@NotNull String name) {
-		if (GET_OFFLINE_PLAYER_CACHED == null)
-			return null;
-		
-		try {
-			return (OfflinePlayer) GET_OFFLINE_PLAYER_CACHED.invokeExact(getServer(), name);
-		} catch (Throwable thr) {
-			return null;
-		}
+		return getServer().getOfflinePlayerIfCached(name);
 	}
 	
 	public static OfflinePlayer getOfflinePlayerForVault(String name) {
 
-		return Bukkit.getOfflinePlayer(UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)));
+		return Bukkit.getOfflinePlayer(getOfflinePlayerUUID(name));
+	}
+	
+	public static UUID getOfflinePlayerUUID(String name) {
+		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
 	}
 	
 	public static String convertCoordtoXYZ(Location loc) {
@@ -345,19 +341,35 @@ public class BukkitTools {
 		return key.getNamespace().equals(NamespacedKey.MINECRAFT) ? key.getKey() : key.toString();
 	}
 
+	/**
+	 * @deprecated Use {@link Server#getCommandMap()} instead.
+	 */
+	@Deprecated
 	public static @NotNull CommandMap getCommandMap() throws ReflectiveOperationException {
-		try {
-			// https://jd.papermc.io/paper/1.20/org/bukkit/Server.html#getCommandMap()
-			final Method commandMapGetter = getServer().getClass().getMethod("getCommandMap");
-
-			return (CommandMap) commandMapGetter.invoke(getServer());
-		} catch (ReflectiveOperationException e) {
-			// Fallback to attempting to get the field directly when not on paper
-			final Field bukkitCommandMap = getServer().getClass().getDeclaredField("commandMap");
-
-			bukkitCommandMap.setAccessible(true);
-			return (CommandMap) bukkitCommandMap.get(getServer());
+		return getServer().getCommandMap();
+	}
+	
+	public static CompletableFuture<Location> getRespawnLocation(final Player player) {
+		if (MinecraftVersion.CURRENT_VERSION.isOlderThan(MinecraftVersion.MINECRAFT_1_21_5)) {
+			return getRespawnLocationOld(player);
 		}
+
+		final Location potentialLocation = player.getRespawnLocation(false);
+		if (potentialLocation == null) {
+			return CompletableFuture.completedFuture(null);
+		}
+
+		return potentialLocation.getWorld().getChunkAtAsync(potentialLocation).thenApply(chunk -> player.getRespawnLocation(true));
+	}
+
+	@SuppressWarnings("deprecation") // remove me when 1.21.4 or below is no longer supported
+	private static CompletableFuture<Location> getRespawnLocationOld(final Player player) {
+		final Location potentialLocation = player.getPotentialBedLocation();
+		if (potentialLocation == null) {
+			return CompletableFuture.completedFuture(null);
+		}
+
+		return potentialLocation.getWorld().getChunkAtAsync(potentialLocation).thenApply(chunk -> player.getBedSpawnLocation());
 	}
 	
 	@ApiStatus.Internal
@@ -370,13 +382,12 @@ public class BukkitTools {
 		return set;
 	}
 	
-	static {
-		MethodHandle temp = null;
-		try {
-			//noinspection JavaReflectionMemberAccess
-			temp = MethodHandles.publicLookup().unreflect(Server.class.getMethod("getOfflinePlayerIfCached", String.class));
-		} catch (ReflectiveOperationException ignored) {}
-		
-		GET_OFFLINE_PLAYER_CACHED = temp;
+	@ApiStatus.Internal
+	public static Registry<EntityType> entityTypeRegistry() {
+		if (MinecraftVersion.CURRENT_VERSION.isNewerThan(MinecraftVersion.MINECRAFT_1_20_5)) {
+			return RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE);
+		} else {
+			return Registry.ENTITY_TYPE;
+		}
 	}
 }

@@ -5,6 +5,7 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.Translation;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,7 @@ public class TownPreUnclaimEvent extends CancellableTownyEvent {
 
     private final TownBlock townBlock;
     private final Town town;
+    private final Cause cause;
 
     /**
      * Event thrown prior to a {@link TownBlock} being unclaimed by a {@link Town}.
@@ -23,9 +25,10 @@ public class TownPreUnclaimEvent extends CancellableTownyEvent {
      * @param town The Town unclaiming the TownBlock.
      * @param townBlock The TownBlock that will be unclaimed.
      */
-    public TownPreUnclaimEvent(Town town, TownBlock townBlock) {
+    public TownPreUnclaimEvent(Town town, TownBlock townBlock, Cause cause) {
         this.town = town;
         this.townBlock = townBlock;
+        this.cause = cause;
 
         // Don't even bother with things if town is null.
         if (this.town == null){
@@ -60,5 +63,33 @@ public class TownPreUnclaimEvent extends CancellableTownyEvent {
 	@Override
 	public HandlerList getHandlers() {
 		return HANDLER_LIST;
+	}
+
+	public Cause getCause() {
+		return cause;
+	}
+
+	public enum Cause {
+		/**
+		 * The townblock is being unclaimed for an unknown reason.
+		 */
+		UNKNOWN,
+		/**
+		 * The townblock is being unclaimed because of a command.
+		 */
+		COMMAND,
+		/**
+		 * The townblock is being unclaimed because of a command run by an admin.
+		 */
+		ADMIN_COMMAND,
+		/**
+		 * The townblock's town is being deleted.
+		 */
+		DELETE;
+
+		@ApiStatus.Internal
+		public boolean ignoresPreEvent() {
+			return this == DELETE || this == ADMIN_COMMAND;
+		}
 	}
 }

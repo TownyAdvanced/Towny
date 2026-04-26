@@ -279,7 +279,7 @@ public class TownyAsciiMap {
 		Component[] compass = generateCompass(player);
 
 		// Output
-		TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("towny_map_header") + Colors.White + "(" + pos + ")"));
+		TownyMessaging.sendMessage(player, ChatTools.formatTitle(translator.of("towny_map_header") + Colors.WHITE + "(" + pos + ")"));
 		Component[] map = new Component[lineHeight];
 		Component[] help = generateHelp(player);
 		
@@ -298,7 +298,7 @@ public class TownyAsciiMap {
 		}
 		
 		for (Component component : map)
-			Towny.getAdventure().player(player).sendMessage(component);
+			player.sendMessage(component);
 
 		TownBlock townblock = pos.getTownBlockOrNull();
 		TownyMessaging.sendMsg(player, translator.of("status_towny_map_town_line", 

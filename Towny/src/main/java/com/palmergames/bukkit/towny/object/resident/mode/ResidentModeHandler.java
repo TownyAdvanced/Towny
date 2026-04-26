@@ -40,6 +40,7 @@ public class ResidentModeHandler {
 		addMode(new GenericResidentMode("adminbypass", "")); // No permission so that admins can toggle it when they don't have admin powers.
 		addMode(new GenericResidentMode("bedspawn", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BEDSPAWN.getNode()));
 		addMode(new GenericResidentMode("bordertitles", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_BORDERTITLES.getNode()));
+		addMode(new GenericResidentMode("ignoreinvites", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS.getNode()));
 		addMode(new GenericResidentMode("ignoreotherchannels", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREOTHERCHANNELS.getNode()));
 		addMode(new GenericResidentMode("ignoreplots", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_IGNOREPLOTS.getNode()));
 		addMode(new GenericResidentMode("infotool", PermissionNodes.TOWNY_COMMAND_RESIDENT_TOGGLE_INFOTOOL.getNode()));
@@ -144,7 +145,7 @@ public class ResidentModeHandler {
 			}
 	
 		if (notify && !getModes(resident).isEmpty())
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ",")));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ", ")));
 	}
 
 	/**
@@ -201,7 +202,7 @@ public class ResidentModeHandler {
 		mode.toggle(resident);
 
 		if (notify)
-			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ",")));
+			TownyMessaging.sendMsg(resident, Translatable.of("msg_modes_set").append(StringMgmt.join(getResidentModesNames(resident), ", ")));
 	}
 
 	/**

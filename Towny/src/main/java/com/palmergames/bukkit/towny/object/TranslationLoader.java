@@ -365,21 +365,26 @@ public class TranslationLoader {
 	 * Creates and loads a global.yml if one is present in the plugin's jar.
 	 */
 	void loadGlobalFile() {
-		try (InputStream resourceAsStream = clazz.getResourceAsStream("/global.yml")) {
-			// A plugin might be using this without also making use of the global.yml.
-			if (resourceAsStream == null)
-				return;
-
+		try {
 			Path globalYMLPath = langFolderPath.resolve("override").resolve("global.yml");
 			Path glitchedGlobalPath = langFolderPath.resolve("global.yml");
 
 			// Move any old global.yml files that are in the wrong location.
-			if (Files.exists(glitchedGlobalPath))
+			if (Files.exists(glitchedGlobalPath)) {
 				Files.move(glitchedGlobalPath, globalYMLPath, StandardCopyOption.REPLACE_EXISTING);
+			}
 
 			// Create the global.yml file if it doesn't exist.
-			if (!Files.exists(globalYMLPath))
-				createGlobalYML(globalYMLPath, resourceAsStream);
+			if (!Files.exists(globalYMLPath)) {
+				try (InputStream resourceAsStream = clazz.getResourceAsStream("/global.yml")) {
+					if (resourceAsStream == null) {
+						// No global.yml file exists 
+						return;
+					}
+
+					createGlobalYML(globalYMLPath, resourceAsStream);
+				}
+			}
 
 			// Load global override file into memory.
 			Map<String, Object> globalOverrides = loadGlobalFile(globalYMLPath);

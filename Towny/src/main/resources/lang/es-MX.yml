@@ -117,7 +117,7 @@ nation_help_11: "Lista las ciudades de la nación."
 nation_help_12: "Lista las naciones aliadas de la nación."
 nation_help_13: "Lista las naciones enemigas de la nación."
 nation_help_14: "Usado para unirse a naciones abiertas."
-nation_help_15: "Deposita dinero en el banco nacional."
+nation_help_15: "Deposits money into the nation bank."
 nation_help_16: "Usado para eliminar tu nación."
 nation_help_17: "Usado para agregar o quitar rangos de los residentes."
 nation_help_18: "Usa /n rank ? para obtener ayuda."
@@ -226,6 +226,7 @@ world_toggle_help_8: "Activar/desactivar la función de revertir a petición en 
 world_toggle_help_9: "Activar/desactivar las características revertidas de las explosiones en este mundo."
 world_toggle_help_10: "Activar/desactivar el comando plot-clear-deletes-blocks en este mundo."
 world_toggle_help_11: "Activar/desactivar la característica de bloques de grafico sin reclamar-eliminar-borrar en este mundo."
+world_toggle_help_12: "Toggle on/off if being jailed is enabled in this world."
 townyadmin_help_1: 'Abandonar este terreno de la ciudad'
 townyadmin_help_2: 'Intentar abandonar alrededor de ti.'
 admin_panel_1: "Usa /res set ? para obtener ayuda"
@@ -240,7 +241,6 @@ admin_panel_9: "Teletransportar a la parcela especificada"
 admin_panel_10: "Comprueba si el jugador tiene un nodo de permiso"
 admin_panel_11: "Restablecer tu configuración"
 admin_panel_12: "Hacer una copia de seguridad de los datos de tu ciudad"
-admin_panel_13: "Volcar tu db de ql a flatfile"
 admin_panel_14: "Forzar guardar o cargar su base de datos"
 admin_panel_15: "Ejecutar el código newhour"
 admin_panel_16: "Purgar antiguos residentes"
@@ -405,7 +405,6 @@ msg_you_couldnt_pay_town_tax: '&bNo pudiste pagar el impuesto de la ciudad de %s
 msg_bankrupt_town: ' no tuvo el dinero para seguir siendo una ciudad.'
 msg_bankrupt_nation: ' no tuvo el dinero para seguir siendo una nación.'
 msg_nation_not_peaceful: '&bLa nación no tuvo el dinero para mantenerse como pacífica.'
-msg_nation_cant_peaceful: '&bNation no puede permitirse convertirse en una nación pacífica. Debes poder pagar % diariamente.'
 msg_peaceful_disabled: '&bLa paz entre naciones está desactivada globalmente.'
 msg_you_paid: '&bPagaste %s para establecer el estado de pacífico.'
 msg_nation_set_peace: '&bSe cambió el estado de la nación.'
@@ -1161,7 +1160,6 @@ msg_err_you_are_not_allowed_to_create_the_other_side_of_this_portal: 'No tienes 
 msg_already_ally: 'Tu nación ya está aliada con %s.'
 #Added in 0.76
 msg_you: 'Tu'
-#Added in 0.77
 msg_click_spawn: '&aPresiona para viajar a &e%s'
 msg_spawn_cost: '&aPrecio del transporte = &e%s'
 #Added in 0.78

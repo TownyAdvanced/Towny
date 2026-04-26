@@ -1,31 +1,26 @@
 package com.palmergames.bukkit.towny.config;
 
-import org.mockbukkit.mockbukkit.MockBukkit;
 import com.palmergames.bukkit.config.CommentedConfiguration;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.config.migration.RunnableMigrations;
 import com.palmergames.bukkit.towny.TownySettings;
-import org.junit.jupiter.api.BeforeAll;
+import com.palmergames.bukkit.towny.test.TownyConfigExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Locale;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(TownyConfigExtension.class)
 public class ConfigMigrationTests {
 	
 	static RunnableMigrations runnableMigrations = new RunnableMigrations();
 	
-	@BeforeAll
-	static void init() {
-		MockBukkit.getOrCreateMock();
-		TownySettings.loadDefaultConfig();
-	}
-	
 	@Test
 	void testEntityClassMigration() {
-		TownySettings.getConfig().set(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST.getRoot(), "Creeper,EnderCrystal,EnderDragon,SmallFireball,Fireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull");
+		TownySettings.getConfig().set(ConfigNodes.NWS_PLOT_MANAGEMENT_WILD_ENTITY_REVERT_LIST.getRoot(), "Creeper,EnderCrystal,EnderDragon,SmallFireball,LargeFireball,TNTPrimed,ExplosiveMinecart,Wither,WitherSkull");
 		
 		Consumer<CommentedConfiguration> migration = runnableMigrations.getByName("convert_entity_class_names");
 		assertNotNull(migration);
