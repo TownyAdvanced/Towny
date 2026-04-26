@@ -83,18 +83,18 @@ public class TownyUniverse {
     private final Map<String, TownyWorld> worlds = new ConcurrentHashMap<>();
     private final Map<UUID, TownyWorld> worldUUIDMap = new ConcurrentHashMap<>();
     
-    private final Map<String, CustomDataField<?>> registeredMetadata = new HashMap<>();
+    private final Map<String, CustomDataField<?>> registeredMetadata = new ConcurrentHashMap<>();
 	private final Map<WorldCoord, TownBlock> townBlocks = new ConcurrentHashMap<>();
 	private CompletableFuture<Void> backupFuture;
     
 	private final Map<SpawnPointLocation, SpawnPoint> spawnPoints = new ConcurrentHashMap<>(); 
-    private final List<Resident> jailedResidents = new ArrayList<>();
+    private final List<Resident> jailedResidents = Collections.synchronizedList(new ArrayList<>());
     private final Map<UUID, Jail> jailUUIDMap = new ConcurrentHashMap<>();
     private final Map<String, String> replacementNamesMap = new ConcurrentHashMap<>();
     private final Map<UUID, PlotGroup> plotGroupUUIDMap = new ConcurrentHashMap<>();
     private final Map<UUID, District> districtUUIDMap = new ConcurrentHashMap<>();
     
-    private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<WorldCoord, TownyMapData>();
+    private final Map<WorldCoord, TownyMapData> wildernessMapDataMap = new ConcurrentHashMap<>();
     private final String rootFolder;
 	private TownyDataSource loadDataSource;
 	private TownyDataSource saveDataSource;

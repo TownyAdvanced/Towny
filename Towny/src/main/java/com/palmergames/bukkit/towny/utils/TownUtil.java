@@ -33,9 +33,15 @@ public class TownUtil {
 	 * @since 0.97.0.7
 	 */
 	public static List<Resident> gatherInactiveResidents(List<Resident> resList, int days) {
-		return resList.stream()
-				.filter(res -> !res.isNPC() && !res.isMayor() && !BukkitTools.isOnline(res.getName()) && (System.currentTimeMillis() - res.getLastOnline() > TimeTools.getMillis(days + "d")))
-				.collect(Collectors.toList());
+		long cutoff = System.currentTimeMillis() - TimeTools.getMillis(days + "d");
+		List<Resident> inactive = new ArrayList<>();
+		for (Resident res : resList) {
+			if (res.isNPC() || res.isMayor())
+				continue;
+			if (res.getLastOnline() < cutoff && !BukkitTools.isOnline(res.getName()))
+				inactive.add(res);
+		}
+		return inactive;
 	}
 
 	public static void checkNationResidentsRequirementsOfTown(Town town) {
