@@ -2817,6 +2817,10 @@ public class TownySettings {
 		return getBoolean(ConfigNodes.CLAIMING_MIN_DISTANCE_IGNORED_FOR_ALLIES);
 	}
 
+	public static boolean isMinDistanceIgnoringRuinedTowns() {
+		return getBoolean(ConfigNodes.CLAIMING_MIN_DISTANCE_IGNORED_FOR_RUINED_TOWN);
+	}
+
 	public static int getMinDistanceBetweenHomeblocks() {
 		return getInt(ConfigNodes.CLAIMING_MIN_DISTANCE_BETWEEN_HOMEBLOCKS);
 	}
