@@ -130,6 +130,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 		"ally",
 		"spawn",
 		"townoutposts",
+		"outpost",
 		"sanctiontown",
 		"king",
 		"leader",
@@ -247,7 +248,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						return Collections.singletonList("-ignore");
 					}
 					break;
-				case "townoutposts":
+				case "townoutposts","outpost":
 					if (nation == null)
 						break;
 					if (args.length == 2) {
