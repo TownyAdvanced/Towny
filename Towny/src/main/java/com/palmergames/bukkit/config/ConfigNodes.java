@@ -2147,7 +2147,7 @@ public enum ConfigNodes {
 			"# Can players interact with switch blocks listed in the above protection.switch_ids in the wilderness without restriction?"),
 	UNCLAIMED_ZONE_IGNORE(
 			"unclaimed.unclaimed_zone_ignore",
-			"TORCH,LADDER,ORES,PLANTS,TREES,SAPLINGS",
+			"TORCHES,LADDER,ORES,PLANTS,TREES,SAPLINGS",
 			"",
 			"# A list of blocks that will bypass the above settings and do not require the towny.wild.* permission node.",
 			"# These blocks are also used in determining which blocks can be interacted with in Towny Wilds plots in towns."),
