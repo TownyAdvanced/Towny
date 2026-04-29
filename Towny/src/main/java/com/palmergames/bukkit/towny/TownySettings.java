@@ -4074,6 +4074,10 @@ public class TownySettings {
 	public static boolean areProtectedEntitiesProtectedAgainstMobs() {
 		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_MOB_BYPASS);
 	}
+
+	public static boolean areProtectedEntitiesProtectedAgainstBlockProjectileSource() {
+		return getBoolean(ConfigNodes.PROT_MOB_TYPES_MOB_VS_BLOCK_PROJECTILE_SOURCE_BYPASS);
+	}
 	
 	public static String getBossBarNotificationColor() {
 		return getString(ConfigNodes.NOTIFICATION_BOSSBARS_COLOR);
