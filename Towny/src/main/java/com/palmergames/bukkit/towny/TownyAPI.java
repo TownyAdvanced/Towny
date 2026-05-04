@@ -266,9 +266,8 @@ public class TownyAPI {
 	 * @return A List of all townless Residents.
 	 */
 	public List<Resident> getResidentsWithoutTown() {
-
 		List<Resident> residentFilter = new ArrayList<>();
-		for (Resident resident : getResidents())
+		for (Resident resident : townyUniverse.getResidents())
 			if (!resident.hasTown())
 				residentFilter.add(resident);
 		return residentFilter;

@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -726,27 +727,26 @@ public class TownyFormatter {
 	 */
 	private static List<String> getRanks(Government gov, Translator translator) {
 		List<String> ranklist = new ArrayList<>();
-		List<Resident> residents = new ArrayList<>(gov.getResidents());
-		List<String> ranks;
-		if (gov instanceof Nation)
-			ranks = TownyPerms.getNationRanks();
-		else 
-			ranks = TownyPerms.getTownRanks();
-		List<Resident> residentWithRank = new ArrayList<>();
+		Collection<Resident> residents = gov.getResidents();
+		List<String> ranks = (gov instanceof Nation) ? TownyPerms.getNationRanks() : TownyPerms.getTownRanks();
+		Map<String, List<Resident>> residentsByRank = new HashMap<>();
+
+		for (Resident r : residents) {
+			List<String> residentRanks = (gov instanceof Nation) ? r.getNationRanks() : r.getTownRanks();
+			if (residentRanks != null) {
+				for (String rank : residentRanks) {
+					residentsByRank.computeIfAbsent(rank, k -> new ArrayList<>()).add(r);
+				}
+			}
+		}
 
 		for (String rank : ranks) {
-			for (Resident r : residents) {
-				if (gov instanceof Nation)
-					if ((r.getNationRanks() != null) && (r.getNationRanks().contains(rank)))
-						residentWithRank.add(r);
-				if (gov instanceof Town)
-					if ((r.getTownRanks() != null) && (r.getTownRanks().contains(rank)))
-						residentWithRank.add(r);
-			}
-			if (!residentWithRank.isEmpty())
+			List<Resident> residentWithRank = residentsByRank.get(rank);
+			if (residentWithRank != null && !residentWithRank.isEmpty()) {
 				ranklist.add(getFormattedTownyObjects(StringMgmt.capitalize(rank), new ArrayList<>(residentWithRank)));
-			residentWithRank.clear();
+			}
 		}
+		
 		if (gov instanceof Town town && town.getTrustedResidents().size() > 0)
 			ranklist.add(getFormattedTownyObjects(translator.of("status_trustedlist"), new ArrayList<>(town.getTrustedResidents())));
 		
