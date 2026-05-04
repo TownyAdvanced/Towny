@@ -10841,3 +10841,4 @@ v0.92.0.11:
   - New PlaceholderAPI placeholder: %townyadvanced_top_town_residents_and_open_n% - (Replace n with a number) Displays the nth Town that is open, arranged by the number of residents.
   - Add hover to town and nation status screen title bars for admins.
     - Displays name, uuid and town/nation level information.
+  - Fix consider_enemies_outlaws config setting not applying to towns who are enemies with each other.

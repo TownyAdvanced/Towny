@@ -661,8 +661,7 @@ public enum ConfigNodes {
 		"global_town_settings.consider_enemies_outlaws",
 		"false",
 		"",
-		"# If set to true, when a town is in a nation any player in another nation that",
-		"# the town's nation considers enemies will be considered an outlaw in that town."
+		"# If set to true, players who's town or nation is enemied by a town or nation, will be treated as outlaws by that town or nation."
 	),
 	GTOWN_SETTINGS_WAR_BLACKLISTED_COMMANDS(
 			"global_town_settings.war_blacklisted_commands",

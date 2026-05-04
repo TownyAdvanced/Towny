@@ -1254,25 +1254,18 @@ public class Town extends Government implements TownBlockOwner {
 		return Collections.unmodifiableList(outlaws);
 	}
 	
-	public boolean hasOutlaw (String name) {
-		if (TownySettings.areEnemiesOutlaws() && nation != null) {
-			for (Nation enemyNation : nation.getEnemies()) {
-				if (enemyNation.getResidents().stream().anyMatch(enemy -> enemy.getName().equalsIgnoreCase(name))) {
-					return true;
-				}
-			}
-		}
-		
-		return outlaws.stream().anyMatch(outlaw -> outlaw.getName().equalsIgnoreCase(name));
+	public boolean hasOutlaw(String name) {
+		Resident outlaw = TownyAPI.getInstance().getResident(name);
+		if (outlaw == null)
+			return false;
+
+		return hasOutlaw(outlaw);
 	}
 	
 	public boolean hasOutlaw(Resident outlaw) {
-		if (TownySettings.areEnemiesOutlaws() && nation != null) {
-			for (Nation enemyNation : nation.getEnemies()) {
-				if (enemyNation.getResidents().contains(outlaw)) {
-					return true;
-				}
-			}
+		if (TownySettings.areEnemiesOutlaws() && outlaw.hasTown()) {
+			if (CombatUtil.isEnemy(this, outlaw.getTownOrNull()))
+				return true;
 		}
 		
 		return outlaws.contains(outlaw);
