@@ -20,7 +20,6 @@ import com.palmergames.bukkit.util.Colors;
 import com.palmergames.util.JavaUtil;
 import net.tnemc.core.Reserve;
 
-import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -56,11 +55,6 @@ public class TownyEconomyHandler {
 	
 	public enum EcoType {
 		NONE, VAULT, RESERVE, VAULTUNLOCKED
-	}
-	
-	@Deprecated
-	public static String getServerAccount() {
-		return TownyServerAccount.ACCOUNT.getName();
 	}
 
 	/**
@@ -177,17 +171,6 @@ public class TownyEconomyHandler {
 	}
 
 	/**
-	 * @deprecated since 0.100.4.6, use {@link #removeAccount(Account)} instead.
-	 * @param accountName legacy account name.
-	 */
-	@Deprecated
-	public static void removeAccount(String accountName) {
-		final Account account = getTownyObjectAccount(accountName);
-		if (account != null)
-			removeAccount(account);
-	}
-
-	/**
 	 * Attempt to delete the economy account.
 	 * 
 	 * @param account account to delete
@@ -207,30 +190,6 @@ public class TownyEconomyHandler {
 		return economy.getBalance(account);
 	}
 
-	/**
-	 * @deprecated since 0.100.4.6, use {@link #getBalance(Account)} instead.
-	 * @param accountName legacy account name.
-	 * @param world world.
-	 */
-	@Deprecated
-	public static double getBalance(String accountName, World world) {
-		final Account account = getTownyObjectAccount(accountName);
-		
-		return account == null ? 0 : getBalance(account);
-	}
-
-	/**
-	 * @deprecated since 0.100.4.6, use {@link #hasEnough(Account, double)} instead.
-	 * @param accountName legacy account name.
-	 * @param amount amount to test for.
-	 * @param world world
-	 */
-	@Deprecated
-	public static boolean hasEnough(String accountName, double amount, World world) {
-		final Account account = getTownyObjectAccount(accountName);
-		
-		return account != null && hasEnough(account, amount);
-	}
 
 	/**
 	 * Returns true if the account has enough money
@@ -260,19 +219,6 @@ public class TownyEconomyHandler {
 	}
 
 	/**
-	 * @deprecated since 0.100.4.6, use {@link #subtract(Account, double)} instead.
-	 * @param accountName legacy account name.
-	 * @param amount amount to remove.
-	 * @param world world
-	 */
-	@Deprecated
-	public static boolean subtract(String accountName, double amount, World world) {
-		final Account account = getTownyObjectAccount(accountName);
-		
-		return account != null && subtract(account, amount);
-	}
-
-	/**
 	 * Attempts to remove an amount from an account
 	 * 
 	 * @param account the Account losing money.
@@ -289,19 +235,6 @@ public class TownyEconomyHandler {
 	}
 
 	/**
-	 * @deprecated since 0.100.4.6, use {@link #add(Account, double)} instead.
-	 * @param accountName legacy account name.
-	 * @param amount amount to add.
-	 * @param world world
-	 */
-	@Deprecated
-	public static boolean add(String accountName, double amount, World world) {
-		final Account account = getTownyObjectAccount(accountName);
-		
-		return account != null && add(account, amount);
-	}
-
-	/**
 	 * Add funds to an account.
 	 * 
 	 * @param account the Account receiving money.
@@ -315,19 +248,6 @@ public class TownyEconomyHandler {
 		}
 
 		return economy.add(account, amount);
-	}
-
-	/**
-	 * @deprecated since 0.100.4.6, use {@link #setBalance(Account, double)} instead.
-	 * @param accountName legacy account name.
-	 * @param amount amount to set as a balance.
-	 * @param world world
-	 */
-	@Deprecated
-	public static boolean setBalance(String accountName, double amount, World world) {
-		final Account account = getTownyObjectAccount(accountName);
-		
-		return account != null && setBalance(account, amount);
 	}
 
 	public static boolean setBalance(Account account, double amount) {
@@ -364,26 +284,6 @@ public class TownyEconomyHandler {
 	
 	public static boolean hasAccount(Account account) {
 		return economy.hasAccount(account);
-	}
-
-	/**
-	 * @deprecated since 0.100.4.6, use {@link #hasAccount(Account)} instead.
-	 * @param accountName legacy account name.
-	 */
-	@Deprecated
-	public static boolean hasAccount(String accountName) {
-		final Account account = getTownyObjectAccount(accountName);
-		
-		return account != null && hasAccount(account);
-	}
-
-	/**
-	 * @deprecated since 0.100.4.6, with no replacement.
-	 * @return true if the Server economy is Essentials Economy.
-	 */
-	@Deprecated
-	public static boolean isEssentials() {
-		return getVersion().startsWith("EssentialsX Economy") || getVersion().startsWith("Essentials Economy");
 	}
 
 	/**

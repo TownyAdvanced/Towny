@@ -3386,15 +3386,6 @@ public class TownySettings {
 	public static boolean isRefundNationDisbandLowResidents() {
 		return getBoolean(ConfigNodes.GTOWN_SETTINGS_REFUND_DISBAND_LOW_RESIDENTS);
 	}
-	
-	/**
-	 * @deprecated since 0.100.0.9, use {@link #getNationProximityToCapital()} instead.
-	 * @return getNationProximityToCapital()
-	 */
-	@Deprecated
-	public static double getNationRequiresProximity() {
-		return getNationProximityToCapital();
-	}
 
 	public static double getNationProximityToCapital() {
 		return getDouble(ConfigNodes.GNATION_SETTINGS_NATION_PROXIMITY_TO_CAPITAL);
