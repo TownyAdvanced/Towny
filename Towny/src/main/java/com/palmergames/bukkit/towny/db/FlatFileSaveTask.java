@@ -3,29 +3,32 @@ package com.palmergames.bukkit.towny.db;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.util.FileMgmt;
 
-import java.util.List;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.io.IOException;
 
 public class FlatFileSaveTask implements Runnable {
 
-	private final List<String> list;
+	private final Map<String, Object> map;
 	private final String path;
 	
 	/**
-	 * Constructor to save a list
-	 * @param list - list to save.
-	 * @param path - path on filesystem.
+	 * Constructor to save a Map to a file.
+	 * @param map Map to save.
+	 * @param path String path on filesystem.
 	 */
-	public FlatFileSaveTask(List<String> list, String path) {
-		this.list = list;
+	public FlatFileSaveTask(Map<String, Object> map, String path) {
+		this.map = map;
 		this.path = path;	
 	}
 
 	@Override
 	public void run() {
 		try {
-			FileMgmt.listToFile(list, path);
-		} catch (NullPointerException ex) {
+			FileMgmt.mapToFile(map, Paths.get(path));
+		} catch (IOException ex) {
 			TownyMessaging.sendErrorMsg("Null Error saving to file - " + path);
+			ex.printStackTrace();
 		}
 	}
 }
