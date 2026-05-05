@@ -2245,8 +2245,8 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		if (amount < 0)
 			throw new TownyException(Translatable.of("msg_err_negative_money"));
 
-		if (TownySettings.getSpawnTravelCost() < amount) 
-			throw new TownyException(Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getSpawnTravelCost()));
+		if (TownySettings.getMaximumSpawnTravelCost() < amount) 
+			throw new TownyException(Translatable.of("msg_err_cannot_set_spawn_cost_more_than", TownySettings.getMaximumSpawnTravelCost()));
 
 		town.setSpawnCost(amount);
 		town.save();

@@ -56,7 +56,7 @@ public enum TownSpawnLevel {
 			"msg_err_public_spawn_forbidden",
 			"msg_err_town_spawn_forbidden_war",
 			"msg_err_town_spawn_forbidden_peace",
-			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC,
+			ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC_MAXIMUM,
 			PermissionNodes.TOWNY_SPAWN_PUBLIC.getNode(),
 			ConfigNodes.SPAWNING_TOWN_SPAWN_UNAFFILIATED_COOLDOWN_TIMER),
 	ADMIN(

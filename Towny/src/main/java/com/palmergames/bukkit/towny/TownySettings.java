@@ -3512,6 +3512,10 @@ public class TownySettings {
 		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC);
 	}
 	
+	public static double getMaximumSpawnTravelCost() {
+		return getDouble(ConfigNodes.ECO_PRICE_TOWN_SPAWN_TRAVEL_PUBLIC_MAXIMUM);
+	}
+
 	public static boolean isPublicSpawnCostAffectedByTownSpawncost() {
 		return getBoolean(ConfigNodes.ECO_PRICE_ALLOW_MAYORS_TO_OVERRIDE_PUBLIC_SPAWN_COST);
 	}
